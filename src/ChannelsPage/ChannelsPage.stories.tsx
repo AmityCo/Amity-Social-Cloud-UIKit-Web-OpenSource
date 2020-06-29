@@ -25,4 +25,8 @@ try {
   console.log(e);
 }
 
-export const Channels = () => <ChannelsPage theme="primary" />;
+const CustomMessage = ({ data, type }) => <div>custom: {data.text}</div>;
+
+export const Channels = () => (
+  <ChannelsPage customComponents={{ Message: CustomMessage }} theme="primary" />
+);
