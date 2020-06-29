@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 const CustomComponentsContext = React.createContext({});
 export const CustomComponentsProvider = CustomComponentsContext.Provider;
@@ -11,8 +11,14 @@ export const customizableComponent = componentName => Component => props => {
 export const withCustomization = Component => props => {
   const { customComponents } = props;
   const customComponentsMap = useContext(CustomComponentsContext);
+
+  const memoizedCustomComponentsMap = useMemo(
+    () => ({ ...customComponentsMap, ...customComponents }),
+    [customComponentsMap, customComponents],
+  );
+
   return (
-    <CustomComponentsProvider value={{ ...customComponentsMap, ...customComponents }}>
+    <CustomComponentsProvider value={memoizedCustomComponentsMap}>
       <Component {...props} />
     </CustomComponentsProvider>
   );
