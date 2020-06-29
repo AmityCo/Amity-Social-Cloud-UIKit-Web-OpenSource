@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import EkoClient, { ChannelRepository, _changeSDKDefaultConfig } from 'eko-sdk';
 
 import ChannelsPage from './index';
+import Channel from '../Channel';
+import Message from '../Message';
+import MessageList from '../MessageList';
+import UiKitProvider from '../UiKitProvider';
 
 export default {
   title: 'ChannelsPage',
@@ -27,6 +31,35 @@ try {
 
 const CustomMessage = ({ data, type }) => <div>custom: {data.text}</div>;
 
-export const Channels = () => (
-  <ChannelsPage customComponents={{ Message: CustomMessage }} theme="primary" />
+export const ChannelsPageWithoutCustomization = () => <ChannelsPage />;
+
+export const ChannelsPageWithCustomization = () => (
+  <ChannelsPage customComponents={{ Message: CustomMessage }} />
 );
+
+export const WithGlobalProvider = () => (
+  <UiKitProvider customComponents={{ Message: CustomMessage }} theme={{}}>
+    <ChannelsPage />
+  </UiKitProvider>
+);
+
+export const WithGlobalProviderOverride = () => (
+  <UiKitProvider customComponents={{ Message: CustomMessage }} theme={{}}>
+    <ChannelsPage customComponents={{ Message: null }} />
+  </UiKitProvider>
+);
+
+const CustomMessageList = ({ messages }) => (
+  <>
+    customMessageList
+    {messages.map(Message)}
+  </>
+);
+
+export const MultyLayer = () => (
+  <UiKitProvider customComponents={{ MessageList: CustomMessageList }} theme={{}}>
+    <ChannelsPage />
+  </UiKitProvider>
+);
+
+export const JustUiComponent = () => <Channel channelId="intg-test-eNv4C5JRYQS7xADb1mHsCR" />;

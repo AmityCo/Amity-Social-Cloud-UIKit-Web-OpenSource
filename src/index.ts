@@ -1,3 +1,8 @@
-import TestComponent from './TestComponent/TestComponent';
+import UiKitProvider from './UiKitProvider';
+import ChannelsPage from './ChannelsPage';
+import Channel from './Channel';
+import Message from './Message';
+import MessageComposeBar from './MessageComposeBar';
+import MessageList from './MessageList';
 
-export { TestComponent };
+export { UiKitProvider, ChannelsPage, Channel, Message, MessageComposeBar, MessageList };

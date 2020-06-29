@@ -1,29 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import EkoClient, {
-  MessageRepository,
-  ChannelRepository,
-  ChannelMembershipRepository,
-  EkoChannelType,
-  EkoConnectionStatus,
-  _changeSDKDefaultConfig,
-} from 'eko-sdk';
+import { ChannelRepository } from 'eko-sdk';
 
 import { withCustomization } from '../hoks/customization';
-
 import useLiveObject from '../hooks/useLiveObject';
 import Channel from '../Channel';
+import ChannelItem from '../ChannelItem';
 
-import { ChannelsPageContainer, ChannelsListContainer, ChannelItemContainer } from './styles';
+import { ChannelsPageContainer, ChannelsListContainer } from './styles';
 
 const channelRepo = new ChannelRepository();
 
-const ChannelItem = ({ channelId, selected, onSelect }) => (
-  <ChannelItemContainer onClick={() => onSelect(channelId)} selected={selected}>
-    {channelId}
-  </ChannelItemContainer>
-);
-
-const ChannelsList = () => {
+const ChannelsPage = () => {
   const [currentChannelId, setCurrenChannelId] = useState(null);
 
   const channels = useLiveObject(() => channelRepo.allChannels(), []);
@@ -45,4 +32,4 @@ const ChannelsList = () => {
   );
 };
 
-export default withCustomization(ChannelsList);
+export default withCustomization(ChannelsPage);

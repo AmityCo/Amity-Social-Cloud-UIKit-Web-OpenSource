@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import { customizableComponent } from '../hoks/customization';
+
 import { MessageComposeBarInput } from './styles';
 
 const MessageComposeBar = ({ onSubmit }) => {
@@ -22,4 +24,4 @@ const MessageComposeBar = ({ onSubmit }) => {
   );
 };
 
-export default MessageComposeBar;
+export default customizableComponent('MessageComposeBar')(MessageComposeBar);

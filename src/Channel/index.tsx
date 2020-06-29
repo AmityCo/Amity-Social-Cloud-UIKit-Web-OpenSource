@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
-import EkoClient, { MessageRepository, ChannelRepository, EkoChannelType } from 'eko-sdk';
+import { MessageRepository, ChannelRepository, EkoChannelType } from 'eko-sdk';
 
-import useLiveObject from '../hooks/useLiveObject';
+import { customizableComponent } from '../hoks/customization';
 import usePaginatedLiveObject from '../hooks/usePaginatedLiveObject';
-import DefaultMessagesList from '../MessagesList';
-import DefaultMessageComposeBar from '../MessageComposeBar';
+
+import MessageList from '../MessageList';
+import MessageComposeBar from '../MessageComposeBar';
 
 import { ChannelContainer } from './styles';
 
 const channelRepo = new ChannelRepository();
 const messageRepo = new MessageRepository();
 
-const Channel = ({
-  channelId,
-  MessageComposeBar = DefaultMessageComposeBar,
-  MessagesList = DefaultMessagesList,
-}) => {
+const Channel = ({ channelId }) => {
   const [messages, hasMore, loadMore] = usePaginatedLiveObject(
     () => messageRepo.messagesForChannel({ channelId }),
     [],
@@ -38,10 +34,10 @@ const Channel = ({
 
   return (
     <ChannelContainer>
-      <MessagesList messages={messages} hasMore={hasMore} loadMore={loadMore} />
+      <MessageList messages={messages} hasMore={hasMore} loadMore={loadMore} />
       <MessageComposeBar onSubmit={sendMessage} />
     </ChannelContainer>
   );
 };
 
-export default Channel;
+export default customizableComponent('Channel')(Channel);
