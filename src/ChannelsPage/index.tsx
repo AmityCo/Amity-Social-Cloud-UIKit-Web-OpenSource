@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChannelRepository } from 'eko-sdk';
 
-import { withCustomization } from '../hoks/customization';
+import { customizableComponent } from '../hoks/customization';
 import useLiveObject from '../hooks/useLiveObject';
 import Channel from '../Channel';
 import ChannelItem from '../ChannelItem';
@@ -32,4 +32,4 @@ const ChannelsPage = () => {
   );
 };
 
-export default withCustomization(ChannelsPage);
+export default customizableComponent('ChannelsPage')(ChannelsPage);

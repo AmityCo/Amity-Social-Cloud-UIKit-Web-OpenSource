@@ -43,3 +43,19 @@ npm publish
 ```
 
 The `"prepublishOnly": "npm run build"` script in `package.json` will execute before publish occurs, ensuring the `build/` directory and the compiled component library exist.
+
+
+## How to customize components
+
+### globally
+```
+  <UiKitProvider customComponents={{ MessageList: CustomMessageList }} theme={{ primary: 'red' }}>
+    <ChannelsPage />
+  </UiKitProvider>
+```
+
+
+### per component
+```
+  <ChannelsPage customComponents={{ Message: CustomMessageList }} />
+```

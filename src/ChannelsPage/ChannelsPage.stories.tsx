@@ -33,14 +33,26 @@ const CustomMessage = ({ data, type }) => <div>custom: {data.text}</div>;
 
 export const ChannelsPageWithoutCustomization = () => <ChannelsPage />;
 
-export const ChannelsPageWithCustomization = () => (
-  <ChannelsPage customComponents={{ Message: CustomMessage }} />
-);
-
 export const WithGlobalProvider = () => (
-  <UiKitProvider customComponents={{ Message: CustomMessage }} theme={{}}>
+  <UiKitProvider
+    customComponents={{ Message: CustomMessage }}
+    theme={
+      {
+        /*TODO*/
+      }
+    }
+    localization={
+      {
+        /*TODO*/
+      }
+    }
+  >
     <ChannelsPage />
   </UiKitProvider>
+);
+
+export const ChannelsPageWithCustomization = () => (
+  <ChannelsPage customComponents={{ Message: CustomMessage }} />
 );
 
 export const WithGlobalProviderOverride = () => (
@@ -52,12 +64,26 @@ export const WithGlobalProviderOverride = () => (
 const CustomMessageList = ({ messages }) => (
   <>
     customMessageList
-    {messages.map(Message)}
+    {messages.map(message => (
+      <Message key={message._id} {...message} />
+    ))}
   </>
 );
-
 export const MultyLayer = () => (
   <UiKitProvider customComponents={{ MessageList: CustomMessageList }} theme={{}}>
+    <ChannelsPage />
+  </UiKitProvider>
+);
+
+const CustomMessageWithMessageInside = props => (
+  <div>
+    <div>Custom Message, wrapping existing Message component</div>
+    <Message {...props} />
+  </div>
+);
+
+export const CustomWithReuseingOfOriginal = () => (
+  <UiKitProvider customComponents={{ Message: CustomMessageWithMessageInside }} theme={{}}>
     <ChannelsPage />
   </UiKitProvider>
 );
