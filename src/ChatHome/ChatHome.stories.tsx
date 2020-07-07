@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import EkoClient, { ChannelRepository, _changeSDKDefaultConfig } from 'eko-sdk';
 
-import ChannelsPage from './index';
-import Channel from '../Channel';
+import ChatHome from './index';
+import Chat from '../Chat';
 import Message from '../Message';
 import MessageList from '../MessageList';
 import UiKitProvider from '../UiKitProvider';
 
 export default {
-  title: 'ChannelsPage',
+  title: 'ChatHome',
 };
 
 _changeSDKDefaultConfig({
@@ -29,9 +29,16 @@ try {
   console.log(e);
 }
 
-const CustomMessage = ({ data, type }) => <div>custom: {data.text}</div>;
+// const CustomMessage = ({ data, type }) => <div>custom: {data.text}</div>;
 
-export const ChannelsPageWithoutCustomization = () => <ChannelsPage />;
+const CustomMessage = props => (
+  <div>
+    original message with header
+    <Message {...props} />
+  </div>
+);
+
+export const ChatHomeWithoutCustomization = () => <ChatHome />;
 
 export const WithGlobalProvider = () => (
   <UiKitProvider
@@ -47,17 +54,17 @@ export const WithGlobalProvider = () => (
       }
     }
   >
-    <ChannelsPage />
+    <ChatHome />
   </UiKitProvider>
 );
 
-export const ChannelsPageWithCustomization = () => (
-  <ChannelsPage customComponents={{ Message: CustomMessage }} />
+export const ChatHomeWithCustomization = () => (
+  <ChatHome customComponents={{ Message: CustomMessage }} />
 );
 
 export const WithGlobalProviderOverride = () => (
   <UiKitProvider customComponents={{ Message: CustomMessage }} theme={{}}>
-    <ChannelsPage customComponents={{ Message: null }} />
+    <ChatHome customComponents={{ Message: null }} />
   </UiKitProvider>
 );
 
@@ -71,7 +78,7 @@ const CustomMessageList = ({ messages }) => (
 );
 export const MultyLayer = () => (
   <UiKitProvider customComponents={{ MessageList: CustomMessageList }} theme={{}}>
-    <ChannelsPage />
+    <ChatHome />
   </UiKitProvider>
 );
 
@@ -87,5 +94,7 @@ export const CustomWithReuseingOfOriginal = () => (
     <ChannelsPage />
   </UiKitProvider>
 );
+
+export const Example = () => <div>Example</div>;
 
 export const JustUiComponent = () => <Channel channelId="intg-test-eNv4C5JRYQS7xADb1mHsCR" />;

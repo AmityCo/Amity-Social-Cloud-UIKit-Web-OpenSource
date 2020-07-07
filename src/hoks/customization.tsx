@@ -19,6 +19,7 @@ export const customizableComponent = componentName => Component => props => {
     [customComponentsMap, customComponents],
   );
 
+  // TODO do not render provider if there is no changes
   return (
     <CustomComponentsProvider value={memoizedCustomComponentsMap}>
       {CustomComponent ? <CustomComponent {...props} /> : <Component {...props} />}

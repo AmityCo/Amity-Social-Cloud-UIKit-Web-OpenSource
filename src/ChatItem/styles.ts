@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ChannelItemContainer = styled.div`
+export const ChatItemContainer = styled.div`
   background-color: white;
   border-bottom: 1px solid #e6e6e6;
   height: 40px;
