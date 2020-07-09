@@ -1,8 +1,7 @@
 import UiKitProvider from './UiKitProvider';
-import ChannelsPage from './ChannelsPage';
-import Channel from './Channel';
-import Message from './Message';
+import ChatHome from './ChatHome';
+import Chat from './Chat';
 import MessageComposeBar from './MessageComposeBar';
 import MessageList from './MessageList';
 
-export { UiKitProvider, ChannelsPage, Channel, Message, MessageComposeBar, MessageList };
+export { UiKitProvider, ChatHome, Chat, MessageComposeBar, MessageList };

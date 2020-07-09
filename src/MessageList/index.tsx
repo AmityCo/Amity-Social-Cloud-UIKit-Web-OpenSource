@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MessageRepository } from 'eko-sdk';
-import Message from '../Message';
+import IncomingMessage from '../Message/IncomingMessage';
+import OutgoingMessage from '../Message/OutgoingMessage';
 
 import { customizableComponent } from '../hoks/customization';
 import usePaginatedLiveObject from '../hooks/usePaginatedLiveObject';
@@ -26,9 +27,16 @@ const MessageList = ({ channelId }) => {
         isReverse
       >
         <MessageListContainer>
-          {messages.map(message => (
-            <Message key={message.messageId} {...message} />
-          ))}
+          {messages.map((message, i) => {
+            const nextMessage = messages[i + 1];
+            const consequent = nextMessage && nextMessage.userId === message.userId;
+            const currentUserId = 'Web-Test'; // TODO
+            const outgoing = message.userId === currentUserId;
+            const MessageComponent = outgoing ? OutgoingMessage : IncomingMessage;
+            return (
+              <MessageComponent key={message.messageId} message={message} consequent={consequent} />
+            );
+          })}
         </MessageListContainer>
       </InfiniteScroll>
     </InfiniteScrollContainer>

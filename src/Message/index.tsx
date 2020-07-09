@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
+import { FormattedTime } from 'react-intl';
 import { customizableComponent } from '../hoks/customization';
+import useLiveObject from '../hooks/useLiveObject';
 
-import { MessageContainer } from './styles';
+import {
+  Avatar,
+  AvatarWrapper,
+  MessageWrapper,
+  MessageContainer,
+  MessageBody,
+  UserName,
+  BottomLine,
+  MessageDate,
+  MessageOptionsIcon,
+} from './styles';
 
 const MessageContent = ({ data, type }) => {
   switch (type) {
@@ -17,12 +29,25 @@ const MessageContent = ({ data, type }) => {
   }
 };
 
-const Message = ({ data, type }) => {
-  console.log('data, type', data, type);
+const Message = ({ message, message: { data, type, editedAt, user }, consequent, incoming }) => {
+  const { displayName } = user.model;
+
   return (
-    <MessageContainer>
-      <MessageContent data={data} type={type} />
-    </MessageContainer>
+    <MessageWrapper incoming={incoming}>
+      {incoming && <AvatarWrapper>{!consequent && <Avatar />}</AvatarWrapper>}
+      <MessageContainer>
+        {incoming && !consequent && <UserName>{displayName}</UserName>}
+        <MessageBody incoming={incoming}>
+          <MessageContent data={data} type={type} />
+          <BottomLine>
+            <MessageDate>
+              <FormattedTime value={editedAt} />
+            </MessageDate>
+            <MessageOptionsIcon />
+          </BottomLine>
+        </MessageBody>
+      </MessageContainer>
+    </MessageWrapper>
   );
 };
 

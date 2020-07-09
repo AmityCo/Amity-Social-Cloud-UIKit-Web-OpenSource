@@ -1,9 +1,16 @@
 import React, { useContext, useMemo } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { CustomComponentsContext, CustomComponentsProvider } from '../hoks/customization';
+import { SdkProvider } from '../hoks/withSdk';
 import { IntlProvider } from 'react-intl';
+import GlobalStyle from './GlobalStyle';
 
-const UiKitProvider = ({ customComponents, theme, children /* TODO localization */ }) => {
+const UiKitProvider = ({
+  customComponents = {},
+  theme = {},
+  client,
+  children /* TODO localization */,
+}) => {
   const customComponentsMap = useContext(CustomComponentsContext);
 
   const memoizedCustomComponentsMap = useMemo(
@@ -14,10 +21,22 @@ const UiKitProvider = ({ customComponents, theme, children /* TODO localization 
     [customComponentsMap, customComponents],
   );
 
+  const sdkInfo = useMemo(
+    () => ({
+      client,
+    }),
+    [client],
+  );
+
   return (
     <IntlProvider locale="en-us">
       <ThemeProvider theme={theme}>
-        <CustomComponentsProvider value={customComponents}>{children}</CustomComponentsProvider>
+        <SdkProvider value={sdkInfo}>
+          <CustomComponentsProvider value={customComponents}>
+            <GlobalStyle />
+            {children}
+          </CustomComponentsProvider>
+        </SdkProvider>
       </ThemeProvider>
     </IntlProvider>
   );

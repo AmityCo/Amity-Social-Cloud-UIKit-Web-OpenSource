@@ -38,7 +38,11 @@ const CustomMessage = props => (
   </div>
 );
 
-export const ChatHomeWithoutCustomization = () => <ChatHome />;
+export const ChatHomeWithoutCustomization = () => (
+  <UiKitProvider>
+    <ChatHome />
+  </UiKitProvider>
+);
 
 export const WithGlobalProvider = () => (
   <UiKitProvider
@@ -59,7 +63,9 @@ export const WithGlobalProvider = () => (
 );
 
 export const ChatHomeWithCustomization = () => (
-  <ChatHome customComponents={{ Message: CustomMessage }} />
+  <UiKitProvider>
+    <ChatHome customComponents={{ Message: CustomMessage }} />
+  </UiKitProvider>
 );
 
 export const WithGlobalProviderOverride = () => (
@@ -72,7 +78,7 @@ const CustomMessageList = ({ messages }) => (
   <>
     customMessageList
     {messages.map(message => (
-      <Message key={message._id} {...message} />
+      <Message key={message._id} message={message} />
     ))}
   </>
 );
@@ -97,4 +103,8 @@ export const CustomWithReuseingOfOriginal = () => (
 
 export const Example = () => <div>Example</div>;
 
-export const JustUiComponent = () => <Channel channelId="intg-test-eNv4C5JRYQS7xADb1mHsCR" />;
+export const JustUiComponent = () => (
+  <UiKitProvider>
+    <Channel channelId="intg-test-eNv4C5JRYQS7xADb1mHsCR" />
+  </UiKitProvider>
+);
