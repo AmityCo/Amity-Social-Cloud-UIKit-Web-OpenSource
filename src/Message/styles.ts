@@ -12,7 +12,7 @@ export const MessageOptionsIcon = styled(FaIcon).attrs({ icon: faEllipsisV })`
 `;
 
 export const Avatar = styled(UiKitAvatar)`
-  margin: 0 12px 0 auto;
+  margin-right: auto;
 `;
 
 export const MessageWrapper = styled.div`
@@ -25,7 +25,7 @@ export const MessageWrapper = styled.div`
 export const MessageContainer = styled.div``;
 
 export const AvatarWrapper = styled.div`
-  width: 72px;
+  width: 52px;
 `;
 
 export const UserName = styled.div`

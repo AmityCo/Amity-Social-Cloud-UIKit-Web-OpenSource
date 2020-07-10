@@ -5,6 +5,5 @@ export const ChannelsListContainer = styled.div`
   border: 1px solid #e6e6e6;
   border-radius: 4px;
   width: 360px;
-  margin-right: 10px;
   overflow: auto;
 `;

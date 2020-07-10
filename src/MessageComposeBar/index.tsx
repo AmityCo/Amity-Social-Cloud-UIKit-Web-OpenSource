@@ -3,24 +3,36 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import { customizableComponent } from '../hoks/customization';
 
-import { MessageComposeBarInput } from './styles';
+import {
+  MessageComposeBarContainer,
+  MessageComposeBarInput,
+  ImageMessageIcon,
+  FileMessageIcon,
+  SendMessageIcon,
+} from './styles';
 
 const MessageComposeBar = ({ onSubmit }) => {
   const [message, setMessage] = useState('');
 
+  const sendMessage = () => {
+    if (message === '') return;
+    onSubmit(message);
+    setMessage('');
+  };
+
   return (
-    <MessageComposeBarInput
-      placeholder="Type your message..."
-      type="text"
-      value={message}
-      onChange={e => setMessage(e.target.value)}
-      onKeyPress={e => {
-        if (e.key === 'Enter' && message !== '') {
-          onSubmit(message);
-          setMessage('');
-        }
-      }}
-    />
+    <MessageComposeBarContainer>
+      <ImageMessageIcon />
+      <FileMessageIcon />
+      <MessageComposeBarInput
+        placeholder="Type your message..."
+        type="text"
+        value={message}
+        onChange={e => setMessage(e.target.value)}
+        onKeyPress={e => e.key === 'Enter' && sendMessage()}
+      />
+      <SendMessageIcon onClick={sendMessage} />
+    </MessageComposeBarContainer>
   );
 };
 
