@@ -7,7 +7,7 @@ export const SendMessageIcon = styled(FaIcon).attrs({ icon: faArrowCircleUp })`
   font-size: 28px;
   cursor: pointer;
   margin-left: 12px;
-  margin-right: 20px;
+  margin-right: 8px;
   color: #0f86fe;
 `;
 

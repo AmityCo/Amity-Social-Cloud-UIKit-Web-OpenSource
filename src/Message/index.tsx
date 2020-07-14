@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FormattedTime } from 'react-intl';
 import { customizableComponent } from '../hoks/customization';
 import useLiveObject from '../hooks/useLiveObject';
+import Options from './Options';
 
 import {
   Avatar,
@@ -12,10 +13,13 @@ import {
   UserName,
   BottomLine,
   MessageDate,
-  MessageOptionsIcon,
+  SystemMessageContainer,
 } from './styles';
 
-const MessageContent = ({ data, type }) => {
+const DeletedMessage = () => <SystemMessageContainer>deleted</SystemMessageContainer>;
+
+const MessageContent = ({ message: { data, type, isDeleted } }) => {
+  if (isDeleted) return <DeletedMessage />;
   switch (type) {
     case 'text':
       return data.text || null;
@@ -25,7 +29,7 @@ const MessageContent = ({ data, type }) => {
     case 'image':
     case 'file':
     default:
-      return 'Unsupported message format';
+      return <SystemMessageContainer>Unsupported message format</SystemMessageContainer>;
   }
 };
 
@@ -38,12 +42,12 @@ const Message = ({ message, message: { data, type, editedAt, user }, consequent,
       <MessageContainer>
         {incoming && !consequent && <UserName>{displayName}</UserName>}
         <MessageBody incoming={incoming}>
-          <MessageContent data={data} type={type} />
+          <MessageContent message={message} />
           <BottomLine>
             <MessageDate>
               <FormattedTime value={editedAt} />
             </MessageDate>
-            <MessageOptionsIcon />
+            {!message.isDeleted && <Options incoming={incoming} message={message} />}
           </BottomLine>
         </MessageBody>
       </MessageContainer>
