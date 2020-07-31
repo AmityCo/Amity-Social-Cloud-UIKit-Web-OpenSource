@@ -1,26 +1,29 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/pro-regular-svg-icons';
 import UiKitAvatar from '../Avatar';
 
 export const Avatar = styled(UiKitAvatar)``;
 
-export const DetailsIcon = styled(FaIcon).attrs({ icon: faBars })`
-  font-size: 16px;
+export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+  font-size: 19px;
   cursor: pointer;
   color: #17181c;
-  align-self: center;
+  margin-left: auto;
 `;
 
-export const ChatHeaderContainer = styled.div`
-  height: 76px;
-  flex-shrink: 0;
-  padding: 0 20px;
-  background: #ffffff;
-  border-top: 1px solid #e3e4e8;
-  border-bottom: 1px solid #e3e4e8;
+export const ChatDetailsHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  color: #17181c;
+  font-weight: 600;
+  font-size: 16px;
+`;
+
+export const ChatDetailsContainer = styled.div`
+  width: 280px;
+  flex-shrink: 0;
+  border: solid 1px #e3e4e8;
+  padding: 24px 20px;
 `;
 
 export const Channel = styled.div`
@@ -29,7 +32,7 @@ export const Channel = styled.div`
 `;
 
 export const ChannelInfo = styled.div`
-  margin-left: 8px;
+  margin-left: 12px;
 `;
 
 export const ChannelName = styled.div`
@@ -38,7 +41,7 @@ export const ChannelName = styled.div`
   color: #000000;
 `;
 
-export const MemberCount = styled.div`
+export const CommunityName = styled.div`
   font-size: 12px;
-  color: #999999;
+  // color: #999999;
 `;

@@ -5,6 +5,7 @@ import { customizableComponent } from '../hoks/customization';
 import useLiveObject from '../hooks/useLiveObject';
 import RecentChat from '../RecentChat';
 import Chat from '../Chat';
+import ChatDetails from '../ChatDetails';
 
 import { ChatHomeContainer } from './styles';
 
@@ -13,9 +14,10 @@ const channelRepo = new ChannelRepository();
 const ChatHome = () => {
   const [currentChannelId, setCurrenChannelId] = useState(null);
 
-  const [showChatDetails, setShowChatDetails] = useState(true);
+  const [showChatDetails, setShowChatDetails] = useState(false);
 
   const toggleShowChatDetails = () => setShowChatDetails(!showChatDetails);
+  const hideChatDetails = () => setShowChatDetails(false);
 
   return (
     <ChatHomeContainer>
@@ -27,7 +29,15 @@ const ChatHome = () => {
           onChatDetailsClick={toggleShowChatDetails}
         />
       )}
-      {showChatDetails && 'details'}
+      <>
+        {showChatDetails && currentChannelId && (
+          <ChatDetails
+            key={currentChannelId}
+            channelId={currentChannelId}
+            onClose={hideChatDetails}
+          />
+        )}
+      </>
     </ChatHomeContainer>
   );
 };

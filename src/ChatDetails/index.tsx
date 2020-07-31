@@ -7,30 +7,34 @@ import useLiveObject from '../hooks/useLiveObject';
 
 import {
   Avatar,
-  ChatHeaderContainer,
-  DetailsIcon,
+  ChatDetailsContainer,
+  ChatDetailsHeader,
+  CloseIcon,
   Channel,
   ChannelInfo,
+  CommunityName,
   ChannelName,
-  MemberCount,
 } from './styles';
 
 const channelRepo = new ChannelRepository();
 
-const ChatHeader = ({ channelId, onChatDetailsClick }) => {
+const ChatDetails = ({ channelId, onClose }) => {
   const channel = useLiveObject(() => channelRepo.channelForId(channelId), {});
-
   return (
-    <ChatHeaderContainer>
+    <ChatDetailsContainer>
+      <ChatDetailsHeader>
+        Chat Detail
+        <CloseIcon onClick={onClose} />
+      </ChatDetailsHeader>
       <Channel>
         <Avatar />
         <ChannelInfo>
+          <CommunityName>Community Name</CommunityName>
           <ChannelName>{channel.displayName || channel.channelId}</ChannelName>
-          <MemberCount>{channel.memberCount} members</MemberCount>
         </ChannelInfo>
       </Channel>
-      <DetailsIcon onClick={onChatDetailsClick} />
-    </ChatHeaderContainer>
+    </ChatDetailsContainer>
   );
 };
-export default customizableComponent('ChatHeader')(ChatHeader);
+
+export default customizableComponent('ChatDetails')(ChatDetails);

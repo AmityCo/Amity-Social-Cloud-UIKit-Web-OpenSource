@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 
-import { ChatItemContainer } from './styles';
+import { Avatar, ChatItemContainer, UnreadCount } from './styles';
 
-const ChatItem = ({ channelId, selected, onSelect }) => (
-  <ChatItemContainer onClick={() => onSelect(channelId)} selected={selected}>
-    {channelId}
+const ChatItem = ({ channel, selected, onSelect }) => (
+  <ChatItemContainer onClick={() => onSelect(channel.channelId)} selected={selected}>
+    <Avatar />
+    {channel.channelId}
+    {!!channel.unreadCount && <UnreadCount>{channel.unreadCount}</UnreadCount>}
   </ChatItemContainer>
 );
 
