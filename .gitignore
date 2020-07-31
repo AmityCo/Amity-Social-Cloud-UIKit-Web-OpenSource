@@ -1,5 +1,9 @@
 node_modules/
 build/
-storybook-static/
+packaging/storybook-static/
+packaging/ui-kit-web-linux
+packaging/ui-kit-web-macos
+packaging/ui-kit-web-win.exe
+
 
 .DS_Store

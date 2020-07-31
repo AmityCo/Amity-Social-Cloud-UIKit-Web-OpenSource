@@ -1,0 +1,20 @@
+{
+  "name": "ui-kit-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ui-kit-web.js",
+  "bin": "ui-kit-web.js",
+  "scripts": {
+    "pack": "pkg .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "pkg": {
+    "assets": "./storybook-static/**/*"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-static": "^0.7.11",
+    "open": "^7.1.0"
+  }
+}
