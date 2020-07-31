@@ -12,7 +12,7 @@ const usePaginatedLiveObject = (createLiveObject, defaultData) => {
 
   useEffect(() => {
     const liveObject = createLiveObject();
-
+    liveObject.model && setData(liveObject.model);
     liveObject.on('dataUpdated', setData);
 
     liveObject.on('loadingStatusChanged', ({ newValue }) => {
