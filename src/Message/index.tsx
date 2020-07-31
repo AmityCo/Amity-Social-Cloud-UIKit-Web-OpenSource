@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FormattedTime } from 'react-intl';
+import Linkify from 'react-linkify';
 import { customizableComponent } from '../hoks/customization';
 import useLiveObject from '../hooks/useLiveObject';
 import Options from './Options';
@@ -22,7 +23,7 @@ const MessageContent = ({ message: { data, type, isDeleted } }) => {
   if (isDeleted) return <DeletedMessage />;
   switch (type) {
     case 'text':
-      return data.text || null;
+      return <Linkify>{data.text}</Linkify>;
     case 'custom':
       return JSON.stringify(data);
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faImage } from '@fortawesome/free-regular-svg-icons';
-import { faPaperclip, faArrowCircleUp } from '@fortawesome/free-solid-svg-icons';
+import { faPaperclip, faImage } from '@fortawesome/pro-regular-svg-icons';
+import { faArrowCircleUp } from '@fortawesome/pro-solid-svg-icons';
 
 export const SendMessageIcon = styled(FaIcon).attrs({ icon: faArrowCircleUp })`
   font-size: 28px;

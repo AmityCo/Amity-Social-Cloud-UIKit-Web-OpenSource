@@ -6,8 +6,9 @@ import {
   MessageFlagRepository,
 } from 'eko-sdk';
 
+import Popover from '../commonComponents/Popover';
+
 import {
-  Popover,
   MessageOptionsIcon,
   Menu,
   MenuItem,

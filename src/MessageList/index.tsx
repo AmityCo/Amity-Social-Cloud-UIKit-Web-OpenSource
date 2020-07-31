@@ -5,17 +5,20 @@ import IncomingMessage from '../Message/IncomingMessage';
 import OutgoingMessage from '../Message/OutgoingMessage';
 
 import { customizableComponent } from '../hoks/customization';
+import withSDK from '../hoks/withSDK';
 import usePaginatedLiveObject from '../hooks/usePaginatedLiveObject';
 
 import { InfiniteScrollContainer, MessageListContainer } from './styles';
 
 const messageRepo = new MessageRepository();
 
-const MessageList = ({ channelId }) => {
+const MessageList = ({ client, channelId }) => {
   const [messages, hasMore, loadMore] = usePaginatedLiveObject(
     () => messageRepo.messagesForChannel({ channelId }),
     [],
   );
+
+  const { currentUserId } = client;
 
   return (
     <InfiniteScrollContainer>
@@ -30,7 +33,6 @@ const MessageList = ({ channelId }) => {
           {messages.map((message, i) => {
             const nextMessage = messages[i + 1];
             const consequent = nextMessage && nextMessage.userId === message.userId;
-            const currentUserId = 'Web-Test'; // TODO
             const outgoing = message.userId === currentUserId;
             const MessageComponent = outgoing ? OutgoingMessage : IncomingMessage;
             return (
@@ -43,4 +45,4 @@ const MessageList = ({ channelId }) => {
   );
 };
 
-export default customizableComponent('MessageList')(MessageList);
+export default withSDK(customizableComponent('MessageList')(MessageList));
