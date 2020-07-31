@@ -1,13 +1,13 @@
 import React, { useContext, useMemo } from 'react';
 
-export const SdkContext = React.createContext({});
+export const SDKContext = React.createContext({});
 
-export const SdkProvider = SdkContext.Provider;
+export const SDKProvider = SDKContext.Provider;
 
-const withSdk = Component => props => {
-  const { client, sdk } = useContext(SdkContext);
+const withSDK = Component => props => {
+  const { client, SDK } = useContext(SDKContext);
 
-  return <Component client={client} sdk={sdk} {...props} />;
+  return <Component client={client} SDK={SDK} {...props} />;
 };
 
-export default withSdk;
+export default withSDK;
