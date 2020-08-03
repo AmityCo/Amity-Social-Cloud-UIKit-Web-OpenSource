@@ -38,10 +38,12 @@ const extensionsToIconsMap = {
   mpeg: mpegIcon,
   pdf: pdfIcon,
   ppt: pptIcon,
+  pptx: pptIcon,
   ppx: ppxIcon,
   rar: rarIcon,
   txt: txtIcon,
   xls: xlsIcon,
+  xlsx: xlsIcon,
   zip: zipIcon,
 };
 
