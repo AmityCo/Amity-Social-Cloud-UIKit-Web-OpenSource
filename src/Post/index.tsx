@@ -6,6 +6,7 @@ import { customizableComponent } from '../hoks/customization';
 import EngagementBar from '../EngagementBar';
 import Avatar from '../Avatar';
 import Files from '../Files';
+import Images from '../Images';
 import {
   PostContainer,
   PostHeader,
@@ -24,7 +25,7 @@ const hrefDecorator = (decoratedHref, decoratedText, key) => (
   </a>
 );
 
-const Post = ({ className, post: { author, text, files, images } }) => {
+const Post = ({ className, post: { author, text, files = [], images = [] } }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const expand = () => setIsExpanded(true);
 
@@ -53,6 +54,7 @@ const Post = ({ className, post: { author, text, files, images } }) => {
         )}
       </Linkify>
       <Files files={files} />
+      <Images images={images.slice(0, 4)} />
       <EngagementBar />
     </PostContainer>
   );

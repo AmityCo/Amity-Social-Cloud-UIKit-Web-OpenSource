@@ -3,6 +3,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import { customizableComponent } from '../hoks/customization';
 import Files from '../Files';
+import Images from '../Images';
 
 import {
   PostComposeContainer,
@@ -45,6 +46,94 @@ const testFiles = [
     filename: 'archive.zip',
     size: 123123132923,
   },
+  {
+    filename: 'filename.audio',
+    size: 12323,
+  },
+  {
+    filename: 'filename.ogg',
+    size: 12323,
+  },
+  {
+    filename: 'filename.aac',
+    size: 12323,
+  },
+  {
+    filename: 'filename.avi',
+    size: 12323,
+  },
+  {
+    filename: 'filename.csv',
+    size: 12323,
+  },
+  {
+    filename: 'filename.doc',
+    size: 12323,
+  },
+  {
+    filename: 'filename.exe',
+    size: 12323,
+  },
+  {
+    filename: 'filename.html',
+    size: 12323,
+  },
+  {
+    filename: 'filename.jpg',
+    size: 12323,
+  },
+  {
+    filename: 'filename.png',
+    size: 12323,
+  },
+  {
+    filename: 'filename.gif',
+    size: 12323,
+  },
+  {
+    filename: 'filename.mov',
+    size: 12323,
+  },
+  {
+    filename: 'filename.mp3',
+    size: 12323,
+  },
+  {
+    filename: 'filename.mp4',
+    size: 12323,
+  },
+  {
+    filename: 'filename.mpeg',
+    size: 12323,
+  },
+  {
+    filename: 'filename.pdf',
+    size: 12323,
+  },
+  {
+    filename: 'filename.ppt',
+    size: 12323,
+  },
+  {
+    filename: 'filename.ppx',
+    size: 12323,
+  },
+  {
+    filename: 'filename.rar',
+    size: 12323,
+  },
+  {
+    filename: 'filename.txt',
+    size: 12323,
+  },
+  {
+    filename: 'filename.xls',
+    size: 12323,
+  },
+  {
+    filename: 'filename.zip',
+    size: 12323,
+  },
 ];
 
 const testImages = [
@@ -77,7 +166,8 @@ const PostComposeBar = ({ onSubmit, className }) => {
   };
 
   const addImage = () => {
-    setImages([...images, testImages[0]]);
+    const image = testImages[images.length % testImages.length];
+    setImages([...images, { id: Date.now(), ...image }]);
   };
 
   const addFile = () => {
@@ -87,6 +177,10 @@ const PostComposeBar = ({ onSubmit, className }) => {
 
   const onRemoveFile = file => {
     setFiles(files.filter(({ id }) => id !== file.id));
+  };
+
+  const onRemoveImage = image => {
+    setImages(images.filter(({ id }) => id !== image.id));
   };
 
   return (
@@ -101,6 +195,7 @@ const PostComposeBar = ({ onSubmit, className }) => {
             onChange={e => setText(e.target.value)}
           />
           {!!files.length && <Files files={files} onRemove={onRemoveFile} />}
+          {!!images.length && <Images images={images} onRemove={onRemoveImage} />}
         </PostComposeTextareaWrapper>
       </PostContainer>
       <ActionsBar>
