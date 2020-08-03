@@ -8,6 +8,7 @@ import { SDKProvider } from '../hoks/withSDK';
 import { IntlProvider } from 'react-intl';
 import GlobalStyle from './GlobalStyle';
 import GlobalTheme from './GlobalTheme';
+import { ConfirmContainer } from '../commonComponents/Confirm';
 
 _changeSDKDefaultConfig({
   ws: { endpoint: 'https://api.staging.ekomedia.technology' },
@@ -59,6 +60,7 @@ const UiKitProvider = ({
           <CustomComponentsProvider value={customComponents}>
             <GlobalStyle />
             {children}
+            <ConfirmContainer />
           </CustomComponentsProvider>
         </SDKProvider>
       </ThemeProvider>
