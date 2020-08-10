@@ -11,11 +11,18 @@ import {
   PostComposeTextareaWrapper,
   ImagePostIcon,
   FilePostIcon,
-  ActionsBar,
+  Footer,
+  FooterActionBar,
   PostContainer,
   PostButton,
   Avatar,
+  PostAsCommunityContainer,
+  Checkbox,
+  Caption,
 } from './styles';
+
+const MAX_IMAGES = 10;
+const MAX_FILES = 10;
 
 const testFiles = [
   {
@@ -143,19 +150,47 @@ const testImages = [
   },
 ];
 
-const PostComposeBar = ({ onSubmit, className }) => {
-  const [text, setText] = useState('');
-  const [files, setFiles] = useState([]);
-  const [images, setImages] = useState([]);
-  const [isCommunityPost, setIsCommunityPost] = useState(false);
+const PostAsCommunity = ({ value, onChange }) => (
+  <PostAsCommunityContainer>
+    <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />
+    <div>
+      Post as community
+      <Caption>Enable this will publish the post on behalf of community account</Caption>
+    </div>
+  </PostAsCommunityContainer>
+);
 
-  const isEmpty = text.length === 0 && files.length === 0 && images.length === 0;
+const isIdenticalAuthor = (a, b) =>
+  (!!a.userId && a.userId == b.userId) || (!!a.communityId && a.communityId == b.communityId);
+
+const PostComposeBar = ({
+  user = { userId: 1, name: 'John' },
+  community = { communityId: 33, name: 'Harry Potter Fans' },
+  communities,
+  inGlobalFeed,
+  edit,
+  post = {},
+  onSubmit,
+  onSave,
+  className,
+}) => {
+  const [author, setAuthor] = useState(user);
+  const [text, setText] = useState(post.text || '');
+  const [files, setFiles] = useState(post.files || []);
+  const [images, setImages] = useState(post.images || []);
+
+  const isEmpty = text.trim().length === 0 && files.length === 0 && images.length === 0;
+
+  const isCommunityPost = isIdenticalAuthor(author, community);
+
+  const setIsCommunityPost = shouldBeCommunityPost =>
+    setAuthor(shouldBeCommunityPost ? community : user);
 
   const createPost = () => {
     if (isEmpty) return;
     onSubmit({
       id: Date.now(),
-      author: { name: 'John' },
+      author,
       text,
       files,
       images,
@@ -163,6 +198,16 @@ const PostComposeBar = ({ onSubmit, className }) => {
     setText('');
     setFiles([]);
     setImages([]);
+  };
+
+  const updatePost = () => {
+    if (isEmpty) return;
+    onSave({
+      ...post,
+      text,
+      files,
+      images,
+    });
   };
 
   const addImage = () => {
@@ -183,28 +228,38 @@ const PostComposeBar = ({ onSubmit, className }) => {
     setImages(images.filter(({ id }) => id !== image.id));
   };
 
+  const canUploadImage = files.length === 0 && images.length <= MAX_IMAGES;
+  const canUploadFile = images.length === 0 && files.length <= MAX_FILES;
+
   return (
-    <PostComposeContainer className={className}>
+    <PostComposeContainer className={className} edit={edit}>
+      {!edit && <Avatar />
+      /* (inGlobalFeed ? <RoleSelector author={author} communities={communities} /> : <Avatar />) */
+      }
       <PostContainer>
-        <Avatar />
-        <PostComposeTextareaWrapper>
+        <PostComposeTextareaWrapper edit={edit}>
           <PostComposeTextarea
-            placeholder="Type your post..."
+            placeholder="What's going on..."
             type="text"
             value={text}
             onChange={e => setText(e.target.value)}
           />
-          {!!files.length && <Files files={files} onRemove={onRemoveFile} />}
+          {!!files.length && <Files editing files={files} onRemove={onRemoveFile} />}
           {!!images.length && <Images images={images} onRemove={onRemoveImage} />}
         </PostComposeTextareaWrapper>
+        <Footer edit={edit}>
+          {!edit && !!community && (
+            <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
+          )}
+          <FooterActionBar>
+            <ImagePostIcon disabled={!canUploadImage} onClick={canUploadImage && addImage} />
+            <FilePostIcon disabled={!canUploadFile} onClick={canUploadFile && addFile} />
+            <PostButton disabled={isEmpty} onClick={edit ? updatePost : createPost}>
+              {edit ? 'Save' : 'Post'}
+            </PostButton>
+          </FooterActionBar>
+        </Footer>
       </PostContainer>
-      <ActionsBar>
-        <ImagePostIcon onClick={addImage} />
-        <FilePostIcon onClick={addFile} />
-        <PostButton disabled={isEmpty} onClick={createPost}>
-          Post
-        </PostButton>
-      </ActionsBar>
     </PostComposeContainer>
   );
 };

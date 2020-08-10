@@ -5,25 +5,37 @@ import { faPaperclip, faImage } from '@fortawesome/pro-regular-svg-icons';
 import { PrimaryButton } from '../commonComponents/Button';
 import UIAvatar from '../Avatar';
 
+// TODO add icon button
 export const ImagePostIcon = styled(FaIcon).attrs({ icon: faImage })`
   font-size: 18px;
   cursor: pointer;
   margin-right: 20px;
-  color: #17181c;
+  color: ${({ disabled }) => (disabled ? '#A5A9B5' : '#17181c')};
 `;
 
 export const FilePostIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
   font-size: 18px;
   margin-right: 12px;
   cursor: pointer;
-  color: #17181c;
+  color: ${({ disabled }) => (disabled ? '#A5A9B5' : '#17181c')};
+`;
+
+const postComposeEditStyle = `
+  width: 520px;
+  padding: 0;
+  border: none;
+`;
+
+const postComposeStyle = `
+  width: 560px;
+  padding: 16px 20px 12px 16px;
+  border: 1px solid #edeef2;
 `;
 
 export const PostComposeContainer = styled.div`
-  width: 560px;
-  padding: 16px 20px 12px 16px;
+  ${({ edit }) => (edit ? postComposeEditStyle : postComposeStyle)}
+  display: flex;
   background: #ffffff;
-  border: 1px solid #edeef2;
   border-radius: 4px;
 `;
 
@@ -35,22 +47,47 @@ export const PostComposeTextarea = styled(TextareaAutosize).attrs({ rows: 1, max
   resize: none;
 `;
 
-export const PostComposeTextareaWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 10px 12px;
-  flex-grow: 1;
-  border-radius: 4px;
-  border: 1px solid #e3e4e8;
+const postComposeTextareaWrapperEditStyle = `
+  border: none;
+  padding: 20px 16px;
 `;
 
-export const ActionsBar = styled.div`
-  margin-top: 12px;
+const postComposeTextareaWrapperStyle = `
+  border: 1px solid #e3e4e8;
+  padding: 10px 12px;
+  &:focus-within {
+    border: 1px solid #1054de;
+  }
+`;
+
+export const PostComposeTextareaWrapper = styled.div`
+  ${({ edit }) => (edit ? postComposeTextareaWrapperEditStyle : postComposeTextareaWrapperStyle)}
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  border-radius: 4px;
+`;
+
+const footerEditStyle = `
+  border-top: 1px solid #EBECEF;
+  padding: 12px 16px;
+`;
+
+const footerStyle = `
+  padding-top: 12px;
+`;
+
+export const Footer = styled.div`
+  ${({ edit }) => (edit ? footerEditStyle : footerStyle)}
+`;
+
+export const FooterActionBar = styled.div`
   display: flex;
   align-items: center;
 `;
+
 export const PostContainer = styled.div`
-  display: flex;
+  flex-grow: 1;
 `;
 
 export const PostButton = styled(PrimaryButton)`
@@ -60,4 +97,26 @@ export const PostButton = styled(PrimaryButton)`
 
 export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
+`;
+
+export const PostAsCommunityContainer = styled.div`
+  display: flex;
+  border-radius: 4px;
+  background: #ebecef;
+  padding: 10px;
+  margin-bottom: 12px;
+  ${({ theme }) => theme.typography.captionBold}
+`;
+
+export const Checkbox = styled.input.attrs({
+  type: 'checkbox',
+})`
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+`;
+
+export const Caption = styled.div`
+  ${({ theme }) => theme.typography.caption}
+  color: #636878;
 `;
