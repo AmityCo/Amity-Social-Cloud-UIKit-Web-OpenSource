@@ -23,6 +23,8 @@ export const CreateNewChatIcon = styled(FaIcon).attrs({ icon: faCommentAltPlus }
 
 export const RecentChatListHeader = styled.div`
   display: flex;
+  padding-left: 8px;
+  margin-bottom: 5px;
 `;
 
 export const RecentChatListContainer = styled.div`
@@ -30,7 +32,8 @@ export const RecentChatListContainer = styled.div`
   border: 1px solid #e6e6e6;
   width: 280px;
   overflow: auto;
-  padding: 28px 16px;
+  padding: 28px 16px 5px 8px;
+
   flex-shrink: 0;
 `;
 

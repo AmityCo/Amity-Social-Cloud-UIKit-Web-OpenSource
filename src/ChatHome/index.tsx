@@ -11,6 +11,7 @@ import { ChatHomeContainer } from './styles';
 
 const channelRepo = new ChannelRepository();
 
+// TODO add onCreateGroupChat
 const ChatHome = () => {
   const [currentChannelId, setCurrenChannelId] = useState(null);
 

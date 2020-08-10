@@ -1,15 +1,8 @@
 import styled from 'styled-components';
+import SideMenuItem from '../commonComponents/SideMenuItem';
 import UiKitAvatar from '../Avatar';
 
-export const ChatItemContainer = styled.div`
-  background-color: white;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  ${({ selected }) => selected && 'border-left: 1px solid rgba(41, 203, 114, 0.74);'}
-  cursor: pointer;
-  margin-top: 20px;
-`;
+export const ChatItemContainer = styled(SideMenuItem)``;
 
 export const Avatar = styled(UiKitAvatar)`
   margin-right: 8px;
