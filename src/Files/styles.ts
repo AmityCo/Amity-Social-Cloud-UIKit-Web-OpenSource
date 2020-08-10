@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/pro-regular-svg-icons';
 
+import { SecondaryButton } from '../commonComponents/Button';
+
 export const RemoveIcon = styled(FaIcon).attrs({ icon: faTimes })`
   padding: 0 10px;
   cursor: pointer;
@@ -48,4 +50,11 @@ export const FileName = styled.div`
   ${({ theme }) => theme.typography.bodyBold}
   margin-left: 8px;
   margin-right: 4px;
+`;
+
+export const ViewAllFilesButton = styled(SecondaryButton)`
+  ${({ theme }) => theme.typography.body}
+  display: block;
+  color: #1054de;
+  margin-top: 4px;
 `;

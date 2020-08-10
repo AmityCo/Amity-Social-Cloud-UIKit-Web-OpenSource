@@ -12,9 +12,10 @@ const File = ({ file, onRemove }) => {
   useEffect(
     () => {
       if (progress >= 100) return;
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         setProgress(progress + 0.5);
       }, 50);
+      return () => clearTimeout(timeout);
     },
     [progress],
   );
