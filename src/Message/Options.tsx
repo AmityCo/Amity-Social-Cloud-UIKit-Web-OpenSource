@@ -7,11 +7,10 @@ import {
 } from 'eko-sdk';
 
 import Popover from '../commonComponents/Popover';
+import Menu, { MenuItem } from '../commonComponents/Menu';
 
 import {
   MessageOptionsIcon,
-  Menu,
-  MenuItem,
   SaveIcon,
   DeleteIcon,
   CloseIcon,

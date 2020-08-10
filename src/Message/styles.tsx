@@ -48,16 +48,6 @@ export const MessageOptionsIcon = styled(FaIcon).attrs({ icon: faEllipsisV })`
   cursor: pointer;
 `;
 
-export const Menu = styled.div``;
-
-export const MenuItem = styled.div`
-  padding: 8px 12px;
-  cursor: pointer;
-  &:hover {
-    background: #f2f2f4;
-  }
-`;
-
 export const Avatar = styled(UiKitAvatar)`
   margin-right: auto;
 `;

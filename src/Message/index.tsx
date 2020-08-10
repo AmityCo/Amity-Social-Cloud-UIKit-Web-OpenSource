@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { FormattedTime } from 'react-intl';
-import Linkify from 'react-linkify';
+
 import { customizableComponent } from '../hoks/customization';
 import useLiveObject from '../hooks/useLiveObject';
+
+import Linkify from '../commonComponents/Linkify';
+
 import Options from './Options';
 
 import {
