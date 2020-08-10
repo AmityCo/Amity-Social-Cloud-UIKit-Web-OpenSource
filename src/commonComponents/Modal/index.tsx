@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 
 import { Overlay, ModalWindow, Header, Content, Footer, CloseIcon } from './styles';
 
-const Modal = ({ className, onOverlayClick, onClose, title, footer, clean, children }) => (
+const Modal = ({ className, onOverlayClick, onCancel, title, footer, clean, children }) => (
   <Overlay onClick={onOverlayClick}>
     <ModalWindow className={className}>
-      {(title || onClose) && (
+      {(title || onCancel) && (
         <Header clean={clean}>
           {title}
-          {onClose && <CloseIcon onClick={onClose} />}
+          {onCancel && <CloseIcon onClick={onCancel} />}
         </Header>
       )}
       <Content isText={typeof children === 'string'}>{children}</Content>

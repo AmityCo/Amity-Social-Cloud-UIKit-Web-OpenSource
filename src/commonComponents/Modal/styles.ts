@@ -16,13 +16,26 @@ export const Overlay = styled.div`
   bottom: 0;
   right: 0;
   left: 0;
-  background: rgba(23, 24, 28, 0.8);
+  overflow-y: auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 20px 0;
+  background: rgba(23, 24, 28, 0.8);
+  animation-duration: 0.3s;
+  animation-name: appear;
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 export const ModalWindow = styled.div`
+  margin: auto;
   background: white;
   border-radius: 6px;
   max-width: 520px;
@@ -44,5 +57,5 @@ export const Content = styled.div`
 
 export const Footer = styled.div`
   ${({ clean }) => !clean && 'border-top: 1px solid #ebecef;'}
-  padding: 16px;
+  padding: 16px 12px;
 `;

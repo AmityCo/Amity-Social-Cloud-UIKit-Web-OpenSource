@@ -40,28 +40,22 @@ export const ConfirmContainer = () => {
 
   if (!confirm) return null;
 
-  const attachConfirmCanceling = fn => () => {
+  const closeConfirm = () => setConfirm(null);
+
+  const attachCanceling = fn => () => {
+    closeConfirm();
     fn && fn();
-    setConfirm(null);
   };
 
   return (
     <Confirm
       {...confirm}
-      onCancel={attachConfirmCanceling(confirm.onCancel)}
-      onOk={attachConfirmCanceling(confirm.onOk)}
+      onCancel={attachCanceling(confirm.onCancel)}
+      onOk={attachCanceling(confirm.onOk)}
     />
   );
 };
 
 export const confirm = confirmData => spawnNewConfirm(confirmData);
-
-setTimeout(() => {
-  confirm({
-    title: 'title',
-    content: 'content',
-  });
-  console.log('confirmm!!');
-}, 1000);
 
 export default Confirm;
