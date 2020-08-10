@@ -31,27 +31,22 @@ const ChatButton = () => (
 );
 
 const CommunityHeader = ({ className }) => {
-  const private = true;
-  const name = 'Harry Poter Fans';
-  const postsCount = 345;
-  const membersCount = 4501;
-
   return (
     <CommunityHeaderContainer className={className}>
-      <CommunityWrapper>
-        <Avatar />
-        <div>
-          {private && <PrivateIcon />}
-          <CommunityName>{name}</CommunityName>
-          <div>
-            <Count>{toHumanString(postsCount)}</Count> posts{' '}
-            <Count>{toHumanString(membersCount)}</Count> members
-          </div>
-        </div>
-        <Buttons>
-          <ChatButton /> <EditProfileButton />
-        </Buttons>
-      </CommunityWrapper>
+      {/* <CommunityWrapper> */}
+      {/*   <Avatar /> */}
+      {/*   <div> */}
+      {/*     {private && <PrivateIcon />} */}
+      {/*     <CommunityName>{name}</CommunityName> */}
+      {/*     <div> */}
+      {/*       <Count>{toHumanString(postsCount)}</Count> posts{' '} */}
+      {/*       <Count>{toHumanString(membersCount)}</Count> members */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/*   <Buttons> */}
+      {/*     <ChatButton /> <EditProfileButton /> */}
+      {/*   </Buttons> */}
+      {/* </CommunityWrapper> */}
       <Tabs>
         <Tab active>Timeline</Tab>
         <Tab>About</Tab>

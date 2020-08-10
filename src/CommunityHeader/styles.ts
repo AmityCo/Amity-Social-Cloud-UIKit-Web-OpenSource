@@ -30,24 +30,5 @@ export const CommunityWrapper = styled.div`
 `;
 
 export const Tabs = styled.div`
-  border-top: 1px solid #f7f7f8;
   padding: 0 16px;
-`;
-
-export const Avatar = styled(UiAvatar).attrs({
-  size: 'big',
-})`
-  margin-right: 12px;
-`;
-
-export const CommunityName = styled.span`
-  ${({ theme }) => theme.typography.headline}
-`;
-
-export const Count = styled.span`
-  ${({ theme }) => theme.typography.bodyBold}
-`;
-
-export const Buttons = styled.div`
-  margin-left: auto;
 `;

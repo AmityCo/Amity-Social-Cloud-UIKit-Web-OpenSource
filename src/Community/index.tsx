@@ -5,7 +5,8 @@ import { customizableComponent } from '../hoks/customization';
 import withSDK from '../hoks/withSDK';
 import useLiveObject from '../hooks/useLiveObject';
 import SideMenu from '../SideMenu';
-import CommunityAbout from '../CommunityAbout';
+import CommunityInformation from '../CommunityInformation';
+import EmptyFeed from '../EmptyFeed';
 
 import {
   CommunityContainer,
@@ -28,12 +29,13 @@ const Community = ({ client }) => {
   // textPostCreator.text('foobar');
 
   // textPostCreator.post().then(res => console.log(res));
+
   const [posts, setPosts] = useState([
     {
       id: 1,
       author: { name: 'John' },
       text:
-        'text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n text\n',
+        'text\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\n',
     },
     {
       id: 2,
@@ -43,6 +45,10 @@ const Community = ({ client }) => {
   ]);
 
   const addPost = newPost => setPosts([newPost, ...posts]);
+  const removePost = postId => setPosts(posts.filter(({ id }) => id !== postId));
+
+  const editPost = updatedPost =>
+    setPosts(posts.map(post => (post.id === updatedPost.id ? updatedPost : post)));
 
   return (
     <CommunityContainer>
@@ -52,11 +58,17 @@ const Community = ({ client }) => {
         <CommunityContent>
           <CommunityFeed>
             <PostCompose onSubmit={addPost} />
+            {posts.length === 0 && <EmptyFeed />}
             {posts.map(post => (
-              <Post key={post.id} post={post} />
+              <Post
+                key={post.id}
+                post={post}
+                onEdit={updatedPost => editPost(updatedPost)}
+                onDelete={() => removePost(post.id)}
+              />
             ))}
           </CommunityFeed>
-          <CommunityAbout />
+          <CommunityInformation />
         </CommunityContent>
       </CommunityWrapper>
     </CommunityContainer>
