@@ -19,6 +19,7 @@ export const RemoveIcon = styled(FaIcon).attrs({ icon: faTimes })`
 export const ImageContainer = styled.div`
   position: relative;
   overflow: hidden;
+  ${({ editing }) => !editing && 'cursor: pointer;'}
   img {
     object-fit: cover;
     width: 100%;
@@ -91,4 +92,20 @@ export const ProgressBar = styled.div`
   bottom: 0;
   opacity: 0.3;
   z-index: 1;
+`;
+
+export const NumberOfHiddenImagesOverlay = styled.div`
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  z-index: 2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  ${({ theme }) => theme.typography.headline}
+  font-size: 32px;
 `;

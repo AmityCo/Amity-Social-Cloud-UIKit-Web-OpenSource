@@ -148,6 +148,9 @@ const testImages = [
     url:
       'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
   },
+  {
+    url: 'https://theievoice.com/wp-content/uploads/2020/02/1040.jpg',
+  },
 ];
 
 const PostAsCommunity = ({ value, onChange }) => (
@@ -228,8 +231,8 @@ const PostComposeBar = ({
     setImages(images.filter(({ id }) => id !== image.id));
   };
 
-  const canUploadImage = files.length === 0 && images.length <= MAX_IMAGES;
-  const canUploadFile = images.length === 0 && files.length <= MAX_FILES;
+  const canUploadImage = files.length === 0 && images.length < MAX_IMAGES;
+  const canUploadFile = images.length === 0 && files.length < MAX_FILES;
 
   return (
     <PostComposeContainer className={className} edit={edit}>
@@ -245,7 +248,7 @@ const PostComposeBar = ({
             onChange={e => setText(e.target.value)}
           />
           {!!files.length && <Files editing files={files} onRemove={onRemoveFile} />}
-          {!!images.length && <Images images={images} onRemove={onRemoveImage} />}
+          {!!images.length && <Images editing images={images} onRemove={onRemoveImage} />}
         </PostComposeTextareaWrapper>
         <Footer edit={edit}>
           {!edit && !!community && (

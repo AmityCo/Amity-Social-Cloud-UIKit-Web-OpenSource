@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { customizableComponent } from '../hoks/customization';
 
-import { ImageContainer, Content, ProgressBar, RemoveIcon } from './styles';
+import {
+  ImageContainer,
+  Content,
+  ProgressBar,
+  RemoveIcon,
+  NumberOfHiddenImagesOverlay,
+} from './styles';
 
-const Image = ({ image, onRemove }) => {
+const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
   // simulate progress animation
   const [progress, setProgress] = useState(0);
   useEffect(
@@ -17,11 +23,19 @@ const Image = ({ image, onRemove }) => {
     [progress],
   );
 
+  const removeImage = e => {
+    e.stopPropagation();
+    onRemove(image);
+  };
+
   return (
-    <ImageContainer>
+    <ImageContainer editing={editing} onClick={onClick}>
+      {numberOfHiddenImages > 0 && (
+        <NumberOfHiddenImagesOverlay>+ {numberOfHiddenImages}</NumberOfHiddenImagesOverlay>
+      )}
       <ProgressBar progress={progress} />
       <img src={image.url} />
-      {!!onRemove && <RemoveIcon onClick={() => onRemove(image)} />}
+      {!!onRemove && <RemoveIcon onClick={removeImage} />}
     </ImageContainer>
   );
 };

@@ -101,7 +101,7 @@ const Post = ({
         )}
       </Linkify>
       <Files files={files} />
-      <Images images={images.slice(0, 4)} />
+      <Images images={images} />
       <EngagementBar />
     </PostContainer>
   );
