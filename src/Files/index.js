@@ -16,6 +16,8 @@ const Files = ({ editing, files = [], onRemove }) => {
 
   const haveHiddenFiles = visibleFiles.length < files.length;
 
+  if (files.length === 0) return null;
+
   return (
     <FilesContainer>
       {visibleFiles.map((file, i) => (

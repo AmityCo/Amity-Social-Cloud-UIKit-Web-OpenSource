@@ -13,7 +13,7 @@ import {
 const CommunityItem = ({ community, selected, onSelect }) => (
   <CommunityItemContainer onClick={() => onSelect(channel.channelId)} selected={selected}>
     <Avatar />
-    {community.private && <PrivateIcon />}
+    {community.isPrivate && <PrivateIcon />}
     <CommunityName>{community.name}</CommunityName>
     {community.verified && <VervifiedIcon />}
   </CommunityItemContainer>

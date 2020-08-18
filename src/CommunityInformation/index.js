@@ -5,14 +5,14 @@ import Options from '../commonComponents/Options';
 import { Avatar, Container, CommunityName, Header, Footer, Content, RightIcon } from './styles';
 
 const testCommunity = {
-  private: true,
+  isPrivate: true,
   name: 'Harry Poter Fans',
   postsCount: 345,
   membersCount: 4501,
 };
 
 const CommunityInformation = ({ community = testCommunity, onChannelClick, selectedChannelId }) => {
-  const { private, name, postsCount, membersCount } = community;
+  const { isPrivate, name, postsCount, membersCount } = community;
 
   const todo = () => console.log('TODO');
 

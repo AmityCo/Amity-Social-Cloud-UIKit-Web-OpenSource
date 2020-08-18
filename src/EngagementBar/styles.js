@@ -16,7 +16,7 @@ export const Counters = styled.div`
 
 export const InteractionBar = styled.div`
   display: flex;
-  padding-top: 2px;
+  padding: 2px 0;
 `;
 
 export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`

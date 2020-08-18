@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChannelRepository, FeedRepository, PostRepository, EkoPostDataType } from 'eko-sdk';
+import { ChannelRepository, EkoPostDataType } from 'eko-sdk';
 
 import { customizableComponent } from '../hoks/customization';
 import withSDK from '../hoks/withSDK';
@@ -17,9 +17,6 @@ import {
   CommunityWrapper,
   CommunityHeader,
 } from './styles';
-
-const feedRepo = new FeedRepository();
-const postRepo = new PostRepository();
 
 const Community = ({ client }) => {
   // const feed = useLiveObject(() => feedRepo.getUserFeed(client.currentUserId), []);

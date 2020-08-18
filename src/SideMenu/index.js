@@ -23,7 +23,7 @@ const SideMenu = ({ onChannelClick, selectedChannelId }) => {
     { name: 'BLACKPINK TH', verified: true },
     { name: 'Breakfast Club' },
     { name: 'BTS & ARMY' },
-    { name: 'Harry Potter Fans', private: true },
+    { name: 'Harry Potter Fans', isPrivate: true },
   ];
 
   return (

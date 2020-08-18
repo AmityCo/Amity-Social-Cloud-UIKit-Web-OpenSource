@@ -102,7 +102,7 @@ const Post = ({
       </Linkify>
       <Files files={files} />
       <Images images={images} />
-      <EngagementBar />
+      <EngagementBar post={post} onPostEdit={onEdit} />
     </PostContainer>
   );
 };

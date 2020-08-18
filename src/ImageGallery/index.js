@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 
-import Image from './Image';
-
 import {
   ImageGalleryContainer,
   ImageContainer,
