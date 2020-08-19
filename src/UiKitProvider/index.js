@@ -9,6 +9,7 @@ import { IntlProvider } from 'react-intl';
 import GlobalStyle from './GlobalStyle';
 import GlobalTheme from './GlobalTheme';
 import { ConfirmContainer } from '../commonComponents/Confirm';
+import { NotificationsContainer } from '../commonComponents/Notification';
 
 _changeSDKDefaultConfig({
   ws: { endpoint: 'https://api.staging.ekomedia.technology' },
@@ -60,6 +61,7 @@ const UiKitProvider = ({
           <CustomComponentsProvider value={customComponents}>
             <GlobalStyle />
             {children}
+            <NotificationsContainer />
             <ConfirmContainer />
           </CustomComponentsProvider>
         </SDKProvider>

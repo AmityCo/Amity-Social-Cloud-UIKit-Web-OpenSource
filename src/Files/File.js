@@ -6,9 +6,9 @@ import FileIcon from './FileIcon';
 
 import { FileContainer, Content, FileName, FileSize, ProgressBar, RemoveIcon } from './styles';
 
-const File = ({ file, onRemove }) => {
+const File = ({ editing, file, onRemove }) => {
   // simulate progress animation
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(editing ? 0 : 100);
   useEffect(
     () => {
       if (progress >= 100) return;

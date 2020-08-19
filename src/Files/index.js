@@ -21,7 +21,7 @@ const Files = ({ editing, files = [], onRemove }) => {
   return (
     <FilesContainer>
       {visibleFiles.map((file, i) => (
-        <File key={file.id} file={file} onRemove={onRemove} />
+        <File editing={editing} key={file.id} file={file} onRemove={onRemove} />
       ))}
       {haveHiddenFiles && <ViewAllFilesButton onClick={open}>View all files</ViewAllFilesButton>}
     </FilesContainer>

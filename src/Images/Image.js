@@ -11,7 +11,7 @@ import {
 
 const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
   // simulate progress animation
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(editing ? 0 : 100);
   useEffect(
     () => {
       if (progress >= 100) return;

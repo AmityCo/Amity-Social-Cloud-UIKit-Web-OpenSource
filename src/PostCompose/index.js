@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { customizableComponent } from '../hoks/customization';
+import { notification } from '../commonComponents/Notification';
 import Files from '../Files';
 import Images from '../Images';
 
@@ -166,6 +167,16 @@ const PostAsCommunity = ({ value, onChange }) => (
 const isIdenticalAuthor = (a, b) =>
   (!!a.userId && a.userId == b.userId) || (!!a.communityId && a.communityId == b.communityId);
 
+const maxImagesWarning = () =>
+  notification.info({
+    content: 'You reached the maximum attachment of 10',
+  });
+
+const maxFilesWarning = () =>
+  notification.info({
+    content: 'The selected file is larger than 1GB. Plese select a new file. ',
+  });
+
 const PostComposeBar = ({
   user = { userId: 1, name: 'John' },
   community = { communityId: 33, name: 'Harry Potter Fans' },
@@ -255,8 +266,14 @@ const PostComposeBar = ({
             <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
           )}
           <FooterActionBar>
-            <ImagePostIcon disabled={!canUploadImage} onClick={canUploadImage && addImage} />
-            <FilePostIcon disabled={!canUploadFile} onClick={canUploadFile && addFile} />
+            <ImagePostIcon
+              disabled={!canUploadImage}
+              onClick={canUploadImage ? addImage : maxImagesWarning}
+            />
+            <FilePostIcon
+              disabled={!canUploadFile}
+              onClick={canUploadFile ? addFile : maxFilesWarning}
+            />
             <PostButton disabled={isEmpty} onClick={edit ? updatePost : createPost}>
               {edit ? 'Save' : 'Post'}
             </PostButton>
