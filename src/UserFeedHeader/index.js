@@ -4,7 +4,7 @@ import { customizableComponent } from '../hoks/customization';
 import Button from '../commonComponents/Button';
 import Tab from '../commonComponents/Tab';
 
-import { CommunityHeaderContainer, Tabs } from './styles';
+import { UserFeedHeaderContainer, Tabs } from './styles';
 
 const UserFeedHeader = ({ className }) => {
   return (
