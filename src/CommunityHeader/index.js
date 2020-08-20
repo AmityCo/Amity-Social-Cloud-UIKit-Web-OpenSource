@@ -4,38 +4,14 @@ import { customizableComponent } from '../hoks/customization';
 import Button from '../commonComponents/Button';
 import Tab from '../commonComponents/Tab';
 
-import {
-  Avatar,
-  Buttons,
-  CommunityHeaderContainer,
-  CommunityWrapper,
-  CommunityName,
-  Tabs,
-  Count,
-  ChatIcon,
-  PenIcon,
-  PrivateIcon,
-} from './styles';
-
-const EditProfileButton = () => (
-  <Button>
-    <PenIcon />
-    Edit Profile
-  </Button>
-);
-
-const ChatButton = () => (
-  <Button>
-    <ChatIcon />
-  </Button>
-);
+import { CommunityHeaderContainer, Tabs } from './styles';
 
 const CommunityHeader = ({ className }) => {
   return (
     <CommunityHeaderContainer className={className}>
       <Tabs>
         <Tab active>Timeline</Tab>
-        <Tab>About</Tab>
+        <Tab>Members</Tab>
       </Tabs>
     </CommunityHeaderContainer>
   );

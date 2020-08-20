@@ -11,8 +11,8 @@ import {
 
 import UiKitProvider from '../UiKitProvider';
 
-import Layout from '../Layout/';
-import SideMenu, { SELECTION_TYPES } from '../SideMenu';
+import FeedLayout from '../FeedLayout/';
+import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';
 
 import UserFeed from './UserFeed';
 import NewsFeed from './NewsFeed';
@@ -46,9 +46,9 @@ const Pages = () => {
   };
 
   return (
-    <Layout
+    <FeedLayout
       sideMenu={
-        <SideMenu
+        <FeedSideMenu
           selected={selected}
           onCreateCommunityClick={() => console.log('TODO')}
           onCommunityClick={goToCommunity}
@@ -71,7 +71,7 @@ const Pages = () => {
           <CommunityFeed key={communityId} communityId={communityId} />
         </Route>
       </Switch>
-    </Layout>
+    </FeedLayout>
   );
 };
 

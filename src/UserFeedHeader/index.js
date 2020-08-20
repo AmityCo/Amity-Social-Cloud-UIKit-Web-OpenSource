@@ -4,31 +4,7 @@ import { customizableComponent } from '../hoks/customization';
 import Button from '../commonComponents/Button';
 import Tab from '../commonComponents/Tab';
 
-import {
-  Avatar,
-  Buttons,
-  UserFeedHeaderContainer,
-  CommunityWrapper,
-  CommunityName,
-  Tabs,
-  Count,
-  ChatIcon,
-  PenIcon,
-  PrivateIcon,
-} from './styles';
-
-const EditProfileButton = () => (
-  <Button>
-    <PenIcon />
-    Edit Profile
-  </Button>
-);
-
-const ChatButton = () => (
-  <Button>
-    <ChatIcon />
-  </Button>
-);
+import { CommunityHeaderContainer, Tabs } from './styles';
 
 const UserFeedHeader = ({ className }) => {
   return (
