@@ -25,4 +25,5 @@ export const Avatar = styled(UiKitAvatar)`
 export const CommunityName = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `;

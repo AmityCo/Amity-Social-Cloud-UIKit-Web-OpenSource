@@ -14,7 +14,7 @@ const CommunityItem = ({ community, active, onClick }) => (
   <CommunityItemContainer onClick={onClick} active={active}>
     <Avatar />
     {community.isPrivate && <PrivateIcon />}
-    <CommunityName>{community.name}</CommunityName>
+    <CommunityName title={community.name}>{community.name}</CommunityName>
     {community.verified && <VervifiedIcon />}
   </CommunityItemContainer>
 );

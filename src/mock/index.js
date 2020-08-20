@@ -64,6 +64,7 @@ export const communities = [
   { communityId: '3', name: 'Breakfast Club' },
   { communityId: '4', name: 'BTS & ARMY' },
   { communityId: '5', name: 'Harry Potter Fans', isPrivate: true },
+  { communityId: '6', name: 'Very long name very very long name name', isPrivate: true },
 ];
 
 const communityFeeds = communities.map(community => [
