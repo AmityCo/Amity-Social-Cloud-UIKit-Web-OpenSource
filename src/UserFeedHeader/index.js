@@ -7,7 +7,7 @@ import Tab from '../commonComponents/Tab';
 import {
   Avatar,
   Buttons,
-  CommunityHeaderContainer,
+  UserFeedHeaderContainer,
   CommunityWrapper,
   CommunityName,
   Tabs,
@@ -30,15 +30,14 @@ const ChatButton = () => (
   </Button>
 );
 
-const CommunityHeader = ({ className }) => {
+const UserFeedHeader = ({ className }) => {
   return (
-    <CommunityHeaderContainer className={className}>
+    <UserFeedHeaderContainer className={className}>
       <Tabs>
         <Tab active>Timeline</Tab>
-        <Tab>About</Tab>
       </Tabs>
-    </CommunityHeaderContainer>
+    </UserFeedHeaderContainer>
   );
 };
 
-export default customizableComponent('CommunityHeader')(CommunityHeader);
+export default customizableComponent('UserFeedHeader')(UserFeedHeader);

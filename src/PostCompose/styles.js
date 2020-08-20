@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import TextareaAutosize from 'react-autosize-textarea';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faImage } from '@fortawesome/pro-regular-svg-icons';
+import { faSortDown } from '@fortawesome/pro-solid-svg-icons';
 import { PrimaryButton } from '../commonComponents/Button';
 import UIAvatar from '../Avatar';
 
@@ -11,6 +12,12 @@ export const ImagePostIcon = styled(FaIcon).attrs({ icon: faImage })`
   cursor: pointer;
   margin-right: 20px;
   color: ${({ disabled }) => (disabled ? '#A5A9B5' : '#17181c')};
+`;
+
+export const SelectIcon = styled(FaIcon).attrs({ icon: faSortDown })`
+  font-size: 18px;
+  margin-right: 8px;
+  margin-top: -4px;
 `;
 
 export const FilePostIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
@@ -66,6 +73,7 @@ export const PostComposeTextareaWrapper = styled.div`
   flex-direction: column;
   flex-grow: 1;
   border-radius: 4px;
+  min-height: 40px;
 `;
 
 const footerEditStyle = `
@@ -119,4 +127,17 @@ export const Checkbox = styled.input.attrs({
 export const Caption = styled.div`
   ${({ theme }) => theme.typography.caption}
   color: #636878;
+`;
+
+export const AuthorSelectorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const CommunitySeparator = styled.div`
+  ${({ theme }) => theme.typography.caption}
+  border-top: 1px solid #e3e4e8;
+  color: #636878;
+  padding: 12px;
 `;

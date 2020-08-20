@@ -28,13 +28,6 @@ const CommunityInformation = ({ community = testCommunity, onChannelClick, selec
         />
       </Header>
       <CommunityName>{name}</CommunityName>
-      {/* <Content> */}
-      {/*   Take your place in the magical universe of Harry Poter. Everyone's welcome and feel free to */}
-      {/*   join! */}
-      {/* </Content> */}
-      {/* <Footer> */}
-      {/*   View all <RightIcon /> */}
-      {/* </Footer> */}
     </Container>
   );
 };

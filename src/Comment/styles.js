@@ -63,6 +63,14 @@ export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
   margin-right: 5px;
 `;
 
+export const LikeButton = styled(SecondaryButton)`
+  padding: 12px 0;
+
+  &:hover {
+    background-color: transparent;
+  }
+`;
+
 export const SolidLikeIcon = styled(FaIcon).attrs({ icon: faThumbsUpSolid })`
   font-size: 16px;
   margin-right: 5px;

@@ -10,8 +10,8 @@ import {
   PrivateIcon,
 } from './styles';
 
-const CommunityItem = ({ community, selected, onSelect }) => (
-  <CommunityItemContainer onClick={() => onSelect(channel.channelId)} selected={selected}>
+const CommunityItem = ({ community, active, onClick }) => (
+  <CommunityItemContainer onClick={onClick} active={active}>
     <Avatar />
     {community.isPrivate && <PrivateIcon />}
     <CommunityName>{community.name}</CommunityName>

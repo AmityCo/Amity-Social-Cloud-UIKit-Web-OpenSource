@@ -57,4 +57,9 @@ export const ViewAllFilesButton = styled(SecondaryButton)`
   display: block;
   color: #1054de;
   margin-top: 4px;
+  padding: 12px 0;
+
+  &:hover {
+    background-color: transparent;
+  }
 `;

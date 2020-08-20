@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { NotificationContainer, Notifications, SuccessIcon, InfoIcon, ErrorIcon } from './styles';
 
-const DEFAULT_NOTIFICATION_DURATION = 5000;
+const DEFAULT_NOTIFICATION_DURATION = 3000;
 
 const Notification = ({ className, content, icon }) => (
   <NotificationContainer clean className={className}>

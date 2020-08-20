@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { customizableComponent } from '../hoks/customization';
 import withSDK from '../hoks/withSDK';
 
-import CommunityInformation from '../CommunityInformation';
 import EmptyFeed from '../EmptyFeed';
 
 import usePostsMock from '../hooks/usePostsMock';
@@ -12,19 +11,22 @@ import { communities } from '../mock';
 
 import { Content, Feed, PostCompose, Post, CommunityHeader } from './styles';
 
-const COMMUNITY_TEST_POSTS = [];
+const NEWS_TEST_POSTS = [
+  {
+    id: 2,
+    author: { communityId: '5', name: 'Harry Potter Fans', isPrivate: true },
+    text: 'News feed text',
+  },
+];
 
-const CommunityFeed = ({ client, communityId }) => {
-  const { posts, addPost, removePost, editPost } = usePostsMock(COMMUNITY_TEST_POSTS);
-
-  const community = communities.find(community => community.communityId === communityId);
+const NewsFeed = ({ client }) => {
+  const { posts, addPost, removePost, editPost } = usePostsMock(NEWS_TEST_POSTS);
 
   return (
     <>
       <Content>
         <Feed>
-          <CommunityHeader />
-          <PostCompose community={community} onSubmit={addPost} />
+          <PostCompose inGlobalFeed communities={communities.slice(0, 3)} onSubmit={addPost} />
           {posts.length === 0 && <EmptyFeed />}
           {posts.map(post => (
             <Post
@@ -35,10 +37,9 @@ const CommunityFeed = ({ client, communityId }) => {
             />
           ))}
         </Feed>
-        <CommunityInformation community={community} />
       </Content>
     </>
   );
 };
 
-export default withSDK(customizableComponent('CommunityFeed')(CommunityFeed));
+export default withSDK(customizableComponent('NewsFeed')(NewsFeed));

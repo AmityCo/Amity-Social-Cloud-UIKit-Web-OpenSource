@@ -4,7 +4,6 @@ import Truncate from 'react-truncate-markup';
 import { customizableComponent } from '../hoks/customization';
 
 import Linkify from '../commonComponents/Linkify';
-import { SecondaryButton } from '../commonComponents/Button';
 
 import Files from '../Files';
 import Images from '../Images';
@@ -21,6 +20,7 @@ import {
   ReadMoreButton,
   InteractionBar,
   LikeIcon,
+  LikeButton,
   SolidLikeIcon,
 } from './styles';
 
@@ -60,9 +60,9 @@ const Comment = ({ className, comment, comment: { author, text, isLiked, likes =
           )}
         </Linkify>
         <InteractionBar>
-          <SecondaryButton onClick={toggleLike} active={isLiked}>
+          <LikeButton onClick={toggleLike} active={isLiked}>
             {isLiked ? <SolidLikeIcon /> : <LikeIcon />} {!!totalLikes && totalLikes}
-          </SecondaryButton>
+          </LikeButton>
         </InteractionBar>
       </Content>
     </CommentContainer>
