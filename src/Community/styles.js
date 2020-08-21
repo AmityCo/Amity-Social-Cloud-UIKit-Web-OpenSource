@@ -1,22 +1,22 @@
 import styled from 'styled-components';
-import UiPost from '../Post';
-import UiPostCompose from '../PostCompose';
-import UiCommunityHeader from '../CommunityHeader';
-import UiUserFeedHeader from '../UserFeedHeader';
+import UIPost from '../Post';
+import UIPostCompose from '../PostCompose';
+import UIFeedHeaderTabs from '../commonComponents/FeedHeaderTabs';
+import UIUserFeedHeader from '../UserFeedHeader';
 
-export const Post = styled(UiPost)`
+export const Post = styled(UIPost)`
   margin-bottom: 12px;
 `;
 
-export const CommunityHeader = styled(UiCommunityHeader)`
+export const FeedHeaderTabs = styled(UIFeedHeaderTabs)`
   margin-bottom: 12px;
 `;
 
-export const UserFeedHeader = styled(UiUserFeedHeader)`
+export const UserFeedHeader = styled(UIUserFeedHeader)`
   margin-bottom: 12px;
 `;
 
-export const PostCompose = styled(UiPostCompose)`
+export const PostCompose = styled(UIPostCompose)`
   margin-bottom: 14px;
 `;
 

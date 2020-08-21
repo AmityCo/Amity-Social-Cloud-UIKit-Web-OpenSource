@@ -6,7 +6,7 @@ import useLiveObject from '../hooks/useLiveObject';
 import CommunityItem from '../CommunityItem';
 import SideMenuItem from '../commonComponents/SideMenuItem';
 
-import { communities } from '../mock';
+import { myCommunities } from '../mock';
 
 import {
   SideMenuListContainer,
@@ -57,7 +57,7 @@ const FeedSideMenu = ({
         <SideMenuItem onClick={onCreateCommunityClick} icon={<PlusIcon />}>
           Create Community
         </SideMenuItem>
-        {communities.map((community, i) => (
+        {myCommunities.map((community, i) => (
           <CommunityItem
             active={communityId === community.communityId}
             onClick={() => onCommunityClick(community.communityId)}

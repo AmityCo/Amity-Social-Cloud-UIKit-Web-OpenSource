@@ -79,6 +79,7 @@
     "react-intl": "^4.7.6",
     "react-linkify": "^1.0.0-alpha",
     "react-tiny-popover": "^5.1.0",
-    "react-truncate-markup": "^5.0.0"
+    "react-truncate-markup": "^5.0.0",
+    "recoil": "0.0.10"
   }
 }

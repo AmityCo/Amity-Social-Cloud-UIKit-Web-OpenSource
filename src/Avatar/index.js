@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { customizableComponent } from '../hoks/customization';
 
-import { AvatarContainer } from './styles';
+import { AvatarContainer, Img } from './styles';
 
 const STANDARD_SIZE = 40;
 
@@ -11,8 +11,10 @@ const SIZES = {
   tiny: 28,
 };
 
-const Avatar = ({ className, size }) => (
-  <AvatarContainer size={SIZES[size] || STANDARD_SIZE} className={className} />
+const Avatar = ({ className, size, avatar }) => (
+  <AvatarContainer size={SIZES[size] || STANDARD_SIZE} className={className}>
+    {avatar && <Img src={avatar} />}
+  </AvatarContainer>
 );
 
 export default customizableComponent('Avatar')(Avatar);

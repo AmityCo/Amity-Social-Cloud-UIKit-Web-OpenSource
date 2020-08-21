@@ -12,7 +12,7 @@ import {
 
 const CommunityItem = ({ community, active, onClick }) => (
   <CommunityItemContainer onClick={onClick} active={active}>
-    <Avatar />
+    <Avatar avatar={community.avatar} />
     {community.isPrivate && <PrivateIcon />}
     <CommunityName title={community.name}>{community.name}</CommunityName>
     {community.verified && <VervifiedIcon />}

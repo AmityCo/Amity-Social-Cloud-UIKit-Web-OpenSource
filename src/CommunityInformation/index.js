@@ -19,7 +19,7 @@ const CommunityInformation = ({ community = testCommunity, onChannelClick, selec
   return (
     <Container>
       <Header>
-        <Avatar />
+        <Avatar avatar={community.avatar} />
         <Options
           options={[
             { name: 'Edit community', action: todo },

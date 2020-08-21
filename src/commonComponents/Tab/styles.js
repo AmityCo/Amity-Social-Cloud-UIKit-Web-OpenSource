@@ -23,5 +23,5 @@ color: #1054DE;
   }
 `}
 
-  transition: border-bottom 0.3s;
+  transition: border-color 0.3s;
 `;

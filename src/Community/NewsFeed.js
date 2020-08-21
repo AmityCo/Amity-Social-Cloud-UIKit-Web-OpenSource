@@ -7,26 +7,18 @@ import EmptyFeed from '../EmptyFeed';
 
 import usePostsMock from '../hooks/usePostsMock';
 
-import { communities } from '../mock';
+import { myCommunities, testNewsFeed } from '../mock';
 
-import { Content, Feed, PostCompose, Post, CommunityHeader } from './styles';
-
-const NEWS_TEST_POSTS = [
-  {
-    id: 2,
-    author: { communityId: '5', name: 'Harry Potter Fans', isPrivate: true },
-    text: 'News feed text',
-  },
-];
+import { Content, Feed, PostCompose, Post } from './styles';
 
 const NewsFeed = ({ client }) => {
-  const { posts, addPost, removePost, editPost } = usePostsMock(NEWS_TEST_POSTS);
+  const { posts, addPost, removePost, editPost } = usePostsMock(testNewsFeed);
 
   return (
     <>
       <Content>
         <Feed>
-          <PostCompose inGlobalFeed communities={communities.slice(0, 3)} onSubmit={addPost} />
+          <PostCompose inGlobalFeed communities={myCommunities.slice(0, 3)} onSubmit={addPost} />
           {posts.length === 0 && <EmptyFeed />}
           {posts.map(post => (
             <Post

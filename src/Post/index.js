@@ -75,7 +75,7 @@ const Post = ({
       {postEditingModal}
       <PostHeader>
         <>
-          <Avatar />
+          <Avatar avatar={author.avatar} />
           <PostInfo>
             <AuthorName>{author.name}</AuthorName>
             <PostDate>30 min</PostDate>
