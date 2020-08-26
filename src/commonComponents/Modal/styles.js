@@ -56,6 +56,12 @@ export const Content = styled.div`
 `;
 
 export const Footer = styled.div`
-  ${({ clean }) => !clean && 'border-top: 1px solid #ebecef;'}
   padding: 16px 12px;
+  padding-top: 4px;
+  ${({ clean }) =>
+    !clean &&
+    `
+border-top: 1px solid #ebecef;
+padding-top: 16px;
+    `}
 `;

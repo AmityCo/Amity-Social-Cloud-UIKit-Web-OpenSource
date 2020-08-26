@@ -5,7 +5,7 @@ import { customizableComponent } from '../hoks/customization';
 
 import Linkify from '../commonComponents/Linkify';
 import Modal from '../commonComponents/Modal';
-import Options from '../commonComponents/Options';
+import Time from '../commonComponents/Time';
 import { confirm } from '../commonComponents/Confirm';
 
 import EngagementBar from '../EngagementBar';
@@ -17,11 +17,12 @@ import PostCompose from '../PostCompose';
 import {
   PostContainer,
   PostHeader,
+  PostAuthor,
   PostContent,
   AuthorName,
-  PostDate,
   PostInfo,
   ReadMoreButton,
+  Options,
 } from './styles';
 
 const TEXT_POST_MAX_LINES = 8;
@@ -47,9 +48,10 @@ const usePostEditingModal = ({ post, onEdit }) => {
 };
 
 const Post = ({
+  onPostAuthorClick,
   className,
   post,
-  post: { author, text, files = [], images = [] },
+  post: { author, text, files = [], images = [], createdAt },
   onEdit,
   onDelete,
 }) => {
@@ -74,13 +76,13 @@ const Post = ({
     <PostContainer className={className}>
       {postEditingModal}
       <PostHeader>
-        <>
+        <PostAuthor onClick={() => onPostAuthorClick(author)}>
           <Avatar avatar={author.avatar} />
           <PostInfo>
             <AuthorName>{author.name}</AuthorName>
-            <PostDate>30 min</PostDate>
+            <Time date={createdAt} />
           </PostInfo>
-        </>
+        </PostAuthor>
         <Options
           options={[
             { name: 'Edit post', action: openEditingPostModal },

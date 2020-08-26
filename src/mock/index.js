@@ -1,14 +1,21 @@
 import React, { useContext, useMemo, useState } from 'react';
+import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 
 export const testUser = {
+  userId: 'u1',
   name: 'Donald Trump',
   avatar:
     'https://www.thenation.com/wp-content/uploads/2020/08/donald-trump-spacex-speech-gty-img.jpg',
 };
 
-export const userFeed = [
+export const testMembers = [testUser, testUser, testUser, testUser];
+
+export const testModerators = [testUser, testUser];
+
+export const posts = [
   {
-    id: 1,
+    postId: 'p1',
+    targetId: 'u1',
     author: testUser,
     text:
       'text\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\n',
@@ -43,54 +50,126 @@ export const userFeed = [
     ],
   },
   {
-    id: 2,
+    postId: 'p2',
+    targetId: 'u1',
     author: testUser,
     text: 'text text text',
   },
 ];
 
-export const myCommunities = [
+const description =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor leo et tortor tempor finibus. Phasellus ultrices nulla nec libero ornare bibendum. Etiam nibh tellus, egestas at molestie vel, egestas euismod justo. Duis non dui ipsum. Maecenas mollis sed erat et ultrices. Cras rhoncus bibendum erat, at volutpat justo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ac mollis nunc. Nam velit justo, volutpat sed sem quis, malesuada ultrices diam. Nulla hendrerit, elit vitae tincidunt rhoncus, justo enim imperdiet ante, convallis sodales ligula ligula non tellus. Etiam mollis leo ac erat mattis maximus. Praesent dui arcu, bibendum ut porta vel, bibendum id lorem. Mauris laoreet ligula et augue venenatis, in varius augue posuere.';
+
+const communities = [
   {
-    communityId: '1',
+    communityId: 'c1',
     name: 'Billie Ellish Fans',
     avatar:
       'https://cdn.vox-cdn.com/thumbor/VetxE6rRTJt5tLhQ2Z99QFA9zcI=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/16127988/56973906_1031440620389086_5150401069125206016_o.jpg',
+    postsCount: 12332,
+    description,
   },
   {
-    communityId: '2',
+    communityId: 'c2',
     name: 'BLACKPINK TH',
     verified: true,
     avatar: 'https://i.pinimg.com/originals/2c/69/c5/2c69c5959858e4119322698da738bb44.jpg',
+    postsCount: 123,
+    description,
   },
   {
-    communityId: '3',
+    communityId: 'c3',
     name: 'Breakfast Club',
     avatar:
       'https://simply-delicious-food.com/wp-content/uploads/2018/10/breakfast-board-500x500.jpg',
+    postsCount: 5332,
+    description,
   },
   {
-    communityId: '4',
+    communityId: 'c4',
     name: 'BTS & ARMY',
     avatar: 'https://pbs.twimg.com/profile_images/1219274759034363905/BfWdIBVk.jpg',
+    postsCount: 532,
+    description,
   },
   {
-    communityId: '5',
+    communityId: 'c5',
     name: 'Harry Potter Fans',
     isPrivate: true,
     avatar: 'https://static3.srcdn.com/wordpress/wp-content/uploads/2019/09/voldemort-3.jpg',
+    postsCount: 23,
+    description,
   },
   {
-    communityId: '6',
+    communityId: 'c6',
     name: 'Very long name very very long name name',
     isPrivate: true,
+    verified: true,
     avatar:
       'https://i.guim.co.uk/img/media/788dbbce44c1846fab9da460f64d23d02754a143/362_0_776_1626/master/776.jpg?width=300&quality=45&auto=format&fit=max&dpr=2&s=91c98c71c708b039e9fc3eed87177d6c',
+    postsCount: 39807398,
+    description,
   },
 ];
 
-const communityFeeds = myCommunities.map(community => [
+const categories = [
   {
-    id: '1',
+    id: 'cat1',
+    name: 'Travel',
+    avatar:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/PilotwingsSymbol.svg/256px-PilotwingsSymbol.svg.png',
+  },
+  {
+    id: 'cat2',
+    name: 'Fun',
+    avatar:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Oxygen480-emotes-face-smile-big.svg/256px-Oxygen480-emotes-face-smile-big.svg.png',
+  },
+  {
+    id: 'cat3',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat4',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat5',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat6',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat7',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat8',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat9',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat10',
+    name: 'Random',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+];
+
+const communityFeeds = communities.map(community => [
+  {
+    id: 'c1',
     author: community,
     text: 'Community post',
   },
@@ -99,35 +178,15 @@ const communityFeeds = myCommunities.map(community => [
 export const testNewsFeed = [
   {
     id: 1,
-    author: myCommunities[3],
+    author: communities[3],
     text: 'News feed post',
   },
   {
     id: 2,
-    author: myCommunities[2],
+    author: communities[2],
     text: 'News feed post',
   },
 ];
-
-const defaultCommunityFeed = [
-  // {
-  //   id: 1,
-  //   text: 'News feed post',
-  // },
-];
-
-export const MockDataContext = React.createContext();
-
-export const MockDataProvider = props => {
-  const [data, setData] = useState({
-    communities,
-    communityFeeds,
-    userFeed,
-    newsFeed,
-  });
-
-  <MockDataContext.Provider value={data} {...props} />;
-};
 
 export const testFiles = [
   {
@@ -257,3 +316,70 @@ export const testImages = [
     url: 'https://theievoice.com/wp-content/uploads/2020/02/1040.jpg',
   },
 ];
+
+const communitiesAtom = atom({
+  key: 'communities',
+  default: communities,
+});
+
+const categoriesAtom = atom({
+  key: 'categories',
+  default: categories,
+});
+
+const myCommunityIdsAtom = atom({
+  key: 'myCommunityIds',
+  default: ['c4', 'c5', 'c6'],
+});
+
+export const getCommunities = () => useRecoilValue(communitiesAtom);
+
+export const getCategories = () => useRecoilValue(categoriesAtom);
+
+export const getCategory = categoryId => getCategories().find(({ id }) => id === categoryId);
+
+const myCommunities = selector({
+  key: 'myCommunities',
+  get: ({ get }) => {
+    const communities = get(communitiesAtom);
+    const myCommunityIds = get(myCommunityIdsAtom);
+
+    return myCommunityIds.map(id => communities.find(({ communityId }) => communityId === id));
+  },
+});
+
+export const getMyCommunities = () => useRecoilValue(myCommunities);
+
+const postsAtom = atom({ key: 'posts', default: posts });
+
+const myNewsFeed = selector({
+  key: 'myNewsFeed',
+  get: ({ get }) => {
+    const posts = get(postsAtom);
+    const myCommunityIds = get(myCommunityIdsAtom);
+
+    const myNewsSources = [...myCommunityIds, testUser.userId];
+
+    return posts.filter(({ targetId }) => myNewsSources.includes(targetId));
+  },
+});
+
+export const getNewsFeed = () => useRecoilValue(myNewsFeed);
+
+export const usePostsMock = targetId => {
+  const [posts, setPosts] = useRecoilState(postsAtom);
+
+  const addPost = newPost => setPosts([newPost, ...posts]);
+  const removePost = postId => setPosts(posts.filter(post => post.postId !== postId));
+
+  const editPost = updatedPost =>
+    setPosts(posts.map(post => (post.postId === updatedPost.postId ? updatedPost : post)));
+
+  const postsFeed = targetId
+    ? posts.filter(community => community.targetId === targetId)
+    : getNewsFeed();
+
+  return { posts: postsFeed, addPost, removePost, editPost };
+};
+
+export default RecoilRoot;

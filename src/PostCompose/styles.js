@@ -34,7 +34,6 @@ const postComposeEditStyle = `
 `;
 
 const postComposeStyle = `
-  width: 560px;
   padding: 16px 20px 12px 16px;
   border: 1px solid #edeef2;
 `;

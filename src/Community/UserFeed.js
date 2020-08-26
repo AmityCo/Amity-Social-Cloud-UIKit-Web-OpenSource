@@ -6,13 +6,12 @@ import withSDK from '../hoks/withSDK';
 import CommunityInformation from '../CommunityInformation';
 import EmptyFeed from '../EmptyFeed';
 
-import usePostsMock from '../hooks/usePostsMock';
-import { userFeed } from '../mock';
+import { testUser, userFeed, usePostsMock } from '../mock';
 
 import { Content, Feed, PostCompose, Post, UserFeedHeader } from './styles';
 
 const UserFeed = ({ client }) => {
-  const { posts, addPost, removePost, editPost } = usePostsMock(userFeed);
+  const { posts, addPost, removePost, editPost } = usePostsMock(testUser.id);
 
   return (
     <>
@@ -23,10 +22,10 @@ const UserFeed = ({ client }) => {
           {posts.length === 0 && <EmptyFeed />}
           {posts.map(post => (
             <Post
-              key={post.id}
+              key={post.postId}
               post={post}
               onEdit={updatedPost => editPost(updatedPost)}
-              onDelete={() => removePost(post.id)}
+              onDelete={() => removePost(post.postId)}
             />
           ))}
         </Feed>

@@ -6,20 +6,16 @@ import { notification } from '../commonComponents/Notification';
 import Files from '../Files';
 import Images from '../Images';
 
-import Popover from '../commonComponents/Popover/';
-import Menu, { MenuItem } from '../commonComponents/Menu';
-
 import { testUser, testFiles, testImages } from '../mock';
 
+import AuthorSelector from './AuthorSelector';
+
 import {
-  AuthorSelectorContainer,
-  CommunitySeparator,
   PostComposeContainer,
   PostComposeTextarea,
   PostComposeTextareaWrapper,
   ImagePostIcon,
   FilePostIcon,
-  SelectIcon,
   Footer,
   FooterActionBar,
   PostContainer,
@@ -43,10 +39,9 @@ const PostAsCommunity = ({ value, onChange }) => (
   </PostAsCommunityContainer>
 );
 
-const isIdenticalAuthor = (a, b) =>
-  !!a &&
-  !!b &&
-  ((!!a.userId && a.userId == b.userId) || (!!a.communityId && a.communityId == b.communityId));
+const getAuthorId = ({ communityId, userId } = {}) => communityId || userId;
+
+const isIdenticalAuthor = (a, b) => !!getAuthorId(a) && getAuthorId(a) === getAuthorId(b);
 
 const maxImagesWarning = () =>
   notification.info({
@@ -55,62 +50,14 @@ const maxImagesWarning = () =>
 
 const maxFilesWarning = () =>
   notification.info({
-    content: 'The selected file is larger than 1GB. Plese select a new file. ',
+    content: 'The selected file is larger than 1GB. Please select a new file. ',
   });
-
-const AuthorSelector = ({ author, user, communities, onChange }) => {
-  if (!communities || !communities.length) return <Avatar avatar={author.avatar} />;
-
-  const [isOpen, setIsOpen] = useState(false);
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
-
-  const menu = (
-    <Menu>
-      <MenuItem
-        onClick={() => {
-          onChange(user);
-          close();
-        }}
-      >
-        <Avatar size="tiny" avatar={user.avatar} /> My Timeline
-      </MenuItem>
-      <CommunitySeparator>Community</CommunitySeparator>
-      {communities.map(community => (
-        <MenuItem
-          active={author.communityId === community.communityId}
-          onClick={() => {
-            onChange(community);
-            close();
-          }}
-        >
-          <Avatar avatar={community.avatar} size="tiny" /> {community.name}
-        </MenuItem>
-      ))}
-    </Menu>
-  );
-
-  return (
-    <div>
-      <Popover
-        isOpen={isOpen}
-        onClickOutside={close}
-        position="bottom"
-        align="start"
-        content={menu}
-      >
-        <AuthorSelectorContainer onClick={open}>
-          <Avatar avatar={author.avatar} /> <SelectIcon />
-        </AuthorSelectorContainer>
-      </Popover>
-    </div>
-  );
-};
 
 const PostComposeBar = ({
   user = testUser,
   community,
   communities,
+  targetId,
   edit,
   post = {},
   onSubmit,
@@ -132,11 +79,13 @@ const PostComposeBar = ({
   const createPost = () => {
     if (isEmpty) return;
     onSubmit({
-      id: Date.now(),
+      postId: `p${Date.now()}`,
+      targetId: targetId || getAuthorId(author),
       author,
       text,
       files,
       images,
+      createdAt: Date.now(),
     });
     setText('');
     setFiles([]);
@@ -150,6 +99,7 @@ const PostComposeBar = ({
       text,
       files,
       images,
+      updateAt: Date.now(),
     });
   };
 

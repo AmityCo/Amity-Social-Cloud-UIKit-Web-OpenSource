@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
+import CommunityName from '../commonComponents/CommunityName';
 
-import {
-  Avatar,
-  CommunityItemContainer,
-  CommunityName,
-  VervifiedIcon,
-  PrivateIcon,
-} from './styles';
+import { Avatar, CommunityItemContainer } from './styles';
 
 const CommunityItem = ({ community, active, onClick }) => (
   <CommunityItemContainer onClick={onClick} active={active}>
     <Avatar avatar={community.avatar} />
-    {community.isPrivate && <PrivateIcon />}
-    <CommunityName title={community.name}>{community.name}</CommunityName>
-    {community.verified && <VervifiedIcon />}
+    <CommunityName community={community} />
   </CommunityItemContainer>
 );
 

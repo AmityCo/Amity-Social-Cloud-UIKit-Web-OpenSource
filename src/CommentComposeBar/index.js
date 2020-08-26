@@ -3,6 +3,8 @@ import InfiniteScroll from 'react-infinite-scroller';
 
 import { customizableComponent } from '../hoks/customization';
 
+import { testUser } from '../mock';
+
 import {
   Avatar,
   CommentComposeBarContainer,
@@ -10,29 +12,36 @@ import {
   AddCommentButton,
 } from './styles';
 
-const CommentComposeBar = ({ onSubmit }) => {
-  const [comment, setComment] = useState('');
+const CommentComposeBar = ({ className, userToReply, onSubmit, user = testUser }) => {
+  const [text, setText] = useState('');
 
   const AddComment = () => {
-    if (comment === '') return;
-    onSubmit(comment);
-    setComment('');
+    if (text === '') return;
+    onSubmit({
+      author: user,
+      text,
+      createdAt: Date.now(),
+    });
+    setText('');
   };
 
-  const isEmpty = comment === '';
+  const isEmpty = text === '';
+
+  const placeholder = userToReply ? `Reply to ${userToReply.name}` : 'Say something nice';
+  const submitButtonText = userToReply ? 'Reply' : 'Add comment';
 
   return (
-    <CommentComposeBarContainer>
-      <Avatar />
+    <CommentComposeBarContainer className={className}>
+      <Avatar avatar={user.avatar} />
       <CommentComposeBarInput
-        placeholder="Say something nice"
+        placeholder={placeholder}
         type="text"
-        value={comment}
-        onChange={e => setComment(e.target.value)}
-        onKeyPress={e => e.key === 'Enter' && AddComment()}
+        value={text}
+        onChange={e => setText(e.target.value)}
+        /* onKeyPress={e => e.key === 'Enter' && AddComment()} */
       />
       <AddCommentButton disabled={isEmpty} onClick={AddComment}>
-        Add comment
+        {submitButtonText}
       </AddCommentButton>
     </CommentComposeBarContainer>
   );

@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 
 import { SecondaryButton } from '../commonComponents/Button';
+import UIOptions from '../commonComponents/Options';
+
+export const Options = styled(UIOptions)`
+  margin-left: auto;
+`;
 
 export const PostContainer = styled.div`
-  width: 560px;
   padding: 16px;
   background: #ffffff;
   border: 1px solid #edeef2;
@@ -14,6 +18,11 @@ export const PostHeader = styled.div`
   display: flex;
   align-items: center;
   padding-bottom: 14px;
+`;
+
+export const PostAuthor = styled.div`
+  display: flex;
+  cursor: pointer;
 `;
 
 export const PostContent = styled.div`
@@ -29,11 +38,6 @@ export const PostInfo = styled.div`
 
 export const AuthorName = styled.div`
   ${({ theme }) => theme.typography.title}
-`;
-
-export const PostDate = styled.div`
-  color: #818698;
-  ${({ theme }) => theme.typography.caption}
 `;
 
 export const ReadMoreButton = styled(SecondaryButton)`

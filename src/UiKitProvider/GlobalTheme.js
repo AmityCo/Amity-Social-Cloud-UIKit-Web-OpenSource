@@ -25,7 +25,7 @@ const Theme = {
     headline: `
 font-family: Inter;
 font-style: normal;
-font-weight: bold;
+font-weight: 600;
 font-size: 20px;
 `,
     title: `

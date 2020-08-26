@@ -5,27 +5,28 @@ import withSDK from '../hoks/withSDK';
 
 import EmptyFeed from '../EmptyFeed';
 
-import usePostsMock from '../hooks/usePostsMock';
-
-import { myCommunities, testNewsFeed } from '../mock';
+import { getMyCommunities, testNewsFeed, usePostsMock } from '../mock';
 
 import { Content, Feed, PostCompose, Post } from './styles';
 
-const NewsFeed = ({ client }) => {
-  const { posts, addPost, removePost, editPost } = usePostsMock(testNewsFeed);
+const NewsFeed = ({ client, onPostAuthorClick }) => {
+  const { posts, addPost, removePost, editPost } = usePostsMock();
+
+  const myCommunities = getMyCommunities();
 
   return (
     <>
       <Content>
         <Feed>
-          <PostCompose inGlobalFeed communities={myCommunities.slice(0, 3)} onSubmit={addPost} />
+          <PostCompose communities={myCommunities.slice(0, 3)} onSubmit={addPost} />
           {posts.length === 0 && <EmptyFeed />}
           {posts.map(post => (
             <Post
-              key={post.id}
+              onPostAuthorClick={onPostAuthorClick}
+              key={post.postId}
               post={post}
               onEdit={updatedPost => editPost(updatedPost)}
-              onDelete={() => removePost(post.id)}
+              onDelete={() => removePost(post.postId)}
             />
           ))}
         </Feed>

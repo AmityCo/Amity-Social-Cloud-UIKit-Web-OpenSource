@@ -6,7 +6,7 @@ import useLiveObject from '../hooks/useLiveObject';
 import CommunityItem from '../CommunityItem';
 import SideMenuItem from '../commonComponents/SideMenuItem';
 
-import { myCommunities } from '../mock';
+import { getMyCommunities } from '../mock';
 
 import {
   SideMenuListContainer,
@@ -33,6 +33,8 @@ const FeedSideMenu = ({
   onExploreClick,
   selectedChannelId,
 }) => {
+  const myCommunities = getMyCommunities();
+
   return (
     <SideMenuListContainer>
       <CommunityBlock>

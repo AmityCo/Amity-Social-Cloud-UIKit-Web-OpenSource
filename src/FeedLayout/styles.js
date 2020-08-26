@@ -6,9 +6,3 @@ export const LayoutContainer = styled.div`
   height: 90vh;
   overflow: hidden;
 `;
-
-export const FeedWrapper = styled.div`
-  width: 100%;
-  padding: 24px 78px 0;
-  overflow: scroll;
-`;

@@ -37,7 +37,12 @@ const MessageContent = ({ message: { data, type, isDeleted } }) => {
   }
 };
 
-const Message = ({ message, message: { data, type, editedAt, user }, consequent, incoming }) => {
+const Message = ({
+  message,
+  message: { data, type, createdAt, updatedAt, user },
+  consequent,
+  incoming,
+}) => {
   const { displayName } = user.model;
 
   return (
@@ -49,7 +54,7 @@ const Message = ({ message, message: { data, type, editedAt, user }, consequent,
           <MessageContent message={message} />
           <BottomLine>
             <MessageDate>
-              <FormattedTime value={editedAt} />
+              <FormattedTime value={createdAt} />
             </MessageDate>
             {!message.isDeleted && <Options incoming={incoming} message={message} />}
           </BottomLine>

@@ -7,7 +7,7 @@ const FeedLayout = ({ sideMenu, children }) => {
   return (
     <LayoutContainer>
       {sideMenu}
-      <FeedWrapper>{children}</FeedWrapper>
+      {children}
     </LayoutContainer>
   );
 };
