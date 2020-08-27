@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   HashRouter as Router,
   Switch,
@@ -13,12 +13,14 @@ import UiKitProvider from '../UiKitProvider';
 
 import FeedLayout from '../FeedLayout/';
 import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';
+import Modal from '../commonComponents/Modal';
 
 import UserFeed from './UserFeed';
 import NewsFeed from './NewsFeed';
 import ExploreHome from '../ExploreHome';
 import CategoryPage from '../ExploreHome/CategoryPage';
 import CommunityFeed from './index';
+import CommunityForm from '../CommunityForm';
 
 export default {
   title: 'Community',
@@ -58,14 +60,22 @@ const Pages = () => {
     if (userOrCommunity.communityId) goToCommunity(userOrCommunity.communityId);
   };
 
-  const onCreateCommunityClick = () => console.log('TODO');
+  const [communityCreation, setCommunityCreation] = useState(true);
+  const openCommunityCreationModal = () => setCommunityCreation(true);
+  const closeCommunityCreationModal = () => setCommunityCreation(false);
+
+  const createCommunityModal = communityCreation ? (
+    <Modal title="Create community" onCancel={closeCommunityCreationModal}>
+      <CommunityForm />
+    </Modal>
+  ) : null;
 
   return (
     <FeedLayout
       sideMenu={
         <FeedSideMenu
           selected={selected}
-          onCreateCommunityClick={onCreateCommunityClick}
+          onCreateCommunityClick={openCommunityCreationModal}
           onCommunityClick={goToCommunity}
           onNewsFeedClick={goToNewsFeed}
           onExploreClick={goToExplore}
@@ -84,7 +94,7 @@ const Pages = () => {
             onSearchResultCommunityClick={navigateTo}
             onRecomendedCommunityClick={navigateTo}
             onTrendingCommunityClick={navigateTo}
-            onCreateCommunityClick={onCreateCommunityClick}
+            onCreateCommunityClick={openCommunityCreationModal}
             onCategoryClick={onCategoryClick}
           />
         </Route>
@@ -104,6 +114,7 @@ const Pages = () => {
           />
         </Route>
       </Switch>
+      {createCommunityModal}
     </FeedLayout>
   );
 };

@@ -28,7 +28,17 @@ import {
 const TEXT_POST_MAX_LINES = 8;
 const CONTENT_POST_MAX_LINES = 3;
 
-const usePostEditingModal = ({ post, onEdit }) => {
+const Post = ({
+  onPostAuthorClick,
+  className,
+  post,
+  post: { author, text, files = [], images = [], createdAt },
+  onEdit,
+  onDelete,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const expand = () => setIsExpanded(true);
+
   const [isEditing, setIsEditing] = useState(false);
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
@@ -43,22 +53,6 @@ const usePostEditingModal = ({ post, onEdit }) => {
       <PostCompose edit post={post} onSave={onSave} />
     </Modal>
   ) : null;
-
-  return { openEditingPostModal, postEditingModal };
-};
-
-const Post = ({
-  onPostAuthorClick,
-  className,
-  post,
-  post: { author, text, files = [], images = [], createdAt },
-  onEdit,
-  onDelete,
-}) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const expand = () => setIsExpanded(true);
-
-  const { openEditingPostModal, postEditingModal } = usePostEditingModal({ post, onEdit });
 
   const confirmDeleting = () =>
     confirm({

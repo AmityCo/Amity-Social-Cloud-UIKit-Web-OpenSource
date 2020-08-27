@@ -79,12 +79,13 @@
     "pkg": "^4.4.9",
     "ramda": "^0.27.0",
     "react-autosize-textarea": "^7.1.0",
+    "react-hook-form": "^6.5.3",
     "react-infinite-scroller": "^1.2.4",
     "react-intl": "^4.7.6",
     "react-linkify": "^1.0.0-alpha",
-    "react-switch": "^5.0.1",
     "react-time-ago": "^6.0.1",
     "react-tiny-popover": "^5.1.0",
+    "react-toggle": "^4.1.1",
     "react-truncate-markup": "^5.0.0",
     "recoil": "0.0.10"
   }

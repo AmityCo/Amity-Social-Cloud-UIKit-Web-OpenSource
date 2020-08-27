@@ -1,0 +1,203 @@
+import styled from 'styled-components';
+import TextareaAutosize from 'react-autosize-textarea';
+import ReactToggle from 'react-toggle';
+import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
+import { faPaperclip, faImage } from '@fortawesome/pro-regular-svg-icons';
+import { faSortDown } from '@fortawesome/pro-solid-svg-icons';
+import { PrimaryButton } from '../commonComponents/Button';
+import UIAvatar from '../Avatar';
+
+export const Form = styled.form`
+  width: 520px;
+`;
+
+export const SubmitButton = styled(PrimaryButton).attrs({
+  type: 'submit',
+})`
+  padding: 10px 16px;
+  margin-left: auto;
+`;
+
+export const Switch = styled(ReactToggle).attrs({
+  icons: false,
+})``;
+
+export const FormBlockHeader = styled.div`
+  padding: 12px 16px;
+  ${({ theme }) => theme.typography.title}
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ebecef;
+`;
+
+export const FormBlockContainer = styled.div`
+  background: #fff;
+  border-bottom: 1px solid #ebecef;
+  ${({ edit }) =>
+    edit &&
+    `
+  margin-top: 12px;
+  border: 1px solid #EDEEF2;
+border-radius: 4px;
+`}
+`;
+
+export const FormBlockBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  ${({ edit }) => (edit ? `padding: 0 16px 20px;` : `padding: 20px 16px 16px;`)}
+`;
+
+export const SwitchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const Description = styled.div`
+  color: #636878;
+`;
+
+export const InformationBlock = styled.div`
+  padding 0 16px 20px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const CommunityPermissionBlock = styled.div`
+  padding 0 16px 20px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const Footer = styled.div`
+  padding: 12px 16px;
+`;
+
+export const Avatar = styled(UIAvatar)`
+  margin-right: 8px;
+`;
+
+export const AvatarUploadContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 20px;
+`;
+
+export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 1, maxRows: 15 })`
+  display: block;
+  outline: none;
+  border-radius: 4px;
+  resize: none;
+  border: 1px solid #e3e4e8;
+  padding: 10px 12px;
+  &:focus-within {
+    border: 1px solid #1054de;
+  }
+`;
+
+// TODO add icon button
+export const ImagePostIcon = styled(FaIcon).attrs({ icon: faImage })`
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 20px;
+  color: ${({ disabled }) => (disabled ? '#A5A9B5' : '#17181c')};
+`;
+
+export const SelectIcon = styled(FaIcon).attrs({ icon: faSortDown })`
+  font-size: 18px;
+  margin-right: 8px;
+  margin-top: -4px;
+`;
+
+export const FilePostIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
+  font-size: 18px;
+  margin-right: 12px;
+  cursor: pointer;
+  color: ${({ disabled }) => (disabled ? '#A5A9B5' : '#17181c')};
+`;
+
+const postComposeEditStyle = `
+  width: 520px;
+  padding: 0;
+  border: none;
+`;
+
+const postComposeStyle = `
+  padding: 16px 20px 12px 16px;
+  border: 1px solid #edeef2;
+`;
+
+export const PostComposeContainer = styled.div`
+  ${({ edit }) => (edit ? postComposeEditStyle : postComposeStyle)}
+  display: flex;
+  background: #ffffff;
+  border-radius: 4px;
+`;
+
+// const postComposeTextareaWrapperEditStyle = `
+//   border: none;
+//   padding: 20px 16px;
+// `;
+
+// const postComposeTextareaWrapperStyle = `
+//   border: 1px solid #e3e4e8;
+//   padding: 10px 12px;
+//   &:focus-within {
+//     border: 1px solid #1054de;
+//   }
+// `;
+
+export const PostComposeTextareaWrapper = styled.div`
+  ${({ edit }) => (edit ? postComposeTextareaWrapperEditStyle : postComposeTextareaWrapperStyle)}
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  border-radius: 4px;
+  min-height: 40px;
+`;
+
+export const FooterActionBar = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const PostContainer = styled.div`
+  flex-grow: 1;
+`;
+
+export const PostAsCommunityContainer = styled.div`
+  display: flex;
+  border-radius: 4px;
+  background: #ebecef;
+  padding: 10px;
+  margin-bottom: 12px;
+  ${({ theme }) => theme.typography.captionBold}
+`;
+
+export const Checkbox = styled.input.attrs({
+  type: 'checkbox',
+})`
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+`;
+
+export const Caption = styled.div`
+  ${({ theme }) => theme.typography.caption}
+  color: #636878;
+`;
+
+export const AuthorSelectorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const CommunitySeparator = styled.div`
+  ${({ theme }) => theme.typography.caption}
+  border-top: 1px solid #e3e4e8;
+  color: #636878;
+  padding: 12px;
+`;
