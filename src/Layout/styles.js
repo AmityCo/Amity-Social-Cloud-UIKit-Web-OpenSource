@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/pro-solid-svg-icons";
+import { faSortDown } from "@fortawesome/pro-solid-svg-icons";
 
 export const LayoutHeader = styled.div`
   display: flex;
@@ -17,8 +17,9 @@ export const Username = styled.div`
   margin-left: 7px;
 `;
 
-export const DropdownIcon = styled(FaIcon).attrs({ icon: faCaretDown })`
+export const DropdownIcon = styled(FaIcon).attrs({ icon: faSortDown })`
   color: #292b32;
   margin-right: 76px;
   cursor: pointer;
+  margin-bottom: 2px;
 `;

@@ -11,7 +11,9 @@ const Layout = () => {
 
   return (
     <LayoutHeader>
-      <Avatar />
+      <div onClick={() => setIsOpen(!isOpen)}>
+        <Avatar />
+      </div>
       <Username>{username}</Username>
       <Popover
         position="bottom"
