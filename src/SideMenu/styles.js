@@ -28,11 +28,7 @@ export const MenuTabContainer = styled.div`
   width: 100%;
   height: 64px;
   cursor: pointer;
-  border-bottom: 1px solid #ebecef;
-  border-left: 1px solid #ebecef;
   ${({ active }) =>
     active && "border-left: 2px solid #1054DE;  background-color: #ebecef;"}
   ${({ theme }) => theme.typography.captionBold}
 `;
-
-export const CommunityIcon = styled.div``;
