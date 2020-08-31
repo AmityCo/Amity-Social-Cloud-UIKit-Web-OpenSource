@@ -6,10 +6,7 @@ import MenuTab from "./MenuTab";
 
 const SideMenu = () => {
   const [active, setActive] = useState(false);
-  const Mockup = [
-    { name: "COMMUNITY", icon: communityIcon },
-    { name: "TEST", icon: communityIcon },
-  ];
+  const Mockup = [{ name: "COMMUNITY", icon: communityIcon }];
   return (
     <SideMenuContainer>
       {Mockup.map((tab, id) => (

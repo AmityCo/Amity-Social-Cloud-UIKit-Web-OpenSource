@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { customizableComponent } from "../hoks/customization";
-import { LayoutHeader, Username, DropdownIcon } from "./styles";
+import {
+  LayoutHeader,
+  Username,
+  DropdownIcon,
+  DropDownContainer,
+} from "./styles";
 import Avatar from "../Avatar";
 import Popover from "../commonComponents/Popover";
 import Menu, { MenuItem } from "../commonComponents/Menu";
@@ -25,9 +30,9 @@ const Layout = () => {
           </Menu>
         }
       >
-        <div onClick={() => setIsOpen(!isOpen)}>
+        <DropDownContainer onClick={() => setIsOpen(!isOpen)}>
           <DropdownIcon />
-        </div>
+        </DropDownContainer>
       </Popover>
     </LayoutHeader>
   );

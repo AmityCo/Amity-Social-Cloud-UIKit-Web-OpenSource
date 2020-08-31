@@ -19,7 +19,13 @@ export const Username = styled.div`
 
 export const DropdownIcon = styled(FaIcon).attrs({ icon: faSortDown })`
   color: #292b32;
-  margin-right: 76px;
   cursor: pointer;
   margin-bottom: 2px;
+`;
+
+export const DropDownContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  margin-right: 76px;
 `;
