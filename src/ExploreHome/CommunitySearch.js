@@ -49,6 +49,7 @@ const CommunitySearch = ({ onSearchResultCommunityClick }) => {
 
   const menu = (
     <CommunitiesSearchResults>
+      {/* TODO empty state */}
       {searchResult.map(community => (
         <MenuItem onClick={() => onSearchResultCommunityClick(community)}>
           <Avatar size="tiny" avatar={community.avatar} />

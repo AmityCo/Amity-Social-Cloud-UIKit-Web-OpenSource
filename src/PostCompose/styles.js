@@ -11,7 +11,7 @@ export const ImagePostIcon = styled(FaIcon).attrs({ icon: faImage })`
   font-size: 18px;
   cursor: pointer;
   margin-right: 20px;
-  color: ${({ disabled }) => (disabled ? '${({ theme }) => theme.color.base3}' : '#17181c')};
+  color: ${({ theme, disabled }) => (disabled ? theme.color.base3 : '#17181c')};
 `;
 
 export const SelectIcon = styled(FaIcon).attrs({ icon: faSortDown })`
@@ -24,7 +24,7 @@ export const FilePostIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
   font-size: 18px;
   margin-right: 12px;
   cursor: pointer;
-  color: ${({ disabled }) => (disabled ? '${({ theme }) => theme.color.base3}' : '#17181c')};
+  color: ${({ theme, disabled }) => (disabled ? theme.color.base3 : '#17181c')};
 `;
 
 const postComposeEditStyle = `
@@ -109,7 +109,7 @@ export const Avatar = styled(UIAvatar)`
 export const PostAsCommunityContainer = styled.div`
   display: flex;
   border-radius: 4px;
-  background:${({ theme }) => theme.color.base4};
+  background: ${({ theme }) => theme.color.base4};
   padding: 10px;
   margin-bottom: 12px;
   ${({ theme }) => theme.typography.captionBold}

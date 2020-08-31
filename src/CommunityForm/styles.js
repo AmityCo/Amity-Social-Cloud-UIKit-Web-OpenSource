@@ -63,7 +63,7 @@ export const Selector = styled.div`
 `;
 
 export const Chip = styled.div`
-  background:${({ theme }) => theme.color.base4};
+  background: ${({ theme }) => theme.color.base4};
   padding: 4px;
   display: flex;
   align-items: center;
@@ -102,7 +102,7 @@ export const IconWrapper = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 40px;
-  background:${({ theme }) => theme.color.base4};
+  background: ${({ theme }) => theme.color.base4};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,12 +181,12 @@ export const FormBlockHeader = styled.div`
   ${({ theme }) => theme.typography.title}
   display: flex;
   align-items: center;
-  border-bottom: 1px solid${({ theme }) => theme.color.base4};
+  border-bottom: 1px solid ${({ theme }) => theme.color.base4};
 `;
 
 export const FormBlockContainer = styled.div`
   background: #fff;
-  ${({ edit }) =>
+  ${({ theme, edit }) =>
     edit
       ? `
   margin-top: 12px;
@@ -195,7 +195,7 @@ export const FormBlockContainer = styled.div`
 `
       : ` 
   :not(:last-child) {
-    border-bottom: 1px solid${({ theme }) => theme.color.base4};
+    border-bottom: 1px solid${theme.color.base4};
   }
 `}
 `;
@@ -238,7 +238,7 @@ export const CommunityPermissionBlock = styled.div`
 `;
 
 export const Footer = styled.div`
-  border-top: 1px solid${({ theme }) => theme.color.base4};
+  border-top: 1px solid ${({ theme }) => theme.color.base4};
   padding: 12px 16px;
   display: flex;
   justify-content: flex-end;

@@ -1,3 +1,4 @@
+// TODO derrive shades from main colors
 const Theme = {
   color: {
     alert: '#FA4D30',

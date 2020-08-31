@@ -2,7 +2,6 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import { customizableComponent } from '../hoks/customization';
-import { notification } from '../commonComponents/Notification';
 import Button from '../commonComponents/Button';
 
 import { testUser, getCategories, getCommunities } from '../mock';
@@ -62,7 +61,7 @@ const PRIVATE = 'private';
 
 const CommunityForm = ({
   user = testUser,
-  community,
+  community, // initialize form on editing
   edit,
   onSubmit,
   onSave,

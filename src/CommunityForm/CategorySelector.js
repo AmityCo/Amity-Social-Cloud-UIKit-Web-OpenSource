@@ -31,6 +31,7 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
 
   const list = (
     <SelectorList>
+      {/* TODO empty state */}
       {categories.map(category => (
         <MenuItem
           onClick={() => {

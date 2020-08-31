@@ -5,6 +5,7 @@ import ReactTinyPopover from 'react-tiny-popover';
 const ReactPopover = props => <ReactTinyPopover containerClassName={props.className} {...props} />;
 
 export const Popover = styled(ReactPopover)`
+  ${({ theme }) => theme.typography.body}
   z-index: 10000;
   background: white;
   min-width: 200px;

@@ -82,6 +82,7 @@ const UserSelector = ({ value: userIds, onChange }) => {
 
   const list = (
     <SelectorList onClick={focus}>
+      {/* TODO empty state */}
       {selectorUsersList.map(user => (
         <MenuItem
           key={user.userId}

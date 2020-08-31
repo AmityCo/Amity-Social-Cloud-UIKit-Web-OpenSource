@@ -7,11 +7,11 @@ export const Tab = styled.span`
   text-align: center;
   padding: 12px;
   margin-right: 8px;
-  ${({ active }) =>
+  ${({ theme, active }) =>
     active
       ? `
-border-bottom: 2px solid ${({ theme }) => theme.color.primary};
-color: ${({ theme }) => theme.color.primary};
+border-bottom: 2px solid ${theme.color.primary};
+color: ${theme.color.primary};
 `
       : `
   color: #abaeba;
