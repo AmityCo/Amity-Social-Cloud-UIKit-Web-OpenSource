@@ -183,6 +183,7 @@ export const TrendingCommunities = styled.div`
 export const CommunityInfo = styled.div`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   justify-content: space-between;
   padding-bottom: 12px;
   cursor: pointer;

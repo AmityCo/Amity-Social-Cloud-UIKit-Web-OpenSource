@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { customizableComponent } from '../hoks/customization';
-import Options from '../commonComponents/Options';
 
-import { Avatar, Container, CommunityName, Header, Footer, Content, RightIcon } from './styles';
+import { confirm } from '../commonComponents/Confirm';
+import { useCommunitiesMock } from '../mock';
 
-const testCommunity = {
-  isPrivate: true,
-  name: 'Harry Poter Fans',
-  postsCount: 345,
-  membersCount: 4501,
-};
+import { Avatar, Container, CommunityName, Header, Options, Category } from './styles';
 
-const CommunityInformation = ({ community = testCommunity, onChannelClick, selectedChannelId }) => {
+const CommunityInformation = ({ community, onChannelClick }) => {
   const { isPrivate, name, postsCount, membersCount } = community;
 
   const todo = () => console.log('TODO');
+  const { leaveCommunity } = useCommunitiesMock();
+
+  const leaveConfirm = () =>
+    confirm({
+      title: 'Leave community?',
+      content: 'You won’t no longer be able to post and interact in this community after leaving.',
+      okText: 'Leave',
+      onOk: () => leaveCommunity(community.communityId),
+    });
 
   return (
     <Container>
@@ -23,11 +27,12 @@ const CommunityInformation = ({ community = testCommunity, onChannelClick, selec
         <Options
           options={[
             { name: 'Edit community', action: todo },
-            { name: 'Todo todo todo', action: todo },
+            { name: 'Leave Community', action: leaveConfirm },
           ]}
         />
       </Header>
       <CommunityName>{name}</CommunityName>
+      <Category>Category</Category>
     </Container>
   );
 };

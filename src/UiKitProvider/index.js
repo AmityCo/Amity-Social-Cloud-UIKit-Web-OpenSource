@@ -7,6 +7,7 @@ import { CustomComponentsContext, CustomComponentsProvider } from '../hoks/custo
 import { SDKProvider } from '../hoks/withSDK';
 import Localization from './Localisation';
 import GlobalStyle from './GlobalStyle';
+import { UIStyles } from './styles';
 import GlobalTheme from './GlobalTheme';
 import MockData from '../mock/';
 import { ConfirmContainer } from '../commonComponents/Confirm';
@@ -58,14 +59,16 @@ const UiKitProvider = ({
   return (
     <Localization>
       <ThemeProvider theme={merge(GlobalTheme, theme)}>
-        <SDKProvider value={SDKInfo}>
-          <CustomComponentsProvider value={customComponents}>
-            <GlobalStyle />
-            <MockData>{children}</MockData>
-            <NotificationsContainer />
-            <ConfirmContainer />
-          </CustomComponentsProvider>
-        </SDKProvider>
+        <UIStyles>
+          <SDKProvider value={SDKInfo}>
+            <CustomComponentsProvider value={customComponents}>
+              <GlobalStyle />
+              <MockData>{children}</MockData>
+              <NotificationsContainer />
+              <ConfirmContainer />
+            </CustomComponentsProvider>
+          </SDKProvider>
+        </UIStyles>
       </ThemeProvider>
     </Localization>
   );

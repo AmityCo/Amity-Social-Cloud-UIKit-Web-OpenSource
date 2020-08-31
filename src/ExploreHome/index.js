@@ -78,7 +78,7 @@ const ExploreHome = ({
         <Block>
           <BlockHeader>Today's Trending</BlockHeader>
           <TrendingCommunities>
-            {communities.map(community => (
+            {communities.slice(0, 6).map(community => (
               <TrendingCommunity
                 onClick={() => onTrendingCommunityClick(community)}
                 community={community}

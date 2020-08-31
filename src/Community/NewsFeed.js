@@ -18,7 +18,7 @@ const NewsFeed = ({ client, onPostAuthorClick }) => {
     <>
       <Content>
         <Feed>
-          <PostCompose communities={myCommunities.slice(0, 3)} onSubmit={addPost} />
+          <PostCompose communities={myCommunities} onSubmit={addPost} />
           {posts.length === 0 && <EmptyFeed />}
           {posts.map(post => (
             <Post

@@ -3,12 +3,34 @@ import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'reco
 
 export const testUser = {
   userId: 'u1',
-  name: 'Donald Trump',
+  name: 'Lalisa Manoban',
   avatar:
-    'https://www.thenation.com/wp-content/uploads/2020/08/donald-trump-spacex-speech-gty-img.jpg',
+    'https://cdn1.i-scmp.com/sites/default/files/styles/768x768/public/images/methode/2018/07/26/bf01d32e-8fcd-11e8-ad1d-4615aa6bc452_1280x720_204951.jpg?itok=lSmaQVob',
 };
 
-export const testMembers = [testUser, testUser, testUser, testUser];
+export const testUsers = [
+  testUser,
+  {
+    userId: 'u2',
+    name: 'Jennie Kim',
+    avatar:
+      'https://upload.wikimedia.org/wikipedia/commons/9/99/Jennie_Kim_for_Marie_Claire_Korea_Magazine_on_October_9%2C_2018_%285%29.png',
+  },
+  {
+    userId: 'u3',
+    name: 'Rosé',
+    avatar:
+      'https://img1.nickiswift.com/img/gallery/this-is-how-much-blackpinks-rose-is-actually-worth/intro-1579709224.jpg',
+  },
+  {
+    userId: 'u4',
+    name: 'Jisoo',
+    avatar:
+      'https://www.allkpop.com/upload/2020/08/content/280446/1598604401-img-20200828-155652.jpg',
+  },
+];
+
+export const testMembers = testUsers;
 
 export const testModerators = [testUser, testUser];
 
@@ -71,10 +93,9 @@ const communities = [
   },
   {
     communityId: 'c2',
-    name: 'BLACKPINK TH',
-    verified: true,
-    avatar: 'https://i.pinimg.com/originals/2c/69/c5/2c69c5959858e4119322698da738bb44.jpg',
-    postsCount: 123,
+    name: 'BTS & ARMY',
+    avatar: 'https://pbs.twimg.com/profile_images/1219274759034363905/BfWdIBVk.jpg',
+    postsCount: 532,
     description,
   },
   {
@@ -87,9 +108,10 @@ const communities = [
   },
   {
     communityId: 'c4',
-    name: 'BTS & ARMY',
-    avatar: 'https://pbs.twimg.com/profile_images/1219274759034363905/BfWdIBVk.jpg',
-    postsCount: 532,
+    name: 'BLACKPINK TH',
+    verified: true,
+    avatar: 'https://i.pinimg.com/originals/2c/69/c5/2c69c5959858e4119322698da738bb44.jpg',
+    postsCount: 123,
     description,
   },
   {
@@ -113,6 +135,12 @@ const communities = [
 ];
 
 const categories = [
+  {
+    id: 'cat0',
+    name: 'General',
+    avatar:
+      'https://thumbs.dreamstime.com/b/cartoon-illustration-army-general-cartoon-army-general-119601558.jpg',
+  },
   {
     id: 'cat1',
     name: 'Travel',
@@ -333,6 +361,8 @@ const myCommunityIdsAtom = atom({
 });
 
 export const getCommunities = () => useRecoilValue(communitiesAtom);
+export const getCommunity = communityId =>
+  getCommunities().find(community => community.communityId === communityId);
 
 export const getCategories = () => useRecoilValue(categoriesAtom);
 
@@ -380,6 +410,51 @@ export const usePostsMock = targetId => {
     : getNewsFeed();
 
   return { posts: postsFeed, addPost, removePost, editPost };
+};
+
+export const useCommunitiesMock = () => {
+  const [communities, setCommunities] = useRecoilState(communitiesAtom);
+  const [myCommunities, setMyCommunities] = useRecoilState(myCommunityIdsAtom);
+
+  const joinCommunity = id => setMyCommunities([id, ...myCommunities]);
+
+  const leaveCommunity = id =>
+    setMyCommunities(myCommunities.filter(communityId => communityId !== id));
+
+  const addCommunity = newCommunity => {
+    const communityId = `c${Date.now()}`;
+    setCommunities([
+      {
+        communityId,
+        postsCount: 2357,
+        description,
+        ...newCommunity,
+      },
+      ...communities,
+    ]);
+    joinCommunity(communityId);
+  };
+
+  const removeCommunity = communityId =>
+    setCommunities(communities.filter(community => community.communityId !== communityId));
+
+  const editCommunity = updatedCommunity =>
+    setCommunities(
+      communities.map(community =>
+        community.communityId === updatedCommunity.communityId ? updatedCommunity : community,
+      ),
+    );
+
+  const communitiesFeed = getCommunities();
+
+  return {
+    communities,
+    joinCommunity,
+    leaveCommunity,
+    addCommunity,
+    removeCommunity,
+    editCommunity,
+  };
 };
 
 export default RecoilRoot;

@@ -9,18 +9,17 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import UiKitProvider from '../UiKitProvider';
+import { useCommunitiesMock } from '../mock';
 
 import FeedLayout from '../FeedLayout/';
 import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';
-import Modal from '../commonComponents/Modal';
 
 import UserFeed from './UserFeed';
 import NewsFeed from './NewsFeed';
 import ExploreHome from '../ExploreHome';
 import CategoryPage from '../ExploreHome/CategoryPage';
 import CommunityFeed from './index';
-import CommunityForm from '../CommunityForm';
+import CommunityCreationModal from '../CommunityCreationModal';
 
 export default {
   title: 'Community',
@@ -60,15 +59,11 @@ const Pages = () => {
     if (userOrCommunity.communityId) goToCommunity(userOrCommunity.communityId);
   };
 
-  const [communityCreation, setCommunityCreation] = useState(true);
+  const [communityCreation, setCommunityCreation] = useState(false);
   const openCommunityCreationModal = () => setCommunityCreation(true);
   const closeCommunityCreationModal = () => setCommunityCreation(false);
 
-  const createCommunityModal = communityCreation ? (
-    <Modal title="Create community" onCancel={closeCommunityCreationModal}>
-      <CommunityForm />
-    </Modal>
-  ) : null;
+  const { addCommunity } = useCommunitiesMock();
 
   return (
     <FeedLayout
@@ -114,7 +109,11 @@ const Pages = () => {
           />
         </Route>
       </Switch>
-      {createCommunityModal}
+      <CommunityCreationModal
+        isOpen={communityCreation}
+        onSubmit={addCommunity}
+        onClose={closeCommunityCreationModal}
+      />
     </FeedLayout>
   );
 };

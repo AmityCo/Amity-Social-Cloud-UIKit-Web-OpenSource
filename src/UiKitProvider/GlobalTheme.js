@@ -1,3 +1,12 @@
+const primary = '#1054DE';
+const primary2 = '#A0BDF8';
+const primary4 = '#F1F5FE';
+const alert = '#FA4D30';
+const base = '#292B32';
+const base1 = '#636878';
+const base3 = '#A5A9B5';
+const base4 = '#EBECEF';
+
 const Theme = {
   color: {
     primary1: '#1054DE',
