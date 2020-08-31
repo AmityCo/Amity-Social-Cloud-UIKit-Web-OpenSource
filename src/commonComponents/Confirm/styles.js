@@ -11,7 +11,13 @@ export const Footer = styled.div`
   justify-content: flex-end;
 `;
 
-export const DefaultOkButton = PrimaryButton;
+export const DefaultOkButton = styled(PrimaryButton)`
+  color: white;
+  background: ${({ theme }) => theme.color.alert};
+  &:hover {
+    background: ${({ theme }) => theme.color.alert};
+  }
+`;
 export const DefaultCancelButton = styled(Button)`
   margin-right: 10px;
 `;

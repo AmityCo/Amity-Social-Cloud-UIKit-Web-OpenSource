@@ -26,7 +26,6 @@ export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
 
 export const CommentIcon = styled(FaIcon).attrs({ icon: faCommentAlt })`
   position: relative;
-  top: 2px;
   font-size: 16px;
   margin-right: 5px;
 `;

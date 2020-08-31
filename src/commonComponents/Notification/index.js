@@ -10,7 +10,7 @@ const Notification = ({ className, content, icon }) => (
   </NotificationContainer>
 );
 
-let spawnNewNotification;
+let spawnNewNotification; // for modfying NotificationContainer state outside
 
 // rendered by provider, to allow spawning of notification from notification function below
 export const NotificationsContainer = () => {
@@ -34,6 +34,14 @@ export const NotificationsContainer = () => {
   return <Notifications>{notifications.map(Notification)}</Notifications>;
 };
 
+/*
+  Usage:
+  notification.success({
+    content: 'Report Sent',
+  });
+
+  This interface rely on NotificationsContainer being rendered by UIKITProvider in the react tree
+*/
 export const notification = {
   success: data => spawnNewNotification({ ...data, icon: <SuccessIcon /> }),
   info: data => spawnNewNotification({ ...data, icon: <InfoIcon /> }),

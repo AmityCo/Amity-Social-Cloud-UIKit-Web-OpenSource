@@ -1,33 +1,66 @@
 import React, { useState, useEffect } from 'react';
+import { toHumanString } from 'human-readable-numbers';
+import Truncate from 'react-truncate-markup';
 import { customizableComponent } from '../hoks/customization';
-import Options from '../commonComponents/Options';
 
-import { Avatar, Container, CommunityName, Header, Footer, Content, RightIcon } from './styles';
+import { confirm } from '../commonComponents/Confirm';
+import { useCommunitiesMock, getMyCommunityIds } from '../mock';
 
-const testCommunity = {
-  isPrivate: true,
-  name: 'Harry Poter Fans',
-  postsCount: 345,
-  membersCount: 4501,
-};
+import {
+  Count,
+  Avatar,
+  Container,
+  CommunityName,
+  Header,
+  Options,
+  Category,
+  Description,
+  JoinButton,
+  PlusIcon,
+} from './styles';
 
-const CommunityInformation = ({ community = testCommunity, onChannelClick, selectedChannelId }) => {
+const CommunityInformation = ({ community, onEditCommunityClick }) => {
   const { isPrivate, name, postsCount, membersCount } = community;
 
-  const todo = () => console.log('TODO');
+  const { joinCommunity, leaveCommunity } = useCommunitiesMock();
+
+  const leaveConfirm = () =>
+    confirm({
+      title: 'Leave community?',
+      content: 'You won’t no longer be able to post and interact in this community after leaving.',
+      okText: 'Leave',
+      onOk: () => leaveCommunity(community.communityId),
+    });
+
+  const myCommunityIds = getMyCommunityIds();
+
+  const isMine = myCommunityIds.includes(community.communityId);
 
   return (
     <Container>
       <Header>
-        <Avatar />
+        <Avatar avatar={community.avatar} />
         <Options
           options={[
-            { name: 'Edit community', action: todo },
-            { name: 'Todo todo todo', action: todo },
+            { name: 'Edit community', action: () => onEditCommunityClick(community.communityId) },
+            { name: 'Leave Community', action: leaveConfirm },
           ]}
         />
       </Header>
       <CommunityName>{name}</CommunityName>
+      <Category>Category</Category>
+      <div>
+        <Count>{toHumanString(community.postsCount)}</Count> posts
+        <Count>{toHumanString(community.postsCount)}</Count> members
+      </div>
+      <Truncate lines={3}>
+        <Description>{community.description}</Description>
+      </Truncate>
+      {!isMine && (
+        <JoinButton onClick={() => joinCommunity(community.communityId)}>
+          <PlusIcon /> Join
+        </JoinButton>
+      )}
     </Container>
   );
 };

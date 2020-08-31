@@ -8,27 +8,10 @@ import Comment from '../Comment';
 
 import { EngagementBarContainer, Counters, InteractionBar, LikeIcon, CommentIcon } from './styles';
 
-// const Comment = ({ comment, comment: { author, text, isLiked, likes }, onEdit }) => {
-//   const toggleLike = () => {
-//     onEdit({
-//       ...comment,
-//       isLiked: !isLiked,
-//     });
-//   };
-
-//   return (
-//     <div onClick={toggleLike}>
-//       text: {text}
-//       {isLiked ? 'liked' : ''}
-//     </div>
-//   );
-// };
-
 const EngagementBar = ({ post, onPostEdit }) => {
   const { isLiked, likes = 0, comments = [] } = post;
 
   const [isOpen, setIsOpen] = useState(false);
-
   const open = () => setIsOpen(true);
 
   const toggleLike = () => {
@@ -38,15 +21,15 @@ const EngagementBar = ({ post, onPostEdit }) => {
     });
   };
 
-  const addComment = text => {
+  const addComment = comment => {
     onPostEdit({
       ...post,
       comments: [
         ...comments,
         {
           id: Date.now(),
-          author: { userId: 1, name: 'John' },
-          text,
+          replies: [],
+          ...comment,
         },
       ],
     });
@@ -66,8 +49,8 @@ const EngagementBar = ({ post, onPostEdit }) => {
   return (
     <EngagementBarContainer>
       <Counters>
-        <span>{toHumanString(totalLikes)} likes</span>
-        <span>{toHumanString(comments.length)} comments</span>
+        {!!totalLikes && <span>{toHumanString(totalLikes)} likes</span>}
+        {!!comments.length && <span>{toHumanString(comments.length)} comments</span>}
       </Counters>
       <InteractionBar>
         <SecondaryButton onClick={toggleLike} active={isLiked}>

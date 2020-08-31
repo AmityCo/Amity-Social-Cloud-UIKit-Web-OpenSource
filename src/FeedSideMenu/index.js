@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { ChannelRepository } from 'eko-sdk';
+import React from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 import useLiveObject from '../hooks/useLiveObject';
 import CommunityItem from '../CommunityItem';
 import SideMenuItem from '../commonComponents/SideMenuItem';
 
-import { communities } from '../mock';
+import { getMyCommunities } from '../mock';
 
 import {
   SideMenuListContainer,
@@ -33,6 +32,8 @@ const FeedSideMenu = ({
   onExploreClick,
   selectedChannelId,
 }) => {
+  const myCommunities = getMyCommunities();
+
   return (
     <SideMenuListContainer>
       <CommunityBlock>
@@ -57,7 +58,7 @@ const FeedSideMenu = ({
         <SideMenuItem onClick={onCreateCommunityClick} icon={<PlusIcon />}>
           Create Community
         </SideMenuItem>
-        {communities.map((community, i) => (
+        {myCommunities.map((community, i) => (
           <CommunityItem
             active={communityId === community.communityId}
             onClick={() => onCommunityClick(community.communityId)}

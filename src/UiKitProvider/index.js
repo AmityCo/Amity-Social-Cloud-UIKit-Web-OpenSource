@@ -5,9 +5,11 @@ import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 import { ThemeProvider } from 'styled-components';
 import { CustomComponentsContext, CustomComponentsProvider } from '../hoks/customization';
 import { SDKProvider } from '../hoks/withSDK';
-import { IntlProvider } from 'react-intl';
+import Localization from './Localisation';
 import GlobalStyle from './GlobalStyle';
+import { UIStyles } from './styles';
 import GlobalTheme from './GlobalTheme';
+import MockData from '../mock/';
 import { ConfirmContainer } from '../commonComponents/Confirm';
 import { NotificationsContainer } from '../commonComponents/Notification';
 
@@ -55,18 +57,20 @@ const UiKitProvider = ({
   );
 
   return (
-    <IntlProvider locale="en-us">
+    <Localization>
       <ThemeProvider theme={merge(GlobalTheme, theme)}>
-        <SDKProvider value={SDKInfo}>
-          <CustomComponentsProvider value={customComponents}>
-            <GlobalStyle />
-            {children}
-            <NotificationsContainer />
-            <ConfirmContainer />
-          </CustomComponentsProvider>
-        </SDKProvider>
+        <UIStyles>
+          <SDKProvider value={SDKInfo}>
+            <CustomComponentsProvider value={customComponents}>
+              <GlobalStyle />
+              <MockData>{children}</MockData>
+              <NotificationsContainer />
+              <ConfirmContainer />
+            </CustomComponentsProvider>
+          </SDKProvider>
+        </UIStyles>
       </ThemeProvider>
-    </IntlProvider>
+    </Localization>
   );
 };
 

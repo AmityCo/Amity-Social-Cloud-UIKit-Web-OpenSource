@@ -5,7 +5,7 @@ import { customizableComponent } from '../hoks/customization';
 
 import Linkify from '../commonComponents/Linkify';
 import Modal from '../commonComponents/Modal';
-import Options from '../commonComponents/Options';
+import Time from '../commonComponents/Time';
 import { confirm } from '../commonComponents/Confirm';
 
 import EngagementBar from '../EngagementBar';
@@ -17,17 +17,28 @@ import PostCompose from '../PostCompose';
 import {
   PostContainer,
   PostHeader,
+  PostAuthor,
   PostContent,
   AuthorName,
-  PostDate,
   PostInfo,
   ReadMoreButton,
+  Options,
 } from './styles';
 
 const TEXT_POST_MAX_LINES = 8;
 const CONTENT_POST_MAX_LINES = 3;
 
-const usePostEditingModal = ({ post, onEdit }) => {
+const Post = ({
+  onPostAuthorClick,
+  className,
+  post,
+  post: { author, text, files = [], images = [], createdAt },
+  onEdit,
+  onDelete,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const expand = () => setIsExpanded(true);
+
   const [isEditing, setIsEditing] = useState(false);
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
@@ -42,21 +53,6 @@ const usePostEditingModal = ({ post, onEdit }) => {
       <PostCompose edit post={post} onSave={onSave} />
     </Modal>
   ) : null;
-
-  return { openEditingPostModal, postEditingModal };
-};
-
-const Post = ({
-  className,
-  post,
-  post: { author, text, files = [], images = [] },
-  onEdit,
-  onDelete,
-}) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const expand = () => setIsExpanded(true);
-
-  const { openEditingPostModal, postEditingModal } = usePostEditingModal({ post, onEdit });
 
   const confirmDeleting = () =>
     confirm({
@@ -74,13 +70,13 @@ const Post = ({
     <PostContainer className={className}>
       {postEditingModal}
       <PostHeader>
-        <>
-          <Avatar />
+        <PostAuthor onClick={() => onPostAuthorClick(author)}>
+          <Avatar avatar={author.avatar} />
           <PostInfo>
             <AuthorName>{author.name}</AuthorName>
-            <PostDate>30 min</PostDate>
+            <Time date={createdAt} />
           </PostInfo>
-        </>
+        </PostAuthor>
         <Options
           options={[
             { name: 'Edit post', action: openEditingPostModal },

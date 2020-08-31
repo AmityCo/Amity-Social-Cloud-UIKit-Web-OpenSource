@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faExclamationCircle, faCheck, faTimes } from '@fortawesome/pro-regular-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/pro-regular-svg-icons';
+import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
 
 export const SuccessIcon = styled(FaIcon).attrs({ icon: faCheck })`
   font-size: 18px;
@@ -37,7 +38,7 @@ export const NotificationContainer = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  background: #292b32;
+  background: ${({ theme }) => theme.color.base};
   border-radius: 4px;
   margin-bottom: 10px;
 

@@ -84,7 +84,7 @@ export const ImagesContainer = styled.div`
 `;
 
 export const ProgressBar = styled.div`
-  background: #ebecef;
+  background:${({ theme }) => theme.color.base4};
   width: ${({ progress }) => 100 - progress}%;
   position: absolute;
   right: 0;

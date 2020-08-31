@@ -29,7 +29,7 @@ const Confirm = ({
   </ConfirmModal>
 );
 
-let spawnNewConfirm;
+let spawnNewConfirm; // for modfying ConfirmContainer state outside
 
 // rendered by provider, to allow spawning of confirm from confirm function below
 export const ConfirmContainer = () => {
@@ -56,6 +56,18 @@ export const ConfirmContainer = () => {
   );
 };
 
+/*
+  Usage:
+    confirm({
+      title: 'Delete post',
+      content:
+        'This post will be permanently deleted. You’ll no longer to see and find this post. Continue?',
+      okText: 'Delete',
+      onOk: onDelete,
+    });
+
+  This interface rely on ConfirmContainer being rendered by UIKITProvider in the react tree
+*/
 export const confirm = confirmData => spawnNewConfirm(confirmData);
 
 export default Confirm;

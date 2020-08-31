@@ -14,7 +14,6 @@ export const DetailsIcon = styled(FaIcon).attrs({ icon: faBars })`
 
 export const ChatHeaderContainer = styled.div`
   height: 76px;
-  flex-shrink: 0;
   padding: 0 20px;
   background: #ffffff;
   border-top: 1px solid #e3e4e8;

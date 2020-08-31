@@ -6,38 +6,71 @@ import withSDK from '../hoks/withSDK';
 import CommunityInformation from '../CommunityInformation';
 import EmptyFeed from '../EmptyFeed';
 
-import usePostsMock from '../hooks/usePostsMock';
+import CommunityMembers from './CommunityMembers';
 
-import { communities } from '../mock';
+import { getCommunities, usePostsMock } from '../mock';
 
-import { Content, Feed, PostCompose, Post, CommunityHeader } from './styles';
+import { Content, Feed, PostCompose, Post, FeedHeaderTabs } from './styles';
 
-const COMMUNITY_TEST_POSTS = [];
+// TODO replace with translations keys
+const tabs = {
+  TIMELINE: 'Timeline',
+  MEMBERS: 'Members',
+};
 
-const CommunityFeed = ({ client, communityId }) => {
-  const { posts, addPost, removePost, editPost } = usePostsMock(COMMUNITY_TEST_POSTS);
-
-  const community = communities.find(community => community.communityId === communityId);
+const CommunityPosts = ({ communityId = { communityId }, community, onPostAuthorClick }) => {
+  const { posts, addPost, removePost, editPost } = usePostsMock(communityId);
 
   return (
     <>
-      <Content>
-        <Feed>
-          <CommunityHeader />
-          <PostCompose community={community} onSubmit={addPost} />
-          {posts.length === 0 && <EmptyFeed />}
-          {posts.map(post => (
-            <Post
-              key={post.id}
-              post={post}
-              onEdit={updatedPost => editPost(updatedPost)}
-              onDelete={() => removePost(post.id)}
-            />
-          ))}
-        </Feed>
-        <CommunityInformation community={community} />
-      </Content>
+      <PostCompose targetId={communityId} community={community} onSubmit={addPost} />
+      {posts.length === 0 && <EmptyFeed />}
+      {posts.map(post => (
+        <Post
+          onPostAuthorClick={onPostAuthorClick}
+          key={post.postId}
+          post={post}
+          onEdit={updatedPost => editPost(updatedPost)}
+          onDelete={() => removePost(post.postId)}
+        />
+      ))}
     </>
+  );
+};
+
+const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCommunityClick }) => {
+  const communities = getCommunities();
+
+  const community = communities.find(community => community.communityId === communityId);
+
+  const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
+
+  return (
+    <Content>
+      <Feed>
+        <FeedHeaderTabs
+          tabs={[tabs.TIMELINE, tabs.MEMBERS]}
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
+        {activeTab === tabs.TIMELINE && (
+          <CommunityPosts
+            communityId={communityId}
+            community={community}
+            onPostAuthorClick={onPostAuthorClick}
+          />
+        )}
+
+        {activeTab === tabs.MEMBERS && (
+          <CommunityMembers
+            communityId={communityId}
+            community={community}
+            onMemberClick={onMemberClick}
+          />
+        )}
+      </Feed>
+      <CommunityInformation onEditCommunityClick={onEditCommunityClick} community={community} />
+    </Content>
   );
 };
 

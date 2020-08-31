@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 const commonButtonStyles = ({ theme }) => `
-text-align: center;
+display: flex;
+align-items: center;
 border-radius: 4px;
 outline: none;
 padding: 10px 12px;
@@ -12,7 +13,7 @@ ${theme.typography.bodyBold}
 
 export const DefaultButton = styled.button`
   ${commonButtonStyles}
-  background-color: transparent;
+  background-color: #fff;
   border: 1px solid #e3e4e8;
   color: #17181c;
   &:hover {
@@ -26,13 +27,13 @@ export const DefaultButton = styled.button`
 export const PrimaryButton = styled.button`
   ${commonButtonStyles}
   border: none;
-  background-color: #1054de;
+  background-color: ${({ theme }) => theme.color.primary};
   color: white;
   &:hover {
     background-color: #4a82f2;
   }
   &:disabled {
-    background-color: #a0bdf8;
+    background-color: ${({ theme }) => theme.color.primary2};
   }
 `;
 

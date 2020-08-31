@@ -7,7 +7,6 @@ import EkoChatItem from './ChatItem';
 import EkoComment from './Comment';
 import EkoCommentComposeBar from './CommentComposeBar';
 import EkoCommunity from './Community';
-import EkoCommunityHeader from './CommunityHeader';
 import EkoCommunityInformation from './CommunityInformation';
 import EkoCommunityItem from './CommunityItem';
 import EkoEmptyFeed from './EmptyFeed';
@@ -34,7 +33,6 @@ export {
   EkoComment,
   EkoCommentComposeBar,
   EkoCommunity,
-  EkoCommunityHeader,
   EkoCommunityInformation,
   EkoCommunityItem,
   EkoEmptyFeed,

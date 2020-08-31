@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   HashRouter as Router,
   Switch,
@@ -9,14 +9,17 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import UiKitProvider from '../UiKitProvider';
+import { useCommunitiesMock } from '../mock';
 
 import FeedLayout from '../FeedLayout/';
 import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';
 
 import UserFeed from './UserFeed';
 import NewsFeed from './NewsFeed';
+import ExploreHome from '../ExploreHome';
+import CategoryPage from '../ExploreHome/CategoryPage';
 import CommunityFeed from './index';
+import CommunityCreationModal from '../CommunityCreationModal';
 
 export default {
   title: 'Community',
@@ -25,32 +28,53 @@ export default {
 const Pages = () => {
   const location = useLocation();
   const history = useHistory();
-  const { params = {} } = useRouteMatch('/community/:communityId') || {};
-  const { communityId } = params;
+  const { params = {} } =
+    useRouteMatch('/community/:communityId') || useRouteMatch('/category/:categoryId') || {};
+  const { communityId, categoryId } = params;
+
+  const goToUserFeed = () => history.push(`/`);
+  const goToNewsFeed = () => history.push(`/news`);
+  const goToExplore = () => history.push(`/explore`);
+  const onCategoryClick = categoryId => {
+    history.push(`/category/${categoryId}`);
+  };
 
   const goToCommunity = communityId => {
     history.push(`/community/${communityId}`);
   };
 
-  const goToNewsFeed = () => history.push(`/news`);
-  const goToExplore = () => history.push(`/explore`);
-
   const pathToSelectionType = {
-    '/news': SELECTION_TYPES.NEWS_FEED,
-    '/explore': SELECTION_TYPES.EXPLORE,
+    news: SELECTION_TYPES.NEWS_FEED,
+    explore: SELECTION_TYPES.EXPLORE,
+    category: SELECTION_TYPES.EXPLORE,
   };
 
   const selected = {
-    type: pathToSelectionType[location.pathname],
+    type: pathToSelectionType[location.pathname.split('/')[1]],
     communityId,
   };
+
+  const navigateTo = userOrCommunity => {
+    if (userOrCommunity.userId) goToUserFeed(userOrCommunity.userId);
+    if (userOrCommunity.communityId) goToCommunity(userOrCommunity.communityId);
+  };
+
+  const onEditCommunityClick = communityId => {
+    history.push(`/community/${communityId}/edit`);
+  };
+
+  const [communityCreation, setCommunityCreation] = useState(false);
+  const openCommunityCreationModal = () => setCommunityCreation(true);
+  const closeCommunityCreationModal = () => setCommunityCreation(false);
+
+  const { addCommunity } = useCommunitiesMock();
 
   return (
     <FeedLayout
       sideMenu={
         <FeedSideMenu
           selected={selected}
-          onCreateCommunityClick={() => console.log('TODO')}
+          onCreateCommunityClick={openCommunityCreationModal}
           onCommunityClick={goToCommunity}
           onNewsFeedClick={goToNewsFeed}
           onExploreClick={goToExplore}
@@ -59,18 +83,45 @@ const Pages = () => {
     >
       <Switch>
         <Route path="/" exact>
-          <UserFeed />
+          <UserFeed onPostAuthorClick={navigateTo} />
         </Route>
         <Route path="/news" exact>
-          <NewsFeed />
+          <NewsFeed onPostAuthorClick={navigateTo} />
         </Route>
         <Route path="/explore" exact>
-          Explore page, in progress
+          <ExploreHome
+            onSearchResultCommunityClick={navigateTo}
+            onRecomendedCommunityClick={navigateTo}
+            onTrendingCommunityClick={navigateTo}
+            onCreateCommunityClick={openCommunityCreationModal}
+            onCategoryClick={onCategoryClick}
+          />
+        </Route>
+        <Route path="/category/:categoryId">
+          <CategoryPage
+            categoryId={categoryId}
+            onCommunityClick={navigateTo}
+            onHeaderBackButtonClick={goToExplore}
+          />
+        </Route>
+        <Route path="/community/:communityId/edit">
+          TODO: Edit community(reuse CommunityForm with edit param)
         </Route>
         <Route path="/community/:communityId">
-          <CommunityFeed key={communityId} communityId={communityId} />
+          <CommunityFeed
+            onEditCommunityClick={onEditCommunityClick}
+            key={communityId}
+            communityId={communityId}
+            onPostAuthorClick={navigateTo}
+            onMemberClick={navigateTo}
+          />
         </Route>
       </Switch>
+      <CommunityCreationModal
+        isOpen={communityCreation}
+        onSubmit={addCommunity}
+        onClose={closeCommunityCreationModal}
+      />
     </FeedLayout>
   );
 };

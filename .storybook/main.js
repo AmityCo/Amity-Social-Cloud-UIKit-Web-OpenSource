@@ -4,7 +4,7 @@ const webpack = require('webpack');
 module.exports = {
   stories: ['../src/**/*.stories.js'],
   // Add any Storybook addons you want here: https://storybook.js.org/addons/
-  addons: [],
+  addons: ['@storybook/addon-storysource'],
   webpackFinal: async config => {
     config.resolve.extensions.push('.js');
 

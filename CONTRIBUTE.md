@@ -2,10 +2,16 @@
 
 ## Development
 
-### Testing
+### Dependencies
 
 ```
-npm run test
+npm ci
+```
+
+### Start storybook
+
+```
+npm run storybook
 ```
 
 ### Building
@@ -28,13 +34,9 @@ To export your Storybook as static files:
 npm run storybook:export
 ```
 
-### Generating New Components
 
-```
-npm run generate YourComponentName
-```
+Add the component to `index.js` exports if you want the library to export the component.
 
-Add the component to `index.ts` exports if you want the library to export the component.
 
 ## Publishing
 

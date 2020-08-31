@@ -5,35 +5,28 @@ import withSDK from '../hoks/withSDK';
 
 import EmptyFeed from '../EmptyFeed';
 
-import usePostsMock from '../hooks/usePostsMock';
+import { getMyCommunities, testNewsFeed, usePostsMock } from '../mock';
 
-import { communities } from '../mock';
+import { Content, Feed, PostCompose, Post } from './styles';
 
-import { Content, Feed, PostCompose, Post, CommunityHeader } from './styles';
+const NewsFeed = ({ client, onPostAuthorClick }) => {
+  const { posts, addPost, removePost, editPost } = usePostsMock();
 
-const NEWS_TEST_POSTS = [
-  {
-    id: 2,
-    author: { communityId: '5', name: 'Harry Potter Fans', isPrivate: true },
-    text: 'News feed text',
-  },
-];
-
-const NewsFeed = ({ client }) => {
-  const { posts, addPost, removePost, editPost } = usePostsMock(NEWS_TEST_POSTS);
+  const myCommunities = getMyCommunities();
 
   return (
     <>
       <Content>
         <Feed>
-          <PostCompose inGlobalFeed communities={communities.slice(0, 3)} onSubmit={addPost} />
+          <PostCompose communities={myCommunities} onSubmit={addPost} />
           {posts.length === 0 && <EmptyFeed />}
           {posts.map(post => (
             <Post
-              key={post.id}
+              onPostAuthorClick={onPostAuthorClick}
+              key={post.postId}
               post={post}
               onEdit={updatedPost => editPost(updatedPost)}
-              onDelete={() => removePost(post.id)}
+              onDelete={() => removePost(post.postId)}
             />
           ))}
         </Feed>
