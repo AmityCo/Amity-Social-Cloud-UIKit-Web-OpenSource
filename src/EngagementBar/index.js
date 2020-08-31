@@ -49,8 +49,8 @@ const EngagementBar = ({ post, onPostEdit }) => {
   return (
     <EngagementBarContainer>
       <Counters>
-        <span>{toHumanString(totalLikes)} likes</span>
-        <span>{toHumanString(comments.length)} comments</span>
+        {!!totalLikes && <span>{toHumanString(totalLikes)} likes</span>}
+        {!!comments.length && <span>{toHumanString(comments.length)} comments</span>}
       </Counters>
       <InteractionBar>
         <SecondaryButton onClick={toggleLike} active={isLiked}>

@@ -10,8 +10,8 @@ export const Tab = styled.span`
   ${({ active }) =>
     active
       ? `
-border-bottom: 2px solid #1054DE;
-color: #1054DE;
+border-bottom: 2px solid ${({ theme }) => theme.color.primary};
+color: ${({ theme }) => theme.color.primary};
 `
       : `
   color: #abaeba;

@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SecondaryButton } from '../commonComponents/Button';
+import { SecondaryButton, PrimaryButton } from '../commonComponents/Button';
 import UIAvatar from '../Avatar';
 import UIOptions from '../commonComponents/Options';
 
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight } from '@fortawesome/pro-regular-svg-icons';
+import { faChevronRight, faPlus } from '@fortawesome/pro-regular-svg-icons';
 
 export const RightIcon = styled(FaIcon).attrs({ icon: faChevronRight })`
   font-size: 16px;
+`;
+
+export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
+  font-size: 15px;
+  margin-right: 8px;
 `;
 
 export const Options = styled(UIOptions)`
@@ -43,13 +48,18 @@ export const CommunityName = styled.div`
 
 export const Category = styled.div`
   margin-bottom: 16px;
-  color: #636878;
+  color: ${({ theme }) => theme.color.base1};
 `;
 
 export const Count = styled.span`
   ${({ theme }) => theme.typography.bodyBold}
 `;
 
-export const Buttons = styled.div`
-  margin-left: auto;
+export const Description = styled.div`
+  margin: 8px 0 12px;
+`;
+
+export const JoinButton = styled(PrimaryButton)`
+  width: 100%;
+  justify-content: center;
 `;

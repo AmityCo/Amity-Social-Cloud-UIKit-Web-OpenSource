@@ -18,7 +18,7 @@ import Menu from '../commonComponents/Menu';
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 8px;
-  color: #fa4d30;
+  color: ${({ theme }) => theme.color.alert};
   ${({ theme }) => theme.typography.caption}
 `;
 
@@ -35,7 +35,7 @@ export const LockIcon = styled(FaIcon).attrs({ icon: faLockAlt })`
 export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
   font-size: 12px;
   padding: 5px 12px;
-  color: #636878;
+  color: ${({ theme }) => theme.color.base1};
 `;
 
 export const CameraIcon = styled(FaIcon).attrs({ icon: faCamera })`
@@ -49,7 +49,7 @@ export const CameraIcon = styled(FaIcon).attrs({ icon: faCamera })`
 export const Selector = styled.div`
   border: 1px solid #e3e4e8;
   &:focus-within {
-    border: 1px solid #1054de;
+    border: 1px solid ${({ theme }) => theme.color.primary};
   }
   border-radius: 4px;
   min-height: 40px;
@@ -63,7 +63,7 @@ export const Selector = styled.div`
 `;
 
 export const Chip = styled.div`
-  background: #ebecef;
+  background:${({ theme }) => theme.color.base4};
   padding: 4px;
   display: flex;
   align-items: center;
@@ -102,7 +102,7 @@ export const IconWrapper = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 40px;
-  background: #ebecef;
+  background:${({ theme }) => theme.color.base4};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,7 +111,7 @@ export const IconWrapper = styled.div`
 
 export const Counter = styled.div`
   margin-left: auto;
-  color: #636878;
+  color: ${({ theme }) => theme.color.base1};
   ${({ theme }) => theme.typography.caption}
 `;
 
@@ -122,7 +122,7 @@ export const Label = styled.label`
     required &&
     `
   &:after {
-    color: #fa4d30;
+    color: ${({ theme }) => theme.color.alert};
     content: ' *';
   }
 `}
@@ -158,13 +158,13 @@ export const Switch = styled(ReactToggle).attrs({
   &.react-toggle,
   &.react-toggle:hover {
     & > .react-toggle-track {
-      background-color: #a5a9b5;
+      background-color: ${({ theme }) => theme.color.base3};
     }
   }
   &.react-toggle--checked,
   &.react-toggle--checked:hover {
     & > .react-toggle-track {
-      background-color: #1054de;
+      background-color: ${({ theme }) => theme.color.primary};
     }
   }
   &.react-toggle > .react-toggle-thumb {
@@ -181,7 +181,7 @@ export const FormBlockHeader = styled.div`
   ${({ theme }) => theme.typography.title}
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #ebecef;
+  border-bottom: 1px solid${({ theme }) => theme.color.base4};
 `;
 
 export const FormBlockContainer = styled.div`
@@ -195,7 +195,7 @@ export const FormBlockContainer = styled.div`
 `
       : ` 
   :not(:last-child) {
-    border-bottom: 1px solid #ebecef;
+    border-bottom: 1px solid${({ theme }) => theme.color.base4};
   }
 `}
 `;
@@ -221,7 +221,7 @@ export const PermissionControlContainer = styled.div`
 `;
 
 export const Description = styled.div`
-  color: #636878;
+  color: ${({ theme }) => theme.color.base1};
   ${({ theme }) => theme.typography.body}
 `;
 
@@ -238,7 +238,7 @@ export const CommunityPermissionBlock = styled.div`
 `;
 
 export const Footer = styled.div`
-  border-top: 1px solid #ebecef;
+  border-top: 1px solid${({ theme }) => theme.color.base4};
   padding: 12px 16px;
   display: flex;
   justify-content: flex-end;
@@ -262,7 +262,7 @@ export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 
   border: 1px solid #e3e4e8;
   padding: 10px 12px;
   &:focus-within {
-    border-color: #1054de;
+    border-color: ${({ theme }) => theme.color.primary};
   }
 `;
 
@@ -272,7 +272,7 @@ export const TextField = styled.input`
   padding: 10px 12px;
   outline: none;
   &:focus-within {
-    border-color: #1054de;
+    border-color: ${({ theme }) => theme.color.primary};
   }
 `;
 
@@ -289,7 +289,7 @@ export const Field = styled.div`
     error &&
     `
 ${AboutTextarea}, ${TextField} {
-    border-color: #FA4D30;
+    border-color: ${({ theme }) => theme.color.alert};
 }
 
   `}

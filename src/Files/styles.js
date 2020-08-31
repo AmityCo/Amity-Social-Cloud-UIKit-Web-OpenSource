@@ -17,7 +17,7 @@ export const FilesContainer = styled.div`
 
 export const FileContainer = styled.div`
   position: relative;
-  border: 1px solid #ebecef;
+  border: 1px solid${({ theme }) => theme.color.base4};
   padding: 8px;
   border-radius: 4px;
   :not(:first-child) {
@@ -33,7 +33,7 @@ export const Content = styled.div`
 `;
 
 export const ProgressBar = styled.div`
-  background: #ebecef;
+  background:${({ theme }) => theme.color.base4};
   width: ${({ progress }) => progress}%;
   position: absolute;
   left: 0;
@@ -43,7 +43,7 @@ export const ProgressBar = styled.div`
 
 export const FileSize = styled.div`
   ${({ theme }) => theme.typography.caption}
-  color: #636878;
+  color: ${({ theme }) => theme.color.base1};
 `;
 
 export const FileName = styled.div`
@@ -55,7 +55,7 @@ export const FileName = styled.div`
 export const ViewAllFilesButton = styled(SecondaryButton)`
   ${({ theme }) => theme.typography.body}
   display: block;
-  color: #1054de;
+  color: ${({ theme }) => theme.color.primary};
   margin-top: 4px;
   padding: 12px 0;
 

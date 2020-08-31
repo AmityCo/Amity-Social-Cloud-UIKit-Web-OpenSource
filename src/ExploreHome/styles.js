@@ -41,7 +41,7 @@ export const ExploreHeaderContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 35px 10px 30px;
-  background: #1054de;
+  background: ${({ theme }) => theme.color.primary};
   color: #fff;
   ${({ theme }) => theme.typography.title}
 `;
@@ -118,13 +118,13 @@ export const Blocks = styled.div`
 export const Block = styled.div`
   margin-top: 20px;
   background: #fff;
-  border: 1px solid #ebecef;
+  border: 1px solid${({ theme }) => theme.color.base4};
   border-radius: 4px;
 `;
 
 export const BlockHeader = styled.div`
   padding: 16px 16px 12px;
-  border-bottom: 1px solid #ebecef;
+  border-bottom: 1px solid${({ theme }) => theme.color.base4};
   ${({ theme }) => theme.typography.title}
 `;
 
@@ -132,11 +132,11 @@ export const CommunityItem = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #ebecef;
+  border: 1px solid${({ theme }) => theme.color.base4};
   border-radius: 4px;
   padding: 16px;
   overflow: hidden;
-  color: #292b32;
+  color: ${({ theme }) => theme.color.base};
   height: 180px;
   ${({ theme }) => theme.typography.caption}
 `;
@@ -187,7 +187,7 @@ export const CommunityInfo = styled.div`
   justify-content: space-between;
   padding-bottom: 12px;
   cursor: pointer;
-  border-bottom: 1px solid #ebecef;
+  border-bottom: 1px solid${({ theme }) => theme.color.base4};
 `;
 
 export const TrendingCommunityContainer = styled.div`
@@ -203,7 +203,7 @@ export const TrendingCommunityContainer = styled.div`
 `;
 
 export const TrendingFooter = styled.div`
-  color: #636878;
+  color: ${({ theme }) => theme.color.base1};
   margin-top: 5px;
 `;
 
@@ -216,7 +216,7 @@ export const BackButton = styled(SecondaryButton)`
 `;
 
 export const ViewAllButton = styled(SecondaryButton)`
-  border-top: 1px solid #ebecef;
+  border-top: 1px solid${({ theme }) => theme.color.base4};
   padding: 18px;
   width: 100%;
   border-radius: 0;

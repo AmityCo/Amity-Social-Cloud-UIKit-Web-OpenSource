@@ -59,6 +59,10 @@ const Pages = () => {
     if (userOrCommunity.communityId) goToCommunity(userOrCommunity.communityId);
   };
 
+  const onEditCommunityClick = communityId => {
+    history.push(`/community/${communityId}/edit`);
+  };
+
   const [communityCreation, setCommunityCreation] = useState(false);
   const openCommunityCreationModal = () => setCommunityCreation(true);
   const closeCommunityCreationModal = () => setCommunityCreation(false);
@@ -100,8 +104,12 @@ const Pages = () => {
             onHeaderBackButtonClick={goToExplore}
           />
         </Route>
+        <Route path="/community/:communityId/edit">
+          TODO: Edit community(reuse CommunityForm with edit param)
+        </Route>
         <Route path="/community/:communityId">
           <CommunityFeed
+            onEditCommunityClick={onEditCommunityClick}
             key={communityId}
             communityId={communityId}
             onPostAuthorClick={navigateTo}

@@ -38,7 +38,7 @@ const CommunityPosts = ({ communityId = { communityId }, community, onPostAuthor
   );
 };
 
-const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick }) => {
+const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCommunityClick }) => {
   const communities = getCommunities();
 
   const community = communities.find(community => community.communityId === communityId);
@@ -69,7 +69,7 @@ const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick }) => {
           />
         )}
       </Feed>
-      <CommunityInformation community={community} />
+      <CommunityInformation onEditCommunityClick={onEditCommunityClick} community={community} />
     </Content>
   );
 };

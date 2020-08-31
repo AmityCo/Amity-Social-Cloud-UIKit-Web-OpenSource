@@ -13,9 +13,9 @@ export const Footer = styled.div`
 
 export const DefaultOkButton = styled(PrimaryButton)`
   color: white;
-  background: #fa4d30;
+  background: ${({ theme }) => theme.color.alert};
   &:hover {
-    background: #fa4d30;
+    background: ${({ theme }) => theme.color.alert};
   }
 `;
 export const DefaultCancelButton = styled(Button)`

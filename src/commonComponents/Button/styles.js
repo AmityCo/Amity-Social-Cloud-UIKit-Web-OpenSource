@@ -27,13 +27,13 @@ export const DefaultButton = styled.button`
 export const PrimaryButton = styled.button`
   ${commonButtonStyles}
   border: none;
-  background-color: #1054de;
+  background-color: ${({ theme }) => theme.color.primary};
   color: white;
   &:hover {
     background-color: #4a82f2;
   }
   &:disabled {
-    background-color: #a0bdf8;
+    background-color: ${({ theme }) => theme.color.primary2};
   }
 `;
 

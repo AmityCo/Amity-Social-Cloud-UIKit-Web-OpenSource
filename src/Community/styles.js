@@ -73,5 +73,5 @@ export const MemberName = styled.div`
 
 export const Caption = styled.div`
   ${({ theme }) => theme.typography.caption}
-  color: #636878;
+  color: ${({ theme }) => theme.color.base1};
 `;

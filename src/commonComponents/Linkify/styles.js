@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Link = styled.a`
   &,
   &:visited {
-    color: #1054de;
+    color: ${({ theme }) => theme.color.primary};
     text-decoration: none;
   }
 `;

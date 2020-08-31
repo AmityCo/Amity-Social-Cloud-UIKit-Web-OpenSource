@@ -9,7 +9,7 @@ export const SideMenuItemContainer = styled(SecondaryButton)`
   margin-bottom: 6px;
   color: #17181c;
   &:hover {
-    background-color: #ebecef;
+    background-color: ${({ theme }) => theme.color.base4};
   }
   &:disabled {
     color: #abaeba;
@@ -17,7 +17,7 @@ export const SideMenuItemContainer = styled(SecondaryButton)`
   ${({ active, theme }) =>
     active &&
     `
-      background: #F1F5FE;
+      background: ${theme.color.primary4};
       color: ${theme.color.primary1};
     `}
 `;
@@ -33,11 +33,11 @@ export const IconWrapper = styled.div`
   ${({ active, theme }) =>
     active
       ? `
-      background: #1054DE;
+      background: ${theme.color.primary};
       color: white;
     `
       : `
-      background: #ebecef;
+      background:${theme.color.base4};
       color: #898e9e;
   `}
 `;

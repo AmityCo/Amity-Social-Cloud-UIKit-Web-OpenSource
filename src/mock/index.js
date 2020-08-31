@@ -80,7 +80,7 @@ export const posts = [
 ];
 
 const description =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor leo et tortor tempor finibus. Phasellus ultrices nulla nec libero ornare bibendum. Etiam nibh tellus, egestas at molestie vel, egestas euismod justo. Duis non dui ipsum. Maecenas mollis sed erat et ultrices. Cras rhoncus bibendum erat, at volutpat justo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ac mollis nunc. Nam velit justo, volutpat sed sem quis, malesuada ultrices diam. Nulla hendrerit, elit vitae tincidunt rhoncus, justo enim imperdiet ante, convallis sodales ligula ligula non tellus. Etiam mollis leo ac erat mattis maximus. Praesent dui arcu, bibendum ut porta vel, bibendum id lorem. Mauris laoreet ligula et augue venenatis, in varius augue posuere.';
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor leo et tortor tempor finibus. Phasellus ultrices nulla nec libero ornare bibendum. Etiam nibh tellus, egestas at molestie vel, egestas euismod justo. Duis non dui ipsum. Maecenas mollis sed erat et ultrices. Cras rhoncus bibendum erat, at volutpat justo. ';
 
 const communities = [
   {
@@ -367,6 +367,8 @@ export const getCommunity = communityId =>
 export const getCategories = () => useRecoilValue(categoriesAtom);
 
 export const getCategory = categoryId => getCategories().find(({ id }) => id === categoryId);
+
+export const getMyCommunityIds = () => useRecoilValue(myCommunityIdsAtom);
 
 const myCommunities = selector({
   key: 'myCommunities',

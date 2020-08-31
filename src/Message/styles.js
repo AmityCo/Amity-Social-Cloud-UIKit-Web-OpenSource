@@ -87,7 +87,7 @@ export const MessageBody = styled.div`
   border-radius: 0px 6px 6px 6px;
 `
       : `
-  background: #1054DE;
+  background: ${({ theme }) => theme.color.primary};
   color: #fff;
   border-radius: 6px 0px 6px 6px;
 `}
