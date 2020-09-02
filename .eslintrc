@@ -1,4 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": ["eko/react"]
+  "extends": ["eko/react"],
+  "rules": {
+    "react/jsx-fragments": 0 
+  }
 }
