@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Button, { PrimaryButton, SecondaryButton } from './index';
+import Button, { PrimaryButton, SecondaryButton } from '.';
 
 export default {
   title: 'Button',

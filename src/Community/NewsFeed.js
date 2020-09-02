@@ -15,23 +15,21 @@ const NewsFeed = ({ client, onPostAuthorClick }) => {
   const myCommunities = getMyCommunities();
 
   return (
-    <>
-      <Content>
-        <Feed>
-          <PostCompose communities={myCommunities} onSubmit={addPost} />
-          {posts.length === 0 && <EmptyFeed />}
-          {posts.map(post => (
-            <Post
-              onPostAuthorClick={onPostAuthorClick}
-              key={post.postId}
-              post={post}
-              onEdit={updatedPost => editPost(updatedPost)}
-              onDelete={() => removePost(post.postId)}
-            />
-          ))}
-        </Feed>
-      </Content>
-    </>
+    <Content>
+      <Feed>
+        <PostCompose communities={myCommunities} onSubmit={addPost} />
+        {posts.length === 0 && <EmptyFeed />}
+        {posts.map(post => (
+          <Post
+            onPostAuthorClick={onPostAuthorClick}
+            key={post.postId}
+            post={post}
+            onEdit={updatedPost => editPost(updatedPost)}
+            onDelete={() => removePost(post.postId)}
+          />
+        ))}
+      </Feed>
+    </Content>
   );
 };
 

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import Layout from "./index";
-import SideMenu from "../SideMenu";
+import React, { useEffect } from 'react';
+import Layout from '.';
+import SideMenu from '../SideMenu';
 
 export default {
-  title: "Layout",
+  title: 'Layout',
 };
 
 export const headers = () => {

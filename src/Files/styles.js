@@ -17,7 +17,7 @@ export const FilesContainer = styled.div`
 
 export const FileContainer = styled.div`
   position: relative;
-  border: 1px solid${({ theme }) => theme.color.base4};
+  border: 1px solid ${({ theme }) => theme.color.base4};
   padding: 8px;
   border-radius: 4px;
   :not(:first-child) {
@@ -33,7 +33,7 @@ export const Content = styled.div`
 `;
 
 export const ProgressBar = styled.div`
-  background:${({ theme }) => theme.color.base4};
+  background: ${({ theme }) => theme.color.base4};
   width: ${({ progress }) => progress}%;
   position: absolute;
   left: 0;

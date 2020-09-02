@@ -14,24 +14,22 @@ const UserFeed = ({ client }) => {
   const { posts, addPost, removePost, editPost } = usePostsMock(testUser.id);
 
   return (
-    <>
-      <Content>
-        <Feed>
-          <UserFeedHeader />
-          <PostCompose onSubmit={addPost} />
-          {posts.length === 0 && <EmptyFeed />}
-          {posts.map(post => (
-            <Post
-              key={post.postId}
-              post={post}
-              onEdit={updatedPost => editPost(updatedPost)}
-              onDelete={() => removePost(post.postId)}
-            />
-          ))}
-        </Feed>
-        {/* <CommunityInformation /> */}
-      </Content>
-    </>
+    <Content>
+      <Feed>
+        <UserFeedHeader />
+        <PostCompose onSubmit={addPost} />
+        {posts.length === 0 && <EmptyFeed />}
+        {posts.map(post => (
+          <Post
+            key={post.postId}
+            post={post}
+            onEdit={updatedPost => editPost(updatedPost)}
+            onDelete={() => removePost(post.postId)}
+          />
+        ))}
+      </Feed>
+      {/* <CommunityInformation /> */}
+    </Content>
   );
 };
 

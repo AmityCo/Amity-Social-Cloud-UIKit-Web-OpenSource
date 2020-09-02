@@ -11,14 +11,14 @@ import {
 
 import { useCommunitiesMock } from '../mock';
 
-import FeedLayout from '../FeedLayout/';
+import FeedLayout from '../FeedLayout';
 import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';
 
 import UserFeed from './UserFeed';
 import NewsFeed from './NewsFeed';
 import ExploreHome from '../ExploreHome';
 import CategoryPage from '../ExploreHome/CategoryPage';
-import CommunityFeed from './index';
+import CommunityFeed from '.';
 import CommunityCreationModal from '../CommunityCreationModal';
 
 export default {

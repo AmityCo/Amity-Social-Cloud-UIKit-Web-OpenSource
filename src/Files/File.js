@@ -9,16 +9,13 @@ import { FileContainer, Content, FileName, FileSize, ProgressBar, RemoveIcon } f
 const File = ({ editing, file, onRemove }) => {
   // simulate progress animation
   const [progress, setProgress] = useState(0);
-  useEffect(
-    () => {
-      if (!editing || progress >= 100) return;
-      const timeout = setTimeout(() => {
-        setProgress(progress + 0.5);
-      }, 50);
-      return () => clearTimeout(timeout);
-    },
-    [progress],
-  );
+  useEffect(() => {
+    if (!editing || progress >= 100) return;
+    const timeout = setTimeout(() => {
+      setProgress(progress + 0.5);
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [progress]);
 
   return (
     <FileContainer>

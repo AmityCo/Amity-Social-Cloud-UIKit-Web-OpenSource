@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import UiKitAvatar from '../Avatar';
 
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/pro-solid-svg-icons';
 import { faSave, faTrashAlt, faTimes } from '@fortawesome/pro-regular-svg-icons';
+import UiKitAvatar from '../Avatar';
 
 export const SystemMessageContainer = styled.span`
   opacity: 0.5;

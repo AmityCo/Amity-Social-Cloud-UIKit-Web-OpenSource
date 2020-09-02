@@ -28,7 +28,7 @@ export const CommentBlock = styled.div`
 
 const encodeHexColor = hex => hex.replace('#', '%23');
 
-//svg embeded in order to make theamed stroke color
+// svg embeded in order to make theamed stroke color
 export const CommentContainer = styled.div`
   display: flex;
   color: black;
@@ -37,7 +37,7 @@ export const CommentContainer = styled.div`
     background-position: 0 20px;
     background-repeat: no-repeat;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 0 L20 9000" stroke="${({theme}) => encodeHexColor(theme.color.base4)}"/>
+      <path d="M20 0 L20 9000" stroke="${({ theme }) => encodeHexColor(theme.color.base4)}"/>
     </svg>');
 }
 `;
@@ -49,13 +49,13 @@ export const ReplyContainer = styled.div`
   &:last-child {
     background-repeat: no-repeat;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="40">
-      <path d="M20 0 L 20 40" stroke="${({theme}) => encodeHexColor(theme.color.base4)}"/>
+      <path d="M20 0 L 20 40" stroke="${({ theme }) => encodeHexColor(theme.color.base4)}"/>
     </svg>');
   }
   :not(:last-child) {
     background-repeat: repeat-y;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="40">
-      <path d="M20 0 L 20 40" stroke="${({theme}) => encodeHexColor(theme.color.base4)}"/>
+      <path d="M20 0 L 20 40" stroke="${({ theme }) => encodeHexColor(theme.color.base4)}"/>
     </svg>');
 }
 `;
@@ -65,7 +65,7 @@ export const CommentComposeBar = styled(UICommentComposeBar)`
   padding: 8px 0 16px;
   background-repeat: no-repeat;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="40">
-    <path d="M20 0 L 20 40" stroke="${({theme}) => encodeHexColor(theme.color.base4)}"/>
+    <path d="M20 0 L 20 40" stroke="${({ theme }) => encodeHexColor(theme.color.base4)}"/>
   </svg>');
 `;
 

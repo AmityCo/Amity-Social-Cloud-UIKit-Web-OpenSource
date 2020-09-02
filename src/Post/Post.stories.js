@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import EkoClient, { ChannelRepository, _changeSDKDefaultConfig } from 'eko-sdk';
 
-import Post from './index';
+import Post from '.';
 import UiKitProvider from '../UiKitProvider';
 
 export default {

@@ -1,9 +1,4 @@
 import styled from 'styled-components';
-import Button from '../commonComponents/Button';
-import UIAvatar from '../Avatar';
-import Menu from '../commonComponents/Menu';
-import { SecondaryButton } from '../commonComponents/Button';
-
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import {
   faSearch,
@@ -11,6 +6,9 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/pro-regular-svg-icons';
+import Button, { SecondaryButton } from '../commonComponents/Button';
+import UIAvatar from '../Avatar';
+import Menu from '../commonComponents/Menu';
 
 export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
   color: #898e9e;
@@ -118,13 +116,13 @@ export const Blocks = styled.div`
 export const Block = styled.div`
   margin-top: 20px;
   background: #fff;
-  border: 1px solid${({ theme }) => theme.color.base4};
+  border: 1px solid ${({ theme }) => theme.color.base4};
   border-radius: 4px;
 `;
 
 export const BlockHeader = styled.div`
   padding: 16px 16px 12px;
-  border-bottom: 1px solid${({ theme }) => theme.color.base4};
+  border-bottom: 1px solid ${({ theme }) => theme.color.base4};
   ${({ theme }) => theme.typography.title}
 `;
 
@@ -132,7 +130,7 @@ export const CommunityItem = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid${({ theme }) => theme.color.base4};
+  border: 1px solid ${({ theme }) => theme.color.base4};
   border-radius: 4px;
   padding: 16px;
   overflow: hidden;
@@ -187,7 +185,7 @@ export const CommunityInfo = styled.div`
   justify-content: space-between;
   padding-bottom: 12px;
   cursor: pointer;
-  border-bottom: 1px solid${({ theme }) => theme.color.base4};
+  border-bottom: 1px solid ${({ theme }) => theme.color.base4};
 `;
 
 export const TrendingCommunityContainer = styled.div`
@@ -216,7 +214,7 @@ export const BackButton = styled(SecondaryButton)`
 `;
 
 export const ViewAllButton = styled(SecondaryButton)`
-  border-top: 1px solid${({ theme }) => theme.color.base4};
+  border-top: 1px solid ${({ theme }) => theme.color.base4};
   padding: 18px;
   width: 100%;
   border-radius: 0;

@@ -12,18 +12,15 @@ import {
 } from './styles';
 
 const useKeyboardNavigation = (prev, next, onClose) => {
-  useEffect(
-    () => {
-      const listener = e => {
-        if (e.key === 'ArrowRight') next();
-        if (e.key === 'ArrowLeft') prev();
-        if (e.key === 'Escape') onClose();
-      };
-      document.addEventListener('keydown', listener);
-      return () => document.removeEventListener('keydown', listener);
-    },
-    [prev, next, onClose],
-  );
+  useEffect(() => {
+    const listener = e => {
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', listener);
+    return () => document.removeEventListener('keydown', listener);
+  }, [prev, next, onClose]);
 };
 
 const ImageGallery = ({ initialImageIndex, images = [], onClose }) => {

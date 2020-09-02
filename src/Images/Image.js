@@ -12,16 +12,13 @@ import {
 const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
   // simulate progress animation
   const [progress, setProgress] = useState(editing ? 0 : 100);
-  useEffect(
-    () => {
-      if (progress >= 100) return;
-      const timeout = setTimeout(() => {
-        setProgress(progress + 0.5);
-      }, 50);
-      return () => clearTimeout(timeout);
-    },
-    [progress],
-  );
+  useEffect(() => {
+    if (progress >= 100) return;
+    const timeout = setTimeout(() => {
+      setProgress(progress + 0.5);
+    }, 50);
+    return () => clearTimeout(timeout);
+  }, [progress]);
 
   const removeImage = e => {
     e.stopPropagation();

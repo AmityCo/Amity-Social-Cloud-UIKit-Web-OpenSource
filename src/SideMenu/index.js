@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { customizableComponent } from "../hoks/customization";
-import { SideMenuContainer } from "./styles";
-import communityIcon from "./icons/community.svg";
-import MenuTab from "./MenuTab";
+import React, { useState } from 'react';
+import { customizableComponent } from '../hoks/customization';
+import { SideMenuContainer } from './styles';
+import communityIcon from './icons/community.svg';
+import MenuTab from './MenuTab';
 
 const SideMenu = () => {
   const [active, setActive] = useState(false);
-  const Mockup = [{ name: "COMMUNITY", icon: communityIcon }];
+  const Mockup = [{ name: 'COMMUNITY', icon: communityIcon }];
   return (
     <SideMenuContainer>
       {Mockup.map((tab, id) => (
@@ -22,4 +22,4 @@ const SideMenu = () => {
   );
 };
 
-export default customizableComponent("SideMenu")(SideMenu);
+export default customizableComponent('SideMenu')(SideMenu);

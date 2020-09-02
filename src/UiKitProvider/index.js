@@ -9,7 +9,7 @@ import Localization from './Localisation';
 import GlobalStyle from './GlobalStyle';
 import { UIStyles } from './styles';
 import GlobalTheme from './GlobalTheme';
-import MockData from '../mock/';
+import MockData from '../mock';
 import { ConfirmContainer } from '../commonComponents/Confirm';
 import { NotificationsContainer } from '../commonComponents/Notification';
 
@@ -36,25 +36,22 @@ const UiKitProvider = ({
     [customComponentsMap, customComponents],
   );
 
-  const SDKInfo = useMemo(
-    () => {
-      // TODO fix
-      // initialize only one client
-      if (!client) {
-        client = new EkoClient(clientOptions);
-        // Register Session with EkoClient with userId and display name
-        client.registerSession({
-          userId: 'Web-Test',
-          displayName: 'Web-Test',
-        });
-      }
+  const SDKInfo = useMemo(() => {
+    // TODO fix
+    // initialize only one client
+    if (!client) {
+      client = new EkoClient(clientOptions);
+      // Register Session with EkoClient with userId and display name
+      client.registerSession({
+        userId: 'Web-Test',
+        displayName: 'Web-Test',
+      });
+    }
 
-      return {
-        client,
-      };
-    },
-    [clientOptions],
-  );
+    return {
+      client,
+    };
+  }, [clientOptions]);
 
   return (
     <Localization>

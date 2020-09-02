@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const SideMenuContainer = styled.div`
   display: flex;
@@ -28,7 +28,6 @@ export const MenuTabContainer = styled.div`
   width: 100%;
   height: 64px;
   cursor: pointer;
-  ${({ active }) =>
-    active && "border-left: 2px solid #1054DE;  background-color: #ebecef;"}
+  ${({ active }) => active && 'border-left: 2px solid #1054DE;  background-color: #ebecef;'}
   ${({ theme }) => theme.typography.captionBold}
 `;

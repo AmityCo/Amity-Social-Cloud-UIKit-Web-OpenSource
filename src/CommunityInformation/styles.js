@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight, faPlus } from '@fortawesome/pro-regular-svg-icons';
 import { SecondaryButton, PrimaryButton } from '../commonComponents/Button';
 import UIAvatar from '../Avatar';
 import UIOptions from '../commonComponents/Options';
-
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faPlus } from '@fortawesome/pro-regular-svg-icons';
 
 export const RightIcon = styled(FaIcon).attrs({ icon: faChevronRight })`
   font-size: 16px;

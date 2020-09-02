@@ -1,18 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { customizableComponent } from "../hoks/customization";
-import {
-  LayoutHeader,
-  Username,
-  DropdownIcon,
-  DropDownContainer,
-} from "./styles";
-import Avatar from "../Avatar";
-import Popover from "../commonComponents/Popover";
-import Menu, { MenuItem } from "../commonComponents/Menu";
+import React, { useState, useEffect } from 'react';
+import { customizableComponent } from '../hoks/customization';
+import { LayoutHeader, Username, DropdownIcon, DropDownContainer } from './styles';
+import Avatar from '../Avatar';
+import Popover from '../commonComponents/Popover';
+import Menu, { MenuItem } from '../commonComponents/Menu';
 
 const Layout = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const username = "Jackies";
+  const username = 'Jackies';
 
   return (
     <LayoutHeader>
@@ -38,4 +33,4 @@ const Layout = () => {
   );
 };
 
-export default customizableComponent("Layout")(Layout);
+export default customizableComponent('Layout')(Layout);

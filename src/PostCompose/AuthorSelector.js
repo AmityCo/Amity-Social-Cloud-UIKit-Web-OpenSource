@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
-import Popover from '../commonComponents/Popover/';
+import Popover from '../commonComponents/Popover';
 import Menu, { MenuItem } from '../commonComponents/Menu';
 
 import { AuthorSelectorContainer, CommunitySeparator, SelectIcon, Avatar } from './styles';

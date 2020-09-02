@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ChatHome from './index';
+import ChatHome from '.';
 import Chat from '../Chat';
 import Message from '../Message';
 import MessageList from '../MessageList';

@@ -1,6 +1,6 @@
-import React from "react";
-import { customizableComponent } from "../hoks/customization";
-import { MenuTabContainer, MenuName } from "./styles";
+import React from 'react';
+import { customizableComponent } from '../hoks/customization';
+import { MenuTabContainer, MenuName } from './styles';
 
 const MenuTab = ({ icon, name, className, onClick, active }) => {
   return (
@@ -11,4 +11,4 @@ const MenuTab = ({ icon, name, className, onClick, active }) => {
   );
 };
 
-export default customizableComponent("MenuTab")(MenuTab);
+export default customizableComponent('MenuTab')(MenuTab);

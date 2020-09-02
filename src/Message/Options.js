@@ -22,15 +22,12 @@ const Flagging = ({ message: { messageId } = {} }) => {
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(null);
   const [flagRepo, setFlagRepo] = useState(null);
 
-  useEffect(
-    () => {
-      if (!messageId) return;
-      const flagRepository = new MessageFlagRepository(messageId);
-      setFlagRepo(flagRepository);
-      flagRepository.isFlaggedByMe().then(setIsFlaggedByMe);
-    },
-    [messageId],
-  );
+  useEffect(() => {
+    if (!messageId) return;
+    const flagRepository = new MessageFlagRepository(messageId);
+    setFlagRepo(flagRepository);
+    flagRepository.isFlaggedByMe().then(setIsFlaggedByMe);
+  }, [messageId]);
 
   const flagMessage = messageId => {
     flagRepo.flag({ messageId }).then(() => {

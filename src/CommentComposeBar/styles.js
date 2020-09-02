@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { PrimaryButton } from '../commonComponents/Button';
 import TextareaAutosize from 'react-autosize-textarea';
+import { PrimaryButton } from '../commonComponents/Button';
 
 import UIAvatar from '../Avatar';
 

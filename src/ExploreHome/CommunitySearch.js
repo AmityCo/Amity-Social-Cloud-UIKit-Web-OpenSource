@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
-import Popover from '../commonComponents/Popover/';
+import Popover from '../commonComponents/Popover';
 import { MenuItem } from '../commonComponents/Menu';
 
 import { getCommunities, getCategories } from '../mock';
@@ -34,12 +34,9 @@ const CommunitySearch = ({ onSearchResultCommunityClick }) => {
   const close = () => setIsOpen(false);
 
   // open if query not empty
-  useEffect(
-    () => {
-      query.length && open();
-    },
-    [query],
-  );
+  useEffect(() => {
+    query.length && open();
+  }, [query]);
 
   const communities = getCommunities();
 
