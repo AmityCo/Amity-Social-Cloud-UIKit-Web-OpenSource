@@ -12,8 +12,6 @@
     "test:watch": "jest --watch",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook --output-dir ./storybook-build",
-    "storybook:export": "build-storybook --output-dir ./packaging/storybook-static",
-    "pack": "npm run storybook:export && cd packaging && npm run pack",
     "generate": "node ./util/create-component",
     "prepublishOnly": "npm run build"
   },
