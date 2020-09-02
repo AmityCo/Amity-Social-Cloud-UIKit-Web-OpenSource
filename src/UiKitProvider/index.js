@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from 'react';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 
 import { ThemeProvider } from 'styled-components';
