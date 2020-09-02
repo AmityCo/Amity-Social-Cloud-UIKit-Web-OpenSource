@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 import withSDK from '../hoks/withSDK';
 
 import EmptyFeed from '../EmptyFeed';
 
-import { getMyCommunities, testNewsFeed, usePostsMock } from '../mock';
+import { getMyCommunities, usePostsMock } from '../mock';
 
 import { Content, Feed, PostCompose, Post } from './styles';
 
-const NewsFeed = ({ client, onPostAuthorClick }) => {
+const NewsFeed = ({ onPostAuthorClick }) => {
   const { posts, addPost, removePost, editPost } = usePostsMock();
 
   const myCommunities = getMyCommunities();

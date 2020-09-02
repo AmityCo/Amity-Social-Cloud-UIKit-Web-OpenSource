@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 import withSDK from '../hoks/withSDK';
 
-import CommunityInformation from '../CommunityInformation';
+// import CommunityInformation from '../CommunityInformation';
 import EmptyFeed from '../EmptyFeed';
 
-import { testUser, userFeed, usePostsMock } from '../mock';
+import { testUser, usePostsMock } from '../mock';
 
 import { Content, Feed, PostCompose, Post, UserFeedHeader } from './styles';
 
-const UserFeed = ({ client }) => {
+const UserFeed = () => {
   const { posts, addPost, removePost, editPost } = usePostsMock(testUser.id);
 
   return (

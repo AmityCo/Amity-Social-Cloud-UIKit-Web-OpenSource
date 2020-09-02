@@ -1,5 +1,5 @@
 import React from 'react';
-import { IntlProvider, FormattedTime } from 'react-intl';
+import { IntlProvider } from 'react-intl';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en';
 

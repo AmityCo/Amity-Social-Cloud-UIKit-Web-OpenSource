@@ -4,7 +4,7 @@ import { customizableComponent } from '../hoks/customization';
 
 import CommunitySearch from './CommunitySearch';
 
-import { Avatar, CreateCommunityButton, ExploreHeaderContainer, PlusIcon } from './styles';
+import { CreateCommunityButton, ExploreHeaderContainer, PlusIcon } from './styles';
 
 const ExploreHeader = ({ onSearchResultCommunityClick, onCreateCommunityClick }) => (
   <ExploreHeaderContainer>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 import Options from '../commonComponents/Options';
@@ -30,7 +30,7 @@ const CommunityMember = ({ user, onMemberClick }) => {
       content:
         'This user won’t no longer be able to search, post and interact in this community. Are you sure you want tocontinue?',
       okText: 'Remove',
-      onOk: () => console.log('onRemove'),
+      onOk: () => {},
     });
 
   const onReportClick = () =>
@@ -57,7 +57,7 @@ const CommunityMember = ({ user, onMemberClick }) => {
   );
 };
 
-const CommunityMembers = ({ communityId, onMemberClick }) => {
+const CommunityMembers = ({ onMemberClick }) => {
   const [activeTab, setActiveTab] = useState(tabs.MEMBERS);
 
   return (
@@ -69,9 +69,13 @@ const CommunityMembers = ({ communityId, onMemberClick }) => {
         onChange={setActiveTab}
       />
       {activeTab === tabs.MEMBERS &&
-        testMembers.map(user => <CommunityMember user={user} onMemberClick={onMemberClick} />)}
+        testMembers.map(user => (
+          <CommunityMember key={user.userId} user={user} onMemberClick={onMemberClick} />
+        ))}
       {activeTab === tabs.MODERATORS &&
-        testModerators.map(user => <CommunityMember user={user} onMemberClick={onMemberClick} />)}
+        testModerators.map(user => (
+          <CommunityMember key={user.userId} user={user} onMemberClick={onMemberClick} />
+        ))}
     </CommunityMembersContainer>
   );
 };

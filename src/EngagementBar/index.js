@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import { customizableComponent } from '../hoks/customization';
 import { SecondaryButton } from '../commonComponents/Button';

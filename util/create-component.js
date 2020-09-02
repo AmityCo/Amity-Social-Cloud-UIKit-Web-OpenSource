@@ -1,3 +1,5 @@
+/* eslint no-console: 0 */
+/* eslint import/no-extraneous-dependencies: 0 */
 require('colors');
 const fs = require('fs');
 const templates = require('./templates');

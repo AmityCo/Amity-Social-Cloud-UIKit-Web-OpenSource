@@ -4,7 +4,7 @@ import { customizableComponent } from '../hoks/customization';
 import Popover from '../commonComponents/Popover';
 import { MenuItem } from '../commonComponents/Menu';
 
-import { getCommunities, getCategories } from '../mock';
+import { getCommunities } from '../mock';
 
 import {
   Avatar,
@@ -21,8 +21,8 @@ const Highlight = ({ query, text }) => {
   const chunks = text.split(new RegExp(`(${query})`, 'gi'));
   return chunks.map(chunk => {
     if (chunk.toLowerCase() === query.toLowerCase())
-      return <HighlightedText>{chunk}</HighlightedText>;
-    return <Text>{chunk}</Text>;
+      return <HighlightedText key={chunk}>{chunk}</HighlightedText>;
+    return <Text key={chunk}>{chunk}</Text>;
   });
 };
 
@@ -48,7 +48,10 @@ const CommunitySearch = ({ onSearchResultCommunityClick }) => {
     <CommunitiesSearchResults>
       {/* TODO empty state */}
       {searchResult.map(community => (
-        <MenuItem onClick={() => onSearchResultCommunityClick(community)}>
+        <MenuItem
+          key={community.communityId}
+          onClick={() => onSearchResultCommunityClick(community)}
+        >
           <Avatar size="tiny" avatar={community.avatar} />
           <Highlight text={community.name} query={query} />
         </MenuItem>

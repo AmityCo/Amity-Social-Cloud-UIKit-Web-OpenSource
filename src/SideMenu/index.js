@@ -9,9 +9,9 @@ const SideMenu = () => {
   const Mockup = [{ name: 'COMMUNITY', icon: communityIcon }];
   return (
     <SideMenuContainer>
-      {Mockup.map((tab, id) => (
+      {Mockup.map(tab => (
         <MenuTab
-          key={id}
+          key={tab.name}
           active={active === tab.name}
           onClick={() => setActive(tab.name)}
           icon={tab.icon}

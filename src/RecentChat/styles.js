@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';

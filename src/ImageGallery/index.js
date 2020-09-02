@@ -43,7 +43,7 @@ const ImageGallery = ({ initialImageIndex, images = [], onClose }) => {
         <Counter>
           {currentIndex + 1} / {images.length}
         </Counter>
-        <img src={image.url} />
+        <img src={image.url} alt="" />
       </ImageContainer>
       <div>{!isLast && <RightIcon onClick={next} />}</div>
       <CloseIcon onClick={onClose} />

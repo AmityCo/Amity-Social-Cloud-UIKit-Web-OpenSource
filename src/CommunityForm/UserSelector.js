@@ -6,11 +6,8 @@ import { testUsers } from '../mock';
 
 import {
   Avatar,
-  Categories,
-  UserItem,
   Selector,
   SelectorList,
-  SelectIcon,
   SelectorPopover,
   UserSelectorInput,
   Chip,

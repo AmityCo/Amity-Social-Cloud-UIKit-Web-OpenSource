@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 import Modal from '../commonComponents/Modal';
-import Menu, { MenuItem } from '../commonComponents/Menu';
-import CommunityName from '../commonComponents/CommunityName';
+import { MenuItem } from '../commonComponents/Menu';
 
 import { getCommunities, getCategories } from '../mock';
 
@@ -27,7 +26,6 @@ import {
 } from './styles';
 
 const ExploreHome = ({
-  client,
   onSearchResultCommunityClick,
   onRecomendedCommunityClick,
   onTrendingCommunityClick,
@@ -46,9 +44,9 @@ const ExploreHome = ({
     <Modal title="Category" onCancel={closeCategoryModal}>
       <CategoryModalBody>
         {categories.map(category => (
-          <MenuItem onClick={() => onCategoryClick(category.id)}>
+          <MenuItem key={category.id} onClick={() => onCategoryClick(category.id)}>
             <Category>
-              <Avatar avatar={category.avatar} /> {category.name}
+              <Avatar key={category.id} avatar={category.avatar} /> {category.name}
             </Category>
           </MenuItem>
         ))}
@@ -68,6 +66,7 @@ const ExploreHome = ({
           <CommunityItems>
             {communities.slice(0, 5).map(community => (
               <Community
+                key={community.communityId}
                 onClick={() => onRecomendedCommunityClick(community)}
                 community={community}
               />
@@ -76,10 +75,11 @@ const ExploreHome = ({
         </Block>
 
         <Block>
-          <BlockHeader>Today's Trending</BlockHeader>
+          <BlockHeader>Today&apos;s Trending</BlockHeader>
           <TrendingCommunities>
             {communities.slice(0, 6).map(community => (
               <TrendingCommunity
+                key={community.communityId}
                 onClick={() => onTrendingCommunityClick(community)}
                 community={community}
               />
@@ -91,7 +91,7 @@ const ExploreHome = ({
           <BlockHeader>Categories</BlockHeader>
           <Categories>
             {categories.map(category => (
-              <Category onClick={() => onCategoryClick(category.id)}>
+              <Category key={category.id} onClick={() => onCategoryClick(category.id)}>
                 <Avatar avatar={category.avatar} /> {category.name}
               </Category>
             ))}

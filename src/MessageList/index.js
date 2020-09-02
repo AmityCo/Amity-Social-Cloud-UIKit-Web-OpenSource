@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MessageRepository } from 'eko-sdk';
 import IncomingMessage from '../Message/IncomingMessage';

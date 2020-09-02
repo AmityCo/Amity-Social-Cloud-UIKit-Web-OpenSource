@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { customizableComponent } from '../hoks/customization';
 import { LayoutHeader, Username, DropdownIcon, DropDownContainer } from './styles';
 import Avatar from '../Avatar';
@@ -11,7 +11,12 @@ const Layout = () => {
 
   return (
     <LayoutHeader>
-      <div onClick={() => setIsOpen(!isOpen)}>
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={() => setIsOpen(!isOpen)}
+      >
         <Avatar />
       </div>
       <Username>{username}</Username>

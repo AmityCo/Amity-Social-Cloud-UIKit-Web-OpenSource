@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Truncate from 'react-truncate-markup';
 
 import { customizableComponent } from '../hoks/customization';
 
 import Linkify from '../commonComponents/Linkify';
 import { notification } from '../commonComponents/Notification';
-
-import Files from '../Files';
-import Images from '../Images';
 
 import {
   Avatar,
@@ -20,7 +17,6 @@ import {
   CommentContent,
   AuthorName,
   CommentDate,
-  CommentInfo,
   ReadMoreButton,
   InteractionBar,
   LikeIcon,
@@ -61,21 +57,15 @@ const CommentText = ({ children }) => {
 const ReplyComment = ({
   className,
   comment,
-  comment: { author, createdAt, updatedAt, text, isLiked, likes = 0 },
+  comment: { author, createdAt, text, isLiked, likes = 0 },
   onEdit,
 }) => {
-  const [userToReply, setUserToReply] = useState(null);
-  const reply = user => setUserToReply(user);
-
   const toggleLike = () => {
     onEdit({
       ...comment,
       isLiked: !isLiked,
     });
   };
-
-  const [isExpanded, setIsExpanded] = useState(false);
-  const expand = () => setIsExpanded(true);
 
   const totalLikes = likes + (isLiked ? 1 : 0);
 
@@ -102,11 +92,11 @@ const ReplyComment = ({
 const Comment = ({
   className,
   comment,
-  comment: { author, createdAt, replies, updatedAt, text, isLiked, likes = 0 },
+  comment: { author, createdAt, replies, text, isLiked, likes = 0 },
   onEdit,
 }) => {
   const [userToReply, setUserToReply] = useState(null);
-  const reply = user => setUserToReply(user);
+  const handleReply = user => setUserToReply(user);
 
   const toggleLike = () => {
     onEdit({
@@ -151,7 +141,7 @@ const Comment = ({
             <LikeButton onClick={toggleLike} active={isLiked}>
               {isLiked ? <SolidLikeIcon /> : <LikeIcon />} {!!totalLikes && totalLikes}
             </LikeButton>
-            <ReplyButton onClick={() => reply(author)}>
+            <ReplyButton onClick={() => handleReply(author)}>
               <ReplyIcon /> Reply
             </ReplyButton>
             <Options options={[{ name: 'Report comment', action: onReportClick }]} />
@@ -159,7 +149,7 @@ const Comment = ({
         </Content>
       </CommentContainer>
       {replies.map(reply => (
-        <ReplyComment comment={reply} onEdit={editReply} />
+        <ReplyComment key={reply.id} comment={reply} onEdit={editReply} />
       ))}
       {userToReply && <CommentComposeBar userToReply={userToReply} onSubmit={addReply} />}
     </CommentBlock>

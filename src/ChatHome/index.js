@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { ChannelRepository } from 'eko-sdk';
+import React, { useState } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
-import useLiveObject from '../hooks/useLiveObject';
 import RecentChat from '../RecentChat';
 import Chat from '../Chat';
 import ChatDetails from '../ChatDetails';
 
 import { ChatHomeContainer } from './styles';
-
-const channelRepo = new ChannelRepository();
 
 // TODO add onCreateGroupChat
 const ChatHome = () => {
@@ -30,15 +26,13 @@ const ChatHome = () => {
           onChatDetailsClick={toggleShowChatDetails}
         />
       )}
-      <>
-        {showChatDetails && currentChannelId && (
-          <ChatDetails
-            key={currentChannelId}
-            channelId={currentChannelId}
-            onClose={hideChatDetails}
-          />
-        )}
-      </>
+      {showChatDetails && currentChannelId && (
+        <ChatDetails
+          key={currentChannelId}
+          channelId={currentChannelId}
+          onClose={hideChatDetails}
+        />
+      )}
     </ChatHomeContainer>
   );
 };

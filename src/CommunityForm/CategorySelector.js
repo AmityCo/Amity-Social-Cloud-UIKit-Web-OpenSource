@@ -1,18 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MenuItem } from '../commonComponents/Menu';
 
 import { customizableComponent } from '../hoks/customization';
 import { getCategories, getCategory } from '../mock';
 
-import {
-  Avatar,
-  Categories,
-  CategoryItem,
-  Selector,
-  SelectorPopover,
-  SelectorList,
-  SelectIcon,
-} from './styles';
+import { Avatar, Selector, SelectorPopover, SelectorList, SelectIcon } from './styles';
 
 const Category = ({ category }) => (
   <>
@@ -27,19 +19,20 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
 
   const categories = getCategories();
 
-  const category = getCategory(categoryId);
+  const currentCategory = getCategory(categoryId);
 
   const list = (
     <SelectorList>
       {/* TODO empty state */}
       {categories.map(category => (
         <MenuItem
+          key={category.id}
           onClick={() => {
             close();
             onChange(category.id);
           }}
         >
-          <Category category={category} />
+          <Category key={category.id} category={category} />
         </MenuItem>
       ))}
     </SelectorList>
@@ -48,7 +41,7 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   return (
     <SelectorPopover isOpen={isOpen} onClickOutside={close} content={list}>
       <Selector onClick={open}>
-        {categoryId && <Category category={category} />} <SelectIcon />
+        {categoryId && <Category category={currentCategory} />} <SelectIcon />
       </Selector>
     </SelectorPopover>
   );

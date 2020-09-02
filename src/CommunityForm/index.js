@@ -4,7 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { customizableComponent } from '../hoks/customization';
 import Button from '../commonComponents/Button';
 
-import { testUser, getCategories, getCommunities } from '../mock';
+import { getCommunities } from '../mock';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';
@@ -12,7 +12,6 @@ import UserSelector from './UserSelector';
 import {
   Form,
   TextField,
-  InformationBlock,
   Avatar,
   AvatarUploadContainer,
   AboutTextarea,
@@ -40,7 +39,7 @@ import {
   FormBody,
 } from './styles';
 
-const AvatarUpload = ({ value, onChange }) => (
+const AvatarUpload = ({ value }) => (
   <AvatarUploadContainer>
     <AvatarWrapper>
       <Avatar size="big" avatar={value} />
@@ -60,11 +59,9 @@ const PUBLIC = 'public';
 const PRIVATE = 'private';
 
 const CommunityForm = ({
-  user = testUser,
   community, // initialize form on editing
   edit,
   onSubmit,
-  onSave,
   className,
   onCancel,
 }) => {
@@ -83,7 +80,7 @@ const CommunityForm = ({
         },
   });
 
-  const name = watch('name');
+  const currentName = watch('name');
   const description = watch('description');
   const permission = watch('permission');
 
@@ -112,7 +109,7 @@ const CommunityForm = ({
               <Label htmlFor="name" required>
                 Community name
               </Label>
-              <Counter>{name.length}/30</Counter>
+              <Counter>{currentName.length}/30</Counter>
             </LabelCounterWrapper>
             <TextField
               placeholder="Enter community name"
@@ -211,7 +208,7 @@ const CommunityForm = ({
             Cancel
           </Button>
         )}
-        <SubmitButton disabled={name.length === 0}>{edit ? 'Save' : 'Create'}</SubmitButton>
+        <SubmitButton disabled={currentName.length === 0}>{edit ? 'Save' : 'Create'}</SubmitButton>
       </Footer>
     </Form>
   );

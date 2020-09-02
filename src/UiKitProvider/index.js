@@ -1,9 +1,9 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import merge from 'lodash/merge';
 import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 
 import { ThemeProvider } from 'styled-components';
-import { CustomComponentsContext, CustomComponentsProvider } from '../hoks/customization';
+import { CustomComponentsProvider } from '../hoks/customization';
 import { SDKProvider } from '../hoks/withSDK';
 import Localization from './Localisation';
 import GlobalStyle from './GlobalStyle';
@@ -26,16 +26,6 @@ const UiKitProvider = ({
   clientOptions,
   children /* TODO localization */,
 }) => {
-  const customComponentsMap = useContext(CustomComponentsContext);
-
-  const memoizedCustomComponentsMap = useMemo(
-    () => ({
-      ...customComponentsMap,
-      ...customComponents,
-    }),
-    [customComponentsMap, customComponents],
-  );
-
   const SDKInfo = useMemo(() => {
     // TODO fix
     // initialize only one client

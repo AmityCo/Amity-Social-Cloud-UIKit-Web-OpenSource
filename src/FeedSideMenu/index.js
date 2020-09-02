@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { customizableComponent } from '../hoks/customization';
-import useLiveObject from '../hooks/useLiveObject';
 import CommunityItem from '../CommunityItem';
 import SideMenuItem from '../commonComponents/SideMenuItem';
 
@@ -15,7 +14,6 @@ import {
   NewsIcon,
   SearchIcon,
   PlusIcon,
-  VervifiedIcon,
 } from './styles';
 
 export const SELECTION_TYPES = {
@@ -30,7 +28,6 @@ const FeedSideMenu = ({
   onCommunityClick,
   onNewsFeedClick,
   onExploreClick,
-  selectedChannelId,
 }) => {
   const myCommunities = getMyCommunities();
 
@@ -58,11 +55,11 @@ const FeedSideMenu = ({
         <SideMenuItem onClick={onCreateCommunityClick} icon={<PlusIcon />}>
           Create Community
         </SideMenuItem>
-        {myCommunities.map((community, i) => (
+        {myCommunities.map(community => (
           <CommunityItem
+            key={community.communityId}
             active={communityId === community.communityId}
             onClick={() => onCommunityClick(community.communityId)}
-            key={i}
             community={community}
           />
         ))}

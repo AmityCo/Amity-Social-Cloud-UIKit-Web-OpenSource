@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { customizableComponent } from '../hoks/customization';
 
 import { EmptyFeedContainer, FeedIcon } from './styles';
