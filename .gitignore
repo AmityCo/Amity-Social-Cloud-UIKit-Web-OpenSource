@@ -1,5 +1,6 @@
 node_modules/
 build/
+storybook-build/
 packaging/storybook-static/
 packaging/ui-kit-web-linux
 packaging/ui-kit-web-macos
