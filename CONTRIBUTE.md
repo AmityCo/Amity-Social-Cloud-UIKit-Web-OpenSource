@@ -31,7 +31,7 @@ npm run storybook
 To export your Storybook as static files:
 
 ```
-npm run storybook:export
+npm run storybook:build
 ```
 
 
