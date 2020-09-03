@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import Modal from '../Modal';
 import { MenuItem } from '../Menu';
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toHumanString } from 'human-readable-numbers';
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import { SecondaryButton } from '../Button';
 
 import CommentComposeBar from '../CommentComposeBar';

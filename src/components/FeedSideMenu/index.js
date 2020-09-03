@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import CommunityItem from '../CommunityItem';
 import SideMenuItem from '../SideMenuItem';
 

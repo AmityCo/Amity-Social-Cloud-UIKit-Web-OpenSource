@@ -4,7 +4,7 @@ export const CustomComponentsContext = React.createContext({});
 export const CustomComponentsProvider = CustomComponentsContext.Provider;
 
 /*
-  This hok allow as to customize components by it name
+  This hoc allow as to customize components by it name
 
   usage:
   1) wrap component

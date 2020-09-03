@@ -1,5 +1,5 @@
 import React from 'react';
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import { confirm } from '../Confirm';
 import Modal from '../Modal';
 import { CommunityForm } from './styles';

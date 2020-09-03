@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { customizableComponent } from '../../hoks/customization';
-import withSDK from '../../hoks/withSDK';
+import { customizableComponent } from '../../hocs/customization';
+import withSDK from '../../hocs/withSDK';
 
 import EmptyFeed from '../EmptyFeed';
 

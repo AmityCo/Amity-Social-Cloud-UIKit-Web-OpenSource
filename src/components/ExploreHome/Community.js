@@ -1,7 +1,7 @@
 import React from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import CommunityName from '../CommunityName';
 
 import { Avatar, CommunityItem, Description, Count } from './styles';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import RecentChat from '../RecentChat';
 import Chat from '../Chat';
 import ChatDetails from '../ChatDetails';

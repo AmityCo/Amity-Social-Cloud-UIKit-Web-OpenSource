@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import filesize from 'filesize';
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 
 import FileIcon from './FileIcon';
 

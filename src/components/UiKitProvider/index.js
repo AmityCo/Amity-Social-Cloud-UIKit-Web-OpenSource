@@ -3,8 +3,8 @@ import merge from 'lodash/merge';
 import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 
 import { ThemeProvider } from 'styled-components';
-import { CustomComponentsProvider } from '../../hoks/customization';
-import { SDKProvider } from '../../hoks/withSDK';
+import { CustomComponentsProvider } from '../../hocs/customization';
+import { SDKProvider } from '../../hocs/withSDK';
 import Localization from './Localisation';
 import GlobalStyle from './GlobalStyle';
 import { UIStyles } from './styles';

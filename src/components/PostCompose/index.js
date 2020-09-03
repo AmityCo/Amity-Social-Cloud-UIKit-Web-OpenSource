@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import { notification } from '../Notification';
 import Files from '../Files';
 import Images from '../Images';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Truncate from 'react-truncate-markup';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 
 import Linkify from '../Linkify';
 import Modal from '../Modal';

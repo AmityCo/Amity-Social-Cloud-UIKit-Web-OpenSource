@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MenuItem } from '../Menu';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import { getCategories, getCategory } from '../../mock';
 
 import { Avatar, Selector, SelectorPopover, SelectorList, SelectIcon } from './styles';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 
 import { EmptyFeedContainer, FeedIcon } from './styles';
 

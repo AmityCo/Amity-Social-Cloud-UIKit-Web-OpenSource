@@ -1,7 +1,7 @@
 import React from 'react';
 import { ChannelRepository } from 'eko-sdk';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import useLiveObject from '../../hooks/useLiveObject';
 
 import {

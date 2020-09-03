@@ -1,5 +1,5 @@
 import React from 'react';
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 import Tab from '../Tab';
 
 import { UserFeedHeaderContainer, Tabs } from './styles';

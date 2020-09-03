@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedTime } from 'react-intl';
 
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 
 import Linkify from '../Linkify';
 

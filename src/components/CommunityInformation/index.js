@@ -1,7 +1,7 @@
 import React from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
-import { customizableComponent } from '../../hoks/customization';
+import { customizableComponent } from '../../hocs/customization';
 
 import { confirm } from '../Confirm';
 import { useCommunitiesMock, getMyCommunityIds } from '../../mock';
