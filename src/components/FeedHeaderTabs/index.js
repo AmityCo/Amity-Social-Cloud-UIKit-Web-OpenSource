@@ -1,4 +1,4 @@
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 
 import { FeedHeaderTabs } from './styles';
 

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { MessageRepository, ChannelRepository, EkoChannelType } from 'eko-sdk';
 
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 
 import ChatHeader from '../ChatHeader';
 import MessageList from '../MessageList';

@@ -1,12 +1,12 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MessageRepository } from 'eko-sdk';
-import IncomingMessage from '../Message/IncomingMessage';
-import OutgoingMessage from '../Message/OutgoingMessage';
 
-import { customizableComponent } from '../../hocs/customization';
-import withSDK from '../../hocs/withSDK';
-import usePaginatedLiveObject from '../../hooks/usePaginatedLiveObject';
+import { customizableComponent } from 'hocs/customization';
+import withSDK from 'hocs/withSDK';
+import usePaginatedLiveObject from 'hooks/usePaginatedLiveObject';
+import OutgoingMessage from '../Message/OutgoingMessage';
+import IncomingMessage from '../Message/IncomingMessage';
 
 import { InfiniteScrollContainer, MessageListContainer } from './styles';
 

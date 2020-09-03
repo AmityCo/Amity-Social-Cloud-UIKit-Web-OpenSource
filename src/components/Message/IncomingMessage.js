@@ -1,6 +1,6 @@
 import React from 'react';
+import { customizableComponent } from 'hocs/customization';
 import Message from '.';
-import { customizableComponent } from '../../hocs/customization';
 
 const IncomingMessage = props => <Message incoming {...props} />;
 

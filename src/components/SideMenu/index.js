@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 import { SideMenuContainer } from './styles';
 import communityIcon from './icons/community.svg';
 import MenuTab from './MenuTab';

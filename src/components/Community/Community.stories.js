@@ -8,7 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import { useCommunitiesMock } from '../../mock';
+import { useCommunitiesMock } from 'mock';
 
 import FeedLayout from '../FeedLayout';
 import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';

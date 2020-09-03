@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
-import withSDK from '../../hocs/withSDK';
+import { customizableComponent } from 'hocs/customization';
+import withSDK from 'hocs/withSDK';
 
 // import CommunityInformation from '../CommunityInformation';
+import { testUser, usePostsMock } from 'mock';
 import EmptyFeed from '../EmptyFeed';
-
-import { testUser, usePostsMock } from '../../mock';
 
 import { Content, Feed, PostCompose, Post, UserFeedHeader } from './styles';
 

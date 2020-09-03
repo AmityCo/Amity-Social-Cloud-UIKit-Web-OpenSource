@@ -1,5 +1,5 @@
 import React from 'react';
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 import { MenuTabContainer, MenuName } from './styles';
 
 const MenuTab = ({ icon, name, className, onClick, active }) => {

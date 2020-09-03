@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
+import { testMembers, testModerators } from 'mock';
 import Options from '../Options';
 import { confirm } from '../Confirm';
 import { notification } from '../Notification';
-import { testMembers, testModerators } from '../../mock';
 
 import {
   Avatar,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 
 import CommunitySearch from './CommunitySearch';
 

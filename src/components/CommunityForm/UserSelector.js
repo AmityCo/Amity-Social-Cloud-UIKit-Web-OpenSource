@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MenuItem } from '../Menu';
 
-import { customizableComponent } from '../../hocs/customization';
-import { testUsers } from '../../mock';
+import { customizableComponent } from 'hocs/customization';
+import { testUsers } from 'mock';
+import { MenuItem } from '../Menu';
 
 import {
   Avatar,

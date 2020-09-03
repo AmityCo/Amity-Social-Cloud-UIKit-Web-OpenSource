@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 
-import { testUser } from '../../mock';
+import { testUser } from 'mock';
 
 import {
   Avatar,

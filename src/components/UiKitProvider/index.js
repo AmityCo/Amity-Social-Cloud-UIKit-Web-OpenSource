@@ -3,13 +3,13 @@ import merge from 'lodash/merge';
 import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 
 import { ThemeProvider } from 'styled-components';
-import { CustomComponentsProvider } from '../../hocs/customization';
-import { SDKProvider } from '../../hocs/withSDK';
+import { CustomComponentsProvider } from 'hocs/customization';
+import { SDKProvider } from 'hocs/withSDK';
+import MockData from 'mock';
 import Localization from './Localisation';
 import GlobalStyle from './GlobalStyle';
 import { UIStyles } from './styles';
 import GlobalTheme from './GlobalTheme';
-import MockData from '../../mock';
 import { ConfirmContainer } from '../Confirm';
 import { NotificationsContainer } from '../Notification';
 

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
-import withSDK from '../../hocs/withSDK';
+import { customizableComponent } from 'hocs/customization';
+import withSDK from 'hocs/withSDK';
 
+import { getCommunities, usePostsMock } from 'mock';
 import CommunityInformation from '../CommunityInformation';
 import EmptyFeed from '../EmptyFeed';
 
 import CommunityMembers from './CommunityMembers';
-
-import { getCommunities, usePostsMock } from '../../mock';
 
 import { Content, Feed, PostCompose, Post, FeedHeaderTabs } from './styles';
 

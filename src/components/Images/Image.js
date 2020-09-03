@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 
 import { ImageContainer, ProgressBar, RemoveIcon, NumberOfHiddenImagesOverlay } from './styles';
 

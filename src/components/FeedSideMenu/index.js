@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
+import { getMyCommunities } from 'mock';
 import CommunityItem from '../CommunityItem';
 import SideMenuItem from '../SideMenuItem';
-
-import { getMyCommunities } from '../../mock';
 
 import {
   SideMenuListContainer,

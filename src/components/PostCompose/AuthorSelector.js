@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 import Popover from '../Popover';
 import Menu, { MenuItem } from '../Menu';
 

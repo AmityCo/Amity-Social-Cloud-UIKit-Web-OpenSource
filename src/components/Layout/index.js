@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 import { LayoutHeader, Username, DropdownIcon, DropDownContainer } from './styles';
 import Avatar from '../Avatar';
 import Popover from '../Popover';

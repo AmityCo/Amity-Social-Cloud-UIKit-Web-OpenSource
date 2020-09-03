@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { customizableComponent } from '../../hocs/customization';
+import { customizableComponent } from 'hocs/customization';
 
-import { getCommunities, getCategory } from '../../mock';
+import { getCommunities, getCategory } from 'mock';
 
 import Community from './Community';
 
