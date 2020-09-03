@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FormattedTime } from 'react-intl';
 
 import { customizableComponent } from '../hoks/customization';
-import useLiveObject from '../hooks/useLiveObject';
 
 import Linkify from '../commonComponents/Linkify';
 
@@ -37,12 +36,7 @@ const MessageContent = ({ message: { data, type, isDeleted } }) => {
   }
 };
 
-const Message = ({
-  message,
-  message: { data, type, createdAt, updatedAt, user },
-  consequent,
-  incoming,
-}) => {
+const Message = ({ message, message: { createdAt, user }, consequent, incoming }) => {
   const { displayName } = user.model;
 
   return (

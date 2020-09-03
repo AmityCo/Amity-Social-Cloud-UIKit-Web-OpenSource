@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { toHumanString } from 'human-readable-numbers';
+import React from 'react';
 import { customizableComponent } from '../hoks/customization';
-import Button from '../commonComponents/Button';
 import Tab from '../commonComponents/Tab';
 
 import { UserFeedHeaderContainer, Tabs } from './styles';

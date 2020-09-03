@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import EkoClient, { ChannelRepository, _changeSDKDefaultConfig } from 'eko-sdk';
+import React from 'react';
 
-import Post from './index';
-import UiKitProvider from '../UiKitProvider';
+import Post from '.';
 
 export default {
   title: 'Post',

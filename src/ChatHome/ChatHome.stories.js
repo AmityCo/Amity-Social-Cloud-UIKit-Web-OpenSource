@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-import ChatHome from './index';
-import Chat from '../Chat';
+import React from 'react';
+import ChatHome from '.';
 import Message from '../Message';
-import MessageList from '../MessageList';
-import UiKitProvider from '../UiKitProvider';
 
 export default {
   title: 'ChatHome',

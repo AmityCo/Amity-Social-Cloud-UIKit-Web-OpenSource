@@ -1,45 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import {
-  MessageRepository,
-  UserRepository,
-  MessageEditorRepository,
-  MessageFlagRepository,
-} from 'eko-sdk';
+import { MessageEditorRepository, MessageFlagRepository } from 'eko-sdk';
 
 import Popover from '../commonComponents/Popover';
 import Menu, { MenuItem } from '../commonComponents/Menu';
 
-import {
-  MessageOptionsIcon,
-  SaveIcon,
-  DeleteIcon,
-  CloseIcon,
-  EditingInput,
-  EditingContainer,
-} from './styles';
+import { MessageOptionsIcon, SaveIcon, CloseIcon, EditingInput, EditingContainer } from './styles';
 
 const Flagging = ({ message: { messageId } = {} }) => {
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(null);
   const [flagRepo, setFlagRepo] = useState(null);
 
-  useEffect(
-    () => {
-      if (!messageId) return;
-      const flagRepository = new MessageFlagRepository(messageId);
-      setFlagRepo(flagRepository);
-      flagRepository.isFlaggedByMe().then(setIsFlaggedByMe);
-    },
-    [messageId],
-  );
+  useEffect(() => {
+    if (!messageId) return;
+    const flagRepository = new MessageFlagRepository(messageId);
+    setFlagRepo(flagRepository);
+    flagRepository.isFlaggedByMe().then(setIsFlaggedByMe);
+  }, [messageId]);
 
-  const flagMessage = messageId => {
-    flagRepo.flag({ messageId }).then(() => {
+  const flagMessage = id => {
+    flagRepo.flag({ messageId: id }).then(() => {
       setIsFlaggedByMe(true);
     });
   };
 
-  const unflagMessage = messageId => {
-    flagRepo.unflag({ messageId }).then(() => {
+  const unflagMessage = id => {
+    flagRepo.unflag({ messageId: id }).then(() => {
       setIsFlaggedByMe(false);
     });
   };
@@ -59,11 +44,6 @@ const Options = ({ incoming, message }) => {
   const edit = e => {
     e.stopPropagation();
     setIsEditing(true);
-  };
-
-  const stopEdit = e => {
-    e.stopPropagation();
-    setIsEditing(false);
   };
 
   const [isOpen, setIsOpen] = useState(false);
@@ -123,7 +103,7 @@ const Options = ({ incoming, message }) => {
       align={incoming ? 'start' : 'end'}
       content={isEditing ? editing : menu}
     >
-      <div onClick={open}>
+      <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
         <MessageOptionsIcon />
       </div>
     </Popover>

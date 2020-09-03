@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { FontAwesomeIcon as FaIcon } from "@fortawesome/react-fontawesome";
-import { faSortDown } from "@fortawesome/pro-solid-svg-icons";
+import styled from 'styled-components';
+import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
+import { faSortDown } from '@fortawesome/pro-solid-svg-icons';
 
 export const LayoutHeader = styled.div`
   display: flex;

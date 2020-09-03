@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React from 'react';
 import { FormattedDate } from 'react-intl';
 import ReactTimeAgo from 'react-time-ago';
 

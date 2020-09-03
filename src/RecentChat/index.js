@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ChannelRepository } from 'eko-sdk';
 
 import { customizableComponent } from '../hoks/customization';

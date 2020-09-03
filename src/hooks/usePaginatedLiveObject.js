@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import EkoClient, { EkoLoadingStatus } from 'eko-sdk';
+import { useState, useEffect } from 'react';
+import { EkoLoadingStatus } from 'eko-sdk';
 
 const noop = () => null;
 

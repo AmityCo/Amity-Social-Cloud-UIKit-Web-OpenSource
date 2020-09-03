@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Popover from '../Popover';
 import Menu, { MenuItem } from '../Menu';
@@ -18,7 +18,9 @@ const Options = ({ className, icon, options, position = 'bottom', align = 'end' 
   const menu = (
     <Menu>
       {options.map(({ name, action }) => (
-        <MenuItem onClick={attachCanceling(action)}>{name}</MenuItem>
+        <MenuItem key={name} onClick={attachCanceling(action)}>
+          {name}
+        </MenuItem>
       ))}
     </Menu>
   );

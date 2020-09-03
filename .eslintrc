@@ -1,10 +1,15 @@
 {
   "parser": "babel-eslint",
   "extends": ["eko/react"],
-  "settings": {
-    "import/resolver": "babel-plugin-root-import",
-  },
-  "env": {
-    "jest": true,
-  },
+  "rules": {
+    // Allow <> instead of <React.Fragment>
+    "react/jsx-fragments": "off",
+    // Allow dependencies used in some files to remain as devDependencies.
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/*.stories.*", "webpack.config.js"]
+      }
+    ]
+  }
 }

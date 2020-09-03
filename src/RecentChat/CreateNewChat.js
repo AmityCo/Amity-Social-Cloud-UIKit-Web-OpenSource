@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChannelRepository, EkoChannelType } from 'eko-sdk';
 import Popover from '../commonComponents/Popover';
 
 import {
   CreateIcon,
-  DeleteIcon,
   CloseIcon,
   CreateNewChatIcon,
   CreationInput,
@@ -32,7 +31,7 @@ const CreateNewChat = () => {
       type: EkoChannelType.Standard,
       userIds: [],
     });
-    createChat.once('dataUpdated', model => {
+    createChat.once('dataUpdated', () => {
       close();
     });
   };

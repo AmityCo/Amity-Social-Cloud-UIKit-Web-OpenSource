@@ -1,7 +1,7 @@
 import React from 'react';
 import { customizableComponent } from '../hoks/customization';
 
-import { LayoutContainer, FeedWrapper } from './styles';
+import { LayoutContainer } from './styles';
 
 const FeedLayout = ({ sideMenu, children }) => {
   return (

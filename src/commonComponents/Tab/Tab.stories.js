@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import Tab from './index';
+import React from 'react';
+import Tab from '.';
 
 export default {
   title: 'Tab',

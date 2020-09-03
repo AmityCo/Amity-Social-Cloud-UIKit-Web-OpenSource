@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { MessageRepository, ChannelRepository, EkoChannelType } from 'eko-sdk';
 
 import { customizableComponent } from '../hoks/customization';
@@ -21,7 +21,7 @@ const Chat = ({ channelId, onChatDetailsClick }) => {
   }, []);
 
   const sendMessage = text => {
-    const messageLiveObject = messageRepo.createTextMessage({
+    messageRepo.createTextMessage({
       channelId,
       text,
     });

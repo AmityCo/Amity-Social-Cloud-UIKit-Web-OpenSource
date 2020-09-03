@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 
@@ -20,7 +20,7 @@ const Files = ({ editing, files = [], onRemove }) => {
 
   return (
     <FilesContainer>
-      {visibleFiles.map((file, i) => (
+      {visibleFiles.map(file => (
         <File editing={editing} key={file.id} file={file} onRemove={onRemove} />
       ))}
       {haveHiddenFiles && <ViewAllFilesButton onClick={open}>View all files</ViewAllFilesButton>}

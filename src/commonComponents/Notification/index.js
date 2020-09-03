@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { NotificationContainer, Notifications, SuccessIcon, InfoIcon, ErrorIcon } from './styles';
 
@@ -18,12 +18,11 @@ export const NotificationsContainer = () => {
 
   const removeNotification = id =>
     setNotifications &&
-    setNotifications(notifications => notifications.filter(notification => notification.id != id));
+    setNotifications(prevNotifications =>
+      prevNotifications.filter(notification => notification.id !== id),
+    );
 
-  spawnNewNotification = (
-    { duration = DEFAULT_NOTIFICATION_DURATION, ...notificationData },
-    icon,
-  ) => {
+  spawnNewNotification = ({ duration = DEFAULT_NOTIFICATION_DURATION, ...notificationData }) => {
     const id = Date.now();
 
     setNotifications([{ id, ...notificationData }, ...notifications]);

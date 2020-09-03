@@ -5,7 +5,9 @@ util
 .babelrc
 .env
 .npmrc
-jest.config.js
+.eslintrc
+.eslintignore
+.prettierrc
 webpack.config.js
 build/report.html
 CONTRIBUTE.md

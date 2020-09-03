@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { customizableComponent } from '../hoks/customization';
@@ -20,7 +20,7 @@ import {
 } from './styles';
 
 const CommunityInformation = ({ community, onEditCommunityClick }) => {
-  const { isPrivate, name, postsCount, membersCount } = community;
+  const { name } = community;
 
   const { joinCommunity, leaveCommunity } = useCommunitiesMock();
 

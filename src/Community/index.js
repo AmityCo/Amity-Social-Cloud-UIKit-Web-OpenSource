@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
 import withSDK from '../hoks/withSDK';
@@ -18,7 +18,7 @@ const tabs = {
   MEMBERS: 'Members',
 };
 
-const CommunityPosts = ({ communityId = { communityId }, community, onPostAuthorClick }) => {
+const CommunityPosts = ({ communityId, community, onPostAuthorClick }) => {
   const { posts, addPost, removePost, editPost } = usePostsMock(communityId);
 
   return (
@@ -41,7 +41,7 @@ const CommunityPosts = ({ communityId = { communityId }, community, onPostAuthor
 const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCommunityClick }) => {
   const communities = getCommunities();
 
-  const community = communities.find(community => community.communityId === communityId);
+  const currentCommunity = communities.find(community => community.communityId === communityId);
 
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
 
@@ -56,7 +56,7 @@ const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCo
         {activeTab === tabs.TIMELINE && (
           <CommunityPosts
             communityId={communityId}
-            community={community}
+            community={currentCommunity}
             onPostAuthorClick={onPostAuthorClick}
           />
         )}
@@ -64,12 +64,15 @@ const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCo
         {activeTab === tabs.MEMBERS && (
           <CommunityMembers
             communityId={communityId}
-            community={community}
+            community={currentCommunity}
             onMemberClick={onMemberClick}
           />
         )}
       </Feed>
-      <CommunityInformation onEditCommunityClick={onEditCommunityClick} community={community} />
+      <CommunityInformation
+        onEditCommunityClick={onEditCommunityClick}
+        community={currentCommunity}
+      />
     </Content>
   );
 };

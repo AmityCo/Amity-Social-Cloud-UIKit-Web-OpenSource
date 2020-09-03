@@ -50,7 +50,7 @@ const extensionsToIconsMap = {
 const FileIcon = ({ file }) => {
   const extension = file.filename.split('.').slice(-1);
   const icon = extensionsToIconsMap[extension] || defaultIcon;
-  return <img src={icon} />;
+  return <img src={icon} alt={file.filename} />;
 };
 
 export default FileIcon;

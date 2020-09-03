@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   HashRouter as Router,
   Switch,
   Route,
-  Link,
   useLocation,
   useHistory,
   useRouteMatch,
@@ -11,14 +10,14 @@ import {
 
 import { useCommunitiesMock } from '../mock';
 
-import FeedLayout from '../FeedLayout/';
+import FeedLayout from '../FeedLayout';
 import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';
 
 import UserFeed from './UserFeed';
 import NewsFeed from './NewsFeed';
 import ExploreHome from '../ExploreHome';
 import CategoryPage from '../ExploreHome/CategoryPage';
-import CommunityFeed from './index';
+import CommunityFeed from '.';
 import CommunityCreationModal from '../CommunityCreationModal';
 
 export default {
@@ -35,12 +34,12 @@ const Pages = () => {
   const goToUserFeed = () => history.push(`/`);
   const goToNewsFeed = () => history.push(`/news`);
   const goToExplore = () => history.push(`/explore`);
-  const onCategoryClick = categoryId => {
-    history.push(`/category/${categoryId}`);
+  const onCategoryClick = id => {
+    history.push(`/category/${id}`);
   };
 
-  const goToCommunity = communityId => {
-    history.push(`/community/${communityId}`);
+  const goToCommunity = id => {
+    history.push(`/community/${id}`);
   };
 
   const pathToSelectionType = {
@@ -59,8 +58,8 @@ const Pages = () => {
     if (userOrCommunity.communityId) goToCommunity(userOrCommunity.communityId);
   };
 
-  const onEditCommunityClick = communityId => {
-    history.push(`/community/${communityId}/edit`);
+  const onEditCommunityClick = id => {
+    history.push(`/community/${id}/edit`);
   };
 
   const [communityCreation, setCommunityCreation] = useState(false);

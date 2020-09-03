@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { customizableComponent } from '../hoks/customization';
-import Popover from '../commonComponents/Popover/';
+import Popover from '../commonComponents/Popover';
 import Menu, { MenuItem } from '../commonComponents/Menu';
 
 import { AuthorSelectorContainer, CommunitySeparator, SelectIcon, Avatar } from './styles';
@@ -26,6 +26,7 @@ const AuthorSelector = ({ author, user, communities, onChange }) => {
       <CommunitySeparator>Community</CommunitySeparator>
       {communities.map(community => (
         <MenuItem
+          key={community.communityId}
           active={author.communityId === community.communityId}
           onClick={() => {
             onChange(community);

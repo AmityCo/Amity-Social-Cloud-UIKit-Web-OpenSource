@@ -6,11 +6,8 @@ import { testUsers } from '../mock';
 
 import {
   Avatar,
-  Categories,
-  UserItem,
   Selector,
   SelectorList,
-  SelectIcon,
   SelectorPopover,
   UserSelectorInput,
   Chip,
@@ -56,12 +53,9 @@ const UserSelector = ({ value: userIds, onChange }) => {
   const close = () => setIsOpen(false);
 
   // open selector list each time query changes
-  useRunOnUpdate(
-    () => {
-      open();
-    },
-    [query],
-  );
+  useRunOnUpdate(() => {
+    open();
+  }, [query]);
 
   const selectedUsers = userIds.map(id => testUsers.find(({ userId }) => id === userId));
 

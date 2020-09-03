@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import ReactTinyPopover from 'react-tiny-popover';
 
-const ReactPopover = props => <ReactTinyPopover containerClassName={props.className} {...props} />;
+const ReactPopover = ({ className, ...rest }) => (
+  <ReactTinyPopover containerClassName={className} {...rest} />
+);
 
 export const Popover = styled(ReactPopover)`
   ${({ theme }) => theme.typography.body}

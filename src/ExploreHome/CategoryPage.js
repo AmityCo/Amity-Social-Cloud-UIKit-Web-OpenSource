@@ -18,7 +18,7 @@ import {
   BackIcon,
 } from './styles';
 
-const CategoryPage = ({ client, onCommunityClick, onHeaderBackButtonClick, categoryId }) => {
+const CategoryPage = ({ onCommunityClick, onHeaderBackButtonClick, categoryId }) => {
   const communities = getCommunities();
 
   const category = getCategory(categoryId);
@@ -39,7 +39,11 @@ const CategoryPage = ({ client, onCommunityClick, onHeaderBackButtonClick, categ
         <Block>
           <CommunityItems>
             {[...communities, ...communities, ...communities].map(community => (
-              <Community onClick={() => onCommunityClick(community)} community={community} />
+              <Community
+                key={community.communityId}
+                onClick={() => onCommunityClick(community)}
+                community={community}
+              />
             ))}
           </CommunityItems>
         </Block>

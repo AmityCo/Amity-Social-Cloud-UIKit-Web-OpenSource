@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import InfiniteScroll from 'react-infinite-scroller';
+import React from 'react';
 import { ChannelRepository } from 'eko-sdk';
 
 import { customizableComponent } from '../hoks/customization';
