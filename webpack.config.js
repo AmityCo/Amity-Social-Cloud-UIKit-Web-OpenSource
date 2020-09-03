@@ -12,6 +12,15 @@ module.exports = {
     libraryTarget: 'commonjs',
   },
   plugins: [new CleanWebpackPlugin()],
+  resolve: {
+    alias: {
+      components: path.resolve(__dirname, 'src/components'),
+      hocs: path.resolve(__dirname, 'src/hocs'),
+      hooks: path.resolve(__dirname, 'src/hooks'),
+      mock: path.resolve(__dirname, 'src/mock'),
+    },
+    extensions: ['.js', '.jsx', '.css', '.svg'],
+  },
   module: {
     rules: [
       {
