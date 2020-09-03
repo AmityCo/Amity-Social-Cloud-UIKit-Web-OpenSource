@@ -4,7 +4,7 @@ import Truncate from 'react-truncate-markup';
 import { customizableComponent } from 'hocs/customization';
 
 import { useCommunitiesMock, getMyCommunityIds } from 'mock';
-import { confirm } from '../Confirm';
+import { confirm } from 'components/Confirm';
 
 import {
   Count,

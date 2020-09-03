@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 import { testMembers, testModerators } from 'mock';
-import Options from '../Options';
-import { confirm } from '../Confirm';
-import { notification } from '../Notification';
+import Options from 'components/Options';
+import { confirm } from 'components/Confirm';
+import { notification } from 'components/Notification';
 
 import {
   Avatar,

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { customizableComponent } from 'hocs/customization';
-import CommunityName from '../CommunityName';
+import CommunityName from 'components/CommunityName';
 
 import { Avatar, CommunityItemContainer } from './styles';
 

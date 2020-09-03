@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 
+import ImageGallery from 'components/ImageGallery';
 import Image from './Image';
-import ImageGallery from '../ImageGallery';
 
 import { ImagesContainer } from './styles';
 

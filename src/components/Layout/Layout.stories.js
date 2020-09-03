@@ -1,6 +1,6 @@
 import React from 'react';
+import SideMenu from 'components/SideMenu';
 import Layout from '.';
-import SideMenu from '../SideMenu';
 
 export default {
   title: 'Layout',

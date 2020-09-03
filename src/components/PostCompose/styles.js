@@ -3,8 +3,8 @@ import TextareaAutosize from 'react-autosize-textarea';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faImage } from '@fortawesome/pro-regular-svg-icons';
 import { faSortDown } from '@fortawesome/pro-solid-svg-icons';
-import { PrimaryButton } from '../Button';
-import UIAvatar from '../Avatar';
+import { PrimaryButton } from 'components/Button';
+import UIAvatar from 'components/Avatar';
 
 // TODO add icon button
 export const ImagePostIcon = styled(FaIcon).attrs({ icon: faImage })`

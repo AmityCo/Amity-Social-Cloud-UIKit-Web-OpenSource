@@ -10,15 +10,15 @@ import {
 
 import { useCommunitiesMock } from 'mock';
 
-import FeedLayout from '../FeedLayout';
-import FeedSideMenu, { SELECTION_TYPES } from '../FeedSideMenu';
+import FeedLayout from 'components/FeedLayout';
+import FeedSideMenu, { SELECTION_TYPES } from 'components/FeedSideMenu';
 
+import ExploreHome from 'components/ExploreHome';
+import CategoryPage from 'components/ExploreHome/CategoryPage';
+import CommunityCreationModal from 'components/CommunityCreationModal';
 import UserFeed from './UserFeed';
 import NewsFeed from './NewsFeed';
-import ExploreHome from '../ExploreHome';
-import CategoryPage from '../ExploreHome/CategoryPage';
 import CommunityFeed from '.';
-import CommunityCreationModal from '../CommunityCreationModal';
 
 export default {
   title: 'Community',

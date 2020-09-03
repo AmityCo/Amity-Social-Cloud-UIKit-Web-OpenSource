@@ -3,8 +3,8 @@ import Truncate from 'react-truncate-markup';
 
 import { customizableComponent } from 'hocs/customization';
 
-import Linkify from '../Linkify';
-import { notification } from '../Notification';
+import Linkify from 'components/Linkify';
+import { notification } from 'components/Notification';
 
 import {
   Avatar,

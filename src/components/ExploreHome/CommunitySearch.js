@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 import { getCommunities } from 'mock';
-import Popover from '../Popover';
-import { MenuItem } from '../Menu';
+import Popover from 'components/Popover';
+import { MenuItem } from 'components/Menu';
 
 import {
   Avatar,

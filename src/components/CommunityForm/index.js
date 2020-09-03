@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 
 import { customizableComponent } from 'hocs/customization';
 import { getCommunities } from 'mock';
-import Button from '../Button';
+import Button from 'components/Button';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';

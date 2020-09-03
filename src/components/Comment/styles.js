@@ -4,12 +4,12 @@ import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faShare } from '@fortawesome/pro-regular-svg-icons';
 import { faThumbsUp as faThumbsUpSolid } from '@fortawesome/pro-solid-svg-icons';
 
-import { SecondaryButton } from '../Button';
-import Time from '../Time';
-import UIOptions from '../Options';
-import UICommentComposeBar from '../CommentComposeBar';
+import { SecondaryButton } from 'components/Button';
+import Time from 'components/Time';
+import UIOptions from 'components/Options';
+import UICommentComposeBar from 'components/CommentComposeBar';
 
-import UIAvatar from '../Avatar';
+import UIAvatar from 'components/Avatar';
 
 export const Avatar = styled(UIAvatar)`
   margin-right: 8px;

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 import { testUser, testFiles, testImages } from 'mock';
-import { notification } from '../Notification';
-import Files from '../Files';
-import Images from '../Images';
+import { notification } from 'components/Notification';
+import Files from 'components/Files';
+import Images from 'components/Images';
 
 import AuthorSelector from './AuthorSelector';
 

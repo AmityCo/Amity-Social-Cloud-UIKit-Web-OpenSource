@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import UiKitAvatar from '../Avatar';
-import SideMenuItem from '../SideMenuItem';
+import UiKitAvatar from 'components/Avatar';
+import SideMenuItem from 'components/SideMenuItem';
 
 export const CommunityItemContainer = styled(SideMenuItem)``;
 

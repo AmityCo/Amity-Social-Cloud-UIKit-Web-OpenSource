@@ -11,10 +11,10 @@ import {
   faChevronDown,
   faTimes,
 } from '@fortawesome/pro-regular-svg-icons';
-import { PrimaryButton } from '../Button';
-import Popover from '../Popover';
-import UIAvatar from '../Avatar';
-import Menu from '../Menu';
+import { PrimaryButton } from 'components/Button';
+import Popover from 'components/Popover';
+import UIAvatar from 'components/Avatar';
+import Menu from 'components/Menu';
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 8px;

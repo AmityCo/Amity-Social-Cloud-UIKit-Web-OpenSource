@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import { customizableComponent } from 'hocs/customization';
-import { SecondaryButton } from '../Button';
+import { SecondaryButton } from 'components/Button';
 
-import CommentComposeBar from '../CommentComposeBar';
-import Comment from '../Comment';
+import CommentComposeBar from 'components/CommentComposeBar';
+import Comment from 'components/Comment';
 
 import { EngagementBarContainer, Counters, InteractionBar, LikeIcon, CommentIcon } from './styles';
 

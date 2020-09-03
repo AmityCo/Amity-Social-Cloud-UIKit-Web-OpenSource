@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SecondaryButton } from '../Button';
+import { SecondaryButton } from 'components/Button';
 
 export const SideMenuItemContainer = styled(SecondaryButton)`
   display: flex;

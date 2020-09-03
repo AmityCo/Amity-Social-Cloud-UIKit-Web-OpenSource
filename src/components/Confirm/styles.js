@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Modal from '../Modal';
-import Button, { PrimaryButton } from '../Button';
+import Modal from 'components/Modal';
+import Button, { PrimaryButton } from 'components/Button';
 
 export const ConfirmModal = styled(Modal)`
   max-width: 360px;

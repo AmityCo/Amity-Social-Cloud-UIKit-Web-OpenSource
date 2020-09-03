@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
-import Popover from '../Popover';
-import Menu, { MenuItem } from '../Menu';
+import Popover from 'components/Popover';
+import Menu, { MenuItem } from 'components/Menu';
 
 import { AuthorSelectorContainer, CommunitySeparator, SelectIcon, Avatar } from './styles';
 

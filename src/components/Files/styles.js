@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/pro-regular-svg-icons';
 
-import { SecondaryButton } from '../Button';
+import { SecondaryButton } from 'components/Button';
 
 export const RemoveIcon = styled(FaIcon).attrs({ icon: faTimes })`
   padding: 0 10px;

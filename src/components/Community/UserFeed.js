@@ -3,9 +3,9 @@ import React from 'react';
 import { customizableComponent } from 'hocs/customization';
 import withSDK from 'hocs/withSDK';
 
-// import CommunityInformation from '../CommunityInformation';
+// import CommunityInformation from 'components/CommunityInformation';
 import { testUser, usePostsMock } from 'mock';
-import EmptyFeed from '../EmptyFeed';
+import EmptyFeed from 'components/EmptyFeed';
 
 import { Content, Feed, PostCompose, Post, UserFeedHeader } from './styles';
 

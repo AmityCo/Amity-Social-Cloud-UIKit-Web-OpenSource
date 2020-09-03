@@ -2,7 +2,7 @@ import React from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { customizableComponent } from 'hocs/customization';
-import CommunityName from '../CommunityName';
+import CommunityName from 'components/CommunityName';
 
 import { Avatar, CommunityItem, Description, Count } from './styles';
 

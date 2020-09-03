@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { customizableComponent } from 'hocs/customization';
+import Avatar from 'components/Avatar';
+import Popover from 'components/Popover';
+import Menu, { MenuItem } from 'components/Menu';
 import { LayoutHeader, Username, DropdownIcon, DropDownContainer } from './styles';
-import Avatar from '../Avatar';
-import Popover from '../Popover';
-import Menu, { MenuItem } from '../Menu';
 
 const Layout = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -3,9 +3,9 @@ import { MessageRepository, ChannelRepository, EkoChannelType } from 'eko-sdk';
 
 import { customizableComponent } from 'hocs/customization';
 
-import ChatHeader from '../ChatHeader';
-import MessageList from '../MessageList';
-import MessageComposeBar from '../MessageComposeBar';
+import ChatHeader from 'components/ChatHeader';
+import MessageList from 'components/MessageList';
+import MessageComposeBar from 'components/MessageComposeBar';
 
 import { ChannelContainer } from './styles';
 

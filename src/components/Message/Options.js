@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { MessageEditorRepository, MessageFlagRepository } from 'eko-sdk';
 
-import Popover from '../Popover';
-import Menu, { MenuItem } from '../Menu';
+import Popover from 'components/Popover';
+import Menu, { MenuItem } from 'components/Menu';
 
 import { MessageOptionsIcon, SaveIcon, CloseIcon, EditingInput, EditingContainer } from './styles';
 

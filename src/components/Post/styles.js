@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { SecondaryButton } from '../Button';
-import UIOptions from '../Options';
+import { SecondaryButton } from 'components/Button';
+import UIOptions from 'components/Options';
 
 export const Options = styled(UIOptions)`
   margin-left: auto;

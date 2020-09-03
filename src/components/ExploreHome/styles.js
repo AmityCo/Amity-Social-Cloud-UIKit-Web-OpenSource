@@ -6,9 +6,9 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/pro-regular-svg-icons';
-import Button, { SecondaryButton } from '../Button';
-import UIAvatar from '../Avatar';
-import Menu from '../Menu';
+import Button, { SecondaryButton } from 'components/Button';
+import UIAvatar from 'components/Avatar';
+import Menu from 'components/Menu';
 
 export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
   color: #898e9e;

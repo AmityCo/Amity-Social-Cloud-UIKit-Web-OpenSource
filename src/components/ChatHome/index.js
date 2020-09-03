@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
-import RecentChat from '../RecentChat';
-import Chat from '../Chat';
-import ChatDetails from '../ChatDetails';
+import RecentChat from 'components/RecentChat';
+import Chat from 'components/Chat';
+import ChatDetails from 'components/ChatDetails';
 
 import { ChatHomeContainer } from './styles';
 

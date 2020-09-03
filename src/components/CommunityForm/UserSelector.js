@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 import { testUsers } from 'mock';
-import { MenuItem } from '../Menu';
+import { MenuItem } from 'components/Menu';
 
 import {
   Avatar,

@@ -6,12 +6,12 @@ import { ThemeProvider } from 'styled-components';
 import { CustomComponentsProvider } from 'hocs/customization';
 import { SDKProvider } from 'hocs/withSDK';
 import MockData from 'mock';
+import { ConfirmContainer } from 'components/Confirm';
+import { NotificationsContainer } from 'components/Notification';
 import Localization from './Localisation';
 import GlobalStyle from './GlobalStyle';
 import { UIStyles } from './styles';
 import GlobalTheme from './GlobalTheme';
-import { ConfirmContainer } from '../Confirm';
-import { NotificationsContainer } from '../Notification';
 
 _changeSDKDefaultConfig({
   ws: { endpoint: 'https://api.staging.ekomedia.technology' },

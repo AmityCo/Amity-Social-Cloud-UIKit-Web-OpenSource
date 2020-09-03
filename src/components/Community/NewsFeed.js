@@ -4,7 +4,7 @@ import { customizableComponent } from 'hocs/customization';
 import withSDK from 'hocs/withSDK';
 
 import { getMyCommunities, usePostsMock } from 'mock';
-import EmptyFeed from '../EmptyFeed';
+import EmptyFeed from 'components/EmptyFeed';
 
 import { Content, Feed, PostCompose, Post } from './styles';
 

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 import { getCommunities, getCategories } from 'mock';
-import Modal from '../Modal';
-import { MenuItem } from '../Menu';
+import Modal from 'components/Modal';
+import { MenuItem } from 'components/Menu';
 
 import Community from './Community';
 import TrendingCommunity from './TrendingCommunity';

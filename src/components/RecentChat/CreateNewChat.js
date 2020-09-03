@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ChannelRepository, EkoChannelType } from 'eko-sdk';
-import Popover from '../Popover';
+import Popover from 'components/Popover';
 
 import {
   CreateIcon,

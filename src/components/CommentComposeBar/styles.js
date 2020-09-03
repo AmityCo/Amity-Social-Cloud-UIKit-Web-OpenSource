@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 import TextareaAutosize from 'react-autosize-textarea';
-import { PrimaryButton } from '../Button';
+import { PrimaryButton } from 'components/Button';
 
-import UIAvatar from '../Avatar';
+import UIAvatar from 'components/Avatar';
 
 export const Avatar = styled(UIAvatar)`
   margin-right: 8px;

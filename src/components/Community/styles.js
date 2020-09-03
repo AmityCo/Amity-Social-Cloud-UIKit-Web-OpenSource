@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import UIPost from '../Post';
-import UIPostCompose from '../PostCompose';
-import UIFeedHeaderTabs from '../FeedHeaderTabs';
-import UIUserFeedHeader from '../UserFeedHeader';
-import UiKitAvatar from '../Avatar';
+import UIPost from 'components/Post';
+import UIPostCompose from 'components/PostCompose';
+import UIFeedHeaderTabs from 'components/FeedHeaderTabs';
+import UIUserFeedHeader from 'components/UserFeedHeader';
+import UiKitAvatar from 'components/Avatar';
 
-import Tabs from '../Tabs';
+import Tabs from 'components/Tabs';
 
 export const CommunityMembersTabs = styled(Tabs)`
   margin-bottom: 14px;

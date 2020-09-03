@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import Popover from '../Popover';
-import Menu, { MenuItem } from '../Menu';
+import Popover from 'components/Popover';
+import Menu, { MenuItem } from 'components/Menu';
 
 import { OptionsIcon, OptionsButton } from './styles';
 

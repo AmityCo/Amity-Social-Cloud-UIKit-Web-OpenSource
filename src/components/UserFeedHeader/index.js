@@ -1,6 +1,6 @@
 import React from 'react';
 import { customizableComponent } from 'hocs/customization';
-import Tab from '../Tab';
+import Tab from 'components/Tab';
 
 import { UserFeedHeaderContainer, Tabs } from './styles';
 

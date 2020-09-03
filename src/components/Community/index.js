@@ -4,8 +4,8 @@ import { customizableComponent } from 'hocs/customization';
 import withSDK from 'hocs/withSDK';
 
 import { getCommunities, usePostsMock } from 'mock';
-import CommunityInformation from '../CommunityInformation';
-import EmptyFeed from '../EmptyFeed';
+import CommunityInformation from 'components/CommunityInformation';
+import EmptyFeed from 'components/EmptyFeed';
 
 import CommunityMembers from './CommunityMembers';
 

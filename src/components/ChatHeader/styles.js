@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import UiKitAvatar from '../Avatar';
+import UiKitAvatar from 'components/Avatar';
 
 export const Avatar = styled(UiKitAvatar)``;
 

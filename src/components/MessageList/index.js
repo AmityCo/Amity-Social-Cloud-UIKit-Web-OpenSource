@@ -5,8 +5,8 @@ import { MessageRepository } from 'eko-sdk';
 import { customizableComponent } from 'hocs/customization';
 import withSDK from 'hocs/withSDK';
 import usePaginatedLiveObject from 'hooks/usePaginatedLiveObject';
-import OutgoingMessage from '../Message/OutgoingMessage';
-import IncomingMessage from '../Message/IncomingMessage';
+import OutgoingMessage from 'components/Message/OutgoingMessage';
+import IncomingMessage from 'components/Message/IncomingMessage';
 
 import { InfiniteScrollContainer, MessageListContainer } from './styles';
 

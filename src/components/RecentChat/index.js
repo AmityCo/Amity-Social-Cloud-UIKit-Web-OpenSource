@@ -3,7 +3,7 @@ import { ChannelRepository } from 'eko-sdk';
 
 import { customizableComponent } from 'hocs/customization';
 import useLiveObject from 'hooks/useLiveObject';
-import ChatItem from '../ChatItem';
+import ChatItem from 'components/ChatItem';
 import CreateNewChat from './CreateNewChat';
 
 import { RecentChatListContainer, RecentChatListHeader } from './styles';

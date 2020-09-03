@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import UICommunityForm from '../CommunityForm';
-import { FormBody } from '../CommunityForm/styles';
+import UICommunityForm from 'components/CommunityForm';
+import { FormBody } from 'components/CommunityForm/styles';
 
 export const CommunityForm = styled(UICommunityForm)`
   ${FormBody} {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 import { getCategories, getCategory } from 'mock';
-import { MenuItem } from '../Menu';
+import { MenuItem } from 'components/Menu';
 
 import { Avatar, Selector, SelectorPopover, SelectorList, SelectIcon } from './styles';
 

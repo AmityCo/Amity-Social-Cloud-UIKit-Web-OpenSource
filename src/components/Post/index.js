@@ -3,16 +3,16 @@ import Truncate from 'react-truncate-markup';
 
 import { customizableComponent } from 'hocs/customization';
 
-import Linkify from '../Linkify';
-import Modal from '../Modal';
-import Time from '../Time';
-import { confirm } from '../Confirm';
+import Linkify from 'components/Linkify';
+import Modal from 'components/Modal';
+import Time from 'components/Time';
+import { confirm } from 'components/Confirm';
 
-import EngagementBar from '../EngagementBar';
-import Avatar from '../Avatar';
-import Files from '../Files';
-import Images from '../Images';
-import PostCompose from '../PostCompose';
+import EngagementBar from 'components/EngagementBar';
+import Avatar from 'components/Avatar';
+import Files from 'components/Files';
+import Images from 'components/Images';
+import PostCompose from 'components/PostCompose';
 
 import {
   PostContainer,

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import UITabs from '../Tabs';
+import UITabs from 'components/Tabs';
 
 export const FeedHeaderTabs = styled(UITabs)`
   background: #ffffff;

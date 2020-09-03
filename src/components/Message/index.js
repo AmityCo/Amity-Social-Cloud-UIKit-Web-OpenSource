@@ -3,7 +3,7 @@ import { FormattedTime } from 'react-intl';
 
 import { customizableComponent } from 'hocs/customization';
 
-import Linkify from '../Linkify';
+import Linkify from 'components/Linkify';
 
 import Options from './Options';
 

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisH } from '@fortawesome/pro-regular-svg-icons';
-import { SecondaryButton } from '../Button';
+import { SecondaryButton } from 'components/Button';
 
 export const OptionsIcon = styled(FaIcon).attrs({ icon: faEllipsisH })`
   font-size: 16px;

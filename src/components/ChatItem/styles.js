@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import SideMenuItem from '../SideMenuItem';
-import UiKitAvatar from '../Avatar';
+import SideMenuItem from 'components/SideMenuItem';
+import UiKitAvatar from 'components/Avatar';
 
 export const ChatItemContainer = styled(SideMenuItem)``;
 
