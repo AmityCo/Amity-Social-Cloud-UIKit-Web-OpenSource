@@ -9,6 +9,7 @@ module.exports = {
     '@storybook/addon-controls',
     '@storybook/addon-actions',
     '@storybook/addon-viewport',
+    '@storybook/addon-knobs',
   ],
   webpackFinal: async (config) => {
     config.resolve.extensions.push('.js');
