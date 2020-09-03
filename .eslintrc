@@ -1,6 +1,13 @@
 {
   "parser": "babel-eslint",
   "extends": ["eko/react"],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.config.js"
+      }
+    }
+  },
   "rules": {
     // Allow <> instead of <React.Fragment>
     "react/jsx-fragments": "off",
