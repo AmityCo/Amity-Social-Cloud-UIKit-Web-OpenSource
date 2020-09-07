@@ -6,10 +6,16 @@ import CommunitySearch from './CommunitySearch';
 
 import { CreateCommunityButton, ExploreHeaderContainer, PlusIcon } from './styles';
 
+const searchContainerSize = 480;
+
 const ExploreHeader = ({ onSearchResultCommunityClick, onCreateCommunityClick }) => (
   <ExploreHeaderContainer>
     Explore community
-    <CommunitySearch onSearchResultCommunityClick={onSearchResultCommunityClick} />
+    <CommunitySearch
+      searchContainerSize={searchContainerSize}
+      placeholder="Search communities..."
+      onSearchResultCommunityClick={onSearchResultCommunityClick}
+    />
     or create your own community
     <CreateCommunityButton onClick={onCreateCommunityClick}>
       <PlusIcon />

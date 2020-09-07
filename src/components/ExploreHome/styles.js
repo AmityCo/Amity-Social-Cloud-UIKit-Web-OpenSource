@@ -68,7 +68,7 @@ export const CategoryPageHeader = styled.div`
 
 export const CommunitiesSearchContainer = styled.div`
   position: relative;
-  width: 480px;
+  ${({ size }) => `width: ${size}px;`}
   margin: 8px 0 25px;
 `;
 
@@ -87,7 +87,7 @@ export const CreateCommunityButton = styled(Button)`
 `;
 
 export const CommunitiesSearchResults = styled(Menu)`
-  width: 480px;
+  ${({ size }) => `width: ${size}px;`}
   overflow-y: auto;
   max-height: 200px;
 `;
@@ -100,12 +100,16 @@ export const CategoryModalBody = styled(Menu)`
 
 export const HighlightedText = styled.span`
   ${({ theme }) => theme.typography.bodyBold}
-  white-space: break-spaces;
 `;
 
 export const Text = styled.span`
   ${({ theme }) => theme.typography.body}
-  white-space: break-spaces;
+`;
+
+export const TruncatedText = styled.div`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 export const Blocks = styled.div`

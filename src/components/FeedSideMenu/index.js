@@ -14,12 +14,15 @@ import {
   SearchIcon,
   PlusIcon,
 } from './styles';
+import CommunitySearch from '../ExploreHome/CommunitySearch';
 
 export const SELECTION_TYPES = {
   NEWS_FEED: 'NEWS_FEED',
   EXPLORE: 'EXPLORE',
   COMMUNITY: 'COMMUNITY',
 };
+
+const searchContainerSize = 250;
 
 const FeedSideMenu = ({
   selected: { type, communityId } = {},
@@ -32,6 +35,13 @@ const FeedSideMenu = ({
 
   return (
     <SideMenuListContainer>
+      <CommunityBlock>
+        <CommunitySearch
+          searchContainerSize={searchContainerSize}
+          placeholder="Search"
+          onSearchResultCommunityClick={community => onCommunityClick(community.communityId)}
+        />
+      </CommunityBlock>
       <CommunityBlock>
         <BlockTitle>Community</BlockTitle>
         <SideMenuItem

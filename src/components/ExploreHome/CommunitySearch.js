@@ -13,6 +13,7 @@ import {
   CommunitiesSearchResults,
   Text,
   HighlightedText,
+  TruncatedText,
 } from './styles';
 
 // from https://stackoverflow.com/questions/29652862/highlight-text-using-reactjs
@@ -25,7 +26,7 @@ const Highlight = ({ query, text }) => {
   });
 };
 
-const CommunitySearch = ({ onSearchResultCommunityClick }) => {
+const CommunitySearch = ({ onSearchResultCommunityClick, searchContainerSize, placeholder }) => {
   const [query, setQuery] = useState('');
 
   const [isOpen, setIsOpen] = useState(true);
@@ -43,16 +44,21 @@ const CommunitySearch = ({ onSearchResultCommunityClick }) => {
     name.toLowerCase().includes(query.toLowerCase()),
   );
 
+  const handleSearchResultClick = community => {
+    onSearchResultCommunityClick(community);
+    setQuery('');
+    close();
+  };
+
   const menu = (
-    <CommunitiesSearchResults>
+    <CommunitiesSearchResults size={searchContainerSize}>
       {/* TODO empty state */}
       {searchResult.map(community => (
-        <MenuItem
-          key={community.communityId}
-          onClick={() => onSearchResultCommunityClick(community)}
-        >
+        <MenuItem key={community.communityId} onClick={() => handleSearchResultClick(community)}>
           <Avatar size="tiny" avatar={community.avatar} />
-          <Highlight text={community.name} query={query} />
+          <TruncatedText>
+            <Highlight text={community.name} query={query} />
+          </TruncatedText>
         </MenuItem>
       ))}
     </CommunitiesSearchResults>
@@ -68,12 +74,12 @@ const CommunitySearch = ({ onSearchResultCommunityClick }) => {
       align="start"
       content={menu}
     >
-      <CommunitiesSearchContainer>
+      <CommunitiesSearchContainer size={searchContainerSize}>
         <CommunitiesSearchInput
           value={query}
           onChange={e => setQuery(e.target.value)}
           type="text"
-          placeholder="Search communities..."
+          placeholder={placeholder}
         />
         <SearchIcon />
       </CommunitiesSearchContainer>
