@@ -4,7 +4,9 @@ const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   entry: './src/index.js',
-  externals: [nodeExternals()],
+  externals: [nodeExternals({
+    allowlist: ['eko-sdk', /@fortawesome\/pro/]
+  })],
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'build'),
