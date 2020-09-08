@@ -68,7 +68,7 @@ export const CategoryPageHeader = styled.div`
 
 export const CommunitiesSearchContainer = styled.div`
   position: relative;
-  ${({ size }) => `width: ${size}px;`}
+  ${({ size }) => size && `width: ${size}px;`}
   margin: 8px 0 25px;
 `;
 
@@ -87,7 +87,7 @@ export const CreateCommunityButton = styled(Button)`
 `;
 
 export const CommunitiesSearchResults = styled(Menu)`
-  ${({ size }) => `width: ${size}px;`}
+  ${({ size }) => size && `width: ${size}px;`}
   overflow-y: auto;
   max-height: 200px;
 `;
