@@ -26,6 +26,7 @@
     "@babel/core": "^7.10.3",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
+    "@storybook/addon-a11y": "^6.0.21",
     "@storybook/addon-actions": "^6.0.21",
     "@storybook/addon-controls": "^6.0.21",
     "@storybook/addon-knobs": "^6.0.21",
