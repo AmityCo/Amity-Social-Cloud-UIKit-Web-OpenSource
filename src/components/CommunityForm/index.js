@@ -154,7 +154,7 @@ const CommunityForm = ({
             </div>
             <Controller
               name="onlyAdminCanPost"
-              render={props => <Switch {...props} />}
+              render={({ value, onChange }) => <Switch onChange={() => onChange(!value)} />}
               control={control}
             />
           </SwitchContainer>
