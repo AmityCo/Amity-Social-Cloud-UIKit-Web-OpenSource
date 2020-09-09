@@ -5,14 +5,17 @@ const pkg = require('./package.json');
 
 module.exports = {
   entry: './src/index.js',
-  externals: [nodeExternals({
-    allowlist: ['eko-sdk', /@fortawesome\/pro/]
-  })],
+  externals: [
+    nodeExternals({
+      allowlist: ['eko-sdk', /@fortawesome\/pro/],
+    }),
+  ],
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'build'),
     library: pkg.name,
     libraryTarget: 'umd',
+    globalObject: "typeof self !== 'undefined' ? self : this",
   },
   plugins: [new CleanWebpackPlugin()],
   resolve: {
