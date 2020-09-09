@@ -1,5 +1,7 @@
+import 'react-toggle/style.css';
 import React, { useMemo } from 'react';
 import merge from 'lodash/merge';
+import { Helmet } from 'react-helmet';
 import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 
 import { ThemeProvider } from 'styled-components';
@@ -9,7 +11,6 @@ import MockData from 'mock';
 import { ConfirmContainer } from 'components/Confirm';
 import { NotificationsContainer } from 'components/Notification';
 import Localization from './Localisation';
-import GlobalStyle from './GlobalStyle';
 import { UIStyles } from './styles';
 import GlobalTheme from './GlobalTheme';
 
@@ -44,20 +45,24 @@ const UiKitProvider = ({
   }, [clientOptions]);
 
   return (
-    <Localization>
-      <ThemeProvider theme={merge(GlobalTheme, theme)}>
-        <UIStyles>
-          <SDKProvider value={SDKInfo}>
-            <CustomComponentsProvider value={customComponents}>
-              <GlobalStyle />
-              <MockData>{children}</MockData>
-              <NotificationsContainer />
-              <ConfirmContainer />
-            </CustomComponentsProvider>
-          </SDKProvider>
-        </UIStyles>
-      </ThemeProvider>
-    </Localization>
+    <>
+      <Helmet>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+      </Helmet>
+      <Localization>
+        <ThemeProvider theme={merge(GlobalTheme, theme)}>
+          <UIStyles>
+            <SDKProvider value={SDKInfo}>
+              <CustomComponentsProvider value={customComponents}>
+                <MockData>{children}</MockData>
+                <NotificationsContainer />
+                <ConfirmContainer />
+              </CustomComponentsProvider>
+            </SDKProvider>
+          </UIStyles>
+        </ThemeProvider>
+      </Localization>
+    </>
   );
 };
 
