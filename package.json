@@ -82,7 +82,6 @@
     "react-linkify": "^1.0.0-alpha",
     "react-time-ago": "^6.0.1",
     "react-tiny-popover": "^5.1.0",
-    "react-toggle": "^4.1.1",
     "react-truncate-markup": "^5.0.0",
     "recoil": "0.0.10"
   },

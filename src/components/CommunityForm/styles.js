@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import TextareaAutosize from 'react-autosize-textarea';
-import ReactToggle from 'react-toggle';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
 import {
@@ -137,6 +136,7 @@ export const Radio = styled.input`
   width: 20px;
   height: 20px;
   margin-left: auto;
+  margin-right: 0;
   flex-shrink: 0;
 `;
 
@@ -149,31 +149,6 @@ export const SubmitButton = styled(PrimaryButton).attrs({
 })`
   padding: 10px 16px;
   margin-left: 12px;
-`;
-
-export const Switch = styled(ReactToggle).attrs({
-  icons: false,
-})`
-  transform: scale(0.8);
-  &.react-toggle,
-  &.react-toggle:hover {
-    & > .react-toggle-track {
-      background-color: ${({ theme }) => theme.color.base3};
-    }
-  }
-  &.react-toggle--checked,
-  &.react-toggle--checked:hover {
-    & > .react-toggle-track {
-      background-color: ${({ theme }) => theme.color.primary};
-    }
-  }
-  &.react-toggle > .react-toggle-thumb {
-    transform: scale(0.9);
-    border: none !important;
-  }
-  .react-toggle-thumb {
-    box-shadow: none !important;
-  }
 `;
 
 export const FormBlockHeader = styled.div`
