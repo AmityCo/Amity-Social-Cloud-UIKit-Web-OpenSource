@@ -1,15 +1,18 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const pkg = require('./package.json');
 
 module.exports = {
   entry: './src/index.js',
-  externals: [nodeExternals()],
+  externals: [nodeExternals({
+    allowlist: ['eko-sdk', /@fortawesome\/pro/]
+  })],
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'build'),
-    library: '',
-    libraryTarget: 'commonjs',
+    library: pkg.name,
+    libraryTarget: 'umd',
   },
   plugins: [new CleanWebpackPlugin()],
   resolve: {
