@@ -11,7 +11,7 @@ export const ImagePostIcon = styled(FaIcon).attrs({ icon: faImage })`
   font-size: 18px;
   cursor: pointer;
   margin-right: 20px;
-  color: ${({ theme, disabled }) => (disabled ? theme.color.base3 : '#17181c')};
+  color: ${({ theme, disabled }) => (disabled ? theme.palette.base3 : '#17181c')};
 `;
 
 export const SelectIcon = styled(FaIcon).attrs({ icon: faSortDown })`
@@ -24,7 +24,7 @@ export const FilePostIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
   font-size: 18px;
   margin-right: 12px;
   cursor: pointer;
-  color: ${({ theme, disabled }) => (disabled ? theme.color.base3 : '#17181c')};
+  color: ${({ theme, disabled }) => (disabled ? theme.palette.base3 : '#17181c')};
 `;
 
 const postComposeEditStyle = `
@@ -62,7 +62,7 @@ const postComposeTextareaWrapperStyle = `
   border: 1px solid #e3e4e8;
   padding: 10px 12px;
   &:focus-within {
-    border: 1px solid ${({ theme }) => theme.color.primary};
+    border: 1px solid ${({ theme }) => theme.palette.primary};
   }
 `;
 
@@ -76,7 +76,7 @@ export const PostComposeTextareaWrapper = styled.div`
 `;
 
 const footerEditStyle = `
-  border-top: 1px solid${({ theme }) => theme.color.base4};
+  border-top: 1px solid${({ theme }) => theme.palette.base4};
   padding: 12px 16px;
 `;
 
@@ -109,7 +109,7 @@ export const Avatar = styled(UIAvatar)`
 export const PostAsCommunityContainer = styled.div`
   display: flex;
   border-radius: 4px;
-  background: ${({ theme }) => theme.color.base4};
+  background: ${({ theme }) => theme.palette.base4};
   padding: 10px;
   margin-bottom: 12px;
   ${({ theme }) => theme.typography.captionBold}
@@ -125,7 +125,7 @@ export const Checkbox = styled.input.attrs({
 
 export const Caption = styled.div`
   ${({ theme }) => theme.typography.caption}
-  color: ${({ theme }) => theme.color.base1};
+  color: ${({ theme }) => theme.palette.base1};
 `;
 
 export const AuthorSelectorContainer = styled.div`
@@ -137,6 +137,6 @@ export const AuthorSelectorContainer = styled.div`
 export const CommunitySeparator = styled.div`
   ${({ theme }) => theme.typography.caption}
   border-top: 1px solid #e3e4e8;
-  color: ${({ theme }) => theme.color.base1};
+  color: ${({ theme }) => theme.palette.base1};
   padding: 12px;
 `;

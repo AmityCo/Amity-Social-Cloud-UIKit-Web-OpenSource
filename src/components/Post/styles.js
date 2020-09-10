@@ -41,6 +41,6 @@ export const AuthorName = styled.div`
 `;
 
 export const ReadMoreButton = styled(SecondaryButton)`
-  color: ${({ theme }) => theme.color.primary};
+  color: ${({ theme }) => theme.palette.primary};
   padding: 4px;
 `;

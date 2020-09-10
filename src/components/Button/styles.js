@@ -1,14 +1,14 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const commonButtonStyles = ({ theme }) => `
-display: flex;
-align-items: center;
-border-radius: 4px;
-outline: none;
-padding: 10px 12px;
-cursor: pointer;
-transition: background-color 0.3s;
-${theme.typography.bodyBold}
+const commonButtonStyles = ({ theme }) => css`
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  outline: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  ${theme.typography.bodyBold}
 `;
 
 export const DefaultButton = styled.button`

@@ -39,7 +39,7 @@ export const ExploreHeaderContainer = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 35px 10px 30px;
-  background: ${({ theme }) => theme.color.primary};
+  background: ${({ theme }) => theme.palette.primary};
   color: #fff;
   ${({ theme }) => theme.typography.title}
 `;
@@ -116,13 +116,13 @@ export const Blocks = styled.div`
 export const Block = styled.div`
   margin-top: 20px;
   background: #fff;
-  border: 1px solid ${({ theme }) => theme.color.base4};
+  border: 1px solid ${({ theme }) => theme.palette.base4};
   border-radius: 4px;
 `;
 
 export const BlockHeader = styled.div`
   padding: 16px 16px 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.color.base4};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.base4};
   ${({ theme }) => theme.typography.title}
 `;
 
@@ -130,11 +130,11 @@ export const CommunityItem = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid ${({ theme }) => theme.color.base4};
+  border: 1px solid ${({ theme }) => theme.palette.base4};
   border-radius: 4px;
   padding: 16px;
   overflow: hidden;
-  color: ${({ theme }) => theme.color.base};
+  color: ${({ theme }) => theme.palette.base};
   height: 180px;
   ${({ theme }) => theme.typography.caption}
 `;
@@ -185,7 +185,7 @@ export const CommunityInfo = styled.div`
   justify-content: space-between;
   padding-bottom: 12px;
   cursor: pointer;
-  border-bottom: 1px solid ${({ theme }) => theme.color.base4};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.base4};
 `;
 
 export const TrendingCommunityContainer = styled.div`
@@ -201,7 +201,7 @@ export const TrendingCommunityContainer = styled.div`
 `;
 
 export const TrendingFooter = styled.div`
-  color: ${({ theme }) => theme.color.base1};
+  color: ${({ theme }) => theme.palette.base1};
   margin-top: 5px;
 `;
 
@@ -214,7 +214,7 @@ export const BackButton = styled(SecondaryButton)`
 `;
 
 export const ViewAllButton = styled(SecondaryButton)`
-  border-top: 1px solid ${({ theme }) => theme.color.base4};
+  border-top: 1px solid ${({ theme }) => theme.palette.base4};
   padding: 18px;
   width: 100%;
   border-radius: 0;
