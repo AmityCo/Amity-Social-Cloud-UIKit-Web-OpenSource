@@ -4,6 +4,7 @@ import CommunityMembers from 'components/Community/CommunityMembers';
 import CommunityForm from 'components/CommunityForm';
 import { ConditionalRender } from 'components/ConditionalRender';
 import { BackLink } from 'components/BackLink';
+import { AddMemberModal } from 'components/AddMemberModal';
 import { customizableComponent } from 'hocs/customization';
 import { getCommunity } from 'mock/index';
 import {
@@ -26,6 +27,10 @@ const tabs = {
 
 const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
   const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
+  const [isModalOpened, setModalOpened] = useState(false);
+
+  const openModal = () => setModalOpened(true);
+  const closeModal = () => setModalOpened(false);
 
   const currentCommunity = getCommunity(communityId);
 
@@ -64,7 +69,10 @@ const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
         <ConditionalRender condition={activeTab === tabs.MEMBERS}>
           <ActiveTabContent>
             <CommunityMembers community={currentCommunity} onMemberClick={onMemberClick} />
-            <AddMemberAction />
+            <AddMemberAction action={openModal} />
+            <ConditionalRender condition={isModalOpened}>
+              <AddMemberModal closeConfirm={closeModal} />
+            </ConditionalRender>
           </ActiveTabContent>
         </ConditionalRender>
       </ActiveTabContainer>

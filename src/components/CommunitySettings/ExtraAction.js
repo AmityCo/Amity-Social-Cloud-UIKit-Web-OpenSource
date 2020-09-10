@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { confirm } from 'components/Confirm';
 import {
   ExtraActionContainer,
   ExtraActionContainerHeader,
@@ -41,22 +42,31 @@ const CloseCommunityButton = ({ onClick }) => {
   );
 };
 
-export const AddMemberAction = ({ handleClick }) => {
+export const AddMemberAction = ({ action }) => {
   return (
     <ExtraAction
       title={communitySettings.ADD_MEMBER_TITLE}
       bodyText={communitySettings.ADD_MEMBER_BODY}
-      actionButton={<AddMemberButton onClick={handleClick} />}
+      actionButton={<AddMemberButton onClick={action} />}
     />
   );
 };
 
-export const CloseCommunityAction = ({ handleClick }) => {
+export const CloseCommunityAction = ({ action }) => {
+  const closeConfirm = () =>
+    confirm({
+      title: communitySettings.CLOSE_COMMUNITY_CONFIRM_TITLE,
+      content: communitySettings.CLOSE_COMMUNITY_CONFIRM_TEXT,
+      cancelText: 'Cancel',
+      okText: 'Remove',
+      onOk: action,
+    });
+
   return (
     <ExtraAction
       title={communitySettings.CLOSE_COMMUNITY_TITLE}
       bodyText={communitySettings.CLOSE_COMMUNITY_BODY}
-      actionButton={<CloseCommunityButton onClick={handleClick} />}
+      actionButton={<CloseCommunityButton onClick={closeConfirm} />}
     />
   );
 };
