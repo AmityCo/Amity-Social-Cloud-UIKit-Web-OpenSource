@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { confirm } from 'components/Confirm';
+import { useCommunitiesMock } from 'mock';
 import {
   ExtraActionContainer,
   ExtraActionContainerHeader,
@@ -52,14 +53,15 @@ export const AddMemberAction = ({ action }) => {
   );
 };
 
-export const CloseCommunityAction = ({ action }) => {
+export const CloseCommunityAction = () => {
+  const { removeCommunity } = useCommunitiesMock();
   const closeConfirm = () =>
     confirm({
       title: communitySettings.CLOSE_COMMUNITY_CONFIRM_TITLE,
       content: communitySettings.CLOSE_COMMUNITY_CONFIRM_TEXT,
       cancelText: 'Cancel',
       okText: 'Remove',
-      onOk: action,
+      onOk: removeCommunity,
     });
 
   return (
