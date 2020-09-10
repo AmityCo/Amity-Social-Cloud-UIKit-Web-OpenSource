@@ -1,4 +1,3 @@
-import 'react-toggle/style.css';
 import React, { useMemo } from 'react';
 import merge from 'lodash/merge';
 import { Helmet } from 'react-helmet';

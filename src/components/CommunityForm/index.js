@@ -4,6 +4,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { customizableComponent } from 'hocs/customization';
 import { getCommunities } from 'mock';
 import Button from 'components/Button';
+import Switch from 'components/Switch';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';
@@ -14,7 +15,6 @@ import {
   Avatar,
   AvatarUploadContainer,
   AboutTextarea,
-  Switch,
   SwitchContainer,
   Footer,
   SubmitButton,
@@ -154,7 +154,9 @@ const CommunityForm = ({
             </div>
             <Controller
               name="onlyAdminCanPost"
-              render={({ value, onChange }) => <Switch onChange={() => onChange(!value)} />}
+              render={({ value, onChange }) => (
+                <Switch value={value} onChange={() => onChange(!value)} />
+              )}
               control={control}
             />
           </SwitchContainer>
