@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import merge from 'lodash/merge';
 import { Helmet } from 'react-helmet';
 import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 
@@ -10,8 +9,8 @@ import MockData from 'mock';
 import { ConfirmContainer } from 'components/Confirm';
 import { NotificationsContainer } from 'components/Notification';
 import Localization from './Localisation';
+import buildGlobalTheme from './theme';
 import { UIStyles } from './styles';
-import GlobalTheme from './GlobalTheme';
 
 _changeSDKDefaultConfig({
   ws: { endpoint: 'https://api.staging.ekomedia.technology' },
@@ -49,7 +48,7 @@ const UiKitProvider = ({
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Helmet>
       <Localization>
-        <ThemeProvider theme={merge(GlobalTheme, theme)}>
+        <ThemeProvider theme={buildGlobalTheme(theme)}>
           <UIStyles>
             <SDKProvider value={SDKInfo}>
               <CustomComponentsProvider value={customComponents}>
