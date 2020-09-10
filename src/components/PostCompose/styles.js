@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import TextareaAutosize from 'react-autosize-textarea';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, faImage } from '@fortawesome/pro-regular-svg-icons';
@@ -58,7 +58,7 @@ const postComposeTextareaWrapperEditStyle = `
   padding: 20px 16px;
 `;
 
-const postComposeTextareaWrapperStyle = `
+const postComposeTextareaWrapperStyle = css`
   border: 1px solid #e3e4e8;
   padding: 10px 12px;
   &:focus-within {
@@ -75,8 +75,8 @@ export const PostComposeTextareaWrapper = styled.div`
   min-height: 40px;
 `;
 
-const footerEditStyle = `
-  border-top: 1px solid${({ theme }) => theme.palette.base.shade4};
+const footerEditStyle = css`
+  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
   padding: 12px 16px;
 `;
 
