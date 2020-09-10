@@ -1,5 +1,5 @@
 import defaultTheme from './default-theme';
-import buildGlobalTheme, { hexToHslString, COLOR_SHADES } from '.';
+import buildGlobalTheme, { hexToHslString, COLOR_SHADES } from './palette';
 
 const overrideTheme = {
   palette: {
