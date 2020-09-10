@@ -23,8 +23,12 @@ const FormBlock = ({ title, children }) => (
   </FormBlockContainer>
 );
 
-export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
-  const { errors, control, setError, handleSubmit } = useForm();
+export const AddMemberModal = ({ className, closeConfirm, onSubmit, community }) => {
+  const { errors, control, setError, handleSubmit } = useForm({
+    defaultValues: {
+      members: community.members,
+    },
+  });
 
   const validateNameAndSubmit = async data => {
     if (data.members.length === 0) {

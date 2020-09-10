@@ -34,6 +34,11 @@ const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
 
   const currentCommunity = getCommunity(communityId);
 
+  const submitAddMembers = data => {
+    currentCommunity.members = data.members;
+    closeModal();
+  };
+
   return (
     <Container>
       <PageHeader>
@@ -71,7 +76,11 @@ const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
             <CommunityMembers community={currentCommunity} onMemberClick={onMemberClick} />
             <AddMemberAction action={openModal} />
             <ConditionalRender condition={isModalOpened}>
-              <AddMemberModal closeConfirm={closeModal} />
+              <AddMemberModal
+                closeConfirm={closeModal}
+                community={currentCommunity}
+                onSubmit={submitAddMembers}
+              />
             </ConditionalRender>
           </ActiveTabContent>
         </ConditionalRender>
