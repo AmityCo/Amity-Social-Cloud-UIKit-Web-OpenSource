@@ -17,7 +17,10 @@ import FeedSideMenu, { SELECTION_TYPES } from 'components/FeedSideMenu';
 import ExploreHome from 'components/ExploreHome';
 import CategoryPage from 'components/ExploreHome/CategoryPage';
 import CommunityCreationModal from 'components/CommunityCreationModal';
-import Feed from 'components/Feed';
+import CommunitySettings from 'components/CommunitySettings';
+
+import UserFeed from './UserFeed';
+import NewsFeed from './NewsFeed';
 import CommunityFeed from '.';
 
 export default {
