@@ -48,6 +48,7 @@ export const CommunityMembersContainer = styled.div`
   background: #ffffff;
   border: 1px solid #edeef2;
   border-radius: 4px;
+  flex: 2;
 `;
 
 export const CommunityMembersHeader = styled.div`

@@ -42,7 +42,7 @@ const CommunityInformation = ({ community, onEditCommunityClick }) => {
         <Avatar avatar={community.avatar} />
         <Options
           options={[
-            { name: 'Edit community', action: () => onEditCommunityClick(community.communityId) },
+            { name: 'Settings', action: () => onEditCommunityClick(community.communityId) },
             { name: 'Leave Community', action: leaveConfirm },
           ]}
         />

@@ -66,7 +66,7 @@ const Pages = () => {
   const openCommunityCreationModal = () => setCommunityCreation(true);
   const closeCommunityCreationModal = () => setCommunityCreation(false);
 
-  const { addCommunity } = useCommunitiesMock();
+  const { addCommunity, editCommunity } = useCommunitiesMock();
 
   return (
     <FeedLayout
@@ -104,7 +104,11 @@ const Pages = () => {
           />
         </Route>
         <Route path="/community/:communityId/edit">
-          TODO: Edit community(reuse CommunityForm with edit param)
+          <CommunitySettings
+            communityId={communityId}
+            onSubmit={editCommunity}
+            onMemberClick={navigateTo}
+          />
         </Route>
         <Route path="/community/:communityId">
           <CommunityFeed

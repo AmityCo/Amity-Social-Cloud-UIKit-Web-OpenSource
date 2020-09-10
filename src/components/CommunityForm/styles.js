@@ -164,7 +164,6 @@ export const FormBlockContainer = styled.div`
   ${({ theme, edit }) =>
     edit
       ? `
-  margin-top: 12px;
   border: 1px solid #EDEEF2;
   border-radius: 4px;
 `
