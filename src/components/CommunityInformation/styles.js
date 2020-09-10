@@ -46,7 +46,7 @@ export const CommunityName = styled.div`
 
 export const Category = styled.div`
   margin-bottom: 16px;
-  color: ${({ theme }) => theme.palette.base1};
+  color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 export const Count = styled.span`

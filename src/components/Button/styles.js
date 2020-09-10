@@ -27,13 +27,13 @@ export const DefaultButton = styled.button`
 export const PrimaryButton = styled.button`
   ${commonButtonStyles}
   border: none;
-  background-color: ${({ theme }) => theme.color.primary};
+  background-color: ${({ theme }) => theme.palette.primary.main};
   color: white;
   &:hover {
     background-color: #4a82f2;
   }
   &:disabled {
-    background-color: ${({ theme }) => theme.color.primary2};
+    background-color: ${({ theme }) => theme.palette.primary.shade2};
   }
 `;
 
@@ -48,5 +48,5 @@ export const SecondaryButton = styled.button`
   &:disabled {
     color: #abaeba;
   }
-  ${({ active, theme }) => active && `color: ${theme.color.primary1};`}
+  ${({ active, theme }) => active && `color: ${theme.palette.primary.shade1};`}
 `;

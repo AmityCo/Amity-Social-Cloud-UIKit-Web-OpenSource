@@ -17,7 +17,7 @@ import Menu from 'components/Menu';
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 8px;
-  color: ${({ theme }) => theme.palette.alert};
+  color: ${({ theme }) => theme.palette.alert.main};
   ${({ theme }) => theme.typography.caption}
 `;
 
@@ -34,7 +34,7 @@ export const LockIcon = styled(FaIcon).attrs({ icon: faLockAlt })`
 export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
   font-size: 12px;
   padding: 5px 12px;
-  color: ${({ theme }) => theme.palette.base1};
+  color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 export const CameraIcon = styled(FaIcon).attrs({ icon: faCamera })`
@@ -48,7 +48,7 @@ export const CameraIcon = styled(FaIcon).attrs({ icon: faCamera })`
 export const Selector = styled.div`
   border: 1px solid #e3e4e8;
   &:focus-within {
-    border: 1px solid ${({ theme }) => theme.palette.primary};
+    border: 1px solid ${({ theme }) => theme.palette.primary.main};
   }
   border-radius: 4px;
   min-height: 40px;
@@ -62,7 +62,7 @@ export const Selector = styled.div`
 `;
 
 export const Chip = styled.div`
-  background: ${({ theme }) => theme.palette.base4};
+  background: ${({ theme }) => theme.palette.base.shade4};
   padding: 4px;
   display: flex;
   align-items: center;
@@ -101,7 +101,7 @@ export const IconWrapper = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 40px;
-  background: ${({ theme }) => theme.palette.base4};
+  background: ${({ theme }) => theme.palette.base.shade4};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,7 +110,7 @@ export const IconWrapper = styled.div`
 
 export const Counter = styled.div`
   margin-left: auto;
-  color: ${({ theme }) => theme.palette.base1};
+  color: ${({ theme }) => theme.palette.base.shade1};
   ${({ theme }) => theme.typography.caption}
 `;
 
@@ -121,7 +121,7 @@ export const Label = styled.label`
     required &&
     `
   &:after {
-    color: ${({ theme }) => theme.palette.alert};
+    color: ${({ theme }) => theme.palette.alert.main};
     content: ' *';
   }
 `}
@@ -156,7 +156,7 @@ export const FormBlockHeader = styled.div`
   ${({ theme }) => theme.typography.title}
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.base4};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.base.shade4};
 `;
 
 export const FormBlockContainer = styled.div`
@@ -170,7 +170,7 @@ export const FormBlockContainer = styled.div`
 `
       : ` 
   :not(:last-child) {
-    border-bottom: 1px solid${theme.palette.base4};
+    border-bottom: 1px solid${theme.palette.base.shade4};
   }
 `}
 `;
@@ -196,7 +196,7 @@ export const PermissionControlContainer = styled.div`
 `;
 
 export const Description = styled.div`
-  color: ${({ theme }) => theme.palette.base1};
+  color: ${({ theme }) => theme.palette.base.shade1};
   ${({ theme }) => theme.typography.body}
 `;
 
@@ -213,7 +213,7 @@ export const CommunityPermissionBlock = styled.div`
 `;
 
 export const Footer = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.palette.base4};
+  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
   padding: 12px 16px;
   display: flex;
   justify-content: flex-end;
@@ -237,7 +237,7 @@ export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 
   border: 1px solid #e3e4e8;
   padding: 10px 12px;
   &:focus-within {
-    border-color: ${({ theme }) => theme.palette.primary};
+    border-color: ${({ theme }) => theme.palette.primary.main};
   }
 `;
 
@@ -247,7 +247,7 @@ export const TextField = styled.input`
   padding: 10px 12px;
   outline: none;
   &:focus-within {
-    border-color: ${({ theme }) => theme.palette.primary};
+    border-color: ${({ theme }) => theme.palette.primary.main};
   }
 `;
 
@@ -264,7 +264,7 @@ export const Field = styled.div`
     error &&
     `
 ${AboutTextarea}, ${TextField} {
-    border-color: ${({ theme }) => theme.palette.alert};
+    border-color: ${({ theme }) => theme.palette.alert.main};
 }
 
   `}

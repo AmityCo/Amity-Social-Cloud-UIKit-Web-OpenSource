@@ -10,7 +10,7 @@ export const FeedIcon = styled(FaIcon).attrs({ icon: faNewspaper })`
 `;
 
 export const EmptyFeedContainer = styled.div`
-  color: ${({ theme }) => theme.palette.base3};
+  color: ${({ theme }) => theme.palette.base.shade3};
   ${({ theme }) => theme.typography.bodyBold}
   width: 560px;
   padding-top: 90px;

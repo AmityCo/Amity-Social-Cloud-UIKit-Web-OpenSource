@@ -10,5 +10,5 @@ export const MenuItem = styled.div`
   &:hover {
     background: #f2f2f4;
   }
-  ${({ active, theme }) => active && `color: ${theme.palette.primary1};`}
+  ${({ active, theme }) => active && `color: ${theme.palette.primary.shade1};`}
 `;
