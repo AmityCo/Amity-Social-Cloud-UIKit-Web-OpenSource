@@ -23,10 +23,10 @@ const FormBlock = ({ title, children }) => (
   </FormBlockContainer>
 );
 
-export const AddMemberModal = ({ className, closeConfirm, onSubmit, community }) => {
+export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
   const { errors, control, setError, handleSubmit } = useForm({
     defaultValues: {
-      members: community.members,
+      members: [],
     },
   });
 
