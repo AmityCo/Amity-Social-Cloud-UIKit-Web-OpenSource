@@ -1,4 +1,4 @@
-import { filterStyleKeys, buildTypographyTheme } from './typography';
+import { filterStyleKeys, buildTypographyTheme } from '../typography';
 
 describe('the typography theme helper functions', () => {
   describe('the filterStyleKeys function', () => {
@@ -17,7 +17,7 @@ describe('the typography theme helper functions', () => {
 
   describe('the buildTypographyTheme function', () => {
     test('merges the global properties values into all other typography properties ', () => {
-      const initialMergedTheme = {
+      const initialTheme = {
         global: {
           fontFamily: 'Inter',
           fontStyle: 'normal',
@@ -28,7 +28,9 @@ describe('the typography theme helper functions', () => {
         },
       };
 
-      expect(buildTypographyTheme(initialMergedTheme)).toEqual({
+      const finalTypographyTheme = buildTypographyTheme(initialTheme);
+
+      expect(finalTypographyTheme).toEqual({
         global: {
           fontFamily: 'Inter',
           fontStyle: 'normal',
@@ -43,7 +45,7 @@ describe('the typography theme helper functions', () => {
     });
 
     test('removes properties that are not allowed', () => {
-      const initialMergedTheme = {
+      const initialTheme = {
         global: {
           fontFamily: 'Inter',
           fontStyle: 'normal',
@@ -56,7 +58,7 @@ describe('the typography theme helper functions', () => {
         },
       };
 
-      const finalTypographyTheme = buildTypographyTheme(initialMergedTheme);
+      const finalTypographyTheme = buildTypographyTheme(initialTheme);
       expect(finalTypographyTheme.global).not.toHaveProperty('notAllowedProperty');
       expect(finalTypographyTheme.global).not.toHaveProperty('anotherNotAllowedProperty');
       expect(finalTypographyTheme.heading).not.toHaveProperty('notAllowedProperty');

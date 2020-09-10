@@ -6,7 +6,7 @@ const toFixedPercentage = value => {
   return toFixed(asPercentage);
 };
 
-const hslObjectToString = hslObject => {
+export const hslObjectToString = hslObject => {
   const { hue, saturation, lightness, alpha } = hslObject;
   let hslString = `hsl(${toFixed(hue)}, ${toFixedPercentage(saturation)}%, ${toFixedPercentage(
     lightness,
@@ -40,7 +40,7 @@ export const COLOR_SHADES = [25, 40, 50, 75];
 /**
  * Converts all colors from hex format to hsl/hsla format.
  * Adds color variations based on the COLOR_SHADES constant.
- * @param {Object} mergedTheme
+ * @param {Object} mergedPaletteTheme
  */
 export const buildPaletteTheme = mergedPaletteTheme => {
   // Create a color theme object that uses hsl string values.
