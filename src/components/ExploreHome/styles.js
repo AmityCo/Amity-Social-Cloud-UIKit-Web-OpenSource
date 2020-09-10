@@ -68,8 +68,15 @@ export const CategoryPageHeader = styled.div`
 
 export const CommunitiesSearchContainer = styled.div`
   position: relative;
-  ${({ size }) => size && `width: ${size}px;`}
   margin: 8px 0 25px;
+
+  &.feed-menu-search-container {
+    width: 250px;
+  }
+
+  &.explore-header-search-container {
+    width: 480px;
+  }
 `;
 
 export const CommunitiesSearchInput = styled.input`
@@ -87,9 +94,16 @@ export const CreateCommunityButton = styled(Button)`
 `;
 
 export const CommunitiesSearchResults = styled(Menu)`
-  ${({ size }) => size && `width: ${size}px;`}
   overflow-y: auto;
   max-height: 200px;
+
+  &.feed-menu-search-container {
+    width: 250px;
+  }
+
+  &.explore-header-search-container {
+    width: 480px;
+  }
 `;
 
 export const CategoryModalBody = styled(Menu)`

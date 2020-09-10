@@ -22,7 +22,7 @@ export const SELECTION_TYPES = {
   COMMUNITY: 'COMMUNITY',
 };
 
-const searchContainerSize = 250;
+const searchContainerClassName = 'feed-menu-search-container';
 
 const FeedSideMenu = ({
   selected: { type, communityId } = {},
@@ -37,9 +37,9 @@ const FeedSideMenu = ({
     <SideMenuListContainer>
       <CommunityBlock>
         <CommunitySearch
-          searchContainerSize={searchContainerSize}
           placeholder="Search"
           onSearchResultCommunityClick={community => onCommunityClick(community.communityId)}
+          className={searchContainerClassName}
         />
       </CommunityBlock>
       <CommunityBlock>

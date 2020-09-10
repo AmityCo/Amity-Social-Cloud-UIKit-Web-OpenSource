@@ -26,7 +26,7 @@ const Highlight = ({ query, text }) => {
   });
 };
 
-const CommunitySearch = ({ onSearchResultCommunityClick, searchContainerSize, placeholder }) => {
+const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder }) => {
   const [query, setQuery] = useState('');
 
   const [isOpen, setIsOpen] = useState(true);
@@ -51,7 +51,7 @@ const CommunitySearch = ({ onSearchResultCommunityClick, searchContainerSize, pl
   };
 
   const menu = (
-    <CommunitiesSearchResults size={searchContainerSize}>
+    <CommunitiesSearchResults className={className}>
       {/* TODO empty state */}
       {searchResult.map(community => (
         <MenuItem key={community.communityId} onClick={() => handleSearchResultClick(community)}>
@@ -74,7 +74,7 @@ const CommunitySearch = ({ onSearchResultCommunityClick, searchContainerSize, pl
       align="start"
       content={menu}
     >
-      <CommunitiesSearchContainer size={searchContainerSize}>
+      <CommunitiesSearchContainer className={className}>
         <CommunitiesSearchInput
           value={query}
           onChange={e => setQuery(e.target.value)}
