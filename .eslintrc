@@ -13,5 +13,8 @@
     "react/jsx-fragments": "off",
     // Mainly to allow dependencies used in some files to remain as devDependencies.
     "import/no-extraneous-dependencies": "off"
+  },
+  "env": {
+    "jest": true
   }
 }

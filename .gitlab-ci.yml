@@ -60,3 +60,18 @@ trash_pr:
   only:
     - develop
     - merge_requests
+
+default:
+  before_script:
+    - npm i -g npm
+    - npm ci
+
+unit:
+  stage: test
+  image: node:12.18
+  script:
+    - npm i -g npm
+    - npm ci
+    - npm run test
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
