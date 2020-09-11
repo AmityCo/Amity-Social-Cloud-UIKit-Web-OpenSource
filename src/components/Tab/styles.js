@@ -16,10 +16,10 @@ color: ${theme.palette.primary.main};
       : `
   color: #abaeba;
   &:hover {
-    color: #818698;
+    color: ${theme.color.neutral1};
   }
   &:disabled {
-    color: #abaeba;
+    color: ${theme.color.neutral2};
   }
 `}
 

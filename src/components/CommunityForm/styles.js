@@ -164,6 +164,9 @@ export const FormBlockContainer = styled.div`
   ${({ theme, edit }) =>
     edit
       ? `
+  &:not(:first-child) {
+    margin-top: 12px;
+  }
   border: 1px solid #EDEEF2;
   border-radius: 4px;
 `
@@ -212,8 +215,8 @@ export const CommunityPermissionBlock = styled.div`
 `;
 
 export const Footer = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
-  padding: 12px 16px;
+  border-top: 1px solid ${({ theme }) => theme.color.base4};
+  padding: ${({ edit }) => (edit ? `12px 0 12px 16px` : `12px 16px`)};
   display: flex;
   justify-content: flex-end;
 `;

@@ -62,18 +62,12 @@ export const ExtraActionContainer = styled.div`
 `;
 
 export const ExtraActionContainerHeader = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
+  ${({ theme }) => theme.typography.title};
   line-height: 24px;
 `;
 
 export const ExtraActionContainerBody = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
+  ${({ theme }) => theme.typography.body};
   line-height: 20px;
 `;
 

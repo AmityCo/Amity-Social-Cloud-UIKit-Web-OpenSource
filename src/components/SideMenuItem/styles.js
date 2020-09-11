@@ -12,7 +12,7 @@ export const SideMenuItemContainer = styled(SecondaryButton)`
     background-color: ${({ theme }) => theme.palette.base.shade4};
   }
   &:disabled {
-    color: #abaeba;
+    color: ${({ theme }) => theme.color.neutral2};
   }
   ${({ active, theme }) =>
     active &&

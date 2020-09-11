@@ -34,8 +34,7 @@ const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
 
   const currentCommunity = getCommunity(communityId);
 
-  const submitAddMembers = data => {
-    currentCommunity.members = data.members;
+  const submitAddMembers = () => {
     closeModal();
   };
 

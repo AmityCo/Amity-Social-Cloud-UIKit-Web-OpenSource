@@ -102,6 +102,7 @@ const UserSelector = ({ value: userIds, onChange }) => {
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
+          placeholder="Select user..."
         />
       </Selector>
     </SelectorPopover>

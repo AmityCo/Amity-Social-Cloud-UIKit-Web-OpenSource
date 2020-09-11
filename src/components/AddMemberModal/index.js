@@ -6,19 +6,17 @@ import {
   Form,
   FormBlockBody,
   FormBlockContainer,
-  FormBlockHeader,
   FormBody,
-  Label,
   MembersField,
   SubmitButton,
   Footer,
 } from 'components/CommunityForm/styles';
 import UserSelector from 'components/CommunityForm/UserSelector';
 import Modal from 'components/Modal';
+import { FormContainer } from './styles';
 
-const FormBlock = ({ title, children }) => (
+const FormBlock = ({ children }) => (
   <FormBlockContainer>
-    <FormBlockHeader>{title}</FormBlockHeader>
     <FormBlockBody>{children}</FormBlockBody>
   </FormBlockContainer>
 );
@@ -39,23 +37,22 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
   };
 
   return (
-    <Modal title="Create community" onCancel={closeConfirm}>
-      <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)}>
-        <FormBody>
-          <FormBlock title="Community members">
-            <MembersField error={errors.members}>
-              <Label name="members" required>
-                Add members
-              </Label>
-              <Controller name="members" render={UserSelector} control={control} />
-              <ErrorMessage errors={errors} name="members" />
-            </MembersField>
-          </FormBlock>
-        </FormBody>
-        <Footer>
-          <SubmitButton>Add</SubmitButton>
-        </Footer>
-      </Form>
+    <Modal title="Add members" onCancel={closeConfirm}>
+      <FormContainer>
+        <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)}>
+          <FormBody>
+            <FormBlock>
+              <MembersField error={errors.members}>
+                <Controller name="members" render={UserSelector} control={control} />
+                <ErrorMessage errors={errors} name="members" />
+              </MembersField>
+            </FormBlock>
+          </FormBody>
+          <Footer>
+            <SubmitButton>Add</SubmitButton>
+          </Footer>
+        </Form>
+      </FormContainer>
     </Modal>
   );
 };

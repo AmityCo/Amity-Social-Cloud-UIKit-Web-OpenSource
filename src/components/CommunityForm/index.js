@@ -179,7 +179,7 @@ const CommunityForm = ({
             <div>
               Private
               <Description>
-                Onply members invited by the moderators can join, view, and search the posts in this
+                Only members invited by the moderators can join, view, and search the posts in this
                 page.
               </Description>
             </div>
@@ -198,7 +198,7 @@ const CommunityForm = ({
           </FormBlock>
         )}
       </FormBody>
-      <Footer>
+      <Footer edit={edit}>
         {!edit && (
           <Button
             onClick={e => {

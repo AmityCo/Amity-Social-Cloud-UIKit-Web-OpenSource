@@ -95,7 +95,7 @@ export const AuthorName = styled.div`
 
 export const CommentDate = styled(Time)`
   margin-left: 5px;
-  color: #818698;
+  color: ${({ theme }) => theme.color.neutral1};
   &::before {
     content: '• ';
   }
