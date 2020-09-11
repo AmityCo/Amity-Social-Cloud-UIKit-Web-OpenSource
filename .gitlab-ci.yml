@@ -5,7 +5,6 @@ stages:
   - deploy_pr
   - notice_pr
   - trash_pr
-  - build
   - deploy
 
 build_pr:
@@ -88,5 +87,6 @@ publish:
   script:
     - npm i -g npm
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+    - npm publish
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
