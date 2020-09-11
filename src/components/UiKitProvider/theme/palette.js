@@ -8,14 +8,14 @@ const toFixedPercentage = value => {
 
 export const hslObjectToString = hslObject => {
   const { hue, saturation, lightness, alpha } = hslObject;
-  let hslString = `hsl(${toFixed(hue)}, ${toFixedPercentage(saturation)}%, ${toFixedPercentage(
-    lightness,
-  )}%`;
 
-  if (alpha) {
-    hslString += `, ${alpha}`;
-  }
-  return `${hslString})`;
+  const hsl = [
+    `${toFixed(hue)}`,
+    `${toFixedPercentage(saturation)}%`,
+    `${toFixedPercentage(lightness)}%`,
+  ];
+
+  return alpha ? `hsla(${[...hsl, alpha].join(',')})` : `hsl(${hsl.join(',')})`;
 };
 
 export const hexToHslString = hexColor => {

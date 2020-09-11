@@ -29,14 +29,14 @@ describe('the hslObjectToString function', () => {
     lightness: 0.8,
   };
   test('converts a hsl object to hsl string', () => {
-    expect(hslObjectToString(hslObject)).toBe('hsl(8.0, 50.0%, 80.0%)');
+    expect(hslObjectToString(hslObject)).toBe('hsl(8.0,50.0%,80.0%)');
   });
 
-  test('converts a hsl object to hsl string', () => {
+  test('converts a hsla object to hsla string', () => {
     const hslaObject = {
       ...hslObject,
       alpha: 0.3,
     };
-    expect(hslObjectToString(hslaObject)).toBe('hsl(8.0, 50.0%, 80.0%, 0.3)');
+    expect(hslObjectToString(hslaObject)).toBe('hsla(8.0,50.0%,80.0%,0.3)');
   });
 });
