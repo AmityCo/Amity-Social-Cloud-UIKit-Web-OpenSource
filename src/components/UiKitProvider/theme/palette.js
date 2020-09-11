@@ -1,11 +1,15 @@
 import { parseToHsl } from 'polished';
 
+const toFixed = value => value.toFixed(1);
+const toFixedPercentage = value => {
+  const asPercentage = Math.min(value * 100, 100);
+  return toFixed(asPercentage);
+};
+
 const hslObjectToString = hslObject => {
   const { hue, saturation, lightness, alpha } = hslObject;
-  const toFixed = value => value.toFixed(1);
-
-  let hslString = `hsl(${toFixed(hue)}, ${toFixed(saturation * 100)}%, ${toFixed(
-    lightness * 100,
+  let hslString = `hsl(${toFixed(hue)}, ${toFixedPercentage(saturation)}%, ${toFixedPercentage(
+    lightness,
   )}%`;
 
   if (alpha) {
