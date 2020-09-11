@@ -23,19 +23,18 @@ export const hexToHslString = hexColor => {
   return hslObjectToString(hslObject);
 };
 
-const lightenHex = (percentageLighten, hexColorString) => {
+const lightenHex = (lightenAmount, hexColorString) => {
   const currentHsl = parseToHsl(hexColorString);
   const { lightness } = currentHsl;
   const lightenedHsl = {
     ...currentHsl,
-    // lightness: lightness * (1 + percentageLighten / 100),
-    lightness: lightness + percentageLighten / 100,
+    lightness: Math.min(1, lightness + lightenAmount),
   };
   return hslObjectToString(lightenedHsl);
 };
 
-// Percentage lightness values for color variations.
-export const COLOR_SHADES = [25, 40, 50, 75];
+// Lightness values for color variations.
+export const COLOR_SHADES = [0.25, 0.4, 0.5, 0.75];
 
 /**
  * Converts all colors from hex format to hsl/hsla format.
