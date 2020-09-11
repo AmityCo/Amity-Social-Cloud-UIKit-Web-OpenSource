@@ -27,10 +27,10 @@ deploy_pr:
   dependencies:
     - build_pr
   script:
-    - aws s3 sync --delete ./storybook-build s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+    - aws s3 sync --delete ./storybook-build s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID
   environment:
     name: staging/pr$CI_MERGE_REQUEST_ID
-    url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+    url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID
     on_stop: trash_pr
   only:
     - merge_requests
@@ -41,9 +41,9 @@ notice_pr:
   dependencies:
     - deploy_pr
   script:
-    - echo "TODO Send message to eko-green"
-    - echo $CI_MERGE_REQUEST_TITLE
-    - echo http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+    - 'curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" -X POST https://gitlab.com/api/v4/projects/$CI_MERGE_REQUEST_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes -d "body=http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID/"'
+    - 'echo $CI_MERGE_REQUEST_TITLE'
+    - 'echo TODO Send message to eko-green: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID/'
   only:
     - merge_requests
 
@@ -55,7 +55,7 @@ trash_pr:
     - aws s3 rm --recursive s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID/
   environment:
     name: staging/pr$CI_MERGE_REQUEST_ID
-    url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+    url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID
     action: stop
   only:
     - develop
