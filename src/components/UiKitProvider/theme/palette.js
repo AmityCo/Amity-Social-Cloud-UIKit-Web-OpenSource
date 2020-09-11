@@ -28,7 +28,8 @@ const lightenHex = (percentageLighten, hexColorString) => {
   const { lightness } = currentHsl;
   const lightenedHsl = {
     ...currentHsl,
-    lightness: lightness * (1 + percentageLighten / 100),
+    // lightness: lightness * (1 + percentageLighten / 100),
+    lightness: lightness + percentageLighten / 100,
   };
   return hslObjectToString(lightenedHsl);
 };
