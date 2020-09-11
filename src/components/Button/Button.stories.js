@@ -1,12 +1,41 @@
 import React from 'react';
-import Button, { PrimaryButton, SecondaryButton } from '.';
+import UIKitButton from '.';
 
 export default {
-  title: 'Button',
+  title: 'Components',
+  parameters: { layout: 'centered' },
 };
 
-export const Default = () => <Button>text</Button>;
+export const Button = ({ label, ...props }) => {
+  return (
+    <div>
+      before <UIKitButton {...props}>{label}</UIKitButton> after
+    </div>
+  );
+};
 
-export const Primary = () => <PrimaryButton>text</PrimaryButton>;
+Button.args = {
+  label: 'hello world',
+  variant: 'primary',
+  disabled: false,
+};
 
-export const Secondary = () => <SecondaryButton>text</SecondaryButton>;
+Button.argTypes = {
+  label: {
+    control: {
+      type: 'text',
+    },
+  },
+  variant: {
+    control: {
+      type: 'select',
+      options: ['primary', 'secondary'],
+    },
+  },
+  disabled: {
+    control: {
+      type: 'boolean',
+    },
+  },
+  onClick: { action: 'onClick' },
+};
