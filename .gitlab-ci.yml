@@ -1,3 +1,5 @@
+image: node:12.18
+
 stages:
   - audit
   - test
@@ -61,17 +63,28 @@ trash_pr:
     - develop
     - merge_requests
 
-default:
-  before_script:
+audit:
+  stage: audit
+  script:
     - npm i -g npm
     - npm ci
+    - npm audit
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
 
 unit:
   stage: test
-  image: node:12.18
   script:
     - npm i -g npm
     - npm ci
     - npm run test
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
+
+publish:
+  stage: deploy
+  script:
+    - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
