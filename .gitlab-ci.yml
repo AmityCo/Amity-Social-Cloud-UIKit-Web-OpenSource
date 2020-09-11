@@ -17,7 +17,7 @@ build_pr:
     - npm run storybook:build
   artifacts:
     paths:
-    - ./storybook-build
+      - ./storybook-build
   only:
     - merge_requests
 
