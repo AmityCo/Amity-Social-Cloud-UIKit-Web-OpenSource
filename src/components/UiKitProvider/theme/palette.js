@@ -23,7 +23,7 @@ export const hexToHslString = hexColor => {
   return hslObjectToString(hslObject);
 };
 
-const lightenHex = (lightenAmount, hexColorString) => {
+export const lightenHex = (lightenAmount, hexColorString) => {
   const currentHsl = parseToHsl(hexColorString);
   const { lightness } = currentHsl;
   const lightenedHsl = {
