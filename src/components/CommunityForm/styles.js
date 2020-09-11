@@ -215,7 +215,7 @@ export const CommunityPermissionBlock = styled.div`
 `;
 
 export const Footer = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.color.base4};
+  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
   padding: ${({ edit }) => (edit ? `12px 0 12px 16px` : `12px 16px`)};
   display: flex;
   justify-content: flex-end;
