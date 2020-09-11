@@ -2,10 +2,14 @@ const defaultTheme = {
   palette: {
     alert: '#FA4D30',
     base: '#292B32',
+    baseInverse: '#FFFFFF',
     primary: '#1054DE',
     secondary: '#FFD400',
     tertiary: '#FF305A',
     neutral: '#17181C',
+    highlight: '#1054DE',
+    messageBubble: '#1054DE',
+    messageBubbleInverse: '#EBECEF',
   },
   typography: {
     global: {
