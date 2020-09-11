@@ -1,0 +1,62 @@
+stages:
+  - audit
+  - test
+  - build_pr
+  - deploy_pr
+  - notice_pr
+  - trash_pr
+  - build
+  - deploy
+
+build_pr:
+  image: node:12.18
+  stage: build_pr
+  script:
+    - npm i -g npm
+    - npm ci
+    - npm run storybook:build
+  artifacts:
+    paths:
+    - ./storybook-build
+  only:
+    - merge_requests
+
+deploy_pr:
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  stage: deploy_pr
+  dependencies:
+    - build_pr
+  script:
+    - aws s3 sync --delete ./storybook-build s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+  environment:
+    name: staging/pr$CI_MERGE_REQUEST_ID
+    url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+    on_stop: trash_pr
+  only:
+    - merge_requests
+
+notice_pr:
+  image: alpine:latest
+  stage: notice_pr
+  dependencies:
+    - deploy_pr
+  script:
+    - echo "TODO Send message to eko-green"
+    - echo $CI_MERGE_REQUEST_TITLE
+    - echo http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+  only:
+    - merge_requests
+
+trash_pr:
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  stage: trash_pr
+  when: manual
+  script:
+    - aws s3 rm --recursive s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID/
+  environment:
+    name: staging/pr$CI_MERGE_REQUEST_ID
+    url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID
+    action: stop
+  only:
+    - develop
+    - merge_requests
