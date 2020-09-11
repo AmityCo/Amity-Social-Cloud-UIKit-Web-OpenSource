@@ -69,7 +69,7 @@ audit:
     - npm audit
   allow_failure: true
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
+    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
 
 unit:
   image: node:12.18
@@ -79,7 +79,7 @@ unit:
     - npm ci
     - npm run test
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
+    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
 
 publish:
   image: node:12.18
@@ -89,4 +89,4 @@ publish:
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
     - npm publish
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /(?i)^gitlab-ci-npm-publish$/'
+    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
