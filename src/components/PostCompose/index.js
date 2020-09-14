@@ -166,4 +166,4 @@ const PostComposeBar = ({
   );
 };
 
-export default customizableComponent('PostComposeBar')(PostComposeBar);
+export default customizableComponent('PostComposeBar', PostComposeBar);

@@ -51,4 +51,4 @@ const ImageGallery = ({ initialImageIndex, images = [], onClose }) => {
   );
 };
 
-export default customizableComponent('ImageGallery')(ImageGallery);
+export default customizableComponent('ImageGallery', ImageGallery);

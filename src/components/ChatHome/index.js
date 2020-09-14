@@ -37,4 +37,4 @@ const ChatHome = () => {
   );
 };
 
-export default customizableComponent('ChatHome')(ChatHome);
+export default customizableComponent('ChatHome', ChatHome);

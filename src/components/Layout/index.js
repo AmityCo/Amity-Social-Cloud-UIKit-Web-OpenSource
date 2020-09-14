@@ -38,4 +38,4 @@ const Layout = () => {
   );
 };
 
-export default customizableComponent('Layout')(Layout);
+export default customizableComponent('Layout', Layout);

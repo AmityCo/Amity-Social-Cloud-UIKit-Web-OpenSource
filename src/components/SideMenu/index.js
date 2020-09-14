@@ -22,4 +22,4 @@ const SideMenu = () => {
   );
 };
 
-export default customizableComponent('SideMenu')(SideMenu);
+export default customizableComponent('SideMenu', SideMenu);

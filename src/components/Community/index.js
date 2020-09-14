@@ -76,4 +76,4 @@ const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCo
   );
 };
 
-export default withSDK(customizableComponent('CommunityFeed')(CommunityFeed));
+export default withSDK(customizableComponent('CommunityFeed', CommunityFeed));

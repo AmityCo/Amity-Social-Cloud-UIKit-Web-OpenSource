@@ -36,4 +36,4 @@ const ChatDetails = ({ channelId, onClose }) => {
   );
 };
 
-export default customizableComponent('ChatDetails')(ChatDetails);
+export default customizableComponent('ChatDetails', ChatDetails);

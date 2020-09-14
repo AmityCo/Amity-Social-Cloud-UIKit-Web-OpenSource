@@ -47,4 +47,4 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   );
 };
 
-export default customizableComponent('CategorySelector')(CategorySelector);
+export default customizableComponent('CategorySelector', CategorySelector);

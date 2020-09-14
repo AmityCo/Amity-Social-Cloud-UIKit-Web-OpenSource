@@ -26,4 +26,4 @@ const TrendingCommunity = ({ community, onClick }) => (
   </TrendingCommunityContainer>
 );
 
-export default customizableComponent('TrendingCommunity')(TrendingCommunity);
+export default customizableComponent('TrendingCommunity', TrendingCommunity);

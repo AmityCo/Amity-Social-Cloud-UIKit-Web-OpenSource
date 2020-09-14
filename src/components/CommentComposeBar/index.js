@@ -46,4 +46,4 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, user = testUser }
   );
 };
 
-export default customizableComponent('CommentComposeBar')(CommentComposeBar);
+export default customizableComponent('CommentComposeBar', CommentComposeBar);

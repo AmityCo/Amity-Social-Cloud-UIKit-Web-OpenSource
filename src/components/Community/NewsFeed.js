@@ -32,4 +32,4 @@ const NewsFeed = ({ onPostAuthorClick }) => {
   );
 };
 
-export default withSDK(customizableComponent('NewsFeed')(NewsFeed));
+export default withSDK(customizableComponent('NewsFeed', NewsFeed));

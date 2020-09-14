@@ -215,4 +215,4 @@ const CommunityForm = ({
   );
 };
 
-export default customizableComponent('CommunityForm')(CommunityForm);
+export default customizableComponent('CommunityForm', CommunityForm);

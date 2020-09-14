@@ -14,4 +14,4 @@ const Tabs = ({ className, tabs, activeTab, onChange }) => (
   </TabsContainer>
 );
 
-export default customizableComponent('Tabs')(Tabs);
+export default customizableComponent('Tabs', Tabs);

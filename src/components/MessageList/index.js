@@ -45,4 +45,4 @@ const MessageList = ({ client, channelId }) => {
   );
 };
 
-export default withSDK(customizableComponent('MessageList')(MessageList));
+export default withSDK(customizableComponent('MessageList', MessageList));

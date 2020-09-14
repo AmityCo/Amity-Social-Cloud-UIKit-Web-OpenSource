@@ -12,4 +12,4 @@ const ChatItem = ({ channel, selected, onSelect }) => (
   </ChatItemContainer>
 );
 
-export default customizableComponent('ChatItem')(ChatItem);
+export default customizableComponent('ChatItem', ChatItem);

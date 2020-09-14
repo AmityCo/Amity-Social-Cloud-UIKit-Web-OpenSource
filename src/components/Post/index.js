@@ -103,4 +103,4 @@ const Post = ({
   );
 };
 
-export default customizableComponent('Post')(Post);
+export default customizableComponent('Post', Post);

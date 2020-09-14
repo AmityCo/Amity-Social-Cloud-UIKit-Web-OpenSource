@@ -14,4 +14,4 @@ const UserFeedHeader = ({ className }) => {
   );
 };
 
-export default customizableComponent('UserFeedHeader')(UserFeedHeader);
+export default customizableComponent('UserFeedHeader', UserFeedHeader);

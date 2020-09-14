@@ -68,4 +68,4 @@ const EngagementBar = ({ post, onPostEdit }) => {
   );
 };
 
-export default customizableComponent('EngagementBar')(EngagementBar);
+export default customizableComponent('EngagementBar', EngagementBar);

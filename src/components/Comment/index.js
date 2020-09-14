@@ -156,4 +156,4 @@ const Comment = ({
   );
 };
 
-export default customizableComponent('Comment')(Comment);
+export default customizableComponent('Comment', Comment);

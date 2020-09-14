@@ -58,4 +58,4 @@ const Message = ({ message, message: { createdAt, user }, consequent, incoming }
   );
 };
 
-export default customizableComponent('Message')(Message);
+export default customizableComponent('Message', Message);

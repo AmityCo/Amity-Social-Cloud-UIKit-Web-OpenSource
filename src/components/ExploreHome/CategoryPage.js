@@ -52,4 +52,4 @@ const CategoryPage = ({ onCommunityClick, onHeaderBackButtonClick, categoryId })
   );
 };
 
-export default customizableComponent('CategoryPage')(CategoryPage);
+export default customizableComponent('CategoryPage', CategoryPage);

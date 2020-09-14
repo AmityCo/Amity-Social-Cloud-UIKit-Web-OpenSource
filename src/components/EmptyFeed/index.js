@@ -10,4 +10,4 @@ const EmptyFeed = ({ className }) => (
   </EmptyFeedContainer>
 );
 
-export default customizableComponent('EmptyFeed')(EmptyFeed);
+export default customizableComponent('EmptyFeed', EmptyFeed);

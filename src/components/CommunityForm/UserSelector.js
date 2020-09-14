@@ -108,4 +108,4 @@ const UserSelector = ({ value: userIds, onChange }) => {
   );
 };
 
-export default customizableComponent('UserSelector')(UserSelector);
+export default customizableComponent('UserSelector', UserSelector);
