@@ -80,4 +80,4 @@ const CommunityMembers = ({ onMemberClick }) => {
   );
 };
 
-export default customizableComponent('CommunityMembers')(CommunityMembers);
+export default customizableComponent('CommunityMembers', CommunityMembers);

@@ -31,4 +31,4 @@ const RecentChat = ({ onChannelClick, selectedChannelId }) => {
   );
 };
 
-export default customizableComponent('RecentChat')(RecentChat);
+export default customizableComponent('RecentChat', RecentChat);

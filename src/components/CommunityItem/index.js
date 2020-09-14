@@ -12,4 +12,4 @@ const CommunityItem = ({ community, active, onClick }) => (
   </CommunityItemContainer>
 );
 
-export default customizableComponent('CommunityItem')(CommunityItem);
+export default customizableComponent('CommunityItem', CommunityItem);

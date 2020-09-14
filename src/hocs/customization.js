@@ -8,7 +8,7 @@ export const CustomComponentsProvider = CustomComponentsContext.Provider;
 
   usage:
   1) wrap component
-  const MyCustomizableComponent = customizableComponent('ComponentName')(Component);
+  const MyCustomizableComponent = customizableComponent('ComponentName', Component);
 
   2) on customizable parent we can provide customization map with this component name what lead to rendering of new component instead of old one
   <Parent customComponents={ ComponentName: NewCustomComponent } />
@@ -19,7 +19,7 @@ export const CustomComponentsProvider = CustomComponentsContext.Provider;
   2) replace itself if it name in customizable map
  */
 
-export const customizableComponent = componentName => Component => props => {
+export const customizableComponent = (componentName, Component) => props => {
   const { customComponents } = props;
 
   const customComponentsMap = useContext(CustomComponentsContext);

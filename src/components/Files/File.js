@@ -29,4 +29,4 @@ const File = ({ editing, file, onRemove }) => {
   );
 };
 
-export default customizableComponent('File')(File);
+export default customizableComponent('File', File);

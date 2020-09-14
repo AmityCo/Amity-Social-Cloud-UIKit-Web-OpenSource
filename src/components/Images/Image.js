@@ -31,4 +31,4 @@ const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
   );
 };
 
-export default customizableComponent('Image')(Image);
+export default customizableComponent('Image', Image);

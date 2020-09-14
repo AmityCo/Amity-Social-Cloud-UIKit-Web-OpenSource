@@ -17,4 +17,4 @@ const Avatar = ({ className, size, avatar }) => (
   </AvatarContainer>
 );
 
-export default customizableComponent('Avatar')(Avatar);
+export default customizableComponent('Avatar', Avatar);

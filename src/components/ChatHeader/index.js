@@ -32,4 +32,4 @@ const ChatHeader = ({ channelId, onChatDetailsClick }) => {
     </ChatHeaderContainer>
   );
 };
-export default customizableComponent('ChatHeader')(ChatHeader);
+export default customizableComponent('ChatHeader', ChatHeader);

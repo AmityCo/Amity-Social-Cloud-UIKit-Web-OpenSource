@@ -67,4 +67,4 @@ const FeedSideMenu = ({
   );
 };
 
-export default customizableComponent('FeedSideMenu')(FeedSideMenu);
+export default customizableComponent('FeedSideMenu', FeedSideMenu);

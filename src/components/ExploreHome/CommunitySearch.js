@@ -81,4 +81,4 @@ const CommunitySearch = ({ onSearchResultCommunityClick }) => {
   );
 };
 
-export default customizableComponent('CommunitySearch')(CommunitySearch);
+export default customizableComponent('CommunitySearch', CommunitySearch);

@@ -19,4 +19,4 @@ const Community = ({ community, onClick }) => (
   </CommunityItem>
 );
 
-export default customizableComponent('Community')(Community);
+export default customizableComponent('Community', Community);

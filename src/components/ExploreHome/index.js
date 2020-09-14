@@ -106,4 +106,4 @@ const ExploreHome = ({
   );
 };
 
-export default customizableComponent('ExploreHome')(ExploreHome);
+export default customizableComponent('ExploreHome', ExploreHome);

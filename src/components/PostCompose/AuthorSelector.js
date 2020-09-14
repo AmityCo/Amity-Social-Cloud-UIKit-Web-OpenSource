@@ -56,4 +56,4 @@ const AuthorSelector = ({ author, user, communities, onChange }) => {
   );
 };
 
-export default customizableComponent('AuthorSelector')(AuthorSelector);
+export default customizableComponent('AuthorSelector', AuthorSelector);

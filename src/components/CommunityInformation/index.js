@@ -65,4 +65,4 @@ const CommunityInformation = ({ community, onEditCommunityClick }) => {
   );
 };
 
-export default customizableComponent('CommunityInformation')(CommunityInformation);
+export default customizableComponent('CommunityInformation', CommunityInformation);

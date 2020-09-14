@@ -29,4 +29,4 @@ const CommunityCreationModal = ({ isOpen, onClose, onSubmit }) => {
   );
 };
 
-export default customizableComponent('CommunityCreationModal')(CommunityCreationModal);
+export default customizableComponent('CommunityCreationModal', CommunityCreationModal);

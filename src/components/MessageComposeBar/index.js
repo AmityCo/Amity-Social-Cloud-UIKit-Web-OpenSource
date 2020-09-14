@@ -35,4 +35,4 @@ const MessageComposeBar = ({ onSubmit }) => {
   );
 };
 
-export default customizableComponent('MessageComposeBar')(MessageComposeBar);
+export default customizableComponent('MessageComposeBar', MessageComposeBar);

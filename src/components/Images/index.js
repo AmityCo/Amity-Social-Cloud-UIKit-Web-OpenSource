@@ -44,4 +44,4 @@ const Images = ({ editing, images = [], onRemove }) => {
   );
 };
 
-export default customizableComponent('Images')(Images);
+export default customizableComponent('Images', Images);

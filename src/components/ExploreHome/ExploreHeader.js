@@ -18,4 +18,4 @@ const ExploreHeader = ({ onSearchResultCommunityClick, onCreateCommunityClick })
   </ExploreHeaderContainer>
 );
 
-export default customizableComponent('ExploreHeader')(ExploreHeader);
+export default customizableComponent('ExploreHeader', ExploreHeader);

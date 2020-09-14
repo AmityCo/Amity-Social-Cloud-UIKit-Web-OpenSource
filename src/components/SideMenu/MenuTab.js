@@ -11,4 +11,4 @@ const MenuTab = ({ icon, name, className, onClick, active }) => {
   );
 };
 
-export default customizableComponent('MenuTab')(MenuTab);
+export default customizableComponent('MenuTab', MenuTab);

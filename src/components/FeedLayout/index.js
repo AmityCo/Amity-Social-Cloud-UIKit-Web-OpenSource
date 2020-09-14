@@ -12,4 +12,4 @@ const FeedLayout = ({ sideMenu, children }) => {
   );
 };
 
-export default customizableComponent('FeedLayout')(FeedLayout);
+export default customizableComponent('FeedLayout', FeedLayout);

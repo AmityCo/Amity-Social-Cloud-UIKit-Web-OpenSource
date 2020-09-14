@@ -32,4 +32,4 @@ const UserFeed = () => {
   );
 };
 
-export default withSDK(customizableComponent('UserFeed')(UserFeed));
+export default withSDK(customizableComponent('UserFeed', UserFeed));
