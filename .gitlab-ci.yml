@@ -5,8 +5,32 @@ stages:
   - deploy_pr
   - notice_pr
   - trash_pr
+  - build_develop
+  - deploy_develop
+  - notice_develop
   - build
   - deploy
+
+audit:
+  image: node:12.18
+  stage: audit
+  script:
+    - npm i -g npm
+    - npm ci
+    - npm audit
+  allow_failure: true
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
+
+unit:
+  image: node:12.18
+  stage: test
+  script:
+    - npm i -g npm
+    - npm ci
+    - npm run test
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
 
 build_pr:
   image: node:12.18
@@ -62,26 +86,40 @@ trash_pr:
     - develop
     - merge_requests
 
-audit:
+build_develop:
   image: node:12.18
-  stage: audit
+  stage: build_develop
   script:
     - npm i -g npm
     - npm ci
-    - npm audit
-  allow_failure: true
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
+    - npm run storybook:build
+  artifacts:
+    paths:
+      - ./storybook-build
+  only:
+    - develop
 
-unit:
-  image: node:12.18
-  stage: test
+deploy_develop:
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  stage: deploy_develop
+  dependencies:
+    - build_develop
   script:
-    - npm i -g npm
-    - npm ci
-    - npm run test
-  rules:
-    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
+    - aws s3 sync --delete ./storybook-build s3://ui-kit.staging.ekomedia.technology/develop/
+  only:
+    - develop
+
+notice_develop:
+  image: alpine:latest
+  stage: notice_develop
+  dependencies:
+    - deploy_develop
+  script:
+    - apk --no-cache add curl
+    - 'echo $CI_MERGE_REQUEST_TITLE'
+    - 'echo TODO Send message to eko-green: http://ui-kit.staging.ekomedia.technology/develop'
+  only:
+    - develop
 
 build:
   image: node:12.18
