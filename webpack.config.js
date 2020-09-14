@@ -21,6 +21,7 @@ module.exports = {
   resolve: {
     alias: {
       components: path.resolve(__dirname, 'src/components'),
+      icons: path.resolve(__dirname, 'src/icons'),
       hocs: path.resolve(__dirname, 'src/hocs'),
       hooks: path.resolve(__dirname, 'src/hooks'),
       mock: path.resolve(__dirname, 'src/mock'),
