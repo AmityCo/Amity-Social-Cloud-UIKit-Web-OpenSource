@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ButtonLink = styled.button.attrs({ role: 'button' })`
-  color: ${({ theme }) => theme.color.base1};
+  color: ${({ theme }) => theme.palette.base.shade1};
   font-size: 14px;
   border: none;
   outline: none;
@@ -10,6 +10,6 @@ export const ButtonLink = styled.button.attrs({ role: 'button' })`
 
   &:hover {
     cursor: pointer;
-    color: ${({ theme }) => theme.color.neutral1};
+    color: ${({ theme }) => theme.palette.neutral.shade1};
   }
 `;

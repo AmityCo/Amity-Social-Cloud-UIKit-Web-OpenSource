@@ -20,10 +20,10 @@ export const DefaultButton = styled.button`
   border: 1px solid #e3e4e8;
   color: #17181c;
   &:hover {
-    color: ${({ theme }) => theme.color.neutral1};
+    color: ${({ theme }) => theme.palette.neutral.shade1};
   }
   &:disabled {
-    color: ${({ theme }) => theme.color.neutral2};
+    color: ${({ theme }) => theme.palette.neutral.shade2};
   }
 `;
 
@@ -42,14 +42,14 @@ export const PrimaryButton = styled.button`
 
 export const SecondaryButton = styled.button`
   ${commonButtonStyles}
-  color: ${({ theme }) => theme.color.neutral1};
+  color: ${({ theme }) => theme.palette.neutral.shade1};
   background-color: transparent;
   border: none;
   &:hover {
     background-color: #f2f2f4;
   }
   &:disabled {
-    color: ${({ theme }) => theme.color.neutral2};
+    color: ${({ theme }) => theme.palette.neutral.shade2};
   }
   ${({ active, theme }) => active && `color: ${theme.palette.primary.shade1};`}
 `;

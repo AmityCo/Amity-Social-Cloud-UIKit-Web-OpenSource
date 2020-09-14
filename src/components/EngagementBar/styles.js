@@ -3,7 +3,7 @@ import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faCommentAlt } from '@fortawesome/pro-regular-svg-icons';
 
 export const EngagementBarContainer = styled.div`
-  color: ${({ theme }) => theme.color.neutral1};
+  color: ${({ theme }) => theme.palette.neutral.shade1};
   ${({ theme }) => theme.typography.body}
 `;
 
