@@ -14,6 +14,7 @@
     "storybook:build": "build-storybook --output-dir ./storybook-build",
     "generate": "node ./util/create-component",
     "prepublishOnly": "npm run build",
+    "preversion": "npm run test",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
