@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 export const testUser = {
   userId: 'u1',
@@ -411,10 +411,10 @@ export const usePostsMock = targetId => {
   const fetchMorePosts = () => {
     setTimeout(() => {
       setPosts([...posts, {
-        postId: uuid(),
+        postId: v4(),
         targetId: 'u1',
         author: testUser,
-        text: uuid(),
+        text: v4(),
       }]);
     }, 150);
   };
