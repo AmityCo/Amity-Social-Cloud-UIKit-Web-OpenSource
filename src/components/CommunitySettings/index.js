@@ -88,4 +88,4 @@ const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
   );
 };
 
-export default customizableComponent('CommunitySettings')(CommunitySettings);
+export default customizableComponent('CommunitySettings', CommunitySettings);
