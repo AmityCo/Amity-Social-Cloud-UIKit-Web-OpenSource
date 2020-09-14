@@ -45,7 +45,7 @@ export const ModalWindow = styled.div`
 
 export const Header = styled.div`
   padding: 16px 16px 12px 16px;
-  ${({ clean }) => !clean && `border-bottom: 1px solid${({ theme }) => theme.color.base4};`}
+  ${({ clean }) => !clean && `border-bottom: 1px solid${({ theme }) => theme.palette.base.shade4};`}
   ${({ theme }) => theme.typography.title}
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@ export const Footer = styled.div`
   ${({ clean }) =>
     !clean &&
     `
-border-top: 1px solid${({ theme }) => theme.color.base4};
+border-top: 1px solid${({ theme }) => theme.palette.base.shade4};
 padding-top: 16px;
     `}
 `;

@@ -20,7 +20,7 @@ export const SwitchSlider = styled.span`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${({ theme }) => theme.color.base3};
+  background-color: ${({ theme }) => theme.palette.base.shade3};
   -webkit-transition: ${TRANSITION_TIME};
   transition: ${TRANSITION_TIME};
   border-radius: 20px;
@@ -39,7 +39,7 @@ export const SwitchSlider = styled.span`
   }
 
   ${SwitchInput}:checked + & {
-    background-color: ${({ theme }) => theme.color.primary};
+    background-color: ${({ theme }) => theme.palette.primary.main};
   }
 
   ${SwitchInput}:checked + &:before {
