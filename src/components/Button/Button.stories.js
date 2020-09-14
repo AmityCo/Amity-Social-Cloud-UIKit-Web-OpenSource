@@ -2,11 +2,11 @@ import React from 'react';
 import UIKitButton from '.';
 
 export default {
-  title: 'Components',
+  title: 'Components/Button',
   parameters: { layout: 'centered' },
 };
 
-export const Button = ({ label, ...props }) => {
+export const SimpleButton = ({ label, ...props }) => {
   return (
     <div>
       before <UIKitButton {...props}>{label}</UIKitButton> after
@@ -14,13 +14,13 @@ export const Button = ({ label, ...props }) => {
   );
 };
 
-Button.args = {
+SimpleButton.args = {
   label: 'hello world',
   variant: 'primary',
   disabled: false,
 };
 
-Button.argTypes = {
+SimpleButton.argTypes = {
   label: {
     control: {
       type: 'text',

@@ -2,11 +2,11 @@ import React from 'react';
 import UiKitAvatar from '.';
 
 export default {
-  title: 'Components',
+  title: 'Components/Avatar',
   parameters: { layout: 'centered' },
 };
 
-export const Avatar = props => {
+export const SimpleAvatar = props => {
   return (
     <div>
       before <UiKitAvatar {...props} /> after
@@ -14,13 +14,13 @@ export const Avatar = props => {
   );
 };
 
-Avatar.argTypes = {
+SimpleAvatar.argTypes = {
   avatar: { control: { type: 'text' } },
   size: { control: { type: 'select', options: ['small', 'big', 'tiny'] } },
   className: { control: { type: 'text' } },
 };
 
-Avatar.args = {
+SimpleAvatar.args = {
   avatar: 'https://via.placeholder.com/600/771796',
   size: 'big',
   className: '',
