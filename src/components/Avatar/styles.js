@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import { SIZES } from 'hocs/withSize';
+import { backgroundImage } from 'icons/User';
 
 export const AvatarContainer = styled.div`
   flex-shrink: 0;
@@ -11,6 +12,7 @@ export const AvatarContainer = styled.div`
     width: ${SIZES[size]}px;
   `}
 
+  background: ${backgroundImage};
   border-radius: 50%;
 `;
 

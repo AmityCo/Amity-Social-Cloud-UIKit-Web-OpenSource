@@ -1,20 +1,26 @@
 import React from 'react';
-import Avatar from '.';
+import UiKitAvatar from '.';
 
 export default {
-  title: 'Avatar',
-  component: Avatar,
-  argTypes: {
-    avatar: { control: { type: 'text' } },
-    size: { control: { type: 'select', options: ['small', 'big', 'tiny'] } },
-    className: { control: { type: 'text' } },
-  },
+  title: 'Components',
+  parameters: { layout: 'centered' },
 };
 
-const Template = args => <Avatar {...args} />;
+export const Avatar = props => {
+  return (
+    <div>
+      before <UiKitAvatar {...props} /> after
+    </div>
+  );
+};
 
-export const avatar = Template.bind({});
-avatar.args = {
+Avatar.argTypes = {
+  avatar: { control: { type: 'text' } },
+  size: { control: { type: 'select', options: ['small', 'big', 'tiny'] } },
+  className: { control: { type: 'text' } },
+};
+
+Avatar.args = {
   avatar: 'https://via.placeholder.com/600/771796',
   size: 'big',
   className: '',
