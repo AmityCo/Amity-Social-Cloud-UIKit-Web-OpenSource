@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { uuid } from 'uuidv4';
 
 export const testUser = {
   userId: 'u1',
@@ -407,11 +408,22 @@ export const usePostsMock = targetId => {
   const editPost = updatedPost =>
     setPosts(posts.map(post => (post.postId === updatedPost.postId ? updatedPost : post)));
 
+  const fetchMorePosts = () => {
+    setTimeout(() => {
+      setPosts([...posts, {
+        postId: uuid(),
+        targetId: 'u1',
+        author: testUser,
+        text: uuid(),
+      }]);
+    }, 150);
+  };
+
   const postsFeed = targetId
     ? posts.filter(community => community.targetId === targetId)
     : getNewsFeed();
 
-  return { posts: postsFeed, addPost, removePost, editPost };
+  return { posts: postsFeed, addPost, removePost, editPost, fetchMorePosts };
 };
 
 export const useCommunitiesMock = () => {
