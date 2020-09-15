@@ -1,5 +1,5 @@
 import React from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroller';
 import { MessageRepository } from 'eko-sdk';
 
 import { customizableComponent } from 'hocs/customization';
@@ -24,10 +24,10 @@ const MessageList = ({ client, channelId }) => {
     <InfiniteScrollContainer>
       <InfiniteScroll
         hasMore={hasMore}
-        next={loadMore}
-        dataLength={messages.length}
+        loadMore={loadMore}
+        useWindow={false}
         loader={<span key={0}>Loading</span>}
-        inverse
+        isReverse
       >
         <MessageListContainer>
           {messages.map((message, i) => {
