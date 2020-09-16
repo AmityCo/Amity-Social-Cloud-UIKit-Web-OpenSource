@@ -10,6 +10,7 @@ stages:
   - notice_develop
   - build
   - deploy
+  - notice
 
 audit:
   image: node:12.18
@@ -53,7 +54,7 @@ deploy_pr:
   script:
     - aws s3 sync --delete ./storybook-build s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID
   environment:
-    name: staging/pr$CI_MERGE_REQUEST_ID
+    name: staging/pr$CI_MERGE_REQUEST_IID
     url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID
     on_stop: trash_pr
   only:
@@ -62,13 +63,15 @@ deploy_pr:
 notice_pr:
   image: alpine:latest
   stage: notice_pr
+  allow_failure: true
   dependencies:
     - deploy_pr
-  script:
+  script: 
     - apk --no-cache add curl
-    - 'curl --header "PRIVATE-TOKEN: $GITLAB_TOKEN" -X POST https://gitlab.com/api/v4/projects/$CI_MERGE_REQUEST_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes -d "body=http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID/"'
-    - 'echo $CI_MERGE_REQUEST_TITLE'
-    - 'echo TODO Send message to eko-green: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID/'
+    - "curl -v -X POST $BOT_SERVER
+      -H \"Authorization: Bearer $BOT_TOKEN\"
+      -H \"Content-Type: application/json\"
+      -d '{\"gid\":\"'$BOT_GROUP_QA_ID'\", \"tid\":\"'$BOT_THREAD_QA_ID'\", \"message\":{\"type\":\"text\",\"data\":\"Feature ready to test!\\n'$CI_MERGE_REQUEST_TITLE'\\nhttp://ui-kit.staging.ekomedia.technology/pr'$CI_MERGE_REQUEST_IID'\"}}'"
   only:
     - merge_requests
 
@@ -77,9 +80,9 @@ trash_pr:
   stage: trash_pr
   when: manual
   script:
-    - aws s3 rm --recursive s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_ID/
+    - aws s3 rm --recursive s3://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID/
   environment:
-    name: staging/pr$CI_MERGE_REQUEST_ID
+    name: staging/pr$CI_MERGE_REQUEST_IID
     url: http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID
     action: stop
   only:
@@ -112,12 +115,13 @@ deploy_develop:
 notice_develop:
   image: alpine:latest
   stage: notice_develop
-  dependencies:
-    - deploy_develop
+  allow_failure: true
   script:
     - apk --no-cache add curl
-    - 'echo $CI_MERGE_REQUEST_TITLE'
-    - 'echo TODO Send message to eko-green: http://ui-kit.staging.ekomedia.technology/develop'
+    - "curl -v -X POST $BOT_SERVER
+      -H \"Authorization: Bearer $BOT_TOKEN\"
+      -H \"Content-Type: application/json\"
+      -d '{\"gid\":\"'$BOT_GROUP_PM_ID'\", \"tid\":\"'$BOT_THREAD_PM_ID'\", \"message\":{\"type\":\"text\",\"data\":\"Ui-Kit environment updated!\\nhttp://ui-kit.staging.ekomedia.technology/develop\"}}'"
   only:
     - develop
 
@@ -141,5 +145,20 @@ publish:
     - npm i -g npm
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
     - npm publish
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
+
+notice:
+  image: alpine:latest
+  stage: notice
+  allow_failure: true
+  dependencies:
+    - publish
+  script:
+    - apk --no-cache add curl
+    - "curl -X POST $BOT_SERVER
+      -H \"Authorization: Bearer $BOT_TOKEN\"
+      -H \"Content-Type: application/json\"
+      -d \"{'gid':'\"$BOT_GROUP_RL_ID\"', 'tid':'\"$BOT_THREAD_RL_ID\"', 'message':{'type':'text','data':'Upstra Ui-Kit \"$CI_COMMIT_TAG\"' has been released!'}}\" -i"
   rules:
     - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
