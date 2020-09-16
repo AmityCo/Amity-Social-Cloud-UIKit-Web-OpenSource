@@ -13,7 +13,6 @@
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook --output-dir ./storybook-build",
     "generate": "node ./util/create-component",
-    "prepublishOnly": "npm run build",
     "version:publish": "./version-publish.sh",
     "preversion": "npm run test",
     "postversion": "git push && git push --tags",
