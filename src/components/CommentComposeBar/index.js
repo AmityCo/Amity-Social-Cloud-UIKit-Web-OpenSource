@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import { customizableComponent } from 'hocs/customization';
 
@@ -25,6 +25,11 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, user = testUser }
   const placeholder = userToReply ? `Reply to ${userToReply}` : 'Say something nice';
   const submitButtonText = userToReply ? 'Reply' : 'Add comment';
 
+  const commentInputRef = useRef();
+  useEffect(() => {
+    commentInputRef.current.focus();
+  }, []);
+
   return (
     <CommentComposeBarContainer className={className}>
       <Avatar avatar={user.avatar} />
@@ -33,6 +38,7 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, user = testUser }
         type="text"
         value={text}
         onChange={e => setText(e.target.value)}
+        ref={commentInputRef}
         /* onKeyPress={e => e.key === 'Enter' && AddComment()} */
       />
       <AddCommentButton disabled={isEmpty} onClick={AddComment}>
