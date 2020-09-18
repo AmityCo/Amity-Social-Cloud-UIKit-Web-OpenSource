@@ -13,7 +13,7 @@ const defaultTheme = {
   },
   typography: {
     global: {
-      fontFamily: 'Inter',
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif',
       fontStyle: 'normal',
     },
     headline: {
