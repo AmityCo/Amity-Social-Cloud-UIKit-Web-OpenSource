@@ -20,9 +20,10 @@ module.exports = {
     );
 
     // Merge with resolve config from main webpack.
+    // Main webpack is a function with two arguments that can both be left empty.
     config.resolve = {
       ...config.resolve,
-      ...mainWebpack.resolve,
+      ...mainWebpack({}, {}).resolve,
     };
 
     return config;

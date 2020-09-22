@@ -1,9 +1,10 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const pkg = require('./package.json');
 
-module.exports = {
+module.exports = (_, argv) => ({
   entry: './src/index.js',
   externals: [
     nodeExternals({
@@ -17,7 +18,10 @@ module.exports = {
     libraryTarget: 'umd',
     globalObject: "typeof self !== 'undefined' ? self : this",
   },
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new CleanWebpackPlugin(),
+    argv.analyze === 'true' && new BundleAnalyzerPlugin({ analyzerMode: 'static' }),
+  ].filter(Boolean),
   resolve: {
     alias: {
       components: path.resolve(__dirname, 'src/components'),
@@ -48,4 +52,4 @@ module.exports = {
       },
     ],
   },
-};
+});
