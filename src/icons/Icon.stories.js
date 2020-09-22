@@ -2,7 +2,7 @@ import React from 'react';
 import * as Icons from '.';
 
 export default {
-  title: 'Icons',
+  title: 'Components/Icons',
   parameters: { layout: 'centered' },
 };
 

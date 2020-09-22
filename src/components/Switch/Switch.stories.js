@@ -3,7 +3,7 @@ import { useArgs } from '@storybook/client-api';
 import Switch from '.';
 
 export default {
-  title: 'Switch',
+  title: 'Components/Switch',
   component: Switch,
   parameters: { layout: 'centered' },
 };
