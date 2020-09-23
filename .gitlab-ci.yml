@@ -68,10 +68,15 @@ notice_pr:
     - deploy_pr
   script: 
     - apk --no-cache add curl
-    - "curl -v -X POST $BOT_SERVER
-      -H \"Authorization: Bearer $BOT_TOKEN\"
-      -H \"Content-Type: application/json\"
-      -d '{\"gid\":\"'$BOT_GROUP_QA_ID'\", \"tid\":\"'$BOT_THREAD_QA_ID'\", \"message\":{\"type\":\"text\",\"data\":\"PR available (#'$CI_MERGE_REQUEST_TITLE')!\\nhttp://ui-kit.staging.ekomedia.technology/pr'$CI_MERGE_REQUEST_IID'\"}}'"
+    - >-
+      curl -X POST https://gitlab.com/api/v4/projects/$CI_MERGE_REQUEST_PROJECT_ID/merge_requests/$CI_MERGE_REQUEST_IID/notes
+      -H "PRIVATE-TOKEN: $GITLAB_TOKEN"
+      -d "body=http://ui-kit.staging.ekomedia.technology/pr$CI_MERGE_REQUEST_IID/"
+    - >-
+      curl -v -X POST $BOT_SERVER
+      -H "Authorization: Bearer $BOT_TOKEN"
+      -H "Content-Type: application/json"
+      -d '{"gid":"'$BOT_QA_GROUP'", "tid":"'$BOT_QA_THREAD'", "message":{"type":"text","data":"PR available: '"$CI_MERGE_REQUEST_TITLE"'!\nhttp://ui-kit.staging.ekomedia.technology/pr'$CI_MERGE_REQUEST_IID'"}}'
   only:
     - merge_requests
 
@@ -118,10 +123,11 @@ notice_develop:
   allow_failure: true
   script:
     - apk --no-cache add curl
-    - "curl -v -X POST $BOT_SERVER
-      -H \"Authorization: Bearer $BOT_TOKEN\"
-      -H \"Content-Type: application/json\"
-      -d '{\"gid\":\"'$BOT_GROUP_PM_ID'\", \"tid\":\"'$BOT_THREAD_PM_ID'\", \"message\":{\"type\":\"text\",\"data\":\"Ui-Kit environment updated!\\nhttp://ui-kit.staging.ekomedia.technology/develop\"}}'"
+    - >-
+      curl -v -X POST $BOT_SERVER
+      -H "Authorization: Bearer $BOT_TOKEN"
+      -H "Content-Type: application/json"
+      -d '{"gid":"'$BOT_MERGED_GROUP'", "tid":"'$BOT_MERGED_THREAD'", "message":{"type":"text","data":"Ui-Kit environment updated!\nhttp://ui-kit.staging.ekomedia.technology/develop"}}'
   only:
     - develop
 
@@ -157,9 +163,10 @@ notice:
     - publish
   script:
     - apk --no-cache add curl
-    - "curl -X POST $BOT_SERVER
-      -H \"Authorization: Bearer $BOT_TOKEN\"
-      -H \"Content-Type: application/json\"
-      -d '{\"gid\":\"'$BOT_GROUP_RL_ID'\", \"tid\":\"'$BOT_THREAD_RL_ID'\", \"message\":{\"type\":\"text\",\"data\":\"Ui-Kit '$CI_COMMIT_TAG' released!\"}}'"
+    - >-
+      curl -X POST $BOT_SERVER
+      -H "Authorization: Bearer $BOT_TOKEN"
+      -H "Content-Type: application/json"
+      -d '{"gid":"'$BOT_RELEASE_GROUP'", "tid":"'$BOT_RELEASE_THREAD'", "message":{"type":"text","data":"Ui-Kit '"$CI_COMMIT_TAG"' released!"}}'
   rules:
     - if: '$CI_COMMIT_TAG =~ /(?i)^v[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/'
