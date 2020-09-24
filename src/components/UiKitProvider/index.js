@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
 
@@ -20,27 +21,29 @@ _changeSDKDefaultConfig({
 let client;
 
 const UiKitProvider = ({
+  apiKey,
+  userId,
+  displayName,
   customComponents = {},
   theme = {},
-  clientOptions,
   children /* TODO localization */,
 }) => {
   const SDKInfo = useMemo(() => {
     // TODO fix
     // initialize only one client
     if (!client) {
-      client = new EkoClient(clientOptions);
+      client = new EkoClient({ apiKey });
       // Register Session with EkoClient with userId and display name
       client.registerSession({
-        userId: 'Web-Test',
-        displayName: 'Web-Test',
+        userId,
+        displayName,
       });
     }
 
     return {
       client,
     };
-  }, [clientOptions]);
+  }, [apiKey, userId, displayName]);
 
   return (
     <>
@@ -62,6 +65,18 @@ const UiKitProvider = ({
       </Localization>
     </>
   );
+};
+
+UiKitProvider.propTypes = {
+  apiKey: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  displayName: PropTypes.string,
+  customComponents: PropTypes.object,
+  theme: PropTypes.shape({
+    palette: PropTypes.object,
+    typography: PropTypes.object,
+  }),
+  children: PropTypes.node,
 };
 
 export default UiKitProvider;

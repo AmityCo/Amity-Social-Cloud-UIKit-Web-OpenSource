@@ -82,6 +82,7 @@
     "javascript-time-ago": "^2.0.13",
     "lodash": "^4.17.19",
     "polished": "^3.6.6",
+    "prop-types": "^15.7.2",
     "react-autosize-textarea": "^7.1.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^6.6.0",

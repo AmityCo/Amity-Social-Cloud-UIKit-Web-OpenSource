@@ -2,7 +2,11 @@ import React from 'react';
 import UiKitProvider from '../src/components/UiKitProvider';
 
 const UiKitDecorator = storyFn => (
-  <UiKitProvider clientOptions={{ apiKey: 'b3bee858328ef4344a308e4a5a091688d05fdee2be353a2b' }}>
+  <UiKitProvider
+    apiKey={process.env.STORYBOOK_SDK_API_KEY}
+    userId="Web-Test"
+    displayName="Web-Test"
+  >
     {storyFn()}
   </UiKitProvider>
 );
