@@ -41,6 +41,7 @@ export const Avatar = styled(UIAvatar).attrs({
 
 export const CommunityName = styled.div`
   margin-top: 10px;
+  word-break: break-all;
   ${({ theme }) => theme.typography.headline}
 `;
 
@@ -55,6 +56,7 @@ export const Count = styled.span`
 
 export const Description = styled.div`
   margin: 8px 0 12px;
+  word-break: break-all;
 `;
 
 export const JoinButton = styled(PrimaryButton)`

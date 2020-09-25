@@ -168,6 +168,7 @@ export const CommunityItems = styled.div`
 
 export const Description = styled.div`
   margin-top: 5px;
+  word-break: break-all;
 `;
 
 export const Count = styled.span`
