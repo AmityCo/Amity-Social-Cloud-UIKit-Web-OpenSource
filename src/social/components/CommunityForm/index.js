@@ -91,6 +91,10 @@ const CommunityForm = ({
       setError('name', { message: 'This name has already been taken' });
       return;
     }
+    if (!data.name.trim()) {
+      setError('name', { message: 'Name cannot be empty' });
+      return;
+    }
     if (data.permission === PRIVATE && data.members.length === 0) {
       setError('members', { message: 'Please select at least one member' });
       return;
