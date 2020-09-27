@@ -95,7 +95,11 @@ const UserSelector = ({ value: userIds, onChange }) => {
   );
 
   return (
-    <SelectorPopover isOpen={isOpen} onClickOutside={close} content={list}>
+    <SelectorPopover
+      isOpen={isOpen && selectorUsersList.length}
+      onClickOutside={close}
+      content={list}
+    >
       <Selector onClick={open}>
         {selectedUsers.map(user => (
           <UserChip key={user.userId} user={user} onRemove={() => remove(user.userId)} />
