@@ -543,18 +543,21 @@ export const useCommunitiesMock = () => {
   const leaveCommunity = id =>
     setMyCommunities(myCommunities.filter(communityId => communityId !== id));
 
-  const addCommunity = newCommunity => {
+  const addCommunity = community => {
     const communityId = `c${Date.now()}`;
+    const newCommunity = {
+      communityId,
+      postsCount: 2357,
+      description,
+      ...community,
+    };
     setCommunities([
-      {
-        communityId,
-        postsCount: 2357,
-        description,
-        ...newCommunity,
-      },
+      newCommunity,
       ...communities,
     ]);
     joinCommunity(communityId);
+
+    return newCommunity;
   };
 
   const removeCommunity = communityId =>

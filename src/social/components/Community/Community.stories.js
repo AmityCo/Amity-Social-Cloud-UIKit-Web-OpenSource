@@ -81,6 +81,11 @@ const Pages = () => {
 
   const { addCommunity, editCommunity } = useCommunitiesMock();
 
+  const createCommunity = data => {
+    const newCommunity = addCommunity(data);
+    goToCommunity(newCommunity.communityId);
+  };
+
   return (
     <FeedLayout
       sideMenu={
@@ -158,7 +163,7 @@ const Pages = () => {
       </Switch>
       <CommunityCreationModal
         isOpen={communityCreation}
-        onSubmit={addCommunity}
+        onSubmit={createCommunity}
         onClose={closeCommunityCreationModal}
       />
     </FeedLayout>
