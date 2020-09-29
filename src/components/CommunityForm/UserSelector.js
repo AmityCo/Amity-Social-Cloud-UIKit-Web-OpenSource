@@ -14,15 +14,18 @@ import {
   CloseIcon,
 } from './styles';
 
+const DEFAULT_DISPLAY_NAME = 'Anonymous';
+
 const UserChip = ({ user, onRemove }) => (
   <Chip>
-    <Avatar size="tiny" avatar={user.avatar} /> {user.name} <CloseIcon onClick={onRemove} />
+    <Avatar size="tiny" avatar={user.avatar} /> {user.displayName || DEFAULT_DISPLAY_NAME}{' '}
+    <CloseIcon onClick={onRemove} />
   </Chip>
 );
 
 const User = ({ user }) => (
   <>
-    <Avatar size="tiny" avatar={user.avatar} /> {user.name}
+    <Avatar size="tiny" avatar={user.avatar} /> {user.displayName || DEFAULT_DISPLAY_NAME}
   </>
 );
 

@@ -4,7 +4,6 @@ import { faPlus, faPencil } from '@fortawesome/pro-regular-svg-icons';
 
 import UIAvatar from 'components/Avatar';
 import UIOptions from 'components/Options';
-import { PrimaryButton } from 'components/Button';
 
 export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
   font-size: 15px;
@@ -59,14 +58,6 @@ export const Description = styled.div`
   margin: 8px 0 12px;
 `;
 
-export const SubmitButton = styled(PrimaryButton).attrs({
-  type: 'submit',
-})`
-  padding: 10px 16px;
-`;
-
-export const Footer = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
-  padding: 12px 16px;
-  display: flex;
+export const ButtonContainer = styled.div`
+  padding: 12px 0;
 `;

@@ -9,9 +9,6 @@ const commonButtonStyles = ({ theme }) => css`
   cursor: pointer;
   transition: background-color 0.3s;
   ${theme.typography.bodyBold}
-  &:disabled {
-    cursor: auto;
-  }
   ${({ fullWidth }) => fullWidth && 'width: 100%;'}
   ${({ centered }) => centered && 'justify-content: center;'}
 `;

@@ -7,7 +7,7 @@ const description =
 
 export const testUser = {
   userId: 'u1',
-  name: 'Lalisa Manoban',
+  displayName: 'Lalisa Manoban',
   avatar:
     'https://cdn1.i-scmp.com/sites/default/files/styles/768x768/public/images/methode/2018/07/26/bf01d32e-8fcd-11e8-ad1d-4615aa6bc452_1280x720_204951.jpg?itok=lSmaQVob',
   description,
@@ -17,21 +17,21 @@ export const testUsers = [
   testUser,
   {
     userId: 'u2',
-    name: 'Jennie Kim',
+    displayName: 'Jennie Kim',
     avatar:
       'https://upload.wikimedia.org/wikipedia/commons/9/99/Jennie_Kim_for_Marie_Claire_Korea_Magazine_on_October_9%2C_2018_%285%29.png',
     description,
   },
   {
     userId: 'u3',
-    name: 'Rosé',
+    displayName: 'Rosé',
     avatar:
       'https://img1.nickiswift.com/img/gallery/this-is-how-much-blackpinks-rose-is-actually-worth/intro-1579709224.jpg',
     description,
   },
   {
     userId: 'u4',
-    name: 'Jisoo',
+    displayName: 'Jisoo',
     avatar:
       'https://www.allkpop.com/upload/2020/08/content/280446/1598604401-img-20200828-155652.jpg',
     description,

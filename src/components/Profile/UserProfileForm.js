@@ -1,3 +1,6 @@
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+
 import {
   AboutTextarea,
   Avatar,
@@ -16,10 +19,10 @@ import {
   LabelCounterWrapper,
   TextField,
 } from 'components/CommunityForm/styles';
-import { Controller, useForm } from 'react-hook-form';
-import React from 'react';
-import { getCommunities } from 'mock/index';
-import { Footer, SubmitButton } from './styles';
+
+import { PrimaryButton } from 'components/Button';
+
+import { ButtonContainer } from './styles';
 
 const AvatarUpload = ({ value }) => (
   <AvatarUploadContainer>
@@ -38,32 +41,23 @@ const FormBlock = ({ title, children }) => (
 );
 
 export const UserProfileForm = ({ user, onSubmit, className }) => {
-  const { register, handleSubmit, errors, setError, watch, control } = useForm({
-    defaultValues: user || {
+  const { register, handleSubmit, errors, watch, control } = useForm({
+    defaultValues: {
+      ...user,
+      description: '',
+    } || {
       avatar:
         'https://www.gardeningknowhow.com/wp-content/uploads/2017/07/hardwood-tree-400x266.jpg',
-      name: '',
+      displayName: '',
       description: '',
     },
   });
 
-  const currentName = watch('name');
+  const currentName = watch('displayName');
   const description = watch('description');
 
-  const communities = getCommunities();
-
-  const validateNameAndSubmit = async data => {
-    const communityNames = communities.map(({ name }) => name);
-    if (communityNames.includes(data.name)) {
-      setError('name', { message: 'This name has already been taken' });
-      return;
-    }
-
-    onSubmit(data);
-  };
-
   return (
-    <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)}>
+    <Form className={className} onSubmit={handleSubmit(onSubmit)}>
       <FormBody>
         <FormBlock title="General">
           <Controller name="avatar" render={AvatarUpload} control={control} />
@@ -102,11 +96,11 @@ export const UserProfileForm = ({ user, onSubmit, className }) => {
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
+          <ButtonContainer>
+            <PrimaryButton type="submit">Save</PrimaryButton>
+          </ButtonContainer>
         </FormBlock>
       </FormBody>
-      <Footer>
-        <SubmitButton>Save</SubmitButton>
-      </Footer>
     </Form>
   );
 };

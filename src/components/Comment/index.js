@@ -8,6 +8,8 @@ import StyledComment from './Comment.styles';
 import useCommentSdk from './useCommentSdk';
 import { CommentBlock, CommentContainer, ReplyContainer } from './styles';
 
+const DEFAULT_DISPLAY_NAME = 'Anonymous';
+
 const Comment = ({ commentId, isReplyComment = false }) => {
   const [isReplying, setIsReplying] = useState(false);
   const {
@@ -30,7 +32,7 @@ const Comment = ({ commentId, isReplyComment = false }) => {
       <ReplyContainer>
         <StyledComment
           commentId={comment.commentId}
-          authorName={commentAuthor.displayName || commentAuthor.userId}
+          authorName={commentAuthor.displayName || commentAuthor.userId || DEFAULT_DISPLAY_NAME}
           authorAvatar={commentAuthor.avatar}
           createdAt={comment.createdAt}
           text={comment.data.text}
@@ -46,7 +48,7 @@ const Comment = ({ commentId, isReplyComment = false }) => {
       <CommentContainer>
         <StyledComment
           commentId={comment.commentId}
-          authorName={commentAuthor.displayName}
+          authorName={commentAuthor.displayName || DEFAULT_DISPLAY_NAME}
           authorAvatar={commentAuthor.avatar}
           createdAt={comment.createdAt}
           text={comment.data.text}

@@ -70,7 +70,7 @@ export const CommunityProfileBar = customizableComponent(
           <Description>{description}</Description>
         </Truncate>
         {!isMine && (
-          <PrimaryButton fullWidth centered onClick={() => joinCommunity(communityId)}>
+          <PrimaryButton centered fullWidth onClick={() => joinCommunity(communityId)}>
             <PlusIcon /> Join
           </PrimaryButton>
         )}
@@ -92,7 +92,7 @@ export const UserProfileBar = ({ user = {}, editProfile }) => {
         <Count>{toHumanString(posts.length)}</Count> posts
       </div>
       <Description>{description}</Description>
-      <Button fullWidth centered onClick={() => editProfile(userId)}>
+      <Button centered fullWidth onClick={() => editProfile(userId)}>
         <PencilIcon /> Edit profile
       </Button>
     </Container>

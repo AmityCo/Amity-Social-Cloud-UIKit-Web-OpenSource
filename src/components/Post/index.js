@@ -32,6 +32,8 @@ const CONTENT_POST_MAX_LINES = 3;
 
 const userRepo = new UserRepository();
 
+const DEFAULT_DISPLAY_NAME = 'Anonymous';
+
 const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -53,7 +55,7 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
 
   const handleDeletePost = async () => {
     try {
-      const isDeletedSuccess = await postRepo.deletePost(postId);
+      const isDeletedSuccess = await PostRepository.deletePost(postId);
       if (!isDeletedSuccess) {
         throw new Error('Unable to to delete post');
       }
@@ -87,7 +89,7 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
         <PostAuthor onClick={() => onPostAuthorClick(postAuthor.userId)}>
           <Avatar avatar={postAuthor.avatar} />
           <PostInfo>
-            <AuthorName>{postAuthor.displayName}</AuthorName>
+            <AuthorName>{postAuthor.displayName || DEFAULT_DISPLAY_NAME}</AuthorName>
             <Time date={createdAt} />
           </PostInfo>
         </PostAuthor>

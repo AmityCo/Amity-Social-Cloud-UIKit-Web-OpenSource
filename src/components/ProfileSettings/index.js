@@ -4,7 +4,7 @@ import { UserProfileForm } from 'components/Profile/UserProfileForm';
 import { ConditionalRender } from 'components/ConditionalRender';
 import { BackLink } from 'components/BackLink';
 import { customizableComponent } from 'hocs/customization';
-import { getUser } from 'mock/index';
+import { getUser } from 'helpers/getUser';
 import {
   ProfileSettingsTabs,
   Container,
@@ -23,6 +23,7 @@ const tabs = {
 
 const ProfileSettings = ({ userId }) => {
   const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
+
   const currentUser = getUser(userId);
 
   const handleSubmit = data => {
