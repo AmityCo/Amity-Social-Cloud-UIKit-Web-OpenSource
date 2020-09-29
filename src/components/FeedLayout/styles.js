@@ -5,4 +5,9 @@ export const LayoutContainer = styled.div`
   background: #f7f7f8;
   height: 90vh;
   overflow: hidden;
+  & > *:nth-child(2) {
+    width: 100%;
+    padding: 10px;
+    overflow-y: scroll;
+  }
 `;

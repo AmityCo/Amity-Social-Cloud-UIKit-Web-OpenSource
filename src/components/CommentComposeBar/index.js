@@ -16,17 +16,13 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, user = testUser }
 
   const AddComment = () => {
     if (text === '') return;
-    onSubmit({
-      author: user,
-      text,
-      createdAt: Date.now(),
-    });
+    onSubmit(text);
     setText('');
   };
 
   const isEmpty = text === '';
 
-  const placeholder = userToReply ? `Reply to ${userToReply.name}` : 'Say something nice';
+  const placeholder = userToReply ? `Reply to ${userToReply}` : 'Say something nice';
   const submitButtonText = userToReply ? 'Reply' : 'Add comment';
 
   return (

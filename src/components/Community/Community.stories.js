@@ -7,6 +7,7 @@ import {
   useHistory,
   useRouteMatch,
 } from 'react-router-dom';
+import { EkoPostTargetType } from 'eko-sdk';
 
 import { useCommunitiesMock } from 'mock';
 
@@ -16,8 +17,7 @@ import FeedSideMenu, { SELECTION_TYPES } from 'components/FeedSideMenu';
 import ExploreHome from 'components/ExploreHome';
 import CategoryPage from 'components/ExploreHome/CategoryPage';
 import CommunityCreationModal from 'components/CommunityCreationModal';
-import UserFeed from './UserFeed';
-import NewsFeed from './NewsFeed';
+import Feed from 'components/Feed';
 import CommunityFeed from '.';
 
 export default {
@@ -82,10 +82,10 @@ const Pages = () => {
     >
       <Switch>
         <Route path="/" exact>
-          <UserFeed onPostAuthorClick={navigateTo} />
+          <Feed targetType={EkoPostTargetType.MyFeed} showPostCompose />
         </Route>
         <Route path="/news" exact>
-          <NewsFeed onPostAuthorClick={navigateTo} />
+          <Feed targetType={EkoPostTargetType.GlobalFeed} showPostCompose />
         </Route>
         <Route path="/explore" exact>
           <ExploreHome

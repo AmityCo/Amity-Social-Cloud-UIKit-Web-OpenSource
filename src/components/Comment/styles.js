@@ -75,6 +75,7 @@ export const Content = styled.div``;
 export const CommentHeader = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 5px;
 `;
 
 export const CommentContent = styled.div`
@@ -110,6 +111,7 @@ export const InteractionBar = styled.div`
   display: flex;
   align-items: center;
   padding: 2px 0;
+  margin-left: -10px;
 `;
 
 export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`

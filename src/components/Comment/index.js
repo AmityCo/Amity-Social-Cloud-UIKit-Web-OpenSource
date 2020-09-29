@@ -1,159 +1,73 @@
+/* eslint-disable import/no-cycle */
 import React, { useState } from 'react';
-import Truncate from 'react-truncate-markup';
-
+import PropTypes from 'prop-types';
 import { customizableComponent } from 'hocs/customization';
+import CommentComposeBar from 'components/CommentComposeBar';
+import CommentReplies from './CommentReplies';
+import StyledComment from './Comment.styles';
+import useCommentSdk from './useCommentSdk';
+import { CommentBlock, CommentContainer, ReplyContainer } from './styles';
 
-import Linkify from 'components/Linkify';
-import { notification } from 'components/Notification';
+const Comment = ({ commentId, isReplyComment = false }) => {
+  const [isReplying, setIsReplying] = useState(false);
+  const {
+    isCommentReady,
+    comment,
+    commentAuthor,
+    commentReplies,
+    handleReportComment,
+    handleReplyToComment,
+  } = useCommentSdk({ commentId });
 
-import {
-  Avatar,
-  CommentComposeBar,
-  Content,
-  CommentBlock,
-  CommentContainer,
-  ReplyContainer,
-  CommentHeader,
-  CommentContent,
-  AuthorName,
-  CommentDate,
-  ReadMoreButton,
-  InteractionBar,
-  LikeIcon,
-  LikeButton,
-  SolidLikeIcon,
-  ReplyIcon,
-  ReplyButton,
-  Options,
-} from './styles';
-
-const COMMENT_MAX_LINES = 8;
-
-const onReportClick = () =>
-  notification.success({
-    content: 'Report Sent',
-  });
-
-const CommentText = ({ children }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const expand = () => setIsExpanded(true);
-
-  return (
-    <Linkify>
-      {isExpanded ? (
-        <CommentContent>{children}</CommentContent>
-      ) : (
-        <Truncate
-          lines={COMMENT_MAX_LINES}
-          ellipsis={<ReadMoreButton onClick={expand}>...Read more</ReadMoreButton>}
-        >
-          <CommentContent>{children}</CommentContent>
-        </Truncate>
-      )}
-    </Linkify>
-  );
-};
-
-const ReplyComment = ({
-  className,
-  comment,
-  comment: { author, createdAt, text, isLiked, likes = 0 },
-  onEdit,
-}) => {
-  const toggleLike = () => {
-    onEdit({
-      ...comment,
-      isLiked: !isLiked,
-    });
+  const onClickReply = () => {
+    setIsReplying(true);
   };
 
-  const totalLikes = likes + (isLiked ? 1 : 0);
+  if (!isCommentReady) return null;
 
-  return (
-    <ReplyContainer className={className}>
-      <Avatar avatar={author.avatar} />
-      <Content>
-        <CommentHeader>
-          <AuthorName>{author.name}</AuthorName>
-          <CommentDate date={createdAt} />
-        </CommentHeader>
-        <CommentText>{text}</CommentText>
-        <InteractionBar>
-          <LikeButton onClick={toggleLike} active={isLiked}>
-            {isLiked ? <SolidLikeIcon /> : <LikeIcon />} {!!totalLikes && totalLikes}
-          </LikeButton>
-          <Options options={[{ name: 'Report comment', action: onReportClick }]} />
-        </InteractionBar>
-      </Content>
-    </ReplyContainer>
-  );
-};
-
-const Comment = ({
-  className,
-  comment,
-  comment: { author, createdAt, replies, text, isLiked, likes = 0 },
-  onEdit,
-}) => {
-  const [userToReply, setUserToReply] = useState(null);
-  const handleReply = user => setUserToReply(user);
-
-  const toggleLike = () => {
-    onEdit({
-      ...comment,
-      isLiked: !isLiked,
-    });
-  };
-
-  const addReply = replyComment => {
-    onEdit({
-      ...comment,
-      replies: [
-        ...comment.replies,
-        {
-          id: Date.now(),
-          ...replyComment,
-        },
-      ],
-    });
-  };
-
-  const editReply = updatedReply => {
-    onEdit({
-      ...comment,
-      replies: replies.map(reply => (reply.id === updatedReply.id ? updatedReply : reply)),
-    });
-  };
-
-  const totalLikes = likes + (isLiked ? 1 : 0);
+  if (isReplyComment) {
+    return (
+      <ReplyContainer>
+        <StyledComment
+          commentId={comment.commentId}
+          authorName={commentAuthor.displayName || commentAuthor.userId}
+          authorAvatar={commentAuthor.avatar}
+          createdAt={comment.createdAt}
+          text={comment.data.text}
+          handleReportComment={handleReportComment}
+          isReplyComment
+        />
+      </ReplyContainer>
+    );
+  }
 
   return (
     <CommentBlock>
-      <CommentContainer className={className}>
-        <Avatar avatar={author.avatar} />
-        <Content>
-          <CommentHeader>
-            <AuthorName>{author.name}</AuthorName>
-            <CommentDate date={createdAt} />
-          </CommentHeader>
-          <CommentText>{text}</CommentText>
-          <InteractionBar>
-            <LikeButton onClick={toggleLike} active={isLiked}>
-              {isLiked ? <SolidLikeIcon /> : <LikeIcon />} {!!totalLikes && totalLikes}
-            </LikeButton>
-            <ReplyButton onClick={() => handleReply(author)}>
-              <ReplyIcon /> Reply
-            </ReplyButton>
-            <Options options={[{ name: 'Report comment', action: onReportClick }]} />
-          </InteractionBar>
-        </Content>
+      <CommentContainer>
+        <StyledComment
+          commentId={comment.commentId}
+          authorName={commentAuthor.displayName}
+          authorAvatar={commentAuthor.avatar}
+          createdAt={comment.createdAt}
+          text={comment.data.text}
+          onClickReply={onClickReply}
+          handleReportComment={handleReportComment}
+        />
       </CommentContainer>
-      {replies.map(reply => (
-        <ReplyComment key={reply.id} comment={reply} onEdit={editReply} />
-      ))}
-      {userToReply && <CommentComposeBar userToReply={userToReply} onSubmit={addReply} />}
+      <CommentReplies replyIds={commentReplies} />
+      {isReplying && (
+        <CommentComposeBar
+          userToReply={commentAuthor.displayName}
+          onSubmit={handleReplyToComment}
+        />
+      )}
     </CommentBlock>
   );
+};
+
+Comment.propTypes = {
+  commentId: PropTypes.string.isRequired,
+  isReplyComment: PropTypes.bool,
 };
 
 export default customizableComponent('Comment', Comment);

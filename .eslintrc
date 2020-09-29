@@ -12,7 +12,9 @@
     // Allow <> instead of <React.Fragment>
     "react/jsx-fragments": "off",
     // Mainly to allow dependencies used in some files to remain as devDependencies.
-    "import/no-extraneous-dependencies": "off"
+    "import/no-extraneous-dependencies": "off",
+    // Prefer showing through default arguments.
+    "react/require-default-props": "off"
   },
   "env": {
     "jest": true

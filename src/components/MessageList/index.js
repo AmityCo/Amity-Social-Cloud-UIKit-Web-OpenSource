@@ -4,7 +4,7 @@ import { MessageRepository } from 'eko-sdk';
 
 import { customizableComponent } from 'hocs/customization';
 import withSDK from 'hocs/withSDK';
-import usePaginatedLiveObject from 'hooks/usePaginatedLiveObject';
+import useLiveCollection from 'hooks/useLiveCollection';
 import OutgoingMessage from 'components/Message/OutgoingMessage';
 import IncomingMessage from 'components/Message/IncomingMessage';
 
@@ -13,7 +13,7 @@ import { InfiniteScrollContainer, MessageListContainer } from './styles';
 const messageRepo = new MessageRepository();
 
 const MessageList = ({ client, channelId }) => {
-  const [messages, hasMore, loadMore] = usePaginatedLiveObject(
+  const [messages, hasMore, loadMore] = useLiveCollection(
     () => messageRepo.messagesForChannel({ channelId }),
     [],
   );

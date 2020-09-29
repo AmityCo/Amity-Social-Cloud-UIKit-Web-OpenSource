@@ -9,6 +9,9 @@ const commonButtonStyles = ({ theme }) => css`
   cursor: pointer;
   transition: background-color 0.3s;
   ${theme.typography.bodyBold}
+  &:disabled {
+    cursor: auto;
+  }
 `;
 
 export const DefaultButton = styled.button`

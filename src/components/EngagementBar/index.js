@@ -1,69 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { PostRepository, CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
 import { toHumanString } from 'human-readable-numbers';
 import { customizableComponent } from 'hocs/customization';
+import useLiveObject from 'hooks/useLiveObject';
 import { SecondaryButton } from 'components/Button';
-
+import PostLikeButton from 'components/PostLikeButton';
 import CommentComposeBar from 'components/CommentComposeBar';
 import Comment from 'components/Comment';
+import { LIKE_REACTION_KEY } from 'constants';
+import { EngagementBarContainer, Counters, InteractionBar, CommentIcon } from './styles';
 
-import { EngagementBarContainer, Counters, InteractionBar, LikeIcon, CommentIcon } from './styles';
+const commentRepo = new CommentRepository();
 
-const EngagementBar = ({ post, onPostEdit }) => {
-  const { isLiked, likes = 0, comments = [] } = post;
-
+const EngagementBar = ({ postId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const open = () => setIsOpen(true);
 
-  const toggleLike = () => {
-    onPostEdit({
-      ...post,
-      isLiked: !isLiked,
+  const post = useLiveObject(() => PostRepository.postForId(postId), {});
+  const isPostReady = !!post.postId;
+  const { comments = [] } = post;
+
+  const handleAddComment = commentText => {
+    commentRepo.createTextComment({
+      referenceType: EkoCommentReferenceType.Post,
+      referenceId: post.postId,
+      text: commentText,
     });
   };
 
-  const addComment = comment => {
-    onPostEdit({
-      ...post,
-      comments: [
-        ...comments,
-        {
-          id: Date.now(),
-          replies: [],
-          ...comment,
-        },
-      ],
-    });
-  };
+  const totalLikes = useMemo(() => {
+    if (!isPostReady) return 0;
+    return post.reactions[LIKE_REACTION_KEY] || 0;
+  }, [isPostReady, post]);
 
-  const editComment = updatedComment => {
-    onPostEdit({
-      ...post,
-      comments: comments.map(comment =>
-        comment.id === updatedComment.id ? updatedComment : comment,
-      ),
-    });
-  };
-
-  const totalLikes = likes + (isLiked ? 1 : 0);
+  const totalComments = useMemo(() => {
+    if (!isPostReady) return 0;
+    return post.commentsCount;
+  }, [isPostReady, post.commentsCount]);
 
   return (
     <EngagementBarContainer>
       <Counters>
-        {!!totalLikes && <span>{toHumanString(totalLikes)} likes</span>}
-        {!!comments.length && <span>{toHumanString(comments.length)} comments</span>}
+        {totalLikes > 0 && <span>{toHumanString(totalLikes)} likes</span>}
+        {totalComments > 0 && <span>{toHumanString(totalComments)} comments</span>}
       </Counters>
       <InteractionBar>
-        <SecondaryButton onClick={toggleLike} active={isLiked}>
-          <LikeIcon /> Like
-        </SecondaryButton>
+        {isPostReady && <PostLikeButton postId={post.postId} />}
         <SecondaryButton onClick={open}>
           <CommentIcon /> Comment
         </SecondaryButton>
       </InteractionBar>
-      {comments.map(comment => (
-        <Comment key={comment.id} comment={comment} onEdit={editComment} />
+      {comments.map(commentId => (
+        <Comment key={commentId} commentId={commentId} />
       ))}
-      {isOpen && <CommentComposeBar onSubmit={addComment} />}
+      {isOpen && <CommentComposeBar onSubmit={handleAddComment} />}
     </EngagementBarContainer>
   );
 };

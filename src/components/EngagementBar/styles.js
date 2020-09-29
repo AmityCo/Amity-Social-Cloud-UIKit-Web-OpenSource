@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faCommentAlt } from '@fortawesome/pro-regular-svg-icons';
+import { faCommentAlt } from '@fortawesome/pro-regular-svg-icons';
 
 export const EngagementBarContainer = styled.div`
   color: #818698;
@@ -17,11 +17,6 @@ export const Counters = styled.div`
 export const InteractionBar = styled.div`
   display: flex;
   padding: 2px 0;
-`;
-
-export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
-  font-size: 16px;
-  margin-right: 5px;
 `;
 
 export const CommentIcon = styled(FaIcon).attrs({ icon: faCommentAlt })`

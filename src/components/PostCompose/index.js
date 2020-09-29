@@ -1,169 +1,95 @@
 import React, { useState } from 'react';
-
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { PostRepository, EkoPostTargetType } from 'eko-sdk';
 import { customizableComponent } from 'hocs/customization';
-import { testUser, testFiles, testImages } from 'mock';
-import { notification } from 'components/Notification';
 import Files from 'components/Files';
 import Images from 'components/Images';
-
+import PostAsCommunity from './PostAsCommunity';
 import AuthorSelector from './AuthorSelector';
-
+import { isIdenticalAuthor } from './utils';
 import {
   PostComposeContainer,
   PostComposeTextarea,
   PostComposeTextareaWrapper,
-  ImagePostIcon,
-  FilePostIcon,
   Footer,
   FooterActionBar,
   PostContainer,
   PostButton,
-  PostAsCommunityContainer,
-  Checkbox,
-  Caption,
 } from './styles';
 
-const MAX_IMAGES = 10;
-const MAX_FILES = 10;
-
-const PostAsCommunity = ({ value, onChange }) => (
-  <PostAsCommunityContainer>
-    <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />
-    <div>
-      Post as community
-      <Caption>Enable this will publish the post on behalf of community account</Caption>
-    </div>
-  </PostAsCommunityContainer>
-);
-
-const getAuthorId = ({ communityId, userId } = {}) => communityId || userId;
-
-const isIdenticalAuthor = (a, b) => !!getAuthorId(a) && getAuthorId(a) === getAuthorId(b);
-
-const maxImagesWarning = () =>
-  notification.info({
-    content: 'You reached the maximum attachment of 10',
-  });
-
-const maxFilesWarning = () =>
-  notification.info({
-    content: 'The selected file is larger than 1GB. Please select a new file. ',
-  });
-
 const PostComposeBar = ({
-  user = testUser,
-  community,
-  communities,
+  targetType,
   targetId,
-  edit,
-  post = {},
-  onSubmit,
-  onSave,
-  className,
+  onCreateSuccess = null,
+  community = null,
+  communities = [],
+  className = '',
+  placeholder = "What's going on...",
 }) => {
+  const user = {};
   const [author, setAuthor] = useState(user);
-  const [text, setText] = useState(post.text || '');
-  const [files, setFiles] = useState(post.files || []);
-  const [images, setImages] = useState(post.images || []);
-
+  const [text, setText] = useState('');
+  const [files, setFiles] = useState([]);
+  const [images, setImages] = useState([]);
   const isEmpty = text.trim().length === 0 && files.length === 0 && images.length === 0;
+
+  const handleCreateTextPost = async () => {
+    if (isEmpty) return;
+    const newPostLiveObject = PostRepository.createTextPost({
+      text,
+      targetType,
+      targetId,
+    });
+
+    newPostLiveObject.on('dataStatusChanged', () => {
+      onCreateSuccess(newPostLiveObject.model.postId);
+      setText('');
+      newPostLiveObject.dispose();
+    });
+  };
 
   const isCommunityPost = isIdenticalAuthor(author, community);
 
   const setIsCommunityPost = shouldBeCommunityPost =>
     setAuthor(shouldBeCommunityPost ? community : user);
 
-  const createPost = () => {
-    if (isEmpty) return;
-    onSubmit({
-      postId: `p${Date.now()}`,
-      targetId: targetId || getAuthorId(author),
-      author,
-      text,
-      files,
-      images,
-      createdAt: Date.now(),
-    });
-    setText('');
-    setFiles([]);
-    setImages([]);
-  };
-
-  const updatePost = () => {
-    if (isEmpty) return;
-    onSave({
-      ...post,
-      text,
-      files,
-      images,
-      updateAt: Date.now(),
-    });
-  };
-
-  const addImage = () => {
-    const image = testImages[images.length % testImages.length];
-    setImages([...images, { id: Date.now(), ...image }]);
-  };
-
-  const addFile = () => {
-    const file = testFiles[files.length % testFiles.length];
-    setFiles([...files, { id: Date.now(), ...file }]);
-  };
-
-  const onRemoveFile = file => {
-    setFiles(files.filter(({ id }) => id !== file.id));
-  };
-
-  const onRemoveImage = image => {
-    setImages(images.filter(({ id }) => id !== image.id));
-  };
-
-  const canUploadImage = files.length === 0 && images.length < MAX_IMAGES;
-  const canUploadFile = images.length === 0 && files.length < MAX_FILES;
-
   return (
-    <PostComposeContainer className={className} edit={edit}>
-      {!edit && (
-        <AuthorSelector
-          author={author}
-          user={user}
-          communities={communities}
-          onChange={setAuthor}
-        />
-      )}
+    <PostComposeContainer className={cx('postComposeBar', className)}>
+      <AuthorSelector author={author} user={user} communities={communities} onChange={setAuthor} />
       <PostContainer>
-        <PostComposeTextareaWrapper edit={edit}>
+        <PostComposeTextareaWrapper>
           <PostComposeTextarea
-            placeholder="What's going on..."
+            placeholder={placeholder}
             type="text"
             value={text}
             onChange={e => setText(e.target.value)}
           />
 
-          {!!files.length && <Files editing files={files} onRemove={onRemoveFile} />}
-          {!!images.length && <Images editing images={images} onRemove={onRemoveImage} />}
+          {!!files.length && <Files editing files={files} onRemove={() => {}} />}
+          {!!images.length && <Images editing images={images} onRemove={() => {}} />}
         </PostComposeTextareaWrapper>
-        <Footer edit={edit}>
-          {!edit && !!community && (
-            <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
-          )}
+        <Footer>
+          {!!community && <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />}
           <FooterActionBar>
-            <ImagePostIcon
-              disabled={!canUploadImage}
-              onClick={canUploadImage ? addImage : maxImagesWarning}
-            />
-            <FilePostIcon
-              disabled={!canUploadFile}
-              onClick={canUploadFile ? addFile : maxFilesWarning}
-            />
-            <PostButton disabled={isEmpty} onClick={edit ? updatePost : createPost}>
-              {edit ? 'Save' : 'Post'}
+            <PostButton disabled={isEmpty} onClick={handleCreateTextPost}>
+              Post
             </PostButton>
           </FooterActionBar>
         </Footer>
       </PostContainer>
     </PostComposeContainer>
   );
+};
+
+PostComposeBar.propTypes = {
+  targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)).isRequired,
+  targetId: PropTypes.string,
+  onCreateSuccess: PropTypes.func,
+  community: PropTypes.object,
+  communities: PropTypes.array,
+  className: PropTypes.string,
+  placeholder: PropTypes.string,
 };
 
 export default customizableComponent('PostComposeBar', PostComposeBar);

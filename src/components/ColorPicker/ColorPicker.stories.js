@@ -3,7 +3,7 @@ import defaultTheme from 'components/UiKitProvider/theme/default-theme';
 import ColorPicker from '.';
 
 export default {
-  title: 'Color Picker',
+  title: 'Utilities/Color Picker',
   parameters: { layout: 'centered' },
 };
 
