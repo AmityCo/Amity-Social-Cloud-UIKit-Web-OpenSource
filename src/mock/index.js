@@ -2,11 +2,15 @@
 import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { v4 } from 'uuid';
 
+const description =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor leo et tortor tempor finibus. Phasellus ultrices nulla nec libero ornare bibendum. Etiam nibh tellus, egestas at molestie vel, egestas euismod justo. Duis non dui ipsum. Maecenas mollis sed erat et ultrices. Cras rhoncus bibendum erat, at volutpat justo. ';
+
 export const testUser = {
   userId: 'u1',
   name: 'Lalisa Manoban',
   avatar:
     'https://cdn1.i-scmp.com/sites/default/files/styles/768x768/public/images/methode/2018/07/26/bf01d32e-8fcd-11e8-ad1d-4615aa6bc452_1280x720_204951.jpg?itok=lSmaQVob',
+  description,
 };
 
 export const testUsers = [
@@ -16,18 +20,21 @@ export const testUsers = [
     name: 'Jennie Kim',
     avatar:
       'https://upload.wikimedia.org/wikipedia/commons/9/99/Jennie_Kim_for_Marie_Claire_Korea_Magazine_on_October_9%2C_2018_%285%29.png',
+    description,
   },
   {
     userId: 'u3',
     name: 'Rosé',
     avatar:
       'https://img1.nickiswift.com/img/gallery/this-is-how-much-blackpinks-rose-is-actually-worth/intro-1579709224.jpg',
+    description,
   },
   {
     userId: 'u4',
     name: 'Jisoo',
     avatar:
       'https://www.allkpop.com/upload/2020/08/content/280446/1598604401-img-20200828-155652.jpg',
+    description,
   },
   {
     userId: 'u5',
@@ -175,9 +182,6 @@ export const posts = [
     text: 'text text text',
   },
 ];
-
-const description =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor leo et tortor tempor finibus. Phasellus ultrices nulla nec libero ornare bibendum. Etiam nibh tellus, egestas at molestie vel, egestas euismod justo. Duis non dui ipsum. Maecenas mollis sed erat et ultrices. Cras rhoncus bibendum erat, at volutpat justo. ';
 
 const communities = [
   {
@@ -456,6 +460,8 @@ const myCommunityIdsAtom = atom({
   key: 'myCommunityIds',
   default: ['c4', 'c5', 'c6'],
 });
+
+export const getUser = userId => testUsers.find(user => user.userId === userId);
 
 export const getCommunities = () => useRecoilValue(communitiesAtom);
 export const getCommunity = communityId =>

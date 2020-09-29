@@ -18,6 +18,8 @@ SimpleButton.args = {
   label: 'hello world',
   variant: 'primary',
   disabled: false,
+  fullWidth: false,
+  centered: false,
 };
 
 SimpleButton.argTypes = {
@@ -33,6 +35,16 @@ SimpleButton.argTypes = {
     },
   },
   disabled: {
+    control: {
+      type: 'boolean',
+    },
+  },
+  fullWidth: {
+    control: {
+      type: 'boolean',
+    },
+  },
+  centered: {
     control: {
       type: 'boolean',
     },

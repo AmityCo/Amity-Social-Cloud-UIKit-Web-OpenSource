@@ -18,6 +18,7 @@ import ExploreHome from 'components/ExploreHome';
 import CategoryPage from 'components/ExploreHome/CategoryPage';
 import CommunityCreationModal from 'components/CommunityCreationModal';
 import CommunitySettings from 'components/CommunitySettings';
+import ProfileSettings from 'components/ProfileSettings';
 
 import Feed from 'components/Feed';
 import CommunityFeed from '.';
@@ -30,10 +31,13 @@ const Pages = () => {
   const location = useLocation();
   const history = useHistory();
   const { params = {} } =
-    useRouteMatch('/community/:communityId') || useRouteMatch('/category/:categoryId') || {};
-  const { communityId, categoryId } = params;
+    useRouteMatch('/community/:communityId') ||
+    useRouteMatch('/category/:categoryId') ||
+    useRouteMatch('/profile/:userId') ||
+    {};
+  const { communityId, categoryId, userId } = params;
 
-  const goToUserFeed = () => history.push(`/`);
+  const goToUserFeed = id => history.push(`/profile/${id}`);
   const goToNewsFeed = () => history.push(`/news`);
   const goToExplore = () => history.push(`/explore`);
   const onCategoryClick = id => {
@@ -66,6 +70,8 @@ const Pages = () => {
     if (userOrCommunity.communityId) goToCommunity(userOrCommunity.communityId);
   };
 
+  const editProfile = id => history.push(`/profile/${id}/edit`);
+
   const onEditCommunityClick = id => {
     history.push(`/community/${id}/edit`);
   };
@@ -90,7 +96,7 @@ const Pages = () => {
     >
       <Switch>
         <Route path="/" exact>
-          <Feed targetType={EkoPostTargetType.MyFeed} onPostAuthorClick={navigateTo} blockRouteChange={blockRouteChange} showPostCompose />
+          <Feed targetType={EkoPostTargetType.MyFeed} onPostAuthorClick={navigateTo} editProfile={editProfile} blockRouteChange={blockRouteChange} showPostCompose />
         </Route>
         <Route path="/news" exact>
           <Feed targetType={EkoPostTargetType.GlobalFeed} onPostAuthorClick={navigateTo} blockRouteChange={blockRouteChange} showPostCompose />
@@ -127,6 +133,12 @@ const Pages = () => {
             onMemberClick={navigateTo}
             blockRouteChange={blockRouteChange}
           />
+        </Route>
+        <Route path="/profile/:userId" exact>
+          <UserFeed onPostAuthorClick={navigateTo} userId={userId} editProfile={editProfile} />
+        </Route>
+        <Route path="/profile/:userId/edit">
+          <ProfileSettings userId={userId} />
         </Route>
       </Switch>
       <CommunityCreationModal

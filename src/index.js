@@ -8,7 +8,6 @@ import EkoComment from './components/Comment';
 import EkoCommentComposeBar from './components/CommentComposeBar';
 import EkoCommentLikeButton from './components/CommentLikeButton';
 import EkoCommunity from './components/Community';
-import EkoCommunityInformation from './components/CommunityInformation';
 import EkoCommunityItem from './components/CommunityItem';
 import EkoEmptyFeed from './components/EmptyFeed';
 import EkoEngagementBar from './components/EngagementBar';
@@ -37,7 +36,6 @@ export {
   EkoCommentComposeBar,
   EkoCommentLikeButton,
   EkoCommunity,
-  EkoCommunityInformation,
   EkoCommunityItem,
   EkoEmptyFeed,
   EkoEngagementBar,

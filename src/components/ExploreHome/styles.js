@@ -231,11 +231,8 @@ export const BackButton = styled(SecondaryButton)`
   padding: 4px 12px 4px 5px;
 `;
 
-export const ViewAllButton = styled(SecondaryButton)`
+export const ViewAllButton = styled(SecondaryButton).attrs({ centered: true, fullWidth: true })`
   border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
   padding: 18px;
-  width: 100%;
   border-radius: 0;
-  align-items: center;
-  justify-content: center;
 `;

@@ -4,7 +4,7 @@ import { customizableComponent } from 'hocs/customization';
 import withSDK from 'hocs/withSDK';
 
 import { getCommunities, usePostsMock } from 'mock';
-import CommunityInformation from 'components/CommunityInformation';
+import { CommunityProfileBar } from 'components/Profile';
 import EmptyFeed from 'components/EmptyFeed';
 
 import CommunityMembers from './CommunityMembers';
@@ -80,7 +80,7 @@ const CommunityFeed = ({
           />
         )}
       </Feed>
-      <CommunityInformation
+      <CommunityProfileBar
         onEditCommunityClick={onEditCommunityClick}
         community={currentCommunity}
       />
