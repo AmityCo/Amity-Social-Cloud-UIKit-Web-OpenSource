@@ -24,6 +24,7 @@ module.exports = (_, argv) => ({
   ].filter(Boolean),
   resolve: {
     alias: {
+      '~': path.resolve(__dirname, 'src'),
       components: path.resolve(__dirname, 'src/components'),
       icons: path.resolve(__dirname, 'src/icons'),
       hocs: path.resolve(__dirname, 'src/hocs'),

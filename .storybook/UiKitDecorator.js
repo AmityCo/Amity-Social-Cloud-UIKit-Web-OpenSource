@@ -1,5 +1,5 @@
 import React from 'react';
-import UiKitProvider from '../src/components/UiKitProvider';
+import UiKitProvider from '../src/core/providers/UiKitProvider';
 
 const UiKitDecorator = storyFn => (
   <UiKitProvider

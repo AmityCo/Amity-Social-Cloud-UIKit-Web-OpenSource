@@ -1,4 +1,10 @@
-Installation
-Add the ui kit to your repository via npm: npm install upstra-uikit --save.
+# Eko Ui-Kit for Web
 
-Installing the web SDK requires you to use a javascript package manager such as npm or yarn. If your current build system does not use package managers, please contact us at developer@ekoapp.com.
+## Installation
+
+- `npm install --save upstra-uikit`
+- `yarn add upstra-uikit`
+
+## Getting started
+
+Please refer to our online documentation at https://docs.upstra.co or contact a Ui-Kit representative at **developers@amity.co** for support.

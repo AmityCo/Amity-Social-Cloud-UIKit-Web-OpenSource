@@ -1,6 +1,6 @@
 import { UserRepository } from 'eko-sdk';
 
-import { testUser } from 'mock';
+import { testUser } from '~/mock';
 
 export const getUser = userId => {
   if (userId) {

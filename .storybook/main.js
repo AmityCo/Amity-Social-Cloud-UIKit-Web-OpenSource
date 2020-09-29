@@ -10,6 +10,7 @@ module.exports = {
     '@storybook/addon-actions',
     '@storybook/addon-viewport',
     '@storybook/addon-a11y',
+    '@storybook/addon-backgrounds',
   ],
   webpackFinal: async config => {
     config.plugins.push(
