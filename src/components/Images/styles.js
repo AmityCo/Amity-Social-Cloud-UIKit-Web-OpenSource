@@ -94,6 +94,17 @@ export const ProgressBar = styled.div`
   z-index: 1;
 `;
 
+export const LoadingOverlay = styled.div`
+  background: ${({ theme }) => theme.palette.base.shade4};
+  width: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0.5;
+  z-index: 1;
+`;
+
 export const NumberOfHiddenImagesOverlay = styled.div`
   position: absolute;
   right: 0;

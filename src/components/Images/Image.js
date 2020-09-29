@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { customizableComponent } from 'hocs/customization';
 
-import { ImageContainer, ProgressBar, RemoveIcon, NumberOfHiddenImagesOverlay } from './styles';
+import { ImageContainer, RemoveIcon, NumberOfHiddenImagesOverlay, LoadingOverlay } from './styles';
 
 const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
   // simulate progress animation
@@ -19,12 +19,14 @@ const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
     onRemove(image);
   };
 
+  const showOverlay = progress < 100;
+
   return (
     <ImageContainer editing={editing} onClick={onClick}>
       {numberOfHiddenImages > 0 && (
         <NumberOfHiddenImagesOverlay>+ {numberOfHiddenImages}</NumberOfHiddenImagesOverlay>
       )}
-      <ProgressBar progress={progress} />
+      {showOverlay && <LoadingOverlay />}
       <img src={image.url} alt="" />
       {!!onRemove && <RemoveIcon onClick={removeImage} />}
     </ImageContainer>
