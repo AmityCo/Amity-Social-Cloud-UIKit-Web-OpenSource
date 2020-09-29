@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { PostRepository, EkoPostTargetType } from 'eko-sdk';
@@ -6,6 +6,9 @@ import { customizableComponent } from 'hocs/customization';
 import Files from 'components/Files';
 import Images from 'components/Images';
 import PostAsCommunity from './PostAsCommunity';
+
+import { confirm } from 'components/Confirm';
+import { isEqual } from 'helpers';
 import AuthorSelector from './AuthorSelector';
 import { isIdenticalAuthor } from './utils';
 import {
@@ -26,15 +29,55 @@ const PostComposeBar = ({
   communities = [],
   className = '',
   placeholder = "What's going on...",
+  edit,
+  post = { text: '', files: [], images: [] },
+  onSubmit,
+  onSave,
+  className,
+  blockRouteChange,
 }) => {
   const user = {};
   const [author, setAuthor] = useState(user);
-  const [text, setText] = useState('');
-  const [files, setFiles] = useState([]);
-  const [images, setImages] = useState([]);
+  const [text, setText] = useState(post.text);
+  const [files, setFiles] = useState(post.files);
+  const [images, setImages] = useState(post.images);
+
+  const [isDirty, markDirty] = useState(false);
+
   const isEmpty = text.trim().length === 0 && files.length === 0 && images.length === 0;
 
-  const handleCreateTextPost = async () => {
+  const isCommunityPost = isIdenticalAuthor(author, community);
+
+  const onConfirm = goToNextPage => () => {
+    blockRouteChange(() => true);
+    goToNextPage();
+    markDirty(false);
+  };
+
+  blockRouteChange(goToNextPage => {
+    if (isDirty) {
+      confirm({
+        title: 'Leave without finishing?',
+        content: 'Your progress won’t be saved. Are you sure to leave this page now?',
+        cancelText: 'Continue editing',
+        okText: 'Leave',
+        onOk: onConfirm(goToNextPage),
+      });
+    }
+
+    return !isDirty;
+  });
+
+  useEffect(() => {
+    markDirty(
+      !isEqual(text, post.text) || !isEqual(files, post.files) || !isEqual(images, post.images),
+    );
+  }, [text, files, images]);
+
+  const setIsCommunityPost = shouldBeCommunityPost =>
+    setAuthor(shouldBeCommunityPost ? community : user);
+
+  const createPost = () => {
     if (isEmpty) return;
     const newPostLiveObject = PostRepository.createTextPost({
       text,

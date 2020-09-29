@@ -30,6 +30,7 @@ module.exports = (_, argv) => ({
       hooks: path.resolve(__dirname, 'src/hooks'),
       mock: path.resolve(__dirname, 'src/mock'),
       constants: path.resolve(__dirname, 'src/constants'),
+      helpers: path.resolve(__dirname, 'src/helpers'),
     },
     extensions: ['.js', '.jsx', '.css', '.svg'],
   },

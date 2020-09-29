@@ -17,12 +17,17 @@ const tabs = {
   MEMBERS: 'Members',
 };
 
-const CommunityPosts = ({ communityId, community, onPostAuthorClick }) => {
+const CommunityPosts = ({ communityId, community, onPostAuthorClick, blockRouteChange }) => {
   const { posts, addPost, removePost, editPost } = usePostsMock(communityId);
 
   return (
     <>
-      <PostCompose targetId={communityId} community={community} onSubmit={addPost} />
+      <PostCompose
+        targetId={communityId}
+        community={community}
+        onSubmit={addPost}
+        blockRouteChange={blockRouteChange}
+      />
       {posts.length === 0 && <EmptyFeed />}
       {posts.map(post => (
         <Post
@@ -37,7 +42,13 @@ const CommunityPosts = ({ communityId, community, onPostAuthorClick }) => {
   );
 };
 
-const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCommunityClick }) => {
+const CommunityFeed = ({
+  communityId,
+  onPostAuthorClick,
+  onMemberClick,
+  onEditCommunityClick,
+  blockRouteChange,
+}) => {
   const communities = getCommunities();
 
   const currentCommunity = communities.find(community => community.communityId === communityId);
@@ -57,6 +68,7 @@ const CommunityFeed = ({ communityId, onPostAuthorClick, onMemberClick, onEditCo
             communityId={communityId}
             community={currentCommunity}
             onPostAuthorClick={onPostAuthorClick}
+            blockRouteChange={blockRouteChange}
           />
         )}
 

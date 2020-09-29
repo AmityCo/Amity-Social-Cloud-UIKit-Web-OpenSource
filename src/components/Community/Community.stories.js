@@ -19,8 +19,7 @@ import CategoryPage from 'components/ExploreHome/CategoryPage';
 import CommunityCreationModal from 'components/CommunityCreationModal';
 import CommunitySettings from 'components/CommunitySettings';
 
-import UserFeed from './UserFeed';
-import NewsFeed from './NewsFeed';
+import Feed from 'components/Feed';
 import CommunityFeed from '.';
 
 export default {
@@ -43,6 +42,12 @@ const Pages = () => {
 
   const goToCommunity = id => {
     history.push(`/community/${id}`);
+  };
+
+  const blockRouteChange = callback => {
+    return history.block(nextLocation => {
+      return callback(() => history.push(nextLocation.pathname));
+    });
   };
 
   const pathToSelectionType = {
@@ -85,10 +90,10 @@ const Pages = () => {
     >
       <Switch>
         <Route path="/" exact>
-          <Feed targetType={EkoPostTargetType.MyFeed} showPostCompose />
+          <Feed targetType={EkoPostTargetType.MyFeed} onPostAuthorClick={navigateTo} blockRouteChange={blockRouteChange} showPostCompose />
         </Route>
         <Route path="/news" exact>
-          <Feed targetType={EkoPostTargetType.GlobalFeed} showPostCompose />
+          <Feed targetType={EkoPostTargetType.GlobalFeed} onPostAuthorClick={navigateTo} blockRouteChange={blockRouteChange} showPostCompose />
         </Route>
         <Route path="/explore" exact>
           <ExploreHome
@@ -120,6 +125,7 @@ const Pages = () => {
             communityId={communityId}
             onPostAuthorClick={navigateTo}
             onMemberClick={navigateTo}
+            blockRouteChange={blockRouteChange}
           />
         </Route>
       </Switch>
