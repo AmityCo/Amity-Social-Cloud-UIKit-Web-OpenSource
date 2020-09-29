@@ -5,10 +5,10 @@ import { PostRepository, EkoPostTargetType } from 'eko-sdk';
 import { customizableComponent } from 'hocs/customization';
 import Files from 'components/Files';
 import Images from 'components/Images';
-import PostAsCommunity from './PostAsCommunity';
 
 import { confirm } from 'components/Confirm';
 import { isEqual } from 'helpers';
+import PostAsCommunity from './PostAsCommunity';
 import AuthorSelector from './AuthorSelector';
 import { isIdenticalAuthor } from './utils';
 import {
@@ -31,22 +31,20 @@ const PostComposeBar = ({
   placeholder = "What's going on...",
   edit,
   post = { text: '', files: [], images: [] },
-  onSubmit,
-  onSave,
-  className,
   blockRouteChange,
 }) => {
   const user = {};
   const [author, setAuthor] = useState(user);
   const [text, setText] = useState(post.text);
-  const [files, setFiles] = useState(post.files);
-  const [images, setImages] = useState(post.images);
+  // TODO: refactor method to create post with images and files
+  // const [files, setFiles] = useState(post.files);
+  // const [images, setImages] = useState(post.images);
+  const files = [];
+  const images = [];
 
   const [isDirty, markDirty] = useState(false);
 
-  const isEmpty = text.trim().length === 0 && files.length === 0 && images.length === 0;
-
-  const isCommunityPost = isIdenticalAuthor(author, community);
+  const isEmpty = text.trim().length === 0; // && files.length === 0 && images.length === 0;
 
   const onConfirm = goToNextPage => () => {
     blockRouteChange(() => true);
@@ -74,10 +72,7 @@ const PostComposeBar = ({
     );
   }, [text, files, images]);
 
-  const setIsCommunityPost = shouldBeCommunityPost =>
-    setAuthor(shouldBeCommunityPost ? community : user);
-
-  const createPost = () => {
+  const handleCreateTextPost = async () => {
     if (isEmpty) return;
     const newPostLiveObject = PostRepository.createTextPost({
       text,
@@ -98,7 +93,7 @@ const PostComposeBar = ({
     setAuthor(shouldBeCommunityPost ? community : user);
 
   return (
-    <PostComposeContainer className={cx('postComposeBar', className)}>
+    <PostComposeContainer className={cx('postComposeBar', className)} edit={edit}>
       <AuthorSelector author={author} user={user} communities={communities} onChange={setAuthor} />
       <PostContainer>
         <PostComposeTextareaWrapper>
@@ -133,6 +128,13 @@ PostComposeBar.propTypes = {
   communities: PropTypes.array,
   className: PropTypes.string,
   placeholder: PropTypes.string,
+  blockRouteChange: PropTypes.func.isRequired,
+  edit: PropTypes.bool,
+  post: PropTypes.shape({
+    text: PropTypes.string,
+    images: PropTypes.arrayOf(PropTypes.string),
+    files: PropTypes.arrayOf(PropTypes.string),
+  }),
 };
 
 export default customizableComponent('PostComposeBar', PostComposeBar);
