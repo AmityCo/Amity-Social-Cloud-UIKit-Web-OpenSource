@@ -32,15 +32,6 @@ export const Content = styled.div`
   align-items: center;
 `;
 
-export const ProgressBar = styled.div`
-  background: ${({ theme }) => theme.palette.base.shade4};
-  width: ${({ progress }) => progress}%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-`;
-
 export const FileSize = styled.div`
   ${({ theme }) => theme.typography.caption}
   color: ${({ theme }) => theme.palette.base.shade1};

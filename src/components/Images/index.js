@@ -9,7 +9,7 @@ import { ImagesContainer } from './styles';
 
 const MAX_IMAGES_IN_PREVIEW = 4;
 
-const Images = ({ editing, images = [], onRemove }) => {
+const Images = ({ editing, images = [], onRemove, setImageLoaded }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   const closeGallery = () => setSelectedImageIndex(null);
@@ -26,10 +26,10 @@ const Images = ({ editing, images = [], onRemove }) => {
           <Image
             key={image.id}
             numberOfHiddenImages={isLast && numberOfHiddenImages}
-            editing={editing}
             image={image}
-            onClick={() => !editing && setSelectedImageIndex(i)}
+            onClick={() => setSelectedImageIndex(i)}
             onRemove={onRemove}
+            setImageLoaded={setImageLoaded}
           />
         );
       })}

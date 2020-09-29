@@ -44,7 +44,11 @@ const PostComposeBar = ({
 
   const [isDirty, markDirty] = useState(false);
 
-  const isEmpty = text.trim().length === 0; // && files.length === 0 && images.length === 0;
+  const hasNotLoadedImages = images.some(image => image.isNew);
+  const hasNotLoadedFiles = files.some(file => file.isNew);
+
+  const isEmpty = text.trim().length === 0 && files.length === 0 && images.length === 0;
+  const isDisabled = isEmpty || hasNotLoadedImages || hasNotLoadedFiles;
 
   const onConfirm = goToNextPage => () => {
     blockRouteChange(() => true);
@@ -72,7 +76,7 @@ const PostComposeBar = ({
     );
   }, [text, files, images]);
 
-  const handleCreateTextPost = async () => {
+  const createPost = async () => {
     if (isEmpty) return;
     const newPostLiveObject = PostRepository.createTextPost({
       text,
@@ -87,7 +91,59 @@ const PostComposeBar = ({
     });
   };
 
+  const testImages = [];
+  const testFiles = [];
+  const setImages = () => {};
+  const setFiles = () => {};
+  const ImagePostIcon = () => null;
+  const FilePostIcon = () => null;
+  const maxImagesWarning = 0;
+  const maxFilesWarning = 0;
+  const canUploadImage = false;
+  const canUploadFile = false;
+
+  const updatePost = async () => {
+    // TODO: fixme
+  };
+
   const isCommunityPost = isIdenticalAuthor(author, community);
+  const addImage = () => {
+    const image = testImages[images.length % testImages.length];
+    setImages([...images, { id: Date.now(), isNew: true, ...image }]);
+  };
+
+  const addFile = () => {
+    const file = testFiles[files.length % testFiles.length];
+    setFiles([...files, { id: Date.now(), isNew: true, ...file }]);
+  };
+
+  const setImageLoaded = image => {
+    const index = images.indexOf(image);
+    const newImages = images.slice();
+    newImages[index] = {
+      ...image,
+      isNew: false,
+    };
+    setImages(newImages);
+  };
+
+  const setFileLoaded = file => {
+    const index = files.indexOf(file);
+    const newFiles = files.slice();
+    newFiles[index] = {
+      ...file,
+      isNew: false,
+    };
+    setFiles(newFiles);
+  };
+
+  const onRemoveFile = file => {
+    setFiles(files.filter(({ id }) => id !== file.id));
+  };
+
+  const onRemoveImage = image => {
+    setImages(images.filter(({ id }) => id !== image.id));
+  };
 
   const setIsCommunityPost = shouldBeCommunityPost =>
     setAuthor(shouldBeCommunityPost ? community : user);
@@ -104,14 +160,26 @@ const PostComposeBar = ({
             onChange={e => setText(e.target.value)}
           />
 
-          {!!files.length && <Files editing files={files} onRemove={() => {}} />}
-          {!!images.length && <Images editing images={images} onRemove={() => {}} />}
+          {!!files.length && (
+            <Files setFileLoaded={setFileLoaded} files={files} onRemove={onRemoveFile} />
+          )}
+          {!!images.length && (
+            <Images setImageLoaded={setImageLoaded} images={images} onRemove={onRemoveImage} />
+          )}
         </PostComposeTextareaWrapper>
         <Footer>
           {!!community && <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />}
           <FooterActionBar>
-            <PostButton disabled={isEmpty} onClick={handleCreateTextPost}>
-              Post
+            <ImagePostIcon
+              disabled={!canUploadImage}
+              onClick={canUploadImage ? addImage : maxImagesWarning}
+            />
+            <FilePostIcon
+              disabled={!canUploadFile}
+              onClick={canUploadFile ? addFile : maxFilesWarning}
+            />
+            <PostButton disabled={isDisabled} onClick={edit ? updatePost : createPost}>
+              {edit ? 'Save' : 'Post'}
             </PostButton>
           </FooterActionBar>
         </Footer>

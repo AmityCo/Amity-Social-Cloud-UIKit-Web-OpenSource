@@ -150,28 +150,34 @@ export const posts = [
         id: 1,
         url:
           'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        isNew: false,
       },
       {
         id: 2,
         url: 'https://theievoice.com/wp-content/uploads/2020/02/1040.jpg',
+        isNew: false,
       },
       {
         id: 3,
         url:
           'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        isNew: false,
       },
       {
         id: 4,
         url: 'https://theievoice.com/wp-content/uploads/2020/02/1040.jpg',
+        isNew: false,
       },
       {
         id: 5,
         url:
           'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        isNew: false,
       },
       {
         id: 6,
         url: 'https://theievoice.com/wp-content/uploads/2020/02/1040.jpg',
+        isNew: false,
       },
     ],
   },

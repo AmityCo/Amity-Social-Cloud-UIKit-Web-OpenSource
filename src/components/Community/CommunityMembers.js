@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { UserRepository } from 'eko-sdk';
 
-import usePaginatedLiveObject from 'hooks/usePaginatedLiveObject';
+import usePaginatedLiveObject from 'hooks/useLiveCollection';
 import { customizableComponent } from 'hocs/customization';
 import Options from 'components/Options';
 import { confirm } from 'components/Confirm';

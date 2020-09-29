@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { customizableComponent } from 'hocs/customization';
 
-import { ImageContainer, RemoveIcon, NumberOfHiddenImagesOverlay, LoadingOverlay } from './styles';
+import {
+  ImageContainer,
+  NumberOfHiddenImagesOverlay,
+  OverlayContainer,
+  LoadingOverlay,
+  ProgressBarContainer,
+  CloseIcon,
+  CircleButton,
+} from './styles';
 
-const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
+import { ProgressBar } from '../ProgressBar';
+
+const Image = ({ image, onClick, onRemove, numberOfHiddenImages, setImageLoaded }) => {
   // simulate progress animation
-  const [progress, setProgress] = useState(editing ? 0 : 100);
+  const { isNew } = image;
+  const [progress, setProgress] = useState(isNew ? 0 : 100);
+
   useEffect(() => {
-    if (progress >= 100) return;
+    if (!isNew || progress >= 100) {
+      isNew && setImageLoaded && setImageLoaded(image);
+      return;
+    }
     const timeout = setTimeout(() => {
       setProgress(progress + 0.5);
     }, 50);
@@ -22,13 +37,24 @@ const Image = ({ editing, image, onClick, onRemove, numberOfHiddenImages }) => {
   const showOverlay = progress < 100;
 
   return (
-    <ImageContainer editing={editing} onClick={onClick}>
+    <ImageContainer onClick={onClick}>
       {numberOfHiddenImages > 0 && (
         <NumberOfHiddenImagesOverlay>+ {numberOfHiddenImages}</NumberOfHiddenImagesOverlay>
       )}
-      {showOverlay && <LoadingOverlay />}
+      {isNew && (
+        <OverlayContainer>
+          <LoadingOverlay />
+          <ProgressBarContainer>
+            <ProgressBar progress={progress} lightMode />
+          </ProgressBarContainer>
+        </OverlayContainer>
+      )}
+      {!!onRemove && (
+        <CircleButton onClick={removeImage}>
+          <CloseIcon />
+        </CircleButton>
+      )}
       <img src={image.url} alt="" />
-      {!!onRemove && <RemoveIcon onClick={removeImage} />}
     </ImageContainer>
   );
 };

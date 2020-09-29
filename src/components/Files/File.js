@@ -4,13 +4,19 @@ import { customizableComponent } from 'hocs/customization';
 
 import FileIcon from './FileIcon';
 
-import { FileContainer, Content, FileName, FileSize, ProgressBar, RemoveIcon } from './styles';
+import { FileContainer, Content, FileName, FileSize, RemoveIcon } from './styles';
+import { ProgressBar } from '../ProgressBar';
 
-const File = ({ editing, file, onRemove }) => {
+const File = ({ file, onRemove, setFileLoaded }) => {
   // simulate progress animation
-  const [progress, setProgress] = useState(0);
+  const { isNew } = file;
+  const [progress, setProgress] = useState(isNew ? 0 : 100);
+
   useEffect(() => {
-    if (!editing || progress >= 100) return;
+    if (!isNew || progress >= 100) {
+      isNew && setFileLoaded && setFileLoaded(file);
+      return;
+    }
     const timeout = setTimeout(() => {
       setProgress(progress + 0.5);
     }, 50);
@@ -19,7 +25,7 @@ const File = ({ editing, file, onRemove }) => {
 
   return (
     <FileContainer>
-      <ProgressBar progress={progress} />
+      {isNew && <ProgressBar progress={progress} />}
       <Content>
         <FileIcon file={file} />
         <FileName>{file.filename}</FileName> <FileSize>{filesize(file.size)}</FileSize>

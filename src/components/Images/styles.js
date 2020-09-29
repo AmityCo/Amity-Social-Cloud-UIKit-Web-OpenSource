@@ -3,17 +3,24 @@ import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/pro-regular-svg-icons';
 
-export const RemoveIcon = styled(FaIcon).attrs({ icon: faTimes })`
-  z-index: 2;
-  cursor: pointer;
-  margin-left: auto;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  background: rgba(17, 17, 17, 0.2);
-  color: white;
+export const CircleButton = styled.button`
   border-radius: 50%;
-  padding: 2px 6px;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  font-size: 24px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  z-index: 3;
+  border: none;
+`;
+
+export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+  color: #fff;
+  font-size: 18px;
 `;
 
 export const ImageContainer = styled.div`
@@ -83,26 +90,39 @@ export const ImagesContainer = styled.div`
   }}
 `;
 
-export const ProgressBar = styled.div`
-  background: ${({ theme }) => theme.palette.base.shade4};
-  width: ${({ progress }) => 100 - progress}%;
+export const OverlayContainer = styled.div`
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
-  opacity: 0.3;
   z-index: 1;
+  width: 100%;
+  height: 100%;
 `;
 
 export const LoadingOverlay = styled.div`
   background: ${({ theme }) => theme.palette.base.shade4};
-  width: 100%;
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
-  opacity: 0.5;
-  z-index: 1;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+`;
+
+export const ProgressBarContainer = styled.div`
+  height: 5%;
+  width: 60%;
+  background-color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  z-index: 3;
+  overflow: hidden;
 `;
 
 export const NumberOfHiddenImagesOverlay = styled.div`
