@@ -1,15 +1,13 @@
 import React from 'react';
-import Tab from '~/core/components/Tab';
+import Tabs from '~/core/components/Tabs';
 import { customizableComponent } from '~/core/hocs/customization';
 
-import { UserFeedHeaderContainer, Tabs } from './styles';
+import { UserFeedHeaderContainer } from './styles';
 
 const UserFeedHeader = ({ className }) => {
   return (
     <UserFeedHeaderContainer className={className}>
-      <Tabs>
-        <Tab active>Timeline</Tab>
-      </Tabs>
+      <Tabs tabs={{ tl: 'Timeline' }} activeTab="tl" />
     </UserFeedHeaderContainer>
   );
 };
