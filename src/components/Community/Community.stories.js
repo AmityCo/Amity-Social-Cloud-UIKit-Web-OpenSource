@@ -96,10 +96,21 @@ const Pages = () => {
     >
       <Switch>
         <Route path="/" exact>
-          <Feed targetType={EkoPostTargetType.MyFeed} onPostAuthorClick={navigateTo} editProfile={editProfile} blockRouteChange={blockRouteChange} showPostCompose />
+          <Feed
+            targetType={EkoPostTargetType.MyFeed}
+            onPostAuthorClick={navigateTo}
+            editProfile={editProfile}
+            blockRouteChange={blockRouteChange}
+            showPostCompose
+          />
         </Route>
         <Route path="/news" exact>
-          <Feed targetType={EkoPostTargetType.GlobalFeed} onPostAuthorClick={navigateTo} blockRouteChange={blockRouteChange} showPostCompose />
+          <Feed
+            targetType={EkoPostTargetType.GlobalFeed}
+            onPostAuthorClick={navigateTo}
+            blockRouteChange={blockRouteChange}
+            showPostCompose
+          />
         </Route>
         <Route path="/explore" exact>
           <ExploreHome
@@ -135,7 +146,12 @@ const Pages = () => {
           />
         </Route>
         <Route path="/profile/:userId" exact>
-          <UserFeed onPostAuthorClick={navigateTo} userId={userId} editProfile={editProfile} />
+          <Feed
+            targetType={EkoPostTargetType.MyFeed}
+            targetId={userId}
+            onPostAuthorClick={navigateTo}
+            editProfile={editProfile}
+          />
         </Route>
         <Route path="/profile/:userId/edit">
           <ProfileSettings userId={userId} />

@@ -34,7 +34,7 @@ const Image = ({ image, onClick, onRemove, numberOfHiddenImages, setImageLoaded 
     onRemove(image);
   };
 
-  const showOverlay = progress < 100;
+  // const showOverlay = progress < 100;
 
   return (
     <ImageContainer onClick={onClick}>
