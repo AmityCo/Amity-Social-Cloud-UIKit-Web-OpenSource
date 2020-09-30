@@ -54,9 +54,6 @@ const FormBlock = ({ title, children, edit }) => (
   </FormBlockContainer>
 );
 
-const PUBLIC = 'public';
-const PRIVATE = 'private';
-
 const CommunityForm = ({
   community, // initialize form on editing
   edit,
@@ -74,14 +71,14 @@ const CommunityForm = ({
           description: '',
           category: 'cat0',
           onlyAdminCanPost: false,
-          permission: PUBLIC,
+          isPublic: true,
           members: [],
         },
   });
 
   const currentName = watch('name');
   const description = watch('description');
-  const permission = watch('permission');
+  const isPublic = watch('isPublic');
 
   const communities = getCommunities();
 
@@ -95,7 +92,7 @@ const CommunityForm = ({
       setError('name', { message: 'Name cannot be empty' });
       return;
     }
-    if (data.permission === PRIVATE && data.members.length === 0) {
+    if (!data.isPublic && data.members.length === 0) {
       setError('members', { message: 'Please select at least one member' });
       return;
     }
@@ -174,7 +171,7 @@ const CommunityForm = ({
               Public
               <Description>Anyone can join, view, and search the posts  in this page.</Description>
             </div>
-            <Radio type="radio" name="permission" value={PUBLIC} defaultChecked ref={register} />
+            <Radio type="radio" name="isPublic" defaultChecked ref={register} />
           </PermissionControlContainer>
           <PermissionControlContainer>
             <IconWrapper>
@@ -187,10 +184,10 @@ const CommunityForm = ({
                 page.
               </Description>
             </div>
-            <Radio type="radio" name="permission" value={PRIVATE} ref={register} />
+            <Radio type="radio" name="isPublic" value={false} ref={register} />
           </PermissionControlContainer>
         </FormBlock>
-        {permission === PRIVATE && (
+        {!isPublic && (
           <FormBlock title="Community members" edit={edit}>
             <MembersField error={errors.members}>
               <Label name="members" className="required">

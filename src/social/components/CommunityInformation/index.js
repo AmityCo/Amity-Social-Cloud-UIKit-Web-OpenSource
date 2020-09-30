@@ -11,6 +11,7 @@ import {
   Avatar,
   Container,
   CommunityName,
+  CommunityNameContainer,
   Header,
   Options,
   Category,
@@ -18,6 +19,7 @@ import {
   JoinButton,
   PlusIcon,
 } from './styles';
+import { PrivateIcon } from '../CommunityName/styles';
 
 const CommunityInformation = ({ community, onEditCommunityClick }) => {
   const { name } = community;
@@ -47,7 +49,10 @@ const CommunityInformation = ({ community, onEditCommunityClick }) => {
           ]}
         />
       </Header>
-      <CommunityName>{name}</CommunityName>
+      <CommunityNameContainer>
+        {!community.isPublic && <PrivateIcon />}
+        <CommunityName>{name}</CommunityName>
+      </CommunityNameContainer>
       <Category>Category</Category>
       <div>
         <Count>{toHumanString(community.postsCount)}</Count> posts

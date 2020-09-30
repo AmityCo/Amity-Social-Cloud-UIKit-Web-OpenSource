@@ -193,6 +193,7 @@ const communities = [
   {
     communityId: 'c1',
     name: 'Billie Ellish Fans',
+    isPublic: true,
     avatar:
       'https://cdn.vox-cdn.com/thumbor/VetxE6rRTJt5tLhQ2Z99QFA9zcI=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/16127988/56973906_1031440620389086_5150401069125206016_o.jpg',
     postsCount: 12332,
@@ -201,6 +202,7 @@ const communities = [
   {
     communityId: 'c2',
     name: 'BTS & ARMY',
+    isPublic: true,
     avatar: 'https://pbs.twimg.com/profile_images/1219274759034363905/BfWdIBVk.jpg',
     postsCount: 532,
     description,
@@ -208,6 +210,7 @@ const communities = [
   {
     communityId: 'c3',
     name: 'Breakfast Club',
+    isPublic: true,
     avatar:
       'https://simply-delicious-food.com/wp-content/uploads/2018/10/breakfast-board-500x500.jpg',
     postsCount: 5332,
@@ -216,6 +219,7 @@ const communities = [
   {
     communityId: 'c4',
     name: 'BLACKPINK TH',
+    isPublic: true,
     verified: true,
     avatar: 'https://i.pinimg.com/originals/2c/69/c5/2c69c5959858e4119322698da738bb44.jpg',
     postsCount: 123,
@@ -224,7 +228,7 @@ const communities = [
   {
     communityId: 'c5',
     name: 'Harry Potter Fans',
-    isPrivate: true,
+    isPublic: false,
     avatar: 'https://static3.srcdn.com/wordpress/wp-content/uploads/2019/09/voldemort-3.jpg',
     postsCount: 23,
     description,
@@ -232,7 +236,7 @@ const communities = [
   {
     communityId: 'c6',
     name: 'Very long name very very long name name',
-    isPrivate: true,
+    isPublic: false,
     verified: true,
     avatar:
       'https://i.guim.co.uk/img/media/788dbbce44c1846fab9da460f64d23d02754a143/362_0_776_1626/master/776.jpg?width=300&quality=45&auto=format&fit=max&dpr=2&s=91c98c71c708b039e9fc3eed87177d6c',

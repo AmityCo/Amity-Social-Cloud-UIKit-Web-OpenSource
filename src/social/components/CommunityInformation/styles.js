@@ -39,9 +39,15 @@ export const Avatar = styled(UIAvatar).attrs({
   margin-right: 12px;
 `;
 
-export const CommunityName = styled.div`
+export const CommunityNameContainer = styled.div`
+  display: flex;
   margin-top: 10px;
   word-break: break-all;
+  align-items: center;
+`;
+
+export const CommunityName = styled.div`
+  flex: 3;
   ${({ theme }) => theme.typography.headline}
 `;
 
