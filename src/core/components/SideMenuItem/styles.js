@@ -8,6 +8,7 @@ export const SideMenuItemContainer = styled(SecondaryButton)`
   padding: 5px 8px;
   margin-bottom: 6px;
   color: #17181c;
+  justify-content: left;
   &:hover {
     background-color: ${({ theme }) => theme.palette.base.shade4};
   }

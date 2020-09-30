@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form';
 import {
   AboutTextarea,
   Avatar,
-  AvatarUploadContainer,
   AvatarWrapper,
   CameraIcon,
   Counter,
@@ -22,7 +21,7 @@ import {
 
 import { PrimaryButton } from '~/core/components/Button';
 
-import { ButtonContainer } from './styles';
+import { ButtonContainer, AvatarUploadContainer } from './styles';
 
 const AvatarUpload = ({ value }) => (
   <AvatarUploadContainer>
@@ -53,7 +52,6 @@ export const UserProfileForm = ({ user, onSubmit, className }) => {
     },
   });
 
-  const currentName = watch('displayName');
   const description = watch('description');
 
   return (
@@ -63,15 +61,14 @@ export const UserProfileForm = ({ user, onSubmit, className }) => {
           <Controller name="avatar" render={AvatarUpload} control={control} />
           <Field error={errors.name}>
             <LabelCounterWrapper>
-              <Label htmlFor="name" className="required">
+              <Label htmlFor="displayName" className="required">
                 Display name
               </Label>
-              <Counter>{currentName.length}/30</Counter>
             </LabelCounterWrapper>
             <TextField
               placeholder="Enter user display name"
-              id="name"
-              name="name"
+              id="displayName"
+              name="displayName"
               ref={register({
                 required: 'Display name is required',
                 maxLength: {
@@ -80,7 +77,7 @@ export const UserProfileForm = ({ user, onSubmit, className }) => {
                 },
               })}
             />
-            <ErrorMessage errors={errors} name="name" />
+            <ErrorMessage errors={errors} name="displayName" />
           </Field>
           <Field error={errors.description}>
             <LabelCounterWrapper>

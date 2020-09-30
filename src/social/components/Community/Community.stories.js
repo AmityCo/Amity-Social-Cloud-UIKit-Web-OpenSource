@@ -152,8 +152,8 @@ const Pages = () => {
         <Route path="/profile/:userId" exact>
           <Feed
             targetType={EkoPostTargetType.MyFeed}
-            targetId={userId}
             onPostAuthorClick={navigateTo}
+            userId={userId}
             editProfile={editProfile}
             blockRouteChange={blockRouteChange}
           />

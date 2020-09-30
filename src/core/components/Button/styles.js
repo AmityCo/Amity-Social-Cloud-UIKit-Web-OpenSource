@@ -10,7 +10,7 @@ const commonButtonStyles = ({ theme }) => css`
   transition: background-color 0.3s;
   ${theme.typography.bodyBold}
   ${({ fullWidth }) => fullWidth && 'width: 100%;'}
-  ${({ centered }) => centered && 'justify-content: center;'}
+  justify-content: center;
 `;
 
 export const DefaultButton = styled.button`

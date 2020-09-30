@@ -8,6 +8,7 @@ import StyledComment from './Comment.styles';
 import useCommentSdk from './useCommentSdk';
 import { CommentBlock, CommentContainer, ReplyContainer } from './styles';
 
+// TODO: react-intl
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const Comment = ({ commentId, isReplyComment = false }) => {

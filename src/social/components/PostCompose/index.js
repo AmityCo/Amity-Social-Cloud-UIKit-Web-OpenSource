@@ -37,10 +37,8 @@ const PostComposeBar = ({
   const [author, setAuthor] = useState(user);
   const [text, setText] = useState(post.text);
   // TODO: refactor method to create post with images and files
-  // const [files, setFiles] = useState(post.files);
-  // const [images, setImages] = useState(post.images);
-  const files = [];
-  const images = [];
+  const [files, setFiles] = useState(post.files);
+  const [images, setImages] = useState(post.images);
 
   const [isDirty, markDirty] = useState(false);
 
@@ -95,8 +93,8 @@ const PostComposeBar = ({
 
   const testImages = [];
   const testFiles = [];
-  const setImages = () => {};
-  const setFiles = () => {};
+  // const setImages = () => {};
+  // const setFiles = () => {};
   const ImagePostIcon = () => null;
   const FilePostIcon = () => null;
   const maxImagesWarning = 0;

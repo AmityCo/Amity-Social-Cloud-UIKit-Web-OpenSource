@@ -40,6 +40,11 @@ export const Avatar = styled(UIAvatar).attrs({
   margin-right: 12px;
 `;
 
+export const AvatarUploadContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 export const ProfileName = styled.div`
   margin-top: 10px;
   ${({ theme }) => theme.typography.headline}
@@ -59,5 +64,5 @@ export const Description = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  padding: 12px 0;
+  margin-top: 16px;
 `;

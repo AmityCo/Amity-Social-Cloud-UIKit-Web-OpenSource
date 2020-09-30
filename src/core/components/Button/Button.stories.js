@@ -19,7 +19,6 @@ SimpleButton.args = {
   variant: 'primary',
   disabled: false,
   fullWidth: false,
-  centered: false,
 };
 
 SimpleButton.argTypes = {
@@ -40,11 +39,6 @@ SimpleButton.argTypes = {
     },
   },
   fullWidth: {
-    control: {
-      type: 'boolean',
-    },
-  },
-  centered: {
     control: {
       type: 'boolean',
     },
