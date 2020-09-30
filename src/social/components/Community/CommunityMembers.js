@@ -28,9 +28,10 @@ const tabs = {
 const CommunityMember = ({ user, onMemberClick }) => {
   const confirmRemoving = () =>
     confirm({
+      // TODO: react-intl
       title: 'Remove user from community',
       content:
-        'This user won’t no longer be able to search, post and interact in this community. Are you sure you want tocontinue?',
+        'This user won’t no longer be able to search, post and interact in this community. Are you sure you want to continue?',
       okText: 'Remove',
       onOk: () => {},
     });
