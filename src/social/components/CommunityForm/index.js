@@ -109,7 +109,7 @@ const CommunityForm = ({
           <Controller name="avatar" render={AvatarUpload} control={control} />
           <Field error={errors.name}>
             <LabelCounterWrapper>
-              <Label htmlFor="name" required>
+              <Label htmlFor="name" className="required">
                 Community name
               </Label>
               <Counter>{currentName.length}/30</Counter>
@@ -193,7 +193,7 @@ const CommunityForm = ({
         {permission === PRIVATE && (
           <FormBlock title="Community members" edit={edit}>
             <MembersField error={errors.members}>
-              <Label name="members" required>
+              <Label name="members" className="required">
                 Add members
               </Label>
               <Controller name="members" render={UserSelector} control={control} />

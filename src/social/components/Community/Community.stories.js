@@ -155,6 +155,7 @@ const Pages = () => {
             targetId={userId}
             onPostAuthorClick={navigateTo}
             editProfile={editProfile}
+            blockRouteChange={blockRouteChange}
           />
         </Route>
         <Route path="/profile/:userId/edit">

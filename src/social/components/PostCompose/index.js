@@ -50,25 +50,27 @@ const PostComposeBar = ({
   const isEmpty = text.trim().length === 0 && files.length === 0 && images.length === 0;
   const isDisabled = isEmpty || hasNotLoadedImages || hasNotLoadedFiles;
 
-  const onConfirm = goToNextPage => () => {
-    blockRouteChange(() => true);
-    goToNextPage();
-    markDirty(false);
-  };
+  if (blockRouteChange) {
+    const onConfirm = goToNextPage => () => {
+      blockRouteChange(() => true);
+      goToNextPage();
+      markDirty(false);
+    };
 
-  blockRouteChange(goToNextPage => {
-    if (isDirty) {
-      confirm({
-        title: 'Leave without finishing?',
-        content: 'Your progress won’t be saved. Are you sure to leave this page now?',
-        cancelText: 'Continue editing',
-        okText: 'Leave',
-        onOk: onConfirm(goToNextPage),
-      });
-    }
+    blockRouteChange(goToNextPage => {
+      if (isDirty) {
+        confirm({
+          title: 'Leave without finishing?',
+          content: 'Your progress won’t be saved. Are you sure to leave this page now?',
+          cancelText: 'Continue editing',
+          okText: 'Leave',
+          onOk: onConfirm(goToNextPage),
+        });
+      }
 
-    return !isDirty;
-  });
+      return !isDirty;
+    });
+  }
 
   useEffect(() => {
     markDirty(
@@ -196,7 +198,7 @@ PostComposeBar.propTypes = {
   communities: PropTypes.array,
   className: PropTypes.string,
   placeholder: PropTypes.string,
-  blockRouteChange: PropTypes.func.isRequired,
+  blockRouteChange: PropTypes.func,
   edit: PropTypes.bool,
   post: PropTypes.shape({
     text: PropTypes.string,

@@ -117,11 +117,9 @@ export const Counter = styled.div`
 export const Label = styled.label`
   ${({ theme }) => theme.typography.bodyBold}
   margin-bottom: 4px;
-  ${({ required }) =>
-    required &&
-    `
-  &:after {
-    color: ${({ theme }) => theme.palette.alert.main};
+  ${({ theme }) => `
+  &.required {
+    color: ${theme.palette.alert.main};
     content: ' *';
   }
 `}
@@ -200,6 +198,7 @@ export const PermissionControlContainer = styled.div`
 export const Description = styled.div`
   color: ${({ theme }) => theme.palette.base.shade1};
   ${({ theme }) => theme.typography.body}
+  width: 357px;
 `;
 
 export const InformationBlock = styled.div`
@@ -232,6 +231,7 @@ export const AvatarUploadContainer = styled.div`
 `;
 
 export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 15 })`
+  ${({ theme }) => theme.typography.global}
   display: block;
   outline: none;
   border-radius: 4px;
@@ -244,6 +244,7 @@ export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 
 `;
 
 export const TextField = styled.input`
+  ${({ theme }) => theme.typography.global}
   border-radius: 4px;
   border: 1px solid #e3e4e8;
   padding: 10px 12px;

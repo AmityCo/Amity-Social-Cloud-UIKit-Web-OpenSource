@@ -63,7 +63,7 @@ export const UserProfileForm = ({ user, onSubmit, className }) => {
           <Controller name="avatar" render={AvatarUpload} control={control} />
           <Field error={errors.name}>
             <LabelCounterWrapper>
-              <Label htmlFor="name" required>
+              <Label htmlFor="name" className="required">
                 Display name
               </Label>
               <Counter>{currentName.length}/30</Counter>

@@ -14,6 +14,7 @@ const Feed = ({
   showPostCompose = false,
   feedClassName = null,
   onCreatePostSuccess = null,
+  blockRouteChange,
 }) => {
   const [posts, hasMore, loadMore] = useFeedSdk({ targetType, targetId });
 
@@ -29,6 +30,7 @@ const Feed = ({
           targetType={targetType}
           targetId={targetId}
           onCreateSuccess={onCreatePostSuccess}
+          blockRouteChange={blockRouteChange}
         />
       )}
       {!posts.length && <EmptyFeed targetType={targetType} />}
@@ -45,6 +47,7 @@ Feed.propTypes = {
   showPostCompose: PropTypes.bool,
   feedClassName: PropTypes.string,
   onCreatePostSuccess: PropTypes.func,
+  blockRouteChange: PropTypes.func,
 };
 
 export default customizableComponent('Feed', Feed);
