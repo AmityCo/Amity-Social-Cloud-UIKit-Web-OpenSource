@@ -6,6 +6,8 @@ export default {
   parameters: { layout: 'centered' },
 };
 
+export const Category = () => <Icons.Category />;
+export const Community = () => <Icons.Community />;
 export const User = () => <Icons.User />;
 
 export const Files = () => (

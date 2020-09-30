@@ -7,15 +7,18 @@ import withSize from '~/core/hocs/withSize';
 import { AvatarContainer, Img } from './styles';
 
 const Avatar = ({ className, avatar = null, ...props }) => {
-  const [loaded, setLoaded] = useState(false);
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
-    setLoaded(false);
+    setVisible(false);
   }, [avatar]);
-  const onLoad = useCallback(() => setLoaded(true), []);
+
+  const onLoad = useCallback(() => setVisible(true), []);
+  const onError = useCallback(() => setVisible(false), []);
 
   return (
-    <AvatarContainer className={cx(className, { loaded })} {...props}>
-      {avatar ? <Img src={avatar} onLoad={onLoad} onError={onLoad} /> : null}
+    <AvatarContainer className={cx(className, { visible })} {...props}>
+      {avatar ? <Img src={avatar} onLoad={onLoad} onError={onError} /> : null}
     </AvatarContainer>
   );
 };

@@ -18,7 +18,7 @@ const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const UserChip = ({ user, onRemove }) => (
   <Chip>
-    <Avatar size="tiny" avatar={user.avatar} /> {user.displayName || DEFAULT_DISPLAY_NAME}{' '}
+    <Avatar size="tiny" avatar={user.avatar} /> {`${user.displayName || DEFAULT_DISPLAY_NAME} `}
     <CloseIcon onClick={onRemove} />
   </Chip>
 );

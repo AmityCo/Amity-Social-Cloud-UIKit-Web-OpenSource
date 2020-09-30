@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import { customizableComponent } from '~/core/hocs/customization';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 import { AuthorSelectorContainer, CommunitySeparator, SelectIcon, Avatar } from './styles';
 
@@ -33,7 +34,8 @@ const AuthorSelector = ({ author, user, communities, onChange }) => {
             close();
           }}
         >
-          <Avatar avatar={community.avatar} size="tiny" /> {community.name}
+          <Avatar avatar={community.avatar} size="tiny" backgroundImage={CommunityImage} />
+          {` ${community.name}`}
         </MenuItem>
       ))}
     </Menu>

@@ -3,6 +3,7 @@ import React from 'react';
 import { customizableComponent } from '~/core/hocs/customization';
 
 import { getCommunities, getCategory } from '~/mock';
+import { backgroundImage as CategoryImage } from '~/icons/Category';
 
 import Community from './Community';
 
@@ -27,7 +28,7 @@ const CategoryPage = ({ onCommunityClick, onHeaderBackButtonClick, categoryId })
     <CategoryPageContainer>
       <Blocks>
         <CategoryPageHeader>
-          <Avatar avatar={category.avatar} />
+          <Avatar avatar={category.avatar} backgroundImage={CategoryImage} />
           <div>
             <BackButton onClick={onHeaderBackButtonClick}>
               <BackIcon />

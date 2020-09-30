@@ -1,21 +1,21 @@
 import styled from 'styled-components';
 
 import { SIZES } from '~/core/hocs/withSize';
-import { backgroundImage } from '~/icons/User';
+import { backgroundImage as UserImage } from '~/icons/User';
 
 export const AvatarContainer = styled.div`
   flex-shrink: 0;
   overflow: hidden;
 
-  ${({ size }) => `
+  ${({ size, backgroundImage }) => `
     height: ${SIZES[size]}px;
     width: ${SIZES[size]}px;
+    background: ${backgroundImage || UserImage}
   `}
 
-  background: ${backgroundImage};
   border-radius: 50%;
 
-  &.loaded img {
+  &.visible img {
     opacity: 1;
   }
 `;

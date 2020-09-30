@@ -3,6 +3,7 @@ import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { customizableComponent } from '~/core/hocs/customization';
 import CommunityName from '~/social/components/CommunityName';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 import {
   Avatar,
@@ -14,7 +15,7 @@ import {
 
 const TrendingCommunity = ({ community, onClick }) => (
   <TrendingCommunityContainer onClick={onClick}>
-    <Avatar avatar={community.avatar} size="big" />
+    <Avatar avatar={community.avatar} size="big" backgroundImage={CommunityImage} />
     <CommunityInfo>
       <CommunityName community={community} />
       <Truncate lines={2}>

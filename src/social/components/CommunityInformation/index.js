@@ -3,6 +3,7 @@ import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { confirm } from '~/core/components/Confirm';
 import { customizableComponent } from '~/core/hocs/customization';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 import { useCommunitiesMock, getMyCommunityIds } from '~/mock';
 
@@ -20,6 +21,8 @@ import {
   PlusIcon,
 } from './styles';
 import { PrivateIcon } from '../CommunityName/styles';
+
+import { avatarTypes } from '../Avatar/styles';
 
 const CommunityInformation = ({ community, onEditCommunityClick }) => {
   const { name } = community;
@@ -41,7 +44,7 @@ const CommunityInformation = ({ community, onEditCommunityClick }) => {
   return (
     <Container>
       <Header>
-        <Avatar avatar={community.avatar} />
+        <Avatar avatar={community.avatar} backgroundImage={CommunityImage} />
         <Options
           options={[
             { name: 'Settings', action: () => onEditCommunityClick(community.communityId) },

@@ -4,6 +4,8 @@ import Popover from '~/core/components/Popover';
 import { MenuItem } from '~/core/components/Menu';
 import { customizableComponent } from '~/core/hocs/customization';
 import { getCommunities } from '~/mock';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 import {
   Avatar,
@@ -15,6 +17,8 @@ import {
   HighlightedText,
   TruncatedText,
 } from './styles';
+
+import { Placeholder } from '~/core/components/Menu/styles';
 
 // from https://stackoverflow.com/questions/29652862/highlight-text-using-reactjs
 const Highlight = ({ query, text }) => {
@@ -40,9 +44,9 @@ const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder 
 
   const communities = getCommunities();
 
-  const searchResult = communities.filter(({ name }) =>
-    name.toLowerCase().includes(query.toLowerCase()),
-  );
+  const searchResult = communities.filter(({ name, isPrivate }) => {
+    return name.toLowerCase().includes(query.toLowerCase()) && !isPrivate;
+  });
 
   const handleSearchResultClick = community => {
     onSearchResultCommunityClick(community);
@@ -52,19 +56,23 @@ const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder 
 
   const menu = (
     <CommunitiesSearchResults className={className}>
-      {/* TODO empty state */}
-      {searchResult.map(community => (
-        <MenuItem key={community.communityId} onClick={() => handleSearchResultClick(community)}>
-          <Avatar size="tiny" avatar={community.avatar} />
-          <TruncatedText>
-            <Highlight text={community.name} query={query} />
-          </TruncatedText>
+      <ConditionalRender condition={searchResult.length}>
+        {searchResult.map(community => (
+          <MenuItem key={community.communityId} onClick={() => handleSearchResultClick(community)}>
+            <Avatar size="tiny" avatar={community.avatar} backgroundImage={CommunityImage} />
+            <TruncatedText>
+              <Highlight text={community.name} query={query} />
+            </TruncatedText>
+          </MenuItem>
+        ))}
+        <MenuItem>
+          <Placeholder>No community found</Placeholder>
         </MenuItem>
-      ))}
+      </ConditionalRender>
     </CommunitiesSearchResults>
   );
 
-  const isPopoverOpen = isOpen && query.length && searchResult.length;
+  const isPopoverOpen = isOpen && query.length;
 
   return (
     <Popover

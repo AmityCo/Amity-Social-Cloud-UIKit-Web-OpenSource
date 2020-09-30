@@ -4,6 +4,7 @@ import Modal from '~/core/components/Modal';
 import { MenuItem } from '~/core/components/Menu';
 import { customizableComponent } from '~/core/hocs/customization';
 import { getCommunities, getCategories } from '~/mock';
+import { backgroundImage as CategoryImage } from '~/icons/Category';
 
 import Community from './Community';
 import TrendingCommunity from './TrendingCommunity';
@@ -23,6 +24,8 @@ import {
   RightIcon,
   CategoryModalBody,
 } from './styles';
+
+const MAX_CATEGORY_DISPLAY = 15;
 
 const ExploreHome = ({
   onSearchResultCommunityClick,
@@ -45,7 +48,8 @@ const ExploreHome = ({
         {categories.map(category => (
           <MenuItem key={category.id} onClick={() => onCategoryClick(category.id)}>
             <Category>
-              <Avatar key={category.id} avatar={category.avatar} /> {category.name}
+              <Avatar key={category.id} avatar={category.avatar} backgroundImage={CategoryImage} />
+              {` ${category.name}`}
             </Category>
           </MenuItem>
         ))}
@@ -89,9 +93,10 @@ const ExploreHome = ({
         <Block>
           <BlockHeader>Categories</BlockHeader>
           <Categories>
-            {categories.map(category => (
+            {categories.slice(0, MAX_CATEGORY_DISPLAY).map(category => (
               <Category key={category.id} onClick={() => onCategoryClick(category.id)}>
-                <Avatar avatar={category.avatar} /> {category.name}
+                <Avatar avatar={category.avatar} backgroundImage={CategoryImage} />
+                {`${category.name}`}
               </Category>
             ))}
           </Categories>

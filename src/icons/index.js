@@ -1,3 +1,5 @@
+export { default as Category } from './Category';
+export { default as Community } from './Community';
 export { default as User } from './User';
 
 export { default as AudioFile } from './files/Audio';

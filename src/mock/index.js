@@ -266,42 +266,72 @@ const categories = [
   },
   {
     id: 'cat3',
-    name: 'Random',
+    name: 'Random 1',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
   {
     id: 'cat4',
-    name: 'Random',
+    name: 'Random 2',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
   {
     id: 'cat5',
-    name: 'Random',
+    name: 'Random 3',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
   {
     id: 'cat6',
-    name: 'Random',
+    name: 'Random 4',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
   {
     id: 'cat7',
-    name: 'Random',
+    name: 'Random 5',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
   {
     id: 'cat8',
-    name: 'Random',
+    name: 'Random 6',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
   {
     id: 'cat9',
-    name: 'Random',
+    name: 'Random 7',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
   {
     id: 'cat10',
-    name: 'Random',
+    name: 'Random 8',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat11',
+    name: 'Without Avatar',
+  },
+  {
+    id: 'cat12',
+    name: 'Without Avatar 2',
+  },
+  {
+    id: 'cat13',
+    name: 'Without Avatar 3',
+  },
+  {
+    id: 'cat14',
+    name: 'Without Avatar 4',
+  },
+  {
+    id: 'cat15',
+    name: 'Without Avatar 5',
+  },
+  {
+    id: 'cat16',
+    name: 'With Avatar',
+    avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
+  },
+  {
+    id: 'cat17',
+    name: 'With Avatar 2',
     avatar: 'https://s3.amazonaws.com/pix.iemoji.com/images/emoji/apple/ios-12/256/game-die.png',
   },
 ];

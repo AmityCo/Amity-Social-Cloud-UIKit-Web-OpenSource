@@ -1,3 +1,4 @@
 export const ConditionalRender = ({ condition, children }) => {
-  return condition ? children : null;
+  const [whenTrue, whenFalse] = children;
+  return condition ? whenTrue : whenFalse || null;
 };
