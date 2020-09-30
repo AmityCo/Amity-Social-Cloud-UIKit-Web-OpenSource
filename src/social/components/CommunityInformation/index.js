@@ -22,8 +22,6 @@ import {
 } from './styles';
 import { PrivateIcon } from '../CommunityName/styles';
 
-import { avatarTypes } from '../Avatar/styles';
-
 const CommunityInformation = ({ community, onEditCommunityClick }) => {
   const { name } = community;
 

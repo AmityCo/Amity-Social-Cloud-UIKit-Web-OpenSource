@@ -4,7 +4,6 @@ import { useForm, Controller } from 'react-hook-form';
 import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
 import { customizableComponent } from '~/core/hocs/customization';
-import { getCommunities } from '~/mock';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';
@@ -80,14 +79,7 @@ const CommunityForm = ({
   const description = watch('description');
   const isPublic = watch('isPublic');
 
-  const communities = getCommunities();
-
-  const validateNameAndSubmit = async data => {
-    const communityNames = communities.map(({ name }) => name);
-    if (communityNames.includes(data.name)) {
-      setError('name', { message: 'This name has already been taken' });
-      return;
-    }
+  const validateAndSubmit = async data => {
     if (!data.name.trim()) {
       setError('name', { message: 'Name cannot be empty' });
       return;
@@ -100,7 +92,7 @@ const CommunityForm = ({
   };
 
   return (
-    <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)} edit={edit}>
+    <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
       <FormBody>
         <FormBlock title="General" edit={edit}>
           <Controller name="avatar" render={AvatarUpload} control={control} />
