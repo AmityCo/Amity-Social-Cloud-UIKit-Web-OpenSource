@@ -1,18 +1,23 @@
 import React from 'react';
 
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { Overlay, ModalWindow, Header, Content, Footer, CloseIcon } from './styles';
 
 const Modal = ({ className, onOverlayClick, onCancel, title, footer, clean, children }) => (
   <Overlay onClick={onOverlayClick}>
     <ModalWindow className={className}>
-      {(title || onCancel) && (
+      <ConditionalRender condition={title || onCancel}>
         <Header clean={clean}>
           {title}
-          {onCancel && <CloseIcon onClick={onCancel} />}
+          <ConditionalRender condition={onCancel}>
+            <CloseIcon onClick={onCancel} />
+          </ConditionalRender>
         </Header>
-      )}
+      </ConditionalRender>
       <Content isText={typeof children === 'string'}>{children}</Content>
-      {footer && <Footer clean={clean}>{footer}</Footer>}
+      <ConditionalRender condition={footer}>
+        <Footer clean={clean}>{footer}</Footer>
+      </ConditionalRender>
     </ModalWindow>
   </Overlay>
 );

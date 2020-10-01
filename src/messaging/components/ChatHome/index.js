@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import RecentChat from '~/messaging/components/RecentChat';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { customizableComponent } from '~/core/hocs/customization';
 import Chat from '~/messaging/components/Chat';
 import ChatDetails from '~/messaging/components/ChatDetails';
@@ -19,20 +20,20 @@ const ChatHome = () => {
   return (
     <ChatHomeContainer>
       <RecentChat onChannelClick={setCurrenChannelId} selectedChannelId={currentChannelId} />
-      {currentChannelId && (
+      <ConditionalRender condition={currentChannelId}>
         <Chat
           key={currentChannelId}
           channelId={currentChannelId}
           onChatDetailsClick={toggleShowChatDetails}
         />
-      )}
-      {showChatDetails && currentChannelId && (
+      </ConditionalRender>
+      <ConditionalRender condition={showChatDetails && currentChannelId}>
         <ChatDetails
           key={currentChannelId}
           channelId={currentChannelId}
           onClose={hideChatDetails}
         />
-      )}
+      </ConditionalRender>
     </ChatHomeContainer>
   );
 };

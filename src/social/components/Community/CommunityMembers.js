@@ -3,6 +3,7 @@ import { UserRepository } from 'eko-sdk';
 
 import Options from '~/core/components/Options';
 import { notification } from '~/core/components/Notification';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { LoadMore } from '~/social/components/LoadMore';
 import { confirm } from '~/core/components/Confirm';
 import { customizableComponent } from '~/core/hocs/customization';
@@ -20,6 +21,7 @@ import {
 } from './styles';
 
 // TODO replace with translations keys
+// TODO: react-intl
 const tabs = {
   MEMBERS: 'Members',
   MODERATORS: 'Moderators',
@@ -84,20 +86,20 @@ const CommunityMembers = ({ onMemberClick }) => {
         activeTab={activeTab}
         onChange={setActiveTab}
       />
-      {activeTab === tabs.MEMBERS && (
+      <ConditionalRender condition={activeTab === tabs.MEMBERS}>
         <LoadMore hasMore={hasMoreUsers} loadMore={loadMoreUsers}>
           {users.map(user => (
             <CommunityMember key={user.userId} user={user} onMemberClick={onMemberClick} />
           ))}
         </LoadMore>
-      )}
-      {activeTab === tabs.MODERATORS && (
+      </ConditionalRender>
+      <ConditionalRender condition={activeTab === tabs.MODERATORS}>
         <LoadMore hasMore={hasMoreModerators} loadMore={loadMoreModerators}>
           {moderators.map(user => (
             <CommunityMember key={user.userId} user={user} onMemberClick={onMemberClick} />
           ))}
         </LoadMore>
-      )}
+      </ConditionalRender>
     </CommunityMembersContainer>
   );
 };

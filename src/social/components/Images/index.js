@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { customizableComponent } from '~/core/hocs/customization';
 
 import ImageGallery from '~/social/components/ImageGallery';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import Image from './Image';
 
 import { ImagesContainer } from './styles';
@@ -33,13 +34,13 @@ const Images = ({ editing, images = [], onRemove, setImageLoaded }) => {
           />
         );
       })}
-      {Number.isInteger(selectedImageIndex) && (
+      <ConditionalRender condition={Number.isInteger(selectedImageIndex)}>
         <ImageGallery
           images={images}
           initialImageIndex={selectedImageIndex}
           onClose={closeGallery}
         />
-      )}
+      </ConditionalRender>
     </ImagesContainer>
   );
 };

@@ -1,12 +1,17 @@
 import React from 'react';
 
-import { NameContainer, Name, VervifiedIcon, PrivateIcon } from './styles';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
+import { NameContainer, Name, VerifiedIcon, PrivateIcon } from './styles';
 
 const CommunityName = ({ className, community }) => (
   <NameContainer className={className}>
-    {!community.isPublic && <PrivateIcon />}
+    <ConditionalRender condition={!community.isPublic}>
+      <PrivateIcon />
+    </ConditionalRender>
     <Name title={community.name}>{community.name}</Name>
-    {community.verified && <VervifiedIcon />}
+    <ConditionalRender condition={community.verified}>
+      <VerifiedIcon />
+    </ConditionalRender>
   </NameContainer>
 );
 

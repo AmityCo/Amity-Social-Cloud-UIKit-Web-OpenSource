@@ -2,6 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { PostRepository, CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
 import { toHumanString } from 'human-readable-numbers';
 import { LIKE_REACTION_KEY } from 'constants';
+
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import PostLikeButton from '~/social/components/PostLikeButton';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import Comment from '~/social/components/Comment';
@@ -45,11 +47,17 @@ const EngagementBar = ({ postId }) => {
   return (
     <EngagementBarContainer>
       <Counters>
-        {totalLikes > 0 && <span>{toHumanString(totalLikes)} likes</span>}
-        {totalComments > 0 && <span>{toHumanString(totalComments)} comments</span>}
+        <ConditionalRender condition={totalLikes > 0}>
+          <span>{toHumanString(totalLikes)} likes</span>
+        </ConditionalRender>
+        <ConditionalRender condition={totalComments > 0}>
+          <span>{toHumanString(totalComments)} comments</span>
+        </ConditionalRender>
       </Counters>
       <InteractionBar>
-        {isPostReady && <PostLikeButton postId={post.postId} />}
+        <ConditionalRender condition={isPostReady}>
+          <PostLikeButton postId={post.postId} />
+        </ConditionalRender>
         <SecondaryButton onClick={open}>
           <CommentIcon /> Comment
         </SecondaryButton>
@@ -57,7 +65,9 @@ const EngagementBar = ({ postId }) => {
       {comments.map(commentId => (
         <Comment key={commentId} commentId={commentId} />
       ))}
-      {isOpen && <CommentComposeBar onSubmit={handleAddComment} />}
+      <ConditionalRender condition={isOpen}>
+        <CommentComposeBar onSubmit={handleAddComment} />
+      </ConditionalRender>
     </EngagementBarContainer>
   );
 };

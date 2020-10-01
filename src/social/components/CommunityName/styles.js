@@ -8,7 +8,7 @@ export const PrivateIcon = styled(FaIcon).attrs({ icon: faLockAlt })`
   font-size: 16px;
 `;
 
-export const VervifiedIcon = styled(FaIcon).attrs({ icon: faBadgeCheck })`
+export const VerifiedIcon = styled(FaIcon).attrs({ icon: faBadgeCheck })`
   margin-left: 8px;
   font-size: 16px;
   color: #1253de;

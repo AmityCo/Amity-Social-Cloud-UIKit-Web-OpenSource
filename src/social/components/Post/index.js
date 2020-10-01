@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { PostRepository, UserRepository } from 'eko-sdk';
 import Truncate from 'react-truncate-markup';
 import cx from 'classnames';
+
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import Modal from '~/core/components/Modal';
 import Time from '~/core/components/Time';
 
@@ -59,12 +61,6 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
     }
   };
 
-  const postEditingModal = isEditing ? (
-    <Modal title="Edit post" onCancel={closeEditingPostModal}>
-      <PostComposeEdit post={post} onSave={closeEditingPostModal} />
-    </Modal>
-  ) : null;
-
   const confirmDeleting = () =>
     confirm({
       title: 'Delete post',
@@ -79,7 +75,11 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
 
   return (
     <PostContainer className={cx('post', className)}>
-      {postEditingModal}
+      <ConditionalRender condition={isEditing}>
+        <Modal title="Edit post" onCancel={closeEditingPostModal}>
+          <PostComposeEdit post={post} onSave={closeEditingPostModal} />
+        </Modal>
+      </ConditionalRender>
       <PostHeader>
         <PostAuthor onClick={() => onPostAuthorClick(postAuthor.userId)}>
           <Avatar avatar={postAuthor.avatar} />
@@ -88,26 +88,25 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
             <Time date={createdAt} />
           </PostInfo>
         </PostAuthor>
-        {isPostReady && (
+        <ConditionalRender condition={isPostReady}>
           <Options
             options={[
               { name: 'Edit post', action: openEditingPostModal },
               { name: 'Delete post', action: confirmDeleting },
             ]}
           />
-        )}
+        </ConditionalRender>
       </PostHeader>
       <Linkify>
-        {isExpanded ? (
+        <ConditionalRender condition={isExpanded}>
           <PostContent>{text}</PostContent>
-        ) : (
           <Truncate
             lines={postMaxLines}
             ellipsis={<ReadMoreButton onClick={expand}>...Read more</ReadMoreButton>}
           >
             <PostContent>{text}</PostContent>
           </Truncate>
-        )}
+        </ConditionalRender>
       </Linkify>
       <Files files={files} />
       <Images images={images} />

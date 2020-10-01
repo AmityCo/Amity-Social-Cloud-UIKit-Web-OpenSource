@@ -2,6 +2,7 @@ import React from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { confirm } from '~/core/components/Confirm';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { customizableComponent } from '~/core/hocs/customization';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
@@ -51,7 +52,9 @@ const CommunityInformation = ({ community, onEditCommunityClick }) => {
         />
       </Header>
       <CommunityNameContainer>
-        {!community.isPublic && <PrivateIcon />}
+        <ConditionalRender condition={!community.isPublic}>
+          <PrivateIcon />
+        </ConditionalRender>
         <CommunityName>{name}</CommunityName>
       </CommunityNameContainer>
       <Category>Category</Category>
@@ -62,11 +65,11 @@ const CommunityInformation = ({ community, onEditCommunityClick }) => {
       <Truncate lines={3}>
         <Description>{community.description}</Description>
       </Truncate>
-      {!isMine && (
+      <ConditionalRender condition={!isMine}>
         <JoinButton onClick={() => joinCommunity(community.communityId)}>
           <PlusIcon /> Join
         </JoinButton>
-      )}
+      </ConditionalRender>
     </Container>
   );
 };

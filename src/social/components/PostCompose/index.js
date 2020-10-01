@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { PostRepository, EkoPostTargetType } from 'eko-sdk';
+
 import { isEqual } from 'helpers';
 import Images from '~/social/components/Images';
 
 import Files from '~/core/components/Files';
 import { confirm } from '~/core/components/Confirm';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { customizableComponent } from '~/core/hocs/customization';
 import PostAsCommunity from './PostAsCommunity';
 import AuthorSelector from './AuthorSelector';
@@ -160,12 +162,12 @@ const PostComposeBar = ({
             onChange={e => setText(e.target.value)}
           />
 
-          {!!files.length && (
+          <ConditionalRender condition={files.length}>
             <Files setFileLoaded={setFileLoaded} files={files} onRemove={onRemoveFile} />
-          )}
-          {!!images.length && (
+          </ConditionalRender>
+          <ConditionalRender condition={images.length}>
             <Images setImageLoaded={setImageLoaded} images={images} onRemove={onRemoveImage} />
-          )}
+          </ConditionalRender>
         </PostComposeTextareaWrapper>
         <Footer>
           {!!community && <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />}

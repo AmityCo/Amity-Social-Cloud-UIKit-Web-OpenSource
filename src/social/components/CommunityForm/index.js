@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 
 import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { customizableComponent } from '~/core/hocs/customization';
 
 import CategorySelector from './CategorySelector';
@@ -179,7 +180,7 @@ const CommunityForm = ({
             <Radio type="radio" name="isPublic" value={false} ref={register} />
           </PermissionControlContainer>
         </FormBlock>
-        {!isPublic && (
+        <ConditionalRender condition={!isPublic}>
           <FormBlock title="Community members" edit={edit}>
             <MembersField error={errors.members}>
               <Label name="members" className="required">
@@ -189,10 +190,10 @@ const CommunityForm = ({
               <ErrorMessage errors={errors} name="members" />
             </MembersField>
           </FormBlock>
-        )}
+        </ConditionalRender>
       </FormBody>
       <Footer edit={edit}>
-        {!edit && (
+        <ConditionalRender condition={!edit}>
           <Button
             onClick={e => {
               e.preventDefault();
@@ -201,7 +202,7 @@ const CommunityForm = ({
           >
             Cancel
           </Button>
-        )}
+        </ConditionalRender>
         <SubmitButton disabled={currentName.length === 0}>{edit ? 'Save' : 'Create'}</SubmitButton>
       </Footer>
     </Form>

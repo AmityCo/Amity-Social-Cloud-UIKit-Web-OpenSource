@@ -2,6 +2,7 @@ import React from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { confirm } from '~/core/components/Confirm';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import { customizableComponent } from '~/core/hocs/customization';
 
@@ -69,11 +70,11 @@ export const CommunityProfileBar = customizableComponent(
         <Truncate lines={3}>
           <Description>{description}</Description>
         </Truncate>
-        {!isMine && (
+        <ConditionalRender condition={!isMine}>
           <PrimaryButton fullWidth onClick={() => joinCommunity(communityId)}>
             <PlusIcon /> Join
           </PrimaryButton>
-        )}
+        </ConditionalRender>
       </Container>
     );
   },

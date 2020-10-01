@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { CommunityProfileBar } from '~/social/components/Profile';
 import EmptyFeed from '~/social/components/EmptyFeed';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { customizableComponent } from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 
@@ -12,6 +13,7 @@ import CommunityMembers from './CommunityMembers';
 import { Content, Feed, PostCompose, Post, FeedHeaderTabs } from './styles';
 
 // TODO replace with translations keys
+// TODO: react-intl
 const tabs = {
   TIMELINE: 'Timeline',
   MEMBERS: 'Members',
@@ -28,16 +30,18 @@ const CommunityPosts = ({ communityId, community, onPostAuthorClick, blockRouteC
         onSubmit={addPost}
         blockRouteChange={blockRouteChange}
       />
-      {posts.length === 0 && <EmptyFeed />}
-      {posts.map(post => (
-        <Post
-          onPostAuthorClick={onPostAuthorClick}
-          key={post.postId}
-          post={post}
-          onEdit={updatedPost => editPost(updatedPost)}
-          onDelete={() => removePost(post.postId)}
-        />
-      ))}
+      <ConditionalRender condition={posts.length}>
+        {posts.map(post => (
+          <Post
+            onPostAuthorClick={onPostAuthorClick}
+            key={post.postId}
+            post={post}
+            onEdit={updatedPost => editPost(updatedPost)}
+            onDelete={() => removePost(post.postId)}
+          />
+        ))}
+        <EmptyFeed />
+      </ConditionalRender>
     </>
   );
 };
@@ -63,22 +67,21 @@ const CommunityFeed = ({
           activeTab={activeTab}
           onChange={setActiveTab}
         />
-        {activeTab === tabs.TIMELINE && (
+        <ConditionalRender condition={activeTab === tabs.TIMELINE}>
           <CommunityPosts
             communityId={communityId}
             community={currentCommunity}
             onPostAuthorClick={onPostAuthorClick}
             blockRouteChange={blockRouteChange}
           />
-        )}
-
-        {activeTab === tabs.MEMBERS && (
+        </ConditionalRender>
+        <ConditionalRender condition={activeTab === tabs.MEMBERS}>
           <CommunityMembers
             communityId={communityId}
             community={currentCommunity}
             onMemberClick={onMemberClick}
           />
-        )}
+        </ConditionalRender>
       </Feed>
       <CommunityProfileBar
         onEditCommunityClick={onEditCommunityClick}
