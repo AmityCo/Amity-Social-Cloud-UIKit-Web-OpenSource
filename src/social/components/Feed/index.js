@@ -4,6 +4,7 @@ import { EkoPostTargetType } from 'eko-sdk';
 import PostCompose from '~/social/components/PostCompose';
 import Post from '~/social/components/Post';
 import { customizableComponent } from '~/core/hocs/customization';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
 import EmptyFeed from '~/social/components/EmptyFeed';
 import useFeedSdk from './useFeedSdk';
 import { FeedScrollContainer } from './styles';
@@ -15,6 +16,8 @@ const Feed = ({
   feedClassName = null,
   onCreatePostSuccess = null,
   blockRouteChange,
+  emptyFeedIcon,
+  goToExplore,
 }) => {
   const [posts, hasMore, loadMore] = useFeedSdk({ targetType, targetId });
 
@@ -25,18 +28,24 @@ const Feed = ({
       hasMore={hasMore}
       loader={<div key={0}>Loading...</div>}
     >
-      {showPostCompose && (
+      <ConditionalRender condition={showPostCompose}>
         <PostCompose
           targetType={targetType}
           targetId={targetId}
           onCreateSuccess={onCreatePostSuccess}
           blockRouteChange={blockRouteChange}
         />
-      )}
-      {!posts.length && <EmptyFeed targetType={targetType} />}
-      {posts.map(({ postId }) => (
-        <Post key={postId} postId={postId} />
-      ))}
+      </ConditionalRender>
+      <ConditionalRender condition={posts.length}>
+        {posts.map(({ postId }) => (
+          <Post key={postId} postId={postId} />
+        ))}
+        <EmptyFeed
+          targetType={targetType}
+          emptyFeedIcon={emptyFeedIcon}
+          goToExplore={goToExplore}
+        />
+      </ConditionalRender>
     </FeedScrollContainer>
   );
 };
@@ -48,6 +57,8 @@ Feed.propTypes = {
   feedClassName: PropTypes.string,
   onCreatePostSuccess: PropTypes.func,
   blockRouteChange: PropTypes.func,
+  emptyFeedIcon: PropTypes.object,
+  goToExplore: PropTypes.func,
 };
 
 export default customizableComponent('Feed', Feed);

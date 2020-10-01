@@ -9,6 +9,7 @@ export default {
 export const Category = () => <Icons.Category />;
 export const Community = () => <Icons.Community />;
 export const User = () => <Icons.User />;
+export const EmptyFeed = () => <Icons.EmptyFeed />;
 
 export const Files = () => (
   <div

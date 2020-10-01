@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { EkoPostTargetType } from 'eko-sdk';
 import { customizableComponent } from '~/core/hocs/customization';
-import { EmptyFeedContainer, FeedIcon } from './styles';
+import { ConditionalRender } from '~/core/components/ConditionalRender';
+import { EmptyFeedContainer, FeedIcon, ExploreLink, SearchIcon, Text } from './styles';
 
+// TODO: react-intl
 const FeedTypesEmptyText = {
   [EkoPostTargetType.GlobalFeed]: 'This feed is empty',
   [EkoPostTargetType.CommunityFeed]: "This community's feed is empty",
@@ -11,16 +13,34 @@ const FeedTypesEmptyText = {
   [EkoPostTargetType.MyFeed]: 'Your feed is empty. Add your first post',
 };
 
-const EmptyFeed = ({ targetType = EkoPostTargetType.MyFeed, className = null }) => (
+const EmptyFeed = ({
+  targetType = EkoPostTargetType.MyFeed,
+  className = null,
+  emptyFeedIcon,
+  goToExplore,
+}) => (
   <EmptyFeedContainer className={className}>
-    <FeedIcon />
-    {FeedTypesEmptyText[targetType]}
+    <ConditionalRender condition={emptyFeedIcon}>
+      {emptyFeedIcon}
+      <FeedIcon />
+    </ConditionalRender>
+    <Text>{FeedTypesEmptyText[targetType]}</Text>
+    <ConditionalRender condition={goToExplore}>
+      <div>
+        <ExploreLink onClick={goToExplore}>
+          <SearchIcon />
+          Explore Community
+        </ExploreLink>
+      </div>
+    </ConditionalRender>
   </EmptyFeedContainer>
 );
 
 EmptyFeed.propTypes = {
   targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)),
   className: PropTypes.string,
+  emptyFeedIcon: PropTypes.object,
+  goToExplore: PropTypes.func,
 };
 
 export default customizableComponent('EmptyFeed', EmptyFeed);

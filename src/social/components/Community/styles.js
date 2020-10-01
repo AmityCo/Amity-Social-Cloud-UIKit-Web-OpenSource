@@ -6,6 +6,8 @@ import UIPostCompose from '~/social/components/PostCompose';
 import UIFeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 import UiKitAvatar from '~/core/components/Avatar';
 
+import { EmptyFeed } from '~/icons';
+
 export const CommunityMembersTabs = styled(Tabs)`
   margin-bottom: 14px;
 `;
@@ -75,3 +77,8 @@ export const Caption = styled.div`
   ${({ theme }) => theme.typography.caption}
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
+
+export const EmptyFeedIcon = styled(EmptyFeed).attrs({
+  width: '48px',
+  height: '48px',
+})``;

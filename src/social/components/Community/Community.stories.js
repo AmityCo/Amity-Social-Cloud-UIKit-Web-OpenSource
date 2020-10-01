@@ -18,6 +18,7 @@ import ExploreHome from '~/social/components/ExploreHome';
 import CategoryPage from '~/social/components/ExploreHome/CategoryPage';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 import CommunitySettings from '~/social/components/CommunitySettings';
+import { EmptyFeedIcon } from './styles';
 
 import { useCommunitiesMock } from '~/mock';
 import CommunityFeed from '.';
@@ -114,6 +115,8 @@ const Pages = () => {
             onPostAuthorClick={navigateTo}
             blockRouteChange={blockRouteChange}
             showPostCompose
+            goToExplore={goToExplore}
+            emptyFeedIcon={<EmptyFeedIcon />}
           />
         </Route>
         <Route path="/explore" exact>
