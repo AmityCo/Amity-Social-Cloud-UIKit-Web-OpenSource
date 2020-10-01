@@ -36,7 +36,7 @@ const Comment = ({ commentId, isReplyComment = false }) => {
             authorName={commentAuthor.displayName || commentAuthor.userId || DEFAULT_DISPLAY_NAME}
             authorAvatar={commentAuthor.avatar}
             createdAt={comment.createdAt}
-            text={comment.data.text}
+            text={comment?.data?.text ?? ''}
             handleReportComment={handleReportComment}
             isReplyComment
           />
@@ -48,7 +48,7 @@ const Comment = ({ commentId, isReplyComment = false }) => {
               authorName={commentAuthor.displayName || DEFAULT_DISPLAY_NAME}
               authorAvatar={commentAuthor.avatar}
               createdAt={comment.createdAt}
-              text={comment.data.text}
+              text={comment?.data?.text ?? ''}
               onClickReply={onClickReply}
               handleReportComment={handleReportComment}
             />

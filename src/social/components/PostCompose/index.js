@@ -87,7 +87,7 @@ const PostComposeBar = ({
     });
 
     newPostLiveObject.on('dataStatusChanged', () => {
-      onCreateSuccess(newPostLiveObject.model.postId);
+      onCreateSuccess && onCreateSuccess(newPostLiveObject.model.postId);
       setText('');
       newPostLiveObject.dispose();
     });
@@ -170,7 +170,9 @@ const PostComposeBar = ({
           </ConditionalRender>
         </PostComposeTextareaWrapper>
         <Footer>
-          {!!community && <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />}
+          <ConditionalRender condition={community}>
+            <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
+          </ConditionalRender>
           <FooterActionBar>
             <ImagePostIcon
               disabled={!canUploadImage}
