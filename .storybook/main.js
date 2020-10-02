@@ -1,4 +1,4 @@
-const webpack = require('webpack');
+const { DefinePlugin } = require('webpack');
 const mainWebpack = require('../webpack.config.js');
 
 module.exports = {
@@ -15,10 +15,10 @@ module.exports = {
   ],
   webpackFinal: async config => {
     config.plugins.push(
-      // fix static storybook styling
-      new webpack.DefinePlugin({
-        SC_DISABLE_SPEEDY: true,
-      }),
+      new DefinePlugin({
+        SC_DISABLE_SPEEDY: true, // storybook
+        __API_ENDPOINT__: `"${process.env.API_ENDPOINT_STAGING}"`
+      })
     );
 
     // Merge with resolve config from main webpack.

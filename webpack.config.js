@@ -1,4 +1,5 @@
 const path = require('path');
+const { DefinePlugin } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -20,6 +21,12 @@ module.exports = (_, argv) => ({
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new DefinePlugin({
+      __API_ENDPOINT__:
+        process.env.NODE_ENV === 'production'
+          ? `"${process.env.API_ENDPOINT_PRODUCTION}"`
+          : `"${process.env.API_ENDPOINT_STAGING}"`,
+    }),
     argv.analyze === 'true' && new BundleAnalyzerPlugin({ analyzerMode: 'static' }),
   ].filter(Boolean),
   resolve: {
