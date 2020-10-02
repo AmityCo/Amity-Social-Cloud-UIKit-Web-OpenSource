@@ -164,7 +164,7 @@ const CommunityForm = ({
               Public
               <Description>Anyone can join, view, and search the posts  in this page.</Description>
             </div>
-            <Radio type="radio" name="isPublic" defaultChecked ref={register} />
+            <Radio type="radio" name="isPublic" value="true" defaultChecked ref={register} />
           </PermissionControlContainer>
           <PermissionControlContainer>
             <IconWrapper>
@@ -177,7 +177,7 @@ const CommunityForm = ({
                 page.
               </Description>
             </div>
-            <Radio type="radio" name="isPublic" value={false} ref={register} />
+            <Radio type="radio" name="isPublic" value="" ref={register} />
           </PermissionControlContainer>
         </FormBlock>
         <ConditionalRender condition={!isPublic}>

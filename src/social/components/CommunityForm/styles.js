@@ -78,7 +78,7 @@ export const UserSelectorInput = styled.input`
 
 export const SelectorPopover = styled(Popover).attrs({
   disableReposition: true,
-  position: 'bottom',
+  position: ['top', 'bottom'],
 })`
   width: 488px;
 `;
@@ -119,8 +119,10 @@ export const Label = styled.label`
   margin-bottom: 4px;
   ${({ theme }) => `
   &.required {
-    color: ${theme.palette.alert.main};
-    content: ' *';
+    &::after {
+      color: ${theme.palette.alert.main};
+      content: ' *';
+    }
   }
 `}
 `;
