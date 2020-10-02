@@ -1,5 +1,6 @@
 import React from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
+import { _changeSDKDefaultConfig } from 'eko-sdk';
 
 const GLOBAL_NAME = 'user'
 
@@ -14,6 +15,11 @@ const global = {
     },
   }
 }
+
+_changeSDKDefaultConfig({
+  ws: { endpoint: process.env.STORYBOOK_API_ENDPOINT },
+  http: { endpoint: process.env.STORYBOOK_API_ENDPOINT },
+});
 
 const WEB_TEST_USER = 'Web-Test,Web-test'
 const FALLBACK_USER = 'Web-Test,ENV_USER_NOT_SET'

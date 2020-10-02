@@ -17,7 +17,6 @@ module.exports = {
     config.plugins.push(
       new DefinePlugin({
         SC_DISABLE_SPEEDY: true, // storybook
-        __API_ENDPOINT__: `"${process.env.API_ENDPOINT_STAGING}"`
       })
     );
 

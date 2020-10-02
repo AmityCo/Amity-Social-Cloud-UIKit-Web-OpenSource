@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import EkoClient, { _changeSDKDefaultConfig } from 'eko-sdk';
+import EkoClient from 'eko-sdk';
 
 import { ThemeProvider } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
@@ -24,13 +24,6 @@ const UiKitProvider = ({
   children /* TODO localization */,
 }) => {
   const SDKInfo = useMemo(() => {
-    _changeSDKDefaultConfig({
-      /* eslint-disable-next-line no-undef */
-      ws: { endpoint: __API_ENDPOINT__ },
-      /* eslint-disable-next-line no-undef */
-      http: { endpoint: __API_ENDPOINT__ },
-    });
-
     if (!client) client = new EkoClient({ apiKey });
     else client.unregisterSession();
 
