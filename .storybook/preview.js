@@ -1,5 +1,12 @@
+import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
 
-import UiKitDecorator from './UiKitDecorator';
+import * as decorators from './decorators'
 
-addDecorator(UiKitDecorator);
+export const globalTypes = Object.values(decorators)
+  .map(({ global }) => global)
+  .reduce((obj, item) => ({ ...obj, ...item }), {})
+
+Object.values(decorators)
+  .map(({ decorator }) => decorator)
+  .forEach(decorator => addDecorator(decorator))

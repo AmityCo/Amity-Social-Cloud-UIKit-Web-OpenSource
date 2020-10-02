@@ -29,20 +29,15 @@ const UiKitProvider = ({
   children /* TODO localization */,
 }) => {
   const SDKInfo = useMemo(() => {
-    // TODO fix
-    // initialize only one client
-    if (!client) {
-      client = new EkoClient({ apiKey });
-      // Register Session with EkoClient with userId and display name
-      client.registerSession({
-        userId,
-        displayName,
-      });
-    }
+    if (!client) client = new EkoClient({ apiKey });
+    else client.unregisterSession();
 
-    return {
-      client,
-    };
+    client.registerSession({
+      userId,
+      displayName,
+    });
+
+    return { client };
   }, [apiKey, userId, displayName]);
 
   return (
