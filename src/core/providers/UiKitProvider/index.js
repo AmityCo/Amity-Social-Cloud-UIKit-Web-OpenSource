@@ -13,10 +13,9 @@ import Localization from './Localisation';
 import buildGlobalTheme from './theme';
 import { UIStyles } from './styles';
 
-_changeSDKDefaultConfig({
-  ws: { endpoint: 'https://api.staging.ekomedia.technology' },
-  http: { endpoint: 'https://api.staging.ekomedia.technology' },
-});
+// TODO: this should probably be implemented in sdk...
+const STG = 'https://api.staging.ekomedia.technology';
+const PRD = 'https://api.ekomedia.technology';
 
 let client;
 
@@ -24,11 +23,19 @@ const UiKitProvider = ({
   apiKey,
   userId,
   displayName,
+  staging = false,
   customComponents = {},
   theme = {},
   children /* TODO localization */,
 }) => {
   const SDKInfo = useMemo(() => {
+    const endpoint = staging ? STG : PRD;
+
+    _changeSDKDefaultConfig({
+      ws: { endpoint },
+      http: { endpoint },
+    });
+
     if (!client) client = new EkoClient({ apiKey });
     else client.unregisterSession();
 
@@ -38,7 +45,7 @@ const UiKitProvider = ({
     });
 
     return { client };
-  }, [apiKey, userId, displayName]);
+  }, [apiKey, userId, displayName, staging]);
 
   return (
     <>
@@ -66,6 +73,7 @@ UiKitProvider.propTypes = {
   apiKey: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   displayName: PropTypes.string,
+  staging: PropTypes.bool,
   customComponents: PropTypes.object,
   theme: PropTypes.shape({
     palette: PropTypes.object,

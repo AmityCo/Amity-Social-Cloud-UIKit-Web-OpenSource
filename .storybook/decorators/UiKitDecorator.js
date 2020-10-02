@@ -30,6 +30,7 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
     apiKey={process.env.STORYBOOK_SDK_API_KEY}
     userId={userId}
     displayName={displayName || userId}
+    staging
   >
     <Story />
   </UiKitProvider>)
