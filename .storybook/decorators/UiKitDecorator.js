@@ -11,7 +11,16 @@ const global = {
     defaultValue: 'Web-Test',
     toolbar: {
       icon: 'user',
-      items: ['Web-Test', 'ENV_USER1', 'ENV_USER2'],
+      items: [{
+        value: 'Web-Test,Web-test',
+        title: 'Web-Test',
+      }, {
+        value: process.env.STORYBOOK_USER1,
+        title: process.env.STORYBOOK_USER1.split(',')[1],
+      }, {
+        value: process.env.STORYBOOK_USER2,
+        title: process.env.STORYBOOK_USER2.split(',')[1],
+      }],
     },
   }
 }
@@ -21,19 +30,15 @@ _changeSDKDefaultConfig({
   http: { endpoint: process.env.STORYBOOK_API_ENDPOINT },
 });
 
-const WEB_TEST_USER = 'Web-Test,Web-test'
-const FALLBACK_USER = 'Web-Test,ENV_USER_NOT_SET'
+const FALLBACK_USER = 'Web-Test,Web-Test'
 
 const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
-  const user = val === 'Web-Test'
-    ? WEB_TEST_USER  
-    : process.env[`STORYBOOK_${val}`] || FALLBACK_USER
-
-  const [userId,displayName] = user.split(',')
+  const user = val || FALLBACK_USER
+  const [userId, displayName] = user.split(',')
 
   return (<UiKitProvider
     key={userId}
-    apiKey={process.env.STORYBOOK_SDK_API_KEY}
+    apiKey={process.env.STORYBOOK_API_KEY}
     userId={userId}
     displayName={displayName || userId}
   >

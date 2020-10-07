@@ -1,4 +1,4 @@
-const { DefinePlugin } = require('webpack');
+const { DefinePlugin, EnvironmentPlugin } = require('webpack');
 const mainWebpack = require('../webpack.config.js');
 
 module.exports = {
@@ -17,7 +17,11 @@ module.exports = {
     config.plugins.push(
       new DefinePlugin({
         SC_DISABLE_SPEEDY: true, // storybook
-      })
+      }),
+      new EnvironmentPlugin(
+        Object.keys(process.env)
+          .filter(key => key.startsWith('STORYBOOK'))
+      ),
     );
 
     // Merge with resolve config from main webpack.
