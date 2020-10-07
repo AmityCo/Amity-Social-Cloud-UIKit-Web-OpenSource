@@ -4,10 +4,10 @@ stages:
   - build_pr
   - deploy_pr
   - trash_pr
-  - build_develop
-  - deploy_develop
-  - build
+  - storybook
   - deploy
+  - build
+  - publish
 
 audit:
   image: node:12.18
@@ -71,9 +71,9 @@ trash_pr:
     - develop
     - merge_requests
 
-build_develop:
+storybook:
   image: node:12.18
-  stage: build_develop
+  stage: storybook
   script:
     - npm i -g npm
     - npm ci
@@ -84,9 +84,9 @@ build_develop:
   only:
     - develop
 
-deploy_develop:
+deploy:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  stage: deploy_develop
+  stage: deploy
   dependencies:
     - build_develop
   script:
@@ -110,7 +110,7 @@ build:
 
 publish:
   image: node:12.18
-  stage: deploy
+  stage: publish
   script:
     - npm i -g npm
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
