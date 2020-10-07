@@ -88,7 +88,7 @@ deploy:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   stage: deploy
   dependencies:
-    - build_develop
+    - storybook
   script:
     - aws s3 sync --delete ./storybook-build s3://ui-kit.staging.ekomedia.technology/develop/
   only:
