@@ -25,12 +25,14 @@ const UiKitProvider = ({
 }) => {
   const SDKInfo = useMemo(() => {
     if (!client) client = new EkoClient({ apiKey });
-    else client.unregisterSession();
+    else if (client.currentUserId !== userId) client.unregisterSession();
 
-    client.registerSession({
-      userId,
-      displayName,
-    });
+    if (!client.currentUserId) {
+      client.registerSession({
+        userId,
+        displayName,
+      });
+    }
 
     return { client };
   }, [apiKey, userId, displayName]);
