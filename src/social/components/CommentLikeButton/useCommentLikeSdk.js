@@ -2,20 +2,18 @@ import { CommentRepository } from 'eko-sdk';
 import { LIKE_REACTION_KEY } from 'constants';
 import useLiveObject from '~/core/hooks/useLiveObject';
 
-const commentRepo = new CommentRepository();
-
 const useCommentLikeSdk = ({ commentId, onLikeSuccess, onUnlikeSuccess }) => {
-  const comment = useLiveObject(() => commentRepo.commentForId(commentId), [commentId]);
+  const comment = useLiveObject(() => CommentRepository.commentForId(commentId), [commentId]);
   const isCommentReady = !!comment.commentId;
   const userHasLikedComment =
     isCommentReady && comment.myReactions && comment.myReactions.includes(LIKE_REACTION_KEY);
 
   const handleToggleLike = () => {
     if (!userHasLikedComment) {
-      commentRepo.addReaction({ commentId, reactionName: LIKE_REACTION_KEY });
+      CommentRepository.addReaction({ commentId, reactionName: LIKE_REACTION_KEY });
       onLikeSuccess && onLikeSuccess(commentId);
     } else {
-      commentRepo.removeReaction({ commentId, reactionName: LIKE_REACTION_KEY });
+      CommentRepository.removeReaction({ commentId, reactionName: LIKE_REACTION_KEY });
       onUnlikeSuccess && onUnlikeSuccess(commentId);
     }
   };

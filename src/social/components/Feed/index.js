@@ -6,7 +6,7 @@ import Post from '~/social/components/Post';
 import { customizableComponent } from '~/core/hocs/customization';
 import { ConditionalRender } from '~/core/components/ConditionalRender';
 import EmptyFeed from '~/social/components/EmptyFeed';
-import useFeedSdk from './useFeedSdk';
+import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
 
 const Feed = ({
@@ -19,7 +19,7 @@ const Feed = ({
   emptyFeedIcon,
   goToExplore,
 }) => {
-  const [posts, hasMore, loadMore] = useFeedSdk({ targetType, targetId });
+  const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
 
   return (
     <FeedScrollContainer

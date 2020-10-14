@@ -13,7 +13,6 @@ import {
   Avatar,
   MemberInfo,
   MemberName,
-  Caption,
   CommunityMembersContainer,
   CommunityMembersHeader,
   CommunityMemberContainer,
@@ -49,7 +48,6 @@ const CommunityMember = ({ user, onMemberClick }) => {
         <Avatar avatar={user.avatar} />
         <div>
           <MemberName>{user.displayName}</MemberName>
-          <Caption>@useraccount</Caption>
         </div>
       </MemberInfo>
       <Options
@@ -81,11 +79,7 @@ const CommunityMembers = ({ onMemberClick }) => {
   return (
     <CommunityMembersContainer>
       <CommunityMembersHeader>Community Members • {users.length}</CommunityMembersHeader>
-      <CommunityMembersTabs
-        tabs={[tabs.MEMBERS, tabs.MODERATORS]}
-        activeTab={activeTab}
-        onChange={setActiveTab}
-      />
+      <CommunityMembersTabs tabs={[tabs.MEMBERS]} activeTab={activeTab} onChange={setActiveTab} />
       <ConditionalRender condition={activeTab === tabs.MEMBERS}>
         <LoadMore hasMore={hasMoreUsers} loadMore={loadMoreUsers}>
           {users.map(user => (

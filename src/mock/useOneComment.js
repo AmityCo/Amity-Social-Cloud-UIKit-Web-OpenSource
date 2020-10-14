@@ -7,8 +7,6 @@ import useOnePost from '~/mock/useOnePost';
  * Gets an existing comment from a post, or creates a new comment.
  */
 
-const commentRepo = new CommentRepository();
-
 const useOneComment = () => {
   const [comment, setComment] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,11 +18,11 @@ const useOneComment = () => {
     let commentLiveObject;
 
     if (post.comments.length) {
-      commentLiveObject = commentRepo.commentForId(post.comments[0]);
+      commentLiveObject = CommentRepository.commentForId(post.comments[0]);
       commentLiveObject.model && setComment(commentLiveObject.model);
       setIsLoading(false);
     } else {
-      commentLiveObject = commentRepo.createTextComment({
+      commentLiveObject = CommentRepository.createTextComment({
         referenceType: EkoCommentReferenceType.Post,
         referenceId: post.postId,
         text: 'Comment created for story',

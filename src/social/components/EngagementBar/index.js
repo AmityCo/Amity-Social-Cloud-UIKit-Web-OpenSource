@@ -12,8 +12,6 @@ import useLiveObject from '~/core/hooks/useLiveObject';
 import { customizableComponent } from '~/core/hocs/customization';
 import { EngagementBarContainer, Counters, InteractionBar, CommentIcon } from './styles';
 
-const commentRepo = new CommentRepository();
-
 const EngagementBar = ({ postId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const open = () => setIsOpen(true);
@@ -23,7 +21,7 @@ const EngagementBar = ({ postId }) => {
   const { comments = [] } = post;
 
   const handleAddComment = commentText => {
-    commentRepo.createTextComment({
+    CommentRepository.createTextComment({
       referenceType: EkoCommentReferenceType.Post,
       referenceId: post.postId,
       text: commentText,

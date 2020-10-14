@@ -2,20 +2,18 @@ import { CommentRepository, UserRepository } from 'eko-sdk';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-const commentRepo = new CommentRepository();
 const userRepo = new UserRepository();
 
-const useCommentSdk = ({ commentId /* , isReplyComment = false */ }) => {
-  const comment = useLiveObject(() => commentRepo.commentForId(commentId), [commentId]);
+const useComment = ({ commentId }) => {
+  const comment = useLiveObject(() => CommentRepository.commentForId(commentId), [commentId]);
   const isCommentReady = !!comment.commentId;
   const { userId, referenceId, referenceType } = comment;
 
   const commentAuthor = useLiveObject(() => userRepo.userForId(userId), [userId]);
 
-  // TODO - get pagination params here and used to show/hide replies.
-  const [commentReplies] = useLiveCollection(
+  const [commentReplies, commentRepliesHasMore, commentRepliesLoadMore] = useLiveCollection(
     () =>
-      commentRepo.queryComments({
+      CommentRepository.queryComments({
         parentId: commentId,
         filterByParentId: true,
         referenceId,
@@ -24,11 +22,11 @@ const useCommentSdk = ({ commentId /* , isReplyComment = false */ }) => {
   );
 
   const handleReportComment = () => {
-    commentRepo.flag(commentId);
+    CommentRepository.flag(commentId);
   };
 
   const handleReplyToComment = replyCommentText => {
-    commentRepo.createTextComment({
+    CommentRepository.createTextComment({
       referenceType,
       referenceId,
       text: replyCommentText,
@@ -41,9 +39,11 @@ const useCommentSdk = ({ commentId /* , isReplyComment = false */ }) => {
     comment,
     commentAuthor,
     commentReplies,
+    commentRepliesHasMore,
+    commentRepliesLoadMore,
     handleReportComment,
     handleReplyToComment,
   };
 };
 
-export default useCommentSdk;
+export default useComment;

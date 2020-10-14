@@ -17,7 +17,7 @@ export const StyledLikeButton = styled(SecondaryButton)`
 export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
   font-size: 16px;
   margin-right: 5px;
-  ${({ isLiked }) => isLiked && isLikedStyle}
+  ${({ $isLiked }) => $isLiked && isLikedStyle}
 `;
 /**
  * This can be customised by a ui-kit user.
@@ -25,7 +25,7 @@ export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
  */
 const StyledPostLikeButton = ({ onClick, isActive, isDisabled }) => (
   <StyledLikeButton onClick={onClick} active={isActive} disabled={isDisabled}>
-    <LikeIcon isLiked={isActive} /> Like
+    <LikeIcon $isLiked={isActive} /> Like
   </StyledLikeButton>
 );
 

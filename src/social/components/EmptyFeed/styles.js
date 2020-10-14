@@ -9,13 +9,11 @@ import Button from '~/core/components/Button';
 export const FeedIcon = styled(FaIcon).attrs({ icon: faNewspaper })`
   font-size: 48px;
   margin: 10px;
-  cursor: pointer;
 `;
 
 export const EmptyFeedContainer = styled.div`
   color: ${({ theme }) => theme.palette.base.shade3};
   ${({ theme }) => theme.typography.bodyBold}
-  width: 560px;
   height: 220px;
   padding: 0 80px;
   display: flex;

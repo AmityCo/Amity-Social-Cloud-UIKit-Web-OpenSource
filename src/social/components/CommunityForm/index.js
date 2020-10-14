@@ -137,24 +137,26 @@ const CommunityForm = ({
             <Controller name="category" render={CategorySelector} control={control} />
           </Field>
         </FormBlock>
-        <FormBlock title="Post permission" edit={edit}>
-          <SwitchContainer>
-            <div>
-              <Label>Only admin can post</Label>
+        <ConditionalRender condition={false}>
+          <FormBlock title="Post permission" edit={edit}>
+            <SwitchContainer>
+              <div>
+                <Label>Only admin can post</Label>
 
-              <Description>
-                Choose to allow Only Admins to create posts in this community.
-              </Description>
-            </div>
-            <Controller
-              name="onlyAdminCanPost"
-              render={({ value, onChange }) => (
-                <Switch value={value} onChange={() => onChange(!value)} />
-              )}
-              control={control}
-            />
-          </SwitchContainer>
-        </FormBlock>
+                <Description>
+                  Choose to allow Only Admins to create posts in this community.
+                </Description>
+              </div>
+              <Controller
+                name="onlyAdminCanPost"
+                render={({ value, onChange }) => (
+                  <Switch value={value} onChange={() => onChange(!value)} />
+                )}
+                control={control}
+              />
+            </SwitchContainer>
+          </FormBlock>
+        </ConditionalRender>
         <FormBlock title="Community permission" edit={edit}>
           <PermissionControlContainer>
             <IconWrapper>

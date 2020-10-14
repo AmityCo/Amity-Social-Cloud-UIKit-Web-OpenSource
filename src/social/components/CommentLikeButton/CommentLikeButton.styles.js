@@ -18,12 +18,12 @@ export const StyledLikeButton = styled(SecondaryButton)`
 export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
   font-size: 16px;
   margin-right: 5px;
-  ${({ isLiked }) => isLiked && isLikedStyle}
+  ${({ $isLiked }) => $isLiked && isLikedStyle}
 `;
 
 const StyledCommentLikeButton = ({ onClick, isActive, isDisabled, totalLikes }) => (
   <StyledLikeButton onClick={onClick} active={isActive} disabled={isDisabled}>
-    <LikeIcon isLiked={isActive} /> {totalLikes > 0 ? totalLikes : ''}
+    <LikeIcon $isLiked={isActive} /> {totalLikes > 0 ? totalLikes : ''}
   </StyledLikeButton>
 );
 

@@ -11,6 +11,9 @@ const commonButtonStyles = ({ theme }) => css`
   ${theme.typography.bodyBold}
   ${({ fullWidth }) => fullWidth && 'width: 100%;'}
   justify-content: center;
+  &:disabled {
+    cursor: default;
+  }
 `;
 
 export const DefaultButton = styled.button`

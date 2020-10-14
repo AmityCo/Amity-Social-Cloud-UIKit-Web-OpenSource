@@ -50,7 +50,7 @@ StyledComment.propTypes = {
   commentId: PropTypes.string,
   authorName: PropTypes.string,
   authorAvatar: PropTypes.string,
-  createdAt: PropTypes.string,
+  createdAt: PropTypes.instanceOf(Date),
   text: PropTypes.string,
   onClickReply: PropTypes.func,
   handleReportComment: PropTypes.func,

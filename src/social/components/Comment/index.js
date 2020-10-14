@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { customizableComponent } from '~/core/hocs/customization';
+import useComment from '~/social/hooks/useComment';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import { ConditionalRender } from '~/core/components/ConditionalRender';
 import CommentReplies from './CommentReplies';
 import StyledComment from './Comment.styles';
-import useCommentSdk from './useCommentSdk';
 import { CommentBlock, CommentContainer, ReplyContainer } from './styles';
 
 // TODO: react-intl
@@ -21,7 +21,7 @@ const Comment = ({ commentId, isReplyComment = false }) => {
     commentReplies,
     handleReportComment,
     handleReplyToComment,
-  } = useCommentSdk({ commentId });
+  } = useComment({ commentId });
 
   const onClickReply = () => {
     setIsReplying(true);
