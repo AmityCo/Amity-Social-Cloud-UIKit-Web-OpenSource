@@ -8,7 +8,7 @@ module.exports = (_, argv) => ({
   entry: './src/index.js',
   externals: [
     nodeExternals({
-      allowlist: ['eko-sdk', /@fortawesome\/pro/],
+      allowlist: [/@fortawesome\/pro/],
     }),
   ],
   output: {
