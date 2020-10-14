@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { EkoPostTargetType } from 'eko-sdk';
 import useOneUser from '~/mock/useOneUser';
+import useOneCommunity from '~/mock/useOneCommunity';
 import Feed from '.';
 
 export default {
@@ -14,25 +15,23 @@ const FeedContainer = styled.div`
 `;
 
 // You can show and hide the compose bar using the controls tab.
-export const MyFeedWithComposeBar = ({ showPostCompose }) => (
+export const MyFeed = ({ showPostCompose }) => (
   <FeedContainer>
-    <Feed showPostCompose={showPostCompose} style={{ width: 560 }} />
+    <Feed showPostCompose={showPostCompose} />
   </FeedContainer>
 );
 
-MyFeedWithComposeBar.args = {
+MyFeed.args = {
   showPostCompose: true,
 };
 
-MyFeedWithComposeBar.argTypes = {
+MyFeed.argTypes = {
   showPostCompose: { control: { type: 'boolean' } },
 };
 
 // By default this uses a random user, who may have no posts on their feed.
 // Try a different user with the controls tab.
 export const AnotherUsersFeed = ({ customUserId, showPostCompose }) => {
-  // TODO - debounce the changing of customerUserId!
-  // Or allow it to be changed with button click.
   const user = useOneUser();
   if (!user) return <p>Loading...</p>;
   return (
@@ -41,7 +40,6 @@ export const AnotherUsersFeed = ({ customUserId, showPostCompose }) => {
         targetType={EkoPostTargetType.UserFeed}
         targetId={customUserId || user.userId}
         showPostCompose={showPostCompose}
-        style={{ width: 560 }}
       />
     </FeedContainer>
   );
@@ -57,25 +55,24 @@ AnotherUsersFeed.argTypes = {
   customUserId: { control: { type: 'text' } },
 };
 
-// TODO - this community Id should come from BE so that it definitely exists.
-// Same as is currently done above with useOneUser hook.
-const KNOWN_COMMUNITY_ID = '7f1bc42bff3a3a2d3af1da2de892c1f1';
+export const CommunityFeed = ({ showPostCompose }) => {
+  const [community, isLoading] = useOneCommunity();
+  if (isLoading) return <p>Loading...</p>;
+  return (
+    <FeedContainer>
+      <Feed
+        targetType={EkoPostTargetType.CommunityFeed}
+        targetId={community.communityId}
+        showPostCompose={showPostCompose}
+      />
+    </FeedContainer>
+  );
+};
 
-export const CommunityFeedWithComposeBar = ({ showPostCompose }) => (
-  <FeedContainer>
-    <Feed
-      targetType={EkoPostTargetType.CommunityFeed}
-      targetId={KNOWN_COMMUNITY_ID}
-      showPostCompose={showPostCompose}
-      style={{ width: 560 }}
-    />
-  </FeedContainer>
-);
-
-CommunityFeedWithComposeBar.args = {
+CommunityFeed.args = {
   showPostCompose: true,
 };
 
-CommunityFeedWithComposeBar.argTypes = {
+CommunityFeed.argTypes = {
   showPostCompose: { control: { type: 'boolean' } },
 };
