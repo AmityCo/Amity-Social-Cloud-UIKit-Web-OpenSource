@@ -1,13 +1,8 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faPlus } from '@fortawesome/pro-regular-svg-icons';
+import { faPlus } from '@fortawesome/pro-regular-svg-icons';
 import UIOptions from '~/core/components/Options';
 import { PrimaryButton } from '~/core/components/Button';
-import UIAvatar from '~/core/components/Avatar';
-
-export const RightIcon = styled(FaIcon).attrs({ icon: faChevronRight })`
-  font-size: 16px;
-`;
 
 export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
   font-size: 15px;
@@ -31,33 +26,18 @@ export const Container = styled.div`
 export const Header = styled.div`
   display: flex;
   align-items: flex-start;
+  margin-bottom: 12px;
 `;
 
-export const Avatar = styled(UIAvatar).attrs({
-  size: 'big',
-})`
-  margin-right: 12px;
-`;
-
-export const CommunityNameContainer = styled.div`
-  display: flex;
-  margin-top: 10px;
-  word-break: break-all;
-  align-items: center;
-`;
-
-export const CommunityName = styled.div`
-  flex: 3;
-  ${({ theme }) => theme.typography.headline}
-`;
-
-export const Category = styled.div`
+export const CategoriesList = styled.div`
   margin-bottom: 16px;
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 export const Count = styled.span`
-  ${({ theme }) => theme.typography.bodyBold}
+  & > .countNumber {
+    ${({ theme }) => theme.typography.bodyBold}
+  }
 `;
 
 export const Description = styled.div`
@@ -68,4 +48,11 @@ export const Description = styled.div`
 export const JoinButton = styled(PrimaryButton)`
   width: 100%;
   justify-content: center;
+`;
+
+export const CountsContainer = styled.div`
+  margin-bottom: 12px;
+  & > ${Count} {
+    margin-right: 8px;
+  }
 `;

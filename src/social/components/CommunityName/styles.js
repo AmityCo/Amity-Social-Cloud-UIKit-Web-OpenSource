@@ -24,8 +24,18 @@ export const NameContainer = styled.div`
   display: flex;
   align-items: center;
   overflow: hidden;
-  ${({ theme, isActive }) => css`
+  ${({ theme, isActive, isTitle }) => css`
     ${theme.typography.bodyBold}
     ${isActive && `color: ${theme.palette.primary.main}`}
+    ${isTitle && theme.typography.title}
   `}
+
+  & > ${PrivateIcon},
+  & > ${VerifiedIcon} {
+  ${({ isTitle }) =>
+    isTitle &&
+    css`
+      font-size: 18px;
+    `}
+  }
 `;

@@ -15,6 +15,7 @@ UICommunityName.args = {
   isOfficial: false,
   isPublic: true,
   isActive: false,
+  isTitle: false,
 };
 
 UICommunityName.argTypes = {
@@ -22,6 +23,7 @@ UICommunityName.argTypes = {
   isOfficial: { control: { type: 'boolean' } },
   isPublic: { control: { type: 'boolean' } },
   isActive: { control: { type: 'boolean' } },
+  isTitle: { control: { type: 'boolean' } },
 };
 
 export const SDKCommunityName = ({ communityId, isActive, isSearchResult }) => {
@@ -40,10 +42,12 @@ SDKCommunityName.args = {
   communityId: '',
   isActive: false,
   isSearchResult: false,
+  isTitle: false,
 };
 
 SDKCommunityName.argTypes = {
   communityId: { control: { type: 'text' } },
   isActive: { control: { type: 'boolean' } },
   isSearchResult: { control: { type: 'boolean' } },
+  isTitle: { control: { type: 'boolean' } },
 };

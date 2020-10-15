@@ -5,8 +5,15 @@ import Highlight from '~/core/components/Highlight';
 import useCommunity from '~/social/hooks/useCommunity';
 import UICommunityName from './UICommunityName';
 
-const CommunityName = ({ communityId, isActive, isSearchResult, searchInput }) => {
-  const community = useCommunity(communityId);
+const CommunityName = ({
+  communityId,
+  isActive,
+  isTitle,
+  isSearchResult,
+  searchInput,
+  className,
+}) => {
+  const { community } = useCommunity(communityId);
   const { displayName, isOfficial, isPublic } = community;
   if (isSearchResult) {
     return <Highlight text={displayName || ''} query={searchInput} />;
@@ -17,6 +24,8 @@ const CommunityName = ({ communityId, isActive, isSearchResult, searchInput }) =
       isPublic={isPublic}
       isOfficial={isOfficial}
       isActive={isActive}
+      isTitle={isTitle}
+      className={className}
     />
   );
 };
@@ -24,14 +33,18 @@ const CommunityName = ({ communityId, isActive, isSearchResult, searchInput }) =
 CommunityName.propTypes = {
   communityId: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
+  isTitle: PropTypes.bool,
   isSearchResult: PropTypes.bool,
   searchInput: PropTypes.string,
+  className: PropTypes.string,
 };
 
 CommunityName.defaultProps = {
   isActive: false,
+  isTitle: false,
   isSearchResult: false,
   searchInput: '',
+  className: null,
 };
 
 export { UICommunityName };

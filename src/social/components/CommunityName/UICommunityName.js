@@ -10,9 +10,10 @@ const UICommunityName = ({
   isPublic = false,
   isOfficial = false,
   isActive = false,
+  isTitle = false,
   className = null,
 }) => (
-  <NameContainer className={className} isActive={isActive}>
+  <NameContainer className={className} isActive={isActive} isTitle={isTitle}>
     <ConditionalRender condition={!isPublic}>
       <PrivateIcon />
     </ConditionalRender>
@@ -28,6 +29,7 @@ UICommunityName.propTypes = {
   isPublic: PropTypes.bool,
   isOfficial: PropTypes.bool,
   isActive: PropTypes.bool,
+  isTitle: PropTypes.bool,
   className: PropTypes.string,
 };
 

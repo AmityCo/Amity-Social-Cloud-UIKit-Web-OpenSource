@@ -22,7 +22,7 @@ import CommunitySettings from '~/social/components/CommunitySettings';
 import { EmptyFeedIcon } from './styles';
 
 import { useCommunitiesMock } from '~/mock';
-import CommunityFeed from '.';
+import CommunityPage from '~/social/components/CommunityPage';
 
 export default {
   title: 'Community',
@@ -143,6 +143,8 @@ const Pages = () => {
             categoryId={categoryId}
             onCommunityClick={navigateTo}
             onHeaderBackButtonClick={goToExplore}
+            onPostAuthorClick={navigateTo}
+            onEditCommunityClick={onEditCommunityClick}
           />
         </Route>
         <Route path="/community/:communityId/edit">
@@ -153,12 +155,7 @@ const Pages = () => {
           />
         </Route>
         <Route path="/community/:communityId">
-          <Feed
-            targetType={EkoPostTargetType.CommunityFeed}
-            targetId={communityId}
-            blockRouteChange={blockRouteChange}
-            showPostCompose
-          />
+          <CommunityPage communityId={communityId} blockRouteChange={blockRouteChange} />
         </Route>
         <Route path="/profile/:userId" exact>
           <Feed

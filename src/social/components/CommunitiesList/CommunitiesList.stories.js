@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import CommunitiesList from '.';
 
 export default {
-  title: 'Components/Community/CommunitiesList',
+  title: 'Components/Community/List',
   parameters: { layout: 'centered' },
 };
 

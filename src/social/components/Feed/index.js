@@ -18,6 +18,7 @@ const Feed = ({
   blockRouteChange,
   emptyFeedIcon,
   goToExplore,
+  onPostAuthorClick,
 }) => {
   const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
 
@@ -39,7 +40,7 @@ const Feed = ({
       </ConditionalRender>
       <ConditionalRender condition={posts.length}>
         {posts.map(({ postId }) => (
-          <Post key={postId} postId={postId} />
+          <Post key={postId} postId={postId} onPostAuthorClick={onPostAuthorClick} />
         ))}
         <EmptyFeed
           targetType={targetType}
@@ -60,6 +61,7 @@ Feed.propTypes = {
   blockRouteChange: PropTypes.func,
   emptyFeedIcon: PropTypes.object,
   goToExplore: PropTypes.func,
+  onPostAuthorClick: PropTypes.func,
 };
 
 export default customizableComponent('Feed', Feed);
