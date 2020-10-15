@@ -25,7 +25,7 @@ const useComment = ({ commentId }) => {
     CommentRepository.flag(commentId);
   };
 
-  const handleReplyToComment = replyCommentText => {
+  const handleReplyToComment = (replyCommentText) => {
     CommentRepository.createTextComment({
       referenceType,
       referenceId,

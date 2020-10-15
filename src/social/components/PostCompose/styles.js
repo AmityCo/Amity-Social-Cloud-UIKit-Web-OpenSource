@@ -11,7 +11,10 @@ export const ImagePostIcon = styled(FaIcon).attrs({ icon: faImage })`
   font-size: 18px;
   cursor: pointer;
   margin-right: 20px;
-  color: ${({ theme, disabled }) => (disabled ? theme.palette.base.shade3 : '#17181c')};
+  color: ${({ theme, disabled }) => {
+    const { palette } = theme;
+    return disabled ? palette.base.shade3 : palette.neutral.main;
+  }};
 `;
 
 export const SelectIcon = styled(FaIcon).attrs({ icon: faSortDown })`
@@ -24,7 +27,10 @@ export const FilePostIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
   font-size: 18px;
   margin-right: 12px;
   cursor: pointer;
-  color: ${({ theme, disabled }) => (disabled ? theme.palette.base.shade3 : '#17181c')};
+  color: ${({ theme, disabled }) => {
+    const { palette } = theme;
+    return disabled ? palette.base.shade3 : palette.neutral.main;
+  }};
 `;
 
 const postComposeEditStyle = `

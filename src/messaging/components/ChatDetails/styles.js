@@ -8,13 +8,13 @@ export const Avatar = styled(UiKitAvatar)``;
 export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
   font-size: 19px;
   cursor: pointer;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
   margin-left: auto;
 `;
 
 export const ChatDetailsHeader = styled.div`
   display: flex;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
   font-weight: 600;
   font-size: 16px;
 `;

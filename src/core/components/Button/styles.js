@@ -20,7 +20,7 @@ export const DefaultButton = styled.button`
   ${commonButtonStyles}
   background-color: #fff;
   border: 1px solid #e3e4e8;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
   &:hover {
     color: ${({ theme }) => theme.palette.neutral.shade1};
   }

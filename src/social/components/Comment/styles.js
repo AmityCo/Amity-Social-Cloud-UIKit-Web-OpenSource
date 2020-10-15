@@ -16,7 +16,7 @@ export const Avatar = styled(UIAvatar)`
 `;
 
 export const Options = styled(UIOptions).attrs({ align: 'start' })`
-  color: #898e9e;
+  color: ${({ theme }) => theme.palette.neutral.main};
   &:hover {
     background-color: transparent;
   }
@@ -80,7 +80,7 @@ export const CommentHeader = styled.div`
 
 export const CommentContent = styled.div`
   overflow-wrap: break-word;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
   white-space: pre-wrap;
   ${({ theme }) => theme.typography.body}
 `;

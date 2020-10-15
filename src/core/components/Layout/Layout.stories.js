@@ -1,24 +1,24 @@
 import React from 'react';
-import SideMenu from '~/core/components/SideMenu';
+import SideNavBar from '~/core/components/SideNavBar';
 import Layout from '.';
 
 export default {
   title: 'Layout',
 };
 
-export const headers = () => {
+export const Headers = () => {
   return <Layout />;
 };
 
-export const sidemenu = () => {
-  return <SideMenu />;
+export const SideNav = () => {
+  return <SideNavBar />;
 };
 
-export const testlayout = () => {
+export const TestLayout = () => {
   return (
     <div>
       <Layout />
-      <SideMenu />
+      <SideNavBar />
     </div>
   );
 };

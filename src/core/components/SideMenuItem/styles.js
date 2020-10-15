@@ -7,7 +7,7 @@ export const SideMenuItemContainer = styled(SecondaryButton)`
   width: 100%;
   padding: 5px 8px;
   margin-bottom: 6px;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
   justify-content: left;
   &:hover {
     background-color: ${({ theme }) => theme.palette.base.shade4};
@@ -38,7 +38,7 @@ export const IconWrapper = styled.div`
       color: white;
     `
       : `
-      background:${theme.palette.base.shade4};
-      color: #898e9e;
+      background: ${theme.palette.base.shade4};
+      color: ${theme.palette.base.main};
   `}
 `;

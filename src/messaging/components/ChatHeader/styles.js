@@ -8,7 +8,7 @@ export const Avatar = styled(UiKitAvatar)``;
 export const DetailsIcon = styled(FaIcon).attrs({ icon: faBars })`
   font-size: 16px;
   cursor: pointer;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
   align-self: center;
 `;
 

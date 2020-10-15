@@ -20,7 +20,7 @@ export const EmptyFeedContainer = styled.div`
   flex-direction: column;
   align-items: center;
   background: #fff;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 export const ExploreLink = styled(Button)`

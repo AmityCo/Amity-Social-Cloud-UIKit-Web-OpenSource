@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-export const SideMenuContainer = styled.div`
+export const SideNavContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  max-height: 100%;
   background-color: #ffffff;
   border-right: 1px solid #ebecef;
   flex-shrink: 0;

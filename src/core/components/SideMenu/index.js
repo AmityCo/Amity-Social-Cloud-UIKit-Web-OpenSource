@@ -1,25 +1,15 @@
-import React, { useState } from 'react';
-import { customizableComponent } from '~/core/hocs/customization';
-import { SideMenuContainer } from './styles';
-import communityIcon from './icons/community.svg';
-import MenuTab from './MenuTab';
+import React from 'react';
+import styled from 'styled-components';
 
-const SideMenu = () => {
-  const [active, setActive] = useState(false);
-  const Mockup = [{ name: 'COMMUNITY', icon: communityIcon }];
-  return (
-    <SideMenuContainer>
-      {Mockup.map(tab => (
-        <MenuTab
-          key={tab.name}
-          active={active === tab.name}
-          onClick={() => setActive(tab.name)}
-          icon={tab.icon}
-          name={tab.name}
-        />
-      ))}
-    </SideMenuContainer>
-  );
-};
+export const StyledSideMenu = styled.div`
+  background-color: white;
+  border: 1px solid #e6e6e6;
+  width: 280px;
+  overflow: auto;
+  flex-shrink: 0;
+  ${({ theme }) => theme.typography.title}
+`;
 
-export default customizableComponent('SideMenu', SideMenu);
+const SideMenu = ({ children }) => <StyledSideMenu>{children}</StyledSideMenu>;
+
+export default SideMenu;

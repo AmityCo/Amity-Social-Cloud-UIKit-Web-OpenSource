@@ -11,7 +11,8 @@ import { EkoPostTargetType } from 'eko-sdk';
 
 import ProfileSettings from '~/social/components/ProfileSettings';
 import FeedLayout from '~/social/components/FeedLayout';
-import FeedSideMenu, { SELECTION_TYPES } from '~/social/components/FeedSideMenu';
+import CommunitySideMenu from '~/social/components/CommunitySideMenu';
+import { SELECTION_TYPES } from '~/social/components/FeedSideMenu';
 
 import Feed from '~/social/components/Feed';
 import ExploreHome from '~/social/components/ExploreHome';
@@ -65,6 +66,10 @@ const Pages = () => {
     communityId,
   };
 
+  const isNewsFeedActive = selected.type === pathToSelectionType.news;
+  const isExploreActive = selected.type === pathToSelectionType.explore;
+  const getIsCommunityActive = communityId => selected.communityId === communityId;
+
   const navigateTo = userOrCommunity => {
     if (userOrCommunity.userId) goToUserFeed(userOrCommunity.userId);
     if (userOrCommunity.communityId) goToCommunity(userOrCommunity.communityId);
@@ -90,12 +95,17 @@ const Pages = () => {
   return (
     <FeedLayout
       sideMenu={
-        <FeedSideMenu
-          selected={selected}
-          onCreateCommunityClick={openCommunityCreationModal}
-          onCommunityClick={goToCommunity}
-          onNewsFeedClick={goToNewsFeed}
-          onExploreClick={goToExplore}
+        <CommunitySideMenu
+          onClickNewsFeed={goToNewsFeed}
+          onClickExplore={goToExplore}
+          newsFeedActive={isNewsFeedActive}
+          exploreActive={isExploreActive}
+          onClickCreateCommunity={openCommunityCreationModal}
+          onClickCommunity={goToCommunity}
+          getIsCommunityActive={getIsCommunityActive}
+          onSearchResultCommunityClick={goToCommunity}
+          searchInputPlaceholder="Search"
+          showCreateCommunityButton
         />
       }
     >
@@ -143,13 +153,11 @@ const Pages = () => {
           />
         </Route>
         <Route path="/community/:communityId">
-          <CommunityFeed
-            onEditCommunityClick={onEditCommunityClick}
-            key={communityId}
-            communityId={communityId}
-            onPostAuthorClick={navigateTo}
-            onMemberClick={navigateTo}
+          <Feed
+            targetType={EkoPostTargetType.CommunityFeed}
+            targetId={communityId}
             blockRouteChange={blockRouteChange}
+            showPostCompose
           />
         </Route>
         <Route path="/profile/:userId" exact>

@@ -11,7 +11,7 @@ import Button, { SecondaryButton } from '~/core/components/Button';
 import UIAvatar from '~/core/components/Avatar';
 
 export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
-  color: #898e9e;
+  color: ${({ theme }) => theme.palette.base.shade2};
   padding: 0 10px;
   position: absolute;
   top: 10px;

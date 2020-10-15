@@ -15,14 +15,14 @@ export const ImageMessageIcon = styled(FaIcon).attrs({ icon: faImage })`
   font-size: 18px;
   cursor: pointer;
   margin-right: 20px;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
 `;
 
 export const FileMessageIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
   font-size: 18px;
   margin-right: 12px;
   cursor: pointer;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
 `;
 
 export const MessageComposeBarContainer = styled.div`

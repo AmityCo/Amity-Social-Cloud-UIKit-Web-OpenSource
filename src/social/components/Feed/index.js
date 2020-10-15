@@ -24,9 +24,10 @@ const Feed = ({
   return (
     <FeedScrollContainer
       className={feedClassName}
-      loadMore={loadMore}
+      dataLength={posts.length}
+      next={loadMore}
       hasMore={hasMore}
-      loader={<div key={0}>Loading...</div>}
+      loader={<h4>Loading...</h4>}
     >
       <ConditionalRender condition={showPostCompose}>
         <PostCompose

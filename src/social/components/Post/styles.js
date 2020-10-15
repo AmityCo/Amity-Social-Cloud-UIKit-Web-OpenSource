@@ -27,7 +27,7 @@ export const PostAuthor = styled.div`
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
-  color: #17181c;
+  color: ${({ theme }) => theme.palette.neutral.main};
   white-space: pre-wrap;
   ${({ theme }) => theme.typography.body}
 `;
