@@ -9,6 +9,9 @@ export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
   position: absolute;
   top: 10px;
   left: 5px;
+  &.svg-inline--fa {
+    width: auto;
+  }
 `;
 
 export const CommunitiesSearchContainer = styled.div`

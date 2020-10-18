@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { EkoPostTargetType } from 'eko-sdk';
 
 import { ConditionalRender } from '~/core/components/ConditionalRender';
@@ -26,6 +27,7 @@ const CommunityPage = ({
   onMemberClick,
   onEditCommunityClick,
   blockRouteChange,
+  shouldHideTabs = false,
 }) => {
   const [activeTab, setActiveTab] = useState(tabKeys.TIMELINE);
   const { community } = useCommunity(communityId);
@@ -34,7 +36,9 @@ const CommunityPage = ({
   return (
     <PageWrapper>
       <PageMain>
-        <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        {!shouldHideTabs && (
+          <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        )}
         <ConditionalRender condition={activeTab === tabKeys.TIMELINE}>
           <Feed
             targetType={EkoPostTargetType.CommunityFeed}
@@ -51,6 +55,15 @@ const CommunityPage = ({
       <CommunityInfo communityId={communityId} onEditCommunityClick={onEditCommunityClick} />
     </PageWrapper>
   );
+};
+
+CommunityPage.propTypes = {
+  communityId: PropTypes.string.isRequired,
+  onPostAuthorClick: PropTypes.func,
+  onMemberClick: PropTypes.func,
+  onEditCommunityClick: PropTypes.func,
+  blockRouteChange: PropTypes.func,
+  shouldHideTabs: PropTypes.bool,
 };
 
 export default CommunityPage;

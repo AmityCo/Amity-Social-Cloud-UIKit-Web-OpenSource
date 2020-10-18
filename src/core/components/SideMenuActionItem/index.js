@@ -14,7 +14,7 @@ const SideMenuActionItem = ({ icon, children, active, className, onClick, elemen
   return (
     <ActionItemContainer onClick={onClick} className={className} active={active}>
       {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
-      {children}
+      <span className="actionItemChild">{children}</span>
     </ActionItemContainer>
   );
 };

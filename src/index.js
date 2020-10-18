@@ -1,5 +1,6 @@
 export { default as EkoUiKitProvider } from '~/core/providers/UiKitProvider';
 export { default as EkoUiKitFeed } from '~/social/components/Feed';
+export { default as EkoUiKitCommunity } from '~/social/components/CommunityV2';
 
 // import EkoAvatar from './components/Avatar';
 // import EkoComment from './components/Comment';

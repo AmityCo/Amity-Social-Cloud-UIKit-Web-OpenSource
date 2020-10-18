@@ -16,14 +16,16 @@ const CommunityHeaderContainer = styled.a.attrs(props => props)`
   padding: 0.5em;
   border-radius: 4px;
   align-items: center;
+  color: ${({ theme }) => theme.palette.base.main};
   &:hover {
     cursor: pointer;
     background-color: ${({ theme }) => theme.palette.base.shade4};
   }
-  ${({ isActive }) =>
+  ${({ isActive, theme }) =>
     isActive &&
     css`
-      background-color: ${({ theme }) => theme.palette.primary.shade3};
+      color: ${theme.palette.primary.main};
+      background-color: ${theme.palette.primary.shade3};
     `};
 `;
 

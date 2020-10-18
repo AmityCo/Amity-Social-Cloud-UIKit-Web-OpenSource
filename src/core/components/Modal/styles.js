@@ -7,6 +7,9 @@ export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
   font-size: 18px;
   cursor: pointer;
   margin-left: auto;
+  &.svg-inline--fa {
+    width: auto;
+  }
 `;
 
 export const Overlay = styled.div`

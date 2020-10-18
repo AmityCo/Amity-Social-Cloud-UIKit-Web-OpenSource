@@ -27,11 +27,12 @@ const CommunityInfo = ({ communityId, userRoles, onEditCommunityClick }) => {
 
   const { postsCount, membersCount, description, isJoined } = community;
   const canEditCommunity = isModerator(userRoles) && isJoined;
+  const categoryNames = communityCategories.map(({ name }) => name);
 
   return (
     <UICommunityInfo
       communityId={communityId}
-      communityCategories={communityCategories}
+      communityCategories={categoryNames}
       postsCount={postsCount}
       membersCount={membersCount}
       description={description}

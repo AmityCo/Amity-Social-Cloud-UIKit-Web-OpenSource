@@ -1,6 +1,17 @@
 import styled, { css } from 'styled-components';
 import { SecondaryButton } from '~/core/components/Button';
 
+const actionItemActiveStyles = css`
+  ${({ active, theme }) =>
+    active &&
+    css`
+      background-color: ${theme.palette.primary.shade3};
+      & > .actionItemChild {
+        color: ${theme.palette.primary.main};
+      }
+    `}
+`;
+
 const actionItemContainerStyles = css`
   display: flex;
   align-items: center;
@@ -14,12 +25,7 @@ const actionItemContainerStyles = css`
   &:disabled {
     color: ${({ theme }) => theme.palette.neutral.shade2};
   }
-  ${({ active, theme }) =>
-    active &&
-    `
-      background: ${theme.palette.primary.shade4};
-      color: ${theme.palette.primary.main};
-    `}
+  ${actionItemActiveStyles}
 `;
 
 export const ButtonActionItem = styled(SecondaryButton)`

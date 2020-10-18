@@ -16,6 +16,7 @@ import EngagementBar from '~/social/components/EngagementBar';
 import { confirm } from '~/core/components/Confirm';
 import Avatar from '~/core/components/Avatar';
 import useLiveObject from '~/core/hooks/useLiveObject';
+import withSDK from '~/core/hocs/withSDK';
 import { customizableComponent } from '~/core/hocs/customization';
 
 import {
@@ -36,7 +37,8 @@ const userRepo = new UserRepository();
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
+// TODO: refactor this component
+const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className = '' }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const openEditingPostModal = () => setIsEditing(true);
@@ -47,6 +49,8 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
   const isPostReady = !!post.postId;
   const { postedUserId, createdAt, data = {} } = post;
   const { text = '', files = [], images = [] } = data;
+
+  const isMyPost = currentUserId === postedUserId;
 
   const postAuthor = useLiveObject(() => userRepo.userForId(postedUserId), [postedUserId]);
 
@@ -89,12 +93,14 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
           </PostInfo>
         </PostAuthor>
         <ConditionalRender condition={isPostReady}>
-          <Options
-            options={[
-              { name: 'Edit post', action: openEditingPostModal },
-              { name: 'Delete post', action: confirmDeleting },
-            ]}
-          />
+          {isMyPost && (
+            <Options
+              options={[
+                { name: 'Edit post', action: openEditingPostModal },
+                { name: 'Delete post', action: confirmDeleting },
+              ]}
+            />
+          )}
         </ConditionalRender>
       </PostHeader>
       <Linkify>
@@ -117,8 +123,9 @@ const Post = ({ postId, onPostAuthorClick = () => {}, className = '' }) => {
 
 Post.propTypes = {
   postId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string,
   onPostAuthorClick: PropTypes.func,
   className: PropTypes.string,
 };
 
-export default customizableComponent('Post', Post);
+export default withSDK(customizableComponent('Post', Post));

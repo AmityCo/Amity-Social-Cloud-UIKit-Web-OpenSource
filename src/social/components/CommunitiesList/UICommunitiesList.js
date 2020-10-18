@@ -1,9 +1,14 @@
 import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import CommunityHeader from '~/social/components/CommunityHeader';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
-import { LoadMoreButton, ShevronDownIcon } from './styles';
+import { LoadMore } from '~/social/components/LoadMore';
+
+const NoResultsMessage = styled.p`
+  text-align: center;
+  color: ${({ theme }) => theme.palette.base.shade3};
+`;
 
 const UICommunityList = ({
   communityIds,
@@ -20,26 +25,28 @@ const UICommunityList = ({
     dataLength={communityIds.length}
     next={loadMore}
     hasMore={hasMore}
-    loader={<h4>Loading...</h4>}
+    // TODO - when infinite scroll is fixed: bring back loading component
+    // and remove use of LoadMore button.
+    loader={<div />}
   >
-    {communityIds.map(communityId => {
-      const isActive = getIsCommunityActive(communityId);
-      return (
-        <CommunityHeader
-          key={communityId}
-          communityId={communityId}
-          isActive={isActive}
-          onClick={onClickCommunity}
-          isSearchResult={isSearchList}
-          searchInput={searchInput}
-        />
-      );
-    })}
-    <ConditionalRender condition={hasMore}>
-      <LoadMoreButton onClick={loadMore}>
-        Load more <ShevronDownIcon />
-      </LoadMoreButton>
-    </ConditionalRender>
+    <LoadMore hasMore={hasMore} loadMore={loadMore} shouldHideBorder>
+      {isSearchList && !communityIds.length && (
+        <NoResultsMessage>No community found</NoResultsMessage>
+      )}
+      {communityIds.map(communityId => {
+        const isActive = getIsCommunityActive(communityId);
+        return (
+          <CommunityHeader
+            key={communityId}
+            communityId={communityId}
+            isActive={isActive}
+            onClick={onClickCommunity}
+            isSearchResult={isSearchList}
+            searchInput={searchInput}
+          />
+        );
+      })}
+    </LoadMore>
   </InfiniteScroll>
 );
 

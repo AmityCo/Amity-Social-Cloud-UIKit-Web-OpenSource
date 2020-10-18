@@ -26,7 +26,10 @@ export const NameContainer = styled.div`
   overflow: hidden;
   ${({ theme, isActive, isTitle }) => css`
     ${theme.typography.bodyBold}
-    ${isActive && `color: ${theme.palette.primary.main}`}
+    ${isActive &&
+      css`
+        color: ${theme.palette.primary.main};
+      `}
     ${isTitle && theme.typography.title}
   `}
 

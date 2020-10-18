@@ -6,8 +6,16 @@ export default {
   title: 'Components/Community/Page',
 };
 
-export const Basic = () => {
+export const Basic = props => {
   const [community, isLoading] = useOneCommunity();
   if (isLoading) return <p>Loading...</p>;
-  return <CommunityPage communityId={community.communityId} />;
+  return <CommunityPage communityId={community.communityId} {...props} />;
+};
+
+Basic.args = {
+  shouldHideTabs: false,
+};
+
+Basic.argTypes = {
+  shouldHideTabs: { control: { type: 'boolean' } },
 };
