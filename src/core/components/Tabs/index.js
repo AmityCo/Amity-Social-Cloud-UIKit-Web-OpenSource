@@ -8,7 +8,7 @@ const Tabs = ({ className, tabs, activeTab, onChange }) => (
     <TabsList>
       {Object.entries(tabs).map(([key, val]) => (
         <TabItem key={key}>
-          <TabButton className={key === activeTab ? 'active' : ''} onClick={() => onChange(key)}>
+          <TabButton className={val === activeTab ? 'active' : ''} onClick={() => onChange(val)}>
             {val}
           </TabButton>
         </TabItem>

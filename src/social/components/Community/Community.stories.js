@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import {
   HashRouter as Router,
   Switch,
@@ -12,17 +13,21 @@ import { EkoPostTargetType } from 'eko-sdk';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import FeedLayout from '~/social/components/FeedLayout';
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
-import { SELECTION_TYPES } from '~/social/components/FeedSideMenu';
 
 import Feed from '~/social/components/Feed';
 import ExploreHome from '~/social/components/ExploreHome';
 import CategoryPage from '~/social/components/ExploreHome/CategoryPage';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 import CommunitySettings from '~/social/components/CommunitySettings';
-import { EmptyFeedIcon } from './styles';
+import { EmptyFeed } from '~/icons';
 
 import { useCommunitiesMock } from '~/mock';
 import CommunityPage from '~/social/components/CommunityPage';
+
+const EmptyFeedIcon = styled(EmptyFeed).attrs({
+  width: '48px',
+  height: '48px',
+})``;
 
 export default {
   title: 'Community',
@@ -56,9 +61,9 @@ const Pages = () => {
   };
 
   const pathToSelectionType = {
-    news: SELECTION_TYPES.NEWS_FEED,
-    explore: SELECTION_TYPES.EXPLORE,
-    category: SELECTION_TYPES.EXPLORE,
+    news: 'NEWS_FEED',
+    explore: 'EXPLORE',
+    category: 'COMMUNITY',
   };
 
   const selected = {

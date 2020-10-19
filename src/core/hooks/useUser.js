@@ -9,11 +9,13 @@ const userRepo = new UserRepository();
 export default userId => {
   const user = useLiveObject(() => userRepo.userForId(userId), []);
 
-  const file = user.avatarCustomUrl
-    ? { fileUrl: user.avatarCustomUrl }
-    : user.avatarFileId
-    ? useFile(user.avatarFileId)
-    : {};
+  // Must call this hook even if there is a custom file URL which will override it.
+  // Cannot call hooks conditionally due to the 'rules of hooks'.
+  let file = useFile(user.avatarFileId, [user.avatarFileId]);
+
+  if (user.avatarCustomUrl) {
+    file = { fileUrl: user.avatarCustomUrl };
+  }
 
   return { user, file };
 };

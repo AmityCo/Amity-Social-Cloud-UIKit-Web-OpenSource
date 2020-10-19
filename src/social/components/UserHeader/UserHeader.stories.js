@@ -1,6 +1,6 @@
 import React from 'react';
 
-import UiKitUserHeader from './UserHeader.styles';
+import UiKitUserHeader from './UIUserHeader';
 import UiKitUserHeaderWithSdk from '.';
 
 export default {

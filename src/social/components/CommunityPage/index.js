@@ -5,20 +5,15 @@ import { EkoPostTargetType } from 'eko-sdk';
 import { ConditionalRender } from '~/core/components/ConditionalRender';
 import CommunityInfo from '~/social/components/CommunityInfo';
 import Feed from '~/social/components/Feed';
-import CommunityMembers from '~/social/components/Community/CommunityMembers';
 import useCommunity from '~/social/hooks/useCommunity';
+import CommunityMembers from '~/social/components/CommunityMembers';
 import { PageWrapper, FeedHeaderTabs, PageMain } from './styles';
-
-const tabKeys = {
-  TIMELINE: 'TIMELINE',
-  MEMBERS: 'MEMBERS',
-};
 
 // TODO replace with translations keys
 // TODO: react-intl
 const tabs = {
-  [tabKeys.TIMELINE]: 'Timeline',
-  [tabKeys.MEMBERS]: 'Members',
+  TIMELINE: 'Timeline',
+  MEMBERS: 'Members',
 };
 
 const CommunityPage = ({
@@ -29,7 +24,7 @@ const CommunityPage = ({
   blockRouteChange,
   shouldHideTabs = false,
 }) => {
-  const [activeTab, setActiveTab] = useState(tabKeys.TIMELINE);
+  const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
   const { community } = useCommunity(communityId);
   const canMemberPost = !!community?.isJoined;
 
@@ -39,7 +34,7 @@ const CommunityPage = ({
         {!shouldHideTabs && (
           <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         )}
-        <ConditionalRender condition={activeTab === tabKeys.TIMELINE}>
+        <ConditionalRender condition={activeTab === tabs.TIMELINE}>
           <Feed
             targetType={EkoPostTargetType.CommunityFeed}
             targetId={communityId}
@@ -48,7 +43,7 @@ const CommunityPage = ({
             onPostAuthorClick={onPostAuthorClick}
           />
         </ConditionalRender>
-        <ConditionalRender condition={activeTab === tabKeys.MEMBERS}>
+        <ConditionalRender condition={activeTab === tabs.MEMBERS}>
           <CommunityMembers communityId={communityId} onMemberClick={onMemberClick} />
         </ConditionalRender>
       </PageMain>

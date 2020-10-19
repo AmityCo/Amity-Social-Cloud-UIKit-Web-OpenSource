@@ -1,25 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { customizableComponent } from '~/core/hocs/customization';
 
 import Avatar from '~/core/components/Avatar';
 
-const UserHeaderContainer = styled.div.attrs(props => props)`
+const UserHeaderContainer = styled.div`
   display: grid;
   grid-template-areas: 'avatar title' 'avatar subtitle';
   grid-template-columns: min-content auto;
   grid-template-rows: min-content min-content;
   grid-gap: 0 0.5em;
   padding: 1em;
+  ${({ hasNoChildren }) =>
+    hasNoChildren &&
+    css`
+      grid-template-areas: 'avatar title';
+      align-items: center;
+    `}
 `;
 
 const UserHeaderAvatar = styled(Avatar)`
   grid-area: avatar;
 `;
 
-const UserHeaderTitle = styled.div.attrs(props => props)`
+const UserHeaderTitle = styled.div`
   grid-area: title;
   ${({ theme }) => theme.typography.title}
 `;
@@ -30,11 +36,14 @@ const UserHeaderSubtitle = styled.div`
 `;
 
 const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick }) => {
+  const onClickUser = () => onClick(userId);
   return (
-    <UserHeaderContainer title={displayName}>
-      <UserHeaderAvatar avatar={avatarFileUrl} onClick={onClick} />
-      <UserHeaderTitle title={userId}>{displayName}</UserHeaderTitle>
-      <UserHeaderSubtitle>{children}</UserHeaderSubtitle>
+    <UserHeaderContainer title={displayName} hasNoChildren={!children}>
+      <UserHeaderAvatar avatar={avatarFileUrl} onClick={onClickUser} />
+      <UserHeaderTitle title={userId} onClick={onClickUser}>
+        {displayName}
+      </UserHeaderTitle>
+      {children && <UserHeaderSubtitle>{children}</UserHeaderSubtitle>}
     </UserHeaderContainer>
   );
 };

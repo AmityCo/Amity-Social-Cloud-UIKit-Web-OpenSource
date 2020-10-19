@@ -2,20 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import useUser from '~/core/hooks/useUser';
-import StyledUserHeader from './UserHeader.styles';
+import UIUserHeader from './UIUserHeader';
 
 const UserHeader = ({ userId, children, onClick }) => {
   const { user, file } = useUser(userId);
 
   return (
-    <StyledUserHeader
+    <UIUserHeader
       userId={user.userId}
       displayName={user.displayName}
       avatarFileUrl={file.fileUrl}
       onClick={onClick}
     >
       {children}
-    </StyledUserHeader>
+    </UIUserHeader>
   );
 };
 

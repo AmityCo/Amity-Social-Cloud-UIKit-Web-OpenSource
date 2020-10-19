@@ -51,7 +51,7 @@ ChangingTabs.argTypes = {
   activeTab: {
     control: {
       type: 'select',
-      options: Object.fromEntries(Object.entries(mockUpTabs).map(arr => arr.reverse())),
+      options: Object.values(mockUpTabs),
     },
   },
   onChange: { action: 'onChange' },
