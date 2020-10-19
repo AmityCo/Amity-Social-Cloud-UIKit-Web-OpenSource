@@ -174,14 +174,18 @@ const PostComposeBar = ({
             <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
           </ConditionalRender>
           <FooterActionBar>
-            <ImagePostIcon
-              disabled={!canUploadImage}
-              onClick={canUploadImage ? addImage : maxImagesWarning}
-            />
-            <FilePostIcon
-              disabled={!canUploadFile}
-              onClick={canUploadFile ? addFile : maxFilesWarning}
-            />
+            <ConditionalRender condition={!edit}>
+              <>
+                <ImagePostIcon
+                  disabled={!canUploadImage}
+                  onClick={canUploadImage ? addImage : maxImagesWarning}
+                />
+                <FilePostIcon
+                  disabled={!canUploadFile}
+                  onClick={canUploadFile ? addFile : maxFilesWarning}
+                />
+              </>
+            </ConditionalRender>
             <PostButton disabled={isDisabled} onClick={edit ? updatePost : createPost}>
               {edit ? 'Save' : 'Post'}
             </PostButton>
