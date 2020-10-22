@@ -1,8 +1,8 @@
 import React from 'react';
 import File from './File';
 
-export default ({ color = '#1E3868' }) => (
-  <File>
+export default ({ color = '#1E3868', ...props }) => (
+  <File {...props}>
     <path
       fill={color}
       fillRule="evenodd"

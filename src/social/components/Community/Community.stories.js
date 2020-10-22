@@ -73,7 +73,7 @@ const Pages = () => {
 
   const isNewsFeedActive = selected.type === pathToSelectionType.news;
   const isExploreActive = selected.type === pathToSelectionType.explore;
-  const getIsCommunityActive = communityId => selected.communityId === communityId;
+  const getIsCommunityActive = id => selected.communityId === id;
 
   const navigateTo = userOrCommunity => {
     if (userOrCommunity.userId) goToUserFeed(userOrCommunity.userId);

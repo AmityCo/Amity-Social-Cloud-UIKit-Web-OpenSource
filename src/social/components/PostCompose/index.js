@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { PostRepository, EkoPostTargetType } from 'eko-sdk';
+import { v4 } from 'uuid';
 
 import { isEqual } from 'helpers';
 import Images from '~/social/components/Images';
+import { ImageUpload } from '~/social/components/Images/ImageUpload';
 
-import Files from '~/core/components/Files';
+import Files from '~/core/components/Uploaders/File';
 import { confirm } from '~/core/components/Confirm';
 import { ConditionalRender } from '~/core/components/ConditionalRender';
 import { customizableComponent } from '~/core/hocs/customization';
@@ -26,7 +28,7 @@ import {
 const PostComposeBar = ({
   targetType,
   targetId,
-  onCreateSuccess = null,
+  onCreateSuccess = () => {},
   community = null,
   communities = [],
   className = '',
@@ -78,55 +80,79 @@ const PostComposeBar = ({
     );
   }, [text, files, images]);
 
-  const createPost = async () => {
-    if (isEmpty) return;
-    const newPostLiveObject = PostRepository.createTextPost({
-      text,
-      targetType,
-      targetId,
-    });
-
-    newPostLiveObject.on('dataStatusChanged', () => {
-      onCreateSuccess && onCreateSuccess(newPostLiveObject.model.postId);
-      setText('');
-      newPostLiveObject.dispose();
-    });
+  const createImagePost = parentPostId => {
+    if (images.length) {
+      const imageIds = images.map(image => image.fileId);
+      PostRepository.createImagePost({
+        imageIds,
+        targetType,
+        targetId: parentPostId || targetId,
+      });
+    }
   };
 
-  const testImages = [];
-  const testFiles = [];
-  // const setImages = () => {};
-  // const setFiles = () => {};
-  const ImagePostIcon = () => null;
+  const createPost = async () => {
+    if (isEmpty) return;
+
+    if (!text) {
+      createImagePost();
+    } else {
+      const newPostLiveObject = PostRepository.createTextPost({
+        text,
+        targetType,
+        targetId,
+      });
+
+      newPostLiveObject.on('dataStatusChanged', () => {
+        const { postId } = newPostLiveObject.model;
+        onCreateSuccess(postId);
+        setText('');
+
+        createImagePost(postId);
+
+        setFiles([]);
+        newPostLiveObject.dispose();
+      });
+    }
+  };
+
   const FilePostIcon = () => null;
-  const maxImagesWarning = 0;
   const maxFilesWarning = 0;
-  const canUploadImage = false;
-  const canUploadFile = false;
+  const canUploadImage = !files.length;
+  const canUploadFile = !images.length;
 
   const updatePost = async () => {
     // TODO: fixme
   };
 
   const isCommunityPost = isIdenticalAuthor(author, community);
-  const addImage = () => {
-    const image = testImages[images.length % testImages.length];
-    setImages([...images, { id: Date.now(), isNew: true, ...image }]);
+
+  const addImages = added => {
+    const newImages = added.map(image => ({ ...image, isNew: true }));
+    setImages(oldImages => [...oldImages, ...newImages]);
   };
 
-  const addFile = () => {
-    const file = testFiles[files.length % testFiles.length];
-    setFiles([...files, { id: Date.now(), isNew: true, ...file }]);
+  const updateImages = fileIds => {
+    setImages(oldImages =>
+      oldImages.map((image, index) => {
+        return { ...image, isNew: false, fileId: fileIds[index] };
+      }),
+    );
   };
 
-  const setImageLoaded = image => {
-    const index = images.indexOf(image);
-    const newImages = images.slice();
-    newImages[index] = {
-      ...image,
-      isNew: false,
-    };
-    setImages(newImages);
+  const setProgress = ({ imageName, progress }) => {
+    setImages(oldImages => {
+      const index = oldImages.findIndex(image => image.name === imageName);
+      return [
+        ...oldImages.slice(0, index),
+        { ...oldImages[index], progress },
+        ...oldImages.slice(index + 1),
+      ];
+    });
+  };
+
+  const addFile = file => {
+    setFiles([...files, { ...file, id: v4(), isNew: true }]);
   };
 
   const setFileLoaded = file => {
@@ -144,7 +170,9 @@ const PostComposeBar = ({
   };
 
   const onRemoveImage = image => {
-    setImages(images.filter(({ id }) => id !== image.id));
+    setImages(oldImages => {
+      return oldImages.filter(({ name }) => name !== image.name);
+    });
   };
 
   const setIsCommunityPost = shouldBeCommunityPost =>
@@ -166,7 +194,7 @@ const PostComposeBar = ({
             <Files setFileLoaded={setFileLoaded} files={files} onRemove={onRemoveFile} />
           </ConditionalRender>
           <ConditionalRender condition={images.length}>
-            <Images setImageLoaded={setImageLoaded} images={images} onRemove={onRemoveImage} />
+            <Images images={images} onRemove={onRemoveImage} />
           </ConditionalRender>
         </PostComposeTextareaWrapper>
         <Footer>
@@ -175,16 +203,16 @@ const PostComposeBar = ({
           </ConditionalRender>
           <FooterActionBar>
             <ConditionalRender condition={!edit}>
-              <>
-                <ImagePostIcon
-                  disabled={!canUploadImage}
-                  onClick={canUploadImage ? addImage : maxImagesWarning}
-                />
-                <FilePostIcon
-                  disabled={!canUploadFile}
-                  onClick={canUploadFile ? addFile : maxFilesWarning}
-                />
-              </>
+              <ImageUpload
+                disabled={!canUploadImage}
+                addImages={addImages}
+                updateImages={updateImages}
+                setProgress={setProgress}
+              />
+              <FilePostIcon
+                disabled={!canUploadFile}
+                onClick={canUploadFile ? addFile : maxFilesWarning}
+              />
             </ConditionalRender>
             <PostButton disabled={isDisabled} onClick={edit ? updatePost : createPost}>
               {edit ? 'Save' : 'Post'}

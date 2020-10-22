@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/pro-regular-svg-icons';
+import { faTimes, faImage } from '@fortawesome/pro-regular-svg-icons';
 
 export const CircleButton = styled.button`
   border-radius: 50%;
@@ -139,4 +139,16 @@ export const NumberOfHiddenImagesOverlay = styled.div`
   justify-content: center;
   ${({ theme }) => theme.typography.headline}
   font-size: 32px;
+`;
+
+export const ImageUploadContainer = styled.div``;
+
+export const FileInput = styled.input.attrs({ type: 'file' })`
+  display: none;
+`;
+
+export const Label = styled.label``;
+
+export const ImageIcon = styled(FaIcon).attrs({ icon: faImage })`
+  font-size: 18px;
 `;

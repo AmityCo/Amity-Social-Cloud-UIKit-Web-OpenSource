@@ -15,21 +15,19 @@ import {
 
 import { ProgressBar } from '~/core/components/ProgressBar';
 
-const Image = ({ image, onClick, onRemove, numberOfHiddenImages, setImageLoaded }) => {
-  // simulate progress animation
+const Image = ({ image, onClick, onRemove, numberOfHiddenImages }) => {
   const { isNew } = image;
-  const [progress, setProgress] = useState(isNew ? 0 : 100);
+  const [progress, setProgress] = useState(isNew ? image.progress : 100);
 
   useEffect(() => {
     if (!isNew || progress >= 100) {
-      isNew && setImageLoaded && setImageLoaded(image);
       return;
     }
     const timeout = setTimeout(() => {
-      setProgress(progress + 0.5);
-    }, 50);
+      setProgress(image.progress);
+    }, 150);
     return () => clearTimeout(timeout);
-  }, [progress]);
+  }, [progress, image]);
 
   const removeImage = e => {
     e.stopPropagation();
@@ -54,7 +52,7 @@ const Image = ({ image, onClick, onRemove, numberOfHiddenImages, setImageLoaded 
           <CloseIcon />
         </CircleButton>
       </ConditionalRender>
-      <img src={image.url} alt="" />
+      <img src={image.url} alt={image.name} />
     </ImageContainer>
   );
 };

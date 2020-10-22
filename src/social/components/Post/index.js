@@ -10,8 +10,7 @@ import Time from '~/core/components/Time';
 
 import PostComposeEdit from '~/social/components/PostComposeEdit';
 import Linkify from '~/core/components/Linkify';
-import Images from '~/social/components/Images';
-import Files from '~/core/components/Files';
+import PostImage from '~/core/components/Uploaders/Image';
 import EngagementBar from '~/social/components/EngagementBar';
 import { confirm } from '~/core/components/Confirm';
 import Avatar from '~/core/components/Avatar';
@@ -48,7 +47,7 @@ const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className =
   const post = useLiveObject(() => PostRepository.postForId(postId), [postId]);
   const isPostReady = !!post.postId;
   const { postedUserId, createdAt, data = {} } = post;
-  const { text = '', files = [], images = [] } = data;
+  const { text = '', files = [], images = [], fileId } = data;
 
   const isMyPost = currentUserId === postedUserId;
 
@@ -114,8 +113,9 @@ const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className =
           </Truncate>
         </ConditionalRender>
       </Linkify>
-      <Files files={files} />
-      <Images images={images} />
+      <ConditionalRender condition={fileId && post.dataType === 'image'}>
+        <PostImage fileId={fileId} fullSize />
+      </ConditionalRender>
       <EngagementBar postId={postId} />
     </PostContainer>
   );

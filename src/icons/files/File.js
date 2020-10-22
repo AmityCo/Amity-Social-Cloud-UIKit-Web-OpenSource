@@ -1,11 +1,12 @@
 import React from 'react';
 
-export default ({ bg = '#fff', fg = '#EBECEF', width, height, children }) => (
+export default ({ bg = '#fff', fg = '#cacaca', width = '100%', height = '100%', children }) => (
   <svg
-    width={width || '100%'}
-    height={height || '100%'}
+    width={width}
+    height={height}
     viewBox="0 0 24 28"
     fill="none"
+    vectorEffect="non-scaling-stroke"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path

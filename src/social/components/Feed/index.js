@@ -15,7 +15,7 @@ const Feed = ({
   targetId = '',
   showPostCompose = false,
   feedClassName = null,
-  onCreatePostSuccess = null,
+  onCreatePostSuccess,
   blockRouteChange,
   emptyFeedIcon,
   goToExplore,

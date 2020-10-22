@@ -38,10 +38,6 @@ const EngagementBar = ({ postId }) => {
     return post.commentsCount;
   }, [isPostReady, post.commentsCount]);
 
-  // const totalCommentsAmount =
-  //   comments.length +
-  //   comments.reduce((prevValue, comment) => prevValue + comment.replies.length, 0);
-
   return (
     <EngagementBarContainer>
       <Counters>
