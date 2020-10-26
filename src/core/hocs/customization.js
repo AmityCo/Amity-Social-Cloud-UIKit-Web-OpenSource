@@ -19,7 +19,7 @@ export const CustomComponentsProvider = CustomComponentsContext.Provider;
   2) replace itself if it name in customizable map
  */
 
-export const customizableComponent = (componentName, Component) => props => {
+const customizableComponent = (componentName, Component) => props => {
   const { customComponents } = props;
 
   const customComponentsMap = useContext(CustomComponentsContext);
@@ -42,3 +42,5 @@ export const customizableComponent = (componentName, Component) => props => {
     </CustomComponentsProvider>
   );
 };
+
+export default customizableComponent;

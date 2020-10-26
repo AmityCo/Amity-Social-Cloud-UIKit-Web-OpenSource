@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { MenuItem } from '~/core/components/Menu';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import { getCategories, getCategory } from '~/mock';
 import { backgroundImage as CategoryImage } from '~/icons/Category';
 

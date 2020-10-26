@@ -5,7 +5,6 @@ module.exports = {
   stories: ['../src/**/*.stories.js'],
   // Add any Storybook addons you want here: https://storybook.js.org/addons/
   addons: [
-    '@storybook/addon-storysource',
     '@storybook/addon-controls',
     '@storybook/addon-actions',
     '@storybook/addon-viewport',

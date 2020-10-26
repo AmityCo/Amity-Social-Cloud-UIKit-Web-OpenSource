@@ -2,7 +2,7 @@ import React from 'react';
 import { ChannelRepository } from 'eko-sdk';
 
 import ChatItem from '~/messaging/components/ChatItem';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import CreateNewChat from './CreateNewChat';
 

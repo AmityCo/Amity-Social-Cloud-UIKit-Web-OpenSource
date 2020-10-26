@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import { testUser } from '~/mock';
 

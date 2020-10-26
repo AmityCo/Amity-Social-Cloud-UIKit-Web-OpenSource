@@ -10,3 +10,13 @@ export const globalTypes = Object.values(decorators)
 Object.values(decorators)
   .map(({ decorator }) => decorator)
   .forEach(decorator => addDecorator(decorator))
+
+export const parameters = {
+  layout: 'centered',
+
+  options: {
+    storySort: {
+      order: ['Journeys', 'Pages', 'Messaging', 'Social', 'Components', 'Assets'],
+    },  
+  },
+};

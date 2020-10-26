@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import Popover from '~/core/components/Popover';
-import { customizableComponent } from '~/core/hocs/customization';
-import CommunitiesSearchList from '~/social/components/CommunitiesSearchList';
+import customizableComponent from '~/core/hocs/customization';
+import CommunitiesList from '~/social/components/CommunitiesList';
 import {
   CommunitiesSearchContainer,
   CommunitiesSearchInput,
@@ -11,28 +11,31 @@ import {
 } from './styles';
 
 const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder }) => {
-  const [query, setQuery] = useState('');
+  const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(true);
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
   useEffect(() => {
-    query.length && open();
-  }, [query]);
+    search.length && open();
+  }, [search]);
 
   const handleSearchResultClick = communityId => {
     onSearchResultCommunityClick(communityId);
-    setQuery('');
+    setSearch('');
     close();
   };
 
   const menu = (
     <CommunitiesSearchResults className={className}>
-      <CommunitiesSearchList searchInput={query} onClickSearchResult={handleSearchResultClick} />
+      <CommunitiesList
+        communitiesQueryParam={{ search }}
+        onClickCommunity={handleSearchResultClick}
+      />
     </CommunitiesSearchResults>
   );
 
-  const isPopoverOpen = isOpen && query.length;
+  const isPopoverOpen = isOpen && search.length;
 
   return (
     <Popover
@@ -44,8 +47,8 @@ const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder 
     >
       <CommunitiesSearchContainer className="explore-header-search-container">
         <CommunitiesSearchInput
-          value={query}
-          onChange={e => setQuery(e.target.value)}
+          value={search}
+          onChange={e => setSearch(e.target.value)}
           type="text"
           placeholder={placeholder}
         />

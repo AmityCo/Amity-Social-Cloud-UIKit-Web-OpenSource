@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
-import { customizableComponent } from '~/core/hocs/customization';
+import ConditionalRender from '~/core/components/ConditionalRender';
+import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
 import CommunityName from '~/social/components/CommunityName';
 import {
@@ -51,13 +51,13 @@ const UICommunityInfo = ({
       )}
     </Header>
     <CommunityName communityId={communityId} isTitle />
-    <CategoriesList>{communityCategories.join(', ')}</CategoriesList>
+    <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>
     <CountsContainer>
       <Count>
-        <span className="countNumber">{toHumanString(postsCount)}</span> posts
+        <span className="countNumber">{toHumanString(postsCount || 0)}</span> posts
       </Count>
       <Count>
-        <span className="countNumber">{toHumanString(membersCount)}</span> members
+        <span className="countNumber">{toHumanString(membersCount || 0)}</span> members
       </Count>
     </CountsContainer>
     <Truncate lines={3}>

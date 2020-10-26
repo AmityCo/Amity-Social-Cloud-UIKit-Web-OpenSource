@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import usePostLikeSdk from './usePostLikeSdk';
-import StyledPostLikeButton from './PostLikeButton.styles';
+
+import usePostLike from '~/social/hooks/usePostLike';
+
+import StyledPostLikeButton from './styles';
 
 const PostLikeButton = ({ postId, onLikeSuccess, onUnlikeSuccess }) => {
-  const { handleToggleLike, isActive, isDisabled } = usePostLikeSdk({
+  const { handleToggleLike, isActive, isDisabled } = usePostLike({
     postId,
     onLikeSuccess,
     onUnlikeSuccess,

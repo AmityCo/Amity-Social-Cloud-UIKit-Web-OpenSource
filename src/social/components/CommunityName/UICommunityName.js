@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { customizableComponent } from '~/core/hocs/customization';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import customizableComponent from '~/core/hocs/customization';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { NameContainer, Name, VerifiedIcon, PrivateIcon } from './styles';
 
 const UICommunityName = ({

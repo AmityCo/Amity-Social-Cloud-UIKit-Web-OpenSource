@@ -3,13 +3,13 @@ import { PostRepository, CommentRepository, EkoCommentReferenceType } from 'eko-
 import { toHumanString } from 'human-readable-numbers';
 import { LIKE_REACTION_KEY } from 'constants';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import PostLikeButton from '~/social/components/PostLikeButton';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import Comment from '~/social/components/Comment';
 import { SecondaryButton } from '~/core/components/Button';
 import useLiveObject from '~/core/hooks/useLiveObject';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import { EngagementBarContainer, Counters, InteractionBar, CommentIcon } from './styles';
 
 const EngagementBar = ({ postId }) => {

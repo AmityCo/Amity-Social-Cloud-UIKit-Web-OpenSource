@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
+
+import customizableComponent from '~/core/hocs/customization';
+
 import useCommunityMembers from '~/social/hooks/useCommunityMembers';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { LoadMore } from '~/social/components/LoadMore';
-import { customizableComponent } from '~/core/hocs/customization';
+
 import CommunityMemberItem from './CommunityMemberItem';
+
 import { CommunityMembersContainer, CommunityMembersHeader, CommunityMembersTabs } from './styles';
 
 // TODO replace with translations keys

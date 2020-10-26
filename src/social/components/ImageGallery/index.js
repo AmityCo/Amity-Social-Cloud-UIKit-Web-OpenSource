@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import {
   ImageGalleryContainer,

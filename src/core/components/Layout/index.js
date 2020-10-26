@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
 import { LayoutHeader, Username, DropdownIcon, DropDownContainer } from './styles';
 

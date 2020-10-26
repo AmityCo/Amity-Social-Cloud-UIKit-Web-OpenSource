@@ -6,7 +6,7 @@ import useFile from '~/core/hooks/useFile';
 
 const userRepo = new UserRepository();
 
-export default userId => {
+const useUser = userId => {
   const user = useLiveObject(() => userRepo.userForId(userId), []);
 
   // Must call this hook even if there is a custom file URL which will override it.
@@ -19,3 +19,5 @@ export default userId => {
 
   return { user, file };
 };
+
+export default useUser;

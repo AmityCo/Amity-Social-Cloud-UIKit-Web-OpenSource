@@ -2,7 +2,7 @@ import { UserRepository } from 'eko-sdk';
 
 import { testUser } from '~/mock';
 
-export const getUser = userId => {
+const getUser = userId => {
   if (userId) {
     const userRepo = new UserRepository();
     return (userRepo.userForId(userId) || {}).model || testUser;
@@ -10,3 +10,5 @@ export const getUser = userId => {
 
   return testUser;
 };
+
+export default getUser;

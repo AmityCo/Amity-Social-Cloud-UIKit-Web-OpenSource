@@ -4,11 +4,11 @@ import { PostRepository, UserRepository } from 'eko-sdk';
 import Truncate from 'react-truncate-markup';
 import cx from 'classnames';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import Modal from '~/core/components/Modal';
 import Time from '~/core/components/Time';
 
-import PostComposeEdit from '~/social/components/PostComposeEdit';
+import PostEditor from '~/social/components/PostEditor';
 import Linkify from '~/core/components/Linkify';
 import PostImage from '~/core/components/Uploaders/Image';
 import EngagementBar from '~/social/components/EngagementBar';
@@ -16,7 +16,7 @@ import { confirm } from '~/core/components/Confirm';
 import Avatar from '~/core/components/Avatar';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import withSDK from '~/core/hocs/withSDK';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import {
   PostContainer,
@@ -80,7 +80,7 @@ const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className =
     <PostContainer className={cx('post', className)}>
       <ConditionalRender condition={isEditing}>
         <Modal title="Edit post" onCancel={closeEditingPostModal}>
-          <PostComposeEdit post={post} onSave={closeEditingPostModal} />
+          <PostEditor post={post} onSave={closeEditingPostModal} />
         </Modal>
       </ConditionalRender>
       <PostHeader>

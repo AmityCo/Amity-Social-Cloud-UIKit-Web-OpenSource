@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import Button from '~/core/components/Button';
-import { ProgressBar } from '~/core/components/ProgressBar';
+import ProgressBar from '~/core/components/ProgressBar';
 
 import RemoveIcon from '~/icons/Remove';
 

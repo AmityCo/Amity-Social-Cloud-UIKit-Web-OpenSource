@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import cx from 'classnames';
 
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import withSize from '~/core/hocs/withSize';
 
 import { AvatarContainer, Img } from './styles';

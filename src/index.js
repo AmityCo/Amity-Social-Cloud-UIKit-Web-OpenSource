@@ -1,6 +1,6 @@
 export { default as EkoUiKitProvider } from '~/core/providers/UiKitProvider';
 export { default as EkoUiKitFeed } from '~/social/components/Feed';
-export { default as EkoUiKitCommunity } from '~/social/components/CommunityV2';
+export { default as EkoUiKitCommunity } from '~/social/components/Community';
 
 // import EkoAvatar from './components/Avatar';
 // import EkoComment from './components/Comment';
@@ -17,7 +17,7 @@ export { default as EkoUiKitCommunity } from '~/social/components/CommunityV2';
 // import EkoMessageComposeBar from './components/MessageComposeBar';
 // import EkoMessageList from './components/MessageList';
 // import EkoPost from './components/Post';
-// import EkoPostCompose from './components/PostCompose';
+// import EkoPostCreator from './components/PostCreator';
 // import EkoPostLikeButton from './components/PostLikeButton';
 // import EkoRecentChat from './components/RecentChat';
 // import EkoSideMenu from './components/SideMenu';

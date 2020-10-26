@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import useCommunityWithAvatar from '~/social/hooks/useCommunityWithAvatar';
-import UICommunityHeader from './UICommunityHeader';
+
+import UICommunityHeader from './styles';
 
 const CommunityHeader = ({ communityId, onClick, isActive, isSearchResult, searchInput }) => {
   const { file } = useCommunityWithAvatar(communityId);

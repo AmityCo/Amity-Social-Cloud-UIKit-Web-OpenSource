@@ -1,10 +1,13 @@
 import React from 'react';
 
 import { isModerator } from 'helpers/permissions';
-import { confirm } from '~/core/components/Confirm';
-import useCommunityWithAvatar from '~/social/hooks/useCommunityWithAvatar';
 import withSDK from '~/core/hocs/withSDK';
+
+import useCommunityWithAvatar from '~/social/hooks/useCommunityWithAvatar';
+
 import UICommunityInfo from './UICommunityInfo';
+
+import { confirm } from '~/core/components/Confirm';
 
 const CommunityInfo = ({ communityId, userRoles, onEditCommunityClick }) => {
   const {

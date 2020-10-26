@@ -3,8 +3,8 @@ import { useForm, Controller } from 'react-hook-form';
 
 import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
-import { customizableComponent } from '~/core/hocs/customization';
+import ConditionalRender from '~/core/components/ConditionalRender';
+import customizableComponent from '~/core/hocs/customization';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import Modal from '~/core/components/Modal';
 import { MenuItem } from '~/core/components/Menu';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import { getCommunities, getCategories } from '~/mock';
 import { backgroundImage as CategoryImage } from '~/icons/Category';
 

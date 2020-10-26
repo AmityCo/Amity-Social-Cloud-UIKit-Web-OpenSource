@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import RecentChat from '~/messaging/components/RecentChat';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
-import { customizableComponent } from '~/core/hocs/customization';
+import ConditionalRender from '~/core/components/ConditionalRender';
+import customizableComponent from '~/core/hocs/customization';
 import Chat from '~/messaging/components/Chat';
 import ChatDetails from '~/messaging/components/ChatDetails';
 

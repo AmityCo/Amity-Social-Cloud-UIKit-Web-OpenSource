@@ -2,9 +2,9 @@ import React from 'react';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { confirm } from '~/core/components/Confirm';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import Button, { PrimaryButton } from '~/core/components/Button';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import { useCommunitiesMock, getMyCommunityIds, usePostsMock } from '~/mock';
 

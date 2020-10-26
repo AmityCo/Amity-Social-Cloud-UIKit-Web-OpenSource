@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { Overlay, ModalWindow, Header, Content, Footer, CloseIcon } from './styles';
 
 const Modal = ({ className, onOverlayClick, onCancel, title, footer, clean, children }) => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '~/core/components/Modal';
 import { confirm } from '~/core/components/Confirm';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import { CommunityForm } from './styles';
 
 const CommunityCreationModal = ({ isOpen, onClose, onSubmit }) => {

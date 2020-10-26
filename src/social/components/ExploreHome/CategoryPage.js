@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import { getCommunities, getCategory } from '~/mock';
 import { backgroundImage as CategoryImage } from '~/icons/Category';

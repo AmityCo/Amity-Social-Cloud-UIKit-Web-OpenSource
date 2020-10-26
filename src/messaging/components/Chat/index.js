@@ -3,7 +3,7 @@ import { MessageRepository, ChannelRepository, EkoChannelType } from 'eko-sdk';
 
 import MessageList from '~/messaging/components/MessageList';
 import MessageComposeBar from '~/messaging/components/MessageComposeBar';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import ChatHeader from '~/messaging/components/ChatHeader';
 

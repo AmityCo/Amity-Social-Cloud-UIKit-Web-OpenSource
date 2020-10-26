@@ -4,12 +4,14 @@ import { DefaultButton, PrimaryButton, SecondaryButton } from './styles';
 // legacy
 export { PrimaryButton, SecondaryButton };
 
-export default ({ variant, ...props }) => {
-  const Button =
+const Button = ({ variant, ...props }) => {
+  const Component =
     {
       primary: PrimaryButton,
       secondary: SecondaryButton,
     }[variant] || DefaultButton;
 
-  return <Button {...props} />;
+  return <Component {...props} />;
 };
+
+export default Button;

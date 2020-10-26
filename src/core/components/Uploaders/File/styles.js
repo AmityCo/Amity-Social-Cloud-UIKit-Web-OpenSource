@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import filesize from 'filesize';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import Button from '~/core/components/Button';
-import { ProgressBar } from '~/core/components/ProgressBar';
+import ProgressBar from '~/core/components/ProgressBar';
 
 import Remove from '~/icons/Remove';
 import Icon from '~/icons/files';

@@ -1,4 +1,4 @@
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import { ProfileSettingsTabs } from './styles';
 

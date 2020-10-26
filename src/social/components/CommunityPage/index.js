@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
 import { EkoPostTargetType } from 'eko-sdk';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
-import CommunityInfo from '~/social/components/CommunityInfo';
-import Feed from '~/social/components/Feed';
 import useCommunity from '~/social/hooks/useCommunity';
+
+import ConditionalRender from '~/core/components/ConditionalRender';
+
+import Feed from '~/social/components/Feed';
+import CommunityInfo from '~/social/components/CommunityInfo';
 import CommunityMembers from '~/social/components/CommunityMembers';
+
 import { PageWrapper, FeedHeaderTabs, PageMain } from './styles';
 
 // TODO replace with translations keys
@@ -39,7 +43,7 @@ const CommunityPage = ({
             targetType={EkoPostTargetType.CommunityFeed}
             targetId={communityId}
             blockRouteChange={blockRouteChange}
-            showPostCompose={canMemberPost}
+            showPostCreator={canMemberPost}
             onPostAuthorClick={onPostAuthorClick}
           />
         </ConditionalRender>

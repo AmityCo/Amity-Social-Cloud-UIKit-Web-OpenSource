@@ -1,9 +1,12 @@
 import React from 'react';
-import useCommentLikeSdk from './useCommentLikeSdk';
-import StyledCommentLikeButton from './CommentLikeButton.styles';
+import PropTypes from 'prop-types';
+
+import useCommentLike from '~/social/hooks/useCommentLike';
+
+import StyledCommentLikeButton from './styles';
 
 const CommentLikeButton = ({ commentId, onLikeSuccess, onUnlikeSuccess }) => {
-  const { handleToggleLike, isActive, isDisabled, totalLikes } = useCommentLikeSdk({
+  const { handleToggleLike, isActive, isDisabled, totalLikes } = useCommentLike({
     commentId,
     onLikeSuccess,
     onUnlikeSuccess,
@@ -16,6 +19,12 @@ const CommentLikeButton = ({ commentId, onLikeSuccess, onUnlikeSuccess }) => {
       totalLikes={totalLikes}
     />
   );
+};
+
+CommentLikeButton.propTypes = {
+  commentId: PropTypes.string.isRequired,
+  onLikeSuccess: PropTypes.func,
+  onUnlikeSuccess: PropTypes.func,
 };
 
 export default CommentLikeButton;

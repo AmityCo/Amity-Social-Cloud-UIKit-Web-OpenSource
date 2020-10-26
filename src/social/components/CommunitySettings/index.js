@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityMembers from '~/social/components/CommunityMembers';
 import CommunityForm from '~/social/components/CommunityForm';
 import { BackLink } from '~/core/components/BackLink';
 import { AddMemberModal } from '~/social/components/AddMemberModal';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import { getCommunity } from '~/mock/index';
 import {
   CommunitySettingsTabs,

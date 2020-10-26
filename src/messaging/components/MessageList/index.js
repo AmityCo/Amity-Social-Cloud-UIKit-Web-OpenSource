@@ -4,7 +4,7 @@ import { MessageRepository } from 'eko-sdk';
 
 import OutgoingMessage from '~/messaging/components/Message/OutgoingMessage';
 import IncomingMessage from '~/messaging/components/Message/IncomingMessage';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 

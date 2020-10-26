@@ -1,7 +1,17 @@
 import React from 'react';
-import { customizableComponent } from '~/core/hocs/customization';
+import styled from 'styled-components';
 
-import { LayoutContainer } from './styles';
+import customizableComponent from '~/core/hocs/customization';
+
+const LayoutContainer = styled.div`
+  display: flex;
+  background: #f7f7f8;
+  overflow-y: scroll;
+  & > *:nth-child(2) {
+    width: 100%;
+    padding: 10px;
+  }
+`;
 
 const FeedLayout = ({ sideMenu, children }) => {
   return (

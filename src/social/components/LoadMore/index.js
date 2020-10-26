@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { LoadMoreButton, ShevronDownIcon } from './styles';
 
 export const LoadMore = ({ hasMore, loadMore, children, shouldHideBorder = false }) => {

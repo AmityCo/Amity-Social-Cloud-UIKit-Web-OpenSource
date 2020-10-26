@@ -1,7 +1,7 @@
 import React from 'react';
 import File from './File';
 
-export default ({ color = '#999', ...props }) => (
+const Svg = ({ color = '#999', ...props }) => (
   <File {...props}>
     <path
       fill={color}
@@ -21,3 +21,5 @@ export default ({ color = '#999', ...props }) => (
     />
   </File>
 );
+
+export default Svg;

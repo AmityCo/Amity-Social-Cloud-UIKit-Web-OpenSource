@@ -1,6 +1,8 @@
 import styled from 'styled-components';
+
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/pro-regular-svg-icons';
+
 import Menu from '~/core/components/Menu';
 
 export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`

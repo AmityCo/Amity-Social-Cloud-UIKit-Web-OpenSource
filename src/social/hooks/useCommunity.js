@@ -2,7 +2,7 @@ import { CommunityRepository } from 'eko-sdk';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-export default communityId => {
+const useCommunity = communityId => {
   const community = useLiveObject(() => CommunityRepository.communityForId(communityId), [
     communityId,
   ]);
@@ -23,3 +23,5 @@ export default communityId => {
     leaveCommunity,
   };
 };
+
+export default useCommunity;

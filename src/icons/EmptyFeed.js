@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ width, height }) => {
+const Svg = ({ width, height }) => {
   return (
     <svg
       width={width || '100%'}
@@ -16,3 +16,5 @@ export default ({ width, height }) => {
     </svg>
   );
 };
+
+export default Svg;

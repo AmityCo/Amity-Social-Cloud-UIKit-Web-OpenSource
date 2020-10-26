@@ -1,3 +1,2 @@
-export { getUser } from './getUser';
-export { isEqual } from './isEqual';
-export { readFileAsync } from './readFileAsync';
+export { default as getUser } from './getUser';
+export { default as isEqual } from './isEqual';

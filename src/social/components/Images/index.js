@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import ImageGallery from '~/social/components/ImageGallery';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import Image from './Image';
 
 import { ImagesContainer } from './styles';

@@ -9,12 +9,12 @@ const global = {
     defaultValue: 'none',
     toolbar: {
       icon: 'component',
-      items: ['none', 'borders', 'grid'],
+      items: ['none', 'boundingbox', 'stretching', 'textflow'],
     },
   },
 };
 
-const style = '1px dashed royalblue'
+const style = '1px dashed #ccd'
 
 const Cell = ({ top, right, bottom , left, ...props }) => (<div style={{
   borderTop: top ? style : '',
@@ -66,9 +66,23 @@ const Grid = (props) => {
   </div>)
 }
 
+const Text = (props) => (
+  <span style={{
+    fontFamily: 'system-ui; sans-serif',
+    fontSize: '1rem',
+  }} {...props} />
+)
+
+const Flow = ({ children }) => (<div>
+  <Text>Lorem ipsum</Text>
+  { children }
+  <Text>dolor sit amet.</Text>
+</div>)
+
 const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
-  if (val === 'borders') return <Cell top right bottom left><Story /></Cell>
-  else if (val === 'grid') return <Grid><Story /></Grid>
+  if (val === 'boundingbox') return <Cell top right bottom left><Story /></Cell>
+  else if (val === 'stretching') return <Grid><Story /></Grid>
+  else if (val === 'textflow') return <Flow><Story /></Flow>
 
   return <Story />
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 
 import { Avatar, ChatItemContainer, UnreadCount } from './styles';
 

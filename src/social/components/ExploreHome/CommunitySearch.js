@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import Popover from '~/core/components/Popover';
 import { MenuItem } from '~/core/components/Menu';
-import { customizableComponent } from '~/core/hocs/customization';
+import customizableComponent from '~/core/hocs/customization';
 import { getCommunities } from '~/mock';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 import {

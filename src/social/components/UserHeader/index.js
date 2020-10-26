@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import useUser from '~/core/hooks/useUser';
-import UIUserHeader from './UIUserHeader';
+
+import UIUserHeader from './styles';
 
 const UserHeader = ({ userId, children, onClick }) => {
   const { user, file } = useUser(userId);

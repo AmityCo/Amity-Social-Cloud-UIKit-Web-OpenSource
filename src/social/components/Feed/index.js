@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EkoPostTargetType } from 'eko-sdk';
-import PostCompose from '~/social/components/PostCompose';
+import PostCreator from '~/social/components/PostCreator';
 import Post from '~/social/components/Post';
-import { customizableComponent } from '~/core/hocs/customization';
-import { ConditionalRender } from '~/core/components/ConditionalRender';
+import customizableComponent from '~/core/hocs/customization';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import EmptyFeed from '~/social/components/EmptyFeed';
 import { LoadMore } from '~/social/components/LoadMore';
 import useFeed from '~/social/hooks/useFeed';
@@ -13,7 +13,7 @@ import { FeedScrollContainer } from './styles';
 const Feed = ({
   targetType = EkoPostTargetType.MyFeed,
   targetId = '',
-  showPostCompose = false,
+  showPostCreator = false,
   feedClassName = null,
   onCreatePostSuccess,
   blockRouteChange,
@@ -31,8 +31,8 @@ const Feed = ({
       hasMore={hasMore}
       loader={<h4>Loading...</h4>}
     >
-      <ConditionalRender condition={showPostCompose}>
-        <PostCompose
+      <ConditionalRender condition={showPostCreator}>
+        <PostCreator
           targetType={targetType}
           targetId={targetId}
           onCreateSuccess={onCreatePostSuccess}
@@ -58,7 +58,7 @@ const Feed = ({
 Feed.propTypes = {
   targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)),
   targetId: PropTypes.string,
-  showPostCompose: PropTypes.bool,
+  showPostCreator: PropTypes.bool,
   feedClassName: PropTypes.string,
   onCreatePostSuccess: PropTypes.func,
   blockRouteChange: PropTypes.func,

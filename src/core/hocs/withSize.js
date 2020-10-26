@@ -9,9 +9,11 @@ export const SIZES = {
   tiny: 28,
 };
 
-export default (Component, defaultSize = DEFAULT_SIZE) => {
+const withSize = (Component, defaultSize = DEFAULT_SIZE) => {
   return ({ size = defaultSize, ...props }) => {
     const sizeValue = size in SIZES ? size : defaultSize;
     return <Component size={sizeValue} {...props} />;
   };
 };
+
+export default withSize;
