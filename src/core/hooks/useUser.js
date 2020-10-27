@@ -7,8 +7,8 @@ import useFile from '~/core/hooks/useFile';
 
 const userRepo = new UserRepository();
 
-const useUser = userId => {
-  const user = useLiveObject(() => userRepo.userForId(userId), []);
+const useUser = (userId, dependencies, resolver) => {
+  const user = useLiveObject(() => userRepo.userForId(userId), dependencies, resolver);
 
   // Must call this hook even if there is a custom file URL which will override it.
   // Cannot call hooks conditionally due to the 'rules of hooks'.

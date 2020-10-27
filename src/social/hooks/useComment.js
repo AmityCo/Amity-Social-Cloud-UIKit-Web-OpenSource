@@ -21,9 +21,7 @@ const useComment = ({ commentId }) => {
     [commentId, referenceId],
   );
 
-  const handleReportComment = () => {
-    CommentRepository.flag(commentId);
-  };
+  const handleReportComment = () => CommentRepository.flag(commentId);
 
   const handleReplyToComment = replyCommentText => {
     CommentRepository.createTextComment({

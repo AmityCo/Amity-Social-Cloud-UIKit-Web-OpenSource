@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { PostRepository, UserRepository } from 'eko-sdk';
 import Truncate from 'react-truncate-markup';
 import cx from 'classnames';
 
+import isModerator from 'helpers/permissions';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Modal from '~/core/components/Modal';
 import Time from '~/core/components/Time';
@@ -15,7 +15,7 @@ import PostFile from '~/core/components/Uploaders/File';
 import EngagementBar from '~/social/components/EngagementBar';
 import { confirm } from '~/core/components/Confirm';
 import Avatar from '~/core/components/Avatar';
-import useLiveObject from '~/core/hooks/useLiveObject';
+import usePost from '~/social/hooks/usePost';
 import withSDK from '~/core/hocs/withSDK';
 import customizableComponent from '~/core/hocs/customization';
 
@@ -32,38 +32,29 @@ import {
 
 const TEXT_POST_MAX_LINES = 8;
 const CONTENT_POST_MAX_LINES = 3;
-
-const userRepo = new UserRepository();
-
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 // TODO: refactor this component
-const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className = '' }) => {
+const Post = ({
+  postId,
+  currentUserId,
+  userRoles,
+  onPostAuthorClick = () => {},
+  className = '',
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
   const expand = () => setIsExpanded(true);
 
-  const post = useLiveObject(() => PostRepository.postForId(postId), [postId]);
+  const { post, user: postAuthor, handleReportPost, handleDeletePost } = usePost(postId);
   const isPostReady = !!post.postId;
   const { postedUserId, createdAt, data = {} } = post;
   const { text = '', files = [], images = [], fileId } = data;
 
   const isMyPost = currentUserId === postedUserId;
-
-  const postAuthor = useLiveObject(() => userRepo.userForId(postedUserId), [postedUserId]);
-
-  const handleDeletePost = async () => {
-    try {
-      const isDeletedSuccess = await PostRepository.deletePost(postId);
-      if (!isDeletedSuccess) {
-        throw new Error('Unable to to delete post');
-      }
-    } catch (error) {
-      // TODO - show an error saying that post could not be deleted.
-    }
-  };
+  const isAdmin = isModerator(userRoles);
 
   const confirmDeleting = () =>
     confirm({
@@ -76,6 +67,12 @@ const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className =
 
   const haveContent = files.length > 0 || images.length > 0;
   const postMaxLines = haveContent ? CONTENT_POST_MAX_LINES : TEXT_POST_MAX_LINES;
+
+  const options = [
+    (isMyPost || isAdmin) && { name: 'Edit post', action: openEditingPostModal },
+    (isMyPost || isAdmin) && { name: 'Delete post', action: confirmDeleting },
+    (!isMyPost || isAdmin) && { name: 'Report post', action: handleReportPost },
+  ];
 
   return (
     <PostContainer className={cx('post', className)}>
@@ -93,14 +90,7 @@ const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className =
           </PostInfo>
         </PostAuthor>
         <ConditionalRender condition={isPostReady}>
-          {isMyPost && (
-            <Options
-              options={[
-                { name: 'Edit post', action: openEditingPostModal },
-                { name: 'Delete post', action: confirmDeleting },
-              ]}
-            />
-          )}
+          <Options options={options.filter(Boolean)} />
         </ConditionalRender>
       </PostHeader>
       <Linkify>
@@ -130,6 +120,7 @@ Post.propTypes = {
   currentUserId: PropTypes.string,
   onPostAuthorClick: PropTypes.func,
   className: PropTypes.string,
+  userRoles: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default withSDK(customizableComponent('Post', Post));
