@@ -1,4 +1,5 @@
 import { CommentRepository, UserRepository } from 'eko-sdk';
+
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
@@ -32,6 +33,17 @@ const useComment = ({ commentId }) => {
     });
   };
 
+  const handleEditComment = text => {
+    CommentRepository.editTextComment({
+      commentId,
+      text,
+    });
+  };
+
+  const handleDeleteComment = () => {
+    CommentRepository.deleteComment(commentId);
+  };
+
   return {
     isCommentReady,
     comment,
@@ -41,6 +53,8 @@ const useComment = ({ commentId }) => {
     commentRepliesLoadMore,
     handleReportComment,
     handleReplyToComment,
+    handleEditComment,
+    handleDeleteComment,
   };
 };
 

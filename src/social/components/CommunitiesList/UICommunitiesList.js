@@ -29,7 +29,7 @@ const UICommunityList = ({
     // and remove use of LoadMore button.
     loader={<div />}
   >
-    <LoadMore hasMore={hasMore} loadMore={loadMore} shouldHideBorder>
+    <LoadMore hasMore={hasMore} loadMore={loadMore} className="no-border">
       {isSearchList && !communityIds.length && (
         <NoResultsMessage>No community found</NoResultsMessage>
       )}

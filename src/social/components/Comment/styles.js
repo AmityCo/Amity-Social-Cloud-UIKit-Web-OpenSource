@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faShare } from '@fortawesome/pro-regular-svg-icons';
+import { faThumbsUp, faShare, faMinusCircle } from '@fortawesome/pro-regular-svg-icons';
 import { faThumbsUp as faThumbsUpSolid } from '@fortawesome/pro-solid-svg-icons';
 
+import TextareaAutosize from 'react-autosize-textarea';
 import UIOptions from '~/core/components/Options';
 import Time from '~/core/components/Time';
 import UICommentComposeBar from '~/social/components/CommentComposeBar';
@@ -70,7 +71,9 @@ export const CommentComposeBar = styled(UICommentComposeBar)`
   </svg>');
 `;
 
-export const Content = styled.div``;
+export const Content = styled.div`
+  width: 100%;
+`;
 
 export const CommentHeader = styled.div`
   display: flex;
@@ -90,10 +93,19 @@ export const CommentInfo = styled.div`
 `;
 
 export const AuthorName = styled.div`
-  ${({ theme }) => theme.typography.title}
+  ${({ theme }) => theme.typography.body}
 `;
 
 export const CommentDate = styled(Time)`
+  margin-left: 5px;
+  color: ${({ theme }) => theme.palette.base.shade1};
+  &::before {
+    content: '• ';
+  }
+  ${({ theme }) => theme.typography.caption}
+`;
+
+export const EditedMark = styled.div`
   margin-left: 5px;
   color: ${({ theme }) => theme.palette.neutral.shade1};
   &::before {
@@ -117,6 +129,30 @@ export const InteractionBar = styled.div`
 export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
   font-size: 16px;
   margin-right: 5px;
+`;
+
+export const DeletedCommentContainer = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.palette.base.shade3};
+  padding: 16px 0;
+`;
+
+export const DeletedIcon = styled(FaIcon).attrs({ icon: faMinusCircle })`
+  font-size: 18px;
+`;
+
+export const IconContainer = styled.div`
+  padding-right: 10px;
+`;
+
+export const MessageContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const Text = styled.span`
+  font-size: 14px;
 `;
 
 export const LikeButton = styled(SecondaryButton)`
@@ -143,4 +179,28 @@ export const ReplyButton = styled(SecondaryButton)`
 export const SolidLikeIcon = styled(FaIcon).attrs({ icon: faThumbsUpSolid })`
   font-size: 16px;
   margin-right: 5px;
+`;
+
+export const CommentEditContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+
+  > * {
+    margin-left: 8px;
+  }
+`;
+
+export const CommentEditTextarea = styled(TextareaAutosize).attrs({ rows: 1, maxRows: 15 })`
+  padding: 10px 12px 21px 10px;
+  outline: none;
+  border: 1px solid ${({ theme }) => theme.palette.base.shade4};
+  border-radius: 4px;
+  resize: none;
+  ${({ theme }) => theme.typography.global}
 `;
