@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
+import { faShieldAlt } from '@fortawesome/pro-solid-svg-icons';
 
 import UIOptions from '~/core/components/Options';
 import { SecondaryButton } from '~/core/components/Button';
@@ -43,4 +45,31 @@ export const AuthorName = styled.div`
 export const ReadMoreButton = styled(SecondaryButton)`
   color: ${({ theme }) => theme.palette.primary.main};
   padding: 4px;
+`;
+
+export const ShieldIcon = styled(FaIcon).attrs({ icon: faShieldAlt })`
+  margin-right: 4px;
+`;
+
+export const ModeratorBadgeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  .time {
+    &::before {
+      content: '• ';
+    }
+  }
+`;
+
+export const ModeratorBadge = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.palette.base.shade1};
+  margin-right: 4px;
+  ${({ theme }) => theme.typography.captionBold}
+`;
+
+export const AdditionalInfo = styled.div`
+  display: flex;
+  align-items: center;
 `;

@@ -1,13 +1,30 @@
 import React, { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
-import { AuthorSelectorContainer, CommunitySeparator, SelectIcon, Avatar } from './styles';
+import {
+  AuthorSelectorContainer,
+  CommunitySeparator,
+  SelectIcon,
+  Avatar,
+  CommunityList,
+} from './styles';
 
-const AuthorSelector = ({ author, user, communities, onChange }) => {
+const AuthorSelector = ({
+  author,
+  user,
+  communities,
+  onChange,
+  isModerator,
+  postAvatar,
+  setPostAvatar,
+  hasMoreCommunities,
+  loadMoreCommunities,
+}) => {
   if (!communities || !communities.length) return <Avatar avatar={author.avatar} />;
 
   const [isOpen, setIsOpen] = useState(false);
@@ -19,25 +36,37 @@ const AuthorSelector = ({ author, user, communities, onChange }) => {
       <MenuItem
         onClick={() => {
           onChange(user);
+          setPostAvatar(user.avatar);
           close();
         }}
       >
         <Avatar size="tiny" avatar={user.avatar} /> My Timeline
       </MenuItem>
       <CommunitySeparator>Community</CommunitySeparator>
-      {communities.map(community => (
-        <MenuItem
-          key={community.communityId}
-          active={author.communityId === community.communityId}
-          onClick={() => {
-            onChange(community);
-            close();
-          }}
+      <CommunityList>
+        <InfiniteScroll
+          dataLength={communities.length}
+          next={loadMoreCommunities}
+          hasMore={hasMoreCommunities}
+          loader={<h4>Loading...</h4>}
+          onScroll={loadMoreCommunities}
         >
-          <Avatar avatar={community.avatar} size="tiny" backgroundImage={CommunityImage} />
-          {` ${community.name}`}
-        </MenuItem>
-      ))}
+          {communities.map(community => (
+            <MenuItem
+              key={community.communityId}
+              active={author.communityId === community.communityId}
+              onClick={() => {
+                onChange(isModerator ? community : user);
+                setPostAvatar(community.avatar);
+                close();
+              }}
+            >
+              <Avatar avatar={community.avatar} size="tiny" backgroundImage={CommunityImage} />
+              {` ${community.displayName}`}
+            </MenuItem>
+          ))}
+        </InfiniteScroll>
+      </CommunityList>
     </Menu>
   );
 
@@ -51,7 +80,7 @@ const AuthorSelector = ({ author, user, communities, onChange }) => {
         content={menu}
       >
         <AuthorSelectorContainer onClick={open}>
-          <Avatar avatar={author.avatar} /> <SelectIcon />
+          <Avatar avatar={postAvatar} /> <SelectIcon />
         </AuthorSelectorContainer>
       </Popover>
     </div>

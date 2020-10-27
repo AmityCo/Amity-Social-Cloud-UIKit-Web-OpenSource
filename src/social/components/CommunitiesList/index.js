@@ -9,9 +9,7 @@ const CommunitiesList = ({
   getIsCommunityActive,
   className,
 }) => {
-  const [communities, hasMore, loadMore] = useCommunitiesList(communitiesQueryParam, [
-    communitiesQueryParam,
-  ]);
+  const [communities, hasMore, loadMore] = useCommunitiesList(communitiesQueryParam);
 
   // If the list is the result of a search, then the list items are displayed differently.
   const isSearchList = communitiesQueryParam.hasOwnProperty('search');

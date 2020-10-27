@@ -28,6 +28,10 @@ import {
   PostInfo,
   ReadMoreButton,
   Options,
+  ShieldIcon,
+  ModeratorBadgeContainer,
+  ModeratorBadge,
+  AdditionalInfo,
 } from './styles';
 
 const TEXT_POST_MAX_LINES = 8;
@@ -82,11 +86,28 @@ const Post = ({
         </Modal>
       </ConditionalRender>
       <PostHeader>
-        <PostAuthor onClick={() => onPostAuthorClick({ userId: postAuthor.userId })}>
+        <PostAuthor
+          onClick={() => {
+            onPostAuthorClick({
+              userId: postAuthor.userId,
+              communityId: postAuthor.communityId,
+            });
+          }}
+        >
           <Avatar avatar={postAuthor.avatar} />
           <PostInfo>
             <AuthorName>{postAuthor.displayName || DEFAULT_DISPLAY_NAME}</AuthorName>
-            <Time date={createdAt} />
+            <AdditionalInfo>
+              <ConditionalRender condition={isAdmin}>
+                <ModeratorBadgeContainer>
+                  <ModeratorBadge>
+                    <ShieldIcon /> Moderator
+                  </ModeratorBadge>
+                  <Time date={createdAt} className="time" />
+                </ModeratorBadgeContainer>
+                <Time date={createdAt} />
+              </ConditionalRender>
+            </AdditionalInfo>
           </PostInfo>
         </PostAuthor>
         <ConditionalRender condition={isPostReady}>

@@ -37,9 +37,14 @@ const PostCreatorBar = ({
   edit,
   post = { text: '', files: [], images: [] },
   blockRouteChange,
+  isModerator,
+  hasMoreCommunities,
+  loadMoreCommunities,
 }) => {
   const user = {};
   const [author, setAuthor] = useState(user);
+  const [postAvatar, setPostAvatar] = useState(user.avatar);
+
   const [text, setText] = useState(post.text);
 
   const {
@@ -147,7 +152,17 @@ const PostCreatorBar = ({
 
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)} edit={edit}>
-      <AuthorSelector author={author} user={user} communities={communities} onChange={setAuthor} />
+      <AuthorSelector
+        author={author}
+        user={user}
+        communities={communities}
+        hasMoreCommunities={hasMoreCommunities}
+        loadMoreCommunities={loadMoreCommunities}
+        onChange={setAuthor}
+        isModerator={isModerator}
+        postAvatar={postAvatar}
+        setPostAvatar={setPostAvatar}
+      />
       <PostContainer>
         <PostCreatorTextareaWrapper>
           <PostCreatorTextarea
@@ -165,7 +180,7 @@ const PostCreatorBar = ({
           </ConditionalRender>
         </PostCreatorTextareaWrapper>
         <Footer>
-          <ConditionalRender condition={community}>
+          <ConditionalRender condition={isModerator && community}>
             <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
           </ConditionalRender>
           <FooterActionBar>
@@ -210,6 +225,9 @@ PostCreatorBar.propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
     files: PropTypes.arrayOf(PropTypes.string),
   }),
+  isModerator: PropTypes.bool,
+  hasMoreCommunities: PropTypes.bool,
+  loadMoreCommunities: PropTypes.func,
 };
 
 export default customizableComponent('PostCreatorBar', PostCreatorBar);

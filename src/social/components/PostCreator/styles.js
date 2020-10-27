@@ -150,3 +150,9 @@ export const CommunitySeparator = styled.div`
   color: ${({ theme }) => theme.palette.base.shade1};
   padding: 12px;
 `;
+
+export const CommunityList = styled.div`
+  position: relative;
+  height: 350px;
+  overflow: auto;
+`;

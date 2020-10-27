@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EkoPostTargetType } from 'eko-sdk';
+
+import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PostCreator from '~/social/components/PostCreator';
 import Post from '~/social/components/Post';
 import customizableComponent from '~/core/hocs/customization';
@@ -9,6 +11,8 @@ import EmptyFeed from '~/social/components/EmptyFeed';
 import { LoadMore } from '~/social/components/LoadMore';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
+
+const queryParams = { isJoined: true };
 
 const Feed = ({
   targetType = EkoPostTargetType.MyFeed,
@@ -22,6 +26,7 @@ const Feed = ({
   onPostAuthorClick,
 }) => {
   const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
+  const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(queryParams);
 
   return (
     <FeedScrollContainer
@@ -37,6 +42,9 @@ const Feed = ({
           targetId={targetId}
           onCreateSuccess={onCreatePostSuccess}
           blockRouteChange={blockRouteChange}
+          communities={communities}
+          hasMoreCommunities={hasMoreCommunities}
+          loadMoreCommunities={loadMoreCommunities}
         />
       </ConditionalRender>
       <ConditionalRender condition={posts.length}>
