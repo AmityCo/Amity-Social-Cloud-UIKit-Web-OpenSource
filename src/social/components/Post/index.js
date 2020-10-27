@@ -11,6 +11,7 @@ import Time from '~/core/components/Time';
 import PostEditor from '~/social/components/PostEditor';
 import Linkify from '~/core/components/Linkify';
 import PostImage from '~/core/components/Uploaders/Image';
+import PostFile from '~/core/components/Uploaders/File';
 import EngagementBar from '~/social/components/EngagementBar';
 import { confirm } from '~/core/components/Confirm';
 import Avatar from '~/core/components/Avatar';
@@ -115,6 +116,9 @@ const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className =
       </Linkify>
       <ConditionalRender condition={fileId && post.dataType === 'image'}>
         <PostImage fileId={fileId} fullSize />
+      </ConditionalRender>
+      <ConditionalRender condition={fileId && post.dataType === 'file'}>
+        <PostFile fileId={fileId} fullSize />
       </ConditionalRender>
       <EngagementBar postId={postId} />
     </PostContainer>

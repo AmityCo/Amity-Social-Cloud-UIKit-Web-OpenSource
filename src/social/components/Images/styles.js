@@ -151,4 +151,12 @@ export const Label = styled.label``;
 
 export const ImageIcon = styled(FaIcon).attrs({ icon: faImage })`
   font-size: 18px;
+  cursor: pointer;
+
+  ${({ disabled, theme }) =>
+    disabled &&
+    `
+      color: ${theme.palette.base.shade3};
+      cursor: default;
+  `}
 `;

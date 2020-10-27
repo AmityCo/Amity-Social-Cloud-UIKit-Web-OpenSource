@@ -21,7 +21,7 @@ export const ImageUpload = ({ disabled, addImages, setProgress, updateImages }) 
       files: uploadingFiles,
       onProgress: ({ currentFile, currentPercent }) => {
         setProgress({
-          imageName: currentFile.name,
+          name: currentFile.name,
           progress: Math.round(currentPercent * 100),
         });
       },
@@ -33,7 +33,7 @@ export const ImageUpload = ({ disabled, addImages, setProgress, updateImages }) 
   return (
     <ImageUploadContainer>
       <Label htmlFor="image-upload" disabled={disabled}>
-        <ImageIcon />
+        <ImageIcon disabled={disabled} />
       </Label>
       <FileInput id="image-upload" onChange={upload} multiple disabled={disabled} />
     </ImageUploadContainer>

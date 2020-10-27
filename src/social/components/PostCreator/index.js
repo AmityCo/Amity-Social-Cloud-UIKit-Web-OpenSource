@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { PostRepository, EkoPostTargetType } from 'eko-sdk';
-import { v4 } from 'uuid';
 
 import { isEqual } from 'helpers';
+import useFilesUpload from '~/core/hooks/useFilesUpload';
 import Images from '~/social/components/Images';
 import { ImageUpload } from '~/social/components/Images/ImageUpload';
 
-import Files from '~/core/components/Uploaders/File';
+import { Files } from '~/core/components/Files';
+import { FileUpload } from '~/core/components/Files/FileUpload';
 import { confirm } from '~/core/components/Confirm';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
@@ -40,9 +41,24 @@ const PostCreatorBar = ({
   const user = {};
   const [author, setAuthor] = useState(user);
   const [text, setText] = useState(post.text);
-  // TODO: refactor method to create post with images and files
-  const [files, setFiles] = useState(post.files);
-  const [images, setImages] = useState(post.images);
+
+  const {
+    files: images,
+    addFiles: addImages,
+    updateFiles: updateImages,
+    setProgress: setImagesProgress,
+    removeFile: removeImage,
+    reset: resetImages,
+  } = useFilesUpload(post.images);
+
+  const {
+    files,
+    addFiles,
+    updateFiles,
+    setProgress: setFilesProgress,
+    removeFile,
+    reset: resetFiles,
+  } = useFilesUpload(post.files);
 
   const [isDirty, markDirty] = useState(false);
 
@@ -80,44 +96,44 @@ const PostCreatorBar = ({
     );
   }, [text, files, images]);
 
-  const createImagePost = parentPostId => {
-    if (images.length) {
-      const imageIds = images.map(image => image.fileId);
-      PostRepository.createImagePost({
-        imageIds,
-        targetType,
-        targetId: parentPostId || targetId,
-      });
-    }
-  };
-
   const createPost = async () => {
     if (isEmpty) return;
 
-    if (!text) {
-      createImagePost();
-    } else {
-      const newPostLiveObject = PostRepository.createTextPost({
-        text,
-        targetType,
-        targetId,
-      });
-
-      newPostLiveObject.on('dataStatusChanged', () => {
-        const { postId } = newPostLiveObject.model;
-        onCreateSuccess(postId);
-        setText('');
-
-        createImagePost(postId);
-
-        setFiles([]);
-        newPostLiveObject.dispose();
-      });
+    const payload = {};
+    if (text) {
+      payload.text = text;
     }
+
+    if (images.length) {
+      payload.imageIds = images.map(image => image.fileId);
+    }
+
+    if (files.length) {
+      payload.fileIds = files.map(file => file.fileId);
+    }
+
+    // TODO: refactor with isEmpty when it will be merged
+    if (!Object.keys(payload).length) {
+      return;
+    }
+
+    const newPostLiveObject = PostRepository.createPost({
+      ...payload,
+      targetType,
+      targetId,
+    });
+
+    newPostLiveObject.on('dataStatusChanged', () => {
+      const { postId } = newPostLiveObject.model;
+      onCreateSuccess(postId);
+      setText('');
+      resetImages();
+      resetFiles();
+
+      newPostLiveObject.dispose();
+    });
   };
 
-  const FilePostIcon = () => null;
-  const maxFilesWarning = 0;
   const canUploadImage = !files.length;
   const canUploadFile = !images.length;
 
@@ -126,55 +142,6 @@ const PostCreatorBar = ({
   };
 
   const isCommunityPost = isIdenticalAuthor(author, community);
-
-  const addImages = added => {
-    const newImages = added.map(image => ({ ...image, isNew: true }));
-    setImages(oldImages => [...oldImages, ...newImages]);
-  };
-
-  const updateImages = fileIds => {
-    setImages(oldImages =>
-      oldImages.map((image, index) => {
-        return { ...image, isNew: false, fileId: fileIds[index] };
-      }),
-    );
-  };
-
-  const setProgress = ({ imageName, progress }) => {
-    setImages(oldImages => {
-      const index = oldImages.findIndex(image => image.name === imageName);
-      return [
-        ...oldImages.slice(0, index),
-        { ...oldImages[index], progress },
-        ...oldImages.slice(index + 1),
-      ];
-    });
-  };
-
-  const addFile = file => {
-    setFiles([...files, { ...file, id: v4(), isNew: true }]);
-  };
-
-  const setFileLoaded = file => {
-    const index = files.indexOf(file);
-    const newFiles = files.slice();
-    newFiles[index] = {
-      ...file,
-      isNew: false,
-    };
-    setFiles(newFiles);
-  };
-
-  const onRemoveFile = file => {
-    setFiles(files.filter(({ id }) => id !== file.id));
-  };
-
-  const onRemoveImage = image => {
-    setImages(oldImages => {
-      return oldImages.filter(({ name }) => name !== image.name);
-    });
-  };
-
   const setIsCommunityPost = shouldBeCommunityPost =>
     setAuthor(shouldBeCommunityPost ? community : user);
 
@@ -191,10 +158,10 @@ const PostCreatorBar = ({
           />
 
           <ConditionalRender condition={files.length}>
-            <Files setFileLoaded={setFileLoaded} files={files} onRemove={onRemoveFile} />
+            <Files files={files} onRemove={removeFile} />
           </ConditionalRender>
           <ConditionalRender condition={images.length}>
-            <Images images={images} onRemove={onRemoveImage} />
+            <Images images={images} onRemove={removeImage} />
           </ConditionalRender>
         </PostCreatorTextareaWrapper>
         <Footer>
@@ -203,16 +170,20 @@ const PostCreatorBar = ({
           </ConditionalRender>
           <FooterActionBar>
             <ConditionalRender condition={!edit}>
-              <ImageUpload
-                disabled={!canUploadImage}
-                addImages={addImages}
-                updateImages={updateImages}
-                setProgress={setProgress}
-              />
-              <FilePostIcon
-                disabled={!canUploadFile}
-                onClick={canUploadFile ? addFile : maxFilesWarning}
-              />
+              <>
+                <ImageUpload
+                  disabled={!canUploadImage}
+                  addImages={addImages}
+                  updateImages={updateImages}
+                  setProgress={setImagesProgress}
+                />
+                <FileUpload
+                  disabled={!canUploadFile}
+                  addFiles={addFiles}
+                  updateFiles={updateFiles}
+                  setProgress={setFilesProgress}
+                />
+              </>
             </ConditionalRender>
             <PostButton disabled={isDisabled} onClick={edit ? updatePost : createPost}>
               {edit ? 'Save' : 'Post'}

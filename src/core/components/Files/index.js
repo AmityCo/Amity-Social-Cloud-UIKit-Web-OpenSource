@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 
-import customizableComponent from '~/core/hocs/customization';
-
+import ConditionalRender from '~/core/components/ConditionalRender';
 import File from './File';
 
 import { FilesContainer, ViewAllFilesButton } from './styles';
 
 const MAX_VISIBLE_FILES = 5;
 
-const Files = ({ files = [], onRemove, setFileLoaded }) => {
+export const Files = ({ files, onRemove }) => {
   const [isOpen, setIsOpen] = useState(false);
   const open = () => setIsOpen(true);
 
@@ -19,13 +18,13 @@ const Files = ({ files = [], onRemove, setFileLoaded }) => {
   if (files.length === 0) return null;
 
   return (
-    <FilesContainer>
-      {visibleFiles.map(file => (
-        <File key={file.id} file={file} onRemove={onRemove} setFileLoaded={setFileLoaded} />
-      ))}
-      {haveHiddenFiles && <ViewAllFilesButton onClick={open}>View all files</ViewAllFilesButton>}
-    </FilesContainer>
+    <ConditionalRender condition={files.length}>
+      <FilesContainer>
+        {visibleFiles.map(file => (
+          <File key={file.id} file={file} onRemove={onRemove} />
+        ))}
+        {haveHiddenFiles && <ViewAllFilesButton onClick={open}>View all files</ViewAllFilesButton>}
+      </FilesContainer>
+    </ConditionalRender>
   );
 };
-
-export default customizableComponent('Files', Files);
