@@ -12,7 +12,7 @@ const FeedTypesEmptyText = {
   [EkoPostTargetType.GlobalFeed]: 'This feed is empty',
   [EkoPostTargetType.CommunityFeed]: "This community's feed is empty",
   [EkoPostTargetType.UserFeed]: "This user's feed is empty",
-  [EkoPostTargetType.MyFeed]: 'Your feed is empty. Add your first post',
+  [EkoPostTargetType.MyFeed]: 'Your feed is empty. Start your first post',
 };
 
 const EmptyFeed = ({
