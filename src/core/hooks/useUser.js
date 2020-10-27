@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 
 import { UserRepository } from 'eko-sdk';
+
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';
 
@@ -17,7 +18,9 @@ const useUser = userId => {
     file = { fileUrl: user.avatarCustomUrl };
   }
 
-  return { user, file };
+  const handleReportUser = () => userRepo.flag({ userId });
+
+  return { user, file, handleReportUser };
 };
 
 export default useUser;

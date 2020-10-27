@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
 import { getUser } from 'helpers';
-import { UserProfileForm } from '~/social/components/Profile/UserProfileForm';
+import UserProfileForm from '~/social/components/Profile/UserProfileForm';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import { BackLink } from '~/core/components/BackLink';
+import BackLink from '~/core/components/BackLink';
 import customizableComponent from '~/core/hocs/customization';
+import withSDK from '~/core/hocs/withSDK';
 import {
   ProfileSettingsTabs,
   Container,
@@ -21,13 +22,15 @@ const tabs = {
   EDIT_PROFILE: 'Edit profile',
 };
 
-const ProfileSettings = ({ userId }) => {
+const ProfileSettings = ({ userId, client }) => {
   const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
 
   const currentUser = getUser(userId);
 
-  const handleSubmit = data => {
-    return data;
+  const handleSubmit = async data => {
+    const { displayName, description } = data;
+    await client.setDisplayName(displayName);
+    await client.setDescription(description);
   };
 
   return (
@@ -37,7 +40,7 @@ const ProfileSettings = ({ userId }) => {
           <Avatar avatar={currentUser.avatar} />
         </AvatarContainer>
         <div>
-          <BackLink text={`Return to ${currentUser.name}`} />
+          <BackLink text={`Return to ${currentUser.displayName}`} />
           <PageTitle>Profile Settings</PageTitle>
         </div>
       </PageHeader>
@@ -52,8 +55,8 @@ const ProfileSettings = ({ userId }) => {
         <ConditionalRender condition={activeTab === tabs.EDIT_PROFILE}>
           <ActiveTabContent>
             <UserProfileForm
-              onSubmit={data => {
-                handleSubmit(data);
+              onSubmit={async data => {
+                await handleSubmit(data);
               }}
               user={currentUser}
             />
@@ -64,4 +67,4 @@ const ProfileSettings = ({ userId }) => {
   );
 };
 
-export default customizableComponent('ProfileSettings', ProfileSettings);
+export default withSDK(customizableComponent('ProfileSettings', ProfileSettings));

@@ -25,6 +25,7 @@ import ExploreHome from '~/social/components/ExploreHome';
 
 import CategoryPage from '~/social/components/ExploreHome/CategoryPage';
 import CommunityPage from '~/social/components/CommunityPage';
+import UserProfilePage from '~/social/components/UserProfilePage';
 
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 import CommunitySettings from '~/social/components/CommunitySettings';
@@ -170,9 +171,8 @@ const Pages = () => {
           <CommunityPage communityId={communityId} blockRouteChange={blockRouteChange} />
         </Route>
         <Route path="/profile/:userId" exact>
-          <Feed
-            targetType={EkoPostTargetType.MyFeed}
-            onPostAuthorClick={navigateTo}
+          <UserProfilePage
+            goToUserFeed={goToUserFeed}
             userId={userId}
             editProfile={editProfile}
             blockRouteChange={blockRouteChange}

@@ -39,7 +39,7 @@ const FormBlock = ({ title, children }) => (
   </FormBlockContainer>
 );
 
-export const UserProfileForm = ({ user, onSubmit, className }) => {
+const UserProfileForm = ({ user, onSubmit, className }) => {
   const { register, handleSubmit, errors, watch, control } = useForm({
     defaultValues: {
       ...user,
@@ -101,3 +101,5 @@ export const UserProfileForm = ({ user, onSubmit, className }) => {
     </Form>
   );
 };
+
+export default UserProfileForm;

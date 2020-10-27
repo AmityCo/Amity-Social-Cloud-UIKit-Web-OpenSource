@@ -1,11 +1,16 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faPencil } from '@fortawesome/pro-regular-svg-icons';
+import { faPlus, faPencil, faCommentsAlt } from '@fortawesome/pro-regular-svg-icons';
 
 import UIOptions from '~/core/components/Options';
 import UIAvatar from '~/core/components/Avatar';
 
 export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
+  font-size: 15px;
+  margin-right: 8px;
+`;
+
+export const MessageIcon = styled(FaIcon).attrs({ icon: faCommentsAlt })`
   font-size: 15px;
   margin-right: 8px;
 `;
@@ -27,6 +32,7 @@ export const Container = styled.div`
   flex-shrink: 0;
   align-self: flex-start;
   padding: 16px;
+  margin-top: 10px;
 `;
 
 export const Header = styled.div`

@@ -85,7 +85,7 @@ const Post = ({ postId, currentUserId, onPostAuthorClick = () => {}, className =
         </Modal>
       </ConditionalRender>
       <PostHeader>
-        <PostAuthor onClick={() => onPostAuthorClick(postAuthor.userId)}>
+        <PostAuthor onClick={() => onPostAuthorClick({ userId: postAuthor.userId })}>
           <Avatar avatar={postAuthor.avatar} />
           <PostInfo>
             <AuthorName>{postAuthor.displayName || DEFAULT_DISPLAY_NAME}</AuthorName>
