@@ -1,51 +1,46 @@
 import React from 'react';
-import { toHumanString } from 'human-readable-numbers';
+import PropTypes from 'prop-types';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
-import Button from '~/core/components/Button';
 import useUser from '~/core/hooks/useUser';
 import withSDK from '~/core/hocs/withSDK';
-
-import {
-  Count,
-  Avatar,
-  Container,
-  ProfileName,
-  Header,
-  Description,
-  MessageIcon,
-  PencilIcon,
-} from './styles';
+import UIUserProfileBar from './UIUserProfileBar';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const UserProfileBar = ({ userId, currentUserId, editProfile = () => {}, goToChat = () => {} }) => {
+const UserProfileBar = ({ userId, currentUserId, editProfile, goToChat }) => {
   const { user } = useUser(userId);
   const { avatarFileId, displayName, description } = user;
+
+  /* TODO: need method for getting posts amount for current user */
+  const postsCount = 0;
 
   const isMyProfile = userId === currentUserId;
 
   return (
-    <Container>
-      <Header>
-        <Avatar avatar={avatarFileId} />
-      </Header>
-      <ProfileName>{displayName || DEFAULT_DISPLAY_NAME}</ProfileName>
-      <div>
-        {/* TODO: need method for getting posts amount for current user */}
-        <Count>{toHumanString(0)}</Count> posts
-      </div>
-      <Description>{description}</Description>
-      <ConditionalRender condition={isMyProfile}>
-        <Button fullWidth onClick={() => editProfile(userId)}>
-          <PencilIcon /> Edit profile
-        </Button>
-        <Button fullWidth onClick={() => goToChat(userId)}>
-          <MessageIcon /> Message
-        </Button>
-      </ConditionalRender>
-    </Container>
+    <UIUserProfileBar
+      userId={userId}
+      avatarFileId={avatarFileId}
+      displayName={displayName || DEFAULT_DISPLAY_NAME}
+      description={description}
+      postsCount={postsCount}
+      isMyProfile={isMyProfile}
+      editProfile={editProfile}
+      goToChat={goToChat}
+    />
   );
 };
 
+UserProfileBar.propTypes = {
+  userId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string.isRequired,
+  editProfile: PropTypes.func,
+  goToChat: PropTypes.func,
+};
+
+UserProfileBar.defaultProps = {
+  editProfile: () => {},
+  goToChat: () => {},
+};
+
+export { UIUserProfileBar };
 export default withSDK(UserProfileBar);
