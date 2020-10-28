@@ -65,7 +65,7 @@ const Community = ({
       >
         {isShowingFeed ? (
           <Feed
-            targetType={EkoPostTargetType.MyFeed}
+            targetType={EkoPostTargetType.GlobalFeed}
             onPostAuthorClick={onMemberClick}
             blockRouteChange={blockRouteChange}
             showPostCreator
