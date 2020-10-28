@@ -42,7 +42,7 @@ const DeletedComment = ({ comment }) => {
   );
 };
 
-const Comment = ({ commentId, isReplyComment = false, client }) => {
+const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -81,7 +81,6 @@ const Comment = ({ commentId, isReplyComment = false, client }) => {
     cancelEditing();
   };
 
-  const { currentUserId } = client;
   const isCommentOwner = commentAuthor.userId === currentUserId;
 
   const deleteComment = () => {
@@ -161,7 +160,7 @@ const Comment = ({ commentId, isReplyComment = false, client }) => {
 Comment.propTypes = {
   commentId: PropTypes.string.isRequired,
   isReplyComment: PropTypes.bool,
-  client: PropTypes.object.isRequired,
+  currentUserId: PropTypes.string.isRequired,
 };
 
 export default withSDK(customizableComponent('Comment', Comment));

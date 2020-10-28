@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 import customizableComponent from '~/core/hocs/customization';
-
-import { testUser } from '~/mock';
+import useUser from '~/core/hooks/useUser';
+import withSDK from '~/core/hocs/withSDK';
 
 import {
   Avatar,
@@ -11,10 +11,11 @@ import {
   AddCommentButton,
 } from './styles';
 
-const CommentComposeBar = ({ className, userToReply, onSubmit, user = testUser }) => {
+const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) => {
   const [text, setText] = useState('');
+  const currentUser = useUser(currentUserId);
 
-  const AddComment = () => {
+  const addComment = () => {
     if (text === '') return;
     onSubmit(text);
     setText('');
@@ -32,20 +33,20 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, user = testUser }
 
   return (
     <CommentComposeBarContainer className={className}>
-      <Avatar avatar={user.avatar} />
+      <Avatar avatar={currentUser.avatar} />
       <CommentComposeBarInput
         placeholder={placeholder}
         type="text"
         value={text}
         onChange={e => setText(e.target.value)}
         ref={commentInputRef}
-        /* onKeyPress={e => e.key === 'Enter' && AddComment()} */
+        /* onKeyPress={e => e.key === 'Enter' && addComment()} */
       />
-      <AddCommentButton disabled={isEmpty} onClick={AddComment}>
+      <AddCommentButton disabled={isEmpty} onClick={addComment}>
         {submitButtonText}
       </AddCommentButton>
     </CommentComposeBarContainer>
   );
 };
 
-export default customizableComponent('CommentComposeBar', CommentComposeBar);
+export default withSDK(customizableComponent('CommentComposeBar', CommentComposeBar));
