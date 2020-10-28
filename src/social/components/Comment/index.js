@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import withSDK from '~/core/hocs/withSDK';
@@ -21,6 +21,9 @@ import {
   IconContainer,
   MessageContainer,
 } from './styles';
+
+// TODO: enable replies feature once working on all platforms.
+export const ENABLE_REPLIES = false;
 
 // TODO: react-intl
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
@@ -58,7 +61,8 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
   } = useComment({ commentId });
 
   const [text, setText] = useState(comment?.data?.text ?? '');
-  React.useEffect(() => {
+
+  useEffect(() => {
     if (text !== comment?.data?.text) {
       setText(comment?.data?.text);
     }
@@ -96,7 +100,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
 
   return (
     <ConditionalRender condition={isCommentReady}>
-      <ConditionalRender condition={isReplyComment}>
+      <ConditionalRender condition={isReplyComment && ENABLE_REPLIES}>
         <ConditionalRender condition={comment.isDeleted}>
           <DeletedComment comment={comment} />
           <ReplyContainer>
@@ -143,7 +147,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
                 setText={setText}
               />
             </CommentContainer>
-            <CommentReplies replyIds={commentReplies} />
+            {ENABLE_REPLIES && <CommentReplies replyIds={commentReplies} />}
             <ConditionalRender condition={isReplying}>
               <CommentComposeBar
                 userToReply={commentAuthor.displayName}

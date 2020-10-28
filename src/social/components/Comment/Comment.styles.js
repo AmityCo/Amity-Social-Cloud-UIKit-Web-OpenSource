@@ -22,6 +22,9 @@ import {
   EditedMark,
 } from './styles';
 
+// TODO: enable replies feature once working on all platforms.
+import { ENABLE_REPLIES } from '.';
+
 const StyledComment = ({
   commentId,
   authorName,
@@ -84,7 +87,7 @@ const StyledComment = ({
         <ConditionalRender condition={!isEditing}>
           <InteractionBar>
             <CommentLikeButton commentId={commentId} />
-            <ConditionalRender condition={!isReplyComment}>
+            <ConditionalRender condition={!isReplyComment && ENABLE_REPLIES}>
               <ReplyButton onClick={onClickReply}>
                 <ReplyIcon /> Reply
               </ReplyButton>
