@@ -69,6 +69,8 @@ const AuthorSelector = ({
     </Menu>
   );
 
+  const backgroundImage = author.communityId ? CommunityImage : null;
+
   return (
     <div>
       <Popover
@@ -79,7 +81,7 @@ const AuthorSelector = ({
         content={menu}
       >
         <AuthorSelectorContainer onClick={open}>
-          <Avatar avatar={postAvatar} /> <SelectIcon />
+          <Avatar avatar={postAvatar} backgroundImage={backgroundImage} /> <SelectIcon />
         </AuthorSelectorContainer>
       </Popover>
     </div>
