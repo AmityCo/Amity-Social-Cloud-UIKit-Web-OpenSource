@@ -8,9 +8,9 @@ const UserProfilePage = ({ goToUserFeed, userId, editProfile, blockRouteChange }
   return (
     <>
       <Feed
-        targetType={EkoPostTargetType.MyFeed}
+        targetType={EkoPostTargetType.UserFeed}
+        targetId={userId}
         onPostAuthorClick={goToUserFeed}
-        userId={userId}
         editProfile={editProfile}
         blockRouteChange={blockRouteChange}
       />
