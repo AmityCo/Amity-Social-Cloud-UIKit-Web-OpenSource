@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { PostRepository, EkoPostTargetType } from 'eko-sdk';
 
-import { isEqual } from 'helpers';
+import { isEmpty, isEqual } from 'helpers';
 import useFilesUpload from '~/core/hooks/useFilesUpload';
 import Images from '~/social/components/Images';
 import { ImageUpload } from '~/social/components/Images/ImageUpload';
@@ -27,10 +27,8 @@ import {
 } from './styles';
 
 const PostCreatorBar = ({
-  targetType,
-  targetId,
   onCreateSuccess = () => {},
-  community = null,
+  community = {},
   communities = [],
   className = '',
   placeholder = "What's going on...",
@@ -70,8 +68,7 @@ const PostCreatorBar = ({
   const hasNotLoadedImages = images.some(image => image.isNew);
   const hasNotLoadedFiles = files.some(file => file.isNew);
 
-  const isEmpty = text.trim().length === 0 && files.length === 0 && images.length === 0;
-  const isDisabled = isEmpty || hasNotLoadedImages || hasNotLoadedFiles;
+  const isDisabled = isEmpty(text, images, files) || hasNotLoadedImages || hasNotLoadedFiles;
 
   if (blockRouteChange) {
     const onConfirm = goToNextPage => () => {
@@ -102,7 +99,9 @@ const PostCreatorBar = ({
   }, [text, files, images]);
 
   const createPost = async () => {
-    if (isEmpty) return;
+    if (isEmpty(text, images, files)) {
+      return;
+    }
 
     const payload = {};
     if (text) {
@@ -117,15 +116,14 @@ const PostCreatorBar = ({
       payload.fileIds = files.map(file => file.fileId);
     }
 
-    // TODO: refactor with isEmpty when it will be merged
-    if (!Object.keys(payload).length) {
+    if (isEmpty(payload)) {
       return;
     }
 
     const newPostLiveObject = PostRepository.createPost({
       ...payload,
-      targetType,
-      targetId,
+      targetType: author.communityId ? EkoPostTargetType.CommunityFeed : EkoPostTargetType.UserFeed,
+      targetId: author.communityId || author.userId,
     });
 
     newPostLiveObject.on('dataStatusChanged', () => {
@@ -159,7 +157,6 @@ const PostCreatorBar = ({
         hasMoreCommunities={hasMoreCommunities}
         loadMoreCommunities={loadMoreCommunities}
         onChange={setAuthor}
-        isModerator={isModerator}
         postAvatar={postAvatar}
         setPostAvatar={setPostAvatar}
       />
@@ -180,7 +177,7 @@ const PostCreatorBar = ({
           </ConditionalRender>
         </PostCreatorTextareaWrapper>
         <Footer>
-          <ConditionalRender condition={isModerator && community}>
+          <ConditionalRender condition={isModerator && !isEmpty(community)}>
             <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
           </ConditionalRender>
           <FooterActionBar>
@@ -211,8 +208,6 @@ const PostCreatorBar = ({
 };
 
 PostCreatorBar.propTypes = {
-  targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)).isRequired,
-  targetId: PropTypes.string,
   onCreateSuccess: PropTypes.func,
   community: PropTypes.object,
   communities: PropTypes.array,

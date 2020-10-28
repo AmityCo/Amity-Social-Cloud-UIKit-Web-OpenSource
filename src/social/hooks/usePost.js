@@ -10,7 +10,7 @@ const usePost = postId => {
   const { user, file } = useUser(postedUserId, [postedUserId]);
 
   const handleReportPost = () => PostRepository.flag(postId);
-  const handleDeletePost = () => PostRepository.delete(postId);
+  const handleDeletePost = () => PostRepository.deletePost(postId);
 
   return {
     post,

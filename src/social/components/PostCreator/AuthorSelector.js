@@ -19,7 +19,6 @@ const AuthorSelector = ({
   user,
   communities,
   onChange,
-  isModerator,
   postAvatar,
   setPostAvatar,
   hasMoreCommunities,
@@ -56,7 +55,7 @@ const AuthorSelector = ({
               key={community.communityId}
               active={author.communityId === community.communityId}
               onClick={() => {
-                onChange(isModerator ? community : user);
+                onChange(community);
                 setPostAvatar(community.avatar);
                 close();
               }}
