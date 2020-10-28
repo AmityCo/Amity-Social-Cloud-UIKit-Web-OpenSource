@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
 import { LIKE_REACTION_KEY } from 'constants';
@@ -14,11 +14,26 @@ const EngagementBar = ({ postId, noInteractionMessage }) => {
   const { post } = usePost(postId);
   const { commentsCount, reactions = {}, comments = [] } = post;
 
-  const handleAddComment = commentText => {
-    CommentRepository.createTextComment({
+  // this is workaround for updating comments in real-time.
+  // I believe this should be fixed
+  const [postComments, setPostComments] = useState(comments);
+
+  useEffect(() => {
+    if (comments.length > postComments.length) {
+      setPostComments(comments);
+    }
+  }, [comments]);
+
+  const handleAddComment = async commentText => {
+    const newCommentLiveObject = await CommentRepository.createTextComment({
       referenceType: EkoCommentReferenceType.Post,
       referenceId: postId,
       text: commentText,
+    });
+
+    newCommentLiveObject.on('dataStatusChanged', () => {
+      const { commentId } = newCommentLiveObject.model;
+      setPostComments([...postComments, commentId]);
     });
   };
 
@@ -29,7 +44,7 @@ const EngagementBar = ({ postId, noInteractionMessage }) => {
       totalComments={commentsCount}
       noInteractionMessage={noInteractionMessage}
       onClickComment={toggleCommentCompose}
-      commentIds={comments}
+      commentIds={postComments}
       isCommentComposeOpen={isCommentComposeOpen}
       handleAddComment={handleAddComment}
     />
