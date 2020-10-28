@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import InfiniteScroll from 'react-infinite-scroll-component';
+
 import CommunityHeader from '~/social/components/CommunityHeader';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { LoadMore } from '~/social/components/LoadMore';
+import { CommunityScrollContainer } from './styles';
 
 const NoResultsMessage = styled.p`
   text-align: center;
@@ -19,36 +21,41 @@ const UICommunityList = ({
   isSearchList,
   searchInput,
   className,
-}) => (
-  <InfiniteScroll
-    className={className}
-    dataLength={communityIds.length}
-    next={loadMore}
-    hasMore={hasMore}
-    // TODO - when infinite scroll is fixed: bring back loading component
-    // and remove use of LoadMore button.
-    loader={<div />}
-  >
-    <LoadMore hasMore={hasMore} loadMore={loadMore} className="no-border">
-      {isSearchList && !communityIds.length && (
-        <NoResultsMessage>No community found</NoResultsMessage>
-      )}
-      {communityIds.map(communityId => {
-        const isActive = getIsCommunityActive(communityId);
-        return (
-          <CommunityHeader
-            key={communityId}
-            communityId={communityId}
-            isActive={isActive}
-            onClick={onClickCommunity}
-            isSearchResult={isSearchList}
-            searchInput={searchInput}
-          />
-        );
-      })}
-    </LoadMore>
-  </InfiniteScroll>
-);
+}) => {
+  const noCommunitiesFound = isSearchList && !communityIds.length;
+  const classNames = [communityIds.length < 4 && 'no-scroll', className].filter(Boolean).join(' ');
+
+  return (
+    <CommunityScrollContainer
+      className={classNames}
+      dataLength={communityIds.length}
+      next={loadMore}
+      hasMore={hasMore}
+      // TODO - when infinite scroll is fixed: bring back loading component
+      // and remove use of LoadMore button.
+      loader={<div />}
+    >
+      <LoadMore hasMore={hasMore} loadMore={loadMore} className="no-border">
+        <ConditionalRender condition={noCommunitiesFound}>
+          <NoResultsMessage>No community found</NoResultsMessage>
+        </ConditionalRender>
+        {communityIds.map(communityId => {
+          const isActive = getIsCommunityActive(communityId);
+          return (
+            <CommunityHeader
+              key={communityId}
+              communityId={communityId}
+              isActive={isActive}
+              onClick={onClickCommunity}
+              isSearchResult={isSearchList}
+              searchInput={searchInput}
+            />
+          );
+        })}
+      </LoadMore>
+    </CommunityScrollContainer>
+  );
+};
 
 const noop = () => {};
 

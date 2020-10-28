@@ -6,6 +6,7 @@ import customizableComponent from '~/core/hocs/customization';
 
 import Avatar from '~/core/components/Avatar';
 import CommunityName from '~/social/components/CommunityName';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 const CommunityHeaderContainer = styled.a.attrs(props => props)`
   display: grid;
@@ -42,7 +43,7 @@ const UICommunityHeader = ({
   searchInput,
 }) => (
   <CommunityHeaderContainer isActive={isActive} onClick={() => onClick(communityId)}>
-    <CommunityHeaderAvatar avatar={avatarFileUrl} />
+    <CommunityHeaderAvatar avatar={avatarFileUrl} backgroundImage={CommunityImage} />
     <CommunityName
       communityId={communityId}
       isActive={isActive}

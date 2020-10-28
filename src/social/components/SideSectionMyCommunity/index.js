@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-regular-svg-icons';
+
+import ConditionalRender from '~/core/components/ConditionalRender';
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 import SideMenuSection from '~/core/components/SideMenuSection';
 import CommunitiesList from '~/social/components/CommunitiesList';
@@ -21,11 +23,11 @@ const SideSectionMyCommunity = ({
   className,
 }) => (
   <SideMenuSection heading="My Community">
-    {showCreateButton && (
+    <ConditionalRender condition={showCreateButton}>
       <SideMenuActionItem icon={<PlusIcon />} onClick={onClickCreate} element="button">
         Create Community
       </SideMenuActionItem>
-    )}
+    </ConditionalRender>
     <CommunitiesList
       communitiesQueryParam={myListQueryParam}
       onClickCommunity={onClickCommunity}
