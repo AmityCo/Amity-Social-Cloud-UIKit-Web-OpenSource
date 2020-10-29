@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import Popover from '~/core/components/Popover';
 import customizableComponent from '~/core/hocs/customization';
@@ -10,7 +11,19 @@ import {
   CommunitiesSearchResults,
 } from './styles';
 
-const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder }) => {
+const Menu = ({ search, handleSearchResultClick, popoverMenuClassName }) => {
+  if (!search) return null;
+  return (
+    <CommunitiesSearchResults className={popoverMenuClassName}>
+      <CommunitiesList
+        communitiesQueryParam={{ search }}
+        onClickCommunity={handleSearchResultClick}
+      />
+    </CommunitiesSearchResults>
+  );
+};
+
+const CommunitySearch = ({ onSearchResultCommunityClick, popoverMenuClassName, placeholder }) => {
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(true);
   const open = () => setIsOpen(true);
@@ -26,15 +39,6 @@ const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder 
     close();
   };
 
-  const menu = (
-    <CommunitiesSearchResults className={className}>
-      <CommunitiesList
-        communitiesQueryParam={{ search }}
-        onClickCommunity={handleSearchResultClick}
-      />
-    </CommunitiesSearchResults>
-  );
-
   const isPopoverOpen = isOpen && search.length;
 
   return (
@@ -43,7 +47,13 @@ const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder 
       onClickOutside={close}
       position="bottom"
       align="start"
-      content={menu}
+      content={
+        <Menu
+          search={search}
+          handleSearchResultClick={handleSearchResultClick}
+          className={popoverMenuClassName}
+        />
+      }
     >
       <CommunitiesSearchContainer className="explore-header-search-container">
         <CommunitiesSearchInput
@@ -56,6 +66,17 @@ const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder 
       </CommunitiesSearchContainer>
     </Popover>
   );
+};
+
+CommunitySearch.propTypes = {
+  onSearchResultCommunityClick: PropTypes.func.isRequired,
+  popoverMenuClassName: PropTypes.string,
+  placeholder: PropTypes.string,
+};
+
+CommunitySearch.defaultProps = {
+  popoverMenuClassName: null,
+  placeholder: '',
 };
 
 export default customizableComponent('CommunitySearch', CommunitySearch);
