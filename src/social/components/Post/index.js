@@ -43,6 +43,7 @@ const Post = ({
   postId,
   currentUserId,
   userRoles,
+  noInteractionMessage = null,
   onPostAuthorClick = () => {},
   className = '',
 }) => {
@@ -131,7 +132,7 @@ const Post = ({
       <ConditionalRender condition={fileId && post.dataType === 'file'}>
         <PostFile fileId={fileId} fullSize />
       </ConditionalRender>
-      <EngagementBar postId={postId} />
+      <EngagementBar postId={postId} noInteractionMessage={noInteractionMessage} />
     </PostContainer>
   );
 };
@@ -142,6 +143,7 @@ Post.propTypes = {
   onPostAuthorClick: PropTypes.func,
   className: PropTypes.string,
   userRoles: PropTypes.arrayOf(PropTypes.string),
+  noInteractionMessage: PropTypes.string,
 };
 
 export default withSDK(customizableComponent('Post', Post));

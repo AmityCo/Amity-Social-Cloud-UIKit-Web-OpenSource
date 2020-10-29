@@ -1,69 +1,49 @@
-import React, { useState, useMemo } from 'react';
-import { PostRepository, CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
-import { toHumanString } from 'human-readable-numbers';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
 import { LIKE_REACTION_KEY } from 'constants';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
-import PostLikeButton from '~/social/components/PostLikeButton';
-import CommentComposeBar from '~/social/components/CommentComposeBar';
-import Comment from '~/social/components/Comment';
-import { SecondaryButton } from '~/core/components/Button';
-import useLiveObject from '~/core/hooks/useLiveObject';
 import customizableComponent from '~/core/hocs/customization';
-import { EngagementBarContainer, Counters, InteractionBar, CommentIcon } from './styles';
+import usePost from '~/social/hooks/usePost';
+import UIEngagementBar from './UIEngagementBar';
 
-const EngagementBar = ({ postId }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const open = () => setIsOpen(true);
+const EngagementBar = ({ postId, noInteractionMessage }) => {
+  const [isCommentComposeOpen, setCommentComposeOpen] = useState(false);
+  const toggleCommentCompose = () => setCommentComposeOpen(prevValue => !prevValue);
 
-  const post = useLiveObject(() => PostRepository.postForId(postId), [postId]);
-  const isPostReady = !!post.postId;
-  const { comments = [] } = post;
+  const { post } = usePost(postId);
+  const { commentsCount, reactions = {}, comments = [] } = post;
 
   const handleAddComment = commentText => {
     CommentRepository.createTextComment({
       referenceType: EkoCommentReferenceType.Post,
-      referenceId: post.postId,
+      referenceId: postId,
       text: commentText,
     });
   };
 
-  const totalLikes = useMemo(() => {
-    if (!isPostReady) return 0;
-    return post.reactions[LIKE_REACTION_KEY] || 0;
-  }, [isPostReady, post]);
-
-  const totalComments = useMemo(() => {
-    if (!isPostReady) return 0;
-    return post.commentsCount;
-  }, [isPostReady, post.commentsCount]);
-
   return (
-    <EngagementBarContainer>
-      <Counters>
-        <ConditionalRender condition={totalLikes > 0}>
-          <span>{toHumanString(totalLikes)} likes</span>
-        </ConditionalRender>
-        <ConditionalRender condition={totalComments > 0}>
-          <span>{toHumanString(totalComments)} comments</span>
-        </ConditionalRender>
-      </Counters>
-      <InteractionBar>
-        <ConditionalRender condition={isPostReady}>
-          <PostLikeButton postId={post.postId} />
-        </ConditionalRender>
-        <SecondaryButton onClick={open}>
-          <CommentIcon /> Comment
-        </SecondaryButton>
-      </InteractionBar>
-      {comments.map(commentId => (
-        <Comment key={commentId} commentId={commentId} />
-      ))}
-      <ConditionalRender condition={isOpen}>
-        <CommentComposeBar onSubmit={handleAddComment} />
-      </ConditionalRender>
-    </EngagementBarContainer>
+    <UIEngagementBar
+      postId={postId}
+      totalLikes={reactions[LIKE_REACTION_KEY]}
+      totalComments={commentsCount}
+      noInteractionMessage={noInteractionMessage}
+      onClickComment={toggleCommentCompose}
+      commentIds={comments}
+      isCommentComposeOpen={isCommentComposeOpen}
+      handleAddComment={handleAddComment}
+    />
   );
 };
 
+EngagementBar.propTypes = {
+  postId: PropTypes.string.isRequired,
+  noInteractionMessage: PropTypes.string,
+};
+
+EngagementBar.defaultProps = {
+  noInteractionMessage: null,
+};
+
+export { UIEngagementBar };
 export default customizableComponent('EngagementBar', EngagementBar);

@@ -24,3 +24,8 @@ export const CommentIcon = styled(FaIcon).attrs({ icon: faCommentAlt })`
   font-size: 16px;
   margin-right: 5px;
 `;
+
+export const NoInteractionMessage = styled.div`
+  color: ${({ theme }) => theme.palette.base.shade2};
+  margin-top: 8px;
+`;

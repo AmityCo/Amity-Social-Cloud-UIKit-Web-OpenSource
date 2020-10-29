@@ -30,7 +30,7 @@ const CommunityPage = ({
 }) => {
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
   const { community } = useCommunity(communityId);
-  const canMemberPost = !!community?.isJoined;
+  const isCommunityJoined = !!community?.isJoined;
 
   return (
     <PageWrapper>
@@ -43,7 +43,10 @@ const CommunityPage = ({
             targetType={EkoPostTargetType.CommunityFeed}
             targetId={communityId}
             blockRouteChange={blockRouteChange}
-            showPostCreator={canMemberPost}
+            showPostCreator={isCommunityJoined}
+            noPostInteractionMessage={
+              isCommunityJoined ? null : 'Join community to interact with all posts'
+            }
             onPostAuthorClick={onPostAuthorClick}
           />
         </ConditionalRender>

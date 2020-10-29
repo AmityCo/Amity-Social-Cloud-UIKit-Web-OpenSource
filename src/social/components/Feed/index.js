@@ -24,6 +24,7 @@ const Feed = ({
   emptyFeedIcon,
   goToExplore,
   onPostAuthorClick,
+  noPostInteractionMessage = null,
 }) => {
   const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(queryParams);
@@ -50,7 +51,12 @@ const Feed = ({
       <ConditionalRender condition={posts.length}>
         <LoadMore hasMore={hasMore} loadMore={loadMore} className="no-border">
           {posts.map(({ postId }) => (
-            <Post key={postId} postId={postId} onPostAuthorClick={onPostAuthorClick} />
+            <Post
+              key={postId}
+              postId={postId}
+              onPostAuthorClick={onPostAuthorClick}
+              noInteractionMessage={noPostInteractionMessage}
+            />
           ))}
         </LoadMore>
         <EmptyFeed
@@ -73,6 +79,7 @@ Feed.propTypes = {
   emptyFeedIcon: PropTypes.object,
   goToExplore: PropTypes.func,
   onPostAuthorClick: PropTypes.func,
+  noPostInteractionMessage: PropTypes.string,
 };
 
 export default customizableComponent('Feed', Feed);
