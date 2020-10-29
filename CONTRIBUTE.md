@@ -34,6 +34,34 @@ In the context of Ui-Kit, we use it in development phase to deploy faster, QA ph
 
 When creating a component, simply create a `Component.stories.js` file containing your storybook stories. More on how to write stories [here](https://storybook.js.org/docs/react/writing-stories/introduction). We have installed the plugins `controls` and `actions`, so make sure you use them wisely.
 
+## Debugging SDK
+
+### 1. Preparing eko-sdk
+
+1. `git checkout git@gitlab.com:upstra/web/sdk.git`
+2. `cd sdk`
+3. `npm install`
+4. `npm run build:prod`
+5. `npm link`
+6. Run `nvm current` and note which version of node you're running
+
+### 2. Linkage to Ui-Kit
+
+In your local upstra-uikit:
+
+1. `nvm use {version}` with the corresponding eko-sdk node version (from previous step ↑)
+2. `npm uninstall eko-sdk` (to uninstall npmjs.com version of eko-sdk)
+3. `npm link eko-sdk` (to link eko-sdk in node_modules to local build)
+4. `git checkout package*` (to silently cancel the linkage process in git)
+
+### 3. Running
+
+With this installation process done, whenever you make a modification in eko-sdk, simply run `npm run build:prod` and let ui-kit storybook rebuild itself after. You should see your modifications and console.log appear.
+
+### Bug when committing
+
+SDK currently runs and builds on nodejs v10.1 ; this can conflict with lint-staged and husky on ui-kit which are expecting a node version newer than 10.3 to run. Until this is fixed, you will have no choice but to switch node runtimes back and forth between a modern nodejs version and sdk's one. Refer to https://gitlab.com/upstra/web/sdk/-/merge_requests/44 for the progression of the resolution of this bug.
+
 ## Publishing
 
 The publication of the library is entirely automated and controlled by CI. To publish a version, the only necessary command is `npm version` with the according version increment, as per `semver` semantics (`major`, `minor`, `patch`). **The patches can be released freely but the minor and major must be approved by a project manager before release.**
