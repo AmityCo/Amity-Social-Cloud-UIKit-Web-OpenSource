@@ -100,7 +100,7 @@ const Post = ({
     <PostContainer className={cx('post', className)}>
       <ConditionalRender condition={isEditing}>
         <Modal title="Edit post" onCancel={closeEditingPostModal}>
-          <PostEditor post={post} onSave={closeEditingPostModal} />
+          <PostEditor postId={postId} onSave={closeEditingPostModal} />
         </Modal>
       </ConditionalRender>
       <PostHeader>

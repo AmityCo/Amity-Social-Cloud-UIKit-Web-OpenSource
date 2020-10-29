@@ -11,7 +11,7 @@ export default {
 export const SDKEditPost = ({ onSave }) => {
   const [post, isLoading] = getOnePost();
   if (isLoading) return <p>Loading...</p>;
-  return <UiKitPostEditor post={post} onSave={onSave} />;
+  return <UiKitPostEditor postId={post.postId} onSave={onSave} />;
 };
 
 SDKEditPost.storyName = 'Editor';

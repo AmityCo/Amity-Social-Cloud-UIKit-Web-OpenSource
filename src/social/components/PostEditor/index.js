@@ -1,67 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { PostRepository } from 'eko-sdk';
-import customizableComponent from '~/core/hocs/customization';
-import { isEmpty } from '~/helpers';
-import {
-  PostCreatorContainer,
-  PostCreatorTextarea,
-  PostCreatorTextareaWrapper,
-  Footer,
-  FooterActionBar,
-  PostContainer,
-  PostButton,
-} from '~/social/components/PostCreator/styles';
+
+import usePost from '~/social/hooks/usePost';
+import UiPostEditor from './UIPostEditor';
 
 const PostEditor = ({
-  post,
+  postId,
+  onSave = () => {},
+
   className = null,
   placeholder = "What's going on...",
-  onSave = null,
 }) => {
-  const [text, setText] = useState(post?.data?.text ?? '');
+  const { post, handleUpdatePost } = usePost(postId);
 
-  const handleEditTextPost = () => {
-    if (isEmpty(text)) return;
-    const editPostLiveObject = PostRepository.updatePost({
-      postId: post.postId,
-      data: {
-        text,
-      },
-    });
-    onSave && onSave(post.postId, text);
-    setText('');
-    editPostLiveObject.dispose();
+  const handleChange = data => {
+    handleUpdatePost(data);
+    onSave();
   };
 
   return (
-    <PostCreatorContainer className={className} edit>
-      <PostContainer>
-        <PostCreatorTextareaWrapper edit>
-          <PostCreatorTextarea
-            placeholder={placeholder}
-            type="text"
-            value={text}
-            onChange={e => setText(e.target.value)}
-          />
-        </PostCreatorTextareaWrapper>
-        <Footer edit>
-          <FooterActionBar>
-            <PostButton disabled={isEmpty(text)} onClick={handleEditTextPost}>
-              Save
-            </PostButton>
-          </FooterActionBar>
-        </Footer>
-      </PostContainer>
-    </PostCreatorContainer>
+    <UiPostEditor
+      className={className}
+      placeholder={placeholder}
+      data={post.data || {}}
+      dataType={post.dataType}
+      onChange={handleChange}
+    />
   );
 };
 
 PostEditor.propTypes = {
-  post: PropTypes.object.isRequired,
+  postId: PropTypes.string.isRequired,
+  onSave: PropTypes.func,
+
   className: PropTypes.string,
   placeholder: PropTypes.string,
-  onSave: PropTypes.func,
 };
 
-export default customizableComponent('PostEditor', PostEditor);
+export default PostEditor;

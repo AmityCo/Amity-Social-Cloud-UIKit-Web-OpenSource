@@ -10,6 +10,8 @@ const usePost = postId => {
 
   const { user, file } = useUser(postedUserId, [postedUserId]);
 
+  const handleUpdatePost = data => PostRepository.updatePost({ postId, data });
+
   const handleReportPost = () => PostRepository.flag(postId);
   const handleDeletePost = () => PostRepository.deletePost(postId);
 
@@ -19,6 +21,7 @@ const usePost = postId => {
     post,
     user,
     file,
+    handleUpdatePost,
     handleReportPost,
     handleDeletePost,
     childrenPosts,
