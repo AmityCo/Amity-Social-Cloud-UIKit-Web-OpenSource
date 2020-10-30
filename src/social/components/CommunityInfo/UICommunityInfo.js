@@ -38,7 +38,7 @@ const UICommunityInfo = ({
   <Container>
     <Header>
       <Avatar avatar={avatarFileUrl} size="big" />
-      {isJoined && (
+      <ConditionalRender condition={isJoined}>
         <Options
           options={[
             canEditCommunity && {
@@ -48,7 +48,7 @@ const UICommunityInfo = ({
             { name: 'Leave Community', action: () => leaveCommunity(communityId) },
           ].filter(Boolean)}
         />
-      )}
+      </ConditionalRender>
     </Header>
     <CommunityName communityId={communityId} isTitle />
     <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>

@@ -5,8 +5,11 @@ import CommunityMembers from '~/social/components/CommunityMembers';
 import CommunityForm from '~/social/components/CommunityForm';
 import BackLink from '~/core/components/BackLink';
 import { AddMemberModal } from '~/social/components/AddMemberModal';
+
 import customizableComponent from '~/core/hocs/customization';
-import { getCommunity } from '~/mock/index';
+import useCommunity from '~/social/hooks/useCommunity';
+
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 import {
   CommunitySettingsTabs,
   Container,
@@ -25,14 +28,18 @@ const tabs = {
   MEMBERS: 'Members',
 };
 
-const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
+const CommunitySettings = ({ communityId, onMemberClick }) => {
   const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
   const [isModalOpened, setModalOpened] = useState(false);
 
   const openModal = () => setModalOpened(true);
   const closeModal = () => setModalOpened(false);
 
-  const currentCommunity = getCommunity(communityId);
+  const { community: currentCommunity, updateCommunity } = useCommunity({ communityId });
+
+  const handleSubmit = async data => {
+    await updateCommunity(data);
+  };
 
   const submitAddMembers = () => {
     closeModal();
@@ -42,10 +49,10 @@ const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
     <Container>
       <PageHeader>
         <AvatarContainer>
-          <Avatar avatar={currentCommunity.avatar} />
+          <Avatar avatar={currentCommunity.avatar} backgroundImage={CommunityImage} />
         </AvatarContainer>
         <div>
-          <BackLink text={`Return to ${currentCommunity.name}`} />
+          <BackLink text={`Return to ${currentCommunity.displayName}`} />
           <PageTitle>Community Settings</PageTitle>
         </div>
       </PageHeader>
@@ -60,13 +67,13 @@ const CommunitySettings = ({ communityId, onSubmit, onMemberClick }) => {
         <ConditionalRender condition={activeTab === tabs.EDIT_PROFILE}>
           <ActiveTabContent>
             <CommunityForm
-              onSubmit={data => {
-                onSubmit(data);
+              onSubmit={async data => {
+                await handleSubmit(data);
               }}
               edit
               community={currentCommunity}
             />
-            <CloseCommunityAction />
+            <CloseCommunityAction communityId={communityId} />
           </ActiveTabContent>
         </ConditionalRender>
 

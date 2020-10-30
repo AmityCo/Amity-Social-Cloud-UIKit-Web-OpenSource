@@ -44,6 +44,12 @@ export const Count = styled.span`
   ${({ theme }) => theme.typography.bodyBold}
 `;
 
+export const CountContainer = styled.div`
+  > *:not(:last-child) {
+    margin-right: 8px;
+  }
+`;
+
 export const Description = styled.div`
   margin: 8px 0 12px;
 `;

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
 import { testUsers } from '~/mock';
+import { backgroundImage as UserImage } from '~/icons/User';
 
 import {
   Avatar,
@@ -18,14 +19,16 @@ const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const UserChip = ({ user, onRemove }) => (
   <Chip>
-    <Avatar size="tiny" avatar={user.avatar} /> {`${user.displayName || DEFAULT_DISPLAY_NAME} `}
+    <Avatar size="tiny" avatar={user.avatar} backgroundImage={UserImage} />
+    {` ${user.displayName || DEFAULT_DISPLAY_NAME} `}
     <CloseIcon onClick={onRemove} />
   </Chip>
 );
 
 const User = ({ user }) => (
   <>
-    <Avatar size="tiny" avatar={user.avatar} /> {user.displayName || DEFAULT_DISPLAY_NAME}
+    <Avatar size="tiny" avatar={user.avatar} backgroundImage={UserImage} />
+    {` ${user.displayName || DEFAULT_DISPLAY_NAME}`}
   </>
 );
 

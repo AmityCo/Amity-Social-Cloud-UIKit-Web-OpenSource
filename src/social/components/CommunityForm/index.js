@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { FileRepository } from 'eko-sdk';
 
 import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
+import { AvatarUpload } from '~/core/components/Avatar/AvatarUpload';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';
@@ -12,8 +14,6 @@ import UserSelector from './UserSelector';
 import {
   Form,
   TextField,
-  Avatar,
-  AvatarUploadContainer,
   AboutTextarea,
   SwitchContainer,
   Footer,
@@ -26,26 +26,15 @@ import {
   IconWrapper,
   LockIcon,
   WorldIcon,
-  CameraIcon,
   Radio,
   Counter,
   Label,
   LabelCounterWrapper,
   Field,
   MembersField,
-  AvatarWrapper,
   ErrorMessage,
   FormBody,
 } from './styles';
-
-const AvatarUpload = ({ value }) => (
-  <AvatarUploadContainer>
-    <AvatarWrapper>
-      <Avatar size="big" avatar={value} />
-      <CameraIcon />
-    </AvatarWrapper>
-  </AvatarUploadContainer>
-);
 
 const FormBlock = ({ title, children, edit }) => (
   <FormBlockContainer edit={edit}>
@@ -65,49 +54,64 @@ const CommunityForm = ({
     defaultValues: edit
       ? community
       : {
-          avatar:
-            'https://www.gardeningknowhow.com/wp-content/uploads/2017/07/hardwood-tree-400x266.jpg',
-          name: '',
+          avatarFileId: null,
           description: '',
-          category: 'cat0',
-          onlyAdminCanPost: false,
+          displayName: '',
           isPublic: true,
+          tags: [],
+          userIds: [],
           members: [],
         },
   });
 
-  const currentName = watch('name');
-  const description = watch('description');
-  const isPublic = watch('isPublic');
+  const [avatarFileId, setAvatarFileId] = useState(edit ? community.avatarFileId : '');
+
+  const displayName = watch('displayName', '');
+  const description = watch('description', '');
 
   const validateAndSubmit = async data => {
-    if (!data.name.trim()) {
-      setError('name', { message: 'Name cannot be empty' });
+    const isPublicCommunity = JSON.parse(data.isPublic) || data.isPublic === 'true';
+
+    if (!data.displayName.trim()) {
+      setError('displayName', { message: 'Name cannot be empty' });
       return;
     }
-    if (!data.isPublic && data.members.length === 0) {
+    if (!isPublicCommunity && data.members.length === 0) {
       setError('members', { message: 'Please select at least one member' });
       return;
     }
-    onSubmit(data);
+
+    await onSubmit({
+      displayName: data.displayName,
+      description: data.description.length ? data.description : undefined,
+      avatarFileId: null,
+      tags: [],
+      userIds: [],
+      isPublic: isPublicCommunity,
+    });
   };
+
+  if (edit && avatarFileId) {
+    const fileUrl = FileRepository.getFileUrlById(community.avatarFileId);
+    setAvatarFileId(fileUrl);
+  }
 
   return (
     <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
       <FormBody>
         <FormBlock title="General" edit={edit}>
-          <Controller name="avatar" render={AvatarUpload} control={control} />
-          <Field error={errors.name}>
+          <Controller name="avatar" as={<AvatarUpload />} control={control} value={avatarFileId} />
+          <Field error={errors.displayName}>
             <LabelCounterWrapper>
-              <Label htmlFor="name" className="required">
+              <Label htmlFor="displayName" className="required">
                 Community name
               </Label>
-              <Counter>{currentName.length}/30</Counter>
+              <Counter>{displayName.length}/30</Counter>
             </LabelCounterWrapper>
             <TextField
               placeholder="Enter community name"
-              id="name"
-              name="name"
+              id="displayName"
+              name="displayName"
               ref={register({
                 required: 'Name is required',
                 maxLength: {
@@ -116,7 +120,7 @@ const CommunityForm = ({
                 },
               })}
             />
-            <ErrorMessage errors={errors} name="name" />
+            <ErrorMessage errors={errors} name="displayName" />
           </Field>
           <Field error={errors.description}>
             <LabelCounterWrapper>
@@ -134,7 +138,7 @@ const CommunityForm = ({
           </Field>
           <Field error={errors.category}>
             <Label htmlFor="category">Category</Label>
-            <Controller name="category" render={CategorySelector} control={control} />
+            <Controller name="categories" render={CategorySelector} control={control} />
           </Field>
         </FormBlock>
         <ConditionalRender condition={false}>
@@ -164,9 +168,9 @@ const CommunityForm = ({
             </IconWrapper>
             <div>
               Public
-              <Description>Anyone can join, view, and search the posts  in this page.</Description>
+              <Description>Anyone can join, view, and search the posts in this page.</Description>
             </div>
-            <Radio type="radio" name="isPublic" value="true" defaultChecked ref={register} />
+            <Radio name="isPublic" value defaultChecked ref={register} />
           </PermissionControlContainer>
           <PermissionControlContainer>
             <IconWrapper>
@@ -179,20 +183,18 @@ const CommunityForm = ({
                 page.
               </Description>
             </div>
-            <Radio type="radio" name="isPublic" value="" ref={register} />
+            <Radio name="isPublic" value={false} ref={register} />
           </PermissionControlContainer>
         </FormBlock>
-        <ConditionalRender condition={!isPublic}>
-          <FormBlock title="Community members" edit={edit}>
-            <MembersField error={errors.members}>
-              <Label name="members" className="required">
-                Add members
-              </Label>
-              <Controller name="members" render={UserSelector} control={control} />
-              <ErrorMessage errors={errors} name="members" />
-            </MembersField>
-          </FormBlock>
-        </ConditionalRender>
+        <FormBlock title="Community members" edit={edit}>
+          <MembersField error={errors.members}>
+            <Label name="members" className="required">
+              Add members
+            </Label>
+            <Controller name="members" render={UserSelector} control={control} />
+            <ErrorMessage errors={errors} name="members" />
+          </MembersField>
+        </FormBlock>
       </FormBody>
       <Footer edit={edit}>
         <ConditionalRender condition={!edit}>
@@ -205,7 +207,7 @@ const CommunityForm = ({
             Cancel
           </Button>
         </ConditionalRender>
-        <SubmitButton disabled={currentName.length === 0}>{edit ? 'Save' : 'Create'}</SubmitButton>
+        <SubmitButton disabled={displayName.length === 0}>{edit ? 'Save' : 'Create'}</SubmitButton>
       </Footer>
     </Form>
   );

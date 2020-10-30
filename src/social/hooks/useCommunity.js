@@ -18,10 +18,29 @@ const useCommunity = communityId => {
   }
 
   const communityCategoryIds = community.categoryIds;
+
   const [communityCategories] = useLiveCollection(
     () => CommunityRepository.categoriesForIds({ categoryIds: communityCategoryIds }),
     [communityCategoryIds],
   );
+
+  /*
+    developer's note: payload is: {
+      communityId: string,
+      displayName?: string,
+      description?: string,
+      avatarFileId?: string,
+      categories?: string[],
+      tags?: string[],
+      metadata?: Object,
+      isPublic?: boolean,
+    }
+  */
+  const updateCommunity = payload =>
+    CommunityRepository.updateCommunity({
+      communityId,
+      ...payload,
+    });
 
   const joinCommunity = () => CommunityRepository.joinCommunity(communityId);
   const leaveCommunity = () => CommunityRepository.leaveCommunity(communityId);
@@ -32,6 +51,7 @@ const useCommunity = communityId => {
     communityCategories,
     joinCommunity,
     leaveCommunity,
+    updateCommunity,
   };
 };
 

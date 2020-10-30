@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { confirm } from '~/core/components/Confirm';
-import { useCommunitiesMock } from '~/mock';
 import {
   ExtraActionContainer,
   ExtraActionContainerHeader,
@@ -12,6 +11,7 @@ import {
   Footer,
 } from './styles';
 
+import useCommunity from '~/social/hooks/useCommunity';
 import { communitySettings } from '~/constants/community';
 
 const ExtraAction = ({ title, bodyText, actionButton }) => {
@@ -53,8 +53,8 @@ export const AddMemberAction = ({ action }) => {
   );
 };
 
-export const CloseCommunityAction = () => {
-  const { removeCommunity } = useCommunitiesMock();
+export const CloseCommunityAction = ({ communityId }) => {
+  const { removeCommunity } = useCommunity({ communityId });
   const closeConfirm = () =>
     confirm({
       title: communitySettings.CLOSE_COMMUNITY_CONFIRM_TITLE,

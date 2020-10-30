@@ -43,6 +43,8 @@ export const CameraIcon = styled(FaIcon).attrs({ icon: faCamera })`
   position: absolute;
   top: 20px;
   left: 22px;
+  z-index: 3;
+  cursor: pointer;
 `;
 
 export const Selector = styled.div`
@@ -85,7 +87,8 @@ export const SelectorPopover = styled(Popover).attrs({
 
 export const SelectorList = styled(Menu)`
   max-height: 184px;
-  overflow: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 export const AvatarWrapper = styled.div`
@@ -132,7 +135,7 @@ export const LabelCounterWrapper = styled.div`
   align-items: center;
 `;
 
-export const Radio = styled.input`
+export const Radio = styled.input.attrs({ type: 'radio' })`
   width: 20px;
   height: 20px;
   margin-left: auto;

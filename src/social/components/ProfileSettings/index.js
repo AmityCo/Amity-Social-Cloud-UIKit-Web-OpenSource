@@ -6,6 +6,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import BackLink from '~/core/components/BackLink';
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
+import { backgroundImage as UserImage } from '~/icons/User';
 import {
   ProfileSettingsTabs,
   Container,
@@ -37,7 +38,7 @@ const ProfileSettings = ({ userId, client }) => {
     <Container>
       <PageHeader>
         <AvatarContainer>
-          <Avatar avatar={currentUser.avatar} />
+          <Avatar avatar={currentUser.avatar} backgroundImage={UserImage} />
         </AvatarContainer>
         <div>
           <BackLink text={`Return to ${currentUser.displayName}`} />

@@ -2,6 +2,9 @@ import React from 'react';
 import { FormattedTime } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
+import ConditionalRender from '~/core/components/ConditionalRender';
+
+import { backgroundImage as UserImage } from '~/icons/User';
 
 import Linkify from '~/core/components/Linkify';
 
@@ -41,16 +44,26 @@ const Message = ({ message, message: { createdAt, user }, consequent, incoming }
 
   return (
     <MessageWrapper incoming={incoming}>
-      {incoming && <AvatarWrapper>{!consequent && <Avatar />}</AvatarWrapper>}
+      <ConditionalRender condition={incoming}>
+        <AvatarWrapper>
+          <ConditionalRender condition={!consequent}>
+            <Avatar backgroundImage={UserImage} />
+          </ConditionalRender>
+        </AvatarWrapper>
+      </ConditionalRender>
       <MessageContainer>
-        {incoming && !consequent && <UserName>{displayName}</UserName>}
+        <ConditionalRender condition={incoming && !consequent}>
+          <UserName>{displayName}</UserName>
+        </ConditionalRender>
         <MessageBody incoming={incoming}>
           <MessageContent message={message} />
           <BottomLine>
             <MessageDate>
               <FormattedTime value={createdAt} />
             </MessageDate>
-            {!message.isDeleted && <Options incoming={incoming} message={message} />}
+            <ConditionalRender condition={!message.isDeleted}>
+              <Options incoming={incoming} message={message} />
+            </ConditionalRender>
           </BottomLine>
         </MessageBody>
       </MessageContainer>

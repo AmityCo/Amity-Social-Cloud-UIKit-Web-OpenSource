@@ -5,6 +5,7 @@ import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
+import { backgroundImage as UserImage } from '~/icons/User';
 
 import {
   AuthorSelectorContainer,
@@ -39,7 +40,7 @@ const AuthorSelector = ({
           close();
         }}
       >
-        <Avatar size="tiny" avatar={user.avatar} /> My Timeline
+        <Avatar size="tiny" avatar={user.avatar} backgroundImage={UserImage} /> My Timeline
       </MenuItem>
       <CommunitySeparator>Community</CommunitySeparator>
       <CommunityList>

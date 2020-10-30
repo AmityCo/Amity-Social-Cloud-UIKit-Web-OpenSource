@@ -3,6 +3,7 @@ import { ChannelRepository } from 'eko-sdk';
 
 import customizableComponent from '~/core/hocs/customization';
 import useLiveObject from '~/core/hooks/useLiveObject';
+import { backgroundImage as UserImage } from '~/icons/User';
 
 import {
   Avatar,
@@ -26,7 +27,7 @@ const ChatDetails = ({ channelId, onClose }) => {
         <CloseIcon onClick={onClose} />
       </ChatDetailsHeader>
       <Channel>
-        <Avatar />
+        <Avatar backgroundImage={UserImage} />
         <ChannelInfo>
           <CommunityName>Community Name</CommunityName>
           <ChannelName>{channel.displayName || channel.channelId}</ChannelName>

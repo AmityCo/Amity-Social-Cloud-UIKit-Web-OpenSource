@@ -61,7 +61,7 @@ const CommunitySearch = ({ onSearchResultCommunityClick, className, placeholder 
           <MenuItem key={community.communityId} onClick={() => handleSearchResultClick(community)}>
             <Avatar size="tiny" avatar={community.avatar} backgroundImage={CommunityImage} />
             <TruncatedText>
-              <Highlight text={community.name} query={query} />
+              <Highlight text={community.displayName} query={query} />
             </TruncatedText>
           </MenuItem>
         ))}

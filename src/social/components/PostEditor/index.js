@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { PostRepository } from 'eko-sdk';
 import customizableComponent from '~/core/hocs/customization';
+import { isEmpty } from '~/helpers';
 import {
   PostCreatorContainer,
   PostCreatorTextarea,
@@ -19,10 +20,9 @@ const PostEditor = ({
   onSave = null,
 }) => {
   const [text, setText] = useState(post?.data?.text ?? '');
-  const isEmpty = text.trim().length === 0;
 
   const handleEditTextPost = () => {
-    if (isEmpty) return;
+    if (isEmpty(text)) return;
     const editPostLiveObject = PostRepository.updatePost({
       postId: post.postId,
       data: {
@@ -47,7 +47,7 @@ const PostEditor = ({
         </PostCreatorTextareaWrapper>
         <Footer edit>
           <FooterActionBar>
-            <PostButton disabled={isEmpty} onClick={handleEditTextPost}>
+            <PostButton disabled={isEmpty(text)} onClick={handleEditTextPost}>
               Save
             </PostButton>
           </FooterActionBar>

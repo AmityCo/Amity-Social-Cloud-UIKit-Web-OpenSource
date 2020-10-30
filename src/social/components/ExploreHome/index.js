@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import Modal from '~/core/components/Modal';
 import { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
-import { getCommunities, getCategories } from '~/mock';
+import { getCommunities } from '~/mock';
+import useCategories from '~/social/hooks/useCategories';
 import { backgroundImage as CategoryImage } from '~/icons/Category';
 
 import Community from './Community';
@@ -36,7 +37,7 @@ const ExploreHome = ({
 }) => {
   const communities = getCommunities();
 
-  const categories = getCategories();
+  const { categories } = useCategories();
 
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const openCategoryModal = () => setShowCategoryModal(true);
@@ -69,7 +70,7 @@ const ExploreHome = ({
           <CommunityItems>
             {communities.slice(0, 5).map(community => (
               <Community
-                key={community.communityId}
+                key={community.id}
                 onClick={() => onRecomendedCommunityClick(community)}
                 community={community}
               />
@@ -82,7 +83,7 @@ const ExploreHome = ({
           <TrendingCommunities>
             {communities.slice(0, 6).map(community => (
               <TrendingCommunity
-                key={community.communityId}
+                key={community.id}
                 onClick={() => onTrendingCommunityClick(community)}
                 community={community}
               />

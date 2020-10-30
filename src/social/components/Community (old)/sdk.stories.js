@@ -98,7 +98,7 @@ const Pages = () => {
   const openCommunityCreationModal = () => setCommunityCreation(true);
   const closeCommunityCreationModal = () => setCommunityCreation(false);
 
-  const { addCommunity, editCommunity } = useCommunitiesMock();
+  const { addCommunity } = useCommunitiesMock();
 
   const createCommunity = data => {
     const newCommunity = addCommunity(data);
@@ -161,11 +161,7 @@ const Pages = () => {
           />
         </Route>
         <Route path="/community/:communityId/edit">
-          <CommunitySettings
-            communityId={communityId}
-            onSubmit={editCommunity}
-            onMemberClick={navigateTo}
-          />
+          <CommunitySettings communityId={communityId} onMemberClick={navigateTo} />
         </Route>
         <Route path="/community/:communityId">
           <CommunityProfilePage communityId={communityId} blockRouteChange={blockRouteChange} />
