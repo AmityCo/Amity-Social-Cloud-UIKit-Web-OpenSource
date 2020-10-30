@@ -94,7 +94,6 @@ const CommunityForm = ({
           isPublic: true,
           tags: [],
           userIds: [],
-          members: [],
         },
   });
 
@@ -112,8 +111,8 @@ const CommunityForm = ({
       setError('displayName', { message: 'Name cannot be empty' });
       return;
     }
-    if (!isPublic && data.members.length === 0) {
-      setError('members', { message: 'Please select at least one member' });
+    if (!isPublic && data.userIds.length === 0) {
+      setError('userIds', { message: 'Please select at least one member' });
       return;
     }
 
@@ -122,7 +121,7 @@ const CommunityForm = ({
       description: data.description.length ? data.description : undefined,
       avatarFileId: null,
       tags: [],
-      userIds: [],
+      userIds: data.userIds,
       isPublic,
     });
   };
@@ -208,12 +207,12 @@ const CommunityForm = ({
         </FormBlock>
         <ConditionalRender condition={!isPublic}>
           <FormBlock title="Community members" edit={edit}>
-            <MembersField error={errors.members}>
-              <Label name="members" className="required">
+            <MembersField error={errors.userIds}>
+              <Label name="userIds" className="required">
                 Add members
               </Label>
-              <Controller name="members" render={UserSelector} control={control} />
-              <ErrorMessage errors={errors} name="members" />
+              <Controller name="userIds" render={UserSelector} control={control} />
+              <ErrorMessage errors={errors} name="userIds" />
             </MembersField>
           </FormBlock>
         </ConditionalRender>

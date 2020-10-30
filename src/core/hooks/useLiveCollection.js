@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { EkoLoadingStatus } from 'eko-sdk';
 
-const noop = () => null;
+const noop = () => {
+  if (process.env.NODE_ENV === 'development') console.warn('[useLiveCollection] noop hit');
+};
 
 const useLiveCollection = (
   createLiveCollection,
@@ -18,23 +20,27 @@ const useLiveCollection = (
   useEffect(() => {
     if (resolver()) return;
 
-    const liveCollection = createLiveCollection();
+    try {
+      const liveCollection = createLiveCollection();
 
-    // data
-    liveCollection.models && setData(liveCollection.models);
-    liveCollection.on('dataUpdated', setData);
+      // data
+      liveCollection.models && setData(liveCollection.models);
+      liveCollection.on('dataUpdated', setData);
 
-    // pagination
-    liveCollection.on('loadingStatusChanged', ({ newValue }) => {
-      const hasMore = newValue === EkoLoadingStatus.Loaded && liveCollection.hasMore;
+      // pagination
+      liveCollection.on('loadingStatusChanged', ({ newValue }) => {
+        const hasMore = newValue === EkoLoadingStatus.Loaded && liveCollection.hasMore;
 
-      setPagination({
-        hasMore,
-        loadMore: hasMore ? () => liveCollection.nextPage() : noop,
+        setPagination({
+          hasMore,
+          loadMore: hasMore ? () => liveCollection.nextPage() : noop,
+        });
       });
-    });
-
-    return () => liveCollection.dispose();
+      return () => liveCollection.dispose();
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development')
+        console.warn('[useLiveCollection] error thrown', err);
+    }
   }, [...dependencies]);
 
   return [data, pagination.hasMore, pagination.loadMore];

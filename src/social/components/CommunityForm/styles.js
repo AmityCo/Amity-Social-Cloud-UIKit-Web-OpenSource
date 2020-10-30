@@ -57,20 +57,10 @@ export const Selector = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 10px 12px;
+  padding: 0.25rem 0.5rem;
   cursor: pointer;
   max-height: 200px;
   overflow-y: auto;
-`;
-
-export const Chip = styled.div`
-  background: ${({ theme }) => theme.palette.base.shade4};
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  border-radius: 28px;
-  margin-right: 4px;
-  margin-bottom: 4px;
 `;
 
 export const UserSelectorInput = styled.input`
@@ -283,3 +273,7 @@ export const MembersField = styled(Field)`
 `;
 
 export const FormBody = styled.div``;
+
+export const Clickable = styled.div`
+  cursor: pointer;
+`;

@@ -1,36 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
-import { testUsers } from '~/mock';
-import { backgroundImage as UserImage } from '~/icons/User';
 
-import {
-  Avatar,
-  Selector,
-  SelectorList,
-  SelectorPopover,
-  UserSelectorInput,
-  Chip,
-  CloseIcon,
-} from './styles';
+import useUserQuery from '~/core/hooks/useUserQuery';
 
-const DEFAULT_DISPLAY_NAME = 'Anonymous';
+import UserHeader from '~/social/components/UserHeader';
+import UserChip from '~/core/components/UserChip';
 
-const UserChip = ({ user, onRemove }) => (
-  <Chip>
-    <Avatar size="tiny" avatar={user.avatar} backgroundImage={UserImage} />
-    {` ${user.displayName || DEFAULT_DISPLAY_NAME} `}
-    <CloseIcon onClick={onRemove} />
-  </Chip>
-);
-
-const User = ({ user }) => (
-  <>
-    <Avatar size="tiny" avatar={user.avatar} backgroundImage={UserImage} />
-    {` ${user.displayName || DEFAULT_DISPLAY_NAME}`}
-  </>
-);
+import { Selector, SelectorList, SelectorPopover, UserSelectorInput, Clickable } from './styles';
 
 const useRunOnUpdate = (fn, deps) => {
   const isFirstRun = useRef(true);
@@ -52,22 +29,30 @@ const UserSelector = ({ value: userIds, onChange }) => {
   const [query, setQuery] = useState('');
 
   const [isOpen, setIsOpen] = useState(false);
+
   const open = () => {
     setIsOpen(true);
     focus();
   };
-  const close = () => setIsOpen(false);
+
+  const close = () => {
+    setIsOpen(false);
+  };
 
   // open selector list each time query changes
   useRunOnUpdate(() => {
     open();
   }, [query]);
 
-  const selectedUsers = userIds.map(id => testUsers.find(({ userId }) => id === userId));
+  const [queriedUsers = []] = useUserQuery(query);
+
+  const selectedUsers = userIds.map(id => queriedUsers.find(({ userId }) => id === userId));
 
   const searchResult = query.length
-    ? testUsers.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
-    : testUsers;
+    ? queriedUsers.filter(({ displayName }) =>
+        displayName?.toLowerCase().includes(query.toLowerCase()),
+      )
+    : queriedUsers;
 
   // exclude already selected
   const selectorUsersList = searchResult.filter(({ userId }) => !userIds.includes(userId));
@@ -84,15 +69,15 @@ const UserSelector = ({ value: userIds, onChange }) => {
     <SelectorList onClick={focus}>
       {/* TODO empty state */}
       {selectorUsersList.map(user => (
-        <MenuItem
+        <Clickable
           key={user.userId}
           onClick={e => {
             e.stopPropagation();
             add(user.userId);
           }}
         >
-          <User user={user} />
-        </MenuItem>
+          <UserHeader userId={user.userId} />
+        </Clickable>
       ))}
     </SelectorList>
   );
@@ -106,7 +91,7 @@ const UserSelector = ({ value: userIds, onChange }) => {
     >
       <Selector onClick={open}>
         {selectedUsers.map(user => (
-          <UserChip key={user.userId} user={user} onRemove={() => remove(user.userId)} />
+          <UserChip key={user.userId} userId={user.userId} onRemove={() => remove(user.userId)} />
         ))}
         <UserSelectorInput
           ref={inputRef}
