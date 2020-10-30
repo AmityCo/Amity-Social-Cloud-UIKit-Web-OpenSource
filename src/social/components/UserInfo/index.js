@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import useUser from '~/core/hooks/useUser';
 import withSDK from '~/core/hocs/withSDK';
-import UIUserProfileBar from './UIUserProfileBar';
+import UIUserInfo from './UIUserInfo';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const UserProfileBar = ({ userId, currentUserId, editProfile, goToChat }) => {
+const UserInfo = ({ userId, currentUserId, editProfile, goToChat }) => {
   const { user } = useUser(userId);
   const { avatarFileId, displayName, description } = user;
 
@@ -17,7 +17,7 @@ const UserProfileBar = ({ userId, currentUserId, editProfile, goToChat }) => {
   const isMyProfile = userId === currentUserId;
 
   return (
-    <UIUserProfileBar
+    <UIUserInfo
       userId={userId}
       avatarFileId={avatarFileId}
       displayName={displayName || DEFAULT_DISPLAY_NAME}
@@ -30,17 +30,17 @@ const UserProfileBar = ({ userId, currentUserId, editProfile, goToChat }) => {
   );
 };
 
-UserProfileBar.propTypes = {
+UserInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   editProfile: PropTypes.func,
   goToChat: PropTypes.func,
 };
 
-UserProfileBar.defaultProps = {
+UserInfo.defaultProps = {
   editProfile: () => {},
   goToChat: () => {},
 };
 
-export { UIUserProfileBar };
-export default withSDK(UserProfileBar);
+export { UIUserInfo };
+export default withSDK(UserInfo);

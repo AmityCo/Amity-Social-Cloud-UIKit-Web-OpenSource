@@ -1,16 +1,16 @@
 import React from 'react';
 
-import StyledUserProfileBar from './UIUserProfileBar';
+import UserInfo from './UIUserInfo';
 
 export default {
   title: 'Ui Only/Social/User',
 };
 
-export const UiUserProfileBar = props => <StyledUserProfileBar {...props} />;
+export const UiUserInfo = props => <UserInfo {...props} />;
 
-UiUserProfileBar.storyName = 'Profile';
+UiUserInfo.storyName = 'Information';
 
-UiUserProfileBar.args = {
+UiUserInfo.args = {
   userId: 'Web-Test',
   avatarFileId: '',
   displayName: '',
@@ -19,7 +19,7 @@ UiUserProfileBar.args = {
   postsCount: 0,
 };
 
-UiUserProfileBar.argTypes = {
+UiUserInfo.argTypes = {
   userId: { control: { type: 'text' } },
   avatarFileId: { control: { type: 'text' } },
   displayName: { control: { type: 'text' } },

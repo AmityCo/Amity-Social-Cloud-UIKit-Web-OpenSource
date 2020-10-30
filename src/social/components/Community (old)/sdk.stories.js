@@ -24,7 +24,7 @@ import ProfileSettings from '~/social/components/ProfileSettings';
 import ExploreHome from '~/social/components/ExploreHome';
 
 import CategoryPage from '~/social/components/ExploreHome/CategoryPage';
-import CommunityPage from '~/social/components/CommunityPage';
+import CommunityProfilePage from '~/social/components/CommunityProfilePage';
 import UserProfilePage from '~/social/components/UserProfilePage';
 
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
@@ -168,7 +168,7 @@ const Pages = () => {
           />
         </Route>
         <Route path="/community/:communityId">
-          <CommunityPage communityId={communityId} blockRouteChange={blockRouteChange} />
+          <CommunityProfilePage communityId={communityId} blockRouteChange={blockRouteChange} />
         </Route>
         <Route path="/profile/:userId" exact>
           <UserProfilePage

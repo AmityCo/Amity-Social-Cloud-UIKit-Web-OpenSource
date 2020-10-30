@@ -1,6 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
 import { Controller, useForm } from 'react-hook-form';
 
+import { PrimaryButton } from '~/core/components/Button';
+
+// TODO: should not be importing styles from another component.
 import {
   AboutTextarea,
   Avatar,
@@ -19,9 +23,14 @@ import {
   TextField,
 } from '~/social/components/CommunityForm/styles';
 
-import { PrimaryButton } from '~/core/components/Button';
+const AvatarUploadContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
-import { ButtonContainer, AvatarUploadContainer } from './styles';
+const ButtonContainer = styled.div`
+  margin-top: 16px;
+`;
 
 const AvatarUpload = ({ value }) => (
   <AvatarUploadContainer>

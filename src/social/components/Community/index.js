@@ -6,7 +6,7 @@ import { EkoPostTargetType } from 'eko-sdk';
 import FeedLayout from '~/social/components/FeedLayout';
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 import Feed from '~/social/components/Feed';
-import CommunityPage from '~/social/components/CommunityPage';
+import CommunityProfilePage from '~/social/components/CommunityProfilePage';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 
 const CommunityContainer = styled.div`
@@ -17,9 +17,9 @@ const CommunityContainer = styled.div`
 
 const Community = ({
   shouldHideExplore,
-  shouldHideTabs,
   showCreateCommunityButton,
   onMemberClick,
+  onPostAuthorClick,
   blockRouteChange,
 }) => {
   const [isShowingFeed, setIsShowingFeed] = useState(true);
@@ -66,15 +66,15 @@ const Community = ({
         {isShowingFeed ? (
           <Feed
             targetType={EkoPostTargetType.GlobalFeed}
-            onPostAuthorClick={onMemberClick}
+            onPostAuthorClick={onPostAuthorClick}
             blockRouteChange={blockRouteChange}
             showPostCreator
           />
         ) : (
-          <CommunityPage
+          <CommunityProfilePage
             communityId={targetCommuntyId}
-            shouldHideTabs={shouldHideTabs}
             onMemberClick={onMemberClick}
+            onPostAuthorClick={onPostAuthorClick}
           />
         )}
       </FeedLayout>
@@ -85,9 +85,9 @@ const Community = ({
 
 Community.propTypes = {
   shouldHideExplore: PropTypes.bool,
-  shouldHideTabs: PropTypes.bool,
   showCreateCommunityButton: PropTypes.bool,
   onMemberClick: PropTypes.func,
+  onPostAuthorClick: PropTypes.func,
   blockRouteChange: PropTypes.func,
 };
 
@@ -95,10 +95,10 @@ const noop = () => {};
 
 Community.defaultProps = {
   shouldHideExplore: false,
-  shouldHideTabs: false,
   showCreateCommunityButton: true,
   onMemberClick: noop,
   blockRouteChange: noop,
+  onPostAuthorClick: noop,
 };
 
 export default Community;

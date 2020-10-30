@@ -3,14 +3,14 @@ import { HashRouter as Router, Switch, Route, useHistory, useRouteMatch } from '
 
 import useOneUser from '~/mock/useOneUser';
 import ProfileSettings from '~/social/components/ProfileSettings';
-import UserProfileBar from '.';
+import UserInfo from '.';
 
 export default {
   title: 'SDK Connected/Social/User/Profile',
   parameters: { layout: 'centered' },
 };
 
-const MyProfile = () => {
+const SdkUserInfo = () => {
   const user = useOneUser();
   if (!user) {
     return <p>Loading...</p>;
@@ -25,11 +25,7 @@ const MyProfile = () => {
   return (
     <Switch>
       <Route path="/" exact>
-        <UserProfileBar
-          userId={user.userId}
-          currentUserId={user.userId}
-          editProfile={editProfile}
-        />
+        <UserInfo userId={user.userId} currentUserId={user.userId} editProfile={editProfile} />
       </Route>
       <Route path="/profile/:userId/edit">
         <ProfileSettings userId={userId} />
@@ -38,18 +34,20 @@ const MyProfile = () => {
   );
 };
 
-export const SDKApplication = () => {
+export const SdkUserInfoApp = () => {
   return (
     <Router>
-      <MyProfile />
+      <SdkUserInfo />
     </Router>
   );
 };
 
-SDKApplication.storyName = 'My Profile';
+SdkUserInfoApp.storyName = 'My User Info';
 
-export const AnotherUserProfile = () => {
-  const user = useOneUser();
-  if (!user) return <p>Loading...</p>;
-  return <UserProfileBar userId={user.userId} />;
+export const AnotherUserInfo = () => {
+  const [user, loading] = useOneUser();
+  if (!loading) return <p>Loading...</p>;
+  return <UserInfo userId={user.userId} />;
 };
+
+AnotherUserInfo.storyName = 'Another User Info';
