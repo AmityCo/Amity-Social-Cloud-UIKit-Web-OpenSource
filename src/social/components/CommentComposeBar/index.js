@@ -13,7 +13,7 @@ import {
 
 const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) => {
   const [text, setText] = useState('');
-  const currentUser = useUser(currentUserId);
+  const { file } = useUser(currentUserId);
 
   const addComment = () => {
     if (text === '') return;
@@ -33,7 +33,7 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) 
 
   return (
     <CommentComposeBarContainer className={className}>
-      <Avatar avatar={currentUser.avatar} />
+      <Avatar avatar={file?.fileUrl} />
       <CommentComposeBarInput
         placeholder={placeholder}
         type="text"
