@@ -38,7 +38,7 @@ const PostCreatorBar = ({
   isModerator,
   hasMoreCommunities,
   loadMoreCommunities,
-  disablePostToCommunity,
+  enablePostTargetPicker,
 }) => {
   const user = {};
   const [author, setAuthor] = useState(user);
@@ -160,7 +160,7 @@ const PostCreatorBar = ({
         onChange={setAuthor}
         postAvatar={postAvatar}
         setPostAvatar={setPostAvatar}
-        disablePostToCommunity={disablePostToCommunity}
+        enablePostTargetPicker={enablePostTargetPicker}
       />
       <PostContainer>
         <PostCreatorTextareaWrapper>
@@ -225,7 +225,7 @@ PostCreatorBar.propTypes = {
   isModerator: PropTypes.bool,
   hasMoreCommunities: PropTypes.bool,
   loadMoreCommunities: PropTypes.func,
-  disablePostToCommunity: PropTypes.bool,
+  enablePostTargetPicker: PropTypes.bool,
 };
 
 export default customizableComponent('PostCreatorBar', PostCreatorBar);

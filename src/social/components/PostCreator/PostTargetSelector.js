@@ -25,9 +25,9 @@ const PostTargetSelector = ({
   setPostAvatar,
   hasMoreCommunities,
   loadMoreCommunities,
-  disablePostToCommunity,
+  enablePostTargetPicker,
 }) => {
-  if (disablePostToCommunity || isEmpty(communities)) {
+  if (!enablePostTargetPicker || isEmpty(communities)) {
     return <Avatar avatar={author.avatar} />;
   }
 

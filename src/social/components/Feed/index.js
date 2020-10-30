@@ -29,8 +29,7 @@ const Feed = ({
   const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(queryParams);
 
-  const disablePostToCommunity =
-    targetType === EkoPostTargetType.CommunityFeed || targetType === EkoPostTargetType.UserFeed;
+  const enablePostTargetPicker = targetType === EkoPostTargetType.GlobalFeed;
 
   return (
     <FeedScrollContainer
@@ -47,7 +46,7 @@ const Feed = ({
           onCreateSuccess={onCreatePostSuccess}
           blockRouteChange={blockRouteChange}
           communities={communities}
-          disablePostToCommunity={disablePostToCommunity}
+          enablePostTargetPicker={enablePostTargetPicker}
           hasMoreCommunities={hasMoreCommunities}
           loadMoreCommunities={loadMoreCommunities}
         />
