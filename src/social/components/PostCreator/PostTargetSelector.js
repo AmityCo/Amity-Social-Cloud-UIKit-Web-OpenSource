@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import { isEmpty } from '~/helpers';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
@@ -8,14 +9,14 @@ import { backgroundImage as CommunityImage } from '~/icons/Community';
 import { backgroundImage as UserImage } from '~/icons/User';
 
 import {
-  AuthorSelectorContainer,
+  PostTargetSelectorContainer,
   CommunitySeparator,
   SelectIcon,
   Avatar,
   CommunityList,
 } from './styles';
 
-const AuthorSelector = ({
+const PostTargetSelector = ({
   author,
   user,
   communities,
@@ -24,8 +25,11 @@ const AuthorSelector = ({
   setPostAvatar,
   hasMoreCommunities,
   loadMoreCommunities,
+  disablePostToCommunity,
 }) => {
-  if (!communities || !communities.length) return <Avatar avatar={author.avatar} />;
+  if (disablePostToCommunity || isEmpty(communities)) {
+    return <Avatar avatar={author.avatar} />;
+  }
 
   const [isOpen, setIsOpen] = useState(false);
   const open = () => setIsOpen(true);
@@ -81,12 +85,12 @@ const AuthorSelector = ({
         align="start"
         content={menu}
       >
-        <AuthorSelectorContainer onClick={open}>
+        <PostTargetSelectorContainer onClick={open}>
           <Avatar avatar={postAvatar} backgroundImage={backgroundImage} /> <SelectIcon />
-        </AuthorSelectorContainer>
+        </PostTargetSelectorContainer>
       </Popover>
     </div>
   );
 };
 
-export default customizableComponent('AuthorSelector', AuthorSelector);
+export default customizableComponent('PostTargetSelector', PostTargetSelector);

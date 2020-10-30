@@ -14,7 +14,7 @@ import { confirm } from '~/core/components/Confirm';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import PostAsCommunity from './PostAsCommunity';
-import AuthorSelector from './AuthorSelector';
+import PostTargetSelector from './PostTargetSelector';
 import { isIdenticalAuthor } from './utils';
 import {
   PostCreatorContainer,
@@ -38,6 +38,7 @@ const PostCreatorBar = ({
   isModerator,
   hasMoreCommunities,
   loadMoreCommunities,
+  disablePostToCommunity,
 }) => {
   const user = {};
   const [author, setAuthor] = useState(user);
@@ -150,7 +151,7 @@ const PostCreatorBar = ({
 
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)} edit={edit}>
-      <AuthorSelector
+      <PostTargetSelector
         author={author}
         user={user}
         communities={communities}
@@ -159,6 +160,7 @@ const PostCreatorBar = ({
         onChange={setAuthor}
         postAvatar={postAvatar}
         setPostAvatar={setPostAvatar}
+        disablePostToCommunity={disablePostToCommunity}
       />
       <PostContainer>
         <PostCreatorTextareaWrapper>
@@ -223,6 +225,7 @@ PostCreatorBar.propTypes = {
   isModerator: PropTypes.bool,
   hasMoreCommunities: PropTypes.bool,
   loadMoreCommunities: PropTypes.func,
+  disablePostToCommunity: PropTypes.bool,
 };
 
 export default customizableComponent('PostCreatorBar', PostCreatorBar);

@@ -138,7 +138,7 @@ export const Caption = styled.div`
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
-export const AuthorSelectorContainer = styled.div`
+export const PostTargetSelectorContainer = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
