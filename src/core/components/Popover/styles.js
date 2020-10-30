@@ -1,9 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import cx from 'classnames';
+
 import ReactTinyPopover from 'react-tiny-popover';
 
-const ReactPopover = ({ className, ...rest }) => (
-  <ReactTinyPopover containerClassName={className} {...rest} />
+const ReactPopover = ({ className, fixed = false, ...rest }) => (
+  <ReactTinyPopover containerClassName={cx(className, { fixed })} {...rest} />
 );
 
 export const Popover = styled(ReactPopover)`
@@ -14,4 +16,8 @@ export const Popover = styled(ReactPopover)`
   padding: 4px 0;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
+
+  &.fixed {
+    position: fixed !important;
+  }
 `;

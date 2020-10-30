@@ -47,7 +47,7 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   );
 
   return (
-    <SelectorPopover isOpen={isOpen} onClickOutside={close} content={list}>
+    <SelectorPopover isOpen={isOpen} onClickOutside={close} content={list} fixed>
       <Selector onClick={open}>
         <Category category={selectedCategory} /> <SelectIcon />
       </Selector>

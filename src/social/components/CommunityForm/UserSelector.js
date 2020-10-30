@@ -102,6 +102,7 @@ const UserSelector = ({ value: userIds, onChange }) => {
       isOpen={isOpen && selectorUsersList.length}
       onClickOutside={close}
       content={list}
+      fixed
     >
       <Selector onClick={open}>
         {selectedUsers.map(user => (
