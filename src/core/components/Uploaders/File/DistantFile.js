@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { FileRepository, EkoImageSize } from 'eko-sdk';
@@ -6,10 +6,8 @@ import useFile from '~/core/hooks/useFile';
 
 import StyledFile from './styles';
 
-const File = ({ fileId, onRemove = () => {} } = {}) => {
+const File = ({ fileId, onRemove }) => {
   const file = useFile(fileId);
-
-  const removeCallback = useCallback(() => onRemove(fileId), [onRemove]);
 
   if (!file.fileId) return null;
 
@@ -24,7 +22,7 @@ const File = ({ fileId, onRemove = () => {} } = {}) => {
       size={file.attributes.size}
       type={file.attributes.mimeType}
       url={fileUrl}
-      onRemove={removeCallback}
+      onRemove={onRemove}
     />
   );
 };
@@ -35,7 +33,7 @@ File.propTypes = {
 };
 
 File.defaultProps = {
-  onRemove: () => {},
+  onRemove: null,
 };
 
 export default File;

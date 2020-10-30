@@ -11,6 +11,7 @@ export const Options = styled(UIOptions)`
 
 export const PostContainer = styled.div`
   padding: 16px;
+  padding-bottom: 8px;
   background: #ffffff;
   border: 1px solid #edeef2;
   border-radius: 4px;

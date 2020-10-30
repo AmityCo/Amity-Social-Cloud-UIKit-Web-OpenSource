@@ -1,11 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import StyledFile from './styles';
 
-const File = ({ file, progress, onRemove = () => {} } = {}) => {
-  const removeCallback = useCallback(() => onRemove(file), [onRemove]);
-
+const File = ({ file, progress, onRemove }) => {
   let fileUrl = '';
 
   if (file.type.includes('image')) {
@@ -19,7 +17,7 @@ const File = ({ file, progress, onRemove = () => {} } = {}) => {
       type={file.type}
       url={fileUrl}
       progress={progress}
-      onRemove={removeCallback}
+      onRemove={onRemove}
     />
   );
 };
@@ -32,7 +30,7 @@ File.propTypes = {
 
 File.defaultProps = {
   progress: -1,
-  onRemove: () => {},
+  onRemove: null,
 };
 
 export default File;

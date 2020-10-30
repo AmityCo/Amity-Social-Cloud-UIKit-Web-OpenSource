@@ -18,7 +18,7 @@ const PostEditor = ({
   placeholder = "What's going on...",
   onSave = null,
 }) => {
-  const [text, setText] = useState(post.data.text || '');
+  const [text, setText] = useState(post?.data?.text ?? '');
   const isEmpty = text.trim().length === 0;
 
   const handleEditTextPost = () => {

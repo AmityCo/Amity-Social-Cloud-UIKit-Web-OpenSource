@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { FileRepository, EkoImageSize } from 'eko-sdk';
@@ -6,10 +6,8 @@ import useFile from '~/core/hooks/useFile';
 
 import StyledImage from './styles';
 
-const Image = ({ fileId, onRemove = () => {}, fullSize } = {}) => {
+const Image = ({ fileId, onRemove, fullSize } = {}) => {
   const file = useFile(fileId);
-
-  const removeCallback = useCallback(() => onRemove(fileId), [onRemove]);
 
   if (!file.fileId) return null;
 
@@ -18,7 +16,7 @@ const Image = ({ fileId, onRemove = () => {}, fullSize } = {}) => {
     imageSize: EkoImageSize.Large,
   });
 
-  return <StyledImage url={fileUrl} onRemove={removeCallback} fullSize={fullSize} />;
+  return <StyledImage url={fileUrl} onRemove={onRemove} fullSize={fullSize} />;
 };
 
 Image.propTypes = {
@@ -29,6 +27,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   onRemove: () => {},
+  fullSize: false,
 };
 
 export default Image;

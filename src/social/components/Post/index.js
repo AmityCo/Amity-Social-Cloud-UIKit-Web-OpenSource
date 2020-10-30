@@ -18,7 +18,7 @@ import Avatar from '~/core/components/Avatar';
 import usePost from '~/social/hooks/usePost';
 import withSDK from '~/core/hocs/withSDK';
 import customizableComponent from '~/core/hocs/customization';
-
+import PostChildren from './PostChildren';
 import {
   PostContainer,
   PostHeader,
@@ -53,7 +53,9 @@ const Post = ({
   const closeEditingPostModal = () => setIsEditing(false);
   const expand = () => setIsExpanded(true);
 
-  const { post, user: postAuthor, handleReportPost, handleDeletePost } = usePost(postId);
+  const { post, user: postAuthor, handleReportPost, handleDeletePost, childrenPosts } = usePost(
+    postId,
+  );
   const isPostReady = !!post.postId;
   const { postedUserId, createdAt, data = {} } = post;
   const { text = '', files = [], images = [], fileId } = data;
@@ -131,6 +133,9 @@ const Post = ({
       </ConditionalRender>
       <ConditionalRender condition={fileId && post.dataType === 'file'}>
         <PostFile fileId={fileId} fullSize />
+      </ConditionalRender>
+      <ConditionalRender condition={childrenPosts.length}>
+        <PostChildren childrenPosts={childrenPosts} />
       </ConditionalRender>
       <EngagementBar postId={postId} noInteractionMessage={noInteractionMessage} />
     </PostContainer>

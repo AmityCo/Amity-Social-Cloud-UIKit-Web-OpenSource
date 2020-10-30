@@ -51,7 +51,7 @@ const UIEngagementBar = ({
         </ConditionalRender>
       </>
     </ConditionalRender>
-    <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>
+    {noInteractionMessage && <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>}
   </EngagementBarContainer>
 );
 

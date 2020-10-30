@@ -1,14 +1,12 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import StyledImage from './styles';
 
-const Image = ({ file, progress, onRemove = () => {} } = {}) => {
-  const removeCallback = useCallback(() => onRemove(file), [onRemove]);
-
+const Image = ({ file, progress, onRemove } = {}) => {
   const fileUrl = URL.createObjectURL(file);
 
-  return <StyledImage url={fileUrl} progress={progress} onRemove={removeCallback} />;
+  return <StyledImage url={fileUrl} progress={progress} onRemove={onRemove} />;
 };
 
 Image.propTypes = {
@@ -19,7 +17,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   progress: -1,
-  onRemove: () => {},
+  onRemove: null,
 };
 
 export default Image;
