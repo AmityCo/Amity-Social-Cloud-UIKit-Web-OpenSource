@@ -10,7 +10,9 @@ export const SwitchLabel = styled.label`
 `;
 
 export const SwitchInput = styled.input`
-  display: none;
+  &&& {
+    display: none;
+  }
 `;
 
 export const SwitchSlider = styled.span`

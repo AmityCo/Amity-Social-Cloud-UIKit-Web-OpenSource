@@ -18,7 +18,9 @@ const FileLoaderContainer = styled.label`
 `;
 
 const FileInput = styled.input.attrs({ type: 'file' })`
-  display: none;
+  &&& {
+    display: none;
+  }
 `;
 
 const muteEvent = fn => e => {

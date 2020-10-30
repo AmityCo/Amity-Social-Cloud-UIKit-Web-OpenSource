@@ -144,7 +144,9 @@ export const NumberOfHiddenImagesOverlay = styled.div`
 export const ImageUploadContainer = styled.div``;
 
 export const FileInput = styled.input.attrs({ type: 'file' })`
-  display: none;
+  &&& {
+    display: none;
+  }
 `;
 
 export const Label = styled.label``;

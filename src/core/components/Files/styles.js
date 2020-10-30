@@ -63,7 +63,9 @@ export const ViewAllFilesButton = styled(SecondaryButton)`
 export const FileUploadContainer = styled.div``;
 
 export const FileInput = styled.input.attrs({ type: 'file' })`
-  display: none;
+  &&& {
+    display: none;
+  }
 `;
 
 export const Label = styled.label``;
