@@ -1,5 +1,5 @@
 import { CommentRepository } from 'eko-sdk';
-import { LIKE_REACTION_KEY } from 'constants';
+import { LIKE_REACTION_KEY } from '~/constants';
 import useLiveObject from '~/core/hooks/useLiveObject';
 
 const useCommentLike = ({ commentId, onLikeSuccess, onUnlikeSuccess }) => {

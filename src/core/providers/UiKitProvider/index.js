@@ -9,7 +9,7 @@ import { ConfirmContainer } from '~/core/components/Confirm';
 import { CustomComponentsProvider } from '~/core/hocs/customization';
 import { SDKProvider } from '~/core/hocs/withSDK';
 import MockData from '~/mock';
-import Localization from './Localisation';
+import Localisation from './Localisation';
 import buildGlobalTheme from './theme';
 import { UIStyles } from './styles';
 
@@ -42,7 +42,7 @@ const UiKitProvider = ({
       <Helmet>
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </Helmet>
-      <Localization>
+      <Localisation locale="en">
         <ThemeProvider theme={buildGlobalTheme(theme)}>
           <UIStyles>
             <SDKProvider value={SDKInfo}>
@@ -54,7 +54,7 @@ const UiKitProvider = ({
             </SDKProvider>
           </UIStyles>
         </ThemeProvider>
-      </Localization>
+      </Localisation>
     </>
   );
 };

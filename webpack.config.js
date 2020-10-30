@@ -25,13 +25,6 @@ module.exports = (_, argv) => ({
   resolve: {
     alias: {
       '~': path.resolve(__dirname, 'src'),
-      components: path.resolve(__dirname, 'src/components'),
-      icons: path.resolve(__dirname, 'src/icons'),
-      hocs: path.resolve(__dirname, 'src/hocs'),
-      hooks: path.resolve(__dirname, 'src/hooks'),
-      mock: path.resolve(__dirname, 'src/mock'),
-      constants: path.resolve(__dirname, 'src/constants'),
-      helpers: path.resolve(__dirname, 'src/helpers'),
     },
     extensions: ['.js', '.jsx', '.css', '.svg'],
   },

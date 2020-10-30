@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
-import { LIKE_REACTION_KEY } from 'constants';
+import { LIKE_REACTION_KEY } from '~/constants';
 
 import customizableComponent from '~/core/hocs/customization';
 import usePost from '~/social/hooks/usePost';

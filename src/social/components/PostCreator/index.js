@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { PostRepository, EkoPostTargetType } from 'eko-sdk';
 
-import { isEmpty, isEqual } from 'helpers';
+import { isEmpty, isEqual } from '~/helpers';
 import useFilesUpload from '~/core/hooks/useFilesUpload';
 import Images from '~/social/components/Images';
 import { ImageUpload } from '~/social/components/Images/ImageUpload';

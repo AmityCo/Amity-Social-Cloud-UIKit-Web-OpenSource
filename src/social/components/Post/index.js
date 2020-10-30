@@ -4,7 +4,7 @@ import Truncate from 'react-truncate-markup';
 import { EkoPostTargetType } from 'eko-sdk';
 import cx from 'classnames';
 
-import isModerator from 'helpers/permissions';
+import isModerator from '~/helpers/permissions';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Modal from '~/core/components/Modal';
 import Time from '~/core/components/Time';

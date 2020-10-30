@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { getUser } from 'helpers';
+import { getUser } from '~/helpers';
 import UserProfileForm from '~/social/components/UserProfileForm';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import BackLink from '~/core/components/BackLink';

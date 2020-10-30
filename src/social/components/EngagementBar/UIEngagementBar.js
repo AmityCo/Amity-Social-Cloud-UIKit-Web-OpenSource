@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
+import { FormattedMessage } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -29,10 +30,16 @@ const UIEngagementBar = ({
   <EngagementBarContainer>
     <Counters>
       <ConditionalRender condition={totalLikes > 0}>
-        <span>{toHumanString(totalLikes)} likes</span>
+        <span>
+          {toHumanString(totalLikes)}{' '}
+          <FormattedMessage id="plural.like" values={{ amount: totalLikes }} />
+        </span>
       </ConditionalRender>
       <ConditionalRender condition={totalComments > 0}>
-        <span>{toHumanString(totalComments)} comments</span>
+        <span>
+          {toHumanString(totalComments)}{' '}
+          <FormattedMessage id="plural.comment" values={{ amount: totalComments }} />
+        </span>
       </ConditionalRender>
     </Counters>
     <ConditionalRender condition={!noInteractionMessage}>
