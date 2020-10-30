@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { EkoCommunityFilter } from 'eko-sdk';
 
 import UiKitCommunitiesList from '.';
 
@@ -21,7 +22,7 @@ export const SDKCommunitiesList = ({
 
   const queryParams = { ...communitiesQueryParam };
   if (onlyShowJoined) {
-    queryParams.isJoined = true;
+    queryParams.filter = EkoCommunityFilter.Member;
   }
 
   if (querySearch) {

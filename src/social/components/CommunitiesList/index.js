@@ -35,14 +35,8 @@ const CommunitiesList = ({
 };
 
 CommunitiesList.propTypes = {
-  // This prop shape should match the parameters to the SDK's allCommunitiesWithFilters function.
-  communitiesQueryParam: PropTypes.shape({
-    search: PropTypes.string,
-    isJoined: PropTypes.bool,
-    categories: PropTypes.arrayOf(PropTypes.string),
-    tags: PropTypes.arrayOf(PropTypes.string),
-    sortBy: PropTypes.string,
-  }),
+  // This prop shape should match the parameters to the SDK's queryCommunities function.
+  communitiesQueryParam: PropTypes.object,
   onClickCommunity: PropTypes.func,
   getIsCommunityActive: PropTypes.func,
   className: PropTypes.string,

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { EkoCommunityFilter } from 'eko-sdk';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-regular-svg-icons';
 
@@ -13,7 +14,7 @@ export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
   font-size: 20px;
 `;
 
-const myListQueryParam = { isJoined: true };
+const myListQueryParam = { filter: EkoCommunityFilter.Member };
 
 const SideSectionMyCommunity = ({
   onClickCreate,

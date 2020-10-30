@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostTargetType } from 'eko-sdk';
+import { EkoPostTargetType, EkoCommunityFilter } from 'eko-sdk';
 
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PostCreator from '~/social/components/PostCreator';
@@ -12,7 +12,7 @@ import { LoadMore } from '~/social/components/LoadMore';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
 
-const queryParams = { isJoined: true };
+const queryParams = { filter: EkoCommunityFilter.Member };
 
 const Feed = ({
   targetType = EkoPostTargetType.MyFeed,
