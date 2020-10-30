@@ -1,11 +1,16 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import Button from '~/core/components/Button';
 import ProgressBar from '~/core/components/ProgressBar';
 
 import RemoveIcon from '~/icons/Remove';
+
+const fullSizeStyle = css`
+  width: 100%;
+  max-width: 600px;
+`;
 
 export const ImageContainer = styled.div`
   position: relative;
@@ -15,7 +20,7 @@ export const ImageContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.base.shade4};
   border-radius: 4px;
   overflow: hidden;
-  ${({ fullSize }) => fullSize && 'width: 100%;'}
+  ${({ fullSize }) => fullSize && fullSizeStyle}
 `;
 
 export const Content = styled.div`
@@ -27,7 +32,7 @@ export const Content = styled.div`
 export const ImgPreview = styled.img`
   display: block;
   height: 100%;
-  ${({ fullSize }) => fullSize && 'width: 100%;'}
+  ${({ fullSize }) => fullSize && fullSizeStyle}
   object-fit: contain;
   object-position: center;
 `;
