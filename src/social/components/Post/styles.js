@@ -4,6 +4,7 @@ import { faShieldAlt } from '@fortawesome/pro-solid-svg-icons';
 
 import UIOptions from '~/core/components/Options';
 import { SecondaryButton } from '~/core/components/Button';
+import { ArrowRight } from '~/icons';
 
 export const Options = styled(UIOptions)`
   margin-left: auto;
@@ -43,6 +44,18 @@ export const AuthorName = styled.div`
   ${({ theme }) => theme.typography.title}
 `;
 
+export const ArrowSeparatorContainer = styled.div`
+  margin: 0 4px !important;
+`;
+
+export const ArrowSeparator = styled(ArrowRight).attrs({ height: '8px', width: '8px' })`
+  color: ${({ theme }) => theme.palette.base.shade1};
+`;
+
+export const PostCommunityName = styled.div`
+  ${({ theme }) => theme.typography.title}
+`;
+
 export const ReadMoreButton = styled(SecondaryButton)`
   color: ${({ theme }) => theme.palette.primary.main};
   padding: 4px;
@@ -71,6 +84,11 @@ export const ModeratorBadge = styled.div`
 `;
 
 export const AdditionalInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const PostTitleContainer = styled.div`
   display: flex;
   align-items: center;
 `;

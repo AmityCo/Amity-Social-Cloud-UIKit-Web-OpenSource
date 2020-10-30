@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Truncate from 'react-truncate-markup';
+import { EkoPostTargetType } from 'eko-sdk';
 import cx from 'classnames';
 
 import isModerator from 'helpers/permissions';
@@ -16,6 +17,7 @@ import EngagementBar from '~/social/components/EngagementBar';
 import { confirm } from '~/core/components/Confirm';
 import Avatar from '~/core/components/Avatar';
 import usePost from '~/social/hooks/usePost';
+import useCommunity from '~/social/hooks/useCommunity';
 import withSDK from '~/core/hocs/withSDK';
 import customizableComponent from '~/core/hocs/customization';
 import PostChildren from './PostChildren';
@@ -32,6 +34,10 @@ import {
   ModeratorBadgeContainer,
   ModeratorBadge,
   AdditionalInfo,
+  PostCommunityName,
+  ArrowSeparatorContainer,
+  ArrowSeparator,
+  PostTitleContainer,
 } from './styles';
 
 const TEXT_POST_MAX_LINES = 8;
@@ -56,12 +62,17 @@ const Post = ({
   const { post, user: postAuthor, handleReportPost, handleDeletePost, childrenPosts } = usePost(
     postId,
   );
-  const isPostReady = !!post.postId;
+
+  const { targetId, targetType } = post;
+  const { community } = useCommunity(targetId, [targetId]);
+
   const { postedUserId, createdAt, data = {} } = post;
   const { text = '', files = [], images = [], fileId } = data;
 
   const isMyPost = currentUserId === postedUserId;
+  const isPostReady = !!post.postId;
   const isAdmin = isModerator(userRoles);
+  const isCommunityPost = targetType === EkoPostTargetType.CommunityFeed;
 
   const confirmDeleting = () =>
     confirm({
@@ -81,6 +92,13 @@ const Post = ({
     (!isMyPost || isAdmin) && { name: 'Report post', action: handleReportPost },
   ];
 
+  const handleAuthorNameClick = () => {
+    onPostAuthorClick({
+      userId: postAuthor.userId,
+      communityId: postAuthor.communityId,
+    });
+  };
+
   return (
     <PostContainer className={cx('post', className)}>
       <ConditionalRender condition={isEditing}>
@@ -89,17 +107,23 @@ const Post = ({
         </Modal>
       </ConditionalRender>
       <PostHeader>
-        <PostAuthor
-          onClick={() => {
-            onPostAuthorClick({
-              userId: postAuthor.userId,
-              communityId: postAuthor.communityId,
-            });
-          }}
-        >
+        <PostAuthor>
           <Avatar avatar={postAuthor.avatar} />
           <PostInfo>
-            <AuthorName>{postAuthor.displayName || DEFAULT_DISPLAY_NAME}</AuthorName>
+            <ConditionalRender condition={isCommunityPost}>
+              <PostTitleContainer>
+                <AuthorName onClick={handleAuthorNameClick}>
+                  {postAuthor.displayName || DEFAULT_DISPLAY_NAME}
+                </AuthorName>
+                <ArrowSeparatorContainer>
+                  <ArrowSeparator />
+                </ArrowSeparatorContainer>
+                <PostCommunityName>{community?.displayName}</PostCommunityName>
+              </PostTitleContainer>
+              <AuthorName onClick={handleAuthorNameClick}>
+                {postAuthor.displayName || DEFAULT_DISPLAY_NAME}
+              </AuthorName>
+            </ConditionalRender>
             <AdditionalInfo>
               <ConditionalRender condition={isAdmin}>
                 <ModeratorBadgeContainer>
