@@ -12,7 +12,6 @@ import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 const CommunityContainer = styled.div`
   height: 100%;
   width: 100%;
-  overflow-y: scroll;
 `;
 
 const Community = ({

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/pro-regular-svg-icons';
@@ -9,8 +9,10 @@ export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
   color: ${({ theme }) => theme.palette.base.shade2};
   padding: 0 10px;
   position: absolute;
-  top: 10px;
-  left: 5px;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+
   &.svg-inline--fa {
     width: auto;
   }
@@ -18,7 +20,17 @@ export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
 
 export const CommunitiesSearchContainer = styled.div`
   position: relative;
-  margin: 8px 0;
+  padding: 0.5rem;
+  background: #fff;
+
+  ${({ sticky }) =>
+    sticky &&
+    css`
+      z-index: 500;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+    `}
 `;
 
 export const CommunitiesSearchInput = styled.input`

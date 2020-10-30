@@ -23,7 +23,12 @@ const Menu = ({ search, handleSearchResultClick, popoverMenuClassName }) => {
   );
 };
 
-const CommunitySearch = ({ onSearchResultCommunityClick, popoverMenuClassName, placeholder }) => {
+const CommunitySearch = ({
+  onSearchResultCommunityClick,
+  popoverMenuClassName,
+  placeholder,
+  sticky = false,
+}) => {
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(true);
   const open = () => setIsOpen(true);
@@ -55,7 +60,7 @@ const CommunitySearch = ({ onSearchResultCommunityClick, popoverMenuClassName, p
         />
       }
     >
-      <CommunitiesSearchContainer className="explore-header-search-container">
+      <CommunitiesSearchContainer className="explore-header-search-container" sticky={sticky}>
         <CommunitiesSearchInput
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -72,11 +77,13 @@ CommunitySearch.propTypes = {
   onSearchResultCommunityClick: PropTypes.func.isRequired,
   popoverMenuClassName: PropTypes.string,
   placeholder: PropTypes.string,
+  sticky: PropTypes.bool,
 };
 
 CommunitySearch.defaultProps = {
   popoverMenuClassName: null,
   placeholder: '',
+  sticky: false,
 };
 
 export default customizableComponent('CommunitySearch', CommunitySearch);

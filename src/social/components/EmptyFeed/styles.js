@@ -15,7 +15,7 @@ export const EmptyFeedContainer = styled.div`
   color: ${({ theme }) => theme.palette.base.shade3};
   ${({ theme }) => theme.typography.bodyBold}
   height: 220px;
-  padding: 0 80px;
+  padding: 40px 80px 0;
   display: flex;
   flex-direction: column;
   align-items: center;

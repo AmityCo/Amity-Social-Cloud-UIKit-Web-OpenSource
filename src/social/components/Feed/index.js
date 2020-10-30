@@ -52,7 +52,7 @@ const Feed = ({
         />
       </ConditionalRender>
       <ConditionalRender condition={posts.length}>
-        <LoadMore hasMore={hasMore} loadMore={loadMore} className="no-border">
+        <LoadMore hasMore={hasMore} loadMore={loadMore} className="load-more no-border">
           {posts.map(({ postId }) => (
             <Post
               key={postId}

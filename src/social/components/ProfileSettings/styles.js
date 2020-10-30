@@ -9,7 +9,6 @@ export const ProfileSettingsTabs = styled(UIProfileSettingsTabs)``;
 
 export const Container = styled.div`
   width: 100%;
-  padding: 24px 78px 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;

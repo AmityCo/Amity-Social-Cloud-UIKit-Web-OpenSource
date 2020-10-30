@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SideMenu from '~/core/components/SideMenu';
-import SideMenuSection from '~/core/components/SideMenuSection';
 import SideSectionCommunity from '~/social/components/SideSectionCommunity';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
 import CommunitySearch from '~/social/components/CommunitySearch';
@@ -22,13 +21,12 @@ const CommunitySideMenu = ({
   shouldHideExplore,
 }) => (
   <SideMenu>
-    <SideMenuSection>
-      <CommunitySearch
-        onSearchResultCommunityClick={onSearchResultCommunityClick}
-        className={searchInputClassName}
-        placeholder={searchInputPlaceholder}
-      />
-    </SideMenuSection>
+    <CommunitySearch
+      onSearchResultCommunityClick={onSearchResultCommunityClick}
+      className={searchInputClassName}
+      placeholder={searchInputPlaceholder}
+      sticky
+    />
     <SideSectionCommunity
       onClickNewsFeed={onClickNewsFeed}
       onClickExplore={onClickExplore}
