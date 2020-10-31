@@ -19,6 +19,7 @@ const Community = ({
   showCreateCommunityButton,
   onMemberClick,
   onPostAuthorClick,
+  onEditCommunityClick,
   blockRouteChange,
 }) => {
   const [isShowingFeed, setIsShowingFeed] = useState(true);
@@ -74,6 +75,7 @@ const Community = ({
             communityId={targetCommuntyId}
             onMemberClick={onMemberClick}
             onPostAuthorClick={onPostAuthorClick}
+            onEditCommunityClick={onEditCommunityClick}
           />
         )}
       </FeedLayout>
@@ -88,6 +90,7 @@ Community.propTypes = {
   onMemberClick: PropTypes.func,
   onPostAuthorClick: PropTypes.func,
   blockRouteChange: PropTypes.func,
+  onEditCommunityClick: PropTypes.func,
 };
 
 const noop = () => {};
@@ -98,6 +101,7 @@ Community.defaultProps = {
   onMemberClick: noop,
   blockRouteChange: noop,
   onPostAuthorClick: noop,
+  onEditCommunityClick: noop,
 };
 
 export default Community;

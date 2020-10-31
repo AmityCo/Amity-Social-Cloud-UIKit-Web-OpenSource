@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { isEmpty } from '~/helpers';
+import { EkoPostTargetType } from 'eko-sdk';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
+
 import { backgroundImage as UserImage } from '~/icons/User';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 import {
   PostTargetSelectorContainer,
@@ -17,35 +18,32 @@ import {
 } from './styles';
 
 const PostTargetSelector = ({
-  author,
   user,
   communities,
-  onChange,
-  postAvatar,
-  setPostAvatar,
   hasMoreCommunities,
   loadMoreCommunities,
-  enablePostTargetPicker,
-}) => {
-  if (!enablePostTargetPicker || isEmpty(communities)) {
-    return <Avatar avatar={author.avatar} />;
-  }
+  currentTargetId,
+  onChange,
 
+  children,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
+
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
   const menu = (
     <Menu>
       <MenuItem
+        active={user.userId === currentTargetId}
         onClick={() => {
-          onChange(user);
-          setPostAvatar(user.avatar);
+          onChange({ targetId: user.userId, targetType: EkoPostTargetType.UserFeed });
           close();
         }}
       >
-        <Avatar size="tiny" avatar={user.avatar} backgroundImage={UserImage} /> My Timeline
+        <Avatar size="tiny" avatar={user.avatarFileUrl} backgroundImage={UserImage} /> My Timeline
       </MenuItem>
+
       <CommunitySeparator>Community</CommunitySeparator>
       <CommunityList>
         <InfiniteScroll
@@ -58,14 +56,20 @@ const PostTargetSelector = ({
           {communities.map(community => (
             <MenuItem
               key={community.communityId}
-              active={author.communityId === community.communityId}
+              active={community.communityId === currentTargetId}
               onClick={() => {
-                onChange(community);
-                setPostAvatar(community.avatar);
+                onChange({
+                  targetId: community.communityId,
+                  targetType: EkoPostTargetType.CommunityFeed,
+                });
                 close();
               }}
             >
-              <Avatar avatar={community.avatar} size="tiny" backgroundImage={CommunityImage} />
+              <Avatar
+                avatar={community.avatarFileUrl}
+                size="tiny"
+                backgroundImage={CommunityImage}
+              />
               {` ${community.displayName}`}
             </MenuItem>
           ))}
@@ -73,8 +77,6 @@ const PostTargetSelector = ({
       </CommunityList>
     </Menu>
   );
-
-  const backgroundImage = author.communityId ? CommunityImage : null;
 
   return (
     <div>
@@ -86,7 +88,7 @@ const PostTargetSelector = ({
         content={menu}
       >
         <PostTargetSelectorContainer onClick={open}>
-          <Avatar avatar={postAvatar} backgroundImage={backgroundImage} /> <SelectIcon />
+          {children} <SelectIcon />
         </PostTargetSelectorContainer>
       </Popover>
     </div>

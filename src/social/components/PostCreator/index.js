@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { PostRepository, EkoPostTargetType } from 'eko-sdk';
+
+import { UserRepository, CommunityRepository, PostRepository, EkoPostTargetType } from 'eko-sdk';
 
 import { isEmpty, isEqual } from '~/helpers';
+import withSDK from '~/core/hocs/withSDK';
+import useUser from '~/core/hooks/useUser';
+import useLiveObject from '~/core/hooks/useLiveObject';
+import useFile from '~/core/hooks/useFile';
 import useFilesUpload from '~/core/hooks/useFilesUpload';
 import Images from '~/social/components/Images';
 import { ImageUpload } from '~/social/components/Images/ImageUpload';
@@ -12,11 +17,15 @@ import { Files } from '~/core/components/Files';
 import { FileUpload } from '~/core/components/Files/FileUpload';
 import { confirm } from '~/core/components/Confirm';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import customizableComponent from '~/core/hocs/customization';
+
 import PostAsCommunity from './PostAsCommunity';
 import PostTargetSelector from './PostTargetSelector';
-import { isIdenticalAuthor } from './utils';
+
+import { backgroundImage as UserImage } from '~/icons/User';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
+
 import {
+  Avatar,
   PostCreatorContainer,
   PostCreatorTextarea,
   PostCreatorTextareaWrapper,
@@ -26,23 +35,43 @@ import {
   PostButton,
 } from './styles';
 
+const communityFetcher = id => () => CommunityRepository.communityForId(id);
+const userFetcher = id => () => new UserRepository().userForId(id);
+
 const PostCreatorBar = ({
-  onCreateSuccess = () => {},
-  community = {},
-  communities = [],
   className = '',
+  currentUserId,
+  targetType,
+  targetId,
+  enablePostTargetPicker,
+  communities = [],
   placeholder = "What's going on...",
-  edit,
   post = { text: '', files: [], images: [] },
-  blockRouteChange,
-  isModerator,
   hasMoreCommunities,
   loadMoreCommunities,
-  enablePostTargetPicker,
+  onCreateSuccess = () => {},
+  blockRouteChange,
 }) => {
-  const user = {};
-  const [author, setAuthor] = useState(user);
-  const [postAvatar, setPostAvatar] = useState(user.avatar);
+  // TODO: dont forget
+  const edit = false;
+
+  const { user } = useUser(currentUserId);
+
+  // default to me
+  if (targetType === EkoPostTargetType.GlobalFeed || targetType === EkoPostTargetType.MyFeed) {
+    /* eslint-disable no-param-reassign */
+    targetType = EkoPostTargetType.UserFeed;
+    /* eslint-disable no-param-reassign */
+    targetId = currentUserId;
+  }
+
+  const [target, setTarget] = useState({ targetType, targetId });
+
+  const fetcher = target.targetType === EkoPostTargetType.UserFeed ? userFetcher : communityFetcher;
+  const model = useLiveObject(fetcher(target.targetId), [target.targetId]);
+  const { avatarFileId } = model;
+
+  const file = useFile(avatarFileId, [avatarFileId]);
 
   const [text, setText] = useState(post.text);
 
@@ -67,7 +96,7 @@ const PostCreatorBar = ({
   const [isDirty, markDirty] = useState(false);
 
   const hasNotLoadedImages = images.some(image => image.isNew);
-  const hasNotLoadedFiles = files.some(file => file.isNew);
+  const hasNotLoadedFiles = files.some(f => f.isNew);
 
   const isDisabled = isEmpty(text, images, files) || hasNotLoadedImages || hasNotLoadedFiles;
 
@@ -105,26 +134,14 @@ const PostCreatorBar = ({
     }
 
     const payload = {};
-    if (text) {
-      payload.text = text;
-    }
 
-    if (images.length) {
-      payload.imageIds = images.map(image => image.fileId);
-    }
-
-    if (files.length) {
-      payload.fileIds = files.map(file => file.fileId);
-    }
-
-    if (isEmpty(payload)) {
-      return;
-    }
+    if (text) payload.text = text;
+    if (images.length) payload.imageIds = images.map(i => i.fileId);
+    if (files.length) payload.fileIds = files.map(f => f.fileId);
 
     const newPostLiveObject = PostRepository.createPost({
       ...payload,
-      targetType: author.communityId ? EkoPostTargetType.CommunityFeed : EkoPostTargetType.UserFeed,
-      targetId: author.communityId || author.userId,
+      ...target,
     });
 
     newPostLiveObject.on('dataStatusChanged', () => {
@@ -141,27 +158,28 @@ const PostCreatorBar = ({
   const canUploadImage = !files.length;
   const canUploadFile = !images.length;
 
-  const updatePost = async () => {
-    // TODO: fixme
-  };
+  const backgroundImage =
+    target.targetType === EkoPostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
-  const isCommunityPost = isIdenticalAuthor(author, community);
-  const setIsCommunityPost = shouldBeCommunityPost =>
-    setAuthor(shouldBeCommunityPost ? community : user);
+  const CurrentTargetAvatar = <Avatar avatar={file.fileUrl} backgroundImage={backgroundImage} />;
 
   return (
-    <PostCreatorContainer className={cx('postComposeBar', className)} edit={edit}>
-      <PostTargetSelector
-        author={author}
-        user={user}
-        communities={communities}
-        hasMoreCommunities={hasMoreCommunities}
-        loadMoreCommunities={loadMoreCommunities}
-        onChange={setAuthor}
-        postAvatar={postAvatar}
-        setPostAvatar={setPostAvatar}
-        enablePostTargetPicker={enablePostTargetPicker}
-      />
+    <PostCreatorContainer className={cx('postComposeBar', className)}>
+      <ConditionalRender condition={enablePostTargetPicker}>
+        <PostTargetSelector
+          user={user}
+          communities={communities}
+          hasMoreCommunities={hasMoreCommunities}
+          loadMoreCommunities={loadMoreCommunities}
+          currentTargetType={target.targetType}
+          currentTargetId={target.targetId}
+          onChange={setTarget}
+        >
+          {CurrentTargetAvatar}
+        </PostTargetSelector>
+
+        {CurrentTargetAvatar}
+      </ConditionalRender>
       <PostContainer>
         <PostCreatorTextareaWrapper>
           <PostCreatorTextarea
@@ -179,8 +197,8 @@ const PostCreatorBar = ({
           </ConditionalRender>
         </PostCreatorTextareaWrapper>
         <Footer>
-          <ConditionalRender condition={isModerator && !isEmpty(community)}>
-            <PostAsCommunity value={isCommunityPost} onChange={setIsCommunityPost} />
+          <ConditionalRender condition={false}>
+            <PostAsCommunity value="" onChange="" />
           </ConditionalRender>
           <FooterActionBar>
             <ConditionalRender condition={!edit}>
@@ -199,8 +217,8 @@ const PostCreatorBar = ({
                 />
               </>
             </ConditionalRender>
-            <PostButton disabled={isDisabled} onClick={edit ? updatePost : createPost}>
-              {edit ? 'Save' : 'Post'}
+            <PostButton disabled={isDisabled} onClick={createPost}>
+              Post
             </PostButton>
           </FooterActionBar>
         </Footer>
@@ -210,22 +228,22 @@ const PostCreatorBar = ({
 };
 
 PostCreatorBar.propTypes = {
+  currentUserId: PropTypes.string,
+  targetType: PropTypes.string,
+  targetId: PropTypes.string,
   onCreateSuccess: PropTypes.func,
-  community: PropTypes.object,
   communities: PropTypes.array,
   className: PropTypes.string,
   placeholder: PropTypes.string,
   blockRouteChange: PropTypes.func,
-  edit: PropTypes.bool,
   post: PropTypes.shape({
     text: PropTypes.string,
     images: PropTypes.arrayOf(PropTypes.string),
     files: PropTypes.arrayOf(PropTypes.string),
   }),
-  isModerator: PropTypes.bool,
   hasMoreCommunities: PropTypes.bool,
   loadMoreCommunities: PropTypes.func,
   enablePostTargetPicker: PropTypes.bool,
 };
 
-export default customizableComponent('PostCreatorBar', PostCreatorBar);
+export default withSDK(PostCreatorBar);

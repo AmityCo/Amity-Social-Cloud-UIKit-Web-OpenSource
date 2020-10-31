@@ -7,6 +7,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
 import CommunityName from '~/social/components/CommunityName';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
 import {
   Count,
   Container,
@@ -37,7 +38,7 @@ const UICommunityInfo = ({
 }) => (
   <Container>
     <Header>
-      <Avatar avatar={avatarFileUrl} size="big" />
+      <Avatar avatar={avatarFileUrl} size="big" backgroundImage={CommunityImage} />
       <ConditionalRender condition={isJoined}>
         <Options
           options={[

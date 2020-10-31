@@ -11,6 +11,8 @@ import {
   AddCommentButton,
 } from './styles';
 
+import { backgroundImage as UserImage } from '~/icons/User';
+
 const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) => {
   const [text, setText] = useState('');
   const { file } = useUser(currentUserId);
@@ -33,7 +35,7 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) 
 
   return (
     <CommentComposeBarContainer className={className}>
-      <Avatar avatar={file?.fileUrl} />
+      <Avatar avatar={file?.fileUrl} backgroundImage={UserImage} />
       <CommentComposeBarInput
         placeholder={placeholder}
         type="text"

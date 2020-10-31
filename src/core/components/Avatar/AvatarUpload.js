@@ -3,6 +3,9 @@ import { FileRepository } from 'eko-sdk';
 
 import { readFileAsync } from '~/helpers';
 import { FileInput, Label } from './styles';
+
+import { backgroundImage as UserImage } from '~/icons/User';
+
 import {
   Avatar,
   AvatarUploadContainer,
@@ -29,7 +32,7 @@ export const AvatarUpload = ({ disabled, setAvatarFileId, value }) => {
   return (
     <AvatarUploadContainer>
       <AvatarWrapper>
-        <Avatar size="big" avatar={avatar} showOverlay />
+        <Avatar size="big" avatar={avatar} backgroundImage={UserImage} showOverlay />
         <Label htmlFor="image-upload" disabled={disabled}>
           <CameraIcon />
         </Label>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
-
+import { backgroundImage as UserImage } from '~/icons/User';
 import Avatar from '~/core/components/Avatar';
 
 const UserHeaderContainer = styled.div`
@@ -39,7 +39,7 @@ const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick }) =
   const onClickUser = () => onClick(userId);
   return (
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
-      <UserHeaderAvatar avatar={avatarFileUrl} onClick={onClickUser} />
+      <UserHeaderAvatar avatar={avatarFileUrl} onClick={onClickUser} backgroundImage={UserImage} />
       <UserHeaderTitle title={userId} onClick={onClickUser}>
         {displayName}
       </UserHeaderTitle>

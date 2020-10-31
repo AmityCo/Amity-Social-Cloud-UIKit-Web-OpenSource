@@ -35,7 +35,7 @@ const CommunitySettings = ({ communityId, onMemberClick }) => {
   const openModal = () => setModalOpened(true);
   const closeModal = () => setModalOpened(false);
 
-  const { community: currentCommunity, updateCommunity } = useCommunity({ communityId });
+  const { community, file, updateCommunity } = useCommunity({ communityId });
 
   const handleSubmit = async data => {
     await updateCommunity(data);
@@ -49,10 +49,10 @@ const CommunitySettings = ({ communityId, onMemberClick }) => {
     <Container>
       <PageHeader>
         <AvatarContainer>
-          <Avatar avatar={currentCommunity.avatar} backgroundImage={CommunityImage} />
+          <Avatar avatar={file.fileUrl} backgroundImage={CommunityImage} />
         </AvatarContainer>
         <div>
-          <BackLink text={`Return to ${currentCommunity.displayName}`} />
+          <BackLink text={`Return to ${community.displayName}`} />
           <PageTitle>Community Settings</PageTitle>
         </div>
       </PageHeader>
@@ -71,7 +71,7 @@ const CommunitySettings = ({ communityId, onMemberClick }) => {
                 await handleSubmit(data);
               }}
               edit
-              community={currentCommunity}
+              community={community}
             />
             <CloseCommunityAction communityId={communityId} />
           </ActiveTabContent>
@@ -79,12 +79,12 @@ const CommunitySettings = ({ communityId, onMemberClick }) => {
 
         <ConditionalRender condition={activeTab === tabs.MEMBERS}>
           <ActiveTabContent>
-            <CommunityMembers community={currentCommunity} onMemberClick={onMemberClick} />
+            <CommunityMembers community={community} onMemberClick={onMemberClick} />
             <AddMemberAction action={openModal} />
             <ConditionalRender condition={isModalOpened}>
               <AddMemberModal
                 closeConfirm={closeModal}
-                community={currentCommunity}
+                community={community}
                 onSubmit={submitAddMembers}
               />
             </ConditionalRender>

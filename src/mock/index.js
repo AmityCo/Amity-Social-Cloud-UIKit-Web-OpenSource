@@ -501,8 +501,6 @@ const myCommunityIdsAtom = atom({
   default: ['c4', 'c5', 'c6'],
 });
 
-export const getUser = userId => testUsers.find(user => user.userId === userId);
-
 export const getCommunities = () => useRecoilValue(communitiesAtom);
 export const getCommunity = communityId =>
   getCommunities().find(community => community.communityId === communityId);

@@ -21,6 +21,8 @@ import useCommunity from '~/social/hooks/useCommunity';
 import withSDK from '~/core/hocs/withSDK';
 import customizableComponent from '~/core/hocs/customization';
 import PostChildren from './PostChildren';
+import { backgroundImage as UserImage } from '~/icons/User';
+
 import {
   PostContainer,
   PostHeader,
@@ -59,9 +61,7 @@ const Post = ({
   const closeEditingPostModal = () => setIsEditing(false);
   const expand = () => setIsExpanded(true);
 
-  const { post, user: postAuthor, handleReportPost, handleDeletePost, childrenPosts } = usePost(
-    postId,
-  );
+  const { post, user, file, handleReportPost, handleDeletePost, childrenPosts } = usePost(postId);
 
   const { targetId, targetType } = post;
   const { community } = useCommunity(targetId, [targetId]);
@@ -94,8 +94,8 @@ const Post = ({
 
   const handleAuthorNameClick = () => {
     onPostAuthorClick({
-      userId: postAuthor.userId,
-      communityId: postAuthor.communityId,
+      userId: user.userId,
+      communityId: user.communityId,
     });
   };
 
@@ -108,12 +108,12 @@ const Post = ({
       </ConditionalRender>
       <PostHeader>
         <PostAuthor>
-          <Avatar avatar={postAuthor.avatar} />
+          <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
           <PostInfo>
             <ConditionalRender condition={isCommunityPost}>
               <PostTitleContainer>
                 <AuthorName onClick={handleAuthorNameClick}>
-                  {postAuthor.displayName || DEFAULT_DISPLAY_NAME}
+                  {user.displayName || DEFAULT_DISPLAY_NAME}
                 </AuthorName>
                 <ArrowSeparatorContainer>
                   <ArrowSeparator />
@@ -121,7 +121,7 @@ const Post = ({
                 <PostCommunityName>{community?.displayName}</PostCommunityName>
               </PostTitleContainer>
               <AuthorName onClick={handleAuthorNameClick}>
-                {postAuthor.displayName || DEFAULT_DISPLAY_NAME}
+                {user.displayName || DEFAULT_DISPLAY_NAME}
               </AuthorName>
             </ConditionalRender>
             <AdditionalInfo>

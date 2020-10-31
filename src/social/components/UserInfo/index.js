@@ -8,8 +8,9 @@ import UIUserInfo from './UIUserInfo';
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const UserInfo = ({ userId, currentUserId, editProfile, goToChat }) => {
-  const { user } = useUser(userId);
-  const { avatarFileId, displayName, description } = user;
+  const { user, file } = useUser(userId);
+  const { displayName, description } = user;
+  const { fileUrl } = file;
 
   /* TODO: need method for getting posts amount for current user */
   const postsCount = 0;
@@ -19,7 +20,7 @@ const UserInfo = ({ userId, currentUserId, editProfile, goToChat }) => {
   return (
     <UIUserInfo
       userId={userId}
-      avatarFileId={avatarFileId}
+      fileUrl={fileUrl}
       displayName={displayName || DEFAULT_DISPLAY_NAME}
       description={description}
       postsCount={postsCount}

@@ -1,23 +1,12 @@
 import React, { useState } from 'react';
 
-import { isEmpty } from '~/helpers';
 import { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
-import { backgroundImage as CategoryImage } from '~/icons/Category';
 import useCategories from '~/social/hooks/useCategories';
-import useCategory from '~/social/hooks/useCategory';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
-import { Avatar, Selector, SelectorPopover, SelectorList, SelectIcon } from './styles';
+import CategoryHeader from '~/social/components/CategoryHeader';
 
-const Category = ({ category }) => (
-  <ConditionalRender condition={!isEmpty(category)}>
-    <>
-      <Avatar size="tiny" avatar={category.avatar} backgroundImage={CategoryImage} />
-      {` ${category.name}`}
-    </>
-  </ConditionalRender>
-);
+import { Selector, SelectorPopover, SelectorList, SelectIcon } from './styles';
 
 const CategorySelector = ({ value: categoryId, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,22 +14,19 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   const close = () => setIsOpen(false);
 
   const { categories } = useCategories();
-  const { currentCategory } = useCategory(categoryId);
-  const [selectedCategory, setSelectedCategory] = useState(currentCategory);
 
   const list = (
     <SelectorList>
       {/* TODO empty state */}
       {categories.map(category => (
         <MenuItem
-          key={category.id}
+          key={category.categoryId}
           onClick={() => {
-            setSelectedCategory(category);
+            onChange(category.categoryId);
             close();
-            onChange(category.id);
           }}
         >
-          <Category key={category.id} category={category} />
+          <CategoryHeader key={category.categoryId} categoryId={category.categoryId} />
         </MenuItem>
       ))}
     </SelectorList>
@@ -49,7 +35,7 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   return (
     <SelectorPopover isOpen={isOpen} onClickOutside={close} content={list} fixed>
       <Selector onClick={open}>
-        <Category category={selectedCategory} /> <SelectIcon />
+        <CategoryHeader categoryId={categoryId} /> <SelectIcon />
       </Selector>
     </SelectorPopover>
   );

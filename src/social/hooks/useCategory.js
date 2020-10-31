@@ -1,15 +1,14 @@
 import { CommunityRepository } from 'eko-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
+import useFile from '~/core/hooks/useFile';
 
 const useCategory = categoryId => {
-  const currentCategory = useLiveObject(() => CommunityRepository.categoryForId(categoryId), [
-    categoryId,
-  ]);
+  const category = useLiveObject(() => CommunityRepository.categoryForId(categoryId), [categoryId]);
 
-  return {
-    currentCategory,
-  };
+  const file = useFile(category.avatarFileId, [category.avatarFileId]);
+
+  return { category, file };
 };
 
 export default useCategory;

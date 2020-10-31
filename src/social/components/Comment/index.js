@@ -53,6 +53,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
     isCommentReady,
     comment,
     commentAuthor,
+    commentAuthorAvatar,
     commentReplies,
     handleReportComment,
     handleReplyToComment,
@@ -107,7 +108,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
             <StyledComment
               commentId={comment.commentId}
               authorName={commentAuthor.displayName || commentAuthor.userId || DEFAULT_DISPLAY_NAME}
-              authorAvatar={commentAuthor.avatar}
+              authorAvatar={commentAuthorAvatar.fileUrl}
               createdAt={comment.createdAt}
               updatedAt={comment.updatedAt}
               text={text}
@@ -132,7 +133,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
               <StyledComment
                 commentId={comment.commentId}
                 authorName={commentAuthor.displayName || DEFAULT_DISPLAY_NAME}
-                authorAvatar={commentAuthor.avatar}
+                authorAvatar={commentAuthorAvatar.fileUrl}
                 createdAt={comment.createdAt}
                 updatedAt={comment.updatedAt}
                 text={text}

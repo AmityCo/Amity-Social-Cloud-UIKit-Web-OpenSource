@@ -6,6 +6,7 @@ import Button, { PrimaryButton } from '~/core/components/Button';
 import CommentLikeButton from '~/social/components/CommentLikeButton';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import CommentText from './CommentText';
+import { backgroundImage as UserImage } from '~/icons/User';
 import {
   Avatar,
   Content,
@@ -65,7 +66,7 @@ const StyledComment = ({
 
   return (
     <>
-      <Avatar avatar={authorAvatar} />
+      <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
       <Content>
         <CommentHeader>
           <AuthorName>{authorName}</AuthorName>

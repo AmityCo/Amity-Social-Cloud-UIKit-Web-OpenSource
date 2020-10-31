@@ -1,16 +1,16 @@
-import { CommentRepository, UserRepository } from 'eko-sdk';
+import { CommentRepository } from 'eko-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-const userRepo = new UserRepository();
+import useUser from '~/core/hooks/useUser';
 
 const useComment = ({ commentId }) => {
   const comment = useLiveObject(() => CommentRepository.commentForId(commentId), [commentId]);
   const isCommentReady = !!comment.commentId;
   const { userId, referenceId, referenceType } = comment;
 
-  const commentAuthor = useLiveObject(() => userRepo.userForId(userId), [userId]);
+  const { user: commentAuthor, file: commentAuthorAvatar } = useUser(userId, [userId]);
 
   const [commentReplies, commentRepliesHasMore, commentRepliesLoadMore] = useLiveCollection(
     () =>
@@ -48,6 +48,7 @@ const useComment = ({ commentId }) => {
     isCommentReady,
     comment,
     commentAuthor,
+    commentAuthorAvatar,
     commentReplies,
     commentRepliesHasMore,
     commentRepliesLoadMore,

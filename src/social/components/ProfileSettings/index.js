@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
-import { getUser } from '~/helpers';
 import UserProfileForm from '~/social/components/UserProfileForm';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import BackLink from '~/core/components/BackLink';
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 import { backgroundImage as UserImage } from '~/icons/User';
+import useUser from '~/core/hooks/useUser';
+
 import {
   ProfileSettingsTabs,
   Container,
@@ -26,7 +27,7 @@ const tabs = {
 const ProfileSettings = ({ userId, client }) => {
   const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
 
-  const currentUser = getUser(userId);
+  const { user, file } = useUser(userId);
 
   const handleSubmit = async data => {
     const { displayName, description } = data;
@@ -38,10 +39,10 @@ const ProfileSettings = ({ userId, client }) => {
     <Container>
       <PageHeader>
         <AvatarContainer>
-          <Avatar avatar={currentUser.avatar} backgroundImage={UserImage} />
+          <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
         </AvatarContainer>
         <div>
-          <BackLink text={`Return to ${currentUser.displayName}`} />
+          <BackLink text={`Return to ${user.displayName}`} />
           <PageTitle>Profile Settings</PageTitle>
         </div>
       </PageHeader>
@@ -59,7 +60,7 @@ const ProfileSettings = ({ userId, client }) => {
               onSubmit={async data => {
                 await handleSubmit(data);
               }}
-              user={currentUser}
+              user={user}
             />
           </ActiveTabContent>
         </ConditionalRender>

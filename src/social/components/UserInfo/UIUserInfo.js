@@ -5,6 +5,8 @@ import { toHumanString } from 'human-readable-numbers';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Button from '~/core/components/Button';
 import customizableComponent from '~/core/hocs/customization';
+import { backgroundImage as UserImage } from '~/icons/User';
+
 import {
   Count,
   Avatar,
@@ -19,7 +21,7 @@ import {
 // TODO: react-intl
 const UIUserProfileBar = ({
   userId,
-  avatarFileId,
+  fileUrl,
   displayName,
   description,
   isMyProfile,
@@ -30,7 +32,7 @@ const UIUserProfileBar = ({
   return (
     <Container>
       <Header>
-        <Avatar avatar={avatarFileId} />
+        <Avatar avatar={fileUrl} backgroundImage={UserImage} />
       </Header>
       <ProfileName>{displayName}</ProfileName>
       <div>
@@ -51,7 +53,7 @@ const UIUserProfileBar = ({
 
 UIUserProfileBar.propTypes = {
   userId: PropTypes.string,
-  avatarFileId: PropTypes.string,
+  fileUrl: PropTypes.string,
   displayName: PropTypes.string,
   description: PropTypes.string,
   postsCount: PropTypes.number,
@@ -62,7 +64,7 @@ UIUserProfileBar.propTypes = {
 
 UIUserProfileBar.defaultProps = {
   userId: '',
-  avatarFileId: '',
+  fileUrl: '',
   displayName: '',
   description: '',
   postsCount: 0,
