@@ -67,6 +67,10 @@ const PostCreatorBar = ({
 
   const [target, setTarget] = useState({ targetType, targetId });
 
+  useEffect(() => {
+    setTarget({ targetType, targetId });
+  }, [targetType, targetId]);
+
   const fetcher = target.targetType === EkoPostTargetType.UserFeed ? userFetcher : communityFetcher;
   const model = useLiveObject(fetcher(target.targetId), [target.targetId]);
   const { avatarFileId } = model;

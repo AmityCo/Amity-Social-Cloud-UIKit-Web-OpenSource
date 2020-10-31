@@ -23,6 +23,10 @@ const ErrorMessageWrapper = styled.div`
 
 export const ErrorMessage = props => <FormErrorMessage as={ErrorMessageWrapper} {...props} />;
 
+export const InputPlaceholder = styled.span`
+  color: ${({ theme }) => theme.palette.base.shade1};
+`;
+
 export const WorldIcon = styled(FaIcon).attrs({ icon: faGlobeAfrica })`
   font-size: 20px;
 `;

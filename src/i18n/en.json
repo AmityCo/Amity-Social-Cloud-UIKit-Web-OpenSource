@@ -1,5 +1,6 @@
 {
   "hello": "Hello World",
   "plural.like": "{amount, plural, one {like} other {likes}}",
-  "plural.comment": "{amount, plural, one {comment} other {comments}}"
+  "plural.comment": "{amount, plural, one {comment} other {comments}}",
+  "selectACategory": "Select a category"
 }

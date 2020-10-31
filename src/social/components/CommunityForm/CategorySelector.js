@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
@@ -6,7 +7,7 @@ import useCategories from '~/social/hooks/useCategories';
 
 import CategoryHeader from '~/social/components/CategoryHeader';
 
-import { Selector, SelectorPopover, SelectorList, SelectIcon } from './styles';
+import { Selector, SelectorPopover, SelectorList, SelectIcon, InputPlaceholder } from './styles';
 
 const CategorySelector = ({ value: categoryId, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
       {categories.map(category => (
         <MenuItem
           key={category.categoryId}
+          active={categoryId === category.categoryId}
           onClick={() => {
             onChange(category.categoryId);
             close();
@@ -35,7 +37,14 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   return (
     <SelectorPopover isOpen={isOpen} onClickOutside={close} content={list} fixed>
       <Selector onClick={open}>
-        <CategoryHeader categoryId={categoryId} /> <SelectIcon />
+        {categoryId ? (
+          <CategoryHeader categoryId={categoryId} />
+        ) : (
+          <FormattedMessage id="selectACategory">
+            {placeholder => <InputPlaceholder>{placeholder}</InputPlaceholder>}
+          </FormattedMessage>
+        )}
+        <SelectIcon />
       </Selector>
     </SelectorPopover>
   );
