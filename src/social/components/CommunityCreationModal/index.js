@@ -17,6 +17,7 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
     tags,
     userIds,
     isPublic,
+    categoryIds,
   }) => {
     const community = await CommunityRepository.createCommunity({
       displayName,
@@ -25,6 +26,7 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
       tags,
       userIds,
       isPublic,
+      categoryIds,
     });
 
     return community;

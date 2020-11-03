@@ -14,7 +14,7 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
-  const { categories } = useCategories();
+  const { categories } = useCategories({ isDeleted: false });
 
   const list = (
     <SelectorList>

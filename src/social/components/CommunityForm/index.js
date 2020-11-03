@@ -84,18 +84,19 @@ const CommunityForm = ({
   className,
   onCancel,
 }) => {
-  const { register, handleSubmit, errors, setError, watch, control } = useForm({
-    defaultValues: edit
-      ? community
-      : {
-          avatarFileId: null,
-          description: '',
-          displayName: '',
-          isPublic: true,
-          tags: [],
-          userIds: [],
-        },
-  });
+  const defaultValues = {
+    avatarFileId: null,
+    description: '',
+    displayName: '',
+    isPublic: true,
+    tags: [],
+    userIds: [],
+    categoryId: community?.categoryIds[0] ?? '',
+
+    ...community, // if edit, community will erase the defaults
+  };
+
+  const { register, handleSubmit, errors, setError, watch, control } = useForm({ defaultValues });
 
   const [avatarFileId, setAvatarFileId] = useState(edit ? community.avatarFileId : '');
 
@@ -116,14 +117,17 @@ const CommunityForm = ({
       return;
     }
 
-    await onSubmit({
+    const payload = {
       displayName: data.displayName,
       description: data.description.length ? data.description : undefined,
       avatarFileId: null,
       tags: [],
       userIds: data.userIds,
       isPublic,
-    });
+      categoryIds: data?.categoryId?.length ? [data.categoryId] : undefined,
+    };
+
+    await onSubmit(payload);
   };
 
   if (edit && avatarFileId) {
@@ -175,7 +179,7 @@ const CommunityForm = ({
           <Field error={errors.category}>
             <Label htmlFor="category">Category</Label>
             <Controller
-              name="categories"
+              name="categoryId"
               render={CategorySelector}
               control={control}
               defaultValue={null}
