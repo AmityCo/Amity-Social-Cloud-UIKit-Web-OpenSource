@@ -14,7 +14,7 @@ export const UIStyles = styled.div`
   // CSS resets to avoid inheriting from other other libraries e.g. antd.
   & * {
     font-size: ${({ theme }) => theme.typography.body.fontSize};
-    line-height: normal;
+    line-height: 1.5;
   }
 
   & a {

@@ -3,20 +3,16 @@ import React from 'react';
 import isModerator from '~/helpers/permissions';
 import withSDK from '~/core/hocs/withSDK';
 
-import useCommunityWithAvatar from '~/social/hooks/useCommunityWithAvatar';
+import useCommunity from '~/social/hooks/useCommunity';
 
 import UICommunityInfo from './UICommunityInfo';
 
 import { confirm } from '~/core/components/Confirm';
 
 const CommunityInfo = ({ communityId, userRoles, onEditCommunityClick }) => {
-  const {
-    community,
-    communityCategories,
-    joinCommunity,
-    leaveCommunity,
-    file,
-  } = useCommunityWithAvatar(communityId);
+  const { community, communityCategories, joinCommunity, leaveCommunity, file } = useCommunity(
+    communityId,
+  );
   const { fileUrl } = file;
 
   // TODO: react-intl

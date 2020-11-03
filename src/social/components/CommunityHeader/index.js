@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import useCommunityWithAvatar from '~/social/hooks/useCommunityWithAvatar';
+import useCommunity from '~/social/hooks/useCommunity';
 
 import UICommunityHeader from './styles';
 
 const CommunityHeader = ({ communityId, onClick, isActive, isSearchResult, searchInput }) => {
-  const { file } = useCommunityWithAvatar(communityId);
+  const { file } = useCommunity(communityId);
   const { fileUrl } = file;
 
   return (
