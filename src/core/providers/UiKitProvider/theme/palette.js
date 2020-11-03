@@ -42,21 +42,23 @@ export const COLOR_SHADES = [0.25, 0.4, 0.5, 0.75];
  * @param {Object} mergedPaletteTheme
  */
 export const buildPaletteTheme = mergedPaletteTheme => {
+  const { system, ...otherColors } = mergedPaletteTheme;
+
   // Create a color theme object that uses hsl string values.
-  const hslColorTheme = Object.keys(mergedPaletteTheme).reduce(
+  const hslColorTheme = Object.keys(otherColors).reduce(
     (acc, colorKey) => {
       acc[colorKey] = {
-        main: hexToHslString(mergedPaletteTheme[colorKey]),
+        main: hexToHslString(otherColors[colorKey]),
       };
       return acc;
     },
-    { ...mergedPaletteTheme },
+    { ...otherColors },
   );
 
   // Add color shade variations to each color type.
   const colorThemeExtended = Object.keys(hslColorTheme).reduce(
     (acc, colorKey) => {
-      const currentHexColor = mergedPaletteTheme[colorKey];
+      const currentHexColor = otherColors[colorKey];
       COLOR_SHADES.forEach((shade, index) => {
         acc[colorKey][`shade${index + 1}`] = lightenHex(shade, currentHexColor);
       });
@@ -65,5 +67,5 @@ export const buildPaletteTheme = mergedPaletteTheme => {
     { ...hslColorTheme },
   );
 
-  return colorThemeExtended;
+  return { ...colorThemeExtended, system };
 };
