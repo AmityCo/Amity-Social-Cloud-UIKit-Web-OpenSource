@@ -4,5 +4,5 @@
   "plural.comment": "{amount, plural, one {comment} other {comments}}",
   "plural.member": "{amount, plural, one {member} other {members}}",
   "selectACategory": "Select a category",
-  "recommendedList": "Recommended for you"
+  "todaysTrendingTitle": "Today's Trending"
 }
