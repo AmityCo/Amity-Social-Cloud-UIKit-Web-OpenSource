@@ -5,7 +5,7 @@ import useCommunity from '~/social/hooks/useCommunity';
 
 import UICommunityCard from './styles';
 
-const CommunityCard = ({ communityId, onClick }) => {
+const CommunityCard = ({ communityId, onClick, ...props }) => {
   const { community, file, communityCategories } = useCommunity(communityId);
   const { fileUrl } = file;
 
@@ -19,6 +19,7 @@ const CommunityCard = ({ communityId, onClick }) => {
       membersCount={membersCount}
       description={description}
       onClick={onClick}
+      {...props}
     />
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+
 import ConditionalRender from '~/core/components/ConditionalRender';
 
 const Container = styled.div`
@@ -20,10 +21,10 @@ const Body = styled.section`
   ${({ stretched }) => !stretched && `padding: 1.25em;`}
 `;
 
-const Card = ({ title, stretched, children }) => {
+const Card = ({ title, stretched, children, ...props }) => {
   return (
-    <Container>
-      <ConditionalRender condition={!!title && !!title.length}>
+    <Container {...props}>
+      <ConditionalRender condition={!!title}>
         <Title>{title}</Title>
       </ConditionalRender>
 
@@ -33,13 +34,13 @@ const Card = ({ title, stretched, children }) => {
 };
 
 Card.defaultProps = {
-  title: '',
+  title: null,
   stretched: false,
   children: [],
 };
 
 Card.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.node,
   stretched: PropTypes.bool,
   children: PropTypes.node,
 };

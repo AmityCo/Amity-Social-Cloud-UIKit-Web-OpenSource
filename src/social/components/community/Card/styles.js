@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
+import Card from '~/core/components/Card';
 import customizableComponent from '~/core/hocs/customization';
 
 import Avatar from '~/core/components/Avatar';
@@ -14,14 +15,9 @@ import CommunityName from '~/social/components/CommunityName';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 
-// TODO: Replace with Card component (no title) after merge of UKT-1098
-const Container = styled.div`
+const Container = styled(Card)`
   width: 10rem;
   height: 12rem;
-  padding: 1.25rem;
-  background: #fff;
-  border: 1px solid #ebecef;
-  border-radius: 4px;
   cursor: pointer;
 `;
 
@@ -66,11 +62,12 @@ const UICommunityCard = ({
   membersCount,
   description,
   onClick,
+  ...props
 }) => {
   const handleClick = () => onClick(communityId);
 
   return (
-    <Container onClick={handleClick}>
+    <Container onClick={handleClick} {...props}>
       <StyledAvatar avatar={avatarFileUrl} backgroundImage={CommunityImage} />
 
       <CommunityName key={communityId} communityId={communityId} isTitle />

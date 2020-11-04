@@ -3,5 +3,6 @@
   "plural.like": "{amount, plural, one {like} other {likes}}",
   "plural.comment": "{amount, plural, one {comment} other {comments}}",
   "plural.member": "{amount, plural, one {member} other {members}}",
-  "selectACategory": "Select a category"
+  "selectACategory": "Select a category",
+  "recommendedList": "Recommended for you"
 }
