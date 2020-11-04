@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { EkoLoadingStatus } from 'eko-sdk';
 
 const noop = () => {
-  if (process.env.NODE_ENV === 'development') console.warn('[useLiveCollection] noop hit');
+  if (process?.env?.NODE_ENV === 'development') console.warn('[useLiveCollection] noop hit');
 };
 
 const useLiveCollection = (

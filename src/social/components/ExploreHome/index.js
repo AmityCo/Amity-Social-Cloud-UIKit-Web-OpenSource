@@ -37,7 +37,7 @@ const ExploreHome = ({
 }) => {
   const communities = getCommunities();
 
-  const { categories } = useCategories();
+  const [categories] = useCategories();
 
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const openCategoryModal = () => setShowCategoryModal(true);

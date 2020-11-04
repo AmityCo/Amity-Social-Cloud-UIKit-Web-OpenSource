@@ -3,16 +3,12 @@ import { CommunityRepository } from 'eko-sdk';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 const useCategories = query => {
-  const [categories, categoriesHasMore, categoriesLoadMore] = useLiveCollection(
+  const [categories, hasMore, loadMore] = useLiveCollection(
     () => CommunityRepository.queryCategories(query),
     [],
   );
 
-  return {
-    categories,
-    categoriesHasMore,
-    categoriesLoadMore,
-  };
+  return [categories, hasMore, loadMore];
 };
 
 export default useCategories;

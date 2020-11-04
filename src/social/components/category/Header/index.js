@@ -5,11 +5,12 @@ import useCategory from '~/social/hooks/useCategory';
 
 import UICategoryHeader from './styles';
 
-const CategoryHeader = ({ categoryId, children, onClick }) => {
+const CategoryHeader = ({ className, categoryId, children, onClick }) => {
   const { category, file } = useCategory(categoryId);
 
   return (
     <UICategoryHeader
+      className={className}
       categoryId={category.categoryId}
       name={category.name}
       avatarFileUrl={file.fileUrl}
@@ -21,6 +22,7 @@ const CategoryHeader = ({ categoryId, children, onClick }) => {
 };
 
 CategoryHeader.propTypes = {
+  className: PropTypes.string,
   categoryId: PropTypes.string.isRequired,
   children: PropTypes.node,
   onClick: PropTypes.func,
@@ -28,7 +30,6 @@ CategoryHeader.propTypes = {
 
 CategoryHeader.defaultProps = {
   children: null,
-  onClick: () => {},
 };
 
 export default CategoryHeader;

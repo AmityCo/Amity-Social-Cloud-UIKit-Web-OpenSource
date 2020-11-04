@@ -24,3 +24,5 @@ export { default as RarFile } from './files/Rar';
 export { default as TxtFile } from './files/Txt';
 export { default as XlsFile } from './files/Xls';
 export { default as ZipFile } from './files/Zip';
+
+export { default as ChevronDown } from './ChevronDown';

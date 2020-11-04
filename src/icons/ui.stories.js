@@ -10,6 +10,8 @@ export const Community = () => <Icons.Community />;
 export const User = () => <Icons.User />;
 export const EmptyFeed = () => <Icons.EmptyFeed />;
 
+export const ChevronDown = () => <Icons.ChevronDown />;
+
 export const Files = () => (
   <div
     style={{

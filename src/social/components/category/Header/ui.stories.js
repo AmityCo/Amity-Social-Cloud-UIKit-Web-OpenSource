@@ -6,7 +6,11 @@ export default {
   title: 'Ui Only/Social/Category',
 };
 
-export const UiCategoryHeader = props => <StyledCategoryHeader {...props} />;
+export const UiCategoryHeader = props => {
+  const { clickable, ...args } = props;
+  if (!clickable) delete args.onClick;
+  return <StyledCategoryHeader {...args} />;
+};
 
 UiCategoryHeader.storyName = 'Header';
 
@@ -14,6 +18,7 @@ UiCategoryHeader.args = {
   categoryId: 'Web-Test',
   name: 'Web-Test',
   avatarFileUrl: 'https://via.placeholder.com/32/dfdfdf?text=foobar',
+  clickable: false,
   children: 'children slot',
 };
 
@@ -21,6 +26,7 @@ UiCategoryHeader.argTypes = {
   categoryId: { control: { type: 'text' } },
   name: { control: { type: 'text' } },
   avatarFileUrl: { control: { type: 'text' } },
+  clickable: { control: { type: 'boolean' } },
   children: { control: { type: 'text' } },
   onClick: { action: 'onClick()' },
 };

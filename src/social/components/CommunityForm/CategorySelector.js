@@ -5,7 +5,7 @@ import { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
 import useCategories from '~/social/hooks/useCategories';
 
-import CategoryHeader from '~/social/components/CategoryHeader';
+import CategoryHeader from '~/social/components/category/Header';
 
 import { Selector, SelectorPopover, SelectorList, SelectIcon, InputPlaceholder } from './styles';
 
@@ -14,7 +14,7 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
-  const { categories } = useCategories({ isDeleted: false });
+  const [categories] = useCategories({ isDeleted: false });
 
   const list = (
     <SelectorList>

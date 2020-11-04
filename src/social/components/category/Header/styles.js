@@ -10,7 +10,7 @@ import { backgroundImage as CategoryImage } from '~/icons/Category';
 const CategoryHeaderContainer = styled.div`
   display: grid;
   grid-template-areas: 'avatar title' 'avatar subtitle';
-  grid-template-columns: min-content auto;
+  grid-template-columns: min-content max-content;
   grid-template-rows: min-content min-content;
   grid-gap: 0 0.5em;
   padding: 1em;
@@ -20,6 +20,17 @@ const CategoryHeaderContainer = styled.div`
       grid-template-areas: 'avatar title';
       align-items: center;
     `}
+
+  ${({ theme, clickable }) =>
+    clickable &&
+    `
+    padding: .5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    &:hover {
+      background: ${theme.palette.base.shade4};
+    }`}
 `;
 
 const CategoryHeaderAvatar = styled(Avatar)`
@@ -36,24 +47,27 @@ const CategoryHeaderSubtitle = styled.div`
   ${({ theme }) => theme.typography.body}
 `;
 
-const CategoryHeader = ({ categoryId, name, avatarFileUrl, children, onClick }) => {
-  const onClickCategory = () => onClick(categoryId);
+const CategoryHeader = ({ className, categoryId, name, avatarFileUrl, children, onClick }) => {
+  const handleClick = () => onClick(categoryId);
+  const blockClick = e => e.stopPropagation();
+
   return (
-    <CategoryHeaderContainer title={name} hasNoChildren={!children}>
-      <CategoryHeaderAvatar
-        avatar={avatarFileUrl}
-        backgroundImage={CategoryImage}
-        onClick={onClickCategory}
-      />
-      <CategoryHeaderTitle title={categoryId} onClick={onClickCategory}>
-        {name}
-      </CategoryHeaderTitle>
-      {children && <CategoryHeaderSubtitle>{children}</CategoryHeaderSubtitle>}
+    <CategoryHeaderContainer
+      className={className}
+      title={name}
+      hasNoChildren={!children}
+      clickable={!!onClick}
+      onClick={handleClick}
+    >
+      <CategoryHeaderAvatar avatar={avatarFileUrl} backgroundImage={CategoryImage} />
+      <CategoryHeaderTitle title={categoryId}>{name}</CategoryHeaderTitle>
+      {children && <CategoryHeaderSubtitle onClick={blockClick}>{children}</CategoryHeaderSubtitle>}
     </CategoryHeaderContainer>
   );
 };
 
 CategoryHeader.propTypes = {
+  className: PropTypes.string,
   categoryId: PropTypes.string,
   name: PropTypes.string,
   avatarFileUrl: PropTypes.string,
