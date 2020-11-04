@@ -1,9 +1,12 @@
+// svg
 export { default as Category } from './Category';
 export { default as Community } from './Community';
 export { default as User } from './User';
 export { default as ArrowRight } from './ArrowRight';
 export { default as EmptyFeed } from './EmptyFeed';
+export { default as ChevronDown } from './ChevronDown';
 
+// files
 export { default as AudioFile } from './files/Audio';
 export { default as AviFile } from './files/Avi';
 export { default as CsvFile } from './files/Csv';
@@ -25,4 +28,11 @@ export { default as TxtFile } from './files/Txt';
 export { default as XlsFile } from './files/Xls';
 export { default as ZipFile } from './files/Zip';
 
-export { default as ChevronDown } from './ChevronDown';
+// illustrations
+export { default as Sky } from './Sky';
+export { default as Balloon } from './Balloon';
+export { default as Dots } from './Dots';
+
+// fontawesome
+export { default as Plus } from './Plus';
+export { default as Remove } from './Remove';

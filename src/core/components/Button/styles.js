@@ -14,6 +14,9 @@ const commonButtonStyles = ({ theme }) => css`
   &:disabled {
     cursor: default;
   }
+  & > :not(:first-child) {
+    margin-left: 0.5rem;
+  }
 `;
 
 export const DefaultButton = styled.button`

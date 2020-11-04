@@ -11,6 +11,12 @@ export const User = () => <Icons.User />;
 export const EmptyFeed = () => <Icons.EmptyFeed />;
 
 export const ChevronDown = () => <Icons.ChevronDown />;
+export const Sky = () => <Icons.Sky />;
+export const Balloon = () => <Icons.Balloon />;
+export const Dots = () => <Icons.Dots />;
+
+export const Plus = () => <Icons.Plus />;
+export const Remove = () => <Icons.Remove />;
 
 export const Files = () => (
   <div

@@ -20,8 +20,6 @@ export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
 
 export const CommunitiesSearchContainer = styled.div`
   position: relative;
-  padding: 0.5rem;
-  background: #fff;
 
   ${({ sticky }) =>
     sticky &&

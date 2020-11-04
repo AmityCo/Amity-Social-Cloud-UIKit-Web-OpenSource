@@ -9,7 +9,7 @@ const global = {
     defaultValue: 'none',
     toolbar: {
       icon: 'component',
-      items: ['none', 'fullscreen', 'boundingbox', 'stretching', 'textflow'],
+      items: ['none', 'fullscreen', 'framed', 'boundingbox', 'stretching', 'textflow'],
     },
   },
 };
@@ -22,6 +22,12 @@ const FullScreen = (props) => (<div style={{
   top: 0,
   width: '100vw',
   height: '100vh',
+  overflow: 'auto',
+}} {...props} />)
+
+const Framed = (props) => (<div style={{
+  width: '75vw',
+  height: '75vh',
   overflow: 'auto',
 }} {...props} />)
 
@@ -90,6 +96,7 @@ const Flow = ({ children }) => (<div>
 
 const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
   if (val === 'fullscreen') return <FullScreen><Story /></FullScreen>
+  else if (val === 'framed') return <Framed><Story /></Framed>
   else if (val === 'boundingbox') return <Cell top right bottom left><Story /></Cell>
   else if (val === 'stretching') return <Grid><Story /></Grid>
   else if (val === 'textflow') return <Flow><Story /></Flow>

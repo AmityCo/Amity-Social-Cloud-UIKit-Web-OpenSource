@@ -6,5 +6,10 @@
   "selectACategory": "Select a category",
   "todaysTrendingTitle": "Today's Trending",
   "loadMore": "Load More",
-  "categoryList": "Categories"
+  "categoryList": "Categories",
+  "recommendedList": "Recommended for you",
+  "exploreHeader.searchCommunityTitle": "Explore communities",
+  "exploreHeader.searchCommunityPlaceholder": "Search communities...",
+  "exploreHeader.createCommunityTitle": "or create your own one!",
+  "exploreHeader.createCommunityButton": "Create community"
 }
