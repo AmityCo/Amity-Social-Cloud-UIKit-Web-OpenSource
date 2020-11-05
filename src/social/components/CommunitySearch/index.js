@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import Popover from '~/core/components/Popover';
 import customizableComponent from '~/core/hocs/customization';
@@ -23,13 +24,7 @@ const Menu = ({ search, handleSearchResultClick, popoverMenuClassName }) => {
   );
 };
 
-const CommunitySearch = ({
-  className,
-  onSearchResultCommunityClick,
-  popoverMenuClassName,
-  placeholder,
-  sticky = false,
-}) => {
+const CommunitySearch = ({ className, onClickCommunity, popoverMenuClassName, sticky = false }) => {
   const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(true);
   const open = () => setIsOpen(true);
@@ -40,7 +35,7 @@ const CommunitySearch = ({
   }, [search]);
 
   const handleSearchResultClick = communityId => {
-    onSearchResultCommunityClick(communityId);
+    onClickCommunity(communityId);
     setSearch('');
     close();
   };
@@ -62,12 +57,17 @@ const CommunitySearch = ({
       }
     >
       <CommunitiesSearchContainer className={className} sticky={sticky}>
-        <CommunitiesSearchInput
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          type="text"
-          placeholder={placeholder}
-        />
+        <FormattedMessage id="exploreHeader.searchCommunityPlaceholder">
+          {([placeholder]) => (
+            <CommunitiesSearchInput
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              type="text"
+              placeholder={placeholder}
+            />
+          )}
+        </FormattedMessage>
+
         <SearchIcon />
       </CommunitiesSearchContainer>
     </Popover>
@@ -76,15 +76,13 @@ const CommunitySearch = ({
 
 CommunitySearch.propTypes = {
   className: PropTypes.string,
-  onSearchResultCommunityClick: PropTypes.func.isRequired,
+  onClickCommunity: PropTypes.func,
   popoverMenuClassName: PropTypes.string,
-  placeholder: PropTypes.string,
   sticky: PropTypes.bool,
 };
 
 CommunitySearch.defaultProps = {
   popoverMenuClassName: null,
-  placeholder: '',
   sticky: false,
 };
 

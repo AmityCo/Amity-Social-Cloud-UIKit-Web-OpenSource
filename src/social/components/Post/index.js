@@ -52,7 +52,7 @@ const Post = ({
   currentUserId,
   userRoles,
   noInteractionMessage = null,
-  onPostAuthorClick = () => {},
+  onClickUser = () => {},
   className = '',
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -93,10 +93,7 @@ const Post = ({
   ];
 
   const handleAuthorNameClick = () => {
-    onPostAuthorClick({
-      userId: user.userId,
-      communityId: user.communityId,
-    });
+    onClickUser(user.userId);
   };
 
   return (
@@ -169,7 +166,7 @@ const Post = ({
 Post.propTypes = {
   postId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string,
-  onPostAuthorClick: PropTypes.func,
+  onClickUser: PropTypes.func,
   className: PropTypes.string,
   userRoles: PropTypes.arrayOf(PropTypes.string),
   noInteractionMessage: PropTypes.string,

@@ -6,6 +6,10 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKRecommendedList = () => <UiKitRecommendedCommunitiesList />;
+export const SDKRecommendedList = props => <UiKitRecommendedCommunitiesList {...props} />;
 
 SDKRecommendedList.storyName = 'Recommended list';
+
+SDKRecommendedList.argTypes = {
+  onClickCommunity: { action: 'onClickCommunity(communityId)' },
+};

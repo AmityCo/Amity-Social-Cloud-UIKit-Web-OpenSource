@@ -6,11 +6,11 @@ import { EkoPostTargetType } from 'eko-sdk';
 import useCommunity from '~/social/hooks/useCommunity';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
+import FeedLayout from '~/social/layouts/Feed';
 
 import Feed from '~/social/components/Feed';
 import CommunityInfo from '~/social/components/CommunityInfo';
 import CommunityMembers from '~/social/components/CommunityMembers';
-import ProfilePageLayout from '~/social/components/ProfilePageLayout';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 
 // TODO replace with translations keys
@@ -20,49 +20,40 @@ const tabs = {
   MEMBERS: 'Members',
 };
 
-const CommunityProfilePage = ({
-  communityId,
-  onPostAuthorClick,
-  onMemberClick,
-  onEditCommunityClick,
-  blockRouteChange,
-}) => {
+const CommunityFeed = ({ communityId, onClickUser }) => {
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
+
   const { community } = useCommunity(communityId);
-  const isCommunityJoined = !!community?.isJoined;
+  const isJoined = !!community?.isJoined;
 
   return (
-    <ProfilePageLayout
-      profileInfo={
-        <CommunityInfo communityId={communityId} onEditCommunityClick={onEditCommunityClick} />
-      }
-    >
+    <FeedLayout aside={<CommunityInfo communityId={communityId} />}>
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+
       <ConditionalRender condition={activeTab === tabs.TIMELINE}>
         <Feed
           targetType={EkoPostTargetType.CommunityFeed}
           targetId={communityId}
-          blockRouteChange={blockRouteChange}
-          showPostCreator={isCommunityJoined}
-          noPostInteractionMessage={
-            isCommunityJoined ? null : 'Join community to interact with all posts'
-          }
-          onPostAuthorClick={onPostAuthorClick}
+          showPostCreator={isJoined}
+          noPostInteractionMessage={isJoined ? null : 'Join community to interact with all posts'}
+          onClickUser={onClickUser}
         />
       </ConditionalRender>
+
       <ConditionalRender condition={activeTab === tabs.MEMBERS}>
-        <CommunityMembers communityId={communityId} onMemberClick={onMemberClick} />
+        <CommunityMembers communityId={communityId} onClickUser={onClickUser} />
       </ConditionalRender>
-    </ProfilePageLayout>
+    </FeedLayout>
   );
 };
 
-CommunityProfilePage.propTypes = {
+CommunityFeed.propTypes = {
   communityId: PropTypes.string.isRequired,
-  onPostAuthorClick: PropTypes.func,
-  onMemberClick: PropTypes.func,
-  onEditCommunityClick: PropTypes.func,
-  blockRouteChange: PropTypes.func,
+  onClickUser: PropTypes.func,
 };
 
-export default CommunityProfilePage;
+CommunityFeed.defaultProps = {
+  onClickUser: () => {},
+};
+
+export default CommunityFeed;

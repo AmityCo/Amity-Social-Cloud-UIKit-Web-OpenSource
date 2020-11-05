@@ -26,8 +26,8 @@ const UIUserProfileBar = ({
   description,
   isMyProfile,
   postsCount,
-  editProfile,
-  goToChat,
+  onEditUser,
+  onMessageUser,
 }) => {
   return (
     <Container>
@@ -40,10 +40,10 @@ const UIUserProfileBar = ({
       </div>
       <Description>{description}</Description>
       <ConditionalRender condition={isMyProfile}>
-        <Button fullWidth onClick={() => editProfile(userId)}>
+        <Button fullWidth onClick={() => onEditUser(userId)}>
           <PencilIcon /> Edit profile
         </Button>
-        <Button fullWidth onClick={() => goToChat(userId)}>
+        <Button fullWidth onClick={() => onMessageUser(userId)}>
           <MessageIcon /> Message
         </Button>
       </ConditionalRender>
@@ -58,8 +58,8 @@ UIUserProfileBar.propTypes = {
   description: PropTypes.string,
   postsCount: PropTypes.number,
   isMyProfile: PropTypes.bool,
-  editProfile: PropTypes.func,
-  goToChat: PropTypes.func,
+  onEditUser: PropTypes.func,
+  onMessageUser: PropTypes.func,
 };
 
 UIUserProfileBar.defaultProps = {
@@ -69,8 +69,8 @@ UIUserProfileBar.defaultProps = {
   description: '',
   postsCount: 0,
   isMyProfile: false,
-  editProfile: () => {},
-  goToChat: () => {},
+  onEditUser: () => {},
+  onMessageUser: () => {},
 };
 
 export default customizableComponent('UIUserProfileBar', UIUserProfileBar);

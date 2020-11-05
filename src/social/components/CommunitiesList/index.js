@@ -4,10 +4,10 @@ import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import UICommunitiesList from './UICommunitiesList';
 
 const CommunitiesList = ({
+  className,
   communitiesQueryParam,
   onClickCommunity,
-  getIsCommunityActive,
-  className,
+  activeCommunity,
 }) => {
   const [communities, hasMore, loadMore] = useCommunitiesList(communitiesQueryParam);
 
@@ -25,7 +25,7 @@ const CommunitiesList = ({
       communityIds={communityIds}
       loadMore={loadMore}
       hasMore={hasMore}
-      getIsCommunityActive={getIsCommunityActive}
+      activeCommunity={activeCommunity}
       onClickCommunity={onClickCommunity}
       isSearchList={isSearchList}
       searchInput={searchInput}
@@ -35,18 +35,17 @@ const CommunitiesList = ({
 };
 
 CommunitiesList.propTypes = {
-  // This prop shape should match the parameters to the SDK's queryCommunities function.
-  communitiesQueryParam: PropTypes.object,
-  onClickCommunity: PropTypes.func,
-  getIsCommunityActive: PropTypes.func,
   className: PropTypes.string,
+  communitiesQueryParam: PropTypes.object,
+  activeCommunity: PropTypes.string,
+  onClickCommunity: PropTypes.func,
 };
 
 CommunitiesList.defaultProps = {
-  communitiesQueryParam: {},
-  onClickCommunity: () => {},
-  getIsCommunityActive: () => false,
   className: null,
+  communitiesQueryParam: {},
+  activeCommunity: '',
+  onClickCommunity: () => {},
 };
 
 export { UICommunitiesList };

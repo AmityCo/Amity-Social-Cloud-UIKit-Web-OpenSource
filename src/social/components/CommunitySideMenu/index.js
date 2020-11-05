@@ -13,57 +13,52 @@ const CommunitySearch = styled(UiKitCommunitySearch)`
 
 const CommunitySideMenu = ({
   onClickNewsFeed,
-  onClickExplore,
   newsFeedActive,
+
+  onClickExplore,
   exploreActive,
-  onClickCreateCommunity,
-  showCreateCommunityButton,
+
   onClickCommunity,
-  getIsCommunityActive,
-  myCommunitySectionClassName,
-  onSearchResultCommunityClick,
-  searchInputPlaceholder,
-  searchInputClassName,
-  shouldHideExplore,
+  onCommunityCreated,
+  activeCommunity,
 }) => (
   <SideMenu>
-    <CommunitySearch
-      onSearchResultCommunityClick={onSearchResultCommunityClick}
-      className={searchInputClassName}
-      placeholder={searchInputPlaceholder}
-      sticky
-    />
+    <CommunitySearch onClickCommunity={onClickCommunity} sticky />
+
     <SideSectionCommunity
-      onClickNewsFeed={onClickNewsFeed}
-      onClickExplore={onClickExplore}
       newsFeedActive={newsFeedActive}
+      onClickNewsFeed={onClickNewsFeed}
       exploreActive={exploreActive}
-      shouldHideExplore={shouldHideExplore}
+      onClickExplore={onClickExplore}
     />
+
     <SideSectionMyCommunity
-      onClickCreate={onClickCreateCommunity}
-      showCreateButton={showCreateCommunityButton}
+      onClickCreate={onCommunityCreated}
       onClickCommunity={onClickCommunity}
-      getIsCommunityActive={getIsCommunityActive}
-      className={myCommunitySectionClassName}
+      activeCommunity={activeCommunity}
+      showCreateButton
     />
   </SideMenu>
 );
 
 CommunitySideMenu.propTypes = {
   onClickNewsFeed: PropTypes.func,
-  onClickExplore: PropTypes.func,
   newsFeedActive: PropTypes.bool,
+
+  onClickExplore: PropTypes.func,
   exploreActive: PropTypes.bool,
-  onClickCreateCommunity: PropTypes.func,
-  showCreateCommunityButton: PropTypes.bool,
+
+  activeCommunity: PropTypes.string,
+
   onClickCommunity: PropTypes.func,
-  getIsCommunityActive: PropTypes.func,
-  myCommunitySectionClassName: PropTypes.string,
-  onSearchResultCommunityClick: PropTypes.func,
-  searchInputPlaceholder: PropTypes.string,
-  searchInputClassName: PropTypes.string,
-  shouldHideExplore: PropTypes.bool,
+  onCommunityCreated: PropTypes.func,
+};
+
+CommunitySideMenu.defaultProps = {
+  onClickNewsFeed: () => {},
+  onClickExplore: () => {},
+  onClickCommunity: () => {},
+  onCommunityCreated: () => {},
 };
 
 export default CommunitySideMenu;

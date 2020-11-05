@@ -11,17 +11,13 @@ export const SDKCommunitySideMenu = ({ ...args }) => <UiKitCommunitySideMenu {..
 SDKCommunitySideMenu.storyName = 'Side menu';
 
 SDKCommunitySideMenu.args = {
-  newsFeedActive: false,
   exploreActive: false,
-  showCreateCommunityButton: true,
-  searchInputPlaceholder: 'Search',
-  shouldHideExplore: false,
+  newsFeedActive: false,
 };
 
 SDKCommunitySideMenu.argTypes = {
-  onClickCreateCommunity: { action: 'onClickCreateCommunity()' },
-  onClickCommunity: { action: 'onClickCommunity()' },
-  onClickNewsFeed: { action: 'onClickNewsFeed()' },
   onClickExplore: { action: 'onClickExplore()' },
-  onSearchResultCommunityClick: { action: 'onSearchResultCommunityClick()' },
+  onClickNewsFeed: { action: 'onClickNewsFeed()' },
+  onClickCommunity: { action: 'onClickCommunity(communityId)' },
+  onCommunityCreated: { action: 'onCommunityCreated(communityId)' },
 };

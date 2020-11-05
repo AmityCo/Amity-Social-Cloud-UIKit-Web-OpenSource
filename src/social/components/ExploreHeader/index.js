@@ -87,14 +87,7 @@ const Header = ({ onClickCommunity, onCommunityCreated }) => {
           <Headline>
             <FormattedMessage id="exploreHeader.searchCommunityTitle" />
           </Headline>
-          <FormattedMessage id="exploreHeader.searchCommunityPlaceholder">
-            {([placeholder]) => (
-              <UiKitCommunitySearch
-                placeholder={placeholder}
-                onSearchResultCommunityClick={onClickCommunity}
-              />
-            )}
-          </FormattedMessage>
+          <UiKitCommunitySearch onClickCommunity={onClickCommunity} />
         </Search>
         <Create>
           <Title>

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
 
-const LayoutContainer = styled.div`
+const Container = styled.div`
   overflow: hidden;
   display: grid;
   grid-template-areas: 'side main' 'none main';
@@ -14,11 +14,6 @@ const LayoutContainer = styled.div`
   height: 100%;
   padding: 0 20px 0 0;
   background: #f7f7f8;
-
-  & .sidebar {
-    grid-area: side;
-    overflow: auto;
-  }
 `;
 
 const Main = styled.div`
@@ -30,15 +25,18 @@ const Main = styled.div`
   margin: 0 auto;
 `;
 
-const FeedLayout = ({ sideMenu, children }) => {
-  const Sidebar = React.cloneElement(sideMenu, { className: 'sidebar' });
+const Side = styled.div`
+  grid-area: side;
+  overflow: auto;
+`;
 
+const Layout = ({ aside, children }) => {
   return (
-    <LayoutContainer>
-      {Sidebar}
+    <Container>
       <Main>{children}</Main>
-    </LayoutContainer>
+      <Side>{aside}</Side>
+    </Container>
   );
 };
 
-export default customizableComponent('FeedLayout', FeedLayout);
+export default customizableComponent('Layout', Layout);

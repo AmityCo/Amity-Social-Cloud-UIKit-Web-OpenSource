@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
 
@@ -15,7 +16,7 @@ const CommunityCard = styled(UiKitCommunityCard)`
   }
 `;
 
-const RecommendedList = ({ onClick }) => {
+const RecommendedList = ({ onClickCommunity }) => {
   const Title = <FormattedMessage id="recommendedList" />;
 
   const [communities] = useRecommendedCommunitiesList();
@@ -24,11 +25,15 @@ const RecommendedList = ({ onClick }) => {
     <Card title={Title}>
       <HorizontalList>
         {communities.map(({ communityId }) => (
-          <CommunityCard key={communityId} communityId={communityId} onClick={onClick} />
+          <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
         ))}
       </HorizontalList>
     </Card>
   );
+};
+
+RecommendedList.propTypes = {
+  onClickCommunity: PropTypes.func,
 };
 
 export default RecommendedList;

@@ -16,22 +16,22 @@ const PageContainer = styled.div`
 const ExplorePage = ({ onClickCommunity, onCommunityCreated, onClickCategory }) => (
   <PageContainer>
     <ExploreHeader onClickCommunity={onClickCommunity} onCommunityCreated={onCommunityCreated} />
-    <RecommendedList onClick={onClickCommunity} />
+    <RecommendedList onClickCommunity={onClickCommunity} />
     <TrendingList onClickCommunity={onClickCommunity} />
     <CategoriesCard onClick={onClickCategory} />
   </PageContainer>
 );
 
-ExplorePage.defaultProps = {
-  onClickCommunity: () => {},
-  onCommunityCreated: () => {},
-  onClickCategory: () => {},
-};
-
 ExplorePage.propTypes = {
   onClickCommunity: PropTypes.func,
   onCommunityCreated: PropTypes.func,
   onClickCategory: PropTypes.func,
+};
+
+ExplorePage.defaultProps = {
+  onClickCommunity: () => {},
+  onCommunityCreated: () => {},
+  onClickCategory: () => {},
 };
 
 export default ExplorePage;

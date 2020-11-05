@@ -11,6 +11,6 @@ export const SDKExploreHeader = ({ ...props }) => <UiKitExploreHeader {...props}
 SDKExploreHeader.storyName = 'Explore header';
 
 SDKExploreHeader.argTypes = {
-  onClickCommunity: { action: 'onClickCommunity()' },
-  onCommunityCreated: { action: 'onCommunityCreated()' },
+  onClickCommunity: { action: 'onClickCommunity(communityId)' },
+  onCommunityCreated: { action: 'onCommunityCreated(communityId)' },
 };

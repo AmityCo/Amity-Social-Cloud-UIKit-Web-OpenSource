@@ -24,6 +24,7 @@ export const CommentComposeBarInput = styled(TextareaAutosize).attrs({ rows: 1, 
   border: 1px solid #e3e4e8;
   border-radius: 4px;
   flex-grow: 1;
+  font: inherit;
   font-size: 14px;
   resize: vertical;
 `;

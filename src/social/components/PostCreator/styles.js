@@ -57,6 +57,7 @@ export const PostCreatorTextarea = styled(TextareaAutosize).attrs({ rows: 1, max
   border: none;
   border-radius: 4px;
   resize: none;
+  font: inherit;
 `;
 
 const postComposeTextareaWrapperEditStyle = `

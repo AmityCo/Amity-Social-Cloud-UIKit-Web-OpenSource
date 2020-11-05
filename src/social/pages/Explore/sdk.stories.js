@@ -2,7 +2,7 @@ import React from 'react';
 import ExplorePage from '.';
 
 export default {
-  title: 'Sdk connected/Social',
+  title: 'Sdk connected/Social/Pages',
 };
 
 export const SdkExplorePage = props => (
@@ -21,4 +21,4 @@ SdkExplorePage.argTypes = {
   onClickCategory: { action: 'onClickCategory(categoryId)' },
 };
 
-SdkExplorePage.storyName = 'Explore page';
+SdkExplorePage.storyName = 'Explore';

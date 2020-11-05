@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import useUser from '~/core/hooks/useUser';
 import withSDK from '~/core/hocs/withSDK';
+
+import useUser from '~/core/hooks/useUser';
 import UIUserInfo from './UIUserInfo';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const UserInfo = ({ userId, currentUserId, editProfile, goToChat }) => {
+const UserInfo = ({ userId, currentUserId, onEditUser, onMessageUser }) => {
   const { user, file } = useUser(userId);
   const { displayName, description } = user;
   const { fileUrl } = file;
 
   /* TODO: need method for getting posts amount for current user */
   const postsCount = 0;
-
-  const isMyProfile = userId === currentUserId;
 
   return (
     <UIUserInfo
@@ -24,9 +23,9 @@ const UserInfo = ({ userId, currentUserId, editProfile, goToChat }) => {
       displayName={displayName || DEFAULT_DISPLAY_NAME}
       description={description}
       postsCount={postsCount}
-      isMyProfile={isMyProfile}
-      editProfile={editProfile}
-      goToChat={goToChat}
+      isMe={userId === currentUserId}
+      onEditUser={onEditUser}
+      onMessageUser={onMessageUser}
     />
   );
 };
@@ -34,13 +33,13 @@ const UserInfo = ({ userId, currentUserId, editProfile, goToChat }) => {
 UserInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
-  editProfile: PropTypes.func,
-  goToChat: PropTypes.func,
+  onEditUser: PropTypes.func,
+  onMessageUser: PropTypes.func,
 };
 
 UserInfo.defaultProps = {
-  editProfile: () => {},
-  goToChat: () => {},
+  onEditUser: () => {},
+  onMessageUser: () => {},
 };
 
 export { UIUserInfo };

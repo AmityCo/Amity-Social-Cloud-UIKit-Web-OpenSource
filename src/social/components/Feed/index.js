@@ -15,15 +15,14 @@ import { FeedScrollContainer } from './styles';
 const queryParams = { filter: EkoCommunityFilter.Member };
 
 const Feed = ({
+  className = null,
   targetType = EkoPostTargetType.MyFeed,
   targetId = '',
   showPostCreator = false,
-  feedClassName = null,
-  onCreatePostSuccess,
-  blockRouteChange,
+  onPostCreated,
   emptyFeedIcon,
   goToExplore,
-  onPostAuthorClick,
+  onClickUser,
   noPostInteractionMessage = null,
 }) => {
   const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
@@ -33,7 +32,7 @@ const Feed = ({
 
   return (
     <FeedScrollContainer
-      className={feedClassName}
+      className={className}
       dataLength={posts.length}
       next={loadMore}
       hasMore={hasMore}
@@ -43,8 +42,7 @@ const Feed = ({
         <PostCreator
           targetType={targetType}
           targetId={targetId}
-          onCreateSuccess={onCreatePostSuccess}
-          blockRouteChange={blockRouteChange}
+          onCreateSuccess={onPostCreated}
           communities={communities}
           enablePostTargetPicker={enablePostTargetPicker}
           hasMoreCommunities={hasMoreCommunities}
@@ -57,7 +55,7 @@ const Feed = ({
             <Post
               key={postId}
               postId={postId}
-              onPostAuthorClick={onPostAuthorClick}
+              onClickUser={onClickUser}
               noInteractionMessage={noPostInteractionMessage}
             />
           ))}
@@ -73,15 +71,15 @@ const Feed = ({
 };
 
 Feed.propTypes = {
+  className: PropTypes.string,
   targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)),
   targetId: PropTypes.string,
   showPostCreator: PropTypes.bool,
-  feedClassName: PropTypes.string,
-  onCreatePostSuccess: PropTypes.func,
-  blockRouteChange: PropTypes.func,
-  emptyFeedIcon: PropTypes.object,
+  onPostCreated: PropTypes.func,
+  onClickUser: PropTypes.func,
+  // below is to be refactored
   goToExplore: PropTypes.func,
-  onPostAuthorClick: PropTypes.func,
+  emptyFeedIcon: PropTypes.object,
   noPostInteractionMessage: PropTypes.string,
 };
 

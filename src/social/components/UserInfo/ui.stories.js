@@ -15,7 +15,7 @@ UiUserInfo.args = {
   avatarFileId: '',
   displayName: '',
   description: '',
-  isMyProfile: false,
+  isMe: false,
   postsCount: 0,
 };
 
@@ -24,8 +24,8 @@ UiUserInfo.argTypes = {
   avatarFileId: { control: { type: 'text' } },
   displayName: { control: { type: 'text' } },
   description: { control: { type: 'text' } },
-  isMyProfile: { control: { type: 'boolean' } },
+  isMe: { control: { type: 'boolean' } },
   postsCount: { control: { type: 'number' } },
-  editProfile: { action: 'editProfile(userId)' },
-  goToChat: { action: 'goToChat(userId)' },
+  onEditUser: { action: 'onEditUser(userId)' },
+  onMessageUser: { action: 'onMessageUser(userId)' },
 };

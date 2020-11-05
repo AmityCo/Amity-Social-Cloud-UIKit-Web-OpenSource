@@ -17,5 +17,5 @@ export const SDKCommunityMembers = args => {
 SDKCommunityMembers.storyName = 'Member list';
 
 SDKCommunityMembers.argTypes = {
-  onMemberClick: { action: 'onMemberClick()' },
+  onClickUser: { action: 'onClickUser(userId)' },
 };

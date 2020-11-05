@@ -6,28 +6,18 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKSideSectionMyCommunity = ({
-  onClickCreate,
-  showCreateButton,
-  onClickCommunity,
-}) => {
+export const SDKSideSectionMyCommunity = ({ onClickCommunity, onCommunityCreated }) => {
   return (
     <UiKitSideSectionMyCommunity
-      onClickCreate={onClickCreate}
-      showCreateButton={showCreateButton}
       onClickCommunity={onClickCommunity}
+      onCommunityCreated={onCommunityCreated}
     />
   );
 };
 
 SDKSideSectionMyCommunity.storyName = 'My community side section';
 
-SDKSideSectionMyCommunity.args = {
-  showCreateButton: true,
-};
-
 SDKSideSectionMyCommunity.argTypes = {
-  showCreateButton: { control: { type: 'boolean' } },
-  onClickCreate: { action: 'onClickCreate()' },
   onClickCommunity: { action: 'ConClickCommunity()' },
+  onCommunityCreated: { action: 'onCommunityCreated(communityId)' },
 };

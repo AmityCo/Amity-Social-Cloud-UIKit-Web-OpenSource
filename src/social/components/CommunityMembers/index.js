@@ -18,7 +18,7 @@ const tabs = {
   MODERATORS: 'Moderators',
 };
 
-const CommunityMembers = ({ communityId, onMemberClick }) => {
+const CommunityMembers = ({ communityId, onClickUser }) => {
   const [activeTab, setActiveTab] = useState(tabs.MEMBERS);
 
   const { members, hasMoreMembers, loadMoreMembers, membersCount } = useCommunityMembers(
@@ -36,7 +36,7 @@ const CommunityMembers = ({ communityId, onMemberClick }) => {
         <LoadMore hasMore={hasMoreMembers} loadMore={loadMoreMembers}>
           {members.length > 0 &&
             members.map(({ userId }) => (
-              <CommunityMemberItem key={userId} userId={userId} onMemberClick={onMemberClick} />
+              <CommunityMemberItem key={userId} userId={userId} onClick={onClickUser} />
             ))}
         </LoadMore>
       </ConditionalRender>
@@ -44,7 +44,7 @@ const CommunityMembers = ({ communityId, onMemberClick }) => {
         <LoadMore hasMore={hasMoreModerators} loadMore={loadMoreModerators}>
           {moderators.length > 0 &&
             moderators.map(({ userId }) => (
-              <CommunityMemberItem key={userId} userId={userId} onMemberClick={onMemberClick} />
+              <CommunityMemberItem key={userId} userId={userId} onClick={onClickUser} />
             ))}
         </LoadMore>
       </ConditionalRender>

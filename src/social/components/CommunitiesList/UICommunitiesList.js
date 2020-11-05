@@ -13,14 +13,14 @@ const NoResultsMessage = styled.p`
 `;
 
 const UICommunityList = ({
+  className,
   communityIds,
   loadMore,
   hasMore,
-  getIsCommunityActive,
+  activeCommunity,
   onClickCommunity,
   isSearchList,
   searchInput,
-  className,
 }) => {
   const noCommunitiesFound = isSearchList && !communityIds.length;
   const classNames = [communityIds.length < 4 && 'no-scroll', className].filter(Boolean).join(' ');
@@ -39,45 +39,40 @@ const UICommunityList = ({
         <ConditionalRender condition={noCommunitiesFound}>
           <NoResultsMessage>No community found</NoResultsMessage>
         </ConditionalRender>
-        {communityIds.map(communityId => {
-          const isActive = getIsCommunityActive(communityId);
-          return (
-            <CommunityHeader
-              key={communityId}
-              communityId={communityId}
-              isActive={isActive}
-              onClick={onClickCommunity}
-              isSearchResult={isSearchList}
-              searchInput={searchInput}
-            />
-          );
-        })}
+        {communityIds.map(communityId => (
+          <CommunityHeader
+            key={communityId}
+            communityId={communityId}
+            isActive={communityId === activeCommunity}
+            onClick={onClickCommunity}
+            isSearchResult={isSearchList}
+            searchInput={searchInput}
+          />
+        ))}
       </LoadMore>
     </CommunityScrollContainer>
   );
 };
 
-const noop = () => {};
-
 UICommunityList.propTypes = {
+  className: PropTypes.string,
   communityIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onClickCommunity: PropTypes.func,
   loadMore: PropTypes.func,
   hasMore: PropTypes.bool,
-  getIsCommunityActive: PropTypes.func,
+  activeCommunity: PropTypes.string,
+  onClickCommunity: PropTypes.func,
   isSearchList: PropTypes.bool,
   searchInput: PropTypes.string,
-  className: PropTypes.string,
 };
 
 UICommunityList.defaultProps = {
-  onClickCommunity: noop,
-  loadMore: noop,
+  className: null,
+  loadMore: () => {},
   hasMore: false,
-  getIsCommunityActive: () => false,
+  activeCommunity: '',
+  onClickCommunity: () => {},
   isSearchList: false,
   searchInput: '',
-  className: null,
 };
 
 export default UICommunityList;

@@ -5,7 +5,7 @@ import useOneCommunity from '~/mock/useOneCommunity';
 import CommunityProfilePage from '.';
 
 export default {
-  title: 'SDK Connected/Social/Community',
+  title: 'SDK Connected/Social/Pages',
 };
 
 export const SDKCommunityProfilePage = props => {
@@ -14,4 +14,8 @@ export const SDKCommunityProfilePage = props => {
   return <CommunityProfilePage communityId={community.communityId} {...props} />;
 };
 
-SDKCommunityProfilePage.storyName = 'Profile Page';
+SDKCommunityProfilePage.argTypes = {
+  onClickUser: { action: 'onClickUser(userId)' },
+};
+
+SDKCommunityProfilePage.storyName = 'Community Profile Page';
