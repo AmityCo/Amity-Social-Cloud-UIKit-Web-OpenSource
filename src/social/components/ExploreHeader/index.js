@@ -26,7 +26,7 @@ const Foreground = styled.div`
   width: 100%;
   height: 100%;
   grid-template-areas: 'search search search none1' 'create dots balloon balloon' 'none2 dots balloon balloon';
-  grid-template-rows: min-content min-content auto;
+  grid-template-rows: min-content min-content minmax(1rem, auto);
   grid-template-columns: max-content min-content auto;
   grid-gap: 1rem;
   padding: 2rem 0 0 2rem;
@@ -44,11 +44,12 @@ const Create = styled.div`
 
 const Balloon = styled.div`
   grid-area: balloon;
-  min-width: 262px;
-  min-height: 243px;
   width: 100%;
   height: 100%;
-  background: ${BalloonBg} right bottom no-repeat;
+  max-width: 262px;
+  min-height: 243px;
+  place-self: start end;
+  background: ${BalloonBg} left bottom no-repeat;
 `;
 
 const Dots = styled.div`

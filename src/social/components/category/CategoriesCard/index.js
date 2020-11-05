@@ -15,13 +15,15 @@ const Grid = styled.div`
   flex-wrap: wrap;
 
   & > *, &:after {
-    flex: 1 1 calc(100% / 3);
+    flex: 1 1 calc(100% / 3 - 1.5rem);
     min-width: 15rem;
   }
 
   &:after {
     display: block;
     content ' ';
+    padding: 0.5em;
+    margin-right: 0.5rem;
   }
 `;
 

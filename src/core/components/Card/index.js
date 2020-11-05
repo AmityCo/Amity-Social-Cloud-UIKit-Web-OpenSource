@@ -8,6 +8,7 @@ const Container = styled.div`
   overflow: hidden;
   border: 1px solid ${({ theme }) => theme.palette.system.borders};
   border-radius: 4px;
+  background: ${({ theme }) => theme.palette.system.background};
 `;
 
 const Title = styled.div`

@@ -1,12 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
 import { HashRouter as Router, Switch, Route, useHistory, useRouteMatch } from 'react-router-dom';
 
 import UserProfilePage from '~/social/components/UserProfilePage';
 import UiKitCommunity from '.';
 
 export default {
-  title: 'SDK Connected/Social/App',
+  title: 'SDK Connected/Social',
 };
 
 const SDKCommunity = props => {
@@ -47,7 +46,7 @@ export const SDKCommunityApp = () => (
   </Router>
 );
 
-SDKCommunityApp.storyName = 'v2 (new)';
+SDKCommunityApp.storyName = 'Application';
 
 SDKCommunityApp.args = {
   shouldHideExplore: false,
@@ -59,19 +58,3 @@ SDKCommunityApp.argTypes = {
   showCreateCommunityButton: { control: { type: 'boolean' } },
   onMemberClick: { action: 'onMemberClick()' },
 };
-
-const Viewport = styled.div`
-  width: 75vw;
-  height: 75vh;
-  overflow: hidden;
-`;
-
-export const WithinDiv = () => (
-  <Viewport>
-    <Router>
-      <SDKCommunity />
-    </Router>
-  </Viewport>
-);
-
-WithinDiv.storyName = 'within a div (layout)';

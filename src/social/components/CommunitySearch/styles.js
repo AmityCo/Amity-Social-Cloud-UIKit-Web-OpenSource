@@ -44,12 +44,4 @@ export const CommunitiesSearchInput = styled.input`
 export const CommunitiesSearchResults = styled(Menu)`
   overflow-y: auto;
   max-height: 200px;
-
-  &.feed-menu-search-container {
-    width: 250px;
-  }
-
-  &.explore-header-search-container {
-    width: 480px;
-  }
 `;

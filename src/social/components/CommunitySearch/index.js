@@ -24,6 +24,7 @@ const Menu = ({ search, handleSearchResultClick, popoverMenuClassName }) => {
 };
 
 const CommunitySearch = ({
+  className,
   onSearchResultCommunityClick,
   popoverMenuClassName,
   placeholder,
@@ -60,7 +61,7 @@ const CommunitySearch = ({
         />
       }
     >
-      <CommunitiesSearchContainer className="explore-header-search-container" sticky={sticky}>
+      <CommunitiesSearchContainer className={className} sticky={sticky}>
         <CommunitiesSearchInput
           value={search}
           onChange={e => setSearch(e.target.value)}
@@ -74,6 +75,7 @@ const CommunitySearch = ({
 };
 
 CommunitySearch.propTypes = {
+  className: PropTypes.string,
   onSearchResultCommunityClick: PropTypes.func.isRequired,
   popoverMenuClassName: PropTypes.string,
   placeholder: PropTypes.string,

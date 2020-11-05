@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { EkoPostTargetType } from 'eko-sdk';
 
+import ConditionalRender from '~/core/components/ConditionalRender';
 import FeedLayout from '~/social/components/FeedLayout';
+import ExplorePage from '~/social/components/ExplorePage';
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 import Feed from '~/social/components/Feed';
 import CommunityProfilePage from '~/social/components/CommunityProfilePage';
@@ -14,36 +16,44 @@ const CommunityContainer = styled.div`
   width: 100%;
 `;
 
+const PageTypes = {
+  Explore: 'explore',
+  NewsFeed: 'newsFeed',
+  Community: 'community',
+};
+
 const Community = ({
-  shouldHideExplore,
   showCreateCommunityButton,
   onMemberClick,
   onPostAuthorClick,
   onEditCommunityClick,
   blockRouteChange,
 }) => {
-  const [isShowingFeed, setIsShowingFeed] = useState(true);
+  const [currentPage, setCurrentPage] = useState(PageTypes.NewsFeed);
   const [targetCommuntyId, setTargetCommuntyId] = useState(null);
   const [isCreatingCommunity, setIsCreatingCommunity] = useState(false);
 
-  const handleClickNewsFeed = () => {
-    setIsShowingFeed(true);
+  const pageTypeCondition = targetType => currentPage === targetType;
+
+  const handleClickPage = pageType => {
     setTargetCommuntyId(null);
+    setCurrentPage(pageType);
   };
 
   const handleClickCommunity = communityId => {
     setTargetCommuntyId(communityId);
-    setIsShowingFeed(false);
+    setCurrentPage(PageTypes.Community);
   };
 
   const getIsCommunityActive = communityId => communityId === targetCommuntyId;
 
   const openCommunityCreation = () => setIsCreatingCommunity(true);
 
-  // TODO - need to get hold of new community Id.
-  // New community creation (with SDK) need to call onClose with new community Id.
-  const closeCommunityCreation = () => {
+  const closeCommunityCreation = (newCommunityId = null) => {
     setIsCreatingCommunity(false);
+    if (newCommunityId) {
+      handleClickCommunity(newCommunityId);
+    }
   };
 
   return (
@@ -51,33 +61,38 @@ const Community = ({
       <FeedLayout
         sideMenu={
           <CommunitySideMenu
-            newsFeedActive={isShowingFeed}
-            onClickNewsFeed={handleClickNewsFeed}
+            newsFeedActive={pageTypeCondition(PageTypes.NewsFeed)}
+            exploreActive={pageTypeCondition(PageTypes.Explore)}
+            onClickNewsFeed={() => handleClickPage(PageTypes.NewsFeed)}
+            onClickExplore={() => handleClickPage(PageTypes.Explore)}
             onClickCommunity={handleClickCommunity}
             onClickCreateCommunity={openCommunityCreation}
             getIsCommunityActive={getIsCommunityActive}
             onSearchResultCommunityClick={handleClickCommunity}
             searchInputPlaceholder="Search"
             showCreateCommunityButton={showCreateCommunityButton}
-            shouldHideExplore={shouldHideExplore}
           />
         }
       >
-        {isShowingFeed ? (
+        <ConditionalRender condition={pageTypeCondition(PageTypes.NewsFeed)}>
           <Feed
             targetType={EkoPostTargetType.GlobalFeed}
             onPostAuthorClick={onPostAuthorClick}
             blockRouteChange={blockRouteChange}
             showPostCreator
           />
-        ) : (
+        </ConditionalRender>
+        <ConditionalRender condition={pageTypeCondition(PageTypes.Explore)}>
+          <ExplorePage onClickCommunity={handleClickCommunity} />
+        </ConditionalRender>
+        <ConditionalRender condition={pageTypeCondition(PageTypes.Community) && targetCommuntyId}>
           <CommunityProfilePage
             communityId={targetCommuntyId}
             onMemberClick={onMemberClick}
             onPostAuthorClick={onPostAuthorClick}
             onEditCommunityClick={onEditCommunityClick}
           />
-        )}
+        </ConditionalRender>
       </FeedLayout>
       <CommunityCreationModal isOpen={isCreatingCommunity} onClose={closeCommunityCreation} />
     </CommunityContainer>
@@ -85,7 +100,6 @@ const Community = ({
 };
 
 Community.propTypes = {
-  shouldHideExplore: PropTypes.bool,
   showCreateCommunityButton: PropTypes.bool,
   onMemberClick: PropTypes.func,
   onPostAuthorClick: PropTypes.func,
@@ -96,7 +110,6 @@ Community.propTypes = {
 const noop = () => {};
 
 Community.defaultProps = {
-  shouldHideExplore: false,
   showCreateCommunityButton: true,
   onMemberClick: noop,
   blockRouteChange: noop,

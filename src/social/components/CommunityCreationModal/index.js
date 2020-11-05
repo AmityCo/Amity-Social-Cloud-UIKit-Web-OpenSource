@@ -5,6 +5,7 @@ import { CommunityRepository } from 'eko-sdk';
 import Modal from '~/core/components/Modal';
 import { confirm } from '~/core/components/Confirm';
 import customizableComponent from '~/core/hocs/customization';
+import promisify from '~/helpers/promisify';
 import { CommunityForm } from './styles';
 
 const CommunityCreationModal = ({ isOpen, onClose }) => {
@@ -42,9 +43,9 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
     });
 
   const handleSubmit = async data => {
-    const { communityId } = await createCommunity(data);
-
-    onClose(communityId);
+    const communityLiveObject = await createCommunity(data);
+    const communityModel = await promisify(communityLiveObject);
+    onClose(communityModel.communityId);
   };
 
   return (

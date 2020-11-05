@@ -24,6 +24,10 @@ const LayoutContainer = styled.div`
 const Main = styled.div`
   grid-area: main;
   overflow: auto;
+  width: 100%;
+  min-width: 20rem;
+  max-width: 57.325rem;
+  margin: 0 auto;
 `;
 
 const FeedLayout = ({ sideMenu, children }) => {
