@@ -4,7 +4,10 @@ import PostImage from '~/core/components/Uploaders/Image';
 import PostFile from '~/core/components/Uploaders/File';
 
 const ChildPosts = styled.div`
-  margin-top: 16px;
+  margin-top: 1rem;
+  & > *:not(:last-child) {
+    margin-bottom: 1rem;
+  }
 `;
 
 const PostTypeComponents = {

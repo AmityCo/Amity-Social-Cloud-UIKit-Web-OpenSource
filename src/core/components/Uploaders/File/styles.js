@@ -10,11 +10,13 @@ import ProgressBar from '~/core/components/ProgressBar';
 import Remove from '~/icons/Remove';
 import Icon from '~/icons/files';
 
-export const FileContainer = styled.div`
+export const FileContainer = styled.a`
+  display: block;
   position: relative;
   border: 1px solid ${({ theme }) => theme.palette.base.shade4};
   border-radius: 4px;
   overflow: hidden;
+  text-decoration: none;
 `;
 
 export const Content = styled.div`
@@ -71,7 +73,7 @@ const File = ({ name, url, type, size, progress, onRemove }) => {
   const isImg = type.includes('image');
 
   return (
-    <FileContainer>
+    <FileContainer href={url} download>
       <Content remove={!!onRemove}>
         <ConditionalRender condition={isImg && !!url}>
           <ImgPreview src={url} />
