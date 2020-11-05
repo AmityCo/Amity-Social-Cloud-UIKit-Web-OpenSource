@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 import Button from '~/core/components/Button';
+import Skeleton from '~/core/components/Skeleton';
 import ProgressBar from '~/core/components/ProgressBar';
 
 import RemoveIcon from '~/icons/Remove';
@@ -29,12 +30,20 @@ export const Content = styled.div`
   height: 100%;
 `;
 
-export const ImgPreview = styled.img`
+const ImgPreviewContainerStyles = css`
   display: block;
   height: 100%;
   ${({ fullSize }) => fullSize && fullSizeStyle}
   object-fit: contain;
   object-position: center;
+`;
+
+export const ImgPreview = styled.img`
+  ${ImgPreviewContainerStyles}
+`;
+
+export const SkeletonWrapper = styled.div`
+  ${ImgPreviewContainerStyles}
 `;
 
 export const RemoveButton = styled(Button)`
@@ -56,7 +65,14 @@ const Image = ({ url, progress, onRemove, fullSize }) => {
   return (
     <ImageContainer fullSize={fullSize}>
       <Content remove={!!onRemove}>
-        <ImgPreview src={url} fullSize={fullSize} />
+        {url ? (
+          <ImgPreview src={url} fullSize={fullSize} />
+        ) : (
+          <SkeletonWrapper fullSize={fullSize}>
+            <Skeleton />
+          </SkeletonWrapper>
+        )}
+
         {!!onRemove && (
           <RemoveButton variant="secondary" onClick={removeCallback}>
             <RemoveIcon />
@@ -70,13 +86,14 @@ const Image = ({ url, progress, onRemove, fullSize }) => {
 };
 
 Image.propTypes = {
-  url: PropTypes.string.isRequired,
+  url: PropTypes.string,
   progress: PropTypes.number,
   onRemove: PropTypes.func,
   fullSize: PropTypes.bool,
 };
 
 Image.defaultProps = {
+  url: undefined,
   progress: -1,
   onRemove: null,
 };

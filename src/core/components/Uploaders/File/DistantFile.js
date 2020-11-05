@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import { FileRepository, EkoImageSize } from 'eko-sdk';
+
 import useFile from '~/core/hooks/useFile';
 
 import StyledFile from './styles';
@@ -13,7 +13,7 @@ const File = ({ fileId, onRemove }) => {
 
   const fileUrl = FileRepository.getFileUrlById({
     fileId: file.fileId,
-    imageSize: EkoImageSize.Large,
+    imageSize: EkoImageSize.Small,
   });
 
   return (

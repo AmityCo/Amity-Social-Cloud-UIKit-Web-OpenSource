@@ -13,7 +13,7 @@ const Image = ({ fileId, onRemove, fullSize } = {}) => {
 
   const fileUrl = FileRepository.getFileUrlById({
     fileId: file.fileId,
-    imageSize: EkoImageSize.Large,
+    imageSize: EkoImageSize.Medium,
   });
 
   return <StyledImage url={fileUrl} onRemove={onRemove} fullSize={fullSize} />;

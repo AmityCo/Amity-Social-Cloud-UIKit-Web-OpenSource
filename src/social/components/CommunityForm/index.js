@@ -132,7 +132,9 @@ const CommunityForm = ({
 
   if (edit && avatarFileId) {
     const fileUrl = FileRepository.getFileUrlById(community.avatarFileId);
-    setAvatarFileId(fileUrl);
+    if (fileUrl) {
+      setAvatarFileId(fileUrl);
+    }
   }
 
   // <Controller name="avatar" as={<AvatarUpload />} control={control} value={avatarFileId} />
