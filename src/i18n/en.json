@@ -11,5 +11,6 @@
   "exploreHeader.searchCommunityTitle": "Explore communities",
   "exploreHeader.searchCommunityPlaceholder": "Search communities...",
   "exploreHeader.createCommunityTitle": "or create your own one!",
-  "exploreHeader.createCommunityButton": "Create community"
+  "exploreHeader.createCommunityButton": "Create community",
+  "backTitle": "Back"
 }

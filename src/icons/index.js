@@ -5,6 +5,7 @@ export { default as User } from './User';
 export { default as ArrowRight } from './ArrowRight';
 export { default as EmptyFeed } from './EmptyFeed';
 export { default as ChevronDown } from './ChevronDown';
+export { default as ChevronLeft } from './ChevronLeft';
 
 // files
 export { default as AudioFile } from './files/Audio';

@@ -8,10 +8,11 @@ import FeedLayout from '~/social/components/FeedLayout';
 import ExplorePage from '~/social/components/ExplorePage';
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 import Feed from '~/social/components/Feed';
+import CategoryCommunitiesPage from '~/social/components/community/CategoryCommunitiesPage';
 import CommunityProfilePage from '~/social/components/CommunityProfilePage';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 
-const CommunityContainer = styled.div`
+const ApplicationContainer = styled.div`
   height: 100%;
   width: 100%;
 `;
@@ -20,6 +21,7 @@ const PageTypes = {
   Explore: 'explore',
   NewsFeed: 'newsFeed',
   Community: 'community',
+  Category: 'category',
 };
 
 const Community = ({
@@ -28,21 +30,32 @@ const Community = ({
   onPostAuthorClick,
   onEditCommunityClick,
   blockRouteChange,
+  onCommunityCreated,
 }) => {
   const [currentPage, setCurrentPage] = useState(PageTypes.NewsFeed);
-  const [targetCommuntyId, setTargetCommuntyId] = useState(null);
+  const [targetCommuntyId, setTargetCommunityId] = useState(null);
+  const [targetCategoryId, setTargetCategoryId] = useState(null);
   const [isCreatingCommunity, setIsCreatingCommunity] = useState(false);
 
   const pageTypeCondition = targetType => currentPage === targetType;
 
+  // Handles navigating to NewsFeed and Explore pages.
   const handleClickPage = pageType => {
-    setTargetCommuntyId(null);
+    setTargetCommunityId(null);
+    setTargetCategoryId(null);
     setCurrentPage(pageType);
   };
 
   const handleClickCommunity = communityId => {
-    setTargetCommuntyId(communityId);
+    setTargetCategoryId(null);
+    setTargetCommunityId(communityId);
     setCurrentPage(PageTypes.Community);
+  };
+
+  const handleClickCategory = categoryId => {
+    setTargetCommunityId(null);
+    setTargetCategoryId(categoryId);
+    setCurrentPage(PageTypes.Category);
   };
 
   const getIsCommunityActive = communityId => communityId === targetCommuntyId;
@@ -57,7 +70,7 @@ const Community = ({
   };
 
   return (
-    <CommunityContainer>
+    <ApplicationContainer>
       <FeedLayout
         sideMenu={
           <CommunitySideMenu
@@ -83,7 +96,11 @@ const Community = ({
           />
         </ConditionalRender>
         <ConditionalRender condition={pageTypeCondition(PageTypes.Explore)}>
-          <ExplorePage onClickCommunity={handleClickCommunity} />
+          <ExplorePage
+            onClickCommunity={handleClickCommunity}
+            onClickCategory={handleClickCategory}
+            onCommunityCreated={onCommunityCreated}
+          />
         </ConditionalRender>
         <ConditionalRender condition={pageTypeCondition(PageTypes.Community) && targetCommuntyId}>
           <CommunityProfilePage
@@ -93,9 +110,16 @@ const Community = ({
             onEditCommunityClick={onEditCommunityClick}
           />
         </ConditionalRender>
+        <ConditionalRender condition={pageTypeCondition(PageTypes.Category) && targetCategoryId}>
+          <CategoryCommunitiesPage
+            categoryId={targetCategoryId}
+            onBack={() => handleClickPage(PageTypes.Explore)}
+            onClickCommunity={handleClickCommunity}
+          />
+        </ConditionalRender>
       </FeedLayout>
       <CommunityCreationModal isOpen={isCreatingCommunity} onClose={closeCommunityCreation} />
-    </CommunityContainer>
+    </ApplicationContainer>
   );
 };
 
@@ -105,6 +129,7 @@ Community.propTypes = {
   onPostAuthorClick: PropTypes.func,
   blockRouteChange: PropTypes.func,
   onEditCommunityClick: PropTypes.func,
+  onCommunityCreated: PropTypes.func,
 };
 
 const noop = () => {};
@@ -115,6 +140,7 @@ Community.defaultProps = {
   blockRouteChange: noop,
   onPostAuthorClick: noop,
   onEditCommunityClick: noop,
+  onCommunityCreated: noop,
 };
 
 export default Community;
