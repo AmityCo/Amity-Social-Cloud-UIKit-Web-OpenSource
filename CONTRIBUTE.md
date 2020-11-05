@@ -5,11 +5,18 @@
 - git
 - nodejs
 
+## Pre-setup
+
+1. Add this line to your `.bashrc` (or `.zshrc` in case you use `Oh My Zsh`)
+   `export NPM_FONT_AWESOME_TOKEN=<token_value>`
+   The `token_value` can be acquired from your fellow collegues or from GitLab `ui-kit` CI/CD variables.
+2. Restart your terminal.
+
 ## Getting started
 
 1. `git clone git@gitlab.com:upstra/web/ui-kit.git`
 2. `cd ui-kit`
-3. `npm install`
+3. `npm ci`
 4. `npm run storybook`
 
 ## Contribution flow
