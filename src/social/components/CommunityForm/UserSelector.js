@@ -46,7 +46,9 @@ const UserSelector = ({ value: userIds, onChange }) => {
 
   const [queriedUsers = []] = useUserQuery(query);
 
-  const selectedUsers = userIds.map(id => queriedUsers.find(({ userId }) => id === userId));
+  const selectedUsers = userIds
+    .map(id => queriedUsers.find(({ userId }) => id === userId))
+    .filter(Boolean);
 
   const searchResult = query.length
     ? queriedUsers.filter(({ displayName }) =>
