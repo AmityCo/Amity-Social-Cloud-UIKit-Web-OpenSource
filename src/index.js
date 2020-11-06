@@ -1,6 +1,6 @@
 export { default as UpstraUiKitProvider } from '~/core/providers/UiKitProvider';
 export { default as UpstraUiKitFeed } from '~/social/components/Feed';
-export { default as UpstraUiKitSocial } from '~/social/components/Application';
+export { default as UpstraUiKitSocial } from '~/social/pages/Application';
 
 // import UpstraAvatar from './components/Avatar';
 // import UpstraComment from './components/Comment';
