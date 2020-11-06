@@ -1,6 +1,6 @@
 {
   "name": "upstra-uikit",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "main": "build/index.js",
   "files": [
     "build"
