@@ -44,7 +44,7 @@ const Infos = styled.div`
 `;
 
 const Description = styled.p`
-  margin: 8px 0;
+  margin: ${({ slim }) => (!slim ? '.5rem' : 0)} 0;
   ${({ theme }) => theme.typography.caption}
 `;
 
@@ -68,15 +68,20 @@ const UITrendingItem = ({
   description,
   categories,
   membersCount,
+  slim,
   onClick,
 }) => (
   <ItemContainer onClick={onClick}>
-    <Avatar avatar={avatarFileUrl} size="big" backgroundImage={CommunityImage} />
+    <Avatar
+      avatar={avatarFileUrl}
+      size={!slim ? 'big' : 'regular'}
+      backgroundImage={CommunityImage}
+    />
     <TrendingNumber />
     <TextInfos>
       <CommunityName communityId={communityId} />
       <Truncate lines={2}>
-        <Description>{description}</Description>
+        <Description slim={slim}>{description}</Description>
       </Truncate>
       <Infos>
         <ConditionalRender condition={categories.length > 0}>
@@ -106,6 +111,7 @@ UITrendingItem.propTypes = {
     }),
   ),
   membersCount: PropTypes.number,
+  slim: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
@@ -114,6 +120,7 @@ UITrendingItem.defaultProps = {
   description: '',
   categories: [],
   membersCount: 0,
+  slim: false,
   onClick: () => {},
 };
 

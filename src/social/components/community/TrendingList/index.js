@@ -50,20 +50,16 @@ const CommunitiesList = styled.ul`
   }
 `;
 
-const TrendingList = ({ onClickCommunity }) => {
+const TrendingList = ({ slim, onClickCommunity }) => {
   const [communities] = useTrendingCommunitiesList();
   const { formatMessage } = useIntl();
   return (
-    <Card title={formatMessage({ id: 'todaysTrendingTitle' })}>
+    <Card title={formatMessage({ id: 'todaysTrendingTitle' })} slim={slim}>
       <CommunitiesList>
         {/* Only take first 5 communities even if BE returns more */}
-        {communities.slice(0, 5).map(({ communityId }, index) => (
+        {communities.slice(0, 5).map(({ communityId }) => (
           <li key={communityId}>
-            <TrendingItem
-              communityId={communityId}
-              trendingNumber={index + 1}
-              onClick={onClickCommunity}
-            />
+            <TrendingItem communityId={communityId} slim={slim} onClick={onClickCommunity} />
           </li>
         ))}
       </CommunitiesList>
@@ -72,10 +68,12 @@ const TrendingList = ({ onClickCommunity }) => {
 };
 
 TrendingList.propTypes = {
+  slim: PropTypes.bool,
   onClickCommunity: PropTypes.func,
 };
 
 TrendingList.defaultProps = {
+  slim: false,
   onClickCommunity: () => {},
 };
 

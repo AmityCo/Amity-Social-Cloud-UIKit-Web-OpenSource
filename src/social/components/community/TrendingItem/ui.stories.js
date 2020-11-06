@@ -37,6 +37,7 @@ UITrendingItem.args = {
   description: 'Description of the community',
   communityCategories: [],
   membersCount: 10000,
+  slim: false,
 };
 
 UITrendingItem.argTypes = {
@@ -46,5 +47,6 @@ UITrendingItem.argTypes = {
       options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
     },
   },
+  slim: { control: { type: 'boolean' } },
   onClick: { action: 'onClick(communityId)' },
 };

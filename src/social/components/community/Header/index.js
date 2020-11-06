@@ -5,9 +5,18 @@ import useCommunity from '~/social/hooks/useCommunity';
 
 import UICommunityHeader from './styles';
 
-const CommunityHeader = ({ communityId, onClick, isActive, isSearchResult, searchInput }) => {
-  const { file } = useCommunity(communityId);
+const CommunityHeader = ({
+  communityId,
+  onClick,
+  isActive,
+  isSearchResult,
+  searchInput,
+  children,
+}) => {
+  const { community, communityCategories, file } = useCommunity(communityId);
   const { fileUrl } = file;
+
+  const [render] = [].concat(children);
 
   return (
     <UICommunityHeader
@@ -17,7 +26,9 @@ const CommunityHeader = ({ communityId, onClick, isActive, isSearchResult, searc
       onClick={onClick}
       isSearchResult={isSearchResult}
       searchInput={searchInput}
-    />
+    >
+      {typeof render === 'function' ? render({ community, communityCategories, file }) : children}
+    </UICommunityHeader>
   );
 };
 
@@ -27,6 +38,7 @@ CommunityHeader.propTypes = {
   onClick: PropTypes.func,
   isSearchResult: PropTypes.bool,
   searchInput: PropTypes.string,
+  children: PropTypes.oneOf([PropTypes.func, PropTypes.node]),
 };
 
 CommunityHeader.defaultProps = {
@@ -34,6 +46,7 @@ CommunityHeader.defaultProps = {
   isActive: false,
   isSearchResult: false,
   searchInput: '',
+  children: null,
 };
 
 export { UICommunityHeader };

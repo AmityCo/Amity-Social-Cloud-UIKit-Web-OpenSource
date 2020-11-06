@@ -10,7 +10,7 @@ import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 const CommunityHeaderContainer = styled.a.attrs(props => props)`
   display: grid;
-  grid-template-areas: 'avatar title';
+  grid-template-areas: 'avatar title' 'avatar children';
   grid-template-columns: min-content auto;
   grid-template-rows: min-content min-content;
   grid-gap: 0 0.75em;
@@ -34,6 +34,10 @@ const CommunityHeaderAvatar = styled(Avatar)`
   grid-area: avatar;
 `;
 
+const Rest = styled.div`
+  grid-area: children;
+`;
+
 const UICommunityHeader = ({
   communityId,
   isActive,
@@ -41,6 +45,7 @@ const UICommunityHeader = ({
   onClick,
   isSearchResult,
   searchInput,
+  children,
 }) => (
   <CommunityHeaderContainer isActive={isActive} onClick={() => onClick(communityId)}>
     <CommunityHeaderAvatar avatar={avatarFileUrl} backgroundImage={CommunityImage} />
@@ -50,6 +55,7 @@ const UICommunityHeader = ({
       isSearchResult={isSearchResult}
       searchInput={searchInput}
     />
+    {children && <Rest>{children}</Rest>}
   </CommunityHeaderContainer>
 );
 
@@ -60,6 +66,7 @@ UICommunityHeader.propTypes = {
   onClick: PropTypes.func,
   isSearchResult: PropTypes.bool,
   searchInput: PropTypes.string,
+  children: PropTypes.node,
 };
 
 export default customizableComponent('UICommunityHeader', UICommunityHeader);

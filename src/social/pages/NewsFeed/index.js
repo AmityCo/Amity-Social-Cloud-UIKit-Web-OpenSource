@@ -11,8 +11,8 @@ import RecommendedList from '~/social/components/community/RecommendedList';
 const NewsFeed = ({ onClickUser, onClickCommunity, blockRouteChange }) => {
   const Side = (
     <>
-      <TrendingList onClickCommunity={onClickCommunity} />
-      <RecommendedList onClickCommunity={onClickCommunity} />
+      <TrendingList onClickCommunity={onClickCommunity} slim />
+      <RecommendedList onClickCommunity={onClickCommunity} slim />
     </>
   );
 

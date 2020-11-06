@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import CommunityHeader from '~/social/components/CommunityHeader';
+import CommunityHeader from '~/social/components/community/Header';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import { LoadMore } from '~/social/components/LoadMore';
 import { CommunityScrollContainer } from './styles';

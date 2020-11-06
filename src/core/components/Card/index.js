@@ -12,36 +12,42 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  padding: 1.25em;
+  padding: ${({ slim }) => (!slim ? '1.25rem;' : '1rem')};
   border-bottom: 1px solid ${({ theme }) => theme.palette.system.borders};
   ${({ theme }) => theme.typography.title}
 `;
 
 const Body = styled.section`
   margin: 0;
-  ${({ stretched }) => !stretched && `padding: 1.25em;`}
+  padding: 1.25rem;
+  ${({ slim }) => slim && `padding: 1rem;`}
+  ${({ stretched }) => stretched && `padding: 0;`}
 `;
 
-const Card = ({ title, stretched, children, ...props }) => {
+const Card = ({ title, slim, stretched, children, ...props }) => {
   return (
     <Container {...props}>
       <ConditionalRender condition={!!title}>
-        <Title>{title}</Title>
+        <Title slim={slim}>{title}</Title>
       </ConditionalRender>
 
-      <Body stretched={stretched}>{children}</Body>
+      <Body slim={slim} stretched={stretched}>
+        {children}
+      </Body>
     </Container>
   );
 };
 
 Card.defaultProps = {
   title: null,
+  slim: false,
   stretched: false,
   children: [],
 };
 
 Card.propTypes = {
   title: PropTypes.node,
+  slim: PropTypes.bool,
   stretched: PropTypes.bool,
   children: PropTypes.node,
 };

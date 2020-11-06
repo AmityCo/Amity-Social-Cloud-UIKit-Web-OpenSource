@@ -10,6 +10,10 @@ export const SDKRecommendedList = props => <UiKitRecommendedCommunitiesList {...
 
 SDKRecommendedList.storyName = 'Recommended list';
 
+SDKRecommendedList.args = {
+  slim: false,
+};
+
 SDKRecommendedList.argTypes = {
   onClickCommunity: { action: 'onClickCommunity(communityId)' },
 };
