@@ -32,6 +32,7 @@ export const CommunitiesSearchContainer = styled.div`
 `;
 
 export const CommunitiesSearchInput = styled.input`
+  ${({ theme }) => theme.typography.body}
   width: 100%;
   padding: 10px;
   padding-left: 40px;
@@ -39,6 +40,11 @@ export const CommunitiesSearchInput = styled.input`
   border: 1px solid #d5d7dd;
   border-radius: 4px;
   outline: none;
+  color: ${({ theme }) => theme.palette.base.main};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.palette.base.shade1};
+  }
 `;
 
 export const CommunitiesSearchResults = styled(Menu)`
