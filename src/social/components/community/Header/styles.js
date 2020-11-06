@@ -28,6 +28,13 @@ const CommunityHeaderContainer = styled.a.attrs(props => props)`
       color: ${theme.palette.primary.main};
       background-color: ${theme.palette.primary.shade3};
     `};
+
+  ${({ hasChildren }) =>
+    !hasChildren &&
+    css`
+      grid-template-areas: 'avatar title';
+      align-items: center;
+    `}
 `;
 
 const CommunityHeaderAvatar = styled(Avatar)`
@@ -47,7 +54,11 @@ const UICommunityHeader = ({
   searchInput,
   children,
 }) => (
-  <CommunityHeaderContainer isActive={isActive} onClick={() => onClick(communityId)}>
+  <CommunityHeaderContainer
+    isActive={isActive}
+    onClick={() => onClick(communityId)}
+    hasChildren={!!children}
+  >
     <CommunityHeaderAvatar avatar={avatarFileUrl} backgroundImage={CommunityImage} />
     <CommunityName
       communityId={communityId}
