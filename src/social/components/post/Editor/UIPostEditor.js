@@ -15,7 +15,7 @@ import {
   FooterActionBar,
   PostContainer,
   PostButton,
-} from '~/social/components/PostCreator/styles';
+} from '~/social/components/post/Creator/styles';
 
 const PostEditor = ({
   className = '',

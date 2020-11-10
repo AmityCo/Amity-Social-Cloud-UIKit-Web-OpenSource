@@ -1,6 +1,6 @@
 import React from 'react';
 
-import isModerator from '~/helpers/permissions';
+import { isModerator } from '~/helpers/permissions';
 import withSDK from '~/core/hocs/withSDK';
 
 import useCommunity from '~/social/hooks/useCommunity';

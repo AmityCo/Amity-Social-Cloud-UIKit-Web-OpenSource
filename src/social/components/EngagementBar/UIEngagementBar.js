@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import PostLikeButton from '~/social/components/PostLikeButton';
+import PostLikeButton from '~/social/components/post/LikeButton';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import Comment from '~/social/components/Comment';
 import { SecondaryButton } from '~/core/components/Button';

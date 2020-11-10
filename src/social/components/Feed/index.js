@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { EkoPostTargetType, EkoCommunityFilter } from 'eko-sdk';
 
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
-import PostCreator from '~/social/components/PostCreator';
-import Post from '~/social/components/Post';
+import PostCreator from '~/social/components/post/Creator';
+import Post from '~/social/components/post/Post';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import EmptyFeed from '~/social/components/EmptyFeed';

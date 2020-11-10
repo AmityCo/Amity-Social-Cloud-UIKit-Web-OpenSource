@@ -21,6 +21,7 @@ export const CommunityMemberContainer = styled.div`
   padding: 10px 16px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export const MemberInfo = styled.div`

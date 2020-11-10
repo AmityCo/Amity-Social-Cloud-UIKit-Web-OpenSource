@@ -12,5 +12,6 @@ export const OptionsIcon = styled(FaIcon).attrs({ icon: faEllipsisH })`
 
 export const OptionsButton = styled(SecondaryButton)`
   padding: 5px;
+  height: 2rem;
   color: ${({ theme }) => theme.palette.neutral.main};
 `;

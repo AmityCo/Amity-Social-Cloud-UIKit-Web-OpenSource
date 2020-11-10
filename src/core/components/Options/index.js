@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
@@ -19,7 +20,7 @@ const Options = ({ className, icon, options, position = 'bottom', align = 'end' 
     <Menu>
       {options.map(({ name, action }) => (
         <MenuItem key={name} onClick={attachCanceling(action)}>
-          {name}
+          <FormattedMessage id={name} />
         </MenuItem>
       ))}
     </Menu>

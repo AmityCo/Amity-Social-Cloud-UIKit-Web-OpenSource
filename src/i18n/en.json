@@ -13,5 +13,12 @@
   "exploreHeader.createCommunityTitle": "or create your own one!",
   "exploreHeader.createCommunityButton": "Create community",
   "backTitle": "Back",
-  "createCommunity": "Create Community"
+  "createCommunity": "Create Community",
+  "moderator": "Moderator",
+  "post.readMore": "...Read more",
+  "post.editPost": "Edit post",
+  "post.reportPost": "Report post",
+  "post.deletePost": "Delete post",
+  "post.confirmDelete": "This post will be permanently deleted. You’ll no longer to see and find this post. Continue?",
+  "delete": "Delete"
 }
