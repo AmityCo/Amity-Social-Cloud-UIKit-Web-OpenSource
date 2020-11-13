@@ -104,8 +104,10 @@ const CommunityForm = ({
   const description = watch('description', '');
 
   // what the hell...
+  // The logic is very overcomplicated, but left like this just to fix a bug until a proper refactor can be done.
   const isPublicFromForm = watch('isPublic', true);
-  const isPublic = isPublicFromForm === 'true';
+  const isPublic =
+    (typeof isPublicFromForm === 'boolean' && isPublicFromForm) || isPublicFromForm === 'true';
 
   const validateAndSubmit = async data => {
     if (!data.displayName.trim()) {
