@@ -20,7 +20,6 @@ const Feed = ({
   targetId = '',
   showPostCreator = false,
   onPostCreated,
-  emptyFeedIcon,
   goToExplore,
   onClickUser,
   noPostInteractionMessage = null,
@@ -60,11 +59,7 @@ const Feed = ({
             />
           ))}
         </LoadMore>
-        <EmptyFeed
-          targetType={targetType}
-          emptyFeedIcon={emptyFeedIcon}
-          goToExplore={goToExplore}
-        />
+        <EmptyFeed targetType={targetType} goToExplore={goToExplore} />
       </ConditionalRender>
     </FeedScrollContainer>
   );
@@ -79,7 +74,6 @@ Feed.propTypes = {
   onClickUser: PropTypes.func,
   // below is to be refactored
   goToExplore: PropTypes.func,
-  emptyFeedIcon: PropTypes.object,
   noPostInteractionMessage: PropTypes.string,
 };
 

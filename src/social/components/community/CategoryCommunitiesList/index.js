@@ -1,33 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { Grid, ListContainer } from './styles';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PaginatedList from '~/core/components/PaginatedList';
+import EmptyState from '~/core/components/EmptyState';
 import CommunityCard from '~/social/components/community/Card';
-
-const ListContainer = styled.div`
-  padding: 1rem;
-  padding-right: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.palette.system.borders};
-  background: ${({ theme }) => theme.palette.system.background};
-`;
-
-const Grid = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  & > * {
-    margin-bottom: 0.5rem;
-    margin-right: 0.5rem;
-  }
-`;
+import EmptyFeedIcon from '~/icons/EmptyFeed';
 
 const CategoryCommunitiesList = ({ categoryId, onClickCommunity }) => {
   const [communities, hasMore, loadMore] = useCommunitiesList({ categoryId });
+
   return (
     <ListContainer>
-      <PaginatedList items={communities} hasMore={hasMore} loadMore={loadMore} container={Grid}>
+      <PaginatedList
+        items={communities}
+        hasMore={hasMore}
+        loadMore={loadMore}
+        container={Grid}
+        emptyState={
+          <EmptyState
+            icon={<EmptyFeedIcon width={48} height={48} />}
+            title="It's empty here..."
+            description="No community found in this category"
+          />
+        }
+      >
         {({ communityId }) => (
           <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
         )}

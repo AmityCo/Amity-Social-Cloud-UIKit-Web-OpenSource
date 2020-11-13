@@ -1,7 +1,13 @@
 import React from 'react';
 
-const Svg = ({ className }) => (
-  <svg className={className} width="262" height="243" fill="none" viewBox="0 0 262 243">
+const Svg = ({ className, width, height }) => (
+  <svg
+    className={className}
+    width={width || '262'}
+    height={height || '243'}
+    fill="none"
+    viewBox="0 0 262 243"
+  >
     <g rel="balloon">
       <path fill="#BCF7FC" d="M104 149l-11 4 10 32 17 17-16-53z" />
       <path fill="#97E4FD" d="M162 174l5 11-31 15-24-2 50-24z" />

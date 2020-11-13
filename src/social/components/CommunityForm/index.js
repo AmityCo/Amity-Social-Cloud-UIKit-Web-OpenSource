@@ -7,7 +7,7 @@ import Button from '~/core/components/Button';
 import Radios from '~/core/components/Radio';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
-// import { AvatarUpload } from '~/core/components/Avatar/AvatarUpload';
+import { AvatarUpload } from '~/core/components/Avatar/AvatarUpload';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';
@@ -145,6 +145,7 @@ const CommunityForm = ({
     <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
       <FormBody>
         <FormBlock title="General" edit={edit}>
+          <AvatarUpload />
           <Field error={errors.displayName}>
             <LabelCounterWrapper>
               <Label htmlFor="displayName" className="required">

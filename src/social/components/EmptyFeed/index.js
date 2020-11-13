@@ -3,9 +3,31 @@ import PropTypes from 'prop-types';
 
 import { EkoPostTargetType } from 'eko-sdk';
 
+import styled from 'styled-components';
+
+import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
+import { faNewspaper } from '@fortawesome/pro-light-svg-icons';
+
+import { faSearch } from '@fortawesome/pro-regular-svg-icons';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import { EmptyFeedContainer, FeedIcon, ExploreLink, SearchIcon, Text } from './styles';
+import EmptyState from '~/core/components/EmptyState';
+import Button from '~/core/components/Button';
+
+const FeedIcon = styled(FaIcon).attrs({ icon: faNewspaper })`
+  font-size: 48px;
+  margin: 10px;
+`;
+
+const ExploreLink = styled(Button)`
+  font-size: 14px;
+  margin-top: 8px;
+`;
+
+const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
+  font-size: 16px;
+  margin-right: 6px;
+`;
 
 // TODO: react-intl
 const FeedTypesEmptyText = {
@@ -15,18 +37,8 @@ const FeedTypesEmptyText = {
   [EkoPostTargetType.MyFeed]: 'Your feed is empty. Start your first post',
 };
 
-const EmptyFeed = ({
-  targetType = EkoPostTargetType.MyFeed,
-  className = null,
-  emptyFeedIcon,
-  goToExplore,
-}) => (
-  <EmptyFeedContainer className={className}>
-    <ConditionalRender condition={emptyFeedIcon}>
-      {emptyFeedIcon}
-      <FeedIcon />
-    </ConditionalRender>
-    <Text>{FeedTypesEmptyText[targetType]}</Text>
+const EmptyFeed = ({ targetType = EkoPostTargetType.MyFeed, className = null, goToExplore }) => (
+  <EmptyState className={className} title={FeedTypesEmptyText[targetType]} icon={<FeedIcon />}>
     <ConditionalRender condition={goToExplore}>
       <div>
         <ExploreLink onClick={goToExplore}>
@@ -35,13 +47,12 @@ const EmptyFeed = ({
         </ExploreLink>
       </div>
     </ConditionalRender>
-  </EmptyFeedContainer>
+  </EmptyState>
 );
 
 EmptyFeed.propTypes = {
   targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)),
   className: PropTypes.string,
-  emptyFeedIcon: PropTypes.object,
   goToExplore: PropTypes.func,
 };
 
