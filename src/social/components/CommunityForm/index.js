@@ -1,5 +1,6 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
 import { FileRepository } from 'eko-sdk';
 
 import Switch from '~/core/components/Switch';
@@ -8,6 +9,7 @@ import Radios from '~/core/components/Radio';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import { AvatarUpload } from '~/core/components/Avatar/AvatarUpload';
+import { notification } from '~/core/components/Notification';
 
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';
@@ -43,39 +45,33 @@ const FormBlock = ({ title, children, edit }) => (
   </FormBlockContainer>
 );
 
-const PermissionSelector = forwardRef(({ name }, ref) => {
-  const ItemRenderer = ({ type, description, icon }) => (
-    <PermissionControlContainer>
-      <IconWrapper>{icon}</IconWrapper>
-      <div>
-        {type}
-        <Description>{description}</Description>
-      </div>
-    </PermissionControlContainer>
-  );
+const CommunityTypeItem = ({ type, description, icon }) => (
+  <PermissionControlContainer>
+    <IconWrapper>{icon}</IconWrapper>
+    <div>
+      {type}
+      <Description>{description}</Description>
+    </div>
+  </PermissionControlContainer>
+);
 
-  const items = [
-    {
-      type: 'Public',
-      description: 'Anyone can join, view and search the posts in this page.',
-      icon: <WorldIcon />,
-      customRenderer: ItemRenderer,
-      value: true,
-    },
-    {
-      type: 'Private',
-      description:
-        'Only members invited by the moderators can join, view, and search the posts in this page.',
-      icon: <LockIcon />,
-      customRenderer: ItemRenderer,
-      value: false,
-    },
-  ];
-
-  const [bool, setBool] = useState(items[0].value);
-
-  return <Radios value={bool} items={items} onChange={setBool} register={ref} name={name} />;
-});
+const communityTypeItems = [
+  {
+    type: 'Public',
+    description: 'Anyone can join, view and search the posts in this page.',
+    icon: <WorldIcon />,
+    customRenderer: CommunityTypeItem,
+    value: true,
+  },
+  {
+    type: 'Private',
+    description:
+      'Only members invited by the moderators can join, view, and search the posts in this page.',
+    icon: <LockIcon />,
+    customRenderer: CommunityTypeItem,
+    value: false,
+  },
+];
 
 const CommunityForm = ({
   community, // initialize form on editing
@@ -130,6 +126,12 @@ const CommunityForm = ({
     };
 
     await onSubmit(payload);
+
+    if (!edit) {
+      notification.success({
+        content: <FormattedMessage id="community.createSuccess" />,
+      });
+    }
   };
 
   if (edit && avatarFileId) {
@@ -212,7 +214,13 @@ const CommunityForm = ({
           </FormBlock>
         </ConditionalRender>
         <FormBlock title="Community permission" edit={edit}>
-          <PermissionSelector ref={register} name="isPublic" />
+          <Controller
+            name="isPublic"
+            render={({ value, onChange }) => (
+              <Radios items={communityTypeItems} value={value} onChange={() => onChange(!value)} />
+            )}
+            control={control}
+          />
         </FormBlock>
         <ConditionalRender condition={!isPublic}>
           <FormBlock title="Community members" edit={edit}>

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import { Radio, Label, Chip } from './styles';
@@ -28,14 +28,14 @@ const Radios = ({
   disabled = false,
   onChange = () => {},
 }) => {
-  const handleChange = useCallback(e => {
+  const handleChange = e => {
     try {
       const newVal = JSON.parse(e.target.value);
       onChange(newVal);
     } catch (err) {
       onChange(e.target.value);
     }
-  }, []);
+  };
 
   const Renderer = ({ item, checked, disabled: d }) => {
     const props = {
