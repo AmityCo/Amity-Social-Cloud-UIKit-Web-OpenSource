@@ -3,7 +3,7 @@ import React from 'react';
 import UiKitFile from './styles';
 
 export default {
-  title: 'Components/Uploaders/File',
+  title: 'Ui only/Uploaders',
 };
 
 export const SimpleFile = ({ remove, ...args }) => {
@@ -11,6 +11,8 @@ export const SimpleFile = ({ remove, ...args }) => {
   if (!remove) delete args.onRemove;
   return <UiKitFile {...args} />;
 };
+
+SimpleFile.storyName = 'File';
 
 SimpleFile.args = {
   name: 'file.txt',

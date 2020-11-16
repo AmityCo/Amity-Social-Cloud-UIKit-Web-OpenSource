@@ -34,7 +34,7 @@ const ImgPreviewContainerStyles = css`
   display: block;
   height: 100%;
   ${({ fullSize }) => fullSize && fullSizeStyle}
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 `;
 

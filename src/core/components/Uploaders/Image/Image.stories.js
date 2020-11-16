@@ -3,7 +3,7 @@ import React from 'react';
 import UiKitImage from './styles';
 
 export default {
-  title: 'Components/Uploaders/Image',
+  title: 'Ui only/Uploaders',
 };
 
 export const SimpleImage = ({ remove, ...args }) => {
@@ -11,6 +11,8 @@ export const SimpleImage = ({ remove, ...args }) => {
   if (!remove) delete args.onRemove;
   return <UiKitImage {...args} />;
 };
+
+SimpleImage.storyName = 'Image';
 
 SimpleImage.args = {
   url: '',

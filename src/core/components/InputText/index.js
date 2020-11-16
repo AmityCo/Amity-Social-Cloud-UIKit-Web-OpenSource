@@ -40,6 +40,7 @@ const styling = css`
   padding: 0.625rem 0.75rem;
   background: none;
   border: none;
+  box-sizing: border-box;
   outline: none;
   font: inherit;
 
@@ -71,10 +72,11 @@ const InputText = ({
   prepend,
   append,
   onChange = () => {},
+  className = null,
 }) => {
   const handleChange = useCallback(e => onChange(e.target.value), []);
 
-  const className = cx({ disabled, invalid });
+  const classNames = cx(className, { disabled, invalid });
 
   const props = {
     id,
@@ -83,11 +85,11 @@ const InputText = ({
     placeholder,
     disabled,
     onChange: handleChange,
-    className,
+    className: classNames,
   };
 
   return (
-    <Container className={className}>
+    <Container className={classNames}>
       {prepend}
 
       <ConditionalRender condition={multiline}>

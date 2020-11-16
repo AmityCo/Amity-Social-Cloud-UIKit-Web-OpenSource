@@ -21,5 +21,7 @@
   "post.deletePost": "Delete post",
   "post.confirmDelete": "This post will be permanently deleted. You’ll no longer to see and find this post. Continue?",
   "delete": "Delete",
-  "community.createSuccess": "Your community was successfully created"
+  "community.createSuccess": "Your community was successfully created",
+  "post": "Post",
+  "upload.attachmentLimit": "You reached the maximum attachment of {maxFiles}"
 }

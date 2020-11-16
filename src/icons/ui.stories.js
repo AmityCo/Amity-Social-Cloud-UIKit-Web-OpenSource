@@ -17,6 +17,8 @@ export const Balloon = () => <Icons.Balloon />;
 export const Dots = () => <Icons.Dots />;
 export const Plus = () => <Icons.Plus />;
 export const Remove = () => <Icons.Remove />;
+export const ImageAttachment = () => <Icons.ImageAttachment />;
+export const FileAttachment = () => <Icons.FileAttachment />;
 
 export const Files = () => (
   <div

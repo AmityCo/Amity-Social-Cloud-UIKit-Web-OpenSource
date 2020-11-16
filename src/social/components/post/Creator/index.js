@@ -1,38 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
+import { FormattedMessage } from 'react-intl';
 import { UserRepository, CommunityRepository, PostRepository, EkoPostTargetType } from 'eko-sdk';
 
-import { isEmpty, isEqual } from '~/helpers';
+import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
 import useUser from '~/core/hooks/useUser';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';
-import useFilesUpload from '~/core/hooks/useFilesUpload';
-import Images from '~/social/components/Images';
-import { ImageUpload } from '~/social/components/Images/ImageUpload';
-
-import { Files } from '~/core/components/Files';
-import { FileUpload } from '~/core/components/Files/FileUpload';
-import { confirm } from '~/core/components/Confirm';
+import { notification } from '~/core/components/Notification';
 import ConditionalRender from '~/core/components/ConditionalRender';
-
-import PostAsCommunity from './PostAsCommunity';
-import PostTargetSelector from './PostTargetSelector';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
+import PostTargetSelector from './components/PostTargetSelector';
+import UploaderButtons from './components/UploaderButtons';
+import ImagesUploaded from './components/ImagesUploaded';
+import FilesUploaded from './components/FilesUploaded';
+
 import {
   Avatar,
   PostCreatorContainer,
-  PostCreatorTextarea,
-  PostCreatorTextareaWrapper,
   Footer,
-  FooterActionBar,
   PostContainer,
   PostButton,
+  UploadsContainer,
+  PostInputText,
 } from './styles';
 
 const communityFetcher = id => () => CommunityRepository.communityForId(id);
@@ -46,15 +41,11 @@ const PostCreatorBar = ({
   enablePostTargetPicker,
   communities = [],
   placeholder = "What's going on...",
-  post = { text: '', files: [], images: [] },
   hasMoreCommunities,
   loadMoreCommunities,
   onCreateSuccess = () => {},
-  blockRouteChange,
+  maxFiles = 10,
 }) => {
-  // TODO: dont forget
-  const edit = false;
-
   const { user } = useUser(currentUserId);
 
   // default to me
@@ -77,71 +68,23 @@ const PostCreatorBar = ({
 
   const file = useFile(avatarFileId, [avatarFileId]);
 
-  const [text, setText] = useState(post.text);
+  const [postText, setPostText] = useState('');
+  const [postImages, setPostImages] = useState([]);
+  const [postFiles, setPostFiles] = useState([]);
 
-  const {
-    files: images,
-    addFiles: addImages,
-    updateFiles: updateImages,
-    setProgress: setImagesProgress,
-    removeFile: removeImage,
-    reset: resetImages,
-  } = useFilesUpload(post.images);
+  // Images/files incoming from uploads.
+  const [incomingImages, setIncomingImages] = useState([]);
+  const [incomingFiles, setIncomingFiles] = useState([]);
 
-  const {
-    files,
-    addFiles,
-    updateFiles,
-    setProgress: setFilesProgress,
-    removeFile,
-    reset: resetFiles,
-  } = useFilesUpload(post.files);
-
-  const [isDirty, markDirty] = useState(false);
-
-  const hasNotLoadedImages = images.some(image => image.isNew);
-  const hasNotLoadedFiles = files.some(f => f.isNew);
-
-  const isDisabled = isEmpty(text, images, files) || hasNotLoadedImages || hasNotLoadedFiles;
-
-  if (blockRouteChange) {
-    const onConfirm = goToNextPage => () => {
-      blockRouteChange(() => true);
-      goToNextPage();
-      markDirty(false);
-    };
-
-    blockRouteChange(goToNextPage => {
-      if (isDirty) {
-        confirm({
-          title: 'Leave without finishing?',
-          content: 'Your progress won’t be saved. Are you sure to leave this page now?',
-          cancelText: 'Continue editing',
-          okText: 'Leave',
-          onOk: onConfirm(goToNextPage),
-        });
-      }
-
-      return !isDirty;
-    });
-  }
-
-  useEffect(() => {
-    markDirty(
-      !isEqual(text, post.text) || !isEqual(files, post.files) || !isEqual(images, post.images),
-    );
-  }, [text, files, images]);
+  const [uploadLoading, setUploadLoading] = useState(false);
+  const isDisabled = isEmpty(postText, postImages, postFiles) || uploadLoading;
 
   const createPost = async () => {
-    if (isEmpty(text, images, files)) {
-      return;
-    }
-
     const payload = {};
 
-    if (text) payload.text = text;
-    if (images.length) payload.imageIds = images.map(i => i.fileId);
-    if (files.length) payload.fileIds = files.map(f => f.fileId);
+    if (postText) payload.text = postText;
+    if (postImages.length) payload.imageIds = postImages.map(i => i.fileId);
+    if (postFiles.length) payload.fileIds = postFiles.map(f => f.fileId);
 
     const newPostLiveObject = PostRepository.createPost({
       ...payload,
@@ -151,16 +94,21 @@ const PostCreatorBar = ({
     newPostLiveObject.on('dataStatusChanged', () => {
       const { postId } = newPostLiveObject.model;
       onCreateSuccess(postId);
-      setText('');
-      resetImages();
-      resetFiles();
+      setPostText('');
+      setPostImages([]);
+      setPostFiles([]);
+      setIncomingImages([]);
+      setIncomingFiles([]);
 
       newPostLiveObject.dispose();
     });
   };
 
-  const canUploadImage = !files.length;
-  const canUploadFile = !images.length;
+  const onMaxFilesLimit = () => {
+    notification.info({
+      content: <FormattedMessage id="upload.attachmentLimit" values={{ maxFiles }} />,
+    });
+  };
 
   const backgroundImage =
     target.targetType === EkoPostTargetType.CommunityFeed ? CommunityImage : UserImage;
@@ -185,46 +133,41 @@ const PostCreatorBar = ({
         {CurrentTargetAvatar}
       </ConditionalRender>
       <PostContainer>
-        <PostCreatorTextareaWrapper>
-          <PostCreatorTextarea
-            placeholder={placeholder}
-            type="text"
-            value={text}
-            onChange={e => setText(e.target.value)}
-          />
-
-          <ConditionalRender condition={files.length}>
-            <Files files={files} onRemove={removeFile} />
-          </ConditionalRender>
-          <ConditionalRender condition={images.length}>
-            <Images images={images} onRemove={removeImage} />
-          </ConditionalRender>
-        </PostCreatorTextareaWrapper>
+        <PostInputText
+          multiline
+          value={postText}
+          onChange={text => setPostText(text)}
+          placeholder={placeholder}
+          append={
+            <UploadsContainer>
+              <ImagesUploaded
+                files={incomingImages}
+                onLoadingChange={setUploadLoading}
+                onChange={uploadedImages => setPostImages(uploadedImages)}
+                uploadLoading={uploadLoading}
+              />
+              <FilesUploaded
+                files={incomingFiles}
+                onLoadingChange={setUploadLoading}
+                onChange={uploadedFiles => setPostFiles(uploadedFiles)}
+                uploadLoading={uploadLoading}
+              />
+            </UploadsContainer>
+          }
+        />
         <Footer>
-          <ConditionalRender condition={false}>
-            <PostAsCommunity value="" onChange="" />
-          </ConditionalRender>
-          <FooterActionBar>
-            <ConditionalRender condition={!edit}>
-              <>
-                <ImageUpload
-                  disabled={!canUploadImage}
-                  addImages={addImages}
-                  updateImages={updateImages}
-                  setProgress={setImagesProgress}
-                />
-                <FileUpload
-                  disabled={!canUploadFile}
-                  addFiles={addFiles}
-                  updateFiles={updateFiles}
-                  setProgress={setFilesProgress}
-                />
-              </>
-            </ConditionalRender>
-            <PostButton disabled={isDisabled} onClick={createPost}>
-              Post
-            </PostButton>
-          </FooterActionBar>
+          <UploaderButtons
+            imageUploadDisabled={postFiles.length > 0 || uploadLoading}
+            fileUploadDisabled={postImages.length > 0 || uploadLoading}
+            onChangeImages={newImages => setIncomingImages(newImages)}
+            onChangeFiles={newFiles => setIncomingFiles(newFiles)}
+            onMaxFilesLimit={onMaxFilesLimit}
+            fileLimitRemaining={maxFiles - postFiles.length - postImages.length}
+            uploadLoading={uploadLoading}
+          />
+          <PostButton disabled={isDisabled} onClick={createPost}>
+            <FormattedMessage id="post" />
+          </PostButton>
         </Footer>
       </PostContainer>
     </PostCreatorContainer>
@@ -239,15 +182,10 @@ PostCreatorBar.propTypes = {
   communities: PropTypes.array,
   className: PropTypes.string,
   placeholder: PropTypes.string,
-  blockRouteChange: PropTypes.func,
-  post: PropTypes.shape({
-    text: PropTypes.string,
-    images: PropTypes.arrayOf(PropTypes.string),
-    files: PropTypes.arrayOf(PropTypes.string),
-  }),
   hasMoreCommunities: PropTypes.bool,
   loadMoreCommunities: PropTypes.func,
   enablePostTargetPicker: PropTypes.bool,
+  maxFiles: PropTypes.number,
 };
 
 export default withSDK(PostCreatorBar);

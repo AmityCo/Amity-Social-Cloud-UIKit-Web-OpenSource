@@ -29,9 +29,29 @@ const muteEvent = fn => e => {
   return fn(e);
 };
 
-const FileLoader = ({ className, mimeType, multiple, disabled, onChange, children }) => {
+const FileLoader = ({
+  className,
+  mimeType,
+  multiple,
+  disabled,
+  onChange,
+  onMaxFilesLimit,
+  fileLimitRemaining,
+  children,
+}) => {
   const [uniqId] = useState(`_${(Date.now() * Math.random()).toString(36)}`);
   const [hover, setHover] = useState(false);
+
+  const getLimitFiles = targetFiles => {
+    const limitFiles = targetFiles.slice(0, multiple ? fileLimitRemaining : 1);
+
+    // Attempted to upload more files than allowed meaning some have been removed.
+    if (limitFiles.length < targetFiles.length) {
+      onMaxFilesLimit();
+    }
+
+    return limitFiles;
+  };
 
   const onDragEnter = useCallback(
     muteEvent(e => {
@@ -52,7 +72,9 @@ const FileLoader = ({ className, mimeType, multiple, disabled, onChange, childre
   const onLoad = useCallback(
     muteEvent(e => {
       if (disabled) return;
-      onChange(Array.from(e.target.files));
+      const targetFiles = Array.from(e.target.files);
+      const limitFiles = getLimitFiles(targetFiles);
+      limitFiles.length && onChange(limitFiles);
     }),
   );
 
@@ -65,11 +87,13 @@ const FileLoader = ({ className, mimeType, multiple, disabled, onChange, childre
         .map(expr => expr.replace('*', '.*'))
         .map(expr => new RegExp(expr));
 
-      const files = Array.from(e.dataTransfer.files)
-        .filter(file => exprs.some(expr => expr.test(file.type)))
-        .slice(0, multiple ? undefined : 1);
+      const allowedFiles = Array.from(e.dataTransfer.files).filter(file =>
+        exprs.some(expr => expr.test(file.type)),
+      );
 
-      if (files.length) onChange(files);
+      const limitFiles = getLimitFiles(allowedFiles);
+
+      if (limitFiles.length) onChange(limitFiles);
       setHover(false);
     }),
   );
@@ -94,6 +118,8 @@ FileLoader.propTypes = {
   mimeType: PropTypes.string,
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
+  fileLimitRemaining: PropTypes.number,
+  onMaxFilesLimit: PropTypes.func,
   onChange: PropTypes.func,
   children: PropTypes.node,
 };
@@ -103,6 +129,8 @@ FileLoader.defaultProps = {
   mimeType: '*/*',
   multiple: false,
   disabled: false,
+  fileLimitRemaining: null,
+  onMaxFilesLimit: () => {},
   onChange: () => {},
   children: [],
 };

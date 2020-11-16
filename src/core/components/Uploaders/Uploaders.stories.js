@@ -1,11 +1,9 @@
 import React from 'react';
 
-import UiKitFileLoader from './FileLoader';
-import UiKitFileUploader from './FileUploader';
-import UiKitImageUploader from './ImageUploader';
+import UiKitFileLoader from './Loader';
 
 export default {
-  title: 'Components/Uploaders',
+  title: 'Ui only/Uploaders',
 };
 
 export const LocalLoader = args => {
@@ -23,6 +21,8 @@ export const LocalLoader = args => {
     </UiKitFileLoader>
   );
 };
+
+LocalLoader.storyName = 'Loader';
 
 LocalLoader.args = {
   mimeType: 'image/*',
@@ -48,41 +48,3 @@ LocalLoader.argTypes = {
   },
   onChange: { action: 'onChange()' },
 };
-
-export const FileUploader = ({ remove, ...args }) => {
-  return (
-    <UiKitFileUploader {...args}>
-      <div
-        style={{
-          padding: '1em',
-          border: '1px dashed #dfdfdf',
-          textAlign: 'center',
-        }}
-      >
-        Click/Drop to upload
-      </div>
-    </UiKitFileUploader>
-  );
-};
-
-FileUploader.args = { ...LocalLoader.args };
-FileUploader.argTypes = { ...LocalLoader.argTypes };
-
-export const ImageUploader = ({ remove, ...args }) => {
-  return (
-    <UiKitImageUploader {...args}>
-      <div
-        style={{
-          padding: '1em',
-          border: '1px dashed #dfdfdf',
-          textAlign: 'center',
-        }}
-      >
-        Click/Drop to upload
-      </div>
-    </UiKitImageUploader>
-  );
-};
-
-ImageUploader.args = { ...LocalLoader.args };
-ImageUploader.argTypes = { ...LocalLoader.argTypes };

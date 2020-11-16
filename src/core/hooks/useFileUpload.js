@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { FileRepository } from 'eko-sdk';
 
-export default (onChange = () => {}) => {
+export default (onChange = () => {}, onLoadingChange = () => {}) => {
   const [uploading, setUploading] = useState([]); // local File objects
   const [uploaded, setUploaded] = useState([]); // SDK File models
   const [progress, setProgress] = useState({}); // individual progress
@@ -45,6 +45,7 @@ export default (onChange = () => {}) => {
     let cancel = false;
 
     (async () => {
+      onLoadingChange(true);
       const models = await FileRepository.uploadFiles({
         files: uploading,
         onProgress: ({ currentFile, currentPercent }) => {
@@ -53,7 +54,10 @@ export default (onChange = () => {}) => {
       });
 
       // cancel xhr, the easy way
-      if (cancel) return;
+      if (cancel) {
+        onLoadingChange(false);
+        return;
+      }
 
       setUploading([]);
       setProgress({});
@@ -61,6 +65,7 @@ export default (onChange = () => {}) => {
       const updated = [...uploaded, ...models];
       setUploaded(updated);
       onChange(updated);
+      onLoadingChange(false);
     })();
 
     return () => {

@@ -1,21 +1,46 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
+import { faSortDown } from '@fortawesome/pro-solid-svg-icons';
 
 import { EkoPostTargetType } from 'eko-sdk';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
+import UIAvatar from '~/core/components/Avatar';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
-import {
-  PostTargetSelectorContainer,
-  CommunitySeparator,
-  SelectIcon,
-  Avatar,
-  CommunityList,
-} from './styles';
+const SelectIcon = styled(FaIcon).attrs({ icon: faSortDown })`
+  font-size: 18px;
+  margin-right: 8px;
+  margin-top: -4px;
+`;
+
+const Avatar = styled(UIAvatar)`
+  margin-right: 8px;
+`;
+
+const PostTargetSelectorContainer = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const CommunitySeparator = styled.div`
+  ${({ theme }) => theme.typography.caption}
+  border-top: 1px solid #e3e4e8;
+  color: ${({ theme }) => theme.palette.base.shade1};
+  padding: 12px;
+`;
+
+const CommunityList = styled.div`
+  position: relative;
+  height: 350px;
+  overflow: auto;
+`;
 
 const PostTargetSelector = ({
   user,
