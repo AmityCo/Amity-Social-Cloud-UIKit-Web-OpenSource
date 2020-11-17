@@ -1,21 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-
 import { EkoPostDataType } from 'eko-sdk';
 
 import customizableComponent from '~/core/hocs/customization';
-
 import ConditionalRender from '~/core/components/ConditionalRender';
-
 import {
   PostCreatorContainer,
-  PostCreatorTextarea,
-  PostCreatorTextareaWrapper,
   Footer,
-  FooterActionBar,
   PostContainer,
   PostButton,
 } from '~/social/components/post/Creator/styles';
+import { PostCreatorTextareaWrapper, PostCreatorTextarea, FooterActionBar } from './styles';
 
 const PostEditor = ({
   className = '',
