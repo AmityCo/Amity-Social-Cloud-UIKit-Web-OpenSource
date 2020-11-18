@@ -45,12 +45,19 @@ export const ModeratorBadge = styled.div`
   ${({ theme }) => theme.typography.captionBold};
 `;
 
+export const MessageContainer = styled.div`
+  color: ${({ theme }) => theme.palette.base.shade1};
+  ${({ theme }) => theme.typography.caption}
+
+  &::before {
+    content: '• ';
+    margin-left: 4px;
+  }
+`;
+
 export const AdditionalInfo = styled.div`
   display: flex;
   align-items: center;
-  & > .time {
-    margin-bottom: 4px;
-  }
 
   ${({ showTime }) =>
     showTime &&

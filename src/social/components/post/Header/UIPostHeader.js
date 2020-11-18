@@ -1,9 +1,10 @@
-import React, { cloneElement } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import customizableComponent from '~/core/hocs/customization';
 import Time from '~/core/components/Time';
 import Avatar from '~/core/components/Avatar';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { backgroundImage as UserImage } from '~/icons/User';
 import {
   Name,
@@ -15,6 +16,7 @@ import {
   ArrowSeparator,
   PostHeaderContainer,
   PostNamesContainer,
+  MessageContainer,
 } from './styles';
 
 const UIPostHeader = ({
@@ -23,6 +25,7 @@ const UIPostHeader = ({
   postTargetName,
   timeAgo,
   isModerator,
+  isEdited,
   onClickUser,
 }) => {
   const renderPostNames = () => {
@@ -40,14 +43,21 @@ const UIPostHeader = ({
   };
 
   const renderAdditionalInfo = () => {
-    const time = timeAgo ? <Time date={timeAgo} /> : null;
-    if (!isModerator) return time;
     return (
-      <AdditionalInfo showTime={!!time}>
-        <ModeratorBadge>
-          <ShieldIcon /> <FormattedMessage id="moderator" />
-        </ModeratorBadge>
-        {cloneElement(time, { className: 'time' })}
+      <AdditionalInfo showTime={!!timeAgo}>
+        <ConditionalRender condition={isModerator}>
+          <ModeratorBadge>
+            <ShieldIcon /> <FormattedMessage id="moderator" />
+          </ModeratorBadge>
+        </ConditionalRender>
+        <ConditionalRender condition={timeAgo}>
+          <Time date={timeAgo} />
+        </ConditionalRender>
+        <ConditionalRender condition={isEdited}>
+          <MessageContainer>
+            <FormattedMessage id="post.edited" />
+          </MessageContainer>
+        </ConditionalRender>
       </AdditionalInfo>
     );
   };
@@ -69,6 +79,7 @@ UIPostHeader.propTypes = {
   postTargetName: PropTypes.string,
   timeAgo: PropTypes.instanceOf(Date),
   isModerator: PropTypes.bool,
+  isEdited: PropTypes.bool,
   onClickUser: PropTypes.func,
 };
 
@@ -78,6 +89,7 @@ UIPostHeader.defaultProps = {
   postTargetName: '',
   timeAgo: null,
   isModerator: false,
+  isEdited: false,
   onClickUser: () => {},
 };
 

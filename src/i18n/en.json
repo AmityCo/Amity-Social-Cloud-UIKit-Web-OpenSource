@@ -20,6 +20,7 @@
   "post.reportPost": "Report post",
   "post.deletePost": "Delete post",
   "post.confirmDelete": "This post will be permanently deleted. You’ll no longer to see and find this post. Continue?",
+  "post.edited": "Edited",
   "delete": "Delete",
   "community.createSuccess": "Your community was successfully created",
   "post": "Post",
