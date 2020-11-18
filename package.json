@@ -79,7 +79,7 @@
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@hookform/error-message": "0.0.4",
     "classnames": "^2.2.6",
-    "eko-sdk": "^4.0.28",
+    "eko-sdk": "^4.0.29",
     "filesize": "^6.1.0",
     "human-readable-numbers": "^0.9.5",
     "javascript-time-ago": "^2.0.13",

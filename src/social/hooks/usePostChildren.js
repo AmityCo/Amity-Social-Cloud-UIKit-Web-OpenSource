@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { PostRepository } from 'eko-sdk';
 
 const usePostChildren = postChildrenIds => {
   const [childrenPosts, setChildrenPosts] = useState([]);
+
+  // reset local state when new children are passed
+  useEffect(() => setChildrenPosts([]), [postChildrenIds]);
 
   const addChildPost = newChildPost => {
     const isAlreadyLoaded = childrenPosts.find(child => child.postId === newChildPost.postId);

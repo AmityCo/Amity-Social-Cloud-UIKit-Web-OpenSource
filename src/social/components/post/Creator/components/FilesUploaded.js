@@ -34,14 +34,14 @@ const Files = ({ files, onChange, onLoadingChange, uploadLoading }) => (
 
 Files.propTypes = {
   files: PropTypes.array,
-  onChange: PropTypes.array,
+  onChange: PropTypes.func,
   onLoadingChange: PropTypes.func,
   uploadLoading: PropTypes.bool,
 };
 
 Files.defaultProps = {
   files: [],
-  onChange: [],
+  onChange: () => {},
   onLoadingChange: () => {},
   uploadLoading: false,
 };

@@ -1,30 +1,26 @@
 import styled from 'styled-components';
-import TextareaAutosize from 'react-autosize-textarea';
+import { PrimaryButton } from '~/core/components/Button';
 
-export const PostCreatorTextareaWrapper = styled.div`
+export const PostEditorContainer = styled.div`
+  width: 520px;
+  padding: 0;
   border: none;
-  padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  background: ${({ theme }) => theme.palette.system.background};
   border-radius: 4px;
-  min-height: 40px;
 `;
 
-export const PostCreatorTextarea = styled(TextareaAutosize).attrs({ rows: 1, maxRows: 15 })`
-  padding: 0;
-  outline: none;
-  border: none;
-  border-radius: 4px;
-  resize: none;
-  font: inherit;
+export const ContentContainer = styled.div`
+  padding: 16px;
 `;
 
-export const FooterActionBar = styled.div`
-  display: flex;
-  align-items: center;
+export const Footer = styled.div`
+  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
+  padding: 12px 16px;
+`;
 
-  > *:not(:last-child) {
-    margin-right: 20px;
-  }
+export const PostButton = styled(PrimaryButton)`
+  padding: 10px 16px;
+  margin-left: auto;
 `;

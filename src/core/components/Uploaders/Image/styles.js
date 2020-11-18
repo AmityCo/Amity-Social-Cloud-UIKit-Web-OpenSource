@@ -18,7 +18,7 @@ export const ImageContainer = styled.div`
   display: inline-block;
   min-width: 2em;
   min-height: 2em;
-  border: 1px solid ${({ theme }) => theme.palette.base.shade4};
+  width: 100%;
   border-radius: 4px;
   overflow: hidden;
   ${({ fullSize }) => fullSize && fullSizeStyle}

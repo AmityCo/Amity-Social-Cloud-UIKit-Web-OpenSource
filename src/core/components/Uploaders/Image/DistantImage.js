@@ -11,6 +11,7 @@ const Image = ({ fileId, onRemove, fullSize } = {}) => {
 
   if (!file.fileId) return null;
 
+  // TODO: this is temporary - we should use file.fileUrl when supported.
   const fileUrl = FileRepository.getFileUrlById({
     fileId: file.fileId,
     imageSize: EkoImageSize.Medium,

@@ -38,7 +38,7 @@ CommunityHeader.propTypes = {
   onClick: PropTypes.func,
   isSearchResult: PropTypes.bool,
   searchInput: PropTypes.string,
-  children: PropTypes.oneOf([PropTypes.func, PropTypes.node]),
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
 };
 
 CommunityHeader.defaultProps = {

@@ -11,7 +11,7 @@ import Modal from '~/core/components/Modal';
 import PostEditor from '~/social/components/post/Editor';
 import EngagementBar from '~/social/components/EngagementBar';
 import Header from '~/social/components/post/Header';
-import Content from '~/social/components/post/Content';
+import Content from './Content';
 import { PostContainer, PostHeadContainer, Options } from './styles';
 
 // Number of lines to show in a text post before truncating.
