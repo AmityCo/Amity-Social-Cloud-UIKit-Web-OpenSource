@@ -30,6 +30,11 @@ export default (onChange = () => {}, onLoadingChange = () => {}) => {
     [progress],
   );
 
+  const reset = useCallback(() => {
+    setUploaded([]);
+    onChange([]);
+  }, []);
+
   const removeFile = useCallback(
     fileId => {
       const without = uploaded.filter(file => file.fileId !== fileId);
@@ -79,5 +84,6 @@ export default (onChange = () => {}, onLoadingChange = () => {}) => {
     progress,
     addFiles,
     removeFile,
+    reset,
   };
 };

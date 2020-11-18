@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import cx from 'classnames';
 
+// equals to 1 GB
+const MAX_FILE_SIZE = 1073741824;
+
 const FileLoaderContainer = styled.label`
   cursor: pointer;
   background: rgba(0, 0, 0, 0);
@@ -36,22 +39,17 @@ const FileLoader = ({
   disabled,
   onChange,
   onMaxFilesLimit,
+  onFileSizeLimit,
   fileLimitRemaining,
   children,
 }) => {
   const [uniqId] = useState(`_${(Date.now() * Math.random()).toString(36)}`);
   const [hover, setHover] = useState(false);
 
-  const getLimitFiles = targetFiles => {
-    const limitFiles = targetFiles.slice(0, multiple ? fileLimitRemaining : 1);
+  const getLimitFiles = targetFiles => targetFiles.slice(0, multiple ? fileLimitRemaining : 1);
 
-    // Attempted to upload more files than allowed meaning some have been removed.
-    if (limitFiles.length < targetFiles.length) {
-      onMaxFilesLimit();
-    }
-
-    return limitFiles;
-  };
+  const checkFileSizeLimit = targetFiles => targetFiles.some(file => file.size > MAX_FILE_SIZE);
+  const checkFilesLimit = targetFiles => fileLimitRemaining < targetFiles.length;
 
   const onDragEnter = useCallback(
     muteEvent(e => {
@@ -73,8 +71,21 @@ const FileLoader = ({
     muteEvent(e => {
       if (disabled) return;
       const targetFiles = Array.from(e.target.files);
+      const isFileSizeLimitReached = checkFileSizeLimit(targetFiles);
+      const isFilesLimitReached = checkFilesLimit(targetFiles);
       const limitFiles = getLimitFiles(targetFiles);
-      limitFiles.length && onChange(limitFiles);
+
+      if (isFileSizeLimitReached) {
+        e.target.value = null;
+        onFileSizeLimit();
+      } else if (limitFiles.length) {
+        onChange(limitFiles);
+      }
+
+      // Attempted to upload more files than allowed meaning some have been removed.
+      if (isFilesLimitReached) {
+        onMaxFilesLimit();
+      }
     }),
   );
 
@@ -120,6 +131,7 @@ FileLoader.propTypes = {
   disabled: PropTypes.bool,
   fileLimitRemaining: PropTypes.number,
   onMaxFilesLimit: PropTypes.func,
+  onFileSizeLimit: PropTypes.func,
   onChange: PropTypes.func,
   children: PropTypes.node,
 };
@@ -131,6 +143,7 @@ FileLoader.defaultProps = {
   disabled: false,
   fileLimitRemaining: null,
   onMaxFilesLimit: () => {},
+  onFileSizeLimit: () => {},
   onChange: () => {},
   children: [],
 };

@@ -16,6 +16,7 @@ const PostCreatorUploaders = ({
   onChangeFiles,
   uploadLoading,
   onMaxFilesLimit,
+  onFileSizeLimit,
   fileLimitRemaining,
 }) => (
   <>
@@ -24,6 +25,7 @@ const PostCreatorUploaders = ({
       onChange={onChangeImages}
       uploadLoading={uploadLoading}
       onMaxFilesLimit={onMaxFilesLimit}
+      onFileSizeLimit={onFileSizeLimit}
       fileLimitRemaining={fileLimitRemaining}
       multiple
     >
@@ -35,6 +37,7 @@ const PostCreatorUploaders = ({
       onChange={onChangeFiles}
       uploadLoading={uploadLoading}
       onMaxFilesLimit={onMaxFilesLimit}
+      onFileSizeLimit={onFileSizeLimit}
       fileLimitRemaining={fileLimitRemaining}
       multiple
     >
@@ -51,6 +54,7 @@ PostCreatorUploaders.propTypes = {
   onChangeImages: PropTypes.func,
   onChangeFiles: PropTypes.func,
   onMaxFilesLimit: PropTypes.func,
+  onFileSizeLimit: PropTypes.func,
 };
 
 PostCreatorUploaders.defaultProps = {
@@ -61,6 +65,7 @@ PostCreatorUploaders.defaultProps = {
   onChangeImages: () => {},
   onChangeFiles: () => {},
   onMaxFilesLimit: () => {},
+  onFileSizeLimit: () => {},
 };
 
 export default PostCreatorUploaders;

@@ -24,5 +24,6 @@
   "delete": "Delete",
   "community.createSuccess": "Your community was successfully created",
   "post": "Post",
-  "upload.attachmentLimit": "You reached the maximum attachment of {maxFiles}"
+  "upload.attachmentLimit": "You reached the maximum attachment of {maxFiles}",
+  "upload.fileSizeLimit": "One of the selected file is larger than 1GB. Please select a new file."
 }

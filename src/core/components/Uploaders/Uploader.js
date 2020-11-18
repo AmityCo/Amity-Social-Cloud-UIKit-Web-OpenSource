@@ -4,13 +4,14 @@ import PropTypes from 'prop-types';
 import useFileUpload from '~/core/hooks/useFileUpload';
 
 const FileUploader = ({ files, onChange, onLoadingChange, children }) => {
-  const { uploading, uploaded, progress, addFiles, removeFile } = useFileUpload(
+  const { uploading, uploaded, progress, addFiles, removeFile, reset } = useFileUpload(
     onChange,
     onLoadingChange,
   );
 
   useEffect(() => {
     files && addFiles(files);
+    !files.length && reset();
   }, [files]);
 
   if (!files?.length || (!uploading.length && !uploaded.length)) return null;

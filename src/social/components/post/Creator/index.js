@@ -33,6 +33,8 @@ import {
 const communityFetcher = id => () => CommunityRepository.communityForId(id);
 const userFetcher = id => () => new UserRepository().userForId(id);
 
+const MAX_FILES_PER_POST = 10;
+
 const PostCreatorBar = ({
   className = '',
   currentUserId,
@@ -44,7 +46,7 @@ const PostCreatorBar = ({
   hasMoreCommunities,
   loadMoreCommunities,
   onCreateSuccess = () => {},
-  maxFiles = 10,
+  maxFiles = MAX_FILES_PER_POST,
 }) => {
   const { user } = useUser(currentUserId);
 
@@ -110,6 +112,12 @@ const PostCreatorBar = ({
     });
   };
 
+  const onFileSizeLimit = () => {
+    notification.info({
+      content: <FormattedMessage id="upload.fileSizeLimit" />,
+    });
+  };
+
   const backgroundImage =
     target.targetType === EkoPostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
@@ -162,6 +170,7 @@ const PostCreatorBar = ({
             onChangeImages={newImages => setIncomingImages(newImages)}
             onChangeFiles={newFiles => setIncomingFiles(newFiles)}
             onMaxFilesLimit={onMaxFilesLimit}
+            onFileSizeLimit={onFileSizeLimit}
             fileLimitRemaining={maxFiles - postFiles.length - postImages.length}
             uploadLoading={uploadLoading}
           />
