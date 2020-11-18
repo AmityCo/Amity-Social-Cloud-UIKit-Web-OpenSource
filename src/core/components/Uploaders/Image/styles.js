@@ -8,20 +8,16 @@ import ProgressBar from '~/core/components/ProgressBar';
 
 import RemoveIcon from '~/icons/Remove';
 
-const fullSizeStyle = css`
-  width: 100%;
-  max-width: 600px;
-`;
-
 export const ImageContainer = styled.div`
   position: relative;
   display: inline-block;
   min-width: 2em;
   min-height: 2em;
   width: 100%;
+  height: 100%;
+  border: ${({ theme, border }) => border && `1px solid ${theme.palette.base.shade4}`};
   border-radius: 4px;
   overflow: hidden;
-  ${({ fullSize }) => fullSize && fullSizeStyle}
 `;
 
 export const Content = styled.div`
@@ -32,9 +28,9 @@ export const Content = styled.div`
 
 const ImgPreviewContainerStyles = css`
   display: block;
+  width: 100%;
   height: 100%;
-  ${({ fullSize }) => fullSize && fullSizeStyle}
-  object-fit: cover;
+  object-fit: ${({ imageFit }) => imageFit ?? 'cover'};
   object-position: center;
 `;
 
@@ -52,7 +48,7 @@ export const RemoveButton = styled(Button)`
   right: 0.5em;
 `;
 
-const Image = ({ url, progress, onRemove, fullSize }) => {
+const Image = ({ url, progress, imageFit, noBorder, onRemove }) => {
   const removeCallback = useCallback(
     e => {
       e.preventDefault();
@@ -63,12 +59,12 @@ const Image = ({ url, progress, onRemove, fullSize }) => {
   );
 
   return (
-    <ImageContainer fullSize={fullSize}>
+    <ImageContainer border={!noBorder}>
       <Content remove={!!onRemove}>
         {url ? (
-          <ImgPreview src={url} fullSize={fullSize} />
+          <ImgPreview src={url} imageFit={imageFit} />
         ) : (
-          <SkeletonWrapper fullSize={fullSize}>
+          <SkeletonWrapper imageFit={imageFit}>
             <Skeleton />
           </SkeletonWrapper>
         )}
@@ -88,8 +84,9 @@ const Image = ({ url, progress, onRemove, fullSize }) => {
 Image.propTypes = {
   url: PropTypes.string,
   progress: PropTypes.number,
+  imageFit: PropTypes.oneOf(['cover', 'contain']),
+  noBorder: PropTypes.bool,
   onRemove: PropTypes.func,
-  fullSize: PropTypes.bool,
 };
 
 Image.defaultProps = {

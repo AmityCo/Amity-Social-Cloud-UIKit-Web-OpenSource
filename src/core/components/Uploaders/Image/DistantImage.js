@@ -6,7 +6,7 @@ import useFile from '~/core/hooks/useFile';
 
 import StyledImage from './styles';
 
-const Image = ({ fileId, onRemove, fullSize } = {}) => {
+const Image = ({ fileId, imageFit, noBorder, onRemove } = {}) => {
   const file = useFile(fileId);
 
   if (!file.fileId) return null;
@@ -17,18 +17,18 @@ const Image = ({ fileId, onRemove, fullSize } = {}) => {
     imageSize: EkoImageSize.Medium,
   });
 
-  return <StyledImage url={fileUrl} onRemove={onRemove} fullSize={fullSize} />;
+  return <StyledImage url={fileUrl} imageFit={imageFit} noBorder={noBorder} onRemove={onRemove} />;
 };
 
 Image.propTypes = {
   fileId: PropTypes.string.isRequired,
+  imageFit: PropTypes.oneOf(['cover', 'contain']),
+  noBorder: PropTypes.bool,
   onRemove: PropTypes.func,
-  fullSize: PropTypes.bool,
 };
 
 Image.defaultProps = {
   onRemove: () => {},
-  fullSize: false,
 };
 
 export default Image;

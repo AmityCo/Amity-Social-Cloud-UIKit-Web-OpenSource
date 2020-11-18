@@ -1,41 +1,39 @@
+import React from 'react';
 import styled from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faChevronRight, faChevronLeft } from '@fortawesome/pro-regular-svg-icons';
+import { ChevronLeft, ChevronRight, Remove } from '~/icons';
 
-export const ImageContainer = styled.div`
-  position: relative;
-  overflow: hidden;
-  height: 100%;
-  img {
-    object-fit: contain;
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-export const ImageGalleryContainer = styled.div`
-  display: grid;
-  grid-gap: 30px;
-  grid-template-columns: 12px auto 12px;
-  align-items: center;
-  width: 100%;
-  overflow: hidden;
-
+export const Container = styled.div`
   z-index: 9999;
   position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background: rgba(23, 24, 28, 0.8);
-  color: white;
+  overflow: hidden;
 
-  padding: 60px;
+  display: grid;
+  grid-gap: 1rem 3rem;
+  grid-template-columns: 2rem auto 2rem;
+  grid-template-rows: min-content auto;
+  grid-template-areas:
+    'none counter close'
+    'left image right';
+
+  align-items: center;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 3rem;
+
+  background: rgba(0, 0, 0, 0.75);
+  color: ${({ theme }) => theme.palette.system.background};
+
   user-select: none;
 
   animation-duration: 0.3s;
   animation-name: appear;
+
   @keyframes appear {
     from {
       opacity: 0;
@@ -47,27 +45,56 @@ export const ImageGalleryContainer = styled.div`
   }
 `;
 
+const Image = styled.img`
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+`;
+
+export const ImageRenderer = url => <Image key={url} src={url} />;
+
+export const Frame = styled.div`
+  grid-area: image;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;
+
 export const Counter = styled.div`
-  text-align: center;
-  padding-bottom: 10px;
+  grid-area: counter;
   ${({ theme }) => theme.typography.headline}
+  text-align: center;
 `;
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
-  position: absolute;
-  top: 60px;
-  right: 60px;
-  font-size: 24px;
+const InvisibleButton = styled.button`
+  grid-area: ${({ rel }) => rel};
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
   cursor: pointer;
+  font-size: 24px;
+  color: inherit;
 `;
 
-export const RightIcon = styled(FaIcon).attrs({ icon: faChevronRight })`
-  font-size: 24px;
-  cursor: pointer;
-  justify-self: right;
-`;
+export const LeftButton = props => (
+  <InvisibleButton rel="left" {...props}>
+    <ChevronLeft />
+  </InvisibleButton>
+);
 
-export const LeftIcon = styled(FaIcon).attrs({ icon: faChevronLeft })`
-  font-size: 24px;
-  cursor: pointer;
-`;
+export const RightButton = props => (
+  <InvisibleButton rel="right" {...props}>
+    <ChevronRight />
+  </InvisibleButton>
+);
+
+export const CloseButton = props => (
+  <InvisibleButton rel="close" {...props}>
+    <Remove />
+  </InvisibleButton>
+);

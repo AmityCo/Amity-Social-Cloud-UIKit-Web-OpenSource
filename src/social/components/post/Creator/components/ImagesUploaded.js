@@ -16,10 +16,10 @@ const ImagesGallery = ({ uploading, uploaded, progress, removeFile, uploadLoadin
     <StyledGalleryGrid items={allFiles} uploadLoading={uploadLoading}>
       {file => {
         if (!file?.fileId) {
-          return <Image key={file?.name} file={file} progress={progress[file?.name]} fullSize />;
+          return <Image key={file?.name} file={file} progress={progress[file?.name]} />;
         }
         const { fileId } = file;
-        return <Image key={fileId} fileId={fileId} onRemove={() => removeFile(fileId)} fullSize />;
+        return <Image key={fileId} fileId={fileId} onRemove={() => removeFile(fileId)} />;
       }}
     </StyledGalleryGrid>
   );

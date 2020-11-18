@@ -11,7 +11,8 @@ import Modal from '~/core/components/Modal';
 import PostEditor from '~/social/components/post/Editor';
 import EngagementBar from '~/social/components/EngagementBar';
 import Header from '~/social/components/post/Header';
-import Content from './Content';
+import Content from '~/social/components/post/Post/Content';
+import ChildrenContent from '~/social/components/post/ChildrenContent';
 import { PostContainer, PostHeadContainer, Options } from './styles';
 
 // Number of lines to show in a text post before truncating.
@@ -57,7 +58,12 @@ const Post = ({
     return [allOptions.report];
   };
 
-  const hasChildrenPosts = childrenPosts?.length > 0;
+  const childrenContent = childrenPosts?.map(childPost => ({
+    dataType: childPost.dataType,
+    data: childPost.data,
+  }));
+
+  const hasChildrenPosts = childrenContent.length > 0;
   const postMaxLines = hasChildrenPosts ? MAX_TEXT_LINES_WITH_CHILDREN : MAX_TEXT_LINES_DEFAULT;
 
   return (
@@ -66,16 +72,12 @@ const Post = ({
         <Header postId={postId} onClickUser={onClickUser} />
         <Options options={getActionOptions()} />
       </PostHeadContainer>
+
       <Content dataType={dataType} data={data} postMaxLines={postMaxLines} />
-      {childrenPosts.map(childPost => (
-        <Content
-          key={childPost.postId}
-          dataType={childPost.dataType}
-          data={childPost.data}
-          postMaxLines={postMaxLines}
-        />
-      ))}
+      {hasChildrenPosts && <ChildrenContent>{childrenContent}</ChildrenContent>}
+
       <EngagementBar postId={postId} noInteractionMessage={noInteractionMessage} />
+
       {isEditing && (
         <Modal title={formatMessage({ id: 'post.editPost' })} onCancel={closeEditingPostModal}>
           <PostEditor postId={postId} onSave={closeEditingPostModal} />

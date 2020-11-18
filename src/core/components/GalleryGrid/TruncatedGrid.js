@@ -149,7 +149,7 @@ const TruncatedGrid = ({ className, items, onClick, children }) => {
         ))}
 
         <ConditionalRender condition={length >= 4}>
-          <Cell key="#4" onClick={handleClick(length > 4 ? 4 : 3)}>
+          <Cell key="#4" onClick={handleClick(3)}>
             {render(items[3])}
             <ConditionalRender condition={length > 4}>
               <Overlay>+{length - 4}</Overlay>

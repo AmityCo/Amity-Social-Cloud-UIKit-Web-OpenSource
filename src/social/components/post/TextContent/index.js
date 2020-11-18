@@ -12,6 +12,7 @@ export const PostContent = styled.div`
   color: ${({ theme }) => theme.palette.neutral.main};
   white-space: pre-wrap;
   ${({ theme }) => theme.typography.body}
+  padding-bottom: .5rem;
 `;
 
 export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`

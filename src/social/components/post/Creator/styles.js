@@ -11,7 +11,7 @@ export const PostCreatorContainer = styled.div`
   padding: 16px 20px 12px 16px;
   border: 1px solid #edeef2;
   display: flex;
-  background: ${({ theme }) => theme.palette.system.backgrounds};
+  background: ${({ theme }) => theme.palette.system.background};
   border-radius: 4px;
 `;
 

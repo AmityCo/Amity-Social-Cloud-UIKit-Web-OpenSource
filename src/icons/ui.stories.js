@@ -12,6 +12,7 @@ export const EmptyFeed = () => <Icons.EmptyFeed />;
 
 export const ChevronDown = () => <Icons.ChevronDown />;
 export const ChevronLeft = () => <Icons.ChevronLeft />;
+export const ChevronRight = () => <Icons.ChevronRight />;
 export const Sky = () => <Icons.Sky />;
 export const Balloon = () => <Icons.Balloon />;
 export const Dots = () => <Icons.Dots />;

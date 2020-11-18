@@ -1,26 +1,25 @@
 import React from 'react';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import useKeyboard from '~/core/hooks/useKeyboard';
 
 import {
-  ImageGalleryContainer,
-  ImageContainer,
+  Container,
+  Frame,
   Counter,
-  CloseIcon,
-  LeftIcon,
-  RightIcon,
+  LeftButton,
+  RightButton,
+  CloseButton,
+  ImageRenderer,
 } from './styles';
 
-const ImageGallery = ({ currentIndex, images = [], onChange }) => {
-  const { url: imageUrl } = images[currentIndex] ?? {};
-  const isFirst = currentIndex === 0;
-  const isLast = currentIndex === images.length - 1;
+const ImageGallery = ({ index = 0, items = [], children, onChange }) => {
+  const [render = ImageRenderer] = [].concat(children);
+
   const handleClose = () => onChange(null);
 
-  const next = () => !isLast && onChange(currentIndex + 1);
-  const prev = () => !isFirst && onChange(currentIndex - 1);
+  const next = () => onChange(index + 1 < items.length ? index + 1 : 0);
+  const prev = () => onChange(index - 1 >= 0 ? index - 1 : items.length - 1);
 
   useKeyboard({
     ArrowLeft: prev,
@@ -29,19 +28,17 @@ const ImageGallery = ({ currentIndex, images = [], onChange }) => {
   });
 
   return (
-    <ConditionalRender condition={imageUrl}>
-      <ImageGalleryContainer length={images.length}>
-        <div>{!isFirst && <LeftIcon onClick={prev} />}</div>
-        <ImageContainer>
-          <Counter>
-            {currentIndex + 1} / {images.length}
-          </Counter>
-          <img src={imageUrl} alt="" />
-        </ImageContainer>
-        <div>{!isLast && <RightIcon onClick={next} />}</div>
-        <CloseIcon onClick={handleClose} />
-      </ImageGalleryContainer>
-    </ConditionalRender>
+    <Container length={items.length}>
+      <Frame>{render(items[index])}</Frame>
+      <Counter>
+        {index + 1} / {items.length}
+      </Counter>
+
+      {items.length > 1 && <LeftButton onClick={prev} />}
+      {items.length > 1 && <RightButton onClick={next} />}
+
+      <CloseButton onClick={handleClose} />
+    </Container>
   );
 };
 

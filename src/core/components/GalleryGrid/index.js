@@ -5,6 +5,7 @@ import TruncateGrid from './TruncatedGrid';
 
 const GalleryGrid = ({ className, items, truncate, onClick, children }) => {
   const Component = truncate || items.length <= 4 ? TruncateGrid : ExpandedGrid;
+
   return (
     <Component className={className} items={items} onClick={onClick}>
       {children}

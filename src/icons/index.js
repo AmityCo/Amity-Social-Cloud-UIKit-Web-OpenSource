@@ -4,8 +4,6 @@ export { default as Community } from './Community';
 export { default as User } from './User';
 export { default as ArrowRight } from './ArrowRight';
 export { default as EmptyFeed } from './EmptyFeed';
-export { default as ChevronDown } from './ChevronDown';
-export { default as ChevronLeft } from './ChevronLeft';
 
 // files
 export { default as AudioFile } from './files/Audio';
@@ -39,3 +37,6 @@ export { default as Plus } from './Plus';
 export { default as Remove } from './Remove';
 export { default as ImageAttachment } from './ImageAttachment';
 export { default as FileAttachment } from './FileAttachment';
+export { default as ChevronDown } from './ChevronDown';
+export { default as ChevronLeft } from './ChevronLeft';
+export { default as ChevronRight } from './ChevronRight';
