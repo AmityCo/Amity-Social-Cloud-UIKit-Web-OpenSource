@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { notification } from '~/core/components/Notification';
-import Options from '~/core/components/Options';
+import OptionMenu from '~/core/components/OptionMenu';
 import UserHeader from '~/social/components/UserHeader';
 import useUser from '~/core/hooks/useUser';
 import { MemberInfo, CommunityMemberContainer } from './styles';
@@ -24,7 +24,7 @@ const CommunityMemberItem = ({ userId, onClick }) => {
         <UserHeader userId={userId} onClick={onClick} />
       </MemberInfo>
       {/* TODO - add in options once SDK methods for actions are confirmed */}
-      <Options
+      <OptionMenu
         options={[
           /* { name: 'Remove from community', action: confirmRemoving }, */
           { name: 'Report user', action: onReportClick },

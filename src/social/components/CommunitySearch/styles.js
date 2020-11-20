@@ -36,7 +36,7 @@ export const CommunitiesSearchInput = styled.input`
   width: 100%;
   padding: 10px;
   padding-left: 40px;
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.system.background};
   border: 1px solid #d5d7dd;
   border-radius: 4px;
   outline: none;

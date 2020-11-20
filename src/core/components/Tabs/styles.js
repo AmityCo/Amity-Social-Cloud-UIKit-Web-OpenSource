@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const TabsContainer = styled.nav`
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.system.background};
   border-radius: 4px 4px 0 0;
   border: 1px solid #edeef2;
 `;

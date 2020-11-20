@@ -10,7 +10,7 @@ const Container = styled.div`
   flex-wrap: wrap;
   min-width: 1em;
   overflow: hidden;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.system.background};
   border: 1px solid #e3e4e8;
   border-radius: 4px;
   transition: background 0.2s, border-color 0.2s;

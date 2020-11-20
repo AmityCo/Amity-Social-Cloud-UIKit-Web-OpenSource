@@ -2,12 +2,7 @@ import styled, { css } from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faShieldAlt } from '@fortawesome/pro-solid-svg-icons';
 
-import UIOptions from '~/core/components/Options';
 import { ArrowRight } from '~/icons';
-
-export const Options = styled(UIOptions)`
-  margin-left: auto;
-`;
 
 export const PostHeaderContainer = styled.div`
   display: flex;

@@ -5,7 +5,7 @@ import { faThumbsUp, faShare, faMinusCircle } from '@fortawesome/pro-regular-svg
 import { faThumbsUp as faThumbsUpSolid } from '@fortawesome/pro-solid-svg-icons';
 
 import TextareaAutosize from 'react-autosize-textarea';
-import UIOptions from '~/core/components/Options';
+import UIOptionMenu from '~/core/components/OptionMenu';
 import Time from '~/core/components/Time';
 import UICommentComposeBar from '~/social/components/CommentComposeBar';
 import { SecondaryButton } from '~/core/components/Button';
@@ -16,7 +16,7 @@ export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
 `;
 
-export const Options = styled(UIOptions).attrs({ align: 'start' })`
+export const OptionMenu = styled(UIOptionMenu).attrs({ align: 'start' })`
   color: ${({ theme }) => theme.palette.neutral.main};
   &:hover {
     background-color: transparent;

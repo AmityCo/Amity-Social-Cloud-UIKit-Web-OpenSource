@@ -16,7 +16,7 @@ import {
   InteractionBar,
   ReplyIcon,
   ReplyButton,
-  Options,
+  OptionMenu,
   CommentEditContainer,
   CommentEditTextarea,
   ButtonContainer,
@@ -93,7 +93,7 @@ const StyledComment = ({
                 <ReplyIcon /> Reply
               </ReplyButton>
             </ConditionalRender>
-            <Options options={options} />
+            <OptionMenu options={options} />
           </InteractionBar>
         </ConditionalRender>
       </Content>

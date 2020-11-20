@@ -40,7 +40,7 @@ export const Chip = styled.div`
   ${({ checked, theme }) =>
     checked &&
     `
-    background: #fff;
+    background: ${theme.palette.system.background};
     border: 1px solid ${theme.palette.primary.main};
 
     &:after {

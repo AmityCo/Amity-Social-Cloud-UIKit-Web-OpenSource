@@ -39,7 +39,7 @@ export const Overlay = styled.div`
 
 export const ModalWindow = styled.div`
   margin: auto;
-  background: white;
+  background: ${({ theme }) => theme.palette.system.background};
   border-radius: 6px;
   max-width: 520px;
   min-width: 360px;

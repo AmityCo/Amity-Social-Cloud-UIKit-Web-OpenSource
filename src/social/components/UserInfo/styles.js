@@ -17,7 +17,7 @@ export const PencilIcon = styled(FaIcon).attrs({ icon: faPencil })`
 export const Container = styled.div`
   border: 1px solid #edeef2;
   border-radius: 4px;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.system.background};
   width: 330px;
   flex-shrink: 0;
   align-self: flex-start;

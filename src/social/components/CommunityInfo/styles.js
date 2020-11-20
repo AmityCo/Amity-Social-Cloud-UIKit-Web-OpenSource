@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-regular-svg-icons';
-import UIOptions from '~/core/components/Options';
+import UIOptionMenu from '~/core/components/OptionMenu';
 import { PrimaryButton } from '~/core/components/Button';
 
 export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
@@ -9,14 +9,14 @@ export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
   margin-right: 8px;
 `;
 
-export const Options = styled(UIOptions)`
+export const OptionMenu = styled(UIOptionMenu)`
   margin-left: auto;
 `;
 
 export const Container = styled.div`
   border: 1px solid #edeef2;
   border-radius: 4px;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.system.background};
   width: 330px;
   flex-shrink: 0;
   align-self: flex-start;

@@ -13,7 +13,7 @@ import EngagementBar from '~/social/components/EngagementBar';
 import Header from '~/social/components/post/Header';
 import Content from '~/social/components/post/Post/Content';
 import ChildrenContent from '~/social/components/post/ChildrenContent';
-import { PostContainer, PostHeadContainer, Options } from './styles';
+import { PostContainer, PostHeadContainer, OptionMenu } from './styles';
 
 // Number of lines to show in a text post before truncating.
 const MAX_TEXT_LINES_DEFAULT = 8;
@@ -70,7 +70,7 @@ const Post = ({
     <PostContainer className={cx('post', className)}>
       <PostHeadContainer>
         <Header postId={postId} onClickUser={onClickUser} />
-        <Options options={getActionOptions()} />
+        <OptionMenu options={getActionOptions()} />
       </PostHeadContainer>
 
       <Content dataType={dataType} data={data} postMaxLines={postMaxLines} />

@@ -6,7 +6,7 @@ export const CommunityMembersTabs = styled(Tabs)`
 `;
 
 export const CommunityMembersContainer = styled.div`
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.system.background};
   border: 1px solid #edeef2;
   border-radius: 4px;
   flex: 2;

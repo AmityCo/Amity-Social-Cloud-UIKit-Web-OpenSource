@@ -27,7 +27,7 @@ export const FileMessageIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
 
 export const MessageComposeBarContainer = styled.div`
   padding: 12px 16px 16px 16px;
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.system.background};
   border-top: 1px solid #e3e4e8;
   display: flex;
   align-items: center;

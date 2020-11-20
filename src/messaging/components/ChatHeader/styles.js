@@ -15,7 +15,7 @@ export const DetailsIcon = styled(FaIcon).attrs({ icon: faBars })`
 export const ChatHeaderContainer = styled.div`
   height: 76px;
   padding: 0 20px;
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.system.background};
   border-top: 1px solid #e3e4e8;
   border-bottom: 1px solid #e3e4e8;
   display: flex;

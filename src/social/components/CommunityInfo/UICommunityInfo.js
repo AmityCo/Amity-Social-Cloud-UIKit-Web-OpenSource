@@ -12,7 +12,7 @@ import {
   Count,
   Container,
   Header,
-  Options,
+  OptionMenu,
   CategoriesList,
   Description,
   JoinButton,
@@ -40,7 +40,7 @@ const UICommunityInfo = ({
     <Header>
       <Avatar avatar={avatarFileUrl} size="big" backgroundImage={CommunityImage} />
       <ConditionalRender condition={isJoined}>
-        <Options
+        <OptionMenu
           options={[
             canEditCommunity && {
               name: 'Settings',

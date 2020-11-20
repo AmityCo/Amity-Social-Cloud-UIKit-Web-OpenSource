@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import UIOptions from '~/core/components/Options';
+import UIOptionMenu from '~/core/components/OptionMenu';
 
-export const Options = styled(UIOptions)`
+export const OptionMenu = styled(UIOptionMenu)`
   margin-left: auto;
 `;
 
 export const PostContainer = styled.div`
   padding: 16px;
   padding-bottom: 8px;
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.system.background};
   border: 1px solid #edeef2;
   border-radius: 4px;
 `;

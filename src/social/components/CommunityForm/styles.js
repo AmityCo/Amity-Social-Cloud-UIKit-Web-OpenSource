@@ -157,7 +157,7 @@ export const FormBlockHeader = styled.div`
 `;
 
 export const FormBlockContainer = styled.div`
-  background: #fff;
+  background: ${({ theme }) => theme.palette.system.background};
   ${({ theme, edit }) =>
     edit
       ? `

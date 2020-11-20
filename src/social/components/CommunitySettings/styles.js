@@ -17,7 +17,7 @@ export const Container = styled.div`
 
 export const PageHeader = styled.div`
   display: flex;
-  background: #ffffff;
+  background: ${({ theme }) => theme.palette.system.background};
   border-radius: 4px 4px 0 0;
   border: 1px solid #edeef2;
   padding: 10px 10px 20px 10px;
@@ -53,7 +53,7 @@ export const ActiveTabContainer = styled.div`
 export const ExtraActionContainer = styled.div`
   border: 1px solid #edeef2;
   border-radius: 4px;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.system.background};
   align-self: flex-start;
   padding: 16px;
   margin-left: 36px;
