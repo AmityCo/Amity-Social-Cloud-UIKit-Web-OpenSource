@@ -12,8 +12,6 @@ Object.values(decorators)
   .forEach(decorator => addDecorator(decorator))
 
 export const parameters = {
-  layout: 'centered',
-
   options: {
     storySort: {
       order: ['Journeys', 'Pages', 'Messaging', 'Social', 'Components', 'Assets'],

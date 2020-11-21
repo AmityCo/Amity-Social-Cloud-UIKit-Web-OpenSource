@@ -29,6 +29,7 @@ UiInputText.argTypes = {
   multiline: { control: { type: 'boolean' } },
   invalid: { control: { type: 'boolean' } },
   disabled: { control: { type: 'boolean' } },
+  onClear: { action: 'onClear()' },
   onChange: { action: 'onChange()' },
 };
 

@@ -1,15 +1,17 @@
 import styled from 'styled-components';
 
-export const Menu = styled.div``;
+export const Menu = styled.div`
+  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.palette.base.shade4};
+`;
 
 export const MenuItem = styled.div`
   display: flex;
   align-items: center;
   padding: 8px 12px;
   cursor: pointer;
-  &:hover {
-    background: #f2f2f4;
-  }
+
+  ${({ hover, theme }) => hover && `background: ${theme.palette.base.shade4};`}
   ${({ active, theme }) => active && `color: ${theme.palette.primary.shade1};`}
 `;
 

@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import cx from 'classnames';
 
@@ -71,10 +72,18 @@ const InputText = ({
   maxRows = 3,
   prepend,
   append,
-  onChange = () => {},
+  onChange,
+  onClear = () => {},
   className = null,
 }) => {
   const handleChange = useCallback(e => onChange(e.target.value), []);
+
+  const handleKeyDown = useCallback(
+    e => {
+      if (e.key === 'Backspace' && value.length === 0) onClear();
+    },
+    [value],
+  );
 
   const classNames = cx(className, { disabled, invalid });
 
@@ -85,6 +94,7 @@ const InputText = ({
     placeholder,
     disabled,
     onChange: handleChange,
+    onKeyDown: handleKeyDown,
     className: classNames,
   };
 
@@ -93,13 +103,31 @@ const InputText = ({
       {prepend}
 
       <ConditionalRender condition={multiline}>
-        <TextArea ref={input} {...props} rows={rows} maxRows={maxRows} />
+        <TextArea ref={input} rows={rows} maxRows={maxRows} {...props} />
         <TextField ref={input} {...props} />
       </ConditionalRender>
 
       {append}
     </Container>
   );
+};
+
+InputText.propTypes = {
+  id: PropTypes.string,
+  input: PropTypes.object,
+  name: PropTypes.string,
+  value: PropTypes.string,
+  placeholder: PropTypes.string,
+  multiline: PropTypes.bool,
+  disabled: PropTypes.bool,
+  invalid: PropTypes.bool,
+  rows: PropTypes.number,
+  maxRows: PropTypes.number,
+  prepend: PropTypes.node,
+  append: PropTypes.node,
+  onChange: PropTypes.func.isRequired,
+  onClear: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default InputText;

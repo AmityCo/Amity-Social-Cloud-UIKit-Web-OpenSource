@@ -31,6 +31,17 @@ const Framed = (props) => (<div style={{
   overflow: 'auto',
 }} {...props} />)
 
+const Centered = (props) => (
+  <FullScreen>
+    <div style={{
+      position: 'absolute',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+    }} {...props} />
+  </FullScreen>
+)
+
 const Cell = ({ top, right, bottom , left, ...props }) => (<div style={{
   borderTop: top ? style : '',
   borderRight: right ? style : '',
@@ -95,7 +106,8 @@ const Flow = ({ children }) => (<div>
 </div>)
 
 const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
-  if (val === 'fullscreen') return <FullScreen><Story /></FullScreen>
+  if (val === 'none') return <Centered><Story /></Centered>
+  else if (val === 'fullscreen') return <FullScreen><Story /></FullScreen>
   else if (val === 'framed') return <Framed><Story /></Framed>
   else if (val === 'boundingbox') return <Cell top right bottom left><Story /></Cell>
   else if (val === 'stretching') return <Grid><Story /></Grid>
