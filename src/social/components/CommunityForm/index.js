@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 import { FileRepository } from 'eko-sdk';
@@ -98,6 +98,7 @@ const CommunityForm = ({
 
   const displayName = watch('displayName', '');
   const description = watch('description', '');
+  const categoryId = watch('category', '');
 
   // what the hell...
   // The logic is very overcomplicated, but left like this just to fix a bug until a proper refactor can be done.
@@ -141,7 +142,10 @@ const CommunityForm = ({
     }
   }
 
-  // <Controller name="avatar" as={<AvatarUpload />} control={control} value={avatarFileId} />
+  const disabled = useMemo(() => displayName.length === 0 || categoryId === '', [
+    displayName,
+    categoryId,
+  ]);
 
   return (
     <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
@@ -184,13 +188,17 @@ const CommunityForm = ({
             <ErrorMessage errors={errors} name="description" />
           </Field>
           <Field error={errors.category}>
-            <Label htmlFor="category">Category</Label>
+            <Label htmlFor="category" className="required">
+              Category
+            </Label>
             <Controller
-              name="categoryId"
+              name="category"
+              ref={register({ required: 'Category is required' })}
               render={CategorySelector}
               control={control}
-              defaultValue={null}
+              defaultValue=""
             />
+            <ErrorMessage errors={errors} name="category" />
           </Field>
         </FormBlock>
         <ConditionalRender condition={false}>
@@ -245,7 +253,7 @@ const CommunityForm = ({
             Cancel
           </Button>
         </ConditionalRender>
-        <SubmitButton disabled={displayName.length === 0}>{edit ? 'Save' : 'Create'}</SubmitButton>
+        <SubmitButton disabled={disabled}>{edit ? 'Save' : 'Create'}</SubmitButton>
       </Footer>
     </Form>
   );
