@@ -28,6 +28,7 @@ const UIPostHeader = ({
   isModerator,
   isEdited,
   onClickUser,
+  hidePostTarget,
 }) => {
   const renderPostNames = () => {
     const authorName = (
@@ -35,7 +36,7 @@ const UIPostHeader = ({
         {postAuthorName}
       </Name>
     );
-    if (!postTargetName) return authorName;
+    if (!postTargetName || hidePostTarget) return authorName;
     return (
       <PostNamesContainer>
         {authorName}
@@ -86,6 +87,7 @@ UIPostHeader.propTypes = {
   isModerator: PropTypes.bool,
   isEdited: PropTypes.bool,
   onClickUser: PropTypes.func,
+  hidePostTarget: PropTypes.bool,
 };
 
 UIPostHeader.defaultProps = {
@@ -96,6 +98,7 @@ UIPostHeader.defaultProps = {
   isModerator: false,
   isEdited: false,
   onClickUser: null,
+  hidePostTarget: false,
 };
 
 export default customizableComponent('UIPostHeader', UIPostHeader);

@@ -56,6 +56,7 @@ const Feed = ({
               postId={postId}
               onClickUser={onClickUser}
               noInteractionMessage={noPostInteractionMessage}
+              hidePostTarget={targetType !== EkoPostTargetType.GlobalFeed}
             />
           ))}
         </LoadMore>

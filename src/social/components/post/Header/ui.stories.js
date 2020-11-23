@@ -16,6 +16,7 @@ UIPostHeader.args = {
   postTargetName: '',
   timeAgo: new Date(),
   isModerator: false,
+  hidePostTarget: false,
 };
 
 UIPostHeader.argTypes = {

@@ -26,6 +26,7 @@ const Post = ({
   noInteractionMessage,
   onClickUser,
   className,
+  hidePostTarget,
 }) => {
   const { formatMessage } = useIntl();
   const [isEditing, setIsEditing] = useState(false);
@@ -69,7 +70,7 @@ const Post = ({
   return (
     <PostContainer className={cx('post', className)}>
       <PostHeadContainer>
-        <Header postId={postId} onClickUser={onClickUser} />
+        <Header postId={postId} onClickUser={onClickUser} hidePostTarget={hidePostTarget} />
         <OptionMenu options={getActionOptions()} />
       </PostHeadContainer>
 
@@ -94,6 +95,7 @@ Post.propTypes = {
   className: PropTypes.string,
   userRoles: PropTypes.arrayOf(PropTypes.string),
   noInteractionMessage: PropTypes.string,
+  hidePostTarget: PropTypes.bool,
 };
 
 Post.defaultProps = {
@@ -102,6 +104,7 @@ Post.defaultProps = {
   noInteractionMessage: null,
   onClickUser: () => {},
   className: '',
+  hidePostTarget: false,
 };
 
 export default withSDK(customizableComponent('Post', Post));
