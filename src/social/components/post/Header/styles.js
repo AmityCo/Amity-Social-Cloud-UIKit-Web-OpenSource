@@ -15,6 +15,12 @@ export const PostInfo = styled.div`
 
 export const Name = styled.div`
   ${({ theme }) => theme.typography.title}
+
+  &.clickable {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 export const ArrowSeparatorContainer = styled.div`

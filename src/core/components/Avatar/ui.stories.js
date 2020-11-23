@@ -18,10 +18,15 @@ const getBackgroundImage = type => {
   }[type];
 };
 
-export const Avatar = ({ backgroundImage, ...props }) => {
+export const Avatar = ({ backgroundImage, isClickable, onClick, ...props }) => {
+  const handleClick = isClickable ? onClick : null;
   return (
     <div>
-      before <UiKitAvatar {...props} backgroundImage={getBackgroundImage(backgroundImage)} /> after
+      <UiKitAvatar
+        onClick={handleClick}
+        backgroundImage={getBackgroundImage(backgroundImage)}
+        {...props}
+      />
     </div>
   );
 };
@@ -31,6 +36,8 @@ Avatar.argTypes = {
   size: { control: { type: 'select', options: ['small', 'big', 'tiny'] } },
   className: { control: { type: 'text' } },
   backgroundImage: { control: { type: 'select', options: ['', 'user', 'community', 'category'] } },
+  isClickable: { control: { type: 'boolean' } },
+  onClick: { action: 'onClick()' },
 };
 
 Avatar.args = {
@@ -38,4 +45,5 @@ Avatar.args = {
   size: 'big',
   className: '',
   backgroundImage: '',
+  isClickable: false,
 };

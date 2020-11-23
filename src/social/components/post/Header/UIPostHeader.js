@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import cx from 'classnames';
 import customizableComponent from '~/core/hocs/customization';
 import Time from '~/core/components/Time';
 import Avatar from '~/core/components/Avatar';
@@ -29,7 +30,11 @@ const UIPostHeader = ({
   onClickUser,
 }) => {
   const renderPostNames = () => {
-    const authorName = <Name onClick={onClickUser}>{postAuthorName}</Name>;
+    const authorName = (
+      <Name onClick={onClickUser} className={cx({ clickable: !!onClickUser })}>
+        {postAuthorName}
+      </Name>
+    );
     if (!postTargetName) return authorName;
     return (
       <PostNamesContainer>
@@ -64,7 +69,7 @@ const UIPostHeader = ({
 
   return (
     <PostHeaderContainer>
-      <Avatar avatar={avatarFileUrl} backgroundImage={UserImage} />
+      <Avatar avatar={avatarFileUrl} backgroundImage={UserImage} onClick={onClickUser} />
       <PostInfo>
         {renderPostNames()}
         {renderAdditionalInfo()}
@@ -90,7 +95,7 @@ UIPostHeader.defaultProps = {
   timeAgo: null,
   isModerator: false,
   isEdited: false,
-  onClickUser: () => {},
+  onClickUser: null,
 };
 
 export default customizableComponent('UIPostHeader', UIPostHeader);

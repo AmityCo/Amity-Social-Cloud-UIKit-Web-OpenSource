@@ -18,6 +18,12 @@ export const AvatarContainer = styled.div`
   &.visible img {
     opacity: 1;
   }
+
+  &.clickable {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 export const AvatarOverlay = styled.div`

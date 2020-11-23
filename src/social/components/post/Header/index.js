@@ -11,7 +11,7 @@ const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const PostHeader = ({ postId, userRoles, onClickUser }) => {
   const { post, file, user } = usePost(postId);
-  const { targetId, targetType, createdAt, editedAt } = post;
+  const { targetId, targetType, postedUserId, createdAt, editedAt } = post;
 
   // If the post is targetting a community feed, get the name of that community.
   const { community } = useCommunity(targetId, [targetId]);
@@ -19,6 +19,7 @@ const PostHeader = ({ postId, userRoles, onClickUser }) => {
   const postTargetName = isCommunityPost ? community?.displayName : null;
 
   const currentUserIsModerator = isModerator(userRoles);
+  const handleClickUser = () => onClickUser(postedUserId);
 
   return (
     <UIPostHeader
@@ -28,7 +29,7 @@ const PostHeader = ({ postId, userRoles, onClickUser }) => {
       timeAgo={createdAt}
       isModerator={currentUserIsModerator}
       isEdited={createdAt < editedAt}
-      onClickUser={onClickUser}
+      onClickUser={handleClickUser}
     />
   );
 };
