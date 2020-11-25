@@ -9,7 +9,7 @@ import UICommunityInfo from './UICommunityInfo';
 
 import { confirm } from '~/core/components/Confirm';
 
-const CommunityInfo = ({ communityId, userRoles, onEditCommunityClick }) => {
+const CommunityInfo = ({ communityId, userRoles, onEditCommunity, currentUserId }) => {
   const { community, communityCategories, joinCommunity, leaveCommunity, file } = useCommunity(
     communityId,
   );
@@ -24,8 +24,9 @@ const CommunityInfo = ({ communityId, userRoles, onEditCommunityClick }) => {
       onOk: () => leaveCommunity(community.communityId),
     });
 
-  const { postsCount, membersCount, description, isJoined } = community;
-  const canEditCommunity = isModerator(userRoles) && isJoined;
+  const { postsCount, membersCount, description, isJoined, userId } = community;
+  const isOwner = currentUserId === userId;
+  const canEditCommunity = (isModerator(userRoles) && isJoined) || isOwner;
   const categoryNames = communityCategories.map(({ name }) => name);
 
   return (
@@ -38,7 +39,7 @@ const CommunityInfo = ({ communityId, userRoles, onEditCommunityClick }) => {
       isJoined={isJoined}
       avatarFileUrl={fileUrl}
       canEditCommunity={canEditCommunity}
-      onEditCommunityClick={onEditCommunityClick}
+      onEditCommunity={onEditCommunity}
       joinCommunity={joinCommunity}
       leaveCommunity={leaveCommunityConfirm}
     />

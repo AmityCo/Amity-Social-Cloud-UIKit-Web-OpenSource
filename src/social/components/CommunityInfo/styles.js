@@ -1,12 +1,17 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-regular-svg-icons';
+
 import UIOptionMenu from '~/core/components/OptionMenu';
 import { PrimaryButton } from '~/core/components/Button';
+import { Plus, Pencil } from '~/icons';
 
-export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
+export const PlusIcon = styled(Plus)`
   font-size: 15px;
   margin-right: 8px;
+`;
+
+export const PencilIcon = styled(Pencil)`
+  font-size: 15px;
+  margin-right: 4px;
 `;
 
 export const OptionMenu = styled(UIOptionMenu)`

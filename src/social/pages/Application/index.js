@@ -28,6 +28,7 @@ const Community = ({
   onClickUser,
   onEditUser,
   onMessageUser,
+  onEditCommunity,
 }) => {
   const [page, setPage] = useState({ type: PageTypes.Explore });
 
@@ -101,6 +102,18 @@ const Community = ({
     console.log('handleEditUser', { userId });
   };
 
+  const handleEditCommunity = communityId => {
+    const next = {
+      type: 'communitySettings',
+      communityId,
+    };
+
+    if (onChangePage) return onChangePage(next);
+    if (onEditCommunity) return onEditCommunity(communityId);
+
+    console.log('handleEditCommunity', { communityId });
+  };
+
   const handleMessageUser = userId => {
     const next = {
       type: 'conversation',
@@ -150,6 +163,7 @@ const Community = ({
             onClickCommunity={handleClickCommunity}
             onClickUser={handleClickUser}
             onClickCategory={handleClickCategory}
+            onEditCommunity={handleEditCommunity}
           />
         </ConditionalRender>
 
@@ -184,6 +198,7 @@ Community.propTypes = {
   onClickUser: PropTypes.func,
   onEditUser: PropTypes.func,
   onMessageUser: PropTypes.func,
+  onEditCommunity: PropTypes.func,
 };
 
 export default Community;

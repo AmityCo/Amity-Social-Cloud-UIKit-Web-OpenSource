@@ -44,6 +44,7 @@ const useCommunity = communityId => {
 
   const joinCommunity = () => CommunityRepository.joinCommunity(communityId);
   const leaveCommunity = () => CommunityRepository.leaveCommunity(communityId);
+  const closeCommunity = () => CommunityRepository.closeCommunity(communityId);
 
   return {
     community,
@@ -52,6 +53,7 @@ const useCommunity = communityId => {
     joinCommunity,
     leaveCommunity,
     updateCommunity,
+    closeCommunity,
   };
 };
 

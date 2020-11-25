@@ -17,6 +17,7 @@ export const Sky = () => <Icons.Sky />;
 export const Balloon = () => <Icons.Balloon />;
 export const Dots = () => <Icons.Dots />;
 export const Plus = () => <Icons.Plus />;
+export const Pencil = () => <Icons.Pencil />;
 export const Remove = () => <Icons.Remove />;
 export const ImageAttachment = () => <Icons.ImageAttachment />;
 export const FileAttachment = () => <Icons.FileAttachment />;

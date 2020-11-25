@@ -28,14 +28,14 @@ const tabs = {
   MEMBERS: 'Members',
 };
 
-const CommunitySettings = ({ communityId, onMemberClick }) => {
+const CommunitySettings = ({ communityId, onMemberClick, onCommunityClosed }) => {
   const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
   const [isModalOpened, setModalOpened] = useState(false);
 
   const openModal = () => setModalOpened(true);
   const closeModal = () => setModalOpened(false);
 
-  const { community, file, updateCommunity } = useCommunity({ communityId });
+  const { community, file, updateCommunity } = useCommunity(communityId);
 
   const handleSubmit = async data => {
     await updateCommunity(data);
@@ -73,7 +73,7 @@ const CommunitySettings = ({ communityId, onMemberClick }) => {
               edit
               community={community}
             />
-            <CloseCommunityAction communityId={communityId} />
+            <CloseCommunityAction communityId={communityId} onCommunityClosed={onCommunityClosed} />
           </ActiveTabContent>
         </ConditionalRender>
 

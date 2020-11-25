@@ -80,6 +80,7 @@ const CommunityForm = ({
   className,
   onCancel,
 }) => {
+  const categoryIds = community?.categoryIds ?? [];
   const defaultValues = {
     avatarFileId: null,
     description: '',
@@ -87,7 +88,7 @@ const CommunityForm = ({
     isPublic: true,
     tags: [],
     userIds: [],
-    categoryId: community?.categoryIds[0] ?? '',
+    categoryId: categoryIds[0] ?? '',
 
     ...community, // if edit, community will erase the defaults
   };

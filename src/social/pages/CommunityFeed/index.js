@@ -20,14 +20,16 @@ const tabs = {
   MEMBERS: 'Members',
 };
 
-const CommunityFeed = ({ communityId, onClickUser }) => {
+const CommunityFeed = ({ communityId, onClickUser, onEditCommunity }) => {
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
 
   const { community } = useCommunity(communityId);
   const isJoined = !!community?.isJoined;
 
   return (
-    <FeedLayout aside={<CommunityInfo communityId={communityId} />}>
+    <FeedLayout
+      aside={<CommunityInfo communityId={communityId} onEditCommunity={onEditCommunity} />}
+    >
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <ConditionalRender condition={activeTab === tabs.TIMELINE}>
@@ -50,10 +52,12 @@ const CommunityFeed = ({ communityId, onClickUser }) => {
 CommunityFeed.propTypes = {
   communityId: PropTypes.string.isRequired,
   onClickUser: PropTypes.func,
+  onEditCommunity: PropTypes.func,
 };
 
 CommunityFeed.defaultProps = {
   onClickUser: () => {},
+  onEditCommunity: () => {},
 };
 
 export default CommunityFeed;

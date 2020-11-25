@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
+import { FormattedMessage } from 'react-intl';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Button from '~/core/components/Button';
@@ -41,10 +42,10 @@ const UIUserProfileBar = ({
       <Description>{description}</Description>
       <ConditionalRender condition={isMyProfile}>
         <Button fullWidth onClick={() => onEditUser(userId)}>
-          <PencilIcon /> Edit profile
+          <PencilIcon /> <FormattedMessage id="user.editProfile" />
         </Button>
         <Button fullWidth onClick={() => onMessageUser(userId)}>
-          <MessageIcon /> Message
+          <MessageIcon /> <FormattedMessage id="user.message" />
         </Button>
       </ConditionalRender>
     </Container>

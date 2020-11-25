@@ -1,9 +1,13 @@
 import { CommunityRepository } from 'eko-sdk';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-const useCommunitiesList = (queryParams = {}) => {
+const useCommunitiesList = (queryParams = {}, isDeleted = false) => {
+  const params = {
+    ...queryParams,
+    isDeleted,
+  };
   const [communities, hasMore, loadMore] = useLiveCollection(
-    () => CommunityRepository.allCommunitiesWithFilters(queryParams),
+    () => CommunityRepository.allCommunitiesWithFilters(params),
     Object.values(queryParams),
   );
 

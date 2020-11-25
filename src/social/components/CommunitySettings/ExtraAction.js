@@ -53,15 +53,18 @@ export const AddMemberAction = ({ action }) => {
   );
 };
 
-export const CloseCommunityAction = ({ communityId }) => {
-  const { removeCommunity } = useCommunity({ communityId });
+export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
+  const { closeCommunity } = useCommunity(communityId);
   const closeConfirm = () =>
     confirm({
       title: communitySettings.CLOSE_COMMUNITY_CONFIRM_TITLE,
       content: communitySettings.CLOSE_COMMUNITY_CONFIRM_TEXT,
       cancelText: 'Cancel',
       okText: 'Remove',
-      onOk: removeCommunity,
+      onOk: () => {
+        closeCommunity();
+        onCommunityClosed();
+      },
     });
 
   return (

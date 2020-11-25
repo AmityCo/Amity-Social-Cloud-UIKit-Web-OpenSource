@@ -34,6 +34,7 @@ export { default as Dots } from './Dots';
 
 // fontawesome
 export { default as Plus } from './Plus';
+export { default as Pencil } from './Pencil';
 export { default as Remove } from './Remove';
 export { default as ImageAttachment } from './ImageAttachment';
 export { default as FileAttachment } from './FileAttachment';

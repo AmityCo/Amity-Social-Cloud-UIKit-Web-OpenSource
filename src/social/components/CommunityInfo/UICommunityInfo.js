@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
+import { FormattedMessage } from 'react-intl';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
 import CommunityName from '~/social/components/CommunityName';
+import Button from '~/core/components/Button';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 import {
   Count,
@@ -17,6 +19,7 @@ import {
   Description,
   JoinButton,
   PlusIcon,
+  PencilIcon,
   CountsContainer,
 } from './styles';
 
@@ -32,7 +35,7 @@ const UICommunityInfo = ({
   isJoined,
   avatarFileUrl,
   canEditCommunity,
-  onEditCommunityClick,
+  onEditCommunity,
   joinCommunity,
   leaveCommunity,
 }) => (
@@ -44,7 +47,7 @@ const UICommunityInfo = ({
           options={[
             canEditCommunity && {
               name: 'Settings',
-              action: () => onEditCommunityClick(communityId),
+              action: () => onEditCommunity(communityId),
             },
             { name: 'Leave Community', action: () => leaveCommunity(communityId) },
           ].filter(Boolean)}
@@ -66,8 +69,13 @@ const UICommunityInfo = ({
     </Truncate>
     <ConditionalRender condition={!isJoined}>
       <JoinButton onClick={() => joinCommunity(communityId)}>
-        <PlusIcon /> Join
+        <PlusIcon /> <FormattedMessage id="community.join" />
       </JoinButton>
+    </ConditionalRender>
+    <ConditionalRender condition={isJoined && canEditCommunity}>
+      <Button fullWidth onClick={() => onEditCommunity(communityId)}>
+        <PencilIcon /> <FormattedMessage id="community.editProfile" />
+      </Button>
     </ConditionalRender>
   </Container>
 );
@@ -81,7 +89,7 @@ UICommunityInfo.propTypes = {
   isJoined: PropTypes.bool,
   avatarFileUrl: PropTypes.string,
   canEditCommunity: PropTypes.bool,
-  onEditCommunityClick: PropTypes.func,
+  onEditCommunity: PropTypes.func,
   joinCommunity: PropTypes.func,
   leaveCommunity: PropTypes.func,
 };
