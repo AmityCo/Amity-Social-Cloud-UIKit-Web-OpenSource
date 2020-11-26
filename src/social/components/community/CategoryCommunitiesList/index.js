@@ -4,8 +4,8 @@ import { Grid, ListContainer } from './styles';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PaginatedList from '~/core/components/PaginatedList';
 import EmptyState from '~/core/components/EmptyState';
-import CommunityCard from '~/social/components/community/Card';
 import EmptyFeedIcon from '~/icons/EmptyFeed';
+import CommunityCard from '~/social/components/community/Card';
 
 const CategoryCommunitiesList = ({ categoryId, onClickCommunity }) => {
   const [communities, hasMore, loadMore] = useCommunitiesList({ categoryId });

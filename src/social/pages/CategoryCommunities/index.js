@@ -10,6 +10,7 @@ const PageContainer = styled.div`
   & > *:first-child {
     margin-bottom: 1rem;
   }
+  width: 100%;
 `;
 
 const CategoryCommunitiesPage = ({ categoryId, onBack, onClickCommunity }) => {
