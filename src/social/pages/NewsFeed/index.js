@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { EkoPostTargetType } from 'eko-sdk';
 
-import FeedLayout from '~/social/layouts/Feed';
+import PageLayout from '~/social/layouts/Page';
 import Feed from '~/social/components/Feed';
 
 import TrendingList from '~/social/components/community/TrendingList';
@@ -17,14 +17,14 @@ const NewsFeed = ({ onClickUser, onClickCommunity, blockRouteChange }) => {
   );
 
   return (
-    <FeedLayout aside={Side}>
+    <PageLayout aside={Side}>
       <Feed
         targetType={EkoPostTargetType.GlobalFeed}
         onClickUser={onClickUser}
         blockRouteChange={blockRouteChange}
         showPostCreator
       />
-    </FeedLayout>
+    </PageLayout>
   );
 };
 

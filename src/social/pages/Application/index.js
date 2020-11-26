@@ -14,6 +14,7 @@ import NewsFeedPage from '~/social/pages/NewsFeed';
 import CommunityFeedPage from '~/social/pages/CommunityFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
+import CommunityEditPage from '~/social/pages/CommunityEdit';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -104,7 +105,7 @@ const Community = ({
 
   const handleEditCommunity = communityId => {
     const next = {
-      type: 'communitySettings',
+      type: PageTypes.CommunityEdit,
       communityId,
     };
 
@@ -112,6 +113,7 @@ const Community = ({
     if (onEditCommunity) return onEditCommunity(communityId);
 
     console.log('handleEditCommunity', { communityId });
+    setPage(next);
   };
 
   const handleMessageUser = userId => {
@@ -164,6 +166,15 @@ const Community = ({
             onClickUser={handleClickUser}
             onClickCategory={handleClickCategory}
             onEditCommunity={handleEditCommunity}
+          />
+        </ConditionalRender>
+
+        <ConditionalRender condition={page.type === PageTypes.CommunityEdit}>
+          <CommunityEditPage
+            communityId={page.communityId}
+            onReturnToCommunity={handleClickCommunity}
+            onClickUser={handleClickUser}
+            onCommunityClosed={() => handleChangePage(PageTypes.Explore)}
           />
         </ConditionalRender>
 

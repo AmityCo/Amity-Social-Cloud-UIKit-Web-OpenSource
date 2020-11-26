@@ -7,7 +7,7 @@ import withSDK from '~/core/hocs/withSDK';
 import UserInfo from '~/social/components/UserInfo';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 
-import FeedLayout from '~/social/layouts/Feed';
+import PageLayout from '~/social/layouts/Page';
 import Feed from '~/social/components/Feed';
 
 // TODO: react-intl
@@ -19,7 +19,7 @@ const UserFeed = ({ userId, currentUserId, onClickUser, onEditUser, onMessageUse
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
 
   return (
-    <FeedLayout
+    <PageLayout
       aside={<UserInfo userId={userId} onEditUser={onEditUser} onMessageUser={onMessageUser} />}
     >
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
@@ -30,7 +30,7 @@ const UserFeed = ({ userId, currentUserId, onClickUser, onEditUser, onMessageUse
         onClickUser={onClickUser}
         showPostCreator={userId === currentUserId}
       />
-    </FeedLayout>
+    </PageLayout>
   );
 };
 

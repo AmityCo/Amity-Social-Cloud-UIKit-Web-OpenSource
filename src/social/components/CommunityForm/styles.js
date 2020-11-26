@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import TextareaAutosize from 'react-autosize-textarea';
 import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
@@ -94,7 +94,7 @@ export const AvatarWrapper = styled.div`
 `;
 
 export const IconWrapper = styled.div`
-  margin-right: 8px;
+  margin-right: 1rem;
   width: 40px;
   height: 40px;
   border-radius: 40px;
@@ -138,7 +138,7 @@ export const Radio = styled.input.attrs({ type: 'radio' })`
 `;
 
 export const Form = styled.form`
-  width: 520px;
+  min-width: 520px;
 `;
 
 export const SubmitButton = styled(PrimaryButton).attrs({
@@ -146,6 +146,12 @@ export const SubmitButton = styled(PrimaryButton).attrs({
 })`
   padding: 10px 16px;
   margin-left: 12px;
+  ${({ edit }) =>
+    edit &&
+    css`
+      min-width: 100px;
+      margin-left: 0;
+    `};
 `;
 
 export const FormBlockHeader = styled.div`
@@ -187,7 +193,6 @@ export const SwitchContainer = styled.div`
 export const PermissionControlContainer = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
   :not(:last-child) {
     margin-bottom: 16px;
   }
@@ -214,9 +219,9 @@ export const CommunityPermissionBlock = styled.div`
 
 export const Footer = styled.div`
   border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
-  padding: ${({ edit }) => (edit ? `12px 0 12px 16px` : `12px 16px`)};
+  padding: ${({ edit }) => (edit ? `12px 0` : `12px 16px`)};
   display: flex;
-  justify-content: flex-end;
+  justify-content: ${({ edit }) => (edit ? 'flex-start' : 'flex-end')};
 `;
 
 export const Avatar = styled(UIAvatar)`

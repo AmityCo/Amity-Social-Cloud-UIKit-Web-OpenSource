@@ -6,7 +6,7 @@ import { EkoPostTargetType } from 'eko-sdk';
 import useCommunity from '~/social/hooks/useCommunity';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
-import FeedLayout from '~/social/layouts/Feed';
+import PageLayout from '~/social/layouts/Page';
 
 import Feed from '~/social/components/Feed';
 import CommunityInfo from '~/social/components/CommunityInfo';
@@ -27,7 +27,7 @@ const CommunityFeed = ({ communityId, onClickUser, onEditCommunity }) => {
   const isJoined = !!community?.isJoined;
 
   return (
-    <FeedLayout
+    <PageLayout
       aside={<CommunityInfo communityId={communityId} onEditCommunity={onEditCommunity} />}
     >
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
@@ -45,7 +45,7 @@ const CommunityFeed = ({ communityId, onClickUser, onEditCommunity }) => {
       <ConditionalRender condition={activeTab === tabs.MEMBERS}>
         <CommunityMembers communityId={communityId} onClickUser={onClickUser} />
       </ConditionalRender>
-    </FeedLayout>
+    </PageLayout>
   );
 };
 

@@ -23,12 +23,16 @@
   "post.edited": "Edited",
   "delete": "Delete",
   "community.createSuccess": "Your community was successfully created",
+  "community.updateSuccess": "Your community was successfully updated",
   "community.editProfile": "Edit profile",
   "community.join": "Join",
+  "community.communitySettings": "Community Settings",
+  "community.returnTo": "Return to {communityName}",
   "post": "Post",
   "upload.attachmentLimit": "You reached the maximum attachment of {maxFiles}",
   "upload.fileSizeLimit": "One of the selected file is larger than 1GB. Please select a new file.",
   "user.editProfile": "Edit profile",
   "user.message": "Message",
+  "report.reportUser": "Report user",
   "report.reportSent": "Report sent"
 }

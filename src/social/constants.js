@@ -4,4 +4,5 @@ export const PageTypes = {
   NewsFeed: 'newsfeed',
   UserFeed: 'userfeed',
   CommunityFeed: 'communityfeed',
+  CommunityEdit: 'communityedit',
 };

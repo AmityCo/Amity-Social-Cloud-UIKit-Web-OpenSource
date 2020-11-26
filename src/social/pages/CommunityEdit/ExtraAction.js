@@ -60,7 +60,7 @@ export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
       title: communitySettings.CLOSE_COMMUNITY_CONFIRM_TITLE,
       content: communitySettings.CLOSE_COMMUNITY_CONFIRM_TEXT,
       cancelText: 'Cancel',
-      okText: 'Remove',
+      okText: 'Close',
       onOk: () => {
         closeCommunity();
         onCommunityClosed();

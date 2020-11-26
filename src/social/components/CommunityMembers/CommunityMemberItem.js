@@ -28,7 +28,7 @@ const CommunityMemberItem = ({ userId, onClick }) => {
       <OptionMenu
         options={[
           /* { name: 'Remove from community', action: confirmRemoving }, */
-          { name: 'Report user', action: onReportClick },
+          { name: 'report.reportUser', action: onReportClick },
         ]}
       />
     </CommunityMemberContainer>

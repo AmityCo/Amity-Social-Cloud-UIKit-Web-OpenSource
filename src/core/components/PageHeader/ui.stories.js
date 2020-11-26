@@ -15,7 +15,9 @@ UiPageHeader.storyName = 'Page header';
 UiPageHeader.args = {
   title: 'Example page title',
   avatarFileUrl: 'https://cataas.com/cat',
+  backLinkText: 'Back',
   showBackButton: false,
+  hideBackArrow: false,
 };
 
 UiPageHeader.argTypes = {

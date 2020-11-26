@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
-import { FileRepository } from 'eko-sdk';
 
 import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
@@ -95,11 +94,11 @@ const CommunityForm = ({
 
   const { register, handleSubmit, errors, setError, watch, control } = useForm({ defaultValues });
 
-  const [avatarFileId, setAvatarFileId] = useState(edit ? community.avatarFileId : '');
+  const [avatarFileId] = useState(edit ? community.avatarFileId : '');
 
   const displayName = watch('displayName', '');
   const description = watch('description', '');
-  const categoryId = watch('category', '');
+  const categoryId = watch('categoryId', '');
 
   // what the hell...
   // The logic is very overcomplicated, but left like this just to fix a bug until a proper refactor can be done.
@@ -112,36 +111,34 @@ const CommunityForm = ({
       setError('displayName', { message: 'Name cannot be empty' });
       return;
     }
-    if (!isPublic && data.userIds.length === 0) {
+    if (!isPublic && data.userIds?.length === 0) {
       setError('userIds', { message: 'Please select at least one member' });
       return;
     }
 
     const payload = {
       displayName: data.displayName,
-      description: data.description.length ? data.description : undefined,
-      avatarFileId: null,
+      description: data.description?.length ? data.description : undefined,
+      avatarFileId,
       tags: [],
       userIds: data.userIds,
       isPublic,
+      // Currently we support only one category per community.
       categoryIds: data?.categoryId?.length ? [data.categoryId] : undefined,
     };
 
+    // Cannot update community members with this endpoint.
+    if (edit) {
+      delete payload.userIds;
+    }
+
     await onSubmit(payload);
 
-    if (!edit) {
-      notification.success({
-        content: <FormattedMessage id="community.createSuccess" />,
-      });
-    }
+    const notificationMessageId = edit ? 'community.updateSuccess' : 'community.createSuccess';
+    notification.success({
+      content: <FormattedMessage id={notificationMessageId} />,
+    });
   };
-
-  if (edit && avatarFileId) {
-    const fileUrl = FileRepository.getFileUrlById(community.avatarFileId);
-    if (fileUrl) {
-      setAvatarFileId(fileUrl);
-    }
-  }
 
   const disabled = useMemo(() => displayName.length === 0 || categoryId === '', [
     displayName,
@@ -188,12 +185,12 @@ const CommunityForm = ({
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
-          <Field error={errors.category}>
-            <Label htmlFor="category" className="required">
+          <Field error={errors.categoryId}>
+            <Label htmlFor="categoryId" className="required">
               Category
             </Label>
             <Controller
-              name="category"
+              name="categoryId"
               ref={register({ required: 'Category is required' })}
               render={CategorySelector}
               control={control}
@@ -231,7 +228,7 @@ const CommunityForm = ({
             control={control}
           />
         </FormBlock>
-        <ConditionalRender condition={!isPublic}>
+        <ConditionalRender condition={!isPublic && !edit}>
           <FormBlock title="Community members" edit={edit}>
             <MembersField error={errors.userIds}>
               <Label name="userIds" className="required">
@@ -254,7 +251,9 @@ const CommunityForm = ({
             Cancel
           </Button>
         </ConditionalRender>
-        <SubmitButton disabled={disabled}>{edit ? 'Save' : 'Create'}</SubmitButton>
+        <SubmitButton disabled={disabled} edit={edit}>
+          {edit ? 'Save' : 'Create'}
+        </SubmitButton>
       </Footer>
     </Form>
   );

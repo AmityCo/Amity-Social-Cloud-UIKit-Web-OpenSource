@@ -42,14 +42,14 @@ const BackButton = styled.button`
   }
 `;
 
-const PageHeader = ({ title, avatarFileUrl, avatarImage, onBack }) => (
+const PageHeader = ({ title, avatarFileUrl, avatarImage, backLinkText, onBack }) => (
   <HeaderContainer>
     <Avatar avatar={avatarFileUrl} backgroundImage={avatarImage} />
     <LinkAndTitle>
       {onBack instanceof Function && (
         <BackButton onClick={onBack}>
           <ChevronLeftIcon height=".9em" />
-          <FormattedMessage id="backTitle" />
+          {backLinkText ?? <FormattedMessage id="backTitle" />}
         </BackButton>
       )}
       <Title>{title}</Title>
@@ -60,12 +60,14 @@ const PageHeader = ({ title, avatarFileUrl, avatarImage, onBack }) => (
 PageHeader.propTypes = {
   title: PropTypes.node,
   avatarFileUrl: PropTypes.string,
+  backLinkText: PropTypes.node,
   onBack: PropTypes.func,
   avatarImage: PropTypes.string,
 };
 
 PageHeader.defaultProps = {
   title: null,
+  backLinkText: null,
   onBack: null,
   avatarImage: '',
 };
