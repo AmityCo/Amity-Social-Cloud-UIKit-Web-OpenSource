@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { notification } from '~/core/components/Notification';
 import OptionMenu from '~/core/components/OptionMenu';
@@ -14,7 +15,7 @@ const CommunityMemberItem = ({ userId, onClick }) => {
   const onReportClick = () => {
     handleReportUser();
     notification.success({
-      content: 'Report Sent',
+      content: <FormattedMessage id="report.reportSent" />,
     });
   };
 

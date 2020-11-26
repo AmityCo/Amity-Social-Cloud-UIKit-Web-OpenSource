@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { useIntl } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
+
 import { isModerator } from '~/helpers/permissions';
 import { confirm } from '~/core/components/Confirm';
+import { notification } from '~/core/components/Notification';
 import usePost from '~/social/hooks/usePost';
 import withSDK from '~/core/hocs/withSDK';
 import customizableComponent from '~/core/hocs/customization';
@@ -47,10 +49,17 @@ const Post = ({
       onOk: handleDeletePost,
     });
 
+  const onReportClick = () => {
+    handleReportPost();
+    notification.success({
+      content: <FormattedMessage id="report.reportSent" />,
+    });
+  };
+
   const allOptions = {
     edit: { name: 'post.editPost', action: openEditingPostModal },
     delete: { name: 'post.deletePost', action: confirmDeletePost },
-    report: { name: 'post.reportPost', action: handleReportPost },
+    report: { name: 'post.reportPost', action: onReportClick },
   };
 
   const getActionOptions = () => {

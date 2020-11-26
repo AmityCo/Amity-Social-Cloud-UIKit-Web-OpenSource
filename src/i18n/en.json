@@ -29,5 +29,6 @@
   "upload.attachmentLimit": "You reached the maximum attachment of {maxFiles}",
   "upload.fileSizeLimit": "One of the selected file is larger than 1GB. Please select a new file.",
   "user.editProfile": "Edit profile",
-  "user.message": "Message"
+  "user.message": "Message",
+  "report.reportSent": "Report sent"
 }
