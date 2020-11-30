@@ -94,7 +94,7 @@ const CommunityForm = ({
 
   const { register, handleSubmit, errors, setError, watch, control } = useForm({ defaultValues });
 
-  const [avatarFileId] = useState(edit ? community.avatarFileId : '');
+  const [avatarFileId] = useState(edit ? community.avatarFileId : null);
 
   const displayName = watch('displayName', '');
   const description = watch('description', '');
