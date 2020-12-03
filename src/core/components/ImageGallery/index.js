@@ -21,11 +21,17 @@ const ImageGallery = ({ index = 0, items = [], children, onChange }) => {
   const next = () => onChange(index + 1 < items.length ? index + 1 : 0);
   const prev = () => onChange(index - 1 >= 0 ? index - 1 : items.length - 1);
 
-  useKeyboard({
+  const listeners = {
     ArrowLeft: prev,
     ArrowRight: next,
     Escape: handleClose,
-  });
+  };
+
+  const params = {
+    ignoreOtherKeys: true,
+  };
+
+  useKeyboard(listeners, params);
 
   return (
     <Container length={items.length}>
