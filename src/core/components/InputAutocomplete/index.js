@@ -20,6 +20,7 @@ const SuggestionsMenu = styled(Menu)`
   position: absolute;
   top: calc(100% + 0.25rem);
   width: 100%;
+  color: ${({ theme }) => theme.palette.base.main};
 `;
 
 const defaultRender = (item, value) => <Highlight key={item} text={item} query={value} />;
@@ -27,6 +28,7 @@ const defaultFilter = (items, value) => items.filter(item => item.includes(value
 
 const InputAutocomplete = ({
   value,
+  placeholder,
   items,
   filter,
   loadMore,
@@ -80,6 +82,7 @@ const InputAutocomplete = ({
         append={append}
         onClear={onClear}
         onChange={onChange}
+        placeholder={placeholder}
       />
       {open && (
         <SuggestionsMenu>
@@ -99,10 +102,12 @@ InputAutocomplete.defaultProps = {
   invalid: false,
   disabled: false,
   onPick: () => {},
+  placeholder: '',
 };
 
 InputAutocomplete.propTypes = {
   value: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   items: PropTypes.object,
   filter: PropTypes.func,
   loadMore: PropTypes.func,

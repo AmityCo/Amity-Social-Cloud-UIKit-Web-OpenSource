@@ -19,6 +19,7 @@ export const Dots = () => <Icons.Dots />;
 export const Plus = () => <Icons.Plus />;
 export const Pencil = () => <Icons.Pencil />;
 export const Remove = () => <Icons.Remove />;
+export const Search = () => <Icons.Search />;
 export const ImageAttachment = () => <Icons.ImageAttachment />;
 export const FileAttachment = () => <Icons.FileAttachment />;
 

@@ -177,6 +177,7 @@ UiInputAutocomplete.args = {
   expand: 2,
   invalid: false,
   disabled: false,
+  placeholder: 'Input text',
 };
 
 UiInputAutocomplete.argTypes = {
@@ -184,6 +185,7 @@ UiInputAutocomplete.argTypes = {
   expand: { control: { type: 'number', min: 0, step: 1 } },
   invalid: { control: { type: 'boolean' } },
   disabled: { control: { type: 'boolean' } },
+  placeholder: { control: { type: 'text' } },
   onChange: { action: 'onChange(value)' },
   onPick: { action: 'onPick(value)' },
 };

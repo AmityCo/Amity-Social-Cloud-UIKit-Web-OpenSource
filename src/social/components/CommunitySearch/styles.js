@@ -1,21 +1,17 @@
 import styled, { css } from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/pro-regular-svg-icons';
+import InputAutocomplete from '~/core/components/InputAutocomplete';
+import Search from '~/icons/Search';
 
-import Menu from '~/core/components/Menu';
+export const SearchIconContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+`;
 
-export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
+export const SearchIcon = styled(Search)`
   color: ${({ theme }) => theme.palette.base.shade2};
-  padding: 0 10px;
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-
-  &.svg-inline--fa {
-    width: auto;
-  }
+  font-size: 16px;
 `;
 
 export const CommunitiesSearchContainer = styled.div`
@@ -31,7 +27,7 @@ export const CommunitiesSearchContainer = styled.div`
     `}
 `;
 
-export const CommunitiesSearchInput = styled.input`
+export const CommunitiesSearchInput = styled(InputAutocomplete)`
   ${({ theme }) => theme.typography.body}
   width: 100%;
   padding: 10px;
@@ -45,9 +41,4 @@ export const CommunitiesSearchInput = styled.input`
   &::placeholder {
     color: ${({ theme }) => theme.palette.base.shade1};
   }
-`;
-
-export const CommunitiesSearchResults = styled(Menu)`
-  overflow-y: auto;
-  max-height: 200px;
 `;

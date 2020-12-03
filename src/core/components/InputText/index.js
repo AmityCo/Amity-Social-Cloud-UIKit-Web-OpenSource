@@ -45,6 +45,10 @@ const styling = css`
   outline: none;
   font: inherit;
 
+  &::placeholder {
+    font-weight: 400;
+  }
+
   &[disabled] {
     background: none;
   }
