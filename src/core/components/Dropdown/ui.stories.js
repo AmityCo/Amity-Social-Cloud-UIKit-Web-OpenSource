@@ -43,9 +43,9 @@ export const DropdownWithCustomTrigger = () => {
   const toggle = () => updateArgs({ isOpen: !isOpen });
   const close = () => updateArgs({ isOpen: false });
 
-  const Trigger = () => {
+  const triggerRenderer = props => {
     return (
-      <OptionsButton onClick={toggle}>
+      <OptionsButton {...props}>
         <OptionsIcon />
       </OptionsButton>
     );
@@ -54,7 +54,7 @@ export const DropdownWithCustomTrigger = () => {
   return (
     <UiKitDropdown
       isOpen={isOpen}
-      trigger={<Trigger />}
+      renderTrigger={props => triggerRenderer({ ...props, onClick: toggle })}
       position={position}
       align={align}
       // when using custom trigger we should handle close on click outside (if needed)
@@ -76,5 +76,49 @@ DropdownWithCustomTrigger.argTypes = {
   isOpen: { control: { type: 'boolean' } },
   position: { control: { type: 'select', options: [POSITION_TOP, POSITION_BOTTOM] } },
   align: { control: { type: 'select', options: [POSITION_LEFT, POSITION_RIGHT] } },
+  onClick: { action: 'onClick()' },
+};
+
+export const ScrollableDropdownWithCustomTrigger = () => {
+  const [{ isOpen, position, fullSized, scrollable }, updateArgs] = useArgs();
+
+  const toggle = () => updateArgs({ isOpen: !isOpen });
+  const close = () => updateArgs({ isOpen: false });
+
+  const triggerRenderer = props => {
+    return <input type="text" {...props} />;
+  };
+
+  const items = Array.from({ length: 20 }).map((item, index) => (
+    <Option key={index}>{`item_${index}`}</Option>
+  ));
+
+  return (
+    <UiKitDropdown
+      isOpen={isOpen}
+      renderTrigger={props => triggerRenderer({ ...props, onClick: toggle })}
+      position={position}
+      // when using custom trigger we should handle close on click outside (if needed)
+      handleClose={close}
+      fullSized={fullSized}
+      scrollable={scrollable}
+    >
+      {items}
+    </UiKitDropdown>
+  );
+};
+
+ScrollableDropdownWithCustomTrigger.args = {
+  isOpen: false,
+  position: POSITION_BOTTOM,
+  fullSized: true,
+  scrollable: true,
+};
+
+ScrollableDropdownWithCustomTrigger.argTypes = {
+  isOpen: { control: { type: 'boolean' } },
+  fullSized: { control: { type: 'boolean' } },
+  scrollable: { control: { type: 'boolean' } },
+  position: { control: { type: 'select', options: [POSITION_TOP, POSITION_BOTTOM] } },
   onClick: { action: 'onClick()' },
 };

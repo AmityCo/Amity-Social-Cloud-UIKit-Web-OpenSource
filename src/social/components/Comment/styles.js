@@ -16,7 +16,7 @@ export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
 `;
 
-export const OptionMenu = styled(UIOptionMenu).attrs({ align: 'start' })`
+export const OptionMenu = styled(UIOptionMenu)`
   color: ${({ theme }) => theme.palette.neutral.main};
   &:hover {
     background-color: transparent;

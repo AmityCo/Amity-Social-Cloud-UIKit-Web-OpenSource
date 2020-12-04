@@ -7,12 +7,6 @@ import UiKitDropdown from '~/core/components/Dropdown';
 
 import { OptionsIcon, OptionsButton, Option, Container } from './styles';
 
-const Trigger = ({ className, open, icon }) => (
-  <OptionsButton className={className} onClick={open}>
-    {icon || <OptionsIcon />}
-  </OptionsButton>
-);
-
 const OptionMenu = ({
   className,
   icon,
@@ -21,7 +15,7 @@ const OptionMenu = ({
   align = POSITION_RIGHT,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const open = () => setIsOpen(true);
+  const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
   const attachCanceling = fn => () => {
@@ -29,11 +23,15 @@ const OptionMenu = ({
     fn && fn();
   };
 
+  const triggerRenderer = props => {
+    return <OptionsButton {...props}>{icon || <OptionsIcon />}</OptionsButton>;
+  };
+
   return (
     <Container>
       <UiKitDropdown
         isOpen={isOpen}
-        trigger={<Trigger className={className} open={open} icon={icon} />}
+        renderTrigger={props => triggerRenderer({ ...props, onClick: toggle, className, icon })}
         position={position}
         align={align}
         handleClose={() => setIsOpen(false)}

@@ -6,6 +6,7 @@ import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
 import Radios from '~/core/components/Radio';
 import ConditionalRender from '~/core/components/ConditionalRender';
+import useElement from '~/core/hooks/useElement';
 import customizableComponent from '~/core/hocs/customization';
 import { AvatarUpload } from '~/core/components/Avatar/AvatarUpload';
 import { notification } from '~/core/components/Notification';
@@ -145,9 +146,11 @@ const CommunityForm = ({
     categoryId,
   ]);
 
+  const [formBodyRef, formBodyElement] = useElement();
+
   return (
     <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
-      <FormBody>
+      <FormBody ref={formBodyRef}>
         <FormBlock title="General" edit={edit}>
           <AvatarUpload />
           <Field error={errors.displayName}>
@@ -192,7 +195,7 @@ const CommunityForm = ({
             <Controller
               name="categoryId"
               ref={register({ required: 'Category is required' })}
-              render={CategorySelector}
+              render={props => <CategorySelector parentContainer={formBodyElement} {...props} />}
               control={control}
               defaultValue=""
             />

@@ -1,13 +1,11 @@
-const DEFAULT_OFFSET = 0;
-
 export const POSITION_TOP = 'top';
 export const POSITION_RIGHT = 'right';
 export const POSITION_BOTTOM = 'bottom';
 export const POSITION_LEFT = 'left';
 
-const getCssPosition = (position = 'bottom', offset = DEFAULT_OFFSET) => {
+const getCssPosition = (position = 'bottom') => {
   if (position === POSITION_BOTTOM) {
-    return `top: ${offset}px;`;
+    return `top: 100%;`;
   }
 
   if (position === POSITION_LEFT) {
@@ -18,7 +16,7 @@ const getCssPosition = (position = 'bottom', offset = DEFAULT_OFFSET) => {
     return 'right: 0px;';
   }
 
-  return `bottom: ${offset}px;`;
+  return `bottom: 100%;`;
 };
 
 export default getCssPosition;

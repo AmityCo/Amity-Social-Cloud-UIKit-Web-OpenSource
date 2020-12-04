@@ -80,7 +80,6 @@ export const SelectorPopover = styled(Popover).attrs({
 `;
 
 export const SelectorList = styled(Menu)`
-  max-height: 184px;
   overflow-y: auto;
   overflow-x: hidden;
 `;

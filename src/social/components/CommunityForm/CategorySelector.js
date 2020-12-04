@@ -1,42 +1,30 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
-import { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
+import Select from '~/core/components/Select';
 import useCategories from '~/social/hooks/useCategories';
-
 import CategoryHeader from '~/social/components/category/Header';
 
-import { Selector, SelectorPopover, SelectorList, SelectIcon, InputPlaceholder } from './styles';
+import { Selector, SelectIcon, InputPlaceholder } from './styles';
 
-const CategorySelector = ({ value: categoryId, onChange }) => {
+const CategorySelector = ({ value: categoryId, onChange, parentContainer = null }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const open = () => setIsOpen(true);
+  const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
   const [categories] = useCategories({ isDeleted: false });
+  const options = categories.map(category => ({
+    name: category.name,
+    value: category.categoryId,
+  }));
 
-  const list = (
-    <SelectorList>
-      {/* TODO empty state */}
-      {categories.map(category => (
-        <MenuItem
-          key={category.categoryId}
-          active={categoryId === category.categoryId}
-          onClick={() => {
-            onChange(category.categoryId);
-            close();
-          }}
-        >
-          <CategoryHeader key={category.categoryId} categoryId={category.categoryId} />
-        </MenuItem>
-      ))}
-    </SelectorList>
-  );
+  const itemRenderer = ({ value }) => <CategoryHeader categoryId={value} />;
 
-  return (
-    <SelectorPopover isOpen={isOpen} onClickOutside={close} content={list} fixed>
-      <Selector onClick={open}>
+  const triggerRenderer = props => {
+    return (
+      <Selector {...props}>
         {categoryId ? (
           <CategoryHeader categoryId={categoryId} />
         ) : (
@@ -46,8 +34,26 @@ const CategorySelector = ({ value: categoryId, onChange }) => {
         )}
         <SelectIcon />
       </Selector>
-    </SelectorPopover>
+    );
+  };
+
+  return (
+    <Select
+      options={options}
+      onSelect={({ value }) => onChange(value)}
+      renderTrigger={props => triggerRenderer({ ...props, onClick: toggle })}
+      renderItem={itemRenderer}
+      parentContainer={parentContainer}
+      isOpen={isOpen}
+      handleClose={close}
+    />
   );
+};
+
+CategorySelector.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  parentContainer: PropTypes.element,
 };
 
 export default customizableComponent('CategorySelector', CategorySelector);
