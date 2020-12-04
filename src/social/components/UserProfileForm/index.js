@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { Controller, useForm } from 'react-hook-form';
 
 import { PrimaryButton } from '~/core/components/Button';
+import CameraIcon from '~/icons/Camera';
 
 // TODO: should not be importing styles from another component.
 import {
   AboutTextarea,
   Avatar,
   AvatarWrapper,
-  CameraIcon,
   Counter,
   ErrorMessage,
   Field,

@@ -8,9 +8,9 @@ import Radios from '~/core/components/Radio';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import useElement from '~/core/hooks/useElement';
 import customizableComponent from '~/core/hocs/customization';
-import { AvatarUpload } from '~/core/components/Avatar/AvatarUpload';
-import { notification } from '~/core/components/Notification';
+import ImageUploader from './ImageUploader';
 
+import { notification } from '~/core/components/Notification';
 import CategorySelector from './CategorySelector';
 import UserSelector from './UserSelector';
 
@@ -93,7 +93,9 @@ const CommunityForm = ({
     ...community, // if edit, community will erase the defaults
   };
 
-  const { register, handleSubmit, errors, setError, watch, control } = useForm({ defaultValues });
+  const { register, handleSubmit, errors, setError, watch, control } = useForm({
+    defaultValues,
+  });
 
   const [avatarFileId] = useState(edit ? community.avatarFileId : null);
 
@@ -120,7 +122,7 @@ const CommunityForm = ({
     const payload = {
       displayName: data.displayName,
       description: data.description?.length ? data.description : undefined,
-      avatarFileId,
+      avatarFileId: data.avatarFileId,
       tags: [],
       userIds: data.userIds,
       isPublic,
@@ -152,7 +154,16 @@ const CommunityForm = ({
     <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
       <FormBody ref={formBodyRef}>
         <FormBlock title="General" edit={edit}>
-          <AvatarUpload />
+          <Field>
+            <Controller
+              name="avatarFileId"
+              control={control}
+              render={({ onChange }) => (
+                <ImageUploader mimeType="image/png, image/jpeg" onChange={onChange} />
+              )}
+              defaultValue={null}
+            />
+          </Field>
           <Field error={errors.displayName}>
             <LabelCounterWrapper>
               <Label htmlFor="displayName" className="required">

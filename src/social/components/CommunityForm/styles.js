@@ -6,13 +6,13 @@ import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
 import {
   faGlobeAfrica,
   faLockAlt,
-  faCamera,
   faChevronDown,
   faTimes,
 } from '@fortawesome/pro-regular-svg-icons';
 import Popover from '~/core/components/Popover';
 import Menu from '~/core/components/Menu';
 import { PrimaryButton } from '~/core/components/Button';
+import ImageUploader from '~/core/components/Uploaders/Image';
 import UIAvatar from '~/core/components/Avatar';
 
 const ErrorMessageWrapper = styled.div`
@@ -39,16 +39,6 @@ export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
   font-size: 12px;
   padding: 5px 12px;
   color: ${({ theme }) => theme.palette.base.shade1};
-`;
-
-export const CameraIcon = styled(FaIcon).attrs({ icon: faCamera })`
-  font-size: 20px;
-  color: #fff;
-  position: absolute;
-  top: 20px;
-  left: 22px;
-  z-index: 3;
-  cursor: pointer;
 `;
 
 export const Selector = styled.div`
@@ -82,14 +72,6 @@ export const SelectorPopover = styled(Popover).attrs({
 export const SelectorList = styled(Menu)`
   overflow-y: auto;
   overflow-x: hidden;
-`;
-
-export const AvatarWrapper = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
 `;
 
 export const IconWrapper = styled.div`
@@ -223,14 +205,52 @@ export const Footer = styled.div`
   justify-content: ${({ edit }) => (edit ? 'flex-start' : 'flex-end')};
 `;
 
-export const Avatar = styled(UIAvatar)`
-  margin-right: 8px;
-`;
-
-export const AvatarUploadContainer = styled.div`
+export const UploadOverlay = styled.div`
+  background: rgba(0, 0, 0, 0);
+  top: 0;
+  left: 0;
+  z-index: 1;
+  transition: background 0.3s;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  pointer-events: none;
+`;
+
+export const AvatarImageUploader = styled(ImageUploader)`
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+`;
+
+export const AvatarUploadContainer = styled.div`
+  background: ${({ theme }) => theme.palette.base.shade3};
+  position: relative;
+  display: block;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  overflow: hidden;
+  align-self: center;
+  &:hover ${UploadOverlay} {
+    background: rgba(0, 0, 0, 0.5);
+  }
+`;
+
+export const AvatarWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+`;
+
+export const Avatar = styled(UIAvatar)`
+  margin-right: 8px;
 `;
 
 export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 15 })`
@@ -263,9 +283,12 @@ export const SelectIcon = styled(FaIcon).attrs({ icon: faChevronDown })`
 `;
 
 export const Field = styled.div`
-  margin-top: 20px;
+  :not(:first-child) {
+    margin-top: 20px;
+  }
   display: flex;
   flex-direction: column;
+
   ${({ error }) =>
     error &&
     `

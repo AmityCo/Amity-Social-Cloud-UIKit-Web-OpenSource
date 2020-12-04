@@ -10,6 +10,7 @@ export const Community = () => <Icons.Community />;
 export const User = () => <Icons.User />;
 export const EmptyFeed = () => <Icons.EmptyFeed />;
 
+export const Camera = () => <Icons.Camera />;
 export const ChevronDown = () => <Icons.ChevronDown />;
 export const ChevronLeft = () => <Icons.ChevronLeft />;
 export const ChevronRight = () => <Icons.ChevronRight />;

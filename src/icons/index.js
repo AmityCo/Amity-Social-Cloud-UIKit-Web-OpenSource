@@ -42,3 +42,4 @@ export { default as FileAttachment } from './FileAttachment';
 export { default as ChevronDown } from './ChevronDown';
 export { default as ChevronLeft } from './ChevronLeft';
 export { default as ChevronRight } from './ChevronRight';
+export { default as Camera } from './Camera';

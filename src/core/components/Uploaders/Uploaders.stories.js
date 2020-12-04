@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import UiKitFileLoader from './Loader';
+import UiKitUploader from './Uploader';
+import Image from '~/core/components/Uploaders/Image';
 
 export default {
   title: 'Ui only/Uploaders',
 };
 
-export const LocalLoader = args => {
+const ImageRenderer = ({ uploading, uploaded }) => {
+  const allFiles = [...uploading, ...uploaded];
+
+  return allFiles.map(file => {
+    if ('fileId' in file) {
+      return <Image src={file.fileUrl} width="100" alt={file.name} />;
+    }
+    const url = URL.createObjectURL(file);
+    return <Image key="blob" src={url} width="100" />;
+  });
+};
+
+export const SimpleImageUploader = () => {
+  const [loadedImages, setLoadedImages] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState([]);
+
   return (
-    <UiKitFileLoader {...args}>
+    <UiKitFileLoader onChange={images => setLoadedImages(images)}>
       <div
         style={{
           padding: '1em',
@@ -17,20 +34,23 @@ export const LocalLoader = args => {
         }}
       >
         Click/Drop to upload
+        <UiKitUploader files={loadedImages} onChange={images => setUploadedImages(images)}>
+          <ImageRenderer />
+        </UiKitUploader>
       </div>
     </UiKitFileLoader>
   );
 };
 
-LocalLoader.storyName = 'Loader';
+SimpleImageUploader.storyName = 'Loader';
 
-LocalLoader.args = {
+SimpleImageUploader.args = {
   mimeType: 'image/*',
   multiple: true,
   disabled: false,
 };
 
-LocalLoader.argTypes = {
+SimpleImageUploader.argTypes = {
   mimeType: {
     control: {
       type: 'text',
