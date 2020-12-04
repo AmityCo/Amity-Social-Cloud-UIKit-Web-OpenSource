@@ -22,6 +22,8 @@
   "post.confirmDelete": "This post will be permanently deleted. You’ll no longer to see and find this post. Continue?",
   "post.edited": "Edited",
   "delete": "Delete",
+  "collapsible.viewAll": "View all",
+  "collapsible.viewAllFiles": "View all files",
   "community.createSuccess": "Your community was successfully created",
   "community.updateSuccess": "Your community was successfully updated",
   "community.editProfile": "Edit profile",

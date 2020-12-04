@@ -9,6 +9,7 @@ import { notification } from '~/core/components/Notification';
 import usePost from '~/social/hooks/usePost';
 import withSDK from '~/core/hocs/withSDK';
 import customizableComponent from '~/core/hocs/customization';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import Modal from '~/core/components/Modal';
 import PostEditor from '~/social/components/post/Editor';
 import EngagementBar from '~/social/components/EngagementBar';
@@ -84,15 +85,18 @@ const Post = ({
       </PostHeadContainer>
 
       <Content dataType={dataType} data={data} postMaxLines={postMaxLines} />
-      {hasChildrenPosts && <ChildrenContent>{childrenContent}</ChildrenContent>}
+
+      <ConditionalRender condition={hasChildrenPosts}>
+        <ChildrenContent>{childrenContent}</ChildrenContent>
+      </ConditionalRender>
 
       <EngagementBar postId={postId} noInteractionMessage={noInteractionMessage} />
 
-      {isEditing && (
+      <ConditionalRender condition={isEditing}>
         <Modal title={formatMessage({ id: 'post.editPost' })} onCancel={closeEditingPostModal}>
           <PostEditor postId={postId} onSave={closeEditingPostModal} />
         </Modal>
-      )}
+      </ConditionalRender>
     </PostContainer>
   );
 };
