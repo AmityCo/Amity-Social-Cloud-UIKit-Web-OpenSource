@@ -17,8 +17,11 @@ export const Label = styled.label`
 `;
 
 export const Radio = styled.input.attrs({ type: 'radio' })`
-  appearance: none;
-  position: absolute;
+  &&& {
+    appearance: none;
+    position: absolute;
+    outline: none;
+  }
 `;
 
 const absoluteCentered = css`
