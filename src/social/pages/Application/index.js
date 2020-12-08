@@ -21,6 +21,10 @@ const ApplicationContainer = styled.div`
   width: 100%;
 `;
 
+const StyledCommunitySideMenu = styled(CommunitySideMenu)`
+  min-height: 100%;
+`;
+
 const Community = ({
   onChangePage,
   onClickCommunity,
@@ -132,7 +136,7 @@ const Community = ({
     <ApplicationContainer>
       <MainLayout
         aside={
-          <CommunitySideMenu
+          <StyledCommunitySideMenu
             newsFeedActive={page.type === PageTypes.NewsFeed}
             onClickNewsFeed={() => handleChangePage(PageTypes.NewsFeed)}
             exploreActive={page.type === PageTypes.Explore}

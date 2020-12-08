@@ -12,6 +12,8 @@ const CommunitySearch = styled(UiKitCommunitySearch)`
 `;
 
 const CommunitySideMenu = ({
+  className,
+
   onClickNewsFeed,
   newsFeedActive,
 
@@ -22,7 +24,7 @@ const CommunitySideMenu = ({
   onCommunityCreated,
   activeCommunity,
 }) => (
-  <SideMenu>
+  <SideMenu className={className}>
     <CommunitySearch onClickCommunity={onClickCommunity} sticky />
 
     <SideSectionCommunity
@@ -42,6 +44,8 @@ const CommunitySideMenu = ({
 );
 
 CommunitySideMenu.propTypes = {
+  className: PropTypes.string,
+
   onClickNewsFeed: PropTypes.func,
   newsFeedActive: PropTypes.bool,
 
