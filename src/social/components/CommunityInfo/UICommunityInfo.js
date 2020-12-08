@@ -38,6 +38,7 @@ const UICommunityInfo = ({
   onEditCommunity,
   joinCommunity,
   leaveCommunity,
+  canLeaveCommunity,
 }) => (
   <Container>
     <Header>
@@ -49,7 +50,10 @@ const UICommunityInfo = ({
               name: 'Settings',
               action: () => onEditCommunity(communityId),
             },
-            { name: 'Leave Community', action: () => leaveCommunity(communityId) },
+            canLeaveCommunity && {
+              name: 'Leave Community',
+              action: () => leaveCommunity(communityId),
+            },
           ].filter(Boolean)}
         />
       </ConditionalRender>
@@ -92,6 +96,7 @@ UICommunityInfo.propTypes = {
   onEditCommunity: PropTypes.func,
   joinCommunity: PropTypes.func,
   leaveCommunity: PropTypes.func,
+  canLeaveCommunity: PropTypes.bool,
 };
 
 export default customizableComponent('UICommunityInfo', UICommunityInfo);

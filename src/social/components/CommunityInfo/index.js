@@ -1,12 +1,10 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 
 import { isModerator } from '~/helpers/permissions';
 import withSDK from '~/core/hocs/withSDK';
-
 import useCommunity from '~/social/hooks/useCommunity';
-
 import UICommunityInfo from './UICommunityInfo';
-
 import { confirm } from '~/core/components/Confirm';
 
 const CommunityInfo = ({ communityId, userRoles, onEditCommunity, currentUserId }) => {
@@ -15,18 +13,20 @@ const CommunityInfo = ({ communityId, userRoles, onEditCommunity, currentUserId 
   );
   const { fileUrl } = file;
 
-  // TODO: react-intl
+  const { formatMessage } = useIntl();
+
   const leaveCommunityConfirm = () =>
     confirm({
-      title: 'Leave community?',
-      content: 'You won’t no longer be able to post and interact in this community after leaving.',
-      okText: 'Leave',
+      title: formatMessage({ id: 'community.leaveCommunityTitle' }),
+      content: formatMessage({ id: 'community.leaveCommunityBody' }),
+      okText: formatMessage({ id: 'community.leaveCommunityButtonText' }),
       onOk: () => leaveCommunity(community.communityId),
     });
 
   const { postsCount, membersCount, description, isJoined, userId } = community;
   const isOwner = currentUserId === userId;
   const canEditCommunity = (isModerator(userRoles) && isJoined) || isOwner;
+  const canLeaveCommunity = !isOwner;
   const categoryNames = communityCategories.map(({ name }) => name);
 
   return (
@@ -42,6 +42,7 @@ const CommunityInfo = ({ communityId, userRoles, onEditCommunity, currentUserId 
       onEditCommunity={onEditCommunity}
       joinCommunity={joinCommunity}
       leaveCommunity={leaveCommunityConfirm}
+      canLeaveCommunity={canLeaveCommunity}
     />
   );
 };
