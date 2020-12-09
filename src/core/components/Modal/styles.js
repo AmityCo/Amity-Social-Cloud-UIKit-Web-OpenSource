@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/pro-regular-svg-icons';
+import { Close } from '~/icons';
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const CloseIcon = styled(Close)`
   padding: 0 6px;
   font-size: 18px;
   cursor: pointer;

@@ -1,9 +1,6 @@
 import styled from 'styled-components';
-
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisV } from '@fortawesome/pro-solid-svg-icons';
-import { faSave, faTrashAlt, faTimes } from '@fortawesome/pro-regular-svg-icons';
 import UiKitAvatar from '~/core/components/Avatar';
+import { Close, EllipsisV, Save, Trash } from '~/icons';
 
 export const SystemMessageContainer = styled.span`
   opacity: 0.5;
@@ -22,25 +19,25 @@ export const EditingInput = styled.input`
   border-radius: 4px;
 `;
 
-export const SaveIcon = styled(FaIcon).attrs({ icon: faSave })`
+export const SaveIcon = styled(Save)`
   opacity: 0.7;
   padding: 0 10px;
   cursor: pointer;
 `;
 
-export const DeleteIcon = styled(FaIcon).attrs({ icon: faTrashAlt })`
+export const DeleteIcon = styled(Trash)`
   opacity: 0.7;
   padding: 0 10px;
   cursor: pointer;
 `;
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const CloseIcon = styled(Close)`
   opacity: 0.7;
   padding: 0 10px;
   cursor: pointer;
 `;
 
-export const MessageOptionsIcon = styled(FaIcon).attrs({ icon: faEllipsisV })`
+export const MessageOptionsIcon = styled(EllipsisV)`
   opacity: 0.5;
   font-size: 11px;
   padding: 0 5px;

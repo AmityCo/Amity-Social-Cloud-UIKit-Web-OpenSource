@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faImage } from '@fortawesome/pro-regular-svg-icons';
+import { Close, ImageAttachment } from '~/icons';
 
 export const CircleButton = styled.button`
   border-radius: 50%;
@@ -18,7 +17,7 @@ export const CircleButton = styled.button`
   border: none;
 `;
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const CloseIcon = styled(Close)`
   color: #fff;
   font-size: 18px;
 `;
@@ -151,7 +150,7 @@ export const FileInput = styled.input.attrs({ type: 'file' })`
 
 export const Label = styled.label``;
 
-export const ImageIcon = styled(FaIcon).attrs({ icon: faImage })`
+export const ImageIcon = styled(ImageAttachment)`
   font-size: 18px;
   cursor: pointer;
 

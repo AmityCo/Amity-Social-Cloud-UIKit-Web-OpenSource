@@ -5,16 +5,13 @@ import { EkoPostTargetType } from 'eko-sdk';
 
 import styled from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faNewspaper } from '@fortawesome/pro-light-svg-icons';
-
-import { faSearch } from '@fortawesome/pro-regular-svg-icons';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import EmptyState from '~/core/components/EmptyState';
 import Button from '~/core/components/Button';
+import { NewspaperLight, Search } from '~/icons';
 
-const FeedIcon = styled(FaIcon).attrs({ icon: faNewspaper })`
+const FeedIcon = styled(NewspaperLight)`
   font-size: 48px;
   margin: 10px;
 `;
@@ -24,7 +21,7 @@ const ExploreLink = styled(Button)`
   margin-top: 8px;
 `;
 
-const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
+const SearchIcon = styled(Search)`
   font-size: 16px;
   margin-right: 6px;
 `;

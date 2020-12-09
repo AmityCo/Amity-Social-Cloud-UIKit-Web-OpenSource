@@ -1,8 +1,5 @@
 import styled, { css } from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faShieldAlt } from '@fortawesome/pro-solid-svg-icons';
-
-import { ArrowRight } from '~/icons';
+import { ArrowRight, Shield } from '~/icons';
 
 export const PostHeaderContainer = styled.div`
   display: flex;
@@ -34,7 +31,7 @@ export const ArrowSeparator = styled(ArrowRight).attrs({
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
-export const ShieldIcon = styled(FaIcon).attrs({ icon: faShieldAlt })`
+export const ShieldIcon = styled(Shield)`
   margin-right: 4px;
 `;
 

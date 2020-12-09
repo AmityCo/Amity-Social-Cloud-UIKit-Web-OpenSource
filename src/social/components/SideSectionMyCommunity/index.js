@@ -1,19 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { EkoCommunityFilter } from 'eko-sdk';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-regular-svg-icons';
 import { FormattedMessage } from 'react-intl';
 
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 import SideMenuSection from '~/core/components/SideMenuSection';
+import { Plus } from '~/icons';
 import CommunitiesList from '~/social/components/CommunitiesList';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
-
-export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
-  font-size: 20px;
-`;
 
 const myListQueryParam = { filter: EkoCommunityFilter.Member };
 
@@ -34,7 +28,7 @@ const SideSectionMyCommunity = ({
 
   return (
     <SideMenuSection heading="My Community">
-      <SideMenuActionItem icon={<PlusIcon />} onClick={open} element="button">
+      <SideMenuActionItem icon={<Plus height="20px" />} onClick={open} element="button">
         <FormattedMessage id="createCommunity" />
       </SideMenuActionItem>
 

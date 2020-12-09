@@ -1,14 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-regular-svg-icons';
-
+import { Plus } from '~/icons';
 import UiKitSideMenuActionItem, { ALLOWED_ELEMENTS } from '.';
-
-const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
-  font-size: 20px;
-`;
 
 export default {
   title: 'Ui Only/Side Menu',
@@ -29,7 +22,7 @@ ActionItem.args = {
   children: 'children slot',
   active: false,
   showIcon: true,
-  icon: <PlusIcon />,
+  icon: <Plus height="20px" />,
 };
 
 ActionItem.argTypes = {

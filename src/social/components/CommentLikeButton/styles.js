@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/pro-regular-svg-icons';
 import { SecondaryButton } from '~/core/components/Button';
 import customizableComponent from '~/core/hocs/customization';
+import { ThumbsUp } from '~/icons';
 
 const isLikedStyle = css`
   color: ${({ theme }) => theme.palette.primary.main};
@@ -15,7 +14,7 @@ export const StyledLikeButton = styled(SecondaryButton)`
   ${({ active }) => active && isLikedStyle}
 `;
 
-export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
+export const LikeIcon = styled(ThumbsUp)`
   font-size: 16px;
   margin-right: 5px;
   ${({ $isLiked }) => $isLiked && isLikedStyle}

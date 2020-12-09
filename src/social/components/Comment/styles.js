@@ -1,14 +1,10 @@
 import styled from 'styled-components';
-
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faShare, faMinusCircle } from '@fortawesome/pro-regular-svg-icons';
-import { faThumbsUp as faThumbsUpSolid } from '@fortawesome/pro-solid-svg-icons';
-
 import TextareaAutosize from 'react-autosize-textarea';
 import UIOptionMenu from '~/core/components/OptionMenu';
 import Time from '~/core/components/Time';
 import UICommentComposeBar from '~/social/components/CommentComposeBar';
 import { SecondaryButton } from '~/core/components/Button';
+import { MinusCircle, Reply } from '~/icons';
 
 import UIAvatar from '~/core/components/Avatar';
 
@@ -126,11 +122,6 @@ export const InteractionBar = styled.div`
   margin-left: -10px;
 `;
 
-export const LikeIcon = styled(FaIcon).attrs({ icon: faThumbsUp })`
-  font-size: 16px;
-  margin-right: 5px;
-`;
-
 export const DeletedCommentContainer = styled.div`
   display: flex;
   align-items: center;
@@ -138,7 +129,7 @@ export const DeletedCommentContainer = styled.div`
   padding: 16px 0;
 `;
 
-export const DeletedIcon = styled(FaIcon).attrs({ icon: faMinusCircle })`
+export const DeletedIcon = styled(MinusCircle)`
   font-size: 18px;
 `;
 
@@ -163,7 +154,7 @@ export const LikeButton = styled(SecondaryButton)`
   }
 `;
 
-export const ReplyIcon = styled(FaIcon).attrs({ icon: faShare })`
+export const ReplyIcon = styled(Reply)`
   font-size: 16px;
   margin-right: 5px;
 `;
@@ -174,11 +165,6 @@ export const ReplyButton = styled(SecondaryButton)`
   &:hover {
     background-color: transparent;
   }
-`;
-
-export const SolidLikeIcon = styled(FaIcon).attrs({ icon: faThumbsUpSolid })`
-  font-size: 16px;
-  margin-right: 5px;
 `;
 
 export const CommentEditContainer = styled.div`

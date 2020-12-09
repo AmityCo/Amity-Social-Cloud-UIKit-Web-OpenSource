@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { faPlus } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import Button, { PrimaryButton } from '~/core/components/Button';
+import { Plus } from '~/icons';
 
 export const ExtraActionContainer = styled.div`
   border: 1px solid #edeef2;
@@ -39,7 +38,7 @@ export const ExtraActionButton = styled(Button)`
   width: 100%;
 `;
 
-export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
+export const PlusIcon = styled(Plus)`
   font-size: 15px;
   margin-right: 8px;
 `;

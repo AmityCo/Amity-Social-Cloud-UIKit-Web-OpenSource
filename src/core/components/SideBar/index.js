@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import customizableComponent from '~/core/hocs/customization';
+import { CommunityAlt } from '~/icons';
 import { SideNavContainer } from './styles';
-import communityIcon from './icons/community.svg';
 import MenuTab from './MenuTab';
 
 const SideNavBar = () => {
   const [active, setActive] = useState(false);
-  const Mockup = [{ name: 'COMMUNITY', icon: communityIcon }];
+  const Mockup = [{ name: 'COMMUNITY', icon: <CommunityAlt /> }];
   return (
     <SideNavContainer>
       {Mockup.map(tab => (

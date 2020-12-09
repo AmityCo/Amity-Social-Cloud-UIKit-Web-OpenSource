@@ -1,19 +1,17 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faTimes } from '@fortawesome/pro-regular-svg-icons';
-import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
+import { Check, ExclamationCircle, Remove } from '~/icons';
 
-export const SuccessIcon = styled(FaIcon).attrs({ icon: faCheck })`
+export const SuccessIcon = styled(Check)`
   font-size: 18px;
   margin-right: 8px;
 `;
 
-export const InfoIcon = styled(FaIcon).attrs({ icon: faExclamationCircle })`
+export const InfoIcon = styled(ExclamationCircle)`
   font-size: 18px;
   margin-right: 8px;
 `;
 
-export const ErrorIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const ErrorIcon = styled(Remove)`
   font-size: 18px;
   margin-right: 8px;
 `;

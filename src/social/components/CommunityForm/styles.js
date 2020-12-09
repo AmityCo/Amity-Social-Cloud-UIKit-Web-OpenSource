@@ -1,19 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import TextareaAutosize from 'react-autosize-textarea';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
-import {
-  faGlobeAfrica,
-  faLockAlt,
-  faChevronDown,
-  faTimes,
-} from '@fortawesome/pro-regular-svg-icons';
 import Popover from '~/core/components/Popover';
 import Menu from '~/core/components/Menu';
 import { PrimaryButton } from '~/core/components/Button';
 import ImageUploader from '~/core/components/Uploaders/Image';
 import UIAvatar from '~/core/components/Avatar';
+import { Camera, ChevronDown, Close, Globe, Lock } from '~/icons';
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 8px;
@@ -27,15 +21,15 @@ export const InputPlaceholder = styled.span`
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
-export const WorldIcon = styled(FaIcon).attrs({ icon: faGlobeAfrica })`
+export const WorldIcon = styled(Globe)`
   font-size: 20px;
 `;
 
-export const LockIcon = styled(FaIcon).attrs({ icon: faLockAlt })`
+export const LockIcon = styled(Lock)`
   font-size: 20px;
 `;
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const CloseIcon = styled(Close)`
   font-size: 12px;
   padding: 5px 12px;
   color: ${({ theme }) => theme.palette.base.shade1};
@@ -277,7 +271,7 @@ export const TextField = styled.input`
   }
 `;
 
-export const SelectIcon = styled(FaIcon).attrs({ icon: faChevronDown })`
+export const SelectIcon = styled(ChevronDown)`
   font-size: 16px;
   margin-left: auto;
 `;

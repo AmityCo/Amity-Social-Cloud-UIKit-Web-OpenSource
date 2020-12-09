@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faChevronRight, faChevronLeft } from '@fortawesome/pro-regular-svg-icons';
+import { ChevronLeft, ChevronRight, Close } from '~/icons';
 
 export const ImageContainer = styled.div`
   position: relative;
@@ -53,7 +52,7 @@ export const Counter = styled.div`
   ${({ theme }) => theme.typography.headline}
 `;
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const CloseIcon = styled(Close)`
   position: absolute;
   top: 60px;
   right: 60px;
@@ -61,13 +60,13 @@ export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
   cursor: pointer;
 `;
 
-export const RightIcon = styled(FaIcon).attrs({ icon: faChevronRight })`
+export const RightIcon = styled(ChevronRight)`
   font-size: 24px;
   cursor: pointer;
   justify-self: right;
 `;
 
-export const LeftIcon = styled(FaIcon).attrs({ icon: faChevronLeft })`
+export const LeftIcon = styled(ChevronLeft)`
   font-size: 24px;
   cursor: pointer;
 `;

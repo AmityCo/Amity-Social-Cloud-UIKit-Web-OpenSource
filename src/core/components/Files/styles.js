@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faPaperclip } from '@fortawesome/pro-regular-svg-icons';
 import { SecondaryButton } from '~/core/components/Button';
+import { FileAttachment, Remove } from '~/icons';
 
-export const RemoveIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const RemoveIcon = styled(Remove)`
   padding: 0 10px;
   cursor: pointer;
   margin-left: auto;
@@ -70,7 +69,7 @@ export const FileInput = styled.input.attrs({ type: 'file' })`
 
 export const Label = styled.label``;
 
-export const FileIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
+export const FileIcon = styled(FileAttachment)`
   font-size: 18px;
   cursor: pointer;
 

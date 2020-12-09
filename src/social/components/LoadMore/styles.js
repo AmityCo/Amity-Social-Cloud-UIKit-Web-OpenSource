@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/pro-regular-svg-icons';
 
 import Button from '~/core/components/Button';
+import { ChevronDown } from '~/icons';
 
 export const LoadMoreButton = styled(Button)`
   width: 100%;
@@ -18,7 +17,7 @@ export const LoadMoreButton = styled(Button)`
   }
 `;
 
-export const ShevronDownIcon = styled(FaIcon).attrs({ icon: faChevronDown })`
+export const ShevronDownIcon = styled(ChevronDown)`
   font-size: 16px;
   margin-left: 5px;
 `;

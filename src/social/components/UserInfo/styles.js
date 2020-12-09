@@ -1,15 +1,13 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faPencil, faCommentsAlt } from '@fortawesome/pro-regular-svg-icons';
-
 import UIAvatar from '~/core/components/Avatar';
+import { Message, Pencil } from '~/icons';
 
-export const MessageIcon = styled(FaIcon).attrs({ icon: faCommentsAlt })`
+export const MessageIcon = styled(Message)`
   font-size: 15px;
   margin-right: 8px;
 `;
 
-export const PencilIcon = styled(FaIcon).attrs({ icon: faPencil })`
+export const PencilIcon = styled(Pencil)`
   font-size: 15px;
   margin-right: 4px;
 `;

@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/pro-regular-svg-icons';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
 
 import Avatar from '~/core/components/Avatar';
+import { Remove } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
 
 import Button from '~/core/components/Button';
@@ -25,7 +24,7 @@ const Name = styled.span`
   margin: 0 0.5rem;
 `;
 
-const Close = styled(FaIcon).attrs({ icon: faTimes })`
+const Close = styled(Remove)`
   font-size: 12px;
   color: ${({ theme }) => theme.palette.base.shade1};
 `;

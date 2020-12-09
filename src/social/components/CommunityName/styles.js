@@ -1,14 +1,12 @@
 import styled, { css } from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faBadgeCheck } from '@fortawesome/pro-solid-svg-icons';
-import { faLockAlt } from '@fortawesome/pro-regular-svg-icons';
+import { Lock, Verified } from '~/icons';
 
-export const PrivateIcon = styled(FaIcon).attrs({ icon: faLockAlt })`
+export const PrivateIcon = styled(Lock)`
   margin-right: 8px;
   font-size: 16px;
 `;
 
-export const VerifiedIcon = styled(FaIcon).attrs({ icon: faBadgeCheck })`
+export const VerifiedIcon = styled(Verified)`
   margin-left: 8px;
   font-size: 16px;
   color: #1253de;

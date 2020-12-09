@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { faPlus } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 import UIProfileSettingsTabs from '~/social/components/ProfileSettingsTabs';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import UIAvatar from '~/core/components/Avatar';
+import { Plus } from '~/icons';
 
 export const ProfileSettingsTabs = styled(UIProfileSettingsTabs)``;
 
@@ -86,7 +85,7 @@ export const ExtraActionButton = styled(Button)`
   width: 100%;
 `;
 
-export const PlusIcon = styled(FaIcon).attrs({ icon: faPlus })`
+export const PlusIcon = styled(Plus)`
   font-size: 15px;
   margin-right: 8px;
 `;

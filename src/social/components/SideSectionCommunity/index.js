@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faNewspaper, faSearch } from '@fortawesome/pro-regular-svg-icons';
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 import SideMenuSection from '~/core/components/SideMenuSection';
+import { Newspaper, Search } from '~/icons';
 
-export const NewsIcon = styled(FaIcon).attrs({ icon: faNewspaper })`
+export const NewsIcon = styled(Newspaper)`
   font-size: 20px;
 `;
 
-export const SearchIcon = styled(FaIcon).attrs({ icon: faSearch })`
+export const SearchIcon = styled(Search)`
   font-size: 20px;
 `;
 

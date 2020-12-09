@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/pro-regular-svg-icons';
 import UiKitAvatar from '~/core/components/Avatar';
+import { Close } from '~/icons';
 
 export const Avatar = styled(UiKitAvatar)``;
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const CloseIcon = styled(Close)`
   font-size: 19px;
   cursor: pointer;
   color: ${({ theme }) => theme.palette.neutral.main};

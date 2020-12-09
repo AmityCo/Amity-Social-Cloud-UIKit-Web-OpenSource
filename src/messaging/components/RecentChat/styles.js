@@ -1,21 +1,19 @@
 import styled from 'styled-components';
+import { Check, Close, CreateChat } from '~/icons';
 
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faCommentAltPlus, faCheck, faTimes } from '@fortawesome/pro-regular-svg-icons';
-
-export const CreateIcon = styled(FaIcon).attrs({ icon: faCheck })`
+export const CreateIcon = styled(Check)`
   opacity: 0.7;
   padding: 0 10px;
   cursor: pointer;
 `;
 
-export const CloseIcon = styled(FaIcon).attrs({ icon: faTimes })`
+export const CloseIcon = styled(Close)`
   opacity: 0.7;
   padding: 0 10px;
   cursor: pointer;
 `;
 
-export const CreateNewChatIcon = styled(FaIcon).attrs({ icon: faCommentAltPlus })`
+export const CreateNewChatIcon = styled(CreateChat)`
   font-size: 20px;
   cursor: pointer;
 `;

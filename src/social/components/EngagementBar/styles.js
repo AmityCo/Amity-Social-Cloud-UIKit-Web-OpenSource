@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faCommentAlt } from '@fortawesome/pro-regular-svg-icons';
+import { Comment } from '~/icons';
 
 export const EngagementBarContainer = styled.div`
   color: ${({ theme }) => theme.palette.neutral.shade1};
@@ -19,7 +18,7 @@ export const InteractionBar = styled.div`
   padding: 2px 0;
 `;
 
-export const CommentIcon = styled(FaIcon).attrs({ icon: faCommentAlt })`
+export const CommentIcon = styled(Comment)`
   position: relative;
   font-size: 16px;
   margin-right: 5px;

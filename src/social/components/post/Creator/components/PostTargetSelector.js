@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faSortDown } from '@fortawesome/pro-solid-svg-icons';
 
 import { EkoPostTargetType } from 'eko-sdk';
 import Popover from '~/core/components/Popover';
@@ -10,10 +8,11 @@ import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
 import UIAvatar from '~/core/components/Avatar';
 
+import { SortDown } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
-const SelectIcon = styled(FaIcon).attrs({ icon: faSortDown })`
+const SelectIcon = styled(SortDown)`
   font-size: 18px;
   margin-right: 8px;
   margin-top: -4px;

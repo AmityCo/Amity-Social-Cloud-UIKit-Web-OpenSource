@@ -1,9 +1,7 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faPaperclip, faImage } from '@fortawesome/pro-regular-svg-icons';
-import { faArrowCircleUp } from '@fortawesome/pro-solid-svg-icons';
+import { FileAttachment, ImageAttachment, SendMessage } from '~/icons';
 
-export const SendMessageIcon = styled(FaIcon).attrs({ icon: faArrowCircleUp })`
+export const SendMessageIcon = styled(SendMessage)`
   font-size: 28px;
   cursor: pointer;
   margin-left: 12px;
@@ -11,14 +9,14 @@ export const SendMessageIcon = styled(FaIcon).attrs({ icon: faArrowCircleUp })`
   color: #0f86fe;
 `;
 
-export const ImageMessageIcon = styled(FaIcon).attrs({ icon: faImage })`
+export const ImageMessageIcon = styled(ImageAttachment)`
   font-size: 18px;
   cursor: pointer;
   margin-right: 20px;
   color: ${({ theme }) => theme.palette.neutral.main};
 `;
 
-export const FileMessageIcon = styled(FaIcon).attrs({ icon: faPaperclip })`
+export const FileMessageIcon = styled(FileAttachment)`
   font-size: 18px;
   margin-right: 12px;
   cursor: pointer;
