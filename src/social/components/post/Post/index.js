@@ -66,7 +66,7 @@ const Post = ({
   const getActionOptions = () => {
     if (isAdmin) return Object.values(allOptions);
     if (isMyPost) return [allOptions.edit, allOptions.delete];
-    return [allOptions.report];
+    return [];
   };
 
   const childrenContent = childrenPosts?.map(childPost => ({
@@ -81,7 +81,7 @@ const Post = ({
     <PostContainer className={cx('post', className)}>
       <PostHeadContainer>
         <Header postId={postId} onClickUser={onClickUser} hidePostTarget={hidePostTarget} />
-        <OptionMenu options={getActionOptions()} />
+        {getActionOptions.length && <OptionMenu options={getActionOptions()} />}
       </PostHeadContainer>
 
       <Content dataType={dataType} data={data} postMaxLines={postMaxLines} />
