@@ -14,7 +14,7 @@ import { DropdownContainer, Frame, FrameContainer, ButtonContainer } from './sty
 
 const SCROLLABLE_HEIGHT = 200;
 
-const defaultRender = props => {
+const triggerRenderer = props => {
   return (
     <Button {...props}>
       <ChevronDown />
@@ -24,7 +24,7 @@ const defaultRender = props => {
 
 const Dropdown = ({
   isOpen,
-  renderTrigger = defaultRender,
+  renderTrigger = triggerRenderer,
   children,
   position = POSITION_BOTTOM,
   align = POSITION_LEFT,
@@ -64,6 +64,11 @@ const Dropdown = ({
   useEffect(() => {
     !isActiveElement && close();
   }, [isActiveElement]);
+
+  // sync internal state
+  useEffect(() => {
+    setIsOpenInternal(isOpen);
+  }, [isOpen]);
 
   // handling reposition for dropdown list
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
@@ -12,7 +12,7 @@ import ImageUploader from './ImageUploader';
 
 import { notification } from '~/core/components/Notification';
 import CategorySelector from './CategorySelector';
-import UserSelector from './UserSelector';
+import UserSelector from '~/social/components/UserSelector';
 
 import {
   Form,
@@ -96,8 +96,6 @@ const CommunityForm = ({
   const { register, handleSubmit, errors, setError, watch, control } = useForm({
     defaultValues,
   });
-
-  const [avatarFileId] = useState(edit ? community.avatarFileId : null);
 
   const displayName = watch('displayName', '');
   const description = watch('description', '');
@@ -248,7 +246,11 @@ const CommunityForm = ({
               <Label name="userIds" className="required">
                 Add members
               </Label>
-              <Controller name="userIds" render={UserSelector} control={control} />
+              <Controller
+                name="userIds"
+                render={props => <UserSelector parentContainer={formBodyElement} {...props} />}
+                control={control}
+              />
               <ErrorMessage errors={errors} name="userIds" />
             </MembersField>
           </FormBlock>

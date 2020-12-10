@@ -2,12 +2,10 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import TextareaAutosize from 'react-autosize-textarea';
 import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
-import Popover from '~/core/components/Popover';
-import Menu from '~/core/components/Menu';
 import { PrimaryButton } from '~/core/components/Button';
 import ImageUploader from '~/core/components/Uploaders/Image';
 import UIAvatar from '~/core/components/Avatar';
-import { Camera, ChevronDown, Close, Globe, Lock } from '~/icons';
+import { ChevronDown, Close, Globe, Lock } from '~/icons';
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 8px;
@@ -49,23 +47,6 @@ export const Selector = styled.div`
   cursor: pointer;
   max-height: 200px;
   overflow-y: auto;
-`;
-
-export const UserSelectorInput = styled.input`
-  outline: none;
-  border: none;
-`;
-
-export const SelectorPopover = styled(Popover).attrs({
-  disableReposition: true,
-  position: ['top', 'bottom'],
-})`
-  width: 488px;
-`;
-
-export const SelectorList = styled(Menu)`
-  overflow-y: auto;
-  overflow-x: hidden;
 `;
 
 export const IconWrapper = styled.div`
@@ -298,7 +279,3 @@ export const MembersField = styled(Field)`
 `;
 
 export const FormBody = styled.div``;
-
-export const Clickable = styled.div`
-  cursor: pointer;
-`;

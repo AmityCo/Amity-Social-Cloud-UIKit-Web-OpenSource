@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 const useKeyboard = (listeners = {}, params = {}) => {
   useEffect(() => {
     const listener = e => {
+      e.stopPropagation();
       if (params.ignoreOtherKeys) {
         e.preventDefault();
       }

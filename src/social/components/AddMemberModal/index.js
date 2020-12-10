@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import Modal from '~/core/components/Modal';
+import UserSelector from '~/social/components/UserSelector';
 import {
   ErrorMessage,
   Form,
@@ -12,7 +13,6 @@ import {
   SubmitButton,
   Footer,
 } from '~/social/components/CommunityForm/styles';
-import UserSelector from '~/social/components/CommunityForm/UserSelector';
 import { FormContainer } from './styles';
 
 const FormBlock = ({ children }) => (
