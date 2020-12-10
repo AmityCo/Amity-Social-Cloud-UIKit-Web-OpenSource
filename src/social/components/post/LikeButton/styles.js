@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import customizableComponent from '~/core/hocs/customization';
@@ -24,7 +25,7 @@ export const LikeIcon = styled(ThumbsUp)`
  */
 const StyledPostLikeButton = ({ onClick, isActive, isDisabled }) => (
   <StyledLikeButton onClick={onClick} active={isActive} disabled={isDisabled}>
-    <LikeIcon $isLiked={isActive} /> Like
+    <LikeIcon $isLiked={isActive} /> <FormattedMessage id={isActive ? 'post.liked' : 'post.like'} />
   </StyledLikeButton>
 );
 

@@ -21,6 +21,8 @@
   "post.deletePost": "Delete post",
   "post.confirmDelete": "This post will be permanently deleted. You’ll no longer to see and find this post. Continue?",
   "post.edited": "Edited",
+  "post.like": "Like",
+  "post.liked": "Liked",
   "delete": "Delete",
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
