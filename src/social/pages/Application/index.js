@@ -35,7 +35,7 @@ const Community = ({
   onMessageUser,
   onEditCommunity,
 }) => {
-  const [page, setPage] = useState({ type: PageTypes.Explore });
+  const [page, setPage] = useState({ type: PageTypes.NewsFeed });
 
   const handleChangePage = type => {
     if (onChangePage) return onChangePage({ type });
