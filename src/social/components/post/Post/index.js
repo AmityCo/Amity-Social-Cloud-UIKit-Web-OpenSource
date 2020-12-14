@@ -7,6 +7,8 @@ import { isModerator } from '~/helpers/permissions';
 import { confirm } from '~/core/components/Confirm';
 import { notification } from '~/core/components/Notification';
 import usePost from '~/social/hooks/usePost';
+import useCommunityMembers from '~/social/hooks/useCommunityMembers';
+
 import withSDK from '~/core/hocs/withSDK';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -37,10 +39,12 @@ const Post = ({
   const closeEditingPostModal = () => setIsEditing(false);
 
   const { post, handleReportPost, handleDeletePost, childrenPosts = [] } = usePost(postId);
-  const { data, dataType, postedUserId } = post;
+  const { data, dataType, postedUserId, targetId } = post;
+  const { members } = useCommunityMembers(targetId);
 
   const isAdmin = isModerator(userRoles);
   const isMyPost = currentUserId === postedUserId;
+  const isMember = members.find(member => member.userId === currentUserId);
 
   const confirmDeletePost = () =>
     confirm({
@@ -57,17 +61,11 @@ const Post = ({
     });
   };
 
-  const allOptions = {
-    edit: { name: 'post.editPost', action: openEditingPostModal },
-    delete: { name: 'post.deletePost', action: confirmDeletePost },
-    report: { name: 'post.reportPost', action: onReportClick },
-  };
-
-  const getActionOptions = () => {
-    if (isAdmin) return Object.values(allOptions);
-    if (isMyPost) return [allOptions.edit, allOptions.delete];
-    return [];
-  };
+  const allOptions = [
+    (isAdmin || isMyPost) && { name: 'post.editPost', action: openEditingPostModal },
+    (isAdmin || isMyPost) && { name: 'post.deletePost', action: confirmDeletePost },
+    (isAdmin || isMember) && { name: 'post.reportPost', action: onReportClick },
+  ].filter(Boolean);
 
   const childrenContent = childrenPosts?.map(childPost => ({
     dataType: childPost.dataType,
@@ -81,7 +79,7 @@ const Post = ({
     <PostContainer className={cx('post', className)}>
       <PostHeadContainer>
         <Header postId={postId} onClickUser={onClickUser} hidePostTarget={hidePostTarget} />
-        {getActionOptions.length && <OptionMenu options={getActionOptions()} />}
+        <OptionMenu options={allOptions} />
       </PostHeadContainer>
 
       <Content dataType={dataType} data={data} postMaxLines={postMaxLines} />

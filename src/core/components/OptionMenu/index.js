@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { POSITION_BOTTOM, POSITION_RIGHT } from '~/helpers/getCssPosition';
 
 import UiKitDropdown from '~/core/components/Dropdown';
+import ConditionalRender from '~/core/components/ConditionalRender';
 
 import { OptionsIcon, OptionsButton, Option, Container } from './styles';
 
@@ -28,21 +29,23 @@ const OptionMenu = ({
   };
 
   return (
-    <Container>
-      <UiKitDropdown
-        isOpen={isOpen}
-        renderTrigger={props => triggerRenderer({ ...props, onClick: toggle, className, icon })}
-        position={position}
-        align={align}
-        handleClose={() => setIsOpen(false)}
-      >
-        {options.map(({ name, action }) => (
-          <Option key={name} onClick={attachCanceling(action)}>
-            <FormattedMessage id={name} />
-          </Option>
-        ))}
-      </UiKitDropdown>
-    </Container>
+    <ConditionalRender condition={options.length}>
+      <Container>
+        <UiKitDropdown
+          isOpen={isOpen}
+          renderTrigger={props => triggerRenderer({ ...props, onClick: toggle, className, icon })}
+          position={position}
+          align={align}
+          handleClose={() => setIsOpen(false)}
+        >
+          {options.map(({ name, action }) => (
+            <Option key={name} onClick={attachCanceling(action)}>
+              <FormattedMessage id={name} />
+            </Option>
+          ))}
+        </UiKitDropdown>
+      </Container>
+    </ConditionalRender>
   );
 };
 
