@@ -8,6 +8,10 @@
       }
     }
   },
+  "globals": {
+    "globalThis": true,
+    "__VERSION__": true
+  },
   "rules": {
     // Allow <> instead of <React.Fragment>
     "react/jsx-fragments": "off",
