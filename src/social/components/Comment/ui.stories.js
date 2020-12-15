@@ -17,6 +17,7 @@ UiComment.args = {
   authorAvatar: '',
   createdAt: '9/28/20',
   text: 'Dynamic comment text',
+  isReadOnly: false,
   isReplyComment: false,
 };
 
@@ -25,6 +26,7 @@ UiComment.argTypes = {
   authorAvatar: { control: { type: 'text' } },
   createdAt: { control: { type: 'text' } },
   text: { control: { type: 'text' } },
+  isReadOnly: { control: { type: 'boolean' } },
   isReplyComment: { control: { type: 'boolean' } },
   onClickReply: { action: 'onClickReply()' },
   handleReportComment: { action: 'handleReportComment()' },
