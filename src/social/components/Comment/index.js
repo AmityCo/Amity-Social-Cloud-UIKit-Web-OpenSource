@@ -45,7 +45,7 @@ const DeletedComment = ({ comment }) => {
   );
 };
 
-const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
+const Comment = ({ commentId, isReadOnly = false, isReplyComment = false, currentUserId }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -115,6 +115,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
               updatedAt={comment.updatedAt}
               text={text}
               handleReportComment={handleReportComment}
+              isReadOnly={isReadOnly}
               isReplyComment
               isCommentOwner={isCommentOwner}
               startEditing={startEditing}
@@ -136,6 +137,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
                 text={text}
                 onClickReply={onClickReply}
                 handleReportComment={handleReportComment}
+                isReadOnly={isReadOnly}
                 isCommentOwner={isCommentOwner}
                 startEditing={startEditing}
                 cancelEditing={cancelEditing}
@@ -145,7 +147,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
                 setText={setText}
               />
             </CommentContainer>
-            {ENABLE_REPLIES && <CommentReplies replyIds={commentReplies} />}
+            {ENABLE_REPLIES && <CommentReplies isReadOnly={isReadOnly} replyIds={commentReplies} />}
             <ConditionalRender condition={isReplying}>
               <CommentComposeBar
                 userToReply={commentAuthor.displayName}
@@ -161,6 +163,7 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
 
 Comment.propTypes = {
   commentId: PropTypes.string.isRequired,
+  isReadOnly: PropTypes.bool,
   isReplyComment: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
 };

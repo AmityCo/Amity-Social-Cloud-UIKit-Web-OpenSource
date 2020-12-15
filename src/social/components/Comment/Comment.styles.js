@@ -39,6 +39,7 @@ const StyledComment = ({
   startEditing,
   cancelEditing,
   handleDelete,
+  isReadOnly = false,
   isReplyComment = false,
   isCommentOwner = false,
   isEditing,
@@ -63,6 +64,24 @@ const StyledComment = ({
   const options = Object.entries(rules)
     .filter(([, flag]) => flag)
     .map(([key]) => MENU_ITEMS[key]);
+
+  if (isReadOnly) {
+    return (
+      <>
+        <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
+        <Content>
+          <CommentHeader>
+            <AuthorName>{authorName}</AuthorName>
+            <CommentDate date={createdAt} />
+            <ConditionalRender condition={updatedAt - createdAt > 0}>
+              <EditedMark>Edited</EditedMark>
+            </ConditionalRender>
+          </CommentHeader>
+          <CommentText>{text}</CommentText>
+        </Content>
+      </>
+    );
+  }
 
   return (
     <>
@@ -114,6 +133,7 @@ StyledComment.propTypes = {
   startEditing: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  isReadOnly: PropTypes.bool,
   isReplyComment: PropTypes.bool,
   isCommentOwner: PropTypes.bool,
   isEditing: PropTypes.bool,

@@ -42,7 +42,15 @@ const UIEngagementBar = ({
         </span>
       </ConditionalRender>
     </Counters>
-    <ConditionalRender condition={!noInteractionMessage}>
+    <ConditionalRender condition={!!noInteractionMessage}>
+      <>
+        {commentIds.map(commentId => (
+          <Comment key={commentId} commentId={commentId} isReadOnly />
+        ))}
+        {noInteractionMessage && (
+          <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>
+        )}
+      </>
       <>
         <InteractionBar>
           <PostLikeButton postId={postId} />
@@ -58,7 +66,6 @@ const UIEngagementBar = ({
         </ConditionalRender>
       </>
     </ConditionalRender>
-    {noInteractionMessage && <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>}
   </EngagementBarContainer>
 );
 
