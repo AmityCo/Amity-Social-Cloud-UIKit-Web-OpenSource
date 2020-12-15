@@ -101,9 +101,11 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
 
   return (
     <ConditionalRender condition={isCommentReady}>
-      <ConditionalRender condition={isReplyComment && ENABLE_REPLIES}>
-        <ConditionalRender condition={comment.isDeleted}>
+      <ConditionalRender condition={comment.isDeleted}>
+        <CommentBlock>
           <DeletedComment comment={comment} />
+        </CommentBlock>
+        <ConditionalRender condition={isReplyComment && ENABLE_REPLIES}>
           <ReplyContainer>
             <StyledComment
               commentId={comment.commentId}
@@ -123,11 +125,6 @@ const Comment = ({ commentId, isReplyComment = false, currentUserId }) => {
               setText={setText}
             />
           </ReplyContainer>
-        </ConditionalRender>
-        <ConditionalRender condition={comment.isDeleted}>
-          <CommentBlock>
-            <DeletedComment comment={comment} />
-          </CommentBlock>
           <CommentBlock>
             <CommentContainer>
               <StyledComment
