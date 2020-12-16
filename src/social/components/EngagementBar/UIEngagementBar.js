@@ -45,7 +45,7 @@ const UIEngagementBar = ({
     <ConditionalRender condition={!!noInteractionMessage}>
       <>
         {commentIds.map(commentId => (
-          <Comment key={commentId} commentId={commentId} isReadOnly />
+          <Comment key={commentId} commentId={commentId} canInteract={false} />
         ))}
         {noInteractionMessage && (
           <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>

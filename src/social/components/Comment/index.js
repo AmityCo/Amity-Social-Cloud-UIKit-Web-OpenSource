@@ -47,8 +47,8 @@ const DeletedComment = ({ comment }) => {
 };
 
 const Comment = ({
+  canInteract = true,
   commentId,
-  isReadOnly = false,
   isReplyComment = false,
   currentUserId,
   userRoles,
@@ -107,10 +107,10 @@ const Comment = ({
   };
 
   const canDelete = isCommentOwner || isModerator(userRoles);
-  const canEdit = !isReadOnly && isCommentOwner;
-  const canLike = !isReadOnly;
-  const canReply = !isReadOnly && !isReplyComment && ENABLE_REPLIES;
-  const canReport = !isReadOnly && !isCommentOwner;
+  const canEdit = canInteract && isCommentOwner;
+  const canLike = canInteract;
+  const canReply = canInteract && !isReplyComment && ENABLE_REPLIES;
+  const canReport = canInteract && !isCommentOwner;
 
   const renderedComment = (
     <StyledComment
@@ -147,7 +147,9 @@ const Comment = ({
           <CommentBlock>
             <CommentContainer>{renderedComment}</CommentContainer>
 
-            {ENABLE_REPLIES && <CommentReplies isReadOnly={isReadOnly} replyIds={commentReplies} />}
+            {ENABLE_REPLIES && (
+              <CommentReplies canInteract={canInteract} replyIds={commentReplies} />
+            )}
 
             <ConditionalRender condition={isReplying}>
               <CommentComposeBar
@@ -163,8 +165,8 @@ const Comment = ({
 };
 
 Comment.propTypes = {
+  canInteract: PropTypes.bool,
   commentId: PropTypes.string.isRequired,
-  isReadOnly: PropTypes.bool,
   isReplyComment: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
   userRoles: PropTypes.array,

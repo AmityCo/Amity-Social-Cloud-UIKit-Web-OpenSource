@@ -2,9 +2,9 @@
 import React from 'react';
 import Comment from '.';
 
-const CommentReplies = ({ isReadOnly, replyIds }) =>
+const CommentReplies = ({ canInteract, replyIds }) =>
   replyIds.map(({ commentId }) => (
-    <Comment key={commentId} commentId={commentId} isReadOnly={isReadOnly} isReplyComment />
+    <Comment key={commentId} commentId={commentId} canInteract={canInteract} isReplyComment />
   ));
 
 export default CommentReplies;
