@@ -8,6 +8,7 @@ import customizableComponent from '~/core/hocs/customization';
 import useComment from '~/social/hooks/useComment';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import ConditionalRender from '~/core/components/ConditionalRender';
+import { isModerator } from '~/helpers/permissions';
 import CommentReplies from './CommentReplies';
 import StyledComment from './Comment.styles';
 import {
@@ -45,7 +46,13 @@ const DeletedComment = ({ comment }) => {
   );
 };
 
-const Comment = ({ commentId, isReadOnly = false, isReplyComment = false, currentUserId }) => {
+const Comment = ({
+  commentId,
+  isReadOnly = false,
+  isReplyComment = false,
+  currentUserId,
+  userRoles,
+}) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -99,24 +106,33 @@ const Comment = ({ commentId, isReadOnly = false, isReplyComment = false, curren
     });
   };
 
-  const CommentComponent = props => (
+  const canDelete = isCommentOwner || isModerator(userRoles);
+  const canEdit = !isReadOnly && isCommentOwner;
+  const canLike = !isReadOnly;
+  const canReply = !isReadOnly && !isReplyComment && ENABLE_REPLIES;
+  const canReport = !isReadOnly && !isCommentOwner;
+
+  const renderedComment = (
     <StyledComment
       commentId={comment.commentId}
-      authorName={commentAuthor.displayName || DEFAULT_DISPLAY_NAME}
+      authorName={commentAuthor.displayName || commentAuthor.userId || DEFAULT_DISPLAY_NAME}
       authorAvatar={commentAuthorAvatar.fileUrl}
+      canDelete={canDelete}
+      canEdit={canEdit}
+      canLike={canLike}
+      canReply={canReply}
+      canReport={canReport}
       createdAt={comment.createdAt}
       updatedAt={comment.updatedAt}
       text={text}
       onClickReply={onClickReply}
       handleReportComment={handleReportComment}
-      isCommentOwner={isCommentOwner}
       startEditing={startEditing}
       cancelEditing={cancelEditing}
       handleEdit={handleEdit}
       handleDelete={deleteComment}
       isEditing={isEditing}
       setText={setText}
-      {...props}
     />
   );
 
@@ -127,20 +143,12 @@ const Comment = ({ commentId, isReadOnly = false, isReplyComment = false, curren
           <DeletedComment comment={comment} />
         </CommentBlock>
         <ConditionalRender condition={isReplyComment && ENABLE_REPLIES}>
-          <ReplyContainer>
-            <CommentComponent
-              authorName={commentAuthor.displayName || commentAuthor.userId || DEFAULT_DISPLAY_NAME}
-              isReplyComment
-            />
-          </ReplyContainer>
+          <ReplyContainer>{renderedComment}</ReplyContainer>
           <CommentBlock>
-            <CommentContainer>
-              <CommentComponent
-                authorName={commentAuthor.displayName || DEFAULT_DISPLAY_NAME}
-                onClickReply={onClickReply}
-              />
-            </CommentContainer>
+            <CommentContainer>{renderedComment}</CommentContainer>
+
             {ENABLE_REPLIES && <CommentReplies isReadOnly={isReadOnly} replyIds={commentReplies} />}
+
             <ConditionalRender condition={isReplying}>
               <CommentComposeBar
                 userToReply={commentAuthor.displayName}
@@ -159,6 +167,7 @@ Comment.propTypes = {
   isReadOnly: PropTypes.bool,
   isReplyComment: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
+  userRoles: PropTypes.array,
 };
 
 export default withSDK(customizableComponent('Comment', Comment));

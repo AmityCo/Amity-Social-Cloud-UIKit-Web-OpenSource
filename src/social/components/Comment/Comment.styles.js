@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button, { PrimaryButton } from '~/core/components/Button';
@@ -30,6 +30,11 @@ const StyledComment = ({
   commentId,
   authorName,
   authorAvatar,
+  canDelete = false,
+  canEdit = false,
+  canLike = true,
+  canReply = false,
+  canReport = true,
   createdAt,
   updatedAt,
   text,
@@ -39,49 +44,14 @@ const StyledComment = ({
   startEditing,
   cancelEditing,
   handleDelete,
-  isReadOnly = false,
-  isReplyComment = false,
-  isCommentOwner = false,
   isEditing,
   setText,
-  isAdmin,
 }) => {
-  const MENU_ITEMS = useMemo(
-    () => ({
-      edit: { name: 'Edit comment', action: startEditing },
-      report: { name: 'Report comment', action: handleReportComment },
-      delete: { name: 'Delete comment', action: handleDelete },
-    }),
-    [],
-  );
-
-  const rules = {
-    edit: isCommentOwner,
-    report: !isCommentOwner,
-    delete: isCommentOwner || isAdmin,
-  };
-
-  const options = Object.entries(rules)
-    .filter(([, flag]) => flag)
-    .map(([key]) => MENU_ITEMS[key]);
-
-  if (isReadOnly) {
-    return (
-      <>
-        <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
-        <Content>
-          <CommentHeader>
-            <AuthorName>{authorName}</AuthorName>
-            <CommentDate date={createdAt} />
-            <ConditionalRender condition={updatedAt - createdAt > 0}>
-              <EditedMark>Edited</EditedMark>
-            </ConditionalRender>
-          </CommentHeader>
-          <CommentText>{text}</CommentText>
-        </Content>
-      </>
-    );
-  }
+  const options = [
+    canEdit && { name: 'Edit comment', action: startEditing },
+    canReport && { name: 'Report comment', action: handleReportComment },
+    canDelete && { name: 'Delete comment', action: handleDelete },
+  ].filter(Boolean);
 
   return (
     <>
@@ -94,6 +64,7 @@ const StyledComment = ({
             <EditedMark>Edited</EditedMark>
           </ConditionalRender>
         </CommentHeader>
+
         <ConditionalRender condition={isEditing}>
           <CommentEditContainer>
             <CommentEditTextarea value={text} onChange={e => setText(e.target.value)} />
@@ -104,10 +75,16 @@ const StyledComment = ({
           </CommentEditContainer>
           <CommentText>{text}</CommentText>
         </ConditionalRender>
-        <ConditionalRender condition={!isEditing}>
+
+        <ConditionalRender
+          condition={!isEditing && (canLike || (canReply && ENABLE_REPLIES) || options.length > 0)}
+        >
           <InteractionBar>
-            <CommentLikeButton commentId={commentId} />
-            <ConditionalRender condition={!isReplyComment && ENABLE_REPLIES}>
+            <ConditionalRender condition={canLike}>
+              <CommentLikeButton commentId={commentId} />
+            </ConditionalRender>
+
+            <ConditionalRender condition={canReply}>
               <ReplyButton onClick={onClickReply}>
                 <ReplyIcon /> Reply
               </ReplyButton>
@@ -124,6 +101,11 @@ StyledComment.propTypes = {
   commentId: PropTypes.string,
   authorName: PropTypes.string,
   authorAvatar: PropTypes.string,
+  canDelete: PropTypes.bool,
+  canEdit: PropTypes.bool,
+  canLike: PropTypes.bool,
+  canReply: PropTypes.bool,
+  canReport: PropTypes.bool,
   createdAt: PropTypes.instanceOf(Date),
   updatedAt: PropTypes.instanceOf(Date),
   text: PropTypes.string,
@@ -133,12 +115,8 @@ StyledComment.propTypes = {
   startEditing: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-  isReadOnly: PropTypes.bool,
-  isReplyComment: PropTypes.bool,
-  isCommentOwner: PropTypes.bool,
   isEditing: PropTypes.bool,
   setText: PropTypes.func.isRequired,
-  isAdmin: PropTypes.bool,
 };
 
 export default StyledComment;
