@@ -99,6 +99,27 @@ const Comment = ({ commentId, isReadOnly = false, isReplyComment = false, curren
     });
   };
 
+  const CommentComponent = props => (
+    <StyledComment
+      commentId={comment.commentId}
+      authorName={commentAuthor.displayName || DEFAULT_DISPLAY_NAME}
+      authorAvatar={commentAuthorAvatar.fileUrl}
+      createdAt={comment.createdAt}
+      updatedAt={comment.updatedAt}
+      text={text}
+      onClickReply={onClickReply}
+      handleReportComment={handleReportComment}
+      isCommentOwner={isCommentOwner}
+      startEditing={startEditing}
+      cancelEditing={cancelEditing}
+      handleEdit={handleEdit}
+      handleDelete={deleteComment}
+      isEditing={isEditing}
+      setText={setText}
+      {...props}
+    />
+  );
+
   return (
     <ConditionalRender condition={isCommentReady}>
       <ConditionalRender condition={comment.isDeleted}>
@@ -107,44 +128,16 @@ const Comment = ({ commentId, isReadOnly = false, isReplyComment = false, curren
         </CommentBlock>
         <ConditionalRender condition={isReplyComment && ENABLE_REPLIES}>
           <ReplyContainer>
-            <StyledComment
-              commentId={comment.commentId}
+            <CommentComponent
               authorName={commentAuthor.displayName || commentAuthor.userId || DEFAULT_DISPLAY_NAME}
-              authorAvatar={commentAuthorAvatar.fileUrl}
-              createdAt={comment.createdAt}
-              updatedAt={comment.updatedAt}
-              text={text}
-              handleReportComment={handleReportComment}
-              isReadOnly={isReadOnly}
               isReplyComment
-              isCommentOwner={isCommentOwner}
-              startEditing={startEditing}
-              cancelEditing={cancelEditing}
-              handleEdit={handleEdit}
-              handleDelete={deleteComment}
-              isEditing={isEditing}
-              setText={setText}
             />
           </ReplyContainer>
           <CommentBlock>
             <CommentContainer>
-              <StyledComment
-                commentId={comment.commentId}
+              <CommentComponent
                 authorName={commentAuthor.displayName || DEFAULT_DISPLAY_NAME}
-                authorAvatar={commentAuthorAvatar.fileUrl}
-                createdAt={comment.createdAt}
-                updatedAt={comment.updatedAt}
-                text={text}
                 onClickReply={onClickReply}
-                handleReportComment={handleReportComment}
-                isReadOnly={isReadOnly}
-                isCommentOwner={isCommentOwner}
-                startEditing={startEditing}
-                cancelEditing={cancelEditing}
-                handleEdit={handleEdit}
-                handleDelete={deleteComment}
-                isEditing={isEditing}
-                setText={setText}
               />
             </CommentContainer>
             {ENABLE_REPLIES && <CommentReplies isReadOnly={isReadOnly} replyIds={commentReplies} />}
