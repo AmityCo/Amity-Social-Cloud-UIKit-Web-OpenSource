@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
@@ -9,6 +9,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import useElement from '~/core/hooks/useElement';
 import customizableComponent from '~/core/hocs/customization';
 import ImageUploader from './ImageUploader';
+import { isEqual } from '~/helpers';
 
 import { notification } from '~/core/components/Notification';
 import CategorySelector from './CategorySelector';
@@ -107,6 +108,19 @@ const CommunityForm = ({
   const isPublic =
     (typeof isPublicFromForm === 'boolean' && isPublicFromForm) || isPublicFromForm === 'true';
 
+  const [isDirty, markDirty] = useState(false);
+  useEffect(() => {
+    markDirty(
+      !isEqual(defaultValues, {
+        ...defaultValues,
+        displayName,
+        description,
+        categoryId,
+        isPublic,
+      }),
+    );
+  }, [displayName, description, categoryId, isPublic]);
+
   const validateAndSubmit = async data => {
     if (!data.displayName.trim()) {
       setError('displayName', { message: 'Name cannot be empty' });
@@ -141,9 +155,10 @@ const CommunityForm = ({
     });
   };
 
-  const disabled = useMemo(() => displayName.length === 0 || categoryId === '', [
+  const disabled = useMemo(() => !isDirty || displayName.length === 0 || categoryId === '', [
     displayName,
     categoryId,
+    isDirty,
   ]);
 
   const [formBodyRef, formBodyElement] = useElement();
