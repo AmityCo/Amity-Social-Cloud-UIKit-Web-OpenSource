@@ -18,6 +18,11 @@ const CommunitySearch = ({ className, onClickCommunity, sticky = false }) => {
     setValue(newVal);
   };
 
+  const handlePick = communityName => {
+    const { communityId } = communities.find(item => item.displayName === communityName) ?? {};
+    communityId && onClickCommunity(communityId);
+  };
+
   return (
     <CommunitiesSearchContainer className={className} sticky={sticky}>
       <FormattedMessage id="exploreHeader.searchCommunityPlaceholder">
@@ -26,7 +31,7 @@ const CommunitySearch = ({ className, onClickCommunity, sticky = false }) => {
             value={value}
             items={communities.map(community => community.displayName)}
             onChange={handleChange}
-            onPick={onClickCommunity}
+            onPick={handlePick}
             className={className}
             loadMore={hasMore && loadMore}
             placeholder={placeholder}
