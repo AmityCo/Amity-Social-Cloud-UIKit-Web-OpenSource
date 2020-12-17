@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import { FileRepository } from 'eko-sdk';
 
-export default (onChange = () => {}, onLoadingChange = () => {}) => {
+export default (onChange = () => {}, onLoadingChange = () => {}, onError = () => {}) => {
   const [uploading, setUploading] = useState([]); // local File objects
   const [uploaded, setUploaded] = useState([]); // SDK File models
   const [progress, setProgress] = useState({}); // individual progress
+
+  const [rejected, setRejected] = useState([]); // filenames that has loading error
 
   // browser loading callback from FileLoader
   const addFiles = useCallback(files => {
@@ -35,13 +37,25 @@ export default (onChange = () => {}, onLoadingChange = () => {}) => {
     onChange([]);
   }, []);
 
+  const retry = useCallback(() => {
+    // force to re-upload all files
+    setUploading(prev => [...prev]);
+    setRejected([]);
+  }, [rejected]);
+
   const removeFile = useCallback(
-    fileId => {
-      const without = uploaded.filter(file => file.fileId !== fileId);
-      setUploaded(without);
-      onChange(without);
+    file => {
+      if (file.fileId) {
+        const without = uploaded.filter(item => item.fileId !== file.fileId);
+        setUploaded(without);
+        onChange(without);
+      } else {
+        const without = uploading.filter(item => item.name !== file.name);
+        setUploading(without);
+        onChange(without);
+      }
     },
-    [uploaded],
+    [uploaded, uploading],
   );
 
   // file upload function
@@ -51,26 +65,33 @@ export default (onChange = () => {}, onLoadingChange = () => {}) => {
 
     (async () => {
       onLoadingChange(true);
-      const models = await FileRepository.uploadFiles({
-        files: uploading,
-        onProgress: ({ currentFile, currentPercent }) => {
-          !cancel && onProgress(currentFile, currentPercent);
-        },
-      });
+      try {
+        const models = await FileRepository.uploadFiles({
+          files: uploading,
+          onProgress: ({ currentFile, currentPercent }) => {
+            !cancel && onProgress(currentFile, currentPercent);
+          },
+        });
 
-      // cancel xhr, the easy way
-      if (cancel) {
+        // cancel xhr, the easy way
+        if (cancel) {
+          onLoadingChange(false);
+          return;
+        }
+
+        setUploading([]);
+        setProgress({});
+
+        const updated = [...uploaded, ...models];
+        setUploaded(updated);
+        onChange(updated);
         onLoadingChange(false);
-        return;
+        setRejected([]);
+      } catch (e) {
+        setRejected(uploading.map(file => file.name));
+        onLoadingChange(false);
+        onError('Something went wrong. Please try uploading again.');
       }
-
-      setUploading([]);
-      setProgress({});
-
-      const updated = [...uploaded, ...models];
-      setUploaded(updated);
-      onChange(updated);
-      onLoadingChange(false);
     })();
 
     return () => {
@@ -85,5 +106,7 @@ export default (onChange = () => {}, onLoadingChange = () => {}) => {
     addFiles,
     removeFile,
     reset,
+    rejected,
+    retry,
   };
 };

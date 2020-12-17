@@ -8,6 +8,7 @@ import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
 import useUser from '~/core/hooks/useUser';
 import useLiveObject from '~/core/hooks/useLiveObject';
+import useErrorNotification from '~/core/hooks/useErrorNotification';
 import useFile from '~/core/hooks/useFile';
 import { notification } from '~/core/components/Notification';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -81,6 +82,8 @@ const PostCreatorBar = ({
   const [uploadLoading, setUploadLoading] = useState(false);
   const isDisabled = isEmpty(postText, postImages, postFiles) || uploadLoading;
 
+  const [setError] = useErrorNotification();
+
   const createPost = async () => {
     const payload = {};
 
@@ -152,12 +155,14 @@ const PostCreatorBar = ({
                 files={incomingImages}
                 onLoadingChange={setUploadLoading}
                 onChange={uploadedImages => setPostImages(uploadedImages)}
+                onError={setError}
                 uploadLoading={uploadLoading}
               />
               <FilesUploaded
                 files={incomingFiles}
                 onLoadingChange={setUploadLoading}
                 onChange={uploadedFiles => setPostFiles(uploadedFiles)}
+                onError={setError}
                 uploadLoading={uploadLoading}
               />
             </UploadsContainer>

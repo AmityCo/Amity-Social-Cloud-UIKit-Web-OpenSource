@@ -3,11 +3,17 @@ import PropTypes from 'prop-types';
 
 import useFileUpload from '~/core/hooks/useFileUpload';
 
-const FileUploader = ({ files, onChange, onLoadingChange, children }) => {
-  const { uploading, uploaded, progress, addFiles, removeFile, reset } = useFileUpload(
-    onChange,
-    onLoadingChange,
-  );
+const FileUploader = ({ files, onChange, onError, onLoadingChange, children }) => {
+  const {
+    uploading,
+    uploaded,
+    progress,
+    addFiles,
+    removeFile,
+    reset,
+    rejected,
+    retry,
+  } = useFileUpload(onChange, onLoadingChange, onError);
 
   useEffect(() => {
     files && addFiles(files);
@@ -21,12 +27,15 @@ const FileUploader = ({ files, onChange, onLoadingChange, children }) => {
     uploaded,
     progress,
     removeFile,
+    rejected,
+    retry,
   });
 };
 
 FileUploader.propTypes = {
   files: PropTypes.array,
   onChange: PropTypes.func,
+  onError: PropTypes.func,
   onLoadingChange: PropTypes.func,
   children: PropTypes.node,
 };
@@ -34,6 +43,7 @@ FileUploader.propTypes = {
 FileUploader.defaultProps = {
   files: [],
   onChange: () => {},
+  onError: () => {},
   onLoadingChange: () => {},
   children: null,
 };

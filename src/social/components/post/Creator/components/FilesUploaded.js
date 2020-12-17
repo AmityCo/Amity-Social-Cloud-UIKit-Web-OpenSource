@@ -14,20 +14,35 @@ const StylesFileRows = styled.div`
   ${({ uploadLoading }) => uploadLoading && `cursor: wait !important;`}
 `;
 
-const FileRows = ({ uploading, uploaded, progress, removeFile, uploadLoading }) => (
+const FileRows = ({
+  uploading,
+  uploaded,
+  progress,
+  removeFile,
+  uploadLoading,
+  rejected,
+  retry,
+}) => (
   <StylesFileRows uploadLoading={uploadLoading}>
     {uploaded.map(file => (
-      <File key={file.fileId} fileId={file.fileId} onRemove={() => removeFile(file.fileId)} />
+      <File key={file.fileId} fileId={file.fileId} onRemove={() => removeFile(file)} />
     ))}
 
     {uploading.map(file => (
-      <File key={file.name} file={file} progress={progress[file.name]} />
+      <File
+        key={file.name}
+        file={file}
+        progress={progress[file.name]}
+        isRejected={rejected.includes(file.name)}
+        retry={retry}
+        onRemove={() => removeFile(file)}
+      />
     ))}
   </StylesFileRows>
 );
 
-const Files = ({ files, onChange, onLoadingChange, uploadLoading }) => (
-  <Uploader files={files} onChange={onChange} onLoadingChange={onLoadingChange}>
+const Files = ({ files, onChange, onLoadingChange, uploadLoading, onError }) => (
+  <Uploader files={files} onChange={onChange} onLoadingChange={onLoadingChange} onError={onError}>
     <FileRows uploadLoading={uploadLoading} />
   </Uploader>
 );
@@ -35,6 +50,7 @@ const Files = ({ files, onChange, onLoadingChange, uploadLoading }) => (
 Files.propTypes = {
   files: PropTypes.array,
   onChange: PropTypes.func,
+  onError: PropTypes.func,
   onLoadingChange: PropTypes.func,
   uploadLoading: PropTypes.bool,
 };
@@ -42,6 +58,7 @@ Files.propTypes = {
 Files.defaultProps = {
   files: [],
   onChange: () => {},
+  onError: () => {},
   onLoadingChange: () => {},
   uploadLoading: false,
 };

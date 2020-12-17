@@ -10,23 +10,39 @@ const StyledGalleryGrid = styled(GalleryGrid)`
   ${({ uploadLoading }) => uploadLoading && `cursor: wait !important;`}
 `;
 
-const ImagesGallery = ({ uploading, uploaded, progress, removeFile, uploadLoading }) => {
+const ImagesGallery = ({
+  uploading,
+  uploaded,
+  progress,
+  removeFile,
+  uploadLoading,
+  rejected,
+  retry,
+}) => {
   const allFiles = [...uploaded, ...uploading];
   return (
     <StyledGalleryGrid items={allFiles} uploadLoading={uploadLoading}>
       {file => {
         if (!file?.fileId) {
-          return <Image key={file?.name} file={file} progress={progress[file?.name]} />;
+          return (
+            <Image
+              key={file?.name}
+              file={file}
+              progress={progress[file?.name]}
+              isRejected={rejected.includes(file?.name)}
+              retry={retry}
+            />
+          );
         }
         const { fileId } = file;
-        return <Image key={fileId} fileId={fileId} onRemove={() => removeFile(fileId)} />;
+        return <Image key={fileId} fileId={fileId} onRemove={() => removeFile(file)} />;
       }}
     </StyledGalleryGrid>
   );
 };
 
-const Images = ({ files, onChange, onLoadingChange, uploadLoading }) => (
-  <Uploader files={files} onChange={onChange} onLoadingChange={onLoadingChange}>
+const Images = ({ files, onChange, onLoadingChange, uploadLoading, onError }) => (
+  <Uploader files={files} onChange={onChange} onLoadingChange={onLoadingChange} onError={onError}>
     <ImagesGallery uploadLoading={uploadLoading} />
   </Uploader>
 );
@@ -34,6 +50,7 @@ const Images = ({ files, onChange, onLoadingChange, uploadLoading }) => (
 Images.propTypes = {
   files: PropTypes.array,
   onChange: PropTypes.func,
+  onError: PropTypes.func,
   onLoadingChange: PropTypes.func,
   uploadLoading: PropTypes.bool,
 };
@@ -41,6 +58,7 @@ Images.propTypes = {
 Images.defaultProps = {
   files: [],
   onChange: () => {},
+  onError: () => {},
   onLoadingChange: () => {},
   uploadLoading: false,
 };

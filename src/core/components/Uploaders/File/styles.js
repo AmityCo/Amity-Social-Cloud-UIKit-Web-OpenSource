@@ -9,6 +9,7 @@ import ProgressBar from '~/core/components/ProgressBar';
 
 import Remove from '~/icons/Remove';
 import Icon from '~/icons/files';
+import ExclamationCircle from '~/icons/ExclamationCircle';
 
 export const FileContainer = styled.a`
   display: block;
@@ -44,6 +45,11 @@ export const FileIcon = styled(Icon)`
   grid-area: icon;
 `;
 
+export const CircleIcon = styled(ExclamationCircle)`
+  color: ${({ theme }) => theme.palette.alert.main};
+  z-index: 2;
+`;
+
 export const FileName = styled.div`
   grid-area: name;
   padding: 0 0.5em;
@@ -60,7 +66,13 @@ export const RemoveIcon = styled(Remove)`
   grid-area: remove;
 `;
 
-const File = ({ name, url, type, size, progress, onRemove }) => {
+const ButtonContainer = styled.div`
+  display: flex;
+`;
+
+// TODO: react-intl for title
+
+const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }) => {
   const removeCallback = useCallback(
     e => {
       e.preventDefault();
@@ -80,11 +92,26 @@ const File = ({ name, url, type, size, progress, onRemove }) => {
           <FileIcon file={{ name, type }} width={null} height="100%" />
         </ConditionalRender>
         <FileName>{name}</FileName> <FileSize>{filesize(size)}</FileSize>
-        {!!onRemove && (
-          <Button variant="secondary" onClick={removeCallback}>
-            <RemoveIcon />
-          </Button>
-        )}
+        <ButtonContainer>
+          {!!isRejected && (
+            <Button
+              variant="secondary"
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                onRetry();
+              }}
+              title="Click to re-upload the file"
+            >
+              <CircleIcon />
+            </Button>
+          )}
+          {!!onRemove && (
+            <Button variant="secondary" onClick={removeCallback}>
+              <RemoveIcon />
+            </Button>
+          )}
+        </ButtonContainer>
       </Content>
 
       {!Number.isNaN(progress) && <ProgressBar progress={progress * 100} />}
@@ -99,6 +126,8 @@ File.propTypes = {
   size: PropTypes.number,
   progress: PropTypes.number,
   onRemove: PropTypes.func,
+  isRejected: PropTypes.bool,
+  onRetry: PropTypes.func,
 };
 
 File.defaultProps = {
@@ -107,6 +136,8 @@ File.defaultProps = {
   size: 0,
   progress: -1,
   onRemove: null,
+  isRejected: false,
+  onRetry: () => {},
 };
 
 export default File;

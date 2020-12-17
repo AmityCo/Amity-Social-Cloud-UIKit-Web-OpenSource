@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import StyledFile from './styles';
 
-const File = ({ file, progress, onRemove }) => {
+const File = ({ file, progress, onRemove, isRejected, retry = () => {} }) => {
   let fileUrl = '';
 
   if (file.type.includes('image')) {
@@ -18,6 +18,8 @@ const File = ({ file, progress, onRemove }) => {
       url={fileUrl}
       progress={progress}
       onRemove={onRemove}
+      isRejected={isRejected}
+      onRetry={() => retry()}
     />
   );
 };
@@ -26,11 +28,15 @@ File.propTypes = {
   file: PropTypes.instanceOf(File).isRequired,
   progress: PropTypes.number,
   onRemove: PropTypes.func,
+  isRejected: PropTypes.bool,
+  retry: PropTypes.func,
 };
 
 File.defaultProps = {
   progress: -1,
   onRemove: null,
+  isRejected: false,
+  retry: () => {},
 };
 
 export default File;
