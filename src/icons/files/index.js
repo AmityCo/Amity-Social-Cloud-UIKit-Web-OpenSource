@@ -51,14 +51,23 @@ const MAPPING = {
   video: MpegFile,
 };
 
+const MIMETYPES = {
+  pptx: ['openxmlformats-officedocument.presentationml'],
+  xlsx: ['openxmlformats-officedocument.spreadsheetml.sheet'],
+};
+
 const FileIcon = ({ file, ...props }) => {
   const { name, type } = file;
 
-  const extension = Object.keys(MAPPING).find(marker => {
-    return type.includes(marker) || name.endsWith(`.${marker}`);
-  });
+  const typeLowerCase = type.toLowerCase();
 
-  const Icon = MAPPING[extension] || DefaultFile;
+  const resolved = Object.entries(MIMETYPES).find(([, mimetypes]) =>
+    mimetypes.find(mimetype => typeLowerCase.includes(mimetype)),
+  );
+  const extension = resolved ? resolved[0] : name.slice(name.lastIndexOf('.') + 1);
+
+  const Icon = extension in MAPPING ? MAPPING[extension] : DefaultFile;
+
   return <Icon {...props} />;
 };
 
