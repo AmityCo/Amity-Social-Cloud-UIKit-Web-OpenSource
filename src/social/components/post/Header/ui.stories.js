@@ -20,5 +20,6 @@ UIPostHeader.args = {
 };
 
 UIPostHeader.argTypes = {
+  onClickCommunity: { action: 'onClickCommunity(communityId)' },
   onClickUser: { action: 'onClickUser(userId)' },
 };

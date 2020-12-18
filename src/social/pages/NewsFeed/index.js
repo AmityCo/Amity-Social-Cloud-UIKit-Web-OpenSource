@@ -20,6 +20,7 @@ const NewsFeed = ({ onClickUser, onClickCommunity, blockRouteChange }) => {
     <PageLayout aside={Side}>
       <Feed
         targetType={EkoPostTargetType.GlobalFeed}
+        onClickCommunity={onClickCommunity}
         onClickUser={onClickUser}
         blockRouteChange={blockRouteChange}
         showPostCreator

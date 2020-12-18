@@ -16,5 +16,6 @@ export const SdkPostHeader = ({ onClickUser }) => {
 SdkPostHeader.storyName = 'Post header';
 
 SdkPostHeader.argTypes = {
-  onClickUser: { action: 'onClickUser(userId) ' },
+  onClickCommunity: { action: 'onClickCommunity(communityId)' },
+  onClickUser: { action: 'onClickUser(userId)' },
 };

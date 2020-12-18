@@ -27,6 +27,7 @@ const UIPostHeader = ({
   timeAgo,
   isModerator,
   isEdited,
+  onClickCommunity,
   onClickUser,
   hidePostTarget,
 }) => {
@@ -43,7 +44,9 @@ const UIPostHeader = ({
         <ArrowSeparatorContainer>
           <ArrowSeparator />
         </ArrowSeparatorContainer>
-        <Name>{postTargetName}</Name>
+        <Name onClick={onClickCommunity} className={cx({ clickable: !!onClickCommunity })}>
+          {postTargetName}
+        </Name>
       </PostNamesContainer>
     );
   };
@@ -86,6 +89,7 @@ UIPostHeader.propTypes = {
   timeAgo: PropTypes.instanceOf(Date),
   isModerator: PropTypes.bool,
   isEdited: PropTypes.bool,
+  onClickCommunity: PropTypes.func,
   onClickUser: PropTypes.func,
   hidePostTarget: PropTypes.bool,
 };
@@ -97,6 +101,7 @@ UIPostHeader.defaultProps = {
   timeAgo: null,
   isModerator: false,
   isEdited: false,
+  onClickCommunity: null,
   onClickUser: null,
   hidePostTarget: false,
 };

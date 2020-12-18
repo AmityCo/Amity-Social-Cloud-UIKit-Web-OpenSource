@@ -9,7 +9,7 @@ import UIPostHeader from './UIPostHeader';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const PostHeader = ({ postId, userRoles, onClickUser, hidePostTarget }) => {
+const PostHeader = ({ postId, userRoles, onClickCommunity, onClickUser, hidePostTarget }) => {
   const { post, file, user } = usePost(postId);
   const { targetId, targetType, postedUserId, createdAt, editedAt } = post;
 
@@ -17,6 +17,7 @@ const PostHeader = ({ postId, userRoles, onClickUser, hidePostTarget }) => {
   const { community } = useCommunity(targetId, [targetId]);
   const isCommunityPost = targetType === EkoPostTargetType.CommunityFeed;
   const postTargetName = isCommunityPost ? community?.displayName : null;
+  const handleClickCommunity = isCommunityPost ? () => onClickCommunity(targetId) : null;
 
   const currentUserIsModerator = isModerator(userRoles);
   const handleClickUser = () => onClickUser(postedUserId);
@@ -29,6 +30,7 @@ const PostHeader = ({ postId, userRoles, onClickUser, hidePostTarget }) => {
       timeAgo={createdAt}
       isModerator={currentUserIsModerator}
       isEdited={createdAt < editedAt}
+      onClickCommunity={handleClickCommunity}
       onClickUser={handleClickUser}
       hidePostTarget={hidePostTarget}
     />
@@ -38,6 +40,7 @@ const PostHeader = ({ postId, userRoles, onClickUser, hidePostTarget }) => {
 PostHeader.propTypes = {
   postId: PropTypes.string.isRequired,
   userRoles: PropTypes.array,
+  onClickCommunity: PropTypes.func,
   onClickUser: PropTypes.func,
   hidePostTarget: PropTypes.bool,
 };
