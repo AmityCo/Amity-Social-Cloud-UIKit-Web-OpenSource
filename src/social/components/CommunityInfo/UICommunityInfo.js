@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
-import CommunityName from '~/social/components/CommunityName';
+import CommunityName from '~/social/components/community/Name';
 import Button from '~/core/components/Button';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 import {

@@ -7,7 +7,7 @@ import Truncate from 'react-truncate-markup';
 import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import CommunityName from '~/social/components/CommunityName';
+import CommunityName from '~/social/components/community/Name';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 const ItemContainer = styled.div`

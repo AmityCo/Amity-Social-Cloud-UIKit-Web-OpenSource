@@ -12,10 +12,12 @@ export const VerifiedIcon = styled(Verified)`
   color: #1253de;
 `;
 
+// the padding-right is to avoid cutting too short when the name ends with an emoji (due to the flex + text-overflow combination)
 export const Name = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-right: 1ch;
 `;
 
 export const NameContainer = styled.div`

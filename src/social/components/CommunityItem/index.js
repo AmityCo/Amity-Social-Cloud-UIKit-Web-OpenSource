@@ -1,7 +1,7 @@
 import React from 'react';
 
 import customizableComponent from '~/core/hocs/customization';
-import CommunityName from '~/social/components/CommunityName';
+import CommunityName from '~/social/components/community/Name';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 import { Avatar, CommunityItemContainer } from './styles';

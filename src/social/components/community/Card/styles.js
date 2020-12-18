@@ -11,7 +11,7 @@ import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
-import CommunityName from '~/social/components/CommunityName';
+import CommunityName from '~/social/components/community/Name';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 

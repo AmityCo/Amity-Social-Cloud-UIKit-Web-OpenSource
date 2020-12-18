@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components';
 import customizableComponent from '~/core/hocs/customization';
 
 import Avatar from '~/core/components/Avatar';
-import CommunityName from '~/social/components/CommunityName';
+import CommunityName from '~/social/components/community/Name';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 const CommunityHeaderContainer = styled.a.attrs(props => props)`
