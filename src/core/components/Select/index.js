@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import { toArray } from '~/helpers';
 import useKeyboard from '~/core/hooks/useKeyboard';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import Dropdown from '~/core/components/Dropdown';
@@ -27,7 +26,7 @@ const triggerRenderer = ({ placeholder, selected, ...props }) => {
 };
 
 const Select = ({
-  value,
+  value = [],
   onSelect = () => {},
   options = [],
   multiple,
@@ -41,12 +40,16 @@ const Select = ({
   placeholder = 'Select...',
 }) => {
   const [isOpenInternal, setIsOpenInternal] = useState(isOpen);
-  const [selected, setSelected] = useState(value ? toArray(value) : []);
+  const [selected, setSelected] = useState(value);
 
   const toggle = () => setIsOpenInternal(!isOpenInternal);
   const close = () => (handleClose ? handleClose() : setIsOpenInternal(false));
-  const removeByIndex = index => {
-    setSelected([...selected.slice(0, index), ...selected.slice(index + 1)]);
+  const remove = (currentItem, callback) => {
+    setSelected(prev => {
+      const newSelected = prev.filter(item => item.value !== currentItem);
+      callback && callback(newSelected.map(item => item.value));
+      return newSelected;
+    });
   };
 
   useKeyboard({
@@ -65,7 +68,7 @@ const Select = ({
       const index = selected.findIndex(item => item.value === selectedItem.value);
       if (index >= 0) {
         // remove item if selected twice
-        removeByIndex(index);
+        remove(index);
       } else {
         setSelected([...selected, selectedItem]);
       }
@@ -79,7 +82,7 @@ const Select = ({
     <Dropdown
       isOpen={isOpen || isOpenInternal}
       renderTrigger={props =>
-        renderTrigger({ ...props, onClick: toggle, selected, removeByIndex, placeholder })
+        renderTrigger({ ...props, onClick: toggle, selected, remove, placeholder })
       }
       // when using custom trigger we should handle "close on click outside" (if needed)
       handleClose={close}

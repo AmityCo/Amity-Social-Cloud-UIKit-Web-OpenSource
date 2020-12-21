@@ -22,6 +22,11 @@ const UserSelector = ({ value: userIds = [], onChange = () => {}, parentContaine
       value: userId,
     }));
 
+  const selectedUsers = userIds.map(userId => ({
+    name: (queriedUsers.find(user => user.userId === userId) ?? {}).displayName,
+    value: userId,
+  }));
+
   const close = () => {
     setIsOpen(false);
     // clear text input on close
@@ -41,20 +46,11 @@ const UserSelector = ({ value: userIds = [], onChange = () => {}, parentContaine
 
   const itemRenderer = ({ value: userId }) => <UserHeader userId={userId} />;
 
-  const triggerRenderer = ({ selected, removeByIndex, ...props }) => {
+  const triggerRenderer = ({ selected, remove, ...props }) => {
     return (
       <Selector {...props}>
         {selected.map(({ value: userId }) => (
-          <UserChip
-            key={userId}
-            userId={userId}
-            onRemove={() => {
-              const index = selected.findIndex(item => item.value === userId);
-              if (index >= 0) {
-                removeByIndex(index);
-              }
-            }}
-          />
+          <UserChip key={userId} userId={userId} onRemove={() => remove(userId, onChange)} />
         ))}
         <UserSelectorInput
           ref={inputRef}
@@ -69,11 +65,14 @@ const UserSelector = ({ value: userIds = [], onChange = () => {}, parentContaine
 
   return (
     <Select
-      value={userIds}
-      options={options}
+      value={selectedUsers}
+      // prevent show dropdown for empty query
+      options={query ? options : []}
       onSelect={({ value }) => {
         onChange([...userIds, value]);
         inputElement.focus();
+        // clear input on select item
+        setQuery('');
       }}
       renderTrigger={triggerRenderer}
       renderItem={itemRenderer}
