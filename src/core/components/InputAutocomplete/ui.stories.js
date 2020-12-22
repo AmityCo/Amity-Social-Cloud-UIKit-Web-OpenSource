@@ -174,7 +174,7 @@ UiInputAutocomplete.args = {
     'brown',
     'maroon',
   ],
-  expand: 2,
+  expand: 1,
   invalid: false,
   disabled: false,
   placeholder: 'Input text',

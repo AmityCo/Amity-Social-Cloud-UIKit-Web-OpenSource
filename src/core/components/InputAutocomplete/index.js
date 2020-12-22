@@ -54,7 +54,7 @@ const InputAutocomplete = ({
     } else {
       setOpen(!!filtered.length);
     }
-  }, [value]);
+  }, [value, filtered]);
 
   const onPickSuggestion = index => {
     onPick(filtered[index]);
