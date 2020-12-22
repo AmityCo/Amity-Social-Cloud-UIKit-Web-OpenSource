@@ -2,7 +2,7 @@ import React from 'react';
 import PostTextContent from '.';
 
 export default {
-  title: 'Ui Only/Social/Post',
+  title: 'Ui Only/Social/Post/TextContent',
 };
 
 export const UIPostTextContent = props => (
