@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl, FormattedMessage } from 'react-intl';
+import { EkoPostTargetType } from 'eko-sdk';
 
 import { isModerator } from '~/helpers/permissions';
 import { confirm } from '~/core/components/Confirm';
@@ -40,12 +41,13 @@ const Post = ({
   const closeEditingPostModal = () => setIsEditing(false);
 
   const { post, handleReportPost, handleDeletePost, childrenPosts = [] } = usePost(postId);
-  const { data, dataType, postedUserId, targetId } = post;
+  const { data, dataType, postedUserId, targetId, targetType } = post;
   const { members } = useCommunityMembers(targetId);
 
   const isAdmin = isModerator(userRoles);
   const isMyPost = currentUserId === postedUserId;
   const isMember = members.find(member => member.userId === currentUserId);
+  const isCommunityPost = targetType === EkoPostTargetType.CommunityFeed;
 
   const confirmDeletePost = () =>
     confirm({
@@ -65,7 +67,7 @@ const Post = ({
   const allOptions = [
     (isAdmin || isMyPost) && { name: 'post.editPost', action: openEditingPostModal },
     (isAdmin || isMyPost) && { name: 'post.deletePost', action: confirmDeletePost },
-    (isAdmin || (!isMyPost && isMember)) && { name: 'post.reportPost', action: onReportClick },
+    (isAdmin || isMember || !isCommunityPost) && { name: 'post.reportPost', action: onReportClick },
   ].filter(Boolean);
 
   const childrenContent = childrenPosts?.map(childPost => ({
