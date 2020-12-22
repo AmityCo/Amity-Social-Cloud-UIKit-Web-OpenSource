@@ -9,7 +9,7 @@ import Suggestions from '~/core/components/Suggestions';
 import Highlight from '~/core/components/Highlight';
 import Button from '~/core/components/Button';
 
-const MIN_LENGTH_FOR_SUGGESTIONS = 2;
+const MIN_LENGTH_FOR_SUGGESTIONS = 1;
 
 const Container = styled.div`
   position: relative;
