@@ -67,7 +67,11 @@ const Post = ({
   const allOptions = [
     (isAdmin || isMyPost) && { name: 'post.editPost', action: openEditingPostModal },
     (isAdmin || isMyPost) && { name: 'post.deletePost', action: confirmDeletePost },
-    (isAdmin || isMember || !isCommunityPost) && { name: 'post.reportPost', action: onReportClick },
+    !isMyPost &&
+      (isAdmin || !isCommunityPost || isMember) && {
+        name: 'post.reportPost',
+        action: onReportClick,
+      },
   ].filter(Boolean);
 
   const childrenContent = childrenPosts?.map(childPost => ({
