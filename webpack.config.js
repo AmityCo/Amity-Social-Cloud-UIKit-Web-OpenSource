@@ -4,7 +4,7 @@ const nodeExternals = require('webpack-node-externals');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const pkg = require('./package.json');
 
-module.exports = (_, argv) => ({
+module.exports = (_, argv = {}) => ({
   entry: './src/index.js',
   externals: [
     nodeExternals({
