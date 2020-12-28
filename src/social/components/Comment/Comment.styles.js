@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { POSITION_LEFT } from '~/helpers/getCssPosition';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import CommentLikeButton from '~/social/components/CommentLikeButton';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -89,7 +90,7 @@ const StyledComment = ({
                 <ReplyIcon /> Reply
               </ReplyButton>
             </ConditionalRender>
-            <OptionMenu options={options} />
+            <OptionMenu options={options} pullRight={false} align={POSITION_LEFT} />
           </InteractionBar>
         </ConditionalRender>
       </Content>

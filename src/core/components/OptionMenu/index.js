@@ -14,6 +14,7 @@ const OptionMenu = ({
   options,
   position = POSITION_BOTTOM,
   align = POSITION_RIGHT,
+  pullRight = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
@@ -30,7 +31,7 @@ const OptionMenu = ({
 
   return (
     <ConditionalRender condition={options.length}>
-      <Container>
+      <Container pullRight={pullRight}>
         <UiKitDropdown
           isOpen={isOpen}
           renderTrigger={props => triggerRenderer({ ...props, onClick: toggle, className, icon })}

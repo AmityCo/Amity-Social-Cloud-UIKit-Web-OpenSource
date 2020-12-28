@@ -25,5 +25,5 @@ export const Option = styled.div`
 `;
 
 export const Container = styled.div`
-  margin-left: auto;
+  ${({ pullRight }) => pullRight && `margin-left: auto;`}
 `;
