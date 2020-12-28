@@ -74,6 +74,22 @@ const communityTypeItems = [
   },
 ];
 
+function useKeepScrollBottom(ref, deps) {
+  const scrollBottom =
+    ref.current && ref.current.scrollHeight - ref.current.clientHeight - ref.current.scrollTop;
+
+  React.useLayoutEffect(() => {
+    if (ref.current && scrollBottom < 10) {
+      const scrollBottomAfterRender =
+        ref.current.scrollHeight - ref.current.clientHeight - ref.current.scrollTop;
+
+      if (scrollBottomAfterRender > 10) {
+        ref.current.scrollTo({ top: ref.current.scrollHeight });
+      }
+    }
+  }, [ref.current, scrollBottom, ...deps]);
+}
+
 const CommunityForm = ({
   community, // initialize form on editing
   edit,
@@ -94,13 +110,14 @@ const CommunityForm = ({
     ...community, // if edit, community will erase the defaults
   };
 
-  const { register, handleSubmit, errors, setError, watch, control } = useForm({
+  const { register, handleSubmit, errors, setError, watch, control, formState } = useForm({
     defaultValues,
   });
 
   const displayName = watch('displayName', '');
   const description = watch('description', '');
   const categoryId = watch('categoryId', '');
+  const userIds = watch('userIds', []);
 
   // what the hell...
   // The logic is very overcomplicated, but left like this just to fix a bug until a proper refactor can be done.
@@ -116,10 +133,11 @@ const CommunityForm = ({
         displayName,
         description,
         categoryId,
+        userIds,
         isPublic,
       }),
     );
-  }, [displayName, description, categoryId, isPublic]);
+  }, [displayName, description, categoryId, userIds, isPublic]);
 
   const validateAndSubmit = async data => {
     if (!data.displayName.trim()) {
@@ -162,6 +180,7 @@ const CommunityForm = ({
   ]);
 
   const [formBodyRef, formBodyElement] = useElement();
+  useKeepScrollBottom(formBodyRef, [formState]);
 
   return (
     <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
