@@ -43,6 +43,10 @@ export const ModalWindow = styled.div`
   max-width: 520px;
   min-width: 360px;
   ${({ theme }) => theme.typography.body}
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const Header = styled.div`
