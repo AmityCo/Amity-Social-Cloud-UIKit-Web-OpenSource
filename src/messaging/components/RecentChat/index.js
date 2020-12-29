@@ -19,14 +19,15 @@ const RecentChat = ({ onChannelClick, selectedChannelId }) => {
         Chats
         <CreateNewChat />
       </RecentChatListHeader>
-      {channels.map(channel => (
-        <ChatItem
-          selected={selectedChannelId === channel.channelId}
-          onSelect={onChannelClick}
-          key={channel.channelId}
-          channel={channel}
-        />
-      ))}
+      {Array.isArray(channels) &&
+        channels.map(channel => (
+          <ChatItem
+            selected={selectedChannelId === channel.channelId}
+            onSelect={onChannelClick}
+            key={channel.channelId}
+            channel={channel}
+          />
+        ))}
     </RecentChatListContainer>
   );
 };
