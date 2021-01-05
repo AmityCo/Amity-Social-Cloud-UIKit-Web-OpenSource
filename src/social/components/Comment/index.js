@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import { FormattedMessage } from 'react-intl';
 import withSDK from '~/core/hocs/withSDK';
 import { confirm } from '~/core/components/Confirm';
 import customizableComponent from '~/core/hocs/customization';
 import useComment from '~/social/hooks/useComment';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import ConditionalRender from '~/core/components/ConditionalRender';
+import { notification } from '~/core/components/Notification';
 import { isModerator } from '~/helpers/permissions';
 import CommentReplies from './CommentReplies';
 import StyledComment from './Comment.styles';
@@ -68,6 +70,13 @@ const Comment = ({
     handleDeleteComment,
   } = useComment({ commentId });
 
+  const onReportClick = () => {
+    handleReportComment();
+    notification.success({
+      content: <FormattedMessage id="report.reportSent" />,
+    });
+  };
+
   const [text, setText] = useState(comment?.data?.text ?? '');
 
   useEffect(() => {
@@ -126,7 +135,7 @@ const Comment = ({
       updatedAt={comment.updatedAt}
       text={text}
       onClickReply={onClickReply}
-      handleReportComment={handleReportComment}
+      handleReportComment={onReportClick}
       startEditing={startEditing}
       cancelEditing={cancelEditing}
       handleEdit={handleEdit}
