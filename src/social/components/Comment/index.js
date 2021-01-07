@@ -70,11 +70,17 @@ const Comment = ({
     handleDeleteComment,
   } = useComment({ commentId });
 
-  const onReportClick = () => {
-    handleReportComment();
-    notification.success({
-      content: <FormattedMessage id="report.reportSent" />,
-    });
+  const onReportClick = async () => {
+    try {
+      await handleReportComment();
+      notification.success({
+        content: <FormattedMessage id="report.reportSent" />,
+      });
+    } catch (err) {
+      notification.error({
+        content: err.message,
+      });
+    }
   };
 
   const [text, setText] = useState(comment?.data?.text ?? '');
