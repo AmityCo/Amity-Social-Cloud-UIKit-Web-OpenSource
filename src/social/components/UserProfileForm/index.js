@@ -52,7 +52,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
   const { register, handleSubmit, errors, watch, control } = useForm({
     defaultValues: {
       ...user,
-      description: '',
+      description: user.description || '',
     } || {
       avatar:
         'https://www.gardeningknowhow.com/wp-content/uploads/2017/07/hardwood-tree-400x266.jpg',
@@ -62,6 +62,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
   });
 
   const description = watch('description');
+  const displayName = watch('displayName');
 
   return (
     <Form className={className} onSubmit={handleSubmit(onSubmit)}>
@@ -73,6 +74,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               <Label htmlFor="displayName" className="required">
                 Display name
               </Label>
+              <Counter>{displayName.length}/100</Counter>
             </LabelCounterWrapper>
             <TextField
               placeholder="Enter user display name"
@@ -81,7 +83,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               ref={register({
                 required: 'Display name is required',
                 maxLength: {
-                  value: 30,
+                  value: 100,
                   message: 'Display name is too long',
                 },
               })}
