@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useIntl, FormattedMessage } from 'react-intl';
-import { EkoPostTargetType } from 'eko-sdk';
+import { EkoPostTargetType, EkoCommunityUserMembership } from 'eko-sdk';
 
 import { isModerator } from '~/helpers/permissions';
 import { confirm } from '~/core/components/Confirm';
@@ -46,7 +46,9 @@ const Post = ({
 
   const isAdmin = isModerator(userRoles);
   const isMyPost = currentUserId === postedUserId;
-  const isMember = members.find(member => member.userId === currentUserId);
+  const isMember =
+    members.find(member => member.userId === currentUserId)?.communityMembership ===
+    EkoCommunityUserMembership.Member;
   const isCommunityPost = targetType === EkoPostTargetType.CommunityFeed;
 
   const confirmDeletePost = () =>
@@ -65,8 +67,14 @@ const Post = ({
   };
 
   const allOptions = [
-    (isAdmin || isMyPost) && { name: 'post.editPost', action: openEditingPostModal },
-    (isAdmin || isMyPost) && { name: 'post.deletePost', action: confirmDeletePost },
+    (isAdmin || (isMyPost && (!isCommunityPost || isMember))) && {
+      name: 'post.editPost',
+      action: openEditingPostModal,
+    },
+    (isAdmin || (isMyPost && (!isCommunityPost || isMember))) && {
+      name: 'post.deletePost',
+      action: confirmDeletePost,
+    },
     !isMyPost &&
       (isAdmin || !isCommunityPost || isMember) && {
         name: 'post.reportPost',
