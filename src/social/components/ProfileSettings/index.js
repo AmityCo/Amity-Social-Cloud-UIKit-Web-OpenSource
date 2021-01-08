@@ -7,6 +7,7 @@ import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
+import { isEmpty } from '~/helpers';
 
 import {
   ProfileSettingsTabs,
@@ -34,6 +35,10 @@ const ProfileSettings = ({ userId, client }) => {
     await client.setDisplayName(displayName);
     await client.setDescription(description);
   };
+
+  if (isEmpty(user)) {
+    return null;
+  }
 
   return (
     <Container>
