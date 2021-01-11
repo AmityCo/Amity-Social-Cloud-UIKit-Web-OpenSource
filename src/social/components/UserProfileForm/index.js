@@ -81,7 +81,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               ref={register({
                 required: 'Display name is required',
                 maxLength: {
-                  value: 30,
+                  value: 100,
                   message: 'Display name is too long',
                 },
               })}
