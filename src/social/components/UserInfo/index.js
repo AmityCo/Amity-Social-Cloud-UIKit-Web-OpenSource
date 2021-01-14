@@ -23,7 +23,7 @@ const UserInfo = ({ userId, currentUserId, onEditUser, onMessageUser }) => {
       displayName={displayName || DEFAULT_DISPLAY_NAME}
       description={description}
       postsCount={postsCount}
-      isMe={userId === currentUserId}
+      isMyProfile={userId === currentUserId}
       onEditUser={onEditUser}
       onMessageUser={onMessageUser}
     />

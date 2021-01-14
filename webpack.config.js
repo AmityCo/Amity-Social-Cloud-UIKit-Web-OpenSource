@@ -2,6 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { DefinePlugin } = require('webpack');
 const pkg = require('./package.json');
 
 module.exports = (_, argv = {}) => ({
@@ -20,6 +21,9 @@ module.exports = (_, argv = {}) => ({
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new DefinePlugin({
+      __VERSION__: `"${pkg.version}"`,
+    }),
     argv.analyze === 'true' && new BundleAnalyzerPlugin({ analyzerMode: 'static' }),
   ].filter(Boolean),
   resolve: {
