@@ -1,5 +1,6 @@
 const { DefinePlugin, EnvironmentPlugin } = require('webpack');
 const mainWebpack = require('../webpack.config.js');
+const pkg = require('../package.json');
 
 module.exports = {
   stories: ['../src/**/*.stories.js'],
@@ -16,6 +17,7 @@ module.exports = {
     config.plugins.push(
       new DefinePlugin({
         SC_DISABLE_SPEEDY: true, // storybook
+      __VERSION__: `"${pkg.version}"`,
       }),
       new EnvironmentPlugin(
         Object.keys(process.env)
