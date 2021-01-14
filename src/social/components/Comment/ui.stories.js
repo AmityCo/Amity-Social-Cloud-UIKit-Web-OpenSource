@@ -20,8 +20,9 @@ UiComment.args = {
   canLike: true,
   canReply: true,
   canReport: true,
-  createdAt: '9/28/20',
+  createdAt: new Date('9/28/20'),
   text: 'Dynamic comment text',
+  updatedAt: new Date('9/29/20'),
 };
 
 UiComment.argTypes = {
@@ -32,8 +33,9 @@ UiComment.argTypes = {
   canLike: { control: { type: 'boolean' } },
   canReply: { control: { type: 'boolean' } },
   canReport: { control: { type: 'boolean' } },
-  createdAt: { control: { type: 'text' } },
+  createdAt: { control: { type: 'date' } },
   text: { control: { type: 'text' } },
   onClickReply: { action: 'onClickReply()' },
   handleReportComment: { action: 'handleReportComment()' },
+  updatedAt: { control: { type: 'date' } },
 };

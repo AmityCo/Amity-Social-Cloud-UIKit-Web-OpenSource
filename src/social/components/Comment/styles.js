@@ -72,8 +72,7 @@ export const Content = styled.div`
 `;
 
 export const CommentHeader = styled.div`
-  display: flex;
-  align-items: center;
+  word-break: break-all;
   margin-bottom: 5px;
 `;
 
@@ -88,11 +87,14 @@ export const CommentInfo = styled.div`
   margin-left: 8px;
 `;
 
-export const AuthorName = styled.div`
+export const AuthorName = styled.span`
+  // react-truncate-markup tries to set to inline-block
+  display: inline !important;
   ${({ theme }) => theme.typography.body}
 `;
 
 export const CommentDate = styled(Time)`
+  display: inline;
   margin-left: 5px;
   color: ${({ theme }) => theme.palette.base.shade1};
   &::before {
@@ -101,7 +103,7 @@ export const CommentDate = styled(Time)`
   ${({ theme }) => theme.typography.caption}
 `;
 
-export const EditedMark = styled.div`
+export const EditedMark = styled.span`
   margin-left: 5px;
   color: ${({ theme }) => theme.palette.neutral.shade1};
   &::before {

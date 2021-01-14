@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React from 'react';
+import Truncate from 'react-truncate-markup';
 import PropTypes from 'prop-types';
 
 import { POSITION_LEFT } from '~/helpers/getCssPosition';
@@ -58,13 +59,24 @@ const StyledComment = ({
     <>
       <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
       <Content>
-        <CommentHeader>
-          <AuthorName>{authorName}</AuthorName>
-          <CommentDate date={createdAt} />
-          <ConditionalRender condition={updatedAt - createdAt > 0}>
-            <EditedMark>Edited</EditedMark>
-          </ConditionalRender>
-        </CommentHeader>
+        <Truncate
+          ellipsis={
+            <span>
+              ...
+              <CommentDate date={createdAt} />
+              {updatedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
+            </span>
+          }
+          lines={2}
+        >
+          <CommentHeader>
+            <AuthorName>{authorName}</AuthorName>
+            <Truncate.Atom>
+              <CommentDate date={createdAt} />
+              {updatedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
+            </Truncate.Atom>
+          </CommentHeader>
+        </Truncate>
 
         <ConditionalRender condition={isEditing}>
           <CommentEditContainer>

@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -23,6 +25,13 @@ const UiKitProvider = ({
   theme = {},
   children /* TODO localization */,
 }) => {
+  const theGlobal = globalThis || window || global;
+
+  theGlobal.__upstra__ = {
+    ...theGlobal.__upstra__,
+    uikit: __VERSION__,
+  };
+
   const SDKInfo = useMemo(() => {
     if (!client) client = new EkoClient({ apiKey });
     else if (client.currentUserId !== userId) client.unregisterSession();

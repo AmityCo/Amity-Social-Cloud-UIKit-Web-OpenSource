@@ -80,12 +80,9 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               placeholder="Enter user display name"
               id="displayName"
               name="displayName"
+              maxLength={100}
               ref={register({
                 required: 'Display name is required',
-                maxLength: {
-                  value: 100,
-                  message: 'Display name is too long',
-                },
               })}
             />
             <ErrorMessage errors={errors} name="displayName" />
@@ -98,9 +95,8 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
             <AboutTextarea
               placeholder="Enter something about yourself"
               name="description"
-              ref={register({
-                maxLength: { value: 180, message: 'Description text is too long' },
-              })}
+              maxLength={180}
+              ref={register()}
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
