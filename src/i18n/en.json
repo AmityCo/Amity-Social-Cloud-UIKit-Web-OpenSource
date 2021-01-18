@@ -41,5 +41,6 @@
   "user.editProfile": "Edit profile",
   "user.message": "Message",
   "report.reportUser": "Report user",
-  "report.reportSent": "Report sent"
+  "report.reportSent": "Report sent",
+  "report.unflagComment": "Comment not reported now"
 }

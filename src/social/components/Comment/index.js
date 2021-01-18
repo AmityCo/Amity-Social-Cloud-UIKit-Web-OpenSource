@@ -73,9 +73,15 @@ const Comment = ({
   const onReportClick = async () => {
     try {
       await handleReportComment();
-      notification.success({
-        content: <FormattedMessage id="report.reportSent" />,
-      });
+      if (comment.flagCount) {
+        notification.success({
+          content: <FormattedMessage id="report.reportSent" />,
+        });
+      } else {
+        notification.success({
+          content: <FormattedMessage id="report.unflagComment" />,
+        });
+      }
     } catch (err) {
       notification.error({
         content: err.message,

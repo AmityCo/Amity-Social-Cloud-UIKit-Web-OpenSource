@@ -22,7 +22,8 @@ const useComment = ({ commentId }) => {
     [commentId, referenceId],
   );
 
-  const handleReportComment = async () => CommentRepository.flag(commentId);
+  const handleReportComment = async () =>
+    comment.flagCount ? CommentRepository.unflag(commentId) : CommentRepository.flag(commentId);
 
   const handleReplyToComment = replyCommentText => {
     CommentRepository.createTextComment({
