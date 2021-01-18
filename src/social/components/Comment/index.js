@@ -79,7 +79,7 @@ const Comment = ({
         });
       } else {
         notification.success({
-          content: <FormattedMessage id="report.unflagComment" />,
+          content: <FormattedMessage id="report.unreportSent" />,
         });
       }
     } catch (err) {

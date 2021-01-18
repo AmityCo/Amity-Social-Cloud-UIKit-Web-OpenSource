@@ -42,5 +42,5 @@
   "user.message": "Message",
   "report.reportUser": "Report user",
   "report.reportSent": "Report sent",
-  "report.unflagComment": "Comment not reported now"
+  "report.unreportSent": "Unreport sent"
 }
