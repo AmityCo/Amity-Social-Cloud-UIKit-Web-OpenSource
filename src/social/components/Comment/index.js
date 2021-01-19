@@ -68,14 +68,21 @@ const Comment = ({
     handleReplyToComment,
     handleEditComment,
     handleDeleteComment,
+    isFlaggedByMe,
   } = useComment({ commentId });
 
   const onReportClick = async () => {
     try {
       await handleReportComment();
-      notification.success({
-        content: <FormattedMessage id="report.reportSent" />,
-      });
+      if (isFlaggedByMe) {
+        notification.success({
+          content: <FormattedMessage id="report.unreportSent" />,
+        });
+      } else {
+        notification.success({
+          content: <FormattedMessage id="report.reportSent" />,
+        });
+      }
     } catch (err) {
       notification.error({
         content: err.message,
@@ -148,6 +155,7 @@ const Comment = ({
       handleDelete={deleteComment}
       isEditing={isEditing}
       setText={setText}
+      isReported={isFlaggedByMe}
     />
   );
 

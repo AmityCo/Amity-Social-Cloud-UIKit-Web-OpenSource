@@ -2,6 +2,7 @@ import { CommentRepository } from 'eko-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
+import useMemoAsync from '~/core/hooks/useMemoAsync';
 
 import useUser from '~/core/hooks/useUser';
 
@@ -22,7 +23,14 @@ const useComment = ({ commentId }) => {
     [commentId, referenceId],
   );
 
-  const handleReportComment = async () => CommentRepository.flag(commentId);
+  const isFlaggedByMe = useMemoAsync(
+    async () => CommentRepository.isFlaggedByMe(comment?.commentId),
+    [comment],
+  );
+
+  const handleReportComment = async () => {
+    return isFlaggedByMe ? CommentRepository.unflag(commentId) : CommentRepository.flag(commentId);
+  };
 
   const handleReplyToComment = replyCommentText => {
     CommentRepository.createTextComment({
@@ -56,6 +64,7 @@ const useComment = ({ commentId }) => {
     handleReplyToComment,
     handleEditComment,
     handleDeleteComment,
+    isFlaggedByMe,
   };
 };
 
