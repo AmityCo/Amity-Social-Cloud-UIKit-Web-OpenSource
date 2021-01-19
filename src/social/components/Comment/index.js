@@ -154,7 +154,7 @@ const Comment = ({
       handleDelete={deleteComment}
       isEditing={isEditing}
       setText={setText}
-      flagCount={comment.flagCount}
+      isReported={comment.flagCount === 1}
     />
   );
 
