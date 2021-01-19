@@ -68,12 +68,13 @@ const Comment = ({
     handleReplyToComment,
     handleEditComment,
     handleDeleteComment,
+    isFlaggedByMe,
   } = useComment({ commentId });
 
   const onReportClick = async () => {
     try {
       await handleReportComment();
-      if (comment.flagCount) {
+      if (isFlaggedByMe) {
         notification.success({
           content: <FormattedMessage id="report.unreportSent" />,
         });
@@ -154,7 +155,7 @@ const Comment = ({
       handleDelete={deleteComment}
       isEditing={isEditing}
       setText={setText}
-      isReported={comment.flagCount === 1}
+      isReported={isFlaggedByMe}
     />
   );
 
