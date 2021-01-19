@@ -118,6 +118,7 @@ const CommunityForm = ({
   const description = watch('description', '');
   const categoryId = watch('categoryId', '');
   const userIds = watch('userIds', []);
+  const avatarFileId = watch('avatarFileId', null);
 
   // what the hell...
   // The logic is very overcomplicated, but left like this just to fix a bug until a proper refactor can be done.
@@ -135,6 +136,7 @@ const CommunityForm = ({
         categoryId,
         userIds,
         isPublic,
+        avatarFileId,
       }),
     );
   }, [displayName, description, categoryId, userIds, isPublic]);
