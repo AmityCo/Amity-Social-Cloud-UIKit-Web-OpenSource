@@ -48,10 +48,14 @@ const StyledComment = ({
   handleDelete,
   isEditing,
   setText,
+  flagCount,
 }) => {
   const options = [
     canEdit && { name: 'Edit comment', action: startEditing },
-    canReport && { name: 'Report comment', action: handleReportComment },
+    canReport && {
+      name: `${flagCount ? 'Unreport ' : 'Report '} comment`,
+      action: handleReportComment,
+    },
     canDelete && { name: 'Delete comment', action: handleDelete },
   ].filter(Boolean);
 
@@ -130,6 +134,7 @@ StyledComment.propTypes = {
   handleDelete: PropTypes.func.isRequired,
   isEditing: PropTypes.bool,
   setText: PropTypes.func.isRequired,
+  flagCount: PropTypes.number,
 };
 
 export default StyledComment;

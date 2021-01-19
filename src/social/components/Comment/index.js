@@ -75,11 +75,11 @@ const Comment = ({
       await handleReportComment();
       if (comment.flagCount) {
         notification.success({
-          content: <FormattedMessage id="report.reportSent" />,
+          content: <FormattedMessage id="report.unreportSent" />,
         });
       } else {
         notification.success({
-          content: <FormattedMessage id="report.unreportSent" />,
+          content: <FormattedMessage id="report.reportSent" />,
         });
       }
     } catch (err) {
@@ -154,6 +154,7 @@ const Comment = ({
       handleDelete={deleteComment}
       isEditing={isEditing}
       setText={setText}
+      flagCount={comment.flagCount}
     />
   );
 
