@@ -1,0 +1,10 @@
+{
+  "output": "CHANGELOG.md",
+  "package": true,
+  "commitLimit": false,
+  "template": "./.autochangelog/template.hbs",
+  "handlebarsSetup": "./.autochangelog/setup.js",
+  "replaceText": {
+    "([UKT|UP]*-\\d+)": "[`$1`](https://ekoapp.atlassian.net/browse/$1)"
+  }
+}

@@ -15,6 +15,7 @@
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook --output-dir ./storybook-build",
     "preversion": "npm run test",
+    "version": "auto-changelog --config ./.autochangelog/config.json && git add CHANGELOG.md",
     "postversion": "git push && git push --tags",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -44,6 +45,7 @@
     "@storybook/client-api": "^6.1.0-alpha.17",
     "@storybook/react": "^6.1.0-alpha.17",
     "@storybook/theming": "^6.1.0-alpha.17",
+    "auto-changelog": "^2.2.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",

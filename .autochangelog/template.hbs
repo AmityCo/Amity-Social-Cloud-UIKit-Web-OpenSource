@@ -1,0 +1,27 @@
+# Changelog
+
+{{#each releases}}
+  ## [{{title}}]({{href}})
+  #### {{niceDate}}
+
+  {{! List commits with `Breaking change: ` somewhere in the message }}
+  {{#commit-list commits heading='### Breaking Changes' message='break: ' exclude='(feat|fix): '}}
+  - {{strip subject "break: "}} ([`{{shorthash}}`]({{href}})) (by {{author}})
+  {{/commit-list}}
+
+  {{! List commits that add new features, but not those already listed above }}
+  {{#commit-list commits heading='### New Features' message='feat: ' exclude='(break|fix): '}}
+  - {{strip subject "feat: "}} ([`{{shorthash}}`]({{href}})) (by {{author}})
+  {{/commit-list}}
+
+  {{! List commits that add new features, but not those already listed above }}
+  {{#commit-list commits heading='### Fixes' message='fix: ' exclude='(break|feat): '}}
+  - {{strip subject "fix: "}} ([`{{shorthash}}`]({{href}})) (by {{author}})
+  {{/commit-list}}
+
+  {{#commit-list commits heading='### Commits' exclude='(break|feat|fix): '}}
+  - {{subject}} ([`{{shorthash}}`]({{href}})) (by {{author}})
+  {{/commit-list}}
+
+  ---
+{{/each}}
