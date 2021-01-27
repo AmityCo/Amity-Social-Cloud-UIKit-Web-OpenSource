@@ -10,7 +10,7 @@ import { backgroundImage as CategoryImage } from '~/icons/Category';
 const CategoryHeaderContainer = styled.div`
   display: grid;
   grid-template-areas: 'avatar title' 'avatar subtitle';
-  grid-template-columns: min-content max-content;
+  grid-template-columns: min-content auto;
   grid-template-rows: min-content min-content;
   grid-gap: 0 0.5em;
   padding: 1em;
@@ -40,6 +40,9 @@ const CategoryHeaderAvatar = styled(Avatar)`
 const CategoryHeaderTitle = styled.div`
   grid-area: title;
   ${({ theme }) => theme.typography.title}
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 const CategoryHeaderSubtitle = styled.div`
