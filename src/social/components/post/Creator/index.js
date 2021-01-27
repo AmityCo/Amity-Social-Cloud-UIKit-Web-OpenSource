@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import { UserRepository, CommunityRepository, PostRepository, EkoPostTargetType } from 'eko-sdk';
+import {
+  UserRepository,
+  CommunityRepository,
+  PostRepository,
+  EkoPostTargetType,
+  FileRepository,
+  EkoImageSize,
+} from 'eko-sdk';
 
 import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
 import useUser from '~/core/hooks/useUser';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useErrorNotification from '~/core/hooks/useErrorNotification';
-import useFile from '~/core/hooks/useFile';
 import { notification } from '~/core/components/Notification';
 import ConditionalRender from '~/core/components/ConditionalRender';
 
@@ -69,7 +75,16 @@ const PostCreatorBar = ({
   const model = useLiveObject(fetcher(target.targetId), [target.targetId]);
   const { avatarFileId } = model;
 
-  const file = useFile(avatarFileId, [avatarFileId]);
+  // TODO: this is temporary - we should use file.fileUrl when supported.
+  const fileUrl = useMemo(
+    () =>
+      avatarFileId &&
+      FileRepository.getFileUrlById({
+        fileId: avatarFileId,
+        imageSize: EkoImageSize.Medium,
+      }),
+    [avatarFileId],
+  );
 
   const [postText, setPostText] = useState('');
   const [postImages, setPostImages] = useState([]);
@@ -124,7 +139,7 @@ const PostCreatorBar = ({
   const backgroundImage =
     target.targetType === EkoPostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
-  const CurrentTargetAvatar = <Avatar avatar={file.fileUrl} backgroundImage={backgroundImage} />;
+  const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
 
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)}>

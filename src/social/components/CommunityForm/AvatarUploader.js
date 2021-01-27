@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { EkoImageSize, FileRepository } from 'eko-sdk';
+
 import Loader from '~/core/components/Uploaders/Loader';
 import Uploader from '~/core/components/Uploaders/Uploader';
 import Image from '~/core/components/Uploaders/Image';
 import CameraIcon from '~/icons/Camera';
+import Avatar from '~/core/components/Avatar';
 
 const StyledCameraIcon = styled(CameraIcon)`
   font-size: 20px;
@@ -63,13 +66,24 @@ const ImageRenderer = ({ uploading, uploaded, progress }) => {
   });
 };
 
-const AvatarUploader = ({ mimeType, onChange }) => {
+const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
   const [loadedAvatar, setLoadedAvatar] = useState([]);
 
   const handleChange = files => {
-    const [file] = files;
+    const file = files[files.length - 1];
     file?.fileId && onChange(file.fileId);
   };
+
+  // TODO: this is temporary - we should use file.fileUrl when supported.
+  const fileUrl = useMemo(
+    () =>
+      avatarFileId &&
+      FileRepository.getFileUrlById({
+        fileId: avatarFileId,
+        imageSize: EkoImageSize.Medium,
+      }),
+    [avatarFileId],
+  );
 
   return (
     <AvatarUploadContainer>
@@ -79,6 +93,7 @@ const AvatarUploader = ({ mimeType, onChange }) => {
         </Uploader>
         <UploadOverlay>
           <StyledCameraIcon />
+          <Avatar avatar={fileUrl} size="big" />
         </UploadOverlay>
       </AvatarImageLoader>
     </AvatarUploadContainer>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
+import { EkoImageSize, FileRepository } from 'eko-sdk';
 
 import { isModerator } from '~/helpers/permissions';
 import withSDK from '~/core/hocs/withSDK';
@@ -8,10 +9,19 @@ import UICommunityInfo from './UICommunityInfo';
 import { confirm } from '~/core/components/Confirm';
 
 const CommunityInfo = ({ communityId, userRoles, onEditCommunity, currentUserId }) => {
-  const { community, communityCategories, joinCommunity, leaveCommunity, file } = useCommunity(
+  const { community, communityCategories, joinCommunity, leaveCommunity } = useCommunity(
     communityId,
   );
-  const { fileUrl } = file;
+  // TODO: this is temporary - we should use file.fileUrl when supported.
+  const fileUrl = useMemo(
+    () =>
+      community.avatarFileId &&
+      FileRepository.getFileUrlById({
+        fileId: community.avatarFileId,
+        imageSize: EkoImageSize.Medium,
+      }),
+    [community.avatarFileId],
+  );
 
   const { formatMessage } = useIntl();
 

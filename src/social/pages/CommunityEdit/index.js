@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { EkoImageSize, FileRepository } from 'eko-sdk';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityMembers from '~/social/components/CommunityMembers';
@@ -24,7 +25,7 @@ const CommunityEditPage = ({
   const openAddMemberModal = () => setAddMemberModalOpen(true);
   const closeAddMemberModal = () => setAddMemberModalOpen(false);
 
-  const { community, file, updateCommunity } = useCommunity(communityId);
+  const { community, updateCommunity } = useCommunity(communityId);
 
   const handleReturnToCommunity = () => onReturnToCommunity(communityId);
 
@@ -65,12 +66,23 @@ const CommunityEditPage = ({
     }
   };
 
+  // TODO: this is temporary - we should use file.fileUrl when supported.
+  const fileUrl = useMemo(
+    () =>
+      community.avatarFileId &&
+      FileRepository.getFileUrlById({
+        fileId: community.avatarFileId,
+        imageSize: EkoImageSize.Medium,
+      }),
+    [community.avatarFileId],
+  );
+
   return (
     <PageLayout
       aside={renderAsideComponent()}
       header={
         <CommunityEditHeader
-          avatarFileUrl={file.fileUrl}
+          avatarFileUrl={fileUrl}
           communityName={community?.displayName}
           onReturnToCommunity={handleReturnToCommunity}
           tabs={Object.values(PageTabs)}

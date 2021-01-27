@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { EkoImageSize, FileRepository } from 'eko-sdk';
 
 import useCategory from '~/social/hooks/useCategory';
 
 import UICategoryHeader from './styles';
 
 const CategoryHeader = ({ className, categoryId, children, onClick }) => {
-  const { category, file } = useCategory(categoryId);
+  const { category } = useCategory(categoryId);
+
+  // TODO: this is temporary - we should use file.fileUrl when supported.
+  const fileUrl = useMemo(
+    () =>
+      category.avatarFileId &&
+      FileRepository.getFileUrlById({
+        fileId: category.avatarFileId,
+        imageSize: EkoImageSize.Medium,
+      }),
+    [category.avatarFileId],
+  );
 
   return (
     <UICategoryHeader
       className={className}
       categoryId={category.categoryId}
       name={category.name}
-      avatarFileUrl={file.fileUrl}
+      avatarFileUrl={fileUrl}
       onClick={onClick}
     >
       {children}

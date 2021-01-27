@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import cx from 'classnames';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -9,10 +9,6 @@ import { AvatarContainer, Img, AvatarOverlay } from './styles';
 
 const Avatar = ({ className, avatar = null, showOverlay, onClick, ...props }) => {
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setVisible(false);
-  }, [avatar]);
 
   const onLoad = useCallback(() => setVisible(true), []);
   const onError = useCallback(() => setVisible(false), []);

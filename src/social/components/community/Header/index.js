@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
+import { EkoImageSize, FileRepository } from 'eko-sdk';
 import useCommunity from '~/social/hooks/useCommunity';
 
 import UICommunityHeader from './styles';
@@ -14,7 +15,17 @@ const CommunityHeader = ({
   children,
 }) => {
   const { community, communityCategories, file } = useCommunity(communityId);
-  const { fileUrl } = file;
+
+  // TODO: this is temporary - we should use file.fileUrl when supported.
+  const fileUrl = useMemo(
+    () =>
+      community.avatarFileId &&
+      FileRepository.getFileUrlById({
+        fileId: community.avatarFileId,
+        imageSize: EkoImageSize.Medium,
+      }),
+    [community.avatarFileId],
+  );
 
   const [render] = [].concat(children);
 

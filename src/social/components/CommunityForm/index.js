@@ -8,7 +8,7 @@ import Radios from '~/core/components/Radio';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import useElement from '~/core/hooks/useElement';
 import customizableComponent from '~/core/hocs/customization';
-import ImageUploader from './ImageUploader';
+import AvatarUploader from './AvatarUploader';
 import { isEqual } from '~/helpers';
 
 import { notification } from '~/core/components/Notification';
@@ -192,8 +192,8 @@ const CommunityForm = ({
             <Controller
               name="avatarFileId"
               control={control}
-              render={({ onChange }) => (
-                <ImageUploader mimeType="image/png, image/jpeg" onChange={onChange} />
+              render={({ onChange, ...rest }) => (
+                <AvatarUploader mimeType="image/png, image/jpeg" onChange={onChange} {...rest} />
               )}
               defaultValue={null}
             />
