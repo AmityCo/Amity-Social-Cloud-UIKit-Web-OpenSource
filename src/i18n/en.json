@@ -42,5 +42,6 @@
   "user.message": "Message",
   "report.reportUser": "Report user",
   "report.reportSent": "Report sent",
-  "report.unreportSent": "Unreport sent"
+  "report.unreportSent": "Unreport sent",
+  "comment.deleted": "This comment has been deleted"
 }

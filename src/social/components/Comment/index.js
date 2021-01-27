@@ -16,7 +16,6 @@ import StyledComment from './Comment.styles';
 import {
   CommentBlock,
   CommentContainer,
-  CommentDate,
   ReplyContainer,
   DeletedCommentContainer,
   DeletedIcon,
@@ -30,19 +29,17 @@ export const ENABLE_REPLIES = false;
 
 // TODO: react-intl
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
-const COMMENT_DELETED_TEXT = 'This comment has been deleted';
 
-const DeletedComment = ({ comment }) => {
-  const { updatedAt } = comment;
-
+const DeletedComment = () => {
   return (
     <DeletedCommentContainer>
       <IconContainer>
         <DeletedIcon />
       </IconContainer>
       <MessageContainer>
-        <Text>{COMMENT_DELETED_TEXT}</Text>
-        <CommentDate date={updatedAt} />
+        <Text>
+          <FormattedMessage id="comment.deleted" />
+        </Text>
       </MessageContainer>
     </DeletedCommentContainer>
   );
@@ -163,7 +160,7 @@ const Comment = ({
     <ConditionalRender condition={isCommentReady}>
       <ConditionalRender condition={comment.isDeleted}>
         <CommentBlock>
-          <DeletedComment comment={comment} />
+          <DeletedComment />
         </CommentBlock>
         <ConditionalRender condition={isReplyComment && ENABLE_REPLIES}>
           <ReplyContainer>{renderedComment}</ReplyContainer>
