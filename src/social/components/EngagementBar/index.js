@@ -1,39 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
-import { LIKE_REACTION_KEY } from '~/constants';
 
+import { LIKE_REACTION_KEY } from '~/constants';
 import customizableComponent from '~/core/hocs/customization';
 import usePost from '~/social/hooks/usePost';
 import UIEngagementBar from './UIEngagementBar';
+import useLiveCollection from '~/core/hooks/useLiveCollection';
+
+const COMMENTS_PER_PAGE = 5;
 
 const EngagementBar = ({ postId, noInteractionMessage }) => {
   const [isCommentComposeOpen, setCommentComposeOpen] = useState(false);
   const toggleCommentCompose = () => setCommentComposeOpen(prevValue => !prevValue);
 
   const { post } = usePost(postId);
-  const { commentsCount, reactions = {}, comments = [] } = post;
+  const { commentsCount, reactions = {} } = post;
 
-  // this is workaround for updating comments in real-time.
-  // I believe this should be fixed
-  const [postComments, setPostComments] = useState(comments);
+  const [comments, commentsHasMore, commentsLoadMore] = useLiveCollection(
+    () =>
+      CommentRepository.queryComments({
+        referenceId: post.postId,
+        referenceType: EkoCommentReferenceType.Post,
+        last: COMMENTS_PER_PAGE,
+      }),
+    [post.postId],
+  );
 
-  useEffect(() => {
-    if (comments.length > postComments.length) {
-      setPostComments(comments);
-    }
-  }, [comments]);
+  const commentIds = comments.map(comment => comment.commentId);
 
   const handleAddComment = async commentText => {
-    const newCommentLiveObject = await CommentRepository.createTextComment({
+    await CommentRepository.createTextComment({
       referenceType: EkoCommentReferenceType.Post,
       referenceId: postId,
       text: commentText,
-    });
-
-    newCommentLiveObject.on('dataStatusChanged', () => {
-      const { commentId } = newCommentLiveObject.model;
-      setPostComments([...postComments, commentId]);
     });
   };
 
@@ -44,7 +44,9 @@ const EngagementBar = ({ postId, noInteractionMessage }) => {
       totalComments={commentsCount}
       noInteractionMessage={noInteractionMessage}
       onClickComment={toggleCommentCompose}
-      commentIds={postComments}
+      commentIds={commentIds}
+      commentsHasMore={commentsHasMore}
+      commentsLoadMore={commentsLoadMore}
       isCommentComposeOpen={isCommentComposeOpen}
       handleAddComment={handleAddComment}
     />

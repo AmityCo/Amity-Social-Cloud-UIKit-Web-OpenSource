@@ -6,7 +6,7 @@ import { LoadMoreButton, ShevronDownIcon } from './styles';
 // TODO: react-intl
 const DEFAULT_TEXT = 'Load more';
 
-export const LoadMore = ({ hasMore, loadMore, text, children, className = '' }) => {
+const LoadMore = ({ hasMore, loadMore, text, children, className = '' }) => {
   return (
     <div>
       {children}
@@ -18,3 +18,5 @@ export const LoadMore = ({ hasMore, loadMore, text, children, className = '' }) 
     </div>
   );
 };
+
+export default LoadMore;

@@ -26,6 +26,7 @@
   "delete": "Delete",
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
+  "collapsible.viewAllComments": "View all comments",
   "community.createSuccess": "Your community was successfully created",
   "community.updateSuccess": "Your community was successfully updated",
   "community.editProfile": "Edit profile",

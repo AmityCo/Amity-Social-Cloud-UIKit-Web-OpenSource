@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import CommunityHeader from '~/social/components/community/Header';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import { LoadMore } from '~/social/components/LoadMore';
+import LoadMore from '~/social/components/LoadMore';
 import { CommunityScrollContainer } from './styles';
 
 const NoResultsMessage = styled.p`

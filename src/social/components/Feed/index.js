@@ -8,7 +8,7 @@ import Post from '~/social/components/post/Post';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import EmptyFeed from '~/social/components/EmptyFeed';
-import { LoadMore } from '~/social/components/LoadMore';
+import LoadMore from '~/social/components/LoadMore';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
 

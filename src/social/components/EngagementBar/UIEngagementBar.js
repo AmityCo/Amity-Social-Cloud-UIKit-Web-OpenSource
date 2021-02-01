@@ -8,6 +8,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import PostLikeButton from '~/social/components/post/LikeButton';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import Comment from '~/social/components/Comment';
+import LoadMore from '~/social/components/LoadMore';
 import { SecondaryButton } from '~/core/components/Button';
 import {
   EngagementBarContainer,
@@ -26,6 +27,8 @@ const UIEngagementBar = ({
   isCommentComposeOpen,
   handleAddComment,
   commentIds,
+  commentsHasMore,
+  commentsLoadMore,
 }) => (
   <EngagementBarContainer>
     <Counters>
@@ -44,9 +47,15 @@ const UIEngagementBar = ({
     </Counters>
     <ConditionalRender condition={!!noInteractionMessage}>
       <>
-        {commentIds.map(commentId => (
-          <Comment key={commentId} commentId={commentId} canInteract={false} />
-        ))}
+        <LoadMore
+          hasMore={commentsHasMore}
+          loadMore={commentsLoadMore}
+          text={<FormattedMessage id="collapsible.viewAllComments" />}
+        >
+          {commentIds.map(commentId => (
+            <Comment key={commentId} commentId={commentId} canInteract={false} />
+          ))}
+        </LoadMore>
         {noInteractionMessage && (
           <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>
         )}
@@ -58,9 +67,15 @@ const UIEngagementBar = ({
             <CommentIcon /> Comment
           </SecondaryButton>
         </InteractionBar>
-        {commentIds.map(commentId => (
-          <Comment key={commentId} commentId={commentId} />
-        ))}
+        <LoadMore
+          hasMore={commentsHasMore}
+          loadMore={commentsLoadMore}
+          text={<FormattedMessage id="collapsible.viewAllComments" />}
+        >
+          {commentIds.map(commentId => (
+            <Comment key={commentId} commentId={commentId} />
+          ))}
+        </LoadMore>
         <ConditionalRender condition={isCommentComposeOpen}>
           <CommentComposeBar onSubmit={handleAddComment} />
         </ConditionalRender>
@@ -78,6 +93,8 @@ UIEngagementBar.propTypes = {
   isCommentComposeOpen: PropTypes.bool,
   handleAddComment: PropTypes.func,
   commentIds: PropTypes.arrayOf(PropTypes.string),
+  commentsHasMore: PropTypes.bool,
+  commentsLoadMore: PropTypes.func,
 };
 
 UIEngagementBar.defaultProps = {
@@ -89,6 +106,8 @@ UIEngagementBar.defaultProps = {
   isCommentComposeOpen: false,
   handleAddComment: () => {},
   commentIds: [],
+  commentsHasMore: false,
+  commentsLoadMore: () => {},
 };
 
 export default customizableComponent('UIEngagementBar', UIEngagementBar);

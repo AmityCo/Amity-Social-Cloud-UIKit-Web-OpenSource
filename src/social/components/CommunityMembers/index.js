@@ -5,7 +5,7 @@ import customizableComponent from '~/core/hocs/customization';
 import useCommunityMembers from '~/social/hooks/useCommunityMembers';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
-import { LoadMore } from '~/social/components/LoadMore';
+import LoadMore from '~/social/components/LoadMore';
 
 import CommunityMemberItem from './CommunityMemberItem';
 
