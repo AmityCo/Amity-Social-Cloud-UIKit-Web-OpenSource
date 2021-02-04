@@ -13,7 +13,7 @@ const PageContainer = styled.div`
   width: 100%;
 `;
 
-const CategoryCommunitiesPage = ({ categoryId, onBack, onClickCommunity }) => {
+const CategoryCommunitiesPage = ({ categoryId, onBack }) => {
   const { category, file } = useCategory(categoryId);
   const title = category?.name || '';
   const { fileUrl } = file;
@@ -25,7 +25,7 @@ const CategoryCommunitiesPage = ({ categoryId, onBack, onClickCommunity }) => {
         avatarImage={CategoryImage}
         onBack={onBack}
       />
-      <CategoryCommunitiesList categoryId={categoryId} onClickCommunity={onClickCommunity} />
+      <CategoryCommunitiesList categoryId={categoryId} />
     </PageContainer>
   );
 };
@@ -33,12 +33,10 @@ const CategoryCommunitiesPage = ({ categoryId, onBack, onClickCommunity }) => {
 CategoryCommunitiesPage.propTypes = {
   categoryId: PropTypes.string.isRequired,
   onBack: PropTypes.func,
-  onClickCommunity: PropTypes.func,
 };
 
 CategoryCommunitiesPage.defaultProps = {
   onBack: null,
-  onClickCommunity: null,
 };
 
 export default CategoryCommunitiesPage;

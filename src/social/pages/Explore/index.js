@@ -13,23 +13,21 @@ const PageContainer = styled.div`
   grid-gap: 1.5rem;
 `;
 
-const ExplorePage = ({ onClickCommunity, onCommunityCreated, onClickCategory }) => (
+const ExplorePage = ({ onCommunityCreated, onClickCategory }) => (
   <PageContainer>
-    <ExploreHeader onClickCommunity={onClickCommunity} onCommunityCreated={onCommunityCreated} />
-    <RecommendedList onClickCommunity={onClickCommunity} />
-    <TrendingList onClickCommunity={onClickCommunity} />
+    <ExploreHeader onCommunityCreated={onCommunityCreated} />
+    <RecommendedList />
+    <TrendingList />
     <CategoriesCard onClick={onClickCategory} />
   </PageContainer>
 );
 
 ExplorePage.propTypes = {
-  onClickCommunity: PropTypes.func,
   onCommunityCreated: PropTypes.func,
   onClickCategory: PropTypes.func,
 };
 
 ExplorePage.defaultProps = {
-  onClickCommunity: () => {},
   onCommunityCreated: () => {},
   onClickCategory: () => {},
 };

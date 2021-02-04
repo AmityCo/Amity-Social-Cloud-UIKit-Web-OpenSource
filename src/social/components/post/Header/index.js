@@ -5,11 +5,13 @@ import usePost from '~/social/hooks/usePost';
 import useCommunity from '~/social/hooks/useCommunity';
 import withSDK from '~/core/hocs/withSDK';
 import { isModerator } from '~/helpers/permissions';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 import UIPostHeader from './UIPostHeader';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const PostHeader = ({ postId, userRoles, onClickCommunity, onClickUser, hidePostTarget }) => {
+const PostHeader = ({ postId, userRoles, onClickUser, hidePostTarget }) => {
+  const { onClickCommunity } = useNavigation();
   const { post, file, user } = usePost(postId);
   const { targetId, targetType, postedUserId, createdAt, editedAt } = post;
 
@@ -40,7 +42,6 @@ const PostHeader = ({ postId, userRoles, onClickCommunity, onClickUser, hidePost
 PostHeader.propTypes = {
   postId: PropTypes.string.isRequired,
   userRoles: PropTypes.array,
-  onClickCommunity: PropTypes.func,
   onClickUser: PropTypes.func,
   hidePostTarget: PropTypes.bool,
 };

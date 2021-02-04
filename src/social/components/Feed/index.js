@@ -21,7 +21,6 @@ const Feed = ({
   showPostCreator = false,
   onPostCreated,
   goToExplore,
-  onClickCommunity,
   onClickUser,
   noPostInteractionMessage = null,
 }) => {
@@ -55,7 +54,6 @@ const Feed = ({
             <Post
               key={postId}
               postId={postId}
-              onClickCommunity={onClickCommunity}
               onClickUser={onClickUser}
               noInteractionMessage={noPostInteractionMessage}
               hidePostTarget={targetType !== EkoPostTargetType.GlobalFeed}
@@ -74,7 +72,6 @@ Feed.propTypes = {
   targetId: PropTypes.string,
   showPostCreator: PropTypes.bool,
   onPostCreated: PropTypes.func,
-  onClickCommunity: PropTypes.func,
   onClickUser: PropTypes.func,
   // below is to be refactored
   goToExplore: PropTypes.func,

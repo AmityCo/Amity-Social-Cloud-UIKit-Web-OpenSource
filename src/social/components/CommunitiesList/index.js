@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 import UICommunitiesList from './UICommunitiesList';
 
-const CommunitiesList = ({
-  className,
-  communitiesQueryParam,
-  onClickCommunity,
-  activeCommunity,
-}) => {
+const CommunitiesList = ({ className, communitiesQueryParam, activeCommunity }) => {
+  const { onClickCommunity } = useNavigation();
   const [communities, hasMore, loadMore] = useCommunitiesList(communitiesQueryParam);
 
   // If the list is the result of a search, then the list items are displayed differently.
@@ -38,14 +35,12 @@ CommunitiesList.propTypes = {
   className: PropTypes.string,
   communitiesQueryParam: PropTypes.object,
   activeCommunity: PropTypes.string,
-  onClickCommunity: PropTypes.func,
 };
 
 CommunitiesList.defaultProps = {
   className: null,
   communitiesQueryParam: {},
   activeCommunity: '',
-  onClickCommunity: () => {},
 };
 
 export { UICommunitiesList };

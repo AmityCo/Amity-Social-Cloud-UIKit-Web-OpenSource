@@ -10,24 +10,21 @@ import useCommunity from '~/social/hooks/useCommunity';
 import PageLayout from '~/social/layouts/Page';
 
 import CommunityEditHeader from '~/social/components/community/EditPageHeader';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 import { CloseCommunityAction, AddMemberAction } from './ExtraAction';
 import { PageTabs } from './constants';
 
-const CommunityEditPage = ({
-  communityId,
-  onReturnToCommunity,
-  onClickUser,
-  onCommunityClosed,
-}) => {
+const CommunityEditPage = ({ communityId, onCommunityClosed }) => {
   const [activeTab, setActiveTab] = useState(PageTabs.EDIT_PROFILE);
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
 
   const openAddMemberModal = () => setAddMemberModalOpen(true);
   const closeAddMemberModal = () => setAddMemberModalOpen(false);
 
+  const { onClickCommunity } = useNavigation();
   const { community, updateCommunity } = useCommunity(communityId);
 
-  const handleReturnToCommunity = () => onReturnToCommunity(communityId);
+  const handleReturnToCommunity = () => onClickCommunity(communityId);
 
   const handleEditCommunity = async data => {
     await updateCommunity(data);
@@ -104,14 +101,10 @@ const CommunityEditPage = ({
 
 CommunityEditPage.propTypes = {
   communityId: PropTypes.string.isRequired,
-  onReturnToCommunity: PropTypes.func,
-  onClickUser: PropTypes.func,
   onCommunityClosed: PropTypes.func,
 };
 
 CommunityEditPage.defaultProps = {
-  onReturnToCommunity: () => {},
-  onClickUser: () => {},
   onCommunityClosed: () => {},
 };
 

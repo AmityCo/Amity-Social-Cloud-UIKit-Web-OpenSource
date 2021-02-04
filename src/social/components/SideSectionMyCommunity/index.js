@@ -11,12 +11,7 @@ import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 
 const myListQueryParam = { filter: EkoCommunityFilter.Member };
 
-const SideSectionMyCommunity = ({
-  className,
-  onCommunityCreated,
-  onClickCommunity,
-  activeCommunity,
-}) => {
+const SideSectionMyCommunity = ({ className, onCommunityCreated, activeCommunity }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const open = () => setIsOpen(true);
@@ -35,7 +30,6 @@ const SideSectionMyCommunity = ({
       <CommunitiesList
         className={className}
         communitiesQueryParam={myListQueryParam}
-        onClickCommunity={onClickCommunity}
         activeCommunity={activeCommunity}
       />
 
@@ -47,12 +41,10 @@ const SideSectionMyCommunity = ({
 SideSectionMyCommunity.propTypes = {
   className: PropTypes.string,
   activeCommunity: PropTypes.string,
-  onClickCommunity: PropTypes.func,
   onCommunityCreated: PropTypes.func,
 };
 
 SideSectionMyCommunity.defaultProps = {
-  onClickCommunity: () => {},
   onCommunityCreated: () => {},
 };
 

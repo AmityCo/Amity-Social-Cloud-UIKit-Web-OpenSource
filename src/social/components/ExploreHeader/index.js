@@ -71,7 +71,7 @@ const Title = styled.div`
   margin-bottom: 1rem;
 `;
 
-const Header = ({ onClickCommunity, onCommunityCreated }) => {
+const Header = ({ onCommunityCreated }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -87,7 +87,7 @@ const Header = ({ onClickCommunity, onCommunityCreated }) => {
           <Headline>
             <FormattedMessage id="exploreHeader.searchCommunityTitle" />
           </Headline>
-          <UiKitCommunitySearch onClickCommunity={onClickCommunity} />
+          <UiKitCommunitySearch />
         </Search>
         <Create>
           <Title>
@@ -111,12 +111,10 @@ const Header = ({ onClickCommunity, onCommunityCreated }) => {
 };
 
 Header.defaultProps = {
-  onClickCommunity: () => {},
   onCommunityCreated: () => {},
 };
 
 Header.propTypes = {
-  onClickCommunity: PropTypes.func,
   onCommunityCreated: PropTypes.func,
 };
 

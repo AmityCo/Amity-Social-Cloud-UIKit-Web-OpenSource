@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 import {
   CommunitiesSearchContainer,
   CommunitiesSearchInput,
@@ -11,7 +12,8 @@ import {
   SearchIconContainer,
 } from './styles';
 
-const CommunitySearch = ({ className, onClickCommunity, sticky = false }) => {
+const CommunitySearch = ({ className, sticky = false }) => {
+  const { onClickCommunity } = useNavigation();
   const [value, setValue] = useState('');
   const [communities, hasMore, loadMore] = useCommunitiesList({ search: value });
   const handleChange = newVal => {
@@ -49,7 +51,6 @@ const CommunitySearch = ({ className, onClickCommunity, sticky = false }) => {
 
 CommunitySearch.propTypes = {
   className: PropTypes.string,
-  onClickCommunity: PropTypes.func,
   sticky: PropTypes.bool,
 };
 

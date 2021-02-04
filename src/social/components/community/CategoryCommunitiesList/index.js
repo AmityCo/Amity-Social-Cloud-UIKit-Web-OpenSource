@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 import { Grid, ListContainer } from './styles';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PaginatedList from '~/core/components/PaginatedList';
@@ -7,7 +8,8 @@ import EmptyState from '~/core/components/EmptyState';
 import EmptyFeedIcon from '~/icons/EmptyFeed';
 import CommunityCard from '~/social/components/community/Card';
 
-const CategoryCommunitiesList = ({ categoryId, onClickCommunity }) => {
+const CategoryCommunitiesList = ({ categoryId }) => {
+  const { onClickCommunity } = useNavigation();
   const [communities, hasMore, loadMore] = useCommunitiesList({ categoryId });
 
   return (
@@ -35,11 +37,6 @@ const CategoryCommunitiesList = ({ categoryId, onClickCommunity }) => {
 
 CategoryCommunitiesList.propTypes = {
   categoryId: PropTypes.string.isRequired,
-  onClickCommunity: PropTypes.func,
-};
-
-CategoryCommunitiesList.defaultProps = {
-  onClickCommunity: () => {},
 };
 
 export default CategoryCommunitiesList;

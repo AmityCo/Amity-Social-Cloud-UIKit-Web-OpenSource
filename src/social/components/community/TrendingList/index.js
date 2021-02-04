@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import useTrendingCommunitiesList from '~/social/hooks/useTrendingCommunitiesList';
 import Card from '~/core/components/Card';
 import TrendingItem from '~/social/components/community/TrendingItem';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const CommunitiesList = styled.ul`
   list-style: none;
@@ -50,7 +51,8 @@ const CommunitiesList = styled.ul`
   }
 `;
 
-const TrendingList = ({ slim, onClickCommunity }) => {
+const TrendingList = ({ slim }) => {
+  const { onClickCommunity } = useNavigation();
   const [communities] = useTrendingCommunitiesList();
   const { formatMessage } = useIntl();
   return (
@@ -69,12 +71,10 @@ const TrendingList = ({ slim, onClickCommunity }) => {
 
 TrendingList.propTypes = {
   slim: PropTypes.bool,
-  onClickCommunity: PropTypes.func,
 };
 
 TrendingList.defaultProps = {
   slim: false,
-  onClickCommunity: () => {},
 };
 
 export default TrendingList;

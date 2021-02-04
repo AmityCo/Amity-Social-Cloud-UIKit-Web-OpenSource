@@ -14,6 +14,7 @@ import UiKitCommunityCard from '~/social/components/community/Card';
 import CommunityHeader from '~/social/components/community/Header';
 
 import useRecommendedCommunitiesList from '~/social/hooks/useRecommendedCommunitiesList';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const CommunityCard = styled(UiKitCommunityCard)`
   &:not(:first-child) {
@@ -34,9 +35,10 @@ const Category = styled.span`
   }
 `;
 
-const RecommendedList = ({ slim, onClickCommunity }) => {
+const RecommendedList = ({ slim }) => {
   const Title = <FormattedMessage id="recommendedList" />;
 
+  const { onClickCommunity } = useNavigation();
   const [communities] = useRecommendedCommunitiesList();
 
   return (
@@ -75,7 +77,6 @@ const RecommendedList = ({ slim, onClickCommunity }) => {
 
 RecommendedList.propTypes = {
   slim: PropTypes.bool,
-  onClickCommunity: PropTypes.func,
 };
 
 export default RecommendedList;
