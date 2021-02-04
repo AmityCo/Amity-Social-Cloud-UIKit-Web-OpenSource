@@ -20,7 +20,6 @@ const CommunitySideMenu = ({
   onClickExplore,
   exploreActive,
 
-  onCommunityCreated,
   activeCommunity,
 }) => (
   <SideMenu className={className}>
@@ -33,11 +32,7 @@ const CommunitySideMenu = ({
       onClickExplore={onClickExplore}
     />
 
-    <SideSectionMyCommunity
-      onClickCreate={onCommunityCreated}
-      activeCommunity={activeCommunity}
-      showCreateButton
-    />
+    <SideSectionMyCommunity activeCommunity={activeCommunity} showCreateButton />
   </SideMenu>
 );
 
@@ -51,14 +46,11 @@ CommunitySideMenu.propTypes = {
   exploreActive: PropTypes.bool,
 
   activeCommunity: PropTypes.string,
-
-  onCommunityCreated: PropTypes.func,
 };
 
 CommunitySideMenu.defaultProps = {
   onClickNewsFeed: () => {},
   onClickExplore: () => {},
-  onCommunityCreated: () => {},
 };
 
 export default CommunitySideMenu;

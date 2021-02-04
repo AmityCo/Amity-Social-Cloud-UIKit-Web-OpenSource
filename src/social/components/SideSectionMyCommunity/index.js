@@ -8,10 +8,12 @@ import SideMenuSection from '~/core/components/SideMenuSection';
 import { Plus } from '~/icons';
 import CommunitiesList from '~/social/components/CommunitiesList';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const myListQueryParam = { filter: EkoCommunityFilter.Member };
 
-const SideSectionMyCommunity = ({ className, onCommunityCreated, activeCommunity }) => {
+const SideSectionMyCommunity = ({ className, activeCommunity }) => {
+  const { onCommunityCreated } = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
 
   const open = () => setIsOpen(true);
@@ -41,11 +43,6 @@ const SideSectionMyCommunity = ({ className, onCommunityCreated, activeCommunity
 SideSectionMyCommunity.propTypes = {
   className: PropTypes.string,
   activeCommunity: PropTypes.string,
-  onCommunityCreated: PropTypes.func,
-};
-
-SideSectionMyCommunity.defaultProps = {
-  onCommunityCreated: () => {},
 };
 
 export default SideSectionMyCommunity;

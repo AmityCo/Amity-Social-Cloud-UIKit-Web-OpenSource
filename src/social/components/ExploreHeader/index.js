@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
@@ -14,6 +13,7 @@ import UiKitCommunitySearch from '~/social/components/CommunitySearch';
 import UiKitButton from '~/core/components/Button';
 
 import UiKitCommunityCreationModal from '~/social/components/CommunityCreationModal';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const Background = styled.div`
   width: 100%;
@@ -71,7 +71,8 @@ const Title = styled.div`
   margin-bottom: 1rem;
 `;
 
-const Header = ({ onCommunityCreated }) => {
+const Header = () => {
+  const { onCommunityCreated } = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => setIsOpen(true);
@@ -108,14 +109,6 @@ const Header = ({ onCommunityCreated }) => {
       </Foreground>
     </Background>
   );
-};
-
-Header.defaultProps = {
-  onCommunityCreated: () => {},
-};
-
-Header.propTypes = {
-  onCommunityCreated: PropTypes.func,
 };
 
 export default Header;
