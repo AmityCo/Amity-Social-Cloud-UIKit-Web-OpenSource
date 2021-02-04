@@ -93,7 +93,7 @@ const CommunityEditPage = ({ communityId, onCommunityClosed }) => {
       </ConditionalRender>
 
       <ConditionalRender condition={activeTab === PageTabs.MEMBERS}>
-        <CommunityMembers communityId={communityId} onClickUser={onClickUser} />
+        <CommunityMembers communityId={communityId} />
       </ConditionalRender>
     </PageLayout>
   );

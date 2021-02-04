@@ -6,6 +6,7 @@ import useCommunityMembers from '~/social/hooks/useCommunityMembers';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import LoadMore from '~/social/components/LoadMore';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import CommunityMemberItem from './CommunityMemberItem';
 
@@ -18,7 +19,8 @@ const tabs = {
   MODERATORS: 'Moderators',
 };
 
-const CommunityMembers = ({ communityId, onClickUser }) => {
+const CommunityMembers = ({ communityId }) => {
+  const { onClickUser } = useNavigation();
   const [activeTab, setActiveTab] = useState(tabs.MEMBERS);
 
   const { members, hasMoreMembers, loadMoreMembers, membersCount } = useCommunityMembers(

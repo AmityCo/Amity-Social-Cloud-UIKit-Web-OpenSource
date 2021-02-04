@@ -8,7 +8,7 @@ import Feed from '~/social/components/Feed';
 import TrendingList from '~/social/components/community/TrendingList';
 import RecommendedList from '~/social/components/community/RecommendedList';
 
-const NewsFeed = ({ onClickUser, blockRouteChange }) => {
+const NewsFeed = ({ blockRouteChange }) => {
   const Side = (
     <>
       <TrendingList slim />
@@ -20,7 +20,6 @@ const NewsFeed = ({ onClickUser, blockRouteChange }) => {
     <PageLayout aside={Side}>
       <Feed
         targetType={EkoPostTargetType.GlobalFeed}
-        onClickUser={onClickUser}
         blockRouteChange={blockRouteChange}
         showPostCreator
       />
@@ -29,12 +28,10 @@ const NewsFeed = ({ onClickUser, blockRouteChange }) => {
 };
 
 NewsFeed.defaultProps = {
-  onClickUser: () => {},
   blockRouteChange: () => {},
 };
 
 NewsFeed.propTypes = {
-  onClickUser: PropTypes.func,
   blockRouteChange: PropTypes.func,
 };
 

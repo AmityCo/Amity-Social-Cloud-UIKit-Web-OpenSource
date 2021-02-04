@@ -10,8 +10,8 @@ import UIPostHeader from './UIPostHeader';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const PostHeader = ({ postId, userRoles, onClickUser, hidePostTarget }) => {
-  const { onClickCommunity } = useNavigation();
+const PostHeader = ({ postId, userRoles, hidePostTarget }) => {
+  const { onClickCommunity, onClickUser } = useNavigation();
   const { post, file, user } = usePost(postId);
   const { targetId, targetType, postedUserId, createdAt, editedAt } = post;
 
@@ -42,13 +42,11 @@ const PostHeader = ({ postId, userRoles, onClickUser, hidePostTarget }) => {
 PostHeader.propTypes = {
   postId: PropTypes.string.isRequired,
   userRoles: PropTypes.array,
-  onClickUser: PropTypes.func,
   hidePostTarget: PropTypes.bool,
 };
 
 PostHeader.defaultProps = {
   userRoles: [],
-  onClickUser: null,
   hidePostTarget: false,
 };
 

@@ -30,7 +30,6 @@ const Post = ({
   currentUserId,
   userRoles,
   noInteractionMessage,
-  onClickUser,
   className,
   hidePostTarget,
 }) => {
@@ -92,7 +91,7 @@ const Post = ({
   return (
     <PostContainer className={cx('post', className)}>
       <PostHeadContainer>
-        <Header postId={postId} onClickUser={onClickUser} hidePostTarget={hidePostTarget} />
+        <Header postId={postId} hidePostTarget={hidePostTarget} />
         <OptionMenu options={allOptions} />
       </PostHeadContainer>
 
@@ -116,7 +115,6 @@ const Post = ({
 Post.propTypes = {
   postId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string,
-  onClickUser: PropTypes.func,
   className: PropTypes.string,
   userRoles: PropTypes.arrayOf(PropTypes.string),
   noInteractionMessage: PropTypes.string,
@@ -127,7 +125,6 @@ Post.defaultProps = {
   currentUserId: '',
   userRoles: [],
   noInteractionMessage: null,
-  onClickUser: () => {},
   className: '',
   hidePostTarget: false,
 };

@@ -15,7 +15,7 @@ const tabs = {
   TIMELINE: 'Timeline',
 };
 
-const UserFeed = ({ userId, currentUserId, onClickUser, onEditUser, onMessageUser }) => {
+const UserFeed = ({ userId, currentUserId, onEditUser, onMessageUser }) => {
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
 
   return (
@@ -27,7 +27,6 @@ const UserFeed = ({ userId, currentUserId, onClickUser, onEditUser, onMessageUse
       <Feed
         targetType={EkoPostTargetType.UserFeed}
         targetId={userId}
-        onClickUser={onClickUser}
         showPostCreator={userId === currentUserId}
       />
     </PageLayout>
@@ -37,13 +36,11 @@ const UserFeed = ({ userId, currentUserId, onClickUser, onEditUser, onMessageUse
 UserFeed.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
-  onClickUser: PropTypes.func,
   onEditUser: PropTypes.func,
   onMessageUser: PropTypes.func,
 };
 
 UserFeed.defaultProps = {
-  onClickUser: () => {},
   onEditUser: () => {},
   onMessageUser: () => {},
 };

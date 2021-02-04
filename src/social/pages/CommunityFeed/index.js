@@ -20,7 +20,7 @@ const tabs = {
   MEMBERS: 'Members',
 };
 
-const CommunityFeed = ({ communityId, onClickUser }) => {
+const CommunityFeed = ({ communityId }) => {
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
 
   const { community } = useCommunity(communityId);
@@ -36,12 +36,11 @@ const CommunityFeed = ({ communityId, onClickUser }) => {
           targetId={communityId}
           showPostCreator={isJoined}
           noPostInteractionMessage={isJoined ? null : 'Join community to interact with all posts'}
-          onClickUser={onClickUser}
         />
       </ConditionalRender>
 
       <ConditionalRender condition={activeTab === tabs.MEMBERS}>
-        <CommunityMembers communityId={communityId} onClickUser={onClickUser} />
+        <CommunityMembers communityId={communityId} />
       </ConditionalRender>
     </PageLayout>
   );
@@ -49,11 +48,6 @@ const CommunityFeed = ({ communityId, onClickUser }) => {
 
 CommunityFeed.propTypes = {
   communityId: PropTypes.string.isRequired,
-  onClickUser: PropTypes.func,
-};
-
-CommunityFeed.defaultProps = {
-  onClickUser: () => {},
 };
 
 export default CommunityFeed;
