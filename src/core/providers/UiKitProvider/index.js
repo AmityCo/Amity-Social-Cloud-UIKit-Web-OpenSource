@@ -25,7 +25,7 @@ const UiKitProvider = ({
   theme = {},
   children /* TODO localization */,
 }) => {
-  const theGlobal = globalThis || window || global;
+  const theGlobal = /* globalThis || */ window || global;
 
   theGlobal.__upstra__ = {
     ...theGlobal.__upstra__,
