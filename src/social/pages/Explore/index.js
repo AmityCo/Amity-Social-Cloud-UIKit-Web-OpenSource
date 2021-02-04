@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 import ExploreHeader from '~/social/components/ExploreHeader';
 import RecommendedList from '~/social/components/community/RecommendedList';
@@ -13,21 +12,13 @@ const PageContainer = styled.div`
   grid-gap: 1.5rem;
 `;
 
-const ExplorePage = ({ onClickCategory }) => (
+const ExplorePage = () => (
   <PageContainer>
     <ExploreHeader />
     <RecommendedList />
     <TrendingList />
-    <CategoriesCard onClick={onClickCategory} />
+    <CategoriesCard />
   </PageContainer>
 );
-
-ExplorePage.propTypes = {
-  onClickCategory: PropTypes.func,
-};
-
-ExplorePage.defaultProps = {
-  onClickCategory: () => {},
-};
 
 export default ExplorePage;
