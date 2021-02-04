@@ -5,10 +5,12 @@ import { EkoImageSize, FileRepository } from 'eko-sdk';
 import { isModerator } from '~/helpers/permissions';
 import withSDK from '~/core/hocs/withSDK';
 import useCommunity from '~/social/hooks/useCommunity';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 import UICommunityInfo from './UICommunityInfo';
 import { confirm } from '~/core/components/Confirm';
 
-const CommunityInfo = ({ communityId, userRoles, onEditCommunity, currentUserId }) => {
+const CommunityInfo = ({ communityId, userRoles, currentUserId }) => {
+  const { onEditCommunity } = useNavigation();
   const { community, communityCategories, joinCommunity, leaveCommunity } = useCommunity(
     communityId,
   );
