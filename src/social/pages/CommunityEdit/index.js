@@ -6,6 +6,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityMembers from '~/social/components/CommunityMembers';
 import CommunityForm from '~/social/components/CommunityForm';
 import { AddMemberModal } from '~/social/components/AddMemberModal';
+import { PageTypes } from '~/social/constants';
 import useCommunity from '~/social/hooks/useCommunity';
 import PageLayout from '~/social/layouts/Page';
 
@@ -14,7 +15,8 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import { CloseCommunityAction, AddMemberAction } from './ExtraAction';
 import { PageTabs } from './constants';
 
-const CommunityEditPage = ({ communityId, onCommunityClosed }) => {
+const CommunityEditPage = ({ communityId }) => {
+  const { onChangePage } = useNavigation();
   const [activeTab, setActiveTab] = useState(PageTabs.EDIT_PROFILE);
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
 
@@ -43,7 +45,10 @@ const CommunityEditPage = ({ communityId, onCommunityClosed }) => {
     switch (activeTab) {
       case PageTabs.EDIT_PROFILE:
         return (
-          <CloseCommunityAction communityId={communityId} onCommunityClosed={onCommunityClosed} />
+          <CloseCommunityAction
+            communityId={communityId}
+            onCommunityClosed={() => onChangePage(PageTypes.Explore)}
+          />
         );
       case PageTabs.MEMBERS:
         return (
@@ -101,11 +106,6 @@ const CommunityEditPage = ({ communityId, onCommunityClosed }) => {
 
 CommunityEditPage.propTypes = {
   communityId: PropTypes.string.isRequired,
-  onCommunityClosed: PropTypes.func,
-};
-
-CommunityEditPage.defaultProps = {
-  onCommunityClosed: () => {},
 };
 
 export default CommunityEditPage;

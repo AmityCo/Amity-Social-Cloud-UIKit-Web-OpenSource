@@ -11,26 +11,11 @@ const CommunitySearch = styled(UiKitCommunitySearch)`
   padding: 0.5rem;
 `;
 
-const CommunitySideMenu = ({
-  className,
-
-  onClickNewsFeed,
-  newsFeedActive,
-
-  onClickExplore,
-  exploreActive,
-
-  activeCommunity,
-}) => (
+const CommunitySideMenu = ({ className, activeCommunity }) => (
   <SideMenu className={className}>
     <CommunitySearch sticky />
 
-    <SideSectionCommunity
-      newsFeedActive={newsFeedActive}
-      onClickNewsFeed={onClickNewsFeed}
-      exploreActive={exploreActive}
-      onClickExplore={onClickExplore}
-    />
+    <SideSectionCommunity />
 
     <SideSectionMyCommunity activeCommunity={activeCommunity} showCreateButton />
   </SideMenu>
@@ -38,19 +23,7 @@ const CommunitySideMenu = ({
 
 CommunitySideMenu.propTypes = {
   className: PropTypes.string,
-
-  onClickNewsFeed: PropTypes.func,
-  newsFeedActive: PropTypes.bool,
-
-  onClickExplore: PropTypes.func,
-  exploreActive: PropTypes.bool,
-
   activeCommunity: PropTypes.string,
-};
-
-CommunitySideMenu.defaultProps = {
-  onClickNewsFeed: () => {},
-  onClickExplore: () => {},
 };
 
 export default CommunitySideMenu;
