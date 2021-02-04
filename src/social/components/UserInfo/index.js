@@ -9,8 +9,8 @@ import UIUserInfo from './UIUserInfo';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const UserInfo = ({ userId, currentUserId, onMessageUser }) => {
-  const { onEditUser } = useNavigation();
+const UserInfo = ({ userId, currentUserId }) => {
+  const { onEditUser, onMessageUser } = useNavigation();
   const { user, file } = useUser(userId);
   const { displayName, description } = user;
   const { fileUrl } = file;
@@ -35,11 +35,6 @@ const UserInfo = ({ userId, currentUserId, onMessageUser }) => {
 UserInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
-  onMessageUser: PropTypes.func,
-};
-
-UserInfo.defaultProps = {
-  onMessageUser: () => {},
 };
 
 export { UIUserInfo };
