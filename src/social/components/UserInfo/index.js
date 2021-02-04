@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import withSDK from '~/core/hocs/withSDK';
 
 import useUser from '~/core/hooks/useUser';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 import UIUserInfo from './UIUserInfo';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const UserInfo = ({ userId, currentUserId, onEditUser, onMessageUser }) => {
+const UserInfo = ({ userId, currentUserId, onMessageUser }) => {
+  const { onEditUser } = useNavigation();
   const { user, file } = useUser(userId);
   const { displayName, description } = user;
   const { fileUrl } = file;
@@ -33,12 +35,10 @@ const UserInfo = ({ userId, currentUserId, onEditUser, onMessageUser }) => {
 UserInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
-  onEditUser: PropTypes.func,
   onMessageUser: PropTypes.func,
 };
 
 UserInfo.defaultProps = {
-  onEditUser: () => {},
   onMessageUser: () => {},
 };
 

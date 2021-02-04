@@ -15,13 +15,11 @@ const tabs = {
   TIMELINE: 'Timeline',
 };
 
-const UserFeed = ({ userId, currentUserId, onEditUser, onMessageUser }) => {
+const UserFeed = ({ userId, currentUserId, onMessageUser }) => {
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
 
   return (
-    <PageLayout
-      aside={<UserInfo userId={userId} onEditUser={onEditUser} onMessageUser={onMessageUser} />}
-    >
+    <PageLayout aside={<UserInfo userId={userId} onMessageUser={onMessageUser} />}>
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <Feed
@@ -36,12 +34,10 @@ const UserFeed = ({ userId, currentUserId, onEditUser, onMessageUser }) => {
 UserFeed.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
-  onEditUser: PropTypes.func,
   onMessageUser: PropTypes.func,
 };
 
 UserFeed.defaultProps = {
-  onEditUser: () => {},
   onMessageUser: () => {},
 };
 
