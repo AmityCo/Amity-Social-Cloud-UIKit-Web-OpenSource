@@ -14,9 +14,3 @@ export const SDKCommunityEdit = props => {
 };
 
 SDKCommunityEdit.storyName = 'Community Edit';
-
-SDKCommunityEdit.argTypes = {
-  onReturnToCommunity: { action: 'onReturnToCommunity()' },
-  onClickUser: { action: 'onClickUser()' },
-  onCommunityClosed: { action: 'onCommunityClosed()' },
-};

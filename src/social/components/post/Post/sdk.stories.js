@@ -8,14 +8,10 @@ export default {
   title: 'SDK Connected/Social/Post',
 };
 
-export const SDKPost = ({ onClickUser }) => {
+export const SDKPost = () => {
   const [post, isLoading] = useOnePost();
   if (isLoading) return <p>Loading...</p>;
-  return <UiKitPost postId={post.postId} onClickUser={onClickUser} />;
+  return <UiKitPost postId={post.postId} />;
 };
 
 SDKPost.storyName = 'Single Post';
-
-SDKPost.argTypes = {
-  onClickUser: { action: 'onClickUser(userId)' },
-};

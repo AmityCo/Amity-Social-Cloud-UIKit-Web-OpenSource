@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { EkoCommunityFilter } from 'eko-sdk';
+import NavigationProvider, { NavigationContext } from '~/social/providers/NavigationProvider';
 
 import UiKitCommunitiesList from '.';
 
@@ -7,19 +8,7 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKCommunitiesList = ({
-  onClickCommunity,
-  communitiesQueryParam,
-  querySearch,
-  onlyShowJoined,
-}) => {
-  const [activeCommunity, setActiveCommunity] = useState(null);
-
-  const handeClickCommunity = communityId => {
-    onClickCommunity(communityId);
-    setActiveCommunity(communityId);
-  };
-
+const SDKCommunitiesList = ({ communitiesQueryParam, querySearch, onlyShowJoined }) => {
   const queryParams = { ...communitiesQueryParam };
 
   if (onlyShowJoined) {
@@ -31,11 +20,16 @@ export const SDKCommunitiesList = ({
   }
 
   return (
-    <UiKitCommunitiesList
-      communitiesQueryParam={queryParams}
-      onClickCommunity={handeClickCommunity}
-      activeCommunity={activeCommunity}
-    />
+    <NavigationProvider>
+      <NavigationContext>
+        {({ page }) => (
+          <UiKitCommunitiesList
+            communitiesQueryParam={queryParams}
+            activeCommunity={page.communityId}
+          />
+        )}
+      </NavigationContext>
+    </NavigationProvider>
   );
 };
 
@@ -49,5 +43,4 @@ SDKCommunitiesList.args = {
 SDKCommunitiesList.argTypes = {
   querySearch: { control: { type: 'text' } },
   onlyShowJoined: { control: { type: 'boolean' } },
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
 };

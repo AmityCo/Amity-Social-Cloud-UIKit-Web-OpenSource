@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Section } from '~/core/components/SideMenuSection/ui.stories';
 import UiKitCommunitySideMenu from '.';
 
 export default {
@@ -11,13 +11,9 @@ export const SDKCommunitySideMenu = ({ ...args }) => <UiKitCommunitySideMenu {..
 SDKCommunitySideMenu.storyName = 'Side menu';
 
 SDKCommunitySideMenu.args = {
-  exploreActive: false,
-  newsFeedActive: false,
+  activeCommunity: '',
 };
 
-SDKCommunitySideMenu.argTypes = {
-  onClickExplore: { action: 'onClickExplore()' },
-  onClickNewsFeed: { action: 'onClickNewsFeed()' },
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
-  onCommunityCreated: { action: 'onCommunityCreated(communityId)' },
+Section.argTypes = {
+  activeCommunity: { control: { type: 'text' } },
 };

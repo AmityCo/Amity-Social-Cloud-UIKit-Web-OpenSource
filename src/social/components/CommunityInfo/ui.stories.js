@@ -40,7 +40,7 @@ UiCommunityInfo.argTypes = {
   description: { control: { type: 'text' } },
   isJoined: { control: { type: 'boolean' } },
   canEditCommunity: { control: { type: 'boolean' } },
-  onEditCommunityClick: { action: 'onEditCommunityClick()' },
+  onEditCommunity: { action: 'onEditCommunity()' },
   joinCommunity: { action: 'joinCommunity()' },
   leaveCommunity: { action: 'leaveCommunity()' },
 };

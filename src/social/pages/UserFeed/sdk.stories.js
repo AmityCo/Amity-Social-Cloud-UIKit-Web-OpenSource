@@ -15,9 +15,3 @@ export const SDKUserFeedPage = props => {
 };
 
 SDKUserFeedPage.storyName = 'User Profile Page';
-
-SDKUserFeedPage.argTypes = {
-  onClickUser: { action: 'onClickUser(userId)' },
-  onEditUser: { action: 'onEditUser()' },
-  onMessageUser: { action: 'onMessageUser()' },
-};

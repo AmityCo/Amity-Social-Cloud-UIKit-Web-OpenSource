@@ -1,7 +1,26 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
 import { PageTypes } from '~/social/constants';
 
-export const NavigationContext = createContext({});
+let defaultValue = {};
+
+if (process.env.NODE_ENV !== 'production') {
+  defaultValue = {
+    page: { type: PageTypes.NewsFeed },
+    onChangePage: type => console.log(`NavigationContext onChangePage(${type})`),
+    onClickCategory: categoryId => console.log(`NavigationContext onClickCategory(${categoryId})`),
+    onClickCommunity: communityId =>
+      console.log(`NavigationContext onClickCommunity(${communityId})`),
+    onClickUser: userId => console.log(`NavigationContext onClickUser(${userId})`),
+    onCommunityCreated: communityId =>
+      console.log(`NavigationContext onCommunityCreated(${communityId})`),
+    onEditCommunity: communityId =>
+      console.log(`NavigationContext onEditCommunity({${communityId})`),
+    onEditUser: userId => console.log(`NavigationContext onEditUser(${userId})`),
+    onMessageUser: userId => console.log(`NavigationContext onMessageUser(${userId})`),
+  };
+}
+
+export const NavigationContext = createContext(defaultValue);
 
 export const useNavigation = () => useContext(NavigationContext);
 

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import PostHeader from './UIPostHeader';
 
 export default {
@@ -20,6 +19,10 @@ UIPostHeader.args = {
 };
 
 UIPostHeader.argTypes = {
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
-  onClickUser: { action: 'onClickUser(userId)' },
+  avatarFileUrl: { control: { type: 'text' } },
+  postAuthorName: { control: { type: 'text' } },
+  postTargetName: { control: { type: 'text' } },
+  timeAgo: { control: { type: 'date' } },
+  isModerator: { control: { type: 'boolean' } },
+  hidePostTarget: { control: { type: 'boolean' } },
 };

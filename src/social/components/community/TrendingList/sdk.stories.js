@@ -15,5 +15,4 @@ SdkTrendingCommunities.args = {
 
 SdkTrendingCommunities.argTypes = {
   slim: { control: { type: 'boolean' } },
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
 };

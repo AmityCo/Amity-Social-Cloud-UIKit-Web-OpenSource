@@ -6,19 +6,9 @@ export default {
 };
 
 export const SdkExplorePage = props => (
-  <div
-    style={{
-      maxWidth: '930px',
-    }}
-  >
+  <div style={{ maxWidth: '930px' }}>
     <ExplorePage {...props} />
   </div>
 );
-
-SdkExplorePage.argTypes = {
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
-  onCommunityCreated: { action: 'onCommunityCreated(communityId)' },
-  onClickCategory: { action: 'onClickCategory(categoryId)' },
-};
 
 SdkExplorePage.storyName = 'Explore';

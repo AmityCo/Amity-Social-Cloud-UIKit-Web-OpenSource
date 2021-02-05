@@ -1,7 +1,5 @@
 import React from 'react';
-
 import useOneCommunity from '~/mock/useOneCommunity';
-
 import UiKitCommunityMembers from '.';
 
 export default {
@@ -15,7 +13,3 @@ export const SDKCommunityMembers = args => {
 };
 
 SDKCommunityMembers.storyName = 'Member list';
-
-SDKCommunityMembers.argTypes = {
-  onClickUser: { action: 'onClickUser(userId)' },
-};

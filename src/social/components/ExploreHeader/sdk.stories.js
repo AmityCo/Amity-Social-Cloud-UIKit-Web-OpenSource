@@ -1,5 +1,4 @@
 import React from 'react';
-
 import UiKitExploreHeader from '.';
 
 export default {
@@ -9,8 +8,3 @@ export default {
 export const SDKExploreHeader = ({ ...props }) => <UiKitExploreHeader {...props} />;
 
 SDKExploreHeader.storyName = 'Explore header';
-
-SDKExploreHeader.argTypes = {
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
-  onCommunityCreated: { action: 'onCommunityCreated(communityId)' },
-};

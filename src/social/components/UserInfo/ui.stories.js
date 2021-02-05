@@ -26,6 +26,4 @@ UiUserInfo.argTypes = {
   description: { control: { type: 'text' } },
   isMe: { control: { type: 'boolean' } },
   postsCount: { control: { type: 'number' } },
-  onEditUser: { action: 'onEditUser(userId)' },
-  onMessageUser: { action: 'onMessageUser(userId)' },
 };

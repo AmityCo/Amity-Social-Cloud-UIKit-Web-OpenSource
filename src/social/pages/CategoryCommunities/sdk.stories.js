@@ -16,5 +16,4 @@ SdkCategoryCommunitiesPage.storyName = 'Category communities page';
 
 SdkCategoryCommunitiesPage.argTypes = {
   onBack: { action: 'onBack()' },
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
 };

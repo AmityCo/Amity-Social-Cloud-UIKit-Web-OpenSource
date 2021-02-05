@@ -14,8 +14,4 @@ export const SDKCommunityProfilePage = props => {
   return <CommunityProfilePage communityId={community.communityId} {...props} />;
 };
 
-SDKCommunityProfilePage.argTypes = {
-  onClickUser: { action: 'onClickUser(userId)' },
-};
-
 SDKCommunityProfilePage.storyName = 'Community Profile Page';

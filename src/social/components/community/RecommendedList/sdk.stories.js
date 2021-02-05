@@ -1,5 +1,4 @@
 import React from 'react';
-
 import UiKitRecommendedCommunitiesList from '.';
 
 export default {
@@ -15,5 +14,5 @@ SDKRecommendedList.args = {
 };
 
 SDKRecommendedList.argTypes = {
-  onClickCommunity: { action: 'onClickCommunity(communityId)' },
+  slim: { control: { type: 'boolean' } },
 };
