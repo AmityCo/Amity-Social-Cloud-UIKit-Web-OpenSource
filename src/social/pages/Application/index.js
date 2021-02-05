@@ -15,6 +15,7 @@ import UserFeedPage from '~/social/pages/UserFeed';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
 import NavigationProvider, { useNavigation } from '~/social/providers/NavigationProvider';
+import PostRendererProvider from '~/social/providers/PostRendererProvider';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -68,17 +69,20 @@ export default ({
   onEditUser,
   onMessageUser,
   onEditCommunity,
+  postRenderers,
 }) => (
-  <NavigationProvider
-    onChangePage={onChangePage}
-    onClickCategory={onClickCategory}
-    onClickCommunity={onClickCommunity}
-    onClickUser={onClickUser}
-    onCommunityCreated={onCommunityCreated}
-    onEditCommunity={onEditCommunity}
-    onEditUser={onEditUser}
-    onMessageUser={onMessageUser}
-  >
-    <Community />
-  </NavigationProvider>
+  <PostRendererProvider postRenderers={postRenderers}>
+    <NavigationProvider
+      onChangePage={onChangePage}
+      onClickCategory={onClickCategory}
+      onClickCommunity={onClickCommunity}
+      onClickUser={onClickUser}
+      onCommunityCreated={onCommunityCreated}
+      onEditCommunity={onEditCommunity}
+      onEditUser={onEditUser}
+      onMessageUser={onMessageUser}
+    >
+      <Community />
+    </NavigationProvider>
+  </PostRendererProvider>
 );
