@@ -13,7 +13,7 @@ export const PostRendererContext = createContext(defaultValue);
 export const usePostRenderer = () => useContext(PostRendererContext);
 
 export default ({ children, postRenderers }) => {
-  const value = useMemo(() => ({ ...defaultValue, ...postRenderers }), [postRenderers]);
+  const value = useMemo(() => ({ ...postRenderers, ...defaultValue }), [postRenderers]);
 
   return <PostRendererContext.Provider value={value}>{children}</PostRendererContext.Provider>;
 };
