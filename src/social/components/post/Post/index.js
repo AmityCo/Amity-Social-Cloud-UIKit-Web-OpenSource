@@ -23,7 +23,7 @@ const Post = ({
 
   const usePostData = usePost(postId);
 
-  const Renderer = renderers[usePostData.post.dataType] || DummyPostRenderer;
+  const Renderer = renderers[usePostData.post.dataType] ?? DummyPostRenderer;
 
   return (
     <Renderer
