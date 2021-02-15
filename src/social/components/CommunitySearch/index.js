@@ -35,7 +35,7 @@ const CommunitySearch = ({ className, sticky = false }) => {
             onChange={handleChange}
             onPick={handlePick}
             className={className}
-            loadMore={hasMore && loadMore}
+            loadMore={hasMore ? loadMore : undefined}
             placeholder={placeholder}
             prepend={
               <SearchIconContainer>

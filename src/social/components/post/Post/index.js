@@ -6,7 +6,7 @@ import usePost from '~/social/hooks/usePost';
 import { usePostRenderer } from '~/social/providers/PostRendererProvider';
 
 function DummyPostRenderer({ post }) {
-  useEffect(() => console.warn(`There is no post renderer for type ${post.dataType}`), []);
+  useEffect(() => console.warn(`There is no post renderer for type ${post.dataType}`), [post]);
 
   return null;
 }
@@ -22,6 +22,10 @@ const Post = ({
   const renderers = usePostRenderer();
 
   const usePostData = usePost(postId);
+
+  if (!usePostData.post.postId) {
+    return null;
+  }
 
   const Renderer = renderers[usePostData.post.dataType] ?? DummyPostRenderer;
 

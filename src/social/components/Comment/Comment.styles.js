@@ -134,7 +134,7 @@ StyledComment.propTypes = {
   handleDelete: PropTypes.func.isRequired,
   isEditing: PropTypes.bool,
   setText: PropTypes.func.isRequired,
-  isReported: PropTypes.number,
+  isReported: PropTypes.bool,
 };
 
 export default StyledComment;

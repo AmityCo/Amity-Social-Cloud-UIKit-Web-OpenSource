@@ -40,21 +40,21 @@ const Community = () => {
           <NewsFeedPage />
         </ConditionalRender>
 
-        <ConditionalRender condition={page.type === PageTypes.CommunityFeed}>
+        {page.type === PageTypes.CommunityFeed && (
           <CommunityFeedPage communityId={page.communityId} />
-        </ConditionalRender>
+        )}
 
-        <ConditionalRender condition={page.type === PageTypes.CommunityEdit}>
+        {page.type === PageTypes.CommunityEdit && (
           <CommunityEditPage communityId={page.communityId} />
-        </ConditionalRender>
+        )}
 
         <ConditionalRender condition={page.type === PageTypes.UserFeed}>
           <UserFeedPage userId={page.userId} />
         </ConditionalRender>
 
-        <ConditionalRender condition={page.type === PageTypes.Category}>
+        {page.type === PageTypes.Category && (
           <CategoryCommunitiesPage categoryId={page.categoryId} />
-        </ConditionalRender>
+        )}
       </MainLayout>
     </ApplicationContainer>
   );

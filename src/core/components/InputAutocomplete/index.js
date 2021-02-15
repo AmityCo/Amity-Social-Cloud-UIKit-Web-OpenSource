@@ -108,7 +108,7 @@ InputAutocomplete.defaultProps = {
 InputAutocomplete.propTypes = {
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  items: PropTypes.object,
+  items: PropTypes.array,
   filter: PropTypes.func,
   loadMore: PropTypes.func,
   expand: PropTypes.number,
