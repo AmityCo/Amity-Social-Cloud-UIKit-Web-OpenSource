@@ -100,15 +100,15 @@ const PostCreatorBar = ({
   const [setError] = useErrorNotification();
 
   const createPost = async () => {
-    const payload = {};
+    const data = {};
 
-    if (postText) payload.text = postText;
-    if (postImages.length) payload.imageIds = postImages.map(i => i.fileId);
-    if (postFiles.length) payload.fileIds = postFiles.map(f => f.fileId);
+    if (postText) data.text = postText;
+    if (postImages.length) data.images = postImages.map(i => i.fileId);
+    if (postFiles.length) data.files = postFiles.map(f => f.fileId);
 
     const newPostLiveObject = PostRepository.createPost({
-      ...payload,
       ...target,
+      data,
     });
 
     newPostLiveObject.on('dataStatusChanged', () => {
