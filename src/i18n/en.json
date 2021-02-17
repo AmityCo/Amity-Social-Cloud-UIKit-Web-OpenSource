@@ -27,6 +27,7 @@
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
   "collapsible.viewAllComments": "View all comments",
+  "collapsible.viewAllReplies": "View all replies",
   "community.createSuccess": "Your community was successfully created",
   "community.updateSuccess": "Your community was successfully updated",
   "community.editProfile": "Edit profile",
@@ -42,7 +43,11 @@
   "user.editProfile": "Edit profile",
   "user.message": "Message",
   "report.reportUser": "Report user",
+  "report.reportComment": "Report comment",
+  "report.unreportComment": "Unreport comment",
   "report.reportSent": "Report sent",
   "report.unreportSent": "Unreport sent",
-  "comment.deleted": "This comment has been deleted"
+  "comment.deleted": "This comment has been deleted",
+  "comment.delete": "Delete comment",
+  "comment.edit": "Edit comment"
 }

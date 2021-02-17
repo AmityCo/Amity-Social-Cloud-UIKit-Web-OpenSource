@@ -8,14 +8,14 @@ export default {
 };
 
 export const UiEngagementBar = ({ onClickComment, ...props }) => {
-  const [{ isCommentComposeOpen }, updateArgs] = useArgs();
+  const [{ isComposeBarDisplayed }, updateArgs] = useArgs();
 
-  const handleOpenComment = () => {
+  const handleDisplayComposeBar = () => {
     onClickComment();
-    updateArgs({ isCommentComposeOpen: !isCommentComposeOpen });
+    updateArgs({ isComposeBarDisplayed: !isComposeBarDisplayed });
   };
 
-  return <UIEngagementBar {...props} onClickComment={handleOpenComment} />;
+  return <UIEngagementBar {...props} onClickComment={handleDisplayComposeBar} />;
 };
 
 UiEngagementBar.storyName = 'Engagement Bar';
@@ -25,8 +25,7 @@ UiEngagementBar.args = {
   totalLikes: 0,
   totalComments: 0,
   noInteractionMessage: '',
-  isCommentComposeOpen: false,
-  commentIds: [],
+  isComposeBarDisplayed: false,
 };
 
 UiEngagementBar.argTypes = {

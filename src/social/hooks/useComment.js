@@ -1,7 +1,6 @@
 import { CommentRepository } from 'eko-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
-import useLiveCollection from '~/core/hooks/useLiveCollection';
 import useMemoAsync from '~/core/hooks/useMemoAsync';
 
 import useUser from '~/core/hooks/useUser';
@@ -13,18 +12,8 @@ const useComment = ({ commentId }) => {
 
   const { user: commentAuthor, file: commentAuthorAvatar } = useUser(userId, [userId]);
 
-  const [commentReplies, commentRepliesHasMore, commentRepliesLoadMore] = useLiveCollection(
-    () =>
-      CommentRepository.queryComments({
-        parentId: commentId,
-        filterByParentId: true,
-        referenceId,
-      }),
-    [commentId, referenceId],
-  );
-
   const isFlaggedByMe = useMemoAsync(
-    async () => CommentRepository.isFlaggedByMe(comment?.commentId),
+    async () => !!(comment?.commentId && CommentRepository.isFlaggedByMe(comment?.commentId)),
     [comment],
   );
 
@@ -57,9 +46,6 @@ const useComment = ({ commentId }) => {
     comment,
     commentAuthor,
     commentAuthorAvatar,
-    commentReplies,
-    commentRepliesHasMore,
-    commentRepliesLoadMore,
     handleReportComment,
     handleReplyToComment,
     handleEditComment,

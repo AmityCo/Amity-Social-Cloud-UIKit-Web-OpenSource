@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
+import { EkoCommentReferenceType } from 'eko-sdk';
 
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import PostLikeButton from '~/social/components/post/LikeButton';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
-import Comment from '~/social/components/Comment';
-import LoadMore from '~/social/components/LoadMore';
 import { SecondaryButton } from '~/core/components/Button';
 import {
   EngagementBarContainer,
@@ -17,6 +16,9 @@ import {
   CommentIcon,
   NoInteractionMessage,
 } from './styles';
+import CommentList from '~/social/components/CommentList';
+
+const COMMENTS_PER_PAGE = 5;
 
 const UIEngagementBar = ({
   postId,
@@ -24,11 +26,8 @@ const UIEngagementBar = ({
   totalComments,
   noInteractionMessage,
   onClickComment,
-  isCommentComposeOpen,
+  isComposeBarDisplayed,
   handleAddComment,
-  commentIds,
-  commentsHasMore,
-  commentsLoadMore,
 }) => (
   <EngagementBarContainer>
     <Counters>
@@ -47,15 +46,13 @@ const UIEngagementBar = ({
     </Counters>
     <ConditionalRender condition={!!noInteractionMessage}>
       <>
-        <LoadMore
-          hasMore={commentsHasMore}
-          loadMore={commentsLoadMore}
-          text={<FormattedMessage id="collapsible.viewAllComments" />}
-        >
-          {commentIds.map(commentId => (
-            <Comment key={commentId} commentId={commentId} canInteract={false} />
-          ))}
-        </LoadMore>
+        <CommentList
+          referenceId={postId}
+          referenceType={EkoCommentReferenceType.Post}
+          last={COMMENTS_PER_PAGE}
+          canInteract={false}
+          loadMoreText={<FormattedMessage id="collapsible.viewAllComments" />}
+        />
         {noInteractionMessage && (
           <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>
         )}
@@ -67,16 +64,13 @@ const UIEngagementBar = ({
             <CommentIcon /> Comment
           </SecondaryButton>
         </InteractionBar>
-        <LoadMore
-          hasMore={commentsHasMore}
-          loadMore={commentsLoadMore}
-          text={<FormattedMessage id="collapsible.viewAllComments" />}
-        >
-          {commentIds.map(commentId => (
-            <Comment key={commentId} commentId={commentId} />
-          ))}
-        </LoadMore>
-        <ConditionalRender condition={isCommentComposeOpen}>
+        <CommentList
+          referenceId={postId}
+          referenceType={EkoCommentReferenceType.Post}
+          last={COMMENTS_PER_PAGE}
+          loadMoreText={<FormattedMessage id="collapsible.viewAllComments" />}
+        />
+        <ConditionalRender condition={isComposeBarDisplayed}>
           <CommentComposeBar onSubmit={handleAddComment} />
         </ConditionalRender>
       </>
@@ -90,11 +84,8 @@ UIEngagementBar.propTypes = {
   totalComments: PropTypes.number,
   noInteractionMessage: PropTypes.string,
   onClickComment: PropTypes.func,
-  isCommentComposeOpen: PropTypes.bool,
+  isComposeBarDisplayed: PropTypes.bool,
   handleAddComment: PropTypes.func,
-  commentIds: PropTypes.arrayOf(PropTypes.string),
-  commentsHasMore: PropTypes.bool,
-  commentsLoadMore: PropTypes.func,
 };
 
 UIEngagementBar.defaultProps = {
@@ -103,11 +94,8 @@ UIEngagementBar.defaultProps = {
   totalComments: 0,
   noInteractionMessage: null,
   onClickComment: () => {},
-  isCommentComposeOpen: false,
+  isComposeBarDisplayed: false,
   handleAddComment: () => {},
-  commentIds: [],
-  commentsHasMore: false,
-  commentsLoadMore: () => {},
 };
 
 export default customizableComponent('UIEngagementBar', UIEngagementBar);

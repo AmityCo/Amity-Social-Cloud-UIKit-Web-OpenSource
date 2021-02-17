@@ -51,12 +51,12 @@ const StyledComment = ({
   isReported,
 }) => {
   const options = [
-    canEdit && { name: 'Edit comment', action: startEditing },
+    canEdit && { name: 'comment.edit', action: startEditing },
     canReport && {
-      name: `${isReported ? 'Unreport ' : 'Report '} comment`,
+      name: isReported ? 'report.unreportComment' : 'report.reportComment',
       action: handleReportComment,
     },
-    canDelete && { name: 'Delete comment', action: handleDelete },
+    canDelete && { name: 'comment.delete', action: handleDelete },
   ].filter(Boolean);
 
   return (

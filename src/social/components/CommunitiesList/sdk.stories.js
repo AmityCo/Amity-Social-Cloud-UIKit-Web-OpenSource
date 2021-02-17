@@ -8,7 +8,7 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-const SDKCommunitiesList = ({ communitiesQueryParam, querySearch, onlyShowJoined }) => {
+export const SDKCommunitiesList = ({ communitiesQueryParam, querySearch, onlyShowJoined }) => {
   const queryParams = { ...communitiesQueryParam };
 
   if (onlyShowJoined) {

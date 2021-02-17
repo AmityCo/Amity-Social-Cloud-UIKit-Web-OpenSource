@@ -1,17 +1,17 @@
 /* eslint-disable import/no-cycle */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
 import { FormattedMessage } from 'react-intl';
+
 import withSDK from '~/core/hocs/withSDK';
 import { confirm } from '~/core/components/Confirm';
 import customizableComponent from '~/core/hocs/customization';
 import useComment from '~/social/hooks/useComment';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
+import CommentList from '~/social/components/CommentList';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import { notification } from '~/core/components/Notification';
 import { isModerator } from '~/helpers/permissions';
-import CommentReplies from './CommentReplies';
 import StyledComment from './Comment.styles';
 import {
   CommentBlock,
@@ -29,6 +29,8 @@ export const ENABLE_REPLIES = false;
 
 // TODO: react-intl
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
+
+const REPLIES_PER_PAGE = 5;
 
 const DeletedComment = () => {
   return (
@@ -60,7 +62,6 @@ const Comment = ({
     comment,
     commentAuthor,
     commentAuthorAvatar,
-    commentReplies,
     handleReportComment,
     handleReplyToComment,
     handleEditComment,
@@ -96,7 +97,7 @@ const Comment = ({
   }, [comment?.data?.text]);
 
   const onClickReply = () => {
-    setIsReplying(true);
+    setIsReplying(preValue => !preValue);
   };
 
   const startEditing = () => {
@@ -117,7 +118,7 @@ const Comment = ({
   const deleteComment = () => {
     // TODO: react-intl
     confirm({
-      title: 'Delete comment',
+      title: <FormattedMessage id="comment.delete" />,
       content: 'This comment will be permanently deleted. Continue?',
       cancelText: 'Cancel',
       okText: 'Delete',
@@ -128,7 +129,7 @@ const Comment = ({
   const canDelete = isCommentOwner || isModerator(userRoles);
   const canEdit = canInteract && isCommentOwner;
   const canLike = canInteract;
-  const canReply = canInteract && !isReplyComment && ENABLE_REPLIES;
+  const canReply = canInteract && !isReplyComment;
   const canReport = canInteract && !isCommentOwner;
 
   const renderedComment = (
@@ -162,19 +163,25 @@ const Comment = ({
         <CommentBlock>
           <DeletedComment />
         </CommentBlock>
-        <ConditionalRender condition={isReplyComment && ENABLE_REPLIES}>
+        <ConditionalRender condition={isReplyComment}>
           <ReplyContainer>{renderedComment}</ReplyContainer>
           <CommentBlock>
             <CommentContainer>{renderedComment}</CommentContainer>
-
-            {ENABLE_REPLIES && (
-              <CommentReplies canInteract={canInteract} replyIds={commentReplies} />
-            )}
+            <CommentList
+              parentId={commentId}
+              referenceId={comment.referenceId}
+              last={REPLIES_PER_PAGE}
+              canInteract={canInteract}
+              isReplyComment
+            />
 
             <ConditionalRender condition={isReplying}>
               <CommentComposeBar
                 userToReply={commentAuthor.displayName}
-                onSubmit={handleReplyToComment}
+                onSubmit={replyText => {
+                  handleReplyToComment(replyText);
+                  setIsReplying(false);
+                }}
               />
             </ConditionalRender>
           </CommentBlock>
