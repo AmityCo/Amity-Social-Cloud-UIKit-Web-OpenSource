@@ -139,7 +139,7 @@ const CommunityForm = ({
         avatarFileId,
       }),
     );
-  }, [displayName, description, categoryId, userIds, isPublic]);
+  }, [displayName, description, categoryId, userIds, isPublic, avatarFileId]);
 
   const validateAndSubmit = async data => {
     if (!data.displayName.trim()) {
