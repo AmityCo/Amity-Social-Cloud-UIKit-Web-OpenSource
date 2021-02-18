@@ -53,7 +53,7 @@ CommentList.propTypes = {
   last: PropTypes.number,
   canInteract: PropTypes.bool,
   isReplyComment: PropTypes.bool,
-  loadMoreText: PropTypes.string,
+  loadMoreText: PropTypes.node,
 };
 
 export default CommentList;

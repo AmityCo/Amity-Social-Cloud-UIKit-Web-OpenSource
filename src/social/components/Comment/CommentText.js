@@ -5,20 +5,20 @@ import { CommentContent, ReadMoreButton } from './styles';
 
 const COMMENT_MAX_LINES = 8;
 
-const CommentText = ({ children }) => {
+const CommentText = ({ children, className, maxLines = COMMENT_MAX_LINES }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const expand = () => setIsExpanded(true);
 
   return (
     <Linkify>
       {isExpanded ? (
-        <CommentContent>{children}</CommentContent>
+        <CommentContent className={className}>{children}</CommentContent>
       ) : (
         <Truncate
-          lines={COMMENT_MAX_LINES}
+          lines={maxLines}
           ellipsis={<ReadMoreButton onClick={expand}>...Read more</ReadMoreButton>}
         >
-          <CommentContent>{children}</CommentContent>
+          <CommentContent className={className}>{children}</CommentContent>
         </Truncate>
       )}
     </Linkify>

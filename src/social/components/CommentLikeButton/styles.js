@@ -12,17 +12,20 @@ const isLikedStyle = css`
 export const StyledLikeButton = styled(SecondaryButton)`
   background-color: transparent;
   ${({ active }) => active && isLikedStyle}
+
+  > :not(:first-child) {
+    margin-left: 5px;
+  }
 `;
 
 export const LikeIcon = styled(ThumbsUp)`
   font-size: 16px;
-  margin-right: 5px;
   ${({ $isLiked }) => $isLiked && isLikedStyle}
 `;
 
 const StyledCommentLikeButton = ({ onClick, isActive, isDisabled, totalLikes }) => (
   <StyledLikeButton onClick={onClick} active={isActive} disabled={isDisabled}>
-    <LikeIcon $isLiked={isActive} /> {totalLikes > 0 ? totalLikes : ''}
+    <LikeIcon $isLiked={isActive} /> {totalLikes > 0 ? <span>{totalLikes}</span> : ''}
   </StyledLikeButton>
 );
 

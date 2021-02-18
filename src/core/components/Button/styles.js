@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 const commonButtonStyles = ({ theme }) => css`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   border-radius: 4px;
   outline: none;

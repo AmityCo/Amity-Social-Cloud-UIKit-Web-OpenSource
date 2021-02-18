@@ -114,7 +114,12 @@ export const EditedMark = styled.span`
 
 export const ReadMoreButton = styled(SecondaryButton)`
   color: ${({ theme }) => theme.palette.primary.main};
-  padding: 4px;
+  padding: 0 0 0 4px;
+
+  &:hover {
+    background: none;
+    text-decoration: underline;
+  }
 `;
 
 export const InteractionBar = styled.div`
