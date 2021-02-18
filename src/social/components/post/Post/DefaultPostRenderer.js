@@ -1,4 +1,3 @@
-import cx from 'classnames';
 import { EkoCommunityUserMembership, EkoPostTargetType } from 'eko-sdk';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -86,7 +85,7 @@ const DefaultPostRenderer = ({
   const postMaxLines = hasChildrenPosts ? MAX_TEXT_LINES_WITH_CHILDREN : MAX_TEXT_LINES_DEFAULT;
 
   return (
-    <PostContainer className={cx('post', className)}>
+    <PostContainer className={className}>
       <PostHeadContainer>
         <Header hidePostTarget={hidePostTarget} postId={postId} />
         <OptionMenu options={allOptions} />

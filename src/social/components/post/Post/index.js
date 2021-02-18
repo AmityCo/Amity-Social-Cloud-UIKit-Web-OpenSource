@@ -1,15 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 import usePost from '~/social/hooks/usePost';
 import { usePostRenderer } from '~/social/providers/PostRendererProvider';
-
-function DummyPostRenderer({ post }) {
-  useEffect(() => console.warn(`There is no post renderer for type ${post.dataType}`), [post]);
-
-  return null;
-}
+import UnknownPostRenderer from './UnknownPostRenderer';
 
 const Post = ({
   postId,
@@ -27,7 +22,7 @@ const Post = ({
     return null;
   }
 
-  const Renderer = renderers[usePostData.post.dataType] ?? DummyPostRenderer;
+  const Renderer = renderers[usePostData.post.dataType] ?? UnknownPostRenderer;
 
   return (
     <Renderer

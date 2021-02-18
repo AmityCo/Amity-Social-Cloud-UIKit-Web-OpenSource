@@ -23,6 +23,8 @@
   "post.edited": "Edited",
   "post.like": "Like",
   "post.liked": "Liked",
+  "post.unknownPost.description": "We couldn’t recognize this post.",
+  "post.unknownPost.title": "Something went wrong",
   "delete": "Delete",
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
