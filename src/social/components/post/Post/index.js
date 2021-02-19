@@ -4,6 +4,7 @@ import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 import usePost from '~/social/hooks/usePost';
 import { usePostRenderer } from '~/social/providers/PostRendererProvider';
+import PostErrorBoundary from './PostErrorBoundary';
 import UnknownPostRenderer from './UnknownPostRenderer';
 
 const Post = ({
@@ -25,14 +26,16 @@ const Post = ({
   const Renderer = renderers[usePostData.post.dataType] ?? UnknownPostRenderer;
 
   return (
-    <Renderer
-      {...usePostData}
-      className={className}
-      currentUserId={currentUserId}
-      hidePostTarget={hidePostTarget}
-      noInteractionMessage={noInteractionMessage}
-      userRoles={userRoles}
-    />
+    <PostErrorBoundary>
+      <Renderer
+        {...usePostData}
+        className={className}
+        currentUserId={currentUserId}
+        hidePostTarget={hidePostTarget}
+        noInteractionMessage={noInteractionMessage}
+        userRoles={userRoles}
+      />
+    </PostErrorBoundary>
   );
 };
 

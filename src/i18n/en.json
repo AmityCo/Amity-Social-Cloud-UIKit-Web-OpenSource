@@ -25,6 +25,8 @@
   "post.liked": "Liked",
   "post.unknownPost.description": "We couldn’t recognize this post.",
   "post.unknownPost.title": "Something went wrong",
+  "post.renderingError.description": "We couldn’t render this post.",
+  "post.renderingError.title": "Something went wrong",
   "delete": "Delete",
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
