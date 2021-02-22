@@ -47,7 +47,7 @@ const CommunityEditPage = ({ communityId }) => {
         return (
           <CloseCommunityAction
             communityId={communityId}
-            onCommunityClosed={() => onChangePage(PageTypes.Explore)}
+            onCommunityClosed={() => onChangePage(PageTypes.NewsFeed)}
           />
         );
       case PageTabs.MEMBERS:
