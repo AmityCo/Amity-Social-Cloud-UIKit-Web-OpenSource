@@ -34,7 +34,6 @@ const Foreground = styled.div`
 
 const Search = styled.div`
   grid-area: search;
-  color: ${({ theme }) => theme.palette.system.background};
 `;
 
 const Create = styled.div`
