@@ -33,10 +33,10 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
 
   // Update parent post text and delete removed children posts.
   const handleSave = () => {
-    handleUpdatePost({ text: localParentText });
     localRemovedChildren.forEach(childPostId => {
       PostRepository.deletePost(childPostId);
     });
+    handleUpdatePost({ text: localParentText });
     onSave();
   };
 
