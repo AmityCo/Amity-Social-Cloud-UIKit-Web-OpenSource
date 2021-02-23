@@ -38,7 +38,7 @@ const StyledComment = ({
   canReply = false,
   canReport = true,
   createdAt,
-  updatedAt,
+  editedAt,
   text,
   onClickReply,
   handleReportComment,
@@ -68,7 +68,7 @@ const StyledComment = ({
             <span>
               ...
               <CommentDate date={createdAt} />
-              {updatedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
+              {editedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
             </span>
           }
           lines={2}
@@ -77,7 +77,7 @@ const StyledComment = ({
             <AuthorName>{authorName}</AuthorName>
             <Truncate.Atom>
               <CommentDate date={createdAt} />
-              {updatedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
+              {editedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
             </Truncate.Atom>
           </CommentHeader>
         </Truncate>
@@ -124,7 +124,7 @@ StyledComment.propTypes = {
   canReply: PropTypes.bool,
   canReport: PropTypes.bool,
   createdAt: PropTypes.instanceOf(Date),
-  updatedAt: PropTypes.instanceOf(Date),
+  editedAt: PropTypes.instanceOf(Date),
   text: PropTypes.string,
   onClickReply: PropTypes.func,
   handleReportComment: PropTypes.func,
