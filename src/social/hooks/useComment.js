@@ -13,7 +13,7 @@ const useComment = ({ commentId }) => {
   const { user: commentAuthor, file: commentAuthorAvatar } = useUser(userId, [userId]);
 
   const isFlaggedByMe = useMemoAsync(
-    async () => !!(comment?.commentId && CommentRepository.isFlaggedByMe(comment?.commentId)),
+    async () => (comment?.commentId ? CommentRepository.isFlaggedByMe(comment.commentId) : false),
     [comment],
   );
 
