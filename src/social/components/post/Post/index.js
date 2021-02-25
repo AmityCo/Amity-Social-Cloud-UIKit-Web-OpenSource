@@ -17,22 +17,23 @@ const Post = ({
 }) => {
   const renderers = usePostRenderer();
 
-  const usePostData = usePost(postId);
+  const { post, ...others } = usePost(postId);
 
-  if (!usePostData.post.postId) {
+  if (!post?.postId) {
     return null;
   }
 
-  const Renderer = renderers[usePostData.post.dataType] ?? UnknownPostRenderer;
+  const Renderer = renderers[post?.dataType] ?? UnknownPostRenderer;
 
   return (
     <PostErrorBoundary>
       <Renderer
-        {...usePostData}
+        {...others}
         className={className}
         currentUserId={currentUserId}
         hidePostTarget={hidePostTarget}
         noInteractionMessage={noInteractionMessage}
+        post={post}
         userRoles={userRoles}
       />
     </PostErrorBoundary>
