@@ -32,6 +32,9 @@ const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const REPLIES_PER_PAGE = 5;
 
+// temporary disable until 1.7.0 will be released
+const REPLY_ENABLED = false;
+
 const DeletedComment = () => {
   return (
     <DeletedCommentContainer>
@@ -129,7 +132,7 @@ const Comment = ({
   const canDelete = isCommentOwner || isModerator(userRoles);
   const canEdit = canInteract && isCommentOwner;
   const canLike = canInteract;
-  const canReply = canInteract && !isReplyComment;
+  const canReply = REPLY_ENABLED && canInteract && !isReplyComment;
   const canReport = canInteract && !isCommentOwner;
 
   const renderedComment = (
@@ -163,7 +166,7 @@ const Comment = ({
         <CommentBlock>
           <DeletedComment />
         </CommentBlock>
-        <ConditionalRender condition={isReplyComment}>
+        <ConditionalRender condition={REPLY_ENABLED && isReplyComment}>
           <ReplyContainer>{renderedComment}</ReplyContainer>
           <CommentBlock>
             <CommentContainer>{renderedComment}</CommentContainer>
@@ -175,15 +178,17 @@ const Comment = ({
               isReplyComment
             />
 
-            <ConditionalRender condition={isReplying}>
-              <CommentComposeBar
-                userToReply={commentAuthor.displayName}
-                onSubmit={replyText => {
-                  handleReplyToComment(replyText);
-                  setIsReplying(false);
-                }}
-              />
-            </ConditionalRender>
+            {REPLY_ENABLED && (
+              <ConditionalRender condition={isReplying}>
+                <CommentComposeBar
+                  userToReply={commentAuthor.displayName}
+                  onSubmit={replyText => {
+                    handleReplyToComment(replyText);
+                    setIsReplying(false);
+                  }}
+                />
+              </ConditionalRender>
+            )}
           </CommentBlock>
         </ConditionalRender>
       </ConditionalRender>
