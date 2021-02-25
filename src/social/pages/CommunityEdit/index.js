@@ -8,6 +8,7 @@ import CommunityForm from '~/social/components/CommunityForm';
 import { AddMemberModal } from '~/social/components/AddMemberModal';
 import { PageTypes } from '~/social/constants';
 import useCommunity from '~/social/hooks/useCommunity';
+import useCommunityMembers from '~/social/hooks/useCommunityMembers';
 import PageLayout from '~/social/layouts/Page';
 
 import CommunityEditHeader from '~/social/components/community/EditPageHeader';
@@ -25,6 +26,7 @@ const CommunityEditPage = ({ communityId }) => {
 
   const { onClickCommunity } = useNavigation();
   const { community, updateCommunity } = useCommunity(communityId);
+  const { addMembers } = useCommunityMembers(communityId);
 
   const handleReturnToCommunity = () => onClickCommunity(communityId);
 
@@ -33,13 +35,10 @@ const CommunityEditPage = ({ communityId }) => {
     handleReturnToCommunity();
   };
 
-  // TODO - use communityRepository.addMembers when add members is supported by moderation.
-  const submitAddMembers = () => {
+  const submitAddMembers = async ({ members }) => {
+    await addMembers(members);
     closeAddMemberModal();
   };
-
-  // TODO - remove this once adding members is supported.
-  const canAddMembers = false;
 
   const renderAsideComponent = () => {
     switch (activeTab) {
@@ -53,7 +52,7 @@ const CommunityEditPage = ({ communityId }) => {
       case PageTabs.MEMBERS:
         return (
           <>
-            {canAddMembers && <AddMemberAction action={openAddMemberModal} />}
+            <AddMemberAction action={openAddMemberModal} />
             <ConditionalRender condition={addMemberModalOpen}>
               <AddMemberModal
                 closeConfirm={closeAddMemberModal}

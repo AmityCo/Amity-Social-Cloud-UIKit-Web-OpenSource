@@ -39,8 +39,8 @@ const OptionMenu = ({
           align={align}
           handleClose={() => setIsOpen(false)}
         >
-          {options.map(({ name, action }) => (
-            <Option key={name} onClick={attachCanceling(action)}>
+          {options.map(({ name, action, className: optionClassName }) => (
+            <Option key={name} onClick={attachCanceling(action)} className={optionClassName}>
               <FormattedMessage id={name} />
             </Option>
           ))}

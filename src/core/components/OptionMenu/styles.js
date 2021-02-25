@@ -22,6 +22,10 @@ export const Option = styled.div`
   &:hover {
     background: #f2f2f4;
   }
+
+  &.danger-zone {
+    color: ${({ theme }) => theme.palette.alert.main};
+  }
 `;
 
 export const Container = styled.div`

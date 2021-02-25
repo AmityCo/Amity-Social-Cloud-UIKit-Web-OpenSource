@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { EkoImageSize, FileRepository } from 'eko-sdk';
 
-import { isModerator } from '~/helpers/permissions';
 import withSDK from '~/core/hocs/withSDK';
 import useCommunity from '~/social/hooks/useCommunity';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import UICommunityInfo from './UICommunityInfo';
 import { confirm } from '~/core/components/Confirm';
+import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 
-const CommunityInfo = ({ communityId, userRoles, currentUserId }) => {
+const CommunityInfo = ({ communityId, currentUserId }) => {
   const { onEditCommunity } = useNavigation();
   const { community, communityCategories, joinCommunity, leaveCommunity } = useCommunity(
     communityId,
@@ -35,10 +35,14 @@ const CommunityInfo = ({ communityId, userRoles, currentUserId }) => {
       onOk: () => leaveCommunity(community.communityId),
     });
 
-  const { postsCount, membersCount, description, isJoined, userId } = community;
-  const isOwner = currentUserId === userId;
-  const canEditCommunity = (isModerator(userRoles) && isJoined) || isOwner;
-  const canLeaveCommunity = !isOwner;
+  const { postsCount, membersCount, description, isJoined, userId: communityOwnerId } = community;
+  const { isCommunityOwner, isCommunityModerator } = useCommunityOneMember(
+    communityId,
+    currentUserId,
+    communityOwnerId,
+  );
+  const canEditCommunity = (isCommunityModerator && isJoined) || isCommunityOwner;
+  const canLeaveCommunity = !isCommunityOwner;
   const categoryNames = communityCategories.map(({ name }) => name);
 
   return (

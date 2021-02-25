@@ -25,7 +25,7 @@ const UIPostHeader = ({
   postAuthorName,
   postTargetName,
   timeAgo,
-  isModerator,
+  isCommunityModerator,
   isEdited,
   onClickCommunity,
   onClickUser,
@@ -54,7 +54,7 @@ const UIPostHeader = ({
   const renderAdditionalInfo = () => {
     return (
       <AdditionalInfo showTime={!!timeAgo}>
-        <ConditionalRender condition={isModerator}>
+        <ConditionalRender condition={isCommunityModerator}>
           <ModeratorBadge>
             <ShieldIcon /> <FormattedMessage id="moderator" />
           </ModeratorBadge>
@@ -87,7 +87,7 @@ UIPostHeader.propTypes = {
   postAuthorName: PropTypes.string,
   postTargetName: PropTypes.string,
   timeAgo: PropTypes.instanceOf(Date),
-  isModerator: PropTypes.bool,
+  isCommunityModerator: PropTypes.bool,
   isEdited: PropTypes.bool,
   onClickCommunity: PropTypes.func,
   onClickUser: PropTypes.func,
@@ -99,7 +99,7 @@ UIPostHeader.defaultProps = {
   postAuthorName: '',
   postTargetName: '',
   timeAgo: null,
-  isModerator: false,
+  isCommunityModerator: false,
   isEdited: false,
   onClickCommunity: null,
   onClickUser: null,
