@@ -25,7 +25,9 @@ const DefaultPostRenderer = ({
   currentUserId,
   handleDeletePost,
   handleReportPost,
+  handleUnreportPost,
   hidePostTarget,
+  isFlaggedByMe,
   noInteractionMessage,
   post,
   userRoles,
@@ -53,11 +55,26 @@ const DefaultPostRenderer = ({
       onOk: handleDeletePost,
     });
 
-  const onReportClick = () => {
-    handleReportPost();
-    notification.success({
-      content: <FormattedMessage id="report.reportSent" />,
-    });
+  const onReportClick = async () => {
+    try {
+      await handleReportPost();
+      notification.success({
+        content: <FormattedMessage id="report.reportSent" />,
+      });
+    } catch (error) {
+      notification.error({ content: error.message });
+    }
+  };
+
+  const onUnreportClick = async () => {
+    try {
+      await handleUnreportPost();
+      notification.success({
+        content: <FormattedMessage id="report.unreportSent" />,
+      });
+    } catch (error) {
+      notification.error({ content: error.message });
+    }
   };
 
   const allOptions = [
@@ -71,8 +88,8 @@ const DefaultPostRenderer = ({
     },
     !isMyPost &&
       (isAdmin || !isCommunityPost || isMember) && {
-        name: 'post.reportPost',
-        action: onReportClick,
+        name: isFlaggedByMe ? 'post.unreportPost' : 'post.reportPost',
+        action: isFlaggedByMe ? onUnreportClick : onReportClick,
       },
   ].filter(Boolean);
 
@@ -114,7 +131,9 @@ DefaultPostRenderer.propTypes = {
   currentUserId: PropTypes.string,
   handleDeletePost: PropTypes.func.isRequired,
   handleReportPost: PropTypes.func.isRequired,
+  handleUnreportPost: PropTypes.func.isRequired,
   hidePostTarget: PropTypes.bool,
+  isFlaggedByMe: PropTypes.bool,
   noInteractionMessage: PropTypes.string,
   post: PropTypes.shape({
     data: PropTypes.shape({}),
@@ -132,6 +151,7 @@ DefaultPostRenderer.defaultProps = {
   className: '',
   currentUserId: '',
   hidePostTarget: false,
+  isFlaggedByMe: false,
   noInteractionMessage: null,
   userRoles: [],
 };
