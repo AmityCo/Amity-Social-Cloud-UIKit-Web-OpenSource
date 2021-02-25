@@ -1,5 +1,72 @@
 # Changelog
 
+## [v1.6.0-rc.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.5.8...v1.6.0-rc.0)
+
+#### 25 February 2021
+
+### Fixes
+
+- do not allow the user to report the post if the post is already reported ([`b25fd8d`](https://gitlab.com/upstra/web/ui-kit/commit/b25fd8d821a161960dd47fc736f786815c5d240e)) (by Valeriy Malyshev)
+- do not mark a comment as edited if it has been reported ([`caedac4`](https://gitlab.com/upstra/web/ui-kit/commit/caedac4def33a9e0e33b1952c0502514076f6df2)) (by Valeriy Malyshev)
+- the user search ([`510aca7`](https://gitlab.com/upstra/web/ui-kit/commit/510aca7000769ae12a8cba9ec9b97b5fbe8dce2f)) (by Valeriy Malyshev)
+- do not show deleted files in post immediately after they have been deleted ([`54b72f7`](https://gitlab.com/upstra/web/ui-kit/commit/54b72f78e108f80cbc3fc5cd9bae4cc299724b33)) (by Valeriy Malyshev)
+- redirect to NewsFeed page upon closing community ([`720b6a0`](https://gitlab.com/upstra/web/ui-kit/commit/720b6a08b22904a62bcab9514e90d581d75cda5c)) (by Valeriy Malyshev)
+- input color for search bar at Explore page ([`c33869d`](https://gitlab.com/upstra/web/ui-kit/commit/c33869dae85e6e0f7de3f80f8ec490b5415eb910)) (by Valeriy Malyshev)
+
+### Commits
+
+- [`UP-1134`](https://ekoapp.atlassian.net/browse/UP-1134) - refactored comments into comments list component; removed debug code; fixed story; fixed some warnings ([`46d3319`](https://gitlab.com/upstra/web/ui-kit/commit/46d3319ddc7d22a04d32e486e98b093794f18ddb)) (by Serhii Ivanenko)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - add the post renderer provider ([`03be923`](https://gitlab.com/upstra/web/ui-kit/commit/03be923bf9a052644f1392edce3712d5b0f5d485)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onClickCommunity ([`790b0cd`](https://gitlab.com/upstra/web/ui-kit/commit/790b0cdf4811c601a2edd3c7efd4b48850c6be47)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - wrap social app with NavigationProvider ([`0d220ed`](https://gitlab.com/upstra/web/ui-kit/commit/0d220ed068624395c6ed60e4e5cc6ab4f2f6f689)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - fix storybook ([`6723bbf`](https://gitlab.com/upstra/web/ui-kit/commit/6723bbf1b740a1d522e3114f175b1882aa566ae5)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onChangePage ([`d10f6cb`](https://gitlab.com/upstra/web/ui-kit/commit/d10f6cb7bed77358a84becc4bcad4fea2e0222b6)) (by Valeriy Malyshev)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - add unknown post renderer ([`485926e`](https://gitlab.com/upstra/web/ui-kit/commit/485926ec2313faf7ab9112b9a625a2e136faa7b9)) (by Valeriy Malyshev)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - render fallback if there is an error in special post rendering ([`6d8116b`](https://gitlab.com/upstra/web/ui-kit/commit/6d8116b3a3274d79ce002df8f7773f1a94c68746)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onClickUser ([`5363f6e`](https://gitlab.com/upstra/web/ui-kit/commit/5363f6e7c4b7f9025cb5055ba91fedb0d8edbdc4)) (by Valeriy Malyshev)
+- fixes for custom posts ([`3b57e27`](https://gitlab.com/upstra/web/ui-kit/commit/3b57e2738e3ffe1ed5f9642db6767f6b506e7360)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onCommunityCreated ([`9f9becf`](https://gitlab.com/upstra/web/ui-kit/commit/9f9becf37fd5c5feaf75411cde3e19438d2ad910)) (by Valeriy Malyshev)
+- update sdk to 4.1.0 ([`2b090c5`](https://gitlab.com/upstra/web/ui-kit/commit/2b090c5cdebe3860dd17068e50090a9271d4f1e8)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onClickCategory ([`1d4dfed`](https://gitlab.com/upstra/web/ui-kit/commit/1d4dfed1b55dcfa0d994f959d0046ac458dc427b)) (by Valeriy Malyshev)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - wrap the app with PostRendererProvider ([`e7518b6`](https://gitlab.com/upstra/web/ui-kit/commit/e7518b6bbebf73dd9dc1fdcc876e835993b21519)) (by Valeriy Malyshev)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - fix react warnings ([`fc9b70f`](https://gitlab.com/upstra/web/ui-kit/commit/fc9b70ff1227c53583e4bd70ebcccdc56f56afbb)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onMessageUser ([`886f75f`](https://gitlab.com/upstra/web/ui-kit/commit/886f75f20a841535310e584c77e196fec78cbc6e)) (by Valeriy Malyshev)
+- update eko-sdk to 4.1.2 ([`0968d33`](https://gitlab.com/upstra/web/ui-kit/commit/0968d33167c45844f2a26fc4ca1b44c30f1b3fe7)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onEditUser ([`753659f`](https://gitlab.com/upstra/web/ui-kit/commit/753659f85b0fd54e47890c7ab3cbdea89642248a)) (by Valeriy Malyshev)
+- [`UP-1296`](https://ekoapp.atlassian.net/browse/UP-1296) - use NavigationContext to get onEditCommunity ([`4413301`](https://gitlab.com/upstra/web/ui-kit/commit/44133014cd07b77dd32ec4423eb6f529a6e8da94)) (by Valeriy Malyshev)
+- export required staff ([`28aaae3`](https://gitlab.com/upstra/web/ui-kit/commit/28aaae3c661e2c2ab9c036adfcbe4eed812b1d80)) (by Valeriy Malyshev)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - add null check ([`e1fc5ff`](https://gitlab.com/upstra/web/ui-kit/commit/e1fc5ff6fdc41271d25058b1385838c10567dc44)) (by Valeriy Malyshev)
+- update sdk to 4.1.1 ([`917a32d`](https://gitlab.com/upstra/web/ui-kit/commit/917a32d089d506e5f5e29c5db118223e114ee811)) (by Valeriy Malyshev)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - do not allow override predefined post types ([`cf64b9b`](https://gitlab.com/upstra/web/ui-kit/commit/cf64b9b8d3026537725383c4e6f7baadb78671aa)) (by Valeriy Malyshev)
+- [`UP-1235`](https://ekoapp.atlassian.net/browse/UP-1235) - use ?? operator ([`d048be1`](https://gitlab.com/upstra/web/ui-kit/commit/d048be1e81d94c001fd4ede80523d217f7cf7d09)) (by Valeriy Malyshev)
+- fix comment reporting ([`06366b2`](https://gitlab.com/upstra/web/ui-kit/commit/06366b22f70d70e2bf305b9459e14626cb652e95)) (by Valeriy Malyshev)
+- hotfix - fixed submit state changing if only avatar was changed ([`1095ad4`](https://gitlab.com/upstra/web/ui-kit/commit/1095ad47a7ee3e09bad467fafbb60845bf283406)) (by Serhii Ivanenko)
+
+---
+
+## [v1.5.8](https://gitlab.com/upstra/web/ui-kit/compare/v1.5.7...v1.5.8)
+
+#### 17 February 2021
+
+### Commits
+
+- Hotfix/upgrade sdk version ([`329a314`](https://gitlab.com/upstra/web/ui-kit/commit/329a314670051a0b7d1a2aa5d68672a3ee387a8a)) (by Serhii Ivanenko)
+
+---
+
+## [v1.5.7](https://gitlab.com/upstra/web/ui-kit/compare/v1.5.6...v1.5.7)
+
+#### 10 February 2021
+
+### Commits
+
+- hotfix - fixed submit state changing if only avatar was changed ([`97773ce`](https://gitlab.com/upstra/web/ui-kit/commit/97773ce7b2c5b6396427f66156433a6e3b538354)) (by Serhii Ivanenko)
+- hotfix - revert version (because of npm version patch error) ([`2fb00c1`](https://gitlab.com/upstra/web/ui-kit/commit/2fb00c1a5761f50153246e9962b1ee2130ac3a8c)) (by Serhii Ivanenko)
+- hotfix - revert version (because of npm version patch error) ([`3a80f27`](https://gitlab.com/upstra/web/ui-kit/commit/3a80f27e3565c6bf4fd0de1742bab309ae251148)) (by Serhii Ivanenko)
+- hotfix - fixed submit state changing if only avatar was changed ([`d0bd681`](https://gitlab.com/upstra/web/ui-kit/commit/d0bd68142494a1936bea9965d1ccf3ef1e7e7f23)) (by Serhii Ivanenko)
+
+---
+
 ## [v1.5.6](https://gitlab.com/upstra/web/ui-kit/compare/v1.5.5...v1.5.6)
 
 #### 4 February 2021
