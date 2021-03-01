@@ -6,6 +6,7 @@ import { notification } from '~/core/components/Notification';
 import OptionMenu from '~/core/components/OptionMenu';
 import UserHeader from '~/social/components/UserHeader';
 import useUser from '~/core/hooks/useUser';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import { MemberInfo, CommunityMemberContainer } from './styles';
 import { confirm } from '~/core/components/Confirm';
 
@@ -13,6 +14,7 @@ const MODERATOR_ROLE = 'moderator';
 
 const CommunityMemberItem = ({
   userId,
+  currentUserId,
   onClick,
   roles,
   assignRoleToUsers,
@@ -45,37 +47,42 @@ const CommunityMemberItem = ({
 
   const memberHasModeratorRole = roles.includes(MODERATOR_ROLE);
 
+  const isCurrentUser = currentUserId === userId;
+
   return (
     <CommunityMemberContainer>
       <MemberInfo>
         <UserHeader userId={userId} onClick={onClick} />
       </MemberInfo>
-      <OptionMenu
-        options={[
-          { name: 'report.reportUser', action: onReportClick },
-          hasModeratorPermissions &&
-            !memberHasModeratorRole && {
-              name: 'moderatorMenu.promoteToModerator',
-              action: onPromoteModeratorClick,
+      <ConditionalRender condition={!isCurrentUser}>
+        <OptionMenu
+          options={[
+            { name: 'report.reportUser', action: onReportClick },
+            hasModeratorPermissions &&
+              !memberHasModeratorRole && {
+                name: 'moderatorMenu.promoteToModerator',
+                action: onPromoteModeratorClick,
+              },
+            hasModeratorPermissions &&
+              memberHasModeratorRole && {
+                name: 'moderatorMenu.dismissModerator',
+                action: onDismissModeratorClick,
+              },
+            hasModeratorPermissions && {
+              name: 'moderatorMenu.removeFromCommunity',
+              action: onRemoveFromCommunityClick,
+              className: 'danger-zone',
             },
-          hasModeratorPermissions &&
-            memberHasModeratorRole && {
-              name: 'moderatorMenu.dismissModerator',
-              action: onDismissModeratorClick,
-            },
-          hasModeratorPermissions && {
-            name: 'moderatorMenu.removeFromCommunity',
-            action: onRemoveFromCommunityClick,
-            className: 'danger-zone',
-          },
-        ].filter(Boolean)}
-      />
+          ].filter(Boolean)}
+        />
+      </ConditionalRender>
     </CommunityMemberContainer>
   );
 };
 
 CommunityMemberItem.propTypes = {
   userId: PropTypes.string.isRequired,
+  currentUserId: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   assignRoleToUsers: PropTypes.func,
   hasModeratorPermissions: PropTypes.bool,

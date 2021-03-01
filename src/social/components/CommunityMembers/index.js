@@ -61,6 +61,7 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
               <CommunityMemberItem
                 key={userId}
                 userId={userId}
+                currentUserId={currentUserId}
                 roles={roles}
                 onClick={onClickUser}
                 assignRoleToUsers={assignRoleToUsers}
@@ -78,6 +79,7 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
               <CommunityMemberItem
                 key={userId}
                 userId={userId}
+                currentUserId={currentUserId}
                 roles={roles}
                 onClick={onClickUser}
                 assignRoleToUsers={assignRoleToUsers}
