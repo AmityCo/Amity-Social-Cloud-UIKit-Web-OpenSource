@@ -25,19 +25,10 @@ export const CommentBlock = styled.div`
 
 const encodeHexColor = hex => hex.replace('#', '%23');
 
-// svg embeded in order to make theamed stroke color
 export const CommentContainer = styled.div`
   display: flex;
   color: black;
   padding-top: 16px;
-  :not(:last-child) {
-    background-position: 0 20px;
-    background-repeat: no-repeat;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 0 L20 9000" stroke="${({ theme }) =>
-        encodeHexColor(theme.palette.base.shade4)}"/>
-    </svg>');
-}
 `;
 
 export const ReplyContainer = styled.div`
