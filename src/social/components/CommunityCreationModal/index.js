@@ -7,8 +7,11 @@ import { confirm } from '~/core/components/Confirm';
 import customizableComponent from '~/core/hocs/customization';
 import promisify from '~/helpers/promisify';
 import { CommunityForm } from './styles';
+import withSDK from '~/core/hocs/withSDK';
 
-const CommunityCreationModal = ({ isOpen, onClose }) => {
+const MODERATOR_ROLE = 'moderator';
+
+const CommunityCreationModal = ({ isOpen, onClose, currentUserId }) => {
   if (!isOpen) return null;
 
   const createCommunity = async ({
@@ -44,8 +47,13 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async data => {
     const communityLiveObject = await createCommunity(data);
-    const communityModel = await promisify(communityLiveObject);
-    onClose(communityModel.communityId);
+    const { communityId } = await promisify(communityLiveObject);
+    await CommunityRepository.assignRoleToUsers({
+      communityId,
+      role: MODERATOR_ROLE,
+      userIds: [currentUserId],
+    });
+    onClose(communityId);
   };
 
   return (
@@ -55,4 +63,4 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default customizableComponent('CommunityCreationModal', CommunityCreationModal);
+export default withSDK(customizableComponent('CommunityCreationModal', CommunityCreationModal));
