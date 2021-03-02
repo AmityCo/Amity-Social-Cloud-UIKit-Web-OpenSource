@@ -93,7 +93,7 @@ const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
         </Uploader>
         <UploadOverlay>
           <StyledCameraIcon />
-          <Avatar avatar={fileUrl} size="big" />
+          <Avatar avatar={fileUrl} size="big" backgroundImage={null} showOverlay />
         </UploadOverlay>
       </AvatarImageLoader>
     </AvatarUploadContainer>
