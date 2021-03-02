@@ -3,6 +3,7 @@ import { HashRouter as Router, Switch, Route, useHistory, useRouteMatch } from '
 
 import UserFeedPage from '~/social/pages/UserFeed';
 import ProfileSettings from '~/social/components/ProfileSettings';
+import NavigationProvider from '~/social/providers/NavigationProvider';
 import UiKitApp from '.';
 
 export default {
@@ -24,12 +25,15 @@ const SDKApp = props => {
       <Route path="/" exact>
         <UiKitApp onClickUser={onClickUser} {...props} />
       </Route>
-      <Route path="/user/:userId">
-        <UserFeedPage userId={currentUserId} onEditUser={onEditUser} />
-      </Route>
-      <Route path="/profile/:userId">
-        <ProfileSettings userId={currentUserId} />
-      </Route>
+
+      <NavigationProvider onEditUser={onEditUser} onClickUser={onClickUser}>
+        <Route path="/user/:userId">
+          <UserFeedPage userId={currentUserId} o />
+        </Route>
+        <Route path="/profile/:userId">
+          <ProfileSettings userId={currentUserId} />
+        </Route>
+      </NavigationProvider>
     </Switch>
   );
 };
