@@ -44,7 +44,7 @@ const InputAutocomplete = ({
 }) => {
   const [open, setOpen] = useState(false);
 
-  const filtered = useMemo(() => filter(items, value), [value, items, filter]);
+  const filtered = useMemo(() => (filter ? filter(items, value) : items), [value, items, filter]);
 
   useEffect(() => {
     if (disabled) return;

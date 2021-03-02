@@ -32,6 +32,7 @@ const CommunitySearch = ({ className, sticky = false }) => {
           <CommunitiesSearchInput
             value={value}
             items={communities.map(community => community.displayName)}
+            filter={null}
             onChange={handleChange}
             onPick={handlePick}
             className={className}
