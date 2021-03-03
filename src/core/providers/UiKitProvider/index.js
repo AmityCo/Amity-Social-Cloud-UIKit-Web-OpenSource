@@ -24,6 +24,7 @@ const UiKitProvider = ({
   customComponents = {},
   theme = {},
   children /* TODO localization */,
+  avatarCustomUrl,
 }) => {
   const theGlobal = /* globalThis || */ window || global;
 
@@ -40,11 +41,12 @@ const UiKitProvider = ({
       client.registerSession({
         userId,
         displayName,
+        avatarCustomUrl,
       });
     }
 
     return { client };
-  }, [apiKey, userId, displayName]);
+  }, [apiKey, userId, displayName, avatarCustomUrl]);
 
   return (
     <>
@@ -72,6 +74,7 @@ UiKitProvider.propTypes = {
   apiKey: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   displayName: PropTypes.string,
+  avatarCustomUrl: PropTypes.string,
   customComponents: PropTypes.object,
   theme: PropTypes.shape({
     palette: PropTypes.object,
