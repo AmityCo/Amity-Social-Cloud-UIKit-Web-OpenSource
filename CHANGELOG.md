@@ -1,6 +1,12 @@
 # Changelog
 
-## [v1.6.0-rc.2](https://gitlab.com/upstra/web/ui-kit/compare/v1.7.0-re.0...v1.6.0-rc.2)
+## [v1.6.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.6.0-rc.2...v1.6.0)
+
+#### 4 March 2021
+
+---
+
+## [v1.6.0-rc.2](https://gitlab.com/upstra/web/ui-kit/compare/v1.6.0-rc.1...v1.6.0-rc.2)
 
 #### 3 March 2021
 
@@ -17,18 +23,6 @@
 - Update .gitlab-ci.yml file ([`f7476c1`](https://gitlab.com/upstra/web/ui-kit/commit/f7476c101dd4b14a2aa738032bd116ebc980482e)) (by Valeriy Malyshev)
 - [`UP-1842`](https://ekoapp.atlassian.net/browse/UP-1842) - remove "leave community" option for community moderator ([`535545e`](https://gitlab.com/upstra/web/ui-kit/commit/535545e582c71a19c40c11e6a9afd47d8a61a00f)) (by Serhii Ivanenko)
 - hotfix - fix community default avatar ([`1cf5802`](https://gitlab.com/upstra/web/ui-kit/commit/1cf5802e345096cd830573acbb400482e29e2d3d)) (by Serhii Ivanenko)
-
----
-
-## [v1.7.0-re.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.6.0-rec.1...v1.7.0-re.0)
-
-#### 1 March 2021
-
----
-
-## [v1.6.0-rec.1](https://gitlab.com/upstra/web/ui-kit/compare/v1.6.0-rc.1...v1.6.0-rec.1)
-
-#### 1 March 2021
 
 ---
 
