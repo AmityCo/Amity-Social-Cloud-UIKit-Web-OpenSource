@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import EkoClient from 'eko-sdk';
@@ -41,12 +41,15 @@ const UiKitProvider = ({
       client.registerSession({
         userId,
         displayName,
-        avatarCustomUrl,
       });
     }
 
     return { client };
-  }, [apiKey, userId, displayName, avatarCustomUrl]);
+  }, [apiKey, userId, displayName]);
+
+  useEffect(() => {
+    client.setAvatarCustomUrl(avatarCustomUrl);
+  }, [client, avatarCustomUrl]);
 
   return (
     <>
