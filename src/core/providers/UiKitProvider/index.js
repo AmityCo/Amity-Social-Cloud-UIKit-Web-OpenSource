@@ -19,6 +19,7 @@ let client;
 
 const UiKitProvider = ({
   apiKey,
+  authToken,
   userId,
   displayName,
   customComponents = {},
@@ -41,11 +42,12 @@ const UiKitProvider = ({
       client.registerSession({
         userId,
         displayName,
+        authToken,
       });
     }
 
     return { client };
-  }, [apiKey, userId, displayName]);
+  }, [apiKey, userId, displayName, authToken]);
 
   useEffect(() => {
     client.setAvatarCustomUrl(avatarCustomUrl);
@@ -75,6 +77,7 @@ const UiKitProvider = ({
 
 UiKitProvider.propTypes = {
   apiKey: PropTypes.string.isRequired,
+  authToken: PropTypes.string,
   userId: PropTypes.string.isRequired,
   displayName: PropTypes.string,
   avatarCustomUrl: PropTypes.string,
