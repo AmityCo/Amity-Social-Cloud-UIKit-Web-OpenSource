@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import EkoClient from 'eko-sdk';
@@ -25,7 +25,6 @@ const UiKitProvider = ({
   customComponents = {},
   theme = {},
   children /* TODO localization */,
-  avatarCustomUrl,
 }) => {
   const theGlobal = /* globalThis || */ window || global;
 
@@ -48,10 +47,6 @@ const UiKitProvider = ({
 
     return { client };
   }, [apiKey, userId, displayName, authToken]);
-
-  useEffect(() => {
-    client.setAvatarCustomUrl(avatarCustomUrl);
-  }, [client, avatarCustomUrl]);
 
   return (
     <>
@@ -80,7 +75,6 @@ UiKitProvider.propTypes = {
   authToken: PropTypes.string,
   userId: PropTypes.string.isRequired,
   displayName: PropTypes.string,
-  avatarCustomUrl: PropTypes.string,
   customComponents: PropTypes.object,
   theme: PropTypes.shape({
     palette: PropTypes.object,
