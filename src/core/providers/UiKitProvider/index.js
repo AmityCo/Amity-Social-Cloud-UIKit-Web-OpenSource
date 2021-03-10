@@ -11,6 +11,8 @@ import { ConfirmContainer } from '~/core/components/Confirm';
 import { CustomComponentsProvider } from '~/core/hocs/customization';
 import { SDKProvider } from '~/core/hocs/withSDK';
 import MockData from '~/mock';
+import NavigationProvider from '~/social/providers/NavigationProvider';
+import PostRendererProvider from '~/social/providers/PostRendererProvider';
 import Localisation from './Localisation';
 import buildGlobalTheme from './theme';
 import { UIStyles } from './styles';
@@ -25,6 +27,8 @@ const UiKitProvider = ({
   customComponents = {},
   theme = {},
   children /* TODO localization */,
+  postRenderers,
+  actionHandlers,
 }) => {
   const theGlobal = /* globalThis || */ window || global;
 
@@ -58,9 +62,13 @@ const UiKitProvider = ({
           <UIStyles>
             <SDKProvider value={SDKInfo}>
               <CustomComponentsProvider value={customComponents}>
-                <MockData>{children}</MockData>
-                <NotificationsContainer />
-                <ConfirmContainer />
+                <NavigationProvider {...actionHandlers}>
+                  <PostRendererProvider postRenderers={postRenderers}>
+                    <MockData>{children}</MockData>
+                    <NotificationsContainer />
+                    <ConfirmContainer />
+                  </PostRendererProvider>
+                </NavigationProvider>
               </CustomComponentsProvider>
             </SDKProvider>
           </UIStyles>
@@ -81,6 +89,17 @@ UiKitProvider.propTypes = {
     typography: PropTypes.object,
   }),
   children: PropTypes.node,
+  postRenderers: PropTypes.object,
+  actionHandlers: PropTypes.shape({
+    onChangePage: PropTypes.func,
+    onClickCategory: PropTypes.func,
+    onClickCommunity: PropTypes.func,
+    onClickUser: PropTypes.func,
+    onCommunityCreated: PropTypes.func,
+    onEditCommunity: PropTypes.func,
+    onEditUser: PropTypes.func,
+    onMessageUser: PropTypes.func,
+  }),
 };
 
 export default UiKitProvider;

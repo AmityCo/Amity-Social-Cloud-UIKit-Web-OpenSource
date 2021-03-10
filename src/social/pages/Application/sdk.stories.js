@@ -21,20 +21,21 @@ const SDKApp = props => {
   const onEditUser = userId => history.push(`/profile/${userId}`);
 
   return (
-    <Switch>
-      <Route path="/" exact>
-        <UiKitApp onClickUser={onClickUser} {...props} />
-      </Route>
+    <NavigationProvider onEditUser={onEditUser} onClickUser={onClickUser}>
+      <Switch>
+        <Route path="/" exact>
+          <UiKitApp {...props} />
+        </Route>
 
-      <NavigationProvider onEditUser={onEditUser} onClickUser={onClickUser}>
         <Route path="/user/:userId">
           <UserFeedPage userId={currentUserId} o />
         </Route>
+
         <Route path="/profile/:userId">
           <ProfileSettings userId={currentUserId} />
         </Route>
-      </NavigationProvider>
-    </Switch>
+      </Switch>
+    </NavigationProvider>
   );
 };
 

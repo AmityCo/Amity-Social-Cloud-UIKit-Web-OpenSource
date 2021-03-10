@@ -1,7 +1,6 @@
 export { default as UpstraUiKitProvider } from '~/core/providers/UiKitProvider';
 export { default as UpstraUiKitFeed } from '~/social/components/Feed';
 export { default as UpstraUiKitSocial } from '~/social/pages/Application';
-export { default as UpstraUiKitPostRendererProvider } from '~/social/providers/PostRendererProvider';
 
 export { default as useUpstraUser } from '~/core/hooks/useUser';
 export { useNavigation as useUpstraNavigation } from '~/social/providers/NavigationProvider';
