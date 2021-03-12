@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.7.1](https://gitlab.com/upstra/web/ui-kit/compare/v1.7.0...v1.7.1)
+
+#### 12 March 2021
+
+### Commits
+
+- update eko-sdk up to 4.3.1 ([`5cf9f4b`](https://gitlab.com/upstra/web/ui-kit/commit/5cf9f4b73026fe5c71b9a751d8956d4ced855aeb)) (by Valeriy Malyshev)
+
+---
+
 ## [v1.7.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.7.0-rc.1...v1.7.0)
 
 #### 11 March 2021
