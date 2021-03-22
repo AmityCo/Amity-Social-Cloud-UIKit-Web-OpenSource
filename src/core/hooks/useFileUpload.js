@@ -66,12 +66,16 @@ export default (onChange = () => {}, onLoadingChange = () => {}, onError = () =>
     (async () => {
       onLoadingChange(true);
       try {
-        const models = await FileRepository.uploadFiles({
-          files: uploading,
-          onProgress: ({ currentFile, currentPercent }) => {
-            !cancel && onProgress(currentFile, currentPercent);
-          },
-        });
+        const models = await Promise.all(
+          uploading.map(async file => {
+            return FileRepository.uploadFile({
+              file,
+              onProgress: ({ currentFile, currentPercent }) => {
+                !cancel && onProgress(currentFile, currentPercent);
+              },
+            });
+          }),
+        );
 
         // cancel xhr, the easy way
         if (cancel) {
