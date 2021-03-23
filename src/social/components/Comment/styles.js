@@ -57,7 +57,8 @@ export const CommentHeader = styled.div`
 `;
 
 export const CommentContent = styled.div`
-  overflow-wrap: anywhere;
+  overflow-wrap: anywhere !important;
+  word-break: break-word;
   color: ${({ theme }) => theme.palette.neutral.main};
   white-space: pre-wrap;
   ${({ theme }) => theme.typography.body}

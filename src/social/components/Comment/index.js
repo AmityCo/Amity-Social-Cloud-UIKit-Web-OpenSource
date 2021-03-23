@@ -18,6 +18,7 @@ import {
   CommentContainer,
   ReplyContainer,
   DeletedCommentContainer,
+  DeletedReplyContainer,
   DeletedIcon,
   Text,
   IconContainer,
@@ -41,6 +42,23 @@ const DeletedComment = () => {
         </Text>
       </MessageContainer>
     </DeletedCommentContainer>
+  );
+};
+
+const DeletedReply = () => {
+  return (
+    <div>
+      <DeletedReplyContainer>
+        <IconContainer className="reply">
+          <DeletedIcon />
+        </IconContainer>
+        <MessageContainer>
+          <Text>
+            <FormattedMessage id="reply.deleted" />
+          </Text>
+        </MessageContainer>
+      </DeletedReplyContainer>
+    </div>
   );
 };
 
@@ -150,15 +168,19 @@ const Comment = ({ canInteract = true, commentId, currentUserId, userRoles }) =>
       isEditing={isEditing}
       setText={setText}
       isReported={isFlaggedByMe}
+      isReplyComment={isReplyComment}
     />
   );
 
   return (
     <ConditionalRender condition={isCommentReady}>
       <ConditionalRender condition={comment.isDeleted}>
-        <CommentBlock>
-          <DeletedComment />
-        </CommentBlock>
+        <ConditionalRender condition={!isReplyComment}>
+          <CommentBlock>
+            <DeletedComment />
+          </CommentBlock>
+          <DeletedReply />
+        </ConditionalRender>
         <ConditionalRender condition={isReplyComment}>
           <ReplyContainer>{renderedComment}</ReplyContainer>
           <CommentBlock>
