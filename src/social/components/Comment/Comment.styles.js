@@ -25,8 +25,11 @@ import {
   EditedMark,
 } from './styles';
 
-// TODO: enable replies feature once working on all platforms.
-import { ENABLE_REPLIES } from '.';
+const getReportMenuItem = (isReplyComment, isReported) => {
+  const reportText = isReplyComment ? 'report.reportReply' : 'report.reportComment';
+  const unreportText = isReplyComment ? 'report.unreportReply' : 'report.unreportComment';
+  return isReported ? unreportText : reportText;
+};
 
 const StyledComment = ({
   commentId,
@@ -49,14 +52,15 @@ const StyledComment = ({
   isEditing,
   setText,
   isReported,
+  isReplyComment,
 }) => {
   const options = [
-    canEdit && { name: 'comment.edit', action: startEditing },
+    canEdit && { name: isReplyComment ? 'reply.edit' : 'comment.edit', action: startEditing },
     canReport && {
-      name: isReported ? 'report.unreportComment' : 'report.reportComment',
+      name: getReportMenuItem(isReplyComment, isReported),
       action: handleReportComment,
     },
-    canDelete && { name: 'comment.delete', action: handleDelete },
+    canDelete && { name: isReplyComment ? 'reply.delete' : 'comment.delete', action: handleDelete },
   ].filter(Boolean);
 
   return (
@@ -93,9 +97,7 @@ const StyledComment = ({
           <CommentText>{text}</CommentText>
         </ConditionalRender>
 
-        <ConditionalRender
-          condition={!isEditing && (canLike || (canReply && ENABLE_REPLIES) || options.length > 0)}
-        >
+        <ConditionalRender condition={!isEditing && (canLike || canReply || options.length > 0)}>
           <InteractionBar>
             <ConditionalRender condition={canLike}>
               <CommentLikeButton commentId={commentId} />
@@ -135,6 +137,7 @@ StyledComment.propTypes = {
   isEditing: PropTypes.bool,
   setText: PropTypes.func.isRequired,
   isReported: PropTypes.bool,
+  isReplyComment: PropTypes.bool,
 };
 
 export default StyledComment;

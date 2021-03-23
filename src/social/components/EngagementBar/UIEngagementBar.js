@@ -51,7 +51,6 @@ const UIEngagementBar = ({
           referenceType={EkoCommentReferenceType.Post}
           last={COMMENTS_PER_PAGE}
           canInteract={false}
-          loadMoreText={<FormattedMessage id="collapsible.viewAllComments" />}
         />
         {noInteractionMessage && (
           <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>
@@ -68,7 +67,6 @@ const UIEngagementBar = ({
           referenceId={postId}
           referenceType={EkoCommentReferenceType.Post}
           last={COMMENTS_PER_PAGE}
-          loadMoreText={<FormattedMessage id="collapsible.viewAllComments" />}
         />
         <ConditionalRender condition={isComposeBarDisplayed}>
           <CommentComposeBar onSubmit={handleAddComment} />

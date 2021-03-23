@@ -20,7 +20,7 @@ export const OptionMenu = styled(UIOptionMenu)`
 `;
 
 export const CommentBlock = styled.div`
-  border-top: 1px solid #e3e4e8;
+  border-bottom: 1px solid #e3e4e8;
 `;
 
 const encodeHexColor = hex => hex.replace('#', '%23');
@@ -35,18 +35,7 @@ export const ReplyContainer = styled.div`
   display: flex;
   color: black;
   padding-top: 16px;
-  &:last-child {
-    background-repeat: no-repeat;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="40">
-      <path d="M20 0 L 20 40" stroke="${({ theme }) => encodeHexColor(theme.palette.base.shade4)}"/>
-    </svg>');
-  }
-  :not(:last-child) {
-    background-repeat: repeat-y;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="40">
-      <path d="M20 0 L 20 40" stroke="${({ theme }) => encodeHexColor(theme.palette.base.shade4)}"/>
-    </svg>');
-}
+  padding-left: 40px;
 `;
 
 export const CommentComposeBar = styled(UICommentComposeBar)`
@@ -68,7 +57,7 @@ export const CommentHeader = styled.div`
 `;
 
 export const CommentContent = styled.div`
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
   color: ${({ theme }) => theme.palette.neutral.main};
   white-space: pre-wrap;
   ${({ theme }) => theme.typography.body}
@@ -125,6 +114,26 @@ export const DeletedCommentContainer = styled.div`
   align-items: center;
   color: ${({ theme }) => theme.palette.base.shade3};
   padding: 16px 0;
+
+  &.reply {
+    display: inline-flex;
+    margin-left: 40px;
+    background: ${({ theme }) => theme.palette.base.shade4};
+    color: ${({ theme }) => theme.palette.base.shade2};
+    border-radius: 4px;
+    margin: 14px 0px;
+    padding: 4px 8px 2px 0px;
+  }
+`;
+
+export const DeletedReplyContainer = styled.div`
+  display: inline-flex;
+  align-items: center;
+  margin: 7px 0px 7px 40px;
+  background: ${({ theme }) => theme.palette.base.shade4};
+  color: ${({ theme }) => theme.palette.base.shade2};
+  border-radius: 4px;
+  padding: 4px 8px 2px 0px;
 `;
 
 export const DeletedIcon = styled(MinusCircle)`
@@ -132,7 +141,12 @@ export const DeletedIcon = styled(MinusCircle)`
 `;
 
 export const IconContainer = styled.div`
+  display: flex;
   padding-right: 10px;
+
+  &.reply {
+    padding: 4px 10px 4px 4px;
+  }
 `;
 
 export const MessageContainer = styled.div`

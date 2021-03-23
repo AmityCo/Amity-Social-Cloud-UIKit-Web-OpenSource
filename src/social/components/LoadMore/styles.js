@@ -15,6 +15,22 @@ export const LoadMoreButton = styled(Button)`
   &.no-border {
     border: none;
   }
+
+  &.comments-button {
+    justify-content: flex-start;
+    color: black;
+    border: none;
+    margin-top: 16px;
+    padding: 0 0 16px 0;
+    border-bottom: 1px solid #e3e4e8;
+  }
+
+  &.reply-button {
+    width: fit-content;
+    background-color: ${({ theme }) => theme.palette.base.shade4};
+    color: ${({ theme }) => theme.palette.base.shade1};
+    margin: 12px 0px 16px 3rem;
+  }
 `;
 
 export const ShevronDownIcon = styled(ChevronDown)`

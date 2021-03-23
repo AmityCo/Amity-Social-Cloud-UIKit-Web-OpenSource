@@ -7,6 +7,8 @@ import useCommentsQuery from '~/social/hooks/useCommentsQuery';
 import Comment from '~/social/components/Comment';
 import LoadMore from '~/social/components/LoadMore';
 
+import { TabIcon, TabIconContainer } from './styles';
+
 const CommentList = ({
   parentId,
   referenceId,
@@ -15,8 +17,7 @@ const CommentList = ({
   first,
   last,
   canInteract = true,
-  isReplyComment = false,
-  loadMoreText,
+  isExpanded = true,
 }) => {
   const { commentIds, hasMore, loadMore } = useCommentsQuery({
     parentId,
@@ -26,19 +27,34 @@ const CommentList = ({
     first,
     last,
   });
+  const isReplyComment = !!parentId;
+  const loadMoreText = isReplyComment ? (
+    <FormattedMessage id="collapsible.viewMoreReplies" />
+  ) : (
+    <FormattedMessage id="collapsible.viewMoreComments" />
+  );
+
+  let prependIcon = null;
+  if (isReplyComment) {
+    prependIcon = (
+      <TabIconContainer>
+        <TabIcon />
+      </TabIconContainer>
+    );
+  }
+
   return (
     <LoadMore
       hasMore={hasMore}
       loadMore={loadMore}
-      text={loadMoreText || <FormattedMessage id="collapsible.viewAllReplies" />}
+      text={loadMoreText}
+      className={isReplyComment ? 'reply-button' : 'comments-button'}
+      prependIcon={prependIcon}
+      appendIcon={null}
+      isExpanded={isExpanded}
     >
       {commentIds.map(commentId => (
-        <Comment
-          key={commentId}
-          commentId={commentId}
-          canInteract={canInteract}
-          isReplyComment={isReplyComment}
-        />
+        <Comment key={commentId} commentId={commentId} canInteract={canInteract} />
       ))}
     </LoadMore>
   );
@@ -52,8 +68,7 @@ CommentList.propTypes = {
   first: PropTypes.number,
   last: PropTypes.number,
   canInteract: PropTypes.bool,
-  isReplyComment: PropTypes.bool,
-  loadMoreText: PropTypes.node,
+  isExpanded: PropTypes.bool,
 };
 
 export default CommentList;

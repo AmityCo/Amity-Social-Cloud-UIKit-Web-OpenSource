@@ -7,8 +7,7 @@ const useCommunityOneMember = (communityId, currentUserId, communityOwnerId) => 
   const currentMember = useMemo(
     () =>
       communityId &&
-      CommunityRepository
-        .memberByCommunityIdAndUserId({ communityId, userId: currentUserId })
+      CommunityRepository.memberByCommunityIdAndUserId({ communityId, userId: currentUserId })
         .model,
     [communityId, currentUserId],
   );

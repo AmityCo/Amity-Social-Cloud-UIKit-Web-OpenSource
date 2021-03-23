@@ -10,6 +10,7 @@ export const Community = () => <Icons.Community />;
 export const CommunityAlt = () => <Icons.CommunityAlt />;
 export const User = () => <Icons.User />;
 export const EmptyFeed = () => <Icons.EmptyFeed />;
+export const Tab = () => <Icons.Tab />;
 export const UnknownPost = () => <Icons.UnknownPost />;
 
 export const Camera = () => <Icons.Camera />;

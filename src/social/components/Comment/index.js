@@ -24,16 +24,10 @@ import {
   MessageContainer,
 } from './styles';
 
-// TODO: enable replies feature once working on all platforms.
-export const ENABLE_REPLIES = false;
-
 // TODO: react-intl
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const REPLIES_PER_PAGE = 5;
-
-// temporary disable until 1.7.0 will be released
-const REPLY_ENABLED = false;
 
 const DeletedComment = () => {
   return (
@@ -50,13 +44,7 @@ const DeletedComment = () => {
   );
 };
 
-const Comment = ({
-  canInteract = true,
-  commentId,
-  isReplyComment = false,
-  currentUserId,
-  userRoles,
-}) => {
+const Comment = ({ canInteract = true, commentId, currentUserId, userRoles }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -92,6 +80,7 @@ const Comment = ({
   };
 
   const [text, setText] = useState(comment?.data?.text ?? '');
+  const [oldText, setOldText] = useState(comment?.data?.text ?? '');
 
   useEffect(() => {
     if (text !== comment?.data?.text) {
@@ -105,10 +94,12 @@ const Comment = ({
 
   const startEditing = () => {
     setIsEditing(true);
+    setOldText(text);
   };
 
   const cancelEditing = () => {
     setIsEditing(false);
+    setText(oldText);
   };
 
   const handleEdit = commentText => {
@@ -117,22 +108,24 @@ const Comment = ({
   };
 
   const isCommentOwner = commentAuthor.userId === currentUserId;
+  const isReplyComment = !!comment.parentId;
 
   const deleteComment = () => {
-    // TODO: react-intl
+    const title = isReplyComment ? 'reply.delete' : 'comment.delete';
+    const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
     confirm({
-      title: <FormattedMessage id="comment.delete" />,
-      content: 'This comment will be permanently deleted. Continue?',
+      title: <FormattedMessage id={title} />,
+      content: <FormattedMessage id={content} />,
       cancelText: 'Cancel',
       okText: 'Delete',
       onOk: handleDeleteComment,
     });
   };
 
-  const canDelete = isCommentOwner || isModerator(userRoles);
+  const canDelete = (canInteract && isCommentOwner) || isModerator(userRoles);
   const canEdit = canInteract && isCommentOwner;
   const canLike = canInteract;
-  const canReply = REPLY_ENABLED && canInteract && !isReplyComment;
+  const canReply = canInteract && !isReplyComment;
   const canReport = canInteract && !isCommentOwner;
 
   const renderedComment = (
@@ -166,7 +159,7 @@ const Comment = ({
         <CommentBlock>
           <DeletedComment />
         </CommentBlock>
-        <ConditionalRender condition={REPLY_ENABLED && isReplyComment}>
+        <ConditionalRender condition={isReplyComment}>
           <ReplyContainer>{renderedComment}</ReplyContainer>
           <CommentBlock>
             <CommentContainer>{renderedComment}</CommentContainer>
@@ -175,20 +168,18 @@ const Comment = ({
               referenceId={comment.referenceId}
               last={REPLIES_PER_PAGE}
               canInteract={canInteract}
-              isReplyComment
+              isExpanded={false}
             />
 
-            {REPLY_ENABLED && (
-              <ConditionalRender condition={isReplying}>
-                <CommentComposeBar
-                  userToReply={commentAuthor.displayName}
-                  onSubmit={replyText => {
-                    handleReplyToComment(replyText);
-                    setIsReplying(false);
-                  }}
-                />
-              </ConditionalRender>
-            )}
+            <ConditionalRender condition={isReplying}>
+              <CommentComposeBar
+                userToReply={commentAuthor.displayName}
+                onSubmit={replyText => {
+                  handleReplyToComment(replyText);
+                  setIsReplying(false);
+                }}
+              />
+            </ConditionalRender>
           </CommentBlock>
         </ConditionalRender>
       </ConditionalRender>
@@ -199,7 +190,6 @@ const Comment = ({
 Comment.propTypes = {
   canInteract: PropTypes.bool,
   commentId: PropTypes.string.isRequired,
-  isReplyComment: PropTypes.bool,
   currentUserId: PropTypes.string.isRequired,
   userRoles: PropTypes.array,
 };

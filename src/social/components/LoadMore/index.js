@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import { LoadMoreButton, ShevronDownIcon } from './styles';
@@ -6,16 +6,35 @@ import { LoadMoreButton, ShevronDownIcon } from './styles';
 // TODO: react-intl
 const DEFAULT_TEXT = 'Load more';
 
-const LoadMore = ({ hasMore, loadMore, text, children, className = '' }) => {
+const LoadMore = ({
+  hasMore,
+  loadMore,
+  text,
+  children,
+  className = '',
+  prependIcon,
+  appendIcon = <ShevronDownIcon />,
+  isExpanded = true,
+}) => {
+  const [expanded, setExpanded] = useState(isExpanded);
   return (
-    <div>
-      {children}
-      <ConditionalRender condition={hasMore}>
-        <LoadMoreButton onClick={loadMore} className={className}>
-          {text || DEFAULT_TEXT} <ShevronDownIcon />
-        </LoadMoreButton>
-      </ConditionalRender>
-    </div>
+    <ConditionalRender condition={expanded}>
+      <div>
+        {children}
+        {hasMore && (
+          <LoadMoreButton onClick={loadMore} className={className}>
+            {prependIcon} {text || DEFAULT_TEXT} {appendIcon}
+          </LoadMoreButton>
+        )}
+      </div>
+      {children.length && (
+        <div>
+          <LoadMoreButton onClick={() => setExpanded(true)} className={className}>
+            {prependIcon} {text || DEFAULT_TEXT} {appendIcon}
+          </LoadMoreButton>
+        </div>
+      )}
+    </ConditionalRender>
   );
 };
 
