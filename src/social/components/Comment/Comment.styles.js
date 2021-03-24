@@ -25,12 +25,6 @@ import {
   EditedMark,
 } from './styles';
 
-const getReportMenuItem = (isReplyComment, isReported) => {
-  const reportText = isReplyComment ? 'report.reportReply' : 'report.reportComment';
-  const unreportText = isReplyComment ? 'report.unreportReply' : 'report.unreportComment';
-  return isReported ? unreportText : reportText;
-};
-
 const StyledComment = ({
   commentId,
   authorName,
@@ -57,7 +51,7 @@ const StyledComment = ({
   const options = [
     canEdit && { name: isReplyComment ? 'reply.edit' : 'comment.edit', action: startEditing },
     canReport && {
-      name: getReportMenuItem(isReplyComment, isReported),
+      name: isReported ? 'report.undoReport' : 'report.doReport',
       action: handleReportComment,
     },
     canDelete && { name: isReplyComment ? 'reply.delete' : 'comment.delete', action: handleDelete },

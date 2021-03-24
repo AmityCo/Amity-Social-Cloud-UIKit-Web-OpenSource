@@ -88,7 +88,7 @@ const DefaultPostRenderer = ({
     },
     !isMyPost &&
       (isAdmin || !isCommunityPost || isMember) && {
-        name: isFlaggedByMe ? 'post.unreportPost' : 'post.reportPost',
+        name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
         action: isFlaggedByMe ? onUnreportClick : onReportClick,
       },
   ].filter(Boolean);

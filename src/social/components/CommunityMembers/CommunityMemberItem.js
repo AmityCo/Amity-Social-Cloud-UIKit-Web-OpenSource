@@ -58,7 +58,7 @@ const CommunityMemberItem = ({
       <ConditionalRender condition={!isCurrentUser && isJoined}>
         <OptionMenu
           options={[
-            { name: 'report.reportUser', action: onReportClick },
+            { name: 'report.doReport', action: onReportClick },
             hasModeratorPermissions &&
               !memberHasModeratorRole && {
                 name: 'moderatorMenu.promoteToModerator',
