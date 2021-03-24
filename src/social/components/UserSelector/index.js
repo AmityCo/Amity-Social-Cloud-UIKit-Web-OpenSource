@@ -7,16 +7,25 @@ import useUserQuery from '~/core/hooks/useUserQuery';
 import Select from '~/core/components/Select';
 import UserHeader from '~/social/components/UserHeader';
 import UserChip from '~/core/components/UserChip';
+import withSDK from '~/core/hocs/withSDK';
 
 import { Selector, UserSelectorInput } from './styles';
 
-const UserSelector = ({ value: userIds = [], onChange = () => {}, parentContainer = null }) => {
+const UserSelector = ({
+  value: userIds = [],
+  onChange = () => {},
+  parentContainer = null,
+  currentUserId,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [queriedUsers = []] = useUserQuery(query);
 
   const options = queriedUsers
-    .filter(({ displayName }) => displayName?.toLowerCase().includes(query.toLowerCase()))
+    .filter(
+      ({ displayName, userId }) =>
+        displayName?.toLowerCase().includes(query.toLowerCase()) && userId !== currentUserId,
+    )
     .map(({ displayName, userId }) => ({
       name: displayName,
       value: userId,
@@ -88,6 +97,7 @@ UserSelector.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func,
   parentContainer: PropTypes.element,
+  currentUserId: PropTypes.number,
 };
 
-export default customizableComponent('UserSelector', UserSelector);
+export default withSDK(customizableComponent('UserSelector', UserSelector));
