@@ -68,6 +68,7 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
                 removeRoleFromUsers={removeRoleFromUsers}
                 removeMembers={removeMembers}
                 hasModeratorPermissions={hasModeratorPermissions}
+                isJoined={community.isJoined}
               />
             ))}
         </LoadMore>

@@ -21,6 +21,7 @@ const CommunityMemberItem = ({
   hasModeratorPermissions,
   removeRoleFromUsers,
   removeMembers,
+  isJoined,
 }) => {
   const { handleReportUser } = useUser(userId);
 
@@ -54,7 +55,7 @@ const CommunityMemberItem = ({
       <MemberInfo>
         <UserHeader userId={userId} onClick={onClick} />
       </MemberInfo>
-      <ConditionalRender condition={!isCurrentUser}>
+      <ConditionalRender condition={!isCurrentUser && isJoined}>
         <OptionMenu
           options={[
             { name: 'report.reportUser', action: onReportClick },
@@ -89,6 +90,7 @@ CommunityMemberItem.propTypes = {
   removeRoleFromUsers: PropTypes.func,
   removeMembers: PropTypes.func,
   roles: PropTypes.arrayOf(PropTypes.string),
+  isJoined: PropTypes.bool,
 };
 
 export default CommunityMemberItem;
