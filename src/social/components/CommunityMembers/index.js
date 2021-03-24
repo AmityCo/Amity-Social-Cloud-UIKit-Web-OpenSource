@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { FormattedMessage } from 'react-intl';
 import customizableComponent from '~/core/hocs/customization';
 
 import useCommunityMembers from '~/social/hooks/useCommunityMembers';
@@ -15,11 +16,9 @@ import withSDK from '~/core/hocs/withSDK';
 
 import { CommunityMembersContainer, CommunityMembersHeader, CommunityMembersTabs } from './styles';
 
-// TODO replace with translations keys
-// TODO: react-intl
 const tabs = {
-  MEMBERS: 'Members',
-  MODERATORS: 'Moderators',
+  MEMBERS: <FormattedMessage id="tabs.members" />,
+  MODERATORS: <FormattedMessage id="tabs.moderators" />,
 };
 
 const CommunityMembers = ({ communityId, currentUserId }) => {

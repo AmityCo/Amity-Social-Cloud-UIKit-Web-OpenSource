@@ -28,7 +28,7 @@ const DefaultPostRenderer = ({
   handleUnreportPost,
   hidePostTarget,
   isFlaggedByMe,
-  noInteractionMessage,
+  readonly,
   post,
   userRoles,
 }) => {
@@ -114,7 +114,7 @@ const DefaultPostRenderer = ({
         <ChildrenContent>{childrenContent}</ChildrenContent>
       </ConditionalRender>
 
-      <EngagementBar noInteractionMessage={noInteractionMessage} postId={postId} />
+      <EngagementBar readonly={readonly} postId={postId} />
 
       <ConditionalRender condition={isEditing}>
         <Modal onCancel={closeEditingPostModal} title={formatMessage({ id: 'post.editPost' })}>
@@ -134,7 +134,7 @@ DefaultPostRenderer.propTypes = {
   handleUnreportPost: PropTypes.func.isRequired,
   hidePostTarget: PropTypes.bool,
   isFlaggedByMe: PropTypes.bool,
-  noInteractionMessage: PropTypes.string,
+  readonly: PropTypes.bool,
   post: PropTypes.shape({
     data: PropTypes.shape({}),
     dataType: PropTypes.string,
@@ -152,7 +152,7 @@ DefaultPostRenderer.defaultProps = {
   currentUserId: '',
   hidePostTarget: false,
   isFlaggedByMe: false,
-  noInteractionMessage: null,
+  readonly: false,
   userRoles: [],
 };
 

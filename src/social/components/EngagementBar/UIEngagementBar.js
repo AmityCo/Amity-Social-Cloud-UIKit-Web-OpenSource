@@ -24,7 +24,7 @@ const UIEngagementBar = ({
   postId,
   totalLikes,
   totalComments,
-  noInteractionMessage,
+  readonly,
   onClickComment,
   isComposeBarDisplayed,
   handleAddComment,
@@ -44,18 +44,7 @@ const UIEngagementBar = ({
         </span>
       </ConditionalRender>
     </Counters>
-    <ConditionalRender condition={!!noInteractionMessage}>
-      <>
-        <CommentList
-          referenceId={postId}
-          referenceType={EkoCommentReferenceType.Post}
-          last={COMMENTS_PER_PAGE}
-          canInteract={false}
-        />
-        {noInteractionMessage && (
-          <NoInteractionMessage>{noInteractionMessage}</NoInteractionMessage>
-        )}
-      </>
+    <ConditionalRender condition={!readonly}>
       <>
         <InteractionBar>
           <PostLikeButton postId={postId} />
@@ -72,6 +61,18 @@ const UIEngagementBar = ({
           <CommentComposeBar onSubmit={handleAddComment} />
         </ConditionalRender>
       </>
+      <>
+        <NoInteractionMessage>
+          <FormattedMessage id="community.cannotInteract" />
+        </NoInteractionMessage>
+        <CommentList
+          referenceId={postId}
+          referenceType={EkoCommentReferenceType.Post}
+          last={COMMENTS_PER_PAGE}
+          readonly
+          loadMoreText={<FormattedMessage id="collapsible.viewAllComments" />}
+        />
+      </>
     </ConditionalRender>
   </EngagementBarContainer>
 );
@@ -80,7 +81,7 @@ UIEngagementBar.propTypes = {
   postId: PropTypes.string,
   totalLikes: PropTypes.number,
   totalComments: PropTypes.number,
-  noInteractionMessage: PropTypes.string,
+  readonly: PropTypes.bool,
   onClickComment: PropTypes.func,
   isComposeBarDisplayed: PropTypes.bool,
   handleAddComment: PropTypes.func,
@@ -90,7 +91,7 @@ UIEngagementBar.defaultProps = {
   postId: '',
   totalLikes: 0,
   totalComments: 0,
-  noInteractionMessage: null,
+  readonly: false,
   onClickComment: () => {},
   isComposeBarDisplayed: false,
   handleAddComment: () => {},

@@ -21,7 +21,7 @@ const Feed = ({
   showPostCreator = false,
   onPostCreated,
   goToExplore,
-  noPostInteractionMessage = null,
+  readonly = false,
 }) => {
   const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(queryParams);
@@ -53,8 +53,8 @@ const Feed = ({
             <Post
               key={postId}
               postId={postId}
-              noInteractionMessage={noPostInteractionMessage}
               hidePostTarget={targetType !== EkoPostTargetType.GlobalFeed}
+              readonly={readonly}
             />
           ))}
         </LoadMore>
@@ -72,7 +72,7 @@ Feed.propTypes = {
   onPostCreated: PropTypes.func,
   // below is to be refactored
   goToExplore: PropTypes.func,
-  noPostInteractionMessage: PropTypes.string,
+  readonly: PropTypes.bool,
 };
 
 export default customizableComponent('Feed', Feed);

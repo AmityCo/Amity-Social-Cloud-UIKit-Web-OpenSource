@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { EkoPostTargetType } from 'eko-sdk';
+import { FormattedMessage } from 'react-intl';
 
 import useCommunity from '~/social/hooks/useCommunity';
 
@@ -13,11 +14,9 @@ import CommunityInfo from '~/social/components/CommunityInfo';
 import CommunityMembers from '~/social/components/CommunityMembers';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 
-// TODO replace with translations keys
-// TODO: react-intl
 const tabs = {
-  TIMELINE: 'Timeline',
-  MEMBERS: 'Members',
+  TIMELINE: <FormattedMessage id="tabs.timeline" />,
+  MEMBERS: <FormattedMessage id="tabs.members" />,
 };
 
 const CommunityFeed = ({ communityId }) => {
@@ -34,8 +33,8 @@ const CommunityFeed = ({ communityId }) => {
         <Feed
           targetType={EkoPostTargetType.CommunityFeed}
           targetId={communityId}
+          readonly={!isJoined}
           showPostCreator={isJoined}
-          noPostInteractionMessage={isJoined ? null : 'Join community to interact with all posts'}
         />
       </ConditionalRender>
 

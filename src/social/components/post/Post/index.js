@@ -7,14 +7,7 @@ import { usePostRenderer } from '~/social/providers/PostRendererProvider';
 import PostErrorBoundary from './PostErrorBoundary';
 import UnknownPostRenderer from './UnknownPostRenderer';
 
-const Post = ({
-  postId,
-  currentUserId,
-  userRoles,
-  noInteractionMessage,
-  className,
-  hidePostTarget,
-}) => {
+const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, readonly }) => {
   const renderers = usePostRenderer();
 
   const { post, ...others } = usePost(postId);
@@ -32,9 +25,9 @@ const Post = ({
         className={className}
         currentUserId={currentUserId}
         hidePostTarget={hidePostTarget}
-        noInteractionMessage={noInteractionMessage}
         post={post}
         userRoles={userRoles}
+        readonly={readonly}
       />
     </PostErrorBoundary>
   );
@@ -45,14 +38,13 @@ Post.propTypes = {
   currentUserId: PropTypes.string,
   className: PropTypes.string,
   userRoles: PropTypes.arrayOf(PropTypes.string),
-  noInteractionMessage: PropTypes.string,
   hidePostTarget: PropTypes.bool,
+  readonly: PropTypes.bool,
 };
 
 Post.defaultProps = {
   currentUserId: '',
   userRoles: [],
-  noInteractionMessage: null,
   className: '',
   hidePostTarget: false,
 };

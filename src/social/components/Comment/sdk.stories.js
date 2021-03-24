@@ -8,13 +8,13 @@ export default {
   title: 'SDK Connected/Social/Comment',
 };
 
-export const SDKComment = ({ canInteract, isReplyComment }) => {
+export const SDKComment = ({ readonly, isReplyComment }) => {
   const [comment, isLoading] = useOneComment();
   if (isLoading) return <p>Loading...</p>;
   return (
     <UiKitComment
       commentId={comment.commentId}
-      canInteract={canInteract}
+      readonly={readonly}
       isReplyComment={isReplyComment}
     />
   );
@@ -23,12 +23,12 @@ export const SDKComment = ({ canInteract, isReplyComment }) => {
 SDKComment.storyName = 'Single Comment';
 
 SDKComment.args = {
-  canInteract: true,
+  readonly: false,
   isReplyComment: false,
 };
 
 SDKComment.argTypes = {
-  canInteract: { control: { type: 'boolean' } },
+  readonly: { control: { type: 'boolean' } },
   isReplyComment: { control: { type: 'boolean' } },
 };
 

@@ -24,7 +24,7 @@ UiEngagementBar.args = {
   postId: '',
   totalLikes: 0,
   totalComments: 0,
-  noInteractionMessage: '',
+  readonly: false,
   isComposeBarDisplayed: false,
 };
 

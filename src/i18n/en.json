@@ -43,6 +43,7 @@
   "community.leaveCommunityTitle": "Leave community?",
   "community.leaveCommunityBody": "You won’t no longer be able to post and interact in this community after leaving.",
   "community.leaveCommunityButtonText": "Leave",
+  "community.cannotInteract": "Join community to interact with all posts",
   "community.removeUserFromCommunityTitle": "Remove user from community",
   "community.removeUserFromCommunityBody": "This user won't no longer be able to search, post. Continue?",
   "post": "Post",
@@ -61,5 +62,8 @@
   "reply.delete": "Delete reply",
   "reply.deleteBody": "This reply will be permanently deleted. Continue?",
   "reply.edit": "Edit reply",
-  "reply.deleted": "This reply has been deleted"
+  "reply.deleted": "This reply has been deleted",
+  "tabs.timeline": "Timeline",
+  "tabs.members": "Members",
+  "tabs.moderators": "Moderators"
 }

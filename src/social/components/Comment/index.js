@@ -62,7 +62,7 @@ const DeletedReply = () => {
   );
 };
 
-const Comment = ({ canInteract = true, commentId, currentUserId, userRoles }) => {
+const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -140,11 +140,11 @@ const Comment = ({ canInteract = true, commentId, currentUserId, userRoles }) =>
     });
   };
 
-  const canDelete = (canInteract && isCommentOwner) || isModerator(userRoles);
-  const canEdit = canInteract && isCommentOwner;
-  const canLike = canInteract;
-  const canReply = canInteract && !isReplyComment;
-  const canReport = canInteract && !isCommentOwner;
+  const canDelete = (!readonly && isCommentOwner) || isModerator(userRoles);
+  const canEdit = !readonly && isCommentOwner;
+  const canLike = !readonly;
+  const canReply = !readonly && !isReplyComment;
+  const canReport = !readonly && !isCommentOwner;
 
   const renderedComment = (
     <StyledComment
@@ -189,7 +189,7 @@ const Comment = ({ canInteract = true, commentId, currentUserId, userRoles }) =>
               parentId={commentId}
               referenceId={comment.referenceId}
               last={REPLIES_PER_PAGE}
-              canInteract={canInteract}
+              readonly={readonly}
               isExpanded={false}
             />
 
@@ -210,7 +210,7 @@ const Comment = ({ canInteract = true, commentId, currentUserId, userRoles }) =>
 };
 
 Comment.propTypes = {
-  canInteract: PropTypes.bool,
+  readonly: PropTypes.bool,
   commentId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   userRoles: PropTypes.array,

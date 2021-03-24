@@ -16,5 +16,5 @@ export const SdkEngagementBar = props => {
 SdkEngagementBar.storyName = 'Engagement Bar';
 
 SdkEngagementBar.args = {
-  noInteractionMessage: '',
+  readonly: false,
 };

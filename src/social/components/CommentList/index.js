@@ -16,7 +16,7 @@ const CommentList = ({
   filterByParentId = false,
   first,
   last,
-  canInteract = true,
+  readonly = false,
   isExpanded = true,
 }) => {
   const { commentIds, hasMore, loadMore } = useCommentsQuery({
@@ -54,7 +54,7 @@ const CommentList = ({
       isExpanded={isExpanded}
     >
       {commentIds.map(commentId => (
-        <Comment key={commentId} commentId={commentId} canInteract={canInteract} />
+        <Comment key={commentId} commentId={commentId} readonly={readonly} />
       ))}
     </LoadMore>
   );
@@ -67,7 +67,7 @@ CommentList.propTypes = {
   filterByParentId: PropTypes.bool,
   first: PropTypes.number,
   last: PropTypes.number,
-  canInteract: PropTypes.bool,
+  readonly: PropTypes.bool,
   isExpanded: PropTypes.bool,
 };
 
