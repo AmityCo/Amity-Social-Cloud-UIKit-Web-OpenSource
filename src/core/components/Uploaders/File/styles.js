@@ -53,6 +53,9 @@ export const CircleIcon = styled(ExclamationCircle)`
 export const FileName = styled.div`
   grid-area: name;
   padding: 0 0.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   ${({ theme }) => theme.typography.bodyBold}
 `;
 
