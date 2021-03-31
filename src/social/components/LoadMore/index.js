@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import { LoadMoreButton, ShevronDownIcon } from './styles';
@@ -17,6 +17,7 @@ const LoadMore = ({
   isExpanded = true,
 }) => {
   const [expanded, setExpanded] = useState(isExpanded);
+  useEffect(() => setExpanded(isExpanded), [isExpanded]);
   return (
     <ConditionalRender condition={expanded}>
       <div>

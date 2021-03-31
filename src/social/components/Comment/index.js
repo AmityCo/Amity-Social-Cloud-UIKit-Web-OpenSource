@@ -66,6 +66,8 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
+  const [isExpanded, setExpanded] = useState(false);
+
   const {
     isCommentReady,
     comment,
@@ -190,7 +192,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
               referenceId={comment.referenceId}
               last={REPLIES_PER_PAGE}
               readonly={readonly}
-              isExpanded={false}
+              isExpanded={isExpanded}
             />
 
             <ConditionalRender condition={isReplying}>
@@ -199,6 +201,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
                 onSubmit={replyText => {
                   handleReplyToComment(replyText);
                   setIsReplying(false);
+                  setExpanded(true);
                 }}
               />
             </ConditionalRender>
