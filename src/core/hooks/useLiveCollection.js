@@ -25,7 +25,14 @@ const useLiveCollection = (
 
       // data
       liveCollection.models && setData(liveCollection.models);
-      liveCollection.on('dataUpdated', setData);
+      liveCollection.on('dataUpdated', newData => {
+        const { hasMore } = liveCollection;
+        setPagination({
+          hasMore,
+          loadMore: hasMore ? () => liveCollection.nextPage() : noop,
+        });
+        setData(newData);
+      });
 
       // pagination
       liveCollection.on('loadingStatusChanged', ({ newValue }) => {
