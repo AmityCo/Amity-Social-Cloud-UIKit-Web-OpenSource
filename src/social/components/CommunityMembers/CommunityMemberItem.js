@@ -23,7 +23,7 @@ const CommunityMemberItem = ({
   removeMembers,
   isJoined,
 }) => {
-  const { handleReportUser } = useUser(userId);
+  const { handleReportUser, isFlaggedByMe } = useUser(userId);
 
   const onReportClick = () => {
     handleReportUser();
@@ -58,7 +58,10 @@ const CommunityMemberItem = ({
       <ConditionalRender condition={!isCurrentUser && isJoined}>
         <OptionMenu
           options={[
-            { name: 'report.doReport', action: onReportClick },
+            {
+              name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
+              action: onReportClick,
+            },
             hasModeratorPermissions &&
               !memberHasModeratorRole && {
                 name: 'moderatorMenu.promoteToModerator',

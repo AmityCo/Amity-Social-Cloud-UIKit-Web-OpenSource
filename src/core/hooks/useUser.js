@@ -4,6 +4,7 @@ import { UserRepository } from 'eko-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';
+import useMemoAsync from '~/core/hooks/useMemoAsync';
 
 const userRepo = new UserRepository();
 
@@ -18,9 +19,15 @@ const useUser = (userId, dependencies, resolver) => {
     file = { fileUrl: user.avatarCustomUrl };
   }
 
-  const handleReportUser = () => userRepo.flag({ userId });
+  const isFlaggedByMe = useMemoAsync(
+    async () => (user?.userId ? userRepo.isFlaggedByMe({ userId }) : false),
+    [user?.userId],
+  );
 
-  return { user, file, handleReportUser };
+  const handleReportUser = () =>
+    isFlaggedByMe ? userRepo.unflag({ userId }) : userRepo.flag({ userId });
+
+  return { user, file, handleReportUser, isFlaggedByMe };
 };
 
 export default useUser;
