@@ -1,5 +1,11 @@
 # Changelog
 
+## [v1.8.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.7.3...v1.8.0)
+
+#### 5 April 2021
+
+---
+
 ## [v1.7.3](https://gitlab.com/upstra/web/ui-kit/compare/v1.7.2...v1.7.3)
 
 #### 5 April 2021
