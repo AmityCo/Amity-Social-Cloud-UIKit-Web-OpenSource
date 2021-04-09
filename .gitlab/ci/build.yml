@@ -1,0 +1,22 @@
+static_build:
+  stage: build
+  script:
+    - echo $CI_ENVIRONMENT_TYPE
+    - echo $PUBLIC_URL
+    - echo $REACT_APP_BASE_URL
+    - echo $REACT_APP_API_ENDPOINT
+    - npm run storybook:build
+  artifacts:
+    paths:
+      - ./storybook-build
+  environment:
+    name: $CI_ENVIRONMENT_TYPE$CI_MERGE_REQUEST_IID
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      variables:
+        CI_ENVIRONMENT_TYPE: staging
+
+    - if: $CI_MERGE_REQUEST_IID
+      variables:
+        CI_ENVIRONMENT_TYPE: dev/
+        REACT_APP_BASE_URL: /$CI_MERGE_REQUEST_IID

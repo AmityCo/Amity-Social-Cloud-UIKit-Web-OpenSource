@@ -1,0 +1,36 @@
+version_bump:
+  variables:
+    GIT_STRATEGY: none
+  image: node:alpine
+  stage: version
+  script:
+    # install dependencies
+    - apk add --no-cache bash openssh openssh-client git
+    # setup ssh
+    - eval $(ssh-agent -s)
+    - echo "$DEPLOY_KEY" | base64 -d - | ssh-add -
+    # setup git
+    - git config --global user.name $GITLAB_USER_NAME
+    - git config --global user.email $GITLAB_USER_EMAIL
+    # allow gitlab
+    - ssh -o StrictHostKeyChecking=no git@gitlab.com
+    # clone the repo
+    - REPOSITORY=$(echo $CI_REPOSITORY_URL | sed "s/^.*@gitlab.com\//git@gitlab.com:/g")
+    - git clone $REPOSITORY $CI_PROJECT_NAME
+    - cd $CI_PROJECT_NAME
+    # checkout the tag's branch
+    - "BRANCH=$(git branch --contains tags/$CI_COMMIT_TAG --format='%(refname:short)')"
+    - echo $BRANCH
+    - git checkout $BRANCH
+    # delete the commit (locally and remotely)
+    - git tag -d $CI_COMMIT_TAG
+    - git push --delete origin $CI_COMMIT_TAG
+    # create the version commit + matching tag
+    - npm version $CI_COMMIT_TAG
+    # push it back to remote
+    - git push --atomic origin $BRANCH "v$CI_COMMIT_TAG"
+  only:
+    refs:
+      - tags
+    variables:
+      - $CI_COMMIT_TAG =~ /(?i)^[0-9]+\.[0-9]+\.[0-9]+(-rc.[0-9]+)?$/

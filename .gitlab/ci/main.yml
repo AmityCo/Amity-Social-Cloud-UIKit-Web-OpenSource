@@ -1,0 +1,21 @@
+image: node:12.18
+
+stages:
+  - version
+  - vendors
+  - test
+  - build
+  - deploy
+  - compile
+  - publish
+  - teardown
+      
+include:
+  - local: .gitlab/ci/version.yml
+  - local: .gitlab/ci/vendors.yml
+  - local: .gitlab/ci/test.yml
+  - local: .gitlab/ci/build.yml
+  - local: .gitlab/ci/deploy.yml
+  - local: .gitlab/ci/compile.yml
+  - local: .gitlab/ci/publish.yml
+  - local: .gitlab/ci/teardown.yml
