@@ -5,7 +5,7 @@ s3_upload:
     GIT_STRATEGY: none
   script:
     - echo $S3_BUCKET/${CI_ENVIRONMENT_PREFIX}${CI_MERGE_REQUEST_IID}
-    - aws s3 sync --delete ./storybook-build s3://$S3_BUCKET/${CI_ENVIRONMENT_PREFIX}${CI_MERGE_REQUEST_IID}
+    - aws s3 sync --delete ./storybook-build s3://$S3_BUCKET/${CI_ENVIRONMENT_PREFIX}${CI_MERGE_REQUEST_IID} --exact-timestamps
   environment:
     name: $CI_ENVIRONMENT_TYPE$CI_MERGE_REQUEST_IID
     url: https://$S3_BUCKET/$CI_ENVIRONMENT_PREFIX$CI_MERGE_REQUEST_IID
