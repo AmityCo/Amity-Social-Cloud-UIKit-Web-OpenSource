@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { EkoImageSize, FileRepository } from 'eko-sdk';
+import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
 import Loader from '~/core/components/Uploaders/Loader';
 import Uploader from '~/core/components/Uploaders/Uploader';
@@ -80,7 +80,7 @@ const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
       avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: avatarFileId,
-        imageSize: EkoImageSize.Medium,
+        imageSize: ImageSize.Medium,
       }),
     [avatarFileId],
   );

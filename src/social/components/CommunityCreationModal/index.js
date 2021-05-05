@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CommunityRepository } from 'eko-sdk';
+import { CommunityRepository } from '@amityco/js-sdk';
 
 import Modal from '~/core/components/Modal';
 import { confirm } from '~/core/components/Confirm';

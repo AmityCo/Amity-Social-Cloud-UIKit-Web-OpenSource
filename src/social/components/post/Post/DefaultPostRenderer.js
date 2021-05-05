@@ -1,4 +1,4 @@
-import { EkoCommunityUserMembership, EkoPostTargetType } from 'eko-sdk';
+import { CommunityUserMembership, PostTargetType } from '@amityco/js-sdk';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -44,8 +44,8 @@ const DefaultPostRenderer = ({
   const isMyPost = currentUserId === postedUserId;
   const isMember =
     members.find(member => member.userId === currentUserId)?.communityMembership ===
-    EkoCommunityUserMembership.Member;
-  const isCommunityPost = targetType === EkoPostTargetType.CommunityFeed;
+    CommunityUserMembership.Member;
+  const isCommunityPost = targetType === PostTargetType.CommunityFeed;
 
   const confirmDeletePost = () =>
     confirm({

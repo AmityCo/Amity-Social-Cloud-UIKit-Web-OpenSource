@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { PostRepository } from 'eko-sdk';
+import { PostRepository } from '@amityco/js-sdk';
 
 const usePostChildren = postChildrenIds => {
   const [childrenPosts, setChildrenPosts] = useState([]);

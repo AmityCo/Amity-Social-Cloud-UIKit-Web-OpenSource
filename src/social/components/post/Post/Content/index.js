@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostDataType } from 'eko-sdk';
+import { PostDataType } from '@amityco/js-sdk';
 
 import TextContent from '~/social/components/post/TextContent';
 import ImageContent from '~/social/components/post/ImageContent';
 import FileContent from '~/social/components/post/FileContent';
 
 const RENDERERS = {
-  [EkoPostDataType.TextPost]: TextContent,
-  [EkoPostDataType.ImagePost]: ImageContent,
-  [EkoPostDataType.FilePost]: FileContent,
+  [PostDataType.TextPost]: TextContent,
+  [PostDataType.ImagePost]: ImageContent,
+  [PostDataType.FilePost]: FileContent,
 };
 
 const PostContent = ({ data, dataType, postMaxLines }) => {
@@ -21,7 +21,7 @@ const PostContent = ({ data, dataType, postMaxLines }) => {
 
 PostContent.propTypes = {
   data: PropTypes.object,
-  dataType: PropTypes.oneOf(Object.values(EkoPostDataType)),
+  dataType: PropTypes.oneOf(Object.values(PostDataType)),
   postMaxLines: PropTypes.number,
 };
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 
 import useCommunity from '~/social/hooks/useCommunity';
@@ -31,7 +31,7 @@ const CommunityFeed = ({ communityId }) => {
 
       <ConditionalRender condition={activeTab === tabs.TIMELINE}>
         <Feed
-          targetType={EkoPostTargetType.CommunityFeed}
+          targetType={PostTargetType.CommunityFeed}
           targetId={communityId}
           readonly={!isJoined}
           showPostCreator={isJoined}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 
 import useOneUser from '~/mock/useOneUser';
 import useOneCommunity from '~/mock/useOneCommunity';
@@ -31,7 +31,7 @@ export const SDKAnotherUsersFeed = ({ customUserId, showPostCreator }) => {
   if (!user) return <p>Loading...</p>;
   return (
     <UiKitFeed
-      targetType={EkoPostTargetType.UserFeed}
+      targetType={PostTargetType.UserFeed}
       targetId={customUserId || user.userId}
       showPostCreator={showPostCreator}
     />
@@ -55,7 +55,7 @@ export const SDKCommunityFeed = ({ showPostCreator }) => {
   if (isLoading) return <p>Loading...</p>;
   return (
     <UiKitFeed
-      targetType={EkoPostTargetType.CommunityFeed}
+      targetType={PostTargetType.CommunityFeed}
       targetId={community.communityId}
       showPostCreator={showPostCreator}
     />

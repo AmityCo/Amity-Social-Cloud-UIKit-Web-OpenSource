@@ -1,4 +1,4 @@
-import { CommentRepository } from 'eko-sdk';
+import { CommentRepository } from '@amityco/js-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useMemoAsync from '~/core/hooks/useMemoAsync';

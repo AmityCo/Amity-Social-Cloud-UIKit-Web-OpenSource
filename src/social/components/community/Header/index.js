@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { EkoImageSize, FileRepository } from 'eko-sdk';
+import { ImageSize, FileRepository } from '@amityco/js-sdk';
 import useCommunity from '~/social/hooks/useCommunity';
 
 import UICommunityHeader from './styles';
@@ -22,7 +22,7 @@ const CommunityHeader = ({
       community.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: community.avatarFileId,
-        imageSize: EkoImageSize.Medium,
+        imageSize: ImageSize.Medium,
       }),
     [community.avatarFileId],
   );

@@ -1,4 +1,4 @@
-import { CommunityRepository, EkoCommunityFilter } from 'eko-sdk';
+import { CommunityRepository, CommunityFilter } from '@amityco/js-sdk';
 
 import useCommunity from '~/social/hooks/useCommunity';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
@@ -12,7 +12,7 @@ const useCommunityMembers = communityId => {
     () =>
       CommunityRepository.getCommunityMembers({
         communityId,
-        memberships: [EkoCommunityFilter.Member],
+        memberships: [CommunityFilter.Member],
       }),
     [communityId],
   );
@@ -21,7 +21,7 @@ const useCommunityMembers = communityId => {
     () =>
       CommunityRepository.getCommunityMembers({
         communityId,
-        memberships: [EkoCommunityFilter.Member],
+        memberships: [CommunityFilter.Member],
         roles: [FILTER_BY_MODERATOR_ROLE],
       }),
     [communityId],

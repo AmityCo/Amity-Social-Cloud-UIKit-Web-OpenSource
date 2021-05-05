@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileRepository } from 'eko-sdk';
+import { FileRepository } from '@amityco/js-sdk';
 
 import { ImageUploadContainer, FileInput, ImageIcon, Label } from './styles';
 

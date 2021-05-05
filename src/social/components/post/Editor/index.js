@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostDataType, PostRepository } from 'eko-sdk';
+import { PostDataType, PostRepository } from '@amityco/js-sdk';
 
 import usePost from '~/social/hooks/usePost';
 import Content from './Content';
@@ -46,12 +46,12 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
   ]);
 
   const childFilePosts = useMemo(
-    () => localChildrenPosts.filter(childPost => childPost.dataType === EkoPostDataType.FilePost),
+    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.FilePost),
     [localChildrenPosts],
   );
 
   const childImagePosts = useMemo(
-    () => localChildrenPosts.filter(childPost => childPost.dataType === EkoPostDataType.ImagePost),
+    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.ImagePost),
     [localChildrenPosts],
   );
 
@@ -67,14 +67,14 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
         {childImagePosts.length > 0 && (
           <Content
             data={childImagePosts}
-            dataType={EkoPostDataType.ImagePost}
+            dataType={PostDataType.ImagePost}
             onRemoveChild={handleRemoveChild}
           />
         )}
         {childFilePosts.length > 0 && (
           <Content
             data={childFilePosts}
-            dataType={EkoPostDataType.FilePost}
+            dataType={PostDataType.FilePost}
             onRemoveChild={handleRemoveChild}
           />
         )}

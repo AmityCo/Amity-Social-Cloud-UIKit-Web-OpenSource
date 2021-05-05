@@ -1,11 +1,11 @@
-import { EkoPostDataType } from 'eko-sdk';
+import { PostDataType } from '@amityco/js-sdk';
 import React, { createContext, useContext, useMemo } from 'react';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
 
 const defaultValue = {
-  [EkoPostDataType.TextPost]: DefaultPostRenderer,
-  [EkoPostDataType.ImagePost]: DefaultPostRenderer,
-  [EkoPostDataType.FilePost]: DefaultPostRenderer,
+  [PostDataType.TextPost]: DefaultPostRenderer,
+  [PostDataType.ImagePost]: DefaultPostRenderer,
+  [PostDataType.FilePost]: DefaultPostRenderer,
 };
 
 export const PostRendererContext = createContext(defaultValue);

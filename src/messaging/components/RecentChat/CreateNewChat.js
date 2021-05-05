@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChannelRepository, EkoChannelType } from 'eko-sdk';
+import { ChannelRepository, ChannelType } from '@amityco/js-sdk';
 import Popover from '~/core/components/Popover';
 
 import {
@@ -28,7 +28,7 @@ const CreateNewChat = () => {
     if (!text) return;
     const createChat = channelRepo.createChannel({
       channelId: text,
-      type: EkoChannelType.Standard,
+      type: ChannelType.Standard,
       userIds: [],
     });
     createChat.once('dataUpdated', () => {

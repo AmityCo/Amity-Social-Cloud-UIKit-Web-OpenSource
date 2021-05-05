@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FeedRepository, PostRepository, EkoLoadingStatus, EkoPostTargetType } from 'eko-sdk';
+import { FeedRepository, PostRepository, LoadingStatus, PostTargetType } from '@amityco/js-sdk';
 
 /**
  * Used in Storybook stories only to get a single post for the current user.
@@ -14,14 +14,14 @@ const useOnePost = () => {
     const postsLiveCollection = FeedRepository.getMyFeed();
 
     postsLiveCollection.once('loadingStatusChanged', ({ newValue }) => {
-      if (newValue !== EkoLoadingStatus.Loaded) return;
+      if (newValue !== LoadingStatus.Loaded) return;
       if (postsLiveCollection.models.length) {
         setPost(postsLiveCollection.models[0]);
         setIsLoading(false);
       } else {
         newPostLiveObject = PostRepository.createTextPost({
           text: 'Post created for Story',
-          targetType: EkoPostTargetType.MyFeed,
+          targetType: PostTargetType.MyFeed,
         });
 
         newPostLiveObject.once('dataStatusChanged', () => {

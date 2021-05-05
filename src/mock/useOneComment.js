@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
+import { CommentRepository, CommentReferenceType } from '@amityco/js-sdk';
 import useOnePost from '~/mock/useOnePost';
 
 /**
@@ -23,7 +23,7 @@ const useOneComment = () => {
       setIsLoading(false);
     } else {
       commentLiveObject = CommentRepository.createTextComment({
-        referenceType: EkoCommentReferenceType.Post,
+        referenceType: CommentReferenceType.Post,
         referenceId: post.postId,
         text: 'Comment created for story',
       });

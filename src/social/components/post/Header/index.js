@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 import usePost from '~/social/hooks/usePost';
 import useCommunity from '~/social/hooks/useCommunity';
 import { useNavigation } from '~/social/providers/NavigationProvider';
@@ -16,7 +16,7 @@ const PostHeader = ({ postId, hidePostTarget }) => {
 
   // If the post is targetting a community feed, get the name of that community.
   const { community } = useCommunity(targetId);
-  const isCommunityPost = targetType === EkoPostTargetType.CommunityFeed;
+  const isCommunityPost = targetType === PostTargetType.CommunityFeed;
   const postTargetName = isCommunityPost ? community?.displayName : null;
   const handleClickCommunity = isCommunityPost ? () => onClickCommunity(targetId) : null;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 
 import PageLayout from '~/social/layouts/Page';
 import Feed from '~/social/components/Feed';
@@ -19,7 +19,7 @@ const NewsFeed = ({ blockRouteChange }) => {
   return (
     <PageLayout aside={Side}>
       <Feed
-        targetType={EkoPostTargetType.GlobalFeed}
+        targetType={PostTargetType.GlobalFeed}
         blockRouteChange={blockRouteChange}
         showPostCreator
       />

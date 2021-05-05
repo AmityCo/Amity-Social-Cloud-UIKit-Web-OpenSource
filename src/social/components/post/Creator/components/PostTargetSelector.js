@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
@@ -61,7 +61,7 @@ const PostTargetSelector = ({
       <MenuItem
         active={user.userId === currentTargetId}
         onClick={() => {
-          onChange({ targetId: user.userId, targetType: EkoPostTargetType.UserFeed });
+          onChange({ targetId: user.userId, targetType: PostTargetType.UserFeed });
           close();
         }}
       >
@@ -84,7 +84,7 @@ const PostTargetSelector = ({
               onClick={() => {
                 onChange({
                   targetId: community.communityId,
-                  targetType: EkoPostTargetType.CommunityFeed,
+                  targetType: PostTargetType.CommunityFeed,
                 });
                 close();
               }}

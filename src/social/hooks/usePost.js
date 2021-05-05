@@ -1,4 +1,4 @@
-import { PostRepository } from 'eko-sdk';
+import { PostRepository } from '@amityco/js-sdk';
 import useMemoAsync from '~/core/hooks/useMemoAsync';
 
 import usePostChildren from '~/social/hooks/usePostChildren';

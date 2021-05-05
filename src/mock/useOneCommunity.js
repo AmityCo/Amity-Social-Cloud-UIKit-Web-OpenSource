@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CommunityRepository, EkoLoadingStatus } from 'eko-sdk';
+import { CommunityRepository, LoadingStatus } from '@amityco/js-sdk';
 
 /**
  * Used in Storybook stories only to get a single community and its avatar URL.
@@ -26,7 +26,7 @@ const useOneCommunity = (communityId = null) => {
     } else {
       communitiesLiveCollection = CommunityRepository.allCommunitiesWithFilters();
       communitiesLiveCollection.once('loadingStatusChanged', ({ newValue }) => {
-        if (newValue !== EkoLoadingStatus.Loaded) return;
+        if (newValue !== LoadingStatus.Loaded) return;
         if (communitiesLiveCollection.models.length) {
           setCommunity(communitiesLiveCollection.models[0]);
           setIsLoading(false);

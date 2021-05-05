@@ -1,5 +1,5 @@
 import React from 'react';
-import { EkoCommunityFilter } from 'eko-sdk';
+import { CommunityFilter } from '@amityco/js-sdk';
 import NavigationProvider, { NavigationContext } from '~/social/providers/NavigationProvider';
 
 import UiKitCommunitiesList from '.';
@@ -12,7 +12,7 @@ export const SDKCommunitiesList = ({ communitiesQueryParam, querySearch, onlySho
   const queryParams = { ...communitiesQueryParam };
 
   if (onlyShowJoined) {
-    queryParams.filter = EkoCommunityFilter.Member;
+    queryParams.filter = CommunityFilter.Member;
   }
 
   if (querySearch) {

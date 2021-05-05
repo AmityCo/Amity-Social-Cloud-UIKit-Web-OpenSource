@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 
 import withSDK from '~/core/hocs/withSDK';
 
@@ -23,7 +23,7 @@ const UserFeed = ({ userId, currentUserId }) => {
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <Feed
-        targetType={EkoPostTargetType.UserFeed}
+        targetType={PostTargetType.UserFeed}
         targetId={userId}
         showPostCreator={userId === currentUserId}
       />

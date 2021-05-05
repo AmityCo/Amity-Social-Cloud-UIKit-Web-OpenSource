@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { EkoImageSize, FileRepository } from 'eko-sdk';
+import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityMembers from '~/social/components/CommunityMembers';
@@ -73,7 +73,7 @@ const CommunityEditPage = ({ communityId }) => {
       community.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: community.avatarFileId,
-        imageSize: EkoImageSize.Medium,
+        imageSize: ImageSize.Medium,
       }),
     [community.avatarFileId],
   );

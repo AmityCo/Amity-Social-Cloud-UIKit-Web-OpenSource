@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { FileRepository } from 'eko-sdk';
+import { FileRepository } from '@amityco/js-sdk';
 
 export default (onChange = () => {}, onLoadingChange = () => {}, onError = () => {}) => {
   const [uploading, setUploading] = useState([]); // local File objects

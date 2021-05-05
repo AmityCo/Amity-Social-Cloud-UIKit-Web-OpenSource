@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { FileRepository, EkoImageSize } from 'eko-sdk';
+import { FileRepository, ImageSize } from '@amityco/js-sdk';
 import useFile from '~/core/hooks/useFile';
 
 import StyledImage from './styles';
@@ -14,7 +14,7 @@ const Image = ({ fileId, imageFit, noBorder, onRemove } = {}) => {
   // TODO: this is temporary - we should use file.fileUrl when supported.
   const fileUrl = FileRepository.getFileUrlById({
     fileId: file.fileId,
-    imageSize: EkoImageSize.Medium,
+    imageSize: ImageSize.Medium,
   });
 
   return <StyledImage url={fileUrl} imageFit={imageFit} noBorder={noBorder} onRemove={onRemove} />;

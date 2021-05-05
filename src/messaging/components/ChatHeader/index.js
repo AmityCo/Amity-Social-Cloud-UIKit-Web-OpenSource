@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChannelRepository } from 'eko-sdk';
+import { ChannelRepository } from '@amityco/js-sdk';
 
 import customizableComponent from '~/core/hocs/customization';
 import useLiveObject from '~/core/hooks/useLiveObject';

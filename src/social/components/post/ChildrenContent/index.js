@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostDataType } from 'eko-sdk';
+import { PostDataType } from '@amityco/js-sdk';
 
 import GalleryContent from '~/social/components/post/GalleryContent';
 import FileListContent from '~/social/components/post/FileListContent';
 
 const RENDERERS = {
-  [EkoPostDataType.ImagePost]: GalleryContent,
-  [EkoPostDataType.FilePost]: FileListContent,
+  [PostDataType.ImagePost]: GalleryContent,
+  [PostDataType.FilePost]: FileListContent,
 };
 
 const ChildrenContent = ({ children }) => {

@@ -1,4 +1,4 @@
-import { CommentRepository } from 'eko-sdk';
+import { CommentRepository } from '@amityco/js-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
 import useLiveObject from '~/core/hooks/useLiveObject';
 

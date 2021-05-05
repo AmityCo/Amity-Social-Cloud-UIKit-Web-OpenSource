@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostDataType } from 'eko-sdk';
+import { PostDataType } from '@amityco/js-sdk';
 
 import TextContent from './text';
 import ImageContentList from './image';
@@ -9,14 +9,14 @@ import File from '~/core/components/Uploaders/File';
 import Image from '~/core/components/Uploaders/Image';
 
 const RENDERERS = {
-  [EkoPostDataType.TextPost]: TextContent,
-  [EkoPostDataType.ImagePost]: Image,
-  [EkoPostDataType.FilePost]: File,
+  [PostDataType.TextPost]: TextContent,
+  [PostDataType.ImagePost]: Image,
+  [PostDataType.FilePost]: File,
 };
 
 const LIST_RENDERERS = {
-  [EkoPostDataType.ImagePost]: ImageContentList,
-  [EkoPostDataType.FilePost]: FileContentList,
+  [PostDataType.ImagePost]: ImageContentList,
+  [PostDataType.FilePost]: FileContentList,
 };
 
 const PostEditorContent = ({ data, dataType, onChangeText, onRemoveChild, placeholder }) => {
@@ -38,7 +38,7 @@ const PostEditorContent = ({ data, dataType, onChangeText, onRemoveChild, placeh
 
 PostEditorContent.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  dataType: PropTypes.oneOf(Object.values(EkoPostDataType)),
+  dataType: PropTypes.oneOf(Object.values(PostDataType)),
   onChangeText: PropTypes.func,
   onRemoveChild: PropTypes.func,
   placeholder: PropTypes.string,

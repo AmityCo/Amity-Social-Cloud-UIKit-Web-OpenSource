@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileRepository } from 'eko-sdk';
+import { FileRepository } from '@amityco/js-sdk';
 
 import styled from 'styled-components';
 import { readFileAsync } from '~/helpers';

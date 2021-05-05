@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 
 import StyledEmptyFeed from '.';
 
@@ -13,5 +13,5 @@ export const UiEmptyFeed = ({ targetType }) => <StyledEmptyFeed targetType={targ
 UiEmptyFeed.storyName = 'Empty';
 
 UiEmptyFeed.argTypes = {
-  targetType: { control: { type: 'select', options: Object.values(EkoPostTargetType) } },
+  targetType: { control: { type: 'select', options: Object.values(PostTargetType) } },
 };

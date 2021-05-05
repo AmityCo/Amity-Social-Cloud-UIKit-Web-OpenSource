@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { EkoImageSize, FileRepository } from 'eko-sdk';
+import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
 import useCategory from '~/social/hooks/useCategory';
 
@@ -15,7 +15,7 @@ const CategoryHeader = ({ className, categoryId, children, onClick }) => {
       category.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: category.avatarFileId,
-        imageSize: EkoImageSize.Medium,
+        imageSize: ImageSize.Medium,
       }),
     [category.avatarFileId],
   );

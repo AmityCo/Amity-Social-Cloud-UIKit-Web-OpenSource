@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CommentRepository } from 'eko-sdk';
+import { CommentRepository } from '@amityco/js-sdk';
 
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 

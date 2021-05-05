@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CommunityRepository } from 'eko-sdk';
+import { CommunityRepository } from '@amityco/js-sdk';
 
 const MODERATOR_ROLE = 'moderator';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 
 import UiKitPostCreator from '.';
 
@@ -11,7 +11,7 @@ export default {
 export const SDKCreatePost = ({ onCreateSuccess }) => (
   <UiKitPostCreator
     targetId="Web-Test"
-    targetType={EkoPostTargetType.UserFeed}
+    targetType={PostTargetType.UserFeed}
     onCreateSuccess={onCreateSuccess}
   />
 );

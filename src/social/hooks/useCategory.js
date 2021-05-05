@@ -1,4 +1,4 @@
-import { CommunityRepository } from 'eko-sdk';
+import { CommunityRepository } from '@amityco/js-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';

@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 
-import { UserRepository } from 'eko-sdk';
+import { UserRepository } from '@amityco/js-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';

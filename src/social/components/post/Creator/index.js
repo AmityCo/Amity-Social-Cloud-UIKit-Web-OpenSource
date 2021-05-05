@@ -6,10 +6,10 @@ import {
   UserRepository,
   CommunityRepository,
   PostRepository,
-  EkoPostTargetType,
+  PostTargetType,
   FileRepository,
-  EkoImageSize,
-} from 'eko-sdk';
+  ImageSize,
+} from '@amityco/js-sdk';
 
 import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
@@ -58,9 +58,9 @@ const PostCreatorBar = ({
   const { user } = useUser(currentUserId);
 
   // default to me
-  if (targetType === EkoPostTargetType.GlobalFeed || targetType === EkoPostTargetType.MyFeed) {
+  if (targetType === PostTargetType.GlobalFeed || targetType === PostTargetType.MyFeed) {
     /* eslint-disable no-param-reassign */
-    targetType = EkoPostTargetType.UserFeed;
+    targetType = PostTargetType.UserFeed;
     /* eslint-disable no-param-reassign */
     targetId = currentUserId;
   }
@@ -71,7 +71,7 @@ const PostCreatorBar = ({
     setTarget({ targetType, targetId });
   }, [targetType, targetId]);
 
-  const fetcher = target.targetType === EkoPostTargetType.UserFeed ? userFetcher : communityFetcher;
+  const fetcher = target.targetType === PostTargetType.UserFeed ? userFetcher : communityFetcher;
   const model = useLiveObject(fetcher(target.targetId), [target.targetId]);
   const { avatarFileId } = model;
 
@@ -81,7 +81,7 @@ const PostCreatorBar = ({
       avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: avatarFileId,
-        imageSize: EkoImageSize.Medium,
+        imageSize: ImageSize.Medium,
       }),
     [avatarFileId],
   );
@@ -137,7 +137,7 @@ const PostCreatorBar = ({
   };
 
   const backgroundImage =
-    target.targetType === EkoPostTargetType.CommunityFeed ? CommunityImage : UserImage;
+    target.targetType === PostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
   const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
 

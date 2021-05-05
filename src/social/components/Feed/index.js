@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EkoPostTargetType, EkoCommunityFilter } from 'eko-sdk';
+import { PostTargetType, CommunityFilter } from '@amityco/js-sdk';
 
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PostCreator from '~/social/components/post/Creator';
@@ -12,11 +12,11 @@ import LoadMore from '~/social/components/LoadMore';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
 
-const queryParams = { filter: EkoCommunityFilter.Member };
+const queryParams = { filter: CommunityFilter.Member };
 
 const Feed = ({
   className = null,
-  targetType = EkoPostTargetType.MyFeed,
+  targetType = PostTargetType.MyFeed,
   targetId = '',
   showPostCreator = false,
   onPostCreated,
@@ -26,7 +26,7 @@ const Feed = ({
   const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(queryParams);
 
-  const enablePostTargetPicker = targetType === EkoPostTargetType.GlobalFeed;
+  const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
 
   return (
     <FeedScrollContainer
@@ -53,7 +53,7 @@ const Feed = ({
             <Post
               key={postId}
               postId={postId}
-              hidePostTarget={targetType !== EkoPostTargetType.GlobalFeed}
+              hidePostTarget={targetType !== PostTargetType.GlobalFeed}
               readonly={readonly}
             />
           ))}
@@ -66,7 +66,7 @@ const Feed = ({
 
 Feed.propTypes = {
   className: PropTypes.string,
-  targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)),
+  targetType: PropTypes.oneOf(Object.values(PostTargetType)),
   targetId: PropTypes.string,
   showPostCreator: PropTypes.bool,
   onPostCreated: PropTypes.func,

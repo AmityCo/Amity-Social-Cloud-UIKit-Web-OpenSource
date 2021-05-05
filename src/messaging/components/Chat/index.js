@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { MessageRepository, ChannelRepository, EkoChannelType } from 'eko-sdk';
+import { MessageRepository, ChannelRepository, ChannelType } from '@amityco/js-sdk';
 
 import MessageList from '~/messaging/components/MessageList';
 import MessageComposeBar from '~/messaging/components/MessageComposeBar';
@@ -16,7 +16,7 @@ const Chat = ({ channelId, onChatDetailsClick }) => {
   useEffect(() => {
     channelRepo.joinChannel({
       channelId,
-      type: EkoChannelType.Standard,
+      type: ChannelType.Standard,
     });
   }, []);
 

@@ -1,4 +1,4 @@
-import { FileRepository } from 'eko-sdk';
+import { FileRepository } from '@amityco/js-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 

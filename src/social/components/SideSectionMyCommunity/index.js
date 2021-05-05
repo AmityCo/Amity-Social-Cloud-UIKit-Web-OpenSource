@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { EkoCommunityFilter } from 'eko-sdk';
+import { CommunityFilter } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
@@ -10,7 +10,7 @@ import CommunitiesList from '~/social/components/CommunitiesList';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
-const myListQueryParam = { filter: EkoCommunityFilter.Member };
+const myListQueryParam = { filter: CommunityFilter.Member };
 
 const SideSectionMyCommunity = ({ className, activeCommunity }) => {
   const { onCommunityCreated } = useNavigation();

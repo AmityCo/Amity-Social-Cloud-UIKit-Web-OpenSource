@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
-import { EkoCommentReferenceType } from 'eko-sdk';
+import { CommentReferenceType } from '@amityco/js-sdk';
 
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -54,7 +54,7 @@ const UIEngagementBar = ({
         </InteractionBar>
         <CommentList
           referenceId={postId}
-          referenceType={EkoCommentReferenceType.Post}
+          referenceType={CommentReferenceType.Post}
           last={COMMENTS_PER_PAGE}
         />
         <ConditionalRender condition={isComposeBarDisplayed}>
@@ -67,7 +67,7 @@ const UIEngagementBar = ({
         </NoInteractionMessage>
         <CommentList
           referenceId={postId}
-          referenceType={EkoCommentReferenceType.Post}
+          referenceType={CommentReferenceType.Post}
           last={COMMENTS_PER_PAGE}
           readonly
           loadMoreText={<FormattedMessage id="collapsible.viewAllComments" />}

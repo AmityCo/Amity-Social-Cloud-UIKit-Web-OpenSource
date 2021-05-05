@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { EkoImageSize, FileRepository } from 'eko-sdk';
+import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
 import withSDK from '~/core/hocs/withSDK';
 import useCommunity from '~/social/hooks/useCommunity';
@@ -20,7 +20,7 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
       community.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: community.avatarFileId,
-        imageSize: EkoImageSize.Medium,
+        imageSize: ImageSize.Medium,
       }),
     [community.avatarFileId],
   );

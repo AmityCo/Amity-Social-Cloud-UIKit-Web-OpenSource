@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { CommentRepository, EkoCommentReferenceType } from 'eko-sdk';
+import { CommentRepository, CommentReferenceType } from '@amityco/js-sdk';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 import customizableComponent from '~/core/hocs/customization';
@@ -18,7 +18,7 @@ const EngagementBar = ({ postId, readonly }) => {
 
   const handleAddComment = async commentText => {
     await CommentRepository.createTextComment({
-      referenceType: EkoCommentReferenceType.Post,
+      referenceType: CommentReferenceType.Post,
       referenceId: postId,
       text: commentText,
     });

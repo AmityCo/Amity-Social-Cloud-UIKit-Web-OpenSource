@@ -1,6 +1,6 @@
 import React from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { MessageRepository } from 'eko-sdk';
+import { MessageRepository } from '@amityco/js-sdk';
 
 import OutgoingMessage from '~/messaging/components/Message/OutgoingMessage';
 import IncomingMessage from '~/messaging/components/Message/IncomingMessage';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { EkoPostTargetType } from 'eko-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 
 import styled from 'styled-components';
 
@@ -28,13 +28,13 @@ const SearchIcon = styled(Search)`
 
 // TODO: react-intl
 const FeedTypesEmptyText = {
-  [EkoPostTargetType.GlobalFeed]: 'This feed is empty',
-  [EkoPostTargetType.CommunityFeed]: "This community's feed is empty",
-  [EkoPostTargetType.UserFeed]: "This user's feed is empty",
-  [EkoPostTargetType.MyFeed]: 'Your feed is empty. Start your first post',
+  [PostTargetType.GlobalFeed]: 'This feed is empty',
+  [PostTargetType.CommunityFeed]: "This community's feed is empty",
+  [PostTargetType.UserFeed]: "This user's feed is empty",
+  [PostTargetType.MyFeed]: 'Your feed is empty. Start your first post',
 };
 
-const EmptyFeed = ({ targetType = EkoPostTargetType.MyFeed, className = null, goToExplore }) => (
+const EmptyFeed = ({ targetType = PostTargetType.MyFeed, className = null, goToExplore }) => (
   <EmptyState className={className} title={FeedTypesEmptyText[targetType]} icon={<FeedIcon />}>
     <ConditionalRender condition={goToExplore}>
       <div>
@@ -48,7 +48,7 @@ const EmptyFeed = ({ targetType = EkoPostTargetType.MyFeed, className = null, go
 );
 
 EmptyFeed.propTypes = {
-  targetType: PropTypes.oneOf(Object.values(EkoPostTargetType)),
+  targetType: PropTypes.oneOf(Object.values(PostTargetType)),
   className: PropTypes.string,
   goToExplore: PropTypes.func,
 };

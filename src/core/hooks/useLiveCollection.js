@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { EkoLoadingStatus } from 'eko-sdk';
+import { LoadingStatus } from '@amityco/js-sdk';
 
 const noop = () => {
   if (process?.env?.NODE_ENV === 'development') console.warn('[useLiveCollection] noop hit');
@@ -36,7 +36,7 @@ const useLiveCollection = (
 
       // pagination
       liveCollection.on('loadingStatusChanged', ({ newValue }) => {
-        const hasMore = newValue === EkoLoadingStatus.Loaded && liveCollection.hasMore;
+        const hasMore = newValue === LoadingStatus.Loaded && liveCollection.hasMore;
 
         setPagination({
           hasMore,

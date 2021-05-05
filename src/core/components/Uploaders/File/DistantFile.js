@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FileRepository, EkoImageSize } from 'eko-sdk';
+import { FileRepository, ImageSize } from '@amityco/js-sdk';
 
 import useFile from '~/core/hooks/useFile';
 
@@ -13,7 +13,7 @@ const File = ({ fileId, onRemove }) => {
 
   const fileUrl = FileRepository.getFileUrlById({
     fileId: file.fileId,
-    imageSize: EkoImageSize.Small,
+    imageSize: ImageSize.Small,
   });
 
   return (

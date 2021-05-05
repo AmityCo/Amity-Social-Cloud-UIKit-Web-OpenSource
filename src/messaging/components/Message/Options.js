@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MessageEditorRepository, MessageFlagRepository } from 'eko-sdk';
+import { MessageEditorRepository, MessageFlagRepository } from '@amityco/js-sdk';
 
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';

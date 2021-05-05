@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChannelRepository } from 'eko-sdk';
+import { ChannelRepository } from '@amityco/js-sdk';
 
 import ChatItem from '~/messaging/components/ChatItem';
 import customizableComponent from '~/core/hocs/customization';

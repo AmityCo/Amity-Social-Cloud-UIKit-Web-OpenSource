@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import EkoClient from 'eko-sdk';
+import ASCClient from '@amityco/js-sdk';
 
 import { ThemeProvider } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
@@ -38,7 +38,7 @@ const UiKitProvider = ({
   };
 
   const SDKInfo = useMemo(() => {
-    if (!client) client = new EkoClient({ apiKey });
+    if (!client) client = new ASCClient({ apiKey });
     else if (client.currentUserId !== userId) client.unregisterSession();
 
     if (!client.currentUserId) {

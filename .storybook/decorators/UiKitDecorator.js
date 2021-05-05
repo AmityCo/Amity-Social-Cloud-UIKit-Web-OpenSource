@@ -1,6 +1,6 @@
 import React from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
-import { _changeSDKDefaultConfig } from 'eko-sdk';
+import { _changeSDKDefaultConfig } from '@amityco/js-sdk';
 
 const GLOBAL_NAME = 'user'
 

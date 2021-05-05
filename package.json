@@ -76,12 +76,12 @@
     "webpack-node-externals": "^2.5.1"
   },
   "dependencies": {
+    "@amityco/js-sdk": "^5.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
     "@hookform/error-message": "0.0.4",
     "classnames": "^2.2.6",
-    "eko-sdk": "^4.4.1",
     "filesize": "^6.1.0",
     "human-readable-numbers": "^0.9.5",
     "javascript-time-ago": "^2.0.13",
