@@ -2,8 +2,8 @@
 
 ## Installation
 
-- `npm install --save upstra-uikit`
-- `yarn add upstra-uikit`
+- `npm install --save @amityco/ui-kit`
+- `yarn add @amityco/ui-kit`
 
 ## Getting started
 

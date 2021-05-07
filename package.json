@@ -1,11 +1,11 @@
 {
-  "name": "upstra-uikit",
+  "name": "@amityco/ui-kit",
   "version": "1.8.0",
   "main": "build/index.js",
   "files": [
     "build"
   ],
-  "description": "Upstra ui kit",
+  "description": "ASC ui kit",
   "scripts": {
     "build": "webpack --mode production",
     "build:dev:analyze": "webpack --mode development --analyze true",

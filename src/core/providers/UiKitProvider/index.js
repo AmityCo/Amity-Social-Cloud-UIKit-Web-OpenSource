@@ -32,8 +32,8 @@ const UiKitProvider = ({
 }) => {
   const theGlobal = /* globalThis || */ window || global;
 
-  theGlobal.__upstra__ = {
-    ...theGlobal.__upstra__,
+  theGlobal.__asc__ = {
+    ...theGlobal.__asc__,
     uikit: __VERSION__,
   };
 

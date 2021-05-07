@@ -1,14 +1,14 @@
-export { default as UpstraUiKitProvider } from '~/core/providers/UiKitProvider';
-export { default as UpstraUiKitFeed } from '~/social/components/Feed';
-export { default as UpstraUiKitSocial } from '~/social/pages/Application';
+export { default as ASCUiKitProvider } from '~/core/providers/UiKitProvider';
+export { default as ASCUiKitFeed } from '~/social/components/Feed';
+export { default as ASCUiKitSocial } from '~/social/pages/Application';
 
-export { default as useUpstraUser } from '~/core/hooks/useUser';
-export { useNavigation as useUpstraNavigation } from '~/social/providers/NavigationProvider';
+export { default as useASCUser } from '~/core/hooks/useUser';
+export { useNavigation as useASCNavigation } from '~/social/providers/NavigationProvider';
 
-export { default as UpstraAvatar } from '~/core/components/Avatar';
-export { PostContainer as UpstraPostContainer } from '~/social/components/post/Post/styles';
-export { default as UpstraPostEngagementBar } from '~/social/components/EngagementBar';
-export { default as UpstraExpandableText } from '~/social/components/Comment/CommentText';
+export { default as ASCAvatar } from '~/core/components/Avatar';
+export { PostContainer as ASCPostContainer } from '~/social/components/post/Post/styles';
+export { default as ASCPostEngagementBar } from '~/social/components/EngagementBar';
+export { default as ASCExpandableText } from '~/social/components/Comment/CommentText';
 
 // import UpstraComment from './components/Comment';
 // import UpstraCommentComposeBar from './components/CommentComposeBar';
