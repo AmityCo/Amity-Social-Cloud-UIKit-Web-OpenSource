@@ -1,5 +1,23 @@
 # Changelog
 
+## [v1.8.1](https://gitlab.com/upstra/web/ui-kit/compare/v1.8.0...v1.8.1)
+
+#### 12 May 2021
+
+### New Features
+
+- allow to customize the visibility of Create Community button ([`1f7e72d`](https://gitlab.com/upstra/web/ui-kit/commit/1f7e72d21b6c5fee6cca18960d2ab51518360e18)) (by Valeriy Malyshev)
+
+### Commits
+
+- misc: moving to @amityco/js-sdk (v5 preparation) ([`20f53fc`](https://gitlab.com/upstra/web/ui-kit/commit/20f53fc00c1734adaec6fa3bfc3bc6040b5a1de5)) (by Julien Barbay)
+- misc: upgrade ci ([`fa734c9`](https://gitlab.com/upstra/web/ui-kit/commit/fa734c9aca748d4c094e6c3681c06dafa01fa575)) (by Julien Barbay)
+- misc: refactored names (v5 preparation) ([`2ec9e87`](https://gitlab.com/upstra/web/ui-kit/commit/2ec9e87909b6285e2ad176476fc16883eaaf3cc0)) (by Serhii Ivanenko)
+- specify public access (mandatory when using scoped packages) ([`a7e1c92`](https://gitlab.com/upstra/web/ui-kit/commit/a7e1c9293905a5c08e2b10c195f80dc6d02b001e)) (by Julien Barbay)
+- add --exact-timestamps command ([`b33e70c`](https://gitlab.com/upstra/web/ui-kit/commit/b33e70c660d3e7aa579c05b4aba8bb96770eaf22)) (by Julien Barbay)
+
+---
+
 ## [v1.8.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.7.3...v1.8.0)
 
 #### 5 April 2021
