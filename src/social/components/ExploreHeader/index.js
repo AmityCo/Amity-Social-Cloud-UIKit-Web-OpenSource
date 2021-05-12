@@ -13,6 +13,7 @@ import UiKitCommunitySearch from '~/social/components/CommunitySearch';
 import UiKitButton from '~/core/components/Button';
 
 import UiKitCommunityCreationModal from '~/social/components/CommunityCreationModal';
+import { useConfig } from '~/social/providers/ConfigProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const Background = styled.div`
@@ -71,6 +72,7 @@ const Title = styled.div`
 `;
 
 const Header = () => {
+  const { socialCommunityCreationButtonVisible } = useConfig();
   const { onCommunityCreated } = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -93,12 +95,15 @@ const Header = () => {
           <Title>
             <FormattedMessage id="exploreHeader.createCommunityTitle" />
           </Title>
-          <UiKitButton onClick={openModal}>
-            <PlusIcon />
-            <span>
-              <FormattedMessage id="exploreHeader.createCommunityButton" />
-            </span>
-          </UiKitButton>
+
+          {socialCommunityCreationButtonVisible && (
+            <UiKitButton onClick={openModal}>
+              <PlusIcon />
+              <span>
+                <FormattedMessage id="exploreHeader.createCommunityButton" />
+              </span>
+            </UiKitButton>
+          )}
         </Create>
 
         <Balloon />

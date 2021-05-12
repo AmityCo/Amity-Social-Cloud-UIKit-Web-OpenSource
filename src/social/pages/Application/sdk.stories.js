@@ -3,6 +3,7 @@ import { HashRouter as Router, Switch, Route, useHistory, useRouteMatch } from '
 
 import UserFeedPage from '~/social/pages/UserFeed';
 import ProfileSettings from '~/social/components/ProfileSettings';
+import ConfigProvider from '~/social/providers/ConfigProvider';
 import NavigationProvider from '~/social/providers/NavigationProvider';
 import UiKitApp from '.';
 
@@ -10,7 +11,7 @@ export default {
   title: 'SDK Connected/Social',
 };
 
-const SDKApp = props => {
+const SDKApp = ({ socialCommunityCreationButtonVisible, ...props }) => {
   const history = useHistory();
 
   const { params = {} } =
@@ -21,27 +22,29 @@ const SDKApp = props => {
   const onEditUser = userId => history.push(`/profile/${userId}`);
 
   return (
-    <NavigationProvider onEditUser={onEditUser} onClickUser={onClickUser}>
-      <Switch>
-        <Route path="/" exact>
-          <UiKitApp {...props} />
-        </Route>
+    <ConfigProvider config={{ socialCommunityCreationButtonVisible }}>
+      <NavigationProvider onEditUser={onEditUser} onClickUser={onClickUser}>
+        <Switch>
+          <Route path="/" exact>
+            <UiKitApp {...props} />
+          </Route>
 
-        <Route path="/user/:userId">
-          <UserFeedPage userId={currentUserId} o />
-        </Route>
+          <Route path="/user/:userId">
+            <UserFeedPage userId={currentUserId} o />
+          </Route>
 
-        <Route path="/profile/:userId">
-          <ProfileSettings userId={currentUserId} />
-        </Route>
-      </Switch>
-    </NavigationProvider>
+          <Route path="/profile/:userId">
+            <ProfileSettings userId={currentUserId} />
+          </Route>
+        </Switch>
+      </NavigationProvider>
+    </ConfigProvider>
   );
 };
 
-export const SDKCommunityApp = () => (
+export const SDKCommunityApp = args => (
   <Router>
-    <SDKApp />
+    <SDKApp {...args} />
   </Router>
 );
 
@@ -49,11 +52,11 @@ SDKCommunityApp.storyName = 'Application';
 
 SDKCommunityApp.args = {
   shouldHideExplore: false,
-  showCreateCommunityButton: true,
+  socialCommunityCreationButtonVisible: true,
 };
 
 SDKCommunityApp.argTypes = {
   shouldHideExplore: { control: { type: 'boolean' } },
-  showCreateCommunityButton: { control: { type: 'boolean' } },
+  socialCommunityCreationButtonVisible: { control: { type: 'boolean' } },
   onMemberClick: { action: 'onMemberClick()' },
 };

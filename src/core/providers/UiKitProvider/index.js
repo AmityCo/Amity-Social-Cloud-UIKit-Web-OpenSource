@@ -11,6 +11,7 @@ import { ConfirmContainer } from '~/core/components/Confirm';
 import { CustomComponentsProvider } from '~/core/hocs/customization';
 import { SDKProvider } from '~/core/hocs/withSDK';
 import MockData from '~/mock';
+import ConfigProvider from '~/social/providers/ConfigProvider';
 import NavigationProvider from '~/social/providers/NavigationProvider';
 import PostRendererProvider from '~/social/providers/PostRendererProvider';
 import Localisation from './Localisation';
@@ -29,6 +30,7 @@ const UiKitProvider = ({
   children /* TODO localization */,
   postRenderers,
   actionHandlers,
+  socialCommunityCreationButtonVisible,
 }) => {
   const theGlobal = /* globalThis || */ window || global;
 
@@ -61,15 +63,17 @@ const UiKitProvider = ({
         <ThemeProvider theme={buildGlobalTheme(theme)}>
           <UIStyles>
             <SDKProvider value={SDKInfo}>
-              <CustomComponentsProvider value={customComponents}>
-                <NavigationProvider {...actionHandlers}>
-                  <PostRendererProvider postRenderers={postRenderers}>
-                    <MockData>{children}</MockData>
-                    <NotificationsContainer />
-                    <ConfirmContainer />
-                  </PostRendererProvider>
-                </NavigationProvider>
-              </CustomComponentsProvider>
+              <ConfigProvider config={{ socialCommunityCreationButtonVisible }}>
+                <CustomComponentsProvider value={customComponents}>
+                  <NavigationProvider {...actionHandlers}>
+                    <PostRendererProvider postRenderers={postRenderers}>
+                      <MockData>{children}</MockData>
+                      <NotificationsContainer />
+                      <ConfirmContainer />
+                    </PostRendererProvider>
+                  </NavigationProvider>
+                </CustomComponentsProvider>
+              </ConfigProvider>
             </SDKProvider>
           </UIStyles>
         </ThemeProvider>
@@ -100,6 +104,7 @@ UiKitProvider.propTypes = {
     onEditUser: PropTypes.func,
     onMessageUser: PropTypes.func,
   }),
+  socialCommunityCreationButtonVisible: PropTypes.bool,
 };
 
 export default UiKitProvider;
