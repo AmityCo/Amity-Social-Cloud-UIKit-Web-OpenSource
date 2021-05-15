@@ -5,7 +5,7 @@
   "files": [
     "build"
   ],
-  "description": "ASC ui kit",
+  "description": "React Ui-Kit for Amity Social Cloud",
   "scripts": {
     "build": "webpack --mode production",
     "build:dev:analyze": "webpack --mode development --analyze true",
