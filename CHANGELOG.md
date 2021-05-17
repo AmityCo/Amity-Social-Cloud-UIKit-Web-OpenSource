@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.9.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.8.1...v1.9.0)
+
+#### 17 May 2021
+
+### Commits
+
+- rename to amity ([`89ea24b`](https://gitlab.com/upstra/web/ui-kit/commit/89ea24b498d9c7348bf379f5e6339f32a5068771)) (by Julien Barbay)
+
+---
+
 ## [v1.8.1](https://gitlab.com/upstra/web/ui-kit/compare/v1.8.0...v1.8.1)
 
 #### 12 May 2021
