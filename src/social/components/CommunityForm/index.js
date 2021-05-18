@@ -142,37 +142,41 @@ const CommunityForm = ({
   }, [displayName, description, categoryId, userIds, isPublic, avatarFileId]);
 
   const validateAndSubmit = async data => {
-    if (!data.displayName.trim()) {
-      setError('displayName', { message: 'Name cannot be empty' });
-      return;
+    try {
+      if (!data.displayName.trim()) {
+        setError('displayName', { message: 'Name cannot be empty' });
+        return;
+      }
+      if (!isPublic && data.userIds?.length === 0) {
+        setError('userIds', { message: 'Please select at least one member' });
+        return;
+      }
+
+      const payload = {
+        displayName: data.displayName,
+        description: data.description?.length ? data.description : undefined,
+        avatarFileId: data.avatarFileId,
+        tags: [],
+        userIds: data.userIds,
+        isPublic,
+        // Currently we support only one category per community.
+        categoryIds: data?.categoryId?.length ? [data.categoryId] : undefined,
+      };
+
+      // Cannot update community members with this endpoint.
+      if (edit) {
+        delete payload.userIds;
+      }
+
+      await onSubmit(payload);
+
+      const notificationMessageId = edit ? 'community.updateSuccess' : 'community.createSuccess';
+      notification.success({
+        content: <FormattedMessage id={notificationMessageId} />,
+      });
+    } catch (error) {
+      notification.error({ content: error.message });
     }
-    if (!isPublic && data.userIds?.length === 0) {
-      setError('userIds', { message: 'Please select at least one member' });
-      return;
-    }
-
-    const payload = {
-      displayName: data.displayName,
-      description: data.description?.length ? data.description : undefined,
-      avatarFileId: data.avatarFileId,
-      tags: [],
-      userIds: data.userIds,
-      isPublic,
-      // Currently we support only one category per community.
-      categoryIds: data?.categoryId?.length ? [data.categoryId] : undefined,
-    };
-
-    // Cannot update community members with this endpoint.
-    if (edit) {
-      delete payload.userIds;
-    }
-
-    await onSubmit(payload);
-
-    const notificationMessageId = edit ? 'community.updateSuccess' : 'community.createSuccess';
-    notification.success({
-      content: <FormattedMessage id={notificationMessageId} />,
-    });
   };
 
   const disabled = useMemo(() => !isDirty || displayName.length === 0 || categoryId === '', [

@@ -25,7 +25,7 @@ export const Notifications = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 3;
+  z-index: 9999;
   pointer-events: none;
 `;
 
