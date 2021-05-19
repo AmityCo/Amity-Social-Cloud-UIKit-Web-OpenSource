@@ -61,12 +61,13 @@ export const FileName = styled.div`
 
 export const FileSize = styled.div`
   grid-area: size;
-  ${({ theme }) => theme.typography.caption}
+  ${({ theme }) => theme.typography.caption};
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 export const RemoveIcon = styled(Remove)`
   grid-area: remove;
+  z-index: 2;
 `;
 
 const ButtonContainer = styled.div`
