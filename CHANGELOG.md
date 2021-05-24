@@ -1,8 +1,22 @@
 # Changelog
 
-## [v2.0.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.10.1...v2.0.0)
+## [v2.0.1](https://gitlab.com/upstra/web/ui-kit/compare/v2.0.0...v2.0.1)
 
 #### 24 May 2021
+
+### New Features
+
+- update sdk to 5.0.1 ([`2feda0c`](https://gitlab.com/upstra/web/ui-kit/commit/2feda0cc771496fc89fc2cda1100b4fa1378ae2f)) (by Julien Barbay)
+
+### Commits
+
+- misc: ci adjustments from sdk ([`53b3101`](https://gitlab.com/upstra/web/ui-kit/commit/53b3101e919a8cc602c97858a80d188ba7206b79)) (by Julien Barbay)
+
+---
+
+## [v2.0.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.10.2...v2.0.0)
+
+#### 25 May 2021
 
 ### New Features
 
@@ -21,6 +35,20 @@
 - Update publish.yml ([`7419b26`](https://gitlab.com/upstra/web/ui-kit/commit/7419b26097e0890c988397100596d558ad466499)) (by Julien Barbay)
 - [`UP-2834`](https://ekoapp.atlassian.net/browse/UP-2834) - fixed remove icon ([`931aa38`](https://gitlab.com/upstra/web/ui-kit/commit/931aa381a4afee87d1c73a29f6722b5c8b4c23eb)) (by Serhii Ivanenko)
 - specify public access (mandatory when using scoped packages) ([`a7e1c92`](https://gitlab.com/upstra/web/ui-kit/commit/a7e1c9293905a5c08e2b10c195f80dc6d02b001e)) (by Julien Barbay)
+
+---
+
+## [v1.10.2](https://gitlab.com/upstra/web/ui-kit/compare/v1.10.1...v1.10.2)
+
+#### 25 May 2021
+
+### New Features
+
+- update sdk to 4.4.4 ([`27e4ea9`](https://gitlab.com/upstra/web/ui-kit/commit/27e4ea9f313724cc028678d808edda6bb5cd87bc)) (by Julien Barbay)
+
+### Commits
+
+- misc: ci adjustments from sdk ([`739b09f`](https://gitlab.com/upstra/web/ui-kit/commit/739b09fe3c39c584e635e5ad37ac416c5e8dd445)) (by Julien Barbay)
 
 ---
 
