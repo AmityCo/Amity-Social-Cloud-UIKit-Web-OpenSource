@@ -1,5 +1,59 @@
 # Changelog
 
+## [v2.0.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.10.1...v2.0.0)
+
+#### 24 May 2021
+
+### New Features
+
+- allow to customize the visibility of Create Community button ([`1f7e72d`](https://gitlab.com/upstra/web/ui-kit/commit/1f7e72d21b6c5fee6cca18960d2ab51518360e18)) (by Valeriy Malyshev)
+
+### Fixes
+
+- edit profile and navigation provider ([`2fae33d`](https://gitlab.com/upstra/web/ui-kit/commit/2fae33d53052836a6e08d25fbdf3ae91fb3b009b)) (by Julien Barbay)
+- show the community creation error ([`76ac68e`](https://gitlab.com/upstra/web/ui-kit/commit/76ac68e2bd47a755e03c0b6e2a6f6605c1f37c20)) (by Valeriy Malyshev)
+- edit profile page behavior ([`9c199de`](https://gitlab.com/upstra/web/ui-kit/commit/9c199de873140046d6cda82f3ff09b935e2530dd)) (by Julien Barbay)
+
+### Commits
+
+- rename to amity ([`89ea24b`](https://gitlab.com/upstra/web/ui-kit/commit/89ea24b498d9c7348bf379f5e6339f32a5068771)) (by Julien Barbay)
+- misc: refactored names (v5 preparation) ([`2ec9e87`](https://gitlab.com/upstra/web/ui-kit/commit/2ec9e87909b6285e2ad176476fc16883eaaf3cc0)) (by Serhii Ivanenko)
+- Update publish.yml ([`7419b26`](https://gitlab.com/upstra/web/ui-kit/commit/7419b26097e0890c988397100596d558ad466499)) (by Julien Barbay)
+- [`UP-2834`](https://ekoapp.atlassian.net/browse/UP-2834) - fixed remove icon ([`931aa38`](https://gitlab.com/upstra/web/ui-kit/commit/931aa381a4afee87d1c73a29f6722b5c8b4c23eb)) (by Serhii Ivanenko)
+- specify public access (mandatory when using scoped packages) ([`a7e1c92`](https://gitlab.com/upstra/web/ui-kit/commit/a7e1c9293905a5c08e2b10c195f80dc6d02b001e)) (by Julien Barbay)
+
+---
+
+## [v1.10.1](https://gitlab.com/upstra/web/ui-kit/compare/v1.10.0...v1.10.1)
+
+#### 25 May 2021
+
+### Fixes
+
+- edit profile page behavior ([`8f8ccb0`](https://gitlab.com/upstra/web/ui-kit/commit/8f8ccb0e5bc031c1c86812e225ea198e756731dc)) (by Julien Barbay)
+
+### Commits
+
+- misc: revert legacy in legacy ([`8726d4d`](https://gitlab.com/upstra/web/ui-kit/commit/8726d4dfc009ff620f7dea39bf6d0d7cacb8f1d1)) (by Julien Barbay)
+- Update publish.yml ([`86e20b7`](https://gitlab.com/upstra/web/ui-kit/commit/86e20b73159f166b813656266218d5be9cc874a9)) (by Julien Barbay)
+
+---
+
+## [v1.10.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.9.0...v1.10.0)
+
+#### 24 May 2021
+
+### New Features
+
+- allow to customize the visibility of Create Community button ([`a662f9d`](https://gitlab.com/upstra/web/ui-kit/commit/a662f9d61134f3e76d32d8f4ec7697f66196da5b)) (by Valeriy Malyshev)
+
+### Fixes
+
+- legacy edit profile and navigation provider ([`4981fc3`](https://gitlab.com/upstra/web/ui-kit/commit/4981fc3d6cd78e5cc675e5e5e57eb17be4de1284)) (by Julien Barbay)
+- show the community creation error ([`5b80cf3`](https://gitlab.com/upstra/web/ui-kit/commit/5b80cf37994ea55c5dae7f2a5ec822c175f582fe)) (by Valeriy Malyshev)
+
+---
+
 ## [v1.9.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.8.1...v1.9.0)
 
 #### 17 May 2021
