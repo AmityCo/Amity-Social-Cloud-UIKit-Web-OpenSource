@@ -1,14 +1,11 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { ButtonLink } from './styles';
 
 const BackLink = ({ text }) => {
-  const history = useHistory();
-  const handleClick = () => {
-    history.goBack();
-  };
-  return <ButtonLink onClick={handleClick}>{text}</ButtonLink>;
+  const { onBack } = useNavigation();
+  return <ButtonLink onClick={onBack}>{text}</ButtonLink>;
 };
 
 export default BackLink;

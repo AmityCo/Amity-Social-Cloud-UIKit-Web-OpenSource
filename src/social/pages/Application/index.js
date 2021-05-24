@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import { PageTypes } from '~/social/constants';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import MainLayout from '~/social/layouts/Main';
 
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
@@ -14,6 +13,7 @@ import CommunityFeedPage from '~/social/pages/CommunityFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
+import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const ApplicationContainer = styled.div`
@@ -31,13 +31,9 @@ const Community = () => {
   return (
     <ApplicationContainer>
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
-        <ConditionalRender condition={page.type === PageTypes.Explore}>
-          <ExplorePage />
-        </ConditionalRender>
+        {page.type === PageTypes.Explore && <ExplorePage />}
 
-        <ConditionalRender condition={page.type === PageTypes.NewsFeed}>
-          <NewsFeedPage />
-        </ConditionalRender>
+        {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
 
         {page.type === PageTypes.CommunityFeed && (
           <CommunityFeedPage communityId={page.communityId} />
@@ -47,13 +43,13 @@ const Community = () => {
           <CommunityEditPage communityId={page.communityId} />
         )}
 
-        <ConditionalRender condition={page.type === PageTypes.UserFeed}>
-          <UserFeedPage userId={page.userId} />
-        </ConditionalRender>
-
         {page.type === PageTypes.Category && (
           <CategoryCommunitiesPage categoryId={page.categoryId} />
         )}
+
+        {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
+
+        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
       </MainLayout>
     </ApplicationContainer>
   );

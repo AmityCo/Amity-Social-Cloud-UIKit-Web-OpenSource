@@ -35,13 +35,21 @@ export default ({
   onEditUser,
   onMessageUser,
 }) => {
-  const [page, setPage] = useState({ type: PageTypes.NewsFeed });
+  const [pages, setPages] = useState([{ type: PageTypes.NewsFeed }]);
+
+  const pushPage = newPage => {
+    setPages(prevState => [...prevState, newPage]);
+  };
+
+  const popPage = () => {
+    setPages(prevState => (prevState.length > 1 ? prevState.slice(0, -1) : prevState));
+  };
 
   const handleChangePage = useCallback(
     type => {
       if (onChangePage) return onChangePage({ type });
 
-      setPage({ type });
+      pushPage({ type });
     },
     [onChangePage],
   );
@@ -57,7 +65,7 @@ export default ({
       if (onClickCommunity) return onClickCommunity(communityId);
 
       console.log('handleClickCommunity', { communityId });
-      setPage(next);
+      pushPage(next);
     },
     [onChangePage, onClickCommunity],
   );
@@ -73,7 +81,7 @@ export default ({
       if (onCommunityCreated) return onCommunityCreated(communityId);
 
       console.log('handleCommunityCreated', { communityId });
-      setPage(next);
+      pushPage(next);
     },
     [onChangePage, onCommunityCreated],
   );
@@ -89,7 +97,7 @@ export default ({
       if (onClickCategory) return onClickCategory(categoryId);
 
       console.log('handleClickCategory', { categoryId });
-      setPage(next);
+      pushPage(next);
     },
     [onChangePage, onClickCategory],
   );
@@ -105,7 +113,7 @@ export default ({
       if (onClickUser) return onClickUser(userId);
 
       console.log('handleClickUser', { userId });
-      setPage(next);
+      pushPage(next);
     },
     [onChangePage, onClickUser],
   );
@@ -113,7 +121,7 @@ export default ({
   const handleEditUser = useCallback(
     userId => {
       const next = {
-        type: 'userSettings',
+        type: PageTypes.UserEdit,
         userId,
       };
 
@@ -121,6 +129,7 @@ export default ({
       if (onEditUser) return onEditUser(userId);
 
       console.log('handleEditUser', { userId });
+      pushPage(next);
     },
     [onChangePage, onEditUser],
   );
@@ -136,7 +145,7 @@ export default ({
       if (onEditCommunity) return onEditCommunity(communityId);
 
       console.log('handleEditCommunity', { communityId });
-      setPage(next);
+      pushPage(next);
     },
     [onChangePage, onEditCommunity],
   );
@@ -152,6 +161,7 @@ export default ({
       if (onMessageUser) return onMessageUser(userId);
 
       console.log('handleMessageUser', { userId });
+      // pushPage(next);
     },
     [onChangePage, onMessageUser],
   );
@@ -159,7 +169,7 @@ export default ({
   return (
     <NavigationContext.Provider
       value={{
-        page,
+        page: pages[pages.length - 1],
         onChangePage: handleChangePage,
         onClickCategory: handleClickCategory,
         onClickCommunity: handleClickCommunity,
@@ -168,6 +178,7 @@ export default ({
         onEditCommunity: handleEditCommunity,
         onEditUser: handleEditUser,
         onMessageUser: handleMessageUser,
+        onBack: popPage,
       }}
     >
       {children}
