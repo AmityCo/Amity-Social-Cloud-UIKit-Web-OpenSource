@@ -4,7 +4,7 @@ npm_publish:
     - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
 
     # see: https://stedolan.github.io/jq/manual/
-    - apk add --no-cache jq 
+    - apk add --no-cache curl jq 
 
     # get access information
     - PRIVATE=$(cat package.json | jq -r '.private')
