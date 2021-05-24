@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import { Controller, useForm } from 'react-hook-form';
 
 import { PrimaryButton } from '~/core/components/Button';
-import CameraIcon from '~/icons/Camera';
+
+import AvatarUploader from '~/social/components/CommunityForm/AvatarUploader';
 
 // TODO: should not be importing styles from another component.
 import {
   AboutTextarea,
-  Avatar,
-  AvatarWrapper,
   Counter,
   ErrorMessage,
   Field,
@@ -23,23 +22,9 @@ import {
   TextField,
 } from '~/social/components/CommunityForm/styles';
 
-const AvatarUploadContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const ButtonContainer = styled.div`
   margin-top: 16px;
 `;
-
-const AvatarUpload = ({ value }) => (
-  <AvatarUploadContainer>
-    <AvatarWrapper>
-      <Avatar size="big" avatar={value} />
-      <CameraIcon />
-    </AvatarWrapper>
-  </AvatarUploadContainer>
-);
 
 const FormBlock = ({ title, children }) => (
   <FormBlockContainer>
@@ -52,10 +37,10 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
   const { register, handleSubmit, errors, watch, control } = useForm({
     defaultValues: {
       ...user,
-      description: user.description || '',
+      description: user.description ?? '',
+      avatarFileId: user.avatarFileId ?? '',
     } || {
-      avatar:
-        'https://www.gardeningknowhow.com/wp-content/uploads/2017/07/hardwood-tree-400x266.jpg',
+      avatarFileId: '',
       displayName: '',
       description: '',
     },
@@ -68,7 +53,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
     <Form className={className} onSubmit={handleSubmit(onSubmit)}>
       <FormBody>
         <FormBlock title="General">
-          <Controller name="avatar" render={AvatarUpload} control={control} />
+          <Controller name="avatarFileId" render={AvatarUploader} control={control} />
           <Field error={errors.name}>
             <LabelCounterWrapper>
               <Label htmlFor="displayName" className="required">

@@ -9,6 +9,8 @@ import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
 import { isEmpty } from '~/helpers';
 
+import { useNavigation } from '~/social/providers/NavigationProvider';
+
 import {
   ProfileSettingsTabs,
   Container,
@@ -26,14 +28,24 @@ const tabs = {
 };
 
 const ProfileSettings = ({ userId, client }) => {
+  const { onClickUser } = useNavigation();
+
   const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
 
   const { user, file } = useUser(userId);
 
   const handleSubmit = async data => {
-    const { displayName, description } = data;
-    await client.setDisplayName(displayName);
-    await client.setDescription(description);
+    const { displayName, description, avatarFileId } = data;
+
+    try {
+      await client.setDisplayName(displayName);
+      await client.setDescription(description);
+      await client.setAvatar(avatarFileId);
+    } catch (err) {
+      console.log(err);
+    }
+
+    onClickUser(userId);
   };
 
   if (isEmpty(user)) {
@@ -61,12 +73,7 @@ const ProfileSettings = ({ userId, client }) => {
       <ActiveTabContainer>
         <ConditionalRender condition={activeTab === tabs.EDIT_PROFILE}>
           <ActiveTabContent>
-            <UserProfileForm
-              onSubmit={async data => {
-                await handleSubmit(data);
-              }}
-              user={user}
-            />
+            <UserProfileForm onSubmit={handleSubmit} user={user} />
           </ActiveTabContent>
         </ConditionalRender>
       </ActiveTabContainer>
