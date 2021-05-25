@@ -14,28 +14,6 @@ const MODERATOR_ROLE = 'moderator';
 const CommunityCreationModal = ({ isOpen, onClose, currentUserId }) => {
   if (!isOpen) return null;
 
-  const createCommunity = async ({
-    displayName,
-    description,
-    avatarFileId,
-    tags,
-    userIds,
-    isPublic,
-    categoryIds,
-  }) => {
-    const community = await CommunityRepository.createCommunity({
-      displayName,
-      description,
-      avatarFileId,
-      tags,
-      userIds,
-      isPublic,
-      categoryIds,
-    });
-
-    return community;
-  };
-
   const closeConfirm = () =>
     confirm({
       title: 'Leave without finishing?',
@@ -46,8 +24,8 @@ const CommunityCreationModal = ({ isOpen, onClose, currentUserId }) => {
     });
 
   const handleSubmit = async data => {
-    const communityLiveObject = await createCommunity(data);
-    const { communityId } = await promisify(communityLiveObject);
+    const { communityId } = await promisify(CommunityRepository.createCommunity(data));
+
     await CommunityRepository.assignRoleToUsers({
       communityId,
       role: MODERATOR_ROLE,

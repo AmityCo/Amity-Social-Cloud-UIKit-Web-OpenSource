@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
@@ -6,6 +6,7 @@ import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
 import Radios from '~/core/components/Radio';
 import ConditionalRender from '~/core/components/ConditionalRender';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useElement from '~/core/hooks/useElement';
 import customizableComponent from '~/core/hocs/customization';
 import AvatarUploader from './AvatarUploader';
@@ -141,8 +142,8 @@ const CommunityForm = ({
     );
   }, [displayName, description, categoryId, userIds, isPublic, avatarFileId]);
 
-  const validateAndSubmit = async data => {
-    try {
+  const [validateAndSubmit, submitting] = useAsyncCallback(
+    async data => {
       if (!data.displayName.trim()) {
         setError('displayName', { message: 'Name cannot be empty' });
         return;
@@ -174,16 +175,11 @@ const CommunityForm = ({
       notification.success({
         content: <FormattedMessage id={notificationMessageId} />,
       });
-    } catch (error) {
-      notification.error({ content: error.message });
-    }
-  };
+    },
+    [setError, isPublic, onSubmit, edit],
+  );
 
-  const disabled = useMemo(() => !isDirty || displayName.length === 0 || categoryId === '', [
-    displayName,
-    categoryId,
-    isDirty,
-  ]);
+  const disabled = !isDirty || displayName.length === 0 || categoryId === '' || submitting;
 
   const [formBodyRef, formBodyElement] = useElement();
   useKeepScrollBottom(formBodyRef, [formState]);
