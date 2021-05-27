@@ -148,6 +148,20 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   const canReply = !readonly && !isReplyComment;
   const canReport = !readonly && !isCommentOwner;
 
+  if (!isCommentReady) {
+    return null;
+  }
+
+  if (comment.isDeleted) {
+    return isReplyComment ? (
+      <DeletedReply />
+    ) : (
+      <CommentBlock>
+        <DeletedComment />
+      </CommentBlock>
+    );
+  }
+
   const renderedComment = (
     <StyledComment
       commentId={comment.commentId}
@@ -174,41 +188,30 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     />
   );
 
-  return (
-    <ConditionalRender condition={isCommentReady}>
-      <ConditionalRender condition={comment.isDeleted}>
-        <ConditionalRender condition={!isReplyComment}>
-          <CommentBlock>
-            <DeletedComment />
-          </CommentBlock>
-          <DeletedReply />
-        </ConditionalRender>
-        <ConditionalRender condition={isReplyComment}>
-          <ReplyContainer>{renderedComment}</ReplyContainer>
-          <CommentBlock>
-            <CommentContainer>{renderedComment}</CommentContainer>
-            <CommentList
-              parentId={commentId}
-              referenceId={comment.referenceId}
-              last={REPLIES_PER_PAGE}
-              readonly={readonly}
-              isExpanded={isExpanded}
-            />
+  return isReplyComment ? (
+    <ReplyContainer>{renderedComment}</ReplyContainer>
+  ) : (
+    <CommentBlock>
+      <CommentContainer>{renderedComment}</CommentContainer>
+      <CommentList
+        parentId={commentId}
+        referenceId={comment.referenceId}
+        last={REPLIES_PER_PAGE}
+        readonly={readonly}
+        isExpanded={isExpanded}
+      />
 
-            <ConditionalRender condition={isReplying}>
-              <CommentComposeBar
-                userToReply={commentAuthor.displayName}
-                onSubmit={replyText => {
-                  handleReplyToComment(replyText);
-                  setIsReplying(false);
-                  setExpanded(true);
-                }}
-              />
-            </ConditionalRender>
-          </CommentBlock>
-        </ConditionalRender>
+      <ConditionalRender condition={isReplying}>
+        <CommentComposeBar
+          userToReply={commentAuthor.displayName}
+          onSubmit={replyText => {
+            handleReplyToComment(replyText);
+            setIsReplying(false);
+            setExpanded(true);
+          }}
+        />
       </ConditionalRender>
-    </ConditionalRender>
+    </CommentBlock>
   );
 };
 
