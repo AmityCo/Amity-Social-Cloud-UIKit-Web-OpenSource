@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
-import ASCClient from '@amityco/js-sdk';
+import ASCClient, { ConnectionStatus } from '@amityco/js-sdk';
 
 import { ThemeProvider } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
@@ -31,6 +31,9 @@ const UiKitProvider = ({
   postRenderers,
   actionHandlers,
   socialCommunityCreationButtonVisible,
+  onConnectionStatusChange,
+  onConnected,
+  onDisconnected,
 }) => {
   const theGlobal = /* globalThis || */ window || global;
 
@@ -40,8 +43,20 @@ const UiKitProvider = ({
   };
 
   const SDKInfo = useMemo(() => {
-    if (!client) client = new ASCClient({ apiKey });
-    else if (client.currentUserId !== userId) client.unregisterSession();
+    if (!client) {
+      client = new ASCClient({ apiKey });
+      client.on('connectionStatusChanged', data => {
+        onConnectionStatusChange && onConnectionStatusChange(data);
+
+        if (data.newValue === ConnectionStatus.Connected) {
+          onConnected && onConnected();
+        } else if (data.newValue === ConnectionStatus.Disconnected) {
+          onDisconnected && onDisconnected();
+        }
+      });
+    } else if (client.currentUserId !== userId) {
+      client.unregisterSession();
+    }
 
     if (!client.currentUserId) {
       client.registerSession({
@@ -105,6 +120,9 @@ UiKitProvider.propTypes = {
     onMessageUser: PropTypes.func,
   }),
   socialCommunityCreationButtonVisible: PropTypes.bool,
+  onConnectionStatusChange: PropTypes.func,
+  onConnected: PropTypes.func,
+  onDisconnected: PropTypes.func,
 };
 
 export default UiKitProvider;
