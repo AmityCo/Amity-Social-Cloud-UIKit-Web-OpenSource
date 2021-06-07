@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import { _changeSDKDefaultConfig } from '@amityco/js-sdk';
+import MockData from '~/mock';
 
 const GLOBAL_NAME = 'user';
 
@@ -80,7 +81,9 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
     >
-      <Story />
+      <MockData>
+        <Story />
+      </MockData>
     </UiKitProvider>
   );
 };

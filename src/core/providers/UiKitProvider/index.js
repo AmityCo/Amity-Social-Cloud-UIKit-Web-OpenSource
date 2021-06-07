@@ -10,7 +10,6 @@ import { NotificationsContainer } from '~/core/components/Notification';
 import { ConfirmContainer } from '~/core/components/Confirm';
 import { CustomComponentsProvider } from '~/core/hocs/customization';
 import { SDKProvider } from '~/core/hocs/withSDK';
-import MockData from '~/mock';
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import NavigationProvider from '~/social/providers/NavigationProvider';
 import PostRendererProvider from '~/social/providers/PostRendererProvider';
@@ -108,7 +107,7 @@ const UiKitProvider = forwardRef(
                   <CustomComponentsProvider value={customComponents}>
                     <NavigationProvider {...actionHandlers}>
                       <PostRendererProvider postRenderers={postRenderers}>
-                        <MockData>{children}</MockData>
+                        {children}
                         <NotificationsContainer />
                         <ConfirmContainer />
                       </PostRendererProvider>
