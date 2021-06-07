@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import { _changeSDKDefaultConfig } from '@amityco/js-sdk';
 
-const GLOBAL_NAME = 'user'
+const GLOBAL_NAME = 'user';
 
 const global = {
   [GLOBAL_NAME]: {
@@ -11,42 +11,81 @@ const global = {
     defaultValue: 'Web-Test',
     toolbar: {
       icon: 'user',
-      items: [{
-        value: 'Web-Test,Web-test',
-        title: 'Web-Test',
-      }, {
-        value: process.env.STORYBOOK_USER1,
-        title: process.env.STORYBOOK_USER1.split(',')[1],
-      }, {
-        value: process.env.STORYBOOK_USER2,
-        title: process.env.STORYBOOK_USER2.split(',')[1],
-      }],
+      items: [
+        {
+          value: 'Web-Test,Web-test',
+          title: 'Web-Test',
+        },
+        {
+          value: process.env.STORYBOOK_USER1,
+          title: process.env.STORYBOOK_USER1.split(',')[1],
+        },
+        {
+          value: process.env.STORYBOOK_USER2,
+          title: process.env.STORYBOOK_USER2.split(',')[1],
+        },
+        {
+          value: 'reconnect',
+          title: '⚠️ Reconnect ⚠️',
+        },
+        {
+          value: 'disconnect',
+          title: '⚠️ Disconnect ⚠️',
+        },
+      ],
     },
-  }
-}
+  },
+};
 
 _changeSDKDefaultConfig({
   ws: { endpoint: process.env.STORYBOOK_API_ENDPOINT },
   http: { endpoint: process.env.STORYBOOK_API_ENDPOINT },
 });
 
-const FALLBACK_USER = 'Web-Test,Web-Test'
+const FALLBACK_USER = 'Web-Test,Web-Test';
 
 const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
-  const user = val || FALLBACK_USER
-  const [userId, displayName] = user.split(',')
+  const user = val || FALLBACK_USER;
+  const [userId, displayName] = user.split(',');
 
-  return (<UiKitProvider
-    key={userId}
-    apiKey={process.env.STORYBOOK_API_KEY}
-    userId={userId}
-    displayName={displayName || userId}
-  >
-    <Story />
-  </UiKitProvider>)
+  const ref = useRef();
+
+  console.log('-------------------', val);
+
+  if (ref?.current) {
+    if (val === 'reconnect') ref.current.reconnect();
+    else if (val === 'disconnect') ref.current.disconnect();
+  }
+
+  const handleConnectionStatusChange = (...args) => {
+    console.log(`[UiKitProvider.handleConnectionStatusChange]`, ...args);
+  };
+
+  const handleConnected = (...args) => {
+    console.log(`[UiKitProvider.handleConnected]`, ...args);
+  };
+
+  const handleDisconnected = (...args) => {
+    console.log(`[UiKitProvider.handleDisconnected]`, ...args);
+  };
+
+  return (
+    <UiKitProvider
+      ref={ref}
+      key={userId}
+      apiKey={process.env.STORYBOOK_API_KEY}
+      userId={userId}
+      displayName={displayName || userId}
+      onConnectionStatusChange={handleConnectionStatusChange}
+      onConnected={handleConnected}
+      onDisconnected={handleDisconnected}
+    >
+      <Story />
+    </UiKitProvider>
+  );
 };
 
 export default {
   global,
   decorator,
-}
+};

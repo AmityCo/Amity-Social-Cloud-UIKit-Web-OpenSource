@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import React, { useMemo } from 'react';
+import React, { useState, useEffect, useMemo, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import ASCClient, { ConnectionStatus } from '@amityco/js-sdk';
@@ -20,82 +20,109 @@ import { UIStyles } from './styles';
 
 let client;
 
-const UiKitProvider = ({
-  apiKey,
-  authToken,
-  userId,
-  displayName,
-  customComponents = {},
-  theme = {},
-  children /* TODO localization */,
-  postRenderers,
-  actionHandlers,
-  socialCommunityCreationButtonVisible,
-  onConnectionStatusChange,
-  onConnected,
-  onDisconnected,
-}) => {
-  const theGlobal = /* globalThis || */ window || global;
+const UiKitProvider = forwardRef(
+  (
+    {
+      apiKey,
+      authToken,
+      userId,
+      displayName,
+      customComponents = {},
+      theme = {},
+      children /* TODO localization */,
+      postRenderers,
+      actionHandlers,
+      socialCommunityCreationButtonVisible,
+      onConnectionStatusChange,
+      onConnected,
+      onDisconnected,
+    },
+    ref,
+  ) => {
+    const theGlobal = /* globalThis || */ window || global;
 
-  theGlobal.__asc__ = {
-    ...theGlobal.__asc__,
-    uikit: __VERSION__,
-  };
+    theGlobal.__asc__ = {
+      ...theGlobal.__asc__,
+      uikit: __VERSION__,
+    };
 
-  const SDKInfo = useMemo(() => {
-    if (!client) {
-      client = new ASCClient({ apiKey });
-      client.on('connectionStatusChanged', data => {
-        onConnectionStatusChange && onConnectionStatusChange(data);
+    const [preventReconnect, setPreventReconnect] = useState(false);
 
-        if (data.newValue === ConnectionStatus.Connected) {
-          onConnected && onConnected();
-        } else if (data.newValue === ConnectionStatus.Disconnected) {
-          onDisconnected && onDisconnected();
+    // reset state if some props have changed
+    useEffect(() => {
+      setPreventReconnect(false);
+    }, [apiKey, userId, displayName, authToken]);
+
+    const SDKInfo = useMemo(() => {
+      if (!client) {
+        client = new ASCClient({ apiKey });
+        client.on('connectionStatusChanged', data => {
+          onConnectionStatusChange && onConnectionStatusChange(data);
+
+          if (data.newValue === ConnectionStatus.Connected) {
+            onConnected && onConnected();
+          } else if (data.newValue === ConnectionStatus.Disconnected) {
+            onDisconnected && onDisconnected();
+          }
+        });
+      } else if (client.currentUserId !== userId) {
+        client.unregisterSession();
+      }
+
+      // boolean will block looping reconnection
+      if (!client.currentUserId && !preventReconnect) {
+        client.registerSession({
+          userId,
+          displayName,
+          authToken,
+        });
+      }
+
+      return { client };
+    }, [apiKey, userId, displayName, authToken, preventReconnect]);
+
+    useImperativeHandle(ref, () => ({
+      reconnect() {
+        // this should refresh the component and relaunch the useMemo, hopefully reconnecting.
+        setPreventReconnect(false);
+      },
+
+      disconnect() {
+        if (client) {
+          setPreventReconnect(true);
+          client.unregisterSession();
         }
-      });
-    } else if (client.currentUserId !== userId) {
-      client.unregisterSession();
-    }
+      },
+    }));
 
-    if (!client.currentUserId) {
-      client.registerSession({
-        userId,
-        displayName,
-        authToken,
-      });
-    }
-
-    return { client };
-  }, [apiKey, userId, displayName, authToken]);
-
-  return (
-    <>
-      <Helmet>
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-      </Helmet>
-      <Localisation locale="en">
-        <ThemeProvider theme={buildGlobalTheme(theme)}>
-          <UIStyles>
-            <SDKProvider value={SDKInfo}>
-              <ConfigProvider config={{ socialCommunityCreationButtonVisible }}>
-                <CustomComponentsProvider value={customComponents}>
-                  <NavigationProvider {...actionHandlers}>
-                    <PostRendererProvider postRenderers={postRenderers}>
-                      <MockData>{children}</MockData>
-                      <NotificationsContainer />
-                      <ConfirmContainer />
-                    </PostRendererProvider>
-                  </NavigationProvider>
-                </CustomComponentsProvider>
-              </ConfigProvider>
-            </SDKProvider>
-          </UIStyles>
-        </ThemeProvider>
-      </Localisation>
-    </>
-  );
-};
+    return (
+      <>
+        <Helmet>
+          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        </Helmet>
+        <Localisation locale="en">
+          <ThemeProvider theme={buildGlobalTheme(theme)}>
+            <UIStyles>
+              <SDKProvider value={SDKInfo}>
+                <ConfigProvider config={{ socialCommunityCreationButtonVisible }}>
+                  <CustomComponentsProvider value={customComponents}>
+                    <NavigationProvider {...actionHandlers}>
+                      <PostRendererProvider postRenderers={postRenderers}>
+                        <MockData>{children}</MockData>
+                        <NotificationsContainer />
+                        <ConfirmContainer />
+                      </PostRendererProvider>
+                    </NavigationProvider>
+                  </CustomComponentsProvider>
+                </ConfigProvider>
+              </SDKProvider>
+            </UIStyles>
+          </ThemeProvider>
+        </Localisation>
+      </>
+    );
+  },
+);
 
 UiKitProvider.propTypes = {
   apiKey: PropTypes.string.isRequired,
