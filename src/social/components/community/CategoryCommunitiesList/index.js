@@ -1,35 +1,54 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { Grid, ListContainer } from './styles';
+import { Grid, ListContainer, ListEmptyState } from './styles';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PaginatedList from '~/core/components/PaginatedList';
-import EmptyState from '~/core/components/EmptyState';
 import EmptyFeedIcon from '~/icons/EmptyFeed';
 import CommunityCard from '~/social/components/community/Card';
 
 const CategoryCommunitiesList = ({ categoryId }) => {
   const { onClickCommunity } = useNavigation();
-  const [communities, hasMore, loadMore] = useCommunitiesList({ categoryId });
+  const [communities, hasMore, loadMore, loading, loadingMore] = useCommunitiesList({ categoryId });
+
+  const items = useMemo(() => {
+    function getLoadingItems() {
+      return new Array(5).fill(1).map((x, index) => ({ communityId: index, skeleton: true }));
+    }
+
+    if (loading) {
+      return getLoadingItems();
+    }
+
+    if (!loadingMore) {
+      return communities;
+    }
+
+    return [...communities, ...getLoadingItems()];
+  }, [communities, loading, loadingMore]);
 
   return (
     <ListContainer>
       <PaginatedList
-        items={communities}
+        items={items}
         hasMore={hasMore}
         loadMore={loadMore}
         container={Grid}
         emptyState={
-          <EmptyState
+          <ListEmptyState
             icon={<EmptyFeedIcon width={48} height={48} />}
             title="It's empty here..."
             description="No community found in this category"
           />
         }
       >
-        {({ communityId }) => (
-          <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
-        )}
+        {({ communityId, skeleton }) =>
+          skeleton ? (
+            <CommunityCard key={communityId} loading />
+          ) : (
+            <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
+          )
+        }
       </PaginatedList>
     </ListContainer>
   );

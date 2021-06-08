@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import EmptyState from '~/core/components/EmptyState';
 
 export const ListContainer = styled.div`
   padding: 1rem;
@@ -16,4 +17,9 @@ export const Grid = styled.div`
     margin-bottom: 0.5rem;
     margin-right: 0.5rem;
   }
+`;
+
+export const ListEmptyState = styled(EmptyState)`
+  margin-right: auto;
+  margin-left: auto;
 `;
