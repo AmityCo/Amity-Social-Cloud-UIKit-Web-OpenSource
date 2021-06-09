@@ -20,7 +20,7 @@ const useUser = userId => {
   }
 
   const isFlaggedByMe = useMemoAsync(
-    async () => (user?.userId ? userRepo.isFlaggedByMe({ userId }) : false),
+    async () => (user?.userId && user?.flagCount > 0 ? userRepo.isFlaggedByMe({ userId }) : false),
     [user?.userId],
   );
 
