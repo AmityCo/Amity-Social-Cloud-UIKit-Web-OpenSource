@@ -9,7 +9,7 @@ const usePost = postId => {
   const post = useLiveObject(() => PostRepository.postForId(postId), [postId]);
   const { postedUserId, children } = post;
 
-  const { user, file } = useUser(postedUserId, [postedUserId]);
+  const { user, file } = useUser(postedUserId);
 
   const handleUpdatePost = data => PostRepository.updatePost({ postId, data });
 

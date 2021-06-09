@@ -9,10 +9,23 @@ const ActionItemComponents = {
   button: ButtonActionItem,
 };
 
-const SideMenuActionItem = ({ icon, children, active, className, onClick, element = 'a' }) => {
+const SideMenuActionItem = ({
+  icon,
+  children,
+  active,
+  className,
+  onClick,
+  element = 'a',
+  disabled,
+}) => {
   const ActionItemContainer = ActionItemComponents[element];
   return (
-    <ActionItemContainer onClick={onClick} className={className} active={active}>
+    <ActionItemContainer
+      onClick={onClick}
+      className={className}
+      active={active}
+      disabled={disabled}
+    >
       {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
       <span className="actionItemChild">{children}</span>
     </ActionItemContainer>
@@ -26,6 +39,7 @@ SideMenuActionItem.propTypes = {
   active: PropTypes.bool,
   onClick: PropTypes.func,
   className: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 export default SideMenuActionItem;

@@ -8,8 +8,8 @@ import useMemoAsync from '~/core/hooks/useMemoAsync';
 
 const userRepo = new UserRepository();
 
-const useUser = (userId, dependencies, resolver) => {
-  const user = useLiveObject(() => userRepo.userForId(userId), dependencies, resolver);
+const useUser = userId => {
+  const user = useLiveObject(() => userRepo.userForId(userId), [userId]);
 
   // Must call this hook even if there is a custom file URL which will override it.
   // Cannot call hooks conditionally due to the 'rules of hooks'.

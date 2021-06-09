@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 import SideMenuSection from '~/core/components/SideMenuSection';
+import { useSDK } from '~/core/hocs/withSDK';
 import { Plus } from '~/icons';
 import CommunitiesList from '~/social/components/CommunitiesList';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
@@ -14,6 +15,7 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 const myListQueryParam = { filter: CommunityFilter.Member };
 
 const SideSectionMyCommunity = ({ className, activeCommunity }) => {
+  const { connected } = useSDK();
   const { socialCommunityCreationButtonVisible } = useConfig();
   const { onCommunityCreated } = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +30,12 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
   return (
     <SideMenuSection heading="My Community">
       {socialCommunityCreationButtonVisible && (
-        <SideMenuActionItem icon={<Plus height="20px" />} onClick={open} element="button">
+        <SideMenuActionItem
+          icon={<Plus height="20px" />}
+          onClick={open}
+          element="button"
+          disabled={!connected}
+        >
           <FormattedMessage id="createCommunity" />
         </SideMenuActionItem>
       )}

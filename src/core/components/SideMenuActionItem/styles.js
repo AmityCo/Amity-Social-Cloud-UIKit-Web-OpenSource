@@ -19,11 +19,12 @@ const actionItemContainerStyles = css`
   margin-bottom: 6px;
   color: ${({ theme }) => theme.palette.neutral.main};
   justify-content: left;
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: ${({ theme }) => theme.palette.base.shade4};
   }
   &:disabled {
     color: ${({ theme }) => theme.palette.neutral.shade2};
+    background-color: transparent;
   }
   ${actionItemActiveStyles}
 `;
@@ -57,6 +58,6 @@ export const IconWrapper = styled.div`
         `
       : css`
           background: ${theme.palette.base.shade4};
-          color: ${theme.palette.base.main};
+          color: inherit;
         `};
 `;

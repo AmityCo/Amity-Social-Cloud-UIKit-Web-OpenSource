@@ -102,7 +102,7 @@ const UiKitProvider = forwardRef(
         <Localisation locale="en">
           <ThemeProvider theme={buildGlobalTheme(theme)}>
             <UIStyles>
-              <SDKProvider value={SDKInfo}>
+              <SDKProvider {...SDKInfo}>
                 <ConfigProvider config={{ socialCommunityCreationButtonVisible }}>
                   <CustomComponentsProvider value={customComponents}>
                     <NavigationProvider {...actionHandlers}>

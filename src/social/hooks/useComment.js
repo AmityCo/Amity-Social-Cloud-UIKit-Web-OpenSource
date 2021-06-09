@@ -10,7 +10,7 @@ const useComment = ({ commentId }) => {
   const isCommentReady = !!comment.commentId;
   const { userId, referenceId, referenceType } = comment;
 
-  const { user: commentAuthor, file: commentAuthorAvatar } = useUser(userId, [userId]);
+  const { user: commentAuthor, file: commentAuthorAvatar } = useUser(userId);
 
   const isFlaggedByMe = useMemoAsync(
     async () => (comment?.commentId ? CommentRepository.isFlaggedByMe(comment.commentId) : false),

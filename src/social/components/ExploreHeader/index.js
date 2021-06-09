@@ -2,6 +2,7 @@ import React, { memo, useState } from 'react';
 import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
+import { useSDK } from '~/core/hocs/withSDK';
 
 import { backgroundImage as SkyBg } from '~/icons/Sky';
 import { backgroundImage as BalloonBg } from '~/icons/Balloon';
@@ -72,6 +73,7 @@ const Title = styled.div`
 `;
 
 const Header = () => {
+  const { connected } = useSDK();
   const { socialCommunityCreationButtonVisible } = useConfig();
   const { onCommunityCreated } = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
@@ -97,7 +99,7 @@ const Header = () => {
           </Title>
 
           {socialCommunityCreationButtonVisible && (
-            <UiKitButton onClick={openModal}>
+            <UiKitButton disabled={!connected} onClick={openModal}>
               <PlusIcon />
               <span>
                 <FormattedMessage id="exploreHeader.createCommunityButton" />

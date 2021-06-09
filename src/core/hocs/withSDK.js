@@ -1,17 +1,39 @@
-import React, { useContext } from 'react';
+import { ConnectionStatus } from '@amityco/js-sdk';
+import React, { useContext, useEffect, useState } from 'react';
 
-export const SDKContext = React.createContext({});
+const SDKContext = React.createContext({});
 
-export const SDKProvider = SDKContext.Provider;
+export const useSDK = () => useContext(SDKContext);
 
-const withSDK = Component => props => {
-  const { client } = useContext(SDKContext);
-  const { currentUserId } = client;
-  const userRoles = client?.currentUser?.model?.roles;
+export function SDKProvider({ children, client }) {
+  const [connectionStatus, setConnectionStatus] = useState(ConnectionStatus.NotConnected);
+
+  useEffect(() => {
+    if (client) {
+      setConnectionStatus(client.connectionStatus);
+
+      client.on('connectionStatusChanged', ({ newValue }) => setConnectionStatus(newValue));
+    }
+  }, [client]);
 
   return (
-    <Component client={client} currentUserId={currentUserId} userRoles={userRoles} {...props} />
+    <SDKContext.Provider
+      value={{
+        client,
+        connected: connectionStatus === ConnectionStatus.Connected,
+        currentUserId: client?.currentUserId,
+        userRoles: client?.currentUser?.model?.roles,
+      }}
+    >
+      {children}
+    </SDKContext.Provider>
   );
+}
+
+const withSDK = Component => props => {
+  const sdkData = useSDK();
+
+  return <Component {...sdkData} {...props} />;
 };
 
 export default withSDK;
