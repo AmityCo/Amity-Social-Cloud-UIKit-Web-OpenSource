@@ -27,6 +27,7 @@ const defaultRender = (item, value) => <Highlight key={item} text={item} query={
 const defaultFilter = (items, value) => items.filter(item => item.includes(value));
 
 const InputAutocomplete = ({
+  className,
   value,
   placeholder,
   items,
@@ -73,7 +74,7 @@ const InputAutocomplete = ({
   const [render = defaultRender] = [].concat(children);
 
   return (
-    <Container>
+    <Container className={className}>
       <InputText
         value={value}
         invalid={invalid}
@@ -96,6 +97,7 @@ const InputAutocomplete = ({
 };
 
 InputAutocomplete.defaultProps = {
+  className: undefined,
   items: [],
   filter: defaultFilter,
   expand: MIN_LENGTH_FOR_SUGGESTIONS,
@@ -106,6 +108,7 @@ InputAutocomplete.defaultProps = {
 };
 
 InputAutocomplete.propTypes = {
+  className: PropTypes.string,
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
   items: PropTypes.array,

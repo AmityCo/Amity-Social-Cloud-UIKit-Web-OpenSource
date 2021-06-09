@@ -72,6 +72,10 @@ const Title = styled.div`
   margin-bottom: 1rem;
 `;
 
+const CommunitySearch = styled(UiKitCommunitySearch)`
+  max-width: 25rem;
+`;
+
 const Header = () => {
   const { connected } = useSDK();
   const { socialCommunityCreationButtonVisible } = useConfig();
@@ -91,7 +95,7 @@ const Header = () => {
           <Headline>
             <FormattedMessage id="exploreHeader.searchCommunityTitle" />
           </Headline>
-          <UiKitCommunitySearch />
+          <CommunitySearch />
         </Search>
         <Create>
           <Title>
