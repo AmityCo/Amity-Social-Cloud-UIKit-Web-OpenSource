@@ -26,7 +26,7 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
   const [activeTab, setActiveTab] = useState(tabs.MEMBERS);
 
   const {
-    members,
+    members = [],
     hasMoreMembers,
     loadMoreMembers,
     membersCount,
@@ -44,6 +44,9 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
     currentUserId,
     community.userId,
   );
+
+  // to check if owner inside community list
+  const isOwnerJoined = members.find(({ userId }) => userId === community.userId);
 
   return (
     <CommunityMembersContainer>
@@ -68,27 +71,45 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
                 removeMembers={removeMembers}
                 hasModeratorPermissions={hasModeratorPermissions}
                 isJoined={community.isJoined}
+                communityUserId={community.userId}
               />
             ))}
         </LoadMore>
       </ConditionalRender>
       <ConditionalRender condition={activeTab === tabs.MODERATORS}>
-        <LoadMore hasMore={hasMoreModerators} loadMore={loadMoreModerators}>
-          {moderators.length > 0 &&
-            moderators.map(({ userId, roles }) => (
-              <CommunityMemberItem
-                key={userId}
-                userId={userId}
-                currentUserId={currentUserId}
-                roles={roles}
-                onClick={onClickUser}
-                assignRoleToUsers={assignRoleToUsers}
-                removeRoleFromUsers={removeRoleFromUsers}
-                removeMembers={removeMembers}
-                hasModeratorPermissions={hasModeratorPermissions}
-              />
-            ))}
-        </LoadMore>
+        <>
+          {isOwnerJoined && (
+            <CommunityMemberItem
+              userId={community.userId}
+              currentUserId={currentUserId}
+              onClick={onClickUser}
+              assignRoleToUsers={assignRoleToUsers}
+              removeRoleFromUsers={removeRoleFromUsers}
+              removeMembers={removeMembers}
+              hasModeratorPermissions={hasModeratorPermissions}
+              isJoined={community.isJoined}
+              communityUserId={community.userId}
+            />
+          )}
+          <LoadMore hasMore={hasMoreModerators} loadMore={loadMoreModerators}>
+            {moderators.length > 0 &&
+              moderators.map(({ userId, roles }) => (
+                <CommunityMemberItem
+                  key={userId}
+                  userId={userId}
+                  currentUserId={currentUserId}
+                  roles={roles}
+                  onClick={onClickUser}
+                  assignRoleToUsers={assignRoleToUsers}
+                  removeRoleFromUsers={removeRoleFromUsers}
+                  removeMembers={removeMembers}
+                  hasModeratorPermissions={hasModeratorPermissions}
+                  communityUserId={community.userId}
+                  isJoined={community.isJoined}
+                />
+              ))}
+          </LoadMore>
+        </>
       </ConditionalRender>
     </CommunityMembersContainer>
   );
