@@ -4,7 +4,6 @@ import { UserRepository } from '@amityco/js-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';
-import useMemoAsync from '~/core/hooks/useMemoAsync';
 
 const userRepo = new UserRepository();
 
@@ -19,15 +18,7 @@ const useUser = userId => {
     file = { fileUrl: user.avatarCustomUrl };
   }
 
-  const isFlaggedByMe = useMemoAsync(
-    async () => (user?.userId && user?.flagCount > 0 ? userRepo.isFlaggedByMe({ userId }) : false),
-    [user?.userId],
-  );
-
-  const handleReportUser = () =>
-    isFlaggedByMe ? userRepo.unflag({ userId }) : userRepo.flag({ userId });
-
-  return { user, file, handleReportUser, isFlaggedByMe };
+  return { user, file };
 };
 
 export default useUser;
