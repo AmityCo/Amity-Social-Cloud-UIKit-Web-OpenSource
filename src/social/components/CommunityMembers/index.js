@@ -48,6 +48,9 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
   // to check if owner inside community list
   const isOwnerJoined = members.find(({ userId }) => userId === community.userId);
 
+  // we show community owner separately
+  const filteredModerators = moderators.filter(({ userId }) => userId !== community.userId);
+
   return (
     <CommunityMembersContainer>
       <CommunityMembersHeader>Community Members • {membersCount}</CommunityMembersHeader>
@@ -92,8 +95,8 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
             />
           )}
           <LoadMore hasMore={hasMoreModerators} loadMore={loadMoreModerators}>
-            {moderators.length > 0 &&
-              moderators.map(({ userId, roles }) => (
+            {filteredModerators.length > 0 &&
+              filteredModerators.map(({ userId, roles }) => (
                 <CommunityMemberItem
                   key={userId}
                   userId={userId}
