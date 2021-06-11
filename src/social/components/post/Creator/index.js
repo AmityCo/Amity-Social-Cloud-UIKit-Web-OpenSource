@@ -10,6 +10,7 @@ import {
   FileRepository,
   ImageSize,
 } from '@amityco/js-sdk';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 
 import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
@@ -18,6 +19,7 @@ import useLiveObject from '~/core/hooks/useLiveObject';
 import useErrorNotification from '~/core/hooks/useErrorNotification';
 import { notification } from '~/core/components/Notification';
 import ConditionalRender from '~/core/components/ConditionalRender';
+import promisify from '~/helpers/promisify';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
@@ -95,34 +97,30 @@ const PostCreatorBar = ({
   const [incomingFiles, setIncomingFiles] = useState([]);
 
   const [uploadLoading, setUploadLoading] = useState(false);
-  const isDisabled = isEmpty(postText, postImages, postFiles) || uploadLoading;
 
   const [setError] = useErrorNotification();
 
-  const createPost = async () => {
+  const [createPost, creating] = useAsyncCallback(async () => {
     const data = {};
 
     if (postText) data.text = postText;
     if (postImages.length) data.images = postImages.map(i => i.fileId);
     if (postFiles.length) data.files = postFiles.map(f => f.fileId);
 
-    const newPostLiveObject = PostRepository.createPost({
-      ...target,
-      data,
-    });
+    const post = await promisify(
+      PostRepository.createPost({
+        ...target,
+        data,
+      }),
+    );
 
-    newPostLiveObject.on('dataStatusChanged', () => {
-      const { postId } = newPostLiveObject.model;
-      onCreateSuccess(postId);
-      setPostText('');
-      setPostImages([]);
-      setPostFiles([]);
-      setIncomingImages([]);
-      setIncomingFiles([]);
-
-      newPostLiveObject.dispose();
-    });
-  };
+    onCreateSuccess(post.postId);
+    setPostText('');
+    setPostImages([]);
+    setPostFiles([]);
+    setIncomingImages([]);
+    setIncomingFiles([]);
+  }, [postText, postImages, postFiles, target, onCreateSuccess]);
 
   const onMaxFilesLimit = () => {
     notification.info({
@@ -140,6 +138,7 @@ const PostCreatorBar = ({
     target.targetType === PostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
   const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
+  const isDisabled = isEmpty(postText, postImages, postFiles) || uploadLoading || creating;
 
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)}>
