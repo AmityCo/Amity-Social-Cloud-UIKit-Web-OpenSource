@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -71,4 +71,4 @@ CommentList.propTypes = {
   isExpanded: PropTypes.bool,
 };
 
-export default CommentList;
+export default memo(CommentList);

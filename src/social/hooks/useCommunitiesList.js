@@ -6,12 +6,11 @@ const useCommunitiesList = (queryParams = {}, isDeleted = false) => {
     ...queryParams,
     isDeleted,
   };
-  const [communities, hasMore, loadMore] = useLiveCollection(
+
+  return useLiveCollection(
     () => CommunityRepository.allCommunitiesWithFilters(params),
     Object.values(queryParams),
   );
-
-  return [communities, hasMore, loadMore];
 };
 
 export default useCommunitiesList;

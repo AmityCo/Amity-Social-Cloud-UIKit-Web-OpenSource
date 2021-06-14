@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -59,4 +59,4 @@ CommunitySearch.defaultProps = {
   sticky: false,
 };
 
-export default customizableComponent('CommunitySearch', CommunitySearch);
+export default memo(customizableComponent('CommunitySearch', CommunitySearch));

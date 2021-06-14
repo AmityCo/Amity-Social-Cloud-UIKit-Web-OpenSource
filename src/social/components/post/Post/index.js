@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { memo } from 'react';
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 import usePost from '~/social/hooks/usePost';
 import { usePostRenderer } from '~/social/providers/PostRendererProvider';
+import DefaultPostRenderer from './DefaultPostRenderer';
 import PostErrorBoundary from './PostErrorBoundary';
 import UnknownPostRenderer from './UnknownPostRenderer';
 
@@ -13,7 +14,7 @@ const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, rea
   const { post, ...others } = usePost(postId);
 
   if (!post?.postId) {
-    return null;
+    return <DefaultPostRenderer loading />;
   }
 
   const Renderer = renderers[post?.dataType] ?? UnknownPostRenderer;
@@ -49,4 +50,4 @@ Post.defaultProps = {
   hidePostTarget: false,
 };
 
-export default withSDK(customizableComponent('Post', Post));
+export default memo(withSDK(customizableComponent('Post', Post)));

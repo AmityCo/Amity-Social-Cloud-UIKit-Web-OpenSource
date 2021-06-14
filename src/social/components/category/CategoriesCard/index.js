@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
@@ -36,14 +36,34 @@ const List = () => {
   const Title = <FormattedMessage id="categoryList" />;
 
   const { onClickCategory } = useNavigation();
-  const [categories, hasMore, loadMore] = useCategories({ isDeleted: false });
+  const [categories, hasMore, loadMore, loading, loadingMore] = useCategories({ isDeleted: false });
+
+  const items = useMemo(() => {
+    function getLoadingItems() {
+      return new Array(6).fill(1).map((x, index) => ({ categoryId: index, skeleton: true }));
+    }
+
+    if (loading) {
+      return getLoadingItems();
+    }
+
+    if (!loadingMore) {
+      return categories;
+    }
+
+    return [...categories, ...getLoadingItems()];
+  }, [categories, loading, loadingMore]);
 
   return (
     <Card title={Title}>
-      <PaginatedList items={categories} hasMore={hasMore} loadMore={loadMore} container={Grid}>
-        {({ categoryId }) => (
-          <CategoryHeader key={categoryId} categoryId={categoryId} onClick={onClickCategory} />
-        )}
+      <PaginatedList items={items} hasMore={hasMore} loadMore={loadMore} container={Grid}>
+        {({ categoryId, skeleton }) =>
+          skeleton ? (
+            <CategoryHeader key={categoryId} loading />
+          ) : (
+            <CategoryHeader key={categoryId} categoryId={categoryId} onClick={onClickCategory} />
+          )
+        }
       </PaginatedList>
     </Card>
   );

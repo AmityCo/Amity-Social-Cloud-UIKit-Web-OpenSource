@@ -6,7 +6,7 @@ import useCategory from '~/social/hooks/useCategory';
 
 import UICategoryHeader from './styles';
 
-const CategoryHeader = ({ className, categoryId, children, onClick }) => {
+const CategoryHeader = ({ className, categoryId, children, loading, onClick }) => {
   const { category } = useCategory(categoryId);
 
   // TODO: this is temporary - we should use file.fileUrl when supported.
@@ -27,6 +27,7 @@ const CategoryHeader = ({ className, categoryId, children, onClick }) => {
       name={category.name}
       avatarFileUrl={fileUrl}
       onClick={onClick}
+      loading={loading}
     >
       {children}
     </UICategoryHeader>
@@ -37,11 +38,13 @@ CategoryHeader.propTypes = {
   className: PropTypes.string,
   categoryId: PropTypes.string.isRequired,
   children: PropTypes.node,
+  loading: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
 CategoryHeader.defaultProps = {
   children: null,
+  loading: false,
 };
 
 export default CategoryHeader;

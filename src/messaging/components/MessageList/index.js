@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { MessageRepository } from '@amityco/js-sdk';
 
@@ -45,4 +45,4 @@ const MessageList = ({ client, channelId }) => {
   );
 };
 
-export default withSDK(customizableComponent('MessageList', MessageList));
+export default memo(withSDK(customizableComponent('MessageList', MessageList)));

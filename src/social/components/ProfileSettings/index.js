@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 import UserProfileForm from '~/social/components/UserProfileForm';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -81,4 +81,4 @@ const ProfileSettings = ({ userId, client }) => {
   );
 };
 
-export default withSDK(customizableComponent('ProfileSettings', ProfileSettings));
+export default memo(withSDK(customizableComponent('ProfileSettings', ProfileSettings)));

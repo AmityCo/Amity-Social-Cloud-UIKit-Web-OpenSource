@@ -14,7 +14,7 @@ const usePostChildren = postChildrenIds => {
     setChildrenPosts(prevState => [...prevState, newChildPost]);
   };
 
-  postChildrenIds.forEach(childId => {
+  (postChildrenIds || []).forEach(childId => {
     const childPostLiveObject = PostRepository.postForId(childId);
 
     // Crucial to use an if/else here and not try both.

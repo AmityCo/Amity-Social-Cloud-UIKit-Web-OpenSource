@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import CommunityHeader from '~/social/components/community/Header';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import LoadMore from '~/social/components/LoadMore';
 import { CommunityScrollContainer } from './styles';
 
@@ -21,9 +20,15 @@ const UICommunityList = ({
   onClickCommunity,
   isSearchList,
   searchInput,
+  loading,
+  loadingMore,
 }) => {
   const noCommunitiesFound = isSearchList && !communityIds.length;
   const classNames = [communityIds.length < 4 && 'no-scroll', className].filter(Boolean).join(' ');
+
+  function renderLoadingSkeleton() {
+    return new Array(5).fill(1).map((x, index) => <CommunityHeader key={index} loading />);
+  }
 
   return (
     <CommunityScrollContainer
@@ -36,19 +41,23 @@ const UICommunityList = ({
       loader={<div />}
     >
       <LoadMore hasMore={hasMore} loadMore={loadMore} className="no-border">
-        <ConditionalRender condition={noCommunitiesFound}>
-          <NoResultsMessage>No community found</NoResultsMessage>
-        </ConditionalRender>
-        {communityIds.map(communityId => (
-          <CommunityHeader
-            key={communityId}
-            communityId={communityId}
-            isActive={communityId === activeCommunity}
-            onClick={onClickCommunity}
-            isSearchResult={isSearchList}
-            searchInput={searchInput}
-          />
-        ))}
+        {noCommunitiesFound && <NoResultsMessage>No community found</NoResultsMessage>}
+
+        {loading && renderLoadingSkeleton()}
+
+        {!loading &&
+          communityIds.map(communityId => (
+            <CommunityHeader
+              key={communityId}
+              communityId={communityId}
+              isActive={communityId === activeCommunity}
+              onClick={onClickCommunity}
+              isSearchResult={isSearchList}
+              searchInput={searchInput}
+            />
+          ))}
+
+        {loadingMore && renderLoadingSkeleton()}
       </LoadMore>
     </CommunityScrollContainer>
   );
@@ -63,6 +72,8 @@ UICommunityList.propTypes = {
   onClickCommunity: PropTypes.func,
   isSearchList: PropTypes.bool,
   searchInput: PropTypes.string,
+  loading: PropTypes.bool,
+  loadingMore: PropTypes.bool,
 };
 
 UICommunityList.defaultProps = {
@@ -73,6 +84,8 @@ UICommunityList.defaultProps = {
   onClickCommunity: () => {},
   isSearchList: false,
   searchInput: '',
+  loading: false,
+  loadingMore: false,
 };
 
 export default UICommunityList;

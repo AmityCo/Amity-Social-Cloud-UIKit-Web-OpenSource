@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CommentRepository, CommentReferenceType } from '@amityco/js-sdk';
 
@@ -49,4 +49,4 @@ EngagementBar.defaultProps = {
 };
 
 export { UIEngagementBar };
-export default customizableComponent('EngagementBar', EngagementBar);
+export default memo(customizableComponent('EngagementBar', EngagementBar));

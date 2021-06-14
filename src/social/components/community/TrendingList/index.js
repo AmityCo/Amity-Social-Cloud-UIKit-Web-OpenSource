@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import { useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
+import Skeleton from '~/core/components/Skeleton';
 import useTrendingCommunitiesList from '~/social/hooks/useTrendingCommunitiesList';
 import Card from '~/core/components/Card';
 import TrendingItem from '~/social/components/community/TrendingItem';
@@ -53,18 +54,29 @@ const CommunitiesList = styled.ul`
 
 const TrendingList = ({ slim }) => {
   const { onClickCommunity } = useNavigation();
-  const [communities] = useTrendingCommunitiesList();
-  const { formatMessage } = useIntl();
+  const [communities, , , loading] = useTrendingCommunitiesList();
+
+  const title = loading ? (
+    <Skeleton style={{ fontSize: 12, maxWidth: 156 }} />
+  ) : (
+    <FormattedMessage id="todaysTrendingTitle" />
+  );
+
+  const list = loading
+    ? new Array(5).fill(1).map((x, index) => (
+        <li key={index}>
+          <TrendingItem slim={slim} loading />
+        </li>
+      ))
+    : communities.slice(0, 5).map(({ communityId }) => (
+        <li key={communityId}>
+          <TrendingItem communityId={communityId} slim={slim} onClick={onClickCommunity} />
+        </li>
+      ));
+
   return (
-    <Card title={formatMessage({ id: 'todaysTrendingTitle' })} slim={slim}>
-      <CommunitiesList>
-        {/* Only take first 5 communities even if BE returns more */}
-        {communities.slice(0, 5).map(({ communityId }) => (
-          <li key={communityId}>
-            <TrendingItem communityId={communityId} slim={slim} onClick={onClickCommunity} />
-          </li>
-        ))}
-      </CommunitiesList>
+    <Card title={title} slim={slim}>
+      <CommunitiesList>{list}</CommunitiesList>
     </Card>
   );
 };

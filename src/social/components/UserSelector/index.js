@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -100,4 +100,4 @@ UserSelector.propTypes = {
   currentUserId: PropTypes.number,
 };
 
-export default withSDK(customizableComponent('UserSelector', UserSelector));
+export default memo(withSDK(customizableComponent('UserSelector', UserSelector)));

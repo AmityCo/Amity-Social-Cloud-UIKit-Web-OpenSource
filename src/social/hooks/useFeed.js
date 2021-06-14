@@ -18,13 +18,11 @@ const useFeed = ({ targetType, targetId }) => {
     return false;
   };
 
-  const [posts, hasMore, loadMore] = useLiveCollection(
+  return useLiveCollection(
     FeedQueryTypes[targetType],
     [targetType, targetId],
     liveCollectionResolver,
   );
-
-  return [posts, hasMore, loadMore];
 };
 
 export default useFeed;

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
 import { LoadingStatus } from '@amityco/js-sdk';
+import { throttle } from 'lodash';
+import { useEffect, useState } from 'react';
 
 const noop = () => {
   if (process?.env?.NODE_ENV === 'development') console.warn('[useLiveCollection] noop hit');
@@ -9,48 +10,71 @@ const useLiveCollection = (
   createLiveCollection,
   dependencies = [],
   resolver = () => dependencies.some(dep => !dep),
+  debug = null,
 ) => {
-  const [data, setData] = useState([]);
-
-  const [pagination, setPagination] = useState({
+  const [data, setData] = useState({
+    items: [],
     hasMore: false,
     loadMore: noop,
+    loadingFirstTime: true,
+    loadingMore: false,
   });
 
   useEffect(() => {
     if (resolver()) return;
 
+    const liveCollection = createLiveCollection();
+    let loadMoreHasBeenCalled = false;
+
+    const updateLiveCollection = throttle(() => {
+      debug && console.log(liveCollection.dataStatus, liveCollection.hasMore);
+
+      const { hasMore = false } = liveCollection;
+
+      setData({
+        items: liveCollection.models,
+        hasMore,
+        loadMore: hasMore
+          ? () => {
+              loadMoreHasBeenCalled = true;
+              liveCollection.nextPage();
+            }
+          : noop,
+        loadingFirstTime:
+          !loadMoreHasBeenCalled && liveCollection.loadingStatus === LoadingStatus.Loading,
+        loadingMore:
+          loadMoreHasBeenCalled && liveCollection.loadingStatus === LoadingStatus.Loading,
+      });
+    }, 50);
+
+    if (debug) {
+      window.lc = liveCollection;
+    }
+
     try {
-      const liveCollection = createLiveCollection();
-
-      // data
-      liveCollection.models && setData(liveCollection.models);
-      liveCollection.on('dataUpdated', newData => {
-        const { hasMore } = liveCollection;
-        setPagination({
-          hasMore,
-          loadMore: hasMore ? () => liveCollection.nextPage() : noop,
-        });
-        setData(newData);
+      liveCollection.on('dataUpdated', () => {
+        debug && console.log('dataUpdated!');
+        updateLiveCollection();
       });
 
-      // pagination
-      liveCollection.on('loadingStatusChanged', ({ newValue }) => {
-        const hasMore = newValue === LoadingStatus.Loaded && liveCollection.hasMore;
-
-        setPagination({
-          hasMore,
-          loadMore: hasMore ? () => liveCollection.nextPage() : noop,
-        });
+      liveCollection.on('loadingStatusChanged', statuses => {
+        debug && console.log('loadingStatusChanged!', statuses);
+        updateLiveCollection();
       });
-      return () => liveCollection.dispose();
+
+      if (liveCollection.models) {
+        debug && console.log('from client cache');
+        updateLiveCollection();
+      }
     } catch (err) {
       if (process.env.NODE_ENV === 'development')
         console.warn('[useLiveCollection] error thrown', err);
     }
+
+    return () => liveCollection.dispose();
   }, [...dependencies]);
 
-  return [data, pagination.hasMore, pagination.loadMore];
+  return [data.items, data.hasMore, data.loadMore, data.loadingFirstTime, data.loadingMore];
 };
 
 export default useLiveCollection;

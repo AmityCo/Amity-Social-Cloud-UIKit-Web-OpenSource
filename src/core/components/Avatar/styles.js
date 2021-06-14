@@ -1,8 +1,18 @@
+import React from 'react';
 import styled from 'styled-components';
+import Skeleton from '~/core/components/Skeleton';
 
 import { SIZES } from '~/core/hocs/withSize';
 
-export const AvatarContainer = styled.div`
+export const AvatarContainer = styled(({ backgroundImage, children, loading, size, ...props }) => (
+  <div {...props}>
+    {loading ? (
+      <Skeleton circle width="100%" height="100%" style={{ display: 'block' }} />
+    ) : (
+      children
+    )}
+  </div>
+))`
   position: relative;
   flex-shrink: 0;
   overflow: hidden;

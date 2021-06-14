@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { memo, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { PostDataType, PostRepository } from '@amityco/js-sdk';
 
@@ -101,4 +101,4 @@ PostEditor.defaultProps = {
   placeholder: "What's going on...",
 };
 
-export default PostEditor;
+export default memo(PostEditor);

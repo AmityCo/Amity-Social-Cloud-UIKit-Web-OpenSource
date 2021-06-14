@@ -1,12 +1,12 @@
 import React from 'react';
 
-import StyledCommunityName from './UICommunityName';
+import CommunityName from '.';
 
 export default {
   title: 'Ui Only/Social/Community',
 };
 
-export const UiCommunityName = props => <StyledCommunityName {...props} />;
+export const UiCommunityName = props => <CommunityName {...props} />;
 
 UiCommunityName.storyName = 'Name';
 
@@ -16,6 +16,8 @@ UiCommunityName.args = {
   isPublic: true,
   isActive: false,
   isTitle: false,
+  isSearchResult: false,
+  searchInput: '',
 };
 
 UiCommunityName.argTypes = {
@@ -24,4 +26,6 @@ UiCommunityName.argTypes = {
   isPublic: { control: { type: 'boolean' } },
   isActive: { control: { type: 'boolean' } },
   isTitle: { control: { type: 'boolean' } },
+  isSearchResult: { control: { type: 'boolean' } },
+  searchInput: { control: { type: 'text' } },
 };

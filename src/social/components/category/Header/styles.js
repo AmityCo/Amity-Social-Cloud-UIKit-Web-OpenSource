@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
+import Skeleton from '~/core/components/Skeleton';
 
 import customizableComponent from '~/core/hocs/customization';
 
@@ -13,7 +14,7 @@ const CategoryHeaderContainer = styled.div`
   grid-template-columns: min-content auto;
   grid-template-rows: min-content min-content;
   grid-gap: 0 0.5em;
-  padding: 1em;
+  padding: 0.5rem;
   ${({ hasNoChildren }) =>
     hasNoChildren &&
     css`
@@ -24,7 +25,6 @@ const CategoryHeaderContainer = styled.div`
   ${({ theme, clickable }) =>
     clickable &&
     `
-    padding: .5rem;
     border-radius: 4px;
     cursor: pointer;
     
@@ -50,7 +50,15 @@ const CategoryHeaderSubtitle = styled.div`
   ${({ theme }) => theme.typography.body}
 `;
 
-const CategoryHeader = ({ className, categoryId, name, avatarFileUrl, children, onClick }) => {
+const CategoryHeader = ({
+  className,
+  categoryId,
+  name,
+  avatarFileUrl,
+  children,
+  onClick,
+  loading,
+}) => {
   const handleClick = () => onClick(categoryId);
   const blockClick = e => e.stopPropagation();
 
@@ -59,11 +67,13 @@ const CategoryHeader = ({ className, categoryId, name, avatarFileUrl, children, 
       className={className}
       title={name}
       hasNoChildren={!children}
-      clickable={!!onClick}
+      clickable={!loading && !!onClick}
       onClick={handleClick}
     >
-      <CategoryHeaderAvatar avatar={avatarFileUrl} backgroundImage={CategoryImage} />
-      <CategoryHeaderTitle title={categoryId}>{name}</CategoryHeaderTitle>
+      <CategoryHeaderAvatar avatar={avatarFileUrl} backgroundImage={CategoryImage} loading />
+      <CategoryHeaderTitle title={categoryId}>
+        {loading ? <Skeleton style={{ fontSize: 12, maxWidth: 124 }} /> : name}
+      </CategoryHeaderTitle>
       {children && <CategoryHeaderSubtitle onClick={blockClick}>{children}</CategoryHeaderSubtitle>}
     </CategoryHeaderContainer>
   );
@@ -76,6 +86,7 @@ CategoryHeader.propTypes = {
   avatarFileUrl: PropTypes.string,
   children: PropTypes.node,
   onClick: PropTypes.func,
+  loading: PropTypes.bool,
 };
 
 export default customizableComponent('CategoryHeader', CategoryHeader);

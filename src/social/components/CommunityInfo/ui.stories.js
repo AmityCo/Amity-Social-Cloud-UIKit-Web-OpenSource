@@ -20,7 +20,10 @@ UiCommunityInfo.args = {
   membersCount: 250,
   description: 'Description of this community',
   isJoined: true,
+  isOfficial: false,
+  isPublic: false,
   canEditCommunity: true,
+  name: 'Community Name',
 };
 
 UiCommunityInfo.argTypes = {
@@ -39,8 +42,11 @@ UiCommunityInfo.argTypes = {
   membersCount: { control: { type: 'number' } },
   description: { control: { type: 'text' } },
   isJoined: { control: { type: 'boolean' } },
+  isOfficial: { control: { type: 'boolean' } },
+  isPublic: { control: { type: 'boolean' } },
   canEditCommunity: { control: { type: 'boolean' } },
   onEditCommunity: { action: 'onEditCommunity()' },
   joinCommunity: { action: 'joinCommunity()' },
   leaveCommunity: { action: 'leaveCommunity()' },
+  name: { control: { type: 'text' } },
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { ChannelRepository } from '@amityco/js-sdk';
 
 import ChatItem from '~/messaging/components/ChatItem';
@@ -32,4 +32,4 @@ const RecentChat = ({ onChannelClick, selectedChannelId }) => {
   );
 };
 
-export default customizableComponent('RecentChat', RecentChat);
+export default memo(customizableComponent('RecentChat', RecentChat));

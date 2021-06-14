@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
@@ -53,15 +53,18 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
       membersCount={membersCount}
       description={description}
       isJoined={isJoined}
+      isOfficial={community.isOfficial}
+      isPublic={community.isPublic}
       avatarFileUrl={fileUrl}
       canEditCommunity={canEditCommunity}
       onEditCommunity={onEditCommunity}
       joinCommunity={joinCommunity}
       leaveCommunity={leaveCommunityConfirm}
       canLeaveCommunity={canLeaveCommunity}
+      name={community.displayName}
     />
   );
 };
 
 export { UICommunityInfo };
-export default withSDK(CommunityInfo);
+export default memo(withSDK(CommunityInfo));

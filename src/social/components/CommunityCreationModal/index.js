@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import { CommunityRepository } from '@amityco/js-sdk';
 
@@ -41,4 +41,6 @@ const CommunityCreationModal = ({ isOpen, onClose, currentUserId }) => {
   );
 };
 
-export default withSDK(customizableComponent('CommunityCreationModal', CommunityCreationModal));
+export default memo(
+  withSDK(customizableComponent('CommunityCreationModal', CommunityCreationModal)),
+);

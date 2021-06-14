@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import customizableComponent from '~/core/hocs/customization';
 import { CommunityAlt } from '~/icons';
 import { SideNavContainer } from './styles';
@@ -22,4 +22,4 @@ const SideNavBar = () => {
   );
 };
 
-export default customizableComponent('SideNavBar', SideNavBar);
+export default memo(customizableComponent('SideNavBar', SideNavBar));

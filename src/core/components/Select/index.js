@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import useKeyboard from '~/core/hooks/useKeyboard';
@@ -128,4 +128,4 @@ Select.propTypes = {
   placeholder: PropTypes.string,
 };
 
-export default Select;
+export default memo(Select);

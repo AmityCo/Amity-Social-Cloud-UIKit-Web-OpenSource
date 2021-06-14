@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Skeleton, { SKELETON_SHAPES } from '.';
+import Skeleton from '.';
 
 export default {
   title: 'Ui Only',
@@ -19,7 +19,7 @@ UiSkeleton.storyName = 'Skeleton';
 UiSkeleton.args = Skeleton.defaultProps;
 
 UiSkeleton.argTypes = {
-  shape: { control: { type: 'select', options: Object.values(SKELETON_SHAPES) } },
+  circle: { control: { type: 'boolean' } },
   borderRadius: { control: { type: 'number' } },
   primaryColor: { control: { type: 'color' } },
   secondaryColor: { control: { type: 'color' } },

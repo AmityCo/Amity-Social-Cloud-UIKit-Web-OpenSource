@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CommunityFilter } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
@@ -49,4 +49,4 @@ SideSectionMyCommunity.propTypes = {
   activeCommunity: PropTypes.string,
 };
 
-export default SideSectionMyCommunity;
+export default memo(SideSectionMyCommunity);

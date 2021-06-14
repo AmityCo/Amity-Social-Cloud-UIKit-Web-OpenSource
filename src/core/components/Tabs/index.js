@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import customizableComponent from '~/core/hocs/customization';
 
 import { TabsContainer, TabsList, TabItem, TabButton } from './styles';
@@ -17,4 +17,4 @@ const Tabs = ({ className, tabs, activeTab, onChange }) => (
   </TabsContainer>
 );
 
-export default customizableComponent('Tabs', Tabs);
+export default memo(customizableComponent('Tabs', Tabs));

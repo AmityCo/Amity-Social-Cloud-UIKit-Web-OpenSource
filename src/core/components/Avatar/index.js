@@ -8,7 +8,7 @@ import { backgroundImage as UserImage } from '~/icons/User';
 
 import { AvatarContainer, Img, AvatarOverlay } from './styles';
 
-const Avatar = ({ className, avatar = null, showOverlay, size, onClick, ...props }) => {
+const Avatar = ({ className, avatar = null, showOverlay, size, onClick, loading, ...props }) => {
   const [visible, setVisible] = useState(false);
 
   const onLoad = useCallback(() => setVisible(true), []);
@@ -17,6 +17,7 @@ const Avatar = ({ className, avatar = null, showOverlay, size, onClick, ...props
   return (
     <AvatarContainer
       className={cx(className, { visible, clickable: !!onClick })}
+      loading={loading}
       onClick={onClick}
       size={size}
       {...props}
@@ -33,6 +34,7 @@ const Avatar = ({ className, avatar = null, showOverlay, size, onClick, ...props
 
 Avatar.defaultProps = {
   backgroundImage: UserImage,
+  loading: false,
 };
 
 export default customizableComponent('Avatar', withSize(Avatar));

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useState, useEffect } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
@@ -222,4 +222,4 @@ Comment.propTypes = {
   userRoles: PropTypes.array,
 };
 
-export default withSDK(customizableComponent('Comment', Comment));
+export default memo(withSDK(customizableComponent('Comment', Comment)));

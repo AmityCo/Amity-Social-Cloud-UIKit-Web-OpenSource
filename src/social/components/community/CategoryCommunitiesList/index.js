@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { Grid, ListContainer } from './styles';
@@ -39,4 +39,4 @@ CategoryCommunitiesList.propTypes = {
   categoryId: PropTypes.string.isRequired,
 };
 
-export default CategoryCommunitiesList;
+export default memo(CategoryCommunitiesList);

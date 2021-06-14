@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { PostTargetType, CommunityFilter } from '@amityco/js-sdk';
+import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
 
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PostCreator from '~/social/components/post/Creator';
@@ -23,10 +24,14 @@ const Feed = ({
   goToExplore,
   readonly = false,
 }) => {
-  const [posts, hasMore, loadMore] = useFeed({ targetType, targetId });
+  const [posts, hasMore, loadMore, loading, loadingMore] = useFeed({ targetType, targetId });
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(queryParams);
 
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
+
+  function renderLoadingSkeleton() {
+    return new Array(3).fill(3).map((x, index) => <DefaultPostRenderer key={index} loading />);
+  }
 
   return (
     <FeedScrollContainer
@@ -47,7 +52,10 @@ const Feed = ({
           loadMoreCommunities={loadMoreCommunities}
         />
       </ConditionalRender>
-      <ConditionalRender condition={posts.length}>
+
+      {loading && renderLoadingSkeleton()}
+
+      {!loading && posts.length > 0 && (
         <LoadMore hasMore={hasMore} loadMore={loadMore} className="load-more no-border">
           {posts.map(({ postId }) => (
             <Post
@@ -57,9 +65,13 @@ const Feed = ({
               readonly={readonly}
             />
           ))}
+          {loadingMore && renderLoadingSkeleton()}
         </LoadMore>
+      )}
+
+      {!loading && posts.length === 0 && (
         <EmptyFeed targetType={targetType} goToExplore={goToExplore} />
-      </ConditionalRender>
+      )}
     </FeedScrollContainer>
   );
 };
@@ -75,4 +87,4 @@ Feed.propTypes = {
   readonly: PropTypes.bool,
 };
 
-export default customizableComponent('Feed', Feed);
+export default memo(customizableComponent('Feed', Feed));

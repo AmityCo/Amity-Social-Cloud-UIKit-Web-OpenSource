@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -53,7 +53,11 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
     <Form className={className} onSubmit={handleSubmit(onSubmit)}>
       <FormBody>
         <FormBlock title="General">
-          <Controller name="avatarFileId" render={AvatarUploader} control={control} />
+          <Controller
+            name="avatarFileId"
+            render={props => <AvatarUploader {...props} />}
+            control={control}
+          />
           <Field error={errors.name}>
             <LabelCounterWrapper>
               <Label htmlFor="displayName" className="required">
@@ -94,4 +98,4 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
   );
 };
 
-export default UserProfileForm;
+export default memo(UserProfileForm);

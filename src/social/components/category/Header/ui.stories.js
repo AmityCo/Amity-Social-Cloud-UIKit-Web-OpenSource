@@ -20,6 +20,7 @@ UiCategoryHeader.args = {
   avatarFileUrl: 'https://via.placeholder.com/32/dfdfdf?text=foobar',
   clickable: false,
   children: 'children slot',
+  loading: false,
 };
 
 UiCategoryHeader.argTypes = {
@@ -29,4 +30,5 @@ UiCategoryHeader.argTypes = {
   clickable: { control: { type: 'boolean' } },
   children: { control: { type: 'text' } },
   onClick: { action: 'onClick()' },
+  loading: { control: { type: 'boolean' } },
 };

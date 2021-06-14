@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import withSDK from '~/core/hocs/withSDK';
@@ -38,4 +38,4 @@ UserInfo.propTypes = {
 };
 
 export { UIUserInfo };
-export default withSDK(UserInfo);
+export default memo(withSDK(UserInfo));

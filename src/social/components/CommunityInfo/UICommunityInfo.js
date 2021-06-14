@@ -33,12 +33,15 @@ const UICommunityInfo = ({
   membersCount,
   description,
   isJoined,
+  isOfficial,
+  isPublic,
   avatarFileUrl,
   canEditCommunity,
   onEditCommunity,
   joinCommunity,
   leaveCommunity,
   canLeaveCommunity,
+  name,
 }) => (
   <Container>
     <Header>
@@ -58,7 +61,7 @@ const UICommunityInfo = ({
         />
       </ConditionalRender>
     </Header>
-    <CommunityName communityId={communityId} isTitle />
+    <CommunityName isOfficial={isOfficial} isPublic={isPublic} isTitle name={name} />
     <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>
     <CountsContainer>
       <Count>
@@ -91,12 +94,15 @@ UICommunityInfo.propTypes = {
   membersCount: PropTypes.number,
   description: PropTypes.string,
   isJoined: PropTypes.bool,
+  isOfficial: PropTypes.bool,
+  isPublic: PropTypes.bool,
   avatarFileUrl: PropTypes.string,
   canEditCommunity: PropTypes.bool,
   onEditCommunity: PropTypes.func,
   joinCommunity: PropTypes.func,
   leaveCommunity: PropTypes.func,
   canLeaveCommunity: PropTypes.bool,
+  name: PropTypes.string,
 };
 
 export default customizableComponent('UICommunityInfo', UICommunityInfo);

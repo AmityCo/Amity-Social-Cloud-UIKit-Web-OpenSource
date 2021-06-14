@@ -32,12 +32,15 @@ export const UITrendingItem = ({ communityCategories, ...props }) => {
 UITrendingItem.storyName = 'Trending Item';
 
 UITrendingItem.args = {
-  communityId: 'f42c39be6165a292a1dca29b703e2e51',
   avatarFileUrl: 'https://cataas.com/cat',
   description: 'Description of the community',
   communityCategories: [],
   membersCount: 10000,
   slim: false,
+  isOfficial: false,
+  isPublic: false,
+  name: 'Community Name',
+  loading: false,
 };
 
 UITrendingItem.argTypes = {
@@ -49,4 +52,8 @@ UITrendingItem.argTypes = {
   },
   slim: { control: { type: 'boolean' } },
   onClick: { action: 'onClick(communityId)' },
+  isOfficial: { control: { type: 'boolean' } },
+  isPublic: { control: { type: 'boolean' } },
+  name: { control: { type: 'text' } },
+  loading: { control: { type: 'boolean' } },
 };

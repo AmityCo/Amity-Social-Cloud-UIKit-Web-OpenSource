@@ -33,10 +33,12 @@ UiCommunityCard.storyName = 'Card';
 
 UiCommunityCard.args = {
   avatarFileUrl: 'https://cataas.com/cat',
-  communityId: 'f42c39be6165a292a1dca29b703e2e51', // picked up randomly in a query
   communityCategories: [],
   membersCount: 250,
   description: 'Description of this community',
+  isOfficial: false,
+  isPublic: false,
+  name: 'Community Name',
 };
 
 UiCommunityCard.argTypes = {
@@ -51,4 +53,7 @@ UiCommunityCard.argTypes = {
   membersCount: { control: { type: 'number', min: 0, step: 1 } },
   description: { control: { type: 'text' } },
   onClick: { action: 'onClick()' },
+  isOfficial: { control: { type: 'boolean' } },
+  isPublic: { control: { type: 'boolean' } },
+  name: { control: { type: 'text' } },
 };

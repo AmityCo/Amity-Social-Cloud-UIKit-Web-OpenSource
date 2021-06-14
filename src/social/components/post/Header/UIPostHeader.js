@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import cx from 'classnames';
+import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import Time from '~/core/components/Time';
 import Avatar from '~/core/components/Avatar';
@@ -30,6 +31,7 @@ const UIPostHeader = ({
   onClickCommunity,
   onClickUser,
   hidePostTarget,
+  loading,
 }) => {
   const renderPostNames = () => {
     const authorName = (
@@ -73,10 +75,26 @@ const UIPostHeader = ({
 
   return (
     <PostHeaderContainer>
-      <Avatar avatar={avatarFileUrl} backgroundImage={UserImage} onClick={onClickUser} />
+      <Avatar
+        avatar={avatarFileUrl}
+        backgroundImage={UserImage}
+        onClick={onClickUser}
+        loading={loading}
+      />
       <PostInfo>
-        {renderPostNames()}
-        {renderAdditionalInfo()}
+        {loading ? (
+          <>
+            <div>
+              <Skeleton width={96} style={{ fontSize: 8 }} />
+            </div>
+            <Skeleton width={189} style={{ fontSize: 8 }} />
+          </>
+        ) : (
+          <>
+            {renderPostNames()}
+            {renderAdditionalInfo()}
+          </>
+        )}
       </PostInfo>
     </PostHeaderContainer>
   );
@@ -92,6 +110,7 @@ UIPostHeader.propTypes = {
   onClickCommunity: PropTypes.func,
   onClickUser: PropTypes.func,
   hidePostTarget: PropTypes.bool,
+  loading: PropTypes.bool,
 };
 
 UIPostHeader.defaultProps = {
@@ -104,6 +123,7 @@ UIPostHeader.defaultProps = {
   onClickCommunity: null,
   onClickUser: null,
   hidePostTarget: false,
+  loading: false,
 };
 
 export default customizableComponent('UIPostHeader', UIPostHeader);

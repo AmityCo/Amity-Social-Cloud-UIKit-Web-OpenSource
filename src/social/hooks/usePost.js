@@ -7,7 +7,7 @@ import useUser from '~/core/hooks/useUser';
 
 const usePost = postId => {
   const post = useLiveObject(() => PostRepository.postForId(postId), [postId]);
-  const { postedUserId, children = [] } = post;
+  const { postedUserId, children } = post;
 
   const { user, file } = useUser(postedUserId, [postedUserId]);
 

@@ -43,7 +43,11 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
           <FormBody>
             <FormBlock>
               <MembersField error={errors.members}>
-                <Controller name="members" render={UserSelector} control={control} />
+                <Controller
+                  name="members"
+                  render={props => <UserSelector {...props} />}
+                  control={control}
+                />
                 <ErrorMessage errors={errors} name="members" />
               </MembersField>
             </FormBlock>

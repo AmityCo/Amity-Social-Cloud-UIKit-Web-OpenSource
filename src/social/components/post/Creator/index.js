@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { memo, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { FormattedMessage } from 'react-intl';
@@ -217,4 +217,4 @@ PostCreatorBar.propTypes = {
   maxFiles: PropTypes.number,
 };
 
-export default withSDK(PostCreatorBar);
+export default memo(withSDK(PostCreatorBar));

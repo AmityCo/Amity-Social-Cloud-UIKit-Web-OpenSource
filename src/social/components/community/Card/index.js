@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import useCommunity from '~/social/hooks/useCommunity';
@@ -19,6 +19,9 @@ const CommunityCard = ({ communityId, onClick, ...props }) => {
       membersCount={membersCount}
       description={description}
       onClick={onClick}
+      isOfficial={community.isOfficial}
+      isPublic={community.isPublic}
+      name={community.displayName}
       {...props}
     />
   );
@@ -29,4 +32,4 @@ CommunityCard.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default CommunityCard;
+export default memo(CommunityCard);

@@ -6,6 +6,7 @@ import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import Card from '~/core/components/Card';
+import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 
 import Avatar from '~/core/components/Avatar';
@@ -62,29 +63,45 @@ const UICommunityCard = ({
   membersCount,
   description,
   onClick,
+  isOfficial,
+  isPublic,
+  name,
+  loading,
   ...props
 }) => {
   const handleClick = () => onClick(communityId);
 
   return (
     <Container onClick={handleClick} {...props}>
-      <StyledAvatar avatar={avatarFileUrl} backgroundImage={CommunityImage} />
+      <StyledAvatar avatar={avatarFileUrl} backgroundImage={CommunityImage} loading={loading} />
 
-      <CommunityName key={communityId} communityId={communityId} isTitle />
+      <CommunityName
+        isOfficial={isOfficial}
+        isPublic={isPublic}
+        isTitle
+        name={name}
+        loading={loading}
+      />
 
       <Infos>
-        <ConditionalRender condition={!!communityCategories.length}>
-          <Categories>
-            {communityCategories.map(({ categoryId, name }) => (
-              <Category key={categoryId}>{name}</Category>
-            ))}
-          </Categories>
-        </ConditionalRender>
+        {loading && <Skeleton count={2} style={{ fontSize: 8 }} />}
 
-        <Count>
-          <strong>{toHumanString(membersCount)}</strong>{' '}
-          <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
-        </Count>
+        {!loading && (
+          <>
+            <ConditionalRender condition={!!communityCategories.length}>
+              <Categories>
+                {communityCategories.map(category => (
+                  <Category key={category.categoryId}>{category.name}</Category>
+                ))}
+              </Categories>
+            </ConditionalRender>
+
+            <Count>
+              <strong>{toHumanString(membersCount)}</strong>{' '}
+              <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
+            </Count>
+          </>
+        )}
       </Infos>
 
       <Truncate lines={3}>
@@ -97,6 +114,10 @@ const UICommunityCard = ({
 UICommunityCard.defaultProps = {
   communityCategories: [],
   onClick: () => {},
+  isOfficial: false,
+  isPublic: false,
+  name: '',
+  loading: false,
 };
 
 UICommunityCard.propTypes = {
@@ -111,6 +132,10 @@ UICommunityCard.propTypes = {
   membersCount: PropTypes.number,
   description: PropTypes.string,
   onClick: PropTypes.func,
+  isOfficial: PropTypes.bool,
+  isPublic: PropTypes.bool,
+  name: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 export default customizableComponent('UICommunityCard', UICommunityCard);

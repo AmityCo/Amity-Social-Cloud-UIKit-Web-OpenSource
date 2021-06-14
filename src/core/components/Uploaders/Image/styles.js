@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
+import { SizeMe } from 'react-sizeme';
 
 import Button from '~/core/components/Button';
-import Skeleton from '~/core/components/Skeleton';
 import ProgressBar from '~/core/components/ProgressBar';
+import Skeleton from '~/core/components/Skeleton';
 
 import RemoveIcon from '~/icons/Remove';
 import ExclamationCircle from '~/icons/ExclamationCircle';
@@ -45,6 +46,10 @@ export const ImgPreview = styled.img`
 
 export const SkeletonWrapper = styled.div`
   ${ImgPreviewContainerStyles}
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const RemoveButton = styled(Button)`
@@ -87,9 +92,17 @@ const Image = ({ url, progress, imageFit, noBorder, onRemove, isRejected, onRetr
         {url ? (
           <ImgPreview src={url} imageFit={imageFit} className={!!isRejected && 'darken'} />
         ) : (
-          <SkeletonWrapper imageFit={imageFit}>
-            <Skeleton />
-          </SkeletonWrapper>
+          <SizeMe monitorHeight>
+            {({ size }) => {
+              const minSize = Math.min(size.width, size.height);
+
+              return (
+                <SkeletonWrapper imageFit={imageFit}>
+                  <Skeleton height={minSize} width={minSize} style={{ display: 'block' }} />
+                </SkeletonWrapper>
+              );
+            }}
+          </SizeMe>
         )}
 
         <ButtonContainer>

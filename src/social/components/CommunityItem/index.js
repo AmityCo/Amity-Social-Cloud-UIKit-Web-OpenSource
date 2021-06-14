@@ -9,7 +9,11 @@ import { Avatar, CommunityItemContainer } from './styles';
 const CommunityItem = ({ community, active, onClick }) => (
   <CommunityItemContainer onClick={onClick} active={active}>
     <Avatar avatar={community.avatar} backgroundImage={CommunityImage} />
-    <CommunityName community={community} />
+    <CommunityName
+      isOfficial={community.isOfficial}
+      isPublic={community.isPublic}
+      name={community.displayName}
+    />
   </CommunityItemContainer>
 );
 

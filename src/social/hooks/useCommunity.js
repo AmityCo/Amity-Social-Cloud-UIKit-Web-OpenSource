@@ -1,7 +1,6 @@
 import { CommunityRepository } from '@amityco/js-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
-import useLiveCollection from '~/core/hooks/useLiveCollection';
 import useFile from '~/core/hooks/useFile';
 
 const useCommunity = communityId => {
@@ -16,13 +15,6 @@ const useCommunity = communityId => {
   if (community.avatarCustomUrl) {
     file = { fileUrl: community.avatarCustomUrl };
   }
-
-  const communityCategoryIds = community.categoryIds;
-
-  const [communityCategories] = useLiveCollection(
-    () => CommunityRepository.categoriesForIds({ categoryIds: communityCategoryIds }),
-    [communityCategoryIds],
-  );
 
   /*
     developer's note: payload is: {
@@ -49,7 +41,7 @@ const useCommunity = communityId => {
   return {
     community,
     file,
-    communityCategories,
+    communityCategories: community?.categories ?? [],
     joinCommunity,
     leaveCommunity,
     updateCommunity,

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
+import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import Avatar from '~/core/components/Avatar';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -15,6 +16,10 @@ const ItemContainer = styled.div`
   align-items: center;
   cursor: pointer;
   counter-increment: trending;
+
+  > :not(:first-child) {
+    margin-left: 0.5rem;
+  }
 `;
 
 const Categories = styled.span`
@@ -48,60 +53,86 @@ const Description = styled.p`
   ${({ theme }) => theme.typography.caption}
 `;
 
-const TrendingNumber = styled.div`
+const TrendingNumber = styled(({ loading, ...props }) => (
+  <div {...props}>{loading && <Skeleton circle height={16} width={16} />}</div>
+))`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
+  width: 1rem;
   flex-shrink: 0;
   color: ${({ theme }) => theme.palette.primary.main};
   ${({ theme }) => theme.typography.headline}
 
+  ${({ loading }) =>
+    !loading &&
+    `
   &:before {
     content: counter(trending);
   }
+  `}
 `;
 
 const UITrendingItem = ({
-  communityId,
   avatarFileUrl,
   description,
   categories,
   membersCount,
   slim,
   onClick,
+  isOfficial,
+  isPublic,
+  name,
+  loading,
 }) => (
   <ItemContainer onClick={onClick}>
     <Avatar
       avatar={avatarFileUrl}
       size={!slim ? 'big' : 'regular'}
       backgroundImage={CommunityImage}
+      loading={loading}
     />
-    <TrendingNumber />
+    <TrendingNumber loading={loading} />
     <TextInfos>
-      <CommunityName communityId={communityId} />
-      <Truncate lines={2}>
-        <Description slim={slim}>{description}</Description>
-      </Truncate>
-      <Infos>
-        <ConditionalRender condition={categories.length > 0}>
-          <Categories>
-            {categories.map(({ categoryId, name }) => (
-              <Category key={categoryId}>{name}</Category>
-            ))}
-          </Categories>
-        </ConditionalRender>
-        <span>
-          {toHumanString(membersCount)}{' '}
-          <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
-        </span>
-      </Infos>
+      {loading ? (
+        <>
+          <Skeleton style={{ fontSize: '0.5rem', maxWidth: '7.5rem' }} />
+          <div>
+            <Skeleton style={{ fontSize: '0.5rem', maxWidth: '13.5rem' }} />
+          </div>
+          {!slim && (
+            <>
+              <Skeleton width="2.5rem" style={{ fontSize: '0.5rem' }} />
+              <Skeleton width="2.5rem" style={{ fontSize: '0.5rem', marginLeft: '0.75rem' }} />
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          <CommunityName isOfficial={isOfficial} isPublic={isPublic} name={name} />
+          <Truncate lines={2}>
+            <Description slim={slim}>{description}</Description>
+          </Truncate>
+          <Infos>
+            <ConditionalRender condition={categories.length > 0}>
+              <Categories>
+                {categories.map(category => (
+                  <Category key={category.categoryId}>{category.name}</Category>
+                ))}
+              </Categories>
+            </ConditionalRender>
+            <span>
+              {toHumanString(membersCount)}{' '}
+              <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
+            </span>
+          </Infos>
+        </>
+      )}
     </TextInfos>
   </ItemContainer>
 );
 
 UITrendingItem.propTypes = {
-  communityId: PropTypes.string.isRequired,
   avatarFileUrl: PropTypes.string,
   description: PropTypes.string,
   categories: PropTypes.arrayOf(
@@ -113,6 +144,10 @@ UITrendingItem.propTypes = {
   membersCount: PropTypes.number,
   slim: PropTypes.bool,
   onClick: PropTypes.func,
+  isOfficial: PropTypes.bool,
+  isPublic: PropTypes.bool,
+  name: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 UITrendingItem.defaultProps = {
@@ -122,6 +157,10 @@ UITrendingItem.defaultProps = {
   membersCount: 0,
   slim: false,
   onClick: () => {},
+  isOfficial: false,
+  isPublic: false,
+  name: '',
+  loading: false,
 };
 
 export default customizableComponent('UITrendingItem', UITrendingItem);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
@@ -311,4 +311,4 @@ const CommunityForm = ({
   );
 };
 
-export default customizableComponent('CommunityForm', CommunityForm);
+export default memo(customizableComponent('CommunityForm', CommunityForm));

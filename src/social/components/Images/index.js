@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 import customizableComponent from '~/core/hocs/customization';
 
@@ -46,4 +46,4 @@ const Images = ({ editing, images = [], onRemove, setImageLoaded }) => {
   );
 };
 
-export default customizableComponent('Images', Images);
+export default memo(customizableComponent('Images', Images));

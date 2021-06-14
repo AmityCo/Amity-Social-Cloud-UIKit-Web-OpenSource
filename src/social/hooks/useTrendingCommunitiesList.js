@@ -2,12 +2,7 @@ import { CommunityRepository } from '@amityco/js-sdk';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 const useTrendingCommunitiesList = () => {
-  const [communities, hasMore, loadMore] = useLiveCollection(
-    () => CommunityRepository.getTopTrendingCommunities(),
-    [],
-  );
-
-  return [communities, hasMore, loadMore];
+  return useLiveCollection(() => CommunityRepository.getTopTrendingCommunities(), []);
 };
 
 export default useTrendingCommunitiesList;

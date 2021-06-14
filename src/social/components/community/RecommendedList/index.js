@@ -1,15 +1,15 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import Card from '~/core/components/Card';
 import HorizontalList from '~/core/components/HorizontalList';
+import Skeleton from '~/core/components/Skeleton';
 import UiKitCommunityCard from '~/social/components/community/Card';
 import CommunityHeader from '~/social/components/community/Header';
 
@@ -36,41 +36,55 @@ const Category = styled.span`
 `;
 
 const RecommendedList = ({ slim }) => {
-  const Title = <FormattedMessage id="recommendedList" />;
-
   const { onClickCommunity } = useNavigation();
-  const [communities] = useRecommendedCommunitiesList();
+  const [communities, , , loading] = useRecommendedCommunitiesList();
+
+  const title = loading ? (
+    <Skeleton style={{ fontSize: 12, maxWidth: 156 }} />
+  ) : (
+    <FormattedMessage id="recommendedList" />
+  );
 
   return (
-    <Card title={Title} slim={slim}>
-      <ConditionalRender condition={!slim}>
+    <Card title={title} slim={slim}>
+      {!slim && (
         <HorizontalList>
-          {communities.map(({ communityId }) => (
-            <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
-          ))}
-        </HorizontalList>
-      </ConditionalRender>
+          {loading && new Array(4).fill(1).map((x, index) => <CommunityCard key={index} loading />)}
 
-      <ConditionalRender condition={slim}>
-        <>
-          {communities.map(({ communityId }) => (
-            <CommunityHeader key={communityId} communityId={communityId} onClick={onClickCommunity}>
-              {({ community, communityCategories }) => (
-                <Notes>
-                  {communityCategories.map(({ categoryId, name }) => (
-                    <Category key={categoryId}>{name}</Category>
-                  ))}
-                  {toHumanString(community.membersCount)}{' '}
-                  <FormattedMessage
-                    id="plural.member"
-                    values={{ amount: community.membersCount }}
-                  />
-                </Notes>
-              )}
-            </CommunityHeader>
-          ))}
-        </>
-      </ConditionalRender>
+          {!loading &&
+            communities.map(({ communityId }) => (
+              <CommunityCard
+                key={communityId}
+                communityId={communityId}
+                onClick={onClickCommunity}
+              />
+            ))}
+        </HorizontalList>
+      )}
+
+      {slim &&
+        loading &&
+        new Array(5).fill(1).map((x, index) => (
+          <CommunityHeader key={index} loading>
+            <Skeleton style={{ fontSize: 8, maxWidth: 88 }} />
+          </CommunityHeader>
+        ))}
+
+      {slim &&
+        !loading &&
+        communities.map(({ communityId }) => (
+          <CommunityHeader key={communityId} communityId={communityId} onClick={onClickCommunity}>
+            {({ community, communityCategories }) => (
+              <Notes>
+                {communityCategories.map(({ categoryId, name }) => (
+                  <Category key={categoryId}>{name}</Category>
+                ))}
+                {toHumanString(community.membersCount)}{' '}
+                <FormattedMessage id="plural.member" values={{ amount: community.membersCount }} />
+              </Notes>
+            )}
+          </CommunityHeader>
+        ))}
     </Card>
   );
 };
@@ -79,4 +93,4 @@ RecommendedList.propTypes = {
   slim: PropTypes.bool,
 };
 
-export default RecommendedList;
+export default memo(RecommendedList);

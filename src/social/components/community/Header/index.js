@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
 import { ImageSize, FileRepository } from '@amityco/js-sdk';
@@ -13,6 +13,7 @@ const CommunityHeader = ({
   isSearchResult,
   searchInput,
   children,
+  loading,
 }) => {
   const { community, communityCategories, file } = useCommunity(communityId);
 
@@ -35,8 +36,12 @@ const CommunityHeader = ({
       avatarFileUrl={fileUrl}
       isActive={isActive}
       onClick={onClick}
+      isOfficial={community.isOfficial}
+      isPublic={community.isPublic}
       isSearchResult={isSearchResult}
+      name={community.displayName}
       searchInput={searchInput}
+      loading={loading}
     >
       {typeof render === 'function' ? render({ community, communityCategories, file }) : children}
     </UICommunityHeader>
@@ -44,12 +49,13 @@ const CommunityHeader = ({
 };
 
 CommunityHeader.propTypes = {
-  communityId: PropTypes.string.isRequired,
+  communityId: PropTypes.string,
   isActive: PropTypes.bool,
   onClick: PropTypes.func,
   isSearchResult: PropTypes.bool,
   searchInput: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+  loading: PropTypes.bool,
 };
 
 CommunityHeader.defaultProps = {
@@ -58,7 +64,8 @@ CommunityHeader.defaultProps = {
   isSearchResult: false,
   searchInput: '',
   children: null,
+  loading: false,
 };
 
 export { UICommunityHeader };
-export default CommunityHeader;
+export default memo(CommunityHeader);

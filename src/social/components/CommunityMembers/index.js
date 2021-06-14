@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import customizableComponent from '~/core/hocs/customization';
@@ -94,4 +94,4 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
   );
 };
 
-export default withSDK(customizableComponent('CommunityMembers', CommunityMembers));
+export default memo(withSDK(customizableComponent('CommunityMembers', CommunityMembers)));

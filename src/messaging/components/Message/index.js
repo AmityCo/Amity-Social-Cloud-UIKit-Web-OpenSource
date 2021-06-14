@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FormattedTime } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -71,4 +71,4 @@ const Message = ({ message, message: { createdAt, user }, consequent, incoming }
   );
 };
 
-export default customizableComponent('Message', Message);
+export default memo(customizableComponent('Message', Message));
