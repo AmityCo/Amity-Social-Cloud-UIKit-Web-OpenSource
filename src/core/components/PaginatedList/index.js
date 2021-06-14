@@ -54,7 +54,7 @@ const PaginatedList = ({
 };
 
 PaginatedList.propTypes = {
-  container: PropTypes.node,
+  container: PropTypes.elementType,
   items: PropTypes.array.isRequired,
   emptyState: PropTypes.node,
   hasMore: PropTypes.bool,

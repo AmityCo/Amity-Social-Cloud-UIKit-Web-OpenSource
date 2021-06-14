@@ -122,7 +122,7 @@ UICommunityCard.defaultProps = {
 
 UICommunityCard.propTypes = {
   avatarFileUrl: PropTypes.string,
-  communityId: PropTypes.string.isRequired,
+  communityId: PropTypes.string,
   communityCategories: PropTypes.arrayOf(
     PropTypes.shape({
       categoryId: PropTypes.string.isRequired,

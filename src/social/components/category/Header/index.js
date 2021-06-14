@@ -36,7 +36,7 @@ const CategoryHeader = ({ className, categoryId, children, loading, onClick }) =
 
 CategoryHeader.propTypes = {
   className: PropTypes.string,
-  categoryId: PropTypes.string.isRequired,
+  categoryId: PropTypes.string,
   children: PropTypes.node,
   loading: PropTypes.bool,
   onClick: PropTypes.func,

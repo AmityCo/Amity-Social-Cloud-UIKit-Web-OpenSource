@@ -28,7 +28,8 @@ const CommunityCard = ({ communityId, onClick, ...props }) => {
 };
 
 CommunityCard.propTypes = {
-  communityId: PropTypes.string.isRequired,
+  communityId: PropTypes.string,
+  loading: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
