@@ -18,14 +18,16 @@ const tabs = {
 const UserFeed = ({ userId, currentUserId }) => {
   const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
 
+  const isMe = userId === currentUserId;
+
   return (
     <PageLayout aside={<UserInfo userId={userId} />}>
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <Feed
-        targetType={PostTargetType.UserFeed}
+        targetType={isMe ? PostTargetType.MyFeed : PostTargetType.UserFeed}
         targetId={userId}
-        showPostCreator={userId === currentUserId}
+        showPostCreator={isMe}
       />
     </PageLayout>
   );
