@@ -1,3 +1,4 @@
+import { CommunitySortingMethod } from '@amityco/js-sdk';
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigation } from '~/social/providers/NavigationProvider';
@@ -9,7 +10,10 @@ import CommunityCard from '~/social/components/community/Card';
 
 const CategoryCommunitiesList = ({ categoryId }) => {
   const { onClickCommunity } = useNavigation();
-  const [communities, hasMore, loadMore, loading, loadingMore] = useCommunitiesList({ categoryId });
+  const [communities, hasMore, loadMore, loading, loadingMore] = useCommunitiesList({
+    categoryId,
+    sortBy: CommunitySortingMethod.DisplayName,
+  });
 
   const items = useMemo(() => {
     function getLoadingItems() {
