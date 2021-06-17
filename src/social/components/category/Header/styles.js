@@ -70,7 +70,11 @@ const CategoryHeader = ({
       clickable={!loading && !!onClick}
       onClick={handleClick}
     >
-      <CategoryHeaderAvatar avatar={avatarFileUrl} backgroundImage={CategoryImage} loading />
+      <CategoryHeaderAvatar
+        avatar={avatarFileUrl}
+        backgroundImage={CategoryImage}
+        loading={loading}
+      />
       <CategoryHeaderTitle title={categoryId}>
         {loading ? <Skeleton style={{ fontSize: 12, maxWidth: 124 }} /> : name}
       </CategoryHeaderTitle>
