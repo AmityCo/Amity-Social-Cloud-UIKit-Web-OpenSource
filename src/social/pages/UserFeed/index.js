@@ -21,7 +21,8 @@ const UserFeed = ({ userId, currentUserId }) => {
   const isMe = userId === currentUserId;
 
   return (
-    <PageLayout aside={<UserInfo userId={userId} />}>
+    // key prop is necessary here, without it this part will never re-render !!!
+    <PageLayout aside={<UserInfo key={userId} userId={userId} />}>
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <Feed

@@ -23,7 +23,7 @@ const CommunityCard = styled(UiKitCommunityCard)`
 `;
 
 const Notes = styled.div`
-  ${({ theme }) => theme.typography.caption}
+  ${({ theme }) => theme.typography.caption};
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import UiKitCommunitySearch from '.';
+import UiKitSocialSearch from '.';
 
 export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKSearch = ({ ...args }) => <UiKitCommunitySearch {...args} />;
+export const SDKSearch = ({ ...args }) => <UiKitSocialSearch {...args} />;
 
 SDKSearch.storyName = 'Search bar';
 

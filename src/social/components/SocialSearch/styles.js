@@ -14,7 +14,7 @@ export const SearchIcon = styled(Search)`
   font-size: 16px;
 `;
 
-export const CommunitiesSearchContainer = styled.div`
+export const SocialSearchContainer = styled.div`
   position: relative;
 
   ${({ sticky }) =>
@@ -27,4 +27,17 @@ export const CommunitiesSearchContainer = styled.div`
     `}
 `;
 
-export const CommunitiesSearchInput = styled(InputAutocomplete)``;
+export const SocialSearchInput = styled(InputAutocomplete)`
+  ${({ theme }) => theme.typography.body};
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  background: ${({ theme }) => theme.palette.system.background};
+  border: 1px solid #d5d7dd;
+  border-radius: 4px;
+  outline: none;
+  color: ${({ theme }) => theme.palette.base.main};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.palette.base.shade1};
+  }
+`;

@@ -6,7 +6,7 @@ import useUser from '~/core/hooks/useUser';
 import UIUserHeader from './styles';
 
 const UserHeader = ({ userId, children, onClick }) => {
-  const { user, file } = useUser(userId);
+  const { user, file } = useUser(userId, [userId]);
 
   return (
     <UIUserHeader

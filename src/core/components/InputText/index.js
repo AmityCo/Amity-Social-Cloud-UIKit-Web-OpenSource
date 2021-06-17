@@ -59,7 +59,7 @@ const TextField = styled.input`
 `;
 
 const TextArea = styled(TextareaAutosize)`
-  ${styling}
+  ${styling};
   resize: vertical;
 `;
 
@@ -78,6 +78,7 @@ const InputText = ({
   append,
   onChange,
   onClear = () => {},
+  onClick = () => {},
   className = null,
 }) => {
   const handleChange = useCallback(e => onChange(e.target.value), []);
@@ -107,8 +108,8 @@ const InputText = ({
       {prepend}
 
       <ConditionalRender condition={multiline}>
-        <TextArea ref={input} rows={rows} maxRows={maxRows} {...props} />
-        <TextField ref={input} {...props} />
+        <TextArea ref={input} rows={rows} maxRows={maxRows} {...props} onClick={onClick} />
+        <TextField ref={input} {...props} onClick={onClick} />
       </ConditionalRender>
 
       {append}
@@ -131,6 +132,7 @@ InputText.propTypes = {
   append: PropTypes.node,
   onChange: PropTypes.func.isRequired,
   onClear: PropTypes.func,
+  onClick: PropTypes.func,
   className: PropTypes.string,
 };
 

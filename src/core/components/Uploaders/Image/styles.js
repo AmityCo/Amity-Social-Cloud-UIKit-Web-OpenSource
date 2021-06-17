@@ -45,7 +45,7 @@ export const ImgPreview = styled.img`
 `;
 
 export const SkeletonWrapper = styled.div`
-  ${ImgPreviewContainerStyles}
+  ${ImgPreviewContainerStyles};
 
   display: flex;
   align-items: center;

@@ -65,5 +65,6 @@
   "reply.deleted": "This reply has been deleted",
   "tabs.timeline": "Timeline",
   "tabs.members": "Members",
-  "tabs.moderators": "Moderators"
+  "tabs.moderators": "Moderators",
+  "placeholder.noResults": "No results found"
 }

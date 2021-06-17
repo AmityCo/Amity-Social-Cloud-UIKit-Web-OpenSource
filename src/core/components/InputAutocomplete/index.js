@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 
+import ConditionalRender from '~/core/components/ConditionalRender';
 import InputText from '~/core/components/InputText';
 import Menu from '~/core/components/Menu';
 import Suggestions from '~/core/components/Suggestions';
 import Highlight from '~/core/components/Highlight';
 import Button from '~/core/components/Button';
 
-const MIN_LENGTH_FOR_SUGGESTIONS = 1;
+import { InputAutocompleteTabs } from './styles';
+import useKeyboard from '~/core/hooks/useKeyboard';
+import useActiveElement from '~/core/hooks/useActiveElement';
 
 const Container = styled.div`
   position: relative;
@@ -27,13 +30,11 @@ const defaultRender = (item, value) => <Highlight key={item} text={item} query={
 const defaultFilter = (items, value) => items.filter(item => item.includes(value));
 
 const InputAutocomplete = ({
-  className,
   value,
   placeholder,
   items,
   filter,
   loadMore,
-  expand,
   prepend,
   append,
   invalid,
@@ -44,21 +45,38 @@ const InputAutocomplete = ({
   onPick,
 }) => {
   const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(Object.keys(items)[0]);
+  const [containerRef, isActiveElement] = useActiveElement(open);
 
-  const filtered = useMemo(() => (filter ? filter(items, value) : items), [value, items, filter]);
+  const close = () => setOpen(false);
+
+  const currentItems = useMemo(() => (!value ? [] : items[activeTab]), [activeTab, items, value]);
+
+  const filtered = useMemo(() => (filter ? filter(currentItems, value) : currentItems), [
+    value,
+    currentItems,
+    filter,
+  ]);
 
   useEffect(() => {
     if (disabled) return;
 
-    if (value?.length <= expand - 1 || (items.length === 1 && value === items[0])) {
-      setOpen(false);
-    } else {
-      setOpen(!!filtered.length);
+    if (value.length > 0) {
+      setOpen(true);
     }
   }, [value, filtered]);
 
+  // handling close on click outside
+  useEffect(() => {
+    !isActiveElement && close();
+  }, [isActiveElement]);
+
+  useKeyboard({
+    Escape: close,
+  });
+
   const onPickSuggestion = index => {
-    onPick(filtered[index]);
+    onPick(filtered[index], activeTab);
 
     // we need to pass this to nextTick to avoid reopening
     // the menu due to code in useEffect
@@ -74,7 +92,7 @@ const InputAutocomplete = ({
   const [render = defaultRender] = [].concat(children);
 
   return (
-    <Container className={className}>
+    <Container ref={containerRef}>
       <InputText
         value={value}
         invalid={invalid}
@@ -84,11 +102,19 @@ const InputAutocomplete = ({
         onClear={onClear}
         onChange={onChange}
         placeholder={placeholder}
+        onClick={() => setOpen(true)}
       />
       {open && (
         <SuggestionsMenu>
+          <ConditionalRender condition={Object.keys(items).length > 1}>
+            <InputAutocompleteTabs
+              tabs={Object.keys(items)}
+              activeTab={activeTab}
+              onChange={setActiveTab}
+            />
+          </ConditionalRender>
           <Suggestions items={filtered} append={LoadMoreButton} onPick={onPickSuggestion}>
-            {item => render(item, value)}
+            {item => render(item, value, activeTab)}
           </Suggestions>
         </SuggestionsMenu>
       )}
@@ -97,10 +123,8 @@ const InputAutocomplete = ({
 };
 
 InputAutocomplete.defaultProps = {
-  className: undefined,
   items: [],
   filter: defaultFilter,
-  expand: MIN_LENGTH_FOR_SUGGESTIONS,
   invalid: false,
   disabled: false,
   onPick: () => {},
@@ -108,13 +132,11 @@ InputAutocomplete.defaultProps = {
 };
 
 InputAutocomplete.propTypes = {
-  className: PropTypes.string,
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  items: PropTypes.array,
+  items: PropTypes.object,
   filter: PropTypes.func,
   loadMore: PropTypes.func,
-  expand: PropTypes.number,
   prepend: PropTypes.node,
   append: PropTypes.node,
   invalid: PropTypes.bool,

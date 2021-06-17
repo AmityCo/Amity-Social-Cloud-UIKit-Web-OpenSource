@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import SideMenu from '~/core/components/SideMenu';
 import SideSectionCommunity from '~/social/components/SideSectionCommunity';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
-import UiKitCommunitySearch from '~/social/components/CommunitySearch';
+import UiKitSocialSearch from '~/social/components/SocialSearch';
 
-const CommunitySearch = styled(UiKitCommunitySearch)`
+const SocialSearch = styled(UiKitSocialSearch)`
   background: ${({ theme }) => theme.palette.system.background};
   padding: 0.5rem;
 `;
 
 const CommunitySideMenu = ({ className, activeCommunity }) => (
   <SideMenu className={className}>
-    <CommunitySearch sticky />
+    <SocialSearch sticky />
 
     <SideSectionCommunity />
 

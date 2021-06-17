@@ -21,7 +21,7 @@ export const AvatarContainer = styled(({ backgroundImage, children, loading, siz
     height: ${SIZES[size]}px;
     width: ${SIZES[size]}px;
     background: ${backgroundImage || theme.palette.base.shade3}};
-  `}
+  `};
 
   border-radius: 50%;
 

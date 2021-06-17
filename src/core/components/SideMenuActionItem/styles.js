@@ -30,7 +30,7 @@ const actionItemContainerStyles = css`
 `;
 
 export const ButtonActionItem = styled(SecondaryButton)`
-  ${actionItemContainerStyles}
+  ${actionItemContainerStyles};
   width: 100%;
 `;
 

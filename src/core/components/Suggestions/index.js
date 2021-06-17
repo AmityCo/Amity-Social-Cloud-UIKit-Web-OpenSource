@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 import useKeyboard from '~/core/hooks/useKeyboard';
 import { MenuItem } from '~/core/components/Menu';
+import ConditionalRender from '~/core/components/ConditionalRender';
 
 const MenuList = styled.div`
   flex: 1 1 auto;
@@ -16,6 +18,19 @@ const MenuList = styled.div`
   background: #fff;
   border-radius: 4px;
   cursor: pointer;
+`;
+
+const Placeholder = styled.div`
+  flex: 1 1 auto;
+  z-index: 1;
+  position: relative;
+  background: #fff;
+  padding: 18px 72px 18px 72px;
+  color: ${({ theme }) => theme.palette.base.shade3};
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const DefaultRenderer = item => <span>{item}</span>;
@@ -70,19 +85,24 @@ const Suggestions = ({ items, onPick = () => {}, append, children }) => {
   });
 
   return (
-    <MenuList ref={list} onMouseLeave={onMouseLeave}>
-      {items.map((item, index) => (
-        <MenuItem
-          key={`#${index}`}
-          hover={index === active}
-          onClick={onClick(index)}
-          onMouseEnter={onMouseEnter(index)}
-        >
-          {render(item)}
-        </MenuItem>
-      ))}
-      {append && <MenuItem>{append}</MenuItem>}
-    </MenuList>
+    <ConditionalRender condition={!!items.length}>
+      <MenuList ref={list} onMouseLeave={onMouseLeave}>
+        {items.map((item, index) => (
+          <MenuItem
+            key={`#${index}`}
+            hover={index === active}
+            onClick={onClick(index)}
+            onMouseEnter={onMouseEnter(index)}
+          >
+            {render(item)}
+          </MenuItem>
+        ))}
+        {append && <MenuItem>{append}</MenuItem>}
+      </MenuList>
+      <Placeholder>
+        <FormattedMessage id="placeholder.noResults" />
+      </Placeholder>
+    </ConditionalRender>
   );
 };
 

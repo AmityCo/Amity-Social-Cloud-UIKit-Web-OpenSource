@@ -10,7 +10,7 @@ import { backgroundImage as DotsBg } from '~/icons/Dots';
 
 import PlusIcon from '~/icons/Plus';
 
-import UiKitCommunitySearch from '~/social/components/CommunitySearch';
+import UiKitSocialSearch from '~/social/components/SocialSearch';
 import UiKitButton from '~/core/components/Button';
 
 import UiKitCommunityCreationModal from '~/social/components/CommunityCreationModal';
@@ -61,19 +61,15 @@ const Dots = styled.div`
 `;
 
 const Headline = styled.div`
-  ${({ theme }) => theme.typography.headline}
+  ${({ theme }) => theme.typography.headline};
   color: ${({ theme }) => theme.palette.system.background};
   margin-bottom: 1rem;
 `;
 
 const Title = styled.div`
-  ${({ theme }) => theme.typography.body}
+  ${({ theme }) => theme.typography.body};
   color: ${({ theme }) => theme.palette.system.background};
   margin-bottom: 1rem;
-`;
-
-const CommunitySearch = styled(UiKitCommunitySearch)`
-  max-width: 25rem;
 `;
 
 const Header = () => {
@@ -95,7 +91,7 @@ const Header = () => {
           <Headline>
             <FormattedMessage id="exploreHeader.searchCommunityTitle" />
           </Headline>
-          <CommunitySearch />
+          <UiKitSocialSearch searchBy={['communities']} />
         </Search>
         <Create>
           <Title>

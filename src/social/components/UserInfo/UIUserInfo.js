@@ -20,7 +20,7 @@ import {
 } from './styles';
 
 // TODO: react-intl
-const UIUserProfileBar = ({
+const UIUserInfo = ({
   userId,
   fileUrl,
   displayName,
@@ -52,7 +52,7 @@ const UIUserProfileBar = ({
   );
 };
 
-UIUserProfileBar.propTypes = {
+UIUserInfo.propTypes = {
   userId: PropTypes.string,
   fileUrl: PropTypes.string,
   displayName: PropTypes.string,
@@ -63,7 +63,7 @@ UIUserProfileBar.propTypes = {
   onMessageUser: PropTypes.func,
 };
 
-UIUserProfileBar.defaultProps = {
+UIUserInfo.defaultProps = {
   userId: '',
   fileUrl: '',
   displayName: '',
@@ -74,4 +74,4 @@ UIUserProfileBar.defaultProps = {
   onMessageUser: () => {},
 };
 
-export default customizableComponent('UIUserProfileBar', UIUserProfileBar);
+export default customizableComponent('UIUserInfo', UIUserInfo);
