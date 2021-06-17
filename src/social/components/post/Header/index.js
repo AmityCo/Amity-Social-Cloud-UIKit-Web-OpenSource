@@ -15,8 +15,8 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
   const { targetId, targetType, postedUserId, createdAt, editedAt } = post;
 
   // If the post is targetting a community feed, get the name of that community.
-  const { community } = useCommunity(targetId);
   const isCommunityPost = targetType === PostTargetType.CommunityFeed;
+  const { community } = useCommunity(targetId, () => !isCommunityPost);
   const postTargetName = isCommunityPost ? community?.displayName : null;
   const handleClickCommunity = isCommunityPost ? () => onClickCommunity(targetId) : null;
 

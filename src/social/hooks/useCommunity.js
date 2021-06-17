@@ -3,10 +3,12 @@ import { CommunityRepository } from '@amityco/js-sdk';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';
 
-const useCommunity = communityId => {
-  const community = useLiveObject(() => CommunityRepository.communityForId(communityId), [
-    communityId,
-  ]);
+const useCommunity = (communityId, resolver) => {
+  const community = useLiveObject(
+    () => CommunityRepository.communityForId(communityId),
+    [communityId],
+    resolver,
+  );
 
   // Must call this hook even if there is a custom file URL which will override it.
   // Cannot call hooks conditionally due to the 'rules of hooks'.
