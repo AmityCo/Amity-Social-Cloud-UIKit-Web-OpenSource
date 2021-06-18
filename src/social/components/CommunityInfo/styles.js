@@ -37,6 +37,7 @@ export const Header = styled.div`
 export const CategoriesList = styled.div`
   margin-bottom: 16px;
   color: ${({ theme }) => theme.palette.base.shade1};
+  word-break: break-word;
 `;
 
 export const Count = styled.span`
