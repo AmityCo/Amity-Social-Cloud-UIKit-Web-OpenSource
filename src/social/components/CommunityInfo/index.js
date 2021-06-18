@@ -42,7 +42,7 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
     communityOwnerId,
   );
   const canEditCommunity = (isCommunityModerator && isJoined) || isCommunityOwner;
-  const canLeaveCommunity = !isCommunityModerator && !isCommunityOwner;
+  const canLeaveCommunity = isJoined;
   const categoryNames = communityCategories.map(({ name }) => name);
 
   return (

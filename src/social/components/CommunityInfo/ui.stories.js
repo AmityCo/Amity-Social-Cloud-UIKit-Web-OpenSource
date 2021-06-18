@@ -23,6 +23,7 @@ UiCommunityInfo.args = {
   isOfficial: false,
   isPublic: false,
   canEditCommunity: true,
+  canLeaveCommunity: false,
   name: 'Community Name',
 };
 
@@ -45,6 +46,7 @@ UiCommunityInfo.argTypes = {
   isOfficial: { control: { type: 'boolean' } },
   isPublic: { control: { type: 'boolean' } },
   canEditCommunity: { control: { type: 'boolean' } },
+  canLeaveCommunity: { control: { type: 'boolean' } },
   onEditCommunity: { action: 'onEditCommunity()' },
   joinCommunity: { action: 'joinCommunity()' },
   leaveCommunity: { action: 'leaveCommunity()' },
