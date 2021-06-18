@@ -14,7 +14,7 @@ UIPostHeader.args = {
   postAuthorName: 'Web-Test',
   postTargetName: '',
   timeAgo: new Date(),
-  isModerator: false,
+  hasModeratorPermissions: false,
   hidePostTarget: false,
 };
 
@@ -23,6 +23,6 @@ UIPostHeader.argTypes = {
   postAuthorName: { control: { type: 'text' } },
   postTargetName: { control: { type: 'text' } },
   timeAgo: { control: { type: 'date' } },
-  isModerator: { control: { type: 'boolean' } },
+  hasModeratorPermissions: { control: { type: 'boolean' } },
   hidePostTarget: { control: { type: 'boolean' } },
 };

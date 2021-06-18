@@ -36,12 +36,11 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
     });
 
   const { postsCount, membersCount, description, isJoined, userId: communityOwnerId } = community;
-  const { isCommunityOwner, isCommunityModerator } = useCommunityOneMember(
+  const { hasModeratorPermissions } = useCommunityOneMember(
     communityId,
     currentUserId,
     communityOwnerId,
   );
-  const canEditCommunity = (isCommunityModerator && isJoined) || isCommunityOwner;
   const canLeaveCommunity = isJoined;
   const categoryNames = communityCategories.map(({ name }) => name);
 
@@ -56,7 +55,7 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
       isOfficial={community.isOfficial}
       isPublic={community.isPublic}
       avatarFileUrl={fileUrl}
-      canEditCommunity={canEditCommunity}
+      canEditCommunity={hasModeratorPermissions}
       onEditCommunity={onEditCommunity}
       joinCommunity={joinCommunity}
       leaveCommunity={leaveCommunityConfirm}

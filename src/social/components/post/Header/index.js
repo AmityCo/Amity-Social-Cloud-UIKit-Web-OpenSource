@@ -20,7 +20,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
   const postTargetName = isCommunityPost ? community?.displayName : null;
   const handleClickCommunity = isCommunityPost ? () => onClickCommunity(targetId) : null;
 
-  const { isCommunityModerator } = useCommunityOneMember(
+  const { hasModeratorPermissions } = useCommunityOneMember(
     community?.communityId,
     user.userId,
     community?.userId,
@@ -33,7 +33,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
       postAuthorName={user.displayName || DEFAULT_DISPLAY_NAME}
       postTargetName={postTargetName}
       timeAgo={createdAt}
-      isCommunityModerator={isCommunityModerator}
+      hasModeratorPermissions={hasModeratorPermissions}
       isEdited={createdAt < editedAt}
       onClickCommunity={handleClickCommunity}
       onClickUser={handleClickUser}

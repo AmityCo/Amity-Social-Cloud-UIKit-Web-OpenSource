@@ -1,4 +1,4 @@
-import { CommunityRepository } from '@amityco/js-sdk';
+import { CommunityRepository, CommunityUserMembership } from '@amityco/js-sdk';
 import useLiveObject from '~/core/hooks/useLiveObject';
 
 const MODERATOR_ROLE = 'moderator';
@@ -12,8 +12,9 @@ const useCommunityOneMember = (communityId, currentUserId, communityOwnerId) => 
   const isCommunityOwner = currentUserId === communityOwnerId;
 
   const isCommunityModerator = currentMember.roles && currentMember.roles.includes(MODERATOR_ROLE);
+  const isJoined = currentMember.communityMembership === CommunityUserMembership.Member;
 
-  const hasModeratorPermissions = isCommunityModerator || isCommunityOwner;
+  const hasModeratorPermissions = isJoined && (isCommunityModerator || isCommunityOwner);
 
   return {
     currentMember,
