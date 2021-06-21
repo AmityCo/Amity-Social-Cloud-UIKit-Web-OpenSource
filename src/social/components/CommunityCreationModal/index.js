@@ -9,7 +9,9 @@ import promisify from '~/helpers/promisify';
 import { CommunityForm } from './styles';
 import withSDK from '~/core/hocs/withSDK';
 
-const CommunityCreationModal = ({ isOpen, onClose }) => {
+const MODERATOR_ROLE = 'moderator';
+
+const CommunityCreationModal = ({ isOpen, onClose, currentUserId }) => {
   if (!isOpen) return null;
 
   const closeConfirm = () =>
@@ -23,6 +25,13 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async data => {
     const { communityId } = await promisify(CommunityRepository.createCommunity(data));
+
+    // no await, we want this running in background
+    CommunityRepository.assignRoleToUsers({
+      communityId,
+      role: MODERATOR_ROLE,
+      userIds: [currentUserId],
+    });
 
     onClose(communityId);
   };
