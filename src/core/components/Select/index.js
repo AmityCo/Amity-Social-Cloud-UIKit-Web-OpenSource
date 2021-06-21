@@ -120,7 +120,7 @@ Select.propTypes = {
   ),
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
-  parentContainer: PropTypes.element,
+  parentContainer: PropTypes.instanceOf(Element),
   renderItem: PropTypes.func,
   renderTrigger: PropTypes.func,
   isOpen: PropTypes.bool,

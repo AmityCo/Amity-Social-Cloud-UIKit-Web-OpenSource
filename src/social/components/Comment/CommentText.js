@@ -14,12 +14,14 @@ const CommentText = ({ children, className, maxLines = COMMENT_MAX_LINES }) => {
       {isExpanded ? (
         <CommentContent className={className}>{children}</CommentContent>
       ) : (
-        <Truncate
-          lines={maxLines}
-          ellipsis={<ReadMoreButton onClick={expand}>...Read more</ReadMoreButton>}
-        >
-          <CommentContent className={className}>{children}</CommentContent>
-        </Truncate>
+        children && (
+          <Truncate
+            lines={maxLines}
+            ellipsis={<ReadMoreButton onClick={expand}>...Read more</ReadMoreButton>}
+          >
+            <CommentContent className={className}>{children}</CommentContent>
+          </Truncate>
+        )
       )}
     </Linkify>
   );

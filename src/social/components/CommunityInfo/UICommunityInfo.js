@@ -71,9 +71,13 @@ const UICommunityInfo = ({
         <span className="countNumber">{toHumanString(membersCount || 0)}</span> members
       </Count>
     </CountsContainer>
-    <Truncate lines={3}>
-      <Description>{description}</Description>
-    </Truncate>
+
+    {description && (
+      <Truncate lines={3}>
+        <Description>{description}</Description>
+      </Truncate>
+    )}
+
     <ConditionalRender condition={!isJoined}>
       <JoinButton onClick={() => joinCommunity(communityId)}>
         <PlusIcon /> <FormattedMessage id="community.join" />

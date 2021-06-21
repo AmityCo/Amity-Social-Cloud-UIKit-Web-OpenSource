@@ -22,28 +22,30 @@ export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
 `;
 
 const TextContent = ({ text, postMaxLines }) => {
-  const textContent = <PostContent>{text}</PostContent>;
+  const textContent = text && <PostContent>{text}</PostContent>;
 
   const [isExpanded, setIsExpanded] = useState(false);
   const onExpand = () => setIsExpanded(true);
 
   return (
-    <Linkify>
-      {isExpanded ? (
-        textContent
-      ) : (
-        <Truncate
-          lines={postMaxLines}
-          ellipsis={
-            <ReadMoreButton onClick={onExpand}>
-              <FormattedMessage id="post.readMore" />
-            </ReadMoreButton>
-          }
-        >
-          {textContent}
-        </Truncate>
-      )}
-    </Linkify>
+    textContent && (
+      <Linkify>
+        {isExpanded ? (
+          textContent
+        ) : (
+          <Truncate
+            lines={postMaxLines}
+            ellipsis={
+              <ReadMoreButton onClick={onExpand}>
+                <FormattedMessage id="post.readMore" />
+              </ReadMoreButton>
+            }
+          >
+            {textContent}
+          </Truncate>
+        )}
+      </Linkify>
+    )
   );
 };
 

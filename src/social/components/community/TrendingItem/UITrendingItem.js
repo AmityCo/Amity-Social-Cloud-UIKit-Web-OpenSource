@@ -110,9 +110,13 @@ const UITrendingItem = ({
       ) : (
         <>
           <CommunityName isOfficial={isOfficial} isPublic={isPublic} name={name} />
-          <Truncate lines={2}>
-            <Description slim={slim}>{description}</Description>
-          </Truncate>
+
+          {description && (
+            <Truncate lines={2}>
+              <Description slim={slim}>{description}</Description>
+            </Truncate>
+          )}
+
           <Infos>
             <ConditionalRender condition={categories.length > 0}>
               <Categories>

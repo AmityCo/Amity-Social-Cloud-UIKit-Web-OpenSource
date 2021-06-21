@@ -104,9 +104,11 @@ const UICommunityCard = ({
         )}
       </Infos>
 
-      <Truncate lines={3}>
-        <Description>{description}</Description>
-      </Truncate>
+      {description && (
+        <Truncate lines={3}>
+          <Description>{description}</Description>
+        </Truncate>
+      )}
     </Container>
   );
 };

@@ -117,7 +117,7 @@ Dropdown.propTypes = {
   fullSized: PropTypes.bool,
   scrollable: PropTypes.bool,
   scrollableHeight: PropTypes.number,
-  parentContainer: PropTypes.element,
+  parentContainer: PropTypes.instanceOf(Element),
   disabled: PropTypes.bool,
 };
 

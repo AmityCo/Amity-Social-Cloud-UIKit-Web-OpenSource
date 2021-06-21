@@ -39,7 +39,7 @@ CommunityEditHeader.propTypes = {
   avatarFileUrl: PropTypes.string,
   communityName: PropTypes.string,
   onReturnToCommunity: PropTypes.func,
-  tabs: PropTypes.instanceOf(PageTabs),
+  tabs: PropTypes.arrayOf(PropTypes.string),
   activeTab: PropTypes.oneOf(Object.values(PageTabs)),
   setActiveTab: PropTypes.func,
 };

@@ -53,7 +53,7 @@ const CategorySelector = ({ value: categoryId, onChange, parentContainer = null 
 CategorySelector.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
-  parentContainer: PropTypes.element,
+  parentContainer: PropTypes.instanceOf(Element),
 };
 
 export default customizableComponent('CategorySelector', CategorySelector);
