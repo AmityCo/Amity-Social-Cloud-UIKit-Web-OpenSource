@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { PostTargetType } from '@amityco/js-sdk';
 
 import { PageTypes } from '~/social/constants';
@@ -10,7 +9,7 @@ import TrendingList from '~/social/components/community/TrendingList';
 import RecommendedList from '~/social/components/community/RecommendedList';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
-const NewsFeed = ({ blockRouteChange }) => {
+const NewsFeed = () => {
   const { onChangePage } = useNavigation();
 
   const Side = (
@@ -24,20 +23,11 @@ const NewsFeed = ({ blockRouteChange }) => {
     <PageLayout aside={Side}>
       <Feed
         targetType={PostTargetType.GlobalFeed}
-        blockRouteChange={blockRouteChange}
         goToExplore={() => onChangePage(PageTypes.Explore)}
         showPostCreator
       />
     </PageLayout>
   );
-};
-
-NewsFeed.defaultProps = {
-  blockRouteChange: () => {},
-};
-
-NewsFeed.propTypes = {
-  blockRouteChange: PropTypes.func,
 };
 
 export default NewsFeed;
