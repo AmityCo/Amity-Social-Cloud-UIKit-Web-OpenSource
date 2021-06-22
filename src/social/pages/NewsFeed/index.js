@@ -2,13 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { PostTargetType } from '@amityco/js-sdk';
 
+import { PageTypes } from '~/social/constants';
 import PageLayout from '~/social/layouts/Page';
 import Feed from '~/social/components/Feed';
 
 import TrendingList from '~/social/components/community/TrendingList';
 import RecommendedList from '~/social/components/community/RecommendedList';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const NewsFeed = ({ blockRouteChange }) => {
+  const { onChangePage } = useNavigation();
+
   const Side = (
     <>
       <TrendingList slim />
@@ -21,6 +25,7 @@ const NewsFeed = ({ blockRouteChange }) => {
       <Feed
         targetType={PostTargetType.GlobalFeed}
         blockRouteChange={blockRouteChange}
+        goToExplore={() => onChangePage(PageTypes.Explore)}
         showPostCreator
       />
     </PageLayout>
