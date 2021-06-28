@@ -32,7 +32,7 @@ const useLiveCollection = (
       const { hasMore = false } = liveCollection;
 
       setData({
-        items: liveCollection.models,
+        items: liveCollection.models ?? [],
         hasMore,
         loadMore: hasMore
           ? () => {
