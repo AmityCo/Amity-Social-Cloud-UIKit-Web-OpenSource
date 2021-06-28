@@ -45,6 +45,7 @@ CategoryHeader.propTypes = {
 CategoryHeader.defaultProps = {
   children: null,
   loading: false,
+  onClick: () => {},
 };
 
 export default CategoryHeader;
