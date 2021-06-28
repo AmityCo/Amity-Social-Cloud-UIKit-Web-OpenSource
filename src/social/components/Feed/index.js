@@ -70,7 +70,7 @@ const Feed = ({
       )}
 
       {!loading && posts.length === 0 && (
-        <EmptyFeed targetType={targetType} goToExplore={goToExplore} />
+        <EmptyFeed targetType={targetType} goToExplore={goToExplore} canPost={showPostCreator} />
       )}
     </FeedScrollContainer>
   );

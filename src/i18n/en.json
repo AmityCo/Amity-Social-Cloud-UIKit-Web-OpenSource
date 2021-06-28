@@ -46,6 +46,7 @@
   "community.cannotInteract": "Join community to interact with all posts",
   "community.removeUserFromCommunityTitle": "Remove user from community",
   "community.removeUserFromCommunityBody": "This user won't no longer be able to search, post. Continue?",
+  "community.exploreCommunities": "Explore Community",
   "post": "Post",
   "upload.attachmentLimit": "You reached the maximum attachment of {maxFiles}",
   "upload.fileSizeLimit": "One of the selected file is larger than 1GB. Please select a new file.",
@@ -66,5 +67,10 @@
   "tabs.timeline": "Timeline",
   "tabs.members": "Members",
   "tabs.moderators": "Moderators",
-  "placeholder.noResults": "No results found"
+  "placeholder.noResults": "No results found",
+  "feed.emptyFeed": "This feed is empty",
+  "feed.emptyCommunityFeed": "This community's feed is empty",
+  "feed.emptyJoinedCommunityFeed": "Your feed is empty. Start you first post",
+  "feed.emptyUserFeed": "No posts yet",
+  "feed.emptyMyFeed": "Your feed is empty. Start your first post"
 }

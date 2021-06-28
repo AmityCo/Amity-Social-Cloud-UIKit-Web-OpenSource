@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 import { PostTargetType } from '@amityco/js-sdk';
@@ -6,7 +7,6 @@ import { PostTargetType } from '@amityco/js-sdk';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import EmptyState from '~/core/components/EmptyState';
 import Button from '~/core/components/Button';
 import { NewspaperLight, Search } from '~/icons';
@@ -26,29 +26,37 @@ const SearchIcon = styled(Search)`
   margin-right: 6px;
 `;
 
-// TODO: react-intl
 const FeedTypesEmptyText = {
-  [PostTargetType.GlobalFeed]: 'This feed is empty',
-  [PostTargetType.CommunityFeed]: "This community's feed is empty",
-  [PostTargetType.UserFeed]: "This user's feed is empty",
-  [PostTargetType.MyFeed]: 'Your feed is empty. Start your first post',
+  [PostTargetType.GlobalFeed]: () => 'feed.emptyFeed',
+  [PostTargetType.CommunityFeed]: canPost =>
+    canPost ? 'feed.emptyJoinedCommunityFeed' : 'feed.emptyCommunityFeed',
+  [PostTargetType.UserFeed]: () => 'feed.emptyUserFeed',
+  [PostTargetType.MyFeed]: () => 'feed.emptyMyFeed',
 };
 
-const EmptyFeed = ({ targetType = PostTargetType.MyFeed, className = null, goToExplore }) => (
-  <EmptyState className={className} title={FeedTypesEmptyText[targetType]} icon={<FeedIcon />}>
-    <ConditionalRender condition={goToExplore}>
-      <div>
-        <ExploreLink onClick={goToExplore}>
-          <SearchIcon />
-          Explore Community
-        </ExploreLink>
-      </div>
-    </ConditionalRender>
+const EmptyFeed = ({
+  targetType = PostTargetType.MyFeed,
+  canPost = false,
+  className = null,
+  goToExplore,
+}) => (
+  <EmptyState
+    className={className}
+    title={<FormattedMessage id={FeedTypesEmptyText[targetType]?.(canPost) || 'feed.emptyFeed'} />}
+    icon={<FeedIcon />}
+  >
+    {goToExplore && (
+      <ExploreLink onClick={goToExplore}>
+        <SearchIcon />
+        <FormattedMessage id="community.exploreCommunities" />
+      </ExploreLink>
+    )}
   </EmptyState>
 );
 
 EmptyFeed.propTypes = {
   targetType: PropTypes.oneOf(Object.values(PostTargetType)),
+  canPost: PropTypes.bool,
   className: PropTypes.string,
   goToExplore: PropTypes.func,
 };
