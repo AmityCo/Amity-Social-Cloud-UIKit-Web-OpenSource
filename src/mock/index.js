@@ -336,14 +336,6 @@ const categories = [
   },
 ];
 
-const communityFeeds = communities.map(community => [
-  {
-    id: 'c1',
-    author: community,
-    text: 'Community post',
-  },
-]);
-
 export const testNewsFeed = [
   {
     id: 1,

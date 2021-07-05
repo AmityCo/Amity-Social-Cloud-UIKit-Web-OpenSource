@@ -1,6 +1,5 @@
 import React, { memo, useState } from 'react';
 
-import { FormattedMessage } from 'react-intl';
 import customizableComponent from '~/core/hocs/customization';
 
 import useCommunityMembers from '~/social/hooks/useCommunityMembers';
@@ -14,16 +13,12 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import CommunityMemberItem from './CommunityMemberItem';
 import withSDK from '~/core/hocs/withSDK';
 
+import { MemberTabs, tabs } from './constants';
 import { CommunityMembersContainer, CommunityMembersHeader, CommunityMembersTabs } from './styles';
-
-const tabs = {
-  MEMBERS: <FormattedMessage id="tabs.members" />,
-  MODERATORS: <FormattedMessage id="tabs.moderators" />,
-};
 
 const CommunityMembers = ({ communityId, currentUserId }) => {
   const { onClickUser } = useNavigation();
-  const [activeTab, setActiveTab] = useState(tabs.MEMBERS);
+  const [activeTab, setActiveTab] = useState(MemberTabs.MEMBERS);
 
   const {
     members = [],
@@ -54,12 +49,8 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
   return (
     <CommunityMembersContainer>
       <CommunityMembersHeader>Community Members • {membersCount}</CommunityMembersHeader>
-      <CommunityMembersTabs
-        tabs={[tabs.MEMBERS, tabs.MODERATORS]}
-        activeTab={activeTab}
-        onChange={setActiveTab}
-      />
-      <ConditionalRender condition={activeTab === tabs.MEMBERS}>
+      <CommunityMembersTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <ConditionalRender condition={activeTab === MemberTabs.MEMBERS}>
         <LoadMore hasMore={hasMoreMembers} loadMore={loadMoreMembers}>
           {members.length > 0 &&
             members.map(({ userId, roles }) => (
@@ -79,7 +70,7 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
             ))}
         </LoadMore>
       </ConditionalRender>
-      <ConditionalRender condition={activeTab === tabs.MODERATORS}>
+      <ConditionalRender condition={activeTab === MemberTabs.MODERATORS}>
         <>
           {isOwnerJoined && (
             <CommunityMemberItem

@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityMembers from '~/social/components/CommunityMembers';
+import CommunityPermissions from '~/social/components/CommunityPermissions';
 import CommunityForm from '~/social/components/CommunityForm';
 import { AddMemberModal } from '~/social/components/AddMemberModal';
 import { PageTypes } from '~/social/constants';
@@ -14,15 +15,17 @@ import PageLayout from '~/social/layouts/Page';
 import CommunityEditHeader from '~/social/components/community/EditPageHeader';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { CloseCommunityAction, AddMemberAction } from './ExtraAction';
-import { PageTabs } from './constants';
+import { PageTabs, tabs } from './constants';
 
-const CommunityEditPage = ({ communityId }) => {
+const CommunityEditPage = ({ communityId, tab }) => {
   const { onChangePage } = useNavigation();
-  const [activeTab, setActiveTab] = useState(PageTabs.EDIT_PROFILE);
+  const [activeTab, setActiveTab] = useState(tab);
   const [addMemberModalOpen, setAddMemberModalOpen] = useState(false);
 
   const openAddMemberModal = () => setAddMemberModalOpen(true);
   const closeAddMemberModal = () => setAddMemberModalOpen(false);
+
+  useEffect(() => setActiveTab(tab), [tab]);
 
   const { onClickCommunity } = useNavigation();
   const { community, updateCommunity } = useCommunity(communityId);
@@ -86,7 +89,7 @@ const CommunityEditPage = ({ communityId }) => {
           avatarFileUrl={fileUrl}
           communityName={community?.displayName}
           onReturnToCommunity={handleReturnToCommunity}
-          tabs={Object.values(PageTabs)}
+          tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
@@ -99,12 +102,19 @@ const CommunityEditPage = ({ communityId }) => {
       <ConditionalRender condition={activeTab === PageTabs.MEMBERS}>
         <CommunityMembers communityId={communityId} />
       </ConditionalRender>
+
+      {activeTab === PageTabs.PERMISSIONS && <CommunityPermissions communityId={communityId} />}
     </PageLayout>
   );
 };
 
 CommunityEditPage.propTypes = {
   communityId: PropTypes.string.isRequired,
+  tab: PropTypes.oneOf(Object.values(PageTabs.EDIT_PROFILE)),
+};
+
+CommunityEditPage.defaultProps = {
+  tab: PageTabs.EDIT_PROFILE,
 };
 
 export default CommunityEditPage;

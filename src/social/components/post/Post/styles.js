@@ -22,3 +22,18 @@ export const PostHeadContainer = styled.div`
   align-items: center;
   padding-bottom: 14px;
 `;
+
+export const ReviewButtonsContainer = styled.div`
+  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
+  margin-top: 6px;
+  padding-top: 12px;
+  display: flex;
+
+  > * {
+    flex: 1 1 0;
+
+    &:not(:first-child) {
+      margin-left: 12px;
+    }
+  }
+`;

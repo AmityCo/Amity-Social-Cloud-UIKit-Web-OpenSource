@@ -11,13 +11,13 @@ import UnknownPostRenderer from './UnknownPostRenderer';
 const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, readonly }) => {
   const renderers = usePostRenderer();
 
-  const { post, ...others } = usePost(postId);
+  const { isPostReady, post, ...others } = usePost(postId);
 
-  if (!post?.postId) {
+  if (!isPostReady) {
     return <DefaultPostRenderer loading />;
   }
 
-  const Renderer = renderers[post?.dataType] ?? UnknownPostRenderer;
+  const Renderer = renderers[post.dataType] ?? UnknownPostRenderer;
 
   return (
     <PostErrorBoundary>

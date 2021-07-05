@@ -11,6 +11,7 @@ import { isEmpty } from '~/helpers';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
+import { Tabs, tabs } from './constants';
 import {
   ProfileSettingsTabs,
   Container,
@@ -22,15 +23,10 @@ import {
   AvatarContainer,
 } from './styles';
 
-// TODO replace with translations keys
-const tabs = {
-  EDIT_PROFILE: 'Edit profile',
-};
-
 const ProfileSettings = ({ userId, client }) => {
   const { onClickUser } = useNavigation();
 
-  const [activeTab, setActiveTab] = useState(tabs.EDIT_PROFILE);
+  const [activeTab, setActiveTab] = useState(Tabs.EDIT_PROFILE);
 
   const { user, file } = useUser(userId);
 
@@ -64,14 +60,10 @@ const ProfileSettings = ({ userId, client }) => {
         </div>
       </PageHeader>
       <div>
-        <ProfileSettingsTabs
-          tabs={[tabs.EDIT_PROFILE]}
-          activeTab={activeTab}
-          onChange={setActiveTab}
-        />
+        <ProfileSettingsTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
       <ActiveTabContainer>
-        <ConditionalRender condition={activeTab === tabs.EDIT_PROFILE}>
+        <ConditionalRender condition={activeTab === Tabs.EDIT_PROFILE}>
           <ActiveTabContent>
             <UserProfileForm onSubmit={handleSubmit} user={user} />
           </ActiveTabContent>

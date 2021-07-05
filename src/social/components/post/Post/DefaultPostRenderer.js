@@ -1,23 +1,39 @@
-import { CommunityUserMembership, PostTargetType } from '@amityco/js-sdk';
+import { PostTargetType } from '@amityco/js-sdk';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { confirm } from '~/core/components/Confirm';
+import Button, { PrimaryButton } from '~/core/components/Button';
+import { confirm, info } from '~/core/components/Confirm';
 import Modal from '~/core/components/Modal';
 import { notification } from '~/core/components/Notification';
 import Skeleton from '~/core/components/Skeleton';
-import { isModerator } from '~/helpers/permissions';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import EngagementBar from '~/social/components/EngagementBar';
 import ChildrenContent from '~/social/components/post/ChildrenContent';
 import PostEditor from '~/social/components/post/Editor';
 import Header from '~/social/components/post/Header';
 import Content from '~/social/components/post/Post/Content';
+import useCommunity from '~/social/hooks/useCommunity';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
-import { OptionMenu, PostContainer, PostHeadContainer } from './styles';
+import { getAvailableActions, isPostUnderReview } from './utils';
+import { OptionMenu, PostContainer, PostHeadContainer, ReviewButtonsContainer } from './styles';
 
 // Number of lines to show in a text post before truncating.
 const MAX_TEXT_LINES_DEFAULT = 8;
 const MAX_TEXT_LINES_WITH_CHILDREN = 3;
+
+const ERROR_POST_HAS_BEEN_REVIEWED = 'Post has been reviewed';
+
+function showHasBeenReviewedMessageIfNeeded(error) {
+  if (error.message.includes(ERROR_POST_HAS_BEEN_REVIEWED)) {
+    info({
+      title: <FormattedMessage id="post.error.cannotReview.title" />,
+      content: <FormattedMessage id="post.error.cannotReview.description" />,
+    });
+  } else {
+    throw error;
+  }
+}
 
 const DefaultPostRenderer = ({
   childrenPosts = [],
@@ -26,6 +42,8 @@ const DefaultPostRenderer = ({
   handleDeletePost,
   handleReportPost,
   handleUnreportPost,
+  handleApprovePost,
+  handleDeclinePost,
   hidePostTarget,
   isFlaggedByMe,
   readonly,
@@ -38,58 +56,75 @@ const DefaultPostRenderer = ({
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
 
-  const { data, dataType, postedUserId, postId, targetId, targetType } = post;
-  const { currentMember } = useCommunityOneMember(targetId, currentUserId);
+  const { data, dataType, postId, targetId, targetType } = post;
+  const { community } = useCommunity(targetId, () => targetType !== PostTargetType.CommunityFeed);
+  const { currentMember, canReviewCommunityPosts } = useCommunityOneMember(
+    targetId,
+    currentUserId,
+    community.userId,
+  );
 
-  const isAdmin = isModerator(userRoles);
-  const isMyPost = currentUserId === postedUserId;
-  const isMember = currentMember?.communityMembership === CommunityUserMembership.Member;
-  const isCommunityPost = targetType === PostTargetType.CommunityFeed;
+  const [onReportClick] = useAsyncCallback(async () => {
+    await handleReportPost();
+    notification.success({ content: <FormattedMessage id="report.reportSent" /> });
+  }, [handleReportPost]);
+
+  const [onUnreportClick] = useAsyncCallback(async () => {
+    await handleUnreportPost();
+    notification.success({ content: <FormattedMessage id="report.unreportSent" /> });
+  }, [handleUnreportPost]);
+
+  const [onApprove, approving] = useAsyncCallback(async () => {
+    try {
+      await handleApprovePost();
+      notification.success({ content: <FormattedMessage id="post.success.approved" /> });
+    } catch (error) {
+      showHasBeenReviewedMessageIfNeeded(error);
+    }
+  }, [handleApprovePost]);
+
+  const [onDecline, declining] = useAsyncCallback(async () => {
+    try {
+      await handleDeclinePost();
+      notification.success({ content: <FormattedMessage id="post.success.declined" /> });
+    } catch (error) {
+      showHasBeenReviewedMessageIfNeeded(error);
+    }
+  }, [handleDeclinePost]);
+
+  const { canEdit, canDelete, canReport } = getAvailableActions({
+    post,
+    community,
+    userRoles,
+    currentUserId,
+    currentMember,
+  });
+
+  const isUnderReview = isPostUnderReview(post, community);
 
   const confirmDeletePost = () =>
     confirm({
       title: formatMessage({ id: 'post.deletePost' }),
-      content: formatMessage({ id: 'post.confirmDelete' }),
+      content: formatMessage({
+        id: isUnderReview ? 'post.confirmPendingDelete' : 'post.confirmDelete',
+      }),
       okText: formatMessage({ id: 'delete' }),
       onOk: handleDeletePost,
     });
 
-  const onReportClick = async () => {
-    try {
-      await handleReportPost();
-      notification.success({
-        content: <FormattedMessage id="report.reportSent" />,
-      });
-    } catch (error) {
-      notification.error({ content: error.message });
-    }
-  };
-
-  const onUnreportClick = async () => {
-    try {
-      await handleUnreportPost();
-      notification.success({
-        content: <FormattedMessage id="report.unreportSent" />,
-      });
-    } catch (error) {
-      notification.error({ content: error.message });
-    }
-  };
-
   const allOptions = [
-    (isAdmin || (isMyPost && (!isCommunityPost || isMember))) && {
+    canEdit && {
       name: 'post.editPost',
       action: openEditingPostModal,
     },
-    (isAdmin || (isMyPost && (!isCommunityPost || isMember))) && {
+    canDelete && {
       name: 'post.deletePost',
       action: confirmDeletePost,
     },
-    !isMyPost &&
-      (isAdmin || !isCommunityPost || isMember) && {
-        name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
-        action: isFlaggedByMe ? onUnreportClick : onReportClick,
-      },
+    canReport && {
+      name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
+      action: isFlaggedByMe ? onUnreportClick : onReportClick,
+    },
   ].filter(Boolean);
 
   const childrenContent = childrenPosts?.map(childPost => ({
@@ -125,7 +160,18 @@ const DefaultPostRenderer = ({
 
           {hasChildrenPosts && <ChildrenContent>{childrenContent}</ChildrenContent>}
 
-          <EngagementBar readonly={readonly} postId={postId} />
+          {!isUnderReview && <EngagementBar readonly={readonly} postId={postId} />}
+
+          {isUnderReview && canReviewCommunityPosts && (
+            <ReviewButtonsContainer>
+              <PrimaryButton disabled={approving || declining} onClick={onApprove}>
+                <FormattedMessage id="general.action.accept" />
+              </PrimaryButton>
+              <Button disabled={approving || declining} onClick={onDecline}>
+                <FormattedMessage id="general.action.decline" />
+              </Button>
+            </ReviewButtonsContainer>
+          )}
 
           {isEditing && (
             <Modal onCancel={closeEditingPostModal} title={formatMessage({ id: 'post.editPost' })}>
@@ -145,6 +191,8 @@ DefaultPostRenderer.propTypes = {
   handleDeletePost: PropTypes.func,
   handleReportPost: PropTypes.func,
   handleUnreportPost: PropTypes.func,
+  handleApprovePost: PropTypes.func,
+  handleDeclinePost: PropTypes.func,
   hidePostTarget: PropTypes.bool,
   isFlaggedByMe: PropTypes.bool,
   readonly: PropTypes.bool,
@@ -167,6 +215,8 @@ DefaultPostRenderer.defaultProps = {
   handleDeletePost: () => {},
   handleReportPost: () => {},
   handleUnreportPost: () => {},
+  handleApprovePost: () => {},
+  handleDeclinePost: () => {},
   hidePostTarget: false,
   isFlaggedByMe: false,
   readonly: false,

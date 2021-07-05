@@ -8,19 +8,19 @@ export default {
 };
 
 // Global config
-const mockUpTabs = {
-  tab1: 'Tab 1',
-  tab2: 'Tab 2',
-  tab3: 'Tab 3',
-};
+const mockUpTabs = [
+  { value: 'tab1', label: 'Tab 1' },
+  { value: 'tab2', label: 'Tab 2' },
+  { value: 'tab3', label: 'Tab 3' },
+];
 
 // We test generation of tabs
 export const Distribution = ({ tabs, onChange }) => {
-  return <UiKitTabs tabs={tabs} activeTab={Object.keys(tabs)[0]} onChange={onChange} />;
+  return <UiKitTabs tabs={tabs} activeTab={mockUpTabs[0].value} onChange={onChange} />;
 };
 
 Distribution.args = {
-  tabs: { ...mockUpTabs },
+  tabs: mockUpTabs,
 };
 
 Distribution.argTypes = {
@@ -44,14 +44,14 @@ export const Active = () => {
 };
 
 Active.args = {
-  activeTab: Object.values(mockUpTabs)[0],
+  activeTab: mockUpTabs[0].value,
 };
 
 Active.argTypes = {
   activeTab: {
     control: {
       type: 'select',
-      options: Object.values(mockUpTabs),
+      options: mockUpTabs.map(x => x.value),
     },
   },
   onChange: { action: 'onChange()' },

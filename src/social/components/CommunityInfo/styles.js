@@ -22,7 +22,7 @@ export const Container = styled.div`
   border: 1px solid #edeef2;
   border-radius: 4px;
   background: ${({ theme }) => theme.palette.system.background};
-  width: 330px;
+  width: 20rem;
   flex-shrink: 0;
   align-self: flex-start;
   padding: 16px;
@@ -61,4 +61,32 @@ export const CountsContainer = styled.div`
   & > ${Count} {
     margin-right: 8px;
   }
+`;
+
+export const PendingPostsBannerContainer = styled.div`
+  background: ${({ theme }) => theme.palette.base.shade4};
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 4px;
+  text-align: center;
+`;
+
+export const PendingPostsBannerTitle = styled.div`
+  ${({ theme }) => theme.typography.bodyBold}
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const PendingPostsBannerTitleBadge = styled.span`
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: ${({ theme }) => theme.palette.primary.main};
+  margin-right: 6px;
+`;
+
+export const PendingPostsBannerMessage = styled.div`
+  ${({ theme }) => theme.typography.caption}
+  color: ${({ theme }) => theme.palette.base.shade1}
 `;

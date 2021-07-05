@@ -36,11 +36,11 @@ const Community = () => {
         {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
 
         {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeedPage communityId={page.communityId} />
+          <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity} />
         )}
 
         {page.type === PageTypes.CommunityEdit && (
-          <CommunityEditPage communityId={page.communityId} />
+          <CommunityEditPage communityId={page.communityId} tab={page.tab} />
         )}
 
         {page.type === PageTypes.Category && (

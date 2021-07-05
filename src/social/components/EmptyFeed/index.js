@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-import { PostTargetType } from '@amityco/js-sdk';
+import { FeedType, PostTargetType } from '@amityco/js-sdk';
 
 import styled from 'styled-components';
 
@@ -28,8 +28,13 @@ const SearchIcon = styled(Search)`
 
 const FeedTypesEmptyText = {
   [PostTargetType.GlobalFeed]: () => 'feed.emptyFeed',
-  [PostTargetType.CommunityFeed]: canPost =>
-    canPost ? 'feed.emptyJoinedCommunityFeed' : 'feed.emptyCommunityFeed',
+  [PostTargetType.CommunityFeed]: (canPost, communityFeedType) => {
+    if (communityFeedType === FeedType.Reviewing) {
+      return 'feed.emptyCommunityReviewingFeed';
+    }
+
+    return canPost ? 'feed.emptyJoinedCommunityPublicFeed' : 'feed.emptyCommunityPublicFeed';
+  },
   [PostTargetType.UserFeed]: () => 'feed.emptyUserFeed',
   [PostTargetType.MyFeed]: () => 'feed.emptyMyFeed',
 };
@@ -38,11 +43,16 @@ const EmptyFeed = ({
   targetType = PostTargetType.MyFeed,
   canPost = false,
   className = null,
+  feedType = null,
   goToExplore,
 }) => (
   <EmptyState
     className={className}
-    title={<FormattedMessage id={FeedTypesEmptyText[targetType]?.(canPost) || 'feed.emptyFeed'} />}
+    title={
+      <FormattedMessage
+        id={FeedTypesEmptyText[targetType]?.(canPost, feedType) || 'feed.emptyFeed'}
+      />
+    }
     icon={<FeedIcon />}
   >
     {goToExplore && (
@@ -59,6 +69,7 @@ EmptyFeed.propTypes = {
   canPost: PropTypes.bool,
   className: PropTypes.string,
   goToExplore: PropTypes.func,
+  feedType: PropTypes.oneOf(Object.values(FeedType)),
 };
 
 export default customizableComponent('EmptyFeed', EmptyFeed);

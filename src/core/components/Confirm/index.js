@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PrimaryButton } from '~/core/components/Button';
 
 import { ConfirmModal, Footer, DefaultOkButton, DefaultCancelButton } from './styles';
 
@@ -12,6 +13,7 @@ const Confirm = ({
   cancelText = 'Cancel',
   CancelButton = DefaultCancelButton,
   onCancel,
+  type = 'confirm',
 }) => (
   <ConfirmModal
     clean
@@ -20,7 +22,7 @@ const Confirm = ({
     title={title}
     footer={
       <Footer>
-        <CancelButton onClick={onCancel}>{cancelText}</CancelButton>
+        {type === 'confirm' && <CancelButton onClick={onCancel}>{cancelText}</CancelButton>}
         <OkButton onClick={onOk}>{okText}</OkButton>
       </Footer>
     }
@@ -68,6 +70,8 @@ export const ConfirmContainer = () => {
 
   This interface rely on ConfirmContainer being rendered by UIKITProvider in the react tree
 */
-export const confirm = confirmData => spawnNewConfirm(confirmData);
+export const confirm = confirmData => spawnNewConfirm({ ...confirmData, type: 'confirm' });
+
+export const info = data => spawnNewConfirm({ ...data, type: 'info', OkButton: PrimaryButton });
 
 export default Confirm;

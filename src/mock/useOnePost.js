@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FeedRepository, PostRepository, LoadingStatus, PostTargetType } from '@amityco/js-sdk';
+import { PostRepository, LoadingStatus, PostTargetType } from '@amityco/js-sdk';
 
 /**
  * Used in Storybook stories only to get a single post for the current user.
@@ -11,7 +11,7 @@ const useOnePost = () => {
 
   useEffect(() => {
     let newPostLiveObject = {};
-    const postsLiveCollection = FeedRepository.getMyFeed();
+    const postsLiveCollection = PostRepository.queryMyPosts();
 
     postsLiveCollection.once('loadingStatusChanged', ({ newValue }) => {
       if (newValue !== LoadingStatus.Loaded) return;

@@ -1,14 +1,17 @@
-import { FeedRepository, PostTargetType } from '@amityco/js-sdk';
+import { PostRepository, PostTargetType } from '@amityco/js-sdk';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-const { getGlobalFeed, getCommunityFeed, getUserFeed, getMyFeed } = FeedRepository;
+const { queryAllPosts, queryCommunityPosts, queryUserPosts, queryMyPosts } = PostRepository;
 
-const useFeed = ({ targetType, targetId }) => {
+const useFeed = ({ targetType, targetId, feedType }) => {
   const FeedQueryTypes = {
-    [PostTargetType.GlobalFeed]: getGlobalFeed,
-    [PostTargetType.CommunityFeed]: getCommunityFeed.bind(this, { communityId: targetId }),
-    [PostTargetType.UserFeed]: getUserFeed.bind(this, { userId: targetId }),
-    [PostTargetType.MyFeed]: getMyFeed,
+    [PostTargetType.GlobalFeed]: queryAllPosts,
+    [PostTargetType.CommunityFeed]: queryCommunityPosts.bind(this, {
+      communityId: targetId,
+      feedType,
+    }),
+    [PostTargetType.UserFeed]: queryUserPosts.bind(this, { userId: targetId }),
+    [PostTargetType.MyFeed]: queryMyPosts,
   };
 
   // Override default resolver because for MyFeed and GlobalFeed there does not need to be a targetId.
@@ -20,7 +23,7 @@ const useFeed = ({ targetType, targetId }) => {
 
   return useLiveCollection(
     FeedQueryTypes[targetType],
-    [targetType, targetId],
+    [targetType, targetId, feedType],
     liveCollectionResolver,
   );
 };

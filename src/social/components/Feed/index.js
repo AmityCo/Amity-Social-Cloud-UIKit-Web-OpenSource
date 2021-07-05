@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { PostTargetType, CommunityFilter } from '@amityco/js-sdk';
+import { PostTargetType, FeedType, CommunityFilter } from '@amityco/js-sdk';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
 
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
@@ -17,6 +17,7 @@ const queryParams = { filter: CommunityFilter.Member };
 
 const Feed = ({
   className = null,
+  feedType,
   targetType = PostTargetType.MyFeed,
   targetId = '',
   showPostCreator = false,
@@ -24,10 +25,18 @@ const Feed = ({
   goToExplore,
   readonly = false,
 }) => {
-  const [posts, hasMore, loadMore, loading, loadingMore] = useFeed({ targetType, targetId });
-  const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(queryParams);
-
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
+
+  const [posts, hasMore, loadMore, loading, loadingMore] = useFeed({
+    targetType,
+    targetId,
+    feedType,
+  });
+  const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(
+    queryParams,
+    false,
+    () => !showPostCreator && !enablePostTargetPicker,
+  );
 
   function renderLoadingSkeleton() {
     return new Array(3).fill(3).map((x, index) => <DefaultPostRenderer key={index} loading />);
@@ -70,7 +79,12 @@ const Feed = ({
       )}
 
       {!loading && posts.length === 0 && (
-        <EmptyFeed targetType={targetType} goToExplore={goToExplore} canPost={showPostCreator} />
+        <EmptyFeed
+          targetType={targetType}
+          goToExplore={goToExplore}
+          canPost={showPostCreator}
+          feedType={feedType}
+        />
       )}
     </FeedScrollContainer>
   );
@@ -78,6 +92,7 @@ const Feed = ({
 
 Feed.propTypes = {
   className: PropTypes.string,
+  feedType: PropTypes.oneOf(Object.values(FeedType)),
   targetType: PropTypes.oneOf(Object.values(PostTargetType)),
   targetId: PropTypes.string,
   showPostCreator: PropTypes.bool,

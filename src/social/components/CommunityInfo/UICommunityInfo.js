@@ -10,6 +10,7 @@ import Avatar from '~/core/components/Avatar';
 import CommunityName from '~/social/components/community/Name';
 import Button from '~/core/components/Button';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
+import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';
 import {
   Count,
   Container,
@@ -29,6 +30,7 @@ import {
 const UICommunityInfo = ({
   communityId,
   communityCategories,
+  pendingPostsCount,
   postsCount,
   membersCount,
   description,
@@ -41,7 +43,9 @@ const UICommunityInfo = ({
   joinCommunity,
   leaveCommunity,
   canLeaveCommunity,
+  canReviewPosts,
   name,
+  needApprovalOnPostCreation,
 }) => (
   <Container>
     <Header>
@@ -88,12 +92,17 @@ const UICommunityInfo = ({
         <PencilIcon /> <FormattedMessage id="community.editProfile" />
       </Button>
     </ConditionalRender>
+
+    {needApprovalOnPostCreation && isJoined && pendingPostsCount > 0 && (
+      <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
+    )}
   </Container>
 );
 
 UICommunityInfo.propTypes = {
   communityId: PropTypes.string.isRequired,
   communityCategories: PropTypes.arrayOf(PropTypes.string),
+  pendingPostsCount: PropTypes.number,
   postsCount: PropTypes.number,
   membersCount: PropTypes.number,
   description: PropTypes.string,
@@ -106,7 +115,9 @@ UICommunityInfo.propTypes = {
   joinCommunity: PropTypes.func,
   leaveCommunity: PropTypes.func,
   canLeaveCommunity: PropTypes.bool,
+  canReviewPosts: PropTypes.bool,
   name: PropTypes.string,
+  needApprovalOnPostCreation: PropTypes.bool,
 };
 
 export default customizableComponent('UICommunityInfo', UICommunityInfo);

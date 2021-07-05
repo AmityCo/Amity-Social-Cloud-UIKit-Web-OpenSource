@@ -171,10 +171,9 @@ const CommunityForm = ({
 
       await onSubmit(payload);
 
-      const notificationMessageId = edit ? 'community.updateSuccess' : 'community.createSuccess';
-      notification.success({
-        content: <FormattedMessage id={notificationMessageId} />,
-      });
+      if (edit) {
+        notification.success({ content: <FormattedMessage id="community.updateSuccess" /> });
+      }
     },
     [setError, isPublic, onSubmit, edit],
   );

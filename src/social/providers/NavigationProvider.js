@@ -75,6 +75,7 @@ export default ({
       const next = {
         type: PageTypes.CommunityFeed,
         communityId,
+        isNewCommunity: true,
       };
 
       if (onChangePage) return onChangePage(next);
@@ -135,16 +136,17 @@ export default ({
   );
 
   const handleEditCommunity = useCallback(
-    communityId => {
+    (communityId, tab) => {
       const next = {
         type: PageTypes.CommunityEdit,
         communityId,
+        tab,
       };
 
       if (onChangePage) return onChangePage(next);
-      if (onEditCommunity) return onEditCommunity(communityId);
+      if (onEditCommunity) return onEditCommunity(communityId, { tab });
 
-      console.log('handleEditCommunity', { communityId });
+      console.log('handleEditCommunity', { communityId, tab });
       pushPage(next);
     },
     [onChangePage, onEditCommunity],

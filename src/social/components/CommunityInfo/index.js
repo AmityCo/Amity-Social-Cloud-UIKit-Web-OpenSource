@@ -1,13 +1,26 @@
 import React, { memo, useMemo } from 'react';
 import { useIntl } from 'react-intl';
-import { ImageSize, FileRepository } from '@amityco/js-sdk';
+import { ImageSize, FileRepository, FeedType, PostTargetType } from '@amityco/js-sdk';
 
 import withSDK from '~/core/hocs/withSDK';
 import useCommunity from '~/social/hooks/useCommunity';
+import useFeed from '~/social/hooks/useFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import UICommunityInfo from './UICommunityInfo';
 import { confirm } from '~/core/components/Confirm';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
+
+function usePendingPostCount(isReady, community, canReviewCommunityPosts) {
+  // TODO workaround
+  // community.reviewingFeed?.postCount has the same number for all users
+  const [posts] = useFeed({
+    targetType: isReady && !canReviewCommunityPosts ? PostTargetType.CommunityFeed : '',
+    targetId: community.communityId,
+    feedType: FeedType.Reviewing,
+  });
+
+  return canReviewCommunityPosts ? community.reviewingFeed?.postCount ?? 0 : posts.length;
+}
 
 const CommunityInfo = ({ communityId, currentUserId }) => {
   const { onEditCommunity } = useNavigation();
@@ -35,32 +48,42 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
       onOk: () => leaveCommunity(community.communityId),
     });
 
-  const { postsCount, membersCount, description, isJoined, userId: communityOwnerId } = community;
-  const { hasModeratorPermissions } = useCommunityOneMember(
+  const { membersCount, description, isJoined, userId: communityOwnerId } = community;
+  const { isCurrentMemberReady, canEditCommunity, canReviewCommunityPosts } = useCommunityOneMember(
     communityId,
     currentUserId,
     communityOwnerId,
   );
+
   const canLeaveCommunity = isJoined;
   const categoryNames = communityCategories.map(({ name }) => name);
+
+  const pendingPostsCount = usePendingPostCount(
+    isCurrentMemberReady,
+    community,
+    canReviewCommunityPosts,
+  );
 
   return (
     <UICommunityInfo
       communityId={communityId}
       communityCategories={categoryNames}
-      postsCount={postsCount}
+      pendingPostsCount={pendingPostsCount}
+      postsCount={community.publishedFeed?.postCount ?? 0}
       membersCount={membersCount}
       description={description}
       isJoined={isJoined}
       isOfficial={community.isOfficial}
       isPublic={community.isPublic}
       avatarFileUrl={fileUrl}
-      canEditCommunity={hasModeratorPermissions}
+      canEditCommunity={canEditCommunity}
       onEditCommunity={onEditCommunity}
       joinCommunity={joinCommunity}
       leaveCommunity={leaveCommunityConfirm}
       canLeaveCommunity={canLeaveCommunity}
+      canReviewPosts={canReviewCommunityPosts}
       name={community.displayName}
+      needApprovalOnPostCreation={community.needApprovalOnPostCreation}
     />
   );
 };

@@ -24,7 +24,10 @@ UiCommunityInfo.args = {
   isPublic: false,
   canEditCommunity: true,
   canLeaveCommunity: false,
+  canReviewPosts: false,
   name: 'Community Name',
+  pendingPostsCount: 1,
+  needApprovalOnPostCreation: false,
 };
 
 UiCommunityInfo.argTypes = {
@@ -50,5 +53,8 @@ UiCommunityInfo.argTypes = {
   onEditCommunity: { action: 'onEditCommunity()' },
   joinCommunity: { action: 'joinCommunity()' },
   leaveCommunity: { action: 'leaveCommunity()' },
+  canReviewPosts: { control: { type: 'boolean' } },
   name: { control: { type: 'text' } },
+  pendingPostsCount: { control: { type: 'number' } },
+  needApprovalOnPostCreation: { control: { type: 'boolean' } },
 };

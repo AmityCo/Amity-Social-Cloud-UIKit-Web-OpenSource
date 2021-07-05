@@ -7,6 +7,7 @@ import useUser from '~/core/hooks/useUser';
 
 const usePost = postId => {
   const post = useLiveObject(() => PostRepository.postForId(postId), [postId]);
+  const isPostReady = !!post.postId;
   const { postedUserId, children } = post;
 
   const { user, file } = useUser(postedUserId);
@@ -16,15 +17,18 @@ const usePost = postId => {
   const handleReportPost = () => PostRepository.flag(postId);
   const handleUnreportPost = () => PostRepository.unflag(postId);
   const handleDeletePost = () => PostRepository.deletePost(postId);
+  const handleApprovePost = () => PostRepository.approvePost(postId);
+  const handleDeclinePost = () => PostRepository.declinePost(postId);
 
   const childrenPosts = usePostChildren(children);
 
   const isFlaggedByMe = useMemoAsync(
-    async () => (post?.postId ? PostRepository.isFlaggedByMe(post.postId) : false),
-    [post],
+    async () => (isPostReady ? PostRepository.isFlaggedByMe(post.postId) : false),
+    [isPostReady, post],
   );
 
   return {
+    isPostReady,
     post,
     user,
     file,
@@ -32,6 +36,8 @@ const usePost = postId => {
     handleReportPost,
     handleUnreportPost,
     handleDeletePost,
+    handleApprovePost,
+    handleDeclinePost,
     childrenPosts,
     isFlaggedByMe,
   };

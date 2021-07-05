@@ -4,7 +4,17 @@ function useMemoAsync(factory, deps = []) {
   const [value, setValue] = useState(undefined);
 
   useEffect(() => {
-    factory().then(setValue);
+    let disposed = false;
+
+    factory().then(newValue => {
+      if (!disposed) {
+        setValue(newValue);
+      }
+    });
+
+    return () => {
+      disposed = true;
+    };
   }, deps);
 
   return value;

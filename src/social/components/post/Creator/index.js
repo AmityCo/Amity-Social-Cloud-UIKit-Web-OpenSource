@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import {
   UserRepository,
   CommunityRepository,
-  PostRepository,
   PostTargetType,
   FileRepository,
   ImageSize,
@@ -19,7 +18,6 @@ import useLiveObject from '~/core/hooks/useLiveObject';
 import useErrorNotification from '~/core/hooks/useErrorNotification';
 import { notification } from '~/core/components/Notification';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import promisify from '~/helpers/promisify';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
@@ -29,6 +27,7 @@ import UploaderButtons from './components/UploaderButtons';
 import ImagesUploaded from './components/ImagesUploaded';
 import FilesUploaded from './components/FilesUploaded';
 
+import { createPost, showPostCreatedNotification } from './utils';
 import {
   Avatar,
   PostCreatorContainer,
@@ -100,19 +99,14 @@ const PostCreatorBar = ({
 
   const [setError] = useErrorNotification();
 
-  const [createPost, creating] = useAsyncCallback(async () => {
+  const [onCreatePost, creating] = useAsyncCallback(async () => {
     const data = {};
 
     if (postText) data.text = postText;
     if (postImages.length) data.images = postImages.map(i => i.fileId);
     if (postFiles.length) data.files = postFiles.map(f => f.fileId);
 
-    const post = await promisify(
-      PostRepository.createPost({
-        ...target,
-        data,
-      }),
-    );
+    const post = await createPost({ ...target, data });
 
     onCreateSuccess(post.postId);
     setPostText('');
@@ -120,7 +114,9 @@ const PostCreatorBar = ({
     setPostFiles([]);
     setIncomingImages([]);
     setIncomingFiles([]);
-  }, [postText, postImages, postFiles, target, onCreateSuccess]);
+
+    showPostCreatedNotification(post, model);
+  }, [postText, postImages, postFiles, target, onCreateSuccess, model]);
 
   const onMaxFilesLimit = () => {
     notification.info({
@@ -193,7 +189,7 @@ const PostCreatorBar = ({
             fileLimitRemaining={maxFiles - postFiles.length - postImages.length}
             uploadLoading={uploadLoading}
           />
-          <PostButton disabled={isDisabled} onClick={createPost}>
+          <PostButton disabled={isDisabled} onClick={onCreatePost}>
             <FormattedMessage id="post" />
           </PostButton>
         </Footer>

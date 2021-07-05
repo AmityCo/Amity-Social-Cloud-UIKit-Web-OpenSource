@@ -4,8 +4,8 @@ const TRANSITION_TIME = '0.3s';
 
 export const SwitchLabel = styled.label`
   position: relative;
-  width: 40px;
-  height: 20px;
+  width: 48px;
+  height: 28px;
   float: right;
 `;
 
@@ -25,13 +25,13 @@ export const SwitchSlider = styled.span`
   background-color: ${({ theme }) => theme.palette.base.shade3};
   -webkit-transition: ${TRANSITION_TIME};
   transition: ${TRANSITION_TIME};
-  border-radius: 20px;
+  border-radius: 14px;
 
   &:before {
     position: absolute;
     content: '';
-    height: 16px;
-    width: 16px;
+    height: 24px;
+    width: 24px;
     left: 2px;
     bottom: 2px;
     background-color: #fff;

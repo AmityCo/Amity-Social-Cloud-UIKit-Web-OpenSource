@@ -3,6 +3,9 @@ import Tabs from '~/core/components/Tabs';
 
 export const CommunityMembersTabs = styled(Tabs)`
   margin-bottom: 14px;
+  border-radius: 0;
+  border-right: 0;
+  border-left: 0;
 `;
 
 export const CommunityMembersContainer = styled.div`

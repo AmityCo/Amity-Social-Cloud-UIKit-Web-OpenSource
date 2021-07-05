@@ -10,13 +10,10 @@ import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 import PageLayout from '~/social/layouts/Page';
 import Feed from '~/social/components/Feed';
 
-// TODO: react-intl
-const tabs = {
-  TIMELINE: 'Timeline',
-};
+import { tabs, UserFeedTabs } from './constants';
 
 const UserFeed = ({ userId, currentUserId }) => {
-  const [activeTab, setActiveTab] = useState(tabs.TIMELINE);
+  const [activeTab, setActiveTab] = useState(UserFeedTabs.TIMELINE);
 
   const isMe = userId === currentUserId;
 
