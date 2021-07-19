@@ -20,7 +20,7 @@ import {
   TitleInfoChatName,
 } from './styles';
 
-const ChatDetails = ({ channelId, onClose, leaveChat, onEditChatMemberClick }) => {
+const ChatDetails = ({ channelId, onClose, leaveChat, onEditChatMemberClick, onMemberSelect }) => {
   const channel = useChannel(channelId);
   const { chatName, chatAvatar } = useChatInfo({ channel });
   const [shouldShowMembers, setShouldShowMembers] = useState(false);
@@ -45,6 +45,7 @@ const ChatDetails = ({ channelId, onClose, leaveChat, onEditChatMemberClick }) =
       {shouldShowMembers ? (
         <ChatDetailsMembers
           channelId={channelId}
+          onMemberSelect={onMemberSelect}
           onEditChatMemberClick={onEditChatMemberClick}
           hideMembers={() => setShouldShowMembers(false)}
         />

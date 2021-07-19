@@ -13,6 +13,7 @@ import { ApplicationContainer } from './styles';
 const ChatApplication = ({
   membershipFilter,
   defaultChannelId,
+  onMemberSelect,
   onChannelSelect,
   onAddNewChannel,
   onEditChatMember,
@@ -75,6 +76,7 @@ const ChatApplication = ({
         <ChatDetails
           channelId={currentChannelData.channelId}
           onEditChatMemberClick={onEditChatMember}
+          onMemberSelect={onMemberSelect}
           onClose={hideChatDetails}
           leaveChat={leaveChat}
         />
@@ -86,6 +88,7 @@ const ChatApplication = ({
 ChatApplication.propTypes = {
   membershipFilter: PropTypes.oneOf(Object.values(ChannelMembership)),
   defaultChannelId: PropTypes.string,
+  onMemberSelect: PropTypes.func,
   onChannelSelect: PropTypes.func,
   onAddNewChannel: PropTypes.func,
   onEditChatMember: PropTypes.func,
@@ -94,6 +97,7 @@ ChatApplication.propTypes = {
 ChatApplication.defaultProps = {
   membershipFilter: ChannelMembership.None,
   defaultChannelId: null,
+  onMemberSelect: () => {},
   onChannelSelect: () => {},
   onAddNewChannel: () => {},
   onEditChatMember: () => {},

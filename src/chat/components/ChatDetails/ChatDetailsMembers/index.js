@@ -23,7 +23,7 @@ import {
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const ChatDetailsMembers = ({ channelId, hideMembers, onEditChatMemberClick }) => {
+const ChatDetailsMembers = ({ channelId, hideMembers, onEditChatMemberClick, onMemberSelect }) => {
   const channel = useChannel(channelId);
   const [members, hasMore, loadMore] = useChannelMembers(channelId, channel.memberCount);
 
@@ -53,7 +53,7 @@ const ChatDetailsMembers = ({ channelId, hideMembers, onEditChatMemberClick }) =
       </MembersReturn>
       <LoadMore hasMore={hasMore} loadMore={loadMore}>
         {members.map(member => (
-          <MemberItem key={member.userId}>
+          <MemberItem key={member.userId} onClick={() => onMemberSelect(member)}>
             <UserAvatar
               size={SIZE_ALIAS.SMALL}
               defaultImage={backgroundUserImage}
