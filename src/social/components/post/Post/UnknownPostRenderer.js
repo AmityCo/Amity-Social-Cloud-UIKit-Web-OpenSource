@@ -4,7 +4,7 @@ import EmptyState from '~/core/components/EmptyState';
 import UnknownPost from '~/icons/UnknownPost';
 import { PostContainer } from './styles';
 
-export default function UnknownPostRenderer() {
+const UnknownPostRenderer = () => {
   const { formatMessage } = useIntl();
 
   return (
@@ -14,4 +14,6 @@ export default function UnknownPostRenderer() {
       </EmptyState>
     </PostContainer>
   );
-}
+};
+
+export default UnknownPostRenderer;

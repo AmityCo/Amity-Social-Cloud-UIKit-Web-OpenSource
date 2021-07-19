@@ -49,6 +49,10 @@ export const ModalWindow = styled.div`
   }
 `;
 
+export const SmallModalWindow = styled(ModalWindow)`
+  width: 440px;
+`;
+
 export const Header = styled.div`
   padding: 16px 16px 12px 16px;
   ${({ clean }) => !clean && `border-bottom: 1px solid${({ theme }) => theme.palette.base.shade4};`}

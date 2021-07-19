@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import Skeleton from '.';
 
@@ -6,13 +7,18 @@ export default {
   title: 'Ui Only',
 };
 
-export function UiSkeleton(props) {
+const UiSkeletonContainer = styled.div`
+  width: 100px;
+  height: 100px;
+`;
+
+export const UiSkeleton = props => {
   return (
-    <div style={{ width: '100px', height: '100px' }}>
+    <UiSkeletonContainer>
       <Skeleton {...props} />
-    </div>
+    </UiSkeletonContainer>
   );
-}
+};
 
 UiSkeleton.storyName = 'Skeleton';
 

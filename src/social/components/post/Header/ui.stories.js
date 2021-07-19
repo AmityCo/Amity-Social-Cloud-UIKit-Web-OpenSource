@@ -5,7 +5,10 @@ export default {
   title: 'Ui Only/Social/Post',
 };
 
-export const UIPostHeader = props => <PostHeader {...props} />;
+export const UIPostHeader = ({ timeAgo, ...restArgs }) => {
+  const normalizedTimeAgo = new Date(timeAgo);
+  return <PostHeader timeAgo={normalizedTimeAgo} {...restArgs} />;
+};
 
 UIPostHeader.storyName = 'Header';
 

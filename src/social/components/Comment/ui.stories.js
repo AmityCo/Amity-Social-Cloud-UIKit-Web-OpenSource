@@ -6,8 +6,13 @@ export default {
   title: 'Ui Only/Social/Comment',
 };
 
-export const UiComment = args => {
-  return <StyledComment {...args} />;
+export const UiComment = ({ createdAt, editedAt, ...restArgs }) => {
+  const normalizedCreatedAt = new Date(createdAt);
+  const normalizedEditedAt = new Date(editedAt);
+
+  return (
+    <StyledComment createdAt={normalizedCreatedAt} editedAt={normalizedEditedAt} {...restArgs} />
+  );
 };
 
 UiComment.storyName = 'Single Comment';

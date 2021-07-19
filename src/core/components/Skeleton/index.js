@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactLoadingSkeleton from 'react-loading-skeleton';
 
-function Skeleton({ circle, borderRadius, primaryColor, secondaryColor, style, ...props }) {
+const Skeleton = ({ circle, borderRadius, primaryColor, secondaryColor, style, ...props }) => {
   return (
     <ReactLoadingSkeleton
       {...props}
@@ -15,7 +15,7 @@ function Skeleton({ circle, borderRadius, primaryColor, secondaryColor, style, .
       }}
     />
   );
-}
+};
 
 Skeleton.propTypes = {
   borderRadius: PropTypes.number,

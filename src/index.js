@@ -1,6 +1,14 @@
 export { default as AmityUiKitProvider } from '~/core/providers/UiKitProvider';
 export { default as AmityUiKitFeed } from '~/social/components/Feed';
 export { default as AmityUiKitSocial } from '~/social/pages/Application';
+export { default as AmityUiKitChat } from '~/chat/pages/Application';
+
+// Export helper
+export {
+  createNewChat as amityCreateNewChat,
+  addChatMembers as amityAddChatMembers,
+  removeChatMembers as amityRemoveChatMembers,
+} from '~/chat/helpers';
 
 export { default as useAmityUser } from '~/core/hooks/useUser';
 export { useNavigation as useAmityNavigation } from '~/social/providers/NavigationProvider';

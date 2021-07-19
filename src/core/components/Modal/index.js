@@ -3,18 +3,39 @@ import { FormattedMessage } from 'react-intl';
 
 import useElement from '~/core/hooks/useElement';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import { Overlay, ModalWindow, Header, Content, Footer, CloseIcon } from './styles';
+import {
+  Overlay,
+  ModalWindow,
+  SmallModalWindow,
+  Header,
+  Content,
+  Footer,
+  CloseIcon,
+} from './styles';
 
-const Modal = ({ className, onOverlayClick, onCancel, title, footer, clean, children }) => {
+const Modal = ({
+  size = 'small',
+  className,
+  onOverlayClick,
+  onCancel,
+  title,
+  footer,
+  clean,
+  children,
+}) => {
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
   useEffect(() => modalElement && modalElement.focus(), [modalElement]);
 
   const isText = typeof children === 'string' || children.type === FormattedMessage;
 
+  const attrProps = { className, ref: modalRef };
+
+  const ModalComponent = size === 'small' ? SmallModalWindow : ModalWindow;
+
   return (
     <Overlay onClick={onOverlayClick}>
-      <ModalWindow className={className} ref={modalRef} tabIndex={0}>
+      <ModalComponent tabIndex={0} {...attrProps}>
         <ConditionalRender condition={title || onCancel}>
           <Header clean={clean}>
             {title}
@@ -27,7 +48,7 @@ const Modal = ({ className, onOverlayClick, onCancel, title, footer, clean, chil
         <ConditionalRender condition={footer}>
           <Footer clean={clean}>{footer}</Footer>
         </ConditionalRender>
-      </ModalWindow>
+      </ModalComponent>
     </Overlay>
   );
 };

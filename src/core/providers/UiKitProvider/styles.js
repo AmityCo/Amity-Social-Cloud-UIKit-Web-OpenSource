@@ -23,4 +23,8 @@ export const UIStyles = styled.div`
       color: ${({ theme }) => theme.palette.base.main};
     }
   }
+
+  & pre {
+    ${({ theme }) => theme.typography.body}
+  }
 `;

@@ -81,3 +81,21 @@ SDK currently runs and builds on nodejs v10.1 ; this can conflict with lint-stag
 ## Publishing
 
 The publication of the library is entirely automated and controlled by CI. To publish a version, the only necessary command is `npm version` with the according version increment, as per `semver` semantics (`major`, `minor`, `patch`). **The patches can be released freely but the minor and major must be approved by a project manager before release.**
+
+## Code syntax (project specific rules)
+
+### Functional component declaration
+
+UI Kit requires using `arrow function` syntax for functional components declaration (**consistency**):
+
+```
+// Correct
+const Example = props => {
+  return <div />;
+}
+
+// Wrong
+function Example(props) {
+  return <div />;
+}
+```

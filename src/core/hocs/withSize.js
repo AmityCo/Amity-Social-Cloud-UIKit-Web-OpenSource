@@ -2,11 +2,18 @@ import React from 'react';
 
 const DEFAULT_SIZE = 'regular';
 
+export const SIZE_ALIAS = {
+  BIG: 'big',
+  REGULAR: 'regular',
+  SMALL: 'small',
+  TINY: 'tiny',
+};
+
 export const SIZES = {
-  big: 64,
-  regular: 40,
-  small: 32,
-  tiny: 28,
+  [SIZE_ALIAS.BIG]: 64,
+  [SIZE_ALIAS.REGULAR]: 40,
+  [SIZE_ALIAS.SMALL]: 32,
+  [SIZE_ALIAS.TINY]: 28,
 };
 
 const withSize = (Component, defaultSize = DEFAULT_SIZE) => {

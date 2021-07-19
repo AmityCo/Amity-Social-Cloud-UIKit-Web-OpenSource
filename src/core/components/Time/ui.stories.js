@@ -6,8 +6,9 @@ export default {
   title: 'Ui Only',
 };
 
-export const Time = ({ ...props }) => {
-  return <UiKitTime {...props} />;
+export const Time = ({ date, ...restArgs }) => {
+  const normalizedDate = new Date(date);
+  return <UiKitTime date={normalizedDate} {...restArgs} />;
 };
 
 Time.args = {

@@ -9,18 +9,25 @@ export const SideMenuItemContainer = styled(SecondaryButton)`
   margin-bottom: 6px;
   color: ${({ theme }) => theme.palette.neutral.main};
   justify-content: left;
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.base.shade4};
-  }
+
   &:disabled {
     color: ${({ theme }) => theme.palette.neutral.shade2};
   }
+
   ${({ active, theme }) =>
-    active &&
-    `
-      background: ${theme.palette.primary.shade4};
+    active
+      ? `
+      background-color: ${theme.palette.primary.shade3};
       color: ${theme.palette.primary.main};
-    `}
+      &:hover {
+        background-color: ${theme.palette.primary.shade3};
+      }
+    `
+      : `
+      &:hover {
+        background-color: ${theme.palette.base.shade4};
+      }
+    `}}
 `;
 
 export const IconWrapper = styled.div`
