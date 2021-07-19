@@ -104,9 +104,9 @@ export default ({
   );
 
   const handleClickUser = useCallback(
-    userId => {
+    (userId, pageType) => {
       const next = {
-        type: PageTypes.UserFeed,
+        type: pageType ?? PageTypes.UserFeed,
         userId,
       };
 
