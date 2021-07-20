@@ -1,5 +1,15 @@
 # Changelog
 
+## [v2.1.0-rc.1](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0-rc.0...v2.1.0-rc.1)
+
+#### 20 July 2021
+
+### Commits
+
+- fix sdk version ([`2c5e90e`](https://gitlab.com/upstra/web/ui-kit/commit/2c5e90e37d5fe06fe6b1f899b90ba781a0cb9720)) (by Valeriy Malyshev)
+
+---
+
 ## [v2.1.0-rc.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.0.1...v2.1.0-rc.0)
 
 #### 20 July 2021
