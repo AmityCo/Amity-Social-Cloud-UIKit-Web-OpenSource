@@ -1,8 +1,59 @@
 # Changelog
 
+## [v2.1.0-rc.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.0.1...v2.1.0-rc.0)
+
+#### 20 July 2021
+
+### New Features
+
+- Chat Application Beta Version (the chat creation is disabled) ([`c8f6fc6`](https://gitlab.com/upstra/web/ui-kit/commit/c8f6fc6f29e8c1561807b2111d6913c562f06b1f)) (by Yevhen Khort)
+- [`UP-1331`](https://ekoapp.atlassian.net/browse/UP-1331) post review ([`2fa5e51`](https://gitlab.com/upstra/web/ui-kit/commit/2fa5e51027cb362d5d01b2719c34b19c5061e0a9)) (by Valeriy Malyshev)
+- [`UP-3029`](https://ekoapp.atlassian.net/browse/UP-3029) expose disconnect function in provider through ref ([`1a1d9b9`](https://gitlab.com/upstra/web/ui-kit/commit/1a1d9b93ae6b34f202152a336ed202aaad503620)) (by Julien Barbay)
+- [`UP-3229`](https://ekoapp.atlassian.net/browse/UP-3229) disable Create Community button if connection is not established ([`d14c239`](https://gitlab.com/upstra/web/ui-kit/commit/d14c239d623a16ea846071fa6b38f3d4bc5a7565)) (by Valeriy Malyshev)
+- [`UP-3036`](https://ekoapp.atlassian.net/browse/UP-3036) show the loading ui for search ([`de59d9b`](https://gitlab.com/upstra/web/ui-kit/commit/de59d9b24f4048ec560bbd5db508b277e682d0e0)) (by Valeriy Malyshev)
+- [`UP-3037`](https://ekoapp.atlassian.net/browse/UP-3037) disable Create Community button until request is finished ([`5e41cc7`](https://gitlab.com/upstra/web/ui-kit/commit/5e41cc76f8c37f67befb38bdeb754bd99445d9a6)) (by Valeriy Malyshev)
+- [`UP-3148`](https://ekoapp.atlassian.net/browse/UP-3148) align emtpy state, add loading state to category page ([`7b2ffce`](https://gitlab.com/upstra/web/ui-kit/commit/7b2ffcebcceae4f76030ced57c164e93ac54f75d)) (by Valeriy Malyshev)
+- [`UP-3032`](https://ekoapp.atlassian.net/browse/UP-3032) add props to listen the connection status ([`9b6277b`](https://gitlab.com/upstra/web/ui-kit/commit/9b6277b48363d7e429adadf2269ebf52a9a9620b)) (by Valeriy Malyshev)
+- Chat | Callback for member selection ([`9f7745f`](https://gitlab.com/upstra/web/ui-kit/commit/9f7745f3ccea9b53d1e4e3ace1fa1181605b670b)) (by Yevhen Khort)
+- show Explore Community button if global feed is empty ([`c1992b1`](https://gitlab.com/upstra/web/ui-kit/commit/c1992b16366eff9b3dda7c932be9c5ef4911dfde)) (by Valeriy Malyshev)
+- [`UP-119`](https://ekoapp.atlassian.net/browse/UP-119) - allow to override page type for redirecting on user click ([`6ebe50b`](https://gitlab.com/upstra/web/ui-kit/commit/6ebe50b1fb4e6a414db7885c13d194176add0e6b)) (by Serhii Ivanenko)
+
+### Fixes
+
+- react-truncate-markup warnings ([`10d497f`](https://gitlab.com/upstra/web/ui-kit/commit/10d497f5b1a659019b9d7c3607f43b50f04acf77)) (by Valeriy Malyshev)
+- react warning on comments component ([`095f2b5`](https://gitlab.com/upstra/web/ui-kit/commit/095f2b5d3e6906e2246c04cbb1240a9af0df6c8a)) (by Valeriy Malyshev)
+- [`UP-3281`](https://ekoapp.atlassian.net/browse/UP-3281) show moderators badge for joined owners and moderators ([`927b430`](https://gitlab.com/upstra/web/ui-kit/commit/927b4305966a7d63163c3852ec18493685d164e0)) (by Valeriy Malyshev)
+- remove unused blockRouteChange param ([`7aac0b8`](https://gitlab.com/upstra/web/ui-kit/commit/7aac0b8c65ae7ad5e83074c3ca2f9e67ee4585b2)) (by Valeriy Malyshev)
+- [`UP-3034`](https://ekoapp.atlassian.net/browse/UP-3034) do not request community for non community posts ([`13fe4d7`](https://gitlab.com/upstra/web/ui-kit/commit/13fe4d774c90bb41b982b3a71e07728d3b861353)) (by Valeriy Malyshev)
+- [`UP-2059`](https://ekoapp.atlassian.net/browse/UP-2059) add moderator to community owner in the background ([`4fd9a17`](https://gitlab.com/upstra/web/ui-kit/commit/4fd9a171a07e2af7e4754587a2e13baff8fc0bf3)) (by Julien Barbay)
+- fix react warnings ([`d3252f7`](https://gitlab.com/upstra/web/ui-kit/commit/d3252f787fc80df7fab24ded13edfc56dae3e9fc)) (by Valeriy Malyshev)
+- [`UP-3258`](https://ekoapp.atlassian.net/browse/UP-3258) show default avatar for categories ([`af0e405`](https://gitlab.com/upstra/web/ui-kit/commit/af0e405dc9dfb6022e14ae0b045ad891746cc7d6)) (by Valeriy Malyshev)
+- [`UP-3263`](https://ekoapp.atlassian.net/browse/UP-3263) show the right empty message for my user feed ([`c3533cb`](https://gitlab.com/upstra/web/ui-kit/commit/c3533cb187078efd17d894907623847cac1735c2)) (by Valeriy Malyshev)
+- [`UP-3254`](https://ekoapp.atlassian.net/browse/UP-3254) sort communities for category in alphabet order ([`5960ac5`](https://gitlab.com/upstra/web/ui-kit/commit/5960ac567fc846be4404e5660d8bad1e9576ff1c)) (by Valeriy Malyshev)
+- [`UP-3273`](https://ekoapp.atlassian.net/browse/UP-3273) allow owners and moderators to leave communities ([`a1d1804`](https://gitlab.com/upstra/web/ui-kit/commit/a1d180469544009960472c05aa92c3a613c0a8ed)) (by Valeriy Malyshev)
+- [`UP-3274`](https://ekoapp.atlassian.net/browse/UP-3274) wrap long category to another line ([`15a2116`](https://gitlab.com/upstra/web/ui-kit/commit/15a21165aff233493e426d9173357649624a0ad1)) (by Valeriy Malyshev)
+
+### Commits
+
+- misc: [`UP-3034`](https://ekoapp.atlassian.net/browse/UP-3034) improve perfomance ([`7aa39c2`](https://gitlab.com/upstra/web/ui-kit/commit/7aa39c2b162db1b2cb10ef4765bc45c0d97eecc1)) (by Valeriy Malyshev)
+- chore: install sdk 5.3.1 ([`7723131`](https://gitlab.com/upstra/web/ui-kit/commit/7723131d76c6d50a1c9f055f8b65b59dc3a07af8)) (by Julien Barbay)
+- [`UP-2594`](https://ekoapp.atlassian.net/browse/UP-2594) - refactored CommunitySearch -&gt; SocialSearch ([`1306490`](https://gitlab.com/upstra/web/ui-kit/commit/13064907c6f6368bd02d99ec503e0c6fab6d4290)) (by Serhii Ivanenko)
+- [`UP-2059`](https://ekoapp.atlassian.net/browse/UP-2059) - hardcoded owner into moderator tab; fixed show 3dots menu ([`5b0ad90`](https://gitlab.com/upstra/web/ui-kit/commit/5b0ad908128bbfa4008cc5c65ac4a68ffb9a42c0)) (by Serhii Ivanenko)
+- [`UP-3263`](https://ekoapp.atlassian.net/browse/UP-3263) - align empty feed messages with the design ([`43fd27b`](https://gitlab.com/upstra/web/ui-kit/commit/43fd27bcaa197acbc49d2fb049aea5f28990120c)) (by Valeriy Malyshev)
+- misc: [`UP-3034`](https://ekoapp.atlassian.net/browse/UP-3034) move the reporting out of useUser hook for performance reasons ([`eb322d0`](https://gitlab.com/upstra/web/ui-kit/commit/eb322d01ca4f9bd44d1d018f7395a7e0aa8b5f40)) (by Valeriy Malyshev)
+- misc: show post creation error ([`d77a39d`](https://gitlab.com/upstra/web/ui-kit/commit/d77a39dc4639ac7a167c721099846fa022fc632f)) (by Valeriy Malyshev)
+- misc: [`UP-3150`](https://ekoapp.atlassian.net/browse/UP-3150) remove mock data from prod build ([`15e2281`](https://gitlab.com/upstra/web/ui-kit/commit/15e2281363d2fffa6d67d7f2ea1204599ba44e59)) (by Valeriy Malyshev)
+- [`UP-2059`](https://ekoapp.atlassian.net/browse/UP-2059) - fixed moderators output when owner has assigned moderator role ([`81bd50d`](https://gitlab.com/upstra/web/ui-kit/commit/81bd50d5877be87d4dd8cad6414652156925f98f)) (by Serhii Ivanenko)
+- [`UP-3325`](https://ekoapp.atlassian.net/browse/UP-3325) - added default array for case when communities undefined ([`374c71e`](https://gitlab.com/upstra/web/ui-kit/commit/374c71ef66c049d987d0fd5b3acf1d0b1fe48a9d)) (by Serhii Ivanenko)
+- misc: wording on community create title in explore header ([`502d8e4`](https://gitlab.com/upstra/web/ui-kit/commit/502d8e4dbea10f074388ff62fb0d147b5e1a9c23)) (by Valeriy Malyshev)
+- [`UP-2073`](https://ekoapp.atlassian.net/browse/UP-2073) - added patch to prevent redundant queries (isFlagByMe) ([`fa0d1e2`](https://gitlab.com/upstra/web/ui-kit/commit/fa0d1e2ded6c4deba1e712831313001af4ba9104)) (by Serhii Ivanenko)
+- fix warning related to missing click handler for CommmunityHeader ([`22833ac`](https://gitlab.com/upstra/web/ui-kit/commit/22833ac8c4646950bb06057d1ac9309f4cfcd9df)) (by Valeriy Malyshev)
+
+---
+
 ## [v2.0.1](https://gitlab.com/upstra/web/ui-kit/compare/v2.0.0...v2.0.1)
 
-#### 24 May 2021
+#### 25 May 2021
 
 ### New Features
 
@@ -14,7 +65,7 @@
 
 ---
 
-## [v2.0.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.10.2...v2.0.0)
+## [v2.0.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.11.4...v2.0.0)
 
 #### 25 May 2021
 
@@ -35,6 +86,120 @@
 - Update publish.yml ([`7419b26`](https://gitlab.com/upstra/web/ui-kit/commit/7419b26097e0890c988397100596d558ad466499)) (by Julien Barbay)
 - [`UP-2834`](https://ekoapp.atlassian.net/browse/UP-2834) - fixed remove icon ([`931aa38`](https://gitlab.com/upstra/web/ui-kit/commit/931aa381a4afee87d1c73a29f6722b5c8b4c23eb)) (by Serhii Ivanenko)
 - specify public access (mandatory when using scoped packages) ([`a7e1c92`](https://gitlab.com/upstra/web/ui-kit/commit/a7e1c9293905a5c08e2b10c195f80dc6d02b001e)) (by Julien Barbay)
+
+---
+
+## [v1.11.4](https://gitlab.com/upstra/web/ui-kit/compare/v1.11.3...v1.11.4)
+
+#### 25 June 2021
+
+### Fixes
+
+- fix react-truncate-markup warnings ([`f2b793e`](https://gitlab.com/upstra/web/ui-kit/commit/f2b793e56e5c34b713598fc959757535c0a74769)) (by Valeriy Malyshev)
+- force reset of input file after picking a file ([`65b44bf`](https://gitlab.com/upstra/web/ui-kit/commit/65b44bf22e3354b76d17abe18c72b15b6a68c51e)) (by Julien Barbay)
+
+---
+
+## [v1.11.3](https://gitlab.com/upstra/web/ui-kit/compare/v1.11.2...v1.11.3)
+
+#### 21 June 2021
+
+### Fixes
+
+- show moderators badge for joined owners and moderators ([`8233d9b`](https://gitlab.com/upstra/web/ui-kit/commit/8233d9b7a7feedbb35f08345c9d1887f2517ba4c)) (by Valeriy Malyshev)
+- Revert "sort communities for category in alphabet order" ([`ae6a59a`](https://gitlab.com/upstra/web/ui-kit/commit/ae6a59af6a127d4b008e4dd55424db07e728538b)) (by Valeriy Malyshev)
+
+---
+
+## [v1.11.2](https://gitlab.com/upstra/web/ui-kit/compare/v1.11.1...v1.11.2)
+
+#### 21 June 2021
+
+### Fixes
+
+- add modeerator to community owner in the background ([`ea70d66`](https://gitlab.com/upstra/web/ui-kit/commit/ea70d6678cabc8b22e4e4e8c537fbd891b215a14)) (by Julien Barbay)
+
+---
+
+## [v1.11.1](https://gitlab.com/upstra/web/ui-kit/compare/v1.11.0...v1.11.1)
+
+#### 19 June 2021
+
+### New Features
+
+- show community badges in search ([`ec5ae8f`](https://gitlab.com/upstra/web/ui-kit/commit/ec5ae8fd97dbdc55b6f971bcc22ae7d06895bb11)) (by Valeriy Malyshev)
+
+### Fixes
+
+- do not request community for non community posts ([`d95ef93`](https://gitlab.com/upstra/web/ui-kit/commit/d95ef9391bfb3eb44d9d6564b572d9cdd8959fbd)) (by Valeriy Malyshev)
+- show default avatar for categories ([`a067e90`](https://gitlab.com/upstra/web/ui-kit/commit/a067e906309b1a3101bd5c9390a3e50c0eb13e2a)) (by Valeriy Malyshev)
+- sort communities for category in alphabet order ([`4f42019`](https://gitlab.com/upstra/web/ui-kit/commit/4f420190e25be6e8faffa72188b1c866a6c3d4b4)) (by Valeriy Malyshev)
+- show the right empty message for my user feed ([`92442ff`](https://gitlab.com/upstra/web/ui-kit/commit/92442ff800c2e0220bec9991351088d0d5fd889b)) (by Valeriy Malyshev)
+- allow owners and moderators to leave communities ([`9eb7db9`](https://gitlab.com/upstra/web/ui-kit/commit/9eb7db9d39a474ade705c35d5b235138f2dc2223)) (by Valeriy Malyshev)
+- fix official badge position ([`fe6bc7b`](https://gitlab.com/upstra/web/ui-kit/commit/fe6bc7bb56041365d8b09eb84acc792965f58c7e)) (by Valeriy Malyshev)
+- wrap long category to another line ([`661ae13`](https://gitlab.com/upstra/web/ui-kit/commit/661ae1382073b7f32908b5bc66de74b9857fe7c3)) (by Valeriy Malyshev)
+
+### Commits
+
+- bump sdk version to 4.5.2 ([`ca7e3f7`](https://gitlab.com/upstra/web/ui-kit/commit/ca7e3f79135694dc0d3f611e57e52d198fb2a883)) (by Valeriy Malyshev)
+- change message ([`632fd25`](https://gitlab.com/upstra/web/ui-kit/commit/632fd25155746202b00b14832b2f062b51430ed3)) (by Valeriy Malyshev)
+
+---
+
+## [v1.11.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.11.0-rc.1...v1.11.0)
+
+#### 11 June 2021
+
+### New Features
+
+- disable Create Community button if connection is not established ([`500a36e`](https://gitlab.com/upstra/web/ui-kit/commit/500a36e9909ffb0bb330446fa61e182e71b8bc4f)) (by Valeriy Malyshev)
+- show the loading ui for search ([`8efa760`](https://gitlab.com/upstra/web/ui-kit/commit/8efa7609036ec7b325d119e340aa1888aeda6661)) (by Valeriy Malyshev)
+
+### Commits
+
+- [`UP-2059`](https://ekoapp.atlassian.net/browse/UP-2059) - hardcoded owner into moderator tab; fixed show 3dots menu ([`128e3aa`](https://gitlab.com/upstra/web/ui-kit/commit/128e3aaacb38fc95b65c19cf60984c86f062a5d7)) (by Serhii Ivanenko)
+- misc: move the reporting out of useUser hook for performance reasons ([`038e7a9`](https://gitlab.com/upstra/web/ui-kit/commit/038e7a9eae11b7d42bcec2c6afa25c63e667707b)) (by Valeriy Malyshev)
+- misc: show post creation error ([`bbaf0db`](https://gitlab.com/upstra/web/ui-kit/commit/bbaf0dba1e7b32d56acdf322c3b3d6ca3706306e)) (by Valeriy Malyshev)
+- misc: update sdk to 4.5.1 ([`6bbfbd4`](https://gitlab.com/upstra/web/ui-kit/commit/6bbfbd463852c463b1598ea4550045881a0ded95)) (by Valeriy Malyshev)
+- [`UP-2059`](https://ekoapp.atlassian.net/browse/UP-2059) - fixed moderators output when owner has assigned moderator role ([`9671355`](https://gitlab.com/upstra/web/ui-kit/commit/9671355e367a71201acc1c5c5d0c2364b34a3687)) (by Serhii Ivanenko)
+- [`UP-2073`](https://ekoapp.atlassian.net/browse/UP-2073) - added patch to prevent redundant queries (isFlagByMe) ([`6697e49`](https://gitlab.com/upstra/web/ui-kit/commit/6697e49baff80b55fa3d5fa4cc5ea6bd2dbc7aaf)) (by Serhii Ivanenko)
+
+---
+
+## [v1.11.0-rc.1](https://gitlab.com/upstra/web/ui-kit/compare/v1.11.0-rc.0...v1.11.0-rc.1)
+
+#### 8 June 2021
+
+### New Features
+
+- align emtpy state, add loading state to category page ([`57e30d3`](https://gitlab.com/upstra/web/ui-kit/commit/57e30d32bdc31ff9e8ed4136510ff8f230fbfd97)) (by Valeriy Malyshev)
+
+### Fixes
+
+- loading state for feeds, explore page ([`d48a953`](https://gitlab.com/upstra/web/ui-kit/commit/d48a953b8929b116bcdcaf00681175e9a12c2413)) (by Valeriy Malyshev)
+- fix 'TypeError: render is not a function' ([`801a9e7`](https://gitlab.com/upstra/web/ui-kit/commit/801a9e7c6203bf203eb0ed977caf87614ff6f6ae)) (by Valeriy Malyshev)
+
+### Commits
+
+- misc: update CI script to support staging environment for v1 ([`ef9770b`](https://gitlab.com/upstra/web/ui-kit/commit/ef9770bf445f6cb5ee7c751663a0b7ff5aadc671)) (by Julien Barbay)
+- misc: remove mock data from prod build ([`d21144f`](https://gitlab.com/upstra/web/ui-kit/commit/d21144f980d5f49651a88e25fd5fa118ce337f8e)) (by Valeriy Malyshev)
+
+---
+
+## [v1.11.0-rc.0](https://gitlab.com/upstra/web/ui-kit/compare/v1.10.2...v1.11.0-rc.0)
+
+#### 7 June 2021
+
+### New Features
+
+- added loading state to feed and explore pages ([`7a04f01`](https://gitlab.com/upstra/web/ui-kit/commit/7a04f012534550a5607e956aed90d81aa5ada3f8)) (by Valeriy Malyshev)
+- [`UP-3029`](https://ekoapp.atlassian.net/browse/UP-3029) expose disconnect function in provider through ref ([`4c3afde`](https://gitlab.com/upstra/web/ui-kit/commit/4c3afdeb3190a58a91adfffc2cd989ba7b2101f1)) (by Julien Barbay)
+- disable Create Community button until request is finished ([`59d44dd`](https://gitlab.com/upstra/web/ui-kit/commit/59d44dd1073d782f4da1d8d70ca4762533e5373c)) (by Valeriy Malyshev)
+- add props to listen the connection status ([`0e31f1d`](https://gitlab.com/upstra/web/ui-kit/commit/0e31f1d9aba147cdea705bf341fcabeded2f46ee)) (by Valeriy Malyshev)
+
+### Commits
+
+- misc: improve perfomance ([`add0dee`](https://gitlab.com/upstra/web/ui-kit/commit/add0dee42eebe9ebfc7e5684801182eb078f2082)) (by Valeriy Malyshev)
 
 ---
 
