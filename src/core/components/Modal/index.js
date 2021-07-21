@@ -13,16 +13,7 @@ import {
   CloseIcon,
 } from './styles';
 
-const Modal = ({
-  size = 'small',
-  className,
-  onOverlayClick,
-  onCancel,
-  title,
-  footer,
-  clean,
-  children,
-}) => {
+const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean, children }) => {
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
   useEffect(() => modalElement && modalElement.focus(), [modalElement]);
