@@ -1,5 +1,15 @@
 # Changelog
 
+## [v2.1.0-rc.2](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0-rc.1...v2.1.0-rc.2)
+
+#### 21 July 2021
+
+### Fixes
+
+- [`UP-3997`](https://ekoapp.atlassian.net/browse/UP-3997) - make modal to be not small by default ([`08975ac`](https://gitlab.com/upstra/web/ui-kit/commit/08975acd4eaf59d00429212e6ff454b7a5a59655)) (by Valeriy Malyshev)
+
+---
+
 ## [v2.1.0-rc.1](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0-rc.0...v2.1.0-rc.1)
 
 #### 20 July 2021
