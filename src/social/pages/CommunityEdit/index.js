@@ -110,7 +110,7 @@ const CommunityEditPage = ({ communityId, tab }) => {
 
 CommunityEditPage.propTypes = {
   communityId: PropTypes.string.isRequired,
-  tab: PropTypes.oneOf(Object.values(PageTabs.EDIT_PROFILE)),
+  tab: PropTypes.oneOf(Object.values(PageTabs)),
 };
 
 CommunityEditPage.defaultProps = {
