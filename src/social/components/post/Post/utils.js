@@ -1,5 +1,11 @@
 import { CommunityUserMembership, PostTargetType } from '@amityco/js-sdk';
-import { isModerator } from '~/helpers/permissions';
+import { isAdmin, isModerator } from '~/helpers/permissions';
+
+function canModerate(globalUserRoles, communityUserRoles) {
+  return (
+    isAdmin(globalUserRoles) || isModerator(globalUserRoles) || isModerator(communityUserRoles)
+  );
+}
 
 function isCommunityMember(currentMember) {
   return currentMember?.communityMembership === CommunityUserMembership.Member;
@@ -15,7 +21,7 @@ export function isPostUnderReview(post, community) {
 
 export function canEdit({ post, community, userRoles, currentUserId, currentMember }) {
   const isCommunityPost = post.targetType === PostTargetType.CommunityFeed;
-  const isModer = isModerator(userRoles);
+  const isModer = canModerate(userRoles, currentMember.roles);
   const isMyPost = post.postedUserId === currentUserId;
 
   if (isCommunityPost) {
@@ -30,7 +36,7 @@ export function canEdit({ post, community, userRoles, currentUserId, currentMemb
 
 export function canDelete({ post, community, userRoles, currentUserId, currentMember }) {
   const isCommunityPost = post.targetType === PostTargetType.CommunityFeed;
-  const isModer = isModerator(userRoles);
+  const isModer = canModerate(userRoles, currentMember.roles);
   const isMyPost = post.postedUserId === currentUserId;
 
   if (isCommunityPost) {
@@ -44,7 +50,7 @@ export function canDelete({ post, community, userRoles, currentUserId, currentMe
 
 export function canReport({ post, community, userRoles, currentUserId, currentMember }) {
   const isCommunityPost = post.targetType === PostTargetType.CommunityFeed;
-  const isModer = isModerator(userRoles);
+  const isModer = canModerate(userRoles, currentMember.roles);
   const isMyPost = post.postedUserId === currentUserId;
 
   if (isCommunityPost) {

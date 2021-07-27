@@ -24,7 +24,7 @@ const useCommunityOneMember = (communityId, currentUserId, communityOwnerId) => 
   const hasModeratorPermissions =
     (isJoined && (isCommunityModerator || isCommunityOwner)) ||
     isModerator(user?.roles) ||
-    isAdmin(user);
+    isAdmin(user?.roles);
 
   return {
     isCurrentMemberReady: !!currentMember.userId,
