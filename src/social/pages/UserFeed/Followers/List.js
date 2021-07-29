@@ -31,7 +31,7 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser }) => {
     });
   }, [handleReport]);
 
-  const { followDecline } = useFollow(currentUserId, userId);
+  const { deleteFollower } = useFollow(currentUserId, userId);
 
   const onRemoveClick = () => {
     confirm({
@@ -49,7 +49,7 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser }) => {
       ),
       cancelText: formatMessage({ id: 'buttonText.cancel' }),
       okText: formatMessage({ id: 'buttonText.remove' }),
-      onOk: followDecline,
+      onOk: deleteFollower,
     });
   };
 
