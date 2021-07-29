@@ -69,7 +69,7 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
       ref={ref}
       key={userId}
       apiKey={process.env.STORYBOOK_API_KEY}
-      apiEndpoint={process.env.STORYBOOK_API_ENDPOINT }
+      apiEndpoint={process.env.STORYBOOK_API_ENDPOINT}
       userId={userId}
       displayName={displayName || userId}
       onConnectionStatusChange={handleConnectionStatusChange}

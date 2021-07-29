@@ -72,7 +72,7 @@ export const PendingPostsBannerContainer = styled.div`
 `;
 
 export const PendingPostsBannerTitle = styled.div`
-  ${({ theme }) => theme.typography.bodyBold}
+  ${({ theme }) => theme.typography.bodyBold};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,6 +87,6 @@ export const PendingPostsBannerTitleBadge = styled.span`
 `;
 
 export const PendingPostsBannerMessage = styled.div`
-  ${({ theme }) => theme.typography.caption}
-  color: ${({ theme }) => theme.palette.base.shade1}
+  ${({ theme }) => theme.typography.caption};
+  color: ${({ theme }) => theme.palette.base.shade1};
 `;

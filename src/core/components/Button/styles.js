@@ -20,7 +20,7 @@ const commonButtonStyles = ({ theme }) => css`
 `;
 
 export const DefaultButton = styled.button`
-  ${commonButtonStyles}
+  ${commonButtonStyles};
   background-color: #fff;
   border: 1px solid #e3e4e8;
   color: ${({ theme }) => theme.palette.neutral.main};
@@ -33,7 +33,7 @@ export const DefaultButton = styled.button`
 `;
 
 export const PrimaryButton = styled.button`
-  ${commonButtonStyles}
+  ${commonButtonStyles};
   border: none;
   background-color: ${({ theme }) => theme.palette.primary.main};
   color: white;
@@ -46,7 +46,7 @@ export const PrimaryButton = styled.button`
 `;
 
 export const SecondaryButton = styled.button`
-  ${commonButtonStyles}
+  ${commonButtonStyles};
   color: ${({ theme }) => theme.palette.neutral.shade1};
   background-color: transparent;
   border: none;

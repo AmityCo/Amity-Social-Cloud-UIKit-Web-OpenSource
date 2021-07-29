@@ -7,6 +7,7 @@ export { default as ArrowRight } from './ArrowRight';
 export { default as EmptyFeed } from './EmptyFeed';
 export { default as Tab } from './Tab';
 export { default as UnknownPost } from './UnknownPost';
+export { default as Pending } from './Pending';
 export { default as MagicWand } from './MagicWand';
 export { default as Play } from './Play';
 export { default as VideoAttachment } from './VideoAttachment';

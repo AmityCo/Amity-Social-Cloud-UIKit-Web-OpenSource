@@ -18,7 +18,10 @@ const useUser = userId => {
     file = { fileUrl: user.avatarCustomUrl };
   }
 
-  return { user, file };
+  return {
+    user,
+    file,
+  };
 };
 
 export default useUser;

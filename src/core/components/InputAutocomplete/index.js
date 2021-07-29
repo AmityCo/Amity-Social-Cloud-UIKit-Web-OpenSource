@@ -31,6 +31,7 @@ const defaultFilter = (items, value) => items.filter(item => item.includes(value
 
 const InputAutocomplete = ({
   value,
+  setValue,
   placeholder,
   items,
   filter,
@@ -80,7 +81,11 @@ const InputAutocomplete = ({
 
     // we need to pass this to nextTick to avoid reopening
     // the menu due to code in useEffect
-    setTimeout(() => setOpen(false), 0);
+    setTimeout(() => {
+      setOpen(false);
+      // reset value
+      setValue('');
+    }, 0);
   };
 
   const LoadMoreButton = loadMore && (
@@ -108,7 +113,10 @@ const InputAutocomplete = ({
         <SuggestionsMenu>
           <ConditionalRender condition={Object.keys(items).length > 1}>
             <InputAutocompleteTabs
-              tabs={Object.keys(items)}
+              tabs={Object.keys(items).map(key => ({
+                value: key,
+                label: key,
+              }))}
               activeTab={activeTab}
               onChange={setActiveTab}
             />
@@ -133,6 +141,7 @@ InputAutocomplete.defaultProps = {
 
 InputAutocomplete.propTypes = {
   value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   items: PropTypes.object,
   filter: PropTypes.func,

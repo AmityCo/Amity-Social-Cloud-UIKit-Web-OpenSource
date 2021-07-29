@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const UIStyles = styled.div`
-  ${({ theme }) => theme.typography.body}
+  ${({ theme }) => theme.typography.body};
   color: ${({ theme }) => theme.palette.base.main};
   width: 100%;
   height: 100%;

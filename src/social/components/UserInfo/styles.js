@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 import UIAvatar from '~/core/components/Avatar';
-import { Message, Pencil } from '~/icons';
+import { Message, Pencil, Pending } from '~/icons';
+import UIOptionMenu from '~/core/components/OptionMenu';
 
 export const MessageIcon = styled(Message)`
   font-size: 15px;
+  margin-right: 8px;
+`;
+
+export const PendingIcon = styled(Pending).attrs({ height: 30, width: 20 })`
   margin-right: 8px;
 `;
 
@@ -39,15 +44,28 @@ export const ProfileName = styled.div`
 `;
 
 export const Count = styled.span`
-  ${({ theme }) => theme.typography.bodyBold}
+  ${({ theme }) => theme.typography.bodyBold};
+  margin-right: 2px;
+`;
+
+export const ClickableCount = styled(Count)`
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 export const CountContainer = styled.div`
-  > *:not(:last-child) {
-    margin-right: 8px;
+  display: flex;
+
+  > *:not(:first-child) {
+    margin-left: 10px;
   }
 `;
 
 export const Description = styled.div`
   margin: 8px 0 12px;
+`;
+
+export const OptionMenu = styled(UIOptionMenu)`
+  margin-left: auto;
 `;

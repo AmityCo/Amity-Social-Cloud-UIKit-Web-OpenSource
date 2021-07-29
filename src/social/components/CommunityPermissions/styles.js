@@ -8,7 +8,7 @@ export const CommunityPermissionsContainer = styled.div`
 
 export const CommunityPermissionsHeader = styled.div`
   padding: 12px 16px;
-  ${({ theme }) => theme.typography.title}
+  ${({ theme }) => theme.typography.title};
   border-bottom: 1px solid ${({ theme }) => theme.palette.base.shade4};
 `;
 

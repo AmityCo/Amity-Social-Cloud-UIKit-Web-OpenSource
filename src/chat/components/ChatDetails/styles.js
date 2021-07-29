@@ -17,7 +17,7 @@ export const ChatDetailsHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 24px 18px 20px;
-  ${({ theme }) => theme.typography.title}
+  ${({ theme }) => theme.typography.title};
   line-height: 1.75;
   color: ${({ theme }) => theme.palette.neutral.shade1};
 `;
@@ -41,13 +41,13 @@ export const TitleInfo = styled.div`
 
 export const TitleInfoLabel = styled.div`
   padding-bottom: 2px;
-  ${({ theme }) => theme.typography.body}
+  ${({ theme }) => theme.typography.body};
   line-height: 16px;
   color: ${({ theme }) => theme.palette.neutral.main};
 `;
 
 export const TitleInfoChatName = styled.div`
-  ${({ theme }) => theme.typography.bodyBold}
+  ${({ theme }) => theme.typography.bodyBold};
   line-height: 24px;
   color: #000000;
 `;

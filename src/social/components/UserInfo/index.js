@@ -6,12 +6,20 @@ import withSDK from '~/core/hocs/withSDK';
 import useUser from '~/core/hooks/useUser';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import UIUserInfo from './UIUserInfo';
+import useFollow from '~/core/hooks/useFollow';
+import useFollowCount from '~/core/hooks/useFollowCount';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-const UserInfo = ({ userId, currentUserId }) => {
+const UserInfo = ({ userId, currentUserId, setFollowActiveTab, setActiveTab }) => {
   const { onEditUser, onMessageUser } = useNavigation();
   const { user, file } = useUser(userId);
+  const { follow, followDecline, isFollowPending, isFollowNone, isFollowAccepted } = useFollow(
+    currentUserId,
+    userId,
+  );
+  const { followerCount, followingCount } = useFollowCount(userId);
+
   const { displayName, description } = user;
   const { fileUrl } = file;
 
@@ -25,9 +33,18 @@ const UserInfo = ({ userId, currentUserId }) => {
       displayName={displayName || DEFAULT_DISPLAY_NAME}
       description={description}
       postsCount={postsCount}
+      onFollowRequest={follow}
+      onFollowDecline={followDecline}
+      setActiveTab={setActiveTab}
+      setFollowActiveTab={setFollowActiveTab}
       isMyProfile={userId === currentUserId}
       onEditUser={onEditUser}
       onMessageUser={onMessageUser}
+      isFollowPending={isFollowPending}
+      isFollowNone={isFollowNone}
+      isFollowAccepted={isFollowAccepted}
+      followerCount={followerCount}
+      followingCount={followingCount}
     />
   );
 };
@@ -35,6 +52,8 @@ const UserInfo = ({ userId, currentUserId }) => {
 UserInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
+  setActiveTab: PropTypes.func.isRequired,
+  setFollowActiveTab: PropTypes.func.isRequired,
 };
 
 export { UIUserInfo };

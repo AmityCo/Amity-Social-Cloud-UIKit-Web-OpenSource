@@ -24,7 +24,7 @@ export const Avatar = styled(UserAvatar)`
 
 export const Title = styled.div`
   width: 135px;
-  ${({ theme }) => theme.typography.bodyBold}
+  ${({ theme }) => theme.typography.bodyBold};
   line-height: 20px;
   text-align: left;
   color: #000;

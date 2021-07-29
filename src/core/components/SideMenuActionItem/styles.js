@@ -4,7 +4,7 @@ import { SecondaryButton } from '~/core/components/Button';
 const actionItemActiveStyles = css`
   ${({ active, theme }) =>
     active &&
-    css`
+    `
       background-color: ${theme.palette.primary.shade3};
       & > .actionItemChild {
         color: ${theme.palette.primary.main};

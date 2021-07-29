@@ -16,7 +16,7 @@ export const CommunityMembersContainer = styled.div`
 `;
 
 export const CommunityMembersHeader = styled.div`
-  ${({ theme }) => theme.typography.title}
+  ${({ theme }) => theme.typography.title};
   padding: 16px;
 `;
 

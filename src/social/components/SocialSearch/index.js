@@ -85,6 +85,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
         {([placeholder]) => (
           <SocialSearchInput
             value={value}
+            setValue={setValue}
             items={items}
             filter={null}
             onChange={handleChange}
