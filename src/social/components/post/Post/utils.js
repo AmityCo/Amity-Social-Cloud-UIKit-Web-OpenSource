@@ -25,7 +25,7 @@ export function canEdit({ post, community, userRoles, currentUserId, currentMemb
   const isMyPost = post.postedUserId === currentUserId;
 
   if (isCommunityPost) {
-    if (community.needApprovalOnPostCreation) {
+    if (isPostUnderReview(post, community)) {
       return false;
     }
 
