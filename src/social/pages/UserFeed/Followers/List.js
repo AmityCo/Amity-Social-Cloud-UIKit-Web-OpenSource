@@ -1,5 +1,5 @@
 import { FollowRequestStatus } from '@amityco/js-sdk';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import React, { useMemo } from 'react';
 
 import useUser from '~/core/hooks/useUser';
@@ -17,15 +17,68 @@ import { Grid } from '~/social/components/community/CategoryCommunitiesList/styl
 import EmptyFeedIcon from '~/icons/EmptyFeed';
 import Skeleton from '~/core/components/Skeleton';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
+import { confirm } from '~/core/components/Confirm';
+import useFollow from '~/core/hooks/useFollow';
 
-const List = ({ currentUserId, hook, emptyMessage }) => {
-  const { user } = useUser(currentUserId);
+const UserItem = ({ currentUserId, userId, allowRemoveUser }) => {
+  const { user } = useUser(userId);
+  const { formatMessage } = useIntl();
+  const { isFlaggedByMe, handleReport } = useReport(user);
+  const [onReportClick] = useAsyncCallback(async () => {
+    await handleReport();
+    notification.success({
+      content: <FormattedMessage id="report.reportSent" />,
+    });
+  }, [handleReport]);
+
+  const { followDecline } = useFollow(currentUserId, userId);
+
+  const onRemoveClick = () => {
+    confirm({
+      title: (
+        <FormattedMessage
+          id="follower.title.removeUser"
+          values={{ displayName: user.displayName }}
+        />
+      ),
+      content: (
+        <FormattedMessage
+          id="follower.body.removeUser"
+          values={{ displayName: user.displayName }}
+        />
+      ),
+      cancelText: formatMessage({ id: 'buttonText.cancel' }),
+      okText: formatMessage({ id: 'buttonText.remove' }),
+      onOk: followDecline,
+    });
+  };
+
+  return (
+    <UserHeaderContainer key={userId}>
+      <Header>
+        <UserHeader userId={userId} />
+        <OptionMenu
+          options={[
+            {
+              name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
+              action: onReportClick,
+            },
+            allowRemoveUser && {
+              name: 'follower.menuItem.removeUser',
+              action: onRemoveClick,
+            },
+          ].filter(Boolean)}
+        />
+      </Header>
+    </UserHeaderContainer>
+  );
+};
+
+const List = ({ currentUserId, hook, emptyMessage, allowRemoveUser }) => {
   const [followings, hasMore, loadMore, loading, loadingMore] = hook(
     currentUserId,
     FollowRequestStatus.Accepted,
   );
-
-  const { isFlaggedByMe, handleReport } = useReport(user);
 
   const items = useMemo(() => {
     function getLoadingItems() {
@@ -42,13 +95,6 @@ const List = ({ currentUserId, hook, emptyMessage }) => {
 
     return [...followings, ...getLoadingItems()];
   }, [followings, loading, loadingMore]);
-
-  const [onReportClick] = useAsyncCallback(async () => {
-    await handleReport();
-    notification.success({
-      content: <FormattedMessage id="report.reportSent" />,
-    });
-  }, [handleReport]);
 
   return (
     <PaginatedList
@@ -69,19 +115,12 @@ const List = ({ currentUserId, hook, emptyMessage }) => {
           <Skeleton count={3} style={{ fontSize: 8 }} />
         ) : (
           followings.map(({ userId }) => (
-            <UserHeaderContainer key={userId}>
-              <Header>
-                <UserHeader userId={userId} />
-                <OptionMenu
-                  options={[
-                    {
-                      name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
-                      action: onReportClick,
-                    },
-                  ]}
-                />
-              </Header>
-            </UserHeaderContainer>
+            <UserItem
+              key={userId}
+              userId={userId}
+              currentUserId={currentUserId}
+              allowRemoveUser={allowRemoveUser}
+            />
           ))
         )
       }

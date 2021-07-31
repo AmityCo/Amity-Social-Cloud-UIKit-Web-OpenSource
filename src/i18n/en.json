@@ -100,12 +100,6 @@
   "tabs.pending": "Pending",
   "tabs.members": "Members",
   "tabs.moderators": "Moderators",
-  "placeholder.noResults": "No results found",
-  "user.follow": "Follow",
-  "user.unfollow": "Unfollow",
-  "user.cancel_follow": "Cancel request",
-  "request.accept": "Accept",
-  "request.decline": "Decline",
   "tabs.pendingPosts": "Pending {amount, select, 0 {} other { ({formattedAmount})}}",
   "tabs.permissions": "Permissions",
   "feed.emptyFeed": "This feed is empty",
@@ -138,6 +132,16 @@
   "general.create.capital": "Create",
   "general.done.capital": "Done",
   "chat.member.addMore": "Add or Remove user",
-
-  "video.notReady": "Your video is being processed please try again later"
+  "video.notReady": "Your video is being processed please try again later",
+  "user.follow": "Follow",
+  "user.unfollow": "Unfollow",
+  "user.cancel_follow": "Cancel request",
+  "placeholder.noResults": "No results found",
+  "request.accept": "Accept",
+  "request.decline": "Decline",
+  "follower.title.removeUser": "Remove {displayName} from followers?",
+  "follower.body.removeUser": "We will not notify {displayName} that they've been removed from your followers",
+  "follower.menuItem.removeUser": "Remove user",
+  "buttonText.cancel": "Cancel",
+  "buttonText.remove": "Remove"
 }

@@ -13,6 +13,7 @@ export const EmptyFeed = () => <Icons.EmptyFeed />;
 export const Tab = () => <Icons.Tab />;
 export const UnknownPost = () => <Icons.UnknownPost />;
 export const Pending = () => <Icons.Pending />;
+export const PendingIcon = () => <Icons.PendingIcon />;
 export const MagicWand = () => <Icons.MagicWand />;
 
 export const Camera = () => <Icons.Camera />;

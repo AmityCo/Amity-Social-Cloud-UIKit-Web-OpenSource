@@ -22,7 +22,7 @@ const ImageRenderer = ({ uploading, uploaded }) => {
 
 export const SimpleImageUploader = () => {
   const [loadedImages, setLoadedImages] = useState([]);
-  const [uploadedImages, setUploadedImages] = useState([]);
+  const [, setUploadedImages] = useState([]);
 
   return (
     <UiKitFileLoader onChange={images => setLoadedImages(images)}>
