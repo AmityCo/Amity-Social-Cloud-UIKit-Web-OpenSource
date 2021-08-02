@@ -1,5 +1,15 @@
 # Changelog
 
+## [v2.1.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0-rc.2...v2.1.0)
+
+#### 2 August 2021
+
+### Commits
+
+- fix prop types ([`b30e609`](https://gitlab.com/upstra/web/ui-kit/commit/b30e6094633c3346e72dff35984d631530259cef)) (by Valeriy Malyshev)
+
+---
+
 ## [v2.1.0-rc.2](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0-rc.1...v2.1.0-rc.2)
 
 #### 21 July 2021
