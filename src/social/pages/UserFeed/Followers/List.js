@@ -110,18 +110,16 @@ const List = ({ currentUserId, hook, emptyMessage, allowRemoveUser }) => {
         />
       }
     >
-      {({ skeleton }) =>
+      {({ skeleton, userId }) =>
         skeleton ? (
           <Skeleton count={3} style={{ fontSize: 8 }} />
         ) : (
-          followings.map(({ userId }) => (
-            <UserItem
-              key={userId}
-              userId={userId}
-              currentUserId={currentUserId}
-              allowRemoveUser={allowRemoveUser}
-            />
-          ))
+          <UserItem
+            key={userId}
+            userId={userId}
+            currentUserId={currentUserId}
+            allowRemoveUser={allowRemoveUser}
+          />
         )
       }
     </PaginatedList>
