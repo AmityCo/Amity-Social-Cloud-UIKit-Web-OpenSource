@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import getOnePost from '~/mock/useOnePost';
 
@@ -10,7 +11,12 @@ export default {
 
 export const SDKEditPost = ({ onSave }) => {
   const [post, isLoading] = getOnePost();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return <UiKitPostEditor postId={post.postId} onSave={onSave} />;
 };
 

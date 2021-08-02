@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useIntl } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
 import useElement from '~/core/hooks/useElement';
@@ -20,6 +21,7 @@ const UserSelector = ({
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [queriedUsers = []] = useUserQuery(query);
+  const { formatMessage } = useIntl();
 
   const options = queriedUsers
     .filter(
@@ -66,7 +68,7 @@ const UserSelector = ({
           type="text"
           value={query}
           onChange={e => handleChange(e.target.value)}
-          placeholder="Select user..."
+          placeholder={formatMessage({ id: 'UserSelector.placeholder' })}
         />
       </Selector>
     );

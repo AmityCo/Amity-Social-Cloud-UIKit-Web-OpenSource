@@ -1,6 +1,8 @@
 import { CommunitySortingMethod } from '@amityco/js-sdk';
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
+
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { Grid, ListContainer, ListEmptyState } from './styles';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
@@ -41,8 +43,8 @@ const CategoryCommunitiesList = ({ categoryId }) => {
         emptyState={
           <ListEmptyState
             icon={<EmptyFeedIcon width={48} height={48} />}
-            title="It's empty here..."
-            description="No community found in this category"
+            title={<FormattedMessage id="CategoryCommunitiesList.emptyTitle" />}
+            description={<FormattedMessage id="CategoryCommunitiesList.emptyDescription" />}
           />
         }
       >

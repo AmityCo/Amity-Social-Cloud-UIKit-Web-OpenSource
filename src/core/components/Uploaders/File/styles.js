@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import filesize from 'filesize';
+import { useIntl } from 'react-intl';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Button from '~/core/components/Button';
@@ -84,9 +85,9 @@ const ButtonContainer = styled.div`
   display: flex;
 `;
 
-// TODO: react-intl for title
-
 const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }) => {
+  const { formatMessage } = useIntl();
+
   function removeCallback(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -111,7 +112,7 @@ const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }
         <FileName>{name}</FileName> <FileSize>{filesize(size)}</FileSize>
         <ButtonContainer>
           {!!isRejected && (
-            <RetryButton onClick={retryCallback} title="Click to re-upload the file" />
+            <RetryButton onClick={retryCallback} title={formatMessage({ id: 'file.reUpload' })} />
           )}
 
           {!!onRemove && <RemoveButton onClick={removeCallback} />}

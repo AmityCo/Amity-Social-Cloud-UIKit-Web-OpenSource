@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import React, { memo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import withSDK from '~/core/hocs/withSDK';
 import { confirm } from '~/core/components/Confirm';
@@ -24,9 +24,6 @@ import {
   IconContainer,
   MessageContainer,
 } from './styles';
-
-// TODO: react-intl
-const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -66,6 +63,8 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
+  const { formatMessage } = useIntl();
+
   const [isExpanded, setExpanded] = useState(false);
 
   const {
@@ -85,11 +84,11 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       await handleReportComment();
       if (isFlaggedByMe) {
         notification.success({
-          content: <FormattedMessage id="report.unreportSent" />,
+          content: formatMessage({ id: 'report.unreportSent' }),
         });
       } else {
         notification.success({
-          content: <FormattedMessage id="report.reportSent" />,
+          content: formatMessage({ id: 'report.reportSent' }),
         });
       }
     } catch (err) {
@@ -136,8 +135,8 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     confirm({
       title: <FormattedMessage id={title} />,
       content: <FormattedMessage id={content} />,
-      cancelText: 'Cancel',
-      okText: 'Delete',
+      cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),
+      okText: formatMessage({ id: 'comment.deleteConfirmOkText' }),
       onOk: handleDeleteComment,
     });
   };
@@ -165,7 +164,9 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   const renderedComment = (
     <StyledComment
       commentId={comment.commentId}
-      authorName={commentAuthor.displayName || commentAuthor.userId || DEFAULT_DISPLAY_NAME}
+      authorName={
+        commentAuthor.displayName || commentAuthor.userId || formatMessage({ id: 'anonymous' })
+      }
       authorAvatar={commentAuthorAvatar.fileUrl}
       canDelete={canDelete}
       canEdit={canEdit}

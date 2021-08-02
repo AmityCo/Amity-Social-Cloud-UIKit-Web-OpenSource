@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 import { PostTargetType, FeedType, CommunityFilter } from '@amityco/js-sdk';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
 
@@ -48,7 +49,11 @@ const Feed = ({
       dataLength={posts.length}
       next={loadMore}
       hasMore={hasMore}
-      loader={<h4>Loading...</h4>}
+      loader={
+        <h4>
+          <FormattedMessage id="loading" />
+        </h4>
+      }
     >
       <ConditionalRender condition={showPostCreator}>
         <PostCreator

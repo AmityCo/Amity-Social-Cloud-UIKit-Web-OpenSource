@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: 0 */
 import { FileRepository, ImageSize } from '@amityco/js-sdk';
 import trim from 'lodash/trim';
 

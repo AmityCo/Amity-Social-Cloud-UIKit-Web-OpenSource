@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import SideMenuActionItem from '~/core/components/SideMenuActionItem';
-import SideMenuSection from '~/core/components/SideMenuSection';
+import { FormattedMessage } from 'react-intl';
+
 import { Newspaper, Search } from '~/icons';
 import { PageTypes } from '~/social/constants';
+import SideMenuSection from '~/core/components/SideMenuSection';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 
 export const NewsIcon = styled(Newspaper)`
   font-size: 20px;
@@ -19,13 +21,13 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
   const { onChangePage, page } = useNavigation();
 
   return (
-    <SideMenuSection heading="Community">
+    <SideMenuSection heading={<FormattedMessage id="sidesectioncommunity.community" />}>
       <SideMenuActionItem
         icon={<NewsIcon />}
         onClick={() => onChangePage(PageTypes.NewsFeed)}
         active={page.type === PageTypes.NewsFeed}
       >
-        NewsFeed
+        <FormattedMessage id="sidesectioncommunity.newfeed" />
       </SideMenuActionItem>
 
       {!shouldHideExplore && (
@@ -34,7 +36,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
           onClick={() => onChangePage(PageTypes.Explore)}
           active={page.type === PageTypes.Explore}
         >
-          Explore
+          <FormattedMessage id="sidesectioncommunity.explore" />
         </SideMenuActionItem>
       )}
       {children}

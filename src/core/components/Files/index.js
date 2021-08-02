@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import File from './File';
@@ -23,7 +24,11 @@ export const Files = ({ files, onRemove }) => {
         {visibleFiles.map(file => (
           <File key={file.id} file={file} onRemove={onRemove} />
         ))}
-        {haveHiddenFiles && <ViewAllFilesButton onClick={open}>View all files</ViewAllFilesButton>}
+        {haveHiddenFiles && (
+          <ViewAllFilesButton onClick={open}>
+            <FormattedMessage id="files.all" />
+          </ViewAllFilesButton>
+        )}
       </FilesContainer>
     </ConditionalRender>
   );

@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 
 import { CommunityRepository } from '@amityco/js-sdk';
+import { useIntl } from 'react-intl';
 
 import Modal from '~/core/components/Modal';
 import { confirm } from '~/core/components/Confirm';
@@ -14,12 +15,13 @@ const MODERATOR_ROLE = 'moderator';
 const CommunityCreationModal = ({ isOpen, onClose, currentUserId }) => {
   if (!isOpen) return null;
 
+  const { formatMessage } = useIntl();
   const closeConfirm = () =>
     confirm({
-      title: 'Leave without finishing?',
-      content: 'Your progress won’t be saved. Are you sure to leave this page now?',
-      cancelText: 'Continue editing',
-      okText: 'Leave',
+      title: formatMessage({ id: 'CommunityCreationModal.title' }),
+      content: formatMessage({ id: 'CommunityCreationModal.content' }),
+      cancelText: formatMessage({ id: 'CommunityCreationModal.cancelText' }),
+      okText: formatMessage({ id: 'CommunityCreationModal.okText' }),
       onOk: onClose,
     });
 

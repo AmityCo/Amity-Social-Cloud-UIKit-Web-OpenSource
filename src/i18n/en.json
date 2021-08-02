@@ -6,6 +6,7 @@
 
   "hello": "Hello World",
   "plural.like": "{amount, plural, one {like} other {likes}}",
+  "comment": "Comment",
   "plural.comment": "{amount, plural, one {comment} other {comments}}",
   "plural.member": "{amount, plural, one {member} other {members}}",
   "selectACategory": "Select a category",
@@ -35,17 +36,20 @@
   "post.unknownPost.title": "Something went wrong",
   "post.renderingError.description": "We couldn’t render this post.",
   "post.renderingError.title": "Something went wrong",
+  "post.community": "Community",
+  "post.myTimeline": "My Timeline",
+
   "post.success.approved": "Post approved",
   "post.success.declined": "Post declined",
   "post.success.submittedToReview": "Your post has been submitted to review by moderator",
   "post.error.cannotReview.title": "Post is not available",
   "post.error.cannotReview.description": "The post has been reviewed by another moderator",
-  "delete": "Delete",
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
   "collapsible.viewMoreComments": "View more comments",
   "collapsible.viewMoreReplies": "View more replies",
 
+  "community.createSuccess": "Your community was successfully created",
   "community.updateSuccess": "Your community was successfully updated",
   "community.editProfile": "Edit profile",
   "community.join": "Join",
@@ -57,6 +61,28 @@
   "community.cannotInteract": "Join community to interact with all posts",
   "community.removeUserFromCommunityTitle": "Remove user from community",
   "community.removeUserFromCommunityBody": "This user won't no longer be able to search, post. Continue?",
+  "community.name": "Community name",
+  "community.about": "About",
+  "community.category": "Category",
+  "community.onlyadmincanpost": ">Only admin can post",
+  "community.onlyadmins": "Choose to allow Only Admins to create posts in this community.",
+  "community.categorypermission": "Community permission",
+  "community.addmembers": "Add members",
+  "community.posts": "posts",
+  "community.members": "members",
+  "community.settings": "Settings",
+  "community.leaveCommunity": "Leave Community",
+
+  "CommunityMembers.members": "Members",
+  "CommunityMembers.moderators": "Moderators",
+
+  "EmptyFeed.TargetType.globalFeed": "This feed is empty",
+  "EmptyFeed.TargetType.communityFeed": "This community's feed is empty",
+  "EmptyFeed.TargetType.userFeed": "This user's feed is empty",
+  "EmptyFeed.TargetType.myFeed": "Your feed is empty. Start your first post",
+  "EmptyFeed.exploreCommunity": "Explore Community",
+
+  "UserFeed.tabs.timeline": "Timeline",
   "community.exploreCommunities": "Explore Community",
   "community.permissions.postReview": "Post review",
   "community.permissions.approvePosts": "Approve member posts",
@@ -78,16 +104,116 @@
   "upload.attachmentLimit": "You reached the maximum attachment of {maxFiles}",
   "upload.fileSizeLimit": "One of the selected file is larger than 1GB. Please select a new file.",
   "user.editProfile": "Edit profile",
+  "user.posts": "posts",
   "user.message": "Message",
   "follow.placeholder.noFollowings": "No followings found",
   "follow.placeholder.noFollowers": "No followers found",
+
+  "ProfileSettings.editProfile": "Edit profile",
+  "ProfileSettings.returnTo": "Return to ",
+
+  "SideSectionMyCommunity.myCommunity": "My Community",
+
+  "file.reUpload": "Click to re-upload the file",
+
+  "UserProfileForm.displayname": "Display name",
+  "UserProfileForm.about": "About",
+  "UserProfileForm.title": "General",
+  "UserProfileForm.namePlaceholder": "Enter user display name",
+  "UserProfileForm.requiredDisplayName": "Display name is required",
+  "UserProfileForm.requiredDescription": "Enter something about yourself",
+
+  "UserSelector.placeholder": "Select user...",
+
+  "report.reportUser": "Report user",
+  "report.reportComment": "Report comment",
+  "report.unreportComment": "Unreport comment",
   "report.reportSent": "Report sent",
   "report.unreportSent": "Unreport sent",
-  "report.doReport": "Report",
-  "report.undoReport": "Undo Report",
+
   "comment.deleted": "This comment has been deleted",
   "comment.delete": "Delete comment",
   "comment.edit": "Edit comment",
+  "comment.deleteConfirmContent": "This comment will be permanently deleted. Continue?",
+  "comment.deleteConfirmCancelText": "Cancel",
+  "comment.deleteConfirmOkText": "Delete",
+
+  "dropdown.first": "First",
+  "dropdown.second": "Second",
+
+  "layout.logout": "Log Out",
+  "layout.username": "Jackies",
+
+  "chat.details.chatDetailes": "Chat Detail",
+  "chat.details.communityName": "Community Name",
+
+  "message.flag": "flag",
+  "message.unflag": "Unflag",
+  "message.edit": "Edit",
+  "message.delete": "Delete",
+  "message.deleted": "deleted",
+  "message.unsupportedFormat": "Unsupported message format",
+  "message.saveOptionsError": "There was an error processing your request",
+
+  "MessageComposeBar.placeholder": "Type your message...",
+
+  "RecentChat.chats": "Chats",
+
+  "AddMemberModal.addMembers": "Add members",
+  "AddMemberModal.membersValidationError": "Please select at least one member",
+
+  "add": "Add",
+  "save": "Save",
+  "close": "Close",
+  "reply": "Reply",
+  "delete": "Delete",
+  "create": "Create",
+  "cancel": "Cancel",
+  "loading": "Loading...",
+  "anonymous": "Anonymous",
+  "comment.edited": "Edited",
+  "comment.readmore": "...Read more",
+
+  "communities.nocommunityfound": "No community found",
+
+  "profile.setting": "Profile Settings",
+
+  "sidesectioncommunity.newfeed": "NewsFeed",
+  "sidesectioncommunity.explore": "Explore",
+  "sidesectioncommunity.community": "Community",
+
+  "communityFeed.join": "Join community to interact with all posts",
+  "communityFeed.members": "Members",
+  "communityFeed.moderators": "Moderators",
+
+  "files.all": "View all files",
+
+  "sidebar.community": "Community",
+
+  "CategoryCommunitiesList.emptyTitle": "It's empty here...",
+  "CategoryCommunitiesList.emptyDescription": "No community found in this category",
+
+  "CommentComposeBar.addComment": "Add comment",
+  "CommentComposeBar.replayTo": "Reply to ",
+  "CommentComposeBar.saySomething": "Say something nice",
+
+  "CommunityCreationModal.title": "Leave without finishing?",
+  "CommunityCreationModal.content": "Your progress won’t be saved. Are you sure to leave this page now?",
+  "CommunityCreationModal.cancelText": "Continue editing",
+  "CommunityCreationModal.okText": "Leave",
+
+  "PostAsCommunity.title": "Post as community",
+  "PostAsCommunity.caption": "Enable this will publish the post on behalf of community account",
+
+  "AddMemberAction.title": "Add members",
+  "AddMemberAction.description": "Add your friends to this community to participate in group conversations",
+
+  "CloseCommunityAction.closeConfirm.title": "Close community?",
+  "CloseCommunityAction.closeConfirm.description": "All members will be removed from the community. All posts, messages, reactions and media shared in community will be deleted. This cannot be undone.",
+  "CloseCommunityAction.title": "Close community",
+  "CloseCommunityAction.description": "Closing this community will remove the community page and all its content and comments. This cannot be undone.",
+  "report.doReport": "Report",
+  "report.undoReport": "Undo Report",
   "comment.deleteBody": "This comment will be permanently deleted. Continue?",
   "reply.delete": "Delete reply",
   "reply.deleteBody": "This reply will be permanently deleted. Continue?",

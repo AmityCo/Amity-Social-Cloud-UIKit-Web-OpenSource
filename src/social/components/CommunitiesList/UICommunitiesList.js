@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import CommunityHeader from '~/social/components/community/Header';
 import LoadMore from '~/social/components/LoadMore';
@@ -41,7 +42,11 @@ const UICommunityList = ({
       loader={<div />}
     >
       <LoadMore hasMore={hasMore} loadMore={loadMore} className="no-border">
-        {noCommunitiesFound && <NoResultsMessage>No community found</NoResultsMessage>}
+        {noCommunitiesFound && (
+          <NoResultsMessage>
+            <FormattedMessage id="communities.nocommunityfound" />
+          </NoResultsMessage>
+        )}
 
         {loading && renderLoadingSkeleton()}
 

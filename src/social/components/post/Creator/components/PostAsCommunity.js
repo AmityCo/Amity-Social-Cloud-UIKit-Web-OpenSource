@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { FormattedMessage } from 'react-intl';
 
 const PostAsCommunityContainer = styled.div`
   display: flex;
@@ -27,8 +28,10 @@ const PostAsCommunity = ({ value, onChange }) => (
   <PostAsCommunityContainer>
     <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />
     <div>
-      Post as community
-      <Caption>Enable this will publish the post on behalf of community account</Caption>
+      <FormattedMessage id="PostAsCommunity.title" />
+      <Caption>
+        <FormattedMessage id="PostAsCommunity.caption" />
+      </Caption>
     </div>
   </PostAsCommunityContainer>
 );

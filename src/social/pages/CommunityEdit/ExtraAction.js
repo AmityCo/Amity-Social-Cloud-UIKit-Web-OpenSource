@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { confirm } from '~/core/components/Confirm';
 import {
@@ -12,7 +13,6 @@ import {
 } from './styles';
 
 import useCommunity from '~/social/hooks/useCommunity';
-import { communitySettings } from '~/constants/community';
 
 const ExtraAction = ({ title, bodyText, actionButton }) => {
   return (
@@ -30,7 +30,7 @@ const AddMemberButton = ({ onClick }) => {
   return (
     <ExtraActionPrimaryButton onClick={onClick}>
       <PlusIcon />
-      {communitySettings.ADD_MEMBER_BUTTON_TEXT}
+      <FormattedMessage id="add" />
     </ExtraActionPrimaryButton>
   );
 };
@@ -38,7 +38,7 @@ const AddMemberButton = ({ onClick }) => {
 const CloseCommunityButton = ({ onClick }) => {
   return (
     <ExtraActionButton onClick={onClick}>
-      {communitySettings.CLOSE_COMMUNITY_BUTTON_TEXT}
+      <FormattedMessage id="close" />
     </ExtraActionButton>
   );
 };
@@ -46,8 +46,8 @@ const CloseCommunityButton = ({ onClick }) => {
 export const AddMemberAction = ({ action }) => {
   return (
     <ExtraAction
-      title={communitySettings.ADD_MEMBER_TITLE}
-      bodyText={communitySettings.ADD_MEMBER_BODY}
+      title={<FormattedMessage id="AddMemberAction.title" />}
+      bodyText={<FormattedMessage id="AddMemberAction.description" />}
       actionButton={<AddMemberButton onClick={action} />}
     />
   );
@@ -55,12 +55,14 @@ export const AddMemberAction = ({ action }) => {
 
 export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
   const { closeCommunity } = useCommunity(communityId);
+  const { formatMessage } = useIntl();
+
   const closeConfirm = () =>
     confirm({
-      title: communitySettings.CLOSE_COMMUNITY_CONFIRM_TITLE,
-      content: communitySettings.CLOSE_COMMUNITY_CONFIRM_TEXT,
-      cancelText: 'Cancel',
-      okText: 'Close',
+      title: formatMessage({ id: 'CloseCommunityAction.closeConfirm.title' }),
+      content: formatMessage({ id: 'CloseCommunityAction.closeConfirm.description' }),
+      cancelText: formatMessage({ id: 'cancel' }),
+      okText: formatMessage({ id: 'close' }),
       onOk: () => {
         closeCommunity();
         onCommunityClosed();
@@ -69,8 +71,8 @@ export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
 
   return (
     <ExtraAction
-      title={communitySettings.CLOSE_COMMUNITY_TITLE}
-      bodyText={communitySettings.CLOSE_COMMUNITY_BODY}
+      title={<FormattedMessage id="CloseCommunityAction.title" />}
+      bodyText={<FormattedMessage id="CloseCommunityAction.description" />}
       actionButton={<CloseCommunityButton onClick={closeConfirm} />}
     />
   );

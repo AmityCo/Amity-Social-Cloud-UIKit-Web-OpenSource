@@ -2,6 +2,7 @@
 import React from 'react';
 import Truncate from 'react-truncate-markup';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import { POSITION_LEFT } from '~/helpers/getCssPosition';
 import Button, { PrimaryButton } from '~/core/components/Button';
@@ -66,7 +67,11 @@ const StyledComment = ({
             <span>
               ...
               <CommentDate date={createdAt} />
-              {editedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
+              {editedAt - createdAt > 0 && (
+                <EditedMark>
+                  <FormattedMessage id="comment.edited" />
+                </EditedMark>
+              )}
             </span>
           }
           lines={2}
@@ -75,7 +80,11 @@ const StyledComment = ({
             <AuthorName>{authorName}</AuthorName>
             <Truncate.Atom>
               <CommentDate date={createdAt} />
-              {editedAt - createdAt > 0 && <EditedMark>Edited</EditedMark>}
+              {editedAt - createdAt > 0 && (
+                <EditedMark>
+                  <FormattedMessage id="comment.edited" />
+                </EditedMark>
+              )}
             </Truncate.Atom>
           </CommentHeader>
         </Truncate>
@@ -84,8 +93,12 @@ const StyledComment = ({
           <CommentEditContainer>
             <CommentEditTextarea value={text} onChange={e => setText(e.target.value)} />
             <ButtonContainer>
-              <Button onClick={cancelEditing}>Cancel</Button>
-              <PrimaryButton onClick={() => handleEdit(text)}>Save</PrimaryButton>
+              <Button onClick={cancelEditing}>
+                <FormattedMessage id="cancel" />
+              </Button>
+              <PrimaryButton onClick={() => handleEdit(text)}>
+                <FormattedMessage id="save" />
+              </PrimaryButton>
             </ButtonContainer>
           </CommentEditContainer>
           <CommentText>{text}</CommentText>
@@ -99,7 +112,7 @@ const StyledComment = ({
 
             <ConditionalRender condition={canReply}>
               <ReplyButton onClick={onClickReply}>
-                <ReplyIcon /> Reply
+                <ReplyIcon /> <FormattedMessage id="reply" />
               </ReplyButton>
             </ConditionalRender>
             <OptionMenu options={options} pullRight={false} align={POSITION_LEFT} />

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useIntl } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
 import useUser from '~/core/hooks/useUser';
@@ -17,6 +18,8 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) 
   const [text, setText] = useState('');
   const { file } = useUser(currentUserId);
 
+  const { formatMessage } = useIntl();
+
   const addComment = () => {
     if (text === '') return;
     onSubmit(text);
@@ -25,8 +28,12 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) 
 
   const isEmpty = text === '';
 
-  const placeholder = userToReply ? `Reply to ${userToReply}` : 'Say something nice';
-  const submitButtonText = userToReply ? 'Reply' : 'Add comment';
+  const placeholder = userToReply
+    ? formatMessage({ id: 'CommentComposeBar.replayTo' }) + userToReply
+    : formatMessage({ id: 'CommentComposeBar.saySomething' });
+  const submitButtonText = userToReply
+    ? formatMessage({ id: 'reply' })
+    : formatMessage({ id: 'CommentComposeBar.addComment' });
 
   const commentInputRef = useRef();
   useEffect(() => {

@@ -22,7 +22,7 @@ const SideMenuSection = ({ heading, children }) => (
 );
 
 SideMenuSection.propTypes = {
-  heading: PropTypes.string,
+  heading: PropTypes.node,
   children: PropTypes.node,
 };
 

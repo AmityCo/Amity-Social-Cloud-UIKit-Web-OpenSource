@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import useOnePost from '~/mock/useOnePost';
 
@@ -11,7 +12,12 @@ export default {
 // This is the SDK-integrated Post Like Button.
 export const SDKPostLikeButton = ({ onLikeSuccess, onUnlikeSuccess }) => {
   const [post, isLoading] = useOnePost();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return (
     <UiKitPostLikeButton
       postId={post.postId}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import useOnePost from '~/mock/useOnePost';
 import UiKitCommentList from '.';
@@ -9,7 +10,12 @@ export default {
 
 export const SDKCommentList = ({ lastAmount }) => {
   const [post, isLoading] = useOnePost();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
 
   return <UiKitCommentList referenceId={post.postId} last={lastAmount} />;
 };

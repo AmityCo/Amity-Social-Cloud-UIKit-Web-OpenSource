@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
@@ -24,9 +24,6 @@ import {
   CountsContainer,
 } from './styles';
 
-// TODO: react-intl
-// Translations for options buttons, join button, counts.
-
 const UICommunityInfo = ({
   communityId,
   communityCategories,
@@ -46,59 +43,64 @@ const UICommunityInfo = ({
   canReviewPosts,
   name,
   needApprovalOnPostCreation,
-}) => (
-  <Container>
-    <Header>
-      <Avatar avatar={avatarFileUrl} size="big" backgroundImage={CommunityImage} />
-      <ConditionalRender condition={isJoined}>
-        <OptionMenu
-          options={[
-            canEditCommunity && {
-              name: 'Settings',
-              action: () => onEditCommunity(communityId),
-            },
-            canLeaveCommunity && {
-              name: 'Leave Community',
-              action: () => leaveCommunity(communityId),
-            },
-          ].filter(Boolean)}
-        />
+}) => {
+  const { formatMessage } = useIntl();
+
+  return (
+    <Container>
+      <Header>
+        <Avatar avatar={avatarFileUrl} size="big" backgroundImage={CommunityImage} />
+        <ConditionalRender condition={isJoined}>
+          <OptionMenu
+            options={[
+              canEditCommunity && {
+                name: formatMessage({ id: 'community.settings' }),
+                action: () => onEditCommunity(communityId),
+              },
+              canLeaveCommunity && {
+                name: formatMessage({ id: 'community.leaveCommunity' }),
+                action: () => leaveCommunity(communityId),
+              },
+            ].filter(Boolean)}
+          />
+        </ConditionalRender>
+      </Header>
+      <CommunityName isOfficial={isOfficial} isPublic={isPublic} isTitle name={name} />
+      <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>
+      <CountsContainer>
+        <Count>
+          <span className="countNumber">{toHumanString(postsCount || 0)}</span>{' '}
+          <FormattedMessage id="community.posts" />
+        </Count>
+        <Count>
+          <span className="countNumber">{toHumanString(membersCount || 0)}</span>{' '}
+          <FormattedMessage id="community.members" />
+        </Count>
+      </CountsContainer>
+
+      {description && (
+        <Truncate lines={3}>
+          <Description>{description}</Description>
+        </Truncate>
+      )}
+
+      <ConditionalRender condition={!isJoined}>
+        <JoinButton onClick={() => joinCommunity(communityId)}>
+          <PlusIcon /> <FormattedMessage id="community.join" />
+        </JoinButton>
       </ConditionalRender>
-    </Header>
-    <CommunityName isOfficial={isOfficial} isPublic={isPublic} isTitle name={name} />
-    <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>
-    <CountsContainer>
-      <Count>
-        <span className="countNumber">{toHumanString(postsCount || 0)}</span> posts
-      </Count>
-      <Count>
-        <span className="countNumber">{toHumanString(membersCount || 0)}</span> members
-      </Count>
-    </CountsContainer>
+      <ConditionalRender condition={isJoined && canEditCommunity}>
+        <Button fullWidth onClick={() => onEditCommunity(communityId)}>
+          <PencilIcon /> <FormattedMessage id="community.editProfile" />
+        </Button>
+      </ConditionalRender>
 
-    {description && (
-      <Truncate lines={3}>
-        <Description>{description}</Description>
-      </Truncate>
-    )}
-
-    <ConditionalRender condition={!isJoined}>
-      <JoinButton onClick={() => joinCommunity(communityId)}>
-        <PlusIcon /> <FormattedMessage id="community.join" />
-      </JoinButton>
-    </ConditionalRender>
-    <ConditionalRender condition={isJoined && canEditCommunity}>
-      <Button fullWidth onClick={() => onEditCommunity(communityId)}>
-        <PencilIcon /> <FormattedMessage id="community.editProfile" />
-      </Button>
-    </ConditionalRender>
-
-    {needApprovalOnPostCreation && isJoined && pendingPostsCount > 0 && (
-      <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
-    )}
-  </Container>
-);
-
+      {needApprovalOnPostCreation && isJoined && pendingPostsCount > 0 && (
+        <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
+      )}
+    </Container>
+  );
+};
 UICommunityInfo.propTypes = {
   communityId: PropTypes.string.isRequired,
   communityCategories: PropTypes.arrayOf(PropTypes.string),

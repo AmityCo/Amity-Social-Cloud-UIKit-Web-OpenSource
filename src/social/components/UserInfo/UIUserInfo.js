@@ -27,7 +27,6 @@ import {
 
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
 
-// TODO: react-intl
 const UIUserInfo = ({
   userId,
   fileUrl,
@@ -61,7 +60,7 @@ const UIUserInfo = ({
       </Header>
       <ProfileName>{displayName}</ProfileName>
       <CountContainer>
-        <Count>{toHumanString(postsCount)}</Count> posts
+        <Count>{toHumanString(postsCount)}</Count> <FormattedMessage id="user.posts" />
         <ClickableCount
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);

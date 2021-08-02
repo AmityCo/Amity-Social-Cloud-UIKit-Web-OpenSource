@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
@@ -7,7 +9,6 @@ import { LayoutHeader, Username, DropdownIcon, DropDownContainer } from './style
 
 const Layout = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const username = 'Jackies';
 
   return (
     <LayoutHeader>
@@ -19,14 +20,18 @@ const Layout = () => {
       >
         <Avatar />
       </div>
-      <Username>{username}</Username>
+      <Username>
+        <FormattedMessage id="layout.username" />
+      </Username>
       <Popover
         position="bottom"
         isOpen={isOpen}
         align="end"
         content={
           <Menu>
-            <MenuItem>Log out</MenuItem>
+            <MenuItem>
+              <FormattedMessage id="layout.logout" />
+            </MenuItem>
           </Menu>
         }
       >

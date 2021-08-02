@@ -200,7 +200,7 @@ const CommunityForm = ({
           <Field error={errors.displayName}>
             <LabelCounterWrapper>
               <Label htmlFor="displayName" className="required">
-                Community name
+                <FormattedMessage id="community.name" />
               </Label>
               <Counter>{displayName.length}/30</Counter>
             </LabelCounterWrapper>
@@ -220,7 +220,9 @@ const CommunityForm = ({
           </Field>
           <Field error={errors.description}>
             <LabelCounterWrapper>
-              <Label htmlFor="description">About</Label>
+              <Label htmlFor="description">
+                <FormattedMessage id="community.about" />
+              </Label>
               <Counter>{description.length}/180</Counter>
             </LabelCounterWrapper>
             <AboutTextarea
@@ -234,7 +236,7 @@ const CommunityForm = ({
           </Field>
           <Field error={errors.categoryId}>
             <Label htmlFor="categoryId" className="required">
-              Category
+              <FormattedMessage id="community.category" />
             </Label>
             <Controller
               name="categoryId"
@@ -250,10 +252,12 @@ const CommunityForm = ({
           <FormBlock title="Post permission" edit={edit}>
             <SwitchContainer>
               <div>
-                <Label>Only admin can post</Label>
+                <Label>
+                  <FormattedMessage id="community.onlyadmincanpost" />
+                </Label>
 
                 <Description>
-                  Choose to allow Only Admins to create posts in this community.
+                  <FormattedMessage id="community.onlyadmins" />,
                 </Description>
               </div>
               <Controller
@@ -266,7 +270,7 @@ const CommunityForm = ({
             </SwitchContainer>
           </FormBlock>
         </ConditionalRender>
-        <FormBlock title="Community permission" edit={edit}>
+        <FormBlock title={<FormattedMessage id="community.categorypermission" />} edit={edit}>
           <Controller
             name="isPublic"
             render={({ value, onChange }) => (
@@ -279,7 +283,7 @@ const CommunityForm = ({
           <FormBlock title="Community members" edit={edit}>
             <MembersField error={errors.userIds}>
               <Label name="userIds" className="required">
-                Add members
+                <FormattedMessage id="community.addmembers" />
               </Label>
               <Controller
                 name="userIds"
@@ -299,11 +303,11 @@ const CommunityForm = ({
               onCancel();
             }}
           >
-            Cancel
+            <FormattedMessage id="cancel" />
           </Button>
         </ConditionalRender>
         <SubmitButton disabled={disabled} edit={edit}>
-          {edit ? 'Save' : 'Create'}
+          {edit ? <FormattedMessage id="save" /> : <FormattedMessage id="create" />}
         </SubmitButton>
       </Footer>
     </Form>

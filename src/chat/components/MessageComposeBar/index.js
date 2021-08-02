@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
 
@@ -13,6 +14,8 @@ import {
 const MessageComposeBar = ({ onSubmit }) => {
   const [message, setMessage] = useState('');
 
+  const { formatMessage } = useIntl();
+
   const sendMessage = () => {
     if (message === '') return;
     onSubmit(message);
@@ -22,9 +25,9 @@ const MessageComposeBar = ({ onSubmit }) => {
   return (
     <MessageComposeBarContainer>
       <MessageComposeBarInput
-        placeholder="Type your message..."
         type="text"
         value={message}
+        placeholder={formatMessage({ id: 'MessageComposeBar.placeholder' })}
         onChange={e => setMessage(e.target.value)}
         onKeyPress={e => e.key === 'Enter' && sendMessage()}
       />

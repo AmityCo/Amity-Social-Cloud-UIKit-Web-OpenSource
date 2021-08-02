@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { PostTargetType } from '@amityco/js-sdk';
 
@@ -28,7 +29,12 @@ SDKMyFeed.argTypes = {
 // Try a different user with the controls tab.
 export const SDKAnotherUsersFeed = ({ customUserId, showPostCreator }) => {
   const user = useOneUser();
-  if (!user) return <p>Loading...</p>;
+  if (!user)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return (
     <UiKitFeed
       targetType={PostTargetType.UserFeed}
@@ -52,7 +58,12 @@ SDKAnotherUsersFeed.argTypes = {
 
 export const SDKCommunityFeed = ({ showPostCreator }) => {
   const [community, isLoading] = useOneCommunity();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return (
     <UiKitFeed
       targetType={PostTargetType.CommunityFeed}

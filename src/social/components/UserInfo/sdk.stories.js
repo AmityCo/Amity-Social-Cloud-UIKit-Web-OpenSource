@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { HashRouter as Router, Switch, Route, useHistory, useRouteMatch } from 'react-router-dom';
 
 import useOneUser from '~/mock/useOneUser';
@@ -12,9 +13,12 @@ export default {
 
 const SdkUserInfo = () => {
   const user = useOneUser();
-  if (!user) {
-    return <p>Loading...</p>;
-  }
+  if (!user)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
 
   const history = useHistory();
   const { params = {} } = useRouteMatch('/profile/:userId') || {};
@@ -46,7 +50,12 @@ SdkUserInfoApp.storyName = 'My User Info';
 
 export const AnotherUserInfo = () => {
   const [user, loading] = useOneUser();
-  if (!loading) return <p>Loading...</p>;
+  if (!loading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return <UserInfo userId={user.userId} />;
 };
 

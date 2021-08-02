@@ -101,7 +101,7 @@ const UIPostHeader = ({
 
 UIPostHeader.propTypes = {
   avatarFileUrl: PropTypes.string,
-  postAuthorName: PropTypes.string,
+  postAuthorName: PropTypes.node,
   postTargetName: PropTypes.string,
   timeAgo: PropTypes.instanceOf(Date),
   isModerator: PropTypes.bool,

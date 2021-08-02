@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
+
 import { FormattedMessage } from 'react-intl';
 import Skeleton from '~/core/components/Skeleton';
+
 import useTrendingCommunitiesList from '~/social/hooks/useTrendingCommunitiesList';
 import Card from '~/core/components/Card';
 import TrendingItem from '~/social/components/community/TrendingItem';
@@ -54,6 +56,7 @@ const CommunitiesList = styled.ul`
 
 const TrendingList = ({ slim }) => {
   const { onClickCommunity } = useNavigation();
+
   const [communities, , , loading] = useTrendingCommunitiesList();
 
   const title = loading ? (

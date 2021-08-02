@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
-import { useIntl } from 'react-intl';
 import { ImageSize, FileRepository, FeedType, PostTargetType } from '@amityco/js-sdk';
+import { useIntl } from 'react-intl';
 
 import withSDK from '~/core/hocs/withSDK';
 import useCommunity from '~/social/hooks/useCommunity';

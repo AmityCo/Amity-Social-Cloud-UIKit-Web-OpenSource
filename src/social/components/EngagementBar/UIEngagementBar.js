@@ -49,7 +49,7 @@ const UIEngagementBar = ({
         <InteractionBar>
           <PostLikeButton postId={postId} />
           <SecondaryButton onClick={onClickComment}>
-            <CommentIcon /> Comment
+            <CommentIcon /> <FormattedMessage id="comment" />
           </SecondaryButton>
         </InteractionBar>
         <CommentList

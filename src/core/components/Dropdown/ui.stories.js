@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { useArgs } from '@storybook/client-api';
 
 import UiKitDropdown from '.';
@@ -18,8 +19,12 @@ export const SimpleDropdown = () => {
   const [{ isOpen, onClick, position, align }] = useArgs();
   return (
     <UiKitDropdown isOpen={isOpen} position={position} align={align}>
-      <Option onClick={onClick}>First</Option>
-      <Option onClick={onClick}>Second</Option>
+      <Option onClick={onClick}>
+        <FormattedMessage id="dropdown.first" />
+      </Option>
+      <Option onClick={onClick}>
+        <FormattedMessage id="dropdown.second" />
+      </Option>
     </UiKitDropdown>
   );
 };
@@ -60,8 +65,12 @@ export const DropdownWithCustomTrigger = () => {
       // when using custom trigger we should handle close on click outside (if needed)
       handleClose={close}
     >
-      <Option>First</Option>
-      <Option>Second</Option>
+      <Option>
+        <FormattedMessage id="dropdown.first" />
+      </Option>
+      <Option>
+        <FormattedMessage id="dropdown.second" />
+      </Option>
     </UiKitDropdown>
   );
 };
@@ -90,7 +99,7 @@ export const ScrollableDropdownWithCustomTrigger = () => {
   };
 
   const items = Array.from({ length: 20 }).map((item, index) => (
-    <Option key={index}>{`item_${index}`}</Option>
+    <Option key={`item_${index + 1}`}>{`item_${index}`}</Option>
   ));
 
   return (

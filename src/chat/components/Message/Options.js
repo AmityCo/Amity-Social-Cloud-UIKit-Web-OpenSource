@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MessageEditorRepository, MessageFlagRepository } from '@amityco/js-sdk';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
@@ -37,9 +38,13 @@ const Flagging = ({ messageId }) => {
   if (isFlaggedByMe === null) return null;
 
   return isFlaggedByMe ? (
-    <MenuItem onClick={unflagMessage}>unflag</MenuItem>
+    <MenuItem onClick={unflagMessage}>
+      <FormattedMessage id="message.unflag" />
+    </MenuItem>
   ) : (
-    <MenuItem onClick={flagMessage}>flag</MenuItem>
+    <MenuItem onClick={flagMessage}>
+      <FormattedMessage id="message.flag" />
+    </MenuItem>
   );
 };
 
@@ -53,6 +58,9 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   };
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const { formatMessage } = useIntl();
+
   const open = () => {
     setText(data.text || data);
     setIsOpen(true);
@@ -69,7 +77,7 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
       .editText(text)
       .catch(() => {
         notification.error({
-          content: 'There was an error processing your request',
+          content: formatMessage({ id: 'message.saveOptionsError' }),
         });
       })
       .then(close);
@@ -82,9 +90,17 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
 
   const menu = (
     <Menu>
-      {!isIncoming && isSupportedMessageType && <MenuItem onClick={edit}>edit</MenuItem>}
+      {!isIncoming && isSupportedMessageType && (
+        <MenuItem onClick={edit}>
+          <FormattedMessage id="message.edit" />
+        </MenuItem>
+      )}
       {isIncoming && <Flagging messageId={messageId} />}
-      {!isIncoming && <MenuItem onClick={deleteMessage}>delete</MenuItem>}
+      {!isIncoming && (
+        <MenuItem onClick={deleteMessage}>
+          <FormattedMessage id="message.delete" />
+        </MenuItem>
+      )}
     </Menu>
   );
 

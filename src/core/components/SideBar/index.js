@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react';
+import { useIntl } from 'react-intl';
 import customizableComponent from '~/core/hocs/customization';
 import { CommunityAlt } from '~/icons';
 import { SideNavContainer } from './styles';
@@ -6,7 +7,10 @@ import MenuTab from './MenuTab';
 
 const SideNavBar = () => {
   const [active, setActive] = useState(false);
-  const Mockup = [{ name: 'COMMUNITY', icon: <CommunityAlt /> }];
+  const { formatMessage } = useIntl();
+
+  const Mockup = [{ name: formatMessage({ id: 'sidebar.community' }), icon: <CommunityAlt /> }];
+
   return (
     <SideNavContainer>
       {Mockup.map(tab => (

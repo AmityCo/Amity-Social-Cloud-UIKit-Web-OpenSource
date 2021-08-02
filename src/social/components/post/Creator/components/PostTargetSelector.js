@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -65,16 +66,23 @@ const PostTargetSelector = ({
           close();
         }}
       >
-        <Avatar size="tiny" avatar={user.avatarFileUrl} backgroundImage={UserImage} /> My Timeline
+        <Avatar size="tiny" avatar={user.avatarFileUrl} backgroundImage={UserImage} />{' '}
+        <FormattedMessage id="post.myTimeline" />,
       </MenuItem>
 
-      <CommunitySeparator>Community</CommunitySeparator>
+      <CommunitySeparator>
+        <FormattedMessage id="post.community" />,
+      </CommunitySeparator>
       <CommunityList>
         <InfiniteScroll
           dataLength={communities.length}
           next={loadMoreCommunities}
           hasMore={hasMoreCommunities}
-          loader={<h4>Loading...</h4>}
+          loader={
+            <h4>
+              <FormattedMessage id="loading" />
+            </h4>
+          }
           onScroll={loadMoreCommunities}
         >
           {communities.map(community => (

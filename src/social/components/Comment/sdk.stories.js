@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import useOneComment from '~/mock/useOneComment';
 
@@ -10,7 +11,12 @@ export default {
 
 export const SDKComment = ({ readonly, isReplyComment }) => {
   const [comment, isLoading] = useOneComment();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return (
     <UiKitComment
       commentId={comment.commentId}
@@ -35,7 +41,12 @@ SDKComment.argTypes = {
 // TODO - make sure that the comment for this story always has replies.
 export const SDKCommentWithReplies = () => {
   const [comment, isLoading] = useOneComment();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return <UiKitComment commentId={comment.commentId} />;
 };
 

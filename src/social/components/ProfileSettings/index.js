@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import UserProfileForm from '~/social/components/UserProfileForm';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -24,6 +25,7 @@ import {
 } from './styles';
 
 const ProfileSettings = ({ userId, client }) => {
+  const { formatMessage } = useIntl();
   const { onClickUser } = useNavigation();
 
   const [activeTab, setActiveTab] = useState(Tabs.EDIT_PROFILE);
@@ -55,8 +57,10 @@ const ProfileSettings = ({ userId, client }) => {
           <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
         </AvatarContainer>
         <div>
-          <BackLink text={`Return to ${user.displayName}`} />
-          <PageTitle>Profile Settings</PageTitle>
+          <BackLink text={formatMessage({ id: 'ProfileSettings.returnTo' }) + user.displayName} />
+          <PageTitle>
+            <FormattedMessage id="profile.setting" />
+          </PageTitle>
         </div>
       </PageHeader>
       <div>

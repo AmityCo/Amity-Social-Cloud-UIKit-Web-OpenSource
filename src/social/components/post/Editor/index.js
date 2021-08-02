@@ -1,6 +1,7 @@
 import React, { memo, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { PostDataType, PostRepository } from '@amityco/js-sdk';
+import { FormattedMessage } from 'react-intl';
 
 import usePost from '~/social/hooks/usePost';
 import Content from './Content';
@@ -93,7 +94,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
       </ContentContainer>
       <Footer>
         <PostButton disabled={isEmpty} onClick={handleSave}>
-          Save
+          <FormattedMessage id="save" />
         </PostButton>
       </Footer>
     </PostEditorContainer>

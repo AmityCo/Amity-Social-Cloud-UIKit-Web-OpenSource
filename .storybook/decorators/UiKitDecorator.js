@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import MockData from '~/mock';
 

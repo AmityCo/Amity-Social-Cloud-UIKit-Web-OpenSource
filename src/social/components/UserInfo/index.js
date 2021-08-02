@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import { useIntl } from 'react-intl';
 
 import withSDK from '~/core/hocs/withSDK';
 
@@ -9,9 +10,8 @@ import UIUserInfo from './UIUserInfo';
 import useFollow from '~/core/hooks/useFollow';
 import useFollowCount from '~/core/hooks/useFollowCount';
 
-const DEFAULT_DISPLAY_NAME = 'Anonymous';
-
 const UserInfo = ({ userId, currentUserId, setFollowActiveTab, setActiveTab }) => {
+  const { formatMessage } = useIntl();
   const { onEditUser, onMessageUser } = useNavigation();
   const { user, file } = useUser(userId);
   const { follow, followDecline, isFollowPending, isFollowNone, isFollowAccepted } = useFollow(
@@ -30,7 +30,7 @@ const UserInfo = ({ userId, currentUserId, setFollowActiveTab, setActiveTab }) =
     <UIUserInfo
       userId={userId}
       fileUrl={fileUrl}
-      displayName={displayName || DEFAULT_DISPLAY_NAME}
+      displayName={displayName || formatMessage({ id: 'anonymous' })}
       description={description}
       postsCount={postsCount}
       onFollowRequest={follow}

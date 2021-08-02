@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { PostTargetType } from '@amityco/js-sdk';
+import { FormattedMessage } from 'react-intl';
 import { isAdmin, isModerator } from '~/helpers/permissions';
 import usePost from '~/social/hooks/usePost';
 import useCommunity from '~/social/hooks/useCommunity';
@@ -8,11 +9,10 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import UIPostHeader from './UIPostHeader';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 
-const DEFAULT_DISPLAY_NAME = 'Anonymous';
-
 const PostHeader = ({ postId, hidePostTarget, loading }) => {
   const { onClickCommunity, onClickUser } = useNavigation();
   const { post, file, user } = usePost(postId);
+
   const { targetId, targetType, postedUserId, createdAt, editedAt } = post;
 
   // If the post is targetting a community feed, get the name of that community.
@@ -31,7 +31,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
   return (
     <UIPostHeader
       avatarFileUrl={file.fileUrl}
-      postAuthorName={user.displayName || DEFAULT_DISPLAY_NAME}
+      postAuthorName={user.displayName || <FormattedMessage id="anonymous" />}
       postTargetName={postTargetName}
       timeAgo={createdAt}
       isModerator={isCommunityModerator || isModerator(user.roles) || isAdmin(user.roles)}

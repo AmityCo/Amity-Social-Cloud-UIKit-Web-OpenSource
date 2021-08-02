@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import Modal from '~/core/components/Modal';
 import UserSelector from '~/social/components/UserSelector';
@@ -22,6 +23,8 @@ const FormBlock = ({ children }) => (
 );
 
 export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
+  const { formatMessage } = useIntl();
+
   const { errors, control, setError, handleSubmit } = useForm({
     defaultValues: {
       members: [],
@@ -30,14 +33,16 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
 
   const validateNameAndSubmit = async data => {
     if (data.members.length === 0) {
-      setError('members', { message: 'Please select at least one member' });
+      setError('members', {
+        message: formatMessage({ id: 'AddMemberModal.membersValidationError' }),
+      });
       return;
     }
     onSubmit(data);
   };
 
   return (
-    <Modal title="Add members" onCancel={closeConfirm}>
+    <Modal title={formatMessage({ id: 'AddMemberModal.addMembers' })} onCancel={closeConfirm}>
       <FormContainer>
         <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)}>
           <FormBody>
@@ -53,7 +58,9 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
             </FormBlock>
           </FormBody>
           <Footer>
-            <SubmitButton>Add</SubmitButton>
+            <SubmitButton>
+              <FormattedMessage id="add" />
+            </SubmitButton>
           </Footer>
         </Form>
       </FormContainer>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import useOneCommunity from '~/mock/useOneCommunity';
 
@@ -10,7 +11,12 @@ export default {
 
 export const SDKCommunityInfo = () => {
   const [community, isLoading] = useOneCommunity();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
   return <UiKitCommunityInfo communityId={community.communityId} />;
 };
 

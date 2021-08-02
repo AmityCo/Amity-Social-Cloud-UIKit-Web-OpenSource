@@ -1,4 +1,5 @@
 import React, { memo, useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
 
@@ -13,10 +14,17 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import CommunityMemberItem from './CommunityMemberItem';
 import withSDK from '~/core/hocs/withSDK';
 
-import { MemberTabs, tabs } from './constants';
+import { MemberTabs } from './constants';
 import { CommunityMembersContainer, CommunityMembersHeader, CommunityMembersTabs } from './styles';
 
 const CommunityMembers = ({ communityId, currentUserId }) => {
+  const { formatMessage } = useIntl();
+
+  const tabs = {
+    MEMBERS: formatMessage({ id: 'CommunityMembers.members' }),
+    MODERATORS: formatMessage({ id: 'CommunityMembers.moderators' }),
+  };
+
   const { onClickUser } = useNavigation();
   const [activeTab, setActiveTab] = useState(MemberTabs.MEMBERS);
 

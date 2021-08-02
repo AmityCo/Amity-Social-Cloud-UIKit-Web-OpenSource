@@ -1,4 +1,6 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
+
 import useOneCategory from '~/mock/useOneCategory';
 import CategoryCommunitiesList from '.';
 
@@ -8,7 +10,13 @@ export default {
 
 export const SdkCategoryCommunitiesList = ({ showEmpty, ...props }) => {
   const category = useOneCategory();
-  if (!category.categoryId) return <p>Loading...</p>;
+  if (!category.categoryId)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
+
   return (
     <CategoryCommunitiesList {...props} categoryId={showEmpty ? undefined : category.categoryId} />
   );
