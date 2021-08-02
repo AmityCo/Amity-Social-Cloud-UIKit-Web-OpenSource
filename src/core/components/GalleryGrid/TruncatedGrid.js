@@ -125,7 +125,7 @@ const Overlay = styled.div`
   pointer-events: none;
 `;
 
-const TruncatedGrid = ({ className, items, onClick, children }) => {
+const TruncatedGrid = ({ className, items, onClick, children, itemKeyProp }) => {
   const [render = ImageRenderer] = [].concat(children);
   const { length } = items;
 
@@ -143,19 +143,19 @@ const TruncatedGrid = ({ className, items, onClick, children }) => {
     <Square ratio={0.75}>
       <Gallery className={cx(className, config)} count={length}>
         {items.slice(0, 3).map((item, index) => (
-          <Cell key={`#${index}`} onClick={handleClick(index)}>
+          <Cell key={`#${itemKeyProp ? item[itemKeyProp] : index}`} onClick={handleClick(index)}>
             {render(item)}
           </Cell>
         ))}
 
-        <ConditionalRender condition={length >= 4}>
-          <Cell key="#4" onClick={handleClick(3)}>
+        {length >= 4 && (
+          <Cell key={`#${itemKeyProp ? items[3][itemKeyProp] : 4}`} onClick={handleClick(3)}>
             {render(items[3])}
             <ConditionalRender condition={length > 4}>
               <Overlay>+{length - 4}</Overlay>
             </ConditionalRender>
           </Cell>
-        </ConditionalRender>
+        )}
       </Gallery>
     </Square>
   );

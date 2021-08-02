@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
-import { _changeSDKDefaultConfig } from '@amityco/js-sdk';
 import MockData from '~/mock';
 
 const GLOBAL_NAME = 'user';
@@ -38,11 +37,6 @@ const global = {
   },
 };
 
-_changeSDKDefaultConfig({
-  ws: { endpoint: process.env.STORYBOOK_API_ENDPOINT },
-  http: { endpoint: process.env.STORYBOOK_API_ENDPOINT },
-});
-
 const FALLBACK_USER = 'Web-Test,Web-Test';
 
 const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
@@ -75,6 +69,7 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
       ref={ref}
       key={userId}
       apiKey={process.env.STORYBOOK_API_KEY}
+      apiEndpoint={process.env.STORYBOOK_API_ENDPOINT }
       userId={userId}
       displayName={displayName || userId}
       onConnectionStatusChange={handleConnectionStatusChange}

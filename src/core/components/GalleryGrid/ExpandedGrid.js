@@ -23,7 +23,7 @@ const Cell = styled(Square)`
   }
 `;
 
-const ExpandedGrid = ({ className, items, onClick, children }) => {
+const ExpandedGrid = ({ className, items, onClick, children, itemKeyProp }) => {
   const [render = ImageRenderer] = [].concat(children);
   const { length } = items;
 
@@ -32,7 +32,7 @@ const ExpandedGrid = ({ className, items, onClick, children }) => {
   return (
     <Gallery className={className} count={length}>
       {items.map((item, index) => (
-        <Cell key={`#${index}`} onClick={handleClick(index)}>
+        <Cell key={`#${itemKeyProp ? item[itemKeyProp] : index}`} onClick={handleClick(index)}>
           {render(item)}
         </Cell>
       ))}

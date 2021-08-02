@@ -6,7 +6,7 @@ import useFile from '~/core/hooks/useFile';
 
 import StyledImage from './styles';
 
-const Image = ({ fileId, imageFit, noBorder, onRemove } = {}) => {
+const Image = ({ className, fileId, mediaFit, noBorder, onRemove, overlayElements } = {}) => {
   const file = useFile(fileId);
 
   if (!file.fileId) return null;
@@ -17,18 +17,31 @@ const Image = ({ fileId, imageFit, noBorder, onRemove } = {}) => {
     imageSize: ImageSize.Medium,
   });
 
-  return <StyledImage url={fileUrl} imageFit={imageFit} noBorder={noBorder} onRemove={onRemove} />;
+  return (
+    <StyledImage
+      className={className}
+      url={fileUrl}
+      mediaFit={mediaFit}
+      noBorder={noBorder}
+      onRemove={onRemove}
+      overlayElements={overlayElements}
+    />
+  );
 };
 
 Image.propTypes = {
+  className: PropTypes.string,
   fileId: PropTypes.string.isRequired,
-  imageFit: PropTypes.oneOf(['cover', 'contain']),
+  mediaFit: PropTypes.oneOf(['cover', 'contain']),
   noBorder: PropTypes.bool,
   onRemove: PropTypes.func,
+  overlayElements: PropTypes.node,
 };
 
 Image.defaultProps = {
+  className: undefined,
   onRemove: () => {},
+  overlayElements: undefined,
 };
 
 export default Image;

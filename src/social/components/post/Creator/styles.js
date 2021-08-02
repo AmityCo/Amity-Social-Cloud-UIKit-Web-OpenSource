@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { PrimaryButton } from '~/core/components/Button';
 import InputText from '~/core/components/InputText';
 import UIAvatar from '~/core/components/Avatar';
+import VideoAttachment from '~/icons/VideoAttachment';
 
 export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
@@ -42,4 +43,8 @@ export const PostInputText = styled(InputText)`
   & > textarea {
     width: 100%;
   }
+`;
+
+export const VideoAttachmentIcon = styled(VideoAttachment)`
+  vertical-align: -0.125em;
 `;

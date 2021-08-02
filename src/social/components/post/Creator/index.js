@@ -7,6 +7,7 @@ import {
   CommunityRepository,
   PostTargetType,
   FileRepository,
+  FileType,
   ImageSize,
 } from '@amityco/js-sdk';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
@@ -25,6 +26,7 @@ import { backgroundImage as CommunityImage } from '~/icons/Community';
 import PostTargetSelector from './components/PostTargetSelector';
 import UploaderButtons from './components/UploaderButtons';
 import ImagesUploaded from './components/ImagesUploaded';
+import VideosUploaded from './components/VideosUploaded';
 import FilesUploaded from './components/FilesUploaded';
 
 import { createPost, showPostCreatedNotification } from './utils';
@@ -89,10 +91,12 @@ const PostCreatorBar = ({
 
   const [postText, setPostText] = useState('');
   const [postImages, setPostImages] = useState([]);
+  const [postVideos, setPostVideos] = useState([]);
   const [postFiles, setPostFiles] = useState([]);
 
   // Images/files incoming from uploads.
   const [incomingImages, setIncomingImages] = useState([]);
+  const [incomingVideos, setIncomingVideos] = useState([]);
   const [incomingFiles, setIncomingFiles] = useState([]);
 
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -101,22 +105,32 @@ const PostCreatorBar = ({
 
   const [onCreatePost, creating] = useAsyncCallback(async () => {
     const data = {};
+    const attachments = [];
 
     if (postText) data.text = postText;
-    if (postImages.length) data.images = postImages.map(i => i.fileId);
-    if (postFiles.length) data.files = postFiles.map(f => f.fileId);
+    if (postImages.length) {
+      attachments.push(...postImages.map(i => ({ fileId: i.fileId, type: FileType.Image })));
+    }
+    if (postVideos.length) {
+      attachments.push(...postVideos.map(i => ({ fileId: i.fileId, type: FileType.Video })));
+    }
+    if (postFiles.length) {
+      attachments.push(...postFiles.map(i => ({ fileId: i.fileId, type: FileType.File })));
+    }
 
-    const post = await createPost({ ...target, data });
+    const post = await createPost({ ...target, data, attachments });
 
     onCreateSuccess(post.postId);
     setPostText('');
     setPostImages([]);
+    setPostVideos([]);
     setPostFiles([]);
     setIncomingImages([]);
+    setIncomingVideos([]);
     setIncomingFiles([]);
 
     showPostCreatedNotification(post, model);
-  }, [postText, postImages, postFiles, target, onCreateSuccess, model]);
+  }, [postText, postImages, postVideos, postFiles, target, onCreateSuccess, model]);
 
   const onMaxFilesLimit = () => {
     notification.info({
@@ -134,7 +148,8 @@ const PostCreatorBar = ({
     target.targetType === PostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
   const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
-  const isDisabled = isEmpty(postText, postImages, postFiles) || uploadLoading || creating;
+  const isDisabled =
+    isEmpty(postText, postImages, postVideos, postFiles) || uploadLoading || creating;
 
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)}>
@@ -168,6 +183,13 @@ const PostCreatorBar = ({
                 onError={setError}
                 uploadLoading={uploadLoading}
               />
+              <VideosUploaded
+                files={incomingVideos}
+                onLoadingChange={setUploadLoading}
+                onChange={uploadedVideos => setPostVideos(uploadedVideos)}
+                onError={setError}
+                uploadLoading={uploadLoading}
+              />
               <FilesUploaded
                 files={incomingFiles}
                 onLoadingChange={setUploadLoading}
@@ -180,13 +202,15 @@ const PostCreatorBar = ({
         />
         <Footer>
           <UploaderButtons
-            imageUploadDisabled={postFiles.length > 0 || uploadLoading}
-            fileUploadDisabled={postImages.length > 0 || uploadLoading}
+            imageUploadDisabled={postFiles.length > 0 || postVideos.length > 0 || uploadLoading}
+            videoUploadDisabled={postFiles.length > 0 || postImages.length > 0 || uploadLoading}
+            fileUploadDisabled={postImages.length > 0 || postVideos.length > 0 || uploadLoading}
             onChangeImages={newImages => setIncomingImages(newImages)}
+            onChangeVideos={newVideos => setIncomingVideos(newVideos)}
             onChangeFiles={newFiles => setIncomingFiles(newFiles)}
             onMaxFilesLimit={onMaxFilesLimit}
             onFileSizeLimit={onFileSizeLimit}
-            fileLimitRemaining={maxFiles - postFiles.length - postImages.length}
+            fileLimitRemaining={maxFiles - postFiles.length - postImages.length - postVideos.length}
             uploadLoading={uploadLoading}
           />
           <PostButton disabled={isDisabled} onClick={onCreatePost}>

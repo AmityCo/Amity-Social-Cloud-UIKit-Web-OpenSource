@@ -23,6 +23,7 @@ const UiKitProvider = forwardRef(
   (
     {
       apiKey,
+      apiEndpoint,
       authToken,
       userId,
       displayName,
@@ -54,7 +55,7 @@ const UiKitProvider = forwardRef(
 
     const SDKInfo = useMemo(() => {
       if (!client) {
-        client = new ASCClient({ apiKey });
+        client = new ASCClient({ apiKey, apiEndpoint });
         client.on('connectionStatusChanged', data => {
           onConnectionStatusChange && onConnectionStatusChange(data);
 
@@ -125,6 +126,7 @@ const UiKitProvider = forwardRef(
 
 UiKitProvider.propTypes = {
   apiKey: PropTypes.string.isRequired,
+  apiEndpoint: PropTypes.string.isRequired,
   authToken: PropTypes.string,
   userId: PropTypes.string.isRequired,
   displayName: PropTypes.string,

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { FileRepository } from '@amityco/js-sdk';
+import { FileRepository, FileType } from '@amityco/js-sdk';
 
 export default (onChange = () => {}, onLoadingChange = () => {}, onError = () => {}) => {
   const [uploading, setUploading] = useState([]); // local File objects
@@ -68,12 +68,21 @@ export default (onChange = () => {}, onLoadingChange = () => {}, onError = () =>
       try {
         const models = await Promise.all(
           uploading.map(async file => {
-            return FileRepository.uploadFile({
+            const uploader =
+              file.forceType === FileType.Video
+                ? FileRepository.createVideo
+                : FileRepository.createFile;
+
+            const liveObject = uploader({
               file,
               onProgress: ({ currentFile, currentPercent }) => {
                 !cancel && onProgress(currentFile, currentPercent);
               },
             });
+
+            await new Promise(resolve => liveObject.once('loadingStatusChanged', resolve));
+
+            return liveObject.model;
           }),
         );
 

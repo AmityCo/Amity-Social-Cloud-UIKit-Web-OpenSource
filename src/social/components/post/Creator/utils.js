@@ -21,8 +21,8 @@ export const maxFilesWarning = () =>
     content: 'The selected file is larger than 1GB. Please select a new file. ',
   });
 
-export async function createPost({ targetId, targetType, data }) {
-  return promisify(PostRepository.createPost({ targetId, targetType, data }));
+export async function createPost({ targetId, targetType, data, attachments }) {
+  return promisify(PostRepository.createPost({ targetId, targetType, data, attachments }));
 }
 
 /**

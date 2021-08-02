@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import filesize from 'filesize';
@@ -50,6 +50,11 @@ export const CircleIcon = styled(ExclamationCircle)`
   z-index: 2;
 `;
 
+export const RetryButton = styled(Button).attrs({
+  variant: 'secondary',
+  children: <CircleIcon />,
+})``;
+
 export const FileName = styled.div`
   grid-area: name;
   padding: 0 0.5em;
@@ -70,6 +75,11 @@ export const RemoveIcon = styled(Remove)`
   z-index: 2;
 `;
 
+const RemoveButton = styled(Button).attrs({
+  variant: 'secondary',
+  children: <RemoveIcon />,
+})``;
+
 const ButtonContainer = styled.div`
   display: flex;
 `;
@@ -77,14 +87,17 @@ const ButtonContainer = styled.div`
 // TODO: react-intl for title
 
 const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }) => {
-  const removeCallback = useCallback(
-    e => {
-      e.preventDefault();
-      e.stopPropagation();
-      onRemove && onRemove();
-    },
-    [onRemove],
-  );
+  function removeCallback(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    onRemove && onRemove();
+  }
+
+  function retryCallback(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    onRetry && onRetry();
+  }
 
   const isImg = type.includes('image');
 
@@ -98,23 +111,10 @@ const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }
         <FileName>{name}</FileName> <FileSize>{filesize(size)}</FileSize>
         <ButtonContainer>
           {!!isRejected && (
-            <Button
-              variant="secondary"
-              onClick={e => {
-                e.preventDefault();
-                e.stopPropagation();
-                onRetry();
-              }}
-              title="Click to re-upload the file"
-            >
-              <CircleIcon />
-            </Button>
+            <RetryButton onClick={retryCallback} title="Click to re-upload the file" />
           )}
-          {!!onRemove && (
-            <Button variant="secondary" onClick={removeCallback}>
-              <RemoveIcon />
-            </Button>
-          )}
+
+          {!!onRemove && <RemoveButton onClick={removeCallback} />}
         </ButtonContainer>
       </Content>
 
@@ -139,9 +139,9 @@ File.defaultProps = {
   type: '',
   size: 0,
   progress: -1,
-  onRemove: null,
+  onRemove: undefined,
   isRejected: false,
-  onRetry: () => {},
+  onRetry: undefined,
 };
 
 export default File;

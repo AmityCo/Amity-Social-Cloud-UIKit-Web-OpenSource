@@ -55,6 +55,11 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
     [localChildrenPosts],
   );
 
+  const childVideoPosts = useMemo(
+    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.VideoPost),
+    [localChildrenPosts],
+  );
+
   return (
     <PostEditorContainer className={className}>
       <ContentContainer>
@@ -68,6 +73,13 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
           <Content
             data={childImagePosts}
             dataType={PostDataType.ImagePost}
+            onRemoveChild={handleRemoveChild}
+          />
+        )}
+        {childVideoPosts.length > 0 && (
+          <Content
+            data={childVideoPosts}
+            dataType={PostDataType.VideoPost}
             onRemoveChild={handleRemoveChild}
           />
         )}

@@ -104,7 +104,6 @@
   "feed.emptyJoinedCommunityPublicFeed": "Your feed is empty. Start you first post",
   "feed.emptyUserFeed": "No posts yet",
   "feed.emptyMyFeed": "Your feed is empty. Start your first post",
-  "placeholder.noResults": "No results found",
   "chat.groupSetting": "Group settings",
   "chat.message.deleted": "Message was deleted",
   "chat.message.unsupported": "Unsupported message type",
@@ -128,5 +127,7 @@
   "general.cancel.capital": "Cancel",
   "general.create.capital": "Create",
   "general.done.capital": "Done",
-  "chat.member.addMore": "Add or Remove user"
+  "chat.member.addMore": "Add or Remove user",
+
+  "video.notReady": "Your video is being processed please try again later"
 }

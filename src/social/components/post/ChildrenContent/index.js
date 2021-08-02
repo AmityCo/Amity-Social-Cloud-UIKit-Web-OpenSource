@@ -7,6 +7,7 @@ import FileListContent from '~/social/components/post/FileListContent';
 
 const RENDERERS = {
   [PostDataType.ImagePost]: GalleryContent,
+  [PostDataType.VideoPost]: GalleryContent,
   [PostDataType.FilePost]: FileListContent,
 };
 

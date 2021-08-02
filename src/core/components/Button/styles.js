@@ -37,7 +37,7 @@ export const PrimaryButton = styled.button`
   border: none;
   background-color: ${({ theme }) => theme.palette.primary.main};
   color: white;
-  &:hover {
+  &:hover:not(:disabled) {
     opacity: 0.8;
   }
   &:disabled {

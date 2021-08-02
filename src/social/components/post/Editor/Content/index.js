@@ -4,18 +4,22 @@ import { PostDataType } from '@amityco/js-sdk';
 
 import TextContent from './text';
 import ImageContentList from './image';
+import VideoContentList from './video';
 import FileContentList from './file';
 import File from '~/core/components/Uploaders/File';
 import Image from '~/core/components/Uploaders/Image';
+import Video from '~/core/components/Uploaders/Video';
 
 const RENDERERS = {
   [PostDataType.TextPost]: TextContent,
   [PostDataType.ImagePost]: Image,
+  [PostDataType.VideoPost]: Video,
   [PostDataType.FilePost]: File,
 };
 
 const LIST_RENDERERS = {
   [PostDataType.ImagePost]: ImageContentList,
+  [PostDataType.VideoPost]: VideoContentList,
   [PostDataType.FilePost]: FileContentList,
 };
 

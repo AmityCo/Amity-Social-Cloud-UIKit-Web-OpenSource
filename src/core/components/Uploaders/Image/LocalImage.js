@@ -3,37 +3,53 @@ import PropTypes from 'prop-types';
 
 import StyledImage from './styles';
 
-const Image = ({ file, progress, imageFit, noBorder, onRemove, isRejected, retry = () => {} } = {}) => {
+const Image = ({
+  className,
+  file,
+  progress,
+  mediaFit,
+  noBorder,
+  onRemove,
+  isRejected,
+  retry = () => {},
+  overlayElements,
+} = {}) => {
   const fileUrl = URL.createObjectURL(file);
 
   return (
     <StyledImage
+      className={className}
       url={fileUrl}
       progress={progress}
-      imageFit={imageFit}
+      mediaFit={mediaFit}
       noBorder={noBorder}
       onRemove={onRemove}
       isRejected={isRejected}
       onRetry={() => retry()}
+      overlayElements={overlayElements}
     />
   );
 };
 
 Image.propTypes = {
+  className: PropTypes.string,
   file: PropTypes.instanceOf(File).isRequired,
   progress: PropTypes.number,
   noBorder: PropTypes.bool,
-  imageFit: PropTypes.oneOf(['cover', 'contain']),
+  mediaFit: PropTypes.oneOf(['cover', 'contain']),
   onRemove: PropTypes.func,
   isRejected: PropTypes.bool,
   retry: PropTypes.func,
+  overlayElements: PropTypes.node,
 };
 
 Image.defaultProps = {
+  className: undefined,
   progress: -1,
   onRemove: null,
   isRejected: false,
   retry: () => {},
+  overlayElements: undefined,
 };
 
 export default Image;

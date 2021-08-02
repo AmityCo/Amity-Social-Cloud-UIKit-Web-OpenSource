@@ -7,10 +7,11 @@ import Button from '~/core/components/Button';
 import ProgressBar from '~/core/components/ProgressBar';
 import Skeleton from '~/core/components/Skeleton';
 
+import Play from '~/icons/Play';
 import RemoveIcon from '~/icons/Remove';
 import ExclamationCircle from '~/icons/ExclamationCircle';
 
-export const ImageContainer = styled.div`
+export const VideoContainer = styled.div`
   position: relative;
   display: inline-block;
   min-width: 2em;
@@ -32,7 +33,7 @@ export const Content = styled.div`
   height: 100%;
 `;
 
-const ImgPreviewContainerStyles = css`
+const VideoPreviewContainerStyles = css`
   display: block;
   width: 100%;
   height: 100%;
@@ -40,19 +41,25 @@ const ImgPreviewContainerStyles = css`
   object-position: center;
 `;
 
-export const ImgPreview = styled.img`
-  ${ImgPreviewContainerStyles}
+export const VideoPreview = styled(({ src, mimeType, mediaFit, ...props }) => (
+  // eslint-disable-next-line jsx-a11y/media-has-caption
+  <video controls controlsList="nodownload" {...props}>
+    <source src={src} type={mimeType} />
+  </video>
+))`
+  ${VideoPreviewContainerStyles}
+  cursor: pointer;
 `;
 
 export const SkeletonWrapper = styled.div`
-  ${ImgPreviewContainerStyles};
+  ${VideoPreviewContainerStyles};
 
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const ImageSkeleton = () => (
+const VideoSkeleton = () => (
   <SizeMe monitorHeight>
     {({ size }) => {
       const minSize = Math.min(size.width, size.height);
@@ -92,12 +99,19 @@ export const RetryButton = styled(Button).attrs({
   z-index: 3;
 `;
 
-export const ButtonContainer = styled.div`
+const ButtonContainer = styled.div`
   display: flex;
 `;
 
-const Image = ({
-  className,
+export const PlayIcon = styled(Play)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+`;
+
+const Video = ({
   url,
   progress,
   mediaFit,
@@ -105,7 +119,8 @@ const Image = ({
   onRemove,
   isRejected,
   onRetry,
-  overlayElements,
+  mimeType,
+  autoPlay,
 }) => {
   function removeCallback(e) {
     e.preventDefault();
@@ -120,30 +135,33 @@ const Image = ({
   }
 
   return (
-    <ImageContainer className={className} border={!noBorder}>
+    <VideoContainer border={!noBorder}>
       <Content remove={!!onRemove}>
         {url ? (
-          <ImgPreview src={url} mediaFit={mediaFit} className={!!isRejected && 'darken'} />
+          <VideoPreview
+            className={!!isRejected && 'darken'}
+            mediaFit={mediaFit}
+            mimeType={mimeType}
+            src={url}
+            autoPlay={autoPlay}
+          />
         ) : (
-          <ImageSkeleton />
+          <VideoSkeleton />
         )}
 
         <ButtonContainer>
           {!!isRejected && <RetryButton onClick={retryCallback} />}
 
           {!!onRemove && <RemoveButton onClick={removeCallback} />}
-
-          {overlayElements}
         </ButtonContainer>
       </Content>
 
       {!Number.isNaN(progress) && <ProgressBar progress={progress * 100} />}
-    </ImageContainer>
+    </VideoContainer>
   );
 };
 
-Image.propTypes = {
-  className: PropTypes.string,
+Video.propTypes = {
   url: PropTypes.string,
   progress: PropTypes.number,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
@@ -151,17 +169,18 @@ Image.propTypes = {
   onRemove: PropTypes.func,
   isRejected: PropTypes.bool,
   onRetry: PropTypes.func,
-  overlayElements: PropTypes.node,
+  mimeType: PropTypes.string,
+  autoPlay: PropTypes.bool,
 };
 
-Image.defaultProps = {
-  className: undefined,
+Video.defaultProps = {
   url: undefined,
   progress: -1,
   onRemove: undefined,
   isRejected: false,
   onRetry: undefined,
-  overlayElements: undefined,
+  mimeType: undefined,
+  autoPlay: false,
 };
 
-export default Image;
+export default Video;
