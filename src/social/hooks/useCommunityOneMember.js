@@ -1,4 +1,4 @@
-import { CommunityRepository, CommunityUserMembership } from '@amityco/js-sdk';
+import { CommunityRepository } from '@amityco/js-sdk';
 import useUser from '~/core/hooks/useUser';
 import {
   canEditCommunity,
@@ -7,6 +7,7 @@ import {
   isModerator,
 } from '~/helpers/permissions';
 import useLiveObject from '~/core/hooks/useLiveObject';
+import { isCommunityMember } from '~/helpers/utils';
 
 const useCommunityOneMember = (communityId, currentUserId, communityOwnerId) => {
   const currentMember = useLiveObject(
@@ -19,10 +20,8 @@ const useCommunityOneMember = (communityId, currentUserId, communityOwnerId) => 
   const isCommunityOwner = currentUserId === communityOwnerId;
 
   const isCommunityModerator = isModerator(currentMember?.roles);
-  const isJoined = currentMember.communityMembership === CommunityUserMembership.Member;
-
   const hasModeratorPermissions =
-    (isJoined && (isCommunityModerator || isCommunityOwner)) ||
+    (isCommunityMember(currentMember) && (isCommunityModerator || isCommunityOwner)) ||
     isModerator(user?.roles) ||
     isAdmin(user?.roles);
 
@@ -32,11 +31,18 @@ const useCommunityOneMember = (communityId, currentUserId, communityOwnerId) => 
     isCommunityOwner,
     isCommunityModerator,
     hasModeratorPermissions,
-    canEditCommunity:
-      canEditCommunity(isCommunityOwner, currentMember) || canEditCommunity(isCommunityOwner, user),
-    canReviewCommunityPosts:
-      canReviewCommunityPosts(isCommunityOwner, currentMember) ||
-      canReviewCommunityPosts(isCommunityOwner, user),
+    canEditCommunity: canEditCommunity({
+      userId: currentUserId,
+      user,
+      communityUser: currentMember,
+      community: { userId: communityOwnerId },
+    }),
+    canReviewCommunityPosts: canReviewCommunityPosts({
+      userId: currentUserId,
+      user,
+      communityUser: currentMember,
+      community: { userId: communityOwnerId },
+    }),
   };
 };
 

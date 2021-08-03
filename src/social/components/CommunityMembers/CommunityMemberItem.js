@@ -23,7 +23,6 @@ const CommunityMemberItem = ({
   removeRoleFromUsers,
   removeMembers,
   isJoined,
-  communityUserId,
 }) => {
   const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
@@ -50,7 +49,6 @@ const CommunityMemberItem = ({
   };
 
   const memberHasModeratorRole = roles.includes(MODERATOR_ROLE);
-  const memberIsOwner = communityUserId === userId;
 
   const isCurrentUser = currentUserId === userId;
 
@@ -67,13 +65,11 @@ const CommunityMemberItem = ({
               action: onReportClick,
             },
             hasModeratorPermissions &&
-              !memberIsOwner &&
               !memberHasModeratorRole && {
                 name: 'moderatorMenu.promoteToModerator',
                 action: onPromoteModeratorClick,
               },
             hasModeratorPermissions &&
-              !memberIsOwner &&
               memberHasModeratorRole && {
                 name: 'moderatorMenu.dismissModerator',
                 action: onDismissModeratorClick,
@@ -100,7 +96,6 @@ CommunityMemberItem.propTypes = {
   removeMembers: PropTypes.func,
   roles: PropTypes.arrayOf(PropTypes.string),
   isJoined: PropTypes.bool,
-  communityUserId: PropTypes.string,
 };
 
 export default CommunityMemberItem;

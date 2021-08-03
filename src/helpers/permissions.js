@@ -1,8 +1,8 @@
 // TODO: refactor to align with SDK roles once available.
+import { isCommunityMember, isCommunityPost, isPostUnderReview } from '~/helpers/utils';
+
 const ADMIN = 'global-admin';
 const MODERATOR_ROLE = 'moderator';
-const EDIT_COMMUNITY = 'EDIT_COMMUNITY';
-const REVIEW_COMMUNITY_POST = 'REVIEW_COMMUNITY_POST';
 
 export const isModerator = userRoles => {
   if (!userRoles?.length) {
@@ -20,26 +20,73 @@ export const isAdmin = userRoles => {
   return userRoles.includes(ADMIN);
 };
 
-export const canEditCommunity = (isOwner, communityUser) => {
-  if (isOwner) {
+function isPostModerator({ userId, user, communityUser, post, community }) {
+  const hasModeratorPermissions =
+    isAdmin(user.roles) || isModerator(user.roles) || isModerator(communityUser.roles);
+
+  if (isCommunityPost(post)) {
+    const isCommunityOwner = community.userId === userId;
+
+    return hasModeratorPermissions || (isCommunityOwner && isCommunityMember(communityUser));
+  }
+
+  return hasModeratorPermissions;
+}
+
+export function canEditCommunity({ userId, user, communityUser, community }) {
+  const isCommunityOwner = community.userId === userId;
+
+  if (isCommunityOwner && isCommunityMember(communityUser)) {
     return true;
   }
 
-  if (!communityUser?.permissions) {
-    return false;
+  return isAdmin(user.roles) || isModerator(user.roles) || isModerator(communityUser.roles);
+}
+
+export function canReviewCommunityPosts(data) {
+  return canEditCommunity(data);
+}
+
+export function canDeletePost({ userId, user, communityUser, post, community }) {
+  const isPostModer = isPostModerator({ userId, user, communityUser, post, community });
+  const isMyPost = post.postedUserId === userId;
+
+  if (isCommunityPost(post)) {
+    const isUnderReview = isPostUnderReview(post, community);
+    const isMember = isCommunityMember(communityUser);
+
+    return (!isUnderReview && isPostModer) || (isMyPost && isMember);
   }
 
-  return communityUser.permissions.includes(EDIT_COMMUNITY);
-};
+  return isPostModer || isMyPost;
+}
 
-export const canReviewCommunityPosts = (isOwner, communityUser) => {
-  if (isOwner) {
-    return true;
+export function canEditPost({ userId, user, communityUser, post, community }) {
+  const isPostModer = isPostModerator({ userId, user, communityUser, post, community });
+  const isMyPost = post.postedUserId === userId;
+
+  if (isCommunityPost(post)) {
+    if (isPostUnderReview(post, community)) {
+      return false;
+    }
+
+    return isPostModer || (isMyPost && isCommunityMember(communityUser));
   }
 
-  if (!communityUser?.permissions) {
-    return false;
+  return isPostModer || isMyPost;
+}
+
+export function canReportPost({ userId, user, communityUser, post, community }) {
+  const isPostModer = isPostModerator({ userId, user, communityUser, post, community });
+  const isMyPost = post.postedUserId === userId;
+
+  if (isCommunityPost(post)) {
+    if (isPostUnderReview(post, community)) {
+      return false;
+    }
+
+    return !isMyPost && (isPostModer || isCommunityMember(communityUser));
   }
 
-  return communityUser.permissions.includes(REVIEW_COMMUNITY_POST);
-};
+  return !isMyPost;
+}

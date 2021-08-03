@@ -8,6 +8,8 @@ import Modal from '~/core/components/Modal';
 import { notification } from '~/core/components/Notification';
 import Skeleton from '~/core/components/Skeleton';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
+import { canDeletePost, canEditPost, canReportPost } from '~/helpers/permissions';
+import { isPostUnderReview } from '~/helpers/utils';
 import EngagementBar from '~/social/components/EngagementBar';
 import ChildrenContent from '~/social/components/post/ChildrenContent';
 import PostEditor from '~/social/components/post/Editor';
@@ -15,7 +17,6 @@ import Header from '~/social/components/post/Header';
 import Content from '~/social/components/post/Post/Content';
 import useCommunity from '~/social/hooks/useCommunity';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
-import { getAvailableActions, isPostUnderReview } from './utils';
 import { OptionMenu, PostContainer, PostHeadContainer, ReviewButtonsContainer } from './styles';
 
 // Number of lines to show in a text post before truncating.
@@ -92,14 +93,6 @@ const DefaultPostRenderer = ({
     }
   }, [handleDeclinePost]);
 
-  const { canEdit, canDelete, canReport } = getAvailableActions({
-    post,
-    community,
-    userRoles,
-    currentUserId,
-    currentMember,
-  });
-
   const isUnderReview = isPostUnderReview(post, community);
 
   const confirmDeletePost = () =>
@@ -113,15 +106,33 @@ const DefaultPostRenderer = ({
     });
 
   const allOptions = [
-    canEdit && {
+    canEditPost({
+      userId: currentUserId,
+      user: { roles: userRoles },
+      communityUser: currentMember,
+      post,
+      community,
+    }) && {
       name: 'post.editPost',
       action: openEditingPostModal,
     },
-    canDelete && {
+    canDeletePost({
+      userId: currentUserId,
+      user: { roles: userRoles },
+      communityUser: currentMember,
+      post,
+      community,
+    }) && {
       name: 'post.deletePost',
       action: confirmDeletePost,
     },
-    canReport && {
+    canReportPost({
+      userId: currentUserId,
+      user: { roles: userRoles },
+      communityUser: currentMember,
+      post,
+      community,
+    }) && {
       name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
       action: isFlaggedByMe ? onUnreportClick : onReportClick,
     },

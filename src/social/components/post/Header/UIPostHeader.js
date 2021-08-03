@@ -6,7 +6,6 @@ import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import Time from '~/core/components/Time';
 import Avatar from '~/core/components/Avatar';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { backgroundImage as UserImage } from '~/icons/User';
 import {
   Name,
@@ -26,7 +25,7 @@ const UIPostHeader = ({
   postAuthorName,
   postTargetName,
   timeAgo,
-  hasModeratorPermissions,
+  isModerator,
   isEdited,
   onClickCommunity,
   onClickUser,
@@ -56,19 +55,19 @@ const UIPostHeader = ({
   const renderAdditionalInfo = () => {
     return (
       <AdditionalInfo showTime={!!timeAgo}>
-        <ConditionalRender condition={hasModeratorPermissions}>
+        {isModerator && (
           <ModeratorBadge>
             <ShieldIcon /> <FormattedMessage id="moderator" />
           </ModeratorBadge>
-        </ConditionalRender>
-        <ConditionalRender condition={timeAgo}>
-          <Time date={timeAgo} />
-        </ConditionalRender>
-        <ConditionalRender condition={isEdited}>
+        )}
+
+        {timeAgo && <Time date={timeAgo} />}
+
+        {isEdited && (
           <MessageContainer>
             <FormattedMessage id="post.edited" />
           </MessageContainer>
-        </ConditionalRender>
+        )}
       </AdditionalInfo>
     );
   };
@@ -105,7 +104,7 @@ UIPostHeader.propTypes = {
   postAuthorName: PropTypes.string,
   postTargetName: PropTypes.string,
   timeAgo: PropTypes.instanceOf(Date),
-  hasModeratorPermissions: PropTypes.bool,
+  isModerator: PropTypes.bool,
   isEdited: PropTypes.bool,
   onClickCommunity: PropTypes.func,
   onClickUser: PropTypes.func,
@@ -118,7 +117,7 @@ UIPostHeader.defaultProps = {
   postAuthorName: '',
   postTargetName: '',
   timeAgo: null,
-  hasModeratorPermissions: false,
+  isModerator: false,
   isEdited: false,
   onClickCommunity: null,
   onClickUser: null,

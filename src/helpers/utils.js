@@ -1,3 +1,5 @@
+import { CommunityUserMembership, PostTargetType } from '@amityco/js-sdk';
+
 export function stripUndefinedValues(obj) {
   const out = { ...obj };
 
@@ -8,4 +10,20 @@ export function stripUndefinedValues(obj) {
   });
 
   return out;
+}
+
+export function isCommunityMember(communityUser) {
+  return communityUser?.communityMembership === CommunityUserMembership.Member;
+}
+
+export function isCommunityPost(post) {
+  return post.targetType === PostTargetType.CommunityFeed;
+}
+
+export function isPostUnderReview(post, community) {
+  return (
+    !!community.reviewingFeed?.feedId &&
+    !!post.feedId &&
+    community.reviewingFeed?.feedId === post.feedId
+  );
 }

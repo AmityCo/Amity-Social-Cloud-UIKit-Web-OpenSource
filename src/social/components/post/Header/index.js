@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { PostTargetType } from '@amityco/js-sdk';
+import { isAdmin, isModerator } from '~/helpers/permissions';
 import usePost from '~/social/hooks/usePost';
 import useCommunity from '~/social/hooks/useCommunity';
 import { useNavigation } from '~/social/providers/NavigationProvider';
@@ -20,7 +21,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
   const postTargetName = isCommunityPost ? community?.displayName : null;
   const handleClickCommunity = isCommunityPost ? () => onClickCommunity(targetId) : null;
 
-  const { hasModeratorPermissions } = useCommunityOneMember(
+  const { isCommunityModerator } = useCommunityOneMember(
     community?.communityId,
     user.userId,
     community?.userId,
@@ -33,7 +34,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
       postAuthorName={user.displayName || DEFAULT_DISPLAY_NAME}
       postTargetName={postTargetName}
       timeAgo={createdAt}
-      hasModeratorPermissions={hasModeratorPermissions}
+      isModerator={isCommunityModerator || isModerator(user.roles) || isAdmin(user.roles)}
       isEdited={createdAt < editedAt}
       onClickCommunity={handleClickCommunity}
       onClickUser={handleClickUser}
