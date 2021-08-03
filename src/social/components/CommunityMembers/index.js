@@ -20,10 +20,10 @@ import { CommunityMembersContainer, CommunityMembersHeader, CommunityMembersTabs
 const CommunityMembers = ({ communityId, currentUserId }) => {
   const { formatMessage } = useIntl();
 
-  const tabs = {
-    MEMBERS: formatMessage({ id: 'CommunityMembers.members' }),
-    MODERATORS: formatMessage({ id: 'CommunityMembers.moderators' }),
-  };
+  const tabs = [
+    { value: 'MEMBERS', label: formatMessage({ id: 'CommunityMembers.members' }) },
+    { value: 'MODERATORS', label: formatMessage({ id: 'CommunityMembers.moderators' }) },
+  ];
 
   const { onClickUser } = useNavigation();
   const [activeTab, setActiveTab] = useState(MemberTabs.MEMBERS);
