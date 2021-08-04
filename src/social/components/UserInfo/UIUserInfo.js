@@ -11,7 +11,6 @@ import { backgroundImage as UserImage } from '~/icons/User';
 import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
 
 import {
-  Count,
   Avatar,
   Container,
   ProfileName,
@@ -33,7 +32,6 @@ const UIUserInfo = ({
   displayName,
   description,
   isMyProfile,
-  postsCount,
   onEditUser,
   onFollowRequest,
   onFollowDecline,
@@ -60,7 +58,6 @@ const UIUserInfo = ({
       </Header>
       <ProfileName>{displayName}</ProfileName>
       <CountContainer>
-        <Count>{toHumanString(postsCount)}</Count> <FormattedMessage id="user.posts" />
         <ClickableCount
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
@@ -107,7 +104,6 @@ UIUserInfo.propTypes = {
   fileUrl: PropTypes.string,
   displayName: PropTypes.string,
   description: PropTypes.string,
-  postsCount: PropTypes.number,
   isMyProfile: PropTypes.bool,
   onEditUser: PropTypes.func,
   onFollowRequest: PropTypes.func,
@@ -126,7 +122,6 @@ UIUserInfo.defaultProps = {
   fileUrl: '',
   displayName: '',
   description: '',
-  postsCount: 0,
   isMyProfile: false,
   onEditUser: () => {},
   onFollowRequest: () => null,

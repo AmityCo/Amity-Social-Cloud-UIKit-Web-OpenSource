@@ -23,16 +23,12 @@ const UserInfo = ({ userId, currentUserId, setFollowActiveTab, setActiveTab }) =
   const { displayName, description } = user;
   const { fileUrl } = file;
 
-  /* TODO: need method for getting posts amount for current user */
-  const postsCount = 0;
-
   return (
     <UIUserInfo
       userId={userId}
       fileUrl={fileUrl}
       displayName={displayName || formatMessage({ id: 'anonymous' })}
       description={description}
-      postsCount={postsCount}
       onFollowRequest={follow}
       onFollowDecline={followDecline}
       setActiveTab={setActiveTab}

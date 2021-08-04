@@ -16,7 +16,6 @@ UiUserInfo.args = {
   displayName: '',
   description: '',
   isMe: false,
-  postsCount: 0,
 };
 
 UiUserInfo.argTypes = {
@@ -25,5 +24,4 @@ UiUserInfo.argTypes = {
   displayName: { control: { type: 'text' } },
   description: { control: { type: 'text' } },
   isMe: { control: { type: 'boolean' } },
-  postsCount: { control: { type: 'number' } },
 };
