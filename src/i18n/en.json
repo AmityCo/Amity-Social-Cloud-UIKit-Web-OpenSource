@@ -268,5 +268,7 @@
   "follower.body.removeUser": "We will not notify {displayName} that they've been removed from your followers",
   "follower.menuItem.removeUser": "Remove user",
   "buttonText.cancel": "Cancel",
-  "buttonText.remove": "Remove"
+  "buttonText.remove": "Remove",
+  "follow.pendingNotification.title": "Pending requests",
+  "follow.pendingNotification.body": "Your requests are waiting for review"
 }

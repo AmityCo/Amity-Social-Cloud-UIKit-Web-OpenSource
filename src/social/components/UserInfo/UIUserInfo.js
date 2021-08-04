@@ -8,7 +8,7 @@ import Button, { PrimaryButton } from '~/core/components/Button';
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as UserImage } from '~/icons/User';
 
-import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
+import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
 
 import {
   Avatar,
@@ -22,9 +22,14 @@ import {
   OptionMenu,
   CountContainer,
   ClickableCount,
+  PendingNotification,
+  NotificationTitle,
+  NotificationBody,
+  TitleEllipse,
 } from './styles';
 
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
+import useFollowCount from '~/core/hooks/useFollowCount';
 
 const UIUserInfo = ({
   userId,
@@ -49,6 +54,8 @@ const UIUserInfo = ({
       action: onFollowDecline,
     },
   ].filter(Boolean);
+
+  const { pendingCount } = useFollowCount(userId);
 
   return (
     <Container>
@@ -94,6 +101,22 @@ const UIUserInfo = ({
             </PrimaryButton>
           )}
         </>
+      </ConditionalRender>
+      <ConditionalRender condition={isMyProfile && pendingCount > 0}>
+        <PendingNotification
+          onClick={() => {
+            setActiveTab(UserFeedTabs.FOLLOWERS);
+            setTimeout(() => setFollowActiveTab(PENDING_TAB), 250);
+          }}
+        >
+          <NotificationTitle>
+            <TitleEllipse />
+            <FormattedMessage id="follow.pendingNotification.title" />
+          </NotificationTitle>
+          <NotificationBody>
+            <FormattedMessage id="follow.pendingNotification.body" />
+          </NotificationBody>
+        </PendingNotification>
       </ConditionalRender>
     </Container>
   );

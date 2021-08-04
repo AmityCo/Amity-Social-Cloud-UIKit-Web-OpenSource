@@ -69,3 +69,39 @@ export const Description = styled.div`
 export const OptionMenu = styled(UIOptionMenu)`
   margin-left: auto;
 `;
+
+export const PendingNotification = styled.div`
+  background: ${({ theme }) => theme.palette.base.shade4};
+  display: flex;
+  border-radius: 4px;
+  padding: 12px 20px;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const NotificationTitle = styled.div`
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+
+  > *:first-child {
+    margin-right: 5px;
+  }
+`;
+
+export const NotificationBody = styled.div`
+  font-size: 12px;
+`;
+
+export const TitleEllipse = styled.div`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.palette.primary.main};
+`;
