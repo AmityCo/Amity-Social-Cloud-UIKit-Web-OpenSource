@@ -54,10 +54,10 @@ const Followers = ({ currentUserId, userId, activeTab, setActiveTab }) => {
     <div>
       <StyledTabs tabs={allTabs} activeTab={activeTab} onChange={setActiveTab} />
       <ConditionalRender condition={activeTab === FollowersTabs.FOLLOWINGS}>
-        <FollowingsList currentUserId={userId} />
+        <FollowingsList currentUserId={currentUserId} profileUserId={userId} />
       </ConditionalRender>
       <ConditionalRender condition={activeTab === FollowersTabs.FOLLOWERS}>
-        <FollowersList currentUserId={userId} isMe={isMe} />
+        <FollowersList currentUserId={currentUserId} profileUserId={userId} />
       </ConditionalRender>
       <ConditionalRender condition={activeTab.includes(PENDING_TAB) && isMe}>
         <PendingList pendingUsers={pendingUsers} />

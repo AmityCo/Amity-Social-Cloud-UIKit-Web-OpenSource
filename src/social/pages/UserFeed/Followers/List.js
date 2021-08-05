@@ -21,7 +21,7 @@ import { confirm } from '~/core/components/Confirm';
 import useFollow from '~/core/hooks/useFollow';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
-const UserItem = ({ currentUserId, userId, allowRemoveUser, isMe }) => {
+const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser }) => {
   const { user } = useUser(userId);
   const { onClickUser } = useNavigation();
 
@@ -35,6 +35,9 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser, isMe }) => {
   }, [handleReport]);
 
   const { deleteFollower } = useFollow(currentUserId, userId);
+
+  const isMyProfile = profileUserId === currentUserId;
+  const isMe = currentUserId === userId;
 
   const onRemoveClick = () => {
     confirm({
@@ -62,12 +65,12 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser, isMe }) => {
         <UserHeader userId={userId} onClick={onClickUser} />
         <OptionMenu
           options={[
-            {
+            !isMe && {
               name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
               action: onReportClick,
             },
             allowRemoveUser &&
-              isMe && {
+              isMyProfile && {
                 name: 'follower.menuItem.removeUser',
                 action: onRemoveClick,
               },
@@ -78,9 +81,9 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser, isMe }) => {
   );
 };
 
-const List = ({ currentUserId, hook, emptyMessage, allowRemoveUser, isMe = false }) => {
+const List = ({ profileUserId, currentUserId, hook, emptyMessage, allowRemoveUser }) => {
   const [followings, hasMore, loadMore, loading, loadingMore] = hook(
-    currentUserId,
+    profileUserId,
     FollowRequestStatus.Accepted,
   );
 
@@ -122,8 +125,8 @@ const List = ({ currentUserId, hook, emptyMessage, allowRemoveUser, isMe = false
             key={userId}
             userId={userId}
             currentUserId={currentUserId}
+            profileUserId={profileUserId}
             allowRemoveUser={allowRemoveUser}
-            isMe={isMe}
           />
         )
       }
