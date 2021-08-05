@@ -6,18 +6,30 @@ import UserHeader from '~/social/components/UserHeader';
 import useFollow from '~/core/hooks/useFollow';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import withSDK from '~/core/hocs/withSDK';
+import { notification } from '~/core/components/Notification';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 
 const PendingItem = ({ currentUserId, userId }) => {
   const { followAccept, followDecline } = useFollow(currentUserId, userId);
+
+  const [onFollowAccept] = useAsyncCallback(async () => {
+    await followAccept();
+    notification.success({ content: <FormattedMessage id="notification.done" /> });
+  }, [followAccept]);
+
+  const [onFollowDecline] = useAsyncCallback(async () => {
+    await followDecline();
+    notification.success({ content: <FormattedMessage id="notification.done" /> });
+  }, [followDecline]);
 
   return (
     <UserHeaderContainer>
       <UserHeader userId={userId} />
       <ButtonsContainer>
-        <PrimaryButton fullWidth onClick={followAccept}>
+        <PrimaryButton fullWidth onClick={onFollowAccept}>
           <FormattedMessage id="request.accept" />
         </PrimaryButton>
-        <Button fullWidth onClick={followDecline}>
+        <Button fullWidth onClick={onFollowDecline}>
           <FormattedMessage id="request.decline" />
         </Button>
       </ButtonsContainer>

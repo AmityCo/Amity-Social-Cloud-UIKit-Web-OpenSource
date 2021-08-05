@@ -270,5 +270,6 @@
   "buttonText.cancel": "Cancel",
   "buttonText.remove": "Remove",
   "follow.pendingNotification.title": "Pending requests",
-  "follow.pendingNotification.body": "Your requests are waiting for review"
+  "follow.pendingNotification.body": "Your requests are waiting for review",
+  "notification.done": "Done"
 }
