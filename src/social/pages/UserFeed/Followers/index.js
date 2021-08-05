@@ -57,7 +57,7 @@ const Followers = ({ currentUserId, userId, activeTab, setActiveTab }) => {
         <FollowingsList currentUserId={userId} />
       </ConditionalRender>
       <ConditionalRender condition={activeTab === FollowersTabs.FOLLOWERS}>
-        <FollowersList currentUserId={userId} />
+        <FollowersList currentUserId={userId} isMe={isMe} />
       </ConditionalRender>
       <ConditionalRender condition={activeTab.includes(PENDING_TAB) && isMe}>
         <PendingList pendingUsers={pendingUsers} />

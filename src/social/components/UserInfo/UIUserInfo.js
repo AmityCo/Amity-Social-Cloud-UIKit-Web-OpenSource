@@ -68,21 +68,21 @@ const UIUserInfo = ({
         <ClickableCount
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
+            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
           }}
         >
           {toHumanString(followerCount)}
         </ClickableCount>
-        followings
+        <FormattedMessage id="counter.followers" />
         <ClickableCount
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
+            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
           }}
         >
           {toHumanString(followingCount)}
         </ClickableCount>
-        followers
+        <FormattedMessage id="counter.followings" />
       </CountContainer>
       <Description>{description}</Description>
       <ConditionalRender condition={isMyProfile}>

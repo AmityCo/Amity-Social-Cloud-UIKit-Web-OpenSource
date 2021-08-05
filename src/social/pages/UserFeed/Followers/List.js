@@ -20,7 +20,7 @@ import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { confirm } from '~/core/components/Confirm';
 import useFollow from '~/core/hooks/useFollow';
 
-const UserItem = ({ currentUserId, userId, allowRemoveUser }) => {
+const UserItem = ({ currentUserId, userId, allowRemoveUser, isMe }) => {
   const { user } = useUser(userId);
   const { formatMessage } = useIntl();
   const { isFlaggedByMe, handleReport } = useReport(user);
@@ -63,10 +63,11 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser }) => {
               name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
               action: onReportClick,
             },
-            allowRemoveUser && {
-              name: 'follower.menuItem.removeUser',
-              action: onRemoveClick,
-            },
+            allowRemoveUser &&
+              isMe && {
+                name: 'follower.menuItem.removeUser',
+                action: onRemoveClick,
+              },
           ].filter(Boolean)}
         />
       </Header>
@@ -74,7 +75,7 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser }) => {
   );
 };
 
-const List = ({ currentUserId, hook, emptyMessage, allowRemoveUser }) => {
+const List = ({ currentUserId, hook, emptyMessage, allowRemoveUser, isMe = false }) => {
   const [followings, hasMore, loadMore, loading, loadingMore] = hook(
     currentUserId,
     FollowRequestStatus.Accepted,
@@ -119,6 +120,7 @@ const List = ({ currentUserId, hook, emptyMessage, allowRemoveUser }) => {
             userId={userId}
             currentUserId={currentUserId}
             allowRemoveUser={allowRemoveUser}
+            isMe={isMe}
           />
         )
       }

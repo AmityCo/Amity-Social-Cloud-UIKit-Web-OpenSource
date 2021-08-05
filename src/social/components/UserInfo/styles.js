@@ -52,6 +52,7 @@ export const ClickableCount = styled(Count)`
   &:hover {
     cursor: pointer;
   }
+  margin-right: 3px;
 `;
 
 export const CountContainer = styled.div`
