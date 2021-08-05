@@ -19,9 +19,12 @@ import Skeleton from '~/core/components/Skeleton';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { confirm } from '~/core/components/Confirm';
 import useFollow from '~/core/hooks/useFollow';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const UserItem = ({ currentUserId, userId, allowRemoveUser, isMe }) => {
   const { user } = useUser(userId);
+  const { onClickUser } = useNavigation();
+
   const { formatMessage } = useIntl();
   const { isFlaggedByMe, handleReport } = useReport(user);
   const [onReportClick] = useAsyncCallback(async () => {
@@ -56,7 +59,7 @@ const UserItem = ({ currentUserId, userId, allowRemoveUser, isMe }) => {
   return (
     <UserHeaderContainer key={userId}>
       <Header>
-        <UserHeader userId={userId} />
+        <UserHeader userId={userId} onClick={onClickUser} />
         <OptionMenu
           options={[
             {
