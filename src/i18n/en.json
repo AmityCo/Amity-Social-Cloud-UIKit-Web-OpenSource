@@ -260,6 +260,8 @@
   "video.notReady": "Your video is being processed please try again later",
   "user.follow": "Follow",
   "user.unfollow": "Unfollow",
+  "user.unfollow.confirm.title": "Unfollow {displayName}",
+  "user.unfollow.confirm.body": "You’ll have to send a request again to follow {displayName}. Continue?",
   "user.cancel_follow": "Cancel request",
   "placeholder.noResults": "No results found",
   "request.accept": "Accept",
@@ -273,5 +275,6 @@
   "follow.pendingNotification.body": "Your requests are waiting for review",
   "notification.done": "Done",
   "counter.followings": "followings",
-  "counter.followers": "followers"
+  "counter.followers": "followers",
+  "buttonText.unfollow": "Unfollow"
 }

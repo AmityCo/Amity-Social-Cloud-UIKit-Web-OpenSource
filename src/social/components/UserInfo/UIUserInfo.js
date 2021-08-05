@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Button, { PrimaryButton } from '~/core/components/Button';
@@ -16,7 +16,7 @@ import {
   ProfileName,
   Header,
   Description,
-  MessageIcon,
+  PlusIcon,
   PencilIcon,
   PendingIcon,
   OptionMenu,
@@ -29,6 +29,8 @@ import {
 } from './styles';
 
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
+import { confirm } from '~/core/components/Confirm';
+import useUser from '~/core/hooks/useUser';
 import useFollowCount from '~/core/hooks/useFollowCount';
 
 const UIUserInfo = ({
@@ -48,10 +50,30 @@ const UIUserInfo = ({
   followerCount,
   followingCount,
 }) => {
+  const { user } = useUser(userId);
+  const { formatMessage } = useIntl();
+
   const allOptions = [
     isFollowAccepted && {
       name: 'user.unfollow',
-      action: onFollowDecline,
+      action: () =>
+        confirm({
+          title: (
+            <FormattedMessage
+              id="user.unfollow.confirm.title"
+              values={{ displayName: user.displayName }}
+            />
+          ),
+          content: (
+            <FormattedMessage
+              id="user.unfollow.confirm.body"
+              values={{ displayName: user.displayName }}
+            />
+          ),
+          cancelText: formatMessage({ id: 'buttonText.cancel' }),
+          okText: formatMessage({ id: 'buttonText.unfollow' }),
+          onOk: onFollowDecline,
+        }),
     },
   ].filter(Boolean);
 
@@ -97,7 +119,7 @@ const UIUserInfo = ({
           )}
           {isFollowNone && (
             <PrimaryButton fullWidth onClick={() => onFollowRequest()}>
-              <MessageIcon /> <FormattedMessage id="user.follow" />
+              <PlusIcon /> <FormattedMessage id="user.follow" />
             </PrimaryButton>
           )}
         </>

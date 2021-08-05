@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import UIAvatar from '~/core/components/Avatar';
-import { Message, Pencil, Pending } from '~/icons';
+import { Pencil, Pending, Plus } from '~/icons';
 import UIOptionMenu from '~/core/components/OptionMenu';
 
-export const MessageIcon = styled(Message)`
+export const PlusIcon = styled(Plus)`
   font-size: 15px;
   margin-right: 8px;
 `;
