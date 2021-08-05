@@ -32,6 +32,9 @@ import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
 import { confirm } from '~/core/components/Confirm';
 import useUser from '~/core/hooks/useUser';
 import useFollowCount from '~/core/hooks/useFollowCount';
+import useReport from '~/social/hooks/useReport';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
+import { notification } from '~/core/components/Notification';
 
 const UIUserInfo = ({
   userId,
@@ -51,29 +54,40 @@ const UIUserInfo = ({
   followingCount,
 }) => {
   const { user } = useUser(userId);
+  const { isFlaggedByMe, handleReport } = useReport(user);
   const { formatMessage } = useIntl();
 
+  const [onReportClick] = useAsyncCallback(async () => {
+    await handleReport();
+    notification.success({
+      content: (
+        <FormattedMessage id={isFlaggedByMe ? 'report.unreportSent' : 'report.reportSent'} />
+      ),
+    });
+  }, [handleReport]);
+
   const allOptions = [
-    isFollowAccepted && {
-      name: 'user.unfollow',
-      action: () =>
-        confirm({
-          title: (
-            <FormattedMessage
-              id="user.unfollow.confirm.title"
-              values={{ displayName: user.displayName }}
-            />
-          ),
-          content: (
-            <FormattedMessage
-              id="user.unfollow.confirm.body"
-              values={{ displayName: user.displayName }}
-            />
-          ),
-          cancelText: formatMessage({ id: 'buttonText.cancel' }),
-          okText: formatMessage({ id: 'buttonText.unfollow' }),
-          onOk: onFollowDecline,
-        }),
+    isFollowAccepted &&
+      !isMyProfile && {
+        name: 'user.unfollow',
+        action: () =>
+          confirm({
+            title: formatMessage({
+              id: 'user.unfollow.confirm.title',
+              values: { displayName: user.displayName },
+            }),
+            content: formatMessage({
+              id: 'user.unfollow.confirm.body',
+              values: { displayName: user.displayName },
+            }),
+            cancelText: formatMessage({ id: 'buttonText.cancel' }),
+            okText: formatMessage({ id: 'buttonText.unfollow' }),
+            onOk: onFollowDecline,
+          }),
+      },
+    !isMyProfile && {
+      name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
+      action: onReportClick,
     },
   ].filter(Boolean);
 
