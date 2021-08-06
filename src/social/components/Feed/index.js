@@ -10,6 +10,7 @@ import Post from '~/social/components/post/Post';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import EmptyFeed from '~/social/components/EmptyFeed';
+import PrivateFeed from '~/social/components/Feed/PrivateFeed';
 import LoadMore from '~/social/components/LoadMore';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
@@ -25,6 +26,7 @@ const Feed = ({
   onPostCreated,
   goToExplore,
   readonly = false,
+  isHiddenProfile = false,
 }) => {
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
 
@@ -55,42 +57,47 @@ const Feed = ({
         </h4>
       }
     >
-      <ConditionalRender condition={showPostCreator}>
-        <PostCreator
-          targetType={targetType}
-          targetId={targetId}
-          onCreateSuccess={onPostCreated}
-          communities={communities}
-          enablePostTargetPicker={enablePostTargetPicker}
-          hasMoreCommunities={hasMoreCommunities}
-          loadMoreCommunities={loadMoreCommunities}
-        />
-      </ConditionalRender>
-
-      {loading && renderLoadingSkeleton()}
-
-      {!loading && posts.length > 0 && (
-        <LoadMore hasMore={hasMore} loadMore={loadMore} className="load-more no-border">
-          {posts.map(({ postId }) => (
-            <Post
-              key={postId}
-              postId={postId}
-              hidePostTarget={targetType !== PostTargetType.GlobalFeed}
-              readonly={readonly}
+      <ConditionalRender condition={isHiddenProfile}>
+        <PrivateFeed />
+        <>
+          <ConditionalRender condition={showPostCreator}>
+            <PostCreator
+              targetType={targetType}
+              targetId={targetId}
+              onCreateSuccess={onPostCreated}
+              communities={communities}
+              enablePostTargetPicker={enablePostTargetPicker}
+              hasMoreCommunities={hasMoreCommunities}
+              loadMoreCommunities={loadMoreCommunities}
             />
-          ))}
-          {loadingMore && renderLoadingSkeleton()}
-        </LoadMore>
-      )}
+          </ConditionalRender>
 
-      {!loading && posts.length === 0 && (
-        <EmptyFeed
-          targetType={targetType}
-          goToExplore={goToExplore}
-          canPost={showPostCreator}
-          feedType={feedType}
-        />
-      )}
+          {loading && renderLoadingSkeleton()}
+
+          {!loading && posts.length > 0 && (
+            <LoadMore hasMore={hasMore} loadMore={loadMore} className="load-more no-border">
+              {posts.map(({ postId }) => (
+                <Post
+                  key={postId}
+                  postId={postId}
+                  hidePostTarget={targetType !== PostTargetType.GlobalFeed}
+                  readonly={readonly}
+                />
+              ))}
+              {loadingMore && renderLoadingSkeleton()}
+            </LoadMore>
+          )}
+
+          {!loading && posts.length === 0 && (
+            <EmptyFeed
+              targetType={targetType}
+              goToExplore={goToExplore}
+              canPost={showPostCreator}
+              feedType={feedType}
+            />
+          )}
+        </>
+      </ConditionalRender>
     </FeedScrollContainer>
   );
 };
@@ -105,6 +112,7 @@ Feed.propTypes = {
   // below is to be refactored
   goToExplore: PropTypes.func,
   readonly: PropTypes.bool,
+  isHiddenProfile: PropTypes.bool,
 };
 
 export default memo(customizableComponent('Feed', Feed));

@@ -26,6 +26,7 @@ import {
   NotificationTitle,
   NotificationBody,
   TitleEllipse,
+  PendingIconContainer,
 } from './styles';
 
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
@@ -82,7 +83,10 @@ const UIUserInfo = ({
             }),
             cancelText: formatMessage({ id: 'buttonText.cancel' }),
             okText: formatMessage({ id: 'buttonText.unfollow' }),
-            onOk: onFollowDecline,
+            onOk: async () => {
+              await onFollowDecline();
+              setActiveTab(UserFeedTabs.TIMELINE);
+            },
           }),
       },
     !isMyProfile && {
@@ -128,7 +132,10 @@ const UIUserInfo = ({
         <>
           {isFollowPending && (
             <Button fullWidth onClick={() => onFollowDecline()}>
-              <PendingIcon /> <FormattedMessage id="user.cancel_follow" />
+              <PendingIconContainer>
+                <PendingIcon />
+              </PendingIconContainer>
+              <FormattedMessage id="user.cancel_follow" />
             </Button>
           )}
           {isFollowNone && (

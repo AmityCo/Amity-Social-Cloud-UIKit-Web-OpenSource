@@ -14,12 +14,22 @@ import Followers from '~/social/pages/UserFeed/Followers';
 
 import { tabs, UserFeedTabs } from './constants';
 import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
+import useNetworkSettings from '~/core/hooks/useNetworkSettings';
+import useFollow from '~/core/hooks/useFollow';
 
 const UserFeed = ({ userId, currentUserId }) => {
   const [activeTab, setActiveTab] = useState(UserFeedTabs.TIMELINE);
   const [followActiveTab, setFollowActiveTab] = useState(FollowersTabs.FOLLOWINGS);
 
+  const { isPrivateNetwork } = useNetworkSettings();
+  const { isFollowAccepted } = useFollow(currentUserId, userId);
+
   const isMe = userId === currentUserId;
+  const isHiddenProfile = !isMe && isPrivateNetwork && !isFollowAccepted;
+
+  const filteredTabs = isHiddenProfile
+    ? tabs.filter(({ value }) => value === UserFeedTabs.TIMELINE)
+    : tabs;
 
   return (
     // key prop is necessary here, without it this part will never re-render !!!
@@ -33,13 +43,14 @@ const UserFeed = ({ userId, currentUserId }) => {
         />
       }
     >
-      <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <FeedHeaderTabs tabs={filteredTabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <ConditionalRender condition={activeTab === UserFeedTabs.TIMELINE}>
         <Feed
           targetType={isMe ? PostTargetType.MyFeed : PostTargetType.UserFeed}
           targetId={userId}
           showPostCreator={isMe}
+          isHiddenProfile={isHiddenProfile}
         />
       </ConditionalRender>
       <ConditionalRender condition={activeTab === UserFeedTabs.FOLLOWERS}>

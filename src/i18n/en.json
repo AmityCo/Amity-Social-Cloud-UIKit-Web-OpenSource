@@ -276,5 +276,7 @@
   "notification.done": "Done",
   "counter.followings": "followings",
   "counter.followers": "followers",
-  "buttonText.unfollow": "Unfollow"
+  "buttonText.unfollow": "Unfollow",
+  "feed.private.title": "This account is private",
+  "feed.private.body": "Follow this user to see all posts"
 }
