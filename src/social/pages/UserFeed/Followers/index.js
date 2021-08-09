@@ -12,7 +12,7 @@ import FollowersList from '~/social/pages/UserFeed/Followers/FollowersList';
 import PendingList from '~/social/pages/UserFeed/Followers/PendingList';
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
 
-const Followers = ({ currentUserId, userId, activeTab, setActiveTab }) => {
+const Followers = ({ currentUserId, userId, activeTab, setActiveTab, setUserFeedTab }) => {
   const { formatMessage } = useIntl();
   const [allTabs, setAllTabs] = useState(
     Object.values(FollowersTabs).map(value => ({
@@ -54,10 +54,18 @@ const Followers = ({ currentUserId, userId, activeTab, setActiveTab }) => {
     <div>
       <StyledTabs tabs={allTabs} activeTab={activeTab} onChange={setActiveTab} />
       <ConditionalRender condition={activeTab === FollowersTabs.FOLLOWINGS}>
-        <FollowingsList currentUserId={currentUserId} profileUserId={userId} />
+        <FollowingsList
+          currentUserId={currentUserId}
+          profileUserId={userId}
+          setUserFeedTab={setUserFeedTab}
+        />
       </ConditionalRender>
       <ConditionalRender condition={activeTab === FollowersTabs.FOLLOWERS}>
-        <FollowersList currentUserId={currentUserId} profileUserId={userId} />
+        <FollowersList
+          currentUserId={currentUserId}
+          profileUserId={userId}
+          setUserFeedTab={setUserFeedTab}
+        />
       </ConditionalRender>
       <ConditionalRender condition={activeTab.includes(PENDING_TAB) && isMe}>
         <PendingList pendingUsers={pendingUsers} />
@@ -71,6 +79,7 @@ Followers.propTypes = {
   userId: PropTypes.string.isRequired,
   activeTab: PropTypes.string.isRequired,
   setActiveTab: PropTypes.func.isRequired,
+  setUserFeedTab: PropTypes.func.isRequired,
 };
 
 export default withSDK(Followers);

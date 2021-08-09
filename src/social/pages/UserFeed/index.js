@@ -54,7 +54,12 @@ const UserFeed = ({ userId, currentUserId }) => {
         />
       </ConditionalRender>
       <ConditionalRender condition={activeTab === UserFeedTabs.FOLLOWERS}>
-        <Followers userId={userId} activeTab={followActiveTab} setActiveTab={setFollowActiveTab} />
+        <Followers
+          userId={userId}
+          activeTab={followActiveTab}
+          setActiveTab={setFollowActiveTab}
+          setUserFeedTab={setActiveTab}
+        />
       </ConditionalRender>
     </PageLayout>
   );

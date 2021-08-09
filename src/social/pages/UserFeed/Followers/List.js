@@ -20,8 +20,9 @@ import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { confirm } from '~/core/components/Confirm';
 import useFollow from '~/core/hooks/useFollow';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import { UserFeedTabs } from '../constants';
 
-const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser }) => {
+const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser, setUserFeedTab }) => {
   const { user } = useUser(userId);
   const { onClickUser } = useNavigation();
 
@@ -59,10 +60,15 @@ const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser }) => 
     });
   };
 
+  function onClickUserHeader() {
+    onClickUser(userId);
+    setUserFeedTab(UserFeedTabs.TIMELINE);
+  }
+
   return (
     <UserHeaderContainer key={userId}>
       <Header>
-        <UserHeader userId={userId} onClick={onClickUser} />
+        <UserHeader userId={userId} onClick={onClickUserHeader} />
         <OptionMenu
           options={[
             !isMe && {
@@ -81,7 +87,14 @@ const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser }) => 
   );
 };
 
-const List = ({ profileUserId, currentUserId, hook, emptyMessage, allowRemoveUser }) => {
+const List = ({
+  profileUserId,
+  currentUserId,
+  hook,
+  emptyMessage,
+  allowRemoveUser,
+  setUserFeedTab,
+}) => {
   const [followings, hasMore, loadMore, loading, loadingMore] = hook(
     profileUserId,
     FollowRequestStatus.Accepted,
@@ -127,6 +140,7 @@ const List = ({ profileUserId, currentUserId, hook, emptyMessage, allowRemoveUse
             currentUserId={currentUserId}
             profileUserId={profileUserId}
             allowRemoveUser={allowRemoveUser}
+            setUserFeedTab={setUserFeedTab}
           />
         )
       }

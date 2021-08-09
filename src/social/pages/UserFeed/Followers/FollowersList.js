@@ -4,7 +4,7 @@ import React from 'react';
 import useFollowersList from '~/core/hooks/useFollowersList';
 import List from '~/social/pages/UserFeed/Followers/List';
 
-const FollowersList = ({ currentUserId, profileUserId }) => {
+const FollowersList = ({ currentUserId, profileUserId, setUserFeedTab }) => {
   const { formatMessage } = useIntl();
 
   return (
@@ -13,6 +13,7 @@ const FollowersList = ({ currentUserId, profileUserId }) => {
       currentUserId={currentUserId}
       emptyMessage={formatMessage({ id: 'follow.placeholder.noFollowers' })}
       hook={useFollowersList}
+      setUserFeedTab={setUserFeedTab}
       allowRemoveUser
     />
   );
