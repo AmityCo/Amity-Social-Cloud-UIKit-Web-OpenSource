@@ -64,6 +64,7 @@ const communityTypeItems = [
     icon: <WorldIcon />,
     customRenderer: CommunityTypeItem,
     value: true,
+    'data-qa-anchor': 'social-edit-public',
   },
   {
     type: 'Private',
@@ -72,6 +73,7 @@ const communityTypeItems = [
     icon: <LockIcon />,
     customRenderer: CommunityTypeItem,
     value: false,
+    'data-qa-anchor': 'social-edit-private',
   },
 ];
 

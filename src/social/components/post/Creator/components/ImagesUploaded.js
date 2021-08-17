@@ -27,6 +27,7 @@ const ImagesGallery = ({
           return (
             <Image
               key={file?.name}
+              data-qa-anchor="social-create-post-uploaded-image"
               file={file}
               progress={progress[file?.name]}
               isRejected={rejected.includes(file?.name)}
@@ -35,7 +36,14 @@ const ImagesGallery = ({
           );
         }
         const { fileId } = file;
-        return <Image key={fileId} fileId={fileId} onRemove={() => removeFile(file)} />;
+        return (
+          <Image
+            key={fileId}
+            fileId={fileId}
+            onRemove={() => removeFile(file)}
+            data-qa-anchor="social-create-post-uploaded-image"
+          />
+        );
       }}
     </StyledGalleryGrid>
   );

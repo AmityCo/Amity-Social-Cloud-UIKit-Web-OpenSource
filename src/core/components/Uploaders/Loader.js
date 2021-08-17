@@ -34,6 +34,7 @@ const muteEvent = fn => e => {
 
 const FileLoader = ({
   className,
+  'data-qa-anchor': dataQaAnchor,
   mimeType,
   multiple,
   disabled,
@@ -111,6 +112,7 @@ const FileLoader = ({
 
   return (
     <FileLoaderContainer
+      data-qa-anchor={dataQaAnchor}
       id={uniqId}
       className={cx(className, { hover, disabled })}
       onDragEnter={onDragEnter}
@@ -126,6 +128,7 @@ const FileLoader = ({
 
 FileLoader.propTypes = {
   className: PropTypes.string,
+  'data-qa-anchor': PropTypes.string,
   mimeType: PropTypes.string,
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -138,6 +141,7 @@ FileLoader.propTypes = {
 
 FileLoader.defaultProps = {
   className: '',
+  'data-qa-anchor': '',
   mimeType: '*/*',
   multiple: false,
   disabled: false,

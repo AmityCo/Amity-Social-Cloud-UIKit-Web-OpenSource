@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 
 import StyledFile from './styles';
 
-const File = ({ file, progress, onRemove, isRejected, retry = () => {} }) => {
+const File = ({
+  'data-qa-anchor': dataQaAnchor,
+  file,
+  progress,
+  onRemove,
+  isRejected,
+  retry = () => {},
+}) => {
   let fileUrl = '';
 
   if (file.type.includes('image')) {
@@ -12,6 +19,7 @@ const File = ({ file, progress, onRemove, isRejected, retry = () => {} }) => {
 
   return (
     <StyledFile
+      data-qa-anchor={dataQaAnchor}
       name={file.name}
       size={file.size}
       type={file.type}
@@ -25,6 +33,7 @@ const File = ({ file, progress, onRemove, isRejected, retry = () => {} }) => {
 };
 
 File.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   file: PropTypes.instanceOf(File).isRequired,
   progress: PropTypes.number,
   onRemove: PropTypes.func,
@@ -33,6 +42,7 @@ File.propTypes = {
 };
 
 File.defaultProps = {
+  'data-qa-anchor': undefined,
   progress: -1,
   onRemove: null,
   isRejected: false,

@@ -48,7 +48,7 @@ const UIEngagementBar = ({
       <>
         <InteractionBar>
           <PostLikeButton postId={postId} />
-          <SecondaryButton onClick={onClickComment}>
+          <SecondaryButton onClick={onClickComment} data-qa-anchor="social-comment-post">
             <CommentIcon /> <FormattedMessage id="comment" />
           </SecondaryButton>
         </InteractionBar>

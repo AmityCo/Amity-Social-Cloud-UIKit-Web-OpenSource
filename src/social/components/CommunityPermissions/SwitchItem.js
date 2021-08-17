@@ -21,7 +21,11 @@ export default function SwitchItem({ onChange, value }) {
         </SwitchItemPrompt>
       </SwitchItemDescription>
 
-      <Switch value={value} onChange={onChange} />
+      <Switch
+        value={value}
+        onChange={onChange}
+        data-qa-anchor="social-community-approve-post-permission"
+      />
     </SwitchItemContainer>
   );
 }

@@ -26,6 +26,7 @@ const PostCreatorUploaders = ({
 }) => (
   <>
     <StyledLoader
+      data-qa-anchor="social-create-post-attach-image"
       disabled={imageUploadDisabled}
       onChange={onChangeImages}
       uploadLoading={uploadLoading}
@@ -39,6 +40,7 @@ const PostCreatorUploaders = ({
     </StyledLoader>
 
     <StyledLoader
+      data-qa-anchor="social-create-post-attach-video"
       disabled={videoUploadDisabled}
       onChange={files => {
         files.forEach(file => {
@@ -58,6 +60,7 @@ const PostCreatorUploaders = ({
     </StyledLoader>
 
     <StyledLoader
+      data-qa-anchor="social-create-post-attach-file"
       disabled={fileUploadDisabled}
       onChange={onChangeFiles}
       uploadLoading={uploadLoading}

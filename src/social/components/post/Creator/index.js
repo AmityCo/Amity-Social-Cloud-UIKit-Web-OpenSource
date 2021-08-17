@@ -170,6 +170,7 @@ const PostCreatorBar = ({
       </ConditionalRender>
       <PostContainer>
         <PostInputText
+          data-qa-anchor="social-create-post-input"
           multiline
           value={postText}
           onChange={text => setPostText(text)}
@@ -213,7 +214,11 @@ const PostCreatorBar = ({
             fileLimitRemaining={maxFiles - postFiles.length - postImages.length - postVideos.length}
             uploadLoading={uploadLoading}
           />
-          <PostButton disabled={isDisabled} onClick={onCreatePost}>
+          <PostButton
+            disabled={isDisabled}
+            onClick={onCreatePost}
+            data-qa-anchor="social-create-post-button"
+          >
             <FormattedMessage id="post" />
           </PostButton>
         </Footer>

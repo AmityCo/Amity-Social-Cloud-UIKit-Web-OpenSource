@@ -23,6 +23,7 @@ const triggerRenderer = props => {
 };
 
 const Dropdown = ({
+  'data-qa-anchor': dataQaAnchor,
   isOpen,
   renderTrigger = triggerRenderer,
   children,
@@ -88,7 +89,7 @@ const Dropdown = ({
   return (
     <DropdownContainer ref={dropdownRef}>
       <ButtonContainer ref={buttonContainerRef}>
-        {renderTrigger(defaultTriggerParams)}
+        {renderTrigger({ ...defaultTriggerParams, 'data-qa-anchor': dataQaAnchor })}
       </ButtonContainer>
       <ConditionalRender condition={isOpen || isOpenInternal}>
         <FrameContainer>
@@ -108,6 +109,7 @@ const Dropdown = ({
 };
 
 Dropdown.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   renderTrigger: PropTypes.func,
   children: PropTypes.node,

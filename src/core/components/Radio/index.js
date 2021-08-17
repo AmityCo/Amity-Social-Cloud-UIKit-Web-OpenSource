@@ -3,17 +3,10 @@ import React from 'react';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import { Radio, Label, Chip } from './styles';
 
-const Container = ({ register, name, value, checked, disabled, children, onChange }) => {
+const Container = ({ register, children, 'data-qa-anchor': dataQaAnchor, ...props }) => {
   return (
-    <Label>
-      <Radio
-        ref={register}
-        name={name}
-        value={value}
-        checked={checked}
-        disabled={disabled}
-        onChange={onChange}
-      />
+    <Label data-qa-anchor={`${dataQaAnchor}-label`}>
+      <Radio {...props} data-qa-anchor={`${dataQaAnchor}-radio`} ref={register} />
       {children}
     </Label>
   );
@@ -67,6 +60,7 @@ const Radios = ({
       checked={value === item.value}
       disabled={disabled}
       onChange={handleChange}
+      data-qa-anchor={item['data-qa-anchor']}
     >
       <Renderer item={item} checked={value === item.value} disabled={disabled} />
     </Container>

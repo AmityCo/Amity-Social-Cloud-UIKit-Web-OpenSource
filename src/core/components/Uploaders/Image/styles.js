@@ -98,6 +98,7 @@ export const ButtonContainer = styled.div`
 
 const Image = ({
   className,
+  'data-qa-anchor': dataQaAnchor,
   url,
   progress,
   mediaFit,
@@ -120,7 +121,7 @@ const Image = ({
   }
 
   return (
-    <ImageContainer className={className} border={!noBorder}>
+    <ImageContainer className={className} border={!noBorder} data-qa-anchor={dataQaAnchor}>
       <Content remove={!!onRemove}>
         {url ? (
           <ImgPreview src={url} mediaFit={mediaFit} className={!!isRejected && 'darken'} />
@@ -144,6 +145,7 @@ const Image = ({
 
 Image.propTypes = {
   className: PropTypes.string,
+  'data-qa-anchor': PropTypes.string,
   url: PropTypes.string,
   progress: PropTypes.number,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
@@ -156,6 +158,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   className: undefined,
+  'data-qa-anchor': undefined,
   url: undefined,
   progress: -1,
   onRemove: undefined,

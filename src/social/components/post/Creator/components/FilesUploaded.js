@@ -22,15 +22,22 @@ const FileRows = ({
   uploadLoading,
   rejected,
   retry,
+  rowDataQaAnchor,
 }) => (
   <StylesFileRows uploadLoading={uploadLoading}>
     {uploaded.map(file => (
-      <File key={file.fileId} fileId={file.fileId} onRemove={() => removeFile(file)} />
+      <File
+        key={file.fileId}
+        data-qa-anchor={rowDataQaAnchor}
+        fileId={file.fileId}
+        onRemove={() => removeFile(file)}
+      />
     ))}
 
     {uploading.map(file => (
       <File
         key={file.name}
+        data-qa-anchor={rowDataQaAnchor}
         file={file}
         progress={progress[file.name]}
         isRejected={rejected.includes(file.name)}
@@ -41,9 +48,16 @@ const FileRows = ({
   </StylesFileRows>
 );
 
-const Files = ({ files, onChange, onLoadingChange, uploadLoading, onError }) => (
+const Files = ({
+  files,
+  onChange,
+  onLoadingChange,
+  uploadLoading,
+  onError,
+  rowDataQaAnchor = 'social-create-post-uploaded-file',
+}) => (
   <Uploader files={files} onChange={onChange} onLoadingChange={onLoadingChange} onError={onError}>
-    <FileRows uploadLoading={uploadLoading} />
+    <FileRows uploadLoading={uploadLoading} rowDataQaAnchor={rowDataQaAnchor} />
   </Uploader>
 );
 
@@ -53,6 +67,7 @@ Files.propTypes = {
   onError: PropTypes.func,
   onLoadingChange: PropTypes.func,
   uploadLoading: PropTypes.bool,
+  rowDataQaAnchor: PropTypes.string,
 };
 
 Files.defaultProps = {
@@ -61,6 +76,7 @@ Files.defaultProps = {
   onError: () => {},
   onLoadingChange: () => {},
   uploadLoading: false,
+  rowDataQaAnchor: undefined,
 };
 
 export default Files;

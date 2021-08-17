@@ -85,7 +85,17 @@ const ButtonContainer = styled.div`
   display: flex;
 `;
 
-const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }) => {
+const File = ({
+  'data-qa-anchor': dataQaAnchor,
+  name,
+  url,
+  type,
+  size,
+  progress,
+  onRemove,
+  isRejected,
+  onRetry,
+}) => {
   const { formatMessage } = useIntl();
 
   function removeCallback(e) {
@@ -103,7 +113,7 @@ const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }
   const isImg = type.includes('image');
 
   return (
-    <FileContainer href={url} download>
+    <FileContainer href={url} download data-qa-anchor={dataQaAnchor}>
       <Content remove={!!onRemove}>
         <ConditionalRender condition={isImg && !!url}>
           <ImgPreview src={url} />
@@ -125,6 +135,7 @@ const File = ({ name, url, type, size, progress, onRemove, isRejected, onRetry }
 };
 
 File.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   name: PropTypes.string.isRequired,
   url: PropTypes.string,
   type: PropTypes.string,
@@ -136,6 +147,7 @@ File.propTypes = {
 };
 
 File.defaultProps = {
+  'data-qa-anchor': undefined,
   url: null,
   type: '',
   size: 0,

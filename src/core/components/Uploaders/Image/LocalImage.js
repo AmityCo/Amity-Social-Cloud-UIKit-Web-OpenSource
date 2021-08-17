@@ -5,6 +5,7 @@ import StyledImage from './styles';
 
 const Image = ({
   className,
+  'data-qa-anchor': dataQaAnchor,
   file,
   progress,
   mediaFit,
@@ -19,6 +20,7 @@ const Image = ({
   return (
     <StyledImage
       className={className}
+      data-qa-anchor={dataQaAnchor}
       url={fileUrl}
       progress={progress}
       mediaFit={mediaFit}
@@ -33,6 +35,7 @@ const Image = ({
 
 Image.propTypes = {
   className: PropTypes.string,
+  'data-qa-anchor': PropTypes.string,
   file: PropTypes.instanceOf(File).isRequired,
   progress: PropTypes.number,
   noBorder: PropTypes.bool,
@@ -45,6 +48,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   className: undefined,
+  'data-qa-anchor': undefined,
   progress: -1,
   onRemove: null,
   isRejected: false,

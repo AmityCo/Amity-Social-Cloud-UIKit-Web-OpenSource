@@ -28,16 +28,16 @@ const ExtraAction = ({ title, bodyText, actionButton }) => {
 
 const AddMemberButton = ({ onClick }) => {
   return (
-    <ExtraActionPrimaryButton onClick={onClick}>
+    <ExtraActionPrimaryButton onClick={onClick} data-qa-anchor="social-community-add-member-button">
       <PlusIcon />
       <FormattedMessage id="add" />
     </ExtraActionPrimaryButton>
   );
 };
 
-const CloseCommunityButton = ({ onClick }) => {
+const CloseCommunityButton = ({ onClick, ...props }) => {
   return (
-    <ExtraActionButton onClick={onClick}>
+    <ExtraActionButton {...props} onClick={onClick}>
       <FormattedMessage id="close" />
     </ExtraActionButton>
   );
@@ -73,7 +73,12 @@ export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
     <ExtraAction
       title={<FormattedMessage id="CloseCommunityAction.title" />}
       bodyText={<FormattedMessage id="CloseCommunityAction.description" />}
-      actionButton={<CloseCommunityButton onClick={closeConfirm} />}
+      actionButton={
+        <CloseCommunityButton
+          onClick={closeConfirm}
+          data-qa-anchor="social-edit-profile-close-community"
+        />
+      }
     />
   );
 };

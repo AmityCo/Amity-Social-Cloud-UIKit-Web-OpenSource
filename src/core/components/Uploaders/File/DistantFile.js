@@ -6,7 +6,7 @@ import useFile from '~/core/hooks/useFile';
 
 import StyledFile from './styles';
 
-const File = ({ fileId, onRemove }) => {
+const File = ({ 'data-qa-anchor': dataQaAnchor, fileId, onRemove }) => {
   const file = useFile(fileId);
 
   if (!file.fileId) return null;
@@ -18,6 +18,7 @@ const File = ({ fileId, onRemove }) => {
 
   return (
     <StyledFile
+      data-qa-anchor={dataQaAnchor}
       name={file.attributes.name}
       size={file.attributes.size}
       type={file.attributes.mimeType}
@@ -28,12 +29,14 @@ const File = ({ fileId, onRemove }) => {
 };
 
 File.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   fileId: PropTypes.string.isRequired,
   onRemove: PropTypes.func,
 };
 
 File.defaultProps = {
-  onRemove: null,
+  'data-qa-anchor': undefined,
+  onRemove: undefined,
 };
 
 export default File;

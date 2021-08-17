@@ -6,7 +6,15 @@ import useFile from '~/core/hooks/useFile';
 
 import StyledImage from './styles';
 
-const Image = ({ className, fileId, mediaFit, noBorder, onRemove, overlayElements } = {}) => {
+const Image = ({
+  className,
+  'data-qa-anchor': dataQaAnchor,
+  fileId,
+  mediaFit,
+  noBorder,
+  onRemove,
+  overlayElements,
+} = {}) => {
   const file = useFile(fileId);
 
   if (!file.fileId) return null;
@@ -20,6 +28,7 @@ const Image = ({ className, fileId, mediaFit, noBorder, onRemove, overlayElement
   return (
     <StyledImage
       className={className}
+      data-qa-anchor={dataQaAnchor}
       url={fileUrl}
       mediaFit={mediaFit}
       noBorder={noBorder}
@@ -31,6 +40,7 @@ const Image = ({ className, fileId, mediaFit, noBorder, onRemove, overlayElement
 
 Image.propTypes = {
   className: PropTypes.string,
+  'data-qa-anchor': PropTypes.string,
   fileId: PropTypes.string.isRequired,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
   noBorder: PropTypes.bool,
@@ -40,6 +50,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   className: undefined,
+  'data-qa-anchor': undefined,
   onRemove: () => {},
   overlayElements: undefined,
 };

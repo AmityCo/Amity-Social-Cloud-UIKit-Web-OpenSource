@@ -150,7 +150,7 @@ const DefaultPostRenderer = ({
     <PostContainer className={className}>
       <PostHeadContainer>
         <Header hidePostTarget={hidePostTarget} postId={postId} loading={loading} />
-        {!loading && <OptionMenu options={allOptions} />}
+        {!loading && <OptionMenu options={allOptions} data-qa-anchor="social-post-3dots" />}
       </PostHeadContainer>
 
       {loading ? (

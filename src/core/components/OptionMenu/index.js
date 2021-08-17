@@ -10,6 +10,7 @@ import { OptionsIcon, OptionsButton, Option, Container } from './styles';
 
 const OptionMenu = ({
   className,
+  'data-qa-anchor': dataQaAnchor,
   icon,
   options,
   position = POSITION_BOTTOM,
@@ -33,6 +34,7 @@ const OptionMenu = ({
     <ConditionalRender condition={options.length}>
       <Container pullRight={pullRight}>
         <UiKitDropdown
+          data-qa-anchor={dataQaAnchor}
           isOpen={isOpen}
           renderTrigger={props => triggerRenderer({ ...props, onClick: toggle, className, icon })}
           position={position}

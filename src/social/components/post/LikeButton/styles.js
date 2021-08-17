@@ -24,7 +24,12 @@ export const LikeIcon = styled(ThumbsUp)`
  * They can replace it with any other presentational component with the same props interface.
  */
 const StyledPostLikeButton = ({ onClick, isActive, isDisabled }) => (
-  <StyledLikeButton onClick={onClick} active={isActive} disabled={isDisabled}>
+  <StyledLikeButton
+    onClick={onClick}
+    active={isActive}
+    disabled={isDisabled}
+    data-qa-anchor="social-like-post"
+  >
     <LikeIcon $isLiked={isActive} /> <FormattedMessage id={isActive ? 'post.liked' : 'post.like'} />
   </StyledLikeButton>
 );

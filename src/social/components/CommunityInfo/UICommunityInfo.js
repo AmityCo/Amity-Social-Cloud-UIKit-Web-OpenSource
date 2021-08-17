@@ -52,6 +52,7 @@ const UICommunityInfo = ({
         <Avatar avatar={avatarFileUrl} size="big" backgroundImage={CommunityImage} />
         <ConditionalRender condition={isJoined}>
           <OptionMenu
+            data-qa-anchor="social-community-3dots"
             options={[
               canEditCommunity && {
                 name: formatMessage({ id: 'community.settings' }),
@@ -90,7 +91,11 @@ const UICommunityInfo = ({
         </JoinButton>
       </ConditionalRender>
       <ConditionalRender condition={isJoined && canEditCommunity}>
-        <Button fullWidth onClick={() => onEditCommunity(communityId)}>
+        <Button
+          fullWidth
+          onClick={() => onEditCommunity(communityId)}
+          data-qa-anchor="social-edit-community-button"
+        >
           <PencilIcon /> <FormattedMessage id="community.editProfile" />
         </Button>
       </ConditionalRender>
