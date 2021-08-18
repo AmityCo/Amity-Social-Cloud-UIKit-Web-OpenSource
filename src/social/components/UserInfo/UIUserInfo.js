@@ -9,6 +9,7 @@ import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as UserImage } from '~/icons/User';
 
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
+import { useSDK } from '~/core/hocs/withSDK';
 
 import {
   Avatar,
@@ -58,6 +59,7 @@ const UIUserInfo = ({
   const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
   const { formatMessage } = useIntl();
+  const { connected } = useSDK();
 
   const [onReportClick] = useAsyncCallback(async () => {
     await handleReport();
@@ -127,12 +129,12 @@ const UIUserInfo = ({
       </CountContainer>
       <Description>{description}</Description>
       <ConditionalRender condition={isMyProfile}>
-        <Button fullWidth onClick={() => onEditUser(userId)}>
+        <Button fullWidth disabled={!connected} onClick={() => onEditUser(userId)}>
           <PencilIcon /> <FormattedMessage id="user.editProfile" />
         </Button>
         <>
           {isPrivateNetwork && isFollowPending && (
-            <Button fullWidth onClick={() => onFollowDecline()}>
+            <Button fullWidth disabled={!connected} onClick={() => onFollowDecline()}>
               <PendingIconContainer>
                 <PendingIcon />
               </PendingIconContainer>
@@ -140,7 +142,7 @@ const UIUserInfo = ({
             </Button>
           )}
           {isFollowNone && (
-            <PrimaryButton fullWidth onClick={() => onFollowRequest()}>
+            <PrimaryButton fullWidth disabled={!connected} onClick={() => onFollowRequest()}>
               <PlusIcon /> <FormattedMessage id="user.follow" />
             </PrimaryButton>
           )}
