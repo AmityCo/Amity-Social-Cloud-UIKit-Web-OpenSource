@@ -61,7 +61,7 @@ const CommunityMemberItem = ({
         <OptionMenu
           options={[
             {
-              name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
+              name: isFlaggedByMe ? 'report.unreportUser' : 'report.reportUser',
               action: onReportClick,
             },
             hasModeratorPermissions &&

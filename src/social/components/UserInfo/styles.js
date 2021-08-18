@@ -8,14 +8,13 @@ export const PlusIcon = styled(Plus)`
   margin-right: 8px;
 `;
 
-export const PendingIcon = styled(Pending).attrs({ height: 30, width: 20 })`
-  margin-right: 8px;
+export const PendingIconContainer = styled.div`
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
 `;
 
-export const PendingIconContainer = styled.div`
-  display: flex;
-  margin-right: 8px;
-`;
+export const PendingIcon = styled(Pending).attrs({ height: 30, width: 20 })``;
 
 export const PencilIcon = styled(Pencil)`
   font-size: 15px;

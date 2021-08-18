@@ -125,6 +125,7 @@
   "UserSelector.placeholder": "Select user...",
 
   "report.reportUser": "Report user",
+  "report.unreportUser": "Unreport user",
   "report.reportComment": "Report comment",
   "report.unreportComment": "Unreport comment",
   "report.reportSent": "Report sent",
@@ -274,9 +275,9 @@
   "follow.pendingNotification.title": "Pending requests",
   "follow.pendingNotification.body": "Your requests are waiting for review",
   "notification.done": "Done",
-  "counter.followings": "followings",
+  "counter.followings": "following",
   "counter.followers": "followers",
   "buttonText.unfollow": "Unfollow",
-  "feed.private.title": "This account is private",
-  "feed.private.body": "Follow this user to see all posts"
+  "privateFeed.title": "This account is private",
+  "privateFeed.body": "Follow this user to see all posts"
 }

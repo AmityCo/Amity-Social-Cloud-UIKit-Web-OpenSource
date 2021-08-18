@@ -14,18 +14,18 @@ import Followers from '~/social/pages/UserFeed/Followers';
 
 import { tabs, UserFeedTabs } from './constants';
 import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
-import useNetworkSettings from '~/core/hooks/useNetworkSettings';
 import useFollow from '~/core/hooks/useFollow';
 
-const UserFeed = ({ userId, currentUserId }) => {
+const UserFeed = ({ userId, currentUserId, networkSettings }) => {
+  const isPrivateNetwork = networkSettings?.isPrivateNetwork;
+
   const [activeTab, setActiveTab] = useState(UserFeedTabs.TIMELINE);
   const [followActiveTab, setFollowActiveTab] = useState(FollowersTabs.FOLLOWINGS);
 
-  const { isPrivateNetwork } = useNetworkSettings();
-  const { isFollowAccepted } = useFollow(currentUserId, userId);
-
   const isMe = userId === currentUserId;
-  const isHiddenProfile = !isMe && isPrivateNetwork && !isFollowAccepted;
+
+  const { isFollowAccepted } = useFollow(currentUserId, userId);
+  const isHiddenProfile = isPrivateNetwork && !isFollowAccepted && !isMe;
 
   const filteredTabs = isHiddenProfile
     ? tabs.filter(({ value }) => value === UserFeedTabs.TIMELINE)
@@ -53,7 +53,7 @@ const UserFeed = ({ userId, currentUserId }) => {
           isHiddenProfile={isHiddenProfile}
         />
       </ConditionalRender>
-      <ConditionalRender condition={activeTab === UserFeedTabs.FOLLOWERS}>
+      <ConditionalRender condition={activeTab === UserFeedTabs.FOLLOWERS && !isHiddenProfile}>
         <Followers
           userId={userId}
           activeTab={followActiveTab}
@@ -68,6 +68,7 @@ const UserFeed = ({ userId, currentUserId }) => {
 UserFeed.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
+  networkSettings: PropTypes.object.isRequired,
 };
 
 export default withSDK(UserFeed);

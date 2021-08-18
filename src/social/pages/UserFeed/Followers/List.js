@@ -72,7 +72,7 @@ const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser, setUs
         <OptionMenu
           options={[
             !isMe && {
-              name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
+              name: isFlaggedByMe ? 'report.unreportUser' : 'report.reportUser',
               action: onReportClick,
             },
             allowRemoveUser &&

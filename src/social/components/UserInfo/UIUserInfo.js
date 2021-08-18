@@ -53,6 +53,7 @@ const UIUserInfo = ({
   setFollowActiveTab,
   followerCount,
   followingCount,
+  isPrivateNetwork,
 }) => {
   const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
@@ -90,7 +91,7 @@ const UIUserInfo = ({
           }),
       },
     !isMyProfile && {
-      name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
+      name: isFlaggedByMe ? 'report.unreportUser' : 'report.reportUser',
       action: onReportClick,
     },
   ].filter(Boolean);
@@ -108,21 +109,21 @@ const UIUserInfo = ({
         <ClickableCount
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
-          }}
-        >
-          {toHumanString(followerCount)}
-        </ClickableCount>
-        <FormattedMessage id="counter.followers" />
-        <ClickableCount
-          onClick={() => {
-            setActiveTab(UserFeedTabs.FOLLOWERS);
             setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
           }}
         >
           {toHumanString(followingCount)}
         </ClickableCount>
         <FormattedMessage id="counter.followings" />
+        <ClickableCount
+          onClick={() => {
+            setActiveTab(UserFeedTabs.FOLLOWERS);
+            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
+          }}
+        >
+          {toHumanString(followerCount)}
+        </ClickableCount>
+        <FormattedMessage id="counter.followers" />
       </CountContainer>
       <Description>{description}</Description>
       <ConditionalRender condition={isMyProfile}>
@@ -130,7 +131,7 @@ const UIUserInfo = ({
           <PencilIcon /> <FormattedMessage id="user.editProfile" />
         </Button>
         <>
-          {isFollowPending && (
+          {isPrivateNetwork && isFollowPending && (
             <Button fullWidth onClick={() => onFollowDecline()}>
               <PendingIconContainer>
                 <PendingIcon />
@@ -145,7 +146,7 @@ const UIUserInfo = ({
           )}
         </>
       </ConditionalRender>
-      <ConditionalRender condition={isMyProfile && pendingCount > 0}>
+      <ConditionalRender condition={isMyProfile && pendingCount > 0 && isPrivateNetwork}>
         <PendingNotification
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
@@ -181,6 +182,7 @@ UIUserInfo.propTypes = {
   setFollowActiveTab: PropTypes.func,
   followerCount: PropTypes.number,
   followingCount: PropTypes.number,
+  isPrivateNetwork: PropTypes.bool,
 };
 
 UIUserInfo.defaultProps = {

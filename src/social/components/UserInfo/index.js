@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import withSDK from '~/core/hocs/withSDK';
 
@@ -9,8 +9,17 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import UIUserInfo from './UIUserInfo';
 import useFollow from '~/core/hooks/useFollow';
 import useFollowCount from '~/core/hooks/useFollowCount';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
+import { notification } from '~/core/components/Notification';
+import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
 
-const UserInfo = ({ userId, currentUserId, setFollowActiveTab, setActiveTab }) => {
+const UserInfo = ({
+  userId,
+  currentUserId,
+  setFollowActiveTab,
+  setActiveTab,
+  isPrivateNetwork,
+}) => {
   const { formatMessage } = useIntl();
   const { onEditUser, onMessageUser } = useNavigation();
   const { user, file } = useUser(userId);
@@ -23,6 +32,12 @@ const UserInfo = ({ userId, currentUserId, setFollowActiveTab, setActiveTab }) =
   const { displayName, description } = user;
   const { fileUrl } = file;
 
+  const [onFollowDecline] = useAsyncCallback(async () => {
+    await followDecline();
+    setActiveTab(UserFeedTabs.TIMELINE);
+    notification.success({ content: <FormattedMessage id="notification.done" /> });
+  }, [followDecline]);
+
   return (
     <UIUserInfo
       userId={userId}
@@ -30,13 +45,14 @@ const UserInfo = ({ userId, currentUserId, setFollowActiveTab, setActiveTab }) =
       displayName={displayName || formatMessage({ id: 'anonymous' })}
       description={description}
       onFollowRequest={follow}
-      onFollowDecline={followDecline}
+      onFollowDecline={onFollowDecline}
       setActiveTab={setActiveTab}
       setFollowActiveTab={setFollowActiveTab}
       isMyProfile={userId === currentUserId}
       onEditUser={onEditUser}
       onMessageUser={onMessageUser}
       isFollowPending={isFollowPending}
+      isPrivateNetwork={isPrivateNetwork}
       isFollowNone={isFollowNone}
       isFollowAccepted={isFollowAccepted}
       followerCount={followerCount}
@@ -50,6 +66,7 @@ UserInfo.propTypes = {
   currentUserId: PropTypes.string.isRequired,
   setActiveTab: PropTypes.func.isRequired,
   setFollowActiveTab: PropTypes.func.isRequired,
+  isPrivateNetwork: PropTypes.bool.isRequired,
 };
 
 export { UIUserInfo };

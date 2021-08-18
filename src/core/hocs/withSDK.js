@@ -23,6 +23,7 @@ export function SDKProvider({ children, client }) {
         connected: connectionStatus === ConnectionStatus.Connected,
         currentUserId: client?.currentUserId,
         userRoles: client?.currentUser?.model?.roles,
+        networkSettings: client?.networkSettings ?? {},
       }}
     >
       {children}
