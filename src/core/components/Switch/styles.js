@@ -7,6 +7,13 @@ export const SwitchLabel = styled.label`
   width: 48px;
   height: 28px;
   float: right;
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+    pointer-events: none;
+    cursor: not-allowed;
+  `}
 `;
 
 export const SwitchInput = styled.input`
@@ -22,7 +29,8 @@ export const SwitchSlider = styled.span`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${({ theme }) => theme.palette.base.shade3};
+  background-color: ${({ disabled, theme }) =>
+    disabled ? theme.palette.base.shade4 : theme.palette.base.shade3};
   -webkit-transition: ${TRANSITION_TIME};
   transition: ${TRANSITION_TIME};
   border-radius: 14px;
@@ -41,7 +49,8 @@ export const SwitchSlider = styled.span`
   }
 
   ${SwitchInput}:checked + & {
-    background-color: ${({ theme }) => theme.palette.primary.main};
+    background-color: ${({ disabled, theme }) =>
+      disabled ? theme.palette.primary.shade2 : theme.palette.primary.main};
   }
 
   ${SwitchInput}:checked + &:before {

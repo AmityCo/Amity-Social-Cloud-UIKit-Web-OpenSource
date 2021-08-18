@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { SwitchLabel, SwitchInput, SwitchSlider } from './styles';
 
 const Switch = ({
+  disabled = false,
   value = false,
   onChange = () => {},
   'data-qa-anchor': dataQaAnchor,
@@ -12,7 +13,7 @@ const Switch = ({
   }, [value]);
 
   return (
-    <SwitchLabel {...props} data-qa-anchor={dataQaAnchor}>
+    <SwitchLabel {...props} disabled={disabled} data-qa-anchor={dataQaAnchor}>
       <SwitchInput
         type="checkbox"
         value={value}
@@ -20,7 +21,7 @@ const Switch = ({
         onChange={cb}
         data-qa-anchor={`${dataQaAnchor}-checkbox`}
       />
-      <SwitchSlider />
+      <SwitchSlider disabled={disabled} />
     </SwitchLabel>
   );
 };

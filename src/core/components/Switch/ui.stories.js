@@ -7,21 +7,23 @@ export default {
 };
 
 export const Switch = () => {
-  const [{ value, onChange }, updateArgs] = useArgs();
+  const [{ value, onChange, disabled }, updateArgs] = useArgs();
 
   const setValue = newVal => {
     onChange(newVal);
     updateArgs({ value: newVal });
   };
 
-  return <UiKitSwitch value={value} onChange={setValue} />;
+  return <UiKitSwitch value={value} onChange={setValue} disabled={disabled} />;
 };
 
 Switch.args = {
   value: false,
+  disabled: false,
 };
 
 Switch.argTypes = {
   value: { control: { type: 'boolean' } },
   onChange: { action: 'onChange()' },
+  disabled: { control: { type: 'boolean' } },
 };
