@@ -40,6 +40,7 @@ const UserFeed = ({ userId, currentUserId, networkSettings }) => {
           userId={userId}
           setActiveTab={setActiveTab}
           setFollowActiveTab={setFollowActiveTab}
+          isPrivateNetwork={isPrivateNetwork}
         />
       }
     >
