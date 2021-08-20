@@ -22,6 +22,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import PostTargetSelector from './components/PostTargetSelector';
 import UploaderButtons from './components/UploaderButtons';
@@ -58,6 +59,7 @@ const PostCreatorBar = ({
   onCreateSuccess = () => {},
   maxFiles = MAX_FILES_PER_POST,
 }) => {
+  const { setNavigationBlocker } = useNavigation();
   const { user } = useUser(currentUserId);
 
   // default to me
@@ -150,6 +152,19 @@ const PostCreatorBar = ({
   const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
   const isDisabled =
     isEmpty(postText, postImages, postVideos, postFiles) || uploadLoading || creating;
+  const hasChanges = !isEmpty(postText, postImages, postVideos, postFiles);
+
+  useEffect(() => {
+    if (hasChanges) {
+      setNavigationBlocker({
+        title: <FormattedMessage id="post.discard.title" />,
+        content: <FormattedMessage id="post.discard.content" />,
+        okText: <FormattedMessage id="general.action.discard" />,
+      });
+    } else {
+      setNavigationBlocker(null);
+    }
+  }, [hasChanges]);
 
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)}>

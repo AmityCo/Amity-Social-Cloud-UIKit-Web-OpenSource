@@ -2,6 +2,7 @@
   "general.action.cancel": "Cancel",
   "general.action.accept": "Accept",
   "general.action.decline": "Decline",
+  "general.action.discard": "Discard",
   "general.error.tryAgainLater": "Something went wrong. Please try again later.",
 
   "hello": "Hello World",
@@ -44,6 +45,8 @@
   "post.success.submittedToReview": "Your post has been submitted to review by moderator",
   "post.error.cannotReview.title": "Post is not available",
   "post.error.cannotReview.description": "The post has been reviewed by another moderator",
+  "post.discard.title": "Discard post?",
+  "post.discard.content": "Do you want to discard your post?",
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
   "collapsible.viewMoreComments": "View more comments",
@@ -279,5 +282,9 @@
   "counter.followers": "followers",
   "buttonText.unfollow": "Unfollow",
   "privateFeed.title": "This account is private",
-  "privateFeed.body": "Follow this user to see all posts"
+  "privateFeed.body": "Follow this user to see all posts",
+
+  "navigationBlocker.title": "Unsaved changes",
+  "navigationBlocker.content": "Your changes won`t be saved. Are you sure you want to leave this page now?",
+  "navigationBlocker.okText": "Leave"
 }

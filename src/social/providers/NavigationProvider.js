@@ -1,7 +1,21 @@
-import React, { createContext, useCallback, useContext, useState } from 'react';
+import React, { createContext, useCallback, useContext, useState, useMemo } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { confirm } from '~/core/components/Confirm';
 import { PageTypes } from '~/social/constants';
 
 let defaultValue = {};
+
+const defaultAskForConfirmation = ({ onSuccess: onOk, ...params }) =>
+  confirm({
+    ...params,
+    onOk,
+  });
+
+export const defaultNavigationBlocker = {
+  title: <FormattedMessage id="navigationBlocker.title" />,
+  content: <FormattedMessage id="navigationBlocker.content" />,
+  okText: <FormattedMessage id="navigationBlocker.okText" />,
+};
 
 if (process.env.NODE_ENV !== 'production') {
   defaultValue = {
@@ -25,8 +39,9 @@ export const NavigationContext = createContext(defaultValue);
 export const useNavigation = () => useContext(NavigationContext);
 
 export default ({
+  askForConfirmation = defaultAskForConfirmation,
   children,
-  onChangePage,
+  onChangePage: onChangePageProp,
   onClickCategory,
   onClickCommunity,
   onClickUser,
@@ -36,14 +51,48 @@ export default ({
   onMessageUser,
 }) => {
   const [pages, setPages] = useState([{ type: PageTypes.NewsFeed }]);
+  const [navigationBlocker, setNavigationBlocker] = useState();
 
-  const pushPage = newPage => {
-    setPages(prevState => [...prevState, newPage]);
-  };
+  const confirmPageChange = useCallback(async () => {
+    if (navigationBlocker) {
+      // for more info about this, see https://ekoapp.atlassian.net/browse/UP-3462?focusedCommentId=77155
+      return new Promise(resolve => {
+        askForConfirmation({
+          ...navigationBlocker,
+          onSuccess: () => {
+            setNavigationBlocker(undefined);
+            resolve(true);
+          },
+          onCancel: () => resolve(false),
+        });
+      });
+    }
+
+    return true;
+  }, [navigationBlocker]);
+
+  const pushPage = useCallback(
+    async newPage => {
+      if (!(await confirmPageChange())) return;
+
+      setPages(prevState => [...prevState, newPage]);
+    },
+    [confirmPageChange],
+  );
 
   const popPage = () => {
     setPages(prevState => (prevState.length > 1 ? prevState.slice(0, -1) : prevState));
   };
+
+  const onChangePage = useMemo(() => {
+    if (!onChangePageProp) return undefined;
+
+    return async (...args) => {
+      if (!(await confirmPageChange())) return;
+
+      onChangePageProp(args);
+    };
+  }, [onChangePageProp, confirmPageChange]);
 
   const handleChangePage = useCallback(
     type => {
@@ -51,7 +100,7 @@ export default ({
 
       pushPage({ type });
     },
-    [onChangePage],
+    [onChangePage, pushPage],
   );
 
   const handleClickCommunity = useCallback(
@@ -67,7 +116,7 @@ export default ({
       console.log('handleClickCommunity', { communityId });
       pushPage(next);
     },
-    [onChangePage, onClickCommunity],
+    [onChangePage, onClickCommunity, pushPage],
   );
 
   const handleCommunityCreated = useCallback(
@@ -84,7 +133,7 @@ export default ({
       console.log('handleCommunityCreated', { communityId });
       pushPage(next);
     },
-    [onChangePage, onCommunityCreated],
+    [onChangePage, onCommunityCreated, pushPage],
   );
 
   const handleClickCategory = useCallback(
@@ -100,7 +149,7 @@ export default ({
       console.log('handleClickCategory', { categoryId });
       pushPage(next);
     },
-    [onChangePage, onClickCategory],
+    [onChangePage, onClickCategory, pushPage],
   );
 
   const handleClickUser = useCallback(
@@ -116,7 +165,7 @@ export default ({
       console.log('handleClickUser', { userId });
       pushPage(next);
     },
-    [onChangePage, onClickUser],
+    [onChangePage, onClickUser, pushPage],
   );
 
   const handleEditUser = useCallback(
@@ -132,7 +181,7 @@ export default ({
       console.log('handleEditUser', { userId });
       pushPage(next);
     },
-    [onChangePage, onEditUser],
+    [onChangePage, onEditUser, pushPage],
   );
 
   const handleEditCommunity = useCallback(
@@ -149,7 +198,7 @@ export default ({
       console.log('handleEditCommunity', { communityId, tab });
       pushPage(next);
     },
-    [onChangePage, onEditCommunity],
+    [onChangePage, onEditCommunity, pushPage],
   );
 
   const handleMessageUser = useCallback(
@@ -181,6 +230,7 @@ export default ({
         onEditUser: handleEditUser,
         onMessageUser: handleMessageUser,
         onBack: popPage,
+        setNavigationBlocker,
       }}
     >
       {children}
