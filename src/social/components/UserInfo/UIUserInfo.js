@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { FollowRequestStatus } from '@amityco/js-sdk';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Button, { PrimaryButton } from '~/core/components/Button';
@@ -33,13 +34,14 @@ import {
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
 import { confirm } from '~/core/components/Confirm';
 import useUser from '~/core/hooks/useUser';
-import useFollowCount from '~/core/hooks/useFollowCount';
 import useReport from '~/social/hooks/useReport';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { notification } from '~/core/components/Notification';
+import useFollowersList from '~/core/hooks/useFollowersList';
 
 const UIUserInfo = ({
   userId,
+  currentUserId,
   fileUrl,
   displayName,
   description,
@@ -98,7 +100,7 @@ const UIUserInfo = ({
     },
   ].filter(Boolean);
 
-  const { pendingCount } = useFollowCount(userId);
+  const [pendingUsers] = useFollowersList(currentUserId, FollowRequestStatus.Pending);
 
   return (
     <Container>
@@ -148,7 +150,7 @@ const UIUserInfo = ({
           )}
         </>
       </ConditionalRender>
-      <ConditionalRender condition={isMyProfile && pendingCount > 0 && isPrivateNetwork}>
+      <ConditionalRender condition={isMyProfile && pendingUsers.length > 0 && isPrivateNetwork}>
         <PendingNotification
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
@@ -170,6 +172,7 @@ const UIUserInfo = ({
 
 UIUserInfo.propTypes = {
   userId: PropTypes.string,
+  currentUserId: PropTypes.string,
   fileUrl: PropTypes.string,
   displayName: PropTypes.string,
   description: PropTypes.string,
@@ -189,6 +192,7 @@ UIUserInfo.propTypes = {
 
 UIUserInfo.defaultProps = {
   userId: '',
+  currentUserId: '',
   fileUrl: '',
   displayName: '',
   description: '',

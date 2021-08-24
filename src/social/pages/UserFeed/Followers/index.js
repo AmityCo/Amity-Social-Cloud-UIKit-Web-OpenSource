@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
+import { FollowRequestStatus } from '@amityco/js-sdk';
 
 import { StyledTabs } from './styles';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -10,7 +11,7 @@ import FollowingsList from '~/social/pages/UserFeed/Followers/FollowingsList';
 import FollowersList from '~/social/pages/UserFeed/Followers/FollowersList';
 import PendingList from '~/social/pages/UserFeed/Followers/PendingList';
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
-import useFollowCount from '~/core/hooks/useFollowCount';
+import useFollowersList from '~/core/hooks/useFollowersList';
 
 const Followers = ({
   currentUserId,
@@ -30,12 +31,12 @@ const Followers = ({
     })),
   );
 
-  const { pendingCount } = useFollowCount(userId);
+  const [pendingUsers] = useFollowersList(currentUserId, FollowRequestStatus.Pending);
 
   const isMe = currentUserId === userId;
 
   useEffect(() => {
-    if (pendingCount && isMe && isPrivateNetwork) {
+    if (pendingUsers?.length && isMe && isPrivateNetwork) {
       setAllTabs(
         Object.values(FollowersTabs)
           .map(value => ({
@@ -44,7 +45,7 @@ const Followers = ({
           }))
           .concat({
             value: PENDING_TAB,
-            label: `${formatMessage({ id: 'tabs.pending' })} (${pendingCount})`,
+            label: formatMessage({ id: 'tabs.pending' }),
           }),
       );
     } else {
@@ -57,7 +58,7 @@ const Followers = ({
 
       setActiveTab(FollowersTabs.FOLLOWINGS);
     }
-  }, [pendingCount]);
+  }, [pendingUsers]);
 
   return (
     <div>

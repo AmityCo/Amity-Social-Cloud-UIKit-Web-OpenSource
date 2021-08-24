@@ -41,6 +41,7 @@ const UserInfo = ({
   return (
     <UIUserInfo
       userId={userId}
+      currentUserId={currentUserId}
       fileUrl={fileUrl}
       displayName={displayName || formatMessage({ id: 'anonymous' })}
       description={description}
