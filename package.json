@@ -116,5 +116,6 @@
       "prettier --write",
       "git add --force"
     ]
-  }
+  },
+  "license": "LGPL-2.1-only"
 }
