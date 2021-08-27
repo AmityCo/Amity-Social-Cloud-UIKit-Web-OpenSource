@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { FollowRequestStatus } from '@amityco/js-sdk';
+import * as utils from '~/helpers/utils';
 
 import { StyledTabs } from './styles';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -21,7 +22,7 @@ const Followers = ({
   networkSettings,
   setUserFeedTab,
 }) => {
-  const isPrivateNetwork = networkSettings?.isPrivateNetwork;
+  const isPrivateNetwork = utils.isPrivateNetwork(networkSettings);
 
   const { formatMessage } = useIntl();
   const [allTabs, setAllTabs] = useState(

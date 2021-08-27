@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { PostTargetType } from '@amityco/js-sdk';
 
 import withSDK from '~/core/hocs/withSDK';
+import * as utils from '~/helpers/utils';
 
 import UserInfo from '~/social/components/UserInfo';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
@@ -17,7 +18,7 @@ import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
 import useFollow from '~/core/hooks/useFollow';
 
 const UserFeed = ({ userId, currentUserId, networkSettings }) => {
-  const isPrivateNetwork = networkSettings?.isPrivateNetwork;
+  const isPrivateNetwork = utils.isPrivateNetwork(networkSettings);
 
   const [activeTab, setActiveTab] = useState(UserFeedTabs.TIMELINE);
   const [followActiveTab, setFollowActiveTab] = useState(FollowersTabs.FOLLOWINGS);

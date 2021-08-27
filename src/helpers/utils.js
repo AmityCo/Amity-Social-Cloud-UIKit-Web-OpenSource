@@ -27,3 +27,7 @@ export function isPostUnderReview(post, community) {
     community.reviewingFeed?.feedId === post.feedId
   );
 }
+
+export function isPrivateNetwork(networkSettings) {
+  return networkSettings?.social?.userPrivacySetting === 'private';
+}
