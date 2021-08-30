@@ -7,7 +7,7 @@ import { ButtonsContainer, UserHeaderContainer } from '~/social/pages/UserFeed/F
 import UserHeader from '~/social/components/UserHeader';
 import useFollow from '~/core/hooks/useFollow';
 import Button, { PrimaryButton } from '~/core/components/Button';
-import withSDK from '~/core/hocs/withSDK';
+import withSDK, { useSDK } from '~/core/hocs/withSDK';
 import { notification } from '~/core/components/Notification';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useFollowersList from '~/core/hooks/useFollowersList';
@@ -17,6 +17,7 @@ import Skeleton from '~/core/components/Skeleton';
 
 const PendingItem = ({ currentUserId, userId }) => {
   const { followAccept, deleteFollower } = useFollow(currentUserId, userId);
+  const { connected } = useSDK();
 
   const [onFollowAccept] = useAsyncCallback(async () => {
     await followAccept();
@@ -32,10 +33,10 @@ const PendingItem = ({ currentUserId, userId }) => {
     <UserHeaderContainer>
       <UserHeader userId={userId} />
       <ButtonsContainer>
-        <PrimaryButton fullWidth onClick={onFollowAccept}>
+        <PrimaryButton fullWidth disabled={!connected} onClick={onFollowAccept}>
           <FormattedMessage id="request.accept" />
         </PrimaryButton>
-        <Button fullWidth onClick={onFollowDecline}>
+        <Button fullWidth disabled={!connected} onClick={onFollowDecline}>
           <FormattedMessage id="request.decline" />
         </Button>
       </ButtonsContainer>
