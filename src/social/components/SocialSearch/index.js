@@ -19,10 +19,19 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 const SocialSearch = ({ className, sticky = false, searchBy }) => {
   const { onClickCommunity, onClickUser } = useNavigation();
   const [value, setValue] = useState('');
-  const [users = []] = useUserQuery(value);
-  const [communities, hasMore, loadMore] = useCommunitiesList({ search: value });
+  const [users = [], hasMoreUsers, loadMoreUsers] = useUserQuery(value);
+  const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList({
+    search: value,
+  });
   const handleChange = newVal => {
     setValue(newVal);
+  };
+
+  const getPagination = activeTab => {
+    const hasMore = activeTab === 'communities' ? hasMoreCommunities : hasMoreUsers;
+    const loadMore = activeTab === 'communities' ? loadMoreCommunities : loadMoreUsers;
+
+    return hasMore ? loadMore : undefined;
   };
 
   const handlePick = (name, activeTab) => {
@@ -91,7 +100,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
             onChange={handleChange}
             onPick={handlePick}
             className={className}
-            loadMore={hasMore ? loadMore : undefined}
+            getPagination={getPagination}
             placeholder={placeholder}
             prepend={
               <SearchIconContainer>

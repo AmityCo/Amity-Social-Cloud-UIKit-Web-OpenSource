@@ -35,7 +35,7 @@ const InputAutocomplete = ({
   placeholder,
   items,
   filter,
-  loadMore,
+  getPagination,
   prepend,
   append,
   invalid,
@@ -87,6 +87,8 @@ const InputAutocomplete = ({
       setValue('');
     }, 0);
   };
+
+  const loadMore = getPagination(activeTab);
 
   const LoadMoreButton = loadMore && (
     <Button fullWidth onClick={loadMore}>
@@ -145,7 +147,7 @@ InputAutocomplete.propTypes = {
   placeholder: PropTypes.string,
   items: PropTypes.object,
   filter: PropTypes.func,
-  loadMore: PropTypes.func,
+  getPagination: PropTypes.func,
   prepend: PropTypes.node,
   append: PropTypes.node,
   invalid: PropTypes.bool,
