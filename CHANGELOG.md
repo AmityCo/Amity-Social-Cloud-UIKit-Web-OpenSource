@@ -1,5 +1,55 @@
 # Changelog
 
+## [v2.2.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0...v2.2.0)
+
+#### 31 August 2021
+
+### New Features
+
+- [`UP-3598`](https://ekoapp.atlassian.net/browse/UP-3598) video posts ([`d17284d`](https://gitlab.com/upstra/web/ui-kit/commit/d17284daa7100fbcf8ec33070490697512ebfc49)) (by Valeriy Malyshev)
+- [`UP-2486`](https://ekoapp.atlassian.net/browse/UP-2486) - added follow/unfollow ui integration; integrated follow status... ([`e1bd4fe`](https://gitlab.com/upstra/web/ui-kit/commit/e1bd4fe472091f96f7206c4d9154fc85b1954357)) (by Serhii Ivanenko)
+- [`UP-2458`](https://ekoapp.atlassian.net/browse/UP-2458) - added remove user functionality ([`d4c112e`](https://gitlab.com/upstra/web/ui-kit/commit/d4c112e773cb6cc14edea4c64b1509cf0e07d75d)) (by Serhii Ivanenko)
+- [`UP-3462`](https://ekoapp.atlassian.net/browse/UP-3462) - ask user if he/she wants to leave the page if post creation is not finished ([`58c2d80`](https://gitlab.com/upstra/web/ui-kit/commit/58c2d808341243fac55c968414ba6e5e3e8bdf7a)) (by Valeriy Malyshev)
+- [`UP-2486`](https://ekoapp.atlassian.net/browse/UP-2486) - added follow/unfollow ui integration; integrated follow status... ([`6d75f78`](https://gitlab.com/upstra/web/ui-kit/commit/6d75f78771a597af00eb429207810aacf9c7bfae)) (by Serhii Ivanenko)
+- [`UP-2458`](https://ekoapp.atlassian.net/browse/UP-2458) - added remove user functionality ([`6427556`](https://gitlab.com/upstra/web/ui-kit/commit/64275564791f8c6dc7472c384b14ab20b26dd13b)) (by Serhii Ivanenko)
+- [`UP-3972`](https://ekoapp.atlassian.net/browse/UP-3972) - allow to edit published posts even if post moderation is turn on ([`7e4f644`](https://gitlab.com/upstra/web/ui-kit/commit/7e4f64434c037ad0e0887afe9925b8810fc4f85d)) (by Valeriy Malyshev)
+
+### Fixes
+
+- [`UP-1460`](https://ekoapp.atlassian.net/browse/UP-1460) - fixed markup issues ([`6139d0b`](https://gitlab.com/upstra/web/ui-kit/commit/6139d0b0a8754757403f25241d5dc9e7113a450b)) (by Serhii Ivanenko)
+- [`UP-3569`](https://ekoapp.atlassian.net/browse/UP-3569) - allow to dismiss the moderator role for community owners ([`a718816`](https://gitlab.com/upstra/web/ui-kit/commit/a7188166f7351aec7f79a8026e638d771d0249c3)) (by Valeriy Malyshev)
+- [`UP-4229`](https://ekoapp.atlassian.net/browse/UP-4229) - hide pending tab/pending user info block when network is public ([`e08aa01`](https://gitlab.com/upstra/web/ui-kit/commit/e08aa018307219ec6977d235a98500cec9efe4f0)) (by Serhii Ivanenko)
+- [`UP-4201`](https://ekoapp.atlassian.net/browse/UP-4201) - show private feed if user not connected and network is private ([`915df68`](https://gitlab.com/upstra/web/ui-kit/commit/915df682ef2d2a4abf0b5622e5b110041a2a1dc7)) (by Serhii Ivanenko)
+- [`UP-4230`](https://ekoapp.atlassian.net/browse/UP-4230) - redirect to profile when clicked from following list ([`535ef8d`](https://gitlab.com/upstra/web/ui-kit/commit/535ef8da4fac91ecff29ecb310d62958a1cc86b0)) (by Kaung Myat Lwin)
+- [`UP-4234`](https://ekoapp.atlassian.net/browse/UP-4234) - fixed report menu item; removed redundant 3dots menu for current user profile ([`fc063e7`](https://gitlab.com/upstra/web/ui-kit/commit/fc063e7c244efe8e8461c8c195886e885ceeb5e9)) (by Serhii Ivanenko)
+- [`UP-4206`](https://ekoapp.atlassian.net/browse/UP-4206) - added missed confirmation modal on unfollow ([`c005c1f`](https://gitlab.com/upstra/web/ui-kit/commit/c005c1facb0a5507e4d6e64c1dbc6e6f554c9010)) (by Serhii Ivanenko)
+- fixed counters text and incorrect remove option ([`7076b07`](https://gitlab.com/upstra/web/ui-kit/commit/7076b073021e2614150aa01415ce664f0fb764ca)) (by Serhii Ivanenko)
+- fix pending tab ([`b0fcfe4`](https://gitlab.com/upstra/web/ui-kit/commit/b0fcfe44742872dec247dc16ea5443c0efefe9dc)) (by Serhii Ivanenko)
+- [`UP-4005`](https://ekoapp.atlassian.net/browse/UP-4005) - disable Switch Community Permission when internet cuts ([`68fd75d`](https://gitlab.com/upstra/web/ui-kit/commit/68fd75d31d8dda4692494e32ce59b68dbf50cf1f)) (by Kaung Myat Lwin)
+- [`UP-4217`](https://ekoapp.atlassian.net/browse/UP-4217) - remove 3dots menu for userItem if it equals to current user ([`cc207ce`](https://gitlab.com/upstra/web/ui-kit/commit/cc207ce469fd9fa26020958c3372fc98e6f7e3e9)) (by Serhii Ivanenko)
+- fixed pagination ([`6744f02`](https://gitlab.com/upstra/web/ui-kit/commit/6744f023a8c19b6af2fd01f4470b790d20cc1b3e)) (by Serhii Ivanenko)
+- [`UP-4205`](https://ekoapp.atlassian.net/browse/UP-4205) - added notification for accept/decline follow request ([`a7b26b6`](https://gitlab.com/upstra/web/ui-kit/commit/a7b26b60bec88e5782ae2604950c5a413487c203)) (by Serhii Ivanenko)
+- [`UP-4013`](https://ekoapp.atlassian.net/browse/UP-4013) - allow community moderators to delete posts ([`aadefd2`](https://gitlab.com/upstra/web/ui-kit/commit/aadefd2760befe415d80cd1e6bcb01cff1c0d863)) (by Valeriy Malyshev)
+- [`UP-4012`](https://ekoapp.atlassian.net/browse/UP-4012) - hide the user posts count ([`8dcedfe`](https://gitlab.com/upstra/web/ui-kit/commit/8dcedfe829210f2f39a634fd91b0a3c72a4eb1ec)) (by Valeriy Malyshev)
+- [`UP-4238`](https://ekoapp.atlassian.net/browse/UP-4238) - disable follow/pending buttons when connection drops ([`b44c304`](https://gitlab.com/upstra/web/ui-kit/commit/b44c304e54902e02640db159b0c707a332e179e0)) (by Kaung Myat Lwin)
+- [`UP-4230`](https://ekoapp.atlassian.net/browse/UP-4230) - fixed redirect on user item click ([`b795c7b`](https://gitlab.com/upstra/web/ui-kit/commit/b795c7b32cd7fbe9a48f0a6cb09c249c1d1ca993)) (by Serhii Ivanenko)
+
+### Commits
+
+- misc: EPL[`-662`](https://ekoapp.atlassian.net/browse/-662) - add qa anchors ([`5dd0b28`](https://gitlab.com/upstra/web/ui-kit/commit/5dd0b28e7d6fd31ad985b58347aa372437221af1)) (by Valeriy Malyshev)
+- [`UP-4207`](https://ekoapp.atlassian.net/browse/UP-4207) - added missed pending notification section ([`f0216a2`](https://gitlab.com/upstra/web/ui-kit/commit/f0216a2d54451c8c5f077cd16ea417966a276c10)) (by Serhii Ivanenko)
+- misc: align network settings with sdk changes ([`7b4202a`](https://gitlab.com/upstra/web/ui-kit/commit/7b4202a49101d844df72ffc02ada92223b1e3866)) (by Valeriy Malyshev)
+- [`UP-4235`](https://ekoapp.atlassian.net/browse/UP-4235) - fixed pagination for accounts tab of social search ([`c61deee`](https://gitlab.com/upstra/web/ui-kit/commit/c61deeea49288ec37eadec2178c7ca6b3d464a4e)) (by Serhii Ivanenko)
+- fixed tabs; upgraded SDK version ([`5a06fc5`](https://gitlab.com/upstra/web/ui-kit/commit/5a06fc54a43d1202987001d5ce64f6aa09fbbd96)) (by Serhii Ivanenko)
+- hotfix - upgraded SDK + added missed prop ([`14be597`](https://gitlab.com/upstra/web/ui-kit/commit/14be5972cad624f41ac04f9515bc96311000feea)) (by Serhii Ivanenko)
+- sdk 5.5.0 ([`85ee9dc`](https://gitlab.com/upstra/web/ui-kit/commit/85ee9dc2d4e6af5074b2758675097ee3a0fcfafa)) (by Valeriy Malyshev)
+- update sdk to 5.5.0-rc.5 ([`7faaf73`](https://gitlab.com/upstra/web/ui-kit/commit/7faaf73b77e38224dd4939b73afac65ddcc804c0)) (by Valeriy Malyshev)
+- [`UP-4200`](https://ekoapp.atlassian.net/browse/UP-4200) - upgraded SDK api version (now we not show posts of user who not followed by current) ([`f3181bd`](https://gitlab.com/upstra/web/ui-kit/commit/f3181bd47cf7988c64c348ba217158edef76d71e)) (by Serhii Ivanenko)
+- [`UP-4255`](https://ekoapp.atlassian.net/browse/UP-4255) - disable buttons in pending tab when no connection ([`1190af9`](https://gitlab.com/upstra/web/ui-kit/commit/1190af9d5feed7e843bf8b41278dffa1cc3657a1)) (by Serhii Ivanenko)
+- misc: [`UP-4226`](https://ekoapp.atlassian.net/browse/UP-4226) set LGPL[`-2`](https://ekoapp.atlassian.net/browse/-2).1-only license ([`4d26a60`](https://gitlab.com/upstra/web/ui-kit/commit/4d26a60a06ddc46482792ef69122b154cb6dc659)) (by Valeriy Malyshev)
+
+---
+
 ## [v2.1.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0-rc.2...v2.1.0)
 
 #### 2 August 2021
