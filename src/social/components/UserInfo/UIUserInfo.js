@@ -72,20 +72,22 @@ const UIUserInfo = ({
     });
   }, [handleReport]);
 
+  const title = user.displayName
+    ? formatMessage({ id: 'user.unfollow.confirm.title' }, { displayName: user.displayName })
+    : formatMessage({ id: 'user.unfollow.confirm.title.thisUser' });
+
+  const content = user.displayName
+    ? formatMessage({ id: 'user.unfollow.confirm.body' }, { displayName: user.displayName })
+    : formatMessage({ id: 'user.unfollow.confirm.body.thisUser' });
+
   const allOptions = [
     isFollowAccepted &&
       !isMyProfile && {
         name: 'user.unfollow',
         action: () =>
           confirm({
-            title: formatMessage({
-              id: 'user.unfollow.confirm.title',
-              values: { displayName: user.displayName },
-            }),
-            content: formatMessage({
-              id: 'user.unfollow.confirm.body',
-              values: { displayName: user.displayName },
-            }),
+            title,
+            content,
             cancelText: formatMessage({ id: 'buttonText.cancel' }),
             okText: formatMessage({ id: 'buttonText.unfollow' }),
             onOk: async () => {

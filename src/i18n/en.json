@@ -286,5 +286,7 @@
 
   "navigationBlocker.title": "Unsaved changes",
   "navigationBlocker.content": "Your changes won`t be saved. Are you sure you want to leave this page now?",
-  "navigationBlocker.okText": "Leave"
+  "navigationBlocker.okText": "Leave",
+  "user.unfollow.confirm.title.thisUser": "Unfollow this user",
+  "user.unfollow.confirm.body.thisUser": "You’ll have to send a request again to follow this user. Continue?"
 }
