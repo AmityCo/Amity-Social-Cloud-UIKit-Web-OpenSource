@@ -13,6 +13,7 @@ import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 import PageLayout from '~/social/layouts/Page';
 
 import Feed from '~/social/components/Feed';
+import MediaGallery from '~/social/components/MediaGallery';
 import CommunityInfo from '~/social/components/CommunityInfo';
 import CommunityMembers from '~/social/components/CommunityMembers';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
@@ -71,6 +72,10 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
           feedType={FeedType.Published}
         />
       </ConditionalRender>
+
+      {activeTab === CommunityFeedTabs.GALLERY && (
+        <MediaGallery targetType={PostTargetType.CommunityFeed} targetId={communityId} />
+      )}
 
       <ConditionalRender condition={activeTab === CommunityFeedTabs.MEMBERS}>
         <CommunityMembers communityId={communityId} />

@@ -2,6 +2,7 @@ import React from 'react';
 import { useArgs } from '@storybook/client-api';
 
 import UiKitTabs from '.';
+import UiKitMediaGalleryTabs from './MediaGalleryTabs';
 
 export default {
   title: 'Ui Only/Tabs',
@@ -48,6 +49,31 @@ Active.args = {
 };
 
 Active.argTypes = {
+  activeTab: {
+    control: {
+      type: 'select',
+      options: mockUpTabs.map(x => x.value),
+    },
+  },
+  onChange: { action: 'onChange()' },
+};
+
+export const ActiveMediaGalleryTabs = () => {
+  const [{ activeTab, onChange }, updateArgs] = useArgs();
+
+  const setActiveTab = val => {
+    onChange(val);
+    updateArgs({ activeTab: val });
+  };
+
+  return <UiKitMediaGalleryTabs tabs={mockUpTabs} activeTab={activeTab} onChange={setActiveTab} />;
+};
+
+ActiveMediaGalleryTabs.args = {
+  activeTab: mockUpTabs[0].value,
+};
+
+ActiveMediaGalleryTabs.argTypes = {
   activeTab: {
     control: {
       type: 'select',

@@ -6,6 +6,7 @@ import { CommunityFeedTabs } from './constants';
 export function getTabs(needApprovalOnPostCreation, isJoined, canReview, pendingPostCount = 0) {
   const tabs = [
     { value: CommunityFeedTabs.TIMELINE, label: <FormattedMessage id="tabs.timeline" /> },
+    { value: CommunityFeedTabs.GALLERY, label: <FormattedMessage id="tabs.gallery" /> },
     { value: CommunityFeedTabs.MEMBERS, label: <FormattedMessage id="tabs.members" /> },
   ];
 

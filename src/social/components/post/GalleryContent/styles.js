@@ -1,8 +1,10 @@
 import React from 'react';
+import FormattedDuration, { TIMER_FORMAT } from 'react-intl-formatted-duration';
 import styled from 'styled-components';
 import Button from '~/core/components/Button';
 import { ButtonContainer, ImageContainer } from '~/core/components/Uploaders/Image/styles';
 import { VideoContainer } from '~/core/components/Uploaders/Video/styles';
+import useFile from '~/core/hooks/useFile';
 import { Play } from '~/icons';
 import Image from '~/core/components/Uploaders/Image';
 import RemoveIcon from '~/icons/Remove';
@@ -23,19 +25,55 @@ export const PlayIcon = styled(Play)`
   transform: translate(-50%, -50%);
 `;
 
-export const VideoThumbnail = styled(({ className, fileId, onRemove }) => {
+export const Duration = styled.div`
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  padding: 1px 0.25rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+
+  && {
+    ${({ theme }) => theme.typography.caption}
+  }
+`;
+
+export const VideoThumbnail = styled(({ className, fileId, onRemove, videoFileId }) => {
+  const videoFile = useFile(videoFileId);
+  const duration =
+    typeof videoFile?.attributes?.metadata?.video?.duration === 'number'
+      ? videoFile.attributes.metadata.video.duration
+      : undefined;
+
   return fileId ? (
     <Image
       className={className}
       fileId={fileId}
       mediaFit="cover"
       onRemove={onRemove}
-      overlayElements={<PlayIcon />}
+      overlayElements={
+        <>
+          <PlayIcon />
+
+          {duration && (
+            <Duration>
+              <FormattedDuration seconds={duration} format={TIMER_FORMAT} />
+            </Duration>
+          )}
+        </>
+      }
     />
   ) : (
     <ImageContainer className={className}>
       <ButtonContainer>
         <PlayIcon />
+
+        {duration && (
+          <Duration>
+            <FormattedDuration seconds={duration} format={TIMER_FORMAT} />
+          </Duration>
+        )}
 
         {!!onRemove && (
           <RemoveButton

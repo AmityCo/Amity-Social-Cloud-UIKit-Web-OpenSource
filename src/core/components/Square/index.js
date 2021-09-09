@@ -18,8 +18,8 @@ const Cell = styled.div`
   overflow: hidden;
 `;
 
-const Square = ({ className, ratio = 1, children }) => (
-  <Frame className={className} percent={100 * ratio}>
+const Square = ({ className, ratio = 1, children, onClick }) => (
+  <Frame className={className} percent={100 * ratio} onClick={onClick}>
     <Cell>{children}</Cell>
   </Frame>
 );

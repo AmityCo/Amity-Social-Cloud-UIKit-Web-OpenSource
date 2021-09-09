@@ -10,6 +10,7 @@ const Image = ({
   className,
   'data-qa-anchor': dataQaAnchor,
   fileId,
+  loading,
   mediaFit,
   noBorder,
   onRemove,
@@ -17,13 +18,15 @@ const Image = ({
 } = {}) => {
   const file = useFile(fileId);
 
-  if (!file.fileId) return null;
+  if (!loading && !file.fileId) return null;
 
   // TODO: this is temporary - we should use file.fileUrl when supported.
-  const fileUrl = FileRepository.getFileUrlById({
-    fileId: file.fileId,
-    imageSize: ImageSize.Medium,
-  });
+  const fileUrl =
+    file.fileId &&
+    FileRepository.getFileUrlById({
+      fileId: file.fileId,
+      imageSize: ImageSize.Medium,
+    });
 
   return (
     <StyledImage
@@ -42,6 +45,7 @@ Image.propTypes = {
   className: PropTypes.string,
   'data-qa-anchor': PropTypes.string,
   fileId: PropTypes.string.isRequired,
+  loading: PropTypes.bool,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
   noBorder: PropTypes.bool,
   onRemove: PropTypes.func,
@@ -51,6 +55,7 @@ Image.propTypes = {
 Image.defaultProps = {
   className: undefined,
   'data-qa-anchor': undefined,
+  loading: false,
   onRemove: () => {},
   overlayElements: undefined,
 };

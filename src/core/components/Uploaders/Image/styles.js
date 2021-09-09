@@ -55,11 +55,16 @@ export const SkeletonWrapper = styled.div`
 const ImageSkeleton = () => (
   <SizeMe monitorHeight>
     {({ size }) => {
-      const minSize = Math.min(size.width, size.height);
+      const minSize = Math.min(size.width, size.height) || 0;
 
       return (
         <SkeletonWrapper>
-          <Skeleton height={minSize} width={minSize} style={{ display: 'block' }} />
+          <Skeleton
+            borderRadius={0}
+            height={minSize}
+            width={minSize}
+            style={{ display: 'block' }}
+          />
         </SkeletonWrapper>
       );
     }}

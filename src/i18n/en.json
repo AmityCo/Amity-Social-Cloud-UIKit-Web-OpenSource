@@ -231,6 +231,10 @@
   "tabs.moderators": "Moderators",
   "tabs.pendingPosts": "Pending {amount, select, 0 {} other { ({formattedAmount})}}",
   "tabs.permissions": "Permissions",
+  "tabs.gallery": "Gallery",
+  "tabs.images": "Photos",
+  "tabs.videos": "Videos",
+  "tabs.livestreams": "Livestreams",
   "feed.emptyFeed": "This feed is empty",
   "feed.emptyCommunityPublicFeed": "This community's feed is empty",
   "feed.emptyCommunityReviewingFeed": "No pending posts",
@@ -288,5 +292,8 @@
   "navigationBlocker.content": "Your changes won`t be saved. Are you sure you want to leave this page now?",
   "navigationBlocker.okText": "Leave",
   "user.unfollow.confirm.title.thisUser": "Unfollow this user",
-  "user.unfollow.confirm.body.thisUser": "You’ll have to send a request again to follow this user. Continue?"
+  "user.unfollow.confirm.body.thisUser": "You’ll have to send a request again to follow this user. Continue?",
+
+  "mediaGallery.images.empty": "No photos yet",
+  "mediaGallery.videos.empty": "No videos yet"
 }

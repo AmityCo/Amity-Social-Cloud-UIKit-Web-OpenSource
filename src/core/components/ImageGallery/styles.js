@@ -79,22 +79,34 @@ const InvisibleButton = styled.button`
   cursor: pointer;
   font-size: 24px;
   color: inherit;
+
+  &:hover {
+    color: ${({ theme }) => theme.palette.neutral.shade4};
+  }
 `;
 
 export const LeftButton = props => (
   <InvisibleButton rel="left" {...props}>
-    <ChevronLeft />
+    <ChevronLeft height="24px" />
   </InvisibleButton>
 );
 
 export const RightButton = props => (
   <InvisibleButton rel="right" {...props}>
-    <ChevronRight />
+    <ChevronRight height="24px" />
   </InvisibleButton>
 );
 
-export const CloseButton = props => (
+export const CloseButton = styled(props => (
   <InvisibleButton rel="close" {...props}>
-    <Remove />
+    <Remove height="20px" />
   </InvisibleButton>
-);
+))`
+  background: rgba(0, 0, 0, 0.3);
+  height: 43px;
+  width: 43px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
