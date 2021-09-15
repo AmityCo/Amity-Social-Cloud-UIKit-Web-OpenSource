@@ -1,5 +1,24 @@
 # Changelog
 
+## [v2.3.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.2.0...v2.3.0)
+
+#### 15 September 2021
+
+### New Features
+
+- [`UP-3737`](https://ekoapp.atlassian.net/browse/UP-3737) - add media gallery for photo and video ([`b97252d`](https://gitlab.com/upstra/web/ui-kit/commit/b97252d19affa720bf9f7b7509c2ea06d8025eb8)) (by Valeriy Malyshev)
+
+### Fixes
+
+- [`UP-4494`](https://ekoapp.atlassian.net/browse/UP-4494) - fixed modal confirm text ([`2110deb`](https://gitlab.com/upstra/web/ui-kit/commit/2110deb4cb3e721cde8ce31269a70ecfbeaf6d77)) (by Serhii Ivanenko)
+
+### Commits
+
+- sdk 5.6.0 ([`87ef876`](https://gitlab.com/upstra/web/ui-kit/commit/87ef8767a0477f18bbbd6971db0d469c3e431242)) (by Valeriy Malyshev)
+- sdk 5.6.0-rc.4 ([`6492977`](https://gitlab.com/upstra/web/ui-kit/commit/64929771bdfc4c84f4f5f78fa5622b4ebb8c2979)) (by Valeriy Malyshev)
+
+---
+
 ## [v2.2.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.1.0...v2.2.0)
 
 #### 31 August 2021
