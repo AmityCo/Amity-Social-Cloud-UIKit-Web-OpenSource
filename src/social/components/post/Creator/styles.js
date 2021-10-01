@@ -3,6 +3,7 @@ import { PrimaryButton } from '~/core/components/Button';
 import InputText from '~/core/components/InputText';
 import UIAvatar from '~/core/components/Avatar';
 import VideoAttachment from '~/icons/VideoAttachment';
+import { Poll } from '~/icons';
 
 export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
@@ -48,3 +49,18 @@ export const PostInputText = styled(InputText)`
 export const VideoAttachmentIcon = styled(VideoAttachment)`
   vertical-align: -0.125em;
 `;
+
+export const PollButton = styled.button`
+  background: none;
+  border: none;
+`;
+
+export const PollIconContainer = styled.div`
+  height: 14px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+export const PollIcon = styled(Poll)``;

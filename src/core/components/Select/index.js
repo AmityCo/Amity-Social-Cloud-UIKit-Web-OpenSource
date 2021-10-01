@@ -38,6 +38,7 @@ const Select = ({
   isOpen,
   handleClose,
   placeholder = 'Select...',
+  className = '',
 }) => {
   const [isOpenInternal, setIsOpenInternal] = useState(isOpen);
   const [selected, setSelected] = useState(value);
@@ -78,11 +79,16 @@ const Select = ({
     }
   };
 
+  const handleClick = e => {
+    e.preventDefault();
+    toggle();
+  };
+
   return (
     <Dropdown
       isOpen={isOpen || isOpenInternal}
       renderTrigger={props =>
-        renderTrigger({ ...props, onClick: toggle, selected, remove, placeholder })
+        renderTrigger({ ...props, onClick: handleClick, selected, remove, placeholder })
       }
       // when using custom trigger we should handle "close on click outside" (if needed)
       handleClose={close}
@@ -90,6 +96,7 @@ const Select = ({
       scrollable
       parentContainer={parentContainer}
       disabled={disabled}
+      className={className}
     >
       <ConditionalRender condition={options && options.length}>
         <Menu>
@@ -126,6 +133,7 @@ Select.propTypes = {
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
   placeholder: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default memo(Select);

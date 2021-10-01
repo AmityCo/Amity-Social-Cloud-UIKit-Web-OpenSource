@@ -17,6 +17,9 @@ export const Tab = () => <Icons.Tab />;
 export const UnknownPost = () => <Icons.UnknownPost />;
 export const Pending = () => <Icons.Pending />;
 export const MagicWand = () => <Icons.MagicWand />;
+export const Minus = () => <Icons.Minus />;
+export const Poll = () => <Icons.Poll />;
+export const CircleRemove = () => <Icons.CircleRemove />;
 
 export const Camera = () => <Icons.Camera />;
 export const Check = () => <Icons.Check />;

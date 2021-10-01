@@ -37,6 +37,7 @@ const Dropdown = ({
   // we calculate re-position relatively to parentContainer (document.body by default)
   parentContainer = null,
   disabled = false,
+  className = '',
 }) => {
   const [isOpenInternal, setIsOpenInternal] = useState(isOpen);
   const [currentPosition, setCurrentPosition] = useState(position);
@@ -87,7 +88,7 @@ const Dropdown = ({
   }, [entry]);
 
   return (
-    <DropdownContainer ref={dropdownRef}>
+    <DropdownContainer ref={dropdownRef} className={className}>
       <ButtonContainer ref={buttonContainerRef}>
         {renderTrigger({ ...defaultTriggerParams, 'data-qa-anchor': dataQaAnchor })}
       </ButtonContainer>
@@ -121,6 +122,7 @@ Dropdown.propTypes = {
   scrollableHeight: PropTypes.number,
   parentContainer: PropTypes.instanceOf(Element),
   disabled: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default Dropdown;

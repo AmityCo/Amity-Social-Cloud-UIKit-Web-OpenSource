@@ -68,7 +68,7 @@ export const Counter = styled.div`
 `;
 
 export const Label = styled.label`
-  ${({ theme }) => theme.typography.bodyBold}
+  ${({ theme }) => theme.typography.bodyBold};
   margin-bottom: 4px;
   ${({ theme }) => `
   &.required {
@@ -112,7 +112,7 @@ export const SubmitButton = styled(PrimaryButton).attrs({
 
 export const FormBlockHeader = styled.div`
   padding: 12px 16px;
-  ${({ theme }) => theme.typography.title}
+  ${({ theme }) => theme.typography.title};
   display: flex;
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => theme.palette.base.shade4};
@@ -157,18 +157,18 @@ export const PermissionControlContainer = styled.div`
 
 export const Description = styled.div`
   color: ${({ theme }) => theme.palette.base.shade1};
-  ${({ theme }) => theme.typography.body}
+  ${({ theme }) => theme.typography.body};
   width: 357px;
 `;
 
 export const InformationBlock = styled.div`
-  padding 0 16px 20px;
+  padding: 0 16px 20px;
   display: flex;
   flex-direction: column;
 `;
 
 export const CommunityPermissionBlock = styled.div`
-  padding 0 16px 20px;
+  padding: 0 16px 20px;
   display: flex;
   flex-direction: column;
 `;
@@ -229,7 +229,7 @@ export const Avatar = styled(UIAvatar)`
 `;
 
 export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 15 })`
-  ${({ theme }) => theme.typography.global}
+  ${({ theme }) => theme.typography.global};
   display: block;
   outline: none;
   border-radius: 4px;
@@ -242,7 +242,7 @@ export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 
 `;
 
 export const TextField = styled.input`
-  ${({ theme }) => theme.typography.global}
+  ${({ theme }) => theme.typography.global};
   border-radius: 4px;
   border: 1px solid #e3e4e8;
   padding: 10px 12px;

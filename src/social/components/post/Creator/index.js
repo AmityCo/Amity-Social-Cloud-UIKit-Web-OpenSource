@@ -39,7 +39,11 @@ import {
   PostButton,
   UploadsContainer,
   PostInputText,
+  PollButton,
+  PollIcon,
+  PollIconContainer,
 } from './styles';
+import PollModal from '~/social/components/post/PollComposer/PollModal';
 
 const communityFetcher = id => () => CommunityRepository.communityForId(id);
 const userFetcher = id => () => new UserRepository().userForId(id);
@@ -166,8 +170,23 @@ const PostCreatorBar = ({
     }
   }, [hasChanges]);
 
+  const [isPollModalOpened, setPollModalOpened] = useState(false);
+  const openPollModal = () => setPollModalOpened(true);
+
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)}>
+      <PollModal
+        isOpen={isPollModalOpened}
+        onCreatePoll={(pollId, text) =>
+          createPost({
+            ...{ targetType: PostTargetType.UserFeed, targetId: currentUserId },
+            data: { pollId, text },
+            dataType: 'poll',
+          })
+        }
+        onClose={() => setPollModalOpened(false)}
+      />
+
       <ConditionalRender condition={enablePostTargetPicker}>
         <PostTargetSelector
           user={user}
@@ -229,6 +248,11 @@ const PostCreatorBar = ({
             fileLimitRemaining={maxFiles - postFiles.length - postImages.length - postVideos.length}
             uploadLoading={uploadLoading}
           />
+          <PollButton onClick={openPollModal}>
+            <PollIconContainer>
+              <PollIcon />
+            </PollIconContainer>
+          </PollButton>
           <PostButton
             disabled={isDisabled}
             onClick={onCreatePost}

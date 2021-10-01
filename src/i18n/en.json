@@ -294,11 +294,26 @@
 
   "navigationBlocker.title": "Unsaved changes",
   "navigationBlocker.content": "Your changes won`t be saved. Are you sure you want to leave this page now?",
-  "navigationBlocker.okText": "Leave",
   "user.unfollow.confirm.title.thisUser": "Unfollow this user",
-  "user.unfollow.confirm.body.thisUser": "You’ll have to send a request again to follow this user. Continue?",
-
   "mediaGallery.images.empty": "No photos yet",
+  "mediaGallery.livestreams.empty": "No livestreams yet",
   "mediaGallery.videos.empty": "No videos yet",
-  "mediaGallery.livestreams.empty": "No livestreams yet"
+  "user.unfollow.confirm.body.thisUser": "You’ll have to send a request again to follow this user. Continue?",
+  "navigationBlocker.okText": "Leave",
+  "options_composer.button.add": "Add Option",
+  "options_composer.title": "Create at least 2 options",
+  "poll_modal.answer_type.title": "Selection type",
+  "poll_modal.answer_type.body": "Choose to vote with one or multiple options",
+  "poll_modal.closed_in.title": "Schedule poll (Optional)",
+  "poll_modal.closed_in.body": "Poll will be automatically closed at the end of chosen time frame (UTC)",
+  "select.answerType.item": "{answerType} selection",
+  "poll_composer.question.label": "Poll options",
+  "poll_composer.question.placeholder": "What’s your poll question?",
+  "poll_composer.poll_options.label": "Options",
+  "poll_modal.title": "Create poll",
+  "poll.votes": "{voteCount} votes",
+  "poll.vote.closedIn": "Poll ends in {closedIn} days",
+  "poll.vote.finalResults": "Final results",
+  "poll.vote.submit": "Submit vote",
+  "poll.error.deletedOrClosed": "This poll has been closed or deleted."
 }

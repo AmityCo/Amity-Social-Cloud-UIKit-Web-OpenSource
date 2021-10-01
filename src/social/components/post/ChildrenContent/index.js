@@ -4,6 +4,8 @@ import { PostDataType } from '@amityco/js-sdk';
 
 import GalleryContent from '~/social/components/post/GalleryContent';
 import FileListContent from '~/social/components/post/FileListContent';
+import PollContent from '~/social/components/post/PollContent';
+
 import * as StreamItem from '~/social/components/post/GalleryContent/StreamItem';
 import * as VideoItem from '~/social/components/post/GalleryContent/VideoItem';
 import { LivestreamRenderer } from './styles';
@@ -12,6 +14,7 @@ const RENDERERS = {
   [PostDataType.ImagePost]: GalleryContent,
   [PostDataType.VideoPost]: GalleryContent,
   [PostDataType.FilePost]: FileListContent,
+  [PostDataType.PollPost]: PollContent,
   [PostDataType.LivestreamPost]: LivestreamRenderer,
 };
 

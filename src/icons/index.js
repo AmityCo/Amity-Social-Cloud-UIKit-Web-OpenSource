@@ -15,6 +15,9 @@ export { default as MagicWand } from './MagicWand';
 export { default as Play } from './Play';
 export { default as VideoAttachment } from './VideoAttachment';
 export { default as LivestreamCover } from './LivestreamCover';
+export { default as Minus } from './Minus';
+export { default as Poll } from './Poll';
+export { default as CircleRemove } from './CircleRemove';
 
 // files
 export { default as AudioFile } from './files/Audio';
