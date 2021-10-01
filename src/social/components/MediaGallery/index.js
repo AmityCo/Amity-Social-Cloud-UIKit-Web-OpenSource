@@ -4,9 +4,18 @@ import EmptyState from '~/core/components/EmptyState';
 import customizableComponent from '~/core/hocs/customization';
 import LoadMore from '~/social/components/LoadMore';
 import GalleryContent from '~/social/components/post/GalleryContent';
+import * as VideoItem from '~/social/components/post/GalleryContent/VideoItem';
+import * as StreamItem from '~/social/components/post/GalleryContent/StreamItem';
 import useMediaGallery from '~/social/hooks/useMediaGallery';
 import { EmptyIcons, EmptyText, RECORDS_PER_PAGE, tabs } from './constants';
 import { MediaGalleryContainer, Tabs } from './styles';
+
+const thumbnailRenderers = {
+  [PostDataType.VideoPost]: props => <VideoItem.Thumbnail {...props} showVideoDuration />,
+  [PostDataType.LivestreamPost]: props => (
+    <StreamItem.Thumbnail {...props} showLivestreamTitle showVideoDuration />
+  ),
+};
 
 function MediaGallery({ targetId, targetType }) {
   const [activeTab, setActiveTab] = useState(PostDataType.ImagePost);
@@ -29,8 +38,8 @@ function MediaGallery({ targetId, targetType }) {
             loading={loading}
             loadingMore={loadingMore}
             showCounter={false}
-            showVideoDuration
             truncate={false}
+            thumbnailRenderers={thumbnailRenderers}
           />
         </LoadMore>
       )}

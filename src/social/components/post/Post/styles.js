@@ -2,6 +2,7 @@ import cx from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
 import UIOptionMenu from '~/core/components/OptionMenu';
+import Skeleton from '~/core/components/Skeleton';
 
 export const OptionMenu = styled(UIOptionMenu)`
   margin-left: auto;
@@ -20,7 +21,7 @@ export const PostContainer = styled(({ className, ...props }) => (
 export const PostHeadContainer = styled.div`
   display: flex;
   align-items: center;
-  padding-bottom: 14px;
+  margin-bottom: 14px;
 `;
 
 export const ReviewButtonsContainer = styled.div`
@@ -37,3 +38,19 @@ export const ReviewButtonsContainer = styled.div`
     }
   }
 `;
+
+export function ContentSkeleton() {
+  return (
+    <>
+      <div>
+        <Skeleton style={{ fontSize: 8, maxWidth: 374 }} />
+      </div>
+      <div>
+        <Skeleton style={{ fontSize: 8, maxWidth: 448 }} />
+      </div>
+      <div style={{ paddingBottom: 50 }}>
+        <Skeleton style={{ fontSize: 8, maxWidth: 279 }} />
+      </div>
+    </>
+  );
+}

@@ -1,21 +1,19 @@
-import { PostDataType } from '@amityco/js-sdk';
 import React, { useMemo, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
 import GalleryGrid from '~/core/components/GalleryGrid';
 import ImageGallery from '~/core/components/ImageGallery';
 import Image from '~/core/components/Uploaders/Image';
-import Video from '~/core/components/Uploaders/Video';
-import { VideoMessage, VideoThumbnail } from './styles';
+import { GalleryItems, GalleryThumbnails } from './constants';
 
 const GalleryContent = ({
+  className,
   items: itemsRaw = [],
   loading = false,
   loadingMore = false,
   showCounter = true,
-  showVideoDuration = false,
   truncate = true,
+  thumbnailRenderers = GalleryThumbnails,
 }) => {
   const [index, setIndex] = useState(null);
 
@@ -34,6 +32,7 @@ const GalleryContent = ({
   return (
     <>
       <GalleryGrid
+        className={className}
         items={items}
         onClick={i => {
           if (!items[i].skeleton) {
@@ -43,29 +42,17 @@ const GalleryContent = ({
         truncate={truncate}
       >
         {item => {
-          if (!item) {
-            return null;
-          }
-
           if (item.skeleton) {
             return <Image loading />;
           }
 
-          if (item.dataType === PostDataType.ImagePost) {
-            return <Image key={item.data.fileId} fileId={item.data.fileId} mediaFit="cover" />;
+          const Component = { ...GalleryThumbnails, ...thumbnailRenderers }[item.dataType];
+
+          if (!Component) {
+            return null;
           }
 
-          if (item.dataType === PostDataType.VideoPost) {
-            return (
-              <VideoThumbnail
-                key={item.data.thumbnailFileId}
-                fileId={item.data.thumbnailFileId}
-                videoFileId={showVideoDuration && item.data.videoFileId.original}
-              />
-            );
-          }
-
-          return null;
+          return <Component item={item} />;
         }}
       </GalleryGrid>
 
@@ -76,42 +63,13 @@ const GalleryContent = ({
               return null;
             }
 
-            if (item.dataType === PostDataType.ImagePost) {
-              return (
-                <Image
-                  key={item.data.fileId}
-                  fileId={item.data.fileId}
-                  mediaFit="contain"
-                  noBorder
-                />
-              );
+            const Component = GalleryItems[item.dataType];
+
+            if (!Component) {
+              return null;
             }
 
-            if (item.dataType === PostDataType.VideoPost) {
-              const fileId =
-                item.data.videoFileId.high ||
-                item.data.videoFileId.medium ||
-                item.data.videoFileId.low;
-
-              if (!fileId) {
-                return (
-                  <VideoMessage>
-                    <FormattedMessage id="video.notReady" />
-                  </VideoMessage>
-                );
-              }
-
-              return (
-                <Video
-                  key={item.data.videoFileId.original}
-                  fileId={fileId}
-                  mediaFit="contain"
-                  noBorder
-                />
-              );
-            }
-
-            return null;
+            return <Component item={item} />;
           }}
         </ImageGallery>
       )}
@@ -120,11 +78,12 @@ const GalleryContent = ({
 };
 
 GalleryContent.propTypes = {
+  className: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.object),
   loading: PropTypes.bool,
   loadingMore: PropTypes.bool,
   showCounter: PropTypes.bool,
-  showVideoDuration: PropTypes.bool,
+  thumbnailRenderers: PropTypes.object,
   truncate: PropTypes.bool,
 };
 

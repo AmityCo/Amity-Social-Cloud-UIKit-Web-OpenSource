@@ -2,16 +2,15 @@ import React from 'react';
 import FormattedDuration, { TIMER_FORMAT } from 'react-intl-formatted-duration';
 import styled from 'styled-components';
 import Button from '~/core/components/Button';
+import Image from '~/core/components/Uploaders/Image';
 import { ButtonContainer, ImageContainer } from '~/core/components/Uploaders/Image/styles';
 import { VideoContainer } from '~/core/components/Uploaders/Video/styles';
 import useFile from '~/core/hooks/useFile';
-import { Play } from '~/icons';
-import Image from '~/core/components/Uploaders/Image';
-import RemoveIcon from '~/icons/Remove';
+import { Play, Remove } from '~/icons';
 
 export const RemoveButton = styled(Button).attrs({
   variant: 'secondary',
-  children: <RemoveIcon />,
+  children: <Remove />,
 })`
   position: absolute;
   top: 0.5em;
@@ -39,59 +38,92 @@ export const Duration = styled.div`
   }
 `;
 
-export const VideoThumbnail = styled(({ className, fileId, onRemove, videoFileId }) => {
-  const videoFile = useFile(videoFileId);
-  const duration =
-    typeof videoFile?.attributes?.metadata?.video?.duration === 'number'
-      ? videoFile.attributes.metadata.video.duration
-      : undefined;
+export const Thumbnail = styled(
+  ({ className, duration, fileId, onRemove, overlayElements, showPlayIcon }) => {
+    return fileId ? (
+      <Image
+        className={className}
+        fileId={fileId}
+        mediaFit="cover"
+        onRemove={onRemove}
+        overlayElements={
+          <>
+            {overlayElements}
 
-  return fileId ? (
-    <Image
-      className={className}
-      fileId={fileId}
-      mediaFit="cover"
-      onRemove={onRemove}
-      overlayElements={
-        <>
-          <PlayIcon />
+            {showPlayIcon && <PlayIcon />}
+
+            {duration && (
+              <Duration>
+                <FormattedDuration seconds={duration} format={TIMER_FORMAT} />
+              </Duration>
+            )}
+          </>
+        }
+      />
+    ) : (
+      <ImageContainer className={className}>
+        <ButtonContainer>
+          {overlayElements}
+
+          {showPlayIcon && <PlayIcon />}
 
           {duration && (
             <Duration>
               <FormattedDuration seconds={duration} format={TIMER_FORMAT} />
             </Duration>
           )}
-        </>
-      }
-    />
-  ) : (
-    <ImageContainer className={className}>
-      <ButtonContainer>
-        <PlayIcon />
 
-        {duration && (
-          <Duration>
-            <FormattedDuration seconds={duration} format={TIMER_FORMAT} />
-          </Duration>
-        )}
-
-        {!!onRemove && (
-          <RemoveButton
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              onRemove();
-            }}
-          />
-        )}
-      </ButtonContainer>
-    </ImageContainer>
-  );
-})`
+          {!!onRemove && (
+            <RemoveButton
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                onRemove();
+              }}
+            />
+          )}
+        </ButtonContainer>
+      </ImageContainer>
+    );
+  },
+)`
   background: #ebecef;
 `;
 
-const Message = styled.div`
+export const VideoThumbnail = styled(({ fileId, videoFileId, ...props }) => {
+  const videoFile = useFile(videoFileId);
+  const duration =
+    typeof videoFile?.attributes?.metadata?.video?.duration === 'number'
+      ? videoFile.attributes.metadata.video.duration
+      : undefined;
+
+  return <Thumbnail {...props} duration={duration} fileId={fileId} />;
+})``;
+
+const VideoPlayerMockInternal = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  transform: translateY(-50%);
+  padding-bottom: 56%;
+  background: #000;
+`;
+
+export const VideoPlayerMock = styled(({ children, ...props }) => (
+  <div {...props}>
+    <VideoPlayerMockInternal>{children}</VideoPlayerMockInternal>
+  </div>
+))`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 825px;
+  margin-right: auto;
+  margin-left: auto;
+`;
+
+export const Message = styled.div`
   && {
     position: absolute;
     top: 50%;
@@ -99,7 +131,7 @@ const Message = styled.div`
     left: 1em;
     text-align: center;
     transform: translateY(-50%);
-    font-size: 1.15em;
+    color: #fff;
   }
 `;
 

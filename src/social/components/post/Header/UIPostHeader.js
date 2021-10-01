@@ -13,7 +13,6 @@ import {
   ShieldIcon,
   ModeratorBadge,
   AdditionalInfo,
-  ArrowSeparatorContainer,
   ArrowSeparator,
   PostHeaderContainer,
   PostNamesContainer,
@@ -33,21 +32,20 @@ const UIPostHeader = ({
   loading,
 }) => {
   const renderPostNames = () => {
-    const authorName = (
-      <Name onClick={onClickUser} className={cx({ clickable: !!onClickUser })}>
-        {postAuthorName}
-      </Name>
-    );
-    if (!postTargetName || hidePostTarget) return authorName;
     return (
       <PostNamesContainer>
-        {authorName}
-        <ArrowSeparatorContainer>
-          <ArrowSeparator />
-        </ArrowSeparatorContainer>
-        <Name onClick={onClickCommunity} className={cx({ clickable: !!onClickCommunity })}>
-          {postTargetName}
+        <Name onClick={onClickUser} className={cx({ clickable: !!onClickUser })}>
+          {postAuthorName}
         </Name>
+
+        {postTargetName && !hidePostTarget && (
+          <>
+            <ArrowSeparator />
+            <Name onClick={onClickCommunity} className={cx({ clickable: !!onClickCommunity })}>
+              {postTargetName}
+            </Name>
+          </>
+        )}
       </PostNamesContainer>
     );
   };

@@ -1,4 +1,4 @@
-import { PostTargetType } from '@amityco/js-sdk';
+import { PostDataType, PostTargetType } from '@amityco/js-sdk';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -6,7 +6,6 @@ import Button, { PrimaryButton } from '~/core/components/Button';
 import { confirm, info } from '~/core/components/Confirm';
 import Modal from '~/core/components/Modal';
 import { notification } from '~/core/components/Notification';
-import Skeleton from '~/core/components/Skeleton';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { canDeletePost, canEditPost, canReportPost } from '~/helpers/permissions';
 import { isPostUnderReview } from '~/helpers/utils';
@@ -17,7 +16,13 @@ import Header from '~/social/components/post/Header';
 import Content from '~/social/components/post/Post/Content';
 import useCommunity from '~/social/hooks/useCommunity';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
-import { OptionMenu, PostContainer, PostHeadContainer, ReviewButtonsContainer } from './styles';
+import {
+  ContentSkeleton,
+  OptionMenu,
+  PostContainer,
+  PostHeadContainer,
+  ReviewButtonsContainer,
+} from './styles';
 
 // Number of lines to show in a text post before truncating.
 const MAX_TEXT_LINES_DEFAULT = 8;
@@ -112,6 +117,7 @@ const DefaultPostRenderer = ({
       communityUser: currentMember,
       post,
       community,
+      childrenPosts,
     }) && {
       name: 'post.editPost',
       action: openEditingPostModal,
@@ -146,6 +152,11 @@ const DefaultPostRenderer = ({
   const hasChildrenPosts = childrenContent.length > 0;
   const postMaxLines = hasChildrenPosts ? MAX_TEXT_LINES_WITH_CHILDREN : MAX_TEXT_LINES_DEFAULT;
 
+  // live stream post = empty text post + child livestream post
+  const livestreamContent = childrenContent.find(
+    child => child.dataType === PostDataType.LivestreamPost,
+  );
+
   return (
     <PostContainer className={className}>
       <PostHeadContainer>
@@ -154,20 +165,14 @@ const DefaultPostRenderer = ({
       </PostHeadContainer>
 
       {loading ? (
-        <>
-          <div>
-            <Skeleton style={{ fontSize: 8, maxWidth: 374 }} />
-          </div>
-          <div>
-            <Skeleton style={{ fontSize: 8, maxWidth: 448 }} />
-          </div>
-          <div style={{ paddingBottom: 50 }}>
-            <Skeleton style={{ fontSize: 8, maxWidth: 279 }} />
-          </div>
-        </>
+        <ContentSkeleton />
       ) : (
         <>
-          <Content data={data} dataType={dataType} postMaxLines={postMaxLines} />
+          <Content
+            data={livestreamContent?.data ?? data}
+            dataType={livestreamContent?.dataType ?? dataType}
+            postMaxLines={postMaxLines}
+          />
 
           {hasChildrenPosts && <ChildrenContent>{childrenContent}</ChildrenContent>}
 

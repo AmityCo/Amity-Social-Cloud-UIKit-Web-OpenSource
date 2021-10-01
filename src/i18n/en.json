@@ -39,6 +39,7 @@
   "post.renderingError.title": "Something went wrong",
   "post.community": "Community",
   "post.myTimeline": "My Timeline",
+  "post.wasLive": "was live",
 
   "post.success.approved": "Post approved",
   "post.success.declined": "Post declined",
@@ -265,7 +266,10 @@
   "general.create.capital": "Create",
   "general.done.capital": "Done",
   "chat.member.addMore": "Add or Remove user",
-  "video.notReady": "Your video is being processed please try again later",
+  "video.notReady": "The video is being processed. Please try again later.",
+  "livestream.idle": "This stream is currently unavailable",
+  "livestream.ended.caption": "This livestream has ended.",
+  "livestream.ended.message": "Playback will be available for you to watch shortly.",
   "user.follow": "Follow",
   "user.unfollow": "Unfollow",
   "user.unfollow.confirm.title": "Unfollow {displayName}",
@@ -295,5 +299,6 @@
   "user.unfollow.confirm.body.thisUser": "You’ll have to send a request again to follow this user. Continue?",
 
   "mediaGallery.images.empty": "No photos yet",
-  "mediaGallery.videos.empty": "No videos yet"
+  "mediaGallery.videos.empty": "No videos yet",
+  "mediaGallery.livestreams.empty": "No livestreams yet"
 }

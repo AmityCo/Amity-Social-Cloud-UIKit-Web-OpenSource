@@ -1,3 +1,4 @@
+import { PostDataType } from '@amityco/js-sdk';
 // TODO: refactor to align with SDK roles once available.
 import { isCommunityMember, isCommunityPost, isPostUnderReview } from '~/helpers/utils';
 
@@ -61,7 +62,11 @@ export function canDeletePost({ userId, user, communityUser, post, community }) 
   return isPostModer || isMyPost;
 }
 
-export function canEditPost({ userId, user, communityUser, post, community }) {
+export function canEditPost({ userId, user, communityUser, post, community, childrenPosts }) {
+  if (childrenPosts.find(childPost => childPost.dataType === PostDataType.LivestreamPost)) {
+    return false;
+  }
+
   const isPostModer = isPostModerator({ userId, user, communityUser, post, community });
   const isMyPost = post.postedUserId === userId;
 

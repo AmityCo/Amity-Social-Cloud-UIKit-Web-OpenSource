@@ -1,4 +1,5 @@
-import React from 'react';
+import HLS from 'hls.js';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { SizeMe } from 'react-sizeme';
@@ -6,10 +7,9 @@ import { SizeMe } from 'react-sizeme';
 import Button from '~/core/components/Button';
 import ProgressBar from '~/core/components/ProgressBar';
 import Skeleton from '~/core/components/Skeleton';
+import LiveBadge from '~/social/components/LiveBadge';
 
-import Play from '~/icons/Play';
-import RemoveIcon from '~/icons/Remove';
-import ExclamationCircle from '~/icons/ExclamationCircle';
+import { ExclamationCircle, Play, Remove } from '~/icons';
 
 export const VideoContainer = styled.div`
   position: relative;
@@ -41,12 +41,14 @@ const VideoPreviewContainerStyles = css`
   object-position: center;
 `;
 
-export const VideoPreview = styled(({ src, mimeType, mediaFit, ...props }) => (
-  // eslint-disable-next-line jsx-a11y/media-has-caption
-  <video controls controlsList="nodownload" {...props}>
-    <source src={src} type={mimeType} />
-  </video>
-))`
+export const VideoPreview = styled(
+  React.forwardRef(({ src, mimeType, mediaFit, ...props }, ref) => (
+    // eslint-disable-next-line jsx-a11y/media-has-caption
+    <video controls controlsList="nodownload" {...props} ref={ref}>
+      <source src={src} type={mimeType} />
+    </video>
+  )),
+)`
   ${VideoPreviewContainerStyles}
   cursor: pointer;
 `;
@@ -75,7 +77,7 @@ const VideoSkeleton = () => (
 
 export const RemoveButton = styled(Button).attrs({
   variant: 'secondary',
-  children: <RemoveIcon />,
+  children: <Remove />,
 })`
   position: absolute;
   top: 0.5em;
@@ -111,6 +113,12 @@ export const PlayIcon = styled(Play)`
   pointer-events: none;
 `;
 
+export const LiveIcon = styled(LiveBadge)`
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+`;
+
 const Video = ({
   url,
   progress,
@@ -121,6 +129,7 @@ const Video = ({
   onRetry,
   mimeType,
   autoPlay,
+  isLive,
 }) => {
   function removeCallback(e) {
     e.preventDefault();
@@ -134,22 +143,59 @@ const Video = ({
     onRetry && onRetry();
   }
 
+  const videoRef = useRef();
+
+  useEffect(() => {
+    if (!videoRef.current || !url || !url.includes('m3u8')) {
+      return;
+    }
+
+    if (!videoRef.current?.canPlayType('application/vnd.apple.mpegurl') && HLS.isSupported()) {
+      const hls = new HLS();
+
+      hls.loadSource(url);
+      hls.attachMedia(videoRef.current);
+      hls.on(HLS.Events.ERROR, (event, data) => {
+        console.log('htl', event, data);
+        if (data.fatal) {
+          switch (data.type) {
+            case HLS.ErrorTypes.NETWORK_ERROR:
+              hls.startLoad();
+              break;
+            case HLS.ErrorTypes.MEDIA_ERROR:
+              hls.recoverMediaError();
+              break;
+            default:
+              // hls.destroy();
+              break;
+          }
+        }
+      });
+
+      return () => hls.destroy();
+    }
+  }, [videoRef.current, isLive, url]);
+
   return (
     <VideoContainer border={!noBorder}>
-      <Content remove={!!onRemove}>
+      <Content>
         {url ? (
           <VideoPreview
+            key={url} // url change does not trigger video change
             className={!!isRejected && 'darken'}
             mediaFit={mediaFit}
             mimeType={mimeType}
             src={url}
             autoPlay={autoPlay}
+            ref={videoRef}
           />
         ) : (
           <VideoSkeleton />
         )}
 
         <ButtonContainer>
+          {isLive && <LiveIcon />}
+
           {!!isRejected && <RetryButton onClick={retryCallback} />}
 
           {!!onRemove && <RemoveButton onClick={removeCallback} />}
@@ -171,6 +217,7 @@ Video.propTypes = {
   onRetry: PropTypes.func,
   mimeType: PropTypes.string,
   autoPlay: PropTypes.bool,
+  isLive: PropTypes.bool,
 };
 
 Video.defaultProps = {
@@ -181,6 +228,7 @@ Video.defaultProps = {
   onRetry: undefined,
   mimeType: undefined,
   autoPlay: false,
+  isLive: false,
 };
 
 export default Video;

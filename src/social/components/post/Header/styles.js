@@ -20,10 +20,6 @@ export const Name = styled.div`
   }
 `;
 
-export const ArrowSeparatorContainer = styled.div`
-  margin: 0 4px !important;
-`;
-
 export const ArrowSeparator = styled(ArrowRight).attrs({
   height: '8px',
   width: '8px',
@@ -72,4 +68,8 @@ export const AdditionalInfo = styled.div`
 export const PostNamesContainer = styled.div`
   display: flex;
   align-items: center;
+
+  > :not(:first-child) {
+    margin-left: 0.25rem;
+  }
 `;

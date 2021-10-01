@@ -140,8 +140,8 @@ const TruncatedGrid = ({ className, items, onClick, children, itemKeyProp }) => 
     }[length] ?? 'many';
 
   return (
-    <Square ratio={0.75}>
-      <Gallery className={cx(className, config)} count={length}>
+    <Square ratio={0.75} className={className}>
+      <Gallery className={cx(config)} count={length}>
         {items.slice(0, 3).map((item, index) => (
           <Cell key={`#${itemKeyProp ? item[itemKeyProp] : index}`} onClick={handleClick(index)}>
             {render(item)}

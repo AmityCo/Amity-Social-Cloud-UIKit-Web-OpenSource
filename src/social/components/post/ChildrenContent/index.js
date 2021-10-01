@@ -4,11 +4,24 @@ import { PostDataType } from '@amityco/js-sdk';
 
 import GalleryContent from '~/social/components/post/GalleryContent';
 import FileListContent from '~/social/components/post/FileListContent';
+import * as StreamItem from '~/social/components/post/GalleryContent/StreamItem';
+import * as VideoItem from '~/social/components/post/GalleryContent/VideoItem';
+import { LivestreamRenderer } from './styles';
 
 const RENDERERS = {
   [PostDataType.ImagePost]: GalleryContent,
   [PostDataType.VideoPost]: GalleryContent,
   [PostDataType.FilePost]: FileListContent,
+  [PostDataType.LivestreamPost]: LivestreamRenderer,
+};
+
+const thumbnailRenderers = {
+  [PostDataType.VideoPost]: props => (
+    <VideoItem.Thumbnail {...props} showPlayIcon showVideoDuration />
+  ),
+  [PostDataType.LivestreamPost]: props => (
+    <StreamItem.Thumbnail {...props} showPlayIcon showLivestreamRecordedBadge showVideoDuration />
+  ),
 };
 
 const ChildrenContent = ({ children }) => {
@@ -28,7 +41,7 @@ const ChildrenContent = ({ children }) => {
 
   return Object.entries(groups).map(([dataType, items]) => {
     const Renderer = RENDERERS[dataType];
-    return <Renderer key={dataType} items={items} />;
+    return <Renderer key={dataType} items={items} thumbnailRenderers={thumbnailRenderers} />;
   });
 };
 

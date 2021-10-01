@@ -50,7 +50,7 @@ const TextContent = ({ text, postMaxLines }) => {
 };
 
 TextContent.propTypes = {
-  text: PropTypes.string,
+  text: PropTypes.node,
   postMaxLines: PropTypes.number,
 };
 
