@@ -68,9 +68,7 @@ const OptionsComposer = ({ onChange, optionsLimit }) => {
   };
 
   const updateOption = (id, text) => {
-    const newValue = setInternalOptions(prevState =>
-      prevState.map(opt => (opt.id === id ? { ...opt, text } : opt)),
-    );
+    const newValue = internalOptions.map(opt => (opt.id === id ? { ...opt, text } : opt));
     setInternalOptions(newValue);
     handleChange(newValue);
   };
