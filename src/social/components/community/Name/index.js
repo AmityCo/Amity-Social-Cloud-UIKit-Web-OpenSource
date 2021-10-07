@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Truncate from 'react-truncate-markup';
 import Highlight from '~/core/components/Highlight';
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
@@ -21,6 +22,7 @@ const CommunityName = ({
   searchInput,
   className,
   loading,
+  truncate,
 }) => {
   if (isSearchResult) {
     return <Highlight text={name || ''} query={searchInput} />;
@@ -28,9 +30,12 @@ const CommunityName = ({
 
   return (
     <NameContainer className={className} isActive={isActive} isTitle={isTitle}>
-      {!loading && !isPublic && <PrivateIcon />}
-
-      <Name title={name}>{loading ? <Skeleton width={120} style={{ fontSize: 12 }} /> : name}</Name>
+      <Truncate lines={truncate}>
+        <Name title={name}>
+          {!loading && !isPublic && <PrivateIcon />}
+          {loading ? <Skeleton width={120} style={{ fontSize: 12 }} /> : name}
+        </Name>
+      </Truncate>
 
       {!loading && isOfficial && <VerifiedIcon />}
     </NameContainer>
@@ -47,6 +52,7 @@ CommunityName.propTypes = {
   searchInput: PropTypes.string,
   className: PropTypes.string,
   loading: PropTypes.bool,
+  truncate: PropTypes.number,
 };
 
 CommunityName.defaultProps = {
@@ -59,6 +65,7 @@ CommunityName.defaultProps = {
   searchInput: '',
   className: null,
   loading: false,
+  truncate: 1,
 };
 
 export default customizableComponent('CommunityName', CommunityName);

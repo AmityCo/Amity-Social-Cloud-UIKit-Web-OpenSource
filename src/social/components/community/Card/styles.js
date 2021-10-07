@@ -1,143 +1,74 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import { toHumanString } from 'human-readable-numbers';
-import { FormattedMessage } from 'react-intl';
-import Truncate from 'react-truncate-markup';
-import Card from '~/core/components/Card';
-import Skeleton from '~/core/components/Skeleton';
-import customizableComponent from '~/core/hocs/customization';
+import SocialCommunityName from '~/social/components/community/Name';
 
-import Avatar from '~/core/components/Avatar';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
-
-import CommunityName from '~/social/components/community/Name';
-
-import ConditionalRender from '~/core/components/ConditionalRender';
-
-const Container = styled(Card)`
-  width: 10rem;
-  height: 12rem;
+export const Container = styled.div`
+  min-width: 278px;
+  min-height: 289px;
   cursor: pointer;
+  box-shadow: 0 0 1px rgba(40, 41, 61, 0.08), 0 0.5px 2px rgba(96, 97, 112, 0.16);
+  border-radius: 8px;
+  background: ${({ theme }) => theme.palette.system.background};
+  overflow: hidden;
 `;
 
-const StyledAvatar = styled(Avatar)`
-  margin-bottom: 0.6rem;
+export const Cover = styled.div`
+  padding-top: 74.46%;
+  position: relative;
+
+  ${({ backgroundImage, theme }) => `
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42.03%, rgba(0, 0, 0, 0.5) 100%), ${
+      backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
+    };
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  `}
 `;
 
-const Infos = styled.div`
-  margin: 0.3rem 0;
+export const CoverContent = styled.div`
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  right: 16px;
+`;
 
+export const CommunityName = styled(SocialCommunityName)`
+  color: #ffffff;
+  ${({ theme }) => theme.typography.headline}
+  line-height: 30px !important;
+
+  * {
+    color: #ffffff;
+    line-height: 30px !important;
+    padding: 0;
+  }
+`;
+
+export const CategoriesList = styled.div`
+  word-break: break-word;
+  color: #ffffff;
+  margin-bottom: 0;
+  line-height: 20px;
+  ${({ theme }) => theme.typography.body}
+`;
+
+export const Content = styled.div`
+  padding: 12px 16px;
+`;
+
+export const Header = styled.div`
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+`;
+
+export const Count = styled.div`
+  color: ${({ theme }) => theme.palette.neutral.shade1};
   ${({ theme }) => theme.typography.caption}
-  & > * {
-    font: inherit;
-  }
+  margin-bottom: 4px;
 `;
 
-const Categories = styled.div``;
-
-const Category = styled.span`
-  color: ${({ theme }) => theme.palette.base.shade1};
-  font: inherit;
-
-  &:not(:first-child):before {
-    content: ' ';
-  }
-`;
-
-const Count = styled.div`
-  & > strong {
-    font-weight: bold;
-  }
-`;
-
-const Description = styled.div`
+export const Description = styled.div`
   ${({ theme }) => theme.typography.caption}
 `;
-
-const UICommunityCard = ({
-  avatarFileUrl,
-  communityId,
-  communityCategories,
-  membersCount,
-  description,
-  onClick,
-  isOfficial,
-  isPublic,
-  name,
-  loading,
-  ...props
-}) => {
-  const handleClick = () => onClick(communityId);
-
-  return (
-    <Container onClick={handleClick} {...props}>
-      <StyledAvatar avatar={avatarFileUrl} backgroundImage={CommunityImage} loading={loading} />
-
-      <CommunityName
-        isOfficial={isOfficial}
-        isPublic={isPublic}
-        isTitle
-        name={name}
-        loading={loading}
-      />
-
-      <Infos>
-        {loading && <Skeleton count={2} style={{ fontSize: 8 }} />}
-
-        {!loading && (
-          <>
-            <ConditionalRender condition={!!communityCategories.length}>
-              <Categories>
-                {communityCategories.map(category => (
-                  <Category key={category.categoryId}>{category.name}</Category>
-                ))}
-              </Categories>
-            </ConditionalRender>
-
-            <Count>
-              <strong>{toHumanString(membersCount)}</strong>{' '}
-              <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
-            </Count>
-          </>
-        )}
-      </Infos>
-
-      {description && (
-        <Truncate lines={3}>
-          <Description>{description}</Description>
-        </Truncate>
-      )}
-    </Container>
-  );
-};
-
-UICommunityCard.defaultProps = {
-  communityCategories: [],
-  onClick: () => {},
-  isOfficial: false,
-  isPublic: false,
-  name: '',
-  loading: false,
-};
-
-UICommunityCard.propTypes = {
-  avatarFileUrl: PropTypes.string,
-  communityId: PropTypes.string,
-  communityCategories: PropTypes.arrayOf(
-    PropTypes.shape({
-      categoryId: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-    }),
-  ),
-  membersCount: PropTypes.number,
-  description: PropTypes.string,
-  onClick: PropTypes.func,
-  isOfficial: PropTypes.bool,
-  isPublic: PropTypes.bool,
-  name: PropTypes.string,
-  loading: PropTypes.bool,
-};
-
-export default customizableComponent('UICommunityCard', UICommunityCard);

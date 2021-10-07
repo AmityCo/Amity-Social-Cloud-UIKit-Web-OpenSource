@@ -1,35 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+
 import { PageTypes } from '~/social/constants';
 import useCategory from '~/social/hooks/useCategory';
-import PageHeader from '~/core/components/PageHeader';
 import CategoryCommunitiesList from '~/social/components/community/CategoryCommunitiesList';
-import { backgroundImage as CategoryImage } from '~/icons/Category';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import ArrowLeft from '~/icons/ArrowLeft';
 
-const PageContainer = styled.div`
-  & > *:first-child {
-    margin-bottom: 1rem;
-  }
-  width: 100%;
-`;
+import { BackButton, Header, PageContainer, Title } from './styles';
 
 const CategoryCommunitiesPage = ({ categoryId }) => {
   const { onChangePage } = useNavigation();
-  const { category, file } = useCategory(categoryId);
+  const { category } = useCategory(categoryId);
 
   const title = category?.name || '';
-  const { fileUrl } = file;
+
+  const onBack = () => onChangePage(PageTypes.Explore);
 
   return (
     <PageContainer>
-      <PageHeader
-        title={title}
-        avatarFileUrl={fileUrl}
-        avatarImage={CategoryImage}
-        onBack={() => onChangePage(PageTypes.Explore)}
-      />
+      <Header>
+        <BackButton onClick={onBack}>
+          <ArrowLeft />
+        </BackButton>
+        <Title>{title}</Title>
+      </Header>
       <CategoryCommunitiesList categoryId={categoryId} />
     </PageContainer>
   );

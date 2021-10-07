@@ -15,7 +15,10 @@ UiUserInfo.args = {
   avatarFileId: '',
   displayName: '',
   description: '',
-  isMe: false,
+  isMyProfile: false,
+  isFollowNone: true,
+  isFollowPending: false,
+  isPrivateNetwork: true,
 };
 
 UiUserInfo.argTypes = {
@@ -23,5 +26,8 @@ UiUserInfo.argTypes = {
   avatarFileId: { control: { type: 'text' } },
   displayName: { control: { type: 'text' } },
   description: { control: { type: 'text' } },
-  isMe: { control: { type: 'boolean' } },
+  isMyProfile: { control: { type: 'boolean' } },
+  isFollowNone: { control: { type: 'boolean' } },
+  isFollowPending: { control: { type: 'boolean' } },
+  isPrivateNetwork: { control: { type: 'boolean' } },
 };

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import UIOptionMenu from '~/core/components/OptionMenu';
 import { PrimaryButton } from '~/core/components/Button';
 import { Plus, Pencil } from '~/icons';
+import SocialCommunityName from '~/social/components/community/Name';
 
 export const PlusIcon = styled(Plus)`
   font-size: 15px;
@@ -16,38 +17,92 @@ export const PencilIcon = styled(Pencil)`
 
 export const OptionMenu = styled(UIOptionMenu)`
   margin-left: auto;
+  margin-right: 0;
+
+  & .leave-community {
+    color: ${({ theme }) => theme.palette.alert.main};
+  }
 `;
 
 export const Container = styled.div`
-  border: 1px solid #edeef2;
-  border-radius: 4px;
+  border: 1px solid #ebecef;
+  border-radius: 8px;
   background: ${({ theme }) => theme.palette.system.background};
-  width: 20rem;
   flex-shrink: 0;
   align-self: flex-start;
-  padding: 16px;
+  margin-bottom: 12px;
+`;
+
+export const Cover = styled.div`
+  padding-top: 56.25%;
+  position: relative;
+
+  ${({ backgroundImage, theme }) => `
+    background: linear-gradient(360deg, rgba(0, 0, 0, 0.5) -4.5%, rgba(0, 0, 0, 0) 77.17%), ${
+      backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
+    };
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  `}
+`;
+
+export const CoverContent = styled.div`
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+`;
+
+export const CommunityName = styled(SocialCommunityName)`
+  color: #ffffff;
+  ${({ theme }) => theme.typography.headline}
+  line-height: 30px !important;
+
+  * {
+    line-height: 30px !important;
+  }
+`;
+
+export const Content = styled.div`
+  padding: 18px 16px;
 `;
 
 export const Header = styled.div`
   display: flex;
   align-items: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 `;
 
 export const CategoriesList = styled.div`
-  margin-bottom: 16px;
-  color: ${({ theme }) => theme.palette.base.shade1};
   word-break: break-word;
+  color: #ffffff;
+  margin-bottom: 0;
+  line-height: 20px;
+  ${({ theme }) => theme.typography.body}
 `;
 
 export const Count = styled.span`
   & > .countNumber {
-    ${({ theme }) => theme.typography.bodyBold}
+    ${({ theme }) => theme.typography.title};
+    color: ${({ theme }) => theme.palette.base.default};
+  }
+
+  & > .countType {
+    ${({ theme }) => theme.typography.body};
+    color: ${({ theme }) => theme.palette.base.shade2};
   }
 `;
 
+export const Divider = styled.div`
+  display: inline-block;
+  width: 1px;
+  margin: 12px 0;
+  background: ${({ theme }) => theme.palette.base.shade4};
+`;
+
 export const Description = styled.div`
-  margin: 8px 0 12px;
+  margin-bottom: 20px;
   word-break: break-all;
 `;
 
@@ -57,10 +112,8 @@ export const JoinButton = styled(PrimaryButton)`
 `;
 
 export const CountsContainer = styled.div`
-  margin-bottom: 12px;
-  & > ${Count} {
-    margin-right: 8px;
-  }
+  display: flex;
+  gap: 20px;
 `;
 
 export const PendingPostsBannerContainer = styled.div`

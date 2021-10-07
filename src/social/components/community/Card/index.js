@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import useCommunity from '~/social/hooks/useCommunity';
 
-import UICommunityCard from './styles';
+import UICommunityCard from './UICommunityCard';
 
 const CommunityCard = ({ communityId, onClick, ...props }) => {
   const { community, file, communityCategories } = useCommunity(communityId);

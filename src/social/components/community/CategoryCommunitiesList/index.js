@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { Grid, ListContainer, ListEmptyState } from './styles';
+import { Grid, ListEmptyState } from './styles';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PaginatedList from '~/core/components/PaginatedList';
 import EmptyFeedIcon from '~/icons/EmptyFeed';
@@ -34,29 +34,27 @@ const CategoryCommunitiesList = ({ categoryId }) => {
   }, [communities, loading, loadingMore]);
 
   return (
-    <ListContainer>
-      <PaginatedList
-        items={items}
-        hasMore={hasMore}
-        loadMore={loadMore}
-        container={Grid}
-        emptyState={
-          <ListEmptyState
-            icon={<EmptyFeedIcon width={48} height={48} />}
-            title={<FormattedMessage id="CategoryCommunitiesList.emptyTitle" />}
-            description={<FormattedMessage id="CategoryCommunitiesList.emptyDescription" />}
-          />
-        }
-      >
-        {({ communityId, skeleton }) =>
-          skeleton ? (
-            <CommunityCard key={communityId} loading />
-          ) : (
-            <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
-          )
-        }
-      </PaginatedList>
-    </ListContainer>
+    <PaginatedList
+      items={items}
+      hasMore={hasMore}
+      loadMore={loadMore}
+      container={Grid}
+      emptyState={
+        <ListEmptyState
+          icon={<EmptyFeedIcon width={48} height={48} />}
+          title={<FormattedMessage id="CategoryCommunitiesList.emptyTitle" />}
+          description={<FormattedMessage id="CategoryCommunitiesList.emptyDescription" />}
+        />
+      }
+    >
+      {({ communityId, skeleton }) =>
+        skeleton ? (
+          <CommunityCard key={communityId} loading />
+        ) : (
+          <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
+        )
+      }
+    </PaginatedList>
   );
 };
 

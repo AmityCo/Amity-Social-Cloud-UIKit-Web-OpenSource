@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import useCommunity from '~/social/hooks/useCommunity';
 import UITrendingItem from './UITrendingItem';
 
-const TrendingItem = ({ communityId, slim, onClick, loading }) => {
+const TrendingItem = ({ communityId, onClick, loading }) => {
   const { community, file, communityCategories } = useCommunity(communityId);
   const { fileUrl } = file;
 
@@ -17,7 +17,6 @@ const TrendingItem = ({ communityId, slim, onClick, loading }) => {
       description={description}
       categories={communityCategories}
       membersCount={membersCount}
-      slim={slim}
       onClick={handleClick}
       isOfficial={community.isOfficial}
       isPublic={community.isPublic}
@@ -29,13 +28,11 @@ const TrendingItem = ({ communityId, slim, onClick, loading }) => {
 
 TrendingItem.propTypes = {
   communityId: PropTypes.string,
-  slim: PropTypes.bool,
   onClick: PropTypes.func,
   loading: PropTypes.bool,
 };
 
 TrendingItem.defaultProps = {
-  slim: false,
   onClick: () => {},
   loading: false,
 };

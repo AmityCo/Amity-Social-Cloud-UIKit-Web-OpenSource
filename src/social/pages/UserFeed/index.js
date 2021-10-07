@@ -9,7 +9,6 @@ import MediaGallery from '~/social/components/MediaGallery';
 import UserInfo from '~/social/components/UserInfo';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 
-import PageLayout from '~/social/layouts/Page';
 import Feed from '~/social/components/Feed';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Followers from '~/social/pages/UserFeed/Followers';
@@ -17,6 +16,7 @@ import Followers from '~/social/pages/UserFeed/Followers';
 import { tabs, UserFeedTabs } from './constants';
 import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
 import useFollow from '~/core/hooks/useFollow';
+import { Wrapper } from './styles';
 
 const UserFeed = ({ userId, currentUserId, networkSettings }) => {
   const isPrivateNetwork = utils.isPrivateNetwork(networkSettings);
@@ -35,17 +35,15 @@ const UserFeed = ({ userId, currentUserId, networkSettings }) => {
 
   return (
     // key prop is necessary here, without it this part will never re-render !!!
-    <PageLayout
-      aside={
-        <UserInfo
-          key={userId}
-          userId={userId}
-          setActiveTab={setActiveTab}
-          setFollowActiveTab={setFollowActiveTab}
-          isPrivateNetwork={isPrivateNetwork}
-        />
-      }
-    >
+    <Wrapper>
+      <UserInfo
+        key={userId}
+        userId={userId}
+        setActiveTab={setActiveTab}
+        setFollowActiveTab={setFollowActiveTab}
+        isPrivateNetwork={isPrivateNetwork}
+      />
+
       <FeedHeaderTabs tabs={filteredTabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <ConditionalRender condition={activeTab === UserFeedTabs.TIMELINE}>
@@ -69,7 +67,7 @@ const UserFeed = ({ userId, currentUserId, networkSettings }) => {
           setUserFeedTab={setActiveTab}
         />
       </ConditionalRender>
-    </PageLayout>
+    </Wrapper>
   );
 };
 

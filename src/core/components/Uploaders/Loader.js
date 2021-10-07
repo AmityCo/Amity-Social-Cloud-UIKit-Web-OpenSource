@@ -8,15 +8,29 @@ const MAX_FILE_SIZE = 1073741824;
 
 const FileLoaderContainer = styled.label`
   cursor: pointer;
-  background: rgba(0, 0, 0, 0);
+  background: rgb(235 236 239 / 60%);
   transition: background 0.1s;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  &.hover {
-    background: rgba(0, 0, 0, 0.025);
+  &:hover,
+  &:focus,
+  &:active {
+    background: rgb(235 236 239);
   }
 
   &.disabled {
     cursor: not-allowed;
+  }
+
+  > svg {
+    height: 1.125rem;
+    width: 1.125rem;
+    font-size: 1.125rem;
   }
 `;
 

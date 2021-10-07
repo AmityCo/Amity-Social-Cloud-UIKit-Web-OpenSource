@@ -1,4 +1,5 @@
 import React from 'react';
+import Truncate from 'react-truncate-markup';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage, useIntl } from 'react-intl';
@@ -29,6 +30,7 @@ import {
   NotificationBody,
   TitleEllipse,
   PendingIconContainer,
+  ActionButtonContainer,
 } from './styles';
 
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
@@ -108,9 +110,33 @@ const UIUserInfo = ({
     <Container>
       <Header>
         <Avatar avatar={fileUrl} backgroundImage={UserImage} />
-        <OptionMenu options={allOptions} />
+        <ActionButtonContainer>
+          <ConditionalRender condition={isMyProfile}>
+            <Button disabled={!connected} onClick={() => onEditUser(userId)}>
+              <PencilIcon /> <FormattedMessage id="user.editProfile" />
+            </Button>
+            <>
+              {isPrivateNetwork && isFollowPending && (
+                <Button disabled={!connected} onClick={() => onFollowDecline()}>
+                  <PendingIconContainer>
+                    <PendingIcon />
+                  </PendingIconContainer>
+                  <FormattedMessage id="user.cancel_follow" />
+                </Button>
+              )}
+              {isFollowNone && (
+                <PrimaryButton disabled={!connected} onClick={() => onFollowRequest()}>
+                  <PlusIcon /> <FormattedMessage id="user.follow" />
+                </PrimaryButton>
+              )}
+            </>
+          </ConditionalRender>
+        </ActionButtonContainer>
+        <OptionMenu options={allOptions} pullRight={false} />
       </Header>
-      <ProfileName>{displayName}</ProfileName>
+      <Truncate lines={3}>
+        <ProfileName>{displayName}</ProfileName>
+      </Truncate>
       <CountContainer>
         <ClickableCount
           onClick={() => {
@@ -132,26 +158,6 @@ const UIUserInfo = ({
         <FormattedMessage id="counter.followers" />
       </CountContainer>
       <Description>{description}</Description>
-      <ConditionalRender condition={isMyProfile}>
-        <Button fullWidth disabled={!connected} onClick={() => onEditUser(userId)}>
-          <PencilIcon /> <FormattedMessage id="user.editProfile" />
-        </Button>
-        <>
-          {isPrivateNetwork && isFollowPending && (
-            <Button fullWidth disabled={!connected} onClick={() => onFollowDecline()}>
-              <PendingIconContainer>
-                <PendingIcon />
-              </PendingIconContainer>
-              <FormattedMessage id="user.cancel_follow" />
-            </Button>
-          )}
-          {isFollowNone && (
-            <PrimaryButton fullWidth disabled={!connected} onClick={() => onFollowRequest()}>
-              <PlusIcon /> <FormattedMessage id="user.follow" />
-            </PrimaryButton>
-          )}
-        </>
-      </ConditionalRender>
       <ConditionalRender condition={isMyProfile && pendingUsers.length > 0 && isPrivateNetwork}>
         <PendingNotification
           onClick={() => {

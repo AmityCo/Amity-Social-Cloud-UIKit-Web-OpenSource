@@ -8,11 +8,3 @@ export default {
 export const SdkTrendingCommunities = props => <TrendingCommunitiesList {...props} />;
 
 SdkTrendingCommunities.storyName = 'Trending list';
-
-SdkTrendingCommunities.args = {
-  slim: false,
-};
-
-SdkTrendingCommunities.argTypes = {
-  slim: { control: { type: 'boolean' } },
-};

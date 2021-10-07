@@ -6,10 +6,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
-import Avatar from '~/core/components/Avatar';
-import CommunityName from '~/social/components/community/Name';
 import Button from '~/core/components/Button';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
 import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';
 import {
   Count,
@@ -22,6 +19,11 @@ import {
   PlusIcon,
   PencilIcon,
   CountsContainer,
+  Cover,
+  CoverContent,
+  Divider,
+  Content,
+  CommunityName,
 } from './styles';
 
 const UICommunityInfo = ({
@@ -48,61 +50,78 @@ const UICommunityInfo = ({
 
   return (
     <Container>
-      <Header>
-        <Avatar avatar={avatarFileUrl} size="big" backgroundImage={CommunityImage} />
-        <ConditionalRender condition={isJoined}>
-          <OptionMenu
-            data-qa-anchor="social-community-3dots"
-            options={[
-              canEditCommunity && {
-                name: formatMessage({ id: 'community.settings' }),
-                action: () => onEditCommunity(communityId),
-              },
-              canLeaveCommunity && {
-                name: formatMessage({ id: 'community.leaveCommunity' }),
-                action: () => leaveCommunity(communityId),
-              },
-            ].filter(Boolean)}
+      <Cover backgroundImage={avatarFileUrl}>
+        <CoverContent>
+          <CommunityName
+            isOfficial={isOfficial}
+            isPublic={isPublic}
+            isTitle
+            name={name}
+            truncate={2}
           />
+          <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>
+        </CoverContent>
+      </Cover>
+      <Content>
+        <Header>
+          <CountsContainer>
+            <Count>
+              <div className="countNumber">{toHumanString(postsCount || 0)}</div>
+              <div className="countType">
+                <FormattedMessage id="community.posts" />
+              </div>
+            </Count>
+            <Divider />
+            <Count>
+              <div className="countNumber">{toHumanString(membersCount || 0)}</div>
+              <div className="countType">
+                <FormattedMessage id="community.members" />
+              </div>
+            </Count>
+          </CountsContainer>
+          <ConditionalRender condition={isJoined}>
+            <OptionMenu
+              data-qa-anchor="social-community-3dots"
+              options={[
+                canEditCommunity && {
+                  name: formatMessage({ id: 'community.settings' }),
+                  action: () => onEditCommunity(communityId),
+                },
+                canLeaveCommunity && {
+                  name: formatMessage({ id: 'community.leaveCommunity' }),
+                  action: () => leaveCommunity(communityId),
+                  className: 'leave-community',
+                },
+              ].filter(Boolean)}
+            />
+          </ConditionalRender>
+        </Header>
+
+        {description && (
+          <Truncate lines={3}>
+            <Description>{description}</Description>
+          </Truncate>
+        )}
+
+        <ConditionalRender condition={!isJoined}>
+          <JoinButton onClick={() => joinCommunity(communityId)}>
+            <PlusIcon /> <FormattedMessage id="community.join" />
+          </JoinButton>
         </ConditionalRender>
-      </Header>
-      <CommunityName isOfficial={isOfficial} isPublic={isPublic} isTitle name={name} />
-      <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>
-      <CountsContainer>
-        <Count>
-          <span className="countNumber">{toHumanString(postsCount || 0)}</span>{' '}
-          <FormattedMessage id="community.posts" />
-        </Count>
-        <Count>
-          <span className="countNumber">{toHumanString(membersCount || 0)}</span>{' '}
-          <FormattedMessage id="community.members" />
-        </Count>
-      </CountsContainer>
+        <ConditionalRender condition={isJoined && canEditCommunity}>
+          <Button
+            fullWidth
+            onClick={() => onEditCommunity(communityId)}
+            data-qa-anchor="social-edit-community-button"
+          >
+            <PencilIcon /> <FormattedMessage id="community.editProfile" />
+          </Button>
+        </ConditionalRender>
 
-      {description && (
-        <Truncate lines={3}>
-          <Description>{description}</Description>
-        </Truncate>
-      )}
-
-      <ConditionalRender condition={!isJoined}>
-        <JoinButton onClick={() => joinCommunity(communityId)}>
-          <PlusIcon /> <FormattedMessage id="community.join" />
-        </JoinButton>
-      </ConditionalRender>
-      <ConditionalRender condition={isJoined && canEditCommunity}>
-        <Button
-          fullWidth
-          onClick={() => onEditCommunity(communityId)}
-          data-qa-anchor="social-edit-community-button"
-        >
-          <PencilIcon /> <FormattedMessage id="community.editProfile" />
-        </Button>
-      </ConditionalRender>
-
-      {needApprovalOnPostCreation && isJoined && pendingPostsCount > 0 && (
-        <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
-      )}
+        {needApprovalOnPostCreation && isJoined && pendingPostsCount > 0 && (
+          <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
+        )}
+      </Content>
     </Container>
   );
 };

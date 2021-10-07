@@ -30,6 +30,9 @@ export const LoadMoreButton = styled(Button)`
     background-color: ${({ theme }) => theme.palette.base.shade4};
     color: ${({ theme }) => theme.palette.base.shade1};
     margin: 12px 0px 16px 3rem;
+    padding: 5px 12px;
+    border-radius: 8px;
+    ${({ theme }) => theme.typography.captionBold}
   }
 `;
 

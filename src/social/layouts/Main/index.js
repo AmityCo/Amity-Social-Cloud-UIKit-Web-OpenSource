@@ -21,7 +21,7 @@ const Main = styled.div`
   overflow: auto;
   width: 100%;
   min-width: 20rem;
-  max-width: 57.325rem;
+  max-width: 90.75rem;
   margin: 0 auto;
 `;
 

@@ -22,28 +22,39 @@ export const PencilIcon = styled(Pencil)`
 `;
 
 export const Container = styled.div`
-  border: 1px solid #edeef2;
-  border-radius: 4px;
+  border: 1px solid #ebecef;
+  border-radius: 8px;
   background: ${({ theme }) => theme.palette.system.background};
-  width: 330px;
   flex-shrink: 0;
   align-self: flex-start;
-  padding: 16px;
+  padding: 20px;
+  margin-bottom: 14px;
 `;
 
 export const Header = styled.div`
   display: flex;
   align-items: flex-start;
+  margin-bottom: 16px;
 `;
 
-export const Avatar = styled(UIAvatar).attrs({
-  size: 'big',
-})`
-  margin-right: 12px;
+export const Avatar = styled(UIAvatar)`
+  height: 120px;
+  width: 120px;
+  margin-right: auto;
+`;
+
+export const ActionButtonContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-right: 8px;
+
+  > button {
+    min-width: 136px;
+    height: 40px;
+  }
 `;
 
 export const ProfileName = styled.div`
-  margin-top: 10px;
   ${({ theme }) => theme.typography.headline}
 `;
 
@@ -68,11 +79,24 @@ export const CountContainer = styled.div`
 `;
 
 export const Description = styled.div`
-  margin: 8px 0 12px;
+  margin: 8px 0;
 `;
 
 export const OptionMenu = styled(UIOptionMenu)`
-  margin-left: auto;
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #e3e4e8;
+    border-radius: 4px;
+    height: 40px;
+    width: 40px;
+
+    > * {
+      margin: 0;
+    }
+  }
 `;
 
 export const PendingNotification = styled.div`
@@ -82,7 +106,7 @@ export const PendingNotification = styled.div`
   padding: 12px 20px;
   flex-direction: column;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 20px;
 
   &:hover {
     cursor: pointer;

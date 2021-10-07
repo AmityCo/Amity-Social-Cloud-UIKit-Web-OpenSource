@@ -1,60 +1,34 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
 import Skeleton from '~/core/components/Skeleton';
 
 import useTrendingCommunitiesList from '~/social/hooks/useTrendingCommunitiesList';
-import Card from '~/core/components/Card';
 import TrendingItem from '~/social/components/community/TrendingItem';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import Title from '~/social/components/community/Title';
 
 const CommunitiesList = styled.ul`
   list-style: none;
-  padding-left: 0;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
   counter-reset: trending;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-auto-rows: 1fr;
+  grid-template-columns: 1fr;
+  grid-gap: 16px;
 
-  &:after {
-    content: ' ';
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  & > li {
-    margin-right: 2rem;
-    padding-bottom: 1rem;
-  }
-
-  & > li,
-  &:after {
-    flex: 1 1 calc(50% - 2rem);
-    min-width: 20rem;
-  }
-
-  & > li:not(:last-child) {
-    margin-bottom: 1rem;
-
-    /* Bottom border that does not cover avatar and trending number widths. */
-    ${({ theme }) => {
-      const {
-        palette: {
-          system: { borders },
-        },
-      } = theme;
-
-      return css`
-        background-image: linear-gradient(${borders}, ${borders});
-        background-size: calc(100% - 2rem - 64px) 1px;
-        background-repeat: no-repeat;
-        background-position: 100% 100%;
-      `;
-    }}
+  @media (min-width: 1800px) {{
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
 
-const TrendingList = ({ slim }) => {
+const TrendingList = () => {
   const { onClickCommunity } = useNavigation();
 
   const [communities, , , loading] = useTrendingCommunitiesList();
@@ -68,28 +42,21 @@ const TrendingList = ({ slim }) => {
   const list = loading
     ? new Array(5).fill(1).map((x, index) => (
         <li key={index}>
-          <TrendingItem slim={slim} loading />
+          <TrendingItem loading />
         </li>
       ))
     : communities.slice(0, 5).map(({ communityId }) => (
         <li key={communityId}>
-          <TrendingItem communityId={communityId} slim={slim} onClick={onClickCommunity} />
+          <TrendingItem communityId={communityId} onClick={onClickCommunity} />
         </li>
       ));
 
   return (
-    <Card title={title} slim={slim}>
+    <div>
+      <Title>{title}</Title>
       <CommunitiesList>{list}</CommunitiesList>
-    </Card>
+    </div>
   );
-};
-
-TrendingList.propTypes = {
-  slim: PropTypes.bool,
-};
-
-TrendingList.defaultProps = {
-  slim: false,
 };
 
 export default TrendingList;

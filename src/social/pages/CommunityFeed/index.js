@@ -10,7 +10,6 @@ import useCommunity from '~/social/hooks/useCommunity';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import withSDK from '~/core/hocs/withSDK';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
-import PageLayout from '~/social/layouts/Page';
 
 import Feed from '~/social/components/Feed';
 import MediaGallery from '~/social/components/MediaGallery';
@@ -19,7 +18,7 @@ import CommunityMembers from '~/social/components/CommunityMembers';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 import { CommunityFeedTabs } from './constants';
 import { getTabs } from './utils';
-import { DeclineBanner } from './styles';
+import { DeclineBanner, Wrapper } from './styles';
 
 const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   const { community } = useCommunity(communityId);
@@ -60,7 +59,9 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   const [isCreatedModalOpened, setCreatedModalOpened] = useState(isNewCommunity);
 
   return (
-    <PageLayout aside={<CommunityInfo communityId={communityId} />}>
+    <Wrapper>
+      <CommunityInfo communityId={communityId} />
+
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
       <ConditionalRender condition={activeTab === CommunityFeedTabs.TIMELINE}>
@@ -104,7 +105,7 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
           onClose={() => setCreatedModalOpened(false)}
         />
       )}
-    </PageLayout>
+    </Wrapper>
   );
 };
 

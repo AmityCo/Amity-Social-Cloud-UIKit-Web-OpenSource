@@ -32,7 +32,7 @@ const OptionMenu = ({
 
   return (
     <ConditionalRender condition={options.length}>
-      <Container pullRight={pullRight}>
+      <Container className={className} pullRight={pullRight}>
         <UiKitDropdown
           data-qa-anchor={dataQaAnchor}
           isOpen={isOpen}

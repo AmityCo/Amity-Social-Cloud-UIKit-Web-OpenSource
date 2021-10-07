@@ -6,20 +6,41 @@ import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
-import Avatar from '~/core/components/Avatar';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityName from '~/social/components/community/Name';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
 
 const ItemContainer = styled.div`
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 118px auto;
   cursor: pointer;
   counter-increment: trending;
+  min-width: 425px;
+  height: 118px;
+  border: 1px solid #ebecef;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.palette.system.background};
+  overflow: hidden;
+`;
 
-  > :not(:first-child) {
-    margin-left: 0.5rem;
-  }
+const Cover = styled.div`
+  padding-left: 100%;
+
+  ${({ backgroundImage, theme }) => `
+    background: ${
+      backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
+    };
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  `}
+`;
+
+const Content = styled.div`
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
 `;
 
 const Categories = styled.span`
@@ -35,42 +56,27 @@ const Category = styled.span`
   }
 `;
 
-const TextInfos = styled.div`
-  /* Full width minus avatar and trending number */
-  width: calc(100% - 2.5rem - 64px);
-`;
-
 const Infos = styled.div`
   ${({ theme }) => theme.typography.caption};
   color: ${({ theme }) => theme.palette.base.shade1};
+
   & > * {
     font: inherit;
   }
 `;
 
 const Description = styled.p`
-  margin: ${({ slim }) => (!slim ? '.5rem' : 0)} 0;
+  margin: 0.5rem 0 0;
   ${({ theme }) => theme.typography.caption}
 `;
 
-const TrendingNumber = styled(({ loading, ...props }) => (
-  <div {...props}>{loading && <Skeleton circle height={16} width={16} />}</div>
-))`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1rem;
-  flex-shrink: 0;
-  color: ${({ theme }) => theme.palette.primary.main};
-  ${({ theme }) => theme.typography.headline}
+const TrendingCommunityName = styled(CommunityName)`
+  ${({ theme }) => theme.typography.title};
 
-  ${({ loading }) =>
-    !loading &&
-    `
   &:before {
-    content: counter(trending);
+    content: counter(trending, decimal-leading-zero);
+    margin-right: 0.375em;
   }
-  `}
 `;
 
 const UITrendingItem = ({
@@ -78,7 +84,6 @@ const UITrendingItem = ({
   description,
   categories,
   membersCount,
-  slim,
   onClick,
   isOfficial,
   isPublic,
@@ -86,53 +91,45 @@ const UITrendingItem = ({
   loading,
 }) => (
   <ItemContainer onClick={onClick}>
-    <Avatar
-      avatar={avatarFileUrl}
-      size={!slim ? 'big' : 'regular'}
-      backgroundImage={CommunityImage}
-      loading={loading}
-    />
-    <TrendingNumber loading={loading} />
-    <TextInfos>
+    <Cover backgroundImage={avatarFileUrl} />
+    <Content>
       {loading ? (
         <>
           <Skeleton style={{ fontSize: '0.5rem', maxWidth: '7.5rem' }} />
           <div>
             <Skeleton style={{ fontSize: '0.5rem', maxWidth: '13.5rem' }} />
           </div>
-          {!slim && (
-            <>
-              <Skeleton width="2.5rem" style={{ fontSize: '0.5rem' }} />
-              <Skeleton width="2.5rem" style={{ fontSize: '0.5rem', marginLeft: '0.75rem' }} />
-            </>
-          )}
+          <Skeleton width="2.5rem" style={{ fontSize: '0.5rem' }} />
+          <Skeleton width="2.5rem" style={{ fontSize: '0.5rem', marginLeft: '0.75rem' }} />
         </>
       ) : (
         <>
-          <CommunityName isOfficial={isOfficial} isPublic={isPublic} name={name} />
-
-          {description && (
-            <Truncate lines={2}>
-              <Description slim={slim}>{description}</Description>
-            </Truncate>
-          )}
+          <TrendingCommunityName isOfficial={isOfficial} isPublic={isPublic} name={name} />
 
           <Infos>
             <ConditionalRender condition={categories.length > 0}>
-              <Categories>
-                {categories.map(category => (
-                  <Category key={category.categoryId}>{category.name}</Category>
-                ))}
-              </Categories>
+              <Truncate lines={1}>
+                <Categories>
+                  {categories.map(category => (
+                    <Category key={category.categoryId}>{category.name}</Category>
+                  ))}
+                </Categories>
+              </Truncate>
             </ConditionalRender>
             <span>
               {toHumanString(membersCount)}{' '}
               <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
             </span>
           </Infos>
+
+          {description && (
+            <Truncate lines={2}>
+              <Description>{description}</Description>
+            </Truncate>
+          )}
         </>
       )}
-    </TextInfos>
+    </Content>
   </ItemContainer>
 );
 
@@ -146,7 +143,6 @@ UITrendingItem.propTypes = {
     }),
   ),
   membersCount: PropTypes.number,
-  slim: PropTypes.bool,
   onClick: PropTypes.func,
   isOfficial: PropTypes.bool,
   isPublic: PropTypes.bool,
@@ -159,7 +155,6 @@ UITrendingItem.defaultProps = {
   description: '',
   categories: [],
   membersCount: 0,
-  slim: false,
   onClick: () => {},
   isOfficial: false,
   isPublic: false,

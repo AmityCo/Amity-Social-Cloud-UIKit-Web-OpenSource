@@ -1,6 +1,6 @@
 import React from 'react';
 
-import StyledCommunityCard from './styles';
+import StyledCommunityCard from './UICommunityCard';
 
 export default {
   title: 'Ui Only/Social/Community',

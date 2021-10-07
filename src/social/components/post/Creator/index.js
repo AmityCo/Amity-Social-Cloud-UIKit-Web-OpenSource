@@ -53,6 +53,7 @@ const MAX_FILES_PER_POST = 10;
 const PostCreatorBar = ({
   className = '',
   currentUserId,
+  connected, // connection status
   targetType,
   targetId,
   enablePostTargetPicker,
@@ -155,7 +156,7 @@ const PostCreatorBar = ({
 
   const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
   const isDisabled =
-    isEmpty(postText, postImages, postVideos, postFiles) || uploadLoading || creating;
+    isEmpty(postText, postImages, postVideos, postFiles) || uploadLoading || creating || !connected;
   const hasChanges = !isEmpty(postText, postImages, postVideos, postFiles);
 
   useEffect(() => {
@@ -278,6 +279,7 @@ PostCreatorBar.propTypes = {
   loadMoreCommunities: PropTypes.func,
   enablePostTargetPicker: PropTypes.bool,
   maxFiles: PropTypes.number,
+  connected: PropTypes.bool,
 };
 
 export default memo(withSDK(PostCreatorBar));

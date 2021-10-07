@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { PrimaryButton } from '~/core/components/Button';
 import InputText from '~/core/components/InputText';
 import UIAvatar from '~/core/components/Avatar';
-import VideoAttachment from '~/icons/VideoAttachment';
 import { Poll } from '~/icons';
+import PlayCircle from '~/icons/PlayCircle';
 
 export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
@@ -21,8 +21,9 @@ export const Footer = styled.div`
   padding-top: 12px;
   display: flex;
   align-items: center;
+
   & > label {
-    margin-right: 1rem;
+    margin-right: 0.5rem;
   }
 `;
 
@@ -46,7 +47,7 @@ export const PostInputText = styled(InputText)`
   }
 `;
 
-export const VideoAttachmentIcon = styled(VideoAttachment)`
+export const VideoAttachmentIcon = styled(PlayCircle)`
   vertical-align: -0.125em;
 `;
 

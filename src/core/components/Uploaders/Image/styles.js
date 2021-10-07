@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { SizeMe } from 'react-sizeme';
@@ -113,6 +113,8 @@ const Image = ({
   onRetry,
   overlayElements,
 }) => {
+  const [uploadFailed, setUploadFailed] = useState(false);
+
   function removeCallback(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -129,13 +131,18 @@ const Image = ({
     <ImageContainer className={className} border={!noBorder} data-qa-anchor={dataQaAnchor}>
       <Content remove={!!onRemove}>
         {url ? (
-          <ImgPreview src={url} mediaFit={mediaFit} className={!!isRejected && 'darken'} />
+          <ImgPreview
+            onError={() => setUploadFailed(true)}
+            src={url}
+            mediaFit={mediaFit}
+            className={!!isRejected && 'darken'}
+          />
         ) : (
           <ImageSkeleton />
         )}
 
         <ButtonContainer>
-          {!!isRejected && <RetryButton onClick={retryCallback} />}
+          {(!!isRejected || uploadFailed) && <RetryButton onClick={retryCallback} />}
 
           {!!onRemove && <RemoveButton onClick={removeCallback} />}
 

@@ -4,66 +4,68 @@ import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
 import Loader from '~/core/components/Uploaders/Loader';
 import Uploader from '~/core/components/Uploaders/Uploader';
-import Image from '~/core/components/Uploaders/Image';
+import UploaderImage from '~/core/components/Uploaders/Image';
 import CameraIcon from '~/icons/Camera';
-import Avatar from '~/core/components/Avatar';
 
 const StyledCameraIcon = styled(CameraIcon)`
   font-size: 20px;
   z-index: 3;
-  position: absolute;
-  left: 22px;
-  top: 20px;
-  cursor: pointer;
   color: #fff;
-`;
-
-const UploadOverlay = styled.div`
-  background: rgba(0, 0, 0, 0);
-  top: 0;
-  left: 0;
-  z-index: 1;
-  transition: background 0.3s;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  pointer-events: none;
 `;
 
 const AvatarUploadContainer = styled.div`
   background: ${({ theme }) => theme.palette.base.shade3};
+  border-radius: 4px;
   position: relative;
   display: block;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
+  width: 100%;
+  height: 16.875rem;
   overflow: hidden;
   align-self: center;
-  &:hover ${UploadOverlay} {
-    background: rgba(0, 0, 0, 0.5);
-  }
+  transition: background 0.2s linear;
 `;
 
-const AvatarImageLoader = styled(Loader)`
+const AvatarUploadButton = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  display: flex;
+  background: transparent;
+  border: 1px solid #ffffff;
+  padding: 10px 16px;
+  border-radius: 4px;
+  color: #ffffff;
+`;
+
+const CoverImageLoader = styled(Loader)`
   display: inline-block;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const BgImage = styled.div`
+  width: 100%;
+  height: 100%;
+  background-image: url(${({ src }) => src});
+  background-position: center center;
+  background-repeat: no-repeat;
 `;
 
 const ImageRenderer = ({ uploading, uploaded, progress }) => {
-  const allFiles = [...uploading, ...uploaded];
+  const file = [...uploading, ...uploaded].sort((a, b) => b.updatedAt - a.updatedAt)[0];
 
-  return allFiles.map(file => {
-    if (!file?.fileId)
-      return <Image key={file?.name} file={file} progress={progress[file?.name]} />;
+  if (!file?.fileId)
+    return <UploaderImage key={file?.name} file={file} progress={progress[file?.name]} />;
 
-    const { fileId } = file;
-    return <Image key={fileId} fileId={fileId} />;
-  });
+  const { fileId } = file;
+  return <UploaderImage key={fileId} fileId={fileId} />;
 };
 
 const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
@@ -87,15 +89,15 @@ const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
 
   return (
     <AvatarUploadContainer>
-      <AvatarImageLoader mimeType={mimeType} onChange={newAvatar => setLoadedAvatar(newAvatar)}>
-        <Uploader files={loadedAvatar} onChange={handleChange}>
-          <ImageRenderer />
-        </Uploader>
-        <UploadOverlay>
-          <StyledCameraIcon />
-          <Avatar avatar={fileUrl} size="big" backgroundImage={null} showOverlay />
-        </UploadOverlay>
-      </AvatarImageLoader>
+      <Uploader files={loadedAvatar} onChange={handleChange}>
+        <ImageRenderer />
+      </Uploader>
+      <BgImage src={fileUrl} />
+      <CoverImageLoader mimeType={mimeType} onChange={newAvatar => setLoadedAvatar(newAvatar)}>
+        <AvatarUploadButton>
+          <StyledCameraIcon /> &nbsp; Upload image
+        </AvatarUploadButton>
+      </CoverImageLoader>
     </AvatarUploadContainer>
   );
 };

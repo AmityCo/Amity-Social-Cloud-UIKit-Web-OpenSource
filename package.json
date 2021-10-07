@@ -101,6 +101,7 @@
     "react-time-ago": "^6.0.1",
     "react-tiny-popover": "^5.1.0",
     "react-truncate-markup": "^5.0.0",
+    "react-use": "^17.3.1",
     "recoil": "0.0.10",
     "uuid": "^8.3.2"
   },
