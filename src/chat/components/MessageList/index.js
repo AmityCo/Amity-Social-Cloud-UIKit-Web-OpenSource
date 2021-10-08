@@ -15,11 +15,7 @@ const MessageList = ({ client, channelId }) => {
 
   const { currentUserId } = client;
 
-  const getAvatar = ({
-    user: {
-      model: { avatarCustomUrl, avatarFile, avatarFileId },
-    },
-  }) => {
+  const getAvatar = ({ user: { avatarCustomUrl, avatarFile, avatarFileId } }) => {
     if (avatarCustomUrl) return avatarCustomUrl;
     if (avatarFile) return avatarFile;
     if (avatarFileId) {
@@ -58,7 +54,7 @@ const MessageList = ({ client, channelId }) => {
                 type={message.type}
                 createdAt={message.createdAt}
                 isDeleted={message.isDeleted}
-                userDisplayName={message.user.model.displayName}
+                userDisplayName={message.user.displayName}
                 isConsequent={isConsequent}
                 isIncoming={isIncoming}
               />
