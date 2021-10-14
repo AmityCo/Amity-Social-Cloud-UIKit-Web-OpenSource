@@ -8,7 +8,7 @@ export const RECORDS_PER_PAGE = 21;
 export const tabs = [
   { value: PostDataType.ImagePost, label: <FormattedMessage id="tabs.images" /> },
   { value: PostDataType.VideoPost, label: <FormattedMessage id="tabs.videos" /> },
-  { value: PostDataType.LivestreamPost, label: <FormattedMessage id="tabs.livestreams" /> },
+  // { value: PostDataType.LivestreamPost, label: <FormattedMessage id="tabs.livestreams" /> },
 ];
 
 export const EmptyIcons = {
