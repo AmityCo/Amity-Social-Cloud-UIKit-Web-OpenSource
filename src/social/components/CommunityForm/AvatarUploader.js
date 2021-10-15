@@ -5,6 +5,7 @@ import { ImageSize, FileRepository } from '@amityco/js-sdk';
 import Loader from '~/core/components/Uploaders/Loader';
 import Uploader from '~/core/components/Uploaders/Uploader';
 import UploaderImage from '~/core/components/Uploaders/Image';
+import communityCoverPlaceholder from '~/public/community-cover-placeholder.png';
 import CameraIcon from '~/icons/Camera';
 
 const StyledCameraIcon = styled(CameraIcon)`
@@ -43,8 +44,10 @@ const CoverImageLoader = styled(Loader)`
   width: 100%;
   height: 100%;
   position: absolute;
+  border-radius: 0;
   top: 0;
   left: 0;
+  background: rgba(0, 0, 0, 0.4);
   &:hover {
     background: rgba(0, 0, 0, 0.3);
   }
@@ -54,6 +57,7 @@ const BgImage = styled.div`
   width: 100%;
   height: 100%;
   background-image: url(${({ src }) => src});
+  background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
 `;
@@ -92,7 +96,7 @@ const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
       <Uploader files={loadedAvatar} onChange={handleChange}>
         <ImageRenderer />
       </Uploader>
-      <BgImage src={fileUrl} />
+      <BgImage src={fileUrl ?? communityCoverPlaceholder} />
       <CoverImageLoader mimeType={mimeType} onChange={newAvatar => setLoadedAvatar(newAvatar)}>
         <AvatarUploadButton>
           <StyledCameraIcon /> &nbsp; Upload image
