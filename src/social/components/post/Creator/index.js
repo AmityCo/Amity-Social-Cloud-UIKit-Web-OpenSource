@@ -180,7 +180,8 @@ const PostCreatorBar = ({
         isOpen={isPollModalOpened}
         onCreatePoll={(pollId, text) =>
           createPost({
-            ...{ targetType: PostTargetType.UserFeed, targetId: currentUserId },
+            targetType,
+            targetId,
             data: { pollId, text },
             dataType: 'poll',
           })
