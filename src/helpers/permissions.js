@@ -63,7 +63,13 @@ export function canDeletePost({ userId, user, communityUser, post, community }) 
 }
 
 export function canEditPost({ userId, user, communityUser, post, community, childrenPosts }) {
-  if (childrenPosts.find(childPost => childPost.dataType === PostDataType.LivestreamPost)) {
+  if (
+    childrenPosts.find(
+      childPost =>
+        childPost.dataType === PostDataType.LivestreamPost ||
+        childPost.dataType === PostDataType.PollPost,
+    )
+  ) {
     return false;
   }
 
