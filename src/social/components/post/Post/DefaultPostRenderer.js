@@ -50,6 +50,8 @@ const DefaultPostRenderer = ({
   handleUnreportPost,
   handleApprovePost,
   handleDeclinePost,
+  handleClosePoll,
+  isPollClosed,
   hidePostTarget,
   isFlaggedByMe,
   readonly,
@@ -110,6 +112,8 @@ const DefaultPostRenderer = ({
       onOk: handleDeletePost,
     });
 
+  const pollPost = childrenPosts.find(childPost => childPost.dataType === PostDataType.PollPost);
+
   const allOptions = [
     canEditPost({
       userId: currentUserId,
@@ -142,6 +146,11 @@ const DefaultPostRenderer = ({
       name: isFlaggedByMe ? 'report.undoReport' : 'report.doReport',
       action: isFlaggedByMe ? onUnreportClick : onReportClick,
     },
+    !!pollPost &&
+      !isPollClosed && {
+        name: 'poll.close',
+        action: handleClosePoll,
+      },
   ].filter(Boolean);
 
   const childrenContent = childrenPosts?.map(childPost => ({
@@ -209,6 +218,8 @@ DefaultPostRenderer.propTypes = {
   handleUnreportPost: PropTypes.func,
   handleApprovePost: PropTypes.func,
   handleDeclinePost: PropTypes.func,
+  handleClosePoll: PropTypes.func,
+  isPollClosed: PropTypes.bool,
   hidePostTarget: PropTypes.bool,
   isFlaggedByMe: PropTypes.bool,
   readonly: PropTypes.bool,
@@ -233,6 +244,8 @@ DefaultPostRenderer.defaultProps = {
   handleUnreportPost: () => {},
   handleApprovePost: () => {},
   handleDeclinePost: () => {},
+  handleClosePoll: () => {},
+  isPollClosed: false,
   hidePostTarget: false,
   isFlaggedByMe: false,
   readonly: false,

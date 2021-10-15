@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
+import { PollStatus, PostDataType } from '@amityco/js-sdk';
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 import usePost from '~/social/hooks/usePost';
+import usePoll from '~/social/hooks/usePoll';
 import { usePostRenderer } from '~/social/providers/PostRendererProvider';
 import DefaultPostRenderer from './DefaultPostRenderer';
 import PostErrorBoundary from './PostErrorBoundary';
@@ -12,6 +14,12 @@ const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, rea
   const renderers = usePostRenderer();
 
   const { isPostReady, post, ...others } = usePost(postId);
+  const pollPost = others.childrenPosts.find(
+    childPost => childPost.dataType === PostDataType.PollPost,
+  );
+
+  const { handleClosePoll, poll } = usePoll(pollPost?.data?.pollId);
+  const isPollClosed = poll.status === PollStatus.Closed;
 
   if (!isPostReady) {
     return <DefaultPostRenderer loading />;
@@ -23,6 +31,9 @@ const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, rea
     <PostErrorBoundary>
       <Renderer
         {...others}
+        handleClosePoll={handleClosePoll}
+        isPollClosed={isPollClosed}
+        poll={poll}
         className={className}
         currentUserId={currentUserId}
         hidePostTarget={hidePostTarget}

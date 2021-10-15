@@ -315,5 +315,6 @@
   "poll.vote.closedIn": "Poll ends in {closedIn} days",
   "poll.vote.finalResults": "Final results",
   "poll.vote.submit": "Submit vote",
-  "poll.error.deletedOrClosed": "This poll has been closed or deleted."
+  "poll.error.deletedOrClosed": "This poll has been closed or deleted.",
+  "poll.close": "Close poll"
 }

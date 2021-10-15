@@ -69,7 +69,8 @@ const ResultList = ({ answers, totalVotes }) => {
 
 const PollContent = ({ items }) => {
   const { pollId } = items[0]?.data;
-  const { answers = [], answerType, closedIn, isDeleted, isVoted, status } = usePoll(pollId);
+  const { poll } = usePoll(pollId);
+  const { answers = [], answerType, closedIn, isDeleted, isVoted, status } = poll;
 
   const isClosed = status === PollStatus.Closed;
   const totalVotes = answers.reduce((sum, answer) => sum + answer.voteCount, 0);
