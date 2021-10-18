@@ -17,6 +17,7 @@ export { default as Play } from './Play';
 export { default as PlayCircle } from './PlayCircle';
 export { default as VideoAttachment } from './VideoAttachment';
 export { default as LivestreamCover } from './LivestreamCover';
+export { default as CommunityCoverPicture } from './CommunityCoverPicture';
 export { default as Minus } from './Minus';
 export { default as Poll } from './Poll';
 export { default as CircleRemove } from './CircleRemove';

@@ -7,7 +7,7 @@ import Truncate from 'react-truncate-markup';
 
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
-import communityCoverPlaceholder from '~/public/community-cover-placeholder.png';
+import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 
 import {
   CategoriesList,

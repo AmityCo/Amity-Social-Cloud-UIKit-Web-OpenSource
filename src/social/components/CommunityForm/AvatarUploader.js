@@ -5,7 +5,7 @@ import { ImageSize, FileRepository } from '@amityco/js-sdk';
 import Loader from '~/core/components/Uploaders/Loader';
 import Uploader from '~/core/components/Uploaders/Uploader';
 import UploaderImage from '~/core/components/Uploaders/Image';
-import communityCoverPlaceholder from '~/public/community-cover-placeholder.png';
+import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 import CameraIcon from '~/icons/Camera';
 
 const StyledCameraIcon = styled(CameraIcon)`

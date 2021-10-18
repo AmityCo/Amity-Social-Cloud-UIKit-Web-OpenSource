@@ -37,6 +37,7 @@ export const Sky = () => <Icons.Sky />;
 export const Balloon = () => <Icons.Balloon />;
 export const Dots = () => <Icons.Dots />;
 export const LivestreamCover = () => <Icons.LivestreamCover />;
+export const CommunityCoverPicture = () => <Icons.CommunityCoverPicture />;
 export const Lock = () => <Icons.Lock />;
 export const Message = () => <Icons.Message />;
 export const MinusCirlce = () => <Icons.MinusCircle />;

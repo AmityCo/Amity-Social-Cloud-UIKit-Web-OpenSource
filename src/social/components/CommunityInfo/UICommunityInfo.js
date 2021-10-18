@@ -8,7 +8,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import Button from '~/core/components/Button';
 import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';
-import communityCoverPlaceholder from '~/public/community-cover-placeholder.png';
+import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 import {
   Count,
   Container,
