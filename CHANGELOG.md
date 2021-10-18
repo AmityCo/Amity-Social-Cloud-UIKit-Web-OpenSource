@@ -1,5 +1,31 @@
 # Changelog
 
+## [v2.4.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.3.0...v2.4.0)
+
+#### 18 October 2021
+
+### New Features
+
+- [`UP-1712`](https://ekoapp.atlassian.net/browse/UP-1712) - poll feature ([`1d8cd79`](https://gitlab.com/upstra/web/ui-kit/commit/1d8cd7975b6353ecb869898bcf1f540751dc602b)) (by Serhii Ivanenko)
+- [`UP-4486`](https://ekoapp.atlassian.net/browse/UP-4486) - livestream posts, livestream media gallery ([`5e7e1a5`](https://gitlab.com/upstra/web/ui-kit/commit/5e7e1a5e622757bb23b86adb62bd9f9340f308af)) (by Valeriy Malyshev)
+- [`UP-5360`](https://ekoapp.atlassian.net/browse/UP-5360) - added handler for close poll ([`2e124f5`](https://gitlab.com/upstra/web/ui-kit/commit/2e124f5bb25e4d9e8b993dd8ad45bfe81118abf0)) (by Serhii Ivanenko)
+
+### Fixes
+
+- [`UP-5362`](https://ekoapp.atlassian.net/browse/UP-5362) - convert SVG to Base64 for default community cover ([`4cfcd06`](https://gitlab.com/upstra/web/ui-kit/commit/4cfcd068810a82e3ff5253aaf7043f1ba83b333a)) (by Kaung Myat Lwin)
+- [`UP-5359`](https://ekoapp.atlassian.net/browse/UP-5359) - disallow to edit poll post ([`7b5ef20`](https://gitlab.com/upstra/web/ui-kit/commit/7b5ef204c8665ac231364f154dec2a8f9827f661)) (by Serhii Ivanenko)
+- [`UP-5362`](https://ekoapp.atlassian.net/browse/UP-5362) - set default cover photo ([`018c647`](https://gitlab.com/upstra/web/ui-kit/commit/018c64742c963ceb790c2a5259d1fb6a571f54da)) (by Kaung Myat Lwin)
+- use message.user as a plain object ([`ebf03dc`](https://gitlab.com/upstra/web/ui-kit/commit/ebf03dcebd30744c7ac38de93d69b31627f29274)) (by Valeriy Malyshev)
+- [`UP-5358`](https://ekoapp.atlassian.net/browse/UP-5358) - fixed targetType and targetId for poll post creator ([`b00e347`](https://gitlab.com/upstra/web/ui-kit/commit/b00e34707c5a69eee9adba6692e850e373829141)) (by Serhii Ivanenko)
+- [`UP-4486`](https://ekoapp.atlassian.net/browse/UP-4486) - hide livestream gallery ([`459e3d1`](https://gitlab.com/upstra/web/ui-kit/commit/459e3d170c3b6079198963ea440602f15b441418)) (by Valeriy Malyshev)
+
+### Commits
+
+- Milestone: Y21Q3.6 ([`c1af3f2`](https://gitlab.com/upstra/web/ui-kit/commit/c1af3f2926d5502930937b7a65da6115e0809171)) (by Kaung Myat Lwin)
+- hotfix - fixed crash on option update ([`78f4c75`](https://gitlab.com/upstra/web/ui-kit/commit/78f4c757b0ea579adf01c8859bbbe895d7084c5a)) (by Serhii Ivanenko)
+
+---
+
 ## [v2.3.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.2.0...v2.3.0)
 
 #### 15 September 2021
