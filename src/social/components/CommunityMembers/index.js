@@ -33,8 +33,8 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
     hasMoreMembers,
     loadMoreMembers,
     membersCount,
-    assignRoleToUsers,
-    removeRoleFromUsers,
+    assignRolesToUsers,
+    removeRolesFromUsers,
     moderators,
     hasMoreModerators,
     loadMoreModerators,
@@ -55,18 +55,19 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
       <ConditionalRender condition={activeTab === MemberTabs.MEMBERS}>
         <LoadMore hasMore={hasMoreMembers} loadMore={loadMoreMembers}>
           {members.length > 0 &&
-            members.map(({ userId, roles }) => (
+            members.map(({ userId, roles, isBanned }) => (
               <CommunityMemberItem
                 key={userId}
                 userId={userId}
                 currentUserId={currentUserId}
                 roles={roles}
                 onClick={onClickUser}
-                assignRoleToUsers={assignRoleToUsers}
-                removeRoleFromUsers={removeRoleFromUsers}
+                assignRolesToUsers={assignRolesToUsers}
+                removeRolesFromUsers={removeRolesFromUsers}
                 removeMembers={removeMembers}
                 hasModeratorPermissions={hasModeratorPermissions}
                 isJoined={community.isJoined}
+                isBanned={isBanned}
               />
             ))}
         </LoadMore>
@@ -74,18 +75,19 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
       <ConditionalRender condition={activeTab === MemberTabs.MODERATORS}>
         <LoadMore hasMore={hasMoreModerators} loadMore={loadMoreModerators}>
           {moderators.length > 0 &&
-            moderators.map(({ userId, roles }) => (
+            moderators.map(({ userId, roles, isBanned }) => (
               <CommunityMemberItem
                 key={userId}
                 userId={userId}
                 currentUserId={currentUserId}
                 roles={roles}
                 onClick={onClickUser}
-                assignRoleToUsers={assignRoleToUsers}
-                removeRoleFromUsers={removeRoleFromUsers}
+                assignRolesToUsers={assignRolesToUsers}
+                removeRolesFromUsers={removeRolesFromUsers}
                 removeMembers={removeMembers}
                 hasModeratorPermissions={hasModeratorPermissions}
                 isJoined={community.isJoined}
+                isBanned={isBanned}
               />
             ))}
         </LoadMore>

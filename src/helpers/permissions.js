@@ -1,16 +1,17 @@
 import { PostDataType } from '@amityco/js-sdk';
 // TODO: refactor to align with SDK roles once available.
+import { MemberRoles } from '~/social/constants';
 import { isCommunityMember, isCommunityPost, isPostUnderReview } from '~/helpers/utils';
 
 const ADMIN = 'global-admin';
-const MODERATOR_ROLE = 'moderator';
+const { COMMUNITY_MODERATOR, CHANNEL_MODERATOR } = MemberRoles;
 
 export const isModerator = userRoles => {
   if (!userRoles?.length) {
     return false;
   }
 
-  return userRoles.includes(MODERATOR_ROLE);
+  return userRoles.some(role => [COMMUNITY_MODERATOR, CHANNEL_MODERATOR].includes(role));
 };
 
 export const isAdmin = userRoles => {
@@ -21,26 +22,18 @@ export const isAdmin = userRoles => {
   return userRoles.includes(ADMIN);
 };
 
-function isPostModerator({ userId, user, communityUser, post, community }) {
+function isPostModerator({ user, communityUser, post }) {
   const hasModeratorPermissions =
     isAdmin(user.roles) || isModerator(user.roles) || isModerator(communityUser.roles);
 
   if (isCommunityPost(post)) {
-    const isCommunityOwner = community.userId === userId;
-
-    return hasModeratorPermissions || (isCommunityOwner && isCommunityMember(communityUser));
+    return hasModeratorPermissions && isCommunityMember(communityUser);
   }
 
   return hasModeratorPermissions;
 }
 
-export function canEditCommunity({ userId, user, communityUser, community }) {
-  const isCommunityOwner = community.userId === userId;
-
-  if (isCommunityOwner && isCommunityMember(communityUser)) {
-    return true;
-  }
-
+export function canEditCommunity({ user, communityUser }) {
   return isAdmin(user.roles) || isModerator(user.roles) || isModerator(communityUser.roles);
 }
 

@@ -2,8 +2,9 @@ import { CommunityRepository, CommunityFilter } from '@amityco/js-sdk';
 
 import useCommunity from '~/social/hooks/useCommunity';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
+import { MemberRoles } from '~/social/constants';
 
-const FILTER_BY_MODERATOR_ROLE = 'moderator';
+const { COMMUNITY_MODERATOR } = MemberRoles;
 
 const useCommunityMembers = communityId => {
   const { community } = useCommunity(communityId);
@@ -22,16 +23,16 @@ const useCommunityMembers = communityId => {
       CommunityRepository.getCommunityMembers({
         communityId,
         memberships: [CommunityFilter.Member],
-        roles: [FILTER_BY_MODERATOR_ROLE],
+        roles: [COMMUNITY_MODERATOR], // backward compatibility
       }),
     [communityId],
   );
 
-  const assignRoleToUsers = (role, userIds) =>
-    CommunityRepository.assignRoleToUsers({ communityId, role, userIds });
+  const assignRolesToUsers = (roles, userIds) =>
+    CommunityRepository.assignRolesToUsers({ communityId, roles, userIds });
 
-  const removeRoleFromUsers = (role, userIds) =>
-    CommunityRepository.removeRoleFromUsers({ communityId, role, userIds });
+  const removeRolesFromUsers = (roles, userIds) =>
+    CommunityRepository.removeRolesFromUsers({ communityId, roles, userIds });
 
   const addMembers = userIds => CommunityRepository.addMembers({ communityId, userIds });
   const removeMembers = userIds => CommunityRepository.removeMembers({ communityId, userIds });
@@ -41,8 +42,8 @@ const useCommunityMembers = communityId => {
     hasMoreMembers,
     loadMoreMembers,
     membersCount: community.membersCount,
-    assignRoleToUsers,
-    removeRoleFromUsers,
+    assignRolesToUsers,
+    removeRolesFromUsers,
     moderators,
     hasMoreModerators,
     loadMoreModerators,

@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as UserImage } from '~/icons/User';
+import BanIcon from '~/icons/Ban';
 import Avatar from '~/core/components/Avatar';
 
 const UserHeaderContainer = styled.div`
@@ -33,18 +34,22 @@ const UserHeaderTitle = styled.div`
   white-space: nowrap;
 `;
 
+const StyledBanIcon = styled(BanIcon)`
+  color: ${({ theme }) => theme.palette.base.shade3};
+`;
+
 const UserHeaderSubtitle = styled.div`
   grid-area: subtitle;
   ${({ theme }) => theme.typography.body}
 `;
 
-const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick }) => {
+const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick, isBanned }) => {
   const onClickUser = () => onClick(userId);
   return (
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
       <UserHeaderAvatar avatar={avatarFileUrl} onClick={onClickUser} backgroundImage={UserImage} />
       <UserHeaderTitle title={userId} onClick={onClickUser}>
-        {displayName}
+        {displayName} {isBanned && <StyledBanIcon />}
       </UserHeaderTitle>
       {children && <UserHeaderSubtitle>{children}</UserHeaderSubtitle>}
     </UserHeaderContainer>
@@ -57,6 +62,7 @@ UserHeader.propTypes = {
   avatarFileUrl: PropTypes.string,
   children: PropTypes.node,
   onClick: PropTypes.func,
+  isBanned: PropTypes.bool,
 };
 
 export default customizableComponent('UserHeader', UserHeader);

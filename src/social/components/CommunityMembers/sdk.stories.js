@@ -19,4 +19,4 @@ export const SDKCommunityMembers = args => {
   return <UiKitCommunityMembers communityId={community.communityId} {...args} />;
 };
 
-SDKCommunityMembers.storyName = 'Member list';
+SDKCommunityMembers.storyName = 'Member List';

@@ -41,7 +41,7 @@ const UICommunityInfo = ({
   canEditCommunity,
   onEditCommunity,
   joinCommunity,
-  leaveCommunity,
+  onClickLeaveCommunity,
   canLeaveCommunity,
   canReviewPosts,
   name,
@@ -90,8 +90,7 @@ const UICommunityInfo = ({
                 },
                 canLeaveCommunity && {
                   name: formatMessage({ id: 'community.leaveCommunity' }),
-                  action: () => leaveCommunity(communityId),
-                  className: 'leave-community',
+                  action: () => onClickLeaveCommunity(communityId),
                 },
               ].filter(Boolean)}
             />
@@ -140,7 +139,7 @@ UICommunityInfo.propTypes = {
   canEditCommunity: PropTypes.bool,
   onEditCommunity: PropTypes.func,
   joinCommunity: PropTypes.func,
-  leaveCommunity: PropTypes.func,
+  onClickLeaveCommunity: PropTypes.func,
   canLeaveCommunity: PropTypes.bool,
   canReviewPosts: PropTypes.bool,
   name: PropTypes.string,

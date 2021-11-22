@@ -17,18 +17,15 @@ const useCommunityOneMember = (communityId, currentUserId, communityOwnerId) => 
 
   const { user } = useUser(currentUserId);
 
-  const isCommunityOwner = currentUserId === communityOwnerId;
-
   const isCommunityModerator = isModerator(currentMember?.roles);
   const hasModeratorPermissions =
-    (isCommunityMember(currentMember) && (isCommunityModerator || isCommunityOwner)) ||
+    (isCommunityMember(currentMember) && isCommunityModerator) ||
     isModerator(user?.roles) ||
     isAdmin(user?.roles);
 
   return {
     isCurrentMemberReady: !!currentMember.userId,
     currentMember,
-    isCommunityOwner,
     isCommunityModerator,
     hasModeratorPermissions,
     canEditCommunity: canEditCommunity({

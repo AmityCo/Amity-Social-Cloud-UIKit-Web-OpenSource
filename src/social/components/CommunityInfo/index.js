@@ -1,14 +1,12 @@
 import React, { memo, useMemo } from 'react';
 import { ImageSize, FileRepository, FeedType, PostTargetType } from '@amityco/js-sdk';
-import { useIntl } from 'react-intl';
-
 import withSDK from '~/core/hocs/withSDK';
 import useCommunity from '~/social/hooks/useCommunity';
 import useFeed from '~/social/hooks/useFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import UICommunityInfo from './UICommunityInfo';
-import { confirm } from '~/core/components/Confirm';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
+import UICommunityInfo from './UICommunityInfo';
+import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
 function usePendingPostCount(isReady, community, canReviewCommunityPosts) {
   // TODO workaround
@@ -38,16 +36,6 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
     [community.avatarFileId],
   );
 
-  const { formatMessage } = useIntl();
-
-  const leaveCommunityConfirm = () =>
-    confirm({
-      title: formatMessage({ id: 'community.leaveCommunityTitle' }),
-      content: formatMessage({ id: 'community.leaveCommunityBody' }),
-      okText: formatMessage({ id: 'community.leaveCommunityButtonText' }),
-      onOk: () => leaveCommunity(community.communityId),
-    });
-
   const { membersCount, description, isJoined, userId: communityOwnerId } = community;
   const { isCurrentMemberReady, canEditCommunity, canReviewCommunityPosts } = useCommunityOneMember(
     communityId,
@@ -76,10 +64,10 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
       isOfficial={community.isOfficial}
       isPublic={community.isPublic}
       avatarFileUrl={fileUrl}
+      joinCommunity={joinCommunity}
       canEditCommunity={canEditCommunity}
       onEditCommunity={onEditCommunity}
-      joinCommunity={joinCommunity}
-      leaveCommunity={leaveCommunityConfirm}
+      onClickLeaveCommunity={() => leaveCommunityConfirmModal(communityId, leaveCommunity)}
       canLeaveCommunity={canLeaveCommunity}
       canReviewPosts={canReviewCommunityPosts}
       name={community.displayName}

@@ -15,6 +15,7 @@ UiUserHeader.args = {
   displayName: 'Web-Test',
   avatarFileUrl: 'https://via.placeholder.com/32/dfdfdf?text=foobar',
   children: 'children slot',
+  isBanned: false,
 };
 
 UiUserHeader.argTypes = {
@@ -22,5 +23,6 @@ UiUserHeader.argTypes = {
   displayName: { control: { type: 'text' } },
   avatarFileUrl: { control: { type: 'text' } },
   children: { control: { type: 'text' } },
+  isBanned: { control: { type: 'boolean' } },
   onClick: { action: 'onClick()' },
 };

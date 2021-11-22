@@ -10,19 +10,22 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import useReport from '~/social/hooks/useReport';
 import { MemberInfo, CommunityMemberContainer } from './styles';
 import { confirm } from '~/core/components/Confirm';
+import { isModerator } from '~/helpers/permissions';
+import { MemberRoles } from '~/social/constants';
 
-const MODERATOR_ROLE = 'moderator';
+const { COMMUNITY_MODERATOR, CHANNEL_MODERATOR } = MemberRoles;
 
 const CommunityMemberItem = ({
   userId,
   currentUserId,
   onClick,
   roles = [],
-  assignRoleToUsers,
+  assignRolesToUsers,
   hasModeratorPermissions,
-  removeRoleFromUsers,
+  removeRolesFromUsers,
   removeMembers,
   isJoined,
+  isBanned,
 }) => {
   const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
@@ -34,9 +37,10 @@ const CommunityMemberItem = ({
     });
   };
 
-  const onPromoteModeratorClick = () => assignRoleToUsers(MODERATOR_ROLE, [userId]);
-
-  const onDismissModeratorClick = () => removeRoleFromUsers(MODERATOR_ROLE, [userId]);
+  const onPromoteModeratorClick = () =>
+    assignRolesToUsers([COMMUNITY_MODERATOR, CHANNEL_MODERATOR], [userId]);
+  const onDismissModeratorClick = () =>
+    removeRolesFromUsers([COMMUNITY_MODERATOR, CHANNEL_MODERATOR], [userId]);
 
   const onRemoveFromCommunityClick = () => {
     confirm({
@@ -48,14 +52,13 @@ const CommunityMemberItem = ({
     });
   };
 
-  const memberHasModeratorRole = roles.includes(MODERATOR_ROLE);
-
+  const memberHasModeratorRole = isModerator(roles);
   const isCurrentUser = currentUserId === userId;
 
   return (
     <CommunityMemberContainer>
       <MemberInfo>
-        <UserHeader userId={userId} onClick={onClick} />
+        <UserHeader userId={userId} onClick={onClick} isBanned={isBanned} />
       </MemberInfo>
       <ConditionalRender condition={!isCurrentUser && isJoined}>
         <OptionMenu
@@ -65,12 +68,14 @@ const CommunityMemberItem = ({
               action: onReportClick,
             },
             hasModeratorPermissions &&
-              !memberHasModeratorRole && {
+              !memberHasModeratorRole &&
+              !isBanned && {
                 name: 'moderatorMenu.promoteToModerator',
                 action: onPromoteModeratorClick,
               },
             hasModeratorPermissions &&
-              memberHasModeratorRole && {
+              memberHasModeratorRole &&
+              !isBanned && {
                 name: 'moderatorMenu.dismissModerator',
                 action: onDismissModeratorClick,
               },
@@ -90,12 +95,13 @@ CommunityMemberItem.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  assignRoleToUsers: PropTypes.func,
+  assignRolesToUsers: PropTypes.func,
   hasModeratorPermissions: PropTypes.bool,
-  removeRoleFromUsers: PropTypes.func,
+  removeRolesFromUsers: PropTypes.func,
   removeMembers: PropTypes.func,
   roles: PropTypes.arrayOf(PropTypes.string),
   isJoined: PropTypes.bool,
+  isBanned: PropTypes.bool,
 };
 
 export default CommunityMemberItem;
