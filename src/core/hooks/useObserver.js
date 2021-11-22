@@ -10,7 +10,7 @@ const useObserver = (target, { root, rootMargin, threshold } = defaultOptions) =
   const options = {
     root,
     rootMargin: rootMargin || defaultOptions.rootMargin,
-    threshold,
+    threshold: threshold || defaultOptions.threshold,
   };
   const [entry, setEntry] = useState({});
   const observer = useRef(new IntersectionObserver(entries => setEntry(entries[0]), options));

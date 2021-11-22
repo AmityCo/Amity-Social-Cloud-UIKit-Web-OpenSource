@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect, useMemo } from 'react';
+import React, { memo, useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { FormattedMessage } from 'react-intl';
@@ -10,6 +10,8 @@ import {
   FileType,
   ImageSize,
 } from '@amityco/js-sdk';
+
+import { info } from '~/core/components/Confirm';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 
 import { isEmpty } from '~/helpers';
@@ -30,6 +32,8 @@ import ImagesUploaded from './components/ImagesUploaded';
 import VideosUploaded from './components/VideosUploaded';
 import FilesUploaded from './components/FilesUploaded';
 
+import { formatMentionees } from '../../../../helpers/utils';
+
 import { createPost, showPostCreatedNotification } from './utils';
 import {
   Avatar,
@@ -44,11 +48,20 @@ import {
   PollIconContainer,
 } from './styles';
 import PollModal from '~/social/components/post/PollComposer/PollModal';
+import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 
 const communityFetcher = id => () => CommunityRepository.communityForId(id);
 const userFetcher = id => () => new UserRepository().userForId(id);
 
 const MAX_FILES_PER_POST = 10;
+
+const overCharacterModal = () =>
+  info({
+    title: <FormattedMessage id="postCreator.unableToPost" />,
+    content: <FormattedMessage id="postCreator.overCharacter" />,
+    okText: <FormattedMessage id="postCreator.okText" />,
+    type: 'info',
+  });
 
 const PostCreatorBar = ({
   className = '',
@@ -105,16 +118,24 @@ const PostCreatorBar = ({
   const [incomingImages, setIncomingImages] = useState([]);
   const [incomingVideos, setIncomingVideos] = useState([]);
   const [incomingFiles, setIncomingFiles] = useState([]);
-
   const [uploadLoading, setUploadLoading] = useState(false);
-
   const [setError] = useErrorNotification();
+  const [mentionees, setMentionees] = useState([]);
 
   const [onCreatePost, creating] = useAsyncCallback(async () => {
     const data = {};
     const attachments = [];
+    const postMentionees = {};
 
-    if (postText) data.text = postText;
+    if (postText) {
+      // parse text and remove extra markup
+      // entities created by react-mentions
+      const formattedText = postText.replace(/@\(\w*\)/g, matched => {
+        const middleText = matched.match(/\(([^)]+)\)/)?.[1];
+        return `@${middleText}`;
+      });
+      data.text = formattedText;
+    }
     if (postImages.length) {
       attachments.push(...postImages.map(i => ({ fileId: i.fileId, type: FileType.Image })));
     }
@@ -125,7 +146,27 @@ const PostCreatorBar = ({
       attachments.push(...postFiles.map(i => ({ fileId: i.fileId, type: FileType.File })));
     }
 
-    const post = await createPost({ ...target, data, attachments });
+    if (mentionees.length) {
+      postMentionees.type = 'user';
+      postMentionees.userIds = mentionees.map(({ id }) => id);
+    }
+
+    if (data.text?.length > MAXIMUM_POST_CHARACTERS) {
+      overCharacterModal();
+      return;
+    }
+
+    const createPostParams = {
+      ...target,
+      data,
+      attachments,
+    };
+
+    if (postMentionees.type && postMentionees.userIds.length > 0) {
+      createPostParams.mentionees = [{ ...postMentionees }];
+    }
+
+    const post = await createPost(createPostParams);
 
     onCreateSuccess(post.postId);
     setPostText('');
@@ -135,9 +176,10 @@ const PostCreatorBar = ({
     setIncomingImages([]);
     setIncomingVideos([]);
     setIncomingFiles([]);
+    setMentionees([]);
 
     showPostCreatedNotification(post, model);
-  }, [postText, postImages, postVideos, postFiles, target, onCreateSuccess, model]);
+  }, [postText, postImages, postVideos, postFiles, target, onCreateSuccess, model, mentionees]);
 
   const onMaxFilesLimit = () => {
     notification.info({
@@ -174,6 +216,27 @@ const PostCreatorBar = ({
   const [isPollModalOpened, setPollModalOpened] = useState(false);
   const openPollModal = () => setPollModalOpened(true);
 
+  const [mentionText, setMentionText] = useState();
+
+  const queryMentionees = useCallback(
+    (query, cb) => {
+      const keyword = query || mentionText;
+
+      if (!keyword) return;
+
+      const liveCollection = UserRepository.queryUsers({ keyword });
+
+      if (liveCollection.hasMore) {
+        liveCollection.nextPage();
+      }
+
+      liveCollection.on('dataUpdated', models => {
+        cb(formatMentionees(models));
+      });
+    },
+    [mentionText],
+  );
+
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)}>
       <PollModal
@@ -209,8 +272,26 @@ const PostCreatorBar = ({
           data-qa-anchor="social-create-post-input"
           multiline
           value={postText}
-          onChange={text => setPostText(text)}
+          onChange={({ text, lastMentionText, mentions }) => {
+            // Disrupt the flow
+            if (mentions?.length > MAXIMUM_POST_MENTIONEES) {
+              return info({
+                title: <FormattedMessage id="postCreator.unableToMention" />,
+                content: <FormattedMessage id="postCreator.overMentionees" />,
+                okText: <FormattedMessage id="postCreator.okText" />,
+                type: 'info',
+              });
+            }
+
+            setMentionees(mentions);
+            setMentionText(lastMentionText);
+            setPostText(text);
+          }}
           placeholder={placeholder}
+          mentionAllowed
+          queryMentionees={queryMentionees}
+          // Need to work on this, possible conflict incoming
+          loadMoreMentionees={() => queryMentionees(mentionText)}
           append={
             <UploadsContainer>
               <ImagesUploaded

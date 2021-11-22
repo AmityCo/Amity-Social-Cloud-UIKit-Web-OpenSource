@@ -16,17 +16,18 @@ const RENDERERS = {
   [PostDataType.LivestreamPost]: LivestreamContent,
 };
 
-const PostContent = ({ data, dataType, postMaxLines }) => {
+const PostContent = ({ data, dataType, postMaxLines, mentionees }) => {
   const Renderer = RENDERERS[dataType];
   if (!data || !Renderer) return null;
 
-  return <Renderer {...data} postMaxLines={postMaxLines} />;
+  return <Renderer {...data} postMaxLines={postMaxLines} mentionees={mentionees} />;
 };
 
 PostContent.propTypes = {
   data: PropTypes.object,
   dataType: PropTypes.oneOf(Object.values(PostDataType)),
   postMaxLines: PropTypes.number,
+  mentionees: PropTypes.array,
 };
 
 export default PostContent;

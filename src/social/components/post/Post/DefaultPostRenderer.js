@@ -64,7 +64,7 @@ const DefaultPostRenderer = ({
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
 
-  const { data, dataType, postId, targetId, targetType } = post;
+  const { data, dataType, postId, targetId, targetType, mentionees } = post;
   const { community } = useCommunity(targetId, () => targetType !== PostTargetType.CommunityFeed);
   const { currentMember, canReviewCommunityPosts } = useCommunityOneMember(
     targetId,
@@ -181,6 +181,7 @@ const DefaultPostRenderer = ({
             data={livestreamContent?.data ?? data}
             dataType={livestreamContent?.dataType ?? dataType}
             postMaxLines={postMaxLines}
+            mentionees={mentionees}
           />
 
           {hasChildrenPosts && <ChildrenContent>{childrenContent}</ChildrenContent>}
@@ -230,6 +231,7 @@ DefaultPostRenderer.propTypes = {
     postId: PropTypes.string,
     targetId: PropTypes.string,
     targetType: PropTypes.string,
+    mentionees: PropTypes.array,
   }),
   userRoles: PropTypes.arrayOf(PropTypes.string),
   loading: PropTypes.bool,

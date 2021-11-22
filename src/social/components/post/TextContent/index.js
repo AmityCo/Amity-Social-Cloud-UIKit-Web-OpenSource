@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
+import Highlighter from 'react-highlight-words';
 
 import customizableComponent from '~/core/hocs/customization';
 import Linkify from '~/core/components/Linkify';
 import Button from '~/core/components/Button';
+import { searchWords } from '~/helpers/utils';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
@@ -21,8 +23,21 @@ export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
   display: inline-block;
 `;
 
-const TextContent = ({ text, postMaxLines }) => {
-  const textContent = text && <PostContent>{text}</PostContent>;
+export const Highlighted = styled.span`
+  color: ${({ theme }) => theme.palette.primary.main};
+`;
+
+const TextContent = ({ text, postMaxLines, mentionees }) => {
+  const textContent = text && (
+    <PostContent>
+      <Highlighter
+        autoEscape
+        highlightTag={({ children }) => <Highlighted>{children}</Highlighted>}
+        searchWords={searchWords(mentionees)}
+        textToHighlight={text}
+      />
+    </PostContent>
+  );
 
   const [isExpanded, setIsExpanded] = useState(false);
   const onExpand = () => setIsExpanded(true);

@@ -1,16 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
+import { Mention, MentionsInput } from 'react-mentions';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import cx from 'classnames';
-
 import TextareaAutosize from 'react-autosize-textarea';
+
 import ConditionalRender from '~/core/components/ConditionalRender';
+import SocialMentionItem from '~/core/components/SocialMentionItem';
 
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   min-width: 1em;
-  overflow: hidden;
   background: ${({ theme }) => theme.palette.system.background};
   border: 1px solid #e3e4e8;
   border-radius: 4px;
@@ -38,7 +39,7 @@ const styling = css`
   width: 1%;
   min-width: 0;
   margin: 0;
-  padding: 0.625rem 0.75rem;
+  padding: 0.563rem 0.563rem;
   background: none;
   border: none;
   box-sizing: border-box;
@@ -63,6 +64,66 @@ const TextArea = styled(TextareaAutosize)`
   resize: vertical;
 `;
 
+const displayTransform = (_, display) => `@${display}`;
+// Have to hard code this as we have no way of
+// injecting these styles with styled components
+const suggestListStyles = {
+  suggestions: {
+    zIndex: 999,
+    list: {
+      borderRadius: '0.5rem',
+      minWidth: '22.5rem',
+      maxHeight: '17.5rem',
+      boxShadow: '0 0 0.3rem #A5A9B5',
+      overflow: 'auto',
+    },
+  },
+  '&multiLine': {
+    highlighter: {
+      boxSizing: 'border-box',
+      overflow: 'hidden',
+    },
+  },
+};
+
+const mentionStyle = {
+  position: 'relative',
+  color: '#1054DE',
+  pointerEvents: 'none',
+  textShadow: '1px 1px 1px white, 1px -1px 1px white, -1px 1px 1px white, -1px -1px 1px white',
+  zIndex: 1,
+};
+
+const StyledMentionsInput = styled(MentionsInput)`
+  padding: 0.5rem;
+  textarea {
+    ${styling}
+    resize: vertical;
+  }
+`;
+
+const renderMentionItem = (
+  { id, display, avatar, isLastItem },
+  search,
+  highlightedDisplay,
+  index,
+  focused,
+  dataLength,
+  parentContainer,
+  loadMore,
+) => (
+  <SocialMentionItem
+    avatar={avatar}
+    display={display}
+    focused={focused}
+    id={id}
+    highlightedDisplay={highlightedDisplay}
+    isLastItem={isLastItem}
+    rootEl={parentContainer}
+    loadMore={loadMore}
+  />
+);
+
 const InputText = ({
   id,
   input = null,
@@ -80,8 +141,25 @@ const InputText = ({
   onClear = () => {},
   onClick = () => {},
   className = null,
+  mentionAllowed = false,
+  queryMentionees = () => [],
+  loadMoreMentionees = () => [],
+  onAddMentionee = () => {},
 }) => {
-  const handleChange = useCallback(e => onChange(e.target.value), []);
+  const mentionRef = useRef();
+  const handleMentionInput = useCallback((e, [,], newPlainVal, mentions) => {
+    // Get last item of mention and save it in upper parent component
+    // This way we can call loadMoreMentionees and append new values
+    // inside the existing array
+    const lastSegment = newPlainVal.split(' ').pop();
+    const isMentionText = lastSegment[0]?.match(/^@/g);
+
+    onChange({
+      text: e.target.value,
+      lastMentionText: isMentionText && lastSegment,
+      mentions,
+    });
+  }, []);
 
   const handleKeyDown = useCallback(
     e => {
@@ -98,7 +176,7 @@ const InputText = ({
     value,
     placeholder,
     disabled,
-    onChange: handleChange,
+    onChange: mentionAllowed ? handleMentionInput : e => onChange(e.target.value),
     onKeyDown: handleKeyDown,
     className: classNames,
   };
@@ -106,12 +184,37 @@ const InputText = ({
   return (
     <Container className={classNames}>
       {prepend}
-
+      <div id="mention-input" ref={mentionRef} />
+      {multiline && mentionAllowed && (
+        <StyledMentionsInput
+          inputRef={input}
+          rows={rows}
+          maxRows={maxRows}
+          suggestionsPortalHost={mentionRef?.current}
+          style={suggestListStyles}
+          {...props}
+          onClick={onClick}
+        >
+          <Mention
+            trigger="@"
+            markup="@(__id__)"
+            data={queryMentionees}
+            style={mentionStyle}
+            renderSuggestion={(...args) =>
+              renderMentionItem(...args, queryMentionees?.length, mentionRef, loadMoreMentionees)
+            }
+            displayTransform={displayTransform}
+            appendSpaceOnAdd
+            onAdd={onAddMentionee}
+          />
+        </StyledMentionsInput>
+      )}
       <ConditionalRender condition={multiline}>
-        <TextArea ref={input} rows={rows} maxRows={maxRows} {...props} onClick={onClick} />
+        {!mentionAllowed && (
+          <TextArea ref={input} rows={rows} maxRows={maxRows} {...props} onClick={onClick} />
+        )}
         <TextField ref={input} {...props} onClick={onClick} />
       </ConditionalRender>
-
       {append}
     </Container>
   );
@@ -134,6 +237,10 @@ InputText.propTypes = {
   onClear: PropTypes.func,
   onClick: PropTypes.func,
   className: PropTypes.string,
+  mentionAllowed: PropTypes.bool,
+  queryMentionees: PropTypes.func,
+  loadMoreMentionees: PropTypes.func,
+  onAddMentionee: PropTypes.func,
 };
 
 export default InputText;
