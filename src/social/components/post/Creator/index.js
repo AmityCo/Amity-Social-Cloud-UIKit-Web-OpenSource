@@ -59,7 +59,7 @@ const overCharacterModal = () =>
   info({
     title: <FormattedMessage id="postCreator.unableToPost" />,
     content: <FormattedMessage id="postCreator.overCharacter" />,
-    okText: <FormattedMessage id="postCreator.okText" />,
+    okText: <FormattedMessage id="postCreator.done" />,
     type: 'info',
   });
 

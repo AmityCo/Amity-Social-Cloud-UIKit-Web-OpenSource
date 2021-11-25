@@ -323,9 +323,9 @@
 
   "postCreator.unableToPost": "Unable to post",
   "postCreator.overCharacter": "You have reached maximum 50,000 characters in a post.",
-  "postCreator.okText": "Done",
+  "postCreator.done": "Done",
 
-  "postCreator.unableToPost": "Unable to mention",
-  "postCreator.overCharacter": "You have reached maximum 30 mentioned users in a post.",
+  "postCreator.unableToMention": "Unable to mention",
+  "postCreator.overMentionees": "You have reached maximum 30 mentioned users in a post.",
   "postCreator.okText": "OK"
 }
