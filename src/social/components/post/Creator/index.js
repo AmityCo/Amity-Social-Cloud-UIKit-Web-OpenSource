@@ -53,6 +53,12 @@ import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 const communityFetcher = id => () => CommunityRepository.communityForId(id);
 const userFetcher = id => () => new UserRepository().userForId(id);
 
+const mentioneeCommunityFetcher = (communityId, search = '') =>
+  CommunityRepository.getCommunityMembers({
+    communityId,
+    search,
+  });
+
 const MAX_FILES_PER_POST = 10;
 
 const overCharacterModal = () =>
@@ -220,15 +226,17 @@ const PostCreatorBar = ({
 
   const queryMentionees = useCallback(
     (query, cb) => {
-      const keyword = query || mentionText;
+      let keyword = query || mentionText;
 
-      if (!keyword) return;
-
-      const liveCollection = UserRepository.queryUsers({ keyword });
-
-      if (liveCollection.hasMore) {
-        liveCollection.nextPage();
+      // Weird hack to show users to show users on start
+      if (keyword.match(/^@$/)) {
+        keyword = undefined;
       }
+
+      const liveCollection =
+        targetType === PostTargetType.CommunityFeed
+          ? mentioneeCommunityFetcher(targetId, keyword)
+          : UserRepository.queryUsers({ keyword });
 
       liveCollection.on('dataUpdated', models => {
         cb(formatMentionees(models));
