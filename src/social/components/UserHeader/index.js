@@ -14,7 +14,7 @@ const UserHeader = ({ userId, children, onClick, isBanned }) => {
       displayName={user.displayName}
       avatarFileUrl={file.fileUrl}
       onClick={onClick}
-      isBanned={isBanned}
+      isBanned={isBanned || user.isGlobalBan}
     >
       {children}
     </UIUserHeader>

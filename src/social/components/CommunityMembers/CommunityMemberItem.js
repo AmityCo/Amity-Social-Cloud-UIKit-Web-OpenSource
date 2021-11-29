@@ -27,7 +27,7 @@ const CommunityMemberItem = ({
   isJoined,
   isBanned,
 }) => {
-  const { user } = useUser(userId);
+  const { user, isGlobalBan } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
 
   const onReportClick = () => {
@@ -58,7 +58,7 @@ const CommunityMemberItem = ({
   return (
     <CommunityMemberContainer>
       <MemberInfo>
-        <UserHeader userId={userId} onClick={onClick} isBanned={isBanned} />
+        <UserHeader userId={userId} onClick={onClick} isBanned={isBanned || isGlobalBan} />
       </MemberInfo>
       <ConditionalRender condition={!isCurrentUser && isJoined}>
         <OptionMenu
@@ -69,13 +69,15 @@ const CommunityMemberItem = ({
             },
             hasModeratorPermissions &&
               !memberHasModeratorRole &&
-              !isBanned && {
+              !isBanned &&
+              !isGlobalBan && {
                 name: 'moderatorMenu.promoteToModerator',
                 action: onPromoteModeratorClick,
               },
             hasModeratorPermissions &&
               memberHasModeratorRole &&
-              !isBanned && {
+              !isBanned &&
+              !isGlobalBan && {
                 name: 'moderatorMenu.dismissModerator',
                 action: onDismissModeratorClick,
               },

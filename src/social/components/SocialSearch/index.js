@@ -54,10 +54,10 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
   };
 
   const userRenderer = userName => {
-    const { userId } = users.find(item => item.displayName === userName) ?? {};
+    const { userId, isGlobalBan } = users.find(item => item.displayName === userName) ?? {};
     return (
       <ConditionalRender condition={!!userId}>
-        <UserHeader userId={userId} />
+        <UserHeader userId={userId} isBanned={isGlobalBan} />
       </ConditionalRender>
     );
   };

@@ -68,7 +68,7 @@ const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser, setUs
   return (
     <UserHeaderContainer key={userId}>
       <Header>
-        <UserHeader userId={userId} onClick={onClickUserHeader} />
+        <UserHeader userId={userId} onClick={onClickUserHeader} isBanned={user.isGlobalBan} />
         <OptionMenu
           options={[
             !isMe && {

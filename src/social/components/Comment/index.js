@@ -173,6 +173,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       canLike={canLike}
       canReply={canReply}
       canReport={canReport}
+      isBanned={commentAuthor.isGlobalBan}
       createdAt={comment.createdAt}
       editedAt={comment.editedAt}
       text={text}
