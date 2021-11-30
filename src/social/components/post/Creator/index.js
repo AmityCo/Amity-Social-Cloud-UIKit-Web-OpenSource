@@ -53,7 +53,7 @@ import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 const communityFetcher = id => () => CommunityRepository.communityForId(id);
 const userFetcher = id => () => new UserRepository().userForId(id);
 
-const mentioneeCommunityFetcher = (communityId, search = '') =>
+const mentioneeCommunityFetcher = (communityId, search) =>
   CommunityRepository.getCommunityMembers({
     communityId,
     search,
@@ -227,16 +227,19 @@ const PostCreatorBar = ({
   const queryMentionees = useCallback(
     (query, cb) => {
       let keyword = query || mentionText;
+      let liveCollection;
 
       // Weird hack to show users to show users on start
       if (keyword.match(/^@$/)) {
         keyword = undefined;
       }
 
-      const liveCollection =
-        targetType === PostTargetType.CommunityFeed
-          ? mentioneeCommunityFetcher(targetId, keyword)
-          : UserRepository.queryUsers({ keyword });
+      // Only fetch private community members
+      if (targetType === PostTargetType.CommunityFeed && !model?.isPublic) {
+        liveCollection = mentioneeCommunityFetcher(targetId, keyword);
+      } else {
+        liveCollection = UserRepository.queryUsers({ keyword });
+      }
 
       liveCollection.on('dataUpdated', models => {
         cb(formatMentionees(models));

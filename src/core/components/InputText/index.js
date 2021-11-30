@@ -103,7 +103,7 @@ const StyledMentionsInput = styled(MentionsInput)`
 `;
 
 const renderMentionItem = (
-  { id, display, avatar, isLastItem },
+  { id, isLastItem },
   search,
   highlightedDisplay,
   index,
@@ -113,8 +113,6 @@ const renderMentionItem = (
   loadMore,
 ) => (
   <SocialMentionItem
-    avatar={avatar}
-    display={display}
     focused={focused}
     id={id}
     highlightedDisplay={highlightedDisplay}
