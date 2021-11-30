@@ -27,8 +27,9 @@ const CommunityMemberItem = ({
   isJoined,
   isBanned,
 }) => {
-  const { user, isGlobalBan } = useUser(userId);
+  const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
+  const isGlobalBan = user?.isGlobalBan;
 
   const onReportClick = () => {
     handleReport();
@@ -69,15 +70,12 @@ const CommunityMemberItem = ({
             },
             hasModeratorPermissions &&
               !memberHasModeratorRole &&
-              !isBanned &&
               !isGlobalBan && {
                 name: 'moderatorMenu.promoteToModerator',
                 action: onPromoteModeratorClick,
               },
             hasModeratorPermissions &&
-              memberHasModeratorRole &&
-              !isBanned &&
-              !isGlobalBan && {
+              memberHasModeratorRole && {
                 name: 'moderatorMenu.dismissModerator',
                 action: onDismissModeratorClick,
               },
