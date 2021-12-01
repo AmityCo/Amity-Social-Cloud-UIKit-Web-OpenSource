@@ -53,15 +53,11 @@ export function formatCommunityMentionees(mentionees, users) {
 export function formatMentionees(users) {
   return users.map((user, index) => ({
     id: user.userId,
-    display: user.displayName,
+    display: user.displayName ?? user.userId,
     avatar: user.avatarCustomUrl,
     isLastItem: users?.length === index + 1,
   }));
 }
-
-// export function searchWords(textVal) {
-//   return textVal.match(/\B@([\w-]+)/gim);
-// }
 
 export function searchWords(mentionees) {
   // Prolly need to dissect this on upper level TextContent

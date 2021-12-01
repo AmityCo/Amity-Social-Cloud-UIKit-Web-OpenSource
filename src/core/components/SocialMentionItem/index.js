@@ -31,7 +31,7 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
 
   if (isLastItem) {
     return (
-      <Item focused={focused} ref={targetRef}>
+      <Item focused={focused} ref={targetRef} isBanned={user.isGlobalBan}>
         <Avatar avatar={file.fileUrl} showOverlay={user.isGlobalBan} />
         <div css="margin-left: 10px;">{user.displayName}</div>
       </Item>

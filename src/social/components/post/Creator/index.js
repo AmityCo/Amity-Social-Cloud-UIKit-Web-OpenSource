@@ -138,12 +138,15 @@ const PostCreatorBar = ({
     if (postText) {
       data.text = plainText;
     }
+
     if (postImages.length) {
       attachments.push(...postImages.map(i => ({ fileId: i.fileId, type: FileType.Image })));
     }
+
     if (postVideos.length) {
       attachments.push(...postVideos.map(i => ({ fileId: i.fileId, type: FileType.Video })));
     }
+
     if (postFiles.length) {
       attachments.push(...postFiles.map(i => ({ fileId: i.fileId, type: FileType.File })));
     }

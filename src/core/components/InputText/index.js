@@ -197,7 +197,6 @@ const InputText = ({
         >
           <Mention
             trigger="@"
-            markup="@[__id__](displayName)"
             data={queryMentionees}
             style={mentionStyle}
             renderSuggestion={(...args) =>
