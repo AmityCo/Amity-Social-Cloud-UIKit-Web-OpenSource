@@ -153,7 +153,9 @@ const InputText = ({
     const isMentionText = lastSegment[0]?.match(/^@/g);
 
     onChange({
+      // text: e.target.value,
       text: e.target.value,
+      plainText: newPlainVal,
       lastMentionText: isMentionText && lastSegment,
       mentions,
     });
@@ -195,7 +197,7 @@ const InputText = ({
         >
           <Mention
             trigger="@"
-            markup="@(__id__)"
+            markup="@[__id__](displayName)"
             data={queryMentionees}
             style={mentionStyle}
             renderSuggestion={(...args) =>

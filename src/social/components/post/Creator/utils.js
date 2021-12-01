@@ -28,9 +28,18 @@ export async function createPost({
   dataType,
   attachments,
   mentionees,
+  metadata,
 }) {
   return promisify(
-    PostRepository.createPost({ targetId, targetType, data, dataType, attachments, mentionees }),
+    PostRepository.createPost({
+      targetId,
+      targetType,
+      data,
+      dataType,
+      attachments,
+      mentionees,
+      metadata,
+    }),
   );
 }
 

@@ -116,6 +116,7 @@ const PostCreatorBar = ({
   );
 
   const [postText, setPostText] = useState('');
+  const [plainText, setPlainText] = useState('');
   const [postImages, setPostImages] = useState([]);
   const [postVideos, setPostVideos] = useState([]);
   const [postFiles, setPostFiles] = useState([]);
@@ -132,15 +133,10 @@ const PostCreatorBar = ({
     const data = {};
     const attachments = [];
     const postMentionees = {};
+    const metadata = {};
 
     if (postText) {
-      // parse text and remove extra markup
-      // entities created by react-mentions
-      const formattedText = postText.replace(/@\(\w*\)/g, matched => {
-        const middleText = matched.match(/\(([^)]+)\)/)?.[1];
-        return `@${middleText}`;
-      });
-      data.text = formattedText;
+      data.text = plainText;
     }
     if (postImages.length) {
       attachments.push(...postImages.map(i => ({ fileId: i.fileId, type: FileType.Image })));
@@ -166,10 +162,20 @@ const PostCreatorBar = ({
       ...target,
       data,
       attachments,
+      metadata: {},
     };
 
     if (postMentionees.type && postMentionees.userIds.length > 0) {
       createPostParams.mentionees = [{ ...postMentionees }];
+      metadata.mentioned = [
+        ...mentionees.map(({ plainTextIndex, id }) => ({
+          index: plainTextIndex,
+          length: id.length,
+          type: 'user',
+          userId: id,
+        })),
+      ];
+      createPostParams.metadata = metadata;
     }
 
     const post = await createPost(createPostParams);
@@ -283,7 +289,7 @@ const PostCreatorBar = ({
           data-qa-anchor="social-create-post-input"
           multiline
           value={postText}
-          onChange={({ text, lastMentionText, mentions }) => {
+          onChange={({ text, plainText: plainTextVal, lastMentionText, mentions }) => {
             // Disrupt the flow
             if (mentions?.length > MAXIMUM_POST_MENTIONEES) {
               return info({
@@ -297,6 +303,7 @@ const PostCreatorBar = ({
             setMentionees(mentions);
             setMentionText(lastMentionText);
             setPostText(text);
+            setPlainText(plainTextVal);
           }}
           placeholder={placeholder}
           mentionAllowed

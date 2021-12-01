@@ -40,9 +40,9 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
 
   return (
     <Item focused={focused} isBanned={user.isGlobalBan}>
-      <div css="margin-left: 0.5rem;">{user.isGlobalBan && <StyledBanIcon />}</div>
       <Avatar avatar={file.fileUrl} />
       <div css="margin-left: 10px;">{user.displayName}</div>
+      <div css="margin-left: 0.5rem;">{user.isGlobalBan && <StyledBanIcon />}</div>
     </Item>
   );
 };
