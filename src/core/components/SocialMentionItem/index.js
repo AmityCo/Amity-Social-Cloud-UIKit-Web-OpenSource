@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Avatar from '~/core/components/Avatar';
-import Ban from '~/icons/Ban';
+import BanIcon from '~/icons/Ban';
 import useObserver from '../../hooks/useObserver';
 import useUser from '~/core/hooks/useUser';
 
@@ -12,10 +12,6 @@ const Item = styled.div`
   padding: 5px 15px;
   background-color: ${({ focused, theme }) => focused && theme.palette.base.shade4};
   font-weight: 600;
-`;
-
-const StyledBanIcon = styled(Ban)`
-  color: ${({ theme }) => theme.palette.base.shade3};
 `;
 
 const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootEl }) => {
@@ -42,7 +38,7 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
     <Item focused={focused} isBanned={user.isGlobalBan}>
       <Avatar avatar={file.fileUrl} />
       <div css="margin-left: 10px;">{user.displayName}</div>
-      <div css="margin-left: 0.5rem;">{user.isGlobalBan && <StyledBanIcon />}</div>
+      <div css="margin-left: 0.5rem;">{user.isGlobalBan && <BanIcon />}</div>
     </Item>
   );
 };

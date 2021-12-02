@@ -34,10 +34,6 @@ const UserHeaderTitle = styled.div`
   white-space: nowrap;
 `;
 
-const StyledBanIcon = styled(BanIcon)`
-  color: ${({ theme }) => theme.palette.base.shade3};
-`;
-
 const UserHeaderSubtitle = styled.div`
   grid-area: subtitle;
   ${({ theme }) => theme.typography.body}
@@ -49,7 +45,7 @@ const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick, isB
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
       <UserHeaderAvatar avatar={avatarFileUrl} onClick={onClickUser} backgroundImage={UserImage} />
       <UserHeaderTitle title={userId} onClick={onClickUser}>
-        {displayName} {isBanned && <StyledBanIcon />}
+        {displayName} {isBanned && <BanIcon />}
       </UserHeaderTitle>
       {children && <UserHeaderSubtitle>{children}</UserHeaderSubtitle>}
     </UserHeaderContainer>

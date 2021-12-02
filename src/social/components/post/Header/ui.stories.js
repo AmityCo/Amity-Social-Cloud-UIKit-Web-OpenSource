@@ -19,6 +19,7 @@ UIPostHeader.args = {
   timeAgo: new Date(),
   isModerator: false,
   hidePostTarget: false,
+  isBanned: false,
 };
 
 UIPostHeader.argTypes = {
@@ -28,4 +29,5 @@ UIPostHeader.argTypes = {
   timeAgo: { control: { type: 'date' } },
   isModerator: { control: { type: 'boolean' } },
   hidePostTarget: { control: { type: 'boolean' } },
+  isBanned: { control: { type: 'boolean' } },
 };

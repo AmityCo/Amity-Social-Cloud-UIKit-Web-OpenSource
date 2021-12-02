@@ -36,6 +36,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
       timeAgo={createdAt}
       isModerator={isCommunityModerator || isModerator(user.roles) || isAdmin(user.roles)}
       isEdited={createdAt < editedAt}
+      isBanned={user.isGlobalBan}
       onClickCommunity={handleClickCommunity}
       onClickUser={handleClickUser}
       hidePostTarget={hidePostTarget}

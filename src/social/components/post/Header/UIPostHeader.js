@@ -6,6 +6,7 @@ import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import Time from '~/core/components/Time';
 import Avatar from '~/core/components/Avatar';
+import BanIcon from '~/icons/Ban';
 import { backgroundImage as UserImage } from '~/icons/User';
 import {
   Name,
@@ -30,6 +31,7 @@ const UIPostHeader = ({
   onClickUser,
   hidePostTarget,
   loading,
+  isBanned,
 }) => {
   const renderPostNames = () => {
     return (
@@ -46,6 +48,8 @@ const UIPostHeader = ({
             </Name>
           </>
         )}
+
+        {isBanned && <BanIcon />}
       </PostNamesContainer>
     );
   };
@@ -108,6 +112,7 @@ UIPostHeader.propTypes = {
   onClickUser: PropTypes.func,
   hidePostTarget: PropTypes.bool,
   loading: PropTypes.bool,
+  isBanned: PropTypes.bool,
 };
 
 UIPostHeader.defaultProps = {
@@ -121,6 +126,7 @@ UIPostHeader.defaultProps = {
   onClickUser: null,
   hidePostTarget: false,
   loading: false,
+  isBanned: false,
 };
 
 export default customizableComponent('UIPostHeader', UIPostHeader);

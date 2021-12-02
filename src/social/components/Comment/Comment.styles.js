@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
 import React from 'react';
-import styled from 'styled-components';
 import Truncate from 'react-truncate-markup';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
@@ -12,7 +11,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import CommentText from './CommentText';
 
 import { backgroundImage as UserImage } from '~/icons/User';
-import Ban from '~/icons/Ban';
+import BanIcon from '~/icons/Ban';
 
 import {
   Avatar,
@@ -29,10 +28,6 @@ import {
   ButtonContainer,
   EditedMark,
 } from './styles';
-
-const StyledBanIcon = styled(Ban)`
-  color: ${({ theme }) => theme.palette.base.shade3};
-`;
 
 const StyledComment = ({
   commentId,
@@ -87,7 +82,7 @@ const StyledComment = ({
         >
           <CommentHeader>
             <AuthorName>{authorName}</AuthorName>
-            {isBanned && <StyledBanIcon css="margin-left: 0.265rem; margin-top: 1px;" />}
+            {isBanned && <BanIcon css="margin-left: 0.265rem; margin-top: 1px;" />}
             <Truncate.Atom>
               <CommentDate date={createdAt} />
               {editedAt - createdAt > 0 && (
