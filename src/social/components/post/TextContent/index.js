@@ -27,6 +27,7 @@ export const Highlighted = styled.span`
 `;
 
 const findChunks = mentionees => {
+  if (!mentionees) return [];
   return mentionees.map(({ index, length }) => ({
     start: index,
     end: index + length + 1, // compensate for index === 0
