@@ -1,5 +1,34 @@
 # Changelog
 
+## [v2.5.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.4.0...v2.5.0)
+
+#### 9 December 2021
+
+### New Features
+
+- [`UP-5246`](https://ekoapp.atlassian.net/browse/UP-5246) - Mention Social Post ([`b2a9fff`](https://gitlab.com/upstra/web/ui-kit/commit/b2a9fff0d48a524f62fdc533921afe63a6117663)) (by Kaung Myat Lwin)
+- [`UP-4664`](https://ekoapp.atlassian.net/browse/UP-4664) - Transfer Roles ([`2efadf3`](https://gitlab.com/upstra/web/ui-kit/commit/2efadf3a221223e390823c97c880e71bf35aa783)) (by Kaung Myat Lwin)
+- [`UP-5244`](https://ekoapp.atlassian.net/browse/UP-5244) - banned icon specs ([`UP-5803`](https://ekoapp.atlassian.net/browse/UP-5803),[`UP-5797`](https://ekoapp.atlassian.net/browse/UP-5797),[`UP-5800`](https://ekoapp.atlassian.net/browse/UP-5800),[`UP-5809`](https://ekoapp.atlassian.net/browse/UP-5809)) ([`51619a1`](https://gitlab.com/upstra/web/ui-kit/commit/51619a11d5c3b700d39d584e4e65d16b99880464)) (by Kaung Myat Lwin)
+
+### Fixes
+
+- [`UP-6290`](https://ekoapp.atlassian.net/browse/UP-6290) - update sdk version ([`628d7c0`](https://gitlab.com/upstra/web/ui-kit/commit/628d7c0b211a9263a5e53495933e2c3cf5843485)) (by Serhii Ivanenko)
+- [`UP-6393`](https://ekoapp.atlassian.net/browse/UP-6393) - disallow searching for non-member of private community ([`f1ef0e2`](https://gitlab.com/upstra/web/ui-kit/commit/f1ef0e2dd2884966185d6e1c3c8d82df31882fac)) (by Kaung Myat Lwin)
+- [`UP-6371`](https://ekoapp.atlassian.net/browse/UP-6371) - no highlight on other platforms ([`818bb64`](https://gitlab.com/upstra/web/ui-kit/commit/818bb640c59995f5c97b50a32d1a2bba48637f45)) (by Kaung Myat Lwin)
+- [`UP-5800`](https://ekoapp.atlassian.net/browse/UP-5800) - show banned icon beside user post ([`25712d0`](https://gitlab.com/upstra/web/ui-kit/commit/25712d0a35d603d361bb7f169a2c7bd3249d28c4)) (by Kaung Myat Lwin)
+- [`UP-6396`](https://ekoapp.atlassian.net/browse/UP-6396) - Search mention list not display when put only mention indicator ('@') ([`73295e3`](https://gitlab.com/upstra/web/ui-kit/commit/73295e328e7bd19d7740a840ae1b2c5edf7f3d83)) (by Kaung Myat Lwin)
+- [`UP-6404`](https://ekoapp.atlassian.net/browse/UP-6404) - Mentioned user is not display with highlight when create post with video ([`c2ac22b`](https://gitlab.com/upstra/web/ui-kit/commit/c2ac22bbd802c0464f321d8433cca631df6830c7)) (by Kaung Myat Lwin)
+- [`UP-6433`](https://ekoapp.atlassian.net/browse/UP-6433) - Display mentioned user as @undefined when mention user in private community ([`37a2f7c`](https://gitlab.com/upstra/web/ui-kit/commit/37a2f7c806fe251bba7adad400d2afedba341895)) (by Kaung Myat Lwin)
+- [`UP-4984`](https://ekoapp.atlassian.net/browse/UP-4984) - don't show promote to moderator for globally banned member ([`3eea4e5`](https://gitlab.com/upstra/web/ui-kit/commit/3eea4e509e56a3770fb48ae60f722f9b7b031946)) (by Kaung Myat Lwin)
+- hotarrange i18n en duplicate keys ([`21b0945`](https://gitlab.com/upstra/web/ui-kit/commit/21b0945e212fefb3573cb1f4069ff7df0af1635f)) (by Kaung Myat Lwin)
+- hotreturn empty arr if mentionees is empty ([`88b88ac`](https://gitlab.com/upstra/web/ui-kit/commit/88b88accfd9d9d9400fca725d894c2a9876ace13)) (by Kaung Myat Lwin)
+
+### Commits
+
+- nightly build js-sdk 5.8.2[`-2`](https://ekoapp.atlassian.net/browse/-2)a6dd68.0-rc ([`a972b5f`](https://gitlab.com/upstra/web/ui-kit/commit/a972b5f6a24dc71b6b7324d9e4852217f66ea7f1)) (by Kaung Myat Lwin)
+
+---
+
 ## [v2.4.0](https://gitlab.com/upstra/web/ui-kit/compare/v2.3.0...v2.4.0)
 
 #### 18 October 2021
