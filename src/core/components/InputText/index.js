@@ -143,7 +143,6 @@ const InputText = ({
   mentionAllowed = false,
   queryMentionees = () => [],
   loadMoreMentionees = () => [],
-  onAddMentionee = () => {},
 }) => {
   const mentionRef = useRef();
   const handleMentionInput = useCallback((e, [,], newPlainVal, mentions) => {
@@ -205,7 +204,7 @@ const InputText = ({
             }
             displayTransform={displayTransform}
             appendSpaceOnAdd
-            onAdd={onAddMentionee}
+            onAdd={() => {}}
           />
         </StyledMentionsInput>
       )}
@@ -240,7 +239,6 @@ InputText.propTypes = {
   mentionAllowed: PropTypes.bool,
   queryMentionees: PropTypes.func,
   loadMoreMentionees: PropTypes.func,
-  onAddMentionee: PropTypes.func,
 };
 
 export default InputText;
