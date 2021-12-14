@@ -36,7 +36,7 @@ const Container = styled.div`
 const styling = css`
   flex: 1 1 auto;
   display: block;
-  width: 1%;
+  width: 100%;
   min-width: 0;
   margin: 0;
   padding: 0.563rem 0.563rem;
@@ -96,6 +96,7 @@ const mentionStyle = {
 
 const StyledMentionsInput = styled(MentionsInput)`
   padding: 0.5rem;
+  width: 100%;
   textarea {
     ${styling}
     resize: vertical;

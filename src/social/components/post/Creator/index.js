@@ -171,13 +171,16 @@ const PostCreatorBar = ({
     if (postMentionees.type && postMentionees.userIds.length > 0) {
       createPostParams.mentionees = [{ ...postMentionees }];
       metadata.mentioned = [
-        ...mentionees.map(({ plainTextIndex, id }) => ({
+        ...mentionees.map(({ plainTextIndex, id, index: markupIndex }) => ({
           index: plainTextIndex,
           length: id.length,
           type: 'user',
           userId: id,
+          markupIndex,
+          postWithMarkup: postText,
         })),
       ];
+      metadata.markupText = postText;
       createPostParams.metadata = metadata;
     }
 

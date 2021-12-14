@@ -23,7 +23,14 @@ const LIST_RENDERERS = {
   [PostDataType.FilePost]: FileContentList,
 };
 
-const PostEditorContent = ({ data, dataType, onChangeText, onRemoveChild, placeholder }) => {
+const PostEditorContent = ({
+  data,
+  dataType,
+  onChangeText,
+  onRemoveChild,
+  placeholder,
+  ...props
+}) => {
   const isList = Array.isArray(data);
   const Renderer = (isList ? LIST_RENDERERS : RENDERERS)[dataType];
   if (!data || !Renderer) return null;
@@ -36,6 +43,7 @@ const PostEditorContent = ({ data, dataType, onChangeText, onRemoveChild, placeh
       onChangeText={onChangeText}
       onRemove={onRemoveChild}
       placeholder={placeholder}
+      {...props}
     />
   );
 };

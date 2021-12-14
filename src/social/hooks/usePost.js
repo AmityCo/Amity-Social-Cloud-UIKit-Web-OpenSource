@@ -12,7 +12,7 @@ const usePost = postId => {
 
   const { user, file } = useUser(postedUserId);
 
-  const handleUpdatePost = data => PostRepository.updatePost({ postId, data });
+  const handleUpdatePost = (data, props) => PostRepository.updatePost({ postId, data, ...props });
 
   const handleReportPost = () => PostRepository.flag(postId);
   const handleUnreportPost = () => PostRepository.unflag(postId);
