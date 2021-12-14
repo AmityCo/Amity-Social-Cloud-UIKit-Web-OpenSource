@@ -116,7 +116,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
     <PostEditorContainer className={className}>
       <ContentContainer>
         <Content
-          data={{ text: localMarkupText }}
+          data={{ text: localMarkupText?.length > 0 ? localMarkupText : localParentText }}
           dataType={dataType}
           placeholder={placeholder}
           onChangeText={handleChangeParentText}
