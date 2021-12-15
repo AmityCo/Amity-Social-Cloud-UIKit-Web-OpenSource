@@ -40,6 +40,8 @@ const UIPostHeader = ({
           {postAuthorName}
         </Name>
 
+        {isBanned && <BanIcon />}
+
         {postTargetName && !hidePostTarget && (
           <>
             <ArrowSeparator />
@@ -48,8 +50,6 @@ const UIPostHeader = ({
             </Name>
           </>
         )}
-
-        {isBanned && <BanIcon />}
       </PostNamesContainer>
     );
   };
