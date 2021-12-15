@@ -36,7 +36,7 @@ const Container = styled.div`
 const styling = css`
   flex: 1 1 auto;
   display: block;
-  width: 100%;
+  width: 1%;
   min-width: 0;
   margin: 0;
   padding: 0.563rem 0.563rem;
