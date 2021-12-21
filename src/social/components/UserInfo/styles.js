@@ -134,3 +134,8 @@ export const TitleEllipse = styled.div`
   border-radius: 50%;
   background: ${({ theme }) => theme.palette.primary.main};
 `;
+
+export const ProfileNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;

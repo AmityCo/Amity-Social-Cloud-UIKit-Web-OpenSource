@@ -12,6 +12,7 @@ import { backgroundImage as UserImage } from '~/icons/User';
 
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
 import { useSDK } from '~/core/hocs/withSDK';
+import BanIcon from '~/icons/Ban';
 
 import {
   Avatar,
@@ -31,6 +32,7 @@ import {
   TitleEllipse,
   PendingIconContainer,
   ActionButtonContainer,
+  ProfileNameWrapper,
 } from './styles';
 
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
@@ -134,9 +136,12 @@ const UIUserInfo = ({
         </ActionButtonContainer>
         <OptionMenu options={allOptions} pullRight={false} />
       </Header>
-      <Truncate lines={3}>
-        <ProfileName>{displayName}</ProfileName>
-      </Truncate>
+      <ProfileNameWrapper>
+        <Truncate lines={3}>
+          <ProfileName>{displayName}</ProfileName>
+        </Truncate>
+        {user.isGlobalBan && <BanIcon css="margin-left: 0.265rem; margin-top: 1px;" />}
+      </ProfileNameWrapper>
       <CountContainer>
         <ClickableCount
           onClick={() => {
