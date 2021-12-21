@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
 import { UserRepository, CommunityRepository, PostTargetType } from '@amityco/js-sdk';
-// import useLiveCollection from '~/core/hooks/useLiveCollection';
 import { formatMentionees } from '../../helpers/utils';
+import useCommunity from '~/social/hooks/useCommunity';
 
 const usePostMention = ({ targetId, targetType }) => {
+  const { community } = useCommunity(targetId);
+  const { isPublic } = community;
+
   const mentioneeCommunityFetcher = (communityId, query) =>
     CommunityRepository.getCommunityMembers({
       communityId,
@@ -19,8 +22,9 @@ const usePostMention = ({ targetId, targetType }) => {
         keyword = undefined;
       }
 
-      // if (targetType === PostTargetType.CommunityFeed && !community?.isPublic) {
-      if (targetType === PostTargetType.CommunityFeed) {
+      // Private communities should only look up to their own members
+      // !isPublic would be truthy when it's undefined
+      if (targetType === PostTargetType.CommunityFeed && isPublic === false) {
         liveCollection = mentioneeCommunityFetcher(targetId, keyword);
       } else {
         liveCollection = UserRepository.queryUsers({ keyword });
@@ -32,7 +36,7 @@ const usePostMention = ({ targetId, targetType }) => {
         // setMentionees(formatMentionees(models));
       });
     },
-    [targetId, targetType],
+    [targetId, targetType, community],
   );
 
   return [queryMentionees];

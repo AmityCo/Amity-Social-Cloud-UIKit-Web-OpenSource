@@ -10,7 +10,7 @@ import { PostEditorContainer, Footer, ContentContainer, PostButton } from './sty
 
 const PostEditor = ({ postId, onSave, className, placeholder }) => {
   const { post, handleUpdatePost, childrenPosts = [] } = usePost(postId);
-  const { data, dataType, feedId, metadata } = post;
+  const { data, dataType, targetId, targetType, metadata } = post;
 
   const fromRemoteToLocalMentionees = postMetadata => {
     if (!postMetadata) return [];
@@ -27,7 +27,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
     }));
   };
 
-  const [queryMentionees] = usePostMention({ targetId: feedId });
+  const [queryMentionees] = usePostMention({ targetId, targetType });
 
   // Text content for the post being rendered with postId (parent post).
   const [localParentText, setLocalParentText] = useState('');
