@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import cx from 'classnames';
+import TruncateMarkup from 'react-truncate-markup';
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import Time from '~/core/components/Time';
@@ -36,9 +37,11 @@ const UIPostHeader = ({
   const renderPostNames = () => {
     return (
       <PostNamesContainer>
-        <Name onClick={onClickUser} className={cx({ clickable: !!onClickUser })}>
-          {postAuthorName}
-        </Name>
+        <TruncateMarkup lines={3}>
+          <Name onClick={onClickUser} className={cx({ clickable: !!onClickUser })}>
+            {postAuthorName}
+          </Name>
+        </TruncateMarkup>
 
         {isBanned && <BanIcon />}
 

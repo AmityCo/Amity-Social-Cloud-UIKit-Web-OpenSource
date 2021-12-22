@@ -13,6 +13,8 @@ export const PostInfo = styled.div`
 export const Name = styled.div`
   ${({ theme }) => theme.typography.title}
 
+  word-break: break-all;
+
   &.clickable {
     &:hover {
       cursor: pointer;
