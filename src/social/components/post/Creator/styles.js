@@ -29,6 +29,7 @@ export const Footer = styled.div`
 
 export const PostContainer = styled.div`
   flex-grow: 1;
+  width: 85.5%;
 `;
 
 export const PostButton = styled(PrimaryButton)`
