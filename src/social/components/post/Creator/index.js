@@ -246,9 +246,12 @@ const PostCreatorBar = ({
         keyword = undefined;
       }
 
+      const creatorTargetType = target?.targetType || targetType;
+      const creatorTargetId = target?.targetId || targetId;
+
       // Only fetch private community members
-      if (targetType === PostTargetType.CommunityFeed && !model?.isPublic) {
-        liveCollection = mentioneeCommunityFetcher(targetId, keyword);
+      if (creatorTargetType === PostTargetType.CommunityFeed && !model?.isPublic) {
+        liveCollection = mentioneeCommunityFetcher(creatorTargetId, keyword);
       } else {
         liveCollection = UserRepository.queryUsers({ keyword });
       }
