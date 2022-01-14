@@ -1,4 +1,4 @@
-const readFileAsync = file => {
+const readFileAsync = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 

@@ -105,10 +105,11 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     if (text !== comment?.data?.text) {
       setText(comment?.data?.text);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comment?.data?.text]);
 
   const onClickReply = () => {
-    setIsReplying(preValue => !preValue);
+    setIsReplying((preValue) => !preValue);
   };
 
   const startEditing = () => {
@@ -121,7 +122,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     setText(oldText);
   };
 
-  const handleEdit = commentText => {
+  const handleEdit = (commentText) => {
     handleEditComment(commentText);
     cancelEditing();
   };
@@ -177,7 +178,6 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       createdAt={comment.createdAt}
       editedAt={comment.editedAt}
       text={text}
-      onClickReply={onClickReply}
       handleReportComment={onReportClick}
       startEditing={startEditing}
       cancelEditing={cancelEditing}
@@ -187,6 +187,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       setText={setText}
       isReported={isFlaggedByMe}
       isReplyComment={isReplyComment}
+      onClickReply={onClickReply}
     />
   );
 
@@ -206,7 +207,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       <ConditionalRender condition={isReplying}>
         <CommentComposeBar
           userToReply={commentAuthor.displayName}
-          onSubmit={replyText => {
+          onSubmit={(replyText) => {
             handleReplyToComment(replyText);
             setIsReplying(false);
             setExpanded(true);

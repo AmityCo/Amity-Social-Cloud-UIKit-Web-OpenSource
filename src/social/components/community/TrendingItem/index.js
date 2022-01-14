@@ -17,19 +17,19 @@ const TrendingItem = ({ communityId, onClick, loading }) => {
       description={description}
       categories={communityCategories}
       membersCount={membersCount}
-      onClick={handleClick}
       isOfficial={community.isOfficial}
       isPublic={community.isPublic}
       name={community.displayName}
       loading={loading}
+      onClick={handleClick}
     />
   );
 };
 
 TrendingItem.propTypes = {
   communityId: PropTypes.string,
-  onClick: PropTypes.func,
   loading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 TrendingItem.defaultProps = {

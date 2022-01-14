@@ -36,7 +36,7 @@ const LivestreamIdleMessage = styled.div`
   margin-top: 0.5rem;
 `;
 
-export const LivestreamIdleThumbnail = styled(props => (
+export const LivestreamIdleThumbnail = styled((props) => (
   <Thumbnail
     {...props}
     overlayElements={
@@ -63,7 +63,7 @@ const LivestreamEndedMessage = styled.div`
   max-width: 15.5rem;
 `;
 
-export const LivestreamEndedThumbnail = styled(props => (
+export const LivestreamEndedThumbnail = styled((props) => (
   <Thumbnail
     {...props}
     overlayElements={
@@ -86,7 +86,7 @@ export const LivestreamThumbnail = styled(Thumbnail)`
   background: center / 90% no-repeat ${livestreamCoverBackground} #d9dcec;
 `;
 
-export const RecordedBadge = styled(props => <div {...props}>RECORDED</div>)`
+export const RecordedBadge = styled((props) => <div {...props}>RECORDED</div>)`
   display: inline-block;
   padding: 0.25rem 0.5rem;
   background: rgba(0, 0, 0, 0.7);

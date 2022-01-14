@@ -22,9 +22,8 @@ function usePendingPostCount(isReady, community, canReviewCommunityPosts) {
 
 const CommunityInfo = ({ communityId, currentUserId }) => {
   const { onEditCommunity } = useNavigation();
-  const { community, communityCategories, joinCommunity, leaveCommunity } = useCommunity(
-    communityId,
-  );
+  const { community, communityCategories, joinCommunity, leaveCommunity } =
+    useCommunity(communityId);
   // TODO: this is temporary - we should use file.fileUrl when supported.
   const fileUrl = useMemo(
     () =>
@@ -66,12 +65,12 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
       avatarFileUrl={fileUrl}
       joinCommunity={joinCommunity}
       canEditCommunity={canEditCommunity}
-      onEditCommunity={onEditCommunity}
-      onClickLeaveCommunity={() => leaveCommunityConfirmModal(communityId, leaveCommunity)}
       canLeaveCommunity={canLeaveCommunity}
       canReviewPosts={canReviewCommunityPosts}
       name={community.displayName}
       needApprovalOnPostCreation={community.needApprovalOnPostCreation}
+      onEditCommunity={onEditCommunity}
+      onClickLeaveCommunity={() => leaveCommunityConfirmModal(communityId, leaveCommunity)}
     />
   );
 };

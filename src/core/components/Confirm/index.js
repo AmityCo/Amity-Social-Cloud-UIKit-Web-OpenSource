@@ -18,7 +18,6 @@ const Confirm = ({
   <ConfirmModal
     clean
     className={className}
-    onCancel={onCancel}
     title={title}
     footer={
       <Footer>
@@ -26,6 +25,7 @@ const Confirm = ({
         <OkButton onClick={onOk}>{okText}</OkButton>
       </Footer>
     }
+    onCancel={onCancel}
   >
     {content}
   </ConfirmModal>
@@ -36,7 +36,7 @@ let spawnNewConfirm; // for modfying ConfirmContainer state outside
 // rendered by provider, to allow spawning of confirm from confirm function below
 export const ConfirmContainer = () => {
   const [confirm, setConfirm] = useState(null);
-  spawnNewConfirm = confirmData => {
+  spawnNewConfirm = (confirmData) => {
     setConfirm(confirmData);
   };
 
@@ -44,7 +44,7 @@ export const ConfirmContainer = () => {
 
   const closeConfirm = () => setConfirm(null);
 
-  const attachCanceling = fn => () => {
+  const attachCanceling = (fn) => () => {
     closeConfirm();
     fn && fn();
   };
@@ -70,8 +70,8 @@ export const ConfirmContainer = () => {
 
   This interface rely on ConfirmContainer being rendered by UIKITProvider in the react tree
 */
-export const confirm = confirmData => spawnNewConfirm({ ...confirmData, type: 'confirm' });
+export const confirm = (confirmData) => spawnNewConfirm({ ...confirmData, type: 'confirm' });
 
-export const info = data => spawnNewConfirm({ ...data, type: 'info', OkButton: PrimaryButton });
+export const info = (data) => spawnNewConfirm({ ...data, type: 'info', OkButton: PrimaryButton });
 
 export default Confirm;

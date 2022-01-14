@@ -27,7 +27,7 @@ const SuggestionsMenu = styled(Menu)`
 `;
 
 const defaultRender = (item, value) => <Highlight key={item} text={item} query={value} />;
-const defaultFilter = (items, value) => items.filter(item => item.includes(value));
+const defaultFilter = (items, value) => items.filter((item) => item.includes(value));
 
 const InputAutocomplete = ({
   value,
@@ -53,11 +53,10 @@ const InputAutocomplete = ({
 
   const currentItems = useMemo(() => (!value ? [] : items[activeTab]), [activeTab, items, value]);
 
-  const filtered = useMemo(() => (filter ? filter(currentItems, value) : currentItems), [
-    value,
-    currentItems,
-    filter,
-  ]);
+  const filtered = useMemo(
+    () => (filter ? filter(currentItems, value) : currentItems),
+    [value, currentItems, filter],
+  );
 
   useEffect(() => {
     if (disabled) return;
@@ -65,7 +64,7 @@ const InputAutocomplete = ({
     if (value.length > 0) {
       setOpen(true);
     }
-  }, [value, filtered]);
+  }, [value, filtered, disabled]);
 
   // handling close on click outside
   useEffect(() => {
@@ -76,7 +75,7 @@ const InputAutocomplete = ({
     Escape: close,
   });
 
-  const onPickSuggestion = index => {
+  const onPickSuggestion = (index) => {
     onPick(filtered[index], activeTab);
 
     // we need to pass this to nextTick to avoid reopening
@@ -106,16 +105,16 @@ const InputAutocomplete = ({
         disabled={disabled}
         prepend={prepend}
         append={append}
+        placeholder={placeholder}
         onClear={onClear}
         onChange={onChange}
-        placeholder={placeholder}
         onClick={() => setOpen(true)}
       />
       {open && (
         <SuggestionsMenu>
           <ConditionalRender condition={Object.keys(items).length > 1}>
             <InputAutocompleteTabs
-              tabs={Object.keys(items).map(key => ({
+              tabs={Object.keys(items).map((key) => ({
                 value: key,
                 label: key,
               }))}
@@ -124,7 +123,7 @@ const InputAutocomplete = ({
             />
           </ConditionalRender>
           <Suggestions items={filtered} append={LoadMoreButton} onPick={onPickSuggestion}>
-            {item => render(item, value, activeTab)}
+            {(item) => render(item, value, activeTab)}
           </Suggestions>
         </SuggestionsMenu>
       )}

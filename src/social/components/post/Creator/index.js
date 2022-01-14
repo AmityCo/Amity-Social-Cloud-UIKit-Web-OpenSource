@@ -50,8 +50,8 @@ import {
 import PollModal from '~/social/components/post/PollComposer/PollModal';
 import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 
-const communityFetcher = id => () => CommunityRepository.communityForId(id);
-const userFetcher = id => () => new UserRepository().userForId(id);
+const communityFetcher = (id) => () => CommunityRepository.communityForId(id);
+const userFetcher = (id) => () => new UserRepository().userForId(id);
 
 const mentioneeCommunityFetcher = (communityId, search) =>
   CommunityRepository.getCommunityMembers({
@@ -140,15 +140,15 @@ const PostCreatorBar = ({
     }
 
     if (postImages.length) {
-      attachments.push(...postImages.map(i => ({ fileId: i.fileId, type: FileType.Image })));
+      attachments.push(...postImages.map((i) => ({ fileId: i.fileId, type: FileType.Image })));
     }
 
     if (postVideos.length) {
-      attachments.push(...postVideos.map(i => ({ fileId: i.fileId, type: FileType.Video })));
+      attachments.push(...postVideos.map((i) => ({ fileId: i.fileId, type: FileType.Video })));
     }
 
     if (postFiles.length) {
-      attachments.push(...postFiles.map(i => ({ fileId: i.fileId, type: FileType.File })));
+      attachments.push(...postFiles.map((i) => ({ fileId: i.fileId, type: FileType.File })));
     }
 
     if (mentionees.length) {
@@ -229,7 +229,7 @@ const PostCreatorBar = ({
     } else {
       setNavigationBlocker(null);
     }
-  }, [hasChanges]);
+  }, [hasChanges, setNavigationBlocker]);
 
   const [isPollModalOpened, setPollModalOpened] = useState(false);
   const openPollModal = () => setPollModalOpened(true);
@@ -256,11 +256,11 @@ const PostCreatorBar = ({
         liveCollection = UserRepository.queryUsers({ keyword });
       }
 
-      liveCollection.on('dataUpdated', models => {
+      liveCollection.on('dataUpdated', (models) => {
         cb(formatMentionees(models));
       });
     },
-    [mentionText],
+    [mentionText, model?.isPublic, target?.targetId, target?.targetType, targetId, targetType],
   );
 
   return (
@@ -298,6 +298,36 @@ const PostCreatorBar = ({
           data-qa-anchor="social-create-post-input"
           multiline
           value={postText}
+          placeholder={placeholder}
+          mentionAllowed
+          queryMentionees={queryMentionees}
+          loadMoreMentionees={() => queryMentionees(mentionText)}
+          // Need to work on this, possible conflict incoming
+          append={
+            <UploadsContainer>
+              <ImagesUploaded
+                files={incomingImages}
+                uploadLoading={uploadLoading}
+                onLoadingChange={setUploadLoading}
+                onChange={setPostImages}
+                onError={setError}
+              />
+              <VideosUploaded
+                files={incomingVideos}
+                uploadLoading={uploadLoading}
+                onLoadingChange={setUploadLoading}
+                onChange={setPostVideos}
+                onError={setError}
+              />
+              <FilesUploaded
+                files={incomingFiles}
+                uploadLoading={uploadLoading}
+                onLoadingChange={setUploadLoading}
+                onChange={setPostFiles}
+                onError={setError}
+              />
+            </UploadsContainer>
+          }
           onChange={({ text, plainText: plainTextVal, lastMentionText, mentions }) => {
             // Disrupt the flow
             if (mentions?.length > MAXIMUM_POST_MENTIONEES) {
@@ -314,49 +344,19 @@ const PostCreatorBar = ({
             setPostText(text);
             setPlainText(plainTextVal);
           }}
-          placeholder={placeholder}
-          mentionAllowed
-          queryMentionees={queryMentionees}
-          // Need to work on this, possible conflict incoming
-          loadMoreMentionees={() => queryMentionees(mentionText)}
-          append={
-            <UploadsContainer>
-              <ImagesUploaded
-                files={incomingImages}
-                onLoadingChange={setUploadLoading}
-                onChange={uploadedImages => setPostImages(uploadedImages)}
-                onError={setError}
-                uploadLoading={uploadLoading}
-              />
-              <VideosUploaded
-                files={incomingVideos}
-                onLoadingChange={setUploadLoading}
-                onChange={uploadedVideos => setPostVideos(uploadedVideos)}
-                onError={setError}
-                uploadLoading={uploadLoading}
-              />
-              <FilesUploaded
-                files={incomingFiles}
-                onLoadingChange={setUploadLoading}
-                onChange={uploadedFiles => setPostFiles(uploadedFiles)}
-                onError={setError}
-                uploadLoading={uploadLoading}
-              />
-            </UploadsContainer>
-          }
         />
         <Footer>
           <UploaderButtons
             imageUploadDisabled={postFiles.length > 0 || postVideos.length > 0 || uploadLoading}
             videoUploadDisabled={postFiles.length > 0 || postImages.length > 0 || uploadLoading}
             fileUploadDisabled={postImages.length > 0 || postVideos.length > 0 || uploadLoading}
-            onChangeImages={newImages => setIncomingImages(newImages)}
-            onChangeVideos={newVideos => setIncomingVideos(newVideos)}
-            onChangeFiles={newFiles => setIncomingFiles(newFiles)}
-            onMaxFilesLimit={onMaxFilesLimit}
-            onFileSizeLimit={onFileSizeLimit}
             fileLimitRemaining={maxFiles - postFiles.length - postImages.length - postVideos.length}
             uploadLoading={uploadLoading}
+            onChangeImages={setIncomingImages}
+            onChangeVideos={setIncomingVideos}
+            onChangeFiles={setIncomingFiles}
+            onMaxFilesLimit={onMaxFilesLimit}
+            onFileSizeLimit={onFileSizeLimit}
           />
           <PollButton onClick={openPollModal}>
             <PollIconContainer>
@@ -365,8 +365,8 @@ const PostCreatorBar = ({
           </PollButton>
           <PostButton
             disabled={isDisabled}
-            onClick={onCreatePost}
             data-qa-anchor="social-create-post-button"
+            onClick={onCreatePost}
           >
             <FormattedMessage id="post" />
           </PostButton>
@@ -380,7 +380,6 @@ PostCreatorBar.propTypes = {
   currentUserId: PropTypes.string,
   targetType: PropTypes.string,
   targetId: PropTypes.string,
-  onCreateSuccess: PropTypes.func,
   communities: PropTypes.array,
   className: PropTypes.string,
   placeholder: PropTypes.string,
@@ -389,6 +388,7 @@ PostCreatorBar.propTypes = {
   enablePostTargetPicker: PropTypes.bool,
   maxFiles: PropTypes.number,
   connected: PropTypes.bool,
+  onCreateSuccess: PropTypes.func,
 };
 
 export default memo(withSDK(PostCreatorBar));

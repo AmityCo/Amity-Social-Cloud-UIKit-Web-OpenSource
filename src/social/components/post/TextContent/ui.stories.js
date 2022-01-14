@@ -5,7 +5,7 @@ export default {
   title: 'Ui Only/Social/Post/TextContent',
 };
 
-export const UIPostTextContent = props => (
+export const UIPostTextContent = (props) => (
   <div
     style={{
       width: '200px',

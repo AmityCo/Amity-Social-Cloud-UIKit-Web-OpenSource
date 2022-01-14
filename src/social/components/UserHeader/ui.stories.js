@@ -6,7 +6,7 @@ export default {
   title: 'Ui Only/Social/User',
 };
 
-export const UiUserHeader = props => <StyledUserHeader {...props} />;
+export const UiUserHeader = (props) => <StyledUserHeader {...props} />;
 
 UiUserHeader.storyName = 'Header';
 

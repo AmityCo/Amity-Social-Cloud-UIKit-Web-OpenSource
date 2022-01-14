@@ -5,6 +5,6 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SdkTrendingCommunities = props => <TrendingCommunitiesList {...props} />;
+export const SdkTrendingCommunities = (props) => <TrendingCommunitiesList {...props} />;
 
 SdkTrendingCommunities.storyName = 'Trending list';

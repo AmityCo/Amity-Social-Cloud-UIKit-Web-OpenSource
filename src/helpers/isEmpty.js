@@ -1,5 +1,5 @@
 const isEmpty = (...values) => {
-  const isEmptyValue = value => {
+  const isEmptyValue = (value) => {
     if (typeof value === 'object') {
       return Object.keys(value).length === 0;
     }

@@ -25,8 +25,8 @@ const CategoryCard = ({ categoryId, className, loading, onClick, ...props }) => 
       className={className}
       categoryId={category.categoryId}
       name={category.name}
-      onClick={onClick}
       loading={loading}
+      onClick={onClick}
       {...props}
     />
   );

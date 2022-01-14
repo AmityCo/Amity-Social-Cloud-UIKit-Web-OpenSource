@@ -9,7 +9,7 @@ const noop = () => {
 const useLiveCollection = (
   createLiveCollection,
   dependencies = [],
-  resolver = () => dependencies.some(dep => !dep),
+  resolver = () => dependencies.some((dep) => !dep),
   debug = null,
 ) => {
   const [data, setData] = useState({
@@ -57,7 +57,7 @@ const useLiveCollection = (
         updateLiveCollection();
       });
 
-      liveCollection.on('loadingStatusChanged', statuses => {
+      liveCollection.on('loadingStatusChanged', (statuses) => {
         debug && console.log('loadingStatusChanged!', statuses);
         updateLiveCollection();
       });
@@ -72,7 +72,8 @@ const useLiveCollection = (
     }
 
     return () => liveCollection.dispose();
-  }, [...dependencies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, dependencies);
 
   return [data.items, data.hasMore, data.loadMore, data.loadingFirstTime, data.loadingMore];
 };

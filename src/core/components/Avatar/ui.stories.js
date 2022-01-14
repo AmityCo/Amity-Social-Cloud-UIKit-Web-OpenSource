@@ -10,7 +10,7 @@ export default {
   title: 'Ui Only',
 };
 
-const getBackgroundImage = type => {
+const getBackgroundImage = (type) => {
   return {
     user: UserImage,
     community: CommunityImage,
@@ -23,8 +23,8 @@ export const Avatar = ({ backgroundImage, isClickable, onClick, ...props }) => {
   return (
     <div>
       <UiKitAvatar
-        onClick={handleClick}
         backgroundImage={getBackgroundImage(backgroundImage)}
+        onClick={handleClick}
         {...props}
       />
     </div>

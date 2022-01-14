@@ -9,4 +9,4 @@ const Image = styled.img`
   object-position: center;
 `;
 
-export const ImageRenderer = url => <Image key={url} src={url} />;
+export const ImageRenderer = (url) => <Image key={url} src={url} />;

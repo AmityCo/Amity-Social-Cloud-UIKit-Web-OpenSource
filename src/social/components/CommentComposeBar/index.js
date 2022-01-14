@@ -44,11 +44,11 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) 
     <CommentComposeBarContainer className={className}>
       <Avatar avatar={file?.fileUrl} backgroundImage={UserImage} />
       <CommentComposeBarInput
+        ref={commentInputRef}
         placeholder={placeholder}
         type="text"
         value={text}
-        onChange={e => setText(e.target.value)}
-        ref={commentInputRef}
+        onChange={(e) => setText(e.target.value)}
         /* onKeyPress={e => e.key === 'Enter' && addComment()} */
       />
       <AddCommentButton disabled={isEmpty} onClick={addComment}>

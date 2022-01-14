@@ -9,7 +9,7 @@ export default {
   title: 'SDK Connected/Social/Pages',
 };
 
-export const SDKUserFeedPage = props => {
+export const SDKUserFeedPage = (props) => {
   const [user, isLoading] = useOneUser();
   if (isLoading)
     return (

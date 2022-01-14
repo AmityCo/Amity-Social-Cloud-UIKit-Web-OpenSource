@@ -1,5 +1,5 @@
 import HLS from 'hls.js';
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { SizeMe } from 'react-sizeme';
@@ -131,30 +131,36 @@ const Video = ({
   autoPlay,
   isLive,
 }) => {
-  function removeCallback(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onRemove && onRemove();
-  }
+  const removeCallback = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onRemove && onRemove();
+    },
+    [onRemove],
+  );
 
-  function retryCallback(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onRetry && onRetry();
-  }
+  const retryCallback = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onRetry && onRetry();
+    },
+    [onRetry],
+  );
 
-  const videoRef = useRef();
+  const [videoEl, setVideoEl] = useState();
 
   useEffect(() => {
-    if (!videoRef.current || !url || !url.includes('m3u8')) {
+    if (!videoEl || !url || !url.includes('m3u8')) {
       return;
     }
 
-    if (!videoRef.current?.canPlayType('application/vnd.apple.mpegurl') && HLS.isSupported()) {
+    if (!videoEl?.canPlayType('application/vnd.apple.mpegurl') && HLS.isSupported()) {
       const hls = new HLS();
 
       hls.loadSource(url);
-      hls.attachMedia(videoRef.current);
+      hls.attachMedia(videoEl);
       hls.on(HLS.Events.ERROR, (event, data) => {
         console.log('htl', event, data);
         if (data.fatal) {
@@ -174,7 +180,7 @@ const Video = ({
 
       return () => hls.destroy();
     }
-  }, [videoRef.current, isLive, url]);
+  }, [videoEl, isLive, url]);
 
   return (
     <VideoContainer border={!noBorder}>
@@ -182,12 +188,12 @@ const Video = ({
         {url ? (
           <VideoPreview
             key={url} // url change does not trigger video change
+            ref={(el) => setVideoEl(el)}
             className={!!isRejected && 'darken'}
             mediaFit={mediaFit}
             mimeType={mimeType}
             src={url}
             autoPlay={autoPlay}
-            ref={videoRef}
           />
         ) : (
           <VideoSkeleton />
@@ -212,12 +218,12 @@ Video.propTypes = {
   progress: PropTypes.number,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
   noBorder: PropTypes.bool,
-  onRemove: PropTypes.func,
   isRejected: PropTypes.bool,
-  onRetry: PropTypes.func,
   mimeType: PropTypes.string,
   autoPlay: PropTypes.bool,
   isLive: PropTypes.bool,
+  onRemove: PropTypes.func,
+  onRetry: PropTypes.func,
 };
 
 Video.defaultProps = {

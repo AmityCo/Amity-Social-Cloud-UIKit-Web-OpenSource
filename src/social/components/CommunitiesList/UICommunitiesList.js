@@ -51,14 +51,14 @@ const UICommunityList = ({
         {loading && renderLoadingSkeleton()}
 
         {!loading &&
-          communityIds.map(communityId => (
+          communityIds.map((communityId) => (
             <CommunityHeader
               key={communityId}
               communityId={communityId}
               isActive={communityId === activeCommunity}
-              onClick={onClickCommunity}
               isSearchResult={isSearchList}
               searchInput={searchInput}
+              onClick={onClickCommunity}
             />
           ))}
 
@@ -74,11 +74,11 @@ UICommunityList.propTypes = {
   loadMore: PropTypes.func,
   hasMore: PropTypes.bool,
   activeCommunity: PropTypes.string,
-  onClickCommunity: PropTypes.func,
   isSearchList: PropTypes.bool,
   searchInput: PropTypes.string,
   loading: PropTypes.bool,
   loadingMore: PropTypes.bool,
+  onClickCommunity: PropTypes.func,
 };
 
 UICommunityList.defaultProps = {

@@ -8,11 +8,7 @@ import PollComposer from '~/social/components/post/PollComposer';
 import promisify from '~/helpers/promisify';
 
 const PollModal = ({ isOpen, onClose, onCreatePoll }) => {
-  if (!isOpen) {
-    return null;
-  }
-
-  const handleSubmit = async data => {
+  const handleSubmit = async (data) => {
     const { pollId } = await promisify(PollRepository.createPoll(data));
     await onCreatePoll(pollId, data.question);
     onClose();
@@ -21,6 +17,7 @@ const PollModal = ({ isOpen, onClose, onCreatePoll }) => {
   const [isDirty, setDirty] = useState(false);
 
   const { formatMessage } = useIntl();
+
   const closeConfirm = () =>
     confirm({
       title: formatMessage({ id: 'CommunityCreationModal.title' }),
@@ -30,13 +27,17 @@ const PollModal = ({ isOpen, onClose, onCreatePoll }) => {
       onOk: onClose,
     });
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <Modal
       title={formatMessage({ id: 'poll_modal.title' })}
-      onCancel={isDirty ? closeConfirm : onClose}
       clean={false}
+      onCancel={isDirty ? closeConfirm : onClose}
     >
-      <PollComposer onCancel={closeConfirm} onSubmit={handleSubmit} setDirtyExternal={setDirty} />
+      <PollComposer setDirtyExternal={setDirty} onCancel={closeConfirm} onSubmit={handleSubmit} />
     </Modal>
   );
 };

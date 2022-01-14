@@ -22,8 +22,8 @@ const MOCK_CATEGORIES = [
 ];
 
 export const UITrendingItem = ({ communityCategories, ...props }) => {
-  const categories = communityCategories.map(name =>
-    MOCK_CATEGORIES.find(category => category.name === name),
+  const categories = communityCategories.map((name) =>
+    MOCK_CATEGORIES.find((category) => category.name === name),
   );
 
   return <TrendingItem {...props} categories={categories} />;

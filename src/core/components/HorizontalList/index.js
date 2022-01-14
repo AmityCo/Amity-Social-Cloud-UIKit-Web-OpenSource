@@ -60,36 +60,34 @@ const StretchedList = styled.div`
     Object.entries(columns).map(
       ([breakpoint, column]) => `
         @media (min-width: ${breakpoint}px) {
-        grid-auto-columns: calc((100% / ${column}) - (${ITEM_SPACE_SIZE}px * ${column -
-        1} / ${column}));
+        grid-auto-columns: calc((100% / ${column}) - (${ITEM_SPACE_SIZE}px * ${
+        column - 1
+      } / ${column}));
     }
   `,
     )} );
 `;
 
-function HorizontalList({
+const HorizontalList = ({
   title = '',
   children,
   columns = DEFAULT_COLUMN_NUMBER,
   hasMore = false,
   loadMore = () => {},
-}) {
+}) => {
   const containerRef = useRef(null);
   const { x: scrollPosition } = useScroll(containerRef);
   const [wrapperRef, { width }] = useMeasure();
   const [page, setPage] = useState(0);
 
-  const contentWidth = useMemo(() => containerRef.current?.scrollWidth ?? 0, [
-    containerRef.current?.scrollWidth,
-  ]);
+  const contentWidth = containerRef.current?.scrollWidth ?? 0;
 
   const hasMultiPage = useMemo(() => contentWidth > width, [contentWidth, width]);
 
-  const isLastPage = useMemo(() => scrollPosition >= contentWidth - width, [
-    scrollPosition,
-    contentWidth,
-    width,
-  ]);
+  const isLastPage = useMemo(
+    () => scrollPosition >= contentWidth - width,
+    [scrollPosition, contentWidth, width],
+  );
 
   const isFirstPage = useMemo(() => scrollPosition === 0, [scrollPosition]);
 
@@ -99,14 +97,14 @@ function HorizontalList({
         left: (width + ITEM_SPACE_SIZE) * page,
         behavior: 'smooth',
       }),
-    [containerRef.current, width, page],
+    [width, page],
   );
 
   useEffect(() => {
     if (scrollPosition >= contentWidth - width * 2 && hasMore) {
       loadMore();
     }
-  }, [scrollPosition, contentWidth, width, hasMore]);
+  }, [scrollPosition, contentWidth, width, hasMore, loadMore]);
 
   return (
     <div ref={wrapperRef}>
@@ -128,6 +126,6 @@ function HorizontalList({
       </ScrollContainer>
     </div>
   );
-}
+};
 
 export default HorizontalList;

@@ -9,12 +9,12 @@ export default {
 export const Switch = () => {
   const [{ value, onChange, disabled }, updateArgs] = useArgs();
 
-  const setValue = newVal => {
+  const setValue = (newVal) => {
     onChange(newVal);
     updateArgs({ value: newVal });
   };
 
-  return <UiKitSwitch value={value} onChange={setValue} disabled={disabled} />;
+  return <UiKitSwitch value={value} disabled={disabled} onChange={setValue} />;
 };
 
 Switch.args = {

@@ -13,8 +13,8 @@ const UserHeader = ({ userId, children, onClick, isBanned }) => {
       userId={user.userId}
       displayName={user.displayName}
       avatarFileUrl={file.fileUrl}
-      onClick={onClick}
       isBanned={isBanned || user.isGlobalBan}
+      onClick={onClick}
     >
       {children}
     </UIUserHeader>
@@ -24,8 +24,8 @@ const UserHeader = ({ userId, children, onClick, isBanned }) => {
 UserHeader.propTypes = {
   userId: PropTypes.string.isRequired,
   children: PropTypes.node,
-  onClick: PropTypes.func,
   isBanned: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 UserHeader.defaultProps = {

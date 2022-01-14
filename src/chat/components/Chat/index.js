@@ -21,7 +21,7 @@ const Chat = ({ channelId, channelType, onChatDetailsClick, shouldShowChatDetail
       type: channelType,
     });
 
-    channelLiveObject.on('dataUpdated', channelModel => {
+    channelLiveObject.on('dataUpdated', (channelModel) => {
       if (isReading) return;
 
       const membership = channelModel?.membership;
@@ -38,9 +38,10 @@ const Chat = ({ channelId, channelType, onChatDetailsClick, shouldShowChatDetail
       channelLiveObject.model.membership.stopReading();
       setIsReading(false);
     };
-  }, [channelId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channelId, channelType]);
 
-  const sendMessage = text => {
+  const sendMessage = (text) => {
     messageRepo.createTextMessage({
       channelId,
       text,
@@ -51,8 +52,8 @@ const Chat = ({ channelId, channelType, onChatDetailsClick, shouldShowChatDetail
     <ChannelContainer>
       <ChatHeader
         channelId={channelId}
-        onChatDetailsClick={onChatDetailsClick}
         shouldShowChatDetails={shouldShowChatDetails}
+        onChatDetailsClick={onChatDetailsClick}
       />
       <MessageList channelId={channelId} />
       <MessageComposeBar onSubmit={sendMessage} />

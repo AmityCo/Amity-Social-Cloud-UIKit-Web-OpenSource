@@ -3,14 +3,14 @@ import { ImageSize, FileRepository } from '@amityco/js-sdk';
 import UiKitAvatar from '~/core/components/Avatar';
 import { SIZE_ALIAS } from '~/core/hocs/withSize';
 
-function UserAvatar({
+const UserAvatar = ({
   size = SIZE_ALIAS.REGULAR,
   avatarCustomUrl,
   avatarUrl,
   avatarFileId,
   avatarFile,
   defaultImage,
-}) {
+}) => {
   const getAvatarProps = () => {
     if (avatarUrl) return { avatar: avatarUrl };
     if (avatarCustomUrl) return { avatar: avatarCustomUrl };
@@ -30,6 +30,6 @@ function UserAvatar({
   };
 
   return <UiKitAvatar size={size} {...getAvatarProps()} />;
-}
+};
 
 export default UserAvatar;

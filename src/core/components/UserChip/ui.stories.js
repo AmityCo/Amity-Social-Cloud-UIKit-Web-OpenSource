@@ -8,7 +8,7 @@ export default {
   title: 'Ui Only/User',
 };
 
-export const UiUserChip = args => {
+export const UiUserChip = (args) => {
   const props = { ...args };
 
   if (!props.removable) delete props.onRemove;

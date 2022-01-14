@@ -31,7 +31,7 @@ const useCommunity = (communityId, resolver) => {
       needApprovalOnPostCreation?: boolean,
     }
   */
-  const updateCommunity = payload =>
+  const updateCommunity = (payload) =>
     CommunityRepository.updateCommunity({
       communityId,
       ...payload,

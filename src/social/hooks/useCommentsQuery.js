@@ -17,7 +17,7 @@ const useCommentsQuery = ({ parentId, referenceId, referenceType, first, last })
     [referenceId],
   );
 
-  const commentIds = useMemo(() => comments.map(comment => comment.commentId), [comments]);
+  const commentIds = useMemo(() => comments.map((comment) => comment.commentId), [comments]);
 
   return {
     comments,

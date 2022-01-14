@@ -16,10 +16,10 @@ export const UiCommentLikeButton = ({ isDisabled }) => {
     });
   return (
     <StyledCommentLikeButton
-      onClick={toggleLike}
       isActive={isActive}
       isDisabled={isDisabled}
       totalLikes={totalLikes}
+      onClick={toggleLike}
     />
   );
 };

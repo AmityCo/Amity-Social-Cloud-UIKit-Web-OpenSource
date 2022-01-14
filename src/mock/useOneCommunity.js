@@ -19,7 +19,7 @@ const useOneCommunity = (communityId = null) => {
         setCommunity(communitiesLiveObject.model);
         setIsLoading(false);
       }
-      communitiesLiveObject.on('dataUpdated', newCommunity => {
+      communitiesLiveObject.on('dataUpdated', (newCommunity) => {
         setCommunity(newCommunity);
         setIsLoading(false);
       });

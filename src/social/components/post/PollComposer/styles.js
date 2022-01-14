@@ -71,7 +71,7 @@ export const Field = styled.div`
 
 export const FormBody = styled.div``;
 
-export const ErrorMessage = props => <FormErrorMessage as={ErrorMessageWrapper} {...props} />;
+export const ErrorMessage = (props) => <FormErrorMessage as={ErrorMessageWrapper} {...props} />;
 
 export const Footer = styled.div`
   border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};

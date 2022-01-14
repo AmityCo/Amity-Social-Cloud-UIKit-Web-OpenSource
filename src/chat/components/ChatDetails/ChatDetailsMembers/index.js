@@ -27,12 +27,12 @@ const ChatDetailsMembers = ({ channelId, hideMembers, onEditChatMemberClick, onM
   const channel = useChannel(channelId);
   const [members, hasMore, loadMore] = useChannelMembers(channelId, channel.memberCount);
 
-  const handleReturnClick = e => {
+  const handleReturnClick = (e) => {
     e.stopPropagation();
     hideMembers();
   };
 
-  const getName = member => {
+  const getName = (member) => {
     const { displayName, metadata } = member?.user?.model ?? {};
 
     if (displayName) return displayName;
@@ -52,7 +52,7 @@ const ChatDetailsMembers = ({ channelId, hideMembers, onEditChatMemberClick, onM
         </MembersReturnTitle>
       </MembersReturn>
       <LoadMore hasMore={hasMore} loadMore={loadMore}>
-        {members.map(member => (
+        {members.map((member) => (
           <MemberItem key={member.userId} onClick={() => onMemberSelect(member)}>
             <UserAvatar
               size={SIZE_ALIAS.SMALL}

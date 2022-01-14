@@ -21,22 +21,22 @@ const PostCreatorUploaders = ({
   <>
     <StyledLoader
       disabled={imageUploadDisabled}
-      onChange={onChangeImages}
       uploadLoading={uploadLoading}
-      onMaxFilesLimit={onMaxFilesLimit}
       fileLimitRemaining={fileLimitRemaining}
       multiple
+      onChange={onChangeImages}
+      onMaxFilesLimit={onMaxFilesLimit}
     >
       <ImageAttachmentIcon height="20px" />
     </StyledLoader>
 
     <StyledLoader
       disabled={fileUploadDisabled}
-      onChange={onChangeFiles}
       uploadLoading={uploadLoading}
-      onMaxFilesLimit={onMaxFilesLimit}
       fileLimitRemaining={fileLimitRemaining}
       multiple
+      onChange={onChangeFiles}
+      onMaxFilesLimit={onMaxFilesLimit}
     >
       <FileAttachmentIcon height="18px" />
     </StyledLoader>

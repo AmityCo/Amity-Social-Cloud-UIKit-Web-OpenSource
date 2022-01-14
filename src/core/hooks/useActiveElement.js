@@ -7,7 +7,7 @@ const useActiveElement = (defaultValue = false) => {
   useEffect(() => {
     const element = ref.current;
     if (element) {
-      const handleClick = e => {
+      const handleClick = (e) => {
         setIsActiveElement(
           element.contains(e.target) || document.activeElement === element || e.target === element,
         );
@@ -16,6 +16,7 @@ const useActiveElement = (defaultValue = false) => {
 
       return () => document.removeEventListener('mousedown', handleClick);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current]);
 
   return [ref, isActiveElement];

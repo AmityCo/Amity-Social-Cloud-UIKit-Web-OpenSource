@@ -32,7 +32,7 @@ const ProfileSettings = ({ userId, client }) => {
 
   const { user, file } = useUser(userId);
 
-  const handleSubmit = async data => {
+  const handleSubmit = async (data) => {
     const { displayName, description, avatarFileId } = data;
 
     try {
@@ -69,7 +69,7 @@ const ProfileSettings = ({ userId, client }) => {
       <ActiveTabContainer>
         <ConditionalRender condition={activeTab === Tabs.EDIT_PROFILE}>
           <ActiveTabContent>
-            <UserProfileForm onSubmit={handleSubmit} user={user} />
+            <UserProfileForm user={user} onSubmit={handleSubmit} />
           </ActiveTabContent>
         </ConditionalRender>
       </ActiveTabContainer>

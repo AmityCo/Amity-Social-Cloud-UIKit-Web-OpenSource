@@ -13,18 +13,20 @@ export default {
 
 const SdkUserInfo = () => {
   const user = useOneUser();
-  if (!user)
-    return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
-    );
 
   const history = useHistory();
   const { params = {} } = useRouteMatch('/profile/:userId') || {};
   const { userId } = params;
 
-  const editProfile = id => history.push(`/profile/${id}/edit`);
+  const editProfile = (id) => history.push(`/profile/${id}/edit`);
+
+  if (!user) {
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
+  }
 
   return (
     <Switch>

@@ -43,7 +43,7 @@ const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick, isB
   const onClickUser = () => onClick(userId);
   return (
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
-      <UserHeaderAvatar avatar={avatarFileUrl} onClick={onClickUser} backgroundImage={UserImage} />
+      <UserHeaderAvatar avatar={avatarFileUrl} backgroundImage={UserImage} onClick={onClickUser} />
       <UserHeaderTitle title={userId} onClick={onClickUser}>
         {displayName} {isBanned && <BanIcon />}
       </UserHeaderTitle>
@@ -57,8 +57,8 @@ UserHeader.propTypes = {
   displayName: PropTypes.string,
   avatarFileUrl: PropTypes.string,
   children: PropTypes.node,
-  onClick: PropTypes.func,
   isBanned: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default customizableComponent('UserHeader', UserHeader);

@@ -61,8 +61,8 @@ PageHeader.propTypes = {
   title: PropTypes.node,
   avatarFileUrl: PropTypes.string,
   backLinkText: PropTypes.node,
-  onBack: PropTypes.func,
   avatarImage: PropTypes.string,
+  onBack: PropTypes.func,
 };
 
 PageHeader.defaultProps = {

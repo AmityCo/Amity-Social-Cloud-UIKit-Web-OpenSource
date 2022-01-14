@@ -53,7 +53,7 @@ const ButtonLink = styled.button.attrs({ role: 'button' })`
   }
 `;
 
-const renderTrigger = handleExpand => {
+const renderTrigger = (handleExpand) => {
   return (
     <ButtonLink onClick={handleExpand}>
       <FormattedMessage id="collapsible.viewAll" />
@@ -66,8 +66,8 @@ export const CollapsibleWithCustomTrigger = () => {
   return (
     <UiKitCollapsible
       visibleAmount={Number(visibleAmount)}
-      onExpand={onExpand}
       renderTrigger={renderTrigger}
+      onExpand={onExpand}
     >
       {Array.from({ length: itemsAmount }).map((_, index) => (
         <Item key={index}>{index}</Item>

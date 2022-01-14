@@ -27,7 +27,7 @@ const ButtonLink = styled.button.attrs({ role: 'button' })`
   }
 `;
 
-const renderTrigger = handleExpand => {
+const renderTrigger = (handleExpand) => {
   return (
     <ButtonLink onClick={handleExpand}>
       <FormattedMessage id="collapsible.viewAllFiles" />

@@ -22,7 +22,7 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
 
   const open = () => setIsOpen(true);
 
-  const close = communityId => {
+  const close = (communityId) => {
     setIsOpen(false);
     communityId && onCommunityCreated(communityId);
   };
@@ -32,9 +32,9 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
       {socialCommunityCreationButtonVisible && (
         <SideMenuActionItem
           icon={<Plus height="20px" />}
-          onClick={open}
           element="button"
           disabled={!connected}
+          onClick={open}
         >
           <FormattedMessage id="createCommunity" />
         </SideMenuActionItem>

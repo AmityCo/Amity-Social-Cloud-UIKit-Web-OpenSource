@@ -13,7 +13,7 @@ const ErrorMessageWrapper = styled.div`
   ${({ theme }) => theme.typography.caption}
 `;
 
-export const ErrorMessage = props => <FormErrorMessage as={ErrorMessageWrapper} {...props} />;
+export const ErrorMessage = (props) => <FormErrorMessage as={ErrorMessageWrapper} {...props} />;
 
 export const InputPlaceholder = styled.span`
   color: ${({ theme }) => theme.palette.base.shade1};

@@ -33,7 +33,7 @@ const Placeholder = styled.div`
   justify-content: center;
 `;
 
-const DefaultRenderer = item => <span>{item}</span>;
+const DefaultRenderer = (item) => <span>{item}</span>;
 
 const Suggestions = ({ items, onPick = () => {}, append, children }) => {
   const list = useRef(null);
@@ -41,11 +41,11 @@ const Suggestions = ({ items, onPick = () => {}, append, children }) => {
   const [active, setActive] = useState(-1);
   const [render = DefaultRenderer] = [].concat(children);
 
-  const onMouseEnter = key => () => setActive(key);
+  const onMouseEnter = (key) => () => setActive(key);
 
   const onMouseLeave = () => setActive(-1);
 
-  const onClick = key => () => onPick(key);
+  const onClick = (key) => () => onPick(key);
 
   const prev = () => {
     const value = active > 0 ? active - 1 : items.length - 1;
@@ -108,9 +108,9 @@ const Suggestions = ({ items, onPick = () => {}, append, children }) => {
 
 Suggestions.propTypes = {
   items: PropTypes.array.isRequired,
-  onPick: PropTypes.func,
   append: PropTypes.node,
   children: PropTypes.func,
+  onPick: PropTypes.func,
 };
 
 Suggestions.defaultProps = {

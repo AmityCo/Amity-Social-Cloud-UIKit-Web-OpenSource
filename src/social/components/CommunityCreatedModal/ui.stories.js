@@ -5,7 +5,7 @@ export default {
   title: 'Ui Only/Social/Community',
 };
 
-export const UiCommunityCreatedModal = args => {
+export const UiCommunityCreatedModal = (args) => {
   return <CommunityCreatedModal {...args} />;
 };
 

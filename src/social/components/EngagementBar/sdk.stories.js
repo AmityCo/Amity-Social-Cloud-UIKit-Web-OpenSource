@@ -8,7 +8,7 @@ export default {
   title: 'SDK Connected/Social/Post',
 };
 
-export const SdkEngagementBar = props => {
+export const SdkEngagementBar = (props) => {
   const [post, isLoading] = useOnePost();
   if (isLoading)
     return (

@@ -5,7 +5,7 @@ import UserPlusIcon from '~/icons/UserPlus';
 
 import { IconWrapper, ClickableMenuItem, MemberItemInfo } from './styles';
 
-function AddNewMember({ onClick }) {
+const AddNewMember = ({ onClick }) => {
   return (
     <ClickableMenuItem onClick={onClick}>
       <IconWrapper>
@@ -16,6 +16,6 @@ function AddNewMember({ onClick }) {
       </MemberItemInfo>
     </ClickableMenuItem>
   );
-}
+};
 
 export default AddNewMember;

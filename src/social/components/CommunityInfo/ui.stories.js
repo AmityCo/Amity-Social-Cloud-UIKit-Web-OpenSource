@@ -8,7 +8,7 @@ export default {
 
 // TODO - using hook means that component re-fetches community each time control props are changed.
 // Real community is needed because component renders CommunityName component which is SDK-connected.
-export const UiCommunityInfo = props => {
+export const UiCommunityInfo = (props) => {
   return <StyledCommunityInfo {...props} communityId="" />;
 };
 

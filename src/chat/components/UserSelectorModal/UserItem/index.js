@@ -8,14 +8,14 @@ import { Usercontainer, AvatarContainer, ProfileContainer, CheckIconWrapper } fr
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
-function UserItem({
+const UserItem = ({
   displayName,
   metadata,
   onClick,
   avatarCustomUrl,
   avatarFileId,
   isSelected = false,
-}) {
+}) => {
   // TODO: This code is Personal Mode specific - need to abstract it out.
   const { firstname = '', lastname = '' } = metadata ?? {};
   const name = `${firstname} ${lastname}`;
@@ -33,6 +33,6 @@ function UserItem({
       )}
     </Usercontainer>
   );
-}
+};
 
 export default UserItem;

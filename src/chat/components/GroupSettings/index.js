@@ -6,13 +6,13 @@ import UIKitInputText from '~/core/components/InputText';
 
 import { InputGroup, Label, WrapContent, FooterContainer, OkButton, CancelButton } from './styles';
 
-function GroupSettings({
+const GroupSettings = ({
   closeModal,
   submitButtonName = '',
   onSubmit = () => {},
   chatName = '',
   title = '',
-}) {
+}) => {
   const { formatMessage } = useIntl();
   const [groupName, setGroupName] = useState(chatName);
 
@@ -45,13 +45,13 @@ function GroupSettings({
           <UIKitInputText
             autofocus
             value={groupName}
-            onChange={setGroupName}
             placeholder={formatMessage({ id: 'groupChat.createPopup.placeholder' })}
+            onChange={setGroupName}
           />
         </InputGroup>
       </WrapContent>
     </Modal>
   );
-}
+};
 
 export default GroupSettings;

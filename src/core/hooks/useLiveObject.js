@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 const useLiveObject = (
   createLiveObject,
   dependencies = [],
-  resolver = () => dependencies.some(dep => !dep),
+  resolver = () => dependencies.some((dep) => !dep),
 ) => {
   const [data, setData] = useState({});
 
@@ -16,7 +16,8 @@ const useLiveObject = (
     liveObject.on('dataUpdated', setData);
 
     return () => liveObject.dispose();
-  }, [...dependencies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, dependencies);
 
   return data;
 };

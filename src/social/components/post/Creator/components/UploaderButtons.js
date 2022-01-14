@@ -7,6 +7,8 @@ import ImageAttachmentIcon from '~/icons/ImageAttachment';
 import FileAttachmentIcon from '~/icons/FileAttachment';
 import { VideoAttachmentIcon } from '../styles';
 
+const ALLOWED_VIDEO_MIME_TYPES = 'video/*,.flv,.3gp';
+
 const StyledLoader = styled(Loader)`
   ${({ uploadLoading }) => uploadLoading && 'cursor: wait !important;'}
   ${({ disabled, theme }) => disabled && `color: ${theme.palette.neutral.shade2};`}
@@ -28,13 +30,13 @@ const PostCreatorUploaders = ({
     <StyledLoader
       data-qa-anchor="social-create-post-attach-image"
       disabled={imageUploadDisabled}
-      onChange={onChangeImages}
       uploadLoading={uploadLoading}
-      onMaxFilesLimit={onMaxFilesLimit}
-      onFileSizeLimit={onFileSizeLimit}
       fileLimitRemaining={fileLimitRemaining}
       mimeType="image/*"
       multiple
+      onChange={onChangeImages}
+      onMaxFilesLimit={onMaxFilesLimit}
+      onFileSizeLimit={onFileSizeLimit}
     >
       <ImageAttachmentIcon />
     </StyledLoader>
@@ -42,19 +44,19 @@ const PostCreatorUploaders = ({
     <StyledLoader
       data-qa-anchor="social-create-post-attach-video"
       disabled={videoUploadDisabled}
-      onChange={files => {
-        files.forEach(file => {
+      uploadLoading={uploadLoading}
+      fileLimitRemaining={fileLimitRemaining}
+      mimeType={ALLOWED_VIDEO_MIME_TYPES}
+      multiple
+      onChange={(files) => {
+        files.forEach((file) => {
           // eslint-disable-next-line no-param-reassign
           file.forceType = FileType.Video;
         });
         onChangeVideos(files);
       }}
-      uploadLoading={uploadLoading}
       onMaxFilesLimit={onMaxFilesLimit}
       onFileSizeLimit={onFileSizeLimit}
-      fileLimitRemaining={fileLimitRemaining}
-      mimeType="video/*,.flv,.3gp"
-      multiple
     >
       <VideoAttachmentIcon />
     </StyledLoader>
@@ -62,12 +64,12 @@ const PostCreatorUploaders = ({
     <StyledLoader
       data-qa-anchor="social-create-post-attach-file"
       disabled={fileUploadDisabled}
-      onChange={onChangeFiles}
       uploadLoading={uploadLoading}
-      onMaxFilesLimit={onMaxFilesLimit}
-      onFileSizeLimit={onFileSizeLimit}
       fileLimitRemaining={fileLimitRemaining}
       multiple
+      onChange={onChangeFiles}
+      onMaxFilesLimit={onMaxFilesLimit}
+      onFileSizeLimit={onFileSizeLimit}
     >
       <FileAttachmentIcon />
     </StyledLoader>

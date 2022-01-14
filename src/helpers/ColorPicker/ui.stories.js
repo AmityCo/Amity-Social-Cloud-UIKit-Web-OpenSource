@@ -6,7 +6,7 @@ export default {
   title: 'Utilities/Color Picker',
 };
 
-export const Default = args => {
+export const Default = (args) => {
   return (
     <div style={{ height: '100vh' }}>
       <h2 style={{ marginBottom: 50 }}>Pick a main color and see how the shades of it will vary</h2>
@@ -29,10 +29,10 @@ Default.argTypes = {
 
 const { palette: defaultPalette } = defaultTheme;
 
-export const AllColors = args => {
+export const AllColors = (args) => {
   return (
     <div>
-      {Object.keys(args).map(colorKey => (
+      {Object.keys(args).map((colorKey) => (
         <div key={colorKey} style={{ marginBottom: 30 }}>
           <h3>{colorKey}</h3>
           <ColorPicker mainColor={args[colorKey]} />

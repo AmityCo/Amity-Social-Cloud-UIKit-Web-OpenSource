@@ -6,7 +6,7 @@ export default {
   title: 'SDK Connected/Social/Category',
 };
 
-export const SDKCategoryList = props => <UiKitCategoryList {...props} />;
+export const SDKCategoryList = (props) => <UiKitCategoryList {...props} />;
 
 SDKCategoryList.storyName = 'Categories Card';
 

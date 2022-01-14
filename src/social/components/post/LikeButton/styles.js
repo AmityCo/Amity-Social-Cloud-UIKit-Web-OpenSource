@@ -25,19 +25,19 @@ export const LikeIcon = styled(ThumbsUp)`
  */
 const StyledPostLikeButton = ({ onClick, isActive, isDisabled }) => (
   <StyledLikeButton
-    onClick={onClick}
     active={isActive}
     disabled={isDisabled}
     data-qa-anchor="social-like-post"
+    onClick={onClick}
   >
     <LikeIcon $isLiked={isActive} /> <FormattedMessage id={isActive ? 'post.liked' : 'post.like'} />
   </StyledLikeButton>
 );
 
 StyledPostLikeButton.propTypes = {
-  onClick: PropTypes.func,
   isActive: PropTypes.bool,
   isDisabled: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default customizableComponent('PostLikeButton', StyledPostLikeButton);

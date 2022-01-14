@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { UserRepository, CommunityRepository, PostTargetType } from '@amityco/js-sdk';
-import { formatMentionees } from '../../helpers/utils';
+import { formatMentionees } from '~/helpers/utils';
 import useCommunity from '~/social/hooks/useCommunity';
 
 const usePostMention = ({ targetId, targetType }) => {
@@ -31,12 +31,12 @@ const usePostMention = ({ targetId, targetType }) => {
       }
 
       // utilize useLiveCollection method here
-      liveCollection.on('dataUpdated', models => {
+      liveCollection.on('dataUpdated', (models) => {
         cb([...formatMentionees(models)]);
         // setMentionees(formatMentionees(models));
       });
     },
-    [targetId, targetType, community],
+    [targetType, isPublic, targetId],
   );
 
   return [queryMentionees];

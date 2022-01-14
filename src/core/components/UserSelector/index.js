@@ -21,7 +21,7 @@ const UserSelector = ({ value = [], onChange = () => {} }) => {
     query.length > SUGGESTIONS_MIN_LENGTH ? [query] : [],
   );
 
-  const handleAdd = newUser => {
+  const handleAdd = (newUser) => {
     const { userId } = newUser;
 
     if (!userIds.includes(userId)) {
@@ -30,8 +30,8 @@ const UserSelector = ({ value = [], onChange = () => {} }) => {
     }
   };
 
-  const handleRemove = userId => {
-    onChange(userIds.filter(id => id !== userId));
+  const handleRemove = (userId) => {
+    onChange(userIds.filter((id) => id !== userId));
   };
 
   const handlePop = () => {
@@ -40,9 +40,9 @@ const UserSelector = ({ value = [], onChange = () => {} }) => {
 
   const ChipList =
     !!userIds.length &&
-    userIds.map(userId => <UserChip key={userId} userId={userId} onRemove={handleRemove} />);
+    userIds.map((userId) => <UserChip key={userId} userId={userId} onRemove={handleRemove} />);
 
-  const filter = items => items;
+  const filter = (items) => items;
 
   return (
     <UiKitInputAutocomplete
@@ -51,12 +51,12 @@ const UserSelector = ({ value = [], onChange = () => {} }) => {
       items={users}
       filter={filter}
       loadMore={hasMore ? loadMore : null}
+      expand={SUGGESTIONS_MIN_LENGTH}
       onClear={handlePop}
       onChange={setQuery}
       onPick={handleAdd}
-      expand={SUGGESTIONS_MIN_LENGTH}
     >
-      {item => <UiKitUserHeader userId={item.userId} />}
+      {(item) => <UiKitUserHeader userId={item.userId} />}
     </UiKitInputAutocomplete>
   );
 };

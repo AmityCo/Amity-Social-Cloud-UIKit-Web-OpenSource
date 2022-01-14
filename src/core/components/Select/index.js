@@ -46,9 +46,9 @@ const Select = ({
   const toggle = () => setIsOpenInternal(!isOpenInternal);
   const close = () => (handleClose ? handleClose() : setIsOpenInternal(false));
   const remove = (currentItem, callback) => {
-    setSelected(prev => {
-      const newSelected = prev.filter(item => item.value !== currentItem);
-      callback && callback(newSelected.map(item => item.value));
+    setSelected((prev) => {
+      const newSelected = prev.filter((item) => item.value !== currentItem);
+      callback && callback(newSelected.map((item) => item.value));
       return newSelected;
     });
   };
@@ -62,11 +62,11 @@ const Select = ({
     setIsOpenInternal(isOpen);
   }, [isOpen]);
 
-  const handleSelect = selectedItem => {
+  const handleSelect = (selectedItem) => {
     onSelect(selectedItem);
 
     if (multiple) {
-      const index = selected.findIndex(item => item.value === selectedItem.value);
+      const index = selected.findIndex((item) => item.value === selectedItem.value);
       if (index >= 0) {
         // remove item if selected twice
         remove(index);
@@ -79,7 +79,7 @@ const Select = ({
     }
   };
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     e.preventDefault();
     toggle();
   };
@@ -87,7 +87,7 @@ const Select = ({
   return (
     <Dropdown
       isOpen={isOpen || isOpenInternal}
-      renderTrigger={props =>
+      renderTrigger={(props) =>
         renderTrigger({ ...props, onClick: handleClick, selected, remove, placeholder })
       }
       // when using custom trigger we should handle "close on click outside" (if needed)
@@ -100,12 +100,12 @@ const Select = ({
     >
       <ConditionalRender condition={options && options.length}>
         <Menu>
-          {options.map(option => {
+          {options.map((option) => {
             return (
               <MenuItem
                 key={option.value}
+                active={selected.find((item) => item.value === option.value)}
                 onClick={() => handleSelect(option)}
-                active={selected.find(item => item.value === option.value)}
               >
                 {renderItem(option)}
               </MenuItem>
@@ -118,7 +118,6 @@ const Select = ({
 };
 Select.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-  onSelect: PropTypes.func,
   options: PropTypes.arrayOf(
     PropTypes.shape({
       key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -134,6 +133,7 @@ Select.propTypes = {
   handleClose: PropTypes.func,
   placeholder: PropTypes.string,
   className: PropTypes.string,
+  onSelect: PropTypes.func,
 };
 
 export default memo(Select);

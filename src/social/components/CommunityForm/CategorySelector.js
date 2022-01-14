@@ -15,21 +15,21 @@ const CategorySelector = ({ value: categoryId, onChange, parentContainer = null 
   const close = () => setIsOpen(false);
 
   const [categories] = useCategories({ isDeleted: false });
-  const options = categories.map(category => ({
+  const options = categories.map((category) => ({
     name: category.name,
     value: category.categoryId,
   }));
 
   const itemRenderer = ({ value }) => <CategoryHeader categoryId={value} />;
 
-  const triggerRenderer = props => {
+  const triggerRenderer = (props) => {
     return (
       <Selector {...props}>
         {categoryId ? (
           <CategoryHeader categoryId={categoryId} />
         ) : (
           <FormattedMessage id="selectACategory">
-            {placeholder => <InputPlaceholder>{placeholder}</InputPlaceholder>}
+            {(placeholder) => <InputPlaceholder>{placeholder}</InputPlaceholder>}
           </FormattedMessage>
         )}
         <SelectIcon />
@@ -40,20 +40,20 @@ const CategorySelector = ({ value: categoryId, onChange, parentContainer = null 
   return (
     <Select
       options={options}
-      onSelect={({ value }) => onChange(value)}
-      renderTrigger={props => triggerRenderer({ ...props, onClick: toggle })}
+      renderTrigger={(props) => triggerRenderer({ ...props, onClick: toggle })}
       renderItem={itemRenderer}
       parentContainer={parentContainer}
       isOpen={isOpen}
       handleClose={close}
+      onSelect={({ value }) => onChange(value)}
     />
   );
 };
 
 CategorySelector.propTypes = {
   value: PropTypes.string,
-  onChange: PropTypes.func,
   parentContainer: PropTypes.instanceOf(Element),
+  onChange: PropTypes.func,
 };
 
 export default customizableComponent('CategorySelector', CategorySelector);

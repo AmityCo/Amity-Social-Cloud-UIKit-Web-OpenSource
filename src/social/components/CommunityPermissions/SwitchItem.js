@@ -9,7 +9,7 @@ import {
   SwitchItemPrompt,
 } from './styles';
 
-export default function SwitchItem({ onChange, value }) {
+const SwitchItem = ({ onChange, value }) => {
   const { connected } = useSDK();
   return (
     <SwitchItemContainer>
@@ -25,9 +25,11 @@ export default function SwitchItem({ onChange, value }) {
       <Switch
         disabled={!connected}
         value={value}
-        onChange={onChange}
         data-qa-anchor="social-community-approve-post-permission"
+        onChange={onChange}
       />
     </SwitchItemContainer>
   );
-}
+};
+
+export default SwitchItem;

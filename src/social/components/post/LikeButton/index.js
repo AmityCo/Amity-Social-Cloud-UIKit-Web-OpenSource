@@ -13,7 +13,7 @@ const PostLikeButton = ({ postId, onLikeSuccess, onUnlikeSuccess }) => {
   });
 
   return (
-    <StyledPostLikeButton onClick={handleToggleLike} isActive={isActive} isDisabled={isDisabled} />
+    <StyledPostLikeButton isActive={isActive} isDisabled={isDisabled} onClick={handleToggleLike} />
   );
 };
 

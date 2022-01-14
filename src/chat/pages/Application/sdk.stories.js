@@ -7,7 +7,7 @@ export default {
   title: 'SDK Connected/Chat',
 };
 
-export const ChatApplicationStory = args => {
+export const ChatApplicationStory = (args) => {
   return <ChatApplication {...args} />;
 };
 

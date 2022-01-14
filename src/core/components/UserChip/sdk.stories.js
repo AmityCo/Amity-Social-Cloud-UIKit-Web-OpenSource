@@ -8,7 +8,7 @@ export default {
   title: 'SDK Connected/User',
 };
 
-export const Chip = args => {
+export const Chip = (args) => {
   const props = { ...args };
 
   if (!props.removable) delete props.onRemove;

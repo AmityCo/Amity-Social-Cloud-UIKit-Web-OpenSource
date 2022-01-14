@@ -22,7 +22,7 @@ const ImagesGallery = ({
   const allFiles = [...uploaded, ...uploading];
   return (
     <StyledGalleryGrid items={allFiles} uploadLoading={uploadLoading}>
-      {file => {
+      {(file) => {
         if (!file?.fileId) {
           return (
             <Image
@@ -40,8 +40,8 @@ const ImagesGallery = ({
           <Image
             key={fileId}
             fileId={fileId}
-            onRemove={() => removeFile(file)}
             data-qa-anchor="social-create-post-uploaded-image"
+            onRemove={() => removeFile(file)}
           />
         );
       }}
@@ -57,10 +57,10 @@ const Images = ({ files, onChange, onLoadingChange, uploadLoading, onError }) =>
 
 Images.propTypes = {
   files: PropTypes.array,
+  uploadLoading: PropTypes.bool,
+  onLoadingChange: PropTypes.func,
   onChange: PropTypes.func,
   onError: PropTypes.func,
-  onLoadingChange: PropTypes.func,
-  uploadLoading: PropTypes.bool,
 };
 
 Images.defaultProps = {

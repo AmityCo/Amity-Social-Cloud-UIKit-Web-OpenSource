@@ -53,7 +53,7 @@ const Image = styled.img`
   object-position: center;
 `;
 
-export const ImageRenderer = url => <Image key={url} src={url} />;
+export const ImageRenderer = (url) => <Image key={url} src={url} />;
 
 export const Frame = styled.div`
   grid-area: image;
@@ -85,19 +85,19 @@ const InvisibleButton = styled.button`
   }
 `;
 
-export const LeftButton = props => (
+export const LeftButton = (props) => (
   <InvisibleButton rel="left" {...props}>
     <ChevronLeft height="24px" />
   </InvisibleButton>
 );
 
-export const RightButton = props => (
+export const RightButton = (props) => (
   <InvisibleButton rel="right" {...props}>
     <ChevronRight height="24px" />
   </InvisibleButton>
 );
 
-export const CloseButton = styled(props => (
+export const CloseButton = styled((props) => (
   <InvisibleButton rel="close" {...props}>
     <Remove height="20px" />
   </InvisibleButton>

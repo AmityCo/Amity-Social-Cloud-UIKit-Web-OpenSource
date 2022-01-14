@@ -5,7 +5,7 @@ import usePostChildren from '~/social/hooks/usePostChildren';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useUser from '~/core/hooks/useUser';
 
-const usePost = postId => {
+const usePost = (postId) => {
   const post = useLiveObject(() => PostRepository.postForId(postId), [postId]);
   const isPostReady = !!post.postId;
   const { postedUserId, children } = post;

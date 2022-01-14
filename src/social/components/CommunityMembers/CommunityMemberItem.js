@@ -59,7 +59,7 @@ const CommunityMemberItem = ({
   return (
     <CommunityMemberContainer>
       <MemberInfo>
-        <UserHeader userId={userId} onClick={onClick} isBanned={isBanned || isGlobalBan} />
+        <UserHeader userId={userId} isBanned={isBanned || isGlobalBan} onClick={onClick} />
       </MemberInfo>
       <ConditionalRender condition={!isCurrentUser && isJoined}>
         <OptionMenu
@@ -94,7 +94,6 @@ const CommunityMemberItem = ({
 CommunityMemberItem.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
-  onClick: PropTypes.func,
   assignRolesToUsers: PropTypes.func,
   hasModeratorPermissions: PropTypes.bool,
   removeRolesFromUsers: PropTypes.func,
@@ -102,6 +101,7 @@ CommunityMemberItem.propTypes = {
   roles: PropTypes.arrayOf(PropTypes.string),
   isJoined: PropTypes.bool,
   isBanned: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default CommunityMemberItem;

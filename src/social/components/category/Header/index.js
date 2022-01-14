@@ -26,8 +26,8 @@ const CategoryHeader = ({ className, categoryId, children, loading, onClick }) =
       categoryId={category.categoryId}
       name={category.name}
       avatarFileUrl={fileUrl}
-      onClick={onClick}
       loading={loading}
+      onClick={onClick}
     >
       {children}
     </UICategoryHeader>

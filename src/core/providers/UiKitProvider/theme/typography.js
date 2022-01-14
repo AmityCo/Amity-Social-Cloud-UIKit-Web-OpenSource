@@ -6,7 +6,7 @@ const ALLOWED_PROPERTIES = ['fontFamily', 'fontStyle', 'fontWeight', 'fontSize']
  * Only allow certain CSS properties to be overridden - those in ALLOWED_PROPERTIES
  * @param {Object} styleObject
  */
-export const filterStyleKeys = styleObject => {
+export const filterStyleKeys = (styleObject) => {
   const filteredStyleObject = Object.keys(styleObject).reduce((acc, styleKey) => {
     if (ALLOWED_PROPERTIES.includes(styleKey)) {
       acc[styleKey] = styleObject[styleKey];
@@ -21,7 +21,7 @@ export const filterStyleKeys = styleObject => {
  * Remove style propertie that are not allow to be customised via theme.
  * @param {Object} mergedTypographyTheme
  */
-export const buildTypographyTheme = mergedTypographyTheme => {
+export const buildTypographyTheme = (mergedTypographyTheme) => {
   const filteredTheme = Object.keys(mergedTypographyTheme).reduce((acc, curr) => {
     acc[curr] = filterStyleKeys({
       ...mergedTypographyTheme.global,

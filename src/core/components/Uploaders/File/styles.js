@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import filesize from 'filesize';
@@ -98,17 +98,23 @@ const File = ({
 }) => {
   const { formatMessage } = useIntl();
 
-  function removeCallback(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onRemove && onRemove();
-  }
+  const removeCallback = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onRemove && onRemove();
+    },
+    [onRemove],
+  );
 
-  function retryCallback(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onRetry && onRetry();
-  }
+  const retryCallback = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onRetry && onRetry();
+    },
+    [onRetry],
+  );
 
   const isImg = type.includes('image');
 
@@ -122,7 +128,7 @@ const File = ({
         <FileName>{name}</FileName> <FileSize>{filesize(size)}</FileSize>
         <ButtonContainer>
           {!!isRejected && (
-            <RetryButton onClick={retryCallback} title={formatMessage({ id: 'file.reUpload' })} />
+            <RetryButton title={formatMessage({ id: 'file.reUpload' })} onClick={retryCallback} />
           )}
 
           {!!onRemove && <RemoveButton onClick={removeCallback} />}
@@ -141,9 +147,9 @@ File.propTypes = {
   type: PropTypes.string,
   size: PropTypes.number,
   progress: PropTypes.number,
-  onRemove: PropTypes.func,
   isRejected: PropTypes.bool,
   onRetry: PropTypes.func,
+  onRemove: PropTypes.func,
 };
 
 File.defaultProps = {

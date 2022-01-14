@@ -15,7 +15,7 @@ const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, rea
 
   const { isPostReady, post, ...others } = usePost(postId);
   const pollPost = others.childrenPosts.find(
-    childPost => childPost.dataType === PostDataType.PollPost,
+    (childPost) => childPost.dataType === PostDataType.PollPost,
   );
 
   const { handleClosePoll, poll } = usePoll(pollPost?.data?.pollId);

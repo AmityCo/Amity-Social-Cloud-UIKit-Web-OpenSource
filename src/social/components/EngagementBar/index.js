@@ -9,14 +9,14 @@ import UIEngagementBar from './UIEngagementBar';
 
 const EngagementBar = ({ postId, readonly }) => {
   const [isComposeBarDisplayed, setComposeBarDisplayed] = useState(false);
-  const toggleComposeBar = () => setComposeBarDisplayed(prevValue => !prevValue);
+  const toggleComposeBar = () => setComposeBarDisplayed((prevValue) => !prevValue);
 
   const hideComposeBar = () => setComposeBarDisplayed(false);
 
   const { post } = usePost(postId);
   const { commentsCount, reactions = {} } = post;
 
-  const handleAddComment = async commentText => {
+  const handleAddComment = async (commentText) => {
     await CommentRepository.createTextComment({
       referenceType: CommentReferenceType.Post,
       referenceId: postId,
@@ -32,9 +32,9 @@ const EngagementBar = ({ postId, readonly }) => {
       totalLikes={reactions[LIKE_REACTION_KEY]}
       totalComments={commentsCount}
       readonly={readonly}
-      onClickComment={toggleComposeBar}
       isComposeBarDisplayed={isComposeBarDisplayed}
       handleAddComment={handleAddComment}
+      onClickComment={toggleComposeBar}
     />
   );
 };

@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 
 import { PostRepository } from '@amityco/js-sdk';
 
-const usePostChildren = postChildrenIds => {
+const usePostChildren = (postChildrenIds) => {
   const [childrenPosts, setChildrenPosts] = useState([]);
 
   // reset local state when new children are passed
   useEffect(() => setChildrenPosts([]), [postChildrenIds]);
 
-  const addChildPost = newChildPost => {
-    const isAlreadyLoaded = childrenPosts.find(child => child.postId === newChildPost.postId);
+  const addChildPost = (newChildPost) => {
+    const isAlreadyLoaded = childrenPosts.find((child) => child.postId === newChildPost.postId);
     if (isAlreadyLoaded) return;
-    setChildrenPosts(prevState => [...prevState, newChildPost]);
+    setChildrenPosts((prevState) => [...prevState, newChildPost]);
   };
 
-  (postChildrenIds || []).forEach(childId => {
+  (postChildrenIds || []).forEach((childId) => {
     const childPostLiveObject = PostRepository.postForId(childId);
 
     // Crucial to use an if/else here and not try both.
@@ -22,7 +22,7 @@ const usePostChildren = postChildrenIds => {
     if (childPostLiveObject.model) {
       addChildPost(childPostLiveObject.model);
     } else {
-      childPostLiveObject.on('dataUpdated', childPost => {
+      childPostLiveObject.on('dataUpdated', (childPost) => {
         addChildPost(childPost);
       });
       return childPostLiveObject?.dispose();

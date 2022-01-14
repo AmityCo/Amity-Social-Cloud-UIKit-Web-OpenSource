@@ -6,7 +6,7 @@ export default {
   title: 'Ui Only/Side Menu',
 };
 
-export const Section = props => <UiKitSideMenuSection {...props} />;
+export const Section = (props) => <UiKitSideMenuSection {...props} />;
 
 Section.args = {
   heading: 'Section heading',

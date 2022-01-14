@@ -85,7 +85,7 @@ const PostTargetSelector = ({
           }
           onScroll={loadMoreCommunities}
         >
-          {communities.map(community => (
+          {communities.map((community) => (
             <MenuItem
               key={community.communityId}
               active={community.communityId === currentTargetId}
@@ -114,10 +114,10 @@ const PostTargetSelector = ({
     <div>
       <Popover
         isOpen={isOpen}
-        onClickOutside={close}
         position="bottom"
         align="start"
         content={menu}
+        onClickOutside={close}
       >
         <PostTargetSelectorContainer onClick={open}>
           {children} <SelectIcon />

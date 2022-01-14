@@ -27,7 +27,7 @@ const StyledCameraIcon = styled(CameraIcon)`
 export const AvatarUpload = ({ disabled, setAvatarFileId, value }) => {
   const [avatar, setAvatar] = useState(value);
 
-  const upload = async event => {
+  const upload = async (event) => {
     event.persist();
     const imageUrl = await readFileAsync(event.target.files[0]);
     setAvatar(imageUrl);
@@ -47,7 +47,7 @@ export const AvatarUpload = ({ disabled, setAvatarFileId, value }) => {
         <Label htmlFor="image-upload" disabled={disabled}>
           <StyledCameraIcon />
         </Label>
-        <FileInput id="image-upload" onChange={upload} disabled={disabled} />
+        <FileInput id="image-upload" disabled={disabled} onChange={upload} />
       </AvatarWrapper>
     </AvatarUploadContainer>
   );

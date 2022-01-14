@@ -37,11 +37,7 @@ const ImageGallery = ({ index = 0, items = [], children, onChange, showCounter =
     <Container length={items.length}>
       <Frame>{render(items[index])}</Frame>
 
-      {showCounter && (
-        <Counter>
-          {`${index + 1} / ${items.length}`}
-        </Counter>
-      )}
+      {showCounter && <Counter>{`${index + 1} / ${items.length}`}</Counter>}
 
       {items.length > 1 && <LeftButton onClick={prev} />}
       {items.length > 1 && <RightButton onClick={next} />}

@@ -190,9 +190,6 @@ UIUserInfo.propTypes = {
   displayName: PropTypes.string,
   description: PropTypes.string,
   isMyProfile: PropTypes.bool,
-  onEditUser: PropTypes.func,
-  onFollowRequest: PropTypes.func,
-  onFollowDecline: PropTypes.func,
   isFollowPending: PropTypes.bool,
   isFollowNone: PropTypes.bool,
   isFollowAccepted: PropTypes.bool,
@@ -201,6 +198,9 @@ UIUserInfo.propTypes = {
   followerCount: PropTypes.number,
   followingCount: PropTypes.number,
   isPrivateNetwork: PropTypes.bool,
+  onEditUser: PropTypes.func,
+  onFollowRequest: PropTypes.func,
+  onFollowDecline: PropTypes.func,
 };
 
 UIUserInfo.defaultProps = {

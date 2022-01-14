@@ -6,7 +6,7 @@ import Image from '~/core/components/Uploaders/Image';
 const ImageContentList = ({ items, onRemove }) => {
   return (
     <GalleryGrid items={items}>
-      {post => <Image fileId={post?.data?.fileId} onRemove={() => onRemove(post.postId)} />}
+      {(post) => <Image fileId={post?.data?.fileId} onRemove={() => onRemove(post.postId)} />}
     </GalleryGrid>
   );
 };

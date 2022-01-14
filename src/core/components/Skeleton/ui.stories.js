@@ -12,7 +12,7 @@ const UiSkeletonContainer = styled.div`
   height: 100px;
 `;
 
-export const UiSkeleton = props => {
+export const UiSkeleton = (props) => {
   return (
     <UiSkeletonContainer>
       <Skeleton {...props} />

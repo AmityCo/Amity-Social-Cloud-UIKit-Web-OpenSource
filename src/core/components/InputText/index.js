@@ -145,27 +145,30 @@ const InputText = ({
   loadMoreMentionees = () => [],
 }) => {
   const mentionRef = useRef();
-  const handleMentionInput = useCallback((e, [,], newPlainVal, mentions) => {
-    // Get last item of mention and save it in upper parent component
-    // This way we can call loadMoreMentionees and append new values
-    // inside the existing array
-    const lastSegment = newPlainVal.split(' ').pop();
-    const isMentionText = lastSegment[0]?.match(/^@/g);
+  const handleMentionInput = useCallback(
+    (e, [,], newPlainVal, mentions) => {
+      // Get last item of mention and save it in upper parent component
+      // This way we can call loadMoreMentionees and append new values
+      // inside the existing array
+      const lastSegment = newPlainVal.split(' ').pop();
+      const isMentionText = lastSegment[0]?.match(/^@/g);
 
-    onChange({
-      // text: e.target.value,
-      text: e.target.value,
-      plainText: newPlainVal,
-      lastMentionText: isMentionText && lastSegment,
-      mentions,
-    });
-  }, []);
+      onChange({
+        // text: e.target.value,
+        text: e.target.value,
+        plainText: newPlainVal,
+        lastMentionText: isMentionText && lastSegment,
+        mentions,
+      });
+    },
+    [onChange],
+  );
 
   const handleKeyDown = useCallback(
-    e => {
+    (e) => {
       if (e.key === 'Backspace' && value.length === 0) onClear();
     },
-    [value],
+    [onClear, value.length],
   );
 
   const classNames = cx(className, { disabled, invalid });
@@ -176,7 +179,7 @@ const InputText = ({
     value,
     placeholder,
     disabled,
-    onChange: mentionAllowed ? handleMentionInput : e => onChange(e.target.value),
+    onChange: mentionAllowed ? handleMentionInput : (e) => onChange(e.target.value),
     onKeyDown: handleKeyDown,
     className: classNames,
   };
@@ -184,7 +187,7 @@ const InputText = ({
   return (
     <Container className={classNames}>
       {prepend}
-      <div id="mention-input" ref={mentionRef} />
+      <div ref={mentionRef} id="mention-input" />
       {multiline && mentionAllowed && (
         <StyledMentionsInput
           inputRef={input}
@@ -232,13 +235,13 @@ InputText.propTypes = {
   maxRows: PropTypes.number,
   prepend: PropTypes.node,
   append: PropTypes.node,
-  onChange: PropTypes.func.isRequired,
-  onClear: PropTypes.func,
-  onClick: PropTypes.func,
   className: PropTypes.string,
   mentionAllowed: PropTypes.bool,
   queryMentionees: PropTypes.func,
   loadMoreMentionees: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onClear: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 export default InputText;

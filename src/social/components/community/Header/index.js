@@ -35,13 +35,13 @@ const CommunityHeader = ({
       communityId={communityId}
       avatarFileUrl={fileUrl}
       isActive={isActive}
-      onClick={onClick}
       isOfficial={community.isOfficial}
       isPublic={community.isPublic}
       isSearchResult={isSearchResult}
       name={community.displayName}
       searchInput={searchInput}
       loading={loading}
+      onClick={onClick}
     >
       {typeof render === 'function' ? render({ community, communityCategories, file }) : children}
     </UICommunityHeader>
@@ -51,11 +51,11 @@ const CommunityHeader = ({
 CommunityHeader.propTypes = {
   communityId: PropTypes.string,
   isActive: PropTypes.bool,
-  onClick: PropTypes.func,
   isSearchResult: PropTypes.bool,
   searchInput: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   loading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 CommunityHeader.defaultProps = {

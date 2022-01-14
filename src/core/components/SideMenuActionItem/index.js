@@ -21,10 +21,10 @@ const SideMenuActionItem = ({
   const ActionItemContainer = ActionItemComponents[element];
   return (
     <ActionItemContainer
-      onClick={onClick}
       className={className}
       active={active}
       disabled={disabled}
+      onClick={onClick}
     >
       {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
       <span className="actionItemChild">{children}</span>
@@ -37,9 +37,9 @@ SideMenuActionItem.propTypes = {
   icon: PropTypes.node,
   children: PropTypes.node,
   active: PropTypes.bool,
-  onClick: PropTypes.func,
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default SideMenuActionItem;

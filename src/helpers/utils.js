@@ -33,14 +33,12 @@ export function isPrivateNetwork(networkSettings) {
 }
 
 export function randomString(length) {
-  return Math.random()
-    .toString(36)
-    .slice(length);
+  return Math.random().toString(36).slice(length);
 }
 
 // Because community users have another type
 export function formatCommunityMentionees(mentionees, users) {
-  return mentionees.map(mentionee => {
+  return mentionees.map((mentionee) => {
     const user = users.find(({ userId }) => userId === mentionee.userId);
     return {
       id: user.userId,
@@ -61,5 +59,5 @@ export function formatMentionees(users) {
 
 export function searchWords(mentionees) {
   // Prolly need to dissect this on upper level TextContent
-  return mentionees?.length ? mentionees[0].userIds.map(userId => `@${userId}`) : [];
+  return mentionees?.length ? mentionees[0].userIds.map((userId) => `@${userId}`) : [];
 }

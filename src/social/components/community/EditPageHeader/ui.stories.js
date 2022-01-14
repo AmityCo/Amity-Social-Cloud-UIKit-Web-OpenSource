@@ -7,7 +7,7 @@ export default {
   title: 'Ui Only/Social/Community',
 };
 
-export const UiEditPageHeader = args => {
+export const UiEditPageHeader = (args) => {
   const [activeTab, setActiveTab] = useState(PageTabs.EDIT_PROFILE);
   return <EditPageHeader {...args} activeTab={activeTab} setActiveTab={setActiveTab} />;
 };

@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 
 const defaultOptions = {
   root: null,
@@ -7,13 +7,16 @@ const defaultOptions = {
 };
 
 const useObserver = (target, { root, rootMargin, threshold } = defaultOptions) => {
-  const options = {
-    root,
-    rootMargin: rootMargin || defaultOptions.rootMargin,
-    threshold: threshold || defaultOptions.threshold,
-  };
+  const options = useMemo(
+    () => ({
+      root,
+      rootMargin: rootMargin || defaultOptions.rootMargin,
+      threshold: threshold || defaultOptions.threshold,
+    }),
+    [root, rootMargin, threshold],
+  );
   const [entry, setEntry] = useState({});
-  const observer = useRef(new IntersectionObserver(entries => setEntry(entries[0]), options));
+  const observer = useRef(new IntersectionObserver((entries) => setEntry(entries[0]), options));
 
   useEffect(() => {
     if (target) {
@@ -27,11 +30,11 @@ const useObserver = (target, { root, rootMargin, threshold } = defaultOptions) =
     if (target) {
       const { current: currentObserver } = observer;
       currentObserver.unobserve(target);
-      observer.current = new IntersectionObserver(entries => setEntry(entries[0]), options);
+      observer.current = new IntersectionObserver((entries) => setEntry(entries[0]), options);
       observer.current.observe(target);
       return () => observer.current.disconnect();
     }
-  }, [rootMargin]);
+  }, [options, rootMargin, target]);
 
   return entry;
 };

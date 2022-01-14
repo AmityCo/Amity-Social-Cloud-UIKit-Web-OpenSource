@@ -8,7 +8,7 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SdkTrendingItem = props => {
+export const SdkTrendingItem = (props) => {
   const [community, isLoading] = useOneCommunity();
   if (isLoading)
     return (

@@ -12,7 +12,7 @@ const UiMentionDropdownContainer = styled.div`
   height: 200px;
 `;
 
-export const UiMentionDropdown = props => (
+export const UiMentionDropdown = (props) => (
   <UiMentionDropdownContainer>
     <SocialMentionDropdown {...props} />
   </UiMentionDropdownContainer>

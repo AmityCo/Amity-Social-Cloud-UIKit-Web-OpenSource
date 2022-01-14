@@ -9,7 +9,7 @@ export default {
 export const UiInputText = ({ onChange, ...rest }) => {
   const [value, setValue] = useState('');
 
-  const handleChange = newVal => {
+  const handleChange = (newVal) => {
     onChange(newVal);
     setValue(newVal);
   };
@@ -36,7 +36,7 @@ UiInputText.argTypes = {
 export const UiPrependAppend = ({ onChange, ...rest }) => {
   const [value, setValue] = useState('');
 
-  const handleChange = newVal => {
+  const handleChange = (newVal) => {
     onChange(newVal);
     setValue(newVal);
   };

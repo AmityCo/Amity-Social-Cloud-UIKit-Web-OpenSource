@@ -61,13 +61,13 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
                 userId={userId}
                 currentUserId={currentUserId}
                 roles={roles}
-                onClick={onClickUser}
                 assignRolesToUsers={assignRolesToUsers}
                 removeRolesFromUsers={removeRolesFromUsers}
                 removeMembers={removeMembers}
                 hasModeratorPermissions={hasModeratorPermissions}
                 isJoined={community.isJoined}
                 isBanned={isBanned}
+                onClick={onClickUser}
               />
             ))}
         </LoadMore>
@@ -81,13 +81,13 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
                 userId={userId}
                 currentUserId={currentUserId}
                 roles={roles}
-                onClick={onClickUser}
                 assignRolesToUsers={assignRolesToUsers}
                 removeRolesFromUsers={removeRolesFromUsers}
                 removeMembers={removeMembers}
                 hasModeratorPermissions={hasModeratorPermissions}
                 isJoined={community.isJoined}
                 isBanned={isBanned}
+                onClick={onClickUser}
               />
             ))}
         </LoadMore>

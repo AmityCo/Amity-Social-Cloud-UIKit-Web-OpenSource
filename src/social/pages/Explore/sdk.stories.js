@@ -5,7 +5,7 @@ export default {
   title: 'Sdk connected/Social/Pages',
 };
 
-export const SdkExplorePage = props => (
+export const SdkExplorePage = (props) => (
   <div style={{ maxWidth: '930px' }}>
     <ExplorePage {...props} />
   </div>

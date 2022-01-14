@@ -14,7 +14,7 @@ import {
   InfiniteScrollContainer,
 } from './styles';
 
-function RecentChat({ onChannelSelect, onAddNewChannelClick, selectedChannelId }) {
+const RecentChat = ({ onChannelSelect, onAddNewChannelClick, selectedChannelId }) => {
   const [channels, hasMore, loadMore] = useChannelsList();
 
   return (
@@ -39,10 +39,10 @@ function RecentChat({ onChannelSelect, onAddNewChannelClick, selectedChannelId }
           loader={hasMore && <span key={0}>Loading...</span>}
         >
           {Array.isArray(channels) &&
-            channels.map(channel => (
+            channels.map((channel) => (
               <ChatItem
-                data-qa-anchor="chat-chat-list-item"
                 key={channel.channelId}
+                data-qa-anchor="chat-chat-list-item"
                 channel={channel}
                 isSelected={selectedChannelId === channel.channelId}
                 onSelect={onChannelSelect}
@@ -52,6 +52,6 @@ function RecentChat({ onChannelSelect, onAddNewChannelClick, selectedChannelId }
       </InfiniteScrollContainer>
     </RecentContainer>
   );
-}
+};
 
 export default customizableComponent('RecentChat', RecentChat);

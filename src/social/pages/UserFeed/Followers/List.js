@@ -1,6 +1,6 @@
 import { FollowRequestStatus } from '@amityco/js-sdk';
 import { FormattedMessage, useIntl } from 'react-intl';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import useUser from '~/core/hooks/useUser';
 import useReport from '~/social/hooks/useReport';
@@ -60,15 +60,15 @@ const UserItem = ({ profileUserId, currentUserId, userId, allowRemoveUser, setUs
     });
   };
 
-  function onClickUserHeader() {
+  const onClickUserHeader = useCallback(() => {
     onClickUser(userId);
     setUserFeedTab(UserFeedTabs.TIMELINE);
-  }
+  }, [onClickUser, setUserFeedTab, userId]);
 
   return (
     <UserHeaderContainer key={userId}>
       <Header>
-        <UserHeader userId={userId} onClick={onClickUserHeader} isBanned={user.isGlobalBan} />
+        <UserHeader userId={userId} isBanned={user.isGlobalBan} onClick={onClickUserHeader} />
         <OptionMenu
           options={[
             !isMe && {

@@ -4,7 +4,7 @@ import Video from '~/core/components/Uploaders/Video';
 import { VideoContainer } from '~/core/components/Uploaders/Video/styles';
 import { Message, VideoPlayerMock, VideoThumbnail } from './styles';
 
-export function Thumbnail({ item, showPlayIcon, showVideoDuration }) {
+export const Thumbnail = ({ item, showPlayIcon, showVideoDuration }) => {
   return (
     <VideoThumbnail
       fileId={item.data.thumbnailFileId}
@@ -12,9 +12,9 @@ export function Thumbnail({ item, showPlayIcon, showVideoDuration }) {
       videoFileId={showVideoDuration && item.data.videoFileId.original}
     />
   );
-}
+};
 
-export function Item({ item }) {
+export const Item = ({ item }) => {
   const fileId =
     item.data.videoFileId.high || item.data.videoFileId.medium || item.data.videoFileId.low;
 
@@ -31,4 +31,4 @@ export function Item({ item }) {
   }
 
   return <Video fileId={fileId} mediaFit="contain" noBorder />;
-}
+};

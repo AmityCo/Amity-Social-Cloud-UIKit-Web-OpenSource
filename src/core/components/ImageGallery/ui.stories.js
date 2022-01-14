@@ -9,7 +9,7 @@ export default {
 export const UiImageGallery = ({ numberOfImages, onChange, ...props }) => {
   const [index, setIndex] = useState(0);
 
-  const handleChange = newIndex => {
+  const handleChange = (newIndex) => {
     onChange(newIndex);
     setIndex(newIndex);
   };

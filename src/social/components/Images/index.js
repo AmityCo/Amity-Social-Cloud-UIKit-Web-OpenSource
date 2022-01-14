@@ -29,9 +29,9 @@ const Images = ({ editing, images = [], onRemove, setImageLoaded }) => {
             numberOfHiddenImages={isLast && numberOfHiddenImages}
             image={image}
             fileId={image.fileId}
+            setImageLoaded={setImageLoaded}
             onClick={() => setSelectedImageIndex(i)}
             onRemove={onRemove}
-            setImageLoaded={setImageLoaded}
           />
         );
       })}

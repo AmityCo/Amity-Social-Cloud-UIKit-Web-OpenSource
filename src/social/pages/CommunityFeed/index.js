@@ -49,7 +49,7 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   const [activeTab, setActiveTab] = useState(CommunityFeedTabs.TIMELINE);
 
   useEffect(() => {
-    if (!tabs.find(tab => tab.value === activeTab)) {
+    if (!tabs.find((tab) => tab.value === activeTab)) {
       setActiveTab(tabs[0].value);
     }
   }, [activeTab, tabs]);

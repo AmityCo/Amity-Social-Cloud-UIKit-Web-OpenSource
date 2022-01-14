@@ -26,7 +26,7 @@ const Caption = styled.div`
 
 const PostAsCommunity = ({ value, onChange }) => (
   <PostAsCommunityContainer>
-    <Checkbox checked={value} onChange={e => onChange(e.target.checked)} />
+    <Checkbox checked={value} onChange={(e) => onChange(e.target.checked)} />
     <div>
       <FormattedMessage id="PostAsCommunity.title" />
       <Caption>

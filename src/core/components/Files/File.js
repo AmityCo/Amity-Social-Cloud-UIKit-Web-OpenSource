@@ -19,7 +19,7 @@ const File = ({ file, onRemove }) => {
       setProgress(file.progress);
     }, 150);
     return () => clearTimeout(timeout);
-  }, [progress, file]);
+  }, [progress, file, isNew]);
 
   return (
     <FileContainer>

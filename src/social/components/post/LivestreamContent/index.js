@@ -11,7 +11,7 @@ const TextContainer = styled.div`
   }
 `;
 
-export default function LivestreamContent({ streamId }) {
+const LivestreamContent = ({ streamId }) => {
   const stream = useStream(streamId);
 
   if (!stream.title && !stream.description) {
@@ -26,4 +26,6 @@ export default function LivestreamContent({ streamId }) {
   );
 
   return <TextContent text={text} />;
-}
+};
+
+export default LivestreamContent;

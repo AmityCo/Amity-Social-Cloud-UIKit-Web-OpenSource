@@ -6,7 +6,7 @@ const MINIMUM_STRING_LENGTH_TO_TRIGGER_QUERY = 1;
 
 const userRepo = new UserRepository();
 
-const useUserQuery = term => {
+const useUserQuery = (term) => {
   const [users, hasMore, loadMore] = useLiveCollection(
     () => userRepo.searchUserByDisplayName(term),
     [term],

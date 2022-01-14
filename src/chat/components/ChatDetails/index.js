@@ -45,9 +45,9 @@ const ChatDetails = ({ channelId, onClose, leaveChat, onEditChatMemberClick, onM
       {shouldShowMembers ? (
         <ChatDetailsMembers
           channelId={channelId}
+          hideMembers={() => setShouldShowMembers(false)}
           onMemberSelect={onMemberSelect}
           onEditChatMemberClick={onEditChatMemberClick}
-          hideMembers={() => setShouldShowMembers(false)}
         />
       ) : (
         <ChatDetailsControls

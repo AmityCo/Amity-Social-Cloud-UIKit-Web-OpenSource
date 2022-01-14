@@ -40,9 +40,9 @@ const PostEditorContent = ({
   return (
     <Renderer
       {...dataProps}
+      placeholder={placeholder}
       onChangeText={onChangeText}
       onRemove={onRemoveChild}
-      placeholder={placeholder}
       {...props}
     />
   );
@@ -51,9 +51,9 @@ const PostEditorContent = ({
 PostEditorContent.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   dataType: PropTypes.oneOf(Object.values(PostDataType)),
+  placeholder: PropTypes.string,
   onChangeText: PropTypes.func,
   onRemoveChild: PropTypes.func,
-  placeholder: PropTypes.string,
 };
 
 export default PostEditorContent;

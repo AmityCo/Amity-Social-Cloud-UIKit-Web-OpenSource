@@ -39,15 +39,15 @@ const TextContent = ({ text, placeholder, onChangeText, queryMentionees }) => {
 TextContent.propTypes = {
   text: PropTypes.string,
   placeholder: PropTypes.string,
-  onChangeText: PropTypes.func,
   queryMentionees: PropTypes.func,
+  onChangeText: PropTypes.func,
 };
 
 TextContent.defaultProps = {
   text: '',
   placeholder: '',
-  onChangeText: () => {},
   queryMentionees: () => {},
+  onChangeText: () => {},
 };
 
 export default TextContent;

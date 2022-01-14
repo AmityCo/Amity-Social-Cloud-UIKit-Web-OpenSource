@@ -112,7 +112,7 @@ const DefaultPostRenderer = ({
       onOk: handleDeletePost,
     });
 
-  const pollPost = childrenPosts.find(childPost => childPost.dataType === PostDataType.PollPost);
+  const pollPost = childrenPosts.find((childPost) => childPost.dataType === PostDataType.PollPost);
 
   const allOptions = [
     canEditPost({
@@ -153,7 +153,7 @@ const DefaultPostRenderer = ({
       },
   ].filter(Boolean);
 
-  const childrenContent = childrenPosts?.map(childPost => ({
+  const childrenContent = childrenPosts?.map((childPost) => ({
     dataType: childPost.dataType,
     data: childPost.data,
   }));
@@ -163,7 +163,7 @@ const DefaultPostRenderer = ({
 
   // live stream post = empty text post + child livestream post
   const livestreamContent = childrenContent.find(
-    child => child.dataType === PostDataType.LivestreamPost,
+    (child) => child.dataType === PostDataType.LivestreamPost,
   );
 
   return (
@@ -200,8 +200,8 @@ const DefaultPostRenderer = ({
           )}
 
           {isEditing && (
-            <Modal onCancel={closeEditingPostModal} title={formatMessage({ id: 'post.editPost' })}>
-              <PostEditor onSave={closeEditingPostModal} postId={postId} />
+            <Modal title={formatMessage({ id: 'post.editPost' })} onCancel={closeEditingPostModal}>
+              <PostEditor postId={postId} onSave={closeEditingPostModal} />
             </Modal>
           )}
         </>

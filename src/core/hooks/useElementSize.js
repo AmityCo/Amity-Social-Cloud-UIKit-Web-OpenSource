@@ -14,7 +14,7 @@ const useElementSize = () => {
     const element = ref.current;
     if (element) {
       const { height, width } = element.getBoundingClientRect();
-      const sizeExists = [height, width].every(item => item !== undefined);
+      const sizeExists = [height, width].every((item) => item !== undefined);
       const sizeChanged = height !== size.height || width !== size.width;
 
       // prevent extra render
@@ -25,6 +25,7 @@ const useElementSize = () => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
 
   useResizeObserver(ref.current, setSize);

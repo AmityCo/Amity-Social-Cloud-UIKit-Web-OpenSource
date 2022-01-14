@@ -57,7 +57,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
         <FormBlock title={<FormattedMessage id="UserProfileForm.title" />}>
           <Controller
             name="avatarFileId"
-            render={props => <AvatarUploader {...props} />}
+            render={(props) => <AvatarUploader {...props} />}
             control={control}
           />
           <Field error={errors.name}>
@@ -68,13 +68,13 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               <Counter>{displayName.length}/100</Counter>
             </LabelCounterWrapper>
             <TextField
+              ref={register({
+                required: formatMessage({ id: 'UserProfileForm.requiredDisplayName' }),
+              })}
               placeholder={formatMessage({ id: 'UserProfileForm.namePlaceholder' })}
               id="displayName"
               name="displayName"
               maxLength={100}
-              ref={register({
-                required: formatMessage({ id: 'UserProfileForm.requiredDisplayName' }),
-              })}
             />
             <ErrorMessage errors={errors} name="displayName" />
           </Field>
@@ -86,10 +86,10 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               <Counter>{description.length}/180</Counter>
             </LabelCounterWrapper>
             <AboutTextarea
+              ref={register()}
               placeholder={formatMessage({ id: 'UserProfileForm.requiredDescription' })}
               name="description"
               maxLength={180}
-              ref={register()}
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>

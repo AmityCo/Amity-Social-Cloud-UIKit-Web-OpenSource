@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { FormattedMessage } from 'react-intl';
 
@@ -90,6 +90,7 @@ function useKeepScrollBottom(ref, deps) {
         ref.current.scrollTo({ top: ref.current.scrollHeight });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current, scrollBottom, ...deps]);
 }
 
@@ -100,18 +101,20 @@ const CommunityForm = ({
   className,
   onCancel,
 }) => {
-  const categoryIds = community?.categoryIds ?? [];
-  const defaultValues = {
-    avatarFileId: null,
-    description: '',
-    displayName: '',
-    isPublic: true,
-    tags: [],
-    userIds: [],
-    categoryId: categoryIds[0] ?? '',
+  const defaultValues = useMemo(
+    () => ({
+      avatarFileId: null,
+      description: '',
+      displayName: '',
+      isPublic: true,
+      tags: [],
+      userIds: [],
+      categoryId: community?.categoryIds?.[0] ?? '',
 
-    ...community, // if edit, community will erase the defaults
-  };
+      ...community, // if edit, community will erase the defaults
+    }),
+    [community],
+  );
 
   const { register, handleSubmit, errors, setError, watch, control, formState } = useForm({
     defaultValues,
@@ -142,10 +145,10 @@ const CommunityForm = ({
         avatarFileId,
       }),
     );
-  }, [displayName, description, categoryId, userIds, isPublic, avatarFileId]);
+  }, [displayName, description, categoryId, userIds, isPublic, avatarFileId, defaultValues]);
 
   const [validateAndSubmit, submitting] = useAsyncCallback(
-    async data => {
+    async (data) => {
       if (!data.displayName.trim()) {
         setError('displayName', { message: 'Name cannot be empty' });
         return;
@@ -186,7 +189,7 @@ const CommunityForm = ({
   useKeepScrollBottom(formBodyRef, [formState]);
 
   return (
-    <Form className={className} onSubmit={handleSubmit(validateAndSubmit)} edit={edit}>
+    <Form className={className} edit={edit} onSubmit={handleSubmit(validateAndSubmit)}>
       <FormBody ref={formBodyRef}>
         <FormBlock title="General" edit={edit}>
           <Field>
@@ -207,9 +210,6 @@ const CommunityForm = ({
               <Counter>{displayName.length}/30</Counter>
             </LabelCounterWrapper>
             <TextField
-              placeholder="Enter community name"
-              id="displayName"
-              name="displayName"
               ref={register({
                 required: 'Name is required',
                 maxLength: {
@@ -217,6 +217,9 @@ const CommunityForm = ({
                   message: 'Name is too long',
                 },
               })}
+              placeholder="Enter community name"
+              id="displayName"
+              name="displayName"
             />
             <ErrorMessage errors={errors} name="displayName" />
           </Field>
@@ -228,11 +231,11 @@ const CommunityForm = ({
               <Counter>{description.length}/180</Counter>
             </LabelCounterWrapper>
             <AboutTextarea
-              placeholder="Enter description"
-              name="description"
               ref={register({
                 maxLength: { value: 180, message: 'Description text is too long' },
               })}
+              placeholder="Enter description"
+              name="description"
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
@@ -241,9 +244,9 @@ const CommunityForm = ({
               <FormattedMessage id="community.category" />
             </Label>
             <Controller
-              name="categoryId"
               ref={register({ required: 'Category is required' })}
-              render={props => <CategorySelector parentContainer={formBodyElement} {...props} />}
+              name="categoryId"
+              render={(props) => <CategorySelector parentContainer={formBodyElement} {...props} />}
               control={control}
               defaultValue=""
             />
@@ -289,7 +292,7 @@ const CommunityForm = ({
               </Label>
               <Controller
                 name="userIds"
-                render={props => <UserSelector parentContainer={formBodyElement} {...props} />}
+                render={(props) => <UserSelector parentContainer={formBodyElement} {...props} />}
                 control={control}
               />
               <ErrorMessage errors={errors} name="userIds" />
@@ -300,7 +303,7 @@ const CommunityForm = ({
       <Footer edit={edit}>
         <ConditionalRender condition={!edit}>
           <Button
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               onCancel();
             }}

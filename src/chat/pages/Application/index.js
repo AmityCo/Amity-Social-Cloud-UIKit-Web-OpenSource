@@ -25,7 +25,7 @@ const ChatApplication = ({
   const showChatDetails = () => setShouldShowChatDetails(true);
   const hideChatDetails = () => setShouldShowChatDetails(false);
 
-  const handleChannelSelect = newChannelData => {
+  const handleChannelSelect = (newChannelData) => {
     if (currentChannelData?.channelId === newChannelData?.channelId) return;
     hideChatDetails();
     onChannelSelect(newChannelData);
@@ -54,14 +54,15 @@ const ChatApplication = ({
   useEffect(() => {
     if (!defaultChannelId) return;
     handleChannelSelect({ channelId: defaultChannelId, channelType: ChannelType.Standard });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultChannelId]);
 
   return (
     <ApplicationContainer>
       <RecentChat
-        onChannelSelect={handleChannelSelect}
         selectedChannelId={currentChannelData?.channelId}
         membershipFilter={membershipFilter}
+        onChannelSelect={handleChannelSelect}
         onAddNewChannelClick={onAddNewChannel}
       />
       {currentChannelData && (
@@ -75,10 +76,10 @@ const ChatApplication = ({
       {shouldShowChatDetails && currentChannelData && (
         <ChatDetails
           channelId={currentChannelData.channelId}
+          leaveChat={leaveChat}
           onEditChatMemberClick={onEditChatMember}
           onMemberSelect={onMemberSelect}
           onClose={hideChatDetails}
-          leaveChat={leaveChat}
         />
       )}
     </ApplicationContainer>

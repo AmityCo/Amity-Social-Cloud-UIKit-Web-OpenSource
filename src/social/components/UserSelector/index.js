@@ -33,8 +33,8 @@ const UserSelector = ({
       value: userId,
     }));
 
-  const selectedUsers = userIds.map(userId => ({
-    name: (queriedUsers.find(user => user.userId === userId) ?? {}).displayName,
+  const selectedUsers = userIds.map((userId) => ({
+    name: (queriedUsers.find((user) => user.userId === userId) ?? {}).displayName,
     value: userId,
   }));
 
@@ -46,7 +46,7 @@ const UserSelector = ({
 
   const [inputRef, inputElement] = useElement();
 
-  const handleChange = value => {
+  const handleChange = (value) => {
     setQuery(value);
     // open dropdown only when there some data in the text input
     setIsOpen(!!value);
@@ -67,8 +67,8 @@ const UserSelector = ({
           ref={inputRef}
           type="text"
           value={query}
-          onChange={e => handleChange(e.target.value)}
           placeholder={formatMessage({ id: 'UserSelector.placeholder' })}
+          onChange={(e) => handleChange(e.target.value)}
         />
       </Selector>
     );
@@ -79,27 +79,27 @@ const UserSelector = ({
       value={selectedUsers}
       // prevent show dropdown for empty query
       options={query ? options : []}
-      onSelect={({ value }) => {
-        onChange([...userIds, value]);
-        inputElement.focus();
-        // clear input on select item
-        setQuery('');
-      }}
       renderTrigger={triggerRenderer}
       renderItem={itemRenderer}
       parentContainer={parentContainer}
       isOpen={isOpen}
       handleClose={close}
       multiple
+      onSelect={({ value }) => {
+        onChange([...userIds, value]);
+        inputElement.focus();
+        // clear input on select item
+        setQuery('');
+      }}
     />
   );
 };
 
 UserSelector.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
-  onChange: PropTypes.func,
   parentContainer: PropTypes.element,
   currentUserId: PropTypes.number,
+  onChange: PropTypes.func,
 };
 
 export default memo(withSDK(customizableComponent('UserSelector', UserSelector)));

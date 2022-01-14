@@ -11,7 +11,7 @@ export default {
 const ImageRenderer = ({ uploading, uploaded }) => {
   const allFiles = [...uploading, ...uploaded];
 
-  return allFiles.map(file => {
+  return allFiles.map((file) => {
     if ('fileId' in file) {
       return <Image src={file.fileUrl} width="100" alt={file.name} />;
     }
@@ -25,7 +25,7 @@ export const SimpleImageUploader = () => {
   const [, setUploadedImages] = useState([]);
 
   return (
-    <UiKitFileLoader onChange={images => setLoadedImages(images)}>
+    <UiKitFileLoader onChange={(images) => setLoadedImages(images)}>
       <div
         style={{
           padding: '1em',
@@ -34,7 +34,7 @@ export const SimpleImageUploader = () => {
         }}
       >
         Click/Drop to upload
-        <UiKitUploader files={loadedImages} onChange={images => setUploadedImages(images)}>
+        <UiKitUploader files={loadedImages} onChange={(images) => setUploadedImages(images)}>
           <ImageRenderer />
         </UiKitUploader>
       </div>

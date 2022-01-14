@@ -26,7 +26,7 @@ function getNormalizedUnreadCount(channelUnreadCount) {
 const ChatItem = ({ channel, isSelected, onSelect }) => {
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
-  const handleChatItemClick = e => {
+  const handleChatItemClick = (e) => {
     e.stopPropagation();
     onSelect({ channelId: channel.channelId, channelType: channel.type });
   };
@@ -34,7 +34,7 @@ const ChatItem = ({ channel, isSelected, onSelect }) => {
   const normalizedUnreadCount = getNormalizedUnreadCount(channel.unreadCount);
 
   return (
-    <ChatItemContainer onClick={handleChatItemClick} active={isSelected} title={chatName}>
+    <ChatItemContainer active={isSelected} title={chatName} onClick={handleChatItemClick}>
       <ChatItemLeft>
         <Avatar
           avatarUrl={chatAvatar}

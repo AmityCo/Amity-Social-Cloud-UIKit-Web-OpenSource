@@ -45,19 +45,19 @@ const UserInfo = ({
       fileUrl={fileUrl}
       displayName={displayName || formatMessage({ id: 'anonymous' })}
       description={description}
-      onFollowRequest={follow}
-      onFollowDecline={onFollowDecline}
       setActiveTab={setActiveTab}
       setFollowActiveTab={setFollowActiveTab}
       isMyProfile={userId === currentUserId}
-      onEditUser={onEditUser}
-      onMessageUser={onMessageUser}
       isFollowPending={isFollowPending}
       isPrivateNetwork={isPrivateNetwork}
       isFollowNone={isFollowNone}
       isFollowAccepted={isFollowAccepted}
       followerCount={followerCount}
       followingCount={followingCount}
+      onFollowRequest={follow}
+      onFollowDecline={onFollowDecline}
+      onEditUser={onEditUser}
+      onMessageUser={onMessageUser}
     />
   );
 };

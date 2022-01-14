@@ -8,10 +8,10 @@ import { ControlItem, ControlItemLabel, SideWrapper, GroupSettingIcon } from './
 
 const channelRepo = new ChannelRepository();
 
-function MenuGroupSetting({ chatName, channelId }) {
+const MenuGroupSetting = ({ chatName, channelId }) => {
   const [shouldShowSettingsModal, setShouldShowSettingsModal] = useState(false);
 
-  const updateGroupName = newGroupChatName => {
+  const updateGroupName = (newGroupChatName) => {
     channelRepo.setDisplayName({ channelId, displayName: newGroupChatName });
   };
 
@@ -31,12 +31,12 @@ function MenuGroupSetting({ chatName, channelId }) {
           title={<FormattedMessage id="chat.groupSetting" />}
           chatName={chatName}
           submitButtonName={<FormattedMessage id="general.done.capital" />}
-          onSubmit={updateGroupName}
           closeModal={() => setShouldShowSettingsModal(false)}
+          onSubmit={updateGroupName}
         />
       )}
     </Fragment>
   );
-}
+};
 
 export default MenuGroupSetting;

@@ -1,12 +1,12 @@
 import { parseToHsl } from 'polished';
 
-const toFixed = value => value.toFixed(1);
-const toFixedPercentage = value => {
+const toFixed = (value) => value.toFixed(1);
+const toFixedPercentage = (value) => {
   const asPercentage = Math.min(value * 100, 100);
   return toFixed(asPercentage);
 };
 
-export const hslObjectToString = hslObject => {
+export const hslObjectToString = (hslObject) => {
   const { hue, saturation, lightness, alpha } = hslObject;
 
   const hsl = [
@@ -18,7 +18,7 @@ export const hslObjectToString = hslObject => {
   return alpha ? `hsla(${[...hsl, alpha].join(',')})` : `hsl(${hsl.join(',')})`;
 };
 
-export const hexToHslString = hexColor => {
+export const hexToHslString = (hexColor) => {
   const hslObject = parseToHsl(hexColor);
   return hslObjectToString(hslObject);
 };
@@ -41,7 +41,7 @@ export const COLOR_SHADES = [0.25, 0.4, 0.5, 0.75];
  * Adds color variations based on the COLOR_SHADES constant.
  * @param {Object} mergedPaletteTheme
  */
-export const buildPaletteTheme = mergedPaletteTheme => {
+export const buildPaletteTheme = (mergedPaletteTheme) => {
   const { system, ...otherColors } = mergedPaletteTheme;
 
   // Create a color theme object that uses hsl string values.

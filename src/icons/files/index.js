@@ -62,7 +62,7 @@ const FileIcon = ({ file, ...props }) => {
   const typeLowerCase = type.toLowerCase();
 
   const resolved = Object.entries(MIMETYPES).find(([, mimetypes]) =>
-    mimetypes.find(mimetype => typeLowerCase.includes(mimetype)),
+    mimetypes.find((mimetype) => typeLowerCase.includes(mimetype)),
   );
   const extension = resolved ? resolved[0] : name.slice(name.lastIndexOf('.') + 1);
 

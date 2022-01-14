@@ -16,10 +16,10 @@ let spawnNewNotification; // for modfying NotificationContainer state outside
 export const NotificationsContainer = () => {
   const [notifications, setNotifications] = useState([]);
 
-  const removeNotification = id =>
+  const removeNotification = (id) =>
     setNotifications &&
-    setNotifications(prevNotifications =>
-      prevNotifications.filter(notification => notification.id !== id),
+    setNotifications((prevNotifications) =>
+      prevNotifications.filter((notification) => notification.id !== id),
     );
 
   spawnNewNotification = ({ duration = DEFAULT_NOTIFICATION_DURATION, ...notificationData }) => {
@@ -42,10 +42,10 @@ export const NotificationsContainer = () => {
   This interface rely on NotificationsContainer being rendered by UIKITProvider in the react tree
 */
 export const notification = {
-  success: data => spawnNewNotification({ ...data, icon: <SuccessIcon /> }),
-  info: data => spawnNewNotification({ ...data, icon: <InfoIcon /> }),
-  error: data => spawnNewNotification({ ...data, icon: <ErrorIcon /> }),
-  show: data => spawnNewNotification(data),
+  success: (data) => spawnNewNotification({ ...data, icon: <SuccessIcon /> }),
+  info: (data) => spawnNewNotification({ ...data, icon: <InfoIcon /> }),
+  error: (data) => spawnNewNotification({ ...data, icon: <ErrorIcon /> }),
+  show: (data) => spawnNewNotification(data),
 };
 
 export default Notification;

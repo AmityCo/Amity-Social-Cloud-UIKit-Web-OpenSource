@@ -25,8 +25,8 @@ const File = ({
       type={file.type}
       url={fileUrl}
       progress={progress}
-      onRemove={onRemove}
       isRejected={isRejected}
+      onRemove={onRemove}
       onRetry={() => retry()}
     />
   );
@@ -36,9 +36,9 @@ File.propTypes = {
   'data-qa-anchor': PropTypes.string,
   file: PropTypes.instanceOf(File).isRequired,
   progress: PropTypes.number,
-  onRemove: PropTypes.func,
   isRejected: PropTypes.bool,
   retry: PropTypes.func,
+  onRemove: PropTypes.func,
 };
 
 File.defaultProps = {

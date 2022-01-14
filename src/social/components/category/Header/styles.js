@@ -60,7 +60,7 @@ const CategoryHeader = ({
   loading,
 }) => {
   const handleClick = () => onClick(categoryId);
-  const blockClick = e => e.stopPropagation();
+  const blockClick = (e) => e.stopPropagation();
 
   return (
     <CategoryHeaderContainer
@@ -89,8 +89,8 @@ CategoryHeader.propTypes = {
   name: PropTypes.string,
   avatarFileUrl: PropTypes.string,
   children: PropTypes.node,
-  onClick: PropTypes.func,
   loading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default customizableComponent('CategoryHeader', CategoryHeader);

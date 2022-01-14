@@ -24,8 +24,8 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
     <SideMenuSection heading={<FormattedMessage id="sidesectioncommunity.community" />}>
       <SideMenuActionItem
         icon={<NewsIcon />}
-        onClick={() => onChangePage(PageTypes.NewsFeed)}
         active={page.type === PageTypes.NewsFeed}
+        onClick={() => onChangePage(PageTypes.NewsFeed)}
       >
         <FormattedMessage id="sidesectioncommunity.newfeed" />
       </SideMenuActionItem>
@@ -33,8 +33,8 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
       {!shouldHideExplore && (
         <SideMenuActionItem
           icon={<SearchIcon />}
-          onClick={() => onChangePage(PageTypes.Explore)}
           active={page.type === PageTypes.Explore}
+          onClick={() => onChangePage(PageTypes.Explore)}
         >
           <FormattedMessage id="sidesectioncommunity.explore" />
         </SideMenuActionItem>

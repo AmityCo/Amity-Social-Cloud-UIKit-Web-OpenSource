@@ -9,7 +9,7 @@ import Avatar from '~/core/components/Avatar';
 import CommunityName from '~/social/components/community/Name';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
-const CommunityHeaderContainer = styled.a.attrs(props => props)`
+const CommunityHeaderContainer = styled.a.attrs((props) => props)`
   display: grid;
   grid-template-areas: 'avatar title' 'avatar children';
   grid-template-columns: min-content auto;
@@ -65,9 +65,9 @@ const UICommunityHeader = ({
 }) => (
   <CommunityHeaderContainer
     isActive={isActive}
-    onClick={() => onClick(communityId)}
     hasChildren={!!children}
     $loading={loading}
+    onClick={() => onClick(communityId)}
   >
     <CommunityHeaderAvatar
       avatar={avatarFileUrl}
@@ -95,7 +95,6 @@ UICommunityHeader.propTypes = {
   communityId: PropTypes.string,
   isActive: PropTypes.bool,
   avatarFileUrl: PropTypes.string,
-  onClick: PropTypes.func,
   isOfficial: PropTypes.bool,
   isPublic: PropTypes.bool,
   isSearchResult: PropTypes.bool,
@@ -103,6 +102,7 @@ UICommunityHeader.propTypes = {
   searchInput: PropTypes.string,
   children: PropTypes.node,
   loading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 UICommunityHeader.defaultProps = {

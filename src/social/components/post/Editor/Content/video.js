@@ -18,9 +18,9 @@ const VideoContentList = ({ items, onRemove }) => {
     <GalleryGrid
       itemKeyProp="postId"
       items={items}
-      onClick={index => setPlayingPostId(items[index].postId)}
+      onClick={(index) => setPlayingPostId(items[index].postId)}
     >
-      {item => {
+      {(item) => {
         if (playingPostId === item.postId) {
           const fileId =
             item.data.videoFileId.high || item.data.videoFileId.medium || item.data.videoFileId.low;
@@ -39,8 +39,8 @@ const VideoContentList = ({ items, onRemove }) => {
               fileId={fileId}
               mediaFit="cover"
               noBorder
-              onRemove={() => onRemove(item.postId)}
               autoPlay
+              onRemove={() => onRemove(item.postId)}
             />
           );
         }

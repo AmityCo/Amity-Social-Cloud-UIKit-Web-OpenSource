@@ -35,8 +35,8 @@ const Image = ({
       url={fileUrl}
       mediaFit={mediaFit}
       noBorder={noBorder}
-      onRemove={onRemove}
       overlayElements={overlayElements}
+      onRemove={onRemove}
     />
   );
 };
@@ -48,8 +48,8 @@ Image.propTypes = {
   loading: PropTypes.bool,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
   noBorder: PropTypes.bool,
-  onRemove: PropTypes.func,
   overlayElements: PropTypes.node,
+  onRemove: PropTypes.func,
 };
 
 Image.defaultProps = {

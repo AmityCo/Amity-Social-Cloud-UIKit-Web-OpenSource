@@ -18,15 +18,15 @@ const Avatar = ({ className, avatar = null, showOverlay, size, onClick, loading,
     <AvatarContainer
       className={cx(className, { visible, clickable: !!onClick })}
       loading={loading}
-      onClick={onClick}
       size={size}
+      onClick={onClick}
       {...props}
     >
       <ConditionalRender condition={avatar && showOverlay}>
         <AvatarOverlay {...props}>
-          <Img onError={onError} onLoad={onLoad} src={avatar} />
+          <Img src={avatar} onError={onError} onLoad={onLoad} />
         </AvatarOverlay>
-        <Img onError={onError} onLoad={onLoad} src={avatar} />
+        <Img src={avatar} onError={onError} onLoad={onLoad} />
       </ConditionalRender>
     </AvatarContainer>
   );

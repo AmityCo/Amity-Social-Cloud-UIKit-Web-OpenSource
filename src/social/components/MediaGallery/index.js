@@ -11,13 +11,13 @@ import { EmptyIcons, EmptyText, RECORDS_PER_PAGE, tabs } from './constants';
 import { MediaGalleryContainer, Tabs } from './styles';
 
 const thumbnailRenderers = {
-  [PostDataType.VideoPost]: props => <VideoItem.Thumbnail {...props} showVideoDuration />,
-  [PostDataType.LivestreamPost]: props => (
+  [PostDataType.VideoPost]: (props) => <VideoItem.Thumbnail {...props} showVideoDuration />,
+  [PostDataType.LivestreamPost]: (props) => (
     <StreamItem.Thumbnail {...props} showLivestreamTitle showVideoDuration />
   ),
 };
 
-function MediaGallery({ targetId, targetType }) {
+const MediaGallery = ({ targetId, targetType }) => {
   const [activeTab, setActiveTab] = useState(PostDataType.ImagePost);
 
   const [posts, hasMore, loadMore, loading, loadingMore] = useMediaGallery({
@@ -49,6 +49,6 @@ function MediaGallery({ targetId, targetType }) {
       )}
     </MediaGalleryContainer>
   );
-}
+};
 
 export default memo(customizableComponent('MediaGallery', MediaGallery));

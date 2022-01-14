@@ -48,7 +48,7 @@ const UICommunityCard = ({
           />
           <Truncate lines={1}>
             <CategoriesList>
-              {(communityCategories || []).map(category => category.name).join(', ')}
+              {(communityCategories || []).map((category) => category.name).join(', ')}
             </CategoriesList>
           </Truncate>
         </CoverContent>
@@ -94,11 +94,11 @@ UICommunityCard.propTypes = {
   ),
   membersCount: PropTypes.number,
   description: PropTypes.string,
-  onClick: PropTypes.func,
   isOfficial: PropTypes.bool,
   isPublic: PropTypes.bool,
   name: PropTypes.string,
   loading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default customizableComponent('UICommunityCard', UICommunityCard);

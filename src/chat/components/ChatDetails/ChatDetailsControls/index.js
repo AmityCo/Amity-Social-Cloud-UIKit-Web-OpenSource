@@ -18,7 +18,7 @@ const ChatDetailsControls = ({ channelId, chatName, showMembers, leaveChat, memb
 
   const isDirectChat = memberCount <= 2;
 
-  const handleLeaveChatClick = e => {
+  const handleLeaveChatClick = (e) => {
     e.stopPropagation();
 
     confirm({

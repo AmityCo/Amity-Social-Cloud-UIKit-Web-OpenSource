@@ -53,7 +53,7 @@ const CommentList = ({
       appendIcon={null}
       isExpanded={isExpanded}
     >
-      {commentIds.map(commentId => (
+      {commentIds.map((commentId) => (
         <Comment key={commentId} commentId={commentId} readonly={readonly} />
       ))}
     </LoadMore>

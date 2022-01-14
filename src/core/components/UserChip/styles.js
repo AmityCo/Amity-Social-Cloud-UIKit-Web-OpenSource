@@ -35,15 +35,21 @@ const RoundButton = styled(Button)`
 `;
 
 const UserChip = ({ userId, displayName = 'Anonymous', fileUrl, onClick = () => {}, onRemove }) => {
-  const handleClick = useCallback(e => {
-    e.stopPropagation();
-    onClick(userId);
-  }, []);
+  const handleClick = useCallback(
+    (e) => {
+      e.stopPropagation();
+      onClick(userId);
+    },
+    [onClick, userId],
+  );
 
-  const handleRemove = useCallback(e => {
-    e.stopPropagation();
-    onRemove(userId);
-  }, []);
+  const handleRemove = useCallback(
+    (e) => {
+      e.stopPropagation();
+      onRemove(userId);
+    },
+    [onRemove, userId],
+  );
 
   return (
     <Chip onClick={handleClick}>

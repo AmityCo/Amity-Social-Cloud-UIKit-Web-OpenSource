@@ -21,14 +21,14 @@ const LoadMore = ({
       <div>
         {children}
         {hasMore && (
-          <LoadMoreButton onClick={loadMore} className={className}>
+          <LoadMoreButton className={className} onClick={loadMore}>
             {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}
           </LoadMoreButton>
         )}
       </div>
       {children.length && (
         <div>
-          <LoadMoreButton onClick={() => setExpanded(true)} className={className}>
+          <LoadMoreButton className={className} onClick={() => setExpanded(true)}>
             {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}
           </LoadMoreButton>
         </div>

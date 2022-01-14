@@ -96,7 +96,7 @@ const StyledComment = ({
 
         <ConditionalRender condition={isEditing}>
           <CommentEditContainer>
-            <CommentEditTextarea value={text} onChange={e => setText(e.target.value)} />
+            <CommentEditTextarea value={text} onChange={(e) => setText(e.target.value)} />
             <ButtonContainer>
               <Button onClick={cancelEditing}>
                 <FormattedMessage id="cancel" />
@@ -140,7 +140,6 @@ StyledComment.propTypes = {
   createdAt: PropTypes.instanceOf(Date),
   editedAt: PropTypes.instanceOf(Date),
   text: PropTypes.string,
-  onClickReply: PropTypes.func,
   handleReportComment: PropTypes.func,
   handleEdit: PropTypes.func.isRequired,
   startEditing: PropTypes.func.isRequired,
@@ -151,6 +150,7 @@ StyledComment.propTypes = {
   isReported: PropTypes.bool,
   isReplyComment: PropTypes.bool,
   isBanned: PropTypes.bool,
+  onClickReply: PropTypes.func,
 };
 
 export default StyledComment;

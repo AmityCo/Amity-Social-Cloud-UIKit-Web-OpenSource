@@ -56,7 +56,7 @@ const UiKitProvider = forwardRef(
     const SDKInfo = useMemo(() => {
       if (!client) {
         client = new ASCClient({ apiKey, apiEndpoint });
-        client.on('connectionStatusChanged', data => {
+        client.on('connectionStatusChanged', (data) => {
           onConnectionStatusChange && onConnectionStatusChange(data);
 
           if (data.newValue === ConnectionStatus.Connected) {
@@ -79,6 +79,7 @@ const UiKitProvider = forwardRef(
       }
 
       return { client };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [apiKey, userId, displayName, authToken, preventReconnect]);
 
     useImperativeHandle(ref, () => ({

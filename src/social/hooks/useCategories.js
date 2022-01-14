@@ -2,7 +2,7 @@ import { CommunityRepository } from '@amityco/js-sdk';
 
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-const useCategories = query => {
+const useCategories = (query) => {
   return useLiveCollection(() => CommunityRepository.queryCategories(query), []);
 };
 

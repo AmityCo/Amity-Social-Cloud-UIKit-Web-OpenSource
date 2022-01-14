@@ -13,13 +13,13 @@ const SideNavBar = () => {
 
   return (
     <SideNavContainer>
-      {Mockup.map(tab => (
+      {Mockup.map((tab) => (
         <MenuTab
           key={tab.name}
           active={active === tab.name}
-          onClick={() => setActive(tab.name)}
           icon={tab.icon}
           name={tab.name}
+          onClick={() => setActive(tab.name)}
         />
       ))}
     </SideNavContainer>

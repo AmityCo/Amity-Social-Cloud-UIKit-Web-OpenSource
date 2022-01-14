@@ -6,7 +6,7 @@ export const COUNTER_VALUE_PLACEHOLDER = '{counter}';
 
 const DefaultButtonRenderer = ({ icon = null, onClick, disabled }) => {
   return (
-    <CircleButton onClick={onClick} disabled={disabled}>
+    <CircleButton disabled={disabled} onClick={onClick}>
       {icon}
     </CircleButton>
   );
@@ -31,7 +31,7 @@ const InputCounter = ({
   return (
     <CounterContainer>
       {renderDecButton({
-        onClick: e => {
+        onClick: (e) => {
           e.preventDefault();
           const newValue = counter - 1;
           setCounter(newValue);
@@ -42,7 +42,7 @@ const InputCounter = ({
       })}
       {renderResult({ output: resultFormat.replace(COUNTER_VALUE_PLACEHOLDER, counter) })}
       {renderIncButton({
-        onClick: e => {
+        onClick: (e) => {
           e.preventDefault();
           const newValue = counter + 1;
           setCounter(newValue);

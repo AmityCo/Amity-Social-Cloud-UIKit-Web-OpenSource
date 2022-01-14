@@ -34,14 +34,14 @@ const GalleryContent = ({
       <GalleryGrid
         className={className}
         items={items}
-        onClick={i => {
+        truncate={truncate}
+        onClick={(i) => {
           if (!items[i].skeleton) {
             setIndex(i);
           }
         }}
-        truncate={truncate}
       >
-        {item => {
+        {(item) => {
           if (item.skeleton) {
             return <Image loading />;
           }
@@ -57,8 +57,8 @@ const GalleryContent = ({
       </GalleryGrid>
 
       {index !== null && (
-        <ImageGallery index={index} items={itemsRaw} onChange={setIndex} showCounter={showCounter}>
-          {item => {
+        <ImageGallery index={index} items={itemsRaw} showCounter={showCounter} onChange={setIndex}>
+          {(item) => {
             if (!item) {
               return null;
             }

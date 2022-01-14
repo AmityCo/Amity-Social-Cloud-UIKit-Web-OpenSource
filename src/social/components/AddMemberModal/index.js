@@ -31,7 +31,7 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
     },
   });
 
-  const validateNameAndSubmit = async data => {
+  const validateNameAndSubmit = async (data) => {
     if (data.members.length === 0) {
       setError('members', {
         message: formatMessage({ id: 'AddMemberModal.membersValidationError' }),
@@ -50,7 +50,7 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
               <MembersField error={errors.members}>
                 <Controller
                   name="members"
-                  render={props => <UserSelector {...props} />}
+                  render={(props) => <UserSelector {...props} />}
                   control={control}
                 />
                 <ErrorMessage errors={errors} name="members" />

@@ -10,7 +10,7 @@ export default {
 export const UserSelector = () => {
   const [{ value, onChange }, updateArgs] = useArgs();
 
-  const setValue = newVal => {
+  const setValue = (newVal) => {
     onChange(newVal);
     updateArgs({ value: newVal });
   };

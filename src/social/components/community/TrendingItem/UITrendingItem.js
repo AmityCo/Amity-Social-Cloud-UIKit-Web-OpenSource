@@ -110,7 +110,7 @@ const UITrendingItem = ({
             <ConditionalRender condition={categories.length > 0}>
               <Truncate lines={1}>
                 <Categories>
-                  {categories.map(category => (
+                  {categories.map((category) => (
                     <Category key={category.categoryId}>{category.name}</Category>
                   ))}
                 </Categories>
@@ -143,11 +143,11 @@ UITrendingItem.propTypes = {
     }),
   ),
   membersCount: PropTypes.number,
-  onClick: PropTypes.func,
   isOfficial: PropTypes.bool,
   isPublic: PropTypes.bool,
   name: PropTypes.string,
   loading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 UITrendingItem.defaultProps = {

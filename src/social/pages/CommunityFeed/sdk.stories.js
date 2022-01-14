@@ -9,7 +9,7 @@ export default {
   title: 'SDK Connected/Social/Pages',
 };
 
-export const SDKCommunityProfilePage = props => {
+export const SDKCommunityProfilePage = (props) => {
   const [community, isLoading] = useOneCommunity();
   if (isLoading)
     return (

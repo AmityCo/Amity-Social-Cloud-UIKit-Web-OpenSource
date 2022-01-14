@@ -26,7 +26,7 @@ const Followers = ({
 
   const { formatMessage } = useIntl();
   const [allTabs, setAllTabs] = useState(
-    Object.values(FollowersTabs).map(value => ({
+    Object.values(FollowersTabs).map((value) => ({
       value,
       label: value,
     })),
@@ -40,7 +40,7 @@ const Followers = ({
     if (pendingUsers?.length && isMe && isPrivateNetwork) {
       setAllTabs(
         Object.values(FollowersTabs)
-          .map(value => ({
+          .map((value) => ({
             value,
             label: value,
           }))
@@ -51,7 +51,7 @@ const Followers = ({
       );
     } else {
       setAllTabs(
-        Object.values(FollowersTabs).map(value => ({
+        Object.values(FollowersTabs).map((value) => ({
           value,
           label: value,
         })),
@@ -59,7 +59,7 @@ const Followers = ({
 
       setActiveTab(FollowersTabs.FOLLOWINGS);
     }
-  }, [pendingUsers]);
+  }, [formatMessage, isMe, isPrivateNetwork, pendingUsers, setActiveTab]);
 
   return (
     <div>

@@ -27,7 +27,7 @@ const ExpandedGrid = ({ className, items, onClick, children, itemKeyProp }) => {
   const [render = ImageRenderer] = [].concat(children);
   const { length } = items;
 
-  const handleClick = index => (onClick ? () => onClick(index) : null);
+  const handleClick = (index) => (onClick ? () => onClick(index) : null);
 
   return (
     <Gallery className={className} count={length}>

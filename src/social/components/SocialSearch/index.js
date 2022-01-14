@@ -16,6 +16,24 @@ import {
 import useUserQuery from '~/core/hooks/useUserQuery';
 import ConditionalRender from '~/core/components/ConditionalRender';
 
+const communityRenderer = (communities) => (communityName) => {
+  const { communityId } = communities.find((item) => item.displayName === communityName) ?? {};
+  return (
+    <ConditionalRender condition={!!communityId}>
+      <CommunityHeader communityId={communityId} />
+    </ConditionalRender>
+  );
+};
+
+const userRenderer = (users) => (userName) => {
+  const { userId, isGlobalBan } = users.find((item) => item.displayName === userName) ?? {};
+  return (
+    <ConditionalRender condition={!!userId}>
+      <UserHeader userId={userId} isBanned={isGlobalBan} />
+    </ConditionalRender>
+  );
+};
+
 const SocialSearch = ({ className, sticky = false, searchBy }) => {
   const { onClickCommunity, onClickUser } = useNavigation();
   const [value, setValue] = useState('');
@@ -23,11 +41,11 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList({
     search: value,
   });
-  const handleChange = newVal => {
+  const handleChange = (newVal) => {
     setValue(newVal);
   };
 
-  const getPagination = activeTab => {
+  const getPagination = (activeTab) => {
     const hasMore = activeTab === 'communities' ? hasMoreCommunities : hasMoreUsers;
     const loadMore = activeTab === 'communities' ? loadMoreCommunities : loadMoreUsers;
 
@@ -36,46 +54,28 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
 
   const handlePick = (name, activeTab) => {
     if (activeTab === 'communities') {
-      const { communityId } = communities.find(item => item.displayName === name) ?? {};
+      const { communityId } = communities.find((item) => item.displayName === name) ?? {};
       communityId && onClickCommunity(communityId);
     } else if (activeTab === 'accounts') {
-      const { userId } = users.find(item => item.displayName === name) ?? {};
+      const { userId } = users.find((item) => item.displayName === name) ?? {};
       userId && onClickUser(userId);
     }
   };
 
-  const communityRenderer = communityName => {
-    const { communityId } = communities.find(item => item.displayName === communityName) ?? {};
-    return (
-      <ConditionalRender condition={!!communityId}>
-        <CommunityHeader communityId={communityId} />
-      </ConditionalRender>
-    );
-  };
-
-  const userRenderer = userName => {
-    const { userId, isGlobalBan } = users.find(item => item.displayName === userName) ?? {};
-    return (
-      <ConditionalRender condition={!!userId}>
-        <UserHeader userId={userId} isBanned={isGlobalBan} />
-      </ConditionalRender>
-    );
-  };
-
   const rendererMap = useMemo(
     () => ({
-      communities: communityRenderer,
-      accounts: userRenderer,
+      communities: communityRenderer(communities),
+      accounts: userRenderer(users),
     }),
-    [value, users, communities],
+    [communities, users],
   );
 
   const allItems = useMemo(
     () => ({
-      communities: communities.map(community => community.displayName),
-      accounts: users.map(community => community.displayName),
+      communities: communities.map((community) => community.displayName),
+      accounts: users.map((community) => community.displayName),
     }),
-    [value, communities, users],
+    [communities, users],
   );
 
   const items = useMemo(() => {
@@ -86,7 +86,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
 
       return acc;
     }, {});
-  }, [allItems]);
+  }, [allItems, searchBy]);
 
   return (
     <SocialSearchContainer className={className} sticky={sticky}>
@@ -97,8 +97,6 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
             setValue={setValue}
             items={items}
             filter={null}
-            onChange={handleChange}
-            onPick={handlePick}
             className={className}
             getPagination={getPagination}
             placeholder={placeholder}
@@ -107,6 +105,8 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
                 <SearchIcon />
               </SearchIconContainer>
             }
+            onChange={handleChange}
+            onPick={handlePick}
           >
             {(displayName, inputValue, activeTab) => rendererMap[activeTab](displayName)}
           </SocialSearchInput>

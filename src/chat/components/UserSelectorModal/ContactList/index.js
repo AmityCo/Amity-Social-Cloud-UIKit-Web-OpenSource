@@ -53,7 +53,7 @@ const UserList = withSDK(
             loader={<span key={0}>Loading...</span>}
           >
             <ListItemContainer>
-              {filterUsers.map(userData => (
+              {filterUsers.map((userData) => (
                 <UserItem
                   key={userData.userId}
                   {...userData}
@@ -73,7 +73,7 @@ const UserList = withSDK(
   },
 );
 
-export function AllUserList({ onUserItemSelected, selectedUserIds, excludeSelf = false }) {
+export const AllUserList = ({ onUserItemSelected, selectedUserIds, excludeSelf = false }) => {
   const [users, hasMore, loadMore] = useAllUsers();
   return (
     <UserList
@@ -85,14 +85,14 @@ export function AllUserList({ onUserItemSelected, selectedUserIds, excludeSelf =
       onUserItemSelected={onUserItemSelected}
     />
   );
-}
+};
 
-export function SearchUserList({
+export const SearchUserList = ({
   query,
   onUserItemSelected,
   selectedUserIds,
   excludeSelf = false,
-}) {
+}) => {
   const [users, hasMore, loadMore] = useUserQuery(query);
   return (
     <UserList
@@ -104,4 +104,4 @@ export function SearchUserList({
       onUserItemSelected={onUserItemSelected}
     />
   );
-}
+};

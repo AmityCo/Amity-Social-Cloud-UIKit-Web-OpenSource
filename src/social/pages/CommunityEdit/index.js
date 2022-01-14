@@ -33,7 +33,7 @@ const CommunityEditPage = ({ communityId, tab }) => {
 
   const handleReturnToCommunity = () => onClickCommunity(communityId);
 
-  const handleEditCommunity = async data => {
+  const handleEditCommunity = async (data) => {
     await updateCommunity(data);
     handleReturnToCommunity();
   };
@@ -88,15 +88,15 @@ const CommunityEditPage = ({ communityId, tab }) => {
         <CommunityEditHeader
           avatarFileUrl={fileUrl}
           communityName={community?.displayName}
-          onReturnToCommunity={handleReturnToCommunity}
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          onReturnToCommunity={handleReturnToCommunity}
         />
       }
     >
       <ConditionalRender condition={activeTab === PageTabs.EDIT_PROFILE && !!community.communityId}>
-        <CommunityForm onSubmit={data => handleEditCommunity(data)} community={community} edit />
+        <CommunityForm community={community} edit onSubmit={(data) => handleEditCommunity(data)} />
       </ConditionalRender>
 
       <ConditionalRender condition={activeTab === PageTabs.MEMBERS}>

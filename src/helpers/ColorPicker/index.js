@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { readableColor } from 'polished';
 import { COLOR_SHADES, lightenHex } from '~/core/providers/UiKitProvider/theme/palette';
 
-const getShadeName = tileIndex => {
+const getShadeName = (tileIndex) => {
   if (tileIndex === 0) return 'Main';
   return `Shade ${tileIndex}`;
 };

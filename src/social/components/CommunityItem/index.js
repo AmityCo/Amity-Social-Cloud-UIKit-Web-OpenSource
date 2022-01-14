@@ -7,7 +7,7 @@ import { backgroundImage as CommunityImage } from '~/icons/Community';
 import { Avatar, CommunityItemContainer } from './styles';
 
 const CommunityItem = ({ community, active, onClick }) => (
-  <CommunityItemContainer onClick={onClick} active={active}>
+  <CommunityItemContainer active={active} onClick={onClick}>
     <Avatar avatar={community.avatar} backgroundImage={CommunityImage} />
     <CommunityName
       isOfficial={community.isOfficial}

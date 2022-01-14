@@ -11,7 +11,7 @@ export default {
 export const UiSuggestions = () => {
   const [{ items, value, onPick }, updateArgs] = useArgs();
 
-  const setValue = newVal => {
+  const setValue = (newVal) => {
     onPick(newVal);
     updateArgs({ value: newVal });
   };
@@ -34,11 +34,11 @@ UiSuggestions.argTypes = {
 
 export const UiCustomSuggestion = () => {
   const [{ query, items, onPick }] = useArgs();
-  const filtered = query.length ? items.filter(item => item.includes(query)) : items;
+  const filtered = query.length ? items.filter((item) => item.includes(query)) : items;
 
   return (
     <StyledSuggestions items={filtered} onPick={onPick}>
-      {item => <UiKitHighlight key={item} text={item} query={query} />}
+      {(item) => <UiKitHighlight key={item} text={item} query={query} />}
     </StyledSuggestions>
   );
 };

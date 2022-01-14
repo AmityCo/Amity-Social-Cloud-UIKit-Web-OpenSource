@@ -23,8 +23,8 @@ const MOCK_CATEGORIES = [
 ];
 
 export const UiCommunityCard = ({ communityCategories, ...props }) => {
-  const categories = communityCategories.map(name =>
-    MOCK_CATEGORIES.find(category => category.name === name),
+  const categories = communityCategories.map((name) =>
+    MOCK_CATEGORIES.find((category) => category.name === name),
   );
   return <StyledCommunityCard {...props} communityCategories={categories} />;
 };

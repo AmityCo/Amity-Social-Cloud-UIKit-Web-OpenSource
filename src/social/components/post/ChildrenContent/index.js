@@ -19,10 +19,10 @@ const RENDERERS = {
 };
 
 const thumbnailRenderers = {
-  [PostDataType.VideoPost]: props => (
+  [PostDataType.VideoPost]: (props) => (
     <VideoItem.Thumbnail {...props} showPlayIcon showVideoDuration />
   ),
-  [PostDataType.LivestreamPost]: props => (
+  [PostDataType.LivestreamPost]: (props) => (
     <StreamItem.Thumbnail {...props} showPlayIcon showLivestreamRecordedBadge showVideoDuration />
   ),
 };
@@ -30,8 +30,8 @@ const thumbnailRenderers = {
 const ChildrenContent = ({ children }) => {
   // group children by renderable dataType
   const groups = Object.keys(RENDERERS)
-    .map(dataType => children.filter(child => child.dataType === dataType))
-    .filter(items => items && !!items.length) // remove empty collections
+    .map((dataType) => children.filter((child) => child.dataType === dataType))
+    .filter((items) => items && !!items.length) // remove empty collections
     .reduce(
       (acc, items) => ({
         ...acc,

@@ -20,17 +20,18 @@ export const defaultNavigationBlocker = {
 if (process.env.NODE_ENV !== 'production') {
   defaultValue = {
     page: { type: PageTypes.NewsFeed },
-    onChangePage: type => console.log(`NavigationContext onChangePage(${type})`),
-    onClickCategory: categoryId => console.log(`NavigationContext onClickCategory(${categoryId})`),
-    onClickCommunity: communityId =>
+    onChangePage: (type) => console.log(`NavigationContext onChangePage(${type})`),
+    onClickCategory: (categoryId) =>
+      console.log(`NavigationContext onClickCategory(${categoryId})`),
+    onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
-    onClickUser: userId => console.log(`NavigationContext onClickUser(${userId})`),
-    onCommunityCreated: communityId =>
+    onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
+    onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
-    onEditCommunity: communityId =>
+    onEditCommunity: (communityId) =>
       console.log(`NavigationContext onEditCommunity({${communityId})`),
-    onEditUser: userId => console.log(`NavigationContext onEditUser(${userId})`),
-    onMessageUser: userId => console.log(`NavigationContext onMessageUser(${userId})`),
+    onEditUser: (userId) => console.log(`NavigationContext onEditUser(${userId})`),
+    onMessageUser: (userId) => console.log(`NavigationContext onMessageUser(${userId})`),
   };
 }
 
@@ -56,7 +57,7 @@ export default ({
   const confirmPageChange = useCallback(async () => {
     if (navigationBlocker) {
       // for more info about this, see https://ekoapp.atlassian.net/browse/UP-3462?focusedCommentId=77155
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         askForConfirmation({
           ...navigationBlocker,
           onSuccess: () => {
@@ -69,19 +70,19 @@ export default ({
     }
 
     return true;
-  }, [navigationBlocker]);
+  }, [askForConfirmation, navigationBlocker]);
 
   const pushPage = useCallback(
-    async newPage => {
+    async (newPage) => {
       if (!(await confirmPageChange())) return;
 
-      setPages(prevState => [...prevState, newPage]);
+      setPages((prevState) => [...prevState, newPage]);
     },
     [confirmPageChange],
   );
 
   const popPage = () => {
-    setPages(prevState => (prevState.length > 1 ? prevState.slice(0, -1) : prevState));
+    setPages((prevState) => (prevState.length > 1 ? prevState.slice(0, -1) : prevState));
   };
 
   const onChangePage = useMemo(() => {
@@ -95,7 +96,7 @@ export default ({
   }, [onChangePageProp, confirmPageChange]);
 
   const handleChangePage = useCallback(
-    type => {
+    (type) => {
       if (onChangePage) return onChangePage({ type });
 
       pushPage({ type });
@@ -104,7 +105,7 @@ export default ({
   );
 
   const handleClickCommunity = useCallback(
-    communityId => {
+    (communityId) => {
       const next = {
         type: PageTypes.CommunityFeed,
         communityId,
@@ -120,7 +121,7 @@ export default ({
   );
 
   const handleCommunityCreated = useCallback(
-    communityId => {
+    (communityId) => {
       const next = {
         type: PageTypes.CommunityFeed,
         communityId,
@@ -137,7 +138,7 @@ export default ({
   );
 
   const handleClickCategory = useCallback(
-    categoryId => {
+    (categoryId) => {
       const next = {
         type: PageTypes.Category,
         categoryId,
@@ -169,7 +170,7 @@ export default ({
   );
 
   const handleEditUser = useCallback(
-    userId => {
+    (userId) => {
       const next = {
         type: PageTypes.UserEdit,
         userId,
@@ -202,7 +203,7 @@ export default ({
   );
 
   const handleMessageUser = useCallback(
-    userId => {
+    (userId) => {
       const next = {
         type: 'conversation',
         userId,
@@ -217,23 +218,32 @@ export default ({
     [onChangePage, onMessageUser],
   );
 
-  return (
-    <NavigationContext.Provider
-      value={{
-        page: pages[pages.length - 1],
-        onChangePage: handleChangePage,
-        onClickCategory: handleClickCategory,
-        onClickCommunity: handleClickCommunity,
-        onClickUser: handleClickUser,
-        onCommunityCreated: handleCommunityCreated,
-        onEditCommunity: handleEditCommunity,
-        onEditUser: handleEditUser,
-        onMessageUser: handleMessageUser,
-        onBack: popPage,
-        setNavigationBlocker,
-      }}
-    >
-      {children}
-    </NavigationContext.Provider>
+  const value = useMemo(
+    () => ({
+      page: pages[pages.length - 1],
+      onChangePage: handleChangePage,
+      onClickCategory: handleClickCategory,
+      onClickCommunity: handleClickCommunity,
+      onClickUser: handleClickUser,
+      onCommunityCreated: handleCommunityCreated,
+      onEditCommunity: handleEditCommunity,
+      onEditUser: handleEditUser,
+      onMessageUser: handleMessageUser,
+      onBack: popPage,
+      setNavigationBlocker,
+    }),
+    [
+      handleChangePage,
+      handleClickCategory,
+      handleClickCommunity,
+      handleClickUser,
+      handleCommunityCreated,
+      handleEditCommunity,
+      handleEditUser,
+      handleMessageUser,
+      pages,
+    ],
   );
+
+  return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>;
 };

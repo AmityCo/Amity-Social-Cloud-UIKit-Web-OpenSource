@@ -13,10 +13,10 @@ const CommentLikeButton = ({ commentId, onLikeSuccess, onUnlikeSuccess }) => {
   });
   return (
     <StyledCommentLikeButton
-      onClick={handleToggleLike}
       isActive={isActive}
       isDisabled={isDisabled}
       totalLikes={totalLikes}
+      onClick={handleToggleLike}
     />
   );
 };

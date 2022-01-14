@@ -43,7 +43,7 @@ export const GalleryGridCustom = ({ images, truncate }) => {
 
   return (
     <UiKitGalleryGrid items={imageUrls} truncate={truncate}>
-      {url => <Image key={url} src={url} />}
+      {(url) => <Image key={url} src={url} />}
     </UiKitGalleryGrid>
   );
 };

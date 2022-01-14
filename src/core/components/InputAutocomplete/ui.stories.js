@@ -9,12 +9,12 @@ export default {
 export const UiInputAutocomplete = ({ items, onChange, onPick, ...rest }) => {
   const [value, setValue] = useState('');
 
-  const handleChange = newVal => {
+  const handleChange = (newVal) => {
     onChange(newVal);
     setValue(newVal);
   };
 
-  const handlePick = newVal => {
+  const handlePick = (newVal) => {
     setValue(newVal);
     onPick(newVal);
   };

@@ -70,9 +70,9 @@ const PollComposer = ({
   const question = watch('question', '');
   const answers = watch('answers', []);
 
-  useEffect(() => setDirtyExternal(isDirty), [isDirty]);
+  useEffect(() => setDirtyExternal(isDirty), [isDirty, setDirtyExternal]);
 
-  const [validateAndSubmit, submitting] = useAsyncCallback(async data => {
+  const [validateAndSubmit, submitting] = useAsyncCallback(async (data) => {
     if (!data.question.trim()) {
       setError('question', { message: 'Question cannot be empty' });
       return;
@@ -117,9 +117,6 @@ const PollComposer = ({
                 <Counter>{`${question.length}/${MAX_QUESTION_LENGTH}`}</Counter>
               </LabelWrapper>
               <TextInput
-                placeholder={formatMessage({ id: 'poll_composer.question.placeholder' })}
-                id="question"
-                name="question"
                 ref={register({
                   required: 'Question is required',
                   maxLength: {
@@ -127,6 +124,9 @@ const PollComposer = ({
                     message: 'Question is too long',
                   },
                 })}
+                placeholder={formatMessage({ id: 'poll_composer.question.placeholder' })}
+                id="question"
+                name="question"
               />
               <ErrorMessage errors={errors} name="question" />
             </Field>
@@ -140,15 +140,6 @@ const PollComposer = ({
                 <Counter>{`${answers.length}/${MAX_OPTIONS_AMOUNT}`}</Counter>
               </LabelWrapper>
               <Controller
-                name="answers"
-                control={control}
-                render={({ onChange, ...rest }) => (
-                  <OptionsComposer
-                    onChange={onChange}
-                    optionsLimit={MAX_OPTIONS_AMOUNT}
-                    {...rest}
-                  />
-                )}
                 ref={register({
                   required: 'There should be at least 2 answers',
                   minLength: {
@@ -160,6 +151,15 @@ const PollComposer = ({
                     message: `There can be only ${MAX_OPTIONS_AMOUNT} answers maximum`,
                   },
                 })}
+                name="answers"
+                control={control}
+                render={({ onChange, ...rest }) => (
+                  <OptionsComposer
+                    optionsLimit={MAX_OPTIONS_AMOUNT}
+                    onChange={onChange}
+                    {...rest}
+                  />
+                )}
                 defaultValue={null}
               />
               <ErrorMessage errors={errors} name="answers" />
@@ -176,9 +176,9 @@ const PollComposer = ({
                 </LabelContainer>
                 <ControllerContainer>
                   <Controller
-                    name="answerType"
                     ref={register({ required: 'Answer type is required' })}
-                    render={props => (
+                    name="answerType"
+                    render={(props) => (
                       <AnswerTypeSelector parentContainer={formBodyElement} {...props} />
                     )}
                     control={control}
@@ -199,9 +199,9 @@ const PollComposer = ({
                 </LabelContainer>
                 <ControllerContainer>
                   <Controller
-                    name="closedIn"
                     ref={register()}
-                    render={props => (
+                    name="closedIn"
+                    render={(props) => (
                       <InputCounter
                         {...props}
                         onlyPositiveNumber
@@ -218,7 +218,7 @@ const PollComposer = ({
         </FormBody>
         <Footer>
           <Button
-            onClick={e => {
+            onClick={(e) => {
               e.preventDefault();
               onCancel();
             }}

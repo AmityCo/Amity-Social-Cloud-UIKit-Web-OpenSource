@@ -24,16 +24,16 @@ export const LikeIcon = styled(ThumbsUp)`
 `;
 
 const StyledCommentLikeButton = ({ onClick, isActive, isDisabled, totalLikes }) => (
-  <StyledLikeButton onClick={onClick} active={isActive} disabled={isDisabled}>
+  <StyledLikeButton active={isActive} disabled={isDisabled} onClick={onClick}>
     <LikeIcon $isLiked={isActive} /> {totalLikes > 0 ? <span>{totalLikes}</span> : ''}
   </StyledLikeButton>
 );
 
 StyledCommentLikeButton.propTypes = {
-  onClick: PropTypes.func,
   isActive: PropTypes.bool,
   isDisabled: PropTypes.bool,
   totalLikes: PropTypes.number,
+  onClick: PropTypes.func,
 };
 
 export default customizableComponent('CommentLikeButton', StyledCommentLikeButton);

@@ -48,7 +48,7 @@ export const DropdownWithCustomTrigger = () => {
   const toggle = () => updateArgs({ isOpen: !isOpen });
   const close = () => updateArgs({ isOpen: false });
 
-  const triggerRenderer = props => {
+  const triggerRenderer = (props) => {
     return (
       <OptionsButton {...props}>
         <OptionsIcon />
@@ -59,7 +59,7 @@ export const DropdownWithCustomTrigger = () => {
   return (
     <UiKitDropdown
       isOpen={isOpen}
-      renderTrigger={props => triggerRenderer({ ...props, onClick: toggle })}
+      renderTrigger={(props) => triggerRenderer({ ...props, onClick: toggle })}
       position={position}
       align={align}
       // when using custom trigger we should handle close on click outside (if needed)
@@ -94,7 +94,7 @@ export const ScrollableDropdownWithCustomTrigger = () => {
   const toggle = () => updateArgs({ isOpen: !isOpen });
   const close = () => updateArgs({ isOpen: false });
 
-  const triggerRenderer = props => {
+  const triggerRenderer = (props) => {
     return <input type="text" {...props} />;
   };
 
@@ -105,7 +105,7 @@ export const ScrollableDropdownWithCustomTrigger = () => {
   return (
     <UiKitDropdown
       isOpen={isOpen}
-      renderTrigger={props => triggerRenderer({ ...props, onClick: toggle })}
+      renderTrigger={(props) => triggerRenderer({ ...props, onClick: toggle })}
       position={position}
       // when using custom trigger we should handle close on click outside (if needed)
       handleClose={close}

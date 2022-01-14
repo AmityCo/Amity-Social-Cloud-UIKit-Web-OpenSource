@@ -66,7 +66,7 @@ function useChatInfo({ channel }) {
   const { currentUserId, client } = useSDK();
 
   const otherUserId = channel?.metadata?.isDirectChat
-    ? (channel?.metadata?.userIds ?? []).find(userId => userId !== currentUserId)
+    ? (channel?.metadata?.userIds ?? []).find((userId) => userId !== currentUserId)
     : null;
 
   const currentAvatarUrl = getAvatarUrl(client?._currentUser?.model);

@@ -21,12 +21,12 @@ const OptionMenu = ({
   const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
 
-  const attachCanceling = fn => () => {
+  const attachCanceling = (fn) => () => {
     close();
     fn && fn();
   };
 
-  const triggerRenderer = props => {
+  const triggerRenderer = (props) => {
     return <OptionsButton {...props}>{icon || <OptionsIcon />}</OptionsButton>;
   };
 
@@ -36,13 +36,13 @@ const OptionMenu = ({
         <UiKitDropdown
           data-qa-anchor={dataQaAnchor}
           isOpen={isOpen}
-          renderTrigger={props => triggerRenderer({ ...props, onClick: toggle, className, icon })}
+          renderTrigger={(props) => triggerRenderer({ ...props, onClick: toggle, className, icon })}
           position={position}
           align={align}
           handleClose={() => setIsOpen(false)}
         >
           {options.map(({ name, action, className: optionClassName }) => (
-            <Option key={name} onClick={attachCanceling(action)} className={optionClassName}>
+            <Option key={name} className={optionClassName} onClick={attachCanceling(action)}>
               <FormattedMessage id={name} />
             </Option>
           ))}

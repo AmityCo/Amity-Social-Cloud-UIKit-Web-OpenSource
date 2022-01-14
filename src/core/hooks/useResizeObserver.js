@@ -16,7 +16,7 @@ const useResizeObserver = (target, onResize) => {
       });
       return () => observer.disconnect();
     }
-  }, [target]);
+  }, [onResize, target]);
 };
 
 export default useResizeObserver;

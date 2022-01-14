@@ -79,7 +79,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => setIsOpen(true);
-  const closeModal = communityId => {
+  const closeModal = (communityId) => {
     setIsOpen(false);
     communityId && onCommunityCreated(communityId);
   };

@@ -5,7 +5,7 @@ export default {
   title: 'Ui Only/Social/Community',
 };
 
-export const UiCommunityPermissions = args => {
+export const UiCommunityPermissions = (args) => {
   return <CommunityPermissions {...args} />;
 };
 

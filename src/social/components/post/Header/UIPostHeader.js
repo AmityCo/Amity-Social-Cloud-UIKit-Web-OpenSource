@@ -38,7 +38,7 @@ const UIPostHeader = ({
     return (
       <PostNamesContainer>
         <TruncateMarkup lines={3}>
-          <Name onClick={onClickUser} className={cx({ clickable: !!onClickUser })}>
+          <Name className={cx({ clickable: !!onClickUser })} onClick={onClickUser}>
             {postAuthorName}
           </Name>
         </TruncateMarkup>
@@ -48,7 +48,7 @@ const UIPostHeader = ({
         {postTargetName && !hidePostTarget && (
           <>
             <ArrowSeparator />
-            <Name onClick={onClickCommunity} className={cx({ clickable: !!onClickCommunity })}>
+            <Name className={cx({ clickable: !!onClickCommunity })} onClick={onClickCommunity}>
               {postTargetName}
             </Name>
           </>
@@ -82,8 +82,8 @@ const UIPostHeader = ({
       <Avatar
         avatar={avatarFileUrl}
         backgroundImage={UserImage}
-        onClick={onClickUser}
         loading={loading}
+        onClick={onClickUser}
       />
       <PostInfo>
         {loading ? (
@@ -111,11 +111,11 @@ UIPostHeader.propTypes = {
   timeAgo: PropTypes.instanceOf(Date),
   isModerator: PropTypes.bool,
   isEdited: PropTypes.bool,
-  onClickCommunity: PropTypes.func,
-  onClickUser: PropTypes.func,
   hidePostTarget: PropTypes.bool,
   loading: PropTypes.bool,
   isBanned: PropTypes.bool,
+  onClickCommunity: PropTypes.func,
+  onClickUser: PropTypes.func,
 };
 
 UIPostHeader.defaultProps = {
@@ -125,11 +125,11 @@ UIPostHeader.defaultProps = {
   timeAgo: null,
   isModerator: false,
   isEdited: false,
-  onClickCommunity: null,
-  onClickUser: null,
   hidePostTarget: false,
   loading: false,
   isBanned: false,
+  onClickCommunity: null,
+  onClickUser: null,
 };
 
 export default customizableComponent('UIPostHeader', UIPostHeader);

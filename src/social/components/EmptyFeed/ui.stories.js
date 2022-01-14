@@ -8,7 +8,7 @@ export default {
   title: 'Ui Only/Social/Feed',
 };
 
-export const UiEmptyFeed = props => <StyledEmptyFeed {...props} />;
+export const UiEmptyFeed = (props) => <StyledEmptyFeed {...props} />;
 
 UiEmptyFeed.storyName = 'Empty';
 

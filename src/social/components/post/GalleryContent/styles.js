@@ -45,7 +45,6 @@ export const Thumbnail = styled(
         className={className}
         fileId={fileId}
         mediaFit="cover"
-        onRemove={onRemove}
         overlayElements={
           <>
             {overlayElements}
@@ -59,6 +58,7 @@ export const Thumbnail = styled(
             )}
           </>
         }
+        onRemove={onRemove}
       />
     ) : (
       <ImageContainer className={className}>
@@ -75,7 +75,7 @@ export const Thumbnail = styled(
 
           {!!onRemove && (
             <RemoveButton
-              onClick={e => {
+              onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 onRemove();
@@ -141,7 +141,7 @@ export const VideoMessage = styled(({ children, className, onRemove }) => (
     <ButtonContainer>
       {!!onRemove && (
         <RemoveButton
-          onClick={e => {
+          onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             onRemove();

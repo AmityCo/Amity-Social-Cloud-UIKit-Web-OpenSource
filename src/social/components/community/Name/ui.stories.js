@@ -6,7 +6,7 @@ export default {
   title: 'Ui Only/Social/Community',
 };
 
-export const UiCommunityName = props => <CommunityName {...props} />;
+export const UiCommunityName = (props) => <CommunityName {...props} />;
 
 UiCommunityName.storyName = 'Name';
 

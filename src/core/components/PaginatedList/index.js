@@ -22,7 +22,7 @@ const LoadMore = styled.button`
 `;
 
 const PaginatedList = ({
-  children = props => JSON.stringify(props),
+  children = (props) => JSON.stringify(props),
   items = [],
   hasMore = false,
   loadMore = () => {},
@@ -31,7 +31,7 @@ const PaginatedList = ({
 }) => {
   const [render] = [].concat(children);
 
-  const onClick = e => {
+  const onClick = (e) => {
     e.stopPropagation();
     loadMore();
   };
@@ -41,7 +41,7 @@ const PaginatedList = ({
   return (
     <div>
       <Container>
-        {items.map(item => render(item))}
+        {items.map((item) => render(item))}
         <ConditionalRender condition={items.length === 0}>{emptyState}</ConditionalRender>
       </Container>
       <ConditionalRender condition={hasMore}>

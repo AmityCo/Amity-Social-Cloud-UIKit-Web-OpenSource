@@ -28,8 +28,8 @@ const MessageComposeBar = ({ onSubmit }) => {
         type="text"
         value={message}
         placeholder={formatMessage({ id: 'MessageComposeBar.placeholder' })}
-        onChange={e => setMessage(e.target.value)}
-        onKeyPress={e => e.key === 'Enter' && sendMessage()}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
       />
       <SendMessageIcon onClick={sendMessage} />
     </MessageComposeBarContainer>

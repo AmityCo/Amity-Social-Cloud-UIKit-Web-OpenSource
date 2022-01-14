@@ -8,7 +8,7 @@ export default {
   title: 'Sdk connected/Social/Community',
 };
 
-export const SdkCategoryCommunitiesPage = props => {
+export const SdkCategoryCommunitiesPage = (props) => {
   const category = useOneCategory();
   if (!category.categoryId)
     return (

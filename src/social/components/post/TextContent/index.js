@@ -26,7 +26,7 @@ export const Highlighted = styled.span`
   color: ${({ theme }) => theme.palette.primary.main};
 `;
 
-const findChunks = mentionees => {
+const findChunks = (mentionees) => {
   if (!mentionees) return [];
   return mentionees.map(({ index, length }) => ({
     start: index,
@@ -74,11 +74,18 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
 TextContent.propTypes = {
   text: PropTypes.node,
   postMaxLines: PropTypes.number,
+  mentionees: PropTypes.arrayOf(
+    PropTypes.shape({
+      index: PropTypes.number,
+      length: PropTypes.number,
+    }),
+  ),
 };
 
 TextContent.defaultProps = {
   text: '',
   postMaxLines: 8,
+  mentionees: undefined,
 };
 
 export default customizableComponent('UITextContent', TextContent);

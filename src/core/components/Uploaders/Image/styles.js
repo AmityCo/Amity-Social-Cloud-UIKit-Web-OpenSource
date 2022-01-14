@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { SizeMe } from 'react-sizeme';
@@ -115,27 +115,33 @@ const Image = ({
 }) => {
   const [uploadFailed, setUploadFailed] = useState(false);
 
-  function removeCallback(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onRemove && onRemove();
-  }
+  const removeCallback = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onRemove && onRemove();
+    },
+    [onRemove],
+  );
 
-  function retryCallback(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    onRetry && onRetry();
-  }
+  const retryCallback = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onRetry && onRetry();
+    },
+    [onRetry],
+  );
 
   return (
     <ImageContainer className={className} border={!noBorder} data-qa-anchor={dataQaAnchor}>
       <Content remove={!!onRemove}>
         {url ? (
           <ImgPreview
-            onError={() => setUploadFailed(true)}
             src={url}
             mediaFit={mediaFit}
             className={!!isRejected && 'darken'}
+            onError={() => setUploadFailed(true)}
           />
         ) : (
           <ImageSkeleton />
@@ -162,10 +168,10 @@ Image.propTypes = {
   progress: PropTypes.number,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
   noBorder: PropTypes.bool,
-  onRemove: PropTypes.func,
   isRejected: PropTypes.bool,
-  onRetry: PropTypes.func,
   overlayElements: PropTypes.node,
+  onRemove: PropTypes.func,
+  onRetry: PropTypes.func,
 };
 
 Image.defaultProps = {

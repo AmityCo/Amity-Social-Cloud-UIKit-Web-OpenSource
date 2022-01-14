@@ -6,7 +6,7 @@ import { MemberRoles } from '~/social/constants';
 
 const { COMMUNITY_MODERATOR } = MemberRoles;
 
-const useCommunityMembers = communityId => {
+const useCommunityMembers = (communityId) => {
   const { community } = useCommunity(communityId);
 
   const [members, hasMoreMembers, loadMoreMembers] = useLiveCollection(
@@ -34,8 +34,8 @@ const useCommunityMembers = communityId => {
   const removeRolesFromUsers = (roles, userIds) =>
     CommunityRepository.removeRolesFromUsers({ communityId, roles, userIds });
 
-  const addMembers = userIds => CommunityRepository.addMembers({ communityId, userIds });
-  const removeMembers = userIds => CommunityRepository.removeMembers({ communityId, userIds });
+  const addMembers = (userIds) => CommunityRepository.addMembers({ communityId, userIds });
+  const removeMembers = (userIds) => CommunityRepository.removeMembers({ communityId, userIds });
 
   return {
     members,

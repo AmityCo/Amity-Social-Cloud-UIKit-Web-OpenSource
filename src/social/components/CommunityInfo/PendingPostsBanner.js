@@ -8,7 +8,7 @@ import {
   PendingPostsBannerTitleBadge,
 } from './styles';
 
-export function PendingPostsBanner({ canReviewPosts, postsCount }) {
+export const PendingPostsBanner = ({ canReviewPosts, postsCount }) => {
   return (
     <PendingPostsBannerContainer>
       <PendingPostsBannerTitle>
@@ -31,4 +31,4 @@ export function PendingPostsBanner({ canReviewPosts, postsCount }) {
       </PendingPostsBannerMessage>
     </PendingPostsBannerContainer>
   );
-}
+};

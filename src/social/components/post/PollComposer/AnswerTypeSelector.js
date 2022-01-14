@@ -9,7 +9,7 @@ const itemRenderer = ({ name }) => <div>{name}</div>;
 const AnswerTypeSelector = ({ onChange, parentContainer = null }) => {
   const { formatMessage } = useIntl();
 
-  const options = Object.values(PollAnswerType).map(answerType => ({
+  const options = Object.values(PollAnswerType).map((answerType) => ({
     name: formatMessage({ id: 'select.answerType.item' }, { answerType }),
     value: answerType,
   }));
@@ -17,10 +17,10 @@ const AnswerTypeSelector = ({ onChange, parentContainer = null }) => {
   return (
     <StyledSelect
       options={options}
-      onSelect={({ value }) => onChange(value)}
       value={[options[0]]}
       parentContainer={parentContainer}
       renderItem={itemRenderer}
+      onSelect={({ value }) => onChange(value)}
     />
   );
 };

@@ -21,8 +21,8 @@ export const SDKCommunityHeader = ({ communityId, isActive, isSearchResult, onCl
     <UiKitCommunityHeader
       communityId={community.communityId}
       isActive={isActive}
-      onClick={onClick}
       isSearchResult={isSearchResult}
+      onClick={onClick}
     />
   );
 };

@@ -6,7 +6,7 @@ export default {
   title: 'Ui Only/Social/Category',
 };
 
-export const UiCategoryHeader = props => {
+export const UiCategoryHeader = (props) => {
   const { clickable, ...args } = props;
   if (!clickable) delete args.onClick;
   return <StyledCategoryHeader {...args} />;

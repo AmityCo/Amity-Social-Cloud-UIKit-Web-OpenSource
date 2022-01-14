@@ -21,7 +21,7 @@ export const Files = ({ files, onRemove }) => {
   return (
     <ConditionalRender condition={files.length}>
       <FilesContainer>
-        {visibleFiles.map(file => (
+        {visibleFiles.map((file) => (
           <File key={file.id} file={file} onRemove={onRemove} />
         ))}
         {haveHiddenFiles && (

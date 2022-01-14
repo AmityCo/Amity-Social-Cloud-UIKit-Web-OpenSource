@@ -18,10 +18,10 @@ const CommunityCard = ({ communityId, onClick, ...props }) => {
       communityCategories={communityCategories}
       membersCount={membersCount}
       description={description}
-      onClick={onClick}
       isOfficial={community.isOfficial}
       isPublic={community.isPublic}
       name={community.displayName}
+      onClick={onClick}
       {...props}
     />
   );

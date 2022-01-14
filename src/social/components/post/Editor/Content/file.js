@@ -11,7 +11,7 @@ const FilesContainer = styled.div`
 
 const FileContentList = ({ items, onRemove }) => (
   <FilesContainer>
-    {items.map(post => (
+    {items.map((post) => (
       <File key={post.postId} fileId={post?.data?.fileId} onRemove={() => onRemove(post.postId)} />
     ))}
   </FilesContainer>

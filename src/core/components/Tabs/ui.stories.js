@@ -36,7 +36,7 @@ Distribution.argTypes = {
 export const Active = () => {
   const [{ activeTab, onChange }, updateArgs] = useArgs();
 
-  const setActiveTab = val => {
+  const setActiveTab = (val) => {
     onChange(val);
     updateArgs({ activeTab: val });
   };
@@ -52,7 +52,7 @@ Active.argTypes = {
   activeTab: {
     control: {
       type: 'select',
-      options: mockUpTabs.map(x => x.value),
+      options: mockUpTabs.map((x) => x.value),
     },
   },
   onChange: { action: 'onChange()' },
@@ -61,7 +61,7 @@ Active.argTypes = {
 export const ActiveMediaGalleryTabs = () => {
   const [{ activeTab, onChange }, updateArgs] = useArgs();
 
-  const setActiveTab = val => {
+  const setActiveTab = (val) => {
     onChange(val);
     updateArgs({ activeTab: val });
   };
@@ -77,7 +77,7 @@ ActiveMediaGalleryTabs.argTypes = {
   activeTab: {
     control: {
       type: 'select',
-      options: mockUpTabs.map(x => x.value),
+      options: mockUpTabs.map((x) => x.value),
     },
   },
   onChange: { action: 'onChange()' },

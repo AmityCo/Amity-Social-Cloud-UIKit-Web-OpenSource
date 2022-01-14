@@ -8,7 +8,7 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKCommunityMembers = args => {
+export const SDKCommunityMembers = (args) => {
   const [community, isLoading] = useOneCommunity();
   if (isLoading)
     return (

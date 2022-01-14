@@ -5,6 +5,6 @@ export default {
   title: 'Ui Only/Social/Post',
 };
 
-export const UIUnknownPostRenderer = props => <UnknownPostRenderer {...props} />;
+export const UIUnknownPostRenderer = (props) => <UnknownPostRenderer {...props} />;
 
 UIUnknownPostRenderer.storyName = 'UnknownPostRenderer';

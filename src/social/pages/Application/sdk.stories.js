@@ -5,7 +5,7 @@ export default {
   title: 'SDK Connected/Social',
 };
 
-export const SDKCommunityApp = props => <UiKitApp {...props} />;
+export const SDKCommunityApp = (props) => <UiKitApp {...props} />;
 
 SDKCommunityApp.storyName = 'Application';
 

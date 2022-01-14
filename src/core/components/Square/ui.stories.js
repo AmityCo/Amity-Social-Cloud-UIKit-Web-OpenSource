@@ -20,7 +20,7 @@ const LoremIpsum = styled.div`
   overflow: auto;
 `;
 
-export const UiSquare = props => {
+export const UiSquare = (props) => {
   return (
     <Constraint>
       <Square {...props}>

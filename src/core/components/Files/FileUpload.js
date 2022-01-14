@@ -4,9 +4,9 @@ import { FileRepository } from '@amityco/js-sdk';
 import { FileUploadContainer, FileInput, FileIcon, Label } from './styles';
 
 export const FileUpload = ({ disabled, addFiles, setProgress, updateFiles }) => {
-  const upload = async event => {
+  const upload = async (event) => {
     const uploadingFiles = [...event.target.files];
-    const filesToUpload = uploadingFiles.map(file => {
+    const filesToUpload = uploadingFiles.map((file) => {
       const { name, type, size } = file;
       return {
         name,
@@ -37,7 +37,7 @@ export const FileUpload = ({ disabled, addFiles, setProgress, updateFiles }) => 
       <Label htmlFor="file-upload" disabled={disabled}>
         <FileIcon disabled={disabled} />
       </Label>
-      <FileInput id="file-upload" onChange={upload} multiple disabled={disabled} />
+      <FileInput id="file-upload" multiple disabled={disabled} onChange={upload} />
     </FileUploadContainer>
   );
 };

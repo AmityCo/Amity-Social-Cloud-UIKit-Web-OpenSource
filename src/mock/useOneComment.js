@@ -29,7 +29,7 @@ const useOneComment = () => {
       });
     }
 
-    commentLiveObject.on('dataUpdated', newComment => {
+    commentLiveObject.on('dataUpdated', (newComment) => {
       setComment(newComment);
       setIsLoading(false);
     });

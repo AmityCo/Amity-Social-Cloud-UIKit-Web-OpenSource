@@ -28,8 +28,8 @@ const CommunityEditHeader = ({
       avatarFileUrl={avatarFileUrl}
       avatarImage={CommunityImage}
       backLinkText={<FormattedMessage id="community.returnTo" values={{ communityName }} />}
-      onBack={onReturnToCommunity}
       hideBackArrow
+      onBack={onReturnToCommunity}
     />
     <CommunitySettingsTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
   </>
@@ -38,10 +38,10 @@ const CommunityEditHeader = ({
 CommunityEditHeader.propTypes = {
   avatarFileUrl: PropTypes.string,
   communityName: PropTypes.string,
-  onReturnToCommunity: PropTypes.func,
   tabs: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, label: PropTypes.node })),
   activeTab: PropTypes.oneOf(Object.values(PageTabs)),
   setActiveTab: PropTypes.func,
+  onReturnToCommunity: PropTypes.func,
 };
 
 export default CommunityEditHeader;

@@ -13,7 +13,7 @@ import {
 
 const useKeyboardNavigation = (prev, next, onClose) => {
   useEffect(() => {
-    const listener = e => {
+    const listener = (e) => {
       if (e.key === 'ArrowRight') next();
       if (e.key === 'ArrowLeft') prev();
       if (e.key === 'Escape') onClose();

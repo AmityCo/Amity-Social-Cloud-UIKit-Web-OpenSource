@@ -6,7 +6,7 @@ import { Radio, Label, Chip } from './styles';
 const Container = ({ register, children, 'data-qa-anchor': dataQaAnchor, ...props }) => {
   return (
     <Label data-qa-anchor={`${dataQaAnchor}-label`}>
-      <Radio {...props} data-qa-anchor={`${dataQaAnchor}-radio`} ref={register} />
+      <Radio {...props} ref={register} data-qa-anchor={`${dataQaAnchor}-radio`} />
       {children}
     </Label>
   );
@@ -21,7 +21,7 @@ const Radios = ({
   disabled = false,
   onChange = () => {},
 }) => {
-  const handleChange = e => {
+  const handleChange = (e) => {
     try {
       const newVal = JSON.parse(e.target.value);
       onChange(newVal);
@@ -51,7 +51,7 @@ const Radios = ({
     );
   };
 
-  return items.map(item => (
+  return items.map((item) => (
     <Container
       key={item[uniq]}
       register={register}
@@ -59,8 +59,8 @@ const Radios = ({
       value={item.value}
       checked={value === item.value}
       disabled={disabled}
-      onChange={handleChange}
       data-qa-anchor={item['data-qa-anchor']}
+      onChange={handleChange}
     >
       <Renderer item={item} checked={value === item.value} disabled={disabled} />
     </Container>

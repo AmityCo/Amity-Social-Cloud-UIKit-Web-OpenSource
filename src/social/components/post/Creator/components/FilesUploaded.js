@@ -25,7 +25,7 @@ const FileRows = ({
   rowDataQaAnchor,
 }) => (
   <StylesFileRows uploadLoading={uploadLoading}>
-    {uploaded.map(file => (
+    {uploaded.map((file) => (
       <File
         key={file.fileId}
         data-qa-anchor={rowDataQaAnchor}
@@ -34,7 +34,7 @@ const FileRows = ({
       />
     ))}
 
-    {uploading.map(file => (
+    {uploading.map((file) => (
       <File
         key={file.name}
         data-qa-anchor={rowDataQaAnchor}
@@ -63,11 +63,11 @@ const Files = ({
 
 Files.propTypes = {
   files: PropTypes.array,
-  onChange: PropTypes.func,
-  onError: PropTypes.func,
-  onLoadingChange: PropTypes.func,
   uploadLoading: PropTypes.bool,
   rowDataQaAnchor: PropTypes.string,
+  onLoadingChange: PropTypes.func,
+  onChange: PropTypes.func,
+  onError: PropTypes.func,
 };
 
 Files.defaultProps = {

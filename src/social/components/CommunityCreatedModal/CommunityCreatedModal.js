@@ -4,7 +4,7 @@ import Modal from '~/core/components/Modal';
 import { MagicWand } from '~/icons';
 import { Content, GoToSettingsButton, Message, SkipButton, Title } from './styles';
 
-export default function CommunityCreatedModal({ onClose, onGoSettings }) {
+export default ({ onClose, onGoSettings }) => {
   return (
     <Modal>
       <Content>
@@ -28,4 +28,4 @@ export default function CommunityCreatedModal({ onClose, onGoSettings }) {
       </Content>
     </Modal>
   );
-}
+};

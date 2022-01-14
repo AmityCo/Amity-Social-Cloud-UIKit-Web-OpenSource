@@ -7,7 +7,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 
 export const VISIBLE_AMOUNT = 5;
 
-const defaultTrigger = handleExpand => {
+const defaultTrigger = (handleExpand) => {
   return (
     <Button onClick={handleExpand}>
       <FormattedMessage id="collapsible.viewAll" />
@@ -43,10 +43,10 @@ const Collapsible = ({
 };
 
 Collapsible.propTypes = {
-  onExpand: PropTypes.func,
   renderTrigger: PropTypes.func,
   visibleAmount: PropTypes.number,
   children: PropTypes.node,
+  onExpand: PropTypes.func,
 };
 
 export default Collapsible;

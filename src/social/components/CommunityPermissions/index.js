@@ -4,7 +4,7 @@ import withSDK from '~/core/hocs/withSDK';
 import UICommunityPermissions from './CommunityPermissions';
 import { usePermission } from './utils';
 
-function CommunityPermissions({ communityId }) {
+const CommunityPermissions = ({ communityId }) => {
   const [needApprovalOnPostCreation, updateNeedApprovalOnPostCreation] = usePermission(
     communityId,
     'needApprovalOnPostCreation',
@@ -16,6 +16,6 @@ function CommunityPermissions({ communityId }) {
       onNeedApprovalOnPostCreationChange={updateNeedApprovalOnPostCreation}
     />
   );
-}
+};
 
 export default withSDK(customizableComponent('CommunityPermissions', CommunityPermissions));

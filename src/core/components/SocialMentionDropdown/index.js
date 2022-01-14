@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { SocialMentionDropdownContainer, SocialMentionDropdownItem, Avatar, Name } from './styles';
 
-function SocialMentionDropdown({ items = [] }) {
+const SocialMentionDropdown = ({ items = [] }) => {
   return (
     <SocialMentionDropdownContainer>
       {items.map(({ avatar, name }) => (
@@ -13,7 +13,7 @@ function SocialMentionDropdown({ items = [] }) {
       ))}
     </SocialMentionDropdownContainer>
   );
-}
+};
 
 SocialMentionDropdown.propTypes = {
   items: PropTypes.array(),

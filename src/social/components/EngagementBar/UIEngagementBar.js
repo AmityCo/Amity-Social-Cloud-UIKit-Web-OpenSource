@@ -48,7 +48,7 @@ const UIEngagementBar = ({
       <>
         <InteractionBar>
           <PostLikeButton postId={postId} />
-          <SecondaryButton onClick={onClickComment} data-qa-anchor="social-comment-post">
+          <SecondaryButton data-qa-anchor="social-comment-post" onClick={onClickComment}>
             <CommentIcon /> <FormattedMessage id="comment" />
           </SecondaryButton>
         </InteractionBar>
@@ -82,9 +82,9 @@ UIEngagementBar.propTypes = {
   totalLikes: PropTypes.number,
   totalComments: PropTypes.number,
   readonly: PropTypes.bool,
-  onClickComment: PropTypes.func,
   isComposeBarDisplayed: PropTypes.bool,
   handleAddComment: PropTypes.func,
+  onClickComment: PropTypes.func,
 };
 
 UIEngagementBar.defaultProps = {

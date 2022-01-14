@@ -45,8 +45,8 @@ UICategoryCard.propTypes = {
   categoryId: PropTypes.string,
   name: PropTypes.string,
   avatarFileUrl: PropTypes.string,
-  onClick: PropTypes.func,
   loading: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default customizableComponent('UICategoryCard', UICategoryCard);

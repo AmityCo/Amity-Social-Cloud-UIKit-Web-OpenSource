@@ -6,7 +6,7 @@ export default {
   title: 'Ui Only/Social/User',
 };
 
-export const UiUserInfo = props => <UserInfo {...props} />;
+export const UiUserInfo = (props) => <UserInfo {...props} />;
 
 UiUserInfo.storyName = 'Information';
 

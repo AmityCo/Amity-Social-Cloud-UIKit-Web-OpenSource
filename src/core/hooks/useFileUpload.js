@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
 import { FileRepository, FileType } from '@amityco/js-sdk';
 
+const MAX_PERCENT = 0.999;
+
 export default (onChange = () => {}, onLoadingChange = () => {}, onError = () => {}) => {
   const [uploading, setUploading] = useState([]); // local File objects
   const [uploaded, setUploaded] = useState([]); // SDK File models
@@ -9,53 +11,50 @@ export default (onChange = () => {}, onLoadingChange = () => {}, onError = () =>
   const [rejected, setRejected] = useState([]); // filenames that has loading error
 
   // browser loading callback from FileLoader
-  const addFiles = useCallback(files => {
+  const addFiles = useCallback((files) => {
     setUploading(Array.from(files));
 
     setProgress(
       Array.from(files)
-        .map(file => ({ [file.name]: 0 }))
+        .map((file) => ({ [file.name]: 0 }))
         .reduce((obj, item) => ({ ...obj, ...item }), {}),
     );
   }, []);
 
   // async update of indivisual upload progress
-  const onProgress = useCallback(
-    (currentFile, currentPercent) => {
-      const value = currentPercent <= 0.999 ? currentPercent : 1;
+  const onProgress = useCallback((currentFile, currentPercent) => {
+    const value = currentPercent <= MAX_PERCENT ? currentPercent : 1;
 
-      setProgress(prev => ({
-        ...prev,
-        [currentFile.name]: value,
-      }));
-    },
-    [progress],
-  );
+    setProgress((prev) => ({
+      ...prev,
+      [currentFile.name]: value,
+    }));
+  }, []);
 
   const reset = useCallback(() => {
     setUploaded([]);
     onChange([]);
-  }, []);
+  }, [onChange]);
 
   const retry = useCallback(() => {
     // force to re-upload all files
-    setUploading(prev => [...prev]);
+    setUploading((prev) => [...prev]);
     setRejected([]);
-  }, [rejected]);
+  }, []);
 
   const removeFile = useCallback(
-    file => {
+    (file) => {
       if (file.fileId) {
-        const without = uploaded.filter(item => item.fileId !== file.fileId);
+        const without = uploaded.filter((item) => item.fileId !== file.fileId);
         setUploaded(without);
         onChange(without);
       } else {
-        const without = uploading.filter(item => item.name !== file.name);
+        const without = uploading.filter((item) => item.name !== file.name);
         setUploading(without);
         onChange(without);
       }
     },
-    [uploaded, uploading],
+    [onChange, uploaded, uploading],
   );
 
   // file upload function
@@ -67,7 +66,7 @@ export default (onChange = () => {}, onLoadingChange = () => {}, onError = () =>
       onLoadingChange(true);
       try {
         const models = await Promise.all(
-          uploading.map(async file => {
+          uploading.map(async (file) => {
             const uploader =
               file.forceType === FileType.Video
                 ? FileRepository.createVideo
@@ -80,7 +79,9 @@ export default (onChange = () => {}, onLoadingChange = () => {}, onError = () =>
               },
             });
 
-            await new Promise(resolve => liveObject.once('loadingStatusChanged', resolve));
+            await new Promise((resolve) => {
+              liveObject.once('loadingStatusChanged', resolve);
+            });
 
             return liveObject.model;
           }),
@@ -101,7 +102,7 @@ export default (onChange = () => {}, onLoadingChange = () => {}, onError = () =>
         onLoadingChange(false);
         setRejected([]);
       } catch (e) {
-        setRejected(uploading.map(file => file.name));
+        setRejected(uploading.map((file) => file.name));
         onLoadingChange(false);
         onError('Something went wrong. Please try uploading again.');
       }
@@ -110,6 +111,7 @@ export default (onChange = () => {}, onLoadingChange = () => {}, onError = () =>
     return () => {
       cancel = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploading]);
 
   return {

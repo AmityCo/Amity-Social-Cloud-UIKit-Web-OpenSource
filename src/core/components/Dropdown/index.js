@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '~/core/components/Button';
@@ -14,7 +14,7 @@ import { DropdownContainer, Frame, FrameContainer, ButtonContainer } from './sty
 
 const SCROLLABLE_HEIGHT = 200;
 
-const triggerRenderer = props => {
+const triggerRenderer = (props) => {
   return (
     <Button {...props}>
       <ChevronDown />
@@ -45,7 +45,15 @@ const Dropdown = ({
   const [dropdownRef, isActiveElement] = useActiveElement(isOpen);
   const [buttonContainerRef, buttonContainerHeight] = useElementSize();
 
-  const close = () => (handleClose ? isOpen && handleClose() : setIsOpenInternal(false));
+  const close = useCallback(() => {
+    if (handleClose) {
+      if (isOpen) {
+        handleClose();
+      }
+    } else {
+      setIsOpenInternal(false);
+    }
+  }, [handleClose, isOpen]);
 
   const entry = useObserver(dropdownRef.current, {
     root: parentContainer,
@@ -64,8 +72,10 @@ const Dropdown = ({
 
   // handling close on click outside
   useEffect(() => {
-    !isActiveElement && close();
-  }, [isActiveElement]);
+    if (!isActiveElement) {
+      close();
+    }
+  }, [close, isActiveElement]);
 
   // sync internal state
   useEffect(() => {
@@ -85,7 +95,7 @@ const Dropdown = ({
       // reset to default
       setCurrentPosition(position);
     }
-  }, [entry]);
+  }, [entry, position]);
 
   return (
     <DropdownContainer ref={dropdownRef} className={className}>

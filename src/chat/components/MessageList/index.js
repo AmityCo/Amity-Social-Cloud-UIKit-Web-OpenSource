@@ -46,9 +46,9 @@ const MessageList = ({ client, channelId }) => {
 
             return (
               <MessageComponent
+                key={message.messageId}
                 data-qa-anchor="chat-message-list-message"
                 avatar={getAvatar(message)}
-                key={message.messageId}
                 messageId={message.messageId}
                 data={message.data}
                 type={message.type}

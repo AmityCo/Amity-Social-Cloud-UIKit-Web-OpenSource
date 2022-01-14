@@ -99,16 +99,16 @@ const UserSelectorModal = ({
           <SearchUserList
             excludeSelf
             query={query}
-            onUserItemSelected={selectUser}
             selectedUserIds={selectedUserIds}
+            onUserItemSelected={selectUser}
           />
         )}
 
         {query.length === 0 && (
           <AllUserList
             excludeSelf
-            onUserItemSelected={selectUser}
             selectedUserIds={selectedUserIds}
+            onUserItemSelected={selectUser}
           />
         )}
       </WrapResult>

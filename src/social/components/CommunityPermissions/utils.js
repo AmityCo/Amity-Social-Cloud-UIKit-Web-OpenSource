@@ -5,29 +5,31 @@ import useCommunity from '~/social/hooks/useCommunity';
 
 export function usePermission(communityId, key) {
   const { community, updateCommunity } = useCommunity(communityId);
-  const [permission, setPermissionState] = useState(community[key]);
+  const prevValue = community[key];
 
-  useEffect(() => setPermissionState(community[key]), [community[key]]);
+  const [permission, setPermissionState] = useState(prevValue);
+
+  useEffect(() => setPermissionState(prevValue), [prevValue]);
 
   const setPermission = useCallback(
-    async value => {
+    async (newValue) => {
       try {
-        setPermissionState(value);
-        await updateCommunity({ [key]: value });
+        setPermissionState(newValue);
+        await updateCommunity({ [key]: newValue });
       } catch (error) {
-        setPermissionState(community[key]);
+        setPermissionState(prevValue);
 
         info({
           title: (
             <FormattedMessage
-              id={`community.permissions.error.${key}.${value ? 'turnOn' : 'turnOff'}`}
+              id={`community.permissions.error.${key}.${newValue ? 'turnOn' : 'turnOff'}`}
             />
           ),
           content: <FormattedMessage id="general.error.tryAgainLater" />,
         });
       }
     },
-    [community[key], updateCommunity],
+    [key, prevValue, updateCommunity],
   );
 
   return [permission, setPermission];

@@ -5,6 +5,7 @@ import cx from 'classnames';
 
 // equals to 1 GB
 const MAX_FILE_SIZE = 1073741824;
+const MIN_FILES_LIMIT = 1;
 
 const FileLoaderContainer = styled.label`
   cursor: pointer;
@@ -40,12 +41,6 @@ const FileInput = styled.input.attrs({ type: 'file' })`
   }
 `;
 
-const muteEvent = fn => e => {
-  e.preventDefault();
-  e.stopPropagation();
-  return fn(e);
-};
-
 const FileLoader = ({
   className,
   'data-qa-anchor': dataQaAnchor,
@@ -61,29 +56,45 @@ const FileLoader = ({
   const [uniqId] = useState(`_${(Date.now() * Math.random()).toString(36)}`);
   const [hover, setHover] = useState(false);
 
-  const getLimitFiles = targetFiles => targetFiles.slice(0, multiple ? fileLimitRemaining : 1);
+  const getLimitFiles = useCallback(
+    (targetFiles) => targetFiles.slice(0, multiple ? fileLimitRemaining : MIN_FILES_LIMIT),
+    [fileLimitRemaining, multiple],
+  );
 
-  const checkFileSizeLimit = targetFiles => targetFiles.some(file => file.size > MAX_FILE_SIZE);
-  const checkFilesLimit = targetFiles => fileLimitRemaining < targetFiles.length;
+  const checkFileSizeLimit = (targetFiles) => targetFiles.some((file) => file.size > MAX_FILE_SIZE);
+  const checkFilesLimit = useCallback(
+    (targetFiles) => fileLimitRemaining < targetFiles.length,
+    [fileLimitRemaining],
+  );
 
   const onDragEnter = useCallback(
-    muteEvent(e => {
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
       if (disabled) return;
 
       e.dataTransfer.setData(mimeType, uniqId);
       setHover(true);
-    }),
+    },
+    [disabled, mimeType, uniqId],
   );
 
   const onDragLeave = useCallback(
-    muteEvent(() => {
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
       if (disabled) return;
       setHover(false);
-    }),
+    },
+    [disabled],
   );
 
   const onLoad = useCallback(
-    muteEvent(e => {
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (disabled) return;
       const targetFiles = Array.from(e.target.files);
       const isFileSizeLimitReached = checkFileSizeLimit(targetFiles);
@@ -101,27 +112,31 @@ const FileLoader = ({
       if (isFilesLimitReached) {
         onMaxFilesLimit();
       }
-    }),
+    },
+    [checkFilesLimit, disabled, getLimitFiles, onChange, onFileSizeLimit, onMaxFilesLimit],
   );
 
   const onDrop = useCallback(
-    muteEvent(e => {
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       if (disabled) return;
 
       const exprs = mimeType
         .split(',')
-        .map(expr => expr.replace('*', '.*'))
-        .map(expr => new RegExp(expr));
+        .map((expr) => expr.replace('*', '.*'))
+        .map((expr) => new RegExp(expr));
 
-      const allowedFiles = Array.from(e.dataTransfer.files).filter(file =>
-        exprs.some(expr => expr.test(file.type)),
+      const allowedFiles = Array.from(e.dataTransfer.files).filter((file) =>
+        exprs.some((expr) => expr.test(file.type)),
       );
 
       const limitFiles = getLimitFiles(allowedFiles);
 
       if (limitFiles.length) onChange(limitFiles);
       setHover(false);
-    }),
+    },
+    [disabled, getLimitFiles, mimeType, onChange],
   );
 
   return (
@@ -134,7 +149,7 @@ const FileLoader = ({
       onDragLeave={onDragLeave}
       onDrop={onDrop}
     >
-      <FileInput onChange={onLoad} accept={mimeType} multiple={multiple} disabled={disabled} />
+      <FileInput accept={mimeType} multiple={multiple} disabled={disabled} onChange={onLoad} />
       {children}
     </FileLoaderContainer>
   );
@@ -147,10 +162,10 @@ FileLoader.propTypes = {
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
   fileLimitRemaining: PropTypes.number,
+  children: PropTypes.node,
   onMaxFilesLimit: PropTypes.func,
   onFileSizeLimit: PropTypes.func,
   onChange: PropTypes.func,
-  children: PropTypes.node,
 };
 
 FileLoader.defaultProps = {

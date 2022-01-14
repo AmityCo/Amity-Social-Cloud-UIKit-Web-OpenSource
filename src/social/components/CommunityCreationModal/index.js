@@ -11,9 +11,10 @@ import { CommunityForm } from './styles';
 import withSDK from '~/core/hocs/withSDK';
 
 const CommunityCreationModal = ({ isOpen, onClose }) => {
+  const { formatMessage } = useIntl();
+
   if (!isOpen) return null;
 
-  const { formatMessage } = useIntl();
   const closeConfirm = () =>
     confirm({
       title: formatMessage({ id: 'CommunityCreationModal.title' }),
@@ -23,7 +24,7 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
       onOk: onClose,
     });
 
-  const handleSubmit = async data => {
+  const handleSubmit = async (data) => {
     const { communityId } = await promisify(CommunityRepository.createCommunity(data));
     onClose(communityId);
   };

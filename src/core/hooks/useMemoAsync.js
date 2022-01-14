@@ -6,7 +6,7 @@ function useMemoAsync(factory, deps = []) {
   useEffect(() => {
     let disposed = false;
 
-    factory().then(newValue => {
+    factory().then((newValue) => {
       if (!disposed) {
         setValue(newValue);
       }
@@ -15,6 +15,7 @@ function useMemoAsync(factory, deps = []) {
     return () => {
       disposed = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return value;

@@ -39,7 +39,7 @@ export const ReviewButtonsContainer = styled.div`
   }
 `;
 
-export function ContentSkeleton() {
+export const ContentSkeleton = () => {
   return (
     <>
       <div>
@@ -53,4 +53,4 @@ export function ContentSkeleton() {
       </div>
     </>
   );
-}
+};

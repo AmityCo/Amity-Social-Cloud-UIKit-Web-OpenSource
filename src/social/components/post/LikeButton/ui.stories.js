@@ -10,7 +10,7 @@ export default {
 export const UiPostLikeButton = ({ isDisabled }) => {
   const [{ isActive }, updateArgs] = useArgs();
   const toggleLike = () => updateArgs({ isActive: !isActive });
-  return <StyledPostLikeButton onClick={toggleLike} isActive={isActive} isDisabled={isDisabled} />;
+  return <StyledPostLikeButton isActive={isActive} isDisabled={isDisabled} onClick={toggleLike} />;
 };
 
 UiPostLikeButton.storyName = 'Like button';

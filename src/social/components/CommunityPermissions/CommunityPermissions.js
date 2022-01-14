@@ -7,10 +7,7 @@ import {
   CommunityPermissionsHeader,
 } from './styles';
 
-export default function CommunityPermissionsComponent({
-  needApprovalOnPostCreation,
-  onNeedApprovalOnPostCreationChange,
-}) {
+export default ({ needApprovalOnPostCreation, onNeedApprovalOnPostCreationChange }) => {
   return (
     <CommunityPermissionsContainer>
       <CommunityPermissionsHeader>
@@ -25,4 +22,4 @@ export default function CommunityPermissionsComponent({
       </CommunityPermissionsBody>
     </CommunityPermissionsContainer>
   );
-}
+};

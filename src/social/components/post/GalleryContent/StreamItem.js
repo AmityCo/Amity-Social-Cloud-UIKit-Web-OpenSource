@@ -27,12 +27,12 @@ function getUrl(stream) {
   return undefined;
 }
 
-export function Thumbnail({
+export const Thumbnail = ({
   item,
   showPlayIcon,
   showLivestreamRecordedBadge,
   showLivestreamTitle,
-}) {
+}) => {
   const stream = useStream(item.data.streamId);
   const file = useFile(stream.thumbnailFileId);
 
@@ -60,9 +60,9 @@ export function Thumbnail({
       showPlayIcon={showPlayIcon}
     />
   );
-}
+};
 
-export function Item({ item }) {
+export const Item = ({ item }) => {
   const stream = useStream(item.data.streamId);
 
   if (!stream.streamId) {
@@ -85,4 +85,4 @@ export function Item({ item }) {
       url={getUrl(stream)}
     />
   );
-}
+};

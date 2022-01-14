@@ -25,10 +25,10 @@ const Image = ({
       progress={progress}
       mediaFit={mediaFit}
       noBorder={noBorder}
-      onRemove={onRemove}
       isRejected={isRejected}
-      onRetry={() => retry()}
       overlayElements={overlayElements}
+      onRemove={onRemove}
+      onRetry={() => retry()}
     />
   );
 };
@@ -40,10 +40,10 @@ Image.propTypes = {
   progress: PropTypes.number,
   noBorder: PropTypes.bool,
   mediaFit: PropTypes.oneOf(['cover', 'contain']),
-  onRemove: PropTypes.func,
   isRejected: PropTypes.bool,
   retry: PropTypes.func,
   overlayElements: PropTypes.node,
+  onRemove: PropTypes.func,
 };
 
 Image.defaultProps = {

@@ -4,7 +4,7 @@ import { PageTabs } from '~/social/pages/CommunityEdit/constants';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import UiCommunityCreatedModal from './CommunityCreatedModal';
 
-function CommunityCreatedModal({ communityId, onClose }) {
+const CommunityCreatedModal = ({ communityId, onClose }) => {
   const { onEditCommunity } = useNavigation();
 
   const onGoSettings = () => {
@@ -19,6 +19,6 @@ function CommunityCreatedModal({ communityId, onClose }) {
       onGoSettings={onGoSettings}
     />
   );
-}
+};
 
 export default customizableComponent('CommunityCreatedModal', CommunityCreatedModal);

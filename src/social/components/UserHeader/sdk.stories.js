@@ -7,7 +7,7 @@ export default {
 };
 
 export const SDKUserHeader = ({ userId, children, onClick, isBanned }) => (
-  <UiKitUserHeader userId={userId} onClick={onClick} isBanned={isBanned}>
+  <UiKitUserHeader userId={userId} isBanned={isBanned} onClick={onClick}>
     {children}
   </UiKitUserHeader>
 );

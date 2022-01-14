@@ -80,22 +80,22 @@ const PollContent = ({ items }) => {
 
   const { formatMessage } = useIntl();
 
-  const handleCheck = answerId => {
+  const handleCheck = (answerId) => {
     if (answerIds.includes(answerId)) {
-      const index = answerIds.findIndex(id => id === answerId);
-      setAnswerIds(prevAnswerIds => [
+      const index = answerIds.findIndex((id) => id === answerId);
+      setAnswerIds((prevAnswerIds) => [
         ...prevAnswerIds.splice(0, index),
         ...prevAnswerIds.splice(index + 1),
       ]);
     } else if (canSelectMultiple) {
-      setAnswerIds(prevAnswerIds => [...prevAnswerIds, answerId]);
+      setAnswerIds((prevAnswerIds) => [...prevAnswerIds, answerId]);
     } else {
       setAnswerIds([answerId]);
     }
   };
 
   const [handleSubmit] = useAsyncCallback(
-    async e => {
+    async (e) => {
       e.preventDefault();
 
       if (isClosed || isDeleted) {
@@ -132,7 +132,7 @@ const PollContent = ({ items }) => {
         <ResultList answers={answers} />
       </ConditionalRender>
       {!isVoted && (
-        <SubmitButton onClick={handleSubmit} disabled={!answerIds.length}>
+        <SubmitButton disabled={!answerIds.length} onClick={handleSubmit}>
           <FormattedMessage id="poll.vote.submit" />
         </SubmitButton>
       )}

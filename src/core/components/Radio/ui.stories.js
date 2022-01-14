@@ -10,7 +10,7 @@ export default {
 export const UiRadio = () => {
   const [{ value, items, onChange }, updateArgs] = useArgs();
 
-  const setValue = newVal => {
+  const setValue = (newVal) => {
     onChange(newVal);
     updateArgs({ value: newVal });
   };
@@ -34,14 +34,14 @@ UiRadio.argTypes = {
   onChange: { action: 'onChange()' },
 };
 
-export const CustomRadio = () => {
-  const ItemRenderer = ({ label, value: color }) => (
-    <div style={{ height: '3rem', color }}>{label}</div>
-  );
+const RadioItemRenderer = ({ label, value: color }) => (
+  <div style={{ height: '3rem', color }}>{label}</div>
+);
 
+export const CustomRadio = () => {
   const items = [
-    { value: 'red', label: '1st color', customRender: ItemRenderer },
-    { value: 'blue', label: '2nd color', customRender: ItemRenderer },
+    { value: 'red', label: '1st color', customRender: RadioItemRenderer },
+    { value: 'blue', label: '2nd color', customRender: RadioItemRenderer },
   ];
 
   const [value, setValue] = useState(items[0].value);
@@ -51,14 +51,14 @@ export const CustomRadio = () => {
 
 CustomRadio.storyName = 'Custom renderer';
 
-export const BooleanRadio = () => {
-  const ItemRenderer = ({ label, value }) => (
-    <div style={{ color: value ? 'green' : 'red' }}>{label}</div>
-  );
+const BooleanItemRenderer = ({ label, value }) => (
+  <div style={{ color: value ? 'green' : 'red' }}>{label}</div>
+);
 
+export const BooleanRadio = () => {
   const items = [
-    { value: true, label: 'true value', customRender: ItemRenderer },
-    { value: false, label: 'false value', customRender: ItemRenderer },
+    { value: true, label: 'true value', customRender: BooleanItemRenderer },
+    { value: false, label: 'false value', customRender: BooleanItemRenderer },
   ];
 
   const [bool, setBool] = useState(items[0].value);

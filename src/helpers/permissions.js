@@ -6,15 +6,15 @@ import { isCommunityMember, isCommunityPost, isPostUnderReview } from '~/helpers
 const ADMIN = 'global-admin';
 const { COMMUNITY_MODERATOR, CHANNEL_MODERATOR } = MemberRoles;
 
-export const isModerator = userRoles => {
+export const isModerator = (userRoles) => {
   if (!userRoles?.length) {
     return false;
   }
 
-  return userRoles.some(role => [COMMUNITY_MODERATOR, CHANNEL_MODERATOR].includes(role));
+  return userRoles.some((role) => [COMMUNITY_MODERATOR, CHANNEL_MODERATOR].includes(role));
 };
 
-export const isAdmin = userRoles => {
+export const isAdmin = (userRoles) => {
   if (!userRoles?.length) {
     return false;
   }
@@ -58,7 +58,7 @@ export function canDeletePost({ userId, user, communityUser, post, community }) 
 export function canEditPost({ userId, user, communityUser, post, community, childrenPosts }) {
   if (
     childrenPosts.find(
-      childPost =>
+      (childPost) =>
         childPost.dataType === PostDataType.LivestreamPost ||
         childPost.dataType === PostDataType.PollPost,
     )

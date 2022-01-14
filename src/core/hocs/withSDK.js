@@ -1,11 +1,11 @@
 import { ConnectionStatus } from '@amityco/js-sdk';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 
 const SDKContext = React.createContext({});
 
 export const useSDK = () => useContext(SDKContext);
 
-export function SDKProvider({ children, client }) {
+export const SDKProvider = ({ children, client }) => {
   const [connectionStatus, setConnectionStatus] = useState(ConnectionStatus.NotConnected);
 
   useEffect(() => {
@@ -16,22 +16,28 @@ export function SDKProvider({ children, client }) {
     }
   }, [client]);
 
-  return (
-    <SDKContext.Provider
-      value={{
-        client,
-        connected: connectionStatus === ConnectionStatus.Connected,
-        currentUserId: client?.currentUserId,
-        userRoles: client?.currentUser?.model?.roles,
-        networkSettings: client?.networkSettings ?? {},
-      }}
-    >
-      {children}
-    </SDKContext.Provider>
+  const value = useMemo(
+    () => ({
+      client,
+      connected: connectionStatus === ConnectionStatus.Connected,
+      currentUserId: client?.currentUser?.model?.userId,
+      userRoles: client?.currentUser?.model?.roles,
+      networkSettings: client?.networkSettings ?? {},
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      client,
+      connectionStatus,
+      client?.currentUser?.model?.userId,
+      client?.currentUser?.model?.roles,
+      client?.networkSettings,
+    ],
   );
-}
 
-const withSDK = Component => props => {
+  return <SDKContext.Provider value={value}>{children}</SDKContext.Provider>;
+};
+
+const withSDK = (Component) => (props) => {
   const sdkData = useSDK();
 
   return <Component {...sdkData} {...props} />;

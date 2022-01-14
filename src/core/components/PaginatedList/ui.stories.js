@@ -21,7 +21,7 @@ export const PaginatedList = () => {
 
   return (
     <UiKitPaginatedList items={items} hasMore={hasMore} loadMore={loadMore}>
-      {item => (
+      {(item) => (
         <div key={item} style={{ color: item }}>
           {item}
         </div>

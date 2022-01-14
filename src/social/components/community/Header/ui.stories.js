@@ -6,7 +6,7 @@ export default {
   title: 'Ui Only/Social/Community',
 };
 
-export const UiCommunityHeader = args => <StyledCommunityHeader {...args} />;
+export const UiCommunityHeader = (args) => <StyledCommunityHeader {...args} />;
 
 UiCommunityHeader.storyName = 'Header';
 

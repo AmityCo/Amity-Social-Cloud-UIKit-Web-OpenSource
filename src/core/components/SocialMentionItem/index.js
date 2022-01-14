@@ -26,7 +26,7 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
     if (targetRef && entry?.isIntersecting) {
       loadMore();
     }
-  }, [targetRef, entry.isIntersecting]);
+  }, [targetRef, entry.isIntersecting, loadMore]);
 
   // Slow performance, need more pristine approach
   const onMouseEnter = useCallback((e, isBanned) => {
@@ -34,15 +34,15 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
       e.target.parentNode.style.cursor = 'not-allowed';
       e.target.parentNode.style['pointer-events'] = 'none';
     }
-  });
+  }, []);
 
   if (isLastItem) {
     return (
       <Item
-        focused={focused}
         ref={targetRef}
+        focused={focused}
         isBanned={user.isGlobalBan}
-        onMouseEnter={e => onMouseEnter(e, user.isGlobalBan)}
+        onMouseEnter={(e) => onMouseEnter(e, user.isGlobalBan)}
       >
         <Avatar avatar={file.fileUrl} showOverlay={user.isGlobalBan} />
         <div css="margin-left: 10px;">{user.displayName}</div>
@@ -54,7 +54,7 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
     <Item
       focused={focused}
       isBanned={user.isGlobalBan}
-      onMouseEnter={e => onMouseEnter(e, user.isGlobalBan)}
+      onMouseEnter={(e) => onMouseEnter(e, user.isGlobalBan)}
     >
       <Avatar avatar={file.fileUrl} />
       <div css="margin-left: 10px;">{user.displayName}</div>

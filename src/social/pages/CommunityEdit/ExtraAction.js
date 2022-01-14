@@ -28,7 +28,7 @@ const ExtraAction = ({ title, bodyText, actionButton }) => {
 
 const AddMemberButton = ({ onClick }) => {
   return (
-    <ExtraActionPrimaryButton onClick={onClick} data-qa-anchor="social-community-add-member-button">
+    <ExtraActionPrimaryButton data-qa-anchor="social-community-add-member-button" onClick={onClick}>
       <PlusIcon />
       <FormattedMessage id="add" />
     </ExtraActionPrimaryButton>
@@ -75,8 +75,8 @@ export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
       bodyText={<FormattedMessage id="CloseCommunityAction.description" />}
       actionButton={
         <CloseCommunityButton
-          onClick={closeConfirm}
           data-qa-anchor="social-edit-profile-close-community"
+          onClick={closeConfirm}
         />
       }
     />

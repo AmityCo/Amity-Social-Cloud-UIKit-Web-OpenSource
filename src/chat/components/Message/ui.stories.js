@@ -18,8 +18,7 @@ UIMessage.args = {
   messageId: '',
   type: MessageType.Text,
   data: {
-    text:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s',
+    text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s',
   },
   createdAt: new Date(),
   userDisplayName: 'Test User',

@@ -111,8 +111,8 @@ const UICommunityInfo = ({
         <ConditionalRender condition={isJoined && canEditCommunity}>
           <Button
             fullWidth
-            onClick={() => onEditCommunity(communityId)}
             data-qa-anchor="social-edit-community-button"
+            onClick={() => onEditCommunity(communityId)}
           >
             <PencilIcon /> <FormattedMessage id="community.editProfile" />
           </Button>
@@ -137,13 +137,13 @@ UICommunityInfo.propTypes = {
   isPublic: PropTypes.bool,
   avatarFileUrl: PropTypes.string,
   canEditCommunity: PropTypes.bool,
-  onEditCommunity: PropTypes.func,
   joinCommunity: PropTypes.func,
-  onClickLeaveCommunity: PropTypes.func,
   canLeaveCommunity: PropTypes.bool,
   canReviewPosts: PropTypes.bool,
   name: PropTypes.string,
   needApprovalOnPostCreation: PropTypes.bool,
+  onClickLeaveCommunity: PropTypes.func,
+  onEditCommunity: PropTypes.func,
 };
 
 export default customizableComponent('UICommunityInfo', UICommunityInfo);

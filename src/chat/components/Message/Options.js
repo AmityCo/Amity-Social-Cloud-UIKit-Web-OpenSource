@@ -52,7 +52,7 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   const [text, setText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
-  const edit = e => {
+  const edit = (e) => {
     e.stopPropagation();
     setIsEditing(true);
   };
@@ -109,8 +109,8 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
       <EditingInput
         autoFocus
         value={text}
-        onChange={e => setText(e.target.value)}
-        onKeyDown={e => {
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={(e) => {
           if (e.key === 'Enter') save();
           if (e.key === 'Escape') close();
         }}
@@ -123,10 +123,10 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   return (
     <Popover
       isOpen={isOpen}
-      onClickOutside={close}
       position="bottom"
       align={isIncoming ? 'start' : 'end'}
       content={isEditing ? editing : menu}
+      onClickOutside={close}
     >
       <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
         <MessageOptionsIcon />

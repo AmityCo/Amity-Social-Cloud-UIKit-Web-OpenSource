@@ -63,11 +63,11 @@ const Feed = ({
             <PostCreator
               targetType={targetType}
               targetId={targetId}
-              onCreateSuccess={onPostCreated}
               communities={communities}
               enablePostTargetPicker={enablePostTargetPicker}
               hasMoreCommunities={hasMoreCommunities}
               loadMoreCommunities={loadMoreCommunities}
+              onCreateSuccess={onPostCreated}
             />
           </ConditionalRender>
 
@@ -108,11 +108,11 @@ Feed.propTypes = {
   targetType: PropTypes.oneOf(Object.values(PostTargetType)),
   targetId: PropTypes.string,
   showPostCreator: PropTypes.bool,
-  onPostCreated: PropTypes.func,
   // below is to be refactored
   goToExplore: PropTypes.func,
   readonly: PropTypes.bool,
   isHiddenProfile: PropTypes.bool,
+  onPostCreated: PropTypes.func,
 };
 
 export default memo(customizableComponent('Feed', Feed));
