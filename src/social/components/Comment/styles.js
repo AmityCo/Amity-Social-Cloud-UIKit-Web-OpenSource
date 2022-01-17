@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import TextareaAutosize from 'react-autosize-textarea';
 import UIOptionMenu from '~/core/components/OptionMenu';
 import Time from '~/core/components/Time';
+import InputText from '~/core/components/InputText';
 import UICommentComposeBar from '~/social/components/CommentComposeBar';
 import { SecondaryButton } from '~/core/components/Button';
 import { MinusCircle, Reply } from '~/icons';
@@ -199,11 +199,13 @@ export const ButtonContainer = styled.div`
   }
 `;
 
-export const CommentEditTextarea = styled(TextareaAutosize).attrs({ rows: 1, maxRows: 15 })`
-  padding: 10px 12px 21px 10px;
+export const CommentEditTextarea = styled(InputText).attrs({ rows: 1, maxRows: 15 })`
   outline: none;
-  border: 1px solid ${({ theme }) => theme.palette.base.shade4};
   border-radius: 4px;
   resize: none;
   ${({ theme }) => theme.typography.global}
+`;
+
+export const Highlighted = styled.span`
+  color: ${({ theme }) => theme.palette.primary.main};
 `;

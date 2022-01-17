@@ -4,7 +4,7 @@ import { PostDataType, PostRepository } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 
 import usePost from '~/social/hooks/usePost';
-import usePostMention from '~/core/hooks/usePostMention';
+import useSocialMention from '~/core/hooks/useSocialMention';
 import Content from './Content';
 import { PostEditorContainer, Footer, ContentContainer, PostButton } from './styles';
 
@@ -12,43 +12,12 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
   const { post, handleUpdatePost, childrenPosts = [] } = usePost(postId);
   const { data, dataType, targetId, targetType, metadata } = post;
 
-  const fromRemoteToLocalMentionees = (postMetadata) => {
-    if (!postMetadata) return [];
-
-    const { mentioned } = postMetadata;
-
-    if (!mentioned) return [];
-
-    return mentioned.map(({ index, userId, markupIndex }) => ({
-      length: userId?.length,
-      id: userId,
-      index: markupIndex,
-      plainTextIndex: index,
-    }));
-  };
-
-  const [queryMentionees] = usePostMention({ targetId, targetType });
-
-  // Text content for the post being rendered with postId (parent post).
-  const [localParentText, setLocalParentText] = useState('');
-  const [localMarkupText, setLocalMarkupText] = useState('');
-  const [postMentionees, setPostMentionees] = useState([]);
-
-  useEffect(() => {
-    setPostMentionees(fromRemoteToLocalMentionees(metadata));
-    setLocalMarkupText(metadata?.markupText || '');
-  }, [metadata]);
-
-  useEffect(() => setLocalParentText(data?.text || ''), [data]);
-
-  const handleChangeParentText = ({ text, markupText, mentions: editMentionees }) => {
-    setLocalParentText(text);
-    setLocalMarkupText(markupText);
-
-    if (editMentionees?.length > 0) {
-      setPostMentionees(editMentionees);
-    }
-  };
+  const { text, markup, mentions, clearAll, onChange, queryMentionees } = useSocialMention({
+    targetId,
+    targetType,
+    remoteText: data?.text ?? '',
+    remoteMarkup: metadata?.markupText ?? data?.text ?? '',
+  });
 
   // Children posts of the post being rendered with postId.
   const [localChildrenPosts, setLocalChildrenPosts] = useState(childrenPosts);
@@ -57,58 +26,59 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
   // List of the children posts removed - these will be deleted on save.
   const [localRemovedChildren, setLocalRemovedChildren] = useState([]);
 
-  const handleRemoveChild = (childPostId) => {
-    const updatedChildren = localChildrenPosts.filter((child) => child.postId !== childPostId);
+  const handleRemoveChild = childPostId => {
+    const updatedChildren = localChildrenPosts.filter(child => child.postId !== childPostId);
     setLocalChildrenPosts(updatedChildren);
-    setLocalRemovedChildren((prevRemovedChildren) => [...prevRemovedChildren, childPostId]);
+    setLocalRemovedChildren(prevRemovedChildren => [...prevRemovedChildren, childPostId]);
   };
 
   // Update parent post text and delete removed children posts.
   // TO REFACTOR: Extract this logic as a hook for Create Post too
   const handleSave = () => {
-    let mentionees;
+    let mentionees = [];
     const postMetadata = {};
 
-    if (postMentionees?.length > 0) {
+    if (mentions?.length > 0) {
       mentionees = [{}];
       mentionees[0].type = 'user';
-      mentionees[0].userIds = postMentionees.map(({ id }) => id);
+      mentionees[0].userIds = mentions.map(({ id }) => id);
 
-      postMetadata.mentioned = postMentionees.map(({ plainTextIndex, id }) => ({
+      postMetadata.mentioned = mentions.map(({ plainTextIndex, id }) => ({
         index: plainTextIndex,
         length: id.length,
         type: 'user',
         userId: id,
       }));
 
-      postMetadata.markupText = localMarkupText;
+      postMetadata.markupText = markup;
     }
 
-    localRemovedChildren.forEach((childPostId) => {
+    localRemovedChildren.forEach(childPostId => {
       PostRepository.deletePost(childPostId);
     });
 
-    handleUpdatePost({ text: localParentText }, { mentionees, metadata: postMetadata });
+    handleUpdatePost({ text }, { mentionees, metadata: postMetadata });
+    clearAll();
     onSave();
   };
 
-  const isEmpty = useMemo(
-    () => localParentText?.trim() === '' && !localChildrenPosts.length,
-    [localParentText, localChildrenPosts],
-  );
+  const isEmpty = useMemo(() => text?.trim() === '' && !localChildrenPosts.length, [
+    text,
+    localChildrenPosts,
+  ]);
 
   const childFilePosts = useMemo(
-    () => localChildrenPosts.filter((childPost) => childPost.dataType === PostDataType.FilePost),
+    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.FilePost),
     [localChildrenPosts],
   );
 
   const childImagePosts = useMemo(
-    () => localChildrenPosts.filter((childPost) => childPost.dataType === PostDataType.ImagePost),
+    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.ImagePost),
     [localChildrenPosts],
   );
 
   const childVideoPosts = useMemo(
-    () => localChildrenPosts.filter((childPost) => childPost.dataType === PostDataType.VideoPost),
+    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.VideoPost),
     [localChildrenPosts],
   );
 
@@ -116,11 +86,11 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
     <PostEditorContainer className={className}>
       <ContentContainer>
         <Content
-          data={{ text: localMarkupText?.length > 0 ? localMarkupText : localParentText }}
+          data={{ text: markup }}
           dataType={dataType}
           placeholder={placeholder}
+          onChange={onChange}
           queryMentionees={queryMentionees}
-          onChangeText={handleChangeParentText}
         />
         {childImagePosts.length > 0 && (
           <Content

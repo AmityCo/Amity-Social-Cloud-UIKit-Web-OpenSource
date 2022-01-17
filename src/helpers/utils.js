@@ -61,3 +61,36 @@ export function searchWords(mentionees) {
   // Prolly need to dissect this on upper level TextContent
   return mentionees?.length ? mentionees[0].userIds.map((userId) => `@${userId}`) : [];
 }
+
+export function findChunks(mentionees) {
+  if (!mentionees) return [];
+  return mentionees.map(({ index, length }) => ({
+    start: index,
+    end: index + length + 1, // compensate for index === 0
+  }));
+}
+
+export function extractMetadata(markup, mentions) {
+  let metadata;
+  let mentionees;
+
+  if (mentions?.length > 0) {
+    metadata = {};
+    mentionees = [{}];
+
+    metadata.mentioned = [
+      ...mentions.map(({ plainTextIndex, id, index: markupIndex }) => ({
+        index: plainTextIndex,
+        length: id.length,
+        type: 'user',
+        userId: id,
+        markupIndex,
+      })),
+    ];
+    metadata.markupText = markup;
+    mentionees[0].type = 'user';
+    mentionees[0].userIds = mentions.map(({ id }) => id);
+  }
+
+  return { metadata, mentionees };
+}

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, forwardRef } from 'react';
 import { Mention, MentionsInput } from 'react-mentions';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
@@ -123,27 +123,30 @@ const renderMentionItem = (
   />
 );
 
-const InputText = ({
-  id,
-  input = null,
-  name = '',
-  value = '',
-  placeholder = '',
-  multiline = false,
-  disabled = false,
-  invalid = false,
-  rows = 1,
-  maxRows = 3,
-  prepend,
-  append,
-  onChange,
-  onClear = () => {},
-  onClick = () => {},
-  className = null,
-  mentionAllowed = false,
-  queryMentionees = () => [],
-  loadMoreMentionees = () => [],
-}) => {
+const InputText = (
+  {
+    id,
+    name = '',
+    value = '',
+    placeholder = '',
+    multiline = false,
+    disabled = false,
+    invalid = false,
+    rows = 1,
+    maxRows = 3,
+    prepend,
+    append,
+    onChange,
+    onClear = () => {},
+    onClick = () => {},
+    onKeyPress = () => {},
+    className = null,
+    mentionAllowed = false,
+    queryMentionees = () => [],
+    loadMoreMentionees = () => [],
+  },
+  ref,
+) => {
   const mentionRef = useRef();
   const handleMentionInput = useCallback(
     (e, [,], newPlainVal, mentions) => {
@@ -154,7 +157,6 @@ const InputText = ({
       const isMentionText = lastSegment[0]?.match(/^@/g);
 
       onChange({
-        // text: e.target.value,
         text: e.target.value,
         plainText: newPlainVal,
         lastMentionText: isMentionText && lastSegment,
@@ -165,7 +167,7 @@ const InputText = ({
   );
 
   const handleKeyDown = useCallback(
-    (e) => {
+    e => {
       if (e.key === 'Backspace' && value.length === 0) onClear();
     },
     [onClear, value.length],
@@ -179,7 +181,7 @@ const InputText = ({
     value,
     placeholder,
     disabled,
-    onChange: mentionAllowed ? handleMentionInput : (e) => onChange(e.target.value),
+    onChange: mentionAllowed ? handleMentionInput : e => onChange(e.target.value),
     onKeyDown: handleKeyDown,
     className: classNames,
   };
@@ -190,13 +192,14 @@ const InputText = ({
       <div ref={mentionRef} id="mention-input" />
       {multiline && mentionAllowed && (
         <StyledMentionsInput
-          inputRef={input}
+          inputRef={ref}
           rows={rows}
           maxRows={maxRows}
           suggestionsPortalHost={mentionRef?.current}
           style={suggestListStyles}
           {...props}
           onClick={onClick}
+          onKeyPress={onKeyPress}
         >
           <Mention
             trigger="@"
@@ -213,9 +216,9 @@ const InputText = ({
       )}
       <ConditionalRender condition={multiline}>
         {!mentionAllowed && (
-          <TextArea ref={input} rows={rows} maxRows={maxRows} {...props} onClick={onClick} />
+          <TextArea ref={ref} rows={rows} maxRows={maxRows} {...props} onClick={onClick} />
         )}
-        <TextField ref={input} {...props} onClick={onClick} />
+        <TextField ref={ref} {...props} onClick={onClick} />
       </ConditionalRender>
       {append}
     </Container>
@@ -235,13 +238,14 @@ InputText.propTypes = {
   maxRows: PropTypes.number,
   prepend: PropTypes.node,
   append: PropTypes.node,
+  onChange: PropTypes.func.isRequired,
+  onClear: PropTypes.func,
+  onClick: PropTypes.func,
+  onKeyPress: PropTypes.func,
   className: PropTypes.string,
   mentionAllowed: PropTypes.bool,
   queryMentionees: PropTypes.func,
   loadMoreMentionees: PropTypes.func,
-  onChange: PropTypes.func.isRequired,
-  onClear: PropTypes.func,
-  onClick: PropTypes.func,
 };
 
-export default InputText;
+export default forwardRef(InputText);

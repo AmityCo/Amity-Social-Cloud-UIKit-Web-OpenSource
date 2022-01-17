@@ -8,6 +8,7 @@ import Highlighter from 'react-highlight-words';
 import customizableComponent from '~/core/hocs/customization';
 import Linkify from '~/core/components/Linkify';
 import Button from '~/core/components/Button';
+import { findChunks } from '~/helpers/utils';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
@@ -26,23 +27,17 @@ export const Highlighted = styled.span`
   color: ${({ theme }) => theme.palette.primary.main};
 `;
 
-const findChunks = (mentionees) => {
-  if (!mentionees) return [];
-  return mentionees.map(({ index, length }) => ({
-    start: index,
-    end: index + length + 1, // compensate for index === 0
-  }));
-};
-
 const TextContent = ({ text, postMaxLines, mentionees }) => {
   const textContent = text && (
     <PostContent>
-      <Highlighter
-        autoEscape
-        highlightTag={({ children }) => <Highlighted>{children}</Highlighted>}
-        findChunks={() => findChunks(mentionees)}
-        textToHighlight={text}
-      />
+      <Truncate.Atom>
+        <Highlighter
+          autoEscape
+          highlightTag={({ children }) => <Highlighted>{children}</Highlighted>}
+          findChunks={() => findChunks(mentionees)}
+          textToHighlight={text}
+        />
+      </Truncate.Atom>
     </PostContent>
   );
 

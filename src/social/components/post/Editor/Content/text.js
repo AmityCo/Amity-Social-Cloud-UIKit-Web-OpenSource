@@ -18,7 +18,7 @@ const Textarea = styled(InputText).attrs({ rows: 1, maxRows: 15 })`
   font: inherit;
 `;
 
-const TextContent = ({ text, placeholder, onChangeText, queryMentionees }) => {
+const TextContent = ({ text, placeholder, onChange, queryMentionees }) => {
   return (
     <TextareaWrapper>
       <Textarea
@@ -28,9 +28,7 @@ const TextContent = ({ text, placeholder, onChangeText, queryMentionees }) => {
         multiline
         mentionAllowed
         queryMentionees={queryMentionees}
-        onChange={({ text: markupText, plainText, mentions }) =>
-          onChangeText({ text: plainText, markupText, mentions })
-        }
+        onChange={onChange}
       />
     </TextareaWrapper>
   );
@@ -39,15 +37,15 @@ const TextContent = ({ text, placeholder, onChangeText, queryMentionees }) => {
 TextContent.propTypes = {
   text: PropTypes.string,
   placeholder: PropTypes.string,
+  onChange: PropTypes.func,
   queryMentionees: PropTypes.func,
-  onChangeText: PropTypes.func,
 };
 
 TextContent.defaultProps = {
   text: '',
   placeholder: '',
+  onChange: () => {},
   queryMentionees: () => {},
-  onChangeText: () => {},
 };
 
 export default TextContent;

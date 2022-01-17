@@ -41,6 +41,7 @@ const StyledComment = ({
   createdAt,
   editedAt,
   text,
+  markup,
   onClickReply,
   handleReportComment,
   handleEdit,
@@ -48,10 +49,13 @@ const StyledComment = ({
   cancelEditing,
   handleDelete,
   isEditing,
-  setText,
+  onChange,
+  queryMentionees,
   isReported,
   isReplyComment,
   isBanned,
+  mentionees,
+  metadata,
 }) => {
   const options = [
     canEdit && { name: isReplyComment ? 'reply.edit' : 'comment.edit', action: startEditing },
@@ -96,7 +100,13 @@ const StyledComment = ({
 
         <ConditionalRender condition={isEditing}>
           <CommentEditContainer>
-            <CommentEditTextarea value={text} onChange={(e) => setText(e.target.value)} />
+            <CommentEditTextarea
+              multiline
+              mentionAllowed
+              value={markup}
+              onChange={onChange}
+              queryMentionees={queryMentionees}
+            />
             <ButtonContainer>
               <Button onClick={cancelEditing}>
                 <FormattedMessage id="cancel" />
@@ -106,7 +116,7 @@ const StyledComment = ({
               </PrimaryButton>
             </ButtonContainer>
           </CommentEditContainer>
-          <CommentText>{text}</CommentText>
+          <CommentText text={text} mentionees={mentionees} metadata={metadata} />
         </ConditionalRender>
 
         <ConditionalRender condition={!isEditing && (canLike || canReply || options.length > 0)}>
@@ -140,17 +150,21 @@ StyledComment.propTypes = {
   createdAt: PropTypes.instanceOf(Date),
   editedAt: PropTypes.instanceOf(Date),
   text: PropTypes.string,
+  markup: PropTypes.string,
+  onClickReply: PropTypes.func,
   handleReportComment: PropTypes.func,
   handleEdit: PropTypes.func.isRequired,
   startEditing: PropTypes.func.isRequired,
   cancelEditing: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  mentionees: PropTypes.array,
+  metadata: PropTypes.object,
   isEditing: PropTypes.bool,
-  setText: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  queryMentionees: PropTypes.func.isRequired,
   isReported: PropTypes.bool,
   isReplyComment: PropTypes.bool,
   isBanned: PropTypes.bool,
-  onClickReply: PropTypes.func,
 };
 
 export default StyledComment;

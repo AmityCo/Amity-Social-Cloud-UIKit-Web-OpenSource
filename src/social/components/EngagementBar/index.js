@@ -14,13 +14,15 @@ const EngagementBar = ({ postId, readonly }) => {
   const hideComposeBar = () => setComposeBarDisplayed(false);
 
   const { post } = usePost(postId);
-  const { commentsCount, reactions = {} } = post;
+  const { commentsCount, reactions = {}, targetId, targetType } = post;
 
-  const handleAddComment = async (commentText) => {
+  const handleAddComment = async (commentText, mentionees, metadata) => {
     await CommentRepository.createTextComment({
       referenceType: CommentReferenceType.Post,
       referenceId: postId,
       text: commentText,
+      mentionees,
+      metadata,
     });
 
     hideComposeBar();
@@ -29,6 +31,8 @@ const EngagementBar = ({ postId, readonly }) => {
   return (
     <UIEngagementBar
       postId={post.postId}
+      targetId={targetId}
+      targetType={targetType}
       totalLikes={reactions[LIKE_REACTION_KEY]}
       totalComments={commentsCount}
       readonly={readonly}

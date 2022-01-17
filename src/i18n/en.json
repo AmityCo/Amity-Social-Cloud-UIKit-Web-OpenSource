@@ -204,6 +204,14 @@
   "CommentComposeBar.replayTo": "Reply to ",
   "CommentComposeBar.saySomething": "Say something nice",
 
+  "CommentComposeBar.unableToPost": "Unable to post",
+  "CommentComposeBar.overCharacter": "You have reached maximum 50,000 characters in a post.",
+  "CommentComposeBar.done": "Done",
+
+  "CommentComposeBar.unableToMention": "Unable to mention",
+  "CommentComposeBar.overMentionees": "You have reached maximum 30 mentioned users in a post.",
+  "CommentComposeBar.okText": "OK",
+
   "CommunityCreationModal.title": "Leave without finishing?",
   "CommunityCreationModal.content": "Your progress won’t be saved. Are you sure to leave this page now?",
   "CommunityCreationModal.cancelText": "Continue editing",

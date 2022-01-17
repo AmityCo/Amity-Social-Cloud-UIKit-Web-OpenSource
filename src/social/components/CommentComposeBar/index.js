@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useIntl } from 'react-intl';
+import React, { useRef, useEffect } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import customizableComponent from '~/core/hocs/customization';
+import usePost from '~/social/hooks/usePost';
 import useUser from '~/core/hooks/useUser';
+import useSocialMention from '~/core/hooks/useSocialMention';
 import withSDK from '~/core/hocs/withSDK';
+import { info } from '~/core/components/Confirm';
 
 import {
   Avatar,
@@ -13,17 +16,45 @@ import {
 } from './styles';
 
 import { backgroundImage as UserImage } from '~/icons/User';
+import { extractMetadata } from '../../../helpers/utils';
 
-const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) => {
-  const [text, setText] = useState('');
+const TOTAL_MENTIONEES_LIMIT = 30;
+const COMMENT_LENGTH_LIMIT = 50000;
+
+const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, postId }) => {
+  const { post } = usePost(postId);
+  const { targetId: communityId, targetType: communityType } = post;
+
   const { file } = useUser(currentUserId);
-
+  const { text, markup, mentions, onChange, clearAll, queryMentionees } = useSocialMention({
+    targetId: communityId,
+    targetType: communityType,
+  });
   const { formatMessage } = useIntl();
 
   const addComment = () => {
     if (text === '') return;
-    onSubmit(text);
-    setText('');
+
+    if (mentions?.length > TOTAL_MENTIONEES_LIMIT) {
+      return info({
+        title: <FormattedMessage id="CommentComposeBar.unableToMention" />,
+        content: <FormattedMessage id="CommentComposeBar.overMentionees" />,
+        okText: <FormattedMessage id="CommentComposeBar.okText" />,
+      });
+    }
+
+    if (text?.length > COMMENT_LENGTH_LIMIT) {
+      return info({
+        title: <FormattedMessage id="CommentComposeBar.unableToPost" />,
+        content: <FormattedMessage id="CommentComposeBar.overCharacter" />,
+        okText: <FormattedMessage id="CommentComposeBar.done" />,
+      });
+    }
+
+    const { metadata, mentionees } = extractMetadata(markup, mentions);
+
+    onSubmit(text, mentionees, metadata);
+    clearAll();
   };
 
   const isEmpty = text === '';
@@ -47,9 +78,12 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId }) 
         ref={commentInputRef}
         placeholder={placeholder}
         type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        /* onKeyPress={e => e.key === 'Enter' && addComment()} */
+        value={markup}
+        onChange={onChange}
+        multiline
+        mentionAllowed
+        queryMentionees={queryMentionees}
+        onKeyPress={e => e.key === 'Enter' && addComment()}
       />
       <AddCommentButton disabled={isEmpty} onClick={addComment}>
         {submitButtonText}

@@ -22,6 +22,7 @@ const COMMENTS_PER_PAGE = 5;
 
 const UIEngagementBar = ({
   postId,
+  targetType,
   totalLikes,
   totalComments,
   readonly,
@@ -58,7 +59,7 @@ const UIEngagementBar = ({
           last={COMMENTS_PER_PAGE}
         />
         <ConditionalRender condition={isComposeBarDisplayed}>
-          <CommentComposeBar onSubmit={handleAddComment} />
+          <CommentComposeBar postId={postId} postType={targetType} onSubmit={handleAddComment} />
         </ConditionalRender>
       </>
       <>
@@ -79,6 +80,7 @@ const UIEngagementBar = ({
 
 UIEngagementBar.propTypes = {
   postId: PropTypes.string,
+  targetType: PropTypes.string,
   totalLikes: PropTypes.number,
   totalComments: PropTypes.number,
   readonly: PropTypes.bool,
@@ -89,6 +91,7 @@ UIEngagementBar.propTypes = {
 
 UIEngagementBar.defaultProps = {
   postId: '',
+  targetType: '',
   totalLikes: 0,
   totalComments: 0,
   readonly: false,

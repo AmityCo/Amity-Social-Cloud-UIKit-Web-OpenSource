@@ -21,19 +21,23 @@ const useComment = ({ commentId }) => {
     return isFlaggedByMe ? CommentRepository.unflag(commentId) : CommentRepository.flag(commentId);
   };
 
-  const handleReplyToComment = (replyCommentText) => {
+  const handleReplyToComment = (replyCommentText, mentionees, metadata) => {
     CommentRepository.createTextComment({
       referenceType,
       referenceId,
       text: replyCommentText,
       parentId: commentId,
+      metadata,
+      mentionees,
     });
   };
 
-  const handleEditComment = (text) => {
+  const handleEditComment = (text, mentionees, metadata) => {
     CommentRepository.editTextComment({
       commentId,
       text,
+      metadata,
+      mentionees,
     });
   };
 

@@ -13,6 +13,9 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import { notification } from '~/core/components/Notification';
 import { isModerator } from '~/helpers/permissions';
 import StyledComment from './Comment.styles';
+import useSocialMention from '~/core/hooks/useSocialMention';
+import usePost from '~/social/hooks/usePost';
+
 import {
   CommentBlock,
   CommentContainer,
@@ -24,6 +27,7 @@ import {
   IconContainer,
   MessageContainer,
 } from './styles';
+import { extractMetadata } from '../../../helpers/utils';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -62,9 +66,7 @@ const DeletedReply = () => {
 const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
   const { formatMessage } = useIntl();
-
   const [isExpanded, setExpanded] = useState(false);
 
   const {
@@ -78,6 +80,22 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     handleDeleteComment,
     isFlaggedByMe,
   } = useComment({ commentId });
+
+  const { post } = usePost(comment?.referenceId);
+
+  const {
+    text: localText,
+    markup,
+    mentions,
+    onChange,
+    queryMentionees,
+    clearAll,
+  } = useSocialMention({
+    targetId: post?.targetId,
+    targetType: post?.targetType,
+    remoteText: comment?.data?.text ?? '',
+    remoteMarkup: comment?.metadata?.markupText ?? comment?.data?.text ?? '',
+  });
 
   const onReportClick = async () => {
     try {
@@ -105,11 +123,10 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     if (text !== comment?.data?.text) {
       setText(comment?.data?.text);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [comment?.data?.text]);
 
   const onClickReply = () => {
-    setIsReplying((preValue) => !preValue);
+    setIsReplying(preValue => !preValue);
   };
 
   const startEditing = () => {
@@ -122,8 +139,11 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     setText(oldText);
   };
 
-  const handleEdit = (commentText) => {
-    handleEditComment(commentText);
+  const handleEdit = () => {
+    const { metadata, mentionees } = extractMetadata(markup, mentions);
+    handleEditComment(localText, mentionees, metadata);
+
+    clearAll();
     cancelEditing();
   };
 
@@ -177,17 +197,21 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       isBanned={commentAuthor.isGlobalBan}
       createdAt={comment.createdAt}
       editedAt={comment.editedAt}
+      mentionees={comment?.metadata?.mentioned}
+      metadata={comment?.metadata}
       text={text}
+      markup={markup}
+      onClickReply={onClickReply}
       handleReportComment={onReportClick}
       startEditing={startEditing}
       cancelEditing={cancelEditing}
       handleEdit={handleEdit}
       handleDelete={deleteComment}
       isEditing={isEditing}
-      setText={setText}
+      onChange={onChange}
+      queryMentionees={queryMentionees}
       isReported={isFlaggedByMe}
       isReplyComment={isReplyComment}
-      onClickReply={onClickReply}
     />
   );
 
@@ -206,9 +230,11 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
 
       <ConditionalRender condition={isReplying}>
         <CommentComposeBar
+          postId={comment?.referenceId}
+          postType={comment?.referenceType}
           userToReply={commentAuthor.displayName}
-          onSubmit={(replyText) => {
-            handleReplyToComment(replyText);
+          onSubmit={(replyText, mentionees, metadata) => {
+            handleReplyToComment(replyText, mentionees, metadata);
             setIsReplying(false);
             setExpanded(true);
           }}

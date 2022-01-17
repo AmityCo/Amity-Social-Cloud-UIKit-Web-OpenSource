@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import TextareaAutosize from 'react-autosize-textarea';
+import InputText from '~/core/components/InputText';
 import { PrimaryButton } from '~/core/components/Button';
 
 import UIAvatar from '~/core/components/Avatar';
@@ -17,12 +16,8 @@ export const CommentComposeBarContainer = styled.div`
   align-items: center;
 `;
 
-export const CommentComposeBarInput = styled(TextareaAutosize).attrs({ rows: 1, maxRows: 15 })`
-  height: 22px;
-  padding: 10px 6px 6px;
+export const CommentComposeBarInput = styled(InputText).attrs({ rows: 1, maxRows: 15 })`
   outline: none;
-  border: 1px solid #e3e4e8;
-  border-radius: 4px;
   flex-grow: 1;
   font: inherit;
   font-size: 14px;

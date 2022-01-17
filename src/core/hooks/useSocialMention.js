@@ -1,11 +1,32 @@
-import { useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { UserRepository, CommunityRepository, PostTargetType } from '@amityco/js-sdk';
-import { formatMentionees } from '~/helpers/utils';
+import { formatMentionees } from '../../helpers/utils';
 import useCommunity from '~/social/hooks/useCommunity';
 
-const usePostMention = ({ targetId, targetType }) => {
+const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) => {
   const { community } = useCommunity(targetId);
+  const [text, setText] = useState(remoteText ?? '');
+  const [markup, setMarkup] = useState(remoteMarkup ?? remoteText);
+  const [mentions, setMentions] = useState([]);
+
+  useEffect(() => {
+    setText(remoteText);
+    setMarkup(remoteMarkup ?? '');
+  }, [remoteText, remoteMarkup]);
+
   const { isPublic } = community;
+
+  const onChange = ({ text: markupText, plainText, mentions: localMentions }) => {
+    setText(plainText);
+    setMarkup(markupText);
+    setMentions(localMentions);
+  };
+
+  const clearAll = () => {
+    setText('');
+    setMarkup('');
+    setMentions([]);
+  };
 
   const mentioneeCommunityFetcher = (communityId, query) =>
     CommunityRepository.getCommunityMembers({
@@ -31,15 +52,15 @@ const usePostMention = ({ targetId, targetType }) => {
       }
 
       // utilize useLiveCollection method here
-      liveCollection.on('dataUpdated', (models) => {
+      liveCollection.on('dataUpdated', models => {
         cb([...formatMentionees(models)]);
         // setMentionees(formatMentionees(models));
       });
     },
-    [targetType, isPublic, targetId],
+    [targetId, targetType, community],
   );
 
-  return [queryMentionees];
+  return { text, markup, mentions, onChange, clearAll, queryMentionees };
 };
 
-export default usePostMention;
+export default useSocialMention;
