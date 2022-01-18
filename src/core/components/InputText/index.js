@@ -167,7 +167,7 @@ const InputText = (
   );
 
   const handleKeyDown = useCallback(
-    e => {
+    (e) => {
       if (e.key === 'Backspace' && value.length === 0) onClear();
     },
     [onClear, value.length],
@@ -181,7 +181,7 @@ const InputText = (
     value,
     placeholder,
     disabled,
-    onChange: mentionAllowed ? handleMentionInput : e => onChange(e.target.value),
+    onChange: mentionAllowed ? handleMentionInput : (e) => onChange(e.target.value),
     onKeyDown: handleKeyDown,
     className: classNames,
   };
@@ -192,6 +192,7 @@ const InputText = (
       <div ref={mentionRef} id="mention-input" />
       {multiline && mentionAllowed && (
         <StyledMentionsInput
+          allowSuggestionsAboveCursor
           inputRef={ref}
           rows={rows}
           maxRows={maxRows}
@@ -238,14 +239,14 @@ InputText.propTypes = {
   maxRows: PropTypes.number,
   prepend: PropTypes.node,
   append: PropTypes.node,
-  onChange: PropTypes.func.isRequired,
-  onClear: PropTypes.func,
-  onClick: PropTypes.func,
-  onKeyPress: PropTypes.func,
   className: PropTypes.string,
   mentionAllowed: PropTypes.bool,
   queryMentionees: PropTypes.func,
   loadMoreMentionees: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
+  onKeyPress: PropTypes.func,
+  onClear: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 export default forwardRef(InputText);
