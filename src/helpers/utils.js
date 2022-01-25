@@ -71,11 +71,15 @@ export function findChunks(mentionees) {
 }
 
 export function extractMetadata(markup, mentions) {
-  let metadata;
-  let mentionees;
+  const metadata = {};
+  let mentionees = [
+    {
+      type: 'user',
+      userIds: [],
+    },
+  ];
 
   if (mentions?.length > 0) {
-    metadata = {};
     mentionees = [{}];
 
     metadata.mentioned = [

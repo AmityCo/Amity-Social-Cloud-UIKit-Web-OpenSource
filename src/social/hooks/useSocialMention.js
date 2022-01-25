@@ -18,13 +18,13 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
   const [members] = useLiveCollection(
     () => CommunityRepository.getCommunityMembers({ communityId: targetId, search }),
     [targetId, search],
-    () => isPublic === false || !targetId,
+    () => isPublic || !targetId,
   );
 
   const [users] = useLiveCollection(
     () => UserRepository.queryUsers({ keyword: search }),
     [targetId, search],
-    () => isPublic || !targetId,
+    () => isPublic === false || !targetId,
   );
 
   useEffect(() => {
@@ -52,9 +52,11 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
 
   const dataCallback = useCallback(
     (cb) => {
-      return isCommunityFeed ? cb(formatMentionees(members)) : cb(formatMentionees(users));
+      return isPublic || !isCommunityFeed
+        ? cb(formatMentionees(users))
+        : cb(formatMentionees(members));
     },
-    [isCommunityFeed, members, users],
+    [isCommunityFeed, isPublic, members, users],
   );
 
   const queryMentionees = useCallback(

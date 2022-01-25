@@ -32,14 +32,13 @@ const useComment = ({ commentId }) => {
     });
   };
 
-  const handleEditComment = (text, mentionees, metadata) => {
+  const handleEditComment = (text, mentionees, metadata) =>
     CommentRepository.editTextComment({
       commentId,
       text,
       metadata,
       mentionees,
     });
-  };
 
   const handleDeleteComment = () => {
     CommentRepository.deleteComment(commentId);
