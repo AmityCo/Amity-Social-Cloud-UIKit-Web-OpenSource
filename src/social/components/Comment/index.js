@@ -13,7 +13,7 @@ import ConditionalRender from '~/core/components/ConditionalRender';
 import { notification } from '~/core/components/Notification';
 import { isModerator } from '~/helpers/permissions';
 import StyledComment from './Comment.styles';
-import useSocialMention from '~/core/hooks/useSocialMention';
+import useSocialMention from '~/social/hooks/useSocialMention';
 import usePost from '~/social/hooks/usePost';
 
 import {
@@ -89,6 +89,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     mentions,
     onChange,
     queryMentionees,
+    resetState,
     clearAll,
   } = useSocialMention({
     targetId: post?.targetId,
@@ -117,26 +118,24 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   };
 
   const [text, setText] = useState(comment?.data?.text ?? '');
-  const [oldText, setOldText] = useState(comment?.data?.text ?? '');
 
   useEffect(() => {
     if (text !== comment?.data?.text) {
       setText(comment?.data?.text);
     }
-  }, [comment?.data?.text]);
+  }, [comment?.data?.text, text]);
 
   const onClickReply = () => {
-    setIsReplying(preValue => !preValue);
+    setIsReplying((preValue) => !preValue);
   };
 
   const startEditing = () => {
     setIsEditing(true);
-    setOldText(text);
   };
 
   const cancelEditing = () => {
     setIsEditing(false);
-    setText(oldText);
+    resetState();
   };
 
   const handleEdit = () => {
@@ -144,7 +143,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     handleEditComment(localText, mentionees, metadata);
 
     clearAll();
-    cancelEditing();
+    setIsEditing(false);
   };
 
   const isCommentOwner = commentAuthor.userId === currentUserId;
@@ -201,17 +200,17 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       metadata={comment?.metadata}
       text={text}
       markup={markup}
-      onClickReply={onClickReply}
       handleReportComment={onReportClick}
       startEditing={startEditing}
       cancelEditing={cancelEditing}
       handleEdit={handleEdit}
       handleDelete={deleteComment}
       isEditing={isEditing}
-      onChange={onChange}
       queryMentionees={queryMentionees}
       isReported={isFlaggedByMe}
       isReplyComment={isReplyComment}
+      onClickReply={onClickReply}
+      onChange={onChange}
     />
   );
 

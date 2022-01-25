@@ -1,20 +1,36 @@
 import { useEffect, useState, useCallback } from 'react';
 import { UserRepository, CommunityRepository, PostTargetType } from '@amityco/js-sdk';
-import { formatMentionees } from '../../helpers/utils';
+import useLiveCollection from '~/core/hooks/useLiveCollection';
+import { formatMentionees } from '~/helpers/utils';
 import useCommunity from '~/social/hooks/useCommunity';
 
 const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) => {
+  const isCommunityFeed = targetType === PostTargetType.CommunityFeed;
   const { community } = useCommunity(targetId);
+  const { isPublic } = community;
+
   const [text, setText] = useState(remoteText ?? '');
   const [markup, setMarkup] = useState(remoteMarkup ?? remoteText);
   const [mentions, setMentions] = useState([]);
+
+  const [search, setSearch] = useState();
+
+  const [members] = useLiveCollection(
+    () => CommunityRepository.getCommunityMembers({ communityId: targetId, search }),
+    [targetId, search],
+    () => isPublic === false || !targetId,
+  );
+
+  const [users] = useLiveCollection(
+    () => UserRepository.queryUsers({ keyword: search }),
+    [targetId, search],
+    () => isPublic || !targetId,
+  );
 
   useEffect(() => {
     setText(remoteText);
     setMarkup(remoteMarkup ?? '');
   }, [remoteText, remoteMarkup]);
-
-  const { isPublic } = community;
 
   const onChange = ({ text: markupText, plainText, mentions: localMentions }) => {
     setText(plainText);
@@ -28,39 +44,34 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
     setMentions([]);
   };
 
-  const mentioneeCommunityFetcher = (communityId, query) =>
-    CommunityRepository.getCommunityMembers({
-      communityId,
-      search: query,
-    });
+  const resetState = () => {
+    setText(remoteText);
+    setMarkup(remoteMarkup);
+    setMentions([]);
+  };
+
+  const dataCallback = useCallback(
+    (cb) => {
+      return isCommunityFeed ? cb(formatMentionees(members)) : cb(formatMentionees(users));
+    },
+    [isCommunityFeed, members, users],
+  );
 
   const queryMentionees = useCallback(
     (query, cb) => {
       let keyword = query;
-      let liveCollection;
 
       if (keyword.match(/^@$/) || keyword === '') {
         keyword = undefined;
       }
 
-      // Private communities should only look up to their own members
-      // !isPublic would be truthy when it's undefined
-      if (targetType === PostTargetType.CommunityFeed && isPublic === false) {
-        liveCollection = mentioneeCommunityFetcher(targetId, keyword);
-      } else {
-        liveCollection = UserRepository.queryUsers({ keyword });
-      }
-
-      // utilize useLiveCollection method here
-      liveCollection.on('dataUpdated', models => {
-        cb([...formatMentionees(models)]);
-        // setMentionees(formatMentionees(models));
-      });
+      setSearch(keyword);
+      dataCallback(cb);
     },
-    [targetId, targetType, community],
+    [dataCallback],
   );
 
-  return { text, markup, mentions, onChange, clearAll, queryMentionees };
+  return { text, markup, mentions, onChange, clearAll, resetState, queryMentionees };
 };
 
 export default useSocialMention;

@@ -4,7 +4,7 @@ import { PostDataType, PostRepository } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 
 import usePost from '~/social/hooks/usePost';
-import useSocialMention from '~/core/hooks/useSocialMention';
+import useSocialMention from '~/social/hooks/useSocialMention';
 import Content from './Content';
 import { PostEditorContainer, Footer, ContentContainer, PostButton } from './styles';
 
@@ -26,10 +26,10 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
   // List of the children posts removed - these will be deleted on save.
   const [localRemovedChildren, setLocalRemovedChildren] = useState([]);
 
-  const handleRemoveChild = childPostId => {
-    const updatedChildren = localChildrenPosts.filter(child => child.postId !== childPostId);
+  const handleRemoveChild = (childPostId) => {
+    const updatedChildren = localChildrenPosts.filter((child) => child.postId !== childPostId);
     setLocalChildrenPosts(updatedChildren);
-    setLocalRemovedChildren(prevRemovedChildren => [...prevRemovedChildren, childPostId]);
+    setLocalRemovedChildren((prevRemovedChildren) => [...prevRemovedChildren, childPostId]);
   };
 
   // Update parent post text and delete removed children posts.
@@ -53,7 +53,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
       postMetadata.markupText = markup;
     }
 
-    localRemovedChildren.forEach(childPostId => {
+    localRemovedChildren.forEach((childPostId) => {
       PostRepository.deletePost(childPostId);
     });
 
@@ -62,23 +62,23 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
     onSave();
   };
 
-  const isEmpty = useMemo(() => text?.trim() === '' && !localChildrenPosts.length, [
-    text,
-    localChildrenPosts,
-  ]);
+  const isEmpty = useMemo(
+    () => text?.trim() === '' && !localChildrenPosts.length,
+    [text, localChildrenPosts],
+  );
 
   const childFilePosts = useMemo(
-    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.FilePost),
+    () => localChildrenPosts.filter((childPost) => childPost.dataType === PostDataType.FilePost),
     [localChildrenPosts],
   );
 
   const childImagePosts = useMemo(
-    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.ImagePost),
+    () => localChildrenPosts.filter((childPost) => childPost.dataType === PostDataType.ImagePost),
     [localChildrenPosts],
   );
 
   const childVideoPosts = useMemo(
-    () => localChildrenPosts.filter(childPost => childPost.dataType === PostDataType.VideoPost),
+    () => localChildrenPosts.filter((childPost) => childPost.dataType === PostDataType.VideoPost),
     [localChildrenPosts],
   );
 
@@ -89,8 +89,8 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
           data={{ text: markup }}
           dataType={dataType}
           placeholder={placeholder}
-          onChange={onChange}
           queryMentionees={queryMentionees}
+          onChange={onChange}
         />
         {childImagePosts.length > 0 && (
           <Content

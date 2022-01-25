@@ -104,8 +104,8 @@ const StyledComment = ({
               multiline
               mentionAllowed
               value={markup}
-              onChange={onChange}
               queryMentionees={queryMentionees}
+              onChange={onChange}
             />
             <ButtonContainer>
               <Button onClick={cancelEditing}>
@@ -151,7 +151,6 @@ StyledComment.propTypes = {
   editedAt: PropTypes.instanceOf(Date),
   text: PropTypes.string,
   markup: PropTypes.string,
-  onClickReply: PropTypes.func,
   handleReportComment: PropTypes.func,
   handleEdit: PropTypes.func.isRequired,
   startEditing: PropTypes.func.isRequired,
@@ -160,11 +159,12 @@ StyledComment.propTypes = {
   mentionees: PropTypes.array,
   metadata: PropTypes.object,
   isEditing: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
   queryMentionees: PropTypes.func.isRequired,
   isReported: PropTypes.bool,
   isReplyComment: PropTypes.bool,
   isBanned: PropTypes.bool,
+  onClickReply: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default StyledComment;

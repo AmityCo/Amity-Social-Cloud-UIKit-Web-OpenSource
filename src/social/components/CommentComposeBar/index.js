@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import customizableComponent from '~/core/hocs/customization';
 import usePost from '~/social/hooks/usePost';
 import useUser from '~/core/hooks/useUser';
-import useSocialMention from '~/core/hooks/useSocialMention';
+import useSocialMention from '~/social/hooks/useSocialMention';
 import withSDK from '~/core/hocs/withSDK';
 import { info } from '~/core/components/Confirm';
 
@@ -79,11 +79,11 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, po
         placeholder={placeholder}
         type="text"
         value={markup}
-        onChange={onChange}
         multiline
         mentionAllowed
         queryMentionees={queryMentionees}
-        onKeyPress={e => e.key === 'Enter' && addComment()}
+        onChange={onChange}
+        onKeyPress={(e) => e.key === 'Enter' && addComment()}
       />
       <AddCommentButton disabled={isEmpty} onClick={addComment}>
         {submitButtonText}
