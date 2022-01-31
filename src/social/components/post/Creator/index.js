@@ -32,7 +32,7 @@ import ImagesUploaded from './components/ImagesUploaded';
 import VideosUploaded from './components/VideosUploaded';
 import FilesUploaded from './components/FilesUploaded';
 
-import { formatMentionees } from '../../../../helpers/utils';
+import { formatMentionees } from '~/helpers/utils';
 
 import { createPost, showPostCreatedNotification } from './utils';
 import {
@@ -236,6 +236,9 @@ const PostCreatorBar = ({
 
   const [mentionText, setMentionText] = useState();
 
+  const creatorTargetType = target?.targetType ?? targetType;
+  const creatorTargetId = target?.targetId ?? targetId;
+
   const queryMentionees = useCallback(
     (query, cb) => {
       let keyword = query || mentionText;
@@ -245,9 +248,6 @@ const PostCreatorBar = ({
       if (keyword.match(/^@$/)) {
         keyword = undefined;
       }
-
-      const creatorTargetType = target?.targetType || targetType;
-      const creatorTargetId = target?.targetId || targetId;
 
       // Only fetch private community members
       if (creatorTargetType === PostTargetType.CommunityFeed && !model?.isPublic) {
@@ -260,23 +260,28 @@ const PostCreatorBar = ({
         cb(formatMentionees(models));
       });
     },
-    [mentionText, model?.isPublic, target?.targetId, target?.targetType, targetId, targetType],
+    [mentionText, model?.isPublic, creatorTargetId, creatorTargetType],
   );
 
   return (
     <PostCreatorContainer className={cx('postComposeBar', className)}>
-      <PollModal
-        isOpen={isPollModalOpened}
-        onCreatePoll={(pollId, text) =>
-          createPost({
-            targetType,
-            targetId,
-            data: { pollId, text },
-            dataType: 'poll',
-          })
-        }
-        onClose={() => setPollModalOpened(false)}
-      />
+      {isPollModalOpened && (
+        <PollModal
+          targetId={creatorTargetId}
+          targetType={creatorTargetType}
+          onCreatePoll={(pollId, text, pollMentionees, metadata) =>
+            createPost({
+              targetId: creatorTargetId,
+              targetType: creatorTargetType,
+              data: { pollId, text },
+              dataType: 'poll',
+              mentionees: pollMentionees,
+              metadata,
+            })
+          }
+          onClose={() => setPollModalOpened(false)}
+        />
+      )}
 
       <ConditionalRender condition={enablePostTargetPicker}>
         <PostTargetSelector

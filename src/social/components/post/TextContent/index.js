@@ -50,7 +50,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
         {isExpanded ? (
           textContent
         ) : (
-          <Truncate
+          <Truncate.Atom
             lines={postMaxLines}
             ellipsis={
               <ReadMoreButton onClick={onExpand}>
@@ -59,7 +59,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
             }
           >
             {textContent}
-          </Truncate>
+          </Truncate.Atom>
         )}
       </Linkify>
     )

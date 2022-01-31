@@ -13,3 +13,5 @@ export const MemberRoles = Object.freeze({
   COMMUNITY_MODERATOR: 'community-moderator',
   CHANNEL_MODERATOR: 'channel-moderator',
 });
+
+export const MAXIMUM_MENTIONEES = 30;

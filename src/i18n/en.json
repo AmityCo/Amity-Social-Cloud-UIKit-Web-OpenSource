@@ -335,5 +335,9 @@
 
   "postCreator.unableToMention": "Unable to mention",
   "postCreator.overMentionees": "You have reached maximum 30 mentioned users in a post.",
-  "postCreator.okText": "OK"
+  "postCreator.okText": "OK",
+
+  "pollComposer.unableToMention": "Unable to mention",
+  "pollComposer.overMentionees": "You have reached maximum 30 mentioned users in a post.",
+  "pollComposer.okText": "OK"
 }

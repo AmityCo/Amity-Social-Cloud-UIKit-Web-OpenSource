@@ -5,6 +5,7 @@ import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import { CircleRemove } from '~/icons';
 import Select from '~/core/components/Select';
+import InputText from '~/core/components/InputText';
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 8px;
@@ -23,6 +24,11 @@ export const OptionItemContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+`;
+
+export const MentionTextInput = styled(InputText)`
+  ${({ theme }) => theme.typography.global};
+  outline: none;
 `;
 
 export const TextInput = styled.input`
