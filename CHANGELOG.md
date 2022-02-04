@@ -1,5 +1,23 @@
 # Changelog
 
+## [v2.8.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.7.0...v2.8.0)
+
+#### 4 February 2022
+
+### New Features
+
+- [`UP-5811`](https://ekoapp.atlassian.net/browse/UP-5811) - Mention in Poll Post ([`8158b8d`](https://amity_gitlab.com/upstra/web/ui-kit/commit/8158b8d4664ca37b10c3ce1fbccba338a51e05ad)) (by Kaung Myat Lwin)
+
+### Fixes
+
+- [`UP-7146`](https://ekoapp.atlassian.net/browse/UP-7146) - display exceed error after input mentionees passes 30 ([`7c0d658`](https://amity_gitlab.com/upstra/web/ui-kit/commit/7c0d65809b5ed81e1323f8993e064e6ac69e8c0d)) (by Kaung Myat Lwin)
+
+### Commits
+
+- upgrade sdk version ([`e61dfa2`](https://amity_gitlab.com/upstra/web/ui-kit/commit/e61dfa25e63aabee0ce78163a33aa0c03df12db9)) (by Kaung Myat Lwin)
+
+---
+
 ## [v2.7.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.6.0...v2.7.0)
 
 #### 25 January 2022
