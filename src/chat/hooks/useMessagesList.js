@@ -1,13 +1,12 @@
 import { MessageRepository } from '@amityco/js-sdk';
 import orderBy from 'lodash/orderBy';
 
-import useLiveCollectionTemporaryIsolated from '~/core/hooks/useLiveCollectionTemporaryIsolated';
+import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 const messageRepo = new MessageRepository();
 
 function useMessagesList(channelId) {
-  const [messages, hasMore, loadMore] = useLiveCollectionTemporaryIsolated(
-    'messageId',
+  const [messages, hasMore, loadMore] = useLiveCollection(
     () => messageRepo.messagesForChannel({ channelId }),
     [channelId],
   );

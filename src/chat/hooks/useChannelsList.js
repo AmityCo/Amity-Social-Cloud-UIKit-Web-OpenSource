@@ -1,11 +1,10 @@
 import { ChannelRepository, ChannelFilter } from '@amityco/js-sdk';
 import orderBy from 'lodash/orderBy';
 
-import useLiveCollectionTemporaryIsolated from '~/core/hooks/useLiveCollectionTemporaryIsolated';
+import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 function useChannelsList() {
-  const [channels, hasMore, loadMore] = useLiveCollectionTemporaryIsolated(
-    'channelId',
+  const [channels, hasMore, loadMore] = useLiveCollection(
     // Note: we can not use SDK sortBy LastActivity option - because by default it uses
     // ASC direction from BE. By default LastCreated is used. It still gives wrong result but it
     // better.

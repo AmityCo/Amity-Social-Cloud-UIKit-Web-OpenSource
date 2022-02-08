@@ -1,9 +1,8 @@
 import { ChannelMembershipRepository } from '@amityco/js-sdk';
-import useLiveCollectionTemporaryIsolated from '~/core/hooks/useLiveCollectionTemporaryIsolated';
+import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 function useChannelMembers(channelId, memberCount) {
-  const [members, hasMore, loadMore] = useLiveCollectionTemporaryIsolated(
-    'userId',
+  const [members, hasMore, loadMore] = useLiveCollection(
     () => new ChannelMembershipRepository(channelId).members(),
     [channelId, memberCount],
   );
