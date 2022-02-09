@@ -7,4 +7,4 @@
 
 ## Getting started
 
-Please refer to our online documentation at https://docs.upstra.co or contact a Ui-Kit representative at **developers@amity.co** for support.
+Please refer to our online documentation at https://docs.amity.co or contact a Ui-Kit representative at **developers@amity.co** for support.
