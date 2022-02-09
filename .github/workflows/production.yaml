@@ -51,4 +51,3 @@ jobs:
 
       - name: push version
         run: git push --follow-tags
-git
