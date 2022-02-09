@@ -16,8 +16,8 @@
     "build:prod:analyze": "webpack --mode production --analyze true",
     "test": "jest",
     "test:watch": "jest --watch",
-    "storybook": "start-storybook -s ./public -p 6006",
-    "storybook:build": "build-storybook -s ./public --output-dir ./storybook-build",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "build-storybook --output-dir ./storybook-build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
