@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
@@ -9,6 +9,7 @@ import customizableComponent from '~/core/hocs/customization';
 import Linkify from '~/core/components/Linkify';
 import Button from '~/core/components/Button';
 import { findChunks } from '~/helpers/utils';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
@@ -24,16 +25,28 @@ export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
 `;
 
 export const Highlighted = styled.span`
+  cursor: pointer;
   color: ${({ theme }) => theme.palette.primary.main};
 `;
 
 const TextContent = ({ text, postMaxLines, mentionees }) => {
+  const { onClickUser } = useNavigation();
+
+  const highlightTag = useCallback(
+    ({ children, highlightIndex }) => (
+      <Highlighted onClick={() => onClickUser(mentionees[highlightIndex]?.userId)}>
+        {children}
+      </Highlighted>
+    ),
+    [mentionees, onClickUser],
+  );
+
   const textContent = text && (
     <PostContent>
       <Truncate.Atom>
         <Highlighter
           autoEscape
-          highlightTag={({ children }) => <Highlighted>{children}</Highlighted>}
+          highlightTag={highlightTag}
           findChunks={() => findChunks(mentionees)}
           textToHighlight={text}
         />
@@ -67,7 +80,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
 };
 
 TextContent.propTypes = {
-  text: PropTypes.node,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   postMaxLines: PropTypes.number,
   mentionees: PropTypes.arrayOf(
     PropTypes.shape({
