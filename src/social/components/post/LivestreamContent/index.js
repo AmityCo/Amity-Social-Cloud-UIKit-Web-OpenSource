@@ -11,21 +11,19 @@ const TextContainer = styled.div`
   }
 `;
 
-const LivestreamContent = ({ streamId }) => {
+const LivestreamContent = ({ streamId, mentionees }) => {
   const stream = useStream(streamId);
 
   if (!stream.title && !stream.description) {
     return null;
   }
 
-  const text = (
+  return (
     <TextContainer>
       {stream.title && <div>{stream.title}</div>}
-      {stream.description && <div>{stream.description}</div>}
+      <TextContent text={stream.description} mentionees={mentionees} />
     </TextContainer>
   );
-
-  return <TextContent text={text} />;
 };
 
 export default LivestreamContent;
