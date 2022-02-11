@@ -18,7 +18,7 @@ jobs:
 
       - name: configure committer
         run: |
-          git config user.name "alfred-amity-bot"
+          git config user.name "bmo-amity-bot"
           git config user.email "developers@amity.co"
 
       - name: install node
