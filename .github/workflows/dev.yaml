@@ -13,6 +13,10 @@ jobs:
 
     env:
       NPM_FONT_AWESOME_TOKEN: ${{ secrets.NPM_FONT_AWESOME_TOKEN }}
+      STORYBOOK_API_ENDPOINT: ${{ secrets.STORYBOOK_API_ENDPOINT }}
+      STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
+      STORYBOOK_USER1: ${{ secrets.STORYBOOK_USER1 }}
+      STORYBOOK_USER2: ${{ secrets.STORYBOOK_USER2 }}
 
     steps:
       - name: git checkout
