@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
 import { UserRepository, CommunityRepository, PostTargetType } from '@amityco/js-sdk';
-import useLiveCollection from '~/core/hooks/useLiveCollection';
 import { formatMentionees } from '~/helpers/utils';
 import useCommunity from '~/social/hooks/useCommunity';
 
@@ -12,20 +11,6 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
   const [text, setText] = useState(remoteText ?? '');
   const [markup, setMarkup] = useState(remoteMarkup ?? remoteText);
   const [mentions, setMentions] = useState([]);
-
-  const [search, setSearch] = useState();
-
-  const [members] = useLiveCollection(
-    () => CommunityRepository.getCommunityMembers({ communityId: targetId, search }),
-    [targetId, search],
-    () => isPublic || !targetId,
-  );
-
-  const [users] = useLiveCollection(
-    () => UserRepository.queryUsers({ keyword: search }),
-    [targetId, search],
-    () => isPublic === false || !targetId,
-  );
 
   useEffect(() => {
     setText(remoteText);
@@ -50,15 +35,6 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
     setMentions([]);
   };
 
-  const dataCallback = useCallback(
-    (cb) => {
-      return isPublic || !isCommunityFeed
-        ? cb(formatMentionees(users))
-        : cb(formatMentionees(members));
-    },
-    [isCommunityFeed, isPublic, members, users],
-  );
-
   const queryMentionees = useCallback(
     (query, cb) => {
       let keyword = query;
@@ -67,10 +43,14 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
         keyword = undefined;
       }
 
-      setSearch(keyword);
-      dataCallback(cb);
+      const fetcher =
+        isPublic || !isCommunityFeed
+          ? UserRepository.queryUsers({ keyword })
+          : CommunityRepository.getCommunityMembers({ communityId: targetId, search: keyword });
+
+      fetcher.on('dataUpdated', (models) => cb(formatMentionees(models)));
     },
-    [dataCallback],
+    [isPublic, isCommunityFeed, targetId],
   );
 
   return { text, markup, mentions, onChange, clearAll, resetState, queryMentionees };

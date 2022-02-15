@@ -57,7 +57,7 @@ const UiKitProvider = forwardRef(
     const SDKInfo = useMemo(() => {
       if (!client) {
         client = new ASCClient({ apiKey, apiEndpoint, apiRegion });
-        client.on('connectionStatusChanged', data => {
+        client.on('connectionStatusChanged', (data) => {
           onConnectionStatusChange && onConnectionStatusChange(data);
 
           if (data.newValue === ConnectionStatus.Connected) {

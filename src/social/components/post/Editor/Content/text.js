@@ -37,8 +37,8 @@ const TextContent = ({ text, placeholder, onChange, queryMentionees }) => {
 TextContent.propTypes = {
   text: PropTypes.string,
   placeholder: PropTypes.string,
-  onChange: PropTypes.func,
   queryMentionees: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 TextContent.defaultProps = {
