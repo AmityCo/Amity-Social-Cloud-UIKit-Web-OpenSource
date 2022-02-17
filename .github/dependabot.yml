@@ -1,0 +1,48 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "@amityco/js-sdk"
+    # known dependencies
+    ignore:
+      - dependency-name: "ansi-html"
+      - dependency-name: "ansi-regex"
+      - dependency-name: "ajv"
+      - dependency-name: "browserslist"
+      - dependency-name: "elliptic"
+      - dependency-name: "immer"
+      - dependency-name: "glob-parent"
+      - dependency-name: "hosted-git-info"
+      - dependency-name: "highlight.js"
+      - dependency-name: "ini"
+      - dependency-name: "json-schema"
+      - dependency-name: "merge-deep"
+      - dependency-name: "node-fetch"
+      - dependency-name: "node-notifier"
+      - dependency-name: "nth-check"
+      - dependency-name: "path-parse"
+      - dependency-name: "postcss"
+      - dependency-name: "prismjs"
+      - dependency-name: "react-dev-utils"
+      - dependency-name: "semver-regex"
+      - dependency-name: "shelljs"
+      - dependency-name: "ssri"
+      - dependency-name: "tar"
+      - dependency-name: "tmpl"
+      - dependency-name: "ws"
+      - dependency-name: "ssri"
+      - dependency-name: "y18n"
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
