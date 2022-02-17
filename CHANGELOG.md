@@ -1,132 +1,13 @@
 # Changelog
 
-## [v2.8.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.7.0...v2.8.0)
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-#### 4 February 2022
+## 2.9.0 (2022-02-17)
 
-### New Features
 
-- [`UP-5811`](https://ekoapp.atlassian.net/browse/UP-5811) - Mention in Poll Post ([`8158b8d`](https://amity_gitlab.com/upstra/web/ui-kit/commit/8158b8d4664ca37b10c3ce1fbccba338a51e05ad)) (by Kaung Myat Lwin)
+### Features
 
-### Fixes
-
-- [`UP-7146`](https://ekoapp.atlassian.net/browse/UP-7146) - display exceed error after input mentionees passes 30 ([`7c0d658`](https://amity_gitlab.com/upstra/web/ui-kit/commit/7c0d65809b5ed81e1323f8993e064e6ac69e8c0d)) (by Kaung Myat Lwin)
-
-### Commits
-
-- upgrade sdk version ([`e61dfa2`](https://amity_gitlab.com/upstra/web/ui-kit/commit/e61dfa25e63aabee0ce78163a33aa0c03df12db9)) (by Kaung Myat Lwin)
-
----
-
-## [v2.7.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.6.0...v2.7.0)
-
-#### 25 January 2022
-
-### New Features
-
-- [`UP-5264`](https://ekoapp.atlassian.net/browse/UP-5264) - Comment Mention (EPIC) ([`fd0031e`](https://amity_gitlab.com/upstra/web/ui-kit/commit/fd0031e46e4b67fc6b6bcc4643f281308d0f61a1)) (by Kaung Myat Lwin)
-- [`UP-6880`](https://ekoapp.atlassian.net/browse/UP-6880) - Add apiRegion prop to connect to sdk ([`6dd58ed`](https://amity_gitlab.com/upstra/web/ui-kit/commit/6dd58ed784ce3ef91bee6849155e3613c2fd2bae)) (by Gaurav KC)
-
-### Fixes
-
-- [`UP-6920`](https://ekoapp.atlassian.net/browse/UP-6920) - update sdk ([`c810076`](https://amity_gitlab.com/upstra/web/ui-kit/commit/c810076c4c7ed3767e2c3fb939eb0c87dafd66df)) (by Kaung Myat Lwin)
-- [`UP-6963`](https://ekoapp.atlassian.net/browse/UP-6963) - add resetState func to reset to remote state ([`f29d6cb`](https://amity_gitlab.com/upstra/web/ui-kit/commit/f29d6cb8f0eb69ef7349e698ea03c785589aa9f1)) (by Kaung Myat Lwin)
-- [`UP-6900`](https://ekoapp.atlassian.net/browse/UP-6900) - displaying highlight when removed mentioned user ([`a2383f7`](https://amity_gitlab.com/upstra/web/ui-kit/commit/a2383f70b8a5b58855ad46653799f62c2ebdbbc0)) (by Kaung Myat Lwin)
-- [`UP-6892`](https://ekoapp.atlassian.net/browse/UP-6892) - suggestionList bottom guard ([`4700dec`](https://amity_gitlab.com/upstra/web/ui-kit/commit/4700dec16ced8a4e0fd80561e87e7b706c1042df)) (by Kaung Myat Lwin)
-
-### Commits
-
-- chore: [`UP-5883`](https://ekoapp.atlassian.net/browse/UP-5883) update eslint ([`b301581`](https://amity_gitlab.com/upstra/web/ui-kit/commit/b301581202a6f7936418d1ad1dcaf7b6e7f08615)) (by Valeriy Malyshev)
-
----
-
-## [v2.6.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.5.0...v2.6.0)
-
-#### 24 December 2021
-
-### New Features
-
-- [`UP-6278`](https://ekoapp.atlassian.net/browse/UP-6278) - Update Post with mentions ([`01dd0b1`](https://amity_gitlab.com/upstra/web/ui-kit/commit/01dd0b1659287b2e85ebfe27085ff250d3237554)) (by Kaung Myat Lwin)
-
-### Fixes
-
-- [`UP-6920`](https://ekoapp.atlassian.net/browse/UP-6920) - upgrade sdk version ([`25b7907`](https://amity_gitlab.com/upstra/web/ui-kit/commit/25b7907ca13e7b1076dae6ac8990c0ced7f77aaf)) (by Serhii Ivanenko)
-- [`UP-6096`](https://ekoapp.atlassian.net/browse/UP-6096) - Disable banned user from search list when trying to mention them ([`562db4c`](https://amity_gitlab.com/upstra/web/ui-kit/commit/562db4c4059cc51d9d7d4668bbd654a7f481332b)) (by Kaung Myat Lwin)
-- [`UP-6693`](https://ekoapp.atlassian.net/browse/UP-6693) - disable create and edit post by mention to non member of private community ([`ea5d643`](https://amity_gitlab.com/upstra/web/ui-kit/commit/ea5d6439e8d9f32b6694a0a3af55468617f0eb5e)) (by Kaung Myat Lwin)
-- [`UP-6540`](https://ekoapp.atlassian.net/browse/UP-6540) - Banned symbol on user profile ([`10f6793`](https://amity_gitlab.com/upstra/web/ui-kit/commit/10f6793157701a35b7a0a7ed2f402f680292ce23)) (by Kaung Myat Lwin)
-- [`UP-6541`](https://ekoapp.atlassian.net/browse/UP-6541) - UI broken when have long display name on post ([`eda08dd`](https://amity_gitlab.com/upstra/web/ui-kit/commit/eda08ddbaf9f32c940693dae6bd01fd09dc45353)) (by Kaung Myat Lwin)
-- [`UP-6693`](https://ekoapp.atlassian.net/browse/UP-6693) - news feed showing non-private members for mention ([`838dc59`](https://amity_gitlab.com/upstra/web/ui-kit/commit/838dc597ef30715b82bbfa67f3a2034ca45e498a)) (by Kaung Myat Lwin)
-- [`UP-6539`](https://ekoapp.atlassian.net/browse/UP-6539) - Display banned symbol incorrect position when create post in community ([`f2dcd0f`](https://amity_gitlab.com/upstra/web/ui-kit/commit/f2dcd0f0df53107ab5f4bd7f767d4319fa42b2c0)) (by Kaung Myat Lwin)
-- hotwrong styling for search input ([`e0435d3`](https://amity_gitlab.com/upstra/web/ui-kit/commit/e0435d3b41d0087537f91f0cb5a0e076aea257ed)) (by Kaung Myat Lwin)
-- hotno text showing when edit text ([`d2ead46`](https://amity_gitlab.com/upstra/web/ui-kit/commit/d2ead46f1a7daa433d12b255fd266a02e2acdc70)) (by Kaung Myat Lwin)
-- [`UP-6398`](https://ekoapp.atlassian.net/browse/UP-6398) - text is not wrap to another line when put text with no space ([`e802231`](https://amity_gitlab.com/upstra/web/ui-kit/commit/e8022317ab1317877db8aa9693d6122420740ad3)) (by Kaung Myat Lwin)
-
----
-
-## [v2.5.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.4.0...v2.5.0)
-
-#### 9 December 2021
-
-### New Features
-
-- [`UP-5246`](https://ekoapp.atlassian.net/browse/UP-5246) - Mention Social Post ([`b2a9fff`](https://amity_gitlab.com/upstra/web/ui-kit/commit/b2a9fff0d48a524f62fdc533921afe63a6117663)) (by Kaung Myat Lwin)
-- [`UP-4664`](https://ekoapp.atlassian.net/browse/UP-4664) - Transfer Roles ([`2efadf3`](https://amity_gitlab.com/upstra/web/ui-kit/commit/2efadf3a221223e390823c97c880e71bf35aa783)) (by Kaung Myat Lwin)
-- [`UP-5244`](https://ekoapp.atlassian.net/browse/UP-5244) - banned icon specs ([`UP-5803`](https://ekoapp.atlassian.net/browse/UP-5803),[`UP-5797`](https://ekoapp.atlassian.net/browse/UP-5797),[`UP-5800`](https://ekoapp.atlassian.net/browse/UP-5800),[`UP-5809`](https://ekoapp.atlassian.net/browse/UP-5809)) ([`51619a1`](https://amity_gitlab.com/upstra/web/ui-kit/commit/51619a11d5c3b700d39d584e4e65d16b99880464)) (by Kaung Myat Lwin)
-
-### Fixes
-
-- [`UP-6290`](https://ekoapp.atlassian.net/browse/UP-6290) - update sdk version ([`628d7c0`](https://amity_gitlab.com/upstra/web/ui-kit/commit/628d7c0b211a9263a5e53495933e2c3cf5843485)) (by Serhii Ivanenko)
-- [`UP-6393`](https://ekoapp.atlassian.net/browse/UP-6393) - disallow searching for non-member of private community ([`f1ef0e2`](https://amity_gitlab.com/upstra/web/ui-kit/commit/f1ef0e2dd2884966185d6e1c3c8d82df31882fac)) (by Kaung Myat Lwin)
-- [`UP-6371`](https://ekoapp.atlassian.net/browse/UP-6371) - no highlight on other platforms ([`818bb64`](https://amity_gitlab.com/upstra/web/ui-kit/commit/818bb640c59995f5c97b50a32d1a2bba48637f45)) (by Kaung Myat Lwin)
-- [`UP-5800`](https://ekoapp.atlassian.net/browse/UP-5800) - show banned icon beside user post ([`25712d0`](https://amity_gitlab.com/upstra/web/ui-kit/commit/25712d0a35d603d361bb7f169a2c7bd3249d28c4)) (by Kaung Myat Lwin)
-- [`UP-6396`](https://ekoapp.atlassian.net/browse/UP-6396) - Search mention list not display when put only mention indicator ('@') ([`73295e3`](https://amity_gitlab.com/upstra/web/ui-kit/commit/73295e328e7bd19d7740a840ae1b2c5edf7f3d83)) (by Kaung Myat Lwin)
-- [`UP-6404`](https://ekoapp.atlassian.net/browse/UP-6404) - Mentioned user is not display with highlight when create post with video ([`c2ac22b`](https://amity_gitlab.com/upstra/web/ui-kit/commit/c2ac22bbd802c0464f321d8433cca631df6830c7)) (by Kaung Myat Lwin)
-- [`UP-6433`](https://ekoapp.atlassian.net/browse/UP-6433) - Display mentioned user as @undefined when mention user in private community ([`37a2f7c`](https://amity_gitlab.com/upstra/web/ui-kit/commit/37a2f7c806fe251bba7adad400d2afedba341895)) (by Kaung Myat Lwin)
-- [`UP-4984`](https://ekoapp.atlassian.net/browse/UP-4984) - don't show promote to moderator for globally banned member ([`3eea4e5`](https://amity_gitlab.com/upstra/web/ui-kit/commit/3eea4e509e56a3770fb48ae60f722f9b7b031946)) (by Kaung Myat Lwin)
-- hotarrange i18n en duplicate keys ([`21b0945`](https://amity_gitlab.com/upstra/web/ui-kit/commit/21b0945e212fefb3573cb1f4069ff7df0af1635f)) (by Kaung Myat Lwin)
-- hotreturn empty arr if mentionees is empty ([`88b88ac`](https://amity_gitlab.com/upstra/web/ui-kit/commit/88b88accfd9d9d9400fca725d894c2a9876ace13)) (by Kaung Myat Lwin)
-
-### Commits
-
-- nightly build js-sdk 5.8.2[`-2`](https://ekoapp.atlassian.net/browse/-2)a6dd68.0-rc ([`a972b5f`](https://amity_gitlab.com/upstra/web/ui-kit/commit/a972b5f6a24dc71b6b7324d9e4852217f66ea7f1)) (by Kaung Myat Lwin)
-
----
-
-## [v2.4.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.3.0...v2.4.0)
-
-#### 18 October 2021
-
-### New Features
-
-- [`UP-1712`](https://ekoapp.atlassian.net/browse/UP-1712) - poll feature ([`1d8cd79`](https://amity_gitlab.com/upstra/web/ui-kit/commit/1d8cd7975b6353ecb869898bcf1f540751dc602b)) (by Serhii Ivanenko)
-- [`UP-4486`](https://ekoapp.atlassian.net/browse/UP-4486) - livestream posts, livestream media gallery ([`5e7e1a5`](https://amity_gitlab.com/upstra/web/ui-kit/commit/5e7e1a5e622757bb23b86adb62bd9f9340f308af)) (by Valeriy Malyshev)
-- [`UP-5360`](https://ekoapp.atlassian.net/browse/UP-5360) - added handler for close poll ([`2e124f5`](https://amity_gitlab.com/upstra/web/ui-kit/commit/2e124f5bb25e4d9e8b993dd8ad45bfe81118abf0)) (by Serhii Ivanenko)
-
-### Fixes
-
-- [`UP-5362`](https://ekoapp.atlassian.net/browse/UP-5362) - convert SVG to Base64 for default community cover ([`4cfcd06`](https://amity_gitlab.com/upstra/web/ui-kit/commit/4cfcd068810a82e3ff5253aaf7043f1ba83b333a)) (by Kaung Myat Lwin)
-- [`UP-5359`](https://ekoapp.atlassian.net/browse/UP-5359) - disallow to edit poll post ([`7b5ef20`](https://amity_gitlab.com/upstra/web/ui-kit/commit/7b5ef204c8665ac231364f154dec2a8f9827f661)) (by Serhii Ivanenko)
-- [`UP-5362`](https://ekoapp.atlassian.net/browse/UP-5362) - set default cover photo ([`018c647`](https://amity_gitlab.com/upstra/web/ui-kit/commit/018c64742c963ceb790c2a5259d1fb6a571f54da)) (by Kaung Myat Lwin)
-- use message.user as a plain object ([`ebf03dc`](https://amity_gitlab.com/upstra/web/ui-kit/commit/ebf03dcebd30744c7ac38de93d69b31627f29274)) (by Valeriy Malyshev)
-- [`UP-5358`](https://ekoapp.atlassian.net/browse/UP-5358) - fixed targetType and targetId for poll post creator ([`b00e347`](https://amity_gitlab.com/upstra/web/ui-kit/commit/b00e34707c5a69eee9adba6692e850e373829141)) (by Serhii Ivanenko)
-- [`UP-4486`](https://ekoapp.atlassian.net/browse/UP-4486) - hide livestream gallery ([`459e3d1`](https://amity_gitlab.com/upstra/web/ui-kit/commit/459e3d170c3b6079198963ea440602f15b441418)) (by Valeriy Malyshev)
-
-### Commits
-
-- Milestone: Y21Q3.6 ([`c1af3f2`](https://amity_gitlab.com/upstra/web/ui-kit/commit/c1af3f2926d5502930937b7a65da6115e0809171)) (by Kaung Myat Lwin)
-- hotfix - fixed crash on option update ([`78f4c75`](https://amity_gitlab.com/upstra/web/ui-kit/commit/78f4c757b0ea579adf01c8859bbbe895d7084c5a)) (by Serhii Ivanenko)
-
----
-
-## [v2.3.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/2.3.0...v2.3.0)
-
-#### 15 September 2021
-
-### Commits
-
-- sdk 5.6.0 ([`87ef876`](https://amity_gitlab.com/upstra/web/ui-kit/commit/87ef8767a0477f18bbbd6971db0d469c3e431242)) (by Valeriy Malyshev)
-
----
+* UP-0000 - upgrade sdk version ([#10](https://github.com/EkoCommunications/AmityUiKitWeb/issues/10)) ([6ec1751](https://github.com/EkoCommunications/AmityUiKitWeb/commit/6ec1751880094e351cbe0d24be52ecb2fd541128))
 
 ## [2.3.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.2.0...2.3.0)
 
