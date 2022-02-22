@@ -2,7 +2,7 @@ name: Quality checks
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, edited, reopened]
 
 jobs:
   task-checker:
@@ -10,5 +10,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
       - uses: EkoCommunications/PRChecks/task-list@develop
