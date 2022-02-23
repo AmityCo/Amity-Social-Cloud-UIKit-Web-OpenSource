@@ -1,4 +1,5 @@
-import { useEffect, cloneElement } from 'react';
+import { cloneElement } from 'react';
+import { useShallowCompareEffect } from 'react-use';
 import PropTypes from 'prop-types';
 
 import useFileUpload from '~/core/hooks/useFileUpload';
@@ -7,10 +8,10 @@ const FileUploader = ({ files, onChange, onError, onLoadingChange, children }) =
   const { uploading, uploaded, progress, addFiles, removeFile, reset, rejected, retry } =
     useFileUpload(onChange, onLoadingChange, onError);
 
-  useEffect(() => {
+  useShallowCompareEffect(() => {
     files && addFiles(files);
     !files.length && reset();
-  }, [addFiles, files, reset]);
+  }, [files]);
 
   if (!files?.length || (!uploading.length && !uploaded.length)) return null;
 
