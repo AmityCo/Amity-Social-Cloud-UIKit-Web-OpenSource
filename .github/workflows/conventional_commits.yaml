@@ -2,7 +2,7 @@ name: Conventional commits
 
 on:
   pull_request:
-    types: [opened, edited, reopened]
+    types: [edited, opened, reopened, synchronize]
 
 jobs:
   pr-checker:
