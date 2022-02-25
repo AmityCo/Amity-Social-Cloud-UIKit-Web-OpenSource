@@ -84,9 +84,9 @@ export function extractMetadata(markup, mentions) {
     mentionees = [{}];
 
     metadata.mentioned = [
-      ...mentions.map(({ plainTextIndex, id, index: markupIndex }) => ({
+      ...mentions.map(({ plainTextIndex, id, index: markupIndex, display: displayName }) => ({
         index: plainTextIndex,
-        length: id.length,
+        length: displayName.length,
         type: 'user',
         userId: id,
         markupIndex,

@@ -32,7 +32,7 @@ import ImagesUploaded from './components/ImagesUploaded';
 import VideosUploaded from './components/VideosUploaded';
 import FilesUploaded from './components/FilesUploaded';
 
-import { formatMentionees } from '~/helpers/utils';
+import { extractMetadata, formatMentionees } from '~/helpers/utils';
 
 import { createPost, showPostCreatedNotification } from './utils';
 import {
@@ -170,18 +170,9 @@ const PostCreatorBar = ({
 
     if (postMentionees.type && postMentionees.userIds.length > 0) {
       createPostParams.mentionees = [{ ...postMentionees }];
-      metadata.mentioned = [
-        ...mentionees.map(({ plainTextIndex, id, index: markupIndex }) => ({
-          index: plainTextIndex,
-          length: id.length,
-          type: 'user',
-          userId: id,
-          markupIndex,
-          postWithMarkup: postText,
-        })),
-      ];
+      const { metadata: extractedMetadata } = extractMetadata(postText, mentionees);
       metadata.markupText = postText;
-      createPostParams.metadata = metadata;
+      createPostParams.metadata = { ...metadata, ...extractedMetadata };
     }
 
     const post = await createPost(createPostParams);
