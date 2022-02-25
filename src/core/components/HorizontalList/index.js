@@ -51,6 +51,7 @@ const ScrollContainer = styled.div`
 `;
 
 const StretchedList = styled.div`
+  margin-bottom: 0.188rem; // give the shadow a little space
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: 100%;

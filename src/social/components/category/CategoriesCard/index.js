@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
 
@@ -6,6 +7,21 @@ import useCategories from '~/social/hooks/useCategories';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import HorizontalList from '~/core/components/HorizontalList';
 import CommunityCategoryCard from '~/social/components/community/CategoryCard';
+
+const StyledCommunityCategoryCard = styled(CommunityCategoryCard)`
+  &:first-child {
+    padding-right: 1rem;
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-left: 1rem;
+    padding-right: 0;
+  }
+
+  padding-left: 1rem;
+  padding-right: 1rem;
+`;
 
 const List = () => {
   const { onClickCategory } = useNavigation();
@@ -41,9 +57,9 @@ const List = () => {
     >
       {items.map(({ categoryId, skeleton }) =>
         skeleton ? (
-          <CommunityCategoryCard key={categoryId} loading />
+          <StyledCommunityCategoryCard key={categoryId} loading />
         ) : (
-          <CommunityCategoryCard
+          <StyledCommunityCategoryCard
             key={categoryId}
             categoryId={categoryId}
             onClick={onClickCategory}
