@@ -1,11 +1,13 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import useCommunity from '~/social/hooks/useCommunity';
+import useImage from '~/core/hooks/useImage';
 import UITrendingItem from './UITrendingItem';
 
 const TrendingItem = ({ communityId, onClick, loading }) => {
   const { community, file, communityCategories } = useCommunity(communityId);
-  const { fileUrl } = file;
+  const { fileId } = file;
+  const fileUrl = useImage({ fileId });
 
   const { membersCount, description } = community;
 

@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { FileRepository, ImageSize } from '@amityco/js-sdk';
+import useImage from '~/core/hooks/useImage';
 
 import useCommunity from '~/social/hooks/useCommunity';
 
@@ -8,14 +8,8 @@ import UICommunityCard from './UICommunityCard';
 
 const CommunityCard = ({ communityId, onClick, ...props }) => {
   const { community, file, communityCategories } = useCommunity(communityId);
-  const { fileId, fileUrl: fallbackUrl } = file;
-
-  const fileUrl = fileId
-    ? FileRepository.getFileUrlById({
-        fileId,
-        imageSize: ImageSize.Medium,
-      })
-    : fallbackUrl;
+  const { fileId } = file;
+  const fileUrl = useImage({ fileId });
 
   const { membersCount, description } = community;
 

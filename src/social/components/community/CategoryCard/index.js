@@ -1,23 +1,12 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-
-import { FileRepository, ImageSize } from '@amityco/js-sdk';
-import UICategoryCard from './UICategoryCard';
+import useImage from '~/core/hooks/useImage';
 import useCategory from '~/social/hooks/useCategory';
+import UICategoryCard from './UICategoryCard';
 
 const CategoryCard = ({ categoryId, className, loading, onClick, ...props }) => {
   const { category } = useCategory(categoryId);
-
-  // TODO: this is temporary - we should use file.fileUrl when supported.
-  const fileUrl = useMemo(
-    () =>
-      category.avatarFileId &&
-      FileRepository.getFileUrlById({
-        fileId: category.avatarFileId,
-        imageSize: ImageSize.Medium,
-      }),
-    [category.avatarFileId],
-  );
+  const fileUrl = useImage({ fileId: category.avatarFileId });
 
   return (
     <UICategoryCard
