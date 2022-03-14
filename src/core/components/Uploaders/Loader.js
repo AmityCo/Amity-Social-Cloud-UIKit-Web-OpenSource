@@ -139,6 +139,10 @@ const FileLoader = ({
     [disabled, getLimitFiles, mimeType, onChange],
   );
 
+  const onClick = (e) => {
+    e.target.value = null;
+  };
+
   return (
     <FileLoaderContainer
       data-qa-anchor={dataQaAnchor}
@@ -149,7 +153,13 @@ const FileLoader = ({
       onDragLeave={onDragLeave}
       onDrop={onDrop}
     >
-      <FileInput accept={mimeType} multiple={multiple} disabled={disabled} onChange={onLoad} />
+      <FileInput
+        accept={mimeType}
+        multiple={multiple}
+        disabled={disabled}
+        onChange={onLoad}
+        onClick={onClick}
+      />
       {children}
     </FileLoaderContainer>
   );
