@@ -13,6 +13,9 @@ import { SortDown } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 
+const COMMUNITY_LIST_HEIGHT = 350;
+const SCROLL_THRESHOLD = 0.98;
+
 const SelectIcon = styled(SortDown)`
   font-size: 18px;
   margin-right: 8px;
@@ -38,8 +41,13 @@ const CommunitySeparator = styled.div`
 
 const CommunityList = styled.div`
   position: relative;
-  height: 350px;
+  max-width: 200px;
+  height: ${COMMUNITY_LIST_HEIGHT}px;
   overflow: auto;
+`;
+
+const CommunityListLoader = styled.h4`
+  text-align: center;
 `;
 
 const PostTargetSelector = ({
@@ -78,12 +86,13 @@ const PostTargetSelector = ({
           dataLength={communities.length}
           next={loadMoreCommunities}
           hasMore={hasMoreCommunities}
+          height={COMMUNITY_LIST_HEIGHT}
           loader={
-            <h4>
+            <CommunityListLoader>
               <FormattedMessage id="loading" />
-            </h4>
+            </CommunityListLoader>
           }
-          onScroll={loadMoreCommunities}
+          scrollThreshold={SCROLL_THRESHOLD}
         >
           {communities.map((community) => (
             <MenuItem
