@@ -205,8 +205,3 @@ export const CommentEditTextarea = styled(InputText).attrs({ rows: 1, maxRows: 1
   resize: none;
   ${({ theme }) => theme.typography.global}
 `;
-
-export const Highlighted = styled.span`
-  cursor: pointer;
-  color: ${({ theme }) => theme.palette.primary.main};
-`;
