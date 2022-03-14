@@ -9,6 +9,7 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import UIUserInfo from './UIUserInfo';
 import useFollow from '~/core/hooks/useFollow';
 import useFollowCount from '~/core/hooks/useFollowCount';
+import useImage from '~/core/hooks/useImage';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { notification } from '~/core/components/Notification';
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
@@ -30,7 +31,9 @@ const UserInfo = ({
   const { followerCount, followingCount } = useFollowCount(userId);
 
   const { displayName, description } = user;
-  const { fileUrl } = file;
+
+  const { fileId } = file;
+  const fileUrl = useImage({ fileId });
 
   const [onFollowDecline] = useAsyncCallback(async () => {
     await followDecline();
