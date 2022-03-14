@@ -1,15 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 import Truncate from 'react-truncate-markup';
+import styled from 'styled-components';
 import Highlighter from 'react-highlight-words';
 
 import customizableComponent from '~/core/hocs/customization';
-import Linkify from '~/core/components/Linkify';
+import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import Button from '~/core/components/Button';
 import { findChunks } from '~/helpers/utils';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
@@ -30,53 +29,36 @@ export const Highlighted = styled.span`
 `;
 
 const TextContent = ({ text, postMaxLines, mentionees }) => {
-  const { onClickUser } = useNavigation();
-
-  const highlightTag = useCallback(
-    ({ children, highlightIndex }) => (
-      // eslint-disable-next-line react/prop-types
-      <Highlighted onClick={() => onClickUser(mentionees[highlightIndex]?.userId)}>
-        {children}
-      </Highlighted>
-    ),
-    [mentionees, onClickUser],
-  );
-
   const textContent = text && (
     <PostContent>
-      <Truncate.Atom>
-        <Highlighter
-          autoEscape
-          highlightTag={highlightTag}
-          findChunks={() => findChunks(mentionees)}
-          textToHighlight={text}
-        />
-      </Truncate.Atom>
+      <Highlighter
+        autoEscape
+        searchWords={[]} // marked as required by lib
+        highlightTag={(props) => (
+          <MentionHighlightTag {...props} text={text} mentionees={mentionees} />
+        )}
+        findChunks={() => findChunks(mentionees, text)}
+        textToHighlight={text}
+      />
     </PostContent>
   );
 
   const [isExpanded, setIsExpanded] = useState(false);
   const onExpand = () => setIsExpanded(true);
 
+  if (textContent && isExpanded) return textContent;
+
   return (
-    textContent && (
-      <Linkify>
-        {isExpanded ? (
-          textContent
-        ) : (
-          <Truncate.Atom
-            lines={postMaxLines}
-            ellipsis={
-              <ReadMoreButton onClick={onExpand}>
-                <FormattedMessage id="post.readMore" />
-              </ReadMoreButton>
-            }
-          >
-            {textContent}
-          </Truncate.Atom>
-        )}
-      </Linkify>
-    )
+    <Truncate.Atom
+      lines={postMaxLines}
+      ellipsis={
+        <ReadMoreButton onClick={onExpand}>
+          <FormattedMessage id="post.readMore" />
+        </ReadMoreButton>
+      }
+    >
+      {textContent}
+    </Truncate.Atom>
   );
 };
 
