@@ -1,0 +1,50 @@
+name: Production release pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: git checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: configure committer
+        run: |
+          git config user.name "bmo-amity-bot"
+          git config user.email "developers@amity.co"
+
+      - name: install node
+        uses: actions/setup-node@v2
+
+      - name: cache deps
+        uses: actions/cache@v2
+        id: cache-deps
+        with:
+          path: |
+            **/node_modules
+            **/.eslintcache
+          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: install deps
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: increase version
+        run: npx standard-version --yes
+
+      - name: build
+        run: npm run build
+
+      - name: publish on npm
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+
+      - name: push version
+        run: git push --follow-tags

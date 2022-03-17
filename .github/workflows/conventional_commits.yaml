@@ -1,0 +1,13 @@
+name: Conventional commits
+
+on:
+  pull_request:
+    types: [edited, opened, reopened, synchronize]
+
+jobs:
+  pr-checker:
+    name: PR title
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: EkoCommunications/PRChecks/pr-title@develop

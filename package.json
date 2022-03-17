@@ -1,0 +1,118 @@
+{
+  "name": "@amityco/ui-kit-open-source",
+  "version": "2.9.1",
+  "engines": {
+    "node": ">=16",
+    "npm": ">=7"
+  },
+  "main": "build/index.js",
+  "files": [
+    "build"
+  ],
+  "description": "React Ui-Kit for Amity Social Cloud (open-source)",
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev:analyze": "webpack --mode development --analyze true",
+    "build:prod:analyze": "webpack --mode production --analyze true",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "build-storybook --output-dir ./storybook-build",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "styled-components": "^5.1.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "@babel/preset-react": "^7.10.4",
+    "@storybook/addon-a11y": "^6.1.0-alpha.17",
+    "@storybook/addon-actions": "^6.1.0-alpha.17",
+    "@storybook/addon-backgrounds": "^6.1.0-alpha.17",
+    "@storybook/addon-controls": "^6.1.0-alpha.17",
+    "@storybook/addon-storysource": "^6.1.0-alpha.17",
+    "@storybook/addon-toolbars": "^6.0.22",
+    "@storybook/addon-viewport": "^6.1.0-alpha.17",
+    "@storybook/addons": "^6.1.0-alpha.17",
+    "@storybook/client-api": "^6.1.0-alpha.17",
+    "@storybook/react": "^6.1.0-alpha.17",
+    "@storybook/theming": "^6.1.0-alpha.17",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "18.2.1",
+    "eslint-config-eko": "^3.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-webpack": "^0.13.2",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "7.25.1",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "husky": "^4.2.5",
+    "jest": "^24.9.0",
+    "lint-staged": "^10.2.13",
+    "prettier": "^2.4.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "styled-components": "^5.1.1",
+    "svg-url-loader": "^6.0.0",
+    "webpack": "^4.44.1",
+    "webpack-bundle-analyzer": "^3.9.0",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {
+    "@amityco/js-sdk": "^5.13.0",
+    "@hookform/error-message": "0.0.4",
+    "classnames": "^2.2.6",
+    "filesize": "^6.1.0",
+    "hls.js": "^1.0.10",
+    "human-readable-numbers": "^0.9.5",
+    "javascript-time-ago": "^2.0.13",
+    "linkifyjs": "^3.0.5",
+    "lodash": "^4.17.19",
+    "polished": "^3.6.6",
+    "prop-types": "^15.7.2",
+    "react-autosize-textarea": "^7.1.0",
+    "react-helmet": "^6.1.0",
+    "react-highlight-words": "^0.17.0",
+    "react-hook-form": "^6.6.0",
+    "react-infinite-scroll-component": "^5.1.0",
+    "react-infinite-scroller": "^1.2.4",
+    "react-intl": "^5.8.4",
+    "react-intl-formatted-duration": "^4.0.0",
+    "react-linkify": "^1.0.0-alpha",
+    "react-loading-skeleton": "^2.2.0",
+    "react-mentions": "^4.3.0",
+    "react-sizeme": "^3.0.1",
+    "react-time-ago": "^6.0.1",
+    "react-tiny-popover": "^5.1.0",
+    "react-truncate-markup": "^5.0.0",
+    "react-use": "^17.3.1",
+    "recoil": "0.0.10",
+    "uuid": "^8.3.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add --force"
+    ],
+    "*.{json,md}": [
+      "prettier --write",
+      "git add --force"
+    ]
+  },
+  "license": "LGPL-2.1-only"
+}
