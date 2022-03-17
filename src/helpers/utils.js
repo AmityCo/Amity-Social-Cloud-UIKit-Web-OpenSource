@@ -1,5 +1,4 @@
 import isEmpty from 'lodash/isEmpty';
-import * as linkify from 'linkifyjs';
 import { CommunityUserMembership, PostTargetType } from '@amityco/js-sdk';
 
 export function stripUndefinedValues(obj) {
@@ -75,22 +74,16 @@ export function extractUserIdDisplayNameCollection(text, userId, highlightLength
   };
 }
 
-export function findChunks(mentionees, text) {
+export function findChunks(mentionees) {
   if (!mentionees) return [];
 
   const mentioneeChunks = mentionees.map(({ index, length }) => ({
     start: index,
     end: index + length + 1, // compensate for index === 0
+    highlight: true,
   }));
 
-  let urlChunks = [];
-
-  // To find URLs and find text inside it
-  if (text) {
-    urlChunks = linkify.find(text).map(({ start, end }) => ({ start, end }));
-  }
-
-  return [...mentioneeChunks, ...urlChunks];
+  return mentioneeChunks;
 }
 
 export function extractMetadata(markup, mentions) {
