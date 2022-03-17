@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.10.0 (2022-03-17)
+
+
+### Features
+
+* UP-7644 - Custom Chunk Highlighter Component ([#25](https://github.com/EkoCommunications/AmityUiKitWeb/issues/25)) ([5723c22](https://github.com/EkoCommunications/AmityUiKitWeb/commit/5723c2243d1e1cb1407f77155888e77322399ba6))
+
 ### 2.9.1 (2022-03-03)
 
 ## 2.9.0 (2022-02-17)
