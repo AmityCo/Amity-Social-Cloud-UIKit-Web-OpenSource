@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Truncate from 'react-truncate-markup';
 import styled from 'styled-components';
-import Highlighter from 'react-highlight-words';
-
 import customizableComponent from '~/core/hocs/customization';
-import MentionHighlightTag from '~/core/components/MentionHighlightTag';
+import ChunkHighlighter from '~/core/components/ChunkHighlighter';
 import Button from '~/core/components/Button';
+import Linkify from '~/core/components/Linkify';
+import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { findChunks } from '~/helpers/utils';
 
 export const PostContent = styled.div`
@@ -23,22 +23,16 @@ export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
   display: inline-block;
 `;
 
-export const Highlighted = styled.span`
-  cursor: pointer;
-  color: ${({ theme }) => theme.palette.primary.main};
-`;
-
 const TextContent = ({ text, postMaxLines, mentionees }) => {
+  const chunks = useMemo(() => findChunks(mentionees), [mentionees]);
+
   const textContent = text && (
     <PostContent>
-      <Highlighter
-        autoEscape
-        searchWords={[]} // marked as required by lib
-        highlightTag={(props) => (
-          <MentionHighlightTag {...props} text={text} mentionees={mentionees} />
-        )}
-        findChunks={() => findChunks(mentionees, text)}
+      <ChunkHighlighter
         textToHighlight={text}
+        chunks={chunks}
+        highlightNode={(props) => <MentionHighlightTag {...props} mentionees={mentionees} />}
+        unhighlightNode={Linkify}
       />
     </PostContent>
   );
