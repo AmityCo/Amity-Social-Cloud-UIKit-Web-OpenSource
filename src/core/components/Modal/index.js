@@ -11,6 +11,7 @@ import {
   Content,
   Footer,
   CloseIcon,
+  CloseIconContainer,
 } from './styles';
 
 const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean, children }) => {
@@ -31,7 +32,9 @@ const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean
           <Header clean={clean}>
             {title}
             <ConditionalRender condition={onCancel}>
-              <CloseIcon onClick={onCancel} />
+              <CloseIconContainer onClick={onCancel}>
+                <CloseIcon />
+              </CloseIconContainer>
             </ConditionalRender>
           </Header>
         </ConditionalRender>
