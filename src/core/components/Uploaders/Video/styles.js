@@ -77,7 +77,7 @@ const VideoSkeleton = () => (
 
 export const RemoveButton = styled(Button).attrs({
   variant: 'secondary',
-  children: <Remove />,
+  children: <Remove width={14} height={14} />,
 })`
   position: absolute;
   top: 0.5em;

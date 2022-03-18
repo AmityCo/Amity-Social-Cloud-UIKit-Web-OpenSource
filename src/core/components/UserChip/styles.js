@@ -24,9 +24,8 @@ const Name = styled.span`
   margin: 0 0.5rem;
 `;
 
-const Close = styled(Remove)`
-  font-size: 12px;
-  color: ${({ theme }) => theme.palette.base.shade1};
+const Close = styled(Remove).attrs({ width: 12, height: 12 })`
+  fill: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 const RoundButton = styled(Button)`
