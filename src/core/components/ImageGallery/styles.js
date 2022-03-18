@@ -99,7 +99,7 @@ export const RightButton = (props) => (
 
 export const CloseButton = styled((props) => (
   <InvisibleButton rel="close" {...props}>
-    <Remove height={20} />
+    <Remove height={20} width={20} />
   </InvisibleButton>
 ))`
   background: rgba(0, 0, 0, 0.3);

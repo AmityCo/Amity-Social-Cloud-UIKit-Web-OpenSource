@@ -71,7 +71,7 @@ export const FileSize = styled.div`
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
-export const RemoveIcon = styled(Remove)`
+export const RemoveIcon = styled(Remove).attrs({ width: 14, height: 14 })`
   grid-area: remove;
   z-index: 2;
 `;

@@ -73,7 +73,7 @@ const ImageSkeleton = () => (
 
 export const RemoveButton = styled(Button).attrs({
   variant: 'secondary',
-  children: <RemoveIcon />,
+  children: <RemoveIcon width={14} height={14} />,
 })`
   position: absolute;
   top: 0.5em;
