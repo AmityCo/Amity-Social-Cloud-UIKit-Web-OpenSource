@@ -9,7 +9,7 @@ jobs:
 
     environment:
       name: dev/${{ github.event.pull_request.number }}
-      url: https://ui-kit-open-source.dev.amity.co//${{ github.event.pull_request.number }}
+      url: https://ui-kit-open-source.dev.amity.co/${{ github.event.pull_request.number }}
 
     env:
       STORYBOOK_API_ENDPOINT: ${{ secrets.STORYBOOK_API_ENDPOINT }}
