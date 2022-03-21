@@ -15,7 +15,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_BUCKET: ui-kit.dev.amity.co
+          AWS_S3_BUCKET: ui-kit-open-source.dev.amity.co
           PATH_TO_DELETE: ${{ github.event.pull_request.number }}
 
       - uses: strumwolf/delete-deployment-environment@v2

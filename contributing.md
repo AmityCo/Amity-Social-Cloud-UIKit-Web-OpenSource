@@ -8,7 +8,7 @@ Please refer to the [Amity contribution guide](https://docs.amity.co/support/con
 
 ## What You'll Need
 
-0. [A bug or feature you want to work on](https://github.com/EkoCommunications/AmityUiKitWeb/labels/help%20wanted)!
+0. [A bug or feature you want to work on](https://github.com/EkoCommunications/AmityUiKitWeb-OpenSource/labels/help%20wanted)!
 1. [A GitHub account](https://github.com/join).
 2. A copy of our Ui-Kit. See the next steps for instructions.
 3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
