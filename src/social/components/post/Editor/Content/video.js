@@ -23,7 +23,10 @@ const VideoContentList = ({ items, onRemove }) => {
       {(item) => {
         if (playingPostId === item.postId) {
           const fileId =
-            item.data.videoFileId.high || item.data.videoFileId.medium || item.data.videoFileId.low;
+            item.data.videoFileId.high ||
+            item.data.videoFileId.medium ||
+            item.data.videoFileId.low ||
+            item.data.videoFileId.original;
 
           if (!fileId) {
             return (

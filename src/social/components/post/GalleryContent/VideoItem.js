@@ -16,7 +16,10 @@ export const Thumbnail = ({ item, showPlayIcon, showVideoDuration }) => {
 
 export const Item = ({ item }) => {
   const fileId =
-    item.data.videoFileId.high || item.data.videoFileId.medium || item.data.videoFileId.low;
+    item.data.videoFileId.high ||
+    item.data.videoFileId.medium ||
+    item.data.videoFileId.low ||
+    item.data.videoFileId.original;
 
   if (!fileId) {
     return (
