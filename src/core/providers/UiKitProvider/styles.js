@@ -17,13 +17,6 @@ export const UIStyles = styled.div`
     line-height: 1.5;
   }
 
-  & a {
-    color: ${({ theme }) => theme.palette.base.main};
-    &:hover {
-      color: ${({ theme }) => theme.palette.base.main};
-    }
-  }
-
   & pre {
     ${({ theme }) => theme.typography.body}
   }
