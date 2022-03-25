@@ -10,6 +10,7 @@ export {
   removeChatMembers as amityRemoveChatMembers,
 } from '~/chat/helpers';
 
+export { useSDK as useAmitySDK } from '~/core/hocs/withSDK';
 export { default as useAmityUser } from '~/core/hooks/useUser';
 export { useNavigation as useAmityNavigation } from '~/social/providers/NavigationProvider';
 
