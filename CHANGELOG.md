@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.11.0 (2022-03-31)
+
+### Features
+
+- UP-7716 - provide access to ASCClient instance using useAmitySDK hook ([#23](https://github.com/EkoCommunications/AmityUiKitWeb/issues/23)) ([0ce58fd](https://github.com/EkoCommunications/AmityUiKitWeb/commit/0ce58fd681a22f2b3122a4fa7099bce0b8c548ad))
+
 ## 2.10.0 (2022-03-17)
 
 ### Features
