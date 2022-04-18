@@ -7,8 +7,4 @@ export const Link = styled.a`
   &:hover {
     text-decoration: underline;
   }
-
-  &:visited {
-    color: #663366; // Google's visited color code
-  }
 `;
