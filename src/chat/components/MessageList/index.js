@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, createRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FileRepository, ImageSize } from '@amityco/js-sdk';
 
@@ -15,6 +15,8 @@ const MessageList = ({ client, channelId }) => {
 
   const { currentUserId } = client;
 
+  const containerRef = createRef();
+
   const getAvatar = ({ user: { avatarCustomUrl, avatarFile, avatarFileId } }) => {
     if (avatarCustomUrl) return avatarCustomUrl;
     if (avatarFile) return avatarFile;
@@ -28,6 +30,13 @@ const MessageList = ({ client, channelId }) => {
     return null;
   };
 
+  useEffect(() => {
+    const element = containerRef.current;
+    if (element) {
+      element.scrollIntoView(false);
+    }
+  }, [messages, containerRef]);
+
   return (
     <InfiniteScrollContainer>
       <InfiniteScroll
@@ -38,7 +47,7 @@ const MessageList = ({ client, channelId }) => {
         loader={<span key={0}>Loading...</span>}
         isReverse
       >
-        <MessageListContainer>
+        <MessageListContainer ref={containerRef}>
           {messages.map((message, i) => {
             const nextMessage = messages[i + 1];
             const isConsequent = nextMessage && nextMessage.userId === message.userId;
