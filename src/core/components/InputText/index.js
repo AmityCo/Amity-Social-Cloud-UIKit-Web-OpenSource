@@ -195,7 +195,7 @@ const InputText = (
           allowSuggestionsAboveCursor
           inputRef={ref}
           rows={rows}
-          maxRows={maxRows}
+          maxrows={maxRows}
           suggestionsPortalHost={mentionRef?.current}
           style={suggestListStyles}
           {...props}
