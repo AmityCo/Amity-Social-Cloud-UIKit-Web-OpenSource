@@ -15,6 +15,7 @@
 
 import React, { createElement, isValidElement } from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidV4 } from 'uuid';
 
 const renderNodes = (parentNode, props) => {
   if (isValidElement(parentNode) || typeof parentNode === 'object') {
@@ -57,13 +58,17 @@ const ChunkHighlighter = ({ textToHighlight, chunks, highlightNode, unhighlightN
   return createElement('span', {
     children: combinedChunks.map(({ highlight, start, end }) => {
       const text = textToHighlight.substring(start, end);
+      const key = uuidV4();
 
       if (highlight) {
         highlightIndex += 1;
-        return renderNodes(highlightNode, { children: text, highlightIndex });
+        return renderNodes(highlightNode, { children: text, highlightIndex, key });
       }
 
-      return renderNodes(unhighlightNode, { children: text });
+      return renderNodes(unhighlightNode, {
+        children: text,
+        key, // hack to NOT duplicate the list keys
+      });
     }),
   });
 };
