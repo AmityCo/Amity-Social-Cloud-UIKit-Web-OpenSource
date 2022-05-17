@@ -9,6 +9,7 @@ import Chat from '~/chat/components/Chat';
 import ChatDetails from '~/chat/components/ChatDetails';
 
 import { ApplicationContainer } from './styles';
+import CreateChatModal from '~/chat/components/Chat/CreateChatModal';
 
 const ChatApplication = ({
   membershipFilter,
@@ -24,6 +25,9 @@ const ChatApplication = ({
 
   const showChatDetails = () => setShouldShowChatDetails(true);
   const hideChatDetails = () => setShouldShowChatDetails(false);
+
+  const [isChatModalOpened, setChatModalOpened] = useState(false);
+  const openChatModal = () => setChatModalOpened(true);
 
   const handleChannelSelect = (newChannelData) => {
     if (currentChannelData?.channelId === newChannelData?.channelId) return;
@@ -63,7 +67,10 @@ const ChatApplication = ({
         selectedChannelId={currentChannelData?.channelId}
         membershipFilter={membershipFilter}
         onChannelSelect={handleChannelSelect}
-        onAddNewChannelClick={onAddNewChannel}
+        onAddNewChannelClick={() => {
+          openChatModal();
+          onAddNewChannel();
+        }}
       />
       {currentChannelData && (
         <Chat
@@ -82,6 +89,7 @@ const ChatApplication = ({
           onClose={hideChatDetails}
         />
       )}
+      {isChatModalOpened && <CreateChatModal onClose={() => setChatModalOpened(false)} />}
     </ApplicationContainer>
   );
 };
