@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.12.0 (2022-05-20)
+
+
+### Features
+
+* ASC-468 - added chat composer ([#34](https://github.com/EkoCommunications/AmityUiKitWeb/issues/34)) ([db9b4c2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/db9b4c264f313abf1cecc120c42abe8ea109c83a))
+
 ### 2.11.1 (2022-04-21)
 
 ## 2.11.0 (2022-03-31)
