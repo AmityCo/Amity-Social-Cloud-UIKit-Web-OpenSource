@@ -11,7 +11,7 @@ export const PostInfo = styled.div`
 `;
 
 export const Name = styled.div`
-  ${({ theme }) => theme.typography.title};
+  ${({ theme }) => theme.typography.title}
 
   word-break: break-all;
 
@@ -51,20 +51,20 @@ export const MessageContainer = styled.div`
   }
 `;
 
-const ModeratorBadgeCSS = css`
-  & > ${ModeratorBadge} {
-    &::after {
-      content: '•';
-      margin-left: 4px;
-    }
-  }
-`;
-
 export const AdditionalInfo = styled.div`
   display: flex;
   align-items: center;
 
-  ${({ showTime }) => showTime && ModeratorBadgeCSS};
+  ${({ showTime }) =>
+    showTime &&
+    css`
+      & > ${ModeratorBadge} {
+        &::after {
+          content: '•';
+          margin-left: 4px;
+        }
+      }
+    `};
 `;
 
 export const PostNamesContainer = styled.div`

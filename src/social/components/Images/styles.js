@@ -135,7 +135,7 @@ export const NumberOfHiddenImagesOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  ${({ theme }) => theme.typography.headline};
+  ${({ theme }) => theme.typography.headline}
   font-size: 32px;
 `;
 

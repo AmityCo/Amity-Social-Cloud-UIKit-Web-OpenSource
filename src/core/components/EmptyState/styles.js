@@ -12,7 +12,7 @@ export const EmptyStateContainer = styled.div`
 `;
 
 export const EmptyStateTitle = styled.div`
-  ${({ theme }) => theme.typography.title};
+  ${({ theme }) => theme.typography.title}
   margin-top: 8px;
 `;
 

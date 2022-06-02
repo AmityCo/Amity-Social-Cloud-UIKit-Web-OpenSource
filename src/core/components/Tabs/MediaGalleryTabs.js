@@ -27,7 +27,7 @@ export default styled(Tabs)`
     &.active {
       background: ${({ theme }) => theme.palette.primary.main};
       color: #fff;
-      ${({ theme }) => theme.typography.bodyBold};
+      ${({ theme }) => theme.typography.bodyBold}
       border-bottom: none;
     }
   }

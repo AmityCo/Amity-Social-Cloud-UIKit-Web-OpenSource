@@ -49,7 +49,7 @@ export const VideoPreview = styled(
     </video>
   )),
 )`
-  ${VideoPreviewContainerStyles};
+  ${VideoPreviewContainerStyles}
   cursor: pointer;
 `;
 

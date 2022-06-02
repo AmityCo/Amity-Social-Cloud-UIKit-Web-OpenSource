@@ -9,7 +9,7 @@ const ReactPopover = ({ className, fixed = false, ...rest }) => (
 );
 
 export const Popover = styled(ReactPopover)`
-  ${({ theme }) => theme.typography.body};
+  ${({ theme }) => theme.typography.body}
   z-index: 10000;
   background: ${({ theme }) => theme.palette.system.background};
   min-width: 200px;

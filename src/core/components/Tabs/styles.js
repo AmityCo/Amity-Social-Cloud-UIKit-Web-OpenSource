@@ -25,7 +25,7 @@ export const TabButton = styled.button`
   cursor: pointer;
   outline: none;
   color: #abaeba;
-  ${({ theme }) => theme.typography.bodyBold};
+  ${({ theme }) => theme.typography.bodyBold}
   text-align: center;
 
   &:hover {

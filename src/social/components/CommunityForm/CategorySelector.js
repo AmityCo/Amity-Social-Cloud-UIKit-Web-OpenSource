@@ -6,9 +6,8 @@ import customizableComponent from '~/core/hocs/customization';
 import Select from '~/core/components/Select';
 import useCategories from '~/social/hooks/useCategories';
 import CategoryHeader from '~/social/components/category/Header';
-import ChevronDown from '~/icons/ChevronDown';
 
-import { Selector, ChevronDownContainer, InputPlaceholder } from './styles';
+import { Selector, SelectIcon, InputPlaceholder } from './styles';
 
 const CategorySelector = ({ value: categoryId, onChange, parentContainer = null }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,9 +32,7 @@ const CategorySelector = ({ value: categoryId, onChange, parentContainer = null 
             {(placeholder) => <InputPlaceholder>{placeholder}</InputPlaceholder>}
           </FormattedMessage>
         )}
-        <ChevronDownContainer>
-          <ChevronDown height={16} width={16} />
-        </ChevronDownContainer>
+        <SelectIcon />
       </Selector>
     );
   };

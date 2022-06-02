@@ -35,7 +35,7 @@ export const CoverContent = styled.div`
 
 export const CommunityName = styled(SocialCommunityName)`
   color: #ffffff;
-  ${({ theme }) => theme.typography.headline};
+  ${({ theme }) => theme.typography.headline}
   line-height: 30px !important;
 
   * {
@@ -65,7 +65,7 @@ export const Header = styled.div`
 
 export const Count = styled.div`
   color: ${({ theme }) => theme.palette.neutral.shade1};
-  ${({ theme }) => theme.typography.caption};
+  ${({ theme }) => theme.typography.caption}
   margin-bottom: 4px;
 `;
 

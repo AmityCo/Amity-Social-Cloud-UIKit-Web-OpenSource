@@ -27,6 +27,6 @@ export const Content = styled.div`
 
 export const Name = styled.h4`
   color: #ffffff;
-  ${({ theme }) => theme.typography.title};
+  ${({ theme }) => theme.typography.title}
   margin: 0;
 `;

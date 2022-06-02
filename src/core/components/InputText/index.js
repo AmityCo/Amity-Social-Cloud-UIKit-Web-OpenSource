@@ -98,7 +98,7 @@ const StyledMentionsInput = styled(MentionsInput)`
   padding: 0.5rem;
   width: 100%;
   textarea {
-    ${styling};
+    ${styling}
     resize: vertical;
   }
 `;

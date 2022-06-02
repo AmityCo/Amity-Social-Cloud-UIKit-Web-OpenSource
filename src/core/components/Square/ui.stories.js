@@ -16,7 +16,7 @@ const LoremIpsum = styled.div`
   height: 100%;
   border: 1px solid royalblue;
   padding: 1rem;
-  ${({ theme }) => theme.typography.body};
+  ${({ theme }) => theme.typography.body}
   overflow: auto;
 `;
 

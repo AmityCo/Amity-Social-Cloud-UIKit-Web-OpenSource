@@ -28,7 +28,7 @@ const PostTargetSelectorContainer = styled.div`
 `;
 
 const CommunitySeparator = styled.div`
-  ${({ theme }) => theme.typography.caption};
+  ${({ theme }) => theme.typography.caption}
   border-top: 1px solid #e3e4e8;
   color: ${({ theme }) => theme.palette.base.shade1};
   padding: 12px;

@@ -5,7 +5,7 @@ import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
 import { PrimaryButton } from '~/core/components/Button';
 import ImageUploader from '~/core/components/Uploaders/Image';
 import UIAvatar from '~/core/components/Avatar';
-import { Close, Globe, Lock } from '~/icons';
+import { ChevronDown, Close, Globe, Lock } from '~/icons';
 
 const ErrorMessageWrapper = styled.div`
   margin-top: 8px;
@@ -247,12 +247,8 @@ export const TextField = styled.input`
   }
 `;
 
-export const ChevronDownContainer = styled.span`
+export const SelectIcon = styled(ChevronDown).attrs({ width: 16, height: 16 })`
   margin-left: auto;
-
-  svg {
-    vertical-align: middle;
-  }
 `;
 
 export const Field = styled.div`
