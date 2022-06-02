@@ -108,7 +108,7 @@ const PollComposer = ({
       question: data?.question,
       answers: data?.answers?.length ? data.answers : undefined,
       answerType: data?.answerType || PollAnswerType.Single,
-      closedIn: data?.closedIn * MILLISECONDS_IN_DAY,
+      closedIn: data ? data.closedIn * MILLISECONDS_IN_DAY : undefined,
     };
 
     await onSubmit(payload, mentionees, metadata);

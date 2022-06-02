@@ -61,7 +61,7 @@ const Dropdown = ({
       parentContainer &&
       `0px 0px -${Math.ceil(
         (scrollableHeight * 100) /
-          (parentContainer?.getBoundingClientRect()?.height - buttonContainerHeight),
+          (parentContainer.getBoundingClientRect().height - buttonContainerHeight),
       )}% 0px`,
   });
 

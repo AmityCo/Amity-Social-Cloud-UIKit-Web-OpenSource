@@ -22,7 +22,7 @@ const LivestreamContent = ({ streamId, mentionees = [] }) => {
   // Since we're breaking description into another line, it is necessary
   // to compensate 2 more characters + the title to get correct index for mention highlight
   const descriptionMentionees = mentionees.map(({ index, ...rest }) => ({
-    index: index > stream?.title.length ? index - stream?.title.length - 2 : index,
+    index: index > stream?.title?.length ? index - stream.title.length - 2 : index,
     ...rest,
   }));
 

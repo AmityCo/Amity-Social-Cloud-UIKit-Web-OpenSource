@@ -68,7 +68,7 @@ const ResultList = ({ answers, totalVotes }) => {
 };
 
 const PollContent = ({ items }) => {
-  const { pollId } = items[0]?.data;
+  const pollId = items?.[0]?.data?.pollId;
   const { poll } = usePoll(pollId);
   const { answers = [], answerType, closedIn, isDeleted, isVoted, status } = poll;
 
