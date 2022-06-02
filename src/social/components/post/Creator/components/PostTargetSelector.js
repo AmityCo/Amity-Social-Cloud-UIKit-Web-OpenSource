@@ -7,11 +7,11 @@ import { PostTargetType } from '@amityco/js-sdk';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
-import UIAvatar from '~/core/components/Avatar';
+import { Avatar } from './styles';
 
 import { SortDown } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
+import CommunityItem from './CommunityItem';
 
 const COMMUNITY_LIST_HEIGHT = 350;
 const SCROLL_THRESHOLD = 0.98;
@@ -19,10 +19,6 @@ const SCROLL_THRESHOLD = 0.98;
 const SelectIcon = styled(SortDown).attrs({ width: 18, height: 18 })`
   margin-right: 8px;
   margin-top: -4px;
-`;
-
-const Avatar = styled(UIAvatar)`
-  margin-right: 8px;
 `;
 
 const PostTargetSelectorContainer = styled.div`
@@ -94,24 +90,13 @@ const PostTargetSelector = ({
           scrollThreshold={SCROLL_THRESHOLD}
         >
           {communities.map((community) => (
-            <MenuItem
+            <CommunityItem
               key={community.communityId}
-              active={community.communityId === currentTargetId}
-              onClick={() => {
-                onChange({
-                  targetId: community.communityId,
-                  targetType: PostTargetType.CommunityFeed,
-                });
-                close();
-              }}
-            >
-              <Avatar
-                avatar={community.avatarFileUrl}
-                size="tiny"
-                backgroundImage={CommunityImage}
-              />
-              {` ${community.displayName}`}
-            </MenuItem>
+              community={community}
+              currentTargetId={currentTargetId}
+              onChange={onChange}
+              onClose={close}
+            />
           ))}
         </InfiniteScroll>
       </CommunityList>
