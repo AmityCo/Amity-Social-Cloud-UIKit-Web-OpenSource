@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.12.1 (2022-06-02)
+
+### Bug Fixes
+
+- ASC-1489 - Community image missing in the dropdown ([#37](https://github.com/EkoCommunications/AmityUiKitWeb/issues/37)) ([469c2d2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/469c2d259c6b27397ee2e3be56c27a7fac529188))
+
 ## 2.12.0 (2022-05-20)
 
 ### Features
