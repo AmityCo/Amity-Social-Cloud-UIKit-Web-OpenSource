@@ -12,7 +12,7 @@
 
 Then, inside another project, where need to use ui-kit:
 
-1. npm link @amityco/ui-kit-open-source --install-links
+1. npm link @amityco/ui-kit-open-source --install-links --save
 
 ### Documentation
 
