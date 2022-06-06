@@ -6,7 +6,7 @@
 
 1. git clone git@github.com:AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
 2. cd Amity-Social-Cloud-UIKit-Web-OpenSource
-3. npm i
+3. npm ci
 4. npm build
 5. npm link
 
