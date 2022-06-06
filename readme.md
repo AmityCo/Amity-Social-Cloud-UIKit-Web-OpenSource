@@ -7,7 +7,8 @@
 1. git clone git@github.com:AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
 2. cd Amity-Social-Cloud-UIKit-Web-OpenSource
 3. npm i
-4. npm link
+4. npm build
+5. npm link
 
 Then, inside another project, where need to use ui-kit:
 
