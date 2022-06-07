@@ -23,8 +23,8 @@
     "storybook:build": "build-storybook --output-dir ./storybook-build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "release": "release-it --dry-run",
-    "release:automatic": "release-it --ci --no-increment --dry-run"
+    "release": "release-it",
+    "release:automatic": "release-it --ci --no-increment"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
