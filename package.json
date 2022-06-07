@@ -24,7 +24,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "release": "release-it",
-    "release:automatic": "release-it --ci --no-increment"
+    "release:automatic": "release-it --ci"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
