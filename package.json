@@ -1,6 +1,6 @@
 {
-  "name": "@amityco/ui-kit-open-source",
-  "version": "2.12.1",
+  "name": "@noom/community-web-uikit",
+  "version": "2.12.5",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -9,6 +9,9 @@
   "files": [
     "build"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "description": "React Ui-Kit for Amity Social Cloud (open-source)",
   "scripts": {
     "build": "webpack --mode production",
@@ -19,7 +22,9 @@
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook --output-dir ./storybook-build",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "release": "release-it",
+    "release:automatic": "release-it --ci"
   },
   "peerDependencies": {
     "react": ">=16.8.0",
@@ -32,17 +37,17 @@
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
-    "@storybook/addon-a11y": "^6.1.0-alpha.17",
-    "@storybook/addon-actions": "^6.1.0-alpha.17",
-    "@storybook/addon-backgrounds": "^6.1.0-alpha.17",
-    "@storybook/addon-controls": "^6.1.0-alpha.17",
-    "@storybook/addon-storysource": "^6.1.0-alpha.17",
+    "@storybook/addon-a11y": "6.5.7",
+    "@storybook/addon-actions": "6.5.7",
+    "@storybook/addon-backgrounds": "6.5.7",
+    "@storybook/addon-controls": "6.5.7",
+    "@storybook/addon-storysource": "6.5.7",
     "@storybook/addon-toolbars": "^6.0.22",
-    "@storybook/addon-viewport": "^6.1.0-alpha.17",
-    "@storybook/addons": "^6.1.0-alpha.17",
-    "@storybook/client-api": "^6.1.0-alpha.17",
-    "@storybook/react": "^6.1.0-alpha.17",
-    "@storybook/theming": "^6.1.0-alpha.17",
+    "@storybook/addon-viewport": "6.5.7",
+    "@storybook/addons": "6.5.7",
+    "@storybook/client-api": "6.5.7",
+    "@storybook/react": "6.5.7",
+    "@storybook/theming": "6.5.7",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -62,6 +67,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
+    "release-it": "^15.0.0",
     "styled-components": "^5.1.1",
     "svg-url-loader": "^6.0.0",
     "webpack": "^4.44.1",

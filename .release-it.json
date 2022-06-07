@@ -1,0 +1,23 @@
+{
+  "buildCommand": "npm run build",
+  "hooks": {
+    "before:init": ["npm run lint", "npm test"],
+    "after:bump": "npm run build",
+    "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
+  },
+  "git": {
+    "changelog": "git log --pretty=format:\"* %s (%h)\" ${latestTag}...HEAD",
+    "requireCleanWorkingDir": true,
+    "requireBranch": false,
+    "requireUpstream": true,
+    "requireCommits": false,
+    "addUntrackedFiles": true,
+    "commit": true,
+    "commitMessage": "Release ${version}",
+    "tagAnnotation": "Release ${version}",
+    "push": true
+  },
+  "npm": {
+    "publish": true
+  }
+}
