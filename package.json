@@ -74,7 +74,7 @@
     "webpack-node-externals": "^2.5.1"
   },
   "dependencies": {
-    "@amityco/js-sdk": "^5.13.0",
+    "@amityco/js-sdk": "^5.20.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
