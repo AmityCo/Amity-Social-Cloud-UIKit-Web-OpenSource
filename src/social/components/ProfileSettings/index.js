@@ -33,12 +33,8 @@ const ProfileSettings = ({ userId, client }) => {
   const { user, file } = useUser(userId);
 
   const handleSubmit = async (data) => {
-    const { displayName, description, avatarFileId } = data;
-
     try {
-      await client.setDisplayName(displayName);
-      await client.setDescription(description);
-      await client.setAvatar(avatarFileId);
+      await client.updateCurrentUser(data);
     } catch (err) {
       console.log(err);
     }
