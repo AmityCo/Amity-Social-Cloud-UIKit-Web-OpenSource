@@ -7,6 +7,7 @@ import { PostTargetType } from '@amityco/js-sdk';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
+import useImage from '~/core/hooks/useImage';
 import { Avatar } from './styles';
 
 import { SortDown } from '~/icons';
@@ -61,6 +62,8 @@ const PostTargetSelector = ({
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
+  const fileUrl = useImage({ fileId: user.avatarFileId });
+
   const menu = (
     <Menu>
       <MenuItem
@@ -70,12 +73,12 @@ const PostTargetSelector = ({
           close();
         }}
       >
-        <Avatar size="tiny" avatar={user.avatarFileUrl} backgroundImage={UserImage} />{' '}
-        <FormattedMessage id="post.myTimeline" />,
+        <Avatar size="tiny" avatar={user.avatarCustomUrl || fileUrl} backgroundImage={UserImage} />{' '}
+        <FormattedMessage id="post.myTimeline" />
       </MenuItem>
 
       <CommunitySeparator>
-        <FormattedMessage id="post.community" />,
+        <FormattedMessage id="post.community" />
       </CommunitySeparator>
       <CommunityList>
         <InfiniteScroll

@@ -1,18 +1,12 @@
-import React, { memo, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { memo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { FormattedMessage } from 'react-intl';
-import {
-  UserRepository,
-  CommunityRepository,
-  PostTargetType,
-  FileRepository,
-  FileType,
-  ImageSize,
-} from '@amityco/js-sdk';
+import { UserRepository, CommunityRepository, PostTargetType, FileType } from '@amityco/js-sdk';
 
 import { info } from '~/core/components/Confirm';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
+import useImage from '~/core/hooks/useImage';
 
 import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
@@ -102,18 +96,8 @@ const PostCreatorBar = ({
 
   const fetcher = target.targetType === PostTargetType.UserFeed ? userFetcher : communityFetcher;
   const model = useLiveObject(fetcher(target.targetId), [target.targetId]);
-  const { avatarFileId } = model;
 
-  // TODO: this is temporary - we should use file.fileUrl when supported.
-  const fileUrl = useMemo(
-    () =>
-      avatarFileId &&
-      FileRepository.getFileUrlById({
-        fileId: avatarFileId,
-        imageSize: ImageSize.Medium,
-      }),
-    [avatarFileId],
-  );
+  const fileUrl = useImage({ fileId: model.avatarFileId });
 
   const [postText, setPostText] = useState('');
   const [plainText, setPlainText] = useState('');
@@ -205,7 +189,9 @@ const PostCreatorBar = ({
   const backgroundImage =
     target.targetType === PostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
-  const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
+  const CurrentTargetAvatar = (
+    <Avatar avatar={model.avatarCustomUrl || fileUrl} backgroundImage={backgroundImage} />
+  );
   const isDisabled =
     isEmpty(postText, postImages, postVideos, postFiles) || uploadLoading || creating || !connected;
   const hasChanges = !isEmpty(postText, postImages, postVideos, postFiles);
