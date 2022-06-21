@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.12.2 (2022-06-21)
+
+### Bug Fixes
+
+- asc-1566 - show user's custom avatar in missed places ([#42](https://github.com/EkoCommunications/AmityUiKitWeb/issues/42)) ([71e255e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/71e255e98365c4b46d1fa89cda24b3767ed1d48f))
+
 ### 2.12.1 (2022-06-02)
 
 ### Bug Fixes
