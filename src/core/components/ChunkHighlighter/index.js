@@ -52,7 +52,7 @@ export const processChunks = (text, chunks = []) => {
 };
 
 /** Formats mention chunks to use ChunkHighlighter with Markdown renderer */
-export function formatMentionChunks(text, mentionees, tag = 'mention') {
+export function formatMentionChunks(text = '', mentionees = [], tag = 'mention') {
   const chunks = processChunks(text, findChunks(mentionees));
   let highlightIndex = 0;
   let formattedText = '';

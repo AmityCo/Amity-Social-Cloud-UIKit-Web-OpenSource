@@ -15,6 +15,7 @@
   "description": "React Ui-Kit for Amity Social Cloud (open-source)",
   "scripts": {
     "build": "webpack --mode production",
+    "build:watch": "webpack --mode production --watch",
     "build:dev:analyze": "webpack --mode development --analyze true",
     "build:prod:analyze": "webpack --mode production --analyze true",
     "test": "jest",
