@@ -1,32 +1,38 @@
 import React, { useState, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
-import { findChunks } from '~/helpers/utils';
+import Markdown from 'markdown-to-jsx';
 import MentionHighlightTag from '~/core/components/MentionHighlightTag';
-import ChunkHighlighter from '~/core/components/ChunkHighlighter';
-import Linkify from '~/core/components/Linkify';
+import { formatMentionChunks } from '~/core/components/ChunkHighlighter';
 import { CommentContent, ReadMoreButton } from './styles';
 
 const COMMENT_MAX_LINES = 8;
 
 const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const chunks = useMemo(() => findChunks(mentionees), [mentionees]);
-
   const expand = () => setIsExpanded(true);
+
+  const textWithMentions = useMemo(
+    () => formatMentionChunks(text, mentionees, 'mention'),
+    [text, mentionees],
+  );
 
   const textContent = text && (
     <CommentContent className={className}>
-      <Truncate.Atom>
-        <ChunkHighlighter
-          textToHighlight={text}
-          chunks={chunks}
-          highlightNode={(props) => (
-            <MentionHighlightTag {...props} text={text} mentionees={mentionees} />
-          )}
-          unhighlightNode={Linkify}
-        />
-      </Truncate.Atom>
+      <Markdown
+        options={{
+          overrides: {
+            mention: {
+              component: MentionHighlightTag,
+              props: {
+                mentionees,
+              },
+            },
+          },
+        }}
+      >
+        {textWithMentions}
+      </Markdown>
     </CommentContent>
   );
 

@@ -16,6 +16,7 @@
 import React, { createElement, isValidElement } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
+import { findChunks } from '~/helpers/utils';
 
 const renderNodes = (parentNode, props) => {
   if (isValidElement(parentNode) || typeof parentNode === 'object') {
@@ -27,7 +28,7 @@ const renderNodes = (parentNode, props) => {
   return createElement(parentNode ?? 'span', props);
 };
 
-const processChunks = (text, chunks = []) => {
+export const processChunks = (text, chunks = []) => {
   const textLength = text.length;
   const allChunks = [];
 
@@ -49,6 +50,26 @@ const processChunks = (text, chunks = []) => {
 
   return allChunks;
 };
+
+/** Formats mention chunks to use ChunkHighlighter with Markdown renderer */
+export function formatMentionChunks(text, mentionees, tag = 'mention') {
+  const chunks = processChunks(text, findChunks(mentionees));
+  let highlightIndex = 0;
+  let formattedText = '';
+
+  chunks.forEach((chunk) => {
+    const chunkText = text.substring(chunk.start, chunk.end);
+
+    if (chunk.highlight) {
+      formattedText += `<${tag} highlightIndex="${highlightIndex}">${chunkText}</${tag}>`;
+      highlightIndex += 1;
+    } else {
+      formattedText += chunkText;
+    }
+  });
+
+  return formattedText;
+}
 
 const ChunkHighlighter = ({ textToHighlight, chunks, highlightNode, unhighlightNode }) => {
   let highlightIndex = -1;

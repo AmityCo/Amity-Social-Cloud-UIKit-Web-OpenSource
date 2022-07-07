@@ -1,14 +1,13 @@
 import React, { useState, useMemo } from 'react';
+import Markdown from 'markdown-to-jsx';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import Truncate from 'react-truncate-markup';
 import styled from 'styled-components';
 import customizableComponent from '~/core/hocs/customization';
-import ChunkHighlighter from '~/core/components/ChunkHighlighter';
 import Button from '~/core/components/Button';
-import Linkify from '~/core/components/Linkify';
 import MentionHighlightTag from '~/core/components/MentionHighlightTag';
-import { findChunks } from '~/helpers/utils';
+import { formatMentionChunks } from '~/core/components/ChunkHighlighter';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
@@ -24,16 +23,27 @@ export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
 `;
 
 const TextContent = ({ text, postMaxLines, mentionees }) => {
-  const chunks = useMemo(() => findChunks(mentionees), [mentionees]);
+  const textWithMentions = useMemo(
+    () => formatMentionChunks(text, mentionees, 'mention'),
+    [text, mentionees],
+  );
 
-  const textContent = text && (
+  const textContent = textWithMentions && (
     <PostContent>
-      <ChunkHighlighter
-        textToHighlight={text}
-        chunks={chunks}
-        highlightNode={(props) => <MentionHighlightTag {...props} mentionees={mentionees} />}
-        unhighlightNode={Linkify}
-      />
+      <Markdown
+        options={{
+          overrides: {
+            mention: {
+              component: MentionHighlightTag,
+              props: {
+                mentionees,
+              },
+            },
+          },
+        }}
+      >
+        {textWithMentions}
+      </Markdown>
     </PostContent>
   );
 
@@ -43,7 +53,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
   if (textContent && isExpanded) return textContent;
 
   return (
-    <Truncate.Atom
+    <Truncate
       lines={postMaxLines}
       ellipsis={
         <ReadMoreButton onClick={onExpand}>
@@ -52,7 +62,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
       }
     >
       {textContent}
-    </Truncate.Atom>
+    </Truncate>
   );
 };
 

@@ -27,7 +27,7 @@ UiComment.args = {
   canReport: true,
   createdAt: new Date('9/28/20'),
   editedAt: new Date('9/29/20'),
-  text: 'Dynamic comment text',
+  text: 'Dynamic **comment** text with [link](https://www.google.com).',
 };
 
 UiComment.argTypes = {
