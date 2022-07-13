@@ -1,5 +1,4 @@
 import { ChannelRepository, ChannelType, DataStatus } from '@amityco/js-sdk';
-import { v4 as uuidV4 } from 'uuid';
 
 function getChannelId(userIds) {
   return userIds.sort().join('-');
@@ -28,7 +27,7 @@ export function createNewChat({
   if (!isDirectChat && !chatName) return;
 
   // Use same pattern with mobile patform to sort and concat all userId to make channel Id is unique
-  const newChannelId = isDirectChat ? getChannelId([userIds, currentUserId]) : uuidV4();
+  const newChannelId = isDirectChat ? getChannelId([userIds, currentUserId]) : undefined;
 
   const newChatLiveObject = ChannelRepository.createChannel({
     channelId: newChannelId,

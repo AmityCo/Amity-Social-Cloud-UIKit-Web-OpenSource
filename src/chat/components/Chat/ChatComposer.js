@@ -50,7 +50,6 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
     register,
     handleSubmit,
     errors,
-    setError,
     watch,
     control,
     formState: { isDirty },
@@ -58,17 +57,11 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
     defaultValues,
   });
 
-  const channelId = watch('channelId', '');
   const userIds = watch('userIds', '');
 
   const [validateAndSubmit, submitting] = useAsyncCallback(async (data) => {
-    if (!data.channelId.trim()) {
-      setError('channelId', { message: 'ChannelID cannot be empty' });
-      return;
-    }
-
     const payload = {
-      channelId: data?.channelId,
+      channelId: data?.channelId || undefined,
       type: data?.type || ChannelType.Community,
       displayName: data?.displayName || undefined,
       avatarFileId: data?.avatarFileId || undefined,
@@ -79,7 +72,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
     await onSubmit(payload);
   });
 
-  const disabled = !isDirty || !channelId || userIds.length === 0 || submitting;
+  const disabled = !isDirty || userIds.length === 0 || submitting;
 
   const [formBodyRef, formBodyElement] = useElement();
 
@@ -91,7 +84,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
             <Field>
               <LabelWrapper>
                 <LabelContainer>
-                  <Label className="required">
+                  <Label>
                     <FormattedMessage id="chatComposer.label.channelId" />
                   </Label>
                 </LabelContainer>
