@@ -45,7 +45,7 @@ const UserInfo = ({
     <UIUserInfo
       userId={userId}
       currentUserId={currentUserId}
-      fileUrl={fileUrl}
+      fileUrl={user.avatarCustomUrl || fileUrl}
       displayName={displayName || formatMessage({ id: 'anonymous' })}
       description={description}
       setActiveTab={setActiveTab}
