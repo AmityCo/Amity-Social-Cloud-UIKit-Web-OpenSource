@@ -11,7 +11,7 @@ import { parseMentionsMarkup } from '~/helpers/utils';
 
 const PostEditor = ({ postId, onSave, className, placeholder }) => {
   const { post, handleUpdatePost, childrenPosts = [] } = usePost(postId);
-  const { data, dataType, targetId, targetType, metadata } = post;
+  const { data, dataType, targetId, targetType, metadata, mentionees: postMentionees } = post;
 
   const { text, markup, mentions, clearAll, onChange, queryMentionees } = useSocialMention({
     targetId,
@@ -44,9 +44,9 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
       mentionees[0].type = 'user';
       mentionees[0].userIds = mentions.map(({ id }) => id);
 
-      postMetadata.mentioned = mentions.map(({ plainTextIndex, id }) => ({
+      postMetadata.mentioned = mentions.map(({ plainTextIndex, id, display }) => ({
         index: plainTextIndex,
-        length: id.length,
+        length: display.length,
         type: 'user',
         userId: id,
       }));
@@ -87,7 +87,8 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
     <PostEditorContainer className={className}>
       <ContentContainer>
         <Content
-          data={{ text: markup }}
+          id={postId}
+          data={{ text: markup, initialMentionees: postMentionees }}
           dataType={dataType}
           placeholder={placeholder}
           queryMentionees={queryMentionees}
@@ -95,6 +96,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
         />
         {childImagePosts.length > 0 && (
           <Content
+            id={postId}
             data={childImagePosts}
             dataType={PostDataType.ImagePost}
             onRemoveChild={handleRemoveChild}
@@ -102,6 +104,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
         )}
         {childVideoPosts.length > 0 && (
           <Content
+            id={postId}
             data={childVideoPosts}
             dataType={PostDataType.VideoPost}
             onRemoveChild={handleRemoveChild}

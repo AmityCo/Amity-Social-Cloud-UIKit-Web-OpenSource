@@ -6,6 +6,11 @@ import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { formatMentionChunks } from '~/core/components/ChunkHighlighter';
 import { CommentContent, ReadMoreButton } from './styles';
 
+import {
+  defaultBlockComponentMap,
+  defaultMarkComponentMap,
+} from '~/core/components/RichTextEditor';
+
 const COMMENT_MAX_LINES = 8;
 
 const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES }) => {
@@ -17,18 +22,25 @@ const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES
     [text, mentionees],
   );
 
+  const renderOverrides = useMemo(
+    () => ({
+      ...defaultBlockComponentMap,
+      ...defaultMarkComponentMap,
+      mention: {
+        component: MentionHighlightTag,
+        props: {
+          mentionees,
+        },
+      },
+    }),
+    [mentionees],
+  );
+
   const textContent = text && (
     <CommentContent className={className}>
       <Markdown
         options={{
-          overrides: {
-            mention: {
-              component: MentionHighlightTag,
-              props: {
-                mentionees,
-              },
-            },
-          },
+          overrides: renderOverrides,
         }}
       >
         {textWithMentions}

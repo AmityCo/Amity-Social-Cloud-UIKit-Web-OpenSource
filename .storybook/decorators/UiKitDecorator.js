@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import MockData from '~/mock';
 
+import { ThemeProvider, compassTheme } from '@noom/wax-component-library';
+
 const GLOBAL_NAME = 'user';
 
 const global = {
@@ -65,22 +67,24 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
   };
 
   return (
-    <UiKitProvider
-      ref={ref}
-      key={userId}
-      apiKey={process.env.STORYBOOK_API_KEY}
-      apiRegion={process.env.STORYBOOK_API_REGION}
-      apiEndpoint={process.env.STORYBOOK_API_ENDPOINT}
-      userId={userId}
-      displayName={displayName || userId}
-      onConnectionStatusChange={handleConnectionStatusChange}
-      onConnected={handleConnected}
-      onDisconnected={handleDisconnected}
-    >
-      <MockData>
-        <Story />
-      </MockData>
-    </UiKitProvider>
+    <ThemeProvider theme={compassTheme} resetCSS>
+      <UiKitProvider
+        ref={ref}
+        key={userId}
+        apiKey={process.env.STORYBOOK_API_KEY}
+        apiRegion={process.env.STORYBOOK_API_REGION}
+        apiEndpoint={process.env.STORYBOOK_API_ENDPOINT}
+        userId={userId}
+        displayName={displayName || userId}
+        onConnectionStatusChange={handleConnectionStatusChange}
+        onConnected={handleConnected}
+        onDisconnected={handleDisconnected}
+      >
+        <MockData>
+          <Story />
+        </MockData>
+      </UiKitProvider>
+    </ThemeProvider>
   );
 };
 

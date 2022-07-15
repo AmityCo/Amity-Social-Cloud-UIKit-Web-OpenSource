@@ -1,15 +1,14 @@
 import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
 
-import * as decorators from './decorators';
+import { FluidControl, UiKitDecorator } from './decorators';
 
-export const globalTypes = Object.values(decorators)
+export const globalTypes = [FluidControl, UiKitDecorator]
   .map(({ global }) => global)
   .reduce((obj, item) => ({ ...obj, ...item }), {});
 
-Object.values(decorators)
-  .map(({ decorator }) => decorator)
-  .forEach(decorator => addDecorator(decorator));
+addDecorator(FluidControl.decorator);
+addDecorator(UiKitDecorator.decorator);
 
 export const parameters = {
   options: {

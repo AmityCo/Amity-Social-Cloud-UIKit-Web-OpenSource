@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import InputText from '~/core/components/InputText';
+
+import Editor from '~/core/components/RichTextEditor';
 
 const TextareaWrapper = styled.div`
   padding-top: 0.5rem;
@@ -11,23 +12,19 @@ const TextareaWrapper = styled.div`
   border: none;
 `;
 
-const Textarea = styled(InputText).attrs({ rows: 1, maxRows: 15 })`
-  outline: none;
-  border: none;
-  resize: none;
-  font: inherit;
-`;
-
-const TextContent = ({ text, placeholder, onChange, queryMentionees }) => {
+const TextContent = ({ id, text, initialMentionees, placeholder, onChange, queryMentionees }) => {
   return (
     <TextareaWrapper>
-      <Textarea
+      <Editor
+        id={`update-post-${id}`}
+        autoFocus
         placeholder={placeholder}
         type="text"
         value={text}
         multiline
         mentionAllowed
         queryMentionees={queryMentionees}
+        initialMentionees={initialMentionees}
         onChange={onChange}
       />
     </TextareaWrapper>

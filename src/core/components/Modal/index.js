@@ -1,17 +1,10 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { IconButton } from '@noom/wax-component-library';
 import useElement from '~/core/hooks/useElement';
 import ConditionalRender from '~/core/components/ConditionalRender';
-import {
-  Overlay,
-  ModalWindow,
-  SmallModalWindow,
-  Header,
-  Content,
-  Footer,
-  CloseIcon,
-} from './styles';
+import { Overlay, ModalWindow, SmallModalWindow, Header, Content, Footer } from './styles';
 
 const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean, children }) => {
   const [modalRef, modalElement] = useElement();
@@ -29,9 +22,9 @@ const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean
       <ModalComponent tabIndex={0} {...attrProps}>
         <ConditionalRender condition={title || onCancel}>
           <Header clean={clean}>
-            {title}
+            <span>{title}</span>
             <ConditionalRender condition={onCancel}>
-              <CloseIcon onClick={onCancel} />
+              <IconButton size="sm" icon="close" variant="outline" onClick={onCancel} />
             </ConditionalRender>
           </Header>
         </ConditionalRender>

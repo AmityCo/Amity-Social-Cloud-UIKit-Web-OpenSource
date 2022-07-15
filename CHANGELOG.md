@@ -1,5 +1,25 @@
 # Changelog
 
+### [2.13.9](https://github.com/noom/community-web-uikit/compare/2.13.8...2.13.9) (2022-07-13)
+
+### [2.13.8](https://github.com/noom/community-web-uikit/compare/2.13.7...2.13.8) (2022-07-13)
+
+### [2.13.7](https://github.com/noom/community-web-uikit/compare/2.13.6...2.13.7) (2022-07-13)
+
+### [2.13.6](https://github.com/noom/community-web-uikit/compare/2.13.5...2.13.6) (2022-07-13)
+
+### [2.13.5](https://github.com/noom/community-web-uikit/compare/2.13.4...2.13.5) (2022-07-13)
+
+### [2.13.4](https://github.com/noom/community-web-uikit/compare/2.13.3...2.13.4) (2022-07-13)
+
+### [2.13.3](https://github.com/noom/community-web-uikit/compare/2.13.1...2.13.3) (2022-07-13)
+
+
+### Bug Fixes
+
+* asc-1566 - show user's custom avatar in missed places ([#42](https://github.com/noom/community-web-uikit/issues/42)) ([07726ec](https://github.com/noom/community-web-uikit/commit/07726ecc363c5718718fd4b037daf3faa289160a))
+* ASC-1935 - Make channelId optional when creating channels ([#41](https://github.com/noom/community-web-uikit/issues/41)) ([4489adc](https://github.com/noom/community-web-uikit/commit/4489adc199b4a18441b81fa07233ff2025854b32))
+
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ### 2.12.2 (2022-06-21)

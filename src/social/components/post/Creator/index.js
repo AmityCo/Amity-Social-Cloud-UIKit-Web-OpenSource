@@ -36,13 +36,14 @@ import {
   PostContainer,
   PostButton,
   UploadsContainer,
-  PostInputText,
   PollButton,
   PollIcon,
   PollIconContainer,
 } from './styles';
 import PollModal from '~/social/components/post/PollComposer/PollModal';
 import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
+
+import Editor from '~/core/components/RichTextEditor';
 
 const communityFetcher = (id) => () => CommunityRepository.communityForId(id);
 const userFetcher = (id) => () => new UserRepository().userForId(id);
@@ -276,7 +277,8 @@ const PostCreatorBar = ({
         {CurrentTargetAvatar}
       </ConditionalRender>
       <PostContainer>
-        <PostInputText
+        <Editor
+          id="create-post"
           data-qa-anchor="social-create-post-input"
           multiline
           value={postText}

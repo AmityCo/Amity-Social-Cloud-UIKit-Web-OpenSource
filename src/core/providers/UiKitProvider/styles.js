@@ -11,10 +11,14 @@ export const UIStyles = styled.div`
     box-sizing: border-box;
   }
 
-  // CSS resets to avoid inheriting from other other libraries e.g. antd.
-  & * {
-    font-size: ${({ theme }) => theme.typography.body.fontSize};
-    line-height: 1.5;
+  .slate-ToolbarButton-active {
+    color: white;
+    background-color: var(--chakra-colors-primary-500);
+    border-radius: 15%;
+  }
+
+  li > p {
+    margin: 0;
   }
 
   & pre {

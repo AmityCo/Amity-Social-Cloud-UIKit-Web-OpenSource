@@ -65,7 +65,7 @@ export function searchWords(mentionees) {
 
 export function extractUserIdDisplayNameCollection(text, userId, highlightLength, index) {
   const startOfName = index + 1; // compensate @
-  const endOfName = index + highlightLength + 1;
+  const endOfName = index + highlightLength;
   const displayName = text.substring(startOfName, endOfName);
 
   return {

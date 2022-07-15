@@ -49,6 +49,7 @@ const PostEditorContent = ({
 };
 
 PostEditorContent.propTypes = {
+  id: PropTypes.string,
   data: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   dataType: PropTypes.oneOf(Object.values(PostDataType)),
   placeholder: PropTypes.string,

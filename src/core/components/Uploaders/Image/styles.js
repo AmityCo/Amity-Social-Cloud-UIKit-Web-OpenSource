@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import { SizeMe } from 'react-sizeme';
 
+import { IconButton } from '@noom/wax-component-library';
 import Button from '~/core/components/Button';
 import ProgressBar from '~/core/components/ProgressBar';
 import Skeleton from '~/core/components/Skeleton';
 
-import RemoveIcon from '~/icons/Remove';
 import ExclamationCircle from '~/icons/ExclamationCircle';
 
 export const ImageContainer = styled.div`
@@ -70,15 +70,6 @@ const ImageSkeleton = () => (
     }}
   </SizeMe>
 );
-
-export const RemoveButton = styled(Button).attrs({
-  variant: 'secondary',
-  children: <RemoveIcon />,
-})`
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-`;
 
 export const CircleIcon = styled(ExclamationCircle).attrs({ width: 24, height: 24 })`
   z-index: 2;
@@ -149,7 +140,17 @@ const Image = ({
         <ButtonContainer>
           {(!!isRejected || uploadFailed) && <RetryButton onClick={retryCallback} />}
 
-          {!!onRemove && <RemoveButton onClick={removeCallback} />}
+          {!!onRemove && (
+            <IconButton
+              border="none"
+              position="absolute"
+              top={1}
+              right={1}
+              icon="delete"
+              size="sm"
+              onClick={removeCallback}
+            />
+          )}
 
           {overlayElements}
         </ButtonContainer>

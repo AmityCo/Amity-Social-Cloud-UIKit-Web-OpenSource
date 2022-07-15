@@ -1,6 +1,7 @@
 import React from 'react';
 import FormattedDuration, { TIMER_FORMAT } from 'react-intl-formatted-duration';
 import styled from 'styled-components';
+
 import Button from '~/core/components/Button';
 import Image from '~/core/components/Uploaders/Image';
 import { ButtonContainer, ImageContainer } from '~/core/components/Uploaders/Image/styles';

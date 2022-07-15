@@ -25,13 +25,15 @@ module.exports = (_, argv = {}) => ({
   resolve: {
     alias: {
       '~': path.resolve(__dirname, 'src'),
+      react: path.resolve('./node_modules/react'),
+      'react-router-dom': path.resolve('./node_modules/react-router-dom'),
     },
-    extensions: ['.js', '.jsx', '.css', '.svg'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.svg'],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader'],
       },
@@ -45,6 +47,14 @@ module.exports = (_, argv = {}) => ({
             },
           },
         ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/inline',
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/inline',
       },
     ],
   },

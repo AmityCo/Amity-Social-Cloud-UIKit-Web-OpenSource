@@ -8,6 +8,10 @@ import customizableComponent from '~/core/hocs/customization';
 import Button from '~/core/components/Button';
 import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { formatMentionChunks } from '~/core/components/ChunkHighlighter';
+import {
+  defaultBlockComponentMap,
+  defaultMarkComponentMap,
+} from '~/core/components/RichTextEditor';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
@@ -21,25 +25,31 @@ export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
   padding: 4px;
   display: inline-block;
 `;
-
-const TextContent = ({ text, postMaxLines, mentionees }) => {
+function TextContent({ text, postMaxLines, mentionees }) {
   const textWithMentions = useMemo(
     () => formatMentionChunks(text, mentionees, 'mention'),
     [text, mentionees],
+  );
+
+  const renderOverrides = useMemo(
+    () => ({
+      ...defaultBlockComponentMap,
+      ...defaultMarkComponentMap,
+      mention: {
+        component: MentionHighlightTag,
+        props: {
+          mentionees,
+        },
+      },
+    }),
+    [mentionees],
   );
 
   const textContent = textWithMentions && (
     <PostContent>
       <Markdown
         options={{
-          overrides: {
-            mention: {
-              component: MentionHighlightTag,
-              props: {
-                mentionees,
-              },
-            },
-          },
+          overrides: renderOverrides,
         }}
       >
         {textWithMentions}
@@ -53,7 +63,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
   if (textContent && isExpanded) return textContent;
 
   return (
-    <Truncate
+    <Truncate.Atom
       lines={postMaxLines}
       ellipsis={
         <ReadMoreButton onClick={onExpand}>
@@ -62,9 +72,9 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
       }
     >
       {textContent}
-    </Truncate>
+    </Truncate.Atom>
   );
-};
+}
 
 TextContent.propTypes = {
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),

@@ -11,7 +11,6 @@ const Item = styled.div`
   align-items: center;
   padding: 5px 15px;
   background-color: ${({ focused, theme }) => focused && theme.palette.base.shade4};
-  font-weight: 600;
   color: ${({ isBanned, theme }) => isBanned && theme.palette.base.shade2};
   pointer-events: ${({ isBanned }) => isBanned && 'none'} !important;
   cursor: ${({ isBanned }) => isBanned && 'no-allowed'} !important;
@@ -65,10 +64,10 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
 
 SocialMentionItem.propTypes = {
   id: PropTypes.string, // userId
-  focused: PropTypes.bool.isRequired,
+  focused: PropTypes.bool,
   isLastItem: PropTypes.bool.isRequired,
   loadMore: PropTypes.func,
-  rootEl: PropTypes.element.isRequired,
+  rootEl: PropTypes.element,
 };
 
 export default SocialMentionItem;

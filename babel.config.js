@@ -1,5 +1,5 @@
 module.exports = {
-  presets: ['@babel/env', '@babel/preset-react'],
+  presets: ['@babel/env', '@babel/preset-react', '@babel/preset-typescript'],
   plugins: [
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-nullish-coalescing-operator',
