@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.14.0 (2022-07-18)
+
+
+### Features
+
+* Expose PageType ([f6c1d18](https://github.com/noom/community-web-uikit/commit/f6c1d18ae4d95ea7f20e0a3f4d8cac86d6a5855c))
+
 ### [2.13.9](https://github.com/noom/community-web-uikit/compare/2.13.8...2.13.9) (2022-07-13)
 
 ### [2.13.8](https://github.com/noom/community-web-uikit/compare/2.13.7...2.13.8) (2022-07-13)
