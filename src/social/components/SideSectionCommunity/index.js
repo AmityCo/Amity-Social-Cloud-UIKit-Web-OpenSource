@@ -13,14 +13,14 @@ export const NewsIcon = styled(Newspaper).attrs({ width: 20, height: 20 })``;
 
 export const SearchIcon = styled(Search).attrs({ width: 20, height: 20 })``;
 
-const SideSectionCommunity = ({ shouldHideExplore, children }) => {
-  const { onChangePage, page } = useNavigation();
+const SideSectionCommunity = ({ shouldHideExplore, activePage, children }) => {
+  const { onChangePage } = useNavigation();
 
   return (
     <SideMenuSection heading={<FormattedMessage id="sidesectioncommunity.community" />}>
       <SideMenuActionItem
         icon={<NewsIcon />}
-        active={page.type === PageTypes.NewsFeed}
+        active={activePage === PageTypes.NewsFeed}
         onClick={() => onChangePage(PageTypes.NewsFeed)}
       >
         <FormattedMessage id="sidesectioncommunity.newfeed" />
@@ -29,7 +29,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
       {!shouldHideExplore && (
         <SideMenuActionItem
           icon={<SearchIcon />}
-          active={page.type === PageTypes.Explore}
+          active={activePage === PageTypes.Explore}
           onClick={() => onChangePage(PageTypes.Explore)}
         >
           <FormattedMessage id="sidesectioncommunity.explore" />

@@ -20,7 +20,6 @@ export { default as AmityPostEngagementBar } from '~/social/components/Engagemen
 export { default as AmityExpandableText } from '~/social/components/Comment/CommentText';
 
 export { default as AmityLayout } from '~/social/layouts/Main';
-
 export { default as AmityCommunitySideMenu } from '~/social/components/CommunitySideMenu';
 
 export { default as AmityExplorePage } from '~/social/pages/Explore';
@@ -30,6 +29,8 @@ export { default as AmityUserFeedPage } from '~/social/pages/UserFeed';
 export { default as AmityCategoryCommunitiesPage } from '~/social/pages/CategoryCommunities';
 export { default as AmityCommunityEditPage } from '~/social/pages/CommunityEdit';
 export { default as AmityProfileSettings } from '~/social/components/ProfileSettings';
+
+export { PageTypes } from '~/social/constants';
 
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
