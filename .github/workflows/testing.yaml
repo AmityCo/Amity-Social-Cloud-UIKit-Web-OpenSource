@@ -1,32 +1,23 @@
-name: Testing
-
+name: unit tests
 on:
-  push:
-  workflow_dispatch:
-
+  # Trigger the workflow on pull request,
+  # but only for the master and stable branches
+  pull_request:
+    branches:
+      - develop
+      - master
+      - stable
 jobs:
-  unit_tests:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: git checkout
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: install node
-        uses: actions/setup-node@v2
-
-      - name: cache deps
-        uses: actions/cache@v2
-        id: cache-deps
-        with:
-          path: |
-            **/node_modules
-            **/.eslintcache
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: install deps
-        if: steps.cache-deps.outputs.cache-hit != 'true'
+      - name: Setup npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{secrets.NPM_AUTH_TOKEN}}" > .npmrc
+          echo "@noom:registry=https://npm.pkg.github.com/" >> .npmrc
+      - name: Install modules
         run: npm ci
-
-      - name: eslint checks
-        run: npm run lint
+      - name: Run tests
+        run: npm test

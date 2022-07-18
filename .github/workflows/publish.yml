@@ -3,6 +3,7 @@ on:
   # Trigger the workflow on push/merge to master branch
   push:
     branches:
+      - develop
       - master
 jobs:
   package:
