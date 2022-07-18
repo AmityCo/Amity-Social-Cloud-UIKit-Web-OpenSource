@@ -15,13 +15,13 @@ jobs:
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{secrets.NPM_AUTH_TOKEN}}" > ~/.npmrc
           echo "@noom:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+      - name: Setup git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
       - name: NPM install
         run: npm ci
       - name: Run tests
         run: npm test
-      - name: setup git config
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-      - name: Publish Packages
+      - name: Publish package
         run: npm run release:automatic
