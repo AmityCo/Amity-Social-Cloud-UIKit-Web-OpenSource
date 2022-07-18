@@ -19,6 +19,18 @@ export { PostContainer as AmityPostContainer } from '~/social/components/post/Po
 export { default as AmityPostEngagementBar } from '~/social/components/EngagementBar';
 export { default as AmityExpandableText } from '~/social/components/Comment/CommentText';
 
+export { default as AmityLayout } from '~/social/layouts/Main';
+
+export { default as AmityCommunitySideMenu } from '~/social/components/CommunitySideMenu';
+
+export { default as AmityExplorePage } from '~/social/pages/Explore';
+export { default as AmityNewsFeedPage } from '~/social/pages/NewsFeed';
+export { default as AmityCommunityFeedPage } from '~/social/pages/CommunityFeed';
+export { default as AmityUserFeedPage } from '~/social/pages/UserFeed';
+export { default as AmityCategoryCommunitiesPage } from '~/social/pages/CategoryCommunities';
+export { default as AmityCommunityEditPage } from '~/social/pages/CommunityEdit';
+export { default as AmityProfileSettings } from '~/social/components/ProfileSettings';
+
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
 // import AmityCommentLikeButton from './components/CommentLikeButton';
