@@ -8,7 +8,7 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { Wrapper } from './styles';
 
-const NewsFeed = () => {
+const NewsFeed = ({ handleCopyPostPath, handleCopyCommentPath }) => {
   const { onChangePage } = useNavigation();
 
   return (
@@ -17,9 +17,16 @@ const NewsFeed = () => {
         targetType={PostTargetType.GlobalFeed}
         goToExplore={() => onChangePage(PageTypes.Explore)}
         showPostCreator
+        handleCopyPostPath={handleCopyPostPath}
+        handleCopyCommentPath={handleCopyCommentPath}
       />
     </Wrapper>
   );
+};
+
+NewsFeed.propTypes = {
+  handleCopyPostPath: PropTypes.func,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 export default NewsFeed;

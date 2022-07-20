@@ -20,7 +20,13 @@ import { CommunityFeedTabs } from './constants';
 import { getTabs } from './utils';
 import { DeclineBanner, Wrapper } from './styles';
 
-const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
+const CommunityFeed = ({
+  communityId,
+  currentUserId,
+  isNewCommunity,
+  handleCopyPostPath,
+  handleCopyCommentPath,
+}) => {
   const { community } = useCommunity(communityId);
   const { canReviewCommunityPosts } = useCommunityOneMember(
     communityId,
@@ -71,6 +77,8 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
           readonly={!isJoined}
           showPostCreator={isJoined}
           feedType={FeedType.Published}
+          handleCopyPostPath={handleCopyPostPath}
+          handleCopyCommentPath={handleCopyCommentPath}
         />
       </ConditionalRender>
 
@@ -95,6 +103,8 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
             readonly={!isJoined}
             showPostCreator={false}
             feedType={FeedType.Reviewing}
+            handleCopyPostPath={handleCopyPostPath}
+            handleCopyCommentPath={handleCopyCommentPath}
           />
         </>
       )}
@@ -113,6 +123,8 @@ CommunityFeed.propTypes = {
   communityId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   isNewCommunity: PropTypes.bool,
+  handleCopyPostPath: PropTypes.func,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 CommunityFeed.defaultProps = {

@@ -18,7 +18,13 @@ import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
 import useFollow from '~/core/hooks/useFollow';
 import { Wrapper } from './styles';
 
-const UserFeed = ({ userId, currentUserId, networkSettings }) => {
+const UserFeed = ({
+  userId,
+  currentUserId,
+  networkSettings,
+  handleCopyPostPath,
+  handleCopyCommentPath,
+}) => {
   const isPrivateNetwork = utils.isPrivateNetwork(networkSettings);
 
   const [activeTab, setActiveTab] = useState(UserFeedTabs.TIMELINE);
@@ -52,6 +58,8 @@ const UserFeed = ({ userId, currentUserId, networkSettings }) => {
           targetId={userId}
           showPostCreator={isMe}
           isHiddenProfile={isHiddenProfile}
+          handleCopyPostPath={handleCopyPostPath}
+          handleCopyCommentPath={handleCopyCommentPath}
         />
       </ConditionalRender>
 
@@ -75,6 +83,8 @@ UserFeed.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   networkSettings: PropTypes.object.isRequired,
+  handleCopyPostPath: PropTypes.func,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 export default withSDK(UserFeed);
