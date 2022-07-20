@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.14.6](https://github.com/noom/community-web-uikit/compare/2.14.5...2.14.6) (2022-07-20)
+
+
+### Bug Fixes
+
+* Missing proptypes ([74c54ab](https://github.com/noom/community-web-uikit/commit/74c54abf50dbfe71654d9b59e5930375ee63113f))
+
 ### 2.14.5 (2022-07-20)
 
 ### 2.14.4 (2022-07-20)
