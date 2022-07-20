@@ -29,6 +29,8 @@ export { default as AmityUserFeedPage } from '~/social/pages/UserFeed';
 export { default as AmityCategoryCommunitiesPage } from '~/social/pages/CategoryCommunities';
 export { default as AmityCommunityEditPage } from '~/social/pages/CommunityEdit';
 export { default as AmityProfileSettings } from '~/social/components/ProfileSettings';
+export { default as AmityCommunityPostPage } from '~/social/pages/CommunityPost';
+export { default as AmityUserPostPage } from '~/social/pages/UserPost';
 
 export { PageTypes } from '~/social/constants';
 
