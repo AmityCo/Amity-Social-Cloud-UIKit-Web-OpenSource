@@ -7,7 +7,7 @@ import customizableComponent from '~/core/hocs/customization';
 import usePost from '~/social/hooks/usePost';
 import UIEngagementBar from './UIEngagementBar';
 
-const EngagementBar = ({ postId, readonly }) => {
+const EngagementBar = ({ postId, readonly, handleCopyCommentPath }) => {
   const [isComposeBarDisplayed, setComposeBarDisplayed] = useState(false);
   const toggleComposeBar = () => setComposeBarDisplayed((prevValue) => !prevValue);
 
@@ -39,6 +39,7 @@ const EngagementBar = ({ postId, readonly }) => {
       isComposeBarDisplayed={isComposeBarDisplayed}
       handleAddComment={handleAddComment}
       onClickComment={toggleComposeBar}
+      handleCopyCommentPath={handleCopyCommentPath}
     />
   );
 };
@@ -46,6 +47,7 @@ const EngagementBar = ({ postId, readonly }) => {
 EngagementBar.propTypes = {
   postId: PropTypes.string.isRequired,
   readonly: PropTypes.bool,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 EngagementBar.defaultProps = {

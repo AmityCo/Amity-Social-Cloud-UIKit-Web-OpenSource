@@ -33,7 +33,8 @@
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "styled-components": "^5.1.1",
-    "@noom/wax-component-library": ">=4.8.0"
+    "@noom/wax-component-library": ">=4.8.0",
+    "react-router-dom": ">=6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
@@ -78,7 +79,6 @@
   "dependencies": {
     "@amityco/js-sdk": "^5.20.0",
     "@hookform/error-message": "0.0.4",
-    "@noom/wax-component-library": "4.8.0",
     "@udecode/plate": "^14.2.0",
     "classnames": "^2.2.6",
     "filesize": "^6.1.0",

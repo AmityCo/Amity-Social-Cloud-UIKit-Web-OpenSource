@@ -29,6 +29,7 @@ const UIEngagementBar = ({
   onClickComment,
   isComposeBarDisplayed,
   handleAddComment,
+  handleCopyCommentPath,
 }) => (
   <EngagementBarContainer>
     <Counters>
@@ -57,6 +58,7 @@ const UIEngagementBar = ({
           referenceId={postId}
           referenceType={CommentReferenceType.Post}
           last={COMMENTS_PER_PAGE}
+          handleCopyCommentPath={handleCopyCommentPath}
         />
         <ConditionalRender condition={isComposeBarDisplayed}>
           <CommentComposeBar postId={postId} postType={targetType} onSubmit={handleAddComment} />
@@ -72,6 +74,7 @@ const UIEngagementBar = ({
           last={COMMENTS_PER_PAGE}
           readonly
           loadMoreText={<FormattedMessage id="collapsible.viewAllComments" />}
+          handleCopyCommentPath={handleCopyCommentPath}
         />
       </>
     </ConditionalRender>
@@ -87,6 +90,7 @@ UIEngagementBar.propTypes = {
   isComposeBarDisplayed: PropTypes.bool,
   handleAddComment: PropTypes.func,
   onClickComment: PropTypes.func,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 UIEngagementBar.defaultProps = {

@@ -68,8 +68,8 @@ const UserInfo = ({
 UserInfo.propTypes = {
   userId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
-  setActiveTab: PropTypes.func.isRequired,
-  setFollowActiveTab: PropTypes.func.isRequired,
+  setActiveTab: PropTypes.func,
+  setFollowActiveTab: PropTypes.func,
   isPrivateNetwork: PropTypes.bool.isRequired,
 };
 

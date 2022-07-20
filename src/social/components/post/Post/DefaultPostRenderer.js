@@ -58,6 +58,8 @@ const DefaultPostRenderer = ({
   post,
   userRoles,
   loading,
+  handleCopyPostPath,
+  handleCopyCommentPath,
 }) => {
   const { formatMessage } = useIntl();
   const [isEditing, setIsEditing] = useState(false);
@@ -114,6 +116,10 @@ const DefaultPostRenderer = ({
 
   const pollPost = childrenPosts.find((childPost) => childPost.dataType === PostDataType.PollPost);
 
+  const onCopyPathClick = () => {
+    handleCopyPostPath(post);
+  };
+
   const allOptions = [
     canEditPost({
       userId: currentUserId,
@@ -151,6 +157,10 @@ const DefaultPostRenderer = ({
         name: 'poll.close',
         action: handleClosePoll,
       },
+    !!handleCopyPostPath && {
+      name: 'post.copyPath',
+      action: onCopyPathClick,
+    },
   ].filter(Boolean);
 
   const childrenContent = childrenPosts?.map((childPost) => ({
@@ -167,7 +177,7 @@ const DefaultPostRenderer = ({
   );
 
   return (
-    <PostContainer className={className}>
+    <PostContainer className={className} data-post-id={post.postId}>
       <PostHeadContainer>
         <Header hidePostTarget={hidePostTarget} postId={postId} loading={loading} />
         {!loading && <OptionMenu options={allOptions} data-qa-anchor="social-post-3dots" />}
@@ -186,7 +196,13 @@ const DefaultPostRenderer = ({
 
           {hasChildrenPosts && <ChildrenContent>{childrenContent}</ChildrenContent>}
 
-          {!isUnderReview && <EngagementBar readonly={readonly} postId={postId} />}
+          {!isUnderReview && (
+            <EngagementBar
+              readonly={readonly}
+              postId={postId}
+              handleCopyCommentPath={handleCopyCommentPath}
+            />
+          )}
 
           {isUnderReview && canReviewCommunityPosts && (
             <ReviewButtonsContainer>
@@ -236,6 +252,8 @@ DefaultPostRenderer.propTypes = {
   }),
   userRoles: PropTypes.arrayOf(PropTypes.string),
   loading: PropTypes.bool,
+  handleCopyPostPath: PropTypes.func,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 DefaultPostRenderer.defaultProps = {

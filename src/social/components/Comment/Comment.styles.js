@@ -56,6 +56,7 @@ const StyledComment = ({
   isBanned,
   mentionees,
   metadata,
+  handleCopyPath,
 }) => {
   const options = [
     canEdit && { name: isReplyComment ? 'reply.edit' : 'comment.edit', action: startEditing },
@@ -64,6 +65,10 @@ const StyledComment = ({
       action: handleReportComment,
     },
     canDelete && { name: isReplyComment ? 'reply.delete' : 'comment.delete', action: handleDelete },
+    !!handleCopyPath && {
+      name: 'post.copyPath',
+      action: handleCopyPath,
+    },
   ].filter(Boolean);
 
   return (
@@ -165,6 +170,7 @@ StyledComment.propTypes = {
   isBanned: PropTypes.bool,
   onClickReply: PropTypes.func,
   onChange: PropTypes.func.isRequired,
+  handleCopyPath: PropTypes.func,
 };
 
 export default StyledComment;

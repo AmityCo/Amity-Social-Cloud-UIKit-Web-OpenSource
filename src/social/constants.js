@@ -2,10 +2,14 @@ export const PageTypes = {
   Explore: 'explore',
   Category: 'category',
   NewsFeed: 'newsFeed',
-  UserFeed: 'userFeed',
   CommunityFeed: 'communityFeed',
   CommunityEdit: 'communityEdit',
+  CommunityPost: 'communityPost',
+  CommunityComment: 'communityComment',
+  UserFeed: 'userFeed',
   UserEdit: 'userEdit',
+  UserPost: 'userPost',
+  UserComment: 'userComment',
 };
 
 export const MemberRoles = Object.freeze({

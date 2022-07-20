@@ -63,7 +63,7 @@ const DeletedReply = () => {
   );
 };
 
-const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
+const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handleCopyPath }) => {
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { formatMessage } = useIntl();
@@ -115,6 +115,10 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
         content: err.message,
       });
     }
+  };
+
+  const onCopyPathClick = () => {
+    handleCopyPath(comment);
   };
 
   const [text, setText] = useState(comment?.data?.text ?? '');
@@ -211,6 +215,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
       isReplyComment={isReplyComment}
       onClickReply={onClickReply}
       onChange={onChange}
+      handleCopyPath={handleCopyPath ? onCopyPathClick : undefined}
     />
   );
 
@@ -218,7 +223,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
     <ReplyContainer>{renderedComment}</ReplyContainer>
   ) : (
     <CommentBlock>
-      <CommentContainer>{renderedComment}</CommentContainer>
+      <CommentContainer data-comment-id={comment.commentId}>{renderedComment}</CommentContainer>
       <CommentList
         parentId={commentId}
         referenceId={comment.referenceId}
@@ -248,6 +253,7 @@ Comment.propTypes = {
   commentId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   userRoles: PropTypes.array,
+  handleCopyPath: PropTypes.func,
 };
 
 export default memo(withSDK(customizableComponent('Comment', Comment)));

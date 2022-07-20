@@ -10,7 +10,16 @@ import DefaultPostRenderer from './DefaultPostRenderer';
 import PostErrorBoundary from './PostErrorBoundary';
 import UnknownPostRenderer from './UnknownPostRenderer';
 
-const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, readonly }) => {
+const Post = ({
+  postId,
+  currentUserId,
+  userRoles,
+  className,
+  hidePostTarget,
+  readonly,
+  handleCopyPostPath,
+  handleCopyCommentPath,
+}) => {
   const renderers = usePostRenderer();
 
   const { isPostReady, post, ...others } = usePost(postId);
@@ -40,6 +49,8 @@ const Post = ({ postId, currentUserId, userRoles, className, hidePostTarget, rea
         post={post}
         userRoles={userRoles}
         readonly={readonly}
+        handleCopyPostPath={handleCopyPostPath}
+        handleCopyCommentPath={handleCopyCommentPath}
       />
     </PostErrorBoundary>
   );
@@ -52,6 +63,8 @@ Post.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string),
   hidePostTarget: PropTypes.bool,
   readonly: PropTypes.bool,
+  handleCopyPostPath: PropTypes.func,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 Post.defaultProps = {

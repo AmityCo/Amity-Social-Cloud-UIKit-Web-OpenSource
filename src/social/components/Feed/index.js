@@ -27,6 +27,8 @@ const Feed = ({
   goToExplore,
   readonly = false,
   isHiddenProfile = false,
+  handleCopyPostPath,
+  handleCopyCommentPath,
 }) => {
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
 
@@ -81,6 +83,8 @@ const Feed = ({
                   postId={postId}
                   hidePostTarget={targetType !== PostTargetType.GlobalFeed}
                   readonly={readonly}
+                  handleCopyPostPath={handleCopyPostPath}
+                  handleCopyCommentPath={handleCopyCommentPath}
                 />
               ))}
               {loadingMore && renderLoadingSkeleton()}
@@ -113,6 +117,8 @@ Feed.propTypes = {
   readonly: PropTypes.bool,
   isHiddenProfile: PropTypes.bool,
   onPostCreated: PropTypes.func,
+  handleCopyPostPath: PropTypes.func,
+  handleCopyCommentPath: PropTypes.func,
 };
 
 export default memo(customizableComponent('Feed', Feed));
