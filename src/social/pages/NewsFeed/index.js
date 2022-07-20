@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { PostTargetType } from '@amityco/js-sdk';
 
 import { PageTypes } from '~/social/constants';
