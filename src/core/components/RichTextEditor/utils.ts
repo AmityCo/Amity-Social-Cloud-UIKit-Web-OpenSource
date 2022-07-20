@@ -75,7 +75,7 @@ export function insertLink(editor: Editor, url: string, text?: string) {
   wrapNodes(
     editor,
     {
-      type,
+      type: type as any,
       link: url,
       children: [],
     },

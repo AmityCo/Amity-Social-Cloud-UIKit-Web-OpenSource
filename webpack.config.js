@@ -6,7 +6,7 @@ const { DefinePlugin } = require('webpack');
 const pkg = require('./package.json');
 
 module.exports = (_, argv = {}) => ({
-  entry: './src/index.js',
+  entry: './src/index.ts',
   externals: [nodeExternals()],
   output: {
     filename: 'index.js',

@@ -6,6 +6,7 @@
     "npm": ">=7"
   },
   "main": "build/index.js",
+  "types": "build/index.d.ts",
   "files": [
     "build"
   ],
@@ -15,7 +16,9 @@
   "description": "React Ui-Kit for Amity Social Cloud (open-source)",
   "scripts": {
     "start": "npm run storybook",
-    "build": "webpack --mode production",
+    "build": "npm run build:js && npm run build:types",
+    "build:js": "webpack --mode production",
+    "build:types": "tsc --emitDeclarationOnly",
     "build:watch": "webpack --mode production --watch",
     "build:dev:analyze": "webpack --mode development --analyze true",
     "build:prod:analyze": "webpack --mode production --analyze true",

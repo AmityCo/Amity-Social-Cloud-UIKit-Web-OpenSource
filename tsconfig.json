@@ -16,7 +16,17 @@
     "allowSyntheticDefaultImports": true,
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": "src",
-    "declaration": true
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "isolatedModules": true,
+    "paths": {
+      "~/*": ["*"]
+    },
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "src/**/*.test.*",
+    "src/**/*.stories.*",
+  ]
 }
