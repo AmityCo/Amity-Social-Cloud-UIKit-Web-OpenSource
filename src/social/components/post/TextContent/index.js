@@ -50,6 +50,8 @@ function TextContent({ text, postMaxLines, mentionees }) {
       <Markdown
         options={{
           overrides: renderOverrides,
+          disableParsingRawHTML: true,
+          namedCodesToUnicode: "'",
         }}
       >
         {textWithMentions}

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Box } from '@noom/wax-component-library';
 import SideMenu from '~/core/components/SideMenu';
 import SideSectionCommunity from '~/social/components/SideSectionCommunity';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
@@ -14,10 +15,11 @@ const SocialSearch = styled(UiKitSocialSearch)`
 const CommunitySideMenu = ({ className, activeCommunity, activePage }) => (
   <SideMenu className={className}>
     <SocialSearch sticky />
+    <Box overflow="auto" flex={1} minH={0}>
+      <SideSectionCommunity activePage={activePage} />
 
-    <SideSectionCommunity activePage={activePage} />
-
-    <SideSectionMyCommunity activeCommunity={activeCommunity} showCreateButton />
+      <SideSectionMyCommunity activeCommunity={activeCommunity} showCreateButton />
+    </Box>
   </SideMenu>
 );
 

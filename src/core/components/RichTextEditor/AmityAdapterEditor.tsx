@@ -50,6 +50,8 @@ export function AmityAdapterEditor({
   const handleChange = (data: { value: EditorValue }) => {
     const newMarkdown = slateToMarkdown(data.value);
 
+    console.log(newMarkdown);
+
     onChange({
       text: newMarkdown.text,
       plainText: stripMentionTags(newMarkdown.text),
