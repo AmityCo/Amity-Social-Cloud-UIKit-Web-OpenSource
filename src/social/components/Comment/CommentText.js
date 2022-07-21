@@ -41,7 +41,6 @@ const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES
       <Markdown
         options={{
           overrides: renderOverrides,
-          disableParsingRawHTML: true,
         }}
       >
         {textWithMentions}
