@@ -2,10 +2,6 @@ import { TElement, Data, NoData, CreateMentionNode, TComboboxItemWithData } from
 
 export type MentionType = 'user' | 'tag';
 
-export type MentionElement = TElement & {
-  value: string;
-};
-
 export type MentionInputElement = TElement & {
   trigger: string;
 };
