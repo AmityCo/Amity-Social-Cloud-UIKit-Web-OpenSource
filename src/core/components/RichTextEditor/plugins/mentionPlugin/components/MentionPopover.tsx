@@ -11,6 +11,7 @@ import {
   comboboxStore,
   useEventEditorSelectors,
 } from '@udecode/plate';
+import { Portal } from '@noom/wax-component-library';
 
 import { MentionPlugin, MentionItem } from '../models';
 
