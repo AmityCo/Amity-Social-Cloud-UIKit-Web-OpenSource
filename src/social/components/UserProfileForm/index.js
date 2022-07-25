@@ -40,18 +40,14 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
     defaultValues: {
       ...user,
       description: user.description ?? '',
-      avatarFileId: user.avatarFileId ?? '',
-    } || {
-      avatarFileId: '',
-      displayName: '',
-      description: '',
+      avatarFileId: user.avatarFileId ?? null,
     },
   });
 
   const description = watch('description');
   const displayName = watch('displayName');
 
-  return (
+  return -(
     <Form className={className} onSubmit={handleSubmit(onSubmit)}>
       <FormBody>
         <FormBlock title={<FormattedMessage id="UserProfileForm.title" />}>
