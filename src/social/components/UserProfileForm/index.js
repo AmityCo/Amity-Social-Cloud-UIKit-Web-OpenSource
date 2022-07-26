@@ -47,7 +47,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
   const description = watch('description');
   const displayName = watch('displayName');
 
-  return -(
+  return (
     <Form className={className} onSubmit={handleSubmit(onSubmit)}>
       <FormBody>
         <FormBlock title={<FormattedMessage id="UserProfileForm.title" />}>
