@@ -1,4 +1,4 @@
-# Community web UI Kit
+# Community Web UI Kit
 
 UI kit for Community Web client. Forked from [Amity-Social-Cloud-UIKit-Web-OpenSource](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource).
 
