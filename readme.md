@@ -5,7 +5,7 @@ UI kit for Community Web client. Forked from [Amity-Social-Cloud-UIKit-Web-OpenS
 ## Development
 ### Setting up the local environment
 
-It is recommended to use npm v7 to easily deal with peer dependencies:
+It is recommended to use npm v7 to easily deal with peer dependencies
 ```
 npm i -g npm@7
 ```
@@ -16,9 +16,9 @@ Install the dependencies with
 npm install
 ```
 
-### Running the app locally:
+### Running the UIkit locally
 
-The application comes with a simple start script that will start Storybook in watch mode.
+The kit is developed locally with Stoybook and running a start script that will start Storybook in watch mode
 
 ```
 npm start
