@@ -12,6 +12,7 @@ jobs:
       url: https://ui-kit-open-source.dev.amity.co/${{ github.event.pull_request.number }}
 
     env:
+      NPM_FONT_AWESOME_TOKEN: ${{ secrets.NPM_FONT_AWESOME_TOKEN }}
       STORYBOOK_API_REGION: ${{ secrets.STORYBOOK_API_REGION }}
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
       STORYBOOK_USER1: ${{ secrets.STORYBOOK_USER1 }}
