@@ -49,7 +49,7 @@ export const VideoPreview = styled(
     </video>
   )),
 )`
-  ${VideoPreviewContainerStyles};
+  ${VideoPreviewContainerStyles}
   cursor: pointer;
 `;
 
@@ -161,7 +161,6 @@ const Video = ({
       hls.loadSource(url);
       hls.attachMedia(videoEl);
       hls.on(HLS.Events.ERROR, (event, data) => {
-        console.log('htl', event, data);
         if (data.fatal) {
           switch (data.type) {
             case HLS.ErrorTypes.NETWORK_ERROR:

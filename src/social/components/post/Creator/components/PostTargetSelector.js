@@ -7,19 +7,19 @@ import { PostTargetType } from '@amityco/js-sdk';
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import customizableComponent from '~/core/hocs/customization';
-import UIAvatar from '~/core/components/Avatar';
+import useImage from '~/core/hooks/useImage';
+import { Avatar } from './styles';
 
 import { SortDown } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
+import CommunityItem from './CommunityItem';
+
+const COMMUNITY_LIST_HEIGHT = 350;
+const SCROLL_THRESHOLD = 0.98;
 
 const SelectIcon = styled(SortDown).attrs({ width: 18, height: 18 })`
   margin-right: 8px;
   margin-top: -4px;
-`;
-
-const Avatar = styled(UIAvatar)`
-  margin-right: 8px;
 `;
 
 const PostTargetSelectorContainer = styled.div`
@@ -29,7 +29,7 @@ const PostTargetSelectorContainer = styled.div`
 `;
 
 const CommunitySeparator = styled.div`
-  ${({ theme }) => theme.typography.caption};
+  ${({ theme }) => theme.typography.caption}
   border-top: 1px solid #e3e4e8;
   color: ${({ theme }) => theme.palette.base.shade1};
   padding: 12px;
@@ -37,8 +37,13 @@ const CommunitySeparator = styled.div`
 
 const CommunityList = styled.div`
   position: relative;
-  height: 350px;
+  max-width: 200px;
+  height: ${COMMUNITY_LIST_HEIGHT}px;
   overflow: auto;
+`;
+
+const CommunityListLoader = styled.h4`
+  text-align: center;
 `;
 
 const PostTargetSelector = ({
@@ -56,6 +61,8 @@ const PostTargetSelector = ({
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
 
+  const fileUrl = useImage({ fileId: user.avatarFileId });
+
   const menu = (
     <Menu>
       <MenuItem
@@ -65,44 +72,34 @@ const PostTargetSelector = ({
           close();
         }}
       >
-        <Avatar size="tiny" avatar={user.avatarFileUrl} backgroundImage={UserImage} />{' '}
-        <FormattedMessage id="post.myTimeline" />,
+        <Avatar size="tiny" avatar={user.avatarCustomUrl || fileUrl} backgroundImage={UserImage} />{' '}
+        <FormattedMessage id="post.myTimeline" />
       </MenuItem>
 
       <CommunitySeparator>
-        <FormattedMessage id="post.community" />,
+        <FormattedMessage id="post.community" />
       </CommunitySeparator>
       <CommunityList>
         <InfiniteScroll
           dataLength={communities.length}
           next={loadMoreCommunities}
           hasMore={hasMoreCommunities}
+          height={COMMUNITY_LIST_HEIGHT}
           loader={
-            <h4>
+            <CommunityListLoader>
               <FormattedMessage id="loading" />
-            </h4>
+            </CommunityListLoader>
           }
-          onScroll={loadMoreCommunities}
+          scrollThreshold={SCROLL_THRESHOLD}
         >
           {communities.map((community) => (
-            <MenuItem
+            <CommunityItem
               key={community.communityId}
-              active={community.communityId === currentTargetId}
-              onClick={() => {
-                onChange({
-                  targetId: community.communityId,
-                  targetType: PostTargetType.CommunityFeed,
-                });
-                close();
-              }}
-            >
-              <Avatar
-                avatar={community.avatarFileUrl}
-                size="tiny"
-                backgroundImage={CommunityImage}
-              />
-              {` ${community.displayName}`}
-            </MenuItem>
+              community={community}
+              currentTargetId={currentTargetId}
+              onChange={onChange}
+              onClose={close}
+            />
           ))}
         </InfiniteScroll>
       </CommunityList>

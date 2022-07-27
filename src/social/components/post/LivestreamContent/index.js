@@ -11,17 +11,25 @@ const TextContainer = styled.div`
   }
 `;
 
-const LivestreamContent = ({ streamId, mentionees }) => {
+const LivestreamContent = ({ streamId, mentionees = [] }) => {
   const stream = useStream(streamId);
 
   if (!stream.title && !stream.description) {
     return null;
   }
 
+  // Mobile platforms also counts stream.title in their index
+  // Since we're breaking description into another line, it is necessary
+  // to compensate 2 more characters + the title to get correct index for mention highlight
+  const descriptionMentionees = mentionees.map(({ index, ...rest }) => ({
+    index: index > stream?.title?.length ? index - stream.title.length - 2 : index,
+    ...rest,
+  }));
+
   return (
     <TextContainer>
-      {stream.title && <div>{stream.title}</div>}
-      <TextContent text={stream.description} mentionees={mentionees} />
+      <div>{stream?.title}</div>
+      <TextContent text={stream?.description} mentionees={descriptionMentionees} />
     </TextContainer>
   );
 };

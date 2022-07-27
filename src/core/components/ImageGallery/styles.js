@@ -64,7 +64,7 @@ export const Frame = styled.div`
 
 export const Counter = styled.div`
   grid-area: counter;
-  ${({ theme }) => theme.typography.headline};
+  ${({ theme }) => theme.typography.headline}
   text-align: center;
 `;
 

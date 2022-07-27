@@ -339,5 +339,14 @@
 
   "pollComposer.unableToMention": "Unable to mention",
   "pollComposer.overMentionees": "You have reached maximum 30 mentioned users in a post.",
-  "pollComposer.okText": "OK"
+  "pollComposer.okText": "OK",
+
+  "select.chatType.item": "{answerType} type",
+  "chatComposer.label.channelId": "Channel ID",
+  "chatComposer.label.displayName": "Display Name",
+  "chatComposer.label.type": "Channel Type",
+  "chatComposer.addUsers": "Add users",
+  "chat_modal.title": "Create chat",
+  "chat_composer.placeholder.displayName": "Enter display name here",
+  "chat_composer.placeholder.channelId": "Enter channel ID here"
 }

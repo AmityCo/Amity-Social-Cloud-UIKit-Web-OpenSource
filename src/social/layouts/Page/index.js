@@ -14,7 +14,7 @@ const Container = styled.div`
     grid-template-areas: 'header header' 'main side';
     grid-template-columns: auto min-content;
     grid-template-rows: min-content auto;
-  `};
+  `}
 
   width: 100%;
   height: 100%;

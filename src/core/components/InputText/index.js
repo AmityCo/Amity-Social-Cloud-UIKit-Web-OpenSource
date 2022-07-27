@@ -98,7 +98,7 @@ const StyledMentionsInput = styled(MentionsInput)`
   padding: 0.5rem;
   width: 100%;
   textarea {
-    ${styling};
+    ${styling}
     resize: vertical;
   }
 `;
@@ -195,7 +195,7 @@ const InputText = (
           allowSuggestionsAboveCursor
           inputRef={ref}
           rows={rows}
-          maxRows={maxRows}
+          maxrows={maxRows}
           suggestionsPortalHost={mentionRef?.current}
           style={suggestListStyles}
           {...props}

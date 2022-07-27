@@ -61,8 +61,7 @@ const Dropdown = ({
       parentContainer &&
       `0px 0px -${Math.ceil(
         (scrollableHeight * 100) /
-          // eslint-disable-next-line no-unsafe-optional-chaining
-          (parentContainer?.getBoundingClientRect()?.height - buttonContainerHeight),
+          (parentContainer.getBoundingClientRect().height - buttonContainerHeight),
       )}% 0px`,
   });
 

@@ -28,7 +28,7 @@ const UserHeaderAvatar = styled(Avatar)`
 
 const UserHeaderTitle = styled.div`
   grid-area: title;
-  ${({ theme }) => theme.typography.title};
+  ${({ theme }) => theme.typography.title}
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

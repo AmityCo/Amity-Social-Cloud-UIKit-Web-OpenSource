@@ -121,7 +121,7 @@ const Overlay = styled.div`
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
   color: #fff;
-  ${({ theme }) => theme.typography.headline};
+  ${({ theme }) => theme.typography.headline}
   pointer-events: none;
 `;
 

@@ -20,7 +20,7 @@ const Checkbox = styled.input.attrs({
 `;
 
 const Caption = styled.div`
-  ${({ theme }) => theme.typography.caption};
+  ${({ theme }) => theme.typography.caption}
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 

@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.12.2 (2022-06-21)
+
+### Bug Fixes
+
+- asc-1566 - show user's custom avatar in missed places ([#42](https://github.com/EkoCommunications/AmityUiKitWeb/issues/42)) ([71e255e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/71e255e98365c4b46d1fa89cda24b3767ed1d48f))
+
+### 2.12.1 (2022-06-02)
+
+### Bug Fixes
+
+- ASC-1489 - Community image missing in the dropdown ([#37](https://github.com/EkoCommunications/AmityUiKitWeb/issues/37)) ([469c2d2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/469c2d259c6b27397ee2e3be56c27a7fac529188))
+
+## 2.12.0 (2022-05-20)
+
+### Features
+
+- ASC-468 - added chat composer ([#34](https://github.com/EkoCommunications/AmityUiKitWeb/issues/34)) ([db9b4c2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/db9b4c264f313abf1cecc120c42abe8ea109c83a))
+
+### 2.11.1 (2022-04-21)
+
+## 2.11.0 (2022-03-31)
+
+### Features
+
+- UP-7716 - provide access to ASCClient instance using useAmitySDK hook ([#23](https://github.com/EkoCommunications/AmityUiKitWeb/issues/23)) ([0ce58fd](https://github.com/EkoCommunications/AmityUiKitWeb/commit/0ce58fd681a22f2b3122a4fa7099bce0b8c548ad))
+
+## 2.10.0 (2022-03-17)
+
+### Features
+
+- UP-7644 - Custom Chunk Highlighter Component ([#25](https://github.com/EkoCommunications/AmityUiKitWeb/issues/25)) ([5723c22](https://github.com/EkoCommunications/AmityUiKitWeb/commit/5723c2243d1e1cb1407f77155888e77322399ba6))
+
 ### 2.9.1 (2022-03-03)
 
 ## 2.9.0 (2022-02-17)

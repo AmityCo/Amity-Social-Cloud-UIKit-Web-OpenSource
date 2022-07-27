@@ -36,7 +36,7 @@ export const Chip = styled.div`
   position: relative;
   display: inline-block;
   width: 1.25rem;
-  height: 1.25rem;
+  height 1.25rem;
   border: 1px solid ${({ theme }) => theme.palette.base.shade3};
   border-radius: 50%;
 

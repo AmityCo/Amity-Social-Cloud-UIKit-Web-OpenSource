@@ -63,12 +63,27 @@ export function searchWords(mentionees) {
   return mentionees?.length ? mentionees[0].userIds.map((userId) => `@${userId}`) : [];
 }
 
+export function extractUserIdDisplayNameCollection(text, userId, highlightLength, index) {
+  const startOfName = index + 1; // compensate @
+  const endOfName = index + highlightLength + 1;
+  const displayName = text.substring(startOfName, endOfName);
+
+  return {
+    displayName,
+    userId,
+  };
+}
+
 export function findChunks(mentionees) {
   if (!mentionees) return [];
-  return mentionees.map(({ index, length }) => ({
+
+  const mentioneeChunks = mentionees.map(({ index, length }) => ({
     start: index,
     end: index + length + 1, // compensate for index === 0
+    highlight: true,
   }));
+
+  return mentioneeChunks;
 }
 
 export function extractMetadata(markup, mentions) {
@@ -84,15 +99,14 @@ export function extractMetadata(markup, mentions) {
     mentionees = [{}];
 
     metadata.mentioned = [
-      ...mentions.map(({ plainTextIndex, id, index: markupIndex, display: displayName }) => ({
+      ...mentions.map(({ plainTextIndex, id, display: displayName }) => ({
         index: plainTextIndex,
         length: displayName.length,
         type: 'user',
         userId: id,
-        markupIndex,
       })),
     ];
-    metadata.markupText = markup;
+
     mentionees[0].type = 'user';
     mentionees[0].userIds = mentions.map(({ id }) => id);
   }
@@ -107,9 +121,7 @@ export function parseMentionsMarkup(text, metadata) {
   const { mentioned } = metadata;
 
   mentioned.forEach(({ userId, length, index: textIndex }) => {
-    const startOfName = textIndex + 1; // compensate @
-    const endOfName = textIndex + length + 1;
-    const displayName = text.substring(startOfName, endOfName);
+    const { displayName } = extractUserIdDisplayNameCollection(text, userId, length, textIndex);
     const markupFormat = `[${displayName}](${userId})`;
 
     parsedText = parsedText.replace(displayName, markupFormat);

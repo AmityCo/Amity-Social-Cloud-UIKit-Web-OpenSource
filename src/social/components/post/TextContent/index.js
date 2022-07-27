@@ -1,15 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React, { useState, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 import Truncate from 'react-truncate-markup';
-import Highlighter from 'react-highlight-words';
-
+import styled from 'styled-components';
 import customizableComponent from '~/core/hocs/customization';
-import Linkify from '~/core/components/Linkify';
+import ChunkHighlighter from '~/core/components/ChunkHighlighter';
 import Button from '~/core/components/Button';
+import Linkify from '~/core/components/Linkify';
+import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { findChunks } from '~/helpers/utils';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
@@ -24,59 +23,36 @@ export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
   display: inline-block;
 `;
 
-export const Highlighted = styled.span`
-  cursor: pointer;
-  color: ${({ theme }) => theme.palette.primary.main};
-`;
-
 const TextContent = ({ text, postMaxLines, mentionees }) => {
-  const { onClickUser } = useNavigation();
-
-  const highlightTag = useCallback(
-    ({ children, highlightIndex }) => (
-      // eslint-disable-next-line react/prop-types
-      <Highlighted onClick={() => onClickUser(mentionees[highlightIndex]?.userId)}>
-        {children}
-      </Highlighted>
-    ),
-    [mentionees, onClickUser],
-  );
+  const chunks = useMemo(() => findChunks(mentionees), [mentionees]);
 
   const textContent = text && (
     <PostContent>
-      <Truncate.Atom>
-        <Highlighter
-          autoEscape
-          highlightTag={highlightTag}
-          findChunks={() => findChunks(mentionees)}
-          textToHighlight={text}
-        />
-      </Truncate.Atom>
+      <ChunkHighlighter
+        textToHighlight={text}
+        chunks={chunks}
+        highlightNode={(props) => <MentionHighlightTag {...props} mentionees={mentionees} />}
+        unhighlightNode={Linkify}
+      />
     </PostContent>
   );
 
   const [isExpanded, setIsExpanded] = useState(false);
   const onExpand = () => setIsExpanded(true);
 
+  if (textContent && isExpanded) return textContent;
+
   return (
-    textContent && (
-      <Linkify>
-        {isExpanded ? (
-          textContent
-        ) : (
-          <Truncate.Atom
-            lines={postMaxLines}
-            ellipsis={
-              <ReadMoreButton onClick={onExpand}>
-                <FormattedMessage id="post.readMore" />
-              </ReadMoreButton>
-            }
-          >
-            {textContent}
-          </Truncate.Atom>
-        )}
-      </Linkify>
-    )
+    <Truncate.Atom
+      lines={postMaxLines}
+      ellipsis={
+        <ReadMoreButton onClick={onExpand}>
+          <FormattedMessage id="post.readMore" />
+        </ReadMoreButton>
+      }
+    >
+      {textContent}
+    </Truncate.Atom>
   );
 };
 

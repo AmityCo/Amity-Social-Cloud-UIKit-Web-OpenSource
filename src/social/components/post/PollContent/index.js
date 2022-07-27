@@ -68,8 +68,7 @@ const ResultList = ({ answers, totalVotes }) => {
 };
 
 const PollContent = ({ items }) => {
-  // eslint-disable-next-line no-unsafe-optional-chaining
-  const { pollId } = items[0]?.data;
+  const pollId = items?.[0]?.data?.pollId;
   const { poll } = usePoll(pollId);
   const { answers = [], answerType, closedIn, isDeleted, isVoted, status } = poll;
 
