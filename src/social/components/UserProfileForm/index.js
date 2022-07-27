@@ -40,11 +40,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
     defaultValues: {
       ...user,
       description: user.description ?? '',
-      avatarFileId: user.avatarFileId ?? '',
-    } || {
-      avatarFileId: '',
-      displayName: '',
-      description: '',
+      avatarFileId: user.avatarFileId ?? null,
     },
   });
 
