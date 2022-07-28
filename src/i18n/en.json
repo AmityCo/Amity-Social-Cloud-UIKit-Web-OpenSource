@@ -68,7 +68,7 @@
   "community.leaveCommunityButtonOK": "OK",
   "community.cannotInteract": "Join community to interact with all posts",
   "community.removeUserFromCommunityTitle": "Remove user from community",
-  "community.removeUserFromCommunityBody": "This user won't no longer be able to search, post. Continue?",
+  "community.removeUserFromCommunityBody": "This user will no longer be able to search, post. Continue?",
   "community.name": "Community name",
   "community.about": "About",
   "community.category": "Category",
