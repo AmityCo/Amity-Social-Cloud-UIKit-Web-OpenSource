@@ -14,7 +14,7 @@ jobs:
       url: https://ui-kit-open-source.staging.amity.co/
 
     env:
-      STORYBOOK_API_ENDPOINT: ${{ secrets.STORYBOOK_API_ENDPOINT }}
+      STORYBOOK_API_REGION: ${{ secrets.STORYBOOK_API_REGION }}
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
       STORYBOOK_USER1: ${{ secrets.STORYBOOK_USER1 }}
       STORYBOOK_USER2: ${{ secrets.STORYBOOK_USER2 }}
