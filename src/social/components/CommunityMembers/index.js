@@ -48,6 +48,8 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
     community.userId,
   );
 
+  console.log(members, hasMoreMembers);
+
   return (
     <CommunityMembersContainer>
       <CommunityMembersHeader>Community Members • {membersCount}</CommunityMembersHeader>

@@ -14,6 +14,7 @@ const useCommunityMembers = (communityId) => {
       CommunityRepository.getCommunityMembers({
         communityId,
         memberships: [CommunityFilter.Member],
+        roles: [],
       }),
     [communityId],
   );
