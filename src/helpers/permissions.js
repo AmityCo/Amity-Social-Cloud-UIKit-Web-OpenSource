@@ -80,6 +80,20 @@ export function canEditPost({ userId, user, communityUser, post, community, chil
   return isPostModer || isMyPost;
 }
 
+export function canClosePool({ userId, communityUser, post, community }) {
+  const isMyPost = post.postedUserId === userId;
+
+  if (isCommunityPost(post)) {
+    if (isPostUnderReview(post, community)) {
+      return false;
+    }
+
+    return isMyPost && isCommunityMember(communityUser);
+  }
+
+  return isMyPost;
+}
+
 export function canReportPost({ userId, user, communityUser, post, community }) {
   const isPostModer = isPostModerator({ userId, user, communityUser, post, community });
   const isMyPost = post.postedUserId === userId;

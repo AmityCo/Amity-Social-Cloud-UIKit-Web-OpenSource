@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Truncate from 'react-truncate-markup';
 import Highlight from '~/core/components/Highlight';
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
@@ -30,13 +29,10 @@ const CommunityName = ({
 
   return (
     <NameContainer className={className} isActive={isActive} isTitle={isTitle}>
-      <Truncate lines={truncate}>
-        <Name title={name}>
-          {!loading && !isPublic && <PrivateIcon />}
-          {loading ? <Skeleton width={120} style={{ fontSize: 12 }} /> : name}
-        </Name>
-      </Truncate>
-
+      <Name title={name}>
+        {!loading && !isPublic && <PrivateIcon />}{' '}
+        {loading ? <Skeleton width={120} style={{ fontSize: 12 }} /> : name}
+      </Name>
       {!loading && isOfficial && <VerifiedIcon />}
     </NameContainer>
   );

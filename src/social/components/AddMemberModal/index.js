@@ -22,7 +22,7 @@ const FormBlock = ({ children }) => (
   </FormBlockContainer>
 );
 
-export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
+export const AddMemberModal = ({ className, closeConfirm, onSubmit, usersToOmit = [] }) => {
   const { formatMessage } = useIntl();
 
   const { errors, control, setError, handleSubmit } = useForm({
@@ -50,7 +50,7 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
               <MembersField error={errors.members}>
                 <Controller
                   name="members"
-                  render={(props) => <UserSelector {...props} />}
+                  render={(props) => <UserSelector {...props} usersToOmit={usersToOmit} />}
                   control={control}
                 />
                 <ErrorMessage errors={errors} name="members" />

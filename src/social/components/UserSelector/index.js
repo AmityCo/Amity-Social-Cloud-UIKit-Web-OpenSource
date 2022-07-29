@@ -17,6 +17,7 @@ const UserSelector = ({
   onChange = () => {},
   parentContainer = null,
   currentUserId,
+  usersToOmit = [],
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -28,6 +29,7 @@ const UserSelector = ({
       ({ displayName, userId }) =>
         displayName?.toLowerCase().includes(query.toLowerCase()) && userId !== currentUserId,
     )
+    .filter(({ userId }) => !usersToOmit.map((u) => u.userId).includes(userId))
     .map(({ displayName, userId }) => ({
       name: displayName,
       value: userId,
