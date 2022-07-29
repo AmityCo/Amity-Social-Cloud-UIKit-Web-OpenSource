@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.12.3 (2022-07-29)
+
+
+### Bug Fixes
+
+* ASC-2788 - replace react-time-ago with react-timeago ([#47](https://github.com/EkoCommunications/AmityUiKitWeb/issues/47)) ([f7c2037](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7c20375cfad7843b4d31b04ed091d4bf28e8d1e))
+
 ### 2.12.2 (2022-06-21)
 
 
