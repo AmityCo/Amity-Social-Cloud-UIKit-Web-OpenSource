@@ -319,7 +319,7 @@
   "poll_modal.closed_in.title": "Schedule poll (Optional)",
   "poll_modal.closed_in.body": "Poll will be automatically closed at the end of chosen time frame (UTC)",
   "select.answerType.item": "{answerType} selection",
-  "poll_composer.question.label": "Poll options",
+  "poll_composer.question.label": "Poll question",
   "poll_composer.question.placeholder": "What’s your poll question?",
   "poll_composer.poll_options.label": "Options",
   "poll_modal.title": "Create poll",

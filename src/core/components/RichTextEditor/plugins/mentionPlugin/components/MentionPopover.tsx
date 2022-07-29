@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   Data,
   NoData,
@@ -11,7 +11,6 @@ import {
   comboboxStore,
   useEventEditorSelectors,
 } from '@udecode/plate';
-import { Portal } from '@noom/wax-component-library';
 
 import { MentionPlugin, MentionItem } from '../models';
 
