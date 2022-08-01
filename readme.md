@@ -1,23 +1,37 @@
-# Amity Ui-Kit for Web (open-source)
+# Community Web UI Kit
 
-## Getting started
+UI kit for Community Web client. Forked from [Amity-Social-Cloud-UIKit-Web-OpenSource](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource).
 
-### Installation
+## Development
+### Setting up the local environment
 
-1. git clone git@github.com:AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
-2. cd Amity-Social-Cloud-UIKit-Web-OpenSource
-3. npm ci
-4. npm build
-5. npm link
+It is recommended to use npm v7 to easily deal with peer dependencies
+```
+npm i -g npm@7
+```
 
-Then, inside another project, where need to use ui-kit:
+Install the dependencies with
 
-1. npm link @amityco/ui-kit-open-source --install-links --save
+```
+npm install
+```
 
-### Documentation
+### Running the UIkit locally
 
-Please refer to our online documentation at https://docs.amity.co or contact a Ui-Kit representative at **developers@amity.co** for support.
+The kit is developed locally with Stoybook and running a start script that will start Storybook in watch mode
 
-## Contributing
+```
+npm start
+```
 
-See [our contributing guide](https://github.com/EkoCommunications/AmityUiKitWeb/blob/develop/CONTRIBUTING.md)
+## Release
+
+1. Create a new branch from `develop`
+2. Write your changes
+3. Create a new PR with the title following the [Conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format
+4. Merge your PR using `squash and merge` strategy
+5. The new package will be released with the version generated based on the title
+
+## Documentation
+
+Please refer to Amity online documentation at https://docs.amity.co or contact a Ui-Kit representative at **developers@amity.co** for support.

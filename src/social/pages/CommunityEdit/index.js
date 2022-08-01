@@ -29,7 +29,7 @@ const CommunityEditPage = ({ communityId, tab }) => {
 
   const { onClickCommunity } = useNavigation();
   const { community, updateCommunity } = useCommunity(communityId);
-  const { addMembers } = useCommunityMembers(communityId);
+  const { members, addMembers } = useCommunityMembers(communityId);
 
   const handleReturnToCommunity = () => onClickCommunity(communityId);
 
@@ -58,6 +58,7 @@ const CommunityEditPage = ({ communityId, tab }) => {
             <AddMemberAction action={openAddMemberModal} />
             <ConditionalRender condition={addMemberModalOpen}>
               <AddMemberModal
+                usersToOmit={members}
                 closeConfirm={closeAddMemberModal}
                 community={community}
                 onSubmit={submitAddMembers}

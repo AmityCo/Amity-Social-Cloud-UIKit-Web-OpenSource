@@ -32,6 +32,7 @@ const Close = styled(Remove)`
 const RoundButton = styled(Button)`
   padding: 0.4rem 0.55rem;
   border-radius: 10rem;
+  height: 30px;
 `;
 
 const UserChip = ({ userId, displayName = 'Anonymous', fileUrl, onClick = () => {}, onRemove }) => {

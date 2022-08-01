@@ -114,7 +114,12 @@ const PollComposer = ({
     await onSubmit(payload, mentionees, metadata);
   });
 
-  const disabled = !isDirty || question.length === 0 || submitting;
+  const disabled =
+    !isDirty ||
+    question.length === 0 ||
+    answers.length === 0 ||
+    answers.some((a) => a.data.length === 0) ||
+    submitting;
 
   const [formBodyRef, formBodyElement] = useElement();
 

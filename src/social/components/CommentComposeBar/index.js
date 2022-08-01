@@ -57,7 +57,7 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, po
     clearAll();
   };
 
-  const isEmpty = text === '';
+  const isEmpty = !text || text?.length === 0;
 
   const placeholder = userToReply
     ? formatMessage({ id: 'CommentComposeBar.replayTo' }) + userToReply
