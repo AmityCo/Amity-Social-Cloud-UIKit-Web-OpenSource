@@ -66,7 +66,7 @@ const UICommunityCard = ({
 
         {!loading && description && (
           <Truncate lines={2}>
-            <Description>{description}</Description>
+            <Description title={description}>{description}</Description>
           </Truncate>
         )}
       </Content>
