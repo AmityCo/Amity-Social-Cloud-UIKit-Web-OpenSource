@@ -55,6 +55,20 @@ export const VideoAttachmentIcon = styled(PlayCircle)`
 export const PollButton = styled.button`
   background: none;
   border: none;
+  background: rgb(235 236 239 / 60%);
+  transition: background 0.1s;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: rgb(235 236 239);
+  }
 `;
 
 export const PollIconContainer = styled.div`
