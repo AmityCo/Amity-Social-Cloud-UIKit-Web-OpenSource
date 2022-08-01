@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedDate } from 'react-intl';
-import ReactTimeAgo from 'react-time-ago';
+import TimeAgo from 'react-timeago';
 
 import { DateContainer } from './styles';
 
@@ -11,7 +11,7 @@ const Time = ({ className, date }) => {
 
   return (
     <DateContainer className={className}>
-      {delta < DAY ? <ReactTimeAgo date={date} /> : <FormattedDate value={date} />}
+      {delta < DAY ? <TimeAgo date={date} /> : <FormattedDate value={date} />}
     </DateContainer>
   );
 };
