@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import { CommunityFilter, CommunitySortingMethod } from '@amityco/js-sdk';
 
 import CommunityHeader from '~/social/components/community/Header';
 import UserHeader from '~/social/components/UserHeader';
@@ -40,6 +41,8 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
   const [users = [], hasMoreUsers, loadMoreUsers] = useUserQuery(value);
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList({
     search: value,
+    filter: CommunityFilter.All,
+    sortBy: CommunitySortingMethod.DisplayName,
   });
   const handleChange = (newVal) => {
     setValue(newVal);

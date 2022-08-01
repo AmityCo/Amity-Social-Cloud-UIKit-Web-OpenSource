@@ -7,11 +7,13 @@ const useCommunitiesList = (queryParams = {}, isDeleted = false, resolver = unde
     isDeleted,
   };
 
-  return useLiveCollection(
+  const collection = useLiveCollection(
     () => CommunityRepository.allCommunitiesWithFilters(params),
     Object.values(queryParams),
     resolver,
   );
+
+  return collection;
 };
 
 export default useCommunitiesList;
