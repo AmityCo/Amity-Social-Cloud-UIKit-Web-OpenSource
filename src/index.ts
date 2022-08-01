@@ -34,6 +34,8 @@ export { default as AmityUserPostPage } from '~/social/pages/UserPost';
 
 export { PageTypes } from '~/social/constants';
 
+export { ApiEndpoint, ApiRegion } from '@amityco/js-sdk';
+
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
 // import AmityCommentLikeButton from './components/CommentLikeButton';

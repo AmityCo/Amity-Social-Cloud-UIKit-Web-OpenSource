@@ -8,16 +8,16 @@ import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 import UICommunityInfo from './UICommunityInfo';
 import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
-function usePendingPostCount(isReady, community, canReviewCommunityPosts) {
+function usePendingPostCount(isReady, communityId, community, canReviewCommunityPosts) {
   // TODO workaround
   // community.reviewingFeed?.postCount has the same number for all users
   const [posts] = useFeed({
     targetType: isReady && !canReviewCommunityPosts ? PostTargetType.CommunityFeed : '',
-    targetId: community.communityId,
+    targetId: communityId,
     feedType: FeedType.Reviewing,
   });
 
-  return canReviewCommunityPosts ? community.reviewingFeed?.postCount ?? 0 : posts.length;
+  return canReviewCommunityPosts ? community?.reviewingFeed?.postCount ?? 0 : posts.length;
 }
 
 const CommunityInfo = ({ communityId, currentUserId }) => {
@@ -47,6 +47,7 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
 
   const pendingPostsCount = usePendingPostCount(
     isCurrentMemberReady,
+    communityId,
     community,
     canReviewCommunityPosts,
   );
