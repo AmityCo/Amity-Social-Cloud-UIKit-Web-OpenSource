@@ -25,6 +25,8 @@ const InputCounter = ({
   defaultValue = 0,
   onChange,
   onlyPositiveNumber = true,
+  minValue,
+  maxValue,
 }) => {
   const [counter, setCounter] = useState(defaultValue);
 
@@ -33,7 +35,7 @@ const InputCounter = ({
       {renderDecButton({
         onClick: (e) => {
           e.preventDefault();
-          const newValue = counter - 1;
+          const newValue = minValue ? Math.max(counter - 1, minValue) : minValue;
           setCounter(newValue);
           onChange(newValue);
         },
@@ -44,7 +46,7 @@ const InputCounter = ({
       {renderIncButton({
         onClick: (e) => {
           e.preventDefault();
-          const newValue = counter + 1;
+          const newValue = maxValue ? Math.min(counter + 1, maxValue) : maxValue;
           setCounter(newValue);
           onChange(newValue);
         },

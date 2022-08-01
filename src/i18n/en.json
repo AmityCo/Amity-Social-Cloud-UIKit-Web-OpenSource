@@ -316,7 +316,7 @@
   "options_composer.title": "Create at least 2 options",
   "poll_modal.answer_type.title": "Selection type",
   "poll_modal.answer_type.body": "Choose to vote with one or multiple options",
-  "poll_modal.closed_in.title": "Schedule poll (Optional)",
+  "poll_modal.closed_in.title": "Schedule poll close",
   "poll_modal.closed_in.body": "Poll will be automatically closed at the end of chosen time frame (UTC)",
   "select.answerType.item": "{answerType} selection",
   "poll_composer.question.label": "Poll question",

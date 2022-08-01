@@ -64,7 +64,7 @@ const PollComposer = ({
     question: '',
     answers: [],
     answerType: PollAnswerType.Single,
-    closedIn: 0,
+    closedIn: 30,
   };
 
   const {
@@ -250,11 +250,14 @@ const PollComposer = ({
                       <InputCounter
                         {...props}
                         onlyPositiveNumber
+                        minValue={1}
+                        maxValue={100}
                         resultFormat={`${COUNTER_VALUE_PLACEHOLDER} days`}
+                        defaultValue={defaultValues.closedIn}
                       />
                     )}
                     control={control}
-                    defaultValue=""
+                    defaultValue={defaultValues.closedIn}
                   />
                 </ControllerContainer>
               </FieldContainer>
