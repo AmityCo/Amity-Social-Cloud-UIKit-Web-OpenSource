@@ -131,7 +131,7 @@ const PollContent = ({ items }) => {
         </ConditionalRender>
         <ResultList answers={answers} />
       </ConditionalRender>
-      {!isVoted && (
+      {!isVoted && !isClosed && (
         <SubmitButton disabled={!answerIds.length} onClick={handleSubmit}>
           <FormattedMessage id="poll.vote.submit" />
         </SubmitButton>

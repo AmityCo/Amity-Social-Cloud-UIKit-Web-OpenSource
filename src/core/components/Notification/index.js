@@ -4,9 +4,13 @@ import { NotificationContainer, Notifications, SuccessIcon, InfoIcon, ErrorIcon 
 
 const DEFAULT_NOTIFICATION_DURATION = 3000;
 
+function omitSDKText(content) {
+  return content.replace('ASCWebSDK: ', '');
+}
+
 const Notification = ({ className, content, icon }) => (
   <NotificationContainer clean className={className}>
-    {icon} {content}
+    {icon} {omitSDKText(content)}
   </NotificationContainer>
 );
 
