@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.14.21](https://github.com/noom/community-web-uikit/compare/2.14.20...2.14.21) (2022-08-03)
+
+
+### Bug Fixes
+
+* styles ([d8dc5f0](https://github.com/noom/community-web-uikit/commit/d8dc5f0b78f8a87a1b8e68fa129bda1ba13d6790))
+
 ### 2.14.20 (2022-08-01)
 
 ### 2.14.19 (2022-08-01)
