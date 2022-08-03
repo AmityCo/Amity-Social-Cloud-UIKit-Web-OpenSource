@@ -118,7 +118,7 @@ const PollComposer = ({
     !isDirty ||
     question.length === 0 ||
     answers.length === 0 ||
-    answers.some((a) => a.data.length === 0) ||
+    answers.some((a) => a.data?.trim().length === 0) ||
     submitting;
 
   const [formBodyRef, formBodyElement] = useElement();

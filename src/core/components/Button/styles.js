@@ -41,7 +41,7 @@ export const PrimaryButton = styled.button`
     opacity: 0.8;
   }
   &:disabled {
-    background-color: ${({ theme }) => theme.palette.primary.shade2};
+    opacity: 0.5;
   }
 `;
 

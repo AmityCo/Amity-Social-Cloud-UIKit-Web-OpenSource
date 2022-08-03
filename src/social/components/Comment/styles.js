@@ -75,7 +75,9 @@ export const CommentInfo = styled.div`
 export const AuthorName = styled.span`
   // react-truncate-markup tries to set to inline-block
   display: inline !important;
+  cursor: pointer;
   ${({ theme }) => theme.typography.body}
+  font-weight: 500;
 `;
 
 export const CommentDate = styled(Time)`

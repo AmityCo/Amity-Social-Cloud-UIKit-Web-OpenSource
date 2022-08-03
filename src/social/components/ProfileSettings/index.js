@@ -32,6 +32,10 @@ const ProfileSettings = ({ userId, client }) => {
 
   const { user, file } = useUser(userId);
 
+  const onBack = () => {
+    onClickUser(userId);
+  };
+
   const handleSubmit = async (data) => {
     try {
       await client.updateCurrentUser(data);
@@ -39,7 +43,7 @@ const ProfileSettings = ({ userId, client }) => {
       console.log(err);
     }
 
-    onClickUser(userId);
+    onBack();
   };
 
   if (isEmpty(user)) {
@@ -53,7 +57,10 @@ const ProfileSettings = ({ userId, client }) => {
           <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
         </AvatarContainer>
         <div>
-          <BackLink text={formatMessage({ id: 'ProfileSettings.returnTo' }) + user.displayName} />
+          <BackLink
+            text={formatMessage({ id: 'ProfileSettings.returnTo' }) + user.displayName}
+            onClick={onBack}
+          />
           <PageTitle>
             <FormattedMessage id="profile.setting" />
           </PageTitle>

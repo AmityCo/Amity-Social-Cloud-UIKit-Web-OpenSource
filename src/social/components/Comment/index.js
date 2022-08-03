@@ -15,6 +15,7 @@ import { isModerator } from '~/helpers/permissions';
 import StyledComment from './Comment.styles';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import usePost from '~/social/hooks/usePost';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import {
   CommentBlock,
@@ -68,6 +69,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
   const [isEditing, setIsEditing] = useState(false);
   const { formatMessage } = useIntl();
   const [isExpanded, setExpanded] = useState(false);
+  const { onClickUser } = useNavigation();
 
   const {
     isCommentReady,
@@ -116,6 +118,8 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
       });
     }
   };
+
+  const handleClickUser = () => onClickUser(commentAuthor.userId);
 
   const onCopyPathClick = () => {
     handleCopyPath(comment);
@@ -214,6 +218,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
       isReported={isFlaggedByMe}
       isReplyComment={isReplyComment}
       onClickReply={onClickReply}
+      onClickUser={handleClickUser}
       onChange={onChange}
       handleCopyPath={handleCopyPath ? onCopyPathClick : undefined}
     />
