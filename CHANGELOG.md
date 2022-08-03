@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.14.25](https://github.com/noom/community-web-uikit/compare/2.14.24...2.14.25) (2022-08-03)
+
+
+### Bug Fixes
+
+* Voting on closed polls ([29f3f4b](https://github.com/noom/community-web-uikit/commit/29f3f4b87125296b8f880e13dc68f9263467ee58))
+
 ### [2.14.24](https://github.com/noom/community-web-uikit/compare/2.14.23...2.14.24) (2022-08-03)
 
 ### [2.14.23](https://github.com/noom/community-web-uikit/compare/2.14.22...2.14.23) (2022-08-03)
