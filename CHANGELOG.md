@@ -1,5 +1,7 @@
 # Changelog
 
+### [2.14.22](https://github.com/noom/community-web-uikit/compare/2.14.21...2.14.22) (2022-08-03)
+
 ### [2.14.21](https://github.com/noom/community-web-uikit/compare/2.14.20...2.14.21) (2022-08-03)
 
 
