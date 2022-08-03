@@ -8,7 +8,7 @@ export const CloseIcon = styled(Close).attrs({ width: 18, height: 18 })`
 `;
 
 export const Overlay = styled.div`
-  z-index: 1000;
+  z-index: 1100;
   position: fixed;
   top: 0;
   bottom: 0;
