@@ -5,18 +5,21 @@ UI kit for Community Web client. Forked from [Amity-Social-Cloud-UIKit-Web-OpenS
 ## Development
 ### Setting up the local environment
 
-It is recommended to use npm v7 to easily deal with peer dependencies
+It is recommended to use npm v7 or greather to easily deal with peer dependencies:
 ```
 npm i -g npm@7
 ```
 
-Install the dependencies with
+Install the dependencies with:
 
 ```
 npm install
 ```
 
-Set required ENV variables
+> Note: If it is your first time installing,
+make sure you [register to use](https://github.com/noom/webbees-handbook/blob/dc3d9d4f0aa910f34d553c351f8cbd548910dc92/pages/howto/Private_packages.md) Noom's private packages.
+
+Set required ENV variables:
 ```bash
 STORYBOOK_API_ENDPOINT  # Amity endpoint    -- https://api.us.amity.co
 STORYBOOK_API_REGION    # Amity region      -- us
@@ -28,7 +31,7 @@ STORYBOOK_USER2         # User ID,User Name -- TEST1234,Sam Smith
 
 ### Running the UIkit locally
 
-The kit is developed locally with Stoybook and running a start script that will start Storybook in watch mode
+The kit is developed locally with Stoybook and running a start script that will start Storybook in watch mode:
 
 ```
 npm start
