@@ -16,7 +16,7 @@ Install the dependencies with
 npm install
 ```
 
-Set required ENV variables:
+Set required ENV variables
 ```bash
 STORYBOOK_API_ENDPOINT  # Amity endpoint    -- https://api.us.amity.co
 STORYBOOK_API_REGION    # Amity region      -- us
