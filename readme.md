@@ -16,6 +16,16 @@ Install the dependencies with
 npm install
 ```
 
+Set required ENV variables:
+```bash
+STORYBOOK_API_ENDPOINT  # Amity endpoint    -- https://api.us.amity.co
+STORYBOOK_API_REGION    # Amity region      -- us
+STORYBOOK_API_KEY       # Amity API key
+STORYBOOK_USER1         # User ID,User Name -- TEST1345,Testko Testic
+STORYBOOK_USER2         # User ID,User Name -- TEST1234,Sam Smith
+```
+
+
 ### Running the UIkit locally
 
 The kit is developed locally with Stoybook and running a start script that will start Storybook in watch mode
