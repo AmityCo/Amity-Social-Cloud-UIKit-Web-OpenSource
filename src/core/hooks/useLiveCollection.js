@@ -1,6 +1,7 @@
 import { LoadingStatus } from '@amityco/js-sdk';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
+import { useSDK } from '~/core/hocs/withSDK';
 
 const noop = () => {
   if (process?.env?.NODE_ENV === 'development') console.warn('[useLiveCollection] noop hit');
@@ -12,6 +13,7 @@ const useLiveCollection = (
   resolver = () => dependencies.some((dep) => !dep),
   debug = null,
 ) => {
+  const { connected } = useSDK();
   const [data, setData] = useState({
     items: [],
     hasMore: false,
@@ -21,7 +23,7 @@ const useLiveCollection = (
   });
 
   useEffect(() => {
-    if (resolver()) return;
+    if (!connected || resolver()) return;
 
     const liveCollection = createLiveCollection();
     let loadMoreHasBeenCalled = false;
@@ -73,7 +75,7 @@ const useLiveCollection = (
 
     return () => liveCollection.dispose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, dependencies);
+  }, [connected, ...dependencies]);
 
   return [data.items, data.hasMore, data.loadMore, data.loadingFirstTime, data.loadingMore];
 };
