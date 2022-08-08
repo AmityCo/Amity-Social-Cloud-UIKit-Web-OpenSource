@@ -5,7 +5,7 @@ export const UIStyles = styled.div`
   color: ${({ theme }) => theme.palette.base.main};
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
   input,
   div {
     box-sizing: border-box;
