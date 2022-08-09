@@ -11,7 +11,6 @@ import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as UserImage } from '~/icons/User';
 
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
-import { useSDK } from '~/core/hocs/withSDK';
 import BanIcon from '~/icons/Ban';
 
 import {
@@ -42,6 +41,7 @@ import useReport from '~/social/hooks/useReport';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { notification } from '~/core/components/Notification';
 import useFollowersList from '~/core/hooks/useFollowersList';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const UIUserInfo = ({
   userId,

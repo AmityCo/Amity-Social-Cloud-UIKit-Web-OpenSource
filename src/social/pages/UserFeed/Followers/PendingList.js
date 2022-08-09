@@ -7,13 +7,14 @@ import { ButtonsContainer, UserHeaderContainer } from '~/social/pages/UserFeed/F
 import UserHeader from '~/social/components/UserHeader';
 import useFollow from '~/core/hooks/useFollow';
 import Button, { PrimaryButton } from '~/core/components/Button';
-import withSDK, { useSDK } from '~/core/hocs/withSDK';
+import withSDK from '~/core/hocs/withSDK';
 import { notification } from '~/core/components/Notification';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useFollowersList from '~/core/hooks/useFollowersList';
 import PaginatedList from '~/core/components/PaginatedList';
 import { Grid } from '~/social/components/community/CategoryCommunitiesList/styles';
 import Skeleton from '~/core/components/Skeleton';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const PendingItem = ({ currentUserId, userId }) => {
   const { followAccept, deleteFollower } = useFollow(currentUserId, userId);
