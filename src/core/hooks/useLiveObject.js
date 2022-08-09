@@ -1,6 +1,6 @@
 // TODO add errors handling
 import { useState, useEffect } from 'react';
-import { useSDK } from '~/core/hocs/withSDK';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const useLiveObject = (
   createLiveObject,

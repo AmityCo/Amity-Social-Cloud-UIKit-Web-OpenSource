@@ -2,8 +2,8 @@
 import { FileRepository, ImageSize } from '@amityco/js-sdk';
 import trim from 'lodash/trim';
 
-import { useSDK } from '~/core/hocs/withSDK';
 import useUser from '~/core/hooks/useUser';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const MEMBER_COUNT_PER_CASE = {
   DIRECT_CHAT: 2,

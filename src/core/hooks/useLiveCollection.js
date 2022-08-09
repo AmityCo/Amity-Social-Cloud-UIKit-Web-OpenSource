@@ -1,7 +1,7 @@
 import { LoadingStatus } from '@amityco/js-sdk';
 import { throttle } from 'lodash';
 import { useEffect, useState } from 'react';
-import { useSDK } from '~/core/hocs/withSDK';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const noop = () => {
   if (process?.env?.NODE_ENV === 'development') console.warn('[useLiveCollection] noop hit');
