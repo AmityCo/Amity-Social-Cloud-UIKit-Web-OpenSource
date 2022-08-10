@@ -1,7 +1,7 @@
 const promisify = (liveObject) =>
   new Promise((resolve, reject) => {
-    liveObject.once('dataUpdated', () => {
-      resolve(liveObject.model);
+    liveObject.once('dataUpdated', (model) => {
+      resolve(model);
       liveObject.dispose();
     });
     liveObject.once('dataError', (error) => {

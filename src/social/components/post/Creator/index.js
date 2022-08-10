@@ -43,15 +43,31 @@ import {
 } from './styles';
 import PollModal from '~/social/components/post/PollComposer/PollModal';
 import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
+import promisify from '~/helpers/promisify';
 
 const communityFetcher = (id) => () => CommunityRepository.communityForId(id);
 const userFetcher = (id) => () => new UserRepository().userForId(id);
 
-const mentioneeCommunityFetcher = (communityId, search) =>
-  CommunityRepository.getCommunityMembers({
+const mentioneeCommunityFetcher = async (communityId, search) => {
+  const communityMemberLiveCollection = CommunityRepository.getCommunityMembers({
     communityId,
     search,
   });
+
+  const communityMembers = await promisify(communityMemberLiveCollection);
+
+  return Promise.all(
+    communityMembers.map(({ userId }) => {
+      const userLiveObject = UserRepository.getUser(userId);
+
+      if (userLiveObject.model) {
+        return userLiveObject.model;
+      }
+
+      return promisify(userLiveObject);
+    }),
+  );
+};
 
 const MAX_FILES_PER_POST = 10;
 
@@ -217,9 +233,9 @@ const PostCreatorBar = ({
   const creatorTargetId = target?.targetId ?? targetId;
 
   const queryMentionees = useCallback(
-    (query, cb) => {
+    async (query, cb) => {
       let keyword = query || mentionText;
-      let liveCollection;
+      let users;
 
       // Weird hack to show users to show users on start
       if (keyword.match(/^@$/)) {
@@ -228,14 +244,13 @@ const PostCreatorBar = ({
 
       // Only fetch private community members
       if (creatorTargetType === PostTargetType.CommunityFeed && !model?.isPublic) {
-        liveCollection = mentioneeCommunityFetcher(creatorTargetId, keyword);
+        users = await mentioneeCommunityFetcher(creatorTargetId, keyword);
       } else {
-        liveCollection = UserRepository.queryUsers({ keyword });
+        const userLiveCollection = UserRepository.queryUsers({ keyword });
+        users = await promisify(userLiveCollection);
       }
 
-      liveCollection.on('dataUpdated', (models) => {
-        cb(formatMentionees(models));
-      });
+      cb(formatMentionees(users));
     },
     [mentionText, model?.isPublic, creatorTargetId, creatorTargetType],
   );
