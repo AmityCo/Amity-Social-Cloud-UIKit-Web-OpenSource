@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.13.0 (2022-08-11)
+
+
+### Features
+
+* ASC-3806 - Update js-sdk to v5.23.1 ([#52](https://github.com/EkoCommunications/AmityUiKitWeb/issues/52)) ([cadcab7](https://github.com/EkoCommunications/AmityUiKitWeb/commit/cadcab70880e959ee3eaed6f062ce97a1cf18088))
+
 ### 2.12.3 (2022-07-29)
 
 
