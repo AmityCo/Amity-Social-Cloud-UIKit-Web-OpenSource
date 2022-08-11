@@ -2,12 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### 2.12.3 (2022-07-29)
+## 2.13.0 (2022-08-11)
 
+### Features
+
+- ASC-3806 - Update js-sdk to v5.23.1 ([#52](https://github.com/EkoCommunications/AmityUiKitWeb/issues/52)) ([cadcab7](https://github.com/EkoCommunications/AmityUiKitWeb/commit/cadcab70880e959ee3eaed6f062ce97a1cf18088))
+
+### 2.12.3 (2022-07-29)
 
 ### Bug Fixes
 
-* ASC-2788 - replace react-time-ago with react-timeago ([#47](https://github.com/EkoCommunications/AmityUiKitWeb/issues/47)) ([f7c2037](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7c20375cfad7843b4d31b04ed091d4bf28e8d1e))
+- ASC-2788 - replace react-time-ago with react-timeago ([#47](https://github.com/EkoCommunications/AmityUiKitWeb/issues/47)) ([f7c2037](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7c20375cfad7843b4d31b04ed091d4bf28e8d1e))
 
 ### 2.12.2 (2022-06-21)
 
