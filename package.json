@@ -70,7 +70,7 @@
     "webpack-node-externals": "^2.5.1"
   },
   "dependencies": {
-    "@amityco/js-sdk": "^5.20.0",
+    "@amityco/js-sdk": "^5.23.1",
     "@hookform/error-message": "0.0.4",
     "classnames": "^2.2.6",
     "filesize": "^6.1.0",
