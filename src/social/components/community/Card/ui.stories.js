@@ -45,10 +45,8 @@ UiCommunityCard.argTypes = {
   avatarFileUrl: { control: { type: 'text' } },
   communityId: { control: { type: 'text' } },
   communityCategories: {
-    control: {
-      type: 'inline-check',
-      options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
-    },
+    control: { type: 'inline-check' },
+    options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
   },
   membersCount: { control: { type: 'number', min: 0, step: 1 } },
   description: { control: { type: 'text' } },

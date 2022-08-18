@@ -5,7 +5,6 @@ import { FollowRequestStatus } from '@amityco/js-sdk';
 import * as utils from '~/helpers/utils';
 
 import { StyledTabs } from './styles';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import withSDK from '~/core/hocs/withSDK';
 
 import FollowingsList from '~/social/pages/UserFeed/Followers/FollowingsList';
@@ -64,23 +63,24 @@ const Followers = ({
   return (
     <div>
       <StyledTabs tabs={allTabs} activeTab={activeTab} onChange={setActiveTab} />
-      <ConditionalRender condition={activeTab === FollowersTabs.FOLLOWINGS}>
+
+      {activeTab === FollowersTabs.FOLLOWINGS && (
         <FollowingsList
           currentUserId={currentUserId}
           profileUserId={userId}
           setUserFeedTab={setUserFeedTab}
         />
-      </ConditionalRender>
-      <ConditionalRender condition={activeTab === FollowersTabs.FOLLOWERS}>
+      )}
+
+      {activeTab === FollowersTabs.FOLLOWERS && (
         <FollowersList
           currentUserId={currentUserId}
           profileUserId={userId}
           setUserFeedTab={setUserFeedTab}
         />
-      </ConditionalRender>
-      <ConditionalRender condition={activeTab.includes(PENDING_TAB) && isMe && isPrivateNetwork}>
-        <PendingList />
-      </ConditionalRender>
+      )}
+
+      {activeTab.includes(PENDING_TAB) && isMe && isPrivateNetwork && <PendingList />}
     </div>
   );
 };

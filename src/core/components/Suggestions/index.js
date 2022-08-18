@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 
 import useKeyboard from '~/core/hooks/useKeyboard';
 import { MenuItem } from '~/core/components/Menu';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
 const MenuList = styled.div`
   flex: 1 1 auto;
@@ -84,25 +83,24 @@ const Suggestions = ({ items, onPick = () => {}, append, children }) => {
     Enter: () => onPick(active),
   });
 
-  return (
-    <ConditionalRender condition={!!items.length}>
-      <MenuList ref={list} onMouseLeave={onMouseLeave}>
-        {items.map((item, index) => (
-          <MenuItem
-            key={`#${index}`}
-            hover={index === active}
-            onClick={onClick(index)}
-            onMouseEnter={onMouseEnter(index)}
-          >
-            {render(item)}
-          </MenuItem>
-        ))}
-        {append && <MenuItem>{append}</MenuItem>}
-      </MenuList>
-      <Placeholder>
-        <FormattedMessage id="placeholder.noResults" />
-      </Placeholder>
-    </ConditionalRender>
+  return items.length ? (
+    <MenuList ref={list} onMouseLeave={onMouseLeave}>
+      {items.map((item, index) => (
+        <MenuItem
+          key={`#${index}`}
+          hover={index === active}
+          onClick={onClick(index)}
+          onMouseEnter={onMouseEnter(index)}
+        >
+          {render(item)}
+        </MenuItem>
+      ))}
+      {append && <MenuItem>{append}</MenuItem>}
+    </MenuList>
+  ) : (
+    <Placeholder>
+      <FormattedMessage id="placeholder.noResults" />
+    </Placeholder>
   );
 };
 

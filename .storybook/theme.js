@@ -3,7 +3,7 @@ import logo from './amity-logo.svg';
 
 export default create({
   base: 'light',
-  brandTitle: 'Upstra',
+  brandTitle: 'Amity',
   brandImage: logo,
-  brandUrl: 'https://upstra.co/',
+  brandUrl: 'https://www.amity.co/',
 });

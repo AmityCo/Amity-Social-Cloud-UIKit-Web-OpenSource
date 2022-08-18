@@ -1,26 +1,27 @@
-import React, { memo, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { memo, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
-import useKeyboard from '~/core/hooks/useKeyboard';
-import Menu, { MenuItem } from '~/core/components/Menu';
-import Dropdown from '~/core/components/Dropdown';
-import ConditionalRender from '~/core/components/ConditionalRender';
-import { ChevronDown } from '~/icons';
-import { DefaultTrigger, ItemsContainer } from './styles';
+import useKeyboard from "~/core/hooks/useKeyboard";
+import Menu, { MenuItem } from "~/core/components/Menu";
+import Dropdown from "~/core/components/Dropdown";
+import { ChevronDown } from "~/icons";
+import { DefaultTrigger, ItemsContainer } from "./styles";
 
 const itemRenderer = ({ value }) => <div>{value}</div>;
 const triggerRenderer = ({ placeholder, selected, ...props }) => {
   return (
     <DefaultTrigger {...props}>
-      <ConditionalRender condition={selected.length}>
+      {selected.length ? (
         <ItemsContainer>
           {selected.map(({ name, value }) => (
             <span key={value}>{name}</span>
           ))}
         </ItemsContainer>
+      ) : (
         <div>{placeholder}</div>
-      </ConditionalRender>
-      <ChevronDown height={14} width={14} />
+      )}
+
+      <ChevronDown />
     </DefaultTrigger>
   );
 };
@@ -37,8 +38,8 @@ const Select = ({
   // we pass isOpen and handleClose to manage dropdown state from parent
   isOpen,
   handleClose,
-  placeholder = 'Select...',
-  className = '',
+  placeholder = "Select...",
+  className = "",
 }) => {
   const [isOpenInternal, setIsOpenInternal] = useState(isOpen);
   const [selected, setSelected] = useState(value);
@@ -66,7 +67,9 @@ const Select = ({
     onSelect(selectedItem);
 
     if (multiple) {
-      const index = selected.findIndex((item) => item.value === selectedItem.value);
+      const index = selected.findIndex(
+        (item) => item.value === selectedItem.value
+      );
       if (index >= 0) {
         // remove item if selected twice
         remove(index);
@@ -88,7 +91,13 @@ const Select = ({
     <Dropdown
       isOpen={isOpen || isOpenInternal}
       renderTrigger={(props) =>
-        renderTrigger({ ...props, onClick: handleClick, selected, remove, placeholder })
+        renderTrigger({
+          ...props,
+          onClick: handleClick,
+          selected,
+          remove,
+          placeholder,
+        })
       }
       // when using custom trigger we should handle "close on click outside" (if needed)
       handleClose={close}
@@ -98,7 +107,7 @@ const Select = ({
       disabled={disabled}
       className={className}
     >
-      <ConditionalRender condition={options && options.length}>
+      {options && options.length > 0 && (
         <Menu>
           {options.map((option) => {
             return (
@@ -112,17 +121,16 @@ const Select = ({
             );
           })}
         </Menu>
-      </ConditionalRender>
+      )}
     </Dropdown>
   );
 };
 Select.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
+  value: PropTypes.arrayOf(
+    PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })
+  ),
   options: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      value: PropTypes.any,
-    }),
+    PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })
   ),
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,

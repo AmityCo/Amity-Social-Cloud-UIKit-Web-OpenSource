@@ -33,9 +33,9 @@ export const Avatar = ({ backgroundImage, isClickable, onClick, ...props }) => {
 
 Avatar.argTypes = {
   avatar: { control: { type: 'text' } },
-  size: { control: { type: 'select', options: ['small', 'big', 'tiny'] } },
+  size: { control: { type: 'select' }, options: ['small', 'big', 'tiny'] },
   className: { control: { type: 'text' } },
-  backgroundImage: { control: { type: 'select', options: ['', 'user', 'community', 'category'] } },
+  backgroundImage: { control: { type: 'select' }, options: ['', 'user', 'community', 'category'] },
   isClickable: { control: { type: 'boolean' } },
   onClick: { action: 'onClick()' },
 };
