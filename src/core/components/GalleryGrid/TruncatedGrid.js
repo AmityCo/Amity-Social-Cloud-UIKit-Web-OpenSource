@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import cx from 'classnames';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
-
 import Square from '~/core/components/Square';
 import { ImageRenderer } from './styles';
 
@@ -151,9 +149,7 @@ const TruncatedGrid = ({ className, items, onClick, children, itemKeyProp }) => 
         {length >= 4 && (
           <Cell key={`#${itemKeyProp ? items[3][itemKeyProp] : 4}`} onClick={handleClick(3)}>
             {render(items[3])}
-            <ConditionalRender condition={length > 4}>
-              <Overlay>+{length - 4}</Overlay>
-            </ConditionalRender>
+            {length > 4 && <Overlay>+{length - 4}</Overlay>}
           </Cell>
         )}
       </Gallery>

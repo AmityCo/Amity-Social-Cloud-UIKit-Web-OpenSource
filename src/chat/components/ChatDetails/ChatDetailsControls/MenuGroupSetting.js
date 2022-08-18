@@ -6,13 +6,11 @@ import GroupSettings from '~/chat/components/GroupSettings';
 
 import { ControlItem, ControlItemLabel, SideWrapper, GroupSettingIcon } from './styles';
 
-const channelRepo = new ChannelRepository();
-
 const MenuGroupSetting = ({ chatName, channelId }) => {
   const [shouldShowSettingsModal, setShouldShowSettingsModal] = useState(false);
 
   const updateGroupName = (newGroupChatName) => {
-    channelRepo.setDisplayName({ channelId, displayName: newGroupChatName });
+    ChannelRepository.setDisplayName({ channelId, displayName: newGroupChatName });
   };
 
   return (

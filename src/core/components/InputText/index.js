@@ -3,7 +3,7 @@ import { Mention, MentionsInput } from 'react-mentions';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import cx from 'classnames';
-import TextareaAutosize from 'react-autosize-textarea';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import ConditionalRender from '~/core/components/ConditionalRender';
 import SocialMentionItem from '~/core/components/SocialMentionItem';
@@ -123,108 +123,110 @@ const renderMentionItem = (
   />
 );
 
-const InputText = (
-  {
-    id,
-    name = '',
-    value = '',
-    placeholder = '',
-    multiline = false,
-    disabled = false,
-    invalid = false,
-    rows = 1,
-    maxRows = 3,
-    prepend,
-    append,
-    onChange,
-    onClear = () => {},
-    onClick = () => {},
-    onKeyPress = () => {},
-    className = null,
-    mentionAllowed = false,
-    queryMentionees = () => [],
-    loadMoreMentionees = () => [],
-  },
-  ref,
-) => {
-  const mentionRef = useRef();
-  const handleMentionInput = useCallback(
-    (e, [,], newPlainVal, mentions) => {
-      // Get last item of mention and save it in upper parent component
-      // This way we can call loadMoreMentionees and append new values
-      // inside the existing array
-      const lastSegment = newPlainVal.split(' ').pop();
-      const isMentionText = lastSegment[0]?.match(/^@/g);
-
-      onChange({
-        text: e.target.value,
-        plainText: newPlainVal,
-        lastMentionText: isMentionText && lastSegment,
-        mentions,
-      });
+const InputText = forwardRef(
+  (
+    {
+      id,
+      name = '',
+      value = '',
+      placeholder = '',
+      multiline = false,
+      disabled = false,
+      invalid = false,
+      rows = 1,
+      maxRows = 3,
+      prepend,
+      append,
+      onChange,
+      onClear = () => {},
+      onClick = () => {},
+      onKeyPress = () => {},
+      className = null,
+      mentionAllowed = false,
+      queryMentionees = () => [],
+      loadMoreMentionees = () => [],
     },
-    [onChange],
-  );
+    ref,
+  ) => {
+    const mentionRef = useRef();
+    const handleMentionInput = useCallback(
+      (e, [,], newPlainVal, mentions) => {
+        // Get last item of mention and save it in upper parent component
+        // This way we can call loadMoreMentionees and append new values
+        // inside the existing array
+        const lastSegment = newPlainVal.split(' ').pop();
+        const isMentionText = lastSegment[0]?.match(/^@/g);
 
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (e.key === 'Backspace' && value.length === 0) onClear();
-    },
-    [onClear, value.length],
-  );
+        onChange({
+          text: e.target.value,
+          plainText: newPlainVal,
+          lastMentionText: isMentionText && lastSegment,
+          mentions,
+        });
+      },
+      [onChange],
+    );
 
-  const classNames = cx(className, { disabled, invalid });
+    const handleKeyDown = useCallback(
+      (e) => {
+        if (e.key === 'Backspace' && value.length === 0) onClear();
+      },
+      [onClear, value.length],
+    );
 
-  const props = {
-    id,
-    name,
-    value,
-    placeholder,
-    disabled,
-    onChange: mentionAllowed ? handleMentionInput : (e) => onChange(e.target.value),
-    onKeyDown: handleKeyDown,
-    className: classNames,
-  };
+    const classNames = cx(className, { disabled, invalid });
 
-  return (
-    <Container className={classNames}>
-      {prepend}
-      <div ref={mentionRef} id="mention-input" />
-      {multiline && mentionAllowed && (
-        <StyledMentionsInput
-          allowSuggestionsAboveCursor
-          inputRef={ref}
-          rows={rows}
-          maxrows={maxRows}
-          suggestionsPortalHost={mentionRef?.current}
-          style={suggestListStyles}
-          {...props}
-          onClick={onClick}
-          onKeyPress={onKeyPress}
-        >
-          <Mention
-            trigger="@"
-            data={queryMentionees}
-            style={mentionStyle}
-            renderSuggestion={(...args) =>
-              renderMentionItem(...args, queryMentionees?.length, mentionRef, loadMoreMentionees)
-            }
-            displayTransform={displayTransform}
-            appendSpaceOnAdd
-            onAdd={() => {}}
-          />
-        </StyledMentionsInput>
-      )}
-      <ConditionalRender condition={multiline}>
-        {!mentionAllowed && (
-          <TextArea ref={ref} rows={rows} maxRows={maxRows} {...props} onClick={onClick} />
+    const props = {
+      id,
+      name,
+      value,
+      placeholder,
+      disabled,
+      onChange: mentionAllowed ? handleMentionInput : (e) => onChange(e.target.value),
+      onKeyDown: handleKeyDown,
+      className: classNames,
+    };
+
+    return (
+      <Container className={classNames}>
+        {prepend}
+        <div ref={mentionRef} id="mention-input" />
+        {multiline && mentionAllowed && (
+          <StyledMentionsInput
+            allowSuggestionsAboveCursor
+            inputRef={ref}
+            rows={rows}
+            maxrows={maxRows}
+            suggestionsPortalHost={mentionRef?.current}
+            style={suggestListStyles}
+            {...props}
+            onClick={onClick}
+            onKeyPress={onKeyPress}
+          >
+            <Mention
+              trigger="@"
+              data={queryMentionees}
+              style={mentionStyle}
+              renderSuggestion={(...args) =>
+                renderMentionItem(...args, queryMentionees?.length, mentionRef, loadMoreMentionees)
+              }
+              displayTransform={displayTransform}
+              appendSpaceOnAdd
+              onAdd={() => {}}
+            />
+          </StyledMentionsInput>
         )}
-        <TextField ref={ref} {...props} onClick={onClick} />
-      </ConditionalRender>
-      {append}
-    </Container>
-  );
-};
+        <ConditionalRender condition={multiline}>
+          {!mentionAllowed && (
+            <TextArea ref={ref} minRows={rows} maxRows={maxRows} {...props} onClick={onClick} />
+          )}
+          <TextField ref={ref} {...props} onClick={onClick} />
+        </ConditionalRender>
+        {append}
+      </Container>
+    );
+  },
+);
 
 InputText.propTypes = {
   id: PropTypes.string,
@@ -249,4 +251,4 @@ InputText.propTypes = {
   onClick: PropTypes.func,
 };
 
-export default forwardRef(InputText);
+export default InputText;

@@ -45,10 +45,8 @@ UITrendingItem.args = {
 
 UITrendingItem.argTypes = {
   communityCategories: {
-    control: {
-      type: 'inline-check',
-      options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
-    },
+    control: { type: 'inline-check' },
+    options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
   },
   slim: { control: { type: 'boolean' } },
   onClick: { action: 'onClick(communityId)' },

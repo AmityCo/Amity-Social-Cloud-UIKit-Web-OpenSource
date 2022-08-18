@@ -7,6 +7,7 @@ util
 .npmrc
 .eslintrc
 .eslintignore
+.eslintcache
 .prettierrc
 webpack.config.js
 build/report.html

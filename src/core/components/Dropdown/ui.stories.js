@@ -37,8 +37,8 @@ SimpleDropdown.args = {
 
 SimpleDropdown.argTypes = {
   isOpen: { control: { type: 'boolean' } },
-  position: { control: { type: 'select', options: [POSITION_TOP, POSITION_BOTTOM] } },
-  align: { control: { type: 'select', options: [POSITION_LEFT, POSITION_RIGHT] } },
+  position: { control: { type: 'select' }, options: [POSITION_TOP, POSITION_BOTTOM] },
+  align: { control: { type: 'select' }, options: [POSITION_LEFT, POSITION_RIGHT] },
   onClick: { action: 'onClick()' },
 };
 
@@ -83,8 +83,8 @@ DropdownWithCustomTrigger.args = {
 
 DropdownWithCustomTrigger.argTypes = {
   isOpen: { control: { type: 'boolean' } },
-  position: { control: { type: 'select', options: [POSITION_TOP, POSITION_BOTTOM] } },
-  align: { control: { type: 'select', options: [POSITION_LEFT, POSITION_RIGHT] } },
+  position: { control: { type: 'select' }, options: [POSITION_TOP, POSITION_BOTTOM] },
+  align: { control: { type: 'select' }, options: [POSITION_LEFT, POSITION_RIGHT] },
   onClick: { action: 'onClick()' },
 };
 
@@ -128,6 +128,6 @@ ScrollableDropdownWithCustomTrigger.argTypes = {
   isOpen: { control: { type: 'boolean' } },
   fullSized: { control: { type: 'boolean' } },
   scrollable: { control: { type: 'boolean' } },
-  position: { control: { type: 'select', options: [POSITION_TOP, POSITION_BOTTOM] } },
+  position: { control: { type: 'select' }, options: [POSITION_TOP, POSITION_BOTTOM] },
   onClick: { action: 'onClick()' },
 };

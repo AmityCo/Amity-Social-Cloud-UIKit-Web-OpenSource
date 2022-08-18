@@ -32,18 +32,19 @@ const UIEngagementBar = ({
 }) => (
   <EngagementBarContainer>
     <Counters>
-      <ConditionalRender condition={totalLikes > 0}>
+      {totalLikes > 0 && (
         <span>
           {toHumanString(totalLikes)}{' '}
           <FormattedMessage id="plural.like" values={{ amount: totalLikes }} />
         </span>
-      </ConditionalRender>
-      <ConditionalRender condition={totalComments > 0}>
+      )}
+
+      {totalComments > 0 && (
         <span>
           {toHumanString(totalComments)}{' '}
           <FormattedMessage id="plural.comment" values={{ amount: totalComments }} />
         </span>
-      </ConditionalRender>
+      )}
     </Counters>
     <ConditionalRender condition={!readonly}>
       <>
@@ -58,9 +59,10 @@ const UIEngagementBar = ({
           referenceType={CommentReferenceType.Post}
           last={COMMENTS_PER_PAGE}
         />
-        <ConditionalRender condition={isComposeBarDisplayed}>
+
+        {isComposeBarDisplayed && (
           <CommentComposeBar postId={postId} postType={targetType} onSubmit={handleAddComment} />
-        </ConditionalRender>
+        )}
       </>
       <>
         <NoInteractionMessage>

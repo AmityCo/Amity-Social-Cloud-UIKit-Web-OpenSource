@@ -112,14 +112,12 @@ const PollContent = ({ items }) => {
   return (
     <div>
       <PollInformation>
-        <ConditionalRender condition={!isClosed}>
-          <Title>
+        <Title>
+          <ConditionalRender condition={!isClosed}>
             <FormattedMessage id="poll.vote.closedIn" values={{ closedIn: closedInDays }} />
-          </Title>
-          <Title>
             <FormattedMessage id="poll.vote.finalResults" />
-          </Title>
-        </ConditionalRender>
+          </ConditionalRender>
+        </Title>
         <VoteCounter>
           <FormattedMessage id="poll.votes" values={{ voteCount: totalVotes }} />
         </VoteCounter>

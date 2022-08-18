@@ -1,17 +1,8 @@
-import React from 'react';
-import { configure, addDecorator } from '@storybook/react';
+import { FluidControl, UiKitDecorator } from './decorators';
 
-import * as decorators from './decorators';
+const decorators = [ FluidControl.decorator, UiKitDecorator.decorator];
 
-export const globalTypes = Object.values(decorators)
-  .map(({ global }) => global)
-  .reduce((obj, item) => ({ ...obj, ...item }), {});
-
-Object.values(decorators)
-  .map(({ decorator }) => decorator)
-  .forEach(decorator => addDecorator(decorator));
-
-export const parameters = {
+const parameters = {
   options: {
     storySort: {
       order: [
@@ -25,3 +16,14 @@ export const parameters = {
     },
   },
 };
+
+const globalTypes = {
+  ...FluidControl.global,
+  ...UiKitDecorator.global,
+};
+
+export {
+  decorators,
+  globalTypes,
+  parameters,
+}

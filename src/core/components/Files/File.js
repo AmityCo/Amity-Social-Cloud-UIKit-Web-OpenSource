@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import filesize from 'filesize';
 
 import customizableComponent from '~/core/hocs/customization';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { FileIcon, FileName, FileSize, RemoveIcon } from '../Uploaders/File/styles';
 import { FileContainer, Content } from './styles';
 import ProgressBar from '~/core/components/ProgressBar';
@@ -23,15 +22,12 @@ const File = ({ file, onRemove }) => {
 
   return (
     <FileContainer>
-      <ConditionalRender condition={isNew}>
-        <ProgressBar progress={progress} />
-      </ConditionalRender>
+      {isNew && <ProgressBar progress={progress} />}
+
       <Content>
         <FileIcon file={{ name, type }} width={null} height="100%" />
-        <FileName>{file.name}</FileName> <FileSize>{filesize(file.size)}</FileSize>
-        <ConditionalRender condition={onRemove}>
-          <RemoveIcon onClick={() => onRemove(file)} />
-        </ConditionalRender>
+        <FileName>{file.name}</FileName> <FileSize>{filesize(file.size, { base: 2 })}</FileSize>
+        {onRemove && <RemoveIcon onClick={() => onRemove(file)} />}
       </Content>
     </FileContainer>
   );

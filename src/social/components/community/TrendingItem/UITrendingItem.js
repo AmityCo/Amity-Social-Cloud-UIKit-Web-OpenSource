@@ -6,7 +6,6 @@ import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityName from '~/social/components/community/Name';
 
 const ItemContainer = styled.div`
@@ -107,7 +106,7 @@ const UITrendingItem = ({
           <TrendingCommunityName isOfficial={isOfficial} isPublic={isPublic} name={name} />
 
           <Infos>
-            <ConditionalRender condition={categories.length > 0}>
+            {categories.length > 0 && (
               <Truncate lines={1}>
                 <Categories>
                   {categories.map((category) => (
@@ -115,7 +114,8 @@ const UITrendingItem = ({
                   ))}
                 </Categories>
               </Truncate>
-            </ConditionalRender>
+            )}
+
             <span>
               {toHumanString(membersCount)}{' '}
               <FormattedMessage id="plural.member" values={{ amount: membersCount }} />

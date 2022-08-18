@@ -26,7 +26,7 @@ ActionItem.args = {
 };
 
 ActionItem.argTypes = {
-  element: { control: { type: 'select', options: ALLOWED_ELEMENTS } },
+  element: { control: { type: 'select' }, options: ALLOWED_ELEMENTS },
   children: { control: { type: 'text' } },
   active: { control: { type: 'boolean' } },
   showIcon: { control: { type: 'boolean' } },

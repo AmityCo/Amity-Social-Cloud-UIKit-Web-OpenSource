@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '~/core/components/Button';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
 export const VISIBLE_AMOUNT = 5;
 
@@ -31,14 +30,15 @@ const Collapsible = ({
     onExpand();
   };
 
+  if (expanded) {
+    return children;
+  }
+
   return (
-    <ConditionalRender condition={expanded}>
-      {children}
-      <>
-        {visibleChildren}
-        {renderTrigger(handleExpand)}
-      </>
-    </ConditionalRender>
+    <>
+      {visibleChildren}
+      {renderTrigger(handleExpand)}
+    </>
   );
 };
 

@@ -163,7 +163,8 @@ const UIUserInfo = ({
         <FormattedMessage id="counter.followers" />
       </CountContainer>
       <Description>{description}</Description>
-      <ConditionalRender condition={isMyProfile && pendingUsers.length > 0 && isPrivateNetwork}>
+
+      {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
         <PendingNotification
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
@@ -178,7 +179,7 @@ const UIUserInfo = ({
             <FormattedMessage id="follow.pendingNotification.body" />
           </NotificationBody>
         </PendingNotification>
-      </ConditionalRender>
+      )}
     </Container>
   );
 };

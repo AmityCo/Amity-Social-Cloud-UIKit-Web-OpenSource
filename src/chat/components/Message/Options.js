@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { MessageEditorRepository, MessageFlagRepository } from '@amityco/js-sdk';
+import styled from 'styled-components';
+import React, { useRef, useState, useEffect } from 'react';
+import { MessageRepository } from '@amityco/js-sdk';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import Popover from '~/core/components/Popover';
@@ -8,29 +9,31 @@ import { notification } from '~/core/components/Notification';
 
 import { MessageOptionsIcon, SaveIcon, CloseIcon, EditingInput, EditingContainer } from './styles';
 
+const StyledPopover = styled(Popover)`
+  transform: none !important;
+  position: absolute !important;
+  top: calc(100% + 10px) !important;
+
+  ${({ align, theme }) =>
+    align === 'end' &&
+    `color: ${theme.palette.neutral.main}; left: auto !important; right: 0 !important;`}
+`;
+
 const Flagging = ({ messageId }) => {
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(null);
-  const [flagRepo, setFlagRepo] = useState(null);
-
   useEffect(() => {
     if (!messageId) return;
-    const flagRepository = new MessageFlagRepository(messageId);
-    setFlagRepo(flagRepository);
-    flagRepository.isFlaggedByMe().then(setIsFlaggedByMe);
+    MessageRepository.isFlaggedByMe(messageId).then(setIsFlaggedByMe);
   }, [messageId]);
 
   const flagMessage = () => {
-    if (!flagRepo) return;
-
-    flagRepo.flag().then(() => {
+    MessageRepository.flag(messageId).then(() => {
       setIsFlaggedByMe(true);
     });
   };
 
   const unflagMessage = () => {
-    if (!flagRepo) return;
-
-    flagRepo.unflag().then(() => {
+    MessageRepository.unflag(messageId).then(() => {
       setIsFlaggedByMe(false);
     });
   };
@@ -49,6 +52,7 @@ const Flagging = ({ messageId }) => {
 };
 
 const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
+  const popupContainerRef = useRef();
   const [text, setText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
@@ -72,20 +76,17 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   };
 
   const save = () => {
-    const editor = new MessageEditorRepository(messageId);
-    editor
-      .editText(text)
+    MessageRepository.updateMessage({ messageId, data: { text } })
+      .then(close)
       .catch(() => {
         notification.error({
           content: formatMessage({ id: 'message.saveOptionsError' }),
         });
-      })
-      .then(close);
+      });
   };
 
   const deleteMessage = () => {
-    const editor = new MessageEditorRepository(messageId);
-    editor.delete().then(close);
+    MessageRepository.deleteMessage(messageId).then(close);
   };
 
   const menu = (
@@ -121,17 +122,20 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   );
 
   return (
-    <Popover
-      isOpen={isOpen}
-      position="bottom"
-      align={isIncoming ? 'start' : 'end'}
-      content={isEditing ? editing : menu}
-      onClickOutside={close}
-    >
-      <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
-        <MessageOptionsIcon />
-      </div>
-    </Popover>
+    <div ref={popupContainerRef} style={{ position: 'relative' }}>
+      <StyledPopover
+        isOpen={isOpen}
+        position={['bottom']}
+        align={isIncoming ? 'start' : 'end'}
+        content={isEditing ? editing : menu}
+        parentElement={popupContainerRef.current}
+        onClickOutside={close}
+      >
+        <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
+          <MessageOptionsIcon />
+        </div>
+      </StyledPopover>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ const SocialMentionDropdown = ({ items = [] }) => {
 };
 
 SocialMentionDropdown.propTypes = {
-  items: PropTypes.array(),
+  items: PropTypes.array,
 };
 
 export default SocialMentionDropdown;

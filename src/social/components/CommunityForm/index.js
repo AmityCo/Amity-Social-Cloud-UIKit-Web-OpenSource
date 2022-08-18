@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import Switch from '~/core/components/Switch';
 import Button from '~/core/components/Button';
 import Radios from '~/core/components/Radio';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useElement from '~/core/hooks/useElement';
 import customizableComponent from '~/core/hocs/customization';
@@ -116,10 +115,11 @@ const CommunityForm = ({
     [community],
   );
 
-  const { register, handleSubmit, errors, setError, watch, control, formState } = useForm({
+  const { register, handleSubmit, setError, watch, control, formState } = useForm({
     defaultValues,
   });
 
+  const { errors } = formState;
   const displayName = watch('displayName', '');
   const description = watch('description', '');
   const categoryId = watch('categoryId', '');
@@ -153,7 +153,9 @@ const CommunityForm = ({
         setError('displayName', { message: 'Name cannot be empty' });
         return;
       }
-      if (!isPublic && data.userIds?.length === 0) {
+
+      // Cannot update community members with this endpoint.
+      if (!edit && !isPublic && data.userIds?.length === 0) {
         setError('userIds', { message: 'Please select at least one member' });
         return;
       }
@@ -196,8 +198,8 @@ const CommunityForm = ({
             <Controller
               name="avatarFileId"
               control={control}
-              render={({ onChange, ...rest }) => (
-                <AvatarUploader mimeType="image/png, image/jpeg" onChange={onChange} {...rest} />
+              render={({ field: { ref, ...rest } }) => (
+                <AvatarUploader mimeType="image/png, image/jpeg" {...rest} />
               )}
               defaultValue={null}
             />
@@ -210,7 +212,7 @@ const CommunityForm = ({
               <Counter>{displayName.length}/30</Counter>
             </LabelCounterWrapper>
             <TextField
-              ref={register({
+              {...register('displayName', {
                 required: 'Name is required',
                 maxLength: {
                   value: 30,
@@ -218,8 +220,6 @@ const CommunityForm = ({
                 },
               })}
               placeholder="Enter community name"
-              id="displayName"
-              name="displayName"
             />
             <ErrorMessage errors={errors} name="displayName" />
           </Field>
@@ -231,11 +231,10 @@ const CommunityForm = ({
               <Counter>{description.length}/180</Counter>
             </LabelCounterWrapper>
             <AboutTextarea
-              ref={register({
+              {...register('description', {
                 maxLength: { value: 180, message: 'Description text is too long' },
               })}
               placeholder="Enter description"
-              name="description"
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
@@ -244,16 +243,19 @@ const CommunityForm = ({
               <FormattedMessage id="community.category" />
             </Label>
             <Controller
-              ref={register({ required: 'Category is required' })}
+              rules={{ required: 'Category is required' }}
               name="categoryId"
-              render={(props) => <CategorySelector parentContainer={formBodyElement} {...props} />}
+              render={({ field: { ref, ...rest } }) => (
+                <CategorySelector parentContainer={formBodyElement} {...rest} />
+              )}
               control={control}
               defaultValue=""
             />
             <ErrorMessage errors={errors} name="category" />
           </Field>
         </FormBlock>
-        <ConditionalRender condition={false}>
+
+        {false && (
           <FormBlock title="Post permission" edit={edit}>
             <SwitchContainer>
               <div>
@@ -267,24 +269,26 @@ const CommunityForm = ({
               </div>
               <Controller
                 name="onlyAdminCanPost"
-                render={({ value, onChange }) => (
+                render={({ field: { value, onChange } }) => (
                   <Switch value={value} onChange={() => onChange(!value)} />
                 )}
                 control={control}
               />
             </SwitchContainer>
           </FormBlock>
-        </ConditionalRender>
+        )}
+
         <FormBlock title={<FormattedMessage id="community.categorypermission" />} edit={edit}>
           <Controller
             name="isPublic"
-            render={({ value, onChange }) => (
+            render={({ field: { value, onChange } }) => (
               <Radios items={communityTypeItems} value={value} onChange={() => onChange(!value)} />
             )}
             control={control}
           />
         </FormBlock>
-        <ConditionalRender condition={!isPublic && !edit}>
+
+        {!isPublic && !edit && (
           <FormBlock title="Community members" edit={edit}>
             <MembersField error={errors.userIds}>
               <Label name="userIds" className="required">
@@ -292,16 +296,18 @@ const CommunityForm = ({
               </Label>
               <Controller
                 name="userIds"
-                render={(props) => <UserSelector parentContainer={formBodyElement} {...props} />}
+                render={({ field: { ref, ...rest } }) => (
+                  <UserSelector parentContainer={formBodyElement} {...rest} />
+                )}
                 control={control}
               />
               <ErrorMessage errors={errors} name="userIds" />
             </MembersField>
           </FormBlock>
-        </ConditionalRender>
+        )}
       </FormBody>
       <Footer edit={edit}>
-        <ConditionalRender condition={!edit}>
+        {!edit && (
           <Button
             onClick={(e) => {
               e.preventDefault();
@@ -310,7 +316,8 @@ const CommunityForm = ({
           >
             <FormattedMessage id="cancel" />
           </Button>
-        </ConditionalRender>
+        )}
+
         <SubmitButton disabled={disabled} edit={edit}>
           {edit ? <FormattedMessage id="save" /> : <FormattedMessage id="create" />}
         </SubmitButton>

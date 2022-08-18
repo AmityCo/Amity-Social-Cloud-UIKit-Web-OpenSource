@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -47,6 +47,12 @@ const CommunityListLoader = styled.h4`
   text-align: center;
 `;
 
+const StyledPopover = styled(Popover)`
+  transform: none !important;
+  position: absolute !important;
+  top: 45px !important;
+`;
+
 const PostTargetSelector = ({
   user,
   communities,
@@ -57,6 +63,7 @@ const PostTargetSelector = ({
 
   children,
 }) => {
+  const popupContainerRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
 
   const open = () => setIsOpen(true);
@@ -108,18 +115,19 @@ const PostTargetSelector = ({
   );
 
   return (
-    <div>
-      <Popover
+    <div ref={popupContainerRef} style={{ position: 'relative' }}>
+      <StyledPopover
         isOpen={isOpen}
-        position="bottom"
+        position={['bottom']}
         align="start"
         content={menu}
+        parentElement={popupContainerRef.current}
         onClickOutside={close}
       >
         <PostTargetSelectorContainer onClick={open}>
           {children} <SelectIcon />
         </PostTargetSelectorContainer>
-      </Popover>
+      </StyledPopover>
     </div>
   );
 };
