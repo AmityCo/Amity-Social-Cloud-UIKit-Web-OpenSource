@@ -10,7 +10,6 @@ import ChatHeader from '~/chat/components/ChatHeader';
 import { ChannelContainer } from './styles';
 
 const channelRepo = new ChannelRepository();
-const messageRepo = new MessageRepository();
 
 const Chat = ({ channelId, channelType, onChatDetailsClick, shouldShowChatDetails }) => {
   const [isReading, setIsReading] = useState(false);
@@ -42,7 +41,7 @@ const Chat = ({ channelId, channelType, onChatDetailsClick, shouldShowChatDetail
   }, [channelId, channelType]);
 
   const sendMessage = (text) => {
-    messageRepo.createTextMessage({
+    MessageRepository.createTextMessage({
       channelId,
       text,
     });

@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
 import Avatar from '~/core/components/Avatar';
 import { Remove } from '~/icons';
@@ -56,11 +55,11 @@ const UserChip = ({ userId, displayName = 'Anonymous', fileUrl, onClick = () => 
       <Avatar size="tiny" avatar={fileUrl} backgroundImage={UserImage} />
       <Name>{displayName}</Name>
 
-      <ConditionalRender condition={!!onRemove}>
+      {!!onRemove && (
         <RoundButton onClick={handleRemove}>
           <Close />
         </RoundButton>
-      </ConditionalRender>
+      )}
     </Chip>
   );
 };

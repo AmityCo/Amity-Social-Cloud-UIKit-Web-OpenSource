@@ -2,7 +2,6 @@ import React, { memo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import UserProfileForm from '~/social/components/UserProfileForm';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import BackLink from '~/core/components/BackLink';
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
@@ -63,11 +62,11 @@ const ProfileSettings = ({ userId, client }) => {
         <ProfileSettingsTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
       <ActiveTabContainer>
-        <ConditionalRender condition={activeTab === Tabs.EDIT_PROFILE}>
+        {activeTab === Tabs.EDIT_PROFILE && (
           <ActiveTabContent>
             <UserProfileForm user={user} onSubmit={handleSubmit} />
           </ActiveTabContent>
-        </ConditionalRender>
+        )}
       </ActiveTabContainer>
     </Container>
   );

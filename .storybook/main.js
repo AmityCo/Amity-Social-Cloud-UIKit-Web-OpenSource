@@ -6,13 +6,18 @@ module.exports = {
   stories: ['../src/**/*.stories.js'],
   // Add any Storybook addons you want here: https://storybook.js.org/addons/
   addons: [
-    '@storybook/addon-controls',
     '@storybook/addon-actions',
-    '@storybook/addon-viewport',
-    '@storybook/addon-a11y',
     '@storybook/addon-backgrounds',
+    '@storybook/addon-controls',
+    '@storybook/addon-viewport',
     '@storybook/addon-toolbars',
+
+    '@storybook/addon-a11y',
   ],
+  framework: '@storybook/react',
+  core: {
+    builder: '@storybook/builder-webpack5'
+  },
   webpackFinal: async config => {
     config.plugins.push(
       new DefinePlugin({

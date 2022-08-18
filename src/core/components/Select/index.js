@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import useKeyboard from '~/core/hooks/useKeyboard';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import Dropdown from '~/core/components/Dropdown';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { ChevronDown } from '~/icons';
 import { DefaultTrigger, ItemsContainer } from './styles';
 
@@ -12,14 +11,16 @@ const itemRenderer = ({ value }) => <div>{value}</div>;
 const triggerRenderer = ({ placeholder, selected, ...props }) => {
   return (
     <DefaultTrigger {...props}>
-      <ConditionalRender condition={selected.length}>
+      {selected.length ? (
         <ItemsContainer>
           {selected.map(({ name, value }) => (
             <span key={value}>{name}</span>
           ))}
         </ItemsContainer>
+      ) : (
         <div>{placeholder}</div>
-      </ConditionalRender>
+      )}
+
       <ChevronDown height={14} width={14} />
     </DefaultTrigger>
   );
@@ -98,7 +99,7 @@ const Select = ({
       disabled={disabled}
       className={className}
     >
-      <ConditionalRender condition={options && options.length}>
+      {options && options.length > 0 && (
         <Menu>
           {options.map((option) => {
             return (
@@ -112,18 +113,13 @@ const Select = ({
             );
           })}
         </Menu>
-      </ConditionalRender>
+      )}
     </Dropdown>
   );
 };
 Select.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      value: PropTypes.any,
-    }),
-  ),
+  value: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })),
+  options: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })),
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
   parentContainer: PropTypes.instanceOf(Element),

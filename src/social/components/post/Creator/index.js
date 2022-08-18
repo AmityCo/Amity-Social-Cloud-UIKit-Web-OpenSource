@@ -14,7 +14,6 @@ import useUser from '~/core/hooks/useUser';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useErrorNotification from '~/core/hooks/useErrorNotification';
 import { notification } from '~/core/components/Notification';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
@@ -46,7 +45,7 @@ import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 import promisify from '~/helpers/promisify';
 
 const communityFetcher = (id) => () => CommunityRepository.communityForId(id);
-const userFetcher = (id) => () => new UserRepository().userForId(id);
+const userFetcher = (id) => () => UserRepository.getUser(id);
 
 const mentioneeCommunityFetcher = async (communityId, search) => {
   const communityMemberLiveCollection = CommunityRepository.getCommunityMembers({
@@ -275,7 +274,7 @@ const PostCreatorBar = ({
         />
       )}
 
-      <ConditionalRender condition={enablePostTargetPicker}>
+      {enablePostTargetPicker ? (
         <PostTargetSelector
           user={user}
           communities={communities}
@@ -287,9 +286,10 @@ const PostCreatorBar = ({
         >
           {CurrentTargetAvatar}
         </PostTargetSelector>
+      ) : (
+        CurrentTargetAvatar
+      )}
 
-        {CurrentTargetAvatar}
-      </ConditionalRender>
       <PostContainer>
         <PostInputText
           data-qa-anchor="social-create-post-input"

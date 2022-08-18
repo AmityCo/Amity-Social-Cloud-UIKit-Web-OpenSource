@@ -98,7 +98,7 @@ const UserSelector = ({
 UserSelector.propTypes = {
   value: PropTypes.arrayOf(PropTypes.string),
   parentContainer: PropTypes.element,
-  currentUserId: PropTypes.number,
+  currentUserId: PropTypes.string,
   onChange: PropTypes.func,
 };
 

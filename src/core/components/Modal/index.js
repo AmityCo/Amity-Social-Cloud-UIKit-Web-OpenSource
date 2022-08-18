@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-
 import useElement from '~/core/hooks/useElement';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import {
   Overlay,
   ModalWindow,
@@ -27,18 +25,16 @@ const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean
   return (
     <Overlay onClick={onOverlayClick}>
       <ModalComponent tabIndex={0} {...attrProps}>
-        <ConditionalRender condition={title || onCancel}>
+        {(title || onCancel) && (
           <Header clean={clean}>
             {title}
-            <ConditionalRender condition={onCancel}>
-              <CloseIcon onClick={onCancel} />
-            </ConditionalRender>
+            {onCancel && <CloseIcon onClick={onCancel} />}
           </Header>
-        </ConditionalRender>
+        )}
+
         <Content isText={isText}>{children}</Content>
-        <ConditionalRender condition={footer}>
-          <Footer clean={clean}>{footer}</Footer>
-        </ConditionalRender>
+
+        {footer && <Footer clean={clean}>{footer}</Footer>}
       </ModalComponent>
     </Overlay>
   );

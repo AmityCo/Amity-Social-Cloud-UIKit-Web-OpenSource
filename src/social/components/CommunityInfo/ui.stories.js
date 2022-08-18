@@ -1,3 +1,4 @@
+import { CommunityPostSettings } from '@amityco/js-sdk';
 import React from 'react';
 
 import StyledCommunityInfo from './UICommunityInfo';
@@ -28,20 +29,18 @@ UiCommunityInfo.args = {
   canReviewPosts: false,
   name: 'Community Name',
   pendingPostsCount: 1,
-  needApprovalOnPostCreation: false,
+  postSetting: false,
 };
 
 UiCommunityInfo.argTypes = {
   // Use type select instead of array to avoid so many re-renders (and re-fetches of the community)
   communityCategories: {
-    control: {
-      type: 'select',
-      options: [
-        ['Category 1'],
-        ['Category 2', 'Another category'],
-        ['Category 2', 'Another category', 'Third category'],
-      ],
-    },
+    control: { type: 'select' },
+    options: [
+      ['Category 1'],
+      ['Category 2', 'Another category'],
+      ['Category 2', 'Another category', 'Third category'],
+    ],
   },
   postsCount: { control: { type: 'number' } },
   membersCount: { control: { type: 'number' } },
@@ -58,5 +57,8 @@ UiCommunityInfo.argTypes = {
   canReviewPosts: { control: { type: 'boolean' } },
   name: { control: { type: 'text' } },
   pendingPostsCount: { control: { type: 'number' } },
-  needApprovalOnPostCreation: { control: { type: 'boolean' } },
+  postSetting: {
+    control: { type: 'select' },
+    options: Object.values(CommunityPostSettings),
+  },
 };
