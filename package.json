@@ -33,11 +33,11 @@
     "format": "prettier --config ./.prettierrc.js --check 'src/**/*'"
   },
   "peerDependencies": {
+    "@noom/wax-component-library": ">=4.8.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "styled-components": "^5.1.1",
-    "@noom/wax-component-library": ">=4.8.0",
-    "react-router-dom": ">=6.3.0"
+    "react-router-dom": ">=6.3.0",
+    "styled-components": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
@@ -114,12 +114,12 @@
     "react-truncate-markup": "^5.0.0",
     "react-use": "^17.3.1",
     "recoil": "0.0.10",
-    "remark-gfm": "^3.0.1",
-    "remark-parse": "^10.0.1",
-    "remark-slate": "^1.8.6",
-    "slate": "^0.81.1",
+    "remark-gfm": "3.0.1",
+    "remark-parse": "10.0.1",
+    "remark-slate": "1.8.6",
+    "slate": "^0.82.0",
     "slate-history": "0.66.0",
-    "slate-react": "0.81.0",
+    "slate-react": "0.82.0",
     "unified": "^10.1.2",
     "uuid": "^8.3.2"
   },

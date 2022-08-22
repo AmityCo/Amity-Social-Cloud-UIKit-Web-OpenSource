@@ -57,13 +57,14 @@ const SERIALIZE_OPTS = {
     delete_mark: 'strikeThrough',
     inline_code_mark: 'code',
   },
+  ignoreParagraphNewline: true,
 };
 
 type TransformMetadata = { mentions?: MentionOutput[] };
 type TransformMap = Partial<
   Record<
     Element['type'] | 'text',
-    (el: Descendant, metadata?: TransformMetadata) => Descendant | Descendant[]
+    (el: Descendant, metadata?: TransformMetadata, nodeDepth?: number) => Descendant | Descendant[]
   >
 >;
 
@@ -71,17 +72,18 @@ function transformNodes(
   slateNode: Descendant,
   transformations: typeof serializeTransformElement,
   metadata?: TransformMetadata,
+  nodeDepth = 0,
 ): Descendant | Descendant[] {
   const node =
     isElement(slateNode) && typeof transformations[slateNode.type] === 'function'
-      ? transformations[slateNode.type]?.(slateNode, metadata)
+      ? transformations[slateNode.type]?.(slateNode, metadata, nodeDepth)
       : slateNode;
 
   if (isElement(node) && node.children) {
     return {
       ...node,
       children: node.children.flatMap(
-        (child) => transformNodes(child, transformations, metadata),
+        (child) => transformNodes(child, transformations, metadata, nodeDepth + 1),
         1,
       ),
     } as Descendant;
@@ -146,6 +148,12 @@ const serializeTransformElement: TransformMap = {
         return ch;
       }),
     } as ListItemElement),
+
+  // Add newline to top level paragraphs
+  [ELEMENT_PARAGRAPH]: (el: ParagraphElement, _metadata, nodeDepth) => ({
+    type: ELEMENT_PARAGRAPH,
+    children: nodeDepth === 0 ? [...el.children, { text: '\n' }] : el.children,
+  }),
 };
 
 /** Export mentions from Slate state to a format Amity understands (react-mentions) */
@@ -198,7 +206,7 @@ export function slateToMarkdown(slateState: EditorValue) {
     .map((v) => transformNodes(v, serializeTransformElement))
     .map((v) => serialize(v as any, SERIALIZE_OPTS as any))
     .join('')
-    .replaceAll('<br>', '\n')
+    .replace(/(\n\s*?\n)\s*\n/, '$1')
     .replaceAll('&#39;', '&apos;')
     .trim();
 

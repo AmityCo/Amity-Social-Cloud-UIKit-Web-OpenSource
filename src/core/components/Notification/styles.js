@@ -3,14 +3,17 @@ import { Check, ExclamationCircle, Remove } from '~/icons';
 
 export const SuccessIcon = styled(Check).attrs({ width: 18, height: 18 })`
   margin-right: 8px;
+  fill: white;
 `;
 
 export const InfoIcon = styled(ExclamationCircle).attrs({ width: 18, height: 18 })`
   margin-right: 8px;
+  fill: white;
 `;
 
 export const ErrorIcon = styled(Remove).attrs({ width: 18, height: 18 })`
   margin-right: 8px;
+  fill: white;
 `;
 
 export const Notifications = styled.div`
@@ -33,7 +36,7 @@ export const NotificationContainer = styled.div`
   justify-content: center;
   align-items: center;
   color: white;
-  background: ${({ theme }) => theme.palette.base.main};
+  background: ${({ theme }) => theme.palette.primary.main};
   border-radius: 4px;
   margin-bottom: 10px;
 

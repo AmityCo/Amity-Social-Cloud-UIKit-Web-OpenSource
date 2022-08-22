@@ -60,7 +60,7 @@ export const CommentContent = styled.div`
   overflow-wrap: anywhere !important;
   word-break: break-word;
   color: ${({ theme }) => theme.palette.neutral.main};
-  background-color: ${({ theme }) => theme.palette.base.shade4};
+  background-color: ${({ theme }) => theme.palette.background.main};
   border-radius: 0 12px 12px 12px;
   padding: 12px;
   display: inline-block;

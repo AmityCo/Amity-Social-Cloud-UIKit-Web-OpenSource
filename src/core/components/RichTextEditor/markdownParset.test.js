@@ -2,7 +2,7 @@ import { markdownToSlate, slateToMarkdown } from './markdownParser';
 import { EMPTY_VALUE } from './constants';
 
 const markdownText =
-  '# Hello\nHello there this is **bold** and _italic_ and ~~strike~~ and [link](https://google.com)!\n\n- hello there \n- what is this \n- keeee \n\n  - What is this? \n\n- fsfsfs \n- dddsa \n\n> Quoting Don Qyote!\n\nChek this out @[Sam Smith](TEST4322)!';
+  '# Hello\nHello there this is **bold** and _italic_ and ~~strike~~ and [link](https://google.com)!\n\nparagraph\nwith newline\n\n- hello there \n- what is this \n- keeee \n\n  - What is this? \n\n- fsfsfs \n- dddsa \n\n> Quoting Don Qyote!\n\nChek this out @[Sam Smith](TEST4322)!';
 
 const slateState = [
   {
@@ -51,6 +51,14 @@ const slateState = [
       },
       {
         text: '!',
+      },
+    ],
+  },
+  {
+    type: 'p',
+    children: [
+      {
+        text: 'paragraph\nwith newline',
       },
     ],
   },
@@ -196,10 +204,10 @@ describe('slateToMarkdown', () => {
   test('should correctly export mentions', () => {
     expect(slateToMarkdown(slateState).mentions).toEqual([
       {
-        index: 215,
+        index: 239,
         display: '@Sam Smith',
         id: 'TEST4322',
-        plainTextIndex: 215,
+        plainTextIndex: 239,
         childIndex: 0,
       },
     ]);

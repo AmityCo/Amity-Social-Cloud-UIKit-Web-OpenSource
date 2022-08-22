@@ -4,8 +4,9 @@ import { NotificationContainer, Notifications, SuccessIcon, InfoIcon, ErrorIcon 
 
 const DEFAULT_NOTIFICATION_DURATION = 3000;
 
+// Fix the SDK bug of including ASCWebSDK prefix in error messages
 function omitSDKText(content) {
-  return content.replace('ASCWebSDK: ', '');
+  return typeof content === 'string' ? content.replace('ASCWebSDK: ', '') : content;
 }
 
 const Notification = ({ className, content, icon }) => (

@@ -13,7 +13,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 20px 0 0;
-  background: #f7f7f8;
+  background: ${({ theme }) => theme.palette.background.main};
 `;
 
 const Main = styled.div`

@@ -2,9 +2,30 @@ import React, { useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import MockData from '~/mock';
 
-import { ThemeProvider, compassTheme } from '@noom/wax-component-library';
+import { ThemeProvider, compassTheme, CompassColor } from '@noom/wax-component-library';
 
 const GLOBAL_NAME = 'user';
+
+const theme = {
+  palette: {
+    primary: CompassColor.tarocco,
+    secondary: CompassColor.white,
+    alert: CompassColor.yolk,
+    highlight: CompassColor.tarocco,
+    background: '#F6F4EE',
+    neutral: CompassColor.black,
+  },
+  typography: {
+    global: {
+      fontFamily: 'Untitled Sans, Arial',
+      fontStyle: 'normal',
+      fontWeight: 400,
+    },
+    bodyBold: {
+      fontWeight: 500,
+    },
+  },
+};
 
 const global = {
   [GLOBAL_NAME]: {
@@ -71,6 +92,7 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
       <UiKitProvider
         ref={ref}
         key={userId}
+        theme={theme}
         apiKey={process.env.STORYBOOK_API_KEY}
         apiRegion={process.env.STORYBOOK_API_REGION}
         apiEndpoint={process.env.STORYBOOK_API_ENDPOINT}
