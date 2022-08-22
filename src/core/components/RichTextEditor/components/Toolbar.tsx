@@ -88,7 +88,7 @@ export const BalloonToolbar = () => {
   const theme = 'dark';
 
   return (
-    <PlateBalloonToolbar theme={theme} arrow={arrow}>
+    <PlateBalloonToolbar theme={theme} arrow={arrow} styles={{ root: { zIndex: 9999 } }}>
       <MarkToolbarButton type={getPluginType(editor, MARK_BOLD)} icon={<MdFormatBold />} />
       <MarkToolbarButton type={getPluginType(editor, MARK_ITALIC)} icon={<MdFormatItalic />} />
       <MarkToolbarButton

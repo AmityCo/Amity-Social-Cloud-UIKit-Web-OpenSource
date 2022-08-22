@@ -43,9 +43,9 @@ export const defaultBlockComponentMap = {
     borderColor: 'gray.200',
   }),
   [ELEMENT_CODE_LINE]: withProps(Box, { as: 'code' }),
-  [ELEMENT_H1]: withProps(H1, { fontSize: '2.5em', mb: 4 }),
-  [ELEMENT_H2]: withProps(H2, { fontSize: '2em', mb: 2 }),
-  [ELEMENT_H3]: withProps(H3, { fontSize: '1.5em', mb: 1 }),
+  [ELEMENT_H1]: withProps(H1, { fontSize: '2.5em', mb: 4, fontWeight: 'bold' }),
+  [ELEMENT_H2]: withProps(H2, { fontSize: '2em', mb: 2, fontWeight: 'bold' }),
+  [ELEMENT_H3]: withProps(H3, { fontSize: '1.5em', mb: 1, fontWeight: 'bold' }),
   [ELEMENT_LI]: ListItem,
   [ELEMENT_LINK]: withProps(Link, { rel: 'noreferrer' }),
 
