@@ -5,7 +5,7 @@ UI kit for Community Web client. Forked from [Amity-Social-Cloud-UIKit-Web-OpenS
 ## Development
 ### Setting up the local environment
 
-It is recommended to use npm v7 or greather to easily deal with peer dependencies:
+It is recommended to use npm v7 or greater to easily deal with peer dependencies:
 ```
 npm i -g npm@7
 ```
