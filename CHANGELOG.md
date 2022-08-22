@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.14.30](https://github.com/noom/community-web-uikit/compare/2.14.29...2.14.30) (2022-08-22)
+
+
+### Bug Fixes
+
+* Header weight ([5ee0778](https://github.com/noom/community-web-uikit/commit/5ee0778a7a00329ff4bd8b2f1b1e6cf53414a784))
+
 ### [2.14.29](https://github.com/noom/community-web-uikit/compare/2.14.27...2.14.29) (2022-08-22)
 
 
