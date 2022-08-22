@@ -1,5 +1,19 @@
 # Changelog
 
+### [2.14.29](https://github.com/noom/community-web-uikit/compare/2.14.27...2.14.29) (2022-08-22)
+
+
+### Bug Fixes
+
+* Editor newline bug, Report user, Styles ([0634143](https://github.com/noom/community-web-uikit/commit/06341432123055c1260068c00a6a0ec310d97ada))
+* Readme spelling ([acfff3f](https://github.com/noom/community-web-uikit/commit/acfff3f71aef67948927eca3da9f6a18e904a1c0))
+* Release ([2e5eefc](https://github.com/noom/community-web-uikit/commit/2e5eefc29f83f21a62af536e5546f9cecc7d36e7))
+
+
+### Documentation
+
+* Update readme ([485f804](https://github.com/noom/community-web-uikit/commit/485f804aecd0d7243738185308e731367aff311c))
+
 ### [2.14.28](https://github.com/noom/community-web-uikit/compare/2.14.27...2.14.28) (2022-08-22)
 
 
