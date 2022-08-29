@@ -2,6 +2,7 @@ import { unified } from 'unified';
 import markdown from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import slate, { serialize, defaultNodeTypes } from 'remark-slate';
+import { decode } from 'html-entities';
 import {
   ELEMENT_BLOCKQUOTE,
   ELEMENT_MENTION,
@@ -202,13 +203,14 @@ function exportMentions(slateState: EditorValue, text: string): MentionOutput[] 
 }
 
 export function slateToMarkdown(slateState: EditorValue) {
-  const text = slateState
+  const escapedText = slateState
     .map((v) => transformNodes(v, serializeTransformElement))
     .map((v) => serialize(v as any, SERIALIZE_OPTS as any))
     .join('')
     .replace(/(\n\s*?\n)\s*\n/, '$1')
-    .replaceAll('&#39;', '&apos;')
     .trim();
+
+  const text = decode(escapedText, { level: 'html5' });
 
   const mentions: MentionOutput[] = exportMentions(slateState, text);
 

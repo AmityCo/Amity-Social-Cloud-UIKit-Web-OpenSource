@@ -291,7 +291,10 @@ describe('slateToMarkdown', () => {
       },
     ]);
   });
-});
 
-('@Sam Smith and @Web-Test and @Testko Testic');
-('@[Sam Smith](TEST4322) and @[Web-Test](Web-Test) and @[Testko Testic](TEST1345)');
+  test('should not escape characters', () => {
+    const text = "Hey it's me Mario! It's you & and me <> world!";
+
+    expect(slateToMarkdown([{ text }])).toEqual({ text, mentions: [] });
+  });
+});
