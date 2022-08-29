@@ -44,7 +44,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
     control,
   } = useForm({
     defaultValues: {
-      ...user,
+      displayName: user.displayName,
       description: user.description ?? '',
       avatarFileId: user.avatarFileId ?? null,
     },
