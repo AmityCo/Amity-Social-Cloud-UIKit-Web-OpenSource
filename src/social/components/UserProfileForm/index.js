@@ -38,7 +38,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
   const { formatMessage } = useIntl();
   const { register, handleSubmit, errors, watch, control } = useForm({
     defaultValues: {
-      ...user,
+      displayName: user.displayName,
       description: user.description ?? '',
       avatarFileId: user.avatarFileId ?? null,
     },
