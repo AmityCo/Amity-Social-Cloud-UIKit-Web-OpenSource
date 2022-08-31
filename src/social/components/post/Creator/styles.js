@@ -57,12 +57,4 @@ export const PollButton = styled.button`
   border: none;
 `;
 
-export const PollIconContainer = styled.div`
-  height: 14px;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 export const PollIcon = styled(Poll)``;

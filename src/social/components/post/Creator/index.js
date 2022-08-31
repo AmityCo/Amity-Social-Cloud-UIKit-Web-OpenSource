@@ -19,13 +19,14 @@ import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
+import { extractMetadata, formatMentionees } from '~/helpers/utils';
+import { FileLoaderContainer } from '~/core/components/Uploaders/Loader';
+import PollModal from '~/social/components/post/PollComposer/PollModal';
 import PostTargetSelector from './components/PostTargetSelector';
 import UploaderButtons from './components/UploaderButtons';
 import ImagesUploaded from './components/ImagesUploaded';
 import VideosUploaded from './components/VideosUploaded';
 import FilesUploaded from './components/FilesUploaded';
-
-import { extractMetadata, formatMentionees } from '~/helpers/utils';
 
 import { createPost, showPostCreatedNotification } from './utils';
 import {
@@ -38,9 +39,8 @@ import {
   PostInputText,
   PollButton,
   PollIcon,
-  PollIconContainer,
 } from './styles';
-import PollModal from '~/social/components/post/PollComposer/PollModal';
+
 import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 import promisify from '~/helpers/promisify';
 
@@ -356,9 +356,9 @@ const PostCreatorBar = ({
             onFileSizeLimit={onFileSizeLimit}
           />
           <PollButton onClick={openPollModal}>
-            <PollIconContainer>
+            <FileLoaderContainer>
               <PollIcon />
-            </PollIconContainer>
+            </FileLoaderContainer>
           </PollButton>
           <PostButton
             disabled={isDisabled}
