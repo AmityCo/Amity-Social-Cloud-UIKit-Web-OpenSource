@@ -123,7 +123,7 @@ const File = ({
         {isImg && !!url ? (
           <ImgPreview src={url} />
         ) : (
-          (<FileIcon file={{ name, type }} width={null} height="100%" />)``
+          <FileIcon file={{ name, type }} width={null} height="100%" />
         )}
         <FileName>{name}</FileName> <FileSize>{filesize(size, { base: 2 })}</FileSize>
         <ButtonContainer>
