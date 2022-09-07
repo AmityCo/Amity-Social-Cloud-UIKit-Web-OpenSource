@@ -29,7 +29,7 @@ const LoadMore = ({
   }
 
   return (
-    children.length && (
+    !!children.length && (
       <div>
         <LoadMoreButton className={className} onClick={() => setExpanded(true)}>
           {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}
