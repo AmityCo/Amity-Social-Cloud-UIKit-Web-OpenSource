@@ -21,9 +21,7 @@ const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES
         <ChunkHighlighter
           textToHighlight={text}
           chunks={chunks}
-          highlightNode={(props) => (
-            <MentionHighlightTag {...props} text={text} mentionees={mentionees} />
-          )}
+          highlightNode={(props) => <MentionHighlightTag {...props} mentionees={mentionees} />}
           unhighlightNode={Linkify}
         />
       </Truncate.Atom>

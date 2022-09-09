@@ -169,7 +169,7 @@ const PostCreatorBar = ({
 
     if (postMentionees.type && postMentionees.userIds.length > 0) {
       createPostParams.mentionees = [{ ...postMentionees }];
-      const { metadata: extractedMetadata } = extractMetadata(postText, mentionees);
+      const { metadata: extractedMetadata } = extractMetadata(mentionees);
       metadata.markupText = postText;
       createPostParams.metadata = { ...metadata, ...extractedMetadata };
     }

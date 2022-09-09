@@ -100,7 +100,7 @@ const PollComposer = ({
       return;
     }
 
-    const { mentionees, metadata = {} } = extractMetadata(markup, mentions);
+    const { mentionees, metadata } = extractMetadata(mentions);
 
     const payload = {
       question: data?.question,

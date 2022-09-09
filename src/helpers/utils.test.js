@@ -1,8 +1,31 @@
 /* eslint-disable no-undef */
 // FIXME sdk import in ./utils throws an error in jest env
-// import { parseMentionsMarkup } from './utils';
+// import { extractMetadata, parseMentionsMarkup } from './utils';
 
 xdescribe('helpers/utils', () => {
+  test('extractMetadata', () => {
+    const data = [
+      [
+        [],
+        {
+          metadata: {},
+          mentionees: [{ type: 'user', userIds: [] }],
+        },
+      ],
+      [
+        [{ plainTextIndex: 3, id: 'valeriy', display: '@valeriy' }],
+        {
+          metadata: { mentioned: [{ index: 3, length: 7, userId: 'valeriy', type: 'user' }] },
+          mentionees: [{ type: 'user', userIds: ['valeriy'] }],
+        },
+      ],
+    ];
+
+    data.forEach(([mentions, expected]) => {
+      expect(extractMetadata(mentions)).toEqual(expected);
+    });
+  });
+
   test('parseMentionsMarkup()', () => {
     // index - position of @symbol
     // length - the length of the user's name, it does not include @symbol

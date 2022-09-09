@@ -138,7 +138,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles }) => {
   };
 
   const handleEdit = () => {
-    const { metadata, mentionees } = extractMetadata(markup, mentions);
+    const { metadata, mentionees } = extractMetadata(mentions);
     handleEditComment(localText, mentionees, metadata);
 
     clearAll();

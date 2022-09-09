@@ -84,29 +84,27 @@ export function findChunks(mentionees) {
   return mentioneeChunks;
 }
 
-export function extractMetadata(markup, mentions) {
+export function extractMetadata(mentions) {
   const metadata = {};
-  let mentionees = [
-    {
-      type: 'user',
-      userIds: [],
-    },
-  ];
+  const mentionees = [];
 
   if (mentions?.length > 0) {
-    mentionees = [{}];
-
     metadata.mentioned = [
       ...mentions.map(({ plainTextIndex, id, display: displayName }) => ({
         index: plainTextIndex,
-        length: displayName.length,
+        length: displayName.length - AT_SIGN_LENGTH,
         type: 'user',
         userId: id,
       })),
     ];
 
-    mentionees[0].type = 'user';
-    mentionees[0].userIds = mentions.map(({ id }) => id);
+    mentionees.push({
+      type: 'user',
+      userIds: mentions.map(({ id }) => id),
+    });
+  } else {
+    // to clean the mentionees on backend side
+    mentionees.push({ type: 'user', userIds: [] });
   }
 
   return { metadata, mentionees };
