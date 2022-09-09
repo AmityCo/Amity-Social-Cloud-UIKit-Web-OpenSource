@@ -1,6 +1,6 @@
 {
   "name": "@amityco/ui-kit-open-source",
-  "version": "2.14.1",
+  "version": "2.14.2",
   "engines": {
     "node": ">=16",
     "npm": ">=7"

@@ -2,15 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.14.2 (2022-09-09)
+
 ### 2.14.1 (2022-08-30)
- * ASC-4251 - only update edit page user fields, when editing
+
+- ASC-4251 - only update edit page user fields, when editing
 
 ## 2.14.0 (2022-08-26)
 
-
 ### Features
 
-* update js sdk to 5.24.0 ([aaec8e1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/aaec8e1879ec6d3f085fba9335d8d4d73702f1f3))
+- update js sdk to 5.24.0 ([aaec8e1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/aaec8e1879ec6d3f085fba9335d8d4d73702f1f3))
 
 ## 2.13.0 (2022-08-11)
 
