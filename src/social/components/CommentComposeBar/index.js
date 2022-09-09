@@ -51,7 +51,7 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, po
       });
     }
 
-    const { metadata, mentionees } = extractMetadata(markup, mentions);
+    const { metadata, mentionees } = extractMetadata(mentions);
 
     onSubmit(text, mentionees, metadata);
     clearAll();
