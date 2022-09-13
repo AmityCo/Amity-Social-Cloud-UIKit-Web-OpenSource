@@ -80,7 +80,7 @@
     "webpack-node-externals": "3.0.0"
   },
   "dependencies": {
-    "@amityco/js-sdk": "5.22.0",
+    "@amityco/js-sdk": "5.25.0",
     "@hookform/error-message": "0.0.4",
     "@udecode/plate": "^14.2.0",
     "classnames": "^2.2.6",
