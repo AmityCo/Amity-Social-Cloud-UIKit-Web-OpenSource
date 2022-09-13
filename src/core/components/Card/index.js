@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
-
 const Container = styled.div`
   overflow: hidden;
   border: 1px solid ${({ theme }) => theme.palette.system.borders};
@@ -27,9 +25,7 @@ const Body = styled.section`
 const Card = ({ title, slim, stretched, children, ...props }) => {
   return (
     <Container {...props}>
-      <ConditionalRender condition={!!title}>
-        <Title slim={slim}>{title}</Title>
-      </ConditionalRender>
+      {!!title && <Title slim={slim}>{title}</Title>}
 
       <Body slim={slim} stretched={stretched}>
         {children}

@@ -9,7 +9,6 @@ import customizableComponent from '~/core/hocs/customization';
 import useComment from '~/social/hooks/useComment';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import CommentList from '~/social/components/CommentList';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { notification } from '~/core/components/Notification';
 import { isModerator } from '~/helpers/permissions';
 import StyledComment from './Comment.styles';
@@ -147,7 +146,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
   };
 
   const handleEdit = () => {
-    const { metadata, mentionees } = extractMetadata(markup, mentions);
+    const { metadata, mentionees } = extractMetadata(mentions);
     handleEditComment(localText, mentionees, metadata);
 
     clearAll();
@@ -237,7 +236,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
         isExpanded={isExpanded}
       />
 
-      <ConditionalRender condition={isReplying}>
+      {isReplying && (
         <CommentComposeBar
           postId={comment?.referenceId}
           postType={comment?.referenceType}
@@ -248,7 +247,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
             setExpanded(true);
           }}
         />
-      </ConditionalRender>
+      )}
     </CommentBlock>
   );
 };

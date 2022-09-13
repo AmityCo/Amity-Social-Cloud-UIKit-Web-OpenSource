@@ -7,7 +7,6 @@ import useCommunityMembers from '~/social/hooks/useCommunityMembers';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 import useCommunity from '~/social/hooks/useCommunity';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import LoadMore from '~/social/components/LoadMore';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
@@ -52,7 +51,8 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
     <CommunityMembersContainer>
       <CommunityMembersHeader>Community Members • {membersCount}</CommunityMembersHeader>
       <CommunityMembersTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-      <ConditionalRender condition={activeTab === MemberTabs.MEMBERS}>
+
+      {activeTab === MemberTabs.MEMBERS && (
         <LoadMore hasMore={hasMoreMembers} loadMore={loadMoreMembers}>
           {members.length > 0 &&
             members.map(({ userId, roles, isBanned }) => (
@@ -71,8 +71,9 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
               />
             ))}
         </LoadMore>
-      </ConditionalRender>
-      <ConditionalRender condition={activeTab === MemberTabs.MODERATORS}>
+      )}
+
+      {activeTab === MemberTabs.MODERATORS && (
         <LoadMore hasMore={hasMoreModerators} loadMore={loadMoreModerators}>
           {moderators.length > 0 &&
             moderators.map(({ userId, roles, isBanned }) => (
@@ -91,7 +92,7 @@ const CommunityMembers = ({ communityId, currentUserId }) => {
               />
             ))}
         </LoadMore>
-      </ConditionalRender>
+      )}
     </CommunityMembersContainer>
   );
 };

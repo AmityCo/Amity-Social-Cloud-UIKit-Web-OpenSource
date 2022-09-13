@@ -15,24 +15,17 @@ import {
   SearchIconContainer,
 } from './styles';
 import useUserQuery from '~/core/hooks/useUserQuery';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
 const communityRenderer = (communities) => (communityName) => {
   const { communityId } = communities.find((item) => item.displayName === communityName) ?? {};
-  return (
-    <ConditionalRender condition={!!communityId}>
-      <CommunityHeader communityId={communityId} />
-    </ConditionalRender>
-  );
+
+  return !!communityId && <CommunityHeader communityId={communityId} />;
 };
 
 const userRenderer = (users) => (userName) => {
   const { userId, isGlobalBan } = users.find((item) => item.displayName === userName) ?? {};
-  return (
-    <ConditionalRender condition={!!userId}>
-      <UserHeader userId={userId} isBanned={isGlobalBan} />
-    </ConditionalRender>
-  );
+
+  return !!userId && <UserHeader userId={userId} isBanned={isGlobalBan} />;
 };
 
 const SocialSearch = ({ className, sticky = false, searchBy }) => {

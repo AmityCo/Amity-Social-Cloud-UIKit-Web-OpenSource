@@ -1,11 +1,32 @@
+import { CommunityPostSettings } from '@amityco/js-sdk';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { info } from '~/core/components/Confirm';
 import useCommunity from '~/social/hooks/useCommunity';
 
+function getValue(key, community) {
+  if (key === 'needApprovalOnPostCreation') {
+    return community.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED;
+  }
+
+  return community[key];
+}
+
+function getPatch(key, value) {
+  if (key === 'needApprovalOnPostCreation') {
+    return {
+      postSetting: value
+        ? CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED
+        : CommunityPostSettings.ANYONE_CAN_POST,
+    };
+  }
+
+  return { [key]: value };
+}
+
 export function usePermission(communityId, key) {
   const { community, updateCommunity } = useCommunity(communityId);
-  const prevValue = community[key];
+  const prevValue = getValue(key, community);
 
   const [permission, setPermissionState] = useState(prevValue);
 
@@ -15,7 +36,8 @@ export function usePermission(communityId, key) {
     async (newValue) => {
       try {
         setPermissionState(newValue);
-        await updateCommunity({ [key]: newValue });
+
+        await updateCommunity(getPatch(key, newValue));
       } catch (error) {
         setPermissionState(prevValue);
 
@@ -25,7 +47,7 @@ export function usePermission(communityId, key) {
               id={`community.permissions.error.${key}.${newValue ? 'turnOn' : 'turnOff'}`}
             />
           ),
-          content: <FormattedMessage id="general.error.tryAgainLater" />,
+          content: error.message,
         });
       }
     },

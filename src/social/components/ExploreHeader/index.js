@@ -2,7 +2,6 @@ import React, { memo, useState } from 'react';
 import styled from 'styled-components';
 
 import { FormattedMessage } from 'react-intl';
-import { useSDK } from '~/core/hocs/withSDK';
 
 import { backgroundImage as SkyBg } from '~/icons/Sky';
 import { backgroundImage as BalloonBg } from '~/icons/Balloon';
@@ -16,6 +15,7 @@ import UiKitButton from '~/core/components/Button';
 import UiKitCommunityCreationModal from '~/social/components/CommunityCreationModal';
 import { useConfig } from '~/social/providers/ConfigProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const Background = styled.div`
   width: 100%;

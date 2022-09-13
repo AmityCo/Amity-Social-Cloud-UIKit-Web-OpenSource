@@ -7,7 +7,6 @@ import CommunityCreatedModal from '~/social/components/CommunityCreatedModal';
 
 import useCommunity from '~/social/hooks/useCommunity';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import withSDK from '~/core/hocs/withSDK';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 
@@ -39,17 +38,12 @@ const CommunityFeed = ({
   const tabs = useMemo(
     () =>
       getTabs(
-        community?.needApprovalOnPostCreation,
+        community?.postSetting,
         community?.isJoined,
         canReviewCommunityPosts,
         pendingPostCount,
       ),
-    [
-      community?.needApprovalOnPostCreation,
-      community?.isJoined,
-      canReviewCommunityPosts,
-      pendingPostCount,
-    ],
+    [community?.postSetting, community?.isJoined, canReviewCommunityPosts, pendingPostCount],
   );
 
   const [activeTab, setActiveTab] = useState(CommunityFeedTabs.TIMELINE);
@@ -70,7 +64,7 @@ const CommunityFeed = ({
 
       <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
 
-      <ConditionalRender condition={activeTab === CommunityFeedTabs.TIMELINE}>
+      {activeTab === CommunityFeedTabs.TIMELINE && (
         <Feed
           targetType={PostTargetType.CommunityFeed}
           targetId={communityId}
@@ -80,15 +74,13 @@ const CommunityFeed = ({
           handleCopyPostPath={handleCopyPostPath}
           handleCopyCommentPath={handleCopyCommentPath}
         />
-      </ConditionalRender>
+      )}
 
       {activeTab === CommunityFeedTabs.GALLERY && (
         <MediaGallery targetType={PostTargetType.CommunityFeed} targetId={communityId} />
       )}
 
-      <ConditionalRender condition={activeTab === CommunityFeedTabs.MEMBERS}>
-        <CommunityMembers communityId={communityId} />
-      </ConditionalRender>
+      {activeTab === CommunityFeedTabs.MEMBERS && <CommunityMembers communityId={communityId} />}
 
       {activeTab === CommunityFeedTabs.PENDING && (
         <>

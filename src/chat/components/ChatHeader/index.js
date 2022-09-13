@@ -18,10 +18,8 @@ import {
   MemberCount,
 } from './styles';
 
-const channelRepo = new ChannelRepository();
-
 const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) => {
-  const channel = useLiveObject(() => channelRepo.channelForId(channelId), [channelId]);
+  const channel = useLiveObject(() => ChannelRepository.getChannel(channelId), [channelId]);
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
   return (

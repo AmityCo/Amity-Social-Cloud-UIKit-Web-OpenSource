@@ -128,7 +128,7 @@ const UiKitProvider = forwardRef(
 
 UiKitProvider.propTypes = {
   apiKey: PropTypes.string.isRequired,
-  apiEndpoint: PropTypes.string.isRequired,
+  apiEndpoint: PropTypes.string,
   apiRegion: PropTypes.string.isRequired,
   authToken: PropTypes.string,
   userId: PropTypes.string.isRequired,

@@ -68,13 +68,11 @@ const PollComposer = ({
   };
 
   const {
-    register,
     handleSubmit,
-    errors,
     setError,
     watch,
     control,
-    formState: { isDirty },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues,
   });
@@ -102,7 +100,7 @@ const PollComposer = ({
       return;
     }
 
-    const { mentionees, metadata = {} } = extractMetadata(markup, mentions);
+    const { mentionees, metadata } = extractMetadata(mentions);
 
     const payload = {
       question: data?.question,
@@ -147,7 +145,7 @@ const PollComposer = ({
                     message: 'Question is too long',
                   },
                 }}
-                render={({ value, ref, onChange: pollOnChange, ...rest }) => {
+                render={({ field: { value, ref, onChange: pollOnChange, ...rest } }) => {
                   return (
                     <MentionTextInput
                       {...rest}
@@ -185,8 +183,8 @@ const PollComposer = ({
                 <Counter>{`${answers.length}/${MAX_OPTIONS_AMOUNT}`}</Counter>
               </LabelWrapper>
               <Controller
-                ref={register({
-                  required: 'There should be at least 2 answers',
+                rules={{
+                  required: `There should be at least ${MIN_OPTIONS_AMOUNT} answers`,
                   minLength: {
                     value: MIN_OPTIONS_AMOUNT,
                     message: `There should be at least ${MIN_OPTIONS_AMOUNT} answers`,
@@ -195,15 +193,11 @@ const PollComposer = ({
                     value: MAX_OPTIONS_AMOUNT,
                     message: `There can be only ${MAX_OPTIONS_AMOUNT} answers maximum`,
                   },
-                })}
+                }}
                 name="answers"
                 control={control}
-                render={({ onChange, ...rest }) => (
-                  <OptionsComposer
-                    optionsLimit={MAX_OPTIONS_AMOUNT}
-                    onChange={onChange}
-                    {...rest}
-                  />
+                render={({ field }) => (
+                  <OptionsComposer optionsLimit={MAX_OPTIONS_AMOUNT} {...field} />
                 )}
                 defaultValue={null}
               />
@@ -221,10 +215,10 @@ const PollComposer = ({
                 </LabelContainer>
                 <ControllerContainer>
                   <Controller
-                    ref={register({ required: 'Answer type is required' })}
+                    rules={{ required: 'Answer type is required' }}
                     name="answerType"
-                    render={(props) => (
-                      <AnswerTypeSelector parentContainer={formBodyElement} {...props} />
+                    render={({ field }) => (
+                      <AnswerTypeSelector parentContainer={formBodyElement} {...field} />
                     )}
                     control={control}
                     defaultValue=""
@@ -244,11 +238,10 @@ const PollComposer = ({
                 </LabelContainer>
                 <ControllerContainer>
                   <Controller
-                    ref={register()}
                     name="closedIn"
-                    render={(props) => (
+                    render={({ field }) => (
                       <InputCounter
-                        {...props}
+                        {...field}
                         onlyPositiveNumber
                         minValue={1}
                         maxValue={100}

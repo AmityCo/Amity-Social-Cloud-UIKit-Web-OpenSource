@@ -36,15 +36,17 @@ const FormBlock = ({ title, children }) => (
 
 const UserProfileForm = ({ user, onSubmit, className }) => {
   const { formatMessage } = useIntl();
-  const { register, handleSubmit, errors, watch, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    control,
+  } = useForm({
     defaultValues: {
-      ...user,
+      displayName: user.displayName,
       description: user.description ?? '',
       avatarFileId: user.avatarFileId ?? null,
-    } || {
-      avatarFileId: '',
-      displayName: '',
-      description: '',
     },
   });
 
@@ -57,7 +59,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
         <FormBlock title={<FormattedMessage id="UserProfileForm.title" />}>
           <Controller
             name="avatarFileId"
-            render={(props) => <AvatarUploader {...props} />}
+            render={({ field: { ref, ...rest } }) => <AvatarUploader {...rest} />}
             control={control}
           />
           <Field error={errors.name}>
@@ -68,12 +70,10 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               <Counter>{displayName.length}/100</Counter>
             </LabelCounterWrapper>
             <TextField
-              ref={register({
+              {...register('displayName', {
                 required: formatMessage({ id: 'UserProfileForm.requiredDisplayName' }),
               })}
               placeholder={formatMessage({ id: 'UserProfileForm.namePlaceholder' })}
-              id="displayName"
-              name="displayName"
               maxLength={100}
             />
             <ErrorMessage errors={errors} name="displayName" />
@@ -86,9 +86,8 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               <Counter>{description.length}/180</Counter>
             </LabelCounterWrapper>
             <AboutTextarea
-              ref={register()}
+              {...register('description')}
               placeholder={formatMessage({ id: 'UserProfileForm.requiredDescription' })}
-              name="description"
               maxLength={180}
             />
             <ErrorMessage errors={errors} name="description" />

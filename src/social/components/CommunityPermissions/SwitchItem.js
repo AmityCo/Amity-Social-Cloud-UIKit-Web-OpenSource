@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Switch from '~/core/components/Switch';
-import { useSDK } from '~/core/hocs/withSDK';
 import {
   SwitchItemContainer,
   SwitchItemDescription,
   SwitchItemName,
   SwitchItemPrompt,
 } from './styles';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const SwitchItem = ({ onChange, value }) => {
   const { connected } = useSDK();
