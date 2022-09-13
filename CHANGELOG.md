@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.14.32](https://github.com/noom/community-web-uikit/compare/2.14.31...2.14.32) (2022-09-13)
+
+
+### Bug Fixes
+
+* Update SDK version ([323147e](https://github.com/noom/community-web-uikit/commit/323147e3321c7fe830e02f62fb9094b60456fdaa))
+
 ### [2.14.31](https://github.com/noom/community-web-uikit/compare/2.14.30...2.14.31) (2022-08-29)
 
 
