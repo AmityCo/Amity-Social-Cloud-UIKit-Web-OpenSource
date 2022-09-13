@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
 import Avatar from '~/core/components/Avatar';
 import { Remove } from '~/icons';
@@ -33,6 +32,11 @@ const RoundButton = styled(Button)`
   padding: 0.4rem 0.55rem;
   border-radius: 10rem;
   height: 30px;
+
+  > svg {
+    height: 100%;
+    width: 12px;
+  }
 `;
 
 const UserChip = ({ userId, displayName = 'Anonymous', fileUrl, onClick = () => {}, onRemove }) => {
@@ -57,11 +61,11 @@ const UserChip = ({ userId, displayName = 'Anonymous', fileUrl, onClick = () => 
       <Avatar size="tiny" avatar={fileUrl} backgroundImage={UserImage} />
       <Name>{displayName}</Name>
 
-      <ConditionalRender condition={!!onRemove}>
+      {!!onRemove && (
         <RoundButton onClick={handleRemove}>
           <Close />
         </RoundButton>
-      </ConditionalRender>
+      )}
     </Chip>
   );
 };

@@ -63,15 +63,13 @@ export function searchWords(mentionees) {
   return mentionees?.length ? mentionees[0].userIds.map((userId) => `@${userId}`) : [];
 }
 
-export function extractUserIdDisplayNameCollection(text, userId, highlightLength, index) {
-  const startOfName = index + 1; // compensate @
-  const endOfName = index + highlightLength;
-  const displayName = text.substring(startOfName, endOfName);
+const AT_SIGN_LENGTH = 1;
 
-  return {
-    displayName,
-    userId,
-  };
+export function extractDisplayName(text, displayNameLength, startOfMention) {
+  const startOfName = startOfMention + AT_SIGN_LENGTH;
+  const endOfName = startOfName + displayNameLength;
+
+  return text.substring(startOfName, endOfName);
 }
 
 export function findChunks(mentionees) {
@@ -79,53 +77,56 @@ export function findChunks(mentionees) {
 
   const mentioneeChunks = mentionees.map(({ index, length }) => ({
     start: index,
-    end: index + length + 1, // compensate for index === 0
+    end: index + length + AT_SIGN_LENGTH,
     highlight: true,
   }));
 
   return mentioneeChunks;
 }
 
-export function extractMetadata(markup, mentions) {
+export function extractMetadata(mentions) {
   const metadata = {};
-  let mentionees = [
-    {
-      type: 'user',
-      userIds: [],
-    },
-  ];
+  const mentionees = [];
 
   if (mentions?.length > 0) {
-    mentionees = [{}];
-
     metadata.mentioned = [
       ...mentions.map(({ plainTextIndex, id, display: displayName }) => ({
         index: plainTextIndex,
-        length: displayName.length,
+        length: displayName.length - AT_SIGN_LENGTH,
         type: 'user',
         userId: id,
       })),
     ];
 
-    mentionees[0].type = 'user';
-    mentionees[0].userIds = mentions.map(({ id }) => id);
+    mentionees.push({
+      type: 'user',
+      userIds: mentions.map(({ id }) => id),
+    });
+  } else {
+    // to clean the mentionees on backend side
+    mentionees.push({ type: 'user', userIds: [] });
   }
 
   return { metadata, mentionees };
 }
 
 export function parseMentionsMarkup(text, metadata) {
-  if (isEmpty(metadata?.mentioned)) return text;
+  if (isEmpty(metadata?.mentioned)) {
+    return text;
+  }
 
   let parsedText = text;
-  const { mentioned } = metadata;
 
-  mentioned.forEach(({ userId, length, index: textIndex }) => {
-    const { displayName } = extractUserIdDisplayNameCollection(text, userId, length, textIndex);
-    const markupFormat = `[${displayName}](${userId})`;
+  [...metadata.mentioned]
+    .sort((a, b) => b.index - a.index)
+    .forEach(({ userId, length, index: textIndex }) => {
+      const markupFormat = `@[${extractDisplayName(text, length, textIndex)}](${userId})`;
 
-    parsedText = parsedText.replace(displayName, markupFormat);
-  });
+      parsedText = parsedText.replace(
+        new RegExp(`(.{${textIndex}}).{${length + AT_SIGN_LENGTH}}`),
+        `$1${markupFormat}`,
+      );
+    });
 
   return parsedText;
 }

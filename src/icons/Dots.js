@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Svg = ({ className }) => (
-  <svg className={className} width="25" height="25" fill="none" viewBox="0 0 25 25">
+const Svg = (props) => (
+  <svg width="25" height="25" fill="none" viewBox="0 0 25 25" {...props}>
     <circle cx="3" cy="3" r="3" fill="#F3F0EA" opacity=".1" />
   </svg>
 );

@@ -10,7 +10,6 @@ export {
   removeChatMembers as amityRemoveChatMembers,
 } from '~/chat/helpers';
 
-export { useSDK as useAmitySDK } from '~/core/hocs/withSDK';
 export { default as useAmityUser } from '~/core/hooks/useUser';
 export { useNavigation as useAmityNavigation } from '~/social/providers/NavigationProvider';
 
@@ -18,6 +17,7 @@ export { default as AmityAvatar } from '~/core/components/Avatar';
 export { PostContainer as AmityPostContainer } from '~/social/components/post/Post/styles';
 export { default as AmityPostEngagementBar } from '~/social/components/EngagementBar';
 export { default as AmityExpandableText } from '~/social/components/Comment/CommentText';
+export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 export { default as AmityLayout } from '~/social/layouts/Main';
 export { default as AmityCommunitySideMenu } from '~/social/components/CommunitySideMenu';

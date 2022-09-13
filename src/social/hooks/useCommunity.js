@@ -28,7 +28,7 @@ const useCommunity = (communityId, resolver) => {
       tags?: string[],
       metadata?: Object,
       isPublic?: boolean,
-      needApprovalOnPostCreation?: boolean,
+      postSetting?: boolean,
     }
   */
   const updateCommunity = (payload) =>

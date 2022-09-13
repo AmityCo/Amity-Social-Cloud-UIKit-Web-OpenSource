@@ -1,4 +1,4 @@
-import { PostRepository, PostTargetType } from '@amityco/js-sdk';
+import { CommunityPostSettings, PostRepository, PostTargetType } from '@amityco/js-sdk';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { notification } from '~/core/components/Notification';
@@ -51,7 +51,7 @@ export async function createPost({
 export async function showPostCreatedNotification(post, community) {
   if (
     post.targetType === PostTargetType.CommunityFeed &&
-    community.needApprovalOnPostCreation &&
+    community.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED &&
     post.feedId === community.reviewingFeed.feedId
   ) {
     notification.success({ content: <FormattedMessage id="post.success.submittedToReview" /> });
