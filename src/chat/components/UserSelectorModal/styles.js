@@ -9,7 +9,7 @@ export const PrependIconWrapper = styled.span`
   color: rgb(153, 153, 153);
 
   svg {
-    font-size: 16px;
+    width: 16px;
   }
 `;
 
