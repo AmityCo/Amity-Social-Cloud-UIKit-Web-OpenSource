@@ -1,5 +1,30 @@
 # Changelog
 
+## [2.15.0](https://github.com/noom/community-web-uikit/compare/2.14.32...2.15.0) (2022-09-14)
+
+
+### Features
+
+* ASC-3806 - Update js-sdk to v5.23.1 ([#52](https://github.com/noom/community-web-uikit/issues/52)) ([770aa20](https://github.com/noom/community-web-uikit/commit/770aa20a76fb21e534825e530554a0890253dc0b))
+* New build system ([#10](https://github.com/noom/community-web-uikit/issues/10)) ([7df6aaa](https://github.com/noom/community-web-uikit/commit/7df6aaaeade82267e491ba725696f3c42fcdd80c))
+* update js sdk to 5.24.0 ([02e81f3](https://github.com/noom/community-web-uikit/commit/02e81f3eebc2529355cead24816e7840a05433a1))
+
+
+### Bug Fixes
+
+* ASC-2826 - allow user to update displayName & discription without fileId ([#46](https://github.com/noom/community-web-uikit/issues/46)) ([687e036](https://github.com/noom/community-web-uikit/commit/687e0361b08b388adfcb4e2d20a16947f1a7ced3))
+* ASC-3498 - fix the creation of metadata for mentionees ([#62](https://github.com/noom/community-web-uikit/issues/62)) ([327fefa](https://github.com/noom/community-web-uikit/commit/327fefadd3bea045250ade65f2a481722eb5ff30))
+* asc-3586 - fix the parsing of string containing mentiones ([#61](https://github.com/noom/community-web-uikit/issues/61)) ([00fe646](https://github.com/noom/community-web-uikit/commit/00fe646f5d0284c64727a3c00121354725d0aace))
+* ASC-3724 - Fix mention text showing userId instead of DisplayName ([#51](https://github.com/noom/community-web-uikit/issues/51)) ([5fce996](https://github.com/noom/community-web-uikit/commit/5fce9962134d6fd9cd7f8e8b0909c0d7027a3950))
+* ASC-3885 - pass all icons props into svg element inside icon component ([#16](https://github.com/noom/community-web-uikit/issues/16)) ([35b3f89](https://github.com/noom/community-web-uikit/commit/35b3f89f8ae10287ce9b8a86c9713ef413119def))
+* remove '0' symbol from the comment list ([fbd5c2f](https://github.com/noom/community-web-uikit/commit/fbd5c2f8acc2cfcc54a42b5e54d89f5ea7bb1d3f))
+* wait until connection appears ([#49](https://github.com/noom/community-web-uikit/issues/49)) ([57eb748](https://github.com/noom/community-web-uikit/commit/57eb7486ce62964c5d16ef1550ffb9e130229120))
+
+
+### Documentation
+
+* ASC-0000 - Add examples for using social & chat ([#53](https://github.com/noom/community-web-uikit/issues/53)) ([f7dd5b3](https://github.com/noom/community-web-uikit/commit/f7dd5b32788db14976bb383facacce5638d8b35d))
+
 ### [2.14.32](https://github.com/noom/community-web-uikit/compare/2.14.31...2.14.32) (2022-09-13)
 
 
