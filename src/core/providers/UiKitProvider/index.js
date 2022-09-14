@@ -44,7 +44,7 @@ const UiKitProvider = forwardRef(
 
     theGlobal.__asc__ = {
       ...theGlobal.__asc__,
-      uikit: __VERSION__,
+      //uikit: __VERSION__,
     };
 
     const [preventReconnect, setPreventReconnect] = useState(false);

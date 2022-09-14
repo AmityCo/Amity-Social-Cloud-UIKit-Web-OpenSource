@@ -4,9 +4,9 @@
     "sourceMap": true, // allow sourcemap support
     "strictNullChecks": true, // enable strict null checks as a best practice
     "module": "esnext", // specify module code generation
-    "jsx": "react-jsx", // use typescript to transpile jsx to js
+    "jsx": "react", // use typescript to transpile jsx to js
     "target": "es6", // specify ECMAScript target version
-    "lib": ["es2021", "dom"],
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase
     "experimentalDecorators": true,
     "moduleResolution": "node",
@@ -17,8 +17,8 @@
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": "src",
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "isolatedModules": true,
+    "emitDeclarationOnly": false,
+    "resolveJsonModule": true,
     "paths": {
       "~/*": ["*"]
     },
