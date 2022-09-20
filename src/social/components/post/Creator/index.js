@@ -205,9 +205,7 @@ const PostCreatorBar = ({
   const backgroundImage =
     target.targetType === PostTargetType.CommunityFeed ? CommunityImage : UserImage;
 
-  const CurrentTargetAvatar = (
-    <Avatar avatar={model.avatarCustomUrl || fileUrl} backgroundImage={backgroundImage} />
-  );
+  const CurrentTargetAvatar = <Avatar avatar={fileUrl} backgroundImage={backgroundImage} />;
   const isDisabled =
     isEmpty(postText, postImages, postVideos, postFiles) || uploadLoading || creating || !connected;
   const hasChanges = !isEmpty(postText, postImages, postVideos, postFiles);

@@ -12,10 +12,6 @@ const useUser = (userId) => {
   // Cannot call hooks conditionally due to the 'rules of hooks'.
   let file = useFile(user.avatarFileId, [user.avatarFileId]);
 
-  if (user.avatarCustomUrl) {
-    file = { fileUrl: user.avatarCustomUrl };
-  }
-
   return {
     user,
     file,
