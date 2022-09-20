@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.15.1](https://github.com/noom/community-web-uikit/compare/2.15.0...2.15.1) (2022-09-20)
+
+
+### Bug Fixes
+
+* Style updates ([#11](https://github.com/noom/community-web-uikit/issues/11)) ([686f6da](https://github.com/noom/community-web-uikit/commit/686f6dafec3069f8d7ac215e9c360f43e0e9bf2c))
+
 ## [2.15.0](https://github.com/noom/community-web-uikit/compare/2.14.32...2.15.0) (2022-09-14)
 
 
