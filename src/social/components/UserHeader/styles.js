@@ -29,9 +29,15 @@ const UserHeaderAvatar = styled(Avatar)`
 const UserHeaderTitle = styled.div`
   grid-area: title;
   ${({ theme }) => theme.typography.title}
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+  display: flex;
+  min-width: 0;
+  align-items: center;
+
+  > div {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 `;
 
 const UserHeaderSubtitle = styled.div`
@@ -45,7 +51,7 @@ const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick, isB
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
       <UserHeaderAvatar avatar={avatarFileUrl} backgroundImage={UserImage} onClick={onClickUser} />
       <UserHeaderTitle title={userId} onClick={onClickUser}>
-        {displayName} {isBanned && <BanIcon />}
+        <div>{displayName}</div> {isBanned && <BanIcon />}
       </UserHeaderTitle>
       {children && <UserHeaderSubtitle>{children}</UserHeaderSubtitle>}
     </UserHeaderContainer>
