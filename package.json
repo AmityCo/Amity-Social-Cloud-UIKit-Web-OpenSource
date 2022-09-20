@@ -1,6 +1,6 @@
 {
   "name": "@noom/community-web-uikit",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -21,7 +21,7 @@
     "build": "npm run clean && npm run build:js",
     "build:js": "tsc && tsc-alias",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:watch": "npm run clean && tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+    "watch": "npm run clean && tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "build:dev:analyze": "webpack --mode development --analyze true",
     "build:prod:analyze": "webpack --mode production --analyze true",
     "test": "jest",

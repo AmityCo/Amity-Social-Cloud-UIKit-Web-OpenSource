@@ -5,18 +5,28 @@ import styled from 'styled-components';
 // TODO - confirm colour with design
 const SectionContainer = styled.div`
   border-top: 1px solid #f7f7f8;
-  padding: 0 8px;
+  padding: 0.5rem 0 0.5em;
 `;
 
-const ListHeading = styled.h4`
+export const ListHeading = styled.h4`
   ${({ theme }) => theme.typography.title};
-  padding: 0 8px;
-  margin: 1em 0;
+  padding: 0.5rem 0.8rem;
+  margin: 0 0 0.5rem;
+  border-bottom: 1px solid #f7f7f8;
+  flex-direction: row;
+  align-items: center;
+  display: inline-flex;
+  width: 100%;
+  font-size: 0.9rem !important;
 `;
 
-const SideMenuSection = ({ heading, children }) => (
+const SideMenuSection = ({ heading, icon, children }) => (
   <SectionContainer>
-    {heading && <ListHeading>{heading}</ListHeading>}
+    {(heading || icon) && (
+      <ListHeading>
+        {icon} {heading}
+      </ListHeading>
+    )}
     {children}
   </SectionContainer>
 );

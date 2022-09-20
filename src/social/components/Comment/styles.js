@@ -20,7 +20,9 @@ export const OptionMenu = styled(UIOptionMenu)`
 `;
 
 export const CommentBlock = styled.div`
-  border-bottom: 1px solid #e3e4e8;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #e3e4e8;
+  }
 `;
 
 const encodeHexColor = (hex) => hex.replace('#', '%23');

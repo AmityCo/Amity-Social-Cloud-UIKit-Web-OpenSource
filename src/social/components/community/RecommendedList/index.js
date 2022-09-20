@@ -24,7 +24,7 @@ const RecommendedList = () => {
   if (!communities?.length) return null;
 
   return (
-    <HorizontalList title={title}>
+    <HorizontalList title={title} columns={{ 1024: 2, 1280: 3, 1440: 3, 1800: 3 }}>
       {loading && new Array(4).fill(1).map((x, index) => <CommunityCard key={index} loading />)}
 
       {!loading &&

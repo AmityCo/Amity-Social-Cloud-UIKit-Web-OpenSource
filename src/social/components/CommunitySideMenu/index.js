@@ -8,16 +8,15 @@ import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
 import UiKitSocialSearch from '~/social/components/SocialSearch';
 
 const SocialSearch = styled(UiKitSocialSearch)`
-  background: ${({ theme }) => theme.palette.system.background};
-  padding: 0.5rem;
+  padding: 0.5rem 0;
 `;
 
 const CommunitySideMenu = ({ className, activeCommunity, activePage }) => (
   <SideMenu className={className}>
     <SocialSearch sticky />
-    <Box overflow="auto" flex={1} minH={0}>
-      <SideSectionCommunity activePage={activePage} />
 
+    <SideSectionCommunity activePage={activePage} />
+    <Box flex={1} minH={0}>
       <SideSectionMyCommunity activeCommunity={activeCommunity} showCreateButton />
     </Box>
   </SideMenu>

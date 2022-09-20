@@ -29,10 +29,11 @@ export const Container = styled.div`
   flex-shrink: 0;
   align-self: flex-start;
   margin-bottom: 12px;
+  overflow: hidden;
 `;
 
 export const Cover = styled.div`
-  padding-top: 56.25%;
+  padding-top: 46%;
   position: relative;
 
   ${({ backgroundImage, theme }) => `
@@ -40,7 +41,7 @@ export const Cover = styled.div`
       backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
     };
     background-repeat: no-repeat;
-    background-position: center;
+    background-position-y: center;
     background-size: cover;
   `}
 `;
@@ -54,12 +55,8 @@ export const CoverContent = styled.div`
 
 export const CommunityName = styled(SocialCommunityName)`
   color: #ffffff;
+  font-size: 2rem !important;
   ${({ theme }) => theme.typography.headline};
-  line-height: 30px !important;
-
-  * {
-    line-height: 30px !important;
-  }
 `;
 
 export const Content = styled.div`
@@ -77,6 +74,7 @@ export const CategoriesList = styled.div`
   color: #ffffff;
   margin-bottom: 0;
   line-height: 20px;
+  font-weight: 500 !important;
   ${({ theme }) => theme.typography.body}
 `;
 

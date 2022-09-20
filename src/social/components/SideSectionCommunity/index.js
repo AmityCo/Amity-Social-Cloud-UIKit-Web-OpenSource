@@ -17,7 +17,7 @@ const SideSectionCommunity = ({ shouldHideExplore, activePage, children }) => {
   const { onChangePage } = useNavigation();
 
   return (
-    <SideMenuSection heading={<FormattedMessage id="sidesectioncommunity.community" />}>
+    <SideMenuSection>
       <SideMenuActionItem
         icon={<NewsIcon />}
         active={activePage === PageTypes.NewsFeed}

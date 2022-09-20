@@ -16,7 +16,6 @@ export const Counters = styled.div`
 export const InteractionBar = styled.div`
   display: flex;
   padding: 2px 0;
-  border-bottom: 1px solid #e3e4e8;
 `;
 
 export const CommentIcon = styled(Comment).attrs({ width: 16, height: 16 })`

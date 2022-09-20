@@ -28,7 +28,7 @@ export const lightenHex = (lightenAmount, hexColorString) => {
   const { lightness } = currentHsl;
   const lightenedHsl = {
     ...currentHsl,
-    lightness: Math.min(1, lightness + lightenAmount),
+    lightness: Math.min(1, lightness + (1 - lightness) * lightenAmount),
   };
   return hslObjectToString(lightenedHsl);
 };
