@@ -72,7 +72,6 @@ const ChatApplication = ({
       {currentChannelData && (
         <Chat
           channelId={currentChannelData.channelId}
-          channelType={currentChannelData.channelType}
           shouldShowChatDetails={shouldShowChatDetails}
           onChatDetailsClick={showChatDetails}
         />
