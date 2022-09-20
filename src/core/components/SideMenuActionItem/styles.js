@@ -5,7 +5,7 @@ const actionItemActiveStyles = css`
   ${({ active, theme }) =>
     active &&
     `
-      background-color: ${theme.palette.primary.shade3};
+      background-color: ${theme.palette.tertiary.shade2};
       & > .actionItemChild {
         color: ${theme.palette.primary.main};
       }
@@ -20,7 +20,7 @@ const actionItemContainerStyles = css`
   color: ${({ theme }) => theme.palette.neutral.main};
   justify-content: left;
   &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.palette.base.shade4};
+    background-color: ${({ theme }) => theme.palette.tertiary.shade1};
   }
   &:disabled {
     color: ${({ theme }) => theme.palette.neutral.shade2};
@@ -36,7 +36,6 @@ export const ButtonActionItem = styled(SecondaryButton)`
 
 export const AnchorActionItem = styled.a`
   cursor: pointer;
-  border-radius: 4px;
   ${actionItemContainerStyles}
   ${({ theme }) => theme.typography.bodyBold}
 `;
@@ -57,7 +56,7 @@ export const IconWrapper = styled.div`
           color: white;
         `
       : css`
-          background: ${theme.palette.base.shade4};
+          background: ${theme.palette.tertiary.main};
           color: inherit;
         `};
 `;

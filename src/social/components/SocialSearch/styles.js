@@ -22,7 +22,6 @@ export const SocialSearchContainer = styled.div`
       z-index: 500;
       position: sticky;
       top: 0;
-      box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
     `};
 `;
 

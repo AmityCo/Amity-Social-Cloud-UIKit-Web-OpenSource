@@ -48,8 +48,8 @@ const List = () => {
       columns={{
         1024: 3,
         1280: 5,
-        1440: 6,
-        1800: 8,
+        1440: 5,
+        1800: 5,
       }}
       title={<FormattedMessage id="categoryList" />}
       hasMore={hasMore}

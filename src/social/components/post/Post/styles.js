@@ -15,7 +15,7 @@ export const PostContainer = styled(({ className, ...props }) => (
   padding-bottom: 8px;
   background: ${({ theme }) => theme.palette.system.background};
   border: 1px solid #edeef2;
-  border-radius: 4px;
+  border-radius: 8px;
 `;
 
 export const PostHeadContainer = styled.div`

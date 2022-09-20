@@ -2,6 +2,7 @@
 export { default as Category } from './Category';
 export { default as Community } from './Community';
 export { default as CommunityAlt } from './CommunityAlt';
+export { default as CommunityNoom } from './CommunityNoom';
 export { default as User } from './User';
 export { default as ArrowLeft } from './ArrowLeft';
 export { default as ArrowRight } from './ArrowRight';

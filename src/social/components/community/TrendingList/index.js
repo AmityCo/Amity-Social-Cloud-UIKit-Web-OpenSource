@@ -22,10 +22,6 @@ const CommunitiesList = styled.ul`
   @media (min-width: 1280px) {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  @media (min-width: 1800px) {{
-    grid-template-columns: repeat(3, 1fr);
-  }
 `;
 
 const TrendingList = () => {

@@ -14,7 +14,7 @@ export const PostCreatorContainer = styled.div`
   border: 1px solid #edeef2;
   display: flex;
   background: ${({ theme }) => theme.palette.system.background};
-  border-radius: 4px;
+  border-radius: 8px;
 `;
 
 export const Footer = styled.div`

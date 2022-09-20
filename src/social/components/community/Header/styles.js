@@ -16,22 +16,25 @@ const CommunityHeaderContainer = styled.a.attrs((props) => props)`
   grid-template-rows: min-content min-content;
   grid-gap: 0 0.75em;
   padding: 0.5em;
-  border-radius: 4px;
   align-items: center;
   color: ${({ theme }) => theme.palette.base.main};
+
+  &:hover:not(:disabled) {
+    background-color: ${({ theme }) => theme.palette.tertiary.shade1};
+  }
 
   ${({ $loading }) =>
     !$loading &&
     `&:hover {
     cursor: pointer;
-    background-color: ${({ theme }) => theme.palette.base.shade4};
+    background-color: ${({ theme }) => theme.palette.base.shade3};
   }`}
 
   ${({ isActive, theme }) =>
     isActive &&
     css`
       color: ${theme.palette.primary.main};
-      background-color: ${theme.palette.primary.shade3};
+      background-color: ${theme.palette.tertiary.shade3};
     `};
 
   ${({ hasChildren }) =>
