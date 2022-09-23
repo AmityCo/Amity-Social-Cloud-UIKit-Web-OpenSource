@@ -2,6 +2,7 @@ import { CommunityRepository } from '@amityco/js-sdk';
 
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useFile from '~/core/hooks/useFile';
+import { useActionEvents } from '~/core/providers/ActionProvider';
 
 const useCommunity = (communityId, resolver) => {
   const community = useLiveObject(
@@ -9,6 +10,7 @@ const useCommunity = (communityId, resolver) => {
     [communityId],
     resolver,
   );
+  const actionEvents = useActionEvents();
 
   // Must call this hook even if there is a custom file URL which will override it.
   // Cannot call hooks conditionally due to the 'rules of hooks'.
@@ -37,9 +39,20 @@ const useCommunity = (communityId, resolver) => {
       ...payload,
     });
 
-  const joinCommunity = () => CommunityRepository.joinCommunity(communityId);
-  const leaveCommunity = () => CommunityRepository.leaveCommunity(communityId);
-  const closeCommunity = () => CommunityRepository.closeCommunity(communityId);
+  const joinCommunity = () => {
+    actionEvents.onCommunityJoin?.({ communityId });
+    CommunityRepository.joinCommunity(communityId);
+  };
+
+  const leaveCommunity = () => {
+    actionEvents.onCommunityLeave?.({ communityId });
+    CommunityRepository.leaveCommunity(communityId);
+  };
+
+  const closeCommunity = () => {
+    actionEvents.onCommunityClose?.({ communityId });
+    CommunityRepository.closeCommunity(communityId);
+  };
 
   return {
     community,

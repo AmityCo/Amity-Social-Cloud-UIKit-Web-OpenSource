@@ -6,6 +6,7 @@ import { Helmet } from 'react-helmet';
 import ASCClient, { ConnectionStatus } from '@amityco/js-sdk';
 
 import { ThemeProvider } from 'styled-components';
+import ActionProvider from '../ActionProvider';
 import { NotificationsContainer } from '~/core/components/Notification';
 import { ConfirmContainer } from '~/core/components/Confirm';
 import { CustomComponentsProvider } from '~/core/hocs/customization';
@@ -109,11 +110,13 @@ const UiKitProvider = forwardRef(
                 <ConfigProvider config={{ socialCommunityCreationButtonVisible }}>
                   <CustomComponentsProvider value={customComponents}>
                     <NavigationProvider {...actionHandlers}>
-                      <PostRendererProvider postRenderers={postRenderers}>
-                        {children}
-                        <NotificationsContainer />
-                        <ConfirmContainer />
-                      </PostRendererProvider>
+                      <ActionProvider actionHandlers={actionHandlers}>
+                        <PostRendererProvider postRenderers={postRenderers}>
+                          {children}
+                          <NotificationsContainer />
+                          <ConfirmContainer />
+                        </PostRendererProvider>
+                      </ActionProvider>
                     </NavigationProvider>
                   </CustomComponentsProvider>
                 </ConfigProvider>
@@ -149,6 +152,14 @@ UiKitProvider.propTypes = {
     onEditCommunity: PropTypes.func,
     onEditUser: PropTypes.func,
     onMessageUser: PropTypes.func,
+
+    // Analytic actions
+    onCommunityCreate: PropTypes.func,
+    onCommunityClose: PropTypes.func,
+    onCommunityJoin: PropTypes.func,
+    onCommunityLeave: PropTypes.func,
+    onPostCreate: PropTypes.func,
+    onPostImpression: PropTypes.func,
   }),
   socialCommunityCreationButtonVisible: PropTypes.bool,
   onConnectionStatusChange: PropTypes.func,

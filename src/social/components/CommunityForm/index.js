@@ -109,7 +109,6 @@ const CommunityForm = ({
       tags: [],
       userIds: [],
       categoryId: community?.categoryIds?.[0] ?? '',
-
       ...community, // if edit, community will erase the defaults
     }),
     [community],
@@ -167,6 +166,7 @@ const CommunityForm = ({
         tags: [],
         userIds: data.userIds,
         isPublic,
+
         // Currently we support only one category per community.
         categoryIds: data?.categoryId?.length ? [data.categoryId] : undefined,
       };
@@ -273,6 +273,7 @@ const CommunityForm = ({
                   <Switch value={value} onChange={() => onChange(!value)} />
                 )}
                 control={control}
+                defaultValue={false}
               />
             </SwitchContainer>
           </FormBlock>

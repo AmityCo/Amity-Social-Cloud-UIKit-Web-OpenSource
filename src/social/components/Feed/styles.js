@@ -7,7 +7,8 @@ export const FeedScrollContainer = styled(InfiniteScroll)`
     margin-top: 20px;
   }
 
-  & .post:not(:first-child) {
+  & .post:not(:first-child),
+  & .post-wrapper:not(:first-child) {
     margin-top: 20px;
   }
 

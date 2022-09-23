@@ -9,9 +9,11 @@ import customizableComponent from '~/core/hocs/customization';
 import promisify from '~/helpers/promisify';
 import { CommunityForm } from './styles';
 import withSDK from '~/core/hocs/withSDK';
+import { useActionEvents } from '~/core/providers/ActionProvider';
 
 const CommunityCreationModal = ({ isOpen, onClose }) => {
   const { formatMessage } = useIntl();
+  const actionEvents = useActionEvents();
 
   if (!isOpen) return null;
 
@@ -26,6 +28,11 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (data) => {
     const { communityId } = await promisify(CommunityRepository.createCommunity(data));
+    actionEvents.onCommunityCreate?.({
+      communityId,
+      name: data.displayName,
+      isPrivate: !data.isPublic,
+    });
     onClose(communityId);
   };
 

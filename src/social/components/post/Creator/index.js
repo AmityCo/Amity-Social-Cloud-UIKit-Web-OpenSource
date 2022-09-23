@@ -7,6 +7,7 @@ import { UserRepository, CommunityRepository, PostTargetType, FileType } from '@
 import { info } from '~/core/components/Confirm';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useImage from '~/core/hooks/useImage';
+import { useActionEvents } from '~/core/providers/ActionProvider';
 
 import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
@@ -95,6 +96,7 @@ const PostCreatorBar = ({
 }) => {
   const { setNavigationBlocker } = useNavigation();
   const { user } = useUser(currentUserId);
+  const actionEvents = useActionEvents();
 
   // default to me
   if (targetType === PostTargetType.GlobalFeed || targetType === PostTargetType.MyFeed) {
@@ -188,6 +190,7 @@ const PostCreatorBar = ({
     setMentionees([]);
 
     showPostCreatedNotification(post, model);
+    actionEvents.onPostCreate?.({ postId: post.postId, source: targetType });
   }, [postText, postImages, postVideos, postFiles, target, onCreateSuccess, model, mentionees]);
 
   const onMaxFilesLimit = () => {
