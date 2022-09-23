@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.16.0](https://github.com/noom/community-web-uikit/compare/2.15.1...2.16.0) (2022-09-23)
+
+
+### Features
+
+* Add analytics ([#12](https://github.com/noom/community-web-uikit/issues/12)) ([716bd42](https://github.com/noom/community-web-uikit/commit/716bd42a3abd7efd627290ee9231df0366cc02d9))
+
+
+### Bug Fixes
+
+* avatar URL ([f82f333](https://github.com/noom/community-web-uikit/commit/f82f333827f28c86e0dfe37ee42abf931df21bb8))
+* avatar URL v2 ([4e3f707](https://github.com/noom/community-web-uikit/commit/4e3f70780763b3d8b26029e0d152b1f417e062fc))
+
 ### [2.15.1](https://github.com/noom/community-web-uikit/compare/2.15.0...2.15.1) (2022-09-20)
 
 
