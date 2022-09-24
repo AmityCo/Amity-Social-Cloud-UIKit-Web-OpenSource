@@ -32,6 +32,7 @@ export { default as AmityCommunityEditPage } from '~/social/pages/CommunityEdit'
 export { default as AmityProfileSettings } from '~/social/components/ProfileSettings';
 export { default as AmityCommunityPostPage } from '~/social/pages/CommunityPost';
 export { default as AmityUserPostPage } from '~/social/pages/UserPost';
+export { default as AmityUserHeader } from '~/social/components/UserHeader';
 
 export { PageTypes } from '~/social/constants';
 

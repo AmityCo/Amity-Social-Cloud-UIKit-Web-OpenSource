@@ -5,11 +5,12 @@ import useUser from '~/core/hooks/useUser';
 
 import UIUserHeader from './styles';
 
-const UserHeader = ({ userId, children, onClick, isBanned }) => {
+const UserHeader = ({ userId, children, onClick, isBanned, showId }) => {
   const { user, file } = useUser(userId, [userId]);
 
   return (
     <UIUserHeader
+      showId={showId}
       userId={user.userId}
       displayName={user.displayName}
       avatarFileUrl={file.fileUrl}
@@ -22,6 +23,7 @@ const UserHeader = ({ userId, children, onClick, isBanned }) => {
 };
 
 UserHeader.propTypes = {
+  showId: PropTypes.bool,
   userId: PropTypes.string.isRequired,
   children: PropTypes.node,
   isBanned: PropTypes.bool,

@@ -29,7 +29,7 @@ export function ImpressionTracker({
     }
   }
 
-  useEffect(() => () => clearTimeout(timeoutRef.current));
+  useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
   const { ref } = useInView<HTMLDivElement>({
     onChange: handleVisible,

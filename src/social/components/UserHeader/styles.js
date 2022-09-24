@@ -28,7 +28,7 @@ const UserHeaderAvatar = styled(Avatar)`
 
 const UserHeaderTitle = styled.div`
   grid-area: title;
-  ${({ theme }) => theme.typography.title}
+  ${({ theme }) => theme.typography.bodyBold}
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -39,13 +39,29 @@ const UserHeaderSubtitle = styled.div`
   ${({ theme }) => theme.typography.body}
 `;
 
-const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick, isBanned }) => {
+const UserHeaderId = styled.div`
+  grid-area: subtitle;
+  ${({ theme }) => theme.typography.body}
+  text-align: left;
+  font-size: 0.7em;
+`;
+
+const UserHeader = ({
+  userId,
+  showId,
+  displayName,
+  avatarFileUrl,
+  children,
+  onClick,
+  isBanned,
+}) => {
   const onClickUser = () => onClick(userId);
   return (
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
       <UserHeaderAvatar avatar={avatarFileUrl} backgroundImage={UserImage} onClick={onClickUser} />
       <UserHeaderTitle title={userId} onClick={onClickUser}>
         {displayName} {isBanned && <BanIcon width={14} height={14} />}
+        {showId && <UserHeaderId>{userId}</UserHeaderId>}
       </UserHeaderTitle>
       {children && <UserHeaderSubtitle>{children}</UserHeaderSubtitle>}
     </UserHeaderContainer>
@@ -53,6 +69,7 @@ const UserHeader = ({ userId, displayName, avatarFileUrl, children, onClick, isB
 };
 
 UserHeader.propTypes = {
+  showId: PropTypes.bool,
   userId: PropTypes.string,
   displayName: PropTypes.string,
   avatarFileUrl: PropTypes.string,

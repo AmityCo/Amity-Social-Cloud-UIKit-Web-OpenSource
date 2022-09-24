@@ -84,19 +84,23 @@ const UiKitProvider = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [apiKey, userId, displayName, authToken, preventReconnect]);
 
+    function disconnect() {
+      if (client) {
+        setPreventReconnect(true);
+        client.unregisterSession();
+      }
+    }
+
     useImperativeHandle(ref, () => ({
       reconnect() {
         // this should refresh the component and relaunch the useMemo, hopefully reconnecting.
         setPreventReconnect(false);
       },
 
-      disconnect() {
-        if (client) {
-          setPreventReconnect(true);
-          client.unregisterSession();
-        }
-      },
+      disconnect,
     }));
+
+    useEffect(() => () => disconnect, []);
 
     return (
       <>
