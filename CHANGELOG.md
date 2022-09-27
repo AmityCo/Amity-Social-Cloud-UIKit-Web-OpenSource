@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.16.4](https://github.com/noom/community-web-uikit/compare/2.16.3...2.16.4) (2022-09-27)
+
+
+### Bug Fixes
+
+* Categoriy community sizes ([7a9f8f4](https://github.com/noom/community-web-uikit/commit/7a9f8f4e1449204c9b97a47e54e3e9e5472cfebc))
+
 ### [2.16.3](https://github.com/noom/community-web-uikit/compare/2.16.2...2.16.3) (2022-09-27)
 
 
