@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.16.3](https://github.com/noom/community-web-uikit/compare/2.16.2...2.16.3) (2022-09-27)
+
+
+### Bug Fixes
+
+* Display name Noomer ([812ad06](https://github.com/noom/community-web-uikit/commit/812ad068bc8e8a00170c48fbe91cbd54be82c463))
+
 ### [2.16.2](https://github.com/noom/community-web-uikit/compare/2.16.1...2.16.2) (2022-09-27)
 
 
