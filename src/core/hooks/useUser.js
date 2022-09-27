@@ -12,6 +12,11 @@ const useUser = (userId) => {
   // Cannot call hooks conditionally due to the 'rules of hooks'.
   let file = useFile(user.avatarFileId, [user.avatarFileId]);
 
+  // Add a Noomer as a display name if user does not have one
+  if (!user.displayName) {
+    user.displayName = 'Noomer';
+  }
+
   return {
     user,
     file,
