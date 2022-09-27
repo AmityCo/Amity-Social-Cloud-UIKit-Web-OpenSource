@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.16.2](https://github.com/noom/community-web-uikit/compare/2.16.1...2.16.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* Comment author duplication ([7b4f9ac](https://github.com/noom/community-web-uikit/commit/7b4f9ac4de266ab43d131a3c26a5f3308752fc6d))
+
 ### [2.16.1](https://github.com/noom/community-web-uikit/compare/2.16.0...2.16.1) (2022-09-24)
 
 
