@@ -39,6 +39,9 @@ const CategoryCommunitiesList = ({ categoryId }) => {
       hasMore={hasMore}
       loadMore={loadMore}
       container={Grid}
+      containerProps={{
+        columns: { 880: 2, 1280: 3, 1440: 3, 1800: 3 },
+      }}
       emptyState={
         <ListEmptyState
           icon={<EmptyFeedIcon width={48} height={48} />}

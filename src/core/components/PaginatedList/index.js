@@ -28,6 +28,7 @@ const PaginatedList = ({
   hasMore = false,
   loadMore = () => {},
   container = DefaultContainer,
+  containerProps = {},
   emptyState = null,
 }) => {
   const [render] = [].concat(children);
@@ -41,7 +42,7 @@ const PaginatedList = ({
 
   return (
     <div>
-      <Container>
+      <Container {...containerProps}>
         {items.map((item) => render(item))}
         {items.length === 0 && emptyState}
       </Container>
@@ -60,6 +61,7 @@ const PaginatedList = ({
 
 PaginatedList.propTypes = {
   container: PropTypes.elementType,
+  containerProps: PropTypes.object,
   items: PropTypes.array.isRequired,
   emptyState: PropTypes.node,
   hasMore: PropTypes.bool,
