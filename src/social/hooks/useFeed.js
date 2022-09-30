@@ -3,15 +3,16 @@ import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 const { queryAllPosts, queryCommunityPosts, queryUserPosts, queryMyPosts } = PostRepository;
 
-const useFeed = ({ targetType, targetId, feedType }) => {
+const useFeed = ({ targetType, targetId, feedType, limit }) => {
   const FeedQueryTypes = {
-    [PostTargetType.GlobalFeed]: queryAllPosts,
+    [PostTargetType.GlobalFeed]: queryAllPosts.bind(this, { limit }),
     [PostTargetType.CommunityFeed]: queryCommunityPosts.bind(this, {
       communityId: targetId,
       feedType,
+      limit,
     }),
-    [PostTargetType.UserFeed]: queryUserPosts.bind(this, { userId: targetId }),
-    [PostTargetType.MyFeed]: queryMyPosts,
+    [PostTargetType.UserFeed]: queryUserPosts.bind(this, { userId: targetId, limit }),
+    [PostTargetType.MyFeed]: queryMyPosts.bind(this, { limit }),
   };
 
   // Override default resolver because for MyFeed and GlobalFeed there does not need to be a targetId.
@@ -23,8 +24,9 @@ const useFeed = ({ targetType, targetId, feedType }) => {
 
   return useLiveCollection(
     FeedQueryTypes[targetType],
-    [targetType, targetId, feedType],
+    [targetType, targetId, feedType, limit],
     liveCollectionResolver,
+    true,
   );
 };
 

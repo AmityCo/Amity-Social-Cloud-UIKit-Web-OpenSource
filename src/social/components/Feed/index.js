@@ -17,6 +17,8 @@ import PrivateFeed from '~/social/components/PrivateFeed';
 
 const queryParams = { filter: CommunityFilter.Member };
 
+const FEED_FETCH_POST_LIMIT = 5;
+
 const Feed = ({
   className = null,
   feedType,
@@ -36,6 +38,7 @@ const Feed = ({
     targetType,
     targetId,
     feedType,
+    limit: FEED_FETCH_POST_LIMIT,
   });
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(
     queryParams,
