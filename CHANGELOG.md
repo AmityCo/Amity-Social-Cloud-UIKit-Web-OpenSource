@@ -1,5 +1,14 @@
 # Changelog
 
+### [2.16.5](https://github.com/noom/community-web-uikit/compare/2.16.4...2.16.5) (2022-09-30)
+
+
+### Bug Fixes
+
+* Comments lazy load ([db35e60](https://github.com/noom/community-web-uikit/commit/db35e6079c1e2a97bf5decc196e9164b970bce56))
+* limitloaded posts ([012c72d](https://github.com/noom/community-web-uikit/commit/012c72d5e1defbe106e1b2692c585b44a1d3ea01))
+* Remove debug flag ([612844c](https://github.com/noom/community-web-uikit/commit/612844c7eb3bcf3825e6c4c81dfcb4ad022cea21))
+
 ### [2.16.4](https://github.com/noom/community-web-uikit/compare/2.16.3...2.16.4) (2022-09-27)
 
 
