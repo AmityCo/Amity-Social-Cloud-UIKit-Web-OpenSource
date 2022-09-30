@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 import { CommentReferenceType } from '@amityco/js-sdk';
+import { LazyRender } from '@noom/wax-component-library';
 
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -18,7 +19,8 @@ import {
 } from './styles';
 import CommentList from '~/social/components/CommentList';
 
-const COMMENTS_PER_PAGE = 5;
+const COMMENTS_PER_PAGE = 3;
+const COMMENT_PLACEHOLDER_HEIGHT = 135;
 
 const UIEngagementBar = ({
   postId,
@@ -55,13 +57,18 @@ const UIEngagementBar = ({
             <CommentIcon /> <FormattedMessage id="comment" />
           </SecondaryButton>
         </InteractionBar>
-        <CommentList
-          referenceId={postId}
-          referenceType={CommentReferenceType.Post}
-          last={COMMENTS_PER_PAGE}
-          handleCopyCommentPath={handleCopyCommentPath}
-        />
-
+        <LazyRender
+          lazyBehavior="keepMounted"
+          visibleOffset={300}
+          placeholderHeight={Math.max(totalComments, 5) * COMMENT_PLACEHOLDER_HEIGHT}
+        >
+          <CommentList
+            referenceId={postId}
+            referenceType={CommentReferenceType.Post}
+            last={COMMENTS_PER_PAGE}
+            handleCopyCommentPath={handleCopyCommentPath}
+          />
+        </LazyRender>
         {isComposeBarDisplayed && (
           <CommentComposeBar postId={postId} postType={targetType} onSubmit={handleAddComment} />
         )}
@@ -70,6 +77,7 @@ const UIEngagementBar = ({
         <NoInteractionMessage>
           <FormattedMessage id="community.cannotInteract" />
         </NoInteractionMessage>
+
         <CommentList
           referenceId={postId}
           referenceType={CommentReferenceType.Post}
