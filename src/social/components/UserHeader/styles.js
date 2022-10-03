@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
+import { Loader } from '@noom/wax-component-library';
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as UserImage } from '~/icons/User';
 import BanIcon from '~/icons/Ban';
@@ -54,13 +55,21 @@ const UserHeader = ({
   children,
   onClick,
   isBanned,
+  isLoading,
 }) => {
   const onClickUser = () => onClick(userId);
   return (
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
       <UserHeaderAvatar avatar={avatarFileUrl} backgroundImage={UserImage} onClick={onClickUser} />
+
       <UserHeaderTitle title={userId} onClick={onClickUser}>
-        {displayName} {isBanned && <BanIcon width={14} height={14} />}
+        {isLoading ? (
+          <Loader colorScheme="primary" size="xs" />
+        ) : (
+          <>
+            {displayName} {isBanned && <BanIcon width={14} height={14} />}
+          </>
+        )}
         {showId && <UserHeaderId>{userId}</UserHeaderId>}
       </UserHeaderTitle>
       {children && <UserHeaderSubtitle>{children}</UserHeaderSubtitle>}

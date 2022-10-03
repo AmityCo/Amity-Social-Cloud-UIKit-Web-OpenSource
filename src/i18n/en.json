@@ -61,7 +61,7 @@
   "community.communitySettings": "Community Settings",
   "community.returnTo": "Return to {communityName}",
   "community.leaveCommunityTitle": "Leave community?",
-  "community.leaveCommunityBody": "You won’t no longer be able to post and interact in this community after leaving.",
+  "community.leaveCommunityBody": "You will no longer be able to post and interact in this community after leaving.",
   "community.leaveCommunityBodyLastMember": "As you’re the last moderator and member, choose close community to leave.",
   "community.leaveCommunityBodyOnlyModerator": "You’re the only moderator in this group. Nominate other members before leaving community.",
   "community.leaveCommunityButtonText": "Leave",

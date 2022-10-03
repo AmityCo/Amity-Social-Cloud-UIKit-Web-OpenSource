@@ -5,7 +5,7 @@ const { queryAllPosts, queryCommunityPosts, queryUserPosts, queryMyPosts } = Pos
 
 const useFeed = ({ targetType, targetId, feedType, limit }) => {
   const FeedQueryTypes = {
-    [PostTargetType.GlobalFeed]: queryAllPosts.bind(this, { limit }),
+    [PostTargetType.GlobalFeed]: queryAllPosts.bind(this, { limit, useCustomRanking: true }),
     [PostTargetType.CommunityFeed]: queryCommunityPosts.bind(this, {
       communityId: targetId,
       feedType,
@@ -26,6 +26,7 @@ const useFeed = ({ targetType, targetId, feedType, limit }) => {
     FeedQueryTypes[targetType],
     [targetType, targetId, feedType, limit],
     liveCollectionResolver,
+    true,
   );
 };
 

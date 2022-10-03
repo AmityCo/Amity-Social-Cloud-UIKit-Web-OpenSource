@@ -13,7 +13,8 @@ const useUser = (userId) => {
   let file = useFile(user.avatarFileId, [user.avatarFileId]);
 
   // Add a Noomer as a display name if user does not have one
-  if (!user.displayName) {
+  // We check for existence of createdAt to discount placeholder objects
+  if (user.createdAt && !user.displayName) {
     user.displayName = 'Noomer';
   }
 

@@ -33,25 +33,25 @@ const useCommunity = (communityId, resolver) => {
       postSetting?: boolean,
     }
   */
-  const updateCommunity = (payload) =>
-    CommunityRepository.updateCommunity({
+  const updateCommunity = async (payload) =>
+    await CommunityRepository.updateCommunity({
       communityId,
       ...payload,
     });
 
-  const joinCommunity = () => {
+  const joinCommunity = async () => {
     actionEvents.onCommunityJoin?.({ communityId });
-    CommunityRepository.joinCommunity(communityId);
+    await CommunityRepository.joinCommunity(communityId);
   };
 
-  const leaveCommunity = () => {
+  const leaveCommunity = async () => {
     actionEvents.onCommunityLeave?.({ communityId });
-    CommunityRepository.leaveCommunity(communityId);
+    await CommunityRepository.leaveCommunity(communityId);
   };
 
-  const closeCommunity = () => {
+  const closeCommunity = async () => {
     actionEvents.onCommunityClose?.({ communityId });
-    CommunityRepository.closeCommunity(communityId);
+    await CommunityRepository.closeCommunity(communityId);
   };
 
   return {
