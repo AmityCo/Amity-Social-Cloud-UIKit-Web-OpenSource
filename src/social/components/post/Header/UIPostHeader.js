@@ -22,6 +22,7 @@ import {
 } from './styles';
 
 const UIPostHeader = ({
+  userTag,
   avatarFileUrl,
   postAuthorName,
   postTargetName,
@@ -65,9 +66,12 @@ const UIPostHeader = ({
             <ShieldIcon width={14} height={14} /> <FormattedMessage id="moderator" />
           </ModeratorBadge>
         )}
-
+        {userTag && (
+          <ModeratorBadge>
+            <FormattedMessage id={`userType.${userTag}`} />
+          </ModeratorBadge>
+        )}
         {timeAgo && <Time date={timeAgo} />}
-
         {isEdited && (
           <MessageContainer>
             <FormattedMessage id="post.edited" />
@@ -105,6 +109,7 @@ const UIPostHeader = ({
 };
 
 UIPostHeader.propTypes = {
+  userTag: PropTypes.string,
   avatarFileUrl: PropTypes.string,
   postAuthorName: PropTypes.node,
   postTargetName: PropTypes.string,

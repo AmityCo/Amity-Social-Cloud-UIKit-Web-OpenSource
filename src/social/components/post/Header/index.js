@@ -28,8 +28,11 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
   );
   const handleClickUser = () => onClickUser(postedUserId);
 
+  const userTag = user?.metadata?.userType;
+
   return (
     <UIPostHeader
+      userTag={userTag && userTag !== 'user' ? userTag : undefined}
       avatarFileUrl={file.fileUrl}
       postAuthorName={user.displayName || <FormattedMessage id="anonymous" />}
       postTargetName={postTargetName}

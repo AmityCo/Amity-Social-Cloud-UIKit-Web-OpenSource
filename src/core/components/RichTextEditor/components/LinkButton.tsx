@@ -54,6 +54,12 @@ const LinkModal = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
+  useEffect(() => {
+    if (url.includes('https://https://') || url.includes('https://http://')) {
+      setUrl(url.replace('https://', ''));
+    }
+  }, [url]);
+
   function submit(event?: FormEvent) {
     if (event) {
       event.preventDefault();

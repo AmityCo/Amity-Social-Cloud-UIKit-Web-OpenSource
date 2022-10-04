@@ -349,5 +349,10 @@
   "chatComposer.addUsers": "Add users",
   "chat_modal.title": "Create chat",
   "chat_composer.placeholder.displayName": "Enter display name here",
-  "chat_composer.placeholder.channelId": "Enter channel ID here"
+  "chat_composer.placeholder.channelId": "Enter channel ID here",
+
+  "userType.user": "User",
+  "userType.coach": "Noom Coach",
+  "userType.writer": "Noom Writer",
+  "userType.team": "Noom Team"
 }
