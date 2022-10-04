@@ -26,7 +26,7 @@ const useFeed = ({ targetType, targetId, feedType, limit }) => {
     FeedQueryTypes[targetType],
     [targetType, targetId, feedType, limit],
     liveCollectionResolver,
-    true,
+    false,
   );
 };
 

@@ -17,6 +17,10 @@ import CommunityItem from './CommunityItem';
 const COMMUNITY_LIST_HEIGHT = 350;
 const SCROLL_THRESHOLD = 0.98;
 
+const StyledMenu = styled(Menu)`
+  border: none;
+`;
+
 const SelectIcon = styled(SortDown).attrs({ width: 18, height: 18 })`
   margin-right: 8px;
   margin-top: -4px;
@@ -30,7 +34,6 @@ const PostTargetSelectorContainer = styled.div`
 
 const CommunitySeparator = styled.div`
   ${({ theme }) => theme.typography.caption}
-  border-top: 1px solid #e3e4e8;
   color: ${({ theme }) => theme.palette.base.shade1};
   padding: 12px;
 `;
@@ -59,8 +62,8 @@ const PostTargetSelector = ({
   loadMoreCommunities,
   currentTargetId,
   onChange,
-
   children,
+  canTargetUser = false,
 }) => {
   const popupContainerRef = useRef();
   const [isOpen, setIsOpen] = useState(false);
@@ -71,17 +74,19 @@ const PostTargetSelector = ({
   const fileUrl = useImage({ fileId: user.avatarFileId });
 
   const menu = (
-    <Menu>
-      <MenuItem
-        active={user.userId === currentTargetId}
-        onClick={() => {
-          onChange({ targetId: user.userId, targetType: PostTargetType.UserFeed });
-          close();
-        }}
-      >
-        <Avatar size="tiny" avatar={fileUrl} backgroundImage={UserImage} />{' '}
-        <FormattedMessage id="post.myTimeline" />
-      </MenuItem>
+    <StyledMenu>
+      {canTargetUser ? (
+        <MenuItem
+          active={user.userId === currentTargetId}
+          onClick={() => {
+            onChange({ targetId: user.userId, targetType: PostTargetType.UserFeed });
+            close();
+          }}
+        >
+          <Avatar size="tiny" avatar={fileUrl} backgroundImage={UserImage} />{' '}
+          <FormattedMessage id="post.myTimeline" />
+        </MenuItem>
+      ) : null}
 
       <CommunitySeparator>
         <FormattedMessage id="post.community" />
@@ -110,7 +115,7 @@ const PostTargetSelector = ({
           ))}
         </InfiniteScroll>
       </CommunityList>
-    </Menu>
+    </StyledMenu>
   );
 
   return (

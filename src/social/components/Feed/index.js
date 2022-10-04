@@ -18,6 +18,21 @@ import PrivateFeed from '~/social/components/PrivateFeed';
 const queryParams = { filter: CommunityFilter.Member };
 
 const FEED_FETCH_POST_LIMIT = 10;
+const CAN_POST_ON_GLOBAL_TIMELINE = false;
+
+/** If posting on global feed is disabled, select the first community and set community feed as a target type  */
+function getAdjustedPostTarget(
+  targetType,
+  targetId,
+  communities = [],
+  canPostOnGlobalFeed = false,
+) {
+  if (targetType === PostTargetType.GlobalFeed && !canPostOnGlobalFeed) {
+    return { targetType: PostTargetType.CommunityFeed, targetId: communities?.[0]?.communityId };
+  }
+
+  return { targetType, targetId };
+}
 
 const Feed = ({
   className = null,
@@ -46,6 +61,11 @@ const Feed = ({
     () => !showPostCreator && !enablePostTargetPicker,
   );
 
+  const { targetId: postCreatorTargetId, targetType: postCreatorTargetType } =
+    getAdjustedPostTarget(targetType, targetId, communities, CAN_POST_ON_GLOBAL_TIMELINE);
+
+  console.log(postCreatorTargetId, postCreatorTargetType);
+
   function renderLoadingSkeleton() {
     return new Array(3).fill(3).map((x, index) => <DefaultPostRenderer key={index} loading />);
   }
@@ -59,11 +79,12 @@ const Feed = ({
     >
       <ConditionalRender condition={!isHiddenProfile}>
         <>
-          {showPostCreator && (
+          {showPostCreator && postCreatorTargetId && (
             <PostCreator
-              targetType={targetType}
-              targetId={targetId}
+              targetType={postCreatorTargetType}
+              targetId={postCreatorTargetId}
               communities={communities}
+              canTargetUser={CAN_POST_ON_GLOBAL_TIMELINE}
               enablePostTargetPicker={enablePostTargetPicker}
               hasMoreCommunities={hasMoreCommunities}
               loadMoreCommunities={loadMoreCommunities}

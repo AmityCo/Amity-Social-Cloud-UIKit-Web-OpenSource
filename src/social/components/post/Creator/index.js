@@ -86,6 +86,7 @@ const PostCreatorBar = ({
   connected, // connection status
   targetType,
   targetId,
+  canTargetUser,
   enablePostTargetPicker,
   communities = [],
   placeholder = "What's going on...",
@@ -280,6 +281,7 @@ const PostCreatorBar = ({
         <PostTargetSelector
           user={user}
           communities={communities}
+          canTargetUser={canTargetUser}
           hasMoreCommunities={hasMoreCommunities}
           loadMoreCommunities={loadMoreCommunities}
           currentTargetType={target.targetType}
@@ -377,6 +379,7 @@ const PostCreatorBar = ({
 };
 
 PostCreatorBar.propTypes = {
+  canTargetUser: PropTypes.bool,
   currentUserId: PropTypes.string,
   targetType: PropTypes.string,
   targetId: PropTypes.string,
