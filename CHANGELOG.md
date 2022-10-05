@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.17.1](https://github.com/noom/community-web-uikit/compare/2.17.0...2.17.1) (2022-10-05)
+
+
+### Bug Fixes
+
+* Editor hooks outside of editor context ([3cb32f7](https://github.com/noom/community-web-uikit/commit/3cb32f70d6182820ee4a86a894944c6032cb3b20))
+
 ## [2.17.0](https://github.com/noom/community-web-uikit/compare/2.16.6...2.17.0) (2022-10-05)
 
 
