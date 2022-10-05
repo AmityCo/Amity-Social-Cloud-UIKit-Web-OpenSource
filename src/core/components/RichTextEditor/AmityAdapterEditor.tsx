@@ -1,6 +1,6 @@
-import React, { ReactNode, useLayoutEffect } from 'react';
+import React, { ReactNode, useLayoutEffect, useRef } from 'react';
 
-import RichTextEditor, { useEditor } from './components/Editor';
+import RichTextEditor, { EditorHandle } from './components/Editor';
 import { markdownToSlate, slateToMarkdown } from './markdownParser';
 import { EditorValue } from './models';
 import { MentionOutput } from './plugins/mentionPlugin/models';
@@ -39,18 +39,16 @@ export function AmityAdapterEditor({
   rows = 3,
   ...rest
 }: AmityAdapterProps) {
-  const { clear: clearEditor } = useEditor(id);
+  const editorRef = useRef<EditorHandle>(null);
 
   useLayoutEffect(() => {
     if (value === '') {
-      clearEditor();
+      editorRef.current?.clear();
     }
-  }, [value, clearEditor]);
+  }, [value, editorRef]);
 
   const handleChange = (data: { value: EditorValue }) => {
     const newMarkdown = slateToMarkdown(data.value);
-
-    console.log(newMarkdown.text, data.value);
 
     onChange({
       text: newMarkdown.text,

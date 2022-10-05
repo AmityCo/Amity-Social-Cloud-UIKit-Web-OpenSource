@@ -1,6 +1,20 @@
-import React, { useCallback, useState, ReactNode, useMemo } from 'react';
+import React, {
+  useCallback,
+  useState,
+  ReactNode,
+  useMemo,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 
-import { Plate, TEditableProps, createPlugins, getPlateActions } from '@udecode/plate';
+import {
+  Plate,
+  TEditableProps,
+  createPlugins,
+  getPlateActions,
+  PlateProvider,
+} from '@udecode/plate';
 
 import { Box } from '@noom/wax-component-library';
 
@@ -24,15 +38,21 @@ const renderMentionItem = (data: { item: MentionItem; search: string }) => {
   );
 };
 
-export const useEditor = (editorId: string) => {
+export type EditorHandle = {
+  clear: () => void;
+};
+
+const EditorClear = forwardRef<EditorHandle, { id: string }>(({ id }, ref) => {
   const clear = useCallback(() => {
-    const plateActions = getPlateActions(editorId);
+    const plateActions = getPlateActions(id);
     plateActions.value([EMPTY_VALUE]);
     plateActions.resetEditor();
-  }, [editorId]);
+  }, [id]);
 
-  return { clear };
-};
+  useImperativeHandle(ref, () => ({ clear }));
+
+  return null;
+});
 
 const plugins = createPlugins<EditorValue, Editor>([
   ...defaultMarksPlugins,
@@ -62,104 +82,117 @@ type RichTextEditorProps = {
   autoFocus?: boolean;
 };
 
-function RichTextEditor({
-  id,
-  name,
-  initialValue = [EMPTY_VALUE],
-  rows,
-  maxRows,
-  onChange,
-  onClear,
-  onClick,
-  onFocus,
-  onBlur,
-  onKeyPress,
-  isDisabled,
-  isInvalid,
-  placeholder,
-  prepend,
-  append,
-  isToolbarVisible = true,
-  autoFocus,
-  queryMentionees,
-  mentionAllowed,
-}: RichTextEditorProps) {
-  const [mentionData, setMentionData] = useState<MentionItem[]>([]);
-
-  const onMentionSearchChange = useCallback(
-    (search: string) => {
-      if (search) {
-        queryMentionees?.(search, (data) => setMentionData(data.map((d) => toMentionItem(d))));
-      }
+const RichTextEditor = forwardRef<EditorHandle, RichTextEditorProps>(
+  (
+    {
+      id,
+      name,
+      initialValue = [EMPTY_VALUE],
+      rows,
+      maxRows,
+      onChange,
+      onClear,
+      onClick,
+      onFocus,
+      onBlur,
+      onKeyPress,
+      isDisabled,
+      isInvalid,
+      placeholder,
+      prepend,
+      append,
+      isToolbarVisible = true,
+      autoFocus,
+      queryMentionees,
+      mentionAllowed,
     },
-    [setMentionData, queryMentionees],
-  );
+    ref,
+  ) => {
+    const clearRef = useRef<EditorHandle>(null);
+    const [mentionData, setMentionData] = useState<MentionItem[]>([]);
 
-  function handleChange(newValue: EditorValue) {
-    if (isEmptyValue(newValue)) {
-      onClear?.();
+    useImperativeHandle(ref, () => ({
+      clear: () => {
+        clearRef.current?.clear?.();
+      },
+    }));
+
+    const onMentionSearchChange = useCallback(
+      (search: string) => {
+        if (search) {
+          queryMentionees?.(search, (data) => setMentionData(data.map((d) => toMentionItem(d))));
+        }
+      },
+      [setMentionData, queryMentionees],
+    );
+
+    function handleChange(newValue: EditorValue) {
+      if (isEmptyValue(newValue)) {
+        onClear?.();
+      }
+      onChange({ value: newValue, lastMentionText: '', mentions: [] });
     }
-    onChange({ value: newValue, lastMentionText: '', mentions: [] });
-  }
 
-  const handleFocus = React.useCallback(() => {
-    onFocus?.();
-  }, [onFocus]);
+    const handleFocus = React.useCallback(() => {
+      onFocus?.();
+    }, [onFocus]);
 
-  const handleBlur = React.useCallback(() => {
-    onBlur?.();
-  }, [onBlur]);
+    const handleBlur = React.useCallback(() => {
+      onBlur?.();
+    }, [onBlur]);
 
-  const rowStyles = useMemo(() => calculateRowStyles(rows, maxRows), [rows, maxRows]);
+    const rowStyles = useMemo(() => calculateRowStyles(rows, maxRows), [rows, maxRows]);
 
-  const editableProps: TEditableProps<EditorValue> = {
-    name,
-    onClick,
-    placeholder,
-    spellCheck: true,
-    autoFocus,
-    readOnly: isDisabled,
-    onFocus: handleFocus,
-    onBlur: handleBlur,
-    onKeyDown: onKeyPress,
-  };
+    const editableProps: TEditableProps<EditorValue> = {
+      name,
+      onClick,
+      placeholder,
+      spellCheck: true,
+      autoFocus,
+      readOnly: isDisabled,
+      onFocus: handleFocus,
+      onBlur: handleBlur,
+      onKeyDown: onKeyPress,
+    };
 
-  return (
-    <>
-      <Toolbar editorId={id} isVisible={isToolbarVisible} />
+    return (
+      <PlateProvider id={id}>
+        <Toolbar editorId={id} isVisible={isToolbarVisible} />
 
-      <Box
-        border="1px solid"
-        borderColor={isInvalid ? 'error.500' : 'gray.200'}
-        boxSizing="border-box"
-        borderRadius="md"
-        cursor="text"
-        paddingX={1}
-        paddingY={2}
-        sx={rowStyles}
-      >
-        {prepend}
-
-        <Plate<EditorValue>
-          id={id}
-          onChange={(newValue) => handleChange(newValue)}
-          plugins={plugins}
-          initialValue={initialValue}
-          editableProps={editableProps}
+        <Box
+          border="1px solid"
+          borderColor={isInvalid ? 'error.500' : 'gray.200'}
+          boxSizing="border-box"
+          borderRadius="md"
+          cursor="text"
+          paddingX={1}
+          paddingY={2}
+          sx={rowStyles}
         >
-          <BalloonToolbar />
-          {mentionAllowed && (
-            <MentionPopover<MentionData>
-              items={mentionData}
-              onRenderItem={renderMentionItem}
-              onMentionSearchChange={onMentionSearchChange}
-            />
-          )}
-        </Plate>
-        {append}
-      </Box>
-    </>
-  );
-}
+          {prepend}
+
+          <Plate<EditorValue>
+            id={id}
+            onChange={(newValue) => handleChange(newValue)}
+            plugins={plugins}
+            initialValue={initialValue}
+            editableProps={editableProps}
+          >
+            <BalloonToolbar />
+            {mentionAllowed && (
+              <MentionPopover<MentionData>
+                items={mentionData}
+                onRenderItem={renderMentionItem}
+                onMentionSearchChange={onMentionSearchChange}
+              />
+            )}
+            <EditorClear id={id} ref={clearRef} />
+          </Plate>
+          {append}
+        </Box>
+      </PlateProvider>
+    );
+  },
+);
 
 export default RichTextEditor;
