@@ -1,13 +1,25 @@
 import React, { useState, useCallback } from 'react';
 import cx from 'classnames';
+import { Avatar as WAXAvatar } from '@noom/wax-component-library';
 
 import customizableComponent from '~/core/hocs/customization';
 import withSize from '~/core/hocs/withSize';
 import { backgroundImage as UserImage } from '~/icons/User';
+import { SIZE_TO_WAX } from '~/core/hocs/withSize';
 
-import { AvatarContainer, Img, AvatarOverlay } from './styles';
+import { AvatarContainer, AvatarOverlay } from './styles';
 
-const Avatar = ({ className, avatar = null, showOverlay, size, onClick, loading, ...props }) => {
+const Avatar = ({
+  className,
+  avatar = null,
+  showOverlay,
+  size,
+  onClick,
+  loading,
+  displayName,
+  backgroundImage,
+  ...props
+}) => {
   const [visible, setVisible] = useState(false);
 
   const onLoad = useCallback(() => setVisible(true), []);
@@ -23,10 +35,22 @@ const Avatar = ({ className, avatar = null, showOverlay, size, onClick, loading,
     >
       {avatar && showOverlay ? (
         <AvatarOverlay {...props}>
-          <Img src={avatar} onError={onError} onLoad={onLoad} />
+          <WAXAvatar
+            size={SIZE_TO_WAX[size]}
+            src={avatar || backgroundImage}
+            name={displayName}
+            h="100%"
+            w="100%"
+          />
         </AvatarOverlay>
       ) : (
-        <Img src={avatar} onError={onError} onLoad={onLoad} />
+        <WAXAvatar
+          size={SIZE_TO_WAX[size]}
+          src={avatar || backgroundImage}
+          name={displayName}
+          h="100%"
+          w="100%"
+        />
       )}
     </AvatarContainer>
   );

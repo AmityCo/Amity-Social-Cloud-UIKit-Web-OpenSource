@@ -64,8 +64,6 @@ const Feed = ({
   const { targetId: postCreatorTargetId, targetType: postCreatorTargetType } =
     getAdjustedPostTarget(targetType, targetId, communities, CAN_POST_ON_GLOBAL_TIMELINE);
 
-  console.log(postCreatorTargetId, postCreatorTargetType);
-
   function renderLoadingSkeleton() {
     return new Array(3).fill(3).map((x, index) => <DefaultPostRenderer key={index} loading />);
   }

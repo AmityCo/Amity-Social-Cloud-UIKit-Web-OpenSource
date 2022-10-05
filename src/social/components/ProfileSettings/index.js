@@ -53,7 +53,11 @@ const ProfileSettings = ({ userId, client }) => {
     <Container>
       <PageHeader>
         <AvatarContainer>
-          <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
+          <Avatar
+            displayName={user?.displayName}
+            avatar={file.fileUrl}
+            backgroundImage={UserImage}
+          />
         </AvatarContainer>
         <div>
           <BackLink

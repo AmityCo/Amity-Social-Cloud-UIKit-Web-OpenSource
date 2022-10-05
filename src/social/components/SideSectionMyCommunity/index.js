@@ -1,4 +1,4 @@
-import React, { memo, useState, useState } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { CommunityFilter } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';

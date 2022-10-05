@@ -74,7 +74,7 @@ const StyledComment = ({
 
   return (
     <>
-      <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
+      <Avatar displayName={authorName} avatar={authorAvatar} backgroundImage={UserImage} />
       <Content>
         <Truncate
           ellipsis={

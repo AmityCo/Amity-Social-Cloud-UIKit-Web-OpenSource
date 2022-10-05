@@ -50,6 +50,8 @@ export function AmityAdapterEditor({
   const handleChange = (data: { value: EditorValue }) => {
     const newMarkdown = slateToMarkdown(data.value);
 
+    console.log(newMarkdown.text, data.value);
+
     onChange({
       text: newMarkdown.text,
       plainText: stripMentionTags(newMarkdown.text),
@@ -65,7 +67,7 @@ export function AmityAdapterEditor({
       isDisabled={disabled}
       isInvalid={invalid}
       initialValue={markdownToSlate(value, initialMentionees)}
-      // isToolbarVisible={isFocused}
+      isToolbarVisible
       {...rest}
     />
   );

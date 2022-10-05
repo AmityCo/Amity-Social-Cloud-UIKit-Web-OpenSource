@@ -14,6 +14,7 @@ export const createLinkPlugin = createPluginFactory<LinkPlugin>({
   key: ELEMENT_LINK,
   isElement: true,
   isInline: true,
+  props: ({ element }) => ({ href: element?.url, target: element?.target }),
   handlers: {
     onKeyDown: onKeyDownLink,
   },
@@ -36,7 +37,8 @@ export const createLinkPlugin = createPluginFactory<LinkPlugin>({
       ],
       getNode: (el) => ({
         type,
-        url: el.getAttribute('href'),
+        link: el.getAttribute('href'),
+        target: el.getAttribute('target') || '_blank',
       }),
     },
   }),

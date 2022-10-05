@@ -43,8 +43,13 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
         isBanned={user.isGlobalBan}
         onMouseEnter={(e) => onMouseEnter(e, user.isGlobalBan)}
       >
-        <Avatar avatar={file.fileUrl} showOverlay={user.isGlobalBan} />
-        <div css="margin-left: 10px;">{user.displayName}</div>
+        <Avatar
+          size="small"
+          displayName={user.displayName}
+          avatar={file.fileUrl}
+          showOverlay={user.isGlobalBan}
+        />
+        <div style={{ marginLeft: '0.5em' }}>{user.displayName}</div>
       </Item>
     );
   }
@@ -55,9 +60,9 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
       isBanned={user.isGlobalBan}
       onMouseEnter={(e) => onMouseEnter(e, user.isGlobalBan)}
     >
-      <Avatar avatar={file.fileUrl} />
-      <div css="margin-left: 10px;">{user.displayName}</div>
-      <div css="margin-left: 0.5rem;">{user.isGlobalBan && <BanIcon />}</div>
+      <Avatar size="small" displayName={user.displayName} avatar={file.fileUrl} />{' '}
+      <div style={{ marginLeft: '0.5em' }}>{user.displayName}</div>
+      <div style={{ marginLeft: '0.5em' }}>{user.isGlobalBan && <BanIcon />}</div>
     </Item>
   );
 };

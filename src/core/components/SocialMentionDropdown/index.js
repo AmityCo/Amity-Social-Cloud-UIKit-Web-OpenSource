@@ -7,7 +7,7 @@ const SocialMentionDropdown = ({ items = [] }) => {
     <SocialMentionDropdownContainer>
       {items.map(({ avatar, name }) => (
         <SocialMentionDropdownItem key={name}>
-          <Avatar src={avatar} />
+          <Avatar displayName={name} src={avatar} />
           <Name>{name}</Name>
         </SocialMentionDropdownItem>
       ))}

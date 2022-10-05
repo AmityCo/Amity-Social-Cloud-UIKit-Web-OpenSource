@@ -111,7 +111,12 @@ const UIUserInfo = ({
   return (
     <Container>
       <Header>
-        <Avatar avatar={fileUrl} backgroundImage={UserImage} />
+        <Avatar
+          size="big"
+          displayName={user.displayName}
+          avatar={fileUrl}
+          backgroundImage={UserImage}
+        />
         <ActionButtonContainer>
           <ConditionalRender condition={isMyProfile}>
             <Button disabled={!connected} onClick={() => onEditUser(userId)}>

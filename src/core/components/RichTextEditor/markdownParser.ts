@@ -8,6 +8,7 @@ import {
   ELEMENT_MENTION,
   isElement,
   ELEMENT_PARAGRAPH,
+  ELEMENT_LINK,
   isText,
   ELEMENT_LI,
 } from '@udecode/plate';
@@ -32,6 +33,7 @@ import {
   ParagraphElement,
   MentionElement,
   ListItemElement,
+  LinkElement,
 } from './models';
 
 const DEFAULT_HEADINGS = {
@@ -155,6 +157,15 @@ const serializeTransformElement: TransformMap = {
     type: ELEMENT_PARAGRAPH,
     children: nodeDepth === 0 ? [...el.children, { text: '\n' }] : el.children,
   }),
+
+  // Add url to missing links
+  [ELEMENT_LINK]: (el: LinkElement, _metadata, nodeDepth) =>
+    ({
+      type: ELEMENT_LINK,
+      url: el.link || el.url,
+      link: el.link || el.url,
+      children: el.children,
+    } as LinkElement),
 };
 
 /** Export mentions from Slate state to a format Amity understands (react-mentions) */

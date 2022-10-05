@@ -83,7 +83,12 @@ const PostTargetSelector = ({
             close();
           }}
         >
-          <Avatar size="tiny" avatar={fileUrl} backgroundImage={UserImage} />{' '}
+          <Avatar
+            displayName={user.displayName}
+            size="tiny"
+            avatar={fileUrl}
+            backgroundImage={UserImage}
+          />{' '}
           <FormattedMessage id="post.myTimeline" />
         </MenuItem>
       ) : null}

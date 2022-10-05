@@ -27,6 +27,7 @@ export const MentionPopover = <TData extends Data = NoData>({
   id = pluginKey,
   onMentionSearchChange,
   editorId,
+  items,
   ...props
 }: MentionComboboxProps<TData>) => {
   const search = useRef<string | null>('');
@@ -59,6 +60,7 @@ export const MentionPopover = <TData extends Data = NoData>({
       onSelectItem={getMentionOnSelectItem({
         key: pluginKey,
       })}
+      items={text ? items : []}
       styles={{
         root: {
           zIndex: 10000,

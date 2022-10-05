@@ -9,6 +9,13 @@ export const SIZE_ALIAS = {
   TINY: 'tiny',
 };
 
+export const SIZE_TO_WAX = {
+  [SIZE_ALIAS.BIG]: 'xl',
+  [SIZE_ALIAS.REGULAR]: 'md',
+  [SIZE_ALIAS.SMALL]: 'sm',
+  [SIZE_ALIAS.TINY]: 'xs',
+};
+
 export const SIZES = {
   [SIZE_ALIAS.BIG]: 64,
   [SIZE_ALIAS.REGULAR]: 40,

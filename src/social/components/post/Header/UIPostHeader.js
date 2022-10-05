@@ -80,10 +80,10 @@ const UIPostHeader = ({
       </AdditionalInfo>
     );
   };
-
   return (
     <PostHeaderContainer>
       <Avatar
+        displayName={typeof postAuthorName === 'string' ? postAuthorName : undefined}
         avatar={avatarFileUrl}
         backgroundImage={UserImage}
         loading={loading}

@@ -60,7 +60,12 @@ const UserHeader = ({
   const onClickUser = () => onClick(userId);
   return (
     <UserHeaderContainer title={displayName} hasNoChildren={!children}>
-      <UserHeaderAvatar avatar={avatarFileUrl} backgroundImage={UserImage} onClick={onClickUser} />
+      <UserHeaderAvatar
+        displayName={displayName}
+        avatar={avatarFileUrl}
+        backgroundImage={UserImage}
+        onClick={onClickUser}
+      />
 
       <UserHeaderTitle title={userId} onClick={onClickUser}>
         {isLoading ? (
