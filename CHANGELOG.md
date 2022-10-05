@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.17.0](https://github.com/noom/community-web-uikit/compare/2.16.6...2.17.0) (2022-10-05)
+
+
+### Features
+
+* Add user type tag ([d599673](https://github.com/noom/community-web-uikit/commit/d5996738f4bfb7efd0683aa880e096f34244e38b))
+
+
+### Bug Fixes
+
+* Avatar and links ([7be0d32](https://github.com/noom/community-web-uikit/commit/7be0d323fe13d5f497591f46b23f8fafb8aa2938))
+* Disable posting on global feed ([6d0bc85](https://github.com/noom/community-web-uikit/commit/6d0bc85aa1e24533e6da105f0e4ed6f6a0ab5542))
+
 ### [2.16.6](https://github.com/noom/community-web-uikit/compare/2.16.5...2.16.6) (2022-10-03)
 
 
