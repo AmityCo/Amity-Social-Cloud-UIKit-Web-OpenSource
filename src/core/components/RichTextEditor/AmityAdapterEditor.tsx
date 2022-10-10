@@ -61,6 +61,7 @@ export function AmityAdapterEditor({
     <RichTextEditor
       id={id}
       rows={rows}
+      ref={editorRef}
       onChange={(data) => handleChange(data)}
       isDisabled={disabled}
       isInvalid={invalid}

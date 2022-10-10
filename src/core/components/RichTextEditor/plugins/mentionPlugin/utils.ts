@@ -24,12 +24,12 @@ export function mentionElementToStringWithoutTags(element: MentionElement) {
 }
 
 export function stripMentionTags(text: string) {
-  return text.replaceAll(new RegExp(MentionRegex, 'g'), '$1$2');
+  return text.replaceAll(MentionRegex, '$1$2');
 }
 
 /** Obfuscate mention tags so the serializer does not turn them to links */
 export function obfuscateMentionTags(text: string) {
-  return text.replaceAll(new RegExp(MentionRegex, 'g'), '$1($2)($3)');
+  return text.replaceAll(MentionRegex, '$1($2)($3)');
 }
 
 /** Break text nodes with mention tags into mention elements */

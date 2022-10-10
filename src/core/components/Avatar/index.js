@@ -6,6 +6,7 @@ import customizableComponent from '~/core/hocs/customization';
 import withSize from '~/core/hocs/withSize';
 import { backgroundImage as UserImage } from '~/icons/User';
 import { SIZE_TO_WAX } from '~/core/hocs/withSize';
+import { CommunityNoom } from '~/icons';
 
 import { AvatarContainer, AvatarOverlay } from './styles';
 
@@ -18,12 +19,12 @@ const Avatar = ({
   loading,
   displayName,
   backgroundImage,
+  isCommunity,
   ...props
 }) => {
   const [visible, setVisible] = useState(false);
 
-  const onLoad = useCallback(() => setVisible(true), []);
-  const onError = useCallback(() => setVisible(false), []);
+  const communityProps = isCommunity ? { icon: <CommunityNoom p={1} color="white" /> } : {};
 
   return (
     <AvatarContainer
@@ -36,6 +37,7 @@ const Avatar = ({
       {avatar && showOverlay ? (
         <AvatarOverlay {...props}>
           <WAXAvatar
+            {...communityProps}
             size={SIZE_TO_WAX[size]}
             src={avatar || backgroundImage}
             name={displayName}
@@ -45,6 +47,7 @@ const Avatar = ({
         </AvatarOverlay>
       ) : (
         <WAXAvatar
+          {...communityProps}
           size={SIZE_TO_WAX[size]}
           src={avatar || backgroundImage}
           name={displayName}
@@ -59,6 +62,7 @@ const Avatar = ({
 Avatar.defaultProps = {
   backgroundImage: UserImage,
   loading: false,
+  isCommunity: false,
 };
 
 export default customizableComponent('Avatar', withSize(Avatar));

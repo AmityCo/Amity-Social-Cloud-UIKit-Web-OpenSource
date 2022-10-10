@@ -35,7 +35,13 @@ export const NotificationsContainer = () => {
     setTimeout(() => removeNotification(id), duration);
   };
 
-  return <Notifications>{notifications.map(Notification)}</Notifications>;
+  return (
+    <Notifications>
+      {notifications.map((data, index) => (
+        <Notification {...data} key={index} />
+      ))}
+    </Notifications>
+  );
 };
 
 /*

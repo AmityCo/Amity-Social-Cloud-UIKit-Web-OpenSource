@@ -73,6 +73,7 @@ const UICommunityHeader = ({
     onClick={() => onClick(communityId)}
   >
     <CommunityHeaderAvatar
+      isCommunity
       avatar={avatarFileUrl}
       backgroundImage={CommunityImage}
       loading={loading}

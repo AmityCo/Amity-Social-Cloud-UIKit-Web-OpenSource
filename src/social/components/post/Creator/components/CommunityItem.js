@@ -19,7 +19,7 @@ const CommunityItem = ({ community, currentTargetId, onChange, onClose }) => {
         onClose();
       }}
     >
-      <Avatar avatar={avatarFileUrl} size="tiny" backgroundImage={CommunityImage} />
+      <Avatar isCommunity avatar={avatarFileUrl} size="tiny" backgroundImage={CommunityImage} />
       {` ${community.displayName}`}
     </MenuItem>
   );

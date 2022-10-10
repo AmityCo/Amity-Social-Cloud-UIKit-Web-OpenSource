@@ -36,7 +36,7 @@ export { default as AmityUserHeader } from '~/social/components/UserHeader';
 
 export { PageTypes } from '~/social/constants';
 
-export { ApiEndpoint, ApiRegion } from '@amityco/js-sdk';
+export { ApiEndpoint, ApiRegion, CommunityRepository } from '@amityco/js-sdk';
 
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
