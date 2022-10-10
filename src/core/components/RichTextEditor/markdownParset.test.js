@@ -256,7 +256,7 @@ describe('slateToMarkdown', () => {
             },
           ],
           id: 'TEST1345',
-          value: 'Testko Testic',
+          value: 'Testko Testić',
           mentionType: 'user',
         },
         {
@@ -284,7 +284,7 @@ describe('slateToMarkdown', () => {
       },
       {
         index: 53,
-        display: '@Testko Testic',
+        display: '@Testko Testić',
         id: 'TEST1345',
         plainTextIndex: 29,
         childIndex: 0,

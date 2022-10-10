@@ -96,7 +96,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
     targetId: post?.targetId,
     targetType: post?.targetType,
     remoteText: comment?.data?.text ?? '',
-    remoteMarkup: parseMentionsMarkup(comment?.data?.text, comment?.metadata?.markupText),
+    remoteMarkup: parseMentionsMarkup(comment?.data?.text, comment?.metadata),
   });
 
   const onReportClick = async () => {

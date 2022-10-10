@@ -110,6 +110,7 @@ const StyledComment = ({
               multiline
               mentionAllowed
               value={markup}
+              mentionees={mentionees}
               queryMentionees={queryMentionees}
               onChange={onChange}
             />

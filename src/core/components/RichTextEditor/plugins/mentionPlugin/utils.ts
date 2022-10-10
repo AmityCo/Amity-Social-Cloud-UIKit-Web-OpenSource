@@ -44,7 +44,7 @@ export function breakTextNodeIntoMentions(
   const nodes: (Text | MentionElement)[] = [];
   let currentIndex = 0;
 
-  const matches = [...textNode.text.matchAll(new RegExp(mentionWithTagsRegex, 'g'))];
+  const matches = [...textNode.text.matchAll(new RegExp(mentionWithTagsRegex, 'gu'))];
   matches.forEach((match) => {
     const matchIndex = textNode.text.indexOf(match[0]);
     nodes.push({ text: textNode.text.substring(currentIndex, matchIndex) });

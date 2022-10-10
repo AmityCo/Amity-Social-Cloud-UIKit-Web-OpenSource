@@ -22,13 +22,11 @@ const Avatar = ({
   isCommunity,
   ...props
 }) => {
-  const [visible, setVisible] = useState(false);
-
   const communityProps = isCommunity ? { icon: <CommunityNoom p={1} color="white" /> } : {};
 
   return (
     <AvatarContainer
-      className={cx(className, { visible, clickable: !!onClick })}
+      className={cx(className, { clickable: !!onClick })}
       loading={loading}
       size={size}
       onClick={onClick}

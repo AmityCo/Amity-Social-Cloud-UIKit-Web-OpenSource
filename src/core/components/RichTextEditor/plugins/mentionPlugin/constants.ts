@@ -8,13 +8,13 @@ export const MentionSymbol: Record<MentionType, string> = {
 export const MentionRegex = new RegExp(
   `([${Object.values(MentionSymbol).join(
     ',',
-  )}])\\[([\\p{L}\\p{M}\\p{N}_\\-\\s]+)\\]\\(([A-Za-z0-9]+)\\)`,
+  )}])\\[([\\p{L}\\p{M}\\p{N}_\\s\\-]+)\\]\\(([A-Za-z0-9\\-_]+)\\)`,
   'gu',
 );
 
 export const ObfuscatedMentionRegex = new RegExp(
   `([${Object.values(MentionSymbol).join(
     ',',
-  )}])\\(([\\p{L}\\p{M}\\p{N}_\\-\\s]+)\\)\\(([A-Za-z0-9]+)\\)`,
+  )}])\\(([\\p{L}\\p{M}\\p{N}_\\s\\-]+)\\)\\(([A-Za-z0-9\\-_]+)\\)`,
   'gu',
 );
