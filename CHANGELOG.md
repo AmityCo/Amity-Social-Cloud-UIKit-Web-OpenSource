@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.18.0](https://github.com/noom/community-web-uikit/compare/2.17.2...2.18.0) (2022-10-18)
+
+
+### Features
+
+* Notification Tray UI ([#14](https://github.com/noom/community-web-uikit/issues/14)) ([61ff904](https://github.com/noom/community-web-uikit/commit/61ff904e1435b2a34c4c9362fef1fb592a3a3013))
+
 ### [2.17.2](https://github.com/noom/community-web-uikit/compare/2.17.1...2.17.2) (2022-10-10)
 
 
