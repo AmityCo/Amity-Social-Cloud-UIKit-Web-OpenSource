@@ -354,5 +354,9 @@
   "userType.user": "User",
   "userType.coach": "Noom Coach",
   "userType.writer": "Noom Writer",
-  "userType.team": "Noom Team"
+  "userType.team": "Noom Team",
+
+  "notificationTray.title": "Notifications",
+  "notificationTray.markAllRead": "Mark all as read",
+  "notificationTray.viewAll": "View all notifications"
 }

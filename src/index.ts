@@ -36,6 +36,12 @@ export { default as AmityUserHeader } from '~/social/components/UserHeader';
 
 export { PageTypes } from '~/social/constants';
 
+export {
+  NotificationRecordList,
+  NotificationRecordPopover,
+  NotificationRecordListHeader,
+} from '~/core/components/NotificationTray';
+
 export { ApiEndpoint, ApiRegion, CommunityRepository } from '@amityco/js-sdk';
 
 // import AmityComment from './components/Comment';

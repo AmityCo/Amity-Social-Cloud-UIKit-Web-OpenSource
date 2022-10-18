@@ -5,10 +5,10 @@ import { LoadMoreButton, ShevronDownIcon } from './styles';
 const LoadMore = ({
   hasMore,
   loadMore,
-  text,
+  text = '',
   children,
   className = '',
-  prependIcon,
+  prependIcon = null,
   appendIcon = <ShevronDownIcon />,
   isExpanded = true,
 }) => {
@@ -28,15 +28,13 @@ const LoadMore = ({
     );
   }
 
-  return (
-    !!children.length && (
-      <div>
-        <LoadMoreButton className={className} onClick={() => setExpanded(true)}>
-          {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}
-        </LoadMoreButton>
-      </div>
-    )
-  );
+  return !!children.length ? (
+    <div>
+      <LoadMoreButton className={className} onClick={() => setExpanded(true)}>
+        {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}
+      </LoadMoreButton>
+    </div>
+  ) : null;
 };
 
 export default LoadMore;

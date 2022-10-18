@@ -3,7 +3,7 @@ const mainWebpack = require('../webpack.config.js');
 const pkg = require('../package.json');
 
 module.exports = {
-  stories: ['../src/**/*.stories.js'],
+  stories: ['../src/**/*.stories.js', '../src/**/*.stories.tsx'],
   core: {
     builder: 'webpack5',
   },
@@ -19,9 +19,9 @@ module.exports = {
   ],
   framework: '@storybook/react',
   core: {
-    builder: '@storybook/builder-webpack5'
+    builder: '@storybook/builder-webpack5',
   },
-  webpackFinal: async config => {
+  webpackFinal: async (config) => {
     config.plugins.push(
       new DefinePlugin({
         SC_DISABLE_SPEEDY: true, // storybook
