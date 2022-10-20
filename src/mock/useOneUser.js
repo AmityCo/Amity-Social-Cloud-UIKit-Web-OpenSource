@@ -6,10 +6,8 @@ import useLiveCollection from '~/core/hooks/useLiveCollection';
  * Just takes the first user in the list, and so it could actually be the current user!
  */
 
-const userRepo = new UserRepository();
-
 const useOneUser = () => {
-  const [users] = useLiveCollection(() => userRepo.getAllUsers());
+  const [users] = useLiveCollection(() => UserRepository.queryUsers());
   return users[0] || { userId: 'random-user-id' };
 };
 

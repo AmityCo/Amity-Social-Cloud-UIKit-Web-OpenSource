@@ -19,6 +19,6 @@ UiEmptyFeed.args = {
 
 UiEmptyFeed.argTypes = {
   canPost: { control: { type: 'boolean' } },
-  targetType: { control: { type: 'select', options: Object.values(PostTargetType) } },
-  feedType: { control: { type: 'select', options: Object.values(FeedType) } },
+  targetType: { control: { type: 'select' }, options: Object.values(PostTargetType) },
+  feedType: { control: { type: 'select' }, options: Object.values(FeedType) },
 };

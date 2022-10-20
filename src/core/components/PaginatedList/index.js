@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import styled from 'styled-components';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import ChevronDown from '~/icons/ChevronDown';
 
 import { ChevronDownContainer } from '~/core/components/PaginatedList/styles';
@@ -44,16 +43,17 @@ const PaginatedList = ({
     <div>
       <Container>
         {items.map((item) => render(item))}
-        <ConditionalRender condition={items.length === 0}>{emptyState}</ConditionalRender>
+        {items.length === 0 && emptyState}
       </Container>
-      <ConditionalRender condition={hasMore}>
+
+      {hasMore && (
         <LoadMore onClick={onClick}>
           <FormattedMessage id="loadMore" />
           <ChevronDownContainer>
             <ChevronDown height={14} width={14} />
           </ChevronDownContainer>
         </LoadMore>
-      </ConditionalRender>
+      )}
     </div>
   );
 };

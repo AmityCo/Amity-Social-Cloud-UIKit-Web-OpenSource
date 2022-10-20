@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { LoadMoreButton, ShevronDownIcon } from './styles';
 
 const LoadMore = ({
@@ -16,8 +14,9 @@ const LoadMore = ({
 }) => {
   const [expanded, setExpanded] = useState(isExpanded);
   useEffect(() => setExpanded(isExpanded), [isExpanded]);
-  return (
-    <ConditionalRender condition={expanded}>
+
+  if (expanded) {
+    return (
       <div>
         {children}
         {hasMore && (
@@ -26,14 +25,17 @@ const LoadMore = ({
           </LoadMoreButton>
         )}
       </div>
-      {children.length && (
-        <div>
-          <LoadMoreButton className={className} onClick={() => setExpanded(true)}>
-            {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}
-          </LoadMoreButton>
-        </div>
-      )}
-    </ConditionalRender>
+    );
+  }
+
+  return (
+    !!children.length && (
+      <div>
+        <LoadMoreButton className={className} onClick={() => setExpanded(true)}>
+          {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}
+        </LoadMoreButton>
+      </div>
+    )
   );
 };
 
