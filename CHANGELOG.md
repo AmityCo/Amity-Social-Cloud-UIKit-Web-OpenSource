@@ -1,5 +1,14 @@
 # Changelog
 
+### [2.18.1](https://github.com/noom/community-web-uikit/compare/2.18.0...2.18.1) (2022-10-20)
+
+
+### Bug Fixes
+
+* Modal issues ([b62c1a8](https://github.com/noom/community-web-uikit/commit/b62c1a84c2f8251ffcea4461ad83dade73745920))
+* Responsive edit pages ([21725cf](https://github.com/noom/community-web-uikit/commit/21725cf0d6c70c34854beab434cd73dc491dd615))
+* WAX modal ([99e5d6b](https://github.com/noom/community-web-uikit/commit/99e5d6be38d5531bab69aae28795399f42125cb2))
+
 ## [2.18.0](https://github.com/noom/community-web-uikit/compare/2.17.2...2.18.0) (2022-10-18)
 
 
