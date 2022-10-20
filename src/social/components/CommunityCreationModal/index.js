@@ -37,7 +37,7 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal title="Create community" onCancel={closeConfirm}>
+    <Modal isOpen title="Create community" onCancel={closeConfirm}>
       <CommunityForm onCancel={closeConfirm} onSubmit={handleSubmit} />
     </Modal>
   );

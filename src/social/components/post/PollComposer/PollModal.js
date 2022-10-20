@@ -28,6 +28,7 @@ const PollModal = ({ targetId, targetType, onClose, onCreatePoll }) => {
 
   return (
     <Modal
+      isOpen
       title={formatMessage({ id: 'poll_modal.title' })}
       clean={false}
       onCancel={isDirty ? closeConfirm : onClose}

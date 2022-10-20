@@ -17,6 +17,7 @@ const Confirm = ({
 }) => (
   <ConfirmModal
     clean
+    isOpen
     className={className}
     title={title}
     footer={

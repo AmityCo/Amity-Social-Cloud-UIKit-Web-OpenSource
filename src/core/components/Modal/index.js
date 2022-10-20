@@ -1,39 +1,37 @@
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { IconButton } from '@noom/wax-component-library';
+
+import {
+  Modal as WaxModal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+} from '@noom/wax-component-library';
 import useElement from '~/core/hooks/useElement';
-import ConditionalRender from '~/core/components/ConditionalRender';
-import { Overlay, ModalWindow, SmallModalWindow, Header, Content, Footer } from './styles';
 
-
-const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean, children }) => {
+const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, isOpen, children }) => {
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
   useEffect(() => modalElement && modalElement.focus(), [modalElement]);
 
-  const isText = typeof children === 'string' || children.type === FormattedMessage;
-
   const attrProps = { className, ref: modalRef };
 
-  const ModalComponent = size === 'small' ? SmallModalWindow : ModalWindow;
+  const modalSize = size === 'small' ? 'sm' : 'lg';
 
   return (
-    <Overlay onClick={onOverlayClick}>
-      <ModalComponent tabIndex={0} {...attrProps}>
-        {(title || onCancel) && (
-          <Header clean={clean}>
-            <span>{title}</span>
-            <ConditionalRender condition={onCancel}>
-              <IconButton size="sm" icon="close" variant="outline" onClick={onCancel} />
-            </ConditionalRender>
-          </Header>
-        )}
+    <WaxModal isOpen={isOpen} onClose={onCancel ?? onOverlayClick} size={modalSize}>
+      <ModalOverlay />
 
-        <Content isText={isText}>{children}</Content>
+      <ModalContent tabIndex={0} {...attrProps}>
+        {title && <ModalHeader>{title}</ModalHeader>}
+        {onCancel && <ModalCloseButton />}
+        <ModalBody>{children}</ModalBody>
 
-        {footer && <Footer clean={clean}>{footer}</Footer>}
-      </ModalComponent>
-    </Overlay>
+        {footer && <ModalFooter>{footer}</ModalFooter>}
+      </ModalContent>
+    </WaxModal>
   );
 };
 

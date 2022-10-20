@@ -47,7 +47,11 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit, usersToOmit 
   };
 
   return (
-    <Modal title={formatMessage({ id: 'AddMemberModal.addMembers' })} onCancel={closeConfirm}>
+    <Modal
+      isOpen
+      title={formatMessage({ id: 'AddMemberModal.addMembers' })}
+      onCancel={closeConfirm}
+    >
       <FormContainer>
         <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)}>
           <FormBody>

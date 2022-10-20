@@ -6,7 +6,7 @@ import { Content, GoToSettingsButton, Message, SkipButton, Title } from './style
 
 export default ({ onClose, onGoSettings }) => {
   return (
-    <Modal>
+    <Modal isOpen>
       <Content>
         <MagicWand />
 

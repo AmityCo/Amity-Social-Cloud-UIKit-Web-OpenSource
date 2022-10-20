@@ -224,7 +224,11 @@ const DefaultPostRenderer = ({
           )}
 
           {isEditing && (
-            <Modal title={formatMessage({ id: 'post.editPost' })} onCancel={closeEditingPostModal}>
+            <Modal
+              isOpen
+              title={formatMessage({ id: 'post.editPost' })}
+              onCancel={closeEditingPostModal}
+            >
               <PostEditor postId={postId} onSave={closeEditingPostModal} />
             </Modal>
           )}
