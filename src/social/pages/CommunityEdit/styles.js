@@ -8,7 +8,7 @@ export const ExtraActionContainer = styled.div`
   background: ${({ theme }) => theme.palette.system.background};
   align-self: flex-start;
   padding: 16px;
-  width: 330px;
+  width: 100%;
   flex-shrink: 0;
 `;
 

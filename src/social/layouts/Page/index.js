@@ -5,16 +5,20 @@ import styled from 'styled-components';
 const Container = styled.div`
   display: grid;
 
-  grid-template-areas: 'main side';
-  grid-template-columns: auto min-content;
+  grid-template-areas: 'side' 'main';
+  grid-template-rows: min-content auto;
 
   ${({ withHeader }) =>
     withHeader &&
     `
-    grid-template-areas: 'header header' 'main side';
-    grid-template-columns: auto min-content;
-    grid-template-rows: min-content auto;
+    grid-template-areas: 'header' 'side' 'main';
   `}
+
+  @media (min-width: 960px) {
+    grid-template-areas: 'main side';
+    grid-template-columns: auto min-content;
+    ${({ withHeader }) => withHeader && `grid-template-areas: 'header header' 'main side';`}
+  }
 
   width: 100%;
   height: 100%;
@@ -41,8 +45,11 @@ const Side = styled.div`
   grid-area: side;
   width: 100%;
   height: 100%;
-  max-width: 20rem;
   overflow: auto;
+
+  @media (min-width: 960px) {
+    width: 250px;
+  }
 
   & > :not(:first-child) {
     margin-top: 20px;

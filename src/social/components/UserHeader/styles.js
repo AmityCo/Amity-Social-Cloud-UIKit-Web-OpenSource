@@ -50,6 +50,7 @@ const UserHeaderId = styled.div`
 const UserHeader = ({
   userId,
   showId,
+  showName = true,
   displayName,
   avatarFileUrl,
   children,
@@ -72,7 +73,7 @@ const UserHeader = ({
           <Loader colorScheme="primary" size="xs" />
         ) : (
           <>
-            {displayName} {isBanned && <BanIcon width={14} height={14} />}
+            {showName ? displayName : ''} {isBanned && <BanIcon width={14} height={14} />}
           </>
         )}
         {showId && <UserHeaderId>{userId}</UserHeaderId>}
@@ -84,6 +85,7 @@ const UserHeader = ({
 
 UserHeader.propTypes = {
   showId: PropTypes.bool,
+  showName: PropTypes.bool,
   userId: PropTypes.string,
   displayName: PropTypes.string,
   avatarFileUrl: PropTypes.string,

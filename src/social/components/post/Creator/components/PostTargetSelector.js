@@ -30,6 +30,7 @@ const PostTargetSelectorContainer = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  flex-direction: column;
 `;
 
 const CommunitySeparator = styled.div`
