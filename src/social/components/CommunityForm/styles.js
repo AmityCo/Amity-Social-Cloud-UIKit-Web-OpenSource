@@ -130,7 +130,7 @@ export const FormBlockContainer = styled.div`
 `;
 
 export const FormBlockBody = styled.div`
-  ${({ edit }) => (edit ? `padding: 0 16px 20px;` : `padding: 20px 16px 16px;`)}
+  ${({ edit }) => (edit ? `padding: 0 16px 20px;` : ``)}
 `;
 
 export const SwitchContainer = styled.div`
@@ -151,7 +151,7 @@ export const PermissionControlContainer = styled.div`
 export const Description = styled.div`
   color: ${({ theme }) => theme.palette.base.shade1};
   ${({ theme }) => theme.typography.body};
-  width: 357px;
+  //width: 357px;
 `;
 
 export const InformationBlock = styled.div`

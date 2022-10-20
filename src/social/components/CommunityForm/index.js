@@ -42,7 +42,7 @@ import {
 const FormBlock = ({ title, children, edit }) => (
   <FormBlockContainer edit={edit}>
     {edit && title && <FormBlockHeader>{title}</FormBlockHeader>}
-    <FormBlockBody>{children}</FormBlockBody>
+    <FormBlockBody edit={edit}>{children}</FormBlockBody>
   </FormBlockContainer>
 );
 

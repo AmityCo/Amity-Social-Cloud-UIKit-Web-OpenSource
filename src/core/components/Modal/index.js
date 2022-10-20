@@ -21,13 +21,15 @@ const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, isOpe
   const modalSize = size === 'small' ? 'sm' : 'lg';
 
   return (
-    <WaxModal isOpen={isOpen} onClose={onCancel ?? onOverlayClick} size={modalSize}>
+    <WaxModal isCentered isOpen={isOpen} onClose={onCancel ?? onOverlayClick} size={modalSize}>
       <ModalOverlay />
 
-      <ModalContent tabIndex={0} {...attrProps}>
+      <ModalContent tabIndex={0} marginY={0} {...attrProps}>
         {title && <ModalHeader>{title}</ModalHeader>}
         {onCancel && <ModalCloseButton />}
-        <ModalBody>{children}</ModalBody>
+        <ModalBody maxH="calc(100vh - 100px)" overflowY="auto">
+          {children}
+        </ModalBody>
 
         {footer && <ModalFooter>{footer}</ModalFooter>}
       </ModalContent>
