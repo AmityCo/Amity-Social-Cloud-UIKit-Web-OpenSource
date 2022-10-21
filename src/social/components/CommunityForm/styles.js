@@ -88,7 +88,9 @@ export const Radio = styled.input.attrs({ type: 'radio' })`
   flex-shrink: 0;
 `;
 
-export const Form = styled.form``;
+export const Form = styled.form`
+  width: 100%;
+`;
 
 export const SubmitButton = styled(PrimaryButton).attrs({
   type: 'submit',
@@ -130,7 +132,7 @@ export const FormBlockContainer = styled.div`
 `;
 
 export const FormBlockBody = styled.div`
-  ${({ edit }) => (edit ? `padding: 0 16px 20px;` : ``)}
+  ${({ edit }) => (edit ? `padding: 1em;` : ``)}
 `;
 
 export const SwitchContainer = styled.div`
@@ -167,7 +169,6 @@ export const CommunityPermissionBlock = styled.div`
 `;
 
 export const Footer = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
   padding: ${({ edit }) => (edit ? `12px 0` : `12px 16px`)};
   display: flex;
   justify-content: ${({ edit }) => (edit ? 'flex-start' : 'flex-end')};

@@ -30,7 +30,7 @@ const ButtonContainer = styled.div`
 const FormBlock = ({ title, children }) => (
   <FormBlockContainer>
     <FormBlockHeader>{title}</FormBlockHeader>
-    <FormBlockBody>{children}</FormBlockBody>
+    <FormBlockBody edit>{children}</FormBlockBody>
   </FormBlockContainer>
 );
 

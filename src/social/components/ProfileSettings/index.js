@@ -9,6 +9,8 @@ import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
 import { isEmpty } from '~/helpers';
 
+import PageLayout from '~/social/layouts/Page';
+import PageHeader from '~/core/components/PageHeader';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { Tabs, tabs } from './constants';
@@ -50,28 +52,21 @@ const ProfileSettings = ({ userId, client }) => {
   }
 
   return (
-    <Container>
-      <PageHeader>
-        <AvatarContainer>
-          <Avatar
-            displayName={user?.displayName}
-            avatar={file.fileUrl}
-            backgroundImage={UserImage}
+    <PageLayout
+      header={
+        <>
+          <PageHeader
+            title={<FormattedMessage id="profile.setting" />}
+            avatarFileUrl={file.fileUrl}
+            avatarImage={UserImage}
+            backLinkText={formatMessage({ id: 'ProfileSettings.returnTo' }) + user.displayName}
+            hideBackArrow
+            onBack={onBack}
           />
-        </AvatarContainer>
-        <div>
-          <BackLink
-            text={formatMessage({ id: 'ProfileSettings.returnTo' }) + user.displayName}
-            onClick={onBack}
-          />
-          <PageTitle>
-            <FormattedMessage id="profile.setting" />
-          </PageTitle>
-        </div>
-      </PageHeader>
-      <div>
-        <ProfileSettingsTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-      </div>
+          <ProfileSettingsTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        </>
+      }
+    >
       <ActiveTabContainer>
         {activeTab === Tabs.EDIT_PROFILE && (
           <ActiveTabContent>
@@ -79,7 +74,7 @@ const ProfileSettings = ({ userId, client }) => {
           </ActiveTabContent>
         )}
       </ActiveTabContainer>
-    </Container>
+    </PageLayout>
   );
 };
 
