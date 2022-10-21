@@ -18,6 +18,7 @@ const Confirm = ({
   <ConfirmModal
     clean
     isOpen
+    isCentered
     className={className}
     title={title}
     footer={

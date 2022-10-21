@@ -11,7 +11,17 @@ import {
 } from '@noom/wax-component-library';
 import useElement from '~/core/hooks/useElement';
 
-const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, isOpen, children }) => {
+const Modal = ({
+  size,
+  isCentered,
+  className,
+  onOverlayClick,
+  onCancel,
+  title,
+  footer,
+  isOpen,
+  children,
+}) => {
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
   useEffect(() => modalElement && modalElement.focus(), [modalElement]);
@@ -21,7 +31,12 @@ const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, isOpe
   const modalSize = size === 'small' ? 'sm' : 'lg';
 
   return (
-    <WaxModal isOpen={isOpen} onClose={onCancel ?? onOverlayClick} size={modalSize}>
+    <WaxModal
+      isOpen={isOpen}
+      isCentered={isCentered}
+      onClose={onCancel ?? onOverlayClick}
+      size={modalSize}
+    >
       <ModalOverlay />
 
       <ModalContent tabIndex={0} marginY={0} {...attrProps}>
