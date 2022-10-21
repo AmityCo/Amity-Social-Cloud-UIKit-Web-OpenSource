@@ -25,7 +25,6 @@ const Container = styled.div`
   grid-gap: 20px;
   overflow: hidden;
   margin: 0 auto;
-  padding: 20px 0;
 `;
 
 const HeaderContainer = styled.div`
