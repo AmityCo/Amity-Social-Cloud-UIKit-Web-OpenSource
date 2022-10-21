@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.18.2](https://github.com/noom/community-web-uikit/compare/2.18.1...2.18.2) (2022-10-21)
+
+
+### Bug Fixes
+
+* Modal styles ([1384693](https://github.com/noom/community-web-uikit/commit/13846937aa9a088e10c04f07cb89089d83e1715b))
+
 ### [2.18.1](https://github.com/noom/community-web-uikit/compare/2.18.0...2.18.1) (2022-10-20)
 
 
