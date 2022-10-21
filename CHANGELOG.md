@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.18.3](https://github.com/noom/community-web-uikit/compare/2.18.2...2.18.3) (2022-10-21)
+
+
+### Bug Fixes
+
+* Confirm modal ([b14d953](https://github.com/noom/community-web-uikit/commit/b14d9532c30d38b55f20dd46106c01378fc95f14))
+
 ### [2.18.2](https://github.com/noom/community-web-uikit/compare/2.18.1...2.18.2) (2022-10-21)
 
 
