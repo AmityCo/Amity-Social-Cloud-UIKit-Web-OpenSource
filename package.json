@@ -1,6 +1,6 @@
 {
   "name": "@meetperry/amity-uikit",
-  "version": "1.0.7-beta.0",
+  "version": "1.0.7-beta.1",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
