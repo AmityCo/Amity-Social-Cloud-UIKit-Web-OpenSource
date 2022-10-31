@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageRepository } from '@amityco/js-sdk';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -10,13 +10,7 @@ import { notification } from '~/core/components/Notification';
 import { MessageOptionsIcon, SaveIcon, CloseIcon, EditingInput, EditingContainer } from './styles';
 
 const StyledPopover = styled(Popover)`
-  transform: none !important;
-  position: absolute !important;
-  top: calc(100% + 10px) !important;
-
-  ${({ align, theme }) =>
-    align === 'end' &&
-    `color: ${theme.palette.neutral.main}; left: auto !important; right: 0 !important;`}
+  ${({ align, theme }) => align === 'end' && `color: ${theme.palette.neutral.main};`}
 `;
 
 const Flagging = ({ messageId }) => {
@@ -51,8 +45,8 @@ const Flagging = ({ messageId }) => {
   );
 };
 
-const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
-  const popupContainerRef = useRef();
+const Options = ({ isIncoming, messageId, data, isSupportedMessageType, popupContainerRef }) => {
+  // const popupContainerRef = useRef();
   const [text, setText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
@@ -122,20 +116,18 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   );
 
   return (
-    <div ref={popupContainerRef} style={{ position: 'relative' }}>
-      <StyledPopover
-        isOpen={isOpen}
-        position={['bottom']}
-        align={isIncoming ? 'start' : 'end'}
-        content={isEditing ? editing : menu}
-        parentElement={popupContainerRef.current}
-        onClickOutside={close}
-      >
-        <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
-          <MessageOptionsIcon />
-        </div>
-      </StyledPopover>
-    </div>
+    <StyledPopover
+      isOpen={isOpen}
+      positions={['bottom', 'top']}
+      align={isIncoming ? 'start' : 'end'}
+      content={isEditing ? editing : menu}
+      parentElement={popupContainerRef.current}
+      onClickOutside={close}
+    >
+      <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
+        <MessageOptionsIcon />
+      </div>
+    </StyledPopover>
   );
 };
 

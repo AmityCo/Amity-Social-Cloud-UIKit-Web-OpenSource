@@ -66,6 +66,7 @@ const MessageList = ({ client, channelId }) => {
                 userDisplayName={message.user.displayName}
                 isConsequent={isConsequent}
                 isIncoming={isIncoming}
+                containerRef={containerRef}
               />
             );
           })}
