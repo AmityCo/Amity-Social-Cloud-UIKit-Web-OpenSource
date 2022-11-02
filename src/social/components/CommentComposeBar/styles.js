@@ -14,6 +14,7 @@ export const CommentComposeBarContainer = styled.div`
   background: ${({ theme }) => theme.palette.system.background};
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 export const CommentComposeBarInput = styled(InputText).attrs({ rows: 1, maxRows: 15 })`
@@ -28,4 +29,11 @@ export const AddCommentButton = styled(PrimaryButton)`
   height: 40px;
   padding: 10px 16px;
   margin-left: 12px;
+
+  @media (max-width: 960px) {
+    width: 100%;
+    flex-basis: 100%;
+    margin-top: 0.5rem;
+    margin-left: 0;
+  }
 `;
