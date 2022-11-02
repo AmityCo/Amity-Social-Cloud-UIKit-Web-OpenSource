@@ -193,10 +193,15 @@ export const CommentEditContainer = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  margin-top: 8px;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 
-  > * {
-    margin-left: 8px;
+  @media (max-width: 960px) {
+    > button {
+      flex: 1;
+      margin-left: 0;
+    }
   }
 `;
 

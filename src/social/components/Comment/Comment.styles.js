@@ -72,6 +72,8 @@ const StyledComment = ({
     },
   ].filter(Boolean);
 
+  const isEmpty = !markup || markup?.trim().length === 0;
+
   return (
     <>
       <Avatar displayName={authorName} avatar={authorAvatar} backgroundImage={UserImage} />
@@ -118,7 +120,7 @@ const StyledComment = ({
               <Button onClick={cancelEditing}>
                 <FormattedMessage id="cancel" />
               </Button>
-              <PrimaryButton onClick={() => handleEdit(text)}>
+              <PrimaryButton isDisabled={isEmpty} onClick={() => handleEdit(text)}>
                 <FormattedMessage id="save" />
               </PrimaryButton>
             </ButtonContainer>
