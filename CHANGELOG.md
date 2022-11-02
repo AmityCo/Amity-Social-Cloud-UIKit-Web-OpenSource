@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.18.4](https://github.com/noom/community-web-uikit/compare/2.18.3...2.18.4) (2022-10-21)
+
+
+### Bug Fixes
+
+* Padding ([bd387d3](https://github.com/noom/community-web-uikit/commit/bd387d3679628b3128f1d7cd3bf959b1395597ba))
+
 ### [2.18.3](https://github.com/noom/community-web-uikit/compare/2.18.2...2.18.3) (2022-10-21)
 
 
