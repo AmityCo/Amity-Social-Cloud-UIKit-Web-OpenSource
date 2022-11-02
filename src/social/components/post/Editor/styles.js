@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { PrimaryButton } from '~/core/components/Button';
 
 export const PostEditorContainer = styled.div`
-  width: 520px;
   padding: 0;
   border: none;
   display: flex;
@@ -12,15 +11,18 @@ export const PostEditorContainer = styled.div`
 `;
 
 export const ContentContainer = styled.div`
-  padding: 16px;
+  padding-bottom: 0.5rem;
 `;
 
 export const Footer = styled.div`
   border-top: 1px solid ${({ theme }) => theme.palette.base.shade4};
-  padding: 12px 16px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  display: flex;
 `;
 
 export const PostButton = styled(PrimaryButton)`
   padding: 10px 16px;
   margin-left: auto;
+  flex: 1;
 `;

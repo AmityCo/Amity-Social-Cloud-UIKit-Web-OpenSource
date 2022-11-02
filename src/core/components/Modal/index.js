@@ -8,6 +8,7 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
+  useBreakpointValue,
 } from '@noom/wax-component-library';
 import useElement from '~/core/hooks/useElement';
 
@@ -25,6 +26,12 @@ const Modal = ({
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
   useEffect(() => modalElement && modalElement.focus(), [modalElement]);
+  const forceCentered = useBreakpointValue({
+    base: false,
+    md: true,
+  });
+
+  console.log(forceCentered);
 
   const attrProps = { className, ref: modalRef };
 
@@ -33,7 +40,7 @@ const Modal = ({
   return (
     <WaxModal
       isOpen={isOpen}
-      isCentered={isCentered}
+      isCentered={isCentered || forceCentered}
       onClose={onCancel ?? onOverlayClick}
       size={modalSize}
     >
