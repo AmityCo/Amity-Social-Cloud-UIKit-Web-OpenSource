@@ -120,7 +120,7 @@ const StyledComment = ({
               <Button onClick={cancelEditing}>
                 <FormattedMessage id="cancel" />
               </Button>
-              <PrimaryButton isDisabled={isEmpty} onClick={() => handleEdit(text)}>
+              <PrimaryButton disabled={isEmpty} onClick={() => handleEdit(text)}>
                 <FormattedMessage id="save" />
               </PrimaryButton>
             </ButtonContainer>

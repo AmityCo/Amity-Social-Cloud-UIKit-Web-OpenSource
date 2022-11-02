@@ -73,6 +73,7 @@ export const FileSize = styled.div`
 export const RemoveIcon = styled(Remove)`
   grid-area: remove;
   z-index: 2;
+  height: 2rem;
 `;
 
 const RemoveButton = styled(Button).attrs({

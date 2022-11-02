@@ -16,8 +16,6 @@ import useLiveObject from '~/core/hooks/useLiveObject';
 import useErrorNotification from '~/core/hooks/useErrorNotification';
 import { notification } from '~/core/components/Notification';
 
-import { backgroundImage as UserImage } from '~/icons/User';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { extractMetadata, formatMentionees } from '~/helpers/utils';

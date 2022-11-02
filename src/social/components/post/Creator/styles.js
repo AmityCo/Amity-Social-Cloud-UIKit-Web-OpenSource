@@ -21,9 +21,15 @@ export const Footer = styled.div`
   padding-top: 12px;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 
   & > label {
-    margin-right: 0.5rem;
+    @media (max-width: 960px) {
+      flex: 1;
+      margin-right: 0;
+      border-radius: 8px;
+    }
   }
 `;
 
@@ -35,6 +41,11 @@ export const PostContainer = styled.div`
 export const PostButton = styled(PrimaryButton)`
   padding: 10px 16px;
   margin-left: auto;
+
+  @media (max-width: 960px) {
+    width: 100%;
+    flex-basis: 100%;
+  }
 `;
 
 export const UploadsContainer = styled.div`
@@ -52,7 +63,7 @@ export const VideoAttachmentIcon = styled(PlayCircle)`
   vertical-align: -0.125em;
 `;
 
-export const PollButton = styled.button`
+export const PollButton = styled.label`
   background: none;
   border: none;
   background: rgb(235 236 239 / 60%);
