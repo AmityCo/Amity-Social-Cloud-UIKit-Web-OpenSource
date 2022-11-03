@@ -1,5 +1,15 @@
 # Changelog
 
+### [2.18.5](https://github.com/noom/community-web-uikit/compare/2.18.4...2.18.5) (2022-11-02)
+
+
+### Bug Fixes
+
+* Responsive comment button ([9b9ef09](https://github.com/noom/community-web-uikit/commit/9b9ef09abf74f37feac44f6c2df44a8a8f5197ab))
+* Responsive edit comment buttons ([8d4464d](https://github.com/noom/community-web-uikit/commit/8d4464dc787b348cab07baee3b8c42167874dd69))
+* Responsive post create buttons ([8481b4c](https://github.com/noom/community-web-uikit/commit/8481b4c528cd3829b94b55a9a99e824a2f0b4998))
+* Responsive post edit modal ([2d9cdb3](https://github.com/noom/community-web-uikit/commit/2d9cdb3e0cd7bfbb78bfb405c1cdb7e1deb5de84))
+
 ### [2.18.4](https://github.com/noom/community-web-uikit/compare/2.18.3...2.18.4) (2022-10-21)
 
 
