@@ -22,7 +22,7 @@ export const Footer = styled.div`
   display: flex;
   align-items: center;
 
-  & > label {
+  & > :not(:last-child) {
     margin-right: 0.5rem;
   }
 `;
@@ -55,6 +55,7 @@ export const VideoAttachmentIcon = styled(PlayCircle)`
 export const PollButton = styled.button`
   background: none;
   border: none;
+  padding: 0;
 `;
 
 export const PollIcon = styled(Poll)``;
