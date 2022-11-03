@@ -31,8 +31,6 @@ const Modal = ({
     md: true,
   });
 
-  console.log(forceCentered);
-
   const attrProps = { className, ref: modalRef };
 
   const modalSize = size === 'small' ? 'sm' : 'lg';

@@ -70,6 +70,7 @@ export const AdditionalInfo = styled.div`
 export const PostNamesContainer = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 
   > :not(:first-child) {
     margin-left: 0.25rem;
