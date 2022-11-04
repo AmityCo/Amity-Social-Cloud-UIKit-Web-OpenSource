@@ -13,16 +13,13 @@ import { useConfig } from '~/social/providers/ConfigProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useSDK } from '~/core/hooks/useSDK';
 
-const myListQueryParam = { filter: CommunityFilter.Member };
-
 const CommunityCount = ({ count = 0, ...styles }) => <Box {...styles}>{count}</Box>;
 
-const SideSectionMyCommunity = ({ className, activeCommunity }) => {
+const SideSectionMyCommunity = ({ className, activeCommunity, communityListProps }) => {
   const { connected } = useSDK();
   const { socialCommunityCreationButtonVisible } = useConfig();
   const { onCommunityCreated } = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
-  const [communityCount, setCommunityCount] = useState(0);
 
   const open = () => setIsOpen(true);
 
@@ -39,7 +36,7 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
         </Icon>
         <FormattedMessage id="SideSectionMyCommunity.myCommunity" />
 
-        <CommunityCount ml="auto" count={communityCount} />
+        <CommunityCount ml="auto" count={communityListProps?.communities?.length} />
       </ListHeading>
       <Box h="calc(100% - 50px)" minH={0} overflow="auto">
         {socialCommunityCreationButtonVisible && (
@@ -55,9 +52,8 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
 
         <CommunitiesList
           className={className}
-          communitiesQueryParam={myListQueryParam}
           activeCommunity={activeCommunity}
-          onChange={({ count }) => setCommunityCount(count)}
+          {...communityListProps}
         />
       </Box>
 

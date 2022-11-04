@@ -1,5 +1,5 @@
 import { LoadingStatus } from '@amityco/js-sdk';
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useSDK } from '~/core/hooks/useSDK';
 
@@ -28,7 +28,7 @@ const useLiveCollection = (
     const liveCollection = createLiveCollection();
     let loadMoreHasBeenCalled = false;
 
-    const updateLiveCollection = throttle(() => {
+    const updateLiveCollection = debounce(() => {
       debug && console.log(liveCollection.dataStatus, liveCollection.hasMore);
 
       const { hasMore = false } = liveCollection;

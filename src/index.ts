@@ -22,6 +22,7 @@ export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 export { default as AmityLayout } from '~/social/layouts/Main';
 export { default as AmityCommunitySideMenu } from '~/social/components/CommunitySideMenu';
+export { default as useAmityMyCommunitiesList } from '~/social/hooks/useMyCommunitiesList';
 
 export { default as AmityExplorePage } from '~/social/pages/Explore';
 export { default as AmityNewsFeedPage } from '~/social/pages/NewsFeed';

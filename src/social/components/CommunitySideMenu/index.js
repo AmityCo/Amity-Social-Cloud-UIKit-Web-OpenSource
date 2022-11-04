@@ -11,13 +11,17 @@ const SocialSearch = styled(UiKitSocialSearch)`
   padding: 0.5rem 0;
 `;
 
-const CommunitySideMenu = ({ className, activeCommunity, activePage }) => (
+const CommunitySideMenu = ({ className, activeCommunity, activePage, communityListProps }) => (
   <SideMenu className={className}>
     <SocialSearch sticky />
 
     <SideSectionCommunity activePage={activePage} />
     <Box flex={1} minH={0}>
-      <SideSectionMyCommunity activeCommunity={activeCommunity} showCreateButton />
+      <SideSectionMyCommunity
+        activeCommunity={activeCommunity}
+        communityListProps={communityListProps}
+        showCreateButton
+      />
     </Box>
   </SideMenu>
 );

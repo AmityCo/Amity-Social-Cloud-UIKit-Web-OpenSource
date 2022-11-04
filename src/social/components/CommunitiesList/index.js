@@ -1,17 +1,19 @@
 import React, { memo, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import UICommunitiesList from './UICommunitiesList';
 
-const CommunitiesList = ({ className, communitiesQueryParam, activeCommunity, onChange }) => {
+const CommunitiesList = ({
+  className,
+  communitiesQueryParam,
+  activeCommunity,
+  communities = [],
+  hasMore,
+  loadMore,
+  loading,
+  loadingMore,
+}) => {
   const { onClickCommunity } = useNavigation();
-  const [communities, hasMore, loadMore, loading, loadingMore, ...elseM] =
-    useCommunitiesList(communitiesQueryParam);
-
-  useEffect(() => {
-    onChange({ count: communities?.length ?? 0 });
-  }, [communities?.length ?? 0]);
 
   // If the list is the result of a search, then the list items are displayed differently.
   const isSearchList = communitiesQueryParam.hasOwnProperty('search');

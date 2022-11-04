@@ -25,7 +25,6 @@ const UICommunityList = ({
   loadingMore,
 }) => {
   const noCommunitiesFound = isSearchList && !communityIds.length;
-  const classNames = [communityIds.length < 4 && 'no-scroll', className].filter(Boolean).join(' ');
 
   function renderLoadingSkeleton() {
     return new Array(5).fill(1).map((x, index) => <CommunityHeader key={index} loading />);
@@ -33,7 +32,7 @@ const UICommunityList = ({
 
   return (
     <CommunityScrollContainer
-      className={classNames}
+      className={className}
       dataLength={communityIds.length}
       next={loadMore}
       hasMore={hasMore}
