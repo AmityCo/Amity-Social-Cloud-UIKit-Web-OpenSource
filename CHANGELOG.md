@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.19.0](https://github.com/noom/community-web-uikit/compare/2.18.6...2.19.0) (2022-11-04)
+
+
+### Features
+
+* export comminities hook ([b58c5a9](https://github.com/noom/community-web-uikit/commit/b58c5a9b22a43bc66df2fdbb7ac624091e1250fb))
+
 ### [2.18.6](https://github.com/noom/community-web-uikit/compare/2.18.5...2.18.6) (2022-11-03)
 
 
