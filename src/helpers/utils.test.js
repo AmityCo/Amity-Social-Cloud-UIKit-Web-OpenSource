@@ -1,8 +1,6 @@
-/* eslint-disable no-undef */
-// FIXME sdk import in ./utils throws an error in jest env
-// import { extractMetadata, parseMentionsMarkup } from './utils';
+import { extractMetadata, parseMentionsMarkup } from './utils';
 
-xdescribe('helpers/utils', () => {
+describe('helpers/utils', () => {
   test('extractMetadata', () => {
     const data = [
       [
