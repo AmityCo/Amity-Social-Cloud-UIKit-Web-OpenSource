@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.18.6](https://github.com/noom/community-web-uikit/compare/2.18.5...2.18.6) (2022-11-03)
+
+
+### Bug Fixes
+
+* Post names word break ([accaa17](https://github.com/noom/community-web-uikit/commit/accaa17dca024b213d66421d6d75e04c1b14da6f))
+
 ### [2.18.5](https://github.com/noom/community-web-uikit/compare/2.18.4...2.18.5) (2022-11-02)
 
 
