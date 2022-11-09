@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.19.2](https://github.com/noom/community-web-uikit/compare/2.19.1...2.19.2) (2022-11-09)
+
+
+### Bug Fixes
+
+* Button styles ([d44678c](https://github.com/noom/community-web-uikit/commit/d44678c8eef2e4c06409fd755c9e46f10c1b84b4))
+
 ### [2.19.1](https://github.com/noom/community-web-uikit/compare/2.19.0...2.19.1) (2022-11-09)
 
 
