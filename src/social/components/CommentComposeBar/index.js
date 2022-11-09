@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
+import { Button, ButtonGroup } from '@noom/wax-component-library';
 
 import customizableComponent from '~/core/hocs/customization';
 import usePost from '~/social/hooks/usePost';
@@ -21,7 +22,14 @@ import { extractMetadata } from '../../../helpers/utils';
 const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;
 
-const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, postId }) => {
+const CommentComposeBar = ({
+  className,
+  userToReply,
+  onSubmit,
+  onCancel,
+  currentUserId,
+  postId,
+}) => {
   const { post } = usePost(postId);
   const { targetId: communityId, targetType: communityType } = post;
 
@@ -83,11 +91,15 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, po
         mentionAllowed
         queryMentionees={queryMentionees}
         onChange={onChange}
-        onKeyPress={(e) => e.key === 'Enter' && addComment()}
       />
-      <AddCommentButton disabled={isEmpty} onClick={addComment}>
-        {submitButtonText}
-      </AddCommentButton>
+      <ButtonGroup size="md" isFullWidth>
+        <Button variant="outline" onClick={onCancel}>
+          <FormattedMessage id="cancel" />
+        </Button>
+        <Button disabled={isEmpty} onClick={addComment} colorScheme="primary">
+          {submitButtonText}
+        </Button>
+      </ButtonGroup>
     </CommentComposeBarContainer>
   );
 };

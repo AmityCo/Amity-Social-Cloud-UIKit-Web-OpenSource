@@ -70,7 +70,12 @@ const UIEngagementBar = ({
           />
         </LazyRender>
         {isComposeBarDisplayed && (
-          <CommentComposeBar postId={postId} postType={targetType} onSubmit={handleAddComment} />
+          <CommentComposeBar
+            postId={postId}
+            postType={targetType}
+            onSubmit={handleAddComment}
+            onCancel={onClickComment}
+          />
         )}
       </>
       <>

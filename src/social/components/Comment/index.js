@@ -246,6 +246,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
             setIsReplying(false);
             setExpanded(true);
           }}
+          onCancel={onClickReply}
         />
       )}
     </CommentBlock>

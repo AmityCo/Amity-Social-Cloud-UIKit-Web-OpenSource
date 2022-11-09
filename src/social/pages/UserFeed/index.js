@@ -17,6 +17,8 @@ import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
 import useFollow from '~/core/hooks/useFollow';
 import { Wrapper } from './styles';
 
+const CAN_POST_ON_PRIVATE_TIMELINE = false;
+
 const UserFeed = ({
   userId,
   currentUserId,
@@ -55,7 +57,7 @@ const UserFeed = ({
         <Feed
           targetType={isMe ? PostTargetType.MyFeed : PostTargetType.UserFeed}
           targetId={userId}
-          showPostCreator={isMe}
+          showPostCreator={CAN_POST_ON_PRIVATE_TIMELINE}
           isHiddenProfile={isHiddenProfile}
           handleCopyPostPath={handleCopyPostPath}
           handleCopyCommentPath={handleCopyCommentPath}

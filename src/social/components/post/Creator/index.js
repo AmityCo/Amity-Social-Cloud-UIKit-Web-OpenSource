@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { FormattedMessage } from 'react-intl';
 import { UserRepository, CommunityRepository, PostTargetType, FileType } from '@amityco/js-sdk';
+import { Box } from '@noom/wax-component-library';
 
 import { info } from '~/core/components/Confirm';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
@@ -77,6 +78,17 @@ const overCharacterModal = () =>
     okText: <FormattedMessage id="postCreator.done" />,
     type: 'info',
   });
+
+function PostTargetInfo({ postTarget }) {
+  return (
+    <Box color="gray.500" fontSize="xs" w="100%">
+      <FormattedMessage
+        id="postCreator.postTarget"
+        values={{ postTarget: <b>{postTarget}</b> ?? '...' }}
+      />
+    </Box>
+  );
+}
 
 const PostCreatorBar = ({
   className = '',
@@ -369,6 +381,7 @@ const PostCreatorBar = ({
           >
             <FormattedMessage id="post" />
           </PostButton>
+          {enablePostTargetPicker ? <PostTargetInfo postTarget={model?.displayName} /> : null}
         </Footer>
       </PostContainer>
     </PostCreatorContainer>

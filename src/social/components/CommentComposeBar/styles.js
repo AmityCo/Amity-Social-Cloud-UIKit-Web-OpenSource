@@ -4,9 +4,7 @@ import { PrimaryButton } from '~/core/components/Button';
 
 import UIAvatar from '~/core/components/Avatar';
 
-export const Avatar = styled(UIAvatar)`
-  margin-right: 8px;
-`;
+export const Avatar = UIAvatar;
 
 export const CommentComposeBarContainer = styled.div`
   padding-top: 16px;
@@ -15,6 +13,13 @@ export const CommentComposeBarContainer = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  gap: 0.5rem;
+
+  @media (max-width: 960px) {
+    & > div:last-child {
+      width: 100%;
+    }
+  }
 `;
 
 export const CommentComposeBarInput = styled(InputText).attrs({ rows: 1, maxRows: 15 })`
@@ -23,17 +28,8 @@ export const CommentComposeBarInput = styled(InputText).attrs({ rows: 1, maxRows
   font: inherit;
   font-size: 14px;
   resize: vertical;
-`;
-
-export const AddCommentButton = styled(PrimaryButton)`
-  height: 40px;
-  padding: 10px 16px;
-  margin-left: 12px;
 
   @media (max-width: 960px) {
-    width: 100%;
-    flex-basis: 100%;
-    margin-top: 0.5rem;
-    margin-left: 0;
+    width: calc(100% - 50px);
   }
 `;
