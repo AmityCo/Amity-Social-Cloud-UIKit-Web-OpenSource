@@ -1,20 +1,22 @@
 import React from 'react';
-import { Button } from '@noom/wax-component-library';
+import { Button, ButtonGroup } from '@noom/wax-component-library';
+
+function DefaultButton(props) {
+  return (
+    <Button colorScheme="gray" variant="outline" size="md" fontSize="md" paddingX={4} {...props} />
+  );
+}
 
 function PrimaryButton(props) {
-  return <Button colorScheme="primary" size="md" {...props} />;
+  return <DefaultButton {...props} colorScheme="primary" variant="solid" />;
 }
 
 function SecondaryButton(props) {
-  return <Button colorScheme="gray" variant="ghost" size="md" {...props} />;
-}
-
-function DefaultButton(props) {
-  return <Button colorScheme="gray" variant="outline" size="md" {...props} />;
+  return <DefaultButton {...props} colorScheme="gray" variant="ghost" />;
 }
 
 // legacy
-export { PrimaryButton, SecondaryButton };
+export { PrimaryButton, SecondaryButton, ButtonGroup };
 
 const LeButton = ({ variant, ...props }) => {
   const Component =

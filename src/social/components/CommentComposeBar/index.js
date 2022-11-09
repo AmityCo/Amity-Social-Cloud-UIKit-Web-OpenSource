@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Button, ButtonGroup } from '@noom/wax-component-library';
+import Button, { PrimaryButton, ButtonGroup } from '~/core/components/Button';
 
 import customizableComponent from '~/core/hocs/customization';
 import usePost from '~/social/hooks/usePost';
@@ -9,12 +9,7 @@ import useSocialMention from '~/social/hooks/useSocialMention';
 import withSDK from '~/core/hocs/withSDK';
 import { info } from '~/core/components/Confirm';
 
-import {
-  Avatar,
-  CommentComposeBarContainer,
-  CommentComposeBarInput,
-  AddCommentButton,
-} from './styles';
+import { Avatar, CommentComposeBarContainer, CommentComposeBarInput } from './styles';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { extractMetadata } from '../../../helpers/utils';
@@ -92,13 +87,13 @@ const CommentComposeBar = ({
         queryMentionees={queryMentionees}
         onChange={onChange}
       />
-      <ButtonGroup size="md" isFullWidth>
+      <ButtonGroup isFullWidth>
         <Button variant="outline" onClick={onCancel}>
           <FormattedMessage id="cancel" />
         </Button>
-        <Button disabled={isEmpty} onClick={addComment} colorScheme="primary">
+        <PrimaryButton disabled={isEmpty} onClick={addComment} colorScheme="primary">
           {submitButtonText}
-        </Button>
+        </PrimaryButton>
       </ButtonGroup>
     </CommentComposeBarContainer>
   );
