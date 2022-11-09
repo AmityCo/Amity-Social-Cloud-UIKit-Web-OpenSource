@@ -68,7 +68,7 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
       let keyword = query;
 
       if (keyword.match(/^@$/) || keyword === '') {
-        keyword = undefined;
+        return;
       }
 
       // dispose previous LC instance...

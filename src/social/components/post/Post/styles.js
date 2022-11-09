@@ -4,9 +4,7 @@ import styled from 'styled-components';
 import UIOptionMenu from '~/core/components/OptionMenu';
 import Skeleton from '~/core/components/Skeleton';
 
-export const OptionMenu = styled(UIOptionMenu)`
-  margin-left: auto;
-`;
+export const OptionMenu = UIOptionMenu;
 
 export const PostContainer = styled(({ className, ...props }) => (
   <div className={cx('post', className)} {...props} />

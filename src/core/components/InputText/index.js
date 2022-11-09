@@ -105,11 +105,11 @@ const StyledMentionsInput = styled(MentionsInput)`
 
 const renderMentionItem = (
   { id, isLastItem },
-  search,
+  _search,
   highlightedDisplay,
-  index,
+  _index,
   focused,
-  dataLength,
+  _dataLength,
   parentContainer,
   loadMore,
 ) => (

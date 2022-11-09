@@ -250,7 +250,7 @@ const PostCreatorBar = ({
 
       // Weird hack to show users to show users on start
       if (keyword.match(/^@$/)) {
-        keyword = undefined;
+        return;
       }
 
       // Only fetch private community members

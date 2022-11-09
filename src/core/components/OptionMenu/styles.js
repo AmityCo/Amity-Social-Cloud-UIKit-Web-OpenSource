@@ -4,7 +4,6 @@ import { EllipsisH } from '~/icons';
 
 export const OptionsIcon = styled(EllipsisH).attrs({ width: 16, height: 16 })`
   cursor: pointer;
-  margin-left: auto;
 `;
 
 export const OptionsButton = styled(SecondaryButton)`
