@@ -5,7 +5,10 @@ import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRender
 const defaultValue = {
   [PostDataType.TextPost]: DefaultPostRenderer,
   [PostDataType.ImagePost]: DefaultPostRenderer,
+  [PostDataType.VideoPost]: DefaultPostRenderer,
   [PostDataType.FilePost]: DefaultPostRenderer,
+  [PostDataType.LivestreamPost]: DefaultPostRenderer,
+  [PostDataType.PollPost]: DefaultPostRenderer,
 };
 
 export const PostRendererContext = createContext(defaultValue);
