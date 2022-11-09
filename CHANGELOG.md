@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.19.1](https://github.com/noom/community-web-uikit/compare/2.19.0...2.19.1) (2022-11-09)
+
+
+### Bug Fixes
+
+* empty mentions ([5f3863e](https://github.com/noom/community-web-uikit/commit/5f3863e1f22c06e0b3a5389739d927b76e94f517))
+* Responsive WAX buttons ([05737cd](https://github.com/noom/community-web-uikit/commit/05737cdb14ab286f93c4221321f38c9f40456b42))
+
 ## [2.19.0](https://github.com/noom/community-web-uikit/compare/2.18.6...2.19.0) (2022-11-04)
 
 
