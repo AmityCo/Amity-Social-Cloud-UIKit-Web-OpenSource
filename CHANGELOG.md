@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.20.2](https://github.com/noom/community-web-uikit/compare/2.20.1...2.20.2) (2022-11-11)
+
+
+### Bug Fixes
+
+* Expose modal scroll behaviour ([d5d9f4c](https://github.com/noom/community-web-uikit/commit/d5d9f4c9569577c4923752b0ce5b04fd2f24fe60))
+
 ### [2.20.1](https://github.com/noom/community-web-uikit/compare/2.20.0...2.20.1) (2022-11-11)
 
 
