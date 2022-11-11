@@ -18,10 +18,10 @@ export type OnboardingModalProps = {
   onSubmit: (step: OnboardingStep) => void;
 } & Pick<InterestSelectViewProps, 'interests'> &
   Pick<CommunitySelectViewProps, 'communities'> &
-  ModalProps;
+  Omit<ModalProps, 'children'>;
 
 export function OnboardingModal({
-  step = OnboardingStep.communities,
+  step = OnboardingStep.welcome,
   isLoading,
   onSubmit,
   interests,
