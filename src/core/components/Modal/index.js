@@ -22,6 +22,7 @@ const Modal = ({
   footer,
   isOpen,
   children,
+  scrollBehavior,
 }) => {
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
@@ -41,6 +42,7 @@ const Modal = ({
       isCentered={isCentered || forceCentered}
       onClose={onCancel ?? onOverlayClick}
       size={modalSize}
+      scrollBehavior={scrollBehavior}
     >
       <ModalOverlay />
 
