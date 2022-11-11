@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.20.0](https://github.com/noom/community-web-uikit/compare/2.19.2...2.20.0) (2022-11-11)
+
+
+### Features
+
+* Onboarding modal ([#15](https://github.com/noom/community-web-uikit/issues/15)) ([f367817](https://github.com/noom/community-web-uikit/commit/f367817645f5dae630fac21533c8946d437eaf80))
+
 ### [2.19.2](https://github.com/noom/community-web-uikit/compare/2.19.1...2.19.2) (2022-11-09)
 
 
