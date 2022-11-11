@@ -29,9 +29,14 @@ const actionItemContainerStyles = css`
   ${actionItemActiveStyles}
 `;
 
+// important tags are here because styled components can not override WAX without it
 export const ButtonActionItem = styled(SecondaryButton)`
   ${actionItemContainerStyles};
-  width: 100%;
+  width: 100% !important;
+  border-radius: 0 !important;
+  justify-content: flex-start !important;
+  padding: 0.5rem !important;
+  min-height: 3rem;
 `;
 
 export const AnchorActionItem = styled.a`

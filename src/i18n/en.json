@@ -359,5 +359,19 @@
 
   "notificationTray.title": "Notifications",
   "notificationTray.markAllRead": "Mark all as read",
-  "notificationTray.viewAll": "View all notifications"
+  "notificationTray.viewAll": "View all notifications",
+
+  "onboarding.welcome.title": "Welcome to Noom Connect",
+  "onboarding.welcome.subTitle": "<b>Get tips specific to your life</b> from expert Noom Coaches in 30+ communities!",
+  "onboarding.welcome.bullets.1": "<b>Learn</b> new strategies & get advice from Noomers & Coaches like you",
+  "onboarding.welcome.bullets.2": "<b>Get inspired</b> by success stories, food ideas, & ways to get active",
+  "onboarding.welcome.bullets.3": "<b>Connect</b> with Noomers for support, encouragement, & accountability",
+  "onboarding.welcome.bullets.4": "<b>Be reminded</b> that you’re not alone on this journey!",
+  "onboarding.welcome.button": "Lets Go!",
+  "onboarding.interests.title": "Choose some interests to customize your feed ",
+  "onboarding.interests.subTitle": "You can always keep exploring later!",
+  "onboarding.interests.button": "Next",
+  "onboarding.communities.title": "Communities based on your interests",
+  "onboarding.communities.membersCount": "{count} members",
+  "onboarding.communities.button": "Done"
 }

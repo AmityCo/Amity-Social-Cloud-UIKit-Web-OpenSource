@@ -2,9 +2,7 @@ import React from 'react';
 import { Button, ButtonGroup } from '@noom/wax-component-library';
 
 function DefaultButton(props) {
-  return (
-    <Button colorScheme="gray" variant="outline" size="md" fontSize="md" paddingX={4} {...props} />
-  );
+  return <Button colorScheme="gray" variant="outline" size="md" paddingX={4} {...props} />;
 }
 
 function PrimaryButton(props) {

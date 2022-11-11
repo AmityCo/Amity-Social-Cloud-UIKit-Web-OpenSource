@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import MockData from '~/mock';
 
-import { ThemeProvider, compassTheme, CompassColor } from '@noom/wax-component-library';
+import { ThemeProvider, extendCompassTheme, CompassColor } from '@noom/wax-component-library';
 
 const GLOBAL_NAME = 'user';
 
@@ -61,6 +61,12 @@ const global = {
 };
 
 const FALLBACK_USER = 'Web-Test,Web-Test';
+
+const compassTheme = extendCompassTheme({
+  shadows: {
+    outline: `0 0 0 2px ${CompassColor.tarocco}`,
+  },
+});
 
 const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
   const user = val || FALLBACK_USER;

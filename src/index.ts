@@ -35,6 +35,12 @@ export { default as AmityCommunityPostPage } from '~/social/pages/CommunityPost'
 export { default as AmityUserPostPage } from '~/social/pages/UserPost';
 export { default as AmityUserHeader } from '~/social/components/UserHeader';
 
+export {
+  OnboardingModal,
+  OnboardingModalProps,
+  OnboardingStep,
+} from '~/social/components/onboarding';
+
 export { PageTypes } from '~/social/constants';
 
 export {
