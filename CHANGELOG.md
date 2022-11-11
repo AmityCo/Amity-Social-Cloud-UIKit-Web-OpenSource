@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.20.1](https://github.com/noom/community-web-uikit/compare/2.20.0...2.20.1) (2022-11-11)
+
+
+### Bug Fixes
+
+* Onboarding modal props and defaults ([ea889fb](https://github.com/noom/community-web-uikit/commit/ea889fb13d2d4d464b4f5ee940bc2f44fea6552f))
+
 ## [2.20.0](https://github.com/noom/community-web-uikit/compare/2.19.2...2.20.0) (2022-11-11)
 
 
