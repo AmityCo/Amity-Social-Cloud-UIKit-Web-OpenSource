@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.14.5 (2022-11-04)
+
+### Bug Fixes
+
+* ASC-6036 - update js-sdk, do not crash in node env ([8b4ec5b](https://github.com/EkoCommunications/AmityUiKitWeb/commit/8b4ec5b3aabe940e5b59f08464749cebfcb748ef))
+
 ### 2.14.3 (2022-09-23)
 
 ### 2.14.2 (2022-09-09)
