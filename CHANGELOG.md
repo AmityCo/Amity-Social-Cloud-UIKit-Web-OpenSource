@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.23.0](https://github.com/noom/community-web-uikit/compare/2.22.0...2.23.0) (2022-11-14)
+
+
+### Features
+
+* Onboarding fireworks ([52d287f](https://github.com/noom/community-web-uikit/commit/52d287f2b38a0d63f70061fe4f4d1db74910c02d))
+
 ## [2.22.0](https://github.com/noom/community-web-uikit/compare/2.21.0...2.22.0) (2022-11-14)
 
 
