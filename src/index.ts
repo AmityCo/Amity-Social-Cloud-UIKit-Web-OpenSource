@@ -49,7 +49,13 @@ export {
   NotificationRecordListHeader,
 } from '~/core/components/NotificationTray';
 
-export { ApiEndpoint, ApiRegion, CommunityRepository } from '@amityco/js-sdk';
+export {
+  ApiEndpoint,
+  ApiRegion,
+  CommunityRepository,
+  FileRepository,
+  UserRepository,
+} from '@amityco/js-sdk';
 
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
