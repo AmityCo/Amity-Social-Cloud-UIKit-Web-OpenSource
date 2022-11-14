@@ -1,6 +1,6 @@
 {
   "name": "@meetperry/amity-uikit",
-  "version": "1.0.9",
+  "version": "1.0.10-beta.2",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -81,6 +81,7 @@
     "react-intl-formatted-duration": "^4.0.0",
     "react-linkify": "^1.0.0-alpha",
     "react-loading-skeleton": "^3.1.0",
+    "react-markdown": "^8.0.3",
     "react-mentions": "^4.4.7",
     "react-sizeme": "^3.0.2",
     "react-textarea-autosize": "^8.3.4",
