@@ -20,6 +20,7 @@ const Avatar = ({
   displayName,
   backgroundImage,
   isCommunity,
+  isLazy,
   ...props
 }) => {
   const communityProps = isCommunity ? { icon: <CommunityNoom p={1} color="white" /> } : {};
@@ -41,6 +42,7 @@ const Avatar = ({
             name={displayName}
             h="100%"
             w="100%"
+            loading={isLazy ? 'lazy' : 'eager'}
           />
         </AvatarOverlay>
       ) : (
@@ -51,6 +53,7 @@ const Avatar = ({
           name={displayName}
           h="100%"
           w="100%"
+          loading={isLazy ? 'lazy' : 'eager'}
         />
       )}
     </AvatarContainer>
