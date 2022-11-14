@@ -34,10 +34,10 @@ const PendingItem = ({ currentUserId, userId }) => {
     <UserHeaderContainer>
       <UserHeader userId={userId} />
       <ButtonsContainer>
-        <PrimaryButton fullWidth disabled={!connected} onClick={onFollowAccept}>
+        <PrimaryButton isFullWidth disabled={!connected} onClick={onFollowAccept}>
           <FormattedMessage id="request.accept" />
         </PrimaryButton>
-        <Button fullWidth disabled={!connected} onClick={onFollowDecline}>
+        <Button isFullWidth disabled={!connected} onClick={onFollowDecline}>
           <FormattedMessage id="request.decline" />
         </Button>
       </ButtonsContainer>

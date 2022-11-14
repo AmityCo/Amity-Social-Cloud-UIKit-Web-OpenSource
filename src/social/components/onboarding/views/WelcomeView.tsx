@@ -5,21 +5,27 @@ import {
   ListItem,
   H2,
   Text,
+  Image,
   ModalBody,
   ModalFooter,
   CompassColor,
   ModalContent,
 } from '@noom/wax-component-library';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { PrimaryButton } from '~/core/components/Button';
 
-export type WelcomeViewProps = { isLoading?: boolean; onSubmit: () => void; error?: string };
+export type WelcomeViewProps = {
+  isLoading?: boolean;
+  onSubmit: () => void;
+  error?: string;
+  fireworksImageUrl?: string;
+};
 
-export function WelcomeView({ isLoading, onSubmit }: WelcomeViewProps) {
+export function WelcomeView({ isLoading, onSubmit, fireworksImageUrl }: WelcomeViewProps) {
   return (
     <ModalContent bg={CompassColor.offWhite}>
-      <ModalBody>
+      <ModalBody position="relative">
         <Box textAlign="center" mb={8}>
           <H2 mb={4} fontWeight="500">
             <FormattedMessage id="onboarding.welcome.title" />
@@ -58,6 +64,10 @@ export function WelcomeView({ isLoading, onSubmit }: WelcomeViewProps) {
             </ListItem>
           ))}
         </List>
+
+        {fireworksImageUrl ? (
+          <Image src={fireworksImageUrl} position="absolute" top={0} w="100%" />
+        ) : null}
       </ModalBody>
       <ModalFooter>
         <PrimaryButton isFullWidth isLoading={isLoading} onClick={onSubmit}>

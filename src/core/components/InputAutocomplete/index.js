@@ -89,7 +89,7 @@ const InputAutocomplete = ({
   const loadMore = getPagination(activeTab);
 
   const LoadMoreButton = loadMore && (
-    <Button fullWidth onClick={loadMore}>
+    <Button isFullWidth onClick={loadMore}>
       <FormattedMessage id="loadMore" />
     </Button>
   );

@@ -112,7 +112,7 @@ const UICommunityInfo = ({
 
         {isJoined && canEditCommunity && (
           <Button
-            fullWidth
+            isFullWidth
             data-qa-anchor="social-edit-community-button"
             onClick={() => onEditCommunity(communityId)}
           >

@@ -96,7 +96,7 @@ const OptionsComposer = ({ onChange, optionsLimit }) => {
       ))}
       <div>
         <Button
-          fullWidth
+          isFullWidth
           disabled={!addOptionEnabled}
           onClick={(e) => {
             e.preventDefault();

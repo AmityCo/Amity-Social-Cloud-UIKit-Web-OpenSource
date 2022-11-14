@@ -16,6 +16,7 @@ export type OnboardingModalProps = {
   isLoading?: boolean;
   step?: OnboardingStep;
   onSubmit: (step: OnboardingStep) => void;
+  fireworksImageUrl?: string;
 } & Pick<InterestSelectViewProps, 'interests'> &
   Pick<CommunitySelectViewProps, 'communities'> &
   Omit<ModalProps, 'children'>;
@@ -26,6 +27,7 @@ export function OnboardingModal({
   onSubmit,
   interests,
   communities,
+  fireworksImageUrl,
   ...props
 }: OnboardingModalProps) {
   return (
@@ -33,7 +35,11 @@ export function OnboardingModal({
       <ModalOverlay />
 
       {step === OnboardingStep.welcome ? (
-        <WelcomeView isLoading={isLoading} onSubmit={() => onSubmit(step)} />
+        <WelcomeView
+          isLoading={isLoading}
+          onSubmit={() => onSubmit(step)}
+          fireworksImageUrl={fireworksImageUrl}
+        />
       ) : null}
       {step === OnboardingStep.interests ? (
         <InterestSelectView

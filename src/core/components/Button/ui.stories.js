@@ -11,7 +11,7 @@ Button.args = {
   label: 'hello world',
   variant: 'primary',
   disabled: false,
-  fullWidth: false,
+  isFullWidth: false,
 };
 
 Button.argTypes = {
@@ -29,7 +29,7 @@ Button.argTypes = {
       type: 'boolean',
     },
   },
-  fullWidth: {
+  isFullWidth: {
     control: {
       type: 'boolean',
     },
