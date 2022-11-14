@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.21.0](https://github.com/noom/community-web-uikit/compare/2.20.2...2.21.0) (2022-11-14)
+
+
+### Features
+
+* Avatar isLazy ([74490e7](https://github.com/noom/community-web-uikit/commit/74490e71999c450c49f64f7913b2752e053b2aa1))
+
 ### [2.20.2](https://github.com/noom/community-web-uikit/compare/2.20.1...2.20.2) (2022-11-11)
 
 
