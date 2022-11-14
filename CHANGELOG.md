@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.22.0](https://github.com/noom/community-web-uikit/compare/2.21.0...2.22.0) (2022-11-14)
+
+
+### Features
+
+* Export File and User repositories ([d2fc663](https://github.com/noom/community-web-uikit/commit/d2fc663c81f8a00bf534b109546fc515e479e16d))
+
 ## [2.21.0](https://github.com/noom/community-web-uikit/compare/2.20.2...2.21.0) (2022-11-14)
 
 
