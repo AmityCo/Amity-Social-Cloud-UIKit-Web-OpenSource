@@ -3,11 +3,9 @@ import orderBy from 'lodash/orderBy';
 
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-const messageRepo = new MessageRepository();
-
 function useMessagesList(channelId) {
   const [messages, hasMore, loadMore] = useLiveCollection(
-    () => messageRepo.messagesForChannel({ channelId }),
+    () => MessageRepository.queryMessages({ channelId }),
     [channelId],
   );
 

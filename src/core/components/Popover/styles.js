@@ -2,11 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import cx from 'classnames';
 
-import ReactTinyPopover from 'react-tiny-popover';
+import { Popover as ReactTinyPopover } from 'react-tiny-popover';
 
-const ReactPopover = ({ className, fixed = false, ...rest }) => (
-  <ReactTinyPopover containerClassName={cx(className, { fixed })} {...rest} />
-);
+const ReactPopover = ({ className, fixed = false, children, ...rest }) => {
+  return (
+    <ReactTinyPopover containerClassName={cx(className, { fixed })} {...rest}>
+      {children}
+    </ReactTinyPopover>
+  );
+};
 
 export const Popover = styled(ReactPopover)`
   ${({ theme }) => theme.typography.body}

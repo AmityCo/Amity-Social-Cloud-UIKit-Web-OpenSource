@@ -6,7 +6,6 @@ import { notification } from '~/core/components/Notification';
 import OptionMenu from '~/core/components/OptionMenu';
 import UserHeader from '~/social/components/UserHeader';
 import useUser from '~/core/hooks/useUser';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import useReport from '~/social/hooks/useReport';
 import { MemberInfo, CommunityMemberContainer } from './styles';
 import { confirm } from '~/core/components/Confirm';
@@ -61,7 +60,8 @@ const CommunityMemberItem = ({
       <MemberInfo>
         <UserHeader userId={userId} isBanned={isBanned || isGlobalBan} onClick={onClick} />
       </MemberInfo>
-      <ConditionalRender condition={!isCurrentUser && isJoined}>
+
+      {!isCurrentUser && isJoined && (
         <OptionMenu
           options={[
             {
@@ -86,7 +86,7 @@ const CommunityMemberItem = ({
             },
           ].filter(Boolean)}
         />
-      </ConditionalRender>
+      )}
     </CommunityMemberContainer>
   );
 };

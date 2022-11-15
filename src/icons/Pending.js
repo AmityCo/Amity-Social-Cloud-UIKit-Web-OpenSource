@@ -1,12 +1,13 @@
 import React from 'react';
 
-const Svg = ({ width = '100%', height = '100%' }) => (
+const Svg = (props) => (
   <svg
-    width={width}
-    height={height}
+    width="100%"
+    height="100%"
     viewBox="0 0 19 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    {...props}
   >
     <path
       d="M6.6875 9.3125C9.00195 9.3125 10.9062 7.4375 10.9062 5.09375C10.9062 2.7793 9.00195

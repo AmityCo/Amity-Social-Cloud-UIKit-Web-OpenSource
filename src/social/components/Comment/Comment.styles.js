@@ -86,8 +86,8 @@ const StyledComment = ({
         >
           <CommentHeader>
             <AuthorName>{authorName}</AuthorName>
-            {isBanned && <BanIcon css="margin-left: 0.265rem; margin-top: 1px;" />}
             <Truncate.Atom>
+              {isBanned && <BanIcon css="margin-left: 0.265rem; margin-top: 1px;" />}
               <CommentDate date={createdAt} />
               {editedAt - createdAt > 0 && (
                 <EditedMark>
@@ -119,20 +119,19 @@ const StyledComment = ({
           <CommentText text={text} mentionees={mentionees} metadata={metadata} />
         </ConditionalRender>
 
-        <ConditionalRender condition={!isEditing && (canLike || canReply || options.length > 0)}>
+        {!isEditing && (canLike || canReply || options.length > 0) && (
           <InteractionBar>
-            <ConditionalRender condition={canLike}>
-              <CommentLikeButton commentId={commentId} />
-            </ConditionalRender>
+            {canLike && <CommentLikeButton commentId={commentId} />}
 
-            <ConditionalRender condition={canReply}>
+            {canReply && (
               <ReplyButton onClick={onClickReply}>
                 <ReplyIcon /> <FormattedMessage id="reply" />
               </ReplyButton>
-            </ConditionalRender>
+            )}
+
             <OptionMenu options={options} pullRight={false} align={POSITION_LEFT} />
           </InteractionBar>
-        </ConditionalRender>
+        )}
       </Content>
     </>
   );

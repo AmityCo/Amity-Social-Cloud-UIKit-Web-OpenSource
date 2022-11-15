@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-
 import { POSITION_BOTTOM, POSITION_RIGHT } from '~/helpers/getCssPosition';
-
 import UiKitDropdown from '~/core/components/Dropdown';
-import ConditionalRender from '~/core/components/ConditionalRender';
-
 import { OptionsIcon, OptionsButton, Option, Container } from './styles';
 
 const OptionMenu = ({
@@ -31,7 +27,7 @@ const OptionMenu = ({
   };
 
   return (
-    <ConditionalRender condition={options.length}>
+    options.length > 0 && (
       <Container className={className} pullRight={pullRight}>
         <UiKitDropdown
           data-qa-anchor={dataQaAnchor}
@@ -48,7 +44,7 @@ const OptionMenu = ({
           ))}
         </UiKitDropdown>
       </Container>
-    </ConditionalRender>
+    )
   );
 };
 

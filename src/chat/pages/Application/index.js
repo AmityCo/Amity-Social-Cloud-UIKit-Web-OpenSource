@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ChannelMembership, ChannelType, ChannelMembershipRepository } from '@amityco/js-sdk';
+import { ChannelMembership, ChannelType, ChannelRepository } from '@amityco/js-sdk';
 import { useIntl } from 'react-intl';
 
 import { notification } from '~/core/components/Notification';
@@ -37,10 +37,7 @@ const ChatApplication = ({
   };
 
   const leaveChat = () => {
-    const channelMembershipRepo = new ChannelMembershipRepository(currentChannelData?.channelId);
-
-    channelMembershipRepo
-      .leave()
+    ChannelRepository.leaveChannel(currentChannelData?.channelId)
       .then(() => {
         notification.success({
           content: formatMessage({ id: 'chat.leaveChat.success' }),
@@ -75,7 +72,6 @@ const ChatApplication = ({
       {currentChannelData && (
         <Chat
           channelId={currentChannelData.channelId}
-          channelType={currentChannelData.channelType}
           shouldShowChatDetails={shouldShowChatDetails}
           onChatDetailsClick={showChatDetails}
         />

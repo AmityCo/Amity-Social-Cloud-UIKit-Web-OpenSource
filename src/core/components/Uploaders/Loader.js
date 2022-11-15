@@ -7,7 +7,7 @@ import cx from 'classnames';
 const MAX_FILE_SIZE = 1073741824;
 const MIN_FILES_LIMIT = 1;
 
-const FileLoaderContainer = styled.label`
+export const FileLoaderContainer = styled.label`
   cursor: pointer;
   background: rgb(235 236 239 / 60%);
   transition: background 0.1s;

@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": ["eko/react"],
   "settings": {
     "import/resolver": {
@@ -13,11 +13,8 @@
     "__VERSION__": true
   },
   "rules": {
-    // Allow <> instead of <React.Fragment>
     "react/jsx-fragments": "off",
-    // Mainly to allow dependencies used in some files to remain as devDependencies.
     "import/no-extraneous-dependencies": "off",
-    // Prefer showing through default arguments.
     "react/require-default-props": "off"
   },
   "env": {

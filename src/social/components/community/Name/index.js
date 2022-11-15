@@ -30,12 +30,18 @@ const CommunityName = ({
 
   return (
     <NameContainer className={className} isActive={isActive} isTitle={isTitle}>
-      <Truncate lines={truncate}>
-        <Name title={name}>
-          {!loading && !isPublic && <PrivateIcon />}
-          {loading ? <Skeleton width={120} style={{ fontSize: 12 }} /> : name}
+      {loading ? (
+        <Name>
+          <Skeleton width={120} style={{ fontSize: 12 }} />
         </Name>
-      </Truncate>
+      ) : (
+        <Truncate lines={truncate}>
+          <Name title={name}>
+            {!isPublic && <PrivateIcon />}
+            {name}
+          </Name>
+        </Truncate>
+      )}
 
       {!loading && isOfficial && <VerifiedIcon />}
     </NameContainer>

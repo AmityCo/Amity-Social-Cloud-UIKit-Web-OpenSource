@@ -45,6 +45,7 @@ const Message = ({
   isIncoming,
   isConsequent,
   userDisplayName,
+  containerRef,
 }) => {
   const shouldShowUserName = isIncoming && !isConsequent && userDisplayName;
   const isSupportedMessageType = [MessageType.Text, MessageType.Custom].includes(type);
@@ -80,6 +81,7 @@ const Message = ({
                   data={data}
                   isIncoming={isIncoming}
                   isSupportedMessageType={isSupportedMessageType}
+                  popupContainerRef={containerRef}
                 />
               </BottomLine>
             )}
@@ -100,6 +102,7 @@ Message.propTypes = {
   isIncoming: PropTypes.bool,
   isConsequent: PropTypes.bool,
   avatar: PropTypes.string,
+  containerRef: PropTypes.object.isRequired,
 };
 
 Message.defaultProps = {

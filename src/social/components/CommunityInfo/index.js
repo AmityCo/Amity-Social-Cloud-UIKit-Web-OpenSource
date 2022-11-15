@@ -68,7 +68,7 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
       canLeaveCommunity={canLeaveCommunity}
       canReviewPosts={canReviewCommunityPosts}
       name={community.displayName}
-      needApprovalOnPostCreation={community.needApprovalOnPostCreation}
+      postSetting={community.postSetting}
       onEditCommunity={onEditCommunity}
       onClickLeaveCommunity={() => leaveCommunityConfirmModal(communityId, leaveCommunity)}
     />

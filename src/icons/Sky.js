@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Svg = ({ className }) => (
-  <svg className={className} width="599" height="216" fill="none" viewBox="0 0 599 216">
+const Svg = (props) => (
+  <svg width="599" height="216" fill="none" viewBox="0 0 599 216" {...props}>
     <path
       fill="#fff"
       d="M239 219l-1-6c0-9 5-17 12-21a30 30 0 0128-39c7 0 13 2 18 5 4-3 9-5 14-5 12 0 21 8 23 19l6 5c5-4 11-7 18-7 12 0 22 9 25 20h2l8 1a18 18 0 0125 5 36 36 0 0154-20 53 53 0 01103 17c11 5 20 14 25 26H239zM12 229c-7-6-12-15-12-25 0-18 17-33 37-33l6 1v-5c0-26 23-47 52-47s53 21 53 47l-1 5 6-1c14 0 26 8 30 19 6-4 13-6 21-6 19 0 34 14 34 30 0 6-2 11-4 15H12z"

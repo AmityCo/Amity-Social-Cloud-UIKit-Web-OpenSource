@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.14.5 (2022-11-04)
+
+### Bug Fixes
+
+* ASC-6036 - update js-sdk, do not crash in node env ([8b4ec5b](https://github.com/EkoCommunications/AmityUiKitWeb/commit/8b4ec5b3aabe940e5b59f08464749cebfcb748ef))
+
+### 2.14.3 (2022-09-23)
+
+### 2.14.2 (2022-09-09)
+
+### 2.14.1 (2022-08-30)
+
+- ASC-4251 - only update edit page user fields, when editing
+
+## 2.14.0 (2022-08-26)
+
+### Features
+
+- update js sdk to 5.24.0 ([aaec8e1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/aaec8e1879ec6d3f085fba9335d8d4d73702f1f3))
+
+## 2.13.0 (2022-08-11)
+
+### Features
+
+- ASC-3806 - Update js-sdk to v5.23.1 ([#52](https://github.com/EkoCommunications/AmityUiKitWeb/issues/52)) ([cadcab7](https://github.com/EkoCommunications/AmityUiKitWeb/commit/cadcab70880e959ee3eaed6f062ce97a1cf18088))
+
+### 2.12.3 (2022-07-29)
+
+### Bug Fixes
+
+- ASC-2788 - replace react-time-ago with react-timeago ([#47](https://github.com/EkoCommunications/AmityUiKitWeb/issues/47)) ([f7c2037](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7c20375cfad7843b4d31b04ed091d4bf28e8d1e))
+
 ### 2.12.2 (2022-06-21)
 
 ### Bug Fixes
