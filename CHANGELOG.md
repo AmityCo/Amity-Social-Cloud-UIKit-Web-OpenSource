@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.1](https://github.com/noom/community-web-uikit/compare/2.23.0...2.23.1) (2022-11-17)
+
+
+### Bug Fixes
+
+* Onboarding error handle ([3beb5d0](https://github.com/noom/community-web-uikit/commit/3beb5d079748a358e094e41862c4d68f387b586a))
+
 ## [2.23.0](https://github.com/noom/community-web-uikit/compare/2.22.0...2.23.0) (2022-11-14)
 
 
