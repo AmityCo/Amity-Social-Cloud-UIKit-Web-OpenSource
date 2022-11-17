@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ModalBody,
   ModalFooter,
@@ -16,7 +16,7 @@ import { CommunitySelect } from '../components/CommunitySelect';
 
 export type CommunitySelectViewProps = {
   isLoading?: boolean;
-  onSubmit: () => void;
+  onSubmit: (communities: CommunityData[]) => void;
   error?: string;
   communities?: CommunityData[];
 };
@@ -26,6 +26,8 @@ export function CommunitySelectView({
   onSubmit,
   communities = [],
 }: CommunitySelectViewProps) {
+  const [selected, setSelected] = useState<CommunityData[]>([]);
+
   return (
     <ModalContent>
       <ModalHeader>
@@ -34,10 +36,10 @@ export function CommunitySelectView({
         </H3>
       </ModalHeader>
       <ModalBody>
-        <CommunitySelect communities={communities} isDisabled={isLoading} />
+        <CommunitySelect communities={communities} isDisabled={isLoading} onChange={setSelected} />
       </ModalBody>
       <ModalFooter>
-        <PrimaryButton isFullWidth isLoading={isLoading} onClick={onSubmit}>
+        <PrimaryButton isFullWidth isLoading={isLoading} onClick={() => onSubmit(selected)}>
           <FormattedMessage id="onboarding.communities.button" />
         </PrimaryButton>
       </ModalFooter>

@@ -11,7 +11,7 @@ const isLikedStyle = css`
 `;
 
 export const StyledLikeButton = styled(SecondaryButton)`
-  ${({ active }) => active && isLikedStyle}
+  ${({ isActive }) => isActive && isLikedStyle}
 `;
 
 export const LikeIcon = styled(ThumbsUp).attrs({ width: 16, height: 16 })`
@@ -24,7 +24,7 @@ export const LikeIcon = styled(ThumbsUp).attrs({ width: 16, height: 16 })`
  */
 const StyledPostLikeButton = ({ onClick, isActive, isDisabled }) => (
   <StyledLikeButton
-    active={isActive}
+    isActive={isActive}
     disabled={isDisabled}
     data-qa-anchor="social-like-post"
     onClick={onClick}

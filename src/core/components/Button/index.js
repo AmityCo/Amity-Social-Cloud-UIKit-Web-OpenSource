@@ -14,9 +14,9 @@ function SecondaryButton(props) {
 }
 
 // legacy
-export { PrimaryButton, SecondaryButton, ButtonGroup };
+export { PrimaryButton, SecondaryButton, DefaultButton as Button, ButtonGroup };
 
-const LeButton = ({ variant, ...props }) => {
+const LeButton = ({ variant = '', ...props }) => {
   const Component =
     {
       primary: PrimaryButton,

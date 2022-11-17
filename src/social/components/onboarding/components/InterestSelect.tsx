@@ -54,7 +54,7 @@ export type InterestSelectProps = {
   onChange?: (interests: InterestData[]) => void;
 };
 
-export function InterestSelect({ interests, isDisabled }: InterestSelectProps) {
+export function InterestSelect({ interests, isDisabled, onChange }: InterestSelectProps) {
   const sortedInterests = useMemo(
     () => [...interests].sort((a, b) => a.description.localeCompare(b.description)),
     [interests],
@@ -75,6 +75,7 @@ export function InterestSelect({ interests, isDisabled }: InterestSelectProps) {
     }
 
     setSelected(updatedArray);
+    onChange?.(updatedArray);
   };
 
   return (

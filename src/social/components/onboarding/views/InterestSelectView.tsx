@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   ModalBody,
   ModalFooter,
@@ -19,7 +19,7 @@ export type InterestSelectViewProps = {
   isLoading?: boolean;
   error?: string;
   interests?: InterestData[];
-  onSubmit: () => void;
+  onSubmit: (interests: InterestData[]) => void;
 };
 
 export function InterestSelectView({
@@ -27,6 +27,8 @@ export function InterestSelectView({
   onSubmit,
   interests = [],
 }: InterestSelectViewProps) {
+  const [selected, setSelected] = useState<InterestData[]>([]);
+
   return (
     <ModalContent>
       <ModalHeader>
@@ -43,10 +45,10 @@ export function InterestSelectView({
         </Text>
       </ModalHeader>
       <ModalBody display="flex" flexDir="column">
-        <InterestSelect interests={interests} isDisabled={isLoading} />
+        <InterestSelect interests={interests} isDisabled={isLoading} onChange={setSelected} />
       </ModalBody>
       <ModalFooter>
-        <PrimaryButton isFullWidth isLoading={isLoading} onClick={onSubmit}>
+        <PrimaryButton isFullWidth isLoading={isLoading} onClick={() => onSubmit(selected)}>
           <FormattedMessage id="onboarding.interests.button" />
         </PrimaryButton>
       </ModalFooter>

@@ -373,5 +373,9 @@
   "onboarding.interests.button": "Next",
   "onboarding.communities.title": "Communities based on your interests",
   "onboarding.communities.membersCount": "{count} members",
-  "onboarding.communities.button": "Done"
+  "onboarding.communities.button": "Done",
+  "onboarding.error.title": "Error",
+  "onboarding.error.message": "There was an error with your onboarding. Please try again!",
+  "onboarding.error.cancel": "Skip",
+  "onboarding.error.reset": "Try again"
 }

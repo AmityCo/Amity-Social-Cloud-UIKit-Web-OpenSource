@@ -85,9 +85,9 @@ export type CommunitySelectProps = {
   onChange?: (communities: CommunityData[]) => void;
 };
 
-export function CommunitySelect({ communities, isDisabled }: CommunitySelectProps) {
+export function CommunitySelect({ communities, isDisabled, onChange }: CommunitySelectProps) {
   const sortedCommunities = useMemo(
-    () => [...communities].sort((a, b) => a.description.localeCompare(b.description)),
+    () => [...communities].sort((a, b) => a.name.localeCompare(b.name)),
     [communities],
   );
   const [selected, setSelected] = useState<CommunityData[]>([]);
@@ -105,6 +105,7 @@ export function CommunitySelect({ communities, isDisabled }: CommunitySelectProp
     }
 
     setSelected(updatedArray);
+    onChange?.(updatedArray);
   };
 
   return (

@@ -14,7 +14,7 @@ const useUser = (userId) => {
 
   // Add a Noomer as a display name if user does not have one
   // We check for existence of createdAt to discount placeholder objects
-  if (user.createdAt && !user.displayName) {
+  if ((user.createdAt && !user.displayName) || user.userId === user.displayName) {
     user.displayName = 'Noomer';
   }
 
