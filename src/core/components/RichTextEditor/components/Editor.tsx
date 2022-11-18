@@ -16,7 +16,7 @@ import {
   PlateProvider,
 } from '@udecode/plate';
 
-import { Box } from '@noom/wax-component-library';
+import { Box, useBreakpointValue } from '@noom/wax-component-library';
 
 import { EditorValue, Editor } from '../models';
 import { isEmptyValue, calculateRowStyles } from '../utils';
@@ -110,6 +110,7 @@ const RichTextEditor = forwardRef<EditorHandle, RichTextEditorProps>(
   ) => {
     const clearRef = useRef<EditorHandle>(null);
     const [mentionData, setMentionData] = useState<MentionItem[]>([]);
+    const showBallonToolbar = useBreakpointValue({ base: false, md: true });
 
     useImperativeHandle(ref, () => ({
       clear: () => {
@@ -178,7 +179,7 @@ const RichTextEditor = forwardRef<EditorHandle, RichTextEditorProps>(
             initialValue={initialValue}
             editableProps={editableProps}
           >
-            <BalloonToolbar />
+            {showBallonToolbar && <BalloonToolbar />}
             {mentionAllowed && (
               <MentionPopover<MentionData>
                 items={mentionData}

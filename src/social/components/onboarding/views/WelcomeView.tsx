@@ -66,7 +66,7 @@ export function WelcomeView({ isLoading, onSubmit, fireworksImageUrl }: WelcomeV
         </List>
 
         {fireworksImageUrl ? (
-          <Image src={fireworksImageUrl} position="absolute" top={0} w="100%" />
+          <Image src={fireworksImageUrl} position="absolute" top="-20%" w="100%" />
         ) : null}
       </ModalBody>
       <ModalFooter>
