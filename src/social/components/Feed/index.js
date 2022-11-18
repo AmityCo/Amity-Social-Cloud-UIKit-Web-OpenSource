@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { PostTargetType, FeedType, CommunityFilter } from '@amityco/js-sdk';
 
@@ -49,17 +49,19 @@ const Feed = ({
 }) => {
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
 
-  const [posts, hasMore, loadMore, loading, loadingMore] = useFeed({
-    targetType,
-    targetId,
-    feedType,
-    limit: FEED_FETCH_POST_LIMIT,
-  });
   const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList(
     queryParams,
     false,
     () => !showPostCreator && !enablePostTargetPicker,
   );
+
+  const [posts, hasMore, loadMore, loading, loadingMore] = useFeed({
+    targetType,
+    targetId,
+    feedType,
+    limit: FEED_FETCH_POST_LIMIT,
+    dependencies: [communities],
+  });
 
   const { targetId: postCreatorTargetId, targetType: postCreatorTargetType } =
     getAdjustedPostTarget(targetType, targetId, communities, CAN_POST_ON_GLOBAL_TIMELINE);
