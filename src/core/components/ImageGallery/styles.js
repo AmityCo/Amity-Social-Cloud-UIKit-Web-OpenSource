@@ -7,10 +7,9 @@ export const Container = styled.div`
   z-index: 9999;
   position: fixed;
   overflow: hidden;
-
   display: grid;
-  grid-gap: 1rem 3rem;
-  grid-template-columns: 2rem auto 2rem;
+  grid-gap: 0;
+  grid-template-columns: 3rem auto 3rem;
   grid-template-rows: min-content auto;
   grid-template-areas:
     'none counter close'
@@ -24,7 +23,6 @@ export const Container = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  padding: 3rem;
 
   background: rgba(0, 0, 0, 0.75);
   color: ${({ theme }) => theme.palette.system.background};
@@ -33,6 +31,11 @@ export const Container = styled.div`
 
   animation-duration: 0.3s;
   animation-name: appear;
+
+  @media (min-width: 960px) {
+    grid-gap: 1rem 3rem;
+    padding: 3rem;
+  }
 
   @keyframes appear {
     from {
