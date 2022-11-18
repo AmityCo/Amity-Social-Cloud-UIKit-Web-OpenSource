@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.4](https://github.com/noom/community-web-uikit/compare/2.23.3...2.23.4) (2022-11-18)
+
+
+### Bug Fixes
+
+* Update Connect -> Circles ([2a86401](https://github.com/noom/community-web-uikit/commit/2a864017f645842e6e53c488eb900c9d08556053))
+
 ### [2.23.3](https://github.com/noom/community-web-uikit/compare/2.23.2...2.23.3) (2022-11-18)
 
 
