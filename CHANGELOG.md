@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.23.3](https://github.com/noom/community-web-uikit/compare/2.23.2...2.23.3) (2022-11-18)
+
+
+### Bug Fixes
+
+* Styling and remove unused components ([9c25e17](https://github.com/noom/community-web-uikit/commit/9c25e1799460d22d92c800c2b95e69eaff36a5f4))
+
 ### [2.23.2](https://github.com/noom/community-web-uikit/compare/2.23.1...2.23.2) (2022-11-18)
 
 
