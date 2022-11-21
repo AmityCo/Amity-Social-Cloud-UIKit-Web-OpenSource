@@ -110,7 +110,7 @@ const RichTextEditor = forwardRef<EditorHandle, RichTextEditorProps>(
   ) => {
     const clearRef = useRef<EditorHandle>(null);
     const [mentionData, setMentionData] = useState<MentionItem[]>([]);
-    const showBallonToolbar = useBreakpointValue({ base: false, md: true });
+    const showBallonToolbar = useBreakpointValue({ base: false, lg: true });
 
     useImperativeHandle(ref, () => ({
       clear: () => {
