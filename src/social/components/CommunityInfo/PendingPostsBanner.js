@@ -1,6 +1,7 @@
-import { toHumanString } from 'human-readable-numbers';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+
+import { toHumanString } from '~/helpers/toHumanString';
 import {
   PendingPostsBannerContainer,
   PendingPostsBannerMessage,

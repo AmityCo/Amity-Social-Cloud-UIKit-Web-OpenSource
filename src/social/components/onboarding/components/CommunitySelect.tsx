@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Box, CompassColor, Text, IconButton } from '@noom/wax-component-library';
-import { abbreviateNumber } from 'js-abbreviation-number';
 
+import { toHumanString } from '~/helpers/toHumanString';
 import Avatar from '~/core/components/Avatar';
 
 import { Community as CommunityData } from '../models';
@@ -48,7 +48,7 @@ export function Community({ data, onClick, isSelected, isDisabled }: CommunityPr
                 <FormattedMessage
                   id="onboarding.communities.membersCount"
                   values={{
-                    count: abbreviateNumber(data.membersCount, 1, { padding: false }),
+                    count: toHumanString(data.membersCount),
                   }}
                 />
               </Text>

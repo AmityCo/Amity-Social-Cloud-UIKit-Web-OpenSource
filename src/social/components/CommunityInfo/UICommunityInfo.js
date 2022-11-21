@@ -1,10 +1,10 @@
 import { CommunityPostSettings } from '@amityco/js-sdk';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { FormattedMessage, useIntl } from 'react-intl';
 
+import { toHumanString } from '~/helpers/toHumanString';
 import customizableComponent from '~/core/hocs/customization';
 import Button from '~/core/components/Button';
 import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 
+import { toHumanString } from '~/helpers/toHumanString';
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';

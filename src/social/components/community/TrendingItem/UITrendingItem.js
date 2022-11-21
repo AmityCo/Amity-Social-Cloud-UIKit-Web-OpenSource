@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
+
+import { toHumanString } from '~/helpers/toHumanString';
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import CommunityName from '~/social/components/community/Name';

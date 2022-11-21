@@ -1,7 +1,6 @@
 import {
   createPluginFactory,
   isUrl as isUrlProtocol,
-  onKeyDownLink,
   LinkPlugin,
   withLink,
   ELEMENT_LINK,
@@ -15,9 +14,6 @@ export const createLinkPlugin = createPluginFactory<LinkPlugin>({
   isElement: true,
   isInline: true,
   props: ({ element }) => ({ href: element?.url, target: element?.target }),
-  handlers: {
-    onKeyDown: onKeyDownLink,
-  },
   withOverrides: withLink,
   options: {
     isUrl: isUrlProtocol,

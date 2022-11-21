@@ -30,7 +30,7 @@ export const createFocusSaverPlugin = createPluginFactory<EditorValue, any>({
 
       if (hasSelection) {
         setMarks(editor, { [FOCUS_SAVER_MARK]: true });
-        editor.prevSelection = editor.selection || undefined;
+        editor.prevSelection = editor.selection || null;
       }
     },
     onFocus: (editor: Editor) => (event) => {
@@ -43,7 +43,7 @@ export const createFocusSaverPlugin = createPluginFactory<EditorValue, any>({
           mode: 'all',
         });
 
-        editor.prevSelection = undefined;
+        editor.prevSelection = null;
       }
     },
   },

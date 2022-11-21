@@ -1,4 +1,4 @@
-import { BaseRange } from 'slate';
+import { BaseRange, BaseSelection } from 'slate';
 
 import {
   EDescendant,
@@ -169,7 +169,7 @@ export type EditorValue = RootBlock[];
 
 export type Editor = PlateEditor<EditorValue> & {
   isDragging?: boolean;
-  prevSelection?: Partial<BaseRange>;
+  prevSelection?: BaseSelection | null;
 };
 export type ReactEditor = TReactEditor<EditorValue>;
 export type Node = ENode<EditorValue>;

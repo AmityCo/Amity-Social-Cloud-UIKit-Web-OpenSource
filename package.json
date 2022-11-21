@@ -80,12 +80,11 @@
   "dependencies": {
     "@amityco/js-sdk": "5.30.0",
     "@hookform/error-message": "2.0.0",
-    "@udecode/plate": "14.4.3",
+    "@udecode/plate": "15.0.6",
     "classnames": "2.3.1",
     "filesize": "9.0.11",
     "hls.js": "1.2.1",
     "html-entities": "2.3.3",
-    "human-readable-numbers": "0.9.5",
     "is-hotkey": "0.2.0",
     "javascript-time-ago": "2.5.6",
     "js-abbreviation-number": "1.4.0",

@@ -1,10 +1,11 @@
 import React from 'react';
 import Truncate from 'react-truncate-markup';
 import PropTypes from 'prop-types';
-import { toHumanString } from 'human-readable-numbers';
+
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FollowRequestStatus } from '@amityco/js-sdk';
 
+import { toHumanString } from '~/helpers/toHumanString';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import customizableComponent from '~/core/hocs/customization';

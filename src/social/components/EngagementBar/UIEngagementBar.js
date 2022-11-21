@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { toHumanString } from 'human-readable-numbers';
 import { FormattedMessage } from 'react-intl';
 import { CommentReferenceType } from '@amityco/js-sdk';
 import { LazyRender } from '@noom/wax-component-library';
 
+import { toHumanString } from '~/helpers/toHumanString';
 import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import PostLikeButton from '~/social/components/post/LikeButton';
