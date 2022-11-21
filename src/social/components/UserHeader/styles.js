@@ -59,10 +59,12 @@ const UserHeader = ({
   isLoading,
 }) => {
   const onClickUser = () => onClick(userId);
+  const userName = displayName ?? 'Noomer';
+
   return (
-    <UserHeaderContainer title={displayName} hasNoChildren={!children}>
+    <UserHeaderContainer title={userName} hasNoChildren={!children}>
       <UserHeaderAvatar
-        displayName={displayName}
+        displayName={userName}
         avatar={avatarFileUrl}
         backgroundImage={UserImage}
         onClick={onClickUser}
@@ -73,7 +75,7 @@ const UserHeader = ({
           <Loader colorScheme="primary" size="xs" />
         ) : (
           <>
-            {showName ? displayName : ''} {isBanned && <BanIcon width={14} height={14} />}
+            {showName ? userName : ''} {isBanned && <BanIcon width={14} height={14} />}
           </>
         )}
         {showId && <UserHeaderId>{userId}</UserHeaderId>}
