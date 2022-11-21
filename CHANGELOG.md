@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.23.6](https://github.com/noom/community-web-uikit/compare/2.23.5...2.23.6) (2022-11-21)
+
+
+### Bug Fixes
+
+* broken user settings ([45706c9](https://github.com/noom/community-web-uikit/commit/45706c936fe5019c3fd146060e6cb2e1ecb912dd))
+* Style issus ([23ff8f4](https://github.com/noom/community-web-uikit/commit/23ff8f45ecc7c35c349eef2986cee005fdcd77f4))
+
 ### [2.23.5](https://github.com/noom/community-web-uikit/compare/2.23.4...2.23.5) (2022-11-18)
 
 
