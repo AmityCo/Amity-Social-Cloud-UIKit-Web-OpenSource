@@ -189,13 +189,6 @@ function exportMentions(slateState: EditorValue, text: string): MentionOutput[] 
               .substring(plainTextIndexRef.current)
               .indexOf(displayWithoutTags) + plainTextIndexRef.current;
 
-          console.log(
-            displayWithTags,
-            displayWithoutTags,
-            plainTextIndex,
-            textWithRemovedMentionTags,
-          );
-
           mentions.push({
             id: decendant.id as string,
             display: displayWithoutTags,

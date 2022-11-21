@@ -1,10 +1,15 @@
 import React, { ReactNode, useLayoutEffect, useRef } from 'react';
+import { useBreakpointValue } from '@noom/wax-component-library';
+
+import InputText from '~/core/components/InputText';
 
 import RichTextEditor, { EditorHandle } from './components/Editor';
 import { markdownToSlate, slateToMarkdown } from './markdownParser';
 import { EditorValue } from './models';
 import { MentionOutput } from './plugins/mentionPlugin/models';
 import { stripMentionTags } from './plugins/mentionPlugin/utils';
+
+const SimpleTextEditor = InputText as any;
 
 export type AmityAdapterProps = {
   id: string;
@@ -56,6 +61,24 @@ export function AmityAdapterEditor({
       mentions: newMarkdown.mentions,
     });
   };
+
+  // Quick fix to deal with the broken editor on mobile
+  const useSimpleEditor = useBreakpointValue({ base: true, lg: false });
+
+  if (useSimpleEditor) {
+    return (
+      <SimpleTextEditor
+        id={id}
+        rows={rows}
+        multiline={true}
+        onChange={onChange}
+        disabled={disabled}
+        invalid={invalid}
+        value={value}
+        {...rest}
+      />
+    );
+  }
 
   return (
     <RichTextEditor

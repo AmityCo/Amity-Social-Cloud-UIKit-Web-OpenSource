@@ -174,8 +174,8 @@ const RichTextEditor = forwardRef<EditorHandle, RichTextEditorProps>(
 
           <Plate<EditorValue>
             id={id}
-            onChange={(newValue) => handleChange(newValue)}
             plugins={plugins}
+            onChange={handleChange}
             initialValue={initialValue}
             editableProps={editableProps}
           >
