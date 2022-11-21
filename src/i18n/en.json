@@ -87,7 +87,7 @@
   "EmptyFeed.TargetType.globalFeed": "This feed is empty",
   "EmptyFeed.TargetType.communityFeed": "This community's feed is empty",
   "EmptyFeed.TargetType.userFeed": "This user's feed is empty",
-  "EmptyFeed.TargetType.myFeed": "Your feed is empty. Start your first post",
+  "EmptyFeed.TargetType.myFeed": "Your feed is empty",
   "EmptyFeed.exploreCommunity": "Explore Community",
 
   "UserFeed.tabs.timeline": "Timeline",
@@ -352,6 +352,7 @@
   "chat_composer.placeholder.displayName": "Enter display name here",
   "chat_composer.placeholder.channelId": "Enter channel ID here",
 
+  "userType.noomer": "Noomer",
   "userType.user": "User",
   "userType.coach": "Noom Coach",
   "userType.writer": "Noom Writer",

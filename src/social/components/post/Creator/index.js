@@ -340,6 +340,7 @@ const PostCreatorBar = ({
             </UploadsContainer>
           }
           onChange={({ text, plainText: plainTextVal, lastMentionText, mentions }) => {
+            console.log(text, plainTextVal);
             // Disrupt the flow
             if (mentions?.length > MAXIMUM_POST_MENTIONEES) {
               return info({

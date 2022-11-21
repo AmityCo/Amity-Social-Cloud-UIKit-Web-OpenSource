@@ -64,7 +64,7 @@ const LinkModal = ({
     if (event) {
       event.preventDefault();
     }
-    onSubmit(url, text);
+    onSubmit(url?.trim(), text?.trim());
     onClose();
   }
 

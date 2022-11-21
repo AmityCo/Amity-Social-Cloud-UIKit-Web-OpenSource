@@ -14,7 +14,7 @@ const UserHeaderContainer = styled.div`
   grid-template-columns: min-content auto;
   grid-template-rows: min-content min-content;
   grid-gap: 0 0.5em;
-  padding: 1em;
+  padding: 0.5rem;
   ${({ hasNoChildren }) =>
     hasNoChildren &&
     css`
@@ -59,12 +59,10 @@ const UserHeader = ({
   isLoading,
 }) => {
   const onClickUser = () => onClick(userId);
-  const userName = displayName ?? 'Noomer';
-
   return (
-    <UserHeaderContainer title={userName} hasNoChildren={!children}>
+    <UserHeaderContainer title={displayName} hasNoChildren={!children}>
       <UserHeaderAvatar
-        displayName={userName}
+        displayName={displayName}
         avatar={avatarFileUrl}
         backgroundImage={UserImage}
         onClick={onClickUser}
@@ -75,7 +73,7 @@ const UserHeader = ({
           <Loader colorScheme="primary" size="xs" />
         ) : (
           <>
-            {showName ? userName : ''} {isBanned && <BanIcon width={14} height={14} />}
+            {showName ? displayName : ''} {isBanned && <BanIcon width={14} height={14} />}
           </>
         )}
         {showId && <UserHeaderId>{userId}</UserHeaderId>}
