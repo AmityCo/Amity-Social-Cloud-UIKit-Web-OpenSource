@@ -1,5 +1,13 @@
 # Changelog
 
+### [2.23.7](https://github.com/noom/community-web-uikit/compare/2.23.6...2.23.7) (2022-11-21)
+
+
+### Bug Fixes
+
+* Remove editor controls on mobile ([7e65ea6](https://github.com/noom/community-web-uikit/commit/7e65ea6f6e492790e1d31928bbda255ba6c3c1fc))
+* remove package ([9cc3bf3](https://github.com/noom/community-web-uikit/commit/9cc3bf3594d54b433dc5c7d5d5f158b41cf9aacc))
+
 ### [2.23.6](https://github.com/noom/community-web-uikit/compare/2.23.5...2.23.6) (2022-11-21)
 
 
