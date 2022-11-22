@@ -3,6 +3,7 @@ import { useUnmount } from 'react-use';
 import { UserRepository, CommunityRepository, PostTargetType } from '@amityco/js-sdk';
 import { formatMentionees } from '~/helpers/utils';
 import useCommunity from '~/social/hooks/useCommunity';
+import promisify from '~/helpers/promisify';
 
 const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) => {
   const isCommunityFeed = targetType === PostTargetType.CommunityFeed;
@@ -62,9 +63,28 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
     setMarkup(remoteMarkup);
     setMentions([]);
   };
+  const mentioneeCommunityFetcher = async (communityId, search) => {
+    const communityMemberLiveCollection = CommunityRepository.getCommunityMembers({
+      communityId,
+      search,
+    });
+
+    const communityMembers = await promisify(communityMemberLiveCollection);
+
+    return Promise.all(
+      communityMembers.map(({ userId }) => {
+        const userLiveObject = UserRepository.getUser(userId);
+
+        if (userLiveObject.model) {
+          return userLiveObject.model;
+        }
+        return promisify(userLiveObject);
+      }),
+    );
+  };
 
   const queryMentionees = useCallback(
-    (query, cb) => {
+    async (query, cb) => {
       let keyword = query;
 
       if (keyword.match(/^@$/) || keyword === '') {
@@ -75,14 +95,15 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
       fetcher.current?.dispose();
 
       // ...and create a new one on the fly
-      fetcher.current =
-        isPublic || !isCommunityFeed
-          ? UserRepository.queryUsers({ keyword })
-          : CommunityRepository.getCommunityMembers({ communityId: targetId, search: keyword });
-
-      fetcher.current.on('dataUpdated', (models) => {
-        cb(formatMentionees(models));
-      });
+      if (isPublic || !isCommunityFeed) {
+        fetcher.current = UserRepository.queryUsers({ keyword });
+        fetcher.current.on('dataUpdated', (models) => {
+          cb(formatMentionees(models));
+        });
+      } else {
+        const users = await mentioneeCommunityFetcher(targetId, keyword);
+        cb(formatMentionees(users));
+      }
     },
     [isCommunityFeed, isPublic, targetId],
   );
