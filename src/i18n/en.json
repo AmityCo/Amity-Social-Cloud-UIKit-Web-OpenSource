@@ -378,5 +378,13 @@
   "onboarding.error.title": "Error",
   "onboarding.error.message": "There was an error with your onboarding. Please try again!",
   "onboarding.error.cancel": "Skip",
-  "onboarding.error.reset": "Try again"
+  "onboarding.error.reset": "Try again",
+
+  "settings.emailNotifications.title": "Email notifications",
+  "settings.emailNotifications.comment.title": "Comment",
+  "settings.emailNotifications.comment.subTitle": "When someone comments on your post or comment",
+  "settings.emailNotifications.reaction.title": "Reaction",
+  "settings.emailNotifications.reaction.subTitle": "When someone reacts on your post or comment",
+  "settings.emailNotifications.post.title": "Post",
+  "settings.emailNotifications.post.subTitle": "When there is a new post in a community you joined"
 }
