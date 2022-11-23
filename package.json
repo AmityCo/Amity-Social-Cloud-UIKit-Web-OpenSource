@@ -1,6 +1,6 @@
 {
   "name": "@meetperry/amity-uikit",
-  "version": "1.0.11-beta.0",
+  "version": "1.0.11-beta.1",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -88,8 +88,6 @@
     "react-tiny-popover": "^7.1.0",
     "react-truncate-markup": "^5.1.2",
     "react-use": "^17.4.0",
-    "remark": "^14.0.2",
-    "remark-html": "^15.0.1",
     "uuid": "^8.3.2"
   },
   "lint-staged": {
