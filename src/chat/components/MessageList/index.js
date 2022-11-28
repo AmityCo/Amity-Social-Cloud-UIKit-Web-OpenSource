@@ -20,7 +20,7 @@ const MessageList = ({ client, channelId }) => {
     if (avatarFileId) {
       return FileRepository.getFileUrlById({
         fileId: avatarFileId,
-        imageSize: ImageSize.Medium,
+        imageSize: ImageSize.Small,
       });
     }
 

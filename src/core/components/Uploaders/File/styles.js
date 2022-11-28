@@ -31,7 +31,7 @@ export const Content = styled.div`
   align-items: center;
 `;
 
-export const ImgPreview = styled.img`
+export const ImgPreview = styled.img.attrs({ loading: 'lazy' })`
   grid-area: icon;
   width: 2.5em;
   height: 100%;
