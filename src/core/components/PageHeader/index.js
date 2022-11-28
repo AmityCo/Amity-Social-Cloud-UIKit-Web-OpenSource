@@ -47,7 +47,7 @@ const PageHeader = ({ title, avatarFileUrl, avatarImage, backLinkText, onBack })
     <Avatar avatar={avatarFileUrl} backgroundImage={avatarImage} />
     <LinkAndTitle>
       {onBack instanceof Function && (
-        <BackButton onClick={onBack}>
+        <BackButton data-qa-anchor="page-header-back-button" onClick={onBack}>
           <ChevronLeftIcon height=".9em" />
           {backLinkText ?? <FormattedMessage id="backTitle" />}
         </BackButton>

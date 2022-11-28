@@ -69,6 +69,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
     <PostEditorContainer className={className}>
       <ContentContainer>
         <Content
+          data-qa-anchor="post-editor-textarea"
           data={{ text: markup }}
           dataType={dataType}
           placeholder={placeholder}
@@ -98,7 +99,11 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
         )}
       </ContentContainer>
       <Footer>
-        <PostButton disabled={isEmpty} onClick={handleSave}>
+        <PostButton
+          data-qa-anchor="post-editor-save-button"
+          disabled={isEmpty}
+          onClick={handleSave}
+        >
           <FormattedMessage id="save" />
         </PostButton>
       </Footer>

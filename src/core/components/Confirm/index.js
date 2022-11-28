@@ -4,6 +4,7 @@ import { PrimaryButton } from '~/core/components/Button';
 import { ConfirmModal, Footer, DefaultOkButton, DefaultCancelButton } from './styles';
 
 const Confirm = ({
+  'data-qa-anchor': dataQaAnchor = '',
   className,
   title,
   content,
@@ -16,13 +17,20 @@ const Confirm = ({
   type = 'confirm',
 }) => (
   <ConfirmModal
+    data-qa-anchor={`confirm-modal-${dataQaAnchor}`}
     clean
     className={className}
     title={title}
     footer={
       <Footer>
-        {type === 'confirm' && <CancelButton onClick={onCancel}>{cancelText}</CancelButton>}
-        <OkButton onClick={onOk}>{okText}</OkButton>
+        {type === 'confirm' && (
+          <CancelButton data-qa-anchor="confirm-modal-cancel-button" onClick={onCancel}>
+            {cancelText}
+          </CancelButton>
+        )}
+        <OkButton data-qa-anchor={`confirm-modal-${dataQaAnchor}-ok-button`} onClick={onOk}>
+          {okText}
+        </OkButton>
       </Footer>
     }
     onCancel={onCancel}

@@ -13,6 +13,7 @@ import {
 } from '~/social/components/community/Name/styles';
 
 const CommunityName = ({
+  'data-qa-anchor': dataQaAnchor = '',
   isActive,
   isOfficial,
   isPublic,
@@ -36,8 +37,8 @@ const CommunityName = ({
         </Name>
       ) : (
         <Truncate lines={truncate}>
-          <Name title={name}>
-            {!isPublic && <PrivateIcon />}
+          <Name data-qa-anchor={`${dataQaAnchor}-community-name`} title={name}>
+            {!isPublic && <PrivateIcon data-qa-anchor={`${dataQaAnchor}-private-icon`} />}
             {name}
           </Name>
         </Truncate>
@@ -49,6 +50,7 @@ const CommunityName = ({
 };
 
 CommunityName.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   isActive: PropTypes.bool,
   isOfficial: PropTypes.bool,
   isPublic: PropTypes.bool,
@@ -62,6 +64,7 @@ CommunityName.propTypes = {
 };
 
 CommunityName.defaultProps = {
+  'data-qa-anchor': '',
   isActive: false,
   isOfficial: false,
   isPublic: false,

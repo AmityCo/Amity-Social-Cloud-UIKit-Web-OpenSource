@@ -50,10 +50,11 @@ const UICommunityInfo = ({
   const { formatMessage } = useIntl();
 
   return (
-    <Container>
+    <Container data-qa-anchor="community-info">
       <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
         <CoverContent>
           <CommunityName
+            data-qa-anchor="community-info"
             isOfficial={isOfficial}
             isPublic={isPublic}
             isTitle
@@ -83,15 +84,17 @@ const UICommunityInfo = ({
 
           {isJoined && (
             <OptionMenu
-              data-qa-anchor="social-community-3dots"
+              data-qa-anchor="community-info-options-button"
               options={[
                 canEditCommunity && {
                   name: formatMessage({ id: 'community.settings' }),
                   action: () => onEditCommunity(communityId),
+                  dataQaAnchorMenuItem: 'settings',
                 },
                 canLeaveCommunity && {
                   name: formatMessage({ id: 'community.leaveCommunity' }),
                   action: () => onClickLeaveCommunity(communityId),
+                  dataQaAnchorMenuItem: 'leave-community',
                 },
               ].filter(Boolean)}
             />
@@ -100,12 +103,15 @@ const UICommunityInfo = ({
 
         {description && (
           <Truncate lines={3}>
-            <Description>{description}</Description>
+            <Description data-qa-anchor="community-info-description">{description}</Description>
           </Truncate>
         )}
 
         {!isJoined && (
-          <JoinButton onClick={() => joinCommunity(communityId)}>
+          <JoinButton
+            data-qa-anchor="community-info-join-button"
+            onClick={() => joinCommunity(communityId)}
+          >
             <PlusIcon /> <FormattedMessage id="community.join" />
           </JoinButton>
         )}
@@ -113,7 +119,7 @@ const UICommunityInfo = ({
         {isJoined && canEditCommunity && (
           <Button
             fullWidth
-            data-qa-anchor="social-edit-community-button"
+            data-qa-anchor="community-info-edit-button"
             onClick={() => onEditCommunity(communityId)}
           >
             <PencilIcon /> <FormattedMessage id="community.editProfile" />

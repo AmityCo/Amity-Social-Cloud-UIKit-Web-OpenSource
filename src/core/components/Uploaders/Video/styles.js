@@ -44,7 +44,7 @@ const VideoPreviewContainerStyles = css`
 export const VideoPreview = styled(
   React.forwardRef(({ src, mimeType, mediaFit, ...props }, ref) => (
     // eslint-disable-next-line jsx-a11y/media-has-caption
-    <video controls controlsList="nodownload" {...props} ref={ref}>
+    <video controls controlsList="nodownload" {...props} ref={ref} data-qa-anchor="video-preview">
       <source src={src} type={mimeType} />
     </video>
   )),

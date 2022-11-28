@@ -103,6 +103,7 @@ const PostTargetSelector = ({
           {communities.map((community) => (
             <CommunityItem
               key={community.communityId}
+              data-qa-anchor="post-creator-post-target-community-item"
               community={community}
               currentTargetId={currentTargetId}
               onChange={onChange}
@@ -125,7 +126,7 @@ const PostTargetSelector = ({
         onClickOutside={close}
       >
         <PostTargetSelectorContainer onClick={open}>
-          {children} <SelectIcon />
+          {children} <SelectIcon data-qa-anchor="post-creator-target-selector" />
         </PostTargetSelectorContainer>
       </StyledPopover>
     </div>

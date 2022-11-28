@@ -27,7 +27,7 @@ const ImagesGallery = ({
           return (
             <Image
               key={file?.name}
-              data-qa-anchor="social-create-post-uploaded-image"
+              data-qa-anchor="post-creator-uploaded-image"
               file={file}
               progress={progress[file?.name]}
               isRejected={rejected.includes(file?.name)}
@@ -40,7 +40,7 @@ const ImagesGallery = ({
           <Image
             key={fileId}
             fileId={fileId}
-            data-qa-anchor="social-create-post-uploaded-image"
+            data-qa-anchor="post-creator-uploaded-image"
             onRemove={() => removeFile(file)}
           />
         );

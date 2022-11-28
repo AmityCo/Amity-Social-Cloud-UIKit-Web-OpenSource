@@ -5,7 +5,7 @@ import StyledImage from './styles';
 
 const Image = ({
   className,
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   file,
   progress,
   mediaFit,
@@ -48,7 +48,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   className: undefined,
-  'data-qa-anchor': undefined,
+  'data-qa-anchor': '',
   progress: -1,
   onRemove: null,
   isRejected: false,

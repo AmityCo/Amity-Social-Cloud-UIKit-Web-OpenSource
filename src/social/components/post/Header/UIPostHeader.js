@@ -36,9 +36,13 @@ const UIPostHeader = ({
 }) => {
   const renderPostNames = () => {
     return (
-      <PostNamesContainer>
+      <PostNamesContainer data-qa-anchor="post-header-post-names">
         <TruncateMarkup lines={3}>
-          <Name className={cx({ clickable: !!onClickUser })} onClick={onClickUser}>
+          <Name
+            data-qa-anchor="post-header-post-name"
+            className={cx({ clickable: !!onClickUser })}
+            onClick={onClickUser}
+          >
             {postAuthorName}
           </Name>
         </TruncateMarkup>
@@ -48,7 +52,11 @@ const UIPostHeader = ({
         {postTargetName && !hidePostTarget && (
           <>
             <ArrowSeparator />
-            <Name className={cx({ clickable: !!onClickCommunity })} onClick={onClickCommunity}>
+            <Name
+              data-qa-anchor="post-header-post-target-name"
+              className={cx({ clickable: !!onClickCommunity })}
+              onClick={onClickCommunity}
+            >
               {postTargetName}
             </Name>
           </>
@@ -59,17 +67,17 @@ const UIPostHeader = ({
 
   const renderAdditionalInfo = () => {
     return (
-      <AdditionalInfo showTime={!!timeAgo}>
+      <AdditionalInfo data-qa-anchor="post-header-additional-info" showTime={!!timeAgo}>
         {isModerator && (
-          <ModeratorBadge>
+          <ModeratorBadge data-qa-anchor="post-header-additional-info-moderator-badge">
             <ShieldIcon /> <FormattedMessage id="moderator" />
           </ModeratorBadge>
         )}
 
-        {timeAgo && <Time date={timeAgo} />}
+        {timeAgo && <Time data-qa-anchor="post-header-additional-info-time-ago" date={timeAgo} />}
 
         {isEdited && (
-          <MessageContainer>
+          <MessageContainer data-qa-anchor="post-header-additional-info-edited-label">
             <FormattedMessage id="post.edited" />
           </MessageContainer>
         )}
@@ -78,14 +86,15 @@ const UIPostHeader = ({
   };
 
   return (
-    <PostHeaderContainer>
+    <PostHeaderContainer data-qa-anchor="post-header">
       <Avatar
+        data-qa-anchor="post-header-avatar"
         avatar={avatarFileUrl}
         backgroundImage={UserImage}
         loading={loading}
         onClick={onClickUser}
       />
-      <PostInfo>
+      <PostInfo data-qa-anchor="post-header-post-info">
         {loading ? (
           <>
             <div>

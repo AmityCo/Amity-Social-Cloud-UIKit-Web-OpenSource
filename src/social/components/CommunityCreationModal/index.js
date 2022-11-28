@@ -30,8 +30,16 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal title="Create community" onCancel={closeConfirm}>
-      <CommunityForm onCancel={closeConfirm} onSubmit={handleSubmit} />
+    <Modal
+      data-qa-anchor="community-creation-modal"
+      title="Create community"
+      onCancel={closeConfirm}
+    >
+      <CommunityForm
+        data-qa-anchor="community-creation"
+        onCancel={closeConfirm}
+        onSubmit={handleSubmit}
+      />
     </Modal>
   );
 };

@@ -33,7 +33,7 @@ const Image = ({ image, onClick, onRemove, numberOfHiddenImages }) => {
   };
 
   return (
-    <ImageContainer onClick={onClick}>
+    <ImageContainer data-qa-anchor="image" onClick={onClick}>
       {numberOfHiddenImages > 0 && (
         <NumberOfHiddenImagesOverlay>+ {numberOfHiddenImages}</NumberOfHiddenImagesOverlay>
       )}

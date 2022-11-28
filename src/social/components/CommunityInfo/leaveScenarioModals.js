@@ -36,6 +36,7 @@ async function onClickLeaveCommunityOk(communityId, leaveCommunity) {
 
 export const leaveCommunityConfirmModal = (communityId, leaveCommunityFunc) =>
   confirm({
+    'data-qa-anchor': 'leave-community',
     title: <FormattedMessage id="community.leaveCommunityTitle" />,
     content: <FormattedMessage id="community.leaveCommunityBody" />,
     okText: <FormattedMessage id="community.leaveCommunityButtonText" />,

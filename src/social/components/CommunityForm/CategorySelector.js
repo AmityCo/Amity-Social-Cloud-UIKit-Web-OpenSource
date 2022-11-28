@@ -9,7 +9,12 @@ import CategoryHeader from '~/social/components/category/Header';
 
 import { Selector, SelectIcon, InputPlaceholder } from './styles';
 
-const CategorySelector = ({ value: categoryId, onChange, parentContainer = null }) => {
+const CategorySelector = ({
+  'data-qa-anchor': dataQaAnchor = '',
+  value: categoryId,
+  onChange,
+  parentContainer = null,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
@@ -24,7 +29,7 @@ const CategorySelector = ({ value: categoryId, onChange, parentContainer = null 
 
   const triggerRenderer = (props) => {
     return (
-      <Selector {...props}>
+      <Selector {...props} data-qa-anchor={`${dataQaAnchor}-category-selector`}>
         {categoryId ? (
           <CategoryHeader categoryId={categoryId} />
         ) : (
@@ -39,6 +44,7 @@ const CategorySelector = ({ value: categoryId, onChange, parentContainer = null 
 
   return (
     <Select
+      data-qa-anchor={`${dataQaAnchor}-category`}
       options={options}
       renderTrigger={(props) => triggerRenderer({ ...props, onClick: toggle })}
       renderItem={itemRenderer}
@@ -51,6 +57,7 @@ const CategorySelector = ({ value: categoryId, onChange, parentContainer = null 
 };
 
 CategorySelector.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   value: PropTypes.string,
   parentContainer: PropTypes.instanceOf(Element),
   onChange: PropTypes.func,

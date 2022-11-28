@@ -40,6 +40,7 @@ const Select = ({
   handleClose,
   placeholder = 'Select...',
   className = '',
+  'data-qa-anchor': dataQaAnchor = '',
 }) => {
   const [isOpenInternal, setIsOpenInternal] = useState(isOpen);
   const [selected, setSelected] = useState(value);
@@ -87,6 +88,7 @@ const Select = ({
 
   return (
     <Dropdown
+      data-qa-anchor={`${dataQaAnchor}-select-dropdown`}
       isOpen={isOpen || isOpenInternal}
       renderTrigger={(props) =>
         renderTrigger({ ...props, onClick: handleClick, selected, remove, placeholder })
@@ -105,6 +107,7 @@ const Select = ({
             return (
               <MenuItem
                 key={option.value}
+                data-qa-anchor={`${dataQaAnchor}-select-menu-item`}
                 active={selected.find((item) => item.value === option.value)}
                 onClick={() => handleSelect(option)}
               >
@@ -118,6 +121,7 @@ const Select = ({
   );
 };
 Select.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   value: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })),
   options: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })),
   multiple: PropTypes.bool,
