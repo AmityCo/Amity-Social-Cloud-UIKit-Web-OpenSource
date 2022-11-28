@@ -7,7 +7,7 @@ import usePost from '~/social/hooks/usePost';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import Content from './Content';
 import { PostEditorContainer, Footer, ContentContainer, PostButton } from './styles';
-import { parseMentionsMarkup } from '~/helpers/utils';
+import { extractMetadata, parseMentionsMarkup } from '~/helpers/utils';
 
 const PostEditor = ({ postId, onSave, className, placeholder }) => {
   const { post, handleUpdatePost, childrenPosts = [] } = usePost(postId);
@@ -36,29 +36,11 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
   // Update parent post text and delete removed children posts.
   // TO REFACTOR: Extract this logic as a hook for Create Post too
   const handleSave = () => {
-    let mentionees = [];
-    const postMetadata = {};
-
-    if (mentions?.length > 0) {
-      mentionees = [{}];
-      mentionees[0].type = 'user';
-      mentionees[0].userIds = mentions.map(({ id }) => id);
-
-      postMetadata.mentioned = mentions.map(({ plainTextIndex, id }) => ({
-        index: plainTextIndex,
-        length: id.length,
-        type: 'user',
-        userId: id,
-      }));
-
-      postMetadata.markupText = markup;
-    }
-
     localRemovedChildren.forEach((childPostId) => {
       PostRepository.deletePost(childPostId);
     });
 
-    handleUpdatePost({ text }, { mentionees, metadata: postMetadata });
+    handleUpdatePost({ text }, extractMetadata(mentions));
     clearAll();
     onSave();
   };
