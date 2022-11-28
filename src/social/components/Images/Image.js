@@ -52,7 +52,7 @@ const Image = ({ image, onClick, onRemove, numberOfHiddenImages }) => {
           <CloseIcon />
         </CircleButton>
       )}
-      <img src={image.url} alt={image.name} />
+      <img src={image.url} alt={image.name} loading="lazy" />
     </ImageContainer>
   );
 };

@@ -40,7 +40,7 @@ const ImgPreviewContainerStyles = css`
   object-position: center;
 `;
 
-export const ImgPreview = styled.img`
+export const ImgPreview = styled.img.attrs({ loading: 'lazy' })`
   ${ImgPreviewContainerStyles}
 `;
 

@@ -19,7 +19,7 @@ export const SocialMentionDropdownItem = styled.div`
   }
 `;
 
-export const Avatar = styled.img`
+export const Avatar = styled.img.attrs({ loading: 'lazy' })`
   width: 40px;
   height: 40px;
   border-radius: 100%;
