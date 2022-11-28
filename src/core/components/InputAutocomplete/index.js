@@ -29,6 +29,7 @@ const defaultRender = (item, value) => <Highlight key={item} text={item} query={
 const defaultFilter = (items, value) => items.filter((item) => item.includes(value));
 
 const InputAutocomplete = ({
+  'data-qa-anchor': dataQaAnchor = '',
   value,
   setValue,
   placeholder,
@@ -99,6 +100,7 @@ const InputAutocomplete = ({
   return (
     <Container ref={containerRef}>
       <InputText
+        data-qa-anchor={dataQaAnchor}
         value={value}
         invalid={invalid}
         disabled={disabled}
@@ -141,6 +143,7 @@ InputAutocomplete.defaultProps = {
 };
 
 InputAutocomplete.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
   placeholder: PropTypes.string,

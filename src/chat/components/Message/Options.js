@@ -86,13 +86,13 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType, popupCon
   const menu = (
     <Menu>
       {!isIncoming && isSupportedMessageType && (
-        <MenuItem onClick={edit}>
+        <MenuItem data-qa-anchor="message-menu-item-edit" onClick={edit}>
           <FormattedMessage id="message.edit" />
         </MenuItem>
       )}
       {isIncoming && <Flagging messageId={messageId} />}
       {!isIncoming && (
-        <MenuItem onClick={deleteMessage}>
+        <MenuItem data-qa-anchor="message-menu-item-delete" onClick={deleteMessage}>
           <FormattedMessage id="message.delete" />
         </MenuItem>
       )}
@@ -102,6 +102,7 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType, popupCon
   const editing = (
     <EditingContainer>
       <EditingInput
+        data-qa-anchor="message-edit-input"
         autoFocus
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -110,7 +111,7 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType, popupCon
           if (e.key === 'Escape') close();
         }}
       />
-      <SaveIcon onClick={save} />
+      <SaveIcon data-qa-anchor="message-save-button" onClick={save} />
       <CloseIcon onClick={close} />
     </EditingContainer>
   );
@@ -124,7 +125,13 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType, popupCon
       parentElement={popupContainerRef.current}
       onClickOutside={close}
     >
-      <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
+      <div
+        data-qa-anchor="message-options-button"
+        role="button"
+        tabIndex={0}
+        onClick={open}
+        onKeyDown={open}
+      >
         <MessageOptionsIcon />
       </div>
     </StyledPopover>

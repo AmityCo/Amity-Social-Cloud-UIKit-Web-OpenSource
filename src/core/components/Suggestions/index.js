@@ -98,7 +98,7 @@ const Suggestions = ({ items, onPick = () => {}, append, children }) => {
       {append && <MenuItem>{append}</MenuItem>}
     </MenuList>
   ) : (
-    <Placeholder>
+    <Placeholder data-qa-anchor="suggestions-placeholder-no-results">
       <FormattedMessage id="placeholder.noResults" />
     </Placeholder>
   );

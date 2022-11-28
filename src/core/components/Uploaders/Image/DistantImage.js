@@ -8,7 +8,7 @@ import StyledImage from './styles';
 
 const Image = ({
   className,
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   fileId,
   loading,
   mediaFit,
@@ -54,7 +54,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   className: undefined,
-  'data-qa-anchor': undefined,
+  'data-qa-anchor': '',
   loading: false,
   onRemove: () => {},
   overlayElements: undefined,

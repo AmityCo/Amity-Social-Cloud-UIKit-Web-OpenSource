@@ -16,7 +16,7 @@ const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES
   const expand = () => setIsExpanded(true);
 
   const textContent = text && (
-    <CommentContent className={className}>
+    <CommentContent data-qa-anchor="comment-content" className={className}>
       <Truncate.Atom>
         <ChunkHighlighter
           textToHighlight={text}

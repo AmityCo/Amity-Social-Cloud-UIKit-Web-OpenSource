@@ -126,6 +126,7 @@ const renderMentionItem = (
 const InputText = forwardRef(
   (
     {
+      'data-qa-anchor': dataQaAnchor = '',
       id,
       name = '',
       value = '',
@@ -185,6 +186,7 @@ const InputText = forwardRef(
       onChange: mentionAllowed ? handleMentionInput : (e) => onChange(e.target.value),
       onKeyDown: handleKeyDown,
       className: classNames,
+      'data-qa-anchor': dataQaAnchor,
     };
 
     return (
@@ -229,6 +231,7 @@ const InputText = forwardRef(
 );
 
 InputText.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   id: PropTypes.string,
   input: PropTypes.object,
   name: PropTypes.string,

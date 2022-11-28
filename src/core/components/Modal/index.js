@@ -11,7 +11,17 @@ import {
   CloseIcon,
 } from './styles';
 
-const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean, children }) => {
+const Modal = ({
+  'data-qa-anchor': dataQaAnchor = '',
+  size,
+  className,
+  onOverlayClick,
+  onCancel,
+  title,
+  footer,
+  clean,
+  children,
+}) => {
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
   useEffect(() => modalElement && modalElement.focus(), [modalElement]);
@@ -24,7 +34,7 @@ const Modal = ({ size, className, onOverlayClick, onCancel, title, footer, clean
 
   return (
     <Overlay onClick={onOverlayClick}>
-      <ModalComponent tabIndex={0} {...attrProps}>
+      <ModalComponent tabIndex={0} {...attrProps} data-qa-anchor={dataQaAnchor}>
         {(title || onCancel) && (
           <Header clean={clean}>
             {title}

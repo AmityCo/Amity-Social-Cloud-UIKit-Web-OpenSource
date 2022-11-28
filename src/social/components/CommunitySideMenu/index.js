@@ -12,7 +12,7 @@ const SocialSearch = styled(UiKitSocialSearch)`
 `;
 
 const CommunitySideMenu = ({ className, activeCommunity }) => (
-  <SideMenu className={className}>
+  <SideMenu data-qa-anchor="community-side-menu" className={className}>
     <SocialSearch sticky />
 
     <SideSectionCommunity />

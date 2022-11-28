@@ -27,7 +27,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
   const chunks = useMemo(() => findChunks(mentionees), [mentionees]);
 
   const textContent = text && (
-    <PostContent>
+    <PostContent data-qa-anchor="post-text-content">
       <ChunkHighlighter
         textToHighlight={text}
         chunks={chunks}

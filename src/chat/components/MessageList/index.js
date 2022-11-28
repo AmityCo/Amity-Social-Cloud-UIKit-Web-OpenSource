@@ -44,7 +44,7 @@ const MessageList = ({ client, channelId }) => {
         loader={<span key={0}>Loading...</span>}
         isReverse
       >
-        <MessageListContainer ref={containerRef}>
+        <MessageListContainer ref={containerRef} data-qa-anchor="message-list">
           {messages.map((message, i) => {
             const nextMessage = messages[i + 1];
             const isConsequent = nextMessage && nextMessage.userId === message.userId;
@@ -53,7 +53,6 @@ const MessageList = ({ client, channelId }) => {
             return (
               <MessageComponent
                 key={message.messageId}
-                data-qa-anchor="chat-message-list-message"
                 avatar={getAvatar(message)}
                 messageId={message.messageId}
                 data={message.data}

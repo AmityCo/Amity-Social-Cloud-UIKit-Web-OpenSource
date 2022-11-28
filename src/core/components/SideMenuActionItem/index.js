@@ -10,6 +10,7 @@ const ActionItemComponents = {
 };
 
 const SideMenuActionItem = ({
+  'data-qa-anchor': dataQaAnchor = '',
   icon,
   children,
   active,
@@ -21,6 +22,7 @@ const SideMenuActionItem = ({
   const ActionItemContainer = ActionItemComponents[element];
   return (
     <ActionItemContainer
+      data-qa-anchor={dataQaAnchor}
       className={className}
       active={active}
       disabled={disabled}
@@ -33,6 +35,7 @@ const SideMenuActionItem = ({
 };
 
 SideMenuActionItem.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   element: PropTypes.oneOf(ALLOWED_ELEMENTS),
   icon: PropTypes.node,
   children: PropTypes.node,

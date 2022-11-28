@@ -54,7 +54,7 @@ const Files = ({
   onLoadingChange,
   uploadLoading,
   onError,
-  rowDataQaAnchor = 'social-create-post-uploaded-file',
+  rowDataQaAnchor = 'post-creator-uploaded-file',
 }) => (
   <Uploader files={files} onChange={onChange} onLoadingChange={onLoadingChange} onError={onError}>
     <FileRows uploadLoading={uploadLoading} rowDataQaAnchor={rowDataQaAnchor} />

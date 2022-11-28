@@ -47,7 +47,11 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
   };
 
   return (
-    <Modal title={formatMessage({ id: 'AddMemberModal.addMembers' })} onCancel={closeConfirm}>
+    <Modal
+      data-qa-anchor="add-member-modal"
+      title={formatMessage({ id: 'AddMemberModal.addMembers' })}
+      onCancel={closeConfirm}
+    >
       <FormContainer>
         <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)}>
           <FormBody>
@@ -55,7 +59,9 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
               <MembersField error={errors.members}>
                 <Controller
                   name="members"
-                  render={({ field }) => <UserSelector {...field} />}
+                  render={({ field }) => (
+                    <UserSelector {...field} data-qa-anchor="add-member-modal" />
+                  )}
                   control={control}
                 />
                 <ErrorMessage errors={errors} name="members" />

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import StyledFile from './styles';
 
 const File = ({
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   file,
   progress,
   onRemove,
@@ -42,7 +42,7 @@ File.propTypes = {
 };
 
 File.defaultProps = {
-  'data-qa-anchor': undefined,
+  'data-qa-anchor': '',
   progress: -1,
   onRemove: null,
   isRejected: false,

@@ -59,6 +59,7 @@ const UserSelectorModal = ({
 
   return (
     <Modal
+      data-qa-anchor="user-selector-modal"
       isOpen={false}
       size="small"
       title={title || formatMessage({ id: 'chat.create.modalTitle' })}
