@@ -42,7 +42,7 @@ const Frame = styled.div`
   overflow: hidden;
 `;
 
-const CatItem = styled.img`
+const CatItem = styled.img.attrs({ loading: 'lazy' })`
   width: 8em;
   height: 8em;
   object-position: center;

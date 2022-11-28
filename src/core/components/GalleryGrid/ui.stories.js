@@ -25,7 +25,7 @@ GalleryGrid.argTypes = {
   onClick: { action: 'onClick(index)' },
 };
 
-const Image = styled.img`
+const Image = styled.img.attrs({ loading: 'lazy' })`
   display: block;
   width: 100%;
   height: 100%;
