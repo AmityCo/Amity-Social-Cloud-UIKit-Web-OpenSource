@@ -47,7 +47,11 @@ export {
   NotificationRecordList,
   NotificationRecordPopover,
   NotificationRecordListHeader,
+  NotificationRecordPopoverProps,
+  NotificationRecordListProps,
 } from '~/core/components/NotificationTray';
+
+export { NotificationSettings, NotificationSettingsProps } from '~/core/components/Settings';
 
 export {
   ApiEndpoint,
