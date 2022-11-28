@@ -22,6 +22,7 @@ const TextContent = ({ text, placeholder, onChange, queryMentionees }) => {
   return (
     <TextareaWrapper>
       <Textarea
+        data-qa-anchor="post-editor-textarea"
         placeholder={placeholder}
         type="text"
         value={text}

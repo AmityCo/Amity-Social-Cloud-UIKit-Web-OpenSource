@@ -6,23 +6,26 @@ import { Content, GoToSettingsButton, Message, SkipButton, Title } from './style
 
 export default ({ onClose, onGoSettings }) => {
   return (
-    <Modal>
+    <Modal data-qa-anchor="community-created-modal">
       <Content>
         <MagicWand />
 
-        <Title>
+        <Title data-qa-anchor="community-created-modal-title">
           <FormattedMessage id="communityCreatedModal.title" />
         </Title>
 
-        <Message>
+        <Message data-qa-anchor="community-created-modal-message">
           <FormattedMessage id="communityCreatedModal.message" />
         </Message>
 
-        <GoToSettingsButton onClick={onGoSettings}>
+        <GoToSettingsButton
+          data-qa-anchor="community-created-modal-go-to-settings-button"
+          onClick={onGoSettings}
+        >
           <FormattedMessage id="communityCreatedModal.goToSettings" />
         </GoToSettingsButton>
 
-        <SkipButton onClick={onClose}>
+        <SkipButton data-qa-anchor="community-created-modal-skip-button" onClick={onClose}>
           <FormattedMessage id="communityCreatedModal.skip" />
         </SkipButton>
       </Content>

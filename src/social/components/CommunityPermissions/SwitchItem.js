@@ -25,7 +25,7 @@ const SwitchItem = ({ onChange, value }) => {
       <Switch
         disabled={!connected}
         value={value}
-        data-qa-anchor="social-community-approve-post-permission"
+        data-qa-anchor="community-permissions"
         onChange={onChange}
       />
     </SwitchItemContainer>

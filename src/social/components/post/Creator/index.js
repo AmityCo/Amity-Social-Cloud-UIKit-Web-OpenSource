@@ -292,7 +292,7 @@ const PostCreatorBar = ({
 
       <PostContainer>
         <PostInputText
-          data-qa-anchor="social-create-post-input"
+          data-qa-anchor="post-creator-textarea"
           multiline
           value={postText}
           placeholder={placeholder}
@@ -342,7 +342,7 @@ const PostCreatorBar = ({
             setPlainText(plainTextVal);
           }}
         />
-        <Footer>
+        <Footer data-qa-anchor="post-creator-footer">
           <UploaderButtons
             imageUploadDisabled={postFiles.length > 0 || postVideos.length > 0 || uploadLoading}
             videoUploadDisabled={postFiles.length > 0 || postImages.length > 0 || uploadLoading}
@@ -355,14 +355,14 @@ const PostCreatorBar = ({
             onMaxFilesLimit={onMaxFilesLimit}
             onFileSizeLimit={onFileSizeLimit}
           />
-          <PollButton onClick={openPollModal}>
+          <PollButton data-qa-anchor="post-creator-poll-button" onClick={openPollModal}>
             <FileLoaderContainer>
               <PollIcon />
             </FileLoaderContainer>
           </PollButton>
           <PostButton
             disabled={isDisabled}
-            data-qa-anchor="social-create-post-button"
+            data-qa-anchor="post-creator-post-button"
             onClick={onCreatePost}
           >
             <FormattedMessage id="post" />

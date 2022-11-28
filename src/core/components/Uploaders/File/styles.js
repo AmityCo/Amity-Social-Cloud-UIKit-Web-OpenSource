@@ -85,7 +85,7 @@ const ButtonContainer = styled.div`
 `;
 
 const File = ({
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   name,
   url,
   type,
@@ -131,7 +131,9 @@ const File = ({
             <RetryButton title={formatMessage({ id: 'file.reUpload' })} onClick={retryCallback} />
           )}
 
-          {!!onRemove && <RemoveButton onClick={removeCallback} />}
+          {!!onRemove && (
+            <RemoveButton data-qa-anchor="uploaders-file-remove-button" onClick={removeCallback} />
+          )}
         </ButtonContainer>
       </Content>
 
@@ -153,7 +155,7 @@ File.propTypes = {
 };
 
 File.defaultProps = {
-  'data-qa-anchor': undefined,
+  'data-qa-anchor': '',
   url: null,
   type: '',
   size: 0,

@@ -102,7 +102,7 @@ export const ButtonContainer = styled.div`
 
 const Image = ({
   className,
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   url,
   progress,
   mediaFit,
@@ -175,7 +175,7 @@ Image.propTypes = {
 
 Image.defaultProps = {
   className: undefined,
-  'data-qa-anchor': undefined,
+  'data-qa-anchor': '',
   url: undefined,
   progress: -1,
   onRemove: undefined,
