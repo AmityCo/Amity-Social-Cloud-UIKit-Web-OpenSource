@@ -1,11 +1,12 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
-
 import { Box, H3, Stack, Text } from '@noom/wax-component-library';
 
 import { SwitchSetting } from './SwitchSetting';
 
 import { NotificationSettings as Settings } from '../models';
+
+const NOTIFICATION_ORDER = ['comment', 'reaction', 'post'];
 
 export type NotificationSettingsProps = {
   title?: string;
@@ -34,35 +35,18 @@ export function NotificationSettings({
     <Box>
       {title && <H3 pb={spacing}>{title}</H3>}
       <Stack divider={<Box />} spacing={spacing}>
-        <SwitchSetting
-          name="comment"
-          size="lg"
-          label={formatMessage({ id: 'settings.notifications.comment.label' })}
-          helper={formatMessage({ id: 'settings.notifications.comment.helper' })}
-          isDisabled={isLoading}
-          isChecked={settings.global.comment}
-          onChange={() => onChangeGlobal('comment', !settings.global.comment)}
-        />
-
-        <SwitchSetting
-          name="reaction"
-          size="lg"
-          label={formatMessage({ id: 'settings.notifications.reaction.label' })}
-          helper={formatMessage({ id: 'settings.notifications.reaction.helper' })}
-          isDisabled={isLoading}
-          isChecked={settings.global.reaction}
-          onChange={() => onChangeGlobal('reaction', !settings.global.reaction)}
-        />
-
-        <SwitchSetting
-          name="post"
-          size="lg"
-          label={formatMessage({ id: 'settings.notifications.post.label' })}
-          helper={formatMessage({ id: 'settings.notifications.post.helper' })}
-          isDisabled={isLoading}
-          isChecked={settings.global.post}
-          onChange={() => onChangeGlobal('post', !settings.global.post)}
-        />
+        {NOTIFICATION_ORDER.map((key) => (
+          <SwitchSetting
+            key={key}
+            name={key}
+            size="lg"
+            label={formatMessage({ id: `settings.notifications.${key}.label` })}
+            helper={formatMessage({ id: `settings.notifications.${key}.helper` })}
+            isDisabled={isLoading}
+            isChecked={settings.global[key]}
+            onChange={() => onChangeGlobal(key, !settings.global[key])}
+          />
+        ))}
 
         {sortedCommunities.map((community) => (
           <SwitchSetting
