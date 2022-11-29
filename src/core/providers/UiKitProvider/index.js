@@ -14,7 +14,7 @@ import { SDKProvider } from '~/core/hocs/withSDK';
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import NavigationProvider from '~/social/providers/NavigationProvider';
 import PostRendererProvider from '~/social/providers/PostRendererProvider';
-import Localisation from './Localisation';
+import Localization from './Localization';
 import buildGlobalTheme from './theme';
 import { UIStyles } from './styles';
 
@@ -107,7 +107,7 @@ const UiKitProvider = forwardRef(
         <Helmet>
           <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
         </Helmet>
-        <Localisation locale="en">
+        <Localization locale="en">
           <ThemeProvider theme={buildGlobalTheme(theme)}>
             <UIStyles>
               <SDKProvider {...SDKInfo}>
@@ -127,7 +127,7 @@ const UiKitProvider = forwardRef(
               </SDKProvider>
             </UIStyles>
           </ThemeProvider>
-        </Localisation>
+        </Localization>
       </>
     );
   },

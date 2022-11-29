@@ -64,11 +64,11 @@ export const NotificationSettings = ({ ...props }: NotificationSettingsProps) =>
 };
 
 NotificationSettings.argTypes = {
-  title: { control: { type: 'text' } },
   isLoading: { control: { type: 'boolean' } },
+  type: { control: { type: 'select' }, options: ['email', 'push'] },
 };
 
-SwitchSetting.args = {
-  title: 'Notification settings',
+NotificationSettings.args = {
   isLoading: false,
+  type: 'email',
 };

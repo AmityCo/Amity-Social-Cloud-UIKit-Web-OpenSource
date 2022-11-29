@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIntl } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { Box, H3, Stack, Text } from '@noom/wax-component-library';
 
 import { SwitchSetting } from './SwitchSetting';
@@ -7,9 +7,13 @@ import { SwitchSetting } from './SwitchSetting';
 import { NotificationSettings as Settings } from '../models';
 
 const NOTIFICATION_ORDER = ['comment', 'reaction', 'post'];
+const TypeToTile = {
+  email: <FormattedMessage id="settings.emailNotifications.title" />,
+  push: <FormattedMessage id="settings.pushNotifications.title" />,
+};
 
 export type NotificationSettingsProps = {
-  title?: string;
+  type: keyof typeof TypeToTile;
   spacing?: number;
   isLoading?: boolean;
   settings: Settings;
@@ -18,7 +22,7 @@ export type NotificationSettingsProps = {
 };
 
 export function NotificationSettings({
-  title,
+  type,
   isLoading,
   spacing = 4,
   settings,
@@ -33,7 +37,7 @@ export function NotificationSettings({
 
   return (
     <Box>
-      {title && <H3 pb={spacing}>{title}</H3>}
+      <H3 pb={spacing}>{TypeToTile[type]}</H3>
       <Stack divider={<Box />} spacing={spacing}>
         {NOTIFICATION_ORDER.map((key) => (
           <SwitchSetting

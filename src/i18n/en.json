@@ -386,5 +386,6 @@
   "settings.notifications.reaction.helper": "When someone reacts on your post or comment",
   "settings.notifications.post.label": "Post",
   "settings.notifications.post.helper": "When there is a new post in a community you joined",
-  "settings.emailNotifications.title": "Email notifications"
+  "settings.emailNotifications.title": "Email notifications",
+  "settings.pushNotifications.title": "Push notifications"
 }
