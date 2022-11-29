@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import customizableComponent from '~/core/hocs/customization';
 import ChunkHighlighter from '~/core/components/ChunkHighlighter';
 import Button from '~/core/components/Button';
-import Markdown from '~/core/components/Markdown';
+import LinkifyMarkdown from '~/core/components/LinkifyMarkdown';
 import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { findChunks } from '~/helpers/utils';
 
@@ -32,7 +32,7 @@ const TextContent = ({ text, postMaxLines, mentionees }) => {
         textToHighlight={text}
         chunks={chunks}
         highlightNode={(props) => <MentionHighlightTag {...props} mentionees={mentionees} />}
-        unhighlightNode={Markdown}
+        unhighlightNode={LinkifyMarkdown}
       />
     </PostContent>
   );
