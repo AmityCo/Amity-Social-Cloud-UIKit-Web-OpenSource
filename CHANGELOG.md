@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.25.0](https://github.com/noom/community-web-uikit/compare/2.24.0...2.25.0) (2022-11-30)
+
+
+### Features
+
+* Notification settings ([e980a07](https://github.com/noom/community-web-uikit/commit/e980a07883d9eefc048fd9e6d576d586319fca0b))
+
+
+### Bug Fixes
+
+* Padding sizing ([8381117](https://github.com/noom/community-web-uikit/commit/83811176d6eba2c9fa613f8c183f86d973bf4b68))
+
 ## [2.24.0](https://github.com/noom/community-web-uikit/compare/2.23.7...2.24.0) (2022-11-30)
 
 
