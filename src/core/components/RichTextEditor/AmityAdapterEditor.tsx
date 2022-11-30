@@ -1,5 +1,5 @@
 import React, { ReactNode, useLayoutEffect, useRef } from 'react';
-import { useBreakpointValue } from '@noom/wax-component-library';
+import { useBreakpointValue, Box } from '@noom/wax-component-library';
 
 import InputText from '~/core/components/InputText';
 
@@ -9,7 +9,7 @@ import { EditorValue } from './models';
 import { MentionOutput } from './plugins/mentionPlugin/models';
 import { stripMentionTags } from './plugins/mentionPlugin/utils';
 
-const SimpleTextEditor = InputText as any;
+const InputTextEditor = InputText as any;
 
 export type AmityAdapterProps = {
   id: string;
@@ -33,6 +33,16 @@ export type AmityAdapterProps = {
   append?: ReactNode;
   autoFocus?: boolean;
 };
+
+function SimpleTextEditor({ append, prepend, ...props }: AmityAdapterProps) {
+  return (
+    <Box>
+      {prepend}
+      <InputTextEditor {...props} />
+      {append}
+    </Box>
+  );
+}
 
 export function AmityAdapterEditor({
   id,

@@ -49,7 +49,7 @@ export const PostButton = styled(PrimaryButton)`
 `;
 
 export const UploadsContainer = styled.div`
-  padding: 0 12px;
+  padding: 1rem 1rem 0;
 `;
 
 export const PostInputText = styled(InputText)`
