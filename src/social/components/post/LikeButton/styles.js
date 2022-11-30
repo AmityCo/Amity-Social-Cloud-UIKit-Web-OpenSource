@@ -8,6 +8,7 @@ import { ThumbsUp } from '~/icons';
 
 const isLikedStyle = css`
   color: ${({ theme }) => theme.palette.primary.main};
+  background: transparent !important;
 `;
 
 export const StyledLikeButton = styled(SecondaryButton)`

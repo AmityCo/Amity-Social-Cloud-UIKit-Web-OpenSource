@@ -17,12 +17,12 @@ export const LoadMoreButton = styled(Button)`
   }
 
   &.comments-button {
-    justify-content: flex-start;
+    justify-content: center;
     color: black;
     border: none;
-    margin-top: 16px;
-    padding: 0 0 16px 0;
-    border-bottom: 1px solid #e3e4e8;
+    align-items: center;
+    padding: 1rem 0 1rem 0;
+    border-bottom: none;
   }
 
   &.reply-button {
