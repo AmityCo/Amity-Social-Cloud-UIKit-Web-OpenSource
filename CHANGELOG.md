@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.25.1](https://github.com/noom/community-web-uikit/compare/2.25.0...2.25.1) (2022-11-30)
+
+
+### Bug Fixes
+
+* File upload on small screen ([1501ed9](https://github.com/noom/community-web-uikit/commit/1501ed9fcbb4aaaf2c355f153039f7b03b8e2171))
+
 ## [2.25.0](https://github.com/noom/community-web-uikit/compare/2.24.0...2.25.0) (2022-11-30)
 
 
