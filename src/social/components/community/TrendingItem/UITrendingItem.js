@@ -14,7 +14,6 @@ const ItemContainer = styled.div`
   grid-template-columns: 118px auto;
   cursor: pointer;
   counter-increment: trending;
-  height: 118px;
   border: 1px solid #ebecef;
   border-radius: 8px;
   background: ${({ theme }) => theme.palette.system.background};

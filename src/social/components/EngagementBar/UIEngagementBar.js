@@ -61,7 +61,9 @@ const UIEngagementBar = ({
           idleTimeout={0}
           lazyBehavior="keepMounted"
           visibleOffset={500}
-          placeholderHeight={Math.max(totalComments, 5) * COMMENT_PLACEHOLDER_HEIGHT}
+          placeholderHeight={
+            Math.min(totalComments, COMMENTS_PER_PAGE) * COMMENT_PLACEHOLDER_HEIGHT
+          }
         >
           <CommentList
             referenceId={postId}

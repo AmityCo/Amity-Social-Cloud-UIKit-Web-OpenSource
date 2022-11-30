@@ -4,17 +4,30 @@ import { Lock } from '~/icons';
 
 export const FeedScrollContainer = styled(InfiniteScroll)`
   > :not(:first-child) {
-    margin-top: 20px;
+    margin-top: 0.5rem;
+
+    @media (min-width: 960px) {
+      margin-top: 1rem;
+    }
   }
 
   & .post:not(:first-child),
   & .post-wrapper:not(:first-child) {
-    margin-top: 20px;
+    margin-top: 0.5rem;
+
+    @media (min-width: 960px) {
+      margin-top: 1rem;
+    }
   }
 
   & .load-more {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    @media (min-width: 960px) {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
   }
 `;
 
