@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.25.3](https://github.com/noom/community-web-uikit/compare/2.25.2...2.25.3) (2022-11-30)
+
+
+### Bug Fixes
+
+* Like button ([6bbe1ca](https://github.com/noom/community-web-uikit/commit/6bbe1ca6e4d8ab05ca6a95780531fb3870039171))
+
 ### [2.25.2](https://github.com/noom/community-web-uikit/compare/2.25.1...2.25.2) (2022-11-30)
 
 
