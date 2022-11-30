@@ -34,6 +34,7 @@ export { default as AmityProfileSettings } from '~/social/components/ProfileSett
 export { default as AmityCommunityPostPage } from '~/social/pages/CommunityPost';
 export { default as AmityUserPostPage } from '~/social/pages/UserPost';
 export { default as AmityUserHeader } from '~/social/components/UserHeader';
+export { default as PageLayout } from '~/social/layouts/Page';
 
 export {
   OnboardingModal,
@@ -60,21 +61,3 @@ export {
   FileRepository,
   UserRepository,
 } from '@amityco/js-sdk';
-
-// import AmityComment from './components/Comment';
-// import AmityCommentComposeBar from './components/CommentComposeBar';
-// import AmityCommentLikeButton from './components/CommentLikeButton';
-// import AmityCommunity from './components/Community';
-// import AmityCommunityItem from './components/CommunityItem';
-// import AmityEmptyFeed from './components/EmptyFeed';
-// import AmityFiles from './components/Files';
-// import AmityImageGallery from './components/ImageGallery';
-// import AmityImages from './components/Images';
-// import AmityMessage from './components/Message';
-// import AmityMessageComposeBar from './components/MessageComposeBar';
-// import AmityMessageList from './components/MessageList';
-// import AmityPost from './components/Post';
-// import AmityPostCreator from './components/PostCreator';
-// import AmityPostLikeButton from './components/PostLikeButton';
-// import AmityRecentChat from './components/RecentChat';
-// import AmitySideMenu from './components/SideMenu';

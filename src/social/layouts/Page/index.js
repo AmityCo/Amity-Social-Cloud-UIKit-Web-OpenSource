@@ -8,10 +8,11 @@ const Container = styled.div`
   grid-template-areas: 'side' 'main';
   grid-template-rows: min-content auto;
 
-  ${({ withHeader }) =>
+  ${({ withHeader, asideCollapsePosition }) =>
     withHeader &&
-    `
-    grid-template-areas: 'header' 'side' 'main';
+    `grid-template-areas: ${
+      asideCollapsePosition === 'top' ? "'header' 'side' 'main'" : "'header' 'main' 'side'"
+    };
   `}
 
   @media (min-width: 960px) {
@@ -21,7 +22,6 @@ const Container = styled.div`
   }
 
   width: 100%;
-  height: 100%;
   grid-gap: 20px;
   overflow: hidden;
   margin: 0 auto;
@@ -55,8 +55,8 @@ const Side = styled.div`
   }
 `;
 
-const PageLayout = ({ header, aside, children }) => (
-  <Container withHeader={!!header}>
+const PageLayout = ({ header, aside, asideCollapsePosition = 'top', children }) => (
+  <Container withHeader={!!header} asideCollapsePosition={asideCollapsePosition}>
     {header && <HeaderContainer>{header}</HeaderContainer>}
     <Main>{children}</Main>
     <Side>{aside}</Side>

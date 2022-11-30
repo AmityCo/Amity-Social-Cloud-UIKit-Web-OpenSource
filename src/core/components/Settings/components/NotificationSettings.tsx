@@ -1,6 +1,6 @@
 import React from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
-import { Box, H3, Stack, Text } from '@noom/wax-component-library';
+import { Box, H3, Stack, Text, Container, Loader } from '@noom/wax-component-library';
 
 import { SwitchSetting } from './SwitchSetting';
 
@@ -16,7 +16,7 @@ export type NotificationSettingsProps = {
   type: keyof typeof TypeToTile;
   spacing?: number;
   isLoading?: boolean;
-  settings: Settings;
+  settings?: Settings;
   onChangeGlobal: (type: string, isChecked: boolean) => void;
   onChangeCommunity: (communityId: string, isChecked: boolean) => void;
 };
@@ -31,9 +31,9 @@ export function NotificationSettings({
 }: NotificationSettingsProps) {
   const { formatMessage } = useIntl();
 
-  const sortedCommunities = [...settings.community].sort((a, b) =>
-    a.communityName.localeCompare(b.communityName),
-  );
+  const sortedCommunities = settings
+    ? [...settings.community].sort((a, b) => a.communityName.localeCompare(b.communityName))
+    : [];
 
   return (
     <Box>
@@ -47,8 +47,8 @@ export function NotificationSettings({
             label={formatMessage({ id: `settings.notifications.${key}.label` })}
             helper={formatMessage({ id: `settings.notifications.${key}.helper` })}
             isDisabled={isLoading}
-            isChecked={settings.global[key]}
-            onChange={() => onChangeGlobal(key, !settings.global[key])}
+            isChecked={settings?.global[key]}
+            onChange={() => onChangeGlobal(key, !settings?.global[key])}
           />
         ))}
 
@@ -62,11 +62,17 @@ export function NotificationSettings({
                 {community.communityName}
               </Text>
             }
-            isDisabled={isLoading || !settings.global.post}
-            isChecked={community.enabled}
-            onChange={() => onChangeCommunity(community.communityId, !community.enabled)}
+            isDisabled={isLoading || !settings?.global.post}
+            isChecked={community.isEnabled}
+            onChange={() => onChangeCommunity(community.communityId, !community.isEnabled)}
           />
         ))}
+
+        {isLoading && !sortedCommunities.length && (
+          <Container centerHorizontal>
+            <Loader size="md" colorScheme="primary" />
+          </Container>
+        )}
       </Stack>
     </Box>
   );

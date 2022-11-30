@@ -1,7 +1,7 @@
 export type CommunitySetting = {
   communityId: string;
   communityName: string;
-  enabled: boolean;
+  isEnabled: boolean;
 };
 
 export type NotificationSettings = {
