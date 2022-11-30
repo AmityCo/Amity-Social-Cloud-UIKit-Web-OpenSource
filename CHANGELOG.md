@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.24.0](https://github.com/noom/community-web-uikit/compare/2.23.7...2.24.0) (2022-11-30)
+
+
+### Features
+
+* add setting strings ([f3fb777](https://github.com/noom/community-web-uikit/commit/f3fb77775ad2ab82eb77c20ecd3eacbf6c30d1a8))
+* Notification settings ([#16](https://github.com/noom/community-web-uikit/issues/16)) ([602883f](https://github.com/noom/community-web-uikit/commit/602883f980ea06c73ee735e95fc228db7872276d))
+
 ### [2.23.7](https://github.com/noom/community-web-uikit/compare/2.23.6...2.23.7) (2022-11-21)
 
 
