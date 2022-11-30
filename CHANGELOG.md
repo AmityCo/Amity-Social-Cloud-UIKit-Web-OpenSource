@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.25.2](https://github.com/noom/community-web-uikit/compare/2.25.1...2.25.2) (2022-11-30)
+
+
+### Bug Fixes
+
+* Notification switch size ([c63a642](https://github.com/noom/community-web-uikit/commit/c63a64246542177e86303338a9bff248fd08ea13))
+
 ### [2.25.1](https://github.com/noom/community-web-uikit/compare/2.25.0...2.25.1) (2022-11-30)
 
 
