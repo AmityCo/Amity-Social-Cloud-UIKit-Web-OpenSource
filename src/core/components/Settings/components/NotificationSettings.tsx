@@ -56,7 +56,7 @@ export function NotificationSettings({
           <SwitchSetting
             key={community.communityId}
             name={`community-${community.communityId}`}
-            size="md"
+            size="lg"
             label={
               <Text ml={spacing} title={community.communityName}>
                 {community.communityName}
