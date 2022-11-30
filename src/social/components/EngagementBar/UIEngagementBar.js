@@ -58,8 +58,9 @@ const UIEngagementBar = ({
           </SecondaryButton>
         </InteractionBar>
         <LazyRender
+          idleTimeout={0}
           lazyBehavior="keepMounted"
-          visibleOffset={300}
+          visibleOffset={500}
           placeholderHeight={Math.max(totalComments, 5) * COMMENT_PLACEHOLDER_HEIGHT}
         >
           <CommentList
