@@ -15,6 +15,7 @@ const TypeToTile = {
 export type NotificationSettingsProps = {
   type: keyof typeof TypeToTile;
   spacing?: number;
+  isDisabled?: boolean;
   isLoading?: boolean;
   settings?: Settings;
   onChangeGlobal: (type: string, isChecked: boolean) => void;
@@ -24,6 +25,7 @@ export type NotificationSettingsProps = {
 export function NotificationSettings({
   type,
   isLoading,
+  isDisabled,
   spacing = 4,
   settings,
   onChangeGlobal,
@@ -46,7 +48,7 @@ export function NotificationSettings({
             size="lg"
             label={formatMessage({ id: `settings.notifications.${key}.label` })}
             helper={formatMessage({ id: `settings.notifications.${key}.helper` })}
-            isDisabled={isLoading}
+            isDisabled={isLoading || isDisabled}
             isChecked={settings?.global[key]}
             onChange={() => onChangeGlobal(key, !settings?.global[key])}
           />
@@ -62,7 +64,7 @@ export function NotificationSettings({
                 {community.communityName}
               </Text>
             }
-            isDisabled={isLoading || !settings?.global.post}
+            isDisabled={isLoading || isDisabled || !settings?.global.post}
             isChecked={community.isEnabled}
             onChange={() => onChangeCommunity(community.communityId, !community.isEnabled)}
           />
