@@ -50,6 +50,8 @@ export const PostButton = styled(PrimaryButton)`
 
 export const UploadsContainer = styled.div`
   padding: 1rem 1rem 0;
+  display: none;
+  ${({ show }) => show && `display: block`}
 `;
 
 export const PostInputText = styled(InputText)`

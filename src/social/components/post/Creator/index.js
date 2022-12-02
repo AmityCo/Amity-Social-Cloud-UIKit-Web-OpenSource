@@ -223,6 +223,8 @@ const PostCreatorBar = ({
     isEmpty(postText, postImages, postVideos, postFiles) || uploadLoading || creating || !connected;
   const hasChanges = !isEmpty(postText, postImages, postVideos, postFiles);
 
+  const showAttachments = uploadLoading || !isEmpty(postImages, postVideos, postFiles);
+
   useEffect(() => {
     if (hasChanges) {
       setNavigationBlocker({
@@ -315,7 +317,7 @@ const PostCreatorBar = ({
           loadMoreMentionees={() => queryMentionees(mentionText)}
           // Need to work on this, possible conflict incoming
           append={
-            <UploadsContainer>
+            <UploadsContainer show={showAttachments}>
               <ImagesUploaded
                 files={incomingImages}
                 uploadLoading={uploadLoading}
