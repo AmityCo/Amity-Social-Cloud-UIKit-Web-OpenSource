@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.26.0](https://github.com/noom/community-web-uikit/compare/2.25.3...2.26.0) (2022-12-01)
+
+
+### Features
+
+* Add disabled prop to notification settings ([fc58c03](https://github.com/noom/community-web-uikit/commit/fc58c034ec8ee956c4c2e0504dbbc9281bb671cf))
+
 ### [2.25.3](https://github.com/noom/community-web-uikit/compare/2.25.2...2.25.3) (2022-11-30)
 
 
