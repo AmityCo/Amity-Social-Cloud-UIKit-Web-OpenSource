@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.15.0 (2022-12-02)
+
+
+### Features
+
+* custom attribute for automate test ([#70](https://github.com/EkoCommunications/AmityUiKitWeb/issues/70)) ([a811986](https://github.com/EkoCommunications/AmityUiKitWeb/commit/a811986ea248a51a5e4e7a827639581d6de8d514))
+
 ### 2.14.6 (2022-11-17)
 
 ### 2.14.5 (2022-11-04)
