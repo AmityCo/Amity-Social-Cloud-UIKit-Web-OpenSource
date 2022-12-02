@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.26.2](https://github.com/noom/community-web-uikit/compare/2.26.1...2.26.2) (2022-12-02)
+
+
+### Bug Fixes
+
+* Upload padding ([37a701d](https://github.com/noom/community-web-uikit/commit/37a701d238c28c8116df5df0e78659c493bd13ae))
+
 ### [2.26.1](https://github.com/noom/community-web-uikit/compare/2.26.0...2.26.1) (2022-12-02)
 
 
