@@ -13,7 +13,7 @@ export function getTabs(postSetting, isJoined, canReview, pendingPostCount = 0) 
   ];
 
   if (isJoined && postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED) {
-    const amount = canReview ? pendingPostCount : 0;
+    const amount = pendingPostCount;
 
     tabs.push({
       value: CommunityFeedTabs.PENDING,

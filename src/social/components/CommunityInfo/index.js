@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useEffect } from 'react';
 import { ImageSize, FileRepository, FeedType, PostTargetType } from '@amityco/js-sdk';
 import withSDK from '~/core/hocs/withSDK';
 import useCommunity from '~/social/hooks/useCommunity';
@@ -8,13 +8,21 @@ import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 import UICommunityInfo from './UICommunityInfo';
 import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
-function usePendingPostCount(isReady, communityId, community, canReviewCommunityPosts) {
+function usePendingPostCount(
+  isReady,
+  communityId,
+  community,
+  canReviewCommunityPosts,
+  pendingPostsCount = 0,
+) {
   // TODO workaround
   // community.reviewingFeed?.postCount has the same number for all users
   const [posts] = useFeed({
     targetType: isReady && !canReviewCommunityPosts ? PostTargetType.CommunityFeed : '',
     targetId: communityId,
     feedType: FeedType.Reviewing,
+    limit: 10,
+    dependencies: [pendingPostsCount],
   });
 
   return canReviewCommunityPosts ? community?.reviewingFeed?.postCount ?? 0 : posts.length;
@@ -50,6 +58,7 @@ const CommunityInfo = ({ communityId, currentUserId }) => {
     communityId,
     community,
     canReviewCommunityPosts,
+    community?.reviewingFeed?.postCount ?? 0,
   );
 
   return (

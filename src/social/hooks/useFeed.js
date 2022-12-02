@@ -3,7 +3,7 @@ import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 const { queryAllPosts, queryCommunityPosts, queryUserPosts, queryMyPosts } = PostRepository;
 
-const useFeed = ({ targetType, targetId, feedType, limit, dependencies = [] }) => {
+const useFeed = ({ targetType, targetId, feedType, limit, dependencies = [] }, debug = false) => {
   const FeedQueryTypes = {
     [PostTargetType.GlobalFeed]: queryAllPosts.bind(this, { limit, useCustomRanking: true }),
     [PostTargetType.CommunityFeed]: queryCommunityPosts.bind(this, {
@@ -26,7 +26,7 @@ const useFeed = ({ targetType, targetId, feedType, limit, dependencies = [] }) =
     FeedQueryTypes[targetType],
     [targetType, targetId, feedType, limit, ...dependencies],
     liveCollectionResolver,
-    false,
+    debug,
   );
 };
 

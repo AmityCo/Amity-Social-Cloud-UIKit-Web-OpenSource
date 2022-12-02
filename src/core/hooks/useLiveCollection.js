@@ -29,7 +29,12 @@ const useLiveCollection = (
     let loadMoreHasBeenCalled = false;
 
     const updateLiveCollection = debounce(() => {
-      debug && console.log(liveCollection.dataStatus, liveCollection.hasMore);
+      debug &&
+        console.log(
+          'Live collection: state update',
+          liveCollection.dataStatus,
+          liveCollection.hasMore,
+        );
 
       const { hasMore = false } = liveCollection;
 
@@ -54,18 +59,18 @@ const useLiveCollection = (
     }
 
     try {
-      liveCollection.on('dataUpdated', () => {
-        debug && console.log('dataUpdated!');
+      liveCollection.on('dataUpdated', (data) => {
+        debug && console.log('Live collection: dataUpdated!', data);
         updateLiveCollection();
       });
 
       liveCollection.on('loadingStatusChanged', (statuses) => {
-        debug && console.log('loadingStatusChanged!', statuses);
+        debug && console.log('Live collection: loadingStatusChanged!', statuses);
         updateLiveCollection();
       });
 
       if (liveCollection.models) {
-        debug && console.log('from client cache');
+        debug && console.log('Live collection: from client cache');
         updateLiveCollection();
       }
     } catch (err) {
