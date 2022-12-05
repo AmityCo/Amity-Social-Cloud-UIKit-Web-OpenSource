@@ -8,9 +8,12 @@ export const LoadMoreButton = styled(Button)`
   &.text-center {
     justify-content: center;
   }
-  color: ${({ theme }) => theme.palette.base.shade2};
-  border: 1px solid ${({ theme }) => theme.palette.base.shade4};
-  border-radius: 0;
+
+  border-radius: 8px;
+  padding: 1rem;
+  ${({ theme }) => theme.typography.captionBold}
+  color: ${({ theme }) => theme.palette.neutral.main};
+  background-color: ${({ theme }) => theme.palette.background.main};
 
   &.no-border {
     border: none;
@@ -21,18 +24,14 @@ export const LoadMoreButton = styled(Button)`
     color: black;
     border: none;
     align-items: center;
-    padding: 1rem 0 1rem 0;
+
     border-bottom: none;
   }
 
   &.reply-button {
     width: fit-content;
-    background-color: ${({ theme }) => theme.palette.base.shade4};
-    color: ${({ theme }) => theme.palette.base.shade1};
     margin: 12px 0px 16px 3rem;
-    padding: 5px 12px;
-    border-radius: 8px;
-    ${({ theme }) => theme.typography.captionBold}
+    border: none;
   }
 `;
 

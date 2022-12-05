@@ -88,7 +88,7 @@ export const ProgressBarContainer = styled.div`
   position: relative;
   width: 100%;
   height: 14px;
-  background: ${({ theme }) => theme.palette.base.shade4};
+  background-color: ${({ theme }) => theme.palette.background.main};
   border-radius: 8px;
   overflow: hidden;
 `;

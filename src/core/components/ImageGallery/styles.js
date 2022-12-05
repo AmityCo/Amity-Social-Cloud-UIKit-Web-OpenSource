@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import { ChevronLeft, ChevronRight, Remove } from '~/icons';
 
 export const Container = styled.div`
-  z-index: 9999;
+  z-index: 99999;
   position: fixed;
   overflow: hidden;
   display: grid;
   grid-gap: 0;
+  padding: 3rem 0 0;
   grid-template-columns: 3rem auto 3rem;
   grid-template-rows: min-content auto;
   grid-template-areas:
