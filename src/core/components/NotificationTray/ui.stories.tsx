@@ -1,7 +1,8 @@
 import React from 'react';
+import { useDisclosure } from '@noom/wax-component-library';
 
-import { NotificationRecordList as UINotificationRecordList } from './NotificationRecordList';
-import { NotificationRecordPopover as UINotificationRecordPopover } from './NotificationRecordPopover';
+import { NotificationRecordList as UINotificationRecordList } from './components/NotificationRecordList';
+import { NotificationRecordPopover as UINotificationRecordPopover } from './components/NotificationRecordPopover';
 
 import {
   mockNotificationRecordComment,
@@ -18,8 +19,15 @@ export const NotificationRecordList = ({ notificationRecords, ...props }) => {
 };
 
 export const NotificationRecordPopover = ({ notificationRecords, isLoading, error, ...props }) => {
+  const { onOpen, onClose, isOpen } = useDisclosure();
   return (
-    <UINotificationRecordPopover listProps={{ notificationRecords, isLoading, error }} {...props} />
+    <UINotificationRecordPopover
+      isOpen={isOpen}
+      onClose={onClose}
+      onOpen={onOpen}
+      listProps={{ notificationRecords, isLoading, error }}
+      {...props}
+    />
   );
 };
 

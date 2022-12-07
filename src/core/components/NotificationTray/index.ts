@@ -2,8 +2,8 @@ export {
   NotificationRecordList,
   NotificationRecordListProps,
   NotificationRecordListHeader,
-} from './NotificationRecordList';
+} from './components/NotificationRecordList';
 export {
   NotificationRecordPopover,
   NotificationRecordPopoverProps,
-} from './NotificationRecordPopover';
+} from './components/NotificationRecordPopover';

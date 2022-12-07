@@ -4,15 +4,18 @@ import { Box, StyleProps, Text, SkeletonCircle, SkeletonText } from '@noom/wax-c
 import Avatar from '~/core/components/Avatar';
 import Time from '~/core/components/Time';
 
-import { NotificationRecord } from './models';
+import { NotificationRecord } from '../models';
+import { Highlight } from './Hightlight';
 
 export type NotificationRecordItemProps = {
   record: NotificationRecord;
   onClick?: (record: NotificationRecord) => void;
+  onBadgeClick?: (record: NotificationRecord) => void;
 } & StyleProps;
 
 export type BadgeProps = {
   size: 'sm' | 'xs';
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 const BadgeSizeMap = {
@@ -20,7 +23,12 @@ const BadgeSizeMap = {
   sm: 4,
 };
 
-export function Badge({ children, size, ...style }: PropsWithChildren<BadgeProps> & StyleProps) {
+export function Badge({
+  children,
+  size,
+  onClick,
+  ...style
+}: PropsWithChildren<BadgeProps> & StyleProps) {
   return (
     <Box
       bg="primary.500"
@@ -29,38 +37,16 @@ export function Badge({ children, size, ...style }: PropsWithChildren<BadgeProps
       color="white"
       borderRadius="full"
       boxShadow="md"
-      fontSize={3 * BadgeSizeMap[size]}
+      fontSize="xs"
       display="flex"
       justifyContent="center"
       alignItems="center"
+      onClick={onClick}
       {...style}
     >
       {children}
     </Box>
   );
-}
-
-function HighlightedText(props: { text: string; textToHighlight: string[] }) {
-  const words = props.text.split(' ');
-  const sections: (string | React.ReactElement)[] = [];
-
-  words.forEach((word, index, fullList) => {
-    sections.push(
-      props.textToHighlight.some((highlight) => word.includes(highlight)) ? (
-        <Text key={index} color="primary.500" fontWeight="500">
-          {word}
-        </Text>
-      ) : (
-        word
-      ),
-    );
-
-    if (index < fullList.length - 1) {
-      sections.push(' ');
-    }
-  });
-
-  return <>{sections}</>;
 }
 
 type RecordLayoutProps = {
@@ -82,36 +68,61 @@ export function RecordLayout({
   return (
     <Box w="100%" p={3} display="flex" flexDir="row" borderWidth={1} {...style} onClick={onClick}>
       {avatar}
-      <Box display="flex" flexDir="column" pl={2} flex={1}>
+      <Box display="flex" flexDir="column" pl={3} flex={1}>
         <Box>{title}</Box>
         <Box>{subTitle}</Box>
       </Box>
-      <Box display="flex" alignItems="center" p={2}>
+      <Box display="flex" alignItems="center" p={3}>
         {badge}
       </Box>
     </Box>
   );
 }
 
-export function NotificationRecordItem({ onClick, record, ...style }: NotificationRecordItemProps) {
+export function NotificationRecordItem({
+  onClick,
+  onBadgeClick,
+  record,
+  ...style
+}: NotificationRecordItemProps) {
   const { targetType, description, imageUrl, lastUpdate, hasRead, verb } = record;
 
   const handleClick = () => {
     onClick?.(record);
   };
 
+  const handleBadgeClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    onBadgeClick?.(record);
+  };
+
   return (
     <RecordLayout
       cursor="pointer"
       onClick={handleClick}
-      avatar={<Avatar avatar={imageUrl} isCommunity={targetType === 'community'} />}
-      title={<HighlightedText text={description} textToHighlight={[verb]} />}
+      avatar={
+        <Avatar
+          avatar={imageUrl}
+          displayName={record.actors?.[0]?.name}
+          isCommunity={targetType === 'community'}
+        />
+      }
+      title={
+        <Highlight
+          query={record.actors?.map((a) => a.name) ?? []}
+          styles={{ color: 'primary.500', fontWeight: '500' }}
+          allowDuplicate={false}
+        >
+          {description}
+        </Highlight>
+      }
       subTitle={
         <Text size="xs" color="gray">
-          <Time date={lastUpdate} className="" />
+          <Time date={Number(lastUpdate)} className="" />
         </Text>
       }
-      badge={!hasRead && <Badge size="xs" />}
+      badge={!hasRead && <Badge size="xs" onClick={handleBadgeClick} />}
       {...style}
     />
   );

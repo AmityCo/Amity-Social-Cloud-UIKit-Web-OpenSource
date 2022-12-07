@@ -11,8 +11,8 @@ import {
   ButtonProps,
   PopoverProps,
   Button,
-  useDisclosure,
   Icon,
+  useBreakpointValue,
 } from '@noom/wax-component-library';
 
 import { Badge } from './NotificationRecordItem';
@@ -23,11 +23,16 @@ import {
 } from './NotificationRecordList';
 
 export type NotificationRecordPopoverProps = {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
   popoverProps?: PopoverProps;
   triggerButtonProps?: ButtonProps;
   listProps: NotificationRecordListProps;
   maxH?: number;
   showUnreadBadge?: boolean;
+  showViewAllButton?: boolean;
+  showMarkAllButton?: boolean;
   unreadBadgeLabel?: number | string;
   onMarkAllClick?: () => void;
   onViewAllClick?: () => void;
@@ -35,7 +40,12 @@ export type NotificationRecordPopoverProps = {
 
 export function NotificationRecordPopover({
   maxH,
+  isOpen,
+  onOpen,
+  onClose,
   showUnreadBadge,
+  showMarkAllButton,
+  showViewAllButton,
   popoverProps,
   onMarkAllClick,
   onViewAllClick,
@@ -43,8 +53,6 @@ export function NotificationRecordPopover({
   listProps,
   unreadBadgeLabel = '!',
 }: NotificationRecordPopoverProps) {
-  const { onOpen, onClose, isOpen } = useDisclosure();
-
   const handleMarkAllClick = () => {
     onClose();
     onMarkAllClick?.();
@@ -54,6 +62,8 @@ export function NotificationRecordPopover({
     onClose();
     onViewAllClick?.();
   };
+
+  const width = useBreakpointValue({ base: '100vw', md: '450px' });
 
   return (
     <Popover isLazy isOpen={isOpen} onClose={onClose} {...popoverProps}>
@@ -67,18 +77,19 @@ export function NotificationRecordPopover({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent _focus={{ boxShadow: 'md' }} _active={{ boxShadow: 'md' }}>
+      <PopoverContent _focus={{ boxShadow: 'md' }} _active={{ boxShadow: 'md' }} w={width}>
         <PopoverArrow />
         <PopoverHeader>
           <NotificationRecordListHeader
             isDisabled={listProps.isLoading || !!listProps.error}
             onMarkAllClick={handleMarkAllClick}
+            showMarkAll={showMarkAllButton}
           />
         </PopoverHeader>
         <PopoverBody maxH={maxH} display="flex" flexDir="column">
-          <NotificationRecordList {...listProps} flex={1} />
+          <NotificationRecordList {...listProps} flex={1} height="50vh" />
 
-          {onViewAllClick ? (
+          {showViewAllButton && (
             <Box pt={1} borderTopWidth={1}>
               <Button
                 height="2em"
@@ -92,7 +103,7 @@ export function NotificationRecordPopover({
                 <FormattedMessage id="notificationTray.viewAll" />
               </Button>
             </Box>
-          ) : null}
+          )}
         </PopoverBody>
       </PopoverContent>
     </Popover>

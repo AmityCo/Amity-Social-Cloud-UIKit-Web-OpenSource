@@ -7,6 +7,6 @@ export type NotificationRecord = {
   targetType: string;
   imageUrl?: string;
   hasRead?: boolean;
-  lastUpdate: number;
+  lastUpdate: string;
   actors?: { id: string; name: string }[];
 };
