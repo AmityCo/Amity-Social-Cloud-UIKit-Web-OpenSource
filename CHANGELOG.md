@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.26.4](https://github.com/noom/community-web-uikit/compare/2.26.3...2.26.4) (2022-12-07)
+
+
+### Bug Fixes
+
+* NotificationTray ([0ed41fc](https://github.com/noom/community-web-uikit/commit/0ed41fc6290a091e6bf429068aba6eb3b031d9d7))
+
 ### [2.26.3](https://github.com/noom/community-web-uikit/compare/2.26.2...2.26.3) (2022-12-05)
 
 
