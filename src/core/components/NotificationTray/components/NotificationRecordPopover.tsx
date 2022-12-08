@@ -87,7 +87,7 @@ export function NotificationRecordPopover({
           />
         </PopoverHeader>
         <PopoverBody maxH={maxH} display="flex" flexDir="column">
-          <NotificationRecordList {...listProps} flex={1} height="50vh" />
+          <NotificationRecordList {...listProps} flex={1} maxH="50vh" />
 
           {showViewAllButton && (
             <Box pt={1} borderTopWidth={1}>

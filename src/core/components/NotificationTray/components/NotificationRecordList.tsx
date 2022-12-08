@@ -112,6 +112,16 @@ export function NotificationRecordList({
     );
   }
 
+  if (notificationRecords.length === 0) {
+    return (
+      <Wrap {...style}>
+        <Alert status="info" w="100%">
+          <FormattedMessage id="notificationTray.empty" />
+        </Alert>
+      </Wrap>
+    );
+  }
+
   return (
     <Wrap {...style}>
       <InfiniteScroll

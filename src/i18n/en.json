@@ -361,6 +361,7 @@
   "notificationTray.title": "Notifications",
   "notificationTray.markAllRead": "Mark all as read",
   "notificationTray.viewAll": "View all notifications",
+  "notificationTray.empty": "You have no notifications",
 
   "onboarding.welcome.title": "Welcome to Noom Circles",
   "onboarding.welcome.subTitle": "<b>Get tips specific to your life</b> from expert Noom Coaches in 30+ communities!",
