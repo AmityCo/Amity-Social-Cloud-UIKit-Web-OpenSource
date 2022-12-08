@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.26.5](https://github.com/noom/community-web-uikit/compare/2.26.4...2.26.5) (2022-12-08)
+
+
+### Bug Fixes
+
+* Add empty message ([49f0084](https://github.com/noom/community-web-uikit/commit/49f008474345e83d84b07c719c276894412f8311))
+
 ### [2.26.4](https://github.com/noom/community-web-uikit/compare/2.26.3...2.26.4) (2022-12-07)
 
 
