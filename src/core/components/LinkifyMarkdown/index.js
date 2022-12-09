@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MARKDOWN_LINK_REGEX = /\[([^\\[]+)\]\((.*)\)/gm;
+const MARKDOWN_LINK_REGEX = /\[([^\\[]+)\]\(?(\S*)?\)/gm;
 
 const Markdown = ({ children }) => {
   const content = children.replace(MARKDOWN_LINK_REGEX, '<a href="$2">$1</a>');
