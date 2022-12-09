@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.26.8](https://github.com/noom/community-web-uikit/compare/2.26.7...2.26.8) (2022-12-09)
+
+
+### Bug Fixes
+
+* Notification tray badge ([dc41d7c](https://github.com/noom/community-web-uikit/commit/dc41d7ce707e5ac450eda173067cbd893f5cf187))
+
 ### [2.26.7](https://github.com/noom/community-web-uikit/compare/2.26.6...2.26.7) (2022-12-09)
 
 
