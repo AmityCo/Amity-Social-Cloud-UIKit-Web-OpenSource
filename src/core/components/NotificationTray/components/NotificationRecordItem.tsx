@@ -19,7 +19,7 @@ export type BadgeProps = {
 };
 
 const BadgeSizeMap = {
-  xs: 2,
+  xs: 3,
   sm: 4,
 };
 
@@ -32,12 +32,13 @@ export function Badge({
   return (
     <Box
       bg="primary.500"
+      p={0.5}
       h={BadgeSizeMap[size]}
       w={BadgeSizeMap[size]}
       color="white"
       borderRadius="full"
       boxShadow="md"
-      fontSize="xs"
+      fontSize="0.6rem"
       display="flex"
       justifyContent="center"
       alignItems="center"
