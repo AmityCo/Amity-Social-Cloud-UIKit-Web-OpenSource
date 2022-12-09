@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useRef, forwardRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   Box,
@@ -9,7 +9,7 @@ import {
   Text,
   Alert,
 } from '@noom/wax-component-library';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import { NotificationRecordItem, NotificationRecordSkeleton } from './NotificationRecordItem';
 import { NotificationRecord } from '../models';
@@ -26,13 +26,15 @@ export type NotificationRecordListProps = {
   onBadgeClick?: (record: NotificationRecord) => void;
 } & StyleProps;
 
-function Wrap({ children, ...style }: PropsWithChildren<StyleProps>) {
-  return (
-    <Box display="flex" overflow="auto" flexDir="column" {...style}>
-      {children}
-    </Box>
-  );
-}
+const Wrap = forwardRef<HTMLDivElement, PropsWithChildren<StyleProps>>(
+  ({ children, ...style }, ref) => {
+    return (
+      <Box display="flex" flexDir="column" overflow="auto" ref={ref} {...style}>
+        {children}
+      </Box>
+    );
+  },
+);
 
 export function Skeleton({ numOfRows = 3, ...style }: StyleProps & { numOfRows?: number }) {
   return (
@@ -94,9 +96,11 @@ export function NotificationRecordList({
   onBadgeClick,
   ...style
 }: NotificationRecordListProps) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+
   if (isLoading) {
     return (
-      <Wrap {...style}>
+      <Wrap {...style} ref={wrapRef}>
         <Skeleton numOfRows={numOfSkeletonRows} />
       </Wrap>
     );
@@ -104,7 +108,7 @@ export function NotificationRecordList({
 
   if (error) {
     return (
-      <Wrap {...style}>
+      <Wrap {...style} ref={wrapRef}>
         <Alert status="error" w="100%">
           {error}
         </Alert>
@@ -125,12 +129,11 @@ export function NotificationRecordList({
   return (
     <Wrap {...style}>
       <InfiniteScroll
-        className=""
-        dataLength={notificationRecords.length}
-        next={loadMore}
+        pageStart={0}
+        loadMore={loadMore}
         hasMore={hasMore}
         loader={<NotificationRecordSkeleton />}
-        height={height}
+        useWindow={false}
       >
         <Stack spacing="-1px" mb={hasMore ? '-1px' : ''}>
           {notificationRecords.map((record) => (
