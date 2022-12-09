@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.26.6](https://github.com/noom/community-web-uikit/compare/2.26.5...2.26.6) (2022-12-09)
+
+
+### Bug Fixes
+
+* Infinite scroll for notification tray ([576c66e](https://github.com/noom/community-web-uikit/commit/576c66ea8c123b218dadd3e354dc6f76babace27))
+
 ### [2.26.5](https://github.com/noom/community-web-uikit/compare/2.26.4...2.26.5) (2022-12-08)
 
 
