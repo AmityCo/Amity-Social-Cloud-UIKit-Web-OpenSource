@@ -7,7 +7,7 @@ import usePost from '~/social/hooks/usePost';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import Content from './Content';
 import { PostEditorContainer, Footer, ContentContainer, PostButton } from './styles';
-import { parseMentionsMarkup } from '~/helpers/utils';
+import { extractMetadata, parseMentionsMarkup } from '~/helpers/utils';
 
 const PostEditor = ({ postId, onSave, className, placeholder }) => {
   const { post, handleUpdatePost, childrenPosts = [] } = usePost(postId);
@@ -34,7 +34,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
   };
 
   // Update parent post text and delete removed children posts.
-  // TO REFACTOR: Extract this logic as a hook for Create Post too
+  // TODO: Extract this logic as a hook for Create Post too
   const handleSave = () => {
     let mentionees = [];
     const postMetadata = {};
@@ -58,7 +58,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
       PostRepository.deletePost(childPostId);
     });
 
-    handleUpdatePost({ text }, { mentionees, metadata: postMetadata });
+    handleUpdatePost({ text }, extractMetadata(mentions));
     clearAll();
     onSave();
   };
@@ -89,6 +89,7 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
         <Content
           id={postId}
           data={{ text: markup, initialMentionees: postMentionees }}
+          data-qa-anchor="post-editor-textarea"
           dataType={dataType}
           placeholder={placeholder}
           queryMentionees={queryMentionees}
@@ -119,7 +120,11 @@ const PostEditor = ({ postId, onSave, className, placeholder }) => {
         )}
       </ContentContainer>
       <Footer>
-        <PostButton disabled={isEmpty} onClick={handleSave}>
+        <PostButton
+          data-qa-anchor="post-editor-save-button"
+          disabled={isEmpty}
+          onClick={handleSave}
+        >
           <FormattedMessage id="save" />
         </PostButton>
       </Footer>

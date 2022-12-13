@@ -29,6 +29,7 @@ const UserHeaderAvatar = styled(Avatar)`
 
 const UserHeaderTitle = styled.div`
   grid-area: title;
+
   ${({ theme }) => theme.typography.bodyBold}
   text-overflow: ellipsis;
   overflow: hidden;

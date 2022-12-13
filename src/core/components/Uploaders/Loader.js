@@ -43,7 +43,7 @@ const FileInput = styled.input.attrs({ type: 'file' })`
 
 const FileLoader = ({
   className,
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   mimeType,
   multiple,
   disabled,
@@ -145,7 +145,7 @@ const FileLoader = ({
 
   return (
     <FileLoaderContainer
-      data-qa-anchor={dataQaAnchor}
+      data-qa-anchor={`${dataQaAnchor}`}
       id={uniqId}
       className={cx(className, { hover, disabled })}
       onDragEnter={onDragEnter}

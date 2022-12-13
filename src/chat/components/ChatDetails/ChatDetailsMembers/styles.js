@@ -62,6 +62,6 @@ export const IconWrapper = styled.span`
   align-items: center;
 
   svg {
-    font-size: 20px;
+    width: 24px;
   }
 `;

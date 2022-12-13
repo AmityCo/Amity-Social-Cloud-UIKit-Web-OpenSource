@@ -13,7 +13,7 @@ const NewsFeed = ({ handleCopyPostPath, handleCopyCommentPath }) => {
   const { onChangePage } = useNavigation();
 
   return (
-    <Wrapper>
+    <Wrapper data-qa-anchor="news-feed">
       <Feed
         targetType={PostTargetType.GlobalFeed}
         goToExplore={() => onChangePage(PageTypes.Explore)}

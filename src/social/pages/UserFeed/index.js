@@ -51,7 +51,12 @@ const UserFeed = ({
         isPrivateNetwork={isPrivateNetwork}
       />
 
-      <FeedHeaderTabs tabs={filteredTabs} activeTab={activeTab} onChange={setActiveTab} />
+      <FeedHeaderTabs
+        data-qa-anchor="user-feed-header"
+        tabs={filteredTabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+      />
 
       {activeTab === UserFeedTabs.TIMELINE && (
         <Feed

@@ -79,6 +79,7 @@ const CommentComposeBar = ({
       <Avatar avatar={file?.fileUrl} backgroundImage={UserImage} />
       <CommentComposeBarInput
         ref={commentInputRef}
+        data-qa-anchor="comment-compose-bar-textarea"
         placeholder={placeholder}
         type="text"
         value={markup}
@@ -87,11 +88,25 @@ const CommentComposeBar = ({
         queryMentionees={queryMentionees}
         onChange={onChange}
       />
+
       <ButtonGroup isFullWidth>
-        <Button variant="outline" onClick={onCancel}>
+        <Button
+          variant="outline"
+          onClick={onCancel}
+          data-qa-anchor="comment-compose-bar-cancel-button"
+        >
           <FormattedMessage id="cancel" />
         </Button>
-        <PrimaryButton disabled={isEmpty} onClick={addComment} colorScheme="primary">
+        <PrimaryButton
+          disabled={isEmpty}
+          onClick={addComment}
+          colorScheme="primary"
+          data-qa-anchor={
+            userToReply
+              ? 'comment-compose-bar-reply-button'
+              : 'comment-compose-bar-add-comment-button'
+          }
+        >
           {submitButtonText}
         </PrimaryButton>
       </ButtonGroup>

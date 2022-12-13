@@ -20,7 +20,7 @@ const triggerRenderer = (props) => {
 };
 
 const Dropdown = ({
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   isOpen,
   renderTrigger = triggerRenderer,
   children,

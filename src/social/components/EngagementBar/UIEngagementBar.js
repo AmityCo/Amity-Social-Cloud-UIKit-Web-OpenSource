@@ -36,14 +36,14 @@ const UIEngagementBar = ({
   <EngagementBarContainer>
     <Counters>
       {totalLikes > 0 && (
-        <span>
+        <span data-qa-anchor="engagement-bar-like-counter">
           {toHumanString(totalLikes)}{' '}
           <FormattedMessage id="plural.like" values={{ amount: totalLikes }} />
         </span>
       )}
 
       {totalComments > 0 && (
-        <span>
+        <span data-qa-anchor="engagement-bar-comment-counter">
           {toHumanString(totalComments)}{' '}
           <FormattedMessage id="plural.comment" values={{ amount: totalComments }} />
         </span>
@@ -53,7 +53,7 @@ const UIEngagementBar = ({
       <>
         <InteractionBar>
           <PostLikeButton postId={postId} />
-          <SecondaryButton data-qa-anchor="social-comment-post" onClick={onClickComment}>
+          <SecondaryButton data-qa-anchor="engagement-bar-comment-button" onClick={onClickComment}>
             <CommentIcon /> <FormattedMessage id="comment" />
           </SecondaryButton>
         </InteractionBar>

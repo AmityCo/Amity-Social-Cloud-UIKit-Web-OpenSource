@@ -59,7 +59,9 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
         <FormBlock title={<FormattedMessage id="UserProfileForm.title" />}>
           <Controller
             name="avatarFileId"
-            render={({ field: { ref, ...rest } }) => <AvatarUploader {...rest} />}
+            render={({ field: { ref, ...rest } }) => (
+              <AvatarUploader {...rest} data-qa-anchor="user-profile-form-avatar-uploader" />
+            )}
             control={control}
           />
           <Field error={errors.name}>
@@ -73,6 +75,7 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               {...register('displayName', {
                 required: formatMessage({ id: 'UserProfileForm.requiredDisplayName' }),
               })}
+              data-qa-anchor="user-profile-form-display-name-input"
               placeholder={formatMessage({ id: 'UserProfileForm.namePlaceholder' })}
               maxLength={100}
             />
@@ -87,13 +90,14 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
             </LabelCounterWrapper>
             <AboutTextarea
               {...register('description')}
+              data-qa-anchor="user-profile-form-description-textarea"
               placeholder={formatMessage({ id: 'UserProfileForm.requiredDescription' })}
               maxLength={180}
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
           <ButtonContainer>
-            <PrimaryButton type="submit">
+            <PrimaryButton data-qa-anchor="user-profile-form-save-button" type="submit">
               <FormattedMessage id="save" />
             </PrimaryButton>
           </ButtonContainer>

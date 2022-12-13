@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { MessageRepository, ChannelRepository } from '@amityco/js-sdk';
 
 import MessageList from '~/chat/components/MessageList';
@@ -11,34 +11,31 @@ import { ChannelContainer } from './styles';
 
 const channelRepo = new ChannelRepository();
 
-const Chat = ({ channelId, channelType, onChatDetailsClick, shouldShowChatDetails }) => {
-  const [isReading, setIsReading] = useState(false);
-
+const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) => {
   useEffect(() => {
-    const channelLiveObject = channelRepo.joinChannel({
-      channelId,
-      type: channelType,
-    });
+    const channelLiveObject = channelRepo.joinChannel({ channelId });
+
+    // TODO call startReading once on join, everytime a new message is received and a message list is scrolled to very bottom
+    if (channelLiveObject.model?.membership) {
+      channelLiveObject.model.membership.startReading();
+    }
 
     channelLiveObject.on('dataUpdated', (channelModel) => {
-      if (isReading) return;
+      if (!channelModel?.membership) {
+        return;
+      }
 
-      const membership = channelModel?.membership;
-      if (!membership) return;
-
-      membership.startReading();
-
-      setIsReading(true);
+      channelModel.membership.startReading();
     });
 
     return () => {
-      if (!isReading) return;
-      if (!channelLiveObject?.model?.membership) return;
-      channelLiveObject.model.membership.stopReading();
-      setIsReading(false);
+      if (channelLiveObject?.model?.membership) {
+        channelLiveObject.model.membership.stopReading();
+      }
+
+      channelLiveObject.dispose();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channelId, channelType]);
+  }, [channelId]);
 
   const sendMessage = (text) => {
     MessageRepository.createTextMessage({

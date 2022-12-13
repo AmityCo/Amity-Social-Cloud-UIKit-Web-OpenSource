@@ -150,6 +150,7 @@ const PollComposer = ({
                     <MentionTextInput
                       {...rest}
                       ref={ref}
+                      data-qa-anchor="poll-composer-options-textarea"
                       mentionAllowed
                       multiline
                       value={markup}
@@ -266,7 +267,7 @@ const PollComposer = ({
           >
             <FormattedMessage id="cancel" />
           </Button>
-          <SubmitButton disabled={disabled}>
+          <SubmitButton data-qa-anchor="poll-composer-post-button" disabled={disabled}>
             <FormattedMessage id="post" />
           </SubmitButton>
         </Footer>

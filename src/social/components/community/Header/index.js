@@ -23,7 +23,7 @@ const CommunityHeader = ({
       community.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: community.avatarFileId,
-        imageSize: ImageSize.Medium,
+        imageSize: ImageSize.Small,
       }),
     [community.avatarFileId],
   );

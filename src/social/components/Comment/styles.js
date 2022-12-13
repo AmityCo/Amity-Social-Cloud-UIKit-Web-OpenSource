@@ -14,9 +14,6 @@ export const Avatar = styled(UIAvatar)`
 
 export const OptionMenu = styled(UIOptionMenu)`
   color: ${({ theme }) => theme.palette.neutral.main};
-  &:hover {
-    background-color: transparent;
-  }
 `;
 
 export const CommentBlock = styled.div`
@@ -165,25 +162,11 @@ export const Text = styled.span`
   font-size: 14px;
 `;
 
-export const LikeButton = styled(SecondaryButton)`
-  margin-left: -10px;
-
-  &:hover {
-    background-color: transparent;
-  }
-`;
-
 export const ReplyIcon = styled(Reply).attrs({ width: 16, height: 16 })`
   margin-right: 5px;
 `;
 
-export const ReplyButton = styled(SecondaryButton)`
-  margin-left: -10px;
-
-  &:hover {
-    background-color: transparent;
-  }
-`;
+export const ReplyButton = styled(SecondaryButton)``;
 
 export const CommentEditContainer = styled.div`
   display: flex;

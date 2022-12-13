@@ -39,6 +39,7 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
     return (
       <Item
         ref={targetRef}
+        data-qa-anchor="social-mention-item"
         focused={focused}
         isBanned={user.isGlobalBan}
         onMouseEnter={(e) => onMouseEnter(e, user.isGlobalBan)}
@@ -56,6 +57,7 @@ const SocialMentionItem = ({ id, focused, isLastItem, loadMore = () => {}, rootE
 
   return (
     <Item
+      data-qa-anchor="social-mention-item"
       focused={focused}
       isBanned={user.isGlobalBan}
       onMouseEnter={(e) => onMouseEnter(e, user.isGlobalBan)}

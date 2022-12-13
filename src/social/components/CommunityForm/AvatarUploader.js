@@ -71,7 +71,12 @@ const ImageRenderer = ({ uploading, uploaded, progress }) => {
   return <UploaderImage key={fileId} fileId={fileId} />;
 };
 
-const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
+const AvatarUploader = ({
+  'data-qa-anchor': dataQaAnchor = '',
+  mimeType,
+  onChange,
+  value: avatarFileId,
+}) => {
   const [loadedAvatar, setLoadedAvatar] = useState([]);
 
   const handleChange = (files) => {
@@ -96,7 +101,11 @@ const AvatarUploader = ({ mimeType, onChange, value: avatarFileId }) => {
         <ImageRenderer />
       </Uploader>
       <BgImage src={fileUrl ?? communityCoverPlaceholder} />
-      <CoverImageLoader mimeType={mimeType} onChange={(newAvatar) => setLoadedAvatar(newAvatar)}>
+      <CoverImageLoader
+        data-qa-anchor={`${dataQaAnchor}-avatar-uploader`}
+        mimeType={mimeType}
+        onChange={(newAvatar) => setLoadedAvatar(newAvatar)}
+      >
         <AvatarUploadButton>
           <StyledCameraIcon width={20} height={20} /> &nbsp; Upload image
         </AvatarUploadButton>

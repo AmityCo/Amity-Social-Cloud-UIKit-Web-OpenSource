@@ -28,7 +28,7 @@ const PostCreatorUploaders = ({
 }) => (
   <>
     <StyledLoader
-      data-qa-anchor="social-create-post-attach-image"
+      data-qa-anchor="post-creator-image-attachment-button"
       disabled={imageUploadDisabled}
       uploadLoading={uploadLoading}
       fileLimitRemaining={fileLimitRemaining}
@@ -42,7 +42,7 @@ const PostCreatorUploaders = ({
     </StyledLoader>
 
     <StyledLoader
-      data-qa-anchor="social-create-post-attach-video"
+      data-qa-anchor="post-creator-video-attachment-button"
       disabled={videoUploadDisabled}
       uploadLoading={uploadLoading}
       fileLimitRemaining={fileLimitRemaining}
@@ -62,7 +62,7 @@ const PostCreatorUploaders = ({
     </StyledLoader>
 
     <StyledLoader
-      data-qa-anchor="social-create-post-attach-file"
+      data-qa-anchor="post-creator-file-attachment-button"
       disabled={fileUploadDisabled}
       uploadLoading={uploadLoading}
       fileLimitRemaining={fileLimitRemaining}

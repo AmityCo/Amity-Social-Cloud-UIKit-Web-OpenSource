@@ -33,12 +33,12 @@ const REPLIES_PER_PAGE = 5;
 
 const DeletedComment = () => {
   return (
-    <DeletedCommentContainer>
+    <DeletedCommentContainer data-qa-anchor="comment-deleted-comment">
       <IconContainer>
         <DeletedIcon />
       </IconContainer>
       <MessageContainer>
-        <Text>
+        <Text data-qa-anchor="comment-deleted-comment-text">
           <FormattedMessage id="comment.deleted" />
         </Text>
       </MessageContainer>
@@ -49,12 +49,12 @@ const DeletedComment = () => {
 const DeletedReply = () => {
   return (
     <div>
-      <DeletedReplyContainer>
+      <DeletedReplyContainer data-qa-anchor="reply-deleted-reply">
         <IconContainer className="reply">
           <DeletedIcon />
         </IconContainer>
         <MessageContainer>
-          <Text>
+          <Text data-qa-anchor="reply-deleted-reply-text">
             <FormattedMessage id="reply.deleted" />
           </Text>
         </MessageContainer>
@@ -160,6 +160,7 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
     const title = isReplyComment ? 'reply.delete' : 'comment.delete';
     const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
     confirm({
+      'data-qa-anchor': 'delete-comment',
       title: <FormattedMessage id={title} />,
       content: <FormattedMessage id={content} />,
       cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),
@@ -224,10 +225,13 @@ const Comment = ({ readonly = false, commentId, currentUserId, userRoles, handle
   );
 
   return isReplyComment ? (
-    <ReplyContainer>{renderedComment}</ReplyContainer>
+    <ReplyContainer data-qa-anchor="reply">{renderedComment}</ReplyContainer>
   ) : (
     <CommentBlock>
-      <CommentContainer data-comment-id={comment.commentId}>{renderedComment}</CommentContainer>
+      <CommentContainer data-comment-id={comment.commentId} data-qa-anchor="comment">
+        {renderedComment}
+      </CommentContainer>
+
       <CommentList
         parentId={commentId}
         referenceId={comment.referenceId}

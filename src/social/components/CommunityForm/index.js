@@ -63,7 +63,7 @@ const communityTypeItems = [
     icon: <WorldIcon />,
     customRenderer: CommunityTypeItem,
     value: true,
-    'data-qa-anchor': 'social-edit-public',
+    'data-qa-anchor': 'community-form-public-type',
   },
   {
     type: 'Private',
@@ -72,7 +72,7 @@ const communityTypeItems = [
     icon: <LockIcon />,
     customRenderer: CommunityTypeItem,
     value: false,
-    'data-qa-anchor': 'social-edit-private',
+    'data-qa-anchor': 'community-form-private-type',
   },
 ];
 
@@ -94,6 +94,7 @@ function useKeepScrollBottom(ref, deps) {
 }
 
 const CommunityForm = ({
+  'data-qa-anchor': dataQaAnchor = '',
   community, // initialize form on editing
   edit,
   onSubmit,
@@ -199,7 +200,11 @@ const CommunityForm = ({
               name="avatarFileId"
               control={control}
               render={({ field: { ref, ...rest } }) => (
-                <AvatarUploader mimeType="image/png, image/jpeg" {...rest} />
+                <AvatarUploader
+                  mimeType="image/png, image/jpeg"
+                  {...rest}
+                  data-qa-anchor={dataQaAnchor}
+                />
               )}
               defaultValue={null}
             />
@@ -219,6 +224,7 @@ const CommunityForm = ({
                   message: 'Name is too long',
                 },
               })}
+              data-qa-anchor={`${dataQaAnchor}-community-name-input`}
               placeholder="Enter community name"
             />
             <ErrorMessage errors={errors} name="displayName" />
@@ -234,6 +240,7 @@ const CommunityForm = ({
               {...register('description', {
                 maxLength: { value: 180, message: 'Description text is too long' },
               })}
+              data-qa-anchor={`${dataQaAnchor}-community-description-textarea`}
               placeholder="Enter description"
             />
             <ErrorMessage errors={errors} name="description" />
@@ -246,7 +253,11 @@ const CommunityForm = ({
               rules={{ required: 'Category is required' }}
               name="categoryId"
               render={({ field: { ref, ...rest } }) => (
-                <CategorySelector parentContainer={formBodyElement} {...rest} />
+                <CategorySelector
+                  parentContainer={formBodyElement}
+                  {...rest}
+                  data-qa-anchor={`${dataQaAnchor}`}
+                />
               )}
               control={control}
               defaultValue=""
@@ -298,7 +309,11 @@ const CommunityForm = ({
               <Controller
                 name="userIds"
                 render={({ field: { ref, ...rest } }) => (
-                  <UserSelector parentContainer={formBodyElement} {...rest} />
+                  <UserSelector
+                    parentContainer={formBodyElement}
+                    data-qa-anchor={dataQaAnchor}
+                    {...rest}
+                  />
                 )}
                 control={control}
               />
@@ -319,7 +334,11 @@ const CommunityForm = ({
           </Button>
         )}
 
-        <SubmitButton disabled={disabled} edit={edit}>
+        <SubmitButton
+          data-qa-anchor={`${dataQaAnchor}-${edit ? 'save' : 'create'}-button`}
+          disabled={disabled}
+          edit={edit}
+        >
           {edit ? <FormattedMessage id="save" /> : <FormattedMessage id="create" />}
         </SubmitButton>
       </Footer>

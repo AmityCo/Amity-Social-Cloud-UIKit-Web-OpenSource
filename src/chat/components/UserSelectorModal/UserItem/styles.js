@@ -30,6 +30,6 @@ export const CheckIconWrapper = styled.div`
   color: ${({ theme }) => theme.palette.primary.main};
 
   svg {
-    font-size: 16px;
+    width: 16px;
   }
 `;

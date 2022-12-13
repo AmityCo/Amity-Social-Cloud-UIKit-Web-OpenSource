@@ -67,6 +67,7 @@ const UserSelector = ({
         ))}
         <UserSelectorInput
           ref={inputRef}
+          data-qa-anchor="user-selector-input"
           type="text"
           value={query}
           placeholder={formatMessage({ id: 'UserSelector.placeholder' })}
@@ -78,6 +79,7 @@ const UserSelector = ({
 
   return (
     <Select
+      data-qa-anchor="user"
       value={selectedUsers}
       // prevent show dropdown for empty query
       options={query ? options : []}

@@ -4,7 +4,7 @@ export const ListItemContainer = styled.div``;
 
 export const EmptyStateIcon = styled.span`
   svg {
-    font-size: 25px;
+    width: 25px;
   }
 `;
 

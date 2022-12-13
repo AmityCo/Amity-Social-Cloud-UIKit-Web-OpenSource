@@ -117,10 +117,14 @@ const StyledComment = ({
               onChange={onChange}
             />
             <ButtonContainer>
-              <Button onClick={cancelEditing}>
+              <Button data-qa-anchor="comment-cancel-edit-button" onClick={cancelEditing}>
                 <FormattedMessage id="cancel" />
               </Button>
-              <PrimaryButton disabled={isEmpty} onClick={() => handleEdit(text)}>
+              <PrimaryButton
+                disabled={isEmpty}
+                onClick={() => handleEdit(text)}
+                data-qa-anchor="comment-save-edit-button"
+              >
                 <FormattedMessage id="save" />
               </PrimaryButton>
             </ButtonContainer>
@@ -133,12 +137,17 @@ const StyledComment = ({
             {canLike && <CommentLikeButton commentId={commentId} />}
 
             {canReply && (
-              <ReplyButton onClick={onClickReply}>
+              <ReplyButton data-qa-anchor="comment-reply-button" onClick={onClickReply}>
                 <ReplyIcon /> <FormattedMessage id="reply" />
               </ReplyButton>
             )}
 
-            <OptionMenu options={options} pullRight={false} align={POSITION_LEFT} />
+            <OptionMenu
+              data-qa-anchor="comment-options-button"
+              options={options}
+              pullRight={false}
+              align={POSITION_LEFT}
+            />
           </InteractionBar>
         )}
       </Content>

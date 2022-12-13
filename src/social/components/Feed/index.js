@@ -81,6 +81,7 @@ const Feed = ({
         <>
           {showPostCreator && postCreatorTargetId && (
             <PostCreator
+              data-qa-anchor="feed-post-creator-textarea"
               targetType={postCreatorTargetType}
               targetId={postCreatorTargetId}
               communities={communities}

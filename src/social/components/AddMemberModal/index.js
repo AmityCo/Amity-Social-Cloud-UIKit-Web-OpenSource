@@ -49,6 +49,7 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit, usersToOmit 
   return (
     <Modal
       isOpen
+      data-qa-anchor="add-member-modal"
       title={formatMessage({ id: 'AddMemberModal.addMembers' })}
       onCancel={closeConfirm}
     >
@@ -59,7 +60,13 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit, usersToOmit 
               <MembersField error={errors.members}>
                 <Controller
                   name="members"
-                  render={({ field }) => <UserSelector {...field} usersToOmit={usersToOmit} />}
+                  render={({ field }) => (
+                    <UserSelector
+                      {...field}
+                      usersToOmit={usersToOmit}
+                      data-qa-anchor="add-member-modal"
+                    />
+                  )}
                   control={control}
                 />
                 <ErrorMessage errors={errors} name="members" />

@@ -6,7 +6,7 @@ import { OptionsIcon, OptionsButton, Option, Container } from './styles';
 
 const OptionMenu = ({
   className,
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   icon,
   options,
   position = POSITION_BOTTOM,
@@ -38,7 +38,12 @@ const OptionMenu = ({
           handleClose={() => setIsOpen(false)}
         >
           {options.map(({ name, action, className: optionClassName }) => (
-            <Option key={name} className={optionClassName} onClick={attachCanceling(action)}>
+            <Option
+              key={name}
+              data-qa-anchor={`${dataQaAnchor}-${name}`}
+              className={optionClassName}
+              onClick={attachCanceling(action)}
+            >
               <FormattedMessage id={name} />
             </Option>
           ))}

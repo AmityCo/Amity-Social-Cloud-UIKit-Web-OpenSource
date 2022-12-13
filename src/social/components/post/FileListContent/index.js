@@ -37,10 +37,10 @@ const renderTrigger = (handleExpand) => {
 
 const FileListContent = ({ items }) => {
   return (
-    <List>
+    <List data-qa-anchor="post-file-list-content">
       <Collapsible renderTrigger={renderTrigger}>
         {items.map(({ data }) => (
-          <File key={data.fileId} fileId={data.fileId} />
+          <File key={data.fileId} data-qa-anchor="post-file-item" fileId={data.fileId} />
         ))}
       </Collapsible>
     </List>
