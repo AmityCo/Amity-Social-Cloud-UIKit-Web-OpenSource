@@ -1,5 +1,20 @@
 # Changelog
 
+### [2.26.10](https://github.com/noom/community-web-uikit/compare/2.26.9...2.26.10) (2022-12-13)
+
+
+### Bug Fixes
+
+* asc-3645 - the channel unread count in the channel list ([#64](https://github.com/noom/community-web-uikit/issues/64)) ([b1243ea](https://github.com/noom/community-web-uikit/commit/b1243eaeee590105203fe082ecd1b6e4ce1406ac))
+* ASC-3885 - pass all icons props into svg element inside icon component ([#16](https://github.com/noom/community-web-uikit/issues/16)) ([bc47451](https://github.com/noom/community-web-uikit/commit/bc47451051a29812267ff9c86610c3c247d670bc))
+* ASC-5490 override default post renderers ([3b88be4](https://github.com/noom/community-web-uikit/commit/3b88be4d21b6168adbb10f1194be5bf7dbb19b5c))
+* ASC-6036 - update js-sdk, do not crash in node env ([5bf98d5](https://github.com/noom/community-web-uikit/commit/5bf98d5d785434cc0dc2ab69c765e0e1a9658b43))
+* ASC-6373 - use useRef in functional component instead of createRef ([#66](https://github.com/noom/community-web-uikit/issues/66)) ([a116528](https://github.com/noom/community-web-uikit/commit/a1165282f47d1ee0c73510f0be7170ab933cda4b))
+* ASC-7518 - correctly calculate mentions length on post update ([#73](https://github.com/noom/community-web-uikit/issues/73)) ([0a30f34](https://github.com/noom/community-web-uikit/commit/0a30f34bb52aa84c9b603c172ec87b28d952fa3b))
+* minor style fixes ([1a162c7](https://github.com/noom/community-web-uikit/commit/1a162c754dee8254bfaad50104a868c5ca719eb0))
+* Remove broken test ([cbd49a6](https://github.com/noom/community-web-uikit/commit/cbd49a67261c40932f2be7cc2a8fb98c00982816))
+* user icon sizes ([0303221](https://github.com/noom/community-web-uikit/commit/03032214068fd5f773baa79d461f1b2093ef66d5))
+
 ### [2.26.9](https://github.com/noom/community-web-uikit/compare/2.26.8...2.26.9) (2022-12-13)
 
 ### [2.26.8](https://github.com/noom/community-web-uikit/compare/2.26.7...2.26.8) (2022-12-09)
