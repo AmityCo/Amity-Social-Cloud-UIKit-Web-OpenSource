@@ -6,7 +6,7 @@ import useFile from '~/core/hooks/useFile';
 
 import StyledFile from './styles';
 
-const File = ({ 'data-qa-anchor': dataQaAnchor, fileId, onRemove }) => {
+const File = ({ 'data-qa-anchor': dataQaAnchor = '', fileId, onRemove }) => {
   const file = useFile(fileId);
 
   if (!file.fileId) return null;
@@ -35,7 +35,7 @@ File.propTypes = {
 };
 
 File.defaultProps = {
-  'data-qa-anchor': undefined,
+  'data-qa-anchor': '',
   onRemove: undefined,
 };
 

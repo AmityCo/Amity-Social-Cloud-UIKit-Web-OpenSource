@@ -19,7 +19,7 @@ const UserAvatar = ({
       return {
         avatar: FileRepository.getFileUrlById({
           fileId: avatarFileId,
-          imageSize: ImageSize.Medium,
+          imageSize: ImageSize.Small,
         }),
       };
     }

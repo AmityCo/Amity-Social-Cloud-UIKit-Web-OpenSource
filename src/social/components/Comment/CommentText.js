@@ -37,7 +37,7 @@ const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES
   );
 
   const textContent = text && (
-    <CommentContent className={className}>
+    <CommentContent className={className} data-qa-anchor="comment-content">
       <Markdown
         options={{
           overrides: renderOverrides,

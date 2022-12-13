@@ -23,6 +23,7 @@ const Modal = ({
   isOpen,
   children,
   scrollBehavior,
+  'data-qa-anchor': dataQaAnchor = '',
 }) => {
   const [modalRef, modalElement] = useElement();
   // auto focus to prevent scroll on background (when focus kept on trigger button)
@@ -46,7 +47,7 @@ const Modal = ({
     >
       <ModalOverlay />
 
-      <ModalContent tabIndex={0} marginY={0} {...attrProps}>
+      <ModalContent tabIndex={0} marginY={0} {...attrProps} data-qa-anchor={dataQaAnchor}>
         {title && <ModalHeader>{title}</ModalHeader>}
         {onCancel && <ModalCloseButton />}
         <ModalBody>{children}</ModalBody>

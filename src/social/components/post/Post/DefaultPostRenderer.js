@@ -185,10 +185,10 @@ const DefaultPostRenderer = ({
   );
 
   return (
-    <PostContainer className={className} data-post-id={post.postId}>
+    <PostContainer className={className} data-post-id={post.postId} data-qa-anchor="post">
       <PostHeadContainer>
         <Header hidePostTarget={hidePostTarget} postId={postId} loading={loading} />
-        {!loading && <OptionMenu options={allOptions} data-qa-anchor="social-post-3dots" />}
+        {!loading && <OptionMenu options={allOptions} data-qa-anchor="post-options-button" />}
       </PostHeadContainer>
 
       {loading ? (
@@ -213,11 +213,19 @@ const DefaultPostRenderer = ({
           )}
 
           {isUnderReview && canReviewCommunityPosts && (
-            <ReviewButtonsContainer>
-              <PrimaryButton disabled={approving || declining} onClick={onApprove}>
+            <ReviewButtonsContainer data-qa-anchor="post-review">
+              <PrimaryButton
+                data-qa-anchor="post-review-accept-button"
+                disabled={approving || declining}
+                onClick={onApprove}
+              >
                 <FormattedMessage id="general.action.accept" />
               </PrimaryButton>
-              <Button disabled={approving || declining} onClick={onDecline}>
+              <Button
+                data-qa-anchor="post-review-decline-button"
+                disabled={approving || declining}
+                onClick={onDecline}
+              >
                 <FormattedMessage id="general.action.decline" />
               </Button>
             </ReviewButtonsContainer>
@@ -226,6 +234,7 @@ const DefaultPostRenderer = ({
           {isEditing && (
             <Modal
               isOpen
+              data-qa-anchor="post-editor-modal"
               title={formatMessage({ id: 'post.editPost' })}
               onCancel={closeEditingPostModal}
             >

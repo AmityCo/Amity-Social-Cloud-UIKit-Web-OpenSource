@@ -18,6 +18,7 @@ const TextContent = ({ id, text, initialMentionees, placeholder, onChange, query
       <Editor
         id={`update-post-${id}`}
         autoFocus
+        data-qa-anchor="post-editor-textarea"
         placeholder={placeholder}
         type="text"
         value={text}

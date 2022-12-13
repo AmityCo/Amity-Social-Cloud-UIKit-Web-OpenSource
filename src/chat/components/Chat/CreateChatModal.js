@@ -25,7 +25,12 @@ const CreateChatModal = ({ onClose }) => {
     });
 
   return (
-    <Modal isOpen title={formatMessage({ id: 'chat_modal.title' })} onCancel={closeConfirm}>
+    <Modal
+      isOpen
+      title={formatMessage({ id: 'chat_modal.title' })}
+      onCancel={closeConfirm}
+      data-qa-anchor="create-chat-modal"
+    >
       <ChatComposer onSubmit={handleSubmit} onCancel={closeConfirm} />
     </Modal>
   );

@@ -4,7 +4,9 @@ import { ChannelType } from '@amityco/js-sdk';
 
 import { StyledSelect } from './styles';
 
-const itemRenderer = ({ name }) => <div>{name}</div>;
+const itemRenderer = ({ name }) => (
+  <div data-qa-anchor={`chat-type-selector-item-${name}`}>{name}</div>
+);
 
 const ChatTypeSelector = ({ onChange, parentContainer = null }) => {
   const { formatMessage } = useIntl();
@@ -21,6 +23,7 @@ const ChatTypeSelector = ({ onChange, parentContainer = null }) => {
 
   return (
     <StyledSelect
+      data-qa-anchor="chat-type"
       options={options}
       value={[options[0]]}
       parentContainer={parentContainer}

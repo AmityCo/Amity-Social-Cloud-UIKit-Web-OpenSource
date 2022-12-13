@@ -34,7 +34,12 @@ const ChatItem = ({ channel, isSelected, onSelect }) => {
   const normalizedUnreadCount = getNormalizedUnreadCount(channel.unreadCount);
 
   return (
-    <ChatItemContainer active={isSelected} title={chatName} onClick={handleChatItemClick}>
+    <ChatItemContainer
+      data-qa-anchor="chat-item"
+      active={isSelected}
+      title={chatName}
+      onClick={handleChatItemClick}
+    >
       <ChatItemLeft>
         <Avatar
           avatarUrl={chatAvatar}
@@ -42,7 +47,9 @@ const ChatItem = ({ channel, isSelected, onSelect }) => {
         />
         <Title>{chatName}</Title>
       </ChatItemLeft>
-      {normalizedUnreadCount && <UnreadCount>{normalizedUnreadCount}</UnreadCount>}
+      {normalizedUnreadCount && (
+        <UnreadCount data-qa-anchor="chat-item-unread-count">{normalizedUnreadCount}</UnreadCount>
+      )}
     </ChatItemContainer>
   );
 };

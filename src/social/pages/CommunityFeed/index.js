@@ -62,7 +62,12 @@ const CommunityFeed = ({
     <Wrapper>
       <CommunityInfo communityId={communityId} />
 
-      <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <FeedHeaderTabs
+        data-qa-anchor="community-feed-header"
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+      />
 
       {activeTab === CommunityFeedTabs.TIMELINE && (
         <Feed

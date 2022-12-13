@@ -28,7 +28,7 @@ const ExtraAction = ({ title, bodyText, actionButton }) => {
 
 const AddMemberButton = ({ onClick }) => {
   return (
-    <ExtraActionPrimaryButton data-qa-anchor="social-community-add-member-button" onClick={onClick}>
+    <ExtraActionPrimaryButton data-qa-anchor="community-edit-add-member-button" onClick={onClick}>
       <PlusIcon />
       <FormattedMessage id="add" />
     </ExtraActionPrimaryButton>
@@ -59,6 +59,7 @@ export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
 
   const closeConfirm = () =>
     confirm({
+      'data-qa-anchor': 'close-community',
       title: formatMessage({ id: 'CloseCommunityAction.closeConfirm.title' }),
       content: formatMessage({ id: 'CloseCommunityAction.closeConfirm.description' }),
       cancelText: formatMessage({ id: 'cancel' }),
@@ -75,7 +76,7 @@ export const CloseCommunityAction = ({ communityId, onCommunityClosed }) => {
       bodyText={<FormattedMessage id="CloseCommunityAction.description" />}
       actionButton={
         <CloseCommunityButton
-          data-qa-anchor="social-edit-profile-close-community"
+          data-qa-anchor="community-edit-close-community-button"
           onClick={closeConfirm}
         />
       }

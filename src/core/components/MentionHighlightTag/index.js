@@ -14,7 +14,11 @@ const MentionHighlightTag = ({ children, mentionees, highlightIndex }) => {
   if (!isEmpty(mentionees)) {
     const { userId: mentioneeId } = mentionees[highlightIndex];
 
-    return <Highlighted onClick={() => onClickUser(mentioneeId)}>{children}</Highlighted>;
+    return (
+      <Highlighted data-qa-anchor="mention-hilight-tag" onClick={() => onClickUser(mentioneeId)}>
+        {children}
+      </Highlighted>
+    );
   }
 
   return children;

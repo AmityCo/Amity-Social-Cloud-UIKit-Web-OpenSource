@@ -43,6 +43,7 @@ export const Thumbnail = styled(
   ({ className, duration, fileId, onRemove, overlayElements, showPlayIcon }) => {
     return fileId ? (
       <Image
+        data-qa-anchor="post-gallery-content-thumbnail"
         className={className}
         fileId={fileId}
         mediaFit="cover"
@@ -50,7 +51,7 @@ export const Thumbnail = styled(
           <>
             {overlayElements}
 
-            {showPlayIcon && <PlayIcon />}
+            {showPlayIcon && <PlayIcon data-qa-anchor="post-gallery-content-play-button" />}
 
             {duration && (
               <Duration>
@@ -62,11 +63,11 @@ export const Thumbnail = styled(
         onRemove={onRemove}
       />
     ) : (
-      <ImageContainer className={className}>
+      <ImageContainer data-qa-anchor="post-gallery-content-thumbnail" className={className}>
         <ButtonContainer>
           {overlayElements}
 
-          {showPlayIcon && <PlayIcon />}
+          {showPlayIcon && <PlayIcon data-qa-anchor="post-gallery-content-play-button" />}
 
           {duration && (
             <Duration>

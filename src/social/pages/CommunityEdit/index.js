@@ -77,7 +77,7 @@ const CommunityEditPage = ({ communityId, tab }) => {
       community.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: community.avatarFileId,
-        imageSize: ImageSize.Medium,
+        imageSize: ImageSize.Small,
       }),
     [community.avatarFileId],
   );
@@ -97,7 +97,12 @@ const CommunityEditPage = ({ communityId, tab }) => {
       }
     >
       {activeTab === PageTabs.EDIT_PROFILE && !!community.communityId && (
-        <CommunityForm community={community} edit onSubmit={(data) => handleEditCommunity(data)} />
+        <CommunityForm
+          data-qa-anchor="community-edit"
+          community={community}
+          edit
+          onSubmit={(data) => handleEditCommunity(data)}
+        />
       )}
 
       {activeTab === PageTabs.MEMBERS && <CommunityMembers communityId={communityId} />}

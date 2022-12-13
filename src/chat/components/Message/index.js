@@ -25,14 +25,14 @@ import {
 
 const MessageBody = ({ isDeleted, type, isSupportedMessageType, ...otherProps }) => {
   if (isDeleted) {
-    return <DeletedMessageBody {...otherProps} />;
+    return <DeletedMessageBody {...otherProps} data-qa-anchor="message-body-deleted" />;
   }
 
   if (!isSupportedMessageType) {
-    return <UnsupportedMessageBody {...otherProps} />;
+    return <UnsupportedMessageBody {...otherProps} data-qa-anchor="message-body-unsupported" />;
   }
 
-  return <GeneralMessageBody {...otherProps} />;
+  return <GeneralMessageBody {...otherProps} data-qa-anchor="message-body-general" />;
 };
 
 const Message = ({
@@ -45,6 +45,7 @@ const Message = ({
   isIncoming,
   isConsequent,
   userDisplayName,
+  containerRef,
 }) => {
   const shouldShowUserName = isIncoming && !isConsequent && userDisplayName;
   const isSupportedMessageType = [MessageType.Text, MessageType.Custom].includes(type);
@@ -61,7 +62,7 @@ const Message = ({
           <AvatarWrapper>{!isConsequent && <Avatar {...getAvatarProps()} />}</AvatarWrapper>
         )}
 
-        <MessageContainer>
+        <MessageContainer data-qa-anchor="message">
           {shouldShowUserName && <UserName>{userDisplayName}</UserName>}
           <MessageBody
             type={type}
@@ -80,6 +81,7 @@ const Message = ({
                   data={data}
                   isIncoming={isIncoming}
                   isSupportedMessageType={isSupportedMessageType}
+                  popupContainerRef={containerRef}
                 />
               </BottomLine>
             )}
@@ -100,6 +102,7 @@ Message.propTypes = {
   isIncoming: PropTypes.bool,
   isConsequent: PropTypes.bool,
   avatar: PropTypes.string,
+  containerRef: PropTypes.object.isRequired,
 };
 
 Message.defaultProps = {

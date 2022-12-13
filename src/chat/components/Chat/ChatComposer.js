@@ -91,6 +91,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
               <TextInput
                 {...register('channelId')}
                 placeholder={formatMessage({ id: 'chat_composer.placeholder.channelId' })}
+                data-qa-anchor="chat-composer-channel-id-input"
               />
               <ErrorMessage errors={errors} name="channelId" />
             </Field>
@@ -127,6 +128,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
               <TextInput
                 {...register('displayName')}
                 placeholder={formatMessage({ id: 'chat_composer.placeholder.displayName' })}
+                data-qa-anchor="chat-composer-display-name-input"
               />
               <ErrorMessage errors={errors} name="displayName" />
             </Field>
@@ -149,7 +151,11 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
               <Controller
                 name="userIds"
                 render={({ field: { ref, ...rest } }) => (
-                  <UserSelector parentContainer={formBodyElement} {...rest} />
+                  <UserSelector
+                    parentContainer={formBodyElement}
+                    {...rest}
+                    data-qa-anchor="chat-composer-select-user-input"
+                  />
                 )}
                 control={control}
               />
@@ -167,7 +173,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
           >
             <FormattedMessage id="cancel" />
           </Button>
-          <SubmitButton disabled={disabled}>
+          <SubmitButton data-qa-anchor="chat-composer-submit-button" disabled={disabled}>
             <FormattedMessage id="post" />
           </SubmitButton>
         </Footer>

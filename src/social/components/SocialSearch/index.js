@@ -89,6 +89,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
       <FormattedMessage id="exploreHeader.searchCommunityPlaceholder">
         {([placeholder]) => (
           <SocialSearchInput
+            data-qa-anchor="social-search-input"
             value={value}
             setValue={setValue}
             items={items}

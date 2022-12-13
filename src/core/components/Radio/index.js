@@ -1,7 +1,7 @@
 import React from 'react';
 import { Radio, Label, Chip } from './styles';
 
-const Container = ({ register, children, 'data-qa-anchor': dataQaAnchor, ...props }) => {
+const Container = ({ register, children, 'data-qa-anchor': dataQaAnchor = '', ...props }) => {
   return (
     <Label data-qa-anchor={`${dataQaAnchor}-label`}>
       <Radio {...props} ref={register} data-qa-anchor={`${dataQaAnchor}-radio`} />

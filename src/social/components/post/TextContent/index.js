@@ -45,8 +45,9 @@ function TextContent({ text, postMaxLines, mentionees }) {
     [mentionees],
   );
 
+
   const textContent = textWithMentions && (
-    <PostContent>
+    <PostContent data-qa-anchor="post-text-content">
       <Markdown
         options={{
           overrides: renderOverrides,

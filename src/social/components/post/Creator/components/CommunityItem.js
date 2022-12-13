@@ -5,11 +5,18 @@ import { MenuItem } from '~/core/components/Menu';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 import { Avatar } from './styles';
 
-const CommunityItem = ({ community, currentTargetId, onChange, onClose }) => {
+const CommunityItem = ({
+  'data-qa-anchor': dataQaAnchor = '',
+  community,
+  currentTargetId,
+  onChange,
+  onClose,
+}) => {
   const avatarFileUrl = useImage({ fileId: community.avatarFileId });
 
   return (
     <MenuItem
+      data-qa-anchor={dataQaAnchor}
       active={community.communityId === currentTargetId}
       onClick={() => {
         onChange({

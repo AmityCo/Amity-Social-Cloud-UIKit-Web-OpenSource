@@ -1,6 +1,5 @@
 import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { CommunityFilter } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 import { Box, Icon } from '@noom/wax-component-library';
 
@@ -45,6 +44,7 @@ const SideSectionMyCommunity = ({ className, activeCommunity, communityListProps
             element="button"
             disabled={!connected}
             onClick={open}
+            data-qa-anchor="side-section-my-community-create-community-button"
           >
             <FormattedMessage id="createCommunity" />
           </SideMenuActionItem>
