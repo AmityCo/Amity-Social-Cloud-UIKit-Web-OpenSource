@@ -109,7 +109,7 @@ const CommunityForm = ({
       avatarFileId: null,
       description: '',
       displayName: '',
-      isPublic: true,
+      isPublic: false,
       tags: [],
       userIds: [],
       categoryId: community?.categoryIds?.[0] ?? '',
