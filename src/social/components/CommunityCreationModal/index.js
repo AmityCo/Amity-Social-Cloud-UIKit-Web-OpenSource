@@ -11,7 +11,7 @@ import { CommunityForm } from './styles';
 import withSDK from '~/core/hocs/withSDK';
 import { useActionEvents } from '~/core/providers/ActionProvider';
 
-const CommunityCreationModal = ({ isOpen, onClose }) => {
+const CommunityCreationModal = ({ isOpen, onClose, canCreatePublic }) => {
   const { formatMessage } = useIntl();
   const actionEvents = useActionEvents();
 
@@ -44,6 +44,7 @@ const CommunityCreationModal = ({ isOpen, onClose }) => {
       data-qa-anchor="community-creation-modal"
     >
       <CommunityForm
+        canCreatePublic={canCreatePublic}
         onCancel={closeConfirm}
         onSubmit={handleSubmit}
         data-qa-anchor="community-creation"

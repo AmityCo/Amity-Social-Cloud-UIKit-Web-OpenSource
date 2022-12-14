@@ -14,7 +14,12 @@ import { useSDK } from '~/core/hooks/useSDK';
 
 const CommunityCount = ({ count = 0, ...styles }) => <Box {...styles}>{count}</Box>;
 
-const SideSectionMyCommunity = ({ className, activeCommunity, communityListProps }) => {
+const SideSectionMyCommunity = ({
+  className,
+  activeCommunity,
+  communityListProps,
+  canCreatePublicCommunity,
+}) => {
   const { connected } = useSDK();
   const { socialCommunityCreationButtonVisible } = useConfig();
   const { onCommunityCreated } = useNavigation();
@@ -57,7 +62,11 @@ const SideSectionMyCommunity = ({ className, activeCommunity, communityListProps
         />
       </Box>
 
-      <CommunityCreationModal isOpen={isOpen} onClose={close} />
+      <CommunityCreationModal
+        isOpen={isOpen}
+        onClose={close}
+        canCreatePublic={canCreatePublicCommunity}
+      />
     </Box>
   );
 };
@@ -65,6 +74,7 @@ const SideSectionMyCommunity = ({ className, activeCommunity, communityListProps
 SideSectionMyCommunity.propTypes = {
   className: PropTypes.string,
   activeCommunity: PropTypes.string,
+  canCreatePublicCommunity: PropTypes.bool,
 };
 
 export default memo(SideSectionMyCommunity);

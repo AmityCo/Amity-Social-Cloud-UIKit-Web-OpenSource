@@ -56,7 +56,7 @@ export const defaultBlockComponentMap = {
   [ELEMENT_TODO_LI]: withProps(ListItem, { sx: { '> p': { margin: 0 } } }),
   [ELEMENT_UL]: withProps(List, { ml: 0, paddingInlineStart: 4 }),
   [ELEMENT_OL]: withProps(List, { isOrdered: true, ml: 0, paddingInlineStart: 4 }),
-};
+} as any;
 
 export const mentionComponentMap = {
   [ELEMENT_MENTION]: Mention,

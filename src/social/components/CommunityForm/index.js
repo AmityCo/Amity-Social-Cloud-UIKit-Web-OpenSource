@@ -58,6 +58,7 @@ const CommunityTypeItem = ({ type, description, icon }) => (
 
 const communityTypeItems = [
   {
+    key: 'public',
     type: 'Public',
     description: 'Anyone can join, view and search the posts in this page.',
     icon: <WorldIcon />,
@@ -66,6 +67,7 @@ const communityTypeItems = [
     'data-qa-anchor': 'community-form-public-type',
   },
   {
+    key: 'private',
     type: 'Private',
     description:
       'Only members invited by the moderators can join, view, and search the posts in this page.',
@@ -100,6 +102,7 @@ const CommunityForm = ({
   onSubmit,
   className,
   onCancel,
+  canCreatePublic,
 }) => {
   const defaultValues = useMemo(
     () => ({
@@ -190,6 +193,10 @@ const CommunityForm = ({
 
   const [formBodyRef, formBodyElement] = useElement();
   useKeepScrollBottom(formBodyRef, [formState]);
+
+  const formattedCommunityTypeItems = canCreatePublic
+    ? communityTypeItems
+    : communityTypeItems.filter((i) => i.key !== 'public');
 
   return (
     <Form className={className} edit={edit} onSubmit={handleSubmit(validateAndSubmit)}>
@@ -294,7 +301,11 @@ const CommunityForm = ({
           <Controller
             name="isPublic"
             render={({ field: { value, onChange } }) => (
-              <Radios items={communityTypeItems} value={value} onChange={() => onChange(!value)} />
+              <Radios
+                items={formattedCommunityTypeItems}
+                value={value}
+                onChange={() => onChange(!value)}
+              />
             )}
             control={control}
           />

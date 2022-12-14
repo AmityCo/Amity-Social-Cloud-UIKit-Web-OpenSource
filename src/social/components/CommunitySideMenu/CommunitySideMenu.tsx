@@ -11,7 +11,18 @@ const SocialSearch = styled(UiKitSocialSearch)`
   padding: 0.5rem 0;
 `;
 
-const CommunitySideMenu = ({ className, activeCommunity, activePage, communityListProps }) => (
+export type CommunitySideMenuProps = {
+  showCreateButton?: boolean;
+  canCreatePublicCommunity?: boolean;
+};
+
+const CommunitySideMenu = ({
+  className,
+  activeCommunity,
+  activePage,
+  communityListProps,
+  canCreatePublicCommunity = true,
+}) => (
   <SideMenu className={className} data-qa-anchor="community-side-menu">
     <SocialSearch sticky />
 
@@ -20,7 +31,7 @@ const CommunitySideMenu = ({ className, activeCommunity, activePage, communityLi
       <SideSectionMyCommunity
         activeCommunity={activeCommunity}
         communityListProps={communityListProps}
-        showCreateButton
+        canCreatePublicCommunity={canCreatePublicCommunity}
       />
     </Box>
   </SideMenu>
