@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.27.1](https://github.com/noom/community-web-uikit/compare/2.27.0...2.27.1) (2022-12-14)
+
+
+### Bug Fixes
+
+* Private form default choice ([be20927](https://github.com/noom/community-web-uikit/commit/be20927b49fccb817363920a40ae550fcee84bd5))
+
 ## [2.27.0](https://github.com/noom/community-web-uikit/compare/2.26.10...2.27.0) (2022-12-14)
 
 
