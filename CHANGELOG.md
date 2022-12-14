@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.27.0](https://github.com/noom/community-web-uikit/compare/2.26.10...2.27.0) (2022-12-14)
+
+
+### Features
+
+* Optional public community ([06910e0](https://github.com/noom/community-web-uikit/commit/06910e0238449e1d154b17b0fe7188be875793a0))
+
 ### [2.26.10](https://github.com/noom/community-web-uikit/compare/2.26.9...2.26.10) (2022-12-13)
 
 
