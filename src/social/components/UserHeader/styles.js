@@ -69,7 +69,7 @@ const UserHeader = ({
         onClick={onClickUser}
       />
 
-      <UserHeaderTitle title={userId} onClick={onClickUser}>
+      <UserHeaderTitle title={displayName} onClick={onClickUser}>
         {isLoading ? (
           <Loader colorScheme="primary" size="xs" />
         ) : (
