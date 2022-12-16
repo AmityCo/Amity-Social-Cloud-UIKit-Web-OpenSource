@@ -27,7 +27,7 @@ const UserSelector = ({
   const options = queriedUsers
     .filter(
       ({ displayName, userId }) =>
-        displayName?.toLowerCase().includes(query.toLowerCase()) && userId !== currentUserId,
+        displayName?.toLowerCase().includes(query?.toLowerCase()) && userId !== currentUserId,
     )
     .filter(({ userId }) => !usersToOmit.map((u) => u.userId).includes(userId))
     .map(({ displayName, userId }) => ({

@@ -16,7 +16,7 @@ const Highlight = ({ query, text }) => {
   return (
     <span>
       {chunks.map((chunk, index) => (
-        <Text key={`#${chunk}#${index}`} highlight={chunk.toLowerCase() === query.toLowerCase()}>
+        <Text key={`#${chunk}#${index}`} highlight={chunk?.toLowerCase() === query?.toLowerCase()}>
           {chunk}
         </Text>
       ))}

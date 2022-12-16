@@ -6,7 +6,24 @@ import useUser from '~/core/hooks/useUser';
 
 import UIUserHeader from './styles';
 
-const UserHeader = ({ userId, children, onClick, isBanned, showId, showName = true }) => {
+function formatDisplayName(user, presetDisplayName) {
+  if (user.displayName && user.displayName !== user.userId) {
+    return user.displayName;
+  }
+
+  return presetDisplayName;
+}
+
+const UserHeader = ({
+  userId,
+  children,
+  onClick,
+  isBanned,
+  showId,
+  displayName,
+  isLoading,
+  showName = true,
+}) => {
   const { user, file } = useUser(userId, [userId]);
   const { formatMessage } = useIntl();
 
@@ -15,11 +32,11 @@ const UserHeader = ({ userId, children, onClick, isBanned, showId, showName = tr
       showId={showId}
       showName={showName}
       userId={user.userId}
-      displayName={user.displayName ?? formatMessage({ id: 'userType.noomer' })}
+      displayName={formatDisplayName(user, displayName ?? formatMessage({ id: 'userType.noomer' }))}
       avatarFileUrl={file.fileUrl}
       isBanned={isBanned || user.isGlobalBan}
       onClick={onClick}
-      isLoading={!user.createdAt}
+      isLoading={isLoading !== false && !user.createdAt}
     >
       {children}
     </UIUserHeader>
@@ -32,6 +49,8 @@ UserHeader.propTypes = {
   children: PropTypes.node,
   isBanned: PropTypes.bool,
   onClick: PropTypes.func,
+  isLoading: PropTypes.bool,
+  displayName: PropTypes.string,
 };
 
 UserHeader.defaultProps = {

@@ -60,7 +60,6 @@ const Feed = ({
     targetId,
     feedType,
     limit: FEED_FETCH_POST_LIMIT,
-    dependencies: [communities?.length ?? 0],
   });
 
   const { targetId: postCreatorTargetId, targetType: postCreatorTargetType } =

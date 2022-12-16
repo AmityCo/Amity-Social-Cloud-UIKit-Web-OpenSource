@@ -19,6 +19,8 @@ import { CommunityFeedTabs } from './constants';
 import { getTabs } from './utils';
 import { DeclineBanner, Wrapper } from './styles';
 
+const ADMIN_ONLY_POST_SETTING = 'ONLY_ADMIN_CAN_POST';
+
 const CommunityFeed = ({
   communityId,
   currentUserId,
@@ -27,13 +29,16 @@ const CommunityFeed = ({
   handleCopyCommentPath,
 }) => {
   const { community } = useCommunity(communityId);
-  const { canReviewCommunityPosts } = useCommunityOneMember(
+  const { canReviewCommunityPosts, hasModeratorPermissions } = useCommunityOneMember(
     communityId,
     currentUserId,
     community.userId,
   );
 
+  const isJoined = !!community?.isJoined;
+  const isAdminOnly = community?.postSetting === ADMIN_ONLY_POST_SETTING;
   const pendingPostCount = community.reviewingFeed?.postCount ?? 0;
+  const canCreatePosts = isJoined && isAdminOnly ? hasModeratorPermissions : true;
 
   const tabs = useMemo(
     () =>
@@ -54,8 +59,6 @@ const CommunityFeed = ({
     }
   }, [activeTab, tabs]);
 
-  const isJoined = !!community?.isJoined;
-
   const [isCreatedModalOpened, setCreatedModalOpened] = useState(isNewCommunity);
 
   return (
@@ -74,7 +77,7 @@ const CommunityFeed = ({
           targetType={PostTargetType.CommunityFeed}
           targetId={communityId}
           readonly={!isJoined}
-          showPostCreator={isJoined}
+          showPostCreator={canCreatePosts}
           feedType={FeedType.Published}
           handleCopyPostPath={handleCopyPostPath}
           handleCopyCommentPath={handleCopyCommentPath}

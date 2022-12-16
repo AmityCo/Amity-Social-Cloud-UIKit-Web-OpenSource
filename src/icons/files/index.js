@@ -59,7 +59,7 @@ const MIMETYPES = {
 const FileIcon = ({ file, ...props }) => {
   const { name, type } = file;
 
-  const typeLowerCase = type.toLowerCase();
+  const typeLowerCase = type?.toLowerCase();
 
   const resolved = Object.entries(MIMETYPES).find(([, mimetypes]) =>
     mimetypes.find((mimetype) => typeLowerCase.includes(mimetype)),
