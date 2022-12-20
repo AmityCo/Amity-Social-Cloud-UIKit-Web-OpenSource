@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.27.3](https://github.com/noom/community-web-uikit/compare/2.27.2...2.27.3) (2022-12-16)
+
+
+### Bug Fixes
+
+* Admin posts only / Default user header state ([b1879cf](https://github.com/noom/community-web-uikit/commit/b1879cf98709b842d95a2fe08bad1e0689edda83))
+
 ### [2.27.2](https://github.com/noom/community-web-uikit/compare/2.27.1...2.27.2) (2022-12-16)
 
 
