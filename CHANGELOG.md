@@ -1,5 +1,12 @@
 # Changelog
 
+### [2.27.4](https://github.com/noom/community-web-uikit/compare/2.27.3...2.27.4) (2022-12-20)
+
+
+### Bug Fixes
+
+* Post spacing ([01328b9](https://github.com/noom/community-web-uikit/commit/01328b9b04f211a11e05a57e50a2dace05b55519))
+
 ### [2.27.3](https://github.com/noom/community-web-uikit/compare/2.27.2...2.27.3) (2022-12-16)
 
 
