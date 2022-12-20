@@ -54,8 +54,8 @@ export const defaultBlockComponentMap = {
 
   [ELEMENT_PARAGRAPH]: withProps(Box, { as: 'p', marginY: 2 }),
   [ELEMENT_TODO_LI]: withProps(ListItem, { sx: { '> p': { margin: 0 } } }),
-  [ELEMENT_UL]: withProps(List, { ml: 0, paddingInlineStart: 4 }),
-  [ELEMENT_OL]: withProps(List, { isOrdered: true, ml: 0, paddingInlineStart: 4 }),
+  [ELEMENT_UL]: withProps(List, { ml: 0, paddingInlineStart: 5 }),
+  [ELEMENT_OL]: withProps(List, { isOrdered: true, ml: 0, paddingInlineStart: 5 }),
 } as any;
 
 export const mentionComponentMap = {

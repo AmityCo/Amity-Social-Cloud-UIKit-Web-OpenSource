@@ -18,6 +18,8 @@ export const PostContent = styled.div`
   color: ${({ theme }) => theme.palette.neutral.main};
   white-space: pre-wrap;
   ${({ theme }) => theme.typography.body}
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ReadMoreButton = styled(Button).attrs({ variant: 'secondary' })`
@@ -45,12 +47,12 @@ function TextContent({ text, postMaxLines, mentionees }) {
     [mentionees],
   );
 
-
   const textContent = textWithMentions && (
     <PostContent data-qa-anchor="post-text-content">
       <Markdown
         options={{
           overrides: renderOverrides,
+          wrapper: React.Fragment,
         }}
       >
         {textWithMentions}
