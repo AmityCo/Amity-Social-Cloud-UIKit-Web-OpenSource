@@ -5,6 +5,7 @@ import { PostTargetType } from '@amityco/js-sdk';
 import withSDK from '~/core/hocs/withSDK';
 import * as utils from '~/helpers/utils';
 import MediaGallery from '~/social/components/MediaGallery';
+import { useConfig } from '~/social/providers/ConfigProvider';
 
 import UserInfo from '~/social/components/UserInfo';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
@@ -26,6 +27,7 @@ const UserFeed = ({
   handleCopyPostPath,
   handleCopyCommentPath,
 }) => {
+  const { showUserProfileMetadata } = useConfig();
   const isPrivateNetwork = utils.isPrivateNetwork(networkSettings);
 
   const [activeTab, setActiveTab] = useState(UserFeedTabs.TIMELINE);
@@ -49,6 +51,7 @@ const UserFeed = ({
         setActiveTab={setActiveTab}
         setFollowActiveTab={setFollowActiveTab}
         isPrivateNetwork={isPrivateNetwork}
+        showUserProfileMetadata={showUserProfileMetadata}
       />
 
       <FeedHeaderTabs

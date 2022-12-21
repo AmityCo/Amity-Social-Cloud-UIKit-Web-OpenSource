@@ -388,5 +388,11 @@
   "settings.notifications.post.label": "Post",
   "settings.notifications.post.helper": "When there is a new post in a community you joined",
   "settings.emailNotifications.title": "Email notifications",
-  "settings.pushNotifications.title": "Push notifications"
+  "settings.pushNotifications.title": "Push notifications",
+
+  "userMetadata.title": "User metadata",
+  "userMetadata.helper": "Only visible to Noom employees",
+  "userMetadata.userType": "User type",
+  "userMetadata.hasFinishedInitialProfileSync": "Finished onboarding",
+  "userMetadata.isMigratedFromCircles": "Migrated user"
 }

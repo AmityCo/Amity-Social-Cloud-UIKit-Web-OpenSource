@@ -57,6 +57,8 @@ export {
 
 export { NotificationSettings, NotificationSettingsProps } from '~/core/components/Settings';
 
+export type { SocialConfiguration } from '~/social/providers/ConfigProvider';
+
 export {
   ApiEndpoint,
   ApiRegion,

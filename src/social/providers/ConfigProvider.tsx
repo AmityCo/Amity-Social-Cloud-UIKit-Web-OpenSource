@@ -1,8 +1,16 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { stripUndefinedValues } from '~/helpers/utils';
 
+export type SocialConfiguration = {
+  socialCommunityCreationButtonVisible?: boolean;
+  showCreatePublicCommunityOption?: boolean;
+  showUserProfileMetadata?: boolean;
+};
+
 const defaultConfig = {
   socialCommunityCreationButtonVisible: true,
+  showCreatePublicCommunityOption: false,
+  showUserProfileMetadata: false,
 };
 
 const ConfigContext = createContext(defaultConfig);

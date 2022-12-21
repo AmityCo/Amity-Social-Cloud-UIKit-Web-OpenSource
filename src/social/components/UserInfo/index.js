@@ -20,6 +20,7 @@ const UserInfo = ({
   setFollowActiveTab,
   setActiveTab,
   isPrivateNetwork,
+  showUserProfileMetadata,
 }) => {
   const { formatMessage } = useIntl();
   const { onEditUser, onMessageUser } = useNavigation();
@@ -30,7 +31,7 @@ const UserInfo = ({
   );
   const { followerCount, followingCount } = useFollowCount(userId);
 
-  const { displayName, description } = user;
+  const { displayName, description, metadata } = user;
 
   const { fileId } = file;
   const fileUrl = useImage({ fileId });
@@ -61,6 +62,8 @@ const UserInfo = ({
       onFollowDecline={onFollowDecline}
       onEditUser={onEditUser}
       onMessageUser={onMessageUser}
+      metadata={metadata}
+      showUserProfileMetadata={showUserProfileMetadata}
     />
   );
 };

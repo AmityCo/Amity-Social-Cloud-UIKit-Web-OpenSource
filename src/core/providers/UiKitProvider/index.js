@@ -34,10 +34,10 @@ const UiKitProvider = forwardRef(
       children /* TODO localization */,
       postRenderers,
       actionHandlers,
-      socialCommunityCreationButtonVisible,
       onConnectionStatusChange,
       onConnected,
       onDisconnected,
+      config,
     },
     ref,
   ) => {
@@ -111,7 +111,7 @@ const UiKitProvider = forwardRef(
           <ThemeProvider theme={buildGlobalTheme(theme)}>
             <UIStyles>
               <SDKProvider {...SDKInfo}>
-                <ConfigProvider config={{ socialCommunityCreationButtonVisible }}>
+                <ConfigProvider config={config}>
                   <CustomComponentsProvider value={customComponents}>
                     <NavigationProvider {...actionHandlers}>
                       <ActionProvider actionHandlers={actionHandlers}>
@@ -169,6 +169,11 @@ UiKitProvider.propTypes = {
   onConnectionStatusChange: PropTypes.func,
   onConnected: PropTypes.func,
   onDisconnected: PropTypes.func,
+  config: PropTypes.shape({
+    socialCommunityCreationButtonVisible: PropTypes.bool,
+    showCreatePublicCommunityOption: PropTypes.bool,
+    showUserProfileMetadata: PropTypes.bool,
+  }),
 };
 
 export default UiKitProvider;

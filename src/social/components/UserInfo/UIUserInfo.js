@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FollowRequestStatus } from '@amityco/js-sdk';
+import { Table, TableContainer, Tbody, Thead, Tr, Th, Td, Icon } from '@noom/wax-component-library';
 
 import { toHumanString } from '~/helpers/toHumanString';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -44,6 +45,44 @@ import { notification } from '~/core/components/Notification';
 import useFollowersList from '~/core/hooks/useFollowersList';
 import { useSDK } from '~/core/hooks/useSDK';
 
+const UIUserMetadata = ({ metadata }) => (
+  <TableContainer>
+    <b>
+      <FormattedMessage id="userMetadata.title" />
+    </b>
+    {' - '}
+    <FormattedMessage id="userMetadata.helper" />
+    <Table variant="simple">
+      <Tbody>
+        <Tr>
+          <Td>
+            <FormattedMessage id="userMetadata.userType" />
+          </Td>
+          <Td>{metadata?.userType}</Td>
+        </Tr>
+        <Tr>
+          <Td>
+            <FormattedMessage id="userMetadata.hasFinishedInitialProfileSync" />
+          </Td>
+          <Td>
+            {metadata?.hasFinishedInitialProfileSync ? (
+              <Icon icon="check" />
+            ) : (
+              <Icon icon="close" />
+            )}
+          </Td>
+        </Tr>
+        <Tr>
+          <Td>
+            <FormattedMessage id="userMetadata.isMigratedFromCircles" />
+          </Td>
+          <Td>{metadata?.isMigratedFromCircles ? <Icon icon="check" /> : <Icon icon="close" />}</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+  </TableContainer>
+);
+
 const UIUserInfo = ({
   userId,
   currentUserId,
@@ -62,6 +101,8 @@ const UIUserInfo = ({
   followerCount,
   followingCount,
   isPrivateNetwork,
+  metadata,
+  showUserProfileMetadata,
 }) => {
   const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
@@ -193,6 +234,8 @@ const UIUserInfo = ({
           </NotificationBody>
         </PendingNotification>
       )}
+
+      {showUserProfileMetadata && <UIUserMetadata metadata={metadata} />}
     </Container>
   );
 };
