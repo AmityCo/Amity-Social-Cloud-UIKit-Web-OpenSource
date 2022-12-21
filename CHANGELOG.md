@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.28.0](https://github.com/noom/community-web-uikit/compare/2.27.4...2.28.0) (2022-12-21)
+
+
+### Features
+
+* Add user metadata to profile ([928517b](https://github.com/noom/community-web-uikit/commit/928517b140157c94f235a4ae710dd929c43cfe6e))
+
 ### [2.27.4](https://github.com/noom/community-web-uikit/compare/2.27.3...2.27.4) (2022-12-20)
 
 
