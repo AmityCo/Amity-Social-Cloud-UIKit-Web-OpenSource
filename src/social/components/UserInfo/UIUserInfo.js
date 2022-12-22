@@ -45,15 +45,21 @@ import { notification } from '~/core/components/Notification';
 import useFollowersList from '~/core/hooks/useFollowersList';
 import { useSDK } from '~/core/hooks/useSDK';
 
-const UIUserMetadata = ({ metadata }) => (
+const UIUserMetadata = ({ metadata, userId }) => (
   <TableContainer>
     <b>
       <FormattedMessage id="userMetadata.title" />
     </b>
     {' - '}
     <FormattedMessage id="userMetadata.helper" />
-    <Table variant="simple">
+    <Table variant="simple" size="sm">
       <Tbody>
+        <Tr>
+          <Td>
+            <FormattedMessage id="userMetadata.accessCode" />
+          </Td>
+          <Td>{userId}</Td>
+        </Tr>
         <Tr>
           <Td>
             <FormattedMessage id="userMetadata.userType" />
@@ -235,7 +241,7 @@ const UIUserInfo = ({
         </PendingNotification>
       )}
 
-      {showUserProfileMetadata && <UIUserMetadata metadata={metadata} />}
+      {showUserProfileMetadata && <UIUserMetadata metadata={metadata} userId={userId} />}
     </Container>
   );
 };

@@ -392,6 +392,7 @@
 
   "userMetadata.title": "User metadata",
   "userMetadata.helper": "Only visible to Noom employees",
+  "userMetadata.accessCode": "Access code",
   "userMetadata.userType": "User type",
   "userMetadata.hasFinishedInitialProfileSync": "Finished onboarding",
   "userMetadata.isMigratedFromCircles": "Migrated user"

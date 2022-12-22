@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { Button, Stack } from '@noom/wax-component-library';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 
@@ -31,14 +31,17 @@ const UICommunityCard = ({
   isPublic,
   name,
   loading,
+  showMemberCount,
   ...props
 }) => {
   const handleClick = () => onClick(communityId);
 
   return (
     <Container onClick={handleClick} {...props}>
-      <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
-        <CoverContent>
+      <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder} />
+
+      <Content>
+        <Stack spacing={3}>
           <CommunityName
             isOfficial={isOfficial}
             isPublic={isPublic}
@@ -46,29 +49,26 @@ const UICommunityCard = ({
             name={name}
             truncate={2}
           />
-          <Truncate lines={1}>
-            <CategoriesList>
-              {(communityCategories || []).map((category) => category.name).join(', ')}
-            </CategoriesList>
-          </Truncate>
-        </CoverContent>
-      </Cover>
 
-      <Content>
-        {loading && <Skeleton count={2} style={{ fontSize: 8 }} />}
+          {loading && <Skeleton count={2} style={{ fontSize: 8 }} />}
 
-        {!loading && (
-          <Count>
-            {toHumanString(membersCount)}{' '}
-            <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
-          </Count>
-        )}
+          {!loading && description && (
+            <Truncate lines={2}>
+              <Description title={description}>{description}</Description>
+            </Truncate>
+          )}
 
-        {!loading && description && (
-          <Truncate lines={2}>
-            <Description title={description}>{description}</Description>
-          </Truncate>
-        )}
+          {!loading && showMemberCount && (
+            <Count>
+              {toHumanString(membersCount)}{' '}
+              <FormattedMessage id="plural.member" values={{ amount: membersCount }} />
+            </Count>
+          )}
+
+          <Button width="100%" size="lg" colorScheme="secondary" isLoading={loading}>
+            <FormattedMessage id="community.join" />
+          </Button>
+        </Stack>
       </Content>
     </Container>
   );
@@ -81,6 +81,7 @@ UICommunityCard.defaultProps = {
   isPublic: false,
   name: '',
   loading: false,
+  showMemberCount: false,
 };
 
 UICommunityCard.propTypes = {
@@ -99,6 +100,7 @@ UICommunityCard.propTypes = {
   name: PropTypes.string,
   loading: PropTypes.bool,
   onClick: PropTypes.func,
+  showMemberCount: PropTypes.bool,
 };
 
 export default customizableComponent('UICommunityCard', UICommunityCard);

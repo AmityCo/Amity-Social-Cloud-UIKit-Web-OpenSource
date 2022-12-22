@@ -4,7 +4,7 @@ import SocialCommunityName from '~/social/components/community/Name';
 
 export const Container = styled.div`
   min-width: 278px;
-  min-height: 289px;
+  min-height: 268px;
   cursor: pointer;
   box-shadow: 0 0 1px rgba(40, 41, 61, 0.08), 0 0.5px 2px rgba(96, 97, 112, 0.16);
   border-radius: 8px;
@@ -13,7 +13,7 @@ export const Container = styled.div`
 `;
 
 export const Cover = styled.div`
-  padding-top: 74.46%;
+  padding-top: 40%;
   position: relative;
 
   ${({ backgroundImage, theme }) => `
@@ -21,7 +21,7 @@ export const Cover = styled.div`
       backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
     };
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: 0 20%;
     background-size: cover;
   `}
 `;
@@ -34,13 +34,10 @@ export const CoverContent = styled.div`
 `;
 
 export const CommunityName = styled(SocialCommunityName)`
-  color: #ffffff;
   ${({ theme }) => theme.typography.headline}
-  line-height: 30px !important;
+  line-height: 1.2rem;
 
   * {
-    color: #ffffff;
-    line-height: 30px !important;
     padding: 0;
   }
 `;
