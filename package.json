@@ -1,6 +1,6 @@
 {
   "name": "@noom/community-web-uikit",
-  "version": "2.27.4",
+  "version": "2.29.0",
   "engines": {
     "node": ">=16",
     "npm": ">=7"

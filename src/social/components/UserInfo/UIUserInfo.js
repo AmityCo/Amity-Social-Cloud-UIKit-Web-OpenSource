@@ -1,10 +1,8 @@
 import React from 'react';
 import Truncate from 'react-truncate-markup';
 import PropTypes from 'prop-types';
-
 import { FormattedMessage, useIntl } from 'react-intl';
 import { FollowRequestStatus } from '@amityco/js-sdk';
-import { Table, TableContainer, Tbody, Thead, Tr, Th, Td, Icon } from '@noom/wax-component-library';
 
 import { toHumanString } from '~/helpers/toHumanString';
 import ConditionalRender from '~/core/components/ConditionalRender';
@@ -14,6 +12,8 @@ import { backgroundImage as UserImage } from '~/icons/User';
 
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
 import BanIcon from '~/icons/Ban';
+
+import { UserMetadata } from './UserMetadata';
 
 import {
   Avatar,
@@ -45,50 +45,6 @@ import { notification } from '~/core/components/Notification';
 import useFollowersList from '~/core/hooks/useFollowersList';
 import { useSDK } from '~/core/hooks/useSDK';
 
-const UIUserMetadata = ({ metadata, userId }) => (
-  <TableContainer>
-    <b>
-      <FormattedMessage id="userMetadata.title" />
-    </b>
-    {' - '}
-    <FormattedMessage id="userMetadata.helper" />
-    <Table variant="simple" size="sm">
-      <Tbody>
-        <Tr>
-          <Td>
-            <FormattedMessage id="userMetadata.accessCode" />
-          </Td>
-          <Td>{userId}</Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <FormattedMessage id="userMetadata.userType" />
-          </Td>
-          <Td>{metadata?.userType}</Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <FormattedMessage id="userMetadata.hasFinishedInitialProfileSync" />
-          </Td>
-          <Td>
-            {metadata?.hasFinishedInitialProfileSync ? (
-              <Icon icon="check" />
-            ) : (
-              <Icon icon="close" />
-            )}
-          </Td>
-        </Tr>
-        <Tr>
-          <Td>
-            <FormattedMessage id="userMetadata.isMigratedFromCircles" />
-          </Td>
-          <Td>{metadata?.isMigratedFromCircles ? <Icon icon="check" /> : <Icon icon="close" />}</Td>
-        </Tr>
-      </Tbody>
-    </Table>
-  </TableContainer>
-);
-
 const UIUserInfo = ({
   userId,
   currentUserId,
@@ -107,7 +63,6 @@ const UIUserInfo = ({
   followerCount,
   followingCount,
   isPrivateNetwork,
-  metadata,
   showUserProfileMetadata,
 }) => {
   const { user } = useUser(userId);
@@ -157,92 +112,97 @@ const UIUserInfo = ({
   const [pendingUsers] = useFollowersList(currentUserId, FollowRequestStatus.Pending);
 
   return (
-    <Container data-qa-anchor="user-info">
-      <Header>
-        <Avatar
-          size="big"
-          displayName={user.displayName}
-          data-qa-anchor="user-info-profile-image"
-          avatar={fileUrl}
-          backgroundImage={UserImage}
-        />
-        <ActionButtonContainer>
-          <ConditionalRender condition={isMyProfile}>
-            <Button
-              data-qa-anchor="user-info-edit-profile-button"
-              disabled={!connected}
-              onClick={() => onEditUser(userId)}
-            >
-              <PencilIcon /> <FormattedMessage id="user.editProfile" />
-            </Button>
-            <>
-              {isPrivateNetwork && isFollowPending && (
-                <Button disabled={!connected} onClick={() => onFollowDecline()}>
-                  <PendingIconContainer>
-                    <PendingIcon />
-                  </PendingIconContainer>
-                  <FormattedMessage id="user.cancel_follow" />
-                </Button>
-              )}
-              {isFollowNone && (
-                <PrimaryButton disabled={!connected} onClick={() => onFollowRequest()}>
-                  <PlusIcon /> <FormattedMessage id="user.follow" />
-                </PrimaryButton>
-              )}
-            </>
-          </ConditionalRender>
-        </ActionButtonContainer>
-        <OptionMenu options={allOptions} pullRight={false} />
-      </Header>
-      <ProfileNameWrapper>
-        <Truncate lines={3}>
-          <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
-        </Truncate>
-        {user.isGlobalBan && (
-          <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
+    <>
+      <Container data-qa-anchor="user-info">
+        <Header>
+          <Avatar
+            size="big"
+            displayName={user.displayName}
+            data-qa-anchor="user-info-profile-image"
+            avatar={fileUrl}
+            backgroundImage={UserImage}
+          />
+          <ActionButtonContainer>
+            <ConditionalRender condition={isMyProfile}>
+              <Button
+                data-qa-anchor="user-info-edit-profile-button"
+                disabled={!connected}
+                onClick={() => onEditUser(userId)}
+              >
+                <PencilIcon /> <FormattedMessage id="user.editProfile" />
+              </Button>
+              <>
+                {isPrivateNetwork && isFollowPending && (
+                  <Button disabled={!connected} onClick={() => onFollowDecline()}>
+                    <PendingIconContainer>
+                      <PendingIcon />
+                    </PendingIconContainer>
+                    <FormattedMessage id="user.cancel_follow" />
+                  </Button>
+                )}
+                {isFollowNone && (
+                  <PrimaryButton disabled={!connected} onClick={() => onFollowRequest()}>
+                    <PlusIcon /> <FormattedMessage id="user.follow" />
+                  </PrimaryButton>
+                )}
+              </>
+            </ConditionalRender>
+          </ActionButtonContainer>
+          <OptionMenu options={allOptions} pullRight={false} />
+        </Header>
+        <ProfileNameWrapper>
+          <Truncate lines={3}>
+            <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
+          </Truncate>
+          {user.isGlobalBan && (
+            <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
+          )}
+        </ProfileNameWrapper>
+        <CountContainer>
+          <ClickableCount
+            onClick={() => {
+              setActiveTab(UserFeedTabs.FOLLOWERS);
+              setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
+            }}
+          >
+            {toHumanString(followingCount)}
+          </ClickableCount>
+          <FormattedMessage id="counter.followings" />
+          <ClickableCount
+            onClick={() => {
+              setActiveTab(UserFeedTabs.FOLLOWERS);
+              setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
+            }}
+          >
+            {toHumanString(followerCount)}
+          </ClickableCount>
+          <FormattedMessage id="counter.followers" />
+        </CountContainer>
+        <Description data-qa-anchor="user-info-description">{description}</Description>
+
+        {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
+          <PendingNotification
+            onClick={() => {
+              setActiveTab(UserFeedTabs.FOLLOWERS);
+              setTimeout(() => setFollowActiveTab(PENDING_TAB), 250);
+            }}
+          >
+            <NotificationTitle>
+              <TitleEllipse />
+              <FormattedMessage id="follow.pendingNotification.title" />
+            </NotificationTitle>
+            <NotificationBody>
+              <FormattedMessage id="follow.pendingNotification.body" />
+            </NotificationBody>
+          </PendingNotification>
         )}
-      </ProfileNameWrapper>
-      <CountContainer>
-        <ClickableCount
-          onClick={() => {
-            setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
-          }}
-        >
-          {toHumanString(followingCount)}
-        </ClickableCount>
-        <FormattedMessage id="counter.followings" />
-        <ClickableCount
-          onClick={() => {
-            setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
-          }}
-        >
-          {toHumanString(followerCount)}
-        </ClickableCount>
-        <FormattedMessage id="counter.followers" />
-      </CountContainer>
-      <Description data-qa-anchor="user-info-description">{description}</Description>
-
-      {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
-        <PendingNotification
-          onClick={() => {
-            setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(PENDING_TAB), 250);
-          }}
-        >
-          <NotificationTitle>
-            <TitleEllipse />
-            <FormattedMessage id="follow.pendingNotification.title" />
-          </NotificationTitle>
-          <NotificationBody>
-            <FormattedMessage id="follow.pendingNotification.body" />
-          </NotificationBody>
-        </PendingNotification>
+      </Container>
+      {showUserProfileMetadata && user.userId && (
+        <Container data-qa-anchor="user-metadata">
+          <UserMetadata user={user} />
+        </Container>
       )}
-
-      {showUserProfileMetadata && <UIUserMetadata metadata={metadata} userId={userId} />}
-    </Container>
+    </>
   );
 };
 
