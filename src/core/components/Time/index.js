@@ -6,7 +6,7 @@ import { DateContainer } from './styles';
 
 const DAY = 24 * 60 * 60 * 1000;
 
-const Time = ({ className, date }) => {
+const Time = ({ className = '', date }) => {
   const delta = Date.now() - date;
 
   return (

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -31,7 +31,7 @@ const UserInfo = ({
   );
   const { followerCount, followingCount } = useFollowCount(userId);
 
-  const { displayName, description, metadata } = user;
+  const { displayName, description } = user;
 
   const { fileId } = file;
   const fileUrl = useImage({ fileId });
@@ -62,7 +62,6 @@ const UserInfo = ({
       onFollowDecline={onFollowDecline}
       onEditUser={onEditUser}
       onMessageUser={onMessageUser}
-      metadata={metadata}
       showUserProfileMetadata={showUserProfileMetadata}
     />
   );

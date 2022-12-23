@@ -391,8 +391,14 @@
   "settings.pushNotifications.title": "Push notifications",
 
   "userMetadata.title": "User metadata",
+  "userMetadata.platform": "Platform",
+  "userMetadata.appVersion": "App version",
+  "userMetadata.language": "Language",
+  "userMetadata.timezone": "Timezone",
+  "userMetadata.dateJoined": "Joined Circles",
   "userMetadata.helper": "Only visible to Noom employees",
+  "userMetadata.accessCode": "Access code",
   "userMetadata.userType": "User type",
   "userMetadata.hasFinishedInitialProfileSync": "Finished onboarding",
-  "userMetadata.isMigratedFromCircles": "Migrated user"
+  "userMetadata.isMigratedFromCircles": "Migrated from Circles v1"
 }

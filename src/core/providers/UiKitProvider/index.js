@@ -14,6 +14,7 @@ import { SDKProvider } from '~/core/hocs/withSDK';
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import NavigationProvider from '~/social/providers/NavigationProvider';
 import PostRendererProvider from '~/social/providers/PostRendererProvider';
+import DataFetchingProvider from '~/social/providers/DataFetchingProvider';
 import Localization from './Localization';
 import buildGlobalTheme from './theme';
 import { UIStyles } from './styles';
@@ -38,6 +39,7 @@ const UiKitProvider = forwardRef(
       onConnected,
       onDisconnected,
       config,
+      asyncHandlers,
     },
     ref,
   ) => {
@@ -116,7 +118,9 @@ const UiKitProvider = forwardRef(
                     <NavigationProvider {...actionHandlers}>
                       <ActionProvider actionHandlers={actionHandlers}>
                         <PostRendererProvider postRenderers={postRenderers}>
-                          {children}
+                          <DataFetchingProvider handlers={asyncHandlers}>
+                            {children}
+                          </DataFetchingProvider>
                           <NotificationsContainer />
                           <ConfirmContainer />
                         </PostRendererProvider>
@@ -173,6 +177,9 @@ UiKitProvider.propTypes = {
     socialCommunityCreationButtonVisible: PropTypes.bool,
     showCreatePublicCommunityOption: PropTypes.bool,
     showUserProfileMetadata: PropTypes.bool,
+  }),
+  asyncHandlers: PropTypes.shape({
+    getUserMetadata: PropTypes.func,
   }),
 };
 
