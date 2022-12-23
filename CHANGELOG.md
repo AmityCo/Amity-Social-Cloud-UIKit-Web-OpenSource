@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.29.0](https://github.com/noom/community-web-uikit/compare/2.28.0...2.29.0) (2022-12-23)
+
+
+### Features
+
+* Improved user metadata ([#19](https://github.com/noom/community-web-uikit/issues/19)) ([5c3135f](https://github.com/noom/community-web-uikit/commit/5c3135fa96d47cfd9830ebb6c81905ed89a94a8e))
+
 ## [2.28.0](https://github.com/noom/community-web-uikit/compare/2.27.4...2.28.0) (2022-12-21)
 
 
