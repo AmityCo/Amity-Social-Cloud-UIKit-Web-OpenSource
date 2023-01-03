@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box } from '@noom/wax-component-library';
 
 import useCategories from '~/social/hooks/useCategories';
 import RecommendedList, {
@@ -54,7 +55,9 @@ const ExplorePage = () => {
 
   return (
     <PageContainer>
-      <List categories={categories} isLoading={loading} />
+      <Box mb={2}>
+        <List categories={categories} isLoading={loading} />
+      </Box>
     </PageContainer>
   );
 };

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { CommunitySortingMethod } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 import { Box, Link, Icon, Skeleton as UISkeleton } from '@noom/wax-component-library';
@@ -11,7 +11,7 @@ import CommunityCard from '~/social/components/community/Card';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
-const COMMUNITY_FETCH_NUM = 15;
+const COMMUNITY_FETCH_NUM = 20;
 const COLUMN_CONFIG = { 1024: 2, 1280: 3, 1440: 3, 1800: 3 };
 
 const Skeleton = ({ size = 4 }) =>
@@ -26,10 +26,21 @@ const RecommendedList = ({ category, communityLimit = 5 }) => {
     limit: COMMUNITY_FETCH_NUM,
   });
 
-  const formattedCommunities = useMemo(
-    () => communities.filter((c) => !c.isJoined).slice(0, communityLimit),
-    [communities],
-  );
+  /*
+   * Select {communityLimit} non joined communities out of {COMMUNITY_FETCH_NUM}
+   * If less then {communityLimit} are available pad the list with joined communities
+   * to avoid a broken UI
+   */
+  const formattedCommunities = useMemo(() => {
+    const notJoinedCommunities = communities.filter((c) => !c.isJoined);
+    const joinedCommunities = communities.filter((c) => c.isJoined);
+    return [
+      ...notJoinedCommunities.slice(0, communityLimit),
+      ...joinedCommunities
+        .filter((c) => c.isJoined)
+        .slice(0, Math.max(0, communityLimit - notJoinedCommunities.length)),
+    ];
+  }, [communities.length]);
 
   const title = category.name;
 
@@ -48,7 +59,7 @@ const RecommendedList = ({ category, communityLimit = 5 }) => {
           ))}
       </HorizontalList>
 
-      <Box textAlign="right">
+      <Box textAlign="right" mt={2}>
         <Link
           colorScheme="secondary"
           textTransform="uppercase"

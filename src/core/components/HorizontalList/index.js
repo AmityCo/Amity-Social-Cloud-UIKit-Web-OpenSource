@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Box, CompassColor, IconButton } from '@noom/wax-component-library';
 import styled from 'styled-components';
 
 import useMeasure from 'react-use/lib/useMeasure';
 import useScroll from 'react-use/lib/useScroll';
-import Button from '~/core/components/Button';
-import ChevronLeftIcon from '~/icons/ChevronLeft';
-import ChevronRightIcon from '~/icons/ChevronRight';
 
 const ITEM_SPACE_SIZE = 16;
 const DEFAULT_COLUMN_NUMBER = {
@@ -15,11 +13,17 @@ const DEFAULT_COLUMN_NUMBER = {
   1800: 5,
 };
 
+const Wrap = styled.div`
+  position: relative;
+`;
+
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0 0 16px 0;
   align-items: flex-end;
+  flex-wrap: wrap;
+  padding: 0 1rem;
 `;
 
 const Title = styled.h2`
@@ -30,25 +34,35 @@ const Title = styled.h2`
 
 const SubTitle = styled.div`
   ${({ theme }) => theme.typography.body};
+  flex-basis: 100%;
 `;
 
-const Pagination = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const PaginationButton = styled(Button).attrs({ variant: 'secondary' })`
-  width: 28px;
-  padding: 2px;
-
-  &:hover {
-    background-color: transparent;
-  }
-
-  &:disabled {
-    color: ${({ theme }) => theme.palette.neutral.shade3};
-  }
-`;
+const PaginationButton = ({ onClick, left, right, ...props }) => (
+  <Box
+    zIndex={1}
+    position="absolute"
+    top={0}
+    onClick={onClick}
+    h="100%"
+    display="flex"
+    alignItems="center"
+    left={left}
+    right={right}
+  >
+    <IconButton
+      boxShadow="xl"
+      bg={CompassColor.offWhite}
+      color={CompassColor.gold}
+      borderRadius="full"
+      size="lg"
+      marginX={2}
+      iconProps={{
+        fontSize: '2.5rem',
+      }}
+      {...props}
+    />
+  </Box>
+);
 
 const ScrollContainer = styled.div`
   overflow-x: hidden;
@@ -86,8 +100,6 @@ const HorizontalList = ({
   const [wrapperRef, { width }] = useMeasure();
   const [page, setPage] = useState(0);
 
-  console.log(width);
-
   const contentWidth = containerRef.current?.scrollWidth ?? 0;
 
   const hasMultiPage = useMemo(() => contentWidth > width, [contentWidth, width]);
@@ -115,25 +127,31 @@ const HorizontalList = ({
   }, [scrollPosition, contentWidth, width, hasMore, loadMore]);
 
   return (
-    <div ref={wrapperRef}>
+    <Wrap ref={wrapperRef}>
       <Header>
         <Title>{title}</Title>
-        {hasMultiPage && (
-          <Pagination>
-            <PaginationButton disabled={isFirstPage} onClick={() => setPage(page - 1)}>
-              <ChevronLeftIcon height={20} />
-            </PaginationButton>
-            <PaginationButton disabled={isLastPage} onClick={() => setPage(page + 1)}>
-              <ChevronRightIcon height={20} />
-            </PaginationButton>
-          </Pagination>
-        )}
         {subTitle && <SubTitle>{subTitle}</SubTitle>}
       </Header>
       <ScrollContainer ref={containerRef} page={page}>
+        {hasMultiPage && (
+          <>
+            <PaginationButton
+              left={0}
+              isDisabled={isFirstPage}
+              onClick={() => setPage(page - 1)}
+              icon="chevron-left"
+            ></PaginationButton>
+            <PaginationButton
+              right={0}
+              isDisabled={isLastPage}
+              onClick={() => setPage(page + 1)}
+              icon="chevron-right"
+            ></PaginationButton>
+          </>
+        )}
         <StretchedList columns={columns}>{children}</StretchedList>
       </ScrollContainer>
-    </div>
+    </Wrap>
   );
 };
 
