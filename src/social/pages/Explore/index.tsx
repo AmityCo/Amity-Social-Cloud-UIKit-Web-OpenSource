@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container, Loader } from '@noom/wax-component-library';
 
 import useCategories from '~/social/hooks/useCategories';
 import RecommendedList, {

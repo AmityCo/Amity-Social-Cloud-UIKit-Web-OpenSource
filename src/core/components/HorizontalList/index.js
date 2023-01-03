@@ -28,6 +28,10 @@ const Title = styled.h2`
   margin: 0;
 `;
 
+const SubTitle = styled.div`
+  ${({ theme }) => theme.typography.body};
+`;
+
 const Pagination = styled.div`
   display: flex;
   gap: 20px;
@@ -71,6 +75,7 @@ const StretchedList = styled.div`
 
 const HorizontalList = ({
   title = '',
+  subTitle,
   children,
   columns = DEFAULT_COLUMN_NUMBER,
   hasMore = false,
@@ -80,6 +85,8 @@ const HorizontalList = ({
   const { x: scrollPosition } = useScroll(containerRef);
   const [wrapperRef, { width }] = useMeasure();
   const [page, setPage] = useState(0);
+
+  console.log(width);
 
   const contentWidth = containerRef.current?.scrollWidth ?? 0;
 
@@ -121,6 +128,7 @@ const HorizontalList = ({
             </PaginationButton>
           </Pagination>
         )}
+        {subTitle && <SubTitle>{subTitle}</SubTitle>}
       </Header>
       <ScrollContainer ref={containerRef} page={page}>
         <StretchedList columns={columns}>{children}</StretchedList>

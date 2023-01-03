@@ -7,11 +7,11 @@ import useCommunity from '~/social/hooks/useCommunity';
 import UICommunityCard from './UICommunityCard';
 
 const CommunityCard = ({ communityId, onClick, ...props }) => {
-  const { community, file, communityCategories } = useCommunity(communityId);
+  const { community, file, communityCategories, joinCommunity } = useCommunity(communityId);
   const { fileId } = file;
   const fileUrl = useImage({ fileId });
 
-  const { membersCount, description } = community;
+  const { membersCount, description, isJoined } = community;
 
   return (
     <UICommunityCard
@@ -24,6 +24,9 @@ const CommunityCard = ({ communityId, onClick, ...props }) => {
       isPublic={community.isPublic}
       name={community.displayName}
       onClick={onClick}
+      onClickJoin={joinCommunity}
+      isJoining={false}
+      isJoined={isJoined}
       {...props}
     />
   );

@@ -11,6 +11,7 @@ import CommunityCard from '~/social/components/community/Card';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
+const COMMUNITY_FETCH_NUM = 15;
 const COLUMN_CONFIG = { 1024: 2, 1280: 3, 1440: 3, 1800: 3 };
 
 const Skeleton = ({ size = 4 }) =>
@@ -22,18 +23,27 @@ const RecommendedList = ({ category, communityLimit = 5 }) => {
   const [communities = [], , , loading] = useCommunitiesList({
     categoryId: category.categoryId,
     sortBy: CommunitySortingMethod.DisplayName,
-    limit: communityLimit,
+    limit: COMMUNITY_FETCH_NUM,
   });
+
+  const formattedCommunities = useMemo(
+    () => communities.filter((c) => !c.isJoined).slice(0, communityLimit),
+    [communities],
+  );
 
   const title = category.name;
 
   return (
     <>
-      <HorizontalList title={title} columns={COLUMN_CONFIG}>
+      <HorizontalList
+        title={title}
+        subTitle={category.metadata?.description}
+        columns={COLUMN_CONFIG}
+      >
         {loading && <Skeleton />}
 
         {!loading &&
-          communities.map(({ communityId }) => (
+          formattedCommunities.map(({ communityId }) => (
             <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
           ))}
       </HorizontalList>

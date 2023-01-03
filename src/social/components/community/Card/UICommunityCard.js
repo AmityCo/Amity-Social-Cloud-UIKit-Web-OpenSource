@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Stack } from '@noom/wax-component-library';
+import { Button, Stack, Icon } from '@noom/wax-component-library';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 
@@ -9,16 +9,7 @@ import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 
-import {
-  CategoriesList,
-  CommunityName,
-  Container,
-  Content,
-  Count,
-  Cover,
-  CoverContent,
-  Description,
-} from './styles';
+import { CommunityName, Container, Content, Count, Cover, Description } from './styles';
 
 const UICommunityCard = ({
   avatarFileUrl,
@@ -31,10 +22,19 @@ const UICommunityCard = ({
   isPublic,
   name,
   loading,
+  onClickJoin,
+  isJoining,
+  isJoined,
   showMemberCount,
   ...props
 }) => {
   const handleClick = () => onClick(communityId);
+  const handleButtonClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    onClickJoin();
+  };
 
   return (
     <Container onClick={handleClick} {...props}>
@@ -42,17 +42,21 @@ const UICommunityCard = ({
 
       <Content>
         <Stack spacing={3}>
-          <CommunityName
-            isOfficial={isOfficial}
-            isPublic={isPublic}
-            isTitle
-            name={name}
-            truncate={2}
-          />
+          {loading ? (
+            <Skeleton count={1} style={{ fontSize: 14 }} />
+          ) : (
+            <CommunityName
+              isOfficial={isOfficial}
+              isPublic={isPublic}
+              isTitle
+              name={name}
+              truncate={2}
+            />
+          )}
 
           {loading && <Skeleton count={2} style={{ fontSize: 8 }} />}
 
-          {!loading && description && (
+          {!loading && (
             <Truncate lines={2}>
               <Description title={description}>{description}</Description>
             </Truncate>
@@ -65,8 +69,15 @@ const UICommunityCard = ({
             </Count>
           )}
 
-          <Button width="100%" size="lg" colorScheme="secondary" isLoading={loading}>
-            <FormattedMessage id="community.join" />
+          <Button
+            width="100%"
+            size="lg"
+            colorScheme="secondary"
+            isLoading={loading || isJoining}
+            isDisabled={isJoined}
+            onClick={handleButtonClick}
+          >
+            {isJoined ? <Icon icon="check" /> : <FormattedMessage id="community.join" />}
           </Button>
         </Stack>
       </Content>
@@ -101,6 +112,9 @@ UICommunityCard.propTypes = {
   loading: PropTypes.bool,
   onClick: PropTypes.func,
   showMemberCount: PropTypes.bool,
+  onClickJoin: PropTypes.func,
+  isJoining: PropTypes.bool,
+  isJoined: PropTypes.bool,
 };
 
 export default customizableComponent('UICommunityCard', UICommunityCard);

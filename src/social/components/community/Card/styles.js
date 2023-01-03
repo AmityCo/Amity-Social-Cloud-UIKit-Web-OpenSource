@@ -68,4 +68,5 @@ export const Count = styled.div`
 
 export const Description = styled.div`
   ${({ theme }) => theme.typography.caption}
+  min-height: 2.5em;
 `;
