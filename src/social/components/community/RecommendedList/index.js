@@ -24,23 +24,16 @@ const RecommendedList = ({ category, communityLimit = 5 }) => {
     categoryId: category.categoryId,
     sortBy: CommunitySortingMethod.DisplayName,
     limit: COMMUNITY_FETCH_NUM,
+    filter: 'notMember',
   });
 
   /*
-   * Select {communityLimit} non joined communities out of {COMMUNITY_FETCH_NUM}
-   * If less then {communityLimit} are available pad the list with joined communities
-   * to avoid a broken UI
+   * To not remove the newly joined communities from the list we cache the first result
    */
   const formattedCommunities = useMemo(() => {
     const notJoinedCommunities = communities.filter((c) => !c.isJoined);
-    const joinedCommunities = communities.filter((c) => c.isJoined);
-    return [
-      ...notJoinedCommunities.slice(0, communityLimit),
-      ...joinedCommunities
-        .filter((c) => c.isJoined)
-        .slice(0, Math.max(0, communityLimit - notJoinedCommunities.length)),
-    ];
-  }, [communities.length]);
+    return notJoinedCommunities.slice(0, communityLimit);
+  }, [communities.length > 0]);
 
   const title = category.name;
 
