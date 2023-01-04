@@ -22,7 +22,7 @@ const RecommendedList = ({ category, communityLimit = 5 }) => {
 
   const [communities = [], , , loading] = useCommunitiesList({
     categoryId: category.categoryId,
-    sortBy: CommunitySortingMethod.DisplayName,
+    sortBy: CommunitySortingMethod.FirstCreated,
     limit: COMMUNITY_FETCH_NUM,
     filter: 'notMember',
   });
@@ -36,6 +36,10 @@ const RecommendedList = ({ category, communityLimit = 5 }) => {
   }, [communities.length > 0]);
 
   const title = category.name;
+
+  if (!loading && communities.length === 0) {
+    return null;
+  }
 
   return (
     <>
