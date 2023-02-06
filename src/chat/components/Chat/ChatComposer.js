@@ -39,7 +39,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
 
   const defaultValues = {
     channelId: '',
-    type: '',
+    type: ChannelType.Live,
     displayName: undefined,
     avatarFileId: undefined,
     userIds: [],
