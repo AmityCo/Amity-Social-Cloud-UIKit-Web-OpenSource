@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.15.4 (2023-02-10)
+
+
+### Bug Fixes
+
+* ASC-4612 - Update default values for channel creation ([#79](https://github.com/EkoCommunications/AmityUiKitWeb/issues/79)) ([7e22ca5](https://github.com/EkoCommunications/AmityUiKitWeb/commit/7e22ca56a240400f2900a9997f0912ab9cf8cfa5))
+
+### 2.15.3 (2023-01-31)
+
+### 2.15.2 (2022-12-23)
+
+
+### Bug Fixes
+
+* ASC-7914 - added subscription for community RTE events ([#76](https://github.com/EkoCommunications/AmityUiKitWeb/issues/76)) ([05ad4c3](https://github.com/EkoCommunications/AmityUiKitWeb/commit/05ad4c319d84e3dfe54b035c48414f44c8125244))
+
+### 2.15.1 (2022-12-02)
+
 ## 2.15.0 (2022-12-02)
 
 
