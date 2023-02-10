@@ -1,7 +1,13 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { FeedType, PostTargetType } from '@amityco/js-sdk';
+import {
+  EventSubscriberRepository,
+  FeedType,
+  getCommunityTopic,
+  PostTargetType,
+  SubscriptionLevels,
+} from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 import CommunityCreatedModal from '~/social/components/CommunityCreatedModal';
 
@@ -41,6 +47,14 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   );
 
   const [activeTab, setActiveTab] = useState(CommunityFeedTabs.TIMELINE);
+
+  useEffect(() => {
+    const topic = getCommunityTopic(community, SubscriptionLevels.POST);
+    EventSubscriberRepository.subscribe(topic);
+
+    return () => EventSubscriberRepository.unsubscribe(topic);
+    // eslint-disable-next-line
+  }, [community.id]);
 
   useEffect(() => {
     if (!tabs.find((tab) => tab.value === activeTab)) {
