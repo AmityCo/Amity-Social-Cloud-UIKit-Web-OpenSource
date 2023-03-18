@@ -23,6 +23,7 @@ const GroupSettings = ({
 
   return (
     <Modal
+      data-qa-anchor="group-settings-modal"
       isOpen={false}
       size="small"
       title={title || formatMessage({ id: 'chat.create.modalTitle' })}

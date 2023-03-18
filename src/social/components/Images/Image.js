@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
-import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 
 import {
@@ -35,24 +33,26 @@ const Image = ({ image, onClick, onRemove, numberOfHiddenImages }) => {
   };
 
   return (
-    <ImageContainer onClick={onClick}>
-      <ConditionalRender condition={numberOfHiddenImages > 0}>
+    <ImageContainer data-qa-anchor="image" onClick={onClick}>
+      {numberOfHiddenImages > 0 && (
         <NumberOfHiddenImagesOverlay>+ {numberOfHiddenImages}</NumberOfHiddenImagesOverlay>
-      </ConditionalRender>
-      <ConditionalRender condition={isNew}>
+      )}
+
+      {isNew && (
         <OverlayContainer>
           <LoadingOverlay />
           <ProgressBarContainer>
             <ProgressBar progress={progress} lightMode />
           </ProgressBarContainer>
         </OverlayContainer>
-      </ConditionalRender>
-      <ConditionalRender condition={onRemove}>
+      )}
+
+      {onRemove && (
         <CircleButton onClick={removeImage}>
           <CloseIcon />
         </CircleButton>
-      </ConditionalRender>
-      <img src={image.url} alt={image.name} />
+      )}
+      <img src={image.url} alt={image.name} loading="lazy" />
     </ImageContainer>
   );
 };

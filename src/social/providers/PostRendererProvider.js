@@ -5,7 +5,10 @@ import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRender
 const defaultValue = {
   [PostDataType.TextPost]: DefaultPostRenderer,
   [PostDataType.ImagePost]: DefaultPostRenderer,
+  [PostDataType.VideoPost]: DefaultPostRenderer,
   [PostDataType.FilePost]: DefaultPostRenderer,
+  [PostDataType.LivestreamPost]: DefaultPostRenderer,
+  [PostDataType.PollPost]: DefaultPostRenderer,
 };
 
 export const PostRendererContext = createContext(defaultValue);
@@ -13,7 +16,7 @@ export const PostRendererContext = createContext(defaultValue);
 export const usePostRenderer = () => useContext(PostRendererContext);
 
 export default ({ children, postRenderers }) => {
-  const value = useMemo(() => ({ ...postRenderers, ...defaultValue }), [postRenderers]);
+  const value = useMemo(() => ({ ...defaultValue, ...postRenderers }), [postRenderers]);
 
   return <PostRendererContext.Provider value={value}>{children}</PostRendererContext.Provider>;
 };

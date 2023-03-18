@@ -1,11 +1,13 @@
 // TODO add errors handling
 import { useState, useEffect } from 'react';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const useLiveObject = (
   createLiveObject,
   dependencies = [],
   resolver = () => dependencies.some((dep) => !dep),
 ) => {
+  const { connected } = useSDK();
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -17,7 +19,7 @@ const useLiveObject = (
 
     return () => liveObject.dispose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, dependencies);
+  }, [connected, ...dependencies]);
 
   return data;
 };

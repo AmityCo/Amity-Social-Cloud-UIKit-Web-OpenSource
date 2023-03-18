@@ -21,10 +21,8 @@ Button.argTypes = {
     },
   },
   variant: {
-    control: {
-      type: 'select',
-      options: ['primary', 'secondary'],
-    },
+    control: { type: 'select' },
+    options: ['primary', 'secondary'],
   },
   disabled: {
     control: {

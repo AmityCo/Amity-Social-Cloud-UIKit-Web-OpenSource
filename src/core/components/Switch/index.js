@@ -5,7 +5,7 @@ const Switch = ({
   disabled = false,
   value = false,
   onChange = () => {},
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   ...props
 }) => {
   const cb = useCallback(() => {
@@ -13,12 +13,12 @@ const Switch = ({
   }, [value, onChange]);
 
   return (
-    <SwitchLabel {...props} disabled={disabled} data-qa-anchor={dataQaAnchor}>
+    <SwitchLabel {...props} disabled={disabled} data-qa-anchor={`${dataQaAnchor}-label`}>
       <SwitchInput
         type="checkbox"
         value={value}
         checked={value}
-        data-qa-anchor={`${dataQaAnchor}-checkbox`}
+        data-qa-anchor={`${dataQaAnchor}-switch`}
         onChange={cb}
       />
       <SwitchSlider disabled={disabled} />

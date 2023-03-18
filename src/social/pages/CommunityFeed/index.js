@@ -1,13 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-import { FeedType, PostTargetType } from '@amityco/js-sdk';
+import {
+  EventSubscriberRepository,
+  FeedType,
+  getCommunityTopic,
+  PostTargetType,
+  SubscriptionLevels,
+} from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 import CommunityCreatedModal from '~/social/components/CommunityCreatedModal';
 
 import useCommunity from '~/social/hooks/useCommunity';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import withSDK from '~/core/hocs/withSDK';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 
@@ -33,20 +38,23 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   const tabs = useMemo(
     () =>
       getTabs(
-        community?.needApprovalOnPostCreation,
+        community?.postSetting,
         community?.isJoined,
         canReviewCommunityPosts,
         pendingPostCount,
       ),
-    [
-      community?.needApprovalOnPostCreation,
-      community?.isJoined,
-      canReviewCommunityPosts,
-      pendingPostCount,
-    ],
+    [community?.postSetting, community?.isJoined, canReviewCommunityPosts, pendingPostCount],
   );
 
   const [activeTab, setActiveTab] = useState(CommunityFeedTabs.TIMELINE);
+
+  useEffect(() => {
+    const topic = getCommunityTopic(community, SubscriptionLevels.POST);
+    EventSubscriberRepository.subscribe(topic);
+
+    return () => EventSubscriberRepository.unsubscribe(topic);
+    // eslint-disable-next-line
+  }, [community.id]);
 
   useEffect(() => {
     if (!tabs.find((tab) => tab.value === activeTab)) {
@@ -62,9 +70,14 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
     <Wrapper>
       <CommunityInfo communityId={communityId} />
 
-      <FeedHeaderTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      <FeedHeaderTabs
+        data-qa-anchor="community-feed-header"
+        tabs={tabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+      />
 
-      <ConditionalRender condition={activeTab === CommunityFeedTabs.TIMELINE}>
+      {activeTab === CommunityFeedTabs.TIMELINE && (
         <Feed
           targetType={PostTargetType.CommunityFeed}
           targetId={communityId}
@@ -72,15 +85,13 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
           showPostCreator={isJoined}
           feedType={FeedType.Published}
         />
-      </ConditionalRender>
+      )}
 
       {activeTab === CommunityFeedTabs.GALLERY && (
         <MediaGallery targetType={PostTargetType.CommunityFeed} targetId={communityId} />
       )}
 
-      <ConditionalRender condition={activeTab === CommunityFeedTabs.MEMBERS}>
-        <CommunityMembers communityId={communityId} />
-      </ConditionalRender>
+      {activeTab === CommunityFeedTabs.MEMBERS && <CommunityMembers communityId={communityId} />}
 
       {activeTab === CommunityFeedTabs.PENDING && (
         <>

@@ -10,7 +10,6 @@ import UserInfo from '~/social/components/UserInfo';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 
 import Feed from '~/social/components/Feed';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import Followers from '~/social/pages/UserFeed/Followers';
 
 import { tabs, UserFeedTabs } from './constants';
@@ -44,29 +43,34 @@ const UserFeed = ({ userId, currentUserId, networkSettings }) => {
         isPrivateNetwork={isPrivateNetwork}
       />
 
-      <FeedHeaderTabs tabs={filteredTabs} activeTab={activeTab} onChange={setActiveTab} />
+      <FeedHeaderTabs
+        data-qa-anchor="user-feed-header"
+        tabs={filteredTabs}
+        activeTab={activeTab}
+        onChange={setActiveTab}
+      />
 
-      <ConditionalRender condition={activeTab === UserFeedTabs.TIMELINE}>
+      {activeTab === UserFeedTabs.TIMELINE && (
         <Feed
           targetType={isMe ? PostTargetType.MyFeed : PostTargetType.UserFeed}
           targetId={userId}
           showPostCreator={isMe}
           isHiddenProfile={isHiddenProfile}
         />
-      </ConditionalRender>
+      )}
 
       {activeTab === UserFeedTabs.GALLERY && (
         <MediaGallery targetType={PostTargetType.UserFeed} targetId={userId} />
       )}
 
-      <ConditionalRender condition={activeTab === UserFeedTabs.FOLLOWERS && !isHiddenProfile}>
+      {activeTab === UserFeedTabs.FOLLOWERS && !isHiddenProfile && (
         <Followers
           userId={userId}
           activeTab={followActiveTab}
           setActiveTab={setFollowActiveTab}
           setUserFeedTab={setActiveTab}
         />
-      </ConditionalRender>
+      )}
     </Wrapper>
   );
 };

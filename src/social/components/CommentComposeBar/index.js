@@ -51,7 +51,7 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, po
       });
     }
 
-    const { metadata, mentionees } = extractMetadata(markup, mentions);
+    const { metadata, mentionees } = extractMetadata(mentions);
 
     onSubmit(text, mentionees, metadata);
     clearAll();
@@ -76,6 +76,7 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, po
       <Avatar avatar={file?.fileUrl} backgroundImage={UserImage} />
       <CommentComposeBarInput
         ref={commentInputRef}
+        data-qa-anchor="comment-compose-bar-textarea"
         placeholder={placeholder}
         type="text"
         value={markup}
@@ -85,7 +86,15 @@ const CommentComposeBar = ({ className, userToReply, onSubmit, currentUserId, po
         onChange={onChange}
         onKeyPress={(e) => e.key === 'Enter' && addComment()}
       />
-      <AddCommentButton disabled={isEmpty} onClick={addComment}>
+      <AddCommentButton
+        data-qa-anchor={
+          userToReply
+            ? 'comment-compose-bar-reply-button'
+            : 'comment-compose-bar-add-comment-button'
+        }
+        disabled={isEmpty}
+        onClick={addComment}
+      >
         {submitButtonText}
       </AddCommentButton>
     </CommentComposeBarContainer>

@@ -50,10 +50,8 @@ Active.args = {
 
 Active.argTypes = {
   activeTab: {
-    control: {
-      type: 'select',
-      options: mockUpTabs.map((x) => x.value),
-    },
+    control: { type: 'select' },
+    options: mockUpTabs.map((x) => x.value),
   },
   onChange: { action: 'onChange()' },
 };
@@ -75,10 +73,8 @@ ActiveMediaGalleryTabs.args = {
 
 ActiveMediaGalleryTabs.argTypes = {
   activeTab: {
-    control: {
-      type: 'select',
-      options: mockUpTabs.map((x) => x.value),
-    },
+    control: { type: 'select' },
+    options: mockUpTabs.map((x) => x.value),
   },
   onChange: { action: 'onChange()' },
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, createRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FileRepository, ImageSize } from '@amityco/js-sdk';
 
@@ -11,11 +11,8 @@ import useMessagesList from '~/chat/hooks/useMessagesList';
 import { InfiniteScrollContainer, MessageListContainer } from './styles';
 
 const MessageList = ({ client, channelId }) => {
+  const containerRef = useRef();
   const [messages, hasMore, loadMore] = useMessagesList(channelId);
-
-  const { currentUserId } = client;
-
-  const containerRef = createRef();
 
   const getAvatar = ({ user: { avatarCustomUrl, avatarFile, avatarFileId } }) => {
     if (avatarCustomUrl) return avatarCustomUrl;
@@ -23,7 +20,7 @@ const MessageList = ({ client, channelId }) => {
     if (avatarFileId) {
       return FileRepository.getFileUrlById({
         fileId: avatarFileId,
-        imageSize: ImageSize.Medium,
+        imageSize: ImageSize.Small,
       });
     }
 
@@ -47,16 +44,15 @@ const MessageList = ({ client, channelId }) => {
         loader={<span key={0}>Loading...</span>}
         isReverse
       >
-        <MessageListContainer ref={containerRef}>
+        <MessageListContainer ref={containerRef} data-qa-anchor="message-list">
           {messages.map((message, i) => {
             const nextMessage = messages[i + 1];
             const isConsequent = nextMessage && nextMessage.userId === message.userId;
-            const isIncoming = message.userId !== currentUserId;
+            const isIncoming = message.userId !== client.currentUserId;
 
             return (
               <MessageComponent
                 key={message.messageId}
-                data-qa-anchor="chat-message-list-message"
                 avatar={getAvatar(message)}
                 messageId={message.messageId}
                 data={message.data}
@@ -66,6 +62,7 @@ const MessageList = ({ client, channelId }) => {
                 userDisplayName={message.user.displayName}
                 isConsequent={isConsequent}
                 isIncoming={isIncoming}
+                containerRef={containerRef}
               />
             );
           })}

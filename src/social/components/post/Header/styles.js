@@ -29,7 +29,10 @@ export const ArrowSeparator = styled(ArrowRight).attrs({
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
-export const ShieldIcon = styled(Shield)`
+export const ShieldIcon = styled(Shield).attrs({
+  height: '14px',
+  width: '14px',
+})`
   margin-right: 4px;
 `;
 

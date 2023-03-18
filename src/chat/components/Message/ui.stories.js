@@ -29,6 +29,6 @@ UIMessage.args = {
 
 UIMessage.argTypes = {
   messageId: { control: { disable: true } },
-  type: { control: { type: 'select', options: Object.values(MessageType) } },
+  type: { control: { type: 'select' }, options: Object.values(MessageType) },
   createdAt: { control: { type: 'date' } },
 };

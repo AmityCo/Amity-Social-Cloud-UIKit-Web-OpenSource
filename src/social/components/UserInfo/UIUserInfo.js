@@ -11,7 +11,6 @@ import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as UserImage } from '~/icons/User';
 
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
-import { useSDK } from '~/core/hocs/withSDK';
 import BanIcon from '~/icons/Ban';
 
 import {
@@ -42,6 +41,7 @@ import useReport from '~/social/hooks/useReport';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { notification } from '~/core/components/Notification';
 import useFollowersList from '~/core/hooks/useFollowersList';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const UIUserInfo = ({
   userId,
@@ -109,12 +109,20 @@ const UIUserInfo = ({
   const [pendingUsers] = useFollowersList(currentUserId, FollowRequestStatus.Pending);
 
   return (
-    <Container>
+    <Container data-qa-anchor="user-info">
       <Header>
-        <Avatar avatar={fileUrl} backgroundImage={UserImage} />
+        <Avatar
+          data-qa-anchor="user-info-profile-image"
+          avatar={fileUrl}
+          backgroundImage={UserImage}
+        />
         <ActionButtonContainer>
           <ConditionalRender condition={isMyProfile}>
-            <Button disabled={!connected} onClick={() => onEditUser(userId)}>
+            <Button
+              data-qa-anchor="user-info-edit-profile-button"
+              disabled={!connected}
+              onClick={() => onEditUser(userId)}
+            >
               <PencilIcon /> <FormattedMessage id="user.editProfile" />
             </Button>
             <>
@@ -138,7 +146,7 @@ const UIUserInfo = ({
       </Header>
       <ProfileNameWrapper>
         <Truncate lines={3}>
-          <ProfileName>{displayName}</ProfileName>
+          <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
         </Truncate>
         {user.isGlobalBan && (
           <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
@@ -164,8 +172,9 @@ const UIUserInfo = ({
         </ClickableCount>
         <FormattedMessage id="counter.followers" />
       </CountContainer>
-      <Description>{description}</Description>
-      <ConditionalRender condition={isMyProfile && pendingUsers.length > 0 && isPrivateNetwork}>
+      <Description data-qa-anchor="user-info-description">{description}</Description>
+
+      {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
         <PendingNotification
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
@@ -180,7 +189,7 @@ const UIUserInfo = ({
             <FormattedMessage id="follow.pendingNotification.body" />
           </NotificationBody>
         </PendingNotification>
-      </ConditionalRender>
+      )}
     </Container>
   );
 };

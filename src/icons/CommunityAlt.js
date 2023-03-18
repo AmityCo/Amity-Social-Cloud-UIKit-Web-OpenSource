@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Svg = ({ className, width, height }) => (
+const Svg = (props) => (
   <svg
-    className={className}
-    width={width || '28'}
-    height={height || '28'}
+    width="28"
+    height="28"
     viewBox="0 0 28 28"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
+    {...props}
   >
     <circle cx="7.82443" cy="18.04" r="2.48767" fill="#1054DE" />
     <circle r="2.48767" transform="matrix(-1 0 0 1 22.4188 18.04)" fill="#1054DE" />

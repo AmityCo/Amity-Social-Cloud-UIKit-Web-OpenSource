@@ -2,16 +2,20 @@ import { PostRepository, PostTargetType } from '@amityco/js-sdk';
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
 const { queryAllPosts, queryCommunityPosts, queryUserPosts, queryMyPosts } = PostRepository;
+const QUERY_LIMIT = 10;
 
 const useFeed = ({ targetType, targetId, feedType }) => {
   const FeedQueryTypes = {
-    [PostTargetType.GlobalFeed]: queryAllPosts,
+    [PostTargetType.GlobalFeed]: queryAllPosts.bind(this, {
+      limit: QUERY_LIMIT,
+    }),
     [PostTargetType.CommunityFeed]: queryCommunityPosts.bind(this, {
       communityId: targetId,
       feedType,
+      limit: QUERY_LIMIT,
     }),
-    [PostTargetType.UserFeed]: queryUserPosts.bind(this, { userId: targetId }),
-    [PostTargetType.MyFeed]: queryMyPosts,
+    [PostTargetType.UserFeed]: queryUserPosts.bind(this, { userId: targetId, limit: QUERY_LIMIT }),
+    [PostTargetType.MyFeed]: queryMyPosts.bind(this, { limit: QUERY_LIMIT }),
   };
 
   // Override default resolver because for MyFeed and GlobalFeed there does not need to be a targetId.

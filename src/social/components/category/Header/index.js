@@ -15,7 +15,7 @@ const CategoryHeader = ({ className, categoryId, children, loading, onClick }) =
       category.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: category.avatarFileId,
-        imageSize: ImageSize.Medium,
+        imageSize: ImageSize.Small,
       }),
     [category.avatarFileId],
   );

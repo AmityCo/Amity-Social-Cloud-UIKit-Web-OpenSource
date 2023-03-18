@@ -23,8 +23,7 @@ export const ChatDetailsHeader = styled.div`
 `;
 
 // TODO IconButton
-export const HeaderCloseIcon = styled(Close)`
-  font-size: 20px;
+export const HeaderCloseIcon = styled(Close).attrs({ width: 20, height: 20 })`
   color: ${({ theme }) => theme.palette.neutral.main};
   cursor: pointer;
 `;

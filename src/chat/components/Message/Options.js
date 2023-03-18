@@ -1,5 +1,6 @@
+import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
-import { MessageEditorRepository, MessageFlagRepository } from '@amityco/js-sdk';
+import { MessageRepository } from '@amityco/js-sdk';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import Popover from '~/core/components/Popover';
@@ -8,29 +9,25 @@ import { notification } from '~/core/components/Notification';
 
 import { MessageOptionsIcon, SaveIcon, CloseIcon, EditingInput, EditingContainer } from './styles';
 
+const StyledPopover = styled(Popover)`
+  ${({ align, theme }) => align === 'end' && `color: ${theme.palette.neutral.main};`}
+`;
+
 const Flagging = ({ messageId }) => {
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(null);
-  const [flagRepo, setFlagRepo] = useState(null);
-
   useEffect(() => {
     if (!messageId) return;
-    const flagRepository = new MessageFlagRepository(messageId);
-    setFlagRepo(flagRepository);
-    flagRepository.isFlaggedByMe().then(setIsFlaggedByMe);
+    MessageRepository.isFlaggedByMe(messageId).then(setIsFlaggedByMe);
   }, [messageId]);
 
   const flagMessage = () => {
-    if (!flagRepo) return;
-
-    flagRepo.flag().then(() => {
+    MessageRepository.flag(messageId).then(() => {
       setIsFlaggedByMe(true);
     });
   };
 
   const unflagMessage = () => {
-    if (!flagRepo) return;
-
-    flagRepo.unflag().then(() => {
+    MessageRepository.unflag(messageId).then(() => {
       setIsFlaggedByMe(false);
     });
   };
@@ -48,7 +45,8 @@ const Flagging = ({ messageId }) => {
   );
 };
 
-const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
+const Options = ({ isIncoming, messageId, data, isSupportedMessageType, popupContainerRef }) => {
+  // const popupContainerRef = useRef();
   const [text, setText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
@@ -72,32 +70,29 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   };
 
   const save = () => {
-    const editor = new MessageEditorRepository(messageId);
-    editor
-      .editText(text)
+    MessageRepository.updateMessage({ messageId, data: { text } })
+      .then(close)
       .catch(() => {
         notification.error({
           content: formatMessage({ id: 'message.saveOptionsError' }),
         });
-      })
-      .then(close);
+      });
   };
 
   const deleteMessage = () => {
-    const editor = new MessageEditorRepository(messageId);
-    editor.delete().then(close);
+    MessageRepository.deleteMessage(messageId).then(close);
   };
 
   const menu = (
     <Menu>
       {!isIncoming && isSupportedMessageType && (
-        <MenuItem onClick={edit}>
+        <MenuItem data-qa-anchor="message-menu-item-edit" onClick={edit}>
           <FormattedMessage id="message.edit" />
         </MenuItem>
       )}
       {isIncoming && <Flagging messageId={messageId} />}
       {!isIncoming && (
-        <MenuItem onClick={deleteMessage}>
+        <MenuItem data-qa-anchor="message-menu-item-delete" onClick={deleteMessage}>
           <FormattedMessage id="message.delete" />
         </MenuItem>
       )}
@@ -107,6 +102,7 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
   const editing = (
     <EditingContainer>
       <EditingInput
+        data-qa-anchor="message-edit-input"
         autoFocus
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -115,23 +111,30 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType }) => {
           if (e.key === 'Escape') close();
         }}
       />
-      <SaveIcon onClick={save} />
+      <SaveIcon data-qa-anchor="message-save-button" onClick={save} />
       <CloseIcon onClick={close} />
     </EditingContainer>
   );
 
   return (
-    <Popover
+    <StyledPopover
       isOpen={isOpen}
-      position="bottom"
+      positions={['bottom', 'top']}
       align={isIncoming ? 'start' : 'end'}
       content={isEditing ? editing : menu}
+      parentElement={popupContainerRef.current}
       onClickOutside={close}
     >
-      <div role="button" tabIndex={0} onClick={open} onKeyDown={open}>
+      <div
+        data-qa-anchor="message-options-button"
+        role="button"
+        tabIndex={0}
+        onClick={open}
+        onKeyDown={open}
+      >
         <MessageOptionsIcon />
       </div>
-    </Popover>
+    </StyledPopover>
   );
 };
 

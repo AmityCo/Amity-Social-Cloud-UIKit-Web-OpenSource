@@ -1,10 +1,10 @@
+import { CommunityPostSettings } from '@amityco/js-sdk';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { toHumanString } from 'human-readable-numbers';
 import Truncate from 'react-truncate-markup';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import Button from '~/core/components/Button';
 import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';
@@ -45,15 +45,16 @@ const UICommunityInfo = ({
   canLeaveCommunity,
   canReviewPosts,
   name,
-  needApprovalOnPostCreation,
+  postSetting,
 }) => {
   const { formatMessage } = useIntl();
 
   return (
-    <Container>
+    <Container data-qa-anchor="community-info">
       <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
         <CoverContent>
           <CommunityName
+            data-qa-anchor="community-info"
             isOfficial={isOfficial}
             isPublic={isPublic}
             isTitle
@@ -80,47 +81,56 @@ const UICommunityInfo = ({
               </div>
             </Count>
           </CountsContainer>
-          <ConditionalRender condition={isJoined}>
+
+          {isJoined && (
             <OptionMenu
-              data-qa-anchor="social-community-3dots"
+              data-qa-anchor="community-info-options-button"
               options={[
                 canEditCommunity && {
                   name: formatMessage({ id: 'community.settings' }),
                   action: () => onEditCommunity(communityId),
+                  dataQaAnchorMenuItem: 'settings',
                 },
                 canLeaveCommunity && {
                   name: formatMessage({ id: 'community.leaveCommunity' }),
                   action: () => onClickLeaveCommunity(communityId),
+                  dataQaAnchorMenuItem: 'leave-community',
                 },
               ].filter(Boolean)}
             />
-          </ConditionalRender>
+          )}
         </Header>
 
         {description && (
           <Truncate lines={3}>
-            <Description>{description}</Description>
+            <Description data-qa-anchor="community-info-description">{description}</Description>
           </Truncate>
         )}
 
-        <ConditionalRender condition={!isJoined}>
-          <JoinButton onClick={() => joinCommunity(communityId)}>
+        {!isJoined && (
+          <JoinButton
+            data-qa-anchor="community-info-join-button"
+            onClick={() => joinCommunity(communityId)}
+          >
             <PlusIcon /> <FormattedMessage id="community.join" />
           </JoinButton>
-        </ConditionalRender>
-        <ConditionalRender condition={isJoined && canEditCommunity}>
+        )}
+
+        {isJoined && canEditCommunity && (
           <Button
             fullWidth
-            data-qa-anchor="social-edit-community-button"
+            data-qa-anchor="community-info-edit-button"
             onClick={() => onEditCommunity(communityId)}
           >
             <PencilIcon /> <FormattedMessage id="community.editProfile" />
           </Button>
-        </ConditionalRender>
-
-        {needApprovalOnPostCreation && isJoined && pendingPostsCount > 0 && (
-          <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
         )}
+
+        {postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED &&
+          isJoined &&
+          pendingPostsCount > 0 && (
+            <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
+          )}
       </Content>
     </Container>
   );
@@ -141,7 +151,7 @@ UICommunityInfo.propTypes = {
   canLeaveCommunity: PropTypes.bool,
   canReviewPosts: PropTypes.bool,
   name: PropTypes.string,
-  needApprovalOnPostCreation: PropTypes.bool,
+  postSetting: PropTypes.string,
   onClickLeaveCommunity: PropTypes.func,
   onEditCommunity: PropTypes.func,
 };

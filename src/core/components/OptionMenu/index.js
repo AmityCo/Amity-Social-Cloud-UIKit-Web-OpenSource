@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-
 import { POSITION_BOTTOM, POSITION_RIGHT } from '~/helpers/getCssPosition';
-
 import UiKitDropdown from '~/core/components/Dropdown';
-import ConditionalRender from '~/core/components/ConditionalRender';
-
 import { OptionsIcon, OptionsButton, Option, Container } from './styles';
 
 const OptionMenu = ({
   className,
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   icon,
   options,
   position = POSITION_BOTTOM,
@@ -31,7 +27,7 @@ const OptionMenu = ({
   };
 
   return (
-    <ConditionalRender condition={options.length}>
+    options.length > 0 && (
       <Container className={className} pullRight={pullRight}>
         <UiKitDropdown
           data-qa-anchor={dataQaAnchor}
@@ -42,13 +38,18 @@ const OptionMenu = ({
           handleClose={() => setIsOpen(false)}
         >
           {options.map(({ name, action, className: optionClassName }) => (
-            <Option key={name} className={optionClassName} onClick={attachCanceling(action)}>
+            <Option
+              key={name}
+              data-qa-anchor={`${dataQaAnchor}-${name}`}
+              className={optionClassName}
+              onClick={attachCanceling(action)}
+            >
               <FormattedMessage id={name} />
             </Option>
           ))}
         </UiKitDropdown>
       </Container>
-    </ConditionalRender>
+    )
   );
 };
 

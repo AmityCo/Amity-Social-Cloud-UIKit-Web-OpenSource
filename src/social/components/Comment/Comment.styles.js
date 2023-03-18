@@ -86,8 +86,8 @@ const StyledComment = ({
         >
           <CommentHeader>
             <AuthorName>{authorName}</AuthorName>
-            {isBanned && <BanIcon css="margin-left: 0.265rem; margin-top: 1px;" />}
             <Truncate.Atom>
+              {isBanned && <BanIcon css="margin-left: 0.265rem; margin-top: 1px;" />}
               <CommentDate date={createdAt} />
               {editedAt - createdAt > 0 && (
                 <EditedMark>
@@ -108,10 +108,13 @@ const StyledComment = ({
               onChange={onChange}
             />
             <ButtonContainer>
-              <Button onClick={cancelEditing}>
+              <Button data-qa-anchor="comment-cancel-edit-button" onClick={cancelEditing}>
                 <FormattedMessage id="cancel" />
               </Button>
-              <PrimaryButton onClick={() => handleEdit(text)}>
+              <PrimaryButton
+                data-qa-anchor="comment-save-edit-button"
+                onClick={() => handleEdit(text)}
+              >
                 <FormattedMessage id="save" />
               </PrimaryButton>
             </ButtonContainer>
@@ -119,20 +122,24 @@ const StyledComment = ({
           <CommentText text={text} mentionees={mentionees} metadata={metadata} />
         </ConditionalRender>
 
-        <ConditionalRender condition={!isEditing && (canLike || canReply || options.length > 0)}>
+        {!isEditing && (canLike || canReply || options.length > 0) && (
           <InteractionBar>
-            <ConditionalRender condition={canLike}>
-              <CommentLikeButton commentId={commentId} />
-            </ConditionalRender>
+            {canLike && <CommentLikeButton commentId={commentId} />}
 
-            <ConditionalRender condition={canReply}>
-              <ReplyButton onClick={onClickReply}>
+            {canReply && (
+              <ReplyButton data-qa-anchor="comment-reply-button" onClick={onClickReply}>
                 <ReplyIcon /> <FormattedMessage id="reply" />
               </ReplyButton>
-            </ConditionalRender>
-            <OptionMenu options={options} pullRight={false} align={POSITION_LEFT} />
+            )}
+
+            <OptionMenu
+              data-qa-anchor="comment-options-button"
+              options={options}
+              pullRight={false}
+              align={POSITION_LEFT}
+            />
           </InteractionBar>
-        </ConditionalRender>
+        )}
       </Content>
     </>
   );

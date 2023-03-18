@@ -27,7 +27,8 @@ export const emptyState = ({ iconType, ...props }) => {
 
 emptyState.argTypes = {
   iconType: {
-    control: { type: 'select', options: Object.values(IconTypes) },
+    control: { type: 'select' },
+    options: Object.values(IconTypes),
   },
   title: { control: { type: 'text' } },
   description: { control: { type: 'text' } },

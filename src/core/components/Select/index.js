@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import useKeyboard from '~/core/hooks/useKeyboard';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import Dropdown from '~/core/components/Dropdown';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { ChevronDown } from '~/icons';
 import { DefaultTrigger, ItemsContainer } from './styles';
 
@@ -12,14 +11,16 @@ const itemRenderer = ({ value }) => <div>{value}</div>;
 const triggerRenderer = ({ placeholder, selected, ...props }) => {
   return (
     <DefaultTrigger {...props}>
-      <ConditionalRender condition={selected.length}>
+      {selected.length ? (
         <ItemsContainer>
           {selected.map(({ name, value }) => (
             <span key={value}>{name}</span>
           ))}
         </ItemsContainer>
+      ) : (
         <div>{placeholder}</div>
-      </ConditionalRender>
+      )}
+
       <ChevronDown height={14} width={14} />
     </DefaultTrigger>
   );
@@ -39,6 +40,7 @@ const Select = ({
   handleClose,
   placeholder = 'Select...',
   className = '',
+  'data-qa-anchor': dataQaAnchor = '',
 }) => {
   const [isOpenInternal, setIsOpenInternal] = useState(isOpen);
   const [selected, setSelected] = useState(value);
@@ -86,6 +88,7 @@ const Select = ({
 
   return (
     <Dropdown
+      data-qa-anchor={`${dataQaAnchor}-select-dropdown`}
       isOpen={isOpen || isOpenInternal}
       renderTrigger={(props) =>
         renderTrigger({ ...props, onClick: handleClick, selected, remove, placeholder })
@@ -98,12 +101,13 @@ const Select = ({
       disabled={disabled}
       className={className}
     >
-      <ConditionalRender condition={options && options.length}>
+      {options && options.length > 0 && (
         <Menu>
           {options.map((option) => {
             return (
               <MenuItem
                 key={option.value}
+                data-qa-anchor={`${dataQaAnchor}-select-menu-item`}
                 active={selected.find((item) => item.value === option.value)}
                 onClick={() => handleSelect(option)}
               >
@@ -112,18 +116,14 @@ const Select = ({
             );
           })}
         </Menu>
-      </ConditionalRender>
+      )}
     </Dropdown>
   );
 };
 Select.propTypes = {
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      value: PropTypes.any,
-    }),
-  ),
+  'data-qa-anchor': PropTypes.string,
+  value: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })),
+  options: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, value: PropTypes.any })),
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
   parentContainer: PropTypes.instanceOf(Element),

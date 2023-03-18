@@ -1,13 +1,13 @@
 import React from 'react';
 
-const Svg = ({ width = '100%', height = '100%', className = '' }) => (
+const Svg = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={width}
-    height={height}
+    width="100%"
+    height="100%"
     viewBox="0 0 512 512"
-    className={className}
     fill="currentColor"
+    {...props}
   >
     <path
       d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6

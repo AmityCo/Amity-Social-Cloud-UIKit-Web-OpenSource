@@ -36,15 +36,17 @@ const FormBlock = ({ title, children }) => (
 
 const UserProfileForm = ({ user, onSubmit, className }) => {
   const { formatMessage } = useIntl();
-  const { register, handleSubmit, errors, watch, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    control,
+  } = useForm({
     defaultValues: {
-      ...user,
+      displayName: user.displayName,
       description: user.description ?? '',
-      avatarFileId: user.avatarFileId ?? '',
-    } || {
-      avatarFileId: '',
-      displayName: '',
-      description: '',
+      avatarFileId: user.avatarFileId ?? null,
     },
   });
 
@@ -57,7 +59,9 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
         <FormBlock title={<FormattedMessage id="UserProfileForm.title" />}>
           <Controller
             name="avatarFileId"
-            render={(props) => <AvatarUploader {...props} />}
+            render={({ field: { ref, ...rest } }) => (
+              <AvatarUploader {...rest} data-qa-anchor="user-profile-form-avatar-uploader" />
+            )}
             control={control}
           />
           <Field error={errors.name}>
@@ -68,12 +72,11 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               <Counter>{displayName.length}/100</Counter>
             </LabelCounterWrapper>
             <TextField
-              ref={register({
+              {...register('displayName', {
                 required: formatMessage({ id: 'UserProfileForm.requiredDisplayName' }),
               })}
+              data-qa-anchor="user-profile-form-display-name-input"
               placeholder={formatMessage({ id: 'UserProfileForm.namePlaceholder' })}
-              id="displayName"
-              name="displayName"
               maxLength={100}
             />
             <ErrorMessage errors={errors} name="displayName" />
@@ -86,15 +89,15 @@ const UserProfileForm = ({ user, onSubmit, className }) => {
               <Counter>{description.length}/180</Counter>
             </LabelCounterWrapper>
             <AboutTextarea
-              ref={register()}
+              {...register('description')}
+              data-qa-anchor="user-profile-form-description-textarea"
               placeholder={formatMessage({ id: 'UserProfileForm.requiredDescription' })}
-              name="description"
               maxLength={180}
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
           <ButtonContainer>
-            <PrimaryButton type="submit">
+            <PrimaryButton data-qa-anchor="user-profile-form-save-button" type="submit">
               <FormattedMessage id="save" />
             </PrimaryButton>
           </ButtonContainer>

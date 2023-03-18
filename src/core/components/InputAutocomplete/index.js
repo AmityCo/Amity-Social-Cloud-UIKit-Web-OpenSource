@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import InputText from '~/core/components/InputText';
 import Menu from '~/core/components/Menu';
 import Suggestions from '~/core/components/Suggestions';
@@ -30,6 +29,7 @@ const defaultRender = (item, value) => <Highlight key={item} text={item} query={
 const defaultFilter = (items, value) => items.filter((item) => item.includes(value));
 
 const InputAutocomplete = ({
+  'data-qa-anchor': dataQaAnchor = '',
   value,
   setValue,
   placeholder,
@@ -100,6 +100,7 @@ const InputAutocomplete = ({
   return (
     <Container ref={containerRef}>
       <InputText
+        data-qa-anchor={dataQaAnchor}
         value={value}
         invalid={invalid}
         disabled={disabled}
@@ -112,7 +113,7 @@ const InputAutocomplete = ({
       />
       {open && (
         <SuggestionsMenu>
-          <ConditionalRender condition={Object.keys(items).length > 1}>
+          {Object.keys(items).length > 1 && (
             <InputAutocompleteTabs
               tabs={Object.keys(items).map((key) => ({
                 value: key,
@@ -121,7 +122,8 @@ const InputAutocomplete = ({
               activeTab={activeTab}
               onChange={setActiveTab}
             />
-          </ConditionalRender>
+          )}
+
           <Suggestions items={filtered} append={LoadMoreButton} onPick={onPickSuggestion}>
             {(item) => render(item, value, activeTab)}
           </Suggestions>
@@ -141,6 +143,7 @@ InputAutocomplete.defaultProps = {
 };
 
 InputAutocomplete.propTypes = {
+  'data-qa-anchor': PropTypes.string,
   value: PropTypes.string.isRequired,
   setValue: PropTypes.func.isRequired,
   placeholder: PropTypes.string,

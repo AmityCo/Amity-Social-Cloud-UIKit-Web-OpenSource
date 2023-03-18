@@ -25,7 +25,12 @@ const FormBlock = ({ children }) => (
 export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
   const { formatMessage } = useIntl();
 
-  const { errors, control, setError, handleSubmit } = useForm({
+  const {
+    formState: { errors },
+    control,
+    setError,
+    handleSubmit,
+  } = useForm({
     defaultValues: {
       members: [],
     },
@@ -42,7 +47,11 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
   };
 
   return (
-    <Modal title={formatMessage({ id: 'AddMemberModal.addMembers' })} onCancel={closeConfirm}>
+    <Modal
+      data-qa-anchor="add-member-modal"
+      title={formatMessage({ id: 'AddMemberModal.addMembers' })}
+      onCancel={closeConfirm}
+    >
       <FormContainer>
         <Form className={className} onSubmit={handleSubmit(validateNameAndSubmit)}>
           <FormBody>
@@ -50,7 +59,9 @@ export const AddMemberModal = ({ className, closeConfirm, onSubmit }) => {
               <MembersField error={errors.members}>
                 <Controller
                   name="members"
-                  render={(props) => <UserSelector {...props} />}
+                  render={({ field }) => (
+                    <UserSelector {...field} data-qa-anchor="add-member-modal" />
+                  )}
                   control={control}
                 />
                 <ErrorMessage errors={errors} name="members" />

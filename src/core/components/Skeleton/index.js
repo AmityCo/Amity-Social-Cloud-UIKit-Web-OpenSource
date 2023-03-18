@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactLoadingSkeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const Skeleton = ({ circle, borderRadius, primaryColor, secondaryColor, style, ...props }) => {
   return (

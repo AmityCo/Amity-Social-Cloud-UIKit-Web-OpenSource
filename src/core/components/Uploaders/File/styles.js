@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import filesize from 'filesize';
 import { useIntl } from 'react-intl';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import Button from '~/core/components/Button';
 import ProgressBar from '~/core/components/ProgressBar';
 
@@ -32,7 +31,7 @@ export const Content = styled.div`
   align-items: center;
 `;
 
-export const ImgPreview = styled.img`
+export const ImgPreview = styled.img.attrs({ loading: 'lazy' })`
   grid-area: icon;
   width: 2.5em;
   height: 100%;
@@ -86,7 +85,7 @@ const ButtonContainer = styled.div`
 `;
 
 const File = ({
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   name,
   url,
   type,
@@ -121,17 +120,20 @@ const File = ({
   return (
     <FileContainer href={url} download data-qa-anchor={dataQaAnchor}>
       <Content remove={!!onRemove}>
-        <ConditionalRender condition={isImg && !!url}>
+        {isImg && !!url ? (
           <ImgPreview src={url} />
+        ) : (
           <FileIcon file={{ name, type }} width={null} height="100%" />
-        </ConditionalRender>
-        <FileName>{name}</FileName> <FileSize>{filesize(size)}</FileSize>
+        )}
+        <FileName>{name}</FileName> <FileSize>{filesize(size, { base: 2 })}</FileSize>
         <ButtonContainer>
           {!!isRejected && (
             <RetryButton title={formatMessage({ id: 'file.reUpload' })} onClick={retryCallback} />
           )}
 
-          {!!onRemove && <RemoveButton onClick={removeCallback} />}
+          {!!onRemove && (
+            <RemoveButton data-qa-anchor="uploaders-file-remove-button" onClick={removeCallback} />
+          )}
         </ButtonContainer>
       </Content>
 
@@ -153,7 +155,7 @@ File.propTypes = {
 };
 
 File.defaultProps = {
-  'data-qa-anchor': undefined,
+  'data-qa-anchor': '',
   url: null,
   type: '',
   size: 0,

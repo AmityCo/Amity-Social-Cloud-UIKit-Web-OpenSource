@@ -2,14 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '~/core/components/Button';
-import ConditionalRender from '~/core/components/ConditionalRender';
 import { ChevronDown } from '~/icons';
-
 import useActiveElement from '~/core/hooks/useActiveElement';
 import useElementSize from '~/core/hooks/useElementSize';
 import useObserver from '~/core/hooks/useObserver';
 import { POSITION_TOP, POSITION_BOTTOM, POSITION_LEFT } from '~/helpers/getCssPosition';
-
 import { DropdownContainer, Frame, FrameContainer, ButtonContainer } from './styles';
 
 const SCROLLABLE_HEIGHT = 200;
@@ -23,7 +20,7 @@ const triggerRenderer = (props) => {
 };
 
 const Dropdown = ({
-  'data-qa-anchor': dataQaAnchor,
+  'data-qa-anchor': dataQaAnchor = '',
   isOpen,
   renderTrigger = triggerRenderer,
   children,
@@ -102,7 +99,7 @@ const Dropdown = ({
       <ButtonContainer ref={buttonContainerRef}>
         {renderTrigger({ ...defaultTriggerParams, 'data-qa-anchor': dataQaAnchor })}
       </ButtonContainer>
-      <ConditionalRender condition={isOpen || isOpenInternal}>
+      {(isOpen || isOpenInternal) && (
         <FrameContainer>
           <Frame
             position={currentPosition}
@@ -114,14 +111,14 @@ const Dropdown = ({
             {children}
           </Frame>
         </FrameContainer>
-      </ConditionalRender>
+      )}
     </DropdownContainer>
   );
 };
 
 Dropdown.propTypes = {
   'data-qa-anchor': PropTypes.string,
-  isOpen: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool,
   renderTrigger: PropTypes.func,
   children: PropTypes.node,
   position: PropTypes.string,

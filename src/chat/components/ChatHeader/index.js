@@ -18,22 +18,22 @@ import {
   MemberCount,
 } from './styles';
 
-const channelRepo = new ChannelRepository();
-
 const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) => {
-  const channel = useLiveObject(() => channelRepo.channelForId(channelId), [channelId]);
+  const channel = useLiveObject(() => ChannelRepository.getChannel(channelId), [channelId]);
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
   return (
-    <ChatHeaderContainer>
+    <ChatHeaderContainer data-qa-anchor="chat-header">
       <Channel>
         <UserAvatar
           avatarUrl={chatAvatar}
           defaultImage={channel.memberCount > 2 ? communityBackgroundImage : userBackgroundImage}
         />
-        <ChannelInfo>
-          <ChannelName>{chatName}</ChannelName>
-          <MemberCount>
+        <ChannelInfo data-qa-anchor="chat-header-channel-info">
+          <ChannelName data-qa-anchor="chat-header-channel-info-channel-name">
+            {chatName}
+          </ChannelName>
+          <MemberCount data-qa-anchor="chat-header-channel-info-member-count">
             <FormattedMessage id="chat.members.count" values={{ count: channel.memberCount }} />
           </MemberCount>
         </ChannelInfo>

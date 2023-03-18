@@ -2,8 +2,8 @@
 import { FileRepository, ImageSize } from '@amityco/js-sdk';
 import trim from 'lodash/trim';
 
-import { useSDK } from '~/core/hocs/withSDK';
 import useUser from '~/core/hooks/useUser';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const MEMBER_COUNT_PER_CASE = {
   DIRECT_CHAT: 2,
@@ -41,7 +41,7 @@ function getAvatarUrl({ avatarUrl, avatarFileId, avatarCustomUrl }) {
   if (avatarFileId) {
     return FileRepository.getFileUrlById({
       fileId: avatarFileId,
-      imageSize: ImageSize.Medium,
+      imageSize: ImageSize.Small,
     });
   }
 

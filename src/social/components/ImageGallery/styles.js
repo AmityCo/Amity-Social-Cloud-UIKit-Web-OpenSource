@@ -52,11 +52,10 @@ export const Counter = styled.div`
   ${({ theme }) => theme.typography.headline}
 `;
 
-export const CloseIcon = styled(Close)`
+export const CloseIcon = styled(Close).attrs({ width: 24, height: 24 })`
   position: absolute;
   top: 60px;
   right: 60px;
-  font-size: 24px;
   cursor: pointer;
 `;
 

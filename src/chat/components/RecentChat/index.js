@@ -18,7 +18,7 @@ const RecentChat = ({ onChannelSelect, onAddNewChannelClick, selectedChannelId }
   const [channels, hasMore, loadMore] = useChannelsList();
 
   return (
-    <RecentContainer data-qa-anchor="chat-chat-list">
+    <RecentContainer>
       <RecentHeader>
         <RecentHeaderLabel>
           <FormattedMessage id="chat.chats" />
@@ -26,9 +26,12 @@ const RecentChat = ({ onChannelSelect, onAddNewChannelClick, selectedChannelId }
         {/* this component work only with Callback and User selector on Eko Side, during Personal Mode 
         development selector was not add as there is not specific suitable design for UI Kit.
         Need to be done internaly by ASC when needed. */}
-        <CreateNewChatIcon onClick={onAddNewChannelClick} />
+        <CreateNewChatIcon
+          data-qa-anchor="chat-create-chat-button"
+          onClick={onAddNewChannelClick}
+        />
       </RecentHeader>
-      <InfiniteScrollContainer>
+      <InfiniteScrollContainer data-qa-anchor="chat-list">
         <InfiniteScroll
           initialLoad={false}
           hasMore={hasMore}
@@ -42,7 +45,6 @@ const RecentChat = ({ onChannelSelect, onAddNewChannelClick, selectedChannelId }
             channels.map((channel) => (
               <ChatItem
                 key={channel.channelId}
-                data-qa-anchor="chat-chat-list-item"
                 channel={channel}
                 isSelected={selectedChannelId === channel.channelId}
                 onSelect={onChannelSelect}

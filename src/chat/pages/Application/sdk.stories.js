@@ -21,9 +21,7 @@ ChatApplicationStory.args = {
 ChatApplicationStory.argTypes = {
   defaultChannelId: { control: { type: 'text' } },
   membershipFilter: {
-    control: {
-      type: 'select',
-      options: Object.values(ChannelMembership),
-    },
+    control: { type: 'select' },
+    options: Object.values(ChannelMembership),
   },
 };

@@ -64,6 +64,7 @@ const UICommunityHeader = ({
   loading,
 }) => (
   <CommunityHeaderContainer
+    data-qa-anchor="community-header"
     isActive={isActive}
     hasChildren={!!children}
     $loading={loading}
@@ -78,6 +79,7 @@ const UICommunityHeader = ({
       <Skeleton style={{ fontSize: 8, maxWidth: 120 }} />
     ) : (
       <CommunityName
+        data-qa-anchor="community-header"
         isActive={isActive}
         isOfficial={isOfficial}
         isPublic={isPublic}

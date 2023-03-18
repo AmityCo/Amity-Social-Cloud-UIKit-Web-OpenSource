@@ -48,7 +48,7 @@ export const AvatarOverlay = styled.div`
   `}
 `;
 
-export const Img = styled.img`
+export const Img = styled.img.attrs({ loading: 'lazy' })`
   height: 100%;
   width: 100%;
   object-fit: cover;

@@ -5,12 +5,12 @@ import { FormattedMessage } from 'react-intl';
 
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 import SideMenuSection from '~/core/components/SideMenuSection';
-import { useSDK } from '~/core/hocs/withSDK';
 import { Plus } from '~/icons';
 import CommunitiesList from '~/social/components/CommunitiesList';
 import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 import { useConfig } from '~/social/providers/ConfigProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import { useSDK } from '~/core/hooks/useSDK';
 
 const myListQueryParam = { filter: CommunityFilter.Member };
 
@@ -31,7 +31,8 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
     <SideMenuSection heading={<FormattedMessage id="SideSectionMyCommunity.myCommunity" />}>
       {socialCommunityCreationButtonVisible && (
         <SideMenuActionItem
-          icon={<Plus height={20} />}
+          data-qa-anchor="side-section-my-community-create-community-button"
+          icon={<Plus height="20px" />}
           element="button"
           disabled={!connected}
           onClick={open}

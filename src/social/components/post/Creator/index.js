@@ -14,19 +14,19 @@ import useUser from '~/core/hooks/useUser';
 import useLiveObject from '~/core/hooks/useLiveObject';
 import useErrorNotification from '~/core/hooks/useErrorNotification';
 import { notification } from '~/core/components/Notification';
-import ConditionalRender from '~/core/components/ConditionalRender';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
+import { extractMetadata, formatMentionees } from '~/helpers/utils';
+import { FileLoaderContainer } from '~/core/components/Uploaders/Loader';
+import PollModal from '~/social/components/post/PollComposer/PollModal';
 import PostTargetSelector from './components/PostTargetSelector';
 import UploaderButtons from './components/UploaderButtons';
 import ImagesUploaded from './components/ImagesUploaded';
 import VideosUploaded from './components/VideosUploaded';
 import FilesUploaded from './components/FilesUploaded';
-
-import { extractMetadata, formatMentionees } from '~/helpers/utils';
 
 import { createPost, showPostCreatedNotification } from './utils';
 import {
@@ -39,19 +39,13 @@ import {
   PostInputText,
   PollButton,
   PollIcon,
-  PollIconContainer,
 } from './styles';
-import PollModal from '~/social/components/post/PollComposer/PollModal';
+
 import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
+import promisify from '~/helpers/promisify';
 
 const communityFetcher = (id) => () => CommunityRepository.communityForId(id);
-const userFetcher = (id) => () => new UserRepository().userForId(id);
-
-const mentioneeCommunityFetcher = (communityId, search) =>
-  CommunityRepository.getCommunityMembers({
-    communityId,
-    search,
-  });
+const userFetcher = (id) => () => UserRepository.getUser(id);
 
 const MAX_FILES_PER_POST = 10;
 
@@ -154,7 +148,7 @@ const PostCreatorBar = ({
 
     if (postMentionees.type && postMentionees.userIds.length > 0) {
       createPostParams.mentionees = [{ ...postMentionees }];
-      const { metadata: extractedMetadata } = extractMetadata(postText, mentionees);
+      const { metadata: extractedMetadata } = extractMetadata(mentionees);
       metadata.markupText = postText;
       createPostParams.metadata = { ...metadata, ...extractedMetadata };
     }
@@ -217,9 +211,9 @@ const PostCreatorBar = ({
   const creatorTargetId = target?.targetId ?? targetId;
 
   const queryMentionees = useCallback(
-    (query, cb) => {
+    async (query, cb) => {
       let keyword = query || mentionText;
-      let liveCollection;
+      let users;
 
       // Weird hack to show users to show users on start
       if (keyword.match(/^@$/)) {
@@ -228,14 +222,18 @@ const PostCreatorBar = ({
 
       // Only fetch private community members
       if (creatorTargetType === PostTargetType.CommunityFeed && !model?.isPublic) {
-        liveCollection = mentioneeCommunityFetcher(creatorTargetId, keyword);
+        const liveCollection = CommunityRepository.getCommunityMembers({
+          communityId: creatorTargetId,
+          search: keyword,
+        });
+        const communityMembers = await promisify(liveCollection);
+        users = communityMembers.map((member) => member.user);
       } else {
-        liveCollection = UserRepository.queryUsers({ keyword });
+        const liveCollection = UserRepository.queryUsers({ keyword });
+        users = await promisify(liveCollection);
       }
 
-      liveCollection.on('dataUpdated', (models) => {
-        cb(formatMentionees(models));
-      });
+      cb(formatMentionees(users));
     },
     [mentionText, model?.isPublic, creatorTargetId, creatorTargetType],
   );
@@ -260,7 +258,7 @@ const PostCreatorBar = ({
         />
       )}
 
-      <ConditionalRender condition={enablePostTargetPicker}>
+      {enablePostTargetPicker ? (
         <PostTargetSelector
           user={user}
           communities={communities}
@@ -272,12 +270,13 @@ const PostCreatorBar = ({
         >
           {CurrentTargetAvatar}
         </PostTargetSelector>
+      ) : (
+        CurrentTargetAvatar
+      )}
 
-        {CurrentTargetAvatar}
-      </ConditionalRender>
       <PostContainer>
         <PostInputText
-          data-qa-anchor="social-create-post-input"
+          data-qa-anchor="post-creator-textarea"
           multiline
           value={postText}
           placeholder={placeholder}
@@ -327,7 +326,7 @@ const PostCreatorBar = ({
             setPlainText(plainTextVal);
           }}
         />
-        <Footer>
+        <Footer data-qa-anchor="post-creator-footer">
           <UploaderButtons
             imageUploadDisabled={postFiles.length > 0 || postVideos.length > 0 || uploadLoading}
             videoUploadDisabled={postFiles.length > 0 || postImages.length > 0 || uploadLoading}
@@ -340,14 +339,14 @@ const PostCreatorBar = ({
             onMaxFilesLimit={onMaxFilesLimit}
             onFileSizeLimit={onFileSizeLimit}
           />
-          <PollButton onClick={openPollModal}>
-            <PollIconContainer>
+          <PollButton data-qa-anchor="post-creator-poll-button" onClick={openPollModal}>
+            <FileLoaderContainer>
               <PollIcon />
-            </PollIconContainer>
+            </FileLoaderContainer>
           </PollButton>
           <PostButton
             disabled={isDisabled}
-            data-qa-anchor="social-create-post-button"
+            data-qa-anchor="post-creator-post-button"
             onClick={onCreatePost}
           >
             <FormattedMessage id="post" />

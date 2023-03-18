@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import TextareaAutosize from 'react-autosize-textarea';
+import TextareaAutosize from 'react-textarea-autosize';
 import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
 import { PrimaryButton } from '~/core/components/Button';
 import ImageUploader from '~/core/components/Uploaders/Image';
@@ -223,7 +223,7 @@ export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
 `;
 
-export const AboutTextarea = styled(TextareaAutosize).attrs({ rows: 3, maxRows: 15 })`
+export const AboutTextarea = styled(TextareaAutosize).attrs({ minRows: 3, maxRows: 15 })`
   ${({ theme }) => theme.typography.global};
   display: block;
   outline: none;

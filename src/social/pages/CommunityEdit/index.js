@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { ImageSize, FileRepository } from '@amityco/js-sdk';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import CommunityMembers from '~/social/components/CommunityMembers';
 import CommunityPermissions from '~/social/components/CommunityPermissions';
 import CommunityForm from '~/social/components/CommunityForm';
@@ -56,13 +55,14 @@ const CommunityEditPage = ({ communityId, tab }) => {
         return (
           <>
             <AddMemberAction action={openAddMemberModal} />
-            <ConditionalRender condition={addMemberModalOpen}>
+
+            {addMemberModalOpen && (
               <AddMemberModal
                 closeConfirm={closeAddMemberModal}
                 community={community}
                 onSubmit={submitAddMembers}
               />
-            </ConditionalRender>
+            )}
           </>
         );
       default:
@@ -76,7 +76,7 @@ const CommunityEditPage = ({ communityId, tab }) => {
       community.avatarFileId &&
       FileRepository.getFileUrlById({
         fileId: community.avatarFileId,
-        imageSize: ImageSize.Medium,
+        imageSize: ImageSize.Small,
       }),
     [community.avatarFileId],
   );
@@ -95,13 +95,16 @@ const CommunityEditPage = ({ communityId, tab }) => {
         />
       }
     >
-      <ConditionalRender condition={activeTab === PageTabs.EDIT_PROFILE && !!community.communityId}>
-        <CommunityForm community={community} edit onSubmit={(data) => handleEditCommunity(data)} />
-      </ConditionalRender>
+      {activeTab === PageTabs.EDIT_PROFILE && !!community.communityId && (
+        <CommunityForm
+          data-qa-anchor="community-edit"
+          community={community}
+          edit
+          onSubmit={(data) => handleEditCommunity(data)}
+        />
+      )}
 
-      <ConditionalRender condition={activeTab === PageTabs.MEMBERS}>
-        <CommunityMembers communityId={communityId} />
-      </ConditionalRender>
+      {activeTab === PageTabs.MEMBERS && <CommunityMembers communityId={communityId} />}
 
       {activeTab === PageTabs.PERMISSIONS && <CommunityPermissions communityId={communityId} />}
     </PageLayout>

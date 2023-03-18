@@ -39,7 +39,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
 
   const defaultValues = {
     channelId: '',
-    type: '',
+    type: ChannelType.Live,
     displayName: undefined,
     avatarFileId: undefined,
     userIds: [],
@@ -49,10 +49,9 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
   const {
     register,
     handleSubmit,
-    errors,
     watch,
     control,
-    formState: { isDirty },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues,
   });
@@ -90,10 +89,9 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
                 </LabelContainer>
               </LabelWrapper>
               <TextInput
-                ref={register({})}
+                {...register('channelId')}
                 placeholder={formatMessage({ id: 'chat_composer.placeholder.channelId' })}
-                id="channelId"
-                name="channelId"
+                data-qa-anchor="chat-composer-channel-id-input"
               />
               <ErrorMessage errors={errors} name="channelId" />
             </Field>
@@ -108,10 +106,10 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
               </LabelWrapper>
               <ControllerContainer>
                 <Controller
-                  ref={register({ required: 'Channel type is required' })}
                   name="type"
-                  render={(props) => (
-                    <ChatTypeSelector parentContainer={formBodyElement} {...props} />
+                  rules={{ required: 'Channel type is required' }}
+                  render={({ field: { ref, ...rest } }) => (
+                    <ChatTypeSelector parentContainer={formBodyElement} {...rest} />
                   )}
                   control={control}
                   defaultValue=""
@@ -128,10 +126,9 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
                 </LabelContainer>
               </LabelWrapper>
               <TextInput
-                ref={register({})}
+                {...register('displayName')}
                 placeholder={formatMessage({ id: 'chat_composer.placeholder.displayName' })}
-                id="displayName"
-                name="displayName"
+                data-qa-anchor="chat-composer-display-name-input"
               />
               <ErrorMessage errors={errors} name="displayName" />
             </Field>
@@ -140,8 +137,8 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
               <Controller
                 name="avatarFileId"
                 control={control}
-                render={({ onChange, ...rest }) => (
-                  <AvatarUploader mimeType="image/png, image/jpeg" onChange={onChange} {...rest} />
+                render={({ field: { ref, ...rest } }) => (
+                  <AvatarUploader mimeType="image/png, image/jpeg" {...rest} />
                 )}
                 defaultValue={null}
               />
@@ -153,7 +150,13 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
               </Label>
               <Controller
                 name="userIds"
-                render={(props) => <UserSelector parentContainer={formBodyElement} {...props} />}
+                render={({ field: { ref, ...rest } }) => (
+                  <UserSelector
+                    parentContainer={formBodyElement}
+                    {...rest}
+                    data-qa-anchor="chat-composer-select-user-input"
+                  />
+                )}
                 control={control}
               />
               <ErrorMessage errors={errors} name="userIds" />
@@ -170,7 +173,7 @@ const ChatComposer = ({ className, onCancel = () => {}, onSubmit = () => {} }) =
           >
             <FormattedMessage id="cancel" />
           </Button>
-          <SubmitButton disabled={disabled}>
+          <SubmitButton data-qa-anchor="chat-composer-submit-button" disabled={disabled}>
             <FormattedMessage id="post" />
           </SubmitButton>
         </Footer>
