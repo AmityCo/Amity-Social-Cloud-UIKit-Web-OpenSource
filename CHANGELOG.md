@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.15.5 (2023-03-31)
+
+
+### Bug Fixes
+
+* asc-11360 fix post header icon size ([#80](https://github.com/EkoCommunications/AmityUiKitWeb/issues/80)) ([bc95492](https://github.com/EkoCommunications/AmityUiKitWeb/commit/bc9549210187193d53a4006a49641dc795834e45))
+
 ### 2.15.4 (2023-02-10)
 
 
