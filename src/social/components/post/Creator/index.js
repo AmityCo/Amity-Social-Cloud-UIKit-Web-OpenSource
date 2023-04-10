@@ -47,27 +47,6 @@ import promisify from '~/helpers/promisify';
 const communityFetcher = (id) => () => CommunityRepository.communityForId(id);
 const userFetcher = (id) => () => UserRepository.getUser(id);
 
-const mentioneeCommunityFetcher = async (communityId, search) => {
-  const communityMemberLiveCollection = CommunityRepository.getCommunityMembers({
-    communityId,
-    search,
-  });
-
-  const communityMembers = await promisify(communityMemberLiveCollection);
-
-  return Promise.all(
-    communityMembers.map(({ userId }) => {
-      const userLiveObject = UserRepository.getUser(userId);
-
-      if (userLiveObject.model) {
-        return userLiveObject.model;
-      }
-
-      return promisify(userLiveObject);
-    }),
-  );
-};
-
 const MAX_FILES_PER_POST = 10;
 
 const overCharacterModal = () =>
@@ -243,10 +222,15 @@ const PostCreatorBar = ({
 
       // Only fetch private community members
       if (creatorTargetType === PostTargetType.CommunityFeed && !model?.isPublic) {
-        users = await mentioneeCommunityFetcher(creatorTargetId, keyword);
+        const liveCollection = CommunityRepository.getCommunityMembers({
+          communityId: creatorTargetId,
+          search: keyword,
+        });
+        const communityMembers = await promisify(liveCollection);
+        users = communityMembers.map((member) => member.user);
       } else {
-        const userLiveCollection = UserRepository.queryUsers({ keyword });
-        users = await promisify(userLiveCollection);
+        const liveCollection = UserRepository.queryUsers({ keyword });
+        users = await promisify(liveCollection);
       }
 
       cb(formatMentionees(users));

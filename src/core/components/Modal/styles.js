@@ -20,6 +20,7 @@ export const Overlay = styled.div`
   background: rgba(23, 24, 28, 0.8);
   animation-duration: 0.3s;
   animation-name: appear;
+  margin-top: 0 !important;
 
   @keyframes appear {
     from {
