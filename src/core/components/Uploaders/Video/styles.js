@@ -46,6 +46,10 @@ export const VideoPreview = styled(
     // eslint-disable-next-line jsx-a11y/media-has-caption
     <video controls controlsList="nodownload" {...props} ref={ref} data-qa-anchor="video-preview">
       <source src={src} type={mimeType} />
+      <p>
+        Your browser does not support this format of video. Please try again later once the server
+        transcodes the video into an playable format(mp4).
+      </p>
     </video>
   )),
 )`
