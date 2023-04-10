@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.15.6 (2023-04-10)
+
+
+### Bug Fixes
+
+* asc-12046 use transcoded video if available ([#81](https://github.com/EkoCommunications/AmityUiKitWeb/issues/81)) ([bf69602](https://github.com/EkoCommunications/AmityUiKitWeb/commit/bf69602626675f3377ba33b12eb2865e44629639))
+
 ### 2.15.5 (2023-03-31)
 
 
