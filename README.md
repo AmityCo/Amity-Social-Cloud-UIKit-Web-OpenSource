@@ -11,7 +11,7 @@ Here are the steps to install ui-kit together with another project.
 3. npm ci
 4. npm link
 5. npm link ./`<path-to-your-app>`/node_modules/react ./`<path-to-your-app>`/node_modules/react-dom
-6. npm build
+6. npm run build
 7. cd ./`<path-to-your-app>`
 8. npm link @amityco/ui-kit-open-source --save
 
