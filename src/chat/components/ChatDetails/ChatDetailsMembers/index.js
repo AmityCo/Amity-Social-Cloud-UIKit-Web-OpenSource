@@ -33,7 +33,7 @@ const ChatDetailsMembers = ({ channelId, hideMembers, onEditChatMemberClick, onM
   };
 
   const getName = (member) => {
-    const { displayName, metadata } = member?.user?.model ?? {};
+    const { displayName, metadata } = member?.user ?? {};
 
     if (displayName) return displayName;
 
