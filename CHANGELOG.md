@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.15.7 (2023-05-09)
+
+
+### Bug Fixes
+
+* asc-11719 get displayName from user object ([#82](https://github.com/EkoCommunications/AmityUiKitWeb/issues/82)) ([ad6056a](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ad6056a37c793742f67cfe4e42f4ebd68b0525ae))
+
 ### 2.15.6 (2023-04-10)
 
 
