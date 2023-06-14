@@ -1,7 +1,7 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { useUnmount } from 'react-use';
+import { useEffect, useState, useCallback } from 'react';
 import { UserRepository, CommunityRepository, PostTargetType } from '@amityco/js-sdk';
 import { formatMentionees } from '~/helpers/utils';
+import promisify from '~/helpers/promisify';
 import useCommunity from '~/social/hooks/useCommunity';
 
 const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) => {
@@ -35,10 +35,6 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
     for such we need to keep a reference to the latest active LC which is why we
     need to have a ref.
   */
-  const fetcher = useRef();
-
-  // here we force dispose in case there was a un-disposed live collection
-  useUnmount(() => fetcher.current?.dispose());
 
   useEffect(() => {
     setText(remoteText);
@@ -64,25 +60,27 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
   };
 
   const queryMentionees = useCallback(
-    (query, cb) => {
+    async (query, cb) => {
+      let users;
       let keyword = query;
 
       if (keyword.match(/^@$/) || keyword === '') {
         keyword = undefined;
       }
 
-      // dispose previous LC instance...
-      fetcher.current?.dispose();
+      if (isCommunityFeed && !isPublic) {
+        const liveCollection = CommunityRepository.getCommunityMembers({
+          communityId: targetId,
+          search: keyword,
+        });
+        const communityMembers = await promisify(liveCollection);
+        users = communityMembers.map(({ user }) => user);
+      } else {
+        const liveCollection = UserRepository.queryUsers({ keyword });
+        users = await promisify(liveCollection);
+      }
 
-      // ...and create a new one on the fly
-      fetcher.current =
-        isPublic || !isCommunityFeed
-          ? UserRepository.queryUsers({ keyword })
-          : CommunityRepository.getCommunityMembers({ communityId: targetId, search: keyword });
-
-      fetcher.current.on('dataUpdated', (models) => {
-        cb(formatMentionees(models));
-      });
+      cb(formatMentionees(users));
     },
     [isCommunityFeed, isPublic, targetId],
   );

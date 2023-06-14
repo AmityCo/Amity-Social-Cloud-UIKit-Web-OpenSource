@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.15.6 (2023-04-10)
+
+
+### Bug Fixes
+
+* asc-12046 use transcoded video if available ([#81](https://github.com/EkoCommunications/AmityUiKitWeb/issues/81)) ([bf69602](https://github.com/EkoCommunications/AmityUiKitWeb/commit/bf69602626675f3377ba33b12eb2865e44629639))
+
+### 2.15.5 (2023-03-31)
+
+
+### Bug Fixes
+
+* asc-11360 fix post header icon size ([#80](https://github.com/EkoCommunications/AmityUiKitWeb/issues/80)) ([bc95492](https://github.com/EkoCommunications/AmityUiKitWeb/commit/bc9549210187193d53a4006a49641dc795834e45))
+
+### 2.15.4 (2023-02-10)
+
+
+### Bug Fixes
+
+* ASC-4612 - Update default values for channel creation ([#79](https://github.com/EkoCommunications/AmityUiKitWeb/issues/79)) ([7e22ca5](https://github.com/EkoCommunications/AmityUiKitWeb/commit/7e22ca56a240400f2900a9997f0912ab9cf8cfa5))
+
+### 2.15.3 (2023-01-31)
+
+### 2.15.2 (2022-12-23)
+
+
+### Bug Fixes
+
+* ASC-7914 - added subscription for community RTE events ([#76](https://github.com/EkoCommunications/AmityUiKitWeb/issues/76)) ([05ad4c3](https://github.com/EkoCommunications/AmityUiKitWeb/commit/05ad4c319d84e3dfe54b035c48414f44c8125244))
+
+### 2.15.1 (2022-12-02)
+
 ## 2.15.0 (2022-12-02)
 
 

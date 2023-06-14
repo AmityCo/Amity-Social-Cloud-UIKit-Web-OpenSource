@@ -1,12 +1,16 @@
+import { LoadingStatus } from '@amityco/js-sdk';
+
 const promisify = (liveObject) =>
   new Promise((resolve, reject) => {
-    liveObject.once('dataUpdated', (model) => {
-      resolve(model);
-      liveObject.dispose();
+    liveObject.on('dataUpdated', (model) => {
+      if (liveObject.loadingStatus === LoadingStatus.Loaded) {
+        liveObject.dispose();
+        resolve(model);
+      }
     });
     liveObject.once('dataError', (error) => {
-      reject(error);
       liveObject.dispose();
+      reject(error);
     });
   });
 
