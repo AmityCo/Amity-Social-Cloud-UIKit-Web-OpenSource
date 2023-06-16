@@ -22,7 +22,7 @@ const ApplicationContainer = styled.div`
 `;
 
 const StyledCommunitySideMenu = styled(CommunitySideMenu)`
-  min-height: 100%;
+  height: 100%;
 `;
 
 const Community = () => {
