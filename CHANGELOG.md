@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.15.8 (2023-06-19)
+
+
+### Bug Fixes
+
+* ASC-13714 - fix mime type for video player  ([#84](https://github.com/EkoCommunications/AmityUiKitWeb/issues/84)) ([1168983](https://github.com/EkoCommunications/AmityUiKitWeb/commit/11689837f9cee95e9fc06d51bae514db6e8b783c))
+
 ### 2.15.7 (2023-05-09)
 
 
