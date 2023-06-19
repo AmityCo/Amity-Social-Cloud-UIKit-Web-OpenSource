@@ -11,7 +11,6 @@ const DistantVideo = ({ fileId, ...props }) => {
   if (!file.fileId) return null;
 
   let { fileUrl } = file;
-  let { mimeType } = file.attributes;
 
   /*
    * It's possible that certain video formats uploaded by the user are not
@@ -45,11 +44,9 @@ const DistantVideo = ({ fileId, ...props }) => {
         fileUrl = videoUrl[VideoQuality.Original];
         break;
     }
-
-    if (!fileUrl.includes(VideoQuality.Original)) mimeType = MP4MimeType;
   }
 
-  return <StyledVideo url={fileUrl} mimeType={mimeType} {...props} />;
+  return <StyledVideo url={fileUrl} mimeType={MP4MimeType} {...props} />;
 };
 
 DistantVideo.propTypes = {
