@@ -88,6 +88,7 @@
     "react-tiny-popover": "^7.1.0",
     "react-truncate-markup": "^5.1.2",
     "react-use": "^17.4.0",
+    "storybook": "^7.0.22",
     "uuid": "^8.3.2"
   },
   "lint-staged": {
