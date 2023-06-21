@@ -7,14 +7,15 @@ import MainLayout from '~/social/layouts/Main';
 
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 
-import ExplorePage from '~/social/pages/Explore';
 import NewsFeedPage from '~/social/pages/NewsFeed';
-import CommunityFeedPage from '~/social/pages/CommunityFeed';
-import UserFeedPage from '~/social/pages/UserFeed';
-import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
-import CommunityEditPage from '~/social/pages/CommunityEdit';
-import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+
+const ExplorePage = React.lazy(() => import('../Explore'));
+const CommunityFeedPage = React.lazy(() => import('../CommunityFeed'));
+const UserFeedPage = React.lazy(() => import('~/social/pages/UserFeed'));
+const CategoryCommunitiesPage = React.lazy(() => import('~/social/pages/CategoryCommunities'));
+const CommunityEditPage = React.lazy(() => import('~/social/pages/CommunityEdit'));
+const ProfileSettings = React.lazy(() => import('../../components/ProfileSettings'));
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -31,25 +32,30 @@ const Community = () => {
   return (
     <ApplicationContainer>
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
-        {page.type === PageTypes.Explore && <ExplorePage />}
+        <React.Suspense fallback={null}>
+          {page.type === PageTypes.Explore && <ExplorePage />}
+
+          {page.type === PageTypes.CommunityFeed && (
+            <CommunityFeedPage
+              communityId={page.communityId}
+              isNewCommunity={page.isNewCommunity}
+            />
+          )}
+
+          {page.type === PageTypes.CommunityEdit && (
+            <CommunityEditPage communityId={page.communityId} tab={page.tab} />
+          )}
+
+          {page.type === PageTypes.Category && (
+            <CategoryCommunitiesPage categoryId={page.categoryId} />
+          )}
+
+          {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
+
+          {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
+        </React.Suspense>
 
         {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
-
-        {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity} />
-        )}
-
-        {page.type === PageTypes.CommunityEdit && (
-          <CommunityEditPage communityId={page.communityId} tab={page.tab} />
-        )}
-
-        {page.type === PageTypes.Category && (
-          <CategoryCommunitiesPage categoryId={page.categoryId} />
-        )}
-
-        {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
-
-        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
       </MainLayout>
     </ApplicationContainer>
   );

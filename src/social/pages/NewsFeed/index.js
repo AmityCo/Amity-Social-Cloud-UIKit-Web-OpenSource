@@ -1,23 +1,28 @@
 import React from 'react';
 import { PostTargetType } from '@amityco/js-sdk';
 
+import { eagerImportDefault } from '~/helpers/eagerImport';
+
 import { PageTypes } from '~/social/constants';
-import Feed from '~/social/components/Feed';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { Wrapper } from './styles';
+
+const Feed = eagerImportDefault(() => import('../../components/Feed'));
 
 const NewsFeed = () => {
   const { onChangePage } = useNavigation();
 
   return (
     <Wrapper data-qa-anchor="news-feed">
-      <Feed
-        targetType={PostTargetType.GlobalFeed}
-        goToExplore={() => onChangePage(PageTypes.Explore)}
-        showPostCreator
-      />
+      <React.Suspense fallback={null}>
+        <Feed
+          targetType={PostTargetType.GlobalFeed}
+          goToExplore={() => onChangePage(PageTypes.Explore)}
+          showPostCreator
+        />
+      </React.Suspense>
     </Wrapper>
   );
 };

@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { PostTargetType, FeedType, CommunityFilter } from '@amityco/js-sdk';
+
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
 
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';

@@ -14,6 +14,18 @@ module.exports = (_, argv = {}) => ({
     library: pkg.name,
     libraryTarget: 'umd',
     globalObject: "typeof self !== 'undefined' ? self : this",
+    clean: true,
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
   },
   plugins: [
     new CleanWebpackPlugin(),
