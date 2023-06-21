@@ -1,0 +1,203 @@
+@import 'tailwindcss/base';
+@layer base {
+  /*title*/
+  .cym-title-sm {
+    /* {mon-12-600} */
+    @apply font-mon;
+    @apply font-semibold;
+    @apply text-xs;
+  }
+
+  .cym-title {
+    /* {mon-14-600} */
+    @apply font-mon;
+    @apply font-semibold;
+    @apply text-sm;
+  }
+
+  .cym-title-lg {
+    /* {mon-16-600} */
+    @apply font-mon;
+    @apply font-semibold;
+    @apply text-base;
+  }
+  /*subtitle*/
+  .cym-subtitle-sm {
+    /* {mon-12-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-xs;
+  }
+  .cym-subtitle {
+    /* {mon-14-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-sm;
+  }
+  .cym-subtitle-lg {
+    /* {mon-16-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-base;
+  }
+  /*heading-1*/
+  .cym-h-1-xs {
+    /* {ivy-16-400} */
+    @apply font-ivy;
+    @apply font-normal;
+    @apply text-base;
+  }
+  .cym-h-1-sm {
+    /* {ivy-20-400} */
+    @apply font-ivy;
+    @apply font-normal;
+    @apply text-xl;
+  }
+  .cym-h-1 {
+    @apply font-ivy; /* {ivy-22-400} */
+    @apply font-normal;
+    @apply text-1.5xl;
+  }
+  .cym-h-1-lg {
+    @apply font-ivy; /* {ivy-26-400} */
+    @apply font-normal;
+    @apply text-2.5xl;
+  }
+
+  /*heading-2*/
+  .cym-h-2-sm {
+    @apply font-ter; /* {ter-12-500} */
+    @apply font-medium;
+    @apply text-xs;
+  }
+  .cym-h-2 {
+    /* {ter-14-500} */
+    @apply font-ter;
+    @apply font-medium;
+    @apply text-sm;
+  }
+  .cym-h-2-lg {
+    /* {ter-16-500} */
+    @apply font-ter;
+    @apply font-medium;
+    @apply text-base;
+  }
+
+  /*heading-3*/
+  .cym-h-3-sm {
+    /* {mon-12-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-xs;
+  }
+  .cym-h-3 {
+    /* {mon-14-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-sm;
+  }
+  .cym-h-3-lg {
+    /* {mon-16-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-base;
+  }
+
+  /*heading-4*/
+  .cym-h-4-sm {
+    /* {mon-12-600} */
+    @apply font-mon;
+    @apply font-semibold;
+    @apply text-xs;
+  }
+  .cym-h-4 {
+    /* {mon-14-600} */
+    @apply font-mon;
+    @apply font-semibold;
+    @apply text-sm;
+  }
+  .cym-h-4-lg {
+    /* {mon-16-600} */
+    @apply font-mon;
+    @apply font-bold;
+    @apply text-base;
+  }
+
+  /*paragraph-1*/
+  .cym-p-1-sm {
+    /* {mon-12-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-xs;
+  }
+  .cym-p-1 {
+    /* {mon-14-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-sm;
+  }
+  .cym-p-1-lg {
+    /* {mon-16-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-base;
+  }
+  .cym-p-3-sm {
+    /* {mon-10-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-2xs;
+  }
+  /*caption*/
+  .cym-caption-sm {
+    /* {mon-10-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-2xs;
+  }
+  .cym-caption {
+    /* {mon-12-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-xs;
+  }
+  .cym-caption-lg {
+    /* {mon-14-500} */
+    @apply font-mon;
+    @apply font-medium;
+    @apply text-sm;
+  }
+}
+
+/* button text */
+
+.cym-button-text-lg {
+  @apply cym-caption-lg;
+  @apply uppercase;
+  @apply tracking-[0.08em];
+}
+
+.cym-button-text {
+  @apply cym-caption;
+  @apply uppercase;
+  @apply tracking-[0.08em];
+}
+
+/* INPUTS */
+.cym-input {
+  /* @apply order-2; */
+  @apply !border-2 !border-solid
+    w-full  rounded-md px-4
+    xs:h-[36px] xl:h-[42px] 
+    xs:cym-p-1-sm xl:cym-p-1
+    border-cym-lightgrey 
+    focus:outline-none focus:border-cym;
+}
+.cym-select {
+  @apply !border-r-8 border-transparent 
+  w-full  rounded-md px-4
+  xs:h-[36px] xl:h-[42px] 
+  xs:cym-p-1-sm xl:cym-p-1
+  outline outline-2 outline-cym-lightgrey
+  focus:outline-none focus:outline-cym;
+}

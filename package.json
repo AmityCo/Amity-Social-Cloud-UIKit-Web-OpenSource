@@ -20,7 +20,8 @@
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook --output-dir ./storybook-build",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "cym:build": "npx tailwindcss -i ./src/styles/index.css -o ./src/styles/output.css; npm ci; npm link; npm link ../cym-community-app/node_modules/react ../cym-community-app/node_modules/react-dom; npm run build; cd ../cym-community-app; npm link @amityco/ui-kit-open-source --save"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -41,6 +42,7 @@
     "@storybook/theming": "^6.5.9",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.8.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-eko": "^3.0.0",
@@ -54,7 +56,9 @@
     "prettier": "2.4.0",
     "react-router-dom": "^6.3.0",
     "recoil": "^0.7.5",
+    "style-loader": "^3.3.3",
     "svg-url-loader": "^7.1.1",
+    "tailwindcss": "^3.3.2",
     "webpack": "^5.74.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.10.0",

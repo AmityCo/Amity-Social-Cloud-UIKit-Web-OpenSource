@@ -15,6 +15,8 @@ import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import CustomHeader from '~/core/components/CustomHeader';
+// import Custom from '~/chat/components/Message/MessageContent/Custom';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -30,6 +32,7 @@ const Community = () => {
 
   return (
     <ApplicationContainer>
+      <CustomHeader />
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
         {page.type === PageTypes.Explore && <ExplorePage />}
 

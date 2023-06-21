@@ -1,3 +1,5 @@
+import './styles/output.css';
+
 export { default as AmityUiKitProvider } from '~/core/providers/UiKitProvider';
 export { default as AmityUiKitFeed } from '~/social/components/Feed';
 export { default as AmityUiKitSocial } from '~/social/pages/Application';
@@ -36,3 +38,19 @@ export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 // import AmityPostLikeButton from './components/PostLikeButton';
 // import AmityRecentChat from './components/RecentChat';
 // import AmitySideMenu from './components/SideMenu';
+
+// Get HTML head element
+const head = document.getElementsByTagName('HEAD')[0];
+
+// Create new link Element
+const link = document.createElement('link');
+
+// set the attributes for link element
+link.rel = 'stylesheet';
+
+link.type = 'text/css';
+
+link.href = 'https://use.typekit.net/zzt4gto.css';
+
+// Append link element to HTML head
+head.appendChild(link);
