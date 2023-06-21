@@ -14,18 +14,6 @@ module.exports = (_, argv = {}) => ({
     library: pkg.name,
     libraryTarget: 'umd',
     globalObject: "typeof self !== 'undefined' ? self : this",
-    clean: true,
-  },
-  optimization: {
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
-    },
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -39,5 +27,25 @@ module.exports = (_, argv = {}) => ({
       '~': path.resolve(__dirname, 'src'),
     },
     extensions: ['.js', '.jsx', '.css', '.svg'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-url-loader',
+            options: {
+              limit: 10000,
+            },
+          },
+        ],
+      },
+    ],
   },
 });
