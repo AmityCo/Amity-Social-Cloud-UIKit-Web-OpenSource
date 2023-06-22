@@ -549,6 +549,13 @@ video {
 
 /*heading-2*/
 
+.cym-h-2 {
+  /* {ter-14-500} */
+  font-family: Termina, sans-serif;
+  font-weight: 500;
+  font-size: .875rem;
+}
+
 /*heading-3*/
 
 /*heading-4*/
@@ -729,6 +736,34 @@ video {
   position: sticky;
 }
 
+.ml-2{
+  margin-left: 0.5rem;
+}
+
+.ml-\[-8px\]{
+  margin-left: -8px;
+}
+
+.ml-auto{
+  margin-left: auto;
+}
+
+.mt-10{
+  margin-top: 2.5rem;
+}
+
+.mt-1{
+  margin-top: 0.25rem;
+}
+
+.mt-0{
+  margin-top: 0px;
+}
+
+.mt-20{
+  margin-top: 5rem;
+}
+
 .block{
   display: block;
 }
@@ -753,6 +788,14 @@ video {
   display: none;
 }
 
+.h-\[52px\]{
+  height: 52px;
+}
+
+.h-\[70px\]{
+  height: 70px;
+}
+
 .flex-shrink{
   flex-shrink: 1;
 }
@@ -769,8 +812,28 @@ video {
   resize: both;
 }
 
+.flex-row{
+  flex-direction: row;
+}
+
+.flex-col{
+  flex-direction: column;
+}
+
 .flex-wrap{
   flex-wrap: wrap;
+}
+
+.items-end{
+  align-items: flex-end;
+}
+
+.items-center{
+  align-items: center;
+}
+
+.gap-2{
+  gap: 0.5rem;
 }
 
 .truncate{
@@ -783,29 +846,45 @@ video {
   border-width: 1px;
 }
 
+.border-y-2{
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+}
+
+.border-cym-lightgrey{
+  --tw-border-opacity: 1;
+  border-color: rgb(217 217 217 / var(--tw-border-opacity));
+}
+
+.bg-cym-lightteal{
+  --tw-bg-opacity: 1;
+  background-color: rgb(235 242 241 / var(--tw-bg-opacity));
+}
+
+.px-8{
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 .text-center{
   text-align: center;
 }
 
-.font-ter{
-  font-family: Termina, sans-serif;
-}
-
-.text-2xl{
-  font-size: 1.5rem;
-}
-
-.font-semibold{
-  font-weight: 600;
+.uppercase{
+  text-transform: uppercase;
 }
 
 .capitalize{
   text-transform: capitalize;
 }
 
-.text-sky-600{
+.\!leading-none{
+  line-height: 1 !important;
+}
+
+.text-cym-teal{
   --tw-text-opacity: 1;
-  color: rgb(2 132 199 / var(--tw-text-opacity));
+  color: rgb(0 88 80 / var(--tw-text-opacity));
 }
 
 .underline{
@@ -838,4 +917,31 @@ video {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (min-width: 320px){
+  .xs\:cym-p-1-sm {
+    /* {mon-12-500} */
+    font-family: Montserrat, sans-serif;
+    font-weight: 500;
+    font-size: .75rem;
+  }
+}
+
+@media (min-width: 768px){
+  .md\:cym-p-1 {
+    /* {mon-14-500} */
+    font-family: Montserrat, sans-serif;
+    font-weight: 500;
+    font-size: .875rem;
+  }
+}
+
+@media (min-width: 1240px){
+  .xl\:cym-p-1-lg {
+    /* {mon-16-500} */
+    font-family: Montserrat, sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+  }
 }

@@ -50,6 +50,7 @@ module.exports = {
         placeholdergrey2: '#E7E7E7',
         lightgrey: '#D9D9D9',
         lightergrey: '#F5F5F5',
+        lightteal: '#EBF2F1',
         teal: '#005850',
         darkteal: '#003C34',
         lightgreen: '#E3EBAF',

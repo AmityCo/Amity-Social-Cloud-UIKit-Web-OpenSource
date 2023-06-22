@@ -1,6 +1,7 @@
+import '../src/styles/output.css';
 import { FluidControl, UiKitDecorator } from './decorators';
 
-const decorators = [ FluidControl.decorator, UiKitDecorator.decorator];
+const decorators = [FluidControl.decorator, UiKitDecorator.decorator];
 
 const parameters = {
   options: {
@@ -22,8 +23,4 @@ const globalTypes = {
   ...UiKitDecorator.global,
 };
 
-export {
-  decorators,
-  globalTypes,
-  parameters,
-}
+export { decorators, globalTypes, parameters };
