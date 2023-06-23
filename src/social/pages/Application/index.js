@@ -25,6 +25,10 @@ const ApplicationContainer = styled.div`
 
 const StyledCommunitySideMenu = styled(CommunitySideMenu)`
   min-height: 100%;
+  display: none;
+  @media screen and (min-width: 768px) {
+    display: block;
+  }
 `;
 
 const Community = () => {
