@@ -1,19 +1,20 @@
 import React, { memo } from 'react';
-import withSDK from '~/core/hocs/withSDK';
+
 import customizableComponent from '~/core/hocs/customization';
+import withSDK from '~/core/hocs/withSDK';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
-// import { isEmpty } from '~/helpers';
-
 import Avatar from '../Avatar';
 
-const CustomHeader = ({ userId }) => {
-  const { file } = useUser(userId);
+import { AvatarContainer } from '../../../social/components/ProfileSettings/styles';
 
-  // if (isEmpty(user)) {
-  //   console.log('there is no user');
-  // }
+const CustomHeader = () => {
+  const userId = window.shopifyCustomerId;
+  // const userId = '3454838145071'; // remove on build
+  const { user, file } = useUser(userId);
+  console.log('user', user);
+  console.log('file', file);
 
   return (
     <div className="flex flex-col border-y-2 border-cym-lightgrey gap-2  bg-cym-lightteal px-8">
@@ -62,7 +63,7 @@ const CustomHeader = ({ userId }) => {
 
         <div className="text-cym-teal uppercase cym-h-2 !leading-none ml-2">COMMUNITY</div>
 
-        <div className="flex ml-auto gap-2 items-center">
+        <div className="flex ml-auto gap-3 items-center">
           <svg
             width="24"
             height="25"
@@ -86,8 +87,16 @@ const CustomHeader = ({ userId }) => {
             />
           </svg>
 
-          <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
-          <p className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg">Elon Musk</p>
+          <AvatarContainer>
+            <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
+          </AvatarContainer>
+
+          <p
+            className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg"
+            data-qa-anchor="user-info-profile-name"
+          >
+            {user.displayName}
+          </p>
         </div>
       </div>
 
