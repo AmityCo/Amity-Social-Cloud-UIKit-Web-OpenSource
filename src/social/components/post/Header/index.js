@@ -33,6 +33,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
       avatarFileUrl={file.fileUrl}
       postAuthorName={user.displayName || <FormattedMessage id="anonymous" />}
       postTargetName={postTargetName}
+      postAuthorTier={user?.metadata?.ariseTier}
       timeAgo={createdAt}
       isModerator={isCommunityModerator || isModerator(user.roles) || isAdmin(user.roles)}
       isEdited={createdAt < editedAt}

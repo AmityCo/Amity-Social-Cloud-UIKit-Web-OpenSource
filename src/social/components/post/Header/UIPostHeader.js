@@ -24,6 +24,7 @@ import {
 const UIPostHeader = ({
   avatarFileUrl,
   postAuthorName,
+  postAuthorTier,
   postTargetName,
   timeAgo,
   isModerator,
@@ -36,32 +37,43 @@ const UIPostHeader = ({
 }) => {
   const renderPostNames = () => {
     return (
-      <PostNamesContainer data-qa-anchor="post-header-post-names">
-        <TruncateMarkup lines={3}>
-          <Name
-            data-qa-anchor="post-header-post-name"
-            className={cx({ clickable: !!onClickUser })}
-            onClick={onClickUser}
-          >
-            {postAuthorName}
-          </Name>
-        </TruncateMarkup>
-
-        {isBanned && <BanIcon height={14} width={14} />}
-
-        {postTargetName && !hidePostTarget && (
-          <>
-            <ArrowSeparator />
+      <div>
+        <PostNamesContainer data-qa-anchor="post-header-post-names">
+          <TruncateMarkup lines={3}>
             <Name
-              data-qa-anchor="post-header-post-target-name"
-              className={cx({ clickable: !!onClickCommunity })}
-              onClick={onClickCommunity}
+              data-qa-anchor="post-header-post-name"
+              className={cx({ clickable: !!onClickUser })}
+              onClick={onClickUser}
             >
-              {postTargetName}
+              {postAuthorName} <br />
             </Name>
-          </>
+          </TruncateMarkup>
+
+          {isBanned && <BanIcon height={14} width={14} />}
+
+          {postTargetName && !hidePostTarget && (
+            <>
+              <ArrowSeparator />
+              <Name
+                data-qa-anchor="post-header-post-target-name"
+                className={cx({ clickable: !!onClickCommunity })}
+                onClick={onClickCommunity}
+              >
+                {postTargetName}
+              </Name>
+            </>
+          )}
+        </PostNamesContainer>
+        {postAuthorTier ? (
+          <div className="my-[5px]">
+            <span className="whitespace-nowrap rounded-full bg-[#EBF2F1] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+              {postAuthorTier}
+            </span>
+          </div>
+        ) : (
+          <span className="hidden">Nothing to see here</span>
         )}
-      </PostNamesContainer>
+      </div>
     );
   };
 
@@ -116,6 +128,7 @@ const UIPostHeader = ({
 UIPostHeader.propTypes = {
   avatarFileUrl: PropTypes.string,
   postAuthorName: PropTypes.node,
+  postAuthorTier: PropTypes.node,
   postTargetName: PropTypes.string,
   timeAgo: PropTypes.instanceOf(Date),
   isModerator: PropTypes.bool,
@@ -130,6 +143,7 @@ UIPostHeader.propTypes = {
 UIPostHeader.defaultProps = {
   avatarFileUrl: '',
   postAuthorName: '',
+  postAuthorTier: '',
   postTargetName: '',
   timeAgo: null,
   isModerator: false,
