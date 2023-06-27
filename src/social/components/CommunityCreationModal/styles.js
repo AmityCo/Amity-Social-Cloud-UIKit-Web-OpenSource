@@ -4,7 +4,7 @@ import { FormBody } from '~/social/components/CommunityForm/styles';
 
 export const CommunityForm = styled(UICommunityForm)`
   ${FormBody} {
-    max-height: 550px;
+    max-height: 1450px;
     overflow-y: auto;
   }
 `;
