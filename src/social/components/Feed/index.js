@@ -13,6 +13,8 @@ import LoadMore from '~/social/components/LoadMore';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
 import PrivateFeed from '~/social/components/PrivateFeed';
+// import TrendingList from '../community/TrendingList';
+import NewsFeedTrendingList from '../community/NewsFeedTrendingList';
 
 const queryParams = { filter: CommunityFilter.Member };
 
@@ -70,14 +72,17 @@ const Feed = ({
 
           {!loading && posts.length > 0 && (
             <LoadMore hasMore={hasMore} loadMore={loadMore} className="load-more no-border">
-              {posts.map(({ postId }) => (
-                <Post
-                  key={postId}
-                  postId={postId}
-                  hidePostTarget={targetType !== PostTargetType.GlobalFeed}
-                  readonly={readonly}
-                />
+              {posts.map(({ postId }, index) => (
+                <React.Fragment key={postId}>
+                  <Post
+                    postId={postId}
+                    hidePostTarget={targetType !== PostTargetType.GlobalFeed}
+                    readonly={readonly}
+                  />
+                  {index === 0 && <NewsFeedTrendingList />}
+                </React.Fragment>
               ))}
+
               {loadingMore && renderLoadingSkeleton()}
             </LoadMore>
           )}

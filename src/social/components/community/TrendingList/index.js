@@ -9,7 +9,7 @@ import TrendingItem from '~/social/components/community/TrendingItem';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import Title from '~/social/components/community/Title';
 
-const CommunitiesList = styled.ul`
+const ExploreCommunitiesList = styled.ul`
   list-style: none;
   counter-reset: trending;
   padding: 0;
@@ -19,11 +19,11 @@ const CommunitiesList = styled.ul`
   grid-template-columns: 1fr;
   grid-gap: 16px;
 
-  @media (min-width: 1280px) {
+  @media (min-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (min-width: 1800px) {{
+  @media (min-width: 1800px) {
     grid-template-columns: repeat(3, 1fr);
   }
 `;
@@ -53,8 +53,8 @@ const TrendingList = () => {
 
   return (
     <div>
-      <Title>{title}</Title>
-      <CommunitiesList>{list}</CommunitiesList>
+      <Title>{title} - Explore</Title>
+      <ExploreCommunitiesList>{list}</ExploreCommunitiesList>
     </div>
   );
 };
