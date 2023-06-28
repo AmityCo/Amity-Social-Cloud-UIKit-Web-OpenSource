@@ -35,7 +35,7 @@ export const PostContainer = styled.div`
 export const PostButton = styled(PrimaryButton)`
   padding: 10px 16px;
   margin-left: auto;
-  z-index: 0;
+  z-index: 10;
 `;
 
 export const UploadsContainer = styled.div`
@@ -57,6 +57,7 @@ export const PollButton = styled.button`
   background: none;
   border: none;
   padding: 0;
+  z-index: 10;
 `;
 
 export const PollIcon = styled(Poll)``;
