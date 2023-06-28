@@ -35,6 +35,7 @@ export const PostContainer = styled.div`
 export const PostButton = styled(PrimaryButton)`
   padding: 10px 16px;
   margin-left: auto;
+  z-index: 0;
 `;
 
 export const UploadsContainer = styled.div`
