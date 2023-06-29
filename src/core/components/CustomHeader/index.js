@@ -6,22 +6,22 @@ import withSDK from '~/core/hocs/withSDK';
 import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
 import Avatar from '../Avatar';
+import { EllipsisH } from '~/icons';
 
 import { AvatarContainer } from '../../../social/components/ProfileSettings/styles';
 
 const CustomHeader = () => {
-  const userId = window.shopifyCustomerId;
-  // const userId = '3454838145071'; // remove on build
+  // const userId = window.shopifyCustomerId;
+  const userId = '3454838145071'; // remove on build
   const { user, file } = useUser(userId);
   console.log('user', user);
   console.log('file', file);
 
   return (
-    <div className="flex flex-col border-y-2 border-cym-lightgrey gap-2  bg-cym-lightteal px-8">
-      <div className="flex flex-row h-[70px] items-end">
+    <div className="flex flex-col border-y-1 border-cym-lightgrey gap-3  bg-cym-lightteal px-5 md:px-[68px] py-[16px]">
+      <div className="mb-[6px] flex flex-row items-end">
         <svg
-          className="ml-[-8px]"
-          width={149}
+          className="ml-[-8px] w-[100px] md:w-[140px]"
           id="Layer_1"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -63,44 +63,50 @@ const CustomHeader = () => {
 
         <div className="text-cym-teal uppercase cym-h-2 !leading-none ml-2">COMMUNITY</div>
 
-        <div className="flex ml-auto gap-3 items-center">
-          <svg
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18 8.5C18 6.9087 17.3679 5.38258 16.2426 4.25736C15.1174 3.13214 13.5913 2.5 12 2.5C10.4087 2.5 8.88258 3.13214 7.75736 4.25736C6.63214 5.38258 6 6.9087 6 8.5C6 15.5 3 17.5 3 17.5H21C21 17.5 18 15.5 18 8.5Z"
-              stroke="#005850"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M13.73 21.5C13.5542 21.8031 13.3019 22.0547 12.9982 22.2295C12.6946 22.4044 12.3504 22.4965 12 22.4965C11.6496 22.4965 11.3054 22.4044 11.0018 22.2295C10.6982 22.0547 10.4458 21.8031 10.27 21.5"
-              stroke="#005850"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+        <div className="flex ml-auto gap-5 items-center">
+          <div className="relative">
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-[8px] py-[3px] !text-[11px] font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+              7
+            </span>
+            <svg
+              viewBox="0 0 24 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-[24px] h-[24px]"
+            >
+              <path
+                d="M18 8.5C18 6.9087 17.3679 5.38258 16.2426 4.25736C15.1174 3.13214 13.5913 2.5 12 2.5C10.4087 2.5 8.88258 3.13214 7.75736 4.25736C6.63214 5.38258 6 6.9087 6 8.5C6 15.5 3 17.5 3 17.5H21C21 17.5 18 15.5 18 8.5Z"
+                stroke="#005850"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M13.73 21.5C13.5542 21.8031 13.3019 22.0547 12.9982 22.2295C12.6946 22.4044 12.3504 22.4965 12 22.4965C11.6496 22.4965 11.3054 22.4044 11.0018 22.2295C10.6982 22.0547 10.4458 21.8031 10.27 21.5"
+                stroke="#005850"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
 
-          <AvatarContainer>
+          <AvatarContainer className="hidden md:block">
             <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
           </AvatarContainer>
 
           <p
-            className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg"
+            className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg hidden md:block"
             data-qa-anchor="user-info-profile-name"
           >
             {user.displayName}
           </p>
+
+          <EllipsisH className="md:hidden w-[16px]" />
         </div>
       </div>
 
-      <div className="cym-h-2 h-[52px] mt-5">
+      <div className="cym-h-2 hidden md:block mb-[18px]">
         Ask questions, join challenges, and find support as you embark on your wellness journey.
       </div>
     </div>

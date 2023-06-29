@@ -17,10 +17,10 @@ export const SideMenuItemContainer = styled(SecondaryButton)`
   ${({ active, theme }) =>
     active
       ? `
-      background-color: ${theme.palette.primary.shade3};
+      background-color: #EBF2F1;
       color: ${theme.palette.primary.main};
       &:hover {
-        background-color: ${theme.palette.primary.shade3};
+        background-color: #EBF2F1;
       }
     `
       : `

@@ -5,7 +5,7 @@ const actionItemActiveStyles = css`
   ${({ active, theme }) =>
     active &&
     `
-      background-color: ${theme.palette.primary.shade3};
+      background-color: #EBF2F1;
       & > .actionItemChild {
         color: ${theme.palette.primary.main};
       }

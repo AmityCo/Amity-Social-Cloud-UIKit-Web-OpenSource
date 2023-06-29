@@ -12,8 +12,11 @@ const Container = styled.div`
   grid-gap: 0 20px;
   width: 100%;
   height: 100%;
-  padding: 0 20px 0 0;
+  padding-right: 20px;
   background: #f7f7f8;
+  @media screen and (min-width: 1512px) {
+    padding-right: 0;
+  }
 `;
 
 const Main = styled.div`
