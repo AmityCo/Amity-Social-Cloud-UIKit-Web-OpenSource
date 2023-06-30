@@ -40,11 +40,13 @@ const UserInfo = ({
     setActiveTab(UserFeedTabs.TIMELINE);
     notification.success({ content: <FormattedMessage id="notification.done" /> });
   }, [followDecline]);
-
+  console.log('Roles', user.roles);
   return (
     <UIUserInfo
       userId={userId}
       currentUserId={currentUserId}
+      userAriseTier={user?.metadata?.ariseTier}
+      userRoles={user.roles}
       fileUrl={user.avatarCustomUrl || fileUrl}
       displayName={displayName || formatMessage({ id: 'anonymous' })}
       description={description}
@@ -61,6 +63,7 @@ const UserInfo = ({
       onFollowDecline={onFollowDecline}
       onEditUser={onEditUser}
       onMessageUser={onMessageUser}
+      // add other badge data here e.g. Cym Legend
     />
   );
 };

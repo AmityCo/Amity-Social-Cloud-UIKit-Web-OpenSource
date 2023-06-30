@@ -32,6 +32,7 @@ import {
   PendingIconContainer,
   ActionButtonContainer,
   ProfileNameWrapper,
+  UserBadgesWrapper,
 } from './styles';
 
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
@@ -61,6 +62,8 @@ const UIUserInfo = ({
   followerCount,
   followingCount,
   isPrivateNetwork,
+  userAriseTier,
+  userRoles,
 }) => {
   const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
@@ -148,10 +151,29 @@ const UIUserInfo = ({
         <Truncate lines={3}>
           <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
         </Truncate>
+
         {user.isGlobalBan && (
           <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
         )}
       </ProfileNameWrapper>
+      {/* Add badges styled compoenent */}
+
+      <UserBadgesWrapper>
+        {userAriseTier ? (
+          <span className="whitespace-nowrap rounded-full bg-[#EBF2F1] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+            {' '}
+            {userAriseTier}
+          </span>
+        ) : (
+          <span className="hidden">Nothing to see here</span>
+        )}
+
+        <span className="whitespace-nowrap rounded-full bg-[#EFF0E5] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+          {/* Figure out a way to display any special roles the user might have based on the id*/}
+          {userRoles}
+        </span>
+      </UserBadgesWrapper>
+
       <CountContainer>
         <ClickableCount
           onClick={() => {
@@ -197,6 +219,8 @@ const UIUserInfo = ({
 UIUserInfo.propTypes = {
   userId: PropTypes.string,
   currentUserId: PropTypes.string,
+  userAriseTier: PropTypes.string,
+  userRoles: PropTypes.string,
   fileUrl: PropTypes.string,
   displayName: PropTypes.string,
   description: PropTypes.string,
@@ -217,6 +241,8 @@ UIUserInfo.propTypes = {
 UIUserInfo.defaultProps = {
   userId: '',
   currentUserId: '',
+  userAriseTier: '',
+  userRoles: '',
   fileUrl: '',
   displayName: '',
   description: '',

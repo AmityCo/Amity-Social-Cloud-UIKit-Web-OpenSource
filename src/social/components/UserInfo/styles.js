@@ -137,3 +137,13 @@ export const ProfileNameWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
+
+export const UserBadgesWrapper = styled.div`
+  display: flex;
+
+  gap: 8px;
+  margin: 8px 0;
+  span {
+    width: max-content;
+  }
+`;
