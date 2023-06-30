@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
@@ -10,7 +11,7 @@ import { EllipsisH } from '~/icons';
 
 import { AvatarContainer } from '../../../social/components/ProfileSettings/styles';
 
-const CustomHeader = () => {
+const CustomHeader = ({ onClickUser }) => {
   // const userId = window.shopifyCustomerId;
   const userId = '3454838145071'; // remove on build
   const { user, file } = useUser(userId);
@@ -90,9 +91,14 @@ const CustomHeader = () => {
               />
             </svg>
           </div>
-
-          <AvatarContainer className="hidden md:block">
-            <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
+          <AvatarContainer>
+            <Avatar
+              data-qa-anchor="header-avatar"
+              className="hidden md:block"
+              avatar={file.fileUrl}
+              backgroundImage={UserImage}
+              onClick={onClickUser} // add functionallity that directs to profile page on click.
+            />
           </AvatarContainer>
 
           <p
@@ -111,6 +117,13 @@ const CustomHeader = () => {
       </div>
     </div>
   );
+};
+
+CustomHeader.propTypes = {
+  onClickUser: PropTypes.func,
+};
+CustomHeader.defaultProps = {
+  onClickUser: null,
 };
 
 export default memo(withSDK(customizableComponent('CustomHeader', CustomHeader)));
