@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { PageTypes } from '~/social/constants';
@@ -7,15 +6,16 @@ import MainLayout from '~/social/layouts/Main';
 
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 
-import ExplorePage from '~/social/pages/Explore';
-import NewsFeedPage from '~/social/pages/NewsFeed';
-import CommunityFeedPage from '~/social/pages/CommunityFeed';
-import UserFeedPage from '~/social/pages/UserFeed';
+import CustomHeader from '~/core/components/CustomHeader';
+import ProfileSettings from '~/social/components/ProfileSettings';
+import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
-import ProfileSettings from '~/social/components/ProfileSettings';
+import CommunityFeedPage from '~/social/pages/CommunityFeed';
+import ExplorePage from '~/social/pages/Explore';
+import NewsFeedPage from '~/social/pages/NewsFeed';
+import UserFeedPage from '~/social/pages/UserFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import CustomHeader from '~/core/components/CustomHeader';
 
 // import Custom from '~/chat/components/Message/MessageContent/Custom';
 
@@ -33,11 +33,13 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
 `;
 
 const Community = () => {
-  const { page } = useNavigation();
+  const { page, onClickUser } = useNavigation();
 
+  // const userId = '3454838145071';
+  const handleClickUser = (userId) => onClickUser(userId);
   return (
     <ApplicationContainer>
-      <CustomHeader />
+      <CustomHeader userId={page.userId} onClickUser={handleClickUser} />
 
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
         <pre className="mt-[10px] bg-gray-200 rounded-sm font-mono px-[5px]">
@@ -62,6 +64,10 @@ const Community = () => {
         {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
 
         {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
+
+        {page.type === PageTypes.MyGroups && (
+          <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
+        )}
       </MainLayout>
     </ApplicationContainer>
   );

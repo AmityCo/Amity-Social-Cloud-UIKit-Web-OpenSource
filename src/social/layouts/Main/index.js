@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -26,6 +25,13 @@ const Main = styled.div`
   min-width: 20rem;
   max-width: 90.75rem;
   margin: 0 auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 const Side = styled.div`

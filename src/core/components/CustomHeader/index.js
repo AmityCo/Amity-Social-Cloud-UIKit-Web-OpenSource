@@ -1,15 +1,17 @@
-import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import { memo, useState } from 'react';
 
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 
-import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
-import Avatar from '../Avatar';
 import { EllipsisH } from '~/icons';
+import { backgroundImage as UserImage } from '~/icons/User';
+import Avatar from '../Avatar';
 
-import { AvatarContainer } from '../../../social/components/ProfileSettings/styles';
+import { PageTypes } from '~/social/constants';
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import { AvatarContainer } from './styles';
 
 const CustomHeader = ({ onClickUser }) => {
   // const userId = window.shopifyCustomerId;
@@ -17,6 +19,16 @@ const CustomHeader = ({ onClickUser }) => {
   const { user, file } = useUser(userId);
   console.log('user', user);
   console.log('file', file);
+  const { onChangePage, page } = useNavigation();
+
+  const menuTabs = [
+    { name: 'Profile', func: () => onClickUser(user.userId) },
+    { name: 'News Feed', func: () => onChangePage(PageTypes.NewsFeed) },
+    { name: 'Explore', func: () => onChangePage(PageTypes.Explore) },
+    { name: 'My Groups', func: () => onChangePage(PageTypes.MyGroups) },
+  ];
+
+  const [showMenu, setShowMenu] = useState(false);
 
   return (
     <div className="flex flex-col border-y-1 border-cym-lightgrey gap-3  bg-cym-lightteal px-5 md:px-[68px] py-[16px]">
@@ -97,18 +109,45 @@ const CustomHeader = ({ onClickUser }) => {
               className="hidden md:block"
               avatar={file.fileUrl}
               backgroundImage={UserImage}
-              onClick={onClickUser} // add functionallity that directs to profile page on click.
+              onClick={() => onClickUser(user.userId)} // add functionallity that directs to profile page on click.
             />
           </AvatarContainer>
 
           <p
-            className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg hidden md:block"
+            onClick={() => onClickUser(user.userId)} // add functionallity that directs to profile page on click.
+            className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg hidden md:block cursor-pointer"
             data-qa-anchor="user-info-profile-name"
           >
             {user.displayName}
           </p>
 
-          <EllipsisH className="md:hidden w-[16px]" />
+          <div className="relative">
+            <EllipsisH onClick={() => setShowMenu(!showMenu)} className="md:hidden w-[16px] h-7" />
+            {showMenu && (
+              <>
+                {/* <div className="absolute right-0 w-[160px] h-[200px] z-40 bg-black opacity-30 blur-lg"></div> */}
+                <div
+                  onClick={() => setShowMenu(false)}
+                  className="fixed inset-0 bg-black opacity-60 w-full h-full z-50"
+                ></div>
+                <div className="shadow-custom absolute right-0 w-[140px] bg-white flex flex-col z-50 cym-h-2-sm justify-center border-[0.5px] border-cym-grey rounded-md animate-fade-in">
+                  {menuTabs.map((tab, index) => (
+                    <p
+                      onClick={() => {
+                        tab.func();
+                        setShowMenu(false);
+                      }}
+                      className={`h-8 px-[10px] flex items-center ${
+                        index + 1 < menuTabs.length ? 'border-b-[0.5px] border-cym-grey' : ''
+                      }`}
+                    >
+                      {tab.name}
+                    </p>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 

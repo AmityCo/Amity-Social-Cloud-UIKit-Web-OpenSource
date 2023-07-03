@@ -1,18 +1,18 @@
-import React, { memo } from 'react';
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import withSDK from '~/core/hocs/withSDK';
 
-import useUser from '~/core/hooks/useUser';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import UIUserInfo from './UIUserInfo';
+import { notification } from '~/core/components/Notification';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useFollow from '~/core/hooks/useFollow';
 import useFollowCount from '~/core/hooks/useFollowCount';
 import useImage from '~/core/hooks/useImage';
-import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
-import { notification } from '~/core/components/Notification';
+import useUser from '~/core/hooks/useUser';
 import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import UIUserInfo from './UIUserInfo';
 
 const UserInfo = ({
   userId,
@@ -40,7 +40,7 @@ const UserInfo = ({
     setActiveTab(UserFeedTabs.TIMELINE);
     notification.success({ content: <FormattedMessage id="notification.done" /> });
   }, [followDecline]);
-  console.log('Roles', user.roles);
+  console.log('Roles', user);
   return (
     <UIUserInfo
       userId={userId}

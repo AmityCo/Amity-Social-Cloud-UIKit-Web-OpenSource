@@ -1,4 +1,3 @@
-import React from 'react';
 import defaultTheme from '~/core/providers/UiKitProvider/theme/default-theme';
 import ColorPicker from '.';
 
