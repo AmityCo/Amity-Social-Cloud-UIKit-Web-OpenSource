@@ -14,7 +14,7 @@ const ItemContainer = styled.div`
   cursor: pointer;
   counter-increment: trending;
   min-width: auto;
-  height: 118px;
+  height: 125px;
   border: 1px solid #ebecef;
   border-radius: 8px;
   background: ${({ theme }) => theme.palette.system.background};
@@ -35,7 +35,7 @@ const Cover = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 16px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -78,7 +78,7 @@ const TrendingCommunityName = styled(CommunityName)`
   }
 `;
 
-const UITrendingItem = ({
+const UINewsFeedTrendingItem = ({
   avatarFileUrl,
   description,
   categories,
@@ -133,7 +133,7 @@ const UITrendingItem = ({
   </ItemContainer>
 );
 
-UITrendingItem.propTypes = {
+UINewsFeedTrendingItem.propTypes = {
   avatarFileUrl: PropTypes.string,
   description: PropTypes.string,
   categories: PropTypes.arrayOf(
@@ -150,7 +150,7 @@ UITrendingItem.propTypes = {
   onClick: PropTypes.func,
 };
 
-UITrendingItem.defaultProps = {
+UINewsFeedTrendingItem.defaultProps = {
   avatarFileUrl: '',
   description: '',
   categories: [],
@@ -162,4 +162,4 @@ UITrendingItem.defaultProps = {
   loading: false,
 };
 
-export default customizableComponent('UITrendingItem', UITrendingItem);
+export default customizableComponent('UINewsFeedTrendingItem', UINewsFeedTrendingItem);

@@ -82,3 +82,4 @@ export { default as SortDown } from './SortDown';
 export { default as ThumbsUp } from './ThumbsUp';
 export { default as Trash } from './Trash';
 export { default as Verified } from './Verified';
+export { default as PenToSquare } from './PenToSquare';

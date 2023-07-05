@@ -5,6 +5,7 @@ import { PostTargetType } from '@amityco/js-sdk';
 import withSDK from '~/core/hocs/withSDK';
 import * as utils from '~/helpers/utils';
 import MediaGallery from '~/social/components/MediaGallery';
+import AriseTokensGallery from '~/social/components/AriseTokens';
 
 import UserInfo from '~/social/components/UserInfo';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
@@ -61,6 +62,13 @@ const UserFeed = ({ userId, currentUserId, networkSettings }) => {
 
       {activeTab === UserFeedTabs.GALLERY && (
         <MediaGallery targetType={PostTargetType.UserFeed} targetId={userId} />
+      )}
+
+      {activeTab === UserFeedTabs.TOKENS && (
+        <AriseTokensGallery
+          targetType={isMe ? PostTargetType.MyFeed : PostTargetType.UserFeed}
+          targetId={userId}
+        />
       )}
 
       {activeTab === UserFeedTabs.FOLLOWERS && !isHiddenProfile && (

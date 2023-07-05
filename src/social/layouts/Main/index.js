@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -12,8 +11,11 @@ const Container = styled.div`
   grid-gap: 0 20px;
   width: 100%;
   height: 100%;
-  padding: 0 20px 0 0;
+  padding-right: 20px;
   background: #f7f7f8;
+  @media screen and (min-width: 1512px) {
+    padding-right: 0;
+  }
 `;
 
 const Main = styled.div`
@@ -23,6 +25,13 @@ const Main = styled.div`
   min-width: 20rem;
   max-width: 90.75rem;
   margin: 0 auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 const Side = styled.div`

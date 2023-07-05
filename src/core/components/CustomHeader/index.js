@@ -1,26 +1,41 @@
-import React, { memo } from 'react';
-import withSDK from '~/core/hocs/withSDK';
+import PropTypes from 'prop-types';
+import { memo, useState } from 'react';
+
 import customizableComponent from '~/core/hocs/customization';
+import withSDK from '~/core/hocs/withSDK';
 
-import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
-// import { isEmpty } from '~/helpers';
-
+import { EllipsisH } from '~/icons';
+import { backgroundImage as UserImage } from '~/icons/User';
 import Avatar from '../Avatar';
 
-const CustomHeader = ({ userId }) => {
-  const { file } = useUser(userId);
+import { PageTypes } from '~/social/constants';
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import { AvatarContainer } from './styles';
 
-  // if (isEmpty(user)) {
-  //   console.log('there is no user');
-  // }
+const CustomHeader = ({ onClickUser }) => {
+  // const userId = window.shopifyCustomerId;
+  const userId = '3454838145071'; // remove on build
+  const { user, file } = useUser(userId);
+  console.log('user', user);
+  console.log('file', file);
+  const { onChangePage, page } = useNavigation();
+
+  const menuTabs = [
+    { name: 'Profile', func: () => onClickUser(user.userId) },
+    { name: 'News Feed', func: () => onChangePage(PageTypes.NewsFeed) },
+    { name: 'Explore', func: () => onChangePage(PageTypes.Explore) },
+    { name: 'My Groups', func: () => onChangePage(PageTypes.MyGroups) },
+  ];
+
+  const [showMenu, setShowMenu] = useState(false);
+
 
   return (
-    <div className="flex flex-col border-y-2 border-cym-lightgrey gap-2  bg-cym-lightteal px-8">
-      <div className="flex flex-row h-[70px] items-end">
+    <div className="flex flex-col border-y-1 border-cym-lightgrey gap-3  bg-cym-lightteal px-5 md:px-[68px] py-[16px]">
+      <div className="mb-[6px] flex flex-row items-end">
         <svg
-          className="ml-[-8px]"
-          width={149}
+          className="ml-[-8px] w-[100px] md:w-[140px]"
           id="Layer_1"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
@@ -62,40 +77,95 @@ const CustomHeader = ({ userId }) => {
 
         <div className="text-cym-teal uppercase cym-h-2 !leading-none ml-2">COMMUNITY</div>
 
-        <div className="flex ml-auto gap-2 items-center">
-          <svg
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M18 8.5C18 6.9087 17.3679 5.38258 16.2426 4.25736C15.1174 3.13214 13.5913 2.5 12 2.5C10.4087 2.5 8.88258 3.13214 7.75736 4.25736C6.63214 5.38258 6 6.9087 6 8.5C6 15.5 3 17.5 3 17.5H21C21 17.5 18 15.5 18 8.5Z"
-              stroke="#005850"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+        <div className="flex ml-auto gap-5 items-center">
+          <div className="relative">
+            <span className="absolute top-0 right-0 inline-flex items-center justify-center px-[8px] py-[3px] !text-[11px] font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+              7
+            </span>
+            <svg
+              viewBox="0 0 24 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-[24px] h-[24px]"
+            >
+              <path
+                d="M18 8.5C18 6.9087 17.3679 5.38258 16.2426 4.25736C15.1174 3.13214 13.5913 2.5 12 2.5C10.4087 2.5 8.88258 3.13214 7.75736 4.25736C6.63214 5.38258 6 6.9087 6 8.5C6 15.5 3 17.5 3 17.5H21C21 17.5 18 15.5 18 8.5Z"
+                stroke="#005850"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M13.73 21.5C13.5542 21.8031 13.3019 22.0547 12.9982 22.2295C12.6946 22.4044 12.3504 22.4965 12 22.4965C11.6496 22.4965 11.3054 22.4044 11.0018 22.2295C10.6982 22.0547 10.4458 21.8031 10.27 21.5"
+                stroke="#005850"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <AvatarContainer>
+            <Avatar
+              data-qa-anchor="header-avatar"
+              className="hidden md:block"
+              avatar={file.fileUrl}
+              backgroundImage={UserImage}
+              onClick={() => onClickUser(user.userId)} // add functionallity that directs to profile page on click.
             />
-            <path
-              d="M13.73 21.5C13.5542 21.8031 13.3019 22.0547 12.9982 22.2295C12.6946 22.4044 12.3504 22.4965 12 22.4965C11.6496 22.4965 11.3054 22.4044 11.0018 22.2295C10.6982 22.0547 10.4458 21.8031 10.27 21.5"
-              stroke="#005850"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          </AvatarContainer>
 
-          <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
-          <p className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg">Elon Musk</p>
+          <p
+            onClick={() => onClickUser(user.userId)} // add functionallity that directs to profile page on click.
+            className="xs:cym-p-1-sm md:cym-p-1 xl:cym-p-1-lg hidden md:block cursor-pointer"
+            data-qa-anchor="user-info-profile-name"
+          >
+            {user.displayName}
+          </p>
+
+          <div className="relative">
+            <EllipsisH onClick={() => setShowMenu(!showMenu)} className="md:hidden w-[16px] h-7" />
+            {showMenu && (
+              <>
+                {/* <div className="absolute right-0 w-[160px] h-[200px] z-40 bg-black opacity-30 blur-lg"></div> */}
+                <div
+                  onClick={() => setShowMenu(false)}
+                  className="fixed inset-0 bg-black opacity-40 w-full h-full z-50"
+                ></div>
+                <div className="shadow-custom absolute right-0 w-[140px] bg-white flex flex-col z-50 cym-h-2-sm justify-center border-[0.5px] border-cym-grey rounded-md animate-fade-in">
+                  {menuTabs.map((tab, index) => (
+                    <p
+                      onClick={() => {
+                        tab.func();
+                        setShowMenu(false);
+                      }}
+                      className={`p-[10px] flex items-center ${
+                        index + 1 < menuTabs.length ? 'border-b-[0.5px] border-cym-grey' : ''
+                      }`}
+                    >
+                      {tab.name}
+                    </p>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="cym-h-2 h-[52px] mt-5">
+      <div className="cym-h-2 hidden md:block mb-[18px]">
         Ask questions, join challenges, and find support as you embark on your wellness journey.
       </div>
     </div>
   );
 };
+
+
+CustomHeader.propTypes = {
+  onClickUser: PropTypes.func,
+};
+CustomHeader.defaultProps = {
+  onClickUser: null,
+};
+
 
 export default memo(withSDK(customizableComponent('CustomHeader', CustomHeader)));

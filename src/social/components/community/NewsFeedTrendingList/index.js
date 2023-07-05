@@ -5,11 +5,11 @@ import { FormattedMessage } from 'react-intl';
 import Skeleton from '~/core/components/Skeleton';
 
 import useTrendingCommunitiesList from '~/social/hooks/useTrendingCommunitiesList';
-import TrendingItem from '~/social/components/community/TrendingItem';
+import NewsFeedTrendingItem from '~/social/components/community/NewsFeedTrendingItem';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import Title from '~/social/components/community/Title';
 
-const ExploreCommunitiesList = styled.ul`
+const CommunitiesList = styled.ul`
   list-style: none;
   counter-reset: trending;
   padding: 0;
@@ -19,16 +19,12 @@ const ExploreCommunitiesList = styled.ul`
   grid-template-columns: 1fr;
   grid-gap: 16px;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1280px) {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 1800px) {
-    grid-template-columns: repeat(3, 1fr);
   }
 `;
 
-const TrendingList = () => {
+const NewsFeedTrendingList = () => {
   const { onClickCommunity } = useNavigation();
 
   const [communities, , , loading] = useTrendingCommunitiesList();
@@ -42,21 +38,21 @@ const TrendingList = () => {
   const list = loading
     ? new Array(5).fill(1).map((x, index) => (
         <li key={index}>
-          <TrendingItem loading />
+          <NewsFeedTrendingItem loading />
         </li>
       ))
     : communities.slice(0, 5).map(({ communityId }) => (
         <li key={communityId}>
-          <TrendingItem communityId={communityId} onClick={onClickCommunity} />
+          <NewsFeedTrendingItem communityId={communityId} onClick={onClickCommunity} />
         </li>
       ));
 
   return (
-    <div>
-      <Title>{title} - Explore</Title>
-      <ExploreCommunitiesList>{list}</ExploreCommunitiesList>
+    <div className="mt-5">
+      <Title>{title} 🔥</Title>
+      <CommunitiesList>{list}</CommunitiesList>
     </div>
   );
 };
 
-export default TrendingList;
+export default NewsFeedTrendingList;

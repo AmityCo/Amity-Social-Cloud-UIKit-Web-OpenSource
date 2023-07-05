@@ -143,13 +143,11 @@ export const posts = [
     postId: 'p1',
     targetId: 'u1',
     author: testUser,
-    text:
-      'text\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\n',
+    text: 'text\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\ntext\n',
     images: [
       {
         id: 1,
-        url:
-          'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        url: 'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
         isNew: false,
       },
       {
@@ -159,8 +157,7 @@ export const posts = [
       },
       {
         id: 3,
-        url:
-          'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        url: 'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
         isNew: false,
       },
       {
@@ -170,8 +167,7 @@ export const posts = [
       },
       {
         id: 5,
-        url:
-          'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+        url: 'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
         isNew: false,
       },
       {
@@ -470,8 +466,7 @@ export const testFiles = [
 
 export const testImages = [
   {
-    url:
-      'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+    url: 'https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
   },
   {
     url: 'https://theievoice.com/wp-content/uploads/2020/02/1040.jpg',
@@ -494,12 +489,12 @@ const myCommunityIdsAtom = atom({
 });
 
 export const getCommunities = () => useRecoilValue(communitiesAtom);
-export const getCommunity = communityId =>
-  getCommunities().find(community => community.communityId === communityId);
+export const getCommunity = (communityId) =>
+  getCommunities().find((community) => community.communityId === communityId);
 
 export const getCategories = () => useRecoilValue(categoriesAtom);
 
-export const getCategory = categoryId => getCategories().find(({ id }) => id === categoryId);
+export const getCategory = (categoryId) => getCategories().find(({ id }) => id === categoryId);
 
 export const getMyCommunityIds = () => useRecoilValue(myCommunityIdsAtom);
 
@@ -509,7 +504,7 @@ const myCommunities = selector({
     const communities = get(communitiesAtom);
     const myCommunityIds = get(myCommunityIdsAtom);
 
-    return myCommunityIds.map(id => communities.find(({ communityId }) => communityId === id));
+    return myCommunityIds.map((id) => communities.find(({ communityId }) => communityId === id));
   },
 });
 
@@ -531,28 +526,31 @@ const myNewsFeed = selector({
 
 export const getNewsFeed = () => useRecoilValue(myNewsFeed);
 
-export const usePostsMock = targetId => {
+export const usePostsMock = (targetId) => {
   const [posts, setPosts] = useRecoilState(postsAtom);
 
-  const addPost = newPost => setPosts([newPost, ...posts]);
-  const removePost = postId => setPosts(posts.filter(post => post.postId !== postId));
+  const addPost = (newPost) => setPosts([newPost, ...posts]);
+  const removePost = (postId) => setPosts(posts.filter((post) => post.postId !== postId));
 
-  const editPost = updatedPost =>
-    setPosts(posts.map(post => (post.postId === updatedPost.postId ? updatedPost : post)));
+  const editPost = (updatedPost) =>
+    setPosts(posts.map((post) => (post.postId === updatedPost.postId ? updatedPost : post)));
 
   const fetchMorePosts = () => {
     setTimeout(() => {
-      setPosts([...posts, {
-        postId: v4(),
-        targetId: 'u1',
-        author: testUser,
-        text: v4(),
-      }]);
+      setPosts([
+        ...posts,
+        {
+          postId: v4(),
+          targetId: 'u1',
+          author: testUser,
+          text: v4(),
+        },
+      ]);
     }, 150);
   };
 
   const postsFeed = targetId
-    ? posts.filter(community => community.targetId === targetId)
+    ? posts.filter((community) => community.targetId === targetId)
     : getNewsFeed();
 
   return { posts: postsFeed, addPost, removePost, editPost, fetchMorePosts };
@@ -562,12 +560,12 @@ export const useCommunitiesMock = () => {
   const [communities, setCommunities] = useRecoilState(communitiesAtom);
   const [myCommunities, setMyCommunities] = useRecoilState(myCommunityIdsAtom);
 
-  const joinCommunity = id => setMyCommunities([id, ...myCommunities]);
+  const joinCommunity = (id) => setMyCommunities([id, ...myCommunities]);
 
-  const leaveCommunity = id =>
-    setMyCommunities(myCommunities.filter(communityId => communityId !== id));
+  const leaveCommunity = (id) =>
+    setMyCommunities(myCommunities.filter((communityId) => communityId !== id));
 
-  const addCommunity = community => {
+  const addCommunity = (community) => {
     const communityId = `c${Date.now()}`;
     const newCommunity = {
       communityId,
@@ -575,21 +573,18 @@ export const useCommunitiesMock = () => {
       description,
       ...community,
     };
-    setCommunities([
-      newCommunity,
-      ...communities,
-    ]);
+    setCommunities([newCommunity, ...communities]);
     joinCommunity(communityId);
 
     return newCommunity;
   };
 
-  const removeCommunity = communityId =>
-    setCommunities(communities.filter(community => community.communityId !== communityId));
+  const removeCommunity = (communityId) =>
+    setCommunities(communities.filter((community) => community.communityId !== communityId));
 
-  const editCommunity = updatedCommunity =>
+  const editCommunity = (updatedCommunity) =>
     setCommunities(
-      communities.map(community =>
+      communities.map((community) =>
         community.communityId === updatedCommunity.communityId ? updatedCommunity : community,
       ),
     );

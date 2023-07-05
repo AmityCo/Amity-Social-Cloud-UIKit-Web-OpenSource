@@ -12,6 +12,7 @@ const ALLOWED_VIDEO_MIME_TYPES = 'video/*,.flv,.3gp';
 const StyledLoader = styled(Loader)`
   ${({ uploadLoading }) => uploadLoading && 'cursor: wait !important;'}
   ${({ disabled, theme }) => disabled && `color: ${theme.palette.neutral.shade2};`}
+  z-index: 10;
 `;
 
 const PostCreatorUploaders = ({

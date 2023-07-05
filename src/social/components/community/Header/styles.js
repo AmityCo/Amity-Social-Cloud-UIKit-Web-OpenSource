@@ -31,7 +31,7 @@ const CommunityHeaderContainer = styled.a.attrs((props) => props)`
     isActive &&
     css`
       color: ${theme.palette.primary.main};
-      background-color: ${theme.palette.primary.shade3};
+      background-color: #ebf2f1;
     `};
 
   ${({ hasChildren }) =>

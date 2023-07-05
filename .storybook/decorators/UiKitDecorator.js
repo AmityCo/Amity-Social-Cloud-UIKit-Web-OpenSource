@@ -70,8 +70,10 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
       key={userId}
       apiKey={process.env.STORYBOOK_API_KEY}
       apiRegion={process.env.STORYBOOK_API_REGION}
-      userId={userId}
-      displayName={displayName || userId}
+      // userId={userId}
+      // displayName={displayName || userId}
+      userId={'3454838145071'}
+      displayName={'Test Test'}
       onConnectionStatusChange={handleConnectionStatusChange}
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
