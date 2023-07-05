@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import { PageTypes } from '~/social/constants';
@@ -16,6 +17,7 @@ import ExplorePage from '~/social/pages/Explore';
 import NewsFeedPage from '~/social/pages/NewsFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import MobilePostButton from '~/core/components/MobilePostButton';
 
 // import Custom from '~/chat/components/Message/MessageContent/Custom';
 
@@ -40,11 +42,8 @@ const Community = () => {
   return (
     <ApplicationContainer>
       <CustomHeader userId={page.userId} onClickUser={handleClickUser} />
-
+      <MobilePostButton />
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
-        <pre className="mt-[10px] bg-gray-200 rounded-sm font-mono px-[5px]">
-          Navigation Tabs here
-        </pre>
         {page.type === PageTypes.Explore && <ExplorePage />}
 
         {page.type === PageTypes.NewsFeed && <NewsFeedPage />}

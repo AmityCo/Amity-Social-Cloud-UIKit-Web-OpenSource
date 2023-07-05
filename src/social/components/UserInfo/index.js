@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { memo } from 'react';
+import { React, memo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import withSDK from '~/core/hocs/withSDK';

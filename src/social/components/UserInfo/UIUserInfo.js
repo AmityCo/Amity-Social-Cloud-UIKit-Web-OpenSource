@@ -69,6 +69,14 @@ const UIUserInfo = ({
   const { isFlaggedByMe, handleReport } = useReport(user);
   const { formatMessage } = useIntl();
   const { connected } = useSDK();
+  let cymRole;
+  switch (userRoles[0]) {
+    case 'c312406d-ee76-4900-bc19-43b1f1bdf58d':
+      cymRole = 'Cymbiotika Legend';
+      break;
+    default:
+      console.log('This user has no Cymbiotika roles');
+  }
 
   const [onReportClick] = useAsyncCallback(async () => {
     await handleReport();
@@ -168,10 +176,13 @@ const UIUserInfo = ({
           <span className="hidden">Nothing to see here</span>
         )}
 
-        <span className="whitespace-nowrap rounded-full bg-[#EFF0E5] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
-          {/* Figure out a way to display any special roles the user might have based on the id*/}
-          {userRoles}
-        </span>
+        {cymRole ? (
+          <span className="whitespace-nowrap rounded-full bg-[#EFF0E5] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+            {cymRole}
+          </span>
+        ) : (
+          <span className="hidden">Nothing to see here</span>
+        )}
       </UserBadgesWrapper>
 
       <CountContainer>
