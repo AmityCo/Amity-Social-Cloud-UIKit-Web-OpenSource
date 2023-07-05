@@ -8,4 +8,4 @@ storybook-build/
 .DS_Store
 .eslintcache
 
-./src/styles/output.css
+/src/styles/output.css
