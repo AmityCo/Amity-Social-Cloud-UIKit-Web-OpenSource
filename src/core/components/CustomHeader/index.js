@@ -128,7 +128,7 @@ const CustomHeader = ({ onClickUser }) => {
                 {/* <div className="absolute right-0 w-[160px] h-[200px] z-40 bg-black opacity-30 blur-lg"></div> */}
                 <div
                   onClick={() => setShowMenu(false)}
-                  className="fixed inset-0 bg-black opacity-60 w-full h-full z-50"
+                  className="fixed inset-0 bg-black opacity-40 w-full h-full z-50"
                 ></div>
                 <div className="shadow-custom absolute right-0 w-[140px] bg-white flex flex-col z-50 cym-h-2-sm justify-center border-[0.5px] border-cym-grey rounded-md animate-fade-in">
                   {menuTabs.map((tab, index) => (
@@ -137,7 +137,7 @@ const CustomHeader = ({ onClickUser }) => {
                         tab.func();
                         setShowMenu(false);
                       }}
-                      className={`h-8 px-[10px] flex items-center ${
+                      className={`p-[10px] flex items-center ${
                         index + 1 < menuTabs.length ? 'border-b-[0.5px] border-cym-grey' : ''
                       }`}
                     >
