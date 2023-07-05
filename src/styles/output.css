@@ -780,6 +780,7 @@ video {
   margin-bottom: 6px;
 }
 
+
 .ml-2{
   margin-left: 0.5rem;
 }
@@ -798,6 +799,7 @@ video {
 
 .mt-\[10px\]{
   margin-top: 10px;
+
 }
 
 .block{
@@ -874,6 +876,7 @@ video {
 
 .w-full{
   width: 100%;
+
 }
 
 .flex-shrink{
@@ -910,6 +913,7 @@ video {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+
 .flex-row{
   flex-direction: row;
 }
@@ -944,6 +948,7 @@ video {
 
 .gap-\[32px\]{
   gap: 32px;
+
 }
 
 .truncate{
@@ -987,6 +992,7 @@ video {
 .border-cym-grey{
   --tw-border-opacity: 1;
   border-color: rgb(144 144 144 / var(--tw-border-opacity));
+
 }
 
 .border-cym-lightgrey{

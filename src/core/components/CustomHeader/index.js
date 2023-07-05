@@ -30,6 +30,7 @@ const CustomHeader = ({ onClickUser }) => {
 
   const [showMenu, setShowMenu] = useState(false);
 
+
   return (
     <div className="flex flex-col border-y-1 border-cym-lightgrey gap-3  bg-cym-lightteal px-5 md:px-[68px] py-[16px]">
       <div className="mb-[6px] flex flex-row items-end">
@@ -158,11 +159,13 @@ const CustomHeader = ({ onClickUser }) => {
   );
 };
 
+
 CustomHeader.propTypes = {
   onClickUser: PropTypes.func,
 };
 CustomHeader.defaultProps = {
   onClickUser: null,
 };
+
 
 export default memo(withSDK(customizableComponent('CustomHeader', CustomHeader)));
