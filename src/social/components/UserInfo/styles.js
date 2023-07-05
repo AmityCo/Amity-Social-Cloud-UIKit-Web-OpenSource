@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import UIAvatar from '~/core/components/Avatar';
-import { Pencil, Pending, Plus } from '~/icons';
 import UIOptionMenu from '~/core/components/OptionMenu';
+import { Pencil, Pending, Plus } from '~/icons';
 
 export const PlusIcon = styled(Plus).attrs({ width: 15, height: 15 })`
   margin-right: 8px;
@@ -48,6 +48,7 @@ export const ActionButtonContainer = styled.div`
 
   > button {
     min-width: 136px;
+    width: 100%;
     height: 40px;
   }
 `;
@@ -146,4 +147,7 @@ export const UserBadgesWrapper = styled.div`
   span {
     width: max-content;
   }
+`;
+export const CheckIconWrapper = styled.div`
+  display: flex;
 `;

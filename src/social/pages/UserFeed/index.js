@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { PostTargetType } from '@amityco/js-sdk';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 import withSDK from '~/core/hocs/withSDK';
 import * as utils from '~/helpers/utils';
-import MediaGallery from '~/social/components/MediaGallery';
 import AriseTokensGallery from '~/social/components/AriseTokens';
+import MediaGallery from '~/social/components/MediaGallery';
 
-import UserInfo from '~/social/components/UserInfo';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
+import UserInfo from '~/social/components/UserInfo';
 
 import Feed from '~/social/components/Feed';
 import Followers from '~/social/pages/UserFeed/Followers';
 
-import { tabs, UserFeedTabs } from './constants';
-import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
 import useFollow from '~/core/hooks/useFollow';
+import { FollowersTabs } from '~/social/pages/UserFeed/Followers/constants';
+import { tabs, UserFeedTabs } from './constants';
 import { Wrapper } from './styles';
 
 const UserFeed = ({ userId, currentUserId, networkSettings }) => {

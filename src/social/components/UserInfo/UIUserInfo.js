@@ -1,48 +1,50 @@
-import React from 'react';
-import Truncate from 'react-truncate-markup';
-import PropTypes from 'prop-types';
-import { toHumanString } from 'human-readable-numbers';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { FollowRequestStatus } from '@amityco/js-sdk';
+import { toHumanString } from 'human-readable-numbers';
+import PropTypes from 'prop-types';
+import { FormattedMessage, useIntl } from 'react-intl';
+import Truncate from 'react-truncate-markup';
 
-import ConditionalRender from '~/core/components/ConditionalRender';
 import Button, { PrimaryButton } from '~/core/components/Button';
+import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
 import { backgroundImage as UserImage } from '~/icons/User';
 
-import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
 import BanIcon from '~/icons/Ban';
+import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
 
 import {
+  ActionButtonContainer,
   Avatar,
+  CheckIconWrapper,
+  ClickableCount,
   Container,
-  ProfileName,
-  Header,
+  CountContainer,
   Description,
-  PlusIcon,
+  Header,
+  NotificationBody,
+  NotificationTitle,
+  OptionMenu,
   PencilIcon,
   PendingIcon,
-  OptionMenu,
-  CountContainer,
-  ClickableCount,
-  PendingNotification,
-  NotificationTitle,
-  NotificationBody,
-  TitleEllipse,
   PendingIconContainer,
-  ActionButtonContainer,
+  PendingNotification,
+  PlusIcon,
+  ProfileName,
   ProfileNameWrapper,
+  TitleEllipse,
   UserBadgesWrapper,
 } from './styles';
 
-import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
 import { confirm } from '~/core/components/Confirm';
-import useUser from '~/core/hooks/useUser';
-import useReport from '~/social/hooks/useReport';
-import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import { notification } from '~/core/components/Notification';
+import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useFollowersList from '~/core/hooks/useFollowersList';
 import { useSDK } from '~/core/hooks/useSDK';
+import useUser from '~/core/hooks/useUser';
+import { POSITION_LEFT } from '~/helpers';
+import { Check } from '~/icons';
+import useReport from '~/social/hooks/useReport';
+import { UserFeedTabs } from '~/social/pages/UserFeed/constants';
 
 const UIUserInfo = ({
   userId,
@@ -65,6 +67,8 @@ const UIUserInfo = ({
   userAriseTier,
   userRoles,
 }) => {
+  const isXsScreen = window.innerWidth < 640;
+
   const { user } = useUser(userId);
   const { isFlaggedByMe, handleReport } = useReport(user);
   const { formatMessage } = useIntl();
@@ -120,13 +124,72 @@ const UIUserInfo = ({
   const [pendingUsers] = useFollowersList(currentUserId, FollowRequestStatus.Pending);
 
   return (
-    <Container data-qa-anchor="user-info">
-      <Header>
-        <Avatar
-          data-qa-anchor="user-info-profile-image"
-          avatar={fileUrl}
-          backgroundImage={UserImage}
-        />
+    <>
+      <Container className="xs:block md:hidden" data-qa-anchor="user-info">
+        <Header className="!items-center">
+          <Avatar
+            className="!h-[64px] !w-[64px] !mr-[14px]"
+            data-qa-anchor="user-info-profile-image"
+            avatar={fileUrl}
+            backgroundImage={UserImage}
+          />
+          <div className="flex flex-col">
+            <ProfileNameWrapper>
+              <Truncate lines={3}>
+                <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
+              </Truncate>
+
+              {user.isGlobalBan && (
+                <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
+              )}
+            </ProfileNameWrapper>
+            {/* Add badges styled compoenent */}
+
+            {(userAriseTier || cymRole) && (
+              <UserBadgesWrapper>
+                {userAriseTier ? (
+                  <span className="whitespace-nowrap rounded-full bg-[#EBF2F1] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+                    {' '}
+                    {userAriseTier}
+                  </span>
+                ) : (
+                  <span className="hidden">Nothing to see here</span>
+                )}
+
+                {cymRole ? (
+                  <span className="whitespace-nowrap rounded-full bg-[#EFF0E5] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+                    {cymRole}
+                  </span>
+                ) : (
+                  <span className="hidden">Nothing to see here</span>
+                )}
+              </UserBadgesWrapper>
+            )}
+            <CountContainer>
+              <ClickableCount
+                onClick={() => {
+                  setActiveTab(UserFeedTabs.FOLLOWERS);
+                  setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
+                }}
+              >
+                {toHumanString(followingCount)}
+              </ClickableCount>
+              <FormattedMessage id="counter.followings" />
+              <ClickableCount
+                onClick={() => {
+                  setActiveTab(UserFeedTabs.FOLLOWERS);
+                  setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
+                }}
+              >
+                {toHumanString(followerCount)}
+              </ClickableCount>
+              <FormattedMessage id="counter.followers" />
+            </CountContainer>
+          </div>
+        </Header>
+
+        <Description data-qa-anchor="user-info-description">{description}</Description>
+
         <ActionButtonContainer>
           <ConditionalRender condition={isMyProfile}>
             <Button
@@ -150,80 +213,142 @@ const UIUserInfo = ({
                   <PlusIcon /> <FormattedMessage id="user.follow" />
                 </PrimaryButton>
               )}
+              {isFollowAccepted && (
+                // <CheckIconWrapper>
+                //   <Check className="w-4" /> <FormattedMessage id="Following" />
+                // <CheckIconWrapper/>
+                <CheckIconWrapper className="items-center text-cym gap-2">
+                  <Check className="w-4 fill-cym" /> <FormattedMessage id="Following" />
+                </CheckIconWrapper>
+              )}
             </>
           </ConditionalRender>
+          <OptionMenu options={allOptions} pullRight={false} align={POSITION_LEFT} />
         </ActionButtonContainer>
-        <OptionMenu options={allOptions} pullRight={false} />
-      </Header>
-      <ProfileNameWrapper>
-        <Truncate lines={3}>
-          <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
-        </Truncate>
 
-        {user.isGlobalBan && (
-          <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
+        {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
+          <PendingNotification
+            onClick={() => {
+              setActiveTab(UserFeedTabs.FOLLOWERS);
+              setTimeout(() => setFollowActiveTab(PENDING_TAB), 250);
+            }}
+          >
+            <NotificationTitle>
+              <TitleEllipse />
+              <FormattedMessage id="follow.pendingNotification.title" />
+            </NotificationTitle>
+            <NotificationBody>
+              <FormattedMessage id="follow.pendingNotification.body" />
+            </NotificationBody>
+          </PendingNotification>
         )}
-      </ProfileNameWrapper>
-      {/* Add badges styled compoenent */}
+      </Container>
 
-      <UserBadgesWrapper>
-        {userAriseTier ? (
-          <span className="whitespace-nowrap rounded-full bg-[#EBF2F1] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
-            {' '}
-            {userAriseTier}
-          </span>
-        ) : (
-          <span className="hidden">Nothing to see here</span>
+      <Container className="xs:hidden md:block" data-qa-anchor="user-info">
+        <Header>
+          <Avatar
+            data-qa-anchor="user-info-profile-image"
+            avatar={fileUrl}
+            backgroundImage={UserImage}
+          />
+          <ActionButtonContainer>
+            <ConditionalRender condition={isMyProfile}>
+              <Button
+                data-qa-anchor="user-info-edit-profile-button"
+                disabled={!connected}
+                onClick={() => onEditUser(userId)}
+              >
+                <PencilIcon /> <FormattedMessage id="user.editProfile" />
+              </Button>
+              <>
+                {isPrivateNetwork && isFollowPending && (
+                  <Button disabled={!connected} onClick={() => onFollowDecline()}>
+                    <PendingIconContainer>
+                      <PendingIcon />
+                    </PendingIconContainer>
+                    <FormattedMessage id="user.cancel_follow" />
+                  </Button>
+                )}
+                {isFollowNone && (
+                  <PrimaryButton disabled={!connected} onClick={() => onFollowRequest()}>
+                    <PlusIcon /> <FormattedMessage id="user.follow" />
+                  </PrimaryButton>
+                )}
+              </>
+            </ConditionalRender>
+          </ActionButtonContainer>
+          <OptionMenu options={allOptions} pullRight={false} />
+        </Header>
+        <ProfileNameWrapper>
+          <Truncate lines={3}>
+            <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
+          </Truncate>
+
+          {user.isGlobalBan && (
+            <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
+          )}
+        </ProfileNameWrapper>
+        {/* Add badges styled compoenent */}
+
+        <UserBadgesWrapper>
+          {userAriseTier ? (
+            <span className="whitespace-nowrap rounded-full bg-[#EBF2F1] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+              {' '}
+              {userAriseTier}
+            </span>
+          ) : (
+            <span className="hidden">Nothing to see here</span>
+          )}
+
+          {cymRole ? (
+            <span className="whitespace-nowrap rounded-full bg-[#EFF0E5] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+              {cymRole}
+            </span>
+          ) : (
+            <span className="hidden">Nothing to see here</span>
+          )}
+        </UserBadgesWrapper>
+
+        <CountContainer>
+          <ClickableCount
+            onClick={() => {
+              setActiveTab(UserFeedTabs.FOLLOWERS);
+              setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
+            }}
+          >
+            {toHumanString(followingCount)}
+          </ClickableCount>
+          <FormattedMessage id="counter.followings" />
+          <ClickableCount
+            onClick={() => {
+              setActiveTab(UserFeedTabs.FOLLOWERS);
+              setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
+            }}
+          >
+            {toHumanString(followerCount)}
+          </ClickableCount>
+          <FormattedMessage id="counter.followers" />
+        </CountContainer>
+        <Description data-qa-anchor="user-info-description">{description}</Description>
+
+        {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
+          <PendingNotification
+            onClick={() => {
+              setActiveTab(UserFeedTabs.FOLLOWERS);
+              setTimeout(() => setFollowActiveTab(PENDING_TAB), 250);
+            }}
+          >
+            <NotificationTitle>
+              <TitleEllipse />
+              <FormattedMessage id="follow.pendingNotification.title" />
+            </NotificationTitle>
+            <NotificationBody>
+              <FormattedMessage id="follow.pendingNotification.body" />
+            </NotificationBody>
+          </PendingNotification>
         )}
-
-        {cymRole ? (
-          <span className="whitespace-nowrap rounded-full bg-[#EFF0E5] px-3 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
-            {cymRole}
-          </span>
-        ) : (
-          <span className="hidden">Nothing to see here</span>
-        )}
-      </UserBadgesWrapper>
-
-      <CountContainer>
-        <ClickableCount
-          onClick={() => {
-            setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWINGS), 250);
-          }}
-        >
-          {toHumanString(followingCount)}
-        </ClickableCount>
-        <FormattedMessage id="counter.followings" />
-        <ClickableCount
-          onClick={() => {
-            setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(FollowersTabs.FOLLOWERS), 250);
-          }}
-        >
-          {toHumanString(followerCount)}
-        </ClickableCount>
-        <FormattedMessage id="counter.followers" />
-      </CountContainer>
-      <Description data-qa-anchor="user-info-description">{description}</Description>
-
-      {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
-        <PendingNotification
-          onClick={() => {
-            setActiveTab(UserFeedTabs.FOLLOWERS);
-            setTimeout(() => setFollowActiveTab(PENDING_TAB), 250);
-          }}
-        >
-          <NotificationTitle>
-            <TitleEllipse />
-            <FormattedMessage id="follow.pendingNotification.title" />
-          </NotificationTitle>
-          <NotificationBody>
-            <FormattedMessage id="follow.pendingNotification.body" />
-          </NotificationBody>
-        </PendingNotification>
-      )}
-    </Container>
+      </Container>
+    </>
   );
 };
 
