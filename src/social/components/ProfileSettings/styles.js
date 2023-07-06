@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import UIProfileSettingsTabs from '~/social/components/ProfileSettingsTabs';
-import Button, { PrimaryButton } from '~/core/components/Button';
 import UIAvatar from '~/core/components/Avatar';
+import Button, { PrimaryButton } from '~/core/components/Button';
 import { Plus } from '~/icons';
+import UIProfileSettingsTabs from '~/social/components/ProfileSettingsTabs';
 
 export const ProfileSettingsTabs = styled(UIProfileSettingsTabs)``;
 

@@ -141,6 +141,7 @@ export const ProfileNameWrapper = styled.div`
 
 export const UserBadgesWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
 
   gap: 8px;
   margin: 8px 0;
@@ -150,4 +151,11 @@ export const UserBadgesWrapper = styled.div`
 `;
 export const CheckIconWrapper = styled.div`
   display: flex;
+`;
+export const MyProfileContainer = styled.div`
+  background: ${({ theme }) => theme.palette.system.background};
+  border-radius: 4px 4px 0 0;
+  border: 1px solid #edeef2;
+  width: full;
+  padding: 16px 0;
 `;

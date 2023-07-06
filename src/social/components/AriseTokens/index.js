@@ -1,13 +1,13 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import useUser from '~/core/hooks/useUser';
 // import EmptyState from '~/core/components/EmptyState';
 import customizableComponent from '~/core/hocs/customization';
 
+import { userId } from '~/social/constants';
 import { AriseTokensContainer } from './styles';
 
 const AriseTokensGallery = () => {
   // const userId = window.shopifyCustomerId;
-  const userId = '3454838145071'; // remove on build
   const { user } = useUser(userId);
 
   return (

@@ -33,3 +33,5 @@ export const VideoQuality = Object.freeze({
 });
 
 export const MP4MimeType = 'video/mp4';
+
+export const userId = '3454838145071';

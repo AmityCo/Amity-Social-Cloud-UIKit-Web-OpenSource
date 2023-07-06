@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import styled from 'styled-components';
 import { Lock } from '~/icons';
 
 export const FeedScrollContainer = styled(InfiniteScroll)`

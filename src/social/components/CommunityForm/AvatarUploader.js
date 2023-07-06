@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import { FileRepository, ImageSize } from '@amityco/js-sdk';
+import { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { ImageSize, FileRepository } from '@amityco/js-sdk';
+import Avatar from '~/core/components/Avatar';
 
-import Loader from '~/core/components/Uploaders/Loader';
-import Uploader from '~/core/components/Uploaders/Uploader';
 import UploaderImage from '~/core/components/Uploaders/Image';
-import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
+import Loader from '~/core/components/Uploaders/Loader';
 import CameraIcon from '~/icons/Camera';
 
 const StyledCameraIcon = styled(CameraIcon)`
@@ -46,10 +45,7 @@ const CoverImageLoader = styled(Loader)`
   border-radius: 0;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.4);
-  &:hover {
-    background: rgba(0, 0, 0, 0.3);
-  }
+  opacity: 0;
 `;
 
 const BgImage = styled.div`
@@ -96,22 +92,44 @@ const AvatarUploader = ({
   );
 
   return (
-    <AvatarUploadContainer>
-      <Uploader files={loadedAvatar} onChange={handleChange}>
-        <ImageRenderer />
-      </Uploader>
-      <BgImage src={fileUrl ?? communityCoverPlaceholder} />
+    <div className="w-fit h-fit relative mx-auto p-[6px]">
+      <Avatar
+        className="!w-16 !h-16"
+        data-qa-anchor="profile-setting-avatar"
+        avatar={fileUrl}
+        onClick={() => onClickUser(userId)} // add functionallity that directs to profile page on click.
+      />
+      {/* <Uploader files={loadedAvatar} onChange={handleChange}>
+          <ImageRenderer />
+        </Uploader> */}
       <CoverImageLoader
+        className=""
         data-qa-anchor={`${dataQaAnchor}-avatar-uploader`}
         mimeType={mimeType}
         onChange={(newAvatar) => setLoadedAvatar(newAvatar)}
-      >
-        <AvatarUploadButton>
-          <StyledCameraIcon width={20} height={20} /> &nbsp; Upload image
-        </AvatarUploadButton>
-      </CoverImageLoader>
-    </AvatarUploadContainer>
+      ></CoverImageLoader>
+      <div className="w-7 h-7 bg-white absolute bottom-0 right-0 rounded-full flex justify-center items-center">
+        <div className="w-[85%] h-[85%] bg-[#EBECEF] rounded-full flex justify-center items-center">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.3516 4.6875H13.6875V12.5625H2.3125V4.6875H5.62109L6.27734 2.9375H9.69531L10.3516 4.6875ZM9.85938 1.625H6.27734C5.73047 1.625 5.23828 1.98047 5.04688 2.5L4.71875 3.375H2.3125C1.57422 3.375 1 3.97656 1 4.6875V12.5625C1 13.3008 1.57422 13.875 2.3125 13.875H13.6875C14.3984 13.875 15 13.3008 15 12.5625V4.6875C15 3.97656 14.3984 3.375 13.6875 3.375H11.2812L10.8711 2.33594C10.707 1.92578 10.3242 1.625 9.85938 1.625ZM8 11.9062C9.80469 11.9062 11.2812 10.457 11.2812 8.625C11.2812 6.82031 9.80469 5.34375 8 5.34375C6.16797 5.34375 4.71875 6.82031 4.71875 8.625C4.71875 10.457 6.16797 11.9062 8 11.9062ZM8 6.65625C9.06641 6.65625 9.96875 7.55859 9.96875 8.625C9.96875 9.71875 9.06641 10.5938 8 10.5938C6.90625 10.5938 6.03125 9.71875 6.03125 8.625C6.03125 7.55859 6.90625 6.65625 8 6.65625Z"
+              fill="#292B32"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
   );
 };
+{
+  /* <StyledCameraIcon width={20} height={20} /> &nbsp; Upload image */
+}
+//
 
 export default AvatarUploader;

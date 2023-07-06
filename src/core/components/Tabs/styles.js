@@ -4,6 +4,16 @@ export const TabsContainer = styled.nav`
   background: ${({ theme }) => theme.palette.system.background};
   border-radius: 4px 4px 0 0;
   border: 1px solid #edeef2;
+  width: full;
+  overflow-x: auto;
+  white-space: nowrap;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const TabsList = styled.ul`

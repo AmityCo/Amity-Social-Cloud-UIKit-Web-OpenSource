@@ -9,13 +9,12 @@ import { EllipsisH } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
 import Avatar from '../Avatar';
 
-import { PageTypes } from '~/social/constants';
+import { PageTypes, userId } from '~/social/constants';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { AvatarContainer } from './styles';
 
 const CustomHeader = ({ onClickUser }) => {
   // const userId = window.shopifyCustomerId;
-  const userId = '3454838145071'; // remove on build
   const { user, file } = useUser(userId);
   console.log('user', user);
   console.log('file', file);
@@ -29,7 +28,6 @@ const CustomHeader = ({ onClickUser }) => {
   ];
 
   const [showMenu, setShowMenu] = useState(false);
-
 
   return (
     <div className="flex flex-col border-y-1 border-cym-lightgrey gap-3  bg-cym-lightteal px-5 md:px-[68px] py-[16px]">
@@ -159,13 +157,11 @@ const CustomHeader = ({ onClickUser }) => {
   );
 };
 
-
 CustomHeader.propTypes = {
   onClickUser: PropTypes.func,
 };
 CustomHeader.defaultProps = {
   onClickUser: null,
 };
-
 
 export default memo(withSDK(customizableComponent('CustomHeader', CustomHeader)));

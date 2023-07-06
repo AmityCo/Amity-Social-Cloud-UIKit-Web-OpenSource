@@ -21,6 +21,7 @@ import {
   CountContainer,
   Description,
   Header,
+  MyProfileContainer,
   NotificationBody,
   NotificationTitle,
   OptionMenu,
@@ -35,6 +36,7 @@ import {
   UserBadgesWrapper,
 } from './styles';
 
+import BackLink from '~/core/components/BackLink';
 import { confirm } from '~/core/components/Confirm';
 import { notification } from '~/core/components/Notification';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
@@ -81,7 +83,6 @@ const UIUserInfo = ({
     default:
       console.log('This user has no Cymbiotika roles');
   }
-
   const [onReportClick] = useAsyncCallback(async () => {
     await handleReport();
     notification.success({
@@ -125,6 +126,27 @@ const UIUserInfo = ({
 
   return (
     <>
+      <MyProfileContainer className="!relative xs:!flex justify-center items-center md:!hidden min-h-[32px] h-fit mb-[14px]">
+        <h1 className="!leading-none m-auto cym-h-2-lg">My Profile</h1>
+        <BackLink
+          className="absolute left-0 ml-2"
+          text={
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.6211 19.9141L16.3242 19.2461C16.4648 19.0703 16.4648 18.7891 16.3242 18.6484L9.96094 12.25L16.3242 5.88672C16.4648 5.74609 16.4648 5.46484 16.3242 5.28906L15.6211 4.62109C15.4453 4.44531 15.1992 4.44531 15.0234 4.62109L7.64062 11.9688C7.5 12.1445 7.5 12.3906 7.64062 12.5664L15.0234 19.9141C15.1992 20.0898 15.4453 20.0898 15.6211 19.9141Z"
+                fill="#292B32"
+              />
+            </svg>
+          }
+        />
+      </MyProfileContainer>
+
       <Container className="xs:block md:hidden" data-qa-anchor="user-info">
         <Header className="!items-center">
           <Avatar
@@ -244,7 +266,7 @@ const UIUserInfo = ({
         )}
       </Container>
 
-      <Container className="xs:hidden md:block" data-qa-anchor="user-info">
+      <Container className="hidden md:block" data-qa-anchor="user-info">
         <Header>
           <Avatar
             data-qa-anchor="user-info-profile-image"

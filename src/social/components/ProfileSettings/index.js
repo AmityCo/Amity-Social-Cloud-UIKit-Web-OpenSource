@@ -1,26 +1,26 @@
-import React, { memo, useState } from 'react';
+import { memo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import UserProfileForm from '~/social/components/UserProfileForm';
 import BackLink from '~/core/components/BackLink';
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
-import { backgroundImage as UserImage } from '~/icons/User';
 import useUser from '~/core/hooks/useUser';
 import { isEmpty } from '~/helpers';
+import { backgroundImage as UserImage } from '~/icons/User';
+import UserProfileForm from '~/social/components/UserProfileForm';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { Tabs, tabs } from './constants';
 import {
-  ProfileSettingsTabs,
-  Container,
-  ActiveTabContent,
   ActiveTabContainer,
-  PageHeader,
-  PageTitle,
+  ActiveTabContent,
   Avatar,
   AvatarContainer,
+  Container,
+  PageHeader,
+  PageTitle,
+  ProfileSettingsTabs,
 } from './styles';
 
 const ProfileSettings = ({ userId, client }) => {
@@ -46,8 +46,8 @@ const ProfileSettings = ({ userId, client }) => {
   }
 
   return (
-    <Container>
-      <PageHeader>
+    <Container className="xs:!min-w-0 md:min-w-[600px]">
+      <PageHeader className="xs:!hidden md:!flex">
         <AvatarContainer>
           <Avatar avatar={file.fileUrl} backgroundImage={UserImage} />
         </AvatarContainer>
@@ -59,12 +59,17 @@ const ProfileSettings = ({ userId, client }) => {
         </div>
       </PageHeader>
       <div>
-        <ProfileSettingsTabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <ProfileSettingsTabs
+          className="xs:!hidden md:!block"
+          tabs={tabs}
+          activeTab={activeTab}
+          onChange={setActiveTab}
+        />
       </div>
       <ActiveTabContainer>
         {activeTab === Tabs.EDIT_PROFILE && (
           <ActiveTabContent>
-            <UserProfileForm user={user} onSubmit={handleSubmit} />
+            <UserProfileForm className="w-full" user={user} onSubmit={handleSubmit} />
           </ActiveTabContent>
         )}
       </ActiveTabContainer>

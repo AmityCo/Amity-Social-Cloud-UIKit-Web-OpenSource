@@ -1,10 +1,9 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import TextareaAutosize from 'react-textarea-autosize';
 import { ErrorMessage as FormErrorMessage } from '@hookform/error-message';
+import TextareaAutosize from 'react-textarea-autosize';
+import styled, { css } from 'styled-components';
+import UIAvatar from '~/core/components/Avatar';
 import { PrimaryButton } from '~/core/components/Button';
 import ImageUploader from '~/core/components/Uploaders/Image';
-import UIAvatar from '~/core/components/Avatar';
 import { ChevronDown, Close, Globe, Lock } from '~/icons';
 
 const ErrorMessageWrapper = styled.div`
