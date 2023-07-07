@@ -15,6 +15,13 @@ export const FeedScrollContainer = styled(InfiniteScroll)`
     margin-top: 20px;
     margin-bottom: 20px;
   }
+
+  .postComposeBar {
+    display: none;
+    @media screen and (min-width: 768px) {
+      display: flex;
+    }
+  }
 `;
 
 export const PrivateFeedContainer = styled.div`

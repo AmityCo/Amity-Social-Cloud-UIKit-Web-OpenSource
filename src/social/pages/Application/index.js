@@ -17,7 +17,8 @@ import ExplorePage from '~/social/pages/Explore';
 import NewsFeedPage from '~/social/pages/NewsFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import MobilePostButton from '~/core/components/MobilePostButton';
+import MobilePostButton from '~/social/components/MobilePostButton';
+import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 
 // import Custom from '~/chat/components/Message/MessageContent/Custom';
 
@@ -40,9 +41,10 @@ const Community = () => {
   // const userId = '3454838145071';
   const handleClickUser = (userId) => onClickUser(userId);
   return (
-    <ApplicationContainer>
+    <ApplicationContainer id="ApplicationContainer">
+      <CreatePostOverlay />
       <CustomHeader userId={page.userId} onClickUser={handleClickUser} />
-      <MobilePostButton />
+
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
         {page.type === PageTypes.Explore && <ExplorePage />}
 
@@ -68,6 +70,7 @@ const Community = () => {
           <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
         )}
       </MainLayout>
+      <MobilePostButton />
     </ApplicationContainer>
   );
 };
