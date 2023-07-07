@@ -78,9 +78,9 @@
   }
   .cym-h-2-lg {
     /* {ter-16-500} */
-    @apply font-ter;
-    @apply font-medium;
-    @apply text-base;
+                @apply !font-ter;
+                @apply !font-medium;
+                @apply !text-base;
   }
 
   /*heading-3*/
@@ -112,9 +112,9 @@
   }
   .cym-h-4 {
     /* {mon-14-600} */
-    @apply font-mon;
-    @apply font-semibold;
-    @apply text-sm;
+        @apply !font-mon;
+        @apply !font-semibold;
+        @apply !text-sm;
   }
   .cym-h-4-lg {
     /* {mon-16-600} */

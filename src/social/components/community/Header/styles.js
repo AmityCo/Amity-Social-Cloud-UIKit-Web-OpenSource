@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import Skeleton from '~/core/components/Skeleton';
@@ -6,8 +5,8 @@ import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
 
 import Avatar from '~/core/components/Avatar';
-import CommunityName from '~/social/components/community/Name';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
+import CommunityName from '~/social/components/community/Name';
 
 const CommunityHeaderContainer = styled.a.attrs((props) => props)`
   display: grid;

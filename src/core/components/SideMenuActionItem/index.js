@@ -1,6 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import { IconWrapper, ButtonActionItem, AnchorActionItem } from './styles';
+import { AnchorActionItem, ButtonActionItem, IconWrapper } from './styles';
 
 export const ALLOWED_ELEMENTS = ['button', 'a'];
 
@@ -29,7 +28,7 @@ const SideMenuActionItem = ({
       onClick={onClick}
     >
       {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
-      <span className="actionItemChild">{children}</span>
+      <span className="actionItemChild cym-h-4">{children}</span>
     </ActionItemContainer>
   );
 };

@@ -1,10 +1,10 @@
 import styled from 'styled-components';
+import { SecondaryButton } from '~/core/components/Button';
+import InputText from '~/core/components/InputText';
 import UIOptionMenu from '~/core/components/OptionMenu';
 import Time from '~/core/components/Time';
-import InputText from '~/core/components/InputText';
-import UICommentComposeBar from '~/social/components/CommentComposeBar';
-import { SecondaryButton } from '~/core/components/Button';
 import { MinusCircle, Reply } from '~/icons';
+import UICommentComposeBar from '~/social/components/CommentComposeBar';
 
 import UIAvatar from '~/core/components/Avatar';
 
@@ -72,6 +72,7 @@ export const CommentInfo = styled.div`
 export const AuthorName = styled.span`
   // react-truncate-markup tries to set to inline-block
   display: inline !important;
+  font-weight: 500 !important;
   ${({ theme }) => theme.typography.body}
 `;
 

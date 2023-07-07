@@ -1,13 +1,12 @@
-import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
+import styled from 'styled-components';
 
+import SideMenuActionItem from '~/core/components/SideMenuActionItem';
+import SideMenuSection from '~/core/components/SideMenuSection';
 import { Newspaper, Search } from '~/icons';
 import { PageTypes } from '~/social/constants';
-import SideMenuSection from '~/core/components/SideMenuSection';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 
 export const NewsIcon = styled(Newspaper).attrs({ width: 20, height: 20 })``;
 
@@ -19,6 +18,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
   return (
     <SideMenuSection heading={<FormattedMessage id="sidesectioncommunity.community" />}>
       <SideMenuActionItem
+        className="cym-h-4"
         data-qa-anchor="side-section-community-side-menu-action-item-news-feed-button"
         icon={<NewsIcon />}
         active={page.type === PageTypes.NewsFeed}
@@ -29,6 +29,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
 
       {!shouldHideExplore && (
         <SideMenuActionItem
+          className="cym-h-4"
           data-qa-anchor="side-section-community-side-menu-action-item-explore-button"
           icon={<SearchIcon />}
           active={page.type === PageTypes.Explore}

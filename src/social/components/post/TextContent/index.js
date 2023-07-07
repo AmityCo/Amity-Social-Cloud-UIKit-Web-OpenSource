@@ -1,19 +1,20 @@
-import React, { useState, useMemo } from 'react';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
+import { useMemo, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import styled from 'styled-components';
-import customizableComponent from '~/core/hocs/customization';
-import ChunkHighlighter from '~/core/components/ChunkHighlighter';
 import Button from '~/core/components/Button';
+import ChunkHighlighter from '~/core/components/ChunkHighlighter';
 import Linkify from '~/core/components/Linkify';
 import MentionHighlightTag from '~/core/components/MentionHighlightTag';
+import customizableComponent from '~/core/hocs/customization';
 import { findChunks } from '~/helpers/utils';
 
 export const PostContent = styled.div`
   overflow-wrap: break-word;
   color: ${({ theme }) => theme.palette.neutral.main};
   white-space: pre-wrap;
+  margin-bottom: 12px;
   ${({ theme }) => theme.typography.body}
 `;
 

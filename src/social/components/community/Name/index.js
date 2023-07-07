@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 import Truncate from 'react-truncate-markup';
@@ -30,7 +29,7 @@ const CommunityName = ({
   }
 
   return (
-    <NameContainer className={className} isActive={isActive} isTitle={isTitle}>
+    <NameContainer className={className + ' cym-h-4'} isActive={isActive} isTitle={isTitle}>
       {loading ? (
         <Name>
           <Skeleton width={120} style={{ fontSize: 12 }} />

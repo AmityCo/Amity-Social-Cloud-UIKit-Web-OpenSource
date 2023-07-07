@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { PageTypes } from '~/social/constants';
@@ -8,6 +7,8 @@ import MainLayout from '~/social/layouts/Main';
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 
 import CustomHeader from '~/core/components/CustomHeader';
+import CreatePostOverlay from '~/social/components/CreatePostOverlay';
+import MobilePostButton from '~/social/components/MobilePostButton';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
@@ -17,13 +18,13 @@ import ExplorePage from '~/social/pages/Explore';
 import NewsFeedPage from '~/social/pages/NewsFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import MobilePostButton from '~/social/components/MobilePostButton';
-import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 
 // import Custom from '~/chat/components/Message/MessageContent/Custom';
 
 const ApplicationContainer = styled.div`
-  height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
   width: 100%;
 `;
 
@@ -44,7 +45,6 @@ const Community = () => {
     <ApplicationContainer id="ApplicationContainer">
       <CreatePostOverlay />
       <CustomHeader userId={page.userId} onClickUser={handleClickUser} />
-
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
         {page.type === PageTypes.Explore && <ExplorePage />}
 

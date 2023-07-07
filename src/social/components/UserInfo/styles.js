@@ -21,7 +21,7 @@ export const PencilIcon = styled(Pencil).attrs({ height: 15, width: 15 })`
 
 export const Container = styled.div`
   border: 1px solid #ebecef;
-  border-radius: 8px;
+  border-radius: 4px;
   background: ${({ theme }) => theme.palette.system.background};
   flex-shrink: 0;
   align-self: flex-start;
@@ -154,7 +154,7 @@ export const CheckIconWrapper = styled.div`
 `;
 export const MyProfileContainer = styled.div`
   background: ${({ theme }) => theme.palette.system.background};
-  border-radius: 4px 4px 0 0;
+  border-radius: 4px;
   border: 1px solid #edeef2;
   width: full;
   padding: 16px 0;

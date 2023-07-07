@@ -15,7 +15,7 @@ const defaultTheme = {
   },
   typography: {
     global: {
-      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif',
+      fontFamily: 'Montserrat, Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif',
       fontStyle: 'normal',
     },
     headline: {
@@ -27,7 +27,7 @@ const defaultTheme = {
       fontSize: '16px',
     },
     body: {
-      fontWeight: 'normal',
+      fontWeight: 500,
       fontSize: '14px',
     },
     bodyBold: {

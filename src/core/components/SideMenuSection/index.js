@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -15,8 +14,8 @@ const ListHeading = styled.h4`
 `;
 
 const SideMenuSection = ({ heading, children }) => (
-  <SectionContainer>
-    {heading && <ListHeading>{heading}</ListHeading>}
+  <SectionContainer className="cym-h-4">
+    {heading && <ListHeading className="!cym-h-2-lg">{heading}</ListHeading>}
     {children}
   </SectionContainer>
 );
