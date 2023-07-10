@@ -14,6 +14,9 @@ export const Overlay = styled.div`
   width: 100%;
   height: 100%;
   background-color: #fff;
+  transition-property: all;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 
   .postComposeBar {
     position: relative;
