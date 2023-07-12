@@ -35,7 +35,7 @@ export const DefaultButton = styled.button`
 export const PrimaryButton = styled.button`
   ${commonButtonStyles};
   border: none;
-  background-color: ${({ theme }) => theme.palette.primary.main} !important;
+  background-color: ${'#005850'} !important;
   color: white;
   &:hover:not(:disabled) {
     opacity: 0.8;

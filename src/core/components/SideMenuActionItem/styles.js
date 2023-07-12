@@ -7,7 +7,7 @@ const actionItemActiveStyles = css`
     `
       background-color: #EBF2F1;
       & > .actionItemChild {
-        color: ${theme.palette.primary.main};
+        color: ${'#005850'};
       }
     `}
 `;
@@ -52,7 +52,7 @@ export const IconWrapper = styled.div`
   ${({ active, theme }) =>
     active
       ? css`
-          background: ${theme.palette.primary.main};
+          background: ${'#005850'};
           // TODO: check color with design
           color: white;
         `

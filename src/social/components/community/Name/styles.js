@@ -7,7 +7,7 @@ export const PrivateIcon = styled(Lock).attrs({ width: 16, height: 16 })`
 
 export const VerifiedIcon = styled(Verified).attrs({ width: 16, height: 16 })`
   margin-left: 8px;
-  fill: #1253de;
+  fill: #005850;
 `;
 
 // the padding-right is to avoid cutting too short when the name ends with an emoji (due to the flex + text-overflow combination)
