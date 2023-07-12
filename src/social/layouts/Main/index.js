@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -41,7 +42,7 @@ const Side = styled.div`
 
 const Layout = ({ aside, children }) => {
   return (
-    <Container>
+    <Container id="main-container">
       <Main>{children}</Main>
       <Side>{aside}</Side>
     </Container>

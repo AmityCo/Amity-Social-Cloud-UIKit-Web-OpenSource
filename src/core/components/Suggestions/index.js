@@ -91,6 +91,7 @@ const Suggestions = ({ items, onPick = () => {}, append, children }) => {
           hover={index === active}
           onClick={onClick(index)}
           onMouseEnter={onMouseEnter(index)}
+          className="search-menu-item"
         >
           {render(item)}
         </MenuItem>
