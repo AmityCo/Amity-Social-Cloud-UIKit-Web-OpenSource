@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import BackLink from '~/core/components/BackLink';
