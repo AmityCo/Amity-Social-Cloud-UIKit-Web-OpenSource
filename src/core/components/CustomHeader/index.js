@@ -1,5 +1,5 @@
-import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { memo, useState } from 'react';
 
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
@@ -9,12 +9,12 @@ import { EllipsisH, Search } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
 import Avatar from '../Avatar';
 
+import UiKitSocialSearch from '~/social/components/SocialSearch';
 import { PageTypes, userId } from '~/social/constants';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { CustomHeaderWrapper, SearchWrapper } from './styles';
-import UiKitSocialSearch from '~/social/components/SocialSearch';
 
-const CustomHeader = ({ onClickUser }) => {
+const CustomHeader = ({ onClickUser, className }) => {
   // const userId = window.shopifyCustomerId;
   const { user, file } = useUser(userId);
   console.log('user', user);
@@ -65,7 +65,9 @@ const CustomHeader = ({ onClickUser }) => {
   }
 
   return (
-    <CustomHeaderWrapper className="fixed border-cym-lightgrey  bg-cym-lightteal">
+    <CustomHeaderWrapper
+      className={`${className ?? ''} fixed border-cym-lightgrey  bg-cym-lightteal`}
+    >
       <div className="flex flex-col w-full border-y-1  gap-3  px-5 md:px-[68px] py-[16px]">
         <div className="flex flex-row items-end">
           <svg

@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -9,10 +8,10 @@ const Container = styled.div`
   grid-template-areas: 'side main' 'none main';
   grid-template-columns: min-content auto;
   grid-template-rows: 100%;
-  grid-gap: 0 20px;
+  // grid-gap: 0 20px;
   width: 100%;
   height: 100%;
-  padding-right: 20px;
+  // padding-right: 20px;
   background: #f7f7f8;
   @media screen and (min-width: 1512px) {
     padding-right: 0;

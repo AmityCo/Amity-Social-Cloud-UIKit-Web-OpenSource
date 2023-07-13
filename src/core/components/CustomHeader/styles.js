@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 
 export const CustomHeaderWrapper = styled.div`
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   .infinite-scroll-component {
     width: 100%;

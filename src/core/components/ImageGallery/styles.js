@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { ChevronLeft, ChevronRight, Remove } from '~/icons';
@@ -9,7 +8,7 @@ export const Container = styled.div`
   overflow: hidden;
 
   display: grid;
-  grid-gap: 1rem 3rem;
+  grid-gap: 1rem 1rem;
   grid-template-columns: 2rem auto 2rem;
   grid-template-rows: min-content auto;
   grid-template-areas:
@@ -24,8 +23,10 @@ export const Container = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  padding: 3rem;
-
+  padding: 5rem 2rem 6rem;
+  @media screen and (min-width: 768px) {
+    padding: 3rem;
+  }
   background: rgba(0, 0, 0, 0.75);
   color: ${({ theme }) => theme.palette.system.background};
 

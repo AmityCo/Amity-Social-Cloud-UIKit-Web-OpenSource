@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import Skeleton from '~/core/components/Skeleton';
@@ -10,6 +9,7 @@ import { backgroundImage as CommunityImage } from '~/icons/Community';
 import CommunityName from '~/social/components/community/Name';
 
 const CommunityHeaderContainer = styled.a.attrs((props) => props)`
+  min-width: 100px;
   display: grid;
   grid-template-areas: 'avatar title' 'avatar children';
   grid-template-columns: min-content auto;

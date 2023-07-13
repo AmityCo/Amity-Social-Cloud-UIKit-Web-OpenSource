@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 import { PageTypes } from '~/social/constants';
@@ -10,7 +9,6 @@ import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 import CustomHeader from '~/core/components/CustomHeader';
 import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 import MobilePostButton from '~/social/components/MobilePostButton';
-import MyCommunitiesMobile from '~/social/components/MyCommunitiesMobile';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
@@ -45,11 +43,20 @@ const Community = () => {
   return (
     <ApplicationContainer id="ApplicationContainer">
       <CreatePostOverlay />
-      <CustomHeader userId={page.userId} onClickUser={handleClickUser} />
-      <MyCommunitiesMobile />
+      <CustomHeader
+        className="xs:!hidden md:!flex"
+        userId={page.userId}
+        onClickUser={handleClickUser}
+      />
       <MainLayout
         aside={<StyledCommunitySideMenu activeCommunity={page.communityId} id="main-layout" />}
       >
+        <CustomHeader
+          className="xs:!flex md:!hidden"
+          userId={page.userId}
+          onClickUser={handleClickUser}
+        />
+
         {page.type === PageTypes.Explore && <ExplorePage />}
 
         {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
@@ -73,8 +80,8 @@ const Community = () => {
         {page.type === PageTypes.MyGroups && (
           <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
         )}
+        <MobilePostButton />
       </MainLayout>
-      <MobilePostButton />
     </ApplicationContainer>
   );
 };
