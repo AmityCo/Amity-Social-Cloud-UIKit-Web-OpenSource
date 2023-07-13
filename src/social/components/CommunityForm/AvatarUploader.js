@@ -1,7 +1,7 @@
 import { FileRepository, ImageSize } from '@amityco/js-sdk';
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import Avatar from '~/core/components/Avatar';
+import Uploader from '~/core/components/Uploaders/Uploader';
 
 import UploaderImage from '~/core/components/Uploaders/Image';
 import Loader from '~/core/components/Uploaders/Loader';
@@ -61,10 +61,17 @@ const ImageRenderer = ({ uploading, uploaded, progress }) => {
   const file = [...uploading, ...uploaded].sort((a, b) => b.updatedAt - a.updatedAt)[0];
 
   if (!file?.fileId)
-    return <UploaderImage key={file?.name} file={file} progress={progress[file?.name]} />;
+    return (
+      <UploaderImage
+        className="!border-none"
+        key={file?.name}
+        file={file}
+        progress={progress[file?.name]}
+      />
+    );
 
   const { fileId } = file;
-  return <UploaderImage key={fileId} fileId={fileId} />;
+  return <UploaderImage className="!border-none" key={fileId} fileId={fileId} />;
 };
 
 const AvatarUploader = ({
@@ -90,15 +97,29 @@ const AvatarUploader = ({
       }),
     [avatarFileId],
   );
-
   return (
     <div className="w-fit h-fit relative mx-auto p-[6px]">
-      <Avatar
+      <AvatarUploadContainer className="!w-16 !h-16 !rounded-full">
+        <Uploader files={loadedAvatar} onChange={handleChange}>
+          <ImageRenderer />
+        </Uploader>
+        <BgImage src={fileUrl ?? communityCoverPlaceholder} />
+        <CoverImageLoader
+          data-qa-anchor={`${dataQaAnchor}-avatar-uploader`}
+          mimeType={mimeType}
+          onChange={(newAvatar) => setLoadedAvatar(newAvatar)}
+        >
+          <AvatarUploadButton>
+            <StyledCameraIcon width={20} height={20} /> &nbsp; Upload image
+          </AvatarUploadButton>
+        </CoverImageLoader>
+      </AvatarUploadContainer>
+      {/* <Avatar
         className="!w-16 !h-16"
         data-qa-anchor="profile-setting-avatar"
         avatar={fileUrl}
         onClick={() => onClickUser(userId)} // add functionallity that directs to profile page on click.
-      />
+      /> */}
       {/* <Uploader files={loadedAvatar} onChange={handleChange}>
           <ImageRenderer />
         </Uploader> */}
@@ -108,7 +129,7 @@ const AvatarUploader = ({
         mimeType={mimeType}
         onChange={(newAvatar) => setLoadedAvatar(newAvatar)}
       ></CoverImageLoader>
-      <div className="w-7 h-7 bg-white absolute bottom-0 right-0 rounded-full flex justify-center items-center">
+      <div className="z-1001 w-7 h-7 bg-white absolute bottom-0 right-0 rounded-full flex justify-center items-center">
         <div className="w-[85%] h-[85%] bg-[#EBECEF] rounded-full flex justify-center items-center">
           <svg
             width="16"
