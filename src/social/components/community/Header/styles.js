@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 import Skeleton from '~/core/components/Skeleton';
@@ -73,6 +74,7 @@ const UICommunityHeader = ({
       avatar={avatarFileUrl}
       backgroundImage={CommunityImage}
       loading={loading}
+      className="community-header-avatar"
     />
     {loading && children ? (
       <Skeleton style={{ fontSize: 8, maxWidth: 120 }} />

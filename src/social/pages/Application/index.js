@@ -26,7 +26,7 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 const ApplicationContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100%;
 `;
 
@@ -41,12 +41,10 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
 const Community = () => {
   const { page, onClickUser } = useNavigation();
 
-  // const userId = '3454838145071';
   const handleClickUser = (userId) => onClickUser(userId);
   return (
     <ApplicationContainer id="ApplicationContainer">
       <CreatePostOverlay />
-
       <CustomHeader userId={page.userId} onClickUser={handleClickUser} />
       <MyCommunitiesMobile />
       <MainLayout

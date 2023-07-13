@@ -65,8 +65,8 @@ const CustomHeader = ({ onClickUser }) => {
   }
 
   return (
-    <CustomHeaderWrapper className="border-cym-lightgrey  bg-cym-lightteal">
-      <div className="relative flex flex-col w-full border-y-1  gap-3  px-5 md:px-[68px] py-[16px]">
+    <CustomHeaderWrapper className="fixed border-cym-lightgrey  bg-cym-lightteal">
+      <div className="flex flex-col w-full border-y-1  gap-3  px-5 md:px-[68px] py-[16px]">
         <div className="flex flex-row items-end">
           <svg
             className="ml-[-8px] w-[100px] md:w-[140px]"

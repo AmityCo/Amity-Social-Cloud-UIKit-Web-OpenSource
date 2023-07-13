@@ -15,7 +15,7 @@ const Avatar = ({ className, avatar = null, showOverlay, size, onClick, loading,
 
   return (
     <AvatarContainer
-      className={cx(className, { visible, clickable: !!onClick })}
+      className={cx(className, 'avatar-container', { visible, clickable: !!onClick })}
       loading={loading}
       size={size}
       onClick={onClick}
