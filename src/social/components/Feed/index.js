@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { PostTargetType, FeedType, CommunityFilter } from '@amityco/js-sdk';
+import { PageTypes } from '~/social/constants';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
 
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
@@ -16,6 +17,8 @@ import PrivateFeed from '~/social/components/PrivateFeed';
 // import TrendingList from '../community/TrendingList';
 import NewsFeedTrendingList from '../community/NewsFeedTrendingList';
 
+import { useNavigation } from '~/social/providers/NavigationProvider';
+
 const queryParams = { filter: CommunityFilter.Member };
 
 const Feed = ({
@@ -29,6 +32,7 @@ const Feed = ({
   readonly = false,
   isHiddenProfile = false,
 }) => {
+  const { page } = useNavigation();
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
 
   const [posts, hasMore, loadMore, loading, loadingMore] = useFeed({
@@ -79,7 +83,7 @@ const Feed = ({
                     hidePostTarget={targetType !== PostTargetType.GlobalFeed}
                     readonly={readonly}
                   />
-                  {index === 0 && <NewsFeedTrendingList />}
+                  {page.type === PageTypes.NewsFeed && index === 0 && <NewsFeedTrendingList />}
                 </React.Fragment>
               ))}
 
