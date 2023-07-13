@@ -3,6 +3,9 @@ import styled from 'styled-components';
 export const CustomHeaderWrapper = styled.div`
   position: relative;
   display: flex;
+  .infinite-scroll-component {
+    width: 100%;
+  }
 `;
 export const AvatarContainer = styled.div`
   display: block;

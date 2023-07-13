@@ -13,7 +13,10 @@ export const FeedScrollContainer = styled(InfiniteScroll)`
 
   & .load-more {
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    @media screen and (min-width: px) {
+      margin-bottom: 20px;
+    }
   }
 
   .postComposeBar {
