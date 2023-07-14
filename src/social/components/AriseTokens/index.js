@@ -18,7 +18,6 @@ const AriseTokensGallery = ({ targetId }) => {
 
           // pass targetId to ServerAPI Wrapper
           const ariseRewardsResp = await server.ariseGetRewards(ariseUserId);
-          console.log('Response', ariseRewardsResp);
           const ariseRewardsData = ariseRewardsResp.rewards;
 
           const extractedData = ariseRewardsData.map((reward) => {
@@ -36,9 +35,10 @@ const AriseTokensGallery = ({ targetId }) => {
           });
 
           setExtractedRewardsData(extractedData);
+
           console.log('Your extracted data', extractedData);
-        } catch (err) {
-          console.error('Error fetching Rewards data:', err);
+        } catch (error) {
+          console.error('Error fetching Rewards data:', error);
         }
       };
 
