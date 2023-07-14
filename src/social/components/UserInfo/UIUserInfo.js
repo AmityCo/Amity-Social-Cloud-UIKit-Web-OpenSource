@@ -1,3 +1,4 @@
+import React from 'react';
 import { FollowRequestStatus } from '@amityco/js-sdk';
 import { toHumanString } from 'human-readable-numbers';
 import PropTypes from 'prop-types';
