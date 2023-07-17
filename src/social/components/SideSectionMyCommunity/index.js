@@ -29,6 +29,7 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
 
   return (
     <SideMenuSection heading={<FormattedMessage id="SideSectionMyCommunity.myCommunity" />}>
+      {/* 
       {socialCommunityCreationButtonVisible && (
         <SideMenuActionItem
           data-qa-anchor="side-section-my-community-create-community-button"
@@ -40,6 +41,7 @@ const SideSectionMyCommunity = ({ className, activeCommunity }) => {
           <FormattedMessage id="createCommunity" />
         </SideMenuActionItem>
       )}
+       */}
 
       <CommunitiesList
         className={className}

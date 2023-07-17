@@ -36,12 +36,12 @@ const NewsFeedTrendingList = () => {
   );
 
   const list = loading
-    ? new Array(5).fill(1).map((x, index) => (
+    ? new Array(3).fill(1).map((x, index) => (
         <li key={index}>
           <NewsFeedTrendingItem loading />
         </li>
       ))
-    : communities.slice(0, 5).map(({ communityId }) => (
+    : communities.slice(0, 3).map(({ communityId }) => (
         <li key={communityId}>
           <NewsFeedTrendingItem communityId={communityId} onClick={onClickCommunity} />
         </li>
