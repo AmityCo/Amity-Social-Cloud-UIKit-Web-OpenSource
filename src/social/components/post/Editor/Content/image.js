@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import GalleryGrid from '~/core/components/GalleryGrid';
 import Image from '~/core/components/Uploaders/Image';

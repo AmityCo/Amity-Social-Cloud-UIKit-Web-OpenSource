@@ -6,6 +6,7 @@ import MainLayout from '~/social/layouts/Main';
 
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 
+import CustomFooterNav from '~/core/components/CustomFooterNav';
 import CustomHeader from '~/core/components/CustomHeader';
 import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 import MobilePostButton from '~/social/components/MobilePostButton';
@@ -81,6 +82,7 @@ const Community = () => {
           <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
         )}
         <MobilePostButton />
+        <CustomFooterNav onClickUser={handleClickUser} />
       </MainLayout>
     </ApplicationContainer>
   );

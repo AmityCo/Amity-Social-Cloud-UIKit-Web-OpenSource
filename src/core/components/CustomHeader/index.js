@@ -5,7 +5,6 @@ import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
 
 import useUser from '~/core/hooks/useUser';
-import { EllipsisH, Search } from '~/icons';
 import { backgroundImage as UserImage } from '~/icons/User';
 import Avatar from '../Avatar';
 
@@ -17,11 +16,7 @@ import { CustomHeaderWrapper, SearchWrapper } from './styles';
 const CustomHeader = ({ onClickUser, className }) => {
   // const userId = window.shopifyCustomerId;
   const { user, file } = useUser(userId);
-  console.log('user', user);
-  console.log('file', file);
   const { onChangePage, page } = useNavigation();
-
-  console.log('clicked!');
 
   const menuTabs = [
     { name: 'Profile', func: () => onClickUser(user.userId) },
@@ -35,7 +30,6 @@ const CustomHeader = ({ onClickUser, className }) => {
   const searchWrapper = document.getElementById('search-wrapper');
   const mainContainer = document.getElementById('main-container');
   const searchMenuItem = document.querySelector('.search-menu-item');
-  console.log(mainContainer);
   // const searchMenuItem = document.querySelector('search-menu-item');
 
   function showMobileSearch() {
@@ -143,9 +137,9 @@ const CustomHeader = ({ onClickUser, className }) => {
                 />
               </svg>
             </div>
-            <button type="button" className="relative md:hidden" onClick={showMobileSearch}>
+            {/* <button type="button" className="relative md:hidden" onClick={showMobileSearch}>
               <Search className="w-[16px] h-7" id="search-button" />
-            </button>
+            </button> */}
             <div className="hidden md:block">
               <Avatar
                 data-qa-anchor="header-avatar"
@@ -163,14 +157,13 @@ const CustomHeader = ({ onClickUser, className }) => {
               {user.displayName}
             </p>
 
-            <div className="relative">
+            {/* <div className="relative">
               <EllipsisH
                 onClick={() => setShowMenu(!showMenu)}
                 className="md:hidden w-[16px] h-7"
               />
               {showMenu && (
                 <>
-                  {/* <div className="absolute right-0 w-[160px] h-[200px] z-40 bg-black opacity-30 blur-lg"></div> */}
                   <div
                     onClick={() => setShowMenu(false)}
                     className="fixed inset-0 bg-black opacity-40 w-full h-full z-50"
@@ -192,7 +185,7 @@ const CustomHeader = ({ onClickUser, className }) => {
                   </div>
                 </>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 

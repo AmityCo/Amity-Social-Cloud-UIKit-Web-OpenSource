@@ -1,19 +1,19 @@
-import React, { memo } from 'react';
+import { CommunityFilter, FeedType, PostTargetType } from '@amityco/js-sdk';
 import PropTypes from 'prop-types';
-import { PostTargetType, FeedType, CommunityFilter } from '@amityco/js-sdk';
-import { PageTypes } from '~/social/constants';
+import React, { memo } from 'react';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
+import { PageTypes } from '~/social/constants';
 
-import useCommunitiesList from '~/social/hooks/useCommunitiesList';
-import PostCreator from '~/social/components/post/Creator';
-import Post from '~/social/components/post/Post';
-import customizableComponent from '~/core/hocs/customization';
 import ConditionalRender from '~/core/components/ConditionalRender';
+import customizableComponent from '~/core/hocs/customization';
 import EmptyFeed from '~/social/components/EmptyFeed';
 import LoadMore from '~/social/components/LoadMore';
+import PrivateFeed from '~/social/components/PrivateFeed';
+import PostCreator from '~/social/components/post/Creator';
+import Post from '~/social/components/post/Post';
+import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
-import PrivateFeed from '~/social/components/PrivateFeed';
 // import TrendingList from '../community/TrendingList';
 import NewsFeedTrendingList from '../community/NewsFeedTrendingList';
 

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { React, memo } from 'react';
+import { memo } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import withSDK from '~/core/hocs/withSDK';
@@ -40,7 +40,6 @@ const UserInfo = ({
     setActiveTab(UserFeedTabs.TIMELINE);
     notification.success({ content: <FormattedMessage id="notification.done" /> });
   }, [followDecline]);
-  console.log('Roles', user);
   return (
     <UIUserInfo
       userId={userId}

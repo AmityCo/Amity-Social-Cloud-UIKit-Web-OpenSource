@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
-import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import MockData from '~/mock';
-
+import { userId as ID } from '~/social/constants';
+import UiKitProvider from '../../src/core/providers/UiKitProvider';
 const GLOBAL_NAME = 'user';
 
 const global = {
@@ -72,7 +72,8 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
       apiRegion={process.env.STORYBOOK_API_REGION}
       // userId={userId}
       // displayName={displayName || userId}
-      userId={'3454838145071'}
+      userId={ID}
+      // userId={'3454838145071'}
       displayName={'Test Test'}
       onConnectionStatusChange={handleConnectionStatusChange}
       onConnected={handleConnected}

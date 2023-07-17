@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMemo, useState } from 'react';
 
 import GalleryGrid from '~/core/components/GalleryGrid';
 import ImageGallery from '~/core/components/ImageGallery';
@@ -36,6 +36,8 @@ const GalleryContent = ({
         items={items}
         truncate={truncate}
         onClick={(i) => {
+          document.getElementById('create-post-mobile-button').style.display = 'none';
+
           if (!items[i].skeleton) {
             setIndex(i);
           }

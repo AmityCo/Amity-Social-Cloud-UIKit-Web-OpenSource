@@ -1,4 +1,4 @@
-import { React, memo } from 'react';
+import { memo } from 'react';
 import styled from 'styled-components';
 
 import customizableComponent from '~/core/hocs/customization';
@@ -10,7 +10,7 @@ const Button = styled.div`
   position: fixed;
   z-index: 20;
   right: 10px;
-  bottom: 15px;
+  bottom: 56px;
   padding: 10px;
   width: 64px;
   height: 64px;
@@ -38,7 +38,7 @@ const spawnCreatePostModal = () => {
 
 const MobilePostButton = () => {
   return (
-    <Button onClick={spawnCreatePostModal}>
+    <Button id="create-post-mobile-button" onClick={spawnCreatePostModal}>
       <PenToSquare />
     </Button>
   );

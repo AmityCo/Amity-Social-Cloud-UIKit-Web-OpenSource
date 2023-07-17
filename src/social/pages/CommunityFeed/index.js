@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   EventSubscriberRepository,
@@ -16,14 +16,14 @@ import useCommunity from '~/social/hooks/useCommunity';
 import withSDK from '~/core/hocs/withSDK';
 import useCommunityOneMember from '~/social/hooks/useCommunityOneMember';
 
-import Feed from '~/social/components/Feed';
-import MediaGallery from '~/social/components/MediaGallery';
 import CommunityInfo from '~/social/components/CommunityInfo';
 import CommunityMembers from '~/social/components/CommunityMembers';
+import Feed from '~/social/components/Feed';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
+import MediaGallery from '~/social/components/MediaGallery';
 import { CommunityFeedTabs } from './constants';
-import { getTabs } from './utils';
 import { DeclineBanner, Wrapper } from './styles';
+import { getTabs } from './utils';
 
 const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   const { community } = useCommunity(communityId);

@@ -42,7 +42,7 @@ const Side = styled.div`
 const Layout = ({ aside, children }) => {
   return (
     <Container id="main-container">
-      <Main>{children}</Main>
+      <Main className="pb-[54px]">{children}</Main>
       <Side>{aside}</Side>
     </Container>
   );

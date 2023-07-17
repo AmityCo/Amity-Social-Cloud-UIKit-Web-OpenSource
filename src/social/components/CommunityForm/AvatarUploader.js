@@ -6,6 +6,7 @@ import Uploader from '~/core/components/Uploaders/Uploader';
 import UploaderImage from '~/core/components/Uploaders/Image';
 import Loader from '~/core/components/Uploaders/Loader';
 import CameraIcon from '~/icons/Camera';
+import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 
 const StyledCameraIcon = styled(CameraIcon)`
   z-index: 3;
