@@ -59,16 +59,18 @@ const ChunkHighlighter = ({ textToHighlight, chunks, highlightNode, unhighlightN
     children: combinedChunks.map(({ highlight, start, end }) => {
       const text = textToHighlight.substring(start, end);
       const key = uuidV4();
+      console.log(text);
+
+      if (text.includes('iframe')) {
+        console.log('Parent Node of text var');
+      }
 
       if (highlight) {
         highlightIndex += 1;
         return renderNodes(highlightNode, { children: text, highlightIndex, key });
       }
 
-      return renderNodes(unhighlightNode, {
-        children: text,
-        key, // hack to NOT duplicate the list keys
-      });
+      return renderNodes(unhighlightNode, { children: text, key });
     }),
   });
 };
