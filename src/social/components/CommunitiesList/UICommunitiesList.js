@@ -1,10 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import styled from 'styled-components';
 
-import CommunityHeader from '~/social/components/community/Header';
 import LoadMore from '~/social/components/LoadMore';
+import CommunityHeader from '~/social/components/community/Header';
 import { CommunityScrollContainer } from './styles';
 
 const NoResultsMessage = styled.p`

@@ -10,34 +10,6 @@ function CustomFooterNav({ onClickUser }) {
 
   const menuTabs = [
     {
-      name: 'Profile',
-      func: () => onClickUser(user.userId),
-      svg: (
-        <svg
-          width="23"
-          height="23"
-          viewBox="0 0 23 23"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M3.375 8.42936L11.625 2.0127L19.875 8.42936V18.5127C19.875 18.9989 19.6818 19.4652 19.338 19.8091C18.9942 20.1529 18.5279 20.346 18.0417 20.346H5.20833C4.7221 20.346 4.25579 20.1529 3.91197 19.8091C3.56815 19.4652 3.375 18.9989 3.375 18.5127V8.42936Z"
-            stroke="#005850"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M8.875 20.3459V11.1792H14.375V20.3459"
-            stroke="#005850"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      ),
-    },
-    {
       name: 'News Feed',
       func: () => onChangePage(PageTypes.NewsFeed),
       svg: (
@@ -94,8 +66,36 @@ function CustomFooterNav({ onClickUser }) {
       ),
     },
     {
-      name: 'My Groups',
-      func: () => onChangePage(PageTypes.MyGroups),
+      name: 'Profile',
+      func: () => onClickUser(user.userId),
+      svg: (
+        <svg
+          width="23"
+          height="23"
+          viewBox="0 0 23 23"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3.375 8.42936L11.625 2.0127L19.875 8.42936V18.5127C19.875 18.9989 19.6818 19.4652 19.338 19.8091C18.9942 20.1529 18.5279 20.346 18.0417 20.346H5.20833C4.7221 20.346 4.25579 20.1529 3.91197 19.8091C3.56815 19.4652 3.375 18.9989 3.375 18.5127V8.42936Z"
+            stroke="#005850"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M8.875 20.3459V11.1792H14.375V20.3459"
+            stroke="#005850"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      name: 'Search',
+      func: () => onChangePage(PageTypes.Search),
       svg: (
         <svg
           width="17"

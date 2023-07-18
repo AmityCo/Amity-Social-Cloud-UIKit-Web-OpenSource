@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const CustomHeaderWrapper = styled.div`
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 501;
   display: flex;
   .infinite-scroll-component {
     width: 100%;

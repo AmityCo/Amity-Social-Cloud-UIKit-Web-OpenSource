@@ -1,6 +1,5 @@
-import React from 'react';
-import { Container, MobileCommunitiesHeader } from './styles';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
+import { Container, MobileCommunitiesHeader } from './styles';
 
 const MyCommunitiesMobile = () => {
   return (

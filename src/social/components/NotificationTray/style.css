@@ -1,0 +1,42 @@
+.slide-out-container {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  /* Start position off-screen */
+  bottom: 0;
+  width: 300px;
+  background-color: white;
+  transition: transform 0.3s ease-in-out;
+  z-index: 9999;
+  /* Ensure the slider is on top of the overlay */
+}
+
+.slide-out-content {
+  padding: 16px;
+}
+
+.slide-out-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
+  pointer-events: none;
+  /* Disable interaction with the overlay when it's not visible */
+  z-index: 3;
+  /* Place the overlay below the slider */
+}
+
+.slide-out-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+  /* Enable interaction with the overlay when it's visible */
+}
+
+.slide-out-container.open {
+  right: 0;
+  /* Slide the container into view */
+}

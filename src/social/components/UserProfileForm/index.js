@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { FormattedMessage, useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -30,7 +30,7 @@ const ButtonContainer = styled.div`
 `;
 const FormBlock = ({ title, children }) => (
   <>
-    <MyProfileContainer className="!relative xs:!flex justify-center items-center md:!hidden min-h-[32px] h-fit mb-[14px] mt-4">
+    <MyProfileContainer className="!relative xs:!flex justify-center items-center md:!hidden min-h-[32px] h-fit mt-4">
       <h1 className="!leading-none m-auto cym-h-2-lg">Edit Profile</h1>
       <BackLink
         className="absolute left-0 ml-2"

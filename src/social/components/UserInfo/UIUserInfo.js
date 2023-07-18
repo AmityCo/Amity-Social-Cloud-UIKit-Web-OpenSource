@@ -1,16 +1,15 @@
-import React from 'react';
 import { FollowRequestStatus } from '@amityco/js-sdk';
 import { toHumanString } from 'human-readable-numbers';
 import PropTypes from 'prop-types';
 import { FormattedMessage, useIntl } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 
+import BackLink from '~/core/components/BackLink';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import ConditionalRender from '~/core/components/ConditionalRender';
 import customizableComponent from '~/core/hocs/customization';
-import { backgroundImage as UserImage } from '~/icons/User';
-
 import BanIcon from '~/icons/Ban';
+import { backgroundImage as UserImage } from '~/icons/User';
 import { FollowersTabs, PENDING_TAB } from '~/social/pages/UserFeed/Followers/constants';
 
 import {
@@ -37,7 +36,6 @@ import {
   UserBadgesWrapper,
 } from './styles';
 
-import BackLink from '~/core/components/BackLink';
 import { confirm } from '~/core/components/Confirm';
 import { notification } from '~/core/components/Notification';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
@@ -127,8 +125,8 @@ const UIUserInfo = ({
 
   return (
     <>
-      <MyProfileContainer className="!relative xs:!flex justify-center items-center md:!hidden min-h-[32px] h-fit mb-[14px]">
-        <h1 className="!leading-none m-auto cym-h-2-lg">My Profile</h1>
+      <MyProfileContainer className="!relative xs:!flex justify-center items-center md:!hidden min-h-[50px] h-fit">
+        {isMyProfile && <h1 className="!leading-none m-auto cym-h-2-lg">My Profile</h1>}
         <BackLink
           className="absolute left-0 ml-2"
           text={

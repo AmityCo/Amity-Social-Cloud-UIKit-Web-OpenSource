@@ -9,6 +9,9 @@ import { backgroundImage as CommunityImage } from '~/icons/Community';
 import CommunityName from '~/social/components/community/Name';
 
 const CommunityHeaderContainer = styled.a.attrs((props) => props)`
+  @media screen and (max-width: 768px) {
+    padding-bottom: 0;
+  }
   min-width: 100px;
   display: grid;
   grid-template-areas: 'avatar title' 'avatar children';
@@ -74,7 +77,7 @@ const UICommunityHeader = ({
       avatar={avatarFileUrl}
       backgroundImage={CommunityImage}
       loading={loading}
-      className="community-header-avatar"
+      className="community-header-avatar xs:!h-[60px] xs:!w-[60px] md:!w-[40px] md:!h-[40px]"
     />
     {loading && children ? (
       <Skeleton style={{ fontSize: 8, maxWidth: 120 }} />
