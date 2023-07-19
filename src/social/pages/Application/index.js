@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 import { PageTypes } from '~/social/constants';
@@ -43,7 +44,7 @@ const Community = () => {
   const handleClickUser = (userId) => onClickUser(userId);
   return (
     <ApplicationContainer id="ApplicationContainer">
-      <CreatePostOverlay />
+      <CreatePostOverlay userId={page.userId} />
       <CustomHeader
         className="xs:!hidden md:!flex"
         userId={page.userId}

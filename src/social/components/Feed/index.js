@@ -1,4 +1,4 @@
-import { CommunityFilter, FeedType, PostTargetType } from '@amityco/js-sdk';
+import { CommunityFilter, FeedType, PostTargetType, PostRepository } from '@amityco/js-sdk';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
@@ -14,12 +14,18 @@ import Post from '~/social/components/post/Post';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
-// import TrendingList from '../community/TrendingList';
+
 import NewsFeedTrendingList from '../community/NewsFeedTrendingList';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 
 const queryParams = { filter: CommunityFilter.Member };
+
+const postLiveObject = PostRepository.postForId('64b6ab1efc7ca338eeced8b1');
+postLiveObject.once('dataUpdated', (model) => {
+  console.log('Post', model.data.text);
+});
 
 const Feed = ({
   className = null,
@@ -31,6 +37,7 @@ const Feed = ({
   goToExplore,
   readonly = false,
   isHiddenProfile = false,
+  pinned,
 }) => {
   const { page } = useNavigation();
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
@@ -60,22 +67,48 @@ const Feed = ({
       <ConditionalRender condition={!isHiddenProfile}>
         <>
           {showPostCreator && (
-            <PostCreator
-              data-qa-anchor="feed-post-creator-textarea"
-              targetType={targetType}
-              targetId={targetId}
-              communities={communities}
-              enablePostTargetPicker={enablePostTargetPicker}
-              hasMoreCommunities={hasMoreCommunities}
-              loadMoreCommunities={loadMoreCommunities}
-              onCreateSuccess={onPostCreated}
-            />
+            <>
+              <PostCreator
+                data-qa-anchor="feed-post-creator-textarea"
+                targetType={targetType}
+                targetId={targetId}
+                communities={communities}
+                enablePostTargetPicker={enablePostTargetPicker}
+                hasMoreCommunities={hasMoreCommunities}
+                loadMoreCommunities={loadMoreCommunities}
+                onCreateSuccess={onPostCreated}
+              />
+              <CreatePostOverlay
+                data-qa-anchor="feed-post-creator-textarea"
+                targetType={targetType}
+                targetId={targetId}
+                communities={communities}
+                enablePostTargetPicker={enablePostTargetPicker}
+                hasMoreCommunities={hasMoreCommunities}
+                loadMoreCommunities={loadMoreCommunities}
+                onCreateSuccess={onPostCreated}
+              />
+            </>
           )}
 
           {loading && renderLoadingSkeleton()}
 
           {!loading && posts.length > 0 && (
             <LoadMore hasMore={hasMore} loadMore={loadMore} className="load-more no-border">
+              {page.type === PageTypes.NewsFeed && (
+                <div>
+                  <div className="w-max px-5">
+                    <span className="!text-[18px] font-bold">Pinned Posts 📌</span>
+                    <hr className="w-full h-1 bg-[#005850] rounded" />
+                  </div>
+                  <Post
+                    postId="648b222f83ad0623266524ef"
+                    hidePostTarget={targetType !== PostTargetType.GlobalFeed}
+                    readonly={readonly}
+                    pinned={pinned}
+                  />
+                </div>
+              )}
               {posts.map(({ postId }, index) => (
                 <React.Fragment key={postId}>
                   <Post
@@ -112,6 +145,7 @@ Feed.propTypes = {
   targetType: PropTypes.oneOf(Object.values(PostTargetType)),
   targetId: PropTypes.string,
   showPostCreator: PropTypes.bool,
+  pinned: PropTypes.bool,
   // below is to be refactored
   goToExplore: PropTypes.func,
   readonly: PropTypes.bool,

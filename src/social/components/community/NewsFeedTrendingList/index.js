@@ -48,8 +48,8 @@ const NewsFeedTrendingList = () => {
       ));
 
   return (
-    <div className="mt-5">
-      <Title>{title} 🔥</Title>
+    <div className="mt-5 px-5">
+      <Title>{title} 📈</Title>
       <CommunitiesList>{list}</CommunitiesList>
     </div>
   );
