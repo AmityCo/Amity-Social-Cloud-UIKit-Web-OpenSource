@@ -91,6 +91,7 @@
     "react-loading-skeleton": "^3.1.0",
     "react-mentions": "^4.4.7",
     "react-sizeme": "^3.0.2",
+    "react-spotify-embed": "^2.0.3",
     "react-textarea-autosize": "^8.3.4",
     "react-timeago": "^7.1.0",
     "react-tiny-popover": "^7.1.0",

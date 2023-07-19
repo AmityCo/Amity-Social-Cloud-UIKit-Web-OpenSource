@@ -16,6 +16,8 @@
 import React, { createElement, isValidElement } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
+import { Spotify } from 'react-spotify-embed';
+import YoutubeEmbed from './YoutubeEmbed';
 
 const renderNodes = (parentNode, props) => {
   if (isValidElement(parentNode) || typeof parentNode === 'object') {
@@ -55,24 +57,33 @@ const ChunkHighlighter = ({ textToHighlight, chunks, highlightNode, unhighlightN
 
   const combinedChunks = processChunks(textToHighlight, chunks);
 
-  return createElement('span', {
-    children: combinedChunks.map(({ highlight, start, end }) => {
-      const text = textToHighlight.substring(start, end);
-      const key = uuidV4();
-      console.log(text);
-
-      if (text.includes('iframe')) {
-        console.log('Parent Node of text var');
-      }
-
-      if (highlight) {
-        highlightIndex += 1;
-        return renderNodes(highlightNode, { children: text, highlightIndex, key });
-      }
-
-      return renderNodes(unhighlightNode, { children: text, key });
-    }),
-  });
+  return (
+    <span>
+      {combinedChunks.map(({ highlight, start, end }) => {
+        const text = textToHighlight.substring(start, end);
+        const key = uuidV4();
+        if (text.includes('spotify')) {
+          return <Spotify link={text} className="mx-auto md:mx-0 w-full" />;
+        } else if (text.includes('youtu.be')) {
+          const url = text;
+          const videoId = url.match(/\/([^/]+)$/)[1];
+          console.log('Video', text, videoId);
+          return <YoutubeEmbed embedId={videoId} />;
+        } else if (text.includes('youtube')) {
+          const youtubeUrl = text;
+          const urlParams = new URLSearchParams(new URL(youtubeUrl).search);
+          const videoId = urlParams.get('v');
+          return <YoutubeEmbed embedId={videoId} />;
+        } else {
+          if (highlight) {
+            highlightIndex += 1;
+            return renderNodes(highlightNode, { children: text, highlightIndex, key });
+          }
+          return renderNodes(unhighlightNode, { children: text, key });
+        }
+      })}
+    </span>
+  );
 };
 
 ChunkHighlighter.propTypes = {
