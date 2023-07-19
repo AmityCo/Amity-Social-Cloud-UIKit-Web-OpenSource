@@ -78,16 +78,7 @@ const Feed = ({
                 loadMoreCommunities={loadMoreCommunities}
                 onCreateSuccess={onPostCreated}
               />
-              <CreatePostOverlay
-                data-qa-anchor="feed-post-creator-textarea"
-                targetType={targetType}
-                targetId={targetId}
-                communities={communities}
-                enablePostTargetPicker={enablePostTargetPicker}
-                hasMoreCommunities={hasMoreCommunities}
-                loadMoreCommunities={loadMoreCommunities}
-                onCreateSuccess={onPostCreated}
-              />
+              {/*  */}
             </>
           )}
 
