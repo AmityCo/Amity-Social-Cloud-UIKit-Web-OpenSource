@@ -5,15 +5,13 @@ import { PageTypes } from '~/social/constants';
 
 import MainLayout from '~/social/layouts/Main';
 
-import CommunitySideMenu, { SocialSearch } from '~/social/components/CommunitySideMenu';
-
 import CustomFooterNav from '~/core/components/CustomFooterNav';
 import CustomHeader from '~/core/components/CustomHeader';
+import CommunitySideMenu, { SocialSearch } from '~/social/components/CommunitySideMenu';
 import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 import MobilePostButton from '~/social/components/MobilePostButton';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
-import Post from '~/social/components/post/Post';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
 import CommunityFeedPage from '~/social/pages/CommunityFeed';
@@ -21,6 +19,7 @@ import ExplorePage from '~/social/pages/Explore';
 import NewsFeedPage from '~/social/pages/NewsFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import NotificationTargetPage from '../NotificationTargetPage';
 
 // import Custom from '~/chat/components/Message/MessageContent/Custom';
 
@@ -111,10 +110,12 @@ const Community = () => {
           <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
         )}
         {page.type === PageTypes.Search && <SocialSearch />}
-        {page.type === PageTypes.NotificationTarget && <Post postId={page.targetId} />}
+        {page.type === PageTypes.NotificationTarget && (
+          <NotificationTargetPage targetId={page.targetId} />
+        )}
 
         <MobilePostButton />
-        <CustomFooterNav onClickUser={handleClickUser} />
+        <CustomFooterNav onClickUser={handleClickUser} page={page.type} />
       </MainLayout>
     </ApplicationContainer>
   );

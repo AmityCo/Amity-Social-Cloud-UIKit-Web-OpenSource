@@ -38,7 +38,7 @@ const SlideOutHeader = styled.div`
   position: relative;
 `;
 const SlideOutContent = styled.div`
-  padding: 16px;
+  padding: 16px 0;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -369,11 +369,11 @@ const NotificationTray = () => {
             if (timeRanges[dateRange].arr.length > 0) {
               return (
                 <>
-                  <h1 className="cym-title mt-4 mb-3">{timeRanges[dateRange].title}</h1>
+                  <h1 className="cym-title mt-4 mb-3 px-4">{timeRanges[dateRange].title}</h1>
                   {timeRanges[dateRange].arr.map((noti) => (
                     <div
                       onClick={() => handleClick(noti)}
-                      className={`cursor-pointer rounded-xl border-b-2 border-b-cym-lightergrey flex py-3 min-h-[68px] items-center gap-3 ${
+                      className={`px-4 cursor-pointer border-b-2 border-b-cym-lightergrey flex py-3 min-h-[68px] items-center gap-3 ${
                         noti.hasRead ? '' : 'bg-cym-lightteal'
                       }`}
                     >
