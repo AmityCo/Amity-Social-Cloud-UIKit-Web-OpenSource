@@ -1,7 +1,12 @@
+import { AmityUserTokenManager, ApiRegion } from '@amityco/js-sdk';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Avatar from '~/core/components/Avatar';
 import { backgroundImage as UserImage } from '~/icons/User';
+import { apiKey, userId } from '~/social/constants';
+import usePost from '~/social/hooks/usePost';
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import ServerAPI from '../AriseTokens/ServerAPI';
 
 const SlideOutContainer = styled.div`
   @media screen and (max-width: 768px) {
@@ -62,8 +67,62 @@ const SlideOutOverlay = styled.div`
 `;
 
 const NotificationTray = () => {
+  // const { post, file, user } = usePost('64b5765e84f9df8fd3329ef5');
+  const { onClickCommunity, onChangePage, onClickNotification } = useNavigation();
+  console.log(usePost('64b5765e84f9df8fd3329ef5'));
+  console.log('SADFSDAFSDAFSDAFDSAF', useNavigation());
   const [isMobile, setIsMobile] = useState(false);
   const [timeRanges, setTimeRanges] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+  const [fetchedNotifications, setFetchedNotificaiotns] = useState(null);
+
+  useEffect(() => {
+    if (fetchedNotifications) setTimeRanges(groupByTimeRange(fetchedNotifications.data));
+  }, [fetchedNotifications]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Initial check
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  async function getAccessToken() {
+    const { accessToken, err } = await AmityUserTokenManager.createUserToken(apiKey, ApiRegion.US, {
+      userId: userId,
+    });
+    return accessToken;
+  }
+  const fetchNotifications = async () => {
+    try {
+      const server = new ServerAPI();
+      const accessToken = await getAccessToken();
+      const notifications = await server.getNotifications(accessToken);
+      setFetchedNotificaiotns(notifications);
+    } catch (error) {
+      console.error('Error fetching notifications data:', error);
+    }
+  };
+  const setReadNotification = async (noti) => {
+    try {
+      const server = new ServerAPI();
+      const accessToken = await getAccessToken();
+      const notifications = await server.setReadNotification(accessToken, noti);
+      // setFetchedNotificaiotns(notifications);
+    } catch (error) {
+      console.error('Error fetching notifications data:', error);
+    }
+  };
 
   function getTimeAgo(timestamp) {
     const currentTime = new Date().getTime();
@@ -127,436 +186,116 @@ const NotificationTray = () => {
     };
   }
 
-  useEffect(() => {
-    setTimeRanges(groupByTimeRange(mockNotis.data));
-  }, [mockNotis]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  const mockNotis = {
-    totalPages: 1,
-    data: [
-      {
-        lastUpdate: 1689613959019,
-        targetType: 'post',
-        verb: 'comment',
-        v_tarid_uid:
-          'comment_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'undefined',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '64b5765e84f9df8fd3329ef5',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId commented on your post',
-      },
-      {
-        lastUpdate: 1689613937039,
-        targetType: 'post',
-        verb: 'reaction',
-        v_tarid_uid:
-          'reaction_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'Test Test',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '3454838145071',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId added a reaction to your post in Test Test',
-      },
-      {
-        lastUpdate: 1689197059035,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b243a2b963c70c54750bf_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Non-Toxic Living',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b243a2b963c70c54750bf',
-        description: 'Hannah posted in Non-Toxic Living',
-      },
-      {
-        lastUpdate: 1689193472827,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b23322be19926f2f4d0af_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Gut Health',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b23322be19926f2f4d0af',
-        description: 'Hannah posted in Gut Health',
-      },
-      {
-        lastUpdate: 1689613959019,
-        targetType: 'post',
-        verb: 'comment',
-        v_tarid_uid:
-          'comment_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'undefined',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '64b5765e84f9df8fd3329ef5',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId commented on your post',
-      },
-      {
-        lastUpdate: 1689613937039,
-        targetType: 'post',
-        verb: 'reaction',
-        v_tarid_uid:
-          'reaction_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'Test Test',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '3454838145071',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId added a reaction to your post in Test Test',
-      },
-      {
-        lastUpdate: 1689197059035,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b243a2b963c70c54750bf_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Non-Toxic Living',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b243a2b963c70c54750bf',
-        description: 'Hannah posted in Non-Toxic Living',
-      },
-      {
-        lastUpdate: 1689193472827,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b23322be19926f2f4d0af_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Gut Health',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b23322be19926f2f4d0af',
-        description: 'Hannah posted in Gut Health',
-      },
-      {
-        lastUpdate: 1689613959019,
-        targetType: 'post',
-        verb: 'comment',
-        v_tarid_uid:
-          'comment_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'undefined',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '64b5765e84f9df8fd3329ef5',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId commented on your post',
-      },
-      {
-        lastUpdate: 1689613937039,
-        targetType: 'post',
-        verb: 'reaction',
-        v_tarid_uid:
-          'reaction_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'Test Test',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '3454838145071',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId added a reaction to your post in Test Test',
-      },
-      {
-        lastUpdate: 1689197059035,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b243a2b963c70c54750bf_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Non-Toxic Living',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b243a2b963c70c54750bf',
-        description: 'Hannah posted in Non-Toxic Living',
-      },
-      {
-        lastUpdate: 1689193472827,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b23322be19926f2f4d0af_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Gut Health',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b23322be19926f2f4d0af',
-        description: 'Hannah posted in Gut Health',
-      },
-      {
-        lastUpdate: 1689613959019,
-        targetType: 'post',
-        verb: 'comment',
-        v_tarid_uid:
-          'comment_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'undefined',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '64b5765e84f9df8fd3329ef5',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId commented on your post',
-      },
-      {
-        lastUpdate: 1689613937039,
-        targetType: 'post',
-        verb: 'reaction',
-        v_tarid_uid:
-          'reaction_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'Test Test',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '3454838145071',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId added a reaction to your post in Test Test',
-      },
-      {
-        lastUpdate: 1689197059035,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b243a2b963c70c54750bf_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Non-Toxic Living',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b243a2b963c70c54750bf',
-        description: 'Hannah posted in Non-Toxic Living',
-      },
-      {
-        lastUpdate: 1689193472827,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b23322be19926f2f4d0af_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Gut Health',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b23322be19926f2f4d0af',
-        description: 'Hannah posted in Gut Health',
-      },
-      {
-        lastUpdate: 1689613959019,
-        targetType: 'post',
-        verb: 'comment',
-        v_tarid_uid:
-          'comment_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'undefined',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '64b5765e84f9df8fd3329ef5',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId commented on your post',
-      },
-      {
-        lastUpdate: 1689613937039,
-        targetType: 'post',
-        verb: 'reaction',
-        v_tarid_uid:
-          'reaction_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-        avatarCustomUrl: '',
-        targetName: 'Test Test',
-        actors: [
-          {
-            name: 'Hector ShopifyId',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '3454838145071',
-        targetId: '64b5765e84f9df8fd3329ef5',
-        description: 'Hector ShopifyId added a reaction to your post in Test Test',
-      },
-      {
-        lastUpdate: 1689197059035,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b243a2b963c70c54750bf_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Non-Toxic Living',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b243a2b963c70c54750bf',
-        description: 'Hannah posted in Non-Toxic Living',
-      },
-      {
-        lastUpdate: 1689193472827,
-        targetType: 'community',
-        verb: 'post',
-        v_tarid_uid:
-          'post_646e56c141806b9156f6cf94_649b23322be19926f2f4d0af_649452f09c62fbba03462786',
-        hasRead: false,
-        imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-        avatarCustomUrl: '',
-        targetName: 'Gut Health',
-        actors: [
-          {
-            name: 'Hannah',
-          },
-        ],
-        actorsCount: 1,
-        parentTargetId: '',
-        targetId: '649b23322be19926f2f4d0af',
-        description: 'Hannah posted in Gut Health',
-      },
-    ],
-  };
-  const [isOpen, setIsOpen] = useState(false);
+  async function handleClick(notification) {
+    if (notification.targetType === 'post') {
+      onClickNotification(notification.targetId);
+    } else if (notification.targetType === 'community') onClickCommunity(notification.targetId);
+    else {
+    }
+    toggleSlideOut();
+    if (!notification.hasRead) {
+      await setReadNotification(notification);
+      fetchNotifications();
+    }
+    // fetchNotifications();
+    return;
+  }
+  // const fetchedNotifications = {
+  //   totalPages: 1,
+  //   data: [
+  //     {
+  //       lastUpdate: 1689613959019,
+  //       targetType: 'post',
+  //       verb: 'comment',
+  //       v_tarid_uid:
+  //         'comment_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
+  //       hasRead: false,
+  //       imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
+  //       avatarCustomUrl: '',
+  //       targetName: 'undefined',
+  //       actors: [
+  //         {
+  //           name: 'Hector ShopifyId',
+  //         },
+  //       ],
+  //       actorsCount: 1,
+  //       parentTargetId: '64b5765e84f9df8fd3329ef5',
+  //       targetId: '64b5765e84f9df8fd3329ef5',
+  //       description: 'Hector ShopifyId commented on your post',
+  //     },
+  //     {
+  //       lastUpdate: 1689613937039,
+  //       targetType: 'post',
+  //       verb: 'reaction',
+  //       v_tarid_uid:
+  //         'reaction_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
+  //       hasRead: false,
+  //       imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
+  //       avatarCustomUrl: '',
+  //       targetName: 'Test Test',
+  //       actors: [
+  //         {
+  //           name: 'Hector ShopifyId',
+  //         },
+  //       ],
+  //       actorsCount: 1,
+  //       parentTargetId: '3454838145071',
+  //       targetId: '64b5765e84f9df8fd3329ef5',
+  //       description: 'Hector ShopifyId added a reaction to your post in Test Test',
+  //     },
+  //     {
+  //       lastUpdate: 1689197059035,
+  //       targetType: 'community',
+  //       verb: 'post',
+  //       v_tarid_uid:
+  //         'post_646e56c141806b9156f6cf94_649b243a2b963c70c54750bf_649452f09c62fbba03462786',
+  //       hasRead: false,
+  //       imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
+  //       avatarCustomUrl: '',
+  //       targetName: 'Non-Toxic Living',
+  //       actors: [
+  //         {
+  //           name: 'Hannah',
+  //         },
+  //       ],
+  //       actorsCount: 1,
+  //       parentTargetId: '',
+  //       targetId: '649b243a2b963c70c54750bf',
+  //       description: 'Hannah posted in Non-Toxic Living',
+  //     },
+  //     {
+  //       lastUpdate: 1689193472827,
+  //       targetType: 'community',
+  //       verb: 'post',
+  //       v_tarid_uid:
+  //         'post_646e56c141806b9156f6cf94_649b23322be19926f2f4d0af_649452f09c62fbba03462786',
+  //       hasRead: false,
+  //       imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
+  //       avatarCustomUrl: '',
+  //       targetName: 'Gut Health',
+  //       actors: [
+  //         {
+  //           name: 'Hannah',
+  //         },
+  //       ],
+  //       actorsCount: 1,
+  //       parentTargetId: '',
+  //       targetId: '649b23322be19926f2f4d0af',
+  //       description: 'Hannah posted in Gut Health',
+  //     },
+  //   ],
+  // };
 
   const toggleSlideOut = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <div>
+    <div className="relative">
+      {fetchedNotifications &&
+        fetchedNotifications?.data?.some((noti) => noti.hasRead === false) && (
+          <span className="absolute top-0 right-0 inline-flex items-center justify-center p-1 !text-[10px] font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
+        )}
       <svg
         onClick={toggleSlideOut}
         viewBox="0 0 24 25"
@@ -632,7 +371,12 @@ const NotificationTray = () => {
                 <>
                   <h1 className="cym-title mt-4 mb-3">{timeRanges[dateRange].title}</h1>
                   {timeRanges[dateRange].arr.map((noti) => (
-                    <div className="border-b-2 border-b-cym-lightergrey flex py-3 min-h-[68px] items-center gap-3">
+                    <div
+                      onClick={() => handleClick(noti)}
+                      className={`cursor-pointer rounded-xl border-b-2 border-b-cym-lightergrey flex py-3 min-h-[68px] items-center gap-3 ${
+                        noti.hasRead ? '' : 'bg-cym-lightteal'
+                      }`}
+                    >
                       <Avatar avatar={noti.imageUrl} backgroundImage={UserImage} />
                       <p>
                         {noti.description}.{' '}
@@ -660,6 +404,6 @@ const NotificationTray = () => {
       </SlideOutContainer>
     </div>
   );
-};
+};;
 
 export default NotificationTray;

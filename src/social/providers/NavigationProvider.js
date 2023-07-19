@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useState, useMemo } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { confirm } from '~/core/components/Confirm';
 import { PageTypes } from '~/social/constants';
@@ -26,6 +26,8 @@ if (process.env.NODE_ENV !== 'production') {
     onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
     onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
+    onClickNotification: (targetId) =>
+      console.log(`NavigationContext onClickNotification(${targetId})`),
     onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
     onEditCommunity: (communityId) =>
@@ -46,6 +48,7 @@ export default ({
   onClickCategory,
   onClickCommunity,
   onClickUser,
+  onClickNotification,
   onCommunityCreated,
   onEditCommunity,
   onEditUser,
@@ -169,6 +172,22 @@ export default ({
     [onChangePage, onClickUser, pushPage],
   );
 
+  const handleClickNotification = useCallback(
+    (targetId) => {
+      const next = {
+        type: PageTypes.NotificationTarget,
+        targetId,
+      };
+
+      if (onChangePage) return onChangePage(next);
+      if (onClickNotification) return onClickNotification(targetId);
+
+      console.log('handleClickNotification', { targetId });
+      pushPage(next);
+    },
+    [onChangePage, onClickNotification, pushPage],
+  );
+
   const handleEditUser = useCallback(
     (userId) => {
       const next = {
@@ -229,6 +248,7 @@ export default ({
       onEditCommunity: handleEditCommunity,
       onEditUser: handleEditUser,
       onMessageUser: handleMessageUser,
+      onClickNotification: handleClickNotification,
       onBack: popPage,
       setNavigationBlocker,
     }),
@@ -241,6 +261,7 @@ export default ({
       handleEditCommunity,
       handleEditUser,
       handleMessageUser,
+      handleClickNotification,
       pages,
     ],
   );

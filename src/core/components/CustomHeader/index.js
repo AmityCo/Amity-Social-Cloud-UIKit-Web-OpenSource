@@ -105,12 +105,8 @@ const CustomHeader = ({ onClickUser, className }) => {
           <div className="text-cym-teal uppercase cym-h-2 !leading-none ml-2">COMMUNITY</div>
 
           <div className="flex ml-auto gap-5 items-center ">
-            <div className="relative">
-              <NotificationTray />
-              <span className="absolute top-0 right-0 inline-flex items-center justify-center px-[6px] py-[2px] !text-[10px] font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                7
-              </span>
-            </div>
+            <NotificationTray />
+
             {/* <button type="button" className="relative md:hidden" onClick={showMobileSearch}>
               <Search className="w-[16px] h-7" id="search-button" />
             </button> */}

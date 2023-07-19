@@ -8,6 +8,7 @@ export const PageTypes = {
   UserEdit: 'useredit',
   MyGroups: 'mygroups',
   Search: 'search',
+  NotificationTarget: 'notificationtarget',
 };
 
 export const MemberRoles = Object.freeze({
@@ -36,3 +37,4 @@ export const VideoQuality = Object.freeze({
 export const MP4MimeType = 'video/mp4';
 
 export const userId = '3454838145071';
+export const apiKey = 'b0e8ee0f3fdda3644836851c545a1f89d50fdae4e9636628';
