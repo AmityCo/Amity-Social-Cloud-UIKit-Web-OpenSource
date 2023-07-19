@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
+import { PostTargetType } from '@amityco/js-sdk';
 import { PageTypes } from '~/social/constants';
 
 import MainLayout from '~/social/layouts/Main';
@@ -39,12 +39,39 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
 `;
 
 const Community = () => {
+  const customerId = window.shopifyCustomerId || '3454838145071';
   const { page, onClickUser } = useNavigation();
 
+  const [feedType, setFeedType] = useState('');
+  const [feedTargetId, setFeedTargetId] = useState('');
+  console.log('feedType', feedType);
+  console.log('Page type,', page.type);
+  console.log('user Id', page.userId);
   const handleClickUser = (userId) => onClickUser(userId);
+
+  const assignFeedType = () => {
+    if (page.type === 'communityfeed') {
+      setFeedType(PostTargetType.CommunityFeed);
+    } else {
+      setFeedType(PostTargetType.UserFeed);
+    }
+  };
+  const assignTargetId = () => {
+    if (page.type === 'communityfeed') {
+      setFeedTargetId(window.communityId);
+    } else if (page.type === 'newsfeed') {
+      setFeedTargetId(customerId);
+    } else {
+      setFeedTargetId(page.userId);
+    }
+  };
+  useEffect(() => {
+    assignFeedType();
+    assignTargetId();
+  }, [page.type]);
   return (
     <ApplicationContainer id="ApplicationContainer">
-      <CreatePostOverlay userId={page.userId} />
+      <CreatePostOverlay targetType={feedType} targetId={feedTargetId} userId={page.userId} />
       <CustomHeader
         className="xs:!hidden md:!flex"
         userId={page.userId}

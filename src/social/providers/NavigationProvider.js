@@ -113,7 +113,7 @@ export default ({
 
       if (onChangePage) return onChangePage(next);
       if (onClickCommunity) return onClickCommunity(communityId);
-
+      window.communityId = communityId;
       console.log('handleClickCommunity', { communityId });
       pushPage(next);
     },
