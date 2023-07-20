@@ -1,10 +1,10 @@
-import React, { useState, memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 // import EmptyState from '~/core/components/EmptyState';
 import customizableComponent from '~/core/hocs/customization';
 import { AriseTokensContainer } from './styles';
 
-import ServerAPI from './ServerAPI';
+import ServerAPI from '../../pages/Application/ServerAPI';
 
 const AriseTokensGallery = ({ targetId }) => {
   const [extractedRewardsData, setExtractedRewardsData] = useState([]);

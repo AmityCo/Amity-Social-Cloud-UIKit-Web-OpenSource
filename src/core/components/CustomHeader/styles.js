@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
 export const CustomHeaderWrapper = styled.div`
+  @media screen and (max-width: 768px) {
+    position: fixed;
+    width: 100%;
+  }
+
   position: sticky;
   top: 0;
   z-index: 501;

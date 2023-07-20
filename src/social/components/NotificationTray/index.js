@@ -1,12 +1,10 @@
-import { AmityUserTokenManager, ApiRegion } from '@amityco/js-sdk';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Avatar from '~/core/components/Avatar';
 import { backgroundImage as UserImage } from '~/icons/User';
-import { apiKey, userId } from '~/social/constants';
 import usePost from '~/social/hooks/usePost';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import ServerAPI from '../AriseTokens/ServerAPI';
+import ServerAPI from '../../pages/Application/ServerAPI';
 
 const SlideOutContainer = styled.div`
   @media screen and (max-width: 768px) {
@@ -67,6 +65,8 @@ const SlideOutOverlay = styled.div`
 `;
 
 const NotificationTray = () => {
+  const server = ServerAPI();
+
   // const { post, file, user } = usePost('64b5765e84f9df8fd3329ef5');
   const { onClickCommunity, onChangePage, onClickNotification } = useNavigation();
   console.log(usePost('64b5765e84f9df8fd3329ef5'));
@@ -74,7 +74,7 @@ const NotificationTray = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [timeRanges, setTimeRanges] = useState({});
   const [isOpen, setIsOpen] = useState(false);
-  const [fetchedNotifications, setFetchedNotificaiotns] = useState(null);
+  const [fetchedNotifications, setFetchedNotifications] = useState(null);
 
   useEffect(() => {
     if (fetchedNotifications) setTimeRanges(groupByTimeRange(fetchedNotifications.data));
@@ -97,27 +97,17 @@ const NotificationTray = () => {
     fetchNotifications();
   }, []);
 
-  async function getAccessToken() {
-    const { accessToken, err } = await AmityUserTokenManager.createUserToken(apiKey, ApiRegion.US, {
-      userId: userId,
-    });
-    return accessToken;
-  }
   const fetchNotifications = async () => {
     try {
-      const server = new ServerAPI();
-      const accessToken = await getAccessToken();
-      const notifications = await server.getNotifications(accessToken);
-      setFetchedNotificaiotns(notifications);
+      const notifications = await server.getNotifications();
+      setFetchedNotifications(notifications);
     } catch (error) {
       console.error('Error fetching notifications data:', error);
     }
   };
   const setReadNotification = async (noti) => {
     try {
-      const server = new ServerAPI();
-      const accessToken = await getAccessToken();
-      const notifications = await server.setReadNotification(accessToken, noti);
+      const notifications = await server.setReadNotification(noti);
       // setFetchedNotificaiotns(notifications);
     } catch (error) {
       console.error('Error fetching notifications data:', error);
@@ -223,66 +213,6 @@ const NotificationTray = () => {
   //       targetId: '64b5765e84f9df8fd3329ef5',
   //       description: 'Hector ShopifyId commented on your post',
   //     },
-  //     {
-  //       lastUpdate: 1689613937039,
-  //       targetType: 'post',
-  //       verb: 'reaction',
-  //       v_tarid_uid:
-  //         'reaction_646e56c141806b9156f6cf94_64b5765e84f9df8fd3329ef5_649452f09c62fbba03462786',
-  //       hasRead: false,
-  //       imageUrl: 'https://api.us.amity.co/api/v3/files/3a60f66b82284a0bb6269ec2b8e7e289/download',
-  //       avatarCustomUrl: '',
-  //       targetName: 'Test Test',
-  //       actors: [
-  //         {
-  //           name: 'Hector ShopifyId',
-  //         },
-  //       ],
-  //       actorsCount: 1,
-  //       parentTargetId: '3454838145071',
-  //       targetId: '64b5765e84f9df8fd3329ef5',
-  //       description: 'Hector ShopifyId added a reaction to your post in Test Test',
-  //     },
-  //     {
-  //       lastUpdate: 1689197059035,
-  //       targetType: 'community',
-  //       verb: 'post',
-  //       v_tarid_uid:
-  //         'post_646e56c141806b9156f6cf94_649b243a2b963c70c54750bf_649452f09c62fbba03462786',
-  //       hasRead: false,
-  //       imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-  //       avatarCustomUrl: '',
-  //       targetName: 'Non-Toxic Living',
-  //       actors: [
-  //         {
-  //           name: 'Hannah',
-  //         },
-  //       ],
-  //       actorsCount: 1,
-  //       parentTargetId: '',
-  //       targetId: '649b243a2b963c70c54750bf',
-  //       description: 'Hannah posted in Non-Toxic Living',
-  //     },
-  //     {
-  //       lastUpdate: 1689193472827,
-  //       targetType: 'community',
-  //       verb: 'post',
-  //       v_tarid_uid:
-  //         'post_646e56c141806b9156f6cf94_649b23322be19926f2f4d0af_649452f09c62fbba03462786',
-  //       hasRead: false,
-  //       imageUrl: 'https://api.us.amity.co/api/v3/files/05712cebe0774e178c17acda3f43ab5f/download',
-  //       avatarCustomUrl: '',
-  //       targetName: 'Gut Health',
-  //       actors: [
-  //         {
-  //           name: 'Hannah',
-  //         },
-  //       ],
-  //       actorsCount: 1,
-  //       parentTargetId: '',
-  //       targetId: '649b23322be19926f2f4d0af',
-  //       description: 'Hannah posted in Gut Health',
-  //     },
   //   ],
   // };
 
@@ -296,6 +226,7 @@ const NotificationTray = () => {
         fetchedNotifications?.data?.some((noti) => noti.hasRead === false) && (
           <span className="absolute top-0 right-0 inline-flex items-center justify-center p-1 !text-[10px] font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full"></span>
         )}
+
       <svg
         onClick={toggleSlideOut}
         viewBox="0 0 24 25"
@@ -404,6 +335,6 @@ const NotificationTray = () => {
       </SlideOutContainer>
     </div>
   );
-};;
+};
 
 export default NotificationTray;

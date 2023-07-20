@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { PostTargetType } from '@amityco/js-sdk';
-import { PageTypes } from '~/social/constants';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { PageTypes, userId } from '~/social/constants';
 
 import MainLayout from '~/social/layouts/Main';
 
 import CustomFooterNav from '~/core/components/CustomFooterNav';
 import CustomHeader from '~/core/components/CustomHeader';
+import useFollow from '~/core/hooks/useFollow';
+import useUser from '~/core/hooks/useUser';
 import CommunitySideMenu, { SocialSearch } from '~/social/components/CommunitySideMenu';
 import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 import MobilePostButton from '~/social/components/MobilePostButton';
@@ -37,9 +39,18 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
     display: block;
   }
 `;
-
 const Community = () => {
-  const customerId = window.shopifyCustomerId || '3454838145071';
+  const { user } = useUser(userId);
+  const { follow } = useFollow(userId, 'arise');
+
+  useEffect(() => {
+    const diffInMilliseconds = Math.abs(user.createdAt - new Date());
+    const fiveMinutesInMilliseconds = 5 * 60 * 1000; // 5 minutes in milliseconds
+    if (diffInMilliseconds <= fiveMinutesInMilliseconds) {
+      follow();
+    }
+  }, [user]);
+  const customerId = window.shopifyCustomerId || userId;
   const { page, onClickUser } = useNavigation();
 
   const [feedType, setFeedType] = useState('');
@@ -86,33 +97,38 @@ const Community = () => {
           onClickUser={handleClickUser}
         />
 
-        {page.type === PageTypes.Explore && <ExplorePage />}
+        <div className="xs:pt-[54px] md:pt-0">
+          {page.type === PageTypes.Explore && <ExplorePage />}
 
-        {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
+          {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
 
-        {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity} />
-        )}
+          {page.type === PageTypes.CommunityFeed && (
+            <CommunityFeedPage
+              communityId={page.communityId}
+              isNewCommunity={page.isNewCommunity}
+            />
+          )}
 
-        {page.type === PageTypes.CommunityEdit && (
-          <CommunityEditPage communityId={page.communityId} tab={page.tab} />
-        )}
+          {page.type === PageTypes.CommunityEdit && (
+            <CommunityEditPage communityId={page.communityId} tab={page.tab} />
+          )}
 
-        {page.type === PageTypes.Category && (
-          <CategoryCommunitiesPage categoryId={page.categoryId} />
-        )}
+          {page.type === PageTypes.Category && (
+            <CategoryCommunitiesPage categoryId={page.categoryId} />
+          )}
 
-        {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
+          {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
 
-        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
+          {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
 
-        {page.type === PageTypes.MyGroups && (
-          <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
-        )}
-        {page.type === PageTypes.Search && <SocialSearch />}
-        {page.type === PageTypes.NotificationTarget && (
-          <NotificationTargetPage targetId={page.targetId} />
-        )}
+          {page.type === PageTypes.MyGroups && (
+            <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
+          )}
+          {page.type === PageTypes.Search && <SocialSearch />}
+          {page.type === PageTypes.NotificationTarget && (
+            <NotificationTargetPage targetId={page.targetId} />
+          )}
+        </div>
 
         <MobilePostButton />
         <CustomFooterNav onClickUser={handleClickUser} page={page.type} />
