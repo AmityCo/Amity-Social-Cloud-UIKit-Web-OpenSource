@@ -186,7 +186,12 @@ const CreatePostOverlay = ({
 
     const post = await createPost(createPostParams);
 
-    onCreateSuccess(post.postId);
+    const overlayCloseOnSuccess = () => {
+      document.getElementById('create-post-overlay').style.display = 'none';
+      console.log('Success!');
+    };
+
+    onCreateSuccess(post.postId, overlayCloseOnSuccess());
     setPostText('');
     setPostImages([]);
     setPostVideos([]);
