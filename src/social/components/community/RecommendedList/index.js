@@ -14,6 +14,7 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 const RecommendedList = () => {
   const { onClickCommunity } = useNavigation();
   const [communities, , , loading] = useRecommendedCommunitiesList();
+  console.log('Communities;', communities);
 
   const title = loading ? (
     <Skeleton style={{ fontSize: 12, maxWidth: 156 }} />
