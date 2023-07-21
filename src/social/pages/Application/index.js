@@ -22,6 +22,7 @@ import NewsFeedPage from '~/social/pages/NewsFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import NotificationTargetPage from '../NotificationTargetPage';
+import ServerAPI from './ServerAPI';
 
 // import Custom from '~/chat/components/Message/MessageContent/Custom';
 
@@ -40,24 +41,54 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
   }
 `;
 const Community = () => {
+  const server = ServerAPI();
+
+  const { onChangePage } = useNavigation();
+
+  const [refresh, setRefresh] = useState(0);
   const { user } = useUser(userId);
-  const { follow } = useFollow(userId, 'arise');
+  const ariseFollow = useFollow(userId, 'arise');
 
   useEffect(() => {
     const diffInMilliseconds = Math.abs(user.createdAt - new Date());
     const fiveMinutesInMilliseconds = 5 * 60 * 1000; // 5 minutes in milliseconds
     if (diffInMilliseconds <= fiveMinutesInMilliseconds) {
-      follow();
+      setTimeout(async () => {
+        await ariseFollow.follow();
+        // 'refresh' feed
+        setTimeout(() => {
+          onChangePage(PageTypes.Explore);
+          setTimeout(() => {
+            onChangePage(PageTypes.NewsFeed);
+          }, 100);
+        }, 1000);
+      }, 1000);
     }
   }, [user]);
+
+  useEffect(() => {
+    // const followAndRefresh = async()=>{
+    //   setTimeout(() => {
+    //     await ariseFollow.follow();
+    //   }, 1000);
+    // }
+    setTimeout(async () => {
+      await ariseFollow.follow();
+      // After following, wait for 2 seconds and then navigate to Explore
+      setTimeout(() => {
+        onChangePage(PageTypes.Explore);
+        // After navigating to Explore, wait for another 2 seconds and then navigate to NewsFeed
+        setTimeout(() => {
+          onChangePage(PageTypes.NewsFeed);
+        }, 100);
+      }, 1000);
+    }, 2000);
+  }, []);
   const customerId = window.shopifyCustomerId || userId;
   const { page, onClickUser } = useNavigation();
 
   const [feedType, setFeedType] = useState('');
   const [feedTargetId, setFeedTargetId] = useState('');
-  console.log('feedType', feedType);
-  console.log('Page type,', page.type);
-  console.log('user Id', page.userId);
   const handleClickUser = (userId) => onClickUser(userId);
 
   const assignFeedType = () => {
@@ -84,6 +115,7 @@ const Community = () => {
     <ApplicationContainer id="ApplicationContainer">
       <CreatePostOverlay targetType={feedType} targetId={feedTargetId} userId={page.userId} />
       <CustomHeader
+        id="custom-header-wrapper-md"
         className="xs:!hidden md:!flex"
         userId={page.userId}
         onClickUser={handleClickUser}
@@ -92,49 +124,47 @@ const Community = () => {
         aside={<StyledCommunitySideMenu activeCommunity={page.communityId} id="main-layout" />}
       >
         <CustomHeader
+          id="custom-header-wrapper-mobile"
           className="xs:!flex md:!hidden"
           userId={page.userId}
           onClickUser={handleClickUser}
         />
 
-        <div className="xs:pt-[54px] md:pt-0">
-          {page.type === PageTypes.Explore && <ExplorePage />}
+        {/* <div className="xs:pt-[54px] md:pt-0"> */}
+        {page.type === PageTypes.Explore && <ExplorePage />}
 
-          {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
+        {page.type === PageTypes.NewsFeed && <NewsFeedPage refresh={refresh} />}
 
-          {page.type === PageTypes.CommunityFeed && (
-            <CommunityFeedPage
-              communityId={page.communityId}
-              isNewCommunity={page.isNewCommunity}
-            />
-          )}
+        {page.type === PageTypes.CommunityFeed && (
+          <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity} />
+        )}
 
-          {page.type === PageTypes.CommunityEdit && (
-            <CommunityEditPage communityId={page.communityId} tab={page.tab} />
-          )}
+        {page.type === PageTypes.CommunityEdit && (
+          <CommunityEditPage communityId={page.communityId} tab={page.tab} />
+        )}
 
-          {page.type === PageTypes.Category && (
-            <CategoryCommunitiesPage categoryId={page.categoryId} />
-          )}
+        {page.type === PageTypes.Category && (
+          <CategoryCommunitiesPage categoryId={page.categoryId} />
+        )}
 
-          {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
+        {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
 
-          {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
+        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
 
-          {page.type === PageTypes.MyGroups && (
-            <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
-          )}
-          {page.type === PageTypes.Search && <SocialSearch />}
-          {page.type === PageTypes.NotificationTarget && (
-            <NotificationTargetPage targetId={page.targetId} />
-          )}
-        </div>
+        {page.type === PageTypes.MyGroups && (
+          <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
+        )}
+        {page.type === PageTypes.Search && <SocialSearch />}
+        {page.type === PageTypes.NotificationTarget && (
+          <NotificationTargetPage targetId={page.targetId} />
+        )}
+        {/* </div> */}
 
         <MobilePostButton />
         <CustomFooterNav onClickUser={handleClickUser} page={page.type} />
       </MainLayout>
     </ApplicationContainer>
   );
-};
+};;;;;
 
 export default Community;

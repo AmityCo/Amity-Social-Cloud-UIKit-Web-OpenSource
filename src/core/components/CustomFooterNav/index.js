@@ -134,6 +134,7 @@ function CustomFooterNav({ onClickUser, page }) {
           onClick={() => {
             tab.func();
             setSelectedTab(tab.page);
+
           }}
         >
           <span className="w-[25px] h-[25px] flex justify-center items-center">{tab.svg}</span>

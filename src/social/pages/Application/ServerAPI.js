@@ -32,7 +32,63 @@ const ServerAPI = () => {
       console.error('Error:', error);
     }
   };
-  ///////////////////////////////////////////////////////////////////////////////////////
+  //////////////////////////////// USER //////////////////////////////////////////
+  const followUser = async (userId) => {
+    const url = `https://api.us.amity.co/api/v4/me/following/${userId}`;
+
+    try {
+      const accessToken = await getAccessToken();
+
+      const response = await fetch(url, {
+        method: 'POST',
+
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          deleteAll: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error.message);
+      return null;
+    }
+  };
+  const deleteUser = async (userId) => {
+    const url = `https://api.us.amity.co/api/v4/users/${userId}`;
+
+    try {
+      const accessToken = await getAccessToken();
+
+      const response = await fetch(url, {
+        method: 'DELETE',
+
+        headers: {
+          Authorization: `Bearer ${'4471e3d7c5564e4f9a3e3fc9309d8c7de1871d6b'}`,
+        },
+        body: JSON.stringify({
+          deleteAll: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error:', error.message);
+      return null;
+    }
+  };
 
   //////////////////////////////// NOTIFICATION CALLS //////////////////////////////////////////
 
@@ -89,12 +145,12 @@ const ServerAPI = () => {
     }
   };
 
-  /////////////////////////////////////////////////////////////////////////////////////////////
-
   return {
     ariseGetRewards,
     getNotifications,
     setReadNotification,
+    deleteUser,
+    followUser,
   };
 };
 

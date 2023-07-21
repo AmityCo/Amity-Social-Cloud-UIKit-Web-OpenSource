@@ -1,49 +1,49 @@
-import React, { memo, useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import { CommunityRepository, FileType, PostTargetType, UserRepository } from '@amityco/js-sdk';
 import cx from 'classnames';
+import PropTypes from 'prop-types';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { UserRepository, CommunityRepository, PostTargetType, FileType } from '@amityco/js-sdk';
 import styled from 'styled-components';
 
 import { info } from '~/core/components/Confirm';
 import { useAsyncCallback } from '~/core/hooks/useAsyncCallback';
 import useImage from '~/core/hooks/useImage';
 
-import { isEmpty } from '~/helpers';
 import withSDK from '~/core/hocs/withSDK';
+import { isEmpty } from '~/helpers';
 // import useUser from '~/core/hooks/useUser';
-import useLiveObject from '~/core/hooks/useLiveObject';
-import useErrorNotification from '~/core/hooks/useErrorNotification';
 import { notification } from '~/core/components/Notification';
+import useErrorNotification from '~/core/hooks/useErrorNotification';
+import useLiveObject from '~/core/hooks/useLiveObject';
 
-import { backgroundImage as UserImage } from '~/icons/User';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import { extractMetadata, formatMentionees } from '~/helpers/utils';
 import { FileLoaderContainer } from '~/core/components/Uploaders/Loader';
+import { extractMetadata, formatMentionees } from '~/helpers/utils';
+import { backgroundImage as CommunityImage } from '~/icons/Community';
+import { backgroundImage as UserImage } from '~/icons/User';
 import PollModal from '~/social/components/post/PollComposer/PollModal';
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import FilesUploaded from './components/FilesUploaded';
+import ImagesUploaded from './components/ImagesUploaded';
 import PostTargetSelector from './components/PostTargetSelector';
 import UploaderButtons from './components/UploaderButtons';
-import ImagesUploaded from './components/ImagesUploaded';
 import VideosUploaded from './components/VideosUploaded';
-import FilesUploaded from './components/FilesUploaded';
 
 import { createPost, showPostCreatedNotification } from './utils';
 
 import {
   Avatar,
-  PostCreatorContainer,
   Footer,
-  PostContainer,
-  PostButton,
-  UploadsContainer,
-  PostInputText,
   PollButton,
   PollIcon,
+  PostButton,
+  PostContainer,
+  PostCreatorContainer,
+  PostInputText,
+  UploadsContainer,
 } from './styles';
 
-import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 import promisify from '~/helpers/promisify';
+import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 
 const communityFetcher = (id) => () => CommunityRepository.communityForId(id);
 const userFetcher = (id) => () => UserRepository.getUser(id);
@@ -104,8 +104,6 @@ const CreatePostOverlay = ({
   const { setNavigationBlocker } = useNavigation();
   const user = currentUserId;
 
-  console.log('target type/id', targetType, targetId);
-
   // default to me
   if (targetType === PostTargetType.GlobalFeed || targetType === PostTargetType.MyFeed) {
     /* eslint-disable no-param-reassign */
@@ -114,7 +112,6 @@ const CreatePostOverlay = ({
     targetId = currentUserId;
   }
   const [target, setTarget] = useState({ targetType, targetId });
-  console.log('target ======', target);
   useEffect(() => {
     setTarget({ targetType, targetId });
   }, [targetType, targetId]);
@@ -176,7 +173,6 @@ const CreatePostOverlay = ({
       attachments,
       metadata: {},
     };
-    console.log('param');
     if (postMentionees.type && postMentionees.userIds.length > 0) {
       createPostParams.mentionees = [{ ...postMentionees }];
       const { metadata: extractedMetadata } = extractMetadata(mentionees);

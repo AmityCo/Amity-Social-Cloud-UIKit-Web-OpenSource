@@ -14,7 +14,7 @@ import { userId } from '~/social/constants';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { CustomHeaderWrapper, SearchWrapper } from './styles';
 
-const CustomHeader = ({ onClickUser, className }) => {
+const CustomHeader = ({ onClickUser, className, id }) => {
   // const userId = window.shopifyCustomerId;
   const { user, file } = useUser(userId);
   const { onChangePage, page } = useNavigation();
@@ -54,7 +54,8 @@ const CustomHeader = ({ onClickUser, className }) => {
 
   return (
     <CustomHeaderWrapper
-      className={`${className ?? ''} fixed border-cym-lightgrey  bg-cym-lightteal`}
+      id={id}
+      className={`${className ?? ''}  border-cym-lightgrey  bg-cym-lightteal custom-header-wrapper`}
     >
       <div className="flex flex-col w-full border-y-1  gap-3  px-5 md:px-[68px] py-[16px]">
         <div className="flex flex-row items-end">

@@ -8,14 +8,12 @@ import ServerAPI from '../../pages/Application/ServerAPI';
 
 const AriseTokensGallery = ({ targetId }) => {
   const [extractedRewardsData, setExtractedRewardsData] = useState([]);
-
+  const server = ServerAPI();
   useEffect(() => {
     if (targetId) {
       const ariseResp = async () => {
         const ariseUserId = targetId;
         try {
-          const server = new ServerAPI();
-
           // pass targetId to ServerAPI Wrapper
           const ariseRewardsResp = await server.ariseGetRewards(ariseUserId);
           const ariseRewardsData = ariseRewardsResp.rewards;
@@ -25,7 +23,7 @@ const AriseTokensGallery = ({ targetId }) => {
               claimedNft,
               reward: { name, assets },
             } = reward;
-            const { publicUrl } = assets[0];
+            const { publicUrl } = assets.length ? assets[0] : '';
 
             return {
               claimedNft,

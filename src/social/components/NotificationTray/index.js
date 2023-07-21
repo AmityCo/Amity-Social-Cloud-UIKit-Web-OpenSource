@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Avatar from '~/core/components/Avatar';
 import { backgroundImage as UserImage } from '~/icons/User';
-import usePost from '~/social/hooks/usePost';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import ServerAPI from '../../pages/Application/ServerAPI';
 
@@ -69,8 +68,6 @@ const NotificationTray = () => {
 
   // const { post, file, user } = usePost('64b5765e84f9df8fd3329ef5');
   const { onClickCommunity, onChangePage, onClickNotification } = useNavigation();
-  console.log(usePost('64b5765e84f9df8fd3329ef5'));
-  console.log('SADFSDAFSDAFSDAFDSAF', useNavigation());
   const [isMobile, setIsMobile] = useState(false);
   const [timeRanges, setTimeRanges] = useState({});
   const [isOpen, setIsOpen] = useState(false);
@@ -217,6 +214,14 @@ const NotificationTray = () => {
   // };
 
   const toggleSlideOut = () => {
+    if (isOpen) {
+      document.getElementById('custom-header-wrapper-mobile').style.zIndex = 15;
+      document.getElementById('custom-header-wrapper-md').style.zIndex = 15;
+    } else {
+      document.getElementById('custom-header-wrapper-mobile').style.zIndex = 501;
+      document.getElementById('custom-header-wrapper-md').style.zIndex = 501;
+    }
+
     setIsOpen(!isOpen);
   };
 
@@ -295,7 +300,6 @@ const NotificationTray = () => {
           <h1 className="cym-h-2-lg">Notifications</h1>
         </SlideOutHeader>
         <SlideOutContent className="flex flex-col h-full overflow-y-auto">
-          {console.log(timeRanges)}
           {Object.keys(timeRanges).map((dateRange) => {
             if (timeRanges[dateRange].arr.length > 0) {
               return (

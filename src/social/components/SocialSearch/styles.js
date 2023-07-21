@@ -19,7 +19,7 @@ export const SocialSearchContainer = styled.div`
   ${({ sticky }) =>
     sticky &&
     `
-      z-index: 500;
+      z-index: 10;
       position: sticky;
       top: 0;
       box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);

@@ -1,4 +1,4 @@
-import { CommunityFilter, FeedType, PostTargetType, PostRepository } from '@amityco/js-sdk';
+import { CommunityFilter, FeedType, PostRepository, PostTargetType } from '@amityco/js-sdk';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';

@@ -7,9 +7,9 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import MyCommunitiesMobile from '~/social/components/MyCommunitiesMobile';
 import { Wrapper } from './styles';
+
 const NewsFeed = () => {
   const { onChangePage } = useNavigation();
-
   return (
     <Wrapper data-qa-anchor="news-feed">
       <MyCommunitiesMobile />
