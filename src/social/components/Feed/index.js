@@ -16,10 +16,8 @@ import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
 
 import NewsFeedTrendingList from '../community/NewsFeedTrendingList';
-import FeaturedVideos from '../FeaturedVideos';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
-// import CreatePostOverlay from '~/social/components/CreatePostOverlay';
 
 const queryParams = { filter: CommunityFilter.Member };
 
@@ -65,6 +63,7 @@ const Feed = ({
       next={loadMore}
       hasMore={hasMore}
     >
+      {/* <WellnessWorkshops /> */}
       <ConditionalRender condition={!isHiddenProfile}>
         <>
           {showPostCreator && (
@@ -89,7 +88,6 @@ const Feed = ({
             <LoadMore hasMore={hasMore} loadMore={loadMore} className="load-more no-border">
               {page.type === PageTypes.NewsFeed && (
                 <div>
-                  <FeaturedVideos />
                   <div className="w-max px-5">
                     <span className="!text-[18px] font-bold">Pinned Posts 📌</span>
                     <hr className="w-full h-1 bg-[#005850] rounded" />
