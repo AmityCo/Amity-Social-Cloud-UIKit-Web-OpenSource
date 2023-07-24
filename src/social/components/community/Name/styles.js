@@ -13,11 +13,14 @@ export const VerifiedIcon = styled(Verified).attrs({ width: 16, height: 16 })`
 // the padding-right is to avoid cutting too short when the name ends with an emoji (due to the flex + text-overflow combination)
 export const Name = styled.div`
   padding-right: 1ch;
+  display: flex;
+  align-items: center;
 `;
 
 export const NameContainer = styled.div`
   display: flex;
   align-items: center;
+
   overflow: hidden;
   ${({ theme, isActive, isTitle }) => css`
     ${theme.typography.bodyBold}
