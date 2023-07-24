@@ -184,7 +184,7 @@ const FeaturedVideos = ({
       {selectedVideoIndex !== null && (
         <Overlay id="video-overlay">
           <CloseButton className="absolute right-5 top-5" onClick={closeVideoOverlay} />
-          <video id="video" className="video w-[300px] md:w-[400px]" controls>
+          <video id="video" className="video" controls>
             <source src={playlist[selectedVideoIndex].src} type="video/mp4" />
           </video>
         </Overlay>
@@ -218,20 +218,22 @@ const FeaturedVideos = ({
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
-                onClick={() => spawnVideoOverlay(index)} // Pass the index when the div is clicked
               >
-                <ButtonContainer className="absolute w-full h-full flex items-center justify-center cursor-pointer">
-                  <Play />
-                </ButtonContainer>
-                <h3
-                  className="absolute m-[10px] bottom-0 text-xl font-bold text-white sm:text-2xl"
-                  style={{
-                    dropShadow:
-                      'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-                  }}
+                <ButtonContainer
+                  className="absolute w-full h-full flex items-center justify-center cursor-pointer"
+                  onClick={() => spawnVideoOverlay(index)}
                 >
-                  {video.title}
-                </h3>
+                  <Play />
+                  <h3
+                    className="absolute m-[10px] left-0 bottom-0 text-xl font-bold text-white sm:text-2xl"
+                    style={{
+                      dropShadow:
+                        'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+                    }}
+                  >
+                    {video.title}
+                  </h3>
+                </ButtonContainer>
               </div>
             ))}
           </StretchedList>
