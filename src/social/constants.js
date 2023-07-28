@@ -36,5 +36,6 @@ export const VideoQuality = Object.freeze({
 
 export const MP4MimeType = 'video/mp4';
 
-export const userId = '6229059141679';
+export const userId = window.shopifyCustomerId ?? '3454838145071';
+export const displayName = window.shopifyCustomerName ?? 'Test Test';
 export const apiKey = 'b0e8ee0f3fdda3644836851c545a1f89d50fdae4e9636628';

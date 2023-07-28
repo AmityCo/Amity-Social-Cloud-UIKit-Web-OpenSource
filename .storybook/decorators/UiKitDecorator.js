@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import MockData from '~/mock';
-import { userId as ID } from '~/social/constants';
+import { userId as CustomerId, displayName as CustomerName } from '~/social/constants';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 const GLOBAL_NAME = 'user';
 
@@ -64,17 +64,20 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
     console.log(`[UiKitProvider.handleDisconnected]`, ...args);
   };
 
+  const placeholder = CustomerId;
+  const placeholder2 = CustomerName;
   return (
     <UiKitProvider
       ref={ref}
       key={userId}
       apiKey={process.env.STORYBOOK_API_KEY}
       apiRegion={process.env.STORYBOOK_API_REGION}
-      // userId={userId}
-      // displayName={displayName || userId}
-      userId={ID}
-      // userId={'3454838145071'}
-      displayName={'Test Test'}
+      // Uncomment for production
+      userId={userId}
+      displayName={displayName || userId}
+      // // Uncomment for development
+      // userId={CustomerId}
+      // displayName={CustomerName}
       onConnectionStatusChange={handleConnectionStatusChange}
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
@@ -87,6 +90,6 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
 };
 
 export default {
-  global,
   decorator,
+  global,
 };
