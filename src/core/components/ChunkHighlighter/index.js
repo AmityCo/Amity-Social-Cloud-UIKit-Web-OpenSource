@@ -18,6 +18,7 @@ import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
 import { Spotify } from 'react-spotify-embed';
 import YoutubeEmbed from './YoutubeEmbed';
+import { first } from 'lodash';
 
 const renderNodes = (parentNode, props) => {
   if (isValidElement(parentNode) || typeof parentNode === 'object') {
@@ -63,17 +64,48 @@ const ChunkHighlighter = ({ textToHighlight, chunks, highlightNode, unhighlightN
         const text = textToHighlight.substring(start, end);
         const key = uuidV4();
         if (text.includes('spotify')) {
-          return <Spotify link={text} className="mx-auto md:mx-0 w-full" />;
+          // Extract the first sentence using regex
+          const firstSentenceRegex = /^[^!?\n.]+/;
+          const firstSentenceMatch = text.match(firstSentenceRegex);
+          const firstSentence = firstSentenceMatch ? firstSentenceMatch[0] : "";
+          console.log('Regex Result:', firstSentence);
+
+          // Extract the Spotify URL using regex
+          const spotifyURLRegex = /https:\/\/open\.spotify\.com\/[^\s]+/;
+          const spotifyURLMatch = text.match(spotifyURLRegex);
+          const spotifyURL = spotifyURLMatch ? spotifyURLMatch[0] : "";
+          console.log('Regex Result:', spotifyURL);
+
+          return (
+            <>  
+              <p className='mb-[10px]'>{firstSentence}</p>
+              <Spotify link={spotifyURL} className="mx-auto md:mx-0 w-full" />
+            </>
+          );
         } else if (text.includes('youtu.be')) {
           const url = text;
           const videoId = url.match(/\/([^/]+)$/)[1];
-          console.log('Video', text, videoId);
-          return <YoutubeEmbed embedId={videoId} />;
+          const regex = /https:\/\/youtu\.be\/[^\s]+/g;
+          const result = text.replace(regex, "");
+
+          return (
+            <>
+              <p className='mb-[10px]'>{result}</p>
+              <YoutubeEmbed embedId={videoId} />
+            </>
+          );
         } else if (text.includes('youtube')) {
           const youtubeUrl = text;
           const urlParams = new URLSearchParams(new URL(youtubeUrl).search);
           const videoId = urlParams.get('v');
-          return <YoutubeEmbed embedId={videoId} />;
+          const regex = /https:\/\/youtu\.be\/[^\s]+/g;
+          const result = text.replace(regex, "");
+          return (
+            <>
+              <p className='mb-[10px]'>{result}</p>
+              <YoutubeEmbed embedId={videoId} />
+            </>
+          );
         } else {
           if (highlight) {
             highlightIndex += 1;
