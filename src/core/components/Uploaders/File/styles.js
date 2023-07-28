@@ -78,7 +78,11 @@ export const RemoveIcon = styled(Remove)`
 const RemoveButton = styled(Button).attrs({
   variant: 'secondary',
   children: <RemoveIcon />,
-})``;
+})`
+  svg {
+    width: 15px;
+  }
+`;
 
 const ButtonContainer = styled.div`
   display: flex;

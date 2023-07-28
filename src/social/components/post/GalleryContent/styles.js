@@ -15,6 +15,7 @@ export const RemoveButton = styled(Button).attrs({
   position: absolute;
   top: 0.5em;
   right: 0.5em;
+  max-width: 40px;
 `;
 
 export const PlayIcon = styled(Play)`
