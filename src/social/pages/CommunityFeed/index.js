@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import {
   EventSubscriberRepository,
@@ -7,6 +7,7 @@ import {
   getCommunityTopic,
   PostTargetType,
   SubscriptionLevels,
+  PostRepository,
 } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 import CommunityCreatedModal from '~/social/components/CommunityCreatedModal';
@@ -21,11 +22,24 @@ import CommunityMembers from '~/social/components/CommunityMembers';
 import Feed from '~/social/components/Feed';
 import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 import MediaGallery from '~/social/components/MediaGallery';
+import Post from '~/social/components/post/Post';
 import { CommunityFeedTabs } from './constants';
 import { DeclineBanner, Wrapper } from './styles';
 import { getTabs } from './utils';
 
-const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
+const postLiveObject = PostRepository.postForId('64b6ab1efc7ca338eeced8b1');
+postLiveObject.once('dataUpdated', (model) => {
+  console.log('Post', model.data.text);
+});
+
+const CommunityFeed = ({
+  communityId,
+  currentUserId,
+  isNewCommunity,
+  targetType = '',
+  readonly = false,
+  pinned,
+}) => {
   const { community } = useCommunity(communityId);
   const { canReviewCommunityPosts } = useCommunityOneMember(
     communityId,
@@ -69,6 +83,14 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   return (
     <Wrapper>
       <CommunityInfo communityId={communityId} />
+      {communityId === '649b243a2b963c70c54750bf' && (
+        <Post
+          postId="64c3f91ce998aa1323b13928"
+          hidePostTarget={targetType !== PostTargetType.GlobalFeed}
+          readonly={readonly}
+          pinned={pinned}
+        />
+      )}
 
       <FeedHeaderTabs
         data-qa-anchor="community-feed-header"
@@ -124,6 +146,9 @@ CommunityFeed.propTypes = {
   communityId: PropTypes.string.isRequired,
   currentUserId: PropTypes.string.isRequired,
   isNewCommunity: PropTypes.bool,
+  targetType: PropTypes.string,
+  readonly: PropTypes.bool,
+  pinned: PropTypes.string,
 };
 
 CommunityFeed.defaultProps = {

@@ -94,7 +94,7 @@ const Feed = ({
                     <hr className="w-full h-1 bg-[#005850] rounded" />
                   </div>
                   <Post
-                    postId="648b222f83ad0623266524ef"
+                    postId="64c3f84ae998aa5afeb10dc2"
                     hidePostTarget={targetType !== PostTargetType.GlobalFeed}
                     readonly={readonly}
                     pinned={pinned}
