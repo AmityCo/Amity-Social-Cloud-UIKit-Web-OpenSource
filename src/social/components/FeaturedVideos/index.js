@@ -164,7 +164,8 @@ const FeaturedVideos = ({
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
   console.log('Video index', selectedVideoIndex);
 
-  const spawnVideoOverlay = (index) => {
+  const spawnVideoOverlay = (index, e) => {
+    
     console.log('Video index', selectedVideoIndex);
     console.log('Spawn overlay');
     setSelectedVideoIndex(index);
@@ -221,6 +222,7 @@ const FeaturedVideos = ({
               >
                 <ButtonContainer
                   className="absolute w-full h-full flex items-center justify-center cursor-pointer"
+                  role="button"
                   onClick={() => spawnVideoOverlay(index)}
                 >
                   <Play />
