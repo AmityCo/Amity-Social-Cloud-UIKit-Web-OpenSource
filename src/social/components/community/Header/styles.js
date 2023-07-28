@@ -78,7 +78,7 @@ const UICommunityHeader = ({
       avatar={avatarFileUrl}
       backgroundImage={CommunityImage}
       loading={loading}
-      className="community-header-avatar xs:!h-[60px] xs:!w-[60px] md:!w-[40px] md:!h-[40px]"
+      className="community-header-avatar xs:!h-[60px] xs:!w-[60px] md:!w-[40px] md:!h-[40px] !text-[#005850] no-underline"
     />
     {loading && children ? (
       <Skeleton style={{ fontSize: 8, maxWidth: 120 }} />

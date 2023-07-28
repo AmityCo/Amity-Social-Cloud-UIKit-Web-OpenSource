@@ -48,6 +48,7 @@ const Community = () => {
   const [refresh, setRefresh] = useState(0);
   const { user } = useUser(userId);
   const ariseFollow = useFollow(userId, 'arise');
+  console.log('User:', user);
 
   useEffect(() => {
     const diffInMilliseconds = Math.abs(user.createdAt - new Date());
