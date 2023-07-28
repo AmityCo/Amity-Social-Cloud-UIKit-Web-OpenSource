@@ -190,7 +190,7 @@ const WellnessWorkshops = ({
           <StretchedList columns={columns} className="gap-[16px] md:gap-unset">
             {playlist.map((video, index) => (
               <div
-                className="relative inline-table cover rounded-[5px] overflow-hidden bg-[#EBF2F1]"
+                className="relative inline-table cover rounded-[5px] overflow-hidden bg-[#EBF2F1] cursor-not-allowed"
                 key={video.key}
                 style={{ boxShadow: `rgba(0, 0, 0, 0.05) 0px 1px 2px 0px` }}
               >
