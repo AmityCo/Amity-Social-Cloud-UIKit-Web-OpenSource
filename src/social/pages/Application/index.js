@@ -116,7 +116,7 @@ const Community = () => {
       <CreatePostOverlay targetType={feedType} targetId={feedTargetId} userId={page.userId} />
       <CustomHeader
         id="custom-header-wrapper-md"
-        className="xs:!hidden md:!flex"
+        className="hidden md:block"
         userId={page.userId}
         onClickUser={handleClickUser}
       />
@@ -125,7 +125,7 @@ const Community = () => {
       >
         <CustomHeader
           id="custom-header-wrapper-mobile"
-          className="xs:!flex md:!hidden"
+          className="md:!hidden"
           userId={page.userId}
           onClickUser={handleClickUser}
         />
@@ -165,6 +165,6 @@ const Community = () => {
       </MainLayout>
     </ApplicationContainer>
   );
-};;;;;
+};
 
 export default Community;

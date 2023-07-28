@@ -18,12 +18,14 @@ const AriseTokensGallery = ({ targetId }) => {
           const ariseRewardsResp = await server.ariseGetRewards(ariseUserId);
           const ariseRewardsData = ariseRewardsResp.rewards;
 
-          const extractedData = ariseRewardsData.map((reward) => {
+          const extractedData = ariseRewardsData
+          .filter((reward) => reward.reward.name !== "Birthday Gift")
+          .map((reward) => {
             const {
               claimedNft,
               reward: { name, assets },
             } = reward;
-            const { publicUrl } = assets.length ? assets[0] : '';
+            const { publicUrl } = assets.length ? assets[0] : "";
 
             return {
               claimedNft,
@@ -31,6 +33,7 @@ const AriseTokensGallery = ({ targetId }) => {
               publicUrl,
             };
           });
+
 
           setExtractedRewardsData(extractedData);
 
@@ -45,12 +48,12 @@ const AriseTokensGallery = ({ targetId }) => {
   }, [targetId]);
 
   return (
-    <AriseTokensContainer className="grid grid-cols-3 gap-[32px] items-center">
+    <AriseTokensContainer className="grid grid-cols-3 gap-[32px] items-start mx-auto">
       {extractedRewardsData?.map((reward, index) =>
         reward.claimedNft ? (
-          <div key={index} className="text-center">
+          <div key={index} className="mx-auto w-[75px] md:w-[140px] text-center">
             <div
-              className="m-auto mb-[16px] w-[100px] h-[100px] md:w-[140px] md:h-[140px] rounded-[100px]"
+              className="mb-[16px] h-[75px]  md:h-[140px] rounded-[100px]"
               style={{
                 backgroundImage: `url(${reward.publicUrl})`,
                 backgroundRepeat: 'no-repeat',

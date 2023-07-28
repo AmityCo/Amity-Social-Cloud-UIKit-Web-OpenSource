@@ -1,5 +1,5 @@
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { memo, useState } from 'react';
 
 import customizableComponent from '~/core/hocs/customization';
 import withSDK from '~/core/hocs/withSDK';
@@ -7,6 +7,7 @@ import withSDK from '~/core/hocs/withSDK';
 import useUser from '~/core/hooks/useUser';
 import { backgroundImage as UserImage } from '~/icons/User';
 import Avatar from '../Avatar';
+import ChevronLeft from '~/icons/ChevronLeft';
 
 import NotificationTray from '~/social/components/NotificationTray';
 import UiKitSocialSearch from '~/social/components/SocialSearch';
@@ -55,8 +56,14 @@ const CustomHeader = ({ onClickUser, className, id }) => {
   return (
     <CustomHeaderWrapper
       id={id}
-      className={`${className ?? ''}  border-cym-lightgrey  bg-cym-lightteal custom-header-wrapper`}
+      className={`${
+        className ?? ''
+      } pt-4 border-cym-lightgrey bg-cym-lightteal custom-header-wrapper`}
     >
+      <a href="#" className="flex items-center px-5 md:px-[68px] underline text-[#005850]">
+        <ChevronLeft className="w-2 mr-4" />
+        Back to Dashboard
+      </a>
       <div className="flex flex-col w-full border-y-1  gap-3  px-5 md:px-[68px] py-[16px]">
         <div className="flex flex-row items-end">
           <svg
