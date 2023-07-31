@@ -20,7 +20,7 @@ const DEFAULT_COLUMN_NUMBER = {
 };
 
 export const Overlay = styled.div`
-  display: none;
+  /* display: none; */
   align-items: center;
   justify-content: center;
   position: absolute;
@@ -31,6 +31,13 @@ export const Overlay = styled.div`
   background: rgba(0, 0, 0, 0.75);
   color: #fff;
   z-index: 10000;
+
+  video {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+  }
 `;
 
 const Header = styled.div`
@@ -165,11 +172,10 @@ const FeaturedVideos = ({
   console.log('Video index', selectedVideoIndex);
 
   const spawnVideoOverlay = (index, e) => {
-    
     console.log('Video index', selectedVideoIndex);
     console.log('Spawn overlay');
     setSelectedVideoIndex(index);
-    document.getElementById('video-overlay').style.display = 'flex';
+    // document.getElementById('video-overlay').style.display = 'flex';
   };
 
   const closeVideoOverlay = () => {
