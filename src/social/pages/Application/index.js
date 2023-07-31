@@ -1,5 +1,5 @@
 import { PostTargetType } from '@amityco/js-sdk';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { PageTypes, userId } from '~/social/constants';
 
@@ -47,15 +47,25 @@ const Community = () => {
 
   const [refresh, setRefresh] = useState(0);
   const { user } = useUser(userId);
-  const ariseFollow = useFollow(userId, 'arise');
-  console.log('User:', user);
+  const ariseFollow = useFollow(userId, '6405802983471');
+  const chervinFollow = useFollow(userId, '699914223639');
 
   useEffect(() => {
     const diffInMilliseconds = Math.abs(user.createdAt - new Date());
     const fiveMinutesInMilliseconds = 5 * 60 * 1000; // 5 minutes in milliseconds
     if (diffInMilliseconds <= fiveMinutesInMilliseconds) {
       setTimeout(async () => {
-        await ariseFollow.follow();
+        try {
+          await chervinFollow.follow();
+        } catch (error) {
+          console.error('Error following chervin:', error);
+        }
+
+        try {
+          await ariseFollow.follow();
+        } catch (error) {
+          console.error('Error following arise:', error);
+        }
         // 'refresh' feed
         setTimeout(() => {
           onChangePage(PageTypes.Explore);
@@ -67,24 +77,35 @@ const Community = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    // const followAndRefresh = async()=>{
-    //   setTimeout(() => {
-    //     await ariseFollow.follow();
-    //   }, 1000);
-    // }
-    setTimeout(async () => {
-      await ariseFollow.follow();
-      // After following, wait for 2 seconds and then navigate to Explore
-      setTimeout(() => {
-        onChangePage(PageTypes.Explore);
-        // After navigating to Explore, wait for another 2 seconds and then navigate to NewsFeed
-        setTimeout(() => {
-          onChangePage(PageTypes.NewsFeed);
-        }, 100);
-      }, 1000);
-    }, 2000);
-  }, []);
+  // useEffect(() => {
+  //   // const followAndRefresh = async()=>{
+  //   //   setTimeout(() => {
+  //   //     await ariseFollow.follow();
+  //   //   }, 1000);
+  //   // }
+  //   setTimeout(async () => {
+  //     try {
+  //       await chervinFollow.follow();
+  //     } catch (error) {
+  //       console.error('Error following chervin:', error);
+  //     }
+
+  //     try {
+  //       await ariseFollow.follow();
+  //     } catch (error) {
+  //       console.error('Error following arise:', error);
+  //     }
+
+  //     // After following, wait for 2 seconds and then navigate to Explore
+  //     setTimeout(() => {
+  //       onChangePage(PageTypes.Explore);
+  //       // After navigating to Explore, wait for another 2 seconds and then navigate to NewsFeed
+  //       setTimeout(() => {
+  //         onChangePage(PageTypes.NewsFeed);
+  //       }, 100);
+  //     }, 1000);
+  //   }, 2000);
+  // }, []);
   const customerId = window.shopifyCustomerId || userId;
   const { page, onClickUser } = useNavigation();
 
@@ -166,6 +187,6 @@ const Community = () => {
       </MainLayout>
     </ApplicationContainer>
   );
-};
+};;
 
 export default Community;
