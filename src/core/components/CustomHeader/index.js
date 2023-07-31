@@ -60,7 +60,10 @@ const CustomHeader = ({ onClickUser, className, id }) => {
         className ?? ''
       } pt-4 border-cym-lightgrey bg-cym-lightteal custom-header-wrapper`}
     >
-      <a href="#" className="flex items-center px-5 md:px-[68px] underline text-[#005850]">
+      <a
+        href="/account"
+        className="flex items-center px-5 font-normal md:px-[68px] !underline !text-[#005850]"
+      >
         <ChevronLeft className="w-2 mr-4" />
         Back to Dashboard
       </a>
