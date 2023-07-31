@@ -64,55 +64,80 @@ const ChunkHighlighter = ({ textToHighlight, chunks, highlightNode, unhighlightN
         const text = textToHighlight.substring(start, end);
         const key = uuidV4();
         if (text.includes('spotify')) {
-          // Extract the first sentence using regex
-          const firstSentenceRegex = /^[^!?\n.]+/;
-          const firstSentenceMatch = text.match(firstSentenceRegex);
-          const firstSentence = firstSentenceMatch ? firstSentenceMatch[0] : "";
-          console.log('Regex Result:', firstSentence);
+          // Extract the first String using regex
+          const firstStringRegex = /^[^!?\n.]+/;
+          const firstStringMatch = text.match(firstStringRegex);
+          let firstString = firstStringMatch ? firstStringMatch[0] : '';
+          if (firstString === 'https://open') {
+            firstString = null;
+          }
 
           // Extract the Spotify URL using regex
-          const spotifyURLRegex = /https:\/\/open\.spotify\.com\/[^\s]+/;
+          const spotifyURLRegex = /https:\/\/open\.spotify\.com\/\S+/g;
           const spotifyURLMatch = text.match(spotifyURLRegex);
-          const spotifyURL = spotifyURLMatch ? spotifyURLMatch[0] : "";
-          console.log('Regex Result:', spotifyURL);
-
-          return (
-            <>  
-              <p className='mb-[10px]'>{firstSentence}</p>
-              <Spotify link={spotifyURL} className="mx-auto md:mx-0 w-full" />
-            </>
-          );
-        } else if (text.includes('youtu.be')) {
-          const url = text;
-          const videoId = url.match(/\/([^/]+)$/)[1];
-          const regex = /https:\/\/youtu\.be\/[^\s]+/g;
-          const result = text.replace(regex, "");
+          const spotifyURL = spotifyURLMatch ? spotifyURLMatch[0] : ' ';
 
           return (
             <>
-              <p className='mb-[10px]'>{result}</p>
+              <p className="mb-[10px]">{firstString}</p>
+              <Spotify link={spotifyURL} className="mx-auto md:mx-0 w-full" />
+            </>
+          );
+        }
+
+        if (text.includes('youtu.be')) {
+          const url = text;
+          const firstStringRegex = /^[^!?\n.]+/;
+          const firstStringMatch = text.match(firstStringRegex);
+
+          const videoId = url.match(/\/([^/]+)$/)[1];
+          const regex = /https:\/\/youtu\.be\/[^\s]+/g;
+          const result = text.replace(regex, '');
+
+          let firstString = firstStringMatch ? firstStringMatch[0] : '';
+          console.log('First String:', firstString);
+          if (firstString === 'https://youtu') {
+            firstString = null;
+          }
+
+          return (
+            <>
+              <p className="mb-[10px]">{firstString}</p>
               <YoutubeEmbed embedId={videoId} />
             </>
           );
-        } else if (text.includes('youtube')) {
+        }
+
+        if (text.includes('youtube')) {
           const youtubeUrl = text;
           const urlParams = new URLSearchParams(new URL(youtubeUrl).search);
           const videoId = urlParams.get('v');
           const regex = /https:\/\/youtu\.be\/[^\s]+/g;
-          const result = text.replace(regex, "");
+
+          const firstStringRegex = /^[^!?\n.]+/;
+          const firstStringMatch = text.match(firstStringRegex);
+
+          const result = text.replace(regex, '');
+
+          let firstString = firstStringMatch ? firstStringMatch[0] : '';
+          console.log('First String:', firstString);
+          if (firstString === 'https://www') {
+            firstString = null;
+          }
+
           return (
             <>
-              <p className='mb-[10px]'>{result}</p>
+              <p className="mb-[10px]">{firstString}</p>
               <YoutubeEmbed embedId={videoId} />
             </>
           );
-        } else {
-          if (highlight) {
-            highlightIndex += 1;
-            return renderNodes(highlightNode, { children: text, highlightIndex, key });
-          }
-          return renderNodes(unhighlightNode, { children: text, key });
         }
+
+        if (highlight) {
+          highlightIndex += 1;
+          return renderNodes(highlightNode, { children: text, highlightIndex, key });
+        }
+        return renderNodes(unhighlightNode, { children: text, key });
       })}
     </span>
   );
