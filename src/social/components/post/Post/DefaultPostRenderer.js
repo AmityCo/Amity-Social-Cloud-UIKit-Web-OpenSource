@@ -168,7 +168,7 @@ const DefaultPostRenderer = ({
 
   return (
     <PostContainer data-qa-anchor="post" className={className}>
-      {/* {postId} */}
+      {postId}
       <PostHeadContainer>
         <Header hidePostTarget={hidePostTarget} postId={postId} loading={loading} />
         {!loading && <OptionMenu options={allOptions} data-qa-anchor="post-options-button" />}

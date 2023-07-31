@@ -85,7 +85,7 @@ const CommunityFeed = ({
       <CommunityInfo communityId={communityId} />
       {communityId === '649b243a2b963c70c54750bf' && (
         <Post
-          postId="64c3f91ce998aa1323b13928"
+          postId="64c825313b7d23040b7c2abc"
           hidePostTarget={targetType !== PostTargetType.GlobalFeed}
           readonly={readonly}
           pinned={pinned}
