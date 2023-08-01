@@ -19,6 +19,9 @@ import {
   PostNamesContainer,
   ShieldIcon,
 } from './styles';
+import { userId } from '~/social/constants';
+
+console.log(userId);
 
 const UIPostHeader = ({
   avatarFileUrl,
@@ -33,8 +36,27 @@ const UIPostHeader = ({
   hidePostTarget,
   loading,
   isBanned,
+  userRoles,
 }) => {
   const renderPostNames = () => {
+    let cymRole;
+    switch (userRoles[0]) {
+      case '6412fc76-ef6c-476c-ba45-17063dfed0ba':
+        cymRole = 'Cymbiologist';
+        break;
+      case 'edc90e79-1920-4da2-9176-defad5f70f8e':
+        cymRole = 'Cymbiotika Curated';
+        break;
+      case '4e31d2e1-7ab8-4a63-b1b9-bd7383612ac9':
+        cymRole = 'Founder';
+        break;
+      case '19ee7e0e-e137-4c86-84f5-88bc27fb6504':
+        cymRole = 'Community Moderator';
+        break;
+      default:
+        console.log('This user has no Cymbiotika roles');
+    }
+
     return (
       <div>
         <PostNamesContainer data-qa-anchor="post-header-post-names">
@@ -67,6 +89,16 @@ const UIPostHeader = ({
           <div className="my-[5px]">
             <span className="whitespace-nowrap rounded-full bg-[#EBF2F1] px-2 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
               {postAuthorTier}
+            </span>
+          </div>
+        ) : (
+          <span className="hidden">Nothing to see here</span>
+        )}
+
+        {cymRole ? (
+          <div className="my-[5px]">
+            <span className="whitespace-nowrap rounded-full bg-[#EBF2F1] px-2 py-1 text-[12px] uppercase font-mon font-bold text-[#222222] tracking-[1%]">
+              {cymRole}
             </span>
           </div>
         ) : (
@@ -129,6 +161,7 @@ UIPostHeader.propTypes = {
   postAuthorName: PropTypes.node,
   postAuthorTier: PropTypes.node,
   postTargetName: PropTypes.string,
+  userRoles: PropTypes.string,
   timeAgo: PropTypes.instanceOf(Date),
   isModerator: PropTypes.bool,
   isEdited: PropTypes.bool,
@@ -144,6 +177,7 @@ UIPostHeader.defaultProps = {
   postAuthorName: '',
   postAuthorTier: '',
   postTargetName: '',
+  userRoles: '',
   timeAgo: null,
   isModerator: false,
   isEdited: false,

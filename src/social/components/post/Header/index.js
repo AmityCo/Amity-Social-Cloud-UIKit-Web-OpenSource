@@ -34,6 +34,7 @@ const PostHeader = ({ postId, hidePostTarget, loading }) => {
       postAuthorName={user.displayName || <FormattedMessage id="anonymous" />}
       postTargetName={postTargetName}
       postAuthorTier={user?.metadata?.ariseTier}
+      userRoles={user.roles}
       timeAgo={createdAt}
       isModerator={isCommunityModerator || isModerator(user.roles) || isAdmin(user.roles)}
       isEdited={createdAt < editedAt}
