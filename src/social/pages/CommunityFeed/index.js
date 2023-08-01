@@ -85,10 +85,29 @@ const CommunityFeed = ({
       <CommunityInfo communityId={communityId} />
       {communityId === '649b243a2b963c70c54750bf' && (
         <Post
-          postId="64c825313b7d23040b7c2abc"
+          postId="64c8160a990d2e0543da7e8e"
           hidePostTarget={targetType !== PostTargetType.GlobalFeed}
           readonly={readonly}
           pinned={pinned}
+          className="mb-[12px]"
+        />
+      )}
+      {communityId === '649b239b03858406835eaaa2' && (
+        <Post
+          postId="64c815bd4b5292413089940a"
+          hidePostTarget={targetType !== PostTargetType.GlobalFeed}
+          readonly={readonly}
+          pinned={pinned}
+          className="mb-[12px]"
+        />
+      )}
+      {communityId === '649b23322be19926f2f4d0af' && (
+        <Post
+          postId="64c814fdd29e5dfa7f73aa95"
+          hidePostTarget={targetType !== PostTargetType.GlobalFeed}
+          readonly={readonly}
+          pinned={pinned}
+          className="mb-[12px]"
         />
       )}
 

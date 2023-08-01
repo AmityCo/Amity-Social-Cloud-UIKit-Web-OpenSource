@@ -98,6 +98,12 @@ const Feed = ({
                     readonly={readonly}
                     pinned={pinned}
                   />
+                  <Post
+                    postId="64c82beee998aaff397aee9f"
+                    hidePostTarget={targetType !== PostTargetType.GlobalFeed}
+                    readonly={readonly}
+                    pinned={pinned}
+                  />
                 </div>
               )}
               {posts.map(({ postId }, index) => (
