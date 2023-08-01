@@ -129,25 +129,7 @@ const WellnessWorkshops = ({
       key: 0,
       communityId: '',
       thumbnail: '',
-      title: 'Up close of our plant protein 🌱',
-    },
-    {
-      key: 1,
-      communityId: '',
-      thumbnail: '',
-      title: 'Its the Shilajit! 😤',
-    },
-    {
-      key: 2,
-      src: '',
-      thumbnail: '',
-      title: 'Cool Video 🎬',
-    },
-    {
-      key: 3,
-      communityId: '',
-      thumbnail: '',
-      title: 'Watch this foo 🌮',
+      title: 'Rising Routine',
     },
   ];
 
@@ -190,7 +172,7 @@ const WellnessWorkshops = ({
           <StretchedList columns={columns} className="gap-[16px] md:gap-unset">
             {playlist.map((video, index) => (
               <div
-                className="relative inline-table cover rounded-[5px] overflow-hidden bg-[#EBF2F1] cursor-not-allowed"
+                className="relative w-[350px] inline-table cover rounded-[5px] overflow-hidden bg-[#EBF2F1] cursor-not-allowed"
                 key={video.key}
                 style={{ boxShadow: `rgba(0, 0, 0, 0.05) 0px 1px 2px 0px` }}
               >
@@ -206,11 +188,8 @@ const WellnessWorkshops = ({
                   <span className="!text-[28px] text-[#005850]">Coming Soon...</span>
                 </div>
                 <div className="bg-white p-5">
-                  <h3>Workshop Name</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin laoreet arcu
-                    neque neque consectetur...
-                  </p>
+                  <h3>Rising Routine</h3>
+                  <p></p>
                 </div>
               </div>
             ))}
