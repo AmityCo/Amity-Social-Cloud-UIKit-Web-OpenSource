@@ -5,7 +5,8 @@ export const Wrapper = styled.div`
   max-width: 550px;
   margin: 0 auto;
   padding: 28px 0;
-  overflow-y: auto;
+  // overflow-y: auto;
+  margin-bottom: 54px;
 `;
 
 export const DeclineBanner = styled.div`

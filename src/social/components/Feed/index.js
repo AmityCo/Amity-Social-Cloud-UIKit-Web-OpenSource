@@ -14,7 +14,6 @@ import Post from '~/social/components/post/Post';
 import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import useFeed from '~/social/hooks/useFeed';
 import { FeedScrollContainer } from './styles';
-import FeaturedVideos from '../FeaturedVideos';
 
 import NewsFeedTrendingList from '../community/NewsFeedTrendingList';
 

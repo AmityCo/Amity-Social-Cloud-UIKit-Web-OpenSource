@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import {
   EventSubscriberRepository,
   FeedType,
-  getCommunityTopic,
+  PostRepository,
   PostTargetType,
   SubscriptionLevels,
-  PostRepository,
+  getCommunityTopic,
 } from '@amityco/js-sdk';
 import { FormattedMessage } from 'react-intl';
 import CommunityCreatedModal from '~/social/components/CommunityCreatedModal';
@@ -101,6 +101,7 @@ const CommunityFeed = ({
 
       {activeTab === CommunityFeedTabs.TIMELINE && (
         <Feed
+          className="pb-[68px]"
           targetType={PostTargetType.CommunityFeed}
           targetId={communityId}
           readonly={!isJoined}

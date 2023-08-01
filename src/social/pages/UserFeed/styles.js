@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  overflow-y: auto;
+  // overflow-y: auto;
+  margin-bottom: 54px
   height: 100%;
   max-width: 550px;
   margin: 0 auto;
