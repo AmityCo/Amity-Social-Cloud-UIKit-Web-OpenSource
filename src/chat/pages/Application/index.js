@@ -11,6 +11,9 @@ import ChatDetails from '~/chat/components/ChatDetails';
 import { ApplicationContainer } from './styles';
 import CreateChatModal from '~/chat/components/Chat/CreateChatModal';
 
+import { useSDK } from '~/core/hooks/useSDK';
+import useUser from '~/core/hooks/useUser';
+
 const ChatApplication = ({
   membershipFilter,
   defaultChannelId,
@@ -19,6 +22,11 @@ const ChatApplication = ({
   onAddNewChannel,
   onEditChatMember,
 }) => {
+
+  defaultChannelId = "abhishek2channel2";
+  
+  console.log(`Hit application page...`);
+
   const { formatMessage } = useIntl();
   const [currentChannelData, setCurrentChannelData] = useState(null);
   const [shouldShowChatDetails, setShouldShowChatDetails] = useState(false);
@@ -52,8 +60,22 @@ const ChatApplication = ({
     setCurrentChannelData(null);
   };
 
-  useEffect(() => {
+  const { currentUserId, client } = useSDK();
+
+  const { user, file } = useUser(currentUserId);
+
+  const customChannelId = "abhishek2channel2";
+
+  useEffect(() => 
+  {  
+    console.log(`Hit application page useEffect.`);
+
+    console.log(`Got userId '${currentUserId}'. More user details ${user.id}`);
+    
     if (!defaultChannelId) return;
+
+    console.log(`Hit application page. ${defaultChannelId}`);
+
     handleChannelSelect({ channelId: defaultChannelId, channelType: ChannelType.Standard });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultChannelId]);
@@ -101,7 +123,7 @@ ChatApplication.propTypes = {
 
 ChatApplication.defaultProps = {
   membershipFilter: ChannelMembership.None,
-  defaultChannelId: null,
+  defaultChannelId: 0,
   onMemberSelect: () => {},
   onChannelSelect: () => {},
   onAddNewChannel: () => {},
