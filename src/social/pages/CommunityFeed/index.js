@@ -24,6 +24,10 @@ import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 import { CommunityFeedTabs } from './constants';
 import { getTabs } from './utils';
 import { DeclineBanner, Wrapper } from './styles';
+import {BackButton, Header, Title} from "~/social/pages/CategoryCommunities/styles";
+import ArrowLeft from "~/icons/ArrowLeft";
+import {PageTypes} from "~/social/constants";
+import {useNavigation} from "~/social/providers/NavigationProvider";
 
 const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   const { community } = useCommunity(communityId);
@@ -47,6 +51,7 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
   );
 
   const [activeTab, setActiveTab] = useState(CommunityFeedTabs.TIMELINE);
+  const { onBack, lastPage } = useNavigation();
 
   useEffect(() => {
     const topic = getCommunityTopic(community, SubscriptionLevels.POST);
@@ -68,6 +73,32 @@ const CommunityFeed = ({ communityId, currentUserId, isNewCommunity }) => {
 
   return (
     <Wrapper>
+      <Header>
+        <BackButton onClick={onBack}>
+          <ArrowLeft height={14} />
+        </BackButton>
+
+        {lastPage.type === PageTypes.NewsFeed && (
+            <Title>{"Main Feed"}</Title>
+        )}
+
+        {lastPage.type === PageTypes.Search && (
+            <Title>{"Search & Communities"}</Title>
+        )}
+
+        {lastPage.type === PageTypes.UserFeed && (
+            <Title>{"User Feed"}</Title>
+        )}
+
+        {lastPage.type === PageTypes.Explore && (
+            <Title>{"Explore"}</Title>
+        )}
+
+        {lastPage.type === PageTypes.Category && (
+            <Title>{"Communities"}</Title>
+        )}
+
+      </Header>
       <CommunityInfo communityId={communityId} />
 
       <FeedHeaderTabs

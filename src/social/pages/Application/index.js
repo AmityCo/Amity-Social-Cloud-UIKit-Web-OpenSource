@@ -39,9 +39,6 @@ const Community = () => {
     return (
         <ApplicationContainer>
             <MainLayout>
-                <SocialSearch />
-                <SideSectionCommunity />
-                <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
                 {page.type === PageTypes.Explore && <ExplorePage />}
 
                 {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
