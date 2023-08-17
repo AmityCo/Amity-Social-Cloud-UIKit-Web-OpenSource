@@ -30,12 +30,12 @@ const MessageComposeBar = ({ onSubmit }) => {
 
   return (
     <MessageComposeBarContainer>
-      <FileMessageIcon
+      {/*<FileMessageIcon
         onClick={sendMessage}
       />
       <ImageMessageIcon
         onClick={sendMessage}
-      />
+  />*/}
       <MessageComposeBarInput
         data-qa-anchor="message-compose-bar-input"
         type="text"

@@ -14,7 +14,7 @@ import {
   InfiniteScrollContainer,
 } from './styles';
 
-const RecentChat = ({ onChannelSelect, onAddNewChannelClick, selectedChannelId = 0}) => {
+const RecentChat = ({ onChannelSelect, onAddNewChannelClick, selectedChannelId}) => {
   const [channels, hasMore, loadMore] = useChannelsList();
 
   console.log(`RecentChat invoked selectedChannelId: ${selectedChannelId}`);

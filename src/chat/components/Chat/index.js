@@ -15,7 +15,7 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) =>
 {  
   useEffect(() => 
   {
-    console.log(`Hit a chat channel. ${channelId}`);
+    console.log(`[Chat] Hit a chat channel! ${channelId}`);
 
     const channelLiveObject = channelRepo.joinChannel({ channelId });
 
