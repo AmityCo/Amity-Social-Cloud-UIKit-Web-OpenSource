@@ -10,7 +10,6 @@ import {Wrapper} from './styles';
 import {BackButton, Header, Title} from "~/social/pages/CategoryCommunities/styles";
 import ArrowLeft from "~/icons/ArrowLeft";
 import PropTypes from "prop-types";
-import Community from "~/social/pages/Application";
 
 const NewsFeed = forwardRef(
     (
@@ -23,7 +22,7 @@ const NewsFeed = forwardRef(
 
         return (
             <Wrapper data-qa-anchor="news-feed">
-                {!isLandingPage && lastPage.type === PageTypes.Search && (
+                {lastPage.type === PageTypes.Search && (
                     <Header>
                         <BackButton onClick={onBack}>
                             <ArrowLeft height={14}/>

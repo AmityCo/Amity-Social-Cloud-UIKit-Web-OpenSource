@@ -20,6 +20,7 @@ import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
 import UiKitSocialSearch from '~/social/components/SocialSearch';
 import PropTypes from "prop-types";
 import UiKitProvider from "~/core/providers/UiKitProvider";
+import Search from '~/social/pages/Search';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -78,6 +79,8 @@ const Community = forwardRef(
                     {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId}/>}
 
                     {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId}/>}
+                    
+                    {page.type === PageTypes.Search && <Search />}
                 </MainLayout>
             </ApplicationContainer>
         );
