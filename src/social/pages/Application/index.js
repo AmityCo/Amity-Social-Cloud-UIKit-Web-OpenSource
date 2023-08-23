@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {forwardRef} from 'react';
 import styled from 'styled-components';
 
-import { PageTypes } from '~/social/constants';
+import {PageTypes} from '~/social/constants';
 
 import MainLayout from '~/social/layouts/Main';
 
@@ -14,10 +14,13 @@ import UserFeedPage from '~/social/pages/UserFeed';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
-import { useNavigation } from '~/social/providers/NavigationProvider';
+import {useNavigation} from '~/social/providers/NavigationProvider';
 import SideSectionCommunity from '~/social/components/SideSectionCommunity';
 import SideSectionMyCommunity from '~/social/components/SideSectionMyCommunity';
 import UiKitSocialSearch from '~/social/components/SocialSearch';
+import PropTypes from "prop-types";
+import UiKitProvider from "~/core/providers/UiKitProvider";
+import Search from '~/social/pages/Search';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -29,41 +32,63 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
 `;
 
 const SocialSearch = styled(UiKitSocialSearch)`
-  background: ${({ theme }) => theme.palette.system.background};
+  background: ${({theme}) => theme.palette.system.background};
   padding: 0.5rem;
 `;
+var hasLanded = false;
 
-const Community = () => {
-    const { page } = useNavigation();
+const Community = forwardRef(
+    (
+        {
+            landingPage
+        },
+        ref,
+    ) => {
+        const {page, lastPage, onChangePage} = useNavigation(landingPage);
 
-    return (
-        <ApplicationContainer>
-            <MainLayout>
-                <SocialSearch />
-                <SideSectionCommunity />
-                <SideSectionMyCommunity activeCommunity={page.communityId} showCreateButton />
-                {page.type === PageTypes.Explore && <ExplorePage />}
+        if (landingPage && !hasLanded && landingPage !== PageTypes.NewsFeed) {
+            hasLanded = true;
+            onChangePage(landingPage);
+        }
+        else
+        {
+            hasLanded = true;
+        }
 
-                {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
+        return (
+            <ApplicationContainer>
+                <MainLayout>
+                    {page.type === PageTypes.Explore && <ExplorePage isLandingPage={landingPage && 
+                        lastPage.type === PageTypes.NewsFeed && landingPage === PageTypes.Explore}/>}
 
-                {page.type === PageTypes.CommunityFeed && (
-                    <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity} />
-                )}
+                    {page.type === PageTypes.NewsFeed && <NewsFeedPage isLandingPage={landingPage && 
+                        landingPage !== PageTypes.NewsFeed}/>}
 
-                {page.type === PageTypes.CommunityEdit && (
-                    <CommunityEditPage communityId={page.communityId} tab={page.tab} />
-                )}
+                    {page.type === PageTypes.CommunityFeed && (
+                        <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity}/>
+                    )}
 
-                {page.type === PageTypes.Category && (
-                    <CategoryCommunitiesPage categoryId={page.categoryId} />
-                )}
+                    {page.type === PageTypes.CommunityEdit && (
+                        <CommunityEditPage communityId={page.communityId} tab={page.tab}/>
+                    )}
 
-                {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId} />}
+                    {page.type === PageTypes.Category && (
+                        <CategoryCommunitiesPage categoryId={page.categoryId}/>
+                    )}
 
-                {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
-            </MainLayout>
-        </ApplicationContainer>
-    );
+                    {page.type === PageTypes.UserFeed && <UserFeedPage userId={page.userId}/>}
+
+                    {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId}/>}
+                    
+                    {page.type === PageTypes.Search && <Search />}
+                </MainLayout>
+            </ApplicationContainer>
+        );
+    },
+);
+
+Community.propTypes = {
+    landingPage: PropTypes.string
 };
 
 export default Community;

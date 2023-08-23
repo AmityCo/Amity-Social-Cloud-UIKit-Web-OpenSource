@@ -10,12 +10,10 @@ import ArrowLeft from '~/icons/ArrowLeft';
 import { BackButton, Header, PageContainer, Title } from './styles';
 
 const CategoryCommunitiesPage = ({ categoryId }) => {
-  const { onChangePage } = useNavigation();
+  const { onBack } = useNavigation();
   const { category } = useCategory(categoryId);
 
   const title = category?.name || '';
-
-  const onBack = () => onChangePage(PageTypes.Explore);
 
   return (
     <PageContainer>

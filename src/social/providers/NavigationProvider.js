@@ -32,6 +32,7 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext onEditCommunity({${communityId})`),
     onEditUser: (userId) => console.log(`NavigationContext onEditUser(${userId})`),
     onMessageUser: (userId) => console.log(`NavigationContext onMessageUser(${userId})`),
+      
   };
 }
 
@@ -230,7 +231,8 @@ export default ({
       onEditUser: handleEditUser,
       onMessageUser: handleMessageUser,
       onBack: popPage,
-      setNavigationBlocker,
+      setNavigationBlocker, 
+        lastPage: pages.length > 1 ? pages[pages.length - 2] : pages[pages.length - 1],
     }),
     [
       handleChangePage,

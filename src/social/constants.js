@@ -6,6 +6,7 @@ export const PageTypes = {
   CommunityFeed: 'communityfeed',
   CommunityEdit: 'communityedit',
   UserEdit: 'useredit',
+  Search: 'search',
 };
 
 export const MemberRoles = Object.freeze({
