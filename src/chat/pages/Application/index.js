@@ -67,44 +67,42 @@ const ChatApplication = ({
   const [userModel, setUserModel] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState("");
 
-  let liveUser = UserRepository.getUser("631f771ab4d28808ac365dde")
+  let liveUser = UserRepository.getUser(currentUserId)
   liveUser.on('dataUpdated', model => 
   {        
     setUserModel(model);
-    // you can access user object as model here
-    if (null !== userModel)
+
+    // Check if user model was properly set and has the metadata we need
+    if (null !== userModel && userModel.metadata.teamId)
     {
-      console.log("Retrieved user: " + userModel.userId + ", " + userModel.displayName + ", " + JSON.stringify(userModel));
+      console.log("Retrieved User '"+userModel.displayName+"' ("+userModel.userId+") teamId: " + userModel.metadata.teamId + ",  " + JSON.stringify(userModel));
+    }
+    else
+    {
+      console.log("Retrieved user, but without proper team metadata. Returning.");
+      return;
     }
 
-    // Suppose we have the team id, then we set the var as it, and create the channel
-    //setSelectedChannel("abhishek2channel4"); //("6446f8e6e05b869bfae88825"); // HARDCODED qatest's team id
-    let customChannel = "abhishek2channel4";
+    // Get the user's teamId
+    let customChannel = userModel.metadata.teamId;
 
-    const searchingChannel = ChannelRepository.getChannel('abhishek2channel4');
-
-    searchingChannel.once('dataUpdated', data => 
+    // Check if a team chat channel exists by that teamId
+    const searchingChannel = ChannelRepository.getChannel(customChannel);
+    setSelectedChannel(customChannel);
+    
+    // A channel with that channelId does not exist
+    searchingChannel.on('dataError', error =>
     {
-      if (data.channelId)
+      console.log("Error receiving channel: " + error);
+
+      // Check if you're the leader of the team,
+      if (userModel.userId === userModel.metadata.teamLeaderId)
       {
-        console.log("Channel '" + data.displayName + "' exists! Entering...");
-
-        // Team chat channel was found, so enter it if you're a member
-        setSelectedChannel(customChannel);
-
-        // If you're not a member, join the channel, and then enter it
-
-      }else
-      {
-        // Check if you're the leader of the team,
-
-        // if you're not the team leader, display message "Please wait for leader to log-in and establish a team chat channel."
-
         // if you're the leader, create the channel
         const liveChannel = ChannelRepository.createChannel({
           channelId: customChannel,
           type: ChannelType.Live,
-          displayName : "ROUND 4", // HARDCODED, switch to teamName (after team details start working)
+          displayName : userModel.metadata.teamName,
           userIds: [ userModel.userId, 'abhishek' ],
         })
 
@@ -116,17 +114,41 @@ const ChatApplication = ({
         
         liveChannel.once('dataError', error => 
         { 
-          console.log("Channel didn't get created " + error); 
+          console.log("Channel didn't get created: " + error); 
         });
+      }
+      
+      // if you're not the team leader, display message "Please wait for leader to log-in and establish a team chat channel."
+      else 
+      {
+        console.log("The user '"+userModel.displayName+"' ("+userModel.userId+") is not the team leader. Channel creation delayed. Returning.");
+        return;
+      }
+
+    });    
+
+    // A channel with that channelId was successfully found
+    searchingChannel.on('dataUpdated', data => 
+    {
+      if (data && data.channelId)
+      {
+        console.log("Channel '" + data.displayName + "' exists! Entering...");
+
+        // Team chat channel was found, so enter it if you're a member
+        setSelectedChannel(customChannel);
+
+        // If you're not a member, join the channel, and then enter it
+      }
+      else
+      {
+        console.log("Channel found, but doesn't have name or id?");
       }
     });   
   }) 
 
   useEffect(() => 
   {  
-    console.log("Hit application's useEffect: " + selectedChannel);
-
-    console.log(`Got userId '${currentUserId}'. More user details ${currentUserId}`);
+    console.log("Hit application's useEffect for channel: " + selectedChannel);
     
     if (!selectedChannel || selectedChannel === "")
     {

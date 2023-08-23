@@ -17,8 +17,6 @@ import {
 const RecentChat = ({ onChannelSelect, onAddNewChannelClick, selectedChannelId}) => {
   const [channels, hasMore, loadMore] = useChannelsList();
 
-  console.log(`RecentChat invoked selectedChannelId: ${selectedChannelId}`);
-
   return (
     <RecentContainer>
       <RecentHeader>
