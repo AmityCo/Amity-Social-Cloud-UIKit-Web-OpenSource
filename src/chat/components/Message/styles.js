@@ -66,7 +66,7 @@ export const AvatarWrapper = styled.div`
 `;
 
 export const UserName = styled.div`
-  color: ${({ theme }) => theme.palette.neutral.main};
+  color: white;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 4px;
