@@ -11,8 +11,12 @@ import { ChannelContainer } from './styles';
 
 const channelRepo = new ChannelRepository();
 
-const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) => {
-  useEffect(() => {
+const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails, showSystemMessage, chatSystemMessage }) => 
+{  
+  useEffect(() => 
+  {
+    console.log(`[Chat] Hit a chat channel! ${channelId}`);
+
     const channelLiveObject = channelRepo.joinChannel({ channelId });
 
     // TODO call startReading once on join, everytime a new message is received and a message list is scrolled to very bottom
@@ -46,12 +50,13 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) => {
 
   return (
     <ChannelContainer>
-      <ChatHeader
+  {/* <ChatHeader // this is the channel header, not needed rn
         channelId={channelId}
         shouldShowChatDetails={shouldShowChatDetails}
         onChatDetailsClick={onChatDetailsClick}
-      />
+      /> */}
       <MessageList channelId={channelId} />
+      {showSystemMessage && <b><center>{chatSystemMessage}</center></b>}
       <MessageComposeBar onSubmit={sendMessage} />
     </ChannelContainer>
   );

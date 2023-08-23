@@ -29,6 +29,9 @@ const ChatItem = ({ channel, isSelected, onSelect }) => {
   const handleChatItemClick = (e) => {
     e.stopPropagation();
     onSelect({ channelId: channel.channelId, channelType: channel.type });
+
+    console.log(`ChatItem, channelId: ${channel.channelId}`);
+
   };
 
   const normalizedUnreadCount = getNormalizedUnreadCount(channel.unreadCount);
