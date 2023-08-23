@@ -88,7 +88,7 @@ export const GeneralMessageBody = styled(CommonMessageBody)`
   ${({ theme, isIncoming }) =>
     isIncoming
       ? `
-      background: ${theme.palette.neutral.shade4};
+      background: white; 
       border-radius: 0px 6px 6px 6px;
     `
       : `
