@@ -11,7 +11,7 @@ import { ChannelContainer } from './styles';
 
 const channelRepo = new ChannelRepository();
 
-const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) => 
+const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails, showSystemMessage, chatSystemMessage }) => 
 {  
   useEffect(() => 
   {
@@ -56,6 +56,7 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }) =>
         onChatDetailsClick={onChatDetailsClick}
       /> */}
       <MessageList channelId={channelId} />
+      {showSystemMessage && <b><center>{chatSystemMessage}</center></b>}
       <MessageComposeBar onSubmit={sendMessage} />
     </ChannelContainer>
   );

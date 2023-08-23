@@ -66,9 +66,11 @@ const ChatApplication = ({
   const { currentUserId, client } = useSDK();
   const [userModel, setUserModel] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState("");
+  const [showSystemMessage, setShowSystemMessage] = useState(false);
+  const [chatSystemMessage, setChatSystemMessage] = useState("");
 
   let liveUser = UserRepository.getUser(currentUserId)
-  liveUser.on('dataUpdated', model => 
+  liveUser.once('dataUpdated', model => 
   {        
     setUserModel(model);
 
@@ -80,6 +82,8 @@ const ChatApplication = ({
     else
     {
       console.log("Retrieved user, but without proper team metadata. Returning.");
+      setShowSystemMessage(true);
+      setChatSystemMessage("You do not have the required team meta data.");
       return;
     }
 
@@ -91,7 +95,7 @@ const ChatApplication = ({
     setSelectedChannel(customChannel);
     
     // A channel with that channelId does not exist
-    searchingChannel.on('dataError', error =>
+    searchingChannel.once('dataError', error =>
     {
       console.log("Error receiving channel: " + error);
 
@@ -122,13 +126,17 @@ const ChatApplication = ({
       else 
       {
         console.log("The user '"+userModel.displayName+"' ("+userModel.userId+") is not the team leader. Channel creation delayed. Returning.");
+
+        // Display message that leader needs to log-in first to create chat channel
+        setShowSystemMessage(true);
+        setChatSystemMessage("The Team Leader is required to log-in to generate this team's chat channel!");
         return;
       }
 
     });    
 
     // A channel with that channelId was successfully found
-    searchingChannel.on('dataUpdated', data => 
+    searchingChannel.once('dataUpdated', data => 
     {
       if (data && data.channelId)
       {
@@ -178,6 +186,8 @@ const ChatApplication = ({
           channelId={currentChannelData.channelId}
           shouldShowChatDetails={shouldShowChatDetails}
           onChatDetailsClick={showChatDetails}
+          showLeaderRequiredMessage = {showSystemMessage}
+          chatSystemMessage = {chatSystemMessage}
         />
       )}
       {shouldShowChatDetails && currentChannelData && (
