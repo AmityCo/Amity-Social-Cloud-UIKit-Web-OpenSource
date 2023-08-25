@@ -110,7 +110,6 @@ const ChatApplication = ({
 
           // Team chat channel was found, so enter it if you're a member
           //setSelectedChannel(customChannel);
-          setChannelLoaded(true);
           // If you're not a member, join the channel, and then enter it
         }
         else
@@ -139,7 +138,6 @@ const ChatApplication = ({
           {
             console.log(`Channel created successfully! ${model.channelId}`);
             //setSelectedChannel(customChannel);
-            setChannelLoaded(true);
           });
           
           liveChannel.once('dataError', error => 
@@ -156,7 +154,6 @@ const ChatApplication = ({
           // Display message that leader needs to log-in first to create chat channel
           setShowSystemMessage(true);
           setChatSystemMessage("The Team Leader is required to log-in to generate this team's chat channel!");
-          setChannelLoaded(true);
           return;
         }
 
