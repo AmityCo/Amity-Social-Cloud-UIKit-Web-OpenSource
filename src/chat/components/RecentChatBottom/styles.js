@@ -22,7 +22,7 @@ export const RecentContainerSmall = styled.div`
   flex-shrink: 0;
   width: 280px;
   padding: 24px 0 5px 0;
-  background-color: lightBlue;
+  background-color: lightPink;
   border-right: 1px solid #e3e4e8;
   height: 100px;
 `;
