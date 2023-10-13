@@ -1,6 +1,6 @@
 {
   "name": "c10amityui",
-  "version": "2.15.6",
+  "version": "2.15.8",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -24,8 +24,7 @@
   },
   "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "styled-components": "^5.3.5"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
@@ -40,6 +39,7 @@
     "@storybook/react": "^6.5.10",
     "@storybook/theming": "^6.5.9",
     "babel-loader": "^8.2.5",
+    "chromatic": "^7.2.0",
     "clean-webpack-plugin": "^4.0.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "18.2.1",
@@ -88,6 +88,7 @@
     "react-tiny-popover": "^7.1.0",
     "react-truncate-markup": "^5.1.2",
     "react-use": "^17.4.0",
+    "styled-components": "^5.3.5",
     "uuid": "^8.3.2"
   },
   "lint-staged": {
