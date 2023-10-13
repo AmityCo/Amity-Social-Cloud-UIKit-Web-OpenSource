@@ -11,6 +11,7 @@
 
 ##### Develop locally in parallel with REALM
 1. install yalc globall if you don't have it ```npm i yalc -g```
+2. build the ui kit: ```npm run build```
 2. ```yalc publish``` in c10-amity-uikit directory 
 3. ```yalc add c10-amithy-uikit``` in adminsite repo
 4. npm install if this is the first time you've added it etc
