@@ -1,4 +1,4 @@
-# Amity Ui-Kit for Web (open-source)
+# c10 Amity UI - Fork
 
 ## Getting started
 
