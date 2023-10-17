@@ -9,7 +9,7 @@
   "files": [
     "build"
   ],
-  "description": "React Ui-Kit for Amity Social Cloud (open-source)",
+  "description": "c10 Amity UI - Fork",
   "scripts": {
     "prepare": "husky install",
     "build": "webpack --mode production",
