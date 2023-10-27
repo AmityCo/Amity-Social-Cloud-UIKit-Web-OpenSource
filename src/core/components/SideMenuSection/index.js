@@ -12,6 +12,7 @@ const ListHeading = styled.h4`
   ${({ theme }) => theme.typography.title};
   padding: 0 8px;
   margin: 1em 0;
+  color: ${({ theme }) => theme.palette.title.shade1};
 `;
 
 const SideMenuSection = ({ heading, children }) => (

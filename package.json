@@ -1,6 +1,6 @@
 {
   "name": "c10amityui",
-  "version": "2.15.10",
+  "version": "2.15.11",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -61,6 +61,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@amityco/js-sdk": "^5.33.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
@@ -89,7 +90,8 @@
     "react-truncate-markup": "^5.1.2",
     "react-use": "^17.4.0",
     "styled-components": "^5.3.5",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yalc": "^1.0.0-pre.53"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix",

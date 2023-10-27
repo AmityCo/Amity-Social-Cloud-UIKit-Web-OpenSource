@@ -34,7 +34,7 @@ export const lightenHex = (lightenAmount, hexColorString) => {
 };
 
 // Lightness values for color variations.
-export const COLOR_SHADES = [0.25, 0.4, 0.5, 0.75];
+export const COLOR_SHADES = [0.01, 0.2, 0.3, 0.40];
 
 /**
  * Converts all colors from hex format to hsl/hsla format.

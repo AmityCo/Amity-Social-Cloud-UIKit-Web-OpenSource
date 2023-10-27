@@ -9,4 +9,4 @@ export const SDKSideSectionMyCommunity = () => {
   return <UiKitSideSectionMyCommunity />;
 };
 
-SDKSideSectionMyCommunity.storyName = 'My community side section';
+SDKSideSectionMyCommunity.storyName = 'My group side section';
