@@ -1,6 +1,6 @@
 {
   "name": "c10amityui",
-  "version": "2.15.10",
+  "version": "2.15.12",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -21,10 +21,6 @@
     "storybook:build": "build-storybook --output-dir ./storybook-build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
