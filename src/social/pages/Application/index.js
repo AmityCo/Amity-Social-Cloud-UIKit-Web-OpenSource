@@ -19,6 +19,8 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 const ApplicationContainer = styled.div`
   height: 100%;
   width: 100%;
+  color: #333;
+  font-family: sans-serif;
 `;
 
 const StyledCommunitySideMenu = styled(CommunitySideMenu)`

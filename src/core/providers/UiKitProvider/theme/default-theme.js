@@ -1,16 +1,21 @@
 const defaultTheme = {
   palette: {
     alert: '#FA4D30',
-    base: '#292B32',
-    primary: '#1054DE',
+    base: '#5f467f',
+    primary: '#5f467f',
     secondary: '#FFD400',
     tertiary: '#FF305A',
     neutral: '#17181C',
     highlight: '#1054DE',
+    title: '#5f467fcc',
+    
 
     system: {
       borders: '#ebecef',
       background: '#fff',
+      avatar: '#ff00ff',
+      svgIcon: '#333',
+    
     },
   },
   typography: {
@@ -42,6 +47,9 @@ const defaultTheme = {
       fontWeight: 600,
       fontSize: '12px',
     },
+    socialHead: {
+      color: 'red',
+    }
   },
 };
 

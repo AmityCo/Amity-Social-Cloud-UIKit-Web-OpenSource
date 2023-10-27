@@ -29,9 +29,10 @@ export const FileLoaderContainer = styled.label`
   }
 
   > svg {
-    height: 1.125rem;
-    width: 1.125rem;
-    font-size: 1.125rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    font-size: 1.5rem;
+    color: ${({ theme }) => theme.palette.system.svgIcon};
   }
 `;
 
