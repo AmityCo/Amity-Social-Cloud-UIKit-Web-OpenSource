@@ -39,6 +39,10 @@ export const AnchorActionItem = styled.a`
   border-radius: 4px;
   ${actionItemContainerStyles}
   ${({ theme }) => theme.typography.bodyBold}
+
+  &:hover {
+    color: ${({ theme }) => theme.palette.title.shade1} !important;
+  }
 `;
 
 export const IconWrapper = styled.div`

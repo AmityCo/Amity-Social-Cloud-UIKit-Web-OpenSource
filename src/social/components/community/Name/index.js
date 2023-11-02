@@ -10,6 +10,7 @@ import {
   NameContainer,
   PrivateIcon,
   VerifiedIcon,
+  DescriptionForAll,
 } from '~/social/components/community/Name/styles';
 
 const CommunityName = ({
@@ -20,6 +21,7 @@ const CommunityName = ({
   isTitle,
   isSearchResult,
   name,
+  description,
   searchInput,
   className,
   loading,
@@ -30,22 +32,28 @@ const CommunityName = ({
   }
 
   return (
-    <NameContainer className={className} isActive={isActive} isTitle={isTitle}>
-      {loading ? (
-        <Name>
-          <Skeleton width={120} style={{ fontSize: 12 }} />
-        </Name>
-      ) : (
-        <Truncate lines={truncate}>
-          <Name data-qa-anchor={`${dataQaAnchor}-community-name`} title={name}>
-            {!isPublic && <PrivateIcon data-qa-anchor={`${dataQaAnchor}-private-icon`} />}
-            {name}
+    <div>
+      <NameContainer className={className} isActive={isActive} isTitle={isTitle}>
+        {loading ? (
+          <Name>
+            <Skeleton width={120} style={{ fontSize: 12 }} />
           </Name>
+        ) : (
+          <Truncate lines={truncate}>
+            <Name data-qa-anchor={`${dataQaAnchor}-community-name`} title={name}>
+              {!isPublic && <PrivateIcon data-qa-anchor={`${dataQaAnchor}-private-icon`} />}
+              {name}
+            </Name>
+          </Truncate>
+        )}
+        {!loading && isOfficial && <VerifiedIcon />}
+      </NameContainer>
+      {description && (
+        <Truncate lines={3}>
+          <DescriptionForAll>{description}</DescriptionForAll>
         </Truncate>
       )}
-
-      {!loading && isOfficial && <VerifiedIcon />}
-    </NameContainer>
+    </div>
   );
 };
 
@@ -57,6 +65,7 @@ CommunityName.propTypes = {
   isTitle: PropTypes.bool,
   isSearchResult: PropTypes.bool,
   name: PropTypes.string,
+  description: PropTypes.string,
   searchInput: PropTypes.string,
   className: PropTypes.string,
   loading: PropTypes.bool,
@@ -71,6 +80,7 @@ CommunityName.defaultProps = {
   isTitle: false,
   isSearchResult: false,
   name: '',
+  description: '',
   searchInput: '',
   className: null,
   loading: false,

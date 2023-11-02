@@ -59,6 +59,8 @@ const UICommunityHeader = ({
   isPublic,
   isSearchResult,
   name,
+  description,
+  showDescription,
   searchInput,
   children,
   loading,
@@ -84,7 +86,8 @@ const UICommunityHeader = ({
         isOfficial={isOfficial}
         isPublic={isPublic}
         isSearchResult={isSearchResult}
-        name={name}
+        name={`${name}`}
+        description={showDescription && description ? description : ''}
         searchInput={searchInput}
         loading={loading}
       />
@@ -101,6 +104,8 @@ UICommunityHeader.propTypes = {
   isPublic: PropTypes.bool,
   isSearchResult: PropTypes.bool,
   name: PropTypes.string,
+  description: PropTypes.string,
+  showDescription: PropTypes.bool,
   searchInput: PropTypes.string,
   children: PropTypes.node,
   loading: PropTypes.bool,

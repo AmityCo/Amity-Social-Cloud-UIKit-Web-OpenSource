@@ -22,6 +22,7 @@ const UICommunityList = ({
   isSearchList,
   searchInput,
   loading,
+  showDescription,
   loadingMore,
 }) => {
   const noCommunitiesFound = isSearchList && !communityIds.length;
@@ -57,6 +58,7 @@ const UICommunityList = ({
               communityId={communityId}
               isActive={communityId === activeCommunity}
               isSearchResult={isSearchList}
+              showDescription={showDescription}
               searchInput={searchInput}
               onClick={onClickCommunity}
             />
@@ -78,6 +80,7 @@ UICommunityList.propTypes = {
   searchInput: PropTypes.string,
   loading: PropTypes.bool,
   loadingMore: PropTypes.bool,
+  showDescription: PropTypes.bool,
   onClickCommunity: PropTypes.func,
 };
 
@@ -90,6 +93,7 @@ UICommunityList.defaultProps = {
   isSearchList: false,
   searchInput: '',
   loading: false,
+  showDescription: false,
   loadingMore: false,
 };
 

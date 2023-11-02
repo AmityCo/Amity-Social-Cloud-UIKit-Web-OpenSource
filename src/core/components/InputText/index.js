@@ -42,7 +42,7 @@ const styling = css`
   padding: 0.563rem 0.563rem;
   background: none;
   border: none;
-  box-sizing: border-box;
+  // box-sizing: border-box;
   outline: none;
   font: inherit;
 

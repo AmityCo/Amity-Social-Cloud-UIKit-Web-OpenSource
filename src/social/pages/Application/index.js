@@ -27,22 +27,25 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
   min-height: 100%;
 `;
 
-const Community = () => {
+const Community = (props) => {
+  const { defaultCommunityName, defaultCommunityId} = props;
   const { page } = useNavigation();
-
+  
+  const communityId = defaultCommunityId || (page.communityId ? page.communityId : null);
+ 
   return (
     <ApplicationContainer>
-      <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
+      <MainLayout aside={<StyledCommunitySideMenu activeCommunity={communityId} />}>
         {page.type === PageTypes.Explore && <ExplorePage />}
 
         {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
 
         {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity} />
+          <CommunityFeedPage communityId={communityId} isNewCommunity={page.isNewCommunity} />
         )}
 
         {page.type === PageTypes.CommunityEdit && (
-          <CommunityEditPage communityId={page.communityId} tab={page.tab} />
+          <CommunityEditPage communityId={communityId} tab={page.tab} />
         )}
 
         {page.type === PageTypes.Category && (

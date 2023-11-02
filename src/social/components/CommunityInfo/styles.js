@@ -4,6 +4,7 @@ import UIOptionMenu from '~/core/components/OptionMenu';
 import { PrimaryButton } from '~/core/components/Button';
 import { Plus, Pencil } from '~/icons';
 import SocialCommunityName from '~/social/components/community/Name';
+import UIAvatar from '~/core/components/Avatar';
 
 export const PlusIcon = styled(Plus).attrs({ width: 15, height: 15 })`
   margin-right: 8px;
@@ -53,8 +54,8 @@ export const CoverContent = styled.div`
 `;
 
 export const CommunityName = styled(SocialCommunityName)`
-  color: #ffffff;
-  ${({ theme }) => theme.typography.headline};
+  // color: #ffffff;
+  // ${({ theme }) => theme.typography.headline};
   line-height: 30px !important;
 
   * {
@@ -140,4 +141,14 @@ export const PendingPostsBannerTitleBadge = styled.span`
 export const PendingPostsBannerMessage = styled.div`
   ${({ theme }) => theme.typography.caption};
   color: ${({ theme }) => theme.palette.base.shade1};
+`;
+
+export const Avatar = styled(UIAvatar)`
+  height: 120px;
+  width: 120px;
+  margin: 8px 8px auto;
+`;
+
+export const HeaderDescription = styled.div`
+  margin-left: 22px;
 `;

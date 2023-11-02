@@ -28,9 +28,11 @@ const RecommendedList = () => {
       {loading && new Array(4).fill(1).map((x, index) => <CommunityCard key={index} loading />)}
 
       {!loading &&
-        communities.map(({ communityId }) => (
-          <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
-        ))}
+        communities
+          .slice(0, 4)
+          .map(({ communityId }) => (
+            <CommunityCard key={communityId} communityId={communityId} onClick={onClickCommunity} />
+          ))}
     </HorizontalList>
   );
 };

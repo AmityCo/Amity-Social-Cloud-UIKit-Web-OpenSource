@@ -73,7 +73,7 @@ const TrendingCommunityName = styled(CommunityName)`
   ${({ theme }) => theme.typography.title};
 
   &:before {
-    content: counter(trending, decimal-leading-zero);
+    // content: counter(trending, decimal-leading-zero);
     margin-right: 0.375em;
   }
 `;
@@ -106,7 +106,7 @@ const UITrendingItem = ({
           <TrendingCommunityName isOfficial={isOfficial} isPublic={isPublic} name={name} />
 
           <Infos>
-            {categories.length > 0 && (
+            {/* {categories.length > 0 && (
               <Truncate lines={1}>
                 <Categories>
                   {categories.map((category) => (
@@ -114,7 +114,7 @@ const UITrendingItem = ({
                   ))}
                 </Categories>
               </Truncate>
-            )}
+            )} */}
 
             <span>
               {toHumanString(membersCount)}{' '}

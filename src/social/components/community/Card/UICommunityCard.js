@@ -7,7 +7,7 @@ import Truncate from 'react-truncate-markup';
 
 import Skeleton from '~/core/components/Skeleton';
 import customizableComponent from '~/core/hocs/customization';
-import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
+// import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 
 import {
   CategoriesList,
@@ -19,6 +19,9 @@ import {
   CoverContent,
   Description,
 } from './styles';
+
+const communityCoverPlaceholder =
+  'https://www.realm-global.com/wp-content/uploads/2023/06/REALMLogo.webp';
 
 const UICommunityCard = ({
   avatarFileUrl,
@@ -46,11 +49,11 @@ const UICommunityCard = ({
             name={name}
             truncate={2}
           />
-          <Truncate lines={1}>
+          {/* <Truncate lines={1}>
             <CategoriesList>
               {(communityCategories || []).map((category) => category.name).join(', ')}
             </CategoriesList>
-          </Truncate>
+          </Truncate> */}
         </CoverContent>
       </Cover>
 

@@ -25,11 +25,12 @@ const defaultTheme = {
     },
     headline: {
       fontWeight: 600,
-      fontSize: '20px',
+      fontSize: '18px',
     },
     title: {
       fontWeight: 600,
       fontSize: '16px',
+      fontFamily: 'sans-serif',
     },
     body: {
       fontWeight: 'normal',
@@ -49,7 +50,12 @@ const defaultTheme = {
     },
     socialHead: {
       color: 'red',
-    }
+    },
+    communityFeedTitle: {
+      fontSize: '28px',
+      fontWeight: 600,
+      margin: '22px',
+    },
   },
 };
 
