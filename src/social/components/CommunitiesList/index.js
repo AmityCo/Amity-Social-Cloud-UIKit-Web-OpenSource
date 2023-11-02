@@ -4,7 +4,12 @@ import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import UICommunitiesList from './UICommunitiesList';
 
-const CommunitiesList = ({ className, communitiesQueryParam, activeCommunity }) => {
+const CommunitiesList = ({
+  className,
+  communitiesQueryParam,
+  activeCommunity,
+  showDescription,
+}) => {
   const { onClickCommunity } = useNavigation();
   const [communities, hasMore, loadMore, loading, loadingMore] =
     useCommunitiesList(communitiesQueryParam);
@@ -29,6 +34,7 @@ const CommunitiesList = ({ className, communitiesQueryParam, activeCommunity }) 
       className={className}
       loading={loading}
       loadingMore={loadingMore}
+      showDescription={showDescription}
       onClickCommunity={onClickCommunity}
     />
   );
@@ -38,12 +44,14 @@ CommunitiesList.propTypes = {
   className: PropTypes.string,
   communitiesQueryParam: PropTypes.object,
   activeCommunity: PropTypes.string,
+  showDescription: PropTypes.bool
 };
 
 CommunitiesList.defaultProps = {
   className: null,
   communitiesQueryParam: {},
   activeCommunity: '',
+  showDescription: false,
 };
 
 export { UICommunitiesList };

@@ -11,6 +11,7 @@ const CommunityHeader = ({
   onClick,
   isActive,
   isSearchResult,
+  showDescription,
   searchInput,
   children,
   loading,
@@ -39,6 +40,8 @@ const CommunityHeader = ({
       isPublic={community.isPublic}
       isSearchResult={isSearchResult}
       name={community.displayName}
+      description={community.description}
+      showDescription={showDescription}
       searchInput={searchInput}
       loading={loading}
       onClick={onClick}
@@ -55,6 +58,7 @@ CommunityHeader.propTypes = {
   searchInput: PropTypes.string,
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   loading: PropTypes.bool,
+  showDescription: PropTypes.bool,
   onClick: PropTypes.func,
 };
 
@@ -65,6 +69,7 @@ CommunityHeader.defaultProps = {
   searchInput: '',
   children: null,
   loading: false,
+  showDescription: false,
 };
 
 export { UICommunityHeader };

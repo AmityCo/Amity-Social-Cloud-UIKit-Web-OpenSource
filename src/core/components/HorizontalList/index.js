@@ -54,9 +54,8 @@ const StretchedList = styled.div`
   margin-bottom: 0.188rem; // give the shadow a little space
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 100%;
+  // grid-auto-columns: 100%;
   grid-gap: ${ITEM_SPACE_SIZE}px;
-
   ${({ columns }) =>
     Object.entries(columns).map(
       ([breakpoint, column]) => `
@@ -66,8 +65,12 @@ const StretchedList = styled.div`
       } / ${column}));
     }
   `,
-    )} );
+    )}
+  );
 `;
+/*
+
+*/
 
 const HorizontalList = ({
   title = '',

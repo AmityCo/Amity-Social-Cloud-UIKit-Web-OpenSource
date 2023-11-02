@@ -12,7 +12,7 @@ const Container = styled.div`
   grid-gap: 0 20px;
   width: 100%;
   height: 100%;
-  padding: 0 20px 0 0;
+  // padding: 0 20px 0 0;
   background: #f7f7f8;
 `;
 
@@ -21,7 +21,7 @@ const Main = styled.div`
   overflow: auto;
   width: 100%;
   min-width: 20rem;
-  max-width: 90.75rem;
+  // max-width: 90.75rem;
   margin: 0 auto;
 `;
 

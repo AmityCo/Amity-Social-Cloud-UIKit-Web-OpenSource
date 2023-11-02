@@ -41,11 +41,12 @@ const TrendingList = () => {
 
   const list = loading
     ? new Array(5).fill(1).map((x, index) => (
-        <li key={index}>
+        <li key={`loading-${index}`}>
           <TrendingItem loading />
         </li>
       ))
-    : communities.slice(0, 5).map(({ communityId }) => (
+    : // show top 5...
+      communities.slice(0, 6).map(({ communityId }) => (
         <li key={communityId}>
           <TrendingItem communityId={communityId} onClick={onClickCommunity} />
         </li>

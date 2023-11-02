@@ -8,11 +8,14 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import customizableComponent from '~/core/hocs/customization';
 import Button from '~/core/components/Button';
 import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';
-import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
+// import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
+
 import {
+  Avatar,
   Count,
   Container,
   Header,
+  HeaderDescription,
   OptionMenu,
   CategoriesList,
   Description,
@@ -26,6 +29,9 @@ import {
   Content,
   CommunityName,
 } from './styles';
+
+const communityCoverPlaceholder =
+  'https://www.realm-global.com/wp-content/uploads/2023/06/REALMLogo.webp';
 
 const UICommunityInfo = ({
   communityId,
@@ -51,7 +57,7 @@ const UICommunityInfo = ({
 
   return (
     <Container data-qa-anchor="community-info">
-      <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
+      {/* <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
         <CoverContent>
           <CommunityName
             data-qa-anchor="community-info"
@@ -63,7 +69,31 @@ const UICommunityInfo = ({
           />
           <CategoriesList>{(communityCategories || []).join(', ')}</CategoriesList>
         </CoverContent>
-      </Cover>
+      </Cover> */}
+      <Header>
+        <Avatar
+          data-qa-anchor="user-info-profile-image"
+          avatar={avatarFileUrl ?? communityCoverPlaceholder}
+          backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}
+        />
+        <div>
+          <CommunityName
+            data-qa-anchor="community-info"
+            isOfficial={isOfficial}
+            isPublic={isPublic}
+            isTitle
+            name={name}
+            truncate={2}
+          />
+          {description && (
+            <HeaderDescription>
+              <Truncate lines={3}>
+                <Description data-qa-anchor="community-info-description">{description}</Description>
+              </Truncate>
+            </HeaderDescription>
+          )}
+        </div>
+      </Header>
       <Content>
         <Header>
           <CountsContainer>
@@ -101,11 +131,11 @@ const UICommunityInfo = ({
           )}
         </Header>
 
-        {description && (
+        {/* {description && (
           <Truncate lines={3}>
             <Description data-qa-anchor="community-info-description">{description}</Description>
           </Truncate>
-        )}
+        )} */}
 
         {!isJoined && (
           <JoinButton

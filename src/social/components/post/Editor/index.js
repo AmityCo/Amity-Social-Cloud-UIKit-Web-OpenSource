@@ -120,7 +120,7 @@ PostEditor.propTypes = {
 
 PostEditor.defaultProps = {
   className: null,
-  placeholder: "What's going on...",
+  placeholder: 'What would you like to share...',
   onSave: () => {},
 };
 

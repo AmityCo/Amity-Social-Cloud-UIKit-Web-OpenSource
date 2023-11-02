@@ -215,7 +215,7 @@
   "CommunityCreationModal.title": "Leave without finishing?",
   "CommunityCreationModal.content": "Your progress won’t be saved. Are you sure to leave this page now?",
   "CommunityCreationModal.cancelText": "Continue editing",
-  "CommunityCreationModal.okText": "Leave",
+  "CommunityCreationModal.okText": "OK, cancel",
 
   "PostAsCommunity.title": "Post as group",
   "PostAsCommunity.caption": "Enable this will publish the post on behalf of group account",
@@ -347,6 +347,6 @@
   "chatComposer.label.type": "Channel Type",
   "chatComposer.addUsers": "Add users",
   "chat_modal.title": "Create chat",
-  "chat_composer.placeholder.displayName": "Enter display name here",
-  "chat_composer.placeholder.channelId": "Enter channel ID here"
+  "chat_composer.placeholder.displayName": "Optional display name",
+  "chat_composer.placeholder.channelId": "Optional channel ID here"
 }

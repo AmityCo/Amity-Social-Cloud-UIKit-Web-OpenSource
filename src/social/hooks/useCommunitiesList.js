@@ -6,6 +6,7 @@ const useCommunitiesList = (queryParams = {}, isDeleted = false, resolver = unde
     ...queryParams,
     isDeleted,
   };
+  debugger;
 
   return useLiveCollection(
     () => CommunityRepository.allCommunitiesWithFilters(params),

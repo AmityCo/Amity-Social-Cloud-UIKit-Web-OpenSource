@@ -5,8 +5,11 @@ import { ImageSize, FileRepository } from '@amityco/js-sdk';
 import Loader from '~/core/components/Uploaders/Loader';
 import Uploader from '~/core/components/Uploaders/Uploader';
 import UploaderImage from '~/core/components/Uploaders/Image';
-import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
+// import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 import CameraIcon from '~/icons/Camera';
+
+const communityCoverPlaceholder =
+  'https://www.realm-global.com/wp-content/uploads/2023/06/REALMLogo.webp';
 
 const StyledCameraIcon = styled(CameraIcon)`
   z-index: 3;
