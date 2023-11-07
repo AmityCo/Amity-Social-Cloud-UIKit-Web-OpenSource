@@ -12,7 +12,8 @@ import AvatarUploader from './AvatarUploader';
 import { isEqual } from '~/helpers';
 
 import { notification } from '~/core/components/Notification';
-import CategorySelector from './CategorySelector';
+// import CategorySelector from './CategorySelector';
+import useCategories from '~/social/hooks/useCategories';
 import UserSelector from '~/social/components/UserSelector';
 
 import {
@@ -123,7 +124,43 @@ const CommunityForm = ({
   const { errors } = formState;
   const displayName = watch('displayName', '');
   const description = watch('description', '');
-  const categoryId = watch('categoryId', '');
+
+  const [categoryId, setCategoryId] = useState(community?.categoryIds?.[0] ?? '');
+
+  const [categories, hasMore, loadMore, loading, loadingMore] = useCategories({ isDeleted: false });
+  useEffect(() => {
+    if (!community && !loading) {
+      let id = categories[0].categoryId;
+      categories.forEach((c) => {
+        if (c.name === 'Feed') {
+          id = c.categoryId;
+          console.log('cat Id', c.categoryId);
+        }
+      });
+      setCategoryId(id);
+    }
+  }, [loading, community, categories]);
+
+  // const options = categories.map((category) => ({
+  //   name: category.name,
+  //   value: category.categoryId,
+  // }));
+  // console.log('loading', loading, 'get categories step 1', categories, 'and options: ', options);
+
+  // const [defaultCategoryId, setDefaultCategoryId] = useState(null);
+  // useEffect({
+  //   if (categories.length > 0) {
+  //     let id = categories[0].categoryId;
+  //     categories.forEach(c => {
+  //       if (c.name === 'Feed') {
+  //         console.log('found feed');
+  //         id = c.categoryId;
+  //       }
+  //     })
+  //     setDefaultCategoryId(id);
+  //   }
+  // }, [categories]);
+
   const userIds = watch('userIds', []);
   const avatarFileId = watch('avatarFileId', null);
 
@@ -140,13 +177,13 @@ const CommunityForm = ({
         ...defaultValues,
         displayName,
         description,
-        categoryId,
+        // categoryId,
         userIds,
         isPublic,
         avatarFileId,
       }),
     );
-  }, [displayName, description, categoryId, userIds, isPublic, avatarFileId, defaultValues]);
+  }, [displayName, description, /* categoryId, */ userIds, isPublic, avatarFileId, defaultValues]);
 
   const [validateAndSubmit, submitting] = useAsyncCallback(
     async (data) => {
@@ -245,7 +282,7 @@ const CommunityForm = ({
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
-          <Field error={errors.categoryId}>
+          {/* <Field error={errors.categoryId}>
             <Label htmlFor="categoryId" className="required">
               <FormattedMessage id="community.category" />
             </Label>
@@ -263,7 +300,7 @@ const CommunityForm = ({
               defaultValue=""
             />
             <ErrorMessage errors={errors} name="category" />
-          </Field>
+          </Field> */}
         </FormBlock>
 
         {false && (

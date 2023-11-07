@@ -125,7 +125,7 @@ const UIUserInfo = ({
             >
               <PencilIcon /> <FormattedMessage id="user.editProfile" />
             </Button>
-            <>
+            {/* <>
               {isPrivateNetwork && isFollowPending && (
                 <Button disabled={!connected} onClick={() => onFollowDecline()}>
                   <PendingIconContainer>
@@ -139,7 +139,7 @@ const UIUserInfo = ({
                   <PlusIcon /> <FormattedMessage id="user.follow" />
                 </PrimaryButton>
               )}
-            </>
+            </> */}
           </ConditionalRender>
         </ActionButtonContainer>
         <OptionMenu options={allOptions} pullRight={false} />
@@ -152,7 +152,7 @@ const UIUserInfo = ({
           <BanIcon width={14} height={14} css="margin-left: 0.265rem; margin-top: 1px;" />
         )}
       </ProfileNameWrapper>
-      <CountContainer>
+      {/* <CountContainer>
         <ClickableCount
           onClick={() => {
             setActiveTab(UserFeedTabs.FOLLOWERS);
@@ -171,7 +171,7 @@ const UIUserInfo = ({
           {toHumanString(followerCount)}
         </ClickableCount>
         <FormattedMessage id="counter.followers" />
-      </CountContainer>
+      </CountContainer> */}
       <Description data-qa-anchor="user-info-description">{description}</Description>
 
       {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (

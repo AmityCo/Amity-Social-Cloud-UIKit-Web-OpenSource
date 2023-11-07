@@ -21,6 +21,7 @@ export const DescriptionForAll = styled.div`
   font-size: ${({ theme }) => theme.typography.caption};
   color: ${({ theme }) => theme.palette.neutral.shade2};
   font-weight: 200;
+  padding: 2px 1px;
 `;
 
 export const NameContainer = styled.div`

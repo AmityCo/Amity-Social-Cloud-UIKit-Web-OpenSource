@@ -75,7 +75,7 @@ const PostCreatorBar = ({
   const { user } = useUser(currentUserId);
 
   // default to me
-  if (targetType === PostTargetType.GlobalFeed || targetType === PostTargetType.MyFeed) {
+  if (targetType === PostTargetType.GlobalFeed ||   targetType === PostTargetType.MyFeed) {
     /* eslint-disable no-param-reassign */
     targetType = PostTargetType.UserFeed;
     /* eslint-disable no-param-reassign */
@@ -322,8 +322,12 @@ const PostCreatorBar = ({
 
             setMentionees(mentions);
             setMentionText(lastMentionText);
-            setPostText(text);
-            setPlainText(plainTextVal);
+            const finalText = text ? text.replace('/match-detail', '/view-property') : '';
+            setPostText(finalText);
+            const finalPlainText = plainTextVal
+              ? plainTextVal.replace('/match-detail', '/view-property')
+              : '';
+            setPlainText(finalPlainText);
           }}
         />
         <Footer data-qa-anchor="post-creator-footer">

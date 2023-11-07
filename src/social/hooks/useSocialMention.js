@@ -42,8 +42,10 @@ const useSocialMention = ({ targetId, targetType, remoteText, remoteMarkup }) =>
   }, [remoteText, remoteMarkup]);
 
   const onChange = ({ text: markupText, plainText, mentions: localMentions }) => {
-    setText(plainText);
-    setMarkup(markupText);
+    const finalPlainText = plainText ? plainText.replace('/match-detail', '/view-property') : '';
+    const finalMarkupText = markupText ? markupText.replace('/match-detail', '/view-property') : '';
+    setText(finalPlainText);
+    setMarkup(finalMarkupText);
     setMentions(localMentions);
   };
 

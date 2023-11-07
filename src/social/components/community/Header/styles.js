@@ -7,7 +7,12 @@ import customizableComponent from '~/core/hocs/customization';
 
 import Avatar from '~/core/components/Avatar';
 import CommunityName from '~/social/components/community/Name';
-import { backgroundImage as CommunityImage } from '~/icons/Community';
+// import { backgroundImage as CommunityImage } from '~/icons/Community';
+
+import { Community } from '~/icons';
+
+const CommunityIcon =
+  'https://www.realm-global.com/wp-content/uploads/2023/11/REALM_gunmetal_RGB_R_ONLY.png';
 
 const CommunityHeaderContainer = styled.a.attrs((props) => props)`
   display: grid;
@@ -44,6 +49,7 @@ const CommunityHeaderContainer = styled.a.attrs((props) => props)`
 
 const CommunityHeaderAvatar = styled(Avatar)`
   grid-area: avatar;
+  background: #4c38667d;
 `;
 
 const Rest = styled.div`
@@ -73,8 +79,8 @@ const UICommunityHeader = ({
     onClick={() => onClick(communityId)}
   >
     <CommunityHeaderAvatar
-      avatar={avatarFileUrl}
-      backgroundImage={CommunityImage}
+      avatar={avatarFileUrl || CommunityIcon}
+      backgroundImage={CommunityIcon}
       loading={loading}
     />
     {loading && children ? (

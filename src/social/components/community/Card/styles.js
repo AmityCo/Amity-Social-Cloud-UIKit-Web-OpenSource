@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import SocialCommunityName from '~/social/components/community/Name';
 
 export const Container = styled.div`
-  min-width: 250px;
+  min-width: 225px;
   min-height: 250px;
   max-width: 300px;
   max-height: 300px;

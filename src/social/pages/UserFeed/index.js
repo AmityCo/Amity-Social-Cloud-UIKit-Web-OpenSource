@@ -63,14 +63,14 @@ const UserFeed = ({ userId, currentUserId, networkSettings }) => {
         <MediaGallery targetType={PostTargetType.UserFeed} targetId={userId} />
       )}
 
-      {activeTab === UserFeedTabs.FOLLOWERS && !isHiddenProfile && (
+      {/* {activeTab === UserFeedTabs.FOLLOWERS && !isHiddenProfile && (
         <Followers
           userId={userId}
           activeTab={followActiveTab}
           setActiveTab={setFollowActiveTab}
           setUserFeedTab={setActiveTab}
         />
-      )}
+      )} */}
     </Wrapper>
   );
 };
