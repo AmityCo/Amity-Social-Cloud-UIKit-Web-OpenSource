@@ -31,7 +31,7 @@ import {
 } from './styles';
 
 const communityCoverPlaceholder =
-  'https://www.realm-global.com/wp-content/uploads/2023/06/REALMLogo.webp';
+  'https://www.realm-global.com/wp-content/uploads/2023/11/REALM_gunmetal_RGB_R_ONLY.png';
 
 const UICommunityInfo = ({
   communityId,

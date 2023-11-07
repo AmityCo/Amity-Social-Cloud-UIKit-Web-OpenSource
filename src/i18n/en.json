@@ -11,7 +11,7 @@
   "plural.comment": "{amount, plural, one {comment} other {comments}}",
   "plural.member": "{amount, plural, one {member} other {members}}",
   "selectACategory": "Select a category",
-  "todaysTrendingTitle": "Today's Trending",
+  "todaysTrendingTitle": "All Groups",
   "loadMore": "Load More",
   "categoryList": "Categories",
   "recommendedList": "Recommended for you",
@@ -186,7 +186,7 @@
   "profile.setting": "Profile Settings",
 
   "sidesectioncommunity.newfeed": "Your Feed",
-  "sidesectioncommunity.explore": "Explore",
+  "sidesectioncommunity.explore": "Explore Groups",
   "sidesectioncommunity.community": "Group",
 
   "communityFeed.join": "Join group to interact with all posts",
@@ -202,7 +202,7 @@
 
   "CommentComposeBar.addComment": "Add comment",
   "CommentComposeBar.replayTo": "Reply to ",
-  "CommentComposeBar.saySomething": "Say something nice",
+  "CommentComposeBar.saySomething": "...",
 
   "CommentComposeBar.unableToPost": "Unable to post",
   "CommentComposeBar.overCharacter": "You have reached maximum 50,000 characters in a post.",

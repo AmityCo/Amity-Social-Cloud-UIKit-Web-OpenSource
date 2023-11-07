@@ -147,6 +147,7 @@ export const Avatar = styled(UIAvatar)`
   height: 120px;
   width: 120px;
   margin: 8px 8px auto;
+  background: #ac98c6;
 `;
 
 export const HeaderDescription = styled.div`

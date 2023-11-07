@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 
-import { Newspaper, Search } from '~/icons';
+import { Newspaper, Search, Community } from '~/icons';
 import { PageTypes } from '~/social/constants';
 import SideMenuSection from '~/core/components/SideMenuSection';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
+import SocialSearch from '../SocialSearch';
 
 export const NewsIcon = styled(Newspaper).attrs({ width: 20, height: 20 })``;
 
-export const SearchIcon = styled(Search).attrs({ width: 20, height: 20 })``;
+export const SearchIcon = styled(Community).attrs({ width: 30, height: 30 })``;
+
 
 const SideSectionCommunity = ({ shouldHideExplore, children }) => {
   const { onChangePage, page } = useNavigation();
@@ -27,6 +29,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
         <FormattedMessage id="sidesectioncommunity.newfeed" />
       </SideMenuActionItem>
 
+
       {!shouldHideExplore && (
         <SideMenuActionItem
           data-qa-anchor="side-section-community-side-menu-action-item-explore-button"
@@ -37,6 +40,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }) => {
           <FormattedMessage id="sidesectioncommunity.explore" />
         </SideMenuActionItem>
       )}
+      <SocialSearch sticky />
       {children}
     </SideMenuSection>
   );
