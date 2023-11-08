@@ -33,6 +33,8 @@ export const CoverContent = styled.div`
   bottom: 12px;
   left: 16px;
   right: 16px;
+  background-color: #ffffff88;
+  border-radius: 6px;
 `;
 
 export const CommunityName = styled(SocialCommunityName)`

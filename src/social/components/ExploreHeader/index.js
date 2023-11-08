@@ -91,7 +91,7 @@ const Header = () => {
           <Headline>
             <FormattedMessage id="exploreHeader.searchCommunityTitle" />
           </Headline>
-          <UiKitSocialSearch searchBy={['communities']} />
+          <UiKitSocialSearch searchBy={['communities', 'users']} />
         </Search>
         <Create>
           <Title>
