@@ -15,10 +15,7 @@ const HeaderContainer = styled.div`
 `;
 
 const LinkAndTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-left: 1rem;
+  margin-left: 0px;
 `;
 
 const Title = styled.div`
@@ -34,6 +31,7 @@ const BackButton = styled.button`
   padding: 0;
   margin: 0;
   color: ${({ theme }) => theme.palette.base.shade2};
+  font-size: 14px;
   &:focus {
     outline: none;
   }
@@ -44,11 +42,14 @@ const BackButton = styled.button`
 
 const PageHeader = ({ title, avatarFileUrl, avatarImage, backLinkText, onBack }) => (
   <HeaderContainer>
-    <Avatar avatar={avatarFileUrl} backgroundImage={avatarImage} />
+    {/* <Avatar avatar={avatarFileUrl} backgroundImage={avatarImage} /> */}
     <LinkAndTitle>
       {onBack instanceof Function && (
         <BackButton data-qa-anchor="page-header-back-button" onClick={onBack}>
-          <ChevronLeftIcon height=".9em" />
+          {/* <ChevronLeftIcon height=".9em" /> */}
+          <div style={{ fontSize: 16, paddingRight: 6, marginBottom: 14, marginTop: 12 }}>
+            &lsaquo;{' '}
+          </div>
           {backLinkText ?? <FormattedMessage id="backTitle" />}
         </BackButton>
       )}

@@ -11,8 +11,7 @@ import CommunityName from '~/social/components/community/Name';
 
 import { Community } from '~/icons';
 
-const CommunityIcon =
-  'https://www.realm-global.com/wp-content/uploads/2023/11/REALM_gunmetal_RGB_R_ONLY.png';
+const CommunityIcon = 'https://c10amity.s3.us-west-2.amazonaws.com/images/large_group.png';
 
 const CommunityHeaderContainer = styled.a.attrs((props) => props)`
   display: grid;
