@@ -22,6 +22,9 @@ export const Cover = styled.div`
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42.03%, rgba(0, 0, 0, 0.5) 100%), ${
       backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
     };
+    background: linear-gradient(180deg, #ac98e68f, #927faa), ${
+      backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
+    };
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -33,7 +36,7 @@ export const CoverContent = styled.div`
   bottom: 12px;
   left: 16px;
   right: 16px;
-  background-color: #ffffff88;
+  background-color: #ffffff0d;
   border-radius: 6px;
 `;
 
