@@ -36,6 +36,7 @@ import {
   PostContainer,
   PostButton,
   UploadsContainer,
+  UploadsInsideFrame,
   PostInputText,
   PollButton,
   PollIcon,

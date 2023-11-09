@@ -113,7 +113,7 @@ const InputAutocomplete = ({
       />
       {open && (
         <SuggestionsMenu>
-          {/* {Object.keys(items).length > 1 && (
+          {Object.keys(items).length > 1 && (
             <InputAutocompleteTabs
               tabs={Object.keys(items).map((key) => ({
                 value: key,
@@ -122,7 +122,7 @@ const InputAutocomplete = ({
               activeTab={activeTab}
               onChange={setActiveTab}
             />
-          )} */}
+          )}
 
           <Suggestions items={filtered} append={LoadMoreButton} onPick={onPickSuggestion}>
             {(item) => render(item, value, activeTab)}

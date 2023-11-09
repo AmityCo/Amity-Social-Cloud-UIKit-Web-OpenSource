@@ -37,12 +37,19 @@ import { ImageRenderer } from './styles';
 
 const Gallery = styled.div`
   display: grid;
-  width: 100%;
+  // width: 100%;
   height: 100%;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: 1fr calc((100% / 3) / 0.75);
   grid-gap: 0.5rem;
   border-radius: 4px;
+
+  // c10
+  max-width: 600px;
+  margin: 12px auto;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
 
   &.one > :nth-child(1) {
     grid-column: 1 / 7;

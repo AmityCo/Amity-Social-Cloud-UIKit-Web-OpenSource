@@ -78,6 +78,7 @@ export const RemoveButton = styled(Button).attrs({
   position: absolute;
   top: 0.5em;
   right: 0.5em;
+  max-width: 36px;
 `;
 
 export const CircleIcon = styled(ExclamationCircle).attrs({ width: 24, height: 24 })`

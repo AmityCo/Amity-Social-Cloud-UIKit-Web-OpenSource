@@ -49,7 +49,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
     if (activeTab === 'communities') {
       const { communityId } = communities.find((item) => item.displayName === name) ?? {};
       communityId && onClickCommunity(communityId);
-    } else if (activeTab === 'accounts') {
+    } else if (activeTab === 'members') {
       const { userId } = users.find((item) => item.displayName === name) ?? {};
       userId && onClickUser(userId);
     }
@@ -58,7 +58,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
   const rendererMap = useMemo(
     () => ({
       communities: communityRenderer(communities),
-      accounts: userRenderer(users),
+      members: userRenderer(users),
     }),
     [communities, users],
   );
@@ -66,7 +66,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
   const allItems = useMemo(
     () => ({
       communities: communities.map((community) => community.displayName),
-      accounts: users.map((community) => community.displayName),
+      members: users.map((community) => community.displayName),
     }),
     [communities, users],
   );
@@ -118,7 +118,7 @@ SocialSearch.propTypes = {
 
 SocialSearch.defaultProps = {
   sticky: false,
-  searchBy: ['communities', 'accounts'],
+  searchBy: ['communities', 'members'],
 };
 
 export default customizableComponent('SocialSearch', SocialSearch);

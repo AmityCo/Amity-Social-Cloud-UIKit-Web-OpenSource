@@ -6,10 +6,16 @@ import { ImageRenderer } from './styles';
 
 const Gallery = styled.div`
   display: grid;
-  width: 100%;
+  // width: 100%;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 0.5rem;
   grid-auto-flow: row;
+  // c10
+  max-width: 600px;
+  margin: 12px auto;
+  padding: 12px;
+  border: 1px solid gray;
+  border-radius: 6px;
 `;
 
 const Cell = styled(Square)`
