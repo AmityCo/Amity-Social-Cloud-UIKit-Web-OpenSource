@@ -38,8 +38,19 @@ export const PostButton = styled(PrimaryButton)`
 `;
 
 export const UploadsContainer = styled.div`
-  padding: 0 12px;
+  // padding: 0 12px;
+  max-width: 600px;
+  min-width: 250px;
+  margin: 12px auto;
 `;
+
+export const UploadsInsideFrame = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+`;
+
+
 
 export const PostInputText = styled(InputText)`
   display: block;

@@ -57,7 +57,7 @@ export const CommentContent = styled.div`
   overflow-wrap: anywhere !important;
   word-break: break-word;
   color: ${({ theme }) => theme.palette.neutral.main};
-  background-color: ${({ theme }) => theme.palette.base.shade3};
+  background-color: ${({ theme }) => theme.palette.comment.main};
   border-radius: 0 12px 12px 12px;
   padding: 12px;
   display: inline-block;
@@ -66,8 +66,7 @@ export const CommentContent = styled.div`
 
   &.reply {
     color: ${({ theme }) => theme.palette.neutral.main};
-    background-color: ${({ theme }) => theme.palette.base.shade4};
-    opacity: 0.65;
+    background-color: ${({ theme }) => theme.palette.comment.main};
   }
 `;
 

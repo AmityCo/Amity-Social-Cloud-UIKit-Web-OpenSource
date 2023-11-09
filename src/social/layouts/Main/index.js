@@ -5,7 +5,7 @@ import customizableComponent from '~/core/hocs/customization';
 
 const Container = styled.div`
   overflow: hidden;
-  display: grid;
+ 
   grid-template-areas: 'side main' 'none main';
   grid-template-columns: min-content auto;
   grid-template-rows: 100%;
@@ -14,6 +14,10 @@ const Container = styled.div`
   height: 100%;
   // padding: 0 20px 0 0;
   background: #f7f7f8;
+
+  @media (min-width: 600px) {
+    display: grid;
+  }
 `;
 
 const Main = styled.div`
@@ -28,13 +32,17 @@ const Main = styled.div`
 const Side = styled.div`
   grid-area: side;
   overflow: auto;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const Layout = ({ aside, children }) => {
   return (
     <Container>
-      <Main>{children}</Main>
       <Side>{aside}</Side>
+      <Main>{children}</Main>
     </Container>
   );
 };

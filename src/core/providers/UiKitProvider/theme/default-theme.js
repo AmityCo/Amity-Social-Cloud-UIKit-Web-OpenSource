@@ -8,14 +8,13 @@ const defaultTheme = {
     neutral: '#17181C',
     highlight: '#1054DE',
     title: '#5f467fcc',
-    
+    comment: '#e4e6eb',
 
     system: {
       borders: '#ebecef',
       background: '#fff',
       avatar: '#ff00ff',
       svgIcon: '#333',
-    
     },
   },
   typography: {
