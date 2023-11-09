@@ -38,7 +38,7 @@ import { ImageRenderer } from './styles';
 const Gallery = styled.div`
   display: grid;
   // width: 100%;
-  height: 100%;
+  // height: 100%;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: 1fr calc((100% / 3) / 0.75);
   grid-gap: 0.5rem;

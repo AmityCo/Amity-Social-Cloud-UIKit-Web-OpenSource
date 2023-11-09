@@ -46,9 +46,10 @@ const InputAutocomplete = ({
   onPick,
 }) => {
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState(Object.keys(items)[0]);
-  const [containerRef, isActiveElement] = useActiveElement(open);
 
+  const startingTab = Object.keys(items).includes('members') ? 'members' : Object.keys(items)[0];
+  const [activeTab, setActiveTab] = useState(startingTab);
+  const [containerRef, isActiveElement] = useActiveElement(open);
   const close = () => setOpen(false);
 
   const currentItems = useMemo(() => (!value ? [] : items[activeTab]), [activeTab, items, value]);

@@ -16,8 +16,8 @@ export const ImageContainer = styled.div`
   min-width: 2em;
   min-height: 2em;
   width: 100%;
-  height: 100%;
-  border: ${({ theme, border }) => border && `1px solid ${theme.palette.base.shade4}`};
+  // height: 100%;
+  // border: ${({ theme, border }) => border && `1px solid ${theme.palette.base.shade4}`};
   border-radius: 4px;
   overflow: hidden;
 
@@ -34,10 +34,11 @@ export const Content = styled.div`
 
 const ImgPreviewContainerStyles = css`
   display: block;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100%;
   object-fit: ${({ mediaFit }) => mediaFit ?? 'cover'};
   object-position: center;
+  margin: auto;
 `;
 
 export const ImgPreview = styled.img.attrs({ loading: 'lazy' })`

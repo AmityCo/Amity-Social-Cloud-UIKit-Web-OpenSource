@@ -31,23 +31,26 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
   const { onClickCommunity, onClickUser } = useNavigation();
   const [value, setValue] = useState('');
   const [users = [], hasMoreUsers, loadMoreUsers] = useUserQuery(value);
-  const [communities, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList({
+  const [groups, hasMoreCommunities, loadMoreCommunities] = useCommunitiesList({
     search: value,
   });
+
+  console.log("Social search:, ", searchBy);
   const handleChange = (newVal) => {
     setValue(newVal);
   };
 
   const getPagination = (activeTab) => {
-    const hasMore = activeTab === 'communities' ? hasMoreCommunities : hasMoreUsers;
-    const loadMore = activeTab === 'communities' ? loadMoreCommunities : loadMoreUsers;
+    console.log('get pagination', activeTab)
+    const hasMore = activeTab === 'groups' ? hasMoreCommunities : hasMoreUsers;
+    const loadMore = activeTab === 'groups' ? loadMoreCommunities : loadMoreUsers;
 
     return hasMore ? loadMore : undefined;
   };
 
   const handlePick = (name, activeTab) => {
-    if (activeTab === 'communities') {
-      const { communityId } = communities.find((item) => item.displayName === name) ?? {};
+    if (activeTab === 'groups') {
+      const { communityId } = groups.find((item) => item.displayName === name) ?? {};
       communityId && onClickCommunity(communityId);
     } else if (activeTab === 'members') {
       const { userId } = users.find((item) => item.displayName === name) ?? {};
@@ -57,22 +60,23 @@ const SocialSearch = ({ className, sticky = false, searchBy }) => {
 
   const rendererMap = useMemo(
     () => ({
-      communities: communityRenderer(communities),
+      groups: communityRenderer(groups),
       members: userRenderer(users),
     }),
-    [communities, users],
+    [groups, users],
   );
 
   const allItems = useMemo(
     () => ({
-      communities: communities.map((community) => community.displayName),
+      groups: groups.map((community) => community.displayName),
       members: users.map((community) => community.displayName),
     }),
-    [communities, users],
+    [groups, users],
   );
 
   const items = useMemo(() => {
     return Object.keys(allItems).reduce((acc, key) => {
+      console.log('search items', acc, key, acc);
       if (searchBy.includes(key)) {
         acc[key] = allItems[key];
       }
@@ -118,7 +122,7 @@ SocialSearch.propTypes = {
 
 SocialSearch.defaultProps = {
   sticky: false,
-  searchBy: ['communities', 'members'],
+  searchBy: ['members', 'groups'],
 };
 
 export default customizableComponent('SocialSearch', SocialSearch);
