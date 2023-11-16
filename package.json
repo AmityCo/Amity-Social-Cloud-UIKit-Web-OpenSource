@@ -5,16 +5,18 @@
     "node": ">=16",
     "pnpm": ">=8"
   },
-  "main": "build/index.js",
+  "module": "dist/esm/index.js",
+  "main": "dist/index.js",
+  "exports": "./dist/esm/index.js",
   "files": [
     "build"
   ],
   "description": "React Ui-Kit for Amity Social Cloud",
   "scripts": {
     "prepare": "husky install",
-    "build": "webpack --mode production",
-    "build:dev:analyze": "webpack --mode development --analyze true",
-    "build:prod:analyze": "webpack --mode production --analyze true",
+    "build": "tsup --minify",
+    "build:dev": "tsup --sourcemap --metafile",
+    "build:prod:analyze": "pnpm build --metafile",
     "test": "jest",
     "test:watch": "jest --watch",
     "storybook": "start-storybook -p 6006",
@@ -44,6 +46,7 @@
     "@storybook/theming": "^6.5.9",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
+    "esbuild-plugin-replace": "^1.4.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "18.2.1",
     "eslint-config-eko": "^3.0.0",
