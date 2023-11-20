@@ -19,6 +19,7 @@ const queryParams = { filter: CommunityFilter.Member };
 const Feed = ({
   className = null,
   feedType,
+  defaultCommunityId,
   targetType = PostTargetType.MyFeed,
   targetId = '',
   showPostCreator = false,
@@ -28,7 +29,6 @@ const Feed = ({
   isHiddenProfile = false,
 }) => {
   const enablePostTargetPicker = targetType === PostTargetType.GlobalFeed;
-
   const [posts, hasMore, loadMore, loading, loadingMore] = useFeed({
     targetType,
     targetId,
@@ -58,6 +58,7 @@ const Feed = ({
               data-qa-anchor="feed-post-creator-textarea"
               targetType={targetType}
               targetId={targetId}
+              defaultCommunityId={defaultCommunityId}
               communities={communities}
               enablePostTargetPicker={enablePostTargetPicker}
               hasMoreCommunities={hasMoreCommunities}
@@ -100,6 +101,7 @@ const Feed = ({
 Feed.propTypes = {
   className: PropTypes.string,
   feedType: PropTypes.oneOf(Object.values(FeedType)),
+  defaultCommunityId: PropTypes.string,
   targetType: PropTypes.oneOf(Object.values(PostTargetType)),
   targetId: PropTypes.string,
   showPostCreator: PropTypes.bool,

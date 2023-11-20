@@ -125,7 +125,7 @@ const UIUserInfo = ({
             >
               <PencilIcon /> <FormattedMessage id="user.editProfile" />
             </Button>
-            {/* <>
+            <>
               {isPrivateNetwork && isFollowPending && (
                 <Button disabled={!connected} onClick={() => onFollowDecline()}>
                   <PendingIconContainer>
@@ -139,7 +139,7 @@ const UIUserInfo = ({
                   <PlusIcon /> <FormattedMessage id="user.follow" />
                 </PrimaryButton>
               )}
-            </> */}
+            </>
           </ConditionalRender>
         </ActionButtonContainer>
         <OptionMenu options={allOptions} pullRight={false} />

@@ -38,7 +38,9 @@ const Community = (props) => {
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={communityId} />}>
         {page.type === PageTypes.Explore && <ExplorePage />}
 
-        {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
+        {page.type === PageTypes.NewsFeed && (
+          <NewsFeedPage defaultCommunityId={defaultCommunityId} />
+        )}
 
         {page.type === PageTypes.CommunityFeed && (
           <CommunityFeedPage communityId={communityId} isNewCommunity={page.isNewCommunity} />

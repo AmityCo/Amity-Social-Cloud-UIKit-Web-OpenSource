@@ -27,7 +27,7 @@ YALC documentation: https://github.com/wclr/yalc
 
 #### Publish changes to NPM
 1. Update the version number in package.json (check npm or prod branch to ensure correct version)
-2. commit all changes. 
+2. stage and commit all changes. 
 3. merge changes into prod branch
 4. open prod brach
 5. ```npm run build```
