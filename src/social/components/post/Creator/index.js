@@ -36,7 +36,6 @@ import {
   PostContainer,
   PostButton,
   UploadsContainer,
-  UploadsInsideFrame,
   PostInputText,
   PollButton,
   PollIcon,
@@ -64,6 +63,7 @@ const PostCreatorBar = ({
   connected, // connection status
   targetType,
   targetId,
+  defaultCommunityId,
   enablePostTargetPicker,
   communities = [],
   placeholder = 'What would you like to share...',
@@ -76,11 +76,29 @@ const PostCreatorBar = ({
   const { user } = useUser(currentUserId);
 
   // default to me
-  if (targetType === PostTargetType.GlobalFeed ||   targetType === PostTargetType.MyFeed) {
+  if (targetType === PostTargetType.MyFeed) {
     /* eslint-disable no-param-reassign */
     targetType = PostTargetType.UserFeed;
     /* eslint-disable no-param-reassign */
     targetId = currentUserId;
+  }
+
+
+  if (targetType === PostTargetType.GlobalFeed) {
+    // if there's a default community, use it, rather than the global feed.
+    if (defaultCommunityId) {
+      // assign to default community
+        /* eslint-disable no-param-reassign */
+        targetType = PostTargetType.CommunityFeed;
+        /* eslint-disable no-param-reassign */
+        targetId = defaultCommunityId;
+    } else {
+      // assign to me
+        /* eslint-disable no-param-reassign */
+    targetType = PostTargetType.UserFeed;
+    /* eslint-disable no-param-reassign */
+    targetId = currentUserId;
+    }
   }
 
   const [target, setTarget] = useState({ targetType, targetId });
@@ -366,6 +384,7 @@ PostCreatorBar.propTypes = {
   currentUserId: PropTypes.string,
   targetType: PropTypes.string,
   targetId: PropTypes.string,
+  defaultCommunityId: PropTypes.string,
   communities: PropTypes.array,
   className: PropTypes.string,
   placeholder: PropTypes.string,

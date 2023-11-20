@@ -8,7 +8,8 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { Wrapper } from './styles';
 
-const NewsFeed = () => {
+const NewsFeed = (props) => {
+  const { defaultCommunityId } = props;
   const { onChangePage } = useNavigation();
 
   return (
@@ -16,6 +17,7 @@ const NewsFeed = () => {
       <Feed
         targetType={PostTargetType.GlobalFeed}
         goToExplore={() => onChangePage(PageTypes.Explore)}
+        defaultCommunityId={defaultCommunityId}
         showPostCreator
       />
     </Wrapper>

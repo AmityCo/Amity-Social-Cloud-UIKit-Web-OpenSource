@@ -134,7 +134,6 @@ const CommunityForm = ({
       categories.forEach((c) => {
         if (c.name === 'Feed') {
           id = c.categoryId;
-          console.log('cat Id', c.categoryId);
         }
       });
       setCategoryId(id);

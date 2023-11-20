@@ -1,6 +1,6 @@
 {
   "name": "c10amityui",
-  "version": "2.15.17",
+  "version": "2.15.18",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
