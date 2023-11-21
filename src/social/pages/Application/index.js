@@ -28,11 +28,11 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
 `;
 
 const Community = (props) => {
-  const { defaultCommunityName, defaultCommunityId} = props;
+  const { defaultCommunityId } = props;
   const { page } = useNavigation();
-  
-  const communityId = defaultCommunityId || (page.communityId ? page.communityId : null);
- 
+
+  const communityId = page.communityId ? page.communityId : null;
+
   return (
     <ApplicationContainer>
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={communityId} />}>
