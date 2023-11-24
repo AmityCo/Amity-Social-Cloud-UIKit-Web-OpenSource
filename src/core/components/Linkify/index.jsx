@@ -1,5 +1,5 @@
 import React from 'react';
-import Linkify from 'react-linkify';
+import Linkify from 'linkify-react';
 
 import { Link } from './styles';
 
