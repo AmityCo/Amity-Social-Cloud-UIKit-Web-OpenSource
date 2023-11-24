@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import cx from 'classnames';
+import cx from 'clsx';
 
 import { Popover as ReactTinyPopover } from 'react-tiny-popover';
 

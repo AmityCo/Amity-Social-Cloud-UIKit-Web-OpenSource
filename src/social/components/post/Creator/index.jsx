@@ -1,6 +1,6 @@
 import React, { memo, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
+import cx from 'clsx';
 import { FormattedMessage } from 'react-intl';
 import { UserRepository, CommunityRepository, PostTargetType, FileType } from '@amityco/js-sdk';
 

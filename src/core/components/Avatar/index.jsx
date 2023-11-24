@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import cx from 'classnames';
+import cx from 'clsx';
 
 import customizableComponent from '~/core/hocs/customization';
 import withSize from '~/core/hocs/withSize';

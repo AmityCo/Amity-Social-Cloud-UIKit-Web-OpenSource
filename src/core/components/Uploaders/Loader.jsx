@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import cx from 'classnames';
+import cx from 'clsx';
 
 // equals to 1 GB
 const MAX_FILE_SIZE = 1073741824;

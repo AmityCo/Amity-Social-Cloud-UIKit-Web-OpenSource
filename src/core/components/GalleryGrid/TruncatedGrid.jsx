@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import cx from 'classnames';
+import cx from 'clsx';
 
 import Square from '~/core/components/Square';
 import { ImageRenderer } from './styles';
@@ -8,7 +8,7 @@ import { ImageRenderer } from './styles';
 /*
   Here's the math for the CSS grid-template-rows.
   -----------------------------------------------
-  
+
   The grid is built with a design constraint of a height/width ratio of 0.75,
   meaning that for given width, the height will always be 75% of that width.
 
@@ -17,7 +17,7 @@ import { ImageRenderer } from './styles';
 
   +--------+
   |        | <-- first row, full width, flexible height
-  |        | 
+  |        |
   +--------+
   |  |  |  | <-- second row, when 3 cells, the cells should look square
   +--------+
@@ -30,7 +30,7 @@ import { ImageRenderer } from './styles';
 
   As r = .75 and because we want the height to be 1/3 of the width which is 100%,
   the final formula is:
-  
+
   height = ((width / 3) / ratio)
   => ((100% / 3) / .75)
 */

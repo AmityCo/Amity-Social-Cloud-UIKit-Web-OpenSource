@@ -2,7 +2,7 @@ import React, { useCallback, useRef, forwardRef } from 'react';
 import { Mention, MentionsInput } from 'react-mentions';
 import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
-import cx from 'classnames';
+import cx from 'clsx';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import ConditionalRender from '~/core/components/ConditionalRender';

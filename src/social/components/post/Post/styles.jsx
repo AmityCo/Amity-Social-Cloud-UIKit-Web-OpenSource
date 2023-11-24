@@ -1,4 +1,4 @@
-import cx from 'classnames';
+import cx from 'clsx';
 import React from 'react';
 import styled from 'styled-components';
 import UIOptionMenu from '~/core/components/OptionMenu';
