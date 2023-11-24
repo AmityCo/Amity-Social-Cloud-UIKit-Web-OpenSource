@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { HashRouter as Router, Switch, Route, useHistory, useRouteMatch } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useNavigate, useMatch } from 'react-router-dom';
 
 import useOneUser from '~/mock/useOneUser';
 import ProfileSettings from '~/social/components/ProfileSettings';
@@ -14,8 +14,8 @@ export default {
 const SdkUserInfo = () => {
   const user = useOneUser();
 
-  const history = useHistory();
-  const { params = {} } = useRouteMatch('/profile/:userId') || {};
+  const history = useNavigate();
+  const { params = {} } = useMatch('/profile/:userId') || {};
   const { userId } = params;
 
   const editProfile = (id) => history.push(`/profile/${id}/edit`);
@@ -29,14 +29,16 @@ const SdkUserInfo = () => {
   }
 
   return (
-    <Switch>
-      <Route path="/" exact>
-        <UserInfo userId={user.userId} currentUserId={user.userId} editProfile={editProfile} />
-      </Route>
-      <Route path="/profile/:userId/edit">
-        <ProfileSettings userId={userId} />
-      </Route>
-    </Switch>
+    <Routes>
+      <Route
+        path="/"
+        exact
+        element={
+          <UserInfo userId={user.userId} currentUserId={user.userId} editProfile={editProfile} />
+        }
+      />
+      <Route path="/profile/:userId/edit" element={<ProfileSettings userId={userId} />} />
+    </Routes>
   );
 };
 
@@ -51,13 +53,8 @@ export const SdkUserInfoApp = () => {
 SdkUserInfoApp.storyName = 'My User Info';
 
 export const AnotherUserInfo = () => {
-  const [user, loading] = useOneUser();
-  if (!loading)
-    return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
-    );
+  const user = useOneUser();
+
   return <UserInfo userId={user.userId} />;
 };
 

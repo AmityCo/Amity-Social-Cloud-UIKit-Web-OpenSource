@@ -35,7 +35,7 @@ const InputAutocomplete = ({
   placeholder,
   items,
   filter,
-  getPagination,
+  getPagination = () => {},
   prepend,
   append,
   invalid,

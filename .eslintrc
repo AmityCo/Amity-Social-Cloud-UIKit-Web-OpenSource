@@ -1,11 +1,9 @@
 {
-  "parser": "@babel/eslint-parser",
+  "parser": "@typescript-eslint/parser",
   "extends": ["eko/react"],
   "settings": {
     "import/resolver": {
-      "webpack": {
-        "config": "webpack.config.js"
-      }
+      "typescript": {}
     }
   },
   "globals": {

@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import MockData from '~/mock';
 
+import { Preview } from '@storybook/react';
+
 const GLOBAL_NAME = 'user';
 
 const global = {
@@ -17,12 +19,12 @@ const global = {
           title: 'Web-Test',
         },
         {
-          value: process.env.STORYBOOK_USER1,
-          title: process.env.STORYBOOK_USER1.split(',')[1],
+          value: import.meta.env.STORYBOOK_USER1,
+          title: import.meta.env.STORYBOOK_USER1?.split(',')[1],
         },
         {
-          value: process.env.STORYBOOK_USER2,
-          title: process.env.STORYBOOK_USER2.split(',')[1],
+          value: import.meta.env.STORYBOOK_USER2,
+          title: import.meta.env.STORYBOOK_USER2?.split(',')[1],
         },
         {
           value: 'reconnect',
@@ -39,7 +41,7 @@ const global = {
 
 const FALLBACK_USER = 'Web-Test,Web-Test';
 
-const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
+const decorator: Preview['decorators'] = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
   const user = val || FALLBACK_USER;
   const [userId, displayName] = user.split(',');
 
@@ -47,10 +49,10 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
 
   console.log('-------------------', val);
 
-  if (ref?.current) {
-    if (val === 'reconnect') ref.current.reconnect();
-    else if (val === 'disconnect') ref.current.disconnect();
-  }
+  // if (ref?.current) {
+  //   if (val === 'reconnect') ref.current.reconnect();
+  //   else if (val === 'disconnect') ref.current.disconnect();
+  // }
 
   const handleConnectionStatusChange = (...args) => {
     console.log(`[UiKitProvider.handleConnectionStatusChange]`, ...args);
@@ -68,8 +70,8 @@ const decorator = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
     <UiKitProvider
       ref={ref}
       key={userId}
-      apiKey={process.env.STORYBOOK_API_KEY}
-      apiRegion={process.env.STORYBOOK_API_REGION}
+      apiKey={import.meta.env.STORYBOOK_API_KEY}
+      apiRegion={import.meta.env.STORYBOOK_API_REGION}
       userId={userId}
       displayName={displayName || userId}
       onConnectionStatusChange={handleConnectionStatusChange}

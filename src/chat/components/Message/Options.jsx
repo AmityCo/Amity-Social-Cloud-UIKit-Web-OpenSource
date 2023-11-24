@@ -122,7 +122,7 @@ const Options = ({ isIncoming, messageId, data, isSupportedMessageType, popupCon
       positions={['bottom', 'top']}
       align={isIncoming ? 'start' : 'end'}
       content={isEditing ? editing : menu}
-      parentElement={popupContainerRef.current}
+      parentElement={popupContainerRef?.current}
       onClickOutside={close}
     >
       <div

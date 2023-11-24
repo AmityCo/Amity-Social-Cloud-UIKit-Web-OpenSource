@@ -12,7 +12,7 @@ const NoResultsMessage = styled.p`
   color: ${({ theme }) => theme.palette.base.shade3};
 `;
 
-const UICommunityList = ({
+const UICommunitiesList = ({
   className,
   communityIds,
   loadMore,
@@ -68,7 +68,7 @@ const UICommunityList = ({
   );
 };
 
-UICommunityList.propTypes = {
+UICommunitiesList.propTypes = {
   className: PropTypes.string,
   communityIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   loadMore: PropTypes.func,
@@ -81,7 +81,7 @@ UICommunityList.propTypes = {
   onClickCommunity: PropTypes.func,
 };
 
-UICommunityList.defaultProps = {
+UICommunitiesList.defaultProps = {
   className: null,
   loadMore: () => {},
   hasMore: false,
@@ -93,4 +93,4 @@ UICommunityList.defaultProps = {
   loadingMore: false,
 };
 
-export default UICommunityList;
+export default UICommunitiesList;
