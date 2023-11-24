@@ -16,7 +16,6 @@ const useActiveElement = (defaultValue = false) => {
 
       return () => document.removeEventListener('mousedown', handleClick);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current]);
 
   return [ref, isActiveElement];

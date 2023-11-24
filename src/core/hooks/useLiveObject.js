@@ -18,7 +18,6 @@ const useLiveObject = (
     liveObject.on('dataUpdated', setData);
 
     return () => liveObject.dispose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connected, ...dependencies]);
 
   return data;

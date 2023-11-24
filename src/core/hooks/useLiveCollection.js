@@ -74,7 +74,6 @@ const useLiveCollection = (
     }
 
     return () => liveCollection.dispose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connected, ...dependencies]);
 
   return [data.items, data.hasMore, data.loadMore, data.loadingFirstTime, data.loadingMore];

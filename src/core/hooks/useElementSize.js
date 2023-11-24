@@ -25,7 +25,6 @@ const useElementSize = () => {
         });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref]);
 
   useResizeObserver(ref.current, setSize);

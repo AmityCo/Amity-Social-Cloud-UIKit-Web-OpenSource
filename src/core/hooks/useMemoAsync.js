@@ -15,7 +15,6 @@ function useMemoAsync(factory, deps = []) {
     return () => {
       disposed = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return value;

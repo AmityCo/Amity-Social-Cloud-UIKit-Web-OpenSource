@@ -24,7 +24,6 @@ export const SDKProvider = ({ children, client }) => {
       userRoles: client?.currentUser?.model?.roles,
       networkSettings: client?.networkSettings ?? {},
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       client,
       connectionStatus,

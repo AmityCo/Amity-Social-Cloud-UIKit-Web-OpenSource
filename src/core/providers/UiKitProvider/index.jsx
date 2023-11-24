@@ -80,7 +80,6 @@ const UiKitProvider = forwardRef(
       }
 
       return { client };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [apiKey, userId, displayName, authToken, preventReconnect]);
 
     useImperativeHandle(ref, () => ({

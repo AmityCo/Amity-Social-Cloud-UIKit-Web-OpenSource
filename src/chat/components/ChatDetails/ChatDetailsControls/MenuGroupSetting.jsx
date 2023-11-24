@@ -14,7 +14,7 @@ const MenuGroupSetting = ({ chatName, channelId }) => {
   };
 
   return (
-    <Fragment>
+    <>
       <ControlItem onClick={() => setShouldShowSettingsModal(true)}>
         <SideWrapper>
           <GroupSettingIcon />
@@ -33,7 +33,7 @@ const MenuGroupSetting = ({ chatName, channelId }) => {
           onSubmit={updateGroupName}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 

@@ -13,7 +13,6 @@ export function useAsyncCallback(callback, deps) {
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
   return [newCallback, loading];

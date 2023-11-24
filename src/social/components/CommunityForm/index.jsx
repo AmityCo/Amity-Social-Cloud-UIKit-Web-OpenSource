@@ -89,7 +89,6 @@ function useKeepScrollBottom(ref, deps) {
         ref.current.scrollTo({ top: ref.current.scrollHeight });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref.current, scrollBottom, ...deps]);
 }
 

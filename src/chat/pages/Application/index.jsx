@@ -55,7 +55,6 @@ const ChatApplication = ({
   useEffect(() => {
     if (!defaultChannelId) return;
     handleChannelSelect({ channelId: defaultChannelId, channelType: ChannelType.Standard });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultChannelId]);
 
   return (

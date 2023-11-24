@@ -1,3 +1,6 @@
 node_modules/
 storybook-build/
 build/
+
+dist/
+jest.config.js
