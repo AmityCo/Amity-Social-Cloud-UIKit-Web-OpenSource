@@ -34,11 +34,13 @@ export const Content = styled.div`
 
 const ImgPreviewContainerStyles = css`
   display: block;
-  // width: 100%;
+  //width: 100%;
   // height: 100%;
   object-fit: ${({ mediaFit }) => mediaFit ?? 'cover'};
   object-position: center;
   margin: auto;
+  width: 100%;
+  color: red;
 `;
 
 export const ImgPreview = styled.img.attrs({ loading: 'lazy' })`

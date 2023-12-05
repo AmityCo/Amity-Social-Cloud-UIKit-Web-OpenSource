@@ -362,10 +362,15 @@ const PostCreatorBar = ({
             onMaxFilesLimit={onMaxFilesLimit}
             onFileSizeLimit={onFileSizeLimit}
           />
-          <PollButton data-qa-anchor="post-creator-poll-button" onClick={openPollModal}>
+          <PollButton
+            data-qa-anchor="post-creator-poll-button"
+            style={{ position: 'relative' }}
+            onClick={openPollModal}
+          >
             <FileLoaderContainer>
               <PollIcon />
             </FileLoaderContainer>
+            <div style={{ position: 'absolute', fontSize: 10, bottom: '-7px', left: '2px' }}>Poll</div>
           </PollButton>
           <PostButton
             disabled={isDisabled}

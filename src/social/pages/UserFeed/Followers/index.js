@@ -64,7 +64,7 @@ const Followers = ({
     <div>
       <StyledTabs tabs={allTabs} activeTab={activeTab} onChange={setActiveTab} />
 
-      {activeTab === FollowersTabs.FOLLOWINGS && (
+      {/* {activeTab === FollowersTabs.FOLLOWINGS && (
         <FollowingsList
           currentUserId={currentUserId}
           profileUserId={userId}
@@ -78,9 +78,9 @@ const Followers = ({
           profileUserId={userId}
           setUserFeedTab={setUserFeedTab}
         />
-      )}
+      )} */}
 
-      {activeTab.includes(PENDING_TAB) && isMe && isPrivateNetwork && <PendingList />}
+      {/* {activeTab.includes(PENDING_TAB) && isMe && isPrivateNetwork && <PendingList />} */}
     </div>
   );
 };

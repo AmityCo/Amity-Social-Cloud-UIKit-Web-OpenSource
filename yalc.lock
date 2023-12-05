@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "c10amityui": {
+      "signature": "5b85e05d5a55fb182501ac3e67af6697",
+      "file": true
+    }
+  }
+}

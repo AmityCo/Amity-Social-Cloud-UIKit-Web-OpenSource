@@ -1,6 +1,6 @@
 {
   "name": "c10amityui",
-  "version": "2.15.19",
+  "version": "2.15.20",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -63,6 +63,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/error-message": "^2.0.0",
+    "c10amityui": "file:.yalc/c10amityui",
     "classnames": "^2.3.1",
     "filesize": "^9.0.11",
     "hls.js": "^1.2.1",
