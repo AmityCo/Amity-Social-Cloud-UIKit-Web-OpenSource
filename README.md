@@ -14,7 +14,7 @@
 2. build the ui kit: ```npm run build```
 2. ```yalc publish``` in c10-amity-uikit directory 
 3. ```yalc add c10amityui``` in adminsite repo
-4. npm install in FE repo if this is the first time you've added it (use --legacy-peer-deps if error)
+4. ```npm install``` in FE repo if this is the first time you've added it (use --legacy-peer-deps if error)
 5. Please branch from prod, and work in your own branch. 
 6. When you are done, ```yalc remove --all```  (from the adminsite folder)
 (PLEASE ENSURE YOU DON'T COMMIT TO FE WITH THE YALC REFERENCE PRESENT)
@@ -31,7 +31,7 @@ YALC documentation: https://github.com/wclr/yalc
 3. merge changes into prod branch
 4. open prod brach
 5. ```npm run build```
-6. ```npm publish``` (only clayton currently has npm credentials)
+6. ```npm publish``` (only curve10 team members currently have npm credentials)
 Once published, rebuild product FE enviroment, and UI kit changes should be pulled in. 
 
 ### Documentation

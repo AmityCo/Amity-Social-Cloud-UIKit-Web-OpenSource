@@ -10,5 +10,5 @@ export const UserFeedTabs = {
 export const tabs = [
   { value: UserFeedTabs.TIMELINE, label: <FormattedMessage id="tabs.timeline" /> },
   { value: UserFeedTabs.GALLERY, label: <FormattedMessage id="tabs.gallery" /> },
-  { value: UserFeedTabs.FOLLOWERS, label: <FormattedMessage id="tabs.followers" /> },
+  // { value: UserFeedTabs.FOLLOWERS, label: <FormattedMessage id="tabs.followers" /> },
 ];

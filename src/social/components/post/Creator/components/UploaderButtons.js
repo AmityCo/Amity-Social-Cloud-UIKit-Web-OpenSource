@@ -8,10 +8,13 @@ import FileAttachmentIcon from '~/icons/FileAttachment';
 import { VideoAttachmentIcon } from '../styles';
 
 const ALLOWED_VIDEO_MIME_TYPES = 'video/*,.flv,.3gp';
+const ALLOWED_FILE_MIME_TYPES = 'application/*,text/*';
 
 const StyledLoader = styled(Loader)`
   ${({ uploadLoading }) => uploadLoading && 'cursor: wait !important;'}
   ${({ disabled, theme }) => disabled && `color: ${theme.palette.neutral.shade2};`}
+  position: relative;
+  margin-right: 15px !important;
 `;
 
 const PostCreatorUploaders = ({
@@ -39,6 +42,7 @@ const PostCreatorUploaders = ({
       onFileSizeLimit={onFileSizeLimit}
     >
       <ImageAttachmentIcon />
+      <div style={{ position: 'absolute', fontSize: 10, bottom: '-13px', width: 34 }}>Images</div>
     </StyledLoader>
 
     <StyledLoader
@@ -59,6 +63,11 @@ const PostCreatorUploaders = ({
       onFileSizeLimit={onFileSizeLimit}
     >
       <VideoAttachmentIcon />
+      <div
+        style={{ position: 'absolute', fontSize: 10, bottom: '-13px', width: 34, paddingLeft: 2 }}
+      >
+        Videos
+      </div>
     </StyledLoader>
 
     <StyledLoader
@@ -66,12 +75,18 @@ const PostCreatorUploaders = ({
       disabled={fileUploadDisabled}
       uploadLoading={uploadLoading}
       fileLimitRemaining={fileLimitRemaining}
+      mimeType={ALLOWED_FILE_MIME_TYPES}
       multiple
       onChange={onChangeFiles}
       onMaxFilesLimit={onMaxFilesLimit}
       onFileSizeLimit={onFileSizeLimit}
     >
       <FileAttachmentIcon />
+      <div
+        style={{ position: 'absolute', fontSize: 10, bottom: '-13px', width: 34, paddingLeft: 5 }}
+      >
+        Files
+      </div>
     </StyledLoader>
   </>
 );
