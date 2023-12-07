@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.16.1 (2023-12-07)
+
+
+### Bug Fixes
+
+* update release prod flow ([#103](https://github.com/EkoCommunications/AmityUiKitWeb/issues/103)) ([a1f9d90](https://github.com/EkoCommunications/AmityUiKitWeb/commit/a1f9d905e45bf45e046d1a68723e808e6d6bebb2))
+
 ## 2.16.0 (2023-09-21)
 
 
