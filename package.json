@@ -1,6 +1,6 @@
 {
   "name": "@amityco/ui-kit-open-source",
-  "version": "2.15.6",
+  "version": "2.16.1",
   "engines": {
     "node": ">=16",
     "npm": ">=7"
@@ -61,7 +61,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "@amityco/js-sdk": "^5.33.0",
+    "@amityco/js-sdk": "^5.37.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.2.0",

@@ -101,7 +101,6 @@ export const Divider = styled.div`
 
 export const Description = styled.div`
   margin-bottom: 20px;
-  word-break: break-all;
 `;
 
 export const JoinButton = styled(PrimaryButton)`
