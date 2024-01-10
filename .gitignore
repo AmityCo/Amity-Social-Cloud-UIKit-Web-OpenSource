@@ -7,3 +7,9 @@ storybook-build/
 .env.local
 .DS_Store
 .eslintcache
+
+# Test Coverage Results
+coverage/
+
+# Sonar-Scanner
+.scannerwork/

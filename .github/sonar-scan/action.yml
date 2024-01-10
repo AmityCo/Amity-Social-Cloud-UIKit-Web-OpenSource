@@ -1,0 +1,52 @@
+name: SonarCloud Scan
+description: SonarCloud Scan action.
+
+inputs:
+  SONAR_SCANNER_VERSION:
+    description: SonarCloud Scanner version
+    default: 5.0.1.3006
+  SONAR_HOST:
+    description: SonarCloud Scanner version
+    default: https://sonarcloud.io
+  SONAR_TOKEN:
+    description: SonarCloud user token
+    required: true
+  SONAR_ScanningDirectory:
+    description: Base Directory for Scanner
+  SONAR_QualityGate_Wait:
+    description: SonarCloud Scanner wait for QualityGate
+    default: 'false'
+  SONAR_QualityGate_Timeout:
+    description: SonarCloud Scanner QualityGate polling timeout
+    default: '3000'
+  NODE_VERSION:
+    description: Node version
+    default: '18'
+
+runs:
+  using: composite
+  steps:
+    # Install SonarCloud Scanner
+    - name: Install SonarCloud Scanner
+      shell: bash
+      run: |
+        export SONAR_SCANNER_VERSION=${{ inputs.SONAR_SCANNER_VERSION }}
+        export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux
+        curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-linux.zip
+        unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+        export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+        export SONAR_SCANNER_OPTS="-server"
+
+    # Run the SonarCloud scan
+    - name: SonarCloud Scan
+      working-directory: ${{ inputs.SONAR_ScanningDirectory }}
+      shell: bash
+      run: |
+        export SONAR_SCANNER_VERSION=${{ inputs.SONAR_SCANNER_VERSION }}
+        export SONAR_SCANNER_BIN=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-linux/bin
+        $SONAR_SCANNER_BIN/sonar-scanner \
+          -Dsonar.host.url=${{ inputs.SONAR_HOST }} \
+          -Dsonar.token=${{ inputs.SONAR_TOKEN }} \
+          -Dsonar.projectBaseDir=${{ inputs.SONAR_ScanningDirectory }} \
+          -Dsonar.qualitygate.wait=${{ inputs.SONAR_QualityGate_Wait }} \
+          -Dsonar.qualitygate.timeout=${{ inputs.SONAR_QualityGate_Timeout }}
