@@ -2,6 +2,10 @@ name: Production release pipeline
 
 on:
   workflow_dispatch:
+    inputs:
+      release_as:
+        description: 'release as'
+        required: true
 
 jobs:
   publish:
@@ -40,8 +44,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: increase version
+      - name: increase version (patch)
         run: pnpm standard-version --yes
+        if: github.event.inputs.release_as == 'patch'
+
+      - name: increase version (minor)
+        run: pnpm standard-version --yes --release-as minor
+        if: github.event.inputs.release_as == 'minor'
+
+      - name: increase version (major)
+        run: pnpm standard-version --yes --release-as major
+        if: github.event.inputs.release_as == 'major'
 
       - name: build
         run: pnpm run build
