@@ -1,20 +1,25 @@
 import React from 'react';
 
 import UiKitSocialSearch from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKSearch = ({ ...args }) => <UiKitSocialSearch {...args} />;
+export const SDKSearch = {
+  render: () => {
+    const [props] = useArgs();
+    return <UiKitSocialSearch {...props} />;
+  },
+  name: 'Search bar',
 
-SDKSearch.storyName = 'Search bar';
+  args: {
+    placeholder: 'Search communities',
+  },
 
-SDKSearch.args = {
-  placeholder: 'Search communities',
-};
-
-SDKSearch.argTypes = {
-  placeholder: { control: { type: 'text' } },
-  onSearchResultCommunityClick: { action: 'onSearchResultCommunityClick()' },
+  argTypes: {
+    placeholder: { control: { type: 'text' } },
+    onSearchResultCommunityClick: { action: 'onSearchResultCommunityClick()' },
+  },
 };

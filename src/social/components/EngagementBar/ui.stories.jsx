@@ -7,28 +7,30 @@ export default {
   title: 'Ui Only/Social/Post',
 };
 
-export const UiEngagementBar = ({ onClickComment, ...props }) => {
-  const [{ isComposeBarDisplayed }, updateArgs] = useArgs();
+export const UiEngagementBar = {
+  render: () => {
+    const [{ isComposeBarDisplayed, onClickComment, ...props }, updateArgs] = useArgs();
 
-  const handleDisplayComposeBar = () => {
-    onClickComment();
-    updateArgs({ isComposeBarDisplayed: !isComposeBarDisplayed });
-  };
+    const handleDisplayComposeBar = () => {
+      onClickComment();
+      updateArgs({ isComposeBarDisplayed: !isComposeBarDisplayed });
+    };
 
-  return <UIEngagementBar {...props} onClickComment={handleDisplayComposeBar} />;
-};
+    return <UIEngagementBar {...props} onClickComment={handleDisplayComposeBar} />;
+  },
 
-UiEngagementBar.storyName = 'Engagement Bar';
+  name: 'Engagement Bar',
 
-UiEngagementBar.args = {
-  postId: '',
-  totalLikes: 0,
-  totalComments: 0,
-  readonly: false,
-  isComposeBarDisplayed: false,
-};
+  args: {
+    postId: '',
+    totalLikes: 0,
+    totalComments: 0,
+    readonly: false,
+    isComposeBarDisplayed: false,
+  },
 
-UiEngagementBar.argTypes = {
-  onClickComment: { action: 'onClickComment()' },
-  handleAddComment: { action: 'handleAddComment(commentText)' },
+  argTypes: {
+    onClickComment: { action: 'onClickComment()' },
+    handleAddComment: { action: 'handleAddComment(commentText)' },
+  },
 };

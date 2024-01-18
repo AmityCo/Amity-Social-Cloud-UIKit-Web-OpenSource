@@ -1,58 +1,65 @@
 import React, { useState } from 'react';
 
 import StyledInputText from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
-  title: 'Ui Only/Input',
+  title: 'Ui Only/Input Text',
 };
 
-export const UiInputText = ({ onChange, ...rest }) => {
-  const [value, setValue] = useState('');
+export const UiInputText = {
+  render: () => {
+    const [{ onChange, ...rest }] = useArgs();
+    const [value, setValue] = useState('');
 
-  const handleChange = (newVal) => {
-    onChange(newVal);
-    setValue(newVal);
-  };
+    const handleChange = (newVal) => {
+      onChange(newVal);
+      setValue(newVal);
+    };
 
-  return <StyledInputText {...rest} value={value} onChange={handleChange} />;
+    return <StyledInputText {...rest} value={value} onChange={handleChange} />;
+  },
+
+  name: 'Simple Input text',
+
+  args: {
+    multiline: false,
+    invalid: false,
+    disabled: false,
+  },
+
+  argTypes: {
+    multiline: { control: { type: 'boolean' } },
+    invalid: { control: { type: 'boolean' } },
+    disabled: { control: { type: 'boolean' } },
+    onClear: { action: 'onClear()' },
+    onChange: { action: 'onChange()' },
+  },
 };
 
-UiInputText.storyName = 'Simple Input text';
+export const UiPrependAppend = {
+  render: () => {
+    const [{ onChange, ...rest }] = useArgs();
+    const [value, setValue] = useState('');
 
-UiInputText.args = {
-  multiline: false,
-  invalid: false,
-  disabled: false,
-};
+    const handleChange = (newVal) => {
+      onChange(newVal);
+      setValue(newVal);
+    };
 
-UiInputText.argTypes = {
-  multiline: { control: { type: 'boolean' } },
-  invalid: { control: { type: 'boolean' } },
-  disabled: { control: { type: 'boolean' } },
-  onClear: { action: 'onClear()' },
-  onChange: { action: 'onChange()' },
-};
+    return <StyledInputText {...rest} value={value} onChange={handleChange} />;
+  },
 
-export const UiPrependAppend = ({ onChange, ...rest }) => {
-  const [value, setValue] = useState('');
+  name: 'with Decorators',
 
-  const handleChange = (newVal) => {
-    onChange(newVal);
-    setValue(newVal);
-  };
+  args: {
+    prepend: '',
+    append: '',
+  },
 
-  return <StyledInputText {...rest} value={value} onChange={handleChange} />;
-};
-
-UiPrependAppend.storyName = 'with Decorators';
-
-UiPrependAppend.args = {
-  prepend: '',
-  append: '',
-};
-
-UiPrependAppend.argTypes = {
-  prepend: { control: { type: 'text' } },
-  append: { control: { type: 'text' } },
-  onChange: { action: 'onChange()' },
+  argTypes: {
+    prepend: { control: { type: 'text' } },
+    append: { control: { type: 'text' } },
+    onChange: { action: 'onChange()' },
+  },
 };

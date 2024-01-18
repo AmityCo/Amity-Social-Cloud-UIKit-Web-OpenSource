@@ -5,8 +5,10 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKSideSectionMyCommunity = () => {
-  return <UiKitSideSectionMyCommunity />;
-};
+export const SDKSideSectionMyCommunity = {
+  render: () => {
+    return <UiKitSideSectionMyCommunity />;
+  },
 
-SDKSideSectionMyCommunity.storyName = 'My community side section';
+  name: 'My community side section',
+};

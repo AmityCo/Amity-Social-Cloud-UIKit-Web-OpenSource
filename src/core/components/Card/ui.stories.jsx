@@ -1,27 +1,31 @@
 import React from 'react';
 
 import StyledCard from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only',
 };
 
-export const UiCard = ({ title, stretched }) => {
-  return (
-    <StyledCard title={title} stretched={stretched}>
-      <img src="https://cataas.com/cat" alt="" />
-    </StyledCard>
-  );
-};
+export const UiCard = {
+  render: () => {
+    const [{ title, stretched }] = useArgs();
+    return (
+      <StyledCard title={title} stretched={stretched}>
+        <img src="https://cataas.com/cat" alt="" />
+      </StyledCard>
+    );
+  },
 
-UiCard.storyName = 'Card box';
+  name: 'Card box',
 
-UiCard.args = {
-  title: 'Some title',
-  stretched: false,
-};
+  args: {
+    title: 'Some title',
+    stretched: false,
+  },
 
-UiCard.argTypes = {
-  title: { control: { type: 'text' } },
-  stretched: { control: { type: 'boolean' } },
+  argTypes: {
+    title: { control: { type: 'text' } },
+    stretched: { control: { type: 'boolean' } },
+  },
 };

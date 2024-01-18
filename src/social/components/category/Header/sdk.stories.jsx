@@ -2,35 +2,41 @@ import React from 'react';
 
 import useOneCategory from '~/mock/useOneCategory';
 import UiKitCategoryHeader from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Category',
 };
 
-export const SDKCategoryHeader = ({ categoryIdOverride, children, onClick }) => {
-  const { categoryId } = useOneCategory();
+export const SDKCategoryHeader = {
+  render: () => {
+    const [{ categoryIdOverride, children, onClick }] = useArgs();
+    const category = useOneCategory();
 
-  let targetCategoryId = categoryId;
-  if (categoryIdOverride) {
-    targetCategoryId = categoryIdOverride;
-  }
+    if (category == null) return null;
 
-  return (
-    <UiKitCategoryHeader categoryId={targetCategoryId} onClick={onClick}>
-      {children}
-    </UiKitCategoryHeader>
-  );
-};
+    let targetCategoryId = category.categoryId;
+    if (categoryIdOverride) {
+      targetCategoryId = categoryIdOverride;
+    }
 
-SDKCategoryHeader.storyName = 'Header';
+    return (
+      <UiKitCategoryHeader categoryId={targetCategoryId} onClick={onClick}>
+        {children}
+      </UiKitCategoryHeader>
+    );
+  },
 
-SDKCategoryHeader.args = {
-  categoryIdOverride: '',
-  children: 'children slot',
-};
+  name: 'Header',
 
-SDKCategoryHeader.argTypes = {
-  categoryId: { control: { type: 'text' } },
-  children: { control: { type: 'text' } },
-  onClick: { action: 'onClick()' },
+  args: {
+    categoryIdOverride: '',
+    children: 'children slot',
+  },
+
+  argTypes: {
+    categoryId: { control: { type: 'text' } },
+    children: { control: { type: 'text' } },
+    onClick: { action: 'onClick()' },
+  },
 };

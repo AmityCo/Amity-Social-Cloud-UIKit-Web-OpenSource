@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadMoreButton, ShevronDownIcon } from './styles';
 
+/**
+ *
+ * @deprecated use LoadMoreWrapper instead
+ */
 const LoadMore = ({
   hasMore,
   loadMore,
-  text,
+  text = '',
   children,
   className = '',
-  prependIcon,
+  prependIcon = null,
   appendIcon = <ShevronDownIcon />,
   isExpanded = true,
 }) => {
@@ -29,7 +33,8 @@ const LoadMore = ({
   }
 
   return (
-    !!children.length && (
+    children.length > 0 &&
+    hasMore && (
       <div>
         <LoadMoreButton className={className} onClick={() => setExpanded(true)}>
           {prependIcon} {text || <FormattedMessage id="loadMore" />} {appendIcon}

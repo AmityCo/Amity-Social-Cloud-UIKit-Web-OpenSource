@@ -1,5 +1,6 @@
 import React from 'react';
 import TrendingItem from './UITrendingItem';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only/Social/Community',
@@ -21,37 +22,40 @@ const MOCK_CATEGORIES = [
   },
 ];
 
-export const UITrendingItem = ({ communityCategories, ...props }) => {
-  const categories = communityCategories.map((name) =>
-    MOCK_CATEGORIES.find((category) => category.name === name),
-  );
+export const UITrendingItem = {
+  render: () => {
+    const [{ communityCategories, ...props }] = useArgs();
+    const categories = communityCategories.map((name) =>
+      MOCK_CATEGORIES.find((category) => category.name === name),
+    );
 
-  return <TrendingItem {...props} categories={categories} />;
-};
-
-UITrendingItem.storyName = 'Trending Item';
-
-UITrendingItem.args = {
-  avatarFileUrl: 'https://cataas.com/cat',
-  description: 'Description of the community',
-  communityCategories: [],
-  membersCount: 10000,
-  slim: false,
-  isOfficial: false,
-  isPublic: false,
-  name: 'Community Name',
-  loading: false,
-};
-
-UITrendingItem.argTypes = {
-  communityCategories: {
-    control: { type: 'inline-check' },
-    options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
+    return <TrendingItem {...props} categories={categories} />;
   },
-  slim: { control: { type: 'boolean' } },
-  onClick: { action: 'onClick(communityId)' },
-  isOfficial: { control: { type: 'boolean' } },
-  isPublic: { control: { type: 'boolean' } },
-  name: { control: { type: 'text' } },
-  loading: { control: { type: 'boolean' } },
+
+  name: 'Trending Item',
+
+  args: {
+    avatarFileUrl: 'https://cataas.com/cat',
+    description: 'Description of the community',
+    communityCategories: [],
+    membersCount: 10000,
+    slim: false,
+    isOfficial: false,
+    isPublic: false,
+    name: 'Community Name',
+    loading: false,
+  },
+
+  argTypes: {
+    communityCategories: {
+      control: { type: 'inline-check' },
+      options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
+    },
+    slim: { control: { type: 'boolean' } },
+    onClick: { action: 'onClick(communityId)' },
+    isOfficial: { control: { type: 'boolean' } },
+    isPublic: { control: { type: 'boolean' } },
+    name: { control: { type: 'text' } },
+    loading: { control: { type: 'boolean' } },
+  },
 };

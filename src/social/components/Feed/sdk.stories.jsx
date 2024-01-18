@@ -1,84 +1,105 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { PostTargetType } from '@amityco/js-sdk';
-
 import useOneUser from '~/mock/useOneUser';
 import useOneCommunity from '~/mock/useOneCommunity';
 
 import UiKitFeed from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Feed',
 };
 
-// You can show and hide the compose bar using the controls tab.
-export const SDKMyFeed = ({ showPostCreator }) => <UiKitFeed showPostCreator={showPostCreator} />;
+export const SDKMyFeed = {
+  render: () => {
+    const [{ showPostCreator }] = useArgs();
+    return <UiKitFeed showPostCreator={showPostCreator} />;
+  },
+  name: 'My feed',
 
-SDKMyFeed.storyName = 'My feed';
+  args: {
+    showPostCreator: true,
+  },
 
-SDKMyFeed.args = {
-  showPostCreator: true,
+  argTypes: {
+    showPostCreator: { control: { type: 'boolean' } },
+  },
 };
 
-SDKMyFeed.argTypes = {
-  showPostCreator: { control: { type: 'boolean' } },
-};
+export const SDKAnotherUsersFeed = {
+  render: () => {
+    const [{ customUserId, showPostCreator }] = useArgs();
+    const user = useOneUser();
+    if (!user)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
 
-// By default this uses a random user, who may have no posts on their feed.
-// Try a different user with the controls tab.
-export const SDKAnotherUsersFeed = ({ customUserId, showPostCreator }) => {
-  const user = useOneUser();
-  if (!user)
     return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
+      <UiKitFeed
+        targetType={'userFeed'}
+        targetId={customUserId || user.userId}
+        showPostCreator={showPostCreator}
+      />
     );
-  return (
-    <UiKitFeed
-      targetType={PostTargetType.UserFeed}
-      targetId={customUserId || user.userId}
-      showPostCreator={showPostCreator}
-    />
-  );
+  },
+
+  name: 'User feed',
+
+  args: {
+    showPostCreator: false,
+    customUserId: '',
+  },
+
+  argTypes: {
+    showPostCreator: { control: { type: 'boolean' } },
+    customUserId: { control: { type: 'text' } },
+  },
 };
 
-SDKAnotherUsersFeed.storyName = 'User feed';
+export const SDKCommunityFeed = {
+  render: () => {
+    const [{ showPostCreator }] = useArgs();
+    const [community, isLoading] = useOneCommunity();
+    if (isLoading)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
 
-SDKAnotherUsersFeed.args = {
-  showPostCreator: false,
-  customUserId: '',
-};
+    if (!community && isLoading === false) return <>No community found</>;
 
-SDKAnotherUsersFeed.argTypes = {
-  showPostCreator: { control: { type: 'boolean' } },
-  customUserId: { control: { type: 'text' } },
-};
-
-export const SDKCommunityFeed = ({ showPostCreator }) => {
-  const [community, isLoading] = useOneCommunity();
-  if (isLoading)
     return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
+      <UiKitFeed
+        targetType={'communityFeed'}
+        targetId={community.communityId}
+        showPostCreator={showPostCreator}
+      />
     );
-  return (
-    <UiKitFeed
-      targetType={PostTargetType.CommunityFeed}
-      targetId={community.communityId}
-      showPostCreator={showPostCreator}
-    />
-  );
+  },
+
+  name: 'Community feed',
+
+  args: {
+    showPostCreator: true,
+  },
+
+  argTypes: {
+    showPostCreator: { control: { type: 'boolean' } },
+  },
 };
 
-SDKCommunityFeed.storyName = 'Community feed';
+export const SDKGlobalFeed = {
+  render: () => {
+    return <UiKitFeed targetType={'globalFeed'} />;
+  },
 
-SDKCommunityFeed.args = {
-  showPostCreator: true,
-};
+  name: 'Global feed',
 
-SDKCommunityFeed.argTypes = {
-  showPostCreator: { control: { type: 'boolean' } },
+  args: {},
+  argTypes: {},
 };

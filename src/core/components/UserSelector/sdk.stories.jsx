@@ -7,24 +7,26 @@ export default {
   title: 'SDK Connected/User',
 };
 
-export const UserSelector = () => {
-  const [{ value, onChange }, updateArgs] = useArgs();
+export const UserSelector = {
+  render: () => {
+    const [{ value, onChange }, updateArgs] = useArgs();
 
-  const setValue = (newVal) => {
-    onChange(newVal);
-    updateArgs({ value: newVal });
-  };
+    const setValue = (newVal) => {
+      onChange(newVal);
+      updateArgs({ value: newVal });
+    };
 
-  return <UiKitUserSelector value={value} onChange={setValue} />;
-};
+    return <UiKitUserSelector value={value} onChange={setValue} />;
+  },
 
-UserSelector.storyName = 'Selector';
+  name: 'Selector',
 
-UserSelector.args = {
-  value: [],
-};
+  args: {
+    value: [],
+  },
 
-UserSelector.argTypes = {
-  value: { control: { type: 'object' } },
-  onChange: { action: 'onChange()' },
+  argTypes: {
+    value: { control: { type: 'object' } },
+    onChange: { action: 'onChange()' },
+  },
 };

@@ -2,24 +2,28 @@ import React, { useState } from 'react';
 
 import { PageTabs } from '~/social/pages/CommunityEdit/constants';
 import EditPageHeader from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only/Social/Community',
 };
 
-export const UiEditPageHeader = (args) => {
-  const [activeTab, setActiveTab] = useState(PageTabs.EDIT_PROFILE);
-  return <EditPageHeader {...args} activeTab={activeTab} setActiveTab={setActiveTab} />;
-};
+export const UiEditPageHeader = {
+  render: () => {
+    const [props] = useArgs();
+    const [activeTab, setActiveTab] = useState(PageTabs.EDIT_PROFILE);
+    return <EditPageHeader {...props} activeTab={activeTab} setActiveTab={setActiveTab} />;
+  },
 
-UiEditPageHeader.storyName = 'Edit Page Header';
+  name: 'Edit Page Header',
 
-UiEditPageHeader.args = {
-  communityName: 'Example Community Name',
-  avatarFileUrl: 'https://via.placeholder.com/150x150',
-  tabs: Object.values(PageTabs),
-};
+  args: {
+    communityName: 'Example Community Name',
+    avatarFileUrl: 'https://via.placeholder.com/150x150',
+    tabs: Object.values(PageTabs),
+  },
 
-UiEditPageHeader.argTypes = {
-  onReturnToCommunity: { action: 'onReturnToCommunity()' },
+  argTypes: {
+    onReturnToCommunity: { action: 'onReturnToCommunity()' },
+  },
 };

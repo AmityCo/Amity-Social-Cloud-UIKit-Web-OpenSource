@@ -1,16 +1,20 @@
 import React from 'react';
 import UiKitSideSectionCommunityComponent from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKSideSectionCommunity = ({ children }) => (
-  <UiKitSideSectionCommunityComponent>{children}</UiKitSideSectionCommunityComponent>
-);
+export const SDKSideSectionCommunity = {
+  render: () => {
+    const [{ children }] = useArgs();
+    return <UiKitSideSectionCommunityComponent>{children}</UiKitSideSectionCommunityComponent>;
+  },
 
-SDKSideSectionCommunity.storyName = 'Community side section';
+  name: 'Community side section',
 
-SDKSideSectionCommunity.args = {
-  children: 'children slot',
+  args: {
+    children: 'children slot',
+  },
 };

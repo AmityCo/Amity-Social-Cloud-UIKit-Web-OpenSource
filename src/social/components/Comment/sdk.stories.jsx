@@ -4,50 +4,59 @@ import { FormattedMessage } from 'react-intl';
 import useOneComment from '~/mock/useOneComment';
 
 import UiKitComment from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Comment',
 };
 
-export const SDKComment = ({ readonly, isReplyComment }) => {
-  const [comment, isLoading] = useOneComment();
-  if (isLoading)
+export const SDKComment = {
+  render: () => {
+    const [{ readonly, isReplyComment }] = useArgs();
+    const [comment, isLoading] = useOneComment();
+    if (isLoading)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
+
+    if (!comment && isLoading === false) return <>No comment found</>;
+
     return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
+      <UiKitComment
+        commentId={comment.commentId}
+        readonly={readonly}
+        isReplyComment={isReplyComment}
+      />
     );
-  return (
-    <UiKitComment
-      commentId={comment.commentId}
-      readonly={readonly}
-      isReplyComment={isReplyComment}
-    />
-  );
+  },
+
+  name: 'Single Comment',
+
+  args: {
+    readonly: false,
+    isReplyComment: false,
+  },
+
+  argTypes: {
+    readonly: { control: { type: 'boolean' } },
+    isReplyComment: { control: { type: 'boolean' } },
+  },
 };
 
-SDKComment.storyName = 'Single Comment';
+export const SDKCommentWithReplies = {
+  render: () => {
+    const [comment, isLoading] = useOneComment();
+    if (isLoading)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
+    if (!comment && isLoading === false) return <>No comment found</>;
+    return <UiKitComment commentId={comment.commentId} />;
+  },
 
-SDKComment.args = {
-  readonly: false,
-  isReplyComment: false,
+  name: 'Comment with replies',
 };
-
-SDKComment.argTypes = {
-  readonly: { control: { type: 'boolean' } },
-  isReplyComment: { control: { type: 'boolean' } },
-};
-
-// TODO - make sure that the comment for this story always has replies.
-export const SDKCommentWithReplies = () => {
-  const [comment, isLoading] = useOneComment();
-  if (isLoading)
-    return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
-    );
-  return <UiKitComment commentId={comment.commentId} />;
-};
-
-SDKCommentWithReplies.storyName = 'Comment with replies';

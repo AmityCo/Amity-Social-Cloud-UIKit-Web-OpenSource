@@ -1,46 +1,52 @@
-import React from 'react';
-import { CommunityFilter } from '@amityco/js-sdk';
+import React, { useMemo } from 'react';
 import NavigationProvider, { NavigationContext } from '~/social/providers/NavigationProvider';
 
 import UiKitCommunitiesList from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKCommunitiesList = ({ communitiesQueryParam, querySearch, onlyShowJoined }) => {
-  const queryParams = { ...communitiesQueryParam };
+export const SDKCommunitiesList = {
+  render: () => {
+    const [{ querySearch, onlyShowJoined }] = useArgs();
 
-  if (onlyShowJoined) {
-    queryParams.filter = CommunityFilter.Member;
-  }
+    const queryParams = useMemo(() => {
+      const queryParams = {};
+      if (onlyShowJoined) {
+        queryParams.filter = 'member';
+      }
 
-  if (querySearch) {
-    queryParams.search = querySearch;
-  }
+      if (querySearch) {
+        queryParams.search = querySearch;
+      }
+      return queryParams;
+    }, [querySearch, onlyShowJoined]);
 
-  return (
-    <NavigationProvider>
-      <NavigationContext>
-        {({ page }) => (
-          <UiKitCommunitiesList
-            communitiesQueryParam={queryParams}
-            activeCommunity={page.communityId}
-          />
-        )}
-      </NavigationContext>
-    </NavigationProvider>
-  );
-};
+    return (
+      <NavigationProvider>
+        <NavigationContext>
+          {({ page }) => (
+            <UiKitCommunitiesList
+              communitiesQueryParam={queryParams}
+              activeCommunity={page.communityId}
+            />
+          )}
+        </NavigationContext>
+      </NavigationProvider>
+    );
+  },
 
-SDKCommunitiesList.storyName = 'Communities list';
+  name: 'Communities list',
 
-SDKCommunitiesList.args = {
-  querySearch: '',
-  onlyShowJoined: false,
-};
+  args: {
+    querySearch: '',
+    onlyShowJoined: false,
+  },
 
-SDKCommunitiesList.argTypes = {
-  querySearch: { control: { type: 'text' } },
-  onlyShowJoined: { control: { type: 'boolean' } },
+  argTypes: {
+    querySearch: { control: { type: 'text' } },
+    onlyShowJoined: { control: { type: 'boolean' } },
+  },
 };

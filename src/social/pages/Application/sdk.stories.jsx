@@ -1,21 +1,26 @@
 import React from 'react';
 import UiKitApp from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social',
 };
 
-export const SDKCommunityApp = (props) => <UiKitApp {...props} />;
+export const SDKCommunityApp = {
+  render: () => {
+    const [props] = useArgs();
+    return <UiKitApp {...props} />;
+  },
+  name: 'Application',
 
-SDKCommunityApp.storyName = 'Application';
+  args: {
+    shouldHideExplore: false,
+    socialCommunityCreationButtonVisible: true,
+  },
 
-SDKCommunityApp.args = {
-  shouldHideExplore: false,
-  socialCommunityCreationButtonVisible: true,
-};
-
-SDKCommunityApp.argTypes = {
-  shouldHideExplore: { control: { type: 'boolean' } },
-  socialCommunityCreationButtonVisible: { control: { type: 'boolean' } },
-  onMemberClick: { action: 'onMemberClick()' },
+  argTypes: {
+    shouldHideExplore: { control: { type: 'boolean' } },
+    socialCommunityCreationButtonVisible: { control: { type: 'boolean' } },
+    onMemberClick: { action: 'onMemberClick()' },
+  },
 };
