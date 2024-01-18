@@ -1,7 +1,6 @@
 import React from 'react';
 
 import StyledCommunityCard from './UICommunityCard';
-import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only/Social/Community',
@@ -23,39 +22,36 @@ const MOCK_CATEGORIES = [
   },
 ];
 
-export const UiCommunityCard = {
-  render: () => {
-    const [{ communityCategories, ...props }] = useArgs();
-    const categories = communityCategories.map((name) =>
-      MOCK_CATEGORIES.find((category) => category.name === name),
-    );
-    return <StyledCommunityCard {...props} communityCategories={categories} />;
-  },
+export const UiCommunityCard = ({ communityCategories, ...props }) => {
+  const categories = communityCategories.map((name) =>
+    MOCK_CATEGORIES.find((category) => category.name === name),
+  );
+  return <StyledCommunityCard {...props} communityCategories={categories} />;
+};
 
-  name: 'Card',
+UiCommunityCard.storyName = 'Card';
 
-  args: {
-    avatarFileUrl: 'https://cataas.com/cat',
-    communityCategories: [],
-    membersCount: 250,
-    description: 'Description of this community',
-    isOfficial: false,
-    isPublic: false,
-    name: 'Community Name',
-  },
+UiCommunityCard.args = {
+  avatarFileUrl: 'https://cataas.com/cat',
+  communityCategories: [],
+  membersCount: 250,
+  description: 'Description of this community',
+  isOfficial: false,
+  isPublic: false,
+  name: 'Community Name',
+};
 
-  argTypes: {
-    avatarFileUrl: { control: { type: 'text' } },
-    communityId: { control: { type: 'text' } },
-    communityCategories: {
-      control: { type: 'inline-check' },
-      options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
-    },
-    membersCount: { control: { type: 'number', min: 0, step: 1 } },
-    description: { control: { type: 'text' } },
-    onClick: { action: 'onClick()' },
-    isOfficial: { control: { type: 'boolean' } },
-    isPublic: { control: { type: 'boolean' } },
-    name: { control: { type: 'text' } },
+UiCommunityCard.argTypes = {
+  avatarFileUrl: { control: { type: 'text' } },
+  communityId: { control: { type: 'text' } },
+  communityCategories: {
+    control: { type: 'inline-check' },
+    options: Object.values(MOCK_CATEGORIES).map(({ name }) => name),
   },
+  membersCount: { control: { type: 'number', min: 0, step: 1 } },
+  description: { control: { type: 'text' } },
+  onClick: { action: 'onClick()' },
+  isOfficial: { control: { type: 'boolean' } },
+  isPublic: { control: { type: 'boolean' } },
+  name: { control: { type: 'text' } },
 };

@@ -16,28 +16,26 @@ const Item = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.highlight.shade1};
 `;
 
-export const SimpleCollapsible = {
-  render: function Render() {
-    const [{ visibleAmount, onExpand, itemsAmount }] = useArgs();
-    return (
-      <UiKitCollapsible visibleAmount={Number(visibleAmount)} onExpand={onExpand}>
-        {Array.from({ length: itemsAmount }).map((_, index) => (
-          <Item key={index}>{index}</Item>
-        ))}
-      </UiKitCollapsible>
-    );
-  },
+export const SimpleCollapsible = () => {
+  const [{ visibleAmount, onExpand, itemsAmount }] = useArgs();
+  return (
+    <UiKitCollapsible visibleAmount={Number(visibleAmount)} onExpand={onExpand}>
+      {Array.from({ length: itemsAmount }).map((_, index) => (
+        <Item key={index}>{index}</Item>
+      ))}
+    </UiKitCollapsible>
+  );
+};
 
-  args: {
-    visibleAmount: VISIBLE_AMOUNT,
-    itemsAmount: VISIBLE_AMOUNT,
-  },
+SimpleCollapsible.args = {
+  visibleAmount: VISIBLE_AMOUNT,
+  itemsAmount: VISIBLE_AMOUNT,
+};
 
-  argTypes: {
-    visibleAmount: { control: { type: 'number', step: 1, min: 0 } },
-    itemsAmount: { control: { type: 'number', step: 1, min: 0 } },
-    onExpand: { action: 'onExpand()' },
-  },
+SimpleCollapsible.argTypes = {
+  visibleAmount: { control: { type: 'number', step: 1, min: 0 } },
+  itemsAmount: { control: { type: 'number', step: 1, min: 0 } },
+  onExpand: { action: 'onExpand()' },
 };
 
 const ButtonLink = styled.button.attrs({ role: 'button' })`
@@ -55,34 +53,36 @@ const ButtonLink = styled.button.attrs({ role: 'button' })`
   }
 `;
 
-export const CollapsibleWithCustomTrigger = {
-  render: function Render() {
-    const [{ visibleAmount, onExpand, itemsAmount }] = useArgs();
-    return (
-      <UiKitCollapsible
-        visibleAmount={Number(visibleAmount)}
-        renderTrigger={(handleExpand) => (
-          <ButtonLink onClick={handleExpand}>
-            <FormattedMessage id="collapsible.viewAll" />
-          </ButtonLink>
-        )}
-        onExpand={onExpand}
-      >
-        {Array.from({ length: itemsAmount }).map((_, index) => (
-          <Item key={index}>{index}</Item>
-        ))}
-      </UiKitCollapsible>
-    );
-  },
+const renderTrigger = (handleExpand) => {
+  return (
+    <ButtonLink onClick={handleExpand}>
+      <FormattedMessage id="collapsible.viewAll" />
+    </ButtonLink>
+  );
+};
 
-  args: {
-    visibleAmount: VISIBLE_AMOUNT,
-    itemsAmount: VISIBLE_AMOUNT,
-  },
+export const CollapsibleWithCustomTrigger = () => {
+  const [{ visibleAmount, onExpand, itemsAmount }] = useArgs();
+  return (
+    <UiKitCollapsible
+      visibleAmount={Number(visibleAmount)}
+      renderTrigger={renderTrigger}
+      onExpand={onExpand}
+    >
+      {Array.from({ length: itemsAmount }).map((_, index) => (
+        <Item key={index}>{index}</Item>
+      ))}
+    </UiKitCollapsible>
+  );
+};
 
-  argTypes: {
-    visibleAmount: { control: { type: 'number', step: 1, min: 0 } },
-    itemsAmount: { control: { type: 'number', step: 1, min: 0 } },
-    onExpand: { action: 'onExpand()' },
-  },
+CollapsibleWithCustomTrigger.args = {
+  visibleAmount: VISIBLE_AMOUNT,
+  itemsAmount: VISIBLE_AMOUNT,
+};
+
+CollapsibleWithCustomTrigger.argTypes = {
+  visibleAmount: { control: { type: 'number', step: 1, min: 0 } },
+  itemsAmount: { control: { type: 'number', step: 1, min: 0 } },
+  onExpand: { action: 'onExpand()' },
 };

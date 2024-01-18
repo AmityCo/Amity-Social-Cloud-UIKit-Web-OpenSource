@@ -1,4 +1,5 @@
 import React from 'react';
+import { ChannelMembership } from '@amityco/js-sdk';
 
 import ChatApplication from '.';
 
@@ -6,23 +7,21 @@ export default {
   title: 'SDK Connected/Chat',
 };
 
-export const ChatApplicationStory = {
-  render: (props) => {
-    return <ChatApplication {...props} />;
-  },
+export const ChatApplicationStory = (args) => {
+  return <ChatApplication {...args} />;
+};
 
-  name: 'Application',
+ChatApplicationStory.storyName = 'Application';
 
-  args: {
-    membershipFilter: 'member',
-    defaultChannelId: '',
-  },
+ChatApplicationStory.args = {
+  membershipFilter: ChannelMembership.Member,
+  defaultChannelId: '',
+};
 
-  argTypes: {
-    defaultChannelId: { control: { type: 'text' } },
-    membershipFilter: {
-      control: { type: 'select' },
-      options: ['member', 'banned', 'muted', 'non-member', 'deleted'],
-    },
+ChatApplicationStory.argTypes = {
+  defaultChannelId: { control: { type: 'text' } },
+  membershipFilter: {
+    control: { type: 'select' },
+    options: Object.values(ChannelMembership),
   },
 };

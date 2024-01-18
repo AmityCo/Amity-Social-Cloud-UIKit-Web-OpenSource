@@ -9,17 +9,15 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKCommunityCard = {
-  render: () => {
-    const [community, isLoading] = useOneCommunity();
-    if (isLoading || !community)
-      return (
-        <p>
-          <FormattedMessage id="loading" />
-        </p>
-      );
-    return <UiKitCommunityCard communityId={community.communityId} />;
-  },
-
-  name: 'Card',
+export const SDKCommunityCard = () => {
+  const [community, isLoading] = useOneCommunity();
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
+  return <UiKitCommunityCard communityId={community.communityId} />;
 };
+
+SDKCommunityCard.storyName = 'Card';

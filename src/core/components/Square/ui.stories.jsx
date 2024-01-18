@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Square from '.';
-import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only',
@@ -21,29 +20,26 @@ const LoremIpsum = styled.div`
   overflow: auto;
 `;
 
-export const UiSquare = {
-  render: () => {
-    const [props] = useArgs();
-    return (
-      <Constraint>
-        <Square {...props}>
-          <LoremIpsum>
-            いろはにほへとちりぬるを わかよたれそつねならむ うゐのおくやまけふこえて
-            あさきゆめみしゑひもせす 色は匂へど散りぬるを 我が世誰ぞ常ならむ 有為の奥山今日越えて
-            浅き夢見じ酔ひもせず
-          </LoremIpsum>
-        </Square>
-      </Constraint>
-    );
-  },
+export const UiSquare = (props) => {
+  return (
+    <Constraint>
+      <Square {...props}>
+        <LoremIpsum>
+          いろはにほへとちりぬるを わかよたれそつねならむ うゐのおくやまけふこえて
+          あさきゆめみしゑひもせす 色は匂へど散りぬるを 我が世誰ぞ常ならむ 有為の奥山今日越えて
+          浅き夢見じ酔ひもせず
+        </LoremIpsum>
+      </Square>
+    </Constraint>
+  );
+};
 
-  name: 'Square',
+UiSquare.storyName = 'Square';
 
-  args: {
-    ratio: 1,
-  },
+UiSquare.args = {
+  ratio: 1,
+};
 
-  argTypes: {
-    ratio: { control: { type: 'range', min: 0, max: 1, step: 0.001 } },
-  },
+UiSquare.argTypes = {
+  ratio: { control: { type: 'range', min: 0, max: 1, step: 0.001 } },
 };

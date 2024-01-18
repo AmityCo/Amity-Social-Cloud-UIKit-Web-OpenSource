@@ -1,30 +1,24 @@
 import React from 'react';
 
+import { FeedType, PostTargetType } from '@amityco/js-sdk';
+
 import StyledEmptyFeed from '.';
-import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only/Social/Feed',
 };
 
-export const UiEmptyFeed = {
-  render: () => {
-    const [props] = useArgs();
-    return <StyledEmptyFeed {...props} />;
-  },
-  name: 'Empty',
+export const UiEmptyFeed = (props) => <StyledEmptyFeed {...props} />;
 
-  args: {
-    targetType: 'globalFeed',
-    feedType: '',
-  },
+UiEmptyFeed.storyName = 'Empty';
 
-  argTypes: {
-    canPost: { control: { type: 'boolean' } },
-    targetType: {
-      control: { type: 'select' },
-      options: ['myFeed', 'globalFeed', 'communityFeed', 'userFeed'],
-    },
-    feedType: { control: { type: 'select' }, options: ['reviewing'] },
-  },
+UiEmptyFeed.args = {
+  targetType: PostTargetType.GlobalFeed,
+  feedType: '',
+};
+
+UiEmptyFeed.argTypes = {
+  canPost: { control: { type: 'boolean' } },
+  targetType: { control: { type: 'select' }, options: Object.values(PostTargetType) },
+  feedType: { control: { type: 'select' }, options: Object.values(FeedType) },
 };

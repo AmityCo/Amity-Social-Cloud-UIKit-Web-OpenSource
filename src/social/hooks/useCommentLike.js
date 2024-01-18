@@ -1,24 +1,19 @@
-import { ReactionRepository } from '@amityco/ts-sdk';
+import { CommentRepository } from '@amityco/js-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
-import useComment from './useComment';
+import useLiveObject from '~/core/hooks/useLiveObject';
 
-/**
- *
- * @deprecated call `ReactionRepository.addReaction('comment', commentId, LIKE_REACTION_KEY)`
- * or `ReactionRepository.removeReaction('comment', commentId, LIKE_REACTION_KEY)` directly instead
- */
 const useCommentLike = ({ commentId, onLikeSuccess, onUnlikeSuccess }) => {
-  const comment = useComment(commentId);
+  const comment = useLiveObject(() => CommentRepository.commentForId(commentId), [commentId]);
   const isCommentReady = !!comment.commentId;
   const userHasLikedComment =
     isCommentReady && comment.myReactions && comment.myReactions.includes(LIKE_REACTION_KEY);
 
-  const handleToggleLike = async () => {
+  const handleToggleLike = () => {
     if (!userHasLikedComment) {
-      await ReactionRepository.addReaction('comment', commentId, LIKE_REACTION_KEY);
+      CommentRepository.addReaction({ commentId, reactionName: LIKE_REACTION_KEY });
       onLikeSuccess && onLikeSuccess(commentId);
     } else {
-      await ReactionRepository.removeReaction('comment', commentId, LIKE_REACTION_KEY);
+      CommentRepository.removeReaction({ commentId, reactionName: LIKE_REACTION_KEY });
       onUnlikeSuccess && onUnlikeSuccess(commentId);
     }
   };

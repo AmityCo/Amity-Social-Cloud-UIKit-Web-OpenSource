@@ -3,16 +3,14 @@ import { replace } from 'esbuild-plugin-replace';
 import pkg from './package.json';
 
 export default defineConfig((options) => ({
-  entry: ['src/index.ts'],
+  entry: ['src/index.js'],
   format: ['cjs', 'esm'],
-  dts: true,
+  dts: false,
   sourcemap: options.sourcemap,
   minify: options.minify,
   clean: true,
   splitting: true,
   treeshake: true,
-  metafile: true,
-  legacyOutput: true,
   esbuildPlugins: [
     replace({
       include: /.(ts|js|jsx|tsx)$/,

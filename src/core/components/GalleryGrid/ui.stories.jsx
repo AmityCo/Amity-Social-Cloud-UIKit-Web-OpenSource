@@ -2,33 +2,27 @@ import React from 'react';
 import styled from 'styled-components';
 
 import UiKitGalleryGrid from '.';
-import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only/Gallery Grid',
 };
 
-export const GalleryGrid = {
-  render: () => {
-    const [{ imageAmount, truncate, onClick }] = useArgs();
-    const imageUrls = Array(imageAmount)
-      .fill(0)
-      .map((_, i) => `https://cataas.com/cat?${i}`);
-    return <UiKitGalleryGrid items={imageUrls} truncate={truncate} onClick={onClick} />;
-  },
+export const GalleryGrid = ({ images, truncate, onClick }) => {
+  const imageUrls = new Array(images).fill(0).map((_, i) => `https://cataas.com/cat?${i}`);
+  return <UiKitGalleryGrid items={imageUrls} truncate={truncate} onClick={onClick} />;
+};
 
-  name: 'Default renderer',
+GalleryGrid.storyName = 'Default renderer';
 
-  args: {
-    imageAmount: 1,
-    truncate: false,
-  },
+GalleryGrid.args = {
+  images: 1,
+  truncate: false,
+};
 
-  argTypes: {
-    imageAmount: { control: { type: 'number', min: 1, step: 1 } },
-    truncate: { control: { type: 'boolean' } },
-    onClick: { action: 'onClick(index)' },
-  },
+GalleryGrid.argTypes = {
+  images: { control: { type: 'number', min: 1, step: 1 } },
+  truncate: { control: { type: 'boolean' } },
+  onClick: { action: 'onClick(index)' },
 };
 
 const Image = styled.img.attrs({ loading: 'lazy' })`
@@ -44,29 +38,24 @@ const Image = styled.img.attrs({ loading: 'lazy' })`
   }
 `;
 
-export const GalleryGridCustom = {
-  render: () => {
-    const [{ imageAmount, truncate }] = useArgs();
-    const imageUrls = Array(imageAmount)
-      .fill(0)
-      .map((_, i) => `https://cataas.com/cat?${i}`);
+export const GalleryGridCustom = ({ images, truncate }) => {
+  const imageUrls = new Array(images).fill(0).map((_, i) => `https://cataas.com/cat?${i}`);
 
-    return (
-      <UiKitGalleryGrid items={imageUrls} truncate={truncate}>
-        {(url) => <Image key={url} src={url} />}
-      </UiKitGalleryGrid>
-    );
-  },
+  return (
+    <UiKitGalleryGrid items={imageUrls} truncate={truncate}>
+      {(url) => <Image key={url} src={url} />}
+    </UiKitGalleryGrid>
+  );
+};
 
-  name: 'Custom renderer',
+GalleryGridCustom.storyName = 'Custom renderer';
 
-  args: {
-    imageAmount: 1,
-    truncate: false,
-  },
+GalleryGridCustom.args = {
+  images: 1,
+  truncate: false,
+};
 
-  argTypes: {
-    imageAmount: { control: { type: 'number', min: 1, step: 1 } },
-    truncate: { control: { type: 'boolean' } },
-  },
+GalleryGridCustom.argTypes = {
+  images: { control: { type: 'number', min: 1, step: 1 } },
+  truncate: { control: { type: 'boolean' } },
 };

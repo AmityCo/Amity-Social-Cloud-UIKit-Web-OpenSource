@@ -1,34 +1,33 @@
+/* eslint-disable react/destructuring-assignment */
+
 import React from 'react';
 
-import UIUserChip from './UIUserChip';
-import { useArgs } from '@storybook/client-api';
+import StyledUserChip from './styles';
 
 export default {
   title: 'Ui Only/User',
 };
 
-export const UiUserChip = {
-  render: () => {
-    const [props] = useArgs();
+export const UiUserChip = (args) => {
+  const props = { ...args };
 
-    if (!props.removable) delete props.onRemove;
+  if (!props.removable) delete props.onRemove;
 
-    return <UIUserChip {...props} />;
-  },
+  return <StyledUserChip {...props} />;
+};
 
-  name: 'Chip',
+UiUserChip.storyName = 'Chip';
 
-  args: {
-    displayName: 'Boaty Mc Boat',
-    fileUrl: 'https://via.placeholder.com/150x150',
-    removable: false,
-  },
+UiUserChip.args = {
+  displayName: 'Boaty Mc Boat',
+  fileUrl: 'https://via.placeholder.com/150x150',
+  removable: false,
+};
 
-  argTypes: {
-    displayName: { control: { type: 'text' } },
-    fileUrl: { control: { type: 'text' } },
-    removable: { control: { type: 'boolean' } },
-    onClick: { action: 'onClick()' },
-    onRemove: { action: 'onRemove()' },
-  },
+UiUserChip.argTypes = {
+  displayName: { control: { type: 'text' } },
+  fileUrl: { control: { type: 'text' } },
+  removable: { control: { type: 'boolean' } },
+  onClick: { action: 'onClick()' },
+  onRemove: { action: 'onRemove()' },
 };

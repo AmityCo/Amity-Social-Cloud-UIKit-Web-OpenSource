@@ -3,40 +3,32 @@ import { FormattedMessage } from 'react-intl';
 
 import useOneCategory from '~/mock/useOneCategory';
 import CategoryCommunitiesList from '.';
-import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Sdk connected/Social/Community',
 };
 
-export const SdkCategoryCommunitiesList = {
-  render: () => {
-    const [{ showEmpty, ...props }] = useArgs();
-    const category = useOneCategory();
-    if (!category) {
-      return (
-        <p>
-          <FormattedMessage id="loading" />
-        </p>
-      );
-    }
-
+export const SdkCategoryCommunitiesList = ({ showEmpty, ...props }) => {
+  const category = useOneCategory();
+  if (!category.categoryId)
     return (
-      <CategoryCommunitiesList
-        {...props}
-        categoryId={showEmpty ? undefined : category.categoryId}
-      />
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
     );
-  },
 
-  name: 'Category communities list',
+  return (
+    <CategoryCommunitiesList {...props} categoryId={showEmpty ? undefined : category.categoryId} />
+  );
+};
 
-  args: {
-    showEmpty: false,
-  },
+SdkCategoryCommunitiesList.storyName = 'Category communities list';
 
-  argTypes: {
-    showEmpty: { control: { type: 'boolean' } },
-    onBack: { action: 'onBack()' },
-  },
+SdkCategoryCommunitiesList.args = {
+  showEmpty: false,
+};
+
+SdkCategoryCommunitiesList.argTypes = {
+  showEmpty: { control: { type: 'boolean' } },
+  onBack: { action: 'onBack()' },
 };

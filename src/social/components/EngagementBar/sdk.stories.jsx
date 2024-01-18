@@ -1,30 +1,26 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import useOnePost from '~/mock/useOnePost';
 import EngagementBar from '.';
-import { useArgs } from '@storybook/client-api';
-import useOnePostWithCommentsAndReactions from '~/mock/useOnePostWithCommentsAndReactions';
 
 export default {
   title: 'SDK Connected/Social/Post',
 };
 
-export const SdkEngagementBar = {
-  render: () => {
-    const [props] = useArgs();
-    const [post, isLoading] = useOnePostWithCommentsAndReactions();
-    if (isLoading || !post)
-      return (
-        <p>
-          <FormattedMessage id="loading" />
-        </p>
-      );
-    return <EngagementBar postId={post.postId} {...props} />;
-  },
+export const SdkEngagementBar = (props) => {
+  const [post, isLoading] = useOnePost();
+  if (isLoading)
+    return (
+      <p>
+        <FormattedMessage id="loading" />
+      </p>
+    );
+  return <EngagementBar postId={post.postId} {...props} />;
+};
 
-  name: 'Engagement Bar',
+SdkEngagementBar.storyName = 'Engagement Bar';
 
-  args: {
-    readonly: false,
-  },
+SdkEngagementBar.args = {
+  readonly: false,
 };

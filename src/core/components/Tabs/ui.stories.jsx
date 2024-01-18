@@ -15,74 +15,66 @@ const mockUpTabs = [
   { value: 'tab3', label: 'Tab 3' },
 ];
 
-export const Distribution = {
-  render: () => {
-    const [{ tabs, onChange }] = useArgs();
-    return <UiKitTabs tabs={tabs} activeTab={mockUpTabs[0].value} onChange={onChange} />;
-  },
-
-  args: {
-    tabs: mockUpTabs,
-  },
-
-  argTypes: {
-    tabs: {
-      control: {
-        type: 'object',
-      },
-    },
-    onChange: { action: 'onChange()' },
-  },
+// We test generation of tabs
+export const Distribution = ({ tabs, onChange }) => {
+  return <UiKitTabs tabs={tabs} activeTab={mockUpTabs[0].value} onChange={onChange} />;
 };
 
-export const Active = {
-  render: () => {
-    const [{ activeTab, onChange }, updateArgs] = useArgs();
-
-    const setActiveTab = (val) => {
-      onChange(val);
-      updateArgs({ activeTab: val });
-    };
-
-    return <UiKitTabs tabs={mockUpTabs} activeTab={activeTab} onChange={setActiveTab} />;
-  },
-
-  args: {
-    activeTab: mockUpTabs[0].value,
-  },
-
-  argTypes: {
-    activeTab: {
-      control: { type: 'select' },
-      options: mockUpTabs.map((x) => x.value),
-    },
-    onChange: { action: 'onChange()' },
-  },
+Distribution.args = {
+  tabs: mockUpTabs,
 };
 
-export const ActiveMediaGalleryTabs = {
-  render: () => {
-    const [{ activeTab, onChange }, updateArgs] = useArgs();
-
-    const setActiveTab = (val) => {
-      onChange(val);
-      updateArgs({ activeTab: val });
-    };
-
-    return (
-      <UiKitMediaGalleryTabs tabs={mockUpTabs} activeTab={activeTab} onChange={setActiveTab} />
-    );
-  },
-
-  args: {
-    activeTab: mockUpTabs[0].value,
-  },
-
-  argTypes: {
-    activeTab: {
-      control: { type: 'select' },
-      options: mockUpTabs.map((x) => x.value),
+Distribution.argTypes = {
+  tabs: {
+    control: {
+      type: 'object',
     },
-    onChange: { action: 'onChange()' },
   },
+  onChange: { action: 'onChange()' },
+};
+
+export const Active = () => {
+  const [{ activeTab, onChange }, updateArgs] = useArgs();
+
+  const setActiveTab = (val) => {
+    onChange(val);
+    updateArgs({ activeTab: val });
+  };
+
+  return <UiKitTabs tabs={mockUpTabs} activeTab={activeTab} onChange={setActiveTab} />;
+};
+
+Active.args = {
+  activeTab: mockUpTabs[0].value,
+};
+
+Active.argTypes = {
+  activeTab: {
+    control: { type: 'select' },
+    options: mockUpTabs.map((x) => x.value),
+  },
+  onChange: { action: 'onChange()' },
+};
+
+export const ActiveMediaGalleryTabs = () => {
+  const [{ activeTab, onChange }, updateArgs] = useArgs();
+
+  const setActiveTab = (val) => {
+    onChange(val);
+    updateArgs({ activeTab: val });
+  };
+
+  return <UiKitMediaGalleryTabs tabs={mockUpTabs} activeTab={activeTab} onChange={setActiveTab} />;
+};
+
+ActiveMediaGalleryTabs.args = {
+  activeTab: mockUpTabs[0].value,
+};
+
+ActiveMediaGalleryTabs.argTypes = {
+  activeTab: {
+    control: { type: 'select' },
+    options: mockUpTabs.map((x) => x.value),
+  },
+  onChange: { action: 'onChange()' },
 };

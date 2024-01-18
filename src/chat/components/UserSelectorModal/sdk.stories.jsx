@@ -7,26 +7,24 @@ export default {
   title: 'SDK Connected/User',
 };
 
-export const UserSearchBox = {
-  render: () => {
-    const [{ value, onChange }, updateArgs] = useArgs();
+export const UserSearchBox = () => {
+  const [{ value, onChange }, updateArgs] = useArgs();
 
-    const setValue = (newVal) => {
-      onChange(newVal);
-      updateArgs({ value: newVal });
-    };
+  const setValue = (newVal) => {
+    onChange(newVal);
+    updateArgs({ value: newVal });
+  };
 
-    return <UiKitUserSearchBox value={value} onChange={setValue} />;
-  },
+  return <UiKitUserSearchBox value={value} onChange={setValue} />;
+};
 
-  name: 'SearchBox',
+UserSearchBox.storyName = 'Selector';
 
-  args: {
-    value: '',
-  },
+UserSearchBox.args = {
+  value: '',
+};
 
-  argTypes: {
-    value: { control: { type: 'string' } },
-    onChange: { action: 'onChange()' },
-  },
+UserSearchBox.argTypes = {
+  value: { control: { type: 'string' } },
+  onChange: { action: 'onChange()' },
 };

@@ -1,52 +1,46 @@
-import React, { useMemo } from 'react';
+import React from 'react';
+import { CommunityFilter } from '@amityco/js-sdk';
 import NavigationProvider, { NavigationContext } from '~/social/providers/NavigationProvider';
 
 import UiKitCommunitiesList from '.';
-import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKCommunitiesList = {
-  render: () => {
-    const [{ querySearch, onlyShowJoined }] = useArgs();
+export const SDKCommunitiesList = ({ communitiesQueryParam, querySearch, onlyShowJoined }) => {
+  const queryParams = { ...communitiesQueryParam };
 
-    const queryParams = useMemo(() => {
-      const queryParams = {};
-      if (onlyShowJoined) {
-        queryParams.filter = 'member';
-      }
+  if (onlyShowJoined) {
+    queryParams.filter = CommunityFilter.Member;
+  }
 
-      if (querySearch) {
-        queryParams.search = querySearch;
-      }
-      return queryParams;
-    }, [querySearch, onlyShowJoined]);
+  if (querySearch) {
+    queryParams.search = querySearch;
+  }
 
-    return (
-      <NavigationProvider>
-        <NavigationContext>
-          {({ page }) => (
-            <UiKitCommunitiesList
-              communitiesQueryParam={queryParams}
-              activeCommunity={page.communityId}
-            />
-          )}
-        </NavigationContext>
-      </NavigationProvider>
-    );
-  },
+  return (
+    <NavigationProvider>
+      <NavigationContext>
+        {({ page }) => (
+          <UiKitCommunitiesList
+            communitiesQueryParam={queryParams}
+            activeCommunity={page.communityId}
+          />
+        )}
+      </NavigationContext>
+    </NavigationProvider>
+  );
+};
 
-  name: 'Communities list',
+SDKCommunitiesList.storyName = 'Communities list';
 
-  args: {
-    querySearch: '',
-    onlyShowJoined: false,
-  },
+SDKCommunitiesList.args = {
+  querySearch: '',
+  onlyShowJoined: false,
+};
 
-  argTypes: {
-    querySearch: { control: { type: 'text' } },
-    onlyShowJoined: { control: { type: 'boolean' } },
-  },
+SDKCommunitiesList.argTypes = {
+  querySearch: { control: { type: 'text' } },
+  onlyShowJoined: { control: { type: 'boolean' } },
 };
