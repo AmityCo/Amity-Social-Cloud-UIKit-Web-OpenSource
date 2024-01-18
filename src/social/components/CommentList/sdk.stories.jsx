@@ -1,31 +1,37 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import useOnePost from '~/mock/useOnePost';
 import UiKitCommentList from '.';
+import useOnePostWithComment from '~/mock/useOnePostWithComments';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Comment List',
 };
 
-export const SDKCommentList = ({ lastAmount }) => {
-  const [post, isLoading] = useOnePost();
-  if (isLoading)
-    return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
-    );
+export const SDKCommentList = {
+  render: () => {
+    const [{ lastAmount }] = useArgs();
+    const [post, isLoading] = useOnePostWithComment();
+    if (isLoading)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
 
-  return <UiKitCommentList referenceId={post.postId} last={lastAmount} />;
-};
+    if (post == null || post.comments.length === 0) return <></>;
 
-SDKCommentList.storyName = 'Comment List';
+    return <UiKitCommentList referenceId={post.postId} referenceType={'content'} />;
+  },
 
-SDKCommentList.args = {
-  lastAmount: 5,
-};
+  name: 'Comment List',
 
-SDKCommentList.argTypes = {
-  lastAmount: { control: { type: 'number', min: 0 } },
+  args: {
+    lastAmount: 5,
+  },
+
+  argTypes: {
+    lastAmount: { control: { type: 'number', min: 0 } },
+  },
 };

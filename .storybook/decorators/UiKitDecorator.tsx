@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import UiKitProvider from '../../src/core/providers/UiKitProvider';
-import MockData from '~/mock';
 
 import { Preview } from '@storybook/react';
 
@@ -26,14 +25,6 @@ const global = {
           value: import.meta.env.STORYBOOK_USER2,
           title: import.meta.env.STORYBOOK_USER2?.split(',')[1],
         },
-        {
-          value: 'reconnect',
-          title: '⚠️ Reconnect ⚠️',
-        },
-        {
-          value: 'disconnect',
-          title: '⚠️ Disconnect ⚠️',
-        },
       ],
     },
   },
@@ -41,46 +32,49 @@ const global = {
 
 const FALLBACK_USER = 'Web-Test,Web-Test';
 
-const decorator: Preview['decorators'] = (Story, { globals: { [GLOBAL_NAME]: val } }) => {
+const apiKey = import.meta.env.STORYBOOK_API_KEY;
+const apiRegion = import.meta.env.STORYBOOK_API_REGION;
+
+const decorator: NonNullable<Preview['decorators']> = (
+  Story,
+  { globals: { [GLOBAL_NAME]: val } },
+) => {
   const user = val || FALLBACK_USER;
   const [userId, displayName] = user.split(',');
 
-  const ref = useRef();
+  const ref = useRef<{ logout: () => void; login: () => Promise<void> } | null>(null);
 
   console.log('-------------------', val);
 
-  // if (ref?.current) {
-  //   if (val === 'reconnect') ref.current.reconnect();
-  //   else if (val === 'disconnect') ref.current.disconnect();
-  // }
-
-  const handleConnectionStatusChange = (...args) => {
+  const handleConnectionStatusChange = useCallback((...args) => {
     console.log(`[UiKitProvider.handleConnectionStatusChange]`, ...args);
-  };
+  }, []);
 
-  const handleConnected = (...args) => {
+  const handleConnected = useCallback((...args) => {
     console.log(`[UiKitProvider.handleConnected]`, ...args);
-  };
+  }, []);
 
-  const handleDisconnected = (...args) => {
+  const handleDisconnected = useCallback((...args) => {
     console.log(`[UiKitProvider.handleDisconnected]`, ...args);
-  };
+  }, []);
+
+  useEffect(() => {
+    ref.current?.logout();
+    ref.current?.login();
+  }, [userId]);
 
   return (
     <UiKitProvider
-      ref={ref}
       key={userId}
-      apiKey={import.meta.env.STORYBOOK_API_KEY}
-      apiRegion={import.meta.env.STORYBOOK_API_REGION}
+      apiKey={apiKey}
+      apiRegion={apiRegion}
       userId={userId}
       displayName={displayName || userId}
       onConnectionStatusChange={handleConnectionStatusChange}
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
     >
-      <MockData>
-        <Story />
-      </MockData>
+      {Story()}
     </UiKitProvider>
   );
 };

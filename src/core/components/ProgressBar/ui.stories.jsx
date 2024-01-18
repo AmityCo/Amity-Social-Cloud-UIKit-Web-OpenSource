@@ -1,31 +1,35 @@
 import React from 'react';
 
 import UiKitProgressBar from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only',
 };
 
-export const ProgressBar = ({ ...props }) => {
-  return <UiKitProgressBar {...props} />;
-};
-
-ProgressBar.args = {
-  progress: 0,
-  lightMode: false,
-};
-
-ProgressBar.argTypes = {
-  progress: {
-    control: {
-      type: 'range',
-      min: 0,
-      max: 100,
-    },
+export const ProgressBar = {
+  render: () => {
+    const [props] = useArgs();
+    return <UiKitProgressBar {...props} />;
   },
-  lightMode: {
-    control: {
-      type: 'boolean',
+
+  args: {
+    progress: 0,
+    lightMode: false,
+  },
+
+  argTypes: {
+    progress: {
+      control: {
+        type: 'range',
+        min: 0,
+        max: 100,
+      },
+    },
+    lightMode: {
+      control: {
+        type: 'boolean',
+      },
     },
   },
 };

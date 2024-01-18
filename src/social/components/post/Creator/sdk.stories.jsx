@@ -1,23 +1,23 @@
 import React from 'react';
 
-import { PostTargetType } from '@amityco/js-sdk';
-
 import UiKitPostCreator from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Post',
 };
 
-export const SDKCreatePost = ({ onCreateSuccess }) => (
-  <UiKitPostCreator
-    targetId="Web-Test"
-    targetType={PostTargetType.UserFeed}
-    onCreateSuccess={onCreateSuccess}
-  />
-);
+export const SDKCreatePost = {
+  render: () => {
+    const [{ onCreateSuccess }] = useArgs();
+    return (
+      <UiKitPostCreator targetId="Web-Test" targetType={'user'} onCreateSuccess={onCreateSuccess} />
+    );
+  },
 
-SDKCreatePost.storyName = 'Creator';
+  name: 'Creator',
 
-SDKCreatePost.argTypes = {
-  onCreateSuccess: { action: 'onCreateSuccess()' },
+  argTypes: {
+    onCreateSuccess: { action: 'onCreateSuccess()' },
+  },
 };

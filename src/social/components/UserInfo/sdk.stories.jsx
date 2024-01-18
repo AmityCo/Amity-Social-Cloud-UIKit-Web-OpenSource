@@ -42,20 +42,32 @@ const SdkUserInfo = () => {
   );
 };
 
-export const SdkUserInfoApp = () => {
-  return (
-    <Router>
-      <SdkUserInfo />
-    </Router>
-  );
+export const SdkUserInfoApp = {
+  render: () => {
+    return (
+      <Router>
+        <SdkUserInfo />
+      </Router>
+    );
+  },
+
+  name: 'My User Info',
 };
 
-SdkUserInfoApp.storyName = 'My User Info';
+export const AnotherUserInfo = {
+  render: () => {
+    const user = useOneUser();
 
-export const AnotherUserInfo = () => {
-  const user = useOneUser();
+    if (!user) {
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
+    }
 
-  return <UserInfo userId={user.userId} />;
+    return <UserInfo userId={user.userId} />;
+  },
+
+  name: 'Another User Info',
 };
-
-AnotherUserInfo.storyName = 'Another User Info';

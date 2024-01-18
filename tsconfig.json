@@ -104,6 +104,6 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "allowJs": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "src/global.d.ts"],
   "exclude": ["node_modules", "vite.config.ts"]
 }

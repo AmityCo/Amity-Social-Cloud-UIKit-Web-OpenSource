@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Skeleton from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only',
@@ -12,21 +13,23 @@ const UiSkeletonContainer = styled.div`
   height: 100px;
 `;
 
-export const UiSkeleton = (props) => {
-  return (
-    <UiSkeletonContainer>
-      <Skeleton {...props} />
-    </UiSkeletonContainer>
-  );
-};
+export const UiSkeleton = {
+  render: () => {
+    const [props] = useArgs();
+    return (
+      <UiSkeletonContainer>
+        <Skeleton {...props} />
+      </UiSkeletonContainer>
+    );
+  },
 
-UiSkeleton.storyName = 'Skeleton';
+  name: 'Skeleton',
+  args: Skeleton.defaultProps,
 
-UiSkeleton.args = Skeleton.defaultProps;
-
-UiSkeleton.argTypes = {
-  circle: { control: { type: 'boolean' } },
-  borderRadius: { control: { type: 'number' } },
-  primaryColor: { control: { type: 'color' } },
-  secondaryColor: { control: { type: 'color' } },
+  argTypes: {
+    circle: { control: { type: 'boolean' } },
+    borderRadius: { control: { type: 'number' } },
+    primaryColor: { control: { type: 'color' } },
+    secondaryColor: { control: { type: 'color' } },
+  },
 };

@@ -20,51 +20,53 @@ const ImageRenderer = ({ uploading, uploaded }) => {
   });
 };
 
-export const SimpleImageUploader = () => {
-  const [loadedImages, setLoadedImages] = useState([]);
-  const [, setUploadedImages] = useState([]);
+export const SimpleImageUploader = {
+  render: () => {
+    const [loadedImages, setLoadedImages] = useState([]);
+    const [, setUploadedImages] = useState([]);
 
-  return (
-    <UiKitFileLoader onChange={(images) => setLoadedImages(images)}>
-      <div
-        style={{
-          padding: '1em',
-          border: '1px dashed #dfdfdf',
-          textAlign: 'center',
-        }}
-      >
-        Click/Drop to upload
-        <UiKitUploader files={loadedImages} onChange={(images) => setUploadedImages(images)}>
-          <ImageRenderer />
-        </UiKitUploader>
-      </div>
-    </UiKitFileLoader>
-  );
-};
-
-SimpleImageUploader.storyName = 'Loader';
-
-SimpleImageUploader.args = {
-  mimeType: 'image/*',
-  multiple: true,
-  disabled: false,
-};
-
-SimpleImageUploader.argTypes = {
-  mimeType: {
-    control: {
-      type: 'text',
-    },
+    return (
+      <UiKitFileLoader onChange={(images) => setLoadedImages(images)}>
+        <div
+          style={{
+            padding: '1em',
+            border: '1px dashed #dfdfdf',
+            textAlign: 'center',
+          }}
+        >
+          Click/Drop to upload
+          <UiKitUploader files={loadedImages} onChange={(images) => setUploadedImages(images)}>
+            <ImageRenderer />
+          </UiKitUploader>
+        </div>
+      </UiKitFileLoader>
+    );
   },
-  multiple: {
-    control: {
-      type: 'boolean',
-    },
+
+  name: 'Loader',
+
+  args: {
+    mimeType: 'image/*',
+    multiple: true,
+    disabled: false,
   },
-  disabled: {
-    control: {
-      type: 'boolean',
+
+  argTypes: {
+    mimeType: {
+      control: {
+        type: 'text',
+      },
     },
+    multiple: {
+      control: {
+        type: 'boolean',
+      },
+    },
+    disabled: {
+      control: {
+        type: 'boolean',
+      },
+    },
+    onChange: { action: 'onChange()' },
   },
-  onChange: { action: 'onChange()' },
 };

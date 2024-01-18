@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import SocialMentionDropdown from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'UI Only',
@@ -12,8 +13,13 @@ const UiMentionDropdownContainer = styled.div`
   height: 200px;
 `;
 
-export const UiMentionDropdown = (props) => (
-  <UiMentionDropdownContainer>
-    <SocialMentionDropdown {...props} />
-  </UiMentionDropdownContainer>
-);
+export const UiMentionDropdown = {
+  render: () => {
+    const [props] = useArgs();
+    return (
+      <UiMentionDropdownContainer>
+        <SocialMentionDropdown {...props} />
+      </UiMentionDropdownContainer>
+    );
+  },
+};

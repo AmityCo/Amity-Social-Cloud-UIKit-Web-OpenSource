@@ -1,16 +1,19 @@
 import React from 'react';
 import { useArgs } from '@storybook/client-api';
 
-import StyledPostLikeButton from './styles';
+import UIPostLikeButton from './UILikeButton';
 
 export default {
   title: 'Ui Only/Social/Post',
 };
 
-export const UiPostLikeButton = ({ isDisabled }) => {
-  const [{ isActive }, updateArgs] = useArgs();
-  const toggleLike = () => updateArgs({ isActive: !isActive });
-  return <StyledPostLikeButton isActive={isActive} isDisabled={isDisabled} onClick={toggleLike} />;
-};
+export const UiPostLikeButton = {
+  render: () => {
+    const [{ isDisabled }] = useArgs();
+    const [{ isActive }, updateArgs] = useArgs();
+    const toggleLike = () => updateArgs({ isActive: !isActive });
+    return <UIPostLikeButton isActive={isActive} isDisabled={isDisabled} onClick={toggleLike} />;
+  },
 
-UiPostLikeButton.storyName = 'Like button';
+  name: 'Like button',
+};

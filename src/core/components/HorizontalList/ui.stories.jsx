@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import StyledHList from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only/HorizontalList',
@@ -18,22 +19,25 @@ const Item = styled.div`
   }
 `;
 
-export const UiHList = ({ count }) => {
-  const items = Array(count)
-    .fill(0)
-    .map((_, i) => <Item key={`#${i}`} title={`item#${i}`} />);
+export const UiHList = {
+  render: () => {
+    const [{ count }] = useArgs();
+    const items = Array(count)
+      .fill(0)
+      .map((_, i) => <Item key={`#${i}`} title={`item#${i}`} />);
 
-  return <StyledHList>{items}</StyledHList>;
-};
+    return <StyledHList>{items}</StyledHList>;
+  },
 
-UiHList.storyName = 'Simple list';
+  name: 'Simple list',
 
-UiHList.args = {
-  count: 10,
-};
+  args: {
+    count: 10,
+  },
 
-UiHList.argTypes = {
-  count: { control: { type: 'number', min: 0, step: 1 } },
+  argTypes: {
+    count: { control: { type: 'number', min: 0, step: 1 } },
+  },
 };
 
 const Frame = styled.div`
@@ -49,24 +53,27 @@ const CatItem = styled.img.attrs({ loading: 'lazy' })`
   object-fit: contains;
 `;
 
-export const UiCatList = ({ count }) => {
-  const items = Array(count)
-    .fill(0)
-    .map((_, i) => <CatItem key={`#${i}`} src={`https://cataas.com/cat?nocache=${i}`} />);
+export const UiCatList = {
+  render: () => {
+    const [{ count }] = useArgs();
+    const items = Array(count)
+      .fill(0)
+      .map((_, i) => <CatItem key={`#${i}`} src={`https://cataas.com/cat?nocache=${i}`} />);
 
-  return (
-    <Frame>
-      <StyledHList>{items}</StyledHList>
-    </Frame>
-  );
-};
+    return (
+      <Frame>
+        <StyledHList>{items}</StyledHList>
+      </Frame>
+    );
+  },
 
-UiCatList.storyName = 'In a closed frame';
+  name: 'In a closed frame',
 
-UiCatList.args = {
-  count: 10,
-};
+  args: {
+    count: 10,
+  },
 
-UiCatList.argsTypes = {
-  count: { control: { type: 'number', min: 0, step: 1 } },
+  argsTypes: {
+    count: { control: { type: 'number', min: 0, step: 1 } },
+  },
 };

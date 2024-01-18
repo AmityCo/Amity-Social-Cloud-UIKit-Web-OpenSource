@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ChunkHighlighter from '.';
 import Linkify from '~/core/components/Linkify';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only',
@@ -16,35 +17,38 @@ const unhighlightNode = styled(Linkify)`
   display: inline;
 `;
 
-export const UiChunkHighlighter = ({ textToHighlight, chunks }) => {
-  return (
-    <ChunkHighlighter
-      textToHighlight={textToHighlight}
-      chunks={chunks}
-      highlightNode={highlightNode}
-      unhighlightNode={unhighlightNode}
-    />
-  );
-};
+export const UiChunkHighlighter = {
+  render: () => {
+    const [{ textToHighlight, chunks }] = useArgs();
+    return (
+      <ChunkHighlighter
+        textToHighlight={textToHighlight}
+        chunks={chunks}
+        highlightNode={highlightNode}
+        unhighlightNode={unhighlightNode}
+      />
+    );
+  },
 
-UiChunkHighlighter.storyName = 'Chunk Highlighter';
+  name: 'Chunk Highlighter',
 
-UiChunkHighlighter.args = {
-  textToHighlight:
-    'Hello World @Kaung Myat Lwin @Reza: Please checkout this website: www.amity.co!',
-  chunks: [
-    {
-      start: 12,
-      end: 28,
-    },
-    {
-      start: 29,
-      end: 34,
-    },
-  ],
-};
+  args: {
+    textToHighlight:
+      'Hello World @Kaung Myat Lwin @Reza: Please checkout this website: www.amity.co!',
+    chunks: [
+      {
+        start: 12,
+        end: 28,
+      },
+      {
+        start: 29,
+        end: 34,
+      },
+    ],
+  },
 
-UiChunkHighlighter.argTypes = {
-  textToHighlight: { control: { type: 'text' } },
-  chunks: { control: { type: 'object' } },
+  argTypes: {
+    textToHighlight: { control: { type: 'text' } },
+    chunks: { control: { type: 'object' } },
+  },
 };

@@ -4,27 +4,30 @@ import { FormattedMessage } from 'react-intl';
 import useOnePost from '~/mock/useOnePost';
 
 import UiKitPostLikeButton from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'SDK Connected/Social/Post',
 };
 
-// This is the SDK-integrated Post Like Button.
-export const SDKPostLikeButton = ({ onLikeSuccess, onUnlikeSuccess }) => {
-  const [post, isLoading] = useOnePost();
-  if (isLoading)
+export const SDKPostLikeButton = {
+  render: () => {
+    const [{ onLikeSuccess, onUnlikeSuccess }] = useArgs();
+    const [post, isLoading] = useOnePost();
+    if (isLoading)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
     return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
+      <UiKitPostLikeButton
+        postId={post.postId}
+        onLikeSuccess={onLikeSuccess}
+        onUnlikeSuccess={onUnlikeSuccess}
+      />
     );
-  return (
-    <UiKitPostLikeButton
-      postId={post.postId}
-      onLikeSuccess={onLikeSuccess}
-      onUnlikeSuccess={onUnlikeSuccess}
-    />
-  );
-};
+  },
 
-SDKPostLikeButton.storyName = 'Like button';
+  name: 'Like button',
+};

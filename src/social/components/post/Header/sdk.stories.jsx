@@ -8,15 +8,17 @@ export default {
   title: 'SDK Connected/Social/Post',
 };
 
-export const SdkPostHeader = () => {
-  const [post, isLoading] = useOnePost();
-  if (isLoading)
-    return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
-    );
-  return <PostHeader postId={post.postId} />;
-};
+export const SdkPostHeader = {
+  render: () => {
+    const [post, isLoading] = useOnePost();
+    if (isLoading)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
+    return <PostHeader postId={post.postId} />;
+  },
 
-SdkPostHeader.storyName = 'Post header';
+  name: 'Post header',
+};

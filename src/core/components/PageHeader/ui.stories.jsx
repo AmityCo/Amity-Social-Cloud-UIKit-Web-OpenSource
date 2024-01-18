@@ -1,25 +1,29 @@
 import React from 'react';
 import PageHeader from '.';
+import { useArgs } from '@storybook/client-api';
 
 export default {
   title: 'Ui Only/Header',
 };
 
-export const UiPageHeader = ({ onBack, showBackButton, ...props }) => {
-  const handleBack = showBackButton ? () => onBack() : null;
-  return <PageHeader {...props} onBack={handleBack} />;
-};
+export const UiPageHeader = {
+  render: () => {
+    const [{ onBack, showBackButton, ...props }] = useArgs();
+    const handleBack = showBackButton ? () => onBack() : null;
+    return <PageHeader {...props} onBack={handleBack} />;
+  },
 
-UiPageHeader.storyName = 'Page header';
+  name: 'Page header',
 
-UiPageHeader.args = {
-  title: 'Example page title',
-  avatarFileUrl: 'https://cataas.com/cat',
-  backLinkText: 'Back',
-  showBackButton: false,
-  hideBackArrow: false,
-};
+  args: {
+    title: 'Example page title',
+    avatarFileUrl: 'https://cataas.com/cat',
+    backLinkText: 'Back',
+    showBackButton: false,
+    hideBackArrow: false,
+  },
 
-UiPageHeader.argTypes = {
-  onBack: { action: 'onBack()' },
+  argTypes: {
+    onBack: { action: 'onBack()' },
+  },
 };

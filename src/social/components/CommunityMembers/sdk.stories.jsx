@@ -8,15 +8,22 @@ export default {
   title: 'SDK Connected/Social/Community',
 };
 
-export const SDKCommunityMembers = (args) => {
-  const [community, isLoading] = useOneCommunity();
-  if (isLoading)
-    return (
-      <p>
-        <FormattedMessage id="loading" />
-      </p>
-    );
-  return <UiKitCommunityMembers communityId={community.communityId} {...args} />;
-};
+export const SDKCommunityMembers = {
+  render: () => {
+    const [community, isLoading] = useOneCommunity();
+    if (isLoading)
+      return (
+        <p>
+          <FormattedMessage id="loading" />
+        </p>
+      );
 
-SDKCommunityMembers.storyName = 'Member List';
+    if (community == null) return;
+
+    return <UiKitCommunityMembers communityId={community.communityId} />;
+  },
+
+  name: 'Member List',
+  args: {},
+  argTypes: {},
+};
