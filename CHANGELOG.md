@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.16.0 (2023-09-21)
+
+
+### Features
+
+* **prod:** update sdk version ([#94](https://github.com/EkoCommunications/AmityUiKitWeb/issues/94)) ([7e0286c](https://github.com/EkoCommunications/AmityUiKitWeb/commit/7e0286c8528af457b1d24a425fed393109888bc7))
+
+### 2.15.8 (2023-06-19)
+
+
+### Bug Fixes
+
+* ASC-13714 - fix mime type for video player  ([#84](https://github.com/EkoCommunications/AmityUiKitWeb/issues/84)) ([1168983](https://github.com/EkoCommunications/AmityUiKitWeb/commit/11689837f9cee95e9fc06d51bae514db6e8b783c))
+
+### 2.15.7 (2023-05-09)
+
+
+### Bug Fixes
+
+* asc-11719 get displayName from user object ([#82](https://github.com/EkoCommunications/AmityUiKitWeb/issues/82)) ([ad6056a](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ad6056a37c793742f67cfe4e42f4ebd68b0525ae))
+
 ### 2.15.6 (2023-04-10)
 
 
@@ -49,71 +70,82 @@ All notable changes to this project will be documented in this file. See [standa
 
 * ASC-6036 - update js-sdk, do not crash in node env ([8b4ec5b](https://github.com/EkoCommunications/AmityUiKitWeb/commit/8b4ec5b3aabe940e5b59f08464749cebfcb748ef))
 
+### 2.14.4 (2022-10-10)
+
 ### 2.14.3 (2022-09-23)
 
 ### 2.14.2 (2022-09-09)
 
 ### 2.14.1 (2022-08-30)
-
-- ASC-4251 - only update edit page user fields, when editing
+ 
+* patch ASC-4251, only edit fields in the user profile edit form (334ccfe)
 
 ## 2.14.0 (2022-08-26)
 
+
 ### Features
 
-- update js sdk to 5.24.0 ([aaec8e1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/aaec8e1879ec6d3f085fba9335d8d4d73702f1f3))
+* update js sdk to 5.24.0 ([aaec8e1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/aaec8e1879ec6d3f085fba9335d8d4d73702f1f3))
 
 ## 2.13.0 (2022-08-11)
 
+
 ### Features
 
-- ASC-3806 - Update js-sdk to v5.23.1 ([#52](https://github.com/EkoCommunications/AmityUiKitWeb/issues/52)) ([cadcab7](https://github.com/EkoCommunications/AmityUiKitWeb/commit/cadcab70880e959ee3eaed6f062ce97a1cf18088))
+* ASC-3806 - Update js-sdk to v5.23.1 ([#52](https://github.com/EkoCommunications/AmityUiKitWeb/issues/52)) ([cadcab7](https://github.com/EkoCommunications/AmityUiKitWeb/commit/cadcab70880e959ee3eaed6f062ce97a1cf18088))
 
 ### 2.12.3 (2022-07-29)
 
+
 ### Bug Fixes
 
-- ASC-2788 - replace react-time-ago with react-timeago ([#47](https://github.com/EkoCommunications/AmityUiKitWeb/issues/47)) ([f7c2037](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7c20375cfad7843b4d31b04ed091d4bf28e8d1e))
+* ASC-2788 - replace react-time-ago with react-timeago ([#47](https://github.com/EkoCommunications/AmityUiKitWeb/issues/47)) ([f7c2037](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7c20375cfad7843b4d31b04ed091d4bf28e8d1e))
 
 ### 2.12.2 (2022-06-21)
 
+
 ### Bug Fixes
 
-- asc-1566 - show user's custom avatar in missed places ([#42](https://github.com/EkoCommunications/AmityUiKitWeb/issues/42)) ([71e255e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/71e255e98365c4b46d1fa89cda24b3767ed1d48f))
+* asc-1566 - show user's custom avatar in missed places ([#42](https://github.com/EkoCommunications/AmityUiKitWeb/issues/42)) ([71e255e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/71e255e98365c4b46d1fa89cda24b3767ed1d48f))
 
 ### 2.12.1 (2022-06-02)
 
+
 ### Bug Fixes
 
-- ASC-1489 - Community image missing in the dropdown ([#37](https://github.com/EkoCommunications/AmityUiKitWeb/issues/37)) ([469c2d2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/469c2d259c6b27397ee2e3be56c27a7fac529188))
+* ASC-1489 - Community image missing in the dropdown ([#37](https://github.com/EkoCommunications/AmityUiKitWeb/issues/37)) ([469c2d2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/469c2d259c6b27397ee2e3be56c27a7fac529188))
 
 ## 2.12.0 (2022-05-20)
 
+
 ### Features
 
-- ASC-468 - added chat composer ([#34](https://github.com/EkoCommunications/AmityUiKitWeb/issues/34)) ([db9b4c2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/db9b4c264f313abf1cecc120c42abe8ea109c83a))
+* ASC-468 - added chat composer ([#34](https://github.com/EkoCommunications/AmityUiKitWeb/issues/34)) ([db9b4c2](https://github.com/EkoCommunications/AmityUiKitWeb/commit/db9b4c264f313abf1cecc120c42abe8ea109c83a))
 
 ### 2.11.1 (2022-04-21)
 
 ## 2.11.0 (2022-03-31)
 
+
 ### Features
 
-- UP-7716 - provide access to ASCClient instance using useAmitySDK hook ([#23](https://github.com/EkoCommunications/AmityUiKitWeb/issues/23)) ([0ce58fd](https://github.com/EkoCommunications/AmityUiKitWeb/commit/0ce58fd681a22f2b3122a4fa7099bce0b8c548ad))
+* UP-7716 - provide access to ASCClient instance using useAmitySDK hook ([#23](https://github.com/EkoCommunications/AmityUiKitWeb/issues/23)) ([0ce58fd](https://github.com/EkoCommunications/AmityUiKitWeb/commit/0ce58fd681a22f2b3122a4fa7099bce0b8c548ad))
 
 ## 2.10.0 (2022-03-17)
 
+
 ### Features
 
-- UP-7644 - Custom Chunk Highlighter Component ([#25](https://github.com/EkoCommunications/AmityUiKitWeb/issues/25)) ([5723c22](https://github.com/EkoCommunications/AmityUiKitWeb/commit/5723c2243d1e1cb1407f77155888e77322399ba6))
+* UP-7644 - Custom Chunk Highlighter Component ([#25](https://github.com/EkoCommunications/AmityUiKitWeb/issues/25)) ([5723c22](https://github.com/EkoCommunications/AmityUiKitWeb/commit/5723c2243d1e1cb1407f77155888e77322399ba6))
 
 ### 2.9.1 (2022-03-03)
 
 ## 2.9.0 (2022-02-17)
 
+
 ### Features
 
-- UP-0000 - upgrade sdk version ([#10](https://github.com/EkoCommunications/AmityUiKitWeb/issues/10)) ([6ec1751](https://github.com/EkoCommunications/AmityUiKitWeb/commit/6ec1751880094e351cbe0d24be52ecb2fd541128))
+* UP-0000 - upgrade sdk version ([#10](https://github.com/EkoCommunications/AmityUiKitWeb/issues/10)) ([6ec1751](https://github.com/EkoCommunications/AmityUiKitWeb/commit/6ec1751880094e351cbe0d24be52ecb2fd541128))
 
 ## [2.3.0](https://amity_gitlab.com/upstra/web/ui-kit/compare/v2.2.0...2.3.0)
 

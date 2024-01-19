@@ -2,6 +2,10 @@ name: Production release pipeline
 
 on:
   workflow_dispatch:
+    inputs:
+      release_as:
+        description: 'release as'
+        required: true
 
 jobs:
   publish:
@@ -18,27 +22,41 @@ jobs:
           git config user.name "bmo-amity-bot"
           git config user.email "developers@amity.co"
 
-      - name: install node
-        uses: actions/setup-node@v2
-
-      - name: cache deps
-        uses: actions/cache@v2
-        id: cache-deps
+      - uses: pnpm/action-setup@v2
         with:
-          path: |
-            **/node_modules
-            **/.eslintcache
-          key: node_modules-${{ hashFiles('**/package-lock.json') }}
+          version: 8
+          run_install: false
 
-      - name: install deps
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: npm ci
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - name: increase version
-        run: npx standard-version --yes
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: increase version (patch)
+        run: pnpm standard-version --yes
+        if: github.event.inputs.release_as == 'patch'
+
+      - name: increase version (minor)
+        run: pnpm standard-version --yes --release-as minor
+        if: github.event.inputs.release_as == 'minor'
+
+      - name: increase version (major)
+        run: pnpm standard-version --yes --release-as major
+        if: github.event.inputs.release_as == 'major'
 
       - name: build
-        run: npm run build
+        run: pnpm run build
 
       - name: publish on npm
         uses: JS-DevTools/npm-publish@v1
