@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.0.0 (2024-01-18)
+
+### Features
+
+- support minor and major release ([#113](https://github.com/EkoCommunications/AmityUiKitWeb/issues/113)) ([1491e3d](https://github.com/EkoCommunications/AmityUiKitWeb/commit/1491e3df249f675c472a32e9c320a9f4ff328c2d))
+
 ## 2.16.0 (2023-09-21)
 
 ### Features
