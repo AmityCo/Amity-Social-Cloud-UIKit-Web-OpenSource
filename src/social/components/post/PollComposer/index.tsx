@@ -1,0 +1,294 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import useSocialMention from '~/social/hooks/useSocialMention';
+
+import {
+  PollComposerContainer,
+  Form,
+  FormBlockBody,
+  FormBlockContainer,
+  Field,
+  ErrorMessage,
+  FormBody,
+  Footer,
+  LabelContainer,
+  SubmitButton,
+  Label,
+  ControllerContainer,
+  FieldContainer,
+  Counter,
+  LabelWrapper,
+  MentionTextInput,
+} from './styles';
+
+import OptionsComposer from '~/social/components/post/PollComposer/OptionsComposer';
+import InputCounter, { COUNTER_VALUE_PLACEHOLDER } from '~/core/components/InputCounter';
+import AnswerTypeSelector from '~/social/components/post/PollComposer/AnswerTypeSelector';
+import Button from '~/core/components/Button';
+import { MAXIMUM_MENTIONEES } from '~/social/constants';
+import { info } from '~/core/components/Confirm';
+import { PollRepository } from '@amityco/ts-sdk';
+
+const MAX_QUESTION_LENGTH = 500;
+const MIN_OPTIONS_AMOUNT = 2;
+const MAX_OPTIONS_AMOUNT = 10;
+const MILLISECONDS_IN_DAY = 86400000;
+
+interface FormBlockProps {
+  children: React.ReactNode;
+}
+
+const FormBlock = ({ children }: FormBlockProps) => (
+  <FormBlockContainer>
+    <FormBlockBody>{children}</FormBlockBody>
+  </FormBlockContainer>
+);
+
+type FormValues = Parameters<typeof PollRepository.createPoll>[0];
+
+interface PollComposerProps {
+  className?: string;
+  targetId?: string | null;
+  targetType: 'user' | 'community';
+  onCancel?: () => void;
+  onSubmit?: (
+    data: FormValues,
+    mentionees: Amity.UserMention[],
+    metadata: Record<string, unknown>,
+  ) => void;
+  onIsDirtyChange?: (isDirty: boolean) => void;
+}
+
+const PollComposer = ({
+  className = '',
+  targetId,
+  targetType,
+  onCancel = () => {},
+  onSubmit = (data, mentionees, metadata) => {},
+  onIsDirtyChange,
+}: PollComposerProps) => {
+  const {
+    text,
+    markup,
+    mentions,
+    mentionees,
+    metadata,
+    queryMentionees,
+    onChange: mentionOnChange,
+  } = useSocialMention({ targetId: targetId || undefined, targetType });
+  const [submitting, setSubmitting] = useState(false);
+
+  const defaultValues: FormValues = {
+    question: '',
+    answers: [],
+    answerType: 'single',
+    closedIn: 0,
+  };
+
+  const {
+    handleSubmit,
+    setError,
+    watch,
+    control,
+    formState: { errors, isDirty },
+  } = useForm<FormValues>({
+    defaultValues,
+  });
+
+  const { formatMessage } = useIntl();
+
+  const question = watch('question', '');
+  const answers = watch('answers', []);
+
+  useEffect(() => onIsDirtyChange?.(isDirty), [isDirty]);
+
+  const validateAndSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      setSubmitting(true);
+      if (!data.question.trim()) {
+        setError('question', { message: 'Question cannot be empty' });
+        return;
+      }
+
+      if (data?.answers?.length < MIN_OPTIONS_AMOUNT) {
+        setError('answers', {
+          message: `Minimum amount of answers should be ${MIN_OPTIONS_AMOUNT}`,
+        });
+        return;
+      }
+
+      if (data?.answers?.length > MAX_OPTIONS_AMOUNT) {
+        setError('answers', {
+          message: `Maximum amount of answers should be ${MAX_OPTIONS_AMOUNT}`,
+        });
+        return;
+      }
+
+      const payload = {
+        question: data?.question,
+        answers: data?.answers?.length ? data.answers : [],
+        answerType: data?.answerType || 'single',
+        closedIn: data && data.closedIn ? data.closedIn * MILLISECONDS_IN_DAY : undefined,
+      };
+
+      await onSubmit(payload, mentionees, metadata);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const disabled = !isDirty || question?.length === 0 || submitting;
+
+  const formBodyRef = useRef<HTMLDivElement | null>(null);
+
+  return (
+    <PollComposerContainer>
+      <Form className={className} onSubmit={handleSubmit(validateAndSubmit)}>
+        <FormBody ref={formBodyRef}>
+          <FormBlock>
+            <Field>
+              <LabelWrapper>
+                <LabelContainer>
+                  <Label className="required">
+                    <FormattedMessage id="poll_composer.question.label" />
+                  </Label>
+                </LabelContainer>
+                <Counter>{`${text?.length ?? 0}/${MAX_QUESTION_LENGTH}`}</Counter>
+              </LabelWrapper>
+              <Controller
+                control={control}
+                name="question"
+                rules={{
+                  required: 'Question is required',
+                  maxLength: {
+                    value: MAX_QUESTION_LENGTH,
+                    message: 'Question is too long',
+                  },
+                }}
+                render={({ field: { value, ref, onChange: pollOnChange, ...rest } }) => {
+                  return (
+                    <MentionTextInput
+                      {...rest}
+                      ref={ref}
+                      data-qa-anchor="poll-composer-options-textarea"
+                      mentionAllowed
+                      multiline
+                      value={markup}
+                      queryMentionees={queryMentionees}
+                      placeholder={formatMessage({ id: 'poll_composer.question.placeholder' })}
+                      onChange={({ plainText, mentions: mentionUsers, ...args }) => {
+                        if (mentionUsers?.length > MAXIMUM_MENTIONEES) {
+                          return info({
+                            title: <FormattedMessage id="pollComposer.unableToMention" />,
+                            content: <FormattedMessage id="pollComposer.overMentionees" />,
+                            okText: <FormattedMessage id="pollComposer.okText" />,
+                            type: 'info',
+                          });
+                        }
+                        mentionOnChange({ plainText, mentions: mentionUsers, ...args });
+                        pollOnChange(plainText);
+                      }}
+                    />
+                  );
+                }}
+              />
+              <ErrorMessage errors={errors} name="question" />
+            </Field>
+            <Field>
+              <LabelWrapper>
+                <LabelContainer>
+                  <Label className="required">
+                    <FormattedMessage id="poll_composer.poll_options.label" />
+                  </Label>
+                </LabelContainer>
+                <Counter>{`${answers.length}/${MAX_OPTIONS_AMOUNT}`}</Counter>
+              </LabelWrapper>
+              <Controller
+                rules={{
+                  required: `There should be at least ${MIN_OPTIONS_AMOUNT} answers`,
+                  minLength: {
+                    value: MIN_OPTIONS_AMOUNT,
+                    message: `There should be at least ${MIN_OPTIONS_AMOUNT} answers`,
+                  },
+                  maxLength: {
+                    value: MAX_OPTIONS_AMOUNT,
+                    message: `There can be only ${MAX_OPTIONS_AMOUNT} answers maximum`,
+                  },
+                }}
+                name="answers"
+                control={control}
+                render={({ field }) => (
+                  <OptionsComposer optionsLimit={MAX_OPTIONS_AMOUNT} {...field} />
+                )}
+              />
+              <ErrorMessage errors={errors} name="answers" />
+            </Field>
+            <Field horizontal separate>
+              <FieldContainer>
+                <LabelContainer>
+                  <Label>
+                    <FormattedMessage id="poll_modal.answer_type.title" />
+                  </Label>
+                  <div>
+                    <FormattedMessage id="poll_modal.answer_type.body" />
+                  </div>
+                </LabelContainer>
+                <ControllerContainer>
+                  <Controller
+                    rules={{ required: 'Answer type is required' }}
+                    name="answerType"
+                    render={({ field }) => (
+                      <AnswerTypeSelector parentContainer={formBodyRef.current} {...field} />
+                    )}
+                    control={control}
+                  />
+                </ControllerContainer>
+              </FieldContainer>
+            </Field>
+            <Field horizontal separate>
+              <FieldContainer>
+                <LabelContainer>
+                  <Label>
+                    <FormattedMessage id="poll_modal.closed_in.title" />
+                  </Label>
+                  <div>
+                    <FormattedMessage id="poll_modal.closed_in.body" />
+                  </div>
+                </LabelContainer>
+                <ControllerContainer>
+                  <Controller
+                    name="closedIn"
+                    render={({ field }) => (
+                      <InputCounter
+                        {...field}
+                        onlyPositiveNumber
+                        resultFormat={`${COUNTER_VALUE_PLACEHOLDER} days`}
+                      />
+                    )}
+                    control={control}
+                  />
+                </ControllerContainer>
+              </FieldContainer>
+            </Field>
+          </FormBlock>
+        </FormBody>
+        <Footer>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              onCancel();
+            }}
+          >
+            <FormattedMessage id="cancel" />
+          </Button>
+          <SubmitButton data-qa-anchor="poll-composer-post-button" disabled={disabled}>
+            <FormattedMessage id="post" />
+          </SubmitButton>
+        </Footer>
+      </Form>
+    </PollComposerContainer>
+  );
+};
+
+export default PollComposer;

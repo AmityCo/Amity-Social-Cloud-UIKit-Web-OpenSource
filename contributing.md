@@ -8,22 +8,24 @@ Please refer to the [Amity contribution guide](https://docs.amity.co/support/con
 
 ## What You'll Need
 
-0. [A bug or feature you want to work on](https://github.com/EkoCommunications/AmityUiKitWeb-OpenSource/labels/help%20wanted)!
+0. [A bug or feature you want to work on](https://github.com/EkoCommunications/AmityUiKitWeb/labels/help%20wanted)!
 1. [A GitHub account](https://github.com/join).
 2. A copy of our Ui-Kit. See the next steps for instructions.
 3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
-4. An editor.
+4. A [fontawesome](https://fontawesome.com/) token, from a paid subscription.
+5. An editor.
 
 ## Get Started
 
 1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
 2. Open a terminal.
 3. Make a fork&mdash;your own copy&mdash;of our Ui-Kit on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)).
-4. Change to the folder you made while cloning your local copy: `cd AmityUiKitWeb-OpenSource`
-5. Install dependencies: `npm ci`
-6. Make sure everything builds and tests pass: `npm run storybook`
-7. Open your working folder in your editor.
-8. Follow the directions below to add and debug a test.
+4. Change to the folder you made while cloning your local copy: `cd AmityUiKitWeb`
+5. Add to your fontawesome token to your env: `export NPM_FONT_AWESOME_TOKEN=<your_fontawesome_token>`
+6. Install dependencies: `npm ci`
+7. Make sure everything builds and tests pass: `npm run storybook`
+8. Open your working folder in your editor.
+9. Follow the directions below to add and debug a test.
 
 ### Storybook
 
