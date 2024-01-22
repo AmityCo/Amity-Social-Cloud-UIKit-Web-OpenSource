@@ -25,13 +25,13 @@ interface ItemProps {
 }
 
 export const Item = ({ item }: ItemProps) => {
-  const fileId =
+  const videoFileId =
     item?.data.videoFileId.high ||
     item?.data.videoFileId.medium ||
     item?.data.videoFileId.low ||
     item?.data.videoFileId.original;
 
-  if (!fileId) {
+  if (!videoFileId) {
     return (
       <VideoContainer>
         <VideoPlayer>
@@ -43,5 +43,5 @@ export const Item = ({ item }: ItemProps) => {
     );
   }
 
-  return <Video fileId={fileId} mediaFit="contain" noBorder />;
+  return <Video fileId={videoFileId} mediaFit="contain" noBorder />;
 };
