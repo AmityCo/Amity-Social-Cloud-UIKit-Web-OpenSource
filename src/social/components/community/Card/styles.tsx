@@ -17,8 +17,8 @@ export const Cover = styled.div<{ backgroundImage: string }>`
   position: relative;
 
   ${({ backgroundImage, theme }) => css`
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42.03%, rgba(0, 0, 0, 0.5) 100%),
-      ${backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3};
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 58.82%),
+      ${backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.primary.shade3};
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;

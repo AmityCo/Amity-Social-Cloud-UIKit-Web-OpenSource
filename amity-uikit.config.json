@@ -1,0 +1,162 @@
+{
+  "global_theme": {
+    "light_theme": {
+      "primary_color": "#1D1234",
+      "secondary_color": "#AB1234"
+    }
+  },
+  "excludes": [],
+  "customizations": {
+    "page-id/*/*": {
+      "background_color": "#1234DB"
+    },
+    "page-id/component-id/*": {
+      "background_color": "#123456"
+    },
+    "page-id/component-id/element-id": {
+      "icon": "icon1",
+      "background_color": "#654321"
+    },
+    "page-id/*/element-id": {
+      "icon": "icon2",
+      "background_color": "#aabbcc"
+    },
+    "*/component-id/*": {
+      "background_color": "#456456"
+    },
+    "*/*/element-id": {
+      "icon": "icon3",
+      "background_color": "#AB1234"
+    },
+    "*/component-id/element-id": {
+      "icon": "icon4",
+      "background_color": "#ffddaa"
+    },
+    "select_target_page": {
+      "page_theme": {
+        "light_theme": {
+          "primary_color": "#1D1234",
+          "secondary_color": "#AB1234"
+        }
+      },
+      "title": "Share to"
+    },
+    "select_target_page/*/back_button": {
+      "back_icon": "back"
+    },
+    "camera_page": {
+      "resolution": "720p"
+    },
+    "camera_page/*/close_button": {
+      "close_icon": "close"
+    },
+    "create_story_page": {},
+    "create_story_page/*/back_button": {
+      "back_icon": "back",
+      "background_color": "#1234DB"
+    },
+    "create_story_page/*/aspect_ratio_button": {
+      "aspect_ratio_icon": "aspect_ratio",
+      "background_color": "#1234DB"
+    },
+    "create_story_page/*/story_hyperlink_button": {
+      "hyperlink_button_icon": "hyperlink_button",
+      "background_color": "#1234DB"
+    },
+    "create_story_page/*/hyper_link": {
+      "hyper_link_icon": "hyper_link",
+      "background_color": "#1234DB"
+    },
+    "create_story_page/*/share_story_button": {
+      "share_icon": "share_story_button",
+      "background_color": "#1234DB",
+      "hide_avatar": false
+    },
+    "story_page": {},
+    "story_page/*/progress_bar": {
+      "progress_color": "#FFFFFF",
+      "background_color": "#50FFFFFF"
+    },
+    "story_page/*/overflow_menu": {
+      "overflow_menu_icon": "threeDot"
+    },
+    "story_page/*/close_button": {
+      "close_icon": "close"
+    },
+    "story_page/*/story_impression_button": {
+      "impression_icon": "impression"
+    },
+    "story_page/*/story_comment_button": {
+      "comment_icon": "comment",
+      "background_color": "#1234DD"
+    },
+    "story_page/*/story_reaction_button": {
+      "reaction_icon": "like",
+      "background_color": "#1243EE"
+    },
+    "story_page/*/create_new_story_button": {
+      "create_new_story_icon": "plus",
+      "background_color": "#1243EE"
+    },
+    "story_page/*/speaker_button": {
+      "mute_icon": "mute",
+      "unmute_icon": "unmute",
+      "background_color": "#1243EE"
+    },
+    "*/edit_comment_component/*": {
+      "component_theme": {
+        "light_theme": {
+          "primary_color": "#1D1234",
+          "secondary_color": "#AB1234"
+        }
+      }
+    },
+    "*/edit_comment_component/cancel_button": {
+      "cancel_icon": "",
+      "cancel_button_text": "cancel",
+      "background_color": "#1243EE"
+    },
+    "*/edit_comment_component/save_button": {
+      "save_icon": "",
+      "save_button_text": "Save",
+      "background_color": "#1243EE"
+    },
+    "*/hyper_link_config_component/*": {
+      "component_theme": {
+        "light_theme": {
+          "primary_color": "#1D1234",
+          "secondary_color": "#AB1234"
+        }
+      }
+    },
+    "*/hyper_link_config_component/done_button": {
+      "done_icon": "",
+      "done_button_text": "Done",
+      "background_color": "#1243EE"
+    },
+    "*/hyper_link_config_component/cancel_button": {
+      "cancel_icon": "",
+      "cancel_button_text": "Cancel"
+    },
+    "*/comment_tray_component/*": {
+      "component_theme": {
+        "light_theme": {
+          "primary_color": "#1D1234",
+          "secondary_color": "#AB1234"
+        }
+      }
+    },
+    "*/story_tab_component/*": {},
+    "*/story_tab_component/story_ring": {
+      "progress_color": ["#339AF9", "#78FA58"],
+      "background_color": ["#EBECEF"]
+    },
+    "*/story_tab_component/create_new_story_button": {
+      "create_new_story_icon": "plus",
+      "background_color": "#1243EE"
+    },
+    "*/*/close_button": {
+      "close_icon": "close"
+    }
+  }
+}

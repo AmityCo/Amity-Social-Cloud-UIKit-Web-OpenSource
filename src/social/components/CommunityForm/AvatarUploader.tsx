@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import { FileRepository } from '@amityco/ts-sdk';
 
 import Loader from '~/core/components/Uploaders/Loader';
-import Uploader from '~/core/components/Uploaders/Uploader';
 import UploaderImage from '~/core/components/Uploaders/Image';
-import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 import CameraIcon from '~/icons/Camera';
 import useFile from '~/core/hooks/useFile';
 import useFileUpload, { getUpdatedTime, isAmityFile } from '~/core/hooks/useFileUpload';
@@ -62,6 +60,7 @@ const BgImage = styled.div<{ src: string }>`
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+  background-color: ${({ theme }) => theme.palette.base.shade3};
 `;
 
 interface ImageRendererProps {
@@ -131,7 +130,7 @@ const AvatarUploader = ({
   return (
     <AvatarUploadContainer>
       <ImageRenderer uploading={uploading} uploaded={uploaded} progress={progress} />
-      <BgImage src={fileUrl ?? communityCoverPlaceholder} />
+      <BgImage src={fileUrl} />
       <CoverImageLoader
         data-qa-anchor={`${dataQaAnchor}-avatar-uploader`}
         mimeType={mimeType}

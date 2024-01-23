@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 
-import { SubscriptionLevels } from '@amityco/ts-sdk';
+import { StoryRepository, SubscriptionLevels } from '@amityco/ts-sdk';
 import { FormattedMessage } from 'react-intl';
 import CommunityCreatedModal from '~/social/components/CommunityCreatedModal';
 
@@ -14,20 +14,30 @@ import FeedHeaderTabs from '~/social/components/FeedHeaderTabs';
 import { CommunityFeedTabs } from './constants';
 import { getTabs } from './utils';
 import { DeclineBanner, Wrapper } from './styles';
-import usePosts from '~/social/hooks/usePosts';
 import useCommunityPermission from '~/social/hooks/useCommunityPermission';
 import useCommunitySubscription from '~/social/hooks/useCommunitySubscription';
+
 import usePostsCollection from '~/social/hooks/collections/usePostsCollection';
+import { StoryDraft } from '~/V4/social/components/StoryDraft';
+import useFile from '~/core/hooks/useFile';
+import { notification } from '~/core/components/Notification';
+import { HeadTitle, MobileContainer } from '../NewsFeed/styles';
+import { BarsIcon } from '~/V4/icons';
 
 interface CommunityFeedProps {
   communityId: string;
   isNewCommunity: boolean;
+  toggleOpen: () => void;
 }
 
-const CommunityFeed = ({ communityId, isNewCommunity }: CommunityFeedProps) => {
+const CommunityFeed = ({ communityId, isNewCommunity, toggleOpen }: CommunityFeedProps) => {
   const community = useCommunity(communityId);
 
+  const communityAvatar = useFile(community?.avatarFileId || '');
+
   const { canReview } = useCommunityPermission({ community });
+
+  const [uploading, setUploading] = useState(false);
 
   const { posts } = usePostsCollection({
     targetId: communityId,
@@ -59,10 +69,80 @@ const CommunityFeed = ({ communityId, isNewCommunity }: CommunityFeedProps) => {
 
   const [isCreatedModalOpened, setCreatedModalOpened] = useState(isNewCommunity);
 
+  const [storyFile, setStoryFile] = useState<File | null>(null);
+
+  const createStory = async (file: File, imageMode: 'fit' | 'fill', metadata = {}, items = []) => {
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append('files', file);
+      if (file?.type.includes('image')) {
+        setStoryFile(null);
+        const { data: imageData } = await StoryRepository.createImageStory(
+          'community',
+          communityId,
+          formData,
+          metadata,
+          imageMode,
+          items,
+        );
+        if (imageData) {
+          notification.success({
+            content: <FormattedMessage id="storyViewer.notification.success" />,
+          });
+        }
+      } else {
+        setStoryFile(null);
+        const { data: videoData } = await StoryRepository.createVideoStory(
+          'community',
+          communityId,
+          formData,
+          metadata,
+          items,
+        );
+        if (videoData) {
+          notification.success({
+            content: <FormattedMessage id="storyViewer.notification.success" />,
+          });
+        }
+      }
+    } catch (error) {
+      notification.info({
+        content: <FormattedMessage id="storyViewer.notification.error" />,
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  if (storyFile) {
+    return (
+      <Wrapper>
+        <StoryDraft
+          file={storyFile}
+          targetId={communityId}
+          creatorAvatar={communityAvatar?.fileUrl || ''}
+          onCreateStory={createStory}
+          onDiscardStory={() => setStoryFile(null)}
+          setUploading={setUploading}
+        />
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
-      <CommunityInfo communityId={communityId} />
-
+      <MobileContainer>
+        <BarsIcon onClick={toggleOpen} />
+        <HeadTitle>
+          <FormattedMessage id="sidebar.community" />
+        </HeadTitle>
+      </MobileContainer>
+      <CommunityInfo
+        communityId={communityId}
+        setStoryFile={setStoryFile}
+        uploadingStory={uploading}
+      />
       <FeedHeaderTabs
         data-qa-anchor="community-feed-header"
         tabs={tabs}

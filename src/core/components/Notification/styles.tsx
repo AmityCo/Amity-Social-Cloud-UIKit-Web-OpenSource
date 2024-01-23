@@ -20,7 +20,8 @@ export const ErrorIcon = styled(Remove)<{ icon?: ReactNode }>`
 export const Notifications = styled.div`
   position: fixed;
   padding-top: 50px;
-  top: 0;
+  top: unset; /* Remove top position for mobile */
+  bottom: 0;
   left: 0;
   right: 0;
   display: flex;
@@ -28,6 +29,19 @@ export const Notifications = styled.div`
   align-items: center;
   z-index: 9999;
   pointer-events: none;
+
+  @media (min-width: 768px) {
+    position: fixed;
+    padding-top: 50px;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 9999;
+    pointer-events: none;
+  }
 `;
 
 export const NotificationContainer = styled.div`

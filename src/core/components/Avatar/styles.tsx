@@ -49,7 +49,7 @@ export const AvatarContainer = styled(AvatarContainerComponent)<{ className?: st
   ${({ size, backgroundImage, theme }) => `
     height: ${SIZES[size]}px;
     width: ${SIZES[size]}px;
-    background: ${backgroundImage || theme.palette.base.shade3}};
+    background: ${backgroundImage || theme.palette.primary.shade3}};
   `};
 `;
 
