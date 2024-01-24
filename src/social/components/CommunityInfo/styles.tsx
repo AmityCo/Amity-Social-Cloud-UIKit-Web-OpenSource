@@ -38,9 +38,9 @@ export const Cover = styled.div<{ backgroundImage?: string }>`
   padding-top: 56.25%;
   position: relative;
 
-  ${({ backgroundImage }) => `
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.00) 58.82%), ${
-      backgroundImage ? `url(${CSS.escape(backgroundImage)})` : '#D9E5FC'
+  ${({ backgroundImage, theme }) => `
+    background: linear-gradient(360deg, rgba(0, 0, 0, 0.5) -4.5%, rgba(0, 0, 0, 0) 77.17%), ${
+      backgroundImage ? `url(${CSS.escape(backgroundImage)})` : theme.palette.base.shade3
     };
     background-repeat: no-repeat;
     background-position: center;

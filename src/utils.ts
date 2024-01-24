@@ -4,21 +4,6 @@ export function isLoadingItem<T>(item: T | { skeleton?: boolean }): item is { sk
   return !!(item as { skeleton?: boolean }).skeleton;
 }
 
-export function formatTimeAgo(dateString: string) {
-  const currentDate = new Date();
-  const givenDate = new Date(dateString);
-  const timeDifferenceInSeconds = Math.floor((currentDate.getTime() - givenDate.getTime()) / 1000);
-
-  if (timeDifferenceInSeconds < 60) {
-    return 'Just now';
-  } else if (timeDifferenceInSeconds >= 60 && timeDifferenceInSeconds < 3600) {
-    const minutes = Math.floor(timeDifferenceInSeconds / 60);
-    return `${minutes}m`;
-  } else {
-    const hours = Math.floor(timeDifferenceInSeconds / 3600);
-    return `${hours}h`;
-  }
-}
 const getCommunityUserTopic = (
   path: Amity.Subscribable['path'],
   level?: SubscriptionLevels,

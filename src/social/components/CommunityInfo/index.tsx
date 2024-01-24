@@ -1,33 +1,15 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import UICommunityInfo from './UICommunityInfo';
 import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
 import { useCommunityInfo } from './hooks';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import useStories from '~/V4/social/hooks/useStories';
 
 interface CommunityInfoProps {
   communityId: string;
-  setStoryFile: React.Dispatch<React.SetStateAction<File | null>>;
-  uploadingStory: boolean;
 }
 
-const CommunityInfo = ({ communityId, setStoryFile, uploadingStory }: CommunityInfoProps) => {
-  const { stories } = useStories({
-    targetId: communityId,
-    targetType: 'community',
-  });
-
-  const haveStories = (stories || []).length > 0;
-  const isStorySyncing = (stories || [])
-    .map((story) => story?.syncState === 'syncing')
-    .includes(true);
-  const isStoryErrored = (stories || [])
-    .map((story) => story?.syncState === 'error')
-    .includes(true);
-
-  const { onClickStory, onClickCreateStory } = useNavigation();
+const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
   const {
     community,
     communityCategories,
@@ -71,13 +53,6 @@ const CommunityInfo = ({ communityId, setStoryFile, uploadingStory }: CommunityI
           onOk: () => leaveCommunity(),
         })
       }
-      onClickStory={onClickStory}
-      onClickCreateStory={onClickCreateStory}
-      setStoryFile={setStoryFile}
-      haveStories={haveStories || false}
-      isStorySyncing={isStorySyncing || false}
-      isStoryErrored={isStoryErrored || false}
-      uploadingStory={uploadingStory}
     />
   );
 };

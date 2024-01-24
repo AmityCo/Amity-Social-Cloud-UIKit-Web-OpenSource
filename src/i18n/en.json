@@ -350,18 +350,6 @@
   "chat_modal.title": "Create chat",
   "chat_composer.placeholder.displayName": "Enter display name here",
   "chat_composer.placeholder.channelId": "Enter channel ID here",
-
-  "storyViewer.actions.deleteStory": "Delete story",
-  "storyViewer.action.confirmModal.title": "Delete this story?",
-  "storyViewer.action.confirmModal.content": "This story will be permanently deleted. You’ll no longer to see and find this story.",
-  "storyViewer.notification.deleted": "Story deleted",
-  "storyViewer.notification.success": "Successfully shared story",
-  "storyViewer.notification.error": "Failed to share story",
-  "storyViewer.footer.failed": "Failed to upload",
-  "storyViewer.footer.uploading": "Uploading...",
-
-  "storyDraft.button.shareStory": "Share story",
-
   "editChatMembersModal.title": "Add/Edit chat members",
   "editChatMembersModal.confirm.title": "Leave without finishing?",
   "editChatMembersModal.confirm.content": "Your progress won’t be saved. Are you sure to leave this page now?",

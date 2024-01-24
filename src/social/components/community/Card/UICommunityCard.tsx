@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 
 import Skeleton from '~/core/components/Skeleton';
+import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 
 import {
   CategoriesList,
@@ -48,7 +49,7 @@ const UICommunityCard = ({
 
   return (
     <Container onClick={handleClick} {...props}>
-      <Cover backgroundImage={avatarFileUrl}>
+      <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
         <CoverContent>
           <CommunityName
             isOfficial={isOfficial}

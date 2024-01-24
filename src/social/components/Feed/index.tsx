@@ -417,7 +417,6 @@ interface FeedProps {
   goToExplore?: () => void;
   readonly?: boolean;
   isHiddenProfile?: boolean;
-  openSidemenu?: boolean;
 }
 
 const getActualTargetType = (targetType: string | undefined | null) => {

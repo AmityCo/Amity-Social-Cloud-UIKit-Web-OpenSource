@@ -21,6 +21,7 @@ const CategoryHeader = ({
   onClick,
 }: CategoryHeaderProps) => {
   const category = useCategory(categoryId);
+
   const avatarFileUrl = useImage({ fileId: category?.avatarFileId, imageSize: 'small' });
 
   return (

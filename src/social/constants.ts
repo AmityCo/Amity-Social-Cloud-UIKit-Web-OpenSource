@@ -6,8 +6,6 @@ export const enum PageTypes {
   CommunityFeed = 'communityfeed',
   CommunityEdit = 'communityedit',
   UserEdit = 'useredit',
-  ViewStory = 'viewstory',
-  DraftStory = 'draftstory',
 }
 
 export const MemberRoles = Object.freeze({

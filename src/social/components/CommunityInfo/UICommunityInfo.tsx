@@ -5,6 +5,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '~/core/components/Button';
 import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';
+import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
 import {
   Count,
   Container,
@@ -25,7 +26,6 @@ import {
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import millify from 'millify';
 import { isNonNullable } from '~/helpers/utils';
-import StoryTab from '~/V4/social/components/StoryTab';
 
 interface UICommunityInfoProps {
   communityId: string;
@@ -42,17 +42,10 @@ interface UICommunityInfoProps {
   onEditCommunity: (communityId: string) => void;
   joinCommunity: (communityId: string) => void;
   onClickLeaveCommunity: (communityId: string) => void;
-  onClickStory: (communityId: string) => void;
-  onClickCreateStory: (communityId: string) => void;
   canLeaveCommunity: boolean;
   canReviewPosts: boolean;
-  isStorySyncing: boolean;
-  haveStories: boolean;
-  isStoryErrored: boolean;
   name: string;
   postSetting: ValueOf<typeof CommunityPostSettings>;
-  setStoryFile: React.Dispatch<React.SetStateAction<File | null>>;
-  uploadingStory: boolean;
 }
 
 const UICommunityInfo = ({
@@ -70,22 +63,16 @@ const UICommunityInfo = ({
   onEditCommunity,
   joinCommunity,
   onClickLeaveCommunity,
-  onClickStory,
   canLeaveCommunity,
   canReviewPosts,
   name,
   postSetting,
-  setStoryFile,
-  isStorySyncing,
-  haveStories,
-  isStoryErrored,
-  uploadingStory,
 }: UICommunityInfoProps) => {
   const { formatMessage } = useIntl();
 
   return (
     <Container data-qa-anchor="community-info">
-      <Cover backgroundImage={avatarFileUrl as string}>
+      <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
         <CoverContent>
           <CommunityName
             data-qa-anchor="community-info"
@@ -153,15 +140,6 @@ const UICommunityInfo = ({
             <PlusIcon /> <FormattedMessage id="community.join" />
           </JoinButton>
         )}
-
-        <StoryTab
-          uploadingStory={isStorySyncing || uploadingStory}
-          isErrored={isStoryErrored}
-          storyRing={haveStories}
-          avatar={avatarFileUrl}
-          onClick={() => onClickStory(communityId)}
-          onChange={setStoryFile}
-        />
 
         {isJoined && canEditCommunity && (
           <Button

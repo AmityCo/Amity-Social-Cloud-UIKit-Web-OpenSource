@@ -27,16 +27,6 @@ type Page =
       type: PageTypes.UserFeed | PageTypes.UserEdit;
       userId: string;
       communityId?: string;
-    }
-  | {
-      type: PageTypes.ViewStory;
-      storyId: string;
-      targetId?: string;
-    }
-  | {
-      type: PageTypes.DraftStory;
-      userId: string;
-      targetId: string;
     };
 
 type ContextValue = {
@@ -45,8 +35,6 @@ type ContextValue = {
   onClickCategory: (categoryId: string) => void;
   onClickCommunity: (communityId: string) => void;
   onClickUser: (userId: string, pageType?: string) => void;
-  onClickStory: (storyId: string) => void;
-  onClickCreateStory: (targetId: string) => void;
   onCommunityCreated: (communityId: string) => void;
   onEditCommunity: (communityId: string, tab?: string) => void;
   onEditUser: (userId: string) => void;
@@ -70,8 +58,6 @@ let defaultValue: ContextValue = {
   onClickCategory: (categoryId: string) => {},
   onClickCommunity: (communityId: string) => {},
   onClickUser: (userId: string) => {},
-  onClickStory: (storyId: string) => {},
-  onClickCreateStory: (targetId: string) => {},
   onCommunityCreated: (communityId: string) => {},
   onEditCommunity: (communityId: string) => {},
   onEditUser: (userId: string) => {},
@@ -101,9 +87,6 @@ if (process.env.NODE_ENV !== 'production') {
     onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
     onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
-    onClickStory: (storyId) => console.log(`NavigationContext onClickStory(${storyId})`),
-    onClickCreateStory: (targetId) =>
-      console.log(`NavigationContext onClickCreateStory(${targetId})`),
     onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
     onEditCommunity: (communityId) =>
@@ -131,8 +114,6 @@ interface NavigationProviderProps {
   onClickCategory?: (categoryId: string) => void;
   onClickCommunity?: (communityId: string) => void;
   onClickUser?: (userId: string) => void;
-  onClickStory?: (storyId: string) => void;
-  onClickCreateStory?: (targetId: string) => void;
   onCommunityCreated?: (communityId: string) => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
@@ -207,6 +188,7 @@ export default function NavigationProvider({
   const handleChangePage = useCallback(
     (type) => {
       // if (onChangePageProp) return onChangePage(type);
+      console.log('handleChangePage', type);
       pushPage({ type });
     },
     [
@@ -225,6 +207,7 @@ export default function NavigationProvider({
       if (onChangePage) return onChangePage(next);
       if (onClickCommunity) return onClickCommunity(communityId);
 
+      console.log('handleClickCommunity', { communityId });
       pushPage(next);
     },
     [onChangePage, onClickCommunity, pushPage],
@@ -241,6 +224,7 @@ export default function NavigationProvider({
       if (onChangePage) return onChangePage(next);
       if (onCommunityCreated) return onCommunityCreated(communityId);
 
+      console.log('handleCommunityCreated', { communityId });
       pushPage(next);
     },
     [onChangePage, onCommunityCreated, pushPage],
@@ -256,6 +240,7 @@ export default function NavigationProvider({
       if (onChangePage) return onChangePage(next);
       if (onClickCategory) return onClickCategory(categoryId);
 
+      console.log('handleClickCategory', { categoryId });
       pushPage(next);
     },
     [onChangePage, onClickCategory, pushPage],
@@ -271,6 +256,7 @@ export default function NavigationProvider({
       if (onChangePage) return onChangePage(next);
       if (onClickUser) return onClickUser(userId);
 
+      console.log('handleClickUser', { userId });
       pushPage(next);
     },
     [onChangePage, onClickUser, pushPage],
@@ -286,6 +272,7 @@ export default function NavigationProvider({
       if (onChangePage) return onChangePage(next);
       if (onEditUser) return onEditUser(userId);
 
+      console.log('handleEditUser', { userId });
       pushPage(next);
     },
     [onChangePage, onEditUser, pushPage],
@@ -302,6 +289,7 @@ export default function NavigationProvider({
       if (onChangePage) return onChangePage(next);
       if (onEditCommunity) return onEditCommunity(communityId, { tab });
 
+      console.log('handleEditCommunity', { communityId, tab });
       pushPage(next);
     },
     [onChangePage, onEditCommunity, pushPage],
@@ -317,37 +305,10 @@ export default function NavigationProvider({
       if (onChangePage) return onChangePage(next);
       if (onMessageUser) return onMessageUser(userId);
 
+      console.log('handleMessageUser', { userId });
       // pushPage(next);
     },
     [onChangePage, onMessageUser],
-  );
-
-  const handleClickStory = useCallback(
-    (targetId) => {
-      const next = {
-        type: PageTypes.ViewStory,
-        targetId,
-      };
-
-      if (onChangePage) return onChangePage(next);
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
-  const handleCreateStory = useCallback(
-    (targetId) => {
-      const next = {
-        type: PageTypes.DraftStory,
-        targetId,
-      };
-
-      if (onChangePage) return onChangePage(next);
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
   );
 
   return (
@@ -358,8 +319,6 @@ export default function NavigationProvider({
         onClickCategory: handleClickCategory,
         onClickCommunity: handleClickCommunity,
         onClickUser: handleClickUser,
-        onClickStory: handleClickStory,
-        onClickCreateStory: handleCreateStory,
         onCommunityCreated: handleCommunityCreated,
         onEditCommunity: handleEditCommunity,
         onEditUser: handleEditUser,
