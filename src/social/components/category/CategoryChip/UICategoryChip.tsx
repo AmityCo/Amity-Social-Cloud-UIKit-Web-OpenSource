@@ -15,7 +15,7 @@ interface UICategoryChipProps {
   onRemove?: (categoryId: string) => void;
 }
 
-const CloseIcon = styled(Close).attrs<{ icon?: ReactNode }>({ width: 12, height: 12 })`
+const CloseIcon = styled(Close).attrs({ width: 12, height: 12 })`
   fill: ${({ theme }) => theme.palette.neutral.main};
   cursor: pointer;
 `;

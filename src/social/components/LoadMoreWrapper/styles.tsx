@@ -36,7 +36,7 @@ export const LoadMoreButton = styled(Button)`
   }
 `;
 
-export const ShevronDownIcon = styled(ChevronDown).attrs<{ icon?: ReactNode }>({
+export const ShevronDownIcon = styled(ChevronDown).attrs({
   width: 14,
   height: 14,
 })`
