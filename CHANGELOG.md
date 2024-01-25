@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.1.0 (2024-01-25)
+
+### Bug Fixes
+
+- call stopUnreadSync when unmount ([#121](https://github.com/EkoCommunications/AmityUiKitWeb/issues/121)) ([ed91c32](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ed91c32e9d30df2f7dc3698ec6cd011d2ffd3b56))
+
 ## 3.0.0 (2024-01-18)
 
 ### Features
