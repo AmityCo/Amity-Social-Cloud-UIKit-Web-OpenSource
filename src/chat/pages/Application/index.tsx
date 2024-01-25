@@ -76,6 +76,10 @@ const ChatApplication = ({
     }
 
     startUnreadSync();
+
+    return () => {
+      ASCClient.stopUnreadSync();
+    };
   }, []);
 
   useEffect(() => {
