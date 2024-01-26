@@ -47,7 +47,7 @@ export const usePostEditor = ({ postId, onSave }: { postId?: string; onSave: () 
     onSave();
   };
 
-  const isEmpty = useMemo(() => text?.trim() === '' && !childrenPosts.length, [text]);
+  const isEmpty = text?.trim() === '' && !childrenPosts.length;
 
   const childFilePosts = useMemo(
     () => childrenPosts.filter((childPost) => childPost.dataType === 'file'),

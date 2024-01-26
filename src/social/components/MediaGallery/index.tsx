@@ -44,14 +44,14 @@ const MediaGallery = ({ targetId, targetType }: MediaGalleryProps) => {
               loading={isLoading}
               loadingMore={loadMoreHasBeenCalled}
               renderVideoThumbnail={(item) => (
-                <VideoItem.Thumbnail {...item} showPlayIcon showVideoDuration />
+                <VideoItem.Thumbnail item={item} showPlayIcon showVideoDuration />
               )}
               renderLiveStreamThumbnail={(item) => (
                 <StreamItem.Thumbnail
-                  {...item}
+                  item={item}
                   showPlayIcon
                   showLivestreamTitle
-                  showVideoDuration
+                  showLivestreamRecordedBadge
                 />
               )}
             />
