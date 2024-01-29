@@ -42,7 +42,6 @@ export const ControlItemState = styled.span`
 export const ControlItemArrowRight = styled(ChevronRight).attrs({ width: 16, height: 12 })`
   width: 16px !important;
   padding-left: 8px;
-  font-size: 12px;
   color: ${({ theme }) => theme.palette.neutral.shade3};
 `;
 

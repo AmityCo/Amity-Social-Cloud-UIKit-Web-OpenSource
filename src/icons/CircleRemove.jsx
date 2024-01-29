@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Svg = (props) => (
+const CircleRemove = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width="100%"
     height="100%"
@@ -25,4 +25,4 @@ const Svg = (props) => (
   </svg>
 );
 
-export default Svg;
+export default CircleRemove;

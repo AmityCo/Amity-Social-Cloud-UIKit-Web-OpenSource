@@ -19,8 +19,7 @@ export const CircleButton = styled.button`
 `;
 
 export const CloseIcon = styled(Close).attrs({ width: 18, height: 18 })`
-  color: #fff;
-  font-size: 18px;
+  fill: #fff;
 `;
 
 export const ImageContainer = styled.div<{ editing?: Boolean }>`
@@ -151,10 +150,7 @@ export const FileInput = styled.input.attrs({ type: 'file' })`
 
 export const Label = styled.label<{ disabled?: Boolean }>``;
 
-export const ImageIcon = styled(ImageAttachment).attrs<{ disabled?: Boolean; icon?: ReactNode }>({
-  width: 18,
-  height: 18,
-})`
+export const ImageIcon = styled(ImageAttachment)<{ disabled?: Boolean; icon?: ReactNode }>`
   font-size: 18px;
   cursor: pointer;
 

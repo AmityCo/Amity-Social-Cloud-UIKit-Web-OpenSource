@@ -56,17 +56,14 @@ export const CloseIcon = styled(Close).attrs({ width: 24, height: 24 })`
   position: absolute;
   top: 60px;
   right: 60px;
-  font-size: 24px;
   cursor: pointer;
 `;
 
 export const RightIcon = styled(ChevronRight).attrs({ height: 24 })`
-  font-size: 24px;
   cursor: pointer;
   justify-self: right;
 `;
 
 export const LeftIcon = styled(ChevronLeft).attrs({ height: 24 })`
-  font-size: 24px;
   cursor: pointer;
 `;
