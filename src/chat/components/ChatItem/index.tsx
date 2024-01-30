@@ -6,6 +6,7 @@ import useChatInfo from '~/chat/hooks/useChatInfo';
 
 import { ChatItemLeft, Title, Avatar, ChatItemContainer, UnreadCount } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import useChannelSubscription from '~/social/hooks/useChannelSubscription';
 
 function getNormalizedUnreadCount(channelUnreadCount: number) {
   // Within this range the unread counter will show an actuall number
@@ -33,6 +34,11 @@ const ChatItem = ({ channel, isSelected, onSelect }: ChatItemProps) => {
   const { chatName, chatAvatar } = useChatInfo({ channel: channel || null });
 
   const normalizedUnreadCount = getNormalizedUnreadCount(channel?.unreadCount || 0);
+
+  useChannelSubscription({
+    channelId: channel?.channelId,
+    shouldSubscribe: () => !!channel?.channelId,
+  });
 
   return (
     <ChatItemContainer
