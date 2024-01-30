@@ -4,7 +4,6 @@ import { Lock, Verified } from '~/icons';
 
 export const PrivateIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
   margin-right: 8px;
-  font-size: 16px;
 `;
 
 export const VerifiedIcon = styled(Verified).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`

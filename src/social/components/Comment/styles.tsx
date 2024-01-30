@@ -146,9 +146,7 @@ export const DeletedReplyContainer = styled.div`
 export const DeletedIcon = styled(MinusCircle).attrs<{ icon?: ReactNode }>({
   width: 18,
   height: 18,
-})`
-  font-size: 18px;
-`;
+})``;
 
 export const IconContainer = styled.div`
   display: flex;
@@ -168,7 +166,7 @@ export const Text = styled.span`
   font-size: 14px;
 `;
 
-export const ReplyIcon = styled(Reply).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
+export const ReplyIcon = styled(Reply)<{ icon?: ReactNode }>`
   font-size: 16px;
   margin-right: 5px;
 `;

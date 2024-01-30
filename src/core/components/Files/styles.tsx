@@ -74,13 +74,12 @@ export const FileIcon = styled(FileAttachment).attrs<{ disabled?: boolean; icon?
   width: 18,
   height: 18,
 })`
-  font-size: 18px;
   cursor: pointer;
 
   ${({ disabled, theme }) =>
     disabled &&
     `
-      color: ${theme.palette.base.shade3};
+      fill: ${theme.palette.base.shade3};
       cursor: default;
   `}
 `;

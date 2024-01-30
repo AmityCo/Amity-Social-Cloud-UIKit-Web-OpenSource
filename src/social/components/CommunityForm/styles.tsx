@@ -21,13 +21,9 @@ export const InputPlaceholder = styled.span`
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
-export const WorldIcon = styled(Globe)<{ icon?: ReactNode }>`
-  font-size: 20px;
-`;
+export const WorldIcon = styled(Globe).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })``;
 
-export const LockIcon = styled(Lock)<{ icon?: ReactNode }>`
-  font-size: 20px;
-`;
+export const LockIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })``;
 
 export const CloseIcon = styled(Close).attrs({ width: 12, height: 12 })`
   padding: 5px 12px;
