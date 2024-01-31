@@ -46,7 +46,7 @@ interface MessageListProps {
 const MessageList = ({ channelId }: MessageListProps) => {
   const { client } = useSDK();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { messages, hasMore, loadMore } = useMessagesCollection(channelId);
+  const { messages, hasMore, loadMore, isLoading } = useMessagesCollection(channelId);
 
   useChannelSubscription({
     channelId,
@@ -65,7 +65,7 @@ const MessageList = ({ channelId }: MessageListProps) => {
         <InfiniteScroll
           hasMore={hasMore}
           next={loadMore}
-          loader={<span key={0}>Loading...</span>}
+          loader={isLoading ? <span key={0}>Loading...</span> : null}
           inverse={true}
           dataLength={messages.length}
         >
