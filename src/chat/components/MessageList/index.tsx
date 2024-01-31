@@ -46,7 +46,11 @@ interface MessageListProps {
 const MessageList = ({ channelId }: MessageListProps) => {
   const { client } = useSDK();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { messages, hasMore, loadMore } = useMessagesCollection(channelId);
+  const { messages, hasMore, loadMore } = useMessagesCollection({
+    subChannelId: channelId,
+    sortBy: 'segmentDesc',
+    limit: 20,
+  });
 
   useChannelSubscription({
     channelId,
