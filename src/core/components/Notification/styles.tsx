@@ -6,8 +6,7 @@ export const SuccessIcon = styled(Check).attrs({ width: 18, height: 18 })`
   margin-right: 8px;
 `;
 
-export const InfoIcon = styled(ExclamationCircle)<{ icon?: ReactNode }>`
-  font-size: 18px;
+export const InfoIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
   margin-right: 8px;
 `;
 

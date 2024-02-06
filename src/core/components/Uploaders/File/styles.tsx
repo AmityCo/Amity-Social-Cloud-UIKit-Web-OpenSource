@@ -44,10 +44,7 @@ export const FileIcon = styled(Icon)`
   grid-area: icon;
 `;
 
-export const CircleIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({
-  width: 14,
-  height: 14,
-})`
+export const CircleIcon = styled(ExclamationCircle)<{ icon?: ReactNode }>`
   fill: ${({ theme }) => theme.palette.alert.main};
   z-index: 2;
 `;
