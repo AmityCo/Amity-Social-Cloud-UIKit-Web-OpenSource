@@ -2,12 +2,14 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { FileAttachment, ImageAttachment, SendMessage } from '~/icons';
 
-export const SendMessageIcon = styled(SendMessage)<{ icon?: ReactNode }>`
-  font-size: 28px;
+export const SendMessageIcon = styled(SendMessage).attrs<{ icon?: ReactNode }>({
+  width: 28,
+  height: 28,
+})`
   cursor: pointer;
   margin-left: 12px;
   margin-right: 8px;
-  color: #0f86fe;
+  fill: #0f86fe;
 `;
 
 export const ImageMessageIcon = styled(ImageAttachment).attrs<{ icon?: ReactNode }>({
@@ -19,7 +21,10 @@ export const ImageMessageIcon = styled(ImageAttachment).attrs<{ icon?: ReactNode
   fill: ${({ theme }) => theme.palette.neutral.main};
 `;
 
-export const FileMessageIcon = styled(FileAttachment).attrs<{ disabled?: boolean; icon?: ReactNode }>({
+export const FileMessageIcon = styled(FileAttachment).attrs<{
+  disabled?: boolean;
+  icon?: ReactNode;
+}>({
   width: 18,
   height: 18,
 })`

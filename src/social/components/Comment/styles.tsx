@@ -166,8 +166,7 @@ export const Text = styled.span`
   font-size: 14px;
 `;
 
-export const ReplyIcon = styled(Reply)<{ icon?: ReactNode }>`
-  font-size: 16px;
+export const ReplyIcon = styled(Reply).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
   margin-right: 5px;
 `;
 

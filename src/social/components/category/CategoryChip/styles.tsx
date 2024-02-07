@@ -20,8 +20,7 @@ export const Name = styled.span`
 `;
 
 export const Close = styled(Remove).attrs({ width: 12, height: 12 })`
-  font-size: 12px;
-  color: ${({ theme }) => theme.palette.base.shade1};
+  fill: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 export const RoundButton = styled(Button)`

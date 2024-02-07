@@ -11,7 +11,6 @@ export const SearchIconContainer = styled.div`
 
 export const SearchIcon = styled(Search).attrs({ width: 16, height: 16 })`
   fill: ${({ theme }) => theme.palette.base.shade2};
-  font-size: 16px;
 `;
 
 export const SocialSearchContainer = styled.div<{ sticky?: boolean }>`

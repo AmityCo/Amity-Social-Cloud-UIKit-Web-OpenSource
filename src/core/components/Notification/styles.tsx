@@ -2,16 +2,18 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { Check, ExclamationCircle, Remove } from '~/icons';
 
-export const SuccessIcon = styled(Check).attrs({ width: 18, height: 18 })`
+export const SuccessIcon = styled(Check).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
   margin-right: 8px;
 `;
 
-export const InfoIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
+export const InfoIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({
+  width: 18,
+  height: 18,
+})`
   margin-right: 8px;
 `;
 
-export const ErrorIcon = styled(Remove)<{ icon?: ReactNode }>`
-  font-size: 18px;
+export const ErrorIcon = styled(Remove).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
   margin-right: 8px;
 `;
 
