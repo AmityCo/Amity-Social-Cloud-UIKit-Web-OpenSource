@@ -1,19 +1,21 @@
 import React from 'react';
 
-const Svg = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    width="40"
-    height="40"
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <g opacity="0.3">
-      <circle cx="20" cy="20" r="20" fill="black" />
-    </g>
-    <path d="M16 13V27L27 20L16 13Z" fill="white" />
-  </svg>
-);
+function Icon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="24"
+      fill="none"
+      viewBox="0 0 25 24"
+      {...props}
+    >
+      <path
+        fill="#fff"
+        d="M19.531 10.809a1.71 1.71 0 010 2.918L7.156 21.039c-1.125.668-2.531-.14-2.531-1.477V4.938c0-1.44 1.512-2.039 2.531-1.44l12.375 7.312z"
+      ></path>
+    </svg>
+  );
+}
 
-export default Svg;
+export default Icon;

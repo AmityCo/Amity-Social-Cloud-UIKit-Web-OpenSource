@@ -6,9 +6,16 @@ import useCommunity from '~/social/hooks/useCommunity';
 
 // TODO: check CommunityPostSettings
 
-function getValue(key: 'needApprovalOnPostCreation', community?: Amity.Community | null) {
+function getValue(
+  key: 'needApprovalOnPostCreation' | 'storyComments',
+  community?: Amity.Community | null,
+) {
   if (key === 'needApprovalOnPostCreation') {
     return community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED;
+  }
+
+  if (key === 'storyComments') {
+    return community?.allowCommentInStory; // TO FIX: allowCommentInStory type is missing
   }
 
   return false;
@@ -23,6 +30,14 @@ function getPatch(key: string, value: unknown) {
     };
   }
 
+  if (key === 'storyComments') {
+    return {
+      storySetting: {
+        enableComment: value,
+      },
+    };
+  }
+
   return { [key]: value };
 }
 
@@ -31,7 +46,7 @@ export function usePermission({
   key,
 }: {
   communityId?: string;
-  key: 'needApprovalOnPostCreation';
+  key: 'needApprovalOnPostCreation' | 'storyComments';
 }): [permission: boolean, setPermission: (newValue: boolean) => Promise<void>] {
   const community = useCommunity(communityId);
   const prevValue = getValue(key, community);
