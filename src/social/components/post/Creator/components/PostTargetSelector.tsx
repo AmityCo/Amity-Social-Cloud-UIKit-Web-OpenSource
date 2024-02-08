@@ -17,7 +17,7 @@ import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 const COMMUNITY_LIST_HEIGHT = 350;
 const SCROLL_THRESHOLD = 0.98;
 
-const SelectIcon = styled(SortDown)<{ icon?: ReactNode }>`
+const SelectIcon = styled(SortDown).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
   margin-right: 8px;
   margin-top: -4px;
 `;
