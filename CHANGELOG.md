@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.1.2 (2024-02-09)
+
+
+### Bug Fixes
+
+* ASC-20155 - fix message list scroll ([#140](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/issues/140)) ([ced3fc9](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/ced3fc99441237f4e4b95b79e92579c813b8ce63))
+
 ### 3.1.1 (2024-02-09)
 
 
