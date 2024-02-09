@@ -21,6 +21,28 @@ export { default as CommunityCoverPicture } from './CommunityCoverPicture';
 export { default as Minus } from './Minus';
 export { default as Poll } from './Poll';
 export { default as CircleRemove } from './CircleRemove';
+export { default as MuteCircle } from './Mute';
+export { default as UnmuteCircle } from './Unmute';
+export { default as CommentIcon } from './Comment';
+export { default as DotsIcon } from './EllipsisH';
+export { default as LikeIcon } from './ThumbsUp';
+export { default as TrashIcon } from './Trash';
+export { default as ArrowLeftIcon } from './ArrowLeft';
+export { default as ArrowRightIcon } from './ArrowRight';
+export { default as ExpandIcon } from './Expand';
+export { default as LinkIcon } from './Link';
+export { default as CloseIcon } from './Close';
+export { default as VerifiedIcon } from './Verified';
+export { default as AddIcon } from './Add';
+export { default as BarsIcon } from './Bars';
+export { default as PauseIcon } from './Pause';
+export { default as PlayIcon } from './Play';
+export { default as ErrorIcon } from './Error';
+export { default as ArrowLeftCircle } from './ArrowLeftCircle';
+export { default as ArrowLeftCircle2 } from './ArrowLeftCircle2';
+export { default as ArrowRightCircle } from './ArrowRightCircle';
+export { default as EyeIcon } from './Eye';
+
 
 // files
 export { default as AudioFile } from './files/Audio';

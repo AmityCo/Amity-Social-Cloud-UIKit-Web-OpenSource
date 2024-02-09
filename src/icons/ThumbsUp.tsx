@@ -1,9 +1,21 @@
-import styled from 'styled-components';
+import React from 'react';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/pro-regular-svg-icons';
-import { ReactNode } from 'react';
+function Icon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="none"
+      viewBox="0 0 20 20"
+      {...props}
+    >
+      <path
+        fill="#A5A9B5"
+        d="M17.793 11.025c.148.854.037 1.67-.334 2.338a3.437 3.437 0 01-.668 2.487c-.037 2.078-1.299 3.525-4.156 3.525h-.854c-3.785 0-4.935-1.41-6.605-1.447-.112.482-.594.853-1.114.853H1.688c-.667 0-1.187-.52-1.187-1.187V8.687c0-.63.52-1.187 1.188-1.187h3.636c.705-.594 1.707-2.227 2.56-3.08.52-.52.372-4.045 2.673-4.045 2.115 0 3.525 1.188 3.525 3.896 0 .706-.148 1.262-.334 1.745h1.373c1.781 0 3.191 1.521 3.191 3.154 0 .705-.185 1.299-.519 1.855zm-2.3 2.004c.816-.742.704-1.892.185-2.449.37 0 .853-.705.853-1.373-.037-.705-.63-1.41-1.41-1.41h-3.86c0-1.41 1.04-2.078 1.04-3.526 0-.89 0-2.115-1.744-2.115-.705.705-.372 2.487-1.41 3.526-1.002 1.002-2.45 3.6-3.526 3.6H5.25v6.939c1.967 0 3.71 1.373 6.346 1.373h1.41c1.299 0 2.264-.631 1.967-2.412.556-.334 1.002-1.373.52-2.153zM3.765 16.406a.903.903 0 00-.891-.89.88.88 0 00-.89.89c0 .52.37.89.89.89a.88.88 0 00.89-.89z"
+      ></path>
+    </svg>
+  );
+}
 
-export default styled(FontAwesomeIcon).attrs<{ icon?: ReactNode }>({ icon: faThumbsUp })`
-  font-size: ${({ height = 'inherit' }) => height};
-`;
+export default Icon;
