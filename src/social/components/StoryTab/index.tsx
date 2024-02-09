@@ -65,7 +65,7 @@ const StoryTab = ({
     notification.info({
       content: 'Failed to share story',
     });
-  }, [isErrored]);
+  }, []);
 
   return (
     <StoryTabContainer onClick={handleOnClick}>
