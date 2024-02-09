@@ -1,21 +1,8 @@
-import React from 'react';
+import styled from 'styled-components';
+import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
+import { faCamera } from '@fortawesome/pro-regular-svg-icons';
+import { ReactNode } from 'react';
 
-const Camera = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="100%"
-    height="100%"
-    viewBox="0 0 512 512"
-    {...props}
-  >
-    <path
-      d="M342.7 144H464v288H48V144h121.3l24-64h125.5l23.9 64zM324.3 32h-131c-20 0-37.9 12.4-44.9
-      31.1L136 96H48c-26.5 0-48 21.5-48 48v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5
-      48-48V144c0-26.5-21.5-48-48-48h-88l-14.3-38c-5.8-15.7-20.7-26-37.4-26zM256 408c-66.2
-      0-120-53.8-120-120s53.8-120 120-120 120 53.8 120 120-53.8 120-120 120zm0-192c-39.7
-      0-72 32.3-72 72s32.3 72 72 72 72-32.3 72-72-32.3-72-72-72z"
-    />
-  </svg>
-);
-
-export default Camera;
+export default styled(FaIcon).attrs<{ icon?: ReactNode }>({ icon: faCamera })`
+  font-size: '${({ height = 'inherit' }) => height}';
+`;
