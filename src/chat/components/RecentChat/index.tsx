@@ -62,7 +62,7 @@ const RecentChat = ({
               channels.map((channel) => (
                 <ChatItem
                   key={channel.channelId}
-                  channel={channel}
+                  channelId={channel.channelId}
                   isSelected={selectedChannelId === channel.channelId}
                   onSelect={(data) => {
                     onChannelSelect?.(data);
