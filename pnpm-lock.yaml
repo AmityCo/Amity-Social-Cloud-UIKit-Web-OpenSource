@@ -82,15 +82,6 @@ devDependencies:
   '@amityco/ts-sdk':
     specifier: 6.17.2
     version: 6.17.2
-  '@fortawesome/pro-light-svg-icons':
-    specifier: ^5.15.4
-    version: 5.15.4
-  '@fortawesome/pro-regular-svg-icons':
-    specifier: ^5.15.4
-    version: 5.15.4
-  '@fortawesome/pro-solid-svg-icons':
-    specifier: ^5.15.4
-    version: 5.15.4
   '@storybook/addon-a11y':
     specifier: ^7.6.7
     version: 7.6.7
@@ -2158,36 +2149,6 @@ packages:
       tslib: 2.6.2
       typescript: 4.9.5
     dev: false
-
-  /@fortawesome/fontawesome-common-types@0.2.36:
-    resolution: {integrity: sha512-a/7BiSgobHAgBWeN7N0w+lAhInrGxksn13uK7231n2m8EDPE3BMCl9NZLTGrj9ZXfCmC6LM0QLqXidIizVQ6yg==, tarball: https://npm.fontawesome.com/@fortawesome/fontawesome-common-types/-/0.2.36/fontawesome-common-types-0.2.36.tgz}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dev: true
-
-  /@fortawesome/pro-light-svg-icons@5.15.4:
-    resolution: {integrity: sha512-+Hk1YVmuk+1TYhbRTD4WhabQhWuK/DG8IVGO+iXM5A4OW1D6rHFHr8rt9JNc7iybXFQWY7HuCRPoVXdCm4YZ0A==, tarball: https://npm.fontawesome.com/@fortawesome/pro-light-svg-icons/-/5.15.4/pro-light-svg-icons-5.15.4.tgz}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 0.2.36
-    dev: true
-
-  /@fortawesome/pro-regular-svg-icons@5.15.4:
-    resolution: {integrity: sha512-LN9wOPIISKg3jZBbAuMm6YcsCiMRzTcpVkotLonRuzDmw0OLszUPCHZ6vB5hEnOC7g6IIOwOOnV12fW0V8IS9Q==, tarball: https://npm.fontawesome.com/@fortawesome/pro-regular-svg-icons/-/5.15.4/pro-regular-svg-icons-5.15.4.tgz}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 0.2.36
-    dev: true
-
-  /@fortawesome/pro-solid-svg-icons@5.15.4:
-    resolution: {integrity: sha512-ZlSg/RyAlwYJcsJlw2WfZSeOJ8GMKwIQ3ZY+GNFRZ+7pF+RRXxyZp2WIgUKhPK/M43SfSou6R6XdKZyz2xVVEQ==, tarball: https://npm.fontawesome.com/@fortawesome/pro-solid-svg-icons/-/5.15.4/pro-solid-svg-icons-5.15.4.tgz}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dependencies:
-      '@fortawesome/fontawesome-common-types': 0.2.36
-    dev: true
 
   /@hookform/error-message@2.0.1(react-dom@18.2.0)(react-hook-form@7.49.2)(react@18.2.0):
     resolution: {integrity: sha512-U410sAr92xgxT1idlu9WWOVjndxLdgPUHEB8Schr27C9eh7/xUnITWpCMF93s+lGiG++D4JnbSnrb5A21AdSNg==}
