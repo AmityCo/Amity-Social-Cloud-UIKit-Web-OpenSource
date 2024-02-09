@@ -68,6 +68,9 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const imageLoaded = () => {
     setLoaded(true);
+    if (isPaused) {
+      setIsPaused(false);
+    }
     action('play');
   };
 
@@ -90,7 +93,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     <RendererContainer>
       <Header
         avatar={avatarUrl!}
-        heading={heading}
+        heading={heading!}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
         haveStoryPermission={isStoryCreator && haveStoryPermission}
@@ -104,16 +107,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onClose={onBack}
       />
 
-      <div
-        style={{
-          background: 'red',
-          width: '100%',
-          height: '100%',
-          zIndex: 99999,
-        }}
-      >
-        <StoryImage style={computedStyles} src={story.url} onLoad={imageLoaded} />
-      </div>
+      <StoryImage style={computedStyles} src={story.url} onLoad={imageLoaded} />
+
       {!loaded && (
         <LoadingOverlay width={width} height={height}>
           {loader || <div>loading...</div>}

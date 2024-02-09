@@ -146,7 +146,7 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
     return (
       <Wrapper>
         <StoryDraft
-          file={file}
+          file={file as File}
           targetId={communityId}
           creatorAvatar={communityAvatar?.fileUrl || ''}
           onCreateStory={createStory}

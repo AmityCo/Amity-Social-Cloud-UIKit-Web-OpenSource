@@ -57,7 +57,6 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
 
   const [isDraft, setIsDraft] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentStory, setCurrentStory] = useState<Amity.Story | undefined>();
   const [file, setFile] = useState<File | null>(null);
   const [colors, setColors] = useState<FinalColor[]>([]);
 
@@ -75,7 +74,6 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
       onOk: async () => {
         previousStory();
         if (isLastStory) {
-          setCurrentStory(undefined);
           onClose();
         }
         await StoryRepository.softDeleteStory(storyId);
@@ -167,7 +165,11 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
       type: isImage ? 'image' : 'video',
       actions: [
         haveStoryPermission
-          ? { name: 'delete', action: () => deleteStory(story.storyId!), icon: <TrashIcon /> }
+          ? {
+              name: 'delete',
+              action: () => deleteStory(story?.storyId as string),
+              icon: <TrashIcon />,
+            }
           : null,
       ].filter(isNonNullable),
       handleAddIconClick: (e: React.MouseEvent) => handleAddIconClick,
@@ -178,7 +180,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
   });
 
   const avatarUrl = useImage({
-    fileId: currentStory?.community?.avatarFileId,
+    fileId: stories[currentIndex]?.community?.avatarFileId,
     imageSize: 'small',
   });
 
@@ -198,12 +200,13 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
   const targetRootId = 'stories-viewer';
 
   const storyStyles = {
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    height: '100%',
     objectFit:
-      (currentStory?.dataType === 'image' && currentStory?.data?.imageDisplayMode === 'fill'
+      stories[currentIndex]?.dataType === 'image' &&
+      stories[currentIndex]?.data?.imageDisplayMode === 'fill'
         ? 'cover'
-        : 'contain') || 'contain',
+        : 'contain',
     background: `linear-gradient(
              180deg,
              ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
@@ -211,9 +214,16 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
            )`,
   };
 
+  const increaseIndex = () => {
+    setCurrentIndex(currentIndex + 1);
+  };
+
   useEffect(() => {
     if (stories[stories.length - 1]?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);
+    }
+    if (stories[currentIndex]) {
+      stories[currentIndex]?.analytics.markAsSeen();
     }
   }, [currentIndex, stories]);
 
@@ -231,7 +241,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
     } else {
       setColors([]);
     }
-  }, [stories[currentIndex], file]);
+  }, [stories, file, currentIndex]);
 
   if (isDraft) {
     return (
@@ -259,9 +269,11 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
               preventDefault={!isMobile}
               currentIndex={currentIndex}
               stories={formattedStories}
+              // @ts-ignore
               renderers={renderers}
               defaultInterval={duration}
-              onStoryStart={() => currentStory?.analytics.markAsSeen()}
+              onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
+              onStoryEnd={increaseIndex}
               onNext={nextStory}
               onPrevious={previousStory}
               onAllStoriesEnd={onClose}

@@ -86,6 +86,9 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     vid?.current
       ?.play()
       .then(() => {
+        if (isPaused) {
+          setIsPaused(false);
+        }
         action('play');
       })
       .catch(() => {

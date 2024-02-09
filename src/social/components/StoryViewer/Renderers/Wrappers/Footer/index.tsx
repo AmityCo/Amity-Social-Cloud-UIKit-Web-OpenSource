@@ -16,7 +16,7 @@ import millify from 'millify';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
-    syncState: string;
+    syncState?: string;
     reach: number;
     commentsCount: number;
     reactionsCount: number;

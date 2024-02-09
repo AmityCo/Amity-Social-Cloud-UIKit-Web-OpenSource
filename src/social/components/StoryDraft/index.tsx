@@ -21,7 +21,6 @@ import { extractColors } from 'extract-colors';
 import { confirm } from '~/core/components/Confirm';
 import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import Avatar from '~/core/components/Avatar';
-import { VideoPreview } from '~/core/components/Uploaders/Video/styles';
 import { readFileAsync } from '~/helpers';
 
 type DraftStoryProps = {

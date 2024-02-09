@@ -31,7 +31,7 @@ const Header: React.FC<
     onPause: () => void;
     onAction: () => void;
     onClose: () => void;
-    onAddStory?: () => void;
+    onAddStory?: (file: File) => void;
     onMute?: () => void;
     onUnmute?: () => void;
     onClickCommunity: () => void;
@@ -74,6 +74,7 @@ const Header: React.FC<
       input.click();
     }
   };
+
   return (
     <>
       <ViewStoryHeaderContainer>
