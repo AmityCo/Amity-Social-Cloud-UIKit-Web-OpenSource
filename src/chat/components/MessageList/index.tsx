@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import MessageComponent from '~/chat/components/Message';
@@ -56,22 +56,19 @@ const MessageList = ({ channelId }: MessageListProps) => {
     channelId,
   });
 
-  useEffect(() => {
-    const element = containerRef.current;
-    if (element) {
-      element.scrollIntoView(false);
-    }
-  }, [messages, containerRef]);
-
   return (
     <InfiniteScrollContainer ref={containerRef}>
       {containerRef.current ? (
         <InfiniteScroll
+          scrollableTarget={containerRef.current}
+          scrollThreshold={0.7}
           hasMore={hasMore}
           next={loadMore}
           loader={<span key={0}>Loading...</span>}
           inverse={true}
           dataLength={messages.length}
+          style={{ display: 'flex', flexDirection: 'column-reverse' }}
+          height={containerRef.current.clientHeight}
         >
           <MessageListContainer ref={containerRef} data-qa-anchor="message-list">
             {messages.map((message, i) => {
