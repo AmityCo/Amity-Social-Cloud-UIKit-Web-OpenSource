@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 
 import Comment from '~/social/components/Comment';
 
-import { TabIcon, TabIconContainer } from './styles';
+import { NoCommentsContainer, TabIcon, TabIconContainer } from './styles';
 import LoadMoreWrapper from '../LoadMoreWrapper';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
 import { SubscriptionLevels } from '@amityco/ts-sdk';
@@ -55,6 +55,14 @@ const CommentList = ({
       <TabIcon />
     </TabIconContainer>
   ) : null;
+
+  if (comments.length === 0 && referenceType === 'story') {
+    return (
+      <NoCommentsContainer>
+        {formatMessage({ id: 'storyViewer.commentSheet.empty' })}
+      </NoCommentsContainer>
+    );
+  }
 
   if (comments.length === 0) return null;
 

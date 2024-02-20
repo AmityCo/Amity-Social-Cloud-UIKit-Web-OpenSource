@@ -1,6 +1,7 @@
 import { StoryRepository } from '@amityco/ts-sdk';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { isNonNullable } from '~/helpers/utils';
+import useCommunityStoriesSubscription from './useStoryReactionSubscription';
 
 type UseStories = {
   stories: (Amity.Story | undefined)[];
@@ -22,6 +23,11 @@ const useStories = (params: Amity.GetStoriesByTargetParam): UseStories => {
       loadMoreFnRef.current?.();
     }
   }, [loadMoreFnRef, loadMoreHasBeenCalled, isLoading, setIsLoading]);
+
+  useCommunityStoriesSubscription({
+    targetId: params.targetId,
+    targetType: 'community',
+  });
 
   useEffect(() => {
     async function run() {

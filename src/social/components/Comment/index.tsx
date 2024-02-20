@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { confirm } from '~/core/components/Confirm';
@@ -33,11 +33,11 @@ import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import useFile from '~/core/hooks/useFile';
 import { CommentRepository } from '@amityco/ts-sdk';
-import useCommunity from '~/social/hooks/useCommunity';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
+import useStory from '~/social/hooks/useStory';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -89,6 +89,8 @@ interface CommentProps {
 const Comment = ({ commentId, readonly }: CommentProps) => {
   const comment = useComment(commentId);
   const post = usePost(comment?.referenceId);
+  const story = useStory(comment?.referenceId);
+
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useFile(commentAuthor?.avatarFileId);
   const { userRoles } = useSDK();
@@ -125,7 +127,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   //   }
   // }, [(comment?.data as Amity.ContentDataText)?.text, text]);
 
-  if (post == null || comment == null) return <LoadingIndicator />;
+  if (post == null && comment == null) return <LoadingIndicator />;
 
   const handleReportComment = async () => {
     return toggleFlagComment();
@@ -221,9 +223,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
     });
   };
 
-  if (comment == null) {
-    return null;
-  }
+  if (comment == null) return null;
 
   if (comment?.isDeleted) {
     return isReplyComment ? (
@@ -285,6 +285,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
       {isReplying && (
         <CommentComposeBar
           postId={post?.postId}
+          storyId={story?.storyId}
           userToReply={commentAuthor?.displayName}
           onSubmit={(replyText, mentionees, metadata) => {
             handleReplyToComment(replyText, mentionees, metadata);

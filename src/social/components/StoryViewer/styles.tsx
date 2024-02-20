@@ -23,9 +23,31 @@ export const StoryWrapper = styled.div`
   background-color: #000;
 `;
 
-export const StoryActionSheet = styled(Sheet)`
+export const MobileSheet = styled(Sheet)`
   margin: 0 auto;
-  max-width: 23.438rem;
+  width: 100%;
+`;
+
+export const MobileSheetScroller = styled(MobileSheet.Scroller)`
+  padding: 0 1rem;
+`;
+
+export const StoryCommentComposerBarContainer = styled.div`
+  padding: 0 1rem;
+`;
+
+export const StoryCommentComposerBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #000;
+  color: #fff;
+`;
+
+export const MobileSheetContent = styled(MobileSheet.Content)`
+  padding: 1rem;
+  height: 24rem;
 `;
 
 export const CloseButton = styled(CloseIcon)`
@@ -278,8 +300,12 @@ export const DeleteIcon = styled(TrashIcon)`
   color: #292b32;
 `;
 
-export const StoryActionSheetContent = styled(Sheet.Content)`
-  padding: 1rem 1.3rem;
+export const MobileSheetHeader = styled.div`
+  ${({ theme }) => theme.typography.title};
+  color: ${({ theme }) => theme.palette.base.default};
+  text-align: center;
+  border-bottom: 1px solid #e3e4e8;
+  padding-bottom: 0.5rem;
 `;
 
 export const StoryActionItem = styled.button`

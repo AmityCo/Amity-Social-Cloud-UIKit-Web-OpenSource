@@ -9,13 +9,15 @@ import {
   IconButton,
 } from '~/social/components/StoryViewer/Renderers/styles';
 import {
+  MobileSheet,
+  MobileSheetContent,
+  MobileSheetHeader,
+  MobileSheetScroller,
   StoryActionItem,
   StoryActionItemText,
-  StoryActionSheet,
-  StoryActionSheetContent,
 } from '~/social/components/StoryViewer/styles';
-import Footer from './Wrappers/Footer';
-import Header from './Wrappers/Header';
+import Footer from '~/social/components/StoryViewer/Renderers/Wrappers/Footer';
+import Header from '~/social/components/StoryViewer/Renderers/Wrappers/Header';
 import useImage from '~/core/hooks/useImage';
 import { formatTimeAgo } from '~/utils';
 import { useNavigation } from '~/social/providers/NavigationProvider';
@@ -25,6 +27,9 @@ import { isAdmin, isModerator } from '~/helpers/permissions';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
+import CommentList from '~/social/components/CommentList';
+import { ReactionRepository } from '@amityco/ts-sdk';
+import { LIKE_REACTION_KEY } from '~/constants';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -33,21 +38,16 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const [muted, setMuted] = React.useState(false);
   const [isPaused, setIsPaused] = React.useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = React.useState(false);
+  const [isOpenCommentSheet, setIsOpenCommentSheet] = React.useState(false);
   const { width, height, loader, storyStyles } = config;
   const { client, currentUserId } = useSDK();
   const user = useUser(currentUserId);
 
-  const {
-    syncState,
-    reach,
-    commentsCount,
-    reactionsCount,
-    createdAt,
-    creator,
-    community,
-    actions,
-    onChange,
-  } = story;
+  const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
+  const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
+
+  const { syncState, reach, commentsCount, createdAt, creator, community, actions, onChange } =
+    story;
 
   const avatarUrl = useImage({
     fileId: community?.avatarFileId || '',
@@ -109,7 +109,23 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   const openBottomSheet = () => setIsOpenBottomSheet(true);
   const closeBottomSheet = () => setIsOpenBottomSheet(false);
+
+  const openCommentSheet = () => setIsOpenCommentSheet(true);
+  const closeCommentSheet = () => setIsOpenCommentSheet(false);
+
   const targetRootId = 'stories-viewer';
+
+  const handleLike = async () => {
+    try {
+      if (!isLiked) {
+        await ReactionRepository.addReaction('story', story.storyId, LIKE_REACTION_KEY);
+      } else {
+        await ReactionRepository.removeReaction('story', story.storyId, LIKE_REACTION_KEY);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   React.useEffect(() => {
     if (vid.current) {
@@ -163,16 +179,36 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
           {loader || <div>loading...</div>}
         </LoadingOverlay>
       )}
-      <StoryActionSheet
+
+      <MobileSheet
+        rootId={targetRootId}
+        isOpen={isOpenCommentSheet}
+        onClose={closeCommentSheet}
+        mountPoint={document.getElementById(targetRootId) as HTMLElement}
+      >
+        <MobileSheet.Container>
+          <MobileSheetHeader>
+            {formatMessage({ id: 'storyViewer.commentSheet.title' })}
+          </MobileSheetHeader>
+          <MobileSheetContent>
+            <MobileSheetScroller>
+              <CommentList referenceId={story.storyId} referenceType="story" />
+            </MobileSheetScroller>
+          </MobileSheetContent>
+        </MobileSheet.Container>
+        <MobileSheet.Backdrop onTap={closeCommentSheet} />
+      </MobileSheet>
+
+      <MobileSheet
         rootId={targetRootId}
         isOpen={isOpenBottomSheet}
         onClose={closeBottomSheet}
-        detent="content-height"
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
+        detent="content-height"
       >
-        <StoryActionSheet.Container>
-          <StoryActionSheet.Header />
-          <StoryActionSheetContent>
+        <MobileSheet.Container>
+          <MobileSheet.Header />
+          <MobileSheet.Content>
             {actions?.map((bottomSheetAction) => (
               <StoryActionItem onClick={() => bottomSheetAction.action()}>
                 {bottomSheetAction.icon}
@@ -181,15 +217,18 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
                 </StoryActionItemText>
               </StoryActionItem>
             ))}
-          </StoryActionSheetContent>
-        </StoryActionSheet.Container>
-        <StoryActionSheet.Backdrop onTap={closeBottomSheet} />
-      </StoryActionSheet>
+          </MobileSheet.Content>
+        </MobileSheet.Container>
+        <MobileSheet.Backdrop onTap={closeBottomSheet} />
+      </MobileSheet>
       <Footer
         syncState={syncState}
         reach={reach}
+        isLiked={isLiked}
+        totalLikes={totalLikes}
+        onLike={handleLike}
         commentsCount={commentsCount}
-        reactionsCount={reactionsCount}
+        onClickComment={openCommentSheet}
       />
     </RendererContainer>
   );

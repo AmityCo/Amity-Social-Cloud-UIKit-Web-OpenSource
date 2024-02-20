@@ -10,18 +10,21 @@ import {
   ViewStoryUploadingWrapper,
 } from './styles';
 import Spinner from '~/social/components/Spinner';
-import { CommentIcon, DotsIcon, ErrorIcon, ThumbsUp } from '~/icons';
+import { CommentIcon, DotsIcon, ErrorIcon, LikedIcon, ThumbsUp } from '~/icons';
 import { useIntl } from 'react-intl';
 import millify from 'millify';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
-    syncState?: string;
     reach: number;
     commentsCount: number;
-    reactionsCount: number;
+    isLiked: boolean;
+    totalLikes?: number;
+    onClickComment: () => void;
+    onLike: () => void;
+    syncState?: string;
   }>
-> = ({ syncState, reach, commentsCount, reactionsCount }) => {
+> = ({ syncState, reach, commentsCount, totalLikes, isLiked, onClickComment, onLike }) => {
   const { formatMessage } = useIntl();
 
   if (syncState === 'syncing') {
@@ -54,11 +57,12 @@ const Footer: React.FC<
         {millify(reach || 0)}
       </ViewStoryCompostBarViewIconContainer>
       <ViewStoryCompostBarEngagementContainer>
-        <ViewStoryCompostBarEngagementIconContainer>
+        <ViewStoryCompostBarEngagementIconContainer onClick={onClickComment}>
           <CommentIcon /> {millify(commentsCount) || 0}
         </ViewStoryCompostBarEngagementIconContainer>
         <ViewStoryCompostBarEngagementIconContainer>
-          <ThumbsUp /> {millify(reactionsCount || 0)}
+          {!isLiked ? <ThumbsUp onClick={onLike} /> : <LikedIcon onClick={onLike} />}
+          {millify(totalLikes || 0)}
         </ViewStoryCompostBarEngagementIconContainer>
       </ViewStoryCompostBarEngagementContainer>
     </ViewStoryCompostBarContainer>

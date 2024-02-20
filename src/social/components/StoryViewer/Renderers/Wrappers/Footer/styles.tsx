@@ -45,6 +45,7 @@ export const ViewStoryCompostBarContainer = styled.div`
   background-color: #000;
   bottom: 0;
   color: #ffffff;
+  z-index: 10;
 `;
 
 export const ViewStoryFailedCompostBarContainer = styled.div`

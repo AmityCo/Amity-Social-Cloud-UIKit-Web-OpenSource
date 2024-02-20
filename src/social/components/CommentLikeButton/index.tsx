@@ -4,7 +4,6 @@ import useComment from '~/social/hooks/useComment';
 import UICommentLikeButton from './UICommentLikeButton';
 import useUserReactionSubscription from '~/social/hooks/useUserReactionSubscription';
 import useCommunityReactionSubscription from '~/social/hooks/useCommunityReactionSubscription';
-import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 
 interface CommentLikeButtonProps {
   commentId?: string;

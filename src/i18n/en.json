@@ -355,6 +355,8 @@
   "storyViewer.notification.error": "Failed to share story",
   "storyViewer.footer.failed": "Failed to upload",
   "storyViewer.footer.uploading": "Uploading...",
+  "storyViewer.commentSheet.title": "Comments",
+  "storyViewer.commentSheet.empty": "No comments yet",
 
   "storyDraft.button.shareStory": "Share story",
 

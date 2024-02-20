@@ -30,6 +30,7 @@ import { isAdmin, isModerator } from '~/helpers/permissions';
 import { Permissions } from '~/social/constants';
 import { isNonNullable } from '~/helpers/utils';
 import { TrashIcon } from '~/icons';
+import useCommunityStoriesSubscription from '~/social/hooks/useStoryReactionSubscription';
 
 interface StoryViewerProps {
   targetId: string;
