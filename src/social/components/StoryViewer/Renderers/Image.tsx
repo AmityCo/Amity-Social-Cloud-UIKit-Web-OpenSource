@@ -42,6 +42,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     creator,
     community,
     actions,
+    onChange,
   } = story;
 
   const avatarUrl = useImage({
@@ -57,7 +58,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isStoryCreator = story?.creator?.userId === currentUserId;
   const haveStoryPermission =
-    client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId) ||
+    (community &&
+      client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId)) ||
     isAdmin(user?.roles) ||
     isModerator(user?.roles);
 
@@ -92,17 +94,17 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   return (
     <RendererContainer>
       <Header
-        avatar={avatarUrl!}
-        heading={heading!}
+        avatar={avatarUrl}
+        heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
-        haveStoryPermission={isStoryCreator && haveStoryPermission}
+        haveStoryPermission={isStoryCreator || haveStoryPermission}
         isOfficial={isOfficial}
         isPaused={isPaused}
         onPlay={play}
         onPause={pause}
         onAction={openBottomSheet}
-        onAddStory={story?.onChange}
+        onAddStory={onChange}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
         onClose={onBack}
       />

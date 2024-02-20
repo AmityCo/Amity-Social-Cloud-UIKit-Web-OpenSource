@@ -15,7 +15,6 @@ import { StoryRepository } from '@amityco/ts-sdk';
 import { extractColors } from 'extract-colors';
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import useImage from '~/core/hooks/useImage';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 
 import { useIntl } from 'react-intl';
 import { notification } from '~/core/components/Notification';
@@ -51,7 +50,6 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
   const { currentUserId, client } = useSDK();
   const user = useUser(currentUserId);
 
-  const { onClickCommunity } = useNavigation();
   const { formatMessage } = useIntl();
   const isMobile = useMedia('(max-width: 768px)');
 
@@ -60,6 +58,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
   const [file, setFile] = useState<File | null>(null);
   const [colors, setColors] = useState<FinalColor[]>([]);
 
+  const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
   const haveStoryPermission =
     client?.hasPermission(Permissions.ManageStoryPermission).community(targetId) ||
     isAdmin(user?.roles) ||
@@ -164,7 +163,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        haveStoryPermission
+        isStoryCreator || haveStoryPermission
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),

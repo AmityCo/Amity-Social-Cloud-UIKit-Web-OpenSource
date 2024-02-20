@@ -21,12 +21,13 @@ import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 
 const Header: React.FC<
   React.PropsWithChildren<{
-    avatar: string;
-    heading: string;
-    subheading: string;
-    isOfficial: boolean;
-    isPaused: boolean;
-    isHaveActions: boolean;
+    avatar?: string;
+    heading?: string;
+    subheading?: string;
+    isOfficial?: boolean;
+    isPaused?: boolean;
+    isHaveActions?: boolean;
+    haveStoryPermission?: boolean;
     onPlay: () => void;
     onPause: () => void;
     onAction: () => void;
@@ -35,7 +36,6 @@ const Header: React.FC<
     onMute?: () => void;
     onUnmute?: () => void;
     onClickCommunity: () => void;
-    haveStoryPermission?: boolean;
   }>
 > = ({
   avatar,

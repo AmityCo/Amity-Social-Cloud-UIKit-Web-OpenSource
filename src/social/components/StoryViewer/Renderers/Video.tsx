@@ -46,6 +46,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     creator,
     community,
     actions,
+    onChange,
   } = story;
 
   const avatarUrl = useImage({
@@ -61,7 +62,8 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   const isStoryCreator = story?.creator?.userId === currentUserId;
   const haveStoryPermission =
-    client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId) ||
+    (community &&
+      client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId)) ||
     isAdmin(user?.roles) ||
     isModerator(user?.roles);
 
@@ -127,11 +129,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         {!muted ? <MuteCircleIcon onClick={mute} /> : <UnmuteCircleIcon onClick={unmute} />}
       </IconButton>
       <Header
-        avatar={avatarUrl!}
+        avatar={avatarUrl}
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
-        haveStoryPermission={isStoryCreator && haveStoryPermission}
+        haveStoryPermission={isStoryCreator || haveStoryPermission}
         isOfficial={isOfficial}
         isPaused={isPaused}
         onPlay={play}
@@ -139,7 +141,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onMute={mute}
         onUnmute={unmute}
         onAction={openBottomSheet}
-        onAddStory={story.onChange}
+        onAddStory={onChange}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
         onClose={onBack}
       />

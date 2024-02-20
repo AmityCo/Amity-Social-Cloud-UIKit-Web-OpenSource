@@ -8,6 +8,7 @@ export type CustomRenderer = React.FC<{
         action: () => void;
         icon: JSX.Element;
       }>;
+      onChange: (file: File) => void;
     };
   action: Action;
   config: {
