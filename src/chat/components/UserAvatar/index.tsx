@@ -24,6 +24,8 @@ const UserAvatar = ({
   const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
 
   useEffect(() => {
+    setAvatar(null);
+    setBackgroundImage(null);
     const getAvatarProps = async () => {
       if (avatarUrl) {
         setAvatar(avatarUrl);
