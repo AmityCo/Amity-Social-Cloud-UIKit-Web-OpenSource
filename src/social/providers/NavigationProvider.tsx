@@ -32,6 +32,7 @@ type Page =
       type: PageTypes.ViewStory;
       storyId: string;
       targetId?: string;
+      communityId?: string;
     };
 
 type ContextValue = {
