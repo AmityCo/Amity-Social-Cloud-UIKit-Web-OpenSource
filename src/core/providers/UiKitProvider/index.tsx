@@ -99,6 +99,12 @@ const UiKitProvider = ({
         { userId, displayName, authToken },
         {
           sessionWillRenewAccessToken(renewal) {
+            // secure mode
+            if (authToken) {
+              renewal.renewWithAuthToken(authToken);
+              return;
+            }
+
             renewal.renew();
           },
         },
