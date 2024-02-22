@@ -8,7 +8,7 @@ export default function useCommunityStoriesSubscription({
   callback,
 }: {
   targetId: string;
-  targetType: string;
+  targetType: Amity.StoryTargetType;
   shouldSubscribe?: () => boolean;
   callback?: Amity.Listener;
 }) {

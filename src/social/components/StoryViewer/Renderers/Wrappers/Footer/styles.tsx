@@ -87,7 +87,7 @@ export const ViewStoryCompostBarEngagementContainer = styled.div`
   gap: 0.75rem;
 `;
 
-export const ViewStoryCompostBarEngagementIconContainer = styled.div`
+export const ViewStoryCompostBarEngagementButton = styled.button`
   ${({ theme }) => theme.typography.bodyBold};
   color: #fff;
   display: flex;
@@ -97,6 +97,8 @@ export const ViewStoryCompostBarEngagementIconContainer = styled.div`
   border-radius: 1.5rem;
   padding: 0.5rem 0.625rem;
   background-color: #292b32;
+  cursor: pointer;
+  border: none;
 `;
 
 export const ViewStoryContainer = styled.div`

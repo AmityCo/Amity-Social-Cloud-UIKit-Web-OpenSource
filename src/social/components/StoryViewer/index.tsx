@@ -246,7 +246,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
   if (isDraft) {
     return (
       <StoryDraft
-        file={file as File}
+        file={file}
         creatorAvatar={avatarUrl || communityBackgroundImage}
         onDiscardStory={discardStory}
         onCreateStory={onCreateStory}
@@ -269,6 +269,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
               preventDefault={!isMobile}
               currentIndex={currentIndex}
               stories={formattedStories}
+              // TO FIX: need to override custom type of renderers from react-insta-stories library
               // @ts-ignore
               renderers={renderers}
               defaultInterval={duration}

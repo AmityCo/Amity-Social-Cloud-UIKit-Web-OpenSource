@@ -8,8 +8,8 @@ import {
   MobileSheet,
   MobileSheetHeader,
   MobileSheetContent,
-  MobileSheetScroller,
   StoryCommentComposerBarContainer,
+  MobileActionSheetContent,
 } from '~/social/components/StoryViewer/styles';
 import {
   LoadingOverlay,
@@ -25,10 +25,10 @@ import useSDK from '~/core/hooks/useSDK';
 import { useIntl } from 'react-intl';
 import { Permissions } from '~/social/constants';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
-import CommentList from '~/social/components/CommentList';
-import CommentComposeBar from '~/social/components/CommentComposeBar';
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
 import { Mentionees, Metadata } from '~/helpers/utils';
+import CommentList from '~/social/components/CommentList';
+import CommentComposeBar from '~/social/components/CommentComposeBar';
 import { LIKE_REACTION_KEY } from '~/constants';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
@@ -43,25 +43,17 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { currentUserId, client } = useSDK();
   const user = useUser(currentUserId);
 
-  const {
-    syncState,
-    reach,
-    commentsCount,
-    reactionsCount,
-    createdAt,
-    creator,
-    community,
-    actions,
-    onChange,
-  } = story;
-
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
+
+  const { syncState, reach, commentsCount, createdAt, creator, community, actions, onChange } =
+    story;
 
   const avatarUrl = useImage({
     fileId: community?.avatarFileId || '',
     imageSize: 'small',
   });
+
   const heading = community?.displayName;
   const isOfficial = community?.isOfficial || false;
   const subheading =
@@ -123,7 +115,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         await ReactionRepository.removeReaction('story', story.storyId, LIKE_REACTION_KEY);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Can't toggle like", error);
     }
   };
 
@@ -171,9 +163,9 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
             {formatMessage({ id: 'storyViewer.commentSheet.title' })}
           </MobileSheetHeader>
           <MobileSheetContent>
-            <MobileSheetScroller>
+            <MobileSheet.Scroller>
               <CommentList referenceId={story.storyId} referenceType="story" />
-            </MobileSheetScroller>
+            </MobileSheet.Scroller>
           </MobileSheetContent>
           <StoryCommentComposerBarContainer>
             <CommentComposeBar
@@ -195,27 +187,33 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
       >
         <MobileSheet.Container>
           <MobileSheet.Header />
-          <MobileSheet.Content>
+          <MobileActionSheetContent>
             {actions?.map((bottomSheetAction) => (
-              <StoryActionItem onClick={() => bottomSheetAction.action()}>
+              <StoryActionItem
+                onClick={() => {
+                  bottomSheetAction.action();
+                  closeBottomSheet();
+                }}
+              >
                 {bottomSheetAction.icon}
                 <StoryActionItemText>
                   {formatMessage({ id: bottomSheetAction.name })}
                 </StoryActionItemText>
               </StoryActionItem>
             ))}
-          </MobileSheet.Content>
+          </MobileActionSheetContent>
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeBottomSheet} />
       </MobileSheet>
       <Footer
-        syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}
+        allowCommentInStory={community?.allowCommentInStory}
         onClickComment={openCommentSheet}
-        totalLikes={totalLikes}
-        onLike={handleLike}
         isLiked={isLiked}
+        totalLikes={totalLikes}
+        onClickLike={handleLike}
+        syncState={syncState}
       />
     </RendererContainer>
   );

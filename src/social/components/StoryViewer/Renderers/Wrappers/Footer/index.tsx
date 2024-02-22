@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ViewCountIcon,
   ViewStoryCompostBarContainer,
+  ViewStoryCompostBarEngagementButton,
   ViewStoryCompostBarEngagementContainer,
-  ViewStoryCompostBarEngagementIconContainer,
   ViewStoryCompostBarViewIconContainer,
   ViewStoryFailedCompostBarContainer,
   ViewStoryFailedCompostBarWrapper,
@@ -11,21 +11,40 @@ import {
 } from './styles';
 import Spinner from '~/social/components/Spinner';
 import { CommentIcon, DotsIcon, ErrorIcon, LikedIcon, ThumbsUp } from '~/icons';
+
 import { useIntl } from 'react-intl';
 import millify from 'millify';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
-    reach: number;
+    syncState?: Amity.SyncState;
+    reach: number | null;
     commentsCount: number;
+    totalLikes: number;
     isLiked: boolean;
-    totalLikes?: number;
+    allowCommentInStory: boolean;
     onClickComment: () => void;
-    onLike: () => void;
-    syncState?: string;
+    onClickLike: () => void;
   }>
-> = ({ syncState, reach, commentsCount, totalLikes, isLiked, onClickComment, onLike }) => {
+> = ({
+  syncState,
+  reach,
+  commentsCount,
+  allowCommentInStory,
+  totalLikes,
+  isLiked,
+  onClickComment,
+  onClickLike,
+}) => {
+  const [isActive, setIsActive] = React.useState(false);
+  const [likeCount, setLikeCount] = React.useState(0);
   const { formatMessage } = useIntl();
+
+  const handleLike = () => {
+    setIsActive(!isActive);
+    setLikeCount(isActive ? totalLikes - 1 : totalLikes + 1);
+    onClickLike();
+  };
 
   if (syncState === 'syncing') {
     return (
@@ -50,6 +69,11 @@ const Footer: React.FC<
     );
   }
 
+  useEffect(() => {
+    setIsActive(isLiked);
+    setLikeCount(totalLikes);
+  }, [syncState]);
+
   return (
     <ViewStoryCompostBarContainer>
       <ViewStoryCompostBarViewIconContainer>
@@ -57,13 +81,15 @@ const Footer: React.FC<
         {millify(reach || 0)}
       </ViewStoryCompostBarViewIconContainer>
       <ViewStoryCompostBarEngagementContainer>
-        <ViewStoryCompostBarEngagementIconContainer onClick={onClickComment}>
-          <CommentIcon /> {millify(commentsCount) || 0}
-        </ViewStoryCompostBarEngagementIconContainer>
-        <ViewStoryCompostBarEngagementIconContainer>
-          {!isLiked ? <ThumbsUp onClick={onLike} /> : <LikedIcon onClick={onLike} />}
-          {millify(totalLikes || 0)}
-        </ViewStoryCompostBarEngagementIconContainer>
+        {allowCommentInStory && (
+          <ViewStoryCompostBarEngagementButton onClick={onClickComment}>
+            <CommentIcon /> {millify(commentsCount) || 0}
+          </ViewStoryCompostBarEngagementButton>
+        )}
+        <ViewStoryCompostBarEngagementButton onClick={handleLike}>
+          {!isActive ? <ThumbsUp /> : <LikedIcon />}
+          {millify(likeCount || 0)}
+        </ViewStoryCompostBarEngagementButton>
       </ViewStoryCompostBarEngagementContainer>
     </ViewStoryCompostBarContainer>
   );

@@ -17,17 +17,13 @@ const useStories = (params: Amity.GetStoriesByTargetParam): UseStories => {
   const [hasMore, setHasMore] = useState<boolean>(false);
   const loadMoreFnRef = useRef<(() => void) | undefined | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
+
   const loadMore = useCallback(() => {
     if (loadMoreFnRef.current) {
       setLoadMoreHasBeenCalled(true);
       loadMoreFnRef.current?.();
     }
   }, [loadMoreFnRef, loadMoreHasBeenCalled, isLoading, setIsLoading]);
-
-  useCommunityStoriesSubscription({
-    targetId: params.targetId,
-    targetType: 'community',
-  });
 
   useEffect(() => {
     async function run() {
@@ -75,6 +71,11 @@ const useStories = (params: Amity.GetStoriesByTargetParam): UseStories => {
       }
     };
   }, []);
+
+  useCommunityStoriesSubscription({
+    targetId: params.targetId,
+    targetType: params.targetType as Amity.StoryTargetType, // TO FIX: type issue
+  });
 
   return {
     stories,

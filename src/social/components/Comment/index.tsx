@@ -273,14 +273,16 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   ) : (
     <CommentBlock>
       <CommentContainer data-qa-anchor="comment">{renderedComment}</CommentContainer>
-      <CommentList
-        parentId={comment.commentId}
-        referenceType={comment.referenceType}
-        referenceId={comment.referenceId}
-        readonly={readonly}
-        isExpanded={isExpanded}
-        limit={REPLIES_PER_PAGE}
-      />
+      {comment.children.length > 0 && (
+        <CommentList
+          parentId={comment.commentId}
+          referenceType={comment.referenceType}
+          referenceId={comment.referenceId}
+          readonly={readonly}
+          isExpanded={isExpanded}
+          limit={REPLIES_PER_PAGE}
+        />
+      )}
 
       {isReplying && (
         <CommentComposeBar

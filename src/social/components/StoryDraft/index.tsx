@@ -24,7 +24,7 @@ import Avatar from '~/core/components/Avatar';
 import { readFileAsync } from '~/helpers';
 
 type DraftStoryProps = {
-  file: File;
+  file: File | null;
   creatorAvatar: string;
   onCreateStory: (
     file: File,

@@ -20,7 +20,7 @@ export const IconButton = styled.button`
   border: none;
   top: 6rem;
   left: 1.25rem;
-  z-index: 10;
+  z-index: 9999;
   cursor: pointer;
 `;
 

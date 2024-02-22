@@ -9,12 +9,13 @@ import {
   IconButton,
 } from '~/social/components/StoryViewer/Renderers/styles';
 import {
+  MobileActionSheetContent,
   MobileSheet,
   MobileSheetContent,
   MobileSheetHeader,
-  MobileSheetScroller,
   StoryActionItem,
   StoryActionItemText,
+  StoryCommentComposerBarContainer,
 } from '~/social/components/StoryViewer/styles';
 import Footer from '~/social/components/StoryViewer/Renderers/Wrappers/Footer';
 import Header from '~/social/components/StoryViewer/Renderers/Wrappers/Header';
@@ -28,7 +29,9 @@ import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
 import CommentList from '~/social/components/CommentList';
-import { ReactionRepository } from '@amityco/ts-sdk';
+import CommentComposeBar from '~/social/components/CommentComposeBar';
+import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
+import { Mentionees, Metadata } from '~/helpers/utils';
 import { LIKE_REACTION_KEY } from '~/constants';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
@@ -53,6 +56,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     fileId: community?.avatarFileId || '',
     imageSize: 'small',
   });
+
   const heading = community?.displayName;
   const isOfficial = community?.isOfficial || false;
   const subheading =
@@ -115,6 +119,22 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   const targetRootId = 'stories-viewer';
 
+  const handleAddComment = async (
+    commentText: string,
+    mentionees: Mentionees,
+    metadata: Metadata,
+  ) => {
+    await CommentRepository.createComment({
+      referenceType: 'story',
+      referenceId: story.storyId,
+      data: {
+        text: commentText,
+      },
+      mentionees,
+      metadata,
+    });
+  };
+
   const handleLike = async () => {
     try {
       if (!isLiked) {
@@ -123,13 +143,13 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         await ReactionRepository.removeReaction('story', story.storyId, LIKE_REACTION_KEY);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Can't toggle like", error);
     }
   };
 
   React.useEffect(() => {
     if (vid.current) {
-      if (isPaused || isOpenBottomSheet) {
+      if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
         vid.current.pause();
         action('pause', true);
       } else {
@@ -137,7 +157,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         action('play', true);
       }
     }
-  }, [isPaused, isOpenBottomSheet]);
+  }, [isPaused, isOpenBottomSheet, isOpenCommentSheet]);
 
   return (
     <RendererContainer>
@@ -187,14 +207,23 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
       >
         <MobileSheet.Container>
+          <MobileSheet.Header />
           <MobileSheetHeader>
             {formatMessage({ id: 'storyViewer.commentSheet.title' })}
           </MobileSheetHeader>
           <MobileSheetContent>
-            <MobileSheetScroller>
+            <MobileSheet.Scroller>
               <CommentList referenceId={story.storyId} referenceType="story" />
-            </MobileSheetScroller>
+            </MobileSheet.Scroller>
           </MobileSheetContent>
+          <StoryCommentComposerBarContainer>
+            <CommentComposeBar
+              storyId={story.storyId}
+              onSubmit={(text, mentionees, metadata) =>
+                handleAddComment?.(text, mentionees, metadata)
+              }
+            />
+          </StoryCommentComposerBarContainer>
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeCommentSheet} />
       </MobileSheet>
@@ -208,27 +237,33 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       >
         <MobileSheet.Container>
           <MobileSheet.Header />
-          <MobileSheet.Content>
+          <MobileActionSheetContent>
             {actions?.map((bottomSheetAction) => (
-              <StoryActionItem onClick={() => bottomSheetAction.action()}>
+              <StoryActionItem
+                onClick={() => {
+                  bottomSheetAction.action();
+                  closeBottomSheet();
+                }}
+              >
                 {bottomSheetAction.icon}
                 <StoryActionItemText>
                   {formatMessage({ id: bottomSheetAction.name })}
                 </StoryActionItemText>
               </StoryActionItem>
             ))}
-          </MobileSheet.Content>
+          </MobileActionSheetContent>
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeBottomSheet} />
       </MobileSheet>
       <Footer
-        syncState={syncState}
         reach={reach}
+        commentsCount={commentsCount}
+        allowCommentInStory={community?.allowCommentInStory}
+        onClickComment={openCommentSheet}
         isLiked={isLiked}
         totalLikes={totalLikes}
-        onLike={handleLike}
-        commentsCount={commentsCount}
-        onClickComment={openCommentSheet}
+        onClickLike={handleLike}
+        syncState={syncState}
       />
     </RendererContainer>
   );

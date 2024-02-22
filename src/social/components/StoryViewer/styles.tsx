@@ -28,10 +28,6 @@ export const MobileSheet = styled(Sheet)`
   width: 100%;
 `;
 
-export const MobileSheetScroller = styled(MobileSheet.Scroller)`
-  padding: 0 1rem;
-`;
-
 export const StoryCommentComposerBarContainer = styled.div`
   padding: 0 1rem;
 `;
@@ -48,6 +44,10 @@ export const StoryCommentComposerBar = styled.div`
 export const MobileSheetContent = styled(MobileSheet.Content)`
   padding: 1rem;
   height: 24rem;
+`;
+
+export const MobileActionSheetContent = styled(MobileSheet.Content)`
+  padding: 1rem;
 `;
 
 export const CloseButton = styled(CloseIcon)`
