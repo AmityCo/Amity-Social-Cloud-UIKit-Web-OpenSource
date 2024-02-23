@@ -44,6 +44,7 @@ export { default as ArrowRightCircle } from './ArrowRightCircle';
 export { default as EyeIcon } from './Eye';
 export { default as LikedIcon } from './Liked';
 export { default as Lock2Icon } from './Lock2';
+export { default as Comment2Icon } from './Comment2';
 
 // files
 export { default as AudioFile } from './files/Audio';

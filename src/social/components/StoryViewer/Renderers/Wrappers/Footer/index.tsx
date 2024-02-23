@@ -10,7 +10,7 @@ import {
   ViewStoryUploadingWrapper,
 } from './styles';
 import Spinner from '~/social/components/Spinner';
-import { CommentIcon, DotsIcon, ErrorIcon, LikedIcon, ThumbsUp } from '~/icons';
+import { Comment2Icon, DotsIcon, ErrorIcon, LikedIcon, ThumbsUp } from '~/icons';
 
 import { useIntl } from 'react-intl';
 import millify from 'millify';
@@ -93,7 +93,7 @@ const Footer: React.FC<
       </ViewStoryCompostBarViewIconContainer>
       <ViewStoryCompostBarEngagementContainer>
         <ViewStoryCompostBarEngagementButton onClick={onClickComment}>
-          <CommentIcon /> {millify(commentsCount) || 0}
+          <Comment2Icon /> {millify(commentsCount) || 0}
         </ViewStoryCompostBarEngagementButton>
         <ViewStoryCompostBarEngagementButton onClick={handleLike}>
           {!isActive ? <ThumbsUp /> : <LikedIcon />}
