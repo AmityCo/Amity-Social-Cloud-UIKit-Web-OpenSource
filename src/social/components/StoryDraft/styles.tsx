@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { VideoPreview } from '~/core/components/Uploaders/Video/styles';
-import { ArrowLeftCircle2, ArrowRightIcon, ExpandIcon, LinkIcon } from '~/icons';
+import { ArrowLeftCircle2, ArrowRight2Icon, ExpandIcon, LinkIcon } from '~/icons';
 
 export const BackIcon = styled(ArrowLeftCircle2)`
   cursor: pointer;
@@ -20,7 +20,7 @@ export const StoryLinkIcon = styled(LinkIcon)`
   color: #ffffff;
 `;
 
-export const ShareStoryIcon = styled(ArrowRightIcon)`
+export const ShareStoryIcon = styled(ArrowRight2Icon)`
   color: #292b32;
 `;
 

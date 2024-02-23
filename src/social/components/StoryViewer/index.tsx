@@ -29,7 +29,7 @@ import { confirm } from '~/core/components/Confirm';
 import { isAdmin, isModerator } from '~/helpers/permissions';
 import { Permissions } from '~/social/constants';
 import { isNonNullable } from '~/helpers/utils';
-import { TrashIcon } from '~/icons';
+import { Trash2Icon, TrashIcon } from '~/icons';
 
 interface StoryViewerProps {
   targetId: string;
@@ -166,7 +166,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
-              icon: <TrashIcon />,
+              icon: <Trash2Icon />,
             }
           : null,
       ].filter(isNonNullable),
