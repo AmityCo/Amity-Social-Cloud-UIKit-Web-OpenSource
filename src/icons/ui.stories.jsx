@@ -5,6 +5,7 @@ export default {
   title: 'Assets/Icons',
 };
 
+export const Bars = () => <Icons.BarsIcon />;
 export const Category = () => <Icons.Category />;
 export const Community = () => <Icons.Community />;
 export const CommunityAlt = () => <Icons.CommunityAlt />;

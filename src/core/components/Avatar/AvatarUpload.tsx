@@ -20,14 +20,17 @@ interface AvatarUploadProps {
   value: string;
 }
 
-const StyledCameraIcon = styled(CameraIcon)<{ icon?: ReactNode }>`
+const StyledCameraIcon = styled(CameraIcon).attrs({
+  width: 20,
+  height: 20,
+})`
   font-size: 20px;
   z-index: 3;
   position: absolute;
   left: 22px;
   top: 20px;
   cursor: pointer;
-  color: #fff;
+  fill: #fff;
 `;
 
 export const AvatarUpload = ({ disabled, setAvatarFileId, value }: AvatarUploadProps) => {

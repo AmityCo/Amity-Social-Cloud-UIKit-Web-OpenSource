@@ -6,7 +6,7 @@ interface SvgProps {
   children?: React.ReactNode;
 }
 
-const Svg = ({ bg = '#fff', fg = '#cacaca', children, ...props }: SvgProps) => (
+const File = ({ bg = '#fff', fg = '#cacaca', children, ...props }: SvgProps) => (
   <svg
     width="100%"
     height="100%"
@@ -38,4 +38,4 @@ const Svg = ({ bg = '#fff', fg = '#cacaca', children, ...props }: SvgProps) => (
   </svg>
 );
 
-export default Svg;
+export default File;

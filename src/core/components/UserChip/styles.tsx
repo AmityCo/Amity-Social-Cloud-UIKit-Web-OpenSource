@@ -19,9 +19,8 @@ export const Name = styled.span`
   margin: 0 0.5rem;
 `;
 
-export const Close = styled(Remove)`
-  font-size: 12px;
-  color: ${({ theme }) => theme.palette.base.shade1};
+export const Close = styled(Remove).attrs({ width: 12, height: 12 })`
+  fill: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 export const RoundButton = styled(Button)`

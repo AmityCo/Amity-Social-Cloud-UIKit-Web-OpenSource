@@ -8,8 +8,7 @@ import Button from '~/core/components/Button';
 import { NewspaperLight, Search } from '~/icons';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
-const FeedIcon = styled(NewspaperLight)<{ icon?: ReactNode }>`
-  font-size: 48px;
+const FeedIcon = styled(NewspaperLight).attrs<{ icon?: ReactNode }>({ width: 48, height: 48 })`
   margin: 10px;
 `;
 
@@ -18,8 +17,7 @@ const ExploreLink = styled(Button)`
   margin-top: 8px;
 `;
 
-const SearchIcon = styled(Search)<{ icon?: ReactNode }>`
-  font-size: 16px;
+const SearchIcon = styled(Search).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
   margin-right: 6px;
 `;
 

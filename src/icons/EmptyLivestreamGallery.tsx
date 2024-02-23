@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default (props: React.SVGProps<SVGSVGElement>) => {
+const EmptyLivestreamGallery = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="48"
@@ -14,3 +14,5 @@ export default (props: React.SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
+export default EmptyLivestreamGallery;

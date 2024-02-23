@@ -1,13 +1,14 @@
 import styled from 'styled-components';
-import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { ReactNode } from 'react';
+import { BarsIcon } from "~/icons";
 
-export const DetailsIcon = styled(FaIcon).attrs<{ icon?: ReactNode }>({ icon: faBars })`
-  font-size: 16px;
-  cursor: pointer;
-  color: ${({ theme }) => theme.palette.neutral.main};
-  align-self: center;
+export const DetailsIcon = styled(BarsIcon).attrs<{ icon?: ReactNode }>({
+  width: 24,
+  height: 24,
+})`
+    cursor: pointer;
+    fill: ${({ theme }) => theme.palette.neutral.main};
+    align-self: center;
 `;
 
 export const ChatHeaderContainer = styled.div`

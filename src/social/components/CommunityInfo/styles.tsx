@@ -6,13 +6,11 @@ import { PrimaryButton } from '~/core/components/Button';
 import { Plus, Pencil } from '~/icons';
 import SocialCommunityName from '~/social/components/community/Name';
 
-export const PlusIcon = styled(Plus)<{ icon?: ReactNode }>`
-  font-size: 15px;
+export const PlusIcon = styled(Plus).attrs<{ icon?: ReactNode }>({ width: 15, height: 15 })`
   margin-right: 8px;
 `;
 
-export const PencilIcon = styled(Pencil)`
-  font-size: 15px;
+export const PencilIcon = styled(Pencil).attrs<{ icon?: ReactNode }>({ width: 15, height: 15 })`
   margin-right: 4px;
 `;
 

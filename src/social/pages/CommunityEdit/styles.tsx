@@ -39,7 +39,6 @@ export const ExtraActionButton = styled(Button)`
   width: 100%;
 `;
 
-export const PlusIcon = styled(Plus)<{ icon?: ReactNode }>`
-  font-size: 15px;
+export const PlusIcon = styled(Plus).attrs<{ icon?: ReactNode }>({ width: 15, height: 15 })`
   margin-right: 8px;
 `;

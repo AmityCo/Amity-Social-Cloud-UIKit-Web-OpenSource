@@ -24,7 +24,7 @@ const defaultTriggerRenderer: SelectProps['renderTrigger'] = ({
         <div>{placeholder}</div>
       )}
 
-      <ChevronDown />
+      <ChevronDown height={14} width={14} />
     </DefaultTrigger>
   );
 };
