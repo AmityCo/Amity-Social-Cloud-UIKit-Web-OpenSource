@@ -18,9 +18,8 @@ export const LockIconContainer = styled.div`
   margin-bottom: 12px;
 `;
 
-export const LockIcon = styled(Lock)<{ icon?: ReactNode }>`
-  font-size: 40px;
-  color: ${({ theme }) => theme.palette.base.shade2};
+export const LockIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 40, height: 40 })`
+  fill: ${({ theme }) => theme.palette.base.shade2};
 `;
 
 export const PrivateFeedTitle = styled.div`

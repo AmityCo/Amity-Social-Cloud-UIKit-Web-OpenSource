@@ -2,15 +2,16 @@ import { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import { Lock, Verified } from '~/icons';
 
-export const PrivateIcon = styled(Lock)<{ icon?: ReactNode }>`
+export const PrivateIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
   margin-right: 8px;
-  font-size: 16px;
 `;
 
-export const VerifiedIcon = styled(Verified)<{ icon?: ReactNode }>`
+export const VerifiedIcon = styled(Verified).attrs<{ icon?: ReactNode }>({
+  width: 16,
+  height: 16,
+})`
   margin-left: 8px;
-  font-size: 16px;
-  color: #1253de;
+  fill: #1253de;
 `;
 
 // the padding-right is to avoid cutting too short when the name ends with an emoji (due to the flex + text-overflow combination)
@@ -33,13 +34,4 @@ export const NameContainer = styled.div<{
     `}
     ${isTitle && theme.typography.title}
   `}
-
-  & > ${PrivateIcon},
-  & > ${VerifiedIcon} {
-    ${({ isTitle }) =>
-      isTitle &&
-      css`
-        font-size: 18px;
-      `}
-  }
 `;

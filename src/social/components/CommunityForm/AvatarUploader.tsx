@@ -10,10 +10,12 @@ import CameraIcon from '~/icons/Camera';
 import useFile from '~/core/hooks/useFile';
 import useFileUpload, { getUpdatedTime, isAmityFile } from '~/core/hooks/useFileUpload';
 
-const StyledCameraIcon = styled(CameraIcon)<{ icon?: ReactNode }>`
-  font-size: 20px;
+const StyledCameraIcon = styled(CameraIcon).attrs({
+  height: 20,
+  width: 20,
+})`
   z-index: 3;
-  color: #fff;
+  fill: #fff;
 `;
 
 const AvatarUploadContainer = styled.div`

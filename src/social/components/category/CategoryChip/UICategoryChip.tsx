@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 
 import Avatar from '~/core/components/Avatar';
-import { Close, Remove } from '~/icons';
 import { backgroundImage as CategoryImage } from '~/icons/Category';
 
-import { Chip, Name, RoundButton } from './styles';
+import { Chip, Name, RoundButton, Close } from './styles';
 
 interface UICategoryChipProps {
   categoryId?: string;

@@ -18,8 +18,11 @@ export const Username = styled.div`
   margin-left: 7px;
 `;
 
-export const DropdownIcon = styled(SortDown)<{ icon?: ReactNode }>`
-  color: #292b32;
+export const DropdownIcon = styled(SortDown).attrs<{ icon?: ReactNode }>({
+  width: 18,
+  height: 18,
+})`
+  fill: #292b32;
   cursor: pointer;
   margin-bottom: 2px;
 `;

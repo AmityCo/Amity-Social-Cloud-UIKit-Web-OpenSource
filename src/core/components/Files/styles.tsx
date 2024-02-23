@@ -70,14 +70,16 @@ export const FileInput = styled.input.attrs({ type: 'file' })`
 
 export const Label = styled.label<{ disabled?: boolean }>``;
 
-export const FileIcon = styled(FileAttachment)<{ disabled?: boolean; icon?: ReactNode }>`
-  font-size: 18px;
+export const FileIcon = styled(FileAttachment).attrs<{ disabled?: boolean; icon?: ReactNode }>({
+  width: 18,
+  height: 18,
+})`
   cursor: pointer;
 
   ${({ disabled, theme }) =>
     disabled &&
     `
-      color: ${theme.palette.base.shade3};
+      fill: ${theme.palette.base.shade3};
       cursor: default;
   `}
 `;

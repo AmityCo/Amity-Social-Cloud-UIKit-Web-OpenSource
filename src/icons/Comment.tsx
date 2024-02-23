@@ -1,21 +1,21 @@
 import React from 'react';
 
-function Icon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      fill="none"
-      viewBox="0 0 20 20"
-      {...props}
-    >
-      <path
-        fill="#A5A9B5"
-        d="M10 2.188c4.682 0 8.5 3.12 8.5 6.906C18.5 12.912 14.682 16 10 16c-1.295 0-2.49-.232-3.586-.63-.797.663-2.457 1.693-4.648 1.693-.133 0-.2-.034-.266-.133-.033-.1 0-.233.066-.3 0-.032 1.395-1.493 1.827-3.187-1.196-1.195-1.893-2.69-1.893-4.35 0-3.784 3.785-6.905 8.5-6.905z"
-      ></path>
-    </svg>
-  );
-}
+const Comment = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="100%"
+    height="100%"
+    viewBox="0 0 512 512"
+    fill="currentColor"
+    {...props}
+  >
+    <path
+      d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 7.1 5.8 12 12 12 2.4 0
+      4.9-.7 7.1-2.4L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zm16 352c0 8.8-7.2
+      16-16 16H288l-12.8 9.6L208 428v-60H64c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16h384c8.8
+      0 16 7.2 16 16v288z"
+    />
+  </svg>
+);
 
-export default Icon;
+export default Comment;

@@ -13,7 +13,7 @@ const SCROLLABLE_HEIGHT = 200;
 const triggerRenderer: DropdownProps['renderTrigger'] = (props) => {
   return (
     <Button {...props}>
-      <ChevronDown />
+      <ChevronDown height={14} width={14} />
     </Button>
   );
 };

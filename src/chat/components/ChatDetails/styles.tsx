@@ -23,9 +23,8 @@ export const ChatDetailsHeader = styled.div`
   color: ${({ theme }) => theme.palette.neutral.shade1};
 `;
 
-export const HeaderCloseIcon = styled(Close)<{ icon?: ReactNode }>`
-  font-size: 20px;
-  color: ${({ theme }) => theme.palette.neutral.main};
+export const HeaderCloseIcon = styled(Close).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })`
+  fill: ${({ theme }) => theme.palette.neutral.main};
   cursor: pointer;
 `;
 

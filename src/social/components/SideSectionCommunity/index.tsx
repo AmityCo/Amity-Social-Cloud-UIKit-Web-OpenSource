@@ -8,13 +8,9 @@ import SideMenuSection from '~/core/components/SideMenuSection';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import SideMenuActionItem from '~/core/components/SideMenuActionItem';
 
-export const NewsIcon = styled(Newspaper)<{ icon?: ReactNode }>`
-  font-size: 20px;
-`;
+export const NewsIcon = styled(Newspaper).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })``;
 
-export const SearchIcon = styled(Search)<{ icon?: ReactNode }>`
-  font-size: 20px;
-`;
+export const SearchIcon = styled(Search).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })``;
 
 interface SideSectionCommunityProps {
   shouldHideExplore?: boolean;
