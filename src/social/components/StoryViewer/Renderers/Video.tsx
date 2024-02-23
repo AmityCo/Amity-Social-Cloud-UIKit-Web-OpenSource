@@ -15,7 +15,6 @@ import {
   MobileSheetHeader,
   StoryActionItem,
   StoryActionItemText,
-  StoryCommentComposerBarContainer,
 } from '~/social/components/StoryViewer/styles';
 import Footer from '~/social/components/StoryViewer/Renderers/Wrappers/Footer';
 import Header from '~/social/components/StoryViewer/Renderers/Wrappers/Header';
@@ -29,10 +28,10 @@ import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
 import CommentList from '~/social/components/CommentList';
-import CommentComposeBar from '~/social/components/CommentComposeBar';
-import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
-import { Mentionees, Metadata } from '~/helpers/utils';
+import { ReactionRepository } from '@amityco/ts-sdk';
+
 import { LIKE_REACTION_KEY } from '~/constants';
+import StoryCommentComposeBar from '~/social/components/StoryCommentComposeBar';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -64,7 +63,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       ? `${formatTimeAgo(createdAt as string)} • By ${creator?.displayName}`
       : '';
 
-  const isStoryCreator = story?.creator?.userId === currentUserId;
+  const isStoryCreator = creator?.userId === currentUserId;
   const haveStoryPermission =
     (community &&
       client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId)) ||
@@ -118,22 +117,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const closeCommentSheet = () => setIsOpenCommentSheet(false);
 
   const targetRootId = 'stories-viewer';
-
-  const handleAddComment = async (
-    commentText: string,
-    mentionees: Mentionees,
-    metadata: Metadata,
-  ) => {
-    await CommentRepository.createComment({
-      referenceType: 'story',
-      referenceId: story.storyId,
-      data: {
-        text: commentText,
-      },
-      mentionees,
-      metadata,
-    });
-  };
 
   const handleLike = async () => {
     try {
@@ -216,14 +199,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
               <CommentList referenceId={story.storyId} referenceType="story" />
             </MobileSheet.Scroller>
           </MobileSheetContent>
-          <StoryCommentComposerBarContainer>
-            <CommentComposeBar
-              storyId={story.storyId}
-              onSubmit={(text, mentionees, metadata) =>
-                handleAddComment?.(text, mentionees, metadata)
-              }
-            />
-          </StoryCommentComposerBarContainer>
+          <StoryCommentComposeBar
+            storyId={story.storyId}
+            isJoined={community?.isJoined}
+            allowCommentInStory={community?.allowCommentInStory}
+          />
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeCommentSheet} />
       </MobileSheet>
@@ -256,14 +236,14 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         <MobileSheet.Backdrop onTap={closeBottomSheet} />
       </MobileSheet>
       <Footer
+        syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}
-        allowCommentInStory={community?.allowCommentInStory}
-        onClickComment={openCommentSheet}
-        isLiked={isLiked}
         totalLikes={totalLikes}
+        isLiked={isLiked}
+        isJoined={community?.isJoined}
         onClickLike={handleLike}
-        syncState={syncState}
+        onClickComment={openCommentSheet}
       />
     </RendererContainer>
   );

@@ -30,7 +30,6 @@ import { isAdmin, isModerator } from '~/helpers/permissions';
 import { Permissions } from '~/social/constants';
 import { isNonNullable } from '~/helpers/utils';
 import { TrashIcon } from '~/icons';
-import useCommunityStoriesSubscription from '~/social/hooks/useStoryReactionSubscription';
 
 interface StoryViewerProps {
   targetId: string;
@@ -59,7 +58,6 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
   const [file, setFile] = useState<File | null>(null);
   const [colors, setColors] = useState<FinalColor[]>([]);
 
-  const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
   const haveStoryPermission =
     client?.hasPermission(Permissions.ManageStoryPermission).community(targetId) ||
     isAdmin(user?.roles) ||
@@ -164,7 +162,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        isStoryCreator || haveStoryPermission
+        haveStoryPermission
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),

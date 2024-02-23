@@ -98,8 +98,8 @@ dependencies:
 
 devDependencies:
   '@amityco/ts-sdk':
-    specifier: 6.17.3
-    version: 6.17.3
+    specifier: 6.17.3-7550fba.0
+    version: 6.17.3-7550fba.0
   '@fortawesome/pro-light-svg-icons':
     specifier: ^5.15.4
     version: 5.15.4
@@ -243,7 +243,7 @@ devDependencies:
     version: 7.1.1(webpack@5.89.0)
   ts-jest:
     specifier: ^29.1.1
-    version: 29.1.1(@babel/core@7.23.7)(esbuild@0.19.11)(jest@29.7.0)(typescript@4.9.5)
+    version: 29.1.1(@babel/core@7.23.7)(esbuild@0.18.20)(jest@29.7.0)(typescript@4.9.5)
   tsup:
     specifier: ^7.3.0
     version: 7.3.0(postcss@8.4.33)(typescript@4.9.5)
@@ -264,8 +264,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /@amityco/ts-sdk@6.17.3:
-    resolution: {integrity: sha512-htACVQHYyGNEsybNeXXMxq07PVtIHFpP36b9OulWyaAJMDzDtHyC8g/kXeDkxqNBWZI0bYZHWt1lAOSkpp3r/A==}
+  /@amityco/ts-sdk@6.17.3-7550fba.0:
+    resolution: {integrity: sha512-9Z3JpN7HxsviJlZ+RIBNTIKtBj5B7o3ejIpSQY0oDLwoxTqRcDDhg7nwrHhHXZLdXlMsWqWQf7AAU8KXYhzw0A==}
     engines: {node: '>=12', npm: '>=6'}
     dependencies:
       agentkeepalive: 4.5.0
@@ -7043,7 +7043,7 @@ packages:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: 5.89.0(esbuild@0.19.11)
+      webpack: 5.89.0(esbuild@0.18.20)
     dev: true
 
   /file-system-cache@2.3.0:
@@ -11186,7 +11186,7 @@ packages:
     dependencies:
       file-loader: 6.2.0(webpack@5.89.0)
       loader-utils: 2.0.4
-      webpack: 5.89.0(esbuild@0.19.11)
+      webpack: 5.89.0(esbuild@0.18.20)
     dev: true
 
   /synchronous-promise@2.0.17:
@@ -11259,7 +11259,7 @@ packages:
       unique-string: 2.0.0
     dev: true
 
-  /terser-webpack-plugin@5.3.10(esbuild@0.19.11)(webpack@5.89.0):
+  /terser-webpack-plugin@5.3.10(esbuild@0.18.20)(webpack@5.89.0):
     resolution: {integrity: sha512-BKFPWlPDndPs+NGGCr1U59t0XScL5317Y0UReNrHaw9/FwhPENlq6bfgs+4yPfyP51vqC1bQ4rp1EfXW5ZSH9w==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
@@ -11276,12 +11276,12 @@ packages:
         optional: true
     dependencies:
       '@jridgewell/trace-mapping': 0.3.20
-      esbuild: 0.19.11
+      esbuild: 0.18.20
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.1
       terser: 5.26.0
-      webpack: 5.89.0(esbuild@0.19.11)
+      webpack: 5.89.0(esbuild@0.18.20)
     dev: true
 
   /terser@5.26.0:
@@ -11432,7 +11432,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-jest@29.1.1(@babel/core@7.23.7)(esbuild@0.19.11)(jest@29.7.0)(typescript@4.9.5):
+  /ts-jest@29.1.1(@babel/core@7.23.7)(esbuild@0.18.20)(jest@29.7.0)(typescript@4.9.5):
     resolution: {integrity: sha512-D6xjnnbP17cC85nliwGiL+tpoKN0StpgE0TeOjXQTU6MVCfsB4v7aW05CgQ/1OywGb0x/oy9hHFnN+sczTiRaA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -11455,7 +11455,7 @@ packages:
     dependencies:
       '@babel/core': 7.23.7
       bs-logger: 0.2.6
-      esbuild: 0.19.11
+      esbuild: 0.18.20
       fast-json-stable-stringify: 2.1.0
       jest: 29.7.0
       jest-util: 29.7.0
@@ -11986,7 +11986,7 @@ packages:
     resolution: {integrity: sha512-poXpCylU7ExuvZK8z+On3kX+S8o/2dQ/SVYueKA0D4WEMXROXgY8Ez50/bQEUmvoSMMrWcrJqCHuhAbsiwg7Dg==}
     dev: true
 
-  /webpack@5.89.0(esbuild@0.19.11):
+  /webpack@5.89.0(esbuild@0.18.20):
     resolution: {integrity: sha512-qyfIC10pOr70V+jkmud8tMfajraGCZMBWJtrmuBymQKCrLTRejBI8STDp1MCyZu/QTdZSeacCQYpYNQVOzX5kw==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -12017,7 +12017,7 @@ packages:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(esbuild@0.19.11)(webpack@5.89.0)
+      terser-webpack-plugin: 5.3.10(esbuild@0.18.20)(webpack@5.89.0)
       watchpack: 2.4.0
       webpack-sources: 3.2.3
     transitivePeerDependencies:

@@ -56,7 +56,7 @@ const CommentList = ({
     </TabIconContainer>
   ) : null;
 
-  if (comments.length === 0 && referenceType === 'story') {
+  if (comments.length === 0 && referenceType === 'story' && !isReplyComment) {
     return (
       <NoCommentsContainer>
         {formatMessage({ id: 'storyViewer.commentSheet.empty' })}

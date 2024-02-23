@@ -14,6 +14,7 @@ import { CommentIcon, DotsIcon, ErrorIcon, LikedIcon, ThumbsUp } from '~/icons';
 
 import { useIntl } from 'react-intl';
 import millify from 'millify';
+import { notification } from '~/core/components/Notification';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
@@ -22,7 +23,7 @@ const Footer: React.FC<
     commentsCount: number;
     totalLikes: number;
     isLiked: boolean;
-    allowCommentInStory: boolean;
+    isJoined?: boolean;
     onClickComment: () => void;
     onClickLike: () => void;
   }>
@@ -30,19 +31,29 @@ const Footer: React.FC<
   syncState,
   reach,
   commentsCount,
-  allowCommentInStory,
   totalLikes,
   isLiked,
+  isJoined,
   onClickComment,
   onClickLike,
 }) => {
-  const [isActive, setIsActive] = React.useState(false);
-  const [likeCount, setLikeCount] = React.useState(0);
+  const [isActive, setIsActive] = React.useState(isLiked);
+  const [likeCount, setLikeCount] = React.useState(totalLikes);
   const { formatMessage } = useIntl();
 
   const handleLike = () => {
+    if (!isJoined) {
+      notification.show({
+        content: formatMessage({ id: 'storyViewer.toast.like.disabled' }),
+      });
+      return;
+    }
+    if (isActive) {
+      setLikeCount(likeCount - 1);
+    } else {
+      setLikeCount(likeCount + 1);
+    }
     setIsActive(!isActive);
-    setLikeCount(isActive ? totalLikes - 1 : totalLikes + 1);
     onClickLike();
   };
 
@@ -72,7 +83,7 @@ const Footer: React.FC<
   useEffect(() => {
     setIsActive(isLiked);
     setLikeCount(totalLikes);
-  }, [syncState]);
+  }, [isLiked, totalLikes]);
 
   return (
     <ViewStoryCompostBarContainer>
@@ -81,11 +92,9 @@ const Footer: React.FC<
         {millify(reach || 0)}
       </ViewStoryCompostBarViewIconContainer>
       <ViewStoryCompostBarEngagementContainer>
-        {allowCommentInStory && (
-          <ViewStoryCompostBarEngagementButton onClick={onClickComment}>
-            <CommentIcon /> {millify(commentsCount) || 0}
-          </ViewStoryCompostBarEngagementButton>
-        )}
+        <ViewStoryCompostBarEngagementButton onClick={onClickComment}>
+          <CommentIcon /> {millify(commentsCount) || 0}
+        </ViewStoryCompostBarEngagementButton>
         <ViewStoryCompostBarEngagementButton onClick={handleLike}>
           {!isActive ? <ThumbsUp /> : <LikedIcon />}
           {millify(likeCount || 0)}

@@ -357,6 +357,8 @@
   "storyViewer.footer.uploading": "Uploading...",
   "storyViewer.commentSheet.title": "Comments",
   "storyViewer.commentSheet.empty": "No comments yet",
+  "storyViewer.commentSheet.disabled": "Comments are disabled for this story",
+  "storyViewer.toast.like.disabled": "Join community to interact with all stories",
 
   "storyDraft.button.shareStory": "Share story",
 

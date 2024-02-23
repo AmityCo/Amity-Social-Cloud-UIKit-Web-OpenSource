@@ -90,9 +90,6 @@ const StoryDraft = ({ file, onDiscardStory, onCreateStory }: DraftStoryProps) =>
                 <ExpandStoryIcon />
               </IconButton>
             )}
-            <IconButton>
-              <StoryLinkIcon />
-            </IconButton>
           </ActionsContainer>
         </StoryDraftHeader>
 

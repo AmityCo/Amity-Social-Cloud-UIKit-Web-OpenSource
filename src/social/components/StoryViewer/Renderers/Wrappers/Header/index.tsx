@@ -51,7 +51,6 @@ const Header: React.FC<
   onClose,
   onClickCommunity,
   haveStoryPermission,
-  children,
 }) => {
   const handleAddIconClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -110,7 +109,6 @@ const Header: React.FC<
           </ViewStoryHeaderListActionsContainer>
         </ViewStoryHeadingInfoContainer>
       </ViewStoryHeaderContainer>
-      {children}
     </>
   );
 };

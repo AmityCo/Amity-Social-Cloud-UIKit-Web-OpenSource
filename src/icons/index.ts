@@ -43,6 +43,7 @@ export { default as ArrowLeftCircle2 } from './ArrowLeftCircle2';
 export { default as ArrowRightCircle } from './ArrowRightCircle';
 export { default as EyeIcon } from './Eye';
 export { default as LikedIcon } from './Liked';
+export { default as Lock2Icon } from './Lock2';
 
 // files
 export { default as AudioFile } from './files/Audio';
