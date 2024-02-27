@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import MessageComponent from '~/chat/components/Message';
@@ -46,28 +46,29 @@ interface MessageListProps {
 const MessageList = ({ channelId }: MessageListProps) => {
   const { client } = useSDK();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const { messages, hasMore, loadMore } = useMessagesCollection(channelId);
+  const { messages, hasMore, loadMore, isLoading } = useMessagesCollection({
+    subChannelId: channelId,
+    sortBy: 'segmentDesc',
+    limit: 20,
+  });
 
   useChannelSubscription({
     channelId,
   });
 
-  useEffect(() => {
-    const element = containerRef.current;
-    if (element) {
-      element.scrollIntoView(false);
-    }
-  }, [messages, containerRef]);
-
   return (
     <InfiniteScrollContainer ref={containerRef}>
       {containerRef.current ? (
         <InfiniteScroll
+          scrollableTarget={containerRef.current}
+          scrollThreshold={0.7}
           hasMore={hasMore}
           next={loadMore}
-          loader={<span key={0}>Loading...</span>}
+          loader={isLoading ? <span key={0}>Loading...</span> : null}
           inverse={true}
           dataLength={messages.length}
+          style={{ display: 'flex', flexDirection: 'column-reverse' }}
+          height={containerRef.current.clientHeight}
         >
           <MessageListContainer ref={containerRef} data-qa-anchor="message-list">
             {messages.map((message, i) => {

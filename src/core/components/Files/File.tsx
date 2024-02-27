@@ -33,7 +33,7 @@ const FileComponent = ({ file, onRemove }: FileProps) => {
       {isNew && <ProgressBar progress={progress} />}
 
       <Content>
-        <FileIcon file={{ name, type }} />
+        <FileIcon file={{ name, type }} width={null} height="100%" />
         <FileName>{file.name}</FileName> <FileSize>{filesize(file.size, { base: 2 })}</FileSize>
         {onRemove && <RemoveIcon onClick={() => onRemove(file)} />}
       </Content>

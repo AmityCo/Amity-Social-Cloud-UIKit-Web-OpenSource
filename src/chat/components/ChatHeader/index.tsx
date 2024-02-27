@@ -16,6 +16,7 @@ import {
   MemberCount,
 } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import useChannel from '~/chat/hooks/useChannel';
 
 type ChatHeaderProps = {
   channelId: string;
@@ -24,21 +25,7 @@ type ChatHeaderProps = {
 };
 
 const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatHeaderProps) => {
-  const [channel, setChannel] = useState<Amity.Channel | null>(null);
-  const unsubscribeChannel = useRef<() => void>(() => {});
-  useEffect(() => {
-    async function run() {
-      const unsubscribe = await ChannelRepository.getChannel(channelId, (response) => {
-        setChannel(response.data);
-      });
-      unsubscribeChannel.current = unsubscribe;
-    }
-    run();
-
-    return () => {
-      unsubscribeChannel.current();
-    };
-  }, [channelId]);
+  const channel = useChannel(channelId);
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
   return (

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled, { css } from 'styled-components';
 import { Close } from '~/icons';
 
-export const CloseIcon = styled(Close).attrs({ width: 18, height: 18 })`
+export const CloseIcon = styled(Close).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
   padding: 0 6px;
-  font-size: 18px;
   cursor: pointer;
   margin-left: auto;
   &.svg-inline--fa {

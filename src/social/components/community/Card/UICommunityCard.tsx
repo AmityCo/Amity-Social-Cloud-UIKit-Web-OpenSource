@@ -49,7 +49,7 @@ const UICommunityCard = ({
 
   return (
     <Container onClick={handleClick} {...props}>
-      <Cover backgroundImage={avatarFileUrl ?? communityCoverPlaceholder}>
+      <Cover backgroundImage={avatarFileUrl}>
         <CoverContent>
           <CommunityName
             isOfficial={isOfficial}

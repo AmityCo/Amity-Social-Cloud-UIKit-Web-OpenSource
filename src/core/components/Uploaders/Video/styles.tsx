@@ -101,7 +101,6 @@ export const CircleIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>(
 })`
   z-index: 2;
   opacity: 0.7;
-  font-size: 24px;
 `;
 
 export const RetryButton = styled(Button).attrs<{

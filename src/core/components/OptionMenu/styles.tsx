@@ -4,7 +4,6 @@ import { SecondaryButton } from '~/core/components/Button';
 import { EllipsisH } from '~/icons';
 
 export const OptionsIcon = styled(EllipsisH).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
-  font-size: 16px;
   cursor: pointer;
   margin-left: auto;
 `;

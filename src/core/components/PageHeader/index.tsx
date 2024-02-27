@@ -61,7 +61,7 @@ const PageHeader = ({
     <LinkAndTitle>
       {onBack instanceof Function && (
         <BackButton data-qa-anchor="page-header-back-button" onClick={onBack}>
-          <ChevronLeftIcon height=".9em" />
+          <ChevronLeftIcon height=".9em" width=".9em" />
           {backLinkText ?? <FormattedMessage id="backTitle" />}
         </BackButton>
       )}

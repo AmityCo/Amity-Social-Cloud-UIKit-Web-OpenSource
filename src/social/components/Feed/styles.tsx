@@ -45,7 +45,6 @@ export const TextContainer = styled.div`
 `;
 
 export const LockIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 40, height: 40 })`
-  font-size: 40px;
   fill: ${({ theme }) => theme.palette.base.shade2};
 `;
 

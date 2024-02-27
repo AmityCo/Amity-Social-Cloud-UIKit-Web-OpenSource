@@ -1,6 +1,6 @@
 {
   "name": "@amityco/ui-kit-open-source",
-  "version": "3.0.0",
+  "version": "3.2.1",
   "engines": {
     "node": ">=16",
     "pnpm": ">=8"
@@ -34,12 +34,12 @@
     "tsc": "tsc"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "~6.16.0",
+    "@amityco/ts-sdk": "~6.17.3",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "~6.16.0",
+    "@amityco/ts-sdk": "~6.17.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.2.0",

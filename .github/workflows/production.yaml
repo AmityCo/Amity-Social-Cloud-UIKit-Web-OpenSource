@@ -42,7 +42,7 @@ jobs:
         run: pnpm install
 
       - name: increase version (patch)
-        run: pnpm standard-version --yes
+        run: pnpm standard-version --yes --release-as patch
         if: github.event.inputs.release_as == 'patch'
 
       - name: increase version (minor)

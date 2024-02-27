@@ -86,6 +86,5 @@ export const ExtraActionButton = styled(Button)`
 `;
 
 export const PlusIcon = styled(Plus).attrs({ width: 15, height: 15 })`
-  font-size: 15px;
   margin-right: 8px;
 `;

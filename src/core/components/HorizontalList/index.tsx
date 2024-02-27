@@ -135,10 +135,10 @@ const HorizontalList = ({
         {hasMultiPage && (
           <Pagination>
             <PaginationButton disabled={isFirstPage} onClick={() => setPage(page - 1)}>
-              <ChevronLeftIcon height="20px" />
+              <ChevronLeftIcon height="20px" width="20px" />
             </PaginationButton>
             <PaginationButton disabled={isLastPage} onClick={() => setPage(page + 1)}>
-              <ChevronRightIcon height="20px" />
+              <ChevronRightIcon height="20px" width="20px" />
             </PaginationButton>
           </Pagination>
         )}

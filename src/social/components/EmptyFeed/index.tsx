@@ -9,7 +9,6 @@ import { NewspaperLight, Search } from '~/icons';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 const FeedIcon = styled(NewspaperLight).attrs<{ icon?: ReactNode }>({ width: 48, height: 48 })`
-  font-size: 48px;
   margin: 10px;
 `;
 
@@ -19,7 +18,6 @@ const ExploreLink = styled(Button)`
 `;
 
 const SearchIcon = styled(Search).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
-  font-size: 16px;
   margin-right: 6px;
 `;
 

@@ -89,6 +89,7 @@ function useChatInfo({ channel }: { channel: Amity.Channel | null }) {
 
   useEffect(() => {
     async function run() {
+      setChatAvatar(null);
       const url = await getChatAvatar(
         channel,
         { avatarUrl: otherUser?.avatarCustomUrl || otherUserAvatarUrl },

@@ -2,12 +2,8 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { CreateChat } from '~/icons';
 
-export const CreateNewChatIcon = styled(CreateChat).attrs<{ icon?: ReactNode }>({
-  width: 24,
-  height: 18,
-})`
+export const CreateNewChatIcon = styled(CreateChat).attrs<{ icon?: ReactNode }>({ width: 24, height: 18 })`
   width: 24px !important;
-  font-size: 18px;
   cursor: pointer;
 `;
 
