@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Check, ExclamationCircle, Remove } from '~/icons';
 
 export const SuccessIcon = styled(Check).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
-  font-size: 18px;
   margin-right: 8px;
 `;
 
@@ -11,12 +10,10 @@ export const InfoIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({
   width: 18,
   height: 18,
 })`
-  font-size: 18px;
   margin-right: 8px;
 `;
 
 export const ErrorIcon = styled(Remove).attrs<{ icon?: ReactNode }>({ width: 18, height: 18 })`
-  font-size: 18px;
   margin-right: 8px;
 `;
 

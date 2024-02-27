@@ -6,6 +6,8 @@ import useChatInfo from '~/chat/hooks/useChatInfo';
 
 import { ChatItemLeft, Title, Avatar, ChatItemContainer, UnreadCount } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import useChannelSubscription from '~/social/hooks/useChannelSubscription';
+import useChannel from '~/chat/hooks/useChannel';
 
 function getNormalizedUnreadCount(channelUnreadCount: number) {
   // Within this range the unread counter will show an actuall number
@@ -24,15 +26,21 @@ function getNormalizedUnreadCount(channelUnreadCount: number) {
 }
 
 interface ChatItemProps {
-  channel?: Amity.Channel;
+  channelId: string;
   isSelected: boolean;
   onSelect: ({ channelId, type }: { channelId: string; type: string }) => void;
 }
 
-const ChatItem = ({ channel, isSelected, onSelect }: ChatItemProps) => {
-  const { chatName, chatAvatar } = useChatInfo({ channel: channel || null });
+const ChatItem = ({ channelId, isSelected, onSelect }: ChatItemProps) => {
+  const channel = useChannel(channelId);
+  const { chatName, chatAvatar } = useChatInfo({ channel });
 
   const normalizedUnreadCount = getNormalizedUnreadCount(channel?.unreadCount || 0);
+
+  useChannelSubscription({
+    channelId: channel?.channelId,
+    shouldSubscribe: () => !!channel?.channelId,
+  });
 
   return (
     <ChatItemContainer

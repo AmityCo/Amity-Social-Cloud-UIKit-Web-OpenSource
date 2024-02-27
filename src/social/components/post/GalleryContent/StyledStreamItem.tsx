@@ -6,7 +6,7 @@ import { ExclamationCircle } from '~/icons';
 import { backgroundImage as liveStreamCoverBackground } from '~/icons/LivestreamCover';
 import { Message, Thumbnail, VideoPlayer } from './styles';
 
-const CircleIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({ width: 24, height: 24 })`
+const CircleIcon = styled(ExclamationCircle)<{ icon?: ReactNode }>`
   && {
     font-size: 24px;
   }

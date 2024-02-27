@@ -5,7 +5,6 @@ import UIOptionMenu from '~/core/components/OptionMenu';
 import { ReactNode } from 'react';
 
 export const PlusIcon = styled(Plus).attrs<{ icon?: ReactNode }>({ width: 15, height: 15 })`
-  font-size: 15px;
   margin-right: 8px;
 `;
 
@@ -18,7 +17,6 @@ export const PendingIconContainer = styled.div`
 export const PendingIcon = styled(Pending).attrs({ height: 30, width: 20 })``;
 
 export const PencilIcon = styled(Pencil).attrs({ height: 15, width: 15 })`
-  font-size: 15px;
   margin-right: 4px;
 `;
 

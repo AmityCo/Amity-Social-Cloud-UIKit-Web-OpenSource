@@ -20,9 +20,8 @@ export const InteractionBar = styled.div`
   border-bottom: 1px solid #e3e4e8;
 `;
 
-export const CommentIcon = styled(Comment).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
+export const CommentIcon = styled(Comment).attrs({ width: 16, height: 16 })`
   position: relative;
-  font-size: 16px;
   margin-right: 5px;
 `;
 

@@ -31,9 +31,5 @@ export const CircleButton = styled.button`
   }
 `;
 
-export const MinusIcon = styled(Minus).attrs({ width: 24, height: 24 })`
-  font-size: 24px;
-`;
-export const PlusIcon = styled(Plus).attrs({ width: 24, height: 24 })`
-  font-size: 24px;
-`;
+export const MinusIcon = styled(Minus).attrs({ width: 24, height: 24 })``;
+export const PlusIcon = styled(Plus).attrs({ width: 24, height: 24 })``;

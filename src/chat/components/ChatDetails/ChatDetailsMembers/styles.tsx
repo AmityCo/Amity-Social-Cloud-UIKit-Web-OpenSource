@@ -25,10 +25,7 @@ export const MembersReturn = styled.div`
   }
 `;
 
-export const MembersArrowLeft = styled(ChevronLeft).attrs({ width: 18, height: 14 })`
-  width: 18px !important;
-  font-size: 14px;
-`;
+export const MembersArrowLeft = styled(ChevronLeft).attrs({ width: 18, height: 14 })``;
 
 export const MembersReturnTitle = styled.span`
   padding-left: 8px;

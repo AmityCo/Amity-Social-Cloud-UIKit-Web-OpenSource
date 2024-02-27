@@ -4,12 +4,13 @@ import { Lock, Verified } from '~/icons';
 
 export const PrivateIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
   margin-right: 8px;
-  font-size: 16px;
 `;
 
-export const VerifiedIcon = styled(Verified).attrs<{ icon?: ReactNode }>({ width: 16, height: 16 })`
+export const VerifiedIcon = styled(Verified).attrs<{ icon?: ReactNode }>({
+  width: 16,
+  height: 16,
+})`
   margin-left: 8px;
-  font-size: 16px;
   fill: #1253de;
 `;
 
@@ -33,13 +34,4 @@ export const NameContainer = styled.div<{
     `}
     ${isTitle && theme.typography.title}
   `}
-
-  & > ${PrivateIcon},
-  & > ${VerifiedIcon} {
-    ${({ isTitle }) =>
-      isTitle &&
-      css`
-        font-size: 18px;
-      `}
-  }
 `;

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import UiKitAvatar from '~/core/components/Avatar';
 
-import { Close, EllipsisV, Save, Trash } from '~/icons';
+import { Close, EllipsisV, Save, TrashIcon } from '~/icons';
 
 export const EditingContainer = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ export const SaveIcon = styled(Save)<{ icon?: ReactNode }>`
   cursor: pointer;
 `;
 
-export const DeleteIcon = styled(Trash)`
+export const DeleteIcon = styled(TrashIcon)`
   opacity: 0.7;
   padding: 0 10px;
   cursor: pointer;
@@ -36,11 +36,8 @@ export const CloseIcon = styled(Close)<{ icon?: ReactNode }>`
   cursor: pointer;
 `;
 
-export const MessageOptionsIcon = styled(EllipsisV).attrs<{
-  icon?: ReactNode;
-}>({ width: 11, height: 11 })`
+export const MessageOptionsIcon = styled(EllipsisV).attrs<{ icon?: ReactNode }>({ width: 11, height: 11 })`
   opacity: 0.5;
-  font-size: 11px;
   margin: 0 5px;
   cursor: pointer;
 `;

@@ -21,18 +21,13 @@ export const InputPlaceholder = styled.span`
   color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
-export const WorldIcon = styled(Globe).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })`
-  font-size: 20px;
-`;
+export const WorldIcon = styled(Globe).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })``;
 
-export const LockIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })`
-  font-size: 20px;
-`;
+export const LockIcon = styled(Lock).attrs<{ icon?: ReactNode }>({ width: 20, height: 20 })``;
 
-export const CloseIcon = styled(Close).attrs<{ icon?: ReactNode }>({ width: 12, height: 12 })`
-  font-size: 12px;
+export const CloseIcon = styled(Close).attrs({ width: 12, height: 12 })`
   padding: 5px 12px;
-  fill: ${({ theme }) => theme.palette.base.shade1};
+  color: ${({ theme }) => theme.palette.base.shade1};
 `;
 
 export const Selector = styled.div`
@@ -262,12 +257,13 @@ export const TextField = styled.input`
 `;
 
 export const SelectIcon = styled(ChevronDown).attrs({ width: 16, height: 16 })`
-  font-size: 16px;
   margin-left: auto;
 `;
 
 export const Field = styled.div<{ error?: ReactNode }>`
-  margin-top: 20px;
+  > :not(:first-child) {
+    margin-top: 20px;
+  }
   display: flex;
   flex-direction: column;
 

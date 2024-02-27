@@ -67,7 +67,7 @@ const StyledFile = ({
         {isImg && !!url ? (
           <ImgPreview src={url} />
         ) : (
-          <FileIcon file={{ name: name || '', type: type || '' }} />
+          <FileIcon file={{ name, type }} width={null} height="100%" />
         )}
         <FileName>{name}</FileName> <FileSize>{filesize(size || 0, { base: 2 })}</FileSize>
         <ButtonContainer>

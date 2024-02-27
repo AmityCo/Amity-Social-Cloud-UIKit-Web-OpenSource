@@ -2,14 +2,13 @@ import { MessageRepository } from '@amityco/ts-sdk';
 
 import useLiveCollection from '~/core/hooks/useLiveCollection';
 
-export default function useMessagesCollection(channelId: string) {
+type UseMessagesCollectionParams = Parameters<typeof MessageRepository.getMessages>[0];
+
+export default function useMessagesCollection(params: UseMessagesCollectionParams) {
   const { items, ...rest } = useLiveCollection({
     fetcher: MessageRepository.getMessages,
-    params: {
-      subChannelId: channelId,
-      sortBy: 'segmentDesc',
-    },
-    shouldCall: () => !!channelId,
+    params,
+    shouldCall: () => !!params.subChannelId,
   });
 
   return {

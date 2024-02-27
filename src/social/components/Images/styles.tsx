@@ -19,8 +19,7 @@ export const CircleButton = styled.button`
 `;
 
 export const CloseIcon = styled(Close).attrs({ width: 18, height: 18 })`
-  color: #fff;
-  font-size: 18px;
+  fill: #fff;
 `;
 
 export const ImageContainer = styled.div<{ editing?: Boolean }>`
@@ -155,13 +154,12 @@ export const ImageIcon = styled(ImageAttachment).attrs<{ disabled?: Boolean; ico
   width: 18,
   height: 18,
 })`
-  font-size: 18px;
   cursor: pointer;
 
   ${({ disabled, theme }) =>
     disabled &&
     css`
-      color: ${theme.palette.base.shade3};
+      fill: ${theme.palette.base.shade3};
       cursor: default;
     `}
 `;

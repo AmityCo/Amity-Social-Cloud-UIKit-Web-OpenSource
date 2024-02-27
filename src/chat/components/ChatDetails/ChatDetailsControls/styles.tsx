@@ -42,24 +42,25 @@ export const ControlItemState = styled.span`
 export const ControlItemArrowRight = styled(ChevronRight).attrs({ width: 16, height: 12 })`
   width: 16px !important;
   padding-left: 8px;
-  font-size: 12px;
-  color: ${({ theme }) => theme.palette.neutral.shade3};
+  fill: ${({ theme }) => theme.palette.neutral.shade3};
 `;
 
 const controlIconStyle = css`
-  width: 24px !important;
   padding-right: 8px;
-  font-size: 20px;
   text-align: center;
   fill: ${({ theme }) => theme.palette.neutral.main};
 `;
 
-export const MembersIcon = styled(UserRegular).attrs<{
-  icon?: ReactNode;
-}>({ width: 24, height: 20 })`
+export const MembersIcon = styled(UserRegular).attrs<{ icon?: ReactNode }>({
+  width: 24,
+  height: 24,
+})`
   ${controlIconStyle}
 `;
 
-export const GroupSettingIcon = styled(Pencil).attrs({ width: 24, height: 20 })`
+export const GroupSettingIcon = styled(Pencil).attrs<{ icon?: ReactNode }>({
+  width: 24,
+  height: 20,
+})`
   ${controlIconStyle}
 `;

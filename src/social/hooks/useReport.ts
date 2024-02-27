@@ -6,16 +6,13 @@ import useMemoAsync from '~/core/hooks/useMemoAsync';
  * @deprecated
  */
 export default function useReport(user: Amity.User) {
-  const isFlaggedByMe = useMemoAsync(
-    async () => {
-      if (user?.userId && user?.flagCount > 0) {
-        return UserRepository.isUserFlaggedByMe(user?.userId);
-      }
+  const isFlaggedByMe = useMemoAsync(async () => {
+    if (user?.userId && user?.flagCount > 0) {
+      return UserRepository.isUserFlaggedByMe(user?.userId);
+    }
 
-      return false;
-    },
-    [user] as any,
-  );
+    return false;
+  }, [user]);
 
   const handleReport = () => {
     return isFlaggedByMe
