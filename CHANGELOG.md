@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.2.0 (2024-02-27)
+
+### Features
+
+- ASC-19739 - remove font awesome pro ([#129](https://github.com/EkoCommunications/AmityUiKitWeb/issues/129)) ([f7b35bc](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7b35bcb75fab8457aa5fd41ed31c6ea8b03487f)), closes [#127](https://github.com/EkoCommunications/AmityUiKitWeb/issues/127) [#118](https://github.com/EkoCommunications/AmityUiKitWeb/issues/118) [#116](https://github.com/EkoCommunications/AmityUiKitWeb/issues/116) [#128](https://github.com/EkoCommunications/AmityUiKitWeb/issues/128) [#123](https://github.com/EkoCommunications/AmityUiKitWeb/issues/123) [#142](https://github.com/EkoCommunications/AmityUiKitWeb/issues/142)
+
 ## 3.1.0 (2024-01-25)
 
 ### Bug Fixes
