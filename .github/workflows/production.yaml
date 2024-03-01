@@ -6,6 +6,9 @@ on:
       release_as:
         description: 'release as'
         required: true
+      custom_version:
+        description: 'custom version'
+        required: false
 
 jobs:
   publish:
@@ -55,6 +58,10 @@ jobs:
       - name: increase version (major)
         run: pnpm standard-version --yes --release-as major
         if: github.event.inputs.release_as == 'major'
+
+      - name: increase version (custom)
+        run: pnpm starndard-version --yes --release-as ${{ github.event.inputs.custom_version }}
+        if: github.event.inputs.release_as == 'custom'
 
       - name: build
         run: pnpm run build
