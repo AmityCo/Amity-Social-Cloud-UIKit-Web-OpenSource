@@ -22,6 +22,7 @@ import {
   MobileSheet,
   MobileSheetContent,
   MobileSheetHeader,
+  MobileSheetNestedBackDrop,
 } from './styles';
 import {
   Mentioned,
@@ -95,9 +96,15 @@ interface CommentProps {
   commentId: string;
   readonly?: boolean;
   userRoles?: string[];
+  onClickReply?: (
+    replyTo: string,
+    referenceType: Amity.Comment['referenceType'],
+    referenceId: Amity.Comment['referenceId'],
+    commentId: Amity.Comment['commentId'],
+  ) => void;
 }
 
-const Comment = ({ commentId, readonly }: CommentProps) => {
+const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => {
   const comment = useComment(commentId);
   const story = useStory(comment?.referenceId);
   const [bottomSheet, setBottomSheet] = useState(false);
@@ -108,7 +115,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   const { userRoles } = useSDK();
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
-  const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { formatMessage } = useIntl();
   const [isExpanded, setExpanded] = useState(false);
@@ -137,27 +143,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
 
   const handleReportComment = async () => {
     return toggleFlagComment();
-  };
-
-  const handleReplyToComment = async (
-    replyCommentText: string,
-    mentionees: Mentionees,
-    metadata: Metadata,
-  ) => {
-    if (!comment?.referenceType || !comment?.referenceId) return;
-
-    const { referenceType, referenceId } = comment;
-
-    await CommentRepository.createComment({
-      referenceType,
-      referenceId,
-      data: {
-        text: replyCommentText,
-      },
-      parentId: commentId,
-      metadata,
-      mentionees,
-    });
   };
 
   const handleEditComment = async (text: string, mentionees: Mentionees, metadata: Metadata) =>
@@ -191,10 +176,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
         });
       }
     }
-  };
-
-  const onClickReply = () => {
-    setIsReplying((preValue) => !preValue);
   };
 
   const startEditing = () => {
@@ -318,6 +299,14 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
       onChange={onChange}
       onClickOverflowMenu={toggleBottomSheet}
       options={options}
+      onClickReply={() =>
+        onClickReply?.(
+          commentAuthor?.displayName,
+          comment.referenceType,
+          comment.referenceId,
+          comment.commentId,
+        )
+      }
     />
   );
 
@@ -361,12 +350,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
               </MobileSheetButton>
             ))}
           </MobileSheetContent>
-          <MobileSheet.Backdrop
-            onTap={toggleBottomSheet}
-            style={{
-              backgroundColor: 'transparent',
-            }}
-          />
+          <MobileSheetNestedBackDrop onTap={toggleBottomSheet} />
         </MobileSheet.Container>
       </MobileSheet>
     </>

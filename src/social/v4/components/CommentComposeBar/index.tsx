@@ -27,7 +27,7 @@ const COMMENT_LENGTH_LIMIT = 50000;
 
 export interface CommentComposeBarProps {
   className?: string;
-  userToReply?: string;
+  userToReply?: Amity.User['displayName'] | null;
   onSubmit: (text: string, mentionees: Mentionees, metadata: Metadata) => void;
   onCancelReply?: () => void;
   storyId?: string;
@@ -38,9 +38,7 @@ const CommentComposeBar = ({
   className,
   userToReply,
   onSubmit,
-  onCancelReply,
   storyId,
-  isReplying,
 }: CommentComposeBarProps) => {
   const story = useStory(storyId);
   const { currentUserId } = useSDK();
@@ -92,12 +90,6 @@ const CommentComposeBar = ({
 
   return (
     <>
-      {/* {isReplying && (
-        <AnimatedReplyContainer>
-          <div>Replying to </div>
-          <Close onClick={onCancelReply} />
-        </AnimatedReplyContainer>
-      )} */}
       <CommentComposeBarContainer className={className}>
         <Avatar size="small" avatar={avatarFileUrl} backgroundImage={UserImage} />
         <CommentComposeBarInput

@@ -37,6 +37,12 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const [isOpenBottomSheet, setIsOpenBottomSheet] = React.useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = React.useState(false);
   const [isReplying, setIsReplying] = React.useState(false);
+  const [replyTo, setReplyTo] = React.useState<string | null>(null);
+  const [selectedComment, setSelectedComment] = React.useState<{
+    referenceType?: string;
+    referenceId?: string;
+    commentId?: string;
+  } | null>(null);
 
   const [isPaused, setIsPaused] = React.useState(false);
   const { width, height, loader, storyStyles } = config;
@@ -103,6 +109,17 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     }
   };
 
+  const onClickReply = (
+    replyTo: string,
+    referenceType?: Amity.Comment['referenceType'],
+    referenceId?: Amity.Comment['referenceId'],
+    commentId?: Amity.Comment['commentId'],
+  ) => {
+    setReplyTo(replyTo);
+    setSelectedComment({ referenceType, referenceId, commentId });
+    setIsReplying(true);
+  };
+
   React.useEffect(() => {
     if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
       action('pause', true);
@@ -147,14 +164,22 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
           </MobileSheetHeader>
           <MobileSheetContent>
             <MobileSheet.Scroller>
-              <CommentList referenceId={story.storyId} referenceType="story" />
+              <CommentList
+                referenceId={story.storyId}
+                referenceType="story"
+                onClickReply={onClickReply}
+              />
             </MobileSheet.Scroller>
           </MobileSheetContent>
           <StoryCommentComposeBar
+            referenceId={selectedComment?.referenceId}
+            referenceType={selectedComment?.referenceType}
+            commentId={selectedComment?.commentId}
+            isReplying={isReplying}
+            replyTo={replyTo}
             storyId={story.storyId}
             isJoined={community?.isJoined}
             allowCommentInStory={community?.allowCommentInStory}
-            isReplying={isReplying}
             onCancelReply={() => setIsReplying(false)}
           />
         </MobileSheet.Container>

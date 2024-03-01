@@ -45,6 +45,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const { client, currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const [isReplying, setIsReplying] = React.useState(false);
+  const [replyTo, setReplyTo] = React.useState<string | null>(null);
+  const [selectedComment, setSelectedComment] = React.useState<Pick<
+    Amity.Comment,
+    'referenceType' | 'referenceId' | 'commentId'
+  > | null>(null);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -118,6 +123,12 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const closeCommentSheet = () => setIsOpenCommentSheet(false);
 
   const targetRootId = 'stories-viewer';
+
+  const onClickReply = (replyTo: string, comment: Amity.Comment) => {
+    setReplyTo(replyTo);
+    setSelectedComment(comment);
+    setIsReplying(true);
+  };
 
   const handleLike = async () => {
     try {
@@ -197,14 +208,22 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
           </MobileSheetHeader>
           <MobileSheetContent>
             <MobileSheet.Scroller>
-              <CommentList referenceId={story.storyId} referenceType="story" />
+              <CommentList
+                referenceId={story.storyId}
+                referenceType="story"
+                onClickReply={onClickReply}
+              />
             </MobileSheet.Scroller>
           </MobileSheetContent>
           <StoryCommentComposeBar
+            referenceId={selectedComment?.referenceId}
+            referenceType={selectedComment?.referenceType}
+            commentId={selectedComment?.commentId}
+            isReplying={isReplying}
+            replyTo={replyTo}
             storyId={story.storyId}
             isJoined={community?.isJoined}
             allowCommentInStory={community?.allowCommentInStory}
-            isReplying={isReplying}
             onCancelReply={() => setIsReplying(false)}
           />
         </MobileSheet.Container>

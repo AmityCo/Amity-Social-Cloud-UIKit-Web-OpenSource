@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
 import UIOptionMenu from '~/core/components/OptionMenu';
-import Time from '~/core/components/Time';
 import InputText from '~/core/components/InputText';
 import UICommentComposeBar from '~/social/components/CommentComposeBar';
 import { SecondaryButton } from '~/core/components/Button';
@@ -36,6 +35,10 @@ export const CommentInteractionButton = styled(SecondaryButton)`
 export const MobileSheet = styled(Sheet)`
   margin: 0 auto;
   width: 100%;
+`;
+
+export const MobileSheetNestedBackDrop = styled(Sheet.Backdrop)`
+  background-color: transparent;
 `;
 
 export const MobileSheetHeader = styled(MobileSheet.Header)`

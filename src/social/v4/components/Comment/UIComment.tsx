@@ -28,10 +28,10 @@ import {
 
 import { Mentioned, Metadata } from '~/helpers/utils';
 import { QueryMentioneesFnType } from '~/social/hooks/useSocialMention';
-import { OverflowMenu } from '../../pages/story/ViewStoriesPage';
 import { formatTimeAgo } from '~/utils';
 import { LikedIcon } from '~/icons';
 import { LIKE_REACTION_KEY } from '~/constants';
+import { OverflowMenu } from '~/social/v4/pages/story/ViewStoriesPage';
 
 interface StyledCommentProps {
   commentId?: string;
@@ -47,7 +47,12 @@ interface StyledCommentProps {
   text?: string;
   markup?: string;
   reactions: Record<string, number>;
-  onClickReply?: () => void;
+  onClickReply?: (
+    replyTo?: string,
+    referenceType?: Amity.Comment['referenceType'],
+    referenceId?: Amity.Comment['referenceId'],
+    commentId?: Amity.Comment['commentId'],
+  ) => void;
   onClickOverflowMenu: () => void;
   handleReportComment?: () => void;
   handleEdit?: (text?: string) => void;
@@ -78,16 +83,15 @@ interface StyledCommentProps {
     action: () => void;
     icon: React.ReactNode;
   }[];
+  referenceType?: Amity.Comment['referenceType'];
+  referenceId?: Amity.Comment['referenceId'];
 }
 
 const UIComment = ({
   authorName,
   authorAvatar,
-  canDelete = false,
-  canEdit = false,
   canLike = true,
   canReply = false,
-  canReport = true,
   reactions = {},
   createdAt,
   editedAt,
@@ -95,21 +99,19 @@ const UIComment = ({
   markup,
   onClickReply,
   onClickOverflowMenu,
-  handleReportComment,
   handleEdit,
-  startEditing,
   cancelEditing,
-  handleDelete,
   handleLike,
   isEditing,
   onChange,
   queryMentionees,
-  isReported,
-  isReplyComment,
   isBanned,
   isLiked,
   mentionees,
   options,
+  referenceId,
+  referenceType,
+  commentId,
 }: StyledCommentProps) => {
   return (
     <>
@@ -179,7 +181,7 @@ const UIComment = ({
               {canReply && (
                 <CommentInteractionButton
                   data-qa-anchor="comment-reply-button"
-                  onClick={onClickReply}
+                  onClick={() => onClickReply?.(authorName, referenceType, referenceId, commentId)}
                 >
                   <FormattedMessage id="reply" />
                 </CommentInteractionButton>

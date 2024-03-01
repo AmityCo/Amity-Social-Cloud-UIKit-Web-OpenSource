@@ -9,9 +9,6 @@ import {
   TabIcon,
   TabIconContainer,
 } from '~/social/components/CommentList/styles';
-import usePostSubscription from '~/social/hooks/usePostSubscription';
-import { SubscriptionLevels } from '@amityco/ts-sdk';
-import useCommunityStoriesSubscription from '~/social/hooks/useCommunityStoriesSubscription';
 import { MobileSheet } from '../Comment/styles';
 
 interface CommentListProps {
@@ -22,6 +19,12 @@ interface CommentListProps {
   readonly?: boolean;
   isExpanded?: boolean;
   limit?: number;
+  onClickReply?: (
+    replyTo: string,
+    referenceType: Amity.Comment['referenceType'],
+    referenceId: Amity.Comment['referenceId'],
+    commentId: Amity.Comment['commentId'],
+  ) => void;
 }
 
 const CommentList = ({
@@ -33,7 +36,7 @@ const CommentList = ({
   // filterByParentId = false,
   readonly = false,
   isExpanded = true,
-  onReply,
+  onClickReply,
 }: CommentListProps) => {
   const { comments, hasMore, loadMore } = useCommentsCollection({
     parentId,
@@ -84,8 +87,7 @@ const CommentList = ({
               key={comment.commentId}
               commentId={comment.commentId}
               readonly={readonly}
-              onReply={onReply}
-              onClickOverflowMenu={() => setIsOpenBottomSheet(true)}
+              onClickReply={onClickReply}
             />
           );
         })}
