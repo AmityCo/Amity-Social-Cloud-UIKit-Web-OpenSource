@@ -60,7 +60,7 @@ jobs:
         if: github.event.inputs.release_as == 'major'
 
       - name: increase version (custom)
-        run: pnpm starndard-version --yes --release-as ${{ github.event.inputs.custom_version }}
+        run: pnpm standard-version --yes --release-as ${{ github.event.inputs.custom_version }}
         if: github.event.inputs.release_as == 'custom'
 
       - name: build
