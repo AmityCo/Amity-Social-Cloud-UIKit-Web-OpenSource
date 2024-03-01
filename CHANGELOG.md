@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.3 (2024-03-01)
+
+### Bug Fixes
+
+- typo ([02875bb](https://github.com/EkoCommunications/AmityUiKitWeb/commit/02875bb8d10f174525424d12a3d69d7d92bf8c98))
+
 ### 3.2.1 (2024-02-27)
 
 ## 3.2.0 (2024-02-27)
