@@ -16,9 +16,10 @@ export const StyledLikeButton = styled(SecondaryButton)`
   }
 `;
 
-export const BaseLikeIcon = styled(ThumbsUp)<{ icon?: ReactNode }>`
-  font-size: 16px;
-`;
+export const BaseLikeIcon = styled(ThumbsUp).attrs<{ icon?: ReactNode }>({
+  width: 16,
+  height: 16,
+})``;
 
 export const IsLikedLikeIcon = styled(BaseLikeIcon)<{ icon?: ReactNode }>`
   ${isLikedStyle}

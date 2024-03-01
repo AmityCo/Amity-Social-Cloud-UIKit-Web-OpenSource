@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.3 (2024-03-01)
+
+
+### Bug Fixes
+
+* icon size ([6f604b5](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/6f604b5b0e8f87ea32c24ff7ba9fc3deccae1988))
+
 ### 3.2.2 (2024-02-27)
 
 ## 3.0.0 (2024-01-18)
