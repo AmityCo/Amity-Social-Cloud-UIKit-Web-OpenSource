@@ -42,7 +42,7 @@ const CommentComposeBar = ({
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
-  const { text, markup, mentions, mentionees, metadata, onChange, clearAll, queryMentionees } =
+  const { text, markup, mentions, mentionees, metadata, onChange, queryMentionees } =
     useSocialMention({
       targetId: post?.targetId,
       targetType: post?.targetType,
@@ -76,7 +76,6 @@ const CommentComposeBar = ({
     }
 
     onSubmit?.(text, mentionees, metadata);
-    clearAll?.();
   };
 
   const isEmpty = text === '';
