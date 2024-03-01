@@ -26,6 +26,10 @@ const defaultTheme = {
       fontWeight: 600,
       fontSize: '16px',
     },
+    subTitle: {
+      fontWight: 400,
+      fontSize: '13px',
+    },
     body: {
       fontWeight: 'normal',
       fontSize: '14px',

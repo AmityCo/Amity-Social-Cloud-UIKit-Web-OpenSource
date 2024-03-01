@@ -82,9 +82,9 @@ export const PauseStoryButton = styled(PauseIcon)`
 `;
 
 export const CloseButton = styled(Close)`
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: #ffffff;
+  color: #ffffff;
+  width: 1.25rem;
+  height: 1.25rem;
   cursor: pointer;
 `;
 

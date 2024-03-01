@@ -47,6 +47,9 @@ export { default as Lock2Icon } from './Lock2';
 export { default as Comment2Icon } from './Comment2';
 export { default as ArrowRight2Icon } from './ArrowRight2';
 export { default as Trash2Icon } from './Trash2';
+export { default as ModeratorBadgeIcon } from './ModeratorBadge';
+export { default as FlagIcon } from './Flag';
+export { default as Pencil2Icon } from './Pencil2';
 
 // files
 export { default as AudioFile } from './files/Audio';

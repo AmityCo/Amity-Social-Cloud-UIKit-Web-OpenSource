@@ -3,28 +3,27 @@ import React, { useEffect } from 'react';
 import {
   ActionsContainer,
   IconButton,
-  ShareStoryButton,
-  ShareText,
   BackIcon,
   ExpandStoryIcon,
-  StoryLinkIcon,
-  ShareStoryIcon,
   StoryDraftContainer,
   StoryDraftHeader,
   StoryDraftFooter,
   DraftImage,
   DraftImageContainer,
   StoryVideoPreview,
+  ShareStoryButton,
+  ShareStoryIcon,
+  ShareText,
 } from './styles';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
 import { confirm } from '~/core/components/Confirm';
-import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
-import Avatar from '~/core/components/Avatar';
 import { readFileAsync } from '~/helpers';
+import Avatar from '~/core/components/Avatar';
+import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 
 type DraftStoryProps = {
-  file: File | null;
+  file: File;
   creatorAvatar: string;
   onCreateStory: (
     file: File,
@@ -35,7 +34,7 @@ type DraftStoryProps = {
   onDiscardStory: () => void;
 };
 
-const StoryDraft = ({ file, onDiscardStory, onCreateStory }: DraftStoryProps) => {
+export const DraftsPage = ({ file, onDiscardStory, onCreateStory }: DraftStoryProps) => {
   const { formatMessage } = useIntl();
 
   const [imageMode, setImageMode] = React.useState<'fit' | 'fill'>('fit');
@@ -80,45 +79,42 @@ const StoryDraft = ({ file, onDiscardStory, onCreateStory }: DraftStoryProps) =>
   };
 
   return (
-    <div id="stories-viewer">
-      <StoryDraftContainer>
-        <StoryDraftHeader>
-          <BackIcon onClick={discardCreateStory} />
-          <ActionsContainer>
-            {file?.type.includes('image') && (
-              <IconButton onClick={onClickImageMode}>
-                <ExpandStoryIcon />
-              </IconButton>
-            )}
-          </ActionsContainer>
-        </StoryDraftHeader>
+    <StoryDraftContainer>
+      <StoryDraftHeader>
+        <BackIcon onClick={discardCreateStory} />
+        <ActionsContainer>
+          {file?.type.includes('image') && (
+            <IconButton onClick={onClickImageMode}>
+              <ExpandStoryIcon />
+            </IconButton>
+          )}
+        </ActionsContainer>
+      </StoryDraftHeader>
 
-        {file?.type.includes('image') ? (
-          <DraftImageContainer colors={colors}>
-            <DraftImage
-              colors={colors}
-              src={file && URL.createObjectURL(file)}
-              imageMode={imageMode}
-            />
-          </DraftImageContainer>
-        ) : (
-          <StoryVideoPreview
+      {file?.type.includes('image') ? (
+        <DraftImageContainer colors={colors}>
+          <DraftImage
+            colors={colors}
             src={file && URL.createObjectURL(file)}
-            mediaFit="contain"
-            autoPlay
-            controls={false}
+            imageMode={imageMode}
           />
-        )}
+        </DraftImageContainer>
+      ) : (
+        <StoryVideoPreview
+          src={file && URL.createObjectURL(file)}
+          mediaFit="contain"
+          autoPlay
+          controls={false}
+        />
+      )}
 
-        <StoryDraftFooter>
-          <ShareStoryButton onClick={() => onCreateStory(file, imageMode, {}, [])}>
-            <Avatar size="small" backgroundImage={communityBackgroundImage} />
-            <ShareText>{formatMessage({ id: 'storyDraft.button.shareStory' })}</ShareText>
-            <ShareStoryIcon />
-          </ShareStoryButton>
-        </StoryDraftFooter>
-      </StoryDraftContainer>
-    </div>
+      <StoryDraftFooter>
+        <ShareStoryButton onClick={() => onCreateStory(file, imageMode, {}, [])}>
+          <Avatar size="small" backgroundImage={communityBackgroundImage} />
+          <ShareText>{formatMessage({ id: 'storyDraft.button.shareStory' })}</ShareText>
+          <ShareStoryIcon />
+        </ShareStoryButton>
+      </StoryDraftFooter>
+    </StoryDraftContainer>
   );
 };
-export default StoryDraft;

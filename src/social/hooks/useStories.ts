@@ -1,7 +1,7 @@
 import { StoryRepository } from '@amityco/ts-sdk';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { isNonNullable } from '~/helpers/utils';
-import useCommunityStoriesSubscription from './useStoryReactionSubscription';
+import useCommunityStoriesSubscription from './useCommunityStoriesSubscription';
 
 type UseStories = {
   stories: (Amity.Story | undefined)[];

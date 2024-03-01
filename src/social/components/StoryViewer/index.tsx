@@ -21,7 +21,7 @@ import { notification } from '~/core/components/Notification';
 import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import { useMedia } from 'react-use';
 import { renderers } from '~/social/components/StoryViewer/Renderers';
-import StoryDraft from '~/social/components/StoryDraft';
+
 import useStories from '~/social/hooks/useStories';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
@@ -29,7 +29,8 @@ import { confirm } from '~/core/components/Confirm';
 import { isAdmin, isModerator } from '~/helpers/permissions';
 import { Permissions } from '~/social/constants';
 import { isNonNullable } from '~/helpers/utils';
-import { Trash2Icon, TrashIcon } from '~/icons';
+import { Trash2Icon } from '~/icons';
+import { DraftsPage } from '~/social/v4/pages/story/DraftsPage';
 
 interface StoryViewerProps {
   targetId: string;
@@ -241,9 +242,9 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
     }
   }, [stories, file, currentIndex]);
 
-  if (isDraft) {
+  if (isDraft && file) {
     return (
-      <StoryDraft
+      <DraftsPage
         file={file}
         creatorAvatar={avatarUrl || communityBackgroundImage}
         onDiscardStory={discardStory}

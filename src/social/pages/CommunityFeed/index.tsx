@@ -28,8 +28,9 @@ import {
   StyledCommunitySideMenu,
 } from '../NewsFeed/styles';
 import useStories from '~/social/hooks/useStories';
-import StoryDraft from '~/social/components/StoryDraft';
+
 import { BarsIcon } from '~/icons';
+import { DraftsPage } from '~/social/v4/pages/story/DraftsPage';
 
 interface CommunityFeedProps {
   communityId: string;
@@ -81,7 +82,12 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
   const [file, setFile] = useState<File | null>(null);
   const [isDraft, setIsDraft] = useState(false);
 
-  const createStory = async (file: File, imageMode: 'fit' | 'fill', metadata = {}, items = []) => {
+  const createStory = async (
+    file: File,
+    imageMode: 'fit' | 'fill',
+    metadata: Amity.Metadata | undefined,
+    items: Amity.StoryItem[] | undefined = [],
+  ) => {
     try {
       const formData = new FormData();
       formData.append('files', file);
@@ -142,13 +148,12 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
     }
   }, [file]);
 
-  if (isDraft) {
+  if (isDraft && file) {
     return (
       <Wrapper>
-        <StoryDraft
-          file={file as File}
-          targetId={communityId}
-          creatorAvatar={communityAvatar?.fileUrl || ''}
+        <DraftsPage
+          file={file}
+          creatorAvatar={communityAvatar?.fileUrl}
           onCreateStory={createStory}
           onDiscardStory={discardStory}
         />

@@ -5,7 +5,7 @@ import useLiveObject from '~/core/hooks/useLiveObject';
 const useStory = (storyId: string | undefined) => {
   const story = useLiveObject({
     fetcher: StoryRepository.getStoryByStoryId,
-    params: storyId as string,
+    params: storyId,
     shouldCall: () => !!storyId,
   });
 

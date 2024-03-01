@@ -3,42 +3,52 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import { confirm } from '~/core/components/Confirm';
 import useComment from '~/social/hooks/useComment';
-import CommentComposeBar from '~/social/components/CommentComposeBar';
-import CommentList from '~/social/components/CommentList';
+
 import { notification } from '~/core/components/Notification';
-import StyledComment from './StyledComment';
+
 import useSocialMention from '~/social/hooks/useSocialMention';
-import usePost from '~/social/hooks/usePost';
 
 import {
   CommentBlock,
-  CommentContainer,
-  ReplyContainer,
   DeletedCommentContainer,
-  DeletedReplyContainer,
   DeletedIcon,
-  Text,
+  DeletedReplyContainer,
   IconContainer,
   MessageContainer,
+  Text,
+  ReplyContainer,
+  CommentContainer,
+  MobileSheetButton,
+  MobileSheet,
+  MobileSheetContent,
+  MobileSheetHeader,
 } from './styles';
 import {
   Mentioned,
   Mentionees,
   Metadata,
   extractMetadata,
+  isNonNullable,
   parseMentionsMarkup,
 } from '~/helpers/utils';
 import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
-import useFile from '~/core/hooks/useFile';
-import { CommentRepository } from '@amityco/ts-sdk';
+import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 import useStory from '~/social/hooks/useStory';
-import { ERROR_RESPONSE } from '~/social/constants';
+
+import useImage from '~/core/hooks/useImage';
+
+import { FlagIcon, Pencil2Icon, Trash2Icon } from '~/icons';
+import UIComment from './UIComment';
+import CommentList from '../CommentList';
+
+import { isModerator } from '~/helpers/permissions';
+import { LIKE_REACTION_KEY } from '~/constants';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -89,10 +99,12 @@ interface CommentProps {
 
 const Comment = ({ commentId, readonly }: CommentProps) => {
   const comment = useComment(commentId);
-  const post = usePost(comment?.referenceId);
+  const story = useStory(comment?.referenceId);
+  const [bottomSheet, setBottomSheet] = useState(false);
 
   const commentAuthor = useUser(comment?.userId);
-  const commentAuthorAvatar = useFile(commentAuthor?.avatarFileId);
+  const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });
+  const isCommentAuthorModerator = isModerator(commentAuthor?.roles);
   const { userRoles } = useSDK();
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
@@ -101,19 +113,19 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   const { formatMessage } = useIntl();
   const [isExpanded, setExpanded] = useState(false);
 
+  const toggleBottomSheet = () => setBottomSheet((prev) => !prev);
+
   useCommentSubscription({
     commentId,
   });
 
   const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } =
     useSocialMention({
-      targetId: post?.targetId,
-      targetType: post?.targetType,
+      targetId: story?.targetId,
+      targetType: story?.targetType,
       remoteText: getCommentData(comment),
       remoteMarkup: parseMentionsMarkup(getCommentData(comment), comment?.metadata || {}),
     });
-
-  // const [text, setText] = useState((comment?.data as Amity.ContentDataText)?.text || '');
 
   const { canDelete, canEdit, canLike, canReply, canReport } = useCommentPermission(
     comment,
@@ -121,13 +133,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
     userRoles,
   );
 
-  // useEffect(() => {
-  //   if (text !== (comment?.data as Amity.ContentDataText)?.text) {
-  //     setText((comment?.data as Amity.ContentDataText)?.text || '');
-  //   }
-  // }, [(comment?.data as Amity.ContentDataText)?.text, text]);
-
-  if (post == null && comment == null) return <LoadingIndicator />;
+  if (story == null && comment == null) return <LoadingIndicator />;
 
   const handleReportComment = async () => {
     return toggleFlagComment();
@@ -140,30 +146,18 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   ) => {
     if (!comment?.referenceType || !comment?.referenceId) return;
 
-    try {
-      const { referenceType, referenceId } = comment;
+    const { referenceType, referenceId } = comment;
 
-      await CommentRepository.createComment({
-        referenceType,
-        referenceId,
-        data: {
-          text: replyCommentText,
-        },
-        parentId: commentId,
-        metadata,
-        mentionees,
-      });
-      setIsReplying(false);
-      setExpanded(true);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
-          notification.error({
-            content: <FormattedMessage id="notification.error.blockedWord" />,
-          });
-        }
-      }
-    }
+    await CommentRepository.createComment({
+      referenceType,
+      referenceId,
+      data: {
+        text: replyCommentText,
+      },
+      parentId: commentId,
+      metadata,
+      mentionees,
+    });
   };
 
   const handleEditComment = async (text: string, mentionees: Mentionees, metadata: Metadata) =>
@@ -205,6 +199,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
 
   const startEditing = () => {
     setIsEditing(true);
+    toggleBottomSheet();
   };
 
   const cancelEditing = () => {
@@ -218,6 +213,18 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
 
     clearAll();
     setIsEditing(false);
+  };
+
+  const isLiked = !!comment?.myReactions?.includes(LIKE_REACTION_KEY);
+
+  const handleLike = async () => {
+    if (!comment) return;
+
+    if (!isLiked) {
+      await ReactionRepository.addReaction('comment', comment?.commentId, LIKE_REACTION_KEY);
+    } else {
+      await ReactionRepository.removeReaction('comment', comment?.commentId, LIKE_REACTION_KEY);
+    }
   };
 
   const isReplyComment = !!comment?.parentId;
@@ -235,6 +242,36 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
     });
   };
 
+  const options = [
+    canEdit
+      ? {
+          name: isReplyComment
+            ? formatMessage({ id: 'reply.edit' })
+            : formatMessage({ id: 'comment.edit' }),
+          action: startEditing,
+          icon: <Pencil2Icon width={20} height={20} />,
+        }
+      : null,
+    canReport
+      ? {
+          name: isFlaggedByMe
+            ? formatMessage({ id: 'report.undoReport' })
+            : formatMessage({ id: 'report.doReport' }),
+          action: handleReportComment,
+          icon: <FlagIcon width={20} height={20} />,
+        }
+      : null,
+    canDelete
+      ? {
+          name: isReplyComment
+            ? formatMessage({ id: 'reply.delete' })
+            : formatMessage({ id: 'comment.delete' }),
+          action: deleteComment,
+          icon: <Trash2Icon width={20} height={20} />,
+        }
+      : null,
+  ].filter(isNonNullable);
+
   if (comment == null) return null;
 
   if (comment?.isDeleted) {
@@ -248,12 +285,12 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   }
 
   const renderedComment = (
-    <StyledComment
+    <UIComment
       commentId={comment?.commentId}
       authorName={
         commentAuthor?.displayName || commentAuthor?.userId || formatMessage({ id: 'anonymous' })
       }
-      authorAvatar={commentAuthorAvatar?.fileUrl}
+      authorAvatar={commentAuthorAvatar}
       canDelete={canDelete}
       canEdit={canEdit}
       canLike={canLike}
@@ -264,48 +301,75 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
       editedAt={comment?.editedAt ? new Date(comment?.editedAt) : undefined}
       mentionees={comment?.metadata?.mentioned as Mentioned[]}
       metadata={comment?.metadata}
+      reactions={comment?.reactions}
       text={text}
       markup={markup}
       handleReportComment={onReportClick}
       startEditing={startEditing}
       cancelEditing={cancelEditing}
       handleEdit={handleEdit}
+      handleLike={handleLike}
       handleDelete={deleteComment}
       isEditing={isEditing}
       queryMentionees={queryMentionees}
+      isLiked={isLiked}
       isReported={isFlaggedByMe}
       isReplyComment={isReplyComment}
-      onClickReply={onClickReply}
       onChange={onChange}
+      onClickOverflowMenu={toggleBottomSheet}
+      options={options}
     />
   );
 
-  return isReplyComment ? (
-    <ReplyContainer data-qa-anchor="reply">{renderedComment}</ReplyContainer>
-  ) : (
-    <CommentBlock>
-      <CommentContainer data-qa-anchor="comment">{renderedComment}</CommentContainer>
-      {comment.children.length > 0 && (
-        <CommentList
-          parentId={comment.commentId}
-          referenceType={comment.referenceType}
-          referenceId={comment.referenceId}
-          readonly={readonly}
-          isExpanded={isExpanded}
-          limit={REPLIES_PER_PAGE}
-        />
+  return (
+    <>
+      {isReplyComment ? (
+        <ReplyContainer data-qa-anchor="reply">{renderedComment}</ReplyContainer>
+      ) : (
+        <CommentBlock>
+          <CommentContainer data-qa-anchor="comment">{renderedComment}</CommentContainer>
+          {comment.children.length > 0 && (
+            <CommentList
+              parentId={comment.commentId}
+              referenceType={comment.referenceType}
+              referenceId={comment.referenceId}
+              readonly={readonly}
+              isExpanded={isExpanded}
+              limit={REPLIES_PER_PAGE}
+            />
+          )}
+        </CommentBlock>
       )}
-
-      {isReplying && (
-        <CommentComposeBar
-          postId={post?.postId}
-          userToReply={commentAuthor?.displayName}
-          onSubmit={(replyText, mentionees, metadata) => {
-            handleReplyToComment(replyText, mentionees, metadata);
-          }}
-        />
-      )}
-    </CommentBlock>
+      <MobileSheet
+        isOpen={bottomSheet}
+        onClose={toggleBottomSheet}
+        mountPoint={document.getElementById('stories-viewer') as HTMLElement}
+        detent="content-height"
+      >
+        <MobileSheet.Container>
+          <MobileSheetHeader />
+          <MobileSheetContent>
+            {options.map((bottomSheetAction) => (
+              <MobileSheetButton
+                onClick={() => {
+                  bottomSheetAction.action();
+                  setBottomSheet(false);
+                }}
+              >
+                {bottomSheetAction.icon}
+                {bottomSheetAction.name}
+              </MobileSheetButton>
+            ))}
+          </MobileSheetContent>
+          <MobileSheet.Backdrop
+            onTap={toggleBottomSheet}
+            style={{
+              backgroundColor: 'transparent',
+            }}
+          />
+        </MobileSheet.Container>
+      </MobileSheet>
+    </>
   );
 };
 

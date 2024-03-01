@@ -5,7 +5,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '~/core/components/Button';
 import { PendingPostsBanner } from '~/social/components/CommunityInfo/PendingPostsBanner';
-import { backgroundImage as communityCoverPlaceholder } from '~/icons/CommunityCoverPicture';
+
 import {
   Count,
   Container,
@@ -26,7 +26,7 @@ import {
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import millify from 'millify';
 import { isNonNullable } from '~/helpers/utils';
-import StoryTab from '../StoryTab';
+import StoryTab from '~/social/v4/components/StoryTab';
 
 interface UICommunityInfoProps {
   communityId: string;

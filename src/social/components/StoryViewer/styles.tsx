@@ -3,6 +3,7 @@ import Sheet from 'react-modal-sheet';
 import {
   ArrowLeftCircle,
   ArrowRightCircle,
+  Close,
   CloseIcon,
   CommentIcon,
   DotsIcon,
@@ -11,6 +12,7 @@ import {
   TrashIcon,
   Verified,
 } from '~/icons';
+import { SecondaryButton } from '~/core/components/Button';
 
 export const StoryWrapper = styled.div`
   display: flex;
@@ -30,6 +32,15 @@ export const MobileSheet = styled(Sheet)`
 
 export const StoryCommentComposerBarContainer = styled.div`
   padding: 0 1rem;
+`;
+
+export const ReplyingBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #f2f3f5;
 `;
 
 export const StoryDisabledCommentComposerBarContainer = styled.div`
@@ -319,23 +330,12 @@ export const MobileSheetHeader = styled.div`
   padding-bottom: 0.5rem;
 `;
 
-export const StoryActionItem = styled.button`
+export const StoryActionItem = styled(SecondaryButton)`
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
   width: 100%;
-  background-color: #fff;
-  cursor: pointer;
-  color: #292b32;
-  padding: 0.5rem;
-  border-color: transparent;
-  border-radius: 0.25rem;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.base.shade4};
-    cursor: pointer;
-  }
 `;
 
 export const StoryActionItemText = styled.div`

@@ -44,6 +44,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const { width, height, loader, storyStyles } = config;
   const { client, currentUserId } = useSDK();
   const user = useUser(currentUserId);
+  const [isReplying, setIsReplying] = React.useState(false);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -203,6 +204,8 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
             storyId={story.storyId}
             isJoined={community?.isJoined}
             allowCommentInStory={community?.allowCommentInStory}
+            isReplying={isReplying}
+            onCancelReply={() => setIsReplying(false)}
           />
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeCommentSheet} />

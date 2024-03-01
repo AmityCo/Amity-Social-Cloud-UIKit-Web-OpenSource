@@ -17,7 +17,6 @@ import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
 import StoryViewer from '~/social/components/StoryViewer';
-import useStories from '~/social/hooks/useStories';
 
 const ApplicationContainer = styled.div`
   height: 100%;

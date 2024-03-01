@@ -3,21 +3,25 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import { Mentionees, Metadata } from '~/helpers/utils';
 import { Lock2Icon } from '~/icons';
-import CommentComposeBar from '~/social/components/CommentComposeBar';
+
 import {
   StoryCommentComposerBarContainer,
   StoryDisabledCommentComposerBarContainer,
 } from '~/social/components/StoryViewer/styles';
+import CommentComposeBar from '~/social/v4/components/CommentComposeBar';
 
 interface StoryCommentComposeBarProps {
   storyId: string;
   isJoined?: boolean;
+  isReplying?: boolean;
   allowCommentInStory?: boolean;
+  onCancelReply: () => void;
 }
 
 const StoryCommentComposeBar = ({
   storyId,
   isJoined,
+
   allowCommentInStory,
 }: StoryCommentComposeBarProps) => {
   const { formatMessage } = useIntl();
@@ -39,12 +43,14 @@ const StoryCommentComposeBar = ({
 
   if (isJoined && allowCommentInStory) {
     return (
-      <StoryCommentComposerBarContainer>
-        <CommentComposeBar
-          storyId={storyId}
-          onSubmit={(text, mentionees, metadata) => handleAddComment(text, mentionees, metadata)}
-        />
-      </StoryCommentComposerBarContainer>
+      <>
+        <StoryCommentComposerBarContainer>
+          <CommentComposeBar
+            storyId={storyId}
+            onSubmit={(text, mentionees, metadata) => handleAddComment(text, mentionees, metadata)}
+          />
+        </StoryCommentComposerBarContainer>
+      </>
     );
   }
 

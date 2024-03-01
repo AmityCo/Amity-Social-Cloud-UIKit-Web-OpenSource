@@ -1,6 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-
-import usePost from '~/social/hooks/usePost';
 import useUser from '~/core/hooks/useUser';
 import useSocialMention from '~/social/hooks/useSocialMention';
 
@@ -8,7 +6,6 @@ import { Mentionees, Metadata } from '~/helpers/utils';
 import useSDK from '~/core/hooks/useSDK';
 import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
 import { useIntl, FormattedMessage } from 'react-intl';
-
 import { info } from '~/core/components/Confirm';
 
 import {
@@ -16,12 +13,14 @@ import {
   CommentComposeBarContainer,
   CommentComposeBarInput,
   AddCommentButton,
+  ReplyContainer,
+  AnimatedReplyContainer,
 } from './styles';
 
 import { backgroundImage as UserImage } from '~/icons/User';
-import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useImage from '~/core/hooks/useImage';
 import useStory from '~/social/hooks/useStory';
+import { Close } from '~/icons';
 
 const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;
@@ -30,25 +29,27 @@ export interface CommentComposeBarProps {
   className?: string;
   userToReply?: string;
   onSubmit: (text: string, mentionees: Mentionees, metadata: Metadata) => void;
-  postId?: string;
+  onCancelReply?: () => void;
   storyId?: string;
+  isReplying?: boolean;
 }
 
 const CommentComposeBar = ({
   className,
   userToReply,
   onSubmit,
-  postId,
+  onCancelReply,
+  storyId,
+  isReplying,
 }: CommentComposeBarProps) => {
-  const post = usePost(postId);
-
+  const story = useStory(storyId);
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
-  const { text, markup, mentions, mentionees, metadata, onChange, queryMentionees } =
+  const { text, markup, mentions, mentionees, metadata, onChange, clearAll, queryMentionees } =
     useSocialMention({
-      targetId: post?.targetId,
-      targetType: post?.targetType,
+      targetId: story?.targetId,
+      targetType: story?.targetType as string,
     });
   const { formatMessage } = useIntl();
 
@@ -57,6 +58,8 @@ const CommentComposeBar = ({
   useEffect(() => {
     commentInputRef.current?.focus();
   }, []);
+
+  if (story == null) return <LoadingIndicator />;
 
   const addComment = () => {
     if (text === '') return;
@@ -78,6 +81,7 @@ const CommentComposeBar = ({
     }
 
     onSubmit?.(text, mentionees, metadata);
+    clearAll?.();
   };
 
   const isEmpty = text === '';
@@ -85,43 +89,42 @@ const CommentComposeBar = ({
   const placeholder = userToReply
     ? formatMessage({ id: 'CommentComposeBar.replayTo' }) + userToReply
     : formatMessage({ id: 'CommentComposeBar.saySomething' });
-  const submitButtonText = userToReply
-    ? formatMessage({ id: 'reply' })
-    : formatMessage({ id: 'CommentComposeBar.addComment' });
 
   return (
-    <CommentComposeBarContainer className={className}>
-      <Avatar avatar={avatarFileUrl} backgroundImage={UserImage} />
-      <CommentComposeBarInput
-        ref={commentInputRef}
-        data-qa-anchor="comment-compose-bar-textarea"
-        placeholder={placeholder}
-        value={markup}
-        multiline
-        mentionAllowed
-        queryMentionees={queryMentionees}
-        onChange={(data) => onChange?.(data)}
-        onKeyPress={(e) => e.key === 'Enter' && addComment()}
-      />
-      <AddCommentButton
-        data-qa-anchor={
-          userToReply
-            ? 'comment-compose-bar-reply-button'
-            : 'comment-compose-bar-add-comment-button'
-        }
-        disabled={isEmpty}
-        onClick={addComment}
-      >
-        {submitButtonText}
-      </AddCommentButton>
-    </CommentComposeBarContainer>
+    <>
+      {/* {isReplying && (
+        <AnimatedReplyContainer>
+          <div>Replying to </div>
+          <Close onClick={onCancelReply} />
+        </AnimatedReplyContainer>
+      )} */}
+      <CommentComposeBarContainer className={className}>
+        <Avatar size="small" avatar={avatarFileUrl} backgroundImage={UserImage} />
+        <CommentComposeBarInput
+          ref={commentInputRef}
+          data-qa-anchor="comment-compose-bar-textarea"
+          placeholder={placeholder}
+          value={markup}
+          multiline
+          mentionAllowed
+          queryMentionees={queryMentionees}
+          onChange={(data) => onChange?.(data)}
+          onKeyPress={(e) => e.key === 'Enter' && addComment()}
+        />
+        <AddCommentButton
+          data-qa-anchor={
+            userToReply
+              ? 'comment-compose-bar-reply-button'
+              : 'comment-compose-bar-add-comment-button'
+          }
+          disabled={isEmpty}
+          onClick={addComment}
+        >
+          {formatMessage({ id: 'storyViewer.commentComposeBar.submit' })}
+        </AddCommentButton>
+      </CommentComposeBarContainer>
+    </>
   );
 };
 
-export default (props: CommentComposeBarProps) => {
-  const CustomComponentFn = useCustomComponent<CommentComposeBarProps>('CommentComposerBar');
-
-  if (CustomComponentFn) return CustomComponentFn(props);
-
-  return <CommentComposeBar {...props} />;
-};
+export default CommentComposeBar;

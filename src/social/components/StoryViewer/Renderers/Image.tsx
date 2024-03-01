@@ -25,9 +25,10 @@ import { useIntl } from 'react-intl';
 import { Permissions } from '~/social/constants';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
 import { ReactionRepository } from '@amityco/ts-sdk';
-import CommentList from '~/social/components/CommentList';
+
 import { LIKE_REACTION_KEY } from '~/constants';
 import StoryCommentComposeBar from '~/social/components/StoryCommentComposeBar';
+import CommentList from '~/social/v4/components/CommentList';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -35,6 +36,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const [loaded, setLoaded] = React.useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = React.useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = React.useState(false);
+  const [isReplying, setIsReplying] = React.useState(false);
 
   const [isPaused, setIsPaused] = React.useState(false);
   const { width, height, loader, storyStyles } = config;
@@ -152,6 +154,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
             storyId={story.storyId}
             isJoined={community?.isJoined}
             allowCommentInStory={community?.allowCommentInStory}
+            isReplying={isReplying}
+            onCancelReply={() => setIsReplying(false)}
           />
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeCommentSheet} />
