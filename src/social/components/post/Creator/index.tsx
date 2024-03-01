@@ -44,6 +44,7 @@ import { MAXIMUM_POST_CHARACTERS, MAXIMUM_POST_MENTIONEES } from './constants';
 import useSDK from '~/core/hooks/useSDK';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import useCommunityModeratorsCollection from '~/social/hooks/collections/useCommunityModeratorsCollection';
+import { ERROR_RESPONSE } from '~/social/constants';
 
 const useTargetData = ({
   targetId,
@@ -224,6 +225,14 @@ const PostCreatorBar = ({
         ) {
           notification.success({
             content: <FormattedMessage id="post.success.submittedToReview" />,
+          });
+        }
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
+          notification.error({
+            content: <FormattedMessage id="notification.error.blockedWord" />,
           });
         }
       }

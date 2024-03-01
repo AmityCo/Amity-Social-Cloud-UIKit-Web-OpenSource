@@ -7,6 +7,10 @@ import { Mentionees, Metadata } from '~/helpers/utils';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useReactionSubscription from '~/social/hooks/useReactionSubscription';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
+import { notification } from '~/core/components/Notification';
+import { FormattedMessage } from 'react-intl';
+import useSocialMention from '~/social/hooks/useSocialMention';
+import { ERROR_RESPONSE } from '~/social/constants';
 
 interface EngagementBarProps {
   postId: string;
@@ -20,6 +24,10 @@ const EngagementBar = ({ postId, readonly = false }: EngagementBarProps) => {
   const hideComposeBar = () => setComposeBarDisplayed(false);
 
   const post = usePost(postId);
+  const { clearAll } = useSocialMention({
+    targetType: post?.targetType,
+    targetId: post?.targetId,
+  });
 
   usePostSubscription({
     postId,
@@ -39,17 +47,27 @@ const EngagementBar = ({ postId, readonly = false }: EngagementBarProps) => {
     mentionees: Mentionees,
     metadata: Metadata,
   ) => {
-    await CommentRepository.createComment({
-      referenceType: 'post',
-      referenceId: postId,
-      data: {
-        text: commentText,
-      },
-      mentionees,
-      metadata,
-    });
-
-    hideComposeBar();
+    try {
+      await CommentRepository.createComment({
+        referenceType: 'post',
+        referenceId: postId,
+        data: {
+          text: commentText,
+        },
+        mentionees,
+        metadata,
+      });
+      clearAll?.();
+      hideComposeBar();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
+          notification.error({
+            content: <FormattedMessage id="notification.error.blockedWord" />,
+          });
+        }
+      }
+    }
   };
 
   return (

@@ -38,6 +38,7 @@ import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 import useStory from '~/social/hooks/useStory';
+import { ERROR_RESPONSE } from '~/social/constants';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -140,18 +141,30 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   ) => {
     if (!comment?.referenceType || !comment?.referenceId) return;
 
-    const { referenceType, referenceId } = comment;
+    try {
+      const { referenceType, referenceId } = comment;
 
-    await CommentRepository.createComment({
-      referenceType,
-      referenceId,
-      data: {
-        text: replyCommentText,
-      },
-      parentId: commentId,
-      metadata,
-      mentionees,
-    });
+      await CommentRepository.createComment({
+        referenceType,
+        referenceId,
+        data: {
+          text: replyCommentText,
+        },
+        parentId: commentId,
+        metadata,
+        mentionees,
+      });
+      setIsReplying(false);
+      setExpanded(true);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
+          notification.error({
+            content: <FormattedMessage id="notification.error.blockedWord" />,
+          });
+        }
+      }
+    }
   };
 
   const handleEditComment = async (text: string, mentionees: Mentionees, metadata: Metadata) =>
@@ -291,8 +304,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
           userToReply={commentAuthor?.displayName}
           onSubmit={(replyText, mentionees, metadata) => {
             handleReplyToComment(replyText, mentionees, metadata);
-            setIsReplying(false);
-            setExpanded(true);
           }}
         />
       )}
