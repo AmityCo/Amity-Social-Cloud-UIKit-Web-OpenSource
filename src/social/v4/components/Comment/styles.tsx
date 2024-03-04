@@ -37,15 +37,19 @@ export const MobileSheet = styled(Sheet)`
   width: 100%;
 `;
 
-export const MobileSheetNestedBackDrop = styled(Sheet.Backdrop)`
-  background-color: transparent;
+export const MobileSheetNestedBackDrop = styled(MobileSheet.Backdrop)`
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+export const MobileSheetContainer = styled(MobileSheet.Container)`
+  z-index: 100;
 `;
 
 export const MobileSheetHeader = styled(MobileSheet.Header)`
   z-index: 100;
 `;
 
-export const MobileSheetContent = styled(Sheet.Content)`
+export const MobileSheetContent = styled(MobileSheet.Content)`
   z-index: 100;
   padding: 1rem;
 `;

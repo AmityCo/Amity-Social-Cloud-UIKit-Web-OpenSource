@@ -46,7 +46,7 @@ import useImage from '~/core/hooks/useImage';
 
 import { FlagIcon, Pencil2Icon, Trash2Icon } from '~/icons';
 import UIComment from './UIComment';
-import CommentList from '../CommentList';
+import CommentList from '~/social/v4/components/CommentList';
 
 import { isModerator } from '~/helpers/permissions';
 import { LIKE_REACTION_KEY } from '~/constants';
@@ -97,7 +97,7 @@ interface CommentProps {
   readonly?: boolean;
   userRoles?: string[];
   onClickReply?: (
-    replyTo: string,
+    replyTo: string | undefined,
     referenceType: Amity.Comment['referenceType'],
     referenceId: Amity.Comment['referenceId'],
     commentId: Amity.Comment['commentId'],
@@ -350,8 +350,8 @@ const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => {
               </MobileSheetButton>
             ))}
           </MobileSheetContent>
-          <MobileSheetNestedBackDrop onTap={toggleBottomSheet} />
         </MobileSheet.Container>
+        <MobileSheetNestedBackDrop onTap={toggleBottomSheet} />
       </MobileSheet>
     </>
   );

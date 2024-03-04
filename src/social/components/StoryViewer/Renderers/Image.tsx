@@ -24,7 +24,6 @@ import useSDK from '~/core/hooks/useSDK';
 import { useIntl } from 'react-intl';
 import { Permissions } from '~/social/constants';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
-import { ReactionRepository } from '@amityco/ts-sdk';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 import StoryCommentComposeBar from '~/social/components/StoryCommentComposeBar';
@@ -54,6 +53,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const { syncState, reach, commentsCount, createdAt, creator, community, actions, onChange } =
     story;
+
+  const isJoined = community?.isJoined || false;
 
   const avatarUrl = useImage({
     fileId: community?.avatarFileId || '',
@@ -96,18 +97,6 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const closeCommentSheet = () => setIsOpenCommentSheet(false);
 
   const targetRootId = 'stories-viewer';
-
-  const handleLike = async () => {
-    try {
-      if (!isLiked) {
-        await ReactionRepository.addReaction('story', story.storyId, LIKE_REACTION_KEY);
-      } else {
-        await ReactionRepository.removeReaction('story', story.storyId, LIKE_REACTION_KEY);
-      }
-    } catch (error) {
-      console.error("Can't toggle like", error);
-    }
-  };
 
   const onClickReply = (
     replyTo: string,
@@ -178,7 +167,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
             isReplying={isReplying}
             replyTo={replyTo}
             storyId={story.storyId}
-            isJoined={community?.isJoined}
+            isJoined={isJoined}
             allowCommentInStory={community?.allowCommentInStory}
             onCancelReply={() => setIsReplying(false)}
           />
@@ -213,13 +202,12 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         <MobileSheet.Backdrop onTap={closeBottomSheet} />
       </MobileSheet>
       <Footer
+        storyId={story.storyId}
         syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}
         totalLikes={totalLikes}
         isLiked={isLiked}
-        isJoined={community?.isJoined}
-        onClickLike={handleLike}
         onClickComment={openCommentSheet}
       />
     </RendererContainer>

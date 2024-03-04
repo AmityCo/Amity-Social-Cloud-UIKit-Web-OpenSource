@@ -28,7 +28,6 @@ import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
 import CommentList from '~/social/components/CommentList';
-import { ReactionRepository } from '@amityco/ts-sdk';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 import StoryCommentComposeBar from '~/social/components/StoryCommentComposeBar';
@@ -46,10 +45,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const user = useUser(currentUserId);
   const [isReplying, setIsReplying] = React.useState(false);
   const [replyTo, setReplyTo] = React.useState<string | null>(null);
-  const [selectedComment, setSelectedComment] = React.useState<Pick<
-    Amity.Comment,
-    'referenceType' | 'referenceId' | 'commentId'
-  > | null>(null);
+  const [selectedComment, setSelectedComment] = React.useState<{
+    referenceType?: string;
+    referenceId?: string;
+    commentId?: string;
+  } | null>(null);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -124,22 +124,15 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   const targetRootId = 'stories-viewer';
 
-  const onClickReply = (replyTo: string, comment: Amity.Comment) => {
+  const onClickReply = (
+    replyTo: string,
+    referenceType?: Amity.Comment['referenceType'],
+    referenceId?: Amity.Comment['referenceId'],
+    commentId?: Amity.Comment['commentId'],
+  ) => {
     setReplyTo(replyTo);
-    setSelectedComment(comment);
+    setSelectedComment({ referenceType, referenceId, commentId });
     setIsReplying(true);
-  };
-
-  const handleLike = async () => {
-    try {
-      if (!isLiked) {
-        await ReactionRepository.addReaction('story', story.storyId, LIKE_REACTION_KEY);
-      } else {
-        await ReactionRepository.removeReaction('story', story.storyId, LIKE_REACTION_KEY);
-      }
-    } catch (error) {
-      console.error("Can't toggle like", error);
-    }
   };
 
   React.useEffect(() => {
@@ -258,13 +251,12 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         <MobileSheet.Backdrop onTap={closeBottomSheet} />
       </MobileSheet>
       <Footer
+        storyId={story.storyId}
         syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}
         totalLikes={totalLikes}
         isLiked={isLiked}
-        isJoined={community?.isJoined}
-        onClickLike={handleLike}
         onClickComment={openCommentSheet}
       />
     </RendererContainer>

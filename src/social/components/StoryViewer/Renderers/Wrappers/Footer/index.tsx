@@ -14,47 +14,35 @@ import { Comment2Icon, DotsIcon, ErrorIcon, LikedIcon, ThumbsUp } from '~/icons'
 
 import { useIntl } from 'react-intl';
 import millify from 'millify';
-import { notification } from '~/core/components/Notification';
+
+import { ReactionRepository } from '@amityco/ts-sdk';
+import { LIKE_REACTION_KEY } from '~/constants';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
-    syncState?: Amity.SyncState;
+    storyId: string;
     reach: number | null;
     commentsCount: number;
     totalLikes: number;
     isLiked: boolean;
-    isJoined?: boolean;
     onClickComment: () => void;
-    onClickLike: () => void;
+    syncState?: Amity.SyncState;
   }>
-> = ({
-  syncState,
-  reach,
-  commentsCount,
-  totalLikes,
-  isLiked,
-  isJoined,
-  onClickComment,
-  onClickLike,
-}) => {
+> = ({ syncState, reach, commentsCount, totalLikes, isLiked, storyId, onClickComment }) => {
   const [isActive, setIsActive] = React.useState(isLiked);
   const [likeCount, setLikeCount] = React.useState(totalLikes);
   const { formatMessage } = useIntl();
 
-  const handleLike = () => {
-    if (!isJoined) {
-      notification.show({
-        content: formatMessage({ id: 'storyViewer.toast.like.disabled' }),
-      });
-      return;
+  const handleLike = async () => {
+    try {
+      if (!isLiked) {
+        await ReactionRepository.addReaction('story', storyId, LIKE_REACTION_KEY);
+      } else {
+        await ReactionRepository.removeReaction('story', storyId, LIKE_REACTION_KEY);
+      }
+    } catch (error) {
+      console.error("Can't toggle like", error);
     }
-    if (isActive) {
-      setLikeCount(likeCount - 1);
-    } else {
-      setLikeCount(likeCount + 1);
-    }
-    setIsActive(!isActive);
-    onClickLike();
   };
 
   if (syncState === 'syncing') {

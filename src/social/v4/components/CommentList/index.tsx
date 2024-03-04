@@ -9,7 +9,6 @@ import {
   TabIcon,
   TabIconContainer,
 } from '~/social/components/CommentList/styles';
-import { MobileSheet } from '../Comment/styles';
 
 interface CommentListProps {
   parentId?: string;
@@ -47,12 +46,17 @@ const CommentList = ({
 
   const { formatMessage } = useIntl();
 
-  const [isOpenBottomSheet, setIsOpenBottomSheet] = React.useState(false);
-
   const isReplyComment = !!parentId;
 
+  const commentCount = comments?.length;
+
   const loadMoreText = isReplyComment
-    ? `View 1 reply`
+    ? formatMessage(
+        {
+          id: 'collapsible.viewMoreReplies',
+        },
+        { count: commentCount },
+      )
     : formatMessage({ id: 'collapsible.viewMoreComments' });
 
   const prependIcon = isReplyComment ? (
@@ -61,7 +65,7 @@ const CommentList = ({
     </TabIconContainer>
   ) : null;
 
-  if (comments.length === 0 && referenceType === 'story') {
+  if (comments?.length === 0 && referenceType === 'story') {
     return (
       <NoCommentsContainer>
         {formatMessage({ id: 'storyViewer.commentSheet.empty' })}
@@ -69,7 +73,7 @@ const CommentList = ({
     );
   }
 
-  if (comments.length === 0) return null;
+  if (comments?.length === 0) return null;
 
   return (
     <>
@@ -92,15 +96,6 @@ const CommentList = ({
           );
         })}
       />
-      <MobileSheet
-        isOpen={isOpenBottomSheet}
-        onClose={() => setIsOpenBottomSheet(false)}
-        mountPoint={document.getElementById('stories-viewer') as HTMLElement}
-      >
-        <MobileSheet.Container>
-          <MobileSheet.Content></MobileSheet.Content>
-        </MobileSheet.Container>
-      </MobileSheet>
     </>
   );
 };
