@@ -27,7 +27,7 @@ import { isAdmin, isModerator } from '~/helpers/permissions';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/components/StoryViewer/Renderers/types';
-import CommentList from '~/social/components/CommentList';
+import CommentList from '~/social/v4/components/CommentList';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 import StoryCommentComposeBar from '~/social/components/StoryCommentComposeBar';
