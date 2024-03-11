@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.4 (2024-03-11)
+
+### Bug Fixes
+
+- ASC-20601 - comment with blocked word should show noti ([#154](https://github.com/EkoCommunications/AmityUiKitWeb/issues/154)) ([ba4e3f0](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ba4e3f044f08a3aef4d78910203350661cc59076))
+
 ### 3.2.3 (2024-03-01)
 
 ### Bug Fixes
