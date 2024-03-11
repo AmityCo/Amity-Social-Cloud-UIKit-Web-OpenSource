@@ -68,7 +68,6 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
       ? `${formatTimeAgo(createdAt as string)} • By ${creator?.displayName}`
       : '';
 
-  const isStoryCreator = story?.creator?.userId === currentUserId;
   const haveStoryPermission =
     (community &&
       client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId)) ||
@@ -124,7 +123,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
-        haveStoryPermission={isStoryCreator || haveStoryPermission}
+        haveStoryPermission={haveStoryPermission}
         isOfficial={isOfficial}
         isPaused={isPaused}
         onPlay={play}

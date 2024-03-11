@@ -98,8 +98,8 @@ dependencies:
 
 devDependencies:
   '@amityco/ts-sdk':
-    specifier: 6.18.1-ab6e7e4.0
-    version: 6.18.1-ab6e7e4.0
+    specifier: 6.19.0
+    version: 6.19.0
   '@fortawesome/pro-light-svg-icons':
     specifier: ^5.15.4
     version: 5.15.4
@@ -264,8 +264,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /@amityco/ts-sdk@6.18.1-ab6e7e4.0:
-    resolution: {integrity: sha512-m1r+LxjVKx6Z0/WkPKl/E+s0vGHLtvr1fDlThiXqFHXlz5AuWdQRBAqQIvnt4bWVAO1Uin9mrzd/5EHdlaN68g==}
+  /@amityco/ts-sdk@6.19.0:
+    resolution: {integrity: sha512-ktGx3zlFivrIK0UiuWxdebndVUwk2gT7Tf7xJ7RgtS37xua/nCA4N3DtY9tnEUx8iZLKL0Gh0iw6zy4iK6//eg==}
     engines: {node: '>=12', npm: '>=6'}
     dependencies:
       agentkeepalive: 4.5.0

@@ -39,7 +39,7 @@
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "6.18.1-ab6e7e4.0",
+    "@amityco/ts-sdk": "6.19.0",
     "@fortawesome/pro-light-svg-icons": "^5.15.4",
     "@fortawesome/pro-regular-svg-icons": "^5.15.4",
     "@fortawesome/pro-solid-svg-icons": "^5.15.4",

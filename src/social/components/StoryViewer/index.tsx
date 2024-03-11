@@ -59,10 +59,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
   const [file, setFile] = useState<File | null>(null);
   const [colors, setColors] = useState<FinalColor[]>([]);
 
-  const haveStoryPermission =
-    client?.hasPermission(Permissions.ManageStoryPermission).community(targetId) ||
-    isAdmin(user?.roles) ||
-    isModerator(user?.roles);
+  const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
@@ -163,7 +160,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        haveStoryPermission
+        isStoryCreator
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
