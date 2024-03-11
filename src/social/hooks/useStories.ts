@@ -70,7 +70,7 @@ const useStories = (params: Amity.GetStoriesByTargetParam): UseStories => {
         disposeFnRef.current();
       }
     };
-  }, []);
+  }, [params.targetId]);
 
   useCommunityStoriesSubscription({
     targetId: params.targetId,

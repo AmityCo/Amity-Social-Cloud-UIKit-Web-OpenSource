@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React from 'react';
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import UICommunityInfo from './UICommunityInfo';
 import { leaveCommunityConfirmModal } from './leaveScenarioModals';
