@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Truncate from 'react-truncate-markup';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 import {
   AddStoryButton,
   ErrorButton,
+  HiddenInput,
   StoryAvatar,
   StoryTabContainer,
   StoryTitle,
@@ -38,20 +39,18 @@ const StoryTab = ({
   onClick,
   onChange,
 }: StoryTabProps) => {
-  const handleAddIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-    if (onChange) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*,video/*';
+  const handleAddIconClick = () => {
+    if (onChange && fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
-      input.addEventListener('change', (event) => {
-        const selectedFile = (event.target as HTMLInputElement).files?.[0];
-        onChange(selectedFile as File);
-      });
-
-      input.click();
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      onChange?.(selectedFile);
     }
   };
 
@@ -74,7 +73,17 @@ const StoryTab = ({
           <StoryRing isSeen={isSeen} uploading={uploadingStory} isErrored={isErrored} />
         )}
         <StoryAvatar avatar={avatar} backgroundImage={CommunityImage} />
-        {haveStoryPermission && <AddStoryButton onClick={handleAddIconClick} />}
+        {haveStoryPermission && (
+          <>
+            <AddStoryButton onClick={handleAddIconClick} />
+            <HiddenInput
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,video/*"
+              onChange={handleFileChange}
+            />
+          </>
+        )}
         {isErrored && <ErrorButton />}
       </StoryWrapper>
       <Truncate lines={1}>

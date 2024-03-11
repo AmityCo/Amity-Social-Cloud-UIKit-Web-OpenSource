@@ -18,6 +18,10 @@ export const AddStoryButton = styled(AddIcon)`
   z-index: 2;
 `;
 
+export const HiddenInput = styled.input`
+  display: none;
+`;
+
 export const StoryWrapper = styled.div`
   width: 3rem;
   height: 3rem;
