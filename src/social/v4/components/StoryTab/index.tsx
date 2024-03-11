@@ -67,12 +67,12 @@ const StoryTab = ({
   }, []);
 
   return (
-    <StoryTabContainer onClick={handleOnClick}>
+    <StoryTabContainer>
       <StoryWrapper>
         {storyRing && (
           <StoryRing isSeen={isSeen} uploading={uploadingStory} isErrored={isErrored} />
         )}
-        <StoryAvatar avatar={avatar} backgroundImage={CommunityImage} />
+        <StoryAvatar onClick={handleOnClick} avatar={avatar} backgroundImage={CommunityImage} />
         {haveStoryPermission && (
           <>
             <AddStoryButton onClick={handleAddIconClick} />
