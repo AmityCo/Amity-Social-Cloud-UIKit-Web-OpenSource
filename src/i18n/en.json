@@ -370,5 +370,7 @@
   "editChatMembersModal.confirm.title": "Leave without finishing?",
   "editChatMembersModal.confirm.content": "Your progress won’t be saved. Are you sure to leave this page now?",
   "editChatMembersModal.confirm.cancelText": "Continue editing",
-  "editChatMembersModal.confirm.okText": "Leave"
+  "editChatMembersModal.confirm.okText": "Leave",
+
+  "notification.error.blockedWord": "Amity SDK (400308): Text contain blocked word"
 }

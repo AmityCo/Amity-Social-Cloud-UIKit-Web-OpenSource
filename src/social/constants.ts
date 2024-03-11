@@ -74,3 +74,7 @@ export const VideoQuality = Object.freeze({
 });
 
 export const MP4MimeType = 'video/mp4';
+
+export const ERROR_RESPONSE = Object.freeze({
+  CONTAIN_BLOCKED_WORD: 'Amity SDK (400308): Text contain blocked word',
+});

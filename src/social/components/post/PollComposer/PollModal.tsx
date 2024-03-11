@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 import { PollRepository } from '@amityco/ts-sdk';
 
 import Modal from '~/core/components/Modal';
 import { confirm } from '~/core/components/Confirm';
 import PollComposer from '~/social/components/post/PollComposer';
+import { notification } from '~/core/components/Notification';
+import { ERROR_RESPONSE } from '~/social/constants';
 
 interface PollModalProps {
   targetId?: string | null;
@@ -27,9 +29,19 @@ const PollModal = ({ targetId, targetType, onClose, onCreatePoll }: PollModalPro
     mentionees: Amity.UserMention[],
     metadata: Record<string, unknown>,
   ) => {
-    const createdPoll = await PollRepository.createPoll(data);
-    await onCreatePoll(createdPoll.data.pollId, data.question, mentionees, metadata);
-    onClose();
+    try {
+      const createdPoll = await PollRepository.createPoll(data);
+      await onCreatePoll(createdPoll.data.pollId, data.question, mentionees, metadata);
+      onClose();
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
+          notification.error({
+            content: <FormattedMessage id="notification.error.blockedWord" />,
+          });
+        }
+      }
+    }
   };
 
   const closeConfirm = () =>
