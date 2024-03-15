@@ -4,6 +4,7 @@ import { Icon } from '~/core/v4/components/Icon';
 export const ActionButton = styled(Icon)`
   width: 1.5rem;
   height: 1.5rem;
+  padding: 0.25rem;
   cursor: pointer;
   border-radius: 50%;
   position: absolute;

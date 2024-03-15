@@ -31,9 +31,6 @@ export const SpeakerButton = ({
   const mutedIcon = elementConfig?.mute_icon;
   const unmutedIcon = elementConfig?.unmute_icon;
 
-  console.log('mutedIcon', mutedIcon);
-  console.log('unmutedIcon', unmutedIcon);
-
   const isMutedRemoteImage = mutedIcon && isValidHttpUrl(mutedIcon);
   const isUnmutedRemoteImage = unmutedIcon && isValidHttpUrl(unmutedIcon);
 
@@ -50,7 +47,7 @@ export const SpeakerButton = ({
       />
     ) : (
       <ActionButton
-        name={mutedIcon === 'mute' ? 'MuteCircle' : mutedIcon}
+        name={mutedIcon === 'mute' ? 'UnmuteCircle' : mutedIcon}
         onClick={onClick}
         style={{
           ...style,
@@ -71,7 +68,7 @@ export const SpeakerButton = ({
     />
   ) : (
     <ActionButton
-      name={unmutedIcon === 'unmute' ? 'UnmuteCircle' : unmutedIcon}
+      name={unmutedIcon === 'unmute' ? 'MuteCircle' : unmutedIcon}
       onClick={onClick}
       style={{
         ...style,
