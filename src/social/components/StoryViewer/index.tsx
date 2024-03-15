@@ -48,8 +48,7 @@ const StoryViewer = ({ targetId, duration = 5000, onClose }: StoryViewerProps) =
     },
   });
 
-  const { currentUserId, client } = useSDK();
-  const user = useUser(currentUserId);
+  const { currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
   const isMobile = useMedia('(max-width: 768px)');

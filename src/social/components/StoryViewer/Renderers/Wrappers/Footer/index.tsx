@@ -33,6 +33,11 @@ const Footer: React.FC<
   const [likeCount, setLikeCount] = React.useState(totalLikes);
   const { formatMessage } = useIntl();
 
+  useEffect(() => {
+    setIsActive(isLiked);
+    setLikeCount(totalLikes);
+  }, [isLiked, totalLikes]);
+
   const handleLike = async () => {
     try {
       if (!isLiked) {
@@ -67,11 +72,6 @@ const Footer: React.FC<
       </ViewStoryFailedCompostBarContainer>
     );
   }
-
-  useEffect(() => {
-    setIsActive(isLiked);
-    setLikeCount(totalLikes);
-  }, [isLiked, totalLikes]);
 
   return (
     <ViewStoryCompostBarContainer>
