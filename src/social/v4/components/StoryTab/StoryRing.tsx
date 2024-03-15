@@ -1,33 +1,30 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
-
-const animateRing = keyframes`
-  0% {
-    stroke-dashoffset: 339;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-`;
-
-const ProgressRing = styled.circle<{ uploading?: boolean }>`
-  animation: ${(props) => (props.uploading ? animateRing : 'none')} 2s linear 0s infinite;
-  -webkit-animation: ${(props) => (props.uploading ? animateRing : 'none')} 2s linear 0s infinite;
-  -moz-animation: ${(props) => (props.uploading ? animateRing : 'none')} 2s linear 0s infinite;
-`;
+import { ProgressRing } from './styles';
+import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 
 interface StoryRingProps extends React.SVGProps<SVGSVGElement> {
+  pageId?: string;
+  componentId?: string;
   isSeen?: boolean;
   uploading?: boolean;
   isErrored?: boolean;
 }
 
 const StoryRing = ({
+  pageId = '*',
+  componentId = 'story_tab_component',
   isSeen = false,
   uploading = false,
   isErrored = false,
   ...props
 }: StoryRingProps) => {
+  const elementId = 'story_ring';
+  const { getConfig, isExcluded } = useCustomization();
+  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
+
+  if (isElementExcluded) return null;
+
   if (isErrored) {
     return (
       <svg
@@ -54,13 +51,13 @@ const StoryRing = ({
           y2="45.75"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor="#339AF9" />
-          <stop offset={1} stopColor="#78FA58" />
+          <stop stopColor={elementConfig?.progress_color?.[0]} />
+          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
         </linearGradient>
       </defs>
       <circle
         fill="none"
-        stroke="#EBECEF"
+        stroke={elementConfig?.background_color?.[0]}
         cx="24"
         cy="24"
         r="23"

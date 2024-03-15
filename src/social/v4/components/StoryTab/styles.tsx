@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Avatar from '~/core/components/Avatar';
 import { AddIcon, ErrorIcon } from '~/icons';
 
@@ -62,4 +62,19 @@ export const AddButton = styled(AddIcon)`
   right: 0;
   cursor: pointer;
   z-index: 2;
+`;
+
+const animateRing = keyframes`
+  0% {
+    stroke-dashoffset: 339;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+`;
+
+export const ProgressRing = styled.circle<{ uploading?: boolean }>`
+  animation: ${(props) => (props.uploading ? animateRing : 'none')} 2s linear 0s infinite;
+  -webkit-animation: ${(props) => (props.uploading ? animateRing : 'none')} 2s linear 0s infinite;
+  -moz-animation: ${(props) => (props.uploading ? animateRing : 'none')} 2s linear 0s infinite;
 `;

@@ -18,6 +18,10 @@ import CustomComponentsProvider, { CustomComponentType } from '../CustomComponen
 import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
+import { CustomizationProvider } from '~/social/v4/providers/CustomizationProvider';
+
+import amityConfig from '../../../../amity-uikit.config.json';
+import { PageBehaviorProvider } from '~/social/v4/providers/PageBehaviorProvider';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -43,6 +47,10 @@ interface UiKitProviderProps {
     onEditUser?: (userId: string) => void;
     onMessageUser?: (userId: string) => void;
   };
+  pageBehavior?: {
+    closeAction?: () => void;
+    hyperLinkAction?: () => void;
+  };
   socialCommunityCreationButtonVisible?: boolean;
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
@@ -62,6 +70,7 @@ const UiKitProvider = ({
   children /* TODO localization */,
   socialCommunityCreationButtonVisible,
   actionHandlers,
+  pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
 }: UiKitProviderProps) => {
@@ -140,28 +149,34 @@ const UiKitProvider = ({
 
   return (
     <Localization locale="en">
-      <ThemeProvider theme={buildGlobalTheme(theme)}>
-        <UIStyles>
-          <SDKContext.Provider value={sdkContextValue}>
-            <SDKConnectorProvider>
-              <CustomComponentsProvider config={customComponents}>
-                <ConfigProvider
-                  config={{
-                    socialCommunityCreationButtonVisible:
-                      socialCommunityCreationButtonVisible || true,
-                  }}
-                >
-                  <PostRendererProvider config={postRendererConfig}>
-                    <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
-                  </PostRendererProvider>
-                </ConfigProvider>
-                <NotificationsContainer />
-                <ConfirmContainer />
-              </CustomComponentsProvider>
-            </SDKConnectorProvider>
-          </SDKContext.Provider>
-        </UIStyles>
-      </ThemeProvider>
+      <CustomizationProvider initialConfig={amityConfig}>
+        <ThemeProvider theme={buildGlobalTheme(theme)}>
+          <UIStyles>
+            <SDKContext.Provider value={sdkContextValue}>
+              <SDKConnectorProvider>
+                <CustomComponentsProvider config={customComponents}>
+                  <ConfigProvider
+                    config={{
+                      socialCommunityCreationButtonVisible:
+                        socialCommunityCreationButtonVisible || true,
+                    }}
+                  >
+                    <PostRendererProvider config={postRendererConfig}>
+                      <NavigationProvider {...actionHandlers}>
+                        <PageBehaviorProvider customNavigationBehavior={pageBehavior}>
+                          {children}
+                        </PageBehaviorProvider>
+                      </NavigationProvider>
+                    </PostRendererProvider>
+                  </ConfigProvider>
+                  <NotificationsContainer />
+                  <ConfirmContainer />
+                </CustomComponentsProvider>
+              </SDKConnectorProvider>
+            </SDKContext.Provider>
+          </UIStyles>
+        </ThemeProvider>
+      </CustomizationProvider>
     </Localization>
   );
 };

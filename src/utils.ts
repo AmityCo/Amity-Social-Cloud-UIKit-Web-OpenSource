@@ -4,6 +4,15 @@ export function isLoadingItem<T>(item: T | { skeleton?: boolean }): item is { sk
   return !!(item as { skeleton?: boolean }).skeleton;
 }
 
+export function isValidHttpUrl(url: string) {
+  try {
+    const newUrl = new URL(url);
+    return newUrl.protocol === 'http:' || newUrl.protocol === 'https:';
+  } catch (err) {
+    return false;
+  }
+}
+
 export function formatTimeAgo(dateString: string | Date | undefined) {
   if (!dateString) return;
   const givenDate = new Date(dateString);

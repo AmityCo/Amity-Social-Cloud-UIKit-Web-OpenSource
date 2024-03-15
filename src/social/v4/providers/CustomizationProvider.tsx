@@ -1,54 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface CustomizationConfig {
-  global_theme: Record<string, any>;
-  excludes: string[];
-  customizations: Record<string, any>;
-}
-
 interface CustomizationContextValue {
-  config: CustomizationConfig | null;
-  parseConfig: (config: CustomizationConfig) => void;
+  config: Config | null;
+  parseConfig: (config: Config) => void;
   isExcluded: (path: string) => boolean;
-  getConfig: (path: string) => Record<string, any>;
+  getConfig: (path: keyof Config['customizations']) => Record<string, any>;
 }
 
 interface Theme {
   primary_color: string;
   secondary_color: string;
-}
-
-interface PageTheme {
-  light_theme: Theme;
-}
-
-interface CustomizationTarget {
-  page_theme?: PageTheme;
-  component_theme?: PageTheme;
-  title?: string;
-  back_icon?: string;
-  close_icon?: string;
-  resolution?: string;
-  background_color?: string;
-  aspect_ratio_icon?: string;
-  hyperlink_button_icon?: string;
-  hyper_link_icon?: string;
-  share_icon?: string;
-  hide_avatar?: boolean;
-  progress_color?: string | string[];
-  overflow_menu_icon?: string;
-  impression_icon?: string;
-  comment_icon?: string;
-  reaction_icon?: string;
-  create_new_story_icon?: string;
-  mute_icon?: string;
-  unmute_icon?: string;
-  cancel_icon?: string;
-  cancel_button_text?: string;
-  save_icon?: string;
-  save_button_text?: string;
-  done_icon?: string;
-  done_button_text?: string;
 }
 
 interface Config {
@@ -231,20 +192,29 @@ export const useCustomization = () => {
 
 interface CustomizationProviderProps {
   children: React.ReactNode;
-  initialConfig: CustomizationConfig;
+  initialConfig: Config;
 }
 
 export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   children,
   initialConfig,
 }) => {
-  const [config, setConfig] = useState<CustomizationConfig | null>(null);
+  const [config, setConfig] = useState<Config | null>(null);
 
   useEffect(() => {
     parseConfig(initialConfig);
   }, [initialConfig]);
 
-  const parseConfig = (newConfig: CustomizationConfig) => {
+  const validateConfig = (config: Config): boolean => {
+    // Check if mandatory fields are present
+    if (!config?.global_theme || !config?.excludes || !config?.customizations) {
+      return false;
+    }
+
+    return true;
+  };
+
+  const parseConfig = (newConfig: Config) => {
     // Validate the parsed config
     const isValid = validateConfig(newConfig);
 
@@ -255,15 +225,6 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
     }
   };
 
-  const validateConfig = (config: CustomizationConfig): boolean => {
-    // Check if mandatory fields are present
-    if (!config?.global_theme || !config?.excludes || !config?.customizations) {
-      return false;
-    }
-
-    return true;
-  };
-
   const isExcluded = (path: string) => {
     if (!config) return false;
     return config.excludes.some((exclude) => {
@@ -272,7 +233,7 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
     });
   };
 
-  const getConfig = (path: string) => {
+  const getConfig = (path: keyof Config['customizations']) => {
     if (!config) return {};
     return config.customizations[path] || {};
   };

@@ -26,7 +26,7 @@ import {
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import millify from 'millify';
 import { isNonNullable } from '~/helpers/utils';
-import StoryTab from '~/social/v4/components/StoryTab';
+import { StoryTab } from '~/social/v4/components/StoryTab';
 
 interface UICommunityInfoProps {
   communityId: string;

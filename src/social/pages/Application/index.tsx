@@ -16,7 +16,8 @@ import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
-import StoryViewer from '~/social/components/StoryViewer';
+import { ViewStoriesPage } from '~/social/v4/pages/StoryPage';
+import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -32,14 +33,6 @@ const StyledCommunitySideMenu = styled(CommunitySideMenu)`
   }
 `;
 
-const CommunitySideMenuOverlay = styled.div<{ isOpen: boolean }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  min-height: 100%;
-`;
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -51,6 +44,7 @@ const Wrapper = styled.div`
 
 const Community = () => {
   const { page, onBack } = useNavigation();
+  const { navigationBehavior } = usePageBehavior();
 
   const { client } = useSDK();
   const [socialSettings, setSocialSettings] = React.useState<Amity.SocialSettings | null>(null);
@@ -92,7 +86,7 @@ const Community = () => {
 
         {page.type === PageTypes.ViewStory && (
           <Wrapper>
-            <StoryViewer targetId={page.targetId!} onClose={onBack} />
+            <ViewStoriesPage pageId="story_page" targetId={page.targetId!} onClose={onBack} />
           </Wrapper>
         )}
 

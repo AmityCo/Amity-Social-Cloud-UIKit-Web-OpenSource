@@ -18,6 +18,10 @@ export { default as AmityPostEngagementBar } from '~/social/components/Engagemen
 export { default as AmityExpandableText } from '~/social/components/Comment/CommentText';
 export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
+// v4
+export { DraftsPage, StoryPage } from '~/social/v4/pages';
+export { CommentEdition, CommentTray, StoryTab } from '~/social/v4/components';
+
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
 // import AmityCommentLikeButton from './components/CommentLikeButton';

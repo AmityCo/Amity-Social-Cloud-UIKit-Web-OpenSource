@@ -30,7 +30,7 @@ import {
 import useStories from '~/social/hooks/useStories';
 
 import { BarsIcon } from '~/icons';
-import { DraftsPage } from '~/social/v4/pages/story/DraftsPage';
+import { DraftsPage } from '~/social/v4/pages/DraftsPage';
 
 interface CommunityFeedProps {
   communityId: string;
@@ -152,6 +152,7 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
     return (
       <Wrapper>
         <DraftsPage
+          pageId="create_story_page"
           file={file}
           creatorAvatar={communityAvatar?.fileUrl}
           onCreateStory={createStory}
