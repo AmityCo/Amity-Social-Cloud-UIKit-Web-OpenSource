@@ -33,7 +33,7 @@ import { Trash2Icon } from '~/icons';
 import { DraftsPage } from '~/social/v4/pages/DraftsPage';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import { useTheme } from 'styled-components';
-import { usePageBehavior } from '../../providers/PageBehaviorProvider';
+import { CreateStoryButton } from '../../elements';
 
 interface StoryViewerProps {
   pageId: 'story_page';
@@ -71,6 +71,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
 
   const handleAddIconClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
 
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -169,6 +170,10 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     setIsDraft(false);
   };
 
+  const addStoryButton = (
+    <CreateStoryButton pageId="story_page" componentId="*" onClick={handleAddIconClick} />
+  );
+
   const formattedStories = stories?.map((story) => {
     const isImage = story?.dataType === 'image';
     const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
@@ -186,10 +191,11 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
             }
           : null,
       ].filter(isNonNullable),
-      onChange,
       handleAddIconClick,
       onCreateStory,
       discardStory,
+      addStoryButton,
+      fileInputRef,
     };
   });
 

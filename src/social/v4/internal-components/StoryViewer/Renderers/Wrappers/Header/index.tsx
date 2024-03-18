@@ -18,7 +18,6 @@ import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 
 import { OverflowMenuButton } from '~/social/v4/elements/OverflowMenuButton/OverflowMenuButton';
 import { CloseButton } from '~/social/v4/elements/CloseButton/CloseButton';
-import { CreateStoryButton } from '~/social/v4/elements';
 
 const Header: React.FC<
   React.PropsWithChildren<{
@@ -37,6 +36,7 @@ const Header: React.FC<
     haveStoryPermission?: boolean;
     onMute?: () => void;
     onUnmute?: () => void;
+    addStoryButton?: React.ReactNode;
   }>
 > = ({
   avatar,
@@ -45,24 +45,21 @@ const Header: React.FC<
   isHaveActions,
   isOfficial,
   isPaused,
-  onAddStory,
   onPlay,
   onPause,
   onAction,
   onClose,
   onClickCommunity,
   haveStoryPermission,
+  addStoryButton,
 }) => {
-  console.log(onAddStory);
   return (
     <>
       <ViewStoryHeaderContainer>
         <ViewStoryHeadingInfoContainer>
           <AvatarContainer>
             <Avatar avatar={avatar} backgroundImage={communityBackgroundImage} />
-            {haveStoryPermission && onAddStory && (
-              <CreateStoryButton pageId="story_page" componentId="*" onClick={onAddStory} />
-            )}
+            {haveStoryPermission && addStoryButton}
           </AvatarContainer>
           <ViewStoryInfoContainer>
             <ViewStoryHeading>

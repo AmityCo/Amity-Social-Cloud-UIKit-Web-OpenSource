@@ -36,6 +36,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [replyTo, setReplyTo] = useState<string | undefined>(undefined);
+
   const [selectedComment, setSelectedComment] = useState<{
     referenceType?: string;
     referenceId?: string;
@@ -59,6 +60,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     community,
     actions,
     handleAddIconClick,
+    addStoryButton,
+    fileInputRef,
   } = story;
 
   const isJoined = community?.isJoined || false;
@@ -123,6 +126,27 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     }
   }, [isPaused, isOpenBottomSheet, isOpenCommentSheet]);
 
+  useEffect(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.addEventListener('click', () => {
+        action('pause', true);
+      });
+      fileInputRef.current.addEventListener('cancel', () => {
+        action('play', true);
+      });
+    }
+    return () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.removeEventListener('cancel', () => {
+          action('play', true);
+        });
+        fileInputRef.current.removeEventListener('click', () => {
+          action('pause', true);
+        });
+      }
+    };
+  }, []);
+
   return (
     <RendererContainer>
       <Header
@@ -139,6 +163,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
         onClose={onBack}
+        addStoryButton={addStoryButton}
       />
       <StoryImage style={computedStyles} src={story.url} onLoad={imageLoaded} />
       {!loaded && (
