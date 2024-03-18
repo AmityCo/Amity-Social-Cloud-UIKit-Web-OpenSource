@@ -5,7 +5,7 @@ export const defaultThemeV4 = {
       shade1: '#4A82F2',
       shade2: '#A0BDF8',
       shade3: '#D9E5FC',
-      shade4: '#CBCBCB',
+      shade4: '#FFFFFF',
     },
     secondary: {
       default: '#292B32',

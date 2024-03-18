@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   PauseStoryButton,
   PlayStoryButton,
@@ -22,6 +22,12 @@ import { CreateStoryButton } from '~/social/v4/elements';
 
 const Header: React.FC<
   React.PropsWithChildren<{
+    onPlay: () => void;
+    onPause: () => void;
+    onAction: () => void;
+    onClose: () => void;
+    onAddStory: (e: React.MouseEvent<Element, MouseEvent>) => void;
+    onClickCommunity: () => void;
     avatar?: string;
     heading?: string;
     subheading?: string;
@@ -29,14 +35,8 @@ const Header: React.FC<
     isPaused?: boolean;
     isHaveActions?: boolean;
     haveStoryPermission?: boolean;
-    onPlay: () => void;
-    onPause: () => void;
-    onAction: () => void;
-    onClose: () => void;
-    onAddStory?: (file: File) => void;
     onMute?: () => void;
     onUnmute?: () => void;
-    onClickCommunity: () => void;
   }>
 > = ({
   avatar,
@@ -53,14 +53,7 @@ const Header: React.FC<
   onClickCommunity,
   haveStoryPermission,
 }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleAddIconClick = () => {
-    if (onAddStory && fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
+  console.log(onAddStory);
   return (
     <>
       <ViewStoryHeaderContainer>
@@ -68,7 +61,7 @@ const Header: React.FC<
           <AvatarContainer>
             <Avatar avatar={avatar} backgroundImage={communityBackgroundImage} />
             {haveStoryPermission && onAddStory && (
-              <CreateStoryButton pageId="story_page" componentId="*" onClick={handleAddIconClick} />
+              <CreateStoryButton pageId="story_page" componentId="*" onClick={onAddStory} />
             )}
           </AvatarContainer>
           <ViewStoryInfoContainer>

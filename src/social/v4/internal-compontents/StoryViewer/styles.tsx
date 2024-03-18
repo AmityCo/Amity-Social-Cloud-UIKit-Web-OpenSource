@@ -355,3 +355,7 @@ export const StoryArrowLeftButton = styled(ArrowLeftCircle)`
 export const StoryArrowRightButton = styled(ArrowRightCircle)`
   cursor: pointer;
 `;
+
+export const HiddenInput = styled.input`
+  display: none;
+`;

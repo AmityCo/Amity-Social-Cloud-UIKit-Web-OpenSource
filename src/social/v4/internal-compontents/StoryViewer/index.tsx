@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import {
+  HiddenInput,
   StoryArrowLeftButton,
   StoryArrowRightButton,
   StoryWrapper,
@@ -66,6 +67,23 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     },
   });
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAddIconClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      onChange(selectedFile as File);
+    }
+  };
+
   const { currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
@@ -100,23 +118,6 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   const onChange = (file: File) => {
     setFile(file);
     setIsDraft(true);
-  };
-
-  const handleAddIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (onChange) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*,video/*';
-
-      input.addEventListener('change', (event) => {
-        const selectedFile = (event.target as HTMLInputElement).files?.[0];
-        onChange(selectedFile as File);
-      });
-
-      input.click();
-    }
   };
 
   const deleteStory = async (storyId: string) => {
@@ -185,8 +186,8 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
             }
           : null,
       ].filter(isNonNullable),
-      handleAddIconClick: (e: React.MouseEvent) => handleAddIconClick,
       onChange,
+      handleAddIconClick,
       onCreateStory,
       discardStory,
     };
@@ -272,6 +273,12 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     <StoryWrapper>
       {!isMobile && <StoryArrowLeftButton onClick={previousStory} />}
       <ViewStoryContainer id={targetRootId}>
+        <HiddenInput
+          ref={fileInputRef}
+          type="file"
+          accept="image/*,video/*"
+          onChange={handleFileChange}
+        />
         <ViewStoryContent>
           <ViewStoryOverlay />
           {formattedStories?.length > 0 ? (

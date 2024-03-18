@@ -9,6 +9,7 @@ export type CustomRenderer = React.FC<{
         icon: JSX.Element;
       }>;
       onChange: (file: File) => void;
+      handleAddIconClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
     };
   action: Action;
   config: {

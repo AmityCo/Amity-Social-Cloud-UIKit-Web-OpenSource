@@ -51,8 +51,16 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
 
-  const { syncState, reach, commentsCount, createdAt, creator, community, actions, onChange } =
-    story;
+  const {
+    syncState,
+    reach,
+    commentsCount,
+    createdAt,
+    creator,
+    community,
+    actions,
+    handleAddIconClick,
+  } = story;
 
   const isJoined = community?.isJoined || false;
 
@@ -166,7 +174,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onMute={mute}
         onUnmute={unmute}
         onAction={openBottomSheet}
-        onAddStory={onChange}
+        onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
         onClose={onBack}
       />

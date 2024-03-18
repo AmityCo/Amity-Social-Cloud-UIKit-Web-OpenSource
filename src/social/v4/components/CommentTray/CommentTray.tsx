@@ -64,9 +64,9 @@ export const CommentTray = ({
   const componentConfig = getConfig(`${pageId}/${componentId}/*`);
   const isComponentExcluded = isExcluded(`${pageId}/${componentId}/*`);
 
-  const componentTheme = componentConfig?.component_theme?.light_theme || theme.v4.colors.primary;
-  const primaryColor = componentTheme.primary_color || theme.v4.colors.primary.default;
-  const secondaryColor = componentTheme.secondary_color || theme.v4.colors.secondary.default;
+  const componentTheme =
+    componentConfig?.component_theme?.light_theme || theme.v4.colors.primary.shade4;
+  const primaryColor = componentTheme.primary_color || theme.v4.colors.primary.shade4;
 
   const rootId = 'asc-uikit-stories-viewer';
 

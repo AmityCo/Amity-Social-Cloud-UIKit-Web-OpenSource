@@ -50,8 +50,16 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story.reactions[LIKE_REACTION_KEY] || 0;
 
-  const { syncState, reach, commentsCount, createdAt, creator, community, actions, onChange } =
-    story;
+  const {
+    syncState,
+    reach,
+    commentsCount,
+    createdAt,
+    creator,
+    community,
+    actions,
+    handleAddIconClick,
+  } = story;
 
   const isJoined = community?.isJoined || false;
 
@@ -128,7 +136,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onPlay={play}
         onPause={pause}
         onAction={openBottomSheet}
-        onAddStory={onChange}
+        onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
         onClose={onBack}
       />

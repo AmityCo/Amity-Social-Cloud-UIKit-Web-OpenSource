@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import { IconButton, RemoteImageButton } from './styles';
-import { ArrowLeftCircle2 } from '~/icons';
 import { isValidHttpUrl } from '~/utils';
 import { useTheme } from 'styled-components';
 
@@ -23,7 +22,7 @@ export const CreateStoryButton = ({
   const { getConfig, isExcluded } = useCustomization();
   const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
   const backgroundColor = elementConfig?.background_color;
-  const createStoryIcon = elementConfig?.create_story_icon;
+  const createStoryIcon = elementConfig?.create_new_story_icon;
 
   const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
 
@@ -42,7 +41,7 @@ export const CreateStoryButton = ({
     />
   ) : (
     <IconButton
-      name={createStoryIcon || <ArrowLeftCircle2 />}
+      name={createStoryIcon === 'plus' ? 'AddIcon' : createStoryIcon}
       style={{
         ...style,
         backgroundColor: backgroundColor || theme.v4.colors.secondary.default,

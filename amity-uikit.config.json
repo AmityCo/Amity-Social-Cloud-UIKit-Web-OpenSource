@@ -55,10 +55,7 @@
       "hide_avatar": false
     },
     "story_page/*/*": {},
-    "story_page/*/progress_bar": {
-      "progress_color": "#FFFFFF",
-      "background_color": "#50FFFFFF"
-    },
+    "story_page/*/progress_bar": {},
     "story_page/*/overflow_menu": {
       "overflow_menu_icon": "threeDot"
     },
@@ -118,14 +115,7 @@
       "cancel_icon": "",
       "cancel_button_text": "Cancel"
     },
-    "*/comment_tray_component/*": {
-      "component_theme": {
-        "light_theme": {
-          "primary_color": "#1054DE",
-          "secondary_color": "#292B32"
-        }
-      }
-    },
+    "*/comment_tray_component/*": {},
     "*/story_tab_component/*": {},
     "*/story_tab_component/story_ring": {
       "progress_color": ["#339AF9", "#78FA58"],
