@@ -66,7 +66,6 @@ export const CommentBlock = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background-color: #ffffff;
   align-items: start;
   justify-content: flex-start;
   overflow: hidden;

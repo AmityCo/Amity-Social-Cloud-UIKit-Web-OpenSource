@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 
 import useCommentsCollection from '~/social/hooks/collections/useCommentsCollection';
 import LoadMoreWrapper from '~/social/components/LoadMoreWrapper';
-import Comment from '~/social/v4/internal-compontents/Comment';
+import Comment from '~/social/v4/internal-components/Comment';
 import {
   NoCommentsContainer,
   TabIcon,

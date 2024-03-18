@@ -1,5 +1,5 @@
 import React from 'react';
-import StoryViewer from '~/social/v4/internal-compontents/StoryViewer';
+import StoryViewer from '~/social/v4/internal-components/StoryViewer';
 import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
 
 interface ViewStoriesPageProps {

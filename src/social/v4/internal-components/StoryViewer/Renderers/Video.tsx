@@ -4,15 +4,15 @@ import {
   LoadingOverlay,
   StoryVideo,
   RendererContainer,
-} from '~/social/v4/internal-compontents/StoryViewer/Renderers/styles';
+} from '~/social/v4/internal-components/StoryViewer/Renderers/styles';
 import {
   MobileActionSheetContent,
   MobileSheet,
   StoryActionItem,
   StoryActionItemText,
-} from '~/social/v4/internal-compontents/StoryViewer/styles';
-import Footer from '~/social/v4/internal-compontents/StoryViewer/Renderers/Wrappers/Footer';
-import Header from '~/social/v4/internal-compontents/StoryViewer/Renderers/Wrappers/Header';
+} from '~/social/v4/internal-components/StoryViewer/styles';
+import Footer from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Footer';
+import Header from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Header';
 import useImage from '~/core/hooks/useImage';
 import { formatTimeAgo } from '~/utils';
 import { useNavigation } from '~/social/providers/NavigationProvider';
@@ -21,7 +21,7 @@ import { Permissions } from '~/social/constants';
 import { isAdmin, isModerator } from '~/helpers/permissions';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
-import { CustomRenderer } from '~/social/v4/internal-compontents/StoryViewer/Renderers/types';
+import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 

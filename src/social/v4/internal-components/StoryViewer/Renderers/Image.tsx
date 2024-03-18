@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Tester } from 'react-insta-stories/dist/interfaces';
-import Header from '~/social/v4/internal-compontents/StoryViewer/Renderers/Wrappers/Header';
-import Footer from '~/social/v4/internal-compontents/StoryViewer/Renderers/Wrappers/Footer';
+import Header from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Header';
+import Footer from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Footer';
 import {
   StoryActionItem,
   StoryActionItemText,
   MobileSheet,
   MobileActionSheetContent,
-} from '~/social/v4/internal-compontents/StoryViewer/styles';
+} from '~/social/v4/internal-components/StoryViewer/styles';
 import {
   LoadingOverlay,
   RendererContainer,
   StoryImage,
-} from '~/social/v4/internal-compontents/StoryViewer/Renderers/styles';
+} from '~/social/v4/internal-components/StoryViewer/Renderers/styles';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useImage from '~/core/hooks/useImage';
 import { formatTimeAgo } from '~/utils';
@@ -21,7 +21,7 @@ import useUser from '~/core/hooks/useUser';
 import useSDK from '~/core/hooks/useSDK';
 import { useIntl } from 'react-intl';
 import { Permissions } from '~/social/constants';
-import { CustomRenderer } from '~/social/v4/internal-compontents/StoryViewer/Renderers/types';
+import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 

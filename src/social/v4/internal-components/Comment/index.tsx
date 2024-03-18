@@ -49,7 +49,7 @@ import UIComment from './UIComment';
 
 import { isModerator } from '~/helpers/permissions';
 import { LIKE_REACTION_KEY } from '~/constants';
-import { CommentList } from '~/social/v4/internal-compontents/CommentList';
+import { CommentList } from '~/social/v4/internal-components/CommentList';
 
 const REPLIES_PER_PAGE = 5;
 

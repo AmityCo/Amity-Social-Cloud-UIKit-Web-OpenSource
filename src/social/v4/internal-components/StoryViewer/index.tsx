@@ -8,7 +8,7 @@ import {
   ViewStoryContainer,
   ViewStoryContent,
   ViewStoryOverlay,
-} from '~/social/v4/internal-compontents/StoryViewer/styles';
+} from '~/social/v4/internal-components/StoryViewer/styles';
 
 import Stories from 'react-insta-stories';
 
@@ -21,7 +21,7 @@ import { useIntl } from 'react-intl';
 import { notification } from '~/core/components/Notification';
 import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import { useMedia } from 'react-use';
-import { renderers } from '~/social/v4/internal-compontents/StoryViewer/Renderers';
+import { renderers } from '~/social/v4/internal-components/StoryViewer/Renderers';
 
 import useStories from '~/social/hooks/useStories';
 import useSDK from '~/core/hooks/useSDK';

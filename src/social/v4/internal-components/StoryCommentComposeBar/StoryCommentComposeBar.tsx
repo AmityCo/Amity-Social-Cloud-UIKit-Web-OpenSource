@@ -7,13 +7,13 @@ import { Close, Lock2Icon } from '~/icons';
 import {
   ReplyingBlock,
   StoryDisabledCommentComposerBarContainer,
-} from '~/social/v4/internal-compontents/StoryViewer/styles';
-import { CommentComposeBar } from '~/social/v4/internal-compontents/CommentComposeBar';
+} from '~/social/v4/internal-components/StoryViewer/styles';
+import { CommentComposeBar } from '~/social/v4/internal-components/CommentComposeBar';
 
 import {
   ReplyingToText,
   ReplyingToUsername,
-} from '~/social/v4/internal-compontents/CommentComposeBar/styles';
+} from '~/social/v4/internal-components/CommentComposeBar/styles';
 
 interface StoryCommentComposeBarProps {
   storyId: string;

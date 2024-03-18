@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { CommentList } from '~/social/v4/internal-compontents/CommentList';
-import { StoryCommentComposeBar } from '~/social/v4/internal-compontents/StoryCommentComposeBar';
+import { CommentList } from '~/social/v4/internal-components/CommentList';
+import { StoryCommentComposeBar } from '~/social/v4/internal-components/StoryCommentComposeBar';
 
 import {
   MobileSheet,
   MobileSheetComposeBarContainer,
   MobileSheetContent,
-} from '~/social/v4/internal-compontents/StoryViewer/styles';
+} from '~/social/v4/internal-components/StoryViewer/styles';
 import { FormattedMessage } from 'react-intl';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import { BottomSheet } from '~/core/v4/components';

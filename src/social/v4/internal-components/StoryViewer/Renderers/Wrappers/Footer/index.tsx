@@ -7,7 +7,7 @@ import {
   ViewStoryFailedCompostBarWrapper,
   ViewStoryUploadingWrapper,
 } from './styles';
-import { Spinner } from '~/social/v4/internal-compontents/Spinner';
+import { Spinner } from '~/social/v4/internal-components/Spinner';
 import { DotsIcon, ErrorIcon } from '~/icons';
 
 import { useIntl } from 'react-intl';
