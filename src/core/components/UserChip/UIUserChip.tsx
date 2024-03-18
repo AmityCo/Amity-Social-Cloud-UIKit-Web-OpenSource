@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 
 import Avatar from '~/core/components/Avatar';
-import { Close, Remove } from '~/icons';
+
 import { backgroundImage as UserImage } from '~/icons/User';
 
-import { Chip, Name, RoundButton } from './styles';
+import { Chip, Name, RoundButton, Close } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 interface UIUserChipProps {
