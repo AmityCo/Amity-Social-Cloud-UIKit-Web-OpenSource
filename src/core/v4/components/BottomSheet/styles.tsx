@@ -22,6 +22,8 @@ export const MobileSheetHeader = styled(MobileSheet.Header)`
   border-bottom: 1px solid #e3e4e8;
   padding-bottom: 0.5rem;
   z-index: 100;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 `;
 
 export const MobileSheetContent = styled(MobileSheet.Content)`

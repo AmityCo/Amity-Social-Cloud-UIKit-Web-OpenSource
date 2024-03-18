@@ -3,7 +3,6 @@ import Sheet from 'react-modal-sheet';
 import {
   ArrowLeftCircle,
   ArrowRightCircle,
-  Close,
   CloseIcon,
   CommentIcon,
   DotsIcon,
@@ -28,9 +27,12 @@ export const StoryWrapper = styled.div`
 export const MobileSheet = styled(Sheet)`
   margin: 0 auto;
   width: 100%;
-`;
 
-export const StoryCommentComposerBarContainer = styled.div``;
+  .react-modal-sheet-content {
+    position: relative;
+    padding: 0rem 1rem;
+  }
+`;
 
 export const ReplyingBlock = styled.div`
   display: flex;

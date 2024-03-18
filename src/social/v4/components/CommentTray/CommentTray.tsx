@@ -84,6 +84,8 @@ export const CommentTray = ({
         <MobileSheet.Header
           style={{
             backgroundColor: primaryColor,
+            borderTopLeftRadius: '1rem',
+            borderTopRightRadius: '1rem',
           }}
         />
         <MobileSheetHeader
@@ -93,12 +95,12 @@ export const CommentTray = ({
         >
           <FormattedMessage id="storyViewer.commentSheet.title" />
         </MobileSheetHeader>
-        <MobileSheetContent
-          style={{
-            backgroundColor: primaryColor,
-          }}
-        >
-          <MobileSheet.Scroller>
+        <MobileSheetContent>
+          <MobileSheet.Scroller
+            style={{
+              height: 'calc(100% - 4.5rem)',
+            }}
+          >
             <CommentList
               referenceId={storyId}
               referenceType="story"
