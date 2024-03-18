@@ -19,6 +19,9 @@ import {
   ReactionsWrapper,
   LikeButton,
   CommentDate,
+  CommentEditContainer,
+  CommentEditTextarea,
+  ButtonContainer,
 } from './styles';
 
 import { Mentioned, Metadata } from '~/helpers/utils';
@@ -27,6 +30,7 @@ import { formatTimeAgo } from '~/utils';
 import { EllipsisH, LikedIcon } from '~/icons';
 import { LIKE_REACTION_KEY } from '~/constants';
 import { CommentEdition } from '~/social/v4/components/CommentEdition';
+import { PrimaryButton, SecondaryButton } from '~/core/components/Button';
 
 interface StyledCommentProps {
   commentId?: string;
@@ -129,12 +133,26 @@ const UIComment = ({
         </CommentHeader>
 
         {isEditing ? (
-          <CommentEdition
-            queryMentionees={queryMentionees}
-            onChange={onChange}
-            onCancel={cancelEditing}
-            onSubmit={handleEdit}
-          />
+          <CommentEditContainer>
+            <CommentEditTextarea
+              multiline
+              mentionAllowed
+              value={markup}
+              queryMentionees={queryMentionees}
+              onChange={(data) => onChange?.(data)}
+            />
+            <ButtonContainer>
+              <SecondaryButton data-qa-anchor="comment-cancel-edit-button" onClick={cancelEditing}>
+                <FormattedMessage id="cancel" />
+              </SecondaryButton>
+              <PrimaryButton
+                data-qa-anchor="comment-save-edit-button"
+                onClick={() => handleEdit?.(text)}
+              >
+                <FormattedMessage id="save" />
+              </PrimaryButton>
+            </ButtonContainer>
+          </CommentEditContainer>
         ) : (
           <CommentText text={text} mentionees={mentionees} />
         )}
