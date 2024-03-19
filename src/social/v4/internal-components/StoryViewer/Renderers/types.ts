@@ -10,6 +10,8 @@ export type CustomRenderer = React.FC<{
       }>;
       onChange: (file: File) => void;
       handleAddIconClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
+      addStoryButton: JSX.Element;
+      fileInputRef: React.RefObject<HTMLInputElement>;
     };
   action: Action;
   config: {

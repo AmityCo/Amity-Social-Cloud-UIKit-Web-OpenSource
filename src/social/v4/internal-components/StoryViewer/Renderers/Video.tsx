@@ -60,6 +60,8 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     community,
     actions,
     handleAddIconClick,
+    addStoryButton,
+    fileInputRef,
   } = story;
 
   const isJoined = community?.isJoined || false;
@@ -153,6 +155,27 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     }
   }, [isPaused, isOpenBottomSheet, isOpenCommentSheet]);
 
+  useEffect(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.addEventListener('click', () => {
+        action('pause', true);
+      });
+      fileInputRef.current.addEventListener('cancel', () => {
+        action('play', true);
+      });
+    }
+    return () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.removeEventListener('cancel', () => {
+          action('play', true);
+        });
+        fileInputRef.current.removeEventListener('click', () => {
+          action('pause', true);
+        });
+      }
+    };
+  }, []);
+
   return (
     <RendererContainer>
       <SpeakerButton
@@ -177,6 +200,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
         onClose={onBack}
+        addStoryButton={addStoryButton}
       />
       <StoryVideo
         ref={vid}
