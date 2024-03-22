@@ -27,12 +27,6 @@ type Page =
       type: PageTypes.UserFeed | PageTypes.UserEdit;
       userId: string;
       communityId?: string;
-    }
-  | {
-      type: PageTypes.ViewStory;
-      storyId: string;
-      targetId?: string;
-      communityId?: string;
     };
 
 type ContextValue = {
@@ -41,7 +35,6 @@ type ContextValue = {
   onClickCategory: (categoryId: string) => void;
   onClickCommunity: (communityId: string) => void;
   onClickUser: (userId: string, pageType?: string) => void;
-  onClickStory: (storyId: string) => void;
   onCommunityCreated: (communityId: string) => void;
   onEditCommunity: (communityId: string, tab?: string) => void;
   onEditUser: (userId: string) => void;
@@ -65,7 +58,6 @@ let defaultValue: ContextValue = {
   onClickCategory: (categoryId: string) => {},
   onClickCommunity: (communityId: string) => {},
   onClickUser: (userId: string) => {},
-  onClickStory: (storyId: string) => {},
   onCommunityCreated: (communityId: string) => {},
   onEditCommunity: (communityId: string) => {},
   onEditUser: (userId: string) => {},
@@ -95,7 +87,6 @@ if (process.env.NODE_ENV !== 'production') {
     onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
     onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
-    onClickStory: (storyId) => console.log(`NavigationContext onClickStory(${storyId})`),
     onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
     onEditCommunity: (communityId) =>
@@ -123,7 +114,6 @@ interface NavigationProviderProps {
   onClickCategory?: (categoryId: string) => void;
   onClickCommunity?: (communityId: string) => void;
   onClickUser?: (userId: string) => void;
-  onClickStory?: (storyId: string) => void;
   onCommunityCreated?: (communityId: string) => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
@@ -313,20 +303,6 @@ export default function NavigationProvider({
     [onChangePage, onMessageUser],
   );
 
-  const handleClickStory = useCallback(
-    (targetId) => {
-      const next = {
-        type: PageTypes.ViewStory,
-        targetId,
-      };
-
-      if (onChangePage) return onChangePage(next);
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
   return (
     <NavigationContext.Provider
       value={{
@@ -335,7 +311,6 @@ export default function NavigationProvider({
         onClickCategory: handleClickCategory,
         onClickCommunity: handleClickCommunity,
         onClickUser: handleClickUser,
-        onClickStory: handleClickStory,
         onCommunityCreated: handleCommunityCreated,
         onEditCommunity: handleEditCommunity,
         onEditUser: handleEditUser,

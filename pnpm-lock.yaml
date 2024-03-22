@@ -53,9 +53,6 @@ dependencies:
   react-infinite-scroll-component:
     specifier: ^6.1.0
     version: 6.1.0(react@18.2.0)
-  react-insta-stories:
-    specifier: ^2.6.2
-    version: 2.6.2(react@18.2.0)
   react-intl:
     specifier: ^6.5.5
     version: 6.5.5(react@18.2.0)(typescript@4.9.5)
@@ -65,9 +62,6 @@ dependencies:
   react-mentions:
     specifier: ^4.4.10
     version: 4.4.10(react-dom@18.2.0)(react@18.2.0)
-  react-modal-sheet:
-    specifier: ^2.2.0
-    version: 2.2.0(framer-motion@10.18.0)(react@18.2.0)
   react-sizeme:
     specifier: ^3.0.2
     version: 3.0.2
@@ -1613,25 +1607,11 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: true
 
-  /@emotion/is-prop-valid@0.8.8:
-    resolution: {integrity: sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==}
-    requiresBuild: true
-    dependencies:
-      '@emotion/memoize': 0.7.4
-    dev: false
-    optional: true
-
   /@emotion/is-prop-valid@1.2.1:
     resolution: {integrity: sha512-61Mf7Ufx4aDxx1xlDeOm8aFFigGHE4z+0sKCa+IHCeZKiyP9RLD0Mmx7m8b9/Cf37f7NAvQOOJAbQQGVr5uERw==}
     dependencies:
       '@emotion/memoize': 0.8.1
     dev: true
-
-  /@emotion/memoize@0.7.4:
-    resolution: {integrity: sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==}
-    requiresBuild: true
-    dev: false
-    optional: true
 
   /@emotion/memoize@0.8.1:
     resolution: {integrity: sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA==}
@@ -3183,46 +3163,6 @@ packages:
       '@babel/runtime': 7.23.7
     dev: true
 
-  /@react-aria/ssr@3.9.1(react@18.2.0):
-    resolution: {integrity: sha512-NqzkLFP8ZVI4GSorS0AYljC13QW2sc8bDqJOkBvkAt3M8gbcAXJWVRGtZBCRscki9RZF+rNlnPdg0G0jYkhJcg==}
-    engines: {node: '>= 12'}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    dependencies:
-      '@swc/helpers': 0.5.3
-      react: 18.2.0
-    dev: false
-
-  /@react-aria/utils@3.17.0(react@18.2.0):
-    resolution: {integrity: sha512-NEul0cQ6tQPdNSHYzNYD+EfFabeYNvDwEiHB82kK/Tsfhfm84SM+baben/at2N51K7iRrJPr5hC5fi4+P88lNg==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    dependencies:
-      '@react-aria/ssr': 3.9.1(react@18.2.0)
-      '@react-stately/utils': 3.9.0(react@18.2.0)
-      '@react-types/shared': 3.22.0(react@18.2.0)
-      '@swc/helpers': 0.4.36
-      clsx: 1.2.1
-      react: 18.2.0
-    dev: false
-
-  /@react-stately/utils@3.9.0(react@18.2.0):
-    resolution: {integrity: sha512-yPKFY1F88HxuZ15BG2qwAYxtpE4HnIU0Ofi4CuBE0xC6I8mwo4OQjDzi+DZjxQngM9D6AeTTD6F1V8gkozA0Gw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    dependencies:
-      '@swc/helpers': 0.5.3
-      react: 18.2.0
-    dev: false
-
-  /@react-types/shared@3.22.0(react@18.2.0):
-    resolution: {integrity: sha512-yVOekZWbtSmmiThGEIARbBpnmUIuePFlLyctjvCbgJgGhz8JnEJOipLQ/a4anaWfzAgzSceQP8j/K+VOOePleA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
-    dependencies:
-      react: 18.2.0
-    dev: false
-
   /@remix-run/router@1.14.1:
     resolution: {integrity: sha512-Qg4DMQsfPNAs88rb2xkdk03N3bjK4jgX5fR24eHCTR9q6PrhZQZ4UJBPzCHJkIpTRN1UKxx2DzjZmnC+7Lj0Ow==}
     engines: {node: '>=14.0.0'}
@@ -4049,25 +3989,6 @@ packages:
       '@types/express': 4.17.21
       file-system-cache: 2.3.0
     dev: true
-
-  /@swc/helpers@0.4.14:
-    resolution: {integrity: sha512-4C7nX/dvpzB7za4Ql9K81xK3HPxCpHMgwTZVyf+9JQ6VUbn9jjZVN7/Nkdz/Ugzs2CSjqnL/UPXroiVBVHUWUw==}
-    dependencies:
-      tslib: 2.6.2
-    dev: false
-
-  /@swc/helpers@0.4.36:
-    resolution: {integrity: sha512-5lxnyLEYFskErRPenYItLRSge5DjrJngYKdVjRSrWfza9G6KkgHEXi0vUZiyUeMU5JfXH1YnvXZzSp8ul88o2Q==}
-    dependencies:
-      legacy-swc-helpers: /@swc/helpers@0.4.14
-      tslib: 2.6.2
-    dev: false
-
-  /@swc/helpers@0.5.3:
-    resolution: {integrity: sha512-FaruWX6KdudYloq1AHD/4nU+UsMTdNE8CKyrseXWEcgjDAbvkwJg2QGPAnfIJLIWsjZOSPLOAykK6fuYp4vp4A==}
-    dependencies:
-      tslib: 2.6.2
-    dev: false
 
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -5591,11 +5512,6 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
     dev: true
-
-  /clsx@1.2.1:
-    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
-    engines: {node: '>=6'}
-    dev: false
 
   /clsx@2.1.0:
     resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
@@ -7195,24 +7111,6 @@ packages:
   /fraction.js@4.3.7:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
     dev: true
-
-  /framer-motion@10.18.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-oGlDh1Q1XqYPksuTD/usb0I70hq95OUzmL9+6Zd+Hs4XV0oaISBa/UUMSjYiq6m8EUF32132mOJ8xVZS+I0S6w==}
-    peerDependencies:
-      react: ^18.0.0
-      react-dom: ^18.0.0
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      tslib: 2.6.2
-    optionalDependencies:
-      '@emotion/is-prop-valid': 0.8.8
-    dev: false
 
   /fresh@0.5.2:
     resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
@@ -10048,14 +9946,6 @@ packages:
       throttle-debounce: 2.3.0
     dev: false
 
-  /react-insta-stories@2.6.2(react@18.2.0):
-    resolution: {integrity: sha512-eM1YHr92bV7WK5h9sECjyYnqZtPxnzJrZFr9IaoDcaZaAEOHVRav+pST513DIG8Hk8QjSTHtdvHHZ0Ka5HwH8w==}
-    peerDependencies:
-      react: '>=16.8.2'
-    dependencies:
-      react: 18.2.0
-    dev: false
-
   /react-intl@6.5.5(react@18.2.0)(typescript@4.9.5):
     resolution: {integrity: sha512-cI5UKvBh4tc1zxLIziHBYGMX3dhYWDEFlvUDVN6NfT2i96zTXz/zH2AmM8+2waqgOhwkFUzd+7kK1G9q7fiC2g==}
     peerDependencies:
@@ -10110,18 +10000,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       substyle: 9.4.1(react@18.2.0)
-    dev: false
-
-  /react-modal-sheet@2.2.0(framer-motion@10.18.0)(react@18.2.0):
-    resolution: {integrity: sha512-OAIWuVWxMx3zQqrMLbYWnczadplg0WLd+AaBWmN5+ysNF5/pneqjkOV3AWaIZOCIF4TcrejiCsTduutbzCRP2Q==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      framer-motion: '>=6'
-      react: '>=16'
-    dependencies:
-      '@react-aria/utils': 3.17.0(react@18.2.0)
-      framer-motion: 10.18.0(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
     dev: false
 
   /react-native-uuid@2.0.1:
