@@ -3,7 +3,7 @@ import * as Icons from '~/icons';
 
 type IconName = keyof typeof Icons;
 
-interface IconProps {
+export interface IconProps {
   name: IconName | null;
   size?: number;
   style?: React.CSSProperties;

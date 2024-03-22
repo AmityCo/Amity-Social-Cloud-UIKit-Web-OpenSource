@@ -7,6 +7,7 @@ import {
   MobileSheet,
   MobileSheetComposeBarContainer,
   MobileSheetContent,
+  MobileSheetScroller,
 } from '~/social/v4/internal-components/StoryViewer/styles';
 import { FormattedMessage } from 'react-intl';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
@@ -81,7 +82,7 @@ export const CommentTray = ({
       detent="full-height"
     >
       <MobileSheetContainer>
-        <MobileSheet.Header
+        <MobileSheetHeader
           style={{
             backgroundColor: primaryColor,
             borderTopLeftRadius: '1rem',
@@ -96,11 +97,7 @@ export const CommentTray = ({
           <FormattedMessage id="storyViewer.commentSheet.title" />
         </MobileSheetHeader>
         <MobileSheetContent>
-          <MobileSheet.Scroller
-            style={{
-              height: 'calc(100% - 4.5rem)',
-            }}
-          >
+          <MobileSheetScroller>
             <CommentList
               referenceId={storyId}
               referenceType="story"
@@ -110,7 +107,7 @@ export const CommentTray = ({
                 backgroundColor: primaryColor,
               }}
             />
-          </MobileSheet.Scroller>
+          </MobileSheetScroller>
         </MobileSheetContent>
         <MobileSheetComposeBarContainer>
           <StoryCommentComposeBar

@@ -12,7 +12,7 @@ interface Theme {
   secondary_color: string;
 }
 
-interface Config {
+export interface Config {
   global_theme: {
     light_theme: Theme;
   };
@@ -44,7 +44,7 @@ interface Config {
       background_color: string;
     };
     'create_story_page/*/*': {
-      page_theme: {
+      page_theme?: {
         light_theme: {
           primary_color: string;
           secondary_color: string;
@@ -73,7 +73,7 @@ interface Config {
       hide_avatar: boolean;
     };
     'story_page/*/*': {
-      page_theme: {
+      page_theme?: {
         light_theme: {
           primary_color: string;
           secondary_color: string;
@@ -81,8 +81,8 @@ interface Config {
       };
     };
     'story_page/*/progress_bar': {
-      progress_color: string;
-      background_color: string;
+      progress_color?: string;
+      background_color?: string;
     };
     'story_page/*/overflow_menu': {
       overflow_menu_icon: string;
@@ -94,8 +94,8 @@ interface Config {
       impression_icon: string;
     };
     'story_page/*/story_comment_button': {
-      comment_icon: string;
-      background_color: string;
+      comment_icon?: string;
+      background_color?: string;
     };
     'story_page/*/story_reaction_button': {
       reaction_icon: string;
@@ -106,9 +106,9 @@ interface Config {
       background_color: string;
     };
     'story_page/*/speaker_button': {
-      mute_icon: string;
-      unmute_icon: string;
-      background_color: string;
+      mute_icon?: string;
+      unmute_icon?: string;
+      background_color?: string;
     };
     '*/edit_comment_component/*': {
       component_theme: {
@@ -146,24 +146,24 @@ interface Config {
       cancel_button_text: string;
     };
     '*/comment_tray_component/*': {
-      component_theme: {
-        light_theme: {
-          primary_color: string;
-          secondary_color: string;
+      component_theme?: {
+        light_theme?: {
+          primary_color?: string;
+          secondary_color?: string;
         };
       };
     };
     '*/story_tab_component/*': {
-      component_theme: {
-        light_theme: {
-          primary_color: string;
-          secondary_color: string;
+      component_theme?: {
+        light_theme?: {
+          primary_color?: string;
+          secondary_color?: string;
         };
       };
     };
     '*/story_tab_component/story_ring': {
-      progress_color: [string, string];
-      background_color: [string];
+      progress_color?: string[];
+      background_color?: string[];
     };
     '*/story_tab_component/create_new_story_button': {
       create_new_story_icon: string;

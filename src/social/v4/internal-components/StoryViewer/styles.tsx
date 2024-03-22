@@ -68,6 +68,10 @@ export const MobileSheetContent = styled(MobileSheet.Content)`
   padding: 0rem 1rem;
 `;
 
+export const MobileSheetScroller = styled(MobileSheet.Scroller)`
+  height: calc(100% - 4.5rem);
+`;
+
 export const MobileSheetComposeBarContainer = styled.div`
   position: absolute;
   bottom: 0;

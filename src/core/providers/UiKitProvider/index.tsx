@@ -18,7 +18,7 @@ import CustomComponentsProvider, { CustomComponentType } from '../CustomComponen
 import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
-import { CustomizationProvider } from '~/social/v4/providers/CustomizationProvider';
+import { Config, CustomizationProvider } from '~/social/v4/providers/CustomizationProvider';
 
 import amityConfig from '../../../../amity-uikit.config.json';
 import { PageBehaviorProvider } from '~/social/v4/providers/PageBehaviorProvider';
@@ -149,7 +149,7 @@ const UiKitProvider = ({
 
   return (
     <Localization locale="en">
-      <CustomizationProvider initialConfig={amityConfig}>
+      <CustomizationProvider initialConfig={amityConfig as Config}>
         <ThemeProvider theme={buildGlobalTheme(theme)}>
           <UIStyles>
             <SDKContext.Provider value={sdkContextValue}>
