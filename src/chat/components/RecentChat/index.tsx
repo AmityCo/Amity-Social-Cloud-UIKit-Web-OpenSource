@@ -56,7 +56,7 @@ const RecentChat = ({
             hasMore={hasMore}
             next={loadMore}
             loader={hasMore && <span key={0}>Loading...</span>}
-            dataLength={channels.length}
+            dataLength={channels?.length || 0}
             height={containerRef.current.clientHeight}
           >
             {Array.isArray(channels) &&
