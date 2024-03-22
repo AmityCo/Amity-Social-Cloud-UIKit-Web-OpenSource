@@ -6,7 +6,6 @@ const usePostByIds = (postIds: Parameters<typeof PostRepository.getPostByIds>[0]
 
   useEffect(() => {
     async function run() {
-      if (postIds.length === 0) return;
       if (!postIds || postIds?.length === 0) return;
       const response = await PostRepository.getPostByIds(postIds);
       setPosts(response.data);

@@ -120,7 +120,7 @@ const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) =>
               <Label htmlFor="description">
                 <FormattedMessage id="UserProfileForm.about" />
               </Label>
-              <Counter>{description.length}/180</Counter>
+              <Counter>{description?.length || 0}/180</Counter>
             </LabelCounterWrapper>
             <AboutTextarea
               {...register('description')}

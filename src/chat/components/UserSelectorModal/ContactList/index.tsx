@@ -61,7 +61,7 @@ const UserList = ({
             hasMore={hasMore}
             next={loadMore}
             loader={<span key={0}>Loading...</span>}
-            dataLength={filterUsers.length}
+            dataLength={filterUsers?.length || 0}
           >
             <ListItemContainer>
               {filterUsers.map((userData) => (
