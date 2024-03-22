@@ -18,14 +18,14 @@ import React, { ReactNode } from 'react';
 type Chunk = { start: number; end: number; highlight?: boolean };
 
 export const processChunks = (text: string, chunks: Chunk[] = []) => {
-  const textLength = text.length;
+  const textLength = text?.length || 0;
   const allChunks: Chunk[] = [];
 
   const append = (start: number, end: number, highlight: boolean) => {
     allChunks.push({ start, end, highlight });
   };
 
-  if (chunks.length === 0) {
+  if (!chunks || chunks?.length === 0) {
     append(0, textLength, false);
   } else {
     let lastIndex = 0;

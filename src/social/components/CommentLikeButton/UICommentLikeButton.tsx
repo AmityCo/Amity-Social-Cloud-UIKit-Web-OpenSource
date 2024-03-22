@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import StyledCommentLikeButton from './styles';
 import { ReactionRepository } from '@amityco/ts-sdk';

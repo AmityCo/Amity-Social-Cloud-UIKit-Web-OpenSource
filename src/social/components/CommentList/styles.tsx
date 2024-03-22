@@ -7,3 +7,13 @@ export const TabIconContainer = styled.div`
   display: flex;
   margin-right: 8px;
 `;
+
+export const NoCommentsContainer = styled.div`
+  ${({ theme }) => theme.typography.body};
+  color: ${({ theme }) => theme.palette.base.shade2};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;

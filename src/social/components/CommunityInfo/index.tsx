@@ -1,15 +1,37 @@
-import React, { memo, useMemo } from 'react';
+import React from 'react';
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import UICommunityInfo from './UICommunityInfo';
 import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
 import { useCommunityInfo } from './hooks';
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import { isAdmin, isModerator } from '~/helpers/permissions';
+import { Permissions } from '~/social/constants';
+import useSDK from '~/core/hooks/useSDK';
+import useUser from '~/core/hooks/useUser';
 
 interface CommunityInfoProps {
   communityId: string;
+  setStoryFile: React.Dispatch<React.SetStateAction<File | null>>;
+  stories: (Amity.Story | undefined)[];
 }
 
-const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
+const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProps) => {
+  const haveStories = stories?.length > 0;
+  const isStorySyncing = haveStories && stories.some((story) => story?.syncState === 'syncing');
+  const isStoryErrored = haveStories && stories.some((story) => story?.syncState === 'error');
+  const isSeen = haveStories && stories.every((story) => story?.isSeen === true);
+
+  const { onClickStory } = useNavigation();
+
+  const { currentUserId, client } = useSDK();
+  const user = useUser(currentUserId);
+
+  const haveStoryPermission =
+    client?.hasPermission(Permissions.ManageStoryPermission).community(communityId) ||
+    isAdmin(user?.roles) ||
+    isModerator(user?.roles);
+
   const {
     community,
     communityCategories,
@@ -53,6 +75,13 @@ const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
           onOk: () => leaveCommunity(),
         })
       }
+      setStoryFile={setStoryFile}
+      haveStories={haveStories || false}
+      haveStoryPermission={haveStoryPermission}
+      isStorySyncing={isStorySyncing || false}
+      isStoryErrored={isStoryErrored || false}
+      isSeen={isSeen || false}
+      onClickStory={onClickStory}
     />
   );
 };

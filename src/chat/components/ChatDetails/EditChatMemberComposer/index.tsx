@@ -83,10 +83,10 @@ const EditChatMemberComposerForm = ({
 
       return Promise.all(
         [
-          toAddMemberIds.length > 0
+          toAddMemberIds?.length > 0
             ? ChannelRepository.Membership.addMembers(channelId, toAddMemberIds)
             : null,
-          toRemoveMemberIds.length > 0
+          toRemoveMemberIds?.length > 0
             ? ChannelRepository.Membership.removeMembers(channelId, toRemoveMemberIds)
             : null,
         ].filter(isNonNullable),

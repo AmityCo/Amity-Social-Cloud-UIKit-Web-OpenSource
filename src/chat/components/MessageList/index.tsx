@@ -66,7 +66,7 @@ const MessageList = ({ channelId }: MessageListProps) => {
           next={loadMore}
           loader={isLoading ? <span key={0}>Loading...</span> : null}
           inverse={true}
-          dataLength={messages.length}
+          dataLength={messages?.length || 0}
           style={{ display: 'flex', flexDirection: 'column-reverse' }}
           height={containerRef.current.clientHeight}
         >

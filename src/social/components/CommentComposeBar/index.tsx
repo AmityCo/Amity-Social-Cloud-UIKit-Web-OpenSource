@@ -21,6 +21,7 @@ import {
 import { backgroundImage as UserImage } from '~/icons/User';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useImage from '~/core/hooks/useImage';
+import useStory from '~/social/hooks/useStory';
 
 const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;
@@ -29,7 +30,8 @@ export interface CommentComposeBarProps {
   className?: string;
   userToReply?: string;
   onSubmit: (text: string, mentionees: Mentionees, metadata: Metadata) => void;
-  postId: string;
+  postId?: string;
+  storyId?: string;
 }
 
 const CommentComposeBar = ({
@@ -39,6 +41,7 @@ const CommentComposeBar = ({
   postId,
 }: CommentComposeBarProps) => {
   const post = usePost(postId);
+
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
@@ -50,11 +53,10 @@ const CommentComposeBar = ({
   const { formatMessage } = useIntl();
 
   const commentInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+
   useEffect(() => {
     commentInputRef.current?.focus();
   }, []);
-
-  if (post == null) return <LoadingIndicator />;
 
   const addComment = () => {
     if (text === '') return;

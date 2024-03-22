@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { PrimaryButton } from '~/core/components/Button';
 
-import { ConfirmModal, Footer, DefaultOkButton, DefaultCancelButton } from './styles';
+import {
+  ConfirmModal,
+  Footer,
+  DefaultOkButton,
+  DefaultCancelButton,
+  ConfirmModalContent,
+} from './styles';
 
 const Confirm = ({
   'data-qa-anchor': dataQaAnchor = '',
@@ -35,7 +41,7 @@ const Confirm = ({
     }
     onCancel={onCancel}
   >
-    {content}
+    <ConfirmModalContent>{content}</ConfirmModalContent>
   </ConfirmModal>
 );
 

@@ -12,7 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
   min-width: 1em;
-  background: ${({ theme }) => theme.palette.system.background};
+  background: ${({ theme }) => theme.palette.base.shade4};
   border: 1px solid #e3e4e8;
   border-radius: 4px;
   transition: background 0.2s, border-color 0.2s;

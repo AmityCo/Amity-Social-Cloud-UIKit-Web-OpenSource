@@ -1,0 +1,1 @@
+export { DraftsPage } from './DraftsPage';

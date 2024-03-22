@@ -6,6 +6,10 @@ export const ConfirmModal = styled(Modal)`
   max-width: 360px;
 `;
 
+export const ConfirmModalContent = styled.div`
+  padding: 1rem 1rem 0.75rem 1rem;
+`;
+
 export const Footer = styled.div`
   display: flex;
   justify-content: flex-end;

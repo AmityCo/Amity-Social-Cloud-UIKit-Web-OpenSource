@@ -18,6 +18,10 @@ import CustomComponentsProvider, { CustomComponentType } from '../CustomComponen
 import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
+import { Config, CustomizationProvider } from '~/social/v4/providers/CustomizationProvider';
+
+import amityConfig from '../../../../amity-uikit.config.json';
+import { PageBehaviorProvider } from '~/social/v4/providers/PageBehaviorProvider';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -26,6 +30,7 @@ interface UiKitProviderProps {
     http?: string;
     mqtt?: string;
   };
+  authToken?: string;
   userId: string;
   displayName: string;
   customComponents?: CustomComponentType;
@@ -42,17 +47,21 @@ interface UiKitProviderProps {
     onEditUser?: (userId: string) => void;
     onMessageUser?: (userId: string) => void;
   };
+  pageBehavior?: {
+    closeAction?: () => void;
+    hyperLinkAction?: () => void;
+  };
   socialCommunityCreationButtonVisible?: boolean;
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
-  getAuthToken?: () => Promise<string>;
 }
 
 const UiKitProvider = ({
   apiKey,
   apiRegion,
   apiEndpoint,
+  authToken,
   userId,
   displayName,
   customComponents = {},
@@ -61,9 +70,9 @@ const UiKitProvider = ({
   children /* TODO localization */,
   socialCommunityCreationButtonVisible,
   actionHandlers,
+  pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
-  getAuthToken,
 }: UiKitProviderProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const [client, setClient] = useState<Amity.Client | null>(null);
@@ -95,25 +104,20 @@ const UiKitProvider = ({
     const currentIsConnected = ASCClient.isConnected();
 
     if (!currentIsConnected) {
-      let params: Amity.ConnectClientParams = { userId, displayName };
+      await ASCClient.login(
+        { userId, displayName, authToken },
+        {
+          sessionWillRenewAccessToken(renewal) {
+            // secure mode
+            if (authToken) {
+              renewal.renewWithAuthToken(authToken);
+              return;
+            }
 
-      if (getAuthToken) {
-        const authToken = await getAuthToken();
-        params = { ...params, authToken };
-      }
-
-      await ASCClient.login(params, {
-        async sessionWillRenewAccessToken(renewal: Amity.AccessTokenRenewal) {
-          // secure mode
-          if (getAuthToken) {
-            const authToken = await getAuthToken();
-            renewal.renewWithAuthToken(authToken);
-            return;
-          }
-
-          renewal.renew();
+            renewal.renew();
+          },
         },
-      });
+      );
     }
 
     setIsConnected(true);
@@ -145,28 +149,34 @@ const UiKitProvider = ({
 
   return (
     <Localization locale="en">
-      <ThemeProvider theme={buildGlobalTheme(theme)}>
-        <UIStyles>
-          <SDKContext.Provider value={sdkContextValue}>
-            <SDKConnectorProvider>
-              <CustomComponentsProvider config={customComponents}>
-                <ConfigProvider
-                  config={{
-                    socialCommunityCreationButtonVisible:
-                      socialCommunityCreationButtonVisible || true,
-                  }}
-                >
-                  <PostRendererProvider config={postRendererConfig}>
-                    <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
-                  </PostRendererProvider>
-                </ConfigProvider>
-                <NotificationsContainer />
-                <ConfirmContainer />
-              </CustomComponentsProvider>
-            </SDKConnectorProvider>
-          </SDKContext.Provider>
-        </UIStyles>
-      </ThemeProvider>
+      <CustomizationProvider initialConfig={amityConfig as Config}>
+        <ThemeProvider theme={buildGlobalTheme(theme)}>
+          <UIStyles>
+            <SDKContext.Provider value={sdkContextValue}>
+              <SDKConnectorProvider>
+                <CustomComponentsProvider config={customComponents}>
+                  <ConfigProvider
+                    config={{
+                      socialCommunityCreationButtonVisible:
+                        socialCommunityCreationButtonVisible || true,
+                    }}
+                  >
+                    <PostRendererProvider config={postRendererConfig}>
+                      <NavigationProvider {...actionHandlers}>
+                        <PageBehaviorProvider customNavigationBehavior={pageBehavior}>
+                          {children}
+                        </PageBehaviorProvider>
+                      </NavigationProvider>
+                    </PostRendererProvider>
+                  </ConfigProvider>
+                  <NotificationsContainer />
+                  <ConfirmContainer />
+                </CustomComponentsProvider>
+              </SDKConnectorProvider>
+            </SDKContext.Provider>
+          </UIStyles>
+        </ThemeProvider>
+      </CustomizationProvider>
     </Localization>
   );
 };

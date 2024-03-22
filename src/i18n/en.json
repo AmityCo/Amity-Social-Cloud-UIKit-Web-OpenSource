@@ -51,7 +51,7 @@
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
   "collapsible.viewMoreComments": "View more comments",
-  "collapsible.viewMoreReplies": "View more replies",
+  "collapsible.viewMoreReplies": "View {count, plural, one {# reply} other {# replies}}",
 
   "community.createSuccess": "Your community was successfully created",
   "community.updateSuccess": "Your community was successfully updated",
@@ -234,7 +234,7 @@
   "CloseCommunityAction.description": "Closing this community will remove the community page and all its content and comments. This cannot be undone.",
   "report.doReport": "Report",
   "report.undoReport": "Undo Report",
-  "comment.deleteBody": "This comment will be permanently deleted. Continue?",
+  "comment.deleteBody": "This comment will be permanently removed.",
   "reply.delete": "Delete reply",
   "reply.deleteBody": "This reply will be permanently deleted. Continue?",
   "reply.edit": "Edit reply",
@@ -355,6 +355,13 @@
   "storyViewer.notification.error": "Failed to share story",
   "storyViewer.footer.failed": "Failed to upload",
   "storyViewer.footer.uploading": "Uploading...",
+  "storyViewer.commentSheet.title": "Comments",
+  "storyViewer.commentSheet.empty": "No comments yet",
+  "storyViewer.commentSheet.disabled": "Comments are disabled for this story",
+  "storyViewer.commentSheet.replyingTo": "Replying to",
+  "storyViewer.toast.like.disabled": "Join community to interact with all stories",
+
+  "storyViewer.commentComposeBar.submit": "Post",
 
   "storyDraft.button.shareStory": "Share story",
 

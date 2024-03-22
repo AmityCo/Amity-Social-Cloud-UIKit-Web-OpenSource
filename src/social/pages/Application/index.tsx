@@ -16,6 +16,8 @@ import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
+import { ViewStoriesPage } from '~/social/v4/pages/StoryPage';
+import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -23,17 +25,38 @@ const ApplicationContainer = styled.div`
 `;
 
 const StyledCommunitySideMenu = styled(CommunitySideMenu)`
-  min-height: 100%;
+  display: none;
+
+  @media (min-width: 768px) {
+    min-height: 100%;
+    display: block;
+  }
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const Community = () => {
-  const { page } = useNavigation();
+  const { page, onBack } = useNavigation();
+  const { navigationBehavior } = usePageBehavior();
 
   const { client } = useSDK();
   const [socialSettings, setSocialSettings] = React.useState<Amity.SocialSettings | null>(null);
 
+  const [open, setOpen] = React.useState(false);
+
+  const toggleOpen = () => {
+    setOpen(!open);
+  };
+
   useEffect(() => {
-    if (client == null) return;
+    if (client === null) return;
 
     async function run() {
       const settings = await client?.getSocialSettings();
@@ -50,10 +73,21 @@ const Community = () => {
       <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
         {page.type === PageTypes.Explore && <ExplorePage />}
 
-        {page.type === PageTypes.NewsFeed && <NewsFeedPage />}
+        {page.type === PageTypes.NewsFeed && <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />}
 
         {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeedPage communityId={page.communityId} isNewCommunity={page.isNewCommunity} />
+          <CommunityFeedPage
+            communityId={page.communityId}
+            isNewCommunity={page.isNewCommunity}
+            isOpen={open}
+            toggleOpen={toggleOpen}
+          />
+        )}
+
+        {page.type === PageTypes.ViewStory && (
+          <Wrapper>
+            <ViewStoriesPage pageId="story_page" targetId={page.targetId!} onClose={onBack} />
+          </Wrapper>
         )}
 
         {page.type === PageTypes.CommunityEdit && (

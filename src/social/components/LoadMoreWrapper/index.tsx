@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 import { LoadMoreButton, ShevronDownIcon } from './styles';
 
 interface LoadMoreWrapperProps {
@@ -25,6 +25,7 @@ const LoadMoreWrapper = ({
 }: LoadMoreWrapperProps) => {
   const { formatMessage } = useIntl();
   const [expanded, setExpanded] = useState(isExpanded);
+
   useEffect(() => setExpanded(isExpanded), [isExpanded]);
 
   if (expanded) {

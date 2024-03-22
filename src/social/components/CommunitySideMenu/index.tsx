@@ -10,7 +10,7 @@ const SocialSearch = styled(UiKitSocialSearch)`
   padding: 0.5rem;
 `;
 
-interface CommunitySideMenuProps {
+export interface CommunitySideMenuProps {
   className?: string;
   activeCommunity?: string;
 }

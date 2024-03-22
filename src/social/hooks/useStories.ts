@@ -1,6 +1,7 @@
 import { StoryRepository } from '@amityco/ts-sdk';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { isNonNullable } from '~/helpers/utils';
+import useCommunityStoriesSubscription from './useCommunityStoriesSubscription';
 
 type UseStories = {
   stories: (Amity.Story | undefined)[];
@@ -16,6 +17,7 @@ const useStories = (params: Amity.GetStoriesByTargetParam): UseStories => {
   const [hasMore, setHasMore] = useState<boolean>(false);
   const loadMoreFnRef = useRef<(() => void) | undefined | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
+
   const loadMore = useCallback(() => {
     if (loadMoreFnRef.current) {
       setLoadMoreHasBeenCalled(true);
@@ -68,7 +70,12 @@ const useStories = (params: Amity.GetStoriesByTargetParam): UseStories => {
         disposeFnRef.current();
       }
     };
-  }, []);
+  }, [params.targetId]);
+
+  useCommunityStoriesSubscription({
+    targetId: params.targetId,
+    targetType: params.targetType as Amity.StoryTargetType, // TO FIX: type issue
+  });
 
   return {
     stories,

@@ -4,9 +4,20 @@ export function isLoadingItem<T>(item: T | { skeleton?: boolean }): item is { sk
   return !!(item as { skeleton?: boolean }).skeleton;
 }
 
-export function formatTimeAgo(dateString: string) {
-  const currentDate = new Date();
+export function isValidHttpUrl(url: string) {
+  try {
+    const newUrl = new URL(url);
+    return newUrl.protocol === 'http:' || newUrl.protocol === 'https:';
+  } catch (err) {
+    return false;
+  }
+}
+
+export function formatTimeAgo(dateString: string | Date | undefined) {
+  if (!dateString) return;
   const givenDate = new Date(dateString);
+  const currentDate = new Date();
+
   const timeDifferenceInSeconds = Math.floor((currentDate.getTime() - givenDate.getTime()) / 1000);
 
   if (timeDifferenceInSeconds < 60) {
