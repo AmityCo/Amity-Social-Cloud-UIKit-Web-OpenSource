@@ -104,7 +104,7 @@ const UserSelectorModal = ({
       </WrapSearch>
 
       <WrapResult>
-        {query.length > 0 && (
+        {query?.length > 0 && (
           <SearchUserList
             excludeSelf
             query={query}
@@ -113,7 +113,7 @@ const UserSelectorModal = ({
           />
         )}
 
-        {query.length === 0 && (
+        {(!query || query?.length === 0) && (
           <AllUserList
             excludeSelf
             selectedUserIds={selectedUserIds}

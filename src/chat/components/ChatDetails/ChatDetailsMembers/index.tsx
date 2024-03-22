@@ -69,7 +69,7 @@ const ChatDetailsMembers = ({
           <FormattedMessage id="chat.members.return" />
         </MembersReturnTitle>
       </MembersReturn>
-      {members.length > 0 ? (
+      {members?.length > 0 ? (
         <LoadMoreWrapper
           hasMore={hasMore}
           loadMore={loadMore}
