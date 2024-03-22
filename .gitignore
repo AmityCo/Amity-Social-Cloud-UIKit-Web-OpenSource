@@ -1,5 +1,6 @@
 node_modules/
 build/
+dist/
 storybook-build/
 .idea/
 
@@ -8,4 +9,8 @@ storybook-build/
 .DS_Store
 .eslintcache
 
-dist/
+# Test Coverage Results
+coverage/
+
+# Sonar-Scanner
+.scannerwork/
