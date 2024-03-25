@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 3.2.3 (2024-03-01)
 
+## 3.1.0 (2024-01-25)
 
 ### Bug Fixes
 
