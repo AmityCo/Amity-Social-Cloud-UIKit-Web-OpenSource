@@ -135,6 +135,7 @@ const UIComment = ({
         {isEditing ? (
           <CommentEditContainer>
             <CommentEditTextarea
+              data-qa-anchor="edit_comment_component/text_field"
               multiline
               mentionAllowed
               value={markup}
@@ -142,11 +143,14 @@ const UIComment = ({
               onChange={(data) => onChange?.(data)}
             />
             <ButtonContainer>
-              <SecondaryButton data-qa-anchor="comment-cancel-edit-button" onClick={cancelEditing}>
+              <SecondaryButton
+                data-qa-anchor="edit_comment_component/cancel_button"
+                onClick={cancelEditing}
+              >
                 <FormattedMessage id="cancel" />
               </SecondaryButton>
               <PrimaryButton
-                data-qa-anchor="comment-save-edit-button"
+                data-qa-anchor="edit_comment_component/save_button"
                 onClick={() => handleEdit?.(text)}
               >
                 <FormattedMessage id="save" />

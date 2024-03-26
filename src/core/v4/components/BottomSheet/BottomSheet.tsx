@@ -8,6 +8,7 @@ interface BottomSheetProps {
   rootId?: string;
   mountPoint?: HTMLElement;
   detent?: 'content-height' | 'full-height';
+  'data-qa-anchor'?: string;
 }
 
 export const BottomSheet = ({

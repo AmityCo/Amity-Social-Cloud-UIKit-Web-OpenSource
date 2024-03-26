@@ -9,6 +9,7 @@ interface BackButtonProps {
   componentId?: '*';
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const BackButton = ({
@@ -32,6 +33,7 @@ export const BackButton = ({
 
   return isRemoteImage ? (
     <UIBackButtonImage
+      data-qa-anchor="back_button"
       style={{
         ...style,
         backgroundColor: backgroundColor || theme.v4.colors.secondary.default,
@@ -41,6 +43,7 @@ export const BackButton = ({
     />
   ) : (
     <UIBackButton
+      data-qa-anchor="back_button"
       style={{
         ...style,
         backgroundColor: backgroundColor || theme.v4.colors.secondary.default,

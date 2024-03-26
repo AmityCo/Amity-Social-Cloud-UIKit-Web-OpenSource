@@ -9,6 +9,7 @@ interface CloseButtonProps {
   componentId: '*';
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const CloseButton = ({
@@ -29,9 +30,15 @@ export const CloseButton = ({
   const isRemoteImage = closeIcon && isValidHttpUrl(closeIcon);
 
   return isRemoteImage ? (
-    <UIRemoteImageButton src={closeIcon} onClick={onClick} {...props} />
+    <UIRemoteImageButton
+      data-qa-anchor="close_button"
+      src={closeIcon}
+      onClick={onClick}
+      {...props}
+    />
   ) : (
     <UICloseButton
+      data-qa-anchor="close_button"
       name={closeIcon === 'close' ? 'Close' : closeIcon}
       onClick={onClick}
       {...props}

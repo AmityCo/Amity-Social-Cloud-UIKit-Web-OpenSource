@@ -7,6 +7,7 @@ import { AvatarContainer, Img, AvatarOverlay } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 export interface AvatarProps {
+  id?: string;
   className?: string;
   avatar?: string | null;
   showOverlay?: boolean;

@@ -276,8 +276,10 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   }
 
   return (
-    <StoryWrapper>
-      {!isMobile && <StoryArrowLeftButton onClick={previousStory} />}
+    <StoryWrapper data-qa-anchor="story_page">
+      {!isMobile && (
+        <StoryArrowLeftButton data-qa-anchor="arrow_left_button" onClick={previousStory} />
+      )}
       <ViewStoryContainer id={targetRootId}>
         <HiddenInput
           ref={fileInputRef}
@@ -317,7 +319,9 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
           ) : null}
         </ViewStoryContent>
       </ViewStoryContainer>
-      {!isMobile && <StoryArrowRightButton onClick={nextStory} />}
+      {!isMobile && (
+        <StoryArrowRightButton data-qa-anchor="arrow_right_button" onClick={nextStory} />
+      )}
     </StoryWrapper>
   );
 };

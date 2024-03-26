@@ -9,6 +9,7 @@ interface BackButtonProps {
   componentId: '*';
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const CreateStoryButton = ({
@@ -32,6 +33,7 @@ export const CreateStoryButton = ({
 
   return isRemoteImage ? (
     <RemoteImageButton
+      data-qa-anchor="create_story_icon"
       src={createStoryIcon}
       onClick={onClick}
       style={{
@@ -41,6 +43,7 @@ export const CreateStoryButton = ({
     />
   ) : (
     <IconButton
+      data-qa-anchor="create_story_icon"
       name={createStoryIcon === 'plus' ? 'AddIcon' : createStoryIcon}
       style={{
         ...style,

@@ -10,6 +10,7 @@ interface SpeakerButtonProps {
   isMuted: boolean;
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const SpeakerButton = ({
@@ -37,6 +38,7 @@ export const SpeakerButton = ({
   return isMuted ? (
     isMutedRemoteImage ? (
       <CustomActionButton
+        data-qa-anchor="video_audio_button"
         src={mutedIcon}
         onClick={onClick}
         style={{
@@ -47,6 +49,7 @@ export const SpeakerButton = ({
       />
     ) : (
       <ActionButton
+        data-qa-anchor="video_audio_button"
         name={mutedIcon === 'mute' ? 'UnmuteCircle' : mutedIcon}
         onClick={onClick}
         style={{
@@ -58,6 +61,7 @@ export const SpeakerButton = ({
     )
   ) : isUnmutedRemoteImage ? (
     <CustomActionButton
+      data-qa-anchor="video_audio_button"
       src={unmutedIcon}
       onClick={onClick}
       style={{
@@ -68,6 +72,7 @@ export const SpeakerButton = ({
     />
   ) : (
     <ActionButton
+      data-qa-anchor="video_audio_button"
       name={unmutedIcon === 'unmute' ? 'MuteCircle' : unmutedIcon}
       onClick={onClick}
       style={{

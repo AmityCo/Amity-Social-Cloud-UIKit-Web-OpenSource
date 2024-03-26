@@ -10,6 +10,7 @@ interface AspectRatioButtonProps {
   pageId: 'create_story_page';
   componentId: '*';
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const AspectRatioButton = ({
@@ -33,6 +34,7 @@ export const AspectRatioButton = ({
 
   return isRemoteImage ? (
     <CustomActionButton
+      data-qa-anchor="aspect_ratio_button"
       src={aspectRatioIcon}
       onClick={onClick}
       style={{
@@ -43,6 +45,7 @@ export const AspectRatioButton = ({
     />
   ) : (
     <ActionButton
+      data-qa-anchor="aspect_ratio_button"
       name={aspectRatioIcon === 'aspect_ratio' ? 'ExpandIcon' : aspectRatioIcon}
       onClick={onClick}
       style={{

@@ -75,6 +75,7 @@ export const CommentTray = ({
 
   return (
     <BottomSheet
+      data-qa-anchor="comment_tray_component"
       isOpen={isOpen}
       onClose={onClose}
       rootId={rootId}

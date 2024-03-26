@@ -71,12 +71,18 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     imageSize: 'small',
   });
 
-  const heading = community?.displayName;
   const isOfficial = community?.isOfficial || false;
+
+  const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
-    createdAt && creator?.displayName
-      ? `${formatTimeAgo(createdAt as string)} • By ${creator?.displayName}`
-      : '';
+    createdAt && creator?.displayName ? (
+      <span>
+        <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span>• By{' '}
+        <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+      </span>
+    ) : (
+      ''
+    );
 
   const haveStoryPermission =
     (community &&
@@ -203,6 +209,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         addStoryButton={addStoryButton}
       />
       <StoryVideo
+        data-qa-anchor="video_view"
         ref={vid}
         style={computedStyles}
         src={story?.url || undefined}

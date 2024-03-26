@@ -10,6 +10,7 @@ interface OverflowMenuButtonProps {
   componentId?: '*';
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const OverflowMenuButton = ({
@@ -30,9 +31,15 @@ export const OverflowMenuButton = ({
   const isRemoteImage = overflowMenuIcon && isValidHttpUrl(overflowMenuIcon);
 
   return isRemoteImage ? (
-    <RemoteImageButton src={overflowMenuIcon} onClick={onClick} {...props} />
+    <RemoteImageButton
+      data-qa-anchor="overflow_menu_button"
+      src={overflowMenuIcon}
+      onClick={onClick}
+      {...props}
+    />
   ) : (
     <UIOverflowButton
+      data-qa-anchor="overflow_menu_button"
       name={overflowMenuIcon === 'threeDot' ? 'EllipsisH' : overflowMenuIcon}
       onClick={onClick}
       {...props}

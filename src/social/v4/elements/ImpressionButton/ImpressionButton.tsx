@@ -9,6 +9,7 @@ interface ImpressionButtonProps {
   componentId: '*';
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const ImpressionButton = ({
@@ -32,6 +33,7 @@ export const ImpressionButton = ({
 
   return isRemoteImage ? (
     <RemoteImageButton
+      data-qa-anchor="reach_button"
       src={impressionIcon}
       style={{
         ...style,
@@ -41,6 +43,7 @@ export const ImpressionButton = ({
     />
   ) : (
     <IconButton
+      data-qa-anchor="reach_button"
       name={impressionIcon === 'impressionIcon' ? 'EyeIcon' : impressionIcon}
       style={{
         ...style,

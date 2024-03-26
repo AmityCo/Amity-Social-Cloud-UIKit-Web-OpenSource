@@ -71,12 +71,18 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     imageSize: 'small',
   });
 
-  const heading = community?.displayName;
-  const isOfficial = community?.isOfficial || false;
+  const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
-    createdAt && creator?.displayName
-      ? `${formatTimeAgo(createdAt as string)} • By ${creator?.displayName}`
-      : '';
+    createdAt && creator?.displayName ? (
+      <span>
+        <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span>• By{' '}
+        <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+      </span>
+    ) : (
+      ''
+    );
+
+  const isOfficial = community?.isOfficial || false;
 
   const haveStoryPermission =
     (community &&
@@ -165,7 +171,12 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onClose={onBack}
         addStoryButton={addStoryButton}
       />
-      <StoryImage style={computedStyles} src={story.url} onLoad={imageLoaded} />
+      <StoryImage
+        data-qa-anchor="image_view"
+        style={computedStyles}
+        src={story.url}
+        onLoad={imageLoaded}
+      />
       {!loaded && (
         <LoadingOverlay width={width} height={height}>
           {loader || <div>loading...</div>}
