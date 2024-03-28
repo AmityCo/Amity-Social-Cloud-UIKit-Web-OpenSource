@@ -16,21 +16,24 @@ import {
   EditedMark,
   CommentInteractionButton,
   InteractionWrapper,
-  ReactionsWrapper,
   LikeButton,
   CommentDate,
   CommentEditContainer,
   CommentEditTextarea,
   ButtonContainer,
+  ReactionsListButtonWrapper,
+  ReactionIcon,
+  ReactionListButtonContainer,
 } from './styles';
 
 import { Mentioned, Metadata } from '~/helpers/utils';
 import { QueryMentioneesFnType } from '~/social/hooks/useSocialMention';
 import { formatTimeAgo } from '~/utils';
-import { EllipsisH, LikedIcon } from '~/icons';
-import { LIKE_REACTION_KEY } from '~/constants';
-import { CommentEdition } from '~/social/v4/components/CommentEdition';
+import { EllipsisH, FireIcon, HeartIcon, LikedIcon } from '~/icons';
 import { PrimaryButton, SecondaryButton } from '~/core/components/Button';
+
+import millify from 'millify';
+import { FIRE_REACTION_KEY, LIKE_REACTION_KEY, LOVE_REACTION_KEY } from '~/constants';
 
 interface StyledCommentProps {
   commentId?: string;
@@ -46,6 +49,7 @@ interface StyledCommentProps {
   text?: string;
   markup?: string;
   reactions: Record<string, number>;
+  reactionsCount: number;
   onClickReply?: (
     replyTo?: string,
     referenceType?: Amity.Comment['referenceType'],
@@ -84,6 +88,7 @@ interface StyledCommentProps {
   }[];
   referenceType?: Amity.Comment['referenceType'];
   referenceId?: Amity.Comment['referenceId'];
+  onClickReactionList: () => void;
 }
 
 const UIComment = ({
@@ -92,6 +97,7 @@ const UIComment = ({
   canLike = true,
   canReply = false,
   reactions = {},
+  reactionsCount,
   createdAt,
   editedAt,
   text,
@@ -111,6 +117,7 @@ const UIComment = ({
   referenceId,
   referenceType,
   commentId,
+  onClickReactionList,
 }: StyledCommentProps) => {
   return (
     <>
@@ -194,14 +201,30 @@ const UIComment = ({
                 <EllipsisH width={20} height={20} />
               </CommentInteractionButton>
             </InteractionWrapper>
-            <ReactionsWrapper>
-              {Number(reactions[LIKE_REACTION_KEY as keyof typeof reactions]) > 0 && (
-                <>
-                  {reactions[LIKE_REACTION_KEY as keyof typeof reactions] || 0}
-                  <LikedIcon />
-                </>
+            <SecondaryButton onClick={onClickReactionList}>
+              {reactionsCount > 0 && (
+                <ReactionListButtonContainer>
+                  {millify(reactionsCount)}
+                  <ReactionsListButtonWrapper>
+                    {reactions[LIKE_REACTION_KEY] > 0 && (
+                      <ReactionIcon>
+                        <LikedIcon />
+                      </ReactionIcon>
+                    )}
+                    {reactions[LOVE_REACTION_KEY] > 0 && (
+                      <ReactionIcon>
+                        <HeartIcon />
+                      </ReactionIcon>
+                    )}
+                    {reactions[FIRE_REACTION_KEY] > 0 && (
+                      <ReactionIcon>
+                        <FireIcon />
+                      </ReactionIcon>
+                    )}
+                  </ReactionsListButtonWrapper>
+                </ReactionListButtonContainer>
               )}
-            </ReactionsWrapper>
+            </SecondaryButton>
           </InteractionBar>
         )}
       </Content>

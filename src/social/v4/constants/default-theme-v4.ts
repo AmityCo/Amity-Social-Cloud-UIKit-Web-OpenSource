@@ -43,7 +43,6 @@ export const defaultThemeV4 = {
       default: '#00000080',
     },
   },
-
   typography: {
     heading: {
       fontWeight: 600,
