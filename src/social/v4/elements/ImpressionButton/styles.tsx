@@ -1,12 +1,4 @@
 import styled from 'styled-components';
-import { Icon } from '~/core/v4/components/Icon';
-
-export const IconButton = styled(Icon)<{ backgroundColor?: string }>`
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  background-color: ${({ backgroundColor }) => backgroundColor};
-`;
 
 export const RemoteImageButton = styled.img`
   width: 1.5rem;

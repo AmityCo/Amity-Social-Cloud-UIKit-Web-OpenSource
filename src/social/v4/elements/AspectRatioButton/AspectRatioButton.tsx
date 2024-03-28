@@ -1,15 +1,17 @@
 import React from 'react';
 
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
-import { ActionButton, CustomActionButton } from './styles';
-import { useTheme } from 'styled-components';
+import { CustomActionButton } from './styles';
+
 import { isValidHttpUrl } from '~/utils';
+import { ActionButton } from '../ActionButton';
+
+import { AspectRatioIcon } from '~/social/v4/icons';
 
 interface AspectRatioButtonProps {
   onClick: () => void;
   pageId: 'create_story_page';
   componentId: '*';
-  style?: React.CSSProperties;
   'data-qa-anchor'?: string;
 }
 
@@ -17,11 +19,8 @@ export const AspectRatioButton = ({
   pageId = 'create_story_page',
   componentId = '*',
   onClick = () => {},
-  style,
   ...props
 }: AspectRatioButtonProps) => {
-  const theme = useTheme();
-
   const elementId = 'aspect_ratio_button';
   const { getConfig, isExcluded } = useCustomization();
   const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
@@ -37,21 +36,13 @@ export const AspectRatioButton = ({
       data-qa-anchor="aspect_ratio_button"
       src={aspectRatioIcon}
       onClick={onClick}
-      style={{
-        ...style,
-        backgroundColor: elementConfig?.background_color || theme.v4.colors.secondary.default,
-      }}
       {...props}
     />
   ) : (
     <ActionButton
       data-qa-anchor="aspect_ratio_button"
-      name={aspectRatioIcon === 'aspect_ratio' ? 'ExpandIcon' : aspectRatioIcon}
+      icon={aspectRatioIcon === 'aspect_ratio' ? <AspectRatioIcon /> : aspectRatioIcon}
       onClick={onClick}
-      style={{
-        ...style,
-        backgroundColor: elementConfig?.background_color || theme.v4.colors.secondary.default,
-      }}
       {...props}
     />
   );

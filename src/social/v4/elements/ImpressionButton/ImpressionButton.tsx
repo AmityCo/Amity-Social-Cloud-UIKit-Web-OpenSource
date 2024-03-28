@@ -1,8 +1,9 @@
 import React from 'react';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
-import { IconButton, RemoteImageButton } from './styles';
+import { RemoteImageButton } from './styles';
 import { isValidHttpUrl } from '~/utils';
 import { useTheme } from 'styled-components';
+import { ActionButton } from '../ActionButton';
 
 interface ImpressionButtonProps {
   pageId: 'story_page';
@@ -42,9 +43,9 @@ export const ImpressionButton = ({
       onClick={onClick}
     />
   ) : (
-    <IconButton
+    <ActionButton
       data-qa-anchor="reach_button"
-      name={impressionIcon === 'impressionIcon' ? 'EyeIcon' : impressionIcon}
+      icon={impressionIcon === 'impressionIcon' ? 'EyeIcon' : impressionIcon}
       style={{
         ...style,
         backgroundColor: backgroundColor || theme.v4.colors.secondary.default,

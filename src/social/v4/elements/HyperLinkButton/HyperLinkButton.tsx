@@ -1,20 +1,20 @@
 import React from 'react';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
-import { ActionButton } from './styles';
+
 import { useTheme } from 'styled-components';
+import { ActionButton } from '../ActionButton';
+import { LinkIcon } from '~/icons';
 
 interface BackButtonProps {
   pageId: 'create_story_page';
   componentId: '*';
   onClick: (e: React.MouseEvent) => void;
-  style?: React.CSSProperties;
 }
 
 export const HyperLinkButton = ({
   pageId = 'create_story_page',
   componentId = '*',
   onClick = () => {},
-  style,
 }: BackButtonProps) => {
   const theme = useTheme();
   const elementId = 'story_hyperlink_button';
@@ -23,17 +23,13 @@ export const HyperLinkButton = ({
   const backgroundColor = elementConfig?.background_color;
   const hyperLinkIcon = elementConfig?.hyperlink_button_icon;
 
-  const isElementExcluded = isExcluded(`${pageId}/*/${elementId}`);
+  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
 
   if (isElementExcluded) return null;
 
   return (
     <ActionButton
-      name={hyperLinkIcon ? hyperLinkIcon : 'LinkIcon'}
-      style={{
-        ...style,
-        backgroundColor: backgroundColor || theme.v4.colors.secondary.default,
-      }}
+      icon={<LinkIcon width={24} height={24} fill={theme.v4.colors.baseInverse.default} />}
       onClick={onClick}
     />
   );

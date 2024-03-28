@@ -35,17 +35,15 @@ export const ViewStoryUploadingWrapper = styled.div`
 `;
 
 export const ViewStoryCompostBarContainer = styled.div`
-  position: absolute;
   width: 100%;
+  height: 3.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 3.5rem;
   padding: 0.75rem;
   background-color: #000;
-  bottom: 0;
-  color: #ffffff;
-  z-index: 99999;
+  color: ${({ theme }) => theme.v4.colors.baseInverse.default};
+  z-index: 100;
 `;
 
 export const ViewStoryFailedCompostBarContainer = styled.div`

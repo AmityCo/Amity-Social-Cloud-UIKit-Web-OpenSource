@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { POSITION_BOTTOM } from '~/helpers';
 
 import {
   PauseIcon,
@@ -10,6 +11,7 @@ import {
   MuteCircle,
   UnmuteCircle,
 } from '~/icons';
+import { LinkButtonContainer } from '~/social/v4/pages/DraftsPage/styles';
 
 export const IconButton = styled.button`
   position: absolute;
@@ -24,8 +26,12 @@ export const IconButton = styled.button`
   cursor: pointer;
 `;
 
+export const HyperLinkButtonContainer = styled(LinkButtonContainer)`
+  bottom: 6rem;
+  z-index: 9999;
+`;
+
 export const RendererContainer = styled.div`
-  position: relative;
   width: 100%;
   height: 100%;
 `;

@@ -24,10 +24,13 @@ import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
 
 import { LIKE_REACTION_KEY } from '~/constants';
+import Truncate from 'react-truncate-markup';
 
 import { CommentTray } from '~/social/v4/components/CommentTray';
 import { SpeakerButton } from '~/social/v4/elements';
 import { BottomSheet } from '~/core/v4/components';
+import { HyperlinkFormContainer } from '../../HyperLinkBottomSheet/styles';
+import { LinkButton } from '~/social/v4/elements/HyperLinkURL';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -270,6 +273,15 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onCancelReply={() => setIsReplying(false)}
         onClickReply={onClickReply}
       />
+      {story.items?.[0].data.url && (
+        <HyperlinkFormContainer>
+          <LinkButton href={story.items?.[0].data.url}>
+            <Truncate lines={1}>
+              <span>{story.items?.[0].data.customText || story.items?.[0].data.url}</span>
+            </Truncate>
+          </LinkButton>
+        </HyperlinkFormContainer>
+      )}
       <Footer
         storyId={story.storyId}
         syncState={syncState}

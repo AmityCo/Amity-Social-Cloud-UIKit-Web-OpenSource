@@ -22,7 +22,7 @@ export const defaultThemeV4 = {
       shade4: '#EBECEF',
     },
     baseInverse: {
-      default: '#CBCBCB',
+      default: '#FFFFFF',
     },
     alert: {
       default: '#FA4D30',
@@ -32,15 +32,25 @@ export const defaultThemeV4 = {
       default: '#1054DE',
       inverse: '#FFFFFF',
     },
+    storyIndicator: {
+      default: '#EBECEF',
+      active: ['#339AF9', '#78FA58'],
+    },
+    hyperlink: {
+      default: '#FFFFFFCC',
+    },
+    actionButton: {
+      default: '#00000080',
+    },
   },
 
   typography: {
-    headings: {
+    heading: {
       fontWeight: 600,
       fontSize: '1.25rem',
       lineHeight: '1.5rem',
     },
-    titles: {
+    title: {
       fontWeight: 600,
       fontSize: '1rem',
       lineHeight: '1.25rem',

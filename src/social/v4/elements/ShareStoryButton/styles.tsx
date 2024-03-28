@@ -10,6 +10,7 @@ export const UIShareStoryButton = styled.button`
   flex-shrink: 0;
   border-radius: 1.5rem;
   border: none;
+  cursor: pointer;
 
   > span {
     ${({ theme }) => theme.typography.bodyBold};
