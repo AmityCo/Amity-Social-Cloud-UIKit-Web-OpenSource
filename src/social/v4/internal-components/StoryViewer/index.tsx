@@ -34,6 +34,9 @@ import { DraftsPage } from '~/social/v4/pages/DraftsPage';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import { useTheme } from 'styled-components';
 import { CreateStoryButton } from '../../elements';
+import { Permissions } from '~/social/constants';
+import { isAdmin, isModerator } from '~/helpers/permissions';
+import useUser from '~/core/hooks/useUser';
 
 interface StoryViewerProps {
   pageId: 'story_page';
@@ -85,7 +88,8 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     }
   };
 
-  const { currentUserId } = useSDK();
+  const { client, currentUserId } = useSDK();
+  const user = useUser(currentUserId);
 
   const { formatMessage } = useIntl();
   const isMobile = useMedia('(max-width: 768px)');
@@ -96,6 +100,14 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   const [colors, setColors] = useState<FinalColor[]>([]);
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
+
+  const haveStoryPermission =
+    (typeof stories?.[currentIndex]?.community?.communityId === 'string' &&
+      client
+        ?.hasPermission(Permissions.ManageStoryPermission)
+        ?.community?.(stories[currentIndex]?.community?.communityId as string)) ||
+    isAdmin(user?.roles) ||
+    isModerator(user?.roles);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
@@ -183,7 +195,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        isStoryCreator
+        isStoryCreator || haveStoryPermission
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),

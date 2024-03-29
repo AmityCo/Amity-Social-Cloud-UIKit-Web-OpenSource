@@ -88,8 +88,10 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const isOfficial = community?.isOfficial || false;
 
   const haveStoryPermission =
-    (community &&
-      client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId)) ||
+    (typeof community?.communityId === 'string' &&
+      client
+        ?.hasPermission(Permissions.ManageStoryPermission)
+        ?.community?.(community?.communityId as string)) ||
     isAdmin(user?.roles) ||
     isModerator(user?.roles);
 
