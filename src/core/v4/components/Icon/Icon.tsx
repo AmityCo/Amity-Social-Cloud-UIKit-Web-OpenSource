@@ -5,7 +5,6 @@ type IconName = keyof typeof Icons;
 
 export interface IconProps {
   name: IconName | null;
-  id?: string;
   size?: number;
   style?: React.CSSProperties;
   onClick?: (e: React.MouseEvent) => void;
