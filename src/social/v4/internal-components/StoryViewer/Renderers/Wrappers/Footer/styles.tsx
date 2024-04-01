@@ -43,7 +43,6 @@ export const ViewStoryCompostBarContainer = styled.div`
   padding: 0.75rem;
   background-color: #000;
   color: ${({ theme }) => theme.v4.colors.baseInverse.default};
-  z-index: 100;
 `;
 
 export const ViewStoryFailedCompostBarContainer = styled.div`

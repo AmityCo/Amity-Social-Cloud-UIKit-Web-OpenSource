@@ -32,6 +32,8 @@ export const HyperLinkButtonContainer = styled(LinkButtonContainer)`
 `;
 
 export const RendererContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 `;
@@ -74,6 +76,7 @@ export const StoryImage = styled.img<{ customStyles?: string }>`
   max-width: 100%;
   max-height: 100%;
   margin: auto;
+  flex-grow: 1;
   ${(props) => props.customStyles};
 `;
 

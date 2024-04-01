@@ -228,7 +228,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onCancelReply={() => setIsReplying(false)}
         onClickReply={onClickReply}
       />
-      {story.items?.[0].data.url && (
+      {story.items?.[0]?.data?.url && (
         <HyperLinkButtonContainer>
           <LinkButton href={story.items?.[0].data.url}>
             <Truncate lines={1}>
