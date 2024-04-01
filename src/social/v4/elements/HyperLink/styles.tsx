@@ -1,13 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import { Icon } from '~/core/v4/components';
 
-interface LinkButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  href: string;
-  icon?: React.ReactNode;
-}
-
-const StyledLinkButton = styled.a`
+export const StyledLink = styled.a`
   border: ${({ theme }) => `1px solid ${theme.v4.colors.base.shade4}`};
   color: ${({ theme }) => theme.v4.colors.secondary.default};
   background: ${({ theme }) => theme.v4.colors.hyperlink.default};
@@ -24,20 +18,6 @@ const StyledLinkButton = styled.a`
   gap: 0.5rem;
 `;
 
-const StyledLinkIcon = styled(Icon)`
+export const StyledLinkIcon = styled(Icon)`
   fill: ${({ theme }) => theme.v4.colors.primary.default};
 `;
-
-export const LinkButton: React.FC<LinkButtonProps> = ({
-  href,
-  children,
-  icon = <StyledLinkIcon name="LinkIcon" size={16} />,
-  ...rest
-}) => {
-  return (
-    <StyledLinkButton href={href} {...rest}>
-      {icon && icon}
-      {children}
-    </StyledLinkButton>
-  );
-};

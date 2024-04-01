@@ -30,10 +30,10 @@ import {
 } from '~/social/v4/elements';
 import { useTheme } from 'styled-components';
 import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
-import { HyperLinkBottomSheet } from '~/social/v4/internal-components/HyperLinkBottomSheet';
 
-import { LinkButton } from '~/social/v4/elements/HyperLinkURL';
+import { HyperLink } from '~/social/v4/elements/HyperLink';
 import { SubmitHandler } from 'react-hook-form';
+import { HyperLinkConfig } from '../../components/HyperLinkConfig';
 
 type DraftStoryProps = {
   pageId: 'create_story_page';
@@ -107,14 +107,14 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
     });
   };
 
-  const onSubmitHyperLink = (data: Amity.StoryItem) => {
+  const onSubmitHyperLink = ({ data, type }: Amity.StoryItem) => {
     setHyperLink([
       {
         data: {
-          url: data.data.url,
-          customText: data.data.customText,
+          url: data.url,
+          customText: data.customText,
         },
-        type: data.type,
+        type,
       },
     ]);
     setIsHyperLinkBottomSheetOpen(false);
@@ -203,8 +203,8 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
           }}
         />
       </StoryDraftFooter>
-      <HyperLinkBottomSheet
-        pageId="create_story_page"
+      <HyperLinkConfig
+        pageId="*"
         isHaveHyperLink={!!hyperLink?.[0]?.data?.url}
         isOpen={isHyperLinkBottomSheetOpen}
         onClose={handleHyperLinkBottomSheetClose}
@@ -214,11 +214,11 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
       {/* currently we enable hyperlink to show only one hyperlink */}
       {hyperLink?.[0]?.data?.url && (
         <LinkButtonContainer>
-          <LinkButton href={hyperLink[0].data?.url}>
+          <HyperLink href={hyperLink[0].data?.url}>
             <Truncate lines={1}>
               <span>{hyperLink[0].data?.customText || hyperLink[0].data?.url}</span>
             </Truncate>
-          </LinkButton>
+          </HyperLink>
         </LinkButtonContainer>
       )}
     </StoryDraftContainer>

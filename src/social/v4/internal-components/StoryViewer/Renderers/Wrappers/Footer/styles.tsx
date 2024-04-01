@@ -35,6 +35,8 @@ export const ViewStoryUploadingWrapper = styled.div`
 `;
 
 export const ViewStoryCompostBarContainer = styled.div`
+  position: absolute;
+  bottom: 0;
   width: 100%;
   height: 3.5rem;
   display: flex;

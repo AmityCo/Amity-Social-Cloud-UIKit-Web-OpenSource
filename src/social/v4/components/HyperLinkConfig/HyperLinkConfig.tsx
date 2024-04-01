@@ -32,9 +32,10 @@ import {
 import { SecondaryButton } from '~/core/components/Button';
 import { confirm } from '~/core/components/Confirm';
 import useSDK from '~/core/hooks/useSDK';
+import { useCustomization } from '../../providers/CustomizationProvider';
 
-interface HyperLinkBottomSheetProps {
-  pageId: 'create_story_page';
+interface HyperLinkConfigProps {
+  pageId: '*';
   isHaveHyperLink: boolean;
   isOpen: boolean;
   onClose: () => void;
@@ -44,13 +45,22 @@ interface HyperLinkBottomSheetProps {
 
 const MAX_LENGTH = 30;
 
-export const HyperLinkBottomSheet = ({
+export const HyperLinkConfig = ({
+  pageId = '*',
   isOpen,
   isHaveHyperLink,
   onClose,
   onSubmit,
   onRemove,
-}: HyperLinkBottomSheetProps) => {
+}: HyperLinkConfigProps) => {
+  const componentId = 'hyper_link_config_component';
+  const { getConfig } = useCustomization();
+  const componentConfig = getConfig(`${pageId}/${componentId}/*`);
+  const componentTheme = componentConfig?.component_theme.light_theme || {};
+
+  const cancelButtonConfig = getConfig(`*/hyper_link_config_component/cancel_button`);
+  const doneButtonConfig = getConfig(`*/hyper_link_config_component/done_button`);
+
   const { formatMessage } = useIntl();
   const { client } = useSDK();
 
@@ -121,21 +131,54 @@ export const HyperLinkBottomSheet = ({
       onClose={onClose}
     >
       <MobileSheetContainer>
-        <MobileSheet.Header />
-        <MobileSheetHeader>
+        <MobileSheet.Header
+          style={{
+            backgroundColor: componentTheme?.primary_color,
+            color: componentTheme?.secondary_color,
+            borderTopLeftRadius: '0.5rem',
+            borderTopRightRadius: '0.5rem',
+          }}
+        />
+        <MobileSheetHeader
+          style={{
+            backgroundColor: componentTheme?.primary_color,
+            color: componentTheme?.secondary_color,
+          }}
+        >
           <HeaderContainer>
             <SecondaryButton onClick={onClose}>
-              {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.cancel' })}
+              {cancelButtonConfig?.cancel_button_text ||
+                formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.cancel' })}
+              {cancelButtonConfig?.cancel_icon && (
+                <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
+              )}
             </SecondaryButton>
             <HeaderTitle>
               {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
             </HeaderTitle>
-            <StyledSecondaryButton form="asc-story-hyperlink-form" type="submit">
-              {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.submit' })}
+            <StyledSecondaryButton
+              style={{
+                backgroundColor:
+                  doneButtonConfig?.background_color || componentTheme?.primary_color,
+                color: componentTheme?.secondary_color,
+              }}
+              form="asc-story-hyperlink-form"
+              type="submit"
+            >
+              {doneButtonConfig?.done_button_text ||
+                formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.submit' })}
+              {doneButtonConfig?.done_icon && (
+                <img src={doneButtonConfig.done_icon} width={16} height={16} />
+              )}
             </StyledSecondaryButton>
           </HeaderContainer>
         </MobileSheetHeader>
-        <MobileSheetContent>
+        <MobileSheetContent
+          style={{
+            backgroundColor: componentTheme?.primary_color,
+            color: componentTheme?.secondary_color,
+          }}
+        >
           <HyperlinkFormContainer>
             <Form id="asc-story-hyperlink-form" onSubmit={handleSubmit(onSubmitForm)}>
               <InputContainer>

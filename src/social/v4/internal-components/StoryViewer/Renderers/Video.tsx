@@ -4,6 +4,7 @@ import {
   LoadingOverlay,
   StoryVideo,
   RendererContainer,
+  HyperLinkButtonContainer,
 } from '~/social/v4/internal-components/StoryViewer/Renderers/styles';
 import {
   MobileActionSheetContent,
@@ -28,9 +29,8 @@ import Truncate from 'react-truncate-markup';
 
 import { CommentTray } from '~/social/v4/components/CommentTray';
 import { SpeakerButton } from '~/social/v4/elements';
+import { HyperLink } from '~/social/v4/elements/HyperLink';
 import { BottomSheet } from '~/core/v4/components';
-import { HyperlinkFormContainer } from '../../HyperLinkBottomSheet/styles';
-import { LinkButton } from '~/social/v4/elements/HyperLinkURL';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -276,13 +276,13 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onClickReply={onClickReply}
       />
       {story.items?.[0]?.data?.url && (
-        <HyperlinkFormContainer>
-          <LinkButton href={story.items?.[0].data.url}>
+        <HyperLinkButtonContainer>
+          <HyperLink href={story.items?.[0].data.url}>
             <Truncate lines={1}>
-              <span>{story.items?.[0].data.customText || story.items?.[0].data.url}</span>
+              <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
             </Truncate>
-          </LinkButton>
-        </HyperlinkFormContainer>
+          </HyperLink>
+        </HyperLinkButtonContainer>
       )}
       <Footer
         storyId={story.storyId}

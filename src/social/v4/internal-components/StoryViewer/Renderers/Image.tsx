@@ -29,7 +29,7 @@ import Truncate from 'react-truncate-markup';
 
 import { CommentTray } from '~/social/v4/components/CommentTray';
 import { BottomSheet } from '~/core/v4/components';
-import { LinkButton } from '~/social/v4/elements/HyperLinkURL';
+import { HyperLink } from '~/social/v4/elements/HyperLink';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -230,11 +230,11 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
       />
       {story.items?.[0]?.data?.url && (
         <HyperLinkButtonContainer>
-          <LinkButton href={story.items?.[0].data.url}>
+          <HyperLink href={story.items?.[0].data.url}>
             <Truncate lines={1}>
-              <span>{story.items?.[0].data.customText || story.items?.[0].data.url}</span>
+              <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
             </Truncate>
-          </LinkButton>
+          </HyperLink>
         </HyperLinkButtonContainer>
       )}
       <Footer
