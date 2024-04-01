@@ -61,7 +61,20 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
 
-  const [hyperLink, setHyperLink] = useState<Amity.StoryItem[] | []>([]);
+  const [hyperLink, setHyperLink] = useState<
+    {
+      data: { url: string; customText: string };
+      type: 'hyperlink';
+    }[]
+  >([
+    {
+      data: {
+        url: '',
+        customText: '',
+      },
+      type: 'hyperlink',
+    },
+  ]);
 
   const pageThemePrimaryColor =
     pageConfig?.page_theme?.light_theme.primary_color || theme.v4.colors.primary.default;
@@ -107,14 +120,14 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
     });
   };
 
-  const onSubmitHyperLink = ({ data, type }: Amity.StoryItem) => {
+  const onSubmitHyperLink = ({ url, customText }: { url: string; customText: string }) => {
     setHyperLink([
       {
         data: {
-          url: data.url,
-          customText: data.customText,
+          url,
+          customText,
         },
-        type,
+        type: 'hyperlink',
       },
     ]);
     setIsHyperLinkBottomSheetOpen(false);
