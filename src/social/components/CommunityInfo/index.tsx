@@ -29,7 +29,6 @@ const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProp
 
   const haveStoryPermission =
     client?.hasPermission(Permissions.ManageStoryPermission).community(communityId) ||
-    isAdmin(user?.roles) ||
     isModerator(user?.roles);
 
   const {
