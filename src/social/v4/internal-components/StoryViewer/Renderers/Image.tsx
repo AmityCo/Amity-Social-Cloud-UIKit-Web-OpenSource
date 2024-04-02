@@ -87,13 +87,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isOfficial = community?.isOfficial || false;
 
-  const haveStoryPermission =
-    (typeof community?.communityId === 'string' &&
-      client
-        ?.hasPermission(Permissions.ManageStoryPermission)
-        ?.community?.(community?.communityId as string)) ||
-    isAdmin(user?.roles) ||
-    isModerator(user?.roles);
+  const haveStoryPermission = isModerator(user?.roles);
 
   const computedStyles = {
     ...styles.storyContent,

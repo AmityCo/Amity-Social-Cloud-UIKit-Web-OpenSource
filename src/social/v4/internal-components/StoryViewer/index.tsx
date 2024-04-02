@@ -101,13 +101,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
 
-  const haveStoryPermission =
-    (typeof stories?.[currentIndex]?.community?.communityId === 'string' &&
-      client
-        ?.hasPermission(Permissions.ManageStoryPermission)
-        ?.community?.(stories[currentIndex]?.community?.communityId as string)) ||
-    isAdmin(user?.roles) ||
-    isModerator(user?.roles);
+  const haveStoryPermission = isModerator(user?.roles);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
