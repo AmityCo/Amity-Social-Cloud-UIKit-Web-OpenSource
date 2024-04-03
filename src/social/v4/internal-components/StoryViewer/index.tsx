@@ -89,7 +89,6 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   };
 
   const { client, currentUserId } = useSDK();
-  const user = useUser(currentUserId);
 
   const { formatMessage } = useIntl();
   const isMobile = useMedia('(max-width: 768px)');
@@ -101,7 +100,9 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
 
-  const haveStoryPermission = isModerator(user?.roles);
+  const haveStoryPermission = !!client
+    ?.hasPermission(Permissions.ManageStoryPermission)
+    .community(targetId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;

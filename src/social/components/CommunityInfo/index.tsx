@@ -24,10 +24,11 @@ const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProp
 
   const { onClickStory } = useNavigation();
 
-  const { currentUserId } = useSDK();
-  const user = useUser(currentUserId);
+  const { client } = useSDK();
 
-  const haveStoryPermission = isModerator(user?.roles);
+  const haveStoryPermission = !!client
+    ?.hasPermission(Permissions.ManageStoryPermission)
+    .community(communityId);
 
   const {
     community,
