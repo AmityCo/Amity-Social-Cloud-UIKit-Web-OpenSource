@@ -101,8 +101,8 @@
     "*/hyper_link_config_component/*": {
       "component_theme": {
         "light_theme": {
-          "primary_color": "#1054DE",
-          "secondary_color": "#292B32"
+          "primary_color": "",
+          "secondary_color": ""
         }
       }
     },

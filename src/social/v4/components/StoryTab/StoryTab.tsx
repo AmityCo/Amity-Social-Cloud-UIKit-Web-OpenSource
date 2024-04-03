@@ -60,7 +60,7 @@ export const StoryTab = ({
   };
 
   const handleOnClick = () => {
-    if (!storyRing || !onClick) return;
+    if (!storyRing || !onClick || isErrored) return;
     onClick();
   };
 

@@ -87,13 +87,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       ''
     );
 
-  const haveStoryPermission =
-    (typeof community?.communityId === 'string' &&
-      client
-        ?.hasPermission(Permissions.ManageStoryPermission)
-        ?.community?.(community?.communityId as string)) ||
-    isAdmin(user?.roles) ||
-    isModerator(user?.roles);
+  const haveStoryPermission = isModerator(user?.roles);
 
   const computedStyles = {
     ...styles.storyContent,
@@ -264,8 +258,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         pageId="*"
         isOpen={isOpenCommentSheet}
         onClose={closeCommentSheet}
-        referenceId={selectedComment?.referenceId}
-        referenceType={selectedComment?.referenceType}
+        referenceId={selectedComment?.referenceId || ''}
+        referenceType={(selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'}
+        community={community as Amity.Community}
+        shouldAllowCreation={true}
+        shouldAllowInteraction={true}
         commentId={selectedComment?.commentId}
         isReplying={isReplying}
         replyTo={replyTo}

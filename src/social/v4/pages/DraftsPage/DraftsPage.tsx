@@ -61,7 +61,21 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
 
-  const [hyperLink, setHyperLink] = useState<Amity.StoryItem[] | []>([]);
+  const [hyperLink, setHyperLink] = useState<
+    {
+      data: { url: string; customText: string };
+      type: Amity.StoryItemType;
+    }[]
+  >([
+    {
+      data: {
+        url: '',
+        customText: '',
+      },
+      // TODO: Fix type
+      type: 'hyperlink' as Amity.StoryItemType,
+    },
+  ]);
 
   const pageThemePrimaryColor =
     pageConfig?.page_theme?.light_theme.primary_color || theme.v4.colors.primary.default;
@@ -107,14 +121,15 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
     });
   };
 
-  const onSubmitHyperLink = ({ data, type }: Amity.StoryItem) => {
+  const onSubmitHyperLink = ({ url, customText }: { url: string; customText: string }) => {
     setHyperLink([
       {
         data: {
-          url: data.url,
-          customText: data.customText,
+          url,
+          customText,
         },
-        type,
+        // TODO: Fix type
+        type: 'hyperlink' as Amity.StoryItemType,
       },
     ]);
     setIsHyperLinkBottomSheetOpen(false);
@@ -195,7 +210,7 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
         <ShareStoryButton
           pageId="create_story_page"
           componentId="*"
-          onClick={() => onCreateStory(file, imageMode, {}, hyperLink)}
+          onClick={() => onCreateStory(file, imageMode, {}, hyperLink[0].data.url ? hyperLink : [])}
           avatar={creatorAvatar}
           style={{
             color: pageThemeSecondaryColor,
