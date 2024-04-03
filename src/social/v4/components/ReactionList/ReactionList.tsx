@@ -39,7 +39,7 @@ export const ReactionList: React.FC<ReactionListProps> = ({ referenceId, referen
     <ReactionListContainer>
       <TabList>
         <TabItem active={activeTab === 'All'} onClick={() => handleTabClick('All')}>
-          <Typography.Title $type="titles">
+          <Typography.Title $type="title">
             <ReactionEmoji>
               All <TabCount>{reactions.length}</TabCount>
             </ReactionEmoji>
@@ -56,21 +56,21 @@ export const ReactionList: React.FC<ReactionListProps> = ({ referenceId, referen
               onClick={() => handleTabClick(reactionType)}
             >
               {reactionType === 'like' && (
-                <Typography.Title $type="titles">
+                <Typography.Title $type="title">
                   <ReactionEmoji>
                     <LikedIcon /> <TabCount>{count}</TabCount>
                   </ReactionEmoji>
                 </Typography.Title>
               )}
               {reactionType === 'love' && (
-                <Typography.Title $type="titles">
+                <Typography.Title $type="title">
                   <ReactionEmoji>
                     <HeartIcon /> <TabCount>{count}</TabCount>
                   </ReactionEmoji>
                 </Typography.Title>
               )}
               {reactionType === 'fire' && (
-                <Typography.Title $type="titles">
+                <Typography.Title $type="title">
                   <ReactionEmoji>
                     <FireIcon /> <TabCount>{count}</TabCount>
                   </ReactionEmoji>
