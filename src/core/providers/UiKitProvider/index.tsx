@@ -101,24 +101,20 @@ const UiKitProvider = ({
       setClient(ascClient);
     }
 
-    const currentIsConnected = ASCClient.isConnected();
+    await ASCClient.login(
+      { userId, displayName, authToken },
+      {
+        sessionWillRenewAccessToken(renewal) {
+          // secure mode
+          if (authToken) {
+            renewal.renewWithAuthToken(authToken);
+            return;
+          }
 
-    if (!currentIsConnected) {
-      await ASCClient.login(
-        { userId, displayName, authToken },
-        {
-          sessionWillRenewAccessToken(renewal) {
-            // secure mode
-            if (authToken) {
-              renewal.renewWithAuthToken(authToken);
-              return;
-            }
-
-            renewal.renew();
-          },
+          renewal.renew();
         },
-      );
-    }
+      },
+    );
 
     setIsConnected(true);
 
