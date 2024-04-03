@@ -66,7 +66,7 @@ const decorator: NonNullable<Preview['decorators']> = (
   return (
     <UiKitProvider
       key={userId}
-      apiKey={apiKey}
+      apiKey={'b0efba08688ef9314833dc1c535d438fd15c8ae1bf316c29'}
       apiRegion={apiRegion}
       userId={userId}
       displayName={displayName || userId}

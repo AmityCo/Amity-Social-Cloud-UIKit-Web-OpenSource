@@ -49,7 +49,6 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const [isPaused, setIsPaused] = useState(false);
   const { width, height, loader, storyStyles } = config;
   const { currentUserId, client } = useSDK();
-  const user = useUser(currentUserId);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story.reactions[LIKE_REACTION_KEY] || 0;
@@ -87,9 +86,9 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isOfficial = community?.isOfficial || false;
 
-  const haveStoryPermission = !!client
-    ?.hasPermission(Permissions.ManageStoryPermission)
-    .community(communityId);
+  const haveStoryPermission =
+    community?.communityId &&
+    !!client?.hasPermission(Permissions.ManageStoryPermission).community(community?.communityId);
 
   const computedStyles = {
     ...styles.storyContent,
