@@ -33,16 +33,6 @@ export const HyperLinkButton = ({
         return (
           <img src={customIcon} alt={elementId} data-qa-anchor={elementId} width={24} height={24} />
         );
-      } else {
-        return (
-          <img
-            src={`/${customIcon}`}
-            alt={elementId}
-            data-qa-anchor={elementId}
-            width={24}
-            height={24}
-          />
-        );
       }
     }
 

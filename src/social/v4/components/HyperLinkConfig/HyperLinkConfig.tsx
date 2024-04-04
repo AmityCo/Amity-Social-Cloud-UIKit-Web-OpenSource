@@ -65,18 +65,11 @@ export const HyperLinkConfig = ({
   const { client } = useSDK();
 
   const schema = z.object({
-    url: z
-      .string()
-      .url()
-      .refine(async (value) => {
-        if (!value) return true;
-        // TO FIX: use schema.safeParseAsync()
-        const hasWhitelistedWords = await client
-          ?.validateUrls([value])
-          .then((res) => res)
-          .catch(() => false);
-        return hasWhitelistedWords;
-      }, formatMessage({ id: 'storyCreation.hyperlink.validation.error.whitelisted' })),
+    url: z.string().refine(async (value) => {
+      if (!value) return true;
+      const hasWhitelistedUrls = await client?.validateUrls([value]);
+      return hasWhitelistedUrls;
+    }, formatMessage({ id: 'storyCreation.hyperlink.validation.error.whitelisted' })),
     customText: z
       .string()
       .optional()
@@ -121,6 +114,8 @@ export const HyperLinkConfig = ({
       onOk: confirmDiscardHyperlink,
     });
   };
+
+  console.log(errors);
 
   return (
     <BottomSheet
