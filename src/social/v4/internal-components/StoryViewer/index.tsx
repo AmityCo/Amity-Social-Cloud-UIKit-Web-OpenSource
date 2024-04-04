@@ -35,8 +35,7 @@ import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import { useTheme } from 'styled-components';
 import { CreateStoryButton } from '../../elements';
 import { Permissions } from '~/social/constants';
-import { isAdmin, isModerator } from '~/helpers/permissions';
-import useUser from '~/core/hooks/useUser';
+import { checkStoryPermission } from '~/utils';
 
 interface StoryViewerProps {
   pageId: 'story_page';
@@ -100,9 +99,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
 
-  const haveStoryPermission = !!client
-    ?.hasPermission(Permissions.ManageStoryPermission)
-    .community(targetId);
+  const haveStoryPermission = checkStoryPermission(client, targetId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;

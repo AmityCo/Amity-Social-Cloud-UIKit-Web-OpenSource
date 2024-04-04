@@ -16,12 +16,11 @@ import {
 } from '~/social/v4/internal-components/StoryViewer/Renderers/styles';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useImage from '~/core/hooks/useImage';
-import { formatTimeAgo } from '~/utils';
-import { isAdmin, isModerator } from '~/helpers/permissions';
-import useUser from '~/core/hooks/useUser';
+import { checkStoryPermission, formatTimeAgo } from '~/utils';
+
 import useSDK from '~/core/hooks/useSDK';
 import { useIntl } from 'react-intl';
-import { Permissions } from '~/social/constants';
+
 import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
 
 import { LIKE_REACTION_KEY } from '~/constants';
@@ -86,9 +85,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isOfficial = community?.isOfficial || false;
 
-  const haveStoryPermission =
-    community?.communityId &&
-    !!client?.hasPermission(Permissions.ManageStoryPermission).community(community?.communityId);
+  const haveStoryPermission = checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...styles.storyContent,

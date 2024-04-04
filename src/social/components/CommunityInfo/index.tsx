@@ -5,10 +5,11 @@ import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
 import { useCommunityInfo } from './hooks';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { isModerator } from '~/helpers/permissions';
+
 import { Permissions } from '~/social/constants';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
+import { checkStoryPermission } from '~/utils';
 
 interface CommunityInfoProps {
   communityId: string;
@@ -26,9 +27,7 @@ const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProp
 
   const { client } = useSDK();
 
-  const haveStoryPermission = !!client
-    ?.hasPermission(Permissions.ManageStoryPermission)
-    .community(communityId);
+  const haveStoryPermission = checkStoryPermission(client, communityId);
 
   const {
     community,

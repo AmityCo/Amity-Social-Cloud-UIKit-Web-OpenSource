@@ -15,11 +15,10 @@ import {
 import Footer from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Footer';
 import Header from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Header';
 import useImage from '~/core/hooks/useImage';
-import { formatTimeAgo } from '~/utils';
+import { checkStoryPermission, formatTimeAgo } from '~/utils';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useIntl } from 'react-intl';
-import { Permissions } from '~/social/constants';
-import { isAdmin, isModerator } from '~/helpers/permissions';
+
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
@@ -87,9 +86,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       ''
     );
 
-  const haveStoryPermission =
-    community?.communityId &&
-    !!client?.hasPermission(Permissions.ManageStoryPermission).community(community?.communityId);
+  const haveStoryPermission = checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...styles.storyContent,
