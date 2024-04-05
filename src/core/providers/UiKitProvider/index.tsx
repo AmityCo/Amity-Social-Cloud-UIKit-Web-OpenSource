@@ -22,6 +22,7 @@ import { Config, CustomizationProvider } from '~/social/v4/providers/Customizati
 
 import amityConfig from '../../../../amity-uikit.config.json';
 import { PageBehaviorProvider } from '~/social/v4/providers/PageBehaviorProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -74,6 +75,7 @@ const UiKitProvider = ({
   onConnectionStatusChange,
   onDisconnected,
 }: UiKitProviderProps) => {
+  const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
   const [client, setClient] = useState<Amity.Client | null>(null);
   const stateChangeRef = useRef<(() => void) | null>(null);
@@ -144,36 +146,38 @@ const UiKitProvider = ({
   if (!isConnected) return <></>;
 
   return (
-    <Localization locale="en">
-      <CustomizationProvider initialConfig={amityConfig as Config}>
-        <ThemeProvider theme={buildGlobalTheme(theme)}>
-          <UIStyles>
-            <SDKContext.Provider value={sdkContextValue}>
-              <SDKConnectorProvider>
-                <CustomComponentsProvider config={customComponents}>
-                  <ConfigProvider
-                    config={{
-                      socialCommunityCreationButtonVisible:
-                        socialCommunityCreationButtonVisible || true,
-                    }}
-                  >
-                    <PostRendererProvider config={postRendererConfig}>
-                      <NavigationProvider {...actionHandlers}>
-                        <PageBehaviorProvider customNavigationBehavior={pageBehavior}>
-                          {children}
-                        </PageBehaviorProvider>
-                      </NavigationProvider>
-                    </PostRendererProvider>
-                  </ConfigProvider>
-                  <NotificationsContainer />
-                  <ConfirmContainer />
-                </CustomComponentsProvider>
-              </SDKConnectorProvider>
-            </SDKContext.Provider>
-          </UIStyles>
-        </ThemeProvider>
-      </CustomizationProvider>
-    </Localization>
+    <QueryClientProvider client={queryClient}>
+      <Localization locale="en">
+        <CustomizationProvider initialConfig={amityConfig as Config}>
+          <ThemeProvider theme={buildGlobalTheme(theme)}>
+            <UIStyles>
+              <SDKContext.Provider value={sdkContextValue}>
+                <SDKConnectorProvider>
+                  <CustomComponentsProvider config={customComponents}>
+                    <ConfigProvider
+                      config={{
+                        socialCommunityCreationButtonVisible:
+                          socialCommunityCreationButtonVisible || true,
+                      }}
+                    >
+                      <PostRendererProvider config={postRendererConfig}>
+                        <NavigationProvider {...actionHandlers}>
+                          <PageBehaviorProvider customNavigationBehavior={pageBehavior}>
+                            {children}
+                          </PageBehaviorProvider>
+                        </NavigationProvider>
+                      </PostRendererProvider>
+                    </ConfigProvider>
+                    <NotificationsContainer />
+                    <ConfirmContainer />
+                  </CustomComponentsProvider>
+                </SDKConnectorProvider>
+              </SDKContext.Provider>
+            </UIStyles>
+          </ThemeProvider>
+        </CustomizationProvider>
+      </Localization>
+    </QueryClientProvider>
   );
 };
 

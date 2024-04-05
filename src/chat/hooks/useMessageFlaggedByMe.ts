@@ -1,17 +1,23 @@
 import { MessageRepository } from '@amityco/ts-sdk';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const useMessageFlaggedByMe = (messageId?: string) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(false);
 
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['asc-uikit', 'MessageRepository', 'isMessageFlaggedByMe', messageId],
+    queryFn: () => {
+      return MessageRepository.isMessageFlaggedByMe(messageId as string);
+    },
+    enabled: messageId != null,
+  });
+
   useEffect(() => {
-    if (!messageId) return;
-    MessageRepository.isMessageFlaggedByMe(messageId).then((value) => {
-      setIsFlaggedByMe(value);
-      setIsLoading(false);
-    });
-  }, [messageId]);
+    if (data != null) {
+      setIsFlaggedByMe(data);
+    }
+  }, [data]);
 
   const flagMessage = async () => {
     if (messageId == null) return;
@@ -20,6 +26,8 @@ const useMessageFlaggedByMe = (messageId?: string) => {
       await MessageRepository.flagMessage(messageId);
     } catch (_error) {
       setIsFlaggedByMe(false);
+    } finally {
+      refetch();
     }
   };
 
@@ -30,6 +38,8 @@ const useMessageFlaggedByMe = (messageId?: string) => {
       await MessageRepository.unflagMessage(messageId);
     } catch (_error) {
       setIsFlaggedByMe(true);
+    } finally {
+      refetch();
     }
   };
 

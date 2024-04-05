@@ -1,32 +1,32 @@
 import { UserRepository } from '@amityco/ts-sdk';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const useUserFlaggedByMe = (userId?: string) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(false);
 
-  const fetchUserFlaggedByMe = async () => {
-    if (!userId) return;
-    UserRepository.isUserFlaggedByMe(userId).then((value) => {
-      setIsFlaggedByMe(value);
-      setIsLoading(false);
-    });
-  };
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['asc-uikit', 'UserRepository', 'isUserFlaggedByMe', userId],
+    queryFn: () => {
+      return UserRepository.isUserFlaggedByMe(userId as string);
+    },
+    enabled: userId != null,
+  });
 
   useEffect(() => {
-    if (!userId) return;
-    fetchUserFlaggedByMe();
-  }, [userId]);
+    if (data != null) {
+      setIsFlaggedByMe(data);
+    }
+  }, [data]);
 
   const flagUser = async () => {
     if (userId == null) return;
     try {
       await UserRepository.flagUser(userId);
-      setIsFlaggedByMe(true);
     } catch (_error) {
       setIsFlaggedByMe(false);
     } finally {
-      fetchUserFlaggedByMe();
+      refetch();
     }
   };
 
@@ -38,7 +38,7 @@ const useUserFlaggedByMe = (userId?: string) => {
     } catch (_error) {
       setIsFlaggedByMe(true);
     } finally {
-      fetchUserFlaggedByMe();
+      refetch();
     }
   };
 

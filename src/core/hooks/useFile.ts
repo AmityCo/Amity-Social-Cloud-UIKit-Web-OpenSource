@@ -1,14 +1,16 @@
 import { FileRepository } from '@amityco/ts-sdk';
-import useFetcher from './useFetcher';
+import { useQuery } from '@tanstack/react-query';
 
 const useFile = <T extends Amity.File>(fileId?: string | null) => {
-  const file = useFetcher({
-    fetchFn: FileRepository.getFile,
-    params: [fileId] as [string],
-    shouldCall: () => !!fileId,
+  const { data: file } = useQuery({
+    queryKey: ['asc-uikit', 'FileRepository', 'getFile', fileId],
+    queryFn: () => {
+      return FileRepository.getFile(fileId as string);
+    },
+    enabled: !!fileId,
   });
 
-  return file?.data as T;
+  return file?.data as T | undefined;
 };
 
 export default useFile;
