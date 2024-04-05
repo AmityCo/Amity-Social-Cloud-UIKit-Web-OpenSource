@@ -19,6 +19,8 @@ import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 interface UiKitProviderProps {
   apiKey: string;
   apiRegion: string;
@@ -65,6 +67,7 @@ const UiKitProvider = ({
   onDisconnected,
   getAuthToken,
 }: UiKitProviderProps) => {
+  const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
   const [client, setClient] = useState<Amity.Client | null>(null);
   const stateChangeRef = useRef<(() => void) | null>(null);
@@ -144,30 +147,32 @@ const UiKitProvider = ({
   if (!isConnected) return <></>;
 
   return (
-    <Localization locale="en">
-      <ThemeProvider theme={buildGlobalTheme(theme)}>
-        <UIStyles>
-          <SDKContext.Provider value={sdkContextValue}>
-            <SDKConnectorProvider>
-              <CustomComponentsProvider config={customComponents}>
-                <ConfigProvider
-                  config={{
-                    socialCommunityCreationButtonVisible:
-                      socialCommunityCreationButtonVisible || true,
-                  }}
-                >
-                  <PostRendererProvider config={postRendererConfig}>
-                    <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
-                  </PostRendererProvider>
-                </ConfigProvider>
-                <NotificationsContainer />
-                <ConfirmContainer />
-              </CustomComponentsProvider>
-            </SDKConnectorProvider>
-          </SDKContext.Provider>
-        </UIStyles>
-      </ThemeProvider>
-    </Localization>
+    <QueryClientProvider client={queryClient}>
+      <Localization locale="en">
+        <ThemeProvider theme={buildGlobalTheme(theme)}>
+          <UIStyles>
+            <SDKContext.Provider value={sdkContextValue}>
+              <SDKConnectorProvider>
+                <CustomComponentsProvider config={customComponents}>
+                  <ConfigProvider
+                    config={{
+                      socialCommunityCreationButtonVisible:
+                        socialCommunityCreationButtonVisible || true,
+                    }}
+                  >
+                    <PostRendererProvider config={postRendererConfig}>
+                      <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
+                    </PostRendererProvider>
+                  </ConfigProvider>
+                  <NotificationsContainer />
+                  <ConfirmContainer />
+                </CustomComponentsProvider>
+              </SDKConnectorProvider>
+            </SDKContext.Provider>
+          </UIStyles>
+        </ThemeProvider>
+      </Localization>
+    </QueryClientProvider>
   );
 };
 
