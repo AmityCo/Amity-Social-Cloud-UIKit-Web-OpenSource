@@ -12,6 +12,7 @@ interface ShareButtonProps {
   componentId: '*';
   avatar?: string;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const ShareStoryButton = ({
@@ -35,13 +36,16 @@ export const ShareStoryButton = ({
 
   return (
     <UIShareStoryButton
+      data-qa-anchor="share_story_button"
       onClick={onClick}
       style={{
         ...style,
         backgroundColor: elementConfig?.background_color || theme.v4.colors.primary.default,
       }}
     >
-      {!elementConfig?.hide_avatar && <Avatar size="small" avatar={avatar} />}
+      {!elementConfig?.hide_avatar && (
+        <Avatar data-qa-anchor="share_story_button_image_view" size="small" avatar={avatar} />
+      )}
       <span>{formatMessage({ id: 'storyDraft.button.shareStory' })}</span>
       {isRemoteImage ? (
         <RemoteImageIcon src={shareIcon} />

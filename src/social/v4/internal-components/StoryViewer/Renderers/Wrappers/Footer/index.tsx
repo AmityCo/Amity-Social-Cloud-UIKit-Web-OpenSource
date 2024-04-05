@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ViewStoryCompostBarContainer,
   ViewStoryCompostBarEngagementContainer,
@@ -28,14 +28,9 @@ const Footer: React.FC<
     syncState?: Amity.SyncState;
   }>
 > = ({ syncState, reach, commentsCount, totalLikes, isLiked, storyId, onClickComment }) => {
-  const [isActive, setIsActive] = React.useState(isLiked);
-  const [likeCount, setLikeCount] = React.useState(totalLikes);
+  const [isActive, setIsActive] = useState(isLiked);
+  const [likeCount, setLikeCount] = useState(totalLikes);
   const { formatMessage } = useIntl();
-
-  useEffect(() => {
-    setIsActive(isLiked);
-    setLikeCount(totalLikes);
-  }, [isLiked, totalLikes]);
 
   const handleLike = async () => {
     try {
@@ -48,6 +43,11 @@ const Footer: React.FC<
       console.error("Can't toggle like", error);
     }
   };
+
+  useEffect(() => {
+    setIsActive(isLiked);
+    setLikeCount(totalLikes);
+  }, [isLiked, totalLikes]);
 
   if (syncState === 'syncing') {
     return (

@@ -20,6 +20,9 @@ dependencies:
   '@hookform/resolvers':
     specifier: ^3.3.4
     version: 3.3.4(react-hook-form@7.50.1)
+  '@tanstack/react-query':
+    specifier: ^5.28.14
+    version: 5.28.14(react@18.2.0)
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
@@ -67,7 +70,7 @@ dependencies:
     version: 4.4.10(react-dom@18.2.0)(react@18.2.0)
   react-modal-sheet:
     specifier: ^2.2.0
-    version: 2.2.0(framer-motion@11.0.20)(react@18.2.0)
+    version: 2.2.0(framer-motion@11.0.25)(react@18.2.0)
   react-sizeme:
     specifier: ^3.0.2
     version: 3.0.2
@@ -98,8 +101,8 @@ dependencies:
 
 devDependencies:
   '@amityco/ts-sdk':
-    specifier: ~6.20.0
-    version: 6.20.0
+    specifier: 6.21.0
+    version: 6.21.0
   '@storybook/addon-a11y':
     specifier: ^7.6.7
     version: 7.6.17
@@ -255,8 +258,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /@amityco/ts-sdk@6.20.0:
-    resolution: {integrity: sha512-mTxr9I1k+1AaJs7JIfRtJWkGJ2c0JXb9Xaz7h9va56txND8fUuTmkgoo9526cMawHjmbikLkOrscaxziehZiSw==}
+  /@amityco/ts-sdk@6.21.0:
+    resolution: {integrity: sha512-Bqg9TvMKd4PlEj1ij8UUAD3RJVK78ZKjzOqGDWwD+cZ+HDvqLA8NZo+OFzbJtF2oGZn8MxhPxqyNVdDXN0GqBA==}
     engines: {node: '>=12', npm: '>=6'}
     dependencies:
       agentkeepalive: 4.5.0
@@ -3150,7 +3153,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
     dependencies:
-      '@swc/helpers': 0.5.7
+      '@swc/helpers': 0.5.8
       react: 18.2.0
     dev: false
 
@@ -3172,7 +3175,7 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0
     dependencies:
-      '@swc/helpers': 0.5.7
+      '@swc/helpers': 0.5.8
       react: 18.2.0
     dev: false
 
@@ -4023,10 +4026,23 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@swc/helpers@0.5.7:
-    resolution: {integrity: sha512-BVvNZhx362+l2tSwSuyEUV4h7+jk9raNdoTSdLfwTshXJSaGmYKluGRJznziCI3KX02Z19DdsQrdfrpXAU3Hfg==}
+  /@swc/helpers@0.5.8:
+    resolution: {integrity: sha512-lruDGw3pnfM3wmZHeW7JuhkGQaJjPyiKjxeGhdmfoOT53Ic9qb5JLDNaK2HUdl1zLDeX28H221UvKjfdvSLVMg==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@tanstack/query-core@5.28.13:
+    resolution: {integrity: sha512-C3+CCOcza+mrZ7LglQbjeYEOTEC3LV0VN0eYaIN6GvqAZ8Foegdgch7n6QYPtT4FuLae5ALy+m+ZMEKpD6tMCQ==}
+    dev: false
+
+  /@tanstack/react-query@5.28.14(react@18.2.0):
+    resolution: {integrity: sha512-cZqt03Igb3I9tM72qNX5TAAmeYl75Z+k4Mv92VkXIXc2hCrv0fIywd7GN3JV1BBJl4mr7Cc+OOKKOPy8sNVOkA==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.28.13
+      react: 18.2.0
     dev: false
 
   /@types/babel__core@7.20.5:
@@ -7192,8 +7208,8 @@ packages:
     resolution: {integrity: sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==}
     dev: true
 
-  /framer-motion@11.0.20(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-YSDmWznt3hpdERosbE0UAPYWoYhTnmQ0J1qWPsgpCia9NgY8Xsz5IpOiUEGGj/nzCAW29fSrWugeLRkdp5de7g==}
+  /framer-motion@11.0.25(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-mRt7vQGzA7++wTgb+PW1TrlXXgndqR6hCiJ48fXr2X9alte2hPQiAq556HRwDCt0Q5X98MNvcSe4KUa27Gm5Lg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0
@@ -10119,7 +10135,7 @@ packages:
       substyle: 9.4.1(react@18.2.0)
     dev: false
 
-  /react-modal-sheet@2.2.0(framer-motion@11.0.20)(react@18.2.0):
+  /react-modal-sheet@2.2.0(framer-motion@11.0.25)(react@18.2.0):
     resolution: {integrity: sha512-OAIWuVWxMx3zQqrMLbYWnczadplg0WLd+AaBWmN5+ysNF5/pneqjkOV3AWaIZOCIF4TcrejiCsTduutbzCRP2Q==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -10127,7 +10143,7 @@ packages:
       react: '>=16'
     dependencies:
       '@react-aria/utils': 3.17.0(react@18.2.0)
-      framer-motion: 11.0.20(react-dom@18.2.0)(react@18.2.0)
+      framer-motion: 11.0.25(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
     dev: false
 

@@ -11,6 +11,7 @@ interface SaveButtonProps {
   onClick?: (e: React.MouseEvent) => void;
   children?: React.ReactNode;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const SaveButton = ({
@@ -32,6 +33,7 @@ export const SaveButton = ({
 
   return isRemoteImage ? (
     <RemoteImageButton
+      data-qa-anchor="edit_comment_component/save_button"
       src={saveIcon}
       onClick={onClick}
       style={{
@@ -41,6 +43,7 @@ export const SaveButton = ({
     />
   ) : (
     <PrimaryButton
+      data-qa-anchor="edit_comment_component/save_button"
       onClick={onClick}
       style={{
         ...style,

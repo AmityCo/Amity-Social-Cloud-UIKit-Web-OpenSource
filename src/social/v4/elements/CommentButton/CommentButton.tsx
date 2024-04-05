@@ -11,6 +11,7 @@ interface ReactButtonProps {
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
   children?: React.ReactNode;
+  'data-qa-anchor'?: string;
 }
 
 export const CommentButton = ({
@@ -34,6 +35,7 @@ export const CommentButton = ({
 
   return isRemoteImage ? (
     <UIRemoteImageButton
+      data-qa-anchor="comment_button"
       src={commentIcon}
       onClick={onClick}
       style={{
@@ -44,6 +46,7 @@ export const CommentButton = ({
     />
   ) : (
     <UICommentButton
+      data-qa-anchor="comment_button"
       onClick={onClick}
       style={{
         ...style,
@@ -52,7 +55,7 @@ export const CommentButton = ({
       {...props}
     >
       <Icon name={commentIcon === 'comment' ? 'Comment2Icon' : commentIcon} />
-      {children}
+      <span data-qa-anchor="comment_button_text_view">{children}</span>
     </UICommentButton>
   );
 };

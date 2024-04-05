@@ -36,6 +36,13 @@ export const ActionsContainer = styled.div`
   gap: 0.75rem;
 `;
 
+export const LinkButtonContainer = styled.div`
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
 export const DraftImageContainer = styled.div<{ colors: { hex: string }[] }>`
   width: 100%;
   height: 100%;

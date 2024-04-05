@@ -34,6 +34,8 @@ import { DraftsPage } from '~/social/v4/pages/DraftsPage';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import { useTheme } from 'styled-components';
 import { CreateStoryButton } from '../../elements';
+import { Permissions } from '~/social/constants';
+import { checkStoryPermission } from '~/utils';
 
 interface StoryViewerProps {
   pageId: 'story_page';
@@ -85,7 +87,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     }
   };
 
-  const { currentUserId } = useSDK();
+  const { client, currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
   const isMobile = useMedia('(max-width: 768px)');
@@ -96,6 +98,8 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   const [colors, setColors] = useState<FinalColor[]>([]);
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
+
+  const haveStoryPermission = checkStoryPermission(client, targetId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
@@ -183,7 +187,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        isStoryCreator
+        isStoryCreator || haveStoryPermission
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
@@ -276,8 +280,10 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   }
 
   return (
-    <StoryWrapper>
-      {!isMobile && <StoryArrowLeftButton onClick={previousStory} />}
+    <StoryWrapper data-qa-anchor="story_page">
+      {!isMobile && (
+        <StoryArrowLeftButton data-qa-anchor="arrow_left_button" onClick={previousStory} />
+      )}
       <ViewStoryContainer id={targetRootId}>
         <HiddenInput
           ref={fileInputRef}
@@ -317,7 +323,9 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
           ) : null}
         </ViewStoryContent>
       </ViewStoryContainer>
-      {!isMobile && <StoryArrowRightButton onClick={nextStory} />}
+      {!isMobile && (
+        <StoryArrowRightButton data-qa-anchor="arrow_right_button" onClick={nextStory} />
+      )}
     </StoryWrapper>
   );
 };

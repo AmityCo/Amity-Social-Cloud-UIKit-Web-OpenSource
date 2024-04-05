@@ -47,9 +47,10 @@ import useImage from '~/core/hooks/useImage';
 import { FlagIcon, Pencil2Icon, Trash2Icon } from '~/icons';
 import UIComment from './UIComment';
 
-import { isModerator } from '~/helpers/permissions';
 import { LIKE_REACTION_KEY } from '~/constants';
 import { CommentList } from '~/social/v4/internal-components/CommentList';
+import { ReactionList } from '~/social/v4/components/ReactionList';
+import { useReactionsCollection } from '~/social/v4/hooks/collections/useReactionsCollection';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -103,12 +104,14 @@ interface CommentProps {
     commentId: Amity.Comment['commentId'],
   ) => void;
   style?: React.CSSProperties;
+  onClickReactionList: (commentId: string) => void;
 }
 
 const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => {
   const comment = useComment(commentId);
   const story = useStory(comment?.referenceId);
   const [bottomSheet, setBottomSheet] = useState(false);
+  const [selectedCommentId, setSelectedCommentId] = useState('');
 
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });
@@ -283,6 +286,7 @@ const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => 
       mentionees={comment?.metadata?.mentioned as Mentioned[]}
       metadata={comment?.metadata}
       reactions={comment?.reactions}
+      reactionsCount={comment?.reactionsCount}
       text={text}
       markup={markup}
       handleReportComment={onReportClick}
@@ -307,6 +311,9 @@ const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => 
           comment.commentId,
         )
       }
+      onClickReactionList={() => {
+        setSelectedCommentId(comment.commentId);
+      }}
     />
   );
 
@@ -352,6 +359,22 @@ const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => 
           </MobileSheetContent>
         </MobileSheet.Container>
         <MobileSheetNestedBackDrop onTap={toggleBottomSheet} />
+      </MobileSheet>
+      <MobileSheet
+        isOpen={!!selectedCommentId}
+        onClose={() => setSelectedCommentId('')}
+        mountPoint={document.getElementById('asc-uikit-stories-viewer') as HTMLElement}
+        detent="full-height"
+      >
+        <MobileSheet.Container>
+          <MobileSheetHeader />
+          <MobileSheetContent>
+            <MobileSheet.Scroller>
+              <ReactionList referenceId={comment.commentId} referenceType="comment" />
+            </MobileSheet.Scroller>
+          </MobileSheetContent>
+        </MobileSheet.Container>
+        <MobileSheetNestedBackDrop onTap={() => setSelectedCommentId('')} />
       </MobileSheet>
     </>
   );

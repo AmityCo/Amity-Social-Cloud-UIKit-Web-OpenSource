@@ -11,6 +11,7 @@ interface ReactButtonProps {
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
   children?: React.ReactNode;
+  'data-qa-anchor'?: string;
 }
 
 export const ReactButton = ({
@@ -41,6 +42,7 @@ export const ReactButton = ({
   return isLiked ? (
     isLikedRemoteImage ? (
       <UIRemoteImageButton
+        data-qa-anchor="reaction_button"
         src={likedIcon}
         onClick={onClick}
         style={{
@@ -49,16 +51,17 @@ export const ReactButton = ({
         }}
         {...props}
       >
-        {children}
+        <span data-qa-anchor="reaction_button_text_view">{children}</span>
       </UIRemoteImageButton>
     ) : (
-      <UIReactButton onClick={onClick} {...props}>
+      <UIReactButton data-qa-anchor="reaction_button" onClick={onClick} {...props}>
         <Icon name={likedIcon || 'LikedIcon'} />
-        {children}
+        <span data-qa-anchor="reaction_button_text_view">{children}</span>
       </UIReactButton>
     )
   ) : isUnlikedRemoteImage ? (
     <UIRemoteImageButton
+      data-qa-anchor="reaction_button"
       src={unlikedIcon}
       onClick={onClick}
       style={{
@@ -67,12 +70,12 @@ export const ReactButton = ({
       }}
       {...props}
     >
-      {children}
+      <span data-qa-anchor="reaction_button_text_view">{children}</span>
     </UIRemoteImageButton>
   ) : (
-    <UIReactButton onClick={onClick} {...props}>
+    <UIReactButton data-qa-anchor="reaction_button" onClick={onClick} {...props}>
       <Icon name={unlikedIcon || 'LikeIcon'} />
-      {children}
+      <span data-qa-anchor="reaction_button_text_view">{children}</span>
     </UIReactButton>
   );
 };

@@ -1,4 +1,5 @@
 import { Client as ASCClient, SubscriptionLevels } from '@amityco/ts-sdk';
+import { Permissions } from './social/constants';
 
 export function isLoadingItem<T>(item: T | { skeleton?: boolean }): item is { skeleton?: boolean } {
   return !!(item as { skeleton?: boolean }).skeleton;
@@ -12,6 +13,30 @@ export function isValidHttpUrl(url: string) {
     return false;
   }
 }
+
+export const checkStoryPermission = (
+  client: Amity.Client | null | undefined,
+  communityId?: string,
+): boolean => {
+  if (!client) {
+    return false;
+  }
+
+  const userPermission = client.hasPermission(Permissions.ManageStoryPermission).currentUser();
+
+  if (userPermission) {
+    return true;
+  }
+
+  if (communityId) {
+    const communityPermission = client
+      .hasPermission(Permissions.ManageStoryPermission)
+      .community(communityId);
+    return communityPermission;
+  }
+
+  return false;
+};
 
 export function formatTimeAgo(dateString: string | Date | undefined) {
   if (!dateString) return;

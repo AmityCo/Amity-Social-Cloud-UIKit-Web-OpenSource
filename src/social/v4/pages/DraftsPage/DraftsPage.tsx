@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   ActionsContainer,
@@ -8,6 +8,7 @@ import {
   DraftImage,
   DraftImageContainer,
   StoryVideoPreview,
+  LinkButtonContainer,
 } from './styles';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
@@ -18,10 +19,21 @@ import useUser from '~/core/hooks/useUser';
 import useSDK from '~/core/hooks/useSDK';
 import useImage from '~/core/hooks/useImage';
 
+import Truncate from 'react-truncate-markup';
+
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
-import { BackButton, AspectRatioButton, ShareStoryButton } from '~/social/v4/elements';
+import {
+  BackButton,
+  AspectRatioButton,
+  ShareStoryButton,
+  HyperLinkButton,
+} from '~/social/v4/elements';
 import { useTheme } from 'styled-components';
-import { usePageBehavior } from '../../providers/PageBehaviorProvider';
+import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
+
+import { HyperLink } from '~/social/v4/elements/HyperLink';
+import { SubmitHandler } from 'react-hook-form';
+import { HyperLinkConfig } from '../../components/HyperLinkConfig';
 
 type DraftStoryProps = {
   pageId: 'create_story_page';
@@ -30,10 +42,15 @@ type DraftStoryProps = {
   onCreateStory: (
     file: File,
     imageMode: 'fit' | 'fill',
-    metadata?: Amity.Metadata | undefined,
-    items?: Amity.StoryItem[] | undefined,
+    metadata?: Amity.Metadata,
+    items?: Amity.StoryItem[],
   ) => void;
   onDiscardStory: () => void;
+};
+
+type HyperLinkFormInputs = {
+  url: string;
+  customText?: string;
 };
 
 export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: DraftStoryProps) => {
@@ -42,6 +59,23 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
   const pageConfig = getConfig(`${pageId}/*/*`);
   const isPageExcluded = isExcluded(`${pageId}/*/*`);
   const { navigationBehavior } = usePageBehavior();
+  const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
+
+  const [hyperLink, setHyperLink] = useState<
+    {
+      data: { url: string; customText: string };
+      type: Amity.StoryItemType;
+    }[]
+  >([
+    {
+      data: {
+        url: '',
+        customText: '',
+      },
+      // TODO: Fix type
+      type: 'hyperlink' as Amity.StoryItemType,
+    },
+  ]);
 
   const pageThemePrimaryColor =
     pageConfig?.page_theme?.light_theme.primary_color || theme.v4.colors.primary.default;
@@ -50,14 +84,22 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
 
   if (isPageExcluded) return null;
 
+  const onSubmit: SubmitHandler<HyperLinkFormInputs> = (data) => {
+    onSubmit(data);
+  };
+
+  const handleHyperLinkBottomSheetClose = () => {
+    setIsHyperLinkBottomSheetOpen(false);
+  };
+
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const creatorAvatar = useImage({ imageSize: 'small', fileId: user?.avatarFileId });
 
   const { formatMessage } = useIntl();
 
-  const [imageMode, setImageMode] = React.useState<'fit' | 'fill'>('fit');
-  const [colors, setColors] = React.useState<Awaited<ReturnType<typeof extractColors>>>([]);
+  const [imageMode, setImageMode] = useState<'fit' | 'fill'>('fit');
+  const [colors, setColors] = useState<Awaited<ReturnType<typeof extractColors>>>([]);
 
   const onClickImageMode = () => {
     setImageMode(imageMode === 'fit' ? 'fill' : 'fit');
@@ -77,6 +119,24 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
         navigationBehavior.closeAction();
       },
     });
+  };
+
+  const onSubmitHyperLink = ({ url, customText }: { url: string; customText: string }) => {
+    setHyperLink([
+      {
+        data: {
+          url,
+          customText,
+        },
+        // TODO: Fix type
+        type: 'hyperlink' as Amity.StoryItemType,
+      },
+    ]);
+    setIsHyperLinkBottomSheetOpen(false);
+  };
+
+  const onRemoveHyperLink = () => {
+    setHyperLink([]);
   };
 
   useEffect(() => {
@@ -101,7 +161,7 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
   }, [file, imageMode]);
 
   return (
-    <StoryDraftContainer>
+    <StoryDraftContainer id="asc-uikit-create-story">
       <StoryDraftHeader>
         <div>
           <BackButton
@@ -119,11 +179,13 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
               pageId="create_story_page"
               componentId="*"
               onClick={onClickImageMode}
-              style={{
-                backgroundColor: pageThemeSecondaryColor,
-              }}
             />
           )}
+          <HyperLinkButton
+            pageId="create_story_page"
+            componentId="*"
+            onClick={() => setIsHyperLinkBottomSheetOpen(true)}
+          />
         </ActionsContainer>
       </StoryDraftHeader>
 
@@ -148,7 +210,7 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
         <ShareStoryButton
           pageId="create_story_page"
           componentId="*"
-          onClick={() => onCreateStory(file, imageMode, {}, [])}
+          onClick={() => onCreateStory(file, imageMode, {}, hyperLink[0].data.url ? hyperLink : [])}
           avatar={creatorAvatar}
           style={{
             color: pageThemeSecondaryColor,
@@ -156,6 +218,24 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
           }}
         />
       </StoryDraftFooter>
+      <HyperLinkConfig
+        pageId="*"
+        isHaveHyperLink={!!hyperLink?.[0]?.data?.url}
+        isOpen={isHyperLinkBottomSheetOpen}
+        onClose={handleHyperLinkBottomSheetClose}
+        onSubmit={onSubmitHyperLink}
+        onRemove={onRemoveHyperLink}
+      />
+      {/* currently we enable hyperlink to show only one hyperlink */}
+      {hyperLink?.[0]?.data?.url && (
+        <LinkButtonContainer>
+          <HyperLink href={hyperLink[0].data?.url}>
+            <Truncate lines={1}>
+              <span>{hyperLink[0].data?.customText || hyperLink[0].data?.url}</span>
+            </Truncate>
+          </HyperLink>
+        </LinkButtonContainer>
+      )}
     </StoryDraftContainer>
   );
 };

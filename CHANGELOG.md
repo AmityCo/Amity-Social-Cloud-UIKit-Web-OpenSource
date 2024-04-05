@@ -2,17 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.1 (2024-04-05)
+
+### Bug Fixes
+
+- update ts-sdk version ([84204c0](https://github.com/EkoCommunications/AmityUiKitWeb/commit/84204c0194d2421513f20f7ef15aea3e12b09e74))
+
 ## 4.0.0-beta.0 (2024-03-25)
 
-### 3.2.4 (2024-03-11)
+### Bug Fixes
 
-### 3.2.3 (2024-03-01)
+- add pre-release condition ([#193](https://github.com/EkoCommunications/AmityUiKitWeb/issues/193)) ([ec9c0ca](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ec9c0cab3c821842fae025ba30b54813e0999103))
 
 ## 3.1.0 (2024-01-25)
 
 ### Bug Fixes
 
-* icon size ([6f604b5](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/6f604b5b0e8f87ea32c24ff7ba9fc3deccae1988))
+- icon size ([6f604b5](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/6f604b5b0e8f87ea32c24ff7ba9fc3deccae1988))
 
 ### 3.2.2 (2024-02-27)
 

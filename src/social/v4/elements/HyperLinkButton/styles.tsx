@@ -4,9 +4,9 @@ import { Icon } from '~/core/v4/components/Icon';
 export const ActionButton = styled(Icon)`
   width: 2rem;
   height: 2rem;
-  position: absolute;
-  top: 0,
-  left: 0,
   cursor: pointer;
   border-radius: 50%;
+  padding: 0.375rem 0rem;
+  background: ${({ theme }) => theme.v4.colors.actionButton.default};
+  fill: ${({ theme }) => theme.v4.colors.baseInverse.default};
 `;

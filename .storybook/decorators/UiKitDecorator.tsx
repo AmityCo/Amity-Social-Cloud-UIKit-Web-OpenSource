@@ -14,7 +14,7 @@ const global = {
       icon: 'user',
       items: [
         {
-          value: 'Web-Test,Web-test',
+          value: 'Web-Test,Web-Test',
           title: 'Web-Test',
         },
         {

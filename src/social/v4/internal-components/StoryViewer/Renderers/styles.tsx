@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { POSITION_BOTTOM } from '~/helpers';
 
 import {
   PauseIcon,
@@ -10,6 +11,7 @@ import {
   MuteCircle,
   UnmuteCircle,
 } from '~/icons';
+import { LinkButtonContainer } from '~/social/v4/pages/DraftsPage/styles';
 
 export const IconButton = styled.button`
   position: absolute;
@@ -24,8 +26,14 @@ export const IconButton = styled.button`
   cursor: pointer;
 `;
 
+export const HyperLinkButtonContainer = styled(LinkButtonContainer)`
+  bottom: 6rem;
+  z-index: 9999;
+`;
+
 export const RendererContainer = styled.div`
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 `;
@@ -68,6 +76,7 @@ export const StoryImage = styled.img<{ customStyles?: string }>`
   max-width: 100%;
   max-height: 100%;
   margin: auto;
+  flex-grow: 1;
   ${(props) => props.customStyles};
 `;
 

@@ -50,6 +50,8 @@ export { default as Trash2Icon } from './Trash2';
 export { default as ModeratorBadgeIcon } from './ModeratorBadge';
 export { default as FlagIcon } from './Flag';
 export { default as Pencil2Icon } from './Pencil2';
+export { default as FireIcon } from './Fire';
+export { default as HeartIcon } from './Heart';
 
 // files
 export { default as AudioFile } from './files/Audio';

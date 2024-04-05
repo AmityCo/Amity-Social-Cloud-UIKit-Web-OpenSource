@@ -28,8 +28,8 @@ const Header: React.FC<
     onAddStory: (e: React.MouseEvent<Element, MouseEvent>) => void;
     onClickCommunity: () => void;
     avatar?: string;
-    heading?: string;
-    subheading?: string;
+    heading?: React.ReactNode;
+    subheading?: React.ReactNode;
     isOfficial?: boolean;
     isPaused?: boolean;
     isHaveActions?: boolean;
@@ -58,13 +58,22 @@ const Header: React.FC<
       <ViewStoryHeaderContainer>
         <ViewStoryHeadingInfoContainer>
           <AvatarContainer>
-            <Avatar avatar={avatar} backgroundImage={communityBackgroundImage} />
+            <Avatar
+              data-qa-anchor="community_avatar"
+              avatar={avatar}
+              backgroundImage={communityBackgroundImage}
+            />
             {haveStoryPermission && addStoryButton}
           </AvatarContainer>
           <ViewStoryInfoContainer>
             <ViewStoryHeading>
               <Truncate lines={1}>
-                <ViewStoryHeadingTitle onClick={onClickCommunity}>{heading}</ViewStoryHeadingTitle>
+                <ViewStoryHeadingTitle
+                  data-qa-anchor="community_display_name"
+                  onClick={onClickCommunity}
+                >
+                  {heading}
+                </ViewStoryHeadingTitle>
               </Truncate>
               {isOfficial && <VerifiedBadge />}
             </ViewStoryHeading>
@@ -72,9 +81,9 @@ const Header: React.FC<
           </ViewStoryInfoContainer>
           <ViewStoryHeaderListActionsContainer>
             {isPaused ? (
-              <PlayStoryButton onClick={onPlay} />
+              <PlayStoryButton data-qa-anchor="play_button" onClick={onPlay} />
             ) : (
-              <PauseStoryButton onClick={onPause} />
+              <PauseStoryButton data-qa-anchor="pause_button" onClick={onPause} />
             )}
             {isHaveActions && (
               <OverflowMenuButton pageId="story_page" componentId="*" onClick={onAction} />

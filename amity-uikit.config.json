@@ -43,11 +43,11 @@
     },
     "create_story_page/*/story_hyperlink_button": {
       "hyperlink_button_icon": "hyperlink_button",
-      "background_color": "#80000000"
+      "background_color": ""
     },
     "create_story_page/*/hyper_link": {
       "hyper_link_icon": "hyper_link",
-      "background_color": "#80000000"
+      "background_color": ""
     },
     "create_story_page/*/share_story_button": {
       "share_icon": "share_story_button",
@@ -101,19 +101,19 @@
     "*/hyper_link_config_component/*": {
       "component_theme": {
         "light_theme": {
-          "primary_color": "#1054DE",
-          "secondary_color": "#292B32"
+          "primary_color": "",
+          "secondary_color": ""
         }
       }
     },
     "*/hyper_link_config_component/done_button": {
       "done_icon": "",
-      "done_button_text": "Done",
-      "background_color": "#1243EE"
+      "done_button_text": "",
+      "background_color": ""
     },
     "*/hyper_link_config_component/cancel_button": {
       "cancel_icon": "",
-      "cancel_button_text": "Cancel"
+      "cancel_button_text": ""
     },
     "*/comment_tray_component/*": {},
     "*/story_tab_component/*": {},

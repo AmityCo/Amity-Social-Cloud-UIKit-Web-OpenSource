@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { Icon } from '~/core/v4/components/Icon';
 
 export const ActionButton = styled(Icon)`
-  width: 2rem;
-  height: 2rem;
   cursor: pointer;
   border-radius: 50%;
+  padding: 0.25rem;
+  background-color: ${({ theme }) => theme.v4.colors.actionButton.default};
 `;
 
 export const CustomActionButton = styled.img`

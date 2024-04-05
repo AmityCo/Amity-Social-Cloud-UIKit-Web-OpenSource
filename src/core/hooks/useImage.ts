@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FileRepository } from '@amityco/ts-sdk';
 import useFile from './useFile';
 
@@ -18,7 +18,8 @@ const useImage = ({ fileId, imageSize = 'medium' }: UseImageProps) => {
     }
 
     async function run() {
-      const newImageUrl = await FileRepository.fileUrlWithSize(file?.fileUrl, imageSize);
+      if (file?.fileUrl == null) return;
+      const newImageUrl = FileRepository.fileUrlWithSize(file?.fileUrl, imageSize);
       setImageUrl(newImageUrl);
     }
     run();

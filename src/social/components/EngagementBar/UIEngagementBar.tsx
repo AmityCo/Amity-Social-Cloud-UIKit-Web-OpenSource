@@ -36,7 +36,7 @@ const UIEngagementBar = ({
   isComposeBarDisplayed,
   handleAddComment,
 }: UIEngagementBarProps) => {
-  const { postId, targetType, targetId, reactions = {}, commentsCount } = post;
+  const { postId, targetType, targetId, reactions = {}, commentsCount, latestComments } = post;
 
   usePostSubscription({
     postId,
@@ -93,6 +93,7 @@ const UIEngagementBar = ({
             referenceId={postId}
             referenceType={'post'}
             limit={COMMENTS_PER_PAGE}
+            latestComments={latestComments}
             readonly
           />
         </>

@@ -1,8 +1,6 @@
 import React, { memo } from 'react';
 import { useIntl } from 'react-intl';
-
 import Comment from '~/social/components/Comment';
-
 import { NoCommentsContainer, TabIcon, TabIconContainer } from './styles';
 import LoadMoreWrapper from '../LoadMoreWrapper';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
@@ -13,10 +11,10 @@ interface CommentListProps {
   parentId?: string;
   referenceId?: string;
   referenceType: Amity.CommentReferenceType;
-  // filterByParentId?: boolean;
   readonly?: boolean;
   isExpanded?: boolean;
   limit?: number;
+  latestComments?: Amity.Comment[];
 }
 
 const CommentList = ({
@@ -24,16 +22,23 @@ const CommentList = ({
   referenceId,
   referenceType,
   limit = 5,
-  // TODO: breaking change
-  // filterByParentId = false,
   readonly = false,
   isExpanded = true,
+  latestComments,
 }: CommentListProps) => {
-  const { comments, hasMore, loadMore } = useCommentsCollection({
+  const { formatMessage } = useIntl();
+  const isReplyComment = !!parentId;
+
+  const {
+    comments: fetchedComments,
+    hasMore,
+    loadMore,
+  } = useCommentsCollection({
     parentId,
     referenceId,
     referenceType,
     limit,
+    shouldCall: () => latestComments?.length === 0,
   });
 
   usePostSubscription({
@@ -42,9 +47,7 @@ const CommentList = ({
     shouldSubscribe: () => referenceType === 'post' && !parentId,
   });
 
-  const { formatMessage } = useIntl();
-
-  const isReplyComment = !!parentId;
+  const comments = latestComments || fetchedComments;
 
   const loadMoreText = isReplyComment
     ? formatMessage({ id: 'collapsible.viewMoreReplies' })
@@ -56,7 +59,11 @@ const CommentList = ({
     </TabIconContainer>
   ) : null;
 
-  if (comments.length === 0 && referenceType === 'story' && !isReplyComment) {
+  if (
+    (latestComments?.length === 0 || comments.length === 0) &&
+    referenceType === 'story' &&
+    !isReplyComment
+  ) {
     return (
       <NoCommentsContainer>
         {formatMessage({ id: 'storyViewer.commentSheet.empty' })}
@@ -64,7 +71,7 @@ const CommentList = ({
     );
   }
 
-  if (comments.length === 0) return null;
+  if (latestComments?.length === 0 || comments.length === 0) return null;
 
   return (
     <LoadMoreWrapper
@@ -75,9 +82,15 @@ const CommentList = ({
       prependIcon={prependIcon}
       appendIcon={null}
       isExpanded={isExpanded}
-      contentSlot={comments.map((comment) => (
-        <Comment key={comment.commentId} commentId={comment.commentId} readonly={readonly} />
-      ))}
+      contentSlot={
+        latestComments
+          ? latestComments.map((comment) => (
+              <Comment key={comment.commentId} commentId={comment.commentId} readonly={readonly} />
+            ))
+          : comments.map((comment) => (
+              <Comment key={comment.commentId} commentId={comment.commentId} readonly={readonly} />
+            ))
+      }
     />
   );
 };

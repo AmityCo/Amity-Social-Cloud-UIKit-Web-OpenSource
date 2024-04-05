@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import useCommentsCollection from '~/social/hooks/collections/useCommentsCollection';
@@ -9,6 +9,8 @@ import {
   TabIcon,
   TabIconContainer,
 } from '~/social/components/CommentList/styles';
+import { MobileSheet } from '../Comment/styles';
+import { ReactionList } from '../../components/ReactionList';
 
 interface CommentListProps {
   parentId?: string;
@@ -25,6 +27,7 @@ interface CommentListProps {
     commentId?: Amity.Comment['commentId'],
   ) => void;
   style?: React.CSSProperties;
+  onClickReaction?: (commentId: string) => void;
 }
 
 export const CommentList = ({
@@ -38,7 +41,9 @@ export const CommentList = ({
   isExpanded = true,
   onClickReply,
   style,
+  onClickReaction,
 }: CommentListProps) => {
+  const [selectedCommentId, setSelectedCommentId] = useState<string>('');
   const { comments, hasMore, loadMore } = useCommentsCollection({
     parentId,
     referenceId,
@@ -47,6 +52,14 @@ export const CommentList = ({
   });
 
   const { formatMessage } = useIntl();
+
+  const handleReactionClick = (commentId: string) => {
+    setSelectedCommentId(commentId);
+  };
+
+  const handleReactionListClose = () => {
+    setSelectedCommentId('');
+  };
 
   const isReplyComment = !!parentId;
 
@@ -95,10 +108,27 @@ export const CommentList = ({
               readonly={readonly}
               onClickReply={onClickReply}
               style={style}
+              onClickReactionList={() => handleReactionClick(comment.commentId)}
             />
           );
         })}
       />
+      {selectedCommentId && (
+        <MobileSheet
+          isOpen={!!selectedCommentId}
+          onClose={handleReactionListClose}
+          detent="full-height"
+          mountPoint={document.getElementById('asc-uikit-stories-viewer') as HTMLElement}
+          rootId="comment-reaction-list-sheet"
+        >
+          <MobileSheet.Container>
+            <MobileSheet.Header />
+            <MobileSheet.Content>
+              <ReactionList referenceId={selectedCommentId} referenceType="comment" />
+            </MobileSheet.Content>
+          </MobileSheet.Container>
+        </MobileSheet>
+      )}
     </>
   );
 };

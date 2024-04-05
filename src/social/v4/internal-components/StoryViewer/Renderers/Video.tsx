@@ -4,6 +4,7 @@ import {
   LoadingOverlay,
   StoryVideo,
   RendererContainer,
+  HyperLinkButtonContainer,
 } from '~/social/v4/internal-components/StoryViewer/Renderers/styles';
 import {
   MobileActionSheetContent,
@@ -14,19 +15,20 @@ import {
 import Footer from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Footer';
 import Header from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappers/Header';
 import useImage from '~/core/hooks/useImage';
-import { formatTimeAgo } from '~/utils';
+import { checkStoryPermission, formatTimeAgo } from '~/utils';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useIntl } from 'react-intl';
-import { Permissions } from '~/social/constants';
-import { isAdmin, isModerator } from '~/helpers/permissions';
+
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
 
 import { LIKE_REACTION_KEY } from '~/constants';
+import Truncate from 'react-truncate-markup';
 
 import { CommentTray } from '~/social/v4/components/CommentTray';
 import { SpeakerButton } from '~/social/v4/elements';
+import { HyperLink } from '~/social/v4/elements/HyperLink';
 import { BottomSheet } from '~/core/v4/components';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
@@ -71,18 +73,20 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     imageSize: 'small',
   });
 
-  const heading = community?.displayName;
   const isOfficial = community?.isOfficial || false;
-  const subheading =
-    createdAt && creator?.displayName
-      ? `${formatTimeAgo(createdAt as string)} • By ${creator?.displayName}`
-      : '';
 
-  const haveStoryPermission =
-    (community &&
-      client?.hasPermission(Permissions.ManageStoryPermission).community(community.communityId)) ||
-    isAdmin(user?.roles) ||
-    isModerator(user?.roles);
+  const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
+  const subheading =
+    createdAt && creator?.displayName ? (
+      <span>
+        <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span>• By{' '}
+        <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+      </span>
+    ) : (
+      ''
+    );
+
+  const haveStoryPermission = checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...styles.storyContent,
@@ -203,6 +207,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         addStoryButton={addStoryButton}
       />
       <StoryVideo
+        data-qa-anchor="video_view"
         ref={vid}
         style={computedStyles}
         src={story?.url || undefined}
@@ -252,8 +257,8 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         pageId="*"
         isOpen={isOpenCommentSheet}
         onClose={closeCommentSheet}
-        referenceId={selectedComment?.referenceId}
-        referenceType={selectedComment?.referenceType}
+        referenceId={selectedComment?.referenceId || ''}
+        referenceType={(selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'}
         commentId={selectedComment?.commentId}
         isReplying={isReplying}
         replyTo={replyTo}
@@ -263,6 +268,24 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onCancelReply={() => setIsReplying(false)}
         onClickReply={onClickReply}
       />
+      {story.items?.[0]?.data?.url && (
+        <HyperLinkButtonContainer>
+          <HyperLink
+            href={
+              story.items[0].data.url.startsWith('http')
+                ? story.items[0].data.url
+                : `https://${story.items[0].data.url}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => story.analytics.markLinkAsClicked()}
+          >
+            <Truncate lines={1}>
+              <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
+            </Truncate>
+          </HyperLink>
+        </HyperLinkButtonContainer>
+      )}
       <Footer
         storyId={story.storyId}
         syncState={syncState}

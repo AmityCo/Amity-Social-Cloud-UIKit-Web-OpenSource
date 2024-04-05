@@ -1,27 +1,26 @@
 import React from 'react';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
-import { UIBackButton, UIBackButtonImage } from './styles';
+import { UIBackButtonImage } from './styles';
 import { isValidHttpUrl } from '~/utils';
-import { useTheme } from 'styled-components';
+import { ActionButton } from '../ActionButton';
+import { ArrowLeftCircle, ArrowLeftCircle2 } from '~/icons';
 
 interface BackButtonProps {
   pageId?: 'create_story_page';
   componentId?: '*';
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
+  'data-qa-anchor'?: string;
 }
 
 export const BackButton = ({
   pageId = 'create_story_page',
   componentId = '*',
   onClick = () => {},
-  style,
 }: BackButtonProps) => {
-  const theme = useTheme();
   const elementId = 'back_button';
   const { getConfig, isExcluded } = useCustomization();
   const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
-  const backgroundColor = elementConfig?.background_color;
   const backIcon = elementConfig?.back_icon;
 
   const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
@@ -31,23 +30,18 @@ export const BackButton = ({
   const isRemoteImage = backIcon && isValidHttpUrl(backIcon);
 
   return isRemoteImage ? (
-    <UIBackButtonImage
-      style={{
-        ...style,
-        backgroundColor: backgroundColor || theme.v4.colors.secondary.default,
-      }}
-      src={backIcon}
-      onClick={onClick}
-    />
+    <UIBackButtonImage data-qa-anchor="back_button" src={backIcon} onClick={onClick} />
   ) : (
-    <UIBackButton
-      style={{
-        ...style,
-        backgroundColor: backgroundColor || theme.v4.colors.secondary.default,
-      }}
-      name={backIcon === 'back' ? 'ArrowLeftCircle2' : 'ArrowLeftCircle'}
+    <ActionButton
+      data-qa-anchor="back_button"
+      icon={
+        backIcon === 'back' ? (
+          <ArrowLeftCircle2 width={20} height={20} />
+        ) : (
+          <ArrowLeftCircle width={20} height={20} />
+        )
+      }
       onClick={onClick}
-      backgroundColor={backgroundColor}
     />
   );
 };
