@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.0 (2024-03-25)
+
+### Bug Fixes
+
+- add pre-release condition ([#193](https://github.com/EkoCommunications/AmityUiKitWeb/issues/193)) ([ec9c0ca](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ec9c0cab3c821842fae025ba30b54813e0999103))
+
 ## 3.1.0 (2024-01-25)
 
 ### Bug Fixes
