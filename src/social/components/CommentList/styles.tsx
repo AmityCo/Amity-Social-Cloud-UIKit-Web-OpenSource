@@ -9,9 +9,11 @@ export const TabIconContainer = styled.div`
 `;
 
 export const NoCommentsContainer = styled.div`
+  ${({ theme }) => theme.typography.body};
+  color: ${({ theme }) => theme.palette.base.shade2};
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 16px;
-  color: ${({ theme }) => theme.palette.text.secondary};
+  justify-content: center;
+  height: 100%;
 `;
