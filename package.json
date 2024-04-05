@@ -40,9 +40,9 @@
   },
   "devDependencies": {
     "@amityco/ts-sdk": "6.21.0",
-    "@fortawesome/pro-light-svg-icons": "^5.15.4",
-    "@fortawesome/pro-regular-svg-icons": "^5.15.4",
-    "@fortawesome/pro-solid-svg-icons": "^5.15.4",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@storybook/addon-a11y": "^7.6.7",
     "@storybook/addon-actions": "^7.6.7",
     "@storybook/addon-backgrounds": "^7.6.7",
