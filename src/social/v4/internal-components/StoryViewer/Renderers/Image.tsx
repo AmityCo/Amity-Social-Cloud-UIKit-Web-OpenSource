@@ -222,7 +222,16 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
       />
       {story.items?.[0]?.data?.url && (
         <HyperLinkButtonContainer>
-          <HyperLink href={story.items?.[0].data.url}>
+          <HyperLink
+            href={
+              story.items[0].data.url.startsWith('http')
+                ? story.items[0].data.url
+                : `https://${story.items[0].data.url}`
+            }
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => story.analytics.markLinkAsClicked()}
+          >
             <Truncate lines={1}>
               <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
             </Truncate>
