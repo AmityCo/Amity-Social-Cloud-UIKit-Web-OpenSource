@@ -2,17 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## 4.0.0-beta.1 (2024-04-05)
+## 3.4.0 (2024-04-05)
 
 ### Bug Fixes
 
-- update ts-sdk version ([84204c0](https://github.com/EkoCommunications/AmityUiKitWeb/commit/84204c0194d2421513f20f7ef15aea3e12b09e74))
+- ASC-21481 - remove unnecessary request to prevent rate limit ([#230](https://github.com/EkoCommunications/AmityUiKitWeb/issues/230)) ([b2f2ce1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/b2f2ce116b301f8fe9af124b506050abee1f29d2))
 
-## 4.0.0-beta.0 (2024-03-25)
+## 3.3.0 (2024-03-22)
 
 ### Bug Fixes
 
-- add pre-release condition ([#193](https://github.com/EkoCommunications/AmityUiKitWeb/issues/193)) ([ec9c0ca](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ec9c0cab3c821842fae025ba30b54813e0999103))
+- ASC-21052 - fix undefined runtime error ([#184](https://github.com/EkoCommunications/AmityUiKitWeb/issues/184)) ([2385d3e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/2385d3ec364ea74e4edf59ecffc0db088db7570e))
+
+### 3.2.4 (2024-03-11)
+
+### Bug Fixes
+
+- ASC-20601 - comment with blocked word should show noti ([#154](https://github.com/EkoCommunications/AmityUiKitWeb/issues/154)) ([ba4e3f0](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ba4e3f044f08a3aef4d78910203350661cc59076))
+
+### 3.2.3 (2024-03-01)
+
+### Bug Fixes
+
+- typo ([02875bb](https://github.com/EkoCommunications/AmityUiKitWeb/commit/02875bb8d10f174525424d12a3d69d7d92bf8c98))
+
+### 3.2.1 (2024-02-27)
+
+## 3.2.0 (2024-02-27)
+
+### Features
+
+- ASC-19739 - remove font awesome pro ([#129](https://github.com/EkoCommunications/AmityUiKitWeb/issues/129)) ([f7b35bc](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7b35bcb75fab8457aa5fd41ed31c6ea8b03487f)), closes [#127](https://github.com/EkoCommunications/AmityUiKitWeb/issues/127) [#118](https://github.com/EkoCommunications/AmityUiKitWeb/issues/118) [#116](https://github.com/EkoCommunications/AmityUiKitWeb/issues/116) [#128](https://github.com/EkoCommunications/AmityUiKitWeb/issues/128) [#123](https://github.com/EkoCommunications/AmityUiKitWeb/issues/123) [#142](https://github.com/EkoCommunications/AmityUiKitWeb/issues/142)
 
 ## 3.1.0 (2024-01-25)
 

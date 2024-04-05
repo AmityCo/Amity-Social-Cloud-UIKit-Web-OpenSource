@@ -36,8 +36,7 @@ import { CommentRepository } from '@amityco/ts-sdk';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
-import useCommentSubscription from '~/social/hooks/useCommentSubscription';
-import useStory from '~/social/hooks/useStory';
+import useCommentSubscription from '~/social/hooks/useCommentSubsc
 import { ERROR_RESPONSE } from '~/social/constants';
 
 const REPLIES_PER_PAGE = 5;

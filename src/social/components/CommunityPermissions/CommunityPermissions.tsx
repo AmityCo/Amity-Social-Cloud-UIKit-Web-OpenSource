@@ -12,16 +12,13 @@ import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 interface CommunityPermissionsProps {
   needApprovalOnPostCreation: boolean;
-  storyCommentsApproval: boolean;
   onNeedApprovalOnPostCreationChange?: (value: boolean) => void;
-  onStoryCommentsApproval?: (value: boolean) => void;
 }
 
 function CommunityPermissions({
   needApprovalOnPostCreation,
-  storyCommentsApproval,
+
   onNeedApprovalOnPostCreationChange,
-  onStoryCommentsApproval,
 }: CommunityPermissionsProps) {
   return (
     <CommunityPermissionsWrapper>
@@ -36,22 +33,6 @@ function CommunityPermissions({
               promptText={<FormattedMessage id="community.permissions.approvePosts.prompt" />}
               value={needApprovalOnPostCreation}
               onChange={(newValue) => onNeedApprovalOnPostCreationChange?.(newValue)}
-            />
-          </CommunityPermissionsBody>
-        </CommunityPermissionsItem>
-      </CommunityPermissionsContainer>
-
-      <CommunityPermissionsContainer>
-        <CommunityPermissionsItem>
-          <CommunityPermissionsHeader>
-            <FormattedMessage id="community.permissions.storyComments" />
-          </CommunityPermissionsHeader>
-          <CommunityPermissionsBody>
-            <SwitchItem
-              title={<FormattedMessage id="community.permissions.allowStoryComments" />}
-              promptText={<FormattedMessage id="community.permissions.storyComments.prompt" />}
-              value={storyCommentsApproval}
-              onChange={(newValue) => onStoryCommentsApproval?.(newValue)}
             />
           </CommunityPermissionsBody>
         </CommunityPermissionsItem>

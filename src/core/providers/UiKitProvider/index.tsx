@@ -31,7 +31,6 @@ interface UiKitProviderProps {
     http?: string;
     mqtt?: string;
   };
-  authToken?: string;
   userId: string;
   displayName: string;
   customComponents?: CustomComponentType;
@@ -56,13 +55,13 @@ interface UiKitProviderProps {
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
+  getAuthToken?: () => Promise<string>;
 }
 
 const UiKitProvider = ({
   apiKey,
   apiRegion,
   apiEndpoint,
-  authToken,
   userId,
   displayName,
   customComponents = {},
@@ -74,6 +73,7 @@ const UiKitProvider = ({
   pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
+  getAuthToken,
 }: UiKitProviderProps) => {
   const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
@@ -102,21 +102,6 @@ const UiKitProvider = ({
       );
       setClient(ascClient);
     }
-
-    await ASCClient.login(
-      { userId, displayName, authToken },
-      {
-        sessionWillRenewAccessToken(renewal) {
-          // secure mode
-          if (authToken) {
-            renewal.renewWithAuthToken(authToken);
-            return;
-          }
-
-          renewal.renew();
-        },
-      },
-    );
 
     setIsConnected(true);
 

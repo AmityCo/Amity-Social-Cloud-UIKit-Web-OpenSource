@@ -4,31 +4,12 @@ import UICommunityInfo from './UICommunityInfo';
 import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
 import { useCommunityInfo } from './hooks';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-
-import { Permissions } from '~/social/constants';
-import useSDK from '~/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
-import { checkStoryPermission } from '~/utils';
 
 interface CommunityInfoProps {
   communityId: string;
-  setStoryFile: React.Dispatch<React.SetStateAction<File | null>>;
-  stories: (Amity.Story | undefined)[];
 }
 
-const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProps) => {
-  const haveStories = stories?.length > 0;
-  const isStorySyncing = haveStories && stories.some((story) => story?.syncState === 'syncing');
-  const isStoryErrored = haveStories && stories.some((story) => story?.syncState === 'error');
-  const isSeen = haveStories && stories.every((story) => story?.isSeen);
-
-  const { onClickStory } = useNavigation();
-
-  const { client } = useSDK();
-
-  const haveStoryPermission = checkStoryPermission(client, communityId);
-
+const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
   const {
     community,
     communityCategories,
@@ -72,13 +53,6 @@ const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProp
           onOk: () => leaveCommunity(),
         })
       }
-      setStoryFile={setStoryFile}
-      haveStories={haveStories || false}
-      haveStoryPermission={haveStoryPermission}
-      isStorySyncing={isStorySyncing || false}
-      isStoryErrored={isStoryErrored || false}
-      isSeen={isSeen || false}
-      onClickStory={onClickStory}
     />
   );
 };

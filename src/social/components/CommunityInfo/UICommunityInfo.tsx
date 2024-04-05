@@ -26,7 +26,6 @@ import {
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import millify from 'millify';
 import { isNonNullable } from '~/helpers/utils';
-import { StoryTab } from '~/social/v4/components/StoryTab';
 
 interface UICommunityInfoProps {
   communityId: string;
@@ -45,15 +44,8 @@ interface UICommunityInfoProps {
   onClickLeaveCommunity: (communityId: string) => void;
   canLeaveCommunity: boolean;
   canReviewPosts: boolean;
-  isStorySyncing: boolean;
-  haveStories: boolean;
-  haveStoryPermission: boolean;
-  isStoryErrored: boolean;
-  isSeen: boolean;
   name: string;
   postSetting: ValueOf<typeof CommunityPostSettings>;
-  setStoryFile: React.Dispatch<React.SetStateAction<File | null>>;
-  onClickStory: (communityId: string) => void;
 }
 
 const UICommunityInfo = ({
@@ -66,11 +58,6 @@ const UICommunityInfo = ({
   isJoined,
   isOfficial,
   isPublic,
-  isStorySyncing,
-  isSeen,
-  isStoryErrored,
-  haveStories,
-  haveStoryPermission,
   avatarFileUrl,
   canEditCommunity,
   onEditCommunity,
@@ -80,8 +67,6 @@ const UICommunityInfo = ({
   canReviewPosts,
   name,
   postSetting,
-  setStoryFile,
-  onClickStory,
 }: UICommunityInfoProps) => {
   const { formatMessage } = useIntl();
 
@@ -155,17 +140,6 @@ const UICommunityInfo = ({
             <PlusIcon /> <FormattedMessage id="community.join" />
           </JoinButton>
         )}
-
-        <StoryTab
-          haveStoryPermission={haveStoryPermission}
-          isSeen={isSeen}
-          uploadingStory={isStorySyncing}
-          isErrored={isStoryErrored}
-          storyRing={haveStories}
-          avatar={avatarFileUrl}
-          onClick={() => onClickStory(communityId)}
-          onChange={setStoryFile}
-        />
 
         {isJoined && canEditCommunity && (
           <Button
