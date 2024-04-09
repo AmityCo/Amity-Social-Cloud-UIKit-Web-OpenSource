@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Truncate from 'react-truncate-markup';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
 import {
@@ -10,50 +10,43 @@ import {
   StoryTitle,
   StoryWrapper,
 } from './styles';
-
 import StoryRing from './StoryRing';
-import { notification } from '~/core/components/Notification';
+import useStories from '~/social/hooks/useStories';
+import useSDK from '~/core/hooks/useSDK';
+import { checkStoryPermission } from '~/utils';
+import { useStoryContext } from '~/v4/social/providers/StoryProvider';
+import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
-export enum AmityStoryTabComponentType {
-  CommunityFeed = 'communityFeed',
-  GlobalFeed = 'globalFeed',
-}
+type AmityStoryTabComponentType = 'communityFeed' | 'globalFeed';
 
-interface StoryTabProps {
-  type: AmityStoryTabComponentType;
-  haveStoryPermission: boolean;
-  avatar: string | null;
-  pageId?: string;
-  componentId?: string;
-  elementId?: string;
-  icon?: React.ReactNode;
-  storyRing?: boolean;
-  isSeen?: boolean;
-  uploadingStory?: boolean;
-  isErrored?: boolean;
-  title?: string;
-  onAddStory?: () => void;
-  onClick?: () => void;
-  onChange?: (file: File | null) => void;
-}
+type AmityStoryTabComponentProps<T extends AmityStoryTabComponentType> = {
+  type: T;
+  communityId?: T extends 'communityFeed' ? string : never;
+};
 
-export const StoryTab: React.FC<StoryTabProps> = ({
+export const StoryTab = <T extends AmityStoryTabComponentType>({
   type,
-  haveStoryPermission,
-  avatar,
-  pageId = '*',
-  title = 'Story',
-  storyRing = false,
-  isSeen = false,
-  uploadingStory = false,
-  isErrored = false,
-  onClick,
-  onChange,
-}) => {
+  communityId,
+}: AmityStoryTabComponentProps<T>) => {
+  const { onClickStory } = useNavigation();
+  const { stories } = useStories({
+    targetId: communityId as string,
+    targetType: 'community',
+    options: {
+      orderBy: 'asc',
+      sortBy: 'createdAt',
+    },
+  });
+
+  const { avatarFileUrl } = useCommunityInfo(communityId);
+  const { setFile } = useStoryContext();
+  const accessibilityId = '*/story_tab_component/*';
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddIconClick = () => {
-    if (onChange && fileInputRef.current) {
+    if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
@@ -61,42 +54,44 @@ export const StoryTab: React.FC<StoryTabProps> = ({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      onChange?.(selectedFile);
+      setFile(selectedFile);
     }
   };
 
   const handleOnClick = () => {
-    if (!storyRing || !onClick || isErrored) return;
-    onClick();
+    if (!stories || !communityId) return;
+    onClickStory(communityId);
   };
 
-  useEffect(() => {
-    if (!isErrored) return;
-    notification.info({
-      content: 'Failed to share story',
-    });
-  }, []);
+  const { client } = useSDK();
+  const hasStoryPermission = checkStoryPermission(client, communityId);
+
+  const hasStoryRing = stories?.length > 0;
+  const isSeen = stories.every((story) => story?.isSeen);
+  const uploading = stories.some((story) => story?.syncState === 'syncing');
+  const isErrored = stories.some((story) => story?.syncState === 'error');
 
   const renderStoryTab = () => {
     switch (type) {
-      case AmityStoryTabComponentType.CommunityFeed:
+      case 'communityFeed':
         return (
           <StoryTabContainer>
             <StoryWrapper>
-              {storyRing && (
+              {hasStoryRing && (
                 <StoryRing
-                  pageId={pageId}
+                  pageId="*"
+                  componentId="story_tab_component"
                   isSeen={isSeen}
-                  uploading={uploadingStory}
+                  uploading={uploading}
                   isErrored={isErrored}
                 />
               )}
               <StoryAvatar
                 onClick={handleOnClick}
-                avatar={avatar}
+                avatar={avatarFileUrl}
                 backgroundImage={CommunityImage}
               />
-              {haveStoryPermission && (
+              {hasStoryPermission && (
                 <>
                   <AddStoryButton onClick={handleAddIconClick} />
                   <HiddenInput
@@ -110,11 +105,10 @@ export const StoryTab: React.FC<StoryTabProps> = ({
               {isErrored && <ErrorButton />}
             </StoryWrapper>
             <Truncate lines={1}>
-              <StoryTitle>{title}</StoryTitle>
+              <StoryTitle>Story</StoryTitle>
             </Truncate>
           </StoryTabContainer>
         );
-
       default:
         return null;
     }

@@ -3,8 +3,8 @@ import { ProgressRing } from './styles';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 
 interface StoryRingProps extends React.SVGProps<SVGSVGElement> {
-  pageId?: string;
-  componentId?: string;
+  pageId?: '*';
+  componentId: 'story_tab_component';
   isSeen?: boolean;
   uploading?: boolean;
   isErrored?: boolean;

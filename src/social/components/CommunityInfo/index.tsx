@@ -11,6 +11,7 @@ import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { checkStoryPermission } from '~/utils';
+import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 
 interface CommunityInfoProps {
   communityId: string;
@@ -27,7 +28,6 @@ const CommunityInfo = ({ communityId, stories }: CommunityInfoProps) => {
   const { onClickStory } = useNavigation();
 
   const { client } = useSDK();
-
   const haveStoryPermission = checkStoryPermission(client, communityId);
 
   const {
