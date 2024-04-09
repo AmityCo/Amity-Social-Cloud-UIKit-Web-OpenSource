@@ -4,7 +4,6 @@ import { CommentList } from '~/social/v4/internal-components/CommentList';
 import { StoryCommentComposeBar } from '~/social/v4/internal-components/StoryCommentComposeBar';
 
 import {
-  MobileSheet,
   MobileSheetComposeBarContainer,
   MobileSheetContent,
   MobileSheetScroller,
@@ -22,17 +21,19 @@ import { useTheme } from 'styled-components';
 const REPLIES_PER_PAGE = 5;
 
 interface CommentTrayProps {
+  referenceType: Amity.CommentReferenceType;
+  referenceId: string;
+  community: Amity.Community;
+  shouldAllowInteraction: boolean;
+  shouldAllowCreation: boolean;
   pageId: '*';
   storyId: string;
   commentId?: string;
-  referenceType?: string;
-  referenceId?: string;
   replyTo?: string;
   isReplying: boolean;
-  limit?: number;
   isOpen: boolean;
   isJoined: boolean;
-  allowCommentInStory?: boolean;
+  limit?: number;
   onClose: () => void;
   onClickReply: (
     replyTo?: string,
@@ -44,17 +45,19 @@ interface CommentTrayProps {
 }
 
 export const CommentTray = ({
+  referenceType,
+  referenceId,
+  community,
+  shouldAllowInteraction = true,
+  shouldAllowCreation = true,
   pageId = '*',
   storyId,
   commentId,
-  referenceType,
-  referenceId,
-  limit = REPLIES_PER_PAGE,
   replyTo,
-  isJoined,
-  isOpen,
   isReplying,
-  allowCommentInStory,
+  limit = REPLIES_PER_PAGE,
+  isOpen,
+  isJoined,
   onClose,
   onClickReply,
   onCancelReply,
@@ -88,6 +91,7 @@ export const CommentTray = ({
             backgroundColor: primaryColor,
             borderTopLeftRadius: '1rem',
             borderTopRightRadius: '1rem',
+            borderBottom: 'none',
           }}
         />
         <MobileSheetHeader
@@ -101,8 +105,9 @@ export const CommentTray = ({
           <MobileSheetScroller>
             <CommentList
               referenceId={storyId}
-              referenceType="story"
+              referenceType={referenceType}
               onClickReply={onClickReply}
+              shouldAllowInteraction={shouldAllowInteraction}
               limit={limit}
               style={{
                 backgroundColor: primaryColor,
@@ -112,6 +117,7 @@ export const CommentTray = ({
         </MobileSheetContent>
         <MobileSheetComposeBarContainer>
           <StoryCommentComposeBar
+            communityId={community.communityId}
             referenceId={referenceId}
             referenceType={referenceType}
             commentId={commentId}
@@ -119,7 +125,7 @@ export const CommentTray = ({
             replyTo={replyTo}
             storyId={storyId}
             isJoined={isJoined}
-            allowCommentInStory={allowCommentInStory}
+            shouldAllowCreation={shouldAllowCreation}
             onCancelReply={onCancelReply}
             style={{
               backgroundColor: primaryColor,

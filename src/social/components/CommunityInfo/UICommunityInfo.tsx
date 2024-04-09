@@ -27,6 +27,7 @@ import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import millify from 'millify';
 import { isNonNullable } from '~/helpers/utils';
 import { StoryTab } from '~/social/v4/components/StoryTab';
+import { AmityStoryTabComponentType } from '~/social/v4/components/StoryTab/StoryTab';
 
 interface UICommunityInfoProps {
   communityId: string;
@@ -157,6 +158,7 @@ const UICommunityInfo = ({
         )}
 
         <StoryTab
+          type={AmityStoryTabComponentType.CommunityFeed}
           haveStoryPermission={haveStoryPermission}
           isSeen={isSeen}
           uploadingStory={isStorySyncing}

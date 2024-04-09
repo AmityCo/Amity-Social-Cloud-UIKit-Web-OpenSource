@@ -16,11 +16,12 @@ import {
 } from '~/social/v4/internal-components/CommentComposeBar/styles';
 
 interface StoryCommentComposeBarProps {
-  storyId: string;
+  communityId: string;
   comment?: Amity.Comment | null;
   isJoined?: boolean;
   isReplying?: boolean;
   allowCommentInStory?: boolean;
+  shouldAllowCreation?: boolean;
   replyTo?: string | null;
   onCancelReply?: () => void;
   referenceType?: string;
@@ -30,9 +31,9 @@ interface StoryCommentComposeBarProps {
 }
 
 export const StoryCommentComposeBar = ({
-  storyId,
+  communityId,
   isJoined,
-  allowCommentInStory,
+  shouldAllowCreation,
   isReplying,
   replyTo,
   onCancelReply,
@@ -76,7 +77,7 @@ export const StoryCommentComposeBar = ({
     });
   };
 
-  if (isJoined && allowCommentInStory) {
+  if (isJoined && shouldAllowCreation) {
     return (
       <>
         {isReplying && (
@@ -91,13 +92,13 @@ export const StoryCommentComposeBar = ({
 
         {!isReplying ? (
           <CommentComposeBar
-            storyId={storyId}
+            targetId={communityId}
             onSubmit={(text, mentionees, metadata) => handleAddComment(text, mentionees, metadata)}
             style={style}
           />
         ) : (
           <CommentComposeBar
-            storyId={storyId}
+            targetId={communityId}
             userToReply={replyTo}
             onSubmit={(replyText, mentionees, metadata) => {
               handleReplyToComment(replyText, mentionees, metadata);
@@ -110,7 +111,7 @@ export const StoryCommentComposeBar = ({
     );
   }
 
-  if (isJoined && allowCommentInStory) {
+  if (isJoined && shouldAllowCreation) {
     return (
       <StoryDisabledCommentComposerBarContainer>
         <Lock2Icon /> {formatMessage({ id: 'storyViewer.commentSheet.disabled' })}

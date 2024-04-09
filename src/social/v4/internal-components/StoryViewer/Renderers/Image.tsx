@@ -51,8 +51,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story.reactions[LIKE_REACTION_KEY] || 0;
-
   const {
+    storyId,
     syncState,
     reach,
     commentsCount,
@@ -209,14 +209,16 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         pageId="*"
         isOpen={isOpenCommentSheet}
         onClose={closeCommentSheet}
-        referenceId={selectedComment?.referenceId}
-        referenceType={selectedComment?.referenceType}
+        referenceId={selectedComment?.referenceId || ''}
+        referenceType={(selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'}
+        community={community as Amity.Community}
+        shouldAllowCreation={community?.allowCommentInStory || true}
+        shouldAllowInteraction={isJoined || true}
         commentId={selectedComment?.commentId}
         isReplying={isReplying}
         replyTo={replyTo}
-        storyId={story.storyId}
+        storyId={storyId}
         isJoined={isJoined}
-        allowCommentInStory={community?.allowCommentInStory}
         onCancelReply={() => setIsReplying(false)}
         onClickReply={onClickReply}
       />
@@ -233,13 +235,13 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
             onClick={() => story.analytics.markLinkAsClicked()}
           >
             <Truncate lines={1}>
-              <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
+              <span>{story.items?.[0]?.data?.customText || story.items?.[0].data.url}</span>
             </Truncate>
           </HyperLink>
         </HyperLinkButtonContainer>
       )}
       <Footer
-        storyId={story.storyId}
+        storyId={storyId}
         syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}

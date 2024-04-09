@@ -18,6 +18,7 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
 import { ViewStoriesPage } from '~/social/v4/pages/StoryPage';
 import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
+import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -69,42 +70,46 @@ const Community = () => {
   }, [client]);
 
   return (
-    <ApplicationContainer>
-      <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
-        {page.type === PageTypes.Explore && <ExplorePage />}
+    <StoryProvider>
+      <ApplicationContainer>
+        <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
+          {page.type === PageTypes.Explore && <ExplorePage />}
 
-        {page.type === PageTypes.NewsFeed && <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />}
+          {page.type === PageTypes.NewsFeed && (
+            <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />
+          )}
 
-        {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeedPage
-            communityId={page.communityId}
-            isNewCommunity={page.isNewCommunity}
-            isOpen={open}
-            toggleOpen={toggleOpen}
-          />
-        )}
+          {page.type === PageTypes.CommunityFeed && (
+            <CommunityFeedPage
+              communityId={page.communityId}
+              isNewCommunity={page.isNewCommunity}
+              isOpen={open}
+              toggleOpen={toggleOpen}
+            />
+          )}
 
-        {page.type === PageTypes.ViewStory && (
-          <Wrapper>
-            <ViewStoriesPage pageId="story_page" targetId={page.targetId!} onClose={onBack} />
-          </Wrapper>
-        )}
+          {page.type === PageTypes.ViewStory && (
+            <Wrapper>
+              <ViewStoriesPage pageId="story_page" targetId={page.targetId!} onClose={onBack} />
+            </Wrapper>
+          )}
 
-        {page.type === PageTypes.CommunityEdit && (
-          <CommunityEditPage communityId={page.communityId} tab={page.tab} />
-        )}
+          {page.type === PageTypes.CommunityEdit && (
+            <CommunityEditPage communityId={page.communityId} tab={page.tab} />
+          )}
 
-        {page.type === PageTypes.Category && (
-          <CategoryCommunitiesPage categoryId={page.categoryId} />
-        )}
+          {page.type === PageTypes.Category && (
+            <CategoryCommunitiesPage categoryId={page.categoryId} />
+          )}
 
-        {page.type === PageTypes.UserFeed && (
-          <UserFeedPage userId={page.userId} socialSettings={socialSettings} />
-        )}
+          {page.type === PageTypes.UserFeed && (
+            <UserFeedPage userId={page.userId} socialSettings={socialSettings} />
+          )}
 
-        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
-      </MainLayout>
-    </ApplicationContainer>
+          {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
+        </MainLayout>
+      </ApplicationContainer>
+    </StoryProvider>
   );
 };
 

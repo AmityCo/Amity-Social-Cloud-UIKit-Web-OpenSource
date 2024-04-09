@@ -20,7 +20,7 @@ export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
 export {
-  DraftsPage as AmityCreateStoryPage,
+  DraftsPage as AmityDraftStoryPage,
   StoryPage as AmityViewStoryPage,
 } from '~/social/v4/pages';
 export {

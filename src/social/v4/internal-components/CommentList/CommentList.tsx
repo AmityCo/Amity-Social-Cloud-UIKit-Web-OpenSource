@@ -28,6 +28,7 @@ interface CommentListProps {
   ) => void;
   style?: React.CSSProperties;
   onClickReaction?: (commentId: string) => void;
+  shouldAllowInteraction?: boolean;
 }
 
 export const CommentList = ({
@@ -41,7 +42,7 @@ export const CommentList = ({
   isExpanded = true,
   onClickReply,
   style,
-  onClickReaction,
+  shouldAllowInteraction,
 }: CommentListProps) => {
   const [selectedCommentId, setSelectedCommentId] = useState<string>('');
   const { comments, hasMore, loadMore } = useCommentsCollection({
@@ -50,6 +51,8 @@ export const CommentList = ({
     referenceType,
     limit,
   });
+
+  console.log(comments);
 
   const { formatMessage } = useIntl();
 
@@ -109,6 +112,7 @@ export const CommentList = ({
               onClickReply={onClickReply}
               style={style}
               onClickReactionList={() => handleReactionClick(comment.commentId)}
+              shouldAllowInteraction={shouldAllowInteraction}
             />
           );
         })}

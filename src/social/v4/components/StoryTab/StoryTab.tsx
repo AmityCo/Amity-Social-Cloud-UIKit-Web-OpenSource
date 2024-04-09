@@ -14,7 +14,13 @@ import {
 import StoryRing from './StoryRing';
 import { notification } from '~/core/components/Notification';
 
+export enum AmityStoryTabComponentType {
+  CommunityFeed = 'communityFeed',
+  GlobalFeed = 'globalFeed',
+}
+
 interface StoryTabProps {
+  type: AmityStoryTabComponentType;
   haveStoryPermission: boolean;
   avatar: string | null;
   pageId?: string;
@@ -31,19 +37,19 @@ interface StoryTabProps {
   onChange?: (file: File | null) => void;
 }
 
-export const StoryTab = ({
+export const StoryTab: React.FC<StoryTabProps> = ({
+  type,
+  haveStoryPermission,
+  avatar,
   pageId = '*',
-  elementId = '*',
   title = 'Story',
-  haveStoryPermission = false,
   storyRing = false,
   isSeen = false,
   uploadingStory = false,
   isErrored = false,
-  avatar,
   onClick,
   onChange,
-}: StoryTabProps) => {
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddIconClick = () => {
@@ -71,34 +77,48 @@ export const StoryTab = ({
     });
   }, []);
 
-  return (
-    <StoryTabContainer>
-      <StoryWrapper>
-        {storyRing && (
-          <StoryRing
-            pageId={pageId}
-            isSeen={isSeen}
-            uploading={uploadingStory}
-            isErrored={isErrored}
-          />
-        )}
-        <StoryAvatar onClick={handleOnClick} avatar={avatar} backgroundImage={CommunityImage} />
-        {haveStoryPermission && (
-          <>
-            <AddStoryButton onClick={handleAddIconClick} />
-            <HiddenInput
-              ref={fileInputRef}
-              type="file"
-              accept="image/*,video/*"
-              onChange={handleFileChange}
-            />
-          </>
-        )}
-        {isErrored && <ErrorButton />}
-      </StoryWrapper>
-      <Truncate lines={1}>
-        <StoryTitle>{title}</StoryTitle>
-      </Truncate>
-    </StoryTabContainer>
-  );
+  const renderStoryTab = () => {
+    switch (type) {
+      case AmityStoryTabComponentType.CommunityFeed:
+        return (
+          <StoryTabContainer>
+            <StoryWrapper>
+              {storyRing && (
+                <StoryRing
+                  pageId={pageId}
+                  isSeen={isSeen}
+                  uploading={uploadingStory}
+                  isErrored={isErrored}
+                />
+              )}
+              <StoryAvatar
+                onClick={handleOnClick}
+                avatar={avatar}
+                backgroundImage={CommunityImage}
+              />
+              {haveStoryPermission && (
+                <>
+                  <AddStoryButton onClick={handleAddIconClick} />
+                  <HiddenInput
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*,video/*"
+                    onChange={handleFileChange}
+                  />
+                </>
+              )}
+              {isErrored && <ErrorButton />}
+            </StoryWrapper>
+            <Truncate lines={1}>
+              <StoryTitle>{title}</StoryTitle>
+            </Truncate>
+          </StoryTabContainer>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return renderStoryTab();
 };

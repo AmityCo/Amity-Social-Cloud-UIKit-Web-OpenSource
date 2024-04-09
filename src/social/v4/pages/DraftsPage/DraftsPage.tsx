@@ -21,31 +21,26 @@ import useImage from '~/core/hooks/useImage';
 
 import Truncate from 'react-truncate-markup';
 
-import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import {
   BackButton,
   AspectRatioButton,
   ShareStoryButton,
   HyperLinkButton,
 } from '~/social/v4/elements';
-import { useTheme } from 'styled-components';
+
 import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
 
 import { HyperLink } from '~/social/v4/elements/HyperLink';
 import { SubmitHandler } from 'react-hook-form';
 import { HyperLinkConfig } from '../../components/HyperLinkConfig';
+import { useStoryContext } from '~/v4/social/providers/StoryProvider';
+import { StoryRepository } from '@amityco/ts-sdk';
+import { notification } from '~/core/components/Notification';
 
 type DraftStoryProps = {
-  pageId: 'create_story_page';
-  file: File;
-  creatorAvatar: string;
-  onCreateStory: (
-    file: File,
-    imageMode: 'fit' | 'fill',
-    metadata?: Amity.Metadata,
-    items?: Amity.StoryItem[],
-  ) => void;
-  onDiscardStory: () => void;
+  targetId: string;
+  targetType: Amity.StoryTargetType;
+  mediaType: 'image' | 'video';
 };
 
 type HyperLinkFormInputs = {
@@ -53,11 +48,8 @@ type HyperLinkFormInputs = {
   customText?: string;
 };
 
-export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: DraftStoryProps) => {
-  const theme = useTheme();
-  const { getConfig, isExcluded } = useCustomization();
-  const pageConfig = getConfig(`${pageId}/*/*`);
-  const isPageExcluded = isExcluded(`${pageId}/*/*`);
+export const DraftsPage = ({ targetId, targetType, mediaType }: DraftStoryProps) => {
+  const { file, setFile } = useStoryContext();
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
 
@@ -76,13 +68,6 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
       type: 'hyperlink' as Amity.StoryItemType,
     },
   ]);
-
-  const pageThemePrimaryColor =
-    pageConfig?.page_theme?.light_theme.primary_color || theme.v4.colors.primary.default;
-  const pageThemeSecondaryColor =
-    pageConfig?.page_theme?.light_theme.secondary_color || theme.v4.colors.secondary.default;
-
-  if (isPageExcluded) return null;
 
   const onSubmit: SubmitHandler<HyperLinkFormInputs> = (data) => {
     onSubmit(data);
@@ -108,6 +93,46 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
     }
   };
 
+  const onCreateStory = async (
+    file: File | null,
+    imageMode: 'fit' | 'fill',
+    metadata?: Amity.Metadata,
+    items?: Amity.StoryItem[],
+  ) => {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('files', file);
+    setFile(null);
+    if (file?.type.includes('image')) {
+      const { data: imageData } = await StoryRepository.createImageStory(
+        targetType,
+        targetId,
+        formData,
+        metadata,
+        imageMode,
+        items,
+      );
+      if (imageData) {
+        notification.success({
+          content: formatMessage({ id: 'storyViewer.notification.success' }),
+        });
+      }
+    } else {
+      const { data: videoData } = await StoryRepository.createVideoStory(
+        targetType,
+        targetId,
+        formData,
+        metadata,
+        items,
+      );
+      if (videoData) {
+        notification.success({
+          content: formatMessage({ id: 'storyViewer.notification.success' }),
+        });
+      }
+    }
+  };
+
   const discardCreateStory = () => {
     confirm({
       title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
@@ -115,7 +140,7 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
       cancelText: formatMessage({ id: 'general.action.cancel' }),
       okText: formatMessage({ id: 'delete' }),
       onOk: () => {
-        onDiscardStory();
+        setFile(null);
         navigationBehavior.closeAction();
       },
     });
@@ -164,17 +189,10 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
     <StoryDraftContainer id="asc-uikit-create-story">
       <StoryDraftHeader>
         <div>
-          <BackButton
-            pageId="create_story_page"
-            componentId="*"
-            onClick={discardCreateStory}
-            style={{
-              backgroundColor: pageThemeSecondaryColor,
-            }}
-          />
+          <BackButton pageId="create_story_page" componentId="*" onClick={discardCreateStory} />
         </div>
         <ActionsContainer>
-          {file?.type.includes('image') && (
+          {mediaType === 'image' && (
             <AspectRatioButton
               pageId="create_story_page"
               componentId="*"
@@ -189,7 +207,7 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
         </ActionsContainer>
       </StoryDraftHeader>
 
-      {file?.type.includes('image') ? (
+      {file && mediaType === 'image' ? (
         <DraftImageContainer colors={colors}>
           <DraftImage
             colors={colors}
@@ -199,7 +217,7 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
         </DraftImageContainer>
       ) : (
         <StoryVideoPreview
-          src={file && URL.createObjectURL(file)}
+          src={(file && URL.createObjectURL(file)) || ''}
           mediaFit="contain"
           autoPlay
           controls={false}
@@ -212,10 +230,6 @@ export const DraftsPage = ({ pageId, file, onDiscardStory, onCreateStory }: Draf
           componentId="*"
           onClick={() => onCreateStory(file, imageMode, {}, hyperLink[0].data.url ? hyperLink : [])}
           avatar={creatorAvatar}
-          style={{
-            color: pageThemeSecondaryColor,
-            backgroundColor: pageThemePrimaryColor,
-          }}
         />
       </StoryDraftFooter>
       <HyperLinkConfig

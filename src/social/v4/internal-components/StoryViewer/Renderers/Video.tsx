@@ -259,12 +259,14 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onClose={closeCommentSheet}
         referenceId={selectedComment?.referenceId || ''}
         referenceType={(selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'}
+        community={community as Amity.Community}
+        shouldAllowCreation={true}
+        shouldAllowInteraction={true}
         commentId={selectedComment?.commentId}
         isReplying={isReplying}
         replyTo={replyTo}
         storyId={story.storyId}
         isJoined={isJoined}
-        allowCommentInStory={community?.allowCommentInStory}
         onCancelReply={() => setIsReplying(false)}
         onClickReply={onClickReply}
       />

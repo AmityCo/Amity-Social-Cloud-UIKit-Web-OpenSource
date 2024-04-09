@@ -50,7 +50,7 @@ import UIComment from './UIComment';
 import { LIKE_REACTION_KEY } from '~/constants';
 import { CommentList } from '~/social/v4/internal-components/CommentList';
 import { ReactionList } from '~/social/v4/components/ReactionList';
-import { useReactionsCollection } from '~/social/v4/hooks/collections/useReactionsCollection';
+import { useTheme } from 'styled-components';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -105,9 +105,17 @@ interface CommentProps {
   ) => void;
   style?: React.CSSProperties;
   onClickReactionList: (commentId: string) => void;
+  shouldAllowInteraction?: boolean;
 }
 
-const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => {
+const Comment = ({
+  commentId,
+  readonly,
+  onClickReply,
+  style,
+  shouldAllowInteraction,
+}: CommentProps) => {
+  const theme = useTheme();
   const comment = useComment(commentId);
   const story = useStory(comment?.referenceId);
   const [bottomSheet, setBottomSheet] = useState(false);
@@ -233,7 +241,7 @@ const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => 
             ? formatMessage({ id: 'reply.edit' })
             : formatMessage({ id: 'comment.edit' }),
           action: startEditing,
-          icon: <Pencil2Icon width={20} height={20} />,
+          icon: <Pencil2Icon width={24} height={24} fill={theme.palette.base.default} />,
         }
       : null,
     canReport
@@ -242,7 +250,7 @@ const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => 
             ? formatMessage({ id: 'report.undoReport' })
             : formatMessage({ id: 'report.doReport' }),
           action: handleReportComment,
-          icon: <FlagIcon width={20} height={20} />,
+          icon: <FlagIcon width={24} height={24} fill={theme.palette.base.default} />,
         }
       : null,
     canDelete
@@ -251,7 +259,7 @@ const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => 
             ? formatMessage({ id: 'reply.delete' })
             : formatMessage({ id: 'comment.delete' }),
           action: deleteComment,
-          icon: <Trash2Icon width={20} height={20} />,
+          icon: <Trash2Icon width={24} height={24} fill={theme.palette.base.default} />,
         }
       : null,
   ].filter(isNonNullable);
@@ -352,7 +360,7 @@ const Comment = ({ commentId, readonly, onClickReply, style }: CommentProps) => 
                   setBottomSheet(false);
                 }}
               >
-                {bottomSheetAction.icon}
+                {bottomSheetAction?.icon}
                 {bottomSheetAction.name}
               </MobileSheetButton>
             ))}

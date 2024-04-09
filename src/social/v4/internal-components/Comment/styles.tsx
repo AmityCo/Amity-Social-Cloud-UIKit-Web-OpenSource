@@ -59,6 +59,7 @@ export const MobileSheetButton = styled(SecondaryButton)`
   align-items: center;
   gap: 0.5rem;
   width: 100%;
+  margin-bottom: 0.5rem;
 `;
 
 export const CommentBlock = styled.div`

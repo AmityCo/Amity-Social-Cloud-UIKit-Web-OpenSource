@@ -9,15 +9,16 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import { Permissions } from '~/social/constants';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
+import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { checkStoryPermission } from '~/utils';
 
 interface CommunityInfoProps {
   communityId: string;
-  setStoryFile: React.Dispatch<React.SetStateAction<File | null>>;
   stories: (Amity.Story | undefined)[];
 }
 
-const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProps) => {
+const CommunityInfo = ({ communityId, stories }: CommunityInfoProps) => {
+  const { setFile } = useStoryContext();
   const haveStories = stories?.length > 0;
   const isStorySyncing = haveStories && stories.some((story) => story?.syncState === 'syncing');
   const isStoryErrored = haveStories && stories.some((story) => story?.syncState === 'error');
@@ -72,7 +73,7 @@ const CommunityInfo = ({ communityId, setStoryFile, stories }: CommunityInfoProp
           onOk: () => leaveCommunity(),
         })
       }
-      setStoryFile={setStoryFile}
+      setStoryFile={setFile}
       haveStories={haveStories || false}
       haveStoryPermission={haveStoryPermission}
       isStorySyncing={isStorySyncing || false}

@@ -267,14 +267,12 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     }
   }, [stories, file, currentIndex]);
 
-  if (isDraft && file) {
+  if (file) {
     return (
       <DraftsPage
-        pageId="create_story_page"
-        file={file}
-        creatorAvatar={avatarUrl || communityBackgroundImage}
-        onDiscardStory={discardStory}
-        onCreateStory={onCreateStory}
+        targetId={targetId}
+        targetType="community"
+        mediaType={file.type.includes('image') ? 'image' : 'video'}
       />
     );
   }

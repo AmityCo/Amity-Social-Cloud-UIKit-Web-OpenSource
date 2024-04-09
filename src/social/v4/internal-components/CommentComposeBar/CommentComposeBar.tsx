@@ -23,11 +23,11 @@ const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;
 
 interface CommentComposeBarProps {
+  targetId: string;
   className?: string;
   userToReply?: Amity.User['displayName'] | null;
   onSubmit: (text: string, mentionees: Mentionees, metadata: Metadata) => void;
   onCancelReply?: () => void;
-  storyId?: string;
   isReplying?: boolean;
   style?: React.CSSProperties;
 }
@@ -36,16 +36,15 @@ export const CommentComposeBar = ({
   style,
   userToReply,
   onSubmit,
-  storyId,
+  targetId,
 }: CommentComposeBarProps) => {
-  const story = useStory(storyId);
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { text, markup, mentions, mentionees, metadata, onChange, clearAll, queryMentionees } =
     useSocialMention({
-      targetId: story?.targetId,
-      targetType: story?.targetType as string,
+      targetId: targetId,
+      targetType: 'community',
     });
   const { formatMessage } = useIntl();
 
@@ -55,7 +54,7 @@ export const CommentComposeBar = ({
     commentInputRef.current?.focus();
   }, []);
 
-  if (story == null) return <LoadingIndicator />;
+  if (targetId == null) return <LoadingIndicator />;
 
   const addComment = () => {
     if (text === '') return;
