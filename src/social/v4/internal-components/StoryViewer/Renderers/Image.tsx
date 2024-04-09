@@ -7,6 +7,7 @@ import {
   StoryActionItemText,
   MobileSheet,
   MobileActionSheetContent,
+  MobileSheetScroller,
 } from '~/social/v4/internal-components/StoryViewer/styles';
 import {
   HyperLinkButtonContainer,
@@ -19,7 +20,7 @@ import useImage from '~/core/hooks/useImage';
 import { checkStoryPermission, formatTimeAgo } from '~/utils';
 
 import useSDK from '~/core/hooks/useSDK';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
 
@@ -29,6 +30,7 @@ import Truncate from 'react-truncate-markup';
 import { CommentTray } from '~/social/v4/components/CommentTray';
 import { BottomSheet } from '~/core/v4/components';
 import { HyperLink } from '~/social/v4/elements/HyperLink';
+import { MobileSheetHeader } from '~/core/v4/components/BottomSheet/styles';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -47,7 +49,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const [isPaused, setIsPaused] = useState(false);
   const { width, height, loader, storyStyles } = config;
-  const { currentUserId, client } = useSDK();
+  const { client } = useSDK();
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story.reactions[LIKE_REACTION_KEY] || 0;
@@ -205,23 +207,37 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeBottomSheet} />
       </BottomSheet>
-      <CommentTray
-        pageId="*"
+      <BottomSheet
+        rootId={targetRootId}
         isOpen={isOpenCommentSheet}
         onClose={closeCommentSheet}
-        referenceId={selectedComment?.referenceId || ''}
-        referenceType={(selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'}
-        community={community as Amity.Community}
-        shouldAllowCreation={community?.allowCommentInStory || true}
-        shouldAllowInteraction={isJoined || true}
-        commentId={selectedComment?.commentId}
-        isReplying={isReplying}
-        replyTo={replyTo}
-        storyId={storyId}
-        isJoined={isJoined}
-        onCancelReply={() => setIsReplying(false)}
-        onClickReply={onClickReply}
-      />
+        mountPoint={document.getElementById(targetRootId) as HTMLElement}
+        detent="full-height"
+      >
+        <MobileSheet.Container>
+          <MobileSheetHeader
+            style={{
+              borderTopLeftRadius: '1rem',
+              borderTopRightRadius: '1rem',
+              borderBottom: 'none',
+            }}
+          />
+          <MobileSheetHeader>
+            <FormattedMessage id="storyViewer.commentSheet.title" />
+          </MobileSheetHeader>
+          <MobileSheet.Content>
+            <CommentTray
+              referenceId={storyId}
+              referenceType={
+                (selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'
+              }
+              community={community as Amity.Community}
+              shouldAllowCreation={community?.allowCommentInStory || true}
+              shouldAllowInteraction={isJoined || true}
+            />
+          </MobileSheet.Content>
+        </MobileSheet.Container>
+      </BottomSheet>
       {story.items?.[0]?.data?.url && (
         <HyperLinkButtonContainer>
           <HyperLink

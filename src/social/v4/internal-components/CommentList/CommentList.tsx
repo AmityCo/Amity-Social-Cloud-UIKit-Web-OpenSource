@@ -20,12 +20,7 @@ interface CommentListProps {
   readonly?: boolean;
   isExpanded?: boolean;
   limit?: number;
-  onClickReply?: (
-    replyTo?: string,
-    referenceType?: Amity.Comment['referenceType'],
-    referenceId?: Amity.Comment['referenceId'],
-    commentId?: Amity.Comment['commentId'],
-  ) => void;
+  onClickReply?: (comment: Amity.Comment) => void;
   style?: React.CSSProperties;
   onClickReaction?: (commentId: string) => void;
   shouldAllowInteraction?: boolean;
@@ -51,8 +46,6 @@ export const CommentList = ({
     referenceType,
     limit,
   });
-
-  console.log(comments);
 
   const { formatMessage } = useIntl();
 
@@ -94,7 +87,12 @@ export const CommentList = ({
   if (comments?.length === 0) return null;
 
   return (
-    <>
+    <div
+      style={{
+        maxHeight: 'calc(100vh - 24rem)',
+        overflowY: 'auto',
+      }}
+    >
       <LoadMoreWrapper
         hasMore={hasMore}
         loadMore={loadMore}
@@ -109,7 +107,7 @@ export const CommentList = ({
               key={comment.commentId}
               commentId={comment.commentId}
               readonly={readonly}
-              onClickReply={onClickReply}
+              onClickReply={() => onClickReply?.(comment as Amity.Comment)}
               style={style}
               onClickReactionList={() => handleReactionClick(comment.commentId)}
               shouldAllowInteraction={shouldAllowInteraction}
@@ -133,7 +131,7 @@ export const CommentList = ({
           </MobileSheet.Container>
         </MobileSheet>
       )}
-    </>
+    </div>
   );
 };
 

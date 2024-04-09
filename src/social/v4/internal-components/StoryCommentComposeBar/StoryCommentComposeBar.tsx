@@ -20,13 +20,11 @@ interface StoryCommentComposeBarProps {
   comment?: Amity.Comment | null;
   isJoined?: boolean;
   isReplying?: boolean;
-  allowCommentInStory?: boolean;
   shouldAllowCreation?: boolean;
-  replyTo?: string | null;
+  replyTo?: Amity.Comment | null;
   onCancelReply?: () => void;
   referenceType?: string;
   referenceId?: string;
-  commentId?: string;
   style?: React.CSSProperties;
 }
 
@@ -39,7 +37,6 @@ export const StoryCommentComposeBar = ({
   onCancelReply,
   referenceType,
   referenceId,
-  commentId,
   style,
 }: StoryCommentComposeBarProps) => {
   const { formatMessage } = useIntl();
@@ -50,7 +47,7 @@ export const StoryCommentComposeBar = ({
   ) => {
     await CommentRepository.createComment({
       referenceType: 'story',
-      referenceId: storyId,
+      referenceId: referenceId as string,
       data: {
         text: commentText,
       },
@@ -64,14 +61,13 @@ export const StoryCommentComposeBar = ({
     mentionees: Mentionees,
     metadata: Metadata,
   ) => {
-    if (!referenceType || !referenceId) return;
     await CommentRepository.createComment({
-      referenceType: referenceType as Amity.CommentReferenceType,
-      referenceId,
+      referenceType: replyTo?.referenceType as Amity.CommentReferenceType,
+      referenceId: replyTo?.referenceId as string,
       data: {
         text: replyCommentText,
       },
-      parentId: commentId,
+      parentId: replyTo?.commentId,
       metadata,
       mentionees,
     });
@@ -84,7 +80,7 @@ export const StoryCommentComposeBar = ({
           <ReplyingBlock>
             <ReplyingToText>
               <FormattedMessage id="storyViewer.commentSheet.replyingTo" />{' '}
-              <ReplyingToUsername>{replyTo}</ReplyingToUsername>
+              <ReplyingToUsername>{replyTo?.userId}</ReplyingToUsername>
             </ReplyingToText>
             <Close width={20} height={20} onClick={onCancelReply} />
           </ReplyingBlock>
@@ -99,7 +95,7 @@ export const StoryCommentComposeBar = ({
         ) : (
           <CommentComposeBar
             targetId={communityId}
-            userToReply={replyTo}
+            userToReply={replyTo?.userId}
             onSubmit={(replyText, mentionees, metadata) => {
               handleReplyToComment(replyText, mentionees, metadata);
               onCancelReply?.();

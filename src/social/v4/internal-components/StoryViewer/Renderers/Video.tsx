@@ -17,10 +17,10 @@ import Header from '~/social/v4/internal-components/StoryViewer/Renderers/Wrappe
 import useImage from '~/core/hooks/useImage';
 import { checkStoryPermission, formatTimeAgo } from '~/utils';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { useIntl } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import useSDK from '~/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
+
 import { CustomRenderer } from '~/social/v4/internal-components/StoryViewer/Renderers/types';
 
 import { LIKE_REACTION_KEY } from '~/constants';
@@ -30,6 +30,7 @@ import { CommentTray } from '~/social/v4/components/CommentTray';
 import { SpeakerButton } from '~/social/v4/elements';
 import { HyperLink } from '~/social/v4/elements/HyperLink';
 import { BottomSheet } from '~/core/v4/components';
+import { MobileSheetHeader } from '~/core/v4/components/BottomSheet/styles';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -40,8 +41,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const { width, height, loader, storyStyles } = config;
-  const { client, currentUserId } = useSDK();
-  const user = useUser(currentUserId);
+  const { client } = useSDK();
   const [isReplying, setIsReplying] = useState(false);
   const [replyTo, setReplyTo] = useState<string | undefined>(undefined);
   const [selectedComment, setSelectedComment] = useState<{
@@ -54,6 +54,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
 
   const {
+    storyId,
     syncState,
     reach,
     commentsCount,
@@ -253,23 +254,39 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         </MobileSheet.Container>
         <MobileSheet.Backdrop onTap={closeBottomSheet} />
       </BottomSheet>
-      <CommentTray
-        pageId="*"
+      <BottomSheet
+        rootId={targetRootId}
         isOpen={isOpenCommentSheet}
         onClose={closeCommentSheet}
-        referenceId={selectedComment?.referenceId || ''}
-        referenceType={(selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'}
-        community={community as Amity.Community}
-        shouldAllowCreation={true}
-        shouldAllowInteraction={true}
-        commentId={selectedComment?.commentId}
-        isReplying={isReplying}
-        replyTo={replyTo}
-        storyId={story.storyId}
-        isJoined={isJoined}
-        onCancelReply={() => setIsReplying(false)}
-        onClickReply={onClickReply}
-      />
+        mountPoint={document.getElementById(targetRootId) as HTMLElement}
+        detent="full-height"
+      >
+        <MobileSheet.Container>
+          <MobileSheetHeader
+            style={{
+              borderTopLeftRadius: '1rem',
+              borderTopRightRadius: '1rem',
+              borderBottom: 'none',
+            }}
+          />
+          <MobileSheetHeader>
+            <FormattedMessage id="storyViewer.commentSheet.title" />
+          </MobileSheetHeader>
+          <MobileSheet.Content>
+            <MobileSheet.Scroller>
+              <CommentTray
+                referenceId={storyId}
+                referenceType={
+                  (selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'
+                }
+                community={community as Amity.Community}
+                shouldAllowCreation={community?.allowCommentInStory || true}
+                shouldAllowInteraction={isJoined || true}
+              />
+            </MobileSheet.Scroller>
+          </MobileSheet.Content>
+        </MobileSheet.Container>
+      </BottomSheet>
       {story.items?.[0]?.data?.url && (
         <HyperLinkButtonContainer>
           <HyperLink
@@ -289,7 +306,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         </HyperLinkButtonContainer>
       )}
       <Footer
-        storyId={story.storyId}
+        storyId={storyId}
         syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}

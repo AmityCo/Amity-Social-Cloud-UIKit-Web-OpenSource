@@ -6,12 +6,10 @@ import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 import { useCommunityInfo } from './hooks';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
-import { Permissions } from '~/social/constants';
 import useSDK from '~/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
+
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { checkStoryPermission } from '~/utils';
-import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 
 interface CommunityInfoProps {
   communityId: string;
