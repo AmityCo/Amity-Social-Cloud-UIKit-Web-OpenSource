@@ -16,9 +16,10 @@ import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
-import { ViewStoriesPage } from '~/social/v4/pages/StoryPage';
+
 import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
+import { AmityViewStoryPage } from '~/index';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -90,7 +91,7 @@ const Community = () => {
 
           {page.type === PageTypes.ViewStory && (
             <Wrapper>
-              <ViewStoriesPage pageId="story_page" targetId={page.targetId!} onClose={onBack} />
+              <AmityViewStoryPage type="communityFeed" />
             </Wrapper>
           )}
 

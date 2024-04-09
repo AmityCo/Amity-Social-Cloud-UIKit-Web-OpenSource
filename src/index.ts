@@ -19,10 +19,7 @@ export { default as AmityExpandableText } from '~/social/components/Comment/Comm
 export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
-export {
-  DraftsPage as AmityDraftStoryPage,
-  StoryPage as AmityViewStoryPage,
-} from '~/social/v4/pages';
+export { DraftsPage as AmityDraftStoryPage, AmityViewStoryPage } from '~/social/v4/pages';
 export {
   CommentTray as AmityCommentTrayComponent,
   StoryTab as AmityStoryTabComponent,

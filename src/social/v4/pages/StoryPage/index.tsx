@@ -1,1 +1,1 @@
-export { ViewStoriesPage } from './ViewStoriesPage';
+export { AmityViewStoryPage } from './ViewStoryPage';
