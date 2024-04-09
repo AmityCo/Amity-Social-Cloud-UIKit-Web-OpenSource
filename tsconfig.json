@@ -102,8 +102,13 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
-    "allowJs": true
+    "allowJs": true,
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ]
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "src/global.d.ts"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "src/global.d.ts", "**/*.module.css"],
   "exclude": ["node_modules", "vite.config.ts"]
 }
