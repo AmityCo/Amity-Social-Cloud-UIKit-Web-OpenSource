@@ -1,20 +1,70 @@
-# Amity Ui-Kit for Web (open-source)
+# Amity UI-Kit for Web (Open-Source)
 
-## Getting started
+## Prerequisites
 
-### Installation
+Before getting started, ensure that you have the following prerequisites installed on your system:
 
-Here are the steps to install ui-kit together with another project.
+- [Node.js](https://nodejs.org/) LTS version (currently version 20)
+- [pnpm](https://pnpm.io/) version 8
 
-1. git clone git@github.com:AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
-2. cd ./Amity-Social-Cloud-UIKit-Web-OpenSource
-3. pnpm i
-4. pnpm run build
+## Installation
 
-### Documentation
+To install the Amity UI-Kit together with another project, follow these steps:
 
-Please refer to our online documentation at https://docs.amity.co or contact a Ui-Kit representative at **developers@amity.co** for support.
+1. Clone the repository using the following command:
+
+   ```
+   git clone git@github.com:AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
+   ```
+
+2. Navigate to the cloned repository's directory:
+
+   ```
+   cd ./Amity-Social-Cloud-UIKit-Web-OpenSource
+   ```
+
+3. Install the dependencies using pnpm:
+
+   ```
+   pnpm install
+   ```
+
+4. Build the project:
+
+   ```
+   pnpm run build
+   ```
+
+5. Navigate to your application's directory:
+
+   ```
+   cd <path-to-your-app>
+   ```
+
+6. Link the Amity UI-Kit repository to your application using one of the following package managers:
+   - NPM:
+     ```
+     npm link file:<path-to-amity-ui-kit-repository> --save
+     ```
+   - Yarn (Classic):
+     ```
+     yarn add file:<path-to-amity-ui-kit-repository>
+     ```
+   - PNPM:
+     ```
+     pnpm i file:<path-to-amity-ui-kit-repository>
+     ```
+
+Please note that this installation process is intended for local development environments. If you wish to publish your custom open-source project, you will need to create and publish a new npm package independently.
+
+## Documentation
+
+For detailed information and guidance on using the Amity UI-Kit, please refer to our comprehensive online documentation available at [https://docs.amity.co](https://docs.amity.co).
+
+If you require further assistance or have any questions, please don't hesitate to contact our dedicated UI-Kit support team at **developers@amity.co**. We are here to help you make the most of the Amity UI-Kit.
 
 ## Contributing
 
-See [our contributing guide](https://github.com/EkoCommunications/AmityUiKitWeb/blob/develop/CONTRIBUTING.md)
+We welcome contributions from the community to help improve and enhance the Amity UI-Kit. If you are interested in contributing to this project, please review our [contributing guide](https://github.com/EkoCommunications/AmityUiKitWeb/blob/develop/CONTRIBUTING.md) for guidelines and best practices.
+
+Thank you for choosing the Amity UI-Kit for your web development needs!
