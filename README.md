@@ -7,6 +7,14 @@ Before getting started, ensure that you have the following prerequisites install
 - [Node.js](https://nodejs.org/) LTS version (currently version 20)
 - [pnpm](https://pnpm.io/) version 8
 
+## (Optional) How to install PNPM
+
+```
+corepack enable pnpm
+```
+
+Ref: https://pnpm.io/installation#using-corepack
+
 ## Installation
 
 To install the Amity UI-Kit together with another project, follow these steps:
@@ -14,7 +22,7 @@ To install the Amity UI-Kit together with another project, follow these steps:
 1. Clone the repository using the following command:
 
    ```
-   git clone git@github.com:AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
+   git clone https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
    ```
 
 2. Navigate to the cloned repository's directory:
