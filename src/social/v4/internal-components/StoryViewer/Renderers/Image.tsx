@@ -38,8 +38,6 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
-  const [isReplying, setIsReplying] = useState(false);
-  const [replyTo, setReplyTo] = useState<string | undefined>(undefined);
 
   const [selectedComment, setSelectedComment] = useState<{
     referenceType?: string;
@@ -111,17 +109,6 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const closeCommentSheet = () => setIsOpenCommentSheet(false);
 
   const targetRootId = 'asc-uikit-stories-viewer';
-
-  const onClickReply = (
-    replyTo?: string,
-    referenceType?: Amity.Comment['referenceType'],
-    referenceId?: Amity.Comment['referenceId'],
-    commentId?: Amity.Comment['commentId'],
-  ) => {
-    setReplyTo(replyTo);
-    setSelectedComment({ referenceType, referenceId, commentId });
-    setIsReplying(true);
-  };
 
   useEffect(() => {
     if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {

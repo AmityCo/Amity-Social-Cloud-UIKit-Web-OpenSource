@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import useStories from '~/social/hooks/useStories';
 
 import useSDK from '~/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
+
 import { useMedia } from 'react-use';
 import { useIntl } from 'react-intl';
-import { isModerator } from '~/helpers/permissions';
+
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import { notification } from '~/core/components/Notification';
 import { StoryRepository } from '@amityco/ts-sdk';
@@ -29,6 +29,7 @@ import {
 } from '../../internal-components/StoryViewer/styles';
 import Stories from 'react-insta-stories';
 import { renderers } from '../../internal-components/StoryViewer/Renderers';
+import { checkStoryPermission } from '~/utils';
 
 interface CommunityFeedStoryProps {
   communityId: string;
@@ -66,8 +67,7 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
     }
   };
 
-  const { currentUserId } = useSDK();
-  const user = useUser(currentUserId);
+  const { client, currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
   const isMobile = useMedia('(max-width: 768px)');
@@ -78,8 +78,7 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
   const [colors, setColors] = useState<FinalColor[]>([]);
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-
-  const haveStoryPermission = isModerator(user?.roles);
+  const haveStoryPermission = checkStoryPermission(client, communityId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;

@@ -34,7 +34,6 @@ import { DraftsPage } from '~/social/v4/pages/DraftsPage';
 import { useCustomization } from '~/social/v4/providers/CustomizationProvider';
 import { useTheme } from 'styled-components';
 import { CreateStoryButton } from '../../elements';
-import { Permissions } from '~/social/constants';
 import { checkStoryPermission } from '~/utils';
 
 interface StoryViewerProps {
