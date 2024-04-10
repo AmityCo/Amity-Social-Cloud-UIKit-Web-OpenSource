@@ -25,6 +25,22 @@ const global = {
           value: import.meta.env.STORYBOOK_USER2,
           title: import.meta.env.STORYBOOK_USER2?.split(',')[1],
         },
+        {
+          value: import.meta.env.STORYBOOK_USER3,
+          title: import.meta.env.STORYBOOK_USER3?.split(',')[1],
+        },
+        {
+          value: import.meta.env.STORYBOOK_USER4,
+          title: import.meta.env.STORYBOOK_USER4?.split(',')[1],
+        },
+        {
+          value: import.meta.env.STORYBOOK_USER5,
+          title: import.meta.env.STORYBOOK_USER5?.split(',')[1],
+        },
+        {
+          value: import.meta.env.STORYBOOK_USER6,
+          title: import.meta.env.STORYBOOK_USER6?.split(',')[1],
+        },
       ],
     },
   },
