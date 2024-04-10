@@ -63,8 +63,6 @@ To install the Amity UI-Kit together with another project, follow these steps:
      pnpm i file:<path-to-amity-ui-kit-repository>
      ```
 
-Please note that this installation process is intended for local development environments. If you wish to publish your custom open-source project, you will need to create and publish a new npm package independently.
-
 ## Documentation
 
 For detailed information and guidance on using the Amity UI-Kit, please refer to our comprehensive online documentation available at [https://docs.amity.co](https://docs.amity.co).
@@ -76,3 +74,15 @@ If you require further assistance or have any questions, please don't hesitate t
 We welcome contributions from the community to help improve and enhance the Amity UI-Kit. If you are interested in contributing to this project, please review our [contributing guide](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/blob/develop/contributing.md) for guidelines and best practices.
 
 Thank you for choosing the Amity UI-Kit for your web development needs!
+
+### FAQ
+
+Q: I tried to run `pnpm build` and it throws a types error.
+A: Try to structure your project to be like this:
+
+```
+- your_app
+  - src
+- Amity-Social-Cloud-UIKit-Web-OpenSource
+  - src
+```
