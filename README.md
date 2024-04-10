@@ -65,6 +65,6 @@ If you require further assistance or have any questions, please don't hesitate t
 
 ## Contributing
 
-We welcome contributions from the community to help improve and enhance the Amity UI-Kit. If you are interested in contributing to this project, please review our [contributing guide](https://github.com/EkoCommunications/AmityUiKitWeb/blob/develop/CONTRIBUTING.md) for guidelines and best practices.
+We welcome contributions from the community to help improve and enhance the Amity UI-Kit. If you are interested in contributing to this project, please review our [contributing guide](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/blob/develop/contributing.md) for guidelines and best practices.
 
 Thank you for choosing the Amity UI-Kit for your web development needs!
