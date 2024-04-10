@@ -19,6 +19,10 @@ jobs:
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
       STORYBOOK_USER1: ${{ secrets.STORYBOOK_USER1 }}
       STORYBOOK_USER2: ${{ secrets.STORYBOOK_USER2 }}
+      STORYBOOK_USER3: ${{ secrets.STORYBOOK_USER3 }}
+      STORYBOOK_USER4: ${{ secrets.STORYBOOK_USER4 }}
+      STORYBOOK_USER5: ${{ secrets.STORYBOOK_USER5 }}
+      STORYBOOK_USER6: ${{ secrets.STORYBOOK_USER6 }}
 
     steps:
       - name: git checkout
