@@ -1,26 +1,88 @@
-# Amity Ui-Kit for Web (open-source)
+# Amity UI-Kit for Web (Open-Source)
 
-## Getting started
+## Prerequisites
 
-### Installation
+Before getting started, ensure that you have the following prerequisites installed on your system:
 
-Here are the steps to install ui-kit together with another project.
+- [Node.js](https://nodejs.org/) LTS version (currently version 20)
+- [pnpm](https://pnpm.io/) version 8
 
-1. git clone git@github.com:AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
-2. cd ./Amity-Social-Cloud-UIKit-Web-OpenSource
-3. npm ci
-4. npm link
-5. npm link ./`<path-to-your-app>`/node_modules/react ./`<path-to-your-app>`/node_modules/react-dom
-6. npm run build
-7. cd ./`<path-to-your-app>`
-8. npm link @amityco/ui-kit-open-source --save
+## (Optional) How to install PNPM
 
-** We need to link react module to react module in destination project so that react is the same instance otherwise we will encounter [issues with react hook](https://medium.com/bbc-product-technology/solving-the-problem-with-npm-link-and-react-hooks-266c832dd019).
+```
+corepack enable pnpm
+```
 
-### Documentation
+Ref: https://pnpm.io/installation#using-corepack
 
-Please refer to our online documentation at https://docs.amity.co or contact a Ui-Kit representative at **developers@amity.co** for support.
+## Installation
+
+To install the Amity UI-Kit together with another project, follow these steps:
+
+1. Clone the repository using the following command:
+
+   ```
+   git clone https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
+   ```
+
+2. Navigate to the cloned repository's directory:
+
+   ```
+   cd ./Amity-Social-Cloud-UIKit-Web-OpenSource
+   ```
+
+3. Install the dependencies using pnpm:
+
+   ```
+   pnpm install
+   ```
+
+4. Build the project:
+
+   ```
+   pnpm run build
+   ```
+
+5. Navigate to your application's directory:
+
+   ```
+   cd <path-to-your-app>
+   ```
+
+6. Link the Amity UI-Kit repository to your application using one of the following package managers:
+   - NPM:
+     ```
+     npm link file:<path-to-amity-ui-kit-repository> --save
+     ```
+   - Yarn (Classic):
+     ```
+     yarn add file:<path-to-amity-ui-kit-repository>
+     ```
+   - PNPM:
+     ```
+     pnpm i file:<path-to-amity-ui-kit-repository>
+     ```
+
+## Documentation
+
+For detailed information and guidance on using the Amity UI-Kit, please refer to our comprehensive online documentation available at [https://docs.amity.co](https://docs.amity.co).
+
+If you require further assistance or have any questions, please don't hesitate to contact our dedicated UI-Kit support team at **developers@amity.co**. We are here to help you make the most of the Amity UI-Kit.
 
 ## Contributing
 
-See [our contributing guide](https://github.com/EkoCommunications/AmityUiKitWeb/blob/develop/CONTRIBUTING.md)   
+We welcome contributions from the community to help improve and enhance the Amity UI-Kit. If you are interested in contributing to this project, please review our [contributing guide](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/blob/develop/contributing.md) for guidelines and best practices.
+
+Thank you for choosing the Amity UI-Kit for your web development needs!
+
+### FAQ
+
+Q: I tried to run `pnpm build` and it throws a types error.
+A: Try to structure your project to be like this:
+
+```
+- your_app
+  - src
+- Amity-Social-Cloud-UIKit-Web-OpenSource
+  - src
+```
