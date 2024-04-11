@@ -10,14 +10,6 @@ type UseStories = {
 };
 
 const useStories = (params: Amity.GetStoriesByTargetParam): UseStories => {
-  if (!params.targetId) {
-    throw new Error('targetId is required');
-  }
-
-  if (!params.targetType) {
-    throw new Error('targetType is required');
-  }
-
   const disposeFnRef = useRef<(() => void) | null>(null);
   const [stories, setStories] = useState<Amity.Story[]>([]);
   const [isLoading, setIsLoading] = useState(false);

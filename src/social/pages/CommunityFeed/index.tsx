@@ -30,8 +30,9 @@ import {
 import useStories from '~/social/hooks/useStories';
 
 import { BarsIcon } from '~/icons';
-import { DraftsPage } from '~/social/v4/pages/DraftsPage';
+
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
+import { AmityDraftStoryPage } from '~/index';
 
 interface CommunityFeedProps {
   communityId: string;
@@ -90,10 +91,14 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
   if (file) {
     return (
       <Wrapper>
-        <DraftsPage
+        <AmityDraftStoryPage
           targetId={communityId}
           targetType="community"
-          mediaType={file.type.includes('image') ? 'image' : 'video'}
+          mediaType={
+            file.type.includes('image')
+              ? { type: 'image', url: URL.createObjectURL(file) }
+              : { type: 'video', url: URL.createObjectURL(file) }
+          }
         />
       </Wrapper>
     );

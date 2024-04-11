@@ -19,11 +19,12 @@ export { default as AmityExpandableText } from '~/social/components/Comment/Comm
 export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
-export { DraftsPage as AmityDraftStoryPage, AmityViewStoryPage } from '~/social/v4/pages';
+export { default as AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
+export { AmityDraftStoryPage, AmityViewStoryPage } from '~/v4/social/pages';
 export {
   CommentTray as AmityCommentTrayComponent,
   StoryTab as AmityStoryTabComponent,
-} from '~/social/v4/components';
+} from '~/v4/social/components';
 
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';

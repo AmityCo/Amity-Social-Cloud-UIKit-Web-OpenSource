@@ -18,10 +18,7 @@ import CustomComponentsProvider, { CustomComponentType } from '../CustomComponen
 import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
-import { Config, CustomizationProvider } from '~/social/v4/providers/CustomizationProvider';
 
-import amityConfig from '../../../../amity-uikit.config.json';
-import { PageBehaviorProvider } from '~/social/v4/providers/PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 interface UiKitProviderProps {
@@ -48,10 +45,6 @@ interface UiKitProviderProps {
     onEditUser?: (userId: string) => void;
     onMessageUser?: (userId: string) => void;
   };
-  pageBehavior?: {
-    closeAction?: () => void;
-    hyperLinkAction?: () => void;
-  };
   socialCommunityCreationButtonVisible?: boolean;
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
@@ -62,7 +55,6 @@ const UiKitProvider = ({
   apiKey,
   apiRegion,
   apiEndpoint,
-  authToken,
   userId,
   displayName,
   customComponents = {},
@@ -71,7 +63,6 @@ const UiKitProvider = ({
   children /* TODO localization */,
   socialCommunityCreationButtonVisible,
   actionHandlers,
-  pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
 }: UiKitProviderProps) => {
@@ -103,21 +94,6 @@ const UiKitProvider = ({
       setClient(ascClient);
     }
 
-    await ASCClient.login(
-      { userId, displayName, authToken },
-      {
-        sessionWillRenewAccessToken(renewal) {
-          // secure mode
-          if (authToken) {
-            renewal.renewWithAuthToken(authToken);
-            return;
-          }
-
-          renewal.renew();
-        },
-      },
-    );
-
     setIsConnected(true);
 
     if (stateChangeRef.current == null) {
@@ -148,34 +124,28 @@ const UiKitProvider = ({
   return (
     <QueryClientProvider client={queryClient}>
       <Localization locale="en">
-        <CustomizationProvider initialConfig={amityConfig as Config}>
-          <ThemeProvider theme={buildGlobalTheme(theme)}>
-            <UIStyles>
-              <SDKContext.Provider value={sdkContextValue}>
-                <SDKConnectorProvider>
-                  <CustomComponentsProvider config={customComponents}>
-                    <ConfigProvider
-                      config={{
-                        socialCommunityCreationButtonVisible:
-                          socialCommunityCreationButtonVisible || true,
-                      }}
-                    >
-                      <PostRendererProvider config={postRendererConfig}>
-                        <NavigationProvider {...actionHandlers}>
-                          <PageBehaviorProvider customNavigationBehavior={pageBehavior}>
-                            {children}
-                          </PageBehaviorProvider>
-                        </NavigationProvider>
-                      </PostRendererProvider>
-                    </ConfigProvider>
-                    <NotificationsContainer />
-                    <ConfirmContainer />
-                  </CustomComponentsProvider>
-                </SDKConnectorProvider>
-              </SDKContext.Provider>
-            </UIStyles>
-          </ThemeProvider>
-        </CustomizationProvider>
+        <ThemeProvider theme={buildGlobalTheme(theme)}>
+          <UIStyles>
+            <SDKContext.Provider value={sdkContextValue}>
+              <SDKConnectorProvider>
+                <CustomComponentsProvider config={customComponents}>
+                  <ConfigProvider
+                    config={{
+                      socialCommunityCreationButtonVisible:
+                        socialCommunityCreationButtonVisible || true,
+                    }}
+                  >
+                    <PostRendererProvider config={postRendererConfig}>
+                      <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
+                    </PostRendererProvider>
+                  </ConfigProvider>
+                  <NotificationsContainer />
+                  <ConfirmContainer />
+                </CustomComponentsProvider>
+              </SDKConnectorProvider>
+            </SDKContext.Provider>
+          </UIStyles>
+        </ThemeProvider>
       </Localization>
     </QueryClientProvider>
   );

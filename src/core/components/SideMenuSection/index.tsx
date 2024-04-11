@@ -9,6 +9,7 @@ const SectionContainer = styled.div`
 
 const ListHeading = styled.h4`
   ${({ theme }) => theme.typography.title};
+  color: black;
   padding: 0 8px;
   margin: 1em 0;
 `;

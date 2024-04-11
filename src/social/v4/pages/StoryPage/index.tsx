@@ -1,1 +1,0 @@
-export { AmityViewStoryPage } from './ViewStoryPage';

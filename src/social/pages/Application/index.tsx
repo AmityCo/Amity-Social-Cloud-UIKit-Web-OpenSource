@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { PageTypes } from '~/social/constants';
@@ -9,17 +9,17 @@ import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 
 import ExplorePage from '~/social/pages/Explore';
 import NewsFeedPage from '~/social/pages/NewsFeed';
-import CommunityFeedPage from '~/social/pages/CommunityFeed';
+
 import UserFeedPage from '~/social/pages/UserFeed';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
+import { AmityViewStoryPage } from '~/v4/social/pages/StoryPage';
 
-import { usePageBehavior } from '~/social/v4/providers/PageBehaviorProvider';
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
-import { AmityViewStoryPage } from '~/index';
+import CommunityFeed from '../CommunityFeed';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -46,12 +46,11 @@ const Wrapper = styled.div`
 
 const Community = () => {
   const { page, onBack } = useNavigation();
-  const { navigationBehavior } = usePageBehavior();
 
   const { client } = useSDK();
-  const [socialSettings, setSocialSettings] = React.useState<Amity.SocialSettings | null>(null);
+  const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
     setOpen(!open);
@@ -81,7 +80,7 @@ const Community = () => {
           )}
 
           {page.type === PageTypes.CommunityFeed && (
-            <CommunityFeedPage
+            <CommunityFeed
               communityId={page.communityId}
               isNewCommunity={page.isNewCommunity}
               isOpen={open}

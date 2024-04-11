@@ -1,133 +1,165 @@
 {
-  "global_theme": {
-    "light_theme": {
+  "preferred_theme": "default",
+  "theme": {
+    "light": {
       "primary_color": "#1054DE",
-      "secondary_color": "#292B32"
+      "secondary_color": "#292B32",
+      "base_color": "#292b32",
+      "base_shade1_color": "#636878",
+      "base_shade2_color": "#898e9e",
+      "base_shade3_color": "#a5a9b5",
+      "base_shade4_color": "#ebecef",
+      "alert_color": "#FA4D30",
+      "background_color": "#FFFFFF"
+    },
+    "dark": {
+      "primary_color": "#1054DE",
+      "secondary_color": "#292B32",
+      "base_color": "#ebecef",
+      "base_shade1_color": "#a5a9b5",
+      "base_shade2_color": "#6e7487",
+      "base_shade3_color": "#40434e",
+      "base_shade4_color": "#292b32",
+      "alert_color": "#FA4D30",
+      "background_color": "#191919"
     }
   },
   "excludes": [],
   "customizations": {
     "select_target_page/*/*": {
-      "page_theme": {
-        "light_theme": {
-          "primary_color": "#1054DE",
-          "secondary_color": "#292B32"
-        }
-      },
+      "theme": {},
       "title": "Share to"
     },
     "select_target_page/*/back_button": {
-      "back_icon": "back"
+      "theme": {},
+      "back_icon": "back.png"
     },
     "camera_page/*/*": {
-      "resolution": "720p",
-      "page_theme": {
-        "light_theme": {
-          "primary_color": "#1054DE",
-          "secondary_color": "#292B32"
-        }
-      }
+      "theme": {},
+      "resolution": "720p"
     },
     "camera_page/*/close_button": {
-      "close_icon": "close",
-      "background_color": "#80000000"
+      "theme": {},
+      "close_icon": "close.png"
     },
-    "create_story_page/*/*": {},
+    "create_story_page/*/*": {
+      "theme": {}
+    },
     "create_story_page/*/back_button": {
-      "back_icon": "back",
-      "background_color": "#80000000"
+      "theme": {},
+      "back_icon": "back.png",
+      "background_color": ""
     },
     "create_story_page/*/aspect_ratio_button": {
-      "aspect_ratio_icon": "aspect_ratio",
-      "background_color": "#80000000"
+      "theme": {},
+      "aspect_ratio_icon": "aspect_ratio.png",
+      "background_color": ""
     },
     "create_story_page/*/story_hyperlink_button": {
-      "hyperlink_button_icon": "hyperlink_button",
+      "theme": {},
+      "hyperlink_button_icon": "hyperlink_button.png",
       "background_color": ""
     },
     "create_story_page/*/hyper_link": {
-      "hyper_link_icon": "hyper_link",
+      "theme": {},
+      "hyper_link_icon": "hyper_link.png",
       "background_color": ""
     },
     "create_story_page/*/share_story_button": {
-      "share_icon": "share_story_button",
-      "background_color": "#FFFFFF",
+      "theme": {},
+      "share_icon": "share_story_button.png",
+      "background_color": "",
       "hide_avatar": false
     },
-    "story_page/*/*": {},
-    "story_page/*/progress_bar": {},
+    "story_page/*/*": {
+      "theme": {}
+    },
+    "story_page/*/progress_bar": {
+      "theme": {},
+      "progress_color": "",
+      "background_color": ""
+    },
     "story_page/*/overflow_menu": {
-      "overflow_menu_icon": "threeDot"
+      "theme": {},
+      "overflow_menu_icon": "threeDot.png"
     },
     "story_page/*/close_button": {
-      "close_icon": "close"
+      "theme": {},
+      "close_icon": "close.png"
     },
     "story_page/*/story_impression_button": {
-      "impression_icon": "impressionIcon"
+      "theme": {},
+      "impression_icon": "impressionIcon.png"
     },
     "story_page/*/story_comment_button": {
-      "comment_icon": "comment"
+      "theme": {},
+      "comment_icon": "comment.png",
+      "background_color": ""
     },
     "story_page/*/story_reaction_button": {
-      "reaction_icon": "like",
-      "background_color": "#1243EE"
+      "theme": {},
+      "reaction_icon": "like.png",
+      "background_color": ""
     },
     "story_page/*/create_new_story_button": {
-      "create_new_story_icon": "plus",
-      "background_color": "#1243EE"
+      "theme": {},
+      "create_new_story_icon": "plus.png",
+      "background_color": "#ffffff"
     },
     "story_page/*/speaker_button": {
-      "mute_icon": "mute",
-      "unmute_icon": "unmute"
+      "theme": {},
+      "mute_icon": "mute.png",
+      "unmute_icon": "unmute.png",
+      "background_color": ""
     },
     "*/edit_comment_component/*": {
-      "component_theme": {
-        "light_theme": {
-          "primary_color": "#1054DE",
-          "secondary_color": "#292B32"
-        }
-      }
+      "theme": {}
     },
     "*/edit_comment_component/cancel_button": {
+      "theme": {},
       "cancel_icon": "",
-      "cancel_button_text": "Cancel",
-      "background_color": "#FFFFFF"
+      "cancel_button_text": "cancel",
+      "background_color": ""
     },
     "*/edit_comment_component/save_button": {
+      "theme": {},
       "save_icon": "",
       "save_button_text": "Save",
-      "background_color": "#1054DE"
+      "background_color": ""
     },
     "*/hyper_link_config_component/*": {
-      "component_theme": {
-        "light_theme": {
-          "primary_color": "",
-          "secondary_color": ""
-        }
-      }
+      "theme": {}
     },
     "*/hyper_link_config_component/done_button": {
+      "theme": {},
       "done_icon": "",
-      "done_button_text": "",
+      "done_button_text": "Done",
       "background_color": ""
     },
     "*/hyper_link_config_component/cancel_button": {
+      "theme": {},
       "cancel_icon": "",
-      "cancel_button_text": ""
+      "cancel_button_text": "Cancel"
     },
-    "*/comment_tray_component/*": {},
-    "*/story_tab_component/*": {},
+    "*/comment_tray_component/*": {
+      "theme": {}
+    },
+    "*/story_tab_component/*": {
+      "theme": {}
+    },
     "*/story_tab_component/story_ring": {
+      "theme": {},
       "progress_color": ["#339AF9", "#78FA58"],
-      "fail_color": ["#FA4D30"],
-      "background_color": ["#EBECEF"]
+      "background_color": ""
     },
     "*/story_tab_component/create_new_story_button": {
-      "create_new_story_icon": "plus",
-      "background_color": "#1243EE"
+      "theme": {},
+      "create_new_story_icon": "plus.png",
+      "background_color": ""
     },
     "*/*/close_button": {
-      "close_icon": "close"
+      "theme": {},
+      "close_icon": "close.png"
     }
   }
 }
