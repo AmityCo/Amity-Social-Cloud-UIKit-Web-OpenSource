@@ -29,6 +29,12 @@ import AmityUIKitManager from '../AmityUIKitManager';
 export type AmityUIKitConfig = typeof amityUKitConfig;
 
 interface AmityUIKitProviderProps {
+  apiKey: string;
+  apiRegion: string;
+  apiEndpoint?: {
+    http?: string;
+    mqtt?: string;
+  };
   authToken?: string;
   userId: string;
   displayName: string;
@@ -56,10 +62,10 @@ interface AmityUIKitProviderProps {
   configs?: AmityUIKitConfig;
 }
 
-const apiKey = import.meta.env.STORYBOOK_API_KEY;
-const apiRegion = import.meta.env.STORYBOOK_API_REGION;
-
 const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
+  apiKey,
+  apiRegion,
+  apiEndpoint,
   authToken,
   userId,
   displayName,
@@ -89,7 +95,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
     const setup = async () => {
       try {
         // Set up the AmityUIKitManager
-        AmityUIKitManager.setup({ apiKey, endpoint: apiRegion });
+        AmityUIKitManager.setup({ apiKey, apiRegion, apiEndpoint });
 
         // Register the device and get the client instance
         await AmityUIKitManager.registerDevice(

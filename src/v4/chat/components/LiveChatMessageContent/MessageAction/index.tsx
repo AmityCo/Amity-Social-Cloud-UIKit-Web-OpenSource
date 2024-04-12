@@ -1,14 +1,12 @@
 import React, { useRef } from 'react';
 import styles from './styles.module.css';
 import Kebub from '~/v4/icons/Kebub';
-import Reaction from '~/v4/icons/Reaction';
 import { useIntl } from 'react-intl';
 import Popover from '~/v4/core/components/Popover';
 import Reply from '~/v4/icons/Reply';
 import Copy from '~/v4/icons/Copy';
 import Bin from '~/v4/icons/Bin';
 import { Typography } from '~/v4/core/components';
-import clsx from 'clsx';
 
 export type AmityMessageActionType = {
   onCopy?: () => void;

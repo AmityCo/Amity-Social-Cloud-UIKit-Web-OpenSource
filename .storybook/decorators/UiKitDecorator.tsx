@@ -67,6 +67,8 @@ const decorator: NonNullable<Preview['decorators']>[number] = (
 
   return (
     <AmityUIKitProvider
+      apiKey={import.meta.env.STORYBOOK_API_KEY}
+      apiRegion={import.meta.env.STORYBOOK_API_REGION}
       key={userId}
       userId={userId}
       displayName={displayName || userId}

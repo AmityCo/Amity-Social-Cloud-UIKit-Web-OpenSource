@@ -33,10 +33,22 @@ class AmityUIKitManager {
    * Sets up the AmityUIKitManager instance with the provided configuration.
    * @param config - The configuration object containing the API key and endpoint.
    */
-  public static setup(config: { apiKey: string; endpoint: string }): void {
+  public static setup(config: {
+    apiKey: string;
+    apiRegion: string;
+    apiEndpoint?: {
+      http?: string;
+      mqtt?: string;
+    };
+  }): void {
     if (!AmityUIKitManager.instance) {
       AmityUIKitManager.instance = new AmityUIKitManager();
-      const client: Amity.Client = ASCClient.createClient(config.apiKey, config.endpoint);
+      const client: Amity.Client = ASCClient.createClient(
+        config.apiKey,
+        config.apiRegion,
+        config?.apiEndpoint ? { apiEndpoint: config.apiEndpoint } : {},
+      );
+
       AmityUIKitManager.setClient(client);
     }
   }
