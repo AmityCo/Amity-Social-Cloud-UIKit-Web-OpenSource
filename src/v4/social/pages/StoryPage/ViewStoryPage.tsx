@@ -16,7 +16,7 @@ const AmityViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type }) => {
   const renderContent = () => {
     switch (type) {
       case 'communityFeed':
-        return <CommunityFeedStory communityId={page.targetId} />;
+        return <CommunityFeedStory communityId={page.communityId!} />;
       default:
         return null;
     }

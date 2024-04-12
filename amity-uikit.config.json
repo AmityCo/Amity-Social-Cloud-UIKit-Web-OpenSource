@@ -34,6 +34,7 @@
       "theme": {},
       "back_icon": "back.png"
     },
+
     "camera_page/*/*": {
       "theme": {},
       "resolution": "720p"
@@ -112,6 +113,7 @@
       "unmute_icon": "unmute.png",
       "background_color": ""
     },
+
     "*/edit_comment_component/*": {
       "theme": {}
     },
@@ -127,6 +129,7 @@
       "save_button_text": "Save",
       "background_color": ""
     },
+
     "*/hyper_link_config_component/*": {
       "theme": {}
     },
@@ -160,6 +163,12 @@
     "*/*/close_button": {
       "theme": {},
       "close_icon": "close.png"
+    },
+    "live_chat/*/*": {},
+    "live_chat/chat_header/*": {},
+    "live_chat/message_list/*": {},
+    "live_chat/message_composer/*": {
+      "placeholder_text": "Write a message"
     }
   }
 }

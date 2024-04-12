@@ -1,0 +1,61 @@
+.optionIcon {
+  width: auto;
+  height: 1.25rem;
+
+  :hover {
+    cursor: pointer;
+    background-color: var(--asc-color-secondary-shade4);
+    border-radius: var(--asc-border-radius-sm);
+  }
+}
+
+.reactionIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.timestamp {
+  font-family: var(--asc-text-global-font-family);
+  color: var(--asc-color-base-shade2);
+  font-size: 0.5rem;
+  line-height: 0.75rem;
+  margin-bottom: var(--asc-spacing-s1);
+}
+
+.messageActionButton {
+  cursor: pointer;
+  display: flex;
+  padding: var(--asc-spacing-s2) var(--asc-spacing-m1);
+  justify-content: space-between;
+}
+
+.messageActionButtonText {
+  color: var(--asc-color-base-inverse);
+}
+
+.messageDangerActionButtonText {
+  color: var(--asc-color-alert);
+}
+
+.copyIcon {
+  fill: var(--asc-color-base-inverse);
+}
+
+.replyIcon {
+  fill: var(--asc-color-base-inverse);
+}
+
+.binIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-alert);
+}
+
+.mentionIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.flagIcon {
+  width: 1rem;
+}

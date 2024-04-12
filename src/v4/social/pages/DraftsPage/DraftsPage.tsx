@@ -61,7 +61,6 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   const { formatMessage } = useIntl();
 
   const [imageMode, setImageMode] = useState<'fit' | 'fill'>('fit');
-
   const [colors, setColors] = useState<Awaited<ReturnType<typeof extractColors>>>([]);
 
   const onClickImageMode = () => {

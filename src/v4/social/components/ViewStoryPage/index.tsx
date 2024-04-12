@@ -164,7 +164,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        isStoryCreator || haveStoryPermission
+        isStoryCreator
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),

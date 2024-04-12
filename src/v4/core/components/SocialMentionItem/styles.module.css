@@ -1,0 +1,38 @@
+.mentionItem {
+  display: flex;
+  align-items: center;
+  padding: 0.313rem 0.938rem;
+  font-weight: 600;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.mentionItem.isBanned {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.mentionItem:hover {
+  background-color: var(--asc-color-base-background);
+}
+
+.userDisplayName {
+  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--asc-color-white);
+}
+
+.mentionAllDescription {
+  display: flex;
+  align-items: center;
+  color: var(--asc-color-base-shade2);
+}
+
+.mentionAll {
+  justify-content: space-between;
+  div {
+    display: flex;
+    align-items: center;
+  }
+}

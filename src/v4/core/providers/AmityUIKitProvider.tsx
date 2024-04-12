@@ -12,8 +12,8 @@ import PostRendererProvider from '~/social/providers/PostRendererProvider';
 import NavigationProvider from '~/social/providers/NavigationProvider';
 
 import ConfigProvider from '~/social/providers/ConfigProvider';
-import { ConfirmContainer } from '~/core/components/Confirm';
-import { NotificationsContainer } from '~/core/components/Notification';
+import { ConfirmContainer } from '~/v4/core/components/ConfirmModal';
+import { NotificationsContainer } from '~/v4/core/components/Notification';
 
 import Localization from '~/core/providers/UiKitProvider/Localization';
 

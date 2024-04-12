@@ -13,6 +13,8 @@ const preview: Preview = {
           ['Social', 'Chat'],
           'Utilities',
           'Assets',
+          'V4',
+          ['Chat'],
         ],
       },
     },

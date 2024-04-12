@@ -3,7 +3,8 @@ import { lighten, parseToHsl, darken, hslToColorString } from 'polished';
 
 const SHADE_PERCENTAGES = [0.25, 0.4, 0.5, 0.75];
 
-const setCSSVariable = (variable: string, value: string) => {
+const setCSSVariable = (variable: string, value?: string) => {
+  if (!value) return;
   document.documentElement.style.setProperty(variable, value);
 };
 
@@ -195,6 +196,8 @@ export const ThemeProvider: React.FC<{ initialConfig?: any }> = ({ children, ini
 
     setCSSVariable('--asc-color-alert', config.light?.alert_color);
     setCSSVariable('--asc-color-background', config.light?.background_color);
+
+    setCSSVariable('--asc-color-primary-dark', config.dark?.primary_color);
   }, [currentTheme, config]);
 
   useEffect(() => {

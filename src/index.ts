@@ -26,6 +26,17 @@ export {
   StoryTab as AmityStoryTabComponent,
 } from '~/v4/social/components';
 
+// Chat v4
+export {
+  AmityLiveChatHeader,
+  AmityLiveChatMessageList,
+  AmityLiveChatMessageReceiverView,
+  AmityLiveChatMessageSenderView,
+  AmityMessageActionType,
+} from '~/v4/chat/components';
+
+export { AmityLiveChatPage } from '~/v4/chat/pages';
+
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
 // import AmityCommentLikeButton from './components/CommentLikeButton';

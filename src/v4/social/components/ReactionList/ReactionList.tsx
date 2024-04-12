@@ -10,11 +10,14 @@ interface ReactionListProps {
   referenceType: Amity.ReactableType;
 }
 
+type ReactionType = 'like' | 'love' | 'fire';
+type ReactionTabType = ReactionType | 'All';
+
 export const ReactionList = ({ referenceId, referenceType }: ReactionListProps) => {
   const { reactions } = useReactionsCollection({ referenceId, referenceType });
   const [activeTab, setActiveTab] = useState('All');
 
-  const handleTabClick = (tab) => {
+  const handleTabClick = (tab: ReactionTabType) => {
     setActiveTab(tab);
   };
 
@@ -38,7 +41,7 @@ export const ReactionList = ({ referenceId, referenceType }: ReactionListProps) 
             </span>
           </Typography.Title>
         </div>
-        {['like', 'love', 'fire'].map((reactionType) => {
+        {(['like', 'love', 'fire'] as ReactionType[]).map((reactionType) => {
           const count = reactions.filter(
             (reaction) => reaction.reactionName === reactionType,
           ).length;
