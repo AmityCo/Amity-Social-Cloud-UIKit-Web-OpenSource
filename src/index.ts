@@ -32,6 +32,7 @@ export {
   AmityLiveChatMessageList,
   AmityLiveChatMessageReceiverView,
   AmityLiveChatMessageSenderView,
+  AmityLiveChatMessageComposeBar,
   AmityMessageActionType,
 } from '~/v4/chat/components';
 
