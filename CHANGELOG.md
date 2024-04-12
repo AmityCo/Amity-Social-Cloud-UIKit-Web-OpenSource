@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.2 (2024-04-12)
+
+### Bug Fixes
+
+- export wrong path ([#264](https://github.com/EkoCommunications/AmityUiKitWeb/issues/264)) ([af08529](https://github.com/EkoCommunications/AmityUiKitWeb/commit/af08529265a6b620d7a543b438f96e44e1ef9eb1))
+
 ## 4.0.0-beta.1 (2024-04-05)
 
 ### Bug Fixes
