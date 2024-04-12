@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.1 (2024-04-05)
+
+### Bug Fixes
+
+- update ts-sdk version ([84204c0](https://github.com/EkoCommunications/AmityUiKitWeb/commit/84204c0194d2421513f20f7ef15aea3e12b09e74))
+
 ## 4.0.0-beta.0 (2024-03-25)
 
 ### Bug Fixes
