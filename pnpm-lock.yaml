@@ -101,7 +101,7 @@ dependencies:
 
 devDependencies:
   '@amityco/ts-sdk':
-    specifier: ^6.16.0
+    specifier: ^6.21.0
     version: 6.21.1
   '@fortawesome/pro-light-svg-icons':
     specifier: ^5.15.4

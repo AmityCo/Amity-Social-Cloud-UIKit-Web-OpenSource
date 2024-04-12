@@ -33,8 +33,10 @@ export {
   AmityLiveChatMessageReceiverView,
   AmityLiveChatMessageSenderView,
   AmityLiveChatMessageComposeBar,
-  AmityMessageActionType,
 } from '~/v4/chat/components';
+
+import type { AmityMessageActionType } from '~/v4/chat/components/AmityLiveChatHeader';
+export type { AmityMessageActionType };
 
 export { AmityLiveChatPage } from '~/v4/chat/pages';
 
