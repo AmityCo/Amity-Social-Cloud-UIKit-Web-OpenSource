@@ -22,12 +22,14 @@ function useLiveCollection<TCallback, TParams>({
   isLoading: boolean;
   hasMore: boolean;
   loadMore: () => void;
+  error: Error | null;
   loadMoreHasBeenCalled: boolean;
 } {
   const { subscribe } = useSDKLiveCollectionConnector();
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
   const [isLoading, setIsLoading] = useState(shouldCall ? shouldCall() : true);
   const [items, setItems] = useState<TCallback[]>([]);
+  const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const loadMoreFnRef = useRef<(() => void) | null>(null);
 
@@ -44,6 +46,7 @@ function useLiveCollection<TCallback, TParams>({
       if (response.data) setItems(response.data);
       setIsLoading(response.loading);
       setHasMore(response.hasNextPage);
+      setError(response.error);
       loadMoreFnRef.current = response.onNextPage;
       callback(response);
     },
@@ -68,6 +71,7 @@ function useLiveCollection<TCallback, TParams>({
     hasMore,
     isLoading,
     loadMore,
+    error,
     loadMoreHasBeenCalled,
   };
 }

@@ -21,7 +21,6 @@ import {
 import { backgroundImage as UserImage } from '~/icons/User';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useImage from '~/core/hooks/useImage';
-import useStory from '~/social/hooks/useStory';
 
 const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;

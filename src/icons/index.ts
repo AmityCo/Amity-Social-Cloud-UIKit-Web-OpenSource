@@ -52,6 +52,7 @@ export { default as FlagIcon } from './Flag';
 export { default as Pencil2Icon } from './Pencil2';
 export { default as FireIcon } from './Fire';
 export { default as HeartIcon } from './Heart';
+export { default as MentionIcon } from './Mention';
 
 // files
 export { default as AudioFile } from './files/Audio';
