@@ -1,0 +1,11 @@
+.popover {
+  width: 12.5rem;
+  background-color: var(--asc-color-secondary-shade4);
+  z-index: 10000;
+  padding: var(--asc-spacing-s2) 0;
+  border-radius: var(--asc-border-radius-lg);
+
+  &.fixed {
+    position: fixed !important;
+  }
+}

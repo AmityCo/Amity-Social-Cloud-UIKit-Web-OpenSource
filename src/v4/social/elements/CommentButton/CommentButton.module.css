@@ -1,0 +1,26 @@
+.uiCommentButton {
+  font-weight: var(--asc-text-font-weight-bold);
+  color: var(--asc-color-base-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--asc-spacing-xxs2);
+  border-radius: var(--asc-border-radius-full);
+  padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
+  background-color: var(--asc-color-base-default);
+  cursor: pointer;
+  border: none;
+}
+
+.uiRemoteImageButton {
+  width: var(--asc-spacing-m3);
+  height: var(--asc-spacing-m3);
+  cursor: pointer;
+  border: none;
+  outline: none;
+  padding: var(--asc-spacing-none);
+  margin: var(--asc-spacing-none);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

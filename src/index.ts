@@ -1,4 +1,4 @@
-export { default as AmityUiKitProvider } from '~/core/providers/UiKitProvider';
+export { default as AmityUiKitProvider } from '~/v4/core/providers/AmityUIKitProvider';
 export { default as AmityUiKitFeed } from '~/social/components/Feed';
 export { default as AmityUiKitSocial } from '~/social/pages/Application';
 export { default as AmityUiKitChat } from '~/chat/pages/Application';
@@ -19,14 +19,26 @@ export { default as AmityExpandableText } from '~/social/components/Comment/Comm
 export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
-export {
-  DraftsPage as AmityCreateStoryPage,
-  StoryPage as AmityViewStoryPage,
-} from '~/social/v4/pages';
+export { default as AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
+export { AmityDraftStoryPage, AmityViewStoryPage } from '~/v4/social/pages';
 export {
   CommentTray as AmityCommentTrayComponent,
   StoryTab as AmityStoryTabComponent,
-} from '~/social/v4/components';
+} from '~/v4/social/components';
+
+// Chat v4
+export {
+  AmityLiveChatHeader,
+  AmityLiveChatMessageList,
+  AmityLiveChatMessageReceiverView,
+  AmityLiveChatMessageSenderView,
+  AmityLiveChatMessageComposeBar,
+} from '~/v4/chat/components';
+
+import type { AmityMessageActionType } from '~/v4/chat/components';
+export type { AmityMessageActionType };
+
+export { AmityLiveChatPage } from '~/v4/chat/pages';
 
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';

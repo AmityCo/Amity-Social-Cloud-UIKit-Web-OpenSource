@@ -3,8 +3,9 @@
   "general.action.accept": "Accept",
   "general.action.decline": "Decline",
   "general.action.discard": "Discard",
+  "general.action.ok": "Ok",
   "general.error.tryAgainLater": "Something went wrong. Please try again later.",
-
+  "general.connection.waiting": "Waiting for connection...",
   "hello": "Hello World",
   "plural.like": "{amount, plural, one {like} other {likes}}",
   "comment": "Comment",
@@ -182,6 +183,7 @@
   "create": "Create",
   "cancel": "Cancel",
   "loading": "Loading...",
+  "loading.chat": "Loading chat...",
   "anonymous": "Anonymous",
   "comment.edited": "Edited",
   "comment.readmore": "...Read more",
@@ -207,6 +209,7 @@
 
   "CommentComposeBar.addComment": "Add comment",
   "CommentComposeBar.replayTo": "Reply to ",
+  "CommentComposeBar.replayToUser": "Replying to {displayName}",
   "CommentComposeBar.saySomething": "Say something nice",
 
   "CommentComposeBar.unableToPost": "Unable to post",
@@ -273,6 +276,7 @@
   "chat.members.return": "Return to controls",
   "chat.members.count": "{count} members",
   "chat.create.modalTitle": "Create new chat",
+  "chat.loading.error": "Couldn't load chat",
   "userSelector.placeholder": "Enter name or email addresses",
   "userSelector.emptyState.title": "It's empty here...",
   "userSelector.emptyState.description": "No contact found here",
@@ -396,5 +400,20 @@
   "editChatMembersModal.confirm.cancelText": "Continue editing",
   "editChatMembersModal.confirm.okText": "Leave",
 
-  "notification.error.blockedWord": "Amity SDK (400308): Text contain blocked word"
+  "notification.error.blockedWord": "Amity SDK (400308): Text contain blocked word",
+
+  "livechat.deleted.message": "This message was deleted",
+  "livechat.messageBubble.reply.button": "Reply",
+  "livechat.messageBubble.copy.button": "Copy",
+  "livechat.messageBubble.delete.button": "Delete",
+  "livechat.messageBubble.mention.button": "Mention",
+  "livechat.messageBubble.report.button": "Report",
+
+  "livechat.modal.delete.message.title": "Delete this message?",
+  "livechat.modal.delete.message.content": "This message will also be removed from your friend’s devices.",
+  "livechat.mention.all": "All",
+  "livechat.mention.all.description": "Notify everyone",
+
+  "livechat.notification.copy.message": "Message copied",
+  "livechat.composebar.placeholder": "Write a message"
 }

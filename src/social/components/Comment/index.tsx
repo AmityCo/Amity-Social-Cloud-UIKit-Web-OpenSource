@@ -37,7 +37,7 @@ import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
-import useStory from '~/social/hooks/useStory';
+
 import { ERROR_RESPONSE } from '~/social/constants';
 
 const REPLIES_PER_PAGE = 5;
