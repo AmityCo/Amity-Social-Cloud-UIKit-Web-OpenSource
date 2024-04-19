@@ -8,10 +8,10 @@ import Bin from '~/v4/icons/Bin';
 import useSDK from '~/core/hooks/useSDK';
 import MessageBubble from './MessageBubble';
 import useChannelPermission from '../../hooks/useChannelPermission';
+import Flag from '~/v4/icons/Flag';
 
 interface MessageItemProps {
   message: Amity.Message<'text'>;
-  isCreator: boolean;
   userDisplayName?: string;
   avatarUrl?: string;
   containerRef: React.RefObject<HTMLDivElement>;
@@ -52,7 +52,9 @@ const LiveChatMessageContent = ({
               isOwner={isOwner}
               isModerator={isModerator}
               action={action}
+              isFlagged={message.flagCount > 0}
             />
+            {message.flagCount > 0 && <Flag className={styles.flagIcon} />}
             <div className={styles.timestamp}>
               <FormattedTime value={new Date(message.createdAt)} />
             </div>

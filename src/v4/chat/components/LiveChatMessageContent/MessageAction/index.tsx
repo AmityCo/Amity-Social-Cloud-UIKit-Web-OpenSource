@@ -6,11 +6,13 @@ import Popover from '~/v4/core/components/Popover';
 import Reply from '~/v4/icons/Reply';
 import Copy from '~/v4/icons/Copy';
 import Bin from '~/v4/icons/Bin';
+import Flag from '~/v4/icons/Flag';
 import { Typography } from '~/v4/core/components';
 
 export type AmityMessageActionType = {
   onCopy?: () => void;
   onFlag?: () => void;
+  onUnflag?: () => void;
   onDelete?: () => void;
   onReply?: () => void;
   onMention?: () => void;
@@ -19,11 +21,18 @@ export type AmityMessageActionType = {
 interface MessageActionProps {
   isOwner: boolean;
   isModerator: boolean;
+  isFlagged?: boolean;
   action: AmityMessageActionType;
   containerRef: React.RefObject<HTMLDivElement>;
 }
 
-const MessageAction = ({ isOwner, isModerator, action, containerRef }: MessageActionProps) => {
+const MessageAction = ({
+  isOwner,
+  isModerator,
+  isFlagged,
+  action,
+  containerRef,
+}: MessageActionProps) => {
   const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
   const { formatMessage } = useIntl();
   const clickMeButtonRef = useRef<HTMLDivElement | null>(null);
@@ -40,6 +49,16 @@ const MessageAction = ({ isOwner, isModerator, action, containerRef }: MessageAc
 
   const onDeleteMessage = () => {
     action.onDelete && action.onDelete();
+    setIsPopoverOpen(false);
+  };
+
+  const onFlagMessage = () => {
+    action.onFlag && action.onFlag();
+    setIsPopoverOpen(false);
+  };
+
+  const onUnFlagMessage = () => {
+    action.onUnflag && action.onUnflag();
     setIsPopoverOpen(false);
   };
 
@@ -85,24 +104,25 @@ const MessageAction = ({ isOwner, isModerator, action, containerRef }: MessageAc
                 <Mention className={styles.mentionIcon} />
               </div>
             )} */}
-            {/* {(isModerator && !isOwner) || (
-              <div className={styles.messageActionButton}>
-                <div
-                  className={clsx(
-                    styles.messageDangerActionButtonText,
-                    typography.ascTypograyphyBody,
-                  )}
-                >
-                  {formatMessage({ id: 'livechat.messageBubble.report.button' })}
+            {isModerator && !isOwner && (
+              <div
+                className={styles.messageActionButton}
+                onClick={isFlagged ? onUnFlagMessage : onFlagMessage}
+              >
+                <div className={styles.messageDangerActionButtonText}>
+                  <Typography.Body>
+                    {formatMessage({
+                      id: `${
+                        isFlagged
+                          ? 'livechat.messageBubble.unReport.button'
+                          : 'livechat.messageBubble.report.button'
+                      }`,
+                    })}
+                  </Typography.Body>
                 </div>
-                <Flag
-                  className={styles.flagIcon}
-                  onClick={() => {
-                    onFlag && onFlag();
-                  }}
-                />
+                <Flag className={styles.flagIcon} />
               </div>
-            )} */}
+            )}
             {(isOwner || isModerator) && (
               <div className={styles.messageActionButton} onClick={onDeleteMessage}>
                 <div className={styles.messageDangerActionButtonText}>

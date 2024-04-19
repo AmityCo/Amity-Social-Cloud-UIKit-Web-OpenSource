@@ -1,12 +1,12 @@
 import { MessageRepository } from '@amityco/ts-sdk';
 
-export const flagMessage = async (
+export const unFlagMessage = async (
   messageId: string,
   onSuccess?: () => void,
   onError?: (error: unknown) => void,
 ) => {
   try {
-    await MessageRepository.flagMessage(messageId);
+    await MessageRepository.unflagMessage(messageId);
     onSuccess && onSuccess();
   } catch (error) {
     onError && onError(error);

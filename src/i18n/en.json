@@ -408,6 +408,7 @@
   "livechat.messageBubble.delete.button": "Delete",
   "livechat.messageBubble.mention.button": "Mention",
   "livechat.messageBubble.report.button": "Report",
+  "livechat.messageBubble.unReport.button": "Unreport",
 
   "livechat.modal.delete.message.title": "Delete this message?",
   "livechat.modal.delete.message.content": "This message will also be removed from your friend’s devices.",
@@ -415,5 +416,11 @@
   "livechat.mention.all.description": "Notify everyone",
 
   "livechat.notification.copy.message": "Message copied",
-  "livechat.composebar.placeholder": "Write a message"
+  "livechat.composebar.placeholder": "Write a message",
+
+  "livechat.report.message.success": "Message reported",
+  "livechat.report.message.error": "This message failed to be reported. Please try again.",
+
+  "livechat.unReport.message.success": "Message unreported",
+  "livechat.unReport.message.error": "This message failed to be unreported. Please try again."
 }

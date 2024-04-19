@@ -1,13 +1,13 @@
 import React from 'react';
 
-const ExclamationCircle = (props: React.SVGProps<SVGSVGElement>) => (
+const ExclamationCircle = ({ fill = '#FFFFFF', ...rest }: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="100%"
     height="100%"
     viewBox="0 0 512 512"
     fill="currentColor"
-    {...props}
+    {...rest}
   >
     <path
       d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504
@@ -17,6 +17,7 @@ const ExclamationCircle = (props: React.SVGProps<SVGSVGElement>) => (
       5.591 11.401 11.985 11.401h41.17c6.394 0 11.666-5.014
       11.985-11.401l6.8-136c.343-6.854-5.122-12.599-11.985-12.599h-54.77c-6.863 0-12.328
       5.745-11.985 12.599z"
+      fill={fill}
     />
   </svg>
 );

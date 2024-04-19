@@ -90,3 +90,8 @@
     cursor: pointer;
   }
 }
+
+.notificationPosition {
+  position: relative;
+  height: 0;
+}

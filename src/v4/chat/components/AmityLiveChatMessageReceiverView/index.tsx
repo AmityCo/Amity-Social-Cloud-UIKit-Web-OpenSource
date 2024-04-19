@@ -22,7 +22,6 @@ export const AmityLiveChatMessageReceiverView = ({
     <LiveChatMessageContent
       message={message as Amity.Message<'text'>}
       userDisplayName={user?.displayName}
-      isCreator={false}
       avatarUrl={avatarFileUrl}
       containerRef={containerRef}
       action={action}
