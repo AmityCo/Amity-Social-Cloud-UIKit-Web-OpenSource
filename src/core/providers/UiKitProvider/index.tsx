@@ -43,6 +43,7 @@ interface UiKitProviderProps {
     onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
     onEditUser?: (userId: string) => void;
     onMessageUser?: (userId: string) => void;
+    onBack?: () => void;
   };
   socialCommunityCreationButtonVisible?: boolean;
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
