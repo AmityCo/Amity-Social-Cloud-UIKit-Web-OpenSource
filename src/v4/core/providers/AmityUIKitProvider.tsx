@@ -132,7 +132,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
       <Localization locale="en">
         <CustomizationProvider initialConfig={configs as Config}>
           <StyledThemeProvider theme={buildGlobalTheme(theme)}>
-            <ThemeProvider initialConfig={configs?.theme}>
+            <ThemeProvider>
               <UIStyles>
                 <SDKContext.Provider value={sdkContextValue}>
                   <SDKConnectorProvider>

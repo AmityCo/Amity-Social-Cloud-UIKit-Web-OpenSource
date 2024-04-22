@@ -168,16 +168,16 @@ export interface Config {
       cancel_button_text?: string;
     };
     '*/comment_tray_component/*'?: {
-      component_theme?: {
-        light_theme?: {
+      theme?: {
+        light?: {
           primary_color?: string;
           secondary_color?: string;
         };
       };
     };
     '*/story_tab_component/*'?: {
-      component_theme?: {
-        light_theme?: {
+      theme?: {
+        light?: {
           primary_color?: string;
           secondary_color?: string;
         };

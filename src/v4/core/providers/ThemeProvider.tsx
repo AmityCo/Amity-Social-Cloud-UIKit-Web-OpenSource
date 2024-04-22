@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { lighten, parseToHsl, darken, hslToColorString } from 'polished';
+import { Config, useCustomization } from './CustomizationProvider';
 
 const SHADE_PERCENTAGES = [0.25, 0.4, 0.5, 0.75];
 
@@ -30,7 +31,7 @@ export const ThemeContext = createContext<{
   toggleTheme: () => {},
 });
 
-const defaultConfig = {
+const defaultConfig: Config = {
   preferred_theme: 'default',
   theme: {
     light: {
@@ -167,37 +168,41 @@ const defaultConfig = {
   },
 };
 
-export const ThemeProvider: React.FC<{ initialConfig?: any }> = ({ children, initialConfig }) => {
-  const config = initialConfig || defaultConfig;
+export const ThemeProvider: React.FC = ({ children }) => {
+  const config = useCustomization().config || defaultConfig;
 
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
-    const primaryColorShades = generateShades(config.light.primary_color);
-    const secondaryColorShades = generateShades(config.light.secondary_color);
+    if (config.theme?.light) {
+      const primaryColorShades = generateShades(config.theme.light.primary_color);
+      const secondaryColorShades = generateShades(config.theme.light.secondary_color);
 
-    setCSSVariable('--asc-color-primary-default', config.light.primary_color);
-    setCSSVariable('--asc-color-primary-shade1', primaryColorShades[0]);
-    setCSSVariable('--asc-color-primary-shade2', primaryColorShades[1]);
-    setCSSVariable('--asc-color-primary-shade3', primaryColorShades[2]);
-    setCSSVariable('--asc-color-primary-shade4', primaryColorShades[3]);
+      setCSSVariable('--asc-color-primary-default', config.theme.light.primary_color);
+      setCSSVariable('--asc-color-primary-shade1', primaryColorShades[0]);
+      setCSSVariable('--asc-color-primary-shade2', primaryColorShades[1]);
+      setCSSVariable('--asc-color-primary-shade3', primaryColorShades[2]);
+      setCSSVariable('--asc-color-primary-shade4', primaryColorShades[3]);
 
-    setCSSVariable('--asc-color-secondary-default', config.light.secondary_color);
-    setCSSVariable('--asc-color-secondary-shade1', secondaryColorShades[0]);
-    setCSSVariable('--asc-color-secondary-shade2', secondaryColorShades[1]);
-    setCSSVariable('--asc-color-secondary-shade3', secondaryColorShades[2]);
-    setCSSVariable('--asc-color-secondary-shade4', secondaryColorShades[3]);
+      setCSSVariable('--asc-color-secondary-default', config.theme.light.secondary_color);
+      setCSSVariable('--asc-color-secondary-shade1', secondaryColorShades[0]);
+      setCSSVariable('--asc-color-secondary-shade2', secondaryColorShades[1]);
+      setCSSVariable('--asc-color-secondary-shade3', secondaryColorShades[2]);
+      setCSSVariable('--asc-color-secondary-shade4', secondaryColorShades[3]);
 
-    setCSSVariable('--asc-color-base-default', config.light?.base_color);
-    setCSSVariable('--asc-color-base-shade1', config.light?.base_shade1_color);
-    setCSSVariable('--asc-color-base-shade2', config.light?.base_shade2_color);
-    setCSSVariable('--asc-color-base-shade3', config.light?.base_shade3_color);
-    setCSSVariable('--asc-color-base-shade4', config.light?.base_shade4_color);
+      setCSSVariable('--asc-color-base-default', config.theme.light.base_color);
+      setCSSVariable('--asc-color-base-shade1', config.theme.light.base_shade1_color);
+      setCSSVariable('--asc-color-base-shade2', config.theme.light.base_shade2_color);
+      setCSSVariable('--asc-color-base-shade3', config.theme.light.base_shade3_color);
+      setCSSVariable('--asc-color-base-shade4', config.theme.light.base_shade4_color);
 
-    setCSSVariable('--asc-color-alert', config.light?.alert_color);
-    setCSSVariable('--asc-color-background', config.light?.background_color);
+      setCSSVariable('--asc-color-alert', config.theme.light.alert_color);
+      setCSSVariable('--asc-color-background', config.theme.light.background_color);
+    }
 
-    setCSSVariable('--asc-color-primary-dark', config.dark?.primary_color);
+    if (config.theme?.dark) {
+      setCSSVariable('--asc-color-primary-dark', config.theme.dark.primary_color);
+    }
   }, [currentTheme, config]);
 
   useEffect(() => {
