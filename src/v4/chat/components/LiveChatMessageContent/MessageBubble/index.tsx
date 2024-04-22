@@ -4,12 +4,19 @@ import useUser from '~/core/hooks/useUser';
 import useMessage from '~/chat/hooks/useMessage';
 import MessageTextWithMention from '../MessageTextWithMention';
 import { Typography } from '~/v4/core/components';
+import useSDK from '~/core/hooks/useSDK';
 
 interface MessageBubbleProps {
   message: Amity.Message<'text'>;
 }
 
 const MessageBubble = ({ message }: MessageBubbleProps) => {
+  const userId = useSDK().currentUserId;
+  const isMentionToMe = message.metadata?.mentioned?.some(
+    (mention: { index: number; userId: string; type: 'user' | 'channel'; length: number }) =>
+      mention.userId === userId || mention.type === 'channel',
+  );
+
   if (message && message.parentId) {
     const parentMessage = useMessage(message.parentId) as Amity.Message<'text'>;
     const parentUser = useUser(parentMessage?.creatorId);
@@ -34,7 +41,7 @@ const MessageBubble = ({ message }: MessageBubbleProps) => {
   }
 
   return (
-    <div className={styles.messageBubble}>
+    <div data-mentioned={isMentionToMe} className={styles.messageBubble}>
       <MessageTextWithMention message={message} />
     </div>
   );

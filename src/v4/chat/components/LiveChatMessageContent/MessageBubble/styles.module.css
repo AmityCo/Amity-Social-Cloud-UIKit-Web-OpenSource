@@ -11,6 +11,10 @@
   white-space: pre-wrap;
 }
 
+.messageBubble[data-mentioned='true'] {
+  border: 1px solid var(--asc-color-primary-dark, var(--asc-color-primary));
+}
+
 .messageRepliedBubble {
   width: 12.5rem;
 }
