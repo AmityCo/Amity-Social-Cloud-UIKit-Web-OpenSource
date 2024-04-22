@@ -418,6 +418,8 @@
   "livechat.notification.copy.message": "Message copied",
   "livechat.composebar.placeholder": "Write a message",
 
+  "livechat.delete.message.error": "Unable to delete message. Please try again.",
+
   "livechat.report.message.success": "Message reported",
   "livechat.report.message.error": "This message failed to be reported. Please try again.",
 

@@ -49,7 +49,13 @@ export const AmityLiveChatMessageList = ({
       content: formatMessage({ id: 'livechat.modal.delete.message.content' }),
       cancelText: formatMessage({ id: 'cancel' }),
       okText: formatMessage({ id: 'delete' }),
-      onOk: () => deleteMessage(messageId),
+      onOk: () =>
+        deleteMessage(messageId, {
+          onError: () =>
+            notification.error({
+              content: formatMessage({ id: 'livechat.delete.message.error' }),
+            }),
+        }),
       theme: 'dark',
     });
   };
