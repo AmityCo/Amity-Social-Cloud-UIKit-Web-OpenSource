@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './styles.module.css';
 import { Typography } from '~/v4/core/components';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import HyperLinkText from '~/v4/core/components/HyperlinkText/index';
 
 interface MessageTextWithMentionProps {
   message: Amity.Message<'text'>;
@@ -65,14 +66,20 @@ const MessageTextWithMention = ({ message, className }: MessageTextWithMentionPr
               {segment.text}
             </span>
           ) : (
-            <span key={index}>{segment.text}</span>
+            <span key={index}>
+              <HyperLinkText>{segment.text}</HyperLinkText>
+            </span>
           ),
         )}
       </Typography.Body>
     );
   }
 
-  return <Typography.Body className={className}>{message.data?.text}</Typography.Body>;
+  return (
+    <Typography.Body className={className}>
+      <HyperLinkText>{message.data?.text}</HyperLinkText>
+    </Typography.Body>
+  );
 };
 
 export default MessageTextWithMention;

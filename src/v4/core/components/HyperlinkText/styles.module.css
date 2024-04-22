@@ -1,0 +1,3 @@
+.hyperlink {
+  color: var(--asc-color-primary-dark, var(--asc-color-primary));
+}
