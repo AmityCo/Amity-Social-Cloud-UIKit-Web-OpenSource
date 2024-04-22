@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { SubscriptionLevels } from '@amityco/ts-sdk';
 import { FormattedMessage } from 'react-intl';
@@ -32,7 +32,7 @@ import useStories from '~/social/hooks/useStories';
 import { BarsIcon } from '~/icons';
 
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
-import { AmityDraftStoryPage } from '~/index';
+import { AmityDraftStoryPage } from '~/v4/social/pages';
 
 interface CommunityFeedProps {
   communityId: string;
