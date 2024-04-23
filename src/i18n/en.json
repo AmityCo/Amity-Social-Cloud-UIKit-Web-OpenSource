@@ -410,6 +410,7 @@
   "livechat.messageBubble.report.button": "Report",
   "livechat.messageBubble.unReport.button": "Unreport",
 
+  "livechat.channel.muted": "This channel has been set to read-only by the channel moderator",
   "livechat.modal.delete.message.title": "Delete this message?",
   "livechat.modal.delete.message.content": "This message will also be removed from your friend’s devices.",
   "livechat.mention.all": "All",
@@ -420,6 +421,8 @@
 
   "livechat.delete.message.error": "Unable to delete message. Please try again.",
 
+  "livechat.member.banned.title": "You are banned from chat",
+  "livechat.member.banned.description": "You won’t be able to participate in this chat until you’ve been unbanned.",
   "livechat.report.message.success": "Message reported",
   "livechat.report.message.error": "This message failed to be reported. Please try again.",
 

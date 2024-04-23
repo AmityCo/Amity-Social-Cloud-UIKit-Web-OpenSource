@@ -15,7 +15,7 @@ interface MessageItemProps {
   userDisplayName?: string;
   avatarUrl?: string;
   containerRef: React.RefObject<HTMLDivElement>;
-  action: AmityMessageActionType;
+  action?: AmityMessageActionType;
 }
 
 const LiveChatMessageContent = ({
@@ -47,13 +47,15 @@ const LiveChatMessageContent = ({
         ) : (
           <div className={styles.messageBubbleWrap}>
             <MessageBubble message={message} />
-            <MessageAction
-              containerRef={containerRef}
-              isOwner={isOwner}
-              isModerator={isModerator}
-              action={action}
-              isFlagged={message.flagCount > 0}
-            />
+            {action && (
+              <MessageAction
+                containerRef={containerRef}
+                isOwner={isOwner}
+                isModerator={isModerator}
+                action={action}
+                isFlagged={message.flagCount > 0}
+              />
+            )}
             {message.flagCount > 0 && <Flag className={styles.flagIcon} />}
             <div className={styles.timestamp}>
               <FormattedTime value={new Date(message.createdAt)} />

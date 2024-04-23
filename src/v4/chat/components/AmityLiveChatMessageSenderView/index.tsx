@@ -7,7 +7,7 @@ import { AmityMessageActionType } from '../LiveChatMessageContent/MessageAction'
 interface AmityLiveChatMessageSenderViewProps {
   message: Amity.Message;
   containerRef: React.RefObject<HTMLDivElement>;
-  action: AmityMessageActionType;
+  action?: AmityMessageActionType;
 }
 
 export const AmityLiveChatMessageSenderView = ({

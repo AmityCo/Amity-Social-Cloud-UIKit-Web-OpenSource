@@ -1,15 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AmityLiveChatMessageList } from 'v4/chat/components/AmityLiveChatMessageList';
 import AmityLiveChatMessageComposeBar from 'v4/chat/components/AmityLiveChatMessageComposeBar';
 import ReplyMessagePlaceholder from '~/v4/chat/pages/AmityLiveChatPage/ChatContainer/ReplyMessagePlaceholder';
 import useConnectionStates from '~/social/hooks/useConnectionStates';
 import ChatLoadingState from '~/v4/chat/pages/AmityLiveChatPage/ChatContainer/ChatLoadingState';
-// import mentionStyles from '~/v4/core/components/InputText/styles.module.css';
+import ChatCustomState from '~/v4/chat/pages/AmityLiveChatPage/ChatContainer/ChatCustomState';
 import styles from './styles.module.css';
 import { LiveChatNotificationsContainer } from '~/v4/chat/components/LiveChatNotification';
+import MutedIcon from '~/v4/icons/Muted';
+import { Typography } from '~/v4/core/components/Typography';
+import mentionStyles from '~/v4/core/components/InputText/styles.module.css';
+import { FormattedMessage } from 'react-intl';
+import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChannelMembership';
+import CommentAltExclamation from '~/v4/icons/CommentAltExclamation';
 
 const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
   const isOnline = useConnectionStates();
+  const currentUserMembership = useCurrentUserChannelMembership(channel.channelId);
 
   const [replyMessage, setReplyMessage] = useState<Amity.Message<'text'> | undefined>(undefined);
   const [mentionMessage, setMentionMessage] = useState<Amity.Message<'text'> | undefined>(
@@ -20,13 +27,28 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
   const suggestionRef = useRef<HTMLDivElement>(null);
   const composeBarRef = useRef<HTMLDivElement>(null);
 
-  if (!isOnline) return <ChatLoadingState />;
-
   useEffect(() => {
     if (composeBarRef.current?.clientHeight && composeBarRef.current?.clientHeight > 0) {
       setOffsetBottom(composeBarRef.current.clientHeight - 30);
     }
   }, [composeBarRef.current?.clientHeight]);
+
+  if (!isOnline) return <ChatLoadingState />;
+
+  if (currentUserMembership?.isBanned)
+    return (
+      <ChatCustomState>
+        <div className={styles.banStatePanel}>
+          <CommentAltExclamation className={styles.commentAltIcon} />
+          <Typography.Heading>
+            <FormattedMessage id="livechat.member.banned.title" />
+          </Typography.Heading>
+          <Typography.Body>
+            <FormattedMessage id="livechat.member.banned.description" />
+          </Typography.Body>
+        </div>
+      </ChatCustomState>
+    );
 
   return (
     <>
@@ -34,7 +56,16 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
 
       {isOnline && (
         <>
-          {/* <div ref={suggestionRef} className={mentionStyles.mentionContainer}></div> */}
+          <div ref={suggestionRef} className={mentionStyles.mentionContainer}></div>
+          {channel.isMuted && (
+            <div className={styles.mutedChannelContainer}>
+              <MutedIcon width={20} height={20} className={styles.mutedChannelIcon} />
+              <Typography.Body>
+                <FormattedMessage id="livechat.channel.muted" />
+              </Typography.Body>
+            </div>
+          )}
+
           {replyMessage && (
             <ReplyMessagePlaceholder
               replyMessage={replyMessage}

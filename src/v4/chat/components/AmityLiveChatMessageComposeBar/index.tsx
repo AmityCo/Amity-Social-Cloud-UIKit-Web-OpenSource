@@ -156,6 +156,7 @@ export const AmityLiveChatMessageComposeBar = ({
             suggestionRef={suggestionRef}
             data-qa-anchor="live-chat-compose-bar"
             multiline
+            disabled={channel.isMuted}
             placeholder={
               componentConfig?.placeholder_text ||
               formatMessage({

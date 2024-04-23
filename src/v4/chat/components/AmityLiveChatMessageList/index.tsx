@@ -117,11 +117,15 @@ export const AmityLiveChatMessageList = ({
               return (
                 <AmityLiveChatMessageSenderView
                   message={message}
-                  action={{
-                    onReply: () => replyMessage(message),
-                    onDelete: () => onDeleteMessage(message.messageId),
-                    onCopy: () => message.data?.text && copyMessage(message.data?.text),
-                  }}
+                  action={
+                    !channel.isMuted
+                      ? {
+                          onReply: () => replyMessage(message),
+                          onDelete: () => onDeleteMessage(message.messageId),
+                          onCopy: () => message.data?.text && copyMessage(message.data?.text),
+                        }
+                      : undefined
+                  }
                   key={message.messageId}
                   containerRef={containerRef}
                 />

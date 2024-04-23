@@ -99,3 +99,35 @@
 .messageListPlaceholder {
   height: 100%;
 }
+
+.mutedChannelContainer {
+  display: flex;
+  font-family: var(--asc-text-global-font-family);
+  background-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-shade1);
+  max-width: 100%;
+  padding: var(--asc-spacing-s2);
+  padding-left: var(--asc-spacing-m1);
+  gap: var(--asc-spacing-s2);
+  align-items: center;
+}
+
+.mutedChannelIcon {
+  color: var(--asc-color-base-shade3);
+}
+
+.commentAltIcon {
+  color: var(--asc-color-base-shade2);
+}
+
+.banStatePanel {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: var(--asc-spacing-s2);
+  padding: var(--asc-spacing-m1);
+  color: var(--asc-color-base-shade2);
+}
