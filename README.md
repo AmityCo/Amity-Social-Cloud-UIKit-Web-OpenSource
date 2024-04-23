@@ -48,7 +48,7 @@ To integrate the Amity UI-Kit with your existing project, please follow the step
 5. Pack the project:
 
    ```
-   pnpm run pack
+   pnpm pack
    ```
 
    This command will generate a file named `amityco-ui-kit-open-source-<version>.tgz`.
