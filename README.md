@@ -2,38 +2,46 @@
 
 ## Prerequisites
 
-Prior to commencing the installation process, kindly ensure that the following prerequisites are installed on your system:
+Before getting started, ensure that you have the following prerequisites installed on your system:
 
 - [Node.js](https://nodejs.org/) LTS version (currently version 20)
 - [pnpm](https://pnpm.io/) version 8
 
-## (Optional) Installation of PNPM
-
-To install PNPM, please execute the following command:
+## How to install PNPM (Optional)
 
 ```
 corepack enable pnpm
 ```
 
-Reference: https://pnpm.io/installation#using-corepack
+Ref: https://pnpm.io/installation#using-corepack
+
+## Running Storybook (Optional)
+
+To run Storybook and view the UI components in isolation, use the following command:
+
+```
+pnpm run storybook
+```
+
+Then, open your browser and navigate to http://localhost:6006.
 
 ## Installation
 
-To integrate the Amity UI-Kit with your existing project, please follow the steps outlined below:
+To install the Amity UI-Kit together with another project, follow these steps:
 
-1. Clone the repository by executing the following command:
+1. Clone the repository using the following command:
 
    ```
    git clone https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
    ```
 
-2. Navigate to the directory of the cloned repository:
+2. Navigate to the cloned repository's directory:
 
    ```
    cd ./Amity-Social-Cloud-UIKit-Web-OpenSource
    ```
 
-3. Install the required dependencies using pnpm:
+3. Install the dependencies using pnpm:
 
    ```
    pnpm install
@@ -45,56 +53,42 @@ To integrate the Amity UI-Kit with your existing project, please follow the step
    pnpm run build
    ```
 
-5. Pack the project:
-
-   ```
-   pnpm pack
-   ```
-
-   This command will generate a file named `amityco-ui-kit-open-source-<version>.tgz`.
-
-6. Navigate to the directory of your application:
+5. Navigate to your application's directory:
 
    ```
    cd <path-to-your-app>
    ```
 
-7. Link the Amity UI-Kit repository to your application using one of the following package managers:
-
+6. Link the Amity UI-Kit repository to your application using one of the following package managers:
    - NPM:
-
      ```
-     npm i file:<path-to-amity-ui-kit-repository>/<path-to-tgz-file> --save
+     npm link file:<path-to-amity-ui-kit-repository> --save
      ```
-
    - Yarn (Classic):
-
      ```
-     yarn add file:<path-to-amity-ui-kit-repository>/<path-to-tgz-file>
+     yarn add file:<path-to-amity-ui-kit-repository>
      ```
-
    - PNPM:
-
      ```
-     pnpm i file:<path-to-amity-ui-kit-repository>/<path-to-tgz-file>
+     pnpm i file:<path-to-amity-ui-kit-repository>
      ```
 
 ## Documentation
 
-For comprehensive information and guidance on utilizing the Amity UI-Kit, kindly refer to our extensive online documentation available at [https://docs.amity.co](https://docs.amity.co).
+For detailed information and guidance on using the Amity UI-Kit, please refer to our comprehensive online documentation available at [https://docs.amity.co](https://docs.amity.co).
 
-Should you require further assistance or have any inquiries, please do not hesitate to contact our dedicated UI-Kit support team at **developers@amity.co**. We are committed to assisting you in maximizing the potential of the Amity UI-Kit.
+If you require further assistance or have any questions, please don't hesitate to contact our dedicated UI-Kit support team at **developers@amity.co**. We are here to help you make the most of the Amity UI-Kit.
 
 ## Contributing
 
-We cordially invite contributions from the community to assist in the improvement and enhancement of the Amity UI-Kit. If you are interested in contributing to this project, kindly review our [contributing guide](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/blob/develop/contributing.md) for guidelines and best practices.
+We welcome contributions from the community to help improve and enhance the Amity UI-Kit. If you are interested in contributing to this project, please review our [contributing guide](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/blob/develop/contributing.md) for guidelines and best practices.
 
-Thank you for selecting the Amity UI-Kit for your web development requirements!
+Thank you for choosing the Amity UI-Kit for your web development needs!
 
-### Frequently Asked Questions (FAQ)
+### FAQ
 
-Q: I encountered a types error while attempting to run `pnpm build`.
-A: Please ensure that your project structure resembles the following:
+Q: I tried to run `pnpm build` and it throws a types error.
+A: Try to structure your project to be like this:
 
 ```
 - your_app
@@ -102,6 +96,3 @@ A: Please ensure that your project structure resembles the following:
 - Amity-Social-Cloud-UIKit-Web-OpenSource
   - src
 ```
-
-Q: The modifications I made to the code do not appear to be applied.
-A: Please attempt to execute `npm cache clean` or `npm cache clean --force` to resolve this issue.
