@@ -3,8 +3,6 @@ import { AmityUIKitProvider } from '../../src/v4/core/providers';
 import { Preview } from '@storybook/react';
 import amityConfig from '../../amity-uikit.config.json';
 
-export type AmityUIKitConfig = typeof amityConfig;
-
 const GLOBAL_NAME = 'user';
 const global = {
   [GLOBAL_NAME]: {

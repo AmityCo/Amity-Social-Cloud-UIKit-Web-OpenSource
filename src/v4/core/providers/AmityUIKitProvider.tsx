@@ -1,7 +1,6 @@
 import '../../../core/providers/UiKitProvider/inter.css';
 import './index.css';
 import '../../styles/global.css';
-import amityUKitConfig from '../../../../amity-uikit.config.json';
 
 import React, { useEffect, useMemo, useState } from 'react';
 import useUser from '~/core/hooks/useUser';
@@ -19,14 +18,14 @@ import Localization from '~/core/providers/UiKitProvider/Localization';
 
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import buildGlobalTheme from '~/core/providers/UiKitProvider/theme';
-import { Config, CustomizationProvider } from './CustomizationProvider';
+import { defaultConfig, Config, CustomizationProvider } from './CustomizationProvider';
 import { ThemeProvider } from './ThemeProvider';
 import { PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UIStyles } from '~/core/providers/UiKitProvider/styles';
 import AmityUIKitManager from '../AmityUIKitManager';
 
-export type AmityUIKitConfig = typeof amityUKitConfig;
+export type AmityUIKitConfig = Config;
 
 interface AmityUIKitProviderProps {
   apiKey: string;
@@ -130,7 +129,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   return (
     <QueryClientProvider client={queryClient}>
       <Localization locale="en">
-        <CustomizationProvider initialConfig={configs as Config}>
+        <CustomizationProvider initialConfig={configs || defaultConfig}>
           <StyledThemeProvider theme={buildGlobalTheme(theme)}>
             <ThemeProvider>
               <UIStyles>
