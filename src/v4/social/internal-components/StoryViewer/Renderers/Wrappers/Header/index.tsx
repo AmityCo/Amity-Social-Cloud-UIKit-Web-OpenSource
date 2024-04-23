@@ -6,6 +6,7 @@ import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 
 import { PauseIcon, PlayIcon, VerifiedIcon } from '~/icons';
 import { CloseButton, OverflowMenuButton } from '~/v4/social/elements';
+import Verified from '~/v4/social/icons/verified';
 
 const Header: React.FC<
   React.PropsWithChildren<{
@@ -64,7 +65,7 @@ const Header: React.FC<
                 {heading}
               </div>
             </Truncate>
-            {isOfficial && <VerifiedIcon className={styles.verifiedBadge} />}
+            {!isOfficial && <Verified className={styles.verifiedBadge} />}
           </div>
           <span className={styles.viewStorySubHeading}>{subheading}</span>
         </div>
