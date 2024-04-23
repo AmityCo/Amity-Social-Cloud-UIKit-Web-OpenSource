@@ -17,13 +17,42 @@ Ref: https://pnpm.io/installation#using-corepack
 
 ## Running Storybook (Optional)
 
-To run Storybook and view the UI components in isolation, use the following command:
+To run Storybook and view the UI components in isolation, follow these steps:
 
-```
-pnpm run storybook
-```
+1. Clone the Amity UI-Kit repository:
 
-Then, open your browser and navigate to http://localhost:6006.
+   ```
+   git clone https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource.git
+   ```
+
+2. Navigate to the cloned repository's directory:
+
+   ```
+   cd Amity-Social-Cloud-UIKit-Web-OpenSource
+   ```
+
+3. Install the dependencies using pnpm:
+
+   ```
+   pnpm install
+   ```
+
+4. Create a `.env` file at the root of the project with the following content:
+
+   ```
+   STORYBOOK_API_REGION=<API_REGION>
+   STORYBOOK_API_KEY=<API_KEY>
+   ```
+
+   Replace `<API_REGION>` and `<API_KEY>` with your actual credentials.
+
+5. Run Storybook:
+
+   ```
+   pnpm run storybook
+   ```
+
+6. Open your browser and navigate to `http://localhost:6006` to view the Storybook interface.
 
 ## Installation
 
