@@ -429,5 +429,8 @@
   "livechat.unReport.message.success": "Message unreported",
   "livechat.unReport.message.error": "This message failed to be unreported. Please try again.",
   "livechat.error.tooLongMessage.title": "Unable to send message",
-  "livechat.error.tooLongMessage.description": "Your message is too long. Please shorten your message and try again."
+  "livechat.error.tooLongMessage.description": "Your message is too long. Please shorten your message and try again.",
+  "livechat.error.sendingMessage.error": "Your message wasn't sent. Please try again.",
+  "livechat.error.sendingMessage.blockedWord": "Your message wasn't sent as it contains a blocked word.",
+  "livechat.error.sendingMessage.notAllowLink": "Your message wasn’t sent as it contained a link that’s not allowed."
 }

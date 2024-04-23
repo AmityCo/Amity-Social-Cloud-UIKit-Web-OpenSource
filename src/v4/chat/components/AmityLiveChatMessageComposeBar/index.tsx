@@ -9,6 +9,7 @@ import { confirm } from '~/v4/core/components/ConfirmModal';
 import { useIntl } from 'react-intl';
 import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import { notification } from '~/v4/chat/components/LiveChatNotification';
 
 const COMPOSEBAR_MAX_CHARACTER_LIMIT = 200;
 
@@ -78,11 +79,20 @@ export const AmityLiveChatMessageComposeBar = ({
         metadata,
         parentId: replyMessage?.messageId || undefined,
       });
-    } catch (e) {
-      confirm({
-        title: formatMessage({ id: 'post.renderingError.title' }),
-        content: formatMessage({ id: 'general.error.tryAgainLater' }),
-        okText: formatMessage({ id: 'general.action.ok' }),
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      let notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage' });
+
+      if (errorMessage === 'Amity SDK (400308): Text contain blocked word') {
+        notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.blockedWord' });
+      } else if (
+        errorMessage === 'Amity SDK (400309): Data contain link that is not in whitelist'
+      ) {
+        notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.notAllowLink' });
+      }
+
+      notification.error({
+        content: notificationMessage,
       });
       onChange({ text, plainText: text, mentions: [] });
       return;
