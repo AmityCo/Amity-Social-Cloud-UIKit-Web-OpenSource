@@ -5,32 +5,32 @@ import { confirm } from '~/core/components/Confirm';
 import useComment from '~/social/hooks/useComment';
 
 import { notification } from '~/core/components/Notification';
-import useSocialMention from '~/social/hooks/useSocialMention';
+import useMention from '~/v4/chat/hooks/useMention';
 
 import {
   CommentBlock,
+  CommentContainer,
   DeletedCommentContainer,
   DeletedIcon,
   DeletedReplyContainer,
   IconContainer,
   MessageContainer,
-  Text,
-  ReplyContainer,
-  CommentContainer,
-  MobileSheetButton,
   MobileSheet,
+  MobileSheetButton,
   MobileSheetContent,
   MobileSheetHeader,
   MobileSheetNestedBackDrop,
+  ReplyContainer,
+  Text,
 } from './styles';
 import {
+  extractMetadata,
+  isNonNullable,
   Mentioned,
   Mentionees,
   Metadata,
-  extractMetadata,
-  isNonNullable,
   parseMentionsMarkup,
-} from '~/helpers/utils';
+} from '~/v4/helpers/utils';
 import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
@@ -135,13 +135,12 @@ const Comment = ({
     commentId,
   });
 
-  const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } =
-    useSocialMention({
-      targetId: story?.targetId,
-      targetType: story?.targetType,
-      remoteText: getCommentData(comment),
-      remoteMarkup: parseMentionsMarkup(getCommentData(comment), comment?.metadata || {}),
-    });
+  const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } = useMention({
+    targetId: story?.targetId,
+    targetType: story?.targetType,
+    remoteText: getCommentData(comment),
+    remoteMarkup: parseMentionsMarkup(getCommentData(comment), comment?.metadata || {}),
+  });
 
   const { canDelete, canEdit, canLike, canReply, canReport } = useCommentPermission(
     comment,

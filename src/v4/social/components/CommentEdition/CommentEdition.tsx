@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ButtonContainer, CommentEditContainer, CommentEditTextarea } from './styles';
 
-import { QueryMentioneesFnType } from '~/social/hooks/useSocialMention';
+import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 
 import { useTheme } from 'styled-components';
 import { CancelButton, SaveButton } from '../../elements';

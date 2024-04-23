@@ -1,4 +1,11 @@
-import React, { forwardRef, KeyboardEventHandler, MutableRefObject, RefObject, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  KeyboardEventHandler,
+  MutableRefObject,
+  RefObject,
+  useRef,
+  useState,
+} from 'react';
 import { Mention, MentionsInput } from 'react-mentions';
 import clsx from 'clsx';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -130,7 +137,7 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
             inputRef={ref as MutableRefObject<HTMLTextAreaElement>}
             rows={rows}
             {...props}
-            className='live-chat-mention-input'
+            className="live-chat-mention-input"
             classNames={styles}
             onKeyDown={(e) => handleKeyDown(e)}
             onChange={handleMentionInput}
@@ -140,10 +147,10 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
           >
             <Mention
               trigger="@"
+              className={styles.mentions_mention}
               data={(queryValue, callback) => {
                 if (!queryMentionees) return callback([]);
                 queryMentionees(queryValue).then((result) => {
-
                   if (!isModerator) {
                     callback(result);
                     return;
@@ -155,7 +162,11 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
                     isLastItem: false,
                   };
 
-                  const resultWithAllMention = mentionItem.display.toLowerCase().includes(queryValue.trim().toLowerCase()) ? [mentionItem] : [];
+                  const resultWithAllMention = mentionItem.display
+                    .toLowerCase()
+                    .includes(queryValue.trim().toLowerCase())
+                    ? [mentionItem]
+                    : [];
 
                   callback(resultWithAllMention.concat(result));
                 });

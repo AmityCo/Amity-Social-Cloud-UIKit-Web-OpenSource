@@ -12,7 +12,7 @@ import { notification } from '~/core/components/Notification';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateStoryButton } from '../../elements';
 import { Trash2Icon } from '~/icons';
-import { isNonNullable } from '~/helpers/utils';
+import { isNonNullable } from '~/v4/helpers/utils';
 import { extractColors } from 'extract-colors';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';

@@ -11,7 +11,7 @@ import { useMedia } from 'react-use';
 import useStories from '~/social/hooks/useStories';
 import useSDK from '~/core/hooks/useSDK';
 import { confirm } from '~/core/components/Confirm';
-import { isNonNullable } from '~/helpers/utils';
+import { isNonNullable } from '~/v4/helpers/utils';
 import { ArrowLeftCircle, ArrowRightCircle, Trash2Icon } from '~/icons';
 
 import styles from './ViewStoryPage.module.css';

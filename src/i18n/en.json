@@ -427,5 +427,7 @@
   "livechat.report.message.error": "This message failed to be reported. Please try again.",
 
   "livechat.unReport.message.success": "Message unreported",
-  "livechat.unReport.message.error": "This message failed to be unreported. Please try again."
+  "livechat.unReport.message.error": "This message failed to be unreported. Please try again.",
+  "livechat.error.tooLongMessage.title": "Unable to send message",
+  "livechat.error.tooLongMessage.description": "Your message is too long. Please shorten your message and try again."
 }

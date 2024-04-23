@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChannelRepository, CommunityRepository, UserRepository } from '@amityco/ts-sdk';
-import { extractMetadata, formatMentionees, isNonNullable } from '~/helpers/utils';
+import { extractMetadata, formatMentionees, isNonNullable } from '~/v4/helpers/utils';
 import useCommunity from './useCommunity';
 
 interface UseMentionProps {
