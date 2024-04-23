@@ -1,46 +1,49 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Stories from 'react-insta-stories';
-import { StoryRepository } from '@amityco/ts-sdk';
-import { extractColors } from 'extract-colors';
-import { FinalColor } from 'extract-colors/lib/types/Color';
-import useImage from '~/core/hooks/useImage';
-import { useIntl } from 'react-intl';
-import { notification } from '~/core/components/Notification';
+
+import useStories from '~/social/hooks/useStories';
+
+import useSDK from '~/core/hooks/useSDK';
 
 import { useMedia } from 'react-use';
-import useStories from '~/social/hooks/useStories';
-import useSDK from '~/core/hooks/useSDK';
-import { confirm } from '~/core/components/Confirm';
-import { isNonNullable } from '~/helpers/utils';
-import { ArrowLeftCircle, ArrowRightCircle, Trash2Icon } from '~/icons';
+import { useIntl } from 'react-intl';
 
-import styles from './ViewStoryPage.module.css';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import { FinalColor } from 'extract-colors/lib/types/Color';
+import { notification } from '~/core/components/Notification';
+import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateStoryButton } from '../../elements';
+import { Trash2Icon } from '~/icons';
+import { isNonNullable } from '~/helpers/utils';
+import { extractColors } from 'extract-colors';
 
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import { confirm } from '~/core/components/Confirm';
+
+import {
+  HiddenInput,
+  StoryArrowLeftButton,
+  StoryArrowRightButton,
+  StoryWrapper,
+  ViewStoryContainer,
+  ViewStoryContent,
+  ViewStoryOverlay,
+} from '../../internal-components/StoryViewer/styles';
+import Stories from 'react-insta-stories';
 import { renderers } from '../../internal-components/StoryViewer/Renderers';
+import { AmityDraftStoryPage } from '..';
 import { checkStoryPermission } from '~/utils';
-import { AmityDraftStoryPage } from '../../pages';
 import { useStoryContext } from '../../providers/StoryProvider';
 
-interface StoryViewerProps {
-  pageId: 'story_page';
-  targetId: string;
-  duration?: number;
-  onClose: () => void;
+interface CommunityFeedStoryProps {
+  communityId: string;
 }
 
-const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewerProps) => {
-  const { getConfig, isExcluded } = useCustomization();
-  const pageConfig = getConfig(`${pageId}/*/*`);
-  const isPageExcluded = isExcluded(`${pageId}/*/*`);
+const DURATION = 5000;
 
-  if (isPageExcluded) return null;
-
-  const progressBarElementConfig = getConfig(`${pageId}/*/progress_bar`);
+export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
+  const { onBack } = useNavigation();
 
   const { stories } = useStories({
-    targetId,
+    targetId: communityId,
     targetType: 'community',
     options: {
       orderBy: 'asc',
@@ -66,7 +69,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     }
   };
 
-  const { currentUserId } = useSDK();
+  const { client, currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
   const isMobile = useMedia('(max-width: 768px)');
@@ -75,10 +78,8 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   const { file, setFile } = useStoryContext();
   const [colors, setColors] = useState<FinalColor[]>([]);
 
-  const { client } = useSDK();
-
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const haveStoryPermission = checkStoryPermission(client, targetId);
+  const haveStoryPermission = checkStoryPermission(client, communityId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
@@ -89,7 +90,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
       onOk: async () => {
         previousStory();
         if (isLastStory) {
-          onClose();
+          onBack();
         }
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
@@ -113,14 +114,14 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     metadata?: Amity.Metadata,
     items?: Amity.StoryItem[],
   ) => {
-    onClose();
+    onBack();
     const formData = new FormData();
     formData.append('files', file);
     setFile(null);
     if (file?.type.includes('image')) {
       const { data: imageData } = await StoryRepository.createImageStory(
         'community',
-        targetId,
+        communityId,
         formData,
         metadata,
         imageMode,
@@ -134,7 +135,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     } else {
       const { data: videoData } = await StoryRepository.createVideoStory(
         'community',
-        targetId,
+        communityId,
         formData,
         metadata,
         items,
@@ -164,17 +165,11 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        isStoryCreator
+        isStoryCreator || haveStoryPermission
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
-              icon: (
-                <Trash2Icon
-                  style={{
-                    fill: 'var(--asc-color-black)',
-                  }}
-                />
-              ),
+              icon: <Trash2Icon />,
             }
           : null,
       ].filter(isNonNullable),
@@ -186,14 +181,9 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     };
   });
 
-  const avatarUrl = useImage({
-    fileId: stories[currentIndex]?.community?.avatarFileId,
-    imageSize: 'small',
-  });
-
   const nextStory = () => {
     if (currentIndex === stories.length - 1) {
-      onClose();
+      onBack();
       return;
     }
     setCurrentIndex(currentIndex + 1);
@@ -215,10 +205,10 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
         ? 'cover'
         : 'contain',
     background: `linear-gradient(
-             180deg,
-             ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
-             ${colors?.length > 0 ? colors[colors?.length - 1].hex : '#000'} 100%
-           )`,
+               180deg,
+               ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
+               ${colors?.length > 0 ? colors[colors?.length - 1].hex : '#000'} 100%
+             )`,
   };
 
   const increaseIndex = () => {
@@ -250,7 +240,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     }
   }, [stories, file, currentIndex]);
 
-  if (isDraft && file) {
+  if (file) {
     return (
       <AmityDraftStoryPage
         mediaType={
@@ -258,40 +248,29 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
             ? { type: 'image', url: URL.createObjectURL(file) }
             : { type: 'video', url: URL.createObjectURL(file) }
         }
-        targetId={targetId}
+        targetId={communityId}
         targetType="community"
       />
     );
   }
 
   return (
-    <div className={styles.storyWrapper} data-qa-anchor="story_page">
+    <StoryWrapper data-qa-anchor="story_page">
       {!isMobile && (
-        <button className={styles.storyArrowButton} onClick={previousStory}>
-          <ArrowLeftCircle />
-        </button>
+        <StoryArrowLeftButton data-qa-anchor="arrow_left_button" onClick={previousStory} />
       )}
-      <div className={styles.viewStoryContainer} id={targetRootId}>
-        <input
-          className={styles.hiddenInput}
+      <ViewStoryContainer id={targetRootId}>
+        <HiddenInput
           ref={fileInputRef}
           type="file"
           accept="image/*,video/*"
           onChange={handleFileChange}
         />
-        <div className={styles.viewStoryContent}>
-          <div className={styles.viewStoryOverlay} />
+        <ViewStoryContent>
+          <ViewStoryOverlay />
           {formattedStories?.length > 0 ? (
             // NOTE: Do not use isPaused prop, it will cause the first video story skipped
             <Stories
-              progressStyles={{
-                backgroundColor:
-                  progressBarElementConfig.progress_color || 'var(--asc-color-white)',
-              }}
-              progressWrapperStyles={{
-                backgroundColor:
-                  progressBarElementConfig.background_color || 'var(--asc-color-secondary-shade3)',
-              }}
               width="100%"
               height="100%"
               storyStyles={storyStyles}
@@ -301,23 +280,19 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
               // TO FIX: need to override custom type of renderers from react-insta-stories library
               // @ts-ignore
               renderers={renderers}
-              defaultInterval={duration}
+              defaultInterval={DURATION}
               onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
               onStoryEnd={increaseIndex}
               onNext={nextStory}
               onPrevious={previousStory}
-              onAllStoriesEnd={onClose}
+              onAllStoriesEnd={onBack}
             />
           ) : null}
-        </div>
-      </div>
+        </ViewStoryContent>
+      </ViewStoryContainer>
       {!isMobile && (
-        <button className={styles.storyArrowButton} onClick={nextStory}>
-          <ArrowRightCircle />
-        </button>
+        <StoryArrowRightButton data-qa-anchor="arrow_right_button" onClick={nextStory} />
       )}
-    </div>
+    </StoryWrapper>
   );
 };
-
-export default StoryViewer;

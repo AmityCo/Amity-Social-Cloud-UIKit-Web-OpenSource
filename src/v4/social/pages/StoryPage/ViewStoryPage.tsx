@@ -1,10 +1,9 @@
 import React from 'react';
 import { CommunityFeedStory } from './CommunityFeedStory';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { useStoryContext } from '../../providers/StoryProvider';
-import { AmityDraftStoryPage } from '..';
+import { PageTypes } from '~/social/constants';
 
-type AmityViewStoryPageType = 'communityFeed';
+type AmityViewStoryPageType = 'communityFeed' | 'globalFeed';
 
 interface AmityViewStoryPageProps {
   type: AmityViewStoryPageType;
@@ -16,7 +15,10 @@ const AmityViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type }) => {
   const renderContent = () => {
     switch (type) {
       case 'communityFeed':
-        return <CommunityFeedStory communityId={page.communityId!} />;
+        if (page.type === PageTypes.ViewStory && page.targetId) {
+          return <CommunityFeedStory communityId={page.targetId} />;
+        }
+        return null;
       default:
         return null;
     }

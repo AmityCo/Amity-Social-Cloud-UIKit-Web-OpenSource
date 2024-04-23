@@ -49,6 +49,7 @@ interface UiKitProviderProps {
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
+  pageBehavior?: Record<string, unknown>;
 }
 
 const UiKitProvider = ({
@@ -65,6 +66,7 @@ const UiKitProvider = ({
   actionHandlers,
   onConnectionStatusChange,
   onDisconnected,
+  pageBehavior,
 }: UiKitProviderProps) => {
   const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
