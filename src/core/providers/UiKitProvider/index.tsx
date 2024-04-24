@@ -58,6 +58,7 @@ const UiKitProvider = ({
   apiKey,
   apiRegion,
   apiEndpoint,
+  authToken,
   userId,
   displayName,
   customComponents = {},
@@ -68,7 +69,6 @@ const UiKitProvider = ({
   actionHandlers,
   onConnectionStatusChange,
   onDisconnected,
-  pageBehavior,
 }: UiKitProviderProps) => {
   const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
@@ -98,6 +98,20 @@ const UiKitProvider = ({
       setClient(ascClient);
     }
 
+await ASCClient.login(
+        { userId, displayName, authToken },
+        {
+          sessionWillRenewAccessToken(renewal) {
+            // secure mode
+            if (authToken) {
+              renewal.renewWithAuthToken(authToken);
+              return;
+            }
+
+            renewal.renew();
+          },
+        },
+      );
     setIsConnected(true);
 
     if (stateChangeRef.current == null) {
@@ -114,7 +128,11 @@ const UiKitProvider = ({
   }
 
   useEffect(() => {
-    login();
+    async function run() {
+      await login();
+    }
+
+    run();
 
     return () => {
       stateChangeRef.current?.();
