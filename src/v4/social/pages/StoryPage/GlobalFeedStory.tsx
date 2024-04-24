@@ -16,7 +16,6 @@ import { isNonNullable } from '~/helpers/utils';
 import { extractColors } from 'extract-colors';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { confirm } from '~/core/components/Confirm';
 
 import {
   HiddenInput,
@@ -32,6 +31,7 @@ import { renderers } from '../../internal-components/StoryViewer/Renderers';
 import { AmityDraftStoryPage } from '..';
 import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '../../providers/StoryProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 interface CommunityFeedStoryProps {
   communityId: string;
@@ -41,6 +41,7 @@ const DURATION = 5000;
 
 export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
   const { onBack } = useNavigation();
+  const { confirm } = useConfirmContext();
 
   const { stories } = useStories({
     targetId: communityId,

@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useState, useMemo, ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { confirm } from '~/core/components/Confirm';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+
 import { PageTypes } from '~/social/constants';
 
 type Page =
@@ -74,12 +75,6 @@ let defaultValue: ContextValue = {
   onBack: () => {},
 };
 
-const defaultAskForConfirmation = ({ onSuccess: onOk, ...params }: { onSuccess: () => void }) =>
-  confirm({
-    ...params,
-    onOk,
-  });
-
 export const defaultNavigationBlocker = {
   title: <FormattedMessage id="navigationBlocker.title" />,
   content: <FormattedMessage id="navigationBlocker.content" />,
@@ -131,7 +126,7 @@ interface NavigationProviderProps {
 }
 
 export default function NavigationProvider({
-  askForConfirmation = defaultAskForConfirmation,
+  askForConfirmation,
   children,
   onChangePage: onChangePageProp,
   onClickCategory,
@@ -156,11 +151,15 @@ export default function NavigationProvider({
     | undefined
   >();
 
+  const { confirm } = useConfirmContext();
+
+  const confirmation = askForConfirmation ?? confirm;
+
   const confirmPageChange = useCallback(async () => {
     if (navigationBlocker) {
       // for more info about this, see https://ekoapp.atlassian.net/browse/UP-3462?focusedCommentId=77155
       return new Promise((resolve) => {
-        askForConfirmation({
+        confirmation({
           ...navigationBlocker,
           onSuccess: () => {
             setNavigationBlocker?.(undefined);

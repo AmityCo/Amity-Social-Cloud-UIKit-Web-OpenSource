@@ -5,7 +5,7 @@ import { Client as ASCClient } from '@amityco/ts-sdk';
 
 import { ThemeProvider } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
-import { ConfirmContainer } from '~/core/components/Confirm';
+import { ConfirmComponent } from '~/core/components/Confirm';
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import Localization from './Localization';
 import buildGlobalTheme from './theme';
@@ -20,6 +20,7 @@ import PostRendererProvider, {
 } from '~/social/providers/PostRendererProvider';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ConfirmProvider } from '../ConfirmProvider';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -130,20 +131,22 @@ const UiKitProvider = ({
           <UIStyles>
             <SDKContext.Provider value={sdkContextValue}>
               <SDKConnectorProvider>
-                <CustomComponentsProvider config={customComponents}>
-                  <ConfigProvider
-                    config={{
-                      socialCommunityCreationButtonVisible:
-                        socialCommunityCreationButtonVisible || true,
-                    }}
-                  >
-                    <PostRendererProvider config={postRendererConfig}>
-                      <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
-                    </PostRendererProvider>
-                  </ConfigProvider>
-                  <NotificationsContainer />
-                  <ConfirmContainer />
-                </CustomComponentsProvider>
+                <ConfirmProvider>
+                  <CustomComponentsProvider config={customComponents}>
+                    <ConfigProvider
+                      config={{
+                        socialCommunityCreationButtonVisible:
+                          socialCommunityCreationButtonVisible || true,
+                      }}
+                    >
+                      <PostRendererProvider config={postRendererConfig}>
+                        <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
+                      </PostRendererProvider>
+                    </ConfigProvider>
+                    <NotificationsContainer />
+                    <ConfirmComponent />
+                  </CustomComponentsProvider>
+                </ConfirmProvider>
               </SDKConnectorProvider>
             </SDKContext.Provider>
           </UIStyles>

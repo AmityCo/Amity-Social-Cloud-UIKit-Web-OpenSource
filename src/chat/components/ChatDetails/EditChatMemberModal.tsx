@@ -4,9 +4,9 @@ import { ChannelRepository } from '@amityco/ts-sdk';
 
 import Modal from '~/core/components/Modal';
 import ChatComposer from '~/chat/components/Chat/ChatComposer';
-import { confirm } from '~/core/components/Confirm';
 import { notification } from '~/core/components/Notification';
 import EditChatMemberComposer from './EditChatMemberComposer';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 type Props = {
   channelId: string;
@@ -15,6 +15,7 @@ type Props = {
 
 const EditChatMemberModal = ({ channelId, onClose }: Props) => {
   const { formatMessage } = useIntl();
+  const { confirm } = useConfirmContext();
 
   const handleSubmit = async (
     data: Parameters<typeof ChannelRepository.Membership.addMembers>[1],

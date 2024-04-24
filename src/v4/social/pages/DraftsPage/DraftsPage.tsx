@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
-import { confirm } from '~/core/components/Confirm';
+
 import { readFileAsync } from '~/helpers';
 import useUser from '~/core/hooks/useUser';
 import useSDK from '~/core/hooks/useSDK';
@@ -22,6 +22,7 @@ import { HyperLink } from '../../elements/HyperLink';
 import { HyperlinkFormContainer } from '../../components/HyperLinkConfig/styles';
 import { HyperLinkConfig } from '../../components';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -42,6 +43,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   const { file, setFile } = useStoryContext();
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
+  const { confirm } = useConfirmContext();
 
   const [hyperLink, setHyperLink] = useState<
     {

@@ -9,7 +9,7 @@ import useUser from '~/core/hooks/useUser';
 import { UserRepository } from '@amityco/ts-sdk';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { notification } from '~/core/components/Notification';
-import { confirm } from '~/core/components/Confirm';
+
 import {
   Grid,
   Header,
@@ -23,6 +23,7 @@ import useUserFlaggedByMe from '~/social/hooks/useUserFlaggedByMe';
 import useFollowersSubscription from '~/social/hooks/useFollowersSubscription';
 import useSDK from '~/core/hooks/useSDK';
 import useFollowersCollection from '~/core/hooks/collections/useFollowersCollection';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 interface UserItemProps {
   profileUserId: string;
@@ -35,6 +36,7 @@ export const UserItem = ({ profileUserId, currentUserId, userId, onClick }: User
   const user = useUser(userId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { onClickUser } = useNavigation();
+  const { confirm } = useConfirmContext();
 
   const { formatMessage } = useIntl();
   const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(userId || undefined);

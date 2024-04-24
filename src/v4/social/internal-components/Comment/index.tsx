@@ -1,7 +1,6 @@
 import React, { memo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { confirm } from '~/core/components/Confirm';
 import useComment from '~/social/hooks/useComment';
 
 import { notification } from '~/core/components/Notification';
@@ -50,6 +49,7 @@ import { CommentList } from '~/v4/social/internal-components/CommentList';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { useTheme } from 'styled-components';
 import useGetStoryByStoryId from '../../hooks/useGetStoryByStoryId';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -119,6 +119,7 @@ const Comment = ({
   const story = useGetStoryByStoryId(comment?.referenceId);
   const [bottomSheet, setBottomSheet] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
+  const { confirm } = useConfirmContext();
 
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });

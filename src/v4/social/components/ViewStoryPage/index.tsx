@@ -10,7 +10,7 @@ import { notification } from '~/core/components/Notification';
 import { useMedia } from 'react-use';
 import useStories from '~/social/hooks/useStories';
 import useSDK from '~/core/hooks/useSDK';
-import { confirm } from '~/core/components/Confirm';
+
 import { isNonNullable } from '~/v4/helpers/utils';
 import { ArrowLeftCircle, ArrowRightCircle, Trash2Icon } from '~/icons';
 
@@ -22,6 +22,7 @@ import { renderers } from '../../internal-components/StoryViewer/Renderers';
 import { checkStoryPermission } from '~/utils';
 import { AmityDraftStoryPage } from '../../pages';
 import { useStoryContext } from '../../providers/StoryProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 interface StoryViewerProps {
   pageId: 'story_page';
@@ -34,6 +35,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   const { getConfig, isExcluded } = useCustomization();
   const pageConfig = getConfig(`${pageId}/*/*`);
   const isPageExcluded = isExcluded(`${pageId}/*/*`);
+  const { confirm } = useConfirmContext();
 
   if (isPageExcluded) return null;
 

@@ -3,10 +3,10 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { PollRepository } from '@amityco/ts-sdk';
 
 import Modal from '~/core/components/Modal';
-import { confirm } from '~/core/components/Confirm';
 import PollComposer from '~/social/components/post/PollComposer';
 import { notification } from '~/core/components/Notification';
 import { ERROR_RESPONSE } from '~/social/constants';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 interface PollModalProps {
   targetId?: string | null;
@@ -23,6 +23,7 @@ interface PollModalProps {
 const PollModal = ({ targetId, targetType, onClose, onCreatePoll }: PollModalProps) => {
   const [isDirty, setDirty] = useState(false);
   const { formatMessage } = useIntl();
+  const { confirm } = useConfirmContext();
 
   const handleSubmit = async (
     data: Parameters<typeof PollRepository.createPoll>[0],

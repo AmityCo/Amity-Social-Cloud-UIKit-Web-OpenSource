@@ -6,7 +6,6 @@ import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import useSDK from '~/core/hooks/useSDK';
 import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { info } from '~/core/components/Confirm';
 
 import {
   AddCommentButton,
@@ -17,6 +16,7 @@ import {
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import useImage from '~/core/hooks/useImage';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;
@@ -46,6 +46,7 @@ export const CommentComposeBar = ({
       targetType: 'community',
     });
   const { formatMessage } = useIntl();
+  const { info } = useConfirmContext();
 
   const commentInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 

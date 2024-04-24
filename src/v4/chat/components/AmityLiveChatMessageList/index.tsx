@@ -6,13 +6,13 @@ import useSDK from '~/core/hooks/useSDK';
 import AmityLiveChatMessageSenderView from '../AmityLiveChatMessageSenderView';
 import AmityLiveChatMessageReceiverView from '../AmityLiveChatMessageReceiverView';
 import { copyMessage, deleteMessage, flagMessage } from '~/v4/utils';
-import { confirm } from '~/v4/core/components/ConfirmModal';
 import useMessagesCollection from '~/chat/hooks/collections/useMessagesCollection';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Typography } from '~/v4/core/components';
 import Redo from '~/v4/icons/Redo';
 import { notification } from '~/v4/chat/components/LiveChatNotification';
 import { unFlagMessage } from '~/v4/utils/unFlagMessage';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 interface AmityLiveChatMessageListProps {
   channel: Amity.Channel;
@@ -27,6 +27,7 @@ export const AmityLiveChatMessageList = ({
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const { formatMessage } = useIntl();
   const [height, setHeight] = React.useState<number | undefined>(undefined);
+  const { confirm } = useConfirmContext();
 
   const {
     messages: rawMessages,

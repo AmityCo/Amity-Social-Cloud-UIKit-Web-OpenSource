@@ -27,8 +27,9 @@ import InputCounter, { COUNTER_VALUE_PLACEHOLDER } from '~/core/components/Input
 import AnswerTypeSelector from '~/social/components/post/PollComposer/AnswerTypeSelector';
 import Button from '~/core/components/Button';
 import { MAXIMUM_MENTIONEES } from '~/social/constants';
-import { info } from '~/core/components/Confirm';
+
 import { PollRepository } from '@amityco/ts-sdk';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 const MAX_QUESTION_LENGTH = 500;
 const MIN_OPTIONS_AMOUNT = 2;
@@ -78,6 +79,7 @@ const PollComposer = ({
     onChange: mentionOnChange,
   } = useSocialMention({ targetId: targetId || undefined, targetType });
   const [submitting, setSubmitting] = useState(false);
+  const { info } = useConfirmContext();
 
   const defaultValues: FormValues = {
     question: '',

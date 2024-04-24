@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SecondaryButton } from '~/core/components/Button';
-import { confirm } from '~/core/components/Confirm';
+
 import useSDK from '~/core/hooks/useSDK';
 import { BottomSheet } from '~/v4/core/components';
 import {
@@ -16,6 +16,7 @@ import {
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Trash2Icon } from '~/icons';
 import styles from './HyperLinkConfig.module.css';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 interface HyperLinkConfigProps {
   pageId: '*';
@@ -36,6 +37,7 @@ export const HyperLinkConfig = ({
   onSubmit,
   onRemove,
 }: HyperLinkConfigProps) => {
+  const { confirm } = useConfirmContext();
   const componentId = 'hyper_link_config_component';
   const { getConfig } = useCustomization();
   const componentConfig = getConfig(`${pageId}/${componentId}/*`);

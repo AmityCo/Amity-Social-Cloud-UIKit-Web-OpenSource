@@ -6,13 +6,13 @@ import OptionMenu from '~/core/components/OptionMenu';
 import UserHeader from '~/social/components/UserHeader';
 import useUser from '~/core/hooks/useUser';
 import { MemberInfo, CommunityMemberContainer } from './styles';
-import { confirm } from '~/core/components/Confirm';
 import { isModerator } from '~/helpers/permissions';
 import { MemberRoles } from '~/social/constants';
 import { isNonNullable } from '~/helpers/utils';
 import useUserFlaggedByMe from '~/social/hooks/useUserFlaggedByMe';
 import useUserSubscription from '~/social/hooks/useUserSubscription';
 import { SubscriptionLevels } from '@amityco/ts-sdk';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 const { COMMUNITY_MODERATOR, CHANNEL_MODERATOR } = MemberRoles;
 
@@ -45,6 +45,7 @@ const CommunityMemberItem = ({
   const { formatMessage } = useIntl();
   const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(userId);
   const isGlobalBanned = user?.isGlobalBanned;
+  const { confirm } = useConfirmContext();
 
   useUserSubscription({
     userId,
