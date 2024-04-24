@@ -3,7 +3,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import useComment from '~/social/hooks/useComment';
 
-import { notification } from '~/core/components/Notification';
 import useMention from '~/v4/chat/hooks/useMention';
 
 import {
@@ -50,6 +49,7 @@ import { ReactionList } from '~/v4/social/components/ReactionList';
 import { useTheme } from 'styled-components';
 import useGetStoryByStoryId from '../../hooks/useGetStoryByStoryId';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -120,6 +120,7 @@ const Comment = ({
   const [bottomSheet, setBottomSheet] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
   const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });

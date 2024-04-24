@@ -4,7 +4,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import useComment from '~/social/hooks/useComment';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import CommentList from '~/social/components/CommentList';
-import { notification } from '~/core/components/Notification';
 import StyledComment from './StyledComment';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import usePost from '~/social/hooks/usePost';
@@ -39,6 +38,7 @@ import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 
 import { ERROR_RESPONSE } from '~/social/constants';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -91,6 +91,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   const comment = useComment(commentId);
   const post = usePost(comment?.referenceId);
   const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useFile(commentAuthor?.avatarFileId);

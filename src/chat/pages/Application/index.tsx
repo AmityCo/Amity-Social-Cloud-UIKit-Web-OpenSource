@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { ChannelRepository, Client as ASCClient } from '@amityco/ts-sdk';
 import { useIntl } from 'react-intl';
 
-import { notification } from '~/core/components/Notification';
 import RecentChat from '~/chat/components/RecentChat';
 import Chat from '~/chat/components/Chat';
 import ChatDetails from '~/chat/components/ChatDetails';
@@ -10,6 +9,7 @@ import ChatDetails from '~/chat/components/ChatDetails';
 import { ApplicationContainer } from './styles';
 import CreateChatModal from '~/chat/components/Chat/CreateChatModal';
 import EditChatMemberModal from '~/chat/components/ChatDetails/EditChatMemberModal';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 type PartialChannel = Pick<Amity.Channel, 'channelId' | 'type'>;
 
@@ -37,6 +37,7 @@ const ChatApplication = ({
   const { formatMessage } = useIntl();
   const [currentChannelData, setCurrentChannelData] = useState<PartialChannel | null>(null);
   const [shouldShowChatDetails, setShouldShowChatDetails] = useState(false);
+  const notification = useNotifications();
 
   const showChatDetails = () => setShouldShowChatDetails(true);
   const hideChatDetails = () => setShouldShowChatDetails(false);

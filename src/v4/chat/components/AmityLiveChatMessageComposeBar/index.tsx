@@ -8,8 +8,8 @@ import useMention from '~/v4/chat/hooks/useMention';
 import { useIntl } from 'react-intl';
 import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { notification } from '~/v4/chat/components/LiveChatNotification';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
 
 const COMPOSEBAR_MAX_CHARACTER_LIMIT = 200;
 
@@ -43,6 +43,7 @@ export const AmityLiveChatMessageComposeBar = ({
     [key: ComposeBarMention['id']]: ComposeBarMention;
   }>({});
   const { confirm } = useConfirmContext();
+  const notification = useLiveChatNotifications();
 
   const { getConfig } = useCustomization();
   const componentConfig = getConfig('live_chat/message_composer/*');

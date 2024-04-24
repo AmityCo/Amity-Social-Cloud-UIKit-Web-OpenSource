@@ -4,15 +4,17 @@ import { FormattedMessage } from 'react-intl';
 import { ButtonsContainer, UserHeaderContainer } from '~/social/pages/UserFeed/Followers/styles';
 import UserHeader from '~/social/components/UserHeader';
 import Button, { PrimaryButton } from '~/core/components/Button';
-import { notification } from '~/core/components/Notification';
 import { Grid } from '~/social/components/community/CategoryCommunitiesList/styles';
 import Skeleton from '~/core/components/Skeleton';
 import LoadMore from '~/core/components/LoadMore';
 import { UserRepository } from '@amityco/ts-sdk';
 import { isLoadingItem } from '~/utils';
 import useFollowersCollection from '~/core/hooks/collections/useFollowersCollection';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const PendingItem = ({ userId }: { userId: string }) => {
+  const notification = useNotifications();
+
   const followAccept = async () => {
     if (!userId) return;
     await UserRepository.Relationship.acceptMyFollower(userId);

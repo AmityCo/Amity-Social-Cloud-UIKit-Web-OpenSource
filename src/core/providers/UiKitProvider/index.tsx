@@ -21,6 +21,7 @@ import PostRendererProvider, {
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConfirmProvider } from '../ConfirmProvider';
+import { NotificationProvider } from '~/core/providers/NotificationProvider';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -132,20 +133,22 @@ const UiKitProvider = ({
             <SDKContext.Provider value={sdkContextValue}>
               <SDKConnectorProvider>
                 <ConfirmProvider>
-                  <CustomComponentsProvider config={customComponents}>
-                    <ConfigProvider
-                      config={{
-                        socialCommunityCreationButtonVisible:
-                          socialCommunityCreationButtonVisible || true,
-                      }}
-                    >
-                      <PostRendererProvider config={postRendererConfig}>
-                        <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
-                      </PostRendererProvider>
-                    </ConfigProvider>
-                    <NotificationsContainer />
-                    <ConfirmComponent />
-                  </CustomComponentsProvider>
+                  <NotificationProvider>
+                    <CustomComponentsProvider config={customComponents}>
+                      <ConfigProvider
+                        config={{
+                          socialCommunityCreationButtonVisible:
+                            socialCommunityCreationButtonVisible || true,
+                        }}
+                      >
+                        <PostRendererProvider config={postRendererConfig}>
+                          <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
+                        </PostRendererProvider>
+                      </ConfigProvider>
+                      <NotificationsContainer />
+                      <ConfirmComponent />
+                    </CustomComponentsProvider>
+                  </NotificationProvider>
                 </ConfirmProvider>
               </SDKConnectorProvider>
             </SDKContext.Provider>

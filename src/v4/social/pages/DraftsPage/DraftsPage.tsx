@@ -16,13 +16,13 @@ import { AspectRatioButton, BackButton, HyperLinkButton, ShareStoryButton } from
 import { useStoryContext } from '../../providers/StoryProvider';
 import { StoryVideoPreview } from './styles';
 import { StoryRepository } from '@amityco/ts-sdk';
-import { notification } from '~/core/components/Notification';
 
 import { HyperLink } from '../../elements/HyperLink';
 import { HyperlinkFormContainer } from '../../components/HyperLinkConfig/styles';
 import { HyperLinkConfig } from '../../components';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -44,6 +44,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
   const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const [hyperLink, setHyperLink] = useState<
     {

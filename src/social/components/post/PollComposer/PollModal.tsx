@@ -4,9 +4,9 @@ import { PollRepository } from '@amityco/ts-sdk';
 
 import Modal from '~/core/components/Modal';
 import PollComposer from '~/social/components/post/PollComposer';
-import { notification } from '~/core/components/Notification';
 import { ERROR_RESPONSE } from '~/social/constants';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 interface PollModalProps {
   targetId?: string | null;
@@ -24,6 +24,7 @@ const PollModal = ({ targetId, targetType, onClose, onCreatePoll }: PollModalPro
   const [isDirty, setDirty] = useState(false);
   const { formatMessage } = useIntl();
   const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const handleSubmit = async (
     data: Parameters<typeof PollRepository.createPoll>[0],

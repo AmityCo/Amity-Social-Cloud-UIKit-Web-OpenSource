@@ -25,6 +25,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UIStyles } from '~/core/providers/UiKitProvider/styles';
 import AmityUIKitManager from '../AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
+import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
 
 export type AmityUIKitConfig = Config;
 
@@ -136,24 +137,26 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
               <UIStyles>
                 <SDKContext.Provider value={sdkContextValue}>
                   <SDKConnectorProvider>
-                    <ConfirmProvider>
-                      <ConfigProvider
-                        config={{
-                          socialCommunityCreationButtonVisible:
-                            socialCommunityCreationButtonVisible || true,
-                        }}
-                      >
-                        <PostRendererProvider config={postRendererConfig}>
-                          <NavigationProvider>
-                            <PageBehaviorProvider pageBehavior={pageBehavior}>
-                              {children}
-                            </PageBehaviorProvider>
-                          </NavigationProvider>
-                        </PostRendererProvider>
-                      </ConfigProvider>
-                      <NotificationsContainer />
-                      <ConfirmComponent />
-                    </ConfirmProvider>
+                    <NotificationProvider>
+                      <ConfirmProvider>
+                        <ConfigProvider
+                          config={{
+                            socialCommunityCreationButtonVisible:
+                              socialCommunityCreationButtonVisible || true,
+                          }}
+                        >
+                          <PostRendererProvider config={postRendererConfig}>
+                            <NavigationProvider>
+                              <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                {children}
+                              </PageBehaviorProvider>
+                            </NavigationProvider>
+                          </PostRendererProvider>
+                        </ConfigProvider>
+                        <NotificationsContainer />
+                        <ConfirmComponent />
+                      </ConfirmProvider>
+                    </NotificationProvider>
                   </SDKConnectorProvider>
                 </SDKContext.Provider>
               </UIStyles>

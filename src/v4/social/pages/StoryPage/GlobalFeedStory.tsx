@@ -8,7 +8,6 @@ import { useMedia } from 'react-use';
 import { useIntl } from 'react-intl';
 
 import { FinalColor } from 'extract-colors/lib/types/Color';
-import { notification } from '~/core/components/Notification';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateStoryButton } from '../../elements';
 import { Trash2Icon } from '~/icons';
@@ -32,6 +31,7 @@ import { AmityDraftStoryPage } from '..';
 import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '../../providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 interface CommunityFeedStoryProps {
   communityId: string;
@@ -42,6 +42,7 @@ const DURATION = 5000;
 export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
   const { onBack } = useNavigation();
   const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const { stories } = useStories({
     targetId: communityId,

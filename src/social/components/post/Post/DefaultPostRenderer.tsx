@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import Modal from '~/core/components/Modal';
-import { notification } from '~/core/components/Notification';
 import { isNonNullable } from '~/helpers/utils';
 import EngagementBar from '~/social/components/EngagementBar';
 import ChildrenContent from '~/social/components/post/ChildrenContent';
@@ -23,6 +22,7 @@ import useSDK from '~/core/hooks/useSDK';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
 import { SubscriptionLevels } from '@amityco/ts-sdk';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 // Number of lines to show in a text post before truncating.
 const MAX_TEXT_LINES_DEFAULT = 8;
@@ -53,6 +53,7 @@ const DefaultPostRenderer = ({
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
   const { info, confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   function showHasBeenReviewedMessageIfNeeded(error: unknown) {
     if (error instanceof Error) {
