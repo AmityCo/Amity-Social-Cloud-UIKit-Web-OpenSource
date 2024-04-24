@@ -81,6 +81,8 @@ export const AmityLiveChatMessageComposeBar = ({
         metadata,
         parentId: replyMessage?.messageId || undefined,
       });
+
+      onChange({ text: '', plainText: '', mentions: [] });
     } catch (error) {
       const errorMessage = (error as Error).message;
       let notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage' });
@@ -96,7 +98,7 @@ export const AmityLiveChatMessageComposeBar = ({
       notification.error({
         content: notificationMessage,
       });
-      onChange({ text, plainText: text, mentions: [] });
+
       return;
     }
 
