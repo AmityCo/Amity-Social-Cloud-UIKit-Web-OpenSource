@@ -125,3 +125,6 @@ A: Try to structure your project to be like this:
 - Amity-Social-Cloud-UIKit-Web-OpenSource
   - src
 ```
+
+Q: The modifications I made to the code do not appear to be applied.
+A: Please attempt to execute `npm cache clean` or `npm cache clean --force` to resolve this issue.
