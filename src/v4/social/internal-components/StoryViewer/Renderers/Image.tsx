@@ -208,8 +208,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
               referenceId={storyId}
               referenceType="story"
               community={community as Amity.Community}
-              shouldAllowCreation={community?.allowCommentInStory || true}
-              shouldAllowInteraction={isJoined || true}
+              shouldAllowCreation={community?.allowCommentInStory}
+              shouldAllowInteraction={isJoined}
             />
           </MobileSheet.Content>
         </MobileSheet.Container>

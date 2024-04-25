@@ -44,7 +44,7 @@ export const StoryCommentComposeBar = ({
       data: {
         text: commentText,
       },
-      mentionees,
+      mentionees: mentionees as Amity.UserMention[],
       metadata,
     });
   };
@@ -62,7 +62,7 @@ export const StoryCommentComposeBar = ({
       },
       parentId: replyTo?.commentId,
       metadata,
-      mentionees,
+      mentionees: mentionees as Amity.UserMention[],
     });
   };
 

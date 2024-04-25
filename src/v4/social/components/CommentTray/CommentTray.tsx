@@ -11,7 +11,7 @@ interface CommentTrayProps {
   referenceId: string;
   community: Amity.Community;
   shouldAllowInteraction: boolean;
-  shouldAllowCreation: boolean;
+  shouldAllowCreation?: boolean;
 }
 
 export const CommentTray = ({
@@ -19,7 +19,7 @@ export const CommentTray = ({
   referenceId,
   community = {} as Amity.Community,
   shouldAllowInteraction = true,
-  shouldAllowCreation = true,
+  shouldAllowCreation = false,
 }: CommentTrayProps) => {
   const [isReplying, setIsReplying] = useState(false);
   const [replyTo, setReplyTo] = useState<Amity.Comment | null>(null);

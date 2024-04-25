@@ -263,8 +263,8 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
                   (selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'
                 }
                 community={community as Amity.Community}
-                shouldAllowCreation={community?.allowCommentInStory || true}
-                shouldAllowInteraction={isJoined || true}
+                shouldAllowCreation={community?.allowCommentInStory}
+                shouldAllowInteraction={isJoined}
               />
             </MobileSheet.Scroller>
           </MobileSheet.Content>
