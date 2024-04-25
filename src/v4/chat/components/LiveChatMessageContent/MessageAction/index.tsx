@@ -137,13 +137,13 @@ const MessageAction = ({
         }
       >
         <div
-          className={styles.optionIcon}
+          className={styles.optionButton}
           ref={clickMeButtonRef}
           onClick={() => {
             setIsPopoverOpen(!isPopoverOpen);
           }}
         >
-          <Kebub />
+          <Kebub className={styles.optionIcon} />
         </div>
       </Popover>
       {/* <Reaction className={styles.reactionIcon} /> */}

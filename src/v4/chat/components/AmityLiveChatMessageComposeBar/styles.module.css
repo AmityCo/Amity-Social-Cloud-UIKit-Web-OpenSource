@@ -2,7 +2,10 @@
   border-radius: var(--asc-border-radius-xxl);
   width: 1rem;
   height: 1rem;
-  background-color: var(--asc-color-primary);
+  background-color: var(
+    --live-chat-message-composer-asc-color-primary-default,
+    var(--live-chat-asc-color-primary-default, var(--asc-color-primary-default))
+  );
   cursor: pointer;
   padding: var(--asc-spacing-xxs2);
   fill: white;
@@ -34,7 +37,7 @@
   gap: var(--asc-spacing-s2);
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   background-color: inherit;
-  border-top: 1px solid var(--asc-color-base-shade4);
+  box-shadow: 0px -1px 0px 0px var(--live-chat-message-composer-asc-color-base-shade4, var(--live-chat-asc-color-base-shade4, var(--asc-color-base-shade4)));
 }
 
 .textInputContainer {
@@ -44,8 +47,10 @@
   & > div {
     width: 100%;
     border-radius: var(--asc-border-radius-xxl);
-    border: 1px solid var(--asc-color-base-background);
-    background: var(--asc-color-secondary-shade4);
+    background: var(
+      --live-chat-message-composer-asc-color-secondary-shade4,
+      var(--live-chat-asc-color-secondary-shade4, var(--asc-color-secondary-shade4))
+    );
 
     textarea {
       padding: 0.563rem 1rem;
@@ -60,8 +65,14 @@
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   border-radius: var(--asc-border-radius-sm);
   border: var(--asc-border-radius-none);
-  background-color: var(--asc-color-secondary-default);
-  color: var(--asc-color-base-inverse);
+  background-color: var(
+    --live-chat-message-composer-asc-color-secondary,
+    var(--live-chat-asc-color-secondary, var(--asc-color-secondary-default))
+  );
+  color: var(
+    --live-chat-message-composer-asc-color-base-inverse,
+    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
+  );
   display: flex;
   align-items: center;
 
@@ -69,4 +80,11 @@
     padding-left: var(--asc-spacing-s1);
     font-weight: var(--asc-text-font-weight-light);
   }
+}
+
+.mentionText {
+  color: var(
+    --live-chat-message-composer-asc-color-primary-default,
+    var(--live-chat-asc-color-primary-default, var(--asc-color-primary-default))
+  ) !important;
 }

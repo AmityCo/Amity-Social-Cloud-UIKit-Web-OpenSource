@@ -3,14 +3,20 @@ import styles from './styles.module.css';
 
 import Linkify from 'linkify-react';
 
-const HyperLinkText = ({ children }: { children: ReactNode }) => {
+const HyperLinkText = ({
+  linkClassName,
+  children,
+}: {
+  linkClassName?: string;
+  children: ReactNode;
+}) => {
   return (
     <Linkify
       options={{
         target: '_blank',
         render: ({ attributes, content }) => {
           return (
-            <a className={styles.hyperlink} {...attributes}>
+            <a className={linkClassName || styles.hyperlink} {...attributes}>
               {content}
             </a>
           );

@@ -49,6 +49,7 @@ interface InsideInputTextProps {
   onClear?: () => void;
   onClick?: () => void;
   suggestionRef?: RefObject<HTMLDivElement>;
+  mentionColor?: string;
 }
 
 const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, InsideInputTextProps>(
@@ -76,6 +77,7 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
       loadMoreMentionees,
       isModerator,
       suggestionRef,
+      mentionColor,
     },
     ref,
   ) => {
@@ -147,7 +149,7 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
           >
             <Mention
               trigger="@"
-              className={styles.mentions_mention}
+              className={clsx(styles.mentions_mention, mentionColor)}
               data={(queryValue, callback) => {
                 if (!queryMentionees) return callback([]);
                 queryMentionees(queryValue).then((result) => {

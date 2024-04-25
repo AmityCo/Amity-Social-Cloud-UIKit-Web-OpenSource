@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { AmityUIKitProvider } from '../../src/v4/core/providers';
 import { Preview } from '@storybook/react';
 import amityConfig from '../../amity-uikit.config.json';
+import { Config } from '../../src/v4/core/providers/CustomizationProvider';
 
 const GLOBAL_NAME = 'user';
 const global = {
@@ -73,7 +74,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (
       onConnectionStatusChange={handleConnectionStatusChange}
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
-      configs={amityConfig}
+      configs={amityConfig as Config}
     >
       <Story />
     </AmityUIKitProvider>

@@ -10,18 +10,20 @@
       "base_shade3_color": "#a5a9b5",
       "base_shade4_color": "#ebecef",
       "alert_color": "#FA4D30",
-      "background_color": "#FFFFFF"
+      "background_color": "#FFFFFF",
+      "base_inverse_color": "#000000"
     },
     "dark": {
       "primary_color": "#1054DE",
-      "secondary_color": "#292B32",
+      "secondary_color": "#ebecef",
       "base_color": "#ebecef",
       "base_shade1_color": "#a5a9b5",
       "base_shade2_color": "#6e7487",
       "base_shade3_color": "#40434e",
       "base_shade4_color": "#292b32",
       "alert_color": "#FA4D30",
-      "background_color": "#191919"
+      "background_color": "#191919",
+      "base_inverse_color": "#FFFFFF"
     }
   },
   "excludes": [],
@@ -165,7 +167,34 @@
       "theme": {},
       "close_icon": "close.png"
     },
-    "live_chat/*/*": {},
+    "live_chat/*/*": {
+      "theme": {
+        "light": {
+          "primary_color": "#1054DE",
+          "secondary_color": "#292B32",
+          "base_color": "#292b32",
+          "base_shade1_color": "#636878",
+          "base_shade2_color": "#898e9e",
+          "base_shade3_color": "#a5a9b5",
+          "base_shade4_color": "#ebecef",
+          "alert_color": "#FA4D30",
+          "background_color": "#FFFFFF",
+          "base_inverse_color": "#000000"
+        },
+        "dark": {
+          "primary_color": "#1054DE",
+          "secondary_color": "#ebecef",
+          "base_color": "#ebecef",
+          "base_shade1_color": "#a5a9b5",
+          "base_shade2_color": "#6e7487",
+          "base_shade3_color": "#40434e",
+          "base_shade4_color": "#292b32",
+          "alert_color": "#FA4D30",
+          "background_color": "#191919",
+          "base_inverse_color": "#FFFFFF"
+        }
+      }
+    },
     "live_chat/chat_header/*": {},
     "live_chat/message_list/*": {},
     "live_chat/message_composer/*": {

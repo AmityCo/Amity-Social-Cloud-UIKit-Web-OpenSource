@@ -142,6 +142,7 @@ export const AmityLiveChatMessageComposeBar = ({
             }}
             value={markup}
             queryMentionees={queryMentionees}
+            mentionColor={styles.mentionText}
           />
         </div>
         <div className={styles.sendButtonContainer}>

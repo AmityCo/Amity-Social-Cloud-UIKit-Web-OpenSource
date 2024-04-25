@@ -82,7 +82,7 @@
     outline: none;
     font: inherit;
     resize: vertical;
-    color: var(--asc-color-white);
+    color: var(--asc-color-base-inverse);
 
     &::placeholder {
       font-weight: 400;
@@ -113,7 +113,7 @@
 .mentions_mention {
   position: relative;
   z-index: 1;
-  color: var(--asc-color-primary-dark, var(--asc-color-primary));
+  color: var(--asc-color-primary-dark, var(--asc-color-primary-default));
   pointer-events: none;
   background-color: var(--asc-color-base-shade4);
 }

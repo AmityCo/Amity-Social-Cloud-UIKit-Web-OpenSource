@@ -7,7 +7,7 @@ interface CustomizationContextValue {
   getConfig: (path: string) => Record<string, any>;
 }
 
-type Theme = {
+export type Theme = {
   light: {
     primary_color: string;
     secondary_color: string;
@@ -18,6 +18,7 @@ type Theme = {
     base_shade4_color: string;
     alert_color: string;
     background_color: string;
+    base_inverse_color: string;
   };
   dark: {
     primary_color: string;
@@ -29,6 +30,7 @@ type Theme = {
     base_shade4_color: string;
     alert_color: string;
     background_color: string;
+    base_inverse_color: string;
   };
 };
 
@@ -269,6 +271,7 @@ export const defaultConfig: Config = {
       base_shade4_color: '#ebecef',
       alert_color: '#FA4D30',
       background_color: '#FFFFFF',
+      base_inverse_color: '#000000',
     },
     dark: {
       primary_color: '#1054DE',
@@ -280,6 +283,7 @@ export const defaultConfig: Config = {
       base_shade4_color: '#292b32',
       alert_color: '#FA4D30',
       background_color: '#191919',
+      base_inverse_color: '#FFFFFF',
     },
   },
   excludes: [],

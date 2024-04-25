@@ -18,7 +18,10 @@
   background-color: var(--asc-color-base-shade4);
   gap: var(--asc-spacing-xxs2);
   border-radius: var(--asc-border-radius-lg);
-  color: var(--asc-color-base-inverse);
+  color: var(
+    --live-chat-message-list-asc-color-base-inverse,
+    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
+  );
 }
 
 .messageOptionsWrap {
@@ -30,7 +33,10 @@
 .binIcon {
   height: 1rem;
   width: 1rem;
-  fill: var(--asc-color-base-inverse);
+  fill: var(
+    --live-chat-message-list-asc-color-base-inverse,
+    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
+  );
 }
 
 .optionIcon {
@@ -49,7 +55,10 @@
 
 .timestamp {
   font-family: var(--asc-text-global-font-family);
-  color: var(--asc-color-base-shade2);
+  color: var(
+    --live-chat-message-list-asc-color-base-shade2,
+    var(--live-chat-asc-color-base-shade2, var(--asc-color-base-shade2))
+  );
   margin-bottom: var(--asc-spacing-s1);
 
   /* This value is not available in global css */

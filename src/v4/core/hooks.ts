@@ -1,13 +1,13 @@
 import { useIntl } from 'react-intl';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
 
 export const useCopyMessage = () => {
-  const notification = useNotifications();
+  const notification = useLiveChatNotifications();
   const { formatMessage } = useIntl();
 
   const copyMessage = async (message: string) => {
     await navigator.clipboard.writeText(message);
-    notification.show({
+    notification.success({
       content: formatMessage({ id: 'livechat.notification.copy.message' }),
     });
   };

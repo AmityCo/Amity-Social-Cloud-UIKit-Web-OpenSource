@@ -10,7 +10,7 @@ interface NotificationProps {
 }
 
 const Notification = ({ className, content, icon }: NotificationProps) => (
-  <div data-theme="dark" className={clsx(styles.notificationContainer, className)}>
+  <div className={clsx(styles.notificationContainer, className)}>
     {icon} {content}
   </div>
 );

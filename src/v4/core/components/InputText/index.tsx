@@ -36,6 +36,7 @@ export interface InputTextProps {
   onClear?: () => void;
   onClick?: () => void;
   suggestionRef?: React.RefObject<HTMLDivElement>;
+  mentionColor?: string;
 }
 
 const InputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputTextProps>(

@@ -11,7 +11,7 @@ interface NotificationProps {
 }
 
 const LiveChatNotification = ({ className, content, icon }: NotificationProps) => (
-  <div data-theme="dark" className={clsx(styles.notificationContainer, className)}>
+  <div className={clsx(styles.notificationContainer, className)}>
     {icon}
     <Typography.Body>{content}</Typography.Body>
   </div>
