@@ -38,7 +38,7 @@
 }
 .modalWindow {
   margin: auto;
-  background-color: var(--asc-color-secondary-shade4);
+  background-color: var(--asc-color-base-background);
   border-radius: var(--asc-border-radius-lg);
   max-width: 32.5rem;
   min-width: 20rem;

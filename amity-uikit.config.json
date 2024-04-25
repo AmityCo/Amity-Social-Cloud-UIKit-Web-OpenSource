@@ -198,6 +198,7 @@
     "live_chat/chat_header/*": {},
     "live_chat/message_list/*": {},
     "live_chat/message_composer/*": {
+      "message_limit": 200,
       "placeholder_text": "Write a message"
     }
   }

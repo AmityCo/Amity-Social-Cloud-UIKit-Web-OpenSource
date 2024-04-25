@@ -115,7 +115,7 @@
   align-items: center;
 }
 
-.mutedChannelIcon {
+.mutedIcon {
   color: var(--live-chat-asc-color-base-shade3, var(--asc-color-base-shade3));
 }
 

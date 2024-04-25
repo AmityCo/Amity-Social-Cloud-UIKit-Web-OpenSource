@@ -25,6 +25,7 @@ interface AmityLiveChatMessageComposeBarProps {
   composeAction: ComposeActionTypes;
   suggestionRef?: RefObject<HTMLDivElement>;
   disabled?: boolean;
+  pageId?: string;
 }
 
 type ComposeBarMention = {
@@ -36,6 +37,7 @@ type ComposeBarMention = {
 };
 
 export const AmityLiveChatMessageComposeBar = ({
+  pageId = 'live_chat',
   channel,
   suggestionRef,
   composeAction: { replyMessage, mentionMessage, clearReplyMessage, clearMention },
@@ -44,11 +46,13 @@ export const AmityLiveChatMessageComposeBar = ({
   const [mentionList, setMentionList] = useState<{
     [key: ComposeBarMention['id']]: ComposeBarMention;
   }>({});
+  const componentId = 'message_composer';
+
   const { confirm } = useConfirmContext();
   const notification = useLiveChatNotifications();
 
   const { getConfig } = useCustomization();
-  const componentConfig = getConfig('live_chat/message_composer/*');
+  const componentConfig = getConfig(`${pageId}/${componentId}/*`);
   const commentInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   const { queryMentionees, mentionees, onChange, markup, metadata, text } = useMention({
@@ -64,7 +68,7 @@ export const AmityLiveChatMessageComposeBar = ({
     if (!channel) return;
     if (text?.trim().length === 0) return;
 
-    if (text.trim().length > COMPOSEBAR_MAX_CHARACTER_LIMIT) {
+    if (text.trim().length > (componentConfig?.message_limit || COMPOSEBAR_MAX_CHARACTER_LIMIT)) {
       confirm({
         title: formatMessage({ id: 'livechat.error.tooLongMessage.title' }),
         content: formatMessage({ id: 'livechat.error.tooLongMessage.description' }),

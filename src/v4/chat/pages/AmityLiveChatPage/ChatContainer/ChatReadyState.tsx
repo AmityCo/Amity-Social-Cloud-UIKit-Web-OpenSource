@@ -98,6 +98,7 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
 
           <div ref={composeBarRef}>
             <AmityLiveChatMessageComposeBar
+              pageId="live_chat"
               disabled={(!isModerator && channel.isMuted) || currentUserMembership?.isMuted}
               channel={channel}
               suggestionRef={suggestionRef}
