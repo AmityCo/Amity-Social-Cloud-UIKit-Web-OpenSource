@@ -112,8 +112,8 @@
   align-items: center;
 }
 
-.mutedChannelIcon {
-  color: var(--asc-color-base-shade3);
+.mutedIcon {
+  color: var(--asc-color-base-shade1);
 }
 
 .commentAltIcon {

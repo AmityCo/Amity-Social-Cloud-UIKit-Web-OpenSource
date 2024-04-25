@@ -24,6 +24,7 @@ interface AmityLiveChatMessageComposeBarProps {
   channel: Amity.Channel;
   composeAction: ComposeActionTypes;
   suggestionRef?: RefObject<HTMLDivElement>;
+  disabled?: boolean;
 }
 
 type ComposeBarMention = {
@@ -38,6 +39,7 @@ export const AmityLiveChatMessageComposeBar = ({
   channel,
   suggestionRef,
   composeAction: { replyMessage, mentionMessage, clearReplyMessage, clearMention },
+  disabled,
 }: AmityLiveChatMessageComposeBarProps) => {
   const [mentionList, setMentionList] = useState<{
     [key: ComposeBarMention['id']]: ComposeBarMention;
@@ -85,7 +87,7 @@ export const AmityLiveChatMessageComposeBar = ({
       onChange({ text: '', plainText: '', mentions: [] });
     } catch (error) {
       const errorMessage = (error as Error).message;
-      let notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage' });
+      let notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.error' });
 
       if (errorMessage === 'Amity SDK (400308): Text contain blocked word') {
         notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.blockedWord' });
@@ -93,6 +95,8 @@ export const AmityLiveChatMessageComposeBar = ({
         errorMessage === 'Amity SDK (400309): Data contain link that is not in whitelist'
       ) {
         notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.notAllowLink' });
+      } else if (errorMessage === 'Amity SDK (400302): User is muted') {
+        notificationMessage = formatMessage({ id: 'livechat.member.muted.error' });
       }
 
       notification.error({
@@ -119,7 +123,7 @@ export const AmityLiveChatMessageComposeBar = ({
             suggestionRef={suggestionRef}
             data-qa-anchor="live-chat-compose-bar"
             multiline
-            disabled={channel.isMuted}
+            disabled={disabled}
             placeholder={
               componentConfig?.placeholder_text ||
               formatMessage({

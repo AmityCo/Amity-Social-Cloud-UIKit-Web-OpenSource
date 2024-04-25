@@ -9,7 +9,7 @@ const useSearchChannelUser = (
   const { items, ...rest } = useLiveCollection({
     fetcher: ChannelRepository.Membership.searchMembers,
     params: { channelId, search: search || '', memberships },
-    shouldCall: () => !!channelId && !!search,
+    shouldCall: () => !!channelId,
   });
 
   return {

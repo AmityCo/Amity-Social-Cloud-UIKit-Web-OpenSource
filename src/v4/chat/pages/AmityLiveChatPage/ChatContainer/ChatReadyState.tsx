@@ -13,10 +13,15 @@ import mentionStyles from '~/v4/core/components/InputText/styles.module.css';
 import { FormattedMessage } from 'react-intl';
 import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChannelMembership';
 import CommentAltExclamation from '~/v4/icons/CommentAltExclamation';
+import useSearchChannelUser from '~/v4/chat/hooks/collections/useSearchChannelUser';
+import useSDK from '~/core/hooks/useSDK';
 
 const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
   const isOnline = useConnectionStates();
-  const currentUserMembership = useCurrentUserChannelMembership(channel.channelId);
+
+  const currentUserId = useSDK().currentUserId;
+  const { channelMembers } = useSearchChannelUser(channel.channelId, ['member', 'banned', 'muted']);
+  const currentUserMembership = channelMembers.find((member) => member.userId === currentUserId);
 
   const [replyMessage, setReplyMessage] = useState<Amity.Message<'text'> | undefined>(undefined);
   const [mentionMessage, setMentionMessage] = useState<Amity.Message<'text'> | undefined>(
@@ -57,14 +62,21 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
       {isOnline && (
         <>
           <div ref={suggestionRef} className={mentionStyles.mentionContainer}></div>
-          {channel.isMuted && (
+          {channel.isMuted ? (
             <div className={styles.mutedChannelContainer}>
-              <MutedIcon width={20} height={20} className={styles.mutedChannelIcon} />
+              <MutedIcon width={20} height={20} className={styles.mutedIcon} />
               <Typography.Body>
                 <FormattedMessage id="livechat.channel.muted" />
               </Typography.Body>
             </div>
-          )}
+          ) : currentUserMembership?.isMuted ? (
+            <div className={styles.mutedChannelContainer}>
+              <MutedIcon width={20} height={20} className={styles.mutedIcon} />
+              <Typography.Body>
+                <FormattedMessage id="livechat.member.muted" />
+              </Typography.Body>
+            </div>
+          ) : null}
 
           {replyMessage && (
             <ReplyMessagePlaceholder
@@ -84,6 +96,7 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
 
           <div ref={composeBarRef}>
             <AmityLiveChatMessageComposeBar
+              disabled={channel.isMuted || currentUserMembership?.isMuted}
               channel={channel}
               suggestionRef={suggestionRef}
               composeAction={{

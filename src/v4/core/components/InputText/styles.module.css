@@ -9,10 +9,6 @@
   border-radius: var(--asc-border-radius-sm);
   transition: background 0.2s, border-color 0.2s;
 
-  &:focus-within {
-    border-color: var(--asc-color-primary);
-  }
-
   &.invalid {
     border-color: var(--asc-color-alert);
   }
