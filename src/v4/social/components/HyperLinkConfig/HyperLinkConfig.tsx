@@ -17,6 +17,7 @@ import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Trash2Icon } from '~/icons';
 import styles from './HyperLinkConfig.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import Button from '~/v4/core/components/Button/Button';
 
 interface HyperLinkConfigProps {
   pageId: '*';
@@ -201,10 +202,14 @@ export const HyperLinkConfig = ({
               </div>
               {isHaveHyperLink && (
                 <div className={styles.inputContainer}>
-                  <SecondaryButton onClick={discardHyperlink} className={styles.removeLinkButton}>
+                  <Button
+                    variant="secondary"
+                    onClick={discardHyperlink}
+                    className={styles.removeLinkButton}
+                  >
                     <Trash2Icon className={styles.removeIcon} />
                     {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
-                  </SecondaryButton>
+                  </Button>
                   <div className={styles.divider} />
                 </div>
               )}

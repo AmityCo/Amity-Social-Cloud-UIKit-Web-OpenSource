@@ -25,8 +25,8 @@
 }
 
 .input.hasError {
-  border-bottom-color: var(--asc-color-alert-default);
-  color: var(--asc-color-alert-default);
+  border-bottom-color: var(--asc-color-alert);
+  color: var(--asc-color-alert);
 }
 
 .label {
@@ -35,7 +35,7 @@
 
 .label::after {
   content: none;
-  color: var(--asc-color-alert-default);
+  color: var(--asc-color-alert);
 }
 
 .label.required::after {
@@ -47,7 +47,7 @@
 }
 
 .errorText {
-  color: var(--asc-color-alert-default);
+  color: var(--asc-color-alert);
 }
 
 .characterCount {
@@ -80,7 +80,7 @@
 .removeIcon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-alert-default);
+  fill: var(--asc-color-alert);
 }
 
 .removeLinkButton {
@@ -88,8 +88,11 @@
   justify-content: flex-start;
   align-items: center;
   gap: var(--asc-spacing-s1);
-  color: var(--asc-color-alert-default);
+  color: var(--asc-color-alert) ;
   border-radius: 0;
+  background-color: transparent;
+  transition: color 0.3s ease;
+  border: none;
 }
 
 .divider {
