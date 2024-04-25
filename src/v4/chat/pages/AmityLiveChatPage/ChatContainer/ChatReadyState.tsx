@@ -11,13 +11,15 @@ import MutedIcon from '~/v4/icons/Muted';
 import { Typography } from '~/v4/core/components/Typography';
 import mentionStyles from '~/v4/core/components/InputText/styles.module.css';
 import { FormattedMessage } from 'react-intl';
-import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChannelMembership';
 import CommentAltExclamation from '~/v4/icons/CommentAltExclamation';
 import useSearchChannelUser from '~/v4/chat/hooks/collections/useSearchChannelUser';
 import useSDK from '~/core/hooks/useSDK';
+import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
 
 const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
   const isOnline = useConnectionStates();
+
+  const { isModerator } = useChannelPermission(channel.channelId);
 
   const currentUserId = useSDK().currentUserId;
   const { channelMembers } = useSearchChannelUser(channel.channelId, ['member', 'banned', 'muted']);
@@ -62,7 +64,7 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
       {isOnline && (
         <>
           <div ref={suggestionRef} className={mentionStyles.mentionContainer}></div>
-          {channel.isMuted ? (
+          {!isModerator && channel.isMuted ? (
             <div className={styles.mutedChannelContainer}>
               <MutedIcon width={20} height={20} className={styles.mutedIcon} />
               <Typography.Body>
@@ -96,7 +98,7 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
 
           <div ref={composeBarRef}>
             <AmityLiveChatMessageComposeBar
-              disabled={channel.isMuted || currentUserMembership?.isMuted}
+              disabled={(!isModerator && channel.isMuted) || currentUserMembership?.isMuted}
               channel={channel}
               suggestionRef={suggestionRef}
               composeAction={{
