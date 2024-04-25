@@ -17,7 +17,6 @@ import { StoryVideoPreview } from './styles';
 import { StoryRepository } from '@amityco/ts-sdk';
 
 import { HyperLink } from '../../elements/HyperLink';
-import { HyperlinkFormContainer } from '../../components/HyperLinkConfig/styles';
 import { HyperLinkConfig } from '../../components';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -228,7 +227,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
           />
         ) : null}
         {hyperLink[0]?.data?.url && (
-          <HyperlinkFormContainer>
+          <div className={styles.hyperLinkContainer}>
             <HyperLink
               href={
                 hyperLink[0].data.url.startsWith('http')
@@ -242,7 +241,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
                 <span>{hyperLink[0]?.data?.customText || hyperLink[0].data.url}</span>
               </Truncate>
             </HyperLink>
-          </HyperlinkFormContainer>
+          </div>
         )}
 
         <HyperLinkConfig
