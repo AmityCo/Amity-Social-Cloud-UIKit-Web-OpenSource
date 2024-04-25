@@ -37,7 +37,7 @@ export const StoryTabGlobalFeed: React.FC<StoryTabGlobalFeedProps> = () => {
         next={loadMoreStories}
         hasMore={hasMore}
         loader={<h4>Loading...</h4>}
-        style={{ display: 'flex', overflowX: 'auto' }}
+        style={{ display: 'flex', overflowX: 'auto', gap: '0.5rem' }}
         scrollThreshold={0.9}
         scrollableTarget="containerRef"
       >

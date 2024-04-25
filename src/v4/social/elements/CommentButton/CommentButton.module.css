@@ -1,11 +1,12 @@
 .uiCommentButton {
+  font-family: "Inter";
   font-weight: var(--asc-text-font-weight-bold);
-  color: var(--asc-color-base-inverse);
+  color: var(--asc-color-white);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--asc-spacing-xxs2);
-  border-radius: var(--asc-border-radius-full);
+  border-radius: 1.5rem;
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   background-color: var(--asc-color-base-default);
   cursor: pointer;
