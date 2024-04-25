@@ -3,7 +3,7 @@ import Modal from '~/v4/core/components/Modal';
 import { Button } from '~/v4/core/components/Button';
 import clsx from 'clsx';
 import styles from './styles.module.css';
-import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 const Confirm = ({
   'data-qa-anchor': dataQaAnchor = '',
