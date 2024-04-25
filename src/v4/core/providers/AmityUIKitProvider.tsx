@@ -12,7 +12,9 @@ import NavigationProvider from '~/social/providers/NavigationProvider';
 
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import { ConfirmComponent } from '~/v4/core/components/ConfirmModal';
+import { ConfirmComponent as LegacyConfirmComponent } from '~/core/components/Confirm';
 import { NotificationsContainer } from '~/v4/core/components/Notification';
+import { NotificationsContainer as LegacyNotificationsContainer } from '~/core/components/Notification';
 
 import Localization from '~/core/providers/UiKitProvider/Localization';
 
@@ -25,7 +27,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UIStyles } from '~/core/providers/UiKitProvider/styles';
 import AmityUIKitManager from '../AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
+import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
+import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 
 export type AmityUIKitConfig = Config;
 
@@ -138,24 +142,30 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
                 <SDKContext.Provider value={sdkContextValue}>
                   <SDKConnectorProvider>
                     <NotificationProvider>
-                      <ConfirmProvider>
-                        <ConfigProvider
-                          config={{
-                            socialCommunityCreationButtonVisible:
-                              socialCommunityCreationButtonVisible || true,
-                          }}
-                        >
-                          <PostRendererProvider config={postRendererConfig}>
-                            <NavigationProvider>
-                              <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                {children}
-                              </PageBehaviorProvider>
-                            </NavigationProvider>
-                          </PostRendererProvider>
-                        </ConfigProvider>
-                        <NotificationsContainer />
-                        <ConfirmComponent />
-                      </ConfirmProvider>
+                      <LegacyNotificationProvider>
+                        <ConfirmProvider>
+                          <LegacyConfirmProvider>
+                            <ConfigProvider
+                              config={{
+                                socialCommunityCreationButtonVisible:
+                                  socialCommunityCreationButtonVisible || true,
+                              }}
+                            >
+                              <PostRendererProvider config={postRendererConfig}>
+                                <NavigationProvider>
+                                  <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                    {children}
+                                  </PageBehaviorProvider>
+                                </NavigationProvider>
+                              </PostRendererProvider>
+                            </ConfigProvider>
+                            <NotificationsContainer />
+                            <LegacyNotificationsContainer />
+                            <ConfirmComponent />
+                            <LegacyConfirmComponent />
+                          </LegacyConfirmProvider>
+                        </ConfirmProvider>
+                      </LegacyNotificationProvider>
                     </NotificationProvider>
                   </SDKConnectorProvider>
                 </SDKContext.Provider>
