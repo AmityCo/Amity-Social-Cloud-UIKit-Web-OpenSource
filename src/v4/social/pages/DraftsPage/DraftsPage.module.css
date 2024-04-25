@@ -4,6 +4,16 @@
   width: 23.438rem;
   height: 40.875rem;
   position: relative;
+  font-family: var(--asc-text-global-font-family);
+  font-style: var(--asc-text-global-font-style);
+}
+
+.headerContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }
 
 .header {
@@ -11,31 +21,29 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  top: 0;
-  padding: 1rem;
+  padding: var(--asc-spacing-m1);
 }
 
 .topRightButtons {
   display: flex;
   width: 100%;
   justify-content: flex-end;
-  gap: 8px;
+  gap: var(--asc-spacing-s2);
 }
 
 .mainContainer {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
-    background: linear-gradient(
-      180deg,
-      var(--draft-image-container-color-0, #000) 0%,
-      var(--draft-image-container-color-last, #000) 100%
-    );
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-top-left-radius: var(--asc-border-radius-lg);
+  border-top-right-radius: var(--asc-border-radius-lg);
+  background: linear-gradient(
+    180deg,
+    var(--draft-image-container-color-0, var(--asc-color-black)) 0%,
+    var(--draft-image-container-color-last, var(--asc-color-black)) 100%
+  );
 }
 
 .previewImage {
@@ -46,8 +54,7 @@
 .footer {
   display: flex;
   justify-content: flex-end;
-  padding: 16px;
-  background-color: black;
+  padding: var(--asc-spacing-m1);
+  background-color: var(--asc-color-black);
   width: 100%;
 }
-

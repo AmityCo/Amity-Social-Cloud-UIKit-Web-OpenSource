@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
-
 import { readFileAsync } from '~/helpers';
 import useUser from '~/core/hooks/useUser';
 import useSDK from '~/core/hooks/useSDK';
@@ -178,21 +177,23 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   return (
     <>
       <div id="asc-uikit-create-story" className={styles.draftPage}>
-        <div className={styles.header}>
-          <BackButton pageId="create_story_page" componentId="*" onClick={discardCreateStory} />
-          <div className={styles.topRightButtons}>
-            {mediaType?.type === 'image' && (
-              <AspectRatioButton
+        <div className={styles.headerContainer}>
+          <div className={styles.header}>
+            <BackButton pageId="create_story_page" componentId="*" onClick={discardCreateStory} />
+            <div className={styles.topRightButtons}>
+              {mediaType?.type === 'image' && (
+                <AspectRatioButton
+                  pageId="create_story_page"
+                  componentId="*"
+                  onClick={onClickImageMode}
+                />
+              )}
+              <HyperLinkButton
                 pageId="create_story_page"
                 componentId="*"
-                onClick={onClickImageMode}
+                onClick={() => setIsHyperLinkBottomSheetOpen(true)}
               />
-            )}
-            <HyperLinkButton
-              pageId="create_story_page"
-              componentId="*"
-              onClick={() => setIsHyperLinkBottomSheetOpen(true)}
-            />
+            </div>
           </div>
         </div>
 
