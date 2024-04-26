@@ -25,10 +25,11 @@ import {
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from './Wrappers/Footer';
+import { PageTypes } from '~/social/constants';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
-  const { onBack, onClickCommunity } = useNavigation();
+  const { page, onClickCommunity, onChangePage } = useNavigation();
   const [loaded, setLoaded] = useState(false);
   const [muted, setMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -36,13 +37,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const { width, height, loader, storyStyles } = config;
   const { client } = useSDK();
-  const [isReplying, setIsReplying] = useState(false);
-  const [replyTo, setReplyTo] = useState<string | undefined>(undefined);
-  const [selectedComment, setSelectedComment] = useState<{
-    referenceType?: string;
-    referenceId?: string;
-    commentId?: string;
-  } | null>(null);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -187,7 +181,13 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onAction={openBottomSheet}
         onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
-        onClose={onBack}
+        onClose={() => {
+          if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
+            onChangePage(PageTypes.NewsFeed);
+            return;
+          }
+          onClickCommunity(community?.communityId as string);
+        }}
         addStoryButton={addStoryButton}
       />
       <StoryVideo
@@ -259,9 +259,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
             <MobileSheet.Scroller>
               <CommentTray
                 referenceId={storyId}
-                referenceType={
-                  (selectedComment?.referenceType as Amity.CommentReferenceType) || 'story'
-                }
+                referenceType={'story'}
                 community={community as Amity.Community}
                 shouldAllowCreation={community?.allowCommentInStory}
                 shouldAllowInteraction={isJoined}

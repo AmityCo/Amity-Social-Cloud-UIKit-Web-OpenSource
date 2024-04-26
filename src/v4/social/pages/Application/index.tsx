@@ -58,9 +58,9 @@ const Community = () => {
               toggleOpen={toggleOpen}
             />
           )}
-          {page.type === PageTypes.ViewStory && (
+          {page.type === PageTypes.ViewStory && page.storyType && (
             <div className={styles.wrapper}>
-              <AmityViewStoryPage type="communityFeed" />
+              <AmityViewStoryPage type={page.storyType} />
             </div>
           )}
           {page.type === PageTypes.CommunityEdit && (

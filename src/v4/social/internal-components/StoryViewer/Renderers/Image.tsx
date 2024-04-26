@@ -26,10 +26,11 @@ import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from './Wrappers/Footer';
 import Header from './Wrappers/Header';
+import { PageTypes } from '~/social/constants';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
-  const { onBack, onClickCommunity } = useNavigation();
+  const { page, onChangePage, onClickCommunity } = useNavigation();
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
@@ -143,7 +144,13 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onAction={openBottomSheet}
         onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
-        onClose={onBack}
+        onClose={() => {
+          if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
+            onChangePage(PageTypes.NewsFeed);
+            return;
+          }
+          onClickCommunity(community?.communityId as string);
+        }}
         addStoryButton={addStoryButton}
       />
       <img

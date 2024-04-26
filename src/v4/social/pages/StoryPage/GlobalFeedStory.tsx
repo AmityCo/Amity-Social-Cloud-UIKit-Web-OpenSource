@@ -1,21 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import useStories from '~/social/hooks/useStories';
-
 import useSDK from '~/core/hooks/useSDK';
-
 import { useMedia } from 'react-use';
 import { useIntl } from 'react-intl';
-
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateStoryButton } from '../../elements';
 import { Trash2Icon } from '~/icons';
-import { isNonNullable } from '~/helpers/utils';
+import { isNonNullable } from '~/v4/helpers/utils';
 import { extractColors } from 'extract-colors';
-
 import { useNavigation } from '~/social/providers/NavigationProvider';
-
 import {
   HiddenInput,
   StoryArrowLeftButton,
@@ -32,21 +26,26 @@ import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '../../providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-
-interface CommunityFeedStoryProps {
-  communityId: string;
-}
+import { PageTypes } from '~/social/constants';
 
 const DURATION = 5000;
 
-export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
-  const { onBack } = useNavigation();
+interface GlobalFeedStoryProps {
+  targetId: string;
+}
+
+export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
+  const { page } = useNavigation();
+  const { onClickStory, onChangePage } = useNavigation();
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
   const { stories } = useStories({
-    targetId: communityId,
     targetType: 'community',
+    targetId:
+      page.type === PageTypes.ViewStory && page.storyType === 'globalFeed' && page.targetId
+        ? page.targetId
+        : '',
     options: {
       orderBy: 'asc',
       sortBy: 'createdAt',
@@ -81,7 +80,7 @@ export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
   const [colors, setColors] = useState<FinalColor[]>([]);
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const haveStoryPermission = checkStoryPermission(client, communityId);
+  const haveStoryPermission = checkStoryPermission(client, stories[currentIndex]?.targetId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
@@ -92,7 +91,7 @@ export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
       onOk: async () => {
         previousStory();
         if (isLastStory) {
-          onBack();
+          onChangePage(PageTypes.NewsFeed);
         }
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
@@ -116,37 +115,44 @@ export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
     metadata?: Amity.Metadata,
     items?: Amity.StoryItem[],
   ) => {
-    onBack();
-    const formData = new FormData();
-    formData.append('files', file);
-    setFile(null);
-    if (file?.type.includes('image')) {
-      const { data: imageData } = await StoryRepository.createImageStory(
-        'community',
-        communityId,
-        formData,
-        metadata,
-        imageMode,
-        items,
-      );
-      if (imageData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+      setFile(null);
+      if (file?.type.includes('image') && currentUserId) {
+        const { data: imageData } = await StoryRepository.createImageStory(
+          'user',
+          currentUserId,
+          formData,
+          metadata,
+          imageMode,
+          items,
+        );
+        if (imageData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
+      } else {
+        if (currentUserId) {
+          const { data: videoData } = await StoryRepository.createVideoStory(
+            'user',
+            currentUserId,
+            formData,
+            metadata,
+            items,
+          );
+          if (videoData) {
+            notification.success({
+              content: formatMessage({ id: 'storyViewer.notification.success' }),
+            });
+          }
+        }
       }
-    } else {
-      const { data: videoData } = await StoryRepository.createVideoStory(
-        'community',
-        communityId,
-        formData,
-        metadata,
-        items,
-      );
-      if (videoData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
-      }
+    } catch (error) {
+      notification.error({
+        content: formatMessage({ id: 'storyViewer.notification.error' }),
+      });
     }
   };
 
@@ -184,15 +190,44 @@ export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
   });
 
   const nextStory = () => {
-    if (currentIndex === stories.length - 1) {
-      onBack();
+    if (
+      page.type === PageTypes.ViewStory &&
+      page.targetIds &&
+      page.targetId &&
+      currentIndex === formattedStories?.length - 1
+    ) {
+      const currentTargetIndex = page.targetIds.indexOf(page.targetId);
+      const nextTargetIndex = currentTargetIndex + 1;
+
+      if (nextTargetIndex < page.targetIds.length) {
+        const nextTargetId = page.targetIds[nextTargetIndex];
+        onClickStory(nextTargetId, 'globalFeed', page.targetIds);
+      } else {
+        onChangePage(PageTypes.NewsFeed);
+      }
       return;
     }
     setCurrentIndex(currentIndex + 1);
   };
 
   const previousStory = () => {
-    if (currentIndex === 0) return;
+    if (
+      page.type === PageTypes.ViewStory &&
+      page.targetIds &&
+      page.targetId &&
+      currentIndex === 0
+    ) {
+      const currentTargetIndex = page.targetIds.indexOf(page.targetId);
+      const previousTargetIndex = currentTargetIndex - 1;
+
+      if (previousTargetIndex >= 0) {
+        const previousTargetId = page.targetIds[previousTargetIndex];
+        onClickStory(previousTargetId, 'globalFeed', page.targetIds);
+      } else {
+        onChangePage(PageTypes.NewsFeed);
+      }
+      return;
+    }
     setCurrentIndex(currentIndex - 1);
   };
 
@@ -242,7 +277,7 @@ export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
     }
   }, [stories, file, currentIndex]);
 
-  if (file) {
+  if (file && page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
     return (
       <AmityDraftStoryPage
         mediaType={
@@ -250,7 +285,7 @@ export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
             ? { type: 'image', url: URL.createObjectURL(file) }
             : { type: 'video', url: URL.createObjectURL(file) }
         }
-        targetId={communityId}
+        targetId={page.targetId}
         targetType="community"
       />
     );
@@ -287,7 +322,7 @@ export const GlobalFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
               onStoryEnd={increaseIndex}
               onNext={nextStory}
               onPrevious={previousStory}
-              onAllStoriesEnd={onBack}
+              onAllStoriesEnd={() => onChangePage(PageTypes.NewsFeed)}
             />
           ) : null}
         </ViewStoryContent>

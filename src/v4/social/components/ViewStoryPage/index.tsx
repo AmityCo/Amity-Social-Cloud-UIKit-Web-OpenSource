@@ -253,7 +253,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
     }
   }, [stories, file, currentIndex]);
 
-  if (isDraft && file) {
+  if (file) {
     return (
       <AmityDraftStoryPage
         mediaType={

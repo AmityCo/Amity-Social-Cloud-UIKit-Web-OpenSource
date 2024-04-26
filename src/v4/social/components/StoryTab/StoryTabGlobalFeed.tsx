@@ -66,7 +66,13 @@ export const StoryTabGlobalFeed: React.FC = () => {
             key={story.targetId}
             targetId={story.targetId}
             hasUnseen={story.hasUnseen}
-            onClick={() => onClickStory(story.targetId)}
+            onClick={() =>
+              onClickStory(
+                story.targetId,
+                'globalFeed',
+                stories.map((s) => s.targetId),
+              )
+            }
             size={64}
           />
         );

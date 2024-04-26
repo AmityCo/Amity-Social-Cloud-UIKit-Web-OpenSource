@@ -21,11 +21,12 @@ import { HyperLinkConfig } from '../../components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import { PageTypes } from '~/social/constants';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
 type AmityDraftStoryPageProps = {
-  targetId: string;
+  targetId?: string;
   targetType: Amity.StoryTargetType;
   mediaType?: AmityStoryMediaType;
 };
@@ -36,7 +37,7 @@ type HyperLinkFormInputs = {
 };
 
 const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
-  const { onClickCommunity } = useNavigation();
+  const { page, onChangePage, onClickCommunity } = useNavigation();
   const { file, setFile } = useStoryContext();
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
@@ -78,11 +79,17 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   ) => {
     if (!file) return;
     try {
-      onClickCommunity(targetId);
       const formData = new FormData();
       formData.append('files', file);
       setFile(null);
-      if (mediaType?.type === 'image') {
+      if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
+        onChangePage(PageTypes.NewsFeed);
+      } else {
+        if (page.communityId) {
+          onClickCommunity(page.communityId);
+        }
+      }
+      if (mediaType?.type === 'image' && targetId) {
         const { data: imageData } = await StoryRepository.createImageStory(
           targetType,
           targetId,
@@ -96,7 +103,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             content: formatMessage({ id: 'storyViewer.notification.success' }),
           });
         }
-      } else if (mediaType?.type === 'video') {
+      } else if (mediaType?.type === 'video' && targetId) {
         const { data: videoData } = await StoryRepository.createVideoStory(
           targetType,
           targetId,

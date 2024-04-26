@@ -50,7 +50,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({ co
 
   const handleOnClick = () => {
     if (Array.isArray(stories) && stories.length === 0) return;
-    onClickStory(communityId);
+    onClickStory(communityId, 'communityFeed');
   };
 
   const { client } = useSDK();

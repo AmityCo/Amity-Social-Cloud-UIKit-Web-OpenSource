@@ -41,7 +41,7 @@ const CommunityInfo = ({ communityId, stories }: CommunityInfoProps) => {
     canReviewCommunityPosts,
   } = useCommunityInfo(communityId);
 
-  const { info, confirm } = useConfirmContext();
+  const { confirm } = useConfirmContext();
 
   const categoryNames = (communityCategories || []).map((category) => category.name);
 
