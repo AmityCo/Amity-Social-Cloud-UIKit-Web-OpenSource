@@ -18,7 +18,6 @@ import { StoryRepository } from '@amityco/ts-sdk';
 
 import { HyperLink } from '../../elements/HyperLink';
 import { HyperLinkConfig } from '../../components';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
@@ -76,36 +75,42 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
     items?: Amity.StoryItem[],
   ) => {
     if (!file) return;
-    const formData = new FormData();
-    formData.append('files', file);
-    setFile(null);
-    if (mediaType?.type === 'image') {
-      const { data: imageData } = await StoryRepository.createImageStory(
-        targetType,
-        targetId,
-        formData,
-        metadata,
-        imageMode,
-        items,
-      );
-      if (imageData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+      setFile(null);
+      if (mediaType?.type === 'image') {
+        const { data: imageData } = await StoryRepository.createImageStory(
+          targetType,
+          targetId,
+          formData,
+          metadata,
+          imageMode,
+          items,
+        );
+        if (imageData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
+      } else if (mediaType?.type === 'video') {
+        const { data: videoData } = await StoryRepository.createVideoStory(
+          targetType,
+          targetId,
+          formData,
+          metadata,
+          items,
+        );
+        if (videoData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
       }
-    } else if (mediaType?.type === 'video') {
-      const { data: videoData } = await StoryRepository.createVideoStory(
-        targetType,
-        targetId,
-        formData,
-        metadata,
-        items,
-      );
-      if (videoData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
-      }
+    } catch (error) {
+      notification.error({
+        content: formatMessage({ id: 'storyViewer.notification.error' }),
+      });
     }
   };
 
