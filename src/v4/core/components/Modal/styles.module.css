@@ -36,6 +36,7 @@
   animation-name: appear;
   margin-top: 0 !important;
 }
+
 .modalWindow {
   margin: auto;
   background-color: var(--asc-color-base-background);

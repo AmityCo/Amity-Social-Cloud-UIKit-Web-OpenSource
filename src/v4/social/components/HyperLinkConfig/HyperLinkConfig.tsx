@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { SecondaryButton } from '~/core/components/Button';
 
 import useSDK from '~/core/hooks/useSDK';
-import { BottomSheet } from '~/v4/core/components';
+import { BottomSheet, Typography } from '~/v4/core/components';
 import {
   MobileSheet,
   MobileSheetContainer,
@@ -128,9 +128,9 @@ export const HyperLinkConfig = ({
                 <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
               )}
             </SecondaryButton>
-            <div className={styles.headerTitle}>
+            <Typography.Title>
               {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
-            </div>
+            </Typography.Title>
             <SecondaryButton
               style={{
                 backgroundColor:
@@ -162,12 +162,14 @@ export const HyperLinkConfig = ({
               className={styles.form}
             >
               <div className={styles.inputContainer}>
-                <label
-                  htmlFor="asc-uikit-hyperlink-input-url"
-                  className={`${styles.label} ${styles.required}`}
-                >
-                  {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
-                </label>
+                <Typography.Title>
+                  <label
+                    htmlFor="asc-uikit-hyperlink-input-url"
+                    className={`${styles.label} ${styles.required}`}
+                  >
+                    {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
+                  </label>
+                </Typography.Title>
                 <input
                   id="asc-uikit-hyperlink-input-url"
                   placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}
@@ -178,9 +180,11 @@ export const HyperLinkConfig = ({
               </div>
               <div className={styles.inputContainer}>
                 <div className={styles.labelContainer}>
-                  <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
-                    {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
-                  </label>
+                  <Typography.Title>
+                    <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
+                      {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
+                    </label>
+                  </Typography.Title>
                   <div className={styles.characterCount}>
                     {watch('customText')?.length} / {MAX_LENGTH}
                   </div>

@@ -22,11 +22,11 @@
   border-bottom: 1px solid var(--asc-color-base-shade4);
   outline: none;
   color: inherit;
+  background-color: transparent;
 }
 
 .input.hasError {
   border-bottom-color: var(--asc-color-alert);
-  color: var(--asc-color-alert);
 }
 
 .label {
@@ -93,6 +93,7 @@
   background-color: transparent;
   transition: color 0.3s ease;
   border: none;
+  font-weight: var(--asc-text-font-weight-normal);
 }
 
 .divider {

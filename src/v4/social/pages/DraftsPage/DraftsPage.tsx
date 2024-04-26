@@ -36,8 +36,6 @@ type HyperLinkFormInputs = {
 };
 
 const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
-  // TODO: Change to usePageBehavior() to align with v4
-  const { onBack } = useNavigation();
   const { file, setFile } = useStoryContext();
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
@@ -78,7 +76,6 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
     items?: Amity.StoryItem[],
   ) => {
     if (!file) return;
-    onBack();
     const formData = new FormData();
     formData.append('files', file);
     setFile(null);
