@@ -1,11 +1,9 @@
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { confirm } from '~/core/components/Confirm';
 import useComment from '~/social/hooks/useComment';
 import CommentComposeBar from '~/social/components/CommentComposeBar';
 import CommentList from '~/social/components/CommentList';
-import { notification } from '~/core/components/Notification';
 import StyledComment from './StyledComment';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import usePost from '~/social/hooks/usePost';
@@ -38,6 +36,10 @@ import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 import { ERROR_RESPONSE } from '~/social/constants';
+
+import { ERROR_RESPONSE } from '~/social/constants';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -89,6 +91,9 @@ interface CommentProps {
 const Comment = ({ commentId, readonly }: CommentProps) => {
   const comment = useComment(commentId);
   const post = usePost(comment?.referenceId);
+  const { confirm } = useConfirmContext();
+  const notification = useNotifications();
+
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useFile(commentAuthor?.avatarFileId);
   const { userRoles } = useSDK();
@@ -125,7 +130,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   //   }
   // }, [(comment?.data as Amity.ContentDataText)?.text, text]);
 
-  if (post == null || comment == null) return <LoadingIndicator />;
+  if (post == null && comment == null) return <LoadingIndicator />;
 
   const handleReportComment = async () => {
     return toggleFlagComment();
@@ -233,9 +238,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
     });
   };
 
-  if (comment == null) {
-    return null;
-  }
+  if (comment == null) return null;
 
   if (comment?.isDeleted) {
     return isReplyComment ? (
@@ -285,14 +288,16 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   ) : (
     <CommentBlock>
       <CommentContainer data-qa-anchor="comment">{renderedComment}</CommentContainer>
-      <CommentList
-        parentId={comment.commentId}
-        referenceType={comment.referenceType}
-        referenceId={comment.referenceId}
-        readonly={readonly}
-        isExpanded={isExpanded}
-        limit={REPLIES_PER_PAGE}
-      />
+      {comment.children.length > 0 && (
+        <CommentList
+          parentId={comment.commentId}
+          referenceType={comment.referenceType}
+          referenceId={comment.referenceId}
+          readonly={readonly}
+          isExpanded={isExpanded}
+          limit={REPLIES_PER_PAGE}
+        />
+      )}
 
       {isReplying && (
         <CommentComposeBar

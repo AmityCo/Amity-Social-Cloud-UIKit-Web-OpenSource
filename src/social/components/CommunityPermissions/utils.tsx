@@ -1,7 +1,7 @@
 import { CommunityPostSettings, CommunityRepository } from '@amityco/ts-sdk';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { info } from '~/core/components/Confirm';
+
 import useCommunity from '~/social/hooks/useCommunity';
 
 // TODO: check CommunityPostSettings

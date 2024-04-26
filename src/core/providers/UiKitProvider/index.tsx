@@ -5,7 +5,7 @@ import { Client as ASCClient } from '@amityco/ts-sdk';
 
 import { ThemeProvider } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
-import { ConfirmContainer } from '~/core/components/Confirm';
+import { ConfirmComponent } from '~/core/components/Confirm';
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import Localization from './Localization';
 import buildGlobalTheme from './theme';
@@ -18,6 +18,10 @@ import CustomComponentsProvider, { CustomComponentType } from '../CustomComponen
 import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ConfirmProvider } from '../ConfirmProvider';
+import { NotificationProvider } from '~/core/providers/NotificationProvider';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -65,6 +69,7 @@ const UiKitProvider = ({
   onDisconnected,
   getAuthToken,
 }: UiKitProviderProps) => {
+  const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
   const [client, setClient] = useState<Amity.Client | null>(null);
   const stateChangeRef = useRef<(() => void) | null>(null);
@@ -132,7 +137,11 @@ const UiKitProvider = ({
   }
 
   useEffect(() => {
-    login();
+    async function run() {
+      await login();
+    }
+
+    run();
 
     return () => {
       stateChangeRef.current?.();
@@ -144,30 +153,36 @@ const UiKitProvider = ({
   if (!isConnected) return <></>;
 
   return (
-    <Localization locale="en">
-      <ThemeProvider theme={buildGlobalTheme(theme)}>
-        <UIStyles>
-          <SDKContext.Provider value={sdkContextValue}>
-            <SDKConnectorProvider>
-              <CustomComponentsProvider config={customComponents}>
-                <ConfigProvider
-                  config={{
-                    socialCommunityCreationButtonVisible:
-                      socialCommunityCreationButtonVisible || true,
-                  }}
-                >
-                  <PostRendererProvider config={postRendererConfig}>
-                    <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
-                  </PostRendererProvider>
-                </ConfigProvider>
-                <NotificationsContainer />
-                <ConfirmContainer />
-              </CustomComponentsProvider>
-            </SDKConnectorProvider>
-          </SDKContext.Provider>
-        </UIStyles>
-      </ThemeProvider>
-    </Localization>
+    <QueryClientProvider client={queryClient}>
+      <Localization locale="en">
+        <ThemeProvider theme={buildGlobalTheme(theme)}>
+          <UIStyles>
+            <SDKContext.Provider value={sdkContextValue}>
+              <SDKConnectorProvider>
+                <ConfirmProvider>
+                  <NotificationProvider>
+                    <CustomComponentsProvider config={customComponents}>
+                      <ConfigProvider
+                        config={{
+                          socialCommunityCreationButtonVisible:
+                            socialCommunityCreationButtonVisible || true,
+                        }}
+                      >
+                        <PostRendererProvider config={postRendererConfig}>
+                          <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
+                        </PostRendererProvider>
+                      </ConfigProvider>
+                      <NotificationsContainer />
+                      <ConfirmComponent />
+                    </CustomComponentsProvider>
+                  </NotificationProvider>
+                </ConfirmProvider>
+              </SDKConnectorProvider>
+            </SDKContext.Provider>
+          </UIStyles>
+        </ThemeProvider>
+      </Localization>
+    </QueryClientProvider>
   );
 };
 

@@ -1,9 +1,7 @@
 import React, { memo } from 'react';
 import { useIntl } from 'react-intl';
-
 import Comment from '~/social/components/Comment';
-
-import { TabIcon, TabIconContainer } from './styles';
+import { NoCommentsContainer, TabIcon, TabIconContainer } from './styles';
 import LoadMoreWrapper from '../LoadMoreWrapper';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
 import { SubscriptionLevels } from '@amityco/ts-sdk';
@@ -13,7 +11,6 @@ interface CommentListProps {
   parentId?: string;
   referenceId?: string;
   referenceType: Amity.CommentReferenceType;
-  // filterByParentId?: boolean;
   readonly?: boolean;
   isExpanded?: boolean;
   limit?: number;
@@ -24,11 +21,12 @@ const CommentList = ({
   referenceId,
   referenceType,
   limit = 5,
-  // TODO: breaking change
-  // filterByParentId = false,
   readonly = false,
   isExpanded = true,
 }: CommentListProps) => {
+  const { formatMessage } = useIntl();
+  const isReplyComment = !!parentId;
+
   const { comments, hasMore, loadMore } = useCommentsCollection({
     parentId,
     referenceId,
@@ -42,10 +40,6 @@ const CommentList = ({
     shouldSubscribe: () => referenceType === 'post' && !parentId,
   });
 
-  const { formatMessage } = useIntl();
-
-  const isReplyComment = !!parentId;
-
   const loadMoreText = isReplyComment
     ? formatMessage({ id: 'collapsible.viewMoreReplies' })
     : formatMessage({ id: 'collapsible.viewMoreComments' });
@@ -55,6 +49,14 @@ const CommentList = ({
       <TabIcon />
     </TabIconContainer>
   ) : null;
+
+  if (comments.length === 0 && referenceType === 'story' && !isReplyComment) {
+    return (
+      <NoCommentsContainer>
+        {formatMessage({ id: 'storyViewer.commentSheet.empty' })}
+      </NoCommentsContainer>
+    );
+  }
 
   if (comments.length === 0) return null;
 

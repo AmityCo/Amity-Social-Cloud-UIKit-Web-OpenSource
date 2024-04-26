@@ -5,7 +5,6 @@ import useUser from '~/core/hooks/useUser';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useFollowCount from '~/core/hooks/useFollowCount';
 import useImage from '~/core/hooks/useImage';
-import { notification } from '~/core/components/Notification';
 import useSDK from '~/core/hooks/useSDK';
 import { SubscriptionLevels, UserRepository } from '@amityco/ts-sdk';
 import useFollowStatus from '~/core/hooks/useFollowStatus';
@@ -14,6 +13,7 @@ import UIUserInfo from './UIUserInfo';
 import useUserSubscription from '~/social/hooks/useUserSubscription';
 import useFollowersSubscription from '~/social/hooks/useFollowersSubscription';
 import useFollowingsSubscription from '~/social/hooks/useFollowingsSubscription';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 interface UserInfoProps {
   userId?: string | null;
@@ -35,6 +35,7 @@ const UserInfo = ({
   const { currentUserId } = useSDK();
   const { formatMessage } = useIntl();
   const { onEditUser } = useNavigation();
+  const notification = useNotifications();
   const user = useUser(userId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
 

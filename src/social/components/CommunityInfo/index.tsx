@@ -1,9 +1,10 @@
 import React from 'react';
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import UICommunityInfo from './UICommunityInfo';
-import { leaveCommunityConfirmModal } from './leaveScenarioModals';
 
 import { useCommunityInfo } from './hooks';
+import { FormattedMessage } from 'react-intl';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 import useSDK from '~/core/hooks/useSDK';
 
@@ -26,12 +27,23 @@ const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
     canReviewCommunityPosts,
   } = useCommunityInfo(communityId);
 
+  const { info, confirm } = useConfirmContext();
+
   const categoryNames = (communityCategories || []).map((category) => category.name);
 
   if (community == null) return null;
 
   const canLeaveCommunity = community.isJoined || false;
   const { membersCount, description, isJoined } = community;
+
+  const leaveCommunityConfirmModal = ({ onOk }: { onOk: () => void }) =>
+    confirm({
+      'data-qa-anchor': 'leave-community',
+      title: <FormattedMessage id="community.leaveCommunityTitle" />,
+      content: <FormattedMessage id="community.leaveCommunityBody" />,
+      okText: <FormattedMessage id="community.leaveCommunityButtonText" />,
+      onOk: () => onOk(),
+    });
 
   return (
     <UICommunityInfo

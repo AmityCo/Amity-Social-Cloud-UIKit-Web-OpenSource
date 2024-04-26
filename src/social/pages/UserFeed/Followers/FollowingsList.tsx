@@ -8,8 +8,7 @@ import { isLoadingItem } from '~/utils';
 import useUser from '~/core/hooks/useUser';
 import { UserRepository } from '@amityco/ts-sdk';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { notification } from '~/core/components/Notification';
-import { confirm } from '~/core/components/Confirm';
+
 import {
   Grid,
   Header,
@@ -22,6 +21,8 @@ import useUserFlaggedByMe from '~/social/hooks/useUserFlaggedByMe';
 import useFollowingsSubscription from '~/social/hooks/useFollowingsSubscription';
 import useSDK from '~/core/hooks/useSDK';
 import useFollowingsCollection from '~/core/hooks/collections/useFollowingsCollection';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 interface UserItemProps {
   profileUserId: string;
@@ -33,6 +34,8 @@ interface UserItemProps {
 export const UserItem = ({ profileUserId, currentUserId, userId, onClick }: UserItemProps) => {
   const user = useUser(userId);
   const { onClickUser } = useNavigation();
+  const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const { formatMessage } = useIntl();
   const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(userId);

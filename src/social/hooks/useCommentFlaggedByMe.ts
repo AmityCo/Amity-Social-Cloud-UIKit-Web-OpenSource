@@ -1,17 +1,23 @@
 import { CommentRepository } from '@amityco/ts-sdk';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const useCommentFlaggedByMe = (commentId?: string) => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(false);
 
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['asc-uikit', 'CommentRepository', 'isCommentFlaggedByMe', commentId],
+    queryFn: () => {
+      return CommentRepository.isCommentFlaggedByMe(commentId as string);
+    },
+    enabled: commentId != null,
+  });
+
   useEffect(() => {
-    if (!commentId) return;
-    CommentRepository.isCommentFlaggedByMe(commentId).then((value) => {
-      setIsFlaggedByMe(value);
-      setIsLoading(false);
-    });
-  }, [commentId]);
+    if (data != null) {
+      setIsFlaggedByMe(data);
+    }
+  }, [data]);
 
   const flagComment = async () => {
     if (commentId == null) return;
@@ -20,6 +26,8 @@ const useCommentFlaggedByMe = (commentId?: string) => {
       await CommentRepository.flagComment(commentId);
     } catch (_error) {
       setIsFlaggedByMe(false);
+    } finally {
+      refetch();
     }
   };
 
@@ -30,6 +38,8 @@ const useCommentFlaggedByMe = (commentId?: string) => {
       await CommentRepository.unflagComment(commentId);
     } catch (_error) {
       setIsFlaggedByMe(true);
+    } finally {
+      refetch();
     }
   };
 

@@ -5,9 +5,9 @@ on:
     inputs:
       release_as:
         description: 'release as'
-        required: true
-      custom_version:
-        description: 'custom version'
+        required: false
+      pre-release:
+        description: 'prerelease'
         required: false
 
 jobs:
@@ -49,15 +49,31 @@ jobs:
 
       - name: increase version (patch)
         run: pnpm standard-version --yes --release-as patch
-        if: github.event.inputs.release_as == 'patch'
+        if: github.event.inputs.release_as == 'patch' && github.event.inputs.pre-release == ''
+
+      - name: increase version (patch) (pre-release)
+        run: pnpm standard-version --yes --release-as patch --prerelease ${{ github.event.inputs.pre-release }}
+        if: github.event.inputs.release_as == 'patch' && github.event.inputs.pre-release != ''
 
       - name: increase version (minor)
         run: pnpm standard-version --yes --release-as minor
-        if: github.event.inputs.release_as == 'minor'
+        if: github.event.inputs.release_as == 'minor' && github.event.inputs.pre-release == ''
+
+      - name: increase version (minor) (pre-release)
+        run: pnpm standard-version --yes --prerelease ${{ github.event.inputs.pre-release }}
+        if: github.event.inputs.release_as == 'minor' && github.event.inputs.pre-release != ''
 
       - name: increase version (major)
         run: pnpm standard-version --yes --release-as major
-        if: github.event.inputs.release_as == 'major'
+        if: github.event.inputs.release_as == 'major' && github.event.inputs.pre-release == ''
+
+      - name: increase version (major) (pre-release)
+        run: pnpm standard-version --yes --release-as major --prerelease ${{ github.event.inputs.pre-release }}
+        if: github.event.inputs.release_as == 'major' && github.event.inputs.pre-release != ''
+
+      - name: increase version (pre-release)
+        run: pnpm standard-version --prerelease ${{ github.event.inputs.pre-release }}
+        if: github.event.inputs.release_as == '' && github.event.inputs.pre-release != ''
 
       - name: increase version (custom)
         run: pnpm standard-version --yes --release-as ${{ github.event.inputs.custom_version }}

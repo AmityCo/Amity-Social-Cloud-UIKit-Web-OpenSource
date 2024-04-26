@@ -1,0 +1,169 @@
+@import url('../styles/typography.module.css');
+
+/* 
+  The @supports rule is used to check if the browser supports the 'font-variation-settings' CSS property.
+  If supported, it means the browser can handle variable fonts.
+  In this case, if the browser supports 'font-variation-settings', we set the font-family to 'Inter var', which is the variable font version of Inter.
+  Variable fonts allow for more flexibility in styling and can provide a wider range of font variations.
+*/
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: 'Inter var', sans-serif;
+  }
+}
+
+/*
+  The :root pseudo-class represents the root element of the document tree.
+  It is used to define global CSS variables that can be used throughout the stylesheet.
+*/
+:root {
+  color-scheme: light dark;
+  /*
+    Set the default font-family to 'Inter', with fallback to sans-serif.
+    This ensures that the Inter font is used if available, otherwise, the browser's default sans-serif font will be used.
+  */
+  font-family: 'Inter', sans-serif;
+
+  /* color palette */
+  --asc-color-alert: #fa4d30;
+  --asc-color-black: #000000;
+  --asc-color-white: #ffffff;
+
+  --asc-color-primary-default: #1054de;
+  --asc-color-primary-shade1: #4a82f2;
+  --asc-color-primary-shade2: #a0bdf8;
+  --asc-color-primary-shade3: #d9e5fc;
+  --asc-color-primary-shade4: #ffffff;
+
+  --asc-color-base-inverse: #000000;
+
+  --asc-color-base-default: #292b32;
+  --asc-color-base-shade1: #636878;
+  --asc-color-base-shade2: #898e9e;
+  --asc-color-base-shade3: #a5a9b5;
+  --asc-color-base-shade4: #ebecef;
+  --asc-color-base-shade5: #f9f9fa;
+
+  --asc-color-secondary-default: #292b32;
+  --asc-color-secondary-shade1: #636878;
+  --asc-color-secondary-shade2: #898e9e;
+  --asc-color-secondary-shade3: #a5a9b5;
+  --asc-color-secondary-shade4: #ebecef;
+  --asc-color-secondary-shade5: #f9f9fa;
+
+  /* Font */
+  --asc-text-global-font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --asc-text-global-font-style: normal;
+
+  /* Font Sizes */
+  --asc-text-font-size-xs: 0.75rem; /* 12px */
+  --asc-text-font-size-sm: 0.875rem; /* 14px */
+  --asc-text-font-size-md: 1rem; /* 16px */
+  --asc-text-font-size-lg: 1.125rem; /* 18px */
+  --asc-text-font-size-xl: 1.25rem; /* 20px */
+  --asc-text-font-size-xxl: 1.5rem; /* 24px */
+  --asc-text-font-size-3xl: 1.875rem; /* 30px */
+  --asc-text-font-size-4xl: 2.25rem; /* 36px */
+  --asc-text-font-size-5xl: 3rem; /* 48px */
+  --asc-text-font-size-6xl: 3.75rem; /* 60px */
+  --asc-text-font-size-7xl: 4.5rem; /* 72px */
+
+  /* Font Weights */
+  --asc-text-font-weight-light: 300;
+  --asc-text-font-weight-normal: 400;
+  --asc-text-font-weight-medium: 500;
+  --asc-text-font-weight-bold: 600;
+  --asc-text-font-weight-black: 900;
+
+  /* Line Heights */
+  --asc-line-height-xs: 1rem; /* 16px */
+  --asc-line-height-sm: 1.125rem; /* 18px */
+  --asc-line-height-md: 1.25rem; /* 20px */
+  --asc-line-height-lg: 1.5rem; /* 24px */
+  --asc-line-height-xl: 1.75rem; /* 28px */
+  --asc-line-height-xxl: 2rem; /* 32px */
+
+  /* Border Radius */
+  --asc-border-radius-none: 0;
+  --asc-border-radius-sm: 0.25rem; /* 4px */
+  --asc-border-radius-md: 0.5rem; /* 8px */
+  --asc-border-radius-lg: 0.75rem; /* 12px */
+  --asc-border-radius-xl: 1rem; /* 16px */
+  --asc-border-radius-xxl: 1.5rem; /* 24px */
+  --asc-border-radius-full: 9999px;
+
+  /* Spacing */
+  --asc-spacing-none: 0;
+  --asc-spacing-xxs1: 0.125rem; /* 2px */
+  --asc-spacing-xxs2: 0.25rem; /* 4px */
+  --asc-spacing-xxs3: 0.375rem; /* 6px */
+  --asc-spacing-s1: 0.5rem; /* 8px */
+  --asc-spacing-s2: 0.75rem; /* 12px */
+  --asc-spacing-m1: 1rem; /* 16px */
+  --asc-spacing-m2: 1.25rem; /* 20px */
+  --asc-spacing-m3: 1.5rem; /* 24px */
+  --asc-spacing-l1: 2rem; /* 32px */
+  --asc-spacing-l2: 2.5rem; /* 40px */
+  --asc-spacing-l3: 3rem; /* 48px */
+  --asc-spacing-l4: 3.5rem; /* 56px */
+  --asc-spacing-xl1: 4rem; /* 64px */
+  --asc-spacing-xl2: 4.5em; /* 72px */
+  --asc-spacing-xl3: 6rem; /* 96px */
+
+  /* Box Shadow */
+  --asc-box-shadow-01: 0px 0.5px 2px 0px rgba(96, 97, 112, 0.16),
+    0px 0px 1px 0px rgba(40, 41, 61, 0.08);
+  --asc-box-shadow-02: 0px 0.5px 2px 0px rgba(96, 97, 112, 0.16),
+    0px 0px 1px 0px rgba(40, 41, 61, 0.08);
+  --asc-box-shadow-03: 0px 2px 4px 0px rgba(96, 97, 112, 0.16),
+    0px 0px 1px 0px rgba(40, 41, 61, 0.04);
+  --asc-box-shadow-04: 0px 4px 8px 0px rgba(96, 97, 112, 0.2), 0px 0px 2px 0px rgba(40, 41, 61, 0.1);
+  --asc-box-shadow-05: 0px 8px 16px 0px rgba(96, 97, 112, 0.16),
+    0px 2px 4px 0px rgba(40, 41, 61, 0.04);
+}
+
+/*
+  The [data-theme='light'] attribute selector targets elements with the data-theme attribute set to 'light'.
+  It is used to define styles specific to the light theme.
+*/
+[data-theme='light'] {
+  --asc-color-base-default: #292b32;
+  --asc-color-base-shade1: #636878;
+  --asc-color-base-shade2: #898e9e;
+  --asc-color-base-shade3: #a5a9b5;
+  --asc-color-base-shade4: #ebecef;
+  --asc-color-base-shade5: #f9f9fa;
+
+  --asc-color-base-inverse: #ffffff;
+
+  --asc-color-secondary-default: #292b32;
+  --asc-color-secondary-shade1: #636878;
+  --asc-color-secondary-shade2: #898e9e;
+  --asc-color-secondary-shade3: #a5a9b5;
+  --asc-color-secondary-shade4: #ebecef;
+  --asc-color-secondary-shade5: #f9f9fa;
+}
+
+/*
+  The [data-theme='dark'] attribute selector targets elements with the data-theme attribute set to 'dark'.
+  It is used to define styles specific to the dark theme.
+*/
+[data-theme='dark'] {
+  --asc-color-base-background: #191919;
+
+  --asc-color-base-inverse: #ffffff;
+
+  --asc-color-base-default: #ebecef;
+  --asc-color-base-shade1: #a5a9b5;
+  --asc-color-base-shade2: #6e7487;
+  --asc-color-base-shade3: #40434e;
+  --asc-color-base-shade4: #292b32;
+  --asc-color-base-shade5: #191919;
+
+  --asc-color-secondary-default: #ebecef;
+  --asc-color-secondary-shade1: #a5a9b5;
+  --asc-color-secondary-shade2: #6e7487;
+  --asc-color-secondary-shade3: #40434e;
+  --asc-color-secondary-shade4: #292b32;
+  --asc-color-secondary-shade5: #191919;
+}

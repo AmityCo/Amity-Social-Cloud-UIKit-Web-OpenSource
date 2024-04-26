@@ -5,7 +5,7 @@ import useCommunity from '~/social/hooks/useCommunity';
 
 interface UseSocialMentionProps {
   targetId?: string;
-  targetType: 'user' | 'community' | string;
+  targetType?: 'user' | 'community' | string;
   remoteText?: string;
   remoteMarkup?: string;
 }

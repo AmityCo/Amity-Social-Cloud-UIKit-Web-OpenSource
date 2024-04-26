@@ -1,8 +1,7 @@
-import { ReactionRepository, SubscriptionLevels } from '@amityco/ts-sdk';
+import { ReactionRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
 import usePost from './usePost';
 import useUserReactionSubscription from './useUserReactionSubscription';
-import useCommunitySubscription from './useCommunitySubscription';
 import useCommunityReactionSubscription from './useCommunityReactionSubscription';
 
 /**
