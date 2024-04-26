@@ -1,8 +1,8 @@
-/* styles.module.css */
 .icon {
   width: 1.125rem;
   height: 1.125rem;
   margin-right: 8px;
+  fill: var(--asc-color-white);
 }
 
 .notifications {

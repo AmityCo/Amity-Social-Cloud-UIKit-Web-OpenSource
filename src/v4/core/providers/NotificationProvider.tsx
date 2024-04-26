@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
-import Check from '~/v4/icons/Check';
+
+import CheckCircle from '~/v4/icons/CheckCircle';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import Remove from '~/v4/icons/Remove';
 import styles from './NotificationProvider.module.css';
@@ -65,7 +66,7 @@ export const NotificationProvider: React.FC = ({ children }) => {
         notifications,
         notificationFunction: {
           success: (data: Omit<NotificationInput, 'icon'>) =>
-            addNotifications({ ...data, icon: <Check className={styles.icon} /> }),
+            addNotifications({ ...data, icon: <CheckCircle className={styles.icon} /> }),
           info: (data: Omit<NotificationInput, 'icon'>) =>
             addNotifications({ ...data, icon: <ExclamationCircle className={styles.icon} /> }),
           error: (data: Omit<NotificationInput, 'icon'>) =>
