@@ -93,15 +93,10 @@
   "UserFeed.tabs.timeline": "Timeline",
   "community.exploreCommunities": "Explore Community",
   "community.permissions.postReview": "Post review",
-  "community.permissions.storyComments": "Story comments",
   "community.permissions.approvePosts": "Approve member posts",
-  "community.permissions.allowStoryComments": "Allow comments on community stories",
   "community.permissions.approvePosts.prompt": "Posts by members have to be reviewed and approved by community moderator.",
-  "community.permissions.storyComments.prompt": "Turn on to receive comments on stories in this community.",
   "community.permissions.error.needApprovalOnPostCreation.turnOn": "Unable to turn on post review",
   "community.permissions.error.needApprovalOnPostCreation.turnOff": "Unable to turn off post review",
-  "community.permissions.error.storyComments.turnOn": "Unable to turn on post review",
-  "community.permissions.error.storyComments.turnOff": "Unable to turn off post review",
   "community.review.declinePendingPosts": "Decline pending post will permanently delete the selected post from community.",
 
   "community.pendingPostsBanner.title": "Pending posts",
@@ -351,41 +346,6 @@
   "pollComposer.overMentionees": "You have reached maximum 30 mentioned users in a post.",
   "pollComposer.okText": "OK",
 
-  "storyCreation.hyperlink.bottomSheet.cancel": "Cancel",
-  "storyCreation.hyperlink.bottomSheet.title": "Add link",
-  "storyCreation.hyperlink.bottomSheet.submit": "Done",
-  "storyCreation.hyperlink.form.urlLabel": "URL",
-  "storyCreation.hyperlink.form.urlPlaceholder": "https://example.com",
-  "storyCreation.hyperlink.form.linkTextLabel": "Customize link text",
-  "storyCreation.hyperlink.form.linkTextPlaceholder": "Name your link",
-  "storyCreation.hyperlink.form.linkTextDescription": "This text will show on the link instead of URL.",
-  "storyCreation.hyperlink.validation.invalidUrl": "Please enter a valid URL.",
-  "storyCreation.hyperlink.form.removeButton": "Remove link",
-  "storyCreation.hyperlink.removeConfirm.title": "Remove link",
-  "storyCreation.hyperlink.removeConfirm.content": "This link will be removed from story.",
-  "storyCreation.hyperlink.removeConfirm.cancel": "Cancel",
-  "storyCreation.hyperlink.removeConfirm.confirm": "Remove",
-  "storyCreation.hyperlink.validation.error.whitelisted": "Please enter a whitelisted URL.",
-  "storyCreation.hyperlink.validation.error.blocked": "Your text contains a blocklisted word.",
-
-  "storyViewer.actions.deleteStory": "Delete story",
-  "storyViewer.action.confirmModal.title": "Delete this story?",
-  "storyViewer.action.confirmModal.content": "This story will be permanently deleted. You’ll no longer to see and find this story.",
-  "storyViewer.notification.deleted": "Story deleted",
-  "storyViewer.notification.success": "Successfully shared story",
-  "storyViewer.notification.error": "Failed to share story",
-  "storyViewer.footer.failed": "Failed to upload",
-  "storyViewer.footer.uploading": "Uploading...",
-  "storyViewer.commentSheet.title": "Comments",
-  "storyViewer.commentSheet.empty": "No comments yet",
-  "storyViewer.commentSheet.disabled": "Comments are disabled for this story",
-  "storyViewer.commentSheet.replyingTo": "Replying to",
-  "storyViewer.toast.like.disabled": "Join community to interact with all stories",
-
-  "storyViewer.commentComposeBar.submit": "Post",
-
-  "storyDraft.button.shareStory": "Share story",
-
   "select.chatType.item": "{answerType} type",
   "chatComposer.label.channelId": "Channel ID",
   "chatComposer.label.displayName": "Display Name",
@@ -400,40 +360,5 @@
   "editChatMembersModal.confirm.cancelText": "Continue editing",
   "editChatMembersModal.confirm.okText": "Leave",
 
-  "notification.error.blockedWord": "Amity SDK (400308): Text contain blocked word",
-
-  "livechat.deleted.message": "This message was deleted",
-  "livechat.messageBubble.reply.button": "Reply",
-  "livechat.messageBubble.copy.button": "Copy",
-  "livechat.messageBubble.delete.button": "Delete",
-  "livechat.messageBubble.mention.button": "Mention",
-  "livechat.messageBubble.report.button": "Report",
-  "livechat.messageBubble.unReport.button": "Unreport",
-
-  "livechat.channel.muted": "This channel has been set to read-only by the channel moderator",
-  "livechat.modal.delete.message.title": "Delete this message?",
-  "livechat.modal.delete.message.content": "This message will also be removed from your friend’s devices.",
-  "livechat.mention.all": "All",
-  "livechat.mention.all.description": "Notify everyone",
-
-  "livechat.notification.copy.message": "Message copied",
-  "livechat.composebar.placeholder": "Write a message",
-
-  "livechat.delete.message.error": "Unable to delete message. Please try again.",
-
-  "livechat.member.muted": "You’ve been muted by the channel moderator",
-  "livechat.member.muted.error": "User is muted",
-
-  "livechat.member.banned.title": "You are banned from chat",
-  "livechat.member.banned.description": "You won’t be able to participate in this chat until you’ve been unbanned.",
-  "livechat.report.message.success": "Message reported",
-  "livechat.report.message.error": "This message failed to be reported. Please try again.",
-
-  "livechat.unReport.message.success": "Message unreported",
-  "livechat.unReport.message.error": "This message failed to be unreported. Please try again.",
-  "livechat.error.tooLongMessage.title": "Unable to send message",
-  "livechat.error.tooLongMessage.description": "Your message is too long. Please shorten your message and try again.",
-  "livechat.error.sendingMessage.error": "Your message wasn't sent. Please try again.",
-  "livechat.error.sendingMessage.blockedWord": "Your message wasn't sent as it contains a blocked word.",
-  "livechat.error.sendingMessage.notAllowLink": "Your message wasn’t sent as it contained a link that’s not allowed."
+  "notification.error.blockedWord": "Amity SDK (400308): Text contain blocked word"
 }

@@ -48,7 +48,7 @@ jobs:
         run: pnpm install
 
       - name: increase version (patch)
-        run: pnpm standard-version --yes
+        run: pnpm standard-version --yes --release-as patch
         if: github.event.inputs.release_as == 'patch' && github.event.inputs.pre-release == ''
 
       - name: increase version (patch) (pre-release)
@@ -74,6 +74,10 @@ jobs:
       - name: increase version (pre-release)
         run: pnpm standard-version --prerelease ${{ github.event.inputs.pre-release }}
         if: github.event.inputs.release_as == '' && github.event.inputs.pre-release != ''
+
+      - name: increase version (custom)
+        run: pnpm standard-version --yes --release-as ${{ github.event.inputs.custom_version }}
+        if: github.event.inputs.release_as == 'custom'
 
       - name: build
         run: pnpm run build

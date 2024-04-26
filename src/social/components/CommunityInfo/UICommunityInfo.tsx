@@ -26,7 +26,6 @@ import {
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import millify from 'millify';
 import { isNonNullable } from '~/helpers/utils';
-import { StoryTab } from '~/v4/social/components';
 
 interface UICommunityInfoProps {
   communityId: string;
@@ -141,8 +140,6 @@ const UICommunityInfo = ({
             <PlusIcon /> <FormattedMessage id="community.join" />
           </JoinButton>
         )}
-
-        <StoryTab type="communityFeed" communityId={communityId} />
 
         {isJoined && canEditCommunity && (
           <Button

@@ -19,20 +19,14 @@ import useCommunitySubscription from '~/social/hooks/useCommunitySubscription';
 
 import usePostsCollection from '~/social/hooks/collections/usePostsCollection';
 
-import useFile from '~/core/hooks/useFile';
-
 import {
   CommunitySideMenuOverlay,
   HeadTitle,
   MobileContainer,
   StyledCommunitySideMenu,
 } from '../NewsFeed/styles';
-import useStories from '~/social/hooks/useStories';
 
 import { BarsIcon } from '~/icons';
-
-import { useStoryContext } from '~/v4/social/providers/StoryProvider';
-import { AmityDraftStoryPage } from '~/v4/social/pages';
 
 interface CommunityFeedProps {
   communityId: string;
@@ -42,19 +36,7 @@ interface CommunityFeedProps {
 }
 
 const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: CommunityFeedProps) => {
-  const { file } = useStoryContext();
-  const { stories } = useStories({
-    targetId: communityId,
-    targetType: 'community',
-    options: {
-      orderBy: 'asc',
-      sortBy: 'createdAt',
-    },
-  });
-
   const community = useCommunity(communityId);
-
-  const communityAvatar = useFile(community?.avatarFileId || '');
 
   const { canReview } = useCommunityPermission({ community });
 
@@ -88,22 +70,6 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
     }
   }, [activeTab, tabs]);
 
-  if (file) {
-    return (
-      <Wrapper>
-        <AmityDraftStoryPage
-          targetId={communityId}
-          targetType="community"
-          mediaType={
-            file.type.includes('image')
-              ? { type: 'image', url: URL.createObjectURL(file) }
-              : { type: 'video', url: URL.createObjectURL(file) }
-          }
-        />
-      </Wrapper>
-    );
-  }
-
   return (
     <Wrapper>
       <CommunitySideMenuOverlay isOpen={isOpen} onClick={toggleOpen} />
@@ -114,7 +80,7 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
           <FormattedMessage id="sidebar.community" />
         </HeadTitle>
       </MobileContainer>
-      <CommunityInfo communityId={communityId} stories={stories} />
+      <CommunityInfo communityId={communityId} />
       <FeedHeaderTabs
         data-qa-anchor="community-feed-header"
         tabs={tabs}

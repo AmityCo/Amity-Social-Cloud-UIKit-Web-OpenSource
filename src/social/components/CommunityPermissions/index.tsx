@@ -13,17 +13,10 @@ const CommunityPermissions = ({ communityId }: CommunityPermissionsProps) => {
     key: 'needApprovalOnPostCreation',
   });
 
-  const [storyCommentsApproval, updateStoryCommentsApproval] = usePermission({
-    communityId,
-    key: 'storyComments',
-  });
-
   return (
     <UICommunityPermissions
       needApprovalOnPostCreation={needApprovalOnPostCreation}
       onNeedApprovalOnPostCreationChange={updateNeedApprovalOnPostCreation}
-      storyCommentsApproval={storyCommentsApproval}
-      onStoryCommentsApproval={updateStoryCommentsApproval}
     />
   );
 };

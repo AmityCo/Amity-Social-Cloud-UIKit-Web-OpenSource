@@ -14,7 +14,6 @@ import {
 } from './styles';
 import { BarsIcon } from '~/icons';
 import { useIntl } from 'react-intl';
-import { StoryTab } from '~/v4/social/components';
 
 interface NewsFeedProps {
   isOpen: boolean;
@@ -33,7 +32,6 @@ const NewsFeed = ({ isOpen, toggleOpen }: NewsFeedProps) => {
         <BarsIcon onClick={toggleOpen} />
         <HeadTitle>{formatMessage({ id: 'sidebar.community' })}</HeadTitle>
       </MobileContainer>
-      <StoryTab type="globalFeed" />
       <Feed
         targetType={'globalFeed'}
         goToExplore={() => onChangePage(PageTypes.Explore)}

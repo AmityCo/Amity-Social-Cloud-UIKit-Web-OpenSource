@@ -3,16 +3,18 @@ import { CommunityPostSettings } from '@amityco/ts-sdk';
 import UICommunityInfo from './UICommunityInfo';
 
 import { useCommunityInfo } from './hooks';
-
 import { FormattedMessage } from 'react-intl';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
+import useSDK from '~/core/hooks/useSDK';
+
 interface CommunityInfoProps {
   communityId: string;
-  stories: (Amity.Story | undefined)[];
 }
 
-const CommunityInfo = ({ communityId, stories }: CommunityInfoProps) => {
+const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
+  const { currentUserId } = useSDK();
+
   const {
     community,
     communityCategories,
@@ -25,7 +27,7 @@ const CommunityInfo = ({ communityId, stories }: CommunityInfoProps) => {
     canReviewCommunityPosts,
   } = useCommunityInfo(communityId);
 
-  const { confirm } = useConfirmContext();
+  const { info, confirm } = useConfirmContext();
 
   const categoryNames = (communityCategories || []).map((category) => category.name);
 

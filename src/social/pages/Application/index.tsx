@@ -16,8 +16,6 @@ import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
-
-import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import CommunityFeed from '../CommunityFeed';
 
 const ApplicationContainer = styled.div`
@@ -69,40 +67,32 @@ const Community = () => {
   }, [client]);
 
   return (
-    <StoryProvider>
-      <ApplicationContainer>
-        <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
-          {page.type === PageTypes.Explore && <ExplorePage />}
+    <ApplicationContainer>
+      <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
+        {page.type === PageTypes.Explore && <ExplorePage />}
 
-          {page.type === PageTypes.NewsFeed && (
-            <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />
-          )}
+        {page.type === PageTypes.NewsFeed && <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />}
 
-          {page.type === PageTypes.CommunityFeed && (
-            <CommunityFeed
-              communityId={page.communityId}
-              isNewCommunity={page.isNewCommunity}
-              isOpen={open}
-              toggleOpen={toggleOpen}
-            />
-          )}
+        {page.type === PageTypes.CommunityFeed && (
+          <CommunityFeed
+            communityId={page.communityId}
+            isNewCommunity={page.isNewCommunity}
+            isOpen={open}
+            toggleOpen={toggleOpen}
+          />
+        )}
 
-          {page.type === PageTypes.CommunityEdit && (
-            <CommunityEditPage communityId={page.communityId} tab={page.tab} />
-          )}
+        {page.type === PageTypes.CommunityEdit && (
+          <CommunityEditPage communityId={page.communityId} tab={page.tab} />
+        )}
 
-          {page.type === PageTypes.Category && (
-            <CategoryCommunitiesPage categoryId={page.categoryId} />
-          )}
+        {page.type === PageTypes.UserFeed && (
+          <UserFeedPage userId={page.userId} socialSettings={socialSettings} />
+        )}
 
-          {page.type === PageTypes.UserFeed && (
-            <UserFeedPage userId={page.userId} socialSettings={socialSettings} />
-          )}
-
-          {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
-        </MainLayout>
-      </ApplicationContainer>
-    </StoryProvider>
+        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}
+      </MainLayout>
+    </ApplicationContainer>
   );
 };
 
