@@ -65,7 +65,7 @@ const Header: React.FC<
                 {heading}
               </div>
             </Truncate>
-            {!isOfficial && <Verified className={styles.verifiedBadge} />}
+            {isOfficial && <Verified className={styles.verifiedBadge} />}
           </div>
           <span className={styles.viewStorySubHeading}>{subheading}</span>
         </div>
