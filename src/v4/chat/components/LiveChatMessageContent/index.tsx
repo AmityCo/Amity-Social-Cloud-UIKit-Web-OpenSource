@@ -7,7 +7,7 @@ import { FormattedTime, useIntl } from 'react-intl';
 import Bin from '~/v4/icons/Bin';
 import useSDK from '~/core/hooks/useSDK';
 import MessageBubble from './MessageBubble';
-import useChannelPermission from '../../hooks/useChannelPermission';
+import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
 import Flag from '~/v4/icons/Flag';
 
 interface MessageItemProps {
