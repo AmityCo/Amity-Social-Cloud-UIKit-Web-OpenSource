@@ -21,12 +21,13 @@
   border: none;
   border-bottom: 1px solid var(--asc-color-base-shade4);
   outline: none;
-  color: inherit;
+  color: var(--asc-color-base-default);
   background-color: transparent;
 }
 
 .input.hasError {
   border-bottom-color: var(--asc-color-alert);
+  color: var(--asc-color-alert);
 }
 
 .label {
@@ -40,6 +41,7 @@
 
 .label.required::after {
   content: '*';
+  color: var(--asc-color-alert);
 }
 
 .description {
@@ -88,7 +90,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: var(--asc-spacing-s1);
-  color: var(--asc-color-alert) ;
+  color: var(--asc-color-alert);
   border-radius: 0;
   background-color: transparent;
   transition: color 0.3s ease;

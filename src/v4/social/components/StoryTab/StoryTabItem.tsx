@@ -3,10 +3,10 @@ import useImage from '~/core/hooks/useImage';
 import useCommunity from '~/social/hooks/useCommunity';
 import StoryRing from './StoryRing';
 import { PrivateIcon } from '~/social/components/community/Name/styles';
-import { Verified } from '~/icons';
+
 import styles from './StoryTabItem.module.css';
-import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import { Typography } from '~/v4/core/components';
+import Verified from '~/v4/icons/Verified';
 
 interface StoryTabProps {
   targetId: string;
@@ -23,9 +23,7 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({ targetId, hasUnseen, onC
     <div className={styles.container} onClick={onClick}>
       <div className={styles.avatarContainer}>
         <StoryRing pageId="*" componentId="story_tab_component" hasUnseen={hasUnseen} />
-        {community?.isOfficial && (
-          <Verified width={24} height={24} className={styles.verifiedIcon} />
-        )}
+        {community?.isOfficial && <Verified className={styles.verifiedIcon} />}
         <div className={styles.avatarBackground}>
           {communityAvatar && (
             <img className={styles.avatar} src={communityAvatar} alt={community?.displayName} />

@@ -1,16 +1,164 @@
-import clsx from 'clsx';
 import React from 'react';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import styles from './StoryRing.module.css';
+import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 
 interface StoryRingProps extends React.SVGProps<SVGSVGElement> {
-  pageId: '*';
-  componentId: 'story_tab_component';
+  pageId?: '*';
+  componentId?: 'story_tab_component';
   hasUnseen?: boolean;
   uploading?: boolean;
   isErrored?: boolean;
   size?: number;
 }
+
+const EmptyStateRingSvg = ({
+  pageId,
+  componentId,
+  elementId,
+  size,
+}: {
+  pageId: string;
+  componentId: string;
+  elementId: string;
+  size: number;
+}) => {
+  const { getConfig } = useCustomization();
+  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill="none"
+      viewBox={`0 0 ${size} ${size}`}
+    >
+      <defs>
+        <linearGradient
+          id="story-ring-gradient"
+          x1="35.4004"
+          y1="1.875"
+          x2="10.6504"
+          y2="45.75"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor={elementConfig?.progress_color?.[0]} />
+          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
+        </linearGradient>
+      </defs>
+      <circle
+        fill="none"
+        stroke={getComputedStyle(document.documentElement).getPropertyValue(
+          '--asc-color-secondary-shade4',
+        )}
+        cx={size / 2}
+        cy={size / 2}
+        r={size / 2 - 1}
+        strokeWidth="2"
+      />
+    </svg>
+  );
+};
+
+const HasSeenRingSvg = ({
+  pageId,
+  componentId,
+  elementId,
+  size,
+}: {
+  pageId: string;
+  componentId: string;
+  elementId: string;
+  size: number;
+}) => {
+  const { getConfig } = useCustomization();
+  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill="none"
+      viewBox={`0 0 ${size} ${size}`}
+    >
+      <defs>
+        <linearGradient
+          id="story-ring-gradient"
+          x1="35.4004"
+          y1="1.875"
+          x2="10.6504"
+          y2="45.75"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor={elementConfig?.progress_color?.[0]} />
+          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
+        </linearGradient>
+      </defs>
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={size / 2 - 1}
+        strokeWidth="2"
+        strokeLinecap="round"
+        stroke="url(#story-ring-gradient)"
+        fill="none"
+        strokeDasharray={339}
+        strokeDashoffset={0}
+      />
+    </svg>
+  );
+};
+
+const UploadingRingSvg = ({
+  pageId,
+  componentId,
+  elementId,
+  size,
+}: {
+  pageId: string;
+  componentId: string;
+  elementId: string;
+  size: number;
+}) => {
+  const { getConfig } = useCustomization();
+  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill="none"
+      viewBox={`0 0 ${size} ${size}`}
+    >
+      <defs>
+        <linearGradient
+          id="story-ring-gradient"
+          x1="35.4004"
+          y1="1.875"
+          x2="10.6504"
+          y2="45.75"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor={elementConfig?.progress_color?.[0]} />
+          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
+        </linearGradient>
+      </defs>
+      <circle
+        className={styles.uploadingProgressRing}
+        cx={size / 2}
+        cy={size / 2}
+        r={size / 2 - 1}
+        strokeWidth="2"
+        strokeLinecap="round"
+        stroke="url(#story-ring-gradient)"
+        fill="none"
+        strokeDasharray={339}
+        strokeDashoffset={339}
+        data-uploading={true}
+        transform={`rotate(-90 ${size / 2} ${size / 2})`}
+      />
+    </svg>
+  );
+};
 
 const StoryRing = ({
   pageId = '*',
@@ -22,21 +170,10 @@ const StoryRing = ({
   ...props
 }: StoryRingProps) => {
   const elementId = 'story_ring';
-  const { getConfig, isExcluded } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  const { isExcluded } = useCustomization();
   const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
 
-  const scaleFactor = size / 64; // Assuming the default size is 64
-  const ringSize = 48 * scaleFactor; // Adjust the ring size based on the scale factor
-  const viewBox = `0 0 ${ringSize} ${ringSize}`;
-  const ringRadius = 23 * scaleFactor;
-  const strokeWidth = 2 * scaleFactor;
-
-  const strokeDasharray = 339 * scaleFactor;
-  const strokeDashoffset = (339 / 2) * scaleFactor;
-
   if (isElementExcluded) return null;
-
   if (isErrored) {
     return (
       <svg
@@ -44,66 +181,44 @@ const StoryRing = ({
         width={size}
         height={size}
         fill="none"
-        viewBox={viewBox}
+        viewBox={`0 0 ${size} ${size}`}
         {...props}
       >
         <circle
-          cx={ringSize / 2}
-          cy={ringSize / 2}
-          r={ringRadius}
+          cx="24"
+          cy="24"
+          r="23"
           stroke={getComputedStyle(document.documentElement).getPropertyValue('--asc-color-alert')}
-          strokeWidth={strokeWidth}
-        />
+          strokeWidth="2"
+        ></circle>
       </svg>
     );
   }
 
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      fill="none"
-      viewBox={viewBox}
-    >
-      <defs>
-        <linearGradient
-          id="story-ring-gradient"
-          x1={`${(ringSize * 0.74).toFixed(2)}`}
-          y1="1.875"
-          x2={`${(ringSize * 0.22).toFixed(2)}`}
-          y2={`${(ringSize - 1.875).toFixed(2)}`}
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopColor={elementConfig?.progress_color?.[0]} />
-          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
-        </linearGradient>
-      </defs>
-      <circle
-        fill="none"
-        style={{ stroke: 'var(--asc-color-secondary-shade4)' }}
-        cx={ringSize / 2}
-        cy={ringSize / 2}
-        r={ringRadius}
-        strokeWidth={strokeWidth}
-        strokeDasharray={339 * scaleFactor}
-        strokeDashoffset={0}
+  if (uploading) {
+    return (
+      <UploadingRingSvg
+        pageId={pageId}
+        componentId={componentId}
+        elementId={elementId}
+        size={size}
       />
-      {hasUnseen && (
-        <circle
-          cx={ringSize / 2}
-          cy={ringSize / 2}
-          r={ringRadius}
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
-          stroke="url(#story-ring-gradient)"
-          fill="none"
-          strokeDasharray={strokeDasharray}
-          strokeDashoffset={strokeDashoffset}
-          className={clsx(styles.progressRing, { [styles.uploading]: uploading })}
-        />
-      )}
-    </svg>
+    );
+  }
+
+  if (hasUnseen) {
+    return (
+      <HasSeenRingSvg pageId={pageId} componentId={componentId} elementId={elementId} size={size} />
+    );
+  }
+
+  return (
+    <EmptyStateRingSvg
+      pageId={pageId}
+      componentId={componentId}
+      elementId={elementId}
+      size={size}
+    />
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import Truncate from 'react-truncate-markup';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
-import styles from './StoryTabCommunity.module.css';
+
 import StoryRing from './StoryRing';
 import useStories from '~/social/hooks/useStories';
 import useSDK from '~/core/hooks/useSDK';
@@ -9,7 +9,7 @@ import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { StoryTabItem } from './StoryTabItem';
+
 import {
   AddStoryButton,
   ErrorButton,
@@ -56,7 +56,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({ co
   const { client } = useSDK();
   const hasStoryPermission = checkStoryPermission(client, communityId);
   const hasStoryRing = stories?.length > 0;
-  const isSeen = stories.every((story) => story?.isSeen);
+  const hasUnSeen = stories.some((story) => !story?.isSeen);
   const uploading = stories.some((story) => story?.syncState === 'syncing');
   const isErrored = stories.some((story) => story?.syncState === 'error');
 
@@ -67,7 +67,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({ co
           <StoryRing
             pageId="*"
             componentId="story_tab_component"
-            hasUnseen={isSeen}
+            hasUnseen={hasUnSeen}
             uploading={uploading}
             isErrored={isErrored}
             size={48}

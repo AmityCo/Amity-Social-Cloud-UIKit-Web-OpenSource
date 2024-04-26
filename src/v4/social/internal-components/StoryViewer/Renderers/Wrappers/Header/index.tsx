@@ -4,7 +4,7 @@ import Truncate from 'react-truncate-markup';
 import Avatar from '~/core/components/Avatar';
 import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 
-import { PauseIcon, PlayIcon, VerifiedIcon } from '~/icons';
+import { PauseIcon, PlayIcon } from '~/icons';
 import { CloseButton, OverflowMenuButton } from '~/v4/social/elements';
 import Verified from '~/v4/social/icons/verified';
 

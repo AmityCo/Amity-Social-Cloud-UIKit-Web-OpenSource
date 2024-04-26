@@ -3,12 +3,7 @@ import { CommunityPostSettings } from '@amityco/ts-sdk';
 import UICommunityInfo from './UICommunityInfo';
 
 import { useCommunityInfo } from './hooks';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 
-import useSDK from '~/core/hooks/useSDK';
-
-import { useStoryContext } from '~/v4/social/providers/StoryProvider';
-import { checkStoryPermission } from '~/utils';
 import { FormattedMessage } from 'react-intl';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
@@ -18,17 +13,6 @@ interface CommunityInfoProps {
 }
 
 const CommunityInfo = ({ communityId, stories }: CommunityInfoProps) => {
-  const { setFile } = useStoryContext();
-  const haveStories = stories?.length > 0;
-  const isStorySyncing = haveStories && stories.some((story) => story?.syncState === 'syncing');
-  const isStoryErrored = haveStories && stories.some((story) => story?.syncState === 'error');
-  const isSeen = haveStories && stories.every((story) => story?.isSeen);
-
-  const { onClickStory } = useNavigation();
-
-  const { client } = useSDK();
-  const haveStoryPermission = checkStoryPermission(client, communityId);
-
   const {
     community,
     communityCategories,
@@ -83,13 +67,6 @@ const CommunityInfo = ({ communityId, stories }: CommunityInfoProps) => {
           onOk: () => leaveCommunity(),
         })
       }
-      setStoryFile={(storyFile) => setFile(storyFile)}
-      haveStories={haveStories || false}
-      haveStoryPermission={haveStoryPermission}
-      isStorySyncing={isStorySyncing || false}
-      isStoryErrored={isStoryErrored || false}
-      isSeen={isSeen || false}
-      onClickStory={onClickStory}
     />
   );
 };

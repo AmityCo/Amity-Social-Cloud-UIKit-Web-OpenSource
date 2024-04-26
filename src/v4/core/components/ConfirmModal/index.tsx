@@ -42,7 +42,7 @@ const Confirm = ({
     }
     onCancel={onCancel}
   >
-    {content}
+    <div className={styles.confirmModalContent}>{content}</div>
   </Modal>
 );
 

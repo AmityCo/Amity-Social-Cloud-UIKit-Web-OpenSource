@@ -1,5 +1,5 @@
 import React from 'react';
-import UiKitApp from './index';
+import UiKitApp from '.';
 
 export default {
   title: 'V4/Social',

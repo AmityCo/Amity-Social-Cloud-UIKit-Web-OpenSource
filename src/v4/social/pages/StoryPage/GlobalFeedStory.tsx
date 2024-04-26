@@ -177,7 +177,13 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
-              icon: <Trash2Icon />,
+              icon: (
+                <Trash2Icon
+                  fill={getComputedStyle(document.documentElement).getPropertyValue(
+                    '--asc-color-black',
+                  )}
+                />
+              ),
             }
           : null,
       ].filter(isNonNullable),
@@ -205,6 +211,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
       } else {
         onChangePage(PageTypes.NewsFeed);
       }
+      setCurrentIndex(0);
       return;
     }
     setCurrentIndex(currentIndex + 1);
@@ -226,6 +233,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
       } else {
         onChangePage(PageTypes.NewsFeed);
       }
+      setCurrentIndex(0);
       return;
     }
     setCurrentIndex(currentIndex - 1);
@@ -322,7 +330,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
               onStoryEnd={increaseIndex}
               onNext={nextStory}
               onPrevious={previousStory}
-              onAllStoriesEnd={() => onChangePage(PageTypes.NewsFeed)}
             />
           ) : null}
         </ViewStoryContent>

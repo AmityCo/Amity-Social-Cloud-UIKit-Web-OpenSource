@@ -170,6 +170,7 @@ export const HyperLinkConfig = ({
                     {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
                   </label>
                 </Typography.Title>
+
                 <input
                   id="asc-uikit-hyperlink-input-url"
                   placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}

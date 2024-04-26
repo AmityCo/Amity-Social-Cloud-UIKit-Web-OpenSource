@@ -152,7 +152,15 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   };
 
   const onRemoveHyperLink = () => {
-    setHyperLink([]);
+    setHyperLink([
+      {
+        data: {
+          url: '',
+          customText: '',
+        },
+        type: 'hyperlink' as Amity.StoryItemType,
+      },
+    ]);
   };
 
   useEffect(() => {
