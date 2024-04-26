@@ -36,8 +36,6 @@ import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 import { ERROR_RESPONSE } from '~/social/constants';
-
-import { ERROR_RESPONSE } from '~/social/constants';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 import { useNotifications } from '~/core/providers/NotificationProvider';
 

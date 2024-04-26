@@ -1,1 +1,0 @@
-export { StoryCommentComposeBar } from './StoryCommentComposeBar';

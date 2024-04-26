@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const useErrorNotification = () => {
   const [error, setError] = useState<string | null>(null);

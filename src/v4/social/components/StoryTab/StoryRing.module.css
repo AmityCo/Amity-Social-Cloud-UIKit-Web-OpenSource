@@ -1,9 +1,0 @@
-.progressRing {
-    animation: none;
-  }
-  
-  .progressRing.uploading {
-    animation: animateRing 2s linear 0s infinite;
-    -webkit-animation: animateRing 2s linear 0s infinite;
-    -moz-animation: animateRing 2s linear 0s infinite;
-  }
