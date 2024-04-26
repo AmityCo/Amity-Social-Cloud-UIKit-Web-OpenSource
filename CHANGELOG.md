@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.4.0 (2024-04-05)
+
+### Bug Fixes
+
+- ASC-21481 - remove unnecessary request to prevent rate limit ([#230](https://github.com/EkoCommunications/AmityUiKitWeb/issues/230)) ([b2f2ce1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/b2f2ce116b301f8fe9af124b506050abee1f29d2))
+
+## 3.3.0 (2024-03-22)
+
+### Bug Fixes
+
+- ASC-21052 - fix undefined runtime error ([#184](https://github.com/EkoCommunications/AmityUiKitWeb/issues/184)) ([2385d3e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/2385d3ec364ea74e4edf59ecffc0db088db7570e))
+
 ### 3.2.4 (2024-03-11)
 
 ### Bug Fixes

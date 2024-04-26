@@ -14,6 +14,7 @@ interface CommentListProps {
   readonly?: boolean;
   isExpanded?: boolean;
   limit?: number;
+  latestComments?: Amity.Comment[];
 }
 
 const CommentList = ({
@@ -23,15 +24,21 @@ const CommentList = ({
   limit = 5,
   readonly = false,
   isExpanded = true,
+  latestComments,
 }: CommentListProps) => {
   const { formatMessage } = useIntl();
   const isReplyComment = !!parentId;
 
-  const { comments, hasMore, loadMore } = useCommentsCollection({
+  const {
+    comments: fetchedComments,
+    hasMore,
+    loadMore,
+  } = useCommentsCollection({
     parentId,
     referenceId,
     referenceType,
     limit,
+    shouldCall: () => latestComments?.length === 0,
   });
 
   usePostSubscription({
@@ -39,6 +46,8 @@ const CommentList = ({
     level: SubscriptionLevels.COMMENT,
     shouldSubscribe: () => referenceType === 'post' && !parentId,
   });
+
+  const comments = latestComments || fetchedComments;
 
   const loadMoreText = isReplyComment
     ? formatMessage({ id: 'collapsible.viewMoreReplies' })
@@ -50,7 +59,11 @@ const CommentList = ({
     </TabIconContainer>
   ) : null;
 
-  if (comments.length === 0 && referenceType === 'story' && !isReplyComment) {
+  if (
+    (latestComments?.length === 0 || comments.length === 0) &&
+    referenceType === 'story' &&
+    !isReplyComment
+  ) {
     return (
       <NoCommentsContainer>
         {formatMessage({ id: 'storyViewer.commentSheet.empty' })}
@@ -58,7 +71,7 @@ const CommentList = ({
     );
   }
 
-  if (comments.length === 0) return null;
+  if (latestComments?.length === 0 || comments.length === 0) return null;
 
   return (
     <LoadMoreWrapper
@@ -69,9 +82,15 @@ const CommentList = ({
       prependIcon={prependIcon}
       appendIcon={null}
       isExpanded={isExpanded}
-      contentSlot={comments.map((comment) => (
-        <Comment key={comment.commentId} commentId={comment.commentId} readonly={readonly} />
-      ))}
+      contentSlot={
+        latestComments
+          ? latestComments.map((comment) => (
+              <Comment key={comment.commentId} commentId={comment.commentId} readonly={readonly} />
+            ))
+          : comments.map((comment) => (
+              <Comment key={comment.commentId} commentId={comment.commentId} readonly={readonly} />
+            ))
+      }
     />
   );
 };

@@ -113,6 +113,7 @@ interface NavigationProviderProps {
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
   onMessageUser?: (userId: string) => void;
+  onBack?: () => void;
 }
 
 export default function NavigationProvider({
@@ -126,6 +127,7 @@ export default function NavigationProvider({
   onEditCommunity,
   onEditUser,
   onMessageUser,
+  onBack,
 }: NavigationProviderProps) {
   const [pages, setPages] = useState<Page[]>([
     { type: PageTypes.NewsFeed, communityId: undefined },
@@ -302,6 +304,13 @@ export default function NavigationProvider({
     [onChangePage, onMessageUser],
   );
 
+  const handleBack = useCallback(() => {
+    if (onBack) {
+      onBack();
+    }
+    popPage();
+  }, [onChangePage, onBack, popPage]);
+
   return (
     <NavigationContext.Provider
       value={{
@@ -314,7 +323,7 @@ export default function NavigationProvider({
         onEditCommunity: handleEditCommunity,
         onEditUser: handleEditUser,
         onMessageUser: handleMessageUser,
-        onBack: popPage,
+        onBack: handleBack,
         setNavigationBlocker,
       }}
     >
