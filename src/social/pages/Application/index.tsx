@@ -16,7 +16,6 @@ import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
-import { AmityViewStoryPage } from '~/v4/social/pages/StoryPage';
 
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import CommunityFeed from '../CommunityFeed';
@@ -86,12 +85,6 @@ const Community = () => {
               isOpen={open}
               toggleOpen={toggleOpen}
             />
-          )}
-
-          {page.type === PageTypes.ViewStory && (
-            <Wrapper>
-              <AmityViewStoryPage type="communityFeed" />
-            </Wrapper>
           )}
 
           {page.type === PageTypes.CommunityEdit && (

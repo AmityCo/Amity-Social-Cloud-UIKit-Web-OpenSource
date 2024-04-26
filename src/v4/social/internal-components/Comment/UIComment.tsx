@@ -8,26 +8,26 @@ import { backgroundImage as UserImage } from '~/icons/User';
 import BanIcon from '~/icons/Ban';
 
 import {
-  Avatar,
-  Content,
-  CommentHeader,
   AuthorName,
-  InteractionBar,
-  EditedMark,
-  CommentInteractionButton,
-  InteractionWrapper,
-  LikeButton,
+  Avatar,
+  ButtonContainer,
   CommentDate,
   CommentEditContainer,
   CommentEditTextarea,
-  ButtonContainer,
-  ReactionsListButtonWrapper,
+  CommentHeader,
+  CommentInteractionButton,
+  Content,
+  EditedMark,
+  InteractionBar,
+  InteractionWrapper,
+  LikeButton,
   ReactionIcon,
   ReactionListButtonContainer,
+  ReactionsListButtonWrapper,
 } from './styles';
 
-import { Mentioned, Metadata } from '~/helpers/utils';
-import { QueryMentioneesFnType } from '~/social/hooks/useSocialMention';
+import { Mentioned, Metadata } from '~/v4/helpers/utils';
+import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 import { formatTimeAgo } from '~/utils';
 import { EllipsisH, FireIcon, HeartIcon, LikedIcon } from '~/icons';
 import { PrimaryButton, SecondaryButton } from '~/core/components/Button';

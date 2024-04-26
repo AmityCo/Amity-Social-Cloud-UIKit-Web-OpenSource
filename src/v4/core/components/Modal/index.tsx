@@ -31,7 +31,7 @@ const Modal = ({
   }, [modalRef?.current]);
 
   return (
-    <div data-theme="dark" className={styles.overlay} onClick={onOverlayClick}>
+    <div className={styles.overlay} onClick={onOverlayClick}>
       <div
         className={clsx(styles.modalWindow, `${size === 'small' ? 'smallModalWindow' : ''}`)}
         data-qa-anchor={dataQaAnchor}

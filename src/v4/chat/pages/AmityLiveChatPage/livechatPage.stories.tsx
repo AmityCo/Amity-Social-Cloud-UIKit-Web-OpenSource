@@ -63,12 +63,7 @@ const LiveChatList = () => {
         </InfiniteScroll>
       ) : null}
 
-      <Sheet
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        className={styles.messageListSheet}
-        data-theme="dark"
-      >
+      <Sheet isOpen={open} onClose={() => setOpen(false)} className={styles.messageListSheet}>
         <Sheet.Container className={styles.messageListSheetContainer}>
           <Sheet.Header />
           <Sheet.Content>

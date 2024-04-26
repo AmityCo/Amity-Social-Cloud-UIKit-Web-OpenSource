@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useState, useMemo, ReactNode } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { confirm } from '~/core/components/Confirm';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+
 import { PageTypes } from '~/social/constants';
 
 type Page =
@@ -33,6 +34,8 @@ type Page =
       storyId: string;
       targetId?: string;
       communityId?: string;
+      targetIds?: string[];
+      storyType?: 'communityFeed' | 'globalFeed';
     };
 
 type ContextValue = {
@@ -41,7 +44,11 @@ type ContextValue = {
   onClickCategory: (categoryId: string) => void;
   onClickCommunity: (communityId: string) => void;
   onClickUser: (userId: string, pageType?: string) => void;
-  onClickStory: (storyId: string) => void;
+  onClickStory: (
+    storyId: string,
+    storyType: 'communityFeed' | 'globalFeed',
+    targetId?: string[],
+  ) => void;
   onCommunityCreated: (communityId: string) => void;
   onEditCommunity: (communityId: string, tab?: string) => void;
   onEditUser: (userId: string) => void;
@@ -65,7 +72,11 @@ let defaultValue: ContextValue = {
   onClickCategory: (categoryId: string) => {},
   onClickCommunity: (communityId: string) => {},
   onClickUser: (userId: string) => {},
-  onClickStory: (storyId: string) => {},
+  onClickStory: (
+    storyId: string,
+    storyType: 'communityFeed' | 'globalFeed',
+    targetId?: string[],
+  ) => {},
   onCommunityCreated: (communityId: string) => {},
   onEditCommunity: (communityId: string) => {},
   onEditUser: (userId: string) => {},
@@ -73,12 +84,6 @@ let defaultValue: ContextValue = {
   setNavigationBlocker: () => {},
   onBack: () => {},
 };
-
-const defaultAskForConfirmation = ({ onSuccess: onOk, ...params }: { onSuccess: () => void }) =>
-  confirm({
-    ...params,
-    onOk,
-  });
 
 export const defaultNavigationBlocker = {
   title: <FormattedMessage id="navigationBlocker.title" />,
@@ -95,7 +100,8 @@ if (process.env.NODE_ENV !== 'production') {
     onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
     onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
-    onClickStory: (storyId) => console.log(`NavigationContext onClickStory(${storyId})`),
+    onClickStory: (storyId, storyType, targetIds) =>
+      console.log(`NavigationContext onClickStory(${storyId}, ${storyType}, ${targetIds})`),
     onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
     onEditCommunity: (communityId) =>
@@ -123,15 +129,20 @@ interface NavigationProviderProps {
   onClickCategory?: (categoryId: string) => void;
   onClickCommunity?: (communityId: string) => void;
   onClickUser?: (userId: string) => void;
-  onClickStory?: (storyId: string) => void;
+  onClickStory?: (
+    storyId: string,
+    storyType: 'communityFeed' | 'globalFeed',
+    targetId?: string[],
+  ) => void;
   onCommunityCreated?: (communityId: string) => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
   onMessageUser?: (userId: string) => void;
+  onBack?: () => void;
 }
 
 export default function NavigationProvider({
-  askForConfirmation = defaultAskForConfirmation,
+  askForConfirmation,
   children,
   onChangePage: onChangePageProp,
   onClickCategory,
@@ -141,6 +152,7 @@ export default function NavigationProvider({
   onEditCommunity,
   onEditUser,
   onMessageUser,
+  onBack,
 }: NavigationProviderProps) {
   const [pages, setPages] = useState<Page[]>([
     { type: PageTypes.NewsFeed, communityId: undefined },
@@ -156,11 +168,15 @@ export default function NavigationProvider({
     | undefined
   >();
 
+  const { confirm } = useConfirmContext();
+
+  const confirmation = askForConfirmation ?? confirm;
+
   const confirmPageChange = useCallback(async () => {
     if (navigationBlocker) {
       // for more info about this, see https://ekoapp.atlassian.net/browse/UP-3462?focusedCommentId=77155
       return new Promise((resolve) => {
-        askForConfirmation({
+        confirmation({
           ...navigationBlocker,
           onSuccess: () => {
             setNavigationBlocker?.(undefined);
@@ -313,11 +329,20 @@ export default function NavigationProvider({
     [onChangePage, onMessageUser],
   );
 
+  const handleBack = useCallback(() => {
+    if (onBack) {
+      onBack();
+    }
+    popPage();
+  }, [onChangePage, onBack, popPage]);
+
   const handleClickStory = useCallback(
-    (targetId) => {
+    (targetId, storyType, targetIds) => {
       const next = {
         type: PageTypes.ViewStory,
         targetId,
+        storyType,
+        targetIds,
       };
 
       if (onChangePage) return onChangePage(next);
@@ -340,7 +365,7 @@ export default function NavigationProvider({
         onEditCommunity: handleEditCommunity,
         onEditUser: handleEditUser,
         onMessageUser: handleMessageUser,
-        onBack: popPage,
+        onBack: handleBack,
         setNavigationBlocker,
       }}
     >

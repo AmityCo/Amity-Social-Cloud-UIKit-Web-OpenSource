@@ -4,9 +4,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SecondaryButton } from '~/core/components/Button';
-import { confirm } from '~/core/components/Confirm';
+
 import useSDK from '~/core/hooks/useSDK';
-import { BottomSheet } from '~/v4/core/components';
+import { BottomSheet, Typography } from '~/v4/core/components';
 import {
   MobileSheet,
   MobileSheetContainer,
@@ -16,6 +16,8 @@ import {
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Trash2Icon } from '~/icons';
 import styles from './HyperLinkConfig.module.css';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import Button from '~/v4/core/components/Button/Button';
 
 interface HyperLinkConfigProps {
   pageId: '*';
@@ -36,6 +38,7 @@ export const HyperLinkConfig = ({
   onSubmit,
   onRemove,
 }: HyperLinkConfigProps) => {
+  const { confirm } = useConfirmContext();
   const componentId = 'hyper_link_config_component';
   const { getConfig } = useCustomization();
   const componentConfig = getConfig(`${pageId}/${componentId}/*`);
@@ -125,9 +128,9 @@ export const HyperLinkConfig = ({
                 <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
               )}
             </SecondaryButton>
-            <div className={styles.headerTitle}>
+            <Typography.Title>
               {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
-            </div>
+            </Typography.Title>
             <SecondaryButton
               style={{
                 backgroundColor:
@@ -159,12 +162,15 @@ export const HyperLinkConfig = ({
               className={styles.form}
             >
               <div className={styles.inputContainer}>
-                <label
-                  htmlFor="asc-uikit-hyperlink-input-url"
-                  className={`${styles.label} ${styles.required}`}
-                >
-                  {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
-                </label>
+                <Typography.Title>
+                  <label
+                    htmlFor="asc-uikit-hyperlink-input-url"
+                    className={`${styles.label} ${styles.required}`}
+                  >
+                    {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
+                  </label>
+                </Typography.Title>
+
                 <input
                   id="asc-uikit-hyperlink-input-url"
                   placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}
@@ -175,9 +181,11 @@ export const HyperLinkConfig = ({
               </div>
               <div className={styles.inputContainer}>
                 <div className={styles.labelContainer}>
-                  <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
-                    {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
-                  </label>
+                  <Typography.Title>
+                    <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
+                      {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
+                    </label>
+                  </Typography.Title>
                   <div className={styles.characterCount}>
                     {watch('customText')?.length} / {MAX_LENGTH}
                   </div>
@@ -199,10 +207,14 @@ export const HyperLinkConfig = ({
               </div>
               {isHaveHyperLink && (
                 <div className={styles.inputContainer}>
-                  <SecondaryButton onClick={discardHyperlink} className={styles.removeLinkButton}>
+                  <Button
+                    variant="secondary"
+                    onClick={discardHyperlink}
+                    className={styles.removeLinkButton}
+                  >
                     <Trash2Icon className={styles.removeIcon} />
                     {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
-                  </SecondaryButton>
+                  </Button>
                   <div className={styles.divider} />
                 </div>
               )}

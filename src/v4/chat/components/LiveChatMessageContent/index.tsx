@@ -7,15 +7,15 @@ import { FormattedTime, useIntl } from 'react-intl';
 import Bin from '~/v4/icons/Bin';
 import useSDK from '~/core/hooks/useSDK';
 import MessageBubble from './MessageBubble';
-import useChannelPermission from '../../hooks/useChannelPermission';
+import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
+import Flag from '~/v4/icons/Flag';
 
 interface MessageItemProps {
   message: Amity.Message<'text'>;
-  isCreator: boolean;
   userDisplayName?: string;
   avatarUrl?: string;
   containerRef: React.RefObject<HTMLDivElement>;
-  action: AmityMessageActionType;
+  action?: AmityMessageActionType;
 }
 
 const LiveChatMessageContent = ({
@@ -47,12 +47,16 @@ const LiveChatMessageContent = ({
         ) : (
           <div className={styles.messageBubbleWrap}>
             <MessageBubble message={message} />
-            <MessageAction
-              containerRef={containerRef}
-              isOwner={isOwner}
-              isModerator={isModerator}
-              action={action}
-            />
+            {action && (
+              <MessageAction
+                containerRef={containerRef}
+                isOwner={isOwner}
+                isModerator={isModerator}
+                action={action}
+                isFlagged={message.flagCount > 0}
+              />
+            )}
+            {message.flagCount > 0 && <Flag className={styles.flagIcon} />}
             <div className={styles.timestamp}>
               <FormattedTime value={new Date(message.createdAt)} />
             </div>

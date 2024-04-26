@@ -1,7 +1,7 @@
 import { CommentRepository } from '@amityco/ts-sdk';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Mentionees, Metadata } from '~/helpers/utils';
+import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import { Close, Lock2Icon } from '~/icons';
 import { ReplyingBlock } from '../StoryViewer/styles';
 import { ReplyingToText, ReplyingToUsername } from '../CommentComposeBar/styles';
@@ -44,7 +44,7 @@ export const StoryCommentComposeBar = ({
       data: {
         text: commentText,
       },
-      mentionees,
+      mentionees: mentionees as Amity.UserMention[],
       metadata,
     });
   };
@@ -62,7 +62,7 @@ export const StoryCommentComposeBar = ({
       },
       parentId: replyTo?.commentId,
       metadata,
-      mentionees,
+      mentionees: mentionees as Amity.UserMention[],
     });
   };
 

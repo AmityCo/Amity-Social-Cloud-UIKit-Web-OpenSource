@@ -24,13 +24,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: var(--asc-color-white);
   border-radius: 4px;
   margin-bottom: 10px;
   animation-duration: 0.3s;
   animation-name: appear;
   pointer-events: auto;
-  background-color: var(--asc-color-base-shade4);
+  background-color: var(--asc-color-base-default);
 }
 
 @keyframes appear {

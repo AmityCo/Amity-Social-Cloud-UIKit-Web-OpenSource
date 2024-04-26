@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const UIReactButton = styled.button`
   ${({ theme }) => theme.typography.bodyBold};
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;

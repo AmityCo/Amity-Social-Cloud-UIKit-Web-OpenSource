@@ -8,7 +8,10 @@
   display: flex;
   gap: var(--asc-spacing-xxs2);
   align-items: center;
-  color: var(--asc-color-secondary-shade1);
+  color: var(
+    --live-chat-message-list-asc-color-secondary-shade1,
+    var(--live-chat-asc-color-secondary-shade1, var(--asc-color-secondary-shade1))
+  );
   margin-bottom: var(--asc-spacing-xxs2);
 }
 

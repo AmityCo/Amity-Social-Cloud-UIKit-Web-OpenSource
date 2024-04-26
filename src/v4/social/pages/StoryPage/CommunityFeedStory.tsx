@@ -8,15 +8,13 @@ import { useMedia } from 'react-use';
 import { useIntl } from 'react-intl';
 
 import { FinalColor } from 'extract-colors/lib/types/Color';
-import { notification } from '~/core/components/Notification';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateStoryButton } from '../../elements';
 import { Trash2Icon } from '~/icons';
-import { isNonNullable } from '~/helpers/utils';
+import { isNonNullable } from '~/v4/helpers/utils';
 import { extractColors } from 'extract-colors';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { confirm } from '~/core/components/Confirm';
 
 import {
   HiddenInput,
@@ -32,6 +30,8 @@ import { renderers } from '../../internal-components/StoryViewer/Renderers';
 import { AmityDraftStoryPage } from '..';
 import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '../../providers/StoryProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 interface CommunityFeedStoryProps {
   communityId: string;
@@ -41,6 +41,8 @@ const DURATION = 5000;
 
 export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
   const { onBack } = useNavigation();
+  const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const { stories } = useStories({
     targetId: communityId,
@@ -114,37 +116,42 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
     metadata?: Amity.Metadata,
     items?: Amity.StoryItem[],
   ) => {
-    onBack();
-    const formData = new FormData();
-    formData.append('files', file);
-    setFile(null);
-    if (file?.type.includes('image')) {
-      const { data: imageData } = await StoryRepository.createImageStory(
-        'community',
-        communityId,
-        formData,
-        metadata,
-        imageMode,
-        items,
-      );
-      if (imageData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+      setFile(null);
+      if (file?.type.includes('image')) {
+        const { data: imageData } = await StoryRepository.createImageStory(
+          'community',
+          communityId,
+          formData,
+          metadata,
+          imageMode,
+          items,
+        );
+        if (imageData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
+      } else {
+        const { data: videoData } = await StoryRepository.createVideoStory(
+          'community',
+          communityId,
+          formData,
+          metadata,
+          items,
+        );
+        if (videoData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
       }
-    } else {
-      const { data: videoData } = await StoryRepository.createVideoStory(
-        'community',
-        communityId,
-        formData,
-        metadata,
-        items,
-      );
-      if (videoData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
-      }
+    } catch (error) {
+      notification.error({
+        content: formatMessage({ id: 'storyViewer.notification.error' }),
+      });
     }
   };
 

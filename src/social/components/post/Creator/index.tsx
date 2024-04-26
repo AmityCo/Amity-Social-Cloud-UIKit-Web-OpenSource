@@ -9,12 +9,10 @@ import {
   CommunityPostSettings,
 } from '@amityco/ts-sdk';
 
-import { info } from '~/core/components/Confirm';
 import useImage from '~/core/hooks/useImage';
 
 import useUser from '~/core/hooks/useUser';
 import useErrorNotification from '~/core/hooks/useErrorNotification';
-import { notification } from '~/core/components/Notification';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import { backgroundImage as CommunityImage } from '~/icons/Community';
@@ -45,6 +43,8 @@ import useSDK from '~/core/hooks/useSDK';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import useCommunityModeratorsCollection from '~/social/hooks/collections/useCommunityModeratorsCollection';
 import { ERROR_RESPONSE } from '~/social/constants';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const useTargetData = ({
   targetId,
@@ -87,14 +87,6 @@ const useTargetData = ({
 
 const MAX_FILES_PER_POST = 10;
 
-const overCharacterModal = () =>
-  info({
-    title: <FormattedMessage id="postCreator.unableToPost" />,
-    content: <FormattedMessage id="postCreator.overCharacter" />,
-    okText: <FormattedMessage id="postCreator.done" />,
-    type: 'info',
-  });
-
 interface PostCreatorBarProps {
   className?: string;
   targetType: string;
@@ -123,6 +115,8 @@ const PostCreatorBar = ({
   const { currentUserId } = useSDK();
   const { setNavigationBlocker } = useNavigation();
   const user = useUser(currentUserId);
+  const { info } = useConfirmContext();
+  const notification = useNotifications();
 
   // default to me
   if (targetType === 'global' || targetType === 'myFeed') {
@@ -164,6 +158,15 @@ const PostCreatorBar = ({
       targetId: target.targetId || undefined,
     });
   const [isCreating, setIsCreating] = useState(false);
+
+  const overCharacterModal = () => {
+    info({
+      title: <FormattedMessage id="postCreator.unableToPost" />,
+      content: <FormattedMessage id="postCreator.overCharacter" />,
+      okText: <FormattedMessage id="postCreator.done" />,
+      type: 'info',
+    });
+  };
 
   async function onCreatePost() {
     if (!target.targetId) return;

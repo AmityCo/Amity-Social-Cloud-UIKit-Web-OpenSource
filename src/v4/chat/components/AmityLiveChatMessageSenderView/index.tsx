@@ -7,7 +7,7 @@ import { AmityMessageActionType } from '../LiveChatMessageContent/MessageAction'
 interface AmityLiveChatMessageSenderViewProps {
   message: Amity.Message;
   containerRef: React.RefObject<HTMLDivElement>;
-  action: AmityMessageActionType;
+  action?: AmityMessageActionType;
 }
 
 export const AmityLiveChatMessageSenderView = ({
@@ -22,7 +22,6 @@ export const AmityLiveChatMessageSenderView = ({
     <LiveChatMessageContent
       message={message as Amity.Message<'text'>}
       userDisplayName={user?.displayName}
-      isCreator={true}
       avatarUrl={avatarFileUrl}
       containerRef={containerRef}
       action={action}

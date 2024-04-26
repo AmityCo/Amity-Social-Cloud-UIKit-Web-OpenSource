@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
-import { confirm } from '~/core/components/Confirm';
 import { readFileAsync } from '~/helpers';
 import useUser from '~/core/hooks/useUser';
 import useSDK from '~/core/hooks/useSDK';
@@ -16,17 +15,18 @@ import { AspectRatioButton, BackButton, HyperLinkButton, ShareStoryButton } from
 import { useStoryContext } from '../../providers/StoryProvider';
 import { StoryVideoPreview } from './styles';
 import { StoryRepository } from '@amityco/ts-sdk';
-import { notification } from '~/core/components/Notification';
 
 import { HyperLink } from '../../elements/HyperLink';
-import { HyperlinkFormContainer } from '../../components/HyperLinkConfig/styles';
 import { HyperLinkConfig } from '../../components';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+import { PageTypes } from '~/social/constants';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
 type AmityDraftStoryPageProps = {
-  targetId: string;
+  targetId?: string;
   targetType: Amity.StoryTargetType;
   mediaType?: AmityStoryMediaType;
 };
@@ -37,11 +37,12 @@ type HyperLinkFormInputs = {
 };
 
 const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
-  // TODO: Change to usePageBehavior() to align with v4
-  const { onBack } = useNavigation();
+  const { page, onChangePage, onClickCommunity } = useNavigation();
   const { file, setFile } = useStoryContext();
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
+  const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const [hyperLink, setHyperLink] = useState<
     {
@@ -77,37 +78,49 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
     items?: Amity.StoryItem[],
   ) => {
     if (!file) return;
-    onBack();
-    const formData = new FormData();
-    formData.append('files', file);
-    setFile(null);
-    if (mediaType?.type === 'image') {
-      const { data: imageData } = await StoryRepository.createImageStory(
-        targetType,
-        targetId,
-        formData,
-        metadata,
-        imageMode,
-        items,
-      );
-      if (imageData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+      setFile(null);
+      if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
+        onChangePage(PageTypes.NewsFeed);
+      } else {
+        if (page.communityId) {
+          onClickCommunity(page.communityId);
+        }
       }
-    } else if (mediaType?.type === 'video') {
-      const { data: videoData } = await StoryRepository.createVideoStory(
-        targetType,
-        targetId,
-        formData,
-        metadata,
-        items,
-      );
-      if (videoData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
+      if (mediaType?.type === 'image' && targetId) {
+        const { data: imageData } = await StoryRepository.createImageStory(
+          targetType,
+          targetId,
+          formData,
+          metadata,
+          imageMode,
+          items,
+        );
+        if (imageData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
+      } else if (mediaType?.type === 'video' && targetId) {
+        const { data: videoData } = await StoryRepository.createVideoStory(
+          targetType,
+          targetId,
+          formData,
+          metadata,
+          items,
+        );
+        if (videoData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
       }
+    } catch (error) {
+      notification.error({
+        content: formatMessage({ id: 'storyViewer.notification.error' }),
+      });
     }
   };
 
@@ -139,7 +152,15 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   };
 
   const onRemoveHyperLink = () => {
-    setHyperLink([]);
+    setHyperLink([
+      {
+        data: {
+          url: '',
+          customText: '',
+        },
+        type: 'hyperlink' as Amity.StoryItemType,
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -175,21 +196,23 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   return (
     <>
       <div id="asc-uikit-create-story" className={styles.draftPage}>
-        <div className={styles.header}>
-          <BackButton pageId="create_story_page" componentId="*" onClick={discardCreateStory} />
-          <div className={styles.topRightButtons}>
-            {mediaType?.type === 'image' && (
-              <AspectRatioButton
+        <div className={styles.headerContainer}>
+          <div className={styles.header}>
+            <BackButton pageId="create_story_page" componentId="*" onClick={discardCreateStory} />
+            <div className={styles.topRightButtons}>
+              {mediaType?.type === 'image' && (
+                <AspectRatioButton
+                  pageId="create_story_page"
+                  componentId="*"
+                  onClick={onClickImageMode}
+                />
+              )}
+              <HyperLinkButton
                 pageId="create_story_page"
                 componentId="*"
-                onClick={onClickImageMode}
+                onClick={() => setIsHyperLinkBottomSheetOpen(true)}
               />
-            )}
-            <HyperLinkButton
-              pageId="create_story_page"
-              componentId="*"
-              onClick={() => setIsHyperLinkBottomSheetOpen(true)}
-            />
+            </div>
           </div>
         </div>
 
@@ -224,7 +247,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
           />
         ) : null}
         {hyperLink[0]?.data?.url && (
-          <HyperlinkFormContainer>
+          <div className={styles.hyperLinkContainer}>
             <HyperLink
               href={
                 hyperLink[0].data.url.startsWith('http')
@@ -238,7 +261,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
                 <span>{hyperLink[0]?.data?.customText || hyperLink[0].data.url}</span>
               </Truncate>
             </HyperLink>
-          </HyperlinkFormContainer>
+          </div>
         )}
 
         <HyperLinkConfig

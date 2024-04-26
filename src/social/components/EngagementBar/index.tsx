@@ -7,10 +7,10 @@ import { Mentionees, Metadata } from '~/helpers/utils';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useReactionSubscription from '~/social/hooks/useReactionSubscription';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
-import { notification } from '~/core/components/Notification';
 import { FormattedMessage } from 'react-intl';
 import useSocialMention from '~/social/hooks/useSocialMention';
 import { ERROR_RESPONSE } from '~/social/constants';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 interface EngagementBarProps {
   postId: string;
@@ -19,6 +19,7 @@ interface EngagementBarProps {
 
 const EngagementBar = ({ postId, readonly = false }: EngagementBarProps) => {
   const [isComposeBarDisplayed, setComposeBarDisplayed] = useState(false);
+  const notification = useNotifications();
   const toggleComposeBar = () => setComposeBarDisplayed((prevValue) => !prevValue);
 
   const hideComposeBar = () => setComposeBarDisplayed(false);

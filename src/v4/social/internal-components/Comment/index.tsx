@@ -1,36 +1,34 @@
 import React, { memo, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { confirm } from '~/core/components/Confirm';
 import useComment from '~/social/hooks/useComment';
 
-import { notification } from '~/core/components/Notification';
-import useSocialMention from '~/social/hooks/useSocialMention';
+import useMention from '~/v4/chat/hooks/useMention';
 
 import {
   CommentBlock,
+  CommentContainer,
   DeletedCommentContainer,
   DeletedIcon,
   DeletedReplyContainer,
   IconContainer,
   MessageContainer,
-  Text,
-  ReplyContainer,
-  CommentContainer,
-  MobileSheetButton,
   MobileSheet,
+  MobileSheetButton,
   MobileSheetContent,
   MobileSheetHeader,
   MobileSheetNestedBackDrop,
+  ReplyContainer,
+  Text,
 } from './styles';
 import {
+  extractMetadata,
+  isNonNullable,
   Mentioned,
   Mentionees,
   Metadata,
-  extractMetadata,
-  isNonNullable,
   parseMentionsMarkup,
-} from '~/helpers/utils';
+} from '~/v4/helpers/utils';
 import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
@@ -50,6 +48,8 @@ import { CommentList } from '~/v4/social/internal-components/CommentList';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { useTheme } from 'styled-components';
 import useGetStoryByStoryId from '../../hooks/useGetStoryByStoryId';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -119,6 +119,8 @@ const Comment = ({
   const story = useGetStoryByStoryId(comment?.referenceId);
   const [bottomSheet, setBottomSheet] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
+  const { confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });
@@ -135,13 +137,12 @@ const Comment = ({
     commentId,
   });
 
-  const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } =
-    useSocialMention({
-      targetId: story?.targetId,
-      targetType: story?.targetType,
-      remoteText: getCommentData(comment),
-      remoteMarkup: parseMentionsMarkup(getCommentData(comment), comment?.metadata || {}),
-    });
+  const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } = useMention({
+    targetId: story?.targetId,
+    targetType: story?.targetType,
+    remoteText: getCommentData(comment),
+    remoteMarkup: parseMentionsMarkup(getCommentData(comment), comment?.metadata || {}),
+  });
 
   const { canDelete, canEdit, canLike, canReply, canReport } = useCommentPermission(
     comment,

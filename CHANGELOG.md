@@ -2,7 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.3 (2024-04-26)
+
+### Bug Fixes
+
+- path ([6b130f8](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/6b130f840311ea6723061400a9f16db37444abe0))
+
+## 4.0.0-beta.3 (2024-04-26)
+
+### Bug Fixes
+
+- cherry-pick bugs from v3 ([7b01a95](https://github.com/EkoCommunications/AmityUiKitWeb/commit/7b01a956db5a7c019164ee4ffaf781a55c588714))
+
 ## 4.0.0-beta.2 (2024-04-12)
+
+### Bug Fixes
+
+- export wrong path ([#264](https://github.com/EkoCommunications/AmityUiKitWeb/issues/264)) ([af08529](https://github.com/EkoCommunications/AmityUiKitWeb/commit/af08529265a6b620d7a543b438f96e44e1ef9eb1))
 
 ## 4.0.0-beta.1 (2024-04-05)
 

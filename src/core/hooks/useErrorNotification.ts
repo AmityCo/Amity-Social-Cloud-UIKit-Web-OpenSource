@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-
-import { notification } from '~/core/components/Notification';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 const useErrorNotification = () => {
   const [error, setError] = useState<string | null>(null);
+  const notification = useNotifications();
+
   useEffect(() => {
     if (error) {
       notification.error({

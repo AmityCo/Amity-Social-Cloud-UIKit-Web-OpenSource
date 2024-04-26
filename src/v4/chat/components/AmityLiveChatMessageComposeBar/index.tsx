@@ -1,14 +1,17 @@
-import { MessageRepository, UserRepository } from '@amityco/ts-sdk';
+import { MessageRepository } from '@amityco/ts-sdk';
 import React, { RefObject, useEffect, useRef, useState } from 'react';
 import ArrowTop from '~/v4/icons/ArrowTop';
 import HomeIndicator from '../HomeIndicator';
 import styles from './styles.module.css';
 import InputText from '~/v4/core/components/InputText';
 import useMention from '~/v4/chat/hooks/useMention';
-import { confirm } from '~/core/components/Confirm';
 import { useIntl } from 'react-intl';
 import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
+
+const COMPOSEBAR_MAX_CHARACTER_LIMIT = 200;
 
 type ComposeActionTypes = {
   replyMessage?: Amity.Message;
@@ -21,6 +24,8 @@ interface AmityLiveChatMessageComposeBarProps {
   channel: Amity.Channel;
   composeAction: ComposeActionTypes;
   suggestionRef?: RefObject<HTMLDivElement>;
+  disabled?: boolean;
+  pageId?: string;
 }
 
 type ComposeBarMention = {
@@ -32,21 +37,25 @@ type ComposeBarMention = {
 };
 
 export const AmityLiveChatMessageComposeBar = ({
+  pageId = 'live_chat',
   channel,
   suggestionRef,
   composeAction: { replyMessage, mentionMessage, clearReplyMessage, clearMention },
+  disabled,
 }: AmityLiveChatMessageComposeBarProps) => {
   const [mentionList, setMentionList] = useState<{
     [key: ComposeBarMention['id']]: ComposeBarMention;
   }>({});
+  const componentId = 'message_composer';
+
+  const { confirm } = useConfirmContext();
+  const notification = useLiveChatNotifications();
 
   const { getConfig } = useCustomization();
-  const componentConfig = getConfig('live_chat/message_composer/*');
-
-  const [message, setMessage] = useState('');
+  const componentConfig = getConfig(`${pageId}/${componentId}/*`);
   const commentInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
-  const { queryMentionees } = useMention({
+  const { queryMentionees, mentionees, onChange, markup, metadata, text } = useMention({
     targetId: channel.channelId,
     targetType: 'channel',
   });
@@ -55,97 +64,59 @@ export const AmityLiveChatMessageComposeBar = ({
 
   const { formatMessage } = useIntl();
 
-  const sendMessage = async (inputText: string) => {
+  const sendMessage = async () => {
     if (!channel) return;
-    if (message.trim().length === 0) return;
+    if (text?.trim().length === 0) return;
 
-    setMessage('');
-
-    // Packing mentions into the message
-    const mentionArray =
-      Object.values(mentionList).filter(({ display }) => inputText.includes(display)) || [];
-
-    const mentionees: (Amity.UserMention | Amity.ChannelMention)[] = [];
-    const mentionUsers = mentionArray.filter(({ id }) => id !== '@all').map(({ id }) => id);
-    const mentionAll = mentionArray.find(({ id }) => id === '@all');
-
-    if (mentionUsers.length > 0) {
-      mentionees.push({ type: 'user', userIds: mentionUsers });
-    }
-
-    if (mentionAll) {
-      mentionees.push({ type: 'channel' });
+    if (text.trim().length > (componentConfig?.message_limit || COMPOSEBAR_MAX_CHARACTER_LIMIT)) {
+      confirm({
+        title: formatMessage({ id: 'livechat.error.tooLongMessage.title' }),
+        content: formatMessage({ id: 'livechat.error.tooLongMessage.description' }),
+        okText: formatMessage({ id: 'general.action.ok' }),
+      });
+      return;
     }
 
     try {
       await MessageRepository.createMessage({
         tags: [],
         subChannelId: channel.channelId,
-        data: { text: inputText },
+        data: { text: text.trim() },
         dataType: 'text',
         mentionees,
-        metadata: {
-          mentioned: mentionArray.map(({ id, index, display }) => {
-            if (id === '@all') {
-              return {
-                index,
-                userId: '',
-                type: 'channel',
-                length: display.length - 1,
-              };
-            }
-
-            return {
-              index,
-              userId: id,
-              type: 'user',
-              length: display.length - 1,
-            };
-          }),
-        },
+        metadata,
         parentId: replyMessage?.messageId || undefined,
       });
-    } catch (e) {
-      confirm({
-        title: formatMessage({ id: 'post.renderingError.title' }),
-        content: formatMessage({ id: 'general.error.tryAgainLater' }),
-        okText: formatMessage({ id: 'general.action.ok' }),
+
+      onChange({ text: '', plainText: '', mentions: [] });
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      let notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.error' });
+
+      if (errorMessage === 'Amity SDK (400308): Text contain blocked word') {
+        notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.blockedWord' });
+      } else if (
+        errorMessage === 'Amity SDK (400309): Data contain link that is not in whitelist'
+      ) {
+        notificationMessage = formatMessage({ id: 'livechat.error.sendingMessage.notAllowLink' });
+      } else if (errorMessage === 'Amity SDK (400302): User is muted') {
+        notificationMessage = formatMessage({ id: 'livechat.member.muted.error' });
+      }
+
+      notification.error({
+        content: notificationMessage,
       });
-      setMessage(inputText);
+
       return;
     }
 
     setMentionList({});
-    clearMention && clearMention();
     clearReplyMessage && clearReplyMessage();
   };
 
   useEffect(() => {
     commentInputRef.current?.focus();
   }, []);
-
-  useEffect(() => {
-    if (mentionMessage) {
-      UserRepository.getUser(mentionMessage.creatorId, ({ loading, data }) => {
-        if (loading) return;
-
-        const mentionData = {
-          id: data.userId,
-          display: data.displayName,
-          childIndex: 0,
-          index: message.length,
-          plainTextIndex: message.length,
-        } as ComposeBarMention;
-
-        setMentionList({
-          ...mentionList,
-          [mentionData.id]: mentionData,
-        });
-
-        setMessage(`${message}@${mentionData.display}`);
-      });
-    }
-  }, [mentionMessage]);
 
   return (
     <div className={styles.composeBarContainer}>
@@ -156,6 +127,7 @@ export const AmityLiveChatMessageComposeBar = ({
             suggestionRef={suggestionRef}
             data-qa-anchor="live-chat-compose-bar"
             multiline
+            disabled={disabled}
             placeholder={
               componentConfig?.placeholder_text ||
               formatMessage({
@@ -164,33 +136,21 @@ export const AmityLiveChatMessageComposeBar = ({
             }
             mentionAllowed
             isModerator={isModerator}
+            loadMoreMentionees={(query) => queryMentionees(query)}
             onChange={(e) => {
-              // Set current inputted text to state
-              setMessage(e.plainText);
-
-              // Collect all mentions to local state to prevent got deleted from next change
-              const incomingMentions = e.mentions as ComposeBarMention[];
-
-              if (incomingMentions.length > 0) {
-                const mergedMentions = incomingMentions.reduce((acc, currentMention) => {
-                  return { ...acc, [currentMention.id]: currentMention };
-                }, mentionList);
-                setMentionList(mergedMentions);
-              }
+              onChange({
+                text: e.text,
+                plainText: e.plainText,
+                mentions: e.mentions,
+              });
             }}
-            value={message}
+            value={markup}
             queryMentionees={queryMentionees}
-            onKeyPress={(e) => {
-              if (message.trim().length < 200) return;
-              e.preventDefault();
-              if (message.trim().length > 0) {
-                sendMessage(message);
-              }
-            }}
+            mentionColor={styles.mentionText}
           />
         </div>
         <div className={styles.sendButtonContainer}>
-          <ArrowTop className={styles.sendButton} onClick={() => sendMessage(message)} />
+          <ArrowTop className={styles.sendButton} onClick={() => sendMessage()} />
           {/* {message.length > 0 ? (
             <ArrowTop className={styles.sendButton} onClick={sendMessage} />
           ) : (

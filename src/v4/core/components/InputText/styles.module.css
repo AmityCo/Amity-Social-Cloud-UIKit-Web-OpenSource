@@ -9,10 +9,6 @@
   border-radius: var(--asc-border-radius-sm);
   transition: background 0.2s, border-color 0.2s;
 
-  &:focus-within {
-    border-color: var(--asc-color-primary);
-  }
-
   &.invalid {
     border-color: var(--asc-color-alert);
   }
@@ -67,6 +63,12 @@
   padding: var(--asc-spacing-s1);
   width: calc(100% - 1rem);
 
+  > div:first-child {
+    > div:first-child {
+      padding: 0 0.45rem;
+    }
+  }
+
   textarea {
     flex: 1 1 auto;
     display: block;
@@ -80,7 +82,7 @@
     outline: none;
     font: inherit;
     resize: vertical;
-    color: var(--asc-color-white);
+    color: var(--asc-color-base-inverse);
 
     &::placeholder {
       font-weight: 400;
@@ -100,9 +102,22 @@
   background-color: var(--asc-color-base-shade4);
   max-height: 8rem;
   overflow: auto;
-  
-  /* Use !important to overide inline-css at target element */
-  /* Keep a position of suggest panel strict with the top of composebar same as design */
+  border-bottom: 1px solid var(--asc-color-base-shade3);
+
+  /* Use !important to override inline-css at target element */
+  /* Keep a position of suggest panel strict with the top of compose bar same as design */
   bottom: 2rem !important;
   left: 0 !important;
+}
+
+.mentions_mention {
+  position: relative;
+  z-index: 1;
+  color: var(--asc-color-primary-dark, var(--asc-color-primary-default));
+  pointer-events: none;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.live-chat-mention-input .mentions__highlighter {
+  padding: 0 0.4rem;
 }

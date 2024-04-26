@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
-import { Mentioned, findChunks } from '~/helpers/utils';
+import { findChunks, Mentioned } from '~/v4/helpers/utils';
 import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { processChunks } from '~/core/components/ChunkHighlighter';
 import Linkify from '~/core/components/Linkify';

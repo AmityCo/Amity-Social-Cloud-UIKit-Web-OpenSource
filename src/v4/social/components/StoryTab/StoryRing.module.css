@@ -1,0 +1,14 @@
+@keyframes animateRing {
+  0% {
+    stroke-dashoffset: 339;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.uploadingProgressRing {
+  animation: animateRing 2s linear 0s infinite;
+  -webkit-animation: animateRing 2s linear 0s infinite;
+  -moz-animation: animateRing 2s linear 0s infinite;
+}

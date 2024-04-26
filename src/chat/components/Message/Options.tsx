@@ -5,11 +5,11 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
-import { notification } from '~/core/components/Notification';
 
 import { MessageOptionsIcon, SaveIcon, CloseIcon, EditingInput, EditingContainer } from './styles';
 import useMessageFlaggedByMe from '~/chat/hooks/useMessageFlaggedByMe';
 import useMessageSubscription from '~/social/hooks/useMessageSubscription';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const StyledPopover = styled(Popover)<{ align?: string; className?: string }>`
   ${({ align, theme }) => align === 'end' && `color: ${theme.palette.neutral.main};`}
@@ -55,6 +55,7 @@ const Options = ({
   // const popupContainerRef = useRef();
   const [text, setText] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const notification = useNotifications();
 
   const edit: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation();

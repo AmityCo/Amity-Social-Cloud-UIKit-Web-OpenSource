@@ -53,12 +53,13 @@
 }
 
 .header {
-  padding: var(--asc-spacing-m1) var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-m1);
-  border-bottom: 1px solid var(--asc-color-base-shade4);
+  padding: var(--asc-spacing-m1) var(--asc-spacing-m1) 0 var(--asc-spacing-m1);
   display: flex;
   align-items: center;
-  color: var(--asc-color-white);
+  color: var(--asc-color-base-inverse);
   border-bottom: 1px solid var(--theme-palette-base-shade4);
+  font-size: var(--asc-text-font-size-lg) !important;
+  font-weight: var(--asc-text-font-weight-bold);
 }
 
 .content {

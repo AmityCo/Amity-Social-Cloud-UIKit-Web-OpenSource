@@ -1,0 +1,6 @@
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse));
+  margin-right: var(--asc-spacing-s2);
+}
