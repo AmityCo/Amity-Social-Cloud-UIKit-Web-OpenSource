@@ -46,6 +46,7 @@ interface UiKitProviderProps {
     onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
     onEditUser?: (userId: string) => void;
     onMessageUser?: (userId: string) => void;
+    onBack?: () => void;
   };
   socialCommunityCreationButtonVisible?: boolean;
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
@@ -98,20 +99,20 @@ const UiKitProvider = ({
       setClient(ascClient);
     }
 
-await ASCClient.login(
-        { userId, displayName, authToken },
-        {
-          sessionWillRenewAccessToken(renewal) {
-            // secure mode
-            if (authToken) {
-              renewal.renewWithAuthToken(authToken);
-              return;
-            }
+    await ASCClient.login(
+      { userId, displayName, authToken },
+      {
+        sessionWillRenewAccessToken(renewal) {
+          // secure mode
+          if (authToken) {
+            renewal.renewWithAuthToken(authToken);
+            return;
+          }
 
-            renewal.renew();
-          },
+          renewal.renew();
         },
-      );
+      },
+    );
     setIsConnected(true);
 
     if (stateChangeRef.current == null) {

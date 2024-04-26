@@ -1,6 +1,6 @@
 {
   "name": "@amityco/ui-kit",
-  "version": "4.0.0-beta.2",
+  "version": "4.0.0-beta.3",
   "engines": {
     "node": ">=16",
     "pnpm": ">=8"
@@ -39,7 +39,7 @@
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "^6.21.0",
+    "@amityco/ts-sdk": "^6.23.0",
     "@fortawesome/pro-light-svg-icons": "^5.15.4",
     "@fortawesome/pro-regular-svg-icons": "^5.15.4",
     "@fortawesome/pro-solid-svg-icons": "^5.15.4",
