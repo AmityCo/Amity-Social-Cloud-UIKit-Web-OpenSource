@@ -1,19 +1,47 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import styles from './StoryTabGlobalFeed.module.css';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { useGetGlobalStoryTargets } from '../../hooks/collections/useGetGlobalStoryTargets';
 import { StoryTabItem } from './StoryTabItem';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
 
-interface StoryTabGlobalFeedProps {}
+const STORIES_PER_PAGE = 10;
 
-export const StoryTabGlobalFeed: React.FC<StoryTabGlobalFeedProps> = () => {
-  const { stories, isLoading, hasMore, loadMoreStories } = useGetGlobalStoryTargets({
+export const StoryTabGlobalFeed: React.FC = () => {
+  const { stories, isLoading, hasMore, loadMoreStories } = useGlobalStoryTargets({
     seenState: 'smart' as Amity.StorySeenQuery,
-    limit: 10,
+    limit: STORIES_PER_PAGE,
   });
   const { onClickStory } = useNavigation();
   const containerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          const lastStory = entries[0];
+
+          if (lastStory.isIntersecting && hasMore) {
+            loadMoreStories();
+          }
+        },
+        { root: containerRef.current, rootMargin: '0px', threshold: 0.9 },
+      );
+
+      if (stories.length > 0) {
+        const lastStoryElement = containerRef.current.children[stories.length - 1];
+        if (lastStoryElement) {
+          observerRef.current.observe(lastStoryElement);
+        }
+      }
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [stories, hasMore, loadMoreStories]);
 
   if (isLoading) {
     return (
@@ -32,27 +60,17 @@ export const StoryTabGlobalFeed: React.FC<StoryTabGlobalFeedProps> = () => {
 
   return (
     <div className={styles.storyTabContainer} ref={containerRef}>
-      <InfiniteScroll
-        dataLength={stories.length}
-        next={loadMoreStories}
-        hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        style={{ display: 'flex', overflowX: 'auto', gap: '0.5rem' }}
-        scrollThreshold={0.9}
-        scrollableTarget="containerRef"
-      >
-        {stories.map((story) => {
-          return (
-            <StoryTabItem
-              key={story.targetId}
-              targetId={story.targetId}
-              hasUnseen={story.hasUnseen}
-              onClick={() => onClickStory(story.targetId)}
-              size={64}
-            />
-          );
-        })}
-      </InfiniteScroll>
+      {stories.map((story) => {
+        return (
+          <StoryTabItem
+            key={story.targetId}
+            targetId={story.targetId}
+            hasUnseen={story.hasUnseen}
+            onClick={() => onClickStory(story.targetId)}
+            size={64}
+          />
+        );
+      })}
     </div>
   );
 };

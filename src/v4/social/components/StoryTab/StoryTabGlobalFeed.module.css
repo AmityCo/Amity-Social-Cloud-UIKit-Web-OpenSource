@@ -4,6 +4,7 @@
   padding: 0.625rem; 
   background-color: var(--asc-color-white);
   border-bottom: 0.0625rem solid #e6e6e6; 
+  gap: var(--asc-spacing-s1)
 }
 
 .storyTab {
