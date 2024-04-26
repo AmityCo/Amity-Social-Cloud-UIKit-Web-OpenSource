@@ -330,6 +330,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
               onStoryEnd={increaseIndex}
               onNext={nextStory}
               onPrevious={previousStory}
+              onAllStoriesEnd={nextStory}
             />
           ) : null}
         </ViewStoryContent>
