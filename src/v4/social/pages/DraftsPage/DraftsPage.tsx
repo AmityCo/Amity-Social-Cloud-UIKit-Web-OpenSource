@@ -20,6 +20,7 @@ import { HyperLink } from '../../elements/HyperLink';
 import { HyperLinkConfig } from '../../components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -35,6 +36,7 @@ type HyperLinkFormInputs = {
 };
 
 const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
+  const { onClickCommunity } = useNavigation();
   const { file, setFile } = useStoryContext();
   const { navigationBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
@@ -76,6 +78,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   ) => {
     if (!file) return;
     try {
+      onClickCommunity(targetId);
       const formData = new FormData();
       formData.append('files', file);
       setFile(null);

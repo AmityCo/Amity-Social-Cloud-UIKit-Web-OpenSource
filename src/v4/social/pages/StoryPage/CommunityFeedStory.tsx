@@ -116,37 +116,42 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
     metadata?: Amity.Metadata,
     items?: Amity.StoryItem[],
   ) => {
-    onBack();
-    const formData = new FormData();
-    formData.append('files', file);
-    setFile(null);
-    if (file?.type.includes('image')) {
-      const { data: imageData } = await StoryRepository.createImageStory(
-        'community',
-        communityId,
-        formData,
-        metadata,
-        imageMode,
-        items,
-      );
-      if (imageData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+      setFile(null);
+      if (file?.type.includes('image')) {
+        const { data: imageData } = await StoryRepository.createImageStory(
+          'community',
+          communityId,
+          formData,
+          metadata,
+          imageMode,
+          items,
+        );
+        if (imageData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
+      } else {
+        const { data: videoData } = await StoryRepository.createVideoStory(
+          'community',
+          communityId,
+          formData,
+          metadata,
+          items,
+        );
+        if (videoData) {
+          notification.success({
+            content: formatMessage({ id: 'storyViewer.notification.success' }),
+          });
+        }
       }
-    } else {
-      const { data: videoData } = await StoryRepository.createVideoStory(
-        'community',
-        communityId,
-        formData,
-        metadata,
-        items,
-      );
-      if (videoData) {
-        notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.success' }),
-        });
-      }
+    } catch (error) {
+      notification.error({
+        content: formatMessage({ id: 'storyViewer.notification.error' }),
+      });
     }
   };
 
