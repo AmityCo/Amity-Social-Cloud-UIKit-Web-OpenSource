@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ButtonContainer, CommentEditContainer, CommentEditTextarea } from './styles';
 
-import { QueryMentioneesFnType } from '~/social/hooks/useSocialMention';
+import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 
 import { useTheme } from 'styled-components';
 import { CancelButton, SaveButton } from '../../elements';
@@ -31,7 +31,7 @@ export const CommentEdition = ({
   const componentConfig = getConfig(`${pageId}/${componentId}/*`);
   const isElementExcluded = isExcluded(`${pageId}/${componentId}/*`);
 
-  const componentTheme = componentConfig?.component_theme?.light_theme || theme.v4.colors.primary;
+  const componentTheme = componentConfig?.theme?.light || theme.v4.colors.primary;
 
   if (isElementExcluded) return null;
 

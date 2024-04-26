@@ -19,13 +19,7 @@ const SampleLiveChatHeader = () => {
     return <div style={{ background: 'white', minWidth: '320px' }}>No channels</div>;
   return (
     <div style={{ background: 'white', minWidth: '320px' }}>
-      <AmityLiveChatMessageComposeBar
-        channel={channels[0]}
-        replyMessage={undefined}
-        clearReplyMessage={() => {}}
-        mentionsMessage={undefined}
-        clearMention={() => {}}
-      />
+      <AmityLiveChatMessageComposeBar channel={channels[0]} composeAction={{}} />
     </div>
   );
 };

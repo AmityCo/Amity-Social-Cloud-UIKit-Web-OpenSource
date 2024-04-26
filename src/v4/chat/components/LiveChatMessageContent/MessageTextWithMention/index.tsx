@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.css';
 import { Typography } from '~/v4/core/components';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import HyperLinkText from '~/v4/core/components/HyperlinkText/index';
 
 interface MessageTextWithMentionProps {
   message: Amity.Message<'text'>;
@@ -9,12 +9,6 @@ interface MessageTextWithMentionProps {
 }
 
 const MessageTextWithMention = ({ message, className }: MessageTextWithMentionProps) => {
-  const { getConfig } = useCustomization();
-
-  // TODO: uncomment this when full configuration on the component is supported
-  // const pageConfig = getConfig('live_chat/*/*');
-  // const componentConfig = getConfig('live_chat/message_list/*');
-
   const mentionList = message.metadata?.mentioned as {
     index: number;
     userId: string;
@@ -52,27 +46,24 @@ const MessageTextWithMention = ({ message, className }: MessageTextWithMentionPr
       <Typography.Body className={className}>
         {segments.map((segment, index) =>
           segment.isMention ? (
-            <span
-              key={index}
-              className={styles.mentionText}
-              // TODO: uncomment this when full configuration on the component is supported
-              // style={{
-              //   color:
-              //     componentConfig?.theme?.dark?.primary_color ||
-              //     pageConfig?.theme?.dark?.primary_color,
-              // }}
-            >
+            <span key={index} className={styles.mentionText}>
               {segment.text}
             </span>
           ) : (
-            <span key={index}>{segment.text}</span>
+            <span key={index}>
+              <HyperLinkText linkClassName={styles.hyperlink}>{segment.text}</HyperLinkText>
+            </span>
           ),
         )}
       </Typography.Body>
     );
   }
 
-  return <Typography.Body className={className}>{message.data?.text}</Typography.Body>;
+  return (
+    <Typography.Body className={className}>
+      <HyperLinkText linkClassName={styles.hyperlink}>{message.data?.text}</HyperLinkText>
+    </Typography.Body>
+  );
 };
 
 export default MessageTextWithMention;

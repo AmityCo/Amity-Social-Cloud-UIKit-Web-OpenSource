@@ -42,8 +42,8 @@ export default {
             excludes: [],
             customizations: {
               '*/comment_tray_component/*': {
-                component_theme: {
-                  light_theme: {
+                theme: {
+                  light: {
                     primary_color: '#FF0000',
                     secondary_color: '#00FF00',
                   },

@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 
 import InsideInputText from './InsideInputText';
-import { QueryMentioneesFnType } from '~/social/hooks/useSocialMention';
+import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 
 export interface InputTextProps {
   'data-qa-anchor'?: string;
@@ -36,6 +36,7 @@ export interface InputTextProps {
   onClear?: () => void;
   onClick?: () => void;
   suggestionRef?: React.RefObject<HTMLDivElement>;
+  mentionColor?: string;
 }
 
 const InputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputTextProps>(

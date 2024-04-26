@@ -1,23 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import useUser from '~/core/hooks/useUser';
-import useSocialMention from '~/social/hooks/useSocialMention';
+import useMention from '~/v4/chat/hooks/useMention';
 
-import { Mentionees, Metadata } from '~/helpers/utils';
+import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import useSDK from '~/core/hooks/useSDK';
 import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
-import { useIntl, FormattedMessage } from 'react-intl';
-import { info } from '~/core/components/Confirm';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import {
+  AddCommentButton,
   Avatar,
   CommentComposeBarContainer,
   CommentComposeBarInput,
-  AddCommentButton,
 } from './styles';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import useImage from '~/core/hooks/useImage';
-import useStory from '~/social/hooks/useStory';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;
@@ -42,11 +41,12 @@ export const CommentComposeBar = ({
   const user = useUser(currentUserId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { text, markup, mentions, mentionees, metadata, onChange, clearAll, queryMentionees } =
-    useSocialMention({
+    useMention({
       targetId: targetId,
       targetType: 'community',
     });
   const { formatMessage } = useIntl();
+  const { info } = useConfirmContext();
 
   const commentInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 

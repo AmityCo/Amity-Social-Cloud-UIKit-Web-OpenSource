@@ -30,7 +30,6 @@ import {
   ProfileNameWrapper,
 } from './styles';
 
-import { confirm } from '~/core/components/Confirm';
 import { isNonNullable } from '~/helpers/utils';
 import useUser from '~/core/hooks/useUser';
 import { UserRepository } from '@amityco/ts-sdk';
@@ -38,6 +37,7 @@ import useFollowersList from '~/core/hooks/useFollowersList';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useUserFlaggedByMe from '~/social/hooks/useUserFlaggedByMe';
 import useFollowersCollection from '~/core/hooks/collections/useFollowersCollection';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 interface UIUserInfoProps {
   userId?: string | null;
@@ -88,6 +88,7 @@ const UIUserInfo = ({
   const user = useUser(userId);
   const { formatMessage } = useIntl();
   const { isFlaggedByMe } = useUserFlaggedByMe(userId || undefined);
+  const { confirm } = useConfirmContext();
 
   const { followers: pendingUsers } = useFollowersCollection({
     userId: currentUserId,

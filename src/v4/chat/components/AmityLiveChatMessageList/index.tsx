@@ -5,12 +5,15 @@ import LivechatLoadingIndicator from '~/v4/chat/components/LivechatLoadingIndica
 import useSDK from '~/core/hooks/useSDK';
 import AmityLiveChatMessageSenderView from '../AmityLiveChatMessageSenderView';
 import AmityLiveChatMessageReceiverView from '../AmityLiveChatMessageReceiverView';
-import { copyMessage, deleteMessage } from '~/v4/utils';
-import { confirm } from '~/v4/core/components/ConfirmModal';
+import { deleteMessage, flagMessage } from '~/v4/utils';
 import useMessagesCollection from '~/chat/hooks/collections/useMessagesCollection';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Typography } from '~/v4/core/components';
 import Redo from '~/v4/icons/Redo';
+import { unFlagMessage } from '~/v4/utils/unFlagMessage';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
+import { useCopyMessage } from '~/v4/core/hooks';
 
 interface AmityLiveChatMessageListProps {
   channel: Amity.Channel;
@@ -25,6 +28,9 @@ export const AmityLiveChatMessageList = ({
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const { formatMessage } = useIntl();
   const [height, setHeight] = React.useState<number | undefined>(undefined);
+  const { confirm } = useConfirmContext();
+  const notification = useLiveChatNotifications();
+  const copyMessage = useCopyMessage();
 
   const {
     messages: rawMessages,
@@ -47,7 +53,13 @@ export const AmityLiveChatMessageList = ({
       content: formatMessage({ id: 'livechat.modal.delete.message.content' }),
       cancelText: formatMessage({ id: 'cancel' }),
       okText: formatMessage({ id: 'delete' }),
-      onOk: () => deleteMessage(messageId),
+      onOk: () =>
+        deleteMessage(messageId, {
+          onError: () =>
+            notification.error({
+              content: formatMessage({ id: 'livechat.delete.message.error' }),
+            }),
+        }),
       theme: 'dark',
     });
   };
@@ -109,14 +121,16 @@ export const AmityLiveChatMessageList = ({
               return (
                 <AmityLiveChatMessageSenderView
                   message={message}
-                  action={{
-                    onReply: () => replyMessage(message),
-                    onDelete: () => onDeleteMessage(message.messageId),
-                    onCopy: () => message.data?.text && copyMessage(message.data?.text),
-                  }}
+                  action={
+                    !channel.isMuted
+                      ? {
+                          onReply: () => replyMessage(message),
+                          onDelete: () => onDeleteMessage(message.messageId),
+                          onCopy: () => message.data?.text && copyMessage(message.data?.text),
+                        }
+                      : undefined
+                  }
                   key={message.messageId}
-                  // TODO: release 1.1 hide moderator badge, will be implemented in release 1.2
-                  // isModerator={false}
                   containerRef={containerRef}
                 />
               );
@@ -128,10 +142,32 @@ export const AmityLiveChatMessageList = ({
                   onReply: () => replyMessage(message),
                   onDelete: () => onDeleteMessage(message.messageId),
                   onCopy: () => message.data?.text && copyMessage(message.data?.text),
+                  onFlag: () =>
+                    flagMessage(
+                      message.messageId,
+                      () =>
+                        notification.success({
+                          content: formatMessage({ id: 'livechat.report.message.success' }),
+                        }),
+                      () =>
+                        notification.error({
+                          content: formatMessage({ id: 'livechat.report.message.error' }),
+                        }),
+                    ),
+                  onUnflag: () =>
+                    unFlagMessage(
+                      message.messageId,
+                      () =>
+                        notification.success({
+                          content: formatMessage({ id: 'livechat.unReport.message.success' }),
+                        }),
+                      () =>
+                        notification.error({
+                          content: formatMessage({ id: 'livechat.unReport.message.error' }),
+                        }),
+                    ),
                 }}
                 key={message.messageId}
-                // TODO: release 1.1 hide moderator badge, will be implemented in release 1.2
-                // isModerator={false}
                 containerRef={containerRef}
               />
             );

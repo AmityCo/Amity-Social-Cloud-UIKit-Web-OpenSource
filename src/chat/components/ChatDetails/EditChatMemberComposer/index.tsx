@@ -20,8 +20,8 @@ import {
 } from './styles';
 import { ChannelRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/helpers/utils';
-import { notification } from '~/core/components/Notification';
 import useChannelMembersCollection from '~/chat/hooks/collections/useChannelMembersCollection';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const FormBlock = ({ children }: { children: ReactNode }) => (
   <FormBlockContainer>
@@ -52,6 +52,7 @@ const EditChatMemberComposerForm = ({
   onSubmit,
 }: EditChatMemberComposerFormProps) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const notification = useNotifications();
 
   const defaultValues = {
     userIds: memberIds,

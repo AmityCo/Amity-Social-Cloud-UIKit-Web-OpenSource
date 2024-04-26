@@ -6,9 +6,9 @@ const useChannelPermission = (subChannelId: Amity.SubChannel['subChannelId']) =>
   const [isModerator, setIsModerator] = useState(false);
 
   useEffect(() => {
-    const currentUser = client?.hasPermission('EDIT_CHANNEL_USER').currentUser() || false;
+    const currentUser = client?.hasPermission('MUTE_CHANNEL').currentUser() || false;
     const currentUserInChannel =
-      client?.hasPermission('EDIT_CHANNEL_USER').channel(subChannelId) || false;
+      client?.hasPermission('MUTE_CHANNEL').channel(subChannelId) || false;
     setIsModerator(currentUser || currentUserInChannel);
   }, [subChannelId]);
 

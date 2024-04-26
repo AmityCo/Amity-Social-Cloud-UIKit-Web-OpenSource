@@ -8,5 +8,5 @@
   width: 8.375rem;
   height: 0.3125rem;
   border-radius: var(--asc-border-radius-full);
-  background-color: var(--asc-color-base-shade1);
+  background-color: var(--live-chat-asc-color-base-shade1, var(--asc-color-base-shade1));
 }

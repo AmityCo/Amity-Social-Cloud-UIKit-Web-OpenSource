@@ -15,9 +15,13 @@ const useMessageFlaggedByMe = (messageId?: string) => {
 
   const flagMessage = async () => {
     if (messageId == null) return;
+
     try {
+      setIsLoading(true);
       setIsFlaggedByMe(true);
       await MessageRepository.flagMessage(messageId);
+
+      setIsLoading(false);
     } catch (_error) {
       setIsFlaggedByMe(false);
     }

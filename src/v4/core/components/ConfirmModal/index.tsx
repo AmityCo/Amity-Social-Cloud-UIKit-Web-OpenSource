@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import Modal from '../Modal';
+import React from 'react';
+import Modal from '~/v4/core/components/Modal';
 import { Button } from '~/v4/core/components/Button';
 import clsx from 'clsx';
 import styles from './styles.module.css';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 const Confirm = ({
   'data-qa-anchor': dataQaAnchor = '',
@@ -41,51 +42,26 @@ const Confirm = ({
     }
     onCancel={onCancel}
   >
-    <div className={styles.modalContent}>{content}</div>
+    <div className={styles.confirmModalContent}>{content}</div>
   </Modal>
 );
 
-let spawnNewConfirm: any; // for modfying ConfirmContainer state outside
+export const ConfirmComponent = () => {
+  const { confirmData, closeConfirm } = useConfirmContext();
 
-// rendered by provider, to allow spawning of confirm from confirm function below
-export const ConfirmContainer = () => {
-  const [confirm, setConfirm] = useState<any>(null);
-  spawnNewConfirm = (confirmData: any) => {
-    setConfirm(confirmData);
-  };
+  if (!confirmData) return null;
 
-  if (!confirm) return null;
-
-  const closeConfirm = () => setConfirm(null);
-
-  const attachCanceling = (fn: any) => () => {
+  const onCancel = () => {
     closeConfirm();
-    fn && fn();
+    confirmData?.onCancel && confirmData.onCancel();
   };
 
-  return (
-    <Confirm
-      {...confirm}
-      onCancel={attachCanceling(confirm.onCancel)}
-      onOk={attachCanceling(confirm.onOk)}
-    />
-  );
+  const onOk = () => {
+    closeConfirm();
+    confirmData?.onOk && confirmData.onOk();
+  };
+
+  return <Confirm {...confirmData} onCancel={onCancel} onOk={onOk} />;
 };
-
-/*
-  Usage:
-    confirm({
-      title: 'Delete post',
-      content:
-        'This post will be permanently deleted. You’ll no longer to see and find this post. Continue?',
-      okText: 'Delete',
-      onOk: onDelete,
-    });
-
-  This interface rely on ConfirmContainer being rendered by UIKITProvider in the react tree
-*/
-export const confirm = (confirmData: any) => spawnNewConfirm({ ...confirmData, type: 'confirm' });
-
-export const info = (data: any) => spawnNewConfirm({ ...data, type: 'info' });
 
 export default Confirm;

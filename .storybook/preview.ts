@@ -1,8 +1,16 @@
 import { Preview } from '@storybook/react';
-import { FluidControl, UiKitDecorator } from './decorators';
+import { FluidControl, UiKitDecorator, UiKitV4Decorator } from './decorators';
 
 const preview: Preview = {
-  decorators: [FluidControl.decorator, UiKitDecorator.decorator],
+  decorators: [
+    FluidControl.decorator,
+    (Story, ctx) => {
+      if (ctx.componentId.toLocaleLowerCase().includes('v4')) {
+        return UiKitV4Decorator.decorator(Story, ctx);
+      }
+      return UiKitDecorator.decorator(Story, ctx);
+    },
+  ],
   parameters: {
     options: {
       storySort: {
@@ -22,6 +30,7 @@ const preview: Preview = {
   globalTypes: {
     ...FluidControl.global,
     ...UiKitDecorator.global,
+    ...UiKitV4Decorator.global,
   },
 };
 

@@ -1,7 +1,6 @@
 import '../../../core/providers/UiKitProvider/inter.css';
 import './index.css';
 import '../../styles/global.css';
-import amityUKitConfig from '../../../../amity-uikit.config.json';
 
 import React, { useEffect, useMemo, useState } from 'react';
 import useUser from '~/core/hooks/useUser';
@@ -12,21 +11,27 @@ import PostRendererProvider from '~/social/providers/PostRendererProvider';
 import NavigationProvider from '~/social/providers/NavigationProvider';
 
 import ConfigProvider from '~/social/providers/ConfigProvider';
-import { ConfirmContainer } from '~/v4/core/components/ConfirmModal';
+import { ConfirmComponent } from '~/v4/core/components/ConfirmModal';
+import { ConfirmComponent as LegacyConfirmComponent } from '~/core/components/Confirm';
 import { NotificationsContainer } from '~/v4/core/components/Notification';
+import { NotificationsContainer as LegacyNotificationsContainer } from '~/core/components/Notification';
 
 import Localization from '~/core/providers/UiKitProvider/Localization';
 
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import buildGlobalTheme from '~/core/providers/UiKitProvider/theme';
-import { Config, CustomizationProvider } from './CustomizationProvider';
+import { defaultConfig, Config, CustomizationProvider } from './CustomizationProvider';
 import { ThemeProvider } from './ThemeProvider';
 import { PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UIStyles } from '~/core/providers/UiKitProvider/styles';
 import AmityUIKitManager from '../AmityUIKitManager';
+import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
+import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
+import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
+import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 
-export type AmityUIKitConfig = typeof amityUKitConfig;
+export type AmityUIKitConfig = Config;
 
 interface AmityUIKitProviderProps {
   apiKey: string;
@@ -130,28 +135,38 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   return (
     <QueryClientProvider client={queryClient}>
       <Localization locale="en">
-        <CustomizationProvider initialConfig={configs as Config}>
+        <CustomizationProvider initialConfig={configs || defaultConfig}>
           <StyledThemeProvider theme={buildGlobalTheme(theme)}>
-            <ThemeProvider initialConfig={configs?.theme}>
+            <ThemeProvider>
               <UIStyles>
                 <SDKContext.Provider value={sdkContextValue}>
                   <SDKConnectorProvider>
-                    <ConfigProvider
-                      config={{
-                        socialCommunityCreationButtonVisible:
-                          socialCommunityCreationButtonVisible || true,
-                      }}
-                    >
-                      <PostRendererProvider config={postRendererConfig}>
-                        <NavigationProvider>
-                          <PageBehaviorProvider pageBehavior={pageBehavior}>
-                            {children}
-                          </PageBehaviorProvider>
-                        </NavigationProvider>
-                      </PostRendererProvider>
-                    </ConfigProvider>
-                    <NotificationsContainer />
-                    <ConfirmContainer />
+                    <NotificationProvider>
+                      <LegacyNotificationProvider>
+                        <ConfirmProvider>
+                          <LegacyConfirmProvider>
+                            <ConfigProvider
+                              config={{
+                                socialCommunityCreationButtonVisible:
+                                  socialCommunityCreationButtonVisible || true,
+                              }}
+                            >
+                              <PostRendererProvider config={postRendererConfig}>
+                                <NavigationProvider>
+                                  <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                    {children}
+                                  </PageBehaviorProvider>
+                                </NavigationProvider>
+                              </PostRendererProvider>
+                            </ConfigProvider>
+                            <NotificationsContainer />
+                            <LegacyNotificationsContainer />
+                            <ConfirmComponent />
+                            <LegacyConfirmComponent />
+                          </LegacyConfirmProvider>
+                        </ConfirmProvider>
+                      </LegacyNotificationProvider>
+                    </NotificationProvider>
                   </SDKConnectorProvider>
                 </SDKContext.Provider>
               </UIStyles>

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import Button, { PrimaryButton } from '~/core/components/Button';
-import { confirm, info } from '~/core/components/Confirm';
 import Modal from '~/core/components/Modal';
-import { notification } from '~/core/components/Notification';
 import { isNonNullable } from '~/helpers/utils';
 import EngagementBar from '~/social/components/EngagementBar';
 import ChildrenContent from '~/social/components/post/ChildrenContent';
@@ -23,6 +21,8 @@ import useCommunity from '~/social/hooks/useCommunity';
 import useSDK from '~/core/hooks/useSDK';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
 import { SubscriptionLevels } from '@amityco/ts-sdk';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 // Number of lines to show in a text post before truncating.
 const MAX_TEXT_LINES_DEFAULT = 8;
@@ -52,6 +52,8 @@ const DefaultPostRenderer = ({
   const [isEditing, setIsEditing] = useState(false);
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
+  const { info, confirm } = useConfirmContext();
+  const notification = useNotifications();
 
   function showHasBeenReviewedMessageIfNeeded(error: unknown) {
     if (error instanceof Error) {
@@ -119,15 +121,16 @@ const DefaultPostRenderer = ({
     }
   };
 
-  const confirmDeletePost = () =>
+  const confirmDeletePost = () => {
     confirm({
       title: formatMessage({ id: 'post.deletePost' }),
       content: formatMessage({
         id: isPostUnderReview ? 'post.confirmPendingDelete' : 'post.confirmDelete',
       }),
       okText: formatMessage({ id: 'delete' }),
-      onOk: handleDeletePost,
+      onOk: () => handleDeletePost?.(post?.postId),
     });
+  };
 
   const pollPost = childrenPosts.find((childPost) => childPost.dataType === 'poll');
 

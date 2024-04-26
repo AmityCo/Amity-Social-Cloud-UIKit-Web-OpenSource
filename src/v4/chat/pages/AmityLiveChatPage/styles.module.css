@@ -15,16 +15,10 @@
   box-shadow: var(--asc-box-shadow-01);
 }
 
-.chatIcon {
-  width: 2rem;
-  height: 2rem;
-  fill: var(--asc-color-white);
-}
-
 .amtiyLivechatPage {
   display: flex;
   flex-direction: column;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--live-chat-asc-color-base-background, var(--asc-color-base-background));
   height: 100%;
   overflow-y: hidden;
 }

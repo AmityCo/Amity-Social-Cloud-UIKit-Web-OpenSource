@@ -6,7 +6,6 @@ import Radio from '~/core/components/Radio';
 
 import AvatarUploader from './AvatarUploader';
 
-import { notification } from '~/core/components/Notification';
 import CategorySelector from './CategorySelector';
 
 import {
@@ -32,6 +31,7 @@ import {
 } from './styles';
 import { EditFormValues, useEditCommunityForm } from './hooks';
 import { CommunityRepository } from '@amityco/ts-sdk';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 interface FormBlockProps {
   title?: React.ReactNode;
@@ -83,6 +83,7 @@ const EditCommunityForm = ({
   const { errors, isValid } = formState;
   const displayName = watch('displayName');
   const description = watch('description');
+  const notification = useNotifications();
 
   const formBodyRef = useRef<HTMLDivElement | null>(null);
 

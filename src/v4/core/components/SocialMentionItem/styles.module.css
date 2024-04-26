@@ -20,7 +20,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--asc-color-white);
+  color: var(--asc-color-base-inverse);
 }
 
 .mentionAllDescription {
