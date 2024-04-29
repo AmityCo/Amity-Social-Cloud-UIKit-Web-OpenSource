@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AmityLiveChatMessageList } from 'v4/chat/components/AmityLiveChatMessageList';
-import AmityLiveChatMessageComposeBar from 'v4/chat/components/AmityLiveChatMessageComposeBar';
+import { AmityLiveChatMessageList } from '~/v4/chat/components/AmityLiveChatMessageList';
+import AmityLiveChatMessageComposeBar from '~/v4/chat/components/AmityLiveChatMessageComposeBar';
 import ReplyMessagePlaceholder from '~/v4/chat/pages/AmityLiveChatPage/ChatContainer/ReplyMessagePlaceholder';
 import useConnectionStates from '~/social/hooks/useConnectionStates';
 import ChatLoadingState from '~/v4/chat/pages/AmityLiveChatPage/ChatContainer/ChatLoadingState';
