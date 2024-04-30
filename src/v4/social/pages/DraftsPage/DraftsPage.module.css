@@ -32,7 +32,10 @@
 }
 
 .mainContainer {
+  width: 100%;
+  height: 100%;
   flex: 1;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,7 +68,133 @@
   padding: 1rem;
   display: flex;
   justify-content: center;
-  bottom: 6rem;
+  bottom: 2rem;
   left: 0;
   right: 0;
+}
+
+.playPauseButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-white);
+  font-size: 1.5rem;
+}
+
+.header {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--color-white);
+  top: 0;
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: var(--color-gray);
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-primary);
+  transition: width 0.1s linear;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--color-black);
+}
+
+.description {
+  font-size: 14px;
+  color: var(--color-gray);
+}
+
+.storyPreview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mainContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--color-white);
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-white);
+  transition: width 0.1s linear;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 14px;
+}
+
+.hyperLinkContainer {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  text-align: center;
+}
+
+.playPauseButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  color: var(--color-white);
+  font-size: 48px;
+  cursor: pointer;
 }
