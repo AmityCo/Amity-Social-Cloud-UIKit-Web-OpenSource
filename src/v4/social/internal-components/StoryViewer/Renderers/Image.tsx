@@ -27,6 +27,7 @@ import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from './Wrappers/Footer';
 import Header from './Wrappers/Header';
 import { PageTypes } from '~/social/constants';
+import useUser from '~/core/hooks/useUser';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -62,6 +63,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     imageSize: 'small',
   });
 
+  const user = useUser();
+
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
     createdAt && creator?.displayName ? (
@@ -74,7 +77,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     );
 
   const isOfficial = community?.isOfficial || false;
-
+  const isCreator = creator?.userId === user?.userId;
   const haveStoryPermission = checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
@@ -247,6 +250,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         totalLikes={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
+        showImpression={isCreator || haveStoryPermission}
       />
     </div>
   );

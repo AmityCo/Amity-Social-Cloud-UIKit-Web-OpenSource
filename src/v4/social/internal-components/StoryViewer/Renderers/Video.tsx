@@ -26,6 +26,7 @@ import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from './Wrappers/Footer';
 import { PageTypes } from '~/social/constants';
+import useUser from '~/core/hooks/useUser';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -37,6 +38,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const { width, height, loader, storyStyles } = config;
   const { client } = useSDK();
+  const user = useUser(client.currentUserId);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -76,6 +78,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     );
 
   const haveStoryPermission = checkStoryPermission(client, community?.communityId);
+  const isCreator = creator?.userId === user?.userId;
 
   const computedStyles = {
     ...styles.storyContent,
@@ -294,6 +297,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         totalLikes={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
+        showImpression={isCreator || haveStoryPermission}
       />
     </RendererContainer>
   );

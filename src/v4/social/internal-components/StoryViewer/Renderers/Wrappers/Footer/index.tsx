@@ -12,6 +12,7 @@ import { CommentButton, ImpressionButton, ReactButton } from '~/v4/social/elemen
 const Footer: React.FC<
   React.PropsWithChildren<{
     storyId: string;
+    showImpression: boolean;
     reach: number | null;
     commentsCount: number;
     totalLikes: number;
@@ -19,9 +20,16 @@ const Footer: React.FC<
     onClickComment: () => void;
     syncState?: Amity.SyncState;
   }>
-> = ({ syncState, reach, commentsCount, totalLikes, isLiked, storyId, onClickComment }) => {
-  const [isActive, setIsActive] = useState(isLiked);
-  const [likeCount, setLikeCount] = useState(totalLikes);
+> = ({
+  syncState,
+  reach,
+  commentsCount,
+  totalLikes,
+  isLiked,
+  storyId,
+  onClickComment,
+  showImpression,
+}) => {
   const { formatMessage } = useIntl();
 
   const handleLike = async () => {
@@ -35,11 +43,6 @@ const Footer: React.FC<
       console.error("Can't toggle like", error);
     }
   };
-
-  useEffect(() => {
-    setIsActive(isLiked);
-    setLikeCount(totalLikes);
-  }, [isLiked, totalLikes]);
 
   if (syncState === 'syncing') {
     return (
@@ -66,16 +69,20 @@ const Footer: React.FC<
 
   return (
     <div className={styles.viewStoryCompostBarContainer}>
-      <div className={styles.viewStoryCompostBarViewIconContainer}>
-        <ImpressionButton pageId="story_page" componentId="*" />
-        {millify(reach || 0)}
+      <div>
+        {showImpression && (
+          <div className={styles.viewStoryCompostBarViewIconContainer}>
+            <ImpressionButton pageId="story_page" componentId="*" />
+            {millify(reach || 0)}
+          </div>
+        )}
       </div>
       <div className={styles.viewStoryCompostBarEngagementContainer}>
         <CommentButton onClick={onClickComment} pageId="story_page" componentId="*">
           {millify(commentsCount) || 0}
         </CommentButton>
         <ReactButton onClick={handleLike} pageId="story_page" isLiked={isLiked}>
-          {millify(likeCount || 0)}
+          {millify(totalLikes || 0)}
         </ReactButton>
       </div>
     </div>
