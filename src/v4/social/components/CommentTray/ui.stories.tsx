@@ -26,6 +26,7 @@ export default {
                 base_shade4_color: '#000000',
                 alert_color: '#000000',
                 background_color: '#FFFFFF',
+                base_inverse_color: '#FFFFFF',
               },
               dark: {
                 primary_color: '#FF0000',
@@ -37,6 +38,7 @@ export default {
                 base_shade4_color: '#000000',
                 alert_color: '#000000',
                 background_color: '#000000',
+                base_inverse_color: '#FFFFFF',
               },
             },
             excludes: [],

@@ -7,7 +7,7 @@
 .tabList {
   display: flex;
   gap: var(--asc-spacing-s1);
-  border-bottom: 1px solid var(--asc-color-base-shade3);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
   padding-bottom: var(--asc-spacing-s1);
 }
 
@@ -15,25 +15,25 @@
   cursor: pointer;
   padding: var(--asc-spacing-xxs2) var(--asc-spacing-s1);
   border-radius: var(--asc-border-radius-sm);
-  background-color: var(--asc-color-base-inverse);
+  background: var(--asc-color-base-background);
   color: var(--asc-color-base-shade6);
 }
 
 .tabItem.active {
   background-color: var(--asc-color-base-shade4);
-  color: var(--asc-color-base-inverse);
+  color: var(--asc-color-primary-default);
 }
 
 .reactionEmoji {
   display: flex;
   align-items: center;
-  gap: var(--asc-spacing-xxs);
+  gap: var(--asc-spacing-s1);
 }
 
 .tabCount {
   font-size: 0.8rem;
-  background-color: var(--asc-color-base-shade4);
-  color: var(--asc-color-base-inverse);
+  background: var(--asc-color-base-background);
+  color: var(--asc-color-base-shade1);
   padding: 0.1rem 0.3rem;
   border-radius: var(--asc-border-radius-sm);
 }
@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   gap: var(--asc-spacing-s1);
-  background-color: var(--asc-color-base-inverse);
+  background: var(--asc-color-base-background);
   padding: var(--asc-spacing-s1);
   border-radius: var(--asc-border-radius-sm);
   width: 100%;
@@ -58,4 +58,5 @@
   display: flex;
   align-items: center;
   gap: var(--asc-spacing-s1);
+  color: var(--asc-color-base-default);
 }

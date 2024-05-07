@@ -1,5 +1,5 @@
 import React from 'react';
-import UiKitApp from '.';
+import UiKitSocialApplication from '.';
 
 export default {
   title: 'V4/Social',
@@ -7,9 +7,9 @@ export default {
 
 export const SDKCommunityAppV4 = {
   render: (props) => {
-    return <UiKitApp {...props} />;
+    return <UiKitSocialApplication {...props} />;
   },
-  name: 'ApplicationV4',
+  name: 'Application',
 
   args: {
     shouldHideExplore: false,

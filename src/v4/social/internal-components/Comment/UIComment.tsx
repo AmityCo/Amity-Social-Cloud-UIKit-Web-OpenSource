@@ -7,33 +7,18 @@ import CommentText from './CommentText';
 import { backgroundImage as UserImage } from '~/icons/User';
 import BanIcon from '~/icons/Ban';
 
-import {
-  AuthorName,
-  Avatar,
-  ButtonContainer,
-  CommentDate,
-  CommentEditContainer,
-  CommentEditTextarea,
-  CommentHeader,
-  CommentInteractionButton,
-  Content,
-  EditedMark,
-  InteractionBar,
-  InteractionWrapper,
-  LikeButton,
-  ReactionIcon,
-  ReactionListButtonContainer,
-  ReactionsListButtonWrapper,
-} from './styles';
-
 import { Mentioned, Metadata } from '~/v4/helpers/utils';
 import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 import { formatTimeAgo } from '~/utils';
 import { EllipsisH, FireIcon, HeartIcon, LikedIcon } from '~/icons';
-import { PrimaryButton, SecondaryButton } from '~/core/components/Button';
 
 import millify from 'millify';
 import { FIRE_REACTION_KEY, LIKE_REACTION_KEY, LOVE_REACTION_KEY } from '~/constants';
+import styles from './UIComment.module.css';
+import InputText from '~/v4/core/components/InputText';
+import { Avatar, Typography } from '~/v4/core/components';
+import Button from '~/v4/core/components/Button/Button';
+import clsx from 'clsx';
 
 interface StyledCommentProps {
   commentId?: string;
@@ -120,28 +105,20 @@ const UIComment = ({
   onClickReactionList,
 }: StyledCommentProps) => {
   return (
-    <>
-      <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
-      <Content>
-        <CommentHeader>
-          <AuthorName>{authorName}</AuthorName>
+    <div className={styles.container}>
+      <Avatar size="small" avatar={authorAvatar || UserImage} />
+      <div className={styles.content}>
+        <div className={styles.commentHeader}>
+          <Typography.CaptionBold>{authorName}</Typography.CaptionBold>
           <Truncate.Atom>
-            <>
-              {isBanned && (
-                <BanIcon
-                  style={{
-                    marginLeft: '0.265rem',
-                    marginTop: '1px',
-                  }}
-                />
-              )}
-            </>
+            <>{isBanned && <BanIcon className={clsx(styles.banIcon)} />}</>
           </Truncate.Atom>
-        </CommentHeader>
+        </div>
 
         {isEditing ? (
-          <CommentEditContainer>
-            <CommentEditTextarea
+          <div className={styles.commentEditContainer}>
+            <InputText
+              className={clsx(styles.commentEditTextarea)}
               data-qa-anchor="edit_comment_component/text_field"
               multiline
               mentionAllowed
@@ -149,86 +126,102 @@ const UIComment = ({
               queryMentionees={queryMentionees}
               onChange={(data) => onChange?.(data)}
             />
-            <ButtonContainer>
-              <SecondaryButton
+            <div className={clsx(styles.buttonContainer)}>
+              <Button
+                variant="secondary"
                 data-qa-anchor="edit_comment_component/cancel_button"
                 onClick={cancelEditing}
               >
                 <FormattedMessage id="cancel" />
-              </SecondaryButton>
-              <PrimaryButton
+              </Button>
+              <Button
+                variant="primary"
                 data-qa-anchor="edit_comment_component/save_button"
                 onClick={() => handleEdit?.(text)}
               >
                 <FormattedMessage id="save" />
-              </PrimaryButton>
-            </ButtonContainer>
-          </CommentEditContainer>
+              </Button>
+            </div>
+          </div>
         ) : (
           <CommentText text={text} mentionees={mentionees} />
         )}
 
         {!isEditing && (canLike || canReply || options.length > 0) && (
-          <InteractionBar>
-            <InteractionWrapper>
-              <CommentDate>
+          <div className={styles.interactionBar}>
+            <div className={styles.interactionWrapper}>
+              <div className={styles.commentDate}>
                 {formatTimeAgo(createdAt)}
                 {(editedAt?.getTime() || 0) - (createdAt?.getTime() || 0) > 0 && (
-                  <EditedMark>
+                  <span className={clsx(styles.editedMark)}>
                     <FormattedMessage id="comment.edited" />
-                  </EditedMark>
+                  </span>
                 )}
-              </CommentDate>
+              </div>
               {canLike && (
-                <LikeButton isLiked={isLiked} onClick={handleLike}>
+                <Button
+                  variant="ghost"
+                  className={clsx(styles.likeButton, isLiked && styles.liked)}
+                  onClick={handleLike}
+                >
                   {!isLiked ? (
                     <FormattedMessage id="post.like" />
                   ) : (
                     <FormattedMessage id="post.liked" />
                   )}
-                </LikeButton>
+                </Button>
               )}
               {canReply && (
-                <CommentInteractionButton
+                <Button
+                  variant="ghost"
+                  className={clsx(styles.commentInteractionButton)}
                   data-qa-anchor="comment-reply-button"
                   onClick={() => onClickReply?.(authorName, referenceType, referenceId, commentId)}
                 >
                   <FormattedMessage id="reply" />
-                </CommentInteractionButton>
+                </Button>
               )}
 
-              <CommentInteractionButton onClick={onClickOverflowMenu}>
+              <Button
+                variant="ghost"
+                className={clsx(styles.commentInteractionButton)}
+                onClick={onClickOverflowMenu}
+              >
                 <EllipsisH width={20} height={20} />
-              </CommentInteractionButton>
-            </InteractionWrapper>
-            <SecondaryButton onClick={onClickReactionList}>
-              {reactionsCount > 0 && (
-                <ReactionListButtonContainer>
+              </Button>
+            </div>
+            {reactionsCount > 0 && (
+              <Button
+                className={clsx(styles.reactionListButton)}
+                variant="ghost"
+                onClick={onClickReactionList}
+              >
+                <div className={styles.reactionListButtonContainer}>
                   {millify(reactionsCount)}
-                  <ReactionsListButtonWrapper>
+                  <div className={styles.reactionsListButtonWrapper}>
                     {reactions[LIKE_REACTION_KEY] > 0 && (
-                      <ReactionIcon>
+                      <div className={clsx(styles.reactionIcon)}>
                         <LikedIcon />
-                      </ReactionIcon>
+                      </div>
                     )}
                     {reactions[LOVE_REACTION_KEY] > 0 && (
-                      <ReactionIcon>
+                      <div className={clsx(styles.reactionIcon)}>
                         <HeartIcon />
-                      </ReactionIcon>
+                      </div>
                     )}
                     {reactions[FIRE_REACTION_KEY] > 0 && (
-                      <ReactionIcon>
+                      <div className={clsx(styles.reactionIcon)}>
                         <FireIcon />
-                      </ReactionIcon>
+                      </div>
                     )}
-                  </ReactionsListButtonWrapper>
-                </ReactionListButtonContainer>
-              )}
-            </SecondaryButton>
-          </InteractionBar>
+                  </div>
+                </div>
+              </Button>
+            )}
+          </div>
         )}
-      </Content>
-    </>
+      </div>
+    </div>
   );
 };
 

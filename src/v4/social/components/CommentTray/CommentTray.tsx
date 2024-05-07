@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-
-import { CommentList } from '../../internal-components/CommentList';
-import { MobileSheetComposeBarContainer } from '../../internal-components/StoryViewer/styles';
-import { StoryCommentComposeBar } from '../../internal-components/StoryCommentComposeBar';
+import { CommentList } from '~/v4/social/internal-components/CommentList';
+import { StoryCommentComposeBar } from '~/v4/social/internal-components/StoryCommentComposeBar';
+import styles from './CommentTray.module.css';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -35,8 +34,8 @@ export const CommentTray = ({
   };
 
   return (
-    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ overflowY: 'auto', flexGrow: 1 }}>
+    <div className={styles.commentTrayContainer}>
+      <div className={styles.commentListContainer}>
         <CommentList
           referenceId={referenceId}
           referenceType={referenceType}
@@ -45,18 +44,17 @@ export const CommentTray = ({
           limit={REPLIES_PER_PAGE}
         />
       </div>
-      <MobileSheetComposeBarContainer>
+      <div className={styles.mobileSheetComposeBarContainer}>
         <StoryCommentComposeBar
           communityId={community.communityId}
           referenceId={referenceId}
-          referenceType={referenceType}
           isReplying={isReplying}
           replyTo={replyTo}
           isJoined={community.isJoined}
           shouldAllowCreation={shouldAllowCreation}
           onCancelReply={onCancelReply}
         />
-      </MobileSheetComposeBarContainer>
+      </div>
     </div>
   );
 };

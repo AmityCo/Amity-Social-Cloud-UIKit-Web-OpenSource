@@ -6,7 +6,7 @@
 
   background: var(--asc-color-base-shade4);
   border: 1px solid var(--asc-color-base-shade4);
-  border-radius: var(--asc-border-radius-sm);
+  border-radius: 1.25rem;
   transition: background 0.2s, border-color 0.2s;
 
   &.invalid {

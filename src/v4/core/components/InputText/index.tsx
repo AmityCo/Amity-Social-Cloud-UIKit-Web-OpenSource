@@ -1,5 +1,4 @@
 import React, { forwardRef } from 'react';
-
 import InsideInputText from './InsideInputText';
 import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 

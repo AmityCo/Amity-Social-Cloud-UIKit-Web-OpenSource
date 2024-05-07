@@ -1,0 +1,100 @@
+.avatarContainer {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade3);
+}
+
+.avatarContainer.visible .img {
+  opacity: 1;
+}
+
+.avatarContainer.clickable:hover {
+  cursor: pointer;
+}
+
+.avatarContainer.small {
+  width: 2rem;
+  height: 2rem;
+}
+
+.avatarContainer.medium {
+  width: 3rem;
+  height: 3rem;
+}
+
+.avatarContainer.large {
+  width: 4rem;
+  height: 4rem;
+}
+
+.skeleton {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.skeleton-small {
+  width: 2rem;
+  height: 2rem;
+}
+
+.skeleton-medium {
+  width: 3rem;
+  height: 3rem;
+}
+
+.skeleton-large {
+  width: 4rem;
+  height: 4rem;
+}
+
+.avatarOverlay {
+  position: absolute;
+  z-index: 2;
+  opacity: 0.5;
+  background-color: #000000;
+  width: 100%;
+  height: 100%;
+}
+
+.avatarOverlay-small {
+  width: 2rem;
+  height: 2rem;
+}
+
+.avatarOverlay-medium {
+  width: 3rem;
+  height: 3rem;
+}
+
+.avatarOverlay-large {
+  width: 4rem;
+  height: 4rem;
+}
+
+.img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.img-small {
+  height: 2rem;
+  width: 2rem;
+}
+
+.img-medium {
+  height: 3rem;
+  width: 3rem;
+}
+
+.img-large {
+  height: 4rem;
+  width: 4rem;
+}

@@ -180,7 +180,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
               icon: (
                 <Trash2Icon
                   fill={getComputedStyle(document.documentElement).getPropertyValue(
-                    '--asc-color-black',
+                    '--asc-color-base-default',
                   )}
                 />
               ),

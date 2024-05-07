@@ -11,3 +11,4 @@ export { ReactButton } from './ReactButton';
 export { SaveButton } from './SaveButton';
 export { ShareStoryButton } from './ShareStoryButton/ShareStoryButton';
 export { SpeakerButton } from './SpeakerButton';
+export { HyperLink } from './HyperLink';
