@@ -245,6 +245,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
           </div>
         ) : mediaType?.type === 'video' ? (
           <BaseVideoPreview
+            className={styles.videoPreview}
             src={file ? URL.createObjectURL(file) : mediaType.url}
             mediaFit="contain"
             autoPlay
