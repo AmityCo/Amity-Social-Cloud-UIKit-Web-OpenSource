@@ -11,6 +11,22 @@
   cursor: pointer;
 }
 
+.hyperLinkContainer {
+  position: absolute;
+  bottom: 6rem;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--asc-spacing-s2) var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-m1);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.hyperLinkContainer a {
+  text-decoration: none;
+}
+
 .rendererContainer {
   position: relative;
   width: 100%;
@@ -53,31 +69,31 @@
 }
 
 .playStoryButton {
-  color: #ffffff;
+  color: var(--asc-color-white);
   cursor: pointer;
 }
 
 .pauseStoryButton {
-  color: #ffffff;
+  color: var(--asc-color-white);
   cursor: pointer;
 }
 
 .closeButton {
-  color: #ffffff;
+  color: var(--asc-color-white);
   width: 1.25rem;
   height: 1.25rem;
   cursor: pointer;
 }
 
 .verifiedBadge {
-  color: #ffffff;
+  color: var(--asc-color-white);
 }
 
 .dotsButton {
   width: 1.5rem;
   height: 1.5rem;
   cursor: pointer;
-  color: #ffffff;
+  color: var(--asc-color-white);
 }
 
 .viewStoryInfoContainer {
@@ -94,8 +110,8 @@
   justify-content: space-between;
   align-items: center;
   height: 3.5rem;
-  padding: 0.75rem;
-  background-color: #000;
+  padding: var(--asc-spacing-s2);
+  background-color: var(--asc-color-black);
   bottom: 0;
 }
 
@@ -103,26 +119,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #fff;
-  gap: 0.25rem;
+  color: var(--asc-color-white);
+  gap: var(--asc-spacing-xxs2);
 }
 
 .viewStoryCompostBarEngagementContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #fff;
-  gap: 0.75rem;
+  color: var(--asc-color-white);
+  gap: var(--asc-spacing-s2);
 }
 
 .viewStoryCompostBarEngagementIconContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #fff;
-  gap: 0.25rem;
+  color: var(--asc-color-white);
+  gap: var(--asc-spacing-xxs2);
   border-radius: 50%;
-  padding: 0.5rem 0.625rem;
+  padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   background-color: #292b32;
 }
 
@@ -132,7 +148,7 @@
 
 .header {
   height: 5rem;
-  padding: 0.75rem 1rem 0.625rem 1rem;
+  padding: var(--asc-spacing-s2) var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-m1);
 }
 
 .viewStoryContainer {
@@ -141,7 +157,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: black;
+  background-color: var(--asc-color-black);
 }
 
 .viewStoryHeaderContainer {
@@ -152,8 +168,8 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  padding: 1.5rem 1rem 0.625rem 1rem;
-  gap: 0.5rem;
+  padding: var(--asc-spacing-m3) var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-m1);
+  gap: var(--asc-spacing-s1);
 }
 
 .avatarContainer {
@@ -176,7 +192,7 @@
 
 .viewStoryHeaderListActionsContainer {
   display: flex;
-  gap: 1.25rem;
+  gap: var(--asc-spacing-m2);
   justify-content: flex-end;
   align-items: center;
 }
@@ -185,21 +201,21 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  gap: 0.75rem;
+  gap: var(--asc-spacing-s2);
   align-items: center;
 }
 
 .viewStoryHeading {
   cursor: pointer;
   display: flex;
-  gap: 0.25rem;
-  color: #fff;
-  font-size: 0.938rem;
+  gap: var(--asc-spacing-xxs2);
+  color: var(--asc-color-white);
+  font-size: var(--asc-text-font-size-sm);
   font-style: normal;
-  font-weight: 600;
-  line-height: 1.25rem;
+  font-weight: var(--asc-text-font-weight-bold);
+  line-height: var(--asc-line-height-md);
   letter-spacing: -0.24px;
-  margin-right: 0.25rem;
+  margin-right: var(--asc-spacing-xxs2);
   align-items: center;
 }
 
@@ -210,13 +226,13 @@
 
 .viewStorySubHeading {
   display: inline-flex;
-  gap: 0.25rem;
-  margin-bottom: 0.25rem;
-  color: #fff;
-  font-size: 0.813rem;
+  gap: var(--asc-spacing-xxs2);
+  margin-bottom: var(--asc-spacing-xxs2);
+  color: var(--asc-color-white);
+  font-size: var(--asc-text-font-size-xs);
   font-style: normal;
-  font-weight: 400;
-  line-height: 1.25rem;
+  font-weight: var(--asc-text-font-weight-normal);
+  line-height: var(--asc-line-height-md);
   letter-spacing: -0.1px;
 }
 

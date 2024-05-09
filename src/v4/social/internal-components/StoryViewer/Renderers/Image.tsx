@@ -251,7 +251,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
       </BottomSheet>
 
       {story.items?.[0]?.data?.url && (
-        <div>
+        <div className={styles.hyperLinkContainer}>
           <HyperLink
             href={
               story.items[0].data.url.startsWith('http')
