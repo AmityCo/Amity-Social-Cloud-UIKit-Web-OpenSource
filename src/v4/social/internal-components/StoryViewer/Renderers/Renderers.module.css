@@ -250,7 +250,8 @@
 }
 
 .actionButton {
-  display: inline-flex;
+  width: 100%;
+  display: flex;
   justify-content: flex-start;
   text-align: left;
   gap: var(--asc-spacing-s1);

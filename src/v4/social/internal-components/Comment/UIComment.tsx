@@ -1,11 +1,10 @@
 import React from 'react';
-import Truncate from 'react-truncate-markup';
+
 import { FormattedMessage } from 'react-intl';
 
 import CommentText from './CommentText';
 
 import { backgroundImage as UserImage } from '~/icons/User';
-import BanIcon from '~/icons/Ban';
 
 import { Mentioned, Metadata } from '~/v4/helpers/utils';
 import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
@@ -110,9 +109,6 @@ const UIComment = ({
       <div className={styles.content}>
         <div className={styles.commentHeader}>
           <Typography.CaptionBold>{authorName}</Typography.CaptionBold>
-          <Truncate.Atom>
-            <>{isBanned && <BanIcon className={clsx(styles.banIcon)} />}</>
-          </Truncate.Atom>
         </div>
 
         {isEditing ? (
@@ -144,7 +140,9 @@ const UIComment = ({
             </div>
           </div>
         ) : (
-          <CommentText text={text} mentionees={mentionees} />
+          <div>
+            <CommentText text={text} mentionees={mentionees} />
+          </div>
         )}
 
         {!isEditing && (canLike || canReply || options.length > 0) && (

@@ -19,10 +19,17 @@ interface BottomSheetProps {
 export const BottomSheet = ({ children, headerTitle, ...props }: BottomSheetProps) => {
   return (
     <Sheet {...props}>
-      <Sheet.Container className={styles['react-modal-sheet-container']}>
+      <Sheet.Container
+        className={styles['react-modal-sheet-container']}
+        style={{
+          backgroundColor: 'var(--asc-color-base-background)',
+        }}
+      >
         <Sheet.Header
           style={{
-            background: 'var(--asc-color-base-background)',
+            borderTopLeftRadius: '1.25rem',
+            borderTopRightRadius: '1.25rem',
+            backgroundColor: 'var(--asc-color-base-background)',
           }}
         />
         {headerTitle && (
@@ -30,7 +37,9 @@ export const BottomSheet = ({ children, headerTitle, ...props }: BottomSheetProp
             <Typography.Title>{headerTitle}</Typography.Title>
           </Sheet.Header>
         )}
-        <Sheet.Content className={styles['react-modal-sheet-content']}>{children}</Sheet.Content>
+        <Sheet.Content className={styles['react-modal-sheet-content']}>
+          <Sheet.Scroller>{children}</Sheet.Scroller>
+        </Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop className={styles['react-modal-sheet-backdrop']} onTap={props.onClose} />
     </Sheet>

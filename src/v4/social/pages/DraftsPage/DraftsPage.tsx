@@ -227,8 +227,8 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             style={{
               background: `linear-gradient(
               180deg,
-              ${colors?.length > 0 ? colors[0].hex : 'var(--color-black)'} 0%,
-              ${colors?.length > 0 ? colors[colors?.length - 1].hex : 'var(--color-black)'} 100%
+              ${colors?.length > 0 ? colors[0].hex : 'var(--asc-color-black)'} 0%,
+              ${colors?.length > 0 ? colors[colors?.length - 1].hex : 'var(--asc-color-black)'} 100%
             )`,
             }}
           >

@@ -5,9 +5,6 @@ which have higher specificity.
 */
 
 .react-modal-sheet-container {
-  border-top-left-radius: var(--asc-spacing-m2) !important;
-  border-top-right-radius: var(--asc-spacing-m2) !important;
-  background-color: var(--asc-color-base-background);
   color: var(--asc-color-base-default);
 }
 
@@ -16,12 +13,15 @@ which have higher specificity.
 }
 
 .react-modal-sheet-header {
+  display: flex;
+  height: 2.5rem;
+  padding-bottom: 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
   background-color: var(--asc-color-base-background);
   color: var(--asc-color-base-default);
-  text-align: center;
-  border-bottom: 1px solid var(--asc-color-base-shade4);
-  padding-bottom: 0.5rem;
-  background: var(--asc-color-base-background);
 }
 
 .react-modal-sheet-content {

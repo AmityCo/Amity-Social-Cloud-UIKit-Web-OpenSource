@@ -7,9 +7,6 @@
   padding: 0.75rem;
   display: inline-block;
   white-space: pre-wrap;
-  font-size: var(--asc-text-font-size-md);
-  font-weight: var(--asc-text-font-weight-normal);
-  line-height: var(--asc-line-height-lg);
 }
 
 .readMoreButton {

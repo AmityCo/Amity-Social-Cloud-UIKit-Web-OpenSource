@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { useIntl } from 'react-intl';
 import useCommentsCollection from '~/social/hooks/collections/useCommentsCollection';
 
@@ -27,7 +27,6 @@ export const CommentList = ({
   readonly = false,
   isExpanded = true,
   onClickReply,
-  style,
   shouldAllowInteraction,
 }: CommentListProps) => {
   const { comments, hasMore, loadMore } = useCommentsCollection({
@@ -78,7 +77,6 @@ export const CommentList = ({
               commentId={comment.commentId}
               readonly={readonly}
               onClickReply={() => onClickReply?.(comment as Amity.Comment)}
-              style={style}
               shouldAllowInteraction={shouldAllowInteraction}
             />
           );

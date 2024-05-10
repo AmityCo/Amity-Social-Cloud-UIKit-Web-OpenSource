@@ -264,7 +264,9 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
   return (
     <>
       {isReplyComment ? (
-        <div data-qa-anchor="reply">{renderedComment}</div>
+        <div className={styles.replyContainer} data-qa-anchor="reply">
+          {renderedComment}
+        </div>
       ) : (
         <div>
           <div data-qa-anchor="comment">{renderedComment}</div>

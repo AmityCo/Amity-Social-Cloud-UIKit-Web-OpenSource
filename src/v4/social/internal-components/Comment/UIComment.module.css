@@ -8,11 +8,6 @@
   width: 100%;
 }
 
-.banIcon {
-  margin-left: 0.265rem;
-  margin-top: 1px;
-}
-
 .commentDate {
   color: var(--asc-color-base-shade2);
 }
@@ -47,13 +42,11 @@
 }
 
 .interactionBar {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 0.5rem;
-  align-items: center;
-  padding: 0.125rem 0;
+  padding: 0.25rem 1rem 0.75rem 0rem;
+  align-items: flex-start;
+  gap: 12.9375rem;
+  align-self: stretch;
 }
 
 .commentEditContainer {
@@ -136,13 +129,15 @@
 }
 
 .content {
-  width: 100%;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .commentHeader {
-  display: flex;
-  justify-content: space-between;
+  display: inline-flex;
+  justify-content: flex-start;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.125rem;
   color: var(--asc-color-base-default);
 }
