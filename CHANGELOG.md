@@ -6,12 +6,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-- path ([6b130f8](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/6b130f840311ea6723061400a9f16db37444abe0))
-
-## 4.0.0-beta.3 (2024-04-26)
-
-### Bug Fixes
-
 - cherry-pick bugs from v3 ([7b01a95](https://github.com/EkoCommunications/AmityUiKitWeb/commit/7b01a956db5a7c019164ee4ffaf781a55c588714))
 
 ## 4.0.0-beta.2 (2024-04-12)

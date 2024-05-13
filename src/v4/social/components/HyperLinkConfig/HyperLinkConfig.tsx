@@ -3,21 +3,15 @@ import { useIntl } from 'react-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { SecondaryButton } from '~/core/components/Button';
+import clsx from 'clsx';
 
 import useSDK from '~/core/hooks/useSDK';
 import { BottomSheet, Typography } from '~/v4/core/components';
-import {
-  MobileSheet,
-  MobileSheetContainer,
-  MobileSheetContent,
-  MobileSheetHeader,
-} from '~/v4/core/components/BottomSheet/styles';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Trash2Icon } from '~/icons';
 import styles from './HyperLinkConfig.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import Button from '~/v4/core/components/Button/Button';
+import { Button } from '~/v4/core/components/Button';
 
 interface HyperLinkConfigProps {
   pageId: '*';
@@ -105,123 +99,102 @@ export const HyperLinkConfig = ({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <MobileSheetContainer>
-        <MobileSheet.Header
-          style={{
-            backgroundColor: componentTheme?.primary_color,
-            color: componentTheme?.secondary_color,
-            borderTopLeftRadius: '0.5rem',
-            borderTopRightRadius: '0.5rem',
-          }}
-        />
-        <MobileSheetHeader
-          style={{
-            backgroundColor: componentTheme?.primary_color,
-            color: componentTheme?.secondary_color,
-          }}
+      <div className={styles.headerContainer}>
+        <Button
+          className={clsx(styles.styledSecondaryButton)}
+          variant="secondary"
+          onClick={onClose}
         >
-          <div className={styles.headerContainer}>
-            <SecondaryButton onClick={onClose}>
-              {cancelButtonConfig?.cancel_button_text ||
-                formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.cancel' })}
-              {cancelButtonConfig?.cancel_icon && (
-                <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
-              )}
-            </SecondaryButton>
+          {cancelButtonConfig?.cancel_button_text ||
+            formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.cancel' })}
+          {cancelButtonConfig?.cancel_icon && (
+            <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
+          )}
+        </Button>
+        <Typography.Title>
+          {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
+        </Typography.Title>
+        <Button
+          variant="secondary"
+          form="asc-story-hyperlink-form"
+          type="submit"
+          className={clsx(styles.styledSecondaryButton)}
+        >
+          {doneButtonConfig?.done_button_text ||
+            formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.submit' })}
+          {doneButtonConfig?.done_icon && (
+            <img src={doneButtonConfig.done_icon} width={16} height={16} />
+          )}
+        </Button>
+      </div>
+      <div className={styles.divider} />
+      <div className={styles.hyperlinkFormContainer}>
+        <form
+          id="asc-story-hyperlink-form"
+          onSubmit={handleSubmit(onSubmitForm)}
+          className={styles.form}
+        >
+          <div className={styles.inputContainer}>
             <Typography.Title>
-              {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
+              <label
+                htmlFor="asc-uikit-hyperlink-input-url"
+                className={clsx(styles.label, styles.required)}
+              >
+                {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
+              </label>
             </Typography.Title>
-            <SecondaryButton
-              style={{
-                backgroundColor:
-                  doneButtonConfig?.background_color || componentTheme?.primary_color,
-                color: componentTheme?.secondary_color,
-              }}
-              form="asc-story-hyperlink-form"
-              type="submit"
-              className={styles.styledSecondaryButton}
-            >
-              {doneButtonConfig?.done_button_text ||
-                formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.submit' })}
-              {doneButtonConfig?.done_icon && (
-                <img src={doneButtonConfig.done_icon} width={16} height={16} />
-              )}
-            </SecondaryButton>
-          </div>
-        </MobileSheetHeader>
-        <MobileSheetContent
-          style={{
-            backgroundColor: componentTheme?.primary_color,
-            color: componentTheme?.secondary_color,
-          }}
-        >
-          <div className={styles.hyperlinkFormContainer}>
-            <form
-              id="asc-story-hyperlink-form"
-              onSubmit={handleSubmit(onSubmitForm)}
-              className={styles.form}
-            >
-              <div className={styles.inputContainer}>
-                <Typography.Title>
-                  <label
-                    htmlFor="asc-uikit-hyperlink-input-url"
-                    className={`${styles.label} ${styles.required}`}
-                  >
-                    {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
-                  </label>
-                </Typography.Title>
 
-                <input
-                  id="asc-uikit-hyperlink-input-url"
-                  placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}
-                  className={`${styles.input} ${errors?.url ? styles.hasError : ''}`}
-                  {...register('url')}
-                />
-                {errors?.url && <span className={styles.errorText}>{errors?.url?.message}</span>}
-              </div>
-              <div className={styles.inputContainer}>
-                <div className={styles.labelContainer}>
-                  <Typography.Title>
-                    <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
-                      {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
-                    </label>
-                  </Typography.Title>
-                  <div className={styles.characterCount}>
-                    {watch('customText')?.length} / {MAX_LENGTH}
-                  </div>
-                </div>
-                <input
-                  id="asc-uikit-hyperlink-input-link-text"
-                  placeholder={formatMessage({
-                    id: 'storyCreation.hyperlink.form.linkTextPlaceholder',
-                  })}
-                  className={`${styles.input} ${errors?.customText ? styles.hasError : ''}`}
-                  {...register('customText')}
-                />
-                {errors?.customText && (
-                  <span className={styles.errorText}>{errors?.customText?.message}</span>
-                )}
-                <label className={styles.description}>
-                  {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextDescription' })}
-                </label>
-              </div>
-              {isHaveHyperLink && (
-                <div className={styles.inputContainer}>
-                  <Button
-                    variant="secondary"
-                    onClick={discardHyperlink}
-                    className={styles.removeLinkButton}
-                  >
-                    <Trash2Icon className={styles.removeIcon} />
-                    {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
-                  </Button>
-                  <div className={styles.divider} />
-                </div>
-              )}
-            </form>
+            <input
+              id="asc-uikit-hyperlink-input-url"
+              placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}
+              className={clsx(styles.input, errors?.url && styles.hasError)}
+              {...register('url')}
+            />
+            {errors?.url && <span className={styles.errorText}>{errors?.url?.message}</span>}
           </div>
-        </MobileSheetContent>
-      </MobileSheetContainer>
+          <div className={styles.inputContainer}>
+            <div className={styles.labelContainer}>
+              <Typography.Title>
+                <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
+                  {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
+                </label>
+              </Typography.Title>
+              <div className={styles.characterCount}>
+                {watch('customText')?.length || 0} / {MAX_LENGTH}
+              </div>
+            </div>
+            <input
+              id="asc-uikit-hyperlink-input-link-text"
+              placeholder={formatMessage({
+                id: 'storyCreation.hyperlink.form.linkTextPlaceholder',
+              })}
+              className={clsx(styles.input, errors?.customText && styles.hasError)}
+              {...register('customText')}
+            />
+            {errors?.customText && (
+              <span className={styles.errorText}>{errors?.customText?.message}</span>
+            )}
+            <Typography.Caption>
+              <label className={styles.description}>
+                {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextDescription' })}
+              </label>
+            </Typography.Caption>
+          </div>
+          {isHaveHyperLink && (
+            <div className={styles.inputContainer}>
+              <Button
+                variant="secondary"
+                onClick={discardHyperlink}
+                className={clsx(styles.removeLinkButton)}
+              >
+                <Trash2Icon className={styles.removeIcon} />
+                {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
+              </Button>
+              <div className={styles.divider} />
+            </div>
+          )}
+        </form>
+      </div>
     </BottomSheet>
   );
 };

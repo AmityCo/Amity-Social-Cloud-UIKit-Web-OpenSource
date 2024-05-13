@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyledBadge } from './styles';
+import styles from './Badge.module.css';
 import { BadgeProps } from './types';
 
 export const Badge = ({ icon, communityRole }: BadgeProps) => {
   return (
-    <StyledBadge>
+    <div className={styles.badge}>
       {icon}
       {communityRole}
-    </StyledBadge>
+    </div>
   );
 };

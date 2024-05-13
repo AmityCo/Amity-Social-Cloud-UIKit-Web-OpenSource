@@ -11,17 +11,22 @@ import { SubmitHandler } from 'react-hook-form';
 import Truncate from 'react-truncate-markup';
 
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { AspectRatioButton, BackButton, HyperLinkButton, ShareStoryButton } from '../../elements';
-import { useStoryContext } from '../../providers/StoryProvider';
-import { StoryVideoPreview } from './styles';
+import {
+  AspectRatioButton,
+  BackButton,
+  HyperLinkButton,
+  ShareStoryButton,
+  HyperLink,
+} from '~/v4/social/elements';
+import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { StoryRepository } from '@amityco/ts-sdk';
 
-import { HyperLink } from '../../elements/HyperLink';
-import { HyperLinkConfig } from '../../components';
+import { HyperLinkConfig } from '~/v4/social/components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { PageTypes } from '~/social/constants';
+import { BaseVideoPreview } from '../../internal-components/VideoPreview';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -222,8 +227,8 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             style={{
               background: `linear-gradient(
               180deg,
-              ${colors?.length > 0 ? colors[0].hex : 'var(--color-black)'} 0%,
-              ${colors?.length > 0 ? colors[colors?.length - 1].hex : 'var(--color-black)'} 100%
+              ${colors?.length > 0 ? colors[0].hex : 'var(--asc-color-black)'} 0%,
+              ${colors?.length > 0 ? colors[colors?.length - 1].hex : 'var(--asc-color-black)'} 100%
             )`,
             }}
           >
@@ -239,7 +244,8 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             />
           </div>
         ) : mediaType?.type === 'video' ? (
-          <StoryVideoPreview
+          <BaseVideoPreview
+            className={styles.videoPreview}
             src={file ? URL.createObjectURL(file) : mediaType.url}
             mediaFit="contain"
             autoPlay

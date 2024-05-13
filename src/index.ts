@@ -40,6 +40,9 @@ export type { AmityMessageActionType };
 
 export { AmityLiveChatPage } from '~/v4/chat/pages';
 
+// v4 internal use only (Amity Console)
+export { StoryPreview as AmityStoryPreview } from './v4/social/internal-components/StoryPreview';
+
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';
 // import AmityCommentLikeButton from './components/CommentLikeButton';

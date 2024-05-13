@@ -11,21 +11,19 @@ import useSDK from '~/core/hooks/useSDK';
 import { LIKE_REACTION_KEY } from '~/constants';
 import Truncate from 'react-truncate-markup';
 import { CustomRenderer } from './types';
-import { HyperLinkButtonContainer, LoadingOverlay, RendererContainer, StoryVideo } from './styles';
+import { LoadingOverlay, StoryVideo } from './styles';
 import { SpeakerButton } from '~/v4/social/elements';
 import Header from './Wrappers/Header';
-import { BottomSheet } from '~/v4/core/components';
-import { MobileSheet } from '~/v4/core/components/BottomSheet/styles';
-import {
-  MobileActionSheetContent,
-  MobileSheetHeader,
-  StoryActionItem,
-  StoryActionItemText,
-} from '../styles';
+import { BottomSheet, Button, Typography } from '~/v4/core/components';
+
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from './Wrappers/Footer';
 import { PageTypes } from '~/social/constants';
+import { motion, PanInfo, useAnimationControls } from 'framer-motion';
+
+import rendererStyles from './Renderers.module.css';
+import useUser from '~/core/hooks/useUser';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -37,6 +35,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const { width, height, loader, storyStyles } = config;
   const { client } = useSDK();
+  const user = useUser(client?.userId);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -76,13 +75,15 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     );
 
   const haveStoryPermission = checkStoryPermission(client, community?.communityId);
+  const isCreator = creator?.userId === user?.userId;
 
   const computedStyles = {
-    ...styles.storyContent,
+    ...storyContentStyles,
     ...(storyStyles || {}),
   };
 
   const vid = useRef<HTMLVideoElement>(null);
+  const controls = useAnimationControls();
 
   const onWaiting = () => {
     action('pause', true);
@@ -125,6 +126,37 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   const targetRootId = 'asc-uikit-stories-viewer';
 
+  const handleSwipeDown = () => {
+    controls
+      .start({
+        y: '100%',
+        transition: { duration: 0.3, ease: 'easeOut' },
+      })
+      .then(() => {
+        if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
+          onChangePage(PageTypes.NewsFeed);
+        } else {
+          onClickCommunity(community?.communityId as string);
+        }
+      });
+  };
+
+  const handleDragStart = () => {
+    setIsPaused(true);
+    action('pause', true);
+  };
+
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (info.offset.y > 100) {
+      handleSwipeDown();
+    } else {
+      controls.start({ y: 0, transition: { duration: 0.3, ease: 'easeOut' } }).then(() => {
+        setIsPaused(false);
+        action('play', true);
+      });
+    }
+  };
+
   useEffect(() => {
     if (vid.current) {
       if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
@@ -159,7 +191,16 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   }, []);
 
   return (
-    <RendererContainer>
+    <motion.div
+      className={rendererStyles.rendererContainer}
+      animate={controls}
+      drag="y"
+      dragConstraints={{ top: 0, bottom: 0 }}
+      dragElastic={0.7}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
+    >
       <SpeakerButton
         pageId="story_page"
         componentId="*"
@@ -217,25 +258,21 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
         detent="content-height"
       >
-        <MobileSheet.Container>
-          <MobileSheet.Header />
-          <MobileActionSheetContent>
-            {actions?.map((bottomSheetAction) => (
-              <StoryActionItem
-                onClick={() => {
-                  bottomSheetAction.action();
-                  closeBottomSheet();
-                }}
-              >
-                {bottomSheetAction.icon}
-                <StoryActionItemText>
-                  {formatMessage({ id: bottomSheetAction.name })}
-                </StoryActionItemText>
-              </StoryActionItem>
-            ))}
-          </MobileActionSheetContent>
-        </MobileSheet.Container>
-        <MobileSheet.Backdrop onTap={closeBottomSheet} />
+        {actions?.map((bottomSheetAction) => (
+          <Button
+            className={rendererStyles.actionButton}
+            onClick={() => {
+              bottomSheetAction.action();
+              closeBottomSheet();
+            }}
+            variant="secondary"
+          >
+            {bottomSheetAction?.icon && bottomSheetAction.icon}
+            <Typography.BodyBold>
+              {formatMessage({ id: bottomSheetAction.name })}
+            </Typography.BodyBold>
+          </Button>
+        ))}
       </BottomSheet>
       <BottomSheet
         rootId={targetRootId}
@@ -244,32 +281,16 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
         detent="full-height"
       >
-        <MobileSheet.Container>
-          <MobileSheet.Header
-            style={{
-              borderTopLeftRadius: '1rem',
-              borderTopRightRadius: '1rem',
-              borderBottom: 'none',
-            }}
-          />
-          <MobileSheetHeader>
-            <FormattedMessage id="storyViewer.commentSheet.title" />
-          </MobileSheetHeader>
-          <MobileSheet.Content>
-            <MobileSheet.Scroller>
-              <CommentTray
-                referenceId={storyId}
-                referenceType={'story'}
-                community={community as Amity.Community}
-                shouldAllowCreation={community?.allowCommentInStory}
-                shouldAllowInteraction={isJoined}
-              />
-            </MobileSheet.Scroller>
-          </MobileSheet.Content>
-        </MobileSheet.Container>
+        <CommentTray
+          referenceId={storyId}
+          referenceType={'story'}
+          community={community as Amity.Community}
+          shouldAllowCreation={community?.allowCommentInStory}
+          shouldAllowInteraction={isJoined}
+        />
       </BottomSheet>
       {story.items?.[0]?.data?.url && (
-        <HyperLinkButtonContainer>
+        <div className={rendererStyles.hyperLinkContainer}>
           <HyperLink
             href={
               story.items[0].data.url.startsWith('http')
@@ -284,7 +305,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
               <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
             </Truncate>
           </HyperLink>
-        </HyperLinkButtonContainer>
+        </div>
       )}
       <Footer
         storyId={storyId}
@@ -294,24 +315,24 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         totalLikes={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
+        showImpression={isCreator || haveStoryPermission}
       />
-    </RendererContainer>
+    </motion.div>
   );
 };
 
-const styles = {
-  storyContent: {
-    width: 'auto',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    margin: 'auto',
-    position: 'relative' as const,
-  },
-  videoContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const storyContentStyles = {
+  width: 'auto',
+  maxWidth: '100%',
+  maxHeight: '100%',
+  margin: 'auto',
+  position: 'relative' as const,
+};
+
+const videoContainerStyles = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
 export const tester: Tester = (story) => {

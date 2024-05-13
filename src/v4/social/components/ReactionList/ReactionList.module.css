@@ -6,56 +6,67 @@
 
 .tabList {
   display: flex;
-  gap: var(--asc-spacing-s1);
-  border-bottom: 1px solid var(--asc-color-base-shade3);
-  padding-bottom: var(--asc-spacing-s1);
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid var(--asc-color-neutral-shade2);
+  margin-bottom: 1rem;
 }
 
 .tabItem {
   cursor: pointer;
-  padding: var(--asc-spacing-xxs2) var(--asc-spacing-s1);
-  border-radius: var(--asc-border-radius-sm);
-  background-color: var(--asc-color-base-inverse);
-  color: var(--asc-color-base-shade6);
+  padding: 0.5rem 1rem;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.tabItem::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: transparent;
+  transition: background-color 0.3s ease;
 }
 
 .tabItem.active {
-  background-color: var(--asc-color-base-shade4);
-  color: var(--asc-color-base-inverse);
+  color: var(--asc-color-primary-default);
+}
+
+.tabItem.active::after {
+  background-color: var(--asc-color-primary-default);
 }
 
 .reactionEmoji {
   display: flex;
   align-items: center;
-  gap: var(--asc-spacing-xxs);
+  gap: 0.5rem;
 }
 
 .tabCount {
-  font-size: 0.8rem;
-  background-color: var(--asc-color-base-shade4);
-  color: var(--asc-color-base-inverse);
-  padding: 0.1rem 0.3rem;
-  border-radius: var(--asc-border-radius-sm);
+  color: var(--asc-color-base-shade2);
+  transition: color 0.3s ease;
+}
+
+.tabItem.active .tabCount {
+  color: var(--asc-color-primary-default);
 }
 
 .userList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--asc-spacing-s1);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
 }
 
 .userItem {
   display: flex;
   align-items: center;
-  gap: var(--asc-spacing-s1);
-  background-color: var(--asc-color-base-inverse);
-  padding: var(--asc-spacing-s1);
-  border-radius: var(--asc-border-radius-sm);
-  width: 100%;
+  gap: 0.5rem;
 }
 
 .userDetailsContainer {
   display: flex;
   align-items: center;
-  gap: var(--asc-spacing-s1);
+  gap: 0.5rem;
 }
