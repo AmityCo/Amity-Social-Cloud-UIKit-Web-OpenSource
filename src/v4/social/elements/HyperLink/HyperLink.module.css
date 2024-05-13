@@ -1,0 +1,21 @@
+.hyperlink {
+  border: 1px solid var(--asc-color-base-shade4);
+  color: var(--asc-color-secondary-default);
+  background: rgba(255, 255, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  padding: var(--asc-spacing-s2) var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-s2);
+  border-radius: var(--asc-border-radius-xxl);
+  gap: var(--asc-spacing-s1);
+  font-size: 0.9375rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: -0.015rem;
+}
+
+.hyperlinkIcon {
+  color: var(--asc-color-primary-default);
+  width: 1.5rem;
+  height: 1.5rem;
+}

@@ -1,0 +1,145 @@
+.avatar {
+  margin-right: 0.5rem;
+}
+
+.container {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.commentDate {
+  flex-shrink: 0;
+  color: var(--asc-color-base-shade2);
+}
+
+.editedMark {
+  margin-left: 0.3125rem;
+  color: var(--asc-color-neutral-shade1);
+  font-size: var(--asc-text-font-size-sm);
+  font-weight: var(--asc-text-font-weight-normal);
+  line-height: var(--asc-line-height-sm);
+}
+
+.editedMark:before {
+  content: '(';
+}
+
+.editedMark:after {
+  content: ')';
+}
+
+.interactionWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.reactionsWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.interactionBar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0.25rem 1rem 0.75rem 0rem;
+  align-items: center;
+}
+
+.commentEditContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.buttonContainer > * {
+  margin-left: 0.5rem;
+}
+
+.commentEditTextarea {
+  font-size: var(--asc-text-font-size-md);
+  font-weight: var(--asc-text-font-weight-normal);
+  line-height: var(--asc-line-height-lg);
+  border-radius: 0 0.75rem 0.75rem 0.75rem;
+  height: 7.5rem;
+  padding: 0.75rem;
+}
+
+.reactionListButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--asc-color-base-shade2);
+}
+
+.reactionsListButtonWrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 1;
+}
+
+.reactionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  margin-left: -0.25rem;
+}
+
+.reactionIcon:first-child {
+  margin-left: 0;
+}
+
+.commentInteractionButton {
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--asc-color-base-shade2);
+  cursor: pointer;
+  border: none;
+}
+
+.likeButton {
+  padding: 0.25rem;
+  color: var(--asc-color-base-shade2);
+  border: none;
+}
+
+.liked {
+  padding: 0.25rem;
+  color: var(--asc-color-primary-default);
+  border: none;
+}
+
+.reactionListButton {
+  border: none;
+  color: var(--asc-color-primary-default);
+}
+
+.content {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.commentHeader {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.125rem;
+  color: var(--asc-color-base-default);
+}

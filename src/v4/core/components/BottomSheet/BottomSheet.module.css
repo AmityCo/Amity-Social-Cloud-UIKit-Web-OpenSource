@@ -1,0 +1,32 @@
+/* 
+You can add your own styles or override the default sheet styles via the exposed class names. 
+Note that you might need to use !important for style overrides since the inner styles are applied as inline styles 
+which have higher specificity. 
+*/
+
+.react-modal-sheet-container {
+  color: var(--asc-color-base-default);
+}
+
+.react-modal-sheet-backdrop {
+  background-color: var(--asc-color-base-inverse, rgba(0, 0, 0, 0.5));
+}
+
+.react-modal-sheet-header {
+  display: flex;
+  padding-bottom: 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
+  background-color: var(--asc-color-base-background);
+  color: var(--asc-color-base-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.react-modal-sheet-content {
+  display: flex;
+  background-color: var(--asc-color-base-background);
+  padding: 1rem;
+  color: var(--asc-color-base-default);
+}

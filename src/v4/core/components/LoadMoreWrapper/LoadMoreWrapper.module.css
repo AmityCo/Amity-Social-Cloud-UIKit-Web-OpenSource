@@ -1,0 +1,50 @@
+.loadMoreButton {
+  display: inline-flex;
+  justify-items: center;
+  background: var(--asc-color-base-background);
+  color: var(--asc-color-base-shade2);
+  border: 1px solid var(--asc-color-base-shade4);
+  padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-left: 3rem;
+}
+
+.loadMoreButton.textCenter {
+  justify-content: center;
+}
+
+.loadMoreButton.noBorder {
+  border: none;
+}
+
+.loadMoreButton.commentsButton {
+  justify-content: flex-start;
+  color: var(--asc-color-base-default);
+  border: none;
+  margin-top: 1rem;
+  padding: 0 0 1rem 0;
+  border-bottom: 1px solid #e3e4e8;
+}
+
+.loadMoreButton.replyButton {
+  width: fit-content;
+  background-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-shade1);
+  margin: 0.75rem 0 1rem 3rem;
+  padding: 0.3125rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: var(--asc-text-font-size-xs);
+  font-weight: var(--asc-text-font-weight-bold);
+  line-height: var(--asc-line-height-xs);
+}
+
+.chevronDownIcon {
+  margin-left: 0.3125rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}

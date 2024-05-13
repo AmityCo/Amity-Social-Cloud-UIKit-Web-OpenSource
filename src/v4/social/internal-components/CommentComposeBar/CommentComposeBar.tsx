@@ -4,19 +4,17 @@ import useMention from '~/v4/chat/hooks/useMention';
 
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import useSDK from '~/core/hooks/useSDK';
-import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
-import { FormattedMessage, useIntl } from 'react-intl';
 
-import {
-  AddCommentButton,
-  Avatar,
-  CommentComposeBarContainer,
-  CommentComposeBarInput,
-} from './styles';
+import { FormattedMessage, useIntl } from 'react-intl';
+import styles from './CommentComposeBar.module.css';
 
 import { backgroundImage as UserImage } from '~/icons/User';
 import useImage from '~/core/hooks/useImage';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import InputText from '~/v4/core/components/InputText';
+import { Avatar } from '~/v4/core/components';
+import Button from '~/v4/core/components/Button/Button';
+import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
 
 const TOTAL_MENTIONEES_LIMIT = 30;
 const COMMENT_LENGTH_LIMIT = 50000;
@@ -28,15 +26,9 @@ interface CommentComposeBarProps {
   onSubmit: (text: string, mentionees: Mentionees, metadata: Metadata) => void;
   onCancelReply?: () => void;
   isReplying?: boolean;
-  style?: React.CSSProperties;
 }
 
-export const CommentComposeBar = ({
-  style,
-  userToReply,
-  onSubmit,
-  targetId,
-}: CommentComposeBarProps) => {
+export const CommentComposeBar = ({ userToReply, onSubmit, targetId }: CommentComposeBarProps) => {
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
@@ -86,9 +78,9 @@ export const CommentComposeBar = ({
     : formatMessage({ id: 'CommentComposeBar.saySomething' });
 
   return (
-    <CommentComposeBarContainer style={style}>
+    <div className={styles.commentComposeBarContainer}>
       <Avatar size="small" avatar={avatarFileUrl} backgroundImage={UserImage} />
-      <CommentComposeBarInput
+      <InputText
         ref={commentInputRef}
         data-qa-anchor="comment-compose-bar-textarea"
         placeholder={placeholder}
@@ -98,8 +90,10 @@ export const CommentComposeBar = ({
         queryMentionees={queryMentionees}
         onChange={(data) => onChange?.(data)}
         onKeyPress={(e) => e.key === 'Enter' && addComment()}
+        className={styles.commentComposeBarInput}
       />
-      <AddCommentButton
+      <Button
+        variant="ghost"
         data-qa-anchor={
           userToReply
             ? 'comment-compose-bar-reply-button'
@@ -107,10 +101,11 @@ export const CommentComposeBar = ({
         }
         disabled={isEmpty}
         onClick={addComment}
+        className={styles.addCommentButton}
       >
         {formatMessage({ id: 'storyViewer.commentComposeBar.submit' })}
-      </AddCommentButton>
-    </CommentComposeBarContainer>
+      </Button>
+    </div>
   );
 };
 

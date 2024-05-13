@@ -45,16 +45,7 @@ const EmptyStateRingSvg = ({
           <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
         </linearGradient>
       </defs>
-      <circle
-        fill="none"
-        stroke={getComputedStyle(document.documentElement).getPropertyValue(
-          '--asc-color-secondary-shade4',
-        )}
-        cx={size / 2}
-        cy={size / 2}
-        r={size / 2 - 1}
-        strokeWidth="2"
-      />
+      <circle cx={size / 2} cy={size / 2} r={size / 2 - 1} className={styles.emptyStateRing} />
     </svg>
   );
 };
@@ -121,6 +112,7 @@ const UploadingRingSvg = ({
 }) => {
   const { getConfig } = useCustomization();
   const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

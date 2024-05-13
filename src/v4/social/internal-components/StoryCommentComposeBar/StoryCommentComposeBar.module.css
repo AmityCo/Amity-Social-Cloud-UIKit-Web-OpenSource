@@ -1,0 +1,44 @@
+.storyCommentComposerBarContainer {
+    padding: 0 1rem;
+  }
+  
+  .disabledCommentComposerBarContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-top: 1px solid #e3e4e8;
+    color: var(--asc-color-base-shade2);
+  }
+  
+  .replyingBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 1rem;
+    background-color: var(--asc-color-base-shade4);
+    margin-bottom: 1rem;
+  }
+  
+  .replyingToText {
+    font-size: var(--asc-text-font-size-sm);
+    font-weight: var(--asc-text-font-weight-normal);
+    line-height: var(--asc-line-height-sm);
+    color: var(--asc-color-base-shade1);
+  }
+  
+  .replyingToUsername {
+    font-weight: var(--asc-text-font-weight-bold);
+  }
+  
+  .closeButton {
+    fill: var(--asc-color-base-shade2);
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+  }
+
+  .commentComposeBar {
+    background: red;
+  }
