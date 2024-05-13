@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.4 (2024-05-13)
+
+### Bug Fixes
+
+- add NPM_TOKEN env ([b22eca3](https://github.com/EkoCommunications/AmityUiKitWeb/commit/b22eca3208f632498db40d8a320a8aeac402f45c))
+
 ## 4.0.0-beta.3 (2024-04-26)
 
 ### Bug Fixes
