@@ -76,7 +76,7 @@
 .styledSecondaryButton {
   border: none;
   color: var(--asc-color-base-default);
-  background: var(--asc-color-base-background)
+  background: var(--asc-color-base-background);
 }
 
 .removeIcon {
@@ -103,4 +103,5 @@
   height: 0.0625rem;
   align-self: stretch;
   background-color: var(--asc-color-base-shade4);
+  margin: 1rem 0;
 }

@@ -1,11 +1,11 @@
 import React, { memo } from 'react';
 import { useIntl } from 'react-intl';
 import useCommentsCollection from '~/social/hooks/collections/useCommentsCollection';
-
 import { Comment } from '../Comment';
 import styles from './CommentList.module.css';
-import { LoadMoreWrapper } from '~/v4/core/components/LoadMoreWrapper';
 import { ExpandIcon } from '~/v4/social/icons';
+import { Button } from '~/v4/core/components';
+import { LoadMoreWrapper } from '~/v4/core/components/LoadMoreWrapper/LoadMoreWrapper';
 
 interface CommentListProps {
   parentId?: string;
@@ -35,8 +35,8 @@ export const CommentList = ({
     referenceType,
     limit,
   });
-  const { formatMessage } = useIntl();
 
+  const { formatMessage } = useIntl();
   const isReplyComment = !!parentId;
   const commentCount = comments?.length;
 
@@ -60,29 +60,27 @@ export const CommentList = ({
 
   if (comments?.length === 0) return null;
 
-  return (
-    <div className={styles.commentListContainer}>
-      <LoadMoreWrapper
-        hasMore={hasMore}
-        loadMore={loadMore}
-        text={loadMoreText}
-        className={isReplyComment ? 'reply-button' : 'comments-button'}
-        appendIcon={null}
-        prependIcon={prependIcon}
-        isExpanded={isExpanded}
-        contentSlot={comments.map((comment) => {
-          return (
-            <Comment
-              key={comment.commentId}
-              commentId={comment.commentId}
-              readonly={readonly}
-              onClickReply={() => onClickReply?.(comment as Amity.Comment)}
-              shouldAllowInteraction={shouldAllowInteraction}
-            />
-          );
-        })}
+  const renderComments = () => {
+    return comments.map((comment) => (
+      <Comment
+        key={comment.commentId}
+        commentId={comment.commentId}
+        readonly={readonly}
+        onClickReply={() => onClickReply?.(comment as Amity.Comment)}
+        shouldAllowInteraction={shouldAllowInteraction}
       />
-    </div>
+    ));
+  };
+
+  return (
+    <LoadMoreWrapper
+      hasMore={hasMore}
+      loadMore={loadMore}
+      text={loadMoreText}
+      contentSlot={renderComments()}
+      prependIcon={prependIcon}
+      isExpanded={isExpanded}
+    />
   );
 };
 

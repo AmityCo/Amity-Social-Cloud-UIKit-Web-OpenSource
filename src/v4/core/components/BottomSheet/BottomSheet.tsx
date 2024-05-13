@@ -1,7 +1,7 @@
 import React from 'react';
+
 import Sheet from 'react-modal-sheet';
 import { Typography } from '~/v4/core/components/Typography';
-
 import styles from './BottomSheet.module.css';
 
 interface BottomSheetProps {
@@ -37,9 +37,7 @@ export const BottomSheet = ({ children, headerTitle, ...props }: BottomSheetProp
             <Typography.Title>{headerTitle}</Typography.Title>
           </Sheet.Header>
         )}
-        <Sheet.Content className={styles['react-modal-sheet-content']}>
-          <Sheet.Scroller>{children}</Sheet.Scroller>
-        </Sheet.Content>
+        <Sheet.Content className={styles['react-modal-sheet-content']}>{children}</Sheet.Content>
       </Sheet.Container>
       <Sheet.Backdrop className={styles['react-modal-sheet-backdrop']} onTap={props.onClose} />
     </Sheet>

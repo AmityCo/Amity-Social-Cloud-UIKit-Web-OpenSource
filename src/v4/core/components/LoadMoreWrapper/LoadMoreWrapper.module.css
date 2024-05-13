@@ -41,3 +41,10 @@
 .chevronDownIcon {
   margin-left: 0.3125rem;
 }
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}

@@ -102,7 +102,11 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     return toggleFlagComment();
   };
 
-  const handleEditComment = async (text: string, mentionees: Mentionees, metadata: Metadata) =>
+  const handleEditComment = async (
+    text: string,
+    mentionees: Amity.UserMention[],
+    metadata: Metadata,
+  ) =>
     commentId &&
     CommentRepository.updateComment(commentId, {
       data: {

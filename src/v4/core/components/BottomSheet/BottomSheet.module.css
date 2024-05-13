@@ -14,7 +14,6 @@ which have higher specificity.
 
 .react-modal-sheet-header {
   display: flex;
-  height: 2.5rem;
   padding-bottom: 1rem;
   justify-content: center;
   align-items: center;
@@ -22,9 +21,11 @@ which have higher specificity.
   align-self: stretch;
   background-color: var(--asc-color-base-background);
   color: var(--asc-color-base-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 
 .react-modal-sheet-content {
+  display: flex;
   background-color: var(--asc-color-base-background);
   padding: 1rem;
   color: var(--asc-color-base-default);

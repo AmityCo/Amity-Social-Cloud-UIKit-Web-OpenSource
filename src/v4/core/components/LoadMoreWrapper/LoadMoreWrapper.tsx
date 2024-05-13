@@ -1,15 +1,14 @@
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, useEffect, ReactNode, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import clsx from 'clsx';
 import { Button } from '~/v4/core/components';
 import styles from './LoadMoreWrapper.module.css';
-import { ChevronDownIcon } from '~/v4/social/icons';
 
 interface LoadMoreWrapperProps {
-  hasMore?: boolean;
-  loadMore?: () => void;
+  hasMore: boolean;
+  loadMore: () => void;
   text?: string;
-  contentSlot: ReactNode;
+  contentSlot: React.JSX.Element[];
   className?: string;
   prependIcon?: ReactNode;
   appendIcon?: ReactNode;
@@ -23,30 +22,44 @@ export const LoadMoreWrapper = ({
   contentSlot,
   className = '',
   prependIcon = null,
-  appendIcon = <ChevronDownIcon />,
+  appendIcon,
   isExpanded = true,
 }: LoadMoreWrapperProps) => {
   const { formatMessage } = useIntl();
   const [expanded, setExpanded] = useState(isExpanded);
+  const observerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => setExpanded(isExpanded), [isExpanded]);
+  useEffect(() => {
+    setExpanded(isExpanded);
+  }, [isExpanded]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          loadMore();
+        }
+      },
+      { threshold: 1 },
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [hasMore, loadMore]);
 
   if (expanded) {
     return (
-      <>
+      <div className={styles.content}>
         {contentSlot}
-        {hasMore && (
-          <Button
-            className={clsx(styles.loadMoreButton, className)}
-            variant="secondary"
-            onClick={loadMore}
-          >
-            {prependIcon}
-            {text || formatMessage({ id: 'loadMore' })}
-            {appendIcon}
-          </Button>
-        )}
-      </>
+        <div ref={observerRef} />
+      </div>
     );
   }
 
