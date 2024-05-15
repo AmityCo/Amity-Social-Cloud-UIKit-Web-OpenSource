@@ -91,7 +91,7 @@ const generateComponentPalette = (config: Config, currentTheme: 'light' | 'dark'
     configurable.componentIds.forEach((componentId) => {
       const componentConfig = (config.customizations as { [key: string]: { theme: Theme } })?.[
         `${configurable.pageId}/${componentId}/*`
-      ].theme;
+      ]?.theme;
       if (componentConfig) {
         const themeToGenerate =
           currentTheme === 'light' ? componentConfig.light : componentConfig.dark;
