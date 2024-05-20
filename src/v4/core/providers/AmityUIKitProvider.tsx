@@ -30,6 +30,7 @@ import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
 import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
 import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
+import { CustomReactionProvider } from './CustomReactionProvider';
 
 export type AmityUIKitConfig = Config;
 
@@ -138,38 +139,40 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
         <CustomizationProvider initialConfig={configs || defaultConfig}>
           <StyledThemeProvider theme={buildGlobalTheme(theme)}>
             <ThemeProvider>
-              <UIStyles>
-                <SDKContext.Provider value={sdkContextValue}>
-                  <SDKConnectorProvider>
-                    <NotificationProvider>
-                      <LegacyNotificationProvider>
-                        <ConfirmProvider>
-                          <LegacyConfirmProvider>
-                            <ConfigProvider
-                              config={{
-                                socialCommunityCreationButtonVisible:
-                                  socialCommunityCreationButtonVisible || true,
-                              }}
-                            >
-                              <PostRendererProvider config={postRendererConfig}>
-                                <NavigationProvider>
-                                  <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                    {children}
-                                  </PageBehaviorProvider>
-                                </NavigationProvider>
-                              </PostRendererProvider>
-                            </ConfigProvider>
-                            <NotificationsContainer />
-                            <LegacyNotificationsContainer />
-                            <ConfirmComponent />
-                            <LegacyConfirmComponent />
-                          </LegacyConfirmProvider>
-                        </ConfirmProvider>
-                      </LegacyNotificationProvider>
-                    </NotificationProvider>
-                  </SDKConnectorProvider>
-                </SDKContext.Provider>
-              </UIStyles>
+              <CustomReactionProvider>
+                <UIStyles>
+                  <SDKContext.Provider value={sdkContextValue}>
+                    <SDKConnectorProvider>
+                      <NotificationProvider>
+                        <LegacyNotificationProvider>
+                          <ConfirmProvider>
+                            <LegacyConfirmProvider>
+                              <ConfigProvider
+                                config={{
+                                  socialCommunityCreationButtonVisible:
+                                    socialCommunityCreationButtonVisible || true,
+                                }}
+                              >
+                                <PostRendererProvider config={postRendererConfig}>
+                                  <NavigationProvider>
+                                    <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                      {children}
+                                    </PageBehaviorProvider>
+                                  </NavigationProvider>
+                                </PostRendererProvider>
+                              </ConfigProvider>
+                              <NotificationsContainer />
+                              <LegacyNotificationsContainer />
+                              <ConfirmComponent />
+                              <LegacyConfirmComponent />
+                            </LegacyConfirmProvider>
+                          </ConfirmProvider>
+                        </LegacyNotificationProvider>
+                      </NotificationProvider>
+                    </SDKConnectorProvider>
+                  </SDKContext.Provider>
+                </UIStyles>
+              </CustomReactionProvider>
             </ThemeProvider>
           </StyledThemeProvider>
         </CustomizationProvider>

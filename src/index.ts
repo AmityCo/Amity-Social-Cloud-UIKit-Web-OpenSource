@@ -35,6 +35,10 @@ export {
   AmityLiveChatMessageComposeBar,
 } from '~/v4/chat/components';
 
+export { MessageReactionPreview as AmityLiveChatMessageReactionPreview } from '~/v4/chat/components/MessageReactionPreview';
+export { MessageReactionPicker as AmityLiveChatMessageReactionPicker } from '~/v4/chat/components/MessageReactionPicker';
+export { MessageQuickReaction as AmityLiveChatMessageQuickReaction } from '~/v4/chat/components/MessageQuickReaction';
+
 import type { AmityMessageActionType } from '~/v4/chat/components';
 export type { AmityMessageActionType };
 

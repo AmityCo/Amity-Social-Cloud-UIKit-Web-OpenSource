@@ -16,14 +16,18 @@ import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificati
 import { useCopyMessage } from '~/v4/core/hooks';
 
 interface AmityLiveChatMessageListProps {
+  pageId?: string;
   channel: Amity.Channel;
   replyMessage: (message: Amity.Message<'text'>) => void;
 }
 
 export const AmityLiveChatMessageList = ({
+  pageId,
   channel,
   replyMessage,
 }: AmityLiveChatMessageListProps) => {
+  const componentId = 'message_list';
+
   const sdk = useSDK();
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const { formatMessage } = useIntl();
@@ -132,6 +136,8 @@ export const AmityLiveChatMessageList = ({
                   }
                   key={message.messageId}
                   containerRef={containerRef}
+                  pageId={pageId}
+                  componentId={componentId}
                 />
               );
 
@@ -169,6 +175,8 @@ export const AmityLiveChatMessageList = ({
                 }}
                 key={message.messageId}
                 containerRef={containerRef}
+                pageId={pageId}
+                componentId={componentId}
               />
             );
           })}

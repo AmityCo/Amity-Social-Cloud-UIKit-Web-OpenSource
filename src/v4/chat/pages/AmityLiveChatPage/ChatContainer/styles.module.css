@@ -37,8 +37,8 @@
   border-radius: var(--asc-border-radius-sm);
   border: var(--asc-border-radius-none);
   background-color: var(
-    --live-chat-asc-color-secondary-default,
-    var(--asc-color-secondary-default)
+      --live-chat-asc-color-secondary-default,
+      var(--asc-color-secondary-default)
   );
   color: var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse));
   display: flex;
