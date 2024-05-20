@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
 import { readFileAsync } from '~/helpers';
-import useUser from '~/core/hooks/useUser';
-import useSDK from '~/core/hooks/useSDK';
-import useImage from '~/core/hooks/useImage';
 
 import styles from './DraftsPage.module.css';
 import { SubmitHandler } from 'react-hook-form';
@@ -27,6 +24,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { PageTypes } from '~/social/constants';
 import { BaseVideoPreview } from '../../internal-components/VideoPreview';
+import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -60,9 +58,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
     setIsHyperLinkBottomSheetOpen(false);
   };
 
-  const { currentUserId } = useSDK();
-  const user = useUser(currentUserId);
-  const creatorAvatar = useImage({ imageSize: 'small', fileId: user?.avatarFileId });
+  const community = useCommunityInfo(targetId);
 
   const { formatMessage } = useIntl();
 
@@ -284,7 +280,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             onClick={() =>
               onCreateStory(file, imageMode, {}, hyperLink.length > 0 ? hyperLink : [])
             }
-            avatar={creatorAvatar}
+            avatar={community.avatarFileUrl}
           />
         </div>
       </div>
