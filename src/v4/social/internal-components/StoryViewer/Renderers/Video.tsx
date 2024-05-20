@@ -302,7 +302,10 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
             onClick={() => story.analytics.markLinkAsClicked()}
           >
             <Truncate lines={1}>
-              <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
+              <span>
+                {story.items[0]?.data?.customText ||
+                  story.items[0].data.url.replace(/^https?:\/\//, '')}
+              </span>
             </Truncate>
           </HyperLink>
         </div>

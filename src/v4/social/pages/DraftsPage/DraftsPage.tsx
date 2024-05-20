@@ -259,7 +259,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
               target="_blank"
               rel="noopener noreferrer"
             >
-              {hyperLink[0]?.data?.customText || hyperLink[0].data.url}
+              {hyperLink[0]?.data?.customText || hyperLink[0].data.url.replace(/^https?:\/\//, '')}
             </HyperLink>
           </div>
         )}
