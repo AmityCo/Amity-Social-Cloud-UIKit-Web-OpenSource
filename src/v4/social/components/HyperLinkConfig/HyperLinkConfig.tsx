@@ -170,6 +170,7 @@ export const HyperLinkConfig = ({
               })}
               className={clsx(styles.input, errors?.customText && styles.hasError)}
               {...register('customText')}
+              maxLength={MAX_LENGTH}
             />
             {errors?.customText && (
               <span className={styles.errorText}>{errors?.customText?.message}</span>
