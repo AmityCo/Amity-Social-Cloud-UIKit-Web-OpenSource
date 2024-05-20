@@ -22,12 +22,6 @@ export const checkStoryPermission = (
     return false;
   }
 
-  const userPermission = client.hasPermission(Permissions.ManageStoryPermission).currentUser();
-
-  if (userPermission) {
-    return true;
-  }
-
   if (communityId) {
     const communityPermission = client
       .hasPermission(Permissions.ManageStoryPermission)

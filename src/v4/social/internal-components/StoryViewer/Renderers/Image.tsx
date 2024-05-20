@@ -75,7 +75,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
-  const haveStoryPermission = checkStoryPermission(client, community?.communityId);
+  const isModerator = checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...rendererStyles.storyContent,
@@ -176,7 +176,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
-        haveStoryPermission={haveStoryPermission}
+        haveStoryPermission={isModerator}
         isOfficial={isOfficial}
         isPaused={isPaused}
         onPlay={play}
@@ -280,7 +280,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         totalLikes={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
-        showImpression={isCreator || haveStoryPermission}
+        showImpression={isCreator || isModerator}
       />
     </motion.div>
   );

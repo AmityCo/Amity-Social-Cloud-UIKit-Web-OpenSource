@@ -80,7 +80,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
   const [colors, setColors] = useState<FinalColor[]>([]);
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const haveStoryPermission = checkStoryPermission(client, stories[currentIndex]?.targetId);
+  const isModerator = checkStoryPermission(client, stories[currentIndex]?.targetId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
@@ -173,7 +173,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        isStoryCreator || haveStoryPermission
+        isStoryCreator || isModerator
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
