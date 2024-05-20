@@ -263,9 +263,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Truncate lines={1}>
-                <span>{hyperLink[0]?.data?.customText || hyperLink[0].data.url}</span>
-              </Truncate>
+              {hyperLink[0]?.data?.customText || hyperLink[0].data.url}
             </HyperLink>
           </div>
         )}
