@@ -5,11 +5,26 @@
   height: 100%;
 }
 
+.tabListContainer {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  position: relative;
+  width: 100%;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.tabListContainer::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
 .tabList {
   display: flex;
-  gap: var(--asc-spacing-s2);
+  gap: var(--asc-spacing-s1);
   border-bottom: 1px solid var(--asc-color-base-shade4);
-  overflow: auto;
+  width: 100%;
+  min-width: max-content;
 }
 
 .tabItem {
@@ -21,7 +36,7 @@
   border-bottom: transparent;
 }
 
-.tabItem.active {
+.tabItem[data-active='true'] {
   color: var(--asc-color-primary-default);
   border-bottom: 1px solid var(--asc-color-primary-default);
 }
@@ -105,6 +120,10 @@
   gap: var(--asc-spacing-xxs2);
 }
 
+.removeBtn {
+  cursor: pointer;
+  color: var(--asc-color-base-shade1);
+}
 
 @keyframes skeletonPulse {
   0% {

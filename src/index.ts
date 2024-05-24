@@ -38,9 +38,13 @@ export {
 export { MessageReactionPreview as AmityLiveChatMessageReactionPreview } from '~/v4/chat/components/MessageReactionPreview';
 export { MessageReactionPicker as AmityLiveChatMessageReactionPicker } from '~/v4/chat/components/MessageReactionPicker';
 export { MessageQuickReaction as AmityLiveChatMessageQuickReaction } from '~/v4/chat/components/MessageQuickReaction';
+export { ReactionList as AmityReactionList } from '~/v4/social/components/ReactionList';
 
 import type { AmityMessageActionType } from '~/v4/chat/components';
+import type { ReactionListProps } from '~/v4/social/components/ReactionList';
+
 export type { AmityMessageActionType };
+export type { ReactionListProps as AmityReactionListProps };
 
 export { AmityLiveChatPage } from '~/v4/chat/pages';
 

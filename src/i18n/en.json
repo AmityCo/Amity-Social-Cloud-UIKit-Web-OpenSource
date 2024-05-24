@@ -438,5 +438,6 @@
   "livechat.error.sendingMessage.notAllowLink": "Your message wasn’t sent as it contained a link that’s not allowed.",
   "livechat.reaction.errorOnload": "Unable to load reactions",
   "livechat.reaction.emptyState": "No reactions yet",
-  "livechat.reaction.emptyState.description": "Be the first to react to this message!"
+  "livechat.reaction.emptyState.description": "Be the first to react to this message!",
+  "livechat.reaction.label.removeReaction": "Tap to remove reaction"
 }

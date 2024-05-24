@@ -4,12 +4,17 @@ import { Avatar, Typography } from '~/v4/core/components';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
 import { ReactionIcon } from '~/v4/social/components/ReactionList/ReactionIcon';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
+import useSDK from '~/core/hooks/useSDK';
+import { FormattedMessage } from 'react-intl';
 
 export const ReactionListPanel = ({
   filteredReactions,
+  removeReaction,
 }: {
   filteredReactions: Amity.Reactor[];
+  removeReaction: (reaction: string) => Promise<void>;
 }) => {
+  const { currentUserId } = useSDK();
   const { config } = useCustomReaction();
   const reactionList = useMemo(() => config.map(({ name }) => name), [config]);
 
@@ -28,6 +33,16 @@ export const ReactionListPanel = ({
                   />
                   <Typography.BodyBold data-qa-anchor="user_display_name">
                     {reaction.user?.displayName}
+                    {currentUserId === reaction.user?.userId && (
+                      <>
+                        <br />
+                        <div onClick={() => removeReaction(reaction.reactionName)}>
+                          <Typography.Caption className={styles.removeBtn}>
+                            <FormattedMessage id="livechat.reaction.label.removeReaction" />
+                          </Typography.Caption>
+                        </div>
+                      </>
+                    )}
                   </Typography.BodyBold>
                 </div>
 

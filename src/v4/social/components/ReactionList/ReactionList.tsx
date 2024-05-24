@@ -9,6 +9,7 @@ import { ReactionListPanel } from '~/v4/social/components/ReactionList/ReactionL
 import { ReactionListError } from '~/v4/social/components/ReactionList/ReactionListError';
 import { ReactionListEmptyState } from '~/v4/social/components/ReactionList/ReactionListEmptyState';
 import { ReactionListLoadingState } from '~/v4/social/components/ReactionList/ReactionListLoadingState';
+import useReaction from '~/v4/chat/hooks/useReaction';
 
 interface ReactionListProps {
   pageId: string;
@@ -19,10 +20,12 @@ interface ReactionListProps {
 const RenderCondition = ({
   filteredReactions,
   isLoading,
+  removeReaction,
   error,
 }: {
   filteredReactions: Amity.Reactor[];
   isLoading: boolean;
+  removeReaction: (reaction: string) => Promise<void>;
   error: Error | null;
 }) => {
   if (isLoading) {
@@ -37,7 +40,9 @@ const RenderCondition = ({
     return <ReactionListEmptyState />;
   }
 
-  return <ReactionListPanel filteredReactions={filteredReactions} />;
+  return (
+    <ReactionListPanel filteredReactions={filteredReactions} removeReaction={removeReaction} />
+  );
 };
 
 export const ReactionList = ({ pageId = '*', referenceId, referenceType }: ReactionListProps) => {
@@ -45,6 +50,7 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
   const { reactions, error, isLoading } = useReactionsCollection({ referenceId, referenceType });
   const [activeTab, setActiveTab] = useState('All');
   const { config } = useCustomReaction();
+  const { removeReaction } = useReaction(referenceType, referenceId);
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
@@ -59,44 +65,55 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
 
   return (
     <div className={styles.reactionListContainer} data-qa-anchor="reaction_list_header">
-      <div className={styles.tabList} data-qa-anchor="reaction_list_tab">
-        <div
-          className={`${styles.tabItem} ${activeTab === 'All' ? styles.active : ''}`}
-          onClick={() => handleTabClick('All')}
-        >
-          <Typography.Body>
-            <span className={styles.reactionEmoji}>All {abbreviateCount(reactions.length)}</span>
-          </Typography.Body>
+      <div className={styles.tabListContainer}>
+        <div className={styles.tabList} data-qa-anchor="reaction_list_tab">
+          <div
+            data-active={activeTab === 'All'}
+            className={styles.tabItem}
+            onClick={() => handleTabClick('All')}
+          >
+            <Typography.Body>
+              <span className={styles.reactionEmoji}>All {abbreviateCount(reactions.length)}</span>
+            </Typography.Body>
+          </div>
+
+          {config.map((reactionConfigItem) => {
+            const { name: reactionType, image } = reactionConfigItem;
+
+            const count = reactions.filter(
+              (reaction) => reaction.reactionName === reactionType,
+            ).length;
+
+            if (!count) return null;
+
+            return (
+              <div
+                key={reactionType}
+                data-active={activeTab === reactionType}
+                className={styles.tabItem}
+                onClick={() => handleTabClick(reactionType)}
+              >
+                <Typography.Body>
+                  <span className={styles.reactionEmoji}>
+                    <ReactionIcon
+                      className={styles.reactionItem}
+                      reactionConfigItem={reactionConfigItem}
+                    />
+                    {abbreviateCount(count)}
+                  </span>
+                </Typography.Body>
+              </div>
+            );
+          })}
         </div>
-
-        {config.map((reactionConfigItem) => {
-          const { name: reactionType, image } = reactionConfigItem;
-
-          const count = reactions.filter(
-            (reaction) => reaction.reactionName === reactionType,
-          ).length;
-
-          return (
-            <div
-              key={reactionType}
-              className={`${styles.tabItem} ${activeTab === reactionType ? styles.active : ''}`}
-              onClick={() => handleTabClick(reactionType)}
-            >
-              <Typography.Body>
-                <span className={styles.reactionEmoji}>
-                  <ReactionIcon
-                    className={styles.reactionItem}
-                    reactionConfigItem={reactionConfigItem}
-                  />
-                  {abbreviateCount(count)}
-                </span>
-              </Typography.Body>
-            </div>
-          );
-        })}
       </div>
 
-      <RenderCondition error={error} isLoading={isLoading} filteredReactions={filteredReactions} />
+      <RenderCondition
+        error={error}
+        isLoading={isLoading}
+        filteredReactions={filteredReactions}
+        removeReaction={removeReaction}
+      />
     </div>
   );
 };
