@@ -4,7 +4,7 @@ import { Tester } from 'react-insta-stories/dist/interfaces';
 import useImage from '~/core/hooks/useImage';
 import { checkStoryPermission, formatTimeAgo } from '~/utils';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import useSDK from '~/core/hooks/useSDK';
 
@@ -24,6 +24,7 @@ import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 
 import rendererStyles from './Renderers.module.css';
 import useUser from '~/core/hooks/useUser';
+import { isAdmin } from '~/helpers/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -74,8 +75,9 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       ''
     );
 
-  const isModerator = checkStoryPermission(client, community?.communityId);
   const isCreator = creator?.userId === user?.userId;
+  const isGlobalAdmin = isAdmin(user?.roles);
+  const isModerator = checkStoryPermission(client, community?.communityId) || isGlobalAdmin;
 
   const computedStyles = {
     ...storyContentStyles,

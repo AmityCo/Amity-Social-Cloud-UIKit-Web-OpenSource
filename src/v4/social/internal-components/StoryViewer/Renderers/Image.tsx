@@ -25,6 +25,7 @@ import useUser from '~/core/hooks/useUser';
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
+import { isAdmin } from '~/helpers/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -75,7 +76,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
-  const isModerator = checkStoryPermission(client, community?.communityId);
+  const isGlobalAdmin = isAdmin(user?.roles);
+  const isModerator = checkStoryPermission(client, community?.communityId) || isGlobalAdmin;
 
   const computedStyles = {
     ...rendererStyles.storyContent,
