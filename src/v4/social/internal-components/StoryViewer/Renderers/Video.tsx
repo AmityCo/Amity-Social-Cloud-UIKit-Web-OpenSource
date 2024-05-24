@@ -235,7 +235,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         data-qa-anchor="video_view"
         ref={vid}
         style={computedStyles}
-        src={story?.url || undefined}
+        src={story?.videoData?.fileUrl || story?.videoData?.videoUrl?.original}
         controls={false}
         onLoadedData={videoLoaded}
         playsInline
