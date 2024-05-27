@@ -77,7 +77,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   const isCreator = creator?.userId === user?.userId;
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isModerator = checkStoryPermission(client, community?.communityId) || isGlobalAdmin;
+  const isModerator = isGlobalAdmin || checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...storyContentStyles,
