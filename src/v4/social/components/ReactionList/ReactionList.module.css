@@ -49,8 +49,9 @@
 
 .userList {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--asc-spacing-s1);
+  width: 100%;
+  flex-direction: column;
 }
 
 .userItem {
@@ -58,7 +59,6 @@
   align-items: center;
   gap: var(--asc-spacing-s1);
   background: var(--asc-color-base-background);
-  padding: var(--asc-spacing-s1);
   border-radius: var(--asc-border-radius-sm);
   width: 100%;
   border-bottom: 1px solid var(--asc-color-base-shade4);
@@ -67,6 +67,7 @@
 .userDetailsContainer {
   display: flex;
   color: var(--asc-color-base-default);
+  padding: var(--asc-spacing-s1);
   justify-content: space-between;
   width: 100%;
 }
@@ -135,4 +136,19 @@
   100% {
     opacity: 0.6;
   }
+}
+
+.infiniteScrollContainer {
+  display: flex;
+  flex-grow: 1;
+  overflow: auto;
+  width: 100%;
+
+  > div {
+    width: 100%;
+  }
+}
+
+.reactionPanel {
+  height: 100%;
 }

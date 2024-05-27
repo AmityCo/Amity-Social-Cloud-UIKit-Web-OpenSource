@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import styles from './ReactionList.module.css';
 import { useReactionsCollection } from '~/v4/social/hooks/collections/useReactionsCollection';
 import { Typography } from '~/v4/core/components';
@@ -10,6 +10,8 @@ import { ReactionListError } from '~/v4/social/components/ReactionList/ReactionL
 import { ReactionListEmptyState } from '~/v4/social/components/ReactionList/ReactionListEmptyState';
 import { ReactionListLoadingState } from '~/v4/social/components/ReactionList/ReactionListLoadingState';
 import useReaction from '~/v4/chat/hooks/useReaction';
+import useReactionByReference from '~/v4/chat/hooks/useReactionByReference';
+import FallbackReaction from '~/v4/icons/FallbackReaction';
 
 interface ReactionListProps {
   pageId: string;
@@ -17,16 +19,36 @@ interface ReactionListProps {
   referenceType: Amity.ReactableType;
 }
 
+const UNKNOWN_TAB = 'unknown';
+
+const filterReactionsByTab = (
+  reactions: Amity.Reactor[],
+  activeTab: string,
+  allConfigReactions: string[],
+) => {
+  if (activeTab === 'All') return reactions;
+  if (activeTab === UNKNOWN_TAB) {
+    return reactions.filter((reaction) => !allConfigReactions.includes(reaction.reactionName));
+  }
+  return reactions.filter((reaction) => reaction.reactionName === activeTab.toLowerCase());
+};
+
 const RenderCondition = ({
   filteredReactions,
+  hasMore,
+  loadMore,
   isLoading,
   removeReaction,
   error,
+  currentRef,
 }: {
   filteredReactions: Amity.Reactor[];
   isLoading: boolean;
+  hasMore: boolean;
+  loadMore: () => void;
   removeReaction: (reaction: string) => Promise<void>;
   error: Error | null;
+  currentRef: HTMLDivElement | null;
 }) => {
   if (isLoading) {
     return <ReactionListLoadingState />;
@@ -37,18 +59,40 @@ const RenderCondition = ({
   }
 
   if (filteredReactions.length === 0) {
+    if (isLoading) {
+      return <ReactionListLoadingState />;
+    }
+
     return <ReactionListEmptyState />;
   }
 
   return (
-    <ReactionListPanel filteredReactions={filteredReactions} removeReaction={removeReaction} />
+    <ReactionListPanel
+      currentRef={currentRef}
+      hasMore={hasMore}
+      loadMore={loadMore}
+      isLoading={isLoading}
+      filteredReactions={filteredReactions}
+      removeReaction={removeReaction}
+    />
   );
 };
 
 export const ReactionList = ({ pageId = '*', referenceId, referenceType }: ReactionListProps) => {
   const componentId = 'reaction_list';
-  const { reactions, error, isLoading } = useReactionsCollection({ referenceId, referenceType });
+  const { reactions, error, isLoading, hasMore, loadMore } = useReactionsCollection({
+    referenceId,
+    referenceType,
+    limit: 25,
+  });
+
+  const { reactions: allReacted, reactionCount } = useReactionByReference(
+    referenceType,
+    referenceId,
+  );
+
   const [activeTab, setActiveTab] = useState('All');
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const { config } = useCustomReaction();
   const { removeReaction } = useReaction(referenceType, referenceId);
 
@@ -56,12 +100,30 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
     setActiveTab(tab);
   };
 
-  const filteredReactions =
-    activeTab === 'All'
-      ? reactions
-      : reactions.filter((reaction) => reaction.reactionName === activeTab.toLowerCase());
-
   if (reactions == null || !config) return null;
+
+  const allConfigReactions = useMemo(
+    () => config.map((reactionConfigItem) => reactionConfigItem.name),
+    [config],
+  );
+
+  const unknownReaction = useMemo(
+    () =>
+      Object.keys(allReacted).filter((reaction) => {
+        return !allConfigReactions.includes(reaction);
+      }),
+    [allReacted],
+  );
+
+  const totalUnknownReactionCount = useMemo(
+    () => unknownReaction.reduce((acc, curr) => acc + allReacted[curr], 0),
+    [allReacted],
+  );
+
+  const filteredReactions = useMemo(
+    () => filterReactionsByTab(reactions, activeTab, allConfigReactions),
+    [reactions, activeTab],
+  );
 
   return (
     <div className={styles.reactionListContainer} data-qa-anchor="reaction_list_header">
@@ -73,18 +135,14 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
             onClick={() => handleTabClick('All')}
           >
             <Typography.Body>
-              <span className={styles.reactionEmoji}>All {abbreviateCount(reactions.length)}</span>
+              <span className={styles.reactionEmoji}>All {abbreviateCount(reactionCount)}</span>
             </Typography.Body>
           </div>
 
           {config.map((reactionConfigItem) => {
             const { name: reactionType, image } = reactionConfigItem;
 
-            const count = reactions.filter(
-              (reaction) => reaction.reactionName === reactionType,
-            ).length;
-
-            if (!count) return null;
+            if (!allReacted[reactionType]) return null;
 
             return (
               <div
@@ -99,21 +157,42 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
                       className={styles.reactionItem}
                       reactionConfigItem={reactionConfigItem}
                     />
-                    {abbreviateCount(count)}
+                    {abbreviateCount(allReacted[reactionType])}
                   </span>
                 </Typography.Body>
               </div>
             );
           })}
+
+          {unknownReaction.length > 0 && (
+            <div
+              key={UNKNOWN_TAB}
+              data-active={activeTab === UNKNOWN_TAB}
+              className={styles.tabItem}
+              onClick={() => handleTabClick(UNKNOWN_TAB)}
+            >
+              <Typography.Body>
+                <span className={styles.reactionEmoji}>
+                  <FallbackReaction className={styles.reactionIcon} />
+                  {abbreviateCount(totalUnknownReactionCount)}
+                </span>
+              </Typography.Body>
+            </div>
+          )}
         </div>
       </div>
 
-      <RenderCondition
-        error={error}
-        isLoading={isLoading}
-        filteredReactions={filteredReactions}
-        removeReaction={removeReaction}
-      />
+      <div ref={containerRef} className={styles.reactionPanel}>
+        <RenderCondition
+          currentRef={containerRef.current}
+          hasMore={hasMore}
+          loadMore={loadMore}
+          error={error}
+          isLoading={isLoading}
+          filteredReactions={filteredReactions}
+          removeReaction={removeReaction}
+        />
+      </div>
     </div>
   );
 };
