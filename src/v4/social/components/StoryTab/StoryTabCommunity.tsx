@@ -19,7 +19,7 @@ import {
   StoryTitle,
   StoryWrapper,
 } from './styles';
-import { isAdmin } from '~/helpers/permissions';
+import { isAdmin, isModerator } from '~/helpers/permissions';
 import { FormattedMessage } from 'react-intl';
 import useUser from '~/core/hooks/useUser';
 
@@ -59,7 +59,9 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({ co
   const { currentUserId, client } = useSDK();
   const user = useUser(currentUserId);
   const isGlobalAdmin = isAdmin(user?.roles);
-  const hasStoryPermission = isGlobalAdmin || checkStoryPermission(client, communityId);
+  const isCommunityModerator = isModerator(user?.roles);
+  const hasStoryPermission =
+    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, communityId);
 
   const hasStoryRing = stories?.length > 0;
   const hasUnSeen = stories.some((story) => !story?.isSeen);

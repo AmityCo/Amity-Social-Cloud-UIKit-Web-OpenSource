@@ -25,7 +25,7 @@ import useUser from '~/core/hooks/useUser';
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
-import { isAdmin } from '~/helpers/permissions';
+import { isAdmin, isModerator } from '~/helpers/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -77,7 +77,9 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isModerator = isGlobalAdmin || checkStoryPermission(client, community?.communityId);
+  const isCommunityModerator = isModerator(user?.roles);
+  const haveStoryPermission =
+    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...rendererStyles.storyContent,
@@ -178,7 +180,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
-        haveStoryPermission={isModerator}
+        haveStoryPermission={haveStoryPermission}
         isOfficial={isOfficial}
         isPaused={isPaused}
         onPlay={play}
@@ -282,7 +284,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         totalLikes={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
-        showImpression={isCreator || isModerator}
+        showImpression={isCreator || haveStoryPermission}
       />
     </motion.div>
   );

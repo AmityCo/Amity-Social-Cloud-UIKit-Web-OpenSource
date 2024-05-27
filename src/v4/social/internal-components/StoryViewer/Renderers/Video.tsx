@@ -24,7 +24,7 @@ import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 
 import rendererStyles from './Renderers.module.css';
 import useUser from '~/core/hooks/useUser';
-import { isAdmin } from '~/helpers/permissions';
+import { isAdmin, isModerator } from '~/helpers/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -62,8 +62,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     imageSize: 'small',
   });
 
-  const isOfficial = community?.isOfficial || false;
-
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
     createdAt && creator?.displayName ? (
@@ -75,9 +73,12 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       ''
     );
 
+  const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isModerator = isGlobalAdmin || checkStoryPermission(client, community?.communityId);
+  const isCommunityModerator = isModerator(user?.roles);
+  const haveStoryPermission =
+    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...storyContentStyles,
@@ -214,7 +215,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
-        haveStoryPermission={isModerator}
+        haveStoryPermission={haveStoryPermission}
         isOfficial={isOfficial}
         isPaused={isPaused}
         onPlay={play}
@@ -320,7 +321,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         totalLikes={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
-        showImpression={isCreator || isModerator}
+        showImpression={isCreator || haveStoryPermission}
       />
     </motion.div>
   );
