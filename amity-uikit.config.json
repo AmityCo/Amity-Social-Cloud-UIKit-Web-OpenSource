@@ -27,6 +27,13 @@
     }
   },
   "excludes": [],
+  "message_reactions": [
+    { "name": "heart", "image": "message_reaction_heart.png" },
+    { "name": "like", "image": "message_reaction_like.png" },
+    { "name": "fire", "image": "message_reaction_fire.png" },
+    { "name": "grinning", "image": "message_reaction_grinning.png" },
+    { "name": "sad", "image": "message_reaction_sad.png" }
+  ],
   "customizations": {
     "select_target_page/*/*": {
       "theme": {},
@@ -200,6 +207,9 @@
     "live_chat/message_composer/*": {
       "message_limit": 200,
       "placeholder_text": "Write a message"
+    },
+    "live_chat_page/message_list/message_quick_reaction": {
+      "reaction": "heart"
     }
   }
 }

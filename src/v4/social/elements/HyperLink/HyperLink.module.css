@@ -1,7 +1,7 @@
 .hyperlink {
   border: 1px solid var(--asc-color-base-shade4);
   color: var(--asc-color-secondary-default);
-  background: rgba(255, 255, 255, 0.2);
+  background: #ffffffcc;
   display: inline-flex;
   align-items: center;
   padding: var(--asc-spacing-s2) var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-s2);
@@ -12,10 +12,28 @@
   font-weight: 600;
   line-height: 1.25rem;
   letter-spacing: -0.015rem;
+  max-width: 200px;
+  border: var(--asc-color-base-shade4);
+  text-decoration: none;
 }
 
 .hyperlinkIcon {
   color: var(--asc-color-primary-default);
   width: 1.5rem;
   height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.hyperlinkText {
+  display: flex;
+  align-items: center;
+  max-width: calc(100% - 2rem);
+  overflow: hidden;
+  color: var(--asc-color-secondary-shade4);
+}
+
+.text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

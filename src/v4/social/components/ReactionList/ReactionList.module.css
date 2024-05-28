@@ -1,72 +1,154 @@
 .reactionListContainer {
   display: flex;
   flex-direction: column;
-  gap: var(--asc-spacing-m);
+  gap: var(--asc-spacing-m1);
+  height: 100%;
+}
+
+.tabListContainer {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  position: relative;
+  width: 100%;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.tabListContainer::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
 .tabList {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border-bottom: 1px solid var(--asc-color-neutral-shade2);
-  margin-bottom: 1rem;
+  gap: var(--asc-spacing-s1);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  width: 100%;
+  min-width: max-content;
 }
 
 .tabItem {
   cursor: pointer;
-  padding: 0.5rem 1rem;
-  position: relative;
-  transition: color 0.3s ease;
+  padding: var(--asc-spacing-xxs2) var(--asc-spacing-s1);
+  background: var(--asc-color-base-background);
+  color: var(--asc-color-base-shade6);
+  padding-bottom: var(--asc-spacing-s1);
+  border-bottom: transparent;
 }
 
-.tabItem::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: transparent;
-  transition: background-color 0.3s ease;
-}
-
-.tabItem.active {
+.tabItem[data-active='true'] {
   color: var(--asc-color-primary-default);
-}
-
-.tabItem.active::after {
-  background-color: var(--asc-color-primary-default);
+  border-bottom: 1px solid var(--asc-color-primary-default);
 }
 
 .reactionEmoji {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.tabCount {
-  color: var(--asc-color-base-shade2);
-  transition: color 0.3s ease;
-}
-
-.tabItem.active .tabCount {
-  color: var(--asc-color-primary-default);
+  gap: var(--asc-spacing-s1);
 }
 
 .userList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  display: flex;
+  gap: var(--asc-spacing-s1);
+  width: 100%;
+  flex-direction: column;
 }
 
 .userItem {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--asc-spacing-s1);
+  background: var(--asc-color-base-background);
+  border-radius: var(--asc-border-radius-sm);
+  width: 100%;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 
 .userDetailsContainer {
   display: flex;
+  color: var(--asc-color-base-default);
+  padding: var(--asc-spacing-s1);
+  justify-content: space-between;
+  width: 100%;
+}
+
+.userDetailsProfile {
+  display: flex;
+  gap: var(--asc-spacing-s2);
   align-items: center;
-  gap: 0.5rem;
+}
+
+.userDetailsReaction {
+  display: flex;
+  align-items: center;
+}
+
+.reactionItem {
+  width: 1.25rem;
+}
+
+.reactionIcon {
+  width: 1.5rem;
+}
+
+.reactionCustomStateContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: var(--asc-color-base-shade2)
+}
+
+.reactionCustomStateContainer.loadingState {
+  flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.reactionState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--asc-spacing-s2);
+}
+
+.reactionState2Line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--asc-spacing-xxs2);
+}
+
+.removeBtn {
+  cursor: pointer;
+  color: var(--asc-color-base-shade1);
+}
+
+@keyframes skeletonPulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.infiniteScrollContainer {
+  display: flex;
+  flex-grow: 1;
+  overflow: auto;
+  width: 100%;
+
+  > div {
+    width: 100%;
+  }
+}
+
+.reactionPanel {
+  height: 100%;
 }

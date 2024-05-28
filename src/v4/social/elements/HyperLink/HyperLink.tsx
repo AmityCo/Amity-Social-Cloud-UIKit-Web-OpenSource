@@ -10,7 +10,9 @@ export const HyperLink: React.FC<LinkButtonProps> = ({ href, children, ...rest }
   return (
     <a href={href} className={styles.hyperlink} {...rest}>
       <LinkIcon className={styles.hyperlinkIcon} />
-      {children}
+      <div className={styles.hyperlinkText}>
+        <span className={styles.text}>{children}</span>
+      </div>
     </a>
   );
 };

@@ -5,12 +5,16 @@ import LiveChatMessageContent from '../LiveChatMessageContent';
 import { AmityMessageActionType } from '../LiveChatMessageContent/MessageAction';
 
 interface AmityLiveChatMessageSenderViewProps {
+  pageId?: string;
+  componentId?: string;
   message: Amity.Message;
   containerRef: React.RefObject<HTMLDivElement>;
   action?: AmityMessageActionType;
 }
 
 export const AmityLiveChatMessageSenderView = ({
+  pageId = '*',
+  componentId = '*',
   message,
   containerRef,
   action,
@@ -25,6 +29,8 @@ export const AmityLiveChatMessageSenderView = ({
       avatarUrl={avatarFileUrl}
       containerRef={containerRef}
       action={action}
+      pageId={pageId}
+      componentId={componentId}
     />
   );
 };

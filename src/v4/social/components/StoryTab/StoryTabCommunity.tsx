@@ -19,6 +19,9 @@ import {
   StoryTitle,
   StoryWrapper,
 } from './styles';
+import { isAdmin, isModerator } from '~/helpers/permissions';
+import { FormattedMessage } from 'react-intl';
+import useUser from '~/core/hooks/useUser';
 
 interface StoryTabCommunityFeedProps {
   communityId: string;
@@ -53,8 +56,13 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({ co
     onClickStory(communityId, 'communityFeed');
   };
 
-  const { client } = useSDK();
-  const hasStoryPermission = checkStoryPermission(client, communityId);
+  const { currentUserId, client } = useSDK();
+  const user = useUser(currentUserId);
+  const isGlobalAdmin = isAdmin(user?.roles);
+  const isCommunityModerator = isModerator(user?.roles);
+  const hasStoryPermission =
+    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, communityId);
+
   const hasStoryRing = stories?.length > 0;
   const hasUnSeen = stories.some((story) => !story?.isSeen);
   const uploading = stories.some((story) => story?.syncState === 'syncing');
@@ -92,7 +100,9 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({ co
         {isErrored && <ErrorButton />}
       </StoryWrapper>
       <Truncate lines={1}>
-        <StoryTitle>Story</StoryTitle>
+        <StoryTitle>
+          <FormattedMessage id="storyTab.title" />
+        </StoryTitle>
       </Truncate>
     </StoryTabContainer>
   );

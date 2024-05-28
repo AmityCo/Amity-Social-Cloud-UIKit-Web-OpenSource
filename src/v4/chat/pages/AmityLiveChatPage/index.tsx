@@ -12,6 +12,7 @@ interface AmityLiveChatPageProps {
 export const AmityLiveChatPage = ({ channelId }: AmityLiveChatPageProps) => {
   const channel = useChannel(channelId);
   const ref = useRef<HTMLDivElement>(null);
+  const pageId = 'live_chat_page';
 
   return (
     <LiveChatNotificationProvider>
@@ -19,7 +20,7 @@ export const AmityLiveChatPage = ({ channelId }: AmityLiveChatPageProps) => {
         <div className={styles.messageListHeaderWrap}>
           <AmityLiveChatHeader channel={channel} />
         </div>
-        <ChatContainer channel={channel} />
+        <ChatContainer channel={channel} pageId={pageId} />
       </div>
     </LiveChatNotificationProvider>
   );

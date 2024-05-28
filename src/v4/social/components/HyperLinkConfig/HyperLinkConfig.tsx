@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
+
 import useSDK from '~/core/hooks/useSDK';
 import { BottomSheet, Typography } from '~/v4/core/components';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
@@ -126,28 +127,27 @@ export const HyperLinkConfig = ({
           )}
         </Button>
       </div>
-      <div className={styles.divider} /
+      <div className={styles.divider} />
+      <div className={styles.hyperlinkFormContainer}>
+        <form
+          id="asc-story-hyperlink-form"
+          onSubmit={handleSubmit(onSubmitForm)}
+          className={styles.form}
         >
-          <div className={styles.hyperlinkFormContainer}>
-            <form
-              id="asc-story-hyperlink-form"
-              onSubmit={handleSubmit(onSubmitForm)}
-              className={styles.form}
-            >
-              <div className={styles.inputContainer}>
-                <Typography.Title>
-                  <label
-                    htmlFor="asc-uikit-hyperlink-input-url"
-                    className={clsx(styles.label, styles.required)}
-                  >
-                    {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
-                  </label>
-                </Typography.Title>
+          <div className={styles.inputContainer}>
+            <Typography.Title>
+              <label
+                htmlFor="asc-uikit-hyperlink-input-url"
+                className={clsx(styles.label, styles.required)}
+              >
+                {formatMessage({ id: 'storyCreation.hyperlink.form.urlLabel' })}
+              </label>
+            </Typography.Title>
 
-                <input
-                  id="asc-uikit-hyperlink-input-url"
-                  placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}
-                  className={clsx(styles.input, errors?.url && styles.hasError)}
+            <input
+              id="asc-uikit-hyperlink-input-url"
+              placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}
+              className={clsx(styles.input, errors?.url && styles.hasError)}
               {...register('url')}
             />
             {errors?.url && <span className={styles.errorText}>{errors?.url?.message}</span>}
@@ -155,11 +155,11 @@ export const HyperLinkConfig = ({
           <div className={styles.inputContainer}>
             <div className={styles.labelContainer}>
               <Typography.Title>
-                    <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
-                      {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
-                    </label>
-                  </Typography.Title>
-                  <div className={styles.characterCount}>
+                <label htmlFor="asc-uikit-hyperlink-input-link-text" className={styles.label}>
+                  {formatMessage({ id: 'storyCreation.hyperlink.form.linkTextLabel' })}
+                </label>
+              </Typography.Title>
+              <div className={styles.characterCount}>
                 {watch('customText')?.length || 0} / {MAX_LENGTH}
               </div>
             </div>
@@ -170,6 +170,7 @@ export const HyperLinkConfig = ({
               })}
               className={clsx(styles.input, errors?.customText && styles.hasError)}
               {...register('customText')}
+              maxLength={MAX_LENGTH}
             />
             {errors?.customText && (
               <span className={styles.errorText}>{errors?.customText?.message}</span>
@@ -183,13 +184,13 @@ export const HyperLinkConfig = ({
           {isHaveHyperLink && (
             <div className={styles.inputContainer}>
               <Button
-                    variant="secondary"
-                    onClick={discardHyperlink}
-                    className={clsx(styles.removeLinkButton)}
-                  >
-                    <Trash2Icon className={styles.removeIcon} />
-                    {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
-                  </Button>
+                variant="secondary"
+                onClick={discardHyperlink}
+                className={clsx(styles.removeLinkButton)}
+              >
+                <Trash2Icon className={styles.removeIcon} />
+                {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
+              </Button>
               <div className={styles.divider} />
             </div>
           )}

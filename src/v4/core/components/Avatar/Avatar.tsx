@@ -19,6 +19,7 @@ export const Avatar = ({
   onClick,
   loading,
   size = 'medium',
+  backgroundImage,
   ...props
 }: AvatarProps) => {
   const [visible, setVisible] = useState(false);
