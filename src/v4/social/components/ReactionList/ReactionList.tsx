@@ -1,9 +1,8 @@
 import React, { Fragment, useState } from 'react';
-import Avatar from '~/core/components/Avatar';
 import { FireIcon, HeartIcon, LikedIcon } from '~/icons';
 import styles from './ReactionList.module.css';
-import { useReactionsCollection } from '../../hooks';
-import { Typography } from '~/v4/core/components';
+import { useReactionsCollection } from '~/v4/social/hooks/collections/useReactionsCollection';
+import { Avatar, Typography } from '~/v4/core/components';
 
 interface ReactionListProps {
   referenceId: string;
@@ -83,7 +82,7 @@ export const ReactionList = ({ referenceId, referenceType }: ReactionListProps) 
               <div className={styles.userItem}>
                 <div className={styles.userDetailsContainer}>
                   <Avatar size="small" avatar={reaction.user?.avatar?.fileUrl} />
-                  <Typography.Body>{reaction.user?.displayName}</Typography.Body>
+                  <Typography.BodyBold>{reaction.user?.displayName}</Typography.BodyBold>
                 </div>
               </div>
             </Fragment>

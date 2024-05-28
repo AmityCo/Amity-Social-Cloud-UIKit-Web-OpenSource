@@ -3,6 +3,9 @@ name: Dev release pipeline
 on:
   pull_request:
 
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 jobs:
   sync_dev:
     runs-on: ubuntu-latest
@@ -36,7 +39,7 @@ jobs:
       - name: Get pnpm store directory
         id: pnpm-cache
         run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+          echo "pnpm_cache_dir=$(pnpm store path | tr -d '\n')" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         name: Setup pnpm cache
@@ -51,6 +54,28 @@ jobs:
 
       - name: build storybook
         run: pnpm run storybook:build
+
+      - name: get version
+        id: version
+        run: echo "current_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: increase version (pre-release)
+        run: pnpm standard-version --release-as ${{ steps.version.outputs.current_version }} --prerelease alpha.$(git rev-parse --short HEAD) --skip.changelog --skip.commit --skip.tag
+
+      - name: unpublish old version
+        if: "contains(github.event.pull_request.title, '(sdk):')"
+        continue-on-error: true
+        run: |
+          prev=$(npm view @amityco/ui-kit dist-tags.dev/${{ github.event.pull_request.number }})
+          [[ ! -z $prev ]] && npm unpublish @amityco/ui-kit@$prev
+
+      - name: build
+        run: pnpm run build
+
+      - name: publish on npm with dev dist-tag
+        if: "contains(github.event.pull_request.title, '(sdk):')"
+        continue-on-error: true
+        run: npm publish --tag dev/${{ github.event.pull_request.number }}
 
       - name: publish on s3
         uses: jakejarvis/s3-sync-action@master

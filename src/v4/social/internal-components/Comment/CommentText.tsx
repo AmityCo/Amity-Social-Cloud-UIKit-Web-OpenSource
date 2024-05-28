@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
+import clsx from 'clsx';
 import { findChunks, Mentioned } from '~/v4/helpers/utils';
 import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { processChunks } from '~/core/components/ChunkHighlighter';
 import Linkify from '~/core/components/Linkify';
-import { CommentContent, ReadMoreButton } from './styles';
+import styles from './CommentText.module.css';
 
 const COMMENT_MAX_LINES = 8;
 
@@ -31,7 +32,7 @@ const CommentText = ({
   const expand = () => setIsExpanded(true);
 
   const textContent = text ? (
-    <CommentContent data-qa-anchor="comment-content" className={className}>
+    <div data-qa-anchor="comment-content" className={clsx(styles.commentContent, className)}>
       <Truncate.Atom>
         {chunks.map((chunk) => {
           const key = `${text}-${chunk.start}-${chunk.end}`;
@@ -45,13 +46,12 @@ const CommentText = ({
                 </MentionHighlightTag>
               );
             }
-
             return <span key={key}>{sub}</span>;
           }
           return <Linkify key={key}>{sub}</Linkify>;
         })}
       </Truncate.Atom>
-    </CommentContent>
+    </div>
   ) : null;
 
   if (isExpanded) {
@@ -62,9 +62,9 @@ const CommentText = ({
     <Truncate
       lines={maxLines}
       ellipsis={
-        <ReadMoreButton onClick={expand}>
+        <button className={clsx(styles.readMoreButton)} onClick={expand}>
           <FormattedMessage id="comment.readmore" />
-        </ReadMoreButton>
+        </button>
       }
     >
       {textContent}

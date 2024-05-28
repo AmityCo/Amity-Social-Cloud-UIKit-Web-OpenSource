@@ -82,24 +82,30 @@ To install the Amity UI-Kit together with another project, follow these steps:
    pnpm run build
    ```
 
-5. Navigate to your application's directory:
+5. Pack the project
+
+   ```
+   pnpm pack
+   ```
+
+6. Navigate to your application's directory:
 
    ```
    cd <path-to-your-app>
    ```
 
-6. Link the Amity UI-Kit repository to your application using one of the following package managers:
+7. Install the Amity UI-Kit to your application using one of the following package managers:
    - NPM:
      ```
-     npm link file:<path-to-amity-ui-kit-repository> --save
+     npm i file:<path-to-amity-ui-kit-repository>/<path-to-tgz-file> --save
      ```
    - Yarn (Classic):
      ```
-     yarn add file:<path-to-amity-ui-kit-repository>
+     yarn add file:<path-to-amity-ui-kit-repository>/<path-to-tgz-file>
      ```
    - PNPM:
      ```
-     pnpm i file:<path-to-amity-ui-kit-repository>
+     pnpm i file:<path-to-amity-ui-kit-repository>/<path-to-tgz-file>
      ```
 
 ## Documentation

@@ -4,29 +4,27 @@ import { Tester } from 'react-insta-stories/dist/interfaces';
 import styles from './Renderers.module.css';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useImage from '~/core/hooks/useImage';
+
 import { checkStoryPermission, formatTimeAgo } from '~/utils';
 
 import useSDK from '~/core/hooks/useSDK';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 import Truncate from 'react-truncate-markup';
 
-import { HyperLinkButtonContainer } from './styles';
 import { CustomRenderer } from './types';
-import { BottomSheet } from '~/v4/core/components';
-import { MobileSheet } from '~/v4/core/components/BottomSheet/styles';
-import {
-  MobileActionSheetContent,
-  MobileSheetHeader,
-  StoryActionItem,
-  StoryActionItemText,
-} from '../styles';
+
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from './Wrappers/Footer';
 import Header from './Wrappers/Header';
 import { PageTypes } from '~/social/constants';
+import { motion, PanInfo, useAnimationControls } from 'framer-motion';
+import useUser from '~/core/hooks/useUser';
+import { BottomSheet } from '~/v4/core/components/BottomSheet';
+import { Typography } from '~/v4/core/components';
+import { Button } from '~/v4/core/components/Button';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -62,6 +60,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     imageSize: 'small',
   });
 
+  const user = useUser(client?.userId);
+
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
     createdAt && creator?.displayName ? (
@@ -74,7 +74,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     );
 
   const isOfficial = community?.isOfficial || false;
-
+  const isCreator = creator?.userId === user?.userId;
   const haveStoryPermission = checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
@@ -99,6 +99,37 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   const closeCommentSheet = () => setIsOpenCommentSheet(false);
 
   const targetRootId = 'asc-uikit-stories-viewer';
+
+  const controls = useAnimationControls();
+
+  const handleSwipeDown = () => {
+    controls
+      .start({
+        y: '100%',
+        transition: { duration: 0.3, ease: 'easeOut' },
+      })
+      .then(() => {
+        if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
+          onChangePage(PageTypes.NewsFeed);
+        } else {
+          onClickCommunity(community?.communityId as string);
+        }
+      });
+  };
+
+  const handleDragStart = () => {
+    action('pause', true);
+  };
+
+  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (info.offset.y > 100) {
+      handleSwipeDown();
+    } else {
+      controls.start({ y: 0, transition: { duration: 0.3, ease: 'easeOut' } }).then(() => {
+        action('play', true);
+      });
+    }
+  };
 
   useEffect(() => {
     if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
@@ -130,7 +161,16 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   }, []);
 
   return (
-    <div className={styles.rendererContainer}>
+    <motion.div
+      className={styles.rendererContainer}
+      animate={controls}
+      drag="y"
+      dragConstraints={{ top: 0, bottom: 0 }}
+      dragElastic={0.7}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
+    >
       <Header
         avatar={avatarUrl}
         heading={heading}
@@ -153,6 +193,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         }}
         addStoryButton={addStoryButton}
       />
+
       <img
         className={styles.storyImage}
         data-qa-anchor="image_view"
@@ -161,68 +202,56 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onLoad={imageLoaded}
         alt="Story Image"
       />
+
       {!loaded && (
         <div className={styles.loadingOverlay} style={{ width, height }}>
           {loader || <div>loading...</div>}
         </div>
       )}
+
       <BottomSheet
         rootId={targetRootId}
         isOpen={isOpenBottomSheet}
         onClose={closeBottomSheet}
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
+        detent="content-height"
       >
-        <MobileSheet.Container>
-          <MobileSheet.Header />
-          <MobileActionSheetContent>
-            {actions?.map((bottomSheetAction) => (
-              <StoryActionItem
-                onClick={() => {
-                  bottomSheetAction.action();
-                  closeBottomSheet();
-                }}
-              >
-                {bottomSheetAction.icon}
-                <StoryActionItemText>
-                  {formatMessage({ id: bottomSheetAction.name })}
-                </StoryActionItemText>
-              </StoryActionItem>
-            ))}
-          </MobileActionSheetContent>
-        </MobileSheet.Container>
-        <MobileSheet.Backdrop onTap={closeBottomSheet} />
+        {actions?.map((bottomSheetAction) => (
+          <Button
+            className={styles.actionButton}
+            onClick={() => {
+              bottomSheetAction.action();
+              closeBottomSheet();
+            }}
+            variant="secondary"
+          >
+            {bottomSheetAction?.icon && bottomSheetAction.icon}
+            <Typography.BodyBold>
+              {formatMessage({ id: bottomSheetAction.name })}
+            </Typography.BodyBold>
+          </Button>
+        ))}
       </BottomSheet>
+
       <BottomSheet
         rootId={targetRootId}
         isOpen={isOpenCommentSheet}
         onClose={closeCommentSheet}
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
         detent="full-height"
+        headerTitle={formatMessage({ id: 'storyViewer.commentSheet.title' })}
       >
-        <MobileSheet.Container>
-          <MobileSheet.Header
-            style={{
-              borderTopLeftRadius: '1rem',
-              borderTopRightRadius: '1rem',
-              borderBottom: 'none',
-            }}
-          />
-          <MobileSheetHeader>
-            <FormattedMessage id="storyViewer.commentSheet.title" />
-          </MobileSheetHeader>
-          <MobileSheet.Content>
-            <CommentTray
-              referenceId={storyId}
-              referenceType="story"
-              community={community as Amity.Community}
-              shouldAllowCreation={community?.allowCommentInStory}
-              shouldAllowInteraction={isJoined}
-            />
-          </MobileSheet.Content>
-        </MobileSheet.Container>
+        <CommentTray
+          referenceId={storyId}
+          referenceType="story"
+          community={community as Amity.Community}
+          shouldAllowCreation={community?.allowCommentInStory}
+          shouldAllowInteraction={isJoined}
+        />
       </BottomSheet>
+
       {story.items?.[0]?.data?.url && (
-        <HyperLinkButtonContainer>
+        <div className={styles.hyperLinkContainer}>
           <HyperLink
             href={
               story.items[0].data.url.startsWith('http')
@@ -237,8 +266,9 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
               <span>{story.items?.[0]?.data?.customText || story.items?.[0].data.url}</span>
             </Truncate>
           </HyperLink>
-        </HyperLinkButtonContainer>
+        </div>
       )}
+
       <Footer
         storyId={storyId}
         syncState={syncState}
@@ -247,8 +277,9 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         totalLikes={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
+        showImpression={isCreator || haveStoryPermission}
       />
-    </div>
+    </motion.div>
   );
 };
 

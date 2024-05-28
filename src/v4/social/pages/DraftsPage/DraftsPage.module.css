@@ -32,7 +32,10 @@
 }
 
 .mainContainer {
+  width: 100%;
+  height: 100%;
   flex: 1;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,13 +62,125 @@
   width: 100%;
 }
 
+.videoPreview {
+  width: 100%;
+  height: 100%;
+  background-color: var(--asc-color-black);
+}
+
 .hyperLinkContainer {
   position: absolute;
-  background-color: transparent;
   padding: 1rem;
   display: flex;
   justify-content: center;
   bottom: 6rem;
   left: 0;
   right: 0;
+}
+
+.playPauseButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--asc-color-white);
+  font-size: 1.5rem;
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--asc-color-primary-default);
+  transition: width 0.1s linear;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--asc-color-black);
+}
+
+.description {
+  font-size: 14px;
+}
+
+.storyPreview {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.mainContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: var(--asc-spacing-s1);
+  background-color: transparent;
+  color: var(--color-white);
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--color-white);
+  transition: width 0.1s linear;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 14px;
+}
+
+.playPauseButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: none;
+  border: none;
+  color: var(--color-white);
+  font-size: 48px;
+  cursor: pointer;
 }

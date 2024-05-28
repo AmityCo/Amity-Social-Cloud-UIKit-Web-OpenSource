@@ -4,11 +4,25 @@ on:
   workflow_dispatch:
     inputs:
       release_as:
+        type: choice
         description: 'release as'
         required: false
+        options:
+          - none
+          - major
+          - minor
+          - patch
       pre-release:
+        type: choice
         description: 'prerelease'
         required: false
+        options:
+          - none
+          - alpha
+          - beta
+
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 jobs:
   publish:
@@ -34,7 +48,7 @@ jobs:
       - name: Get pnpm store directory
         id: pnpm-cache
         run: |
-          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+          echo "pnpm_cache_dir=$(pnpm store path | tr -d '\n')" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
         name: Setup pnpm cache
@@ -49,31 +63,31 @@ jobs:
 
       - name: increase version (patch)
         run: pnpm standard-version --yes
-        if: github.event.inputs.release_as == 'patch' && github.event.inputs.pre-release == ''
+        if: github.event.inputs.release_as == 'patch' && github.event.inputs.pre-release == 'none'
 
       - name: increase version (patch) (pre-release)
         run: pnpm standard-version --yes --release-as patch --prerelease ${{ github.event.inputs.pre-release }}
-        if: github.event.inputs.release_as == 'patch' && github.event.inputs.pre-release != ''
+        if: github.event.inputs.release_as == 'patch' && github.event.inputs.pre-release != 'none'
 
       - name: increase version (minor)
         run: pnpm standard-version --yes --release-as minor
-        if: github.event.inputs.release_as == 'minor' && github.event.inputs.pre-release == ''
+        if: github.event.inputs.release_as == 'minor' && github.event.inputs.pre-release == 'none'
 
       - name: increase version (minor) (pre-release)
         run: pnpm standard-version --yes --prerelease ${{ github.event.inputs.pre-release }}
-        if: github.event.inputs.release_as == 'minor' && github.event.inputs.pre-release != ''
+        if: github.event.inputs.release_as == 'minor' && github.event.inputs.pre-release != 'none'
 
       - name: increase version (major)
         run: pnpm standard-version --yes --release-as major
-        if: github.event.inputs.release_as == 'major' && github.event.inputs.pre-release == ''
+        if: github.event.inputs.release_as == 'major' && github.event.inputs.pre-release == 'none'
 
       - name: increase version (major) (pre-release)
         run: pnpm standard-version --yes --release-as major --prerelease ${{ github.event.inputs.pre-release }}
-        if: github.event.inputs.release_as == 'major' && github.event.inputs.pre-release != ''
+        if: github.event.inputs.release_as == 'major' && github.event.inputs.pre-release != 'none'
 
       - name: increase version (pre-release)
         run: pnpm standard-version --prerelease ${{ github.event.inputs.pre-release }}
-        if: github.event.inputs.release_as == '' && github.event.inputs.pre-release != ''
+        if: github.event.inputs.release_as == 'none' && github.event.inputs.pre-release != 'none'
 
       - name: build
         run: pnpm run build

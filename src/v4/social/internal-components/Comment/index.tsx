@@ -1,26 +1,9 @@
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import useComment from '~/social/hooks/useComment';
-
 import useMention from '~/v4/chat/hooks/useMention';
 
-import {
-  CommentBlock,
-  CommentContainer,
-  DeletedCommentContainer,
-  DeletedIcon,
-  DeletedReplyContainer,
-  IconContainer,
-  MessageContainer,
-  MobileSheet,
-  MobileSheetButton,
-  MobileSheetContent,
-  MobileSheetHeader,
-  MobileSheetNestedBackDrop,
-  ReplyContainer,
-  Text,
-} from './styles';
 import {
   extractMetadata,
   isNonNullable,
@@ -29,61 +12,31 @@ import {
   Metadata,
   parseMentionsMarkup,
 } from '~/v4/helpers/utils';
-import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
-import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+
 import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
-
 import useImage from '~/core/hooks/useImage';
 
-import { FlagIcon, Pencil2Icon, Trash2Icon } from '~/icons';
 import UIComment from './UIComment';
 
 import { LIKE_REACTION_KEY } from '~/constants';
 import { CommentList } from '~/v4/social/internal-components/CommentList';
 import { ReactionList } from '~/v4/social/components/ReactionList';
-import { useTheme } from 'styled-components';
 import useGetStoryByStoryId from '../../hooks/useGetStoryByStoryId';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
+import { Button, BottomSheet, Typography } from '~/v4/core/components';
+
+import styles from './Comment.module.css';
+import { TrashIcon, PenIcon, FlagIcon } from '~/v4/social/icons';
+import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
+
 const REPLIES_PER_PAGE = 5;
-
-const DeletedComment = () => {
-  return (
-    <DeletedCommentContainer data-qa-anchor="comment-deleted-comment">
-      <IconContainer>
-        <DeletedIcon />
-      </IconContainer>
-      <MessageContainer>
-        <Text data-qa-anchor="comment-deleted-comment-text">
-          <FormattedMessage id="comment.deleted" />
-        </Text>
-      </MessageContainer>
-    </DeletedCommentContainer>
-  );
-};
-
-const DeletedReply = () => {
-  return (
-    <div>
-      <DeletedReplyContainer data-qa-anchor="reply-deleted-reply">
-        <IconContainer className="reply">
-          <DeletedIcon />
-        </IconContainer>
-        <MessageContainer>
-          <Text data-qa-anchor="reply-deleted-reply-text">
-            <FormattedMessage id="reply.deleted" />
-          </Text>
-        </MessageContainer>
-      </DeletedReplyContainer>
-    </div>
-  );
-};
 
 function getCommentData(comment: Amity.Comment | null) {
   if (comment == null) return '';
@@ -103,18 +56,10 @@ interface CommentProps {
     commentId: Amity.Comment['commentId'],
   ) => void;
   style?: React.CSSProperties;
-  onClickReactionList: (commentId: string) => void;
   shouldAllowInteraction?: boolean;
 }
 
-const Comment = ({
-  commentId,
-  readonly,
-  onClickReply,
-  style,
-  shouldAllowInteraction,
-}: CommentProps) => {
-  const theme = useTheme();
+export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => {
   const comment = useComment(commentId);
   const story = useGetStoryByStoryId(comment?.referenceId);
   const [bottomSheet, setBottomSheet] = useState(false);
@@ -156,7 +101,11 @@ const Comment = ({
     return toggleFlagComment();
   };
 
-  const handleEditComment = async (text: string, mentionees: Mentionees, metadata: Metadata) =>
+  const handleEditComment = async (
+    text: string,
+    mentionees: Amity.UserMention[],
+    metadata: Metadata,
+  ) =>
     commentId &&
     CommentRepository.updateComment(commentId, {
       data: {
@@ -241,7 +190,7 @@ const Comment = ({
             ? formatMessage({ id: 'reply.edit' })
             : formatMessage({ id: 'comment.edit' }),
           action: startEditing,
-          icon: <Pencil2Icon width={24} height={24} fill={theme.palette.base.default} />,
+          icon: <PenIcon className={styles.actionIcon} />,
         }
       : null,
     canReport
@@ -250,7 +199,7 @@ const Comment = ({
             ? formatMessage({ id: 'report.undoReport' })
             : formatMessage({ id: 'report.doReport' }),
           action: handleReportComment,
-          icon: <FlagIcon width={24} height={24} fill={theme.palette.base.default} />,
+          icon: <FlagIcon className={styles.actionIcon} />,
         }
       : null,
     canDelete
@@ -259,22 +208,12 @@ const Comment = ({
             ? formatMessage({ id: 'reply.delete' })
             : formatMessage({ id: 'comment.delete' }),
           action: deleteComment,
-          icon: <Trash2Icon width={24} height={24} fill={theme.palette.base.default} />,
+          icon: <TrashIcon className={styles.actionIcon} />,
         }
       : null,
   ].filter(isNonNullable);
 
   if (comment == null) return null;
-
-  if (comment?.isDeleted) {
-    return isReplyComment ? (
-      <DeletedReply />
-    ) : (
-      <CommentBlock>
-        <DeletedComment />
-      </CommentBlock>
-    );
-  }
 
   const renderedComment = (
     <UIComment
@@ -328,10 +267,12 @@ const Comment = ({
   return (
     <>
       {isReplyComment ? (
-        <ReplyContainer data-qa-anchor="reply">{renderedComment}</ReplyContainer>
+        <div className={styles.replyContainer} data-qa-anchor="reply">
+          {renderedComment}
+        </div>
       ) : (
-        <CommentBlock style={style}>
-          <CommentContainer data-qa-anchor="comment">{renderedComment}</CommentContainer>
+        <div>
+          <div data-qa-anchor="comment">{renderedComment}</div>
           {comment.children.length > 0 && (
             <CommentList
               parentId={comment.commentId}
@@ -342,56 +283,36 @@ const Comment = ({
               limit={REPLIES_PER_PAGE}
             />
           )}
-        </CommentBlock>
+        </div>
       )}
-      <MobileSheet
+      <BottomSheet
         isOpen={bottomSheet}
         onClose={toggleBottomSheet}
         mountPoint={document.getElementById('asc-uikit-stories-viewer') as HTMLElement}
         detent="content-height"
       >
-        <MobileSheet.Container>
-          <MobileSheetHeader />
-          <MobileSheetContent>
-            {options.map((bottomSheetAction) => (
-              <MobileSheetButton
-                onClick={() => {
-                  bottomSheetAction.action();
-                  setBottomSheet(false);
-                }}
-              >
-                {bottomSheetAction?.icon}
-                {bottomSheetAction.name}
-              </MobileSheetButton>
-            ))}
-          </MobileSheetContent>
-        </MobileSheet.Container>
-        <MobileSheetNestedBackDrop onTap={toggleBottomSheet} />
-      </MobileSheet>
-      <MobileSheet
+        {options.map((bottomSheetAction) => (
+          <Button
+            className={styles.actionButton}
+            variant="secondary"
+            onClick={() => {
+              bottomSheetAction.action();
+              setBottomSheet(false);
+            }}
+          >
+            {bottomSheetAction?.icon && bottomSheetAction?.icon}
+            <Typography.BodyBold>{bottomSheetAction.name}</Typography.BodyBold>
+          </Button>
+        ))}
+      </BottomSheet>
+      <BottomSheet
         isOpen={!!selectedCommentId}
         onClose={() => setSelectedCommentId('')}
         mountPoint={document.getElementById('asc-uikit-stories-viewer') as HTMLElement}
         detent="full-height"
       >
-        <MobileSheet.Container>
-          <MobileSheetHeader />
-          <MobileSheetContent>
-            <MobileSheet.Scroller>
-              <ReactionList referenceId={comment.commentId} referenceType="comment" />
-            </MobileSheet.Scroller>
-          </MobileSheetContent>
-        </MobileSheet.Container>
-        <MobileSheetNestedBackDrop onTap={() => setSelectedCommentId('')} />
-      </MobileSheet>
+        <ReactionList referenceId={comment.commentId} referenceType="comment" />
+      </BottomSheet>
     </>
   );
 };
-
-export default memo((props: CommentProps) => {
-  const CustomComponentFn = useCustomComponent<CommentProps>('Comment');
-
-  if (CustomComponentFn) return CustomComponentFn(props);
-
-  return <Comment {...props} />;
-});

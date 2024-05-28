@@ -23,7 +23,7 @@ const generateShades = (hexColor: string, isDarkMode = false): string[] => {
   return shades;
 };
 
-const generatePalleteByConfig = ({
+const generatePaletteByConfig = ({
   themeConfig,
   configId,
   isDarkMode,
@@ -78,7 +78,7 @@ const generateComponentPalette = (config: Config, currentTheme: 'light' | 'dark'
       const configId = configurable.pageId.replace('_', '-');
 
       if (themeToGenerate) {
-        generatePalleteByConfig({
+        generatePaletteByConfig({
           themeConfig: themeToGenerate,
           configId,
           isDarkMode: currentTheme === 'dark',
@@ -100,7 +100,7 @@ const generateComponentPalette = (config: Config, currentTheme: 'light' | 'dark'
           configurable.pageId.replace('_', '-') + '-' + componentId.replace('_', '-');
 
         if (themeToGenerate) {
-          generatePalleteByConfig({
+          generatePaletteByConfig({
             themeConfig: themeToGenerate,
             configId,
             isDarkMode: currentTheme === 'dark',
@@ -136,7 +136,7 @@ export const ThemeProvider: React.FC = ({ children }) => {
     const themeToGenerate = currentTheme === 'light' ? config.theme?.light : config.theme?.dark;
 
     if (themeToGenerate) {
-      generatePalleteByConfig({
+      generatePaletteByConfig({
         themeConfig: themeToGenerate,
         isDarkMode: currentTheme === 'dark',
       });

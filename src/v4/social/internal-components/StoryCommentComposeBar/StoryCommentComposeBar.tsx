@@ -3,10 +3,8 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import { Close, Lock2Icon } from '~/icons';
-import { ReplyingBlock } from '../StoryViewer/styles';
-import { ReplyingToText, ReplyingToUsername } from '../CommentComposeBar/styles';
 import { CommentComposeBar } from '../CommentComposeBar';
-import { StoryDisabledCommentComposerBarContainer } from './styles';
+import styles from './StoryCommentComposeBar.module.css';
 
 interface StoryCommentComposeBarProps {
   communityId: string;
@@ -16,7 +14,6 @@ interface StoryCommentComposeBarProps {
   shouldAllowCreation?: boolean;
   replyTo?: Amity.Comment | null;
   onCancelReply?: () => void;
-  referenceType?: string;
   referenceId?: string;
   style?: React.CSSProperties;
 }
@@ -28,11 +25,10 @@ export const StoryCommentComposeBar = ({
   isReplying,
   replyTo,
   onCancelReply,
-  referenceType,
   referenceId,
-  style,
 }: StoryCommentComposeBarProps) => {
   const { formatMessage } = useIntl();
+
   const handleAddComment = async (
     commentText: string,
     mentionees: Mentionees,
@@ -57,9 +53,7 @@ export const StoryCommentComposeBar = ({
     await CommentRepository.createComment({
       referenceType: replyTo?.referenceType as Amity.CommentReferenceType,
       referenceId: replyTo?.referenceId as string,
-      data: {
-        text: replyCommentText,
-      },
+      data: { text: replyCommentText },
       parentId: replyTo?.commentId,
       metadata,
       mentionees: mentionees as Amity.UserMention[],
@@ -70,20 +64,18 @@ export const StoryCommentComposeBar = ({
     return (
       <>
         {isReplying && (
-          <ReplyingBlock>
-            <ReplyingToText>
+          <div className={styles.replyingBlock}>
+            <div className={styles.replyingToText}>
               <FormattedMessage id="storyViewer.commentSheet.replyingTo" />{' '}
-              <ReplyingToUsername>{replyTo?.userId}</ReplyingToUsername>
-            </ReplyingToText>
-            <Close width={20} height={20} onClick={onCancelReply} />
-          </ReplyingBlock>
+              <span className={styles.replyingToUsername}>{replyTo?.userId}</span>
+            </div>
+            <Close onClick={onCancelReply} className={styles.closeButton} />
+          </div>
         )}
-
         {!isReplying ? (
           <CommentComposeBar
             targetId={communityId}
             onSubmit={(text, mentionees, metadata) => handleAddComment(text, mentionees, metadata)}
-            style={style}
           />
         ) : (
           <CommentComposeBar
@@ -93,7 +85,6 @@ export const StoryCommentComposeBar = ({
               handleReplyToComment(replyText, mentionees, metadata);
               onCancelReply?.();
             }}
-            style={style}
           />
         )}
       </>
@@ -102,9 +93,10 @@ export const StoryCommentComposeBar = ({
 
   if (isJoined && shouldAllowCreation) {
     return (
-      <StoryDisabledCommentComposerBarContainer>
-        <Lock2Icon /> {formatMessage({ id: 'storyViewer.commentSheet.disabled' })}
-      </StoryDisabledCommentComposerBarContainer>
+      <div className={styles.disabledCommentComposerBarContainer}>
+        <Lock2Icon />
+        {formatMessage({ id: 'storyViewer.commentSheet.disabled' })}
+      </div>
     );
   }
 
