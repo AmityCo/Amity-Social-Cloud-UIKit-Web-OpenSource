@@ -282,11 +282,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         detent="full-height"
       >
         <CommentTray
-          referenceId={storyId}
-          referenceType={'story'}
+                referenceId={storyId}
+                referenceType={'story'}
           community={community as Amity.Community}
-          shouldAllowCreation={community?.allowCommentInStory}
-          shouldAllowInteraction={isJoined}
+                shouldAllowCreation={community?.allowCommentInStory}
+                shouldAllowInteraction={isJoined}
         />
       </BottomSheet>
       {story.items?.[0]?.data?.url && (

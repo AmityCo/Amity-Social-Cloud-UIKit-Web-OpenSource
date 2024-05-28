@@ -12,7 +12,6 @@ import {
   Metadata,
   parseMentionsMarkup,
 } from '~/v4/helpers/utils';
-
 import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
