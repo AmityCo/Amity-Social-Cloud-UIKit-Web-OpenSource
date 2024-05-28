@@ -104,8 +104,8 @@ dependencies:
 
 devDependencies:
   '@amityco/ts-sdk':
-    specifier: ^6.25.0
-    version: 6.25.0
+    specifier: ^6.25.1
+    version: 6.25.1
   '@storybook/addon-a11y':
     specifier: ^7.6.7
     version: 7.6.18
@@ -263,8 +263,8 @@ packages:
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
     dev: true
 
-  /@amityco/ts-sdk@6.25.0:
-    resolution: {integrity: sha512-TLqxGVWZMqP0LdwR+9iGGx2a0G3GqoDF1gxC543CCg5dP+D0BsEqohiPl4x+Svxdi6L3975D5+t3X3HjG4CBWg==}
+  /@amityco/ts-sdk@6.25.1:
+    resolution: {integrity: sha512-Xm0BhctI1bMw2IDtpd2weY+BIF5bVhu0CXsG6qkZMVNx3whGteh24YDD3J6ZM8h29RaZp3VXb0yHGZLh6InKAw==}
     engines: {node: '>=12', npm: '>=6'}
     dependencies:
       agentkeepalive: 4.5.0
