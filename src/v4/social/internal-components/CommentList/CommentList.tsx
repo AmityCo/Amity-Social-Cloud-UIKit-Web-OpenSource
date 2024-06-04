@@ -4,7 +4,6 @@ import useCommentsCollection from '~/social/hooks/collections/useCommentsCollect
 import { Comment } from '../Comment';
 import styles from './CommentList.module.css';
 import { ExpandIcon } from '~/v4/social/icons';
-import { Button } from '~/v4/core/components';
 import { LoadMoreWrapper } from '~/v4/core/components/LoadMoreWrapper/LoadMoreWrapper';
 
 interface CommentListProps {

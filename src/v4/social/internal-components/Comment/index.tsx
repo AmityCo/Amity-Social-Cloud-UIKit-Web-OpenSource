@@ -184,6 +184,8 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     });
   };
 
+  const isMember = story?.community?.isJoined;
+
   const options = [
     canEdit
       ? {
@@ -248,6 +250,7 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
       isLiked={isLiked}
       isReported={isFlaggedByMe}
       isReplyComment={isReplyComment}
+      isMember={isMember}
       onChange={onChange}
       onClickOverflowMenu={toggleBottomSheet}
       options={options}
@@ -312,7 +315,7 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
         mountPoint={document.getElementById('asc-uikit-stories-viewer') as HTMLElement}
         detent="full-height"
       >
-        <ReactionList referenceId={comment.commentId} referenceType="comment" />
+        <ReactionList pageId="*" referenceId={comment.commentId} referenceType="comment" />
       </BottomSheet>
     </>
   );

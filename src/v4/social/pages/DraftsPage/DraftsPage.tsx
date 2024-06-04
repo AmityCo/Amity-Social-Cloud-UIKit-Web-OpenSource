@@ -20,7 +20,7 @@ import { StoryRepository } from '@amityco/ts-sdk';
 
 import { HyperLinkConfig } from '~/v4/social/components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useNotificationData, useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { PageTypes } from '~/social/constants';
 import { BaseVideoPreview } from '../../internal-components/VideoPreview';
@@ -164,6 +164,16 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
     ]);
   };
 
+  const handleOnClickHyperLinkActionButton = () => {
+    if (hyperLink[0]?.data?.url === '') {
+      setIsHyperLinkBottomSheetOpen(true);
+      return;
+    }
+    notification.info({
+      content: formatMessage({ id: 'storyDraft.notification.hyperlink.error' }),
+    });
+  };
+
   useEffect(() => {
     const extractColorsFromImage = async (fileTarget: File) => {
       const img = await readFileAsync(fileTarget);
@@ -211,7 +221,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
               <HyperLinkButton
                 pageId="create_story_page"
                 componentId="*"
-                onClick={() => setIsHyperLinkBottomSheetOpen(true)}
+                onClick={handleOnClickHyperLinkActionButton}
               />
             </div>
           </div>
@@ -250,15 +260,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
         ) : null}
         {hyperLink[0]?.data?.url && (
           <div className={styles.hyperLinkContainer}>
-            <HyperLink
-              href={
-                hyperLink[0].data.url.startsWith('http')
-                  ? hyperLink[0].data.url
-                  : `https://${hyperLink[0].data.url}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <HyperLink onClick={() => setIsHyperLinkBottomSheetOpen(true)}>
               {hyperLink[0]?.data?.customText || hyperLink[0].data.url.replace(/^https?:\/\//, '')}
             </HyperLink>
           </div>

@@ -385,6 +385,7 @@
   "storyViewer.commentComposeBar.submit": "Post",
 
   "storyDraft.button.shareStory": "Share story",
+  "storyDraft.notification.hyperlink.error": "Can’t add more than one link to your story.",
 
   "storyTab.title": "Story",
 

@@ -12,6 +12,7 @@ import { Trash2Icon } from '~/icons';
 import styles from './HyperLinkConfig.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Button } from '~/v4/core/components/Button';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 interface HyperLinkConfigProps {
   pageId: '*';
@@ -33,6 +34,7 @@ export const HyperLinkConfig = ({
   onRemove,
 }: HyperLinkConfigProps) => {
   const { confirm } = useConfirmContext();
+
   const componentId = 'hyper_link_config_component';
   const { getConfig } = useCustomization();
   const componentConfig = getConfig(`${pageId}/${componentId}/*`);
