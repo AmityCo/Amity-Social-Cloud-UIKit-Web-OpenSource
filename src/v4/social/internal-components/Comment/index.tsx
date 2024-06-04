@@ -8,7 +8,6 @@ import {
   extractMetadata,
   isNonNullable,
   Mentioned,
-  Mentionees,
   Metadata,
   parseMentionsMarkup,
 } from '~/v4/helpers/utils';
@@ -17,7 +16,6 @@ import useSDK from '~/core/hooks/useSDK';
 import useUser from '~/core/hooks/useUser';
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
 
-import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 import useImage from '~/core/hooks/useImage';
@@ -36,6 +34,7 @@ import { Button, BottomSheet, Typography } from '~/v4/core/components';
 import styles from './Comment.module.css';
 import { TrashIcon, PenIcon, FlagIcon } from '~/v4/social/icons';
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
+import { useCommentFlaggedByMe } from '~/v4/social/hooks';
 
 const REPLIES_PER_PAGE = 5;
 
