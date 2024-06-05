@@ -6,6 +6,7 @@ import useMention from '~/v4/chat/hooks/useMention';
 
 import {
   extractMetadata,
+  isCommunityMember,
   isNonNullable,
   Mentioned,
   Metadata,
@@ -34,6 +35,7 @@ import { Button, BottomSheet, Typography } from '~/v4/core/components';
 import styles from './Comment.module.css';
 import { TrashIcon, PenIcon, FlagIcon } from '~/v4/social/icons';
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
 
 const REPLIES_PER_PAGE = 5;
@@ -62,6 +64,8 @@ interface CommentProps {
 export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => {
   const comment = useComment(commentId);
   const story = useGetStoryByStoryId(comment?.referenceId);
+  const { members } = useCommunityMembersCollection(story?.community?.communityId);
+
   const [bottomSheet, setBottomSheet] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
   const { confirm } = useConfirmContext();
@@ -183,7 +187,9 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     });
   };
 
-  const isMember = story?.community?.isJoined;
+  const { currentUserId } = useSDK();
+  const currentMember = members.find((member) => member.userId === currentUserId);
+  const isMember = isCommunityMember(currentMember);
 
   const options = [
     canEdit
