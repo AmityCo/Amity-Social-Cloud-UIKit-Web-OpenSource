@@ -33,7 +33,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { Button, BottomSheet, Typography } from '~/v4/core/components';
 
 import styles from './Comment.module.css';
-import { TrashIcon, PenIcon, FlagIcon } from '~/v4/social/icons';
+import { TrashIcon, PenIcon, FlagIcon, MinusCircleIcon } from '~/v4/social/icons';
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
@@ -222,6 +222,15 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
   ].filter(isNonNullable);
 
   if (comment == null) return null;
+
+  if (comment?.isDeleted) {
+    return isReplyComment ? null : (
+      <div className={styles.deletedCommentBlock}>
+        <MinusCircleIcon />
+        <FormattedMessage id="comment.deleted" />
+      </div>
+    );
+  }
 
   const renderedComment = (
     <UIComment

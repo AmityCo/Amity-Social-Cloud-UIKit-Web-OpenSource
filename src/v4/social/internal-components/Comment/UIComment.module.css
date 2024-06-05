@@ -144,3 +144,11 @@
   gap: 0.125rem;
   color: var(--asc-color-base-default);
 }
+
+.deletedCommentBlock {
+  padding: var(--asc-spacing-m1);
+  background-color: var(--asc-color-base-background);
+  border-radius: var(--asc-border-radius-sm);
+  text-align: center;
+  color: var(--asc-color-base-shade2);
+}
