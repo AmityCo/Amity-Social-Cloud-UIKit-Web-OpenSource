@@ -15,6 +15,7 @@
   max-width: 200px;
   border: var(--asc-color-base-shade4);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .hyperlinkIcon {
