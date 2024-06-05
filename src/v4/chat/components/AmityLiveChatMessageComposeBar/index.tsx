@@ -129,7 +129,8 @@ export const AmityLiveChatMessageComposeBar = ({
             multiline
             disabled={disabled}
             placeholder={
-              componentConfig?.placeholder_text ||
+              (typeof componentConfig?.placeholder_text === 'string' &&
+                componentConfig?.placeholder_text) ||
               formatMessage({
                 id: 'livechat.composebar.placeholder',
               })

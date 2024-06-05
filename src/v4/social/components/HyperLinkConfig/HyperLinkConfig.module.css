@@ -1,11 +1,49 @@
 .hyperlinkFormContainer {
-  border-radius: var(--asc-border-radius-md);
+  background-color: transparent;
 }
 
 .form {
   display: flex;
   flex-direction: column;
   gap: var(--asc-spacing-l1);
+}
+
+.bottomSheet {
+}
+
+.bottomSheet .react-modal-sheet-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.bottomSheet .react-modal-sheet-container {
+  background-color: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  max-height: 80%;
+  overflow: auto;
+}
+
+.bottomSheet .react-modal-sheet-content {
+  background-color: var(--asc-color-base-background);
+}
+
+.bottomSheet .react-modal-sheet-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottomSheet .react-modal-sheet-drag-indicator {
+  width: 40px;
+  height: 4px;
+  background-color: #ccc;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.bottomSheet .react-modal-sheet-content {
+  padding: 16px;
 }
 
 .inputContainer {
@@ -73,10 +111,18 @@
   color: var(--asc-color-base-default);
 }
 
-.styledSecondaryButton {
+.cancelButton {
   border: none;
   color: var(--asc-color-base-default);
-  background: var(--asc-color-base-background);
+}
+
+.doneButton {
+  border: none;
+}
+
+.doneButton:disabled {
+  cursor: not-allowed;
+  color: var(--asc-color-primary-shade2);
 }
 
 .removeIcon {

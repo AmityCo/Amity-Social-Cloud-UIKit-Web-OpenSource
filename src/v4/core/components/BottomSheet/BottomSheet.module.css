@@ -4,29 +4,24 @@ Note that you might need to use !important for style overrides since the inner s
 which have higher specificity. 
 */
 
-.react-modal-sheet-container {
-  color: var(--asc-color-base-default);
-}
-
-.react-modal-sheet-backdrop {
-  background-color: var(--asc-color-base-inverse, rgba(0, 0, 0, 0.5));
-}
-
-.react-modal-sheet-header {
-  display: flex;
-  padding-bottom: 1rem;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  align-self: stretch;
+.bottomSheet__container {
   background-color: var(--asc-color-base-background);
-  color: var(--asc-color-base-default);
-  border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 
-.react-modal-sheet-content {
+.bottomSheet__header {
+  padding: 1rem;
   display: flex;
+  justify-content: center;
+}
+
+.bottomSheet__drag-indicator {
+}
+
+.bottomSheet__content {
   background-color: var(--asc-color-base-background);
   padding: 1rem;
-  color: var(--asc-color-base-default);
+}
+
+.bottomSheet__backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
 }

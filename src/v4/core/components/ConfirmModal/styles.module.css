@@ -2,6 +2,10 @@
   max-width: 22.5rem !important;
 }
 
+.background {
+  background-color: var(--asc-color-base-background);
+}
+
 .footer {
   display: flex;
   justify-content: flex-end;

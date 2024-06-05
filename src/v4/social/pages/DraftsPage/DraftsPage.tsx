@@ -5,7 +5,6 @@ import { readFileAsync } from '~/helpers';
 
 import styles from './DraftsPage.module.css';
 import { SubmitHandler } from 'react-hook-form';
-import Truncate from 'react-truncate-markup';
 
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import {
