@@ -25,6 +25,7 @@ import {
   ViewStoryContent,
   ViewStoryOverlay,
 } from '../../internal-components/StoryViewer/styles';
+
 import Stories from 'react-insta-stories';
 import { renderers } from '../../internal-components/StoryViewer/Renderers';
 import { AmityDraftStoryPage } from '..';
@@ -84,19 +85,18 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
   const isModerator = checkStoryPermission(client, communityId);
 
   const confirmDeleteStory = (storyId: string) => {
-    const isLastStory = currentIndex === stories.length - 1;
+    const isLastStory = currentIndex === 0;
     confirm({
       title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
       content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
+        previousStory();
+        if (isLastStory) onBack();
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),
         });
-        if (isLastStory) {
-          onBack();
-        }
       },
     });
   };
@@ -220,6 +220,8 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
   const increaseIndex = () => {
     setCurrentIndex(currentIndex + 1);
   };
+
+  console.log(currentIndex);
 
   useEffect(() => {
     if (stories[stories.length - 1]?.syncState === 'syncing') {

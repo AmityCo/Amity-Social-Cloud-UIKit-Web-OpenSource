@@ -335,12 +335,6 @@ const storyContentStyles = {
   position: 'relative' as const,
 };
 
-const videoContainerStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
-
 export const tester: Tester = (story) => {
   return {
     condition: story.type === 'video',
