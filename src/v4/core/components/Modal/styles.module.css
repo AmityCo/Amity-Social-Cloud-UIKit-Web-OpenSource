@@ -42,6 +42,8 @@
   border-radius: var(--asc-border-radius-lg);
   max-width: 32.5rem;
   min-width: 20rem;
+  /* TOFIX --asc-color-base-background is not defined some how */
+  background-color: var(--asc-color-white);
 }
 
 .modalWindow:focus {
