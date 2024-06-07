@@ -104,7 +104,7 @@ const MessageAction = ({
                 <Mention className={styles.mentionIcon} />
               </div>
             )} */}
-            {isModerator && !isOwner && (
+            {(isModerator || !isOwner) && (
               <div
                 className={styles.messageActionButton}
                 onClick={isFlagged ? onUnFlagMessage : onFlagMessage}

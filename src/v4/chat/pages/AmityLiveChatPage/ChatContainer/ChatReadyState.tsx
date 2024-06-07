@@ -16,7 +16,7 @@ import useSearchChannelUser from '~/v4/chat/hooks/collections/useSearchChannelUs
 import useSDK from '~/core/hooks/useSDK';
 import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
 
-const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
+const ChatReadyState = ({ pageId = '*', channel }: { pageId?: string; channel: Amity.Channel }) => {
   const isOnline = useConnectionStates();
 
   const { isModerator } = useChannelPermission(channel.channelId);
@@ -59,7 +59,7 @@ const ChatReadyState = ({ channel }: { channel: Amity.Channel }) => {
 
   return (
     <>
-      <AmityLiveChatMessageList channel={channel} replyMessage={setReplyMessage} />
+      <AmityLiveChatMessageList channel={channel} replyMessage={setReplyMessage} pageId={pageId} />
 
       {isOnline && (
         <>

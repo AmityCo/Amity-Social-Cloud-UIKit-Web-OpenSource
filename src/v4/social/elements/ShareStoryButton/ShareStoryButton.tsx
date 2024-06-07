@@ -1,11 +1,12 @@
 import React from 'react';
 
-import Avatar from '~/core/components/Avatar';
 import { useIntl } from 'react-intl';
 import { isValidHttpUrl } from '~/utils';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Icon } from '~/v4/core/components/Icon';
+import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import styles from './ShareStoryButton.module.css';
+import { Avatar } from '~/v4/core/components';
 
 interface ShareButtonProps {
   onClick: () => void;
@@ -41,7 +42,12 @@ export const ShareStoryButton = ({
       onClick={onClick}
     >
       {!elementConfig?.hide_avatar && (
-        <Avatar data-qa-anchor="share_story_button_image_view" size="small" avatar={avatar} />
+        <Avatar
+          data-qa-anchor="share_story_button_image_view"
+          size="small"
+          avatar={avatar}
+          backgroundImage={communityBackgroundImage}
+        />
       )}
       <span>{formatMessage({ id: 'storyDraft.button.shareStory' })}</span>
       {isRemoteImage ? (

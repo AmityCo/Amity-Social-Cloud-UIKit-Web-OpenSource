@@ -25,6 +25,7 @@ import useUser from '~/core/hooks/useUser';
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
+import { isAdmin, isModerator } from '~/helpers/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -75,7 +76,10 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
-  const haveStoryPermission = checkStoryPermission(client, community?.communityId);
+  const isGlobalAdmin = isAdmin(user?.roles);
+  const isCommunityModerator = isModerator(user?.roles);
+  const haveStoryPermission =
+    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...rendererStyles.storyContent,
@@ -263,7 +267,10 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
             onClick={() => story.analytics.markLinkAsClicked()}
           >
             <Truncate lines={1}>
-              <span>{story.items?.[0]?.data?.customText || story.items?.[0].data.url}</span>
+              <span>
+                {story.items[0]?.data?.customText ||
+                  story.items[0].data.url.replace(/^https?:\/\//, '')}
+              </span>
             </Truncate>
           </HyperLink>
         </div>

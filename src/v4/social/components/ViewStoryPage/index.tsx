@@ -18,7 +18,7 @@ import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { CreateStoryButton } from '../../elements';
 
 import { renderers } from '../../internal-components/StoryViewer/Renderers';
-import { checkStoryPermission } from '~/utils';
+
 import { AmityDraftStoryPage } from '../../pages';
 import { useStoryContext } from '../../providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -78,10 +78,7 @@ const StoryViewer = ({ pageId, targetId, duration = 5000, onClose }: StoryViewer
   const { file, setFile } = useStoryContext();
   const [colors, setColors] = useState<FinalColor[]>([]);
 
-  const { client } = useSDK();
-
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const haveStoryPermission = checkStoryPermission(client, targetId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;

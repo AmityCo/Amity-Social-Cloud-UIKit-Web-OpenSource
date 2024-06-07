@@ -15,61 +15,86 @@ const Typography: React.FC<TypographyProps> & {
   BodyBold: React.FC<TypographyProps>;
   Caption: React.FC<TypographyProps>;
   CaptionBold: React.FC<TypographyProps>;
-} = ({ children, className = '' }) => {
-  return <div className={clsx(typography['typography'], className)}>{children}</div>;
+} = ({ children, className = '', ...props }) => {
+  return (
+    <div {...props} className={clsx(typography['typography'], className)}>
+      {children}
+    </div>
+  );
 };
 
-Typography.Heading = ({ children, className = '' }) => {
+Typography.Heading = ({ children, className = '', ...props }) => {
   return (
-    <h1 className={clsx(typography['typography'], typography['typography-headings'], className)}>
+    <h1
+      {...props}
+      className={clsx(typography['typography'], typography['typography-headings'], className)}
+    >
       {children}
     </h1>
   );
 };
 
-Typography.Title = ({ children, className = '' }) => {
+Typography.Title = ({ children, className = '', ...props }) => {
   return (
-    <h2 className={clsx(typography['typography'], typography['typography-titles'], className)}>
+    <h2
+      {...props}
+      className={clsx(typography['typography'], typography['typography-titles'], className)}
+    >
       {children}
     </h2>
   );
 };
 
-Typography.Subtitle = ({ children, className = '' }) => {
+Typography.Subtitle = ({ children, className = '', ...props }) => {
   return (
-    <h3 className={clsx(typography['typography'], typography['typography-sub-title'], className)}>
+    <h3
+      {...props}
+      className={clsx(typography['typography'], typography['typography-sub-title'], className)}
+    >
       {children}
     </h3>
   );
 };
 
-Typography.Body = ({ children, className = '' }) => {
+Typography.Body = ({ children, className = '', ...props }) => {
   return (
-    <p className={clsx(typography['typography'], typography['typography-body'], className)}>
+    <p
+      {...props}
+      className={clsx(typography['typography'], typography['typography-body'], className)}
+    >
       {children}
     </p>
   );
 };
 
-Typography.BodyBold = ({ children, className = '' }) => {
+Typography.BodyBold = ({ children, className = '', ...props }) => {
   return (
-    <p className={clsx(typography['typography'], typography['typography-body-bold'], className)}>
+    <p
+      {...props}
+      className={clsx(typography['typography'], typography['typography-body-bold'], className)}
+    >
       {children}
     </p>
   );
 };
 
-Typography.Caption = ({ children, className = '' }) => {
+Typography.Caption = ({ children, className = '', ...props }) => {
   return (
-    <p className={clsx(typography['typography'], typography['typography-caption'], className)}>
+    <p
+      {...props}
+      className={clsx(typography['typography'], typography['typography-caption'], className)}
+    >
       {children}
     </p>
   );
 };
 
-Typography.CaptionBold = ({ children, className = '' }) => {
+Typography.CaptionBold = ({ children, className = '', ...props }) => {
   return (
-    <p className={clsx(typography['typography'], typography['typography-caption-bold'], className)}>
+    <p
+      {...props}
+      className={clsx(typography['typography'], typography['typography-caption-bold'], className)}
+    >
       {children}
     </p>
   );

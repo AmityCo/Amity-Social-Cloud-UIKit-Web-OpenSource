@@ -164,3 +164,11 @@ export function parseMentionsMarkup(
 export function isNonNullable<TValue>(value: TValue | undefined | null): value is TValue {
   return value != null;
 }
+
+export function getCssVariableValue(variable: string) {
+  return getComputedStyle(document.documentElement).getPropertyValue(variable);
+}
+
+export function convertRemToPx(rem: number) {
+  return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}

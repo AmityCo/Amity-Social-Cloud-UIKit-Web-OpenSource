@@ -4,7 +4,7 @@ import { Tester } from 'react-insta-stories/dist/interfaces';
 import useImage from '~/core/hooks/useImage';
 import { checkStoryPermission, formatTimeAgo } from '~/utils';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 import useSDK from '~/core/hooks/useSDK';
 
@@ -24,6 +24,7 @@ import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 
 import rendererStyles from './Renderers.module.css';
 import useUser from '~/core/hooks/useUser';
+import { isAdmin, isModerator } from '~/helpers/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -61,8 +62,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     imageSize: 'small',
   });
 
-  const isOfficial = community?.isOfficial || false;
-
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
     createdAt && creator?.displayName ? (
@@ -74,8 +73,12 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       ''
     );
 
-  const haveStoryPermission = checkStoryPermission(client, community?.communityId);
+  const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
+  const isGlobalAdmin = isAdmin(user?.roles);
+  const isCommunityModerator = isModerator(user?.roles);
+  const haveStoryPermission =
+    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
 
   const computedStyles = {
     ...storyContentStyles,
@@ -235,7 +238,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         data-qa-anchor="video_view"
         ref={vid}
         style={computedStyles}
-        src={story?.url || undefined}
+        src={story?.videoData?.fileUrl || story?.videoData?.videoUrl?.original}
         controls={false}
         onLoadedData={videoLoaded}
         playsInline
@@ -282,11 +285,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         detent="full-height"
       >
         <CommentTray
-                referenceId={storyId}
-                referenceType={'story'}
+          referenceId={storyId}
+          referenceType={'story'}
           community={community as Amity.Community}
-                shouldAllowCreation={community?.allowCommentInStory}
-                shouldAllowInteraction={isJoined}
+          shouldAllowCreation={community?.allowCommentInStory}
+          shouldAllowInteraction={isJoined}
         />
       </BottomSheet>
       {story.items?.[0]?.data?.url && (
@@ -302,7 +305,10 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
             onClick={() => story.analytics.markLinkAsClicked()}
           >
             <Truncate lines={1}>
-              <span>{story.items?.[0].data?.customText || story.items?.[0].data.url}</span>
+              <span>
+                {story.items[0]?.data?.customText ||
+                  story.items[0].data.url.replace(/^https?:\/\//, '')}
+              </span>
             </Truncate>
           </HyperLink>
         </div>

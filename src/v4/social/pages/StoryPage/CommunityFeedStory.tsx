@@ -81,7 +81,7 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
   const [colors, setColors] = useState<FinalColor[]>([]);
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const haveStoryPermission = checkStoryPermission(client, communityId);
+  const isModerator = checkStoryPermission(client, communityId);
 
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
@@ -172,7 +172,7 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
       url,
       type: isImage ? 'image' : 'video',
       actions: [
-        isStoryCreator || haveStoryPermission
+        isStoryCreator || isModerator
           ? {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),

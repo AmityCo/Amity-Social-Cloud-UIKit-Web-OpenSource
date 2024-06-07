@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { AmityReactionType } from './CustomReactionProvider';
 
 interface CustomizationContextValue {
   config: Config | null;
@@ -41,6 +42,7 @@ export interface Config {
     dark?: Theme['dark'];
   };
   excludes?: string[];
+  message_reactions?: AmityReactionType[];
   customizations?: {
     'select_target_page/*/*'?: {
       theme?: {
