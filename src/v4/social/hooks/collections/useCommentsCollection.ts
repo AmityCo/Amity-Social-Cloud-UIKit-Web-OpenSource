@@ -7,9 +7,8 @@ type useCommentsParams = {
   referenceId?: string | null;
   referenceType: Amity.CommentReferenceType;
   limit?: number;
-  // breaking changes
-  // first?: number;
-  // last?: number;
+  shouldCall?: () => boolean;
+  includeDeleted?: boolean;
 };
 
 export default function useCommentsCollection({
@@ -17,6 +16,8 @@ export default function useCommentsCollection({
   referenceId,
   referenceType,
   limit = 10,
+  shouldCall = () => true,
+  includeDeleted = false,
 }: useCommentsParams) {
   const { items, ...rest } = useLiveCollection({
     fetcher: CommentRepository.getComments,
@@ -25,8 +26,9 @@ export default function useCommentsCollection({
       referenceId: referenceId as string,
       referenceType,
       limit,
+      includeDeleted,
     },
-    shouldCall: () => !!referenceId && !!referenceType,
+    shouldCall: () => shouldCall() && !!referenceId && !!referenceType,
   });
 
   return {

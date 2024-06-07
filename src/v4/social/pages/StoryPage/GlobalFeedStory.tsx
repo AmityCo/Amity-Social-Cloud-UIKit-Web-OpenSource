@@ -90,9 +90,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
         previousStory();
-        if (isLastStory) {
-          onChangePage(PageTypes.NewsFeed);
-        }
+        if (isLastStory) onChangePage(PageTypes.NewsFeed);
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),

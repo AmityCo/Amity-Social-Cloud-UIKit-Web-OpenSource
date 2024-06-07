@@ -359,12 +359,12 @@
   "storyCreation.hyperlink.form.linkTextLabel": "Customize link text",
   "storyCreation.hyperlink.form.linkTextPlaceholder": "Name your link",
   "storyCreation.hyperlink.form.linkTextDescription": "This text will show on the link instead of URL.",
-  "storyCreation.hyperlink.validation.invalidUrl": "Please enter a valid URL.",
   "storyCreation.hyperlink.form.removeButton": "Remove link",
   "storyCreation.hyperlink.removeConfirm.title": "Remove link",
   "storyCreation.hyperlink.removeConfirm.content": "This link will be removed from story.",
   "storyCreation.hyperlink.removeConfirm.cancel": "Cancel",
   "storyCreation.hyperlink.removeConfirm.confirm": "Remove",
+  "storyCreation.hyperlink.validation.error.invalidUrl": "Please enter a valid URL.",
   "storyCreation.hyperlink.validation.error.whitelisted": "Please enter a whitelisted URL.",
   "storyCreation.hyperlink.validation.error.blocked": "Your text contains a blocklisted word.",
 
@@ -381,10 +381,15 @@
   "storyViewer.commentSheet.disabled": "Comments are disabled for this story",
   "storyViewer.commentSheet.replyingTo": "Replying to",
   "storyViewer.toast.like.disabled": "Join community to interact with all stories",
+  "storyViewer.toast.comment.reported": "Comment reported",
+  "storyViewer.toast.comment.unreported": "Comment unreported",
 
   "storyViewer.commentComposeBar.submit": "Post",
 
   "storyDraft.button.shareStory": "Share story",
+  "storyDraft.notification.hyperlink.error": "Can’t add more than one link to your story.",
+
+  "storyTab.title": "Story",
 
   "storyTab.title": "Story",
 

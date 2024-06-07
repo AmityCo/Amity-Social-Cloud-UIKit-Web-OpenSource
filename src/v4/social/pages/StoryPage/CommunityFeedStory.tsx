@@ -91,9 +91,7 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
         previousStory();
-        if (isLastStory) {
-          onBack();
-        }
+        if (isLastStory) onBack();
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),

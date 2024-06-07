@@ -1,50 +1,34 @@
 import React from 'react';
 
-import { useTheme } from 'styled-components';
 import { ActionButton } from '../ActionButton';
 import { LinkIcon } from '~/icons';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 
-interface BackButtonProps {
-  pageId: 'create_story_page';
-  componentId: '*';
+interface HyperLinkButtonProps {
+  pageId?: string;
+  componentId?: string;
   onClick: (e: React.MouseEvent) => void;
 }
 
 export const HyperLinkButton = ({
-  pageId = 'create_story_page',
+  pageId = '*',
   componentId = '*',
   onClick = () => {},
-}: BackButtonProps) => {
-  const theme = useTheme();
+}: HyperLinkButtonProps) => {
   const elementId = 'story_hyperlink_button';
-  const { getConfig, isExcluded } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
-  const backgroundColor = elementConfig?.background_color;
-  const customIcon = elementConfig?.hyperlink_button_icon;
-  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
-  if (isElementExcluded) return null;
-
-  const renderIcon = () => {
-    if (customIcon) {
-      if (customIcon.startsWith('http://') || customIcon.startsWith('https://')) {
-        return (
-          <img src={customIcon} alt={elementId} data-qa-anchor={elementId} width={24} height={24} />
-        );
-      }
-    }
-
-    return <LinkIcon width={24} height={24} fill={theme.v4.colors.baseInverse.default} />;
-  };
+  if (isExcluded) return null;
 
   return (
     <ActionButton
-      icon={renderIcon()}
+      icon={<LinkIcon fill={themeStyles?.color || 'var(--asc-color-white)'} />}
       onClick={onClick}
-      style={{
-        backgroundColor: backgroundColor || theme.v4.colors.actionButton.default,
-      }}
     />
   );
 };

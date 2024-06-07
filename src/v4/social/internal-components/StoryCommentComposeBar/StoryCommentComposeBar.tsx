@@ -60,38 +60,11 @@ export const StoryCommentComposeBar = ({
     });
   };
 
-  if (isJoined && shouldAllowCreation) {
-    return (
-      <>
-        {isReplying && (
-          <div className={styles.replyingBlock}>
-            <div className={styles.replyingToText}>
-              <FormattedMessage id="storyViewer.commentSheet.replyingTo" />{' '}
-              <span className={styles.replyingToUsername}>{replyTo?.userId}</span>
-            </div>
-            <Close onClick={onCancelReply} className={styles.closeButton} />
-          </div>
-        )}
-        {!isReplying ? (
-          <CommentComposeBar
-            targetId={communityId}
-            onSubmit={(text, mentionees, metadata) => handleAddComment(text, mentionees, metadata)}
-          />
-        ) : (
-          <CommentComposeBar
-            targetId={communityId}
-            userToReply={replyTo?.userId}
-            onSubmit={(replyText, mentionees, metadata) => {
-              handleReplyToComment(replyText, mentionees, metadata);
-              onCancelReply?.();
-            }}
-          />
-        )}
-      </>
-    );
+  if (!isJoined) {
+    return null;
   }
 
-  if (isJoined && shouldAllowCreation) {
+  if (!shouldAllowCreation) {
     return (
       <div className={styles.disabledCommentComposerBarContainer}>
         <Lock2Icon />
@@ -100,5 +73,32 @@ export const StoryCommentComposeBar = ({
     );
   }
 
-  return null;
+  return (
+    <>
+      {isReplying && (
+        <div className={styles.replyingBlock}>
+          <div className={styles.replyingToText}>
+            <FormattedMessage id="storyViewer.commentSheet.replyingTo" />{' '}
+            <span className={styles.replyingToUsername}>{replyTo?.userId}</span>
+          </div>
+          <Close onClick={onCancelReply} className={styles.closeButton} />
+        </div>
+      )}
+      {!isReplying ? (
+        <CommentComposeBar
+          targetId={communityId}
+          onSubmit={(text, mentionees, metadata) => handleAddComment(text, mentionees, metadata)}
+        />
+      ) : (
+        <CommentComposeBar
+          targetId={communityId}
+          userToReply={replyTo?.userId}
+          onSubmit={(replyText, mentionees, metadata) => {
+            handleReplyToComment(replyText, mentionees, metadata);
+            onCancelReply?.();
+          }}
+        />
+      )}
+    </>
+  );
 };

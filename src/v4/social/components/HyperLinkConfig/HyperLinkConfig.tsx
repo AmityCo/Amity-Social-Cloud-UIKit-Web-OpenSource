@@ -14,7 +14,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Button } from '~/v4/core/components/Button';
 
 interface HyperLinkConfigProps {
-  pageId: '*';
+  pageId: string;
   isHaveHyperLink: boolean;
   isOpen: boolean;
   onClose: () => void;
@@ -33,10 +33,12 @@ export const HyperLinkConfig = ({
   onRemove,
 }: HyperLinkConfigProps) => {
   const { confirm } = useConfirmContext();
+
   const componentId = 'hyper_link_config_component';
-  const { getConfig } = useCustomization();
+  const { getConfig, isExcluded } = useCustomization();
+
   const componentConfig = getConfig(`${pageId}/${componentId}/*`);
-  const componentTheme = componentConfig?.theme.light || {};
+  const componentTheme = componentConfig?.theme?.light || {};
 
   const cancelButtonConfig = getConfig(`*/hyper_link_config_component/cancel_button`);
   const doneButtonConfig = getConfig(`*/hyper_link_config_component/done_button`);
@@ -45,11 +47,43 @@ export const HyperLinkConfig = ({
   const { client } = useSDK();
 
   const schema = z.object({
-    url: z.string().refine(async (value) => {
-      if (!value) return true;
-      const hasWhitelistedUrls = await client?.validateUrls([value]).catch(() => false);
-      return hasWhitelistedUrls;
-    }, formatMessage({ id: 'storyCreation.hyperlink.validation.error.whitelisted' })),
+    url: z
+      .string()
+      .refine(
+        (value) => {
+          if (!value) return true;
+          try {
+            const urlObj = new URL(value);
+            return ['http:', 'https:'].includes(urlObj.protocol);
+          } catch (error) {
+            // Check if the value starts with "www."
+            if (value.startsWith('www.')) {
+              try {
+                const urlObj = new URL(`https://${value}`);
+                return ['http:', 'https:'].includes(urlObj.protocol);
+              } catch (error) {
+                return false;
+              }
+            }
+            return false;
+          }
+        },
+        {
+          message: formatMessage({ id: 'storyCreation.hyperlink.validation.error.invalidUrl' }),
+        },
+      )
+      .refine(
+        async (value) => {
+          if (!value) return true;
+          // Prepend "https://" to the value if it starts with "www."
+          const urlToValidate = value.startsWith('www.') ? `https://${value}` : value;
+          const hasWhitelistedUrls = await client?.validateUrls([urlToValidate]).catch(() => false);
+          return hasWhitelistedUrls;
+        },
+        {
+          message: formatMessage({ id: 'storyCreation.hyperlink.validation.error.whitelisted' }),
+        },
+      ),
     customText: z
       .string()
       .optional()
@@ -63,10 +97,12 @@ export const HyperLinkConfig = ({
   type HyperLinkFormInputs = z.infer<typeof schema>;
 
   const {
+    trigger,
     watch,
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<HyperLinkFormInputs>({
     resolver: zodResolver(schema),
   });
@@ -77,6 +113,7 @@ export const HyperLinkConfig = ({
   };
 
   const confirmDiscardHyperlink = () => {
+    reset();
     onRemove();
     onClose();
   };
@@ -98,31 +135,34 @@ export const HyperLinkConfig = ({
       rootId="asc-uikit-create-story"
       isOpen={isOpen}
       onClose={onClose}
+      className={styles.bottomSheet}
     >
       <div className={styles.headerContainer}>
-        <Button
-          className={clsx(styles.styledSecondaryButton)}
-          variant="secondary"
-          onClick={onClose}
-        >
-          {cancelButtonConfig?.cancel_button_text ||
-            formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.cancel' })}
-          {cancelButtonConfig?.cancel_icon && (
-            <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
-          )}
+        <Button className={clsx(styles.cancelButton)} variant="ghost" onClick={onClose}>
+          <Typography.Body>
+            {cancelButtonConfig?.cancel_button_text ||
+              formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.cancel' })}
+          </Typography.Body>
+          {cancelButtonConfig?.cancel_icon &&
+            typeof cancelButtonConfig?.cancel_icon === 'string' && (
+              <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
+            )}
         </Button>
         <Typography.Title>
           {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
         </Typography.Title>
         <Button
-          variant="secondary"
+          variant="ghost"
           form="asc-story-hyperlink-form"
           type="submit"
-          className={clsx(styles.styledSecondaryButton)}
+          className={clsx(styles.doneButton)}
+          disabled={!watch('url') || !!errors.url}
         >
-          {doneButtonConfig?.done_button_text ||
-            formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.submit' })}
-          {doneButtonConfig?.done_icon && (
+          <Typography.Body>
+            {doneButtonConfig?.done_button_text ||
+              formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.submit' })}
+          </Typography.Body>
+          {doneButtonConfig?.done_icon && typeof doneButtonConfig?.done_icon === 'string' && (
             <img src={doneButtonConfig.done_icon} width={16} height={16} />
           )}
         </Button>
@@ -148,7 +188,9 @@ export const HyperLinkConfig = ({
               id="asc-uikit-hyperlink-input-url"
               placeholder={formatMessage({ id: 'storyCreation.hyperlink.form.urlPlaceholder' })}
               className={clsx(styles.input, errors?.url && styles.hasError)}
-              {...register('url')}
+              {...register('url', {
+                onChange: () => trigger('url'),
+              })}
             />
             {errors?.url && <span className={styles.errorText}>{errors?.url?.message}</span>}
           </div>

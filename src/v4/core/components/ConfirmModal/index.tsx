@@ -42,7 +42,7 @@ const Confirm = ({
     }
     onCancel={onCancel}
   >
-    <div className={styles.confirmModalContent}>{content}</div>
+    <div>{content}</div>
   </Modal>
 );
 
@@ -61,7 +61,7 @@ export const ConfirmComponent = () => {
     confirmData?.onOk && confirmData.onOk();
   };
 
-  return <Confirm {...confirmData} onCancel={onCancel} onOk={onOk} />;
+  return <Confirm {...confirmData} onCancel={onCancel} onOk={onOk} className={styles.background} />;
 };
 
 export default Confirm;

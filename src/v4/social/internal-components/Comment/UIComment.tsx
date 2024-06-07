@@ -59,6 +59,7 @@ interface StyledCommentProps {
     }[];
   }) => void;
   queryMentionees: QueryMentioneesFnType;
+  isMember?: boolean;
   isLiked?: boolean;
   isReported?: boolean;
   isReplyComment?: boolean;
@@ -94,6 +95,7 @@ const UIComment = ({
   isEditing,
   onChange,
   queryMentionees,
+  isMember = false,
   isBanned,
   isLiked,
   mentionees,
@@ -145,8 +147,8 @@ const UIComment = ({
           </div>
         )}
 
-        {!isEditing && (canLike || canReply || options.length > 0) && (
-          <div className={styles.interactionBar}>
+        <div className={styles.interactionBar}>
+          {!isEditing && isMember && (canLike || canReply || options.length > 0) && (
             <div className={styles.interactionWrapper}>
               <div className={styles.commentDate}>
                 {formatTimeAgo(createdAt)}
@@ -188,36 +190,36 @@ const UIComment = ({
                 <EllipsisH width={20} height={20} />
               </Button>
             </div>
-            {reactionsCount > 0 && (
-              <Button
-                className={clsx(styles.reactionListButton)}
-                variant="ghost"
-                onClick={onClickReactionList}
-              >
-                <div className={styles.reactionListButtonContainer}>
-                  {millify(reactionsCount)}
-                  <div className={styles.reactionsListButtonWrapper}>
-                    {reactions[LIKE_REACTION_KEY] > 0 && (
-                      <div className={clsx(styles.reactionIcon)}>
-                        <LikedIcon />
-                      </div>
-                    )}
-                    {reactions[LOVE_REACTION_KEY] > 0 && (
-                      <div className={clsx(styles.reactionIcon)}>
-                        <HeartIcon />
-                      </div>
-                    )}
-                    {reactions[FIRE_REACTION_KEY] > 0 && (
-                      <div className={clsx(styles.reactionIcon)}>
-                        <FireIcon />
-                      </div>
-                    )}
-                  </div>
+          )}
+          {reactionsCount > 0 && (
+            <Button
+              className={clsx(styles.reactionListButton)}
+              variant="ghost"
+              onClick={onClickReactionList}
+            >
+              <div className={styles.reactionListButtonContainer}>
+                {millify(reactionsCount)}
+                <div className={styles.reactionsListButtonWrapper}>
+                  {reactions[LIKE_REACTION_KEY] > 0 && (
+                    <div className={clsx(styles.reactionIcon)}>
+                      <LikedIcon />
+                    </div>
+                  )}
+                  {reactions[LOVE_REACTION_KEY] > 0 && (
+                    <div className={clsx(styles.reactionIcon)}>
+                      <HeartIcon />
+                    </div>
+                  )}
+                  {reactions[FIRE_REACTION_KEY] > 0 && (
+                    <div className={clsx(styles.reactionIcon)}>
+                      <FireIcon />
+                    </div>
+                  )}
                 </div>
-              </Button>
-            )}
-          </div>
-        )}
+              </div>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

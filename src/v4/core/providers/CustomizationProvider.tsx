@@ -1,11 +1,18 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AmityReactionType } from './CustomReactionProvider';
 
+export type GetConfigReturnValue = IconConfiguration &
+  TextConfiguration &
+  ThemeConfiguration &
+  CustomConfiguration;
+
 interface CustomizationContextValue {
   config: Config | null;
   parseConfig: (config: Config) => void;
   isExcluded: (path: string) => boolean;
-  getConfig: (path: string) => Record<string, any>;
+  getConfig: (
+    path: string,
+  ) => IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
 }
 
 export type Theme = {
@@ -35,6 +42,14 @@ export type Theme = {
   };
 };
 
+type ThemeConfiguration = {
+  preferred_theme?: 'light' | 'dark' | 'default';
+  theme?: {
+    light?: Partial<Pick<Theme['light'], 'primary_color' | 'secondary_color'>>;
+    dark?: Partial<Pick<Theme['dark'], 'primary_color' | 'secondary_color'>>;
+  };
+};
+
 export interface Config {
   preferred_theme?: 'light' | 'dark' | 'default';
   theme?: {
@@ -44,201 +59,21 @@ export interface Config {
   excludes?: string[];
   message_reactions?: AmityReactionType[];
   customizations?: {
-    'select_target_page/*/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-      title?: string;
-    };
-    'select_target_page/*/back_button'?: {
-      back_icon?: string;
-    };
-    'camera_page/*/*'?: {
-      resolution?: string;
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    'camera_page/*/close_button'?: {
-      close_icon?: string;
-      background_color?: string;
-    };
-    'create_story_page/*/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    'create_story_page/*/back_button'?: {
-      back_icon?: string;
-      background_color?: string;
-    };
-    'create_story_page/*/aspect_ratio_button'?: {
-      aspect_ratio_icon?: string;
-      background_color?: string;
-    };
-    'create_story_page/*/story_hyperlink_button'?: {
-      hyperlink_button_icon?: string;
-      background_color?: string;
-    };
-    'create_story_page/*/hyper_link'?: {
-      hyper_link_icon?: string;
-      background_color?: string;
-    };
-    'create_story_page/*/share_story_button'?: {
-      share_icon?: string;
-      background_color?: string;
-      hide_avatar?: boolean;
-    };
-    'story_page/*/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    'story_page/*/progress_bar'?: {
-      progress_color?: string;
-      background_color?: string;
-    };
-    'story_page/*/overflow_menu'?: {
-      overflow_menu_icon?: string;
-    };
-    'story_page/*/close_button'?: {
-      close_icon?: string;
-    };
-    'story_page/*/story_impression_button'?: {
-      impression_icon?: string;
-    };
-    'story_page/*/story_comment_button'?: {
-      comment_icon?: string;
-      background_color?: string;
-    };
-    'story_page/*/story_reaction_button'?: {
-      reaction_icon?: string;
-      background_color?: string;
-    };
-    'story_page/*/create_new_story_button'?: {
-      create_new_story_icon?: string;
-      background_color?: string;
-    };
-    'story_page/*/speaker_button'?: {
-      mute_icon?: string;
-      unmute_icon?: string;
-      background_color?: string;
-    };
-    '*/edit_comment_component/*'?: {
-      theme?: {
-        light_theme?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    '*/edit_comment_component/cancel_button'?: {
-      cancel_icon?: string;
-      cancel_button_text?: string;
-      background_color?: string;
-    };
-    '*/edit_comment_component/save_button'?: {
-      save_icon?: string;
-      save_button_text?: string;
-      background_color?: string;
-    };
-    '*/hyper_link_config_component/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    '*/hyper_link_config_component/done_button'?: {
-      done_icon?: string;
-      done_button_text?: string;
-      background_color?: string;
-    };
-    '*/hyper_link_config_component/cancel_button'?: {
-      cancel_icon?: string;
-      cancel_button_text?: string;
-    };
-    '*/comment_tray_component/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    '*/story_tab_component/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    '*/story_tab_component/story_ring'?: {
-      progress_color?: string[];
-      background_color?: string;
-    };
-    '*/story_tab_component/create_new_story_button'?: {
-      create_new_story_icon?: string;
-      background_color?: string;
-    };
-    '*/*/close_button'?: {
-      close_icon?: string;
-    };
-    'live_chat/*/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-        dark?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    'live_chat/chat_header/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-        dark?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    'live_chat/message_list/*'?: {
-      theme?: {
-        light?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-        dark?: {
-          primary_color?: string;
-          secondary_color?: string;
-        };
-      };
-    };
-    'live_chat/message_composer/*'?: {
-      placeholder_text?: 'Write a message';
-    };
+    [key: string]: IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
   };
 }
+
+type DefaultConfig = {
+  preferred_theme: 'light' | 'dark' | 'default';
+  theme: {
+    light: Theme['light'];
+    dark: Theme['dark'];
+  };
+  excludes: string[];
+  customizations?: {
+    [key: string]: IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
+  };
+};
 
 const CustomizationContext = createContext<CustomizationContextValue>({
   config: null,
@@ -260,7 +95,17 @@ interface CustomizationProviderProps {
   initialConfig: Config;
 }
 
-export const defaultConfig: Config = {
+type IconConfiguration = {
+  icon?: string;
+};
+type TextConfiguration = {
+  text?: string;
+};
+type CustomConfiguration = {
+  [key: string]: string | undefined | boolean | Array<string> | number | Record<string, unknown>;
+};
+
+export const defaultConfig: DefaultConfig = {
   preferred_theme: 'default',
   theme: {
     light: {
@@ -396,7 +241,169 @@ export const defaultConfig: Config = {
     '*/*/close_button': {
       close_icon: 'close.png',
     },
+    'social_home_page/top_navigation/header_label': {
+      text: 'Community',
+    },
+    'social_home_page/top_navigation/global_search_button': {
+      icon: 'searchButtonIcon',
+    },
+    'social_home_page/top_navigation/post_creation_button': {
+      icon: 'postCreationIcon',
+    },
+    'social_home_page/*/newsfeed_button': {
+      text: 'Newsfeed',
+    },
+    'social_home_page/*/explore_button': {
+      text: 'Explore',
+    },
+    'social_home_page/*/my_communities_button': {
+      text: 'My Communities',
+    },
+    'social_home_page/empty_newsfeed/illustration': {
+      icon: 'emptyFeedIcon',
+    },
+    'social_home_page/empty_newsfeed/title': {
+      text: 'Your Feed is empty',
+    },
+    'social_home_page/empty_newsfeed/description': {
+      text: 'Find community or create your own',
+    },
+    'social_home_page/empty_newsfeed/explore_communities_button': {
+      icon: 'exploreCommunityIcon',
+      text: 'Explore Community',
+    },
+    'social_home_page/empty_newsfeed/create_community_button': {
+      icon: 'createCommunityIcon',
+    },
+    'social_home_page/my_communities/community_avatar': {},
+    'social_home_page/my_communities/community_display_name': {},
+    'social_home_page/my_communities/community_private_badge': {
+      icon: 'lockIcon',
+    },
+    'social_home_page/my_communities/community_official_badge': {
+      icon: 'officalBadgeIcon',
+    },
+    'social_home_page/my_communities/community_category_name': {},
+    'social_home_page/my_communities/community_members_count': {},
+    'social_home_page/newsfeed_component/*': {},
+    'social_home_page/global_feed_component/*': {},
+    'global_search_page/*/*': {},
+    'post_detail_page/*/back_button': {
+      icon: 'backButtonIcon',
+    },
+    'post_detail_page/*/menu_button': {
+      icon: 'menuIcon',
+    },
+    '*/*/moderator_badge': {
+      icon: 'badgeIcon',
+      text: 'Moderator',
+    },
+    '*/post_content/moderator_badge': {
+      icon: 'badgeIcon',
+      text: 'Moderator',
+      theme: {
+        light: {
+          primary_color: '#FA4D30',
+          secondary_color: '#292B32',
+        },
+        dark: {
+          primary_color: '#00FF00',
+          secondary_color: '#292B32',
+        },
+      },
+    },
+    '*/post_comment/*': {
+      preferred_theme: 'default',
+      theme: {
+        light: {
+          primary_color: '#FFC0CB',
+          secondary_color: '#292B32',
+        },
+        dark: {
+          primary_color: '#FFFF00',
+          secondary_color: '#292B32',
+        },
+      },
+    },
+    '*/post_content/timestamp': {},
+    '*/post_content/menu_button': {
+      icon: 'menuIcon',
+    },
+    '*/post_content/post_content_view_count': {},
+    '*/post_content/reaction_button': {
+      icon: 'likeButtonIcon',
+      text: 'Like',
+    },
+    '*/post_content/comment_button': {
+      icon: 'commentButtonIcon',
+      text: 'Comment',
+    },
+    '*/post_content/share_button': {
+      icon: 'shareButtonIcon',
+      text: 'Share',
+    },
+    'social_global_search_page/*/*': {},
+    'social_global_search_page/top_search_bar/*': {},
+    'social_global_search_page/top_search_bar/search_icon': {
+      icon: 'search',
+    },
+    'social_global_search_page/top_search_bar/clear_button': {
+      icon: 'clear',
+    },
+    'social_global_search_page/top_search_bar/cancel_button': {
+      text: 'Cancel',
+    },
+    'social_global_search_page/community_search_result/community_avatar': {},
+    'social_global_search_page/community_search_result/community_display_name': {},
+    'social_global_search_page/community_search_result/community_private_badge': {
+      icon: 'lockIcon',
+    },
+    'social_global_search_page/community_search_result/community_official_badge': {
+      icon: 'officialBadgeIcon',
+    },
+    'social_global_search_page/community_search_result/community_category_name': {},
+    'social_global_search_page/community_search_result/community_members_count': {},
   },
+};
+
+export const getDefaultConfig: CustomizationContextValue['getConfig'] = (path: string) => {
+  const [page, component, element] = path.split('/');
+
+  const customizationKeys = (() => {
+    if (element !== '*') {
+      return [
+        `${page}/${component}/${element}`,
+        `${page}/*/${element}`,
+        `${page}/${component}/*`,
+        `${page}/*/*`,
+        `*/${component}/${element}`,
+        `*/*/${element}`,
+        `*/${component}/*`,
+        `*/*/*`,
+      ];
+    } else if (component !== '*') {
+      return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
+    } else if (page !== '*') {
+      return [`${page}/*/*`, `*/*/*`];
+    }
+
+    return [];
+  })();
+
+  return new Proxy<
+    IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
+  >(
+    {},
+    {
+      get(target, prop: string) {
+        for (const key of customizationKeys) {
+          if (defaultConfig?.customizations?.[key]?.[prop]) {
+            return defaultConfig.customizations[key][prop];
+          }
+        }
+      },
+    },
+  );
 };
 
 export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
@@ -439,9 +446,56 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
     });
   };
 
-  const getConfig = (path: string) => {
-    if (!config?.customizations) return {};
-    return config?.customizations[path as keyof Config['customizations']] || {};
+  const getConfig: CustomizationContextValue['getConfig'] = (path: string) => {
+    const [page, component, element] = path.split('/');
+
+    const customizationKeys = (() => {
+      if (element !== '*') {
+        return [
+          `${page}/${component}/${element}`,
+          `${page}/*/${element}`,
+          `${page}/${component}/*`,
+          `${page}/*/*`,
+          `*/${component}/${element}`,
+          `*/*/${element}`,
+          `*/${component}/*`,
+          `*/*/*`,
+        ];
+      } else if (component !== '*') {
+        return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
+      } else if (page !== '*') {
+        return [`${page}/*/*`, `*/*/*`];
+      }
+
+      return [];
+    })();
+
+    return new Proxy<
+      IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
+    >(
+      {},
+      {
+        get(target, prop: string) {
+          for (const key of customizationKeys) {
+            if (config?.customizations?.[key]?.[prop]) {
+              return config.customizations[key][prop];
+            }
+          }
+          for (const key of customizationKeys) {
+            if (defaultConfig?.customizations?.[key]?.[prop]) {
+              return defaultConfig.customizations[key][prop];
+            }
+          }
+
+          if (prop === 'theme') {
+            return defaultConfig.theme;
+          }
+          if (prop === 'preferred_theme') {
+            return defaultConfig.preferred_theme;
+          }
+        },
+      },
+    );
   };
 
   const contextValue: CustomizationContextValue = {

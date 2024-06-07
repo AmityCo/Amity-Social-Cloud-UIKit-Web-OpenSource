@@ -1,15 +1,12 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { lighten, parseToHsl, darken, hslToColorString } from 'polished';
-import { useCustomization, Config, Theme } from './CustomizationProvider';
+import { defaultConfig, GetConfigReturnValue } from './CustomizationProvider';
 
 const SHADE_PERCENTAGES = [0.25, 0.4, 0.5, 0.75];
 
-const setCSSVariable = (variable: string, value?: string) => {
-  if (!value) return;
-  document.documentElement.style.setProperty(variable, value);
-};
+const generateShades = (hexColor?: string, isDarkMode = false): string[] => {
+  if (!hexColor) return Array(SHADE_PERCENTAGES.length).fill('');
 
-const generateShades = (hexColor: string, isDarkMode = false): string[] => {
   const hslColor = parseToHsl(hexColor);
 
   const shades = SHADE_PERCENTAGES.map((percentage) => {
@@ -23,93 +20,104 @@ const generateShades = (hexColor: string, isDarkMode = false): string[] => {
   return shades;
 };
 
-const generatePaletteByConfig = ({
-  themeConfig,
-  configId,
-  isDarkMode,
-}: {
-  themeConfig: Theme['light'] | Theme['dark'];
-  configId?: string;
-  isDarkMode?: boolean;
-}) => {
-  const primaryColorShades = generateShades(themeConfig.primary_color, isDarkMode);
-  const secondaryColorShades = generateShades(themeConfig.secondary_color, isDarkMode);
+export function useGenerateStylesShadeColors(inputConfig?: GetConfigReturnValue) {
+  const currentTheme = useTheme();
 
-  const prefix = configId ? configId + '-' : '';
+  const inputThemeConfig = inputConfig?.theme;
 
-  setCSSVariable(`--${prefix}asc-color-primary-default`, themeConfig.primary_color);
-  setCSSVariable(`--${prefix}asc-color-primary-shade1`, primaryColorShades[0]);
-  setCSSVariable(`--${prefix}asc-color-primary-shade2`, primaryColorShades[1]);
-  setCSSVariable(`--${prefix}asc-color-primary-shade3`, primaryColorShades[2]);
-  setCSSVariable(`--${prefix}asc-color-primary-shade4`, primaryColorShades[3]);
-
-  setCSSVariable(`--${prefix}asc-color-secondary-default`, themeConfig.secondary_color);
-  setCSSVariable(`--${prefix}asc-color-secondary-shade1`, secondaryColorShades[0]);
-  setCSSVariable(`--${prefix}asc-color-secondary-shade2`, secondaryColorShades[1]);
-  setCSSVariable(`--${prefix}asc-color-secondary-shade3`, secondaryColorShades[2]);
-  setCSSVariable(`--${prefix}asc-color-secondary-shade4`, secondaryColorShades[3]);
-
-  setCSSVariable(`--${prefix}asc-color-base-default`, themeConfig.base_color);
-  setCSSVariable(`--${prefix}asc-color-base-shade1`, themeConfig.base_shade1_color);
-  setCSSVariable(`--${prefix}asc-color-base-shade2`, themeConfig.base_shade2_color);
-  setCSSVariable(`--${prefix}asc-color-base-shade3`, themeConfig.base_shade3_color);
-  setCSSVariable(`--${prefix}asc-color-base-shade4`, themeConfig.base_shade4_color);
-
-  setCSSVariable(`--${prefix}asc-color-alert`, themeConfig.alert_color);
-  setCSSVariable(`--${prefix}asc-color-base-background`, themeConfig.background_color);
-  setCSSVariable(`--${prefix}asc-color-base-inverse`, themeConfig.base_inverse_color);
-};
-
-const generateComponentPalette = (config: Config, currentTheme: 'light' | 'dark') => {
-  const configurables = [
-    {
-      pageId: 'live_chat',
-      componentIds: ['chat_header', 'message_list', 'message_composer'],
-    },
-  ];
-
-  configurables.forEach((configurable) => {
-    const pageConfig = (config.customizations as { [key: string]: { theme: Theme } })?.[
-      `${configurable.pageId}/*/*`
-    ]?.theme;
-
-    if (pageConfig) {
-      const themeToGenerate = currentTheme === 'light' ? pageConfig.light : pageConfig.dark;
-      const configId = configurable.pageId.replace('_', '-');
-
-      if (themeToGenerate) {
-        generatePaletteByConfig({
-          themeConfig: themeToGenerate,
-          configId,
-          isDarkMode: currentTheme === 'dark',
-        });
-      }
+  const preferredTheme = useMemo(() => {
+    if (inputConfig?.preferred_theme && inputConfig?.preferred_theme !== 'default') {
+      return inputConfig.preferred_theme;
     }
 
-    if (configurable.componentIds.length === 0) return;
+    return 'default';
+  }, [inputConfig?.preferred_theme, currentTheme]);
 
-    configurable.componentIds.forEach((componentId) => {
-      const componentConfig = (config.customizations as { [key: string]: { theme: Theme } })?.[
-        `${configurable.pageId}/${componentId}/*`
-      ]?.theme;
-      if (componentConfig) {
-        const themeToGenerate =
-          currentTheme === 'light' ? componentConfig.light : componentConfig.dark;
+  const generatedLightColors = (() => {
+    if (inputThemeConfig?.light) {
+      const lightThemeConfig = inputThemeConfig?.light || defaultConfig.theme.light;
 
-        const configId =
-          configurable.pageId.replace('_', '-') + '-' + componentId.replace('_', '-');
+      const lightPrimary = generateShades(lightThemeConfig.primary_color);
+      const lightSecondary = generateShades(lightThemeConfig.secondary_color);
+      return {
+        '--asc-color-primary-default': lightThemeConfig.primary_color,
+        '--asc-color-primary-shade1': lightPrimary[0],
+        '--asc-color-primary-shade2': lightPrimary[1],
+        '--asc-color-primary-shade3': lightPrimary[2],
+        '--asc-color-primary-shade4': lightPrimary[3],
 
-        if (themeToGenerate) {
-          generatePaletteByConfig({
-            themeConfig: themeToGenerate,
-            configId,
-            isDarkMode: currentTheme === 'dark',
-          });
-        }
-      }
-    });
-  });
-};
+        '--asc-color-secondary-default': lightThemeConfig.secondary_color,
+        '--asc-color-secondary-shade1': lightSecondary[0],
+        '--asc-color-secondary-shade2': lightSecondary[1],
+        '--asc-color-secondary-shade3': lightSecondary[2],
+        '--asc-color-secondary-shade4': lightSecondary[3],
+        '--asc-color-secondary-shade5': '#f9f9fa',
+
+        '--asc-color-alert': '#fa4d30',
+        '--asc-color-black': '#000000',
+        '--asc-color-white': '#ffffff',
+
+        '--asc-color-base-inverse': '#000000',
+
+        '--asc-color-base-default': '#292b32',
+        '--asc-color-base-shade1': '#636878',
+        '--asc-color-base-shade2': '#898e9e',
+        '--asc-color-base-shade3': '#a5a9b5',
+        '--asc-color-base-shade4': '#ebecef',
+        '--asc-color-base-shade5': '#f9f9fa',
+
+        '--asc-color-base-background': defaultConfig.theme.light.background_color,
+      };
+    }
+
+    return {};
+  })();
+
+  const generatedDarkColors = (() => {
+    if (inputThemeConfig?.dark) {
+      const darkThemeConfig = inputThemeConfig?.dark || defaultConfig.theme.dark;
+      const darkPrimary = generateShades(darkThemeConfig.primary_color, true);
+      const darkSecondary = generateShades(darkThemeConfig.secondary_color, true);
+
+      return {
+        '--asc-color-primary-default': darkThemeConfig.primary_color,
+        '--asc-color-primary-shade1': darkPrimary[0],
+        '--asc-color-primary-shade2': darkPrimary[1],
+        '--asc-color-primary-shade3': darkPrimary[2],
+        '--asc-color-primary-shade4': darkPrimary[3],
+
+        '--asc-color-secondary-default': darkThemeConfig.secondary_color,
+        '--asc-color-secondary-shade1': darkSecondary[0],
+        '--asc-color-secondary-shade2': darkSecondary[1],
+        '--asc-color-secondary-shade3': darkSecondary[2],
+        '--asc-color-secondary-shade4': darkSecondary[3],
+        '--asc-color-secondary-shade5': '#f9f9fa',
+
+        '--asc-color-alert': '#fa4d30',
+        '--asc-color-black': '#000000',
+        '--asc-color-white': '#ffffff',
+
+        '--asc-color-base-inverse': '#ffffff',
+
+        '--asc-color-base-default': '#ebecef',
+        '--asc-color-base-shade1': '#a5a9b5',
+        '--asc-color-base-shade2': '#6e7487',
+        '--asc-color-base-shade3': '#40434e',
+        '--asc-color-base-shade4': '#292b32',
+        '--asc-color-base-shade5': '#f9f9fa',
+
+        '--asc-color-base-background': defaultConfig.theme.dark.background_color,
+      };
+    }
+    return {};
+  })();
+
+  const computedTheme = preferredTheme === 'default' ? currentTheme : preferredTheme;
+
+  return {
+    ...(computedTheme === 'light' ? generatedLightColors : generatedDarkColors),
+  } as React.CSSProperties;
+}
 
 export const ThemeContext = createContext<{
   currentTheme: 'light' | 'dark';
@@ -120,43 +128,20 @@ export const ThemeContext = createContext<{
 });
 
 export const ThemeProvider: React.FC = ({ children }) => {
-  const { config } = useCustomization();
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(
-    config?.preferred_theme && config?.preferred_theme !== 'default'
-      ? config.preferred_theme
-      : mediaQuery.matches
-      ? 'dark'
-      : 'light',
+    mediaQuery.matches ? 'dark' : 'light',
   );
 
   useEffect(() => {
-    if (!config) return;
-    const themeToGenerate = currentTheme === 'light' ? config.theme?.light : config.theme?.dark;
+    const handleChange = (e: MediaQueryListEvent) => {
+      setCurrentTheme(e.matches ? 'dark' : 'light');
+    };
 
-    if (themeToGenerate) {
-      generatePaletteByConfig({
-        themeConfig: themeToGenerate,
-        isDarkMode: currentTheme === 'dark',
-      });
-    }
-
-    generateComponentPalette(config, currentTheme);
-  }, [currentTheme, config]);
-
-  useEffect(() => {
-    if (!config) return;
-
-    if (config.preferred_theme === 'default') {
-      const handleChange = (e: MediaQueryListEvent) => {
-        setCurrentTheme(e.matches ? 'dark' : 'light');
-      };
-
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
-  }, [config?.preferred_theme]);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const toggleTheme = () => {
     setCurrentTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
@@ -165,4 +150,10 @@ export const ThemeProvider: React.FC = ({ children }) => {
   return (
     <ThemeContext.Provider value={{ currentTheme, toggleTheme }}>{children}</ThemeContext.Provider>
   );
+};
+
+export const useTheme = () => {
+  const { currentTheme } = useContext(ThemeContext);
+
+  return currentTheme;
 };
