@@ -266,7 +266,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
             className={rendererStyles.actionButton}
             onClick={() => {
               bottomSheetAction.action();
-              closeBottomSheet();
             }}
             variant="secondary"
           >
