@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.5 (2024-06-07)
+
+### Bug Fixes
+
+- ASC-21507 - reset form when confirm remove hyperlink ([#368](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/368)) ([c80ef32](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/c80ef32e3b88a0a5ccd407f7f75d8366d9b3e152))
+
 ## 4.0.0-beta.4 (2024-05-13)
 
 ### Bug Fixes
