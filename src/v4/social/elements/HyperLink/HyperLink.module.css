@@ -15,6 +15,7 @@
   max-width: 200px;
   border: var(--asc-color-base-shade4);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .hyperlinkIcon {
@@ -29,7 +30,7 @@
   align-items: center;
   max-width: calc(100% - 2rem);
   overflow: hidden;
-  color: var(--asc-color-secondary-shade4);
+  color: var(--asc-color-secondary-default);
 }
 
 .text {

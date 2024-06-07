@@ -19,3 +19,21 @@
 .replyContainer {
   margin-left: 3.25rem;
 }
+
+.deletedCommentBlock {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--asc-spacing-s2);
+  padding: var(--asc-spacing-s2) var(--asc-spacing-m1);
+  border-radius: var(--asc-border-radius-sm);
+  text-align: center;
+  color: var(--asc-color-base-shade2);
+  background-color: var(--asc-color-base-background);
+  border-top: 1px solid var(--asc-color-base-shade4);
+}
+
+.deletedCommentBlock:first-child {
+  padding: 0 var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-m1);
+  border-top: none;
+}

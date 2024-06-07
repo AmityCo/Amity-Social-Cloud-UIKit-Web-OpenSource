@@ -13,24 +13,12 @@ interface AmityViewStoryPageProps {
 const AmityViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type }) => {
   const { page } = useNavigation();
 
-  const renderContent = () => {
-    switch (type) {
-      case 'communityFeed':
-        if (page.type === PageTypes.ViewStory && page.targetId) {
-          return <CommunityFeedStory communityId={page.targetId} />;
-        }
-        return null;
-      case 'globalFeed':
-        if (page.type === PageTypes.ViewStory && page.targetId) {
-          return <GlobalFeedStory targetId={page.targetId} />;
-        }
-        return null;
-      default:
-        return null;
-    }
-  };
+  if (page.type !== PageTypes.ViewStory || !page.targetId) return null;
 
-  return <div>{renderContent()}</div>;
+  if (type === 'communityFeed') return <CommunityFeedStory communityId={page.targetId} />;
+  if (type === 'globalFeed') return <GlobalFeedStory targetId={page.targetId} />;
+
+  return null;
 };
 
 export default AmityViewStoryPage;

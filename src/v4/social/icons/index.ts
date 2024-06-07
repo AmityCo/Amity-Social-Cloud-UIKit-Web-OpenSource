@@ -6,3 +6,4 @@ export { default as TrashIcon } from './trash';
 export { default as FlagIcon } from './flag';
 export { default as ChevronDownIcon } from './chevron_down';
 export { default as LinkIcon } from './link';
+export { default as MinusCircleIcon } from './minus_circle';

@@ -91,9 +91,7 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
         previousStory();
-        if (isLastStory) {
-          onBack();
-        }
+        if (isLastStory) onBack();
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),
@@ -221,6 +219,8 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
   const increaseIndex = () => {
     setCurrentIndex(currentIndex + 1);
   };
+
+  console.log(currentIndex);
 
   useEffect(() => {
     if (stories[stories.length - 1]?.syncState === 'syncing') {

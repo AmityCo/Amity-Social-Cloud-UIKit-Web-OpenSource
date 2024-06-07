@@ -14,32 +14,29 @@ interface BottomSheetProps {
   headerTitle?: string;
   cancelText?: string;
   okText?: string;
+  className?: string;
 }
 
 export const BottomSheet = ({ children, headerTitle, ...props }: BottomSheetProps) => {
   return (
     <Sheet {...props}>
-      <Sheet.Container
-        className={styles['react-modal-sheet-container']}
-        style={{
-          backgroundColor: 'var(--asc-color-base-background)',
-        }}
-      >
+      <Sheet.Container className={styles.bottomSheet__container}>
         <Sheet.Header
           style={{
             borderTopLeftRadius: '1.25rem',
             borderTopRightRadius: '1.25rem',
-            backgroundColor: 'var(--asc-color-base-background)',
           }}
-        />
-        {headerTitle && (
-          <Sheet.Header className={styles['react-modal-sheet-header']}>
-            <Typography.Title>{headerTitle}</Typography.Title>
-          </Sheet.Header>
-        )}
-        <Sheet.Content className={styles['react-modal-sheet-content']}>{children}</Sheet.Content>
+        >
+          <Sheet.Header />
+          {headerTitle && (
+            <Sheet.Header className={styles.bottomSheet__header}>
+              <Typography.Title>{headerTitle}</Typography.Title>
+            </Sheet.Header>
+          )}
+        </Sheet.Header>
+        <Sheet.Content className={styles.bottomSheet__content}>{children}</Sheet.Content>
       </Sheet.Container>
-      <Sheet.Backdrop className={styles['react-modal-sheet-backdrop']} onTap={props.onClose} />
+      <Sheet.Backdrop onTap={props.onClose} />
     </Sheet>
   );
 };
