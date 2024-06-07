@@ -1,0 +1,85 @@
+.storyTabContainer {
+  display: flex;
+  overflow: auto;
+  padding: 0.625rem; 
+  background-color: var(--asc-color-white);
+  border-bottom: 0.0625rem solid #e6e6e6; 
+  gap: var(--asc-spacing-s1)
+}
+
+.storyTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1.25rem; 
+  cursor: pointer;
+}
+
+.storyTabImage {
+  width: 3.75rem; 
+  height: 3.75rem; 
+  border-radius: 50%;
+  overflow: hidden;
+  border: 0.125rem solid var(--asc-color-white); 
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); 
+}
+
+.storyTabContent {
+  margin-top: 0.5rem; 
+  text-align: center;
+}
+
+.storyTabTitle {
+  font-size: 0.875rem; 
+  font-weight: 500;
+  color: var(--asc-color-base-default);
+}
+
+.storyTabIcons {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem; 
+}
+
+.storyTabIcons svg {
+  width: 1rem; 
+  height: 1rem; 
+  margin: 0 0.25rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+.storyTabSkeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.storyTabSkeletonAvatar {
+  width: 4.5rem; 
+  height: 4.5rem; 
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade4);
+  margin-bottom: 0.5rem;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+.storyTabSkeletonUsername {
+  width: 4.5rem; 
+  height: 0.75rem; 
+  border-radius: 0.25rem; 
+  background-color: #f0f0f0;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}

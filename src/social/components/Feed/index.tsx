@@ -1,6 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import DefaultPostRenderer from '~/social/components/post/Post/DefaultPostRenderer';
 
+import useCommunitiesList from '~/social/hooks/useCommunitiesList';
 import PostCreator from '~/social/components/post/Creator';
 import Post from '~/social/components/post/Post';
 

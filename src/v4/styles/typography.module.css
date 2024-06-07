@@ -1,0 +1,48 @@
+@import './global.css';
+
+.typography {
+  padding: 0;
+  margin: 0;
+}
+
+.typography-headings {
+  font-weight: var(--asc-text-font-weight-bold);
+  font-size: var(--asc-text-font-size-lg);
+  line-height: var(--asc-line-height-lg);
+}
+
+.typography-titles {
+  font-weight: var(--asc-text-font-weight-bold);
+  font-size: var(--asc-text-font-size-md);
+  line-height: var(--asc-line-height-md);
+}
+
+.typography-sub-title {
+  font-weight: var(--asc-text-font-weight-normal);
+  font-size: 0.8125rem;
+  line-height: var(--asc-line-height-xs);
+}
+
+.typography-body {
+  font-weight: var(--asc-text-font-weight-normal);
+  font-size: var(--asc-text-font-size-sm);
+  line-height: var(--asc-line-height-md);
+}
+
+.typography-body-bold {
+  font-weight: var(--asc-text-font-weight-bold);
+  font-size: var(--asc-text-font-size-sm);
+  line-height: var(--asc-line-height-md);
+}
+
+.typography-caption {
+  font-weight: var(--asc-text-font-weight-normal);
+  font-size: var(--asc-text-font-size-xs);
+  line-height: var(--asc-line-height-xs);
+}
+
+.typography-caption-bold {
+  font-weight: var(--asc-text-font-weight-bold);
+  font-size: var(--asc-text-font-size-xs);
+  line-height: var(--asc-line-height-xs);
+}

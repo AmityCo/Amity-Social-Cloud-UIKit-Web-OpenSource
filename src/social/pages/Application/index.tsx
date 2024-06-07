@@ -67,11 +67,13 @@ const Community = () => {
   }, [client]);
 
   return (
-    <ApplicationContainer>
-      <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
-        {page.type === PageTypes.Explore && <ExplorePage />}
+      <ApplicationContainer>
+        <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
+          {page.type === PageTypes.Explore && <ExplorePage />}
 
-        {page.type === PageTypes.NewsFeed && <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />}
+          {page.type === PageTypes.NewsFeed && (
+            <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />
+          )}
 
         {page.type === PageTypes.CommunityFeed && (
           <CommunityFeed

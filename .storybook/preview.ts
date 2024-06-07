@@ -26,6 +26,7 @@ const preview: Preview = {
   globalTypes: {
     ...FluidControl.global,
     ...UiKitDecorator.global,
+    ...UiKitV4Decorator.global,
   },
 };
 
