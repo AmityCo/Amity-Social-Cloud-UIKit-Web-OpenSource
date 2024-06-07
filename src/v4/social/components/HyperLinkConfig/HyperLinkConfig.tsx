@@ -102,6 +102,7 @@ export const HyperLinkConfig = ({
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<HyperLinkFormInputs>({
     resolver: zodResolver(schema),
   });
@@ -112,6 +113,7 @@ export const HyperLinkConfig = ({
   };
 
   const confirmDiscardHyperlink = () => {
+    reset();
     onRemove();
     onClose();
   };
