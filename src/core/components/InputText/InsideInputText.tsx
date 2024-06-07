@@ -40,6 +40,7 @@ const styling = css`
   min-width: 0;
   margin: 0;
   padding: 0.563rem 0.563rem;
+  color: ${({ theme }) => theme.palette.neutral.main};
   background: none;
   border: none;
   box-sizing: border-box;

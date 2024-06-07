@@ -1,1 +1,0 @@
-export { HyperLinkConfig } from './HyperLinkConfig';

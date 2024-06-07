@@ -2,7 +2,6 @@ import merge from 'lodash/merge';
 import defaultTheme from './default-theme';
 import { buildPaletteTheme } from './palette';
 import { buildTypographyTheme } from './typography';
-import { defaultThemeV4 } from '~/social/v4/constants/default-theme-v4';
 
 /**
  * Builds a global theme object combining default theme and an optional override theme.
@@ -18,7 +17,6 @@ const buildGlobalTheme = (overrideTheme = {}) => {
     ...mergedTheme,
     palette: paletteExtended,
     typography: typographyExtended,
-    v4: defaultThemeV4,
   };
 };
 

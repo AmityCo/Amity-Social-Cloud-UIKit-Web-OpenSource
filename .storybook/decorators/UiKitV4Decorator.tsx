@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react';
-import UiKitProvider from '../../src/core/providers/UiKitProvider';
+import { AmityUIKitProvider } from '../../src/v4/core/providers';
 import { Preview } from '@storybook/react';
 import amityConfig from '../../amity-uikit.config.json';
+import { Config } from '../../src/v4/core/providers/CustomizationProvider';
 
 const GLOBAL_NAME = 'user';
 const global = {
@@ -64,7 +65,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (
   }, []);
 
   return (
-    <UiKitProvider
+    <AmityUIKitProvider
       apiKey={import.meta.env.STORYBOOK_API_KEY}
       apiRegion={import.meta.env.STORYBOOK_API_REGION}
       key={userId}
@@ -73,9 +74,10 @@ const decorator: NonNullable<Preview['decorators']>[number] = (
       onConnectionStatusChange={handleConnectionStatusChange}
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
+      configs={amityConfig as Config}
     >
-      {Story()}
-    </UiKitProvider>
+      <Story />
+    </AmityUIKitProvider>
   );
 };
 

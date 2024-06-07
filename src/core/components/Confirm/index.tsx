@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { PrimaryButton } from '~/core/components/Button';
+import React from 'react';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 import {
   ConfirmModal,
@@ -21,72 +21,49 @@ const Confirm = ({
   CancelButton = DefaultCancelButton,
   onCancel,
   type = 'confirm',
-}: any) => (
-  <ConfirmModal
-    data-qa-anchor={`confirm-modal-${dataQaAnchor}`}
-    clean
-    className={className}
-    title={title}
-    footer={
-      <Footer>
-        {type === 'confirm' && (
-          <CancelButton data-qa-anchor="confirm-modal-cancel-button" onClick={onCancel}>
-            {cancelText}
-          </CancelButton>
-        )}
-        <OkButton data-qa-anchor={`confirm-modal-${dataQaAnchor}-ok-button`} onClick={onOk}>
-          {okText}
-        </OkButton>
-      </Footer>
-    }
-    onCancel={onCancel}
-  >
-    <ConfirmModalContent>{content}</ConfirmModalContent>
-  </ConfirmModal>
-);
-
-let spawnNewConfirm: any; // for modfying ConfirmContainer state outside
-
-// rendered by provider, to allow spawning of confirm from confirm function below
-export const ConfirmContainer = () => {
-  const [confirm, setConfirm] = useState<any>(null);
-  spawnNewConfirm = (confirmData: any) => {
-    setConfirm(confirmData);
-  };
-
-  if (!confirm) return null;
-
-  const closeConfirm = () => setConfirm(null);
-
-  const attachCanceling = (fn: any) => () => {
-    closeConfirm();
-    fn && fn();
-  };
-
+}: any) => {
   return (
-    <Confirm
-      {...confirm}
-      onCancel={attachCanceling(confirm.onCancel)}
-      onOk={attachCanceling(confirm.onOk)}
-    />
+    <ConfirmModal
+      data-qa-anchor={`confirm-modal-${dataQaAnchor}`}
+      clean
+      className={className}
+      title={title}
+      footer={
+        <Footer>
+          {type === 'confirm' && (
+            <CancelButton data-qa-anchor="confirm-modal-cancel-button" onClick={onCancel}>
+              {cancelText}
+            </CancelButton>
+          )}
+          <OkButton data-qa-anchor={`confirm-modal-${dataQaAnchor}-ok-button`} onClick={onOk}>
+            {okText}
+          </OkButton>
+        </Footer>
+      }
+      onCancel={onCancel}
+    >
+      <ConfirmModalContent>{content}</ConfirmModalContent>
+    </ConfirmModal>
   );
 };
 
-/*
-  Usage:
-    confirm({
-      title: 'Delete post',
-      content:
-        'This post will be permanently deleted. You’ll no longer to see and find this post. Continue?',
-      okText: 'Delete',
-      onOk: onDelete,
-    });
+// rendered by provider, to allow spawning of confirm from confirm function below
+export const ConfirmComponent = () => {
+  const { confirmData, closeConfirm } = useConfirmContext();
 
-  This interface rely on ConfirmContainer being rendered by UIKITProvider in the react tree
-*/
-export const confirm = (confirmData: any) => spawnNewConfirm({ ...confirmData, type: 'confirm' });
+  if (!confirmData) return null;
 
-export const info = (data: any) =>
-  spawnNewConfirm({ ...data, type: 'info', OkButton: PrimaryButton });
+  const onCancel = () => {
+    closeConfirm();
+    confirmData?.onCancel && confirmData.onCancel();
+  };
+
+  const onOk = () => {
+    closeConfirm();
+    confirmData?.onOk && confirmData.onOk();
+  };
+
+  return <Confirm {...confirmData} onCancel={onCancel} onOk={onOk} />;
+};
 
 export default Confirm;

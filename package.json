@@ -1,6 +1,6 @@
 {
   "name": "@amityco/ui-kit-open-source",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "engines": {
     "node": ">=16",
     "pnpm": ">=8"
@@ -34,12 +34,12 @@
     "tsc": "tsc"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "~6.20.0",
+    "@amityco/ts-sdk": "~6.21.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "6.21.0",
+    "@amityco/ts-sdk": "^6.26.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.2.0",
@@ -90,6 +90,7 @@
     "ts-jest": "^29.1.1",
     "tsup": "^7.3.0",
     "typescript": "^4.9.5",
+    "typescript-plugin-css-modules": "^5.1.0",
     "vite": "^4.5.1",
     "vite-tsconfig-paths": "^4.2.3"
   },

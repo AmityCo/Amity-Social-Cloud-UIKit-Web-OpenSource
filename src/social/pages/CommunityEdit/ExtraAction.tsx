@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { confirm } from '~/core/components/Confirm';
 import {
   ExtraActionContainer,
   ExtraActionContainerHeader,
@@ -13,6 +12,7 @@ import {
 } from './styles';
 
 import { CommunityRepository } from '@amityco/ts-sdk';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 interface ExtraActionProps {
   title?: ReactNode;
@@ -81,6 +81,7 @@ export const CloseCommunityAction = ({
   onCommunityClosed,
 }: CloseCommunityActionProps) => {
   const { formatMessage } = useIntl();
+  const { confirm } = useConfirmContext();
 
   const closeConfirm = () =>
     confirm({

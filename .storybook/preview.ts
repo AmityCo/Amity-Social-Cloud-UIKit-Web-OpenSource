@@ -2,7 +2,12 @@ import { Preview } from '@storybook/react';
 import { FluidControl, UiKitDecorator } from './decorators';
 
 const preview: Preview = {
-  decorators: [FluidControl.decorator, UiKitDecorator.decorator],
+  decorators: [
+    FluidControl.decorator,
+    (Story, ctx) => {
+      return UiKitDecorator.decorator(Story, ctx);
+    },
+  ],
   parameters: {
     options: {
       storySort: {
@@ -13,6 +18,7 @@ const preview: Preview = {
           ['Social', 'Chat'],
           'Utilities',
           'Assets',
+          ['Chat'],
         ],
       },
     },

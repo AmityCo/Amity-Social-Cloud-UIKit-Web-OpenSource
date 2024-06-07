@@ -3,8 +3,9 @@
   "general.action.accept": "Accept",
   "general.action.decline": "Decline",
   "general.action.discard": "Discard",
+  "general.action.ok": "Ok",
   "general.error.tryAgainLater": "Something went wrong. Please try again later.",
-
+  "general.connection.waiting": "Waiting for connection...",
   "hello": "Hello World",
   "plural.like": "{amount, plural, one {like} other {likes}}",
   "comment": "Comment",
@@ -177,6 +178,7 @@
   "create": "Create",
   "cancel": "Cancel",
   "loading": "Loading...",
+  "loading.chat": "Loading chat...",
   "anonymous": "Anonymous",
   "comment.edited": "Edited",
   "comment.readmore": "...Read more",
@@ -202,6 +204,7 @@
 
   "CommentComposeBar.addComment": "Add comment",
   "CommentComposeBar.replayTo": "Reply to ",
+  "CommentComposeBar.replayToUser": "Replying to {displayName}",
   "CommentComposeBar.saySomething": "Say something nice",
 
   "CommentComposeBar.unableToPost": "Unable to post",
@@ -268,6 +271,7 @@
   "chat.members.return": "Return to controls",
   "chat.members.count": "{count} members",
   "chat.create.modalTitle": "Create new chat",
+  "chat.loading.error": "Couldn't load chat",
   "userSelector.placeholder": "Enter name or email addresses",
   "userSelector.emptyState.title": "It's empty here...",
   "userSelector.emptyState.description": "No contact found here",

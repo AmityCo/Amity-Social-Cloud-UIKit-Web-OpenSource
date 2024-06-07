@@ -22,6 +22,11 @@ const useFeed = () => {
 
   useEffect(() => {
     fetchMore();
+
+    return () => {
+      setItems([]);
+      setQueryToken(null);
+    };
   }, []);
 
   const prependItem = (post: Amity.Post) => {

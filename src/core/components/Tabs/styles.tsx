@@ -24,7 +24,8 @@ export const TabButton = styled.button`
   border-bottom: 2px solid transparent;
   cursor: pointer;
   outline: none;
-  color: ${({ theme }) => theme.v4.colors.base.shade3};
+  color: #abaeba;
+  ${({ theme }) => theme.typography.bodyBold}
   text-align: center;
 
   &:hover {
@@ -33,8 +34,8 @@ export const TabButton = styled.button`
 
   &.active {
     ${({ theme }) => `
-      border-bottom: 2px solid ${theme.v4.colors.primary.default};
-      color: ${theme.v4.colors.primary.default};
+      border-bottom: 2px solid ${theme.palette.primary.main};
+      color: ${theme.palette.primary.main};
     `}
   }
 

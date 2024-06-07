@@ -37,7 +37,6 @@ const defaultPostRenderer: PostRendererConfigType = {
   [PostContentType.POLL]: (props: PostRendererProps) => <DefaultPostRenderer {...props} />,
   [PostContentType.TEXT]: (props: PostRendererProps) => <DefaultPostRenderer {...props} />,
   [PostContentType.VIDEO]: (props: PostRendererProps) => <DefaultPostRenderer {...props} />,
-  [PostContentType.CUSTOM]: (props: PostRendererProps) => <DefaultPostRenderer {...props} />,
 };
 
 const PostRendererContext = createContext(defaultPostRenderer);

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { notification } from '~/core/components/Notification';
+import { useNotifications } from '../providers/NotificationProvider';
 
 /**
  * @deprecated
@@ -10,6 +10,7 @@ export function useAsyncCallback<T extends Array<unknown>, U, V extends (...args
   deps: unknown[],
 ): [(...args: T) => Promise<void>, boolean] {
   const [loading, setLoading] = useState(false);
+  const notification = useNotifications();
 
   const newCallback = useCallback(async (...args: T) => {
     try {

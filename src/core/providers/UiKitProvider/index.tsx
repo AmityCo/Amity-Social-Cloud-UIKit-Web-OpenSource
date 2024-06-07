@@ -5,7 +5,7 @@ import { Client as ASCClient } from '@amityco/ts-sdk';
 
 import { ThemeProvider } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
-import { ConfirmContainer } from '~/core/components/Confirm';
+import { ConfirmComponent } from '~/core/components/Confirm';
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import Localization from './Localization';
 import buildGlobalTheme from './theme';
@@ -18,11 +18,8 @@ import CustomComponentsProvider, { CustomComponentType } from '../CustomComponen
 import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
-import { Config, CustomizationProvider } from '~/social/v4/providers/CustomizationProvider';
-
-import amityConfig from '../../../../amity-uikit.config.json';
-import { PageBehaviorProvider } from '~/social/v4/providers/PageBehaviorProvider';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ConfirmProvider } from '../ConfirmProvider';
+import { NotificationProvider } from '../NotificationProvider';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -46,10 +43,7 @@ interface UiKitProviderProps {
     onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
     onEditUser?: (userId: string) => void;
     onMessageUser?: (userId: string) => void;
-  };
-  pageBehavior?: {
-    closeAction?: () => void;
-    hyperLinkAction?: () => void;
+    onBack?: () => void;
   };
   socialCommunityCreationButtonVisible?: boolean;
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
@@ -70,7 +64,6 @@ const UiKitProvider = ({
   children /* TODO localization */,
   socialCommunityCreationButtonVisible,
   actionHandlers,
-  pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
   getAuthToken,
@@ -103,6 +96,30 @@ const UiKitProvider = ({
       setClient(ascClient);
     }
 
+    const currentIsConnected = ASCClient.isConnected();
+
+    if (!currentIsConnected) {
+      let params: Amity.ConnectClientParams = { userId, displayName };
+
+      if (getAuthToken) {
+        const authToken = await getAuthToken();
+        params = { ...params, authToken };
+      }
+
+      await ASCClient.login(params, {
+        async sessionWillRenewAccessToken(renewal: Amity.AccessTokenRenewal) {
+          // secure mode
+          if (getAuthToken) {
+            const authToken = await getAuthToken();
+            renewal.renewWithAuthToken(authToken);
+            return;
+          }
+
+          renewal.renew();
+        },
+      });
+    }
+
     setIsConnected(true);
 
     if (stateChangeRef.current == null) {
@@ -119,7 +136,11 @@ const UiKitProvider = ({
   }
 
   useEffect(() => {
-    login();
+    async function run() {
+      await login();
+    }
+
+    run();
 
     return () => {
       stateChangeRef.current?.();
@@ -131,38 +152,36 @@ const UiKitProvider = ({
   if (!isConnected) return <></>;
 
   return (
-    <QueryClientProvider client={queryClient}>
+    
       <Localization locale="en">
-        <CustomizationProvider initialConfig={amityConfig as Config}>
-          <ThemeProvider theme={buildGlobalTheme(theme)}>
-            <UIStyles>
-              <SDKContext.Provider value={sdkContextValue}>
-                <SDKConnectorProvider>
-                  <CustomComponentsProvider config={customComponents}>
-                    <ConfigProvider
-                      config={{
-                        socialCommunityCreationButtonVisible:
-                          socialCommunityCreationButtonVisible || true,
-                      }}
-                    >
-                      <PostRendererProvider config={postRendererConfig}>
-                        <NavigationProvider {...actionHandlers}>
-                          <PageBehaviorProvider customNavigationBehavior={pageBehavior}>
-                            {children}
-                          </PageBehaviorProvider>
-                        </NavigationProvider>
-                      </PostRendererProvider>
-                    </ConfigProvider>
-                    <NotificationsContainer />
-                    <ConfirmContainer />
-                  </CustomComponentsProvider>
-                </SDKConnectorProvider>
-              </SDKContext.Provider>
-            </UIStyles>
-          </ThemeProvider>
-        </CustomizationProvider>
+        <ThemeProvider theme={buildGlobalTheme(theme)}>
+          <UIStyles>
+            <SDKContext.Provider value={sdkContextValue}>
+              <SDKConnectorProvider>
+                <ConfirmProvider>
+                  <NotificationProvider>
+                    <CustomComponentsProvider config={customComponents}>
+                      <ConfigProvider
+                        config={{
+                          socialCommunityCreationButtonVisible:
+                            socialCommunityCreationButtonVisible || true,
+                        }}
+                      >
+                        <PostRendererProvider config={postRendererConfig}>
+                          <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
+                        </PostRendererProvider>
+                      </ConfigProvider>
+                      <NotificationsContainer />
+                      <ConfirmComponent />
+                    </CustomComponentsProvider>
+                  </NotificationProvider>
+                </ConfirmProvider>
+              </SDKConnectorProvider>
+            </SDKContext.Provider>
+          </UIStyles>
+        </ThemeProvider>
       </Localization>
-    </QueryClientProvider>
+  
   );
 };
 

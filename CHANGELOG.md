@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.5.0 (2024-04-26)
+
+## 3.5.0 (2024-04-26)
+
+### Bug Fixes
+
+- cherry-pick fix comment disappear bug ([d70f874](https://github.com/EkoCommunications/AmityUiKitWeb/commit/d70f8748d2e6f4588a19a1fe061ad7b74ce37907))
+
 ## 3.4.0 (2024-04-05)
 
 ### Bug Fixes

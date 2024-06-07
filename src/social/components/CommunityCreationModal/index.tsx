@@ -4,19 +4,19 @@ import { CommunityRepository } from '@amityco/ts-sdk';
 import { useIntl } from 'react-intl';
 
 import Modal from '~/core/components/Modal';
-import { confirm } from '~/core/components/Confirm';
 
-import { CommunityForm } from './styles';
 import CreateCommunityForm from '../CommunityForm/CreateCommunityForm';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 interface CommunityCreationModalProps {
   isOpen: boolean;
-  onClose: (communityId: string) => void;
+  onClose: (communityId?: string) => void;
 }
 
 const CommunityCreationModal = ({ isOpen, onClose }: CommunityCreationModalProps) => {
   const { formatMessage } = useIntl();
+  const { confirm } = useConfirmContext();
 
   if (!isOpen) return null;
 
@@ -26,7 +26,7 @@ const CommunityCreationModal = ({ isOpen, onClose }: CommunityCreationModalProps
       content: formatMessage({ id: 'CommunityCreationModal.content' }),
       cancelText: formatMessage({ id: 'CommunityCreationModal.cancelText' }),
       okText: formatMessage({ id: 'CommunityCreationModal.okText' }),
-      onOk: onClose,
+      onOk: () => onClose(),
     });
 
   const handleSubmit = async (data: Parameters<typeof CommunityRepository.createCommunity>[0]) => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import MainLayout from '~/social/layouts/Main';
@@ -7,7 +7,7 @@ import CommunitySideMenu from '~/social/components/CommunitySideMenu';
 
 import ExplorePage from '~/social/pages/Explore';
 import NewsFeedPage from '~/social/pages/NewsFeed';
-import CommunityFeedPage from '~/social/pages/CommunityFeed';
+
 import UserFeedPage from '~/social/pages/UserFeed';
 import CategoryCommunitiesPage from '~/social/pages/CategoryCommunities';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
@@ -15,6 +15,7 @@ import ProfileSettings from '~/social/components/ProfileSettings';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useSDK from '~/core/hooks/useSDK';
 import { PageTypes } from '~/social/constants';
+import CommunityFeed from '../CommunityFeed';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -43,9 +44,9 @@ const Community = () => {
   const { page, onBack } = useNavigation();
 
   const { client } = useSDK();
-  const [socialSettings, setSocialSettings] = React.useState<Amity.SocialSettings | null>(null);
+  const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const toggleOpen = () => {
     setOpen(!open);
@@ -72,7 +73,7 @@ const Community = () => {
         {page.type === PageTypes.NewsFeed && <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />}
 
         {page.type === PageTypes.CommunityFeed && (
-          <CommunityFeedPage
+          <CommunityFeed
             communityId={page.communityId}
             isNewCommunity={page.isNewCommunity}
             isOpen={open}
@@ -82,10 +83,6 @@ const Community = () => {
 
         {page.type === PageTypes.CommunityEdit && (
           <CommunityEditPage communityId={page.communityId} tab={page.tab} />
-        )}
-
-        {page.type === PageTypes.Category && (
-          <CategoryCommunitiesPage categoryId={page.categoryId} />
         )}
 
         {page.type === PageTypes.UserFeed && (

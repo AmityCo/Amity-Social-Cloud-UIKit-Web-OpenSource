@@ -1,7 +1,8 @@
 import { CommunityPostSettings, CommunityRepository } from '@amityco/ts-sdk';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { info } from '~/core/components/Confirm';
+import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+
 import useCommunity from '~/social/hooks/useCommunity';
 
 // TODO: check CommunityPostSettings
@@ -38,6 +39,7 @@ export function usePermission({
 }): [permission: boolean, setPermission: (newValue: boolean) => Promise<void>] {
   const community = useCommunity(communityId);
   const prevValue = getValue(key, community);
+  const { info } = useConfirmContext();
 
   const [permission, setPermissionState] = useState(prevValue);
 
