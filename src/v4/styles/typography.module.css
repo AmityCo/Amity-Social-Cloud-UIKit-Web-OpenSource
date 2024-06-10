@@ -1,4 +1,4 @@
-@import './global.css';
+@import url('./global.css');
 
 .typography {
   padding: 0;

@@ -1,5 +1,5 @@
 .uiCommentButton {
-  font-family: "Inter";
+  font-family: Inter, sans-serif;
   font-weight: var(--asc-text-font-weight-bold);
   color: var(--asc-color-white);
   display: flex;

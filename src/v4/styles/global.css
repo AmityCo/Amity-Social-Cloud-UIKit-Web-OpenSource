@@ -18,32 +18,29 @@
 */
 :root {
   color-scheme: light dark;
+
   /*
     Set the default font-family to 'Inter', with fallback to sans-serif.
     This ensures that the Inter font is used if available, otherwise, the browser's default sans-serif font will be used.
   */
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
 
   /* color palette */
   --asc-color-alert: #fa4d30;
-  --asc-color-black: #000000;
-  --asc-color-white: #ffffff;
-
+  --asc-color-black: #000;
+  --asc-color-white: #fff;
   --asc-color-primary-default: #1054de;
   --asc-color-primary-shade1: #4a82f2;
   --asc-color-primary-shade2: #a0bdf8;
   --asc-color-primary-shade3: #d9e5fc;
-  --asc-color-primary-shade4: #ffffff;
-
-  --asc-color-base-inverse: #000000;
-
+  --asc-color-primary-shade4: #fff;
+  --asc-color-base-inverse: #000;
   --asc-color-base-default: #292b32;
   --asc-color-base-shade1: #636878;
   --asc-color-base-shade2: #898e9e;
   --asc-color-base-shade3: #a5a9b5;
   --asc-color-base-shade4: #ebecef;
   --asc-color-base-shade5: #f9f9fa;
-
   --asc-color-secondary-default: #292b32;
   --asc-color-secondary-shade1: #636878;
   --asc-color-secondary-shade2: #898e9e;
@@ -52,7 +49,7 @@
   --asc-color-secondary-shade5: #f9f9fa;
 
   /* Font */
-  --asc-text-global-font-family: Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --asc-text-global-font-family: inter, -apple-system, blinkmacsystemfont, arial, sans-serif;
   --asc-text-global-font-style: normal;
 
   /* Font Sizes */
@@ -111,76 +108,67 @@
   --asc-spacing-xl3: 6rem; /* 96px */
 
   /* Box Shadow */
-  --asc-box-shadow-01: 0px 0.5px 2px 0px rgba(96, 97, 112, 0.16),
-    0px 0px 1px 0px rgba(40, 41, 61, 0.08);
-  --asc-box-shadow-02: 0px 0.5px 2px 0px rgba(96, 97, 112, 0.16),
-    0px 0px 1px 0px rgba(40, 41, 61, 0.08);
-  --asc-box-shadow-03: 0px 2px 4px 0px rgba(96, 97, 112, 0.16),
-    0px 0px 1px 0px rgba(40, 41, 61, 0.04);
-  --asc-box-shadow-04: 0px 4px 8px 0px rgba(96, 97, 112, 0.2), 0px 0px 2px 0px rgba(40, 41, 61, 0.1);
-  --asc-box-shadow-05: 0px 8px 16px 0px rgba(96, 97, 112, 0.16),
-    0px 2px 4px 0px rgba(40, 41, 61, 0.04);
+  --asc-box-shadow-01: 0px 0.5px 2px 0px rgb(96 97 112 / 16%),
+    0px 0px 1px 0px rgb(40 41 61 / 8%);
+  --asc-box-shadow-02: 0px 0.5px 2px 0px rgb(96 97 112 / 16%),
+    0px 0px 1px 0px rgb(40 41 61 / 8%);
+  --asc-box-shadow-03: 0px 2px 4px 0px rgb(96 97 112 / 16%),
+    0px 0px 1px 0px rgb(40 41 61 / 4%);
+  --asc-box-shadow-04: 0px 4px 8px 0px rgb(96 97 112 / 20%), 0px 0px 2px 0px rgb(40 41 61 / 10%);
+  --asc-box-shadow-05: 0px 8px 16px 0px rgb(96 97 112 / 16%),
+    0px 2px 4px 0px rgb(40 41 61 / 4%);
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     --asc-color-alert: #fa4d30;
-    --asc-color-black: #000000;
-    --asc-color-white: #ffffff;
-
+    --asc-color-black: #000;
+    --asc-color-white: #fff;
     --asc-color-primary-default: #1054de;
     --asc-color-primary-shade1: #4a82f2;
     --asc-color-primary-shade2: #a0bdf8;
     --asc-color-primary-shade3: #d9e5fc;
-    --asc-color-primary-shade4: #ffffff;
-
-    --asc-color-base-inverse: #000000;
-
+    --asc-color-primary-shade4: #fff;
+    --asc-color-base-inverse: #000;
     --asc-color-base-default: #292b32;
     --asc-color-base-shade1: #636878;
     --asc-color-base-shade2: #898e9e;
     --asc-color-base-shade3: #a5a9b5;
     --asc-color-base-shade4: #ebecef;
     --asc-color-base-shade5: #f9f9fa;
-
     --asc-color-secondary-default: #292b32;
     --asc-color-secondary-shade1: #636878;
     --asc-color-secondary-shade2: #898e9e;
     --asc-color-secondary-shade3: #a5a9b5;
     --asc-color-secondary-shade4: #ebecef;
     --asc-color-secondary-shade5: #f9f9fa;
-
-    --asc-color-base-background: #ffffff;
+    --asc-color-base-background: #fff;
   }
 }
+
 @media (prefers-color-scheme: dark) {
   :root {
     --asc-color-alert: #fa4d30;
-    --asc-color-black: #000000;
-    --asc-color-white: #ffffff;
-
+    --asc-color-black: #000;
+    --asc-color-white: #fff;
     --asc-color-primary-default: #1054de;
     --asc-color-primary-shade1: #4a82f2;
     --asc-color-primary-shade2: #a0bdf8;
     --asc-color-primary-shade3: #d9e5fc;
-    --asc-color-primary-shade4: #ffffff;
-
-    --asc-color-base-inverse: #ffffff;
-
+    --asc-color-primary-shade4: #fff;
+    --asc-color-base-inverse: #fff;
     --asc-color-base-default: #ebecef;
     --asc-color-base-shade1: #a5a9b5;
     --asc-color-base-shade2: #6e7487;
     --asc-color-base-shade3: #40434e;
     --asc-color-base-shade4: #292b32;
     --asc-color-base-shade5: #f9f9fa;
-
     --asc-color-secondary-default: #292b32;
     --asc-color-secondary-shade1: #636878;
     --asc-color-secondary-shade2: #898e9e;
     --asc-color-secondary-shade3: #a5a9b5;
     --asc-color-secondary-shade4: #ebecef;
     --asc-color-secondary-shade5: #f9f9fa;
-
     --asc-color-base-background: #191919;
   }
 }

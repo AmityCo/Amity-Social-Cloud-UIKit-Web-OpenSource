@@ -1,7 +1,7 @@
 .messageListSheet {
   z-index: 1000 !important;
 
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     width: 375px !important;
   }
 

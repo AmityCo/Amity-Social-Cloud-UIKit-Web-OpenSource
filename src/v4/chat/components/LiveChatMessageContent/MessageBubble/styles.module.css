@@ -50,7 +50,6 @@
     --live-chat-message-list-asc-color-base-default,
     var(--live-chat-asc-color-base-default, var(--asc-color-base-default))
   );
-
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

@@ -29,8 +29,9 @@
     "test:watch": "jest --watch",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build --output-dir ./storybook-build",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . && stylelint \"**/*.css\"",
+    "stylelint": "stylelint",
+    "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
     "tsc": "tsc"
   },
   "peerDependencies": {
@@ -65,7 +66,7 @@
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.16",
+    "autoprefixer": "^10.4.19",
     "esbuild-plugin-replace": "^1.4.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
@@ -75,7 +76,7 @@
     "husky": "^8.0.3",
     "jest": "^29.7.0",
     "lint-staged": "^13.3.0",
-    "postcss": "^8.4.33",
+    "postcss": "^8.4.38",
     "prettier": "2.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -83,6 +84,9 @@
     "standard-version": "^9.5.0",
     "storybook": "^7.6.7",
     "styled-components": "^6.1.6",
+    "stylelint": "^16.6.1",
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-no-unsupported-browser-features": "^8.0.1",
     "svg-url-loader": "^7.1.1",
     "ts-jest": "^29.1.1",
     "tsup": "^7.3.0",
@@ -127,7 +131,8 @@
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --cache --fix",
-    "*.{json,md}": "prettier --write"
+    "*.{json,md}": "prettier --write",
+    "*.{css}": "stylelint --fix"
   },
   "postcss": {
     "plugins": {

@@ -2,7 +2,7 @@
   position: absolute;
   width: 2rem;
   height: 2rem;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0 0 0 / 50%);
   border-radius: 50%;
   border: none;
   top: 6rem;
@@ -53,7 +53,7 @@
   position: absolute;
   left: 0;
   top: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgb(0 0 0 / 90%);
   z-index: 9;
   display: flex;
   justify-content: center;
@@ -140,10 +140,6 @@
   border-radius: 50%;
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   background-color: #292b32;
-}
-
-.storyContent {
-  flex: 1;
 }
 
 .header {
@@ -247,6 +243,7 @@
   max-width: 100%;
   max-height: 100%;
   margin: auto;
+  flex: 1;
 }
 
 .actionButton {

@@ -7,7 +7,7 @@
     display: none;
   }
   
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     .styledCommunitySideMenu {
       min-height: 100%;
       display: block;

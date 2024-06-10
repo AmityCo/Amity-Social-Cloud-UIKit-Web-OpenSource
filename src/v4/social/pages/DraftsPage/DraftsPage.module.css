@@ -17,11 +17,17 @@
 }
 
 .header {
-  display: flex;
   width: 100%;
   justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
   align-items: center;
-  padding: var(--asc-spacing-m1);
+  padding: var(--asc-spacing-s1);
+  background-color: transparent;
+  color: var(--color-white);
 }
 
 .topRightButtons {
@@ -32,10 +38,7 @@
 }
 
 .mainContainer {
-  width: 100%;
-  height: 100%;
   flex: 1;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,6 +50,9 @@
     var(--draft-image-container-color-0, var(--asc-color-black)) 0%,
     var(--draft-image-container-color-last, var(--asc-color-black)) 100%
   );
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .previewImage {
@@ -80,13 +86,14 @@
 
 .playPauseButton {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: none;
   border: none;
-  cursor: pointer;
   color: var(--asc-color-white);
-  font-size: 1.5rem;
+  font-size: 3rem;
+  cursor: pointer;
 }
 
 .progressBar {
@@ -95,11 +102,12 @@
   left: 0;
   right: 0;
   height: 4px;
+  background-color: rgb(255 255 255 / 30%);
 }
 
 .progressFill {
   height: 100%;
-  background-color: var(--asc-color-primary-default);
+  background-color: var(--color-white);
   transition: width 0.1s linear;
 }
 
@@ -123,64 +131,4 @@
   position: relative;
   width: 100%;
   height: 100%;
-}
-
-.mainContainer {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  padding: var(--asc-spacing-s1);
-  background-color: transparent;
-  color: var(--color-white);
-}
-
-.progressBar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background-color: rgba(255, 255, 255, 0.3);
-}
-
-.progressFill {
-  height: 100%;
-  background-color: var(--color-white);
-  transition: width 0.1s linear;
-}
-
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  margin-left: 10px;
-}
-
-.name {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.description {
-  font-size: 14px;
-}
-
-.playPauseButton {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: none;
-  border: none;
-  color: var(--color-white);
-  font-size: 48px;
-  cursor: pointer;
 }

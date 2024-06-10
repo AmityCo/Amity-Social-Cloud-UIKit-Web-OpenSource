@@ -5,10 +5,10 @@
   align-items: center;
   justify-content: center;
   border: none;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0 0 0 / 50%);
   color: var(--base-inverse-default);
   cursor: pointer;
-  padding: 0.1875rem 0rem;
+  padding: 0.1875rem 0;
   border-radius: 50%;
   transition: background-color 0.3s;
   flex-shrink: 0;

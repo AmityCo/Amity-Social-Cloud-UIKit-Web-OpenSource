@@ -1,7 +1,7 @@
-/* 
-You can add your own styles or override the default sheet styles via the exposed class names. 
-Note that you might need to use !important for style overrides since the inner styles are applied as inline styles 
-which have higher specificity. 
+/*
+You can add your own styles or override the default sheet styles via the exposed class names.
+Note that you might need to use !important for style overrides since the inner styles are applied as inline styles
+which have higher specificity.
 */
 
 .bottomSheet__container {
@@ -14,14 +14,11 @@ which have higher specificity.
   justify-content: center;
 }
 
-.bottomSheet__drag-indicator {
-}
-
 .bottomSheet__content {
   background-color: var(--asc-color-base-background);
   padding: 1rem;
 }
 
 .bottomSheet__backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0 0 0 / 50%);
 }

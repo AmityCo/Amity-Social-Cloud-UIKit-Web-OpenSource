@@ -12,12 +12,10 @@
     --pseudo-element-display: block; /* Enable animation */
   
     background-color: var(--base-color);
-  
     width: 100%;
     border-radius: 0.25rem;
     display: inline-flex;
     line-height: 1;
-  
     position: relative;
     user-select: none;
     overflow: hidden;
@@ -40,7 +38,6 @@
       var(--base-color)
     );
     transform: translateX(-100%);
-  
     animation-name: react-loading-skeleton;
     animation-direction: var(--animation-direction);
     animation-duration: var(--animation-duration);

@@ -97,14 +97,14 @@
   height: 100%;
   align-items: center;
   justify-content: center;
-  color: var(--asc-color-base-shade2)
+  color: var(--asc-color-base-shade2);
 }
 
 .reactionCustomStateContainer.loadingState {
   flex-direction: column;
   justify-content: start;
   align-items: flex-start;
-  animation: skeletonPulse 1.5s ease-in-out infinite;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
 .reactionState {
@@ -126,13 +126,15 @@
   color: var(--asc-color-base-shade1);
 }
 
-@keyframes skeletonPulse {
+@keyframes skeleton-pulse {
   0% {
     opacity: 0.6;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.6;
   }
