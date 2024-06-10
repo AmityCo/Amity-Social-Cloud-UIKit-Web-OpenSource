@@ -1,61 +1,61 @@
 .avatar {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
 .replyContainer {
-    display: flex;
-    padding: 10px 12px 10px 16px;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: var(--asc-color-base-shade4);
-    transform: translateY(100%);
-    transition: transform 0.5s ease-in-out;
+  display: flex;
+  padding: 10px 12px 10px 16px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--asc-color-base-shade4);
+  transform: translateY(100%);
+  transition: transform 0.5s ease-in-out;
 }
 
 .replyingToText {
-    color: var(--asc-color-base-shade2);
-    font-size: var(--asc-text-font-size-sm);
-    font-weight: var(--asc-text-font-weight-normal);
-    line-height: var(--asc-line-height-sm);
+  color: var(--asc-color-base-shade2);
+  font-size: var(--asc-text-font-size-sm);
+  font-weight: var(--asc-text-font-weight-normal);
+  line-height: var(--asc-line-height-sm);
 }
 
 .replyingToUsername {
-    color: var(--asc-color-base-shade2);
-    font-size: var(--asc-text-font-size-sm);
-    font-weight: var(--asc-text-font-weight-bold);
-    line-height: var(--asc-line-height-sm);
+  color: var(--asc-color-base-shade2);
+  font-size: var(--asc-text-font-size-sm);
+  font-weight: var(--asc-text-font-weight-bold);
+  line-height: var(--asc-line-height-sm);
 }
 
 .animatedReplyContainer {
-    transform: translateY(0%);
+  transform: translateY(0%);
 }
 
 .commentComposeBarContainer {
-    width: 100%;
-    background: var(--asc-color-base-background);
-    display: flex;
-    gap: var(--asc-spacing-s1);
-    align-items: center;
+  width: 100%;
+  background: var(--asc-color-base-background);
+  display: flex;
+  gap: var(--asc-spacing-s1);
+  align-items: center;
 }
 
 .commentComposeBarInput {
-    outline: none;
-    flex-grow: 1;
-    font: inherit;
-    font-size: 14px;
-    resize: vertical;
-    color: var(--asc-color-base-shade2);
-    background-color: var(--asc-color-base-shade4);
-    border-radius: 20px;
+  outline: none;
+  flex-grow: 1;
+  font: inherit;
+  font-size: 14px;
+  resize: vertical;
+  color: var(--asc-color-base-shade2);
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 20px;
 }
 
 .addCommentButton {
-    color: var(--asc-color-primary-default) !important;
-    cursor: pointer !important;
-    padding: 0.625rem;
-    background-color: transparent;
-    border: none;
-    font-size: var(--asc-text-font-size-sm);
-    font-weight: var(--asc-text-font-weight-bold);
+  color: var(--asc-color-primary-default) !important;
+  cursor: pointer !important;
+  padding: 0.625rem;
+  background-color: transparent;
+  border: none;
+  font-size: var(--asc-text-font-size-sm);
+  font-weight: var(--asc-text-font-weight-bold);
 }

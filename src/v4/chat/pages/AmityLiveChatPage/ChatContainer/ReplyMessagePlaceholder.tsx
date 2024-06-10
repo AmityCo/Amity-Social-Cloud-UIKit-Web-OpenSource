@@ -20,7 +20,11 @@ const ReplyMessagePlaceholder = ({ replyMessage, onDismiss }: ReplyMessagePlaceh
   return (
     <div className={styles.replyPlaceholderContainer}>
       <div className={styles.replyAvatar}>
-        <UserAvatar avatarUrl={profile.avatar?.fileUrl} size={SIZE_ALIAS.SMALL} defaultImage={userBackgroundImage} />
+        <UserAvatar
+          avatarUrl={profile.avatar?.fileUrl}
+          size={SIZE_ALIAS.SMALL}
+          defaultImage={userBackgroundImage}
+        />
       </div>
       <div className={styles.replyProfile}>
         <div className={styles.replyProfileName}>

@@ -1,24 +1,24 @@
 .applicationContainer {
-    height: 100%;
-    width: 100%;
-  }
-  
+  height: 100%;
+  width: 100%;
+}
+
+.styledCommunitySideMenu {
+  display: none;
+}
+
+@media (width >= 768px) {
   .styledCommunitySideMenu {
-    display: none;
+    min-height: 100%;
+    display: block;
   }
-  
-  @media (width >= 768px) {
-    .styledCommunitySideMenu {
-      min-height: 100%;
-      display: block;
-    }
-  }
-  
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}

@@ -32,8 +32,8 @@
   gap: var(--asc-spacing-xxs2);
   border-radius: var(--asc-border-radius-lg);
   color: var(
-      --live-chat-message-list-asc-color-base-inverse,
-      var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
+    --live-chat-message-list-asc-color-base-inverse,
+    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
   );
 }
 
@@ -47,8 +47,8 @@
   height: 1rem;
   width: 1rem;
   fill: var(
-      --live-chat-message-list-asc-color-base-inverse,
-      var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
+    --live-chat-message-list-asc-color-base-inverse,
+    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
   );
 }
 
@@ -64,8 +64,8 @@
 .timestamp {
   font-family: var(--asc-text-global-font-family);
   color: var(
-      --live-chat-message-list-asc-color-base-shade2,
-      var(--live-chat-asc-color-base-shade2, var(--asc-color-base-shade2))
+    --live-chat-message-list-asc-color-base-shade2,
+    var(--live-chat-asc-color-base-shade2, var(--asc-color-base-shade2))
   );
   margin-bottom: var(--asc-spacing-s1);
 

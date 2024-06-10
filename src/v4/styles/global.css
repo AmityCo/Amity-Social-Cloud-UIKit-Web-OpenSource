@@ -108,15 +108,11 @@
   --asc-spacing-xl3: 6rem; /* 96px */
 
   /* Box Shadow */
-  --asc-box-shadow-01: 0px 0.5px 2px 0px rgb(96 97 112 / 16%),
-    0px 0px 1px 0px rgb(40 41 61 / 8%);
-  --asc-box-shadow-02: 0px 0.5px 2px 0px rgb(96 97 112 / 16%),
-    0px 0px 1px 0px rgb(40 41 61 / 8%);
-  --asc-box-shadow-03: 0px 2px 4px 0px rgb(96 97 112 / 16%),
-    0px 0px 1px 0px rgb(40 41 61 / 4%);
+  --asc-box-shadow-01: 0px 0.5px 2px 0px rgb(96 97 112 / 16%), 0px 0px 1px 0px rgb(40 41 61 / 8%);
+  --asc-box-shadow-02: 0px 0.5px 2px 0px rgb(96 97 112 / 16%), 0px 0px 1px 0px rgb(40 41 61 / 8%);
+  --asc-box-shadow-03: 0px 2px 4px 0px rgb(96 97 112 / 16%), 0px 0px 1px 0px rgb(40 41 61 / 4%);
   --asc-box-shadow-04: 0px 4px 8px 0px rgb(96 97 112 / 20%), 0px 0px 2px 0px rgb(40 41 61 / 10%);
-  --asc-box-shadow-05: 0px 8px 16px 0px rgb(96 97 112 / 16%),
-    0px 2px 4px 0px rgb(40 41 61 / 4%);
+  --asc-box-shadow-05: 0px 8px 16px 0px rgb(96 97 112 / 16%), 0px 2px 4px 0px rgb(40 41 61 / 4%);
 }
 
 @media (prefers-color-scheme: light) {
