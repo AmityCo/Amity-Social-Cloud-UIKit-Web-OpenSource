@@ -262,6 +262,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             src={file ? URL.createObjectURL(file) : mediaType.url}
             mediaFit="contain"
             autoPlay
+            loop
             controls={false}
           />
         ) : null}
