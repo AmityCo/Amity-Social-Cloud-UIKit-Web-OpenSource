@@ -5,10 +5,12 @@ import '../../styles/global.css';
 import React, { useEffect, useMemo, useState } from 'react';
 import useUser from '~/core/hooks/useUser';
 
-import SDKConnectorProvider from '~/core/providers/SDKConnectorProvider';
-import { SDKContext } from '~/core/providers/SDKProvider';
+import SDKConnectorProviderV3 from '~/core/providers/SDKConnectorProvider';
+import SDKConnectorProvider from '~/v4/core/providers/SDKConnectorProvider';
+import { SDKContext } from '~/v4/core/providers/SDKProvider';
+import { SDKContext as SDKContextV3 } from '~/core/providers/SDKProvider';
 import PostRendererProvider from '~/social/providers/PostRendererProvider';
-import NavigationProvider from '~/social/providers/NavigationProvider';
+import NavigationProvider from './NavigationProvider';
 
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import { ConfirmComponent } from '~/v4/core/components/ConfirmModal';
@@ -22,7 +24,7 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import buildGlobalTheme from '~/core/providers/UiKitProvider/theme';
 import { defaultConfig, Config, CustomizationProvider } from './CustomizationProvider';
 import { ThemeProvider } from './ThemeProvider';
-import { PageBehaviorProvider } from './PageBehaviorProvider';
+import { PageBehavior, PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UIStyles } from '~/core/providers/UiKitProvider/styles';
 import AmityUIKitManager from '../AmityUIKitManager';
@@ -58,10 +60,7 @@ interface AmityUIKitProviderProps {
     onEditUser?: (userId: string) => void;
     onMessageUser?: (userId: string) => void;
   };
-  pageBehavior?: {
-    onCloseAction?: () => void;
-    onClickHyperLink?: () => void;
-  };
+  pageBehavior?: PageBehavior;
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
@@ -139,40 +138,44 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
         <CustomizationProvider initialConfig={configs || defaultConfig}>
           <StyledThemeProvider theme={buildGlobalTheme(theme)}>
             <ThemeProvider>
-              <CustomReactionProvider>
-                <UIStyles>
-                  <SDKContext.Provider value={sdkContextValue}>
-                    <SDKConnectorProvider>
-                      <NotificationProvider>
-                        <LegacyNotificationProvider>
-                          <ConfirmProvider>
-                            <LegacyConfirmProvider>
-                              <ConfigProvider
-                                config={{
-                                  socialCommunityCreationButtonVisible:
-                                    socialCommunityCreationButtonVisible || true,
-                                }}
-                              >
-                                <PostRendererProvider config={postRendererConfig}>
-                                  <NavigationProvider>
-                                    <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                      {children}
-                                    </PageBehaviorProvider>
-                                  </NavigationProvider>
-                                </PostRendererProvider>
-                              </ConfigProvider>
-                              <NotificationsContainer />
-                              <LegacyNotificationsContainer />
-                              <ConfirmComponent />
-                              <LegacyConfirmComponent />
-                            </LegacyConfirmProvider>
-                          </ConfirmProvider>
-                        </LegacyNotificationProvider>
-                      </NotificationProvider>
-                    </SDKConnectorProvider>
-                  </SDKContext.Provider>
-                </UIStyles>
-              </CustomReactionProvider>
+              <UIStyles>
+                <CustomReactionProvider>
+                  <SDKContextV3.Provider value={sdkContextValue}>
+                    <SDKContext.Provider value={sdkContextValue}>
+                      <SDKConnectorProviderV3>
+                        <SDKConnectorProvider>
+                          <NotificationProvider>
+                            <LegacyNotificationProvider>
+                              <ConfirmProvider>
+                                <LegacyConfirmProvider>
+                                  <ConfigProvider
+                                    config={{
+                                      socialCommunityCreationButtonVisible:
+                                        socialCommunityCreationButtonVisible || true,
+                                    }}
+                                  >
+                                    <PostRendererProvider config={postRendererConfig}>
+                                      <NavigationProvider>
+                                        <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                          {children}
+                                        </PageBehaviorProvider>
+                                      </NavigationProvider>
+                                    </PostRendererProvider>
+                                  </ConfigProvider>
+                                  <NotificationsContainer />
+                                  <LegacyNotificationsContainer />
+                                  <ConfirmComponent />
+                                  <LegacyConfirmComponent />
+                                </LegacyConfirmProvider>
+                              </ConfirmProvider>
+                            </LegacyNotificationProvider>
+                          </NotificationProvider>
+                        </SDKConnectorProvider>
+                      </SDKConnectorProviderV3>
+                    </SDKContext.Provider>
+                  </SDKContextV3.Provider>
+                </CustomReactionProvider>
+              </UIStyles>
             </ThemeProvider>
           </StyledThemeProvider>
         </CustomizationProvider>

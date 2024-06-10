@@ -1,6 +1,6 @@
 @import url('../styles/typography.module.css');
 
-/* 
+/*
   The @supports rule is used to check if the browser supports the 'font-variation-settings' CSS property.
   If supported, it means the browser can handle variable fonts.
   In this case, if the browser supports 'font-variation-settings', we set the font-family to 'Inter var', which is the variable font version of Inter.
@@ -122,3 +122,65 @@
     0px 2px 4px 0px rgba(40, 41, 61, 0.04);
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --asc-color-alert: #fa4d30;
+    --asc-color-black: #000000;
+    --asc-color-white: #ffffff;
+
+    --asc-color-primary-default: #1054de;
+    --asc-color-primary-shade1: #4a82f2;
+    --asc-color-primary-shade2: #a0bdf8;
+    --asc-color-primary-shade3: #d9e5fc;
+    --asc-color-primary-shade4: #ffffff;
+
+    --asc-color-base-inverse: #000000;
+
+    --asc-color-base-default: #292b32;
+    --asc-color-base-shade1: #636878;
+    --asc-color-base-shade2: #898e9e;
+    --asc-color-base-shade3: #a5a9b5;
+    --asc-color-base-shade4: #ebecef;
+    --asc-color-base-shade5: #f9f9fa;
+
+    --asc-color-secondary-default: #292b32;
+    --asc-color-secondary-shade1: #636878;
+    --asc-color-secondary-shade2: #898e9e;
+    --asc-color-secondary-shade3: #a5a9b5;
+    --asc-color-secondary-shade4: #ebecef;
+    --asc-color-secondary-shade5: #f9f9fa;
+
+    --asc-color-base-background: #ffffff;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --asc-color-alert: #fa4d30;
+    --asc-color-black: #000000;
+    --asc-color-white: #ffffff;
+
+    --asc-color-primary-default: #1054de;
+    --asc-color-primary-shade1: #4a82f2;
+    --asc-color-primary-shade2: #a0bdf8;
+    --asc-color-primary-shade3: #d9e5fc;
+    --asc-color-primary-shade4: #ffffff;
+
+    --asc-color-base-inverse: #ffffff;
+
+    --asc-color-base-default: #ebecef;
+    --asc-color-base-shade1: #a5a9b5;
+    --asc-color-base-shade2: #6e7487;
+    --asc-color-base-shade3: #40434e;
+    --asc-color-base-shade4: #292b32;
+    --asc-color-base-shade5: #f9f9fa;
+
+    --asc-color-secondary-default: #292b32;
+    --asc-color-secondary-shade1: #636878;
+    --asc-color-secondary-shade2: #898e9e;
+    --asc-color-secondary-shade3: #a5a9b5;
+    --asc-color-secondary-shade4: #ebecef;
+    --asc-color-secondary-shade5: #f9f9fa;
+
+    --asc-color-base-background: #191919;
+  }
+}

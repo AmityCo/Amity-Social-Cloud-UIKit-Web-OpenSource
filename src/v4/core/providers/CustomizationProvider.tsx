@@ -92,7 +92,7 @@ export const useCustomization = () => {
 
 interface CustomizationProviderProps {
   children: React.ReactNode;
-  initialConfig: Config;
+  initialConfig: Config | undefined;
 }
 
 type IconConfiguration = {
@@ -274,6 +274,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_home_page/empty_newsfeed/create_community_button': {
       icon: 'createCommunityIcon',
+      text: 'Create Community',
     },
     'social_home_page/my_communities/community_avatar': {},
     'social_home_page/my_communities/community_display_name': {},
@@ -297,33 +298,6 @@ export const defaultConfig: DefaultConfig = {
     '*/*/moderator_badge': {
       icon: 'badgeIcon',
       text: 'Moderator',
-    },
-    '*/post_content/moderator_badge': {
-      icon: 'badgeIcon',
-      text: 'Moderator',
-      theme: {
-        light: {
-          primary_color: '#FA4D30',
-          secondary_color: '#292B32',
-        },
-        dark: {
-          primary_color: '#00FF00',
-          secondary_color: '#292B32',
-        },
-      },
-    },
-    '*/post_comment/*': {
-      preferred_theme: 'default',
-      theme: {
-        light: {
-          primary_color: '#FFC0CB',
-          secondary_color: '#292B32',
-        },
-        dark: {
-          primary_color: '#FFFF00',
-          secondary_color: '#292B32',
-        },
-      },
     },
     '*/post_content/timestamp': {},
     '*/post_content/menu_button': {
@@ -408,7 +382,7 @@ export const getDefaultConfig: CustomizationContextValue['getConfig'] = (path: s
 
 export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   children,
-  initialConfig,
+  initialConfig = {},
 }) => {
   const [config, setConfig] = useState<Config | null>(null);
 
@@ -421,16 +395,6 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   }, [initialConfig]);
 
   const validateConfig = (config: Config): boolean => {
-    // Check if mandatory fields are present
-    if (
-      !config?.preferred_theme ||
-      !config?.theme ||
-      !config?.excludes ||
-      !config?.customizations
-    ) {
-      return false;
-    }
-
     return true;
   };
 
@@ -439,11 +403,34 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   };
 
   const isExcluded = (path: string) => {
-    if (!config) return false;
-    return !!config.excludes?.some((exclude) => {
-      const regex = new RegExp(`^${exclude.replace(/\*/g, '.*')}$`);
-      return regex.test(path);
-    });
+    const [page, component, element] = path.split('/');
+
+    const customizationKeys = (() => {
+      if (element !== '*') {
+        return [
+          `${page}/${component}/${element}`,
+          `${page}/*/${element}`,
+          `${page}/${component}/*`,
+          `${page}/*/*`,
+          `*/${component}/${element}`,
+          `*/*/${element}`,
+          `*/${component}/*`,
+          `*/*/*`,
+        ];
+      } else if (component !== '*') {
+        return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
+      } else if (page !== '*') {
+        return [`${page}/*/*`, `*/*/*`];
+      }
+
+      return [];
+    })();
+
+    return (
+      config?.excludes?.some((excludedPath) => {
+        return customizationKeys.some((key) => key === excludedPath);
+      }) || false
+    );
   };
 
   const getConfig: CustomizationContextValue['getConfig'] = (path: string) => {
@@ -481,6 +468,11 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
               return config.customizations[key][prop];
             }
           }
+
+          if (prop === 'theme' && !!config?.theme) {
+            return config.theme;
+          }
+
           for (const key of customizationKeys) {
             if (defaultConfig?.customizations?.[key]?.[prop]) {
               return defaultConfig.customizations[key][prop];

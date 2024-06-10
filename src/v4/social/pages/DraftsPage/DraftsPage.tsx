@@ -41,7 +41,7 @@ type HyperLinkFormInputs = {
 const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
   const { page, onChangePage, onClickCommunity } = useNavigation();
   const { file, setFile } = useStoryContext();
-  const { navigationBehavior } = usePageBehavior();
+  const { AmityDraftStoryPageBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
@@ -140,7 +140,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
       okText: formatMessage({ id: 'delete' }),
       onOk: () => {
         setFile(null);
-        navigationBehavior.onCloseAction();
+        AmityDraftStoryPageBehavior.onCloseAction();
       },
     });
   };

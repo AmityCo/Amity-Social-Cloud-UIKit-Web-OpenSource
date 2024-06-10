@@ -2,9 +2,12 @@ import React, { ReactNode, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
 import clsx from 'clsx';
 import Close from '~/v4/icons/Close';
+import { useAmityElement } from '../../hooks/uikit';
 
 export interface ModalProps {
-  'data-qa-anchor'?: string;
+  pageId?: string;
+  componentId?: string;
+  elementId?: string;
   size?: 'small' | '';
   className?: string;
   onOverlayClick?: () => void;
@@ -16,7 +19,9 @@ export interface ModalProps {
 }
 
 const Modal = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  pageId = '*',
+  componentId = '*',
+  elementId = '*',
   size = '',
   onOverlayClick = () => {},
   onCancel,
@@ -24,6 +29,8 @@ const Modal = ({
   footer,
   children,
 }: ModalProps) => {
+  const { accessibilityId, themeStyles } = useAmityElement({ pageId, componentId, elementId });
+
   const modalRef = useRef<HTMLDivElement | null>(null);
   // auto focus to prevent scroll on background (when focus kept on trigger button)
   useEffect(() => {
@@ -31,10 +38,10 @@ const Modal = ({
   }, [modalRef?.current]);
 
   return (
-    <div className={styles.overlay} onClick={onOverlayClick}>
+    <div className={styles.overlay} onClick={onOverlayClick} style={themeStyles}>
       <div
         className={clsx(styles.modalWindow, `${size === 'small' ? 'smallModalWindow' : ''}`)}
-        data-qa-anchor={dataQaAnchor}
+        data-qa-anchor={accessibilityId}
         ref={modalRef}
         tabIndex={0}
       >

@@ -64,7 +64,6 @@ export const AmityLiveChatMessageList = ({
               content: formatMessage({ id: 'livechat.delete.message.error' }),
             }),
         }),
-      theme: 'dark',
     });
   };
 
