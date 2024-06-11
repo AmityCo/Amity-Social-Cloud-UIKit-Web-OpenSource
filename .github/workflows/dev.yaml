@@ -27,14 +27,16 @@ jobs:
 
     steps:
       - name: git checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: install node
-        uses: actions/setup-node@v2
-
-      - uses: pnpm/action-setup@v2
+        uses: actions/setup-node@v4
         with:
-          version: 8
+          node-version-file: .tool-versions
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
           run_install: false
 
       - name: Get pnpm store directory
@@ -42,7 +44,7 @@ jobs:
         run: |
           echo "pnpm_cache_dir=$(pnpm store path | tr -d '\n')" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
