@@ -51,6 +51,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: build storybook
         run: pnpm run storybook:build
 
