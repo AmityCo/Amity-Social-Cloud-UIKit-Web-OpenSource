@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './SocialHomePage.module.css';
 
 import { TopNavigation } from '~/v4/social/components/TopNavigation';
+import { MyCommunities } from '~/v4/social/components/MyCommunities';
 import { NewsfeedButton } from '~/v4/social/elements/NewsfeedButton';
 import { ExploreButton } from '~/v4/social/elements/ExploreButton';
 import { MyCommunitiesButton } from '~/v4/social/elements/MyCommunitiesButton';
@@ -44,6 +45,7 @@ export function SocialHomePage() {
       <div className={styles.socialHomePage__contents}>
         {activeTab === EnumTabNames.Newsfeed && <Newsfeed pageId={pageId} />}
         {activeTab === EnumTabNames.Explore && <div>Explore</div>}
+        {activeTab === EnumTabNames.MyCommunities && <MyCommunities pageId={pageId} />}
       </div>
     </div>
   );
