@@ -1,0 +1,103 @@
+.videoContent {
+  display: grid;
+  border-radius: 0.5rem;
+  gap: 0.25rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.videoContent[data-videos-amount='1'] {
+  grid-template: 'video1' / minmax(0, 1fr);
+}
+
+.videoContent[data-videos-amount='2'] {
+  grid-template:
+    'video1 video2' 50%
+    'video1 video2' 50%
+    / 50% 50%;
+}
+
+.videoContent[data-videos-amount='3'] {
+  grid-template:
+    'video1 video1 video1 video1' 66%
+    'video2 video2 video3 video3' 33%
+    / 25% 25% 25% 25%;
+}
+
+.videoContent[data-videos-amount='4'] {
+  grid-template:
+    'video1 video1 video1 video1 video1 video1' 66%
+    'video2 video2 video3 video3 video4 video4' 33%
+    / minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.videoContent__video {
+  object-fit: cover;
+  object-position: center;
+  height: 100%;
+  width: 100%;
+}
+
+.videoContent__videoContainer {
+  cursor: pointer;
+  position: relative;
+}
+
+.videoContent__videoContainer:nth-child(1) {
+  grid-area: video1;
+}
+
+.videoContent__videoContainer:nth-child(2) {
+  grid-area: video2;
+}
+
+.videoContent__videoContainer:nth-child(3) {
+  grid-area: video3;
+}
+
+.videoContent__videoContainer:nth-child(4) {
+  grid-area: video4;
+}
+
+.videoContent__videoCover {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 0 0.5rem;
+  background-color: rgb(0 0 0 / 50%);
+  color: var(--asc-color-white);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.videoContent__playButtonCover {
+  position: absolute;
+  inset: 0;
+  border-radius: 0 0 0.5rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.videoContent__playButton {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--asc-color-secondary-default);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.videoContent__playButton__svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-secondary-shade4);
+}

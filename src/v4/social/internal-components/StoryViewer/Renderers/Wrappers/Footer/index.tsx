@@ -7,7 +7,7 @@ import millify from 'millify';
 import { ReactionRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
 import Spinner from '~/social/components/Spinner';
-import { CommentButton, ImpressionButton, ReactButton } from '~/v4/social/elements';
+import { StoryCommentButton, ImpressionButton, ReactButton } from '~/v4/social/elements';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
@@ -78,9 +78,9 @@ const Footer: React.FC<
         )}
       </div>
       <div className={styles.viewStoryCompostBarEngagementContainer}>
-        <CommentButton onClick={onClickComment} pageId="story_page" componentId="*">
+        <StoryCommentButton onClick={onClickComment} pageId="story_page" componentId="*">
           {millify(commentsCount) || 0}
-        </CommentButton>
+        </StoryCommentButton>
         <ReactButton onClick={handleLike} pageId="story_page" isLiked={isLiked}>
           {millify(totalLikes || 0)}
         </ReactButton>

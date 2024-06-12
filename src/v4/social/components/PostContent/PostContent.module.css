@@ -1,0 +1,213 @@
+.postContent {
+  background-color: var(--asc-color-base-background);
+}
+
+.postContent__bar {
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.postContent__bar__userAvatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.postContent__bar__information__subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.postContent__bar__information__subtitle__moderator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.postContent__bar__information__subtitle__separator {
+  color: var(--asc-color-base-shade2);
+}
+
+.postContent__bar__information__subtitle__timestamp {
+  cursor: pointer;
+}
+
+.postContent__bar__actionButton {
+  justify-self: flex-end;
+  cursor: pointer;
+}
+
+.postContent__content_and_reactions {
+  padding-left: 0.25rem;
+}
+
+.postContent__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.postContent__divider {
+  width: 100%;
+  background-color: var(--asc-color-base-shade4);
+  height: 0.0625rem;
+}
+
+.postContent__reactionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.7rem;
+}
+
+.postContent__reactionBar__leftPane {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 0.75rem;
+}
+
+.postContent__reactionBar__rightPane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.postContent__reactionBar__leftPane__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.postContent__reactionBar__leftPane__iconImg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.postTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.postTitle__text {
+  color: var(--asc-color-base-default);
+}
+
+.postTitle__icon {
+  fill: var(--asc-color-base-shade1);
+  height: 0.75rem;
+  width: 1rem;
+}
+
+.postContent__comment {
+  display: grid;
+}
+
+.postContent__reactions_and_comments {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.postContent__reactionsBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.25rem;
+}
+
+.postContent__commentsCount {
+  color: var(--asc-color-base-shade2);
+}
+
+.postContent__reactionsBar__reactions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row-reverse;
+}
+
+.postContent__reactionsBar__reactions__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.postContent__reactionsBar__reactions__icon:nth-last-child(1) {
+  transform: translateX(0);
+}
+
+.postContent__reactionsBar__reactions__icon:nth-last-child(2) {
+  transform: translateX(-0.25rem);
+}
+
+.postContent__reactionsBar__reactions__icon:nth-last-child(3) {
+  transform: translateX(-0.5rem);
+}
+
+.postContent__reactionsBar__reactions__icon:nth-last-child(4) {
+  transform: translateX(-0.75rem);
+}
+
+.postContent__reactionsBar__reactions__icon:nth-last-child(5) {
+  transform: translateX(-1rem);
+}
+
+.postContent__reactionsBar__reactions__icon:nth-last-child(6) {
+  transform: translateX(-1.25rem);
+}
+
+.postContent__reactionsBar__reactions__count {
+  color: var(--asc-color-base-shade2);
+}
+
+.postContent__postMenu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.postContent__postMenu__item:hover {
+  background-color: var(--asc-color-base-shade4);
+  border-radius: var(--asc-border-radius-md);
+}
+
+.postContent__postMenu__editPost__text {
+  color: var(--asc-color-secondary-default);
+}
+
+.postContent__postMenu__editPost__icon {
+  fill: var(--asc-color-secondary-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+.postContent__postMenu__reportPost__text {
+  color: var(--asc-color-secondary-default);
+}
+
+.postContent__postMenu__reportPost__icon {
+  fill: var(--asc-color-secondary-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+.postContent__postMenu__deletePost__text {
+  color: var(--asc-color-alert);
+}
+
+.postContent__postMenu__deletePost__icon {
+  fill: var(--asc-color-alert);
+  width: 1.5rem;
+  height: 1.25rem;
+}

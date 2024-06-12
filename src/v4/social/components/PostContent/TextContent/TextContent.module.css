@@ -1,0 +1,15 @@
+.postContent {
+  overflow-wrap: break-word;
+  color: var(--asc-color-base-default);
+  white-space: pre-wrap;
+}
+
+.mentionHighlightTag {
+  cursor: pointer;
+  color: var(--asc-color-primary-default);
+}
+
+.postContent__readmore {
+  cursor: pointer;
+  color: var(--asc-color-primary-default);
+}

@@ -1,0 +1,14 @@
+.shareButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.shareButton__icon {
+  fill: var(--asc-color-secondary-shade4);
+}
+
+.shareButton__text {
+  color: var(--asc-color-base-shade2);
+}

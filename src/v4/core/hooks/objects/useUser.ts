@@ -11,11 +11,16 @@ const useUser = (userId?: string | null) => {
     level: SubscriptionLevels.USER,
   });
 
-  return useLiveObject({
+  const { item, ...rest } = useLiveObject({
     fetcher: UserRepository.getUser,
     params: userId,
     shouldCall: () => !!userId,
   });
+
+  return {
+    user: item,
+    ...rest,
+  };
 };
 
 export default useUser;

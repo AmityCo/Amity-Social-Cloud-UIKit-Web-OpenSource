@@ -1,8 +1,8 @@
 export { AspectRatioButton } from './AspectRatioButton';
 export { BackButton } from './BackButton/BackButton';
-export { CloseButton } from './CloseButton/CloseButton';
-export { CancelButton } from './CancelButton/CancelButton';
-export { CommentButton } from './CommentButton';
+export { CloseButton } from './CloseButton';
+export { CancelButton } from './CancelButton';
+export { StoryCommentButton } from './StoryCommentButton';
 export { CreateStoryButton } from './CreateStoryButton/CreateStoryButton';
 export { HyperLinkButton } from './HyperLinkButton/HyperLinkButton';
 export { ImpressionButton } from './ImpressionButton';

@@ -7,6 +7,31 @@ export type Metadata = {
   mentioned?: Mentioned[];
 };
 
+type Chunk = { start: number; end: number; highlight?: boolean };
+
+export const processChunks = (text: string, chunks: Chunk[] = []) => {
+  const textLength = text?.length || 0;
+  const allChunks: Chunk[] = [];
+
+  const append = (start: number, end: number, highlight: boolean) => {
+    allChunks.push({ start, end, highlight });
+  };
+
+  if (!chunks || chunks?.length === 0) {
+    append(0, textLength, false);
+  } else {
+    let lastIndex = 0;
+    chunks.forEach((chunk) => {
+      append(lastIndex, chunk.start, false);
+      append(chunk.start, chunk.end, true);
+      lastIndex = chunk.end;
+    });
+    append(lastIndex, textLength, false);
+  }
+
+  return allChunks;
+};
+
 export function isCommunityMember(member?: Amity.Member<'community'>) {
   return member?.communityMembership === 'member';
 }
