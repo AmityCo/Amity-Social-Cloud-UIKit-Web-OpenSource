@@ -1,0 +1,18 @@
+.exploreCommunitiesButton {
+  display: flex;
+  padding: 0.625rem 1rem 0.625rem 0.75rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.25rem;
+  background: var(--asc-color-primary-default);
+  cursor: pointer;
+}
+
+.exploreCommunitiesButton__icon {
+  fill: var(--asc-color-white);
+}
+
+.exploreCommunitiesButton__text {
+  color: var(--asc-color-white);
+}

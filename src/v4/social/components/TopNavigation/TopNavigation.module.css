@@ -1,0 +1,21 @@
+.topNavigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--asc-color-base-background);
+  height: 3.625rem;
+}
+
+.topNavigationLeftPane {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.topNavigationRightPane {
+  display: flex;
+  gap: 0.625rem;
+  justify-content: center;
+  align-items: center;
+}
