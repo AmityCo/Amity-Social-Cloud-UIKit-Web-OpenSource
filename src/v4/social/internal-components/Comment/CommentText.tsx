@@ -1,12 +1,20 @@
-import React, { useMemo, useState } from 'react';
+import React, { ReactNode, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import clsx from 'clsx';
 import { findChunks, Mentioned } from '~/v4/helpers/utils';
-import MentionHighlightTag from '~/core/components/MentionHighlightTag';
 import { processChunks } from '~/core/components/ChunkHighlighter';
 import Linkify from '~/core/components/Linkify';
 import styles from './CommentText.module.css';
+
+interface MentionHighlightTagProps {
+  children: ReactNode;
+  mentionee: Mentioned;
+}
+
+const MentionHighlightTag = ({ children }: MentionHighlightTagProps) => {
+  return <span className={styles.mentionHighlightTag}>{children}</span>;
+};
 
 const COMMENT_MAX_LINES = 8;
 

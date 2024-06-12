@@ -5,15 +5,15 @@ import { isValidHttpUrl } from '~/utils';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 
 interface CloseButtonProps {
-  pageId: 'story_page';
-  componentId: '*';
+  pageId: string;
+  componentId: string;
   onClick?: (e: React.MouseEvent) => void;
   style?: React.CSSProperties;
   'data-qa-anchor'?: string;
 }
 
 export const CloseButton = ({
-  pageId = 'story_page',
+  pageId = '*',
   componentId = '*',
   onClick = () => {},
   style,

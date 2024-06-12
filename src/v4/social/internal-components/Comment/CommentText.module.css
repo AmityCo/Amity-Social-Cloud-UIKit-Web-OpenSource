@@ -20,3 +20,8 @@
 .readMoreButton:hover {
   text-decoration: underline;
 }
+
+.mentionHighlightTag {
+  cursor: pointer;
+  color: var(--asc-color-primary-default);
+}

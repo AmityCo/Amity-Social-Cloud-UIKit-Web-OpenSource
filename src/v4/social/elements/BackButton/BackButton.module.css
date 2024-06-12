@@ -1,15 +1,16 @@
-.uiBackButton {
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-  top: 0;
-  left: 0;
+button {
+  appearance: none;
+  border-radius: 0;
+  text-align: inherit;
+  background: none;
+  box-shadow: none;
+  padding: 0;
   cursor: pointer;
-  border-radius: 50%;
+  border: none;
+  color: inherit;
+  font: inherit;
 }
 
-.uiBackButtonImage {
-  width: 1.5rem;
-  height: 1.5rem;
-  cursor: pointer;
+.backButton {
+  fill: var(--asc-color-base-default);
 }

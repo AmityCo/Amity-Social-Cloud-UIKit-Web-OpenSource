@@ -21,6 +21,7 @@ const COMMENT_LENGTH_LIMIT = 50000;
 
 interface CommentComposeBarProps {
   targetId: string;
+  targetType: string;
   className?: string;
   userToReply?: Amity.User['displayName'] | null;
   onSubmit: (text: string, mentionees: Mentionees, metadata: Metadata) => void;
@@ -28,14 +29,19 @@ interface CommentComposeBarProps {
   isReplying?: boolean;
 }
 
-export const CommentComposeBar = ({ userToReply, onSubmit, targetId }: CommentComposeBarProps) => {
+export const CommentComposeBar = ({
+  userToReply,
+  onSubmit,
+  targetId,
+  targetType,
+}: CommentComposeBarProps) => {
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { text, markup, mentions, mentionees, metadata, onChange, clearAll, queryMentionees } =
     useMention({
       targetId: targetId,
-      targetType: 'community',
+      targetType,
     });
   const { formatMessage } = useIntl();
   const { info } = useConfirmContext();
