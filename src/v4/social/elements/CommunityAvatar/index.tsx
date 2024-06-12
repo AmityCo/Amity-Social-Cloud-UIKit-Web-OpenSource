@@ -1,0 +1,1 @@
+export { CommunityAvatar } from './CommunityAvatar';

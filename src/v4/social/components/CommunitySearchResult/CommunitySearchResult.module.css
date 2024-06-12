@@ -1,0 +1,67 @@
+.communitySearchResult {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  background-color: var(--asc-color-base-background);
+}
+
+.communitySearchResult__communityItem {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+.communitySearchResult__communityItem:not(:first-child) {
+  border-top: 0.0625rem solid var(--asc-color-base-shade4);
+}
+
+.communitySearchResult__communityItem__leftPane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.communitySearchResult__communityItem__rightPane {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.communityItem__communityName {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.communityItem__communityName__private {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.22rem;
+  padding-bottom: 0.28rem;
+}
+
+.communityItem__communityCategory {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.communityItem__communityMemberCount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
