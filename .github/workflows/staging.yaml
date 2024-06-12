@@ -36,7 +36,12 @@ jobs:
       - uses: pnpm/action-setup@v4
         with:
           version: 9
-          run_install: true
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "pnpm_cache_dir=$(pnpm store path | tr -d '\n')" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v4
         name: Setup pnpm cache
