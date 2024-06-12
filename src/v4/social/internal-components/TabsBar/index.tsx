@@ -1,0 +1,1 @@
+export { TabsBar } from './TabsBar';
