@@ -74,7 +74,11 @@ export const VideoContent = ({
         data-videos-amount={Math.min(post.children.length, 4)}
       >
         {videoPosts.map((post, index) => (
-          <div className={styles.videoContent__videoContainer} onClick={() => onVideoClick(index)}>
+          <div
+            className={styles.videoContent__videoContainer}
+            data-videos-amount={Math.min(post.children.length, 4)}
+            onClick={() => onVideoClick(index)}
+          >
             <Video fileId={post.data.thumbnailFileId} />
             {videoLeftCount > 0 && index === posts.length - 1 && (
               <Typography.Heading className={styles.videoContent__videoCover}>

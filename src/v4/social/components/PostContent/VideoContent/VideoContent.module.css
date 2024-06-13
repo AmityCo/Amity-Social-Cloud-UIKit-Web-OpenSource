@@ -32,15 +32,27 @@
 }
 
 .videoContent__video {
-  object-fit: cover;
-  object-position: center;
-  height: 100%;
   width: 100%;
+  position: absolute;
+  top: 0;
+  margin: auto;
 }
 
 .videoContent__videoContainer {
   cursor: pointer;
   position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+}
+
+.videoContent__videoContainer[data-videos-amount='1'],
+.videoContent__videoContainer[data-videos-amount='2'] {
+  padding-top: 56.25%;
+}
+
+.videoContent__videoContainer[data-videos-amount='3'],
+.videoContent__videoContainer[data-videos-amount='4'] {
+  padding-top: 100%;
 }
 
 .videoContent__videoContainer:nth-child(1) {
