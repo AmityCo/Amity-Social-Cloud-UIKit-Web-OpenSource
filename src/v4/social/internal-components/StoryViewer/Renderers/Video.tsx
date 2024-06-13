@@ -25,6 +25,7 @@ import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 import rendererStyles from './Renderers.module.css';
 import useUser from '~/core/hooks/useUser';
 import { isAdmin, isModerator } from '~/helpers/permissions';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -55,7 +56,9 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     fileInputRef,
   } = story;
 
-  const isJoined = community?.isJoined || false;
+  const { members } = useCommunityMembersCollection(community?.communityId as string);
+  const member = members?.find((member) => member.userId === client?.userId);
+  const isMember = member != null;
 
   const avatarUrl = useImage({
     fileId: community?.avatarFileId || '',
@@ -288,7 +291,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
           referenceType={'story'}
           community={community as Amity.Community}
           shouldAllowCreation={community?.allowCommentInStory}
-          shouldAllowInteraction={isJoined}
+          shouldAllowInteraction={isMember}
         />
       </BottomSheet>
       {story.items?.[0]?.data?.url && (
@@ -321,6 +324,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         isLiked={isLiked}
         onClickComment={openCommentSheet}
         showImpression={isCreator || haveStoryPermission}
+        isMember={isMember}
       />
     </motion.div>
   );

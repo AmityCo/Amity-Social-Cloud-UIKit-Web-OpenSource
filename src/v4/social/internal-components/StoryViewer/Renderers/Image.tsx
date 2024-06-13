@@ -26,6 +26,7 @@ import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
 import { isAdmin, isModerator } from '~/helpers/permissions';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -54,7 +55,9 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     fileInputRef,
   } = story;
 
-  const isJoined = community?.isJoined || false;
+  const { members } = useCommunityMembersCollection(community?.communityId as string);
+  const member = members?.find((member) => member.userId === client?.userId);
+  const isMember = member != null;
 
   const avatarUrl = useImage({
     fileId: community?.avatarFileId || '',
@@ -249,7 +252,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
           referenceType="story"
           community={community as Amity.Community}
           shouldAllowCreation={community?.allowCommentInStory}
-          shouldAllowInteraction={isJoined}
+          shouldAllowInteraction={isMember}
         />
       </BottomSheet>
 
@@ -284,6 +287,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         isLiked={isLiked}
         onClickComment={openCommentSheet}
         showImpression={isCreator || haveStoryPermission}
+        isMember={isMember}
       />
     </motion.div>
   );

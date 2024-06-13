@@ -387,6 +387,7 @@
   "storyViewer.toast.like.disabled": "Join community to interact with all stories",
   "storyViewer.toast.comment.reported": "Comment reported",
   "storyViewer.toast.comment.unreported": "Comment unreported",
+  "storyViewer.toast.disable.react": "Join community to interact with all stories",
 
   "storyViewer.commentComposeBar.submit": "Post",
 

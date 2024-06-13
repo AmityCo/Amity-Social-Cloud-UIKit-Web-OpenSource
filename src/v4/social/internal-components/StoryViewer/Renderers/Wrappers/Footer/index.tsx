@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styles from './Footer.module.css';
 
 import { DotsIcon, ErrorIcon } from '~/icons';
@@ -8,6 +8,7 @@ import { ReactionRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
 import Spinner from '~/social/components/Spinner';
 import { StoryCommentButton, ImpressionButton, ReactButton } from '~/v4/social/elements';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
@@ -19,6 +20,7 @@ const Footer: React.FC<
     isLiked: boolean;
     onClickComment: () => void;
     syncState?: Amity.SyncState;
+    isMember?: boolean;
   }>
 > = ({
   syncState,
@@ -29,11 +31,19 @@ const Footer: React.FC<
   storyId,
   onClickComment,
   showImpression,
+  isMember,
 }) => {
+  const notification = useNotifications();
   const { formatMessage } = useIntl();
 
   const handleLike = async () => {
     try {
+      if (!isMember) {
+        notification.show({
+          content: formatMessage({ id: 'storyViewer.toast.disable.react' }),
+        });
+        return;
+      }
       if (!isLiked) {
         await ReactionRepository.addReaction('story', storyId, LIKE_REACTION_KEY);
       } else {
