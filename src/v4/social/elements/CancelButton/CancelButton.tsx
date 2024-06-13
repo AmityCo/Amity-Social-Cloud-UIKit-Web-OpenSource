@@ -28,7 +28,7 @@ export const CancelButton = ({
 
   return (
     <button data-qa-anchor={accessibilityId} style={themeStyles} onClick={onClick}>
-      <Typography.Body className={styles.clearButton}>{config.text}</Typography.Body>
+      <Typography.Body className={styles.clearButton}>{config.cancel_button_text}</Typography.Body>
     </button>
   );
 };

@@ -2,6 +2,10 @@ import React, { useContext } from 'react';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 export interface PageBehavior {
+  AmityStoryViewPageBehavior: {
+    onCloseAction(): void;
+    hyperLinkAction?(context: Record<string, unknown>): void;
+  };
   AmityDraftStoryPageBehavior: {
     onCloseAction(): void;
   };
@@ -9,6 +13,12 @@ export interface PageBehavior {
   AmitySocialHomePageBehavior: Record<string, unknown>;
   AmityGlobalFeedComponentBehavior: {
     goToPostDetailPage: (context: { postId: string }) => void;
+    goToViewStoryPage: (context: {
+      targetId: string;
+      targetType: string;
+      storyType: 'communityFeed' | 'globalFeed';
+      targetIds?: string[];
+    }) => void;
   };
   AmityPostDetailPageBehavior: Record<string, unknown>;
   AmityPostContentComponentBehavior: {
@@ -32,9 +42,27 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
   children,
   pageBehavior = {},
 }) => {
-  const { onBack, goToPostDetailPage, goToCommunityProfilePage, goToUserProfilePage } =
-    useNavigation();
+  const {
+    onBack,
+    goToPostDetailPage,
+    goToCommunityProfilePage,
+    goToUserProfilePage,
+    goToViewStoryPage,
+  } = useNavigation();
   const navigationBehavior: PageBehavior = {
+    AmityStoryViewPageBehavior: {
+      onCloseAction: () => {
+        if (pageBehavior?.AmityStoryViewPageBehavior?.onCloseAction) {
+          return pageBehavior.AmityStoryViewPageBehavior.onCloseAction();
+        }
+        onBack();
+      },
+      hyperLinkAction: (context: Record<string, unknown>) => {
+        if (pageBehavior?.AmityStoryViewPageBehavior?.hyperLinkAction) {
+          return pageBehavior.AmityStoryViewPageBehavior.hyperLinkAction(context);
+        }
+      },
+    },
     AmityDraftStoryPageBehavior: {
       onCloseAction: () => {
         if (pageBehavior?.AmityDraftStoryPageBehavior?.onCloseAction) {
@@ -51,6 +79,22 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior?.AmityGlobalFeedComponentBehavior.goToPostDetailPage(context);
         }
         goToPostDetailPage(context.postId);
+      },
+      goToViewStoryPage: (context: {
+        targetId: string;
+        targetType: string;
+        storyType: 'communityFeed' | 'globalFeed';
+        targetIds?: string[];
+      }) => {
+        if (pageBehavior?.AmityGlobalFeedComponentBehavior?.goToViewStoryPage) {
+          return pageBehavior?.AmityGlobalFeedComponentBehavior.goToViewStoryPage(context);
+        }
+        goToViewStoryPage(
+          context.targetId,
+          context.targetType,
+          context.storyType,
+          context.targetIds,
+        );
       },
     },
     AmityPostDetailPageBehavior: {},

@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import styles from './StoryTabGlobalFeed.module.css';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 import { StoryTabItem } from './StoryTabItem';
 import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 const STORIES_PER_PAGE = 10;
 
@@ -11,7 +11,7 @@ export const StoryTabGlobalFeed: React.FC = () => {
     seenState: 'smart' as Amity.StorySeenQuery,
     limit: STORIES_PER_PAGE,
   });
-  const { onClickStory } = useNavigation();
+  const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -67,11 +67,12 @@ export const StoryTabGlobalFeed: React.FC = () => {
             targetId={story.targetId}
             hasUnseen={story.hasUnseen}
             onClick={() =>
-              onClickStory(
-                story.targetId,
-                'globalFeed',
-                stories.map((s) => s.targetId),
-              )
+              AmityGlobalFeedComponentBehavior.goToViewStoryPage({
+                targetId: story.targetId,
+                targetType: story.targetType,
+                storyType: 'globalFeed',
+                targetIds: stories.map((story) => story.targetId),
+              })
             }
             size={64}
           />

@@ -3,17 +3,14 @@ import React from 'react';
 import { StoryTabCommunityFeed } from './StoryTabCommunity';
 import { StoryTabGlobalFeed } from './StoryTabGlobalFeed';
 
-type AmityStoryTabComponentType = 'communityFeed' | 'globalFeed';
+type StoryTabType = 'communityFeed' | 'globalFeed';
 
-type AmityStoryTabComponentProps<T extends AmityStoryTabComponentType> = {
+type StoryTabProps<T extends StoryTabType> = {
   type: T;
   communityId?: T extends 'communityFeed' ? string : never;
 };
 
-export const StoryTab = <T extends AmityStoryTabComponentType>({
-  type,
-  communityId,
-}: AmityStoryTabComponentProps<T>) => {
+export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTabProps<T>) => {
   const renderStoryTab = () => {
     switch (type) {
       case 'communityFeed':

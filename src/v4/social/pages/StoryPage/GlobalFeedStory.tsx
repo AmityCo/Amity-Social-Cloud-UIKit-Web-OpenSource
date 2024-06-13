@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import useStories from '~/social/hooks/useStories';
+
 import useSDK from '~/core/hooks/useSDK';
 import { useMedia } from 'react-use';
 import { useIntl } from 'react-intl';
@@ -9,7 +9,7 @@ import { CreateStoryButton } from '../../elements';
 import { Trash2Icon } from '~/icons';
 import { isNonNullable } from '~/v4/helpers/utils';
 import { extractColors } from 'extract-colors';
-import { useNavigation } from '~/social/providers/NavigationProvider';
+
 import {
   HiddenInput,
   StoryArrowLeftButton,
@@ -19,6 +19,7 @@ import {
   ViewStoryContent,
   ViewStoryOverlay,
 } from '../../internal-components/StoryViewer/styles';
+
 import Stories from 'react-insta-stories';
 import { renderers } from '../../internal-components/StoryViewer/Renderers';
 import { AmityDraftStoryPage } from '..';
@@ -26,7 +27,10 @@ import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '../../providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { PageTypes } from '~/social/constants';
+
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useGetActiveStoriesByTarget } from '../../hooks/useGetActiveStories';
 
 const DURATION = 5000;
 
@@ -35,16 +39,18 @@ interface GlobalFeedStoryProps {
 }
 
 export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
-  const { page } = useNavigation();
-  const { onClickStory, onChangePage } = useNavigation();
+  const { page, onChangePage, onClickStory } = useNavigation();
+  const { AmityStoryViewPageBehavior } = usePageBehavior();
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
-  const { stories } = useStories({
+  const { stories } = useGetActiveStoriesByTarget({
     targetType: 'community',
     targetId:
-      page.type === PageTypes.ViewStory && page.storyType === 'globalFeed' && page.targetId
-        ? page.targetId
+      page.type === PageTypes.ViewStoryPage &&
+      page.context.storyType === 'globalFeed' &&
+      page.context.targetId
+        ? page.context.targetId
         : '',
     options: {
       orderBy: 'asc',
@@ -90,7 +96,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
         previousStory();
-        if (isLastStory) onChangePage(PageTypes.NewsFeed);
+        // if (isLastStory) onChangePage(PageTypes.SocialHomePage);
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),
@@ -195,17 +201,17 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
 
   const nextStory = () => {
     if (
-      page.type === PageTypes.ViewStory &&
-      page.targetIds &&
-      page.targetId &&
+      page.type === PageTypes.ViewStoryPage &&
+      page.context.targetIds &&
+      page.context.targetId &&
       currentIndex === formattedStories?.length - 1
     ) {
-      const currentTargetIndex = page.targetIds.indexOf(page.targetId);
+      const currentTargetIndex = page.context.targetIds.indexOf(page.context.targetId);
       const nextTargetIndex = currentTargetIndex + 1;
 
-      if (nextTargetIndex < page.targetIds.length) {
-        const nextTargetId = page.targetIds[nextTargetIndex];
-        onClickStory(nextTargetId, 'globalFeed', page.targetIds);
+      if (nextTargetIndex < page.context.targetIds.length) {
+        const nextTargetId = page.context.targetIds[nextTargetIndex];
+        onClickStory(nextTargetId, 'globalFeed', page.context.targetIds);
       } else {
         onChangePage(PageTypes.NewsFeed);
       }
@@ -217,17 +223,17 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
 
   const previousStory = () => {
     if (
-      page.type === PageTypes.ViewStory &&
-      page.targetIds &&
-      page.targetId &&
+      page.type === PageTypes.ViewStoryPage &&
+      page.context.targetIds &&
+      page.context.targetId &&
       currentIndex === 0
     ) {
-      const currentTargetIndex = page.targetIds.indexOf(page.targetId);
+      const currentTargetIndex = page.context.targetIds.indexOf(page.context.targetId);
       const previousTargetIndex = currentTargetIndex - 1;
 
       if (previousTargetIndex >= 0) {
-        const previousTargetId = page.targetIds[previousTargetIndex];
-        onClickStory(previousTargetId, 'globalFeed', page.targetIds);
+        const previousTargetId = page.context.targetIds[previousTargetIndex];
+        onClickStory(previousTargetId, 'globalFeed', page.context.targetIds);
       } else {
         onChangePage(PageTypes.NewsFeed);
       }
@@ -283,7 +289,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
     }
   }, [stories, file, currentIndex]);
 
-  if (file && page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
+  if (file && page.type === PageTypes.ViewStoryPage && page.context.storyType === 'globalFeed') {
     return (
       <AmityDraftStoryPage
         mediaType={
@@ -291,7 +297,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
             ? { type: 'image', url: URL.createObjectURL(file) }
             : { type: 'video', url: URL.createObjectURL(file) }
         }
-        targetId={page.targetId}
+        targetId={page.context.targetId}
         targetType="community"
       />
     );

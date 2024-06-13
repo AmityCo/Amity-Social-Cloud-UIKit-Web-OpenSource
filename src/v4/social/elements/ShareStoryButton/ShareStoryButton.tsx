@@ -10,15 +10,15 @@ import { Avatar } from '~/v4/core/components';
 
 interface ShareButtonProps {
   onClick: () => void;
-  pageId: 'create_story_page';
-  componentId: '*';
+  pageId?: string;
+  componentId?: string;
   avatar?: string;
   style?: React.CSSProperties;
   'data-qa-anchor'?: string;
 }
 
 export const ShareStoryButton = ({
-  pageId = 'create_story_page',
+  pageId = '*',
   componentId = '*',
   onClick,
   avatar,

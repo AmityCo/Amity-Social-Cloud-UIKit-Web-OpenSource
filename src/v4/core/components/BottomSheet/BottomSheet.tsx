@@ -21,12 +21,7 @@ export const BottomSheet = ({ children, headerTitle, ...props }: BottomSheetProp
   return (
     <Sheet {...props}>
       <Sheet.Container className={styles.bottomSheet__container}>
-        <Sheet.Header
-          style={{
-            borderTopLeftRadius: '1.25rem',
-            borderTopRightRadius: '1.25rem',
-          }}
-        >
+        <Sheet.Header className={styles.bottomSheet__header}>
           <Sheet.Header />
           {headerTitle && (
             <Sheet.Header className={styles.bottomSheet__header}>

@@ -1,24 +1,23 @@
 import React from 'react';
 import { CommunityFeedStory } from './CommunityFeedStory';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import { PageTypes } from '~/social/constants';
 import { GlobalFeedStory } from './GlobalFeedStory';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 
-type AmityViewStoryPageType = 'communityFeed' | 'globalFeed';
+type ViewStoryPageType = 'communityFeed' | 'globalFeed';
 
 interface AmityViewStoryPageProps {
-  type: AmityViewStoryPageType;
+  type: ViewStoryPageType;
 }
 
-const AmityViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type }) => {
+const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type }) => {
   const { page } = useNavigation();
 
-  if (page.type !== PageTypes.ViewStory || !page.targetId) return null;
+  if (page.type !== PageTypes.ViewStoryPage || !page.context.targetId) return null;
 
-  if (type === 'communityFeed') return <CommunityFeedStory communityId={page.targetId} />;
-  if (type === 'globalFeed') return <GlobalFeedStory targetId={page.targetId} />;
+  if (type === 'communityFeed') return <CommunityFeedStory communityId={page.context.targetId} />;
+  if (type === 'globalFeed') return <GlobalFeedStory targetId={page.context.targetId} />;
 
   return null;
 };
 
-export default AmityViewStoryPage;
+export default ViewStoryPage;

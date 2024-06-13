@@ -5,13 +5,13 @@ which have higher specificity.
 */
 
 .bottomSheet__container {
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-base-background) !important;
 }
 
-.bottomSheet__header {
-  padding: 1rem;
-  display: flex;
-  justify-content: center;
+.bottomSheet__default__header {
+  background-color: var(--asc-color-base-background);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .bottomSheet__content {

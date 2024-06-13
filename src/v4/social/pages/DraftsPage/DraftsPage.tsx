@@ -39,6 +39,7 @@ type HyperLinkFormInputs = {
 };
 
 const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
+  const pageId = 'create_story_page';
   const { page, onChangePage, onClickCommunity } = useNavigation();
   const { file, setFile } = useStoryContext();
   const { AmityDraftStoryPageBehavior } = usePageBehavior();
@@ -285,12 +286,12 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
 
         <div className={styles.footer}>
           <ShareStoryButton
-            pageId="create_story_page"
+            pageId="*"
             componentId="*"
+            avatar={community.avatarFileUrl}
             onClick={() =>
               onCreateStory(file, imageMode, {}, hyperLink[0]?.data?.url ? hyperLink : [])
             }
-            avatar={community.avatarFileUrl}
           />
         </div>
       </div>

@@ -8,7 +8,7 @@ export enum PageTypes {
   Category = 'category',
   UserFeed = 'userFeed',
   UserEdit = 'userEdit',
-  ViewStory = 'viewStory',
+  ViewStoryPage = 'ViewStoryPage',
   SocialHomePage = 'SocialHomePage',
   PostDetailPage = 'PostDetailPage',
   CommunityProfilePage = 'CommunityProfilePage',
@@ -50,13 +50,12 @@ type Page =
       };
     }
   | {
-      type: PageTypes.ViewStory;
+      type: PageTypes.ViewStoryPage;
       context: {
-        storyId: string;
-        targetId?: string;
-        communityId?: string;
+        targetId: string;
+        targetType: Amity.StoryTargetType;
+        storyType: 'communityFeed' | 'globalFeed';
         targetIds?: string[];
-        storyType?: 'communityFeed' | 'globalFeed';
       };
     }
   | {
@@ -91,6 +90,12 @@ type ContextValue = {
   goToPostDetailPage: (postId: string) => void;
   goToCommunityProfilePage: (communityId: string) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
+  goToViewStoryPage: (
+    targetId: string,
+    targetType: string,
+    storyType: 'communityFeed' | 'globalFeed',
+    targetIds?: string[],
+  ) => void;
   setNavigationBlocker?: (
     params:
       | {
@@ -120,6 +125,11 @@ let defaultValue: ContextValue = {
   onMessageUser: (userId: string) => {},
   goToUserProfilePage: (userId: string) => {},
   goToPostDetailPage: (postId: string) => {},
+  goToViewStoryPage: (
+    targetId: string,
+    targetType: string,
+    storyType: 'communityFeed' | 'globalFeed',
+  ) => {},
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
   setNavigationBlocker: () => {},
@@ -147,6 +157,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToUserProfilePage: (userId) =>
       console.log(`NavigationContext goToUserProfilePage(${userId})`),
     goToPostDetailPage: (postId) => console.log(`NavigationContext goToPostDetailPage(${postId})`),
+    goToViewStoryPage: (targetId, targetType, storyType) =>
+      console.log(`NavigationContext goToViewStoryPage(${targetId}) ${targetType} ${storyType}`),
     goToCommunityProfilePage: (communityId) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId})`),
     goToSocialGlobalSearchPage: (tab) =>
@@ -348,7 +360,7 @@ export default function NavigationProvider({
   const handleClickStory = useCallback(
     (targetId, storyType, targetIds) => {
       const next = {
-        type: PageTypes.ViewStory,
+        type: PageTypes.ViewStoryPage,
         targetId,
         storyType,
         targetIds,
@@ -384,7 +396,22 @@ export default function NavigationProvider({
         },
       };
 
-      console.log('postId', postId);
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
+  const goToViewStoryPage = useCallback(
+    (targetId, targetType, storyType, targetIds) => {
+      const next = {
+        type: PageTypes.ViewStoryPage,
+        context: {
+          targetId,
+          targetType,
+          storyType,
+          targetIds,
+        },
+      };
 
       pushPage(next);
     },
@@ -435,6 +462,7 @@ export default function NavigationProvider({
         goToPostDetailPage,
         goToSocialGlobalSearchPage,
         goToCommunityProfilePage,
+        goToViewStoryPage,
         setNavigationBlocker,
       }}
     >
