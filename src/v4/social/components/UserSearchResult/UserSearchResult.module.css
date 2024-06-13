@@ -5,6 +5,7 @@
   align-items: start;
   width: 100%;
   background-color: var(--asc-color-base-background);
+  overflow-x: hidden;
 }
 
 .userSearchResult__userItem {
@@ -39,4 +40,12 @@
   align-items: last baseline;
   gap: 0.25rem;
   width: 100%;
+  color: var(--asc-color-base-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userItem__userName__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

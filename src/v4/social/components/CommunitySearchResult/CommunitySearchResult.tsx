@@ -21,15 +21,26 @@ const CommunityCategories = ({
 }) => {
   const categories = useCategoriesByIds(community.categoryIds);
 
+  const maxCategoriesLength = 3;
+
+  const overflowCategoriesLength = categories.length - maxCategoriesLength;
+
   return (
     <>
-      {categories.map((category) => (
+      {categories.slice(0, 3).map((category) => (
         <CommunityCategoryName
           pageId={pageId}
           componentId={componentId}
           categoryName={category.name}
         />
       ))}
+      {overflowCategoriesLength > 0 && (
+        <CommunityCategoryName
+          pageId={pageId}
+          componentId={componentId}
+          categoryName={`+${overflowCategoriesLength}`}
+        />
+      )}
     </>
   );
 };

@@ -39,7 +39,9 @@ export const UserSearchResult = ({
           </div>
           <div className={styles.userSearchResult__userItem__rightPane}>
             <div className={styles.userItem__userName}>
-              <Typography.BodyBold>{user.displayName}</Typography.BodyBold>
+              <Typography.BodyBold className={styles.userItem__userName__text}>
+                {user.displayName}
+              </Typography.BodyBold>
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@
   align-items: start;
   width: 100%;
   background-color: var(--asc-color-base-background);
+  overflow-x: hidden;
 }
 
 .communitySearchResult__communityItem {
