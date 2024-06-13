@@ -16,6 +16,7 @@ import ConfigProvider from '~/social/providers/ConfigProvider';
 import { ConfirmComponent } from '~/v4/core/components/ConfirmModal';
 import { ConfirmComponent as LegacyConfirmComponent } from '~/core/components/Confirm';
 import { NotificationsContainer } from '~/v4/core/components/Notification';
+import { DrawerContainer } from '~/v4/core/components/Drawer';
 import { NotificationsContainer as LegacyNotificationsContainer } from '~/core/components/Notification';
 
 import Localization from '~/core/providers/UiKitProvider/Localization';
@@ -31,6 +32,7 @@ import AmityUIKitManager from '../AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
 import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
+import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
 import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 import { CustomReactionProvider } from './CustomReactionProvider';
 
@@ -145,30 +147,33 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
                       <SDKConnectorProviderV3>
                         <SDKConnectorProvider>
                           <NotificationProvider>
-                            <LegacyNotificationProvider>
-                              <ConfirmProvider>
-                                <LegacyConfirmProvider>
-                                  <ConfigProvider
-                                    config={{
-                                      socialCommunityCreationButtonVisible:
-                                        socialCommunityCreationButtonVisible || true,
-                                    }}
-                                  >
-                                    <PostRendererProvider config={postRendererConfig}>
-                                      <NavigationProvider>
-                                        <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                          {children}
-                                        </PageBehaviorProvider>
-                                      </NavigationProvider>
-                                    </PostRendererProvider>
-                                  </ConfigProvider>
-                                  <NotificationsContainer />
-                                  <LegacyNotificationsContainer />
-                                  <ConfirmComponent />
-                                  <LegacyConfirmComponent />
-                                </LegacyConfirmProvider>
-                              </ConfirmProvider>
-                            </LegacyNotificationProvider>
+                            <DrawerProvider>
+                              <LegacyNotificationProvider>
+                                <ConfirmProvider>
+                                  <LegacyConfirmProvider>
+                                    <ConfigProvider
+                                      config={{
+                                        socialCommunityCreationButtonVisible:
+                                          socialCommunityCreationButtonVisible || true,
+                                      }}
+                                    >
+                                      <PostRendererProvider config={postRendererConfig}>
+                                        <NavigationProvider>
+                                          <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                            {children}
+                                          </PageBehaviorProvider>
+                                        </NavigationProvider>
+                                      </PostRendererProvider>
+                                    </ConfigProvider>
+                                    <NotificationsContainer />
+                                    <LegacyNotificationsContainer />
+                                    <ConfirmComponent />
+                                    <DrawerContainer />
+                                    <LegacyConfirmComponent />
+                                  </LegacyConfirmProvider>
+                                </ConfirmProvider>
+                              </LegacyNotificationProvider>
+                            </DrawerProvider>
                           </NotificationProvider>
                         </SDKConnectorProvider>
                       </SDKConnectorProviderV3>

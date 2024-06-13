@@ -5,6 +5,7 @@ import { CommentRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { MenuButton } from '~/v4/social/elements/MenuButton';
+import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePost from '~/v4/core/hooks/objects/usePost';
 
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -14,6 +15,7 @@ import CommentList from '~/v4/social/internal-components/CommentList/CommentList
 import CommentComposeBar from '~/v4/social/internal-components/CommentComposeBar/CommentComposeBar';
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import styles from './PostDetailPage.module.css';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 
 interface PostDetailPageProps {
   id: string;
@@ -28,6 +30,8 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
     });
   const { onBack } = useNavigation();
   const [replyComment, setReplyComment] = useState<Amity.Comment | null>(null);
+
+  const { setDrawerData, removeDrawerData } = useDrawer();
 
   const { mutateAsync } = useMutation({
     mutationFn: async ({
@@ -82,7 +86,18 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
           onClick={() => onBack()}
         />
         <Typography.Title className={styles.postDetailPage__topBar__title}>Post</Typography.Title>
-        <MenuButton pageId={pageId} />
+        <div className={styles.postDetailPage__topBar__menuBar}>
+          <MenuButton
+            pageId={pageId}
+            onClick={() =>
+              setDrawerData({
+                content: (
+                  <PostMenu post={post} onCloseMenu={() => removeDrawerData()} pageId={pageId} />
+                ),
+              })
+            }
+          />
+        </div>
       </div>
       <div className={styles.postDetailPage__commentComposeBar}>
         <CommentComposeBar

@@ -34,6 +34,10 @@
   text-align: center;
 }
 
+.postDetailPage__topBar__menuBar {
+  cursor: pointer;
+}
+
 .postDetailPage__postContent {
   padding: 0.5rem 1rem;
 }
