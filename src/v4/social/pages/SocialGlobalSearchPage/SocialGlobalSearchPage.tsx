@@ -21,10 +21,10 @@ const useGlobalSearchViewModel = () => {
     AmityGlobalSearchType.Community,
   );
   const communityCollection = useCommunitiesCollection(
-    { displayName: searchKeyword },
+    { displayName: searchKeyword, limit: 20 },
     () => searchType === AmityGlobalSearchType.Community,
   );
-  const userCollection = useUserQueryByDisplayName(searchKeyword);
+  const userCollection = useUserQueryByDisplayName({ displayName: searchKeyword, limit: 20 });
 
   const search = useCallback((keyword: string) => {
     setSearchKeyword(keyword);

@@ -4,6 +4,7 @@ import { SocialHomePage } from '~/v4/social/pages/SocialHomePage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
+import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
 
 const Application = () => {
   const { page } = useNavigation();
@@ -12,6 +13,7 @@ const Application = () => {
     <StoryProvider>
       <div className={styles.applicationContainer}>
         {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
+        {page.type === PageTypes.SocialGlobalSearchPage && <SocialGlobalSearchPage />}
         {page.type === PageTypes.PostDetailPage && <PostDetailPage id={page.context.postId} />}
       </div>
     </StoryProvider>

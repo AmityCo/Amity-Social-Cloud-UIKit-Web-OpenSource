@@ -7,6 +7,7 @@ import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider'
 
 import styles from './TopSearchBar.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 export interface TopSearchBarProps {
   pageId?: string;
@@ -20,6 +21,8 @@ export function TopSearchBar({ pageId = '*', search }: TopSearchBarProps) {
       pageId,
       componentId,
     });
+
+  const { onBack } = useNavigation();
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -57,7 +60,7 @@ export function TopSearchBar({ pageId = '*', search }: TopSearchBarProps) {
           />
         ) : null}
       </div>
-      <CancelButton pageId={pageId} componentId={componentId} />
+      <CancelButton pageId={pageId} componentId={componentId} onClick={() => onBack()} />
     </div>
   );
 }

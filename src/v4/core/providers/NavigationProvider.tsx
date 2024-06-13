@@ -13,6 +13,7 @@ export enum PageTypes {
   PostDetailPage = 'PostDetailPage',
   CommunityProfilePage = 'CommunityProfilePage',
   UserProfilePage = 'UserProfilePage',
+  SocialGlobalSearchPage = 'SocialGlobalSearchPage',
 }
 
 type Page =
@@ -67,7 +68,8 @@ type Page =
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string } }
   | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }
-  | { type: PageTypes.SocialHomePage; context: { communityId?: string } };
+  | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
+  | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } };
 
 type ContextValue = {
   page: Page;
@@ -88,6 +90,7 @@ type ContextValue = {
   goToUserProfilePage: (userId: string) => void;
   goToPostDetailPage: (postId: string) => void;
   goToCommunityProfilePage: (communityId: string) => void;
+  goToSocialGlobalSearchPage: (tab?: string) => void;
   setNavigationBlocker?: (
     params:
       | {
@@ -118,6 +121,7 @@ let defaultValue: ContextValue = {
   goToUserProfilePage: (userId: string) => {},
   goToPostDetailPage: (postId: string) => {},
   goToCommunityProfilePage: (communityId: string) => {},
+  goToSocialGlobalSearchPage: (tab?: string) => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
 };
@@ -145,6 +149,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToPostDetailPage: (postId) => console.log(`NavigationContext goToPostDetailPage(${postId})`),
     goToCommunityProfilePage: (communityId) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId})`),
+    goToSocialGlobalSearchPage: (tab) =>
+      console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
   };
 }
 
@@ -399,6 +405,18 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToSocialGlobalSearchPage = useCallback(
+    (tab?: string) => {
+      const next = {
+        type: PageTypes.SocialGlobalSearchPage,
+        context: { tab },
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   return (
     <NavigationContext.Provider
       value={{
@@ -415,6 +433,7 @@ export default function NavigationProvider({
         onBack: handleBack,
         goToUserProfilePage,
         goToPostDetailPage,
+        goToSocialGlobalSearchPage,
         goToCommunityProfilePage,
         setNavigationBlocker,
       }}
