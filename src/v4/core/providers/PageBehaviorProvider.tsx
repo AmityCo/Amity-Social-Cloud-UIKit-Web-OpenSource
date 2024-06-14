@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 export interface PageBehavior {
   AmityStoryViewPageBehavior: {
@@ -51,6 +51,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToCommunityProfilePage,
     goToUserProfilePage,
     goToViewStoryPage,
+    onChangePage,
     goToSelectPostTargetPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
@@ -59,7 +60,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityStoryViewPageBehavior?.onCloseAction) {
           return pageBehavior.AmityStoryViewPageBehavior.onCloseAction();
         }
-        onBack();
+        onChangePage(PageTypes.SocialHomePage);
       },
       hyperLinkAction: (context: Record<string, unknown>) => {
         if (pageBehavior?.AmityStoryViewPageBehavior?.hyperLinkAction) {

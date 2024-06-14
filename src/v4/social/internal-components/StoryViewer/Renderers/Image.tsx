@@ -2,35 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { Tester } from 'react-insta-stories/dist/interfaces';
 
 import styles from './Renderers.module.css';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import useImage from '~/core/hooks/useImage';
 
-import { checkStoryPermission, formatTimeAgo } from '~/utils';
-
-import useSDK from '~/core/hooks/useSDK';
 import { useIntl } from 'react-intl';
 
-import { LIKE_REACTION_KEY } from '~/constants';
 import Truncate from 'react-truncate-markup';
 
-import { CustomRenderer } from './types';
+import { CustomRenderer } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
-import Footer from './Wrappers/Footer';
-import Header from './Wrappers/Header';
-import { PageTypes } from '~/social/constants';
+import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
+import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
 import { motion, PanInfo, useAnimationControls } from 'framer-motion';
-import useUser from '~/core/hooks/useUser';
+
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
-import { isAdmin, isModerator } from '~/helpers/permissions';
+
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+
+import useSDK from '~/v4/core/hooks/useSDK';
+import useImage from '~/v4/core/hooks/useImage';
+import useUser from '~/v4/core/hooks/objects/useUser';
+
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
+import { isAdmin, isModerator } from '~/v4/utils/permissions';
+import { checkStoryPermission, formatTimeAgo } from '~/v4/social/utils';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
+  const { AmityStoryViewPageBehavior } = usePageBehavior();
   const { page, onChangePage, onClickCommunity } = useNavigation();
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
@@ -66,7 +70,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
     imageSize: 'small',
   });
 
-  const user = useUser(client?.userId);
+  const { user } = useUser(client?.userId);
 
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
@@ -118,8 +122,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         transition: { duration: 0.3, ease: 'easeOut' },
       })
       .then(() => {
-        if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-          onChangePage(PageTypes.NewsFeed);
+        if (page.type === PageTypes.ViewStoryPage && page.context.storyType === 'globalFeed') {
+          onChangePage(PageTypes.SocialHomePage);
         } else {
           onClickCommunity(community?.communityId as string);
         }
@@ -138,6 +142,14 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         action('play', true);
       });
     }
+  };
+
+  const handleOnClose = () => {
+    if (page.type === PageTypes.ViewStoryPage && page.context.storyType === 'globalFeed') {
+      AmityStoryViewPageBehavior.onCloseAction();
+      return;
+    }
+    onClickCommunity(community?.communityId as string);
   };
 
   useEffect(() => {
@@ -199,13 +211,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onAction={openBottomSheet}
         onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
-        onClose={() => {
-          if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-            onChangePage(PageTypes.NewsFeed);
-            return;
-          }
-          onClickCommunity(community?.communityId as string);
-        }}
+        onClose={handleOnClose}
         addStoryButton={addStoryButton}
       />
 

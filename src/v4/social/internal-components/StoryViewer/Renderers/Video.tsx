@@ -1,44 +1,49 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Tester } from 'react-insta-stories/dist/interfaces';
 
-import useImage from '~/core/hooks/useImage';
-import { checkStoryPermission, formatTimeAgo } from '~/utils';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useIntl } from 'react-intl';
 
-import useSDK from '~/core/hooks/useSDK';
-
-import { LIKE_REACTION_KEY } from '~/constants';
 import Truncate from 'react-truncate-markup';
-import { CustomRenderer } from './types';
-import { LoadingOverlay, StoryVideo } from './styles';
+import { CustomRenderer } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { SpeakerButton } from '~/v4/social/elements';
-import Header from './Wrappers/Header';
+
 import { BottomSheet, Button, Typography } from '~/v4/core/components';
 
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
-import Footer from './Wrappers/Footer';
-import { PageTypes } from '~/social/constants';
+import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
+import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
+
 import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 
-import rendererStyles from './Renderers.module.css';
-import useUser from '~/core/hooks/useUser';
-import { isAdmin, isModerator } from '~/helpers/permissions';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+
+import useSDK from '~/v4/core/hooks/useSDK';
+import useImage from '~/v4/core/hooks/useImage';
+import useUser from '~/v4/core/hooks/objects/useUser';
+
+import clsx from 'clsx';
+
+import rendererStyles from './Renderers.module.css';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
+import { checkStoryPermission, formatTimeAgo, isAdmin } from '~/v4/social/utils';
+import { isModerator } from '~/v4/utils/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
+  const { AmityStoryViewPageBehavior } = usePageBehavior();
   const { formatMessage } = useIntl();
-  const { page, onClickCommunity, onChangePage } = useNavigation();
+  const { page, onClickCommunity } = useNavigation();
   const [loaded, setLoaded] = useState(false);
   const [muted, setMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
-  const { width, height, loader, storyStyles } = config;
+  const { loader } = config;
   const { client } = useSDK();
-  const user = useUser(client?.userId);
+  const { user } = useUser(client?.userId);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -83,11 +88,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const isCommunityModerator = isModerator(user?.roles);
   const haveStoryPermission =
     isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
-
-  const computedStyles = {
-    ...storyContentStyles,
-    ...(storyStyles || {}),
-  };
 
   const vid = useRef<HTMLVideoElement>(null);
   const controls = useAnimationControls();
@@ -140,8 +140,8 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         transition: { duration: 0.3, ease: 'easeOut' },
       })
       .then(() => {
-        if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-          onChangePage(PageTypes.NewsFeed);
+        if (page.type === PageTypes.ViewStoryPage && page.context.storyType === 'globalFeed') {
+          AmityStoryViewPageBehavior.onCloseAction();
         } else {
           onClickCommunity(community?.communityId as string);
         }
@@ -162,6 +162,14 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         action('play', true);
       });
     }
+  };
+
+  const handleOnClose = () => {
+    if (page.type === PageTypes.ViewStoryPage && page.context.storyType === 'globalFeed') {
+      AmityStoryViewPageBehavior.onCloseAction();
+      return;
+    }
+    onClickCommunity(community?.communityId as string);
   };
 
   useEffect(() => {
@@ -205,7 +213,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   return (
     <motion.div
-      className={rendererStyles.rendererContainer}
+      className={clsx(rendererStyles.rendererContainer)}
       animate={controls}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
@@ -235,19 +243,13 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onAction={openBottomSheet}
         onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity(community?.communityId as string)}
-        onClose={() => {
-          if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-            onChangePage(PageTypes.NewsFeed);
-            return;
-          }
-          onClickCommunity(community?.communityId as string);
-        }}
+        onClose={handleOnClose}
         addStoryButton={addStoryButton}
       />
-      <StoryVideo
+      <video
         data-qa-anchor="video_view"
         ref={vid}
-        style={computedStyles}
+        className={clsx(rendererStyles.storyVideo)}
         src={story?.videoData?.fileUrl || story?.videoData?.videoUrl?.original}
         controls={false}
         onLoadedData={videoLoaded}
@@ -259,9 +261,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         webkit-playsinline="true"
       />
       {!loaded && (
-        <LoadingOverlay width={width} height={height}>
-          {loader || <div>loading...</div>}
-        </LoadingOverlay>
+        <div className={clsx(rendererStyles.loadingOverlay)}>{loader || <div>loading...</div>}</div>
       )}
 
       <BottomSheet
@@ -273,7 +273,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       >
         {actions?.map((bottomSheetAction) => (
           <Button
-            className={rendererStyles.actionButton}
+            className={clsx(rendererStyles.actionButton)}
             onClick={() => {
               bottomSheetAction.action();
             }}
@@ -302,7 +302,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         />
       </BottomSheet>
       {story.items?.[0]?.data?.url && (
-        <div className={rendererStyles.hyperLinkContainer}>
+        <div className={clsx(rendererStyles.hyperLinkContainer)}>
           <HyperLink
             href={
               story.items[0].data.url.startsWith('http')
@@ -335,14 +335,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       />
     </motion.div>
   );
-};
-
-const storyContentStyles = {
-  width: 'auto',
-  maxWidth: '100%',
-  maxHeight: '100%',
-  margin: 'auto',
-  position: 'relative' as const,
 };
 
 export const tester: Tester = (story) => {
