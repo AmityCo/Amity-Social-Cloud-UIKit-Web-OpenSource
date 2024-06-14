@@ -37,6 +37,7 @@ import { TrashIcon, PenIcon, FlagIcon, MinusCircleIcon } from '~/v4/social/icons
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
+import { isModerator } from '~/helpers/permissions';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -81,10 +82,6 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
   const [isExpanded, setExpanded] = useState(false);
 
   const toggleBottomSheet = () => setBottomSheet((prev) => !prev);
-
-  useCommentSubscription({
-    commentId,
-  });
 
   const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } = useMention({
     targetId: story?.targetId,
@@ -187,8 +184,8 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     });
   };
 
-  const { currentUserId } = useSDK();
-  const currentMember = members.find((member) => member.userId === currentUserId);
+  const currentMember = members.find((member) => member.userId === comment?.userId);
+  const isCommunityModerator = isModerator(currentMember?.roles);
   const isMember = isCommunityMember(currentMember);
 
   const options = [
@@ -279,6 +276,7 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
       onClickReactionList={() => {
         setSelectedCommentId(comment.commentId);
       }}
+      isModerator={isCommunityModerator}
     />
   );
 

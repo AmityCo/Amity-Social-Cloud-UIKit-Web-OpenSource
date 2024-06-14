@@ -8,15 +8,19 @@ which have higher specificity.
   background-color: var(--asc-color-base-background) !important;
 }
 
-.bottomSheet__default__header {
+.bottomSheet__header {
   background-color: var(--asc-color-base-background);
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
+  border-top-left-radius: var(--asc-border-radius-xl);
+  border-top-right-radius: var(--asc-border-radius-xl);
+  text-align: center;
+  color: var(--asc-color-base-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  padding-bottom: var(--asc-spacing-m1);
 }
 
 .bottomSheet__content {
   background-color: var(--asc-color-base-background);
-  padding: 1rem;
+  padding: var(--asc-spacing-m1);
 }
 
 .bottomSheet__backdrop {

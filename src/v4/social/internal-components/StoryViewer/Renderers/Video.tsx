@@ -26,6 +26,7 @@ import rendererStyles from './Renderers.module.css';
 import useUser from '~/core/hooks/useUser';
 import { isAdmin, isModerator } from '~/helpers/permissions';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { formatMessage } = useIntl();
@@ -195,6 +196,12 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       }
     };
   }, []);
+
+  useCommunityStoriesSubscription({
+    targetId: community?.communityId as string,
+    targetType: 'community',
+    shouldSubscribe: () => !!community?.communityId,
+  });
 
   return (
     <motion.div

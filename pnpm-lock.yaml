@@ -118,8 +118,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: ^6.25.1
-        version: 6.26.2
+        specifier: ^6.26.3
+        version: 6.26.3
       '@storybook/addon-a11y':
         specifier: ^7.6.7
         version: 7.6.19
@@ -288,8 +288,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@6.26.2':
-    resolution: {integrity: sha512-FUwpkQEwhDCsvZ16qFem9iqVUzuv2gdXs0TPTvOItDfaxEZk46nOW7Pv4n5UvJ3UhSdtgW4hibrKRbNKT29Kxg==}
+  '@amityco/ts-sdk@6.26.3':
+    resolution: {integrity: sha512-Fw9g0hLVs8GYUBHVdSQpV/n7JZRRFkFolHTKh42w4aVy7dwYRj0NhiRtQpSNfIxCoQWHG6fwL7ttC3L1ZWheOQ==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -6987,7 +6987,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@6.26.2':
+  '@amityco/ts-sdk@6.26.3':
     dependencies:
       agentkeepalive: 4.5.0
       axios: 1.7.2(debug@4.3.5)

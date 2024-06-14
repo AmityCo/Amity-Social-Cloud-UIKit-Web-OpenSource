@@ -27,6 +27,7 @@ import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
 import { isAdmin, isModerator } from '~/helpers/permissions';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
@@ -41,6 +42,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story.reactions[LIKE_REACTION_KEY] || 0;
+
   const {
     storyId,
     syncState,
@@ -166,6 +168,12 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
       }
     };
   }, []);
+
+  useCommunityStoriesSubscription({
+    targetId: community?.communityId as string,
+    targetType: 'community',
+    shouldSubscribe: () => !!community?.communityId,
+  });
 
   return (
     <motion.div
