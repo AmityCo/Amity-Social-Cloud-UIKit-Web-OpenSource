@@ -8,15 +8,20 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 export interface TopNavigationProps {
   pageId?: string;
+  onClickPostCreationButton: (event: React.MouseEvent) => void;
+  createPostButtonRef: React.RefObject<HTMLDivElement>;
 }
 
-export function TopNavigation({ pageId = '*' }: TopNavigationProps) {
+export function TopNavigation({
+  pageId = '*',
+  onClickPostCreationButton,
+  createPostButtonRef,
+}: TopNavigationProps) {
   const componentId = 'top_navigation';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { isExcluded, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   const { goToSocialGlobalSearchPage } = useNavigation();
 
@@ -33,7 +38,12 @@ export function TopNavigation({ pageId = '*' }: TopNavigationProps) {
           componentId={componentId}
           onClick={() => goToSocialGlobalSearchPage()}
         />
-        <PostCreationButton pageId={pageId} componentId={componentId} />
+        <PostCreationButton
+          pageId={pageId}
+          componentId={componentId}
+          onClick={onClickPostCreationButton}
+          createPostButtonRef={createPostButtonRef}
+        />
       </div>
     </div>
   );

@@ -29,6 +29,9 @@ export interface PageBehavior {
   AmityCommunitySearchResultComponentBehavior: {
     goToCommunityProfilePage: (context: { communityId: string }) => void;
   };
+  AmityCreatePostMenuComponentBehavior: {
+    goToSelectPostTargetPage(): void;
+  };
 }
 
 const PageBehaviorContext = React.createContext<PageBehavior | undefined>(undefined);
@@ -48,6 +51,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToCommunityProfilePage,
     goToUserProfilePage,
     goToViewStoryPage,
+    goToSelectPostTargetPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -121,6 +125,14 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           );
         }
         goToCommunityProfilePage(context.communityId);
+      },
+    },
+    AmityCreatePostMenuComponentBehavior: {
+      goToSelectPostTargetPage() {
+        if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToSelectPostTargetPage) {
+          return pageBehavior.AmityCreatePostMenuComponentBehavior.goToSelectPostTargetPage();
+        }
+        goToSelectPostTargetPage();
       },
     },
   };

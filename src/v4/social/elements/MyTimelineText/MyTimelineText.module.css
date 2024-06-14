@@ -1,0 +1,11 @@
+.myTimelineText {
+  font-size: 0.9375rem;
+  font-weight: var(--asc-text-font-weight-bold);
+  line-height: var(--asc-line-height-md);
+  letter-spacing: -0.015rem;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--asc-color-base-default);
+}

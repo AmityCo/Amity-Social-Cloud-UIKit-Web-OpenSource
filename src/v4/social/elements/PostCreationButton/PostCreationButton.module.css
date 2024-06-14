@@ -3,9 +3,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   border-radius: 50%;
   width: 2rem;
   height: 2rem;
+  cursor: pointer;
 }
 
 .postCreationButton__icon {

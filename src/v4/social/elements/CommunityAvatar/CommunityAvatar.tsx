@@ -33,7 +33,7 @@ export function CommunityAvatar({
   community,
 }: CommunityAvatarProps) {
   const elementId = 'community_avatar';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+  const { accessibilityId, isExcluded, themeStyles } =
     useAmityElement({
       pageId,
       componentId,

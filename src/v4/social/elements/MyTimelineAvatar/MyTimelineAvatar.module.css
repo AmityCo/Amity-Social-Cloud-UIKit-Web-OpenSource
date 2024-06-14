@@ -1,0 +1,10 @@
+.myTimelineAvatar {
+  display: flex;
+  align-items: center;
+  margin-right: var(--asc-spacing-s1);
+}
+
+.myTimelineAvatar__userAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+}

@@ -6,6 +6,7 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
 import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
+import { SelectPostTargetPage } from '../SelectPostTargetPage';
 
 const Application = () => {
   const { page } = useNavigation();
@@ -17,6 +18,7 @@ const Application = () => {
         {page.type === PageTypes.SocialGlobalSearchPage && <SocialGlobalSearchPage />}
         {page.type === PageTypes.PostDetailPage && <PostDetailPage id={page.context.postId} />}
         {page.type === PageTypes.ViewStoryPage && <ViewStoryPage type="globalFeed" />}
+        {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />}
       </div>
     </StoryProvider>
   );

@@ -2,7 +2,6 @@ import React from 'react';
 import { getDefaultConfig, useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { IconComponent } from '~/v4/core/IconComponent';
 import styles from './BackButton.module.css';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 const BackButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
@@ -44,18 +43,15 @@ export const BackButton = ({
   if (isExcluded) return null;
 
   return (
-    <button
+    <IconComponent
       data-qa-anchor={accessibilityId}
       className={styles.backButton}
+      defaultIcon={() => <BackButtonSvg className={defaultClassName} />}
+      imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+      defaultIconName={defaultConfig.icon}
+      configIconName={config.icon}
       onClick={onClick}
       style={themeStyles}
-    >
-      <IconComponent
-        defaultIcon={() => <BackButtonSvg className={defaultClassName} />}
-        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
-        defaultIconName={defaultConfig.icon}
-        configIconName={config.icon}
-      />
-    </button>
+    />
   );
 };

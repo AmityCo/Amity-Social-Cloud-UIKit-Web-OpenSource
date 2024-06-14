@@ -14,6 +14,7 @@ export enum PageTypes {
   CommunityProfilePage = 'CommunityProfilePage',
   UserProfilePage = 'UserProfilePage',
   SocialGlobalSearchPage = 'SocialGlobalSearchPage',
+  SelectPostTargetPage = 'SelectPostTargetPage',
 }
 
 type Page =
@@ -68,7 +69,8 @@ type Page =
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string } }
   | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
-  | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } };
+  | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } }
+  | { type: PageTypes.SelectPostTargetPage };
 
 type ContextValue = {
   page: Page;
@@ -96,6 +98,7 @@ type ContextValue = {
     storyType: 'communityFeed' | 'globalFeed',
     targetIds?: string[],
   ) => void;
+  goToSelectPostTargetPage: () => void;
   setNavigationBlocker?: (
     params:
       | {
@@ -132,6 +135,7 @@ let defaultValue: ContextValue = {
   ) => {},
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
+  goToSelectPostTargetPage: () => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
 };
@@ -163,6 +167,7 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext goToCommunityProfilePage(${communityId})`),
     goToSocialGlobalSearchPage: (tab) =>
       console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
+    goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
   };
 }
 
@@ -443,6 +448,13 @@ export default function NavigationProvider({
     },
     [onChangePage, pushPage],
   );
+  const goToSelectPostTargetPage = useCallback(() => {
+    const next = {
+      type: PageTypes.SelectPostTargetPage,
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
 
   return (
     <NavigationContext.Provider
@@ -463,6 +475,7 @@ export default function NavigationProvider({
         goToSocialGlobalSearchPage,
         goToCommunityProfilePage,
         goToViewStoryPage,
+        goToSelectPostTargetPage,
         setNavigationBlocker,
       }}
     >

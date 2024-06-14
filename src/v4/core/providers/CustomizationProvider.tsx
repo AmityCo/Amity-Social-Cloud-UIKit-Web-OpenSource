@@ -97,6 +97,7 @@ interface CustomizationProviderProps {
 
 type IconConfiguration = {
   icon?: string;
+  image?: string;
 };
 type TextConfiguration = {
   text?: string;
@@ -315,6 +316,87 @@ export const defaultConfig: DefaultConfig = {
     '*/post_content/share_button': {
       icon: 'shareButtonIcon',
       text: 'Share',
+    },
+    'post_composer_page/*/*': {},
+    'post_composer_page/*/close_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/*/community_display_name': {},
+    'post_composer_page/*/create_button': {
+      text: 'Post',
+    },
+    'post_composer_page/*/edit_post_button': {
+      text: 'Save',
+    },
+    'post_composer_page/*/edit_post_title': {
+      text: 'Edit post',
+    },
+    'post_composer_page/media_attachment/*': {},
+    'post_composer_page/media_attachment/camera_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/image_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/video_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/file_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/detailed_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/detailed_media_attachment/*': {},
+    'post_composer_page/detailed_media_attachment/camera_button': {
+      text: 'Camera',
+      image: 'platformValue',
+    },
+    'post_composer_page/detailed_media_attachment/image_button': {
+      text: 'Photo',
+      image: 'platformValue',
+    },
+    'post_composer_page/detailed_media_attachment/video_button': {
+      text: 'Video',
+      image: 'platformValue',
+    },
+    'create_post_page/detailed_media_attachment/file_button': {
+      textpost_composer_page: 'Attachment',
+      image: 'platformValue',
+    },
+    'social_home_page/*/*': {},
+    'social_home_page/create_post_menu/*': {},
+    'social_home_page/create_post_menu/create_post_button': {
+      text: 'Post',
+      image: 'Post',
+    },
+    'social_home_page/create_post_menu/create_story_button': {
+      text: 'Story',
+      image: 'Story',
+    },
+    'social_home_page/create_post_menu/create_poll_button': {
+      text: 'Poll',
+      image: 'Poll',
+    },
+    'social_home_page/create_post_menu/create_livestream_button': {
+      text: 'Livestream',
+      image: 'Livestream',
+    },
+    'select_post_target_page/*/close_button': {
+      image: 'platformValue',
+    },
+    'select_post_target_page/*/my_timeline_avatar': {},
+    'select_post_target_page/*/title': {
+      text: 'Post to',
+    },
+    'select_post_target_page/*/my_timeline_text': {
+      text: 'My Timeline',
+    },
+    '*/*/community_official_badge': {
+      image: 'platformValue',
+    },
+    '*/*/community_private_badge': {
+      image: 'platformValue',
     },
     'social_global_search_page/*/*': {},
     'social_global_search_page/top_search_bar/*': {},
