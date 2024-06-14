@@ -226,20 +226,19 @@ export const HyperLinkConfig = ({
               </label>
             </Typography.Caption>
           </div>
-          {isHaveHyperLink && (
-            <div className={styles.inputContainer}>
-              <Button
-                variant="secondary"
-                onClick={discardHyperlink}
-                className={clsx(styles.removeLinkButton)}
-              >
-                <Trash className={styles.removeIcon} />
-                {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
-              </Button>
-              <div className={styles.divider} />
-            </div>
-          )}
         </form>
+        {isHaveHyperLink && (
+          <div className={styles.removeLinkContainer}>
+            <Button
+              variant="secondary"
+              onClick={discardHyperlink}
+              className={clsx(styles.removeLinkButton)}
+            >
+              <Trash className={styles.removeIcon} />
+              {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
+            </Button>
+          </div>
+        )}
       </div>
     </BottomSheet>
   );
