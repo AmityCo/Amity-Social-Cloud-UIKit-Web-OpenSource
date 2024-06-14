@@ -8,7 +8,7 @@ import { ExploreButton } from '~/v4/social/elements/ExploreButton';
 import { MyCommunitiesButton } from '~/v4/social/elements/MyCommunitiesButton';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
-import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
+// import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
 
 enum EnumTabNames {
   Newsfeed = 'Newsfeed',
@@ -24,45 +24,47 @@ export function SocialHomePage() {
 
   const [activeTab, setActiveTab] = useState(EnumTabNames.Newsfeed);
 
-  const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
-  const createPostMenuRef = useRef<HTMLDivElement | null>(null);
-  const createPostButtonRef = useRef<HTMLDivElement>(null);
+  // const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
+  // const createPostMenuRef = useRef<HTMLDivElement | null>(null);
+  // const createPostButtonRef = useRef<HTMLDivElement>(null);
 
-  const handleClickButton = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    setIsShowCreatePostMenu((prev) => !prev);
-  };
+  // const handleClickButton = (event: React.MouseEvent) => {
+  //   event.stopPropagation();
+  //   setIsShowCreatePostMenu((prev) => !prev);
+  // };
+  
+  // Hide code for current release
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        createPostMenuRef.current &&
-        !createPostMenuRef.current.contains(event.target as Node) &&
-        createPostButtonRef.current !== event.target
-      ) {
-        setIsShowCreatePostMenu(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (
+  //       createPostMenuRef.current &&
+  //       !createPostMenuRef.current.contains(event.target as Node) &&
+  //       createPostButtonRef.current !== event.target
+  //     ) {
+  //       setIsShowCreatePostMenu(false);
+  //     }
+  //   };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
 
   return (
     <div className={styles.socialHomePage} style={themeStyles}>
       <div className={styles.socialHomePage__topBar}>
         <TopNavigation
           pageId={pageId}
-          onClickPostCreationButton={handleClickButton}
-          createPostButtonRef={createPostButtonRef}
+          // onClickPostCreationButton={handleClickButton}
+          // createPostButtonRef={createPostButtonRef}
         />
-        {isShowCreatePostMenu && (
+        {/* {isShowCreatePostMenu && (
           <div ref={createPostMenuRef}>
             <CreatePostMenu pageId={pageId} />
           </div>
-        )}
+        )} */}
         <div className={styles.socialHomePage__tabs}>
           <NewsfeedButton
             pageId={pageId}

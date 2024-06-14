@@ -18,7 +18,7 @@ const Application = () => {
         {page.type === PageTypes.SocialGlobalSearchPage && <SocialGlobalSearchPage />}
         {page.type === PageTypes.PostDetailPage && <PostDetailPage id={page.context.postId} />}
         {page.type === PageTypes.ViewStoryPage && <ViewStoryPage type="globalFeed" />}
-        {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />}
+        {/* {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />} */}
       </div>
     </StoryProvider>
   );
