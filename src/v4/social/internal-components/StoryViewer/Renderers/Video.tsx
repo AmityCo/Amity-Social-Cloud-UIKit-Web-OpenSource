@@ -29,8 +29,9 @@ import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStori
 
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin } from '~/v4/social/utils';
-import { isModerator } from '~/v4/utils/permissions';
+
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { isModerator } from '~/v4/utils/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { AmityStoryViewPageBehavior } = usePageBehavior();

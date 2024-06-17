@@ -29,8 +29,8 @@ import useUser from '~/v4/core/hooks/objects/useUser';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
-import { isAdmin, isModerator } from '~/v4/utils/permissions';
-import { checkStoryPermission, formatTimeAgo } from '~/v4/social/utils';
+
+import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
 
 export const renderer: CustomRenderer = ({ story, action, config }) => {
   const { formatMessage } = useIntl();
