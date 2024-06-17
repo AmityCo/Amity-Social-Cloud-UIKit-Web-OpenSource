@@ -27,7 +27,7 @@
   align-items: center;
   padding: var(--asc-spacing-s1);
   background-color: transparent;
-  color: var(--color-white);
+  color: var(--asc-color-white);
 }
 
 .topRightButtons {
@@ -47,8 +47,8 @@
   border-top-right-radius: var(--asc-border-radius-lg);
   background: linear-gradient(
     180deg,
-    var(--draft-image-container-color-0, var(--asc-color-black)) 0%,
-    var(--draft-image-container-color-last, var(--asc-color-black)) 100%
+    var(--asc-draft-image-container-color-0, var(--asc-color-black)) 0%,
+    var(--asc-draft-image-container-color-last, var(--asc-color-black)) 100%
   );
   position: relative;
   width: 100%;
@@ -107,7 +107,7 @@
 
 .progressFill {
   height: 100%;
-  background-color: var(--color-white);
+  background-color: var(--asc-color-white);
   transition: width 0.1s linear;
 }
 

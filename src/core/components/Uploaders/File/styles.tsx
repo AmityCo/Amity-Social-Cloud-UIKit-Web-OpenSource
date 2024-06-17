@@ -82,7 +82,7 @@ export const RemoveIcon = styled(Remove)`
 
 export const RemoveButton = (props: ButtonProps) => (
   <Button {...props} variant="secondary">
-    <RemoveIcon />
+    <RemoveIcon width={14} height={14} />
   </Button>
 );
 

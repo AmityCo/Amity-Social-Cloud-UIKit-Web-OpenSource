@@ -52,7 +52,7 @@
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
   "collapsible.viewMoreComments": "View more comments",
-  "collapsible.viewMoreReplies": "View {count, plural, one {# reply} other {# replies}}",
+  "collapsible.viewMoreReplies": "View more replies",
 
   "community.createSuccess": "Your community was successfully created",
   "community.updateSuccess": "Your community was successfully updated",

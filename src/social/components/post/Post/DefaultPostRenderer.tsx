@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import Modal from '~/core/components/Modal';
@@ -10,7 +10,8 @@ import PostHeader from '~/social/components/post/Header';
 import Content from '~/social/components/post/Post/Content';
 import {
   ContentSkeleton,
-  OptionMenu,
+  OptionButtonContainer,
+  OptionMenuContainer,
   PostContainer,
   PostHeadContainer,
   ReviewButtonsContainer,
@@ -23,6 +24,12 @@ import usePostSubscription from '~/social/hooks/usePostSubscription';
 import { SubscriptionLevels } from '@amityco/ts-sdk';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 import { useNotifications } from '~/core/providers/NotificationProvider';
+import usePostFlaggedByMe from '~/social/hooks/usePostFlaggedByMe';
+import { Option, OptionsButton, OptionsIcon } from '~/core/components/OptionMenu/styles';
+import { useDropdown } from '~/core/components/Dropdown/index';
+import useElementSize from '~/core/hooks/useElementSize';
+import { Frame, FrameContainer } from '~/core/components/Dropdown/styles';
+import { POSITION_BOTTOM, POSITION_RIGHT } from '~/helpers/getCssPosition';
 
 // Number of lines to show in a text post before truncating.
 const MAX_TEXT_LINES_DEFAULT = 8;
@@ -30,30 +37,155 @@ const MAX_TEXT_LINES_WITH_CHILDREN = 3;
 
 const ERROR_POST_HAS_BEEN_REVIEWED = 'Post has been reviewed';
 
-type DefaultPostRendererProps = PostRendererProps;
+type OptionMenuProps = DefaultPostRendererProps & {
+  onApprove: () => void;
+  onDecline: () => void;
+  onEditPostClick: () => void;
+  onClose: () => void;
+  buttonContainerHeight: number;
+};
 
-const DefaultPostRenderer = ({
+const OptionMenu = ({
   childrenPosts = [],
-  className,
   handleDeletePost,
   handleReportPost,
   handleUnreportPost,
-  handleApprovePost,
-  handleDeclinePost,
   handleClosePoll,
   isPollClosed,
-  hidePostTarget,
-  isFlaggedByMe,
-  readonly,
   post,
-  loading,
-}: DefaultPostRendererProps) => {
+  onEditPostClick,
+  onClose,
+  buttonContainerHeight,
+}: OptionMenuProps) => {
+  const { formatMessage } = useIntl();
+
+  const { info, confirm } = useConfirmContext();
+  const notification = useNotifications();
+
+  const { isFlaggedByMe, toggleFlagPost } = usePostFlaggedByMe(post);
+
+  const communityId = post?.targetId;
+  const community = useCommunity(communityId);
+  const { currentUserId } = useSDK();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { currentPosition, align, scrollableHeight } = useDropdown({
+    dropdownRef,
+    buttonContainerHeight,
+    position: POSITION_BOTTOM,
+    align: POSITION_RIGHT,
+  });
+
+  const { canEdit, canReview, canDelete, canReport, isPostUnderReview } =
+    useCommunityPostPermission({
+      community,
+      post,
+      childrenPosts,
+      userId: currentUserId || undefined,
+    });
+
+  const pollPost = childrenPosts.find((childPost) => childPost.dataType === 'poll');
+
+  const onReportClick = async () => {
+    toggleFlagPost();
+    await handleReportPost?.();
+    notification.success({ content: <FormattedMessage id="report.reportSent" /> });
+  };
+
+  const onUnreportClick = async () => {
+    toggleFlagPost();
+    await handleUnreportPost?.();
+    notification.success({ content: <FormattedMessage id="report.unreportSent" /> });
+  };
+
+  const confirmDeletePost = () => {
+    confirm({
+      title: formatMessage({ id: 'post.deletePost' }),
+      content: formatMessage({
+        id: isPostUnderReview ? 'post.confirmPendingDelete' : 'post.confirmDelete',
+      }),
+      okText: formatMessage({ id: 'delete' }),
+      onOk: () => handleDeletePost?.(post?.postId),
+    });
+  };
+
+  const options = [
+    canEdit
+      ? {
+          name: formatMessage({ id: 'post.editPost' }),
+          action: () => onEditPostClick(),
+        }
+      : null,
+    canDelete
+      ? {
+          name: formatMessage({ id: 'post.deletePost' }),
+          action: confirmDeletePost,
+        }
+      : null,
+    canReport
+      ? {
+          name: isFlaggedByMe
+            ? formatMessage({ id: 'report.undoReport' })
+            : formatMessage({ id: 'report.doReport' }),
+          action: isFlaggedByMe ? onUnreportClick : onReportClick,
+        }
+      : null,
+    !!pollPost && !isPollClosed
+      ? {
+          name: formatMessage({ id: 'poll.close' }),
+          action: handleClosePoll,
+        }
+      : null,
+  ].filter(isNonNullable);
+
+  return (
+    <OptionMenuContainer ref={dropdownRef}>
+      <FrameContainer>
+        <Frame position={currentPosition} align={align} scrollableHeight={scrollableHeight}>
+          {options.map(({ name, action }) => (
+            <Option
+              key={name}
+              data-qa-anchor={`post-options-button-${name}`}
+              onClick={() => {
+                action?.();
+                onClose();
+              }}
+            >
+              {name}
+            </Option>
+          ))}
+        </Frame>
+      </FrameContainer>
+    </OptionMenuContainer>
+  );
+};
+
+type DefaultPostRendererProps = PostRendererProps;
+
+const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
+  const {
+    childrenPosts = [],
+    className,
+    handleApprovePost,
+    handleDeclinePost,
+    hidePostTarget,
+    readonly,
+    post,
+    loading,
+  } = props;
   const { formatMessage } = useIntl();
   const [isEditing, setIsEditing] = useState(false);
   const openEditingPostModal = () => setIsEditing(true);
   const closeEditingPostModal = () => setIsEditing(false);
   const { info, confirm } = useConfirmContext();
   const notification = useNotifications();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [buttonContainerRef, buttonContainerHeight] = useElementSize();
+
+  const [approving, setApproving] = useState(false);
+  const [declining, setDeclining] = useState(false);
+
+  const toggle = () => setIsMenuOpen((prev) => !prev);
 
   function showHasBeenReviewedMessageIfNeeded(error: unknown) {
     if (error instanceof Error) {
@@ -77,25 +209,12 @@ const DefaultPostRenderer = ({
     level: SubscriptionLevels.POST,
   });
 
-  const [approving, setApproving] = useState(false);
-  const [declining, setDeclining] = useState(false);
-  const { canEdit, canReview, canDelete, canReport, isPostUnderReview } =
-    useCommunityPostPermission({
-      community,
-      post,
-      childrenPosts,
-      userId: currentUserId || undefined,
-    });
-
-  const onReportClick = async () => {
-    await handleReportPost?.();
-    notification.success({ content: <FormattedMessage id="report.reportSent" /> });
-  };
-
-  const onUnreportClick = async () => {
-    await handleUnreportPost?.();
-    notification.success({ content: <FormattedMessage id="report.unreportSent" /> });
-  };
+  const { canReview, isPostUnderReview } = useCommunityPostPermission({
+    community,
+    post,
+    childrenPosts,
+    userId: currentUserId || undefined,
+  });
 
   const onApprove = async () => {
     try {
@@ -121,48 +240,6 @@ const DefaultPostRenderer = ({
     }
   };
 
-  const confirmDeletePost = () => {
-    confirm({
-      title: formatMessage({ id: 'post.deletePost' }),
-      content: formatMessage({
-        id: isPostUnderReview ? 'post.confirmPendingDelete' : 'post.confirmDelete',
-      }),
-      okText: formatMessage({ id: 'delete' }),
-      onOk: () => handleDeletePost?.(post?.postId),
-    });
-  };
-
-  const pollPost = childrenPosts.find((childPost) => childPost.dataType === 'poll');
-
-  const allOptions = [
-    canEdit
-      ? {
-          name: formatMessage({ id: 'post.editPost' }),
-          action: openEditingPostModal,
-        }
-      : null,
-    canDelete
-      ? {
-          name: formatMessage({ id: 'post.deletePost' }),
-          action: confirmDeletePost,
-        }
-      : null,
-    canReport
-      ? {
-          name: isFlaggedByMe
-            ? formatMessage({ id: 'report.undoReport' })
-            : formatMessage({ id: 'report.doReport' }),
-          action: isFlaggedByMe ? onUnreportClick : onReportClick,
-        }
-      : null,
-    !!pollPost && !isPollClosed
-      ? {
-          name: formatMessage({ id: 'poll.close' }),
-          action: handleClosePoll,
-        }
-      : null,
-  ].filter(isNonNullable);
-
   const hasChildrenPosts = childrenPosts.length > 0;
   const postMaxLines = hasChildrenPosts ? MAX_TEXT_LINES_WITH_CHILDREN : MAX_TEXT_LINES_DEFAULT;
 
@@ -175,7 +252,25 @@ const DefaultPostRenderer = ({
     <PostContainer data-qa-anchor="post" className={className}>
       <PostHeadContainer>
         <PostHeader postId={post?.postId} hidePostTarget={hidePostTarget} loading={loading} />
-        {!loading && <OptionMenu options={allOptions} data-qa-anchor="post-options-button" />}
+        {!loading && (
+          <OptionButtonContainer>
+            <div ref={buttonContainerRef}>
+              <OptionsButton onClick={toggle} className={className}>
+                <OptionsIcon />
+              </OptionsButton>
+            </div>
+            {isMenuOpen && (
+              <OptionMenu
+                {...props}
+                onApprove={onApprove}
+                onDecline={onDecline}
+                onClose={toggle}
+                onEditPostClick={() => openEditingPostModal()}
+                buttonContainerHeight={buttonContainerHeight}
+              />
+            )}
+          </OptionButtonContainer>
+        )}
       </PostHeadContainer>
 
       {loading ? (

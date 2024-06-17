@@ -9,6 +9,19 @@ import { MinusCircle, Reply } from '~/icons';
 
 import UIAvatar from '~/core/components/Avatar';
 
+export const OptionButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  position: relative;
+`;
+
+export const OptionMenuContainer = styled.div`
+  position: absolute;
+
+  left: 100%;
+`;
+
 export const Avatar = styled(UIAvatar)`
   margin-right: 8px;
 `;

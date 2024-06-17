@@ -14,8 +14,6 @@ import { Trash2Icon } from '~/icons';
 import { isNonNullable } from '~/v4/helpers/utils';
 import { extractColors } from 'extract-colors';
 
-import { useNavigation } from '~/social/providers/NavigationProvider';
-
 import {
   HiddenInput,
   StoryArrowLeftButton,
@@ -33,15 +31,28 @@ import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '../../providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import {
+  RendererObject,
+  CustomRendererProps,
+} from '../../internal-components/StoryViewer/Renderers/types';
 
 interface CommunityFeedStoryProps {
   communityId: string;
+  onBack: () => void;
+  onClose: (communityId: string) => void;
+  onSwipeDown: (communityId: string) => void;
+  onClickCommunity: (communityId: string) => void;
 }
 
 const DURATION = 5000;
 
-export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => {
-  const { onBack } = useNavigation();
+export const CommunityFeedStory = ({
+  communityId,
+  onBack,
+  onClose,
+  onSwipeDown,
+  onClickCommunity,
+}: CommunityFeedStoryProps) => {
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
@@ -52,6 +63,21 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
       orderBy: 'asc',
       sortBy: 'createdAt',
     },
+  });
+
+  const communityFeedRenderers = renderers.map(({ renderer, tester }) => {
+    const newRenderer = (props: CustomRendererProps) =>
+      renderer({
+        ...props,
+        onClose: () => onClose(communityId),
+        onSwipeDown: () => onSwipeDown(communityId),
+        onClickCommunity: () => onClickCommunity(communityId),
+      });
+
+    return {
+      renderer: newRenderer,
+      tester,
+    };
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -286,9 +312,7 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
               preventDefault={!isMobile}
               currentIndex={currentIndex}
               stories={formattedStories}
-              // TO FIX: need to override custom type of renderers from react-insta-stories library
-              // @ts-ignore
-              renderers={renderers}
+              renderers={communityFeedRenderers as RendererObject[]}
               defaultInterval={DURATION}
               onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
               onStoryEnd={increaseIndex}

@@ -46,7 +46,7 @@ const CommentList = ({
   });
 
   const loadMoreText = isReplyComment
-    ? formatMessage({ id: 'collapsible.viewMoreReplies' }, { count: comments.length })
+    ? formatMessage({ id: 'collapsible.viewMoreReplies' })
     : formatMessage({ id: 'collapsible.viewMoreComments' });
 
   const prependIcon = isReplyComment ? (

@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState, useMemo, ReactNode } from 'react';
+import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -15,6 +16,7 @@ export enum PageTypes {
   UserProfilePage = 'UserProfilePage',
   SocialGlobalSearchPage = 'SocialGlobalSearchPage',
   SelectPostTargetPage = 'SelectPostTargetPage',
+  DraftPage = 'DraftPage',
 }
 
 type Page =
@@ -56,7 +58,6 @@ type Page =
         targetId: string;
         targetType: Amity.StoryTargetType;
         storyType: 'communityFeed' | 'globalFeed';
-        targetIds?: string[];
       };
     }
   | {
@@ -70,7 +71,14 @@ type Page =
   | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
   | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } }
-  | { type: PageTypes.SelectPostTargetPage };
+  | { type: PageTypes.SelectPostTargetPage }
+  | {
+      type: PageTypes.DraftPage;
+      communityId?: string;
+      mediaType: AmityStoryMediaType;
+      targetId: string;
+      targetType: Amity.StoryTargetType;
+    };
 
 type ContextValue = {
   page: Page;
@@ -78,11 +86,6 @@ type ContextValue = {
   onClickCategory: (categoryId: string) => void;
   onClickCommunity: (communityId: string) => void;
   onClickUser: (userId: string, pageType?: string) => void;
-  onClickStory: (
-    storyId: string,
-    storyType: 'communityFeed' | 'globalFeed',
-    targetId?: string[],
-  ) => void;
   onCommunityCreated: (communityId: string) => void;
   onEditCommunity: (communityId: string, tab?: string) => void;
   onEditUser: (userId: string) => void;
@@ -92,13 +95,17 @@ type ContextValue = {
   goToPostDetailPage: (postId: string) => void;
   goToCommunityProfilePage: (communityId: string) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
-  goToViewStoryPage: (
-    targetId: string,
-    targetType: string,
-    storyType: 'communityFeed' | 'globalFeed',
-    targetIds?: string[],
-  ) => void;
   goToSelectPostTargetPage: () => void;
+  goToDraftStoryPage: (context: {
+    targetId: string;
+    targetType: string;
+    mediaType: AmityStoryMediaType;
+  }) => void;
+  goToViewStoryPage: (context: {
+    targetId: string;
+    targetType: string;
+    storyType: 'communityFeed' | 'globalFeed';
+  }) => void;
   setNavigationBlocker?: (
     params:
       | {
@@ -117,22 +124,22 @@ let defaultValue: ContextValue = {
   onClickCategory: (categoryId: string) => {},
   onClickCommunity: (communityId: string) => {},
   onClickUser: (userId: string) => {},
-  onClickStory: (
-    storyId: string,
-    storyType: 'communityFeed' | 'globalFeed',
-    targetId?: string[],
-  ) => {},
   onCommunityCreated: (communityId: string) => {},
   onEditCommunity: (communityId: string) => {},
   onEditUser: (userId: string) => {},
   onMessageUser: (userId: string) => {},
   goToUserProfilePage: (userId: string) => {},
   goToPostDetailPage: (postId: string) => {},
-  goToViewStoryPage: (
-    targetId: string,
-    targetType: string,
-    storyType: 'communityFeed' | 'globalFeed',
-  ) => {},
+  goToViewStoryPage: (context: {
+    targetId: string;
+    targetType: string;
+    storyType: 'communityFeed' | 'globalFeed';
+  }) => {},
+  goToDraftStoryPage: (context: {
+    targetId: string;
+    targetType: string;
+    mediaType: AmityStoryMediaType;
+  }) => {},
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
@@ -149,8 +156,8 @@ if (process.env.NODE_ENV !== 'production') {
     onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
     onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
-    onClickStory: (storyId, storyType, targetIds) =>
-      console.log(`NavigationContext onClickStory(${storyId}, ${storyType}, ${targetIds})`),
+    goToViewStoryPage: ({ targetId, storyType }) =>
+      console.log(`NavigationContext goToViewStoryPage(${targetId}, ${storyType})`),
     onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
     onEditCommunity: (communityId) =>
@@ -161,13 +168,13 @@ if (process.env.NODE_ENV !== 'production') {
     goToUserProfilePage: (userId) =>
       console.log(`NavigationContext goToUserProfilePage(${userId})`),
     goToPostDetailPage: (postId) => console.log(`NavigationContext goToPostDetailPage(${postId})`),
-    goToViewStoryPage: (targetId, targetType, storyType) =>
-      console.log(`NavigationContext goToViewStoryPage(${targetId}) ${targetType} ${storyType}`),
     goToCommunityProfilePage: (communityId) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId})`),
     goToSocialGlobalSearchPage: (tab) =>
       console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
+    goToDraftStoryPage: ({ targetId, targetType, mediaType }) =>
+      console.log(`NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType})`),
   };
 }
 
@@ -188,11 +195,16 @@ interface NavigationProviderProps {
   onClickCategory?: (categoryId: string) => void;
   onClickCommunity?: (communityId: string) => void;
   onClickUser?: (userId: string) => void;
-  onClickStory?: (
-    storyId: string,
-    storyType: 'communityFeed' | 'globalFeed',
-    targetId?: string[],
-  ) => void;
+  goToViewStoryPage?: (context: {
+    storyId: string;
+    storyType: 'communityFeed' | 'globalFeed';
+    targetId?: string[];
+  }) => void;
+  goToDraftStoryPage?: (context: {
+    targetId: string;
+    targetType: string;
+    mediaType: AmityStoryMediaType;
+  }) => void;
   onCommunityCreated?: (communityId: string) => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
@@ -362,8 +374,8 @@ export default function NavigationProvider({
     popPage();
   }, [onChangePage, onBack, popPage]);
 
-  const handleClickStory = useCallback(
-    (targetId, storyType, targetIds) => {
+  const goToViewStoryPage = useCallback(
+    ({ targetId, storyType, targetIds }) => {
       const next = {
         type: PageTypes.ViewStoryPage,
         targetId,
@@ -406,23 +418,6 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const goToViewStoryPage = useCallback(
-    (targetId, targetType, storyType, targetIds) => {
-      const next = {
-        type: PageTypes.ViewStoryPage,
-        context: {
-          targetId,
-          targetType,
-          storyType,
-          targetIds,
-        },
-      };
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
   const goToCommunityProfilePage = useCallback(
     (communityId) => {
       const next = {
@@ -456,6 +451,22 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
+  const goToDraftStoryPage = useCallback(
+    ({ targetId, targetType, mediaType }) => {
+      const next = {
+        type: PageTypes.DraftPage,
+        targetId,
+        targetType,
+        mediaType,
+      };
+
+      if (onChangePage) return onChangePage(next);
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   return (
     <NavigationContext.Provider
       value={{
@@ -464,7 +475,6 @@ export default function NavigationProvider({
         onClickCategory: handleClickCategory,
         onClickCommunity: handleClickCommunity,
         onClickUser: handleClickUser,
-        onClickStory: handleClickStory,
         onCommunityCreated: handleCommunityCreated,
         onEditCommunity: handleEditCommunity,
         onEditUser: handleEditUser,
@@ -476,6 +486,7 @@ export default function NavigationProvider({
         goToCommunityProfilePage,
         goToViewStoryPage,
         goToSelectPostTargetPage,
+        goToDraftStoryPage,
         setNavigationBlocker,
       }}
     >

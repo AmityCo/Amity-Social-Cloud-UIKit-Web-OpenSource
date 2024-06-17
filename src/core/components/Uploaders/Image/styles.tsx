@@ -71,12 +71,14 @@ export const ImageSkeleton = () => (
   </SizeMe>
 );
 
+const StyledRemoveIcon = styled(RemoveIcon).attrs<{ icon?: ReactNode }>({width: 24, height: 24})``;
+
 export const RemoveButton = styled(Button).attrs<{
   variant?: string;
   children?: ReactNode;
 }>({
   variant: 'secondary',
-  children: <RemoveIcon />,
+  children: <StyledRemoveIcon />,
 })`
   position: absolute;
   top: 0.5em;

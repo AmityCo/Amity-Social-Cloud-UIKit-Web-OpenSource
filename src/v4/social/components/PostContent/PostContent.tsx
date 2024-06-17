@@ -7,7 +7,7 @@ import { MenuButton } from '~/v4/social/elements/MenuButton';
 import { ShareButton } from '~/v4/social/elements/ShareButton';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import useUser from '~/v4/core/hooks/objects/useUser';
-import { BottomSheet, Typography } from '~/v4/core/components';
+import { Typography } from '~/v4/core/components';
 import AngleRight from '~/v4/icons/AngleRight';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';

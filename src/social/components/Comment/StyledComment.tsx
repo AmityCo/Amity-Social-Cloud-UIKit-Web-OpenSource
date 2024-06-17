@@ -1,9 +1,7 @@
-/* eslint-disable import/no-cycle */
-import React from 'react';
+import React, { forwardRef, MutableRefObject, useRef, useState } from 'react';
 import Truncate from 'react-truncate-markup';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { POSITION_LEFT } from '~/helpers/getCssPosition';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import CommentLikeButton from '~/social/components/CommentLikeButton';
 import CommentText from './CommentText';
@@ -20,14 +18,121 @@ import {
   InteractionBar,
   ReplyIcon,
   ReplyButton,
-  OptionMenu,
   CommentEditContainer,
   CommentEditTextarea,
   ButtonContainer,
   EditedMark,
+  OptionMenuContainer,
+  OptionButtonContainer,
 } from './styles';
 import { Mentioned, Metadata, isNonNullable } from '~/helpers/utils';
 import { QueryMentioneesFnType } from '~/social/hooks/useSocialMention';
+import { Option, OptionsButton, OptionsIcon } from '~/core/components/OptionMenu/styles';
+import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
+import { useNotifications } from '~/core/providers/NotificationProvider';
+import { useDropdown } from '~/core/components/Dropdown/index';
+import useElementSize from '~/core/hooks/useElementSize';
+import { Frame, FrameContainer } from '~/core/components/Dropdown/styles';
+
+type OptionMenuProps = StyledCommentProps & {
+  onEditCommentClick: () => void;
+  onClose: () => void;
+  buttonContainerHeight: number;
+};
+
+const OptionMenu = ({
+  commentId,
+  canDelete = false,
+  canEdit = false,
+  canReport = true,
+  handleReportComment,
+  startEditing,
+  handleDelete,
+  isReplyComment,
+  onClose,
+  buttonContainerHeight,
+}: OptionMenuProps) => {
+  const { formatMessage } = useIntl();
+  const notification = useNotifications();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const { currentPosition, align, scrollableHeight } = useDropdown({
+    dropdownRef,
+    buttonContainerHeight,
+  });
+
+  const { isFlaggedByMe: isReported, toggleFlagComment } = useCommentFlaggedByMe(commentId);
+
+  const onReportClick = async () => {
+    try {
+      await toggleFlagComment();
+      handleReportComment?.();
+      if (isReported) {
+        notification.success({
+          content: formatMessage({ id: 'report.unreportSent' }),
+        });
+      } else {
+        notification.success({
+          content: formatMessage({ id: 'report.reportSent' }),
+        });
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        notification.error({
+          content: err.message,
+        });
+      }
+    }
+  };
+
+  const options = [
+    canEdit
+      ? {
+          name: isReplyComment
+            ? formatMessage({ id: 'reply.edit' })
+            : formatMessage({ id: 'comment.edit' }),
+          action: startEditing,
+        }
+      : null,
+    canReport
+      ? {
+          name: isReported
+            ? formatMessage({ id: 'report.undoReport' })
+            : formatMessage({ id: 'report.doReport' }),
+          action: onReportClick,
+        }
+      : null,
+    canDelete
+      ? {
+          name: isReplyComment
+            ? formatMessage({ id: 'reply.delete' })
+            : formatMessage({ id: 'comment.delete' }),
+          action: handleDelete,
+        }
+      : null,
+  ].filter(isNonNullable);
+
+  return (
+    <OptionMenuContainer ref={dropdownRef}>
+      <FrameContainer>
+        <Frame position={currentPosition} align={align} scrollableHeight={scrollableHeight}>
+          {options.map(({ name, action }) => (
+            <Option
+              key={name}
+              data-qa-anchor={`post-options-button-${name}`}
+              onClick={() => {
+                action?.();
+                onClose();
+              }}
+            >
+              {name}
+            </Option>
+          ))}
+        </Frame>
+      </FrameContainer>
+    </OptionMenuContainer>
+  );
+};
 
 interface StyledCommentProps {
   commentId?: string;
@@ -67,61 +172,33 @@ interface StyledCommentProps {
   metadata?: Metadata;
 }
 
-const StyledComment = ({
-  commentId,
-  authorName,
-  authorAvatar,
-  canDelete = false,
-  canEdit = false,
-  canLike = true,
-  canReply = false,
-  canReport = true,
-  createdAt,
-  editedAt,
-  text,
-  markup,
-  onClickReply,
-  handleReportComment,
-  handleEdit,
-  startEditing,
-  cancelEditing,
-  handleDelete,
-  isEditing,
-  onChange,
-  queryMentionees,
-  isReported,
-  isReplyComment,
-  isBanned,
-  mentionees,
-  metadata,
-}: StyledCommentProps) => {
+const StyledComment = (props: StyledCommentProps) => {
+  const {
+    commentId,
+    authorName,
+    authorAvatar,
+    canLike = true,
+    canReply = false,
+    createdAt,
+    editedAt,
+    text,
+    markup,
+    onClickReply,
+    handleEdit,
+    startEditing,
+    cancelEditing,
+    isEditing,
+    onChange,
+    queryMentionees,
+    isBanned,
+    mentionees,
+  } = props;
   const { formatMessage } = useIntl();
-  const options = [
-    canEdit
-      ? {
-          name: isReplyComment
-            ? formatMessage({ id: 'reply.edit' })
-            : formatMessage({ id: 'comment.edit' }),
-          action: startEditing,
-        }
-      : null,
-    canReport
-      ? {
-          name: isReported
-            ? formatMessage({ id: 'report.undoReport' })
-            : formatMessage({ id: 'report.doReport' }),
-          action: handleReportComment,
-        }
-      : null,
-    canDelete
-      ? {
-          name: isReplyComment
-            ? formatMessage({ id: 'reply.delete' })
-            : formatMessage({ id: 'comment.delete' }),
-          action: handleDelete,
-        }
-      : null,
-  ].filter(isNonNullable);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [buttonContainerRef, buttonContainerHeight] = useElementSize();
+
+  const toggle = () => setIsMenuOpen((prev) => !prev);
 
   return (
     <>
@@ -189,7 +266,7 @@ const StyledComment = ({
           <CommentText text={text} mentionees={mentionees} />
         )}
 
-        {!isEditing && (canLike || canReply || options.length > 0) && (
+        {!isEditing && (canLike || canReply) && (
           <InteractionBar>
             {canLike && <CommentLikeButton commentId={commentId} />}
 
@@ -199,12 +276,21 @@ const StyledComment = ({
               </ReplyButton>
             )}
 
-            <OptionMenu
-              data-qa-anchor="comment-options-button"
-              options={options}
-              pullRight={false}
-              align={POSITION_LEFT}
-            />
+            <OptionButtonContainer>
+              <div ref={buttonContainerRef}>
+                <OptionsButton onClick={toggle}>
+                  <OptionsIcon />
+                </OptionsButton>
+              </div>
+              {isMenuOpen && (
+                <OptionMenu
+                  {...props}
+                  onClose={toggle}
+                  onEditCommentClick={() => startEditing()}
+                  buttonContainerHeight={buttonContainerHeight}
+                />
+              )}
+            </OptionButtonContainer>
           </InteractionBar>
         )}
       </Content>

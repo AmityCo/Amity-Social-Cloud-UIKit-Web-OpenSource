@@ -94,12 +94,11 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityGlobalFeedComponentBehavior?.goToViewStoryPage) {
           return pageBehavior?.AmityGlobalFeedComponentBehavior.goToViewStoryPage(context);
         }
-        goToViewStoryPage(
-          context.targetId,
-          context.targetType,
-          context.storyType,
-          context.targetIds,
-        );
+        goToViewStoryPage({
+          targetId: context.targetId,
+          targetType: context.targetType,
+          storyType: context.storyType,
+        });
       },
     },
     AmityPostDetailPageBehavior: {},

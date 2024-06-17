@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Renderer, Tester } from 'react-insta-stories/dist/interfaces';
+import { CustomRenderer, Tester } from './types';
 
-export const renderer: Renderer = ({ story, action }) => {
+export const renderer: CustomRenderer = ({ story, action }) => {
   useEffect(() => {
     action('play');
   }, [story]);

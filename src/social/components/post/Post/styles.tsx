@@ -4,6 +4,17 @@ import styled from 'styled-components';
 import UIOptionMenu from '~/core/components/OptionMenu';
 import Skeleton from '~/core/components/Skeleton';
 
+export const OptionButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  position: relative;
+`;
+
+export const OptionMenuContainer = styled.div`
+  position: absolute;
+`;
+
 export const OptionMenu = styled(UIOptionMenu)<{ icon?: ReactNode }>`
   margin-left: auto;
 `;
@@ -27,6 +38,7 @@ export const PostContainer = styled(PlainPostContainer)`
 export const PostHeadContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 14px;
 `;
 

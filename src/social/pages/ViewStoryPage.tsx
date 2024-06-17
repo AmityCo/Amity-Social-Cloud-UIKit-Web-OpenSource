@@ -1,8 +1,8 @@
 import React from 'react';
 import { CommunityFeedStory } from '~/v4/social/pages/StoryPage/CommunityFeedStory';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { ViewGlobalFeedStoryPage } from './ViewGlobalFeedStory';
+import { useNavigation } from '~/social/providers/NavigationProvider';
+import { ViewGlobalFeedStoryPage } from '~/v4/social/pages/StoryPage/ViewGlobalFeedStory';
+import { PageTypes } from '../constants';
 
 type ViewStoryPageType = 'communityFeed' | 'globalFeed';
 
@@ -12,8 +12,8 @@ interface AmityViewStoryPageProps {
 }
 
 const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) => {
-  const { AmityStoryViewPageBehavior } = usePageBehavior();
-  const { onBack, goToViewStoryPage, goToDraftStoryPage, onClickCommunity } = useNavigation();
+  const { onBack, goToDraftStoryPage, onClickCommunity, onChangePage, onClickStory } =
+    useNavigation();
 
   if (type === 'communityFeed')
     return (
@@ -29,18 +29,15 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
     return (
       <ViewGlobalFeedStoryPage
         targetId={targetId}
-        onChangePage={() => AmityStoryViewPageBehavior.onCloseAction()}
-        onClose={() => AmityStoryViewPageBehavior.onCloseAction()}
-        onSwipeDown={() => AmityStoryViewPageBehavior.onCloseAction()}
-        onClickStory={(targetId) =>
-          goToViewStoryPage({
-            storyType: 'globalFeed',
-            targetId,
-            targetType: 'community',
-          })
-        }
+        onChangePage={() => onChangePage(PageTypes.NewsFeed)}
+        onClose={() => {
+          console.log('hello');
+          onChangePage(PageTypes.NewsFeed);
+        }}
+        onSwipeDown={() => onChangePage(PageTypes.NewsFeed)}
+        onClickStory={(targetId) => onClickStory(targetId, 'globalFeed')}
         goToDraftStoryPage={({ targetId, targetType, mediaType }) =>
-          goToDraftStoryPage({ targetId, targetType, mediaType })
+          goToDraftStoryPage(targetId, targetType, mediaType)
         }
         onClickCommunity={(targetId) => onClickCommunity(targetId)}
       />

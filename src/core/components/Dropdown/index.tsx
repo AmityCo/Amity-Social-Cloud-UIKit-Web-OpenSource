@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, MutableRefObject } from 'react';
 
 import Button from '~/core/components/Button';
 import { ChevronDown } from '~/icons';
@@ -9,6 +9,54 @@ import { POSITION_TOP, POSITION_BOTTOM, POSITION_LEFT } from '~/helpers/getCssPo
 import { DropdownContainer, Frame, FrameContainer, ButtonContainer } from './styles';
 
 const SCROLLABLE_HEIGHT = 200;
+
+export const useDropdown = ({
+  parentContainer,
+  dropdownRef,
+  align = POSITION_LEFT,
+  scrollableHeight = SCROLLABLE_HEIGHT,
+  position = POSITION_BOTTOM,
+  buttonContainerHeight,
+}: {
+  scrollableHeight?: number;
+  position?: string;
+  align?: string;
+  dropdownRef: MutableRefObject<HTMLElement | null>;
+  parentContainer?: Element | null;
+  buttonContainerHeight: number;
+}) => {
+  const [currentPosition, setCurrentPosition] = useState(position);
+  const entry = useObserver(dropdownRef.current, {
+    root: parentContainer,
+    rootMargin: parentContainer
+      ? `0px 0px -${Math.ceil(
+          (scrollableHeight * 100) /
+            (parentContainer.getBoundingClientRect().height - buttonContainerHeight),
+        )}% 0px`
+      : undefined,
+  });
+
+  // handling reposition for dropdown list
+  useEffect(() => {
+    if (entry?.isIntersecting === false) {
+      // handling vertical re-position
+      if (entry.boundingClientRect?.top < 0) {
+        setCurrentPosition(POSITION_BOTTOM);
+      } else {
+        setCurrentPosition(POSITION_TOP);
+      }
+    } else {
+      // reset to default
+      setCurrentPosition(position);
+    }
+  }, [entry, position]);
+
+  return {
+    align,
+    currentPosition,
+    scrollableHeight,
+  };
+};
 
 const triggerRenderer: DropdownProps['renderTrigger'] = (props) => {
   return (

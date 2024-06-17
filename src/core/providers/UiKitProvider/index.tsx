@@ -1,27 +1,33 @@
 import './inter.css';
-import './index.css';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Client as ASCClient } from '@amityco/ts-sdk';
 
 import { ThemeProvider } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
 import { ConfirmComponent } from '~/core/components/Confirm';
+import { NotificationsContainer as NotificationsContainerV4 } from '~/v4/core/components/Notification';
+import { ConfirmComponent as ConfirmComponentV4 } from '~/v4/core/components/ConfirmModal';
 import ConfigProvider from '~/social/providers/ConfigProvider';
 import Localization from './Localization';
 import buildGlobalTheme from './theme';
 import { UIStyles } from './styles';
 import { SDKContext } from '../SDKProvider';
+import { SDKContext as SDKContextV4 } from '~/v4/core/providers/SDKProvider';
 import useUser from '~/core/hooks/useUser';
 import NavigationProvider from '~/social/providers/NavigationProvider';
-import SDKConnectorProvider from '../SDKConnectorProvider';
+import SDKConnectorProvider from '~/core/providers/SDKConnectorProvider';
+import SDKConnectorProviderV4 from '~/v4/core/providers/SDKConnectorProvider';
 import CustomComponentsProvider, { CustomComponentType } from '../CustomComponentsProvider';
 import PostRendererProvider, {
   PostRendererConfigType,
 } from '~/social/providers/PostRendererProvider';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ConfirmProvider } from '../ConfirmProvider';
+import { ConfirmProvider as ConfirmProviderV4 } from '~/v4/core/providers/ConfirmProvider';
+import { NotificationProvider as NotificationProviderV4 } from '~/v4/core/providers/NotificationProvider';
+import { ConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider } from '~/core/providers/NotificationProvider';
+import { CustomizationProvider } from '~/v4/core/providers/CustomizationProvider';
 
 interface UiKitProviderProps {
   apiKey: string;
@@ -150,26 +156,40 @@ const UiKitProvider = ({
         <ThemeProvider theme={buildGlobalTheme(theme)}>
           <UIStyles>
             <SDKContext.Provider value={sdkContextValue}>
-              <SDKConnectorProvider>
-                <ConfirmProvider>
-                  <NotificationProvider>
-                    <CustomComponentsProvider config={customComponents}>
-                      <ConfigProvider
-                        config={{
-                          socialCommunityCreationButtonVisible:
-                            socialCommunityCreationButtonVisible || true,
-                        }}
-                      >
-                        <PostRendererProvider config={postRendererConfig}>
-                          <NavigationProvider {...actionHandlers}>{children}</NavigationProvider>
-                        </PostRendererProvider>
-                      </ConfigProvider>
-                      <NotificationsContainer />
-                      <ConfirmComponent />
-                    </CustomComponentsProvider>
-                  </NotificationProvider>
-                </ConfirmProvider>
-              </SDKConnectorProvider>
+              <SDKContextV4.Provider value={sdkContextValue}>
+                <SDKConnectorProvider>
+                  <SDKConnectorProviderV4>
+                    <ConfirmProvider>
+                      <ConfirmProviderV4>
+                        <NotificationProvider>
+                          <NotificationProviderV4>
+                            <CustomizationProvider initialConfig={{}}>
+                              <CustomComponentsProvider config={customComponents}>
+                                <ConfigProvider
+                                  config={{
+                                    socialCommunityCreationButtonVisible:
+                                      socialCommunityCreationButtonVisible || true,
+                                  }}
+                                >
+                                  <PostRendererProvider config={postRendererConfig}>
+                                    <NavigationProvider {...actionHandlers}>
+                                      {children}
+                                    </NavigationProvider>
+                                  </PostRendererProvider>
+                                </ConfigProvider>
+                                <NotificationsContainer />
+                                <NotificationsContainerV4 />
+                                <ConfirmComponent />
+                                <ConfirmComponentV4 />
+                              </CustomComponentsProvider>
+                            </CustomizationProvider>
+                          </NotificationProviderV4>
+                        </NotificationProvider>
+                      </ConfirmProviderV4>
+                    </ConfirmProvider>
+                  </SDKConnectorProviderV4>
+                </SDKConnectorProvider>
+              </SDKContextV4.Provider>
             </SDKContext.Provider>
           </UIStyles>
         </ThemeProvider>

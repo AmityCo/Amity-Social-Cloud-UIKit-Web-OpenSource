@@ -20,22 +20,25 @@ import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
 
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 import useSDK from '~/v4/core/hooks/useSDK';
 import useImage from '~/v4/core/hooks/useImage';
 import useUser from '~/v4/core/hooks/objects/useUser';
 
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
 
-export const renderer: CustomRenderer = ({ story, action, config }) => {
+export const renderer: CustomRenderer = ({
+  story,
+  action,
+  config,
+  onClose,
+  onSwipeDown,
+  onClickCommunity,
+}) => {
   const { formatMessage } = useIntl();
-  const { AmityStoryViewPageBehavior } = usePageBehavior();
-  const { page, onChangePage, onClickCommunity } = useNavigation();
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
@@ -122,11 +125,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         transition: { duration: 0.3, ease: 'easeOut' },
       })
       .then(() => {
-        if (page.type === PageTypes.ViewStoryPage && page.context.storyType === 'globalFeed') {
-          onChangePage(PageTypes.SocialHomePage);
-        } else {
-          onClickCommunity(community?.communityId as string);
-        }
+        onSwipeDown?.();
       });
   };
 
@@ -145,11 +144,8 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
   };
 
   const handleOnClose = () => {
-    if (page.type === PageTypes.ViewStoryPage && page.context.storyType === 'globalFeed') {
-      AmityStoryViewPageBehavior.onCloseAction();
-      return;
-    }
-    onClickCommunity(community?.communityId as string);
+    console.log('handleOnClose');
+    onClose();
   };
 
   useEffect(() => {
@@ -210,7 +206,7 @@ export const renderer: CustomRenderer = ({ story, action, config }) => {
         onPause={pause}
         onAction={openBottomSheet}
         onAddStory={handleAddIconClick}
-        onClickCommunity={() => onClickCommunity(community?.communityId as string)}
+        onClickCommunity={() => onClickCommunity?.()}
         onClose={handleOnClose}
         addStoryButton={addStoryButton}
       />

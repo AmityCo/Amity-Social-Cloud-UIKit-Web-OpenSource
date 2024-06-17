@@ -1,15 +1,6 @@
 import React from 'react';
 import styles from './StoryRing.module.css';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-
-interface StoryRingProps extends React.SVGProps<SVGSVGElement> {
-  pageId?: '*';
-  componentId?: 'story_tab_component';
-  hasUnseen?: boolean;
-  uploading?: boolean;
-  isErrored?: boolean;
-  size?: number;
-}
+import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 
 const EmptyStateRingSvg = ({
   pageId,
@@ -22,8 +13,14 @@ const EmptyStateRingSvg = ({
   elementId: string;
   size: number;
 }) => {
-  const { getConfig } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  const { config } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
+
+  const progressColors = config?.progress_color as string[];
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -41,8 +38,8 @@ const EmptyStateRingSvg = ({
           y2="45.75"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={elementConfig?.progress_color?.[0]} />
-          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
+          <stop stopColor={progressColors[0]} />
+          <stop offset={1} stopColor={progressColors[1]} />
         </linearGradient>
       </defs>
       <circle cx={size / 2} cy={size / 2} r={size / 2 - 1} className={styles.emptyStateRing} />
@@ -61,8 +58,14 @@ const HasSeenRingSvg = ({
   elementId: string;
   size: number;
 }) => {
-  const { getConfig } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  const { config } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
+
+  const progressColors = config?.progress_color as string[];
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -80,8 +83,8 @@ const HasSeenRingSvg = ({
           y2="45.75"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={elementConfig?.progress_color?.[0]} />
-          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
+          <stop stopColor={progressColors[0]} />
+          <stop offset={1} stopColor={progressColors[1]} />
         </linearGradient>
       </defs>
       <circle
@@ -110,8 +113,13 @@ const UploadingRingSvg = ({
   elementId: string;
   size: number;
 }) => {
-  const { getConfig } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
+  const { config } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
+
+  const progressColors = config?.progress_color as string[];
 
   return (
     <svg
@@ -130,8 +138,8 @@ const UploadingRingSvg = ({
           y2="45.75"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={elementConfig?.progress_color?.[0]} />
-          <stop offset={1} stopColor={elementConfig?.progress_color?.[1]} />
+          <stop stopColor={progressColors[0]} />
+          <stop offset={1} stopColor={progressColors[1]} />
         </linearGradient>
       </defs>
       <circle
@@ -152,9 +160,18 @@ const UploadingRingSvg = ({
   );
 };
 
-const StoryRing = ({
+interface StoryRingProps extends React.SVGProps<SVGSVGElement> {
+  pageId?: string;
+  componentId?: string;
+  hasUnseen?: boolean;
+  uploading?: boolean;
+  isErrored?: boolean;
+  size?: number;
+}
+
+export const StoryRing = ({
   pageId = '*',
-  componentId = 'story_tab_component',
+  componentId = '*',
   hasUnseen = false,
   uploading = false,
   isErrored = false,
@@ -162,10 +179,13 @@ const StoryRing = ({
   ...props
 }: StoryRingProps) => {
   const elementId = 'story_ring';
-  const { isExcluded } = useCustomization();
-  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
+  const { isExcluded, config } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
-  if (isElementExcluded) return null;
+  if (isExcluded) return null;
   if (isErrored) {
     return (
       <svg
@@ -213,5 +233,3 @@ const StoryRing = ({
     />
   );
 };
-
-export default StoryRing;

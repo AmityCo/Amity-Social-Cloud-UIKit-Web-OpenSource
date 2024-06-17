@@ -19,30 +19,40 @@ import { StoryRepository } from '@amityco/ts-sdk';
 import { HyperLinkConfig } from '~/v4/social/components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import { PageTypes } from '~/social/constants';
-import { BaseVideoPreview } from '../../internal-components/VideoPreview';
+import { BaseVideoPreview } from '~/v4/social/internal-components/VideoPreview';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
-type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
+export type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
-type AmityDraftStoryPageProps = {
-  targetId?: string;
+export type AmityDraftStoryPageProps = {
+  targetId: string;
   targetType: Amity.StoryTargetType;
   mediaType?: AmityStoryMediaType;
 };
 
-type HyperLinkFormInputs = {
+export type HyperLinkFormInputs = {
   url: string;
   customText?: string;
 };
 
-const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
+export const PlainDraftStoryPage = ({
+  targetId,
+  targetType,
+  mediaType,
+  goToCommunityPage,
+  goToGlobalFeedPage,
+  onDiscardCreateStory,
+  storyType,
+}: AmityDraftStoryPageProps & {
+  goToCommunityPage: (communityId: string) => void;
+  goToGlobalFeedPage: () => void;
+  onDiscardCreateStory: () => void;
+  storyType: 'communityFeed' | 'globalFeed';
+}) => {
   const pageId = 'create_story_page';
-  const { page, onChangePage, onClickCommunity } = useNavigation();
   const { file, setFile } = useStoryContext();
-  const { AmityDraftStoryPageBehavior } = usePageBehavior();
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
@@ -91,12 +101,10 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
       const formData = new FormData();
       formData.append('files', file);
       setFile(null);
-      if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-        onChangePage(PageTypes.NewsFeed);
+      if (storyType === 'globalFeed') {
+        goToGlobalFeedPage();
       } else {
-        if (page.communityId) {
-          onClickCommunity(page.communityId);
-        }
+        goToCommunityPage(targetId);
       }
       if (mediaType?.type === 'image' && targetId) {
         const { data: imageData } = await StoryRepository.createImageStory(
@@ -141,7 +149,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
       okText: formatMessage({ id: 'delete' }),
       onOk: () => {
         setFile(null);
-        AmityDraftStoryPageBehavior.onCloseAction();
+        onDiscardCreateStory();
       },
     });
   };
@@ -217,20 +225,12 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
       <div id="asc-uikit-create-story" className={styles.draftPage}>
         <div className={styles.headerContainer}>
           <div className={styles.header}>
-            <BackButton pageId="create_story_page" componentId="*" onClick={discardCreateStory} />
+            <BackButton pageId={pageId} onClick={discardCreateStory} />
             <div className={styles.topRightButtons}>
               {mediaType?.type === 'image' && (
-                <AspectRatioButton
-                  pageId="create_story_page"
-                  componentId="*"
-                  onClick={onClickImageMode}
-                />
+                <AspectRatioButton pageId={pageId} onClick={onClickImageMode} />
               )}
-              <HyperLinkButton
-                pageId="create_story_page"
-                componentId="*"
-                onClick={handleOnClickHyperLinkActionButton}
-              />
+              <HyperLinkButton pageId={pageId} onClick={handleOnClickHyperLinkActionButton} />
             </div>
           </div>
         </div>
@@ -276,7 +276,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
         )}
 
         <HyperLinkConfig
-          pageId="*"
+          pageId={pageId}
           isOpen={isHyperLinkBottomSheetOpen}
           onClose={handleHyperLinkBottomSheetClose}
           onSubmit={onSubmitHyperLink}
@@ -286,8 +286,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
 
         <div className={styles.footer}>
           <ShareStoryButton
-            pageId="*"
-            componentId="*"
+            pageId={pageId}
             avatar={community.avatarFileUrl}
             onClick={() =>
               onCreateStory(file, imageMode, {}, hyperLink[0]?.data?.url ? hyperLink : [])
@@ -296,6 +295,21 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
         </div>
       </div>
     </>
+  );
+};
+
+export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
+  const { page } = useNavigation();
+  const { AmityDraftStoryPageBehavior } = usePageBehavior();
+
+  return (
+    <PlainDraftStoryPage
+      {...props}
+      onDiscardCreateStory={() => AmityDraftStoryPageBehavior.onCloseAction()}
+      goToCommunityPage={(communityId) => AmityDraftStoryPageBehavior.onCloseAction()}
+      goToGlobalFeedPage={() => AmityDraftStoryPageBehavior.onCloseAction()}
+      storyType={page.type === 'communityFeed' ? 'communityFeed' : 'globalFeed'}
+    />
   );
 };
 

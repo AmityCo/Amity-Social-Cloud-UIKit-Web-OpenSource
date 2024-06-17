@@ -16,6 +16,7 @@ export const useGlobalStoryTargets = (
     }
   };
 
+
   return {
     stories: items,
     hasMore,

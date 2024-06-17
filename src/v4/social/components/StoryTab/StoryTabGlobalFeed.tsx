@@ -2,16 +2,28 @@ import React, { useRef, useEffect } from 'react';
 import styles from './StoryTabGlobalFeed.module.css';
 import { StoryTabItem } from './StoryTabItem';
 import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 const STORIES_PER_PAGE = 10;
 
-export const StoryTabGlobalFeed: React.FC = () => {
+interface StoryTabGlobalFeedProps {
+  pageId: string;
+  componentId: string;
+  goToViewStoryPage: (data: {
+    storyTarget: Amity.StoryTarget;
+    storyTargets: Amity.StoryTarget[];
+  }) => void;
+}
+
+export const StoryTabGlobalFeed = ({
+  pageId,
+  componentId,
+  goToViewStoryPage,
+}: StoryTabGlobalFeedProps) => {
   const { stories, isLoading, hasMore, loadMoreStories } = useGlobalStoryTargets({
     seenState: 'smart' as Amity.StorySeenQuery,
     limit: STORIES_PER_PAGE,
   });
-  const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
+
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -63,15 +75,15 @@ export const StoryTabGlobalFeed: React.FC = () => {
       {stories.map((story) => {
         return (
           <StoryTabItem
+            pageId={pageId}
+            componentId={componentId}
             key={story.targetId}
             targetId={story.targetId}
             hasUnseen={story.hasUnseen}
             onClick={() =>
-              AmityGlobalFeedComponentBehavior.goToViewStoryPage({
-                targetId: story.targetId,
-                targetType: story.targetType,
-                storyType: 'globalFeed',
-                targetIds: stories.map((story) => story.targetId),
+              goToViewStoryPage({
+                storyTargets: stories,
+                storyTarget: story,
               })
             }
             size={64}
