@@ -18,20 +18,17 @@ import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import useImage from '~/v4/core/hooks/useImage';
 import useUser from '~/v4/core/hooks/objects/useUser';
 
 import clsx from 'clsx';
+import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
+import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
 
 import rendererStyles from './Renderers.module.css';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
-
-import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
-import { checkStoryPermission, formatTimeAgo, isAdmin } from '~/v4/social/utils';
-
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { isModerator } from '~/v4/utils/permissions';
 
 export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
   const { AmityStoryViewPageBehavior } = usePageBehavior();
