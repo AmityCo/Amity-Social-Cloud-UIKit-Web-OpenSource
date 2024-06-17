@@ -221,8 +221,6 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
     setCurrentIndex(currentIndex + 1);
   };
 
-  console.log(currentIndex);
-
   useEffect(() => {
     if (stories[stories.length - 1]?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);

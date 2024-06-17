@@ -1,5 +1,5 @@
 import { StoryRepository } from '@amityco/ts-sdk';
-import useLiveCollection from '~/core/hooks/useLiveCollection';
+import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
 export const useGlobalStoryTargets = (
   params: Amity.LiveCollectionParams<Amity.StoryGlobalQuery>,

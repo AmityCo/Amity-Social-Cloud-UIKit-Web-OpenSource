@@ -202,6 +202,14 @@ export const defaultConfig: DefaultConfig = {
       unmute_icon: 'unmute.png',
       background_color: '#1243EE',
     },
+    'story_page/*/arrow_left_button': {
+      arrow_left_icon: 'arrow_left.png',
+      background_color: '#1243EE',
+    },
+    'story_page/*/arrow_right_button': {
+      arrow_right_icon: 'arrow_right.png',
+      background_color: '#1243EE',
+    },
     '*/edit_comment_component/*': {
       theme: {},
     },

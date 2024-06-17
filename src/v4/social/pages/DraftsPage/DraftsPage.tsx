@@ -6,7 +6,6 @@ import { readFileAsync } from '~/helpers';
 import styles from './DraftsPage.module.css';
 import { SubmitHandler } from 'react-hook-form';
 
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import {
   AspectRatioButton,
   BackButton,
@@ -24,6 +23,7 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 import { PageTypes } from '~/social/constants';
 import { BaseVideoPreview } from '../../internal-components/VideoPreview';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 

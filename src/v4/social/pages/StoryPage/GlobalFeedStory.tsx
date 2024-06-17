@@ -1,36 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import useSDK from '~/core/hooks/useSDK';
-import { useMedia } from 'react-use';
 import { useIntl } from 'react-intl';
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
-import { CreateStoryButton } from '../../elements';
-import { Trash2Icon } from '~/icons';
+import { CreateStoryButton } from '~/v4/social/elements';
+
 import { isNonNullable } from '~/v4/helpers/utils';
 import { extractColors } from 'extract-colors';
 
-import {
-  HiddenInput,
-  StoryArrowLeftButton,
-  StoryArrowRightButton,
-  StoryWrapper,
-  ViewStoryContainer,
-  ViewStoryContent,
-  ViewStoryOverlay,
-} from '../../internal-components/StoryViewer/styles';
-
 import Stories from 'react-insta-stories';
-import { renderers } from '../../internal-components/StoryViewer/Renderers';
-import { AmityDraftStoryPage } from '..';
-import { checkStoryPermission } from '~/utils';
-import { useStoryContext } from '../../providers/StoryProvider';
+import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
+import { AmityDraftStoryPage } from '~/v4/social/pages/DraftsPage';
+
+import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { useGetActiveStoriesByTarget } from '../../hooks/useGetActiveStories';
+import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
+import clsx from 'clsx';
+import useSDK from '~/v4/core/hooks/useSDK';
+
+import styles from './StoryPage.module.css';
+import { checkStoryPermission } from '~/v4/social/utils';
+import Trash from '~/v4/social/icons/trash';
+import { ArrowLeftButton } from '~/v4/social/elements/ArrowLeftButton';
+import { ArrowRightButton } from '~/v4/social/elements/ArrowRightButton';
 
 const DURATION = 5000;
 
@@ -49,8 +45,8 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
     targetId:
       page.type === PageTypes.ViewStoryPage &&
       page.context.storyType === 'globalFeed' &&
-      page.context.targetId
-        ? page.context.targetId
+      page.context?.targetId
+        ? page.context?.targetId
         : '',
     options: {
       orderBy: 'asc',
@@ -79,7 +75,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
   const { client, currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
-  const isMobile = useMedia('(max-width: 768px)');
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const { file, setFile } = useStoryContext();
@@ -96,7 +91,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
         previousStory();
-        // if (isLastStory) onChangePage(PageTypes.SocialHomePage);
+        if (isLastStory) onChangePage(PageTypes.SocialHomePage);
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),
@@ -182,7 +177,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
               icon: (
-                <Trash2Icon
+                <Trash
                   fill={getComputedStyle(document.documentElement).getPropertyValue(
                     '--asc-color-base-default',
                   )}
@@ -202,8 +197,8 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
   const nextStory = () => {
     if (
       page.type === PageTypes.ViewStoryPage &&
-      page.context.targetIds &&
-      page.context.targetId &&
+      page.context?.targetIds &&
+      page.context?.targetId &&
       currentIndex === formattedStories?.length - 1
     ) {
       const currentTargetIndex = page.context.targetIds.indexOf(page.context.targetId);
@@ -213,7 +208,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
         const nextTargetId = page.context.targetIds[nextTargetIndex];
         onClickStory(nextTargetId, 'globalFeed', page.context.targetIds);
       } else {
-        onChangePage(PageTypes.NewsFeed);
+        onChangePage(PageTypes.SocialHomePage);
       }
       setCurrentIndex(0);
       return;
@@ -235,7 +230,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
         const previousTargetId = page.context.targetIds[previousTargetIndex];
         onClickStory(previousTargetId, 'globalFeed', page.context.targetIds);
       } else {
-        onChangePage(PageTypes.NewsFeed);
+        onChangePage(PageTypes.SocialHomePage);
       }
       setCurrentIndex(0);
       return;
@@ -304,26 +299,27 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
   }
 
   return (
-    <StoryWrapper data-qa-anchor="story_page">
-      {!isMobile && (
-        <StoryArrowLeftButton data-qa-anchor="arrow_left_button" onClick={previousStory} />
-      )}
-      <ViewStoryContainer id={targetRootId}>
-        <HiddenInput
+    <div className={clsx(styles.storyWrapper)} data-qa-anchor="story_page">
+      <ArrowLeftButton onClick={previousStory} />
+      <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
+        <input
+          className={clsx(styles.hiddenInput)}
           ref={fileInputRef}
           type="file"
           accept="image/*,video/*"
           onChange={handleFileChange}
         />
-        <ViewStoryContent>
-          <ViewStoryOverlay />
+        <div className={clsx(styles.viewStoryContent)}>
+          <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
+          <div className={clsx(styles.overlayRight)} onClick={nextStory} />
+          <div className={clsx(styles.viewStoryOverlay)} />
           {formattedStories?.length > 0 ? (
             // NOTE: Do not use isPaused prop, it will cause the first video story skipped
             <Stories
               width="100%"
               height="100%"
               storyStyles={storyStyles}
-              preventDefault={!isMobile}
+              preventDefault
               currentIndex={currentIndex}
               stories={formattedStories}
               // TO FIX: need to override custom type of renderers from react-insta-stories library
@@ -337,11 +333,9 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
               onAllStoriesEnd={nextStory}
             />
           ) : null}
-        </ViewStoryContent>
-      </ViewStoryContainer>
-      {!isMobile && (
-        <StoryArrowRightButton data-qa-anchor="arrow_right_button" onClick={nextStory} />
-      )}
-    </StoryWrapper>
+        </div>
+      </div>
+      <ArrowRightButton onClick={nextStory} />
+    </div>
   );
 };

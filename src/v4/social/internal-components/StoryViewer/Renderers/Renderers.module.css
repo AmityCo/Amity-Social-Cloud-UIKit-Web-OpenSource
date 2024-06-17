@@ -256,3 +256,19 @@
   color: var(--asc-color-base-default);
   background-color: var(--asc-color-base-background);
 }
+
+.navigationOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 10;
+}
+
+.leftOverlay {
+  left: 0;
+}
+
+.rightOverlay {
+  right: 0;
+}
