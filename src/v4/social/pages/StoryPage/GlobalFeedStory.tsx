@@ -96,6 +96,11 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = () => {
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),
         });
+        if (isLastStory && stories.length > 1) {
+          setCurrentIndex(currentIndex - 1);
+        } else if (stories.length === 1) {
+          onChangePage(PageTypes.SocialHomePage);
+        }
       },
     });
   };

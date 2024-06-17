@@ -85,18 +85,21 @@ export const CommunityFeedStory = ({ communityId }: CommunityFeedStoryProps) => 
   const isModerator = checkStoryPermission(client, communityId);
 
   const confirmDeleteStory = (storyId: string) => {
-    const isLastStory = currentIndex === 0;
+    const isLastStory = currentIndex === stories.length - 1;
     confirm({
       title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
       content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
-        previousStory();
-        if (isLastStory) onBack();
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),
         });
+        if (isLastStory && stories.length > 1) {
+          setCurrentIndex(currentIndex - 1);
+        } else if (stories.length === 1) {
+          onBack();
+        }
       },
     });
   };
