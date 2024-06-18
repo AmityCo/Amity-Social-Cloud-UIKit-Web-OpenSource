@@ -378,12 +378,13 @@ export default function NavigationProvider({
     ({ targetId, storyType, targetIds }) => {
       const next = {
         type: PageTypes.ViewStoryPage,
-        targetId,
-        storyType,
-        targetIds,
+        context: {
+          targetId,
+          targetType: 'community',
+          storyType,
+          targetIds,
+        },
       };
-
-      if (onChangePage) return onChangePage(next);
 
       pushPage(next);
     },
