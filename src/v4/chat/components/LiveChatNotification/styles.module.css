@@ -15,13 +15,13 @@
   padding: 1.125rem var(--asc-spacing-m1);
   display: flex;
   align-items: center;
-  color: var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse));
+  color: var(--asc-color-base-inverse);
   border-radius: var(--asc-border-radius-md);
   animation-duration: 0.3s;
   animation-name: appear;
   animation-fill-mode: forwards;
   pointer-events: auto;
-  background-color: var(--live-chat-asc-color-base-shade4, var(--asc-color-base-shade4));
+  background-color: var(--asc-color-base-shade4);
 }
 
 @keyframes appear {

@@ -1,11 +1,11 @@
 import React from 'react';
 import useUser from '~/core/hooks/useUser';
 import styles from './styles.module.css';
-import UserAvatar from '~/v4/chat/components/UserAvatar';
-import { SIZE_ALIAS } from '~/core/hocs/withSize';
 import { FormattedMessage } from 'react-intl';
-import { CloseIcon } from '~/icons';
-import { backgroundImage as userBackgroundImage } from '~/icons/User';
+import CloseIcon from '~/v4/icons/Close';
+import { Avatar } from '~/v4/core/components';
+import User from '~/v4/icons/User';
+import { AVATAR_SIZE } from '~/v4/core/components/Avatar/Avatar';
 
 interface ReplyMessagePlaceholderProps {
   replyMessage: Amity.Message<'text'>;
@@ -20,11 +20,7 @@ const ReplyMessagePlaceholder = ({ replyMessage, onDismiss }: ReplyMessagePlaceh
   return (
     <div className={styles.replyPlaceholderContainer}>
       <div className={styles.replyAvatar}>
-        <UserAvatar
-          avatarUrl={profile.avatar?.fileUrl}
-          size={SIZE_ALIAS.SMALL}
-          defaultImage={userBackgroundImage}
-        />
+        <Avatar avatar={profile.avatar?.fileUrl} size={AVATAR_SIZE.SMALL} defaultImage={<User />} />
       </div>
       <div className={styles.replyProfile}>
         <div className={styles.replyProfileName}>

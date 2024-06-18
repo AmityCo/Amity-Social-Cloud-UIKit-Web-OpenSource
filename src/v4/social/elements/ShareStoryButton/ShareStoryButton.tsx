@@ -4,9 +4,10 @@ import { useIntl } from 'react-intl';
 import { isValidHttpUrl } from '~/utils';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Icon } from '~/v4/core/components/Icon';
-import { backgroundImage as communityBackgroundImage } from '~/v4/icons/Community';
+import Community from '~/v4/icons/Community';
 import styles from './ShareStoryButton.module.css';
 import { Avatar } from '~/v4/core/components';
+import { AVATAR_SIZE } from '~/v4/core/components/Avatar/Avatar';
 
 interface ShareButtonProps {
   onClick: () => void;
@@ -44,9 +45,9 @@ export const ShareStoryButton = ({
       {!elementConfig?.hide_avatar && (
         <Avatar
           data-qa-anchor="share_story_button_image_view"
-          size="small"
+          size={AVATAR_SIZE.SMALL}
           avatar={avatar}
-          backgroundImage={communityBackgroundImage}
+          defaultImage={<Community />}
         />
       )}
       <span>{formatMessage({ id: 'storyDraft.button.shareStory' })}</span>

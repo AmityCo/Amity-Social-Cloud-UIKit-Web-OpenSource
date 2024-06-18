@@ -10,6 +10,7 @@ import useChannelPermission from '~/v4/chat/hooks/useChannelPermission';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
 const COMPOSEBAR_MAX_CHARACTER_LIMIT = 200;
 
@@ -37,7 +38,7 @@ type ComposeBarMention = {
 };
 
 export const AmityLiveChatMessageComposeBar = ({
-  pageId = 'live_chat',
+  pageId = '*',
   channel,
   suggestionRef,
   composeAction: { replyMessage, mentionMessage, clearReplyMessage, clearMention },
@@ -46,13 +47,13 @@ export const AmityLiveChatMessageComposeBar = ({
   const [mentionList, setMentionList] = useState<{
     [key: ComposeBarMention['id']]: ComposeBarMention;
   }>({});
+
   const componentId = 'message_composer';
+  const { themeStyles, config } = useAmityComponent({ pageId, componentId });
 
   const { confirm } = useConfirmContext();
   const notification = useLiveChatNotifications();
 
-  const { getConfig } = useCustomization();
-  const componentConfig = getConfig(`${pageId}/${componentId}/*`);
   const commentInputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   const { queryMentionees, mentionees, onChange, markup, metadata, text } = useMention({
@@ -68,7 +69,7 @@ export const AmityLiveChatMessageComposeBar = ({
     if (!channel) return;
     if (text?.trim().length === 0) return;
 
-    if (text.trim().length > (componentConfig?.message_limit || COMPOSEBAR_MAX_CHARACTER_LIMIT)) {
+    if (text.trim().length > (config?.message_limit || COMPOSEBAR_MAX_CHARACTER_LIMIT)) {
       confirm({
         title: formatMessage({ id: 'livechat.error.tooLongMessage.title' }),
         content: formatMessage({ id: 'livechat.error.tooLongMessage.description' }),
@@ -119,7 +120,7 @@ export const AmityLiveChatMessageComposeBar = ({
   }, []);
 
   return (
-    <div className={styles.composeBarContainer}>
+    <div className={styles.composeBarContainer} style={themeStyles}>
       <div className={styles.composeBar}>
         <div className={styles.textInputContainer}>
           <InputText
@@ -129,8 +130,7 @@ export const AmityLiveChatMessageComposeBar = ({
             multiline
             disabled={disabled}
             placeholder={
-              (typeof componentConfig?.placeholder_text === 'string' &&
-                componentConfig?.placeholder_text) ||
+              (typeof config?.placeholder_text === 'string' && config?.placeholder_text) ||
               formatMessage({
                 id: 'livechat.composebar.placeholder',
               })

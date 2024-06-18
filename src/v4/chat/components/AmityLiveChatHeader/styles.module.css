@@ -7,17 +7,11 @@
 }
 
 .displayName {
-  color: var(
-    --live-chat-chat-header-asc-color-base-inverse,
-    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
-  );
+  color: var(--asc-color-base-inverse);
 }
 
 .memberCount {
-  color: var(
-    --live-chat-chat-header-asc-color-base-default,
-    var(--live-chat-asc-color-base-default, var(--asc-color-base-default))
-  );
+  color: var(--asc-color-base-default);
   display: flex;
   align-items: center;
 }
@@ -26,8 +20,5 @@
   width: 0.75rem;
   height: 0.75rem;
   margin-right: var(--asc-spacing-xxs2);
-  fill: var(
-    --live-chat-chat-header-asc-color-base-default,
-    var(--live-chat-asc-color-base-default, var(--asc-color-base-default))
-  );
+  fill: var(--asc-color-base-default);
 }

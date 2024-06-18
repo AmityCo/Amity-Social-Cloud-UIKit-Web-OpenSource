@@ -29,8 +29,7 @@
   width: 100%;
   height: 100%;
   align-items: center;
-  color: var(--live-chat-message-list-asc-color-secondary-shade2),
-    var(--live-chat-asc-color-secondary-shade2, var(--asc-color-secondary-shade2));
+  color: var(--asc-color-secondary-shade2);
   font-weight: var(--asc-text-font-weight-light);
   font-size: var(--asc-text-font-size-md);
 }

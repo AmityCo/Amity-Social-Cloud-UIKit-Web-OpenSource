@@ -2,14 +2,20 @@ import React, { useState, useCallback } from 'react';
 import clsx from 'clsx';
 import styles from './Avatar.module.css';
 
+export const enum AVATAR_SIZE {
+  SMALL = 'small',
+  MEDIUM = 'medium',
+  LARGE = 'large',
+}
+
 export interface AvatarProps {
   className?: string;
   avatar?: string | null;
   showOverlay?: boolean;
   onClick?: () => void;
   loading?: boolean;
-  backgroundImage?: string | null;
-  size?: 'small' | 'medium' | 'large';
+  defaultImage?: React.ReactNode;
+  size?: AVATAR_SIZE;
 }
 
 export const Avatar = ({
@@ -18,8 +24,8 @@ export const Avatar = ({
   showOverlay,
   onClick,
   loading,
-  size = 'medium',
-  backgroundImage,
+  size = AVATAR_SIZE.MEDIUM,
+  defaultImage,
   ...props
 }: AvatarProps) => {
   const [visible, setVisible] = useState(false);
@@ -62,7 +68,9 @@ export const Avatar = ({
             alt="Avatar"
           />
         )
-      ) : null}
+      ) : (
+        defaultImage ?? null
+      )}
     </div>
   );
 };

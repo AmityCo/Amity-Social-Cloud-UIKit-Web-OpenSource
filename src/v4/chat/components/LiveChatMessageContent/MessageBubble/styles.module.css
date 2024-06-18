@@ -2,14 +2,8 @@
   padding: var(--asc-spacing-s1) 0.625rem;
   border-radius: var(--asc-border-radius-lg);
   border-top-left-radius: var(--asc-border-radius-none);
-  color: var(
-    --live-chat-message-list-asc-color-base-inverse,
-    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
-  );
-  background-color: var(
-    --live-chat-message-list-asc-color-base-shade4,
-    var(--live-chat-asc-color-base-shade4, var(--asc-color-base-shade4))
-  );
+  color: var(--asc-color-base-inverse);
+  background-color: var(--asc-color-base-shade4);
   max-width: 7.5rem;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -18,11 +12,7 @@
 }
 
 .messageBubble[data-mentioned='true'] {
-  border: 1px solid
-    var(
-      --live-chat-message-list-asc-color-primary-default,
-      var(--live-chat-asc-color-primary-default, var(--asc-color-primary-default))
-    );
+  border: 1px solid var(--asc-color-primary-default);
 }
 
 .messageRepliedBubble {
@@ -32,24 +22,15 @@
 .messageParentContainer {
   padding: var(--asc-spacing-s2);
   border-radius: var(--asc-border-radius-lg) var(--asc-border-radius-lg) 0 0;
-  background-color: var(
-    --live-chat-message-list-asc-color-base-shade3,
-    var(--live-chat-asc-color-base-shade3, var(--asc-color-base-shade3))
-  );
+  background-color: var(--asc-color-base-shade3);
 }
 
 .messageParentDisplayName {
-  color: var(
-    --live-chat-message-list-asc-color-base-inverse,
-    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
-  );
+  color: var(--asc-color-base-inverse);
 }
 
 .messageParentText {
-  color: var(
-    --live-chat-message-list-asc-color-base-default,
-    var(--live-chat-asc-color-base-default, var(--asc-color-base-default))
-  );
+  color: var(--asc-color-base-default);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -57,14 +38,8 @@
 
 .messageChildContainer {
   border-radius: 0 0 var(--asc-border-radius-lg) var(--asc-border-radius-lg);
-  background-color: var(
-    --live-chat-message-list-asc-color-base-shade4,
-    var(--live-chat-asc-color-base-shade4, var(--asc-color-base-shade4))
-  );
-  color: var(
-    --live-chat-message-list-asc-color-base-inverse,
-    var(--live-chat-asc-color-base-inverse, var(--asc-color-base-inverse))
-  );
+  background-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-inverse);
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
 }
 
