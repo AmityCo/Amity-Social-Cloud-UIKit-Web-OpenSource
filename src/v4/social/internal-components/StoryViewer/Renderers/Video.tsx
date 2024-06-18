@@ -266,7 +266,6 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
             className={rendererStyles.actionButton}
             onClick={() => {
               bottomSheetAction.action();
-              closeBottomSheet();
             }}
             variant="secondary"
           >
@@ -333,12 +332,6 @@ const storyContentStyles = {
   maxHeight: '100%',
   margin: 'auto',
   position: 'relative' as const,
-};
-
-const videoContainerStyles = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
 };
 
 export const tester: Tester = (story) => {

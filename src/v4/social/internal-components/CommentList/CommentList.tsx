@@ -1,11 +1,11 @@
 import React, { memo } from 'react';
 import { useIntl } from 'react-intl';
-import useCommentsCollection from '~/social/hooks/collections/useCommentsCollection';
+
 import { Comment } from '../Comment';
 import styles from './CommentList.module.css';
 import { ExpandIcon } from '~/v4/social/icons';
-import { Button } from '~/v4/core/components';
 import { LoadMoreWrapper } from '~/v4/core/components/LoadMoreWrapper/LoadMoreWrapper';
+import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
 
 interface CommentListProps {
   parentId?: string;
@@ -17,6 +17,7 @@ interface CommentListProps {
   onClickReply?: (comment: Amity.Comment) => void;
   style?: React.CSSProperties;
   shouldAllowInteraction?: boolean;
+  includeDeleted?: boolean;
 }
 
 export const CommentList = ({
@@ -28,12 +29,14 @@ export const CommentList = ({
   isExpanded = true,
   onClickReply,
   shouldAllowInteraction,
+  includeDeleted = false,
 }: CommentListProps) => {
   const { comments, hasMore, loadMore } = useCommentsCollection({
     parentId,
     referenceId,
     referenceType,
     limit,
+    includeDeleted,
   });
 
   const { formatMessage } = useIntl();

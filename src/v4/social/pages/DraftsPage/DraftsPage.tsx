@@ -5,7 +5,6 @@ import { readFileAsync } from '~/helpers';
 
 import styles from './DraftsPage.module.css';
 import { SubmitHandler } from 'react-hook-form';
-import Truncate from 'react-truncate-markup';
 
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import {
@@ -52,7 +51,15 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
       data: { url: string; customText: string };
       type: Amity.StoryItemType;
     }[]
-  >([]);
+  >([
+    {
+      data: {
+        url: '',
+        customText: '',
+      },
+      type: 'hyperlink' as Amity.StoryItemType,
+    },
+  ]);
 
   const handleHyperLinkBottomSheetClose = () => {
     setIsHyperLinkBottomSheetOpen(false);
@@ -164,6 +171,16 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
     ]);
   };
 
+  const handleOnClickHyperLinkActionButton = () => {
+    if (hyperLink[0]?.data?.url) {
+      notification.info({
+        content: formatMessage({ id: 'storyDraft.notification.hyperlink.error' }),
+      });
+      return;
+    }
+    setIsHyperLinkBottomSheetOpen(true);
+  };
+
   useEffect(() => {
     const extractColorsFromImage = async (fileTarget: File) => {
       const img = await readFileAsync(fileTarget);
@@ -211,7 +228,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
               <HyperLinkButton
                 pageId="create_story_page"
                 componentId="*"
-                onClick={() => setIsHyperLinkBottomSheetOpen(true)}
+                onClick={handleOnClickHyperLinkActionButton}
               />
             </div>
           </div>
@@ -250,15 +267,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
         ) : null}
         {hyperLink[0]?.data?.url && (
           <div className={styles.hyperLinkContainer}>
-            <HyperLink
-              href={
-                hyperLink[0].data.url.startsWith('http')
-                  ? hyperLink[0].data.url
-                  : `https://${hyperLink[0].data.url}`
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <HyperLink onClick={() => setIsHyperLinkBottomSheetOpen(true)}>
               {hyperLink[0]?.data?.customText || hyperLink[0].data.url.replace(/^https?:\/\//, '')}
             </HyperLink>
           </div>
@@ -270,7 +279,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
           onClose={handleHyperLinkBottomSheetClose}
           onSubmit={onSubmitHyperLink}
           onRemove={onRemoveHyperLink}
-          isHaveHyperLink={hyperLink.length > 0}
+          isHaveHyperLink={hyperLink?.[0]?.data?.url !== ''}
         />
 
         <div className={styles.footer}>
@@ -278,7 +287,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             pageId="create_story_page"
             componentId="*"
             onClick={() =>
-              onCreateStory(file, imageMode, {}, hyperLink.length > 0 ? hyperLink : [])
+              onCreateStory(file, imageMode, {}, hyperLink[0]?.data?.url ? hyperLink : [])
             }
             avatar={community.avatarFileUrl}
           />

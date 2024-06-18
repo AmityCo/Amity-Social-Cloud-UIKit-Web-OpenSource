@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
+import { AmityReactionType, useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { QuickReactionIcon } from '~/v4/icons/QuickReactionIcon';
 import { selectMessageReaction } from '~/v4/utils/selectMessageReaction';
 import styles from './styles.module.css';
@@ -30,7 +30,10 @@ export const MessageQuickReaction = ({
       elementConfig.reaction &&
       reactionConfig.find((config) => config.name === elementConfig.reaction)
     ) {
-      selectMessageReaction({ reactionName: elementConfig.reaction, message });
+      selectMessageReaction({
+        reactionName: elementConfig.reaction as AmityReactionType['name'],
+        message,
+      });
     }
 
     onSelectReaction && onSelectReaction();

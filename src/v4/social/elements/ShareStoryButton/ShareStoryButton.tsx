@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import { isValidHttpUrl } from '~/utils';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Icon } from '~/v4/core/components/Icon';
-import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
+import { backgroundImage as communityBackgroundImage } from '~/v4/icons/Community';
 import styles from './ShareStoryButton.module.css';
 import { Avatar } from '~/v4/core/components';
 

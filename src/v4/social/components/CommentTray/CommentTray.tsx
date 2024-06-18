@@ -42,6 +42,7 @@ export const CommentTray = ({
           onClickReply={onClickReply}
           shouldAllowInteraction={shouldAllowInteraction}
           limit={REPLIES_PER_PAGE}
+          includeDeleted
         />
       </div>
       <div className={styles.mobileSheetComposeBarContainer}>

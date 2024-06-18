@@ -73,7 +73,7 @@ const UIEngagementBar = ({
               <CommentIcon /> <FormattedMessage id="comment" />
             </SecondaryButton>
           </InteractionBar>
-          {latestComments.length > 0 ? (
+          {latestComments?.length > 0 ? (
             <CommentList referenceId={postId} referenceType={'post'} limit={COMMENTS_PER_PAGE} />
           ) : null}
 
@@ -91,7 +91,7 @@ const UIEngagementBar = ({
           <NoInteractionMessage>
             <FormattedMessage id="community.cannotInteract" />
           </NoInteractionMessage>
-          {latestComments.length > 0 ? (
+          {latestComments?.length > 0 ? (
             <CommentList
               referenceId={postId}
               referenceType={'post'}
