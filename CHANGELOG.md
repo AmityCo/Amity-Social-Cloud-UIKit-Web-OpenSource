@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.7 (2024-06-18)
+
+### Bug Fixes
+
+- build include css ([#421](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/421)) ([1dea7f5](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/1dea7f50a9f70491e217f639be8159c0c20b6b65))
+
 ## 4.0.0-beta.6 (2024-06-07)
 
 ## 4.0.0-beta.5 (2024-06-07)
