@@ -22,4 +22,7 @@ export default defineConfig((options) => ({
         '(typeof process !== "undefined" && process.env && process.env.NODE_ENV ? (process.env.NODE_ENV !== "production") : false)',
     }),
   ],
+  loader: {
+    '.css': 'local-css',
+  },
 }));

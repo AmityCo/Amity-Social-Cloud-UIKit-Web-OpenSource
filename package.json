@@ -13,6 +13,10 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/esm/index.js",
       "default": "./dist/index.js"
+    },
+    "./dist/index.css": {
+      "import": "./dist/esm/index.css",
+      "default": "./dist/index.css"
     }
   },
   "files": [
@@ -35,7 +39,7 @@
     "tsc": "tsc"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "~6.16.0",
+    "@amityco/ts-sdk": "^6.26.3",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
