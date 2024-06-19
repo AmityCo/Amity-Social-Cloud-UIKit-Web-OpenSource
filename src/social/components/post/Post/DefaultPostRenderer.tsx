@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import Button, { PrimaryButton } from '~/core/components/Button';
 import Modal from '~/core/components/Modal';
@@ -187,6 +187,18 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
 
   const toggle = () => setIsMenuOpen((prev) => !prev);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.addEventListener('click', toggle);
+    } else {
+      document.removeEventListener('click', toggle);
+    }
+
+    return () => {
+      document.removeEventListener('click', toggle);
+    };
+  }, [isMenuOpen]);
+
   function showHasBeenReviewedMessageIfNeeded(error: unknown) {
     if (error instanceof Error) {
       if (error.message.includes(ERROR_POST_HAS_BEEN_REVIEWED)) {
@@ -255,7 +267,13 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
         {!loading && (
           <OptionButtonContainer>
             <div ref={buttonContainerRef}>
-              <OptionsButton onClick={toggle} className={className}>
+              <OptionsButton
+                onClick={(event) => {
+                  event.stopPropagation();
+                  toggle();
+                }}
+                className={className}
+              >
                 <OptionsIcon />
               </OptionsButton>
             </div>

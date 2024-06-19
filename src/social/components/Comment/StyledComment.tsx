@@ -1,4 +1,4 @@
-import React, { forwardRef, MutableRefObject, useRef, useState } from 'react';
+import React, { forwardRef, MutableRefObject, useEffect, useRef, useState } from 'react';
 import Truncate from 'react-truncate-markup';
 import { FormattedMessage, useIntl } from 'react-intl';
 
@@ -200,6 +200,18 @@ const StyledComment = (props: StyledCommentProps) => {
 
   const toggle = () => setIsMenuOpen((prev) => !prev);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.addEventListener('click', toggle);
+    } else {
+      document.removeEventListener('click', toggle);
+    }
+
+    return () => {
+      document.removeEventListener('click', toggle);
+    };
+  }, [isMenuOpen]);
+
   return (
     <>
       <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
@@ -278,7 +290,12 @@ const StyledComment = (props: StyledCommentProps) => {
 
             <OptionButtonContainer>
               <div ref={buttonContainerRef}>
-                <OptionsButton onClick={toggle}>
+                <OptionsButton
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    toggle();
+                  }}
+                >
                   <OptionsIcon />
                 </OptionsButton>
               </div>
