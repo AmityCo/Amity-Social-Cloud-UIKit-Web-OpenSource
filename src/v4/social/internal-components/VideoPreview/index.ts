@@ -1,1 +1,1 @@
-export { BaseVideoPreview } from './VideoPreview';
+export { VideoPreview } from './VideoPreview';

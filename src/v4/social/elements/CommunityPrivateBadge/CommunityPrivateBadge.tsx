@@ -2,8 +2,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { getDefaultConfig, useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 import styles from './CommunityPrivateBadge.module.css';
 
 const PrivateIconSvg = (props: React.SVGProps<SVGSVGElement>) => (

@@ -19,7 +19,7 @@ import { StoryRepository } from '@amityco/ts-sdk';
 import { HyperLinkConfig } from '~/v4/social/components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { BaseVideoPreview } from '~/v4/social/internal-components/VideoPreview';
+import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -258,7 +258,7 @@ export const PlainDraftStoryPage = ({
             />
           </div>
         ) : mediaType?.type === 'video' ? (
-          <BaseVideoPreview
+          <VideoPreview
             className={styles.videoPreview}
             src={file ? URL.createObjectURL(file) : mediaType.url}
             mediaFit="contain"
