@@ -168,43 +168,10 @@ const PostCreatorBar = ({
     });
   };
 
-  async function onCreatePost() {
+  async function createPost(createPostParams: Parameters<typeof PostRepository.createPost>[0]) {
     if (!target.targetId) return;
     try {
       setIsCreating(true);
-      const data: { text?: string } = {};
-      const attachments = [];
-
-      if (text) {
-        data.text = text;
-      }
-
-      if (postImages.length) {
-        attachments.push(...postImages.map((i) => ({ fileId: i.fileId, type: FileType.IMAGE })));
-      }
-
-      if (postVideos.length) {
-        attachments.push(...postVideos.map((i) => ({ fileId: i.fileId, type: FileType.VIDEO })));
-      }
-
-      if (postFiles.length) {
-        attachments.push(...postFiles.map((i) => ({ fileId: i.fileId, type: FileType.FILE })));
-      }
-
-      if (data.text?.length && data.text.length > MAXIMUM_POST_CHARACTERS) {
-        overCharacterModal();
-        return;
-      }
-
-      const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
-        targetId: target.targetId,
-        targetType: target.targetType,
-        data,
-        dataType: 'text',
-        attachments,
-        metadata,
-        mentionees,
-      };
 
       const postData = await PostRepository.createPost(createPostParams);
 
@@ -242,6 +209,45 @@ const PostCreatorBar = ({
     } finally {
       setIsCreating(false);
     }
+  }
+
+  async function onCreatePost() {
+    if (!target.targetId) return;
+    const data: { text?: string } = {};
+    const attachments = [];
+
+    if (text) {
+      data.text = text;
+    }
+
+    if (postImages.length) {
+      attachments.push(...postImages.map((i) => ({ fileId: i.fileId, type: FileType.IMAGE })));
+    }
+
+    if (postVideos.length) {
+      attachments.push(...postVideos.map((i) => ({ fileId: i.fileId, type: FileType.VIDEO })));
+    }
+
+    if (postFiles.length) {
+      attachments.push(...postFiles.map((i) => ({ fileId: i.fileId, type: FileType.FILE })));
+    }
+
+    if (data.text?.length && data.text.length > MAXIMUM_POST_CHARACTERS) {
+      overCharacterModal();
+      return;
+    }
+
+    const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
+      targetId: target.targetId,
+      targetType: target.targetType,
+      data,
+      dataType: 'text',
+      attachments,
+      metadata,
+      mentionees,
+    };
+
+    return createPost(createPostParams);
   }
 
   const onMaxFilesLimit = () => {
@@ -300,7 +306,7 @@ const PostCreatorBar = ({
           targetType={creatorTargetType}
           onCreatePoll={async (pollId, text, pollMentionees, metadata) => {
             if (!creatorTargetId) return;
-            await PostRepository.createPost({
+            createPost({
               targetId: creatorTargetId,
               targetType: creatorTargetType,
               data: { pollId, text },
