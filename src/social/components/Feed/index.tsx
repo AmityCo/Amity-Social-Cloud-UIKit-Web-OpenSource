@@ -43,58 +43,60 @@ const GlobalFeed = ({
   }
 
   return (
-    <FeedScrollContainer
-      className={className}
-      dataLength={contents.length}
-      next={loadMore}
-      hasMore={hasMore}
-      loader={null}
-    >
-      {!isHiddenProfile ? (
-        <>
-          {showPostCreator ? (
-            <PostCreator
-              data-qa-anchor="feed-post-creator-textarea"
-              targetType={'user'}
-              targetId={currentUserId || undefined}
-              enablePostTargetPicker={false}
-              onCreateSuccess={(newPost) => prependItem(newPost)}
-            />
-          ) : null}
-          {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+    <>
+      {showPostCreator ? (
+        <PostCreator
+          data-qa-anchor="feed-post-creator-textarea"
+          targetType={'user'}
+          targetId={currentUserId || undefined}
+          enablePostTargetPicker={false}
+          onCreateSuccess={(newPost) => prependItem(newPost)}
+        />
+      ) : null}
+      <FeedScrollContainer
+        className={className}
+        dataLength={contents.length}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={null}
+      >
+        {!isHiddenProfile ? (
+          <>
+            {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
 
-          {(!isLoading || loadMoreHasBeenCalled) && contents.length > 0 && (
-            <LoadMoreWrapper
-              hasMore={hasMore}
-              loadMore={loadMore}
-              className="load-more no-border"
-              contentSlot={contents.map((content) => (
-                <Post
-                  key={content.postId}
-                  postId={content.postId}
-                  hidePostTarget={false}
-                  readonly={readonly}
-                  onDeleted={(postId) => removeItem(postId)}
-                />
-              ))}
-            />
-          )}
+            {(!isLoading || loadMoreHasBeenCalled) && contents.length > 0 && (
+              <LoadMoreWrapper
+                hasMore={hasMore}
+                loadMore={loadMore}
+                className="load-more no-border"
+                contentSlot={contents.map((content) => (
+                  <Post
+                    key={content.postId}
+                    postId={content.postId}
+                    hidePostTarget={false}
+                    readonly={readonly}
+                    onDeleted={(postId) => removeItem(postId)}
+                  />
+                ))}
+              />
+            )}
 
-          {!isLoading && contents.length === 0 && (
-            <EmptyFeed
-              targetType={'global'}
-              goToExplore={goToExplore}
-              canPost={showPostCreator}
-              feedType={feedType}
-            />
-          )}
+            {!isLoading && contents.length === 0 && (
+              <EmptyFeed
+                targetType={'global'}
+                goToExplore={goToExplore}
+                canPost={showPostCreator}
+                feedType={feedType}
+              />
+            )}
 
-          {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
-        </>
-      ) : (
-        <PrivateFeed />
-      )}
-    </FeedScrollContainer>
+            {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+          </>
+        ) : (
+          <PrivateFeed />
+        )}
+      </FeedScrollContainer>
+    </>
   );
 };
 
@@ -147,63 +149,64 @@ const MyFeed = ({
   }
 
   return (
-    <FeedScrollContainer
-      className={className}
-      dataLength={posts.length}
-      next={loadMore}
-      hasMore={hasMore}
-      loader={null}
-    >
-      {!isHiddenProfile ? (
-        <>
-          <PostCreator
-            data-qa-anchor="feed-post-creator-textarea"
-            targetType={'user'}
-            targetId={targetId || undefined}
-            communities={communities}
-            enablePostTargetPicker={false}
-            hasMoreCommunities={hasMoreCommunities}
-            loadMoreCommunities={loadMoreCommunitiesCB}
-            onCreateSuccess={onPostCreated}
-          />
+    <>
+      <PostCreator
+        data-qa-anchor="feed-post-creator-textarea"
+        targetType={'user'}
+        targetId={targetId || undefined}
+        communities={communities}
+        enablePostTargetPicker={false}
+        hasMoreCommunities={hasMoreCommunities}
+        loadMoreCommunities={loadMoreCommunitiesCB}
+        onCreateSuccess={onPostCreated}
+      />
+      <FeedScrollContainer
+        className={className}
+        dataLength={posts.length}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={null}
+      >
+        {!isHiddenProfile ? (
+          <>
+            {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
 
-          {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+            {(!isLoading || loadMoreHasBeenCalled) && posts.length > 0 && (
+              <LoadMoreWrapper
+                hasMore={hasMore}
+                loadMore={loadMore}
+                className="load-more no-border"
+                contentSlot={
+                  <>
+                    {posts.map((post) => (
+                      <Post
+                        key={post.postId}
+                        postId={post.postId}
+                        hidePostTarget={true}
+                        readonly={readonly}
+                      />
+                    ))}
+                  </>
+                }
+              />
+            )}
 
-          {(!isLoading || loadMoreHasBeenCalled) && posts.length > 0 && (
-            <LoadMoreWrapper
-              hasMore={hasMore}
-              loadMore={loadMore}
-              className="load-more no-border"
-              contentSlot={
-                <>
-                  {posts.map((post) => (
-                    <Post
-                      key={post.postId}
-                      postId={post.postId}
-                      hidePostTarget={true}
-                      readonly={readonly}
-                    />
-                  ))}
-                </>
-              }
-            />
-          )}
+            {!isLoading && posts.length === 0 && (
+              <EmptyFeed
+                targetType={targetType}
+                goToExplore={goToExplore}
+                canPost={true}
+                feedType={feedType}
+              />
+            )}
 
-          {!isLoading && posts.length === 0 && (
-            <EmptyFeed
-              targetType={targetType}
-              goToExplore={goToExplore}
-              canPost={true}
-              feedType={feedType}
-            />
-          )}
-
-          {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
-        </>
-      ) : (
-        <PrivateFeed />
-      )}
-    </FeedScrollContainer>
+            {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+          </>
+        ) : (
+          <PrivateFeed />
+        )}
+      </FeedScrollContainer>
+    </>
   );
 };
 
@@ -246,61 +249,62 @@ const CommunityFeed = ({
   }
 
   return (
-    <FeedScrollContainer
-      className={className}
-      dataLength={posts.length}
-      next={loadMore}
-      hasMore={hasMore}
-      loader={null}
-    >
-      {!isHiddenProfile ? (
-        <>
-          {showPostCreator ? (
-            <PostCreator
-              data-qa-anchor="feed-post-creator-textarea"
-              targetType={targetType}
-              targetId={targetId}
-              enablePostTargetPicker={false}
-              onCreateSuccess={onPostCreated}
-            />
-          ) : null}
+    <>
+      {showPostCreator ? (
+        <PostCreator
+          data-qa-anchor="feed-post-creator-textarea"
+          targetType={targetType}
+          targetId={targetId}
+          enablePostTargetPicker={false}
+          onCreateSuccess={onPostCreated}
+        />
+      ) : null}
+      <FeedScrollContainer
+        className={className}
+        dataLength={posts.length}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={null}
+      >
+        {!isHiddenProfile ? (
+          <>
+            {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
 
-          {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+            {!isLoading && posts.length > 0 && (
+              <LoadMoreWrapper
+                hasMore={hasMore}
+                loadMore={loadMore}
+                className="load-more no-border"
+                contentSlot={
+                  <>
+                    {posts.map((post) => (
+                      <Post
+                        key={post.postId}
+                        postId={post.postId}
+                        hidePostTarget
+                        readonly={readonly}
+                      />
+                    ))}
+                  </>
+                }
+              />
+            )}
 
-          {!isLoading && posts.length > 0 && (
-            <LoadMoreWrapper
-              hasMore={hasMore}
-              loadMore={loadMore}
-              className="load-more no-border"
-              contentSlot={
-                <>
-                  {posts.map((post) => (
-                    <Post
-                      key={post.postId}
-                      postId={post.postId}
-                      hidePostTarget
-                      readonly={readonly}
-                    />
-                  ))}
-                </>
-              }
-            />
-          )}
+            {!isLoading && posts.length === 0 && (
+              <EmptyFeed
+                targetType={targetType}
+                goToExplore={goToExplore}
+                canPost={showPostCreator}
+              />
+            )}
 
-          {!isLoading && posts.length === 0 && (
-            <EmptyFeed
-              targetType={targetType}
-              goToExplore={goToExplore}
-              canPost={showPostCreator}
-            />
-          )}
-
-          {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
-        </>
-      ) : (
-        <PrivateFeed />
-      )}
-    </FeedScrollContainer>
+            {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+          </>
+        ) : (
+          <PrivateFeed />
+        )}
+      </FeedScrollContainer>
+    </>
   );
 };
 
@@ -345,65 +349,66 @@ const BaseFeed = ({
   }
 
   return (
-    <FeedScrollContainer
-      className={className}
-      dataLength={posts.length}
-      next={loadMore}
-      hasMore={hasMore}
-      loader={null}
-    >
-      {!isHiddenProfile ? (
-        <>
-          {showPostCreator && (
-            <PostCreator
-              data-qa-anchor="feed-post-creator-textarea"
-              targetType={targetType}
-              targetId={targetId}
-              communities={communities}
-              enablePostTargetPicker={false}
-              hasMoreCommunities={hasMoreCommunities}
-              loadMoreCommunities={loadMoreCommunities}
-              onCreateSuccess={onPostCreated}
-            />
-          )}
-
-          {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
-
-          {!isLoading && posts.length > 0 && (
-            <LoadMoreWrapper
-              hasMore={hasMore}
-              loadMore={loadMore}
-              className="load-more no-border"
-              contentSlot={
-                <>
-                  {posts.map((post) => (
-                    <Post
-                      key={post.postId}
-                      postId={post.postId}
-                      hidePostTarget
-                      readonly={readonly}
-                    />
-                  ))}
-                </>
-              }
-            />
-          )}
-
-          {!isLoading && posts.length === 0 && (
-            <EmptyFeed
-              targetType={targetType}
-              goToExplore={goToExplore}
-              canPost={showPostCreator}
-              feedType={feedType}
-            />
-          )}
-
-          {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
-        </>
-      ) : (
-        <PrivateFeed />
+    <>
+      {showPostCreator && (
+        <PostCreator
+          data-qa-anchor="feed-post-creator-textarea"
+          targetType={targetType}
+          targetId={targetId}
+          communities={communities}
+          enablePostTargetPicker={false}
+          hasMoreCommunities={hasMoreCommunities}
+          loadMoreCommunities={loadMoreCommunities}
+          onCreateSuccess={onPostCreated}
+        />
       )}
-    </FeedScrollContainer>
+      <FeedScrollContainer
+        className={className}
+        dataLength={posts.length}
+        next={loadMore}
+        hasMore={hasMore}
+        loader={null}
+      >
+        {!isHiddenProfile ? (
+          <>
+            {isLoading && !loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+
+            {!isLoading && posts.length > 0 && (
+              <LoadMoreWrapper
+                hasMore={hasMore}
+                loadMore={loadMore}
+                className="load-more no-border"
+                contentSlot={
+                  <>
+                    {posts.map((post) => (
+                      <Post
+                        key={post.postId}
+                        postId={post.postId}
+                        hidePostTarget
+                        readonly={readonly}
+                      />
+                    ))}
+                  </>
+                }
+              />
+            )}
+
+            {!isLoading && posts.length === 0 && (
+              <EmptyFeed
+                targetType={targetType}
+                goToExplore={goToExplore}
+                canPost={showPostCreator}
+                feedType={feedType}
+              />
+            )}
+
+            {isLoading && loadMoreHasBeenCalled ? renderLoadingSkeleton() : null}
+          </>
+        ) : (
+          <PrivateFeed />
+        )}
+      </FeedScrollContainer>
+    </>
   );
 };
 
