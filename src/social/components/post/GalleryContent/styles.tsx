@@ -61,7 +61,8 @@ const BaseThumbnail = ({
   const { formatNumber } = useIntl();
 
   const formatDuration = (inputDuration: number) => {
-    const hour = formatNumber(Math.floor(inputDuration / 60 / 60), {
+    const floorHour = Math.floor(inputDuration / 60 / 60);
+    const hour = formatNumber(floorHour, {
       minimumIntegerDigits: 2,
       maximumSignificantDigits: 2,
     });
@@ -70,12 +71,14 @@ const BaseThumbnail = ({
       maximumSignificantDigits: 2,
     });
 
-    const second = formatNumber((inputDuration % 60) % 60, {
+    const roundedSecond = Math.round((inputDuration % 60) % 60);
+
+    const second = formatNumber(roundedSecond, {
       minimumIntegerDigits: 2,
       maximumSignificantDigits: 2,
     });
 
-    if (hour === '00') {
+    if (floorHour === 0) {
       return `${minute}:${second}`;
     }
     return `${hour}:${minute}:${second}`;
