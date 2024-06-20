@@ -175,7 +175,6 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     const title = isReplyComment ? 'reply.delete' : 'comment.delete';
     const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
     confirm({
-      'data-qa-anchor': 'delete-comment',
       title: <FormattedMessage id={title} />,
       content: <FormattedMessage id={content} />,
       cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),

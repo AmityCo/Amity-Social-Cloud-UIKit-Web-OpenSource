@@ -238,6 +238,10 @@ export const defaultConfig: DefaultConfig = {
     '*/comment_tray_component/*': {
       theme: {},
     },
+    '*/comment_tray_component/comment_bubble_deleted_view': {
+      comment_bubble_deleted_icon: 'comment_bubble_deleted.png',
+      text: 'This reply has been deleted',
+    },
     '*/story_tab_component/*': {},
     '*/story_tab_component/story_ring': {
       progress_color: ['#339AF9', '#78FA58'],

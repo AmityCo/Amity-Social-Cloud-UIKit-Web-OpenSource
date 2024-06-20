@@ -1,5 +1,5 @@
 .emptyStateRing {
-  stroke: var(--asc-color-base-shade4);
+  stroke: var(--asc-color-secondary-shade4);
   stroke-width: 2;
   fill: none;
 }

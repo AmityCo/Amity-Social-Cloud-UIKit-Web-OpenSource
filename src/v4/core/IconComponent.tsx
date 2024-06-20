@@ -20,7 +20,6 @@ export const IconComponent = ({
   configIconName,
   className,
 }: IconComponentProps) => {
-
   return (
     <button className={className} data-qa-anchor={'data-qa-anchor'} onClick={onClick} style={style}>
       {defaultIconName === configIconName ? defaultIcon() : imgIcon()}

@@ -7,6 +7,7 @@
   padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
   border-radius: 0.25rem;
   margin-left: 3rem;
+  margin-bottom: var(--asc-spacing-m1);
 }
 
 .loadMoreButton.textCenter {

@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-
 import { Avatar, Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 import Community from '~/v4/icons/Community';

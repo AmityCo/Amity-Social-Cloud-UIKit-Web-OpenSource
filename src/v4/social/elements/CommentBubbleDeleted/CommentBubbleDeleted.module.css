@@ -1,0 +1,19 @@
+.commentBubbleDeleted__container {
+  margin-left: 3.25rem;
+  display: inline-flex;
+  padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--asc-color-secondary-shade2);
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+  margin-bottom: var(--asc-spacing-m1);
+}
+
+.commentBubbleDeleted__icon {
+  cursor: auto;
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-secondary-shade2);
+}

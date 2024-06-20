@@ -20,12 +20,13 @@ import clsx from 'clsx';
 import { ArrowRightButton } from '~/v4/social/elements/ArrowRightButton/ArrowRightButton';
 
 import styles from './StoryPage.module.css';
-import { Trash2Icon } from '~/icons';
+
 import useSDK from '~/v4/core/hooks/useSDK';
 import {
   CustomRendererProps,
   RendererObject,
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
+import { TrashIcon } from '~/v4/social/icons';
 
 const DURATION = 5000;
 
@@ -212,7 +213,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
               name: 'delete',
               action: () => deleteStory(story?.storyId as string),
               icon: (
-                <Trash2Icon
+                <TrashIcon
                   fill={getComputedStyle(document.documentElement).getPropertyValue(
                     '--asc-color-base-default',
                   )}
