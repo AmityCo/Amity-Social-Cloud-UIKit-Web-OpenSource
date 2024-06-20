@@ -1,40 +1,38 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Truncate from 'react-truncate-markup';
-
-import useStories from '~/social/hooks/useStories';
-import useSDK from '~/core/hooks/useSDK';
-
+import { FileTrigger, Button } from 'react-aria-components';
 import { FormattedMessage } from 'react-intl';
 import { StoryRing } from '~/v4/social/elements/StoryRing/StoryRing';
 import clsx from 'clsx';
-
-import styles from './StoryTabCommunity.module.css';
+import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
+import useSDK from '~/v4/core/hooks/useSDK';
 import useUser from '~/v4/core/hooks/objects/useUser';
-import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { isAdmin, isModerator } from '~/v4/utils/permissions';
 import { checkStoryPermission } from '~/v4/social/utils';
-import { Avatar } from '~/v4/core/components';
-import { AVATAR_SIZE } from '~/v4/core/components/Avatar';
-import CommunityDefaultImg from '~/v4/icons/Community';
+import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
 
-const AddIcon = (props: React.SVGProps<SVGSVGElement>) => {
+import styles from './StoryTabCommunity.module.css';
+import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
+
+const AddStoryIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       fill="none"
-      viewBox="0 0 16 16"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
       {...props}
     >
-      <circle cx="8" cy="8" r="7.25" fill="#1054DE" stroke="#fff" strokeWidth="1.5"></circle>
-      <path
-        fill="#fff"
-        d="M11.438 7.625c.156 0 .312.156.312.313v.625a.321.321 0 01-.313.312H8.626v2.813a.321.321 0 01-.313.312h-.624a.308.308 0 01-.313-.313V8.876H4.562a.309.309 0 01-.312-.313v-.624c0-.157.137-.313.313-.313h2.812V4.812c0-.156.137-.312.313-.312h.625c.156 0 .312.156.312.313v2.812h2.813z"
-      ></path>
+      <path d="M12 5v14M5 12h14"></path>
     </svg>
   );
 };
+
 const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -69,13 +67,12 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   onFileChange,
   onStoryClick,
 }) => {
-  const { stories } = useStories({
+  const { stories } = useGetActiveStoriesByTarget({
     targetId: communityId,
     targetType: 'community',
     options: { orderBy: 'asc', sortBy: 'createdAt' },
   });
   const { avatarFileUrl, community } = useCommunityInfo(communityId);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { currentUserId, client } = useSDK();
   const { user } = useUser(currentUserId);
@@ -88,25 +85,12 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   const uploading = stories.some((story) => story?.syncState === 'syncing');
   const isErrored = stories.some((story) => story?.syncState === 'error');
 
-  const handleAddIconClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      onFileChange(selectedFile);
-    }
-  };
-
   const handleOnClick = () => {
     if (Array.isArray(stories) && stories.length === 0) return;
     onStoryClick();
   };
 
-  if (!community?.isJoined && !hasStories) return null;
+  if (!community?.isJoined || !hasStories) return null;
 
   return (
     <div className={clsx(styles.storyTabContainer)}>
@@ -123,25 +107,19 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
         )}
 
         <div className={clsx(styles.storyAvatarContainer)}>
-          <Avatar
-            avatar={avatarFileUrl}
-            size={AVATAR_SIZE.SMALL}
-            className={clsx(styles.storyAvatar)}
-            onClick={handleOnClick}
-            defaultImage={<CommunityDefaultImg />}
-          />
+          <img src={avatarFileUrl} className={clsx(styles.storyAvatar)} onClick={handleOnClick} />
         </div>
 
         {hasStoryPermission && (
           <>
-            <AddIcon className={styles.addStoryButton} onClick={handleAddIconClick} />
-            <input
-              className={clsx(styles.hiddenInput)}
-              ref={fileInputRef}
-              type="file"
-              accept="image/*,video/*"
-              onChange={handleFileChange}
-            />
+            <FileTrigger
+              onSelect={(e) => {
+                const files = Array.from(e as FileList);
+                onFileChange(files[0]);
+              }}
+            >
+              <CreateNewStoryButton pageId="story_page" componentId="*" />
+            </FileTrigger>
           </>
         )}
         {isErrored && <ErrorIcon className={clsx(styles.errorIcon)} />}

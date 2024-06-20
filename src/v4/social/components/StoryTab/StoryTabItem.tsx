@@ -92,7 +92,7 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
           )}
         </div>
         {isErrored && <ErrorIcon className={styles.errorIcon} />}
-        {community?.isOfficial && <Verified className={styles.verifiedIcon} />}
+        {community?.isOfficial && !isErrored && <Verified className={styles.verifiedIcon} />}
       </div>
 
       <Typography.Caption className={clsx(styles.displayName)}>

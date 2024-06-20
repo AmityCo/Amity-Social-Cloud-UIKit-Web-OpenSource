@@ -1,6 +1,6 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
-import useLiveCollection from '~/core/hooks/useLiveCollection';
-import { MemberRoles } from '~/social/constants';
+import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
+import { MemberRoles } from '~/v4/social/constants/memberRoles';
 
 const { COMMUNITY_MODERATOR } = MemberRoles;
 

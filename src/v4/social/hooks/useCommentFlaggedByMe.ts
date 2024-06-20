@@ -1,7 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import { CommentRepository } from '@amityco/ts-sdk';
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 export const useCommentFlaggedByMe = (commentId?: string) => {
@@ -51,12 +50,12 @@ export const useCommentFlaggedByMe = (commentId?: string) => {
     if (isFlaggedByMe) {
       await unflagComment();
       notification.success({
-        content: <FormattedMessage id="storyViewer.toast.comment.unreported" />,
+        content: 'Comment unreported',
       });
     } else {
       await flagComment();
       notification.success({
-        content: <FormattedMessage id="storyViewer.toast.comment.reported" />,
+        content: 'Comment reported',
       });
     }
   };
