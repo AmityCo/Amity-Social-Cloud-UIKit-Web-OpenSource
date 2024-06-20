@@ -1,4 +1,8 @@
-.commentBubbleDeleted__container {
+.commentBubbleDeletedBlock {
+  cursor: auto;
+}
+
+.commentBubbleDeleted {
   margin-left: 3.25rem;
   display: inline-flex;
   padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
@@ -11,7 +15,7 @@
   margin-bottom: var(--asc-spacing-m1);
 }
 
-.commentBubbleDeleted__icon {
+.commentBubbleDeletedIcon {
   cursor: auto;
   width: 1rem;
   height: 1rem;

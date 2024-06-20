@@ -3,6 +3,7 @@ import { CommunityFeedStory } from '~/v4/social/pages/StoryPage/CommunityFeedSto
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { ViewGlobalFeedStoryPage } from './ViewGlobalFeedStory';
+import { useAmityPage } from '~/v4/core/hooks/uikit/index';
 
 type ViewStoryPageType = 'communityFeed' | 'globalFeed';
 
@@ -12,22 +13,28 @@ interface AmityViewStoryPageProps {
 }
 
 const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) => {
+  const pageId = 'story_page';
   const { AmityStoryViewPageBehavior } = usePageBehavior();
   const { onBack, goToViewStoryPage, goToDraftStoryPage, onClickCommunity } = useNavigation();
 
   if (type === 'communityFeed')
     return (
       <CommunityFeedStory
+        pageId={pageId}
         communityId={targetId}
         onBack={onBack}
         onClose={(communityId) => onClickCommunity(communityId)}
         onSwipeDown={(communityId) => onClickCommunity(communityId)}
         onClickCommunity={(communityId) => onClickCommunity(communityId)}
+        goToDraftStoryPage={({ targetId, targetType, mediaType, storyType }) =>
+          goToDraftStoryPage({ targetId, targetType, mediaType, storyType })
+        }
       />
     );
   if (type === 'globalFeed')
     return (
       <ViewGlobalFeedStoryPage
+        pageId={pageId}
         targetId={targetId}
         onChangePage={() => AmityStoryViewPageBehavior.onCloseAction()}
         onClose={() => AmityStoryViewPageBehavior.onCloseAction()}

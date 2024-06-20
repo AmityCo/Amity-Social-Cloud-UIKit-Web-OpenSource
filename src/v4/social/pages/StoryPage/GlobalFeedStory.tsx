@@ -1,36 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
-
 import { useIntl } from 'react-intl';
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
-import { CreateStoryButton } from '~/v4/social/elements';
 import { isNonNullable } from '~/v4/helpers/utils';
 import { extractColors } from 'extract-colors';
-
 import Stories from 'react-insta-stories';
 import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
 import { checkStoryPermission } from '~/utils';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 import { ArrowLeftButton } from '~/v4/social/elements/ArrowLeftButton/ArrowLeftButton';
 import clsx from 'clsx';
 import { ArrowRightButton } from '~/v4/social/elements/ArrowRightButton/ArrowRightButton';
-
-import styles from './StoryPage.module.css';
-
 import useSDK from '~/v4/core/hooks/useSDK';
 import {
   CustomRendererProps,
   RendererObject,
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { TrashIcon } from '~/v4/social/icons';
+import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
+
+import styles from './StoryPage.module.css';
+import { useAmityPage } from '~/v4/core/hooks/uikit/index';
 
 const DURATION = 5000;
 
 interface GlobalFeedStoryProps {
+  pageId?: string;
   targetId: string;
   targetIds: string[];
   onChangePage: () => void;
@@ -47,6 +45,7 @@ interface GlobalFeedStoryProps {
 }
 
 export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
+  pageId = '*',
   targetId,
   targetIds,
   onChangePage,
@@ -56,6 +55,9 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   onSwipeDown,
   onClickCommunity,
 }) => {
+  const { accessibilityId } = useAmityPage({
+    pageId,
+  });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
@@ -117,6 +119,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   const confirmDeleteStory = (storyId: string) => {
     const isLastStory = currentIndex === 0;
     confirm({
+      pageId,
       title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
       content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
       okText: formatMessage({ id: 'delete' }),
@@ -195,9 +198,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setFile(null);
   };
 
-  const addStoryButton = (
-    <CreateStoryButton pageId="story_page" componentId="*" onClick={handleAddIconClick} />
-  );
+  const addStoryButton = <CreateNewStoryButton pageId={pageId} onClick={handleAddIconClick} />;
 
   const formattedStories = stories?.map((story) => {
     const isImage = story?.dataType === 'image';
@@ -285,6 +286,17 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setCurrentIndex(currentIndex + 1);
   };
 
+  if (file) {
+    goToDraftStoryPage({
+      targetId,
+      targetType: 'community',
+      mediaType: file.type.includes('image')
+        ? { type: 'image', url: URL.createObjectURL(file) }
+        : { type: 'video', url: URL.createObjectURL(file) },
+      storyType: 'globalFeed',
+    });
+  }
+
   useEffect(() => {
     if (stories[stories.length - 1]?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);
@@ -295,6 +307,16 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   }, [currentIndex, stories]);
 
   useEffect(() => {
+    if (stories.every((story) => story?.isSeen)) return;
+    const firstUnseenStoryIndex = stories.findIndex((story) => !story?.isSeen);
+
+    if (firstUnseenStoryIndex !== -1) {
+      setCurrentIndex(firstUnseenStoryIndex);
+    }
+  }, [stories]);
+
+  useEffect(() => {
+    if (!file || !stories) return;
     const extractColorsFromImage = async (url: string) => {
       const colorsFromImage = await extractColors(url, {
         crossOrigin: 'anonymous',
@@ -310,19 +332,8 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     }
   }, [stories, file, currentIndex]);
 
-  if (file) {
-    goToDraftStoryPage({
-      targetId,
-      targetType: 'community',
-      mediaType: file.type.includes('image')
-        ? { type: 'image', url: URL.createObjectURL(file) }
-        : { type: 'video', url: URL.createObjectURL(file) },
-      storyType: 'globalFeed',
-    });
-  }
-
   return (
-    <div className={clsx(styles.storyWrapper)} data-qa-anchor="story_page">
+    <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
       <ArrowLeftButton onClick={previousStory} />
       <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
         <input

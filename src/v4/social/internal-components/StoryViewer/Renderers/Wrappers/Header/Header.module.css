@@ -63,7 +63,7 @@
 }
 
 .closeButton {
-  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
   width: 1.25rem;
   height: 1.25rem;
   cursor: pointer;

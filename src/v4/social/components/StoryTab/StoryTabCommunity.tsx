@@ -74,8 +74,19 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
     targetType: 'community',
     options: { orderBy: 'asc', sortBy: 'createdAt' },
   });
-  const { avatarFileUrl } = useCommunityInfo(communityId);
+  const { avatarFileUrl, community } = useCommunityInfo(communityId);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { currentUserId, client } = useSDK();
+  const { user } = useUser(currentUserId);
+  const isGlobalAdmin = isAdmin(user?.roles);
+  const isCommunityModerator = isModerator(user?.roles);
+  const hasStoryPermission =
+    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, communityId);
+  const hasStories = stories?.length > 0;
+  const hasUnSeen = stories.some((story) => !story?.isSeen);
+  const uploading = stories.some((story) => story?.syncState === 'syncing');
+  const isErrored = stories.some((story) => story?.syncState === 'error');
 
   const handleAddIconClick = () => {
     if (fileInputRef.current) {
@@ -95,22 +106,12 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
     onStoryClick();
   };
 
-  const { currentUserId, client } = useSDK();
-  const { user } = useUser(currentUserId);
-  const isGlobalAdmin = isAdmin(user?.roles);
-  const isCommunityModerator = isModerator(user?.roles);
-  const hasStoryPermission =
-    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, communityId);
-
-  const hasStoryRing = stories?.length > 0;
-  const hasUnSeen = stories.some((story) => !story?.isSeen);
-  const uploading = stories.some((story) => story?.syncState === 'syncing');
-  const isErrored = stories.some((story) => story?.syncState === 'error');
+  if (!community?.isJoined && !hasStories) return null;
 
   return (
     <div className={clsx(styles.storyTabContainer)}>
       <div className={clsx(styles.storyWrapper)}>
-        {hasStoryRing && (
+        {hasStories && (
           <StoryRing
             pageId={pageId}
             componentId={componentId}

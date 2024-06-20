@@ -43,15 +43,19 @@ export function CommentBubbleDeleted({
 
   return (
     <IconComponent
+      className={clsx(styles.commentBubbleDeletedBlock)}
       defaultIcon={() => (
-        <div className={styles.commentBubbleDeleted__container} data-qa-anchor={accessibilityId}>
+        <div
+          className={clsx(styles.commentBubbleDeleted, defaultIconClassName)}
+          data-qa-anchor={accessibilityId}
+        >
           <CommentBubbleDeletedSvg
-            className={clsx(styles.commentBubbleDeleted__icon, defaultIconClassName)}
+            className={clsx(styles.commentBubbleDeletedIcon, defaultIconClassName)}
           />
           <Typography.Caption>{config.text}</Typography.Caption>
         </div>
       )}
-      imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
+      imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgIconClassName)} />}
       defaultIconName={defaultConfig.icon}
       configIconName={config.icon}
     />

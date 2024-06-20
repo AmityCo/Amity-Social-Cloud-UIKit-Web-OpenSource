@@ -12,7 +12,13 @@ export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
   return (
     <PlainDraftStoryPage
       {...props}
-      onDiscardCreateStory={() => onChangePage(PageTypes.NewsFeed)}
+      onDiscardCreateStory={() => {
+        if (props.storyType === 'communityFeed') {
+          onClickCommunity(props.targetId);
+        } else {
+          onChangePage(PageTypes.NewsFeed);
+        }
+      }}
       goToCommunityPage={(communityId) => onClickCommunity(communityId)}
       goToGlobalFeedPage={() => onChangePage(PageTypes.NewsFeed)}
       storyType={props.storyType}

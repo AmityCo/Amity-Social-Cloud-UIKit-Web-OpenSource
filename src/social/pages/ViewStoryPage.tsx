@@ -15,25 +15,35 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
   const { onBack, goToDraftStoryPage, onClickCommunity, onChangePage, onClickStory } =
     useNavigation();
 
+  const goToNewsFeed = () => {
+    onChangePage(PageTypes.NewsFeed);
+  };
+
+  const goToCommunity = (communityId: string) => {
+    onClickCommunity(communityId);
+  };
+
   if (type === 'communityFeed')
     return (
       <CommunityFeedStory
         communityId={targetId}
         onBack={onBack}
-        onClose={(communityId) => onClickCommunity(communityId)}
-        onSwipeDown={(communityId) => onClickCommunity(communityId)}
-        onClickCommunity={(communityId) => onClickCommunity(communityId)}
+        onClose={goToCommunity}
+        onSwipeDown={goToCommunity}
+        onClickCommunity={goToCommunity}
+        goToDraftStoryPage={({ targetId, targetType, mediaType, storyType }) =>
+          goToDraftStoryPage(targetId, targetType, mediaType, storyType)
+        }
       />
     );
+
   if (type === 'globalFeed')
     return (
       <ViewGlobalFeedStoryPage
         targetId={targetId}
-        onChangePage={() => onChangePage(PageTypes.NewsFeed)}
-        onClose={() => {
-          onChangePage(PageTypes.NewsFeed);
-        }}
-        onSwipeDown={() => onChangePage(PageTypes.NewsFeed)}
+        onChangePage={goToNewsFeed}
+        onClose={goToNewsFeed}
+        onSwipeDown={goToNewsFeed}
         onClickStory={(targetId) => onClickStory(targetId, 'globalFeed')}
         goToDraftStoryPage={({ targetId, targetType, mediaType, storyType }) =>
           goToDraftStoryPage(targetId, targetType, mediaType, storyType)

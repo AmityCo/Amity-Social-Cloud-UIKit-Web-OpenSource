@@ -1,11 +1,10 @@
 import React from 'react';
 import clsx from 'clsx';
-import { Avatar, Typography } from '~/v4/core/components';
+import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit/index';
-import Community from '~/v4/icons/Community';
-import { AVATAR_SIZE } from '~/v4/core/components/Avatar/Avatar';
 
 import styles from './ShareStoryButton.module.css';
+import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 
 const ArrowRightIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -27,18 +26,16 @@ const ArrowRightIcon = (props: React.SVGProps<SVGSVGElement>) => {
 
 interface ShareButtonProps {
   onClick: () => void;
+  community?: Amity.Community | null;
   pageId?: string;
   componentId?: string;
-  avatar?: string;
-  style?: React.CSSProperties;
-  'data-qa-anchor'?: string;
 }
 
 export const ShareStoryButton = ({
   pageId = '*',
   componentId = '*',
+  community,
   onClick,
-  avatar,
 }: ShareButtonProps) => {
   const elementId = 'share_story_button';
 
@@ -59,12 +56,7 @@ export const ShareStoryButton = ({
       data-hideAvatar={config?.hide_avatar}
     >
       {!config?.hide_avatar && (
-        <Avatar
-          data-qa-anchor="share_story_button_image_view"
-          size={AVATAR_SIZE.SMALL}
-          avatar={avatar}
-          defaultImage={<Community />}
-        />
+        <CommunityAvatar pageId={pageId} componentId={componentId} community={community} />
       )}
       <Typography.BodyBold>{config?.text || 'Share story'}</Typography.BodyBold>
       <ArrowRightIcon />

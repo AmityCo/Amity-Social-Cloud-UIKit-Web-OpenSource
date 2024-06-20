@@ -1,0 +1,5 @@
+.impressionButton {
+  display: flex;
+  align-items: center;
+  gap: var(--asc-spacing-xxs2);
+}

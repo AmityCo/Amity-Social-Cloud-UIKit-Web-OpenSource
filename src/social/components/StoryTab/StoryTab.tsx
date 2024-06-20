@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-
 import { StoryTabCommunityFeed } from '~/v4/social/components/StoryTab/StoryTabCommunity';
 import { StoryTabGlobalFeed } from '~/v4/social/components/StoryTab/StoryTabGlobalFeed';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
@@ -36,6 +35,7 @@ export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTab
                   file.type.includes('image')
                     ? { type: 'image', url: URL.createObjectURL(file) }
                     : { type: 'video', url: URL.createObjectURL(file) },
+                  'communityFeed',
                 );
               }
             }}

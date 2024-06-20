@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './Footer.module.css';
 
 import { DotsIcon, ErrorIcon } from '~/icons';
 import { useIntl } from 'react-intl';
@@ -7,8 +6,12 @@ import millify from 'millify';
 import { ReactionRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
 import Spinner from '~/social/components/Spinner';
-import { StoryCommentButton, ImpressionButton, ReactButton } from '~/v4/social/elements';
+import { ImpressionButton, ReactButton } from '~/v4/social/elements';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { CommentButton } from '~/v4/social/elements/CommentButton/CommentButton';
+
+import styles from './Footer.module.css';
+import clsx from 'clsx';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
@@ -82,15 +85,18 @@ const Footer: React.FC<
       <div>
         {showImpression && (
           <div className={styles.viewStoryCompostBarViewIconContainer}>
-            <ImpressionButton pageId="story_page" componentId="*" />
-            {millify(reach || 0)}
+            <ImpressionButton pageId="story_page" reach={reach} />
           </div>
         )}
       </div>
       <div className={styles.viewStoryCompostBarEngagementContainer}>
-        <StoryCommentButton onClick={onClickComment} pageId="story_page" componentId="*">
-          {millify(commentsCount) || 0}
-        </StoryCommentButton>
+        <CommentButton
+          className={clsx(styles.viewStoryCommentButton)}
+          defaultIconClassName={clsx(styles.viewStoryCommentIcon)}
+          pageId="story_page"
+          commentsCount={commentsCount}
+          onClick={onClickComment}
+        />
         <ReactButton onClick={handleLike} pageId="story_page" isLiked={isLiked}>
           {millify(totalLikes || 0)}
         </ReactButton>

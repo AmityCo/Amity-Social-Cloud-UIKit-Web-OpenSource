@@ -154,7 +154,6 @@ const UploadingRingSvg = ({
         fill="none"
         strokeDasharray={339}
         strokeDashoffset={339}
-        data-uploading={true}
         transform={`rotate(-90 ${size / 2} ${size / 2})`}
       />
     </svg>

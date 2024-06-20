@@ -24,7 +24,7 @@ const CommunityAvatarSvg = (props: React.SVGProps<SVGSVGElement>) => (
 export interface CommunityAvatarProps {
   pageId?: string;
   componentId?: string;
-  community: Amity.Community;
+  community?: Amity.Community | null;
 }
 
 export function CommunityAvatar({
@@ -33,12 +33,11 @@ export function CommunityAvatar({
   community,
 }: CommunityAvatarProps) {
   const elementId = 'community_avatar';
-  const { accessibilityId, isExcluded, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   const avatarFile = useImage({ fileId: community?.avatarFileId });
 

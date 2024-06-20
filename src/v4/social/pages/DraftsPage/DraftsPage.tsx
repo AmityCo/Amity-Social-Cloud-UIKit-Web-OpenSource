@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
 import { readFileAsync } from '~/helpers';
-
-import styles from './DraftsPage.module.css';
 import { SubmitHandler } from 'react-hook-form';
-
 import {
   AspectRatioButton,
   BackButton,
@@ -15,14 +12,15 @@ import {
 } from '~/v4/social/elements';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { StoryRepository } from '@amityco/ts-sdk';
-
 import { HyperLinkConfig } from '~/v4/social/components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+
+import styles from './DraftsPage.module.css';
+import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 
 export type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -54,6 +52,7 @@ export const PlainDraftStoryPage = ({
 }) => {
   const pageId = 'create_story_page';
   const { file, setFile } = useStoryContext();
+  const { community } = useCommunityInfo(targetId);
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
@@ -76,8 +75,6 @@ export const PlainDraftStoryPage = ({
   const handleHyperLinkBottomSheetClose = () => {
     setIsHyperLinkBottomSheetOpen(false);
   };
-
-  const community = useCommunityInfo(targetId);
 
   const { formatMessage } = useIntl();
 
@@ -258,7 +255,8 @@ export const PlainDraftStoryPage = ({
           />
         </div>
       ) : mediaType?.type === 'video' ? (
-        <video
+        <VideoPreview
+          mediaFit="contain"
           className={styles.videoPreview}
           src={file ? URL.createObjectURL(file) : mediaType.url}
           autoPlay
@@ -285,8 +283,8 @@ export const PlainDraftStoryPage = ({
 
       <div className={styles.footer}>
         <ShareStoryButton
+          community={community}
           pageId={pageId}
-          avatar={community.avatarFileUrl}
           onClick={() =>
             onCreateStory(file, imageMode, {}, hyperLink[0]?.data?.url ? hyperLink : [])
           }

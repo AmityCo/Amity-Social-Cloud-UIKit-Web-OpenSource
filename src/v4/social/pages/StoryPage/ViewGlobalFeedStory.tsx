@@ -4,6 +4,7 @@ import { GlobalFeedStory } from '~/v4/social/pages/StoryPage/GlobalFeedStory';
 import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 
 export const ViewGlobalFeedStoryPage = ({
+  pageId = '*',
   targetId,
   onChangePage,
   onClickStory,
@@ -12,8 +13,9 @@ export const ViewGlobalFeedStoryPage = ({
   onSwipeDown,
   onClickCommunity,
 }: {
+  pageId?: string;
   targetId: string;
-  onChangePage: () => void;
+  onChangePage?: () => void;
   onClickStory: (targetId: string) => void;
   goToDraftStoryPage: ({
     targetId,
@@ -34,8 +36,10 @@ export const ViewGlobalFeedStoryPage = ({
     seenState: 'smart' as Amity.StorySeenQuery,
     limit: 10,
   });
+
   return (
     <GlobalFeedStory
+      pageId={pageId}
       targetId={targetId}
       targetIds={stories.map((s) => s.targetId)}
       onChangePage={onChangePage}

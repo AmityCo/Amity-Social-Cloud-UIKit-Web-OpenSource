@@ -19,7 +19,3 @@
 .shareStoryIcon {
   margin-left: var(--asc-spacing-s1);
 }
-
-.hideAvatar {
-  display: none;
-}

@@ -1,12 +1,12 @@
 import React from 'react';
-import styles from './Header.module.css';
 import Truncate from 'react-truncate-markup';
-import Avatar from '~/core/components/Avatar';
-import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
-
 import { PauseIcon, PlayIcon } from '~/icons';
 import { CloseButton, OverflowMenuButton } from '~/v4/social/elements';
 import Verified from '~/v4/social/icons/verified';
+import clsx from 'clsx';
+import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
+
+import styles from './Header.module.css';
 
 const Header: React.FC<
   React.PropsWithChildren<{
@@ -16,7 +16,7 @@ const Header: React.FC<
     onClose: () => void;
     onAddStory: (e: React.MouseEvent<Element, MouseEvent>) => void;
     onClickCommunity: () => void;
-    avatar?: string;
+    community?: Amity.Community | null;
     heading?: React.ReactNode;
     subheading?: React.ReactNode;
     isOfficial?: boolean;
@@ -28,7 +28,7 @@ const Header: React.FC<
     addStoryButton?: React.ReactNode;
   }>
 > = ({
-  avatar,
+  community,
   heading,
   subheading,
   isHaveActions,
@@ -46,11 +46,7 @@ const Header: React.FC<
     <div className={styles.viewStoryHeaderContainer}>
       <div className={styles.viewStoryHeadingInfoContainer}>
         <div className={styles.avatarContainer}>
-          <Avatar
-            data-qa-anchor="community_avatar"
-            avatar={avatar}
-            backgroundImage={communityBackgroundImage}
-          />
+          <CommunityAvatar pageId="story_page" community={community} />
 
           {haveStoryPermission && addStoryButton}
         </div>
@@ -85,7 +81,11 @@ const Header: React.FC<
           />
         )}
         {isHaveActions && <OverflowMenuButton pageId="story_page" onClick={onAction} />}
-        <CloseButton pageId="story_page" onClick={onClose} />
+        <CloseButton
+          defaultClassName={clsx(styles.closeButton)}
+          pageId="story_page"
+          onClick={onClose}
+        />
       </div>
     </div>
   );

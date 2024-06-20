@@ -142,7 +142,7 @@ const UICommunityInfo = ({
           </JoinButton>
         )}
 
-        {isJoined && <StoryTab type="communityFeed" communityId={communityId} />}
+        <StoryTab type="communityFeed" communityId={communityId} />
 
         {isJoined && canEditCommunity && (
           <Button

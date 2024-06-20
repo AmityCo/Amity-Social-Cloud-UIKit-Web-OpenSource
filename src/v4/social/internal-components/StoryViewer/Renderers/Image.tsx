@@ -1,34 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Tester } from 'react-insta-stories/dist/interfaces';
-
-import styles from './Renderers.module.css';
-
 import { useIntl } from 'react-intl';
-
 import Truncate from 'react-truncate-markup';
-
-import { CustomRenderer } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
-
+import {
+  CustomRenderer,
+  Tester,
+} from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
 import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
 import { motion, PanInfo, useAnimationControls } from 'framer-motion';
-
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
-
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
-
 import useSDK from '~/v4/core/hooks/useSDK';
-import useImage from '~/v4/core/hooks/useImage';
 import useUser from '~/v4/core/hooks/objects/useUser';
-
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
-
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
+
+import styles from './Renderers.module.css';
 
 export const renderer: CustomRenderer = ({
   story,
@@ -42,9 +34,8 @@ export const renderer: CustomRenderer = ({
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
-
   const [isPaused, setIsPaused] = useState(false);
-  const { width, height, loader, storyStyles } = config;
+  const { loader, storyStyles } = config;
   const { client } = useSDK();
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
@@ -68,23 +59,8 @@ export const renderer: CustomRenderer = ({
   const member = members?.find((member) => member.userId === client?.userId);
   const isMember = member != null;
 
-  const avatarUrl = useImage({
-    fileId: community?.avatarFileId || '',
-    imageSize: 'small',
-  });
-
   const { user } = useUser(client?.userId);
-
-  const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
-  const subheading =
-    createdAt && creator?.displayName ? (
-      <span>
-        <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-        <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
-      </span>
-    ) : (
-      ''
-    );
+  const controls = useAnimationControls();
 
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
@@ -97,6 +73,18 @@ export const renderer: CustomRenderer = ({
     ...rendererStyles.storyContent,
     ...(storyStyles || {}),
   };
+
+  const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
+  const subheading =
+    createdAt && creator?.displayName ? (
+      <span>
+        <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
+        <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+      </span>
+    ) : (
+      ''
+    );
+  const targetRootId = 'asc-uikit-stories-viewer';
 
   const imageLoaded = () => {
     setLoaded(true);
@@ -113,10 +101,6 @@ export const renderer: CustomRenderer = ({
   const closeBottomSheet = () => setIsOpenBottomSheet(false);
   const openCommentSheet = () => setIsOpenCommentSheet(true);
   const closeCommentSheet = () => setIsOpenCommentSheet(false);
-
-  const targetRootId = 'asc-uikit-stories-viewer';
-
-  const controls = useAnimationControls();
 
   const handleSwipeDown = () => {
     controls
@@ -156,6 +140,7 @@ export const renderer: CustomRenderer = ({
   }, [isPaused, isOpenBottomSheet, isOpenCommentSheet]);
 
   useEffect(() => {
+    action('pause', true);
     if (fileInputRef.current) {
       fileInputRef.current.addEventListener('click', () => {
         action('pause', true);
@@ -164,6 +149,7 @@ export const renderer: CustomRenderer = ({
         action('play', true);
       });
     }
+
     return () => {
       if (fileInputRef.current) {
         fileInputRef.current.removeEventListener('cancel', () => {
@@ -194,7 +180,7 @@ export const renderer: CustomRenderer = ({
       whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
     >
       <Header
-        avatar={avatarUrl}
+        community={community}
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
@@ -219,11 +205,7 @@ export const renderer: CustomRenderer = ({
         alt="Story Image"
       />
 
-      {!loaded && (
-        <div className={styles.loadingOverlay} style={{ width, height }}>
-          {loader || <div>loading...</div>}
-        </div>
-      )}
+      {!loaded && <div className={styles.loadingOverlay}>{loader || <div>loading...</div>}</div>}
 
       <BottomSheet
         rootId={targetRootId}

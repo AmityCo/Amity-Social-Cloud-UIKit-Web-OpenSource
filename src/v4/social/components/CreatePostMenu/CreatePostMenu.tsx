@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from './CreatePostMenu.module.css';
 import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
-import { CreateStoryButton } from '~/v4/social/elements/CreateStoryButtons';
+
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton/CreatePollButton';
 import { CreateLivestreamButton } from '~/v4/social/elements/CreateLivestreamButton';
+import { CreateStoryButton } from '~/v4/social/elements/CreateStoryButton';
 
 interface CreatePostMenuProps {
   pageId: string;

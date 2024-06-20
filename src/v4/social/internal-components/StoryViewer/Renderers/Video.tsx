@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Tester } from 'react-insta-stories/dist/interfaces';
 
 import { useIntl } from 'react-intl';
 
 import Truncate from 'react-truncate-markup';
-import { CustomRenderer } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
+import {
+  CustomRenderer,
+  Tester,
+} from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { SpeakerButton } from '~/v4/social/elements';
 
 import { BottomSheet, Button, Typography } from '~/v4/core/components';
@@ -223,7 +225,7 @@ export const renderer: CustomRenderer = ({
         onClick={muted ? unmute : mute}
       />
       <Header
-        avatar={avatarUrl}
+        community={community}
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
@@ -252,7 +254,6 @@ export const renderer: CustomRenderer = ({
         onPlaying={onPlaying}
         muted={muted}
         autoPlay
-        webkit-playsinline="true"
       />
       {!loaded && (
         <div className={clsx(rendererStyles.loadingOverlay)}>{loader || <div>loading...</div>}</div>
