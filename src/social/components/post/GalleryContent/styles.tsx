@@ -20,12 +20,31 @@ export const RemoveButton = styled(Button).attrs<{
   right: 0.5em;
 `;
 
-export const PlayIcon = styled(Play)`
+export const StyledPlayIcon = styled(Play)`
+  fill: #fff;
+`;
+
+export const PlayIconContainer = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 2.25rem;
+  height: 2.25rem;
+
+  background-color: ${({ theme }) => theme.palette.base.shade2};
+  border-radius: 50%;
 `;
+
+export const PlayIcon = (props: HTMLAttributes<SVGElement>) => (
+  <PlayIconContainer>
+    <StyledPlayIcon {...props} />
+  </PlayIconContainer>
+);
 
 export const Duration = styled.div`
   position: absolute;
