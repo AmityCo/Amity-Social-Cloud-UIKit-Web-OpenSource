@@ -34,10 +34,10 @@ const usePreviewLink = ({ url }: { url: string }) => {
     queryKey: ['asc-uikit', 'previewLink'],
     queryFn: async () => {
       const data = await client?.http.get<{
-        title: 'string';
-        description: 'string';
-        image: 'string';
-        video: 'string';
+        title: string;
+        description: string;
+        image: string;
+        video: string;
       }>('/api/v1/link-preview', {
         params: {
           url,
@@ -87,15 +87,12 @@ export function LinkPreview({ url }: LinkPreviewProps) {
           <object data={previewData.data.image} className={styles.linkPreview__object}>
             <UnableToPreview />
           </object>
+        ) : previewData.data?.video ? (
+          <VideoPreview src={previewData.data.video} />
         ) : (
           <UnableToPreview />
         )}
       </div>
-      {previewData.data?.video ? (
-        <VideoPreview src={previewData.data.video} />
-      ) : (
-        <UnableToPreview />
-      )}
       <div className={styles.linkPreview__bottom}>
         <Typography.Caption>{urlObject.hostname}</Typography.Caption>
         <Typography.BodyBold>{previewData.data?.title || ''}</Typography.BodyBold>
