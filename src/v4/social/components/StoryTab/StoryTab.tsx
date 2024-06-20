@@ -41,6 +41,7 @@ export const StoryTab = <T extends StoryTabType>({
                   mediaType: file.type.includes('image')
                     ? { type: 'image', url: URL.createObjectURL(file) }
                     : { type: 'video', url: URL.createObjectURL(file) },
+                  storyType: 'communityFeed',
                 });
               }
             }}
@@ -61,7 +62,7 @@ export const StoryTab = <T extends StoryTabType>({
             goToViewStoryPage={({ storyTarget, storyTargets }) => {
               AmityGlobalFeedComponentBehavior.goToViewStoryPage({
                 targetId: storyTarget.targetId,
-                targetType: storyTarget.targetType,
+                targetType: storyTarget.targetType as Amity.StoryTargetType,
                 storyType: 'globalFeed',
                 targetIds: storyTargets.map((s) => s.targetId),
               });

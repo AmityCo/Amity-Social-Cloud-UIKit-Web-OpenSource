@@ -80,6 +80,7 @@ export const StoryTabGlobalFeed = ({
             key={story.targetId}
             targetId={story.targetId}
             hasUnseen={story.hasUnseen}
+            isErrored={story.failedStoriesCount > 0}
             onClick={() =>
               goToViewStoryPage({
                 storyTargets: stories,

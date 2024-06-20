@@ -15,7 +15,7 @@ export interface PageBehavior {
     goToPostDetailPage: (context: { postId: string }) => void;
     goToViewStoryPage: (context: {
       targetId: string;
-      targetType: string;
+      targetType: Amity.StoryTargetType;
       storyType: 'communityFeed' | 'globalFeed';
       targetIds?: string[];
     }) => void;
@@ -87,9 +87,8 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       },
       goToViewStoryPage: (context: {
         targetId: string;
-        targetType: string;
+        targetType: Amity.StoryTargetType;
         storyType: 'communityFeed' | 'globalFeed';
-        targetIds?: string[];
       }) => {
         if (pageBehavior?.AmityGlobalFeedComponentBehavior?.goToViewStoryPage) {
           return pageBehavior?.AmityGlobalFeedComponentBehavior.goToViewStoryPage(context);

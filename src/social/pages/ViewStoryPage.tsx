@@ -2,7 +2,7 @@ import React from 'react';
 import { CommunityFeedStory } from '~/v4/social/pages/StoryPage/CommunityFeedStory';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { ViewGlobalFeedStoryPage } from '~/v4/social/pages/StoryPage/ViewGlobalFeedStory';
-import { PageTypes } from '../constants';
+import { PageTypes } from '~/social/constants';
 
 type ViewStoryPageType = 'communityFeed' | 'globalFeed';
 
@@ -31,13 +31,12 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
         targetId={targetId}
         onChangePage={() => onChangePage(PageTypes.NewsFeed)}
         onClose={() => {
-          console.log('hello');
           onChangePage(PageTypes.NewsFeed);
         }}
         onSwipeDown={() => onChangePage(PageTypes.NewsFeed)}
         onClickStory={(targetId) => onClickStory(targetId, 'globalFeed')}
-        goToDraftStoryPage={({ targetId, targetType, mediaType }) =>
-          goToDraftStoryPage(targetId, targetType, mediaType)
+        goToDraftStoryPage={({ targetId, targetType, mediaType, storyType }) =>
+          goToDraftStoryPage(targetId, targetType, mediaType, storyType)
         }
         onClickCommunity={(targetId) => onClickCommunity(targetId)}
       />

@@ -1,13 +1,30 @@
 import React from 'react';
+import clsx from 'clsx';
 
-import { useIntl } from 'react-intl';
-import { isValidHttpUrl } from '~/utils';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { Icon } from '~/v4/core/components/Icon';
+import { Avatar, Typography } from '~/v4/core/components';
+import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 import Community from '~/v4/icons/Community';
-import styles from './ShareStoryButton.module.css';
-import { Avatar } from '~/v4/core/components';
 import { AVATAR_SIZE } from '~/v4/core/components/Avatar/Avatar';
+
+import styles from './ShareStoryButton.module.css';
+
+const ArrowRightIcon = (props: React.SVGProps<SVGSVGElement>) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="15"
+      height="14"
+      fill="none"
+      viewBox="0 0 15 14"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M6.813.219c.125-.157.375-.157.53 0l6.532 6.531a.36.36 0 010 .531l-6.531 6.532c-.157.156-.407.156-.532 0l-.625-.594c-.156-.156-.156-.406 0-.531l4.844-4.876H.375A.361.361 0 010 7.438v-.875a.38.38 0 01.375-.375h10.656L6.187 1.345c-.156-.125-.156-.375 0-.532L6.813.22z"
+      ></path>
+    </svg>
+  );
+};
 
 interface ShareButtonProps {
   onClick: () => void;
@@ -25,24 +42,24 @@ export const ShareStoryButton = ({
   avatar,
 }: ShareButtonProps) => {
   const elementId = 'share_story_button';
-  const { formatMessage } = useIntl();
-  const { getConfig, isExcluded } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
-  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
 
-  if (isElementExcluded) return null;
+  const { config, isExcluded } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
-  const shareIcon = elementConfig?.share_icon;
-  const isRemoteImage = shareIcon && isValidHttpUrl(shareIcon);
+  if (isExcluded) return null;
 
   return (
     <button
       role="button"
-      className={styles.uiShareStoryButton}
+      className={clsx(styles.shareStoryButton)}
       data-qa-anchor="share_story_button"
       onClick={onClick}
+      data-hideAvatar={config?.hide_avatar}
     >
-      {!elementConfig?.hide_avatar && (
+      {!config?.hide_avatar && (
         <Avatar
           data-qa-anchor="share_story_button_image_view"
           size={AVATAR_SIZE.SMALL}
@@ -50,12 +67,8 @@ export const ShareStoryButton = ({
           defaultImage={<Community />}
         />
       )}
-      <span>{formatMessage({ id: 'storyDraft.button.shareStory' })}</span>
-      {isRemoteImage ? (
-        <img src={shareIcon} alt="Share Story Icon" className={styles.remoteImageIcon} />
-      ) : (
-        <Icon className={styles.shareStoryIcon} name={'ArrowRight2Icon'} />
-      )}
+      <Typography.BodyBold>{config?.text || 'Share story'}</Typography.BodyBold>
+      <ArrowRightIcon />
     </button>
   );
 };

@@ -142,9 +142,7 @@ const UICommunityInfo = ({
           </JoinButton>
         )}
 
-        {isJoined && !canEditCommunity && (
-          <StoryTab type="communityFeed" communityId={communityId} />
-        )}
+        {isJoined && <StoryTab type="communityFeed" communityId={communityId} />}
 
         {isJoined && canEditCommunity && (
           <Button

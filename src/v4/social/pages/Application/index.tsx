@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Application.module.css';
+
 import { SocialHomePage } from '~/v4/social/pages/SocialHomePage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -7,6 +7,8 @@ import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
 import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
 import { SelectPostTargetPage } from '../SelectPostTargetPage';
+
+import styles from './Application.module.css';
 
 const Application = () => {
   const { page } = useNavigation();

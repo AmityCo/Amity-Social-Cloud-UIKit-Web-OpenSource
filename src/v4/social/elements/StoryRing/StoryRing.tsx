@@ -1,6 +1,7 @@
 import React from 'react';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+
 import styles from './StoryRing.module.css';
-import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 
 const EmptyStateRingSvg = ({
   pageId,
@@ -197,9 +198,9 @@ export const StoryRing = ({
         {...props}
       >
         <circle
-          cx="24"
-          cy="24"
-          r="23"
+          cx={size / 2}
+          cy={size / 2}
+          r={size / 2 - 1}
           stroke={getComputedStyle(document.documentElement).getPropertyValue('--asc-color-alert')}
           strokeWidth="2"
         ></circle>

@@ -1,4 +1,4 @@
-.errorButton {
+.errorIcon {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -26,6 +26,7 @@
 }
 
 .storyTabContainer {
+  background-color: var(--asc-color-base-background);
   position: relative;
   width: 3rem;
   display: flex;
@@ -36,14 +37,22 @@
   align-items: center;
 }
 
-.storyAvatar {
+.storyAvatarContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 2.5rem;
   height: 2.5rem;
-  position: absolute;
-  top: 0.25rem;
-  left: 0.25rem;
-  z-index: 1;
-  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.storyAvatar {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .storyTitle {

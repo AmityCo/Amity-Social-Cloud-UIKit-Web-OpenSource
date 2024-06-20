@@ -46,7 +46,7 @@ const Wrapper = styled.div`
 `;
 
 const Community = () => {
-  const { page, onBack } = useNavigation();
+  const { page } = useNavigation();
 
   const { client } = useSDK();
   const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
@@ -100,6 +100,7 @@ const Community = () => {
               mediaType={page.mediaType}
               targetId={page.targetId}
               targetType={page.targetType}
+              storyType={page.storyType}
             />
           )}
 

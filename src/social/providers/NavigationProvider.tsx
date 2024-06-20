@@ -44,6 +44,7 @@ type Page =
       mediaType: AmityStoryMediaType;
       targetId: string;
       targetType: Amity.StoryTargetType;
+      storyType: 'communityFeed' | 'globalFeed';
     };
 
 type ContextValue = {
@@ -66,6 +67,7 @@ type ContextValue = {
     targetId: string,
     targetType: string,
     mediaType: AmityStoryMediaType,
+    storyType: 'communityFeed' | 'globalFeed',
   ) => void;
   setNavigationBlocker?: (
     params:
@@ -123,7 +125,7 @@ if (process.env.NODE_ENV !== 'production') {
     onEditUser: (userId) => console.log(`NavigationContext onEditUser(${userId})`),
     onMessageUser: (userId) => console.log(`NavigationContext onMessageUser(${userId})`),
     onBack: () => console.log('NavigationContext onBack()'),
-    goToDraftStoryPage: (targetId, targetType, mediaType) =>
+    goToDraftStoryPage: (targetId, targetType, mediaType, storyType) =>
       console.log(`NavigationContext goToDraftStoryPage(${targetId})`),
   };
 }
@@ -370,12 +372,13 @@ export default function NavigationProvider({
   );
 
   const goToDraftStoryPage = useCallback(
-    (targetId, targetType, mediaType) => {
+    (targetId, targetType, mediaType, storyType) => {
       const next = {
         type: PageTypes.DraftPage,
         targetId,
         targetType,
         mediaType,
+        storyType,
       };
 
       if (onChangePage) return onChangePage(next);

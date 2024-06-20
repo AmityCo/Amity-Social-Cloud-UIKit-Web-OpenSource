@@ -1,6 +1,7 @@
 import React from 'react';
-import { useGlobalStoryTargets } from '../../hooks/collections/useGlobalStoryTargets';
-import { GlobalFeedStory } from './GlobalFeedStory';
+import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
+import { GlobalFeedStory } from '~/v4/social/pages/StoryPage/GlobalFeedStory';
+import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 
 export const ViewGlobalFeedStoryPage = ({
   targetId,
@@ -18,10 +19,12 @@ export const ViewGlobalFeedStoryPage = ({
     targetId,
     targetType,
     mediaType,
+    storyType,
   }: {
     targetId: string;
     targetType: string;
-    mediaType: any;
+    mediaType: AmityStoryMediaType;
+    storyType: 'globalFeed';
   }) => void;
   onClose: (targetId: string) => void;
   onSwipeDown: (targetId: string) => void;

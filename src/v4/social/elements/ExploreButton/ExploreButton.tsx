@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { TabButton } from '~/v4/social/internal-components/TabButton';
 
 export interface ExploreButtonProps {

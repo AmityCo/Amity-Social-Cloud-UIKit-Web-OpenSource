@@ -38,6 +38,7 @@ interface GlobalFeedStoryProps {
     mediaType: { type: 'image' | 'video'; url: string };
     targetId: string;
     targetType: string;
+    storyType: 'globalFeed';
   }) => void;
   onClose: (targetId: string) => void;
   onSwipeDown: (targetId: string) => void;
@@ -71,7 +72,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
       renderer({
         ...props,
         onClose: () => {
-          console.log('onClose');
           onClose(targetId);
         },
         onSwipeDown: () => onSwipeDown(targetId),
@@ -316,6 +316,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
       mediaType: file.type.includes('image')
         ? { type: 'image', url: URL.createObjectURL(file) }
         : { type: 'video', url: URL.createObjectURL(file) },
+      storyType: 'globalFeed',
     });
   }
 

@@ -84,10 +84,8 @@ const Header: React.FC<
             onClick={onPause}
           />
         )}
-        {isHaveActions && (
-          <OverflowMenuButton pageId="story_page" componentId="*" onClick={onAction} />
-        )}
-        <CloseButton pageId="story_page" componentId="*" onClick={onClose} />
+        {isHaveActions && <OverflowMenuButton pageId="story_page" onClick={onAction} />}
+        <CloseButton pageId="story_page" onClick={onClose} />
       </div>
     </div>
   );

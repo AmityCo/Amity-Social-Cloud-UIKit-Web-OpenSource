@@ -100,10 +100,11 @@ type ContextValue = {
     targetId: string;
     targetType: string;
     mediaType: AmityStoryMediaType;
+    storyType: 'communityFeed' | 'globalFeed';
   }) => void;
   goToViewStoryPage: (context: {
     targetId: string;
-    targetType: string;
+    targetType: Amity.StoryTargetType;
     storyType: 'communityFeed' | 'globalFeed';
   }) => void;
   setNavigationBlocker?: (
@@ -132,7 +133,7 @@ let defaultValue: ContextValue = {
   goToPostDetailPage: (postId: string) => {},
   goToViewStoryPage: (context: {
     targetId: string;
-    targetType: string;
+    targetType: Amity.StoryTargetType;
     storyType: 'communityFeed' | 'globalFeed';
   }) => {},
   goToDraftStoryPage: (context: {
@@ -156,8 +157,8 @@ if (process.env.NODE_ENV !== 'production') {
     onClickCommunity: (communityId) =>
       console.log(`NavigationContext onClickCommunity(${communityId})`),
     onClickUser: (userId) => console.log(`NavigationContext onClickUser(${userId})`),
-    goToViewStoryPage: ({ targetId, storyType }) =>
-      console.log(`NavigationContext goToViewStoryPage(${targetId}, ${storyType})`),
+    goToViewStoryPage: ({ targetId, storyType, targetType }) =>
+      console.log(`NavigationContext goToViewStoryPage(${targetId}, ${storyType}, ${targetType})`),
     onCommunityCreated: (communityId) =>
       console.log(`NavigationContext onCommunityCreated(${communityId})`),
     onEditCommunity: (communityId) =>
@@ -198,7 +199,7 @@ interface NavigationProviderProps {
   goToViewStoryPage?: (context: {
     storyId: string;
     storyType: 'communityFeed' | 'globalFeed';
-    targetId?: string[];
+    targetType: Amity.StoryTargetType;
   }) => void;
   goToDraftStoryPage?: (context: {
     targetId: string;
@@ -375,14 +376,13 @@ export default function NavigationProvider({
   }, [onChangePage, onBack, popPage]);
 
   const goToViewStoryPage = useCallback(
-    ({ targetId, storyType, targetIds }) => {
+    ({ targetId, storyType, targetType }) => {
       const next = {
         type: PageTypes.ViewStoryPage,
         context: {
           targetId,
-          targetType: 'community',
           storyType,
-          targetIds,
+          targetType,
         },
       };
 

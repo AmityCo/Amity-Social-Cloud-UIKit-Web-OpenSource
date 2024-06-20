@@ -144,7 +144,6 @@ export const renderer: CustomRenderer = ({
   };
 
   const handleOnClose = () => {
-    console.log('handleOnClose');
     onClose();
   };
 

@@ -39,8 +39,8 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
             targetType: 'community',
           })
         }
-        goToDraftStoryPage={({ targetId, targetType, mediaType }) =>
-          goToDraftStoryPage({ targetId, targetType, mediaType })
+        goToDraftStoryPage={({ targetId, targetType, mediaType, storyType }) =>
+          goToDraftStoryPage({ targetId, targetType, mediaType, storyType })
         }
         onClickCommunity={(targetId) => onClickCommunity(targetId)}
       />
