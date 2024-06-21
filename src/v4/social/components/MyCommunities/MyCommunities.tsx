@@ -26,6 +26,7 @@ export const MyCommunities = ({ pageId = '*' }: MyCommunitiesProps) => {
       <CommunitySearchResult
         pageId={pageId}
         communityCollection={communities}
+        isLoading={isLoading}
         onLoadMore={() => {
           if (hasMore && isLoading === false) {
             loadMore();

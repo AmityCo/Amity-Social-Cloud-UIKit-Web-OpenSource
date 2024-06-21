@@ -59,6 +59,7 @@ export function SocialGlobalSearchPage() {
         <CommunitySearchResult
           pageId={pageId}
           communityCollection={communityCollection.communities}
+          isLoading={communityCollection.isLoading}
           onLoadMore={() => {
             if (communityCollection.hasMore && communityCollection.isLoading === false) {
               communityCollection.loadMore();
@@ -74,6 +75,7 @@ export function SocialGlobalSearchPage() {
         <UserSearchResult
           pageId={pageId}
           userCollection={userCollection.users}
+          isLoading={userCollection.isLoading}
           onLoadMore={() => {
             if (userCollection.hasMore && userCollection.isLoading === false) {
               userCollection.loadMore();

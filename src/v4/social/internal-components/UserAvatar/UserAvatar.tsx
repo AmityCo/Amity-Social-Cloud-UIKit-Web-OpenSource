@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
-import useImage from '~/core/hooks/useImage';
-import useUser from '~/core/hooks/useUser';
+import useUser from '~/v4/core/hooks/objects/useUser';
+import useImage from '~/v4/core/hooks/useImage';
 import styles from './UserAvatar.module.css';
 
 const UserSvg = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
@@ -32,7 +32,7 @@ interface UserAvatarProps {
 }
 
 export function UserAvatar({ userId, className }: UserAvatarProps) {
-  const user = useUser(userId);
+  const { user } = useUser(userId);
 
   const userImage = useImage({ fileId: user?.avatar?.fileId });
 

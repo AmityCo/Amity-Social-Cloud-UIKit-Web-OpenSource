@@ -2,18 +2,20 @@ import React, { useRef } from 'react';
 import styles from './UserSearchResult.module.css';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { UserAvatar } from '../../internal-components/UserAvatar/UserAvatar';
-import { Typography } from '~/v4/core/components/index';
+import { UserSearchItem } from './UserSearchItem';
+import { UserSearchItemSkeleton } from './UserSearchItemSkeleton';
 
 interface UserSearchResultProps {
   pageId?: string;
   userCollection: Amity.User[];
+  isLoading: boolean;
   onLoadMore: () => void;
 }
 
 export const UserSearchResult = ({
   pageId = '*',
   userCollection = [],
+  isLoading,
   onLoadMore,
 }: UserSearchResultProps) => {
   const componentId = 'user_search_result';
@@ -30,22 +32,13 @@ export const UserSearchResult = ({
   return (
     <div className={styles.userSearchResult} style={themeStyles}>
       {userCollection.map((user) => (
-        <div key={user.userId} className={styles.userSearchResult__userItem}>
-          <div className={styles.userSearchResult__userItem__leftPane}>
-            <UserAvatar
-              userId={user.userId}
-              className={styles.userSearchResult__userItem__avatar}
-            />
-          </div>
-          <div className={styles.userSearchResult__userItem__rightPane}>
-            <div className={styles.userItem__userName}>
-              <Typography.BodyBold className={styles.userItem__userName__text}>
-                {user.displayName}
-              </Typography.BodyBold>
-            </div>
-          </div>
-        </div>
+        <UserSearchItem key={user.userId} user={user} />
       ))}
+      {isLoading
+        ? Array.from({ length: 5 }).map((_, index) => (
+            <UserSearchItemSkeleton key={index} pageId={pageId} componentId={componentId} />
+          ))
+        : null}
       <div ref={intersectionRef} />
     </div>
   );
