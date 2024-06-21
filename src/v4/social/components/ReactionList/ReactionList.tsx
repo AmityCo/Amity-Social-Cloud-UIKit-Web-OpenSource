@@ -1,5 +1,4 @@
 import React, { useMemo, useRef, useState } from 'react';
-import styles from './ReactionList.module.css';
 import { useReactionsCollection } from '~/v4/social/hooks/collections/useReactionsCollection';
 import { Typography } from '~/v4/core/components';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
@@ -12,7 +11,9 @@ import { ReactionListLoadingState } from './ReactionListLoadingState';
 import useReaction from '~/v4/chat/hooks/useReaction';
 import useReactionByReference from '~/v4/chat/hooks/useReactionByReference';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
-import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+
+import styles from './ReactionList.module.css';
 
 interface ReactionListProps {
   pageId: string;
@@ -42,6 +43,7 @@ const RenderCondition = ({
   removeReaction,
   error,
   currentRef,
+  showReactionUserDetails = false,
 }: {
   filteredReactions: Amity.Reactor[];
   isLoading: boolean;
@@ -50,6 +52,7 @@ const RenderCondition = ({
   removeReaction: (reaction: string) => Promise<void>;
   error: Error | null;
   currentRef: HTMLDivElement | null;
+  showReactionUserDetails?: boolean;
 }) => {
   if (isLoading) {
     return <ReactionListLoadingState />;
@@ -75,6 +78,7 @@ const RenderCondition = ({
       isLoading={isLoading}
       filteredReactions={filteredReactions}
       removeReaction={removeReaction}
+      showReactionUserDetails={showReactionUserDetails}
     />
   );
 };
@@ -85,6 +89,7 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
     pageId,
     componentId,
   });
+
   const { reactions, error, isLoading, hasMore, loadMore } = useReactionsCollection({
     referenceId,
     referenceType,

@@ -222,12 +222,12 @@ export const PlainDraftStoryPage = ({
     <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
       <div className={styles.headerContainer}>
         <div className={styles.header}>
-          <BackButton pageId={pageId} onClick={discardCreateStory} />
+          <BackButton pageId={pageId} onPress={discardCreateStory} />
           <div className={styles.topRightButtons}>
             {mediaType?.type === 'image' && (
-              <AspectRatioButton pageId={pageId} onClick={onClickImageMode} />
+              <AspectRatioButton pageId={pageId} onPress={onClickImageMode} />
             )}
-            <HyperLinkButton pageId={pageId} onClick={handleOnClickHyperLinkActionButton} />
+            <HyperLinkButton pageId={pageId} onPress={handleOnClickHyperLinkActionButton} />
           </div>
         </div>
       </div>

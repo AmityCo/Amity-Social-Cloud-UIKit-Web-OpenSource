@@ -20,7 +20,7 @@ interface AspectRatioButtonProps {
   componentId?: string;
   defaultIconClassName?: string;
   imgIconClassName?: string;
-  onClick: () => void;
+  onPress: () => void;
 }
 
 export function AspectRatioButton({
@@ -28,7 +28,7 @@ export function AspectRatioButton({
   componentId = '*',
   defaultIconClassName,
   imgIconClassName,
-  onClick,
+  onPress,
 }: AspectRatioButtonProps) {
   const elementId = 'aspect_ratio_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
@@ -43,7 +43,7 @@ export function AspectRatioButton({
     <IconComponent
       data-qa-anchor={accessibilityId}
       className={clsx(styles.aspectRatioButton)}
-      onClick={onClick}
+      onPress={onPress}
       defaultIcon={() => <AspectRatioSvg className={clsx(defaultIconClassName)} />}
       imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgIconClassName)} />}
       defaultIconName={defaultConfig.icon}

@@ -2,11 +2,10 @@ import React from 'react';
 
 import { DotsIcon, ErrorIcon } from '~/icons';
 import { useIntl } from 'react-intl';
-import millify from 'millify';
 import { ReactionRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
 import Spinner from '~/social/components/Spinner';
-import { ImpressionButton, ReactButton } from '~/v4/social/elements';
+import { ImpressionButton, ReactionButton } from '~/v4/social/elements';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { CommentButton } from '~/v4/social/elements/CommentButton/CommentButton';
 
@@ -19,27 +18,29 @@ const Footer: React.FC<
     showImpression: boolean;
     reach: number | null;
     commentsCount: number;
-    totalLikes: number;
+    reactionsCount: number;
     isLiked: boolean;
     onClickComment: () => void;
     syncState?: Amity.SyncState;
     isMember?: boolean;
+    myReactions: string[];
   }>
 > = ({
   syncState,
   reach,
   commentsCount,
-  totalLikes,
+  reactionsCount,
   isLiked,
   storyId,
   onClickComment,
   showImpression,
   isMember,
+  myReactions,
 }) => {
   const notification = useNotifications();
   const { formatMessage } = useIntl();
 
-  const handleLike = async () => {
+  const handleClickReaction = async () => {
     try {
       if (!isMember) {
         notification.show({
@@ -95,11 +96,14 @@ const Footer: React.FC<
           defaultIconClassName={clsx(styles.viewStoryCommentIcon)}
           pageId="story_page"
           commentsCount={commentsCount}
-          onClick={onClickComment}
+          onPress={onClickComment}
         />
-        <ReactButton onClick={handleLike} pageId="story_page" isLiked={isLiked}>
-          {millify(totalLikes || 0)}
-        </ReactButton>
+        <ReactionButton
+          onReactionClick={handleClickReaction}
+          pageId="story_page"
+          myReactions={myReactions}
+          reactionsCount={reactionsCount}
+        />
       </div>
     </div>
   );

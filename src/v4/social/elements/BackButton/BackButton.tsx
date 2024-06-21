@@ -27,7 +27,7 @@ interface BackButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: () => void;
 }
 
 export const BackButton = ({
@@ -35,7 +35,7 @@ export const BackButton = ({
   componentId = '*',
   defaultClassName,
   imgClassName,
-  onClick = () => {},
+  onPress = () => {},
 }: BackButtonProps) => {
   const elementId = 'back_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -55,7 +55,7 @@ export const BackButton = ({
       imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgClassName)} />}
       defaultIconName={defaultConfig.icon}
       configIconName={config.icon}
-      onClick={onClick}
+      onPress={onPress}
       style={themeStyles}
     />
   );

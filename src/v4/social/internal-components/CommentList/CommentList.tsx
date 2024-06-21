@@ -9,6 +9,8 @@ import { CommentBubbleDeleted } from '~/v4/social/elements/CommentBubbleDeleted'
 
 interface CommentListProps {
   parentId?: string;
+  pageId?: string;
+  componentId?: string;
   referenceId?: string;
   referenceType: Amity.CommentReferenceType;
   readonly?: boolean;
@@ -21,6 +23,8 @@ interface CommentListProps {
 }
 
 export const CommentList = ({
+  pageId = '*',
+  componentId = '*',
   parentId,
   referenceId,
   referenceType,
@@ -64,6 +68,8 @@ export const CommentList = ({
     return comments.map((comment) => (
       <Comment
         key={comment.commentId}
+        pageId={pageId}
+        componentId={componentId}
         commentId={comment.commentId}
         readonly={readonly}
         onClickReply={() => onClickReply?.(comment as Amity.Comment)}

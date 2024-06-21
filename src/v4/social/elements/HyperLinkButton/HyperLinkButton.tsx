@@ -29,7 +29,7 @@ interface HyperLinkButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onClick: (e: React.MouseEvent) => void;
+  onPress: (e: React.MouseEvent) => void;
 }
 
 export const HyperLinkButton = ({
@@ -37,7 +37,7 @@ export const HyperLinkButton = ({
   componentId = '*',
   defaultClassName,
   imgClassName,
-  onClick = () => {},
+  onPress = () => {},
 }: HyperLinkButtonProps) => {
   const elementId = 'story_hyperlink_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -57,7 +57,7 @@ export const HyperLinkButton = ({
       imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgClassName)} />}
       defaultIconName={defaultConfig.icon}
       configIconName={config.icon}
-      onClick={onClick}
+      onPress={onPress}
       style={themeStyles}
     />
   );

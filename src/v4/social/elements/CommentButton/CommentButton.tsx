@@ -26,7 +26,7 @@ interface CommentButtonProps {
   className?: string;
   defaultIconClassName?: string;
   imgIconClassName?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: () => void;
 }
 
 export function CommentButton({
@@ -36,7 +36,7 @@ export function CommentButton({
   className = '',
   defaultIconClassName,
   imgIconClassName,
-  onClick = () => {},
+  onPress = () => {},
 }: CommentButtonProps) {
   const elementId = 'comment_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
@@ -51,7 +51,7 @@ export function CommentButton({
     <IconComponent
       className={clsx(className)}
       data-qa-anchor={accessibilityId}
-      onClick={onClick}
+      onPress={onPress}
       defaultIcon={() => (
         <div className={clsx(styles.commentButton)}>
           <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
 import { CommentList } from '~/v4/social/internal-components/CommentList';
 import { StoryCommentComposeBar } from '~/v4/social/internal-components/StoryCommentComposeBar';
 import styles from './CommentTray.module.css';
@@ -11,15 +12,23 @@ interface CommentTrayProps {
   community: Amity.Community;
   shouldAllowInteraction: boolean;
   shouldAllowCreation?: boolean;
+  pageId?: string;
 }
 
 export const CommentTray = ({
+  pageId = '*',
   referenceType,
   referenceId,
   community = {} as Amity.Community,
   shouldAllowInteraction = true,
-  shouldAllowCreation = false,
+  shouldAllowCreation = true,
 }: CommentTrayProps) => {
+  const componentId = 'comment_tray_component';
+  const { config } = useAmityComponent({
+    pageId,
+    componentId,
+  });
+
   const [isReplying, setIsReplying] = useState(false);
   const [replyTo, setReplyTo] = useState<Amity.Comment | null>(null);
 
@@ -37,6 +46,8 @@ export const CommentTray = ({
     <div className={styles.commentTrayContainer}>
       <div className={styles.commentListContainer}>
         <CommentList
+          pageId={pageId}
+          componentId={componentId}
           referenceId={referenceId}
           referenceType={referenceType}
           onClickReply={onClickReply}

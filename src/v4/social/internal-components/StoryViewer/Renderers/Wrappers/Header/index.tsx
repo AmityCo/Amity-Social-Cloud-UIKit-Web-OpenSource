@@ -80,11 +80,11 @@ const Header: React.FC<
             onClick={onPause}
           />
         )}
-        {isHaveActions && <OverflowMenuButton pageId="story_page" onClick={onAction} />}
+        {isHaveActions && <OverflowMenuButton pageId="story_page" onPress={onAction} />}
         <CloseButton
           defaultClassName={clsx(styles.closeButton)}
           pageId="story_page"
-          onClick={onClose}
+          onPress={onClose}
         />
       </div>
     </div>

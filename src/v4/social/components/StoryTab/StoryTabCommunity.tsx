@@ -1,7 +1,6 @@
 import React from 'react';
 import Truncate from 'react-truncate-markup';
-import { FileTrigger, Button } from 'react-aria-components';
-import { FormattedMessage } from 'react-intl';
+import { FileTrigger } from 'react-aria-components';
 import { StoryRing } from '~/v4/social/elements/StoryRing/StoryRing';
 import clsx from 'clsx';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
@@ -13,25 +12,7 @@ import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
 
 import styles from './StoryTabCommunity.module.css';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
-
-const AddStoryIcon = (props: React.SVGProps<SVGSVGElement>) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M12 5v14M5 12h14"></path>
-    </svg>
-  );
-};
+import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 
 const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -53,16 +34,16 @@ const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
 };
 
 interface StoryTabCommunityFeedProps {
-  pageId: string;
-  componentId: string;
+  pageId?: string;
+  componentId?: string;
   communityId: string;
   onStoryClick: () => void;
   onFileChange: (file: File | null) => void;
 }
 
 export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
-  pageId,
-  componentId,
+  pageId = '*',
+  componentId = '*',
   communityId,
   onFileChange,
   onStoryClick,
@@ -72,7 +53,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
     targetType: 'community',
     options: { orderBy: 'asc', sortBy: 'createdAt' },
   });
-  const { avatarFileUrl, community } = useCommunityInfo(communityId);
+  const { community } = useCommunityInfo(communityId);
 
   const { currentUserId, client } = useSDK();
   const { user } = useUser(currentUserId);
@@ -90,7 +71,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
     onStoryClick();
   };
 
-  if (!community?.isJoined || !hasStories) return null;
+  if (!hasStories && !hasStoryPermission) return null;
 
   return (
     <div className={clsx(styles.storyTabContainer)}>
@@ -106,9 +87,9 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
           />
         )}
 
-        <div className={clsx(styles.storyAvatarContainer)}>
-          <img src={avatarFileUrl} className={clsx(styles.storyAvatar)} onClick={handleOnClick} />
-        </div>
+        <button className={clsx(styles.storyAvatarContainer)} onClick={handleOnClick}>
+          <CommunityAvatar pageId={pageId} componentId={componentId} community={community} />
+        </button>
 
         {hasStoryPermission && (
           <>
@@ -118,16 +99,14 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
                 onFileChange(files[0]);
               }}
             >
-              <CreateNewStoryButton pageId="story_page" componentId="*" />
+              <CreateNewStoryButton pageId={pageId} componentId={componentId} />
             </FileTrigger>
           </>
         )}
         {isErrored && <ErrorIcon className={clsx(styles.errorIcon)} />}
       </div>
       <Truncate lines={1}>
-        <div className={clsx(styles.storyTitle)}>
-          <FormattedMessage id="storyTab.title" />
-        </div>
+        <div className={clsx(styles.storyTitle)}>Story</div>
       </Truncate>
     </div>
   );

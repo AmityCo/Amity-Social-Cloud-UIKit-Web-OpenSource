@@ -127,7 +127,7 @@
 .reactionListButton {
   border: none;
   color: var(--asc-color-primary-default);
-  padding: 0;
+  padding: var(--asc-spacing-xxs2);
 }
 
 .content {

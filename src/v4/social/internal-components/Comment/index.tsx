@@ -49,6 +49,8 @@ function getCommentData(comment: Amity.Comment | null) {
 }
 
 interface CommentProps {
+  pageId?: string;
+  componentId: string;
   commentId: string;
   readonly?: boolean;
   userRoles?: string[];
@@ -62,7 +64,13 @@ interface CommentProps {
   shouldAllowInteraction?: boolean;
 }
 
-export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => {
+export const Comment = ({
+  pageId = '*',
+  componentId = '*',
+  commentId,
+  readonly,
+  onClickReply,
+}: CommentProps) => {
   const comment = useComment(commentId);
   const story = useGetStoryByStoryId(comment?.referenceId);
   const { members } = useCommunityMembersCollection(story?.community?.communityId);
@@ -74,7 +82,7 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
 
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });
-  const { userRoles } = useSDK();
+  const { userRoles, currentUserId } = useSDK();
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -175,6 +183,8 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     const title = isReplyComment ? 'reply.delete' : 'comment.delete';
     const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
     confirm({
+      pageId,
+      componentId,
       title: <FormattedMessage id={title} />,
       content: <FormattedMessage id={content} />,
       cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),
@@ -183,7 +193,7 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     });
   };
 
-  const currentMember = members.find((member) => member.userId === comment?.userId);
+  const currentMember = members.find((member) => member.userId === currentUserId);
   const isCommunityModerator = isModerator(currentMember?.roles);
   const isMember = isCommunityMember(currentMember);
 

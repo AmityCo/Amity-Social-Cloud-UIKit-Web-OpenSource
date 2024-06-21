@@ -42,7 +42,6 @@ export const Avatar = ({
         styles[size],
       )}
       onClick={onClick}
-      style={{ backgroundImage: backgroundImage ? backgroundImage : undefined }}
       {...props}
     >
       {loading ? (

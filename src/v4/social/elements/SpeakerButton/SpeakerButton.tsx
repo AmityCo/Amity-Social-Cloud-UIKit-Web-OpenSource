@@ -47,7 +47,7 @@ interface SpeakerButtonProps {
   componentId?: string;
   defaultIconClassName?: string;
   imgIconClassName?: string;
-  onClick: () => void;
+  onPress: () => void;
 }
 
 export function SpeakerButton({
@@ -56,7 +56,7 @@ export function SpeakerButton({
   componentId = '*',
   defaultIconClassName,
   imgIconClassName,
-  onClick,
+  onPress,
 }: SpeakerButtonProps) {
   const elementId = 'speaker_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
@@ -71,7 +71,7 @@ export function SpeakerButton({
     <IconComponent
       data-qa-anchor={accessibilityId}
       className={clsx(styles.speakerButton)}
-      onClick={onClick}
+      onPress={onPress}
       defaultIcon={() => (isMuted ? <SpeakerMuteSvg /> : <SpeakerUnmuteSvg />)}
       imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgIconClassName)} />}
       defaultIconName={defaultConfig.icon}

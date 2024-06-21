@@ -25,7 +25,7 @@ const ImpressionSvg = (props: React.SVGProps<SVGSVGElement>) => (
 interface CommentButtonProps {
   pageId?: string;
   componentId?: string;
-  reach?: number;
+  reach?: number | null;
   defaultIconClassName?: string;
   imgIconClassName?: string;
 }

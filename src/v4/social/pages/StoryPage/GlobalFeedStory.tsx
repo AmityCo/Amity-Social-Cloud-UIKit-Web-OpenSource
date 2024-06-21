@@ -31,7 +31,7 @@ interface GlobalFeedStoryProps {
   pageId?: string;
   targetId: string;
   targetIds: string[];
-  onChangePage: () => void;
+  onChangePage?: () => void;
   onClickStory: (targetId: string) => void;
   goToDraftStoryPage: (data: {
     mediaType: { type: 'image' | 'video'; url: string };
@@ -125,7 +125,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
       okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
         previousStory();
-        if (isLastStory) onChangePage();
+        if (isLastStory) onChangePage?.();
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
           content: formatMessage({ id: 'storyViewer.notification.deleted' }),
@@ -133,7 +133,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         if (isLastStory && stories.length > 1) {
           setCurrentIndex(currentIndex - 1);
         } else if (stories.length === 1) {
-          onChangePage();
+          onChangePage?.();
         }
       },
     });
@@ -198,7 +198,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setFile(null);
   };
 
-  const addStoryButton = <CreateNewStoryButton pageId={pageId} onClick={handleAddIconClick} />;
+  const addStoryButton = <CreateNewStoryButton pageId={pageId} onPress={handleAddIconClick} />;
 
   const formattedStories = stories?.map((story) => {
     const isImage = story?.dataType === 'image';
@@ -240,7 +240,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         const nextTargetId = targetIds[nextTargetIndex];
         onClickStory(nextTargetId);
       } else {
-        onChangePage();
+        onChangePage?.();
       }
       setCurrentIndex(0);
       return;
@@ -257,7 +257,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         const previousTargetId = targetIds[previousTargetIndex];
         onClickStory(previousTargetId);
       } else {
-        onChangePage();
+        onChangePage?.();
       }
       setCurrentIndex(0);
       return;

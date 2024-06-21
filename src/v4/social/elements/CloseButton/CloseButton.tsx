@@ -27,7 +27,7 @@ const CloseIconSVG = (props: React.SVGProps<SVGSVGElement>) => (
 interface CloseButtonProps {
   pageId?: string;
   componentId?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: () => void;
   'data-qa-anchor'?: string;
   defaultClassName?: string;
   imgClassName?: string;
@@ -36,7 +36,7 @@ interface CloseButtonProps {
 export const CloseButton = ({
   pageId = '*',
   componentId = '*',
-  onClick = () => {},
+  onPress = () => {},
   defaultClassName,
   imgClassName,
 }: CloseButtonProps) => {
@@ -51,7 +51,7 @@ export const CloseButton = ({
 
   return (
     <IconComponent
-      onClick={onClick}
+      onPress={onPress}
       data-qa-anchor="close_button"
       defaultIcon={() => <CloseIconSVG className={clsx(styles.closeButton, defaultClassName)} />}
       imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}

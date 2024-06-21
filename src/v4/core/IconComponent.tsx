@@ -1,9 +1,10 @@
 import React from 'react';
+import { Button, PressEvent } from 'react-aria-components';
 
 export interface IconComponentProps {
   defaultIcon: () => JSX.Element;
   imgIcon: () => JSX.Element;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: (e: PressEvent) => void;
   defaultIconName?: string;
   configIconName?: string;
   'data-qa-anchor'?: string;
@@ -14,15 +15,15 @@ export interface IconComponentProps {
 export const IconComponent = ({
   defaultIcon,
   imgIcon,
-  onClick,
+  onPress,
   style,
   defaultIconName,
   configIconName,
   className,
 }: IconComponentProps) => {
   return (
-    <button className={className} data-qa-anchor={'data-qa-anchor'} onClick={onClick} style={style}>
+    <Button className={className} data-qa-anchor={'data-qa-anchor'} onPress={onPress} style={style}>
       {defaultIconName === configIconName ? defaultIcon() : imgIcon()}
-    </button>
+    </Button>
   );
 };

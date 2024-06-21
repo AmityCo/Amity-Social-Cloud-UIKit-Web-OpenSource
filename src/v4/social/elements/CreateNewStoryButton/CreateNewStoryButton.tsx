@@ -27,7 +27,7 @@ interface BackButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: () => void;
 }
 
 export const CreateNewStoryButton = ({
@@ -35,7 +35,7 @@ export const CreateNewStoryButton = ({
   componentId = '*',
   defaultClassName,
   imgClassName,
-  onClick = () => {},
+  onPress = () => {},
 }: BackButtonProps) => {
   const elementId = 'create_new_story_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -55,7 +55,7 @@ export const CreateNewStoryButton = ({
       imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgClassName)} />}
       defaultIconName={defaultConfig.icon}
       configIconName={config.icon}
-      onClick={onClick}
+      onPress={onPress}
       style={themeStyles}
     />
   );

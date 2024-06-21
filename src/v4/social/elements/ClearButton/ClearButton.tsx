@@ -24,7 +24,7 @@ interface ClearButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: () => void;
 }
 
 export const ClearButton = ({
@@ -32,7 +32,7 @@ export const ClearButton = ({
   componentId = '*',
   defaultClassName,
   imgClassName,
-  onClick = () => {},
+  onPress = () => {},
 }: ClearButtonProps) => {
   const elementId = 'clear_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -45,13 +45,9 @@ export const ClearButton = ({
   if (isExcluded) return null;
 
   return (
-    <button
-      data-qa-anchor={accessibilityId}
-      className={styles.clearButton}
-      onClick={onClick}
-      style={themeStyles}
-    >
+    <button data-qa-anchor={accessibilityId} className={styles.clearButton} style={themeStyles}>
       <IconComponent
+        onPress={onPress}
         defaultIcon={() => <ClearButtonSvg className={defaultClassName} />}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
         defaultIconName={defaultConfig.icon}

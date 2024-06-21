@@ -6,7 +6,7 @@ export { CreateStoryButton } from './CreateStoryButton/CreateStoryButton';
 export { HyperLinkButton } from './HyperLinkButton/HyperLinkButton';
 export { ImpressionButton } from './ImpressionButton';
 export { OverflowMenuButton } from './OverflowMenuButton/OverflowMenuButton';
-export { ReactButton } from './ReactButton';
+export { ReactionButton } from './ReactionButton';
 export { SaveButton } from './SaveButton';
 export { ShareStoryButton } from './ShareStoryButton/ShareStoryButton';
 export { SpeakerButton } from './SpeakerButton';

@@ -6,8 +6,8 @@ import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalSt
 const STORIES_PER_PAGE = 10;
 
 interface StoryTabGlobalFeedProps {
-  pageId: string;
-  componentId: string;
+  pageId?: string;
+  componentId?: string;
   goToViewStoryPage: (data: {
     storyTarget: Amity.StoryTarget;
     storyTargets: Amity.StoryTarget[];
@@ -15,8 +15,8 @@ interface StoryTabGlobalFeedProps {
 }
 
 export const StoryTabGlobalFeed = ({
-  pageId,
-  componentId,
+  pageId = '*',
+  componentId = '*',
   goToViewStoryPage,
 }: StoryTabGlobalFeedProps) => {
   const { stories, isLoading, hasMore, loadMoreStories } = useGlobalStoryTargets({

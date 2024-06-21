@@ -39,7 +39,8 @@ export const renderer: CustomRenderer = ({
   const { client } = useSDK();
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
-  const totalLikes = story.reactions[LIKE_REACTION_KEY] || 0;
+  const reactionsCount = story.reactionsCount || 0;
+  const myReactions = story.myReactions || [];
 
   const {
     storyId,
@@ -274,8 +275,9 @@ export const renderer: CustomRenderer = ({
         syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}
-        totalLikes={totalLikes}
+        reactionsCount={reactionsCount}
         isLiked={isLiked}
+        myReactions={myReactions}
         onClickComment={openCommentSheet}
         showImpression={isCreator || haveStoryPermission}
         isMember={isMember}

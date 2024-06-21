@@ -25,7 +25,7 @@ const OverflowMenuSvg = (props: React.SVGProps<SVGSVGElement>) => {
 interface OverflowMenuButtonProps {
   pageId?: string;
   componentId?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: () => void;
   defaultClassName?: string;
   imgClassName?: string;
   'data-qa-anchor'?: string;
@@ -34,7 +34,7 @@ interface OverflowMenuButtonProps {
 export const OverflowMenuButton = ({
   pageId = '*',
   componentId = '*',
-  onClick = () => {},
+  onPress = () => {},
   defaultClassName,
   imgClassName,
 }: OverflowMenuButtonProps) => {
@@ -47,7 +47,7 @@ export const OverflowMenuButton = ({
 
   return (
     <IconComponent
-      onClick={onClick}
+      onPress={onPress}
       defaultIcon={() => (
         <OverflowMenuSvg className={clsx(styles.overflowMenuIcon, defaultClassName)} />
       )}

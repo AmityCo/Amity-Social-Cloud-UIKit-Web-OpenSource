@@ -12,7 +12,6 @@ type StoryTabProps<T extends StoryTabType> = {
 };
 
 export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTabProps<T>) => {
-  const pageId = '*';
   const componentId = 'story_tab_component';
   const { onClickStory, goToDraftStoryPage } = useNavigation();
 
@@ -23,7 +22,6 @@ export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTab
       case 'communityFeed':
         return (
           <StoryTabCommunityFeed
-            pageId={pageId}
             componentId={componentId}
             communityId={communityId || ''}
             onFileChange={(file) => {
@@ -45,7 +43,6 @@ export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTab
       case 'globalFeed':
         return (
           <StoryTabGlobalFeed
-            pageId={pageId}
             componentId={componentId}
             goToViewStoryPage={({ storyTarget, storyTargets }) => {
               onClickStory(
