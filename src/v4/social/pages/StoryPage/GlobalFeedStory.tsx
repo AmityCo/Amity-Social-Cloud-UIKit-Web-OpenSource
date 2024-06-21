@@ -24,6 +24,7 @@ import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton'
 
 import styles from './StoryPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit/index';
+import { FileTrigger } from 'react-aria-components';
 
 const DURATION = 5000;
 
@@ -89,22 +90,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleAddIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      onChange(selectedFile as File);
-    }
-  };
-
   const { client, currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
@@ -137,10 +122,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         }
       },
     });
-  };
-
-  const onChange = (file: File) => {
-    setFile(file);
   };
 
   const deleteStory = async (storyId: string) => {
@@ -198,7 +179,32 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setFile(null);
   };
 
-  const addStoryButton = <CreateNewStoryButton pageId={pageId} onPress={handleAddIconClick} />;
+  const addStoryButton = (
+    <FileTrigger
+      ref={fileInputRef}
+      onSelect={(e) => {
+        const files = Array.from(e as FileList);
+        setFile(files[0]);
+      }}
+    >
+      <CreateNewStoryButton pageId={pageId} />
+    </FileTrigger>
+  );
+
+  const storyStyles = {
+    width: '100%',
+    height: '100%',
+    objectFit:
+      stories[currentIndex]?.dataType === 'image' &&
+      stories[currentIndex]?.data?.imageDisplayMode === 'fill'
+        ? 'cover'
+        : 'contain',
+    background: `linear-gradient(
+               180deg,
+               ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
+               ${colors?.length > 0 ? colors[colors?.length - 1].hex : '#000'} 100%
+             )`,
+  };
 
   const formattedStories = stories?.map((story) => {
     const isImage = story?.dataType === 'image';
@@ -223,11 +229,11 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
             }
           : null,
       ].filter(isNonNullable),
-      handleAddIconClick,
       onCreateStory,
       discardStory,
       addStoryButton,
       fileInputRef,
+      storyStyles,
     };
   });
 
@@ -267,35 +273,9 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   const targetRootId = 'asc-uikit-stories-viewer';
 
-  const storyStyles = {
-    width: '100%',
-    height: '100%',
-    objectFit:
-      stories[currentIndex]?.dataType === 'image' &&
-      stories[currentIndex]?.data?.imageDisplayMode === 'fill'
-        ? 'cover'
-        : 'contain',
-    background: `linear-gradient(
-               180deg,
-               ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
-               ${colors?.length > 0 ? colors[colors?.length - 1].hex : '#000'} 100%
-             )`,
-  };
-
   const increaseIndex = () => {
     setCurrentIndex(currentIndex + 1);
   };
-
-  if (file) {
-    goToDraftStoryPage({
-      targetId,
-      targetType: 'community',
-      mediaType: file.type.includes('image')
-        ? { type: 'image', url: URL.createObjectURL(file) }
-        : { type: 'video', url: URL.createObjectURL(file) },
-      storyType: 'globalFeed',
-    });
-  }
 
   useEffect(() => {
     if (stories[stories.length - 1]?.syncState === 'syncing') {
@@ -316,7 +296,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   }, [stories]);
 
   useEffect(() => {
-    if (!file || !stories) return;
+    if (!stories) return;
     const extractColorsFromImage = async (url: string) => {
       const colorsFromImage = await extractColors(url, {
         crossOrigin: 'anonymous',
@@ -330,19 +310,23 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     } else {
       setColors([]);
     }
-  }, [stories, file, currentIndex]);
+  }, [stories, currentIndex]);
+
+  if (file) {
+    goToDraftStoryPage({
+      targetId,
+      targetType: 'community',
+      mediaType: file.type.includes('image')
+        ? { type: 'image', url: URL.createObjectURL(file) }
+        : { type: 'video', url: URL.createObjectURL(file) },
+      storyType: 'globalFeed',
+    });
+  }
 
   return (
     <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
       <ArrowLeftButton onClick={previousStory} />
       <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
-        <input
-          className={clsx(styles.hiddenInput)}
-          ref={fileInputRef}
-          type="file"
-          accept="image/*,video/*"
-          onChange={handleFileChange}
-        />
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
@@ -350,9 +334,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
           {formattedStories?.length > 0 ? (
             // NOTE: Do not use isPaused prop, it will cause the first video story skipped
             <Stories
-              width="100%"
-              height="100%"
-              storyStyles={storyStyles}
               preventDefault
               currentIndex={currentIndex}
               stories={formattedStories}

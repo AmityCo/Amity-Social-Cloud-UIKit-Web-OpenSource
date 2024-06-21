@@ -24,6 +24,9 @@ export type CustomStory = Story &
     handleAddIconClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
     addStoryButton: JSX.Element;
     fileInputRef: React.RefObject<HTMLInputElement>;
+    storyStyles: {
+      background: string;
+    };
   };
 
 export type CustomRendererProps = RendererProps & {

@@ -1,16 +1,16 @@
 import React from 'react';
 
 import { DotsIcon, ErrorIcon } from '~/icons';
-import { useIntl } from 'react-intl';
 import { ReactionRepository } from '@amityco/ts-sdk';
 import { LIKE_REACTION_KEY } from '~/constants';
 import Spinner from '~/social/components/Spinner';
-import { ImpressionButton, ReactionButton } from '~/v4/social/elements';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { CommentButton } from '~/v4/social/elements/CommentButton/CommentButton';
 
 import styles from './Footer.module.css';
 import clsx from 'clsx';
+import { StoryCommentButton } from '~/v4/social/elements/StoryCommentButton/StoryCommentButton';
+import { StoryReactionButton } from '~/v4/social/elements/StoryReactionButton/StoryReactionButton';
+import { StoryImpressionButton } from '~/v4/social/elements/StoryImpressionButton/StoryImpressionButton';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
@@ -23,7 +23,7 @@ const Footer: React.FC<
     onClickComment: () => void;
     syncState?: Amity.SyncState;
     isMember?: boolean;
-    myReactions: string[];
+    myReactions?: string[];
   }>
 > = ({
   syncState,
@@ -38,13 +38,12 @@ const Footer: React.FC<
   myReactions,
 }) => {
   const notification = useNotifications();
-  const { formatMessage } = useIntl();
 
   const handleClickReaction = async () => {
     try {
       if (!isMember) {
         notification.show({
-          content: formatMessage({ id: 'storyViewer.toast.disable.react' }),
+          content: 'You need to be a member to like this story',
         });
         return;
       }
@@ -63,7 +62,7 @@ const Footer: React.FC<
       <div className={styles.viewStoryCompostBarContainer}>
         <div className={styles.viewStoryUploadingWrapper}>
           <Spinner width={20} height={20} />
-          {formatMessage({ id: 'storyViewer.footer.uploading' })}
+          Uploading...
         </div>
       </div>
     );
@@ -74,7 +73,7 @@ const Footer: React.FC<
       <div className={styles.viewStoryFailedCompostBarContainer}>
         <div className={styles.viewStoryFailedCompostBarWrapper}>
           <ErrorIcon />
-          {formatMessage({ id: 'storyViewer.footer.failed' })}
+          <span>Failed to upload</span>
         </div>
         <DotsIcon />
       </div>
@@ -86,12 +85,19 @@ const Footer: React.FC<
       <div>
         {showImpression && (
           <div className={styles.viewStoryCompostBarViewIconContainer}>
-            <ImpressionButton pageId="story_page" reach={reach} />
+            <StoryImpressionButton />
+            {/* <ImpressionButton pageId="story_page" reach={reach} /> */}
           </div>
         )}
       </div>
       <div className={styles.viewStoryCompostBarEngagementContainer}>
-        <CommentButton
+        <StoryCommentButton commentsCount={commentsCount} onPress={onClickComment} />
+        <StoryReactionButton
+          myReactions={myReactions}
+          reactionsCount={reactionsCount}
+          onPress={handleClickReaction}
+        />
+        {/* <CommentButton
           className={clsx(styles.viewStoryCommentButton)}
           defaultIconClassName={clsx(styles.viewStoryCommentIcon)}
           pageId="story_page"
@@ -103,7 +109,7 @@ const Footer: React.FC<
           pageId="story_page"
           myReactions={myReactions}
           reactionsCount={reactionsCount}
-        />
+        /> */}
       </div>
     </div>
   );

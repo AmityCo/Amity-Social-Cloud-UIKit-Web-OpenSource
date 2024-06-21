@@ -21,6 +21,7 @@ import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
 
 import styles from './Renderers.module.css';
+import clsx from 'clsx';
 
 export const renderer: CustomRenderer = ({
   story,
@@ -35,12 +36,11 @@ export const renderer: CustomRenderer = ({
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const { loader, storyStyles } = config;
+  const { loader } = config;
   const { client } = useSDK();
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const reactionsCount = story.reactionsCount || 0;
-  const myReactions = story.myReactions || [];
 
   const {
     storyId,
@@ -51,9 +51,10 @@ export const renderer: CustomRenderer = ({
     creator,
     community,
     actions,
-    handleAddIconClick,
     addStoryButton,
     fileInputRef,
+    storyStyles,
+    myReactions,
   } = story;
 
   const { members } = useCommunityMembersCollection(community?.communityId as string);
@@ -69,11 +70,6 @@ export const renderer: CustomRenderer = ({
   const isCommunityModerator = isModerator(user?.roles);
   const haveStoryPermission =
     isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
-
-  const computedStyles = {
-    ...rendererStyles.storyContent,
-    ...(storyStyles || {}),
-  };
 
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
@@ -191,20 +187,27 @@ export const renderer: CustomRenderer = ({
         onPlay={play}
         onPause={pause}
         onAction={openBottomSheet}
-        onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity?.()}
         onClose={handleOnClose}
         addStoryButton={addStoryButton}
       />
 
-      <img
-        className={styles.storyImage}
-        data-qa-anchor="image_view"
-        style={computedStyles}
-        src={story.url}
-        onLoad={imageLoaded}
-        alt="Story Image"
-      />
+      <div
+        className={clsx(styles.storyImageContainer)}
+        style={
+          {
+            '--asc-story-image-background': storyStyles?.background,
+          } as React.CSSProperties
+        }
+      >
+        <img
+          className={styles.storyImage}
+          data-qa-anchor="image_view"
+          src={story.url}
+          onLoad={imageLoaded}
+          alt="Story Image"
+        />
+      </div>
 
       {!loaded && <div className={styles.loadingOverlay}>{loader || <div>loading...</div>}</div>}
 

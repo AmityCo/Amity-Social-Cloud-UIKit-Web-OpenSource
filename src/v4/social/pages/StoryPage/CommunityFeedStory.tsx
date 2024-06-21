@@ -91,22 +91,6 @@ export const CommunityFeedStory = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleAddIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      onChange(selectedFile as File);
-    }
-  };
-
   const { client, currentUserId } = useSDK();
 
   const { formatMessage } = useIntl();
@@ -132,10 +116,6 @@ export const CommunityFeedStory = ({
         if (stories.length === 1) onClose(communityId);
       },
     });
-  };
-
-  const onChange = (file: File) => {
-    setFile(file);
   };
 
   const deleteStory = async (storyId: string) => {
@@ -191,7 +171,7 @@ export const CommunityFeedStory = ({
     setFile(null);
   };
 
-  const addStoryButton = <CreateNewStoryButton pageId={pageId} onClick={handleAddIconClick} />;
+  const addStoryButton = <CreateNewStoryButton pageId={pageId} />;
 
   const formattedStories = stories?.map((story) => {
     const isImage = story?.dataType === 'image';
@@ -210,7 +190,6 @@ export const CommunityFeedStory = ({
             }
           : null,
       ].filter(isNonNullable),
-      handleAddIconClick,
       onCreateStory,
       discardStory,
       addStoryButton,
@@ -252,17 +231,6 @@ export const CommunityFeedStory = ({
     setCurrentIndex(currentIndex + 1);
   };
 
-  if (file) {
-    goToDraftStoryPage({
-      targetId: communityId,
-      targetType: 'community',
-      mediaType: file.type.includes('image')
-        ? { type: 'image', url: URL.createObjectURL(file) }
-        : { type: 'video', url: URL.createObjectURL(file) },
-      storyType: 'communityFeed',
-    });
-  }
-
   useEffect(() => {
     if (stories[stories.length - 1]?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);
@@ -282,7 +250,7 @@ export const CommunityFeedStory = ({
   }, [stories]);
 
   useEffect(() => {
-    if (!stories || !file) return;
+    if (!stories) return;
     const extractColorsFromImage = async (url: string) => {
       const colorsFromImage = await extractColors(url, {
         crossOrigin: 'anonymous',
@@ -296,19 +264,23 @@ export const CommunityFeedStory = ({
     } else {
       setColors([]);
     }
-  }, [stories, file, currentIndex]);
+  }, [stories, currentIndex]);
+
+  if (file) {
+    goToDraftStoryPage({
+      targetId: communityId,
+      targetType: 'community',
+      mediaType: file.type.includes('image')
+        ? { type: 'image', url: URL.createObjectURL(file) }
+        : { type: 'video', url: URL.createObjectURL(file) },
+      storyType: 'communityFeed',
+    });
+  }
 
   return (
     <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
       <ArrowLeftButton onClick={previousStory} />
       <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
-        <input
-          className={clsx(styles.hiddenInput)}
-          ref={fileInputRef}
-          type="file"
-          accept="image/*,video/*"
-          onChange={handleFileChange}
-        />
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
@@ -316,8 +288,6 @@ export const CommunityFeedStory = ({
           {formattedStories?.length > 0 ? (
             // NOTE: Do not use isPaused prop, it will cause the first video story skipped
             <Stories
-              width="100%"
-              height="100%"
               storyStyles={storyStyles}
               preventDefault
               currentIndex={currentIndex}

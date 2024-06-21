@@ -61,19 +61,14 @@ export const renderer: CustomRenderer = ({
     creator,
     community,
     actions,
-    handleAddIconClick,
     addStoryButton,
     fileInputRef,
+    myReactions,
   } = story;
 
   const { members } = useCommunityMembersCollection(community?.communityId as string);
   const member = members?.find((member) => member.userId === client?.userId);
   const isMember = member != null;
-
-  const avatarUrl = useImage({
-    fileId: community?.avatarFileId || '',
-    imageSize: 'small',
-  });
 
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
@@ -222,7 +217,7 @@ export const renderer: CustomRenderer = ({
         pageId="story_page"
         componentId="*"
         isMuted={muted}
-        onClick={muted ? unmute : mute}
+        onPress={muted ? unmute : mute}
       />
       <Header
         community={community}
@@ -237,7 +232,6 @@ export const renderer: CustomRenderer = ({
         onMute={mute}
         onUnmute={unmute}
         onAction={openBottomSheet}
-        onAddStory={handleAddIconClick}
         onClickCommunity={() => onClickCommunity?.()}
         onClose={handleOnClose}
         addStoryButton={addStoryButton}
@@ -322,9 +316,10 @@ export const renderer: CustomRenderer = ({
         syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}
-        totalLikes={totalLikes}
+        reactionsCount={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
+        myReactions={myReactions}
         showImpression={isCreator || haveStoryPermission}
         isMember={isMember}
       />

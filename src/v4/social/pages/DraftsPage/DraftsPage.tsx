@@ -219,76 +219,78 @@ export const PlainDraftStoryPage = ({
   }, [file, imageMode, mediaType]);
 
   return (
-    <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
-      <div className={styles.headerContainer}>
-        <div className={styles.header}>
-          <BackButton pageId={pageId} onPress={discardCreateStory} />
-          <div className={styles.topRightButtons}>
-            {mediaType?.type === 'image' && (
-              <AspectRatioButton pageId={pageId} onPress={onClickImageMode} />
-            )}
-            <HyperLinkButton pageId={pageId} onPress={handleOnClickHyperLinkActionButton} />
+    <div className={styles.storyWrapper}>
+      <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
+        <div className={styles.headerContainer}>
+          <div className={styles.header}>
+            <BackButton pageId={pageId} onPress={discardCreateStory} />
+            <div className={styles.topRightButtons}>
+              {mediaType?.type === 'image' && (
+                <AspectRatioButton pageId={pageId} onPress={onClickImageMode} />
+              )}
+              <HyperLinkButton pageId={pageId} onPress={handleOnClickHyperLinkActionButton} />
+            </div>
           </div>
         </div>
-      </div>
 
-      {mediaType?.type === 'image' ? (
-        <div
-          className={styles.mainContainer}
-          style={{
-            background: `linear-gradient(
+        {mediaType?.type === 'image' ? (
+          <div
+            className={styles.mainContainer}
+            style={{
+              background: `linear-gradient(
               180deg,
               ${colors?.length > 0 ? colors[0].hex : 'var(--asc-color-black)'} 0%,
               ${colors?.length > 0 ? colors[colors?.length - 1].hex : 'var(--asc-color-black)'} 100%
             )`,
-          }}
-        >
-          <img
-            className={styles.previewImage}
-            src={file ? URL.createObjectURL(file) : mediaType.url}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: imageMode === 'fit' ? 'contain' : 'cover',
             }}
-            alt="Draft"
+          >
+            <img
+              className={styles.previewImage}
+              src={file ? URL.createObjectURL(file) : mediaType.url}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: imageMode === 'fit' ? 'contain' : 'cover',
+              }}
+              alt="Draft"
+            />
+          </div>
+        ) : mediaType?.type === 'video' ? (
+          <VideoPreview
+            mediaFit="contain"
+            className={styles.videoPreview}
+            src={file ? URL.createObjectURL(file) : mediaType.url}
+            autoPlay
+            loop
+            controls={false}
+          />
+        ) : null}
+        {hyperLink[0]?.data?.url && (
+          <div className={styles.hyperLinkContainer}>
+            <HyperLink onClick={() => setIsHyperLinkBottomSheetOpen(true)}>
+              {hyperLink[0]?.data?.customText || hyperLink[0].data.url.replace(/^https?:\/\//, '')}
+            </HyperLink>
+          </div>
+        )}
+
+        <HyperLinkConfig
+          pageId={pageId}
+          isOpen={isHyperLinkBottomSheetOpen}
+          onClose={handleHyperLinkBottomSheetClose}
+          onSubmit={onSubmitHyperLink}
+          onRemove={onRemoveHyperLink}
+          isHaveHyperLink={hyperLink?.[0]?.data?.url !== ''}
+        />
+
+        <div className={styles.footer}>
+          <ShareStoryButton
+            community={community}
+            pageId={pageId}
+            onClick={() =>
+              onCreateStory(file, imageMode, {}, hyperLink[0]?.data?.url ? hyperLink : [])
+            }
           />
         </div>
-      ) : mediaType?.type === 'video' ? (
-        <VideoPreview
-          mediaFit="contain"
-          className={styles.videoPreview}
-          src={file ? URL.createObjectURL(file) : mediaType.url}
-          autoPlay
-          loop
-          controls={false}
-        />
-      ) : null}
-      {hyperLink[0]?.data?.url && (
-        <div className={styles.hyperLinkContainer}>
-          <HyperLink onClick={() => setIsHyperLinkBottomSheetOpen(true)}>
-            {hyperLink[0]?.data?.customText || hyperLink[0].data.url.replace(/^https?:\/\//, '')}
-          </HyperLink>
-        </div>
-      )}
-
-      <HyperLinkConfig
-        pageId={pageId}
-        isOpen={isHyperLinkBottomSheetOpen}
-        onClose={handleHyperLinkBottomSheetClose}
-        onSubmit={onSubmitHyperLink}
-        onRemove={onRemoveHyperLink}
-        isHaveHyperLink={hyperLink?.[0]?.data?.url !== ''}
-      />
-
-      <div className={styles.footer}>
-        <ShareStoryButton
-          community={community}
-          pageId={pageId}
-          onClick={() =>
-            onCreateStory(file, imageMode, {}, hyperLink[0]?.data?.url ? hyperLink : [])
-          }
-        />
       </div>
     </div>
   );

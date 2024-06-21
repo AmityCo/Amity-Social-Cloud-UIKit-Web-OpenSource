@@ -92,16 +92,14 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
         </button>
 
         {hasStoryPermission && (
-          <>
-            <FileTrigger
-              onSelect={(e) => {
-                const files = Array.from(e as FileList);
-                onFileChange(files[0]);
-              }}
-            >
-              <CreateNewStoryButton pageId={pageId} componentId={componentId} />
-            </FileTrigger>
-          </>
+          <FileTrigger
+            onSelect={(e) => {
+              const files = Array.from(e as FileList);
+              onFileChange(files[0]);
+            }}
+          >
+            <CreateNewStoryButton pageId={pageId} componentId={componentId} />
+          </FileTrigger>
         )}
         {isErrored && <ErrorIcon className={clsx(styles.errorIcon)} />}
       </div>

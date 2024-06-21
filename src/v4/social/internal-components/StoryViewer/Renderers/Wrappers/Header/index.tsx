@@ -14,7 +14,6 @@ const Header: React.FC<
     onPause: () => void;
     onAction: () => void;
     onClose: () => void;
-    onAddStory: (e: React.MouseEvent<Element, MouseEvent>) => void;
     onClickCommunity: () => void;
     community?: Amity.Community | null;
     heading?: React.ReactNode;
@@ -47,7 +46,6 @@ const Header: React.FC<
       <div className={styles.viewStoryHeadingInfoContainer}>
         <div className={styles.avatarContainer}>
           <CommunityAvatar pageId="story_page" community={community} />
-
           {haveStoryPermission && addStoryButton}
         </div>
         <div className={styles.viewStoryInfoContainer}>

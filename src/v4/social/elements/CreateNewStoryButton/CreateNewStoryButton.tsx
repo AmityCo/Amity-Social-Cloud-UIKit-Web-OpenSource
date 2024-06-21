@@ -22,7 +22,7 @@ const CreateNewStoryButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-interface BackButtonProps {
+interface CreateNewStoryProps {
   pageId?: string;
   componentId?: string;
   defaultClassName?: string;
@@ -36,7 +36,7 @@ export const CreateNewStoryButton = ({
   defaultClassName,
   imgClassName,
   onPress = () => {},
-}: BackButtonProps) => {
+}: CreateNewStoryProps) => {
   const elementId = 'create_new_story_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
     useAmityElement({
