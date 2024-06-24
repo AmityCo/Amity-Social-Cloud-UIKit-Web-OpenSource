@@ -59,6 +59,7 @@ interface UiKitProviderProps {
   onConnected?: () => void;
   onDisconnected?: () => void;
   pageBehavior?: Record<string, unknown>;
+  getAuthToken?: () => Promise<string>;
 }
 
 const UiKitProvider = ({
@@ -76,6 +77,7 @@ const UiKitProvider = ({
   actionHandlers,
   onConnectionStatusChange,
   onDisconnected,
+  getAuthToken,
 }: UiKitProviderProps) => {
   const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
@@ -105,20 +107,30 @@ const UiKitProvider = ({
       setClient(ascClient);
     }
 
-    await ASCClient.login(
-      { userId, displayName, authToken },
-      {
-        sessionWillRenewAccessToken(renewal) {
+    const currentIsConnected = ASCClient.isConnected();
+
+    if (!currentIsConnected) {
+      let params: Amity.ConnectClientParams = { userId, displayName };
+
+      if (getAuthToken) {
+        const authToken = await getAuthToken();
+        params = { ...params, authToken };
+      }
+
+      await ASCClient.login(params, {
+        async sessionWillRenewAccessToken(renewal: Amity.AccessTokenRenewal) {
           // secure mode
-          if (authToken) {
+          if (getAuthToken) {
+            const authToken = await getAuthToken();
             renewal.renewWithAuthToken(authToken);
             return;
           }
 
           renewal.renew();
         },
-      },
-    );
+      });
+    }
+
     setIsConnected(true);
 
     if (stateChangeRef.current == null) {

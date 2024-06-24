@@ -27,9 +27,8 @@ export {
 export { ReactionList as AmityReactionList } from '~/v4/social/components/ReactionList';
 
 import type { ReactionListProps } from '~/v4/social/components/ReactionList';
-export type { ReactionListProps as AmityReactionListProps };
 
-export { LiveChat as AmityLiveChatPage } from '~/v4/chat/pages/LiveChat';
+export type { ReactionListProps as AmityReactionListProps };
 
 // v4 internal use only (Amity Console)
 export {
