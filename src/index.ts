@@ -1,4 +1,4 @@
-export { default as AmityUiKitProvider } from '~/v4/core/providers/AmityUIKitProvider';
+export { default as AmityUiKitProvider } from '~/core/providers/UiKitProvider';
 export { default as AmityUiKitFeed } from '~/social/components/Feed';
 export { default as AmityUiKitSocial } from '~/social/pages/Application';
 export { default as AmityUiKitChat } from '~/chat/pages/Application';
@@ -26,27 +26,11 @@ export {
   StoryTab as AmityStoryTabComponent,
 } from '~/v4/social/components';
 
-// Chat v4
-export {
-  AmityLiveChatHeader,
-  AmityLiveChatMessageList,
-  AmityLiveChatMessageReceiverView,
-  AmityLiveChatMessageSenderView,
-  AmityLiveChatMessageComposeBar,
-} from '~/v4/chat/components';
-
-export { MessageReactionPreview as AmityLiveChatMessageReactionPreview } from '~/v4/chat/components/MessageReactionPreview';
-export { MessageReactionPicker as AmityLiveChatMessageReactionPicker } from '~/v4/chat/components/MessageReactionPicker';
-export { MessageQuickReaction as AmityLiveChatMessageQuickReaction } from '~/v4/chat/components/MessageQuickReaction';
 export { ReactionList as AmityReactionList } from '~/v4/social/components/ReactionList';
 
-import type { AmityMessageActionType } from '~/v4/chat/components';
 import type { ReactionListProps } from '~/v4/social/components/ReactionList';
 
-export type { AmityMessageActionType };
 export type { ReactionListProps as AmityReactionListProps };
-
-export { AmityLiveChatPage } from '~/v4/chat/pages';
 
 // v4 internal use only (Amity Console)
 export { StoryPreview as AmityStoryPreview } from './v4/social/internal-components/StoryPreview';
