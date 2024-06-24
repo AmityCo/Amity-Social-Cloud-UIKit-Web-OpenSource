@@ -41,8 +41,6 @@ import type { ReactionListProps } from '~/v4/social/components/ReactionList';
 export type { MessageActionType as AmityMessageActionType };
 export type { ReactionListProps as AmityReactionListProps };
 
-export { LiveChat as AmityLiveChatPage } from '~/v4/chat/pages/LiveChat';
-
 // v4 internal use only (Amity Console)
 export {
   StoryPreview as AmityStoryPreview,
