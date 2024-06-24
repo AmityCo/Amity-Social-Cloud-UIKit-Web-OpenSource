@@ -1,0 +1,12 @@
+.speakerButton {
+  fill: var(--asc-color-white);
+  position: absolute;
+  top: 96px;
+  left: 24px;
+  z-index: 99999;
+}
+
+.speakerButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

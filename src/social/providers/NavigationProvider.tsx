@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 import { PageTypes } from '~/social/constants';
+import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 
 type Page =
   | {
@@ -32,10 +33,18 @@ type Page =
   | {
       type: PageTypes.ViewStory;
       storyId: string;
-      targetId?: string;
+      targetId: string;
       communityId?: string;
-      targetIds?: string[];
-      storyType?: 'communityFeed' | 'globalFeed';
+      targetIds: string[];
+      storyType: 'communityFeed' | 'globalFeed';
+    }
+  | {
+      type: PageTypes.DraftPage;
+      communityId?: string;
+      mediaType: AmityStoryMediaType;
+      targetId: string;
+      targetType: Amity.StoryTargetType;
+      storyType: 'communityFeed' | 'globalFeed';
     };
 
 type ContextValue = {
@@ -54,6 +63,12 @@ type ContextValue = {
   onEditUser: (userId: string) => void;
   onMessageUser: (userId: string) => void;
   onBack: () => void;
+  goToDraftStoryPage: (
+    targetId: string,
+    targetType: string,
+    mediaType: AmityStoryMediaType,
+    storyType: 'communityFeed' | 'globalFeed',
+  ) => void;
   setNavigationBlocker?: (
     params:
       | {
@@ -83,6 +98,7 @@ let defaultValue: ContextValue = {
   onMessageUser: (userId: string) => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
+  goToDraftStoryPage: (targetId: string) => {},
 };
 
 export const defaultNavigationBlocker = {
@@ -109,6 +125,8 @@ if (process.env.NODE_ENV !== 'production') {
     onEditUser: (userId) => console.log(`NavigationContext onEditUser(${userId})`),
     onMessageUser: (userId) => console.log(`NavigationContext onMessageUser(${userId})`),
     onBack: () => console.log('NavigationContext onBack()'),
+    goToDraftStoryPage: (targetId, targetType, mediaType, storyType) =>
+      console.log(`NavigationContext goToDraftStoryPage(${targetId})`),
   };
 }
 
@@ -139,6 +157,7 @@ interface NavigationProviderProps {
   onEditUser?: (userId: string) => void;
   onMessageUser?: (userId: string) => void;
   onBack?: () => void;
+  goToDraftStoryPage?: (targetId: string) => void;
 }
 
 export default function NavigationProvider({
@@ -352,6 +371,23 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToDraftStoryPage = useCallback(
+    (targetId, targetType, mediaType, storyType) => {
+      const next = {
+        type: PageTypes.DraftPage,
+        targetId,
+        targetType,
+        mediaType,
+        storyType,
+      };
+
+      if (onChangePage) return onChangePage(next);
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   return (
     <NavigationContext.Provider
       value={{
@@ -366,6 +402,7 @@ export default function NavigationProvider({
         onEditUser: handleEditUser,
         onMessageUser: handleMessageUser,
         onBack: handleBack,
+        goToDraftStoryPage,
         setNavigationBlocker,
       }}
     >

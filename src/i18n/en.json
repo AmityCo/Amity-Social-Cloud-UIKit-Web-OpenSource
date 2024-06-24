@@ -52,7 +52,8 @@
   "collapsible.viewAll": "View all",
   "collapsible.viewAllFiles": "View all files",
   "collapsible.viewMoreComments": "View more comments",
-  "collapsible.viewMoreReplies": "View {count, plural, one {# reply} other {# replies}}",
+  "collapsible.viewMoreReplies": "View more replies",
+  "collapsible.viewMoreReply": "View {count, plural, one {# reply} other {# replies}}",
 
   "community.createSuccess": "Your community was successfully created",
   "community.updateSuccess": "Your community was successfully updated",
@@ -367,6 +368,10 @@
   "storyCreation.hyperlink.validation.error.invalidUrl": "Please enter a valid URL.",
   "storyCreation.hyperlink.validation.error.whitelisted": "Please enter a whitelisted URL.",
   "storyCreation.hyperlink.validation.error.blocked": "Your text contains a blocklisted word.",
+  "storyCreation.hyperlink.unsavedChanges.title": "Unsaved changes",
+  "storyCreation.hyperlink.unsavedChanges.content": "Are you sure you want to cancel? Your changes won't be saved.",
+  "storyCreation.hyperlink.unsavedChanges.cancel": "No",
+  "storyCreation.hyperlink.unsavedChanges.confirm": "Yes",
 
   "storyViewer.actions.deleteStory": "Delete story",
   "storyViewer.action.confirmModal.title": "Delete this story?",
@@ -383,6 +388,7 @@
   "storyViewer.toast.like.disabled": "Join community to interact with all stories",
   "storyViewer.toast.comment.reported": "Comment reported",
   "storyViewer.toast.comment.unreported": "Comment unreported",
+  "storyViewer.toast.disable.react": "Join community to interact with all stories",
 
   "storyViewer.commentComposeBar.submit": "Post",
 

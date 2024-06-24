@@ -1,0 +1,22 @@
+.tabButton {
+  display: flex;
+  align-items: center;
+  padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
+  background: var(--asc-color-base-background, #fff);
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 1.5rem;
+  cursor: pointer;
+  color: var(--asc-color-base-shade1);
+  white-space: nowrap;
+}
+
+.tabButton[data-active='true'] {
+  font-weight: 600;
+  color: var(--asc-color-white);
+  background-color: var(--asc-color-primary-default);
+  border: 1px solid transparent;
+}
+
+.tabButton__text {
+  font-size: 1.0625rem;
+}

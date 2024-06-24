@@ -1,0 +1,41 @@
+.userItem {
+  display: grid;
+  grid-template-columns: 3.75rem minmax(0, 1fr);
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  width: 100%;
+}
+
+.userItem__leftPane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userItem__rightPane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.userItem__avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.userItem__userName {
+  display: flex;
+  justify-content: start;
+  align-items: last baseline;
+  gap: 0.25rem;
+  width: 100%;
+  color: var(--asc-color-base-default);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userItem__userName__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

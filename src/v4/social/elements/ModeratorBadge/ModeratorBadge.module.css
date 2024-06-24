@@ -1,0 +1,28 @@
+.moderatorBadge {
+  display: flex;
+  padding: 0 0.375rem 0 0.25rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.0625rem;
+  background-color: var(--asc-color-primary-shade3);
+  border-radius: 1.25rem;
+}
+
+.moderatorBadge__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 0.5625rem;
+  width: 0.75rem;
+  fill: var(--asc-color-primary-default);
+}
+
+.moderatorBadge__text {
+  color: var(--asc-color-primary-default);
+  text-align: center;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: -0.0063rem;
+}

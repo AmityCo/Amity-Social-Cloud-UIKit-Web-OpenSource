@@ -1,2 +1,2 @@
 export { AmityDraftStoryPage } from './DraftsPage';
-export { AmityViewStoryPage } from './StoryPage';
+export { ViewStoryPage } from './StoryPage';

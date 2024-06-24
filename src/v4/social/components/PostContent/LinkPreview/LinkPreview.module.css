@@ -1,0 +1,41 @@
+.linkPreview {
+  cursor: pointer;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.linkPreview__top {
+  background-color: var(--asc-color-base-shade4);
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 21 / 9;
+}
+
+.linkPreview__bottom {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.linkPreview__object {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.linkPreview__unableToPreview {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.linkPreview__unableToPreview__icon {
+  width: 3rem;
+  height: 2.25rem;
+  fill: var(--asc-color-base-shade3);
+}

@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { ReactNode } from 'react';
-import { BarsIcon } from "~/icons";
+import { BarsIcon } from '~/icons';
 
 export const DetailsIcon = styled(BarsIcon).attrs<{ icon?: ReactNode }>({
   width: 24,
   height: 24,
 })`
-    cursor: pointer;
-    fill: ${({ theme }) => theme.palette.neutral.main};
-    align-self: center;
+  cursor: pointer;
+  fill: ${({ theme }) => theme.palette.neutral.main};
+  align-self: center;
 `;
 
 export const ChatHeaderContainer = styled.div`

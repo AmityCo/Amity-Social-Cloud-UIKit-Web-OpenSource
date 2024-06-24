@@ -32,7 +32,6 @@ import useUser from '~/core/hooks/useUser';
 import useFile from '~/core/hooks/useFile';
 import { CommentRepository } from '@amityco/ts-sdk';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
-import useCommentFlaggedByMe from '~/social/hooks/useCommentFlaggedByMe';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 
@@ -96,7 +95,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useFile(commentAuthor?.avatarFileId);
   const { userRoles } = useSDK();
-  const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -130,10 +128,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   // }, [(comment?.data as Amity.ContentDataText)?.text, text]);
 
   if (post == null && comment == null) return <LoadingIndicator />;
-
-  const handleReportComment = async () => {
-    return toggleFlagComment();
-  };
 
   const handleReplyToComment = async (
     replyCommentText: string,
@@ -179,27 +173,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
     });
 
   const handleDeleteComment = async () => commentId && CommentRepository.deleteComment(commentId);
-
-  const onReportClick = async () => {
-    try {
-      await handleReportComment();
-      if (isFlaggedByMe) {
-        notification.success({
-          content: formatMessage({ id: 'report.unreportSent' }),
-        });
-      } else {
-        notification.success({
-          content: formatMessage({ id: 'report.reportSent' }),
-        });
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        notification.error({
-          content: err.message,
-        });
-      }
-    }
-  };
 
   const onClickReply = () => {
     setIsReplying((preValue) => !preValue);
@@ -268,14 +241,12 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
       metadata={comment?.metadata}
       text={text}
       markup={markup}
-      handleReportComment={onReportClick}
       startEditing={startEditing}
       cancelEditing={cancelEditing}
       handleEdit={handleEdit}
       handleDelete={deleteComment}
       isEditing={isEditing}
       queryMentionees={queryMentionees}
-      isReported={isFlaggedByMe}
       isReplyComment={isReplyComment}
       onClickReply={onClickReply}
       onChange={onChange}

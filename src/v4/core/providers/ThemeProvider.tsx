@@ -7,6 +7,22 @@ const SHADE_PERCENTAGES = [0.25, 0.4, 0.5, 0.75];
 const generateShades = (hexColor?: string, isDarkMode = false): string[] => {
   if (!hexColor) return Array(SHADE_PERCENTAGES.length).fill('');
 
+  if (isDarkMode === true && hexColor === defaultConfig.theme.dark.primary_color) {
+    return ['#4a82f2', '#a0bdf8', '#d9e5fc', '#ffffff'];
+  }
+
+  if (isDarkMode === false && hexColor === defaultConfig.theme.light.primary_color) {
+    return ['#4a82f2', '#a0bdf8', '#d9e5fc', '#ffffff'];
+  }
+
+  if (isDarkMode === true && hexColor === defaultConfig.theme.dark.secondary_color) {
+    return ['#a5a9b5', '#6e7487', '#40434e', '#292b32'];
+  }
+
+  if (isDarkMode === false && hexColor === defaultConfig.theme.light.secondary_color) {
+    return ['#636878', '#898e9e', '#a5a9b5', '#ebecef'];
+  }
+
   const hslColor = parseToHsl(hexColor);
 
   const shades = SHADE_PERCENTAGES.map((percentage) => {
@@ -78,7 +94,6 @@ export function useGenerateStylesShadeColors(inputConfig?: GetConfigReturnValue)
       const darkThemeConfig = inputThemeConfig?.dark || defaultConfig.theme.dark;
       const darkPrimary = generateShades(darkThemeConfig.primary_color, true);
       const darkSecondary = generateShades(darkThemeConfig.secondary_color, true);
-
       return {
         '--asc-color-primary-default': darkThemeConfig.primary_color,
         '--asc-color-primary-shade1': darkPrimary[0],

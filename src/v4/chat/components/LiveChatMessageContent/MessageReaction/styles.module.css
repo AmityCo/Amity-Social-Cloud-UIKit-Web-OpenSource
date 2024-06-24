@@ -6,7 +6,7 @@
   position: absolute;
   bottom: 1.5rem;
   left: 0.625rem;
-  transform: translate(-50%, 0px);
+  transform: translate(-50%, 0);
 }
 
 .reactionButton {

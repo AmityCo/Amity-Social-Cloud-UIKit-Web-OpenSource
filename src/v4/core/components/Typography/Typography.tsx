@@ -5,6 +5,7 @@ import typography from '~/v4/styles/typography.module.css';
 interface TypographyProps {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const Typography: React.FC<TypographyProps> & {
@@ -15,85 +16,92 @@ const Typography: React.FC<TypographyProps> & {
   BodyBold: React.FC<TypographyProps>;
   Caption: React.FC<TypographyProps>;
   CaptionBold: React.FC<TypographyProps>;
-} = ({ children, className = '', ...props }) => {
+} = ({ children, className = '', style, ...rest }) => {
   return (
-    <div {...props} className={clsx(typography['typography'], className)}>
+    <div className={clsx(typography['typography'], className)} style={style} {...rest}>
       {children}
     </div>
   );
 };
 
-Typography.Heading = ({ children, className = '', ...props }) => {
+Typography.Heading = ({ children, className = '', style, ...rest }) => {
   return (
     <h1
-      {...props}
       className={clsx(typography['typography'], typography['typography-headings'], className)}
+      style={style}
+      {...rest}
     >
       {children}
     </h1>
   );
 };
 
-Typography.Title = ({ children, className = '', ...props }) => {
+Typography.Title = ({ children, className = '', style, ...rest }) => {
   return (
     <h2
-      {...props}
       className={clsx(typography['typography'], typography['typography-titles'], className)}
+      style={style}
+      {...rest}
     >
       {children}
     </h2>
   );
 };
 
-Typography.Subtitle = ({ children, className = '', ...props }) => {
+Typography.Subtitle = ({ children, className = '', style, ...rest }) => {
   return (
     <h3
-      {...props}
       className={clsx(typography['typography'], typography['typography-sub-title'], className)}
+      style={style}
+      {...rest}
     >
       {children}
     </h3>
   );
 };
 
-Typography.Body = ({ children, className = '', ...props }) => {
+Typography.Body = ({ children, className = '', style, ...rest }) => {
   return (
     <p
-      {...props}
       className={clsx(typography['typography'], typography['typography-body'], className)}
+      style={style}
+      {...rest}
     >
       {children}
     </p>
   );
 };
 
-Typography.BodyBold = ({ children, className = '', ...props }) => {
+Typography.BodyBold = ({ children, className = '', style, ...rest }) => {
   return (
     <p
-      {...props}
       className={clsx(typography['typography'], typography['typography-body-bold'], className)}
+      style={style}
+      {...rest}
     >
       {children}
     </p>
   );
 };
 
-Typography.Caption = ({ children, className = '', ...props }) => {
+Typography.Caption = ({ children, className = '', style, ...rest }) => {
   return (
     <p
-      {...props}
       className={clsx(typography['typography'], typography['typography-caption'], className)}
+      style={style}
+      {...rest}
     >
       {children}
     </p>
   );
 };
 
-Typography.CaptionBold = ({ children, className = '', ...props }) => {
+Typography.CaptionBold = ({ children, className = '', style, ...rest }) => {
   return (
     <p
-      {...props}
       className={clsx(typography['typography'], typography['typography-caption-bold'], className)}
+      style={style}
+      {...rest}
     >
       {children}
     </p>

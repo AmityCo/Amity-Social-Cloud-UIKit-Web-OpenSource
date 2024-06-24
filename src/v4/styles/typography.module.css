@@ -1,4 +1,4 @@
-@import './global.css';
+@import url('./global.css');
 
 .typography {
   padding: 0;
@@ -36,9 +36,11 @@
 }
 
 .typography-caption {
-  font-weight: var(--asc-text-font-weight-normal);
-  font-size: var(--asc-text-font-size-xs);
-  line-height: var(--asc-line-height-xs);
+  font-size: 0.8125rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.125rem; /* 138.462% */
+  letter-spacing: -0.0063rem;
 }
 
 .typography-caption-bold {

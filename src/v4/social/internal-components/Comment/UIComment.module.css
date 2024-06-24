@@ -1,10 +1,10 @@
 .avatar {
-  margin-right: 0.5rem;
+  margin-right: var(--asc-spacing-s1);
 }
 
 .container {
   display: flex;
-  gap: 1rem;
+  gap: var(--asc-spacing-m1);
   width: 100%;
 }
 
@@ -14,18 +14,18 @@
 }
 
 .editedMark {
-  margin-left: 0.3125rem;
+  margin-left: var(--asc-spacing-xxs2);
   color: var(--asc-color-neutral-shade1);
   font-size: var(--asc-text-font-size-sm);
   font-weight: var(--asc-text-font-weight-normal);
   line-height: var(--asc-line-height-sm);
 }
 
-.editedMark:before {
+.editedMark::before {
   content: '(';
 }
 
-.editedMark:after {
+.editedMark::after {
   content: ')';
 }
 
@@ -33,20 +33,20 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--asc-spacing-s2);
 }
 
 .reactionsWrapper {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--asc-spacing-s1);
 }
 
 .interactionBar {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  padding: 0.25rem 1rem 0.75rem 0rem;
+  padding: var(--asc-spacing-xxs2) var(--asc-spacing-m1) var(--asc-spacing-s2) 0;
   align-items: center;
 }
 
@@ -58,27 +58,27 @@
 .buttonContainer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 0.5rem;
+  margin-top: var(--asc-spacing-s1);
 }
 
 .buttonContainer > * {
-  margin-left: 0.5rem;
+  margin-left: var(--asc-spacing-s1);
 }
 
 .commentEditTextarea {
   font-size: var(--asc-text-font-size-md);
   font-weight: var(--asc-text-font-weight-normal);
   line-height: var(--asc-line-height-lg);
-  border-radius: 0 0.75rem 0.75rem 0.75rem;
+  border-radius: 0 var(--asc-border-radius-lg) var(--asc-border-radius-lg);
   height: 7.5rem;
-  padding: 0.75rem;
+  padding: var(--asc-spacing-s2);
 }
 
 .reactionListButtonContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--asc-spacing-s1);
   color: var(--asc-color-base-shade2);
 }
 
@@ -95,7 +95,7 @@
   width: 1.25rem;
   height: 1.25rem;
   border-radius: 50%;
-  margin-left: -0.25rem;
+  margin-left: calc(-1 * var(--asc-spacing-xxs2));
 }
 
 .reactionIcon:first-child {
@@ -103,23 +103,23 @@
 }
 
 .commentInteractionButton {
-  padding: 0.25rem;
+  padding: var(--asc-spacing-xxs2);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--asc-spacing-s1);
   color: var(--asc-color-base-shade2);
   cursor: pointer;
   border: none;
 }
 
 .likeButton {
-  padding: 0.25rem;
+  padding: var(--asc-spacing-xxs2);
   color: var(--asc-color-base-shade2);
   border: none;
 }
 
 .liked {
-  padding: 0.25rem;
+  padding: var(--asc-spacing-xxs2);
   color: var(--asc-color-primary-default);
   border: none;
 }
@@ -127,13 +127,13 @@
 .reactionListButton {
   border: none;
   color: var(--asc-color-primary-default);
-  padding: 0;
+  padding: var(--asc-spacing-xxs2);
 }
 
 .content {
   display: inline-flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--asc-spacing-xxs2);
   width: 100%;
 }
 
@@ -141,7 +141,7 @@
   display: inline-flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 0.125rem;
+  gap: var(--asc-spacing-xxs2);
   color: var(--asc-color-base-default);
 }
 
@@ -151,4 +151,9 @@
   border-radius: var(--asc-border-radius-sm);
   text-align: center;
   color: var(--asc-color-base-shade2);
+}
+
+.moderatorBadge__container {
+  display: flex;
+  margin-bottom: var(--asc-spacing-xxs2);
 }

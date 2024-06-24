@@ -5,15 +5,6 @@ export function isLoadingItem<T>(item: T | { skeleton?: boolean }): item is { sk
   return !!(item as { skeleton?: boolean }).skeleton;
 }
 
-export function isValidHttpUrl(url: string) {
-  try {
-    const newUrl = new URL(url);
-    return newUrl.protocol === 'http:' || newUrl.protocol === 'https:';
-  } catch (err) {
-    return false;
-  }
-}
-
 export const checkStoryPermission = (
   client: Amity.Client | null | undefined,
   communityId?: string,

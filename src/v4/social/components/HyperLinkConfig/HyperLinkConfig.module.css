@@ -8,11 +8,8 @@
   gap: var(--asc-spacing-l1);
 }
 
-.bottomSheet {
-}
-
 .bottomSheet .react-modal-sheet-backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgb(0 0 0 / 50%);
 }
 
 .bottomSheet .react-modal-sheet-container {
@@ -25,6 +22,7 @@
 
 .bottomSheet .react-modal-sheet-content {
   background-color: var(--asc-color-base-background);
+  padding: 16px;
 }
 
 .bottomSheet .react-modal-sheet-header {
@@ -40,10 +38,6 @@
   background-color: #ccc;
   border-radius: 2px;
   margin-bottom: 8px;
-}
-
-.bottomSheet .react-modal-sheet-content {
-  padding: 16px;
 }
 
 .inputContainer {
@@ -150,4 +144,11 @@
   align-self: stretch;
   background-color: var(--asc-color-base-shade4);
   margin: 1rem 0;
+}
+
+.removeLinkContainer {
+  margin-top: var(--asc-spacing-l1);
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
 }

@@ -14,7 +14,7 @@ import {
 } from './styles';
 import { BarsIcon } from '~/icons';
 import { useIntl } from 'react-intl';
-import { StoryTab } from '~/v4/social/components';
+import { StoryTab } from '~/social/components/StoryTab';
 
 interface NewsFeedProps {
   isOpen: boolean;

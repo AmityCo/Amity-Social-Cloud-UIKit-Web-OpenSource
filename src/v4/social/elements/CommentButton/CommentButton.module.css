@@ -1,27 +1,15 @@
-.uiCommentButton {
-  font-family: "Inter";
-  font-weight: var(--asc-text-font-weight-bold);
-  color: var(--asc-color-white);
+.commentButton {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--asc-spacing-xxs2);
-  border-radius: 1.5rem;
-  padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
-  background-color: var(--asc-color-base-default);
+  justify-content: start;
+  gap: 0.25rem;
   cursor: pointer;
-  border: none;
 }
 
-.uiRemoteImageButton {
-  width: var(--asc-spacing-m3);
-  height: var(--asc-spacing-m3);
-  cursor: pointer;
-  border: none;
-  outline: none;
-  padding: var(--asc-spacing-none);
-  margin: var(--asc-spacing-none);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.commentButton__icon {
+  fill: var(--asc-color-base-shade2);
+}
+
+.commentButton__text {
+  color: var(--asc-color-base-shade2);
 }

@@ -1,42 +1,61 @@
 import React from 'react';
+import styles from './CloseButton.module.css';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import clsx from 'clsx';
+import { IconComponent } from '~/v4/core/IconComponent';
 
-import { UICloseButton, UIRemoteImageButton } from './styles';
-import { isValidHttpUrl } from '~/utils';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+const CloseIconSVG = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="100%"
+    height="100%"
+    viewBox="0 0 320 512"
+    fill="currentColor"
+    {...props}
+  >
+    <path
+      d="M207.6 256l107.72-107.72c6.23-6.23 6.23-16.34
+    0-22.58l-25.03-25.03c-6.23-6.23-16.34-6.23-22.58 0L160 208.4
+    52.28 100.68c-6.23-6.23-16.34-6.23-22.58 0L4.68 125.7c-6.23 6.23-6.23 16.34 0 22.58L112.4
+    256 4.68 363.72c-6.23 6.23-6.23 16.34 0 22.58l25.03 25.03c6.23 6.23 16.34 6.23 22.58 0L160
+    303.6l107.72 107.72c6.23 6.23 16.34 6.23 22.58 0l25.03-25.03c6.23-6.23 6.23-16.34
+    0-22.58L207.6 256z"
+    />
+  </svg>
+);
 
 interface CloseButtonProps {
-  pageId: 'story_page';
-  componentId: '*';
-  onClick?: (e: React.MouseEvent) => void;
-  style?: React.CSSProperties;
+  pageId?: string;
+  componentId?: string;
+  onPress?: () => void;
   'data-qa-anchor'?: string;
+  defaultClassName?: string;
+  imgClassName?: string;
 }
 
 export const CloseButton = ({
-  pageId = 'story_page',
+  pageId = '*',
   componentId = '*',
-  onClick = () => {},
-  style,
-  ...props
+  onPress = () => {},
+  defaultClassName,
+  imgClassName,
 }: CloseButtonProps) => {
   const elementId = 'close_button';
-  const { getConfig, isExcluded } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
-  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
-  const closeIcon = elementConfig?.close_icon;
+  const { isExcluded, config, uiReference } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
-  if (isElementExcluded) return null;
+  if (isExcluded) return null;
 
-  const isRemoteImage = closeIcon && isValidHttpUrl(closeIcon);
-
-  return isRemoteImage ? (
-    <UIRemoteImageButton
+  return (
+    <IconComponent
+      onPress={onPress}
       data-qa-anchor="close_button"
-      src={closeIcon}
-      onClick={onClick}
-      {...props}
+      defaultIcon={() => <CloseIconSVG className={clsx(styles.closeButton, defaultClassName)} />}
+      imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+      configIconName={config.icon}
     />
-  ) : (
-    <UICloseButton data-qa-anchor="close_button" name={'Close'} onClick={onClick} {...props} />
   );
 };

@@ -6,10 +6,6 @@
   background-color: var(--asc-color-base-shade3);
 }
 
-.avatarContainer.visible .img {
-  opacity: 1;
-}
-
 .avatarContainer.clickable:hover {
   cursor: pointer;
 }
@@ -56,7 +52,7 @@
   position: absolute;
   z-index: 2;
   opacity: 0.5;
-  background-color: #000000;
+  background-color: #000;
   width: 100%;
   height: 100%;
 }
@@ -97,4 +93,8 @@
 .img-large {
   height: 4rem;
   width: 4rem;
+}
+
+.avatarContainer.visible .img {
+  opacity: 1;
 }

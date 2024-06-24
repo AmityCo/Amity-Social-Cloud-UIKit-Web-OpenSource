@@ -1,0 +1,9 @@
+.createCommunityButton {
+  display: flex;
+  padding: 0.625rem 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.25rem;
+  border: 0 solid var(--asc-color-secondary-shade3);
+  color: var(--asc-color-primary-default);
+}

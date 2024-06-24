@@ -136,7 +136,7 @@ const PollContent = ({ pollId }: { pollId?: string }) => {
     }
   };
 
-  const handleSubmit: React.MouseEventHandler<HTMLAnchorElement> = async (e) => {
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
     if (!pollId) return;
     e.preventDefault();
 
@@ -173,7 +173,7 @@ const PollContent = ({ pollId }: { pollId?: string }) => {
         <ResultList answers={answers} />
       )}
       {!isVoted && (
-        <SubmitButton disabled={!answerIds.length} onClick={handleSubmit}>
+        <SubmitButton disabled={!answerIds.length} onClick={(e) => handleSubmit(e)}>
           <FormattedMessage id="poll.vote.submit" />
         </SubmitButton>
       )}

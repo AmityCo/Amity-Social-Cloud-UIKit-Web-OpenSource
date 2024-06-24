@@ -1,53 +1,34 @@
+import { config } from 'process';
 import React from 'react';
-
-import { StyledRemoteImageButton } from './styles';
-import { useIntl } from 'react-intl';
-import { isValidHttpUrl } from '~/utils';
-import { useTheme } from 'styled-components';
+import { Typography } from '~/v4/core/components';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { Button } from '~/v4/core/components/Button';
+import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
+import styles from './CancelButton.module.css';
 
 interface CancelButtonProps {
-  pageId: '*';
-  componentId: 'edit_comment_component';
+  pageId?: string;
+  componentId?: string;
   onClick?: (e: React.MouseEvent) => void;
-  children?: React.ReactNode;
-  style?: React.CSSProperties;
 }
 
 export const CancelButton = ({
   pageId = '*',
-  componentId = 'edit_comment_component',
+  componentId = '*',
   onClick = () => {},
-  style,
 }: CancelButtonProps) => {
-  const theme = useTheme();
   const elementId = 'cancel_button';
-  const { formatMessage } = useIntl();
-  const { getConfig, isExcluded } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
-  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
+  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
-  const cancelButtonText = elementConfig?.cancel_button_text;
-  const backgroundColor = elementConfig?.background_color;
-  const cancelButton = elementConfig?.back_icon;
+  if (isExcluded) return null;
 
-  if (isElementExcluded) return null;
-
-  const isRemoteImage = cancelButton && isValidHttpUrl(cancelButton);
-
-  return isRemoteImage ? (
-    <StyledRemoteImageButton
-      src={cancelButton}
-      onClick={onClick}
-      style={{
-        ...style,
-        backgroundColor: backgroundColor || theme.v4.colors.secondary.default,
-      }}
-    >
-      {formatMessage({ id: cancelButtonText })}
-    </StyledRemoteImageButton>
-  ) : (
-    <Button variant="secondary">{formatMessage({ id: cancelButtonText })}</Button>
+  return (
+    <button data-qa-anchor={accessibilityId} style={themeStyles} onClick={onClick}>
+      <Typography.Body className={styles.clearButton}>{config.cancel_button_text}</Typography.Body>
+    </button>
   );
 };

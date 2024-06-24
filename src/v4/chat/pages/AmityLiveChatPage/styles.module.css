@@ -1,7 +1,7 @@
 .messageListSheet {
   z-index: 1000 !important;
 
-  @media (min-width: 768px) {
+  @media (width >= 768px) {
     width: 375px !important;
   }
 
@@ -18,7 +18,7 @@
 .amtiyLivechatPage {
   display: flex;
   flex-direction: column;
-  background-color: var(--live-chat-asc-color-base-background, var(--asc-color-base-background));
+  background-color: var(--asc-color-base-background);
   height: 100%;
   overflow-y: hidden;
 }

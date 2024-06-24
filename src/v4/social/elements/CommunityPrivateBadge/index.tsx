@@ -1,0 +1,1 @@
+export { CommunityPrivateBadge } from './CommunityPrivateBadge';

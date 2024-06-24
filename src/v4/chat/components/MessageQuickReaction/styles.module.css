@@ -10,9 +10,6 @@
 
 .quickReactionIconContainer:hover {
   cursor: pointer;
-  background-color: var(
-    --live-chat-message-list-asc-color-secondary-shade4,
-    var(--live-chat-asc-color-secondary-shade4, var(--asc-color-secondary-shade4))
-  );
+  background-color: var(--asc-color-secondary-shade4);
   border-radius: var(--asc-border-radius-sm);
 }

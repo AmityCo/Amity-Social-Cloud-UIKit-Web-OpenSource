@@ -16,7 +16,6 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  z-index: 2;
   fill: var(--asc-color-primary-default);
 }
 
@@ -46,4 +45,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--asc-color-secondary-default);
+}
+
+.errorIcon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: pointer;
 }

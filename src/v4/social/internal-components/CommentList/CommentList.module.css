@@ -1,7 +1,7 @@
 .commentListContainer {
   max-height: calc(100vh - 16rem);
-  overflow-y: auto;
   overflow: hidden;
+  overflow-y: auto;
   margin-bottom: 1rem;
 }
 

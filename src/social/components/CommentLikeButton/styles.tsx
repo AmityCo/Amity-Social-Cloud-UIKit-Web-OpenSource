@@ -5,6 +5,7 @@ import { ThumbsUp } from '~/icons';
 
 const isLikedStyle = css`
   color: ${({ theme }) => theme.palette.primary.main};
+  fill: ${({ theme }) => theme.palette.primary.main};
 `;
 
 export const StyledLikeButton = styled(SecondaryButton)`
@@ -18,6 +19,8 @@ export const StyledLikeButton = styled(SecondaryButton)`
 
 export const BaseLikeIcon = styled(ThumbsUp)<{ icon?: ReactNode }>`
   font-size: 16px;
+  color: #a5a9b5;
+  fill: #a5a9b5;
 `;
 
 export const IsLikedLikeIcon = styled(BaseLikeIcon)<{ icon?: ReactNode }>`

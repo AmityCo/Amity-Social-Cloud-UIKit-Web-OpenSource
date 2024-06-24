@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
-import styles from './styles.module.css';
+import styles from './Notification.module.css';
 import { useNotificationData } from '~/v4/core/providers/NotificationProvider';
 
 interface NotificationProps {
@@ -11,7 +11,7 @@ interface NotificationProps {
 
 const Notification = ({ className, content, icon }: NotificationProps) => (
   <div className={clsx(styles.notificationContainer, className)}>
-    {icon} {content}
+    <div className={clsx(styles.icon__container)}>{icon}</div> {content}
   </div>
 );
 

@@ -1,0 +1,86 @@
+.global_feed {
+  display: flex;
+  flex-direction: column;
+}
+
+.global_feed__postContainer {
+  padding: 0.25rem 1rem 0.75rem 0.75rem;
+}
+
+.global_feed__postSkeletonContainer {
+  padding-top: 0.75rem;
+  padding-left: 1rem;
+}
+
+.global_feed__pullToRefresh {
+  height: var(--asc-pull-to-refresh-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.global_feed__post__reactionBar__leftPane__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.global_feed__post__reactionBar__leftPane__iconImg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.global_feed__pullToRefresh__spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  animation-name: spin;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.global_feed__divider {
+  background-color: var(--asc-color-base-shade4);
+  height: 0.5rem;
+  width: 100%;
+}
+
+.global_feed__post__divider {
+  width: 100%;
+  background-color: var(--asc-color-base-shade4);
+  height: 0.0625rem;
+}
+
+.global_feed__post__reactionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.global_feed__post__reactionBar__leftPane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.global_feed__post__reactionBar__rightPane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.global_feed__intersection {
+  height: 1px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

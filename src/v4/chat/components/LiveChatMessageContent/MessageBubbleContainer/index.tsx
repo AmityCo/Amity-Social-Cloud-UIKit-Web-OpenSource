@@ -1,10 +1,8 @@
 import React from 'react';
 import styles from './styles.module.css';
-import UserAvatar from '../../UserAvatar';
-import { backgroundImage as userBackgroundImage } from '~/icons/User';
-import Badge from '~/v4/icons/Badge';
+import User from '~/v4/icons/User';
 import { Typography } from '~/v4/core/components';
-import { SIZE_ALIAS } from '~/core/hooks/useSize';
+import { Avatar, AVATAR_SIZE } from '~/v4/core/components/Avatar';
 
 interface MessageBubbleContainerProps {
   avatarUrl?: string;
@@ -19,11 +17,7 @@ const MessageBubbleContainer = ({
 }: MessageBubbleContainerProps) => {
   return (
     <div className={styles.messageItemContainer}>
-      <UserAvatar
-        size={SIZE_ALIAS.SMALL}
-        avatarUrl={avatarUrl}
-        defaultImage={userBackgroundImage}
-      />
+      <Avatar size={AVATAR_SIZE.SMALL} avatar={avatarUrl} defaultImage={<User />} />
 
       <div>
         <div className={styles.userDisplayName}>

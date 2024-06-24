@@ -1,42 +1,52 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Tester } from 'react-insta-stories/dist/interfaces';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import useImage from '~/core/hooks/useImage';
-import { checkStoryPermission, formatTimeAgo } from '~/utils';
-import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useIntl } from 'react-intl';
 
-import useSDK from '~/core/hooks/useSDK';
-
-import { LIKE_REACTION_KEY } from '~/constants';
 import Truncate from 'react-truncate-markup';
-import { CustomRenderer } from './types';
-import { LoadingOverlay, StoryVideo } from './styles';
+import {
+  CustomRenderer,
+  Tester,
+} from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { SpeakerButton } from '~/v4/social/elements';
-import Header from './Wrappers/Header';
+
 import { BottomSheet, Button, Typography } from '~/v4/core/components';
 
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
-import Footer from './Wrappers/Footer';
-import { PageTypes } from '~/social/constants';
+import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
+import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
+
 import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 
-import rendererStyles from './Renderers.module.css';
-import useUser from '~/core/hooks/useUser';
-import { isAdmin, isModerator } from '~/helpers/permissions';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import useSDK from '~/v4/core/hooks/useSDK';
+import useUser from '~/v4/core/hooks/objects/useUser';
 
-export const renderer: CustomRenderer = ({ story, action, config, messageHandler }) => {
+import clsx from 'clsx';
+import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
+import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
+
+import rendererStyles from './Renderers.module.css';
+import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
+
+export const renderer: CustomRenderer = ({
+  story,
+  action,
+  config,
+  messageHandler,
+  onSwipeDown,
+  onClose,
+  onClickCommunity,
+}) => {
   const { formatMessage } = useIntl();
-  const { page, onClickCommunity, onChangePage } = useNavigation();
   const [loaded, setLoaded] = useState(false);
   const [muted, setMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
-  const { width, height, loader, storyStyles } = config;
+  const { loader } = config;
   const { client } = useSDK();
-  const user = useUser(client?.userId);
+  const { user } = useUser(client?.userId);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
@@ -50,17 +60,18 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
     creator,
     community,
     actions,
-    handleAddIconClick,
     addStoryButton,
     fileInputRef,
+    myReactions,
+    currentIndex,
+    storiesCount,
+    increaseIndex,
+    pageId,
   } = story;
 
-  const isJoined = community?.isJoined || false;
-
-  const avatarUrl = useImage({
-    fileId: community?.avatarFileId || '',
-    imageSize: 'small',
-  });
+  const { members } = useCommunityMembersCollection(community?.communityId as string);
+  const member = members?.find((member) => member.userId === client?.userId);
+  const isMember = member != null;
 
   const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
   const subheading =
@@ -80,21 +91,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
   const haveStoryPermission =
     isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
 
-  const computedStyles = {
-    ...storyContentStyles,
-    ...(storyStyles || {}),
-  };
-
   const vid = useRef<HTMLVideoElement>(null);
   const controls = useAnimationControls();
 
-  const onWaiting = () => {
-    action('pause', true);
-  };
-
-  const onPlaying = () => {
-    action('play', true);
-  };
+  const onWaiting = () => action('pause', true);
+  const onPlaying = () => action('play', true);
 
   const videoLoaded = () => {
     messageHandler('UPDATE_VIDEO_DURATION', { duration: vid?.current?.duration });
@@ -136,11 +137,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         transition: { duration: 0.3, ease: 'easeOut' },
       })
       .then(() => {
-        if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-          onChangePage(PageTypes.NewsFeed);
-        } else {
-          onClickCommunity(community?.communityId as string);
-        }
+        onSwipeDown?.();
       });
   };
 
@@ -159,6 +156,14 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       });
     }
   };
+
+  const handleOnClose = () => {
+    onClose();
+  };
+
+  const handleProgressComplete = useCallback(() => {
+    increaseIndex();
+  }, [increaseIndex]);
 
   useEffect(() => {
     if (vid.current) {
@@ -195,7 +200,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
 
   return (
     <motion.div
-      className={rendererStyles.rendererContainer}
+      className={clsx(rendererStyles.rendererContainer)}
       animate={controls}
       drag="y"
       dragConstraints={{ top: 0, bottom: 0 }}
@@ -204,14 +209,22 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       onDragEnd={handleDragEnd}
       whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
     >
+      <StoryProgressBar
+        pageId={pageId}
+        duration={5000}
+        currentIndex={currentIndex}
+        storiesCount={storiesCount}
+        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet}
+        onComplete={handleProgressComplete}
+      />
       <SpeakerButton
         pageId="story_page"
         componentId="*"
         isMuted={muted}
-        onClick={muted ? unmute : mute}
+        onPress={muted ? unmute : mute}
       />
       <Header
-        avatar={avatarUrl}
+        community={community}
         heading={heading}
         subheading={subheading}
         isHaveActions={actions?.length > 0}
@@ -223,21 +236,14 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onMute={mute}
         onUnmute={unmute}
         onAction={openBottomSheet}
-        onAddStory={handleAddIconClick}
-        onClickCommunity={() => onClickCommunity(community?.communityId as string)}
-        onClose={() => {
-          if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-            onChangePage(PageTypes.NewsFeed);
-            return;
-          }
-          onClickCommunity(community?.communityId as string);
-        }}
+        onClickCommunity={() => onClickCommunity?.()}
+        onClose={handleOnClose}
         addStoryButton={addStoryButton}
       />
-      <StoryVideo
+      <video
         data-qa-anchor="video_view"
         ref={vid}
-        style={computedStyles}
+        className={clsx(rendererStyles.storyVideo)}
         src={story?.videoData?.fileUrl || story?.videoData?.videoUrl?.original}
         controls={false}
         onLoadedData={videoLoaded}
@@ -246,12 +252,9 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         onPlaying={onPlaying}
         muted={muted}
         autoPlay
-        webkit-playsinline="true"
       />
       {!loaded && (
-        <LoadingOverlay width={width} height={height}>
-          {loader || <div>loading...</div>}
-        </LoadingOverlay>
+        <div className={clsx(rendererStyles.loadingOverlay)}>{loader || <div>loading...</div>}</div>
       )}
 
       <BottomSheet
@@ -263,7 +266,7 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
       >
         {actions?.map((bottomSheetAction) => (
           <Button
-            className={rendererStyles.actionButton}
+            className={clsx(rendererStyles.actionButton)}
             onClick={() => {
               bottomSheetAction.action();
             }}
@@ -288,11 +291,11 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
           referenceType={'story'}
           community={community as Amity.Community}
           shouldAllowCreation={community?.allowCommentInStory}
-          shouldAllowInteraction={isJoined}
+          shouldAllowInteraction={isMember}
         />
       </BottomSheet>
       {story.items?.[0]?.data?.url && (
-        <div className={rendererStyles.hyperLinkContainer}>
+        <div className={clsx(rendererStyles.hyperLinkContainer)}>
           <HyperLink
             href={
               story.items[0].data.url.startsWith('http')
@@ -317,21 +320,15 @@ export const renderer: CustomRenderer = ({ story, action, config, messageHandler
         syncState={syncState}
         reach={reach}
         commentsCount={commentsCount}
-        totalLikes={totalLikes}
+        reactionsCount={totalLikes}
         isLiked={isLiked}
         onClickComment={openCommentSheet}
+        myReactions={myReactions}
         showImpression={isCreator || haveStoryPermission}
+        isMember={isMember}
       />
     </motion.div>
   );
-};
-
-const storyContentStyles = {
-  width: 'auto',
-  maxWidth: '100%',
-  maxHeight: '100%',
-  margin: 'auto',
-  position: 'relative' as const,
 };
 
 export const tester: Tester = (story) => {

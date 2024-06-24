@@ -1,0 +1,8 @@
+.aspectRatioButton {
+  fill: var(--asc-color-white);
+}
+
+.aspectRatioButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

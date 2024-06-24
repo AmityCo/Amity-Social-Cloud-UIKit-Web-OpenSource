@@ -13,23 +13,25 @@ export const MessageReactionPreview = ({
 }) => {
   const { config: reactionConfig } = useCustomReaction();
   // find the top 3 reactions
-  const topReactions = useMemo(
-    () =>
-      Object.entries(message.reactions)
-        .sort((a, b) => b[1] - a[1]) // sort by value in descending order
-        // remove reaction that has zero value
-        .filter((reaction) => reaction[1] > 0)
-        .slice(0, 3)
-        .sort((a, b) => a[1] - b[1]),
-    [message.reactions],
-  );
+  const topReactions = message.reactions
+    ? useMemo(
+        () =>
+          Object.entries(message.reactions)
+            .sort((a, b) => b[1] - a[1]) // sort by value in descending order
+            // remove reaction that has zero value
+            .filter((reaction) => reaction[1] > 0)
+            .slice(0, 3)
+            .sort((a, b) => a[1] - b[1]),
+        [message?.reactions],
+      )
+    : [];
 
-  if (!message.reactionsCount) return null;
+  if (!message?.reactionsCount) return null;
 
   return (
     <div
       className={styles.reactionPreviewContainer}
-      data-myreaction={message.myReactions && !!message.myReactions.length}
+      data-myreaction={message?.myReactions && !!message?.myReactions.length}
       onClick={onClick}
     >
       <div className={styles.reactionIconContainer}>

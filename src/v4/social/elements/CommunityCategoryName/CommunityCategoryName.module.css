@@ -1,0 +1,9 @@
+.communityCategoryName {
+  display: flex;
+  padding: 0 0.5rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1.25rem;
+  background-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-default);
+}

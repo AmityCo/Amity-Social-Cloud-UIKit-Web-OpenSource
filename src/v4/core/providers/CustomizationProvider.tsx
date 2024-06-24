@@ -92,11 +92,12 @@ export const useCustomization = () => {
 
 interface CustomizationProviderProps {
   children: React.ReactNode;
-  initialConfig: Config;
+  initialConfig: Config | undefined;
 }
 
 type IconConfiguration = {
   icon?: string;
+  image?: string;
 };
 type TextConfiguration = {
   text?: string;
@@ -201,6 +202,14 @@ export const defaultConfig: DefaultConfig = {
       unmute_icon: 'unmute.png',
       background_color: '#1243EE',
     },
+    'story_page/*/arrow_left_button': {
+      arrow_left_icon: 'arrow_left.png',
+      background_color: '#1243EE',
+    },
+    'story_page/*/arrow_right_button': {
+      arrow_right_icon: 'arrow_right.png',
+      background_color: '#1243EE',
+    },
     '*/edit_comment_component/*': {
       theme: {},
     },
@@ -228,6 +237,10 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/comment_tray_component/*': {
       theme: {},
+    },
+    '*/comment_tray_component/comment_bubble_deleted_view': {
+      comment_bubble_deleted_icon: 'comment_bubble_deleted.png',
+      text: 'This reply has been deleted',
     },
     '*/story_tab_component/*': {},
     '*/story_tab_component/story_ring': {
@@ -274,6 +287,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_home_page/empty_newsfeed/create_community_button': {
       icon: 'createCommunityIcon',
+      text: 'Create Community',
     },
     'social_home_page/my_communities/community_avatar': {},
     'social_home_page/my_communities/community_display_name': {},
@@ -298,33 +312,6 @@ export const defaultConfig: DefaultConfig = {
       icon: 'badgeIcon',
       text: 'Moderator',
     },
-    '*/post_content/moderator_badge': {
-      icon: 'badgeIcon',
-      text: 'Moderator',
-      theme: {
-        light: {
-          primary_color: '#FA4D30',
-          secondary_color: '#292B32',
-        },
-        dark: {
-          primary_color: '#00FF00',
-          secondary_color: '#292B32',
-        },
-      },
-    },
-    '*/post_comment/*': {
-      preferred_theme: 'default',
-      theme: {
-        light: {
-          primary_color: '#FFC0CB',
-          secondary_color: '#292B32',
-        },
-        dark: {
-          primary_color: '#FFFF00',
-          secondary_color: '#292B32',
-        },
-      },
-    },
     '*/post_content/timestamp': {},
     '*/post_content/menu_button': {
       icon: 'menuIcon',
@@ -341,6 +328,87 @@ export const defaultConfig: DefaultConfig = {
     '*/post_content/share_button': {
       icon: 'shareButtonIcon',
       text: 'Share',
+    },
+    'post_composer_page/*/*': {},
+    'post_composer_page/*/close_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/*/community_display_name': {},
+    'post_composer_page/*/create_button': {
+      text: 'Post',
+    },
+    'post_composer_page/*/edit_post_button': {
+      text: 'Save',
+    },
+    'post_composer_page/*/edit_post_title': {
+      text: 'Edit post',
+    },
+    'post_composer_page/media_attachment/*': {},
+    'post_composer_page/media_attachment/camera_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/image_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/video_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/file_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/media_attachment/detailed_button': {
+      image: 'platformValue',
+    },
+    'post_composer_page/detailed_media_attachment/*': {},
+    'post_composer_page/detailed_media_attachment/camera_button': {
+      text: 'Camera',
+      image: 'platformValue',
+    },
+    'post_composer_page/detailed_media_attachment/image_button': {
+      text: 'Photo',
+      image: 'platformValue',
+    },
+    'post_composer_page/detailed_media_attachment/video_button': {
+      text: 'Video',
+      image: 'platformValue',
+    },
+    'create_post_page/detailed_media_attachment/file_button': {
+      textpost_composer_page: 'Attachment',
+      image: 'platformValue',
+    },
+    'social_home_page/*/*': {},
+    'social_home_page/create_post_menu/*': {},
+    'social_home_page/create_post_menu/create_post_button': {
+      text: 'Post',
+      image: 'Post',
+    },
+    'social_home_page/create_post_menu/create_story_button': {
+      text: 'Story',
+      image: 'Story',
+    },
+    'social_home_page/create_post_menu/create_poll_button': {
+      text: 'Poll',
+      image: 'Poll',
+    },
+    'social_home_page/create_post_menu/create_livestream_button': {
+      text: 'Livestream',
+      image: 'Livestream',
+    },
+    'select_post_target_page/*/close_button': {
+      image: 'platformValue',
+    },
+    'select_post_target_page/*/my_timeline_avatar': {},
+    'select_post_target_page/*/title': {
+      text: 'Post to',
+    },
+    'select_post_target_page/*/my_timeline_text': {
+      text: 'My Timeline',
+    },
+    '*/*/community_official_badge': {
+      image: 'platformValue',
+    },
+    '*/*/community_private_badge': {
+      image: 'platformValue',
     },
     'social_global_search_page/*/*': {},
     'social_global_search_page/top_search_bar/*': {},
@@ -408,7 +476,7 @@ export const getDefaultConfig: CustomizationContextValue['getConfig'] = (path: s
 
 export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   children,
-  initialConfig,
+  initialConfig = {},
 }) => {
   const [config, setConfig] = useState<Config | null>(null);
 
@@ -421,16 +489,6 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   }, [initialConfig]);
 
   const validateConfig = (config: Config): boolean => {
-    // Check if mandatory fields are present
-    if (
-      !config?.preferred_theme ||
-      !config?.theme ||
-      !config?.excludes ||
-      !config?.customizations
-    ) {
-      return false;
-    }
-
     return true;
   };
 
@@ -439,11 +497,34 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   };
 
   const isExcluded = (path: string) => {
-    if (!config) return false;
-    return !!config.excludes?.some((exclude) => {
-      const regex = new RegExp(`^${exclude.replace(/\*/g, '.*')}$`);
-      return regex.test(path);
-    });
+    const [page, component, element] = path.split('/');
+
+    const customizationKeys = (() => {
+      if (element !== '*') {
+        return [
+          `${page}/${component}/${element}`,
+          `${page}/*/${element}`,
+          `${page}/${component}/*`,
+          `${page}/*/*`,
+          `*/${component}/${element}`,
+          `*/*/${element}`,
+          `*/${component}/*`,
+          `*/*/*`,
+        ];
+      } else if (component !== '*') {
+        return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
+      } else if (page !== '*') {
+        return [`${page}/*/*`, `*/*/*`];
+      }
+
+      return [];
+    })();
+
+    return (
+      config?.excludes?.some((excludedPath) => {
+        return customizationKeys.some((key) => key === excludedPath);
+      }) || false
+    );
   };
 
   const getConfig: CustomizationContextValue['getConfig'] = (path: string) => {
@@ -481,6 +562,11 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
               return config.customizations[key][prop];
             }
           }
+
+          if (prop === 'theme' && !!config?.theme) {
+            return config.theme;
+          }
+
           for (const key of customizationKeys) {
             if (defaultConfig?.customizations?.[key]?.[prop]) {
               return defaultConfig.customizations[key][prop];

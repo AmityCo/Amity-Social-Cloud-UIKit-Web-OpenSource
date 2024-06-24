@@ -1,47 +1,59 @@
+import clsx from 'clsx';
 import React from 'react';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { IconComponent } from '~/v4/core/IconComponent';
+import styles from './OverflowMenuButton.module.css';
 
-import { UIOverflowButton, RemoteImageButton } from './styles';
-import { isValidHttpUrl } from '~/utils';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+const OverflowMenuSvg = (props: React.SVGProps<SVGSVGElement>) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="#fff"
+        d="M13.688 12.25c0 .95-.774 1.688-1.688 1.688-.95 0-1.688-.739-1.688-1.688 0-.914.739-1.688 1.688-1.688a1.71 1.71 0 011.688 1.688zm4.218-1.688c.914 0 1.688.774 1.688 1.688 0 .95-.774 1.688-1.688 1.688-.949 0-1.687-.739-1.687-1.688 0-.914.738-1.688 1.687-1.688zm-11.812 0c.914 0 1.687.774 1.687 1.688 0 .95-.773 1.688-1.687 1.688-.95 0-1.688-.739-1.688-1.688 0-.914.739-1.688 1.688-1.688z"
+      ></path>
+    </svg>
+  );
+};
 
 interface OverflowMenuButtonProps {
-  pageId?: 'story_page';
-  componentId?: '*';
-  onClick?: (e: React.MouseEvent) => void;
-  style?: React.CSSProperties;
+  pageId?: string;
+  componentId?: string;
+  onPress?: () => void;
+  defaultClassName?: string;
+  imgClassName?: string;
   'data-qa-anchor'?: string;
 }
 
 export const OverflowMenuButton = ({
-  pageId = 'story_page',
+  pageId = '*',
   componentId = '*',
-  onClick = () => {},
-  style,
-  ...props
+  onPress = () => {},
+  defaultClassName,
+  imgClassName,
 }: OverflowMenuButtonProps) => {
   const elementId = 'overflow_menu';
-  const { getConfig, isExcluded } = useCustomization();
-  const elementConfig = getConfig(`${pageId}/${componentId}/${elementId}`);
-  const isElementExcluded = isExcluded(`${pageId}/${componentId}/${elementId}`);
+  const { config, defaultConfig, uiReference } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
-  if (isElementExcluded) return null;
-
-  const overflowMenuIcon = elementConfig?.overflow_menu_icon;
-  const isRemoteImage = overflowMenuIcon && isValidHttpUrl(overflowMenuIcon);
-
-  return isRemoteImage ? (
-    <RemoteImageButton
-      data-qa-anchor="overflow_menu_button"
-      src={overflowMenuIcon}
-      onClick={onClick}
-      {...props}
-    />
-  ) : (
-    <UIOverflowButton
-      data-qa-anchor="overflow_menu_button"
-      name={'EllipsisH'}
-      onClick={onClick}
-      {...props}
+  return (
+    <IconComponent
+      onPress={onPress}
+      defaultIcon={() => (
+        <OverflowMenuSvg className={clsx(styles.overflowMenuIcon, defaultClassName)} />
+      )}
+      imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+      defaultIconName={defaultConfig.icon}
+      configIconName={config.icon}
     />
   );
 };

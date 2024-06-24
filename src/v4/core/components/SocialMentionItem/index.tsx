@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import clsx from 'clsx';
-import UserAvatar from '~/v4/chat/components/UserAvatar';
-import { backgroundImage as userBackgroundImage } from '~/icons/User';
 import BanIcon from '~/icons/Ban';
 import useObserver from '~/core/hooks/useObserver';
 import useUser from '~/core/hooks/useUser';
 import useImage from '~/core/hooks/useImage';
 import styles from './styles.module.css';
 import { MentionIcon } from '~/icons';
-import { SIZE_ALIAS } from '~/core/hooks/useSize';
 import { FormattedMessage } from 'react-intl';
 import { Typography } from '../index';
+import { Avatar, AVATAR_SIZE } from '~/v4/core/components/Avatar';
+import User from '~/v4/icons/User';
 
 interface SocialMentionItemProps {
   id: string;
@@ -58,11 +57,7 @@ const UserMentionItem = ({
       className={clsx(styles.mentionItem, user?.isGlobalBanned && 'isBanned')}
       onMouseEnter={(e) => onMouseEnter(e, user?.isGlobalBanned)}
     >
-      <UserAvatar
-        size={SIZE_ALIAS.SMALL}
-        avatarUrl={avatarFileUrl}
-        defaultImage={userBackgroundImage}
-      />
+      <Avatar size={AVATAR_SIZE.SMALL} avatar={avatarFileUrl} defaultImage={<User />} />
       <div className={styles.userDisplayName}>
         <Typography.Body>{user?.displayName}</Typography.Body>
       </div>

@@ -7,6 +7,7 @@
   padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
   border-radius: 0.25rem;
   margin-left: 3rem;
+  margin-bottom: var(--asc-spacing-m1);
 }
 
 .loadMoreButton.textCenter {
@@ -22,7 +23,7 @@
   color: var(--asc-color-base-default);
   border: none;
   margin-top: 1rem;
-  padding: 0 0 1rem 0;
+  padding: 0 0 1rem;
   border-bottom: 1px solid #e3e4e8;
 }
 

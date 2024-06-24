@@ -1,12 +1,12 @@
 import React from 'react';
 
-type BaseVideoPreviewProps = {
+type VideoPreviewProps = {
   src: string;
   mimeType?: string;
   mediaFit?: string;
 } & React.VideoHTMLAttributes<HTMLVideoElement>;
 
-export const BaseVideoPreview = React.forwardRef<HTMLVideoElement, BaseVideoPreviewProps>(
+export const VideoPreview = React.forwardRef<HTMLVideoElement, VideoPreviewProps>(
   ({ src, mimeType, mediaFit, ...props }, ref) => (
     <video controls controlsList="nodownload" {...props} ref={ref} data-qa-anchor="video-preview">
       <source src={src} type={mimeType} />

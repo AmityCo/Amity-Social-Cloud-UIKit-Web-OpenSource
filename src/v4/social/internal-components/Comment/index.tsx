@@ -37,6 +37,7 @@ import { TrashIcon, PenIcon, FlagIcon, MinusCircleIcon } from '~/v4/social/icons
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
+import { isModerator } from '~/helpers/permissions';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -48,6 +49,8 @@ function getCommentData(comment: Amity.Comment | null) {
 }
 
 interface CommentProps {
+  pageId?: string;
+  componentId: string;
   commentId: string;
   readonly?: boolean;
   userRoles?: string[];
@@ -61,7 +64,13 @@ interface CommentProps {
   shouldAllowInteraction?: boolean;
 }
 
-export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => {
+export const Comment = ({
+  pageId = '*',
+  componentId = '*',
+  commentId,
+  readonly,
+  onClickReply,
+}: CommentProps) => {
   const comment = useComment(commentId);
   const story = useGetStoryByStoryId(comment?.referenceId);
   const { members } = useCommunityMembersCollection(story?.community?.communityId);
@@ -73,7 +82,7 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
 
   const commentAuthor = useUser(comment?.userId);
   const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });
-  const { userRoles } = useSDK();
+  const { userRoles, currentUserId } = useSDK();
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -81,10 +90,6 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
   const [isExpanded, setExpanded] = useState(false);
 
   const toggleBottomSheet = () => setBottomSheet((prev) => !prev);
-
-  useCommentSubscription({
-    commentId,
-  });
 
   const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } = useMention({
     targetId: story?.targetId,
@@ -178,7 +183,8 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     const title = isReplyComment ? 'reply.delete' : 'comment.delete';
     const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
     confirm({
-      'data-qa-anchor': 'delete-comment',
+      pageId,
+      componentId,
       title: <FormattedMessage id={title} />,
       content: <FormattedMessage id={content} />,
       cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),
@@ -187,8 +193,8 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
     });
   };
 
-  const { currentUserId } = useSDK();
   const currentMember = members.find((member) => member.userId === currentUserId);
+  const isCommunityModerator = isModerator(currentMember?.roles);
   const isMember = isCommunityMember(currentMember);
 
   const options = [
@@ -279,6 +285,7 @@ export const Comment = ({ commentId, readonly, onClickReply }: CommentProps) => 
       onClickReactionList={() => {
         setSelectedCommentId(comment.commentId);
       }}
+      isModerator={isCommunityModerator}
     />
   );
 

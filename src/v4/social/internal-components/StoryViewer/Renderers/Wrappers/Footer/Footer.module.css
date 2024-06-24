@@ -56,3 +56,16 @@
   justify-content: space-between;
   gap: var(--asc-spacing-s2);
 }
+
+.viewStoryCommentButton {
+  display: flex;
+  padding: 8px 10px;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 24px;
+  background: var(--asc-color-secondary-default);
+}
+
+.viewStoryCommentIcon {
+  fill: var(--asc-color-white);
+}

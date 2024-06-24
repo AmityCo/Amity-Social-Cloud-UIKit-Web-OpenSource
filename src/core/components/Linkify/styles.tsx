@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Link = styled.a`
-  color: ${({ theme }) => theme.palette.primary.shade1};
+  color: ${({ theme }) => theme.palette.primary.main};
   text-decoration: none;
 
   &:hover {
