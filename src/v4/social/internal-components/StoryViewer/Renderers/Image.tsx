@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import {
@@ -16,12 +16,14 @@ import { Button } from '~/v4/core/components/Button';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import useUser from '~/v4/core/hooks/objects/useUser';
-import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
 
 import styles from './Renderers.module.css';
 import clsx from 'clsx';
+
+import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
+import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 export const renderer: CustomRenderer = ({
   story,
@@ -55,6 +57,10 @@ export const renderer: CustomRenderer = ({
     fileInputRef,
     storyStyles,
     myReactions,
+    currentIndex,
+    storiesCount,
+    increaseIndex,
+    pageId,
   } = story;
 
   const { members } = useCommunityMembersCollection(community?.communityId as string);
@@ -71,16 +77,22 @@ export const renderer: CustomRenderer = ({
   const haveStoryPermission =
     isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
 
-  const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
-  const subheading =
-    createdAt && creator?.displayName ? (
-      <span>
-        <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-        <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
-      </span>
-    ) : (
-      ''
-    );
+  const heading = useMemo(
+    () => <div data-qa-anchor="community_display_name">{community?.displayName}</div>,
+    [community?.displayName],
+  );
+  const subheading = useMemo(
+    () =>
+      createdAt && creator?.displayName ? (
+        <span>
+          <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
+          <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+        </span>
+      ) : (
+        ''
+      ),
+    [createdAt, creator?.displayName],
+  );
   const targetRootId = 'asc-uikit-stories-viewer';
 
   const imageLoaded = () => {
@@ -88,7 +100,7 @@ export const renderer: CustomRenderer = ({
     if (isPaused) {
       setIsPaused(false);
     }
-    action('play');
+    action('play', true);
   };
 
   const play = () => setIsPaused(false);
@@ -128,42 +140,35 @@ export const renderer: CustomRenderer = ({
     onClose();
   };
 
+  const handleProgressComplete = () => {
+    increaseIndex();
+  };
+
   useEffect(() => {
     if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
       action('pause', true);
     } else {
       action('play', true);
     }
-  }, [isPaused, isOpenBottomSheet, isOpenCommentSheet]);
+  }, [isPaused, isOpenBottomSheet, isOpenCommentSheet, action]);
 
   useEffect(() => {
     action('pause', true);
     if (fileInputRef.current) {
-      fileInputRef.current.addEventListener('click', () => {
-        action('pause', true);
-      });
-      fileInputRef.current.addEventListener('cancel', () => {
-        action('play', true);
-      });
+      const handleClick = () => action('pause', true);
+      const handleCancel = () => action('play', true);
+
+      fileInputRef.current.addEventListener('click', handleClick);
+      fileInputRef.current.addEventListener('cancel', handleCancel);
+
+      return () => {
+        if (fileInputRef.current) {
+          fileInputRef.current.removeEventListener('cancel', handleCancel);
+          fileInputRef.current.removeEventListener('click', handleClick);
+        }
+      };
     }
-
-    return () => {
-      if (fileInputRef.current) {
-        fileInputRef.current.removeEventListener('cancel', () => {
-          action('play', true);
-        });
-        fileInputRef.current.removeEventListener('click', () => {
-          action('pause', true);
-        });
-      }
-    };
-  }, []);
-
-  useCommunityStoriesSubscription({
-    targetId: community?.communityId as string,
-    targetType: 'community',
-    shouldSubscribe: () => !!community?.communityId,
-  });
+  }, [action, fileInputRef]);
 
   return (
     <motion.div
@@ -176,6 +181,14 @@ export const renderer: CustomRenderer = ({
       onDragEnd={handleDragEnd}
       whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
     >
+      <StoryProgressBar
+        pageId={pageId}
+        duration={5000}
+        currentIndex={currentIndex}
+        storiesCount={storiesCount}
+        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet}
+        onComplete={handleProgressComplete}
+      />
       <Header
         community={community}
         heading={heading}
@@ -220,6 +233,7 @@ export const renderer: CustomRenderer = ({
       >
         {actions?.map((bottomSheetAction) => (
           <Button
+            key={bottomSheetAction.name}
             className={styles.actionButton}
             onClick={() => {
               bottomSheetAction.action();
@@ -287,20 +301,6 @@ export const renderer: CustomRenderer = ({
       />
     </motion.div>
   );
-};
-
-const rendererStyles = {
-  story: {
-    display: 'flex',
-    position: 'relative',
-    overflow: 'hidden',
-  },
-  storyContent: {
-    width: 'auto',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    margin: 'auto',
-  },
 };
 
 export const tester: Tester = (story) => {

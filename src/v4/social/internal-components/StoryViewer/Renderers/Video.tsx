@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useIntl } from 'react-intl';
 
@@ -20,7 +20,6 @@ import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
-import useImage from '~/v4/core/hooks/useImage';
 import useUser from '~/v4/core/hooks/objects/useUser';
 
 import clsx from 'clsx';
@@ -28,7 +27,7 @@ import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
 
 import rendererStyles from './Renderers.module.css';
-import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
+import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 
 export const renderer: CustomRenderer = ({
   story,
@@ -64,6 +63,10 @@ export const renderer: CustomRenderer = ({
     addStoryButton,
     fileInputRef,
     myReactions,
+    currentIndex,
+    storiesCount,
+    increaseIndex,
+    pageId,
   } = story;
 
   const { members } = useCommunityMembersCollection(community?.communityId as string);
@@ -91,13 +94,8 @@ export const renderer: CustomRenderer = ({
   const vid = useRef<HTMLVideoElement>(null);
   const controls = useAnimationControls();
 
-  const onWaiting = () => {
-    action('pause', true);
-  };
-
-  const onPlaying = () => {
-    action('play', true);
-  };
+  const onWaiting = () => action('pause', true);
+  const onPlaying = () => action('play', true);
 
   const videoLoaded = () => {
     messageHandler('UPDATE_VIDEO_DURATION', { duration: vid?.current?.duration });
@@ -163,6 +161,10 @@ export const renderer: CustomRenderer = ({
     onClose();
   };
 
+  const handleProgressComplete = useCallback(() => {
+    increaseIndex();
+  }, [increaseIndex]);
+
   useEffect(() => {
     if (vid.current) {
       if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
@@ -196,12 +198,6 @@ export const renderer: CustomRenderer = ({
     };
   }, []);
 
-  useCommunityStoriesSubscription({
-    targetId: community?.communityId as string,
-    targetType: 'community',
-    shouldSubscribe: () => !!community?.communityId,
-  });
-
   return (
     <motion.div
       className={clsx(rendererStyles.rendererContainer)}
@@ -213,6 +209,14 @@ export const renderer: CustomRenderer = ({
       onDragEnd={handleDragEnd}
       whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
     >
+      <StoryProgressBar
+        pageId={pageId}
+        duration={5000}
+        currentIndex={currentIndex}
+        storiesCount={storiesCount}
+        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet}
+        onComplete={handleProgressComplete}
+      />
       <SpeakerButton
         pageId="story_page"
         componentId="*"

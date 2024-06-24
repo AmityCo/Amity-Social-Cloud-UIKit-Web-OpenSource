@@ -72,7 +72,7 @@ export function SpeakerButton({
       data-qa-anchor={accessibilityId}
       className={clsx(styles.speakerButton)}
       onPress={onPress}
-      defaultIcon={() => (isMuted ? <SpeakerMuteSvg /> : <SpeakerUnmuteSvg />)}
+      defaultIcon={() => (isMuted ? <SpeakerUnmuteSvg /> : <SpeakerMuteSvg />)}
       imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgIconClassName)} />}
       defaultIconName={defaultConfig.icon}
       configIconName={config.icon}

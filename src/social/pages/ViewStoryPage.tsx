@@ -12,6 +12,7 @@ interface AmityViewStoryPageProps {
 }
 
 const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) => {
+  const pageId = 'view_story_page';
   const { onBack, goToDraftStoryPage, onClickCommunity, onChangePage, onClickStory } =
     useNavigation();
 
@@ -26,6 +27,7 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
   if (type === 'communityFeed')
     return (
       <CommunityFeedStory
+        pageId={pageId}
         communityId={targetId}
         onBack={onBack}
         onClose={goToCommunity}
@@ -40,6 +42,7 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
   if (type === 'globalFeed')
     return (
       <ViewGlobalFeedStoryPage
+        pageId={pageId}
         targetId={targetId}
         onChangePage={goToNewsFeed}
         onClose={goToNewsFeed}

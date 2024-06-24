@@ -27,6 +27,10 @@ export type CustomStory = Story &
     storyStyles: {
       background: string;
     };
+    currentIndex: number;
+    storiesCount: number;
+    increaseIndex: () => void;
+    pageId?: string;
   };
 
 export type CustomRendererProps = RendererProps & {

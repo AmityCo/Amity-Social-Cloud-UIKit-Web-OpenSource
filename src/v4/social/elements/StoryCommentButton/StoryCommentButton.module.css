@@ -1,13 +1,12 @@
 .storyCommentButton {
   display: flex;
-  width: 3.5rem;
-  height: 2.5rem;
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   align-items: center;
   gap: var(--asc-spacing-xxs3);
   border-radius: var(--asc-border-radius-full);
   background: var(--asc-color-secondary-default);
   color: var(--asc-color-white);
+  cursor: pointer;
 }
 
 .storyCommentIcon {

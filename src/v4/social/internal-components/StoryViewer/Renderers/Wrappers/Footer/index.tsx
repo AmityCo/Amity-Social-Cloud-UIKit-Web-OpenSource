@@ -85,8 +85,7 @@ const Footer: React.FC<
       <div>
         {showImpression && (
           <div className={styles.viewStoryCompostBarViewIconContainer}>
-            <StoryImpressionButton />
-            {/* <ImpressionButton pageId="story_page" reach={reach} /> */}
+            <StoryImpressionButton reach={reach} />
           </div>
         )}
       </div>
@@ -97,19 +96,6 @@ const Footer: React.FC<
           reactionsCount={reactionsCount}
           onPress={handleClickReaction}
         />
-        {/* <CommentButton
-          className={clsx(styles.viewStoryCommentButton)}
-          defaultIconClassName={clsx(styles.viewStoryCommentIcon)}
-          pageId="story_page"
-          commentsCount={commentsCount}
-          onPress={onClickComment}
-        />
-        <ReactionButton
-          onReactionClick={handleClickReaction}
-          pageId="story_page"
-          myReactions={myReactions}
-          reactionsCount={reactionsCount}
-        /> */}
       </div>
     </div>
   );
