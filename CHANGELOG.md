@@ -116,7 +116,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 4.0.0-beta.11 (2024-08-16)
 
-## 4.0.0-beta.10 (2024-07-24)
+## 3.5.0 (2024-04-26)
 
 ## 4.0.0-beta.9 (2024-07-12)
 
@@ -152,7 +152,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 3.2.3 (2024-03-01)
 
-### Bug Fixes
+## 3.2.0 (2024-02-27)
 
 - typo ([02875bb](https://github.com/EkoCommunications/AmityUiKitWeb/commit/02875bb8d10f174525424d12a3d69d7d92bf8c98))
 
