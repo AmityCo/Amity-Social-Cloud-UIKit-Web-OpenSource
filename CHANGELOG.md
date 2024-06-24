@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.7.0 (2024-06-24)
+
+### Bug Fixes
+
+- remove expose v4 component ([dbf1665](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/dbf1665b9bb1aac7f717814b3df901f4c6caa6b4))
+
 ## 3.6.0 (2024-06-07)
 
 ### Bug Fixes
