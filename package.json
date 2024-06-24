@@ -1,9 +1,9 @@
 {
   "name": "@amityco/ui-kit",
-  "version": "4.0.0-beta.15",
+  "version": "3.6.0",
   "engines": {
-    "node": ">=20",
-    "pnpm": "9"
+    "node": ">=16",
+    "pnpm": ">=8"
   },
   "module": "dist/esm/index.js",
   "main": "dist/index.js",
