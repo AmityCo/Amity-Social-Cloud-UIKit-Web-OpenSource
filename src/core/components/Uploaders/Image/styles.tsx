@@ -71,19 +71,24 @@ export const ImageSkeleton = () => (
   </SizeMe>
 );
 
+const StyledRemoveIcon = styled(RemoveIcon).attrs<{ icon?: ReactNode }>({width: 24, height: 24})``;
+
 export const RemoveButton = styled(Button).attrs<{
   variant?: string;
   children?: ReactNode;
 }>({
   variant: 'secondary',
-  children: <RemoveIcon />,
+  children: <StyledRemoveIcon />,
 })`
   position: absolute;
   top: 0.5em;
   right: 0.5em;
 `;
 
-export const CircleIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({ width: 24, height: 24 })`
+export const CircleIcon = styled(ExclamationCircle).attrs<{ icon?: ReactNode }>({
+  width: 24,
+  height: 24,
+})`
   z-index: 2;
   opacity: 0.7;
 `;

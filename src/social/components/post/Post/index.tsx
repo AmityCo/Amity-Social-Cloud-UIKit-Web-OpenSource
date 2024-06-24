@@ -9,7 +9,6 @@ import { PollRepository, PostRepository, SubscriptionLevels } from '@amityco/ts-
 import usePostByIds from '~/social/hooks/usePostByIds';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useImage from '~/core/hooks/useImage';
-import usePostFlaggedByMe from '~/social/hooks/usePostFlaggedByMe';
 import { usePostRenderer } from '~/social/providers/PostRendererProvider';
 import usePostSubscription from '~/social/hooks/usePostSubscription';
 import useReactionSubscription from '~/social/hooks/useReactionSubscription';
@@ -28,7 +27,6 @@ const Post = ({ postId, className, hidePostTarget, readonly, onDeleted }: PostPr
   const avatarFileUrl = useImage({ fileId: postedUser?.avatarFileId, imageSize: 'small' });
   const childrenPosts = usePostByIds(post?.children);
   const { userRoles } = useSDK();
-  const { isFlaggedByMe, toggleFlagPost } = usePostFlaggedByMe(post);
   const postRenderFn = usePostRenderer(post?.dataType);
   const { currentUserId } = useSDK();
 
@@ -87,9 +85,6 @@ const Post = ({ postId, className, hidePostTarget, readonly, onDeleted }: PostPr
         post,
         userRoles,
         readonly,
-        isFlaggedByMe,
-        handleReportPost: toggleFlagPost,
-        handleUnreportPost: toggleFlagPost,
         handleApprovePost,
         handleDeclinePost,
         handleDeletePost,

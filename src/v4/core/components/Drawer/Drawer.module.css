@@ -1,0 +1,41 @@
+.drawer__content {
+  padding: 1rem;
+  background-color: var(--asc-color-base-background);
+  max-height: 50%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 0.625rem;
+  border-top-right-radius: 0.625rem;
+  margin-top: 6rem;
+}
+
+.drawer__content:focus {
+  outline: none;
+}
+
+.drawer__innerContent {
+  background-color: var(--asc-color-base-background);
+  border-top-left-radius: 0.625rem;
+  border-top-right-radius: 0.625rem;
+  flex: 1;
+}
+
+.drawer__placeholder {
+  margin: auto;
+  width: 3rem;
+  height: 0.375rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background-color: var(--asc-color-secondary-shade2);
+  margin-bottom: 2rem;
+}
+
+.drawer__overlay {
+  background-color: color(from var(--asc-color-base-background) srgb r g b / 50%);
+  inset: 0;
+  position: fixed;
+}

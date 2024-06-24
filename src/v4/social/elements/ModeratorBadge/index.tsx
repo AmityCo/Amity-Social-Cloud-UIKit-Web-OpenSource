@@ -1,0 +1,1 @@
+export { ModeratorBadge } from './ModeratorBadge';

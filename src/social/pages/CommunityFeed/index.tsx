@@ -32,7 +32,7 @@ import useStories from '~/social/hooks/useStories';
 import { BarsIcon } from '~/icons';
 
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
-import { AmityDraftStoryPage } from '~/v4/social/pages';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 interface CommunityFeedProps {
   communityId: string;
@@ -42,7 +42,7 @@ interface CommunityFeedProps {
 }
 
 const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: CommunityFeedProps) => {
-  const { file } = useStoryContext();
+  const { goToDraftStoryPage } = useNavigation();
   const { stories } = useStories({
     targetId: communityId,
     targetType: 'community',
@@ -53,8 +53,6 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
   });
 
   const community = useCommunity(communityId);
-
-  const communityAvatar = useFile(community?.avatarFileId || '');
 
   const { canReview } = useCommunityPermission({ community });
 
@@ -87,22 +85,6 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
       setActiveTab(tabs[0].value);
     }
   }, [activeTab, tabs]);
-
-  if (file) {
-    return (
-      <Wrapper>
-        <AmityDraftStoryPage
-          targetId={communityId}
-          targetType="community"
-          mediaType={
-            file.type.includes('image')
-              ? { type: 'image', url: URL.createObjectURL(file) }
-              : { type: 'video', url: URL.createObjectURL(file) }
-          }
-        />
-      </Wrapper>
-    );
-  }
 
   return (
     <Wrapper>

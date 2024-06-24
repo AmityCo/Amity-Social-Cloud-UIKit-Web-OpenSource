@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
 
-import useSDK from '~/core/hooks/useSDK';
 import { BottomSheet, Typography } from '~/v4/core/components';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { Trash2Icon } from '~/icons';
+
 import styles from './HyperLinkConfig.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Button } from '~/v4/core/components/Button';
+import useSDK from '~/v4/core/hooks/useSDK';
+import Trash from '~/v4/social/icons/trash';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { CancelButton } from '~/v4/social/elements/CancelButton';
+import { DoneButton } from '~/v4/social/elements/DoneButton';
 
 interface HyperLinkConfigProps {
   pageId: string;
@@ -32,19 +35,19 @@ export const HyperLinkConfig = ({
   onSubmit,
   onRemove,
 }: HyperLinkConfigProps) => {
-  const { confirm } = useConfirmContext();
-
   const componentId = 'hyper_link_config_component';
-  const { getConfig, isExcluded } = useCustomization();
+  const { confirm } = useConfirmContext();
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+    useAmityComponent({
+      pageId,
+      componentId,
+    });
 
-  const componentConfig = getConfig(`${pageId}/${componentId}/*`);
-  const componentTheme = componentConfig?.theme?.light || {};
-
-  const cancelButtonConfig = getConfig(`*/hyper_link_config_component/cancel_button`);
-  const doneButtonConfig = getConfig(`*/hyper_link_config_component/done_button`);
+  if (isExcluded) return null;
 
   const { formatMessage } = useIntl();
   const { client } = useSDK();
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const schema = z.object({
     url: z
@@ -107,6 +110,12 @@ export const HyperLinkConfig = ({
     resolver: zodResolver(schema),
   });
 
+  const { url, customText } = watch();
+
+  useEffect(() => {
+    setHasUnsavedChanges(url !== '' || customText !== '');
+  }, [url, customText]);
+
   const onSubmitForm = async (data: HyperLinkFormInputs) => {
     onSubmit(data);
     onClose();
@@ -128,44 +137,38 @@ export const HyperLinkConfig = ({
     });
   };
 
+  const handleClose = () => {
+    if (hasUnsavedChanges) {
+      confirm({
+        title: formatMessage({ id: 'storyCreation.hyperlink.unsavedChanges.title' }),
+        content: formatMessage({ id: 'storyCreation.hyperlink.unsavedChanges.content' }),
+        cancelText: formatMessage({ id: 'storyCreation.hyperlink.unsavedChanges.cancel' }),
+        okText: formatMessage({ id: 'storyCreation.hyperlink.unsavedChanges.confirm' }),
+        onOk: () => {
+          reset();
+          onClose();
+        },
+      });
+    } else {
+      onClose();
+    }
+  };
+
   return (
     <BottomSheet
       detent="full-height"
       mountPoint={document.getElementById('asc-uikit-create-story') as HTMLElement}
       rootId="asc-uikit-create-story"
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose}
       className={styles.bottomSheet}
     >
       <div className={styles.headerContainer}>
-        <Button className={clsx(styles.cancelButton)} variant="ghost" onClick={onClose}>
-          <Typography.Body>
-            {cancelButtonConfig?.cancel_button_text ||
-              formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.cancel' })}
-          </Typography.Body>
-          {cancelButtonConfig?.cancel_icon &&
-            typeof cancelButtonConfig?.cancel_icon === 'string' && (
-              <img src={cancelButtonConfig?.cancel_icon} width={16} height={16} />
-            )}
-        </Button>
+        <CancelButton pageId="*" componentId={componentId} onClick={handleClose} />
         <Typography.Title>
           {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
         </Typography.Title>
-        <Button
-          variant="ghost"
-          form="asc-story-hyperlink-form"
-          type="submit"
-          className={clsx(styles.doneButton)}
-          disabled={!watch('url') || !!errors.url}
-        >
-          <Typography.Body>
-            {doneButtonConfig?.done_button_text ||
-              formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.submit' })}
-          </Typography.Body>
-          {doneButtonConfig?.done_icon && typeof doneButtonConfig?.done_icon === 'string' && (
-            <img src={doneButtonConfig.done_icon} width={16} height={16} />
-          )}
-        </Button>
+        <DoneButton pageId="*" componentId={componentId} onClick={handleSubmit(onSubmitForm)} />
       </div>
       <div className={styles.divider} />
       <div className={styles.hyperlinkFormContainer}>
@@ -223,20 +226,19 @@ export const HyperLinkConfig = ({
               </label>
             </Typography.Caption>
           </div>
-          {isHaveHyperLink && (
-            <div className={styles.inputContainer}>
-              <Button
-                variant="secondary"
-                onClick={discardHyperlink}
-                className={clsx(styles.removeLinkButton)}
-              >
-                <Trash2Icon className={styles.removeIcon} />
-                {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
-              </Button>
-              <div className={styles.divider} />
-            </div>
-          )}
         </form>
+        {isHaveHyperLink && (
+          <div className={styles.removeLinkContainer}>
+            <Button
+              variant="secondary"
+              onClick={discardHyperlink}
+              className={clsx(styles.removeLinkButton)}
+            >
+              <Trash className={styles.removeIcon} />
+              {formatMessage({ id: 'storyCreation.hyperlink.form.removeButton' })}
+            </Button>
+          </div>
+        )}
       </div>
     </BottomSheet>
   );

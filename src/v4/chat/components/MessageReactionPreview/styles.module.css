@@ -24,15 +24,15 @@
 }
 
 .reactionIconContainer > :first-child {
-  transform: translateX(0rem);
+  transform: translateX(0);
 }
 
 .reactionIconContainer > :nth-child(2) {
-  transform: translateX(0rem);
+  transform: translateX(0);
 }
 
 .reactionIconContainer > :last-child {
-  transform: translateX(0rem);
+  transform: translateX(0);
 }
 
 .reactionIcon {

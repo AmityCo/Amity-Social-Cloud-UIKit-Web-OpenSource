@@ -1,0 +1,53 @@
+.postMenu {
+  height: 100%;
+  width: 100%;
+}
+
+.postMenu__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.postMenu__item:focus {
+  outline: none;
+}
+
+.postMenu__item:hover {
+  background-color: var(--asc-color-base-shade4);
+  border-radius: var(--asc-border-radius-md);
+}
+
+.postMenu__editPost__text {
+  color: var(--asc-color-secondary-default);
+}
+
+.postMenu__editPost__icon {
+  fill: var(--asc-color-secondary-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+.postMenu__reportPost__text {
+  color: var(--asc-color-secondary-default);
+}
+
+.postMenu__reportPost__icon {
+  fill: var(--asc-color-secondary-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+.postMenu__deletePost__text {
+  color: var(--asc-color-alert);
+}
+
+.postMenu__deletePost__icon {
+  fill: var(--asc-color-alert);
+  width: 1.5rem;
+  height: 1.25rem;
+}

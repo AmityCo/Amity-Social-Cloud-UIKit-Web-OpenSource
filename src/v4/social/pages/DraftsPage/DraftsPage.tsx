@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
 import { readFileAsync } from '~/helpers';
-
-import styles from './DraftsPage.module.css';
 import { SubmitHandler } from 'react-hook-form';
-
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import {
   AspectRatioButton,
   BackButton,
@@ -16,32 +12,47 @@ import {
 } from '~/v4/social/elements';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { StoryRepository } from '@amityco/ts-sdk';
-
 import { HyperLinkConfig } from '~/v4/social/components';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import { PageTypes } from '~/social/constants';
-import { BaseVideoPreview } from '../../internal-components/VideoPreview';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
-type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
+import styles from './DraftsPage.module.css';
+import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 
-type AmityDraftStoryPageProps = {
-  targetId?: string;
+export type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
+
+export type AmityDraftStoryPageProps = {
+  targetId: string;
   targetType: Amity.StoryTargetType;
   mediaType?: AmityStoryMediaType;
+  storyType: 'communityFeed' | 'globalFeed';
 };
 
-type HyperLinkFormInputs = {
+export type HyperLinkFormInputs = {
   url: string;
   customText?: string;
 };
 
-const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStoryPageProps) => {
-  const { page, onChangePage, onClickCommunity } = useNavigation();
+export const PlainDraftStoryPage = ({
+  targetId,
+  targetType,
+  mediaType,
+  goToCommunityPage,
+  goToGlobalFeedPage,
+  onDiscardCreateStory,
+  storyType,
+}: AmityDraftStoryPageProps & {
+  goToCommunityPage: (communityId: string) => void;
+  goToGlobalFeedPage: () => void;
+  onDiscardCreateStory: () => void;
+  storyType: 'communityFeed' | 'globalFeed';
+}) => {
+  const pageId = 'create_story_page';
   const { file, setFile } = useStoryContext();
-  const { navigationBehavior } = usePageBehavior();
+  const { community } = useCommunityInfo(targetId);
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
@@ -64,8 +75,6 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   const handleHyperLinkBottomSheetClose = () => {
     setIsHyperLinkBottomSheetOpen(false);
   };
-
-  const community = useCommunityInfo(targetId);
 
   const { formatMessage } = useIntl();
 
@@ -90,12 +99,10 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
       const formData = new FormData();
       formData.append('files', file);
       setFile(null);
-      if (page.type === PageTypes.ViewStory && page.storyType === 'globalFeed') {
-        onChangePage(PageTypes.NewsFeed);
+      if (storyType === 'globalFeed') {
+        goToGlobalFeedPage();
       } else {
-        if (page.communityId) {
-          onClickCommunity(page.communityId);
-        }
+        goToCommunityPage(targetId);
       }
       if (mediaType?.type === 'image' && targetId) {
         const { data: imageData } = await StoryRepository.createImageStory(
@@ -140,7 +147,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
       okText: formatMessage({ id: 'delete' }),
       onOk: () => {
         setFile(null);
-        navigationBehavior.onCloseAction();
+        onDiscardCreateStory();
       },
     });
   };
@@ -212,24 +219,16 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
   }, [file, imageMode, mediaType]);
 
   return (
-    <>
-      <div id="asc-uikit-create-story" className={styles.draftPage}>
+    <div className={styles.storyWrapper}>
+      <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
         <div className={styles.headerContainer}>
           <div className={styles.header}>
-            <BackButton pageId="create_story_page" componentId="*" onClick={discardCreateStory} />
+            <BackButton pageId={pageId} onPress={discardCreateStory} />
             <div className={styles.topRightButtons}>
               {mediaType?.type === 'image' && (
-                <AspectRatioButton
-                  pageId="create_story_page"
-                  componentId="*"
-                  onClick={onClickImageMode}
-                />
+                <AspectRatioButton pageId={pageId} onPress={onClickImageMode} />
               )}
-              <HyperLinkButton
-                pageId="create_story_page"
-                componentId="*"
-                onClick={handleOnClickHyperLinkActionButton}
-              />
+              <HyperLinkButton pageId={pageId} onPress={handleOnClickHyperLinkActionButton} />
             </div>
           </div>
         </div>
@@ -257,11 +256,12 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
             />
           </div>
         ) : mediaType?.type === 'video' ? (
-          <BaseVideoPreview
+          <VideoPreview
+            mediaFit="contain"
             className={styles.videoPreview}
             src={file ? URL.createObjectURL(file) : mediaType.url}
-            mediaFit="contain"
             autoPlay
+            loop
             controls={false}
           />
         ) : null}
@@ -274,7 +274,7 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
         )}
 
         <HyperLinkConfig
-          pageId="*"
+          pageId={pageId}
           isOpen={isHyperLinkBottomSheetOpen}
           onClose={handleHyperLinkBottomSheetClose}
           onSubmit={onSubmitHyperLink}
@@ -284,16 +284,30 @@ const AmityDraftStoryPage = ({ targetId, targetType, mediaType }: AmityDraftStor
 
         <div className={styles.footer}>
           <ShareStoryButton
-            pageId="create_story_page"
-            componentId="*"
+            community={community}
+            pageId={pageId}
             onClick={() =>
               onCreateStory(file, imageMode, {}, hyperLink[0]?.data?.url ? hyperLink : [])
             }
-            avatar={community.avatarFileUrl}
           />
         </div>
       </div>
-    </>
+    </div>
+  );
+};
+
+export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
+  const { page } = useNavigation();
+  const { AmityDraftStoryPageBehavior } = usePageBehavior();
+
+  return (
+    <PlainDraftStoryPage
+      {...props}
+      onDiscardCreateStory={() => AmityDraftStoryPageBehavior.onCloseAction()}
+      goToCommunityPage={(communityId) => AmityDraftStoryPageBehavior.onCloseAction()}
+      goToGlobalFeedPage={() => AmityDraftStoryPageBehavior.onCloseAction()}
+      storyType={page.type === 'communityFeed' ? 'communityFeed' : 'globalFeed'}
+    />
   );
 };
 

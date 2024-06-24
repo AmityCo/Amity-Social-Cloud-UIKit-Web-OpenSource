@@ -1,1 +1,1 @@
-export { default as AmityViewStoryPage } from './ViewStoryPage';
+export { default as ViewStoryPage } from './ViewStoryPage';

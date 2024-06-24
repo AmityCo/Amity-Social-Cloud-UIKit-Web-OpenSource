@@ -18,6 +18,7 @@ import InputText from '~/v4/core/components/InputText';
 import { Avatar, Typography } from '~/v4/core/components';
 import Button from '~/v4/core/components/Button/Button';
 import clsx from 'clsx';
+import { ModeratorBadge } from '../../elements/ModeratorBadge/ModeratorBadge';
 
 interface StyledCommentProps {
   commentId?: string;
@@ -74,6 +75,7 @@ interface StyledCommentProps {
   referenceType?: Amity.Comment['referenceType'];
   referenceId?: Amity.Comment['referenceId'];
   onClickReactionList: () => void;
+  isModerator?: boolean;
 }
 
 const UIComment = ({
@@ -104,6 +106,7 @@ const UIComment = ({
   referenceType,
   commentId,
   onClickReactionList,
+  isModerator,
 }: StyledCommentProps) => {
   return (
     <div className={styles.container}>
@@ -112,6 +115,12 @@ const UIComment = ({
         <div className={styles.commentHeader}>
           <Typography.CaptionBold>{authorName}</Typography.CaptionBold>
         </div>
+
+        {isModerator && (
+          <div className={styles.moderatorBadge__container}>
+            <ModeratorBadge />
+          </div>
+        )}
 
         {isEditing ? (
           <div className={styles.commentEditContainer}>

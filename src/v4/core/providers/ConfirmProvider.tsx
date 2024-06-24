@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 import { PrimaryButton } from '~/core/components/Button/styles';
 
-type ConfirmType = {
+export type ConfirmType = {
   onCancel?: () => void;
   onOk?: () => void;
   type?: 'confirm' | 'info';
@@ -11,8 +11,9 @@ type ConfirmType = {
   content?: ReactNode;
   okText?: ReactNode;
   cancelText?: ReactNode;
-  'data-qa-anchor'?: string;
-  theme?: 'light' | 'dark';
+  pageId?: string;
+  componentId?: string;
+  elementId?: string;
 };
 
 interface ConfirmContextProps {
@@ -24,8 +25,8 @@ interface ConfirmContextProps {
 
 export const ConfirmContext = createContext<ConfirmContextProps>({
   confirmData: null,
-  confirm: () => {},
-  info: () => {},
+  confirm: (data: ConfirmType) => {},
+  info: (data: ConfirmType) => {},
   closeConfirm: () => {},
 });
 

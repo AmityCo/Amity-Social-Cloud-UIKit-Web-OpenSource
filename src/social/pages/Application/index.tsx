@@ -19,6 +19,8 @@ import useSDK from '~/core/hooks/useSDK';
 
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import CommunityFeed from '../CommunityFeed';
+import ViewStoryPage from '../ViewStoryPage';
+import AmityDraftStoryPage from '../DraftPage';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -44,7 +46,7 @@ const Wrapper = styled.div`
 `;
 
 const Community = () => {
-  const { page, onBack } = useNavigation();
+  const { page } = useNavigation();
 
   const { client } = useSDK();
   const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
@@ -84,6 +86,21 @@ const Community = () => {
               isNewCommunity={page.isNewCommunity}
               isOpen={open}
               toggleOpen={toggleOpen}
+            />
+          )}
+
+          {page.type === PageTypes.ViewStory && (
+            <Wrapper>
+              <ViewStoryPage targetId={page.targetId} type={page.storyType} />
+            </Wrapper>
+          )}
+
+          {page.type === PageTypes.DraftPage && (
+            <AmityDraftStoryPage
+              mediaType={page.mediaType}
+              targetId={page.targetId}
+              targetType={page.targetType}
+              storyType={page.storyType}
             />
           )}
 

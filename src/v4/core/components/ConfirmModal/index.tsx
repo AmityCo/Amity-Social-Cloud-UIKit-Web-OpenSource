@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Modal from '~/v4/core/components/Modal';
 import { Button } from '~/v4/core/components/Button';
 import clsx from 'clsx';
 import styles from './styles.module.css';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { ConfirmType, useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useAmityElement } from '~/v4/core/hooks/uikit/index';
+
+interface ConfirmProps extends ConfirmType {
+  className?: string;
+  okText?: ReactNode;
+  cancelText?: ReactNode;
+  type?: 'confirm' | 'info';
+}
 
 const Confirm = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  pageId = '*',
+  componentId = '*',
+  elementId = '*',
   className,
   title,
   content,
@@ -15,36 +25,42 @@ const Confirm = ({
   cancelText = 'Cancel',
   onCancel,
   type = 'confirm',
-}: any) => (
-  <Modal
-    className={clsx(className, styles.modal)}
-    data-qa-anchor={`confirm-modal-${dataQaAnchor}`}
-    title={title}
-    footer={
-      <div className={styles.footer}>
-        {type === 'confirm' && (
+}: ConfirmProps) => {
+  const { accessibilityId, themeStyles } = useAmityElement({ pageId, componentId, elementId });
+  return (
+    <Modal
+      className={clsx(className, styles.modal)}
+      pageId={pageId}
+      componentId={componentId}
+      elementId={elementId}
+      data-qa-anchor={`confirm-modal-${accessibilityId}`}
+      title={title}
+      footer={
+        <div className={styles.footer}>
+          {type === 'confirm' && (
+            <Button
+              className={styles.cancelButton}
+              data-qa-anchor="confirm-modal-cancel-button"
+              onClick={onCancel}
+            >
+              {cancelText}
+            </Button>
+          )}
           <Button
-            className={styles.cancelButton}
-            data-qa-anchor="confirm-modal-cancel-button"
-            onClick={onCancel}
+            className={styles.okButton}
+            data-qa-anchor={`confirm-modal-${accessibilityId}-ok-button`}
+            onClick={onOk}
           >
-            {cancelText}
+            {okText}
           </Button>
-        )}
-        <Button
-          className={styles.okButton}
-          data-qa-anchor={`confirm-modal-${dataQaAnchor}-ok-button`}
-          onClick={onOk}
-        >
-          {okText}
-        </Button>
-      </div>
-    }
-    onCancel={onCancel}
-  >
-    <div>{content}</div>
-  </Modal>
-);
+        </div>
+      }
+      onCancel={onCancel}
+    >
+      <div>{content}</div>
+    </Modal>
+  );
+};
 
 export const ConfirmComponent = () => {
   const { confirmData, closeConfirm } = useConfirmContext();

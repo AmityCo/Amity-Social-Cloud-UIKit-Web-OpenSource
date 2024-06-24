@@ -1,7 +1,6 @@
 .hyperlink {
-  border: 1px solid var(--asc-color-base-shade4);
   color: var(--asc-color-secondary-default);
-  background: #ffffffcc;
+  background: #fffc;
   display: inline-flex;
   align-items: center;
   padding: var(--asc-spacing-s2) var(--asc-spacing-m1) var(--asc-spacing-s2) var(--asc-spacing-s2);

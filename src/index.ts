@@ -20,7 +20,7 @@ export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
 export { default as AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
-export { AmityDraftStoryPage, AmityViewStoryPage } from '~/v4/social/pages';
+export { AmityDraftStoryPage, ViewStoryPage as AmityViewStoryPage } from '~/v4/social/pages';
 export {
   CommentTray as AmityCommentTrayComponent,
   StoryTab as AmityStoryTabComponent,

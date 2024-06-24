@@ -14,6 +14,7 @@ import { unFlagMessage } from '~/v4/utils/unFlagMessage';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
 import { useCopyMessage } from '~/v4/core/hooks';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
 interface AmityLiveChatMessageListProps {
   pageId?: string;
@@ -22,7 +23,7 @@ interface AmityLiveChatMessageListProps {
 }
 
 export const AmityLiveChatMessageList = ({
-  pageId,
+  pageId = '*',
   channel,
   replyMessage,
 }: AmityLiveChatMessageListProps) => {
@@ -35,6 +36,8 @@ export const AmityLiveChatMessageList = ({
   const { confirm } = useConfirmContext();
   const notification = useLiveChatNotifications();
   const copyMessage = useCopyMessage();
+
+  const { themeStyles } = useAmityComponent({ pageId, componentId });
 
   const {
     messages: rawMessages,
@@ -64,7 +67,6 @@ export const AmityLiveChatMessageList = ({
               content: formatMessage({ id: 'livechat.delete.message.error' }),
             }),
         }),
-      theme: 'dark',
     });
   };
 
@@ -89,7 +91,7 @@ export const AmityLiveChatMessageList = ({
 
   if (error) {
     return (
-      <div className={styles.customStatusContainer} ref={containerRef}>
+      <div className={styles.customStatusContainer} ref={containerRef} style={themeStyles}>
         <div className={styles.iconContainer}>
           <Redo />
         </div>
@@ -101,7 +103,7 @@ export const AmityLiveChatMessageList = ({
   }
 
   return (
-    <div className={styles.infiniteScrollContainer} ref={containerRef}>
+    <div className={styles.infiniteScrollContainer} ref={containerRef} style={themeStyles}>
       {containerRef.current && (
         <InfiniteScroll
           className={styles.infiniteScrollInner}

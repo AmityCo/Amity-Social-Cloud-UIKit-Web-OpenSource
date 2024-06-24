@@ -1,0 +1,13 @@
+.myCommunitiesButton {
+  background-color: var(--asc-color-base-default);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: var(--asc-spacing-l1);
+  height: var(--asc-spacing-l1);
+}
+
+.myCommunitiesButton__icon {
+  fill: var(--asc-color-secondary-shade4);
+}

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { useNotificationData } from '~/core/providers/NotificationProvider';
 
 import { NotificationContainer, Notifications } from './styles';

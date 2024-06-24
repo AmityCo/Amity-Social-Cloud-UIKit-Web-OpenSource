@@ -99,7 +99,6 @@ export const MessageReaction = ({
   };
 
   useEffect(() => {
-
     document.addEventListener('mousedown', onMouseDown);
     document.addEventListener('touchstart', handleClickOutside);
     return () => {

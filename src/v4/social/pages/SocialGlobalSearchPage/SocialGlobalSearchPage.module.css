@@ -1,0 +1,24 @@
+.socialGlobalSearchPage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--asc-color-base-background);
+}
+
+.socialGlobalSearchPage__tabs {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.socialGlobalSearchPage__postContents {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  height: 100%;
+}

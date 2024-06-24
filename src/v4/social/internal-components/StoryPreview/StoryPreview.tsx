@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import UserAvatar from '~/v4/chat/components/UserAvatar';
-import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
+import Community from '~/v4/icons/Community';
 import Verified from '~/v4/social/icons/verified';
 import { Typography } from '~/v4/core/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import TruncateMarkup from 'react-truncate-markup';
 import styles from './StoryPreview.module.css';
+import { Avatar } from '~/v4/core/components/Avatar/';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -109,7 +109,7 @@ export const StoryPreview: React.FC<StoryPreviewProps> = ({
           <div className={styles.progressFill} style={{ width: `${progress}%` }} />
         </div>
         <div className={styles.userInfo}>
-          <UserAvatar avatarUrl={avatar} defaultImage={communityBackgroundImage} />
+          <Avatar avatar={avatar} defaultImage={<Community />} />
           <Typography.BodyBold className={styles.storyPreviewTitle}>
             <span className={styles.nameContainer}>
               {title} {isOfficial && <Verified fill="white" />}

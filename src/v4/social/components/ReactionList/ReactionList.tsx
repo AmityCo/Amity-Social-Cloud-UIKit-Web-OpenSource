@@ -1,17 +1,19 @@
 import React, { useMemo, useRef, useState } from 'react';
-import styles from './ReactionList.module.css';
 import { useReactionsCollection } from '~/v4/social/hooks/collections/useReactionsCollection';
 import { Typography } from '~/v4/core/components';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { abbreviateCount } from '~/v4/utils/abbreviateCount';
-import { ReactionIcon } from '~/v4/social/components/ReactionList/ReactionIcon';
-import { ReactionListPanel } from '~/v4/social/components/ReactionList/ReactionListPanel';
-import { ReactionListError } from '~/v4/social/components/ReactionList/ReactionListError';
-import { ReactionListEmptyState } from '~/v4/social/components/ReactionList/ReactionListEmptyState';
-import { ReactionListLoadingState } from '~/v4/social/components/ReactionList/ReactionListLoadingState';
+import { ReactionIcon } from './ReactionIcon';
+import { ReactionListPanel } from './ReactionListPanel';
+import { ReactionListError } from './ReactionListError';
+import { ReactionListEmptyState } from './ReactionListEmptyState';
+import { ReactionListLoadingState } from './ReactionListLoadingState';
 import useReaction from '~/v4/chat/hooks/useReaction';
 import useReactionByReference from '~/v4/chat/hooks/useReactionByReference';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+
+import styles from './ReactionList.module.css';
 
 interface ReactionListProps {
   pageId: string;
@@ -41,6 +43,7 @@ const RenderCondition = ({
   removeReaction,
   error,
   currentRef,
+  showReactionUserDetails = false,
 }: {
   filteredReactions: Amity.Reactor[];
   isLoading: boolean;
@@ -49,6 +52,7 @@ const RenderCondition = ({
   removeReaction: (reaction: string) => Promise<void>;
   error: Error | null;
   currentRef: HTMLDivElement | null;
+  showReactionUserDetails?: boolean;
 }) => {
   if (isLoading) {
     return <ReactionListLoadingState />;
@@ -74,12 +78,18 @@ const RenderCondition = ({
       isLoading={isLoading}
       filteredReactions={filteredReactions}
       removeReaction={removeReaction}
+      showReactionUserDetails={showReactionUserDetails}
     />
   );
 };
 
 export const ReactionList = ({ pageId = '*', referenceId, referenceType }: ReactionListProps) => {
   const componentId = 'reaction_list';
+  const { accessibilityId } = useAmityComponent({
+    pageId,
+    componentId,
+  });
+
   const { reactions, error, isLoading, hasMore, loadMore } = useReactionsCollection({
     referenceId,
     referenceType,
@@ -126,9 +136,9 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
   );
 
   return (
-    <div className={styles.reactionListContainer} data-qa-anchor="reaction_list_header">
+    <div className={styles.reactionListContainer} data-qa-anchor={`${accessibilityId}_header`}>
       <div className={styles.tabListContainer}>
-        <div className={styles.tabList} data-qa-anchor="reaction_list_tab">
+        <div className={styles.tabList} data-qa-anchor={`${accessibilityId}_tab`}>
           <div
             data-active={activeTab === 'All'}
             className={styles.tabItem}

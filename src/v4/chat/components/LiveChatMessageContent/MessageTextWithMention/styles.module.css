@@ -1,13 +1,7 @@
 .mentionText {
-  color: var(
-    --live-chat-message-list-asc-color-primary-default,
-    var(--live-chat-asc-color-primary-default, var(--asc-color-primary-default))
-  );
+  color: var(--asc-color-primary-default);
 }
 
 .hyperlink {
-  color: var(
-    --live-chat-message-list-asc-color-primary-default,
-    var(--live-chat-asc-color-primary-default, var(--asc-color-primary-default))
-  );
+  color: var(--asc-color-primary-default);
 }

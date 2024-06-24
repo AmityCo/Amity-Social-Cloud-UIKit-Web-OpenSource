@@ -1,24 +1,59 @@
 import React from 'react';
-import { CommunityFeedStory } from './CommunityFeedStory';
-import { useNavigation } from '~/social/providers/NavigationProvider';
-import { PageTypes } from '~/social/constants';
-import { GlobalFeedStory } from './GlobalFeedStory';
+import { CommunityFeedStory } from '~/v4/social/pages/StoryPage/CommunityFeedStory';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { ViewGlobalFeedStoryPage } from './ViewGlobalFeedStory';
+import { useAmityPage } from '~/v4/core/hooks/uikit/index';
 
-type AmityViewStoryPageType = 'communityFeed' | 'globalFeed';
+type ViewStoryPageType = 'communityFeed' | 'globalFeed';
 
 interface AmityViewStoryPageProps {
-  type: AmityViewStoryPageType;
+  type: ViewStoryPageType;
+  targetId: string;
 }
 
-const AmityViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type }) => {
-  const { page } = useNavigation();
+const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) => {
+  const pageId = 'story_page';
+  const { AmityStoryViewPageBehavior } = usePageBehavior();
+  const { onBack, goToViewStoryPage, goToDraftStoryPage, onClickCommunity } = useNavigation();
 
-  if (page.type !== PageTypes.ViewStory || !page.targetId) return null;
-
-  if (type === 'communityFeed') return <CommunityFeedStory communityId={page.targetId} />;
-  if (type === 'globalFeed') return <GlobalFeedStory targetId={page.targetId} />;
+  if (type === 'communityFeed')
+    return (
+      <CommunityFeedStory
+        pageId={pageId}
+        communityId={targetId}
+        onBack={onBack}
+        onClose={(communityId) => onClickCommunity(communityId)}
+        onSwipeDown={(communityId) => onClickCommunity(communityId)}
+        onClickCommunity={(communityId) => onClickCommunity(communityId)}
+        goToDraftStoryPage={({ targetId, targetType, mediaType, storyType }) =>
+          goToDraftStoryPage({ targetId, targetType, mediaType, storyType })
+        }
+      />
+    );
+  if (type === 'globalFeed')
+    return (
+      <ViewGlobalFeedStoryPage
+        pageId={pageId}
+        targetId={targetId}
+        onChangePage={() => AmityStoryViewPageBehavior.onCloseAction()}
+        onClose={() => AmityStoryViewPageBehavior.onCloseAction()}
+        onSwipeDown={() => AmityStoryViewPageBehavior.onCloseAction()}
+        onClickStory={(targetId) =>
+          goToViewStoryPage({
+            storyType: 'globalFeed',
+            targetId,
+            targetType: 'community',
+          })
+        }
+        goToDraftStoryPage={({ targetId, targetType, mediaType, storyType }) =>
+          goToDraftStoryPage({ targetId, targetType, mediaType, storyType })
+        }
+        onClickCommunity={(targetId) => onClickCommunity(targetId)}
+      />
+    );
 
   return null;
 };
 
-export default AmityViewStoryPage;
+export default ViewStoryPage;

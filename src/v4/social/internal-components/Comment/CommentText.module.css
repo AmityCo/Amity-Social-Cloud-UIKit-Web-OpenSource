@@ -3,7 +3,7 @@
   word-break: break-word;
   color: var(--asc-color-base-default);
   background-color: var(--asc-color-base-shade4);
-  border-radius: 0 0.75rem 0.75rem 0.75rem;
+  border-radius: 0 0.75rem 0.75rem;
   padding: 0.75rem;
   display: inline-block;
   white-space: pre-wrap;
@@ -19,4 +19,9 @@
 
 .readMoreButton:hover {
   text-decoration: underline;
+}
+
+.mentionHighlightTag {
+  cursor: pointer;
+  color: var(--asc-color-primary-default);
 }

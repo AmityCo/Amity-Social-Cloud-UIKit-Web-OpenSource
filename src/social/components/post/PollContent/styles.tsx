@@ -45,7 +45,7 @@ export const PollInformation = styled.div`
   margin-bottom: 12px;
 `;
 
-export const SubmitButton = styled.a.attrs<{ disabled?: boolean }>({ role: 'button' })`
+export const SubmitButton = styled.button.attrs<{ disabled?: boolean }>({ role: 'button' })`
   display: block;
   width: 100%;
   text-align: center;
@@ -53,11 +53,12 @@ export const SubmitButton = styled.a.attrs<{ disabled?: boolean }>({ role: 'butt
   font-weight: 600;
 
   ${({ disabled, theme }) =>
-    disabled ? theme.palette.primary.shade2 : theme.palette.primary.main};
-
-  &:hover {
-    cursor: pointer;
-  }
+    disabled
+      ? {
+          color: theme.palette.primary.shade2,
+          cursor: 'not-allowed',
+        }
+      : { color: theme.palette.primary.main, cursor: 'pointer' }};
 `;
 
 export const ChipContainer = styled.div`

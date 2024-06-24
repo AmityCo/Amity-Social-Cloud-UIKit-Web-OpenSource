@@ -61,6 +61,8 @@ const StyledFile = ({
 
   const isImg = type?.includes('image');
 
+  const isUploading = progress < 100;
+
   return (
     <FileContainer href={url} download data-qa-anchor={dataQaAnchor}>
       <Content>
@@ -74,7 +76,11 @@ const StyledFile = ({
           {!!isRejected && <RetryButton onClick={retryCallback} />}
 
           {!!onRemove && (
-            <RemoveButton data-qa-anchor="uploaders-file-remove-button" onClick={removeCallback} />
+            <RemoveButton
+              data-qa-anchor="uploaders-file-remove-button"
+              onClick={removeCallback}
+              disabled={isUploading}
+            />
           )}
         </ButtonContainer>
       </Content>

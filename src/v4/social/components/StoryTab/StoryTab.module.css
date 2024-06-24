@@ -63,10 +63,11 @@
   z-index: 2;
 }
 
-@keyframes animateRing {
+@keyframes animate-ring {
   0% {
     stroke-dashoffset: 339;
   }
+
   100% {
     stroke-dashoffset: 0;
   }
@@ -74,14 +75,10 @@
 
 .progressRing {
   animation: none;
-  -webkit-animation: none;
-  -moz-animation: none;
 }
 
 .progressRing.animateRing {
-  animation: animateRing 2s linear 0s infinite;
-  -webkit-animation: animateRing 2s linear 0s infinite;
-  -moz-animation: animateRing 2s linear 0s infinite;
+  animation: animate-ring 2s linear 0s infinite;
 }
 
 .storyTab {

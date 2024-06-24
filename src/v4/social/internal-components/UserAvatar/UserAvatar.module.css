@@ -1,0 +1,31 @@
+.userAvatar__text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  color: var(--asc-color-base-shade4);
+  background-color: var(--asc-color-secondary-shade2);
+  text-transform: uppercase;
+}
+
+.userAvatar__placeholder__path {
+  fill: var(--asc-color-white);
+}
+
+.userAvatar__placeholder__rect {
+  fill: var(--asc-color-primary-shade3);
+}
+
+.userAvatar__placeholder {
+  width: 2rem;
+  height: 2rem;
+}
+
+.userAvatar__img {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 2rem;
+  height: 2rem;
+}

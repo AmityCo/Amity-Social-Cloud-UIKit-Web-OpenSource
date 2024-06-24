@@ -4,6 +4,7 @@ import AmityLiveChatHeader from '~/v4/chat/components/AmityLiveChatHeader';
 import ChatContainer from './ChatContainer';
 import styles from './styles.module.css';
 import { LiveChatNotificationProvider } from '~/v4/chat/providers/LiveChatNotificationProvider';
+import { useAmityPage } from '~/v4/core/hooks/uikit';
 
 interface AmityLiveChatPageProps {
   channelId: Amity.Channel['channelId'];
@@ -11,14 +12,15 @@ interface AmityLiveChatPageProps {
 
 export const AmityLiveChatPage = ({ channelId }: AmityLiveChatPageProps) => {
   const channel = useChannel(channelId);
+  const pageId = 'live_chat';
+  const { themeStyles } = useAmityPage({ pageId });
   const ref = useRef<HTMLDivElement>(null);
-  const pageId = 'live_chat_page';
 
   return (
     <LiveChatNotificationProvider>
-      <div className={styles.amtiyLivechatPage} ref={ref}>
+      <div className={styles.amtiyLivechatPage} ref={ref} style={themeStyles}>
         <div className={styles.messageListHeaderWrap}>
-          <AmityLiveChatHeader channel={channel} />
+          <AmityLiveChatHeader channel={channel} pageId={pageId} />
         </div>
         <ChatContainer channel={channel} pageId={pageId} />
       </div>

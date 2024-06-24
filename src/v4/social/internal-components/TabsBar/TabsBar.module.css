@@ -1,0 +1,28 @@
+button,
+fieldset,
+input {
+  all: unset;
+}
+
+.tabsRoot {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--asc-color-base-background);
+}
+
+.tabsList {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  gap: 1.25rem;
+}
+
+.tabsTrigger {
+  height: 3rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.tabsTrigger[data-state='active'] {
+  color: var(--asc-color-primary-default);
+  border-bottom: 0.125rem solid var(--asc-color-primary-default);
+}

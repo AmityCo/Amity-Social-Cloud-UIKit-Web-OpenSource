@@ -1,0 +1,28 @@
+.remoteImageButton {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: var(--asc-spacing-none);
+  margin: var(--asc-spacing-none);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.closeButton {
+  cursor: pointer;
+  fill: var(--asc-color-base-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}

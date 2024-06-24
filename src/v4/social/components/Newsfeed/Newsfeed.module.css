@@ -1,0 +1,88 @@
+.newsfeed {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: var(--asc-color-base-background);
+}
+
+.newsfeed__postList {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsfeed__postContainer {
+  padding: 0.25rem 1rem 0.75rem 0.75rem;
+}
+
+.newsfeed__pullToRefresh {
+  height: var(--asc-pull-to-refresh-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.newsfeed__post__reactionBar__leftPane__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.newsfeed__post__reactionBar__leftPane__iconImg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.newsfeed__pullToRefresh__spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  animation-name: spin;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.newsfeed__divider {
+  background-color: var(--asc-color-base-shade4);
+  height: 0.5rem;
+  width: 100%;
+}
+
+.newsfeed__post__divider {
+  width: 100%;
+  background-color: var(--asc-color-base-shade4);
+  height: 0.0625rem;
+}
+
+.newsfeed__post__reactionBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.newsfeed__post__reactionBar__leftPane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsfeed__post__reactionBar__rightPane {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.newsfeed__intersection {
+  height: 1px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
