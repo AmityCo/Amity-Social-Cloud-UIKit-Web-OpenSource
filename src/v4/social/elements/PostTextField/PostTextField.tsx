@@ -65,7 +65,6 @@ function editorStateToText(editor: LexicalEditor) {
         });
 
         mentionees.push({ type: 'user', userIds: [child.userId] });
-        console.log('runningIndex', runningIndex, 'child.text.length', child.text.length);
       }
       runningIndex += child.text.length;
     });
@@ -76,7 +75,7 @@ function editorStateToText(editor: LexicalEditor) {
 }
 
 export const PostTextField = forwardRef<LexicalEditor, PostTextFieldProps>(({ onChange }) => {
-   return (
+  return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className={styles.editorContainer}>
         <RichTextPlugin
