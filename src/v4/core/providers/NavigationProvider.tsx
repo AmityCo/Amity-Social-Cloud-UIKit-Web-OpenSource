@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useState, useMemo, ReactNode } from 'react';
 import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
+import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -17,6 +18,7 @@ export enum PageTypes {
   SocialGlobalSearchPage = 'SocialGlobalSearchPage',
   SelectPostTargetPage = 'SelectPostTargetPage',
   DraftPage = 'DraftPage',
+  PostComposerPage = 'PostComposerPage',
 }
 
 type Page =
@@ -78,6 +80,17 @@ type Page =
       mediaType: AmityStoryMediaType;
       targetId: string;
       targetType: Amity.StoryTargetType;
+    }
+  | {
+      type: PageTypes.PostComposerPage;
+
+      context: {
+        targetId: string | null;
+        targetType: 'community' | 'user';
+        mode: Mode;
+        community?: Amity.Community;
+        post?: Amity.Post;
+      };
     };
 
 type ContextValue = {
@@ -117,6 +130,14 @@ type ContextValue = {
       | null
       | undefined,
   ) => void;
+  goToPostComposerPage: (
+    mode: Mode,
+    targetId: string | null,
+    targetType: 'community' | 'user',
+    community?: Amity.Community,
+    post?: Amity.Post,
+  ) => void;
+  goToSocialHomePage: () => void;
 };
 
 let defaultValue: ContextValue = {
@@ -144,6 +165,14 @@ let defaultValue: ContextValue = {
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
+  goToPostComposerPage: (
+    mode: Mode,
+    targetId: string | null,
+    targetType: 'community' | 'user',
+    community?: Amity.Community,
+    post?: Amity.Post,
+  ) => {},
+  goToSocialHomePage: () => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
 };
@@ -176,6 +205,11 @@ if (process.env.NODE_ENV !== 'production') {
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
     goToDraftStoryPage: ({ targetId, targetType, mediaType }) =>
       console.log(`NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType})`),
+    goToPostComposerPage: (mode, targetId, targetType, community, post) =>
+      console.log(
+        `NavigationContext goToPostComposerPage(${mode} ${targetId}) ${targetType} ${community} ${post}`,
+      ),
+    goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
   };
 }
 
@@ -468,6 +502,32 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToSocialHomePage = useCallback(() => {
+    const next = {
+      type: PageTypes.SocialHomePage,
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
+  const goToPostComposerPage = useCallback(
+    (mode, targetId, targetType, community, post) => {
+      const next = {
+        type: PageTypes.PostComposerPage,
+        context: {
+          mode,
+          targetId,
+          targetType,
+          community,
+          post,
+        },
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   return (
     <NavigationContext.Provider
       value={{
@@ -488,6 +548,8 @@ export default function NavigationProvider({
         goToViewStoryPage,
         goToSelectPostTargetPage,
         goToDraftStoryPage,
+        goToPostComposerPage,
+        goToSocialHomePage,
         setNavigationBlocker,
       }}
     >

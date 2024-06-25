@@ -1,0 +1,34 @@
+.editorPlaceholder {
+  color: #999;
+  overflow: hidden;
+  position: absolute;
+  top: 4.5rem;
+  left: 1rem;
+  user-select: none;
+  pointer-events: none;
+}
+
+.editorParagraph {
+  height: 100%;
+  width: 100%;
+  color: var(--asc-color-base-default);
+  background-color: var(--asc-color-base-background);
+}
+
+.editorParagraph span {
+  color: var(--asc-color-base-default);
+  background-color: var(--asc-color-base-background);
+}
+
+.editorContainer {
+  height: 100%;
+  font-size: var(--asc-text-font-size-md);
+  color: var(--asc-color-base-default);
+  background-color: var(--asc-color-base-background);
+  padding: 0 1rem;
+}
+
+.editorContainer :focus {
+  border: none;
+  outline: none;
+}

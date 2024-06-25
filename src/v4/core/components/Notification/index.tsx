@@ -9,7 +9,7 @@ interface NotificationProps {
   icon?: ReactNode;
 }
 
-const Notification = ({ className, content, icon }: NotificationProps) => (
+export const Notification = ({ className, content, icon }: NotificationProps) => (
   <div className={clsx(styles.notificationContainer, className)}>
     <div className={clsx(styles.icon__container)}>{icon}</div> {content}
   </div>

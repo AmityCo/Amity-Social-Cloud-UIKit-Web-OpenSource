@@ -13,6 +13,9 @@ import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName'
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import useUser from '~/v4/core/hooks/objects/useUser';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { Mode } from '../PostComposerPage/PostComposerPage';
 
 export function SelectPostTargetPage() {
   const pageId = 'select_post_target_page';
@@ -24,9 +27,11 @@ export function SelectPostTargetPage() {
     sortBy: 'displayName',
     limit: 20,
   });
-  const intersectionRef = useRef<HTMLDivElement>(null);
-  const { user } = useUser();
+  const { AmityPostTargetSelectionPage } = usePageBehavior();
 
+  const intersectionRef = useRef<HTMLDivElement>(null);
+  const { currentUserId } = useSDK();
+  const { user } = useUser(currentUserId);
   useIntersectionObserver({
     onIntersect: () => {
       if (hasMore && isLoading === false) {
@@ -40,7 +45,12 @@ export function SelectPostTargetPage() {
     return (
       <div
         onClick={() => {
-          //TODO: Navigate to create post page
+          AmityPostTargetSelectionPage.goToPostComposerPage({
+            targetId: community.communityId,
+            targetType: 'community',
+            mode: Mode.CREATE,
+            community: community,
+          });
         }}
         key={community.communityId}
         className={styles.selectPostTargetPage__timeline}
@@ -63,14 +73,19 @@ export function SelectPostTargetPage() {
         <CloseButton
           imgClassName={styles.selectPostTargetPage__closeButton}
           pageId={pageId}
-          onClick={onBack}
+          onPress={onBack}
         />
         <Title pageId={pageId} titleClassName={styles.selectPostTargetPage__title} />
         <div />
       </div>
       <div
         onClick={() => {
-          // TODO: Navigate to create post page
+          AmityPostTargetSelectionPage.goToPostComposerPage({
+            mode: Mode.CREATE,
+            targetId: null,
+            targetType: 'user',
+            community: undefined,
+          });
         }}
         className={styles.selectPostTargetPage__timeline}
       >

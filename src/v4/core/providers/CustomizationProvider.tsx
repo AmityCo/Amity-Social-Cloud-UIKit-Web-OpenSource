@@ -334,7 +334,7 @@ export const defaultConfig: DefaultConfig = {
       image: 'platformValue',
     },
     'post_composer_page/*/community_display_name': {},
-    'post_composer_page/*/create_button': {
+    'post_composer_page/*/create_new_post_button': {
       text: 'Post',
     },
     'post_composer_page/*/edit_post_button': {
@@ -372,8 +372,8 @@ export const defaultConfig: DefaultConfig = {
       text: 'Video',
       image: 'platformValue',
     },
-    'create_post_page/detailed_media_attachment/file_button': {
-      textpost_composer_page: 'Attachment',
+    'post_composer_page/detailed_media_attachment/file_button': {
+      text: 'Attachment',
       image: 'platformValue',
     },
     'social_home_page/*/*': {},

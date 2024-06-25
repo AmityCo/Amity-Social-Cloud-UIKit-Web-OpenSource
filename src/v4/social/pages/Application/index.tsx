@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { SocialHomePage } from '~/v4/social/pages/SocialHomePage';
+import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
@@ -22,7 +23,8 @@ const Application = () => {
         {page.type === PageTypes.ViewStoryPage && (
           <ViewStoryPage type="globalFeed" targetId={page.context.targetId} />
         )}
-        {/* {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />} */}
+        {page.type === PageTypes.PostComposerPage && <PostComposerPage mode={page.context.mode} targetId={page.context.targetId} targetType={page.context.targetType} community={page.context.community} post={page.context.post} />}
+        {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />}
       </div>
     </StoryProvider>
   );

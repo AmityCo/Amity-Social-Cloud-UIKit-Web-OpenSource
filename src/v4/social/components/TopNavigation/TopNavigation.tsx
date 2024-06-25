@@ -8,14 +8,14 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 export interface TopNavigationProps {
   pageId?: string;
-  // onClickPostCreationButton: (event: React.MouseEvent) => void;
-  // createPostButtonRef: React.RefObject<HTMLDivElement>;
+  onClickPostCreationButton: (event: React.MouseEvent) => void;
+  createPostButtonRef: React.RefObject<HTMLDivElement>;
 }
 
 export function TopNavigation({
   pageId = '*',
-  // onClickPostCreationButton,
-  // createPostButtonRef,
+  onClickPostCreationButton,
+  createPostButtonRef,
 }: TopNavigationProps) {
   const componentId = 'top_navigation';
   const { isExcluded, themeStyles } = useAmityComponent({
@@ -41,9 +41,8 @@ export function TopNavigation({
         <PostCreationButton
           pageId={pageId}
           componentId={componentId}
-          onClick={() => {}}
-          // onClick={onClickPostCreationButton}
-          // createPostButtonRef={createPostButtonRef}
+          onClick={onClickPostCreationButton}
+          createPostButtonRef={createPostButtonRef}
         />
       </div>
     </div>

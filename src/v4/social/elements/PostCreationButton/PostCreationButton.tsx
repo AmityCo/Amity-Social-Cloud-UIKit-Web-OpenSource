@@ -8,6 +8,7 @@ import styles from './PostCreationButton.module.css';
 
 const PostCreationButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
+    style={{ pointerEvents: 'none' }}
     width="14"
     height="15"
     viewBox="0 0 14 15"
@@ -25,7 +26,7 @@ export interface PostCreationButtonProps {
   defaultClassName?: string;
   imgClassName?: string;
   onClick?: (e: React.MouseEvent) => void;
-  // createPostButtonRef: React.RefObject<HTMLDivElement>;
+  createPostButtonRef: React.RefObject<HTMLDivElement>;
 }
 
 export function PostCreationButton({
@@ -34,7 +35,7 @@ export function PostCreationButton({
   defaultClassName,
   imgClassName,
   onClick,
-  // createPostButtonRef,
+  createPostButtonRef,
 }: PostCreationButtonProps) {
   const elementId = 'post_creation_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -54,7 +55,7 @@ export function PostCreationButton({
           className={styles.postCreationButton}
           onClick={onClick}
           data-qa-anchor={accessibilityId}
-          // ref={createPostButtonRef}
+          ref={createPostButtonRef}
         >
           <PostCreationButtonSvg
             className={clsx(styles.postCreationButton__icon, defaultClassName)}

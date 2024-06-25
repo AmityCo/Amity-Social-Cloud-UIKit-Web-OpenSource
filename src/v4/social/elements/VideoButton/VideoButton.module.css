@@ -1,0 +1,18 @@
+.videoButton {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+}
+
+.videoButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke: var(--asc-color-base-default);
+  background: var(--asc-color-base-shade4);
+  border-radius: 50%;
+  padding: 0.25rem;
+}
+
+.videoButton__text {
+  margin-left: 0.75rem;
+}

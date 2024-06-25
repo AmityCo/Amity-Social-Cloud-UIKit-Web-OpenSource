@@ -1,0 +1,36 @@
+.postComposerPage {
+  display: block;
+  background-color: var(--asc-color-base-background);
+  height: 100%;
+}
+
+.selectPostTargetPage__topBar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--asc-spacing-m1);
+}
+
+.selectPostTargetPage__status {
+  position: absolute;
+  left: 1rem;
+  bottom: 0;
+  width: calc(100% - 2rem);
+  display: flex;
+  justify-content: start;
+  padding: unset;
+  font-size: var(--asc-text-font-size-md);
+  gap: 0.75rem;
+  margin: 0 auto 1rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--asc-box-shadow-03);
+  background-color: var(--asc-color-secondary-default);
+  color: var(--asc-color-base-background);
+}
+
+.selectPostTargetPag_infoIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-background);
+}

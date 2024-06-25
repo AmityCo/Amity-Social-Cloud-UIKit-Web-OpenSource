@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 
 export interface PageBehavior {
   AmityStoryViewPageBehavior: {
@@ -32,6 +33,18 @@ export interface PageBehavior {
   AmityCreatePostMenuComponentBehavior: {
     goToSelectPostTargetPage(): void;
   };
+  AmityPostTargetSelectionPage: {
+    goToPostComposerPage: (context: {
+      mode: Mode.CREATE | Mode.EDIT;
+      targetId: string | null;
+      targetType: 'community' | 'user';
+      community?: Amity.Community;
+      post?: Amity.Post;
+    }) => void;
+  };
+  AmityPostComposerPageBehavior: {
+    goToSocialHomePage(): void;
+  };
 }
 
 const PageBehaviorContext = React.createContext<PageBehavior | undefined>(undefined);
@@ -53,6 +66,8 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToViewStoryPage,
     onChangePage,
     goToSelectPostTargetPage,
+    goToPostComposerPage,
+    goToSocialHomePage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -115,6 +130,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         goToUserProfilePage(context.userId);
       },
     },
+
     AmitySocialGlobalSearchPageBehavior: {},
     AmityCommunitySearchResultComponentBehavior: {
       goToCommunityProfilePage: (context: { communityId: string }) => {
@@ -132,6 +148,34 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCreatePostMenuComponentBehavior.goToSelectPostTargetPage();
         }
         goToSelectPostTargetPage();
+      },
+    },
+    AmityPostTargetSelectionPage: {
+      goToPostComposerPage: (context: {
+        mode: Mode.CREATE | Mode.EDIT;
+        targetId: string | null;
+        targetType: 'community' | 'user';
+        community?: Amity.Community;
+        post?: Amity.Post;
+      }) => {
+        if (pageBehavior?.AmityPostTargetSelectionPage?.goToPostComposerPage) {
+          return pageBehavior.AmityPostTargetSelectionPage.goToPostComposerPage(context);
+        }
+        goToPostComposerPage(
+          context.mode,
+          context.targetId,
+          context.targetType,
+          context.community,
+          context.post,
+        );
+      },
+    },
+    AmityPostComposerPageBehavior: {
+      goToSocialHomePage() {
+        if (pageBehavior?.AmityPostComposerPageBehavior?.goToSocialHomePage) {
+          return pageBehavior.AmityPostComposerPageBehavior.goToSocialHomePage();
+        }
+        goToSocialHomePage();
       },
     },
   };
