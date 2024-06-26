@@ -23,6 +23,7 @@ jobs:
       STORYBOOK_USER4: ${{ secrets.STORYBOOK_USER4 }}
       STORYBOOK_USER5: ${{ secrets.STORYBOOK_USER5 }}
       STORYBOOK_USER6: ${{ secrets.STORYBOOK_USER6 }}
+      STORYBOOK_USER7: ${{ secrets.STORYBOOK_USER7 }}
 
     steps:
       - name: git checkout

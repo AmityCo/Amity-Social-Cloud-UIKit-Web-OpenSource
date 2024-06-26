@@ -37,6 +37,10 @@ const global = {
           value: import.meta.env.STORYBOOK_USER6,
           title: import.meta.env.STORYBOOK_USER6?.split(',')[1],
         },
+        {
+          value: import.meta.env.STORYBOOK_USER7,
+          title: import.meta.env.STORYBOOK_USER7?.split(',')[1],
+        },
       ],
     },
   },
