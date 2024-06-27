@@ -26,20 +26,26 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProp
   const channel = useChannel(channelId);
   useEffect(() => {
     async function run() {
-      if (channel == null) return;
+      // For clarity and simplicity
+      if (!channel) return;
 
       if (channel.type !== 'conversation') {
         await ChannelRepository.joinChannel(channel?.channelId);
       }
 
-      await SubChannelRepository.startReading(channel?.channelId);
+      // Was using a deprecated function
+      await SubChannelRepository.startMessageReceiptSync(channel?.channelId); 
     }
     run();
     return () => {
-      if (channel == null) return;
-      SubChannelRepository.stopReading(channel?.channelId);
+      // changed if condition for clarity and simplicity
+      if (channel) {
+        // Was using a deprecated function
+        SubChannelRepository.stopMessageReceiptSync(channel.channelId);
+      }
     };
-  }, [channel]);
+    // Dependency array shoudln't be channel since channel will keep changing and triggering infinite re render loop
+  }, [channelId]);
 
   const sendMessage = async (text: string) => {
     return MessageRepository.createMessage({
