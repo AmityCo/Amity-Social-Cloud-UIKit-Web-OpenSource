@@ -6,11 +6,11 @@ import { LIKE_REACTION_KEY } from '~/constants';
 import Spinner from '~/social/components/Spinner';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
-import styles from './Footer.module.css';
-import clsx from 'clsx';
 import { StoryCommentButton } from '~/v4/social/elements/StoryCommentButton/StoryCommentButton';
 import { StoryReactionButton } from '~/v4/social/elements/StoryReactionButton/StoryReactionButton';
 import { StoryImpressionButton } from '~/v4/social/elements/StoryImpressionButton/StoryImpressionButton';
+
+import styles from './Footer.module.css';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
@@ -42,8 +42,8 @@ const Footer: React.FC<
   const handleClickReaction = async () => {
     try {
       if (!isMember) {
-        notification.show({
-          content: 'You need to be a member to like this story',
+        notification.info({
+          content: 'Join community to interact with all stories',
         });
         return;
       }
