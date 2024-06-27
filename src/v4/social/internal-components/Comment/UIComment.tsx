@@ -13,13 +13,14 @@ import { EllipsisH, FireIcon, HeartIcon, LikedIcon } from '~/icons';
 
 import millify from 'millify';
 import { FIRE_REACTION_KEY, LIKE_REACTION_KEY, LOVE_REACTION_KEY } from '~/constants';
-import styles from './UIComment.module.css';
 import InputText from '~/v4/core/components/InputText';
 import { Avatar, Typography } from '~/v4/core/components';
 import Button from '~/v4/core/components/Button/Button';
 import clsx from 'clsx';
 import { ModeratorBadge } from '../../elements/ModeratorBadge/ModeratorBadge';
 import User from '~/v4/icons/User';
+
+import styles from './UIComment.module.css';
 
 interface StyledCommentProps {
   commentId?: string;
@@ -99,7 +100,6 @@ const UIComment = ({
   onChange,
   queryMentionees,
   isMember = false,
-  isBanned,
   isLiked,
   mentionees,
   options,

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-
 import useComment from '~/social/hooks/useComment';
 import useMention from '~/v4/chat/hooks/useMention';
-
 import {
   extractMetadata,
   isCommunityMember,
@@ -12,32 +10,26 @@ import {
   Metadata,
   parseMentionsMarkup,
 } from '~/v4/helpers/utils';
-
-import useSDK from '~/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
-
 import useCommentPermission from '~/social/hooks/useCommentPermission';
-import useCommentSubscription from '~/social/hooks/useCommentSubscription';
-import useImage from '~/core/hooks/useImage';
-
 import UIComment from './UIComment';
-
 import { LIKE_REACTION_KEY } from '~/constants';
 import { CommentList } from '~/v4/social/internal-components/CommentList';
 import { ReactionList } from '~/v4/social/components/ReactionList';
-import useGetStoryByStoryId from '../../hooks/useGetStoryByStoryId';
+import useGetStoryByStoryId from '~/v4/social/hooks/useGetStoryByStoryId';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-
 import { Button, BottomSheet, Typography } from '~/v4/core/components';
-
-import styles from './Comment.module.css';
 import { TrashIcon, PenIcon, FlagIcon, MinusCircleIcon } from '~/v4/social/icons';
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
 import { isModerator } from '~/helpers/permissions';
+
+import useImage from '~/v4/core/hooks/useImage';
+import useSDK from '~/v4/core/hooks/useSDK';
+
+import styles from './Comment.module.css';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -80,9 +72,12 @@ export const Comment = ({
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
-  const commentAuthor = useUser(comment?.userId);
-  const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });
-  const { userRoles, currentUserId } = useSDK();
+  const commentAuthor = members?.find((member) => member.userId === comment?.userId);
+  const commentAuthorAvatar = useImage({
+    fileId: commentAuthor?.user?.avatarFileId,
+    imageSize: 'small',
+  });
+  const { userRoles } = useSDK();
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -193,9 +188,8 @@ export const Comment = ({
     });
   };
 
-  const currentMember = members.find((member) => member.userId === currentUserId);
-  const isCommunityModerator = isModerator(currentMember?.roles);
-  const isMember = isCommunityMember(currentMember);
+  const isCommunityModerator = isModerator(commentAuthor?.roles);
+  const isMember = isCommunityMember(commentAuthor);
 
   const options = [
     canEdit
@@ -242,7 +236,9 @@ export const Comment = ({
     <UIComment
       commentId={comment?.commentId}
       authorName={
-        commentAuthor?.displayName || commentAuthor?.userId || formatMessage({ id: 'anonymous' })
+        commentAuthor?.user?.displayName ||
+        commentAuthor?.userId ||
+        formatMessage({ id: 'anonymous' })
       }
       authorAvatar={commentAuthorAvatar}
       canDelete={canDelete}
@@ -250,7 +246,6 @@ export const Comment = ({
       canLike={canLike}
       canReply={canReply}
       canReport={canReport}
-      isBanned={commentAuthor?.isGlobalBanned}
       createdAt={comment?.createdAt ? new Date(comment.createdAt) : undefined}
       editedAt={comment?.editedAt ? new Date(comment?.editedAt) : undefined}
       mentionees={comment?.metadata?.mentioned as Mentioned[]}
@@ -276,7 +271,7 @@ export const Comment = ({
       options={options}
       onClickReply={() =>
         onClickReply?.(
-          commentAuthor?.displayName,
+          commentAuthor?.user?.displayName,
           comment.referenceType,
           comment.referenceId,
           comment.commentId,
