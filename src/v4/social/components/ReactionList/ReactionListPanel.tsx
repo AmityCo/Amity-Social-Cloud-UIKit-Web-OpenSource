@@ -4,7 +4,7 @@ import FallbackReaction from '~/v4/icons/FallbackReaction';
 import { ReactionIcon } from '~/v4/social/components/ReactionList/ReactionIcon';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { AVATAR_SIZE } from '~/v4/core/components/Avatar/Avatar';
+import User from '~/v4/icons/User';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 import styles from './ReactionList.module.css';
@@ -51,11 +51,13 @@ export const ReactionListPanel = ({
                 <div className={styles.userItem}>
                   <div className={styles.userDetailsContainer}>
                     <div className={styles.userDetailsProfile}>
-                      <Avatar
-                        data-qa-anchor="user_avatar_view"
-                        size={AVATAR_SIZE.SMALL}
-                        avatar={reaction.user?.avatar?.fileUrl}
-                      />
+                      <div className={styles.avatar}>
+                        <Avatar
+                          data-qa-anchor="user_avatar_view"
+                          avatarUrl={reaction.user?.avatar?.fileUrl}
+                          defaultImage={<User />}
+                        />
+                      </div>
                       <Typography.BodyBold data-qa-anchor="user_display_name">
                         {reaction.user?.displayName}
                         {currentUserId === reaction.user?.userId && showReactionUserDetails && (

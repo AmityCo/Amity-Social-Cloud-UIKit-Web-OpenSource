@@ -37,3 +37,8 @@
     align-items: center;
   }
 }
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+}

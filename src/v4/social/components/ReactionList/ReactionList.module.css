@@ -154,3 +154,8 @@
 .reactionPanel {
   height: 100%;
 }
+
+.avatar {
+  width: 2rem;
+  height: 2rem;
+}

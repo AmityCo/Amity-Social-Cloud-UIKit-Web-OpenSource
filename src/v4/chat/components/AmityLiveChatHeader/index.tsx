@@ -8,7 +8,7 @@ import ConnectionSpinner from '~/v4/icons/ConnectionSpinner';
 import { Typography } from '~/v4/core/components';
 import styles from './styles.module.css';
 import useChatInfo from '~/v4/chat/hooks/useChatInfo';
-import { Avatar, AVATAR_SIZE } from '~/v4/core/components/Avatar/Avatar';
+import { Avatar } from '~/v4/core/components/Avatar/Avatar';
 import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
 
 interface AmityLiveChatHeaderProps {
@@ -20,14 +20,15 @@ interface AmityLiveChatHeaderProps {
 export const AmityLiveChatHeader = ({ channel, pageId = '*' }: AmityLiveChatHeaderProps) => {
   const componentId = 'chat_header';
   const { themeStyles } = useAmityComponent({ pageId, componentId });
-
   const { chatName, chatAvatar } = useChatInfo({ channel });
   const { formatMessage } = useIntl();
   const isOnline = useConnectionStates();
 
   return (
     <div className={styles.messageListHeader} style={themeStyles}>
-      <Avatar size={AVATAR_SIZE.MEDIUM} avatar={chatAvatar} defaultImage={<Chat />} />
+      <div className={styles.avatar}>
+        <Avatar avatarUrl={chatAvatar} defaultImage={<Chat />} />
+      </div>
       <div>
         <div className={styles.displayName}>
           <Typography.Title>{chatName || formatMessage({ id: 'loading' })}</Typography.Title>

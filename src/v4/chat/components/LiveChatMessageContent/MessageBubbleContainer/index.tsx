@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.module.css';
 import User from '~/v4/icons/User';
 import { Typography } from '~/v4/core/components';
-import { Avatar, AVATAR_SIZE } from '~/v4/core/components/Avatar';
+import { Avatar } from '~/v4/core/components/Avatar';
 
 interface MessageBubbleContainerProps {
   avatarUrl?: string;
@@ -17,8 +17,9 @@ const MessageBubbleContainer = ({
 }: MessageBubbleContainerProps) => {
   return (
     <div className={styles.messageItemContainer}>
-      <Avatar size={AVATAR_SIZE.SMALL} avatar={avatarUrl} defaultImage={<User />} />
-
+      <div className={styles.avatar}>
+        <Avatar avatarUrl={avatarUrl} defaultImage={<User />} />
+      </div>
       <div>
         <div className={styles.userDisplayName}>
           {/* TODO: release 1.1 hide moderator badge, will be implemented in release 1.2  */}

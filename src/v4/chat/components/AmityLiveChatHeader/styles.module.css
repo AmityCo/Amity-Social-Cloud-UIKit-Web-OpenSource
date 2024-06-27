@@ -22,3 +22,8 @@
   margin-right: var(--asc-spacing-xxs2);
   fill: var(--asc-color-base-default);
 }
+
+.avatar {
+  width: 3rem;
+  height: 3rem;
+}

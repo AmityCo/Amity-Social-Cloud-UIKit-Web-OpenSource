@@ -19,6 +19,7 @@ import { Avatar, Typography } from '~/v4/core/components';
 import Button from '~/v4/core/components/Button/Button';
 import clsx from 'clsx';
 import { ModeratorBadge } from '../../elements/ModeratorBadge/ModeratorBadge';
+import User from '~/v4/icons/User';
 
 interface StyledCommentProps {
   commentId?: string;
@@ -110,7 +111,9 @@ const UIComment = ({
 }: StyledCommentProps) => {
   return (
     <div className={styles.container}>
-      <Avatar size="small" avatar={authorAvatar || UserImage} />
+      <div className={styles.avatar}>
+        <Avatar avatarUrl={authorAvatar || UserImage} defaultImage={<User />} />
+      </div>
       <div className={styles.content}>
         <div className={styles.commentHeader}>
           <Typography.CaptionBold>{authorName}</Typography.CaptionBold>

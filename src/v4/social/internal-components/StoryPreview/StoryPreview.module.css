@@ -79,3 +79,8 @@
   height: 100%;
   object-fit: cover;
 }
+
+.avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+}

@@ -1,5 +1,7 @@
 .avatar {
   margin-right: var(--asc-spacing-s1);
+  width: 2rem;
+  height: 2rem;
 }
 
 .container {

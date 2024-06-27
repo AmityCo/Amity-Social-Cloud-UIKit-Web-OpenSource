@@ -109,7 +109,9 @@ export const StoryPreview: React.FC<StoryPreviewProps> = ({
           <div className={styles.progressFill} style={{ width: `${progress}%` }} />
         </div>
         <div className={styles.userInfo}>
-          <Avatar avatar={avatar} defaultImage={<Community />} />
+          <div className={styles.avatar}>
+            <Avatar avatarUrl={avatar} defaultImage={<Community />} />
+          </div>
           <Typography.BodyBold className={styles.storyPreviewTitle}>
             <span className={styles.nameContainer}>
               {title} {isOfficial && <Verified fill="white" />}
