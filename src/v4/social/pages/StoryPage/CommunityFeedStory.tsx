@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import useStories from '~/social/hooks/useStories';
 import useSDK from '~/core/hooks/useSDK';
-import { useIntl } from 'react-intl';
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
@@ -25,9 +24,10 @@ import clsx from 'clsx';
 import { ArrowLeftButton } from '~/v4/social/elements/ArrowLeftButton';
 import { ArrowRightButton } from '~/v4/social/elements/ArrowRightButton';
 
-import styles from './StoryPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { FileTrigger } from 'react-aria-components';
+
+import styles from './StoryPage.module.css';
 
 interface CommunityFeedStoryProps {
   pageId?: string;
@@ -98,8 +98,6 @@ export const CommunityFeedStory = ({
 
   const { client, currentUserId } = useSDK();
 
-  const { formatMessage } = useIntl();
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const { file, setFile } = useStoryContext();
   const [colors, setColors] = useState<FinalColor[]>([]);
@@ -108,17 +106,29 @@ export const CommunityFeedStory = ({
   const isModerator = checkStoryPermission(client, communityId);
 
   const confirmDeleteStory = (storyId: string) => {
+    const isLastStory = currentIndex === stories.length - 1;
     confirm({
       pageId,
-      title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
-      content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
-      okText: formatMessage({ id: 'delete' }),
+      title: 'Delete this story?',
+      content:
+        'This story will be permanently deleted. You’ll no longer to see and find this story.',
+      okText: 'Delete',
       onOk: async () => {
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.deleted' }),
+          content: 'Story deleted',
         });
-        if (stories.length === 1) onClose(communityId);
+        if (stories.length === 1) {
+          // If it's the only story, close the ViewStory screen
+          onClose(communityId);
+        } else if (isLastStory) {
+          // If it's the last story, move to the previous one
+          setCurrentIndex((prevIndex) => prevIndex - 1);
+        } else {
+          // For any other case (including first story), stay on the same index
+          // The next story will automatically take its place
+          setCurrentIndex((prevIndex) => prevIndex);
+        }
       },
     });
   };
@@ -149,7 +159,7 @@ export const CommunityFeedStory = ({
           );
           if (imageData) {
             notification.success({
-              content: formatMessage({ id: 'storyViewer.notification.success' }),
+              content: 'Successfully shared story',
             });
           }
         } else {
@@ -163,18 +173,18 @@ export const CommunityFeedStory = ({
             );
             if (videoData) {
               notification.success({
-                content: formatMessage({ id: 'storyViewer.notification.success' }),
+                content: 'Successfully shared story',
               });
             }
           }
         }
       } catch (error) {
         notification.error({
-          content: formatMessage({ id: 'storyViewer.notification.error' }),
+          content: 'Failed to share story',
         });
       }
     },
-    [currentUserId, formatMessage, notification, setFile],
+    [currentUserId, notification, setFile],
   );
 
   const discardStory = () => {

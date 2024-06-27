@@ -269,13 +269,12 @@ export const renderer: CustomRenderer = ({
             className={clsx(rendererStyles.actionButton)}
             onClick={() => {
               bottomSheetAction.action();
+              closeBottomSheet();
             }}
             variant="secondary"
           >
             {bottomSheetAction?.icon && bottomSheetAction.icon}
-            <Typography.BodyBold>
-              {formatMessage({ id: bottomSheetAction.name })}
-            </Typography.BodyBold>
+            <Typography.BodyBold>{bottomSheetAction.name}</Typography.BodyBold>
           </Button>
         ))}
       </BottomSheet>

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useIntl } from 'react-intl';
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
@@ -21,10 +20,10 @@ import {
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { TrashIcon } from '~/v4/social/icons';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
+import { useAmityPage } from '~/v4/core/hooks/uikit';
+import { FileTrigger } from 'react-aria-components';
 
 import styles from './StoryPage.module.css';
-import { useAmityPage } from '~/v4/core/hooks/uikit/index';
-import { FileTrigger } from 'react-aria-components';
 
 const DURATION = 5000;
 
@@ -59,7 +58,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   const { accessibilityId } = useAmityPage({ pageId });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
-  const { formatMessage } = useIntl();
   const { client, currentUserId } = useSDK();
   const { file, setFile } = useStoryContext();
 
@@ -98,23 +96,28 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   };
 
   const confirmDeleteStory = (storyId: string) => {
-    const isLastStory = currentIndex === 0;
+    const isLastStory = currentIndex === stories.length - 1;
     confirm({
       pageId,
-      title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
-      content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
-      okText: formatMessage({ id: 'delete' }),
+      title: 'Delete this story?',
+      content:
+        'This story will be permanently deleted. You’ll no longer to see and find this story.',
+      okText: 'Delete',
       onOk: async () => {
-        previousStory();
-        if (isLastStory) onChangePage?.();
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.deleted' }),
+          content: 'Story deleted',
         });
-        if (isLastStory && stories.length > 1) {
-          setCurrentIndex((prevIndex) => prevIndex - 1);
-        } else if (stories.length === 1) {
+        if (stories.length === 1) {
+          // If it's the only story, close the ViewStory screen
           onChangePage?.();
+        } else if (isLastStory) {
+          // If it's the last story, move to the previous one
+          setCurrentIndex((prevIndex) => prevIndex - 1);
+        } else {
+          // For any other case (including first story), stay on the same index
+          // The next story will automatically take its place
+          setCurrentIndex((prevIndex) => prevIndex);
         }
       },
     });
@@ -146,7 +149,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
           );
           if (imageData) {
             notification.success({
-              content: formatMessage({ id: 'storyViewer.notification.success' }),
+              content: 'Successfully shared story',
             });
           }
         } else {
@@ -160,18 +163,18 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
             );
             if (videoData) {
               notification.success({
-                content: formatMessage({ id: 'storyViewer.notification.success' }),
+                content: 'Successfully shared story',
               });
             }
           }
         }
       } catch (error) {
         notification.error({
-          content: formatMessage({ id: 'storyViewer.notification.error' }),
+          content: 'Failed to share story',
         });
       }
     },
-    [currentUserId, formatMessage, notification, setFile],
+    [currentUserId, notification, setFile],
   );
 
   const discardStory = () => {

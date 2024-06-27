@@ -237,6 +237,7 @@ export const renderer: CustomRenderer = ({
             className={styles.actionButton}
             onClick={() => {
               bottomSheetAction.action();
+              closeBottomSheet();
             }}
             variant="secondary"
           >
