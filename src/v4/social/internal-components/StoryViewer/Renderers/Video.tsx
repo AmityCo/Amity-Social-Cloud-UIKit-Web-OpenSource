@@ -318,7 +318,10 @@ export const renderer: CustomRenderer = ({
         isLiked={isLiked}
         onClickComment={openCommentSheet}
         myReactions={myReactions}
-        showImpression={isCreator || haveStoryPermission}
+        // only show impression if user is creator, community moderator or has story permission
+        showImpression={
+          isCreator || isCommunityModerator || checkStoryPermission(client, community?.communityId)
+        }
         isMember={isMember}
       />
     </motion.div>

@@ -294,7 +294,9 @@ export const renderer: CustomRenderer = ({
         isLiked={isLiked}
         myReactions={myReactions}
         onClickComment={openCommentSheet}
-        showImpression={isCreator || haveStoryPermission}
+        showImpression={
+          isCreator || isCommunityModerator || checkStoryPermission(client, community?.communityId)
+        }
         isMember={isMember}
       />
     </motion.div>
