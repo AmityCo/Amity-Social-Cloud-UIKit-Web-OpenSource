@@ -168,10 +168,12 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
             }
           }
         }
-      } catch (error) {
-        notification.error({
-          content: 'Failed to share story',
-        });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          notification.info({
+            content: error.message ?? 'Failed to share story',
+          });
+        }
       }
     },
     [currentUserId, notification, setFile],

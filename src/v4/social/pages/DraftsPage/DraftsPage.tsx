@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
 import { extractColors } from 'extract-colors';
 import { readFileAsync } from '~/helpers';
 import { SubmitHandler } from 'react-hook-form';
@@ -18,9 +17,10 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
+import { useAmityPage } from '~/v4/core/hooks/uikit';
 
 import styles from './DraftsPage.module.css';
-import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 
 export type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -51,6 +51,12 @@ export const PlainDraftStoryPage = ({
   storyType: 'communityFeed' | 'globalFeed';
 }) => {
   const pageId = 'create_story_page';
+  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
+    pageId,
+  });
+
+  if (isExcluded) return null;
+
   const { file, setFile } = useStoryContext();
   const { community } = useCommunityInfo(targetId);
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
@@ -75,8 +81,6 @@ export const PlainDraftStoryPage = ({
   const handleHyperLinkBottomSheetClose = () => {
     setIsHyperLinkBottomSheetOpen(false);
   };
-
-  const { formatMessage } = useIntl();
 
   const [imageMode, setImageMode] = useState<'fit' | 'fill'>('fit');
   const [colors, setColors] = useState<Awaited<ReturnType<typeof extractColors>>>([]);
@@ -105,7 +109,7 @@ export const PlainDraftStoryPage = ({
         goToCommunityPage(targetId);
       }
       if (mediaType?.type === 'image' && targetId) {
-        const { data: imageData } = await StoryRepository.createImageStory(
+        await StoryRepository.createImageStory(
           targetType,
           targetId,
           formData,
@@ -113,38 +117,28 @@ export const PlainDraftStoryPage = ({
           imageMode,
           items,
         );
-        if (imageData) {
-          notification.success({
-            content: formatMessage({ id: 'storyViewer.notification.success' }),
-          });
-        }
       } else if (mediaType?.type === 'video' && targetId) {
-        const { data: videoData } = await StoryRepository.createVideoStory(
-          targetType,
-          targetId,
-          formData,
-          metadata,
-          items,
-        );
-        if (videoData) {
-          notification.success({
-            content: formatMessage({ id: 'storyViewer.notification.success' }),
-          });
-        }
+        await StoryRepository.createVideoStory(targetType, targetId, formData, metadata, items);
       }
-    } catch (error) {
-      notification.error({
-        content: formatMessage({ id: 'storyViewer.notification.error' }),
+      notification.success({
+        content: 'Successfully shared story',
       });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notification.info({
+          content: error.message ?? 'Failed to share story',
+        });
+      }
     }
   };
 
   const discardCreateStory = () => {
     confirm({
-      title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
-      content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
-      cancelText: formatMessage({ id: 'general.action.cancel' }),
-      okText: formatMessage({ id: 'delete' }),
+      title: 'Delete this story?',
+      content:
+        'This story will be permanently deleted. You’ll no longer to see and find this story.',
+      cancelText: 'Cancel',
+      okText: 'Delete',
       onOk: () => {
         setFile(null);
         onDiscardCreateStory();
@@ -181,7 +175,7 @@ export const PlainDraftStoryPage = ({
   const handleOnClickHyperLinkActionButton = () => {
     if (hyperLink[0]?.data?.url) {
       notification.info({
-        content: formatMessage({ id: 'storyDraft.notification.hyperlink.error' }),
+        content: 'Can’t add more than one link to your story.',
       });
       return;
     }
@@ -219,7 +213,7 @@ export const PlainDraftStoryPage = ({
   }, [file, imageMode, mediaType]);
 
   return (
-    <div className={styles.storyWrapper}>
+    <div data-qa-anchor={accessibilityId} style={themeStyles} className={styles.storyWrapper}>
       <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
         <div className={styles.headerContainer}>
           <div className={styles.header}>

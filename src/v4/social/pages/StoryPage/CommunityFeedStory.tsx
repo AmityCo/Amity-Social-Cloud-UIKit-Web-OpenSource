@@ -149,7 +149,7 @@ export const CommunityFeedStory = ({
         formData.append('files', file);
         setFile(null);
         if (file?.type.includes('image') && currentUserId) {
-          const { data: imageData } = await StoryRepository.createImageStory(
+          await StoryRepository.createImageStory(
             'user',
             currentUserId,
             formData,
@@ -157,31 +157,26 @@ export const CommunityFeedStory = ({
             imageMode,
             items,
           );
-          if (imageData) {
-            notification.success({
-              content: 'Successfully shared story',
-            });
-          }
         } else {
           if (currentUserId) {
-            const { data: videoData } = await StoryRepository.createVideoStory(
+            await StoryRepository.createVideoStory(
               'user',
               currentUserId,
               formData,
               metadata,
               items,
             );
-            if (videoData) {
-              notification.success({
-                content: 'Successfully shared story',
-              });
-            }
           }
         }
-      } catch (error) {
-        notification.error({
-          content: 'Failed to share story',
+        notification.success({
+          content: 'Successfully shared story',
         });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          notification.info({
+            content: error.message ?? 'Failed to share story',
+          });
+        }
       }
     },
     [currentUserId, notification, setFile],
