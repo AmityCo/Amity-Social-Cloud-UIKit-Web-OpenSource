@@ -135,55 +135,57 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   if (!client) return null;
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Localization locale="en">
-        <CustomizationProvider initialConfig={configs || defaultConfig}>
-          <StyledThemeProvider theme={buildGlobalTheme(theme)}>
-            <ThemeProvider>
-              <CustomReactionProvider>
-                <SDKContextV3.Provider value={sdkContextValue}>
-                  <SDKContext.Provider value={sdkContextValue}>
-                    <SDKConnectorProviderV3>
-                      <SDKConnectorProvider>
-                        <NotificationProvider>
-                          <DrawerProvider>
-                            <LegacyNotificationProvider>
-                              <ConfirmProvider>
-                                <LegacyConfirmProvider>
-                                  <ConfigProvider
-                                    config={{
-                                      socialCommunityCreationButtonVisible:
-                                        socialCommunityCreationButtonVisible || true,
-                                    }}
-                                  >
-                                    <PostRendererProvider config={postRendererConfig}>
-                                      <NavigationProvider>
-                                        <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                          {children}
-                                        </PageBehaviorProvider>
-                                      </NavigationProvider>
-                                    </PostRendererProvider>
-                                  </ConfigProvider>
-                                  <NotificationsContainer />
-                                  <LegacyNotificationsContainer />
-                                  <ConfirmComponent />
-                                  <DrawerContainer />
-                                  <LegacyConfirmComponent />
-                                </LegacyConfirmProvider>
-                              </ConfirmProvider>
-                            </LegacyNotificationProvider>
-                          </DrawerProvider>
-                        </NotificationProvider>
-                      </SDKConnectorProvider>
-                    </SDKConnectorProviderV3>
-                  </SDKContext.Provider>
-                </SDKContextV3.Provider>
-              </CustomReactionProvider>
-            </ThemeProvider>
-          </StyledThemeProvider>
-        </CustomizationProvider>
-      </Localization>
-    </QueryClientProvider>
+    <div className="asc-uikit">
+      <QueryClientProvider client={queryClient}>
+        <Localization locale="en">
+          <CustomizationProvider initialConfig={configs || defaultConfig}>
+            <StyledThemeProvider theme={buildGlobalTheme(theme)}>
+              <ThemeProvider>
+                <CustomReactionProvider>
+                  <SDKContextV3.Provider value={sdkContextValue}>
+                    <SDKContext.Provider value={sdkContextValue}>
+                      <SDKConnectorProviderV3>
+                        <SDKConnectorProvider>
+                          <NotificationProvider>
+                            <DrawerProvider>
+                              <LegacyNotificationProvider>
+                                <ConfirmProvider>
+                                  <LegacyConfirmProvider>
+                                    <ConfigProvider
+                                      config={{
+                                        socialCommunityCreationButtonVisible:
+                                          socialCommunityCreationButtonVisible || true,
+                                      }}
+                                    >
+                                      <PostRendererProvider config={postRendererConfig}>
+                                        <NavigationProvider>
+                                          <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                            {children}
+                                          </PageBehaviorProvider>
+                                        </NavigationProvider>
+                                      </PostRendererProvider>
+                                    </ConfigProvider>
+                                    <NotificationsContainer />
+                                    <LegacyNotificationsContainer />
+                                    <ConfirmComponent />
+                                    <DrawerContainer />
+                                    <LegacyConfirmComponent />
+                                  </LegacyConfirmProvider>
+                                </ConfirmProvider>
+                              </LegacyNotificationProvider>
+                            </DrawerProvider>
+                          </NotificationProvider>
+                        </SDKConnectorProvider>
+                      </SDKConnectorProviderV3>
+                    </SDKContext.Provider>
+                  </SDKContextV3.Provider>
+                </CustomReactionProvider>
+              </ThemeProvider>
+            </StyledThemeProvider>
+          </CustomizationProvider>
+        </Localization>
+      </QueryClientProvider>
+    </div>
   );
 };
 

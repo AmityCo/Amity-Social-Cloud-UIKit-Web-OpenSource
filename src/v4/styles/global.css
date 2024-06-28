@@ -169,3 +169,10 @@
     --asc-color-base-background: #191919;
   }
 }
+
+/* vaul */
+.asc-uikit {
+  [vaul-drawer][vaul-drawer-direction='bottom']::after {
+    height: unset;
+  }
+}

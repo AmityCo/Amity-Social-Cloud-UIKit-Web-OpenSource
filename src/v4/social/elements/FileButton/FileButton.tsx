@@ -62,8 +62,7 @@ export function FileButton({
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-
-      <Typography.BodyBold className={styles.fileButton__text}>{config.text}</Typography.BodyBold>
+      {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
     </div>
   );
 }

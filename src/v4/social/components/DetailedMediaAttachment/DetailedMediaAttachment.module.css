@@ -1,11 +1,12 @@
 .detailedMediaAttachment {
   display: block;
   width: 100%;
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-base-background);
   border-top-left-radius: 1.25rem;
   border-top-right-radius: 1.25rem;
   box-shadow: var(--asc-box-shadow-04);
   padding-bottom: 2rem;
+  padding-top: 0.75rem;
 }
 
 .detailedMediaAttachment__swipeDown {
@@ -17,5 +18,4 @@
   background-color: var(--asc-color-base-shade3);
   margin-top: 0.75rem;
   margin-bottom: 1.25rem;
-  bottom: 0;
 }

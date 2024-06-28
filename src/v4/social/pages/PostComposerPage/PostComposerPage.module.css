@@ -5,7 +5,7 @@
   height: 100%;
 }
 
-.selectPostTargetPage__topBar {
+.postComposerPage__topBar {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -13,11 +13,11 @@
   padding: var(--asc-spacing-m1);
 }
 
-.selectPostTargetPage__status {
-  position: absolute;
-  left: 1rem;
-  bottom: 0;
+.postComposerPage__status {
   width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
   display: flex;
   justify-content: start;
   padding: unset;
@@ -34,4 +34,34 @@
   width: 1.5rem;
   height: 1.5rem;
   fill: var(--asc-color-base-background);
+}
+
+.postComposerPage__notiWrap {
+  position: relative;
+  top: 0;
+}
+
+.postComposerPage__formLong {
+  max-height: calc(100% - 92px);
+  overflow: auto;
+}
+
+.postComposerPage__formShort {
+  max-height: calc(100% - 236px); /* 290px including file button */
+  overflow: auto;
+}
+
+.postComposerPage__formLong::-webkit-scrollbar,
+.postComposerPage__formShort::-webkit-scrollbar {
+  display: none;
+}
+
+/* vaul */
+
+.drawer__content {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  outline: none;
 }

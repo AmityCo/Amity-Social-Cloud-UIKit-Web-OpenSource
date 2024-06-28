@@ -68,7 +68,7 @@ export function VideoButton({
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-      <Typography.BodyBold className={styles.videoButton__text}>{config.text}</Typography.BodyBold>
+      {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
     </div>
   );
 }

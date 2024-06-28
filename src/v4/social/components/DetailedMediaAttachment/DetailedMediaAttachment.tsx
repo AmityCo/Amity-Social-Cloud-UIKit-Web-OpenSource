@@ -26,7 +26,6 @@ export function DetailedMediaAttachment({ pageId }: DetailedMediaAttachmentProps
       <CameraButton pageId={pageId} componentId={componentId} />
       <ImageButton pageId={pageId} componentId={componentId} />
       <VideoButton pageId={pageId} componentId={componentId} />
-      <FileButton pageId={pageId} componentId={componentId} />
     </div>
   );
 }

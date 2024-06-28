@@ -70,7 +70,7 @@ export function ImageButton({
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-      <Typography.BodyBold className={styles.imageButton__text}>{config.text}</Typography.BodyBold>
+      {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
     </div>
   );
 }

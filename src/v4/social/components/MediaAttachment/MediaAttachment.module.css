@@ -4,7 +4,7 @@
   justify-content: space-between;
   width: 100%;
   padding: 0.5rem 1rem;
-  background-color: var(--asc-color-white);
+  background-color: var(--asc-color-base-background);
   border-top-left-radius: 1.25rem;
   border-top-right-radius: 1.25rem;
   box-shadow: var(--asc-box-shadow-04);
