@@ -163,7 +163,11 @@ const UiKitProvider = ({
                       <ConfirmProviderV4>
                         <NotificationProvider>
                           <NotificationProviderV4>
-                            <CustomizationProvider initialConfig={{}}>
+                            <CustomizationProvider
+                              initialConfig={{
+                                preferred_theme: 'light',
+                              }}
+                            >
                               <CustomComponentsProvider config={customComponents}>
                                 <ConfigProvider
                                   config={{

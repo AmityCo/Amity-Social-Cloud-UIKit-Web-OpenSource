@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import styles from './StoryTabGlobalFeed.module.css';
 import { StoryTabItem } from './StoryTabItem';
 import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
+import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
 
 const STORIES_PER_PAGE = 10;
 
@@ -19,6 +20,10 @@ export const StoryTabGlobalFeed = ({
   componentId = '*',
   goToViewStoryPage,
 }: StoryTabGlobalFeedProps) => {
+  const { isExcluded, accessibilityId, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
   const { stories, isLoading, hasMore, loadMoreStories } = useGlobalStoryTargets({
     seenState: 'smart' as Amity.StorySeenQuery,
     limit: STORIES_PER_PAGE,
@@ -68,10 +73,17 @@ export const StoryTabGlobalFeed = ({
     );
   }
 
+  if (isExcluded) return null;
+
   if (stories?.length === 0) return null;
 
   return (
-    <div className={styles.storyTabContainer} ref={containerRef}>
+    <div
+      data-qa-anchor={accessibilityId}
+      style={themeStyles}
+      className={styles.storyTabContainer}
+      ref={containerRef}
+    >
       {stories.map((story) => {
         return (
           <StoryTabItem
