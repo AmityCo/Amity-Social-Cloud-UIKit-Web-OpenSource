@@ -9,7 +9,6 @@ import useUser from '~/v4/core/hooks/objects/useUser';
 import { isAdmin, isModerator } from '~/v4/utils/permissions';
 import { checkStoryPermission } from '~/v4/social/utils';
 import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
-
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -90,16 +89,14 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
       className={clsx(styles.storyTabContainer)}
     >
       <div className={clsx(styles.storyWrapper)}>
-        {hasStories && (
-          <StoryRing
-            pageId={pageId}
-            componentId={componentId}
-            hasUnseen={hasUnSeen}
-            uploading={uploading}
-            isErrored={isErrored}
-            size={48}
-          />
-        )}
+        <StoryRing
+          pageId={pageId}
+          componentId={componentId}
+          hasUnseen={hasUnSeen}
+          uploading={uploading}
+          isErrored={isErrored}
+          size={48}
+        />
 
         <button className={clsx(styles.storyAvatarContainer)} onClick={handleOnClick}>
           <CommunityAvatar pageId={pageId} componentId={componentId} community={community} />

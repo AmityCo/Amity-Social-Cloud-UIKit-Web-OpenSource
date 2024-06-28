@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import useStories from '~/social/hooks/useStories';
 import useSDK from '~/core/hooks/useSDK';
 import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
@@ -28,6 +27,7 @@ import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { FileTrigger } from 'react-aria-components';
 
 import styles from './StoryPage.module.css';
+import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 
 interface CommunityFeedStoryProps {
   pageId?: string;
@@ -66,7 +66,7 @@ export const CommunityFeedStory = ({
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
-  const { stories } = useStories({
+  const { stories } = useGetActiveStoriesByTarget({
     targetId: communityId,
     targetType: 'community',
     options: {

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import styles from './StoryTabGlobalFeed.module.css';
 import { StoryTabItem } from './StoryTabItem';
 import { useGlobalStoryTargets } from '~/v4/social/hooks/collections/useGlobalStoryTargets';
-import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
 const STORIES_PER_PAGE = 10;
 
@@ -60,9 +60,11 @@ export const StoryTabGlobalFeed = ({
     };
   }, [stories, hasMore, loadMoreStories]);
 
+  if (isExcluded) return null;
+
   if (isLoading) {
     return (
-      <div className={styles.storyTabContainer}>
+      <div style={themeStyles} className={styles.storyTabContainer}>
         {Array.from({ length: 10 }).map((_, index) => (
           <div key={index} className={styles.storyTabSkeleton}>
             <div className={styles.storyTabSkeletonAvatar} />

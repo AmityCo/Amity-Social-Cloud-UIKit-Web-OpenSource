@@ -152,9 +152,6 @@ const UploadingRingSvg = ({
         strokeLinecap="round"
         stroke="url(#story-ring-gradient)"
         fill="none"
-        strokeDasharray={339}
-        strokeDashoffset={339}
-        transform={`rotate(-90 ${size / 2} ${size / 2})`}
       />
     </svg>
   );
@@ -179,7 +176,7 @@ export const StoryRing = ({
   ...props
 }: StoryRingProps) => {
   const elementId = 'story_ring';
-  const { isExcluded, config } = useAmityElement({
+  const { isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,

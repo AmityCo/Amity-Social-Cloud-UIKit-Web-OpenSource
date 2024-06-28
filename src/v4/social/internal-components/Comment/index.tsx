@@ -64,7 +64,8 @@ export const Comment = ({
   onClickReply,
 }: CommentProps) => {
   const comment = useComment(commentId);
-  const story = useGetStoryByStoryId(comment?.referenceId);
+
+  const { item: story } = useGetStoryByStoryId(comment?.referenceId);
   const { members } = useCommunityMembersCollection(story?.community?.communityId);
 
   const [bottomSheet, setBottomSheet] = useState(false);
