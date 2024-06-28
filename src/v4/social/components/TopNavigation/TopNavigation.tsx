@@ -36,7 +36,7 @@ export function TopNavigation({
         <GlobalSearchButton
           pageId={pageId}
           componentId={componentId}
-          onClick={() => goToSocialGlobalSearchPage()}
+          onPress={onGlobalSearchButtonClick}
         />
         <PostCreationButton
           pageId={pageId}

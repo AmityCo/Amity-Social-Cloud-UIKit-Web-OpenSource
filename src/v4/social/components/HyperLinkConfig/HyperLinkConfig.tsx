@@ -13,8 +13,8 @@ import { Button } from '~/v4/core/components/Button';
 import useSDK from '~/v4/core/hooks/useSDK';
 import Trash from '~/v4/social/icons/trash';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { CancelButton } from '~/v4/social/elements/CancelButton';
 import { DoneButton } from '~/v4/social/elements/DoneButton';
+import { EditCancelButton } from '../../elements/EditCancelButton/EditCancelButton';
 
 interface HyperLinkConfigProps {
   pageId: string;
@@ -164,11 +164,15 @@ export const HyperLinkConfig = ({
       className={styles.bottomSheet}
     >
       <div className={styles.headerContainer}>
-        <CancelButton pageId="*" componentId={componentId} onClick={handleClose} />
+        <EditCancelButton pageId={pageId} componentId={componentId} onPress={handleClose} />
         <Typography.Title>
           {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
         </Typography.Title>
-        <DoneButton pageId="*" componentId={componentId} onClick={handleSubmit(onSubmitForm)} />
+        <DoneButton
+          pageId={pageId}
+          componentId={componentId}
+          onClick={handleSubmit(onSubmitForm)}
+        />
       </div>
       <div className={styles.divider} />
       <div className={styles.hyperlinkFormContainer}>

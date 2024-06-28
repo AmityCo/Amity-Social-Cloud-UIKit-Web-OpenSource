@@ -5,8 +5,9 @@ import { ButtonContainer, CommentEditContainer, CommentEditTextarea } from './st
 import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 
 import { useTheme } from 'styled-components';
-import { CancelButton, SaveButton } from '../../elements';
+import { SaveButton } from '../../elements';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import { EditCancelButton } from '../../elements/EditCancelButton/EditCancelButton';
 
 interface CommentEditionProps {
   pageId?: '*';
@@ -49,7 +50,7 @@ export const CommentEdition = ({
         onChange={(data) => onChange?.(data)}
       />
       <ButtonContainer>
-        <CancelButton pageId={pageId} componentId={componentId} onClick={onCancel} />
+        <EditCancelButton pageId={pageId} componentId={componentId} onPress={onCancel} />
         <SaveButton pageId={pageId} componentId={componentId} onClick={onSubmit} />
       </ButtonContainer>
     </CommentEditContainer>

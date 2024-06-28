@@ -5,7 +5,7 @@ export const useGetActiveStoriesByTarget = (params: Amity.GetStoriesByTargetPara
   const { items, ...rest } = useLiveCollection({
     fetcher: StoryRepository.getActiveStoriesByTarget,
     params,
-    shouldCall: () => true,
+    shouldCall: true,
   });
 
   return {

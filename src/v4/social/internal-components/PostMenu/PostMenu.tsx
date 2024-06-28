@@ -65,9 +65,11 @@ export const PostMenu = ({
 }: PostMenuProps) => {
   const { success, error } = useNotifications();
 
+  const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
+
   const { community } = useCommunity({
     communityId: post?.targetId,
-    shouldCall: () => post?.targetType === 'community',
+    shouldCall,
   });
 
   const { isCommunityModerator, isOwner } = usePostPermissions({ post, community });

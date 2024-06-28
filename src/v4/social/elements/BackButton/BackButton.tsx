@@ -1,7 +1,7 @@
 import React from 'react';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import clsx from 'clsx';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 import styles from './BackButton.module.css';
 
@@ -27,7 +27,7 @@ interface BackButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onPress?: () => void;
+  onPress?: ButtonProps['onPress'];
 }
 
 export const BackButton = ({
@@ -35,7 +35,7 @@ export const BackButton = ({
   componentId = '*',
   defaultClassName,
   imgClassName,
-  onPress = () => {},
+  onPress,
 }: BackButtonProps) => {
   const elementId = 'back_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -48,15 +48,14 @@ export const BackButton = ({
   if (isExcluded) return null;
 
   return (
-    <IconComponent
-      data-qa-anchor={accessibilityId}
-      className={clsx(styles.backButton, defaultClassName)}
-      defaultIcon={() => <BackButtonSvg />}
-      imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgClassName)} />}
-      defaultIconName={defaultConfig.icon}
-      configIconName={config.icon}
-      onPress={onPress}
-      style={themeStyles}
-    />
+    <Button className={styles.backButton} style={themeStyles} onPress={onPress}>
+      <IconComponent
+        data-qa-anchor={accessibilityId}
+        defaultIcon={() => <BackButtonSvg className={defaultClassName} />}
+        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+        defaultIconName={defaultConfig.icon}
+        configIconName={config.icon}
+      />
+    </Button>
   );
 };

@@ -1,5 +1,4 @@
 .speakerButton {
-  fill: var(--asc-color-white);
   position: absolute;
   top: 96px;
   left: 24px;
@@ -7,6 +6,7 @@
 }
 
 .speakerButton__icon {
+  fill: var(--asc-color-white);
   width: 1.5rem;
   height: 1.5rem;
 }

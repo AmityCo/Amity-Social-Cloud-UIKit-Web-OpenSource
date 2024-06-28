@@ -6,7 +6,7 @@ const useUser = (userId?: string | null) => {
   const { item, ...rest } = useLiveObject({
     fetcher: UserRepository.getUser,
     params: userId,
-    shouldCall: () => !!userId,
+    shouldCall: !!userId,
   });
 
   return {

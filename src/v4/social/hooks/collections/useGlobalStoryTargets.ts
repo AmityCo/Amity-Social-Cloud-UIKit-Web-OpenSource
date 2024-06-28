@@ -7,7 +7,7 @@ export const useGlobalStoryTargets = (
   const { items, hasMore, loadMore, ...rest } = useLiveCollection({
     fetcher: StoryRepository.getGlobalStoryTargets,
     params,
-    shouldCall: () => true,
+    shouldCall: true,
   });
 
   const loadMoreStories = () => {
@@ -15,7 +15,6 @@ export const useGlobalStoryTargets = (
       loadMore();
     }
   };
-
 
   return {
     stories: items,

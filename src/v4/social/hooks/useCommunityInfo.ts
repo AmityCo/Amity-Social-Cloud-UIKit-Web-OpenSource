@@ -11,7 +11,7 @@ export const useCommunityInfo = (communityId?: string) => {
   const { onEditCommunity } = useNavigation();
   const { community } = useCommunity({
     communityId,
-    shouldCall: () => !!communityId,
+    shouldCall: !!communityId,
   });
   const avatarFileUrl = useImage({ fileId: community?.avatarFileId, imageSize: 'medium' });
 

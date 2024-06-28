@@ -213,7 +213,7 @@ export const defaultConfig: DefaultConfig = {
     '*/edit_comment_component/*': {
       theme: {},
     },
-    '*/edit_comment_component/cancel_button': {
+    '*/edit_comment_component/edit_cancel_button': {
       cancel_icon: '',
       cancel_button_text: 'cancel',
       background_color: '#1243EE',
@@ -231,7 +231,7 @@ export const defaultConfig: DefaultConfig = {
       done_button_text: 'Done',
       background_color: '#1243EE',
     },
-    '*/hyper_link_config_component/cancel_button': {
+    '*/hyper_link_config_component/edit_cancel_button': {
       cancel_icon: '',
       cancel_button_text: 'Cancel',
     },

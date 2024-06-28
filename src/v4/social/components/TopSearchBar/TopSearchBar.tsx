@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
 import { CancelButton } from '~/v4/social/elements/CancelButton';
 import { SearchIcon } from '~/v4/social/elements/SearchIcon';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 
 import styles from './TopSearchBar.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -16,11 +14,10 @@ export interface TopSearchBarProps {
 
 export function TopSearchBar({ pageId = '*', search }: TopSearchBarProps) {
   const componentId = 'top_search_bar';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { config, isExcluded, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   const { onBack } = useNavigation();
 
@@ -54,13 +51,13 @@ export function TopSearchBar({ pageId = '*', search }: TopSearchBarProps) {
             componentId={componentId}
             defaultClassName={styles.topSearchBar__clearButton}
             imgClassName={styles.topSearchBar__clearButton__img}
-            onClick={() => {
+            onPress={() => {
               setSearchValue('');
             }}
           />
         ) : null}
       </div>
-      <CancelButton pageId={pageId} componentId={componentId} onClick={() => onBack()} />
+      <CancelButton pageId={pageId} componentId={componentId} onPress={() => onBack()} />
     </div>
   );
 }
