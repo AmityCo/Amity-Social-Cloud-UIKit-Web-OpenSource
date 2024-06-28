@@ -26,7 +26,7 @@ const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
 interface ReactionButtonProps {
   pageId?: string;
   componentId?: string;
-  myReactions: string[];
+  myReaction?: string | null;
   reactionsCount?: number;
   defaultIconClassName?: string;
   imgIconClassName?: string;
@@ -38,7 +38,7 @@ const MOUSE_DURATION = 250;
 export function ReactionButton({
   pageId = '*',
   componentId = '*',
-  myReactions,
+  myReaction,
   reactionsCount,
   defaultIconClassName,
   imgIconClassName,
@@ -52,44 +52,43 @@ export function ReactionButton({
       elementId,
     });
 
-  const clickTimerRef = useRef(0);
-  const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const [isShowReactionPanel, setIsShowReactionPanel] = useState(false);
+  // const clickTimerRef = useRef(0);
+  // const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // const [isShowReactionPanel, setIsShowReactionPanel] = useState(false);
 
-  const likeRef = useRef<HTMLDivElement>(null);
-  const loveRef = useRef<HTMLDivElement>(null);
-  const fireRef = useRef<HTMLDivElement>(null);
-  const happyRef = useRef<HTMLDivElement>(null);
-  const cryingRef = useRef<HTMLDivElement>(null);
+  // const likeRef = useRef<HTMLDivElement>(null);
+  // const loveRef = useRef<HTMLDivElement>(null);
+  // const fireRef = useRef<HTMLDivElement>(null);
+  // const happyRef = useRef<HTMLDivElement>(null);
+  // const cryingRef = useRef<HTMLDivElement>(null);
 
-  const myReaction = myReactions && myReactions.length > 0 ? myReactions[0] : null;
   const hasMyReaction = myReaction != null;
 
-  const [selectedReaction, setSelectedReaction] = useState<string | null>(null);
-  const [activeReaction, setActiveReaction] = useState<string | null>(null);
+  // const [selectedReaction, setSelectedReaction] = useState<string | null>(null);
+  // const [activeReaction, setActiveReaction] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (selectedReaction) {
-      setTimeout(() => {
-        setSelectedReaction(null);
-        setIsShowReactionPanel(false);
-      }, 250);
-    }
-  }, [selectedReaction]);
+  // useEffect(() => {
+  //   if (selectedReaction) {
+  //     setTimeout(() => {
+  //       setSelectedReaction(null);
+  //       setIsShowReactionPanel(false);
+  //     }, 250);
+  //   }
+  // }, [selectedReaction]);
 
-  const hideReactionPanel = (ev: MouseEvent) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    setIsShowReactionPanel(false);
-  };
+  // const hideReactionPanel = (ev: MouseEvent) => {
+  //   ev.preventDefault();
+  //   ev.stopPropagation();
+  //   setIsShowReactionPanel(false);
+  // };
 
-  useEffect(() => {
-    if (isShowReactionPanel) {
-      window.addEventListener('click', hideReactionPanel);
-    } else {
-      window.removeEventListener('click', hideReactionPanel);
-    }
-  }, [isShowReactionPanel]);
+  // useEffect(() => {
+  //   if (isShowReactionPanel) {
+  //     window.addEventListener('click', hideReactionPanel);
+  //   } else {
+  //     window.removeEventListener('click', hideReactionPanel);
+  //   }
+  // }, [isShowReactionPanel]);
 
   if (isExcluded) return null;
 
@@ -119,141 +118,141 @@ export function ReactionButton({
         ev.preventDefault();
         ev.stopPropagation();
 
-        clickTimerRef.current = Date.now();
+        // clickTimerRef.current = Date.now();
 
-        touchTimerRef.current = setTimeout(() => {
-          setIsShowReactionPanel(true);
-        }, MOUSE_DURATION);
+        // touchTimerRef.current = setTimeout(() => {
+        //   setIsShowReactionPanel(true);
+        // }, MOUSE_DURATION);
       }}
       onTouchStart={(ev) => {
         ev.preventDefault();
         ev.stopPropagation();
 
-        clickTimerRef.current = Date.now();
+        // clickTimerRef.current = Date.now();
 
-        touchTimerRef.current = setTimeout(() => {
-          setIsShowReactionPanel(true);
-        }, MOUSE_DURATION);
+        // touchTimerRef.current = setTimeout(() => {
+        //   setIsShowReactionPanel(true);
+        // }, MOUSE_DURATION);
       }}
-      onMouseMove={(ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
+      // onMouseMove={(ev) => {
+      //   ev.preventDefault();
+      //   ev.stopPropagation();
 
-        if (
-          likeRef.current &&
-          likeRef.current.offsetLeft < ev.clientX &&
-          ev.clientX < likeRef.current.offsetLeft + likeRef.current.clientWidth
-        ) {
-          setActiveReaction('like');
-          return;
-        }
-        if (
-          loveRef.current &&
-          loveRef.current.offsetLeft < ev.clientX &&
-          ev.clientX < loveRef.current.offsetLeft + loveRef.current.clientWidth
-        ) {
-          setActiveReaction('love');
-          return;
-        }
-        if (
-          fireRef.current &&
-          fireRef.current.offsetLeft < ev.clientX &&
-          ev.clientX < fireRef.current.offsetLeft + fireRef.current.clientWidth
-        ) {
-          setActiveReaction('fire');
-          return;
-        }
-        if (
-          happyRef.current &&
-          happyRef.current.offsetLeft < ev.clientX &&
-          ev.clientX < happyRef.current.offsetLeft + happyRef.current.clientWidth
-        ) {
-          setActiveReaction('happy');
-          return;
-        }
-        if (
-          cryingRef.current &&
-          cryingRef.current.offsetLeft < ev.clientX &&
-          ev.clientX < cryingRef.current.offsetLeft + cryingRef.current.clientWidth
-        ) {
-          setActiveReaction('crying');
-          return;
-        }
+      //   if (
+      //     likeRef.current &&
+      //     likeRef.current.offsetLeft < ev.clientX &&
+      //     ev.clientX < likeRef.current.offsetLeft + likeRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('like');
+      //     return;
+      //   }
+      //   if (
+      //     loveRef.current &&
+      //     loveRef.current.offsetLeft < ev.clientX &&
+      //     ev.clientX < loveRef.current.offsetLeft + loveRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('love');
+      //     return;
+      //   }
+      //   if (
+      //     fireRef.current &&
+      //     fireRef.current.offsetLeft < ev.clientX &&
+      //     ev.clientX < fireRef.current.offsetLeft + fireRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('fire');
+      //     return;
+      //   }
+      //   if (
+      //     happyRef.current &&
+      //     happyRef.current.offsetLeft < ev.clientX &&
+      //     ev.clientX < happyRef.current.offsetLeft + happyRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('happy');
+      //     return;
+      //   }
+      //   if (
+      //     cryingRef.current &&
+      //     cryingRef.current.offsetLeft < ev.clientX &&
+      //     ev.clientX < cryingRef.current.offsetLeft + cryingRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('crying');
+      //     return;
+      //   }
 
-        setActiveReaction(null);
-      }}
-      onTouchMove={(ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
+      //   setActiveReaction(null);
+      // }}
+      // onTouchMove={(ev) => {
+      //   ev.preventDefault();
+      //   ev.stopPropagation();
 
-        if (
-          likeRef.current &&
-          likeRef.current.offsetLeft < ev.touches[0].clientX &&
-          ev.touches[0].clientX < likeRef.current.offsetLeft + likeRef.current.clientWidth
-        ) {
-          setActiveReaction('like');
-          return;
-        }
-        if (
-          loveRef.current &&
-          loveRef.current.offsetLeft < ev.touches[0].clientX &&
-          ev.touches[0].clientX < loveRef.current.offsetLeft + loveRef.current.clientWidth
-        ) {
-          setActiveReaction('love');
-          return;
-        }
-        if (
-          fireRef.current &&
-          fireRef.current.offsetLeft < ev.touches[0].clientX &&
-          ev.touches[0].clientX < fireRef.current.offsetLeft + fireRef.current.clientWidth
-        ) {
-          setActiveReaction('fire');
-          return;
-        }
-        if (
-          happyRef.current &&
-          happyRef.current.offsetLeft < ev.touches[0].clientX &&
-          ev.touches[0].clientX < happyRef.current.offsetLeft + happyRef.current.clientWidth
-        ) {
-          setActiveReaction('happy');
-          return;
-        }
-        if (
-          cryingRef.current &&
-          cryingRef.current.offsetLeft < ev.touches[0].clientX &&
-          ev.touches[0].clientX < cryingRef.current.offsetLeft + cryingRef.current.clientWidth
-        ) {
-          setActiveReaction('crying');
-          return;
-        }
+      //   if (
+      //     likeRef.current &&
+      //     likeRef.current.offsetLeft < ev.touches[0].clientX &&
+      //     ev.touches[0].clientX < likeRef.current.offsetLeft + likeRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('like');
+      //     return;
+      //   }
+      //   if (
+      //     loveRef.current &&
+      //     loveRef.current.offsetLeft < ev.touches[0].clientX &&
+      //     ev.touches[0].clientX < loveRef.current.offsetLeft + loveRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('love');
+      //     return;
+      //   }
+      //   if (
+      //     fireRef.current &&
+      //     fireRef.current.offsetLeft < ev.touches[0].clientX &&
+      //     ev.touches[0].clientX < fireRef.current.offsetLeft + fireRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('fire');
+      //     return;
+      //   }
+      //   if (
+      //     happyRef.current &&
+      //     happyRef.current.offsetLeft < ev.touches[0].clientX &&
+      //     ev.touches[0].clientX < happyRef.current.offsetLeft + happyRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('happy');
+      //     return;
+      //   }
+      //   if (
+      //     cryingRef.current &&
+      //     cryingRef.current.offsetLeft < ev.touches[0].clientX &&
+      //     ev.touches[0].clientX < cryingRef.current.offsetLeft + cryingRef.current.clientWidth
+      //   ) {
+      //     setActiveReaction('crying');
+      //     return;
+      //   }
 
-        setActiveReaction(null);
-      }}
+      //   setActiveReaction(null);
+      // }}
       onTouchEnd={(ev) => {
-        touchTimerRef.current && clearTimeout(touchTimerRef.current);
-        touchTimerRef.current = null;
-        setIsShowReactionPanel(false);
-        if (activeReaction) {
-          setSelectedReaction(activeReaction);
-          onReactionClick(activeReaction);
-          setActiveReaction(null);
-        } else {
-          setSelectedReaction('like');
-          onReactionClick('like');
-        }
+        // touchTimerRef.current && clearTimeout(touchTimerRef.current);
+        // touchTimerRef.current = null;
+        // setIsShowReactionPanel(false);
+        // if (activeReaction) {
+        // setSelectedReaction(activeReaction);
+        // onReactionClick(activeReaction);
+        // setActiveReaction(null);
+        // } else {
+        // setSelectedReaction('like');
+        onReactionClick('like');
+        // }
       }}
       onMouseUp={(ev) => {
-        touchTimerRef.current && clearTimeout(touchTimerRef.current);
-        touchTimerRef.current = null;
-        setIsShowReactionPanel(false);
-        if (activeReaction) {
-          setSelectedReaction(activeReaction);
-          onReactionClick(activeReaction);
-          setActiveReaction(null);
-        } else {
-          setSelectedReaction('like');
-          onReactionClick('like');
-        }
+        // touchTimerRef.current && clearTimeout(touchTimerRef.current);
+        // touchTimerRef.current = null;
+        // setIsShowReactionPanel(false);
+        // if (activeReaction) {
+        //   setSelectedReaction(activeReaction);
+        //   onReactionClick(activeReaction);
+        //   setActiveReaction(null);
+        // } else {
+        // setSelectedReaction('like');
+        onReactionClick('like');
+        // }
       }}
     >
       {myReaction ? (
@@ -277,7 +276,7 @@ export function ReactionButton({
       >
         {typeof reactionsCount === 'number' ? reactionsCount : myReaction || config.text}
       </Typography.BodyBold>
-      {isShowReactionPanel ? (
+      {/* {isShowReactionPanel ? (
         <div className={styles.reactButton__panel}>
           <div
             className={styles.reactButton__panel__reaction}
@@ -325,7 +324,7 @@ export function ReactionButton({
             <Crying />
           </div>
         </div>
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

@@ -11,10 +11,9 @@ import { Typography } from '~/v4/core/components';
 import AngleRight from '~/v4/icons/AngleRight';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useMutation } from '@tanstack/react-query';
-import { ReactionRepository } from '@amityco/ts-sdk';
+import { ReactionRepository, SubscriptionLevels } from '@amityco/ts-sdk';
 
 import styles from './PostContent.module.css';
 
@@ -30,10 +29,10 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
 import usePost from '~/v4/core/hooks/objects/usePost';
-import { ReactionList } from '~/v4/social/components/ReactionList/';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscription';
+import { ReactionList } from '../index';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -41,22 +40,18 @@ interface PostTitleProps {
 }
 
 const PostTitle = ({ pageId, post }: PostTitleProps) => {
-  const componentId = 'post_content';
-  const { getConfig } = useCustomization();
-  const uiReference = `${pageId}/${componentId}/*`;
-  const config = getConfig(uiReference);
-  const themeStyles = useGenerateStylesShadeColors(config);
+  const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
   const { community: targetCommunity } = useCommunity({
     communityId: post.targetId,
-    shouldCall: () => post.targetType === 'community',
+    shouldCall,
   });
 
   const { user: postedUser } = useUser(post.postedUserId);
 
   if (targetCommunity) {
     return (
-      <div style={themeStyles} className={styles.postTitle}>
+      <div className={styles.postTitle}>
         <Typography.BodyBold className={styles.postTitle__text}>
           {postedUser?.displayName}
         </Typography.BodyBold>
@@ -141,6 +136,7 @@ interface PostContentProps {
   pageId?: string;
   post: Amity.Post;
   type: 'feed' | 'detail';
+  drawerRef?: React.RefObject<HTMLDivElement>;
   onClick?: () => void;
 }
 
@@ -148,6 +144,7 @@ export const PostContent = ({
   pageId = '*',
   post: initialPost,
   type,
+  drawerRef,
   onClick,
 }: PostContentProps) => {
   const componentId = 'post_content';
@@ -156,15 +153,25 @@ export const PostContent = ({
     componentId,
   });
 
-  const { post: postData } = usePost(initialPost.postId);
+  const { post: postData } = usePost(initialPost?.postId);
   const { setDrawerData, removeDrawerData } = useDrawer();
 
   const post = postData || initialPost;
 
+  const [shouldSubscribe, setShouldSubscribe] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedImageIndex, setClickedImageIndex] = useState<number | null>(null);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
+
+  const [reactionByMe, setReactionByMe] = useState<string | null>(null);
+  const [reactionsCount, setReactionsCount] = useState<number>(0);
+
+  usePostSubscription({
+    postId: post?.postId,
+    level: SubscriptionLevels.POST,
+    shouldSubscribe: shouldSubscribe,
+  });
 
   useEffect(() => {
     if (post) {
@@ -172,9 +179,11 @@ export const PostContent = ({
     }
   }, [post]);
 
+  const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
+
   const { community: targetCommunity } = useCommunity({
     communityId: post?.targetId,
-    shouldCall: () => post?.targetType === 'community',
+    shouldCall,
   });
 
   const { isCommunityModerator } = usePostPermissions({
@@ -182,24 +191,48 @@ export const PostContent = ({
     community: targetCommunity,
   });
 
-  const reactionByMe = useMemo(() => {
-    if (post == null || post.myReactions?.length === 0) return null;
-    return post.myReactions[0];
+  useEffect(() => {
+    if (post == null) return;
+    setReactionByMe(post.myReactions[0] || null);
   }, [post.myReactions]);
 
-  const { mutateAsync: mutateAddReactionAsync } = useMutateAddReaction({
-    postId: post.postId,
-    reactionByMe,
+  useEffect(() => {
+    if (post == null) return;
+    setReactionsCount(post?.reactionsCount || 0);
+  }, [post?.reactionsCount]);
+
+  const { mutateAsync: mutateAddReactionAsync } = useMutation({
+    mutationFn: async (reactionKey: string) => {
+      if (reactionByMe && reactionByMe !== reactionKey) {
+        try {
+          await ReactionRepository.removeReaction('post', post?.postId, reactionByMe);
+        } catch {
+          console.log();
+        }
+      }
+      return ReactionRepository.addReaction('post', post?.postId, reactionKey);
+    },
+    onMutate: (reactionKey) => {
+      setShouldSubscribe(true);
+      setReactionsCount(reactionsCount + 1);
+      setReactionByMe(reactionKey);
+    },
   });
 
-  const { mutateAsync: mutateRemoveReactionAsync } = useMutateRemoveReaction({
-    postId: post.postId,
-    reactionsByMe: post.myReactions,
+  const { mutateAsync: mutateRemoveReactionAsync } = useMutation({
+    mutationFn: async (reactionKey: string) => {
+      return ReactionRepository.removeReaction('post', post?.postId, reactionKey);
+    },
+    onMutate: () => {
+      setShouldSubscribe(true);
+      setReactionsCount(Math.max(0, reactionsCount - 1));
+      setReactionByMe(null);
+    },
   });
 
   const handleReactionClick = (reactionKey: string) => {
-    if (post.myReactions?.length > 0) {
-      mutateRemoveReactionAsync();
+    if (reactionByMe) {
+      mutateRemoveReactionAsync(reactionByMe);
     } else {
       mutateAddReactionAsync(reactionKey);
     }
@@ -234,135 +267,127 @@ export const PostContent = ({
   const hasReaction = hasLike || hasLove || hasFire || hasHappy || hasCrying;
 
   return (
-    <>
-      <div className={styles.postContent} style={themeStyles}>
-        <div className={styles.postContent__bar}>
-          <div className={styles.postContent__bar__userAvatar}>
-            <UserAvatar userId={post.postedUserId} />
-          </div>
+    <div className={styles.postContent} style={themeStyles}>
+      <div className={styles.postContent__bar} data-type={type}>
+        <div className={styles.postContent__bar__userAvatar}>
+          <UserAvatar userId={post?.postedUserId} />
+        </div>
+        <div>
           <div>
-            <div>
-              <PostTitle post={post} />
-            </div>
-            <div className={styles.postContent__bar__information__subtitle}>
-              {!isCommunityModerator ? (
-                <div className={styles.postContent__bar__information__subtitle__moderator}>
-                  <ModeratorBadge pageId={pageId} componentId={componentId} />
-                  <span className={styles.postContent__bar__information__subtitle__separator}>
-                    •
-                  </span>
-                </div>
-              ) : null}
-              <span
-                className={styles.postContent__bar__information__subtitle__timestamp}
-                onClick={() => onClick?.()}
-              >
-                <Timestamp timestamp={post.createdAt} />
-              </span>
-            </div>
+            <PostTitle post={post} />
           </div>
-          <div className={styles.postContent__bar__actionButton}>
-            {type === 'feed' ? (
-              <MenuButton
-                pageId={pageId}
-                componentId={componentId}
-                onClick={() =>
-                  setDrawerData({
-                    content: (
-                      <PostMenu
-                        post={post}
-                        onCloseMenu={() => removeDrawerData()}
-                        pageId={pageId}
-                        componentId={componentId}
-                      />
-                    ),
-                  })
-                }
-              />
+          <div className={styles.postContent__bar__information__subtitle}>
+            {!isCommunityModerator ? (
+              <div className={styles.postContent__bar__information__subtitle__moderator}>
+                <ModeratorBadge pageId={pageId} componentId={componentId} />
+                <span className={styles.postContent__bar__information__subtitle__separator}>•</span>
+              </div>
             ) : null}
+            <span className={styles.postContent__bar__information__subtitle__timestamp}>
+              <Timestamp timestamp={post.createdAt} />
+            </span>
           </div>
         </div>
-        <div className={styles.postContent__content_and_reactions}>
-          <div className={styles.postContent__content}>
-            <TextContent text={post.data.text} mentionees={post?.metadata?.mentioned} />
-            {post.children.length > 0 ? (
-              <ChildrenPostContent
-                post={post}
-                onImageClick={openImageViewer}
-                onVideoClick={openVideoViewer}
-              />
-            ) : null}
-          </div>
-          {type === 'detail' ? (
-            <div className={styles.postContent__reactions_and_comments}>
-              <div
-                className={styles.postContent__reactionsBar}
-                onClick={() =>
-                  setDrawerData({
-                    content: (
-                      <ReactionList
-                        pageId={pageId}
-                        referenceId={post.postId}
-                        referenceType={'post'}
-                      />
-                    ),
-                  })
-                }
-              >
-                {hasReaction ? (
-                  <div className={styles.postContent__reactionsBar__reactions}>
-                    {hasCrying && (
-                      <Crying className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasHappy && (
-                      <Happy className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasFire && (
-                      <Fire className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasLove && (
-                      <Love className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasLike && (
-                      <Like className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                  </div>
-                ) : null}
-                <Typography.Caption className={styles.postContent__reactionsBar__reactions__count}>
-                  {`${post?.reactionsCount || 0} ${post?.reactionsCount === 1 ? 'like' : 'likes'}`}
-                </Typography.Caption>
-              </div>
-
-              <Typography.Caption className={styles.postContent__commentsCount}>
-                {`${post?.commentsCount || 0} ${
-                  post?.commentsCount === 1 ? 'comment' : 'comments'
-                }`}
+        <div className={styles.postContent__bar__actionButton}>
+          {type === 'feed' ? (
+            <MenuButton
+              pageId={pageId}
+              componentId={componentId}
+              onClick={() =>
+                setDrawerData({
+                  content: (
+                    <PostMenu
+                      post={post}
+                      onCloseMenu={() => removeDrawerData()}
+                      pageId={pageId}
+                      componentId={componentId}
+                    />
+                  ),
+                })
+              }
+            />
+          ) : null}
+        </div>
+      </div>
+      <div className={styles.postContent__content_and_reactions}>
+        <div className={styles.postContent__content}>
+          <TextContent text={post.data.text} mentionees={post?.metadata?.mentioned} />
+          {post.children.length > 0 ? (
+            <ChildrenPostContent
+              post={post}
+              onImageClick={openImageViewer}
+              onVideoClick={openVideoViewer}
+            />
+          ) : null}
+        </div>
+        {type === 'detail' ? (
+          <div className={styles.postContent__reactions_and_comments}>
+            <div
+              className={styles.postContent__reactionsBar}
+              onClick={() =>
+                setDrawerData({
+                  content: (
+                    <ReactionList
+                      pageId={pageId}
+                      referenceId={post.postId}
+                      referenceType={'post'}
+                    />
+                  ),
+                })
+              }
+            >
+              {hasReaction ? (
+                <div className={styles.postContent__reactionsBar__reactions}>
+                  {hasCrying && (
+                    <Crying className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasHappy && (
+                    <Happy className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasFire && (
+                    <Fire className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasLove && (
+                    <Love className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasLike && (
+                    <Like className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                </div>
+              ) : null}
+              <Typography.Caption className={styles.postContent__reactionsBar__reactions__count}>
+                {`${post?.reactionsCount || 0} ${post?.reactionsCount === 1 ? 'like' : 'likes'}`}
               </Typography.Caption>
             </div>
-          ) : null}
-          <div className={styles.postContent__divider} />
-          <div className={styles.postContent__reactionBar}>
-            <div className={styles.postContent__reactionBar__leftPane}>
-              <ReactionButton
-                pageId={pageId}
-                componentId={componentId}
-                reactionsCount={type === 'feed' ? post.reactionsCount : undefined}
-                myReactions={post.myReactions}
-                defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                onReactionClick={handleReactionClick}
-              />
-              <CommentButton
-                pageId={pageId}
-                componentId={componentId}
-                commentsCount={type === 'feed' ? post.commentsCount : undefined}
-                defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-              />
-            </div>
-            <div className={styles.postContent__reactionBar__rightPane}>
-              <ShareButton pageId={pageId} componentId={componentId} />
-            </div>
+
+            <Typography.Caption className={styles.postContent__commentsCount}>
+              {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
+            </Typography.Caption>
+          </div>
+        ) : null}
+        <div className={styles.postContent__divider} />
+        <div className={styles.postContent__reactionBar}>
+          <div className={styles.postContent__reactionBar__leftPane}>
+            <ReactionButton
+              pageId={pageId}
+              componentId={componentId}
+              reactionsCount={type === 'feed' ? reactionsCount : undefined}
+              myReaction={reactionByMe}
+              defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+              imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+              onReactionClick={handleReactionClick}
+            />
+            <CommentButton
+              pageId={pageId}
+              componentId={componentId}
+              commentsCount={type === 'feed' ? post.commentsCount : undefined}
+              defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+              imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+              onPress={() => onClick?.()}
+            />
+          </div>
+          <div className={styles.postContent__reactionBar__rightPane}>
+            <ShareButton pageId={pageId} componentId={componentId} />
           </div>
         </div>
       </div>
@@ -372,6 +397,6 @@ export const PostContent = ({
       {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
         <VideoViewer post={post} onClose={closeVideoViewer} initialVideoIndex={clickedVideoIndex} />
       ) : null}
-    </>
+    </div>
   );
 };

@@ -4,16 +4,17 @@ import { GlobalSearchButton } from '~/v4/social/elements/GlobalSearchButton';
 import { HeaderLabel } from '~/v4/social/elements/HeaderLabel';
 import styles from './TopNavigation.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 export interface TopNavigationProps {
   pageId?: string;
+  onGlobalSearchButtonClick: () => void;
   onClickPostCreationButton: (event: React.MouseEvent) => void;
   createPostButtonRef: React.RefObject<HTMLDivElement>;
 }
 
 export function TopNavigation({
   pageId = '*',
+  onGlobalSearchButtonClick,
   onClickPostCreationButton,
   createPostButtonRef,
 }: TopNavigationProps) {
@@ -22,8 +23,6 @@ export function TopNavigation({
     pageId,
     componentId,
   });
-
-  const { goToSocialGlobalSearchPage } = useNavigation();
 
   if (isExcluded) return null;
 

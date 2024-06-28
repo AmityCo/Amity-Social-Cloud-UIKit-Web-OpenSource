@@ -411,7 +411,9 @@ export const defaultConfig: DefaultConfig = {
       image: 'platformValue',
     },
     'social_global_search_page/*/*': {},
-    'social_global_search_page/top_search_bar/*': {},
+    'social_global_search_page/top_search_bar/*': {
+      text: 'Search community and user',
+    },
     'social_global_search_page/top_search_bar/search_icon': {
       icon: 'search',
     },
