@@ -4,13 +4,13 @@ import { useEffect, useMemo, useState } from 'react';
 const useGlobalFeed = () => {
   const [items, setItems] = useState<Amity.Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [queryToken, setQueryToken] = useState<number | null>(null);
+  const [queryToken, setQueryToken] = useState<string | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
 
   async function fetchMore() {
     try {
       setIsLoading(true);
-      const newPosts = await FeedRepository.queryGlobalFeed({
+      const newPosts = await FeedRepository.getCustomRankingGlobalFeed({
         limit: 10,
         queryToken: queryToken || undefined,
       });
