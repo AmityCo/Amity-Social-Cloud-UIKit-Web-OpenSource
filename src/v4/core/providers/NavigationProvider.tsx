@@ -19,6 +19,7 @@ export enum PageTypes {
   SelectPostTargetPage = 'SelectPostTargetPage',
   DraftPage = 'DraftPage',
   PostComposerPage = 'PostComposerPage',
+  MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
 }
 
 type Page =
@@ -73,6 +74,7 @@ type Page =
   | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
   | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } }
+  | { type: PageTypes.MyCommunitiesSearchPage; context: { communityId?: string } }
   | { type: PageTypes.SelectPostTargetPage }
   | {
       type: PageTypes.DraftPage;
@@ -108,6 +110,7 @@ type ContextValue = {
   goToPostDetailPage: (postId: string) => void;
   goToCommunityProfilePage: (communityId: string) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
+  goToMyCommunitiesSearchPage: () => void;
   goToSelectPostTargetPage: () => void;
   goToDraftStoryPage: (context: {
     targetId: string;
@@ -173,6 +176,7 @@ let defaultValue: ContextValue = {
     post?: Amity.Post,
   ) => {},
   goToSocialHomePage: () => {},
+  goToMyCommunitiesSearchPage: () => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
 };
@@ -210,6 +214,8 @@ if (process.env.NODE_ENV !== 'production') {
         `NavigationContext goToPostComposerPage(${mode} ${targetId}) ${targetType} ${community} ${post}`,
       ),
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
+    goToMyCommunitiesSearchPage: () =>
+      console.log('NavigationContext goToMyCommunitiesSearchPage()'),
   };
 }
 
@@ -528,6 +534,15 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToMyCommunitiesSearchPage = useCallback(() => {
+    const next = {
+      type: PageTypes.MyCommunitiesSearchPage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
   return (
     <NavigationContext.Provider
       value={{
@@ -550,10 +565,11 @@ export default function NavigationProvider({
         goToDraftStoryPage,
         goToPostComposerPage,
         goToSocialHomePage,
+        goToMyCommunitiesSearchPage,
         setNavigationBlocker,
       }}
     >
-      {children}
+      <div style={{ position: 'relative' }}>{children}</div>
     </NavigationContext.Provider>
   );
 }

@@ -431,6 +431,22 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_global_search_page/community_search_result/community_category_name': {},
     'social_global_search_page/community_search_result/community_members_count': {},
+    'my_communities_search_page/top_search_bar/*': {
+      text: 'Search my community',
+    },
+    'my_communities_search_page/*/community_avatar': {},
+    'my_communities_search_page/*/community_display_name': {},
+    'my_communities_search_page/*/community_private_badge': {
+      icon: 'lockIcon',
+    },
+    'my_communities_search_page/*/community_official_badge': {
+      icon: 'officialBadgeIcon',
+    },
+    'my_communities_search_page/*/community_category_name': {},
+    'my_communities_search_page/*/community_members_count': {},
+    'my_communities_search_page/top_search_bar/cancel_button': {
+      text: 'Cancel',
+    },
   },
 };
 

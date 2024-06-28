@@ -9,6 +9,8 @@ import { MyCommunitiesButton } from '~/v4/social/elements/MyCommunitiesButton';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 enum EnumTabNames {
   Newsfeed = 'Newsfeed',
@@ -21,6 +23,7 @@ export function SocialHomePage() {
   const { themeStyles } = useAmityPage({
     pageId,
   });
+  const { goToSocialGlobalSearchPage, goToMyCommunitiesSearchPage } = useNavigation();
 
   const [activeTab, setActiveTab] = useState(EnumTabNames.Newsfeed);
 
@@ -31,6 +34,20 @@ export function SocialHomePage() {
   const handleClickButton = (event: React.MouseEvent) => {
     event.stopPropagation();
     setIsShowCreatePostMenu((prev) => !prev);
+  };
+
+  const handleGlobalSearchClick = () => {
+    switch (activeTab) {
+      case EnumTabNames.Newsfeed:
+        goToSocialGlobalSearchPage();
+        break;
+      case EnumTabNames.Explore:
+        break;
+      case EnumTabNames.MyCommunities:
+        goToMyCommunitiesSearchPage();
+
+        break;
+    }
   };
 
   useEffect(() => {
@@ -56,6 +73,7 @@ export function SocialHomePage() {
         <TopNavigation
           pageId={pageId}
           onClickPostCreationButton={handleClickButton}
+          onGlobalSearchButtonClick={handleGlobalSearchClick}
           createPostButtonRef={createPostButtonRef}
         />
         {isShowCreatePostMenu && (

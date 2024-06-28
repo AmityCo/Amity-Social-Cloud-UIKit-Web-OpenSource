@@ -8,6 +8,7 @@ import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
 import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
 import { SelectPostTargetPage } from '../SelectPostTargetPage';
+import { MyCommunitiesSearchPage } from '../MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 
 import styles from './Application.module.css';
 
@@ -23,8 +24,17 @@ const Application = () => {
         {page.type === PageTypes.ViewStoryPage && (
           <ViewStoryPage type="globalFeed" targetId={page.context.targetId} />
         )}
-        {page.type === PageTypes.PostComposerPage && <PostComposerPage mode={page.context.mode} targetId={page.context.targetId} targetType={page.context.targetType} community={page.context.community} post={page.context.post} />}
+        {page.type === PageTypes.PostComposerPage && (
+          <PostComposerPage
+            mode={page.context.mode}
+            targetId={page.context.targetId}
+            targetType={page.context.targetType}
+            community={page.context.community}
+            post={page.context.post}
+          />
+        )}
         {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />}
+        {page.type === PageTypes.MyCommunitiesSearchPage && <MyCommunitiesSearchPage />}
       </div>
     </StoryProvider>
   );
