@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { extractColors } from 'extract-colors';
-import { readFileAsync } from '~/helpers';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import {
   AspectRatioButton,
@@ -19,6 +17,7 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
+import ColorThief from 'colorthief';
 
 import styles from './DraftsPage.module.css';
 
@@ -83,7 +82,7 @@ export const PlainDraftStoryPage = ({
   };
 
   const [imageMode, setImageMode] = useState<'fit' | 'fill'>('fit');
-  const [colors, setColors] = useState<Awaited<ReturnType<typeof extractColors>>>([]);
+  const [colors, setColors] = useState<string[]>([]);
 
   const onClickImageMode = () => {
     setImageMode(imageMode === 'fit' ? 'fill' : 'fit');
@@ -182,35 +181,34 @@ export const PlainDraftStoryPage = ({
     setIsHyperLinkBottomSheetOpen(true);
   };
 
+  const extractColorsFromImage = useCallback(async (imageUrl: string) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = imageUrl;
+
+    img.onload = () => {
+      const colorThief = new ColorThief();
+      const palette = colorThief.getPalette(img, 2);
+      if (palette) {
+        setColors(palette.map((color) => `rgb(${color.join(',')})`));
+      }
+    };
+  }, []);
+
   useEffect(() => {
-    const extractColorsFromImage = async (fileTarget: File) => {
-      const img = await readFileAsync(fileTarget);
-
-      if (fileTarget?.type.includes('image')) {
-        const image = new Image();
-        image.src = img as string;
-
-        const colorsFromImage = await extractColors(image, {
-          crossOrigin: 'anonymous',
-        });
-
-        setColors(colorsFromImage);
+    const extractColors = async () => {
+      if (mediaType?.type === 'image') {
+        if (file) {
+          const imageUrl = URL.createObjectURL(file);
+          await extractColorsFromImage(imageUrl);
+        } else if (mediaType.url) {
+          await extractColorsFromImage(mediaType.url);
+        }
       }
     };
 
-    if (mediaType?.type === 'image') {
-      if (file) {
-        extractColorsFromImage(file);
-      } else if (mediaType.url) {
-        fetch(mediaType.url)
-          .then((response) => response.blob())
-          .then((blob) => {
-            const fileFromUrl = new File([blob], 'image', { type: 'image/jpeg' });
-            extractColorsFromImage(fileFromUrl);
-          });
-      }
-    }
-  }, [file, imageMode, mediaType]);
+    extractColors();
+  }, [file, mediaType, extractColorsFromImage]);
 
   return (
     <div data-qa-anchor={accessibilityId} style={themeStyles} className={styles.storyWrapper}>
@@ -232,10 +230,10 @@ export const PlainDraftStoryPage = ({
             className={styles.mainContainer}
             style={{
               background: `linear-gradient(
-              180deg,
-              ${colors?.length > 0 ? colors[0].hex : 'var(--asc-color-black)'} 0%,
-              ${colors?.length > 0 ? colors[colors?.length - 1].hex : 'var(--asc-color-black)'} 100%
-            )`,
+                180deg,
+                ${colors[0] || 'var(--asc-color-black)'} 0%,
+                ${colors[1] || 'var(--asc-color-black)'} 100%
+              )`,
             }}
           >
             <img
@@ -247,6 +245,11 @@ export const PlainDraftStoryPage = ({
                 objectFit: imageMode === 'fit' ? 'contain' : 'cover',
               }}
               alt="Draft"
+              onLoad={(e) => {
+                if (imageMode === 'fill') {
+                  extractColorsFromImage((e.target as HTMLImageElement).src);
+                }
+              }}
             />
           </div>
         ) : mediaType?.type === 'video' ? (

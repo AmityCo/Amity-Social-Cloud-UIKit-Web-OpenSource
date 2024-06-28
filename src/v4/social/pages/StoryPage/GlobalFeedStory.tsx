@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
-import { extractColors } from 'extract-colors';
 import Stories from 'react-insta-stories';
 import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
 import { checkStoryPermission } from '~/utils';
@@ -62,7 +60,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   const { file, setFile } = useStoryContext();
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [colors, setColors] = useState<FinalColor[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -198,24 +195,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     [pageId, setFile],
   );
 
-  const storyStyles = useMemo(
-    () => ({
-      width: '100%',
-      height: '100%',
-      objectFit:
-        stories[currentIndex]?.dataType === 'image' &&
-        stories[currentIndex]?.data?.imageDisplayMode === 'fill'
-          ? 'cover'
-          : 'contain',
-      background: `linear-gradient(
-               180deg,
-               ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
-               ${colors?.length > 0 ? colors[colors?.length - 1].hex : '#000'} 100%
-             )`,
-    }),
-    [stories, currentIndex, colors],
-  );
-
   const increaseIndex = () => {
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
@@ -235,13 +214,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
               ? {
                   name: 'delete',
                   action: () => deleteStory(story?.storyId as string),
-                  icon: (
-                    <TrashIcon
-                      fill={getComputedStyle(document.documentElement).getPropertyValue(
-                        '--asc-color-base-default',
-                      )}
-                    />
-                  ),
+                  icon: <TrashIcon className={styles.deleteIcon} />,
                 }
               : null,
           ].filter(isNonNullable),
@@ -249,7 +222,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
           discardStory,
           addStoryButton,
           fileInputRef,
-          storyStyles,
           currentIndex,
           storiesCount: stories?.length,
           increaseIndex,
@@ -263,7 +235,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
       discardStory,
       addStoryButton,
       fileInputRef,
-      storyStyles,
       currentIndex,
       increaseIndex,
     ],
@@ -325,23 +296,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     }
   }, [stories]);
 
-  useEffect(() => {
-    if (!stories) return;
-    const extractColorsFromImage = async (url: string) => {
-      const colorsFromImage = await extractColors(url, {
-        crossOrigin: 'anonymous',
-      });
-
-      setColors(colorsFromImage);
-    };
-
-    if (stories[currentIndex]?.dataType === 'image') {
-      extractColorsFromImage(stories[currentIndex]?.imageData?.fileUrl as string);
-    } else {
-      setColors([]);
-    }
-  }, [stories, currentIndex]);
-
   if (file) {
     goToDraftStoryPage({
       targetId,
@@ -353,6 +307,8 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     });
   }
 
+  if (!stories || stories.length === 0) return null;
+
   return (
     <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
       <ArrowLeftButton onClick={previousStory} />
@@ -361,25 +317,23 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
           <div className={clsx(styles.viewStoryOverlay)} />
-          {formattedStories?.length > 0 ? (
-            // NOTE: Do not use isPaused prop, it will cause the first video story skipped
-            <Stories
-              // hide default progress bar
-              progressWrapperStyles={{
-                display: 'none',
-              }}
-              preventDefault
-              currentIndex={currentIndex}
-              stories={formattedStories}
-              renderers={globalFeedRenderers as RendererObject[]}
-              defaultInterval={DURATION}
-              onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
-              onStoryEnd={increaseIndex}
-              onNext={nextStory}
-              onPrevious={previousStory}
-              onAllStoriesEnd={nextStory}
-            />
-          ) : null}
+          {/* NOTE: Do not use isPaused prop, it will cause the first video story skipped */}
+          <Stories
+            // hide default progress bar
+            progressWrapperStyles={{
+              display: 'none',
+            }}
+            preventDefault
+            currentIndex={currentIndex}
+            stories={formattedStories}
+            renderers={globalFeedRenderers as RendererObject[]}
+            defaultInterval={DURATION}
+            onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
+            onStoryEnd={increaseIndex}
+            onNext={nextStory}
+            onPrevious={previousStory}
+            onAllStoriesEnd={nextStory}
+          />
         </div>
       </div>
       <ArrowRightButton onClick={nextStory} />

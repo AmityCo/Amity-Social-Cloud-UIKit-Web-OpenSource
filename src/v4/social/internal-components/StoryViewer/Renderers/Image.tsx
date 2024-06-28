@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import {
   CustomRenderer,
   Tester,
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
+import ColorThief from 'colorthief';
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
@@ -23,7 +24,6 @@ import styles from './Renderers.module.css';
 import clsx from 'clsx';
 
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
-import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 export const renderer: CustomRenderer = ({
   story,
@@ -40,6 +40,8 @@ export const renderer: CustomRenderer = ({
   const [isPaused, setIsPaused] = useState(false);
   const { loader } = config;
   const { client } = useSDK();
+  const [backgroundGradient, setBackgroundGradient] = useState('');
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
   const reactionsCount = story.reactionsCount || 0;
@@ -55,7 +57,6 @@ export const renderer: CustomRenderer = ({
     actions,
     addStoryButton,
     fileInputRef,
-    storyStyles,
     myReactions,
     currentIndex,
     storiesCount,
@@ -95,13 +96,27 @@ export const renderer: CustomRenderer = ({
   );
   const targetRootId = 'asc-uikit-stories-viewer';
 
-  const imageLoaded = () => {
+  const extractColors = useCallback(() => {
+    if (imageRef.current && imageRef.current.complete) {
+      const colorThief = new ColorThief();
+      const palette = colorThief.getPalette(imageRef.current, 2);
+      if (palette) {
+        const gradient = `linear-gradient(to top, rgb(${palette[0].join(
+          ',',
+        )}), rgb(${palette[1].join(',')})`;
+        setBackgroundGradient(gradient);
+      }
+    }
+  }, []);
+
+  const imageLoaded = useCallback(() => {
     setLoaded(true);
     if (isPaused) {
       setIsPaused(false);
     }
     action('play', true);
-  };
+    extractColors();
+  }, [action, isPaused, extractColors]);
 
   const play = () => setIsPaused(false);
   const pause = () => setIsPaused(true);
@@ -145,6 +160,12 @@ export const renderer: CustomRenderer = ({
   };
 
   useEffect(() => {
+    if (imageRef.current && imageRef.current.complete) {
+      extractColors();
+    }
+  }, [extractColors]);
+
+  useEffect(() => {
     if (fileInputRef.current) {
       const handleClick = () => {
         action('pause', true);
@@ -177,6 +198,9 @@ export const renderer: CustomRenderer = ({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
+      style={{
+        background: backgroundGradient,
+      }}
     >
       <StoryProgressBar
         pageId={pageId}
@@ -202,20 +226,15 @@ export const renderer: CustomRenderer = ({
         addStoryButton={addStoryButton}
       />
 
-      <div
-        className={clsx(styles.storyImageContainer)}
-        style={
-          {
-            '--asc-story-image-background': storyStyles?.background,
-          } as React.CSSProperties
-        }
-      >
+      <div className={clsx(styles.storyImageContainer)}>
         <img
+          ref={imageRef}
           className={styles.storyImage}
           data-qa-anchor="image_view"
           src={story.url}
           onLoad={imageLoaded}
           alt="Story Image"
+          crossOrigin="anonymous"
         />
       </div>
 
