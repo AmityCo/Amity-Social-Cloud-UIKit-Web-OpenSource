@@ -24,10 +24,9 @@ interface PostDetailPageProps {
 export function PostDetailPage({ id }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
   const { post, isLoading: isPostLoading, error } = usePost(id);
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityPage({
-      pageId,
-    });
+  const { themeStyles } = useAmityPage({
+    pageId,
+  });
   const { onBack } = useNavigation();
   const [replyComment, setReplyComment] = useState<Amity.Comment | null>(null);
 
@@ -83,7 +82,7 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
         <BackButton
           pageId={pageId}
           defaultClassName={styles.postDetailPage__backIcon}
-          onClick={() => onBack()}
+          onPress={() => onBack()}
         />
         <Typography.Title className={styles.postDetailPage__topBar__title}>Post</Typography.Title>
         <div className={styles.postDetailPage__topBar__menuBar}>

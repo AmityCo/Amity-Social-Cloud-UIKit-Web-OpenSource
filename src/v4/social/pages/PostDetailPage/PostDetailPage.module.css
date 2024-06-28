@@ -7,6 +7,8 @@
 }
 
 .postDetailPage__container {
+  flex: 1;
+  margin-top: 3.625rem;
   overflow-y: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;

@@ -569,7 +569,7 @@ export default function NavigationProvider({
         setNavigationBlocker,
       }}
     >
-      <div style={{ position: 'relative' }}>{children}</div>
+      {children}
     </NavigationContext.Provider>
   );
 }
