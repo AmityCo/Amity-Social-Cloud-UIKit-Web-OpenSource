@@ -1,4 +1,5 @@
 .postComposerPage {
+  position: relative;
   display: block;
   background-color: var(--asc-color-base-background);
   height: 100%;

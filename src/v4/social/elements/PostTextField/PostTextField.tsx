@@ -11,7 +11,6 @@ import { MentionNode } from '~/v4/social/internal-components/MentionTextInput/Me
 import { MentionTextInput } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
 import { MetaData, createPostParams } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import styles from './PostTextField.module.css';
-import { Mentionees } from '~/v4/helpers/utils';
 
 const theme = {
   ltr: 'ltr',

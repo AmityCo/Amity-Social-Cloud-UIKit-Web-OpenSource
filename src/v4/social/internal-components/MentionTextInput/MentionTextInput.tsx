@@ -6,7 +6,7 @@ import {
   MenuTextMatch,
 } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import { TextNode } from 'lexical';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { $createMentionNode } from './MentionNodes';
 import { CommunityMember } from '../CommunityMember';
@@ -153,76 +153,86 @@ export const useUserQueryByDisplayName = (displayName: string) => {
   };
 };
 
-export function MentionTextInput(): JSX.Element | null {
-  const [editor] = useLexicalComposerContext();
-
-  const [queryString, setQueryString] = useState<string | null>(null);
-
-  const { users } = useUserQueryByDisplayName(queryString || '' );
-
-  const options = useMemo(() => users.map((user) => new MentionTypeaheadOption(user)), [users]);
-
-  const onSelectOption = useCallback(
-    (
-      selectedOption: MentionTypeaheadOption,
-      nodeToReplace: TextNode | null,
-      closeMenu: () => void,
-    ) => {
-      editor.update(() => {
-        const mentionNode = $createMentionNode({
-          mentionName: selectedOption.key,
-          displayName: selectedOption.user.displayName,
-          userId: selectedOption.user.userId,
-        });
-        if (nodeToReplace) {
-          nodeToReplace.replace(mentionNode);
-        }
-        mentionNode.select();
-        closeMenu();
-      });
-    },
-    [editor],
-  );
-
-  const checkForMentionMatch = useCallback(
-    (text: string) => {
-      return getPossibleQueryMatch(text);
-    },
-    [editor],
-  );
-
+export const MentionTextInput = () => {
+  const mentionTextInputItemRef = useRef<HTMLDivElement>(null);
   return (
-    <LexicalTypeaheadMenuPlugin
-      onQueryChange={setQueryString}
-      onSelectOption={onSelectOption}
-      triggerFn={checkForMentionMatch}
-      options={options}
-      menuRenderFn={(
-        anchorElementRef,
-        { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
-      ) =>
-        anchorElementRef.current && users.length
-          ? ReactDOM.createPortal(
-              <div className={styles.mentionTextInput_item}>
-                {options.map((option, i: number) => (
-                  <CommunityMember
-                    isSelected={selectedIndex === i}
-                    onClick={() => {
-                      setHighlightedIndex(i);
-                      selectOptionAndCleanUp(option);
-                    }}
-                    onMouseEnter={() => {
-                      setHighlightedIndex(i);
-                    }}
-                    key={option.key}
-                    option={option}
-                  />
-                ))}
-              </div>,
-              anchorElementRef.current,
-            )
-          : null
-      }
-    />
+    <div>
+      <div ref={mentionTextInputItemRef}></div>
+      <Mention anchorRef={mentionTextInputItemRef} />
+    </div>
   );
-}
+};
+
+ function Mention({ anchorRef }: { anchorRef: RefObject<HTMLDivElement> }) {
+   const [editor] = useLexicalComposerContext();
+
+   const [queryString, setQueryString] = useState<string | null>(null);
+
+   const { users } = useUserQueryByDisplayName(queryString || '');
+
+   const options = useMemo(() => users.map((user) => new MentionTypeaheadOption(user)), [users]);
+
+   const onSelectOption = useCallback(
+     (
+       selectedOption: MentionTypeaheadOption,
+       nodeToReplace: TextNode | null,
+       closeMenu: () => void,
+     ) => {
+       editor.update(() => {
+         const mentionNode = $createMentionNode({
+           mentionName: selectedOption.key,
+           displayName: selectedOption.user.displayName,
+           userId: selectedOption.user.userId,
+         });
+         if (nodeToReplace) {
+           nodeToReplace.replace(mentionNode);
+         }
+         mentionNode.select();
+         closeMenu();
+       });
+     },
+     [editor],
+   );
+
+   const checkForMentionMatch = useCallback(
+     (text: string) => {
+       return getPossibleQueryMatch(text);
+     },
+     [editor],
+   );
+
+   return (
+     <LexicalTypeaheadMenuPlugin
+       onQueryChange={setQueryString}
+       onSelectOption={onSelectOption}
+       triggerFn={checkForMentionMatch}
+       options={options}
+       menuRenderFn={(
+         anchorElementRef,
+         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
+       ) =>
+         anchorRef.current && users.length
+           ? ReactDOM.createPortal(
+               <div className={styles.mentionTextInput_item}>
+                 {options.map((option, i: number) => (
+                   <CommunityMember
+                     isSelected={selectedIndex === i}
+                     onClick={() => {
+                       setHighlightedIndex(i);
+                       selectOptionAndCleanUp(option);
+                     }}
+                     onMouseEnter={() => {
+                       setHighlightedIndex(i);
+                     }}
+                     key={option.key}
+                     option={option}
+                   />
+                 ))}
+               </div>,
+               anchorRef.current,
+             )
+           : null
+       }
+     />
+   );
+ }
