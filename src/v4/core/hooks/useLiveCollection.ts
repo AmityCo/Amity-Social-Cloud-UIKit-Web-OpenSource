@@ -54,7 +54,7 @@ function useLiveCollection<TCallback, TParams>({
   );
 
   useEffect(() => {
-    if (shouldCall) return;
+    if (!shouldCall) return;
     const { unsubscribe } = subscribe({
       fetcher,
       params,
