@@ -38,7 +38,6 @@ export const renderer: CustomRenderer = ({
   onClose,
   onClickCommunity,
 }) => {
-  const { formatMessage } = useIntl();
   const [loaded, setLoaded] = useState(false);
   const [muted, setMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -161,9 +160,13 @@ export const renderer: CustomRenderer = ({
     onClose();
   };
 
-  const handleProgressComplete = useCallback(() => {
-    increaseIndex();
-  }, [increaseIndex]);
+  const handleProgressComplete = () => {
+    if (currentIndex + 1 < storiesCount) {
+      increaseIndex();
+    } else {
+      onClose();
+    }
+  };
 
   useEffect(() => {
     if (vid.current) {
@@ -181,21 +184,13 @@ export const renderer: CustomRenderer = ({
     if (fileInputRef.current) {
       fileInputRef.current.addEventListener('click', () => {
         action('pause', true);
+        setIsPaused(true);
       });
       fileInputRef.current.addEventListener('cancel', () => {
         action('play', true);
+        setIsPaused(false);
       });
     }
-    return () => {
-      if (fileInputRef.current) {
-        fileInputRef.current.removeEventListener('cancel', () => {
-          action('play', true);
-        });
-        fileInputRef.current.removeEventListener('click', () => {
-          action('pause', true);
-        });
-      }
-    };
   }, []);
 
   return (

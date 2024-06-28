@@ -145,18 +145,15 @@ export const renderer: CustomRenderer = ({
   };
 
   useEffect(() => {
-    if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
-      action('pause', true);
-    } else {
-      action('play', true);
-    }
-  }, [isPaused, isOpenBottomSheet, isOpenCommentSheet, action]);
-
-  useEffect(() => {
-    action('pause', true);
     if (fileInputRef.current) {
-      const handleClick = () => action('pause', true);
-      const handleCancel = () => action('play', true);
+      const handleClick = () => {
+        action('pause', true);
+        setIsPaused(true);
+      };
+      const handleCancel = () => {
+        action('play', true);
+        setIsPaused(false);
+      };
 
       fileInputRef.current.addEventListener('click', handleClick);
       fileInputRef.current.addEventListener('cancel', handleCancel);
@@ -168,7 +165,7 @@ export const renderer: CustomRenderer = ({
         }
       };
     }
-  }, [action, fileInputRef]);
+  }, [fileInputRef]);
 
   return (
     <motion.div
