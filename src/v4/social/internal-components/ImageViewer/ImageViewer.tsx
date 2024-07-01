@@ -3,6 +3,7 @@ import useImage from '~/core/hooks/useImage';
 import usePostByIds from '~/social/hooks/usePostByIds';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { ClearButton } from '../../elements/ClearButton/ClearButton';
+
 import styles from './ImageViewer.module.css';
 
 const AngleRight = (props: React.SVGProps<SVGSVGElement>) => (
@@ -81,12 +82,13 @@ export function ImageViewer({
               </div>
             )}
           </div>
-          <span className={styles.closeButton} onClick={onClose}>
+          <span className={styles.closeButton}>
             <ClearButton
               pageId={pageId}
               componentId={componentId}
               defaultClassName={styles.imageViewer__clearButton}
               imgClassName={styles.imageViewer__clearButton__img}
+              onPress={onClose}
             />
           </span>
         </div>
