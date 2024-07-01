@@ -24,11 +24,9 @@ export function SelectPostTargetPage() {
   });
   const { onBack } = useNavigation();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    sortBy: 'displayName',
-    limit: 20,
+    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
   });
   const { AmityPostTargetSelectionPage } = usePageBehavior();
-
   const intersectionRef = useRef<HTMLDivElement>(null);
   const { currentUserId } = useSDK();
   const { user } = useUser(currentUserId);
