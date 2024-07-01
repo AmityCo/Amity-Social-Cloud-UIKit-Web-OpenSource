@@ -283,9 +283,7 @@ export const PostContent = ({
                 <span className={styles.postContent__bar__information__subtitle__separator}>•</span>
               </div>
             ) : null}
-            <span className={styles.postContent__bar__information__subtitle__timestamp}>
-              <Timestamp timestamp={post.createdAt} />
-            </span>
+            <Timestamp timestamp={post.createdAt} />
           </div>
         </div>
         <div className={styles.postContent__bar__actionButton}>

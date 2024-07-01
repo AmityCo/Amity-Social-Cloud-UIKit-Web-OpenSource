@@ -34,17 +34,6 @@
   color: var(--asc-color-base-shade2);
 }
 
-.postContent__bar__information__subtitle__timestamp {
-  cursor: pointer;
-}
-
-.postContent__bar__information__subtitle__timestamp:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.125rem;
-  text-decoration-thickness: 0.0625rem;
-  text-decoration-color: var(--asc-color-base-shade2);
-}
-
 .postContent__bar__actionButton {
   justify-self: flex-end;
   cursor: pointer;
