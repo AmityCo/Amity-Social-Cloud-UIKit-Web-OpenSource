@@ -29,10 +29,10 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
 import usePost from '~/v4/core/hooks/objects/usePost';
-import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscription';
 import { ReactionList } from '../index';
+import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -186,7 +186,7 @@ export const PostContent = ({
     shouldCall,
   });
 
-  const { isCommunityModerator } = usePostPermissions({
+  const { isCommunityModerator } = usePostedUserInformation({
     post,
     community: targetCommunity,
   });
@@ -277,7 +277,7 @@ export const PostContent = ({
             <PostTitle post={post} />
           </div>
           <div className={styles.postContent__bar__information__subtitle}>
-            {!isCommunityModerator ? (
+            {isCommunityModerator ? (
               <div className={styles.postContent__bar__information__subtitle__moderator}>
                 <ModeratorBadge pageId={pageId} componentId={componentId} />
                 <span className={styles.postContent__bar__information__subtitle__separator}>•</span>
