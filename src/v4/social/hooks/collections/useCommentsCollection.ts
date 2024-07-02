@@ -1,13 +1,12 @@
 import { CommentRepository } from '@amityco/ts-sdk';
-
-import useLiveCollection from '~/core/hooks/useLiveCollection';
+import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
 type useCommentsParams = {
   parentId?: string | null;
   referenceId?: string | null;
   referenceType: Amity.CommentReferenceType;
   limit?: number;
-  shouldCall?: () => boolean;
+  shouldCall?: boolean;
   includeDeleted?: boolean;
 };
 
@@ -16,7 +15,7 @@ export default function useCommentsCollection({
   referenceId,
   referenceType,
   limit = 10,
-  shouldCall = () => true,
+  shouldCall = true,
   includeDeleted = false,
 }: useCommentsParams) {
   const { items, ...rest } = useLiveCollection({
@@ -28,7 +27,7 @@ export default function useCommentsCollection({
       limit,
       includeDeleted,
     },
-    shouldCall: () => shouldCall() && !!referenceId && !!referenceType,
+    shouldCall: !!referenceId && !!referenceType && shouldCall,
   });
 
   return {

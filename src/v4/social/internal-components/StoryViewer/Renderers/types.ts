@@ -31,6 +31,7 @@ export type CustomStory = Story &
     storiesCount: number;
     increaseIndex: () => void;
     pageId?: string;
+    dragEventTarget?: React.RefObject<HTMLElement>;
   };
 
 export type CustomRendererProps = RendererProps & {

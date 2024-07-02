@@ -10,7 +10,6 @@ import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
 import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
-import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/Button';
@@ -65,12 +64,16 @@ export const renderer: CustomRenderer = ({
     dragEventTarget,
   } = story;
 
-  const { members } = useCommunityMembersCollection(community?.communityId as string);
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: community?.communityId as string,
+    },
+    shouldCall: !!community?.communityId,
+  });
   const member = members?.find((member) => member.userId === client?.userId);
   const isMember = member != null;
 
   const { user } = useUser(client?.userId);
-  const controls = useAnimationControls();
 
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
@@ -145,31 +148,6 @@ export const renderer: CustomRenderer = ({
     setIsOpenCommentSheet(false);
   };
 
-  const handleSwipeDown = () => {
-    controls
-      .start({
-        y: '100%',
-        transition: { duration: 0.3, ease: 'easeOut' },
-      })
-      .then(() => {
-        onSwipeDown?.();
-      });
-  };
-
-  const handleDragStart = () => {
-    action('pause', true);
-  };
-
-  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (info.offset.y > 100) {
-      handleSwipeDown();
-    } else {
-      controls.start({ y: 0, transition: { duration: 0.3, ease: 'easeOut' } }).then(() => {
-        action('play', true);
-      });
-    }
-  };
-
   const handleOnClose = () => {
     onClose();
   };
@@ -218,12 +196,12 @@ export const renderer: CustomRenderer = ({
         setIsPaused(false);
       };
 
-      dragEventTarget.addEventListener('dragstart', handleDragStart);
-      dragEventTarget.addEventListener('dragend', handleDragEnd);
+      dragEventTarget.current?.addEventListener('dragstart', handleDragStart);
+      dragEventTarget.current?.addEventListener('dragend', handleDragEnd);
 
       return () => {
-        dragEventTarget.removeEventListener('dragstart', handleDragStart);
-        dragEventTarget.removeEventListener('dragend', handleDragEnd);
+        dragEventTarget.current?.removeEventListener('dragstart', handleDragStart);
+        dragEventTarget.current?.removeEventListener('dragend', handleDragEnd);
       };
     }
   }, [dragEventTarget]);

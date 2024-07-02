@@ -1,6 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-
-import { useIntl } from 'react-intl';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Truncate from 'react-truncate-markup';
 import {
@@ -15,17 +13,12 @@ import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
 import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
-
-import { motion, PanInfo, useAnimationControls } from 'framer-motion';
-
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import useUser from '~/v4/core/hooks/objects/useUser';
-
 import clsx from 'clsx';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
-
 import rendererStyles from './Renderers.module.css';
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 
@@ -34,7 +27,6 @@ export const renderer: CustomRenderer = ({
   action,
   config,
   messageHandler,
-  onSwipeDown,
   onClose,
   onClickCommunity,
 }) => {
@@ -69,7 +61,12 @@ export const renderer: CustomRenderer = ({
     dragEventTarget,
   } = story;
 
-  const { members } = useCommunityMembersCollection(community?.communityId as string);
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: community?.communityId as string,
+    },
+    shouldCall: !!community?.communityId,
+  });
   const member = members?.find((member) => member.userId === client?.userId);
   const isMember = member != null;
 
@@ -92,7 +89,6 @@ export const renderer: CustomRenderer = ({
     isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
 
   const vid = useRef<HTMLVideoElement>(null);
-  const controls = useAnimationControls();
 
   const onWaiting = () => action('pause', true);
   const onPlaying = () => action('play', true);
@@ -147,33 +143,6 @@ export const renderer: CustomRenderer = ({
 
   const targetRootId = 'asc-uikit-stories-viewer';
 
-  const handleSwipeDown = () => {
-    controls
-      .start({
-        y: '100%',
-        transition: { duration: 0.3, ease: 'easeOut' },
-      })
-      .then(() => {
-        onSwipeDown?.();
-      });
-  };
-
-  const handleDragStart = () => {
-    setIsPaused(true);
-    action('pause', true);
-  };
-
-  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (info.offset.y > 100) {
-      handleSwipeDown();
-    } else {
-      controls.start({ y: 0, transition: { duration: 0.3, ease: 'easeOut' } }).then(() => {
-        setIsPaused(false);
-        action('play', true);
-      });
-    }
-  };
-
   const handleOnClose = () => {
     onClose();
   };
@@ -222,12 +191,12 @@ export const renderer: CustomRenderer = ({
         setIsPaused(false);
       };
 
-      dragEventTarget.addEventListener('dragstart', handleDragStart);
-      dragEventTarget.addEventListener('dragend', handleDragEnd);
+      dragEventTarget.current?.addEventListener('dragstart', handleDragStart);
+      dragEventTarget.current?.addEventListener('dragend', handleDragEnd);
 
       return () => {
-        dragEventTarget.removeEventListener('dragstart', handleDragStart);
-        dragEventTarget.removeEventListener('dragend', handleDragEnd);
+        dragEventTarget.current?.removeEventListener('dragstart', handleDragStart);
+        dragEventTarget.current?.removeEventListener('dragend', handleDragEnd);
       };
     }
   }, [dragEventTarget]);

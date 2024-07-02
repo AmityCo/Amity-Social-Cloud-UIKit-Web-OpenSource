@@ -66,7 +66,13 @@ export const Comment = ({
   const comment = useComment(commentId);
 
   const { item: story } = useGetStoryByStoryId(comment?.referenceId);
-  const { members } = useCommunityMembersCollection(story?.community?.communityId);
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: story?.community?.communityId as string,
+      limit: 10,
+    },
+    shouldCall: !!story?.community?.communityId,
+  });
 
   const [bottomSheet, setBottomSheet] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
@@ -78,6 +84,7 @@ export const Comment = ({
     fileId: commentAuthor?.user?.avatarFileId,
     imageSize: 'small',
   });
+
   const { userRoles } = useSDK();
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
