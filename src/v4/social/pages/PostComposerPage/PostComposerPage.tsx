@@ -26,12 +26,12 @@ export enum Mode {
 }
 interface AmityPostComposerEditOptions {
   mode: Mode.EDIT;
-  post?: Amity.Post;
+  post: Amity.Post;
 }
 
 interface AmityPostComposerCreateOptions {
   mode: Mode.CREATE;
-  targetId: string | null;
+  targetId?: string | null;
   targetType: 'community' | 'user';
   community?: Amity.Community;
 }
