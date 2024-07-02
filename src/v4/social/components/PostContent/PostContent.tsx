@@ -193,7 +193,7 @@ export const PostContent = ({
 
   useEffect(() => {
     if (post == null) return;
-    setReactionByMe(post.myReactions[0] || null);
+    setReactionByMe(post.myReactions?.[0] || null);
   }, [post.myReactions]);
 
   useEffect(() => {
