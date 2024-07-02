@@ -49,7 +49,10 @@ export type { ReactionListProps as AmityReactionListProps };
 export { AmityLiveChatPage } from '~/v4/chat/pages';
 
 // v4 internal use only (Amity Console)
-export { StoryPreview as AmityStoryPreview } from './v4/social/internal-components/StoryPreview';
+export {
+  StoryPreview as AmityStoryPreview,
+  StoryPreviewThumbnail as AmityStoryPreviewThumbnail,
+} from './v4/social/internal-components/StoryPreview';
 
 // import AmityComment from './components/Comment';
 // import AmityCommentComposeBar from './components/CommentComposeBar';

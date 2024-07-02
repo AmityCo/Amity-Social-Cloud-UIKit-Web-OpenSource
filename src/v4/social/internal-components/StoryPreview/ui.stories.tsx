@@ -12,7 +12,6 @@ const Template: ComponentStory<typeof StoryPreview> = (args) => (
     style={{
       width: '23.4375rem',
       height: '40.875rem',
-      flexShrink: 0,
     }}
   >
     <StoryPreview {...args} />
@@ -21,8 +20,7 @@ const Template: ComponentStory<typeof StoryPreview> = (args) => (
 
 export const ImageStory = Template.bind({});
 ImageStory.args = {
-  mediaType: { type: 'image', url: 'https://picsum.photos/400/600' },
-  file: null,
+  mediaType: { type: 'image', url: 'https://picsum.photos/400/400' },
   imageMode: 'fit',
   hyperLink: [],
   avatar: 'https://picsum.photos/120/120',
@@ -32,9 +30,10 @@ ImageStory.args = {
 
 export const StoryWithHyperlink = Template.bind({});
 StoryWithHyperlink.args = {
-  mediaType: { type: 'image', url: 'https://picsum.photos/400/600' },
-  file: null,
-  imageMode: 'fit',
+  mediaType: {
+    type: 'video',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+  },
   hyperLink: [
     {
       data: { url: 'https://example.com', customText: 'Visit Website' },
