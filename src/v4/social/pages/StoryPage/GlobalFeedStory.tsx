@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
 import Stories from 'react-insta-stories';
@@ -20,6 +20,7 @@ import { TrashIcon } from '~/v4/social/icons';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { FileTrigger } from 'react-aria-components';
+import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 import styles from './StoryPage.module.css';
 
@@ -71,6 +72,25 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
       sortBy: 'createdAt',
     },
   });
+
+  const globalFeedRenderers = useMemo(
+    () =>
+      renderers.map(({ renderer, tester }) => {
+        const newRenderer = (props: CustomRendererProps) =>
+          renderer({
+            ...props,
+            onClose: () => onClose(targetId),
+            onSwipeDown: () => onSwipeDown(targetId),
+            onClickCommunity: () => onClickCommunity(targetId),
+          });
+
+        return {
+          renderer: newRenderer,
+          tester,
+        };
+      }),
+    [renderers, onClose, onSwipeDown, onClickCommunity, targetId],
+  );
 
   const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
   const isModerator = checkStoryPermission(client, stories[currentIndex]?.targetId);
@@ -238,21 +258,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
-  const globalFeedRenderers = renderers.map(({ renderer, tester }) => {
-    const newRenderer = (props: CustomRendererProps) =>
-      renderer({
-        ...props,
-        onClose: () => onClose(targetId),
-        onSwipeDown: () => onSwipeDown(targetId),
-        onClickCommunity: () => onClickCommunity(targetId),
-      });
-
-    return {
-      renderer: newRenderer,
-      tester,
-    };
-  });
-
   const targetRootId = 'asc-uikit-stories-viewer';
 
   useEffect(() => {
@@ -284,6 +289,11 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
       storyType: 'globalFeed',
     });
   }, [file, goToDraftStoryPage, targetId]);
+
+  useCommunityStoriesSubscription({
+    targetId,
+    targetType: 'community',
+  });
 
   if (!stories || stories.length === 0) return null;
 

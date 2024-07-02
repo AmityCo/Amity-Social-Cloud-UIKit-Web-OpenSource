@@ -16,7 +16,6 @@ export const ReactionListPanel = ({
   loadMore,
   isLoading,
   currentRef,
-  showReactionUserDetails,
 }: {
   filteredReactions: Amity.Reactor[];
   removeReaction: (reaction: string) => Promise<void>;
@@ -24,7 +23,6 @@ export const ReactionListPanel = ({
   loadMore: () => void;
   isLoading: boolean;
   currentRef: HTMLDivElement | null;
-  showReactionUserDetails?: boolean;
 }) => {
   const { currentUserId } = useSDK();
   const { config } = useCustomReaction();
@@ -60,7 +58,7 @@ export const ReactionListPanel = ({
                       </div>
                       <Typography.BodyBold data-qa-anchor="user_display_name">
                         {reaction.user?.displayName}
-                        {currentUserId === reaction.user?.userId && showReactionUserDetails && (
+                        {currentUserId === reaction.user?.userId && (
                           <>
                             <br />
                             <div onClick={() => removeReaction(reaction.reactionName)}>
@@ -73,20 +71,18 @@ export const ReactionListPanel = ({
                       </Typography.BodyBold>
                     </div>
 
-                    {showReactionUserDetails && (
-                      <div className={styles.userDetailsReaction}>
-                        {reactionList.includes(reaction.reactionName) ? (
-                          <ReactionIcon
-                            reactionConfigItem={
-                              config.find(({ name }) => name === reaction.reactionName)!
-                            }
-                            className={styles.reactionIcon}
-                          />
-                        ) : (
-                          <FallbackReaction className={styles.reactionIcon} />
-                        )}
-                      </div>
-                    )}
+                    <div className={styles.userDetailsReaction}>
+                      {reactionList.includes(reaction.reactionName) ? (
+                        <ReactionIcon
+                          reactionConfigItem={
+                            config.find(({ name }) => name === reaction.reactionName)!
+                          }
+                          className={styles.reactionIcon}
+                        />
+                      ) : (
+                        <FallbackReaction className={styles.reactionIcon} />
+                      )}
+                    </div>
                   </div>
                 </div>
               </Fragment>

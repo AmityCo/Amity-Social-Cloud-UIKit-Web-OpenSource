@@ -27,6 +27,7 @@ import { FileTrigger } from 'react-aria-components';
 
 import styles from './StoryPage.module.css';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
+import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 interface CommunityFeedStoryProps {
   pageId?: string;
@@ -74,20 +75,24 @@ export const CommunityFeedStory = ({
     },
   });
 
-  const communityFeedRenderers = renderers.map(({ renderer, tester }) => {
-    const newRenderer = (props: CustomRendererProps) =>
-      renderer({
-        ...props,
-        onClose: () => onClose(communityId),
-        onSwipeDown: () => onSwipeDown(communityId),
-        onClickCommunity: () => onClickCommunity(communityId),
-      });
+  const communityFeedRenderers = useMemo(
+    () =>
+      renderers.map(({ renderer, tester }) => {
+        const newRenderer = (props: CustomRendererProps) =>
+          renderer({
+            ...props,
+            onClose: () => onClose(communityId),
+            onSwipeDown: () => onSwipeDown(communityId),
+            onClickCommunity: () => onClickCommunity(communityId),
+          });
 
-    return {
-      renderer: newRenderer,
-      tester,
-    };
-  });
+        return {
+          renderer: newRenderer,
+          tester,
+        };
+      }),
+    [renderers, onClose, onSwipeDown, onClickCommunity, communityId],
+  );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -185,19 +190,16 @@ export const CommunityFeedStory = ({
   const discardStory = () => {
     setFile(null);
   };
-  const addStoryButton = useMemo(
-    () => (
-      <FileTrigger
-        ref={fileInputRef}
-        onSelect={(e) => {
-          const files = Array.from(e as FileList);
-          setFile(files[0]);
-        }}
-      >
-        <CreateNewStoryButton pageId={pageId} />
-      </FileTrigger>
-    ),
-    [pageId, setFile],
+  const addStoryButton = (
+    <FileTrigger
+      ref={fileInputRef}
+      onSelect={(e) => {
+        const files = Array.from(e as FileList);
+        setFile(files[0]);
+      }}
+    >
+      <CreateNewStoryButton pageId={pageId} />
+    </FileTrigger>
   );
 
   const increaseIndex = () => {
@@ -231,7 +233,6 @@ export const CommunityFeedStory = ({
       discardStory,
       addStoryButton,
       fileInputRef,
-      // storyStyles,
       currentIndex,
       storiesCount: stories?.length,
       increaseIndex,
@@ -258,6 +259,11 @@ export const CommunityFeedStory = ({
       setCurrentIndex(firstUnseenStoryIndex);
     }
   }, [stories]);
+
+  useCommunityStoriesSubscription({
+    targetId: communityId,
+    targetType: 'community',
+  });
 
   if (file) {
     goToDraftStoryPage({
