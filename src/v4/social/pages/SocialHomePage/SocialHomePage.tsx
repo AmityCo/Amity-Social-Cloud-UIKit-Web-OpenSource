@@ -70,12 +70,14 @@ export function SocialHomePage() {
   return (
     <div className={styles.socialHomePage} style={themeStyles}>
       <div className={styles.socialHomePage__topBar}>
-        <TopNavigation
-          pageId={pageId}
-          onClickPostCreationButton={handleClickButton}
-          onGlobalSearchButtonClick={handleGlobalSearchClick}
-          createPostButtonRef={createPostButtonRef}
-        />
+        <div className={styles.socialHomePage__topNavigation}>
+          <TopNavigation
+            pageId={pageId}
+            onClickPostCreationButton={handleClickButton}
+            onGlobalSearchButtonClick={handleGlobalSearchClick}
+            createPostButtonRef={createPostButtonRef}
+          />
+        </div>
         {isShowCreatePostMenu && (
           <div ref={createPostMenuRef}>
             <CreatePostMenu pageId={pageId} />
