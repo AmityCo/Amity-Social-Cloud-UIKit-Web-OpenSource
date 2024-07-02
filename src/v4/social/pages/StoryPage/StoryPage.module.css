@@ -60,3 +60,17 @@
 .deleteIcon {
   fill: var(--asc-color-base-default);
 }
+
+/* TODO: should standardize media variable eg. mobile screen, tablet screen ,desktop screen */
+
+/* Mobile-first approach */
+@media (width >= 768px) {
+  .overlayLeft,
+  .overlayRight {
+    display: none;
+  }
+
+  .arrowButton {
+    display: block;
+  }
+}

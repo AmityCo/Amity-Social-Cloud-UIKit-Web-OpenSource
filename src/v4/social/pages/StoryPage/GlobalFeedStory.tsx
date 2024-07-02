@@ -214,6 +214,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   );
 
   const increaseIndex = () => {
+    if (currentIndex === stories.length - 1) return;
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
