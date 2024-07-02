@@ -14,6 +14,7 @@ import styles from './Footer.module.css';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
+    pageId?: string;
     storyId: string;
     showImpression: boolean;
     reach: number | null;
@@ -26,6 +27,7 @@ const Footer: React.FC<
     myReactions?: string[];
   }>
 > = ({
+  pageId = '*',
   syncState,
   reach,
   commentsCount,
@@ -90,8 +92,13 @@ const Footer: React.FC<
         )}
       </div>
       <div className={styles.viewStoryCompostBarEngagementContainer}>
-        <StoryCommentButton commentsCount={commentsCount} onPress={onClickComment} />
+        <StoryCommentButton
+          pageId={pageId}
+          commentsCount={commentsCount}
+          onPress={onClickComment}
+        />
         <StoryReactionButton
+          pageId={pageId}
           myReactions={myReactions}
           reactionsCount={reactionsCount}
           onPress={handleClickReaction}

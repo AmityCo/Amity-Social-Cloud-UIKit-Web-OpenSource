@@ -1,3 +1,4 @@
-.overflowMenuIcon {
+.overflowMenuButton {
+  all: unset;
   cursor: pointer;
 }

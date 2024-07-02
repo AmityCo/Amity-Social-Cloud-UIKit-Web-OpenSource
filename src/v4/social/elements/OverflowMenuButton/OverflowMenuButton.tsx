@@ -50,7 +50,7 @@ export const OverflowMenuButton = ({
     <Button
       style={themeStyles}
       data-qa-anchor={accessibilityId}
-      className={styles.overflowMenuIcon}
+      className={styles.overflowMenuButton}
       onPress={onPress}
     >
       <IconComponent

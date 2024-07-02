@@ -338,6 +338,7 @@ export const renderer: CustomRenderer = ({
       )}
 
       <Footer
+        pageId={pageId}
         storyId={storyId}
         syncState={syncState}
         reach={reach}
