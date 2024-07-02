@@ -27,6 +27,7 @@ import { FileTrigger } from 'react-aria-components';
 
 import styles from './StoryPage.module.css';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
+import { useMotionValue, motion } from 'framer-motion';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 interface CommunityFeedStoryProps {
@@ -65,6 +66,9 @@ export const CommunityFeedStory = ({
   });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
+  const y = useMotionValue(0);
+  const motionRef = useRef<HTMLDivElement>(null);
+  const dragEventTarget = useRef(new EventTarget());
 
   const { stories } = useGetActiveStoriesByTarget({
     targetId: communityId,
@@ -237,6 +241,7 @@ export const CommunityFeedStory = ({
       storiesCount: stories?.length,
       increaseIndex,
       pageId,
+      dragEventTarget: dragEventTarget.current,
     };
   });
 
@@ -279,14 +284,40 @@ export const CommunityFeedStory = ({
   if (!stories || stories.length === 0) return null;
 
   return (
-    <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
+    <div className={clsx(styles.storyWrapper)}>
       <ArrowLeftButton onClick={previousStory} />
-      <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
+      <motion.div
+        id={targetRootId}
+        ref={motionRef}
+        data-qa-anchor={accessibilityId}
+        initial={{ y: 0 }}
+        drag="y"
+        whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
+        dragConstraints={{ top: 0, bottom: 200 }}
+        dragElastic={{ top: 0, bottom: 0.5 }}
+        onDragStart={() => {
+          dragEventTarget.current.dispatchEvent(new Event('dragstart'));
+        }}
+        onDrag={(_, info) => {
+          // Prevent dragging upwards
+          if (info.point.y < info.point.y - info.offset.y) {
+            y.set(0);
+          }
+        }}
+        onDragEnd={(_, info) => {
+          dragEventTarget.current.dispatchEvent(new Event('dragend'));
+          if (info.offset.y > 100) {
+            onSwipeDown(communityId);
+          } else {
+            y.set(0);
+          }
+        }}
+        className={clsx(styles.viewStoryContainer)}
+      >
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
           <div className={clsx(styles.viewStoryOverlay)} />
-          {/* NOTE: Do not use isPaused prop, it will cause the first video story skipped */}
           <Stories
             key={stories?.length}
             progressWrapperStyles={{
@@ -304,7 +335,7 @@ export const CommunityFeedStory = ({
             onAllStoriesEnd={nextStory}
           />
         </div>
-      </div>
+      </motion.div>
       <ArrowRightButton onClick={nextStory} />
     </div>
   );

@@ -20,6 +20,7 @@ import { TrashIcon } from '~/v4/social/icons';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { FileTrigger } from 'react-aria-components';
+import { useMotionValue, motion } from 'framer-motion';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 import styles from './StoryPage.module.css';
@@ -59,6 +60,9 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   const notification = useNotifications();
   const { client, currentUserId } = useSDK();
   const { file, setFile } = useStoryContext();
+  const y = useMotionValue(0);
+  const motionRef = useRef<HTMLDivElement>(null);
+  const dragEventTarget = useRef(new EventTarget());
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -300,7 +304,34 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   return (
     <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
       <ArrowLeftButton onClick={previousStory} />
-      <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
+      <motion.div
+        id={targetRootId}
+        ref={motionRef}
+        data-qa-anchor={accessibilityId}
+        initial={{ y: 0 }}
+        drag="y"
+        whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
+        dragConstraints={{ top: 0, bottom: 200 }}
+        dragElastic={{ top: 0, bottom: 0.5 }}
+        onDragStart={() => {
+          dragEventTarget.current.dispatchEvent(new Event('dragstart'));
+        }}
+        onDrag={(_, info) => {
+          // Prevent dragging upwards
+          if (info.point.y < info.point.y - info.offset.y) {
+            y.set(0);
+          }
+        }}
+        onDragEnd={(_, info) => {
+          dragEventTarget.current.dispatchEvent(new Event('dragend'));
+          if (info.offset.y > 100) {
+            onSwipeDown(targetId);
+          } else {
+            y.set(0);
+          }
+        }}
+        className={clsx(styles.viewStoryContainer)}
+      >
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
@@ -323,7 +354,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
             onAllStoriesEnd={nextStory}
           />
         </div>
-      </div>
+      </motion.div>
       <ArrowRightButton onClick={nextStory} />
     </div>
   );

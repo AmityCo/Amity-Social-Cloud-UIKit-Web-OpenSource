@@ -66,6 +66,7 @@ export const renderer: CustomRenderer = ({
     storiesCount,
     increaseIndex,
     pageId,
+    dragEventTarget,
   } = story;
 
   const { members } = useCommunityMembersCollection(community?.communityId as string);
@@ -210,17 +211,29 @@ export const renderer: CustomRenderer = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (dragEventTarget) {
+      const handleDragStart = () => {
+        action('pause', true);
+        setIsPaused(true);
+      };
+      const handleDragEnd = () => {
+        action('play', true);
+        setIsPaused(false);
+      };
+
+      dragEventTarget.addEventListener('dragstart', handleDragStart);
+      dragEventTarget.addEventListener('dragend', handleDragEnd);
+
+      return () => {
+        dragEventTarget.removeEventListener('dragstart', handleDragStart);
+        dragEventTarget.removeEventListener('dragend', handleDragEnd);
+      };
+    }
+  }, [dragEventTarget]);
+
   return (
-    <motion.div
-      className={clsx(rendererStyles.rendererContainer)}
-      animate={controls}
-      drag="y"
-      dragConstraints={{ top: 0, bottom: 0 }}
-      dragElastic={0.7}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
-    >
+    <div className={clsx(rendererStyles.rendererContainer)}>
       <StoryProgressBar
         pageId={pageId}
         duration={5000}
@@ -341,7 +354,7 @@ export const renderer: CustomRenderer = ({
         }
         isMember={isMember}
       />
-    </motion.div>
+    </div>
   );
 };
 
