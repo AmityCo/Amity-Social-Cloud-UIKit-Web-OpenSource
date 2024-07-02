@@ -59,6 +59,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
   pageBehavior = {},
 }) => {
   const {
+    page,
     onBack,
     goToPostDetailPage,
     goToCommunityProfilePage,
@@ -88,7 +89,11 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityDraftStoryPageBehavior?.onCloseAction) {
           return pageBehavior.AmityDraftStoryPageBehavior.onCloseAction();
         }
-        onBack();
+        if (page.type === PageTypes.DraftPage && page.context.storyType === 'communityFeed') {
+          goToCommunityProfilePage(page.context.targetId);
+        } else {
+          goToSocialHomePage();
+        }
       },
     },
     onClickHyperLink: () => {},

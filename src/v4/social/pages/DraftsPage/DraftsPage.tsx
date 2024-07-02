@@ -14,7 +14,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import ColorThief from 'colorthief';
@@ -27,7 +27,6 @@ export type AmityDraftStoryPageProps = {
   targetId: string;
   targetType: Amity.StoryTargetType;
   mediaType?: AmityStoryMediaType;
-  storyType: 'communityFeed' | 'globalFeed';
 };
 
 export type HyperLinkFormInputs = {
@@ -42,13 +41,12 @@ export const PlainDraftStoryPage = ({
   goToCommunityPage,
   goToGlobalFeedPage,
   onDiscardCreateStory,
-  storyType,
 }: AmityDraftStoryPageProps & {
   goToCommunityPage: (communityId: string) => void;
   goToGlobalFeedPage: () => void;
   onDiscardCreateStory: () => void;
-  storyType: 'communityFeed' | 'globalFeed';
 }) => {
+  const { page } = useNavigation();
   const pageId = 'create_story_page';
   const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
     pageId,
@@ -102,7 +100,7 @@ export const PlainDraftStoryPage = ({
       const formData = new FormData();
       formData.append('files', file);
       setFile(null);
-      if (storyType === 'globalFeed') {
+      if (page.type === PageTypes.DraftPage && page.context.storyType === 'globalFeed') {
         goToGlobalFeedPage();
       } else {
         goToCommunityPage(targetId);
@@ -294,7 +292,6 @@ export const PlainDraftStoryPage = ({
 };
 
 export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
-  const { page } = useNavigation();
   const { AmityDraftStoryPageBehavior } = usePageBehavior();
 
   return (
@@ -303,7 +300,6 @@ export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
       onDiscardCreateStory={() => AmityDraftStoryPageBehavior.onCloseAction()}
       goToCommunityPage={(communityId) => AmityDraftStoryPageBehavior.onCloseAction()}
       goToGlobalFeedPage={() => AmityDraftStoryPageBehavior.onCloseAction()}
-      storyType={page.type === 'communityFeed' ? 'communityFeed' : 'globalFeed'}
     />
   );
 };

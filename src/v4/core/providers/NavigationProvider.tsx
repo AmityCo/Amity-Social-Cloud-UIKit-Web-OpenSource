@@ -78,10 +78,13 @@ type Page =
   | { type: PageTypes.SelectPostTargetPage }
   | {
       type: PageTypes.DraftPage;
-      communityId?: string;
-      mediaType: AmityStoryMediaType;
-      targetId: string;
-      targetType: Amity.StoryTargetType;
+      context: {
+        communityId?: string;
+        mediaType: AmityStoryMediaType;
+        targetId: string;
+        targetType: Amity.StoryTargetType;
+        storyType: 'communityFeed' | 'globalFeed';
+      };
     }
   | {
       type: PageTypes.PostComposerPage;
@@ -164,6 +167,7 @@ let defaultValue: ContextValue = {
     targetId: string;
     targetType: string;
     mediaType: AmityStoryMediaType;
+    storyType: 'communityFeed' | 'globalFeed';
   }) => {},
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
@@ -207,8 +211,10 @@ if (process.env.NODE_ENV !== 'production') {
     goToSocialGlobalSearchPage: (tab) =>
       console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
-    goToDraftStoryPage: ({ targetId, targetType, mediaType }) =>
-      console.log(`NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType})`),
+    goToDraftStoryPage: ({ targetId, targetType, mediaType, storyType }) =>
+      console.log(
+        `NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType}), ${storyType})`,
+      ),
     goToPostComposerPage: (mode, targetId, targetType, community, post) =>
       console.log(
         `NavigationContext goToPostComposerPage(${mode} ${targetId}) ${targetType} ${community} ${post}`,
@@ -245,6 +251,7 @@ interface NavigationProviderProps {
     targetId: string;
     targetType: string;
     mediaType: AmityStoryMediaType;
+    storyType: 'communityFeed' | 'globalFeed';
   }) => void;
   onCommunityCreated?: (communityId: string) => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
@@ -493,15 +500,16 @@ export default function NavigationProvider({
   }, [onChangePage, pushPage]);
 
   const goToDraftStoryPage = useCallback(
-    ({ targetId, targetType, mediaType }) => {
+    ({ targetId, targetType, mediaType, storyType }) => {
       const next = {
         type: PageTypes.DraftPage,
-        targetId,
-        targetType,
-        mediaType,
+        context: {
+          targetId,
+          targetType,
+          mediaType,
+          storyType,
+        },
       };
-
-      if (onChangePage) return onChangePage(next);
 
       pushPage(next);
     },

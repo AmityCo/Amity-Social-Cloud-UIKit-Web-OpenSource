@@ -11,6 +11,7 @@ import { SelectPostTargetPage } from '../SelectPostTargetPage';
 import { MyCommunitiesSearchPage } from '../MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 
 import styles from './Application.module.css';
+import { AmityDraftStoryPage } from '..';
 
 const Application = () => {
   const { page } = useNavigation();
@@ -23,6 +24,13 @@ const Application = () => {
         {page.type === PageTypes.PostDetailPage && <PostDetailPage id={page.context.postId} />}
         {page.type === PageTypes.ViewStoryPage && (
           <ViewStoryPage type="globalFeed" targetId={page.context.targetId} />
+        )}
+        {page.type === PageTypes.DraftPage && (
+          <AmityDraftStoryPage
+            targetId={page.context.targetId}
+            targetType={page.context.targetType}
+            mediaType={page.context.mediaType}
+          />
         )}
         {page.type === PageTypes.PostComposerPage && (
           <PostComposerPage

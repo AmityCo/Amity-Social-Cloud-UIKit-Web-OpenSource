@@ -118,14 +118,31 @@ export const renderer: CustomRenderer = ({
   const mute = () => setMuted(true);
   const unmute = () => setMuted(false);
 
-  const play = () => setIsPaused(false);
-  const pause = () => setIsPaused(true);
+  const play = () => {
+    action('play', true);
+    setIsPaused(false);
+  };
+  const pause = () => {
+    action('pause', true);
+    setIsPaused(true);
+  };
 
-  const openBottomSheet = () => setIsOpenBottomSheet(true);
-  const closeBottomSheet = () => setIsOpenBottomSheet(false);
-
-  const openCommentSheet = () => setIsOpenCommentSheet(true);
-  const closeCommentSheet = () => setIsOpenCommentSheet(false);
+  const openBottomSheet = () => {
+    action('pause', true);
+    setIsOpenBottomSheet(true);
+  };
+  const closeBottomSheet = () => {
+    action('play', true);
+    setIsOpenBottomSheet(false);
+  };
+  const openCommentSheet = () => {
+    action('pause', true);
+    setIsOpenCommentSheet(true);
+  };
+  const closeCommentSheet = () => {
+    action('play', true);
+    setIsOpenCommentSheet(false);
+  };
 
   const targetRootId = 'asc-uikit-stories-viewer';
 

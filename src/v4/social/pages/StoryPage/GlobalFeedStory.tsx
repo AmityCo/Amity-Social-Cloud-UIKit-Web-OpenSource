@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
 import Stories from 'react-insta-stories';
@@ -124,121 +124,102 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     confirmDeleteStory(storyId);
   };
 
-  const onCreateStory = useCallback(
-    async (
-      file: File,
-      imageMode: 'fit' | 'fill',
-      metadata?: Amity.Metadata,
-      items?: Amity.StoryItem[],
-    ) => {
-      try {
-        const formData = new FormData();
-        formData.append('files', file);
-        setFile(null);
-        if (file?.type.includes('image') && currentUserId) {
-          const { data: imageData } = await StoryRepository.createImageStory(
+  const onCreateStory = async (
+    file: File,
+    imageMode: 'fit' | 'fill',
+    metadata?: Amity.Metadata,
+    items?: Amity.StoryItem[],
+  ) => {
+    try {
+      const formData = new FormData();
+      formData.append('files', file);
+      setFile(null);
+      if (file?.type.includes('image') && currentUserId) {
+        const { data: imageData } = await StoryRepository.createImageStory(
+          'user',
+          currentUserId,
+          formData,
+          metadata,
+          imageMode,
+          items,
+        );
+        if (imageData) {
+          notification.success({
+            content: 'Successfully shared story',
+          });
+        }
+      } else {
+        if (currentUserId) {
+          const { data: videoData } = await StoryRepository.createVideoStory(
             'user',
             currentUserId,
             formData,
             metadata,
-            imageMode,
             items,
           );
-          if (imageData) {
+          if (videoData) {
             notification.success({
               content: 'Successfully shared story',
             });
           }
-        } else {
-          if (currentUserId) {
-            const { data: videoData } = await StoryRepository.createVideoStory(
-              'user',
-              currentUserId,
-              formData,
-              metadata,
-              items,
-            );
-            if (videoData) {
-              notification.success({
-                content: 'Successfully shared story',
-              });
-            }
-          }
-        }
-      } catch (error: unknown) {
-        if (error instanceof Error) {
-          notification.info({
-            content: error.message ?? 'Failed to share story',
-          });
         }
       }
-    },
-    [currentUserId, notification, setFile],
-  );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notification.info({
+          content: error.message ?? 'Failed to share story',
+        });
+      }
+    }
+  };
 
   const discardStory = () => {
     setFile(null);
   };
 
-  const addStoryButton = useMemo(
-    () => (
-      <FileTrigger
-        ref={fileInputRef}
-        onSelect={(e) => {
-          const files = Array.from(e as FileList);
-          setFile(files[0]);
-        }}
-      >
-        <CreateNewStoryButton pageId={pageId} />
-      </FileTrigger>
-    ),
-    [pageId, setFile],
+  const addStoryButton = (
+    <FileTrigger
+      ref={fileInputRef}
+      onSelect={(e) => {
+        const files = Array.from(e as FileList);
+        setFile(files[0]);
+      }}
+    >
+      <CreateNewStoryButton pageId={pageId} />
+    </FileTrigger>
   );
 
   const increaseIndex = () => {
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
-  const formattedStories = useMemo(
-    () =>
-      stories?.map((story) => {
-        const isImage = story?.dataType === 'image';
-        const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
+  const formattedStories = stories?.map((story) => {
+    const isImage = story?.dataType === 'image';
+    const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
 
-        return {
-          ...story,
-          url,
-          type: isImage ? 'image' : 'video',
-          actions: [
-            isStoryCreator || isModerator
-              ? {
-                  name: 'delete',
-                  action: () => deleteStory(story?.storyId as string),
-                  icon: <TrashIcon className={styles.deleteIcon} />,
-                }
-              : null,
-          ].filter(isNonNullable),
-          onCreateStory,
-          discardStory,
-          addStoryButton,
-          fileInputRef,
-          currentIndex,
-          storiesCount: stories?.length,
-          increaseIndex,
-          pageId,
-        };
-      }),
-    [
-      stories,
-      deleteStory,
+    return {
+      ...story,
+      url,
+      type: isImage ? 'image' : 'video',
+      actions: [
+        isStoryCreator || isModerator
+          ? {
+              name: 'delete',
+              action: () => deleteStory(story?.storyId as string),
+              icon: <TrashIcon className={styles.deleteIcon} />,
+            }
+          : null,
+      ].filter(isNonNullable),
       onCreateStory,
       discardStory,
       addStoryButton,
       fileInputRef,
       currentIndex,
+      storiesCount: stories?.length,
       increaseIndex,
-    ],
-  );
+      pageId,
+    };
+  });
 
   const nextStory = () => {
     if (currentIndex === formattedStories?.length - 1) {
@@ -257,24 +238,20 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
-  const globalFeedRenderers = useMemo(
-    () =>
-      renderers.map(({ renderer, tester }) => {
-        const newRenderer = (props: CustomRendererProps) =>
-          renderer({
-            ...props,
-            onClose: () => onClose(targetId),
-            onSwipeDown: () => onSwipeDown(targetId),
-            onClickCommunity: () => onClickCommunity(targetId),
-          });
+  const globalFeedRenderers = renderers.map(({ renderer, tester }) => {
+    const newRenderer = (props: CustomRendererProps) =>
+      renderer({
+        ...props,
+        onClose: () => onClose(targetId),
+        onSwipeDown: () => onSwipeDown(targetId),
+        onClickCommunity: () => onClickCommunity(targetId),
+      });
 
-        return {
-          renderer: newRenderer,
-          tester,
-        };
-      }),
-    [renderers, onClose, onSwipeDown, onClickCommunity, targetId],
-  );
+    return {
+      renderer: newRenderer,
+      tester,
+    };
+  });
 
   const targetRootId = 'asc-uikit-stories-viewer';
 
@@ -296,7 +273,8 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     }
   }, [stories]);
 
-  if (file) {
+  useEffect(() => {
+    if (!file) return;
     goToDraftStoryPage({
       targetId,
       targetType: 'community',
@@ -305,7 +283,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         : { type: 'video', url: URL.createObjectURL(file) },
       storyType: 'globalFeed',
     });
-  }
+  }, [file, goToDraftStoryPage, targetId]);
 
   if (!stories || stories.length === 0) return null;
 
