@@ -11,7 +11,7 @@ export default function useCommunitiesCollection({
   const { items, ...rest } = useLiveCollection({
     fetcher: CommunityRepository.getCommunities,
     params: queryParams as Parameters<typeof CommunityRepository.getCommunities>[0],
-    shouldCall: !!queryParams?.categoryId && shouldCall,
+    shouldCall: shouldCall,
   });
 
   return {

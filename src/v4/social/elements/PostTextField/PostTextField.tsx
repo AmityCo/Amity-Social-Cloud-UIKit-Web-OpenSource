@@ -8,7 +8,7 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { MentionNode } from '~/v4/social/internal-components/MentionTextInput/MentionNodes';
-import { MentionTextInput } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
+import { MentionTextInputPlugin } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
 import { MetaData, createPostParams } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import styles from './PostTextField.module.css';
 
@@ -34,6 +34,7 @@ interface EditorStateJson extends SerializedLexicalNode {
 
 interface PostTextFieldProps {
   onChange: (data: createPostParams) => void;
+  communityId?: string | null;
 }
 
 function editorStateToText(editor: LexicalEditor) {
@@ -73,24 +74,26 @@ function editorStateToText(editor: LexicalEditor) {
   return { mentioned, text: editorStateTextString.join('\n'), mentionees };
 }
 
-export const PostTextField = forwardRef<LexicalEditor, PostTextFieldProps>(({ onChange }) => {
-  return (
-    <LexicalComposer initialConfig={editorConfig}>
-      <div className={styles.editorContainer}>
-        <RichTextPlugin
-          contentEditable={<ContentEditable />}
-          placeholder={<div className={styles.editorPlaceholder}>What’s going on...</div>}
-          ErrorBoundary={LexicalErrorBoundary}
-        />
-        <OnChangePlugin
-          onChange={(editorState, editor) => {
-            onChange(editorStateToText(editor));
-          }}
-        />
-        <HistoryPlugin />
-        <AutoFocusPlugin />
-        <MentionTextInput />
-      </div>
-    </LexicalComposer>
-  );
-});
+export const PostTextField = forwardRef<LexicalEditor, PostTextFieldProps>(
+  ({ onChange, communityId }) => {
+    return (
+      <LexicalComposer initialConfig={editorConfig}>
+        <div className={styles.editorContainer}>
+          <RichTextPlugin
+            contentEditable={<ContentEditable />}
+            placeholder={<div className={styles.editorPlaceholder}>What’s going on...</div>}
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <OnChangePlugin
+            onChange={(editorState, editor) => {
+              onChange(editorStateToText(editor));
+            }}
+          />
+          <HistoryPlugin />
+          <AutoFocusPlugin />
+          <MentionTextInputPlugin communityId={communityId} />
+        </div>
+      </LexicalComposer>
+    );
+  },
+);

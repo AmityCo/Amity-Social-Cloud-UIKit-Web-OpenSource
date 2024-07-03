@@ -153,7 +153,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
             isValid={textValue.text.length > 0 && !isPending}
           />
         </div>
-        <PostTextField ref={editorRef} onChange={onChange} />
+        <PostTextField ref={editorRef} onChange={onChange} communityId={targetId} />
       </form>
       {isPending && isOnline && (
         <Notification

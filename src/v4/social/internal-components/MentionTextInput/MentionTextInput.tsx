@@ -11,6 +11,9 @@ import ReactDOM from 'react-dom';
 import { $createMentionNode } from './MentionNodes';
 import { CommunityMember } from '../CommunityMember';
 import { UserRepository } from '@amityco/ts-sdk';
+import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
+import useCommunity from '~/v4/chat/hooks/useCommunity';
+import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 
 const MAX_LENGTH = 5000;
 
@@ -97,7 +100,7 @@ function checkForAtSignMentions(text: string, minMatchLength: number): MenuTextM
 }
 
 function getPossibleQueryMatch(text: string): MenuTextMatch | null {
-  return checkForAtSignMentions(text, 1);
+  return checkForAtSignMentions(text, 0);
 }
 
 export class MentionTypeaheadOption extends MenuOption {
@@ -109,130 +112,112 @@ export class MentionTypeaheadOption extends MenuOption {
   }
 }
 
-export const useUserQueryByDisplayName = (displayName: string) => {
-  const [items, setItems] = useState<Amity.User[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
-  const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
-  const loadMoreRef = useRef<(() => void) | null>(null);
-  const unSubRef = useRef<(() => void) | null>(null);
-
-  const loadMore = () => {
-    if (loadMoreRef.current) {
-      loadMoreRef.current();
-      setLoadMoreHasBeenCalled(true);
-    }
-  };
-
-  useEffect(() => {
-    if (unSubRef.current) {
-      unSubRef.current();
-      unSubRef.current = null;
-    }
-
-    const unSubFn = UserRepository.searchUserByDisplayName({ displayName }, (response) => {
-      setHasMore(response.hasNextPage || false);
-      setIsLoading(response.loading);
-      loadMoreRef.current = response.onNextPage || null;
-      setItems(response.data);
-    });
-    unSubRef.current = unSubFn;
-
-    return () => {
-      unSubRef.current?.();
-      unSubRef.current = null;
-    };
-  }, [displayName]);
-
-  return {
-    users: items,
-    isLoading,
-    hasMore,
-    loadMore,
-    loadMoreHasBeenCalled,
-  };
-};
-
-export const MentionTextInput = () => {
+export const MentionTextInputPlugin = ({ communityId }: { communityId?: string | null }) => {
   const mentionTextInputItemRef = useRef<HTMLDivElement>(null);
   return (
     <div>
       <div ref={mentionTextInputItemRef}></div>
-      <Mention anchorRef={mentionTextInputItemRef} />
+      <Mention anchorRef={mentionTextInputItemRef} communityId={communityId} />
     </div>
   );
 };
 
- function Mention({ anchorRef }: { anchorRef: RefObject<HTMLDivElement> }) {
-   const [editor] = useLexicalComposerContext();
+function Mention({
+  anchorRef,
+  communityId,
+}: {
+  anchorRef: RefObject<HTMLDivElement>;
+  communityId?: string | null;
+}) {
+  const [editor] = useLexicalComposerContext();
 
-   const [queryString, setQueryString] = useState<string | null>(null);
+  const [queryString, setQueryString] = useState<string | null>(null);
+  let options: MentionTypeaheadOption[] = [];
+  const { users: members } = useMemberQueryByDisplayName({
+    communityId: communityId || '',
+    displayName: queryString || '',
+    limit: 10,
+    enabled: !!communityId && !!queryString,
+  });
+  const { users } = useUserQueryByDisplayName({
+    displayName: queryString || '',
+    limit: 10,
+    enabled: !!queryString,
+  });
 
-   const { users } = useUserQueryByDisplayName(queryString || '');
+  const community = useCommunity(communityId || '');
+  const isPublic = community?.isPublic;
 
-   const options = useMemo(() => users.map((user) => new MentionTypeaheadOption(user)), [users]);
+  if (communityId && !isPublic) {
+    options = useMemo(
+      () => members.map((member) => new MentionTypeaheadOption(member.user as Amity.User)),
+      [members],
+    );
+  } else {
+    options = useMemo(() => users.map((user) => new MentionTypeaheadOption(user)), [users]);
+  }
 
-   const onSelectOption = useCallback(
-     (
-       selectedOption: MentionTypeaheadOption,
-       nodeToReplace: TextNode | null,
-       closeMenu: () => void,
-     ) => {
-       editor.update(() => {
-         const mentionNode = $createMentionNode({
-           mentionName: selectedOption.key,
-           displayName: selectedOption.user.displayName,
-           userId: selectedOption.user.userId,
-         });
-         if (nodeToReplace) {
-           nodeToReplace.replace(mentionNode);
-         }
-         mentionNode.select();
-         closeMenu();
-       });
-     },
-     [editor],
-   );
+  const onSelectOption = useCallback(
+    (
+      selectedOption: MentionTypeaheadOption,
+      nodeToReplace: TextNode | null,
+      closeMenu: () => void,
+    ) => {
+      editor.update(() => {
+        const mentionNode = $createMentionNode({
+          mentionName: selectedOption.key,
+          displayName: selectedOption.user.displayName,
+          userId: selectedOption.user.userId,
+        });
+        if (nodeToReplace) {
+          nodeToReplace.replace(mentionNode);
+        }
+        mentionNode.select();
+        closeMenu();
+      });
+    },
+    [editor],
+  );
 
-   const checkForMentionMatch = useCallback(
-     (text: string) => {
-       return getPossibleQueryMatch(text);
-     },
-     [editor],
-   );
+  const checkForMentionMatch = useCallback(
+    (text: string) => {
+      return getPossibleQueryMatch(text);
+    },
+    [editor],
+  );
 
-   return (
-     <LexicalTypeaheadMenuPlugin
-       onQueryChange={setQueryString}
-       onSelectOption={onSelectOption}
-       triggerFn={checkForMentionMatch}
-       options={options}
-       menuRenderFn={(
-         anchorElementRef,
-         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
-       ) =>
-         anchorRef.current && users.length
-           ? ReactDOM.createPortal(
-               <div className={styles.mentionTextInput_item}>
-                 {options.map((option, i: number) => (
-                   <CommunityMember
-                     isSelected={selectedIndex === i}
-                     onClick={() => {
-                       setHighlightedIndex(i);
-                       selectOptionAndCleanUp(option);
-                     }}
-                     onMouseEnter={() => {
-                       setHighlightedIndex(i);
-                     }}
-                     key={option.key}
-                     option={option}
-                   />
-                 ))}
-               </div>,
-               anchorRef.current,
-             )
-           : null
-       }
-     />
-   );
- }
+  return (
+    <LexicalTypeaheadMenuPlugin
+      onQueryChange={setQueryString}
+      onSelectOption={onSelectOption}
+      triggerFn={checkForMentionMatch}
+      options={options}
+      menuRenderFn={(
+        anchorElementRef,
+        { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
+      ) =>
+        anchorRef.current && options.length > 0
+          ? ReactDOM.createPortal(
+              <div className={styles.mentionTextInput_item}>
+                {options.map((option, i: number) => (
+                  <CommunityMember
+                    isSelected={selectedIndex === i}
+                    onClick={() => {
+                      setHighlightedIndex(i);
+                      selectOptionAndCleanUp(option);
+                    }}
+                    onMouseEnter={() => {
+                      setHighlightedIndex(i);
+                    }}
+                    key={option.key}
+                    option={option}
+                  />
+                ))}
+              </div>,
+              anchorRef.current,
+            )
+          : null
+      }
+    />
+  );
+}
