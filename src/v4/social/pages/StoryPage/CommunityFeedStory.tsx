@@ -86,7 +86,6 @@ export const CommunityFeedStory = ({
           renderer({
             ...props,
             onClose: () => onClose(communityId),
-            onSwipeDown: () => onSwipeDown(communityId),
             onClickCommunity: () => onClickCommunity(communityId),
           });
 
@@ -95,7 +94,7 @@ export const CommunityFeedStory = ({
           tester,
         };
       }),
-    [renderers, onClose, onSwipeDown, onClickCommunity, communityId],
+    [renderers, onClose, onClickCommunity, communityId],
   );
 
   const fileInputRef = useRef<HTMLInputElement>(null);

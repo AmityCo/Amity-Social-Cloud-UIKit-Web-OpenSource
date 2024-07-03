@@ -3,7 +3,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 import styles from './StoryRing.module.css';
 
-const EmptyStateRingSvg = ({
+const SeenStateRingSvg = ({
   pageId,
   componentId,
   elementId,
@@ -183,6 +183,7 @@ export const StoryRing = ({
   });
 
   if (isExcluded) return null;
+
   if (isErrored) {
     return (
       <svg
@@ -222,11 +223,6 @@ export const StoryRing = ({
   }
 
   return (
-    <EmptyStateRingSvg
-      pageId={pageId}
-      componentId={componentId}
-      elementId={elementId}
-      size={size}
-    />
+    <SeenStateRingSvg pageId={pageId} componentId={componentId} elementId={elementId} size={size} />
   );
 };

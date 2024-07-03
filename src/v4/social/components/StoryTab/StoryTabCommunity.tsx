@@ -89,14 +89,16 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
       className={clsx(styles.storyTabContainer)}
     >
       <div className={clsx(styles.storyWrapper)}>
-        <StoryRing
-          pageId={pageId}
-          componentId={componentId}
-          hasUnseen={hasUnSeen}
-          uploading={uploading}
-          isErrored={isErrored}
-          size={48}
-        />
+        {hasStories && (
+          <StoryRing
+            pageId={pageId}
+            componentId={componentId}
+            hasUnseen={hasUnSeen}
+            uploading={uploading}
+            isErrored={isErrored}
+            size={48}
+          />
+        )}
 
         <button className={clsx(styles.storyAvatarContainer)} onClick={handleOnClick}>
           <CommunityAvatar pageId={pageId} componentId={componentId} community={community} />

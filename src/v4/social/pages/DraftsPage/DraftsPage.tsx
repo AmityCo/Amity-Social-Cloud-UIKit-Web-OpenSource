@@ -292,6 +292,7 @@ export const PlainDraftStoryPage = ({
 };
 
 export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
+  const { page } = useNavigation();
   const { AmityDraftStoryPageBehavior } = usePageBehavior();
 
   return (

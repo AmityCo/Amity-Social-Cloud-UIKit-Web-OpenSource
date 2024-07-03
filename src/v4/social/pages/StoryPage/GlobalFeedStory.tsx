@@ -84,7 +84,6 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
           renderer({
             ...props,
             onClose: () => onClose(targetId),
-            onSwipeDown: () => onSwipeDown(targetId),
             onClickCommunity: () => onClickCommunity(targetId),
           });
 
