@@ -1,14 +1,12 @@
 import React, { useRef } from 'react';
 import { PostContent, PostContentSkeleton } from '../PostContent';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed/EmptyNewsFeed';
-import useGlobalFeed from '~/v4/core/hooks/collections/useGlobalFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 import styles from './GlobalFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { usePostContext } from '~/v4/social/providers/PostProvider';
 
 interface GlobalFeedProps {
   pageId?: string;
@@ -25,8 +23,7 @@ export const GlobalFeed = ({
   isLoading,
   onFeedReachBottom,
 }: GlobalFeedProps) => {
-  const { getConfig } = useCustomization();
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+  const { accessibilityId, themeStyles } =
     useAmityComponent({
       pageId,
       componentId,
@@ -35,6 +32,7 @@ export const GlobalFeed = ({
   const intersectionRef = useRef<HTMLDivElement>(null);
 
   const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
+  const { post: newPost } = usePostContext();
 
   useIntersectionObserver({
     ref: intersectionRef,
@@ -48,7 +46,22 @@ export const GlobalFeed = ({
   }
 
   return (
-    <div className={styles.global_feed} style={themeStyles}>
+    <div className={styles.global_feed} style={themeStyles} data-qa-anchor={accessibilityId}>
+      {newPost && (
+        <>
+          <div className={styles.global_feed__postContainer}>
+            <PostContent
+              pageId={pageId}
+              post={newPost}
+              type="feed"
+              onClick={() => {
+                AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: newPost.postId });
+              }}
+            />
+          </div>
+          <div className={styles.global_feed__divider} />
+        </>
+      )}
       {posts.map((post, index) => (
         <div key={post.postId}>
           {index !== 0 ? <div className={styles.global_feed__divider} /> : null}

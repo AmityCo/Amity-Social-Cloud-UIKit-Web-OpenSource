@@ -9,7 +9,7 @@ import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
 import { MentionNode } from '~/v4/social/internal-components/MentionTextInput/MentionNodes';
 import { MentionTextInputPlugin } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
-import { MetaData, createPostParams } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
+import { MetaData, CreatePostParams } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import styles from './PostTextField.module.css';
 
 const theme = {
@@ -33,7 +33,7 @@ interface EditorStateJson extends SerializedLexicalNode {
 }
 
 interface PostTextFieldProps {
-  onChange: (data: createPostParams) => void;
+  onChange: (data: CreatePostParams) => void;
   communityId?: string | null;
 }
 

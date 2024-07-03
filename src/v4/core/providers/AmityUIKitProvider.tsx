@@ -35,6 +35,7 @@ import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
 import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
 import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 import { CustomReactionProvider } from './CustomReactionProvider';
+import { PostProvider } from '~/v4/social/providers/PostProvider';
 
 export type AmityUIKitConfig = Config;
 
@@ -160,7 +161,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
                                       <PostRendererProvider config={postRendererConfig}>
                                         <NavigationProvider>
                                           <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                            {children}
+                                            <PostProvider>{children}</PostProvider>
                                           </PageBehaviorProvider>
                                         </NavigationProvider>
                                       </PostRendererProvider>

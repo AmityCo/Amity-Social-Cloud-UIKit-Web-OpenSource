@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import { Mentioned } from '~/v4/helpers/utils';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useConnectionState from '~/v4/social/hooks/useConnectionState';
+import { usePostContext } from '~/v4/social/providers/PostProvider';
 
 export enum Mode {
   CREATE = 'create',
@@ -63,7 +64,7 @@ export function PostComposerPage(props: PostComposerPageProps) {
   }
 }
 
-export type createPostParams = {
+export type CreatePostParams = {
   text: string;
   mentioned: Mentioned[];
   mentionees: {
@@ -78,13 +79,13 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
     pageId,
   });
 
-  const { onBack } = useNavigation();
   const editorRef = useRef<LexicalEditor | null>(null);
   const { AmityPostComposerPageBehavior } = usePageBehavior();
   const { confirm } = useConfirmContext();
   const isOnline = useConnectionState();
+  const { setPost } = usePostContext();
 
-  const [textValue, setTextValue] = useState<createPostParams>({
+  const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
     mentionees: [
@@ -115,15 +116,17 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
       },
     });
 
-  const { mutateAsync: mutateCreatePostAsync, isPending, isError } = useMutateCreatePost();
+  const { mutateAsync: mutateCreatePostAsync, isPending, isError, isSuccess } = useMutateCreatePost();
 
   const { handleSubmit } = useForm();
 
   const onSubmit = () => {
-    mutateCreatePostAsync();
+    mutateCreatePostAsync().then((response) => {
+      setPost(response.data);
+    })
   };
 
-  const onChange = (val: createPostParams) => {
+  const onChange = (val: CreatePostParams) => {
     setTextValue(val);
   };
 
