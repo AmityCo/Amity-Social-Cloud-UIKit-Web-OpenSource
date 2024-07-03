@@ -6,11 +6,10 @@ import {
   MenuTextMatch,
 } from '@lexical/react/LexicalTypeaheadMenuPlugin';
 import { TextNode } from 'lexical';
-import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { $createMentionNode } from './MentionNodes';
 import { CommunityMember } from '../CommunityMember';
-import { UserRepository } from '@amityco/ts-sdk';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import useCommunity from '~/v4/chat/hooks/useCommunity';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
@@ -137,12 +136,11 @@ function Mention({
     communityId: communityId || '',
     displayName: queryString || '',
     limit: 10,
-    enabled: !!communityId && !!queryString,
+    enabled: !!communityId,
   });
   const { users } = useUserQueryByDisplayName({
     displayName: queryString || '',
     limit: 10,
-    enabled: !!queryString,
   });
 
   const community = useCommunity(communityId || '');

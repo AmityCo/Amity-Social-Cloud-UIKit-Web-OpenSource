@@ -6,11 +6,11 @@ import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 export const useUserQueryByDisplayName = ({
   displayName,
   limit,
-  enabled,
+  enabled = true,
 }: {
   displayName: string;
   limit: number;
-  enabled: boolean;
+  enabled?: boolean;
 }) => {
   const [items, setItems] = useState<Amity.User[]>([]);
   const [isLoading, setIsLoading] = useState(false);

@@ -5,12 +5,12 @@ export const useMemberQueryByDisplayName = ({
   communityId,
   displayName,
   limit,
-  enabled,
+  enabled = true,
 }: {
   communityId: string;
   displayName: string;
   limit: number;
-  enabled: boolean;
+  enabled?: boolean;
 }) => {
   const [items, setItems] = useState<Amity.Membership<'community'>[]>([]);
   const [isLoading, setIsLoading] = useState(false);
