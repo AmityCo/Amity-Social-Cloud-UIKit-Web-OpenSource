@@ -19,6 +19,7 @@ import { Drawer } from 'vaul';
 import { MediaAttachment } from '../../components/MediaAttachment';
 import { DetailedMediaAttachment } from '../../components/DetailedMediaAttachment';
 import ReactDOM from 'react-dom';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 export enum Mode {
   CREATE = 'create',
@@ -90,6 +91,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
   const [snap, setSnap] = useState<number | string | null>(HEIGHT_MEDIA_ATTACHMENT_MENU);
   const [isShowBottomMenu, setIsShowBottomMenu] = useState<boolean>(true);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const { confirm } = useConfirmContext();
 
   const [textValue, setTextValue] = useState<createPostParams>({
     text: '',
@@ -141,6 +143,20 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
     setSnap(newSnap);
   };
 
+  const onClickClose = () => {
+    confirm({
+      pageId: pageId,
+      type: 'confirm',
+      title: 'Discard this post?',
+      content: 'The post will be permanently deleted. It cannot be undone.',
+      onOk: () => {
+        AmityPostComposerPageBehavior.goToSocialHomePage();
+      },
+      okText: 'Discard',
+      cancelText: 'Keep editing',
+    });
+  };
+
   return (
     <div className={styles.postComposerPage} style={themeStyles}>
       <form
@@ -152,7 +168,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
         }
       >
         <div className={styles.postComposerPage__topBar}>
-          <CloseButton pageId={pageId} onPress={onBack} />
+          <CloseButton pageId={pageId} onPress={onClickClose} />
           <CommunityDisplayName pageId={pageId} community={community} />
           <CreateNewPostButton
             pageId={pageId}
@@ -163,41 +179,44 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
         <PostTextField ref={editorRef} onChange={onChange} />
       </form>
       <div ref={drawerRef}></div>
-      {drawerRef.current ? ReactDOM.createPortal(
-        <Drawer.Root
-          snapPoints={[HEIGHT_MEDIA_ATTACHMENT_MENU, HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU]}
-          activeSnapPoint={snap}
-          setActiveSnapPoint={handleSnapChange}
-          open={isShowBottomMenu}
-          modal={false}
-        >
-          <Drawer.Portal container={drawerRef.current}>
-            <Drawer.Content className={styles.drawer__content}>
-              <div className={styles.postComposerPage__notiWrap}>
-                {isPending && (
-                  <Notification
-                    content="Posting..."
-                    icon={<Spinner />}
-                    className={styles.postComposerPage__status}
-                  />
-                )}
-                {isError && (
-                  <Notification
-                    content="Failed to create post"
-                    icon={<ExclamationCircle className={styles.selectPostTargetPag_infoIcon} />}
-                    className={styles.postComposerPage__status}
-                  />
-                )}
-              </div>
-              {snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU ? (
-                <DetailedMediaAttachment pageId={pageId} />
-              ) : (
-                <MediaAttachment pageId={pageId} />
-              )}
-            </Drawer.Content>
-          </Drawer.Portal>
-        </Drawer.Root>, drawerRef.current
-      ) : null }
+      {drawerRef.current
+        ? ReactDOM.createPortal(
+            <Drawer.Root
+              snapPoints={[HEIGHT_MEDIA_ATTACHMENT_MENU, HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU]}
+              activeSnapPoint={snap}
+              setActiveSnapPoint={handleSnapChange}
+              open={isShowBottomMenu}
+              modal={false}
+            >
+              <Drawer.Portal container={drawerRef.current}>
+                <Drawer.Content className={styles.drawer__content}>
+                  <div className={styles.postComposerPage__notiWrap}>
+                    {isPending && (
+                      <Notification
+                        content="Posting..."
+                        icon={<Spinner />}
+                        className={styles.postComposerPage__status}
+                      />
+                    )}
+                    {isError && (
+                      <Notification
+                        content="Failed to create post"
+                        icon={<ExclamationCircle className={styles.selectPostTargetPag_infoIcon} />}
+                        className={styles.postComposerPage__status}
+                      />
+                    )}
+                  </div>
+                  {snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU ? (
+                    <DetailedMediaAttachment pageId={pageId} />
+                  ) : (
+                    <MediaAttachment pageId={pageId} />
+                  )}
+                </Drawer.Content>
+              </Drawer.Portal>
+            </Drawer.Root>,
+            drawerRef.current,
+          )
+        : null}
     </div>
   );
 };
