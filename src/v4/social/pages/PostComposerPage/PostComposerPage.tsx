@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './PostComposerPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
@@ -15,11 +15,8 @@ import { Spinner } from '../../internal-components/Spinner';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { useForm } from 'react-hook-form';
 import { Mentioned } from '~/v4/helpers/utils';
-import { Drawer } from 'vaul';
-import { MediaAttachment } from '../../components/MediaAttachment';
-import { DetailedMediaAttachment } from '../../components/DetailedMediaAttachment';
-import ReactDOM from 'react-dom';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import useConnectionState from '~/v4/social/hooks/useConnectionState';
 
 export enum Mode {
   CREATE = 'create',
@@ -81,17 +78,11 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
     pageId,
   });
 
-  // const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU = '290px'; //Including file button
-  const HEIGHT_MEDIA_ATTACHMENT_MENU = '92px';
-  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU = '236px'; //Not including file button
-
   const { onBack } = useNavigation();
   const editorRef = useRef<LexicalEditor | null>(null);
   const { AmityPostComposerPageBehavior } = usePageBehavior();
-  const [snap, setSnap] = useState<number | string | null>(HEIGHT_MEDIA_ATTACHMENT_MENU);
-  const [isShowBottomMenu, setIsShowBottomMenu] = useState<boolean>(true);
-  const drawerRef = useRef<HTMLDivElement>(null);
   const { confirm } = useConfirmContext();
+  const isOnline = useConnectionState();
 
   const [textValue, setTextValue] = useState<createPostParams>({
     text: '',
@@ -136,13 +127,6 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
     setTextValue(val);
   };
 
-  const handleSnapChange = (newSnap: string | number | null) => {
-    if (snap === HEIGHT_MEDIA_ATTACHMENT_MENU && newSnap === '0px') {
-      return;
-    }
-    setSnap(newSnap);
-  };
-
   const onClickClose = () => {
     confirm({
       pageId: pageId,
@@ -159,64 +143,33 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
 
   return (
     <div className={styles.postComposerPage} style={themeStyles}>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={
-          snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU
-            ? styles.postComposerPage__formShort
-            : styles.postComposerPage__formLong
-        }
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.postComposerPage__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
           <CommunityDisplayName pageId={pageId} community={community} />
           <CreateNewPostButton
             pageId={pageId}
             onSubmit={handleSubmit(onSubmit)}
-            isValid={textValue.text.length > 0}
+            isValid={textValue.text.length > 0 && !isPending}
           />
         </div>
         <PostTextField ref={editorRef} onChange={onChange} />
       </form>
-      <div ref={drawerRef}></div>
-      {drawerRef.current
-        ? ReactDOM.createPortal(
-            <Drawer.Root
-              snapPoints={[HEIGHT_MEDIA_ATTACHMENT_MENU, HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU]}
-              activeSnapPoint={snap}
-              setActiveSnapPoint={handleSnapChange}
-              open={isShowBottomMenu}
-              modal={false}
-            >
-              <Drawer.Portal container={drawerRef.current}>
-                <Drawer.Content className={styles.drawer__content}>
-                  <div className={styles.postComposerPage__notiWrap}>
-                    {isPending && (
-                      <Notification
-                        content="Posting..."
-                        icon={<Spinner />}
-                        className={styles.postComposerPage__status}
-                      />
-                    )}
-                    {isError && (
-                      <Notification
-                        content="Failed to create post"
-                        icon={<ExclamationCircle className={styles.selectPostTargetPag_infoIcon} />}
-                        className={styles.postComposerPage__status}
-                      />
-                    )}
-                  </div>
-                  {snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU ? (
-                    <DetailedMediaAttachment pageId={pageId} />
-                  ) : (
-                    <MediaAttachment pageId={pageId} />
-                  )}
-                </Drawer.Content>
-              </Drawer.Portal>
-            </Drawer.Root>,
-            drawerRef.current,
-          )
-        : null}
+      {isPending && isOnline && (
+        <Notification
+          content="Posting..."
+          icon={<Spinner />}
+          className={styles.postComposerPage__status}
+        />
+      )}
+      {(isError || (!isOnline && isPending)) && (
+        <Notification
+          content="Failed to create post"
+          icon={<ExclamationCircle className={styles.selectPostTargetPag_infoIcon} />}
+          className={styles.postComposerPage__status}
+          duration={3000}
+        />
+      )}
     </div>
   );
 };
