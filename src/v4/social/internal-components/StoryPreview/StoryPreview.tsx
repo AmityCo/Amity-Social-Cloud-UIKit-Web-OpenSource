@@ -8,6 +8,7 @@ import { PauseIcon, PlayIcon } from '~/icons';
 import ColorThief from 'colorthief';
 import Community from '~/v4/icons/Community';
 import clsx from 'clsx';
+import { StoryPreviewSkeleton } from './StoryPreviewSkeleton';
 
 type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -120,7 +121,7 @@ export const StoryPreview: React.FC<StoryPreviewProps> = ({
       };
     };
 
-    if (mediaType?.url) {
+    if (mediaType?.url && mediaType?.type === 'image') {
       extractColorsFromImage(mediaType.url);
     } else {
       setBackgroundColor([]);
@@ -166,6 +167,10 @@ export const StoryPreview: React.FC<StoryPreviewProps> = ({
     };
   }, [isPlaying, mediaType, duration, isImageLoaded]);
 
+  if (isLoading) {
+    return <StoryPreviewSkeleton />;
+  }
+
   return (
     <div className={styles.storyPreviewWrapper} style={{ width, height }}>
       <div className={styles.storyPreviewContainer}>
@@ -186,7 +191,7 @@ export const StoryPreview: React.FC<StoryPreviewProps> = ({
                 </Typography.BodyBold>
               </div>
               {mediaType?.type === 'video' && (
-                <div className={styles.playPauseButton} onClick={handlePlayPauseClick}>
+                <div onClick={handlePlayPauseClick}>
                   {isPlaying ? (
                     <PauseIcon width={24} height={24} />
                   ) : (
@@ -235,6 +240,7 @@ export const StoryPreview: React.FC<StoryPreviewProps> = ({
                 )}
               </>
             )}
+            <div className={styles.shadowOverlay} />
           </div>
 
           <div className={styles.hyperLinkContainer}>

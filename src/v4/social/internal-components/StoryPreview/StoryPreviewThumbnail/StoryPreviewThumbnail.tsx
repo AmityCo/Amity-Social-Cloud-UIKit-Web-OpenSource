@@ -6,6 +6,7 @@ import { Avatar, Typography } from '~/v4/core/components';
 import TruncateMarkup from 'react-truncate-markup';
 import styles from './StoryPreviewThumbnail.module.css';
 import Community from '~/v4/icons/Community';
+import { StoryPreviewThumbnailSkeleton } from './StoryPreviewThumbnailSkeleton';
 
 type StoryPreviewThumbnailProps = {
   thumbnailUrl?: string;
@@ -30,14 +31,31 @@ export const StoryPreviewThumbnail: React.FC<StoryPreviewThumbnailProps> = ({
   imageMode = 'fill',
 }) => {
   const [backgroundColor, setBackgroundColor] = useState<string>('');
+  const [imageError, setImageError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    const extractColorsFromImage = async () => {
-      if (imageRef.current && imageRef.current.complete) {
+    console.log('Effect start - thumbnailUrl:', thumbnailUrl);
+    setIsLoading(true);
+    setImageError(false);
+
+    if (!thumbnailUrl) {
+      setBackgroundColor('');
+      setImageError(true);
+      setIsLoading(false);
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = thumbnailUrl;
+
+    img.onload = () => {
+      if (imageRef.current) {
         const colorThief = new ColorThief();
         try {
-          const palette = colorThief.getPalette(imageRef.current, 2);
+          const palette = colorThief.getPalette(img, 2);
           if (palette) {
             const gradient = `linear-gradient(
               180deg,
@@ -51,22 +69,48 @@ export const StoryPreviewThumbnail: React.FC<StoryPreviewThumbnailProps> = ({
           setBackgroundColor('');
         }
       }
+      setIsLoading(false);
     };
 
-    if (thumbnailUrl) {
-      if (imageRef.current && imageRef.current.complete) {
-        extractColorsFromImage();
-      } else {
-        imageRef.current?.addEventListener('load', extractColorsFromImage);
-      }
-    } else {
-      setBackgroundColor('');
-    }
+    img.onerror = () => {
+      setImageError(true);
+      setIsLoading(false);
+    };
 
     return () => {
-      imageRef.current?.removeEventListener('load', extractColorsFromImage);
+      img.onload = null;
+      img.onerror = null;
     };
   }, [thumbnailUrl]);
+
+  const renderThumbnail = () => {
+    if (imageError || !thumbnailUrl) {
+      return (
+        <div className={styles.fallbackThumbnail}>
+          <Typography.Body>No Image Available</Typography.Body>
+        </div>
+      );
+    }
+    return (
+      <>
+        <img
+          ref={imageRef}
+          src={thumbnailUrl}
+          alt="Story Thumbnail"
+          className={clsx(styles.thumbnailImage, {
+            [styles.imageFit]: imageMode === 'fit',
+            [styles.imageCover]: imageMode === 'fill',
+          })}
+          crossOrigin="anonymous"
+        />
+        <div className={styles.shadowOverlay}></div>
+      </>
+    );
+  };
+
+  if (isLoading) {
+    return <StoryPreviewThumbnailSkeleton />;
+  }
 
   return (
     <div
@@ -77,18 +121,7 @@ export const StoryPreviewThumbnail: React.FC<StoryPreviewThumbnailProps> = ({
       }}
     >
       <div className={styles.storyPreviewContainer}>
-        <div className={styles.thumbnailMedia}>
-          <img
-            ref={imageRef}
-            src={thumbnailUrl}
-            alt="Story Thumbnail"
-            className={clsx(styles.thumbnailImage, {
-              [styles.imageFit]: imageMode === 'fit',
-              [styles.imageCover]: imageMode === 'fill',
-            })}
-            crossOrigin="anonymous"
-          />
-        </div>
+        <div className={styles.thumbnailMedia}>{renderThumbnail()}</div>
         <div className={styles.thumbnailInfo}>
           <div className={styles.userInfo}>
             <div className={styles.storyPreviewAvatar}>
