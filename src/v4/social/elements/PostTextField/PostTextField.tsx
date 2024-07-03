@@ -44,7 +44,7 @@ function editorStateToText(editor: LexicalEditor) {
   const mentionees: {
     type: string;
     userIds: string[];
-  }[] = [];
+  }[] = [{ type: 'user', userIds: [] }];
   let runningIndex = 0;
 
   paragraphs.forEach((paragraph) => {
@@ -63,7 +63,7 @@ function editorStateToText(editor: LexicalEditor) {
           userId: child.userId,
         });
 
-        mentionees.push({ type: 'user', userIds: [child.userId] });
+        mentionees.length && mentionees[0].userIds.push(child.userId);
       }
       runningIndex += child.text.length;
     });
