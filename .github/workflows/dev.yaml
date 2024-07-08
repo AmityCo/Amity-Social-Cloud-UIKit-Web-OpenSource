@@ -18,13 +18,7 @@ jobs:
       NPM_FONT_AWESOME_TOKEN: ${{ secrets.NPM_FONT_AWESOME_TOKEN }}
       STORYBOOK_API_REGION: ${{ secrets.STORYBOOK_API_REGION }}
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
-      STORYBOOK_USER1: ${{ secrets.STORYBOOK_USER1 }}
-      STORYBOOK_USER2: ${{ secrets.STORYBOOK_USER2 }}
-      STORYBOOK_USER3: ${{ secrets.STORYBOOK_USER3 }}
-      STORYBOOK_USER4: ${{ secrets.STORYBOOK_USER4 }}
-      STORYBOOK_USER5: ${{ secrets.STORYBOOK_USER5 }}
-      STORYBOOK_USER6: ${{ secrets.STORYBOOK_USER6 }}
-      STORYBOOK_USER7: ${{ secrets.STORYBOOK_USER7 }}
+      STORYBOOK_USERS: ${{ secrets.STORYBOOK_USERS }}
 
     steps:
       - name: git checkout
