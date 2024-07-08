@@ -41,17 +41,16 @@ export const HyperLinkButton = ({
   onPress = () => {},
 }: HyperLinkButtonProps) => {
   const elementId = 'story_hyperlink_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
   return (
-    <Button onPress={onPress} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <Button className={styles.hyperLinkButton} onPress={onPress} data-qa-anchor={accessibilityId}>
       <IconComponent
         defaultIcon={() => (
           <HyperLinkButtonSvg className={clsx(styles.hyperLinkButton, defaultClassName)} />

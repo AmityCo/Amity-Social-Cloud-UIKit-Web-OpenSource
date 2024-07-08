@@ -48,7 +48,7 @@ export const BackButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button className={styles.backButton} style={themeStyles} onPress={onPress}>
+    <Button style={themeStyles} className={styles.backButton} onPress={onPress}>
       <IconComponent
         data-qa-anchor={accessibilityId}
         defaultIcon={() => <BackButtonSvg className={defaultClassName} />}

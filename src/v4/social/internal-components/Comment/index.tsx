@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import useComment from '~/social/hooks/useComment';
 import useMention from '~/v4/chat/hooks/useMention';
 import {
@@ -20,16 +19,16 @@ import useGetStoryByStoryId from '~/v4/social/hooks/useGetStoryByStoryId';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { Button, BottomSheet, Typography } from '~/v4/core/components';
-import { TrashIcon, PenIcon, FlagIcon, MinusCircleIcon } from '~/v4/social/icons';
+import { TrashIcon, PenIcon, FlagIcon } from '~/v4/social/icons';
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
-import { isModerator } from '~/helpers/permissions';
 
 import useImage from '~/v4/core/hooks/useImage';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 import styles from './Comment.module.css';
+import { isModerator } from '~/v4/utils/permissions';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -89,7 +88,6 @@ export const Comment = ({
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
   const [isEditing, setIsEditing] = useState(false);
-  const { formatMessage } = useIntl();
   const [isExpanded, setExpanded] = useState(false);
 
   const toggleBottomSheet = () => setBottomSheet((prev) => !prev);
@@ -134,11 +132,11 @@ export const Comment = ({
       await handleReportComment();
       if (isFlaggedByMe) {
         notification.success({
-          content: formatMessage({ id: 'report.unreportSent' }),
+          content: 'Unreport sent',
         });
       } else {
         notification.success({
-          content: formatMessage({ id: 'report.reportSent' }),
+          content: 'Report sent',
         });
       }
     } catch (err) {
@@ -183,15 +181,17 @@ export const Comment = ({
   const isReplyComment = !!comment?.parentId;
 
   const deleteComment = () => {
-    const title = isReplyComment ? 'reply.delete' : 'comment.delete';
-    const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
+    const title = isReplyComment ? 'Delete reply' : 'Delete comment';
+    const content = isReplyComment
+      ? 'This reply will be permanently deleted. Continue?'
+      : 'This comment will be permanently removed.';
     confirm({
       pageId,
       componentId,
-      title: <FormattedMessage id={title} />,
-      content: <FormattedMessage id={content} />,
-      cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),
-      okText: formatMessage({ id: 'comment.deleteConfirmOkText' }),
+      title,
+      content,
+      cancelText: 'Cancel',
+      okText: 'Delete',
       onOk: handleDeleteComment,
     });
   };
@@ -202,27 +202,21 @@ export const Comment = ({
   const options = [
     canEdit
       ? {
-          name: isReplyComment
-            ? formatMessage({ id: 'reply.edit' })
-            : formatMessage({ id: 'comment.edit' }),
+          name: isReplyComment ? 'Edit reply' : 'Edit comment',
           action: startEditing,
           icon: <PenIcon className={styles.actionIcon} />,
         }
       : null,
     canReport
       ? {
-          name: isFlaggedByMe
-            ? formatMessage({ id: 'report.undoReport' })
-            : formatMessage({ id: 'report.doReport' }),
+          name: isFlaggedByMe ? 'Undo Report' : 'Report',
           action: handleReportComment,
           icon: <FlagIcon className={styles.actionIcon} />,
         }
       : null,
     canDelete
       ? {
-          name: isReplyComment
-            ? formatMessage({ id: 'reply.delete' })
-            : formatMessage({ id: 'comment.delete' }),
+          name: isReplyComment ? 'Delete reply' : 'Delete comment',
           action: deleteComment,
           icon: <TrashIcon className={styles.actionIcon} />,
         }
@@ -231,23 +225,10 @@ export const Comment = ({
 
   if (comment == null) return null;
 
-  if (comment?.isDeleted) {
-    return isReplyComment ? null : (
-      <div className={styles.deletedCommentBlock}>
-        <MinusCircleIcon />
-        <FormattedMessage id="comment.deleted" />
-      </div>
-    );
-  }
-
   const renderedComment = (
     <UIComment
       commentId={comment?.commentId}
-      authorName={
-        commentAuthor?.user?.displayName ||
-        commentAuthor?.userId ||
-        formatMessage({ id: 'anonymous' })
-      }
+      authorName={commentAuthor?.user?.displayName || commentAuthor?.userId || 'Anonymous'}
       authorAvatar={commentAuthorAvatar}
       canDelete={canDelete}
       canEdit={canEdit}
@@ -303,6 +284,7 @@ export const Comment = ({
           <div data-qa-anchor="comment">{renderedComment}</div>
           {comment.children.length > 0 && (
             <CommentList
+              componentId={componentId}
               parentId={comment.commentId}
               referenceType={comment.referenceType}
               referenceId={comment.referenceId}

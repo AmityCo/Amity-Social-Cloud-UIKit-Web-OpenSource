@@ -24,14 +24,7 @@ import clsx from 'clsx';
 
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 
-export const renderer: CustomRenderer = ({
-  story,
-  action,
-  config,
-  onClose,
-  onSwipeDown,
-  onClickCommunity,
-}) => {
+export const renderer: CustomRenderer = ({ story, action, config, onClose, onClickCommunity }) => {
   const { formatMessage } = useIntl();
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
@@ -62,6 +55,7 @@ export const renderer: CustomRenderer = ({
     increaseIndex,
     pageId,
     dragEventTarget,
+    data,
   } = story;
 
   const { members } = useCommunityMembersCollection({
@@ -237,10 +231,18 @@ export const renderer: CustomRenderer = ({
         addStoryButton={addStoryButton}
       />
 
-      <div className={clsx(styles.storyImageContainer)}>
+      <div
+        className={clsx(styles.storyImageContainer, {
+          [styles.imageFit]: data.imageDisplayMode === 'fit',
+          [styles.imageFill]: data.imageDisplayMode === 'fill',
+        })}
+      >
         <img
           ref={imageRef}
-          className={styles.storyImage}
+          className={clsx(styles.storyImage, {
+            [styles.imageFit]: data.imageDisplayMode === 'fit',
+            [styles.imageFill]: data.imageDisplayMode === 'fill',
+          })}
           data-qa-anchor="image_view"
           src={story.url}
           onLoad={imageLoaded}

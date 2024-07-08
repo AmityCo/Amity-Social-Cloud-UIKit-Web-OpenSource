@@ -309,6 +309,7 @@ export const renderer: CustomRenderer = ({
         </div>
       )}
       <Footer
+        pageId={pageId}
         storyId={storyId}
         syncState={syncState}
         reach={reach}

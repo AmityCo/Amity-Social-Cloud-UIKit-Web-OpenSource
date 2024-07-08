@@ -131,6 +131,7 @@ export const PlainDraftStoryPage = ({
 
   const discardCreateStory = () => {
     confirm({
+      pageId,
       title: 'Delete this story?',
       content:
         'This story will be permanently deleted. You’ll no longer to see and find this story.',

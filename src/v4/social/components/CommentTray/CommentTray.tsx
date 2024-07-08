@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CommentList } from '~/v4/social/internal-components/CommentList';
 import { StoryCommentComposeBar } from '~/v4/social/internal-components/StoryCommentComposeBar';
 import styles from './CommentTray.module.css';
@@ -24,7 +24,7 @@ export const CommentTray = ({
   shouldAllowCreation = true,
 }: CommentTrayProps) => {
   const componentId = 'comment_tray_component';
-  const { config } = useAmityComponent({
+  const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
     componentId,
   });
@@ -43,7 +43,11 @@ export const CommentTray = ({
   };
 
   return (
-    <div className={styles.commentTrayContainer}>
+    <div
+      style={themeStyles}
+      data-qa-anchor={accessibilityId}
+      className={styles.commentTrayContainer}
+    >
       <div className={styles.commentListContainer}>
         <CommentList
           pageId={pageId}

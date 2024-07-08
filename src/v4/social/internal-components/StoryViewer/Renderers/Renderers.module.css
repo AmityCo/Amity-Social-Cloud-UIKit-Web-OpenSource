@@ -281,3 +281,11 @@
 .rightOverlay {
   right: 0;
 }
+
+.imageFit {
+  object-fit: contain;
+}
+
+.imageFill {
+  object-fit: cover;
+}

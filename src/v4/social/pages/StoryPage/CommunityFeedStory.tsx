@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import useSDK from '~/core/hooks/useSDK';
-
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
 import { Trash2Icon } from '~/icons';
@@ -29,6 +27,7 @@ import styles from './StoryPage.module.css';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 import { useMotionValue, motion } from 'framer-motion';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 interface CommunityFeedStoryProps {
   pageId?: string;
@@ -206,6 +205,10 @@ export const CommunityFeedStory = ({
   );
 
   const increaseIndex = () => {
+    if (currentIndex === stories.length - 1) {
+      onBack();
+      return;
+    }
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 

@@ -1,4 +1,5 @@
 .speakerButton {
+  all: unset;
   position: absolute;
   top: 96px;
   left: 24px;

@@ -171,7 +171,7 @@ export const HyperLinkConfig = ({
         <DoneButton
           pageId={pageId}
           componentId={componentId}
-          onClick={handleSubmit(onSubmitForm)}
+          onPress={() => handleSubmit(onSubmitForm)}
         />
       </div>
       <div className={styles.divider} />
