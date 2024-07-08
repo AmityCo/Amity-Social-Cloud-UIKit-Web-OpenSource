@@ -138,6 +138,7 @@ interface PostContentProps {
   type: 'feed' | 'detail';
   drawerRef?: React.RefObject<HTMLDivElement>;
   onClick?: () => void;
+  onPostDeleted?: (post: Amity.Post) => void;
 }
 
 export const PostContent = ({
@@ -146,6 +147,7 @@ export const PostContent = ({
   type,
   drawerRef,
   onClick,
+  onPostDeleted,
 }: PostContentProps) => {
   const componentId = 'post_content';
   const { themeStyles } = useAmityComponent({
@@ -299,6 +301,7 @@ export const PostContent = ({
                       onCloseMenu={() => removeDrawerData()}
                       pageId={pageId}
                       componentId={componentId}
+                      onPostDeleted={onPostDeleted}
                     />
                   ),
                 })

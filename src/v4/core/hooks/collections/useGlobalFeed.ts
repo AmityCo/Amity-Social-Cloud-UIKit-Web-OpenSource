@@ -1,11 +1,20 @@
 import { FeedRepository } from '@amityco/ts-sdk';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { usePaginatorApi } from '../usePagination';
 
 const useGlobalFeed = () => {
-  const [items, setItems] = useState<Amity.Post[]>([]);
+  const [items, setItems] = useState<Array<Amity.Post | Amity.Ad>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [queryToken, setQueryToken] = useState<string | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
+  const limit = 10;
+
+  const { itemWithAds } = usePaginatorApi({
+    items: items,
+    pageSize: limit,
+    placement: 'feed' as Amity.AdPlacement,
+    getItemId: (item) => item.postId,
+  });
 
   async function fetchMore() {
     try {
@@ -15,9 +24,11 @@ const useGlobalFeed = () => {
         queryToken: queryToken || undefined,
       });
       setQueryToken(newPosts.paging.next || null);
-      setItems((prevItems) => [...prevItems, ...newPosts.data]);
+      setItems((prev) => [...prev, ...newPosts.data]);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
     }
   }
 
@@ -41,12 +52,13 @@ const useGlobalFeed = () => {
 
   const hasMore = useMemo(() => queryToken !== null, [queryToken]);
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     setLoadMoreHasBeenCalled(true);
+    if (isLoading) return;
     if (hasMore) {
       fetchMore();
     }
-  };
+  }, [isLoading, hasMore, fetchMore]);
 
   const refetch = () => {
     setItems([]);
@@ -55,7 +67,7 @@ const useGlobalFeed = () => {
   };
 
   return {
-    posts: items,
+    itemWithAds,
     isLoading,
     prependItem,
     removeItem,

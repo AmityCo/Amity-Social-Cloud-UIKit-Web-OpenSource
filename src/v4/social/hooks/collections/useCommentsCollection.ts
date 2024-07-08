@@ -1,5 +1,6 @@
 import { CommentRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
+import { usePaginator } from '~/v4/core/hooks/usePagination';
 
 type useCommentsParams = {
   parentId?: string | null;
@@ -28,6 +29,35 @@ export default function useCommentsCollection({
       includeDeleted,
     },
     shouldCall: !!referenceId && !!referenceType && shouldCall,
+  });
+
+  return {
+    comments: items,
+    ...rest,
+  };
+}
+
+export function useCommentsCollectionWithAds({
+  parentId,
+  referenceId,
+  referenceType,
+  limit = 10,
+  shouldCall = true,
+  includeDeleted = false,
+}: useCommentsParams) {
+  const { items, ...rest } = usePaginator({
+    fetcher: CommentRepository.getComments,
+    params: {
+      parentId,
+      referenceId: referenceId as string,
+      referenceType,
+      limit,
+      includeDeleted,
+    },
+    shouldCall: shouldCall && !!referenceId && !!referenceType,
+    getItemId: (item) => item.commentId,
+    pageSize: limit,
+    placement: 'comment' as Amity.AdPlacement,
   });
 
   return {

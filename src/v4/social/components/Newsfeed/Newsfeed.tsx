@@ -2,8 +2,6 @@ import React, { useRef, useState } from 'react';
 import { StoryTab } from '~/v4/social/components/StoryTab';
 import useGlobalFeed from '~/v4/core/hooks/collections/useGlobalFeed';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 import { GlobalFeed } from '~/v4/social/components/GlobalFeed';
 
 import styles from './Newsfeed.module.css';
@@ -49,22 +47,21 @@ interface NewsfeedProps {
 
 export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
   const componentId = 'newsfeed';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   const touchStartY = useRef(0);
   const [touchDiff, setTouchDiff] = useState(0);
 
-  const { posts, hasMore, isLoading, loadMore, refetch } = useGlobalFeed();
+  const { itemWithAds, hasMore, isLoading, loadMore, refetch, removeItem } = useGlobalFeed();
 
   const onFeedReachBottom = () => {
     if (hasMore && !isLoading) loadMore();
   };
 
-  if (posts.length === 0 && !isLoading) {
+  if (itemWithAds.length === 0 && !isLoading) {
     return <EmptyNewsfeed pageId={pageId} />;
   }
 
@@ -107,13 +104,14 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
       </div>
       <div className={styles.newsfeed__divider} />
       <StoryTab type="globalFeed" pageId={pageId} />
-      {posts.length > 0 && <div className={styles.newsfeed__divider} />}
+      {itemWithAds.length > 0 && <div className={styles.newsfeed__divider} />}
       <GlobalFeed
         isLoading={isLoading}
-        posts={posts}
+        items={itemWithAds}
         pageId={pageId}
         componentId={componentId}
         onFeedReachBottom={() => onFeedReachBottom()}
+        onPostDeleted={(post) => removeItem(post.postId)}
       />
     </div>
   );

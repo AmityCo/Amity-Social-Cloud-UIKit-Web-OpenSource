@@ -54,6 +54,7 @@ interface PostMenuProps {
   componentId?: string;
   elementId?: string;
   onCloseMenu: () => void;
+  onPostDeleted?: (post: Amity.Post) => void;
 }
 
 export const PostMenu = ({
@@ -62,6 +63,7 @@ export const PostMenu = ({
   componentId = '*',
   elementId = '*',
   onCloseMenu,
+  onPostDeleted,
 }: PostMenuProps) => {
   const { success, error } = useNotifications();
 
@@ -132,6 +134,7 @@ export const PostMenu = ({
     },
     onSuccess: () => {
       success({ content: 'Post deleted' });
+      onPostDeleted?.(post);
     },
     onError: () => {
       error({ content: 'Failed to delete post' });

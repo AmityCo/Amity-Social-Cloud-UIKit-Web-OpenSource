@@ -7,23 +7,28 @@ import { usePostContext } from '~/v4/social/providers/PostProvider';
 
 import styles from './GlobalFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { PostCommentComposer } from '../PostCommentComposer/PostCommentComposer';
-import { PostCommentList } from '../PostCommentList/PostCommentList';
+import { PostAd } from '~/v4/social/internal-components/PostAd/PostAd';
 
 interface GlobalFeedProps {
   pageId?: string;
   componentId?: string;
-  posts: Amity.Post[];
+  items: Array<Amity.Post | Amity.Ad>;
   isLoading: boolean;
   onFeedReachBottom: () => void;
+  onPostDeleted?: (post: Amity.Post) => void;
 }
+
+const isAmityAd = (item: Amity.Post | Amity.Ad): item is Amity.Ad => {
+  return 'adId' in item;
+};
 
 export const GlobalFeed = ({
   pageId = '*',
   componentId = '*',
-  posts,
+  items,
   isLoading,
   onFeedReachBottom,
+  onPostDeleted,
 }: GlobalFeedProps) => {
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
@@ -42,7 +47,7 @@ export const GlobalFeed = ({
     },
   });
 
-  if (posts.length === 0 && !isLoading) {
+  if (items.length === 0 && !isLoading) {
     return <EmptyNewsfeed pageId={pageId} />;
   }
 
@@ -63,21 +68,24 @@ export const GlobalFeed = ({
           <div className={styles.global_feed__divider} />
         </>
       )}
-      {posts.map((post, index) => (
-        <div key={post.postId}>
+      {items.map((item, index) => (
+        <div key={item.postId}>
           {index !== 0 ? <div className={styles.global_feed__divider} /> : null}
-          <>
+          {isAmityAd(item) ? (
+            <PostAd key={item.adId} ad={item} />
+          ) : (
             <div className={styles.global_feed__postContainer}>
               <PostContent
                 pageId={pageId}
-                post={post}
+                post={item}
                 type="feed"
                 onClick={() => {
-                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: post.postId });
+                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId });
                 }}
+                onPostDeleted={onPostDeleted}
               />
             </div>
-          </>
+          )}
         </div>
       ))}
       {isLoading
@@ -90,7 +98,7 @@ export const GlobalFeed = ({
             </div>
           ))
         : null}
-      <div ref={intersectionRef} className={styles.global_feed__intersection} />
+      {!isLoading && <div ref={intersectionRef} className={styles.global_feed__intersection} />}
     </div>
   );
 };
