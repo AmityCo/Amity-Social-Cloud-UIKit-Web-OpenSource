@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
@@ -7,12 +8,14 @@ import styles from './EditCancelButton.module.css';
 interface EditCancelButtonProps {
   pageId?: string;
   componentId?: string;
+  className?: string;
   onPress?: ButtonProps['onPress'];
 }
 
 export const EditCancelButton = ({
   pageId = '*',
   componentId = '*',
+  className,
   onPress = () => {},
 }: EditCancelButtonProps) => {
   const elementId = 'edit_cancel_button';
@@ -27,7 +30,7 @@ export const EditCancelButton = ({
   return (
     <Button
       data-qa-anchor={accessibilityId}
-      className={styles.editCancelButton}
+      className={clsx(styles.editCancelButton, className)}
       style={{
         ...themeStyles,
         backgroundColor: config.background_color as string | undefined,

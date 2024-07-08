@@ -3,10 +3,12 @@ import { PostContent, PostContentSkeleton } from '../PostContent';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed/EmptyNewsFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { usePostContext } from '~/v4/social/providers/PostProvider';
 
 import styles from './GlobalFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { usePostContext } from '~/v4/social/providers/PostProvider';
+import { PostCommentComposer } from '../PostCommentComposer/PostCommentComposer';
+import { PostCommentList } from '../PostCommentList/PostCommentList';
 
 interface GlobalFeedProps {
   pageId?: string;
@@ -23,11 +25,10 @@ export const GlobalFeed = ({
   isLoading,
   onFeedReachBottom,
 }: GlobalFeedProps) => {
-  const { accessibilityId, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { accessibilityId, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   const intersectionRef = useRef<HTMLDivElement>(null);
 
@@ -65,16 +66,18 @@ export const GlobalFeed = ({
       {posts.map((post, index) => (
         <div key={post.postId}>
           {index !== 0 ? <div className={styles.global_feed__divider} /> : null}
-          <div className={styles.global_feed__postContainer}>
-            <PostContent
-              pageId={pageId}
-              post={post}
-              type="feed"
-              onClick={() => {
-                AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: post.postId });
-              }}
-            />
-          </div>
+          <>
+            <div className={styles.global_feed__postContainer}>
+              <PostContent
+                pageId={pageId}
+                post={post}
+                type="feed"
+                onClick={() => {
+                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: post.postId });
+                }}
+              />
+            </div>
+          </>
         </div>
       ))}
       {isLoading

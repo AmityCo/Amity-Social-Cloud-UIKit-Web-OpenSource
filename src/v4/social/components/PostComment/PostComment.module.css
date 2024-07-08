@@ -1,0 +1,175 @@
+.postComment {
+  width: 100%;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  gap: 0.5rem;
+}
+
+.postComment__deleteComment_container {
+  display: flex;
+  padding: 0.75rem 1rem;
+  align-items: flex-start;
+  gap: 1rem;
+  border-top: 1px solid var(--asc-color-base-shade4);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.postComment__deleteComment_icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--asc-color-base-shade2);
+}
+
+.postComment__deleteComment_text {
+  color: var(--asc-color-base-shade2);
+}
+
+.postComment__avatar {
+  margin-right: 0.75rem;
+  display: inline-block;
+}
+
+.postComment__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.postComment__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: center;
+  align-items: start;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0 0.75rem 0.75rem;
+  padding: 0.75rem;
+  max-width: max-content;
+}
+
+.postComment__content__username {
+  color: var(--asc-color-base-default);
+}
+
+.postComment__content__text {
+  color: var(--asc-color-base-default);
+}
+
+.postComment__secondRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.postComment__secondRow__leftPane {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.postComment__secondRow__timestamp {
+  display: flex;
+  color: var(--asc-color-base-shade2);
+  white-space: pre;
+}
+
+.postComment__secondRow__rightPane {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.postComment__secondRow__rightPane__like {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.postComment__secondRow__like {
+  cursor: pointer;
+  color: var(--asc-color-base-shade2);
+}
+
+.postComment__secondRow__like[data-is-liked='true'] {
+  color: var(--asc-color-primary-default);
+}
+
+.postComment__secondRow__reply {
+  cursor: pointer;
+  color: var(--asc-color-base-shade2);
+}
+
+.postComment__secondRow__actionButton {
+  cursor: pointer;
+  height: 1.25rem;
+  fill: var(--asc-color-secondary-shade2);
+}
+
+.postComment__viewReply_button {
+  display: flex;
+  padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
+  cursor: pointer;
+  align-items: flex-start;
+  gap: 0.25rem;
+  background: var(--asc-color-base-background);
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+  width: max-content;
+}
+
+.postComment__viewReply_icon {
+  color: var(--asc-color-secondary-shade1);
+  width: 1rem;
+  height: 1rem;
+}
+
+.postComment__viewReply_text {
+  color: var(--asc-color-secondary-shade1);
+}
+
+.postComment__edit {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.postComment__edit__inputWrap {
+  width: 100%;
+}
+
+.postComment__edit__input {
+  display: flex;
+  height: 7.5rem;
+  padding: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  align-self: stretch;
+  background-color: var(--asc-color-base-shade4);
+  width: 100%;
+  border-radius: 0 0.75rem 0.75rem;
+}
+
+.postComment__edit__buttonWrap {
+  display: flex;
+  gap: var(--asc-spacing-s1);
+  justify-content: flex-end;
+  margin-top: var(--asc-spacing-s1);
+}
+
+.postComment__edit__button {
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+}
+
+.postComment__edit__cancelButton {
+  color: var(--asc-color-secondary-shade1);
+  border-radius: var(--asc-border-radius-sm);
+  border: 1px solid var(--asc-color-secondary-shade1);
+  background: var(--asc-color-base-background);
+}
+
+.postComment__edit__saveButton {
+  color: var(--asc-color-white);
+  border-radius: var(--asc-border-radius-sm);
+  background: var(--asc-color-primary-default);
+}

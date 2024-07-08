@@ -51,7 +51,7 @@ export const CommentEdition = ({
       />
       <ButtonContainer>
         <EditCancelButton pageId={pageId} componentId={componentId} onPress={onCancel} />
-        <SaveButton pageId={pageId} componentId={componentId} onClick={onSubmit} />
+        <SaveButton pageId={pageId} componentId={componentId} onPress={onSubmit} />
       </ButtonContainer>
     </CommentEditContainer>
   );

@@ -24,12 +24,13 @@ const useOneComment = (): [Amity.Comment | null, boolean] => {
         });
         return () => disposeFn();
       } else {
-        await CommentRepository.createComment({
+        const { data: commentCreatedData } = await CommentRepository.createComment({
           referenceType: 'post',
           referenceId: post.postId,
           data: { text: 'Comment created for story' },
         });
         setIsLoading(false);
+        setComment(commentCreatedData);
       }
     }
     run();

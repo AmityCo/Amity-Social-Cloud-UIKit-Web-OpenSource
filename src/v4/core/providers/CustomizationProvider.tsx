@@ -215,8 +215,8 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/edit_comment_component/edit_cancel_button': {
       cancel_icon: '',
-      cancel_button_text: 'cancel',
-      background_color: '#1243EE',
+      cancel_button_text: 'Cancel',
+      background_color: '',
     },
     '*/edit_comment_component/save_button': {
       save_icon: '',
