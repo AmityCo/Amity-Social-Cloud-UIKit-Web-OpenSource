@@ -1,0 +1,111 @@
+.commentAd {
+  width: 100%;
+  position: relative;
+  height: 100%;
+}
+
+.commentAd__container {
+  display: grid;
+  grid-template-columns: min-content minmax(0, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.commentAd__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.commentAd__avatar {
+  width: 2rem;
+  height: 2rem;
+}
+
+.commentAd__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: center;
+  align-items: start;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0 0.75rem 0.75rem;
+  padding: 0.75rem;
+  max-width: max-content;
+}
+
+.commentAd__content__username {
+  color: var(--asc-color-base-default);
+}
+
+.commentAd__content__text {
+  color: var(--asc-color-base-default);
+  margin: var(--asc-spacing-s1) 0;
+}
+
+.commentAd__adCard {
+  display: flex;
+  border-radius: 0.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-base-background);
+  height: 100%;
+  cursor: pointer;
+}
+
+.commentAd__adCard__imageContainer {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 0.5rem 0 0 0.5rem;
+  flex-basis: 35%;
+  width: 35%;
+}
+
+.commentAd__adCard__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.commentAd__adCard__detail {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex-basis: 65%;
+  width: 65%;
+  overflow: hidden;
+}
+
+.commentAd__adCard__caption {
+  color: var(--asc-color-base-shade1);
+}
+
+.commentAd__adCard__description {
+  color: var(--asc-color-base-default);
+}
+
+.commentAd__adCard__button {
+  background-color: var(--asc-color-primary-default);
+  color: var(--asc-color-white);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--asc-border-radius-md);
+  box-sizing: border-box;
+}
+
+.commentAd__adCard__button__text {
+  width: 100%;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.infoIcon {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-base-shade3);
+  right: 0.25rem;
+  top: 0.25rem;
+}

@@ -50,7 +50,7 @@ function useLiveCollection<TCallback, TParams>({
       loadMoreFnRef.current = response.onNextPage;
       callback(response);
     },
-    [shouldCall, setItems, setIsLoading, setHasMore, loadMoreFnRef, callback],
+    [shouldCall, loadMoreFnRef],
   );
 
   useEffect(() => {

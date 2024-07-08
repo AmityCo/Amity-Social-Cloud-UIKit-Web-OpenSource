@@ -82,7 +82,7 @@ const usePaginatorCore = <T>({
       }
       return newItems;
     },
-    [currentAdIndex, currentIndex, frequency, itemWithAds, recommendedAds, adSettings?.enabled],
+    [frequency, recommendedAds, adSettings?.enabled, getItemId],
   );
 
   return { combineItemsWithAds };
@@ -127,22 +127,19 @@ export const usePaginator = <TCallback, TParams>({
     getItemId,
   });
 
-  const liveCollectionCallback = useCallback<Amity.LiveCollectionCallback<TCallback>>(
-    (response) => {
-      const newItems = combineItemsWithAds(response.data).flatMap((item) => item);
-
-      callback({ ...response, data: newItems });
-    },
-    [combineItemsWithAds],
-  );
-
-  return useLiveCollection({
+  const { items, ...rest } = useLiveCollection({
     fetcher,
     params,
-    callback: liveCollectionCallback,
     config,
     shouldCall,
   });
+
+  const itemWithAds = useMemo(() => combineItemsWithAds(items).flatMap((item) => item), [items]);
+
+  return {
+    ...rest,
+    items: itemWithAds,
+  };
 };
 
 export const usePaginatorApi = <T>(params: {

@@ -1,7 +1,7 @@
 .postComment {
   width: 100%;
   display: grid;
-  grid-template-columns: min-content 1fr;
+  grid-template-columns: min-content minmax(0, 1fr);
   gap: 0.5rem;
 }
 

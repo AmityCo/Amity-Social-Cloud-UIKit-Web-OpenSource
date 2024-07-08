@@ -13,7 +13,6 @@ import styles from './PostDetailPage.module.css';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PostCommentComposer } from '../../components/PostCommentComposer/PostCommentComposer';
 import { PostCommentList } from '../../components/PostCommentList/PostCommentList';
-import useCommentsCollection from '../../hooks/collections/useCommentsCollection';
 
 interface PostDetailPageProps {
   id: string;
@@ -26,7 +25,7 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
     pageId,
   });
   const { onBack } = useNavigation();
-  const [replyComment, setReplyComment] = useState<Amity.Comment>();
+  const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
 
   const { setDrawerData, removeDrawerData } = useDrawer();
 

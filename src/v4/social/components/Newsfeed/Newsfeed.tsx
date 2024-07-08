@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { StoryTab } from '~/v4/social/components/StoryTab';
-import useGlobalFeed from '~/v4/core/hooks/collections/useGlobalFeed';
+import { useGlobalFeed } from '~/v4/core/hooks/collections/useGlobalFeed';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed';
 import { GlobalFeed } from '~/v4/social/components/GlobalFeed';
 

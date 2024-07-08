@@ -5,13 +5,19 @@ import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import useCommentsCollection from '../../hooks/collections/useCommentsCollection';
 import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
 import useUserSubscription from '~/v4/core/hooks/subscriptions/useUserSubscription';
-import { SubscriptionLevels } from '@amityco/ts-sdk';
+import { CommentRepository, SubscriptionLevels } from '@amityco/ts-sdk';
 import useCommunitySubscription from '~/v4/core/hooks/subscriptions/useCommunitySubscription';
+import { usePaginator } from '~/v4/core/hooks/usePagination';
+import { CommentAd } from '../../internal-components/CommentAd/CommentAd';
 
 type PostCommentListProps = {
   post: Amity.Post;
   pageId?: string;
   onClickReply: (comment: Amity.Comment) => void;
+};
+
+const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
+  return 'adId' in item;
 };
 
 export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommentListProps) => {
@@ -22,14 +28,20 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
     pageId,
   });
 
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const intersectionRef = useRef<HTMLDivElement>(null);
 
-  const { comments, loadMore, hasMore, isLoading } = useCommentsCollection({
-    referenceId: post.postId,
-    referenceType: 'post',
-    limit: 5,
-    includeDeleted: true,
+  const { items, loadMore, hasMore, isLoading } = usePaginator({
+    fetcher: CommentRepository.getComments,
+    params: {
+      referenceId: post.postId,
+      referenceType: 'post',
+      limit: 5,
+      includeDeleted: true,
+    },
+    placement: 'comment' as Amity.AdPlacement,
+    pageSize: 5,
+    getItemId: (item) => item.commentId,
   });
 
   useIntersectionObserver({
@@ -53,8 +65,6 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
     shouldSubscribe: post.targetType === 'community',
   });
 
-  if (!comments) return null;
-
   return (
     <div
       className={styles.postCommentList__container}
@@ -62,12 +72,14 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
       ref={containerRef}
       data-qa-anchor={accessibilityId}
     >
-      {comments.map((comment) => {
-        return (
+      {items.map((item) => {
+        return isAmityAd(item) ? (
+          <CommentAd key={item.adId} ad={item} />
+        ) : (
           <PostComment
-            key={comment.commentId}
-            comment={comment as Amity.Comment}
-            onClickReply={onClickReply}
+            key={item.commentId}
+            comment={item as Amity.Comment}
+            onClickReply={(comment) => onClickReply?.(comment)}
             componentId={componentId}
             postTargetId={post.targetId}
             postTargetType={post.targetType}
@@ -78,7 +90,9 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
       {/* <div className={styles.postCommentList__viewAllComments__button}>
         <Typography.BodyBold>View all comments...</Typography.BodyBold>
       </div> */}
-      <div ref={intersectionRef} className={styles.postCommentList__container_intersection} />
+      {!isLoading && (
+        <div ref={intersectionRef} className={styles.postCommentList__container_intersection} />
+      )}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { FeedRepository } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePaginatorApi } from '../usePagination';
 
-const useGlobalFeed = () => {
+export const useGlobalFeed = () => {
   const [items, setItems] = useState<Array<Amity.Post | Amity.Ad>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [queryToken, setQueryToken] = useState<string | null>(null);
@@ -77,5 +77,3 @@ const useGlobalFeed = () => {
     refetch,
   };
 };
-
-export default useGlobalFeed;
