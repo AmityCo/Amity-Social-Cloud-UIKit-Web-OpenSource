@@ -84,9 +84,9 @@ export const renderer: CustomRenderer = ({
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isCommunityModerator = isModerator(user?.roles);
+  const isModeratorUser = isModerator(user?.roles);
   const haveStoryPermission =
-    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
+    isGlobalAdmin || isModeratorUser || checkStoryPermission(client, community?.communityId);
 
   const vid = useRef<HTMLVideoElement>(null);
 
@@ -318,10 +318,8 @@ export const renderer: CustomRenderer = ({
         isLiked={isLiked}
         onClickComment={openCommentSheet}
         myReactions={myReactions}
-        // only show impression if user is creator, community moderator or has story permission
-        showImpression={
-          isCreator || isCommunityModerator || checkStoryPermission(client, community?.communityId)
-        }
+        // Only story-creator and moderator of the community should be able to see impression count.
+        showImpression={isCreator || checkStoryPermission(client, community?.communityId)}
         isMember={isMember}
       />
     </div>
