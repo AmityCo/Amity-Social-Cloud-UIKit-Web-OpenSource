@@ -3,6 +3,8 @@ import UiKitProvider from '../../src/core/providers/UiKitProvider';
 import { Preview } from '@storybook/react';
 import amityConfig from '../../amity-uikit.config.json';
 
+const users = import.meta.env.STORYBOOK_USERS.split(',');
+
 const GLOBAL_NAME = 'user';
 const global = {
   [GLOBAL_NAME]: {
@@ -13,34 +15,9 @@ const global = {
       icon: 'user',
       items: [
         { value: 'Web-Test,Web-test', title: 'Web-Test' },
-        {
-          value: import.meta.env.STORYBOOK_USER1,
-          title: import.meta.env.STORYBOOK_USER1?.split(',')[1],
-        },
-        {
-          value: import.meta.env.STORYBOOK_USER2,
-          title: import.meta.env.STORYBOOK_USER2?.split(',')[1],
-        },
-        {
-          value: import.meta.env.STORYBOOK_USER3,
-          title: import.meta.env.STORYBOOK_USER3?.split(',')[1],
-        },
-        {
-          value: import.meta.env.STORYBOOK_USER4,
-          title: import.meta.env.STORYBOOK_USER4?.split(',')[1],
-        },
-        {
-          value: import.meta.env.STORYBOOK_USER5,
-          title: import.meta.env.STORYBOOK_USER5?.split(',')[1],
-        },
-        {
-          value: import.meta.env.STORYBOOK_USER6,
-          title: import.meta.env.STORYBOOK_USER6?.split(',')[1],
-        },
-        {
-          value: import.meta.env.STORYBOOK_USER7,
-          title: import.meta.env.STORYBOOK_USER7?.split(',')[1],
-        },
+        ...users.map((user) => {
+          return { value: `${user},${user}`, title: user };
+        }),
       ],
     },
   },
