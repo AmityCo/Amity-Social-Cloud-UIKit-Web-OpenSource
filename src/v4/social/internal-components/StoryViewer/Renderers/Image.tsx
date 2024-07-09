@@ -12,12 +12,12 @@ import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappe
 import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
-import { Button } from '~/v4/core/components/Button';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import useUser from '~/v4/core/hooks/objects/useUser';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
+import { Button } from '~/v4/core/natives/Button';
 
 import styles from './Renderers.module.css';
 import clsx from 'clsx';
@@ -264,11 +264,7 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose, onCli
           <Button
             key={bottomSheetAction.name}
             className={styles.actionButton}
-            onClick={() => {
-              bottomSheetAction.action();
-              closeBottomSheet();
-            }}
-            variant="secondary"
+            onPress={() => bottomSheetAction?.action()}
           >
             {bottomSheetAction?.icon && bottomSheetAction.icon}
             <Typography.BodyBold>

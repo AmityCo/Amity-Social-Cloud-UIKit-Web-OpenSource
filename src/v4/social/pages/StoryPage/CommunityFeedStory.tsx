@@ -223,7 +223,7 @@ export const CommunityFeedStory = ({
       actions: [
         isStoryCreator || isModerator
           ? {
-              name: 'delete',
+              name: 'Delete',
               action: () => deleteStory(story?.storyId as string),
               icon: (
                 <Trash2Icon

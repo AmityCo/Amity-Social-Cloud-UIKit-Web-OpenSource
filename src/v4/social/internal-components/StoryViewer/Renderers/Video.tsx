@@ -7,7 +7,8 @@ import {
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { SpeakerButton } from '~/v4/social/elements';
 
-import { BottomSheet, Button, Typography } from '~/v4/core/components';
+import { BottomSheet, Typography } from '~/v4/core/components';
+import { Button } from '~/v4/core/natives/Button';
 
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
@@ -261,11 +262,7 @@ export const renderer: CustomRenderer = ({
         {actions?.map((bottomSheetAction) => (
           <Button
             className={clsx(rendererStyles.actionButton)}
-            onClick={() => {
-              bottomSheetAction.action();
-              closeBottomSheet();
-            }}
-            variant="secondary"
+            onPress={() => bottomSheetAction?.action()}
           >
             {bottomSheetAction?.icon && bottomSheetAction.icon}
             <Typography.BodyBold>{bottomSheetAction.name}</Typography.BodyBold>

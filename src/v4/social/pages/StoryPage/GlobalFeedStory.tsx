@@ -228,7 +228,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
       actions: [
         isStoryCreator || isModerator
           ? {
-              name: 'delete',
+              name: 'Delete',
               action: () => deleteStory(story?.storyId as string),
               icon: <TrashIcon className={styles.deleteIcon} />,
             }

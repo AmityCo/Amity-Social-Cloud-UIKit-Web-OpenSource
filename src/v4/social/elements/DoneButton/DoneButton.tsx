@@ -13,6 +13,7 @@ export interface DoneButtonProps extends ButtonProps {
 export function DoneButton({
   pageId = '*',
   componentId = '*',
+  formId,
   className,
   ...buttonProps
 }: DoneButtonProps) {
