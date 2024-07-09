@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .socialHomePage__topBar {
@@ -10,7 +10,7 @@
   position: absolute;
   width: 100%;
   height: 7.5rem;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .socialHomePage__topNavigation {

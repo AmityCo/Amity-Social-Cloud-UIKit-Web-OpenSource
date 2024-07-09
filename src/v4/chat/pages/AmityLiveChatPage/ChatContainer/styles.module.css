@@ -1,7 +1,7 @@
 .composeBarContainer {
   min-height: 3.5rem;
   z-index: 99;
-  background-color: inherit;
+  background-color: var(--asc-color-background-default);
 }
 
 .composeBar {
@@ -16,11 +16,12 @@
 .textInputContainer {
   display: flex;
   flex-grow: 1;
+  background: var(--asc-color-background-default);
 
   & > div {
     width: 100%;
     border-radius: var(--asc-border-radius-xxl);
-    border: 1px solid var(--asc-color-base-background);
+    border: 1px solid var(--asc-color-background-default);
     background: var(--asc-color-secondary-shade4);
 
     textarea {
@@ -36,10 +37,7 @@
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   border-radius: var(--asc-border-radius-sm);
   border: var(--asc-border-radius-none);
-  background-color: var(
-    --live-chat-asc-color-secondary-default,
-    var(--asc-color-secondary-default)
-  );
+  background-color: var(--asc-color-secondary-default);
   color: var(--asc-color-base-inverse);
   display: flex;
   align-items: center;

@@ -1,5 +1,5 @@
 .createPostMenu {
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
   padding: 0.75rem 1rem;
   border-radius: 0.75rem;
   position: absolute;

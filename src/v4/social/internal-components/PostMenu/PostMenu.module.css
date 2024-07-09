@@ -43,11 +43,11 @@
 }
 
 .postMenu__deletePost__text {
-  color: var(--asc-color-alert);
+  color: var(--asc-color-alert-default);
 }
 
 .postMenu__deletePost__icon {
-  fill: var(--asc-color-alert);
+  fill: var(--asc-color-alert-default);
   width: 1.5rem;
   height: 1.25rem;
 }

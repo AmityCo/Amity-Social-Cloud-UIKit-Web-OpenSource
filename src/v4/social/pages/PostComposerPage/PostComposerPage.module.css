@@ -1,7 +1,7 @@
 .postComposerPage {
   position: relative;
   display: block;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
   height: 100%;
 }
 
@@ -27,13 +27,13 @@
   border-radius: 0.5rem;
   box-shadow: var(--asc-box-shadow-03);
   background-color: var(--asc-color-secondary-default);
-  color: var(--asc-color-base-background);
+  color: var(--asc-color-background-default);
 }
 
 .selectPostTargetPag_infoIcon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-base-background);
+  fill: var(--asc-color-background-default);
 }
 
 .postComposerPage__notiWrap {

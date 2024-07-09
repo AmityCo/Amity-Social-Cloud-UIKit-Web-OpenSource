@@ -1,7 +1,7 @@
 .detailedMediaAttachment {
   display: block;
   width: 100%;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
   border-top-left-radius: 1.25rem;
   border-top-right-radius: 1.25rem;
   box-shadow: var(--asc-box-shadow-04);

@@ -1,5 +1,5 @@
 .cancelButton {
   cursor: pointer;
   color: var(--asc-color-primary-default);
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }

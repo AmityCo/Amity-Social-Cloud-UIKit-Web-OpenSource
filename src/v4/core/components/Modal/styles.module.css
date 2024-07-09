@@ -41,7 +41,7 @@
   max-width: 32.5rem;
   min-width: 20rem;
   padding: 1.5rem;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .modalWindow:focus {

@@ -7,7 +7,7 @@ input {
 .tabsRoot {
   display: flex;
   flex-direction: column;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .tabsList {

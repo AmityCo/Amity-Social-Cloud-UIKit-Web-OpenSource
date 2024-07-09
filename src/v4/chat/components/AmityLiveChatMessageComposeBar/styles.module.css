@@ -25,7 +25,7 @@
 .composeBarContainer {
   min-height: 3.5rem;
   z-index: 99;
-  background-color: inherit;
+  background-color: var(--asc-color-background-default);
 }
 
 .composeBar {

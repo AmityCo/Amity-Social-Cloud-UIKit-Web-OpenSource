@@ -3,7 +3,7 @@
 }
 
 .background {
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .footer {
@@ -19,7 +19,7 @@
   justify-content: center;
   align-items: center;
   border-radius: var(--asc-border-radius-sm);
-  background: var(--asc-color-alert);
+  background: var(--asc-color-alert-default);
   border: none;
   cursor: pointer;
 }

@@ -35,7 +35,7 @@
 
 .commentComposeBarContainer {
   width: 100%;
-  background: var(--asc-color-base-background);
+  background: var(--asc-color-background-default);
   display: flex;
   gap: var(--asc-spacing-s1);
   align-items: center;

@@ -1,5 +1,34 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AmityReactionType } from './CustomReactionProvider';
+import { useTheme } from './ThemeProvider';
+
+export const getCustomizationKeys = ({
+  page,
+  component,
+  element,
+}: {
+  page: string;
+  component: string;
+  element: string;
+}) => {
+  if (element !== '*') {
+    return [
+      `${page}/${component}/${element}`,
+      `*/${component}/${element}`,
+      `${page}/*/${element}`,
+      `*/*/${element}`,
+      `${page}/${component}/*`,
+      `*/${component}/*`,
+      `${page}/*/*`,
+    ];
+  } else if (component !== '*') {
+    return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`];
+  } else if (page !== '*') {
+    return [`${page}/*/*`];
+  }
+
+  return [];
+};
 
 export type GetConfigReturnValue = IconConfiguration &
   TextConfiguration &
@@ -15,38 +44,34 @@ interface CustomizationContextValue {
   ) => IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
 }
 
+type ThemeValue = {
+  primary_color: string;
+  secondary_color: string;
+  secondary_shade1_color: string;
+  secondary_shade2_color: string;
+  secondary_shade3_color: string;
+  secondary_shade4_color: string;
+  base_color: string;
+  base_shade1_color: string;
+  base_shade2_color: string;
+  base_shade3_color: string;
+  base_shade4_color: string;
+  base_shade5_color: string;
+  alert_color: string;
+  background_color: string;
+  base_inverse_color: string;
+};
+
 export type Theme = {
-  light: {
-    primary_color: string;
-    secondary_color: string;
-    base_color: string;
-    base_shade1_color: string;
-    base_shade2_color: string;
-    base_shade3_color: string;
-    base_shade4_color: string;
-    alert_color: string;
-    background_color: string;
-    base_inverse_color: string;
-  };
-  dark: {
-    primary_color: string;
-    secondary_color: string;
-    base_color: string;
-    base_shade1_color: string;
-    base_shade2_color: string;
-    base_shade3_color: string;
-    base_shade4_color: string;
-    alert_color: string;
-    background_color: string;
-    base_inverse_color: string;
-  };
+  light: ThemeValue;
+  dark: ThemeValue;
 };
 
 type ThemeConfiguration = {
   preferred_theme?: 'light' | 'dark' | 'default';
   theme?: {
-    light?: Partial<Pick<Theme['light'], 'primary_color' | 'secondary_color'>>;
-    dark?: Partial<Pick<Theme['dark'], 'primary_color' | 'secondary_color'>>;
+    light?: Partial<Theme['light']>;
+    dark?: Partial<Theme['dark']>;
   };
 };
 
@@ -110,25 +135,35 @@ export const defaultConfig: DefaultConfig = {
   preferred_theme: 'default',
   theme: {
     light: {
-      primary_color: '#1054DE',
-      secondary_color: '#292B32',
+      primary_color: '#36486c',
+      secondary_color: '#292b32',
+      secondary_shade1_color: '#636878',
+      secondary_shade2_color: '#898e9e',
+      secondary_shade3_color: '#a5a9b5',
+      secondary_shade4_color: '#ebecef',
       base_color: '#292b32',
       base_shade1_color: '#636878',
       base_shade2_color: '#898e9e',
       base_shade3_color: '#a5a9b5',
       base_shade4_color: '#ebecef',
+      base_shade5_color: '#F9F9FA',
       alert_color: '#FA4D30',
       background_color: '#FFFFFF',
       base_inverse_color: '#000000',
     },
     dark: {
       primary_color: '#1054DE',
-      secondary_color: '#292B32',
+      secondary_color: '#ebecef',
+      secondary_shade1_color: '#a5a9b5',
+      secondary_shade2_color: '#898e9e',
+      secondary_shade3_color: '#40434e',
+      secondary_shade4_color: '#292b32',
       base_color: '#ebecef',
       base_shade1_color: '#a5a9b5',
       base_shade2_color: '#6e7487',
       base_shade3_color: '#40434e',
       base_shade4_color: '#292b32',
+      base_shade5_color: '#f9f9fa',
       alert_color: '#FA4D30',
       background_color: '#191919',
       base_inverse_color: '#FFFFFF',
@@ -455,26 +490,7 @@ export const defaultConfig: DefaultConfig = {
 export const getDefaultConfig: CustomizationContextValue['getConfig'] = (path: string) => {
   const [page, component, element] = path.split('/');
 
-  const customizationKeys = (() => {
-    if (element !== '*') {
-      return [
-        `${page}/${component}/${element}`,
-        `${page}/*/${element}`,
-        `${page}/${component}/*`,
-        `${page}/*/*`,
-        `*/${component}/${element}`,
-        `*/*/${element}`,
-        `*/${component}/*`,
-        `*/*/*`,
-      ];
-    } else if (component !== '*') {
-      return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
-    } else if (page !== '*') {
-      return [`${page}/*/*`, `*/*/*`];
-    }
-
-    return [];
-  })();
+  const customizationKeys = getCustomizationKeys({ page, component, element });
 
   return new Proxy<
     IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
@@ -498,6 +514,8 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
 }) => {
   const [config, setConfig] = useState<Config | null>(null);
 
+  const currentTheme = useTheme();
+
   useEffect(() => {
     if (validateConfig(initialConfig)) {
       parseConfig(initialConfig);
@@ -517,26 +535,7 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   const isExcluded = (path: string) => {
     const [page, component, element] = path.split('/');
 
-    const customizationKeys = (() => {
-      if (element !== '*') {
-        return [
-          `${page}/${component}/${element}`,
-          `${page}/*/${element}`,
-          `${page}/${component}/*`,
-          `${page}/*/*`,
-          `*/${component}/${element}`,
-          `*/*/${element}`,
-          `*/${component}/*`,
-          `*/*/*`,
-        ];
-      } else if (component !== '*') {
-        return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
-      } else if (page !== '*') {
-        return [`${page}/*/*`, `*/*/*`];
-      }
-
-      return [];
-    })();
+    const customizationKeys = getCustomizationKeys({ page, component, element });
 
     return (
       config?.excludes?.some((excludedPath) => {
@@ -548,26 +547,33 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   const getConfig: CustomizationContextValue['getConfig'] = (path: string) => {
     const [page, component, element] = path.split('/');
 
-    const customizationKeys = (() => {
-      if (element !== '*') {
-        return [
-          `${page}/${component}/${element}`,
-          `${page}/*/${element}`,
-          `${page}/${component}/*`,
-          `${page}/*/*`,
-          `*/${component}/${element}`,
-          `*/*/${element}`,
-          `*/${component}/*`,
-          `*/*/*`,
-        ];
-      } else if (component !== '*') {
-        return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
-      } else if (page !== '*') {
-        return [`${page}/*/*`, `*/*/*`];
-      }
+    const customizationKeys = getCustomizationKeys({ page, component, element });
 
-      return [];
-    })();
+    const buildThemeProxyHandler = (
+      themeName: 'light' | 'dark',
+    ): ProxyHandler<
+      IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
+    > => ({
+      get(_, prop: keyof ThemeValue) {
+        for (const key of customizationKeys) {
+          if (config?.customizations?.[key]?.theme?.[themeName]?.[prop]) {
+            return config.customizations[key].theme?.[themeName]?.[prop];
+          }
+        }
+
+        if (config?.theme?.[themeName]?.[prop]) {
+          return config.theme[themeName]?.[prop];
+        }
+
+        for (const key of customizationKeys) {
+          if (defaultConfig.customizations?.[key]?.theme?.[themeName]?.[prop]) {
+            return defaultConfig.customizations[key].theme?.[themeName]?.[prop];
+          }
+        }
+
+        return defaultConfig.theme[themeName][prop];
+      },
+    });
 
     return new Proxy<
       IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
@@ -575,27 +581,27 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
       {},
       {
         get(target, prop: string) {
+          if (prop === 'theme') {
+            return {
+              light: new Proxy({}, buildThemeProxyHandler('light')),
+              dark: new Proxy({}, buildThemeProxyHandler('dark')),
+            };
+          }
+
+          if (prop === 'preferred_theme') {
+            return config?.preferred_theme ?? defaultConfig.preferred_theme;
+          }
+
           for (const key of customizationKeys) {
             if (config?.customizations?.[key]?.[prop]) {
               return config.customizations[key][prop];
             }
           }
 
-          if (prop === 'theme' && !!config?.theme) {
-            return config.theme;
-          }
-
           for (const key of customizationKeys) {
             if (defaultConfig?.customizations?.[key]?.[prop]) {
               return defaultConfig.customizations[key][prop];
             }
-          }
-
-          if (prop === 'theme') {
-            return defaultConfig.theme;
-          }
-          if (prop === 'preferred_theme') {
-            return defaultConfig.preferred_theme;
           }
         },
       },

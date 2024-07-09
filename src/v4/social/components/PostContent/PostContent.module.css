@@ -1,5 +1,5 @@
 .postContent {
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .postContent__bar {

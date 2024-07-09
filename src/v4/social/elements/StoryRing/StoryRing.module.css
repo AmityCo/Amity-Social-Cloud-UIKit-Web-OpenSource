@@ -5,7 +5,7 @@
 }
 
 .errorRing {
-  stroke: var(--asc-color-alert);
+  stroke: var(--asc-color-alert-default);
 }
 
 .uploadingProgressRing {

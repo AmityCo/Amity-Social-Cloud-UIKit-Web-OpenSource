@@ -2,5 +2,5 @@
   all: unset;
   cursor: pointer;
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }

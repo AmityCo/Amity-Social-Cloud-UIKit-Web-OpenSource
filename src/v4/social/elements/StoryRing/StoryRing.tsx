@@ -198,7 +198,9 @@ export const StoryRing = ({
           cx={size / 2}
           cy={size / 2}
           r={size / 2 - 1}
-          stroke={getComputedStyle(document.documentElement).getPropertyValue('--asc-color-alert')}
+          stroke={getComputedStyle(document.documentElement).getPropertyValue(
+            '--asc-color-alert-default',
+          )}
           strokeWidth="2"
         ></circle>
       </svg>

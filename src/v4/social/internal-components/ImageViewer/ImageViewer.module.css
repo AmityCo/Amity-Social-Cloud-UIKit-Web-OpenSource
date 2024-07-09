@@ -9,7 +9,7 @@
 }
 
 .modalContent {
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
   position: relative;
   display: flex;
   justify-content: center;
