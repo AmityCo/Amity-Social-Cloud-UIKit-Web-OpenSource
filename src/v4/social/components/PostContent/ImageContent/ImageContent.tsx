@@ -54,7 +54,11 @@ export const ImageContent = ({
       data-images-amount={Math.min(post.children.length, 4)}
     >
       {imagePosts.map((post, index) => (
-        <div className={styles.imageContent__imgContainer} onClick={() => onImageClick(index)}>
+        <div
+          key={post.postId}
+          className={styles.imageContent__imgContainer}
+          onClick={() => onImageClick(index)}
+        >
           <Image fileId={post.data.fileId} />
           {imageLeftCount > 0 && index === posts.length - 1 && (
             <Typography.Heading className={styles.imageContent__imgCover}>

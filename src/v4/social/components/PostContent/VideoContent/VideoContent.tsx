@@ -14,7 +14,7 @@ const PlayButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <g id="Icon " clip-path="url(#clip0_1936_14348)">
+    <g id="Icon " clipPath="url(#clip0_1936_14348)">
       <path id="Vector" d="M8.95117 5V19L19.9512 12L8.95117 5Z" />
     </g>
     <defs>

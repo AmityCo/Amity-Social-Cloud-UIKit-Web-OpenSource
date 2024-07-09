@@ -10,7 +10,7 @@ const Fire = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <circle cx="16" cy="16.5" r="16" fill="url(#paint0_linear_1709_7888)" />
-    <g clip-path="url(#clip0_1709_7888)">
+    <g clipPath="url(#clip0_1709_7888)">
       <path
         d="M21.8752 10.2903C21.3417 9.70788 20.5123 8.92173 20.1595 10.6968C20.0395 11.3004 19.7591 11.7656 19.5189 12.1402C19.2599 10.8296 18.4808 9.47308 17.7467 8.55843C17.472 8.21623 16.4973 6.85588 16.3101 4.58008C16.2821 4.24043 15.8787 4.08093 15.6263 4.31003C13.2147 6.49923 11.891 9.51013 11.8419 12.8998C11.8419 12.8998 10.8377 12.0533 10.2921 10.4786C10.1452 10.0546 9.57671 9.97368 9.33006 10.3486C9.28271 10.4206 9.23881 10.4927 9.19921 10.5627C7.33856 13.8527 6.44351 17.848 7.27096 21.565C8.65446 27.7898 17.8062 29.5301 22.6511 25.6177C27.3914 21.7899 25.8846 14.6654 21.8752 10.2903Z"
         fill="#ED694A"
@@ -41,8 +41,8 @@ const Fire = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
         y2="29.3"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#FFF09F" />
-        <stop offset="1" stop-color="#FCCF5A" />
+        <stop stopColor="#FFF09F" />
+        <stop offset="1" stopColor="#FCCF5A" />
       </linearGradient>
       <clipPath id="clip0_1709_7888">
         <rect width="25.6" height="25.6" fill="white" transform="translate(3.2002 2.09998)" />

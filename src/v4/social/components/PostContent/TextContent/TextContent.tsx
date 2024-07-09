@@ -46,24 +46,22 @@ export const TextContent = ({ text = '', mentionees }: TextContentProps) => {
   return (
     <>
       <Typography.Body className={styles.postContent}>
-        <>
-          {chunks.map((chunk) => {
-            const key = `${text}-${chunk.start}-${chunk.end}`;
-            const sub = text.substring(chunk.start, chunk.end);
-            if (chunk.highlight) {
-              const mentionee = mentionees?.find((m) => m.index === chunk.start);
-              if (mentionee) {
-                return (
-                  <MentionHighlightTag key={key} mentionee={mentionee}>
-                    {sub}
-                  </MentionHighlightTag>
-                );
-              }
-              return <span key={key}>{sub}</span>;
+        {chunks.map((chunk) => {
+          const key = `${text}-${chunk.start}-${chunk.end}`;
+          const sub = text.substring(chunk.start, chunk.end);
+          if (chunk.highlight) {
+            const mentionee = mentionees?.find((m) => m.index === chunk.start);
+            if (mentionee) {
+              return (
+                <MentionHighlightTag key={key} mentionee={mentionee}>
+                  {sub}
+                </MentionHighlightTag>
+              );
             }
-            return <Linkify key={key}>{sub}</Linkify>;
-          })}
-        </>
+            return <span key={key}>{sub}</span>;
+          }
+          return <Linkify key={key}>{sub}</Linkify>;
+        })}
         {isShowReadMore ? (
           <span className={styles.postContent__readmore} onClick={() => setIsReadMoreClick(true)}>
             ...Read more
