@@ -61,8 +61,8 @@ export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
                 <img className={styles.commentAd__adCard__image} src={adImageUrl} />
               </div>
               <div className={styles.commentAd__adCard__detail}>
-                <div>
-                  <Typography.Caption className={styles.commentAd__adCard__caption}>
+                <div className={styles.commentAd__adCard__textContainer}>
+                  <Typography.Caption className={styles.commentAd__adCard__headline}>
                     {ad.headline}
                   </Typography.Caption>
                   <Typography.BodyBold className={styles.commentAd__adCard__description}>

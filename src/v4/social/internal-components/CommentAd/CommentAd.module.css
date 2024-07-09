@@ -49,6 +49,7 @@
   border: 1px solid var(--asc-color-base-shade4);
   background-color: var(--asc-color-base-background);
   height: 100%;
+  width: 100%;
   cursor: pointer;
 }
 
@@ -78,12 +79,24 @@
   overflow: hidden;
 }
 
-.commentAd__adCard__caption {
+.commentAd__adCard__textContainer {
+  width: 100%;
+}
+
+.commentAd__adCard__headline {
   color: var(--asc-color-base-shade1);
+  width: 100%;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .commentAd__adCard__description {
   color: var(--asc-color-base-default);
+  width: 100%;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .commentAd__adCard__button {
@@ -92,6 +105,7 @@
   padding: 0.375rem 0.75rem;
   border-radius: var(--asc-border-radius-md);
   box-sizing: border-box;
+  max-width: 100%;
 }
 
 .commentAd__adCard__button__text {

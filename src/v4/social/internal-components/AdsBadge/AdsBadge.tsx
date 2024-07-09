@@ -7,7 +7,7 @@ export const AdsBadge = () => {
     <div className={styles.badge}>
       <div className={styles.badge__child}>
         <Star className={styles.badge__icon} />
-        <div className={styles.badge__text}>Premium Sponser</div>
+        <div className={styles.badge__text}>Sponsored</div>
       </div>
     </div>
   );
