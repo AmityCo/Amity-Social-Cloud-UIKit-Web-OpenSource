@@ -51,11 +51,20 @@ const usePaginatorCore = <T>({
           })
           .filter(isNonNullable);
 
+        const startItem = prevItemWithAds[0];
         const latestItem = prevItemWithAds[prevItemWithAds.length - 1];
 
         const startIndex = latestItem
           ? newItems.findIndex((newItem) => getItemId(newItem) === getItemId(latestItem[0]))
           : 0;
+
+        const topIndex = startItem
+          ? newItems.findIndex((newItem) => getItemId(newItem) === getItemId(startItem[0]))
+          : 0;
+
+        const newestItems: Array<[T]> = (newItems || []).slice(0, topIndex).map((item) => [item]);
+
+        const prevItems = [...newestItems, ...prevItemWithAds];
 
         let runningAdIndex = currentAdIndex;
         let runningIndex = currentIndex;
@@ -75,8 +84,8 @@ const usePaginatorCore = <T>({
 
         setCurrentAdIndex(runningAdIndex);
         setCurrentIndex(runningIndex);
-        setItemWithAds([...prevItemWithAds, ...suffixItems]);
-        return [...prevItemWithAds, ...suffixItems].flatMap((item) => item);
+        setItemWithAds([...prevItems, ...suffixItems]);
+        return [...prevItems, ...suffixItems].flatMap((item) => item);
       } else if (frequency?.type === 'time-window') {
         return [...newItems.slice(0, 1), recommendedAds[0], ...newItems.slice(1)];
       }
