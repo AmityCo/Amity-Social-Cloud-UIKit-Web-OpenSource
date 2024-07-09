@@ -60,7 +60,7 @@ const usePaginatorCore = <T>({
         let runningAdIndex = currentAdIndex;
         let runningIndex = currentIndex;
         const suffixItems: Array<[T] | [T, Amity.Ad]> = newItems
-          .slice(startIndex + 1)
+          .slice(startIndex)
           .map((newItem) => {
             runningIndex = runningIndex + 1;
             const shouldPlaceAd = runningIndex % frequency.value === 0;
