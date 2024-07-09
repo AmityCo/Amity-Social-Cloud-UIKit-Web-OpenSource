@@ -4,13 +4,18 @@ import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './DoneButton.module.css';
 
-export interface DoneButtonProps {
+export interface DoneButtonProps extends ButtonProps {
   pageId?: string;
   componentId?: string;
-  onPress?: ButtonProps['onPress'];
+  formId?: string;
 }
 
-export function DoneButton({ pageId = '*', componentId = '*', onPress }: DoneButtonProps) {
+export function DoneButton({
+  pageId = '*',
+  componentId = '*',
+  className,
+  ...buttonProps
+}: DoneButtonProps) {
   const elementId = 'done_button';
   const { accessibilityId, config, isExcluded } = useAmityElement({
     pageId,
@@ -21,7 +26,11 @@ export function DoneButton({ pageId = '*', componentId = '*', onPress }: DoneBut
   if (isExcluded) return null;
 
   return (
-    <Button className={styles.doneButton} data-qa-anchor={accessibilityId} onPress={onPress}>
+    <Button
+      className={`${styles.doneButton} ${className || ''}`}
+      data-qa-anchor={accessibilityId}
+      {...buttonProps}
+    >
       <Typography.Body className={styles.doneButton_text}>
         {config.done_button_text}
       </Typography.Body>
