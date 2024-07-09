@@ -65,11 +65,11 @@
   cursor: pointer;
 }
 
-.footer__content__title {
+.footer__content__description {
   color: var(--asc-color-base-shade1);
 }
 
-.footer__content__description {
+.footer__content__headline {
   color: var(--asc-color-base-default);
 }
 

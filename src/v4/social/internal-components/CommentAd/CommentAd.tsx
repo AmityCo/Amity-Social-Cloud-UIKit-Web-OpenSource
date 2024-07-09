@@ -45,7 +45,7 @@ export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
         <div className={styles.commentAd__details}>
           <div className={styles.commentAd__content}>
             <Typography.BodyBold className={styles.commentAd__content__username}>
-              {ad.advertiser?.companyName}
+              {ad.advertiser?.name}
             </Typography.BodyBold>
 
             <AdsBadge />
@@ -62,11 +62,11 @@ export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
               </div>
               <div className={styles.commentAd__adCard__detail}>
                 <div className={styles.commentAd__adCard__textContainer}>
-                  <Typography.Caption className={styles.commentAd__adCard__headline}>
-                    {ad.headline}
-                  </Typography.Caption>
-                  <Typography.BodyBold className={styles.commentAd__adCard__description}>
+                  <Typography.Caption className={styles.commentAd__adCard__description}>
                     {ad.description}
+                  </Typography.Caption>
+                  <Typography.BodyBold className={styles.commentAd__adCard__headline}>
+                    {ad.headline}
                   </Typography.BodyBold>
                 </div>
                 {ad.callToActionUrl ? (

@@ -83,7 +83,7 @@
   width: 100%;
 }
 
-.commentAd__adCard__headline {
+.commentAd__adCard__description {
   color: var(--asc-color-base-shade1);
   width: 100%;
   word-wrap: break-word;
@@ -91,7 +91,7 @@
   text-overflow: ellipsis;
 }
 
-.commentAd__adCard__description {
+.commentAd__adCard__headline {
   color: var(--asc-color-base-default);
   width: 100%;
   word-wrap: break-word;

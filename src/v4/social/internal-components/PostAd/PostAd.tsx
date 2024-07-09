@@ -37,7 +37,7 @@ export const PostAd = ({ pageId = '*', ad }: PostAdProps) => {
           </div>
           <div className={styles.header__detail}>
             <Typography.BodyBold className={styles.header__title}>
-              {ad.advertiser?.companyName}
+              {ad.advertiser?.name}
             </Typography.BodyBold>
             <AdsBadge />
           </div>
@@ -59,9 +59,11 @@ export const PostAd = ({ pageId = '*', ad }: PostAdProps) => {
         onClick={() => window?.open(ad?.callToActionUrl, '_blank')}
       >
         <div>
-          <Typography.Body className={styles.footer__content__title}>{ad.headline}</Typography.Body>
-          <Typography.BodyBold className={styles.footer__content__description}>
+          <Typography.Body className={styles.footer__content__description}>
             {ad.description}
+          </Typography.Body>
+          <Typography.BodyBold className={styles.footer__content__headline}>
+            {ad.headline}
           </Typography.BodyBold>
         </div>
         {ad.callToActionUrl ? (
