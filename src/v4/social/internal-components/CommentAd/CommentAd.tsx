@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './CommentAd.module.css';
 import { Avatar, Typography } from '~/v4/core/components';
 import { AdsBadge } from '../AdsBadge/AdsBadge';
@@ -7,6 +7,7 @@ import InfoCircle from '~/v4/icons/InfoCircle';
 import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
 import { Button } from '~/v4/core/natives/Button';
 import useImage from '~/v4/core/hooks/useImage';
+import { AdInformation } from '../AdInformation.tsx/AdInformation';
 
 interface CommentAdProps {
   pageId?: string;
@@ -20,6 +21,8 @@ export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
     componentId,
   });
 
+  const [isAdvertisementInfoOpen, setIsAdvertisementInfoOpen] = useState(false);
+
   const avatarFile = useImage({ fileId: ad.advertiser?.avatar?.fileId });
   const avatarUrl = avatarFile || ad.advertiser?.avatar?.fileUrl || '';
 
@@ -32,7 +35,9 @@ export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
 
   return (
     <div className={styles.commentAd} style={themeStyles}>
-      <InfoCircle className={styles.infoIcon} />
+      <Button className={styles.infoIcon__button} onPress={() => setIsAdvertisementInfoOpen(true)}>
+        <InfoCircle className={styles.infoIcon} />
+      </Button>
       <div className={styles.commentAd__container}>
         <div className={styles.commentAd__avatar}>
           <Avatar avatarUrl={avatarUrl} defaultImage={<Broadcast />} />
@@ -79,6 +84,11 @@ export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
           </div>
         </div>
       </div>
+      <AdInformation
+        ad={ad}
+        isOpen={isAdvertisementInfoOpen}
+        onOpenChange={(open) => setIsAdvertisementInfoOpen(open)}
+      />
     </div>
   );
 };

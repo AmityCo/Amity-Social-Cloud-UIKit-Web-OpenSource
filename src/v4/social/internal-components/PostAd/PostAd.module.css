@@ -84,11 +84,15 @@
   background-color: var(--asc-color-primary-50);
 }
 
-.infoIcon {
+.infoIcon__button {
   position: absolute;
   width: 1rem;
   height: 1rem;
-  fill: var(--asc-color-base-shade3);
   right: 0.25rem;
   top: 0.25rem;
+  cursor: pointer;
+}
+
+.infoIcon {
+  fill: var(--asc-color-base-shade3);
 }
