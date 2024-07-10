@@ -24,7 +24,24 @@ import clsx from 'clsx';
 
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 
-export const renderer: CustomRenderer = ({ story, action, config, onClose, onClickCommunity }) => {
+export const renderer: CustomRenderer = ({
+  story: {
+    actions,
+    fileInputRef,
+    addStoryButton,
+    currentIndex,
+    storiesCount,
+    increaseIndex,
+    pageId,
+    dragEventTarget,
+    story,
+    url,
+  },
+  action,
+  config,
+  onClose,
+  onClickCommunity,
+}) => {
   const { formatMessage } = useIntl();
   const [loaded, setLoaded] = useState(false);
   const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
@@ -36,7 +53,7 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose, onCli
   const imageRef = useRef<HTMLImageElement>(null);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
-  const reactionsCount = story.reactionsCount || 0;
+  const reactionsCount = story?.reactionsCount || 0;
 
   const {
     storyId,
@@ -46,17 +63,10 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose, onCli
     createdAt,
     creator,
     community,
-    actions,
-    addStoryButton,
-    fileInputRef,
     myReactions,
-    currentIndex,
-    storiesCount,
-    increaseIndex,
-    pageId,
-    dragEventTarget,
     data,
-  } = story;
+    items,
+  } = story as Amity.Story;
 
   const { members } = useCommunityMembersCollection({
     queryParams: {
@@ -244,7 +254,7 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose, onCli
             [styles.imageFill]: data.imageDisplayMode === 'fill',
           })}
           data-qa-anchor="image_view"
-          src={story.url}
+          src={url}
           onLoad={imageLoaded}
           alt="Story Image"
           crossOrigin="anonymous"
@@ -291,22 +301,21 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose, onCli
         />
       </BottomSheet>
 
-      {story.items?.[0]?.data?.url && (
+      {items?.[0]?.data?.url && (
         <div className={styles.hyperLinkContainer}>
           <HyperLink
             href={
-              story.items[0].data.url.startsWith('http')
-                ? story.items[0].data.url
-                : `https://${story.items[0].data.url}`
+              items[0].data.url.startsWith('http')
+                ? items[0].data.url
+                : `https://${items[0].data.url}`
             }
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => story.analytics.markLinkAsClicked()}
+            onClick={() => story?.analytics.markLinkAsClicked()}
           >
             <Truncate lines={1}>
               <span>
-                {story.items[0]?.data?.customText ||
-                  story.items[0].data.url.replace(/^https?:\/\//, '')}
+                {items[0]?.data?.customText || items[0].data.url.replace(/^https?:\/\//, '')}
               </span>
             </Truncate>
           </HyperLink>
@@ -333,7 +342,7 @@ export const renderer: CustomRenderer = ({ story, action, config, onClose, onCli
 
 export const tester: Tester = (story) => {
   return {
-    condition: !story.content && (!story.type || story.type === 'image'),
+    condition: !!story.story?.storyId && (!story.type || story.type === 'image'),
     priority: 2,
   };
 };

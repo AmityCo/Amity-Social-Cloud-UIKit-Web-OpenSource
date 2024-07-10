@@ -1,8 +1,8 @@
 .drawer__content {
-  padding: 1rem;
+  padding-top: 1rem;
   background-color: var(--asc-color-background-default);
-  max-height: 50%;
-  position: fixed;
+  max-height: 70%;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
@@ -10,7 +10,7 @@
   flex-direction: column;
   border-top-left-radius: 1.25rem;
   border-top-right-radius: 1.25rem;
-  margin-top: 6rem;
+  z-index: 100000;
 }
 
 .drawer__content:focus {
@@ -21,6 +21,8 @@
   background-color: var(--asc-color-background-default);
   border-top-left-radius: 1.25rem;
   border-top-right-radius: 1.25rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   flex: 1;
 }
 
@@ -37,7 +39,8 @@
 .drawer__overlay {
   background-color: color(from var(--asc-color-black) srgb r g b / 70%);
   inset: 0;
-  position: fixed;
+  position: absolute;
+  z-index: 100000;
 }
 
 .drawer__title {
@@ -77,4 +80,6 @@
 
 .drawer__content__emptySpace {
   min-height: 15rem;
+  width: 100%;
+  background-color: var(--asc-color-background-default);
 }

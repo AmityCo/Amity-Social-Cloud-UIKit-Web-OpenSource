@@ -24,7 +24,17 @@ import rendererStyles from './Renderers.module.css';
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 
 export const renderer: CustomRenderer = ({
-  story,
+  story: {
+    actions,
+    addStoryButton,
+    fileInputRef,
+    currentIndex,
+    storiesCount,
+    increaseIndex,
+    pageId,
+    dragEventTarget,
+    story,
+  },
   action,
   config,
   messageHandler,
@@ -51,16 +61,10 @@ export const renderer: CustomRenderer = ({
     createdAt,
     creator,
     community,
-    actions,
-    addStoryButton,
-    fileInputRef,
     myReactions,
-    currentIndex,
-    storiesCount,
-    increaseIndex,
-    pageId,
-    dragEventTarget,
-  } = story;
+    data,
+    items,
+  } = story as Amity.Story;
 
   const { members } = useCommunityMembersCollection({
     queryParams: {
@@ -284,22 +288,21 @@ export const renderer: CustomRenderer = ({
           shouldAllowInteraction={isMember}
         />
       </BottomSheet>
-      {story.items?.[0]?.data?.url && (
+      {items?.[0]?.data?.url && (
         <div className={clsx(rendererStyles.hyperLinkContainer)}>
           <HyperLink
             href={
-              story.items[0].data.url.startsWith('http')
-                ? story.items[0].data.url
-                : `https://${story.items[0].data.url}`
+              items[0].data.url.startsWith('http')
+                ? items[0].data.url
+                : `https://${items[0].data.url}`
             }
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => story.analytics.markLinkAsClicked()}
+            onClick={() => story?.analytics.markLinkAsClicked()}
           >
             <Truncate lines={1}>
               <span>
-                {story.items[0]?.data?.customText ||
-                  story.items[0].data.url.replace(/^https?:\/\//, '')}
+                {items[0]?.data?.customText || items[0].data.url.replace(/^https?:\/\//, '')}
               </span>
             </Truncate>
           </HyperLink>
@@ -325,7 +328,7 @@ export const renderer: CustomRenderer = ({
 
 export const tester: Tester = (story) => {
   return {
-    condition: story.type === 'video',
+    condition: !!story.story?.storyId && story.type === 'video',
     priority: 2,
   };
 };

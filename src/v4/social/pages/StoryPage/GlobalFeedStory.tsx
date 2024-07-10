@@ -27,6 +27,9 @@ import styles from './StoryPage.module.css';
 
 const DURATION = 5000;
 
+const isStory = (story: Amity.Story | Amity.Ad): story is Amity.Story =>
+  !!(story as Amity.Story)?.storyId;
+
 interface GlobalFeedStoryProps {
   pageId?: string;
   targetId: string;
@@ -95,8 +98,14 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     [renderers, onClose, onSwipeDown, onClickCommunity, targetId],
   );
 
-  const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const isModerator = checkStoryPermission(client, stories[currentIndex]?.targetId);
+  const currentStory = stories[currentIndex];
+
+  const isStoryCreator = isStory(currentStory)
+    ? currentStory?.creator?.userId === currentUserId
+    : false;
+  const isModerator = isStory(currentStory)
+    ? checkStoryPermission(client, currentStory?.targetId)
+    : false;
 
   const previousStory = () => {
     if (currentIndex === 0) {
@@ -218,31 +227,42 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   };
 
   const formattedStories = stories?.map((story) => {
-    const isImage = story?.dataType === 'image';
-    const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
+    if (isStory(story)) {
+      const isImage = story?.dataType === 'image';
+      const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
 
-    return {
-      ...story,
-      url,
-      type: isImage ? 'image' : 'video',
-      actions: [
-        isStoryCreator || isModerator
-          ? {
-              name: 'Delete',
-              action: () => deleteStory(story?.storyId as string),
-              icon: <TrashIcon className={styles.deleteIcon} />,
-            }
-          : null,
-      ].filter(isNonNullable),
-      onCreateStory,
-      discardStory,
-      addStoryButton,
-      fileInputRef,
-      currentIndex,
-      storiesCount: stories?.length,
-      increaseIndex,
-      pageId,
-    };
+      return {
+        story,
+        url,
+        type: isImage ? 'image' : 'video',
+        actions: [
+          isStoryCreator || isModerator
+            ? {
+                name: 'Delete',
+                action: () => deleteStory(story?.storyId as string),
+                icon: <TrashIcon className={styles.deleteIcon} />,
+              }
+            : null,
+        ].filter(isNonNullable),
+        onCreateStory,
+        discardStory,
+        addStoryButton,
+        fileInputRef,
+        currentIndex,
+        storiesCount: stories?.length,
+        increaseIndex,
+        pageId,
+      };
+    } else {
+      return {
+        ad: story,
+        actions: [],
+        pageId,
+        currentIndex,
+        storiesCount: stories?.length,
+        increaseIndex,
+      };
+    }
   });
 
   const nextStory = () => {
@@ -265,17 +285,18 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   const targetRootId = 'asc-uikit-stories-viewer';
 
   useEffect(() => {
-    if (stories[stories.length - 1]?.syncState === 'syncing') {
+    const lastStory = stories[stories.length - 1];
+    if (isStory(lastStory) && lastStory?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);
     }
-    if (stories[currentIndex]) {
-      stories[currentIndex]?.analytics.markAsSeen();
+    if (currentStory && isStory(currentStory)) {
+      currentStory?.analytics.markAsSeen();
     }
-  }, [currentIndex, stories]);
+  }, [currentStory, stories]);
 
   useEffect(() => {
-    if (stories.every((story) => story?.isSeen)) return;
-    const firstUnseenStoryIndex = stories.findIndex((story) => !story?.isSeen);
+    if (stories.filter(isStory).every((story) => story?.isSeen)) return;
+    const firstUnseenStoryIndex = stories.filter(isStory).findIndex((story) => !story?.isSeen);
 
     if (firstUnseenStoryIndex !== -1) {
       setCurrentIndex(firstUnseenStoryIndex);
@@ -347,7 +368,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
             stories={formattedStories}
             renderers={globalFeedRenderers as RendererObject[]}
             defaultInterval={DURATION}
-            onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
+            onStoryStart={() => isStory(currentStory) && currentStory?.analytics.markAsSeen()}
             onStoryEnd={increaseIndex}
             onNext={nextStory}
             onPrevious={previousStory}
