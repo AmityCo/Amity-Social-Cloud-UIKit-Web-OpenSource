@@ -4,13 +4,31 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
-import { FileButton } from '~/v4/social/elements/FileButton';
+import clsx from 'clsx';
 
 interface MediaAttachmentProps {
   pageId: string;
+  uploadLoading?: boolean;
+  onChangeImages?: (files: File[]) => void;
+  onChangeVideos?: (files: File[]) => void;
+  onChangeThumbnail?: (thumbnail: { file: File; videoUrl: string; thumbnail: string | undefined }[]) => void;
+  isVisibleCamera: boolean;
+  isVisibleImage: boolean;
+  isVisibleVideo: boolean;
+  videoThumbnail?: { file: File; videoUrl: string; thumbnail: string | undefined }[];
 }
 
-export function MediaAttachment({ pageId }: MediaAttachmentProps) {
+export function MediaAttachment({
+  pageId,
+  uploadLoading,
+  onChangeImages,
+  onChangeVideos,
+  onChangeThumbnail,
+  isVisibleCamera,
+  isVisibleImage,
+  isVisibleVideo,
+  videoThumbnail,
+}: MediaAttachmentProps) {
   const componentId = 'media_attachment';
   const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({ pageId, componentId });
 
@@ -19,10 +37,38 @@ export function MediaAttachment({ pageId }: MediaAttachmentProps) {
   return (
     <div style={themeStyles} data-qa-anchor={accessibilityId} className={styles.mediaAttachment}>
       <div className={styles.mediaAttachment__swipeDown} />
-      <div className={styles.mediaAttachment__wrapMedia}>
-        <CameraButton pageId={pageId} componentId={componentId} />
-        <ImageButton pageId={pageId} componentId={componentId} />
-        <VideoButton pageId={pageId} componentId={componentId} />
+      <div
+        className={clsx(
+          !isVisibleImage || !isVisibleVideo || !isVisibleCamera
+            ? styles.mediaAttachment__wrapMedia_2items
+            : styles.mediaAttachment__wrapMedia,
+        )}
+      >
+        {isVisibleCamera && (
+          <CameraButton
+            pageId={pageId}
+            componentId={componentId}
+            onChange={onChangeImages}
+            isVisibleImage={isVisibleImage}
+            isVisibleVideo={isVisibleVideo}
+            onChangeVideos={onChangeVideos}
+            videoThumbnail={videoThumbnail}
+            onChangeThumbnail={onChangeThumbnail}
+          />
+        )}
+        {isVisibleImage && (
+          <ImageButton pageId={pageId} componentId={componentId} onChange={onChangeImages} />
+        )}
+
+        {isVisibleVideo && (
+          <VideoButton
+            pageId={pageId}
+            componentId={componentId}
+            onChangeVideos={onChangeVideos}
+            onChangeThumbnail={onChangeThumbnail}
+            videoThumbnail={videoThumbnail}
+          />
+        )}
       </div>
     </div>
   );

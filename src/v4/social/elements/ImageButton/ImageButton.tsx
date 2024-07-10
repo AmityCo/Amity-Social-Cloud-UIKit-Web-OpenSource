@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './ImageButton.module.css';
 import clsx from 'clsx';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { Button } from '~/v4/core/natives/Button';
 
 interface ImageButtonProps {
   pageId: string;
   componentId?: string;
   imgIconClassName?: string;
   defaultIconClassName?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onChange?: (files: File[]) => void;
 }
 
 const ImageButtonSvg = (props: React.SVGProps<SVGSVGElement>) => {
@@ -47,20 +49,56 @@ export function ImageButton({
   componentId = '*',
   imgIconClassName,
   defaultIconClassName,
-  onClick,
+  onChange,
 }: ImageButtonProps) {
   const elementId = 'image_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
     useAmityElement({ pageId, componentId, elementId });
 
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+
+  const { confirm } = useConfirmContext();
+
   if (isExcluded) return null;
 
+  const triggerFileInput = () => {
+    const fileInput = document.getElementById('image-upload') as HTMLInputElement;
+    fileInput.click();
+  };
+
+  const onLoad: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const targetFiles = e.target.files ? [...e.target.files] : [];
+
+      if (targetFiles.length + uploadedImages.length > 10) {
+        confirm({
+          pageId: pageId,
+          type: 'info',
+          title: 'Maximum upload limit reached',
+          content:
+            'You’ve reached the upload limit of 10 images. Any additional images will not be saved. ',
+          okText: 'Close',
+        });
+        return;
+      }
+
+      if (targetFiles.length) {
+        setUploadedImages((prevImages) => [...prevImages, ...targetFiles]);
+        onChange?.(targetFiles);
+      }
+    },
+    [onChange],
+  );
+
   return (
-    <div
+    <Button
+      type="button"
       style={themeStyles}
       data-qa-anchor={accessibilityId}
       className={styles.imageButton}
-      onClick={() => {}}
+      onPress={triggerFileInput}
     >
       <IconComponent
         defaultIcon={() => (
@@ -71,6 +109,14 @@ export function ImageButton({
         configIconName={config.icon}
       />
       {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
-    </div>
+      <input
+        type="file"
+        onChange={onLoad}
+        multiple
+        id="image-upload"
+        accept="image/*"
+        className={styles.imageButton_input}
+      />
+    </Button>
   );
 }

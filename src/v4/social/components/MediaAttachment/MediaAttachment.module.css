@@ -25,3 +25,8 @@
   display: flex;
   justify-content: space-between;
 }
+
+.mediaAttachment__wrapMedia_2items {
+  display: flex;
+  justify-content: space-around;
+}
