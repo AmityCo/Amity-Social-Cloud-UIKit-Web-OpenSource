@@ -12,12 +12,12 @@
   height: 100%;
   width: 100%;
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .editorParagraph span {
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }
 
 .editorContainer {

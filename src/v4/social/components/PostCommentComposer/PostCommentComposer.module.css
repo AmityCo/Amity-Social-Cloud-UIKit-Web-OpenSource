@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
   align-items: flex-end;
   padding: var(--asc-spacing-s1) 0 var(--asc-spacing-s1) var(--asc-spacing-m1);
   border-top: 1px solid var(--asc-color-base-shade4);

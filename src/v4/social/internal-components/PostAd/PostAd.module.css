@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  background-color: var(--asc-color-base-background-sh);
+  background-color: var(--asc-color-background-default-sh);
 }
 
 .innerContainer {
@@ -51,8 +51,7 @@
 }
 
 .footer {
-  /* TODO: change it to css variable */
-  background-color: #f6f7f8;
+  background-color: var(--asc-color-background-shade1);
   padding: var(--asc-spacing-m1) var(--asc-spacing-s2);
   display: flex;
   flex-direction: row;

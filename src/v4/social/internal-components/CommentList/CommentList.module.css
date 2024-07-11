@@ -37,5 +37,5 @@
   border-radius: var(--asc-border-radius-sm);
   text-align: center;
   color: var(--asc-color-base-shade2);
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
 }

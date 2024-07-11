@@ -4,7 +4,7 @@
   cursor: pointer;
   align-items: flex-start;
   gap: 0.25rem;
-  background: var(--asc-color-base-background);
+  background: var(--asc-color-background-default);
   border: 1px solid var(--asc-color-base-shade4);
   border-radius: 0.25rem;
   width: max-content;
