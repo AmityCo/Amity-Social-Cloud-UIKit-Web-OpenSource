@@ -10,6 +10,7 @@ import Love from '~/v4/social/elements/ReactionButton/Love';
 import styles from './ReactionButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Button } from '~/v4/core/natives/Button';
+import millify from 'millify';
 
 const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -102,7 +103,7 @@ export function ReactionButton({
         className={styles.reactButton__reactionsText}
         data-has-my-reaction={hasMyReaction}
       >
-        {typeof reactionsCount === 'number' ? reactionsCount : myReaction || config.text}
+        {typeof reactionsCount === 'number' ? millify(reactionsCount) : myReaction || config.text}
       </Typography.BodyBold>
     </Button>
   );
