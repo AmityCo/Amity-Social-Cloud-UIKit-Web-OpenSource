@@ -13,8 +13,7 @@ import { CommunityMember } from '../CommunityMember';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import useCommunity from '~/v4/chat/hooks/useCommunity';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
-
-const MAX_LENGTH = 5000;
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 
 const PUNCTUATION = '\\.,\\+\\*\\?\\$\\@\\|#{}\\(\\)\\^\\-\\[\\]\\\\/!%\'"~=<>_:;';
 const NAME = '\\b[A-Z][^\\s' + PUNCTUATION + ']';
@@ -132,15 +131,35 @@ function Mention({
 
   const [queryString, setQueryString] = useState<string | null>(null);
   let options: MentionTypeaheadOption[] = [];
-  const { users: members } = useMemberQueryByDisplayName({
+  const intersectionRef = useRef<HTMLDivElement>(null);
+  const {
+    users: members,
+    hasMore: hasMoreMember,
+    isLoading: isLoadingMember,
+    loadMore: loadMoreMember,
+  } = useMemberQueryByDisplayName({
     communityId: communityId || '',
     displayName: queryString || '',
     limit: 10,
     enabled: !!communityId,
   });
-  const { users } = useUserQueryByDisplayName({
+  const { users, hasMore, loadMore, isLoading } = useUserQueryByDisplayName({
     displayName: queryString || '',
     limit: 10,
+  });
+  useIntersectionObserver({
+    onIntersect: () => {
+      if (communityId) {
+        if (hasMoreMember && isLoadingMember === false) {
+          loadMoreMember();
+        }
+      } else {
+        if (hasMore && isLoading === false) {
+          loadMore();
+        }
+      }
+    },
+    ref: intersectionRef,
   });
 
   const community = useCommunity(communityId || '');
@@ -196,22 +215,25 @@ function Mention({
       ) =>
         anchorRef.current && options.length > 0
           ? ReactDOM.createPortal(
-              <div className={styles.mentionTextInput_item}>
-                {options.map((option, i: number) => (
-                  <CommunityMember
-                    isSelected={selectedIndex === i}
-                    onClick={() => {
-                      setHighlightedIndex(i);
-                      selectOptionAndCleanUp(option);
-                    }}
-                    onMouseEnter={() => {
-                      setHighlightedIndex(i);
-                    }}
-                    key={option.key}
-                    option={option}
-                  />
-                ))}
-              </div>,
+              <>
+                <div className={styles.mentionTextInput_item}>
+                  {options.map((option, i: number) => (
+                    <CommunityMember
+                      isSelected={selectedIndex === i}
+                      onClick={() => {
+                        setHighlightedIndex(i);
+                        selectOptionAndCleanUp(option);
+                      }}
+                      onMouseEnter={() => {
+                        setHighlightedIndex(i);
+                      }}
+                      key={option.key}
+                      option={option}
+                    />
+                  ))}
+                </div>
+                <div ref={intersectionRef} />
+              </>,
               anchorRef.current,
             )
           : null

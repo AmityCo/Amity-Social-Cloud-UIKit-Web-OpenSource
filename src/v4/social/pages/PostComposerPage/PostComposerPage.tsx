@@ -77,7 +77,7 @@ export type CreatePostParams = {
     type: string;
     userIds: string[];
   }[];
-  attachments: {
+  attachments?: {
     fileId: string;
     type: string;
   }[];
@@ -248,7 +248,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
             isValid={textValue.text.length > 0 || postImages.length > 0 || postVideos.length > 0}
           />
         </div>
-        <PostTextField ref={editorRef} onChange={onChange} />
+        <PostTextField ref={editorRef} onChange={onChange} communityId={targetId} />
         <ImageThumbnail
           files={incomingImages}
           uploadedFiles={postImages}
