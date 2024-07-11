@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { createContext, useContext, useState, useMemo } from 'react';
 import { FeedRepository, PostRepository } from '@amityco/ts-sdk';
 
 import { usePaginatorApi } from '~/v4/core/hooks/usePaginator';

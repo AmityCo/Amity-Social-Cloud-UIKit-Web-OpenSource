@@ -7,12 +7,11 @@
 }
 
 .imageContent[data-images-amount='1'] {
-  aspect-ratio: 16/ 9;
   grid-template: 'image1' / minmax(0, 1fr);
 }
 
 .imageContent[data-images-amount='2'] {
-  aspect-ratio: 16/ 9;
+  aspect-ratio: 1;
   grid-template:
     'image1 image2' 50%
     'image1 image2' 50%
