@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 import { AdEngine } from '../AdEngine';
 import { useAdSettings, useRecommendAds } from '../providers/AdEngineProvider';
@@ -32,69 +32,85 @@ const usePaginatorCore = <T>({
 
   const recommendedAds = useRecommendAds({ count, placement, communityId });
 
-  const combineItemsWithAds = useCallback(
-    (newItems: T[]) => {
-      if (!adSettings?.enabled) {
-        return newItems;
-      }
-      if (frequency?.type === 'fixed') {
-        const newItemIds = new Set(newItems.map((item) => getItemId(item)));
+  const reset = () => {
+    setCurrentAdIndex(0);
+    setItemWithAds([]);
+    setCurrentIndex(0);
+  };
 
-        const prevItemWithAds = itemWithAds
-          .map((itemWithAd) => {
-            const itemId = getItemId(itemWithAd[0]);
-
-            if (!newItemIds.has(itemId)) {
-              return null;
-            }
-            return itemWithAd;
-          })
-          .filter(isNonNullable);
-
-        const startItem = prevItemWithAds[0];
-        const latestItem = prevItemWithAds[prevItemWithAds.length - 1];
-
-        const startIndex = latestItem
-          ? newItems.findIndex((newItem) => getItemId(newItem) === getItemId(latestItem[0]))
-          : 0;
-
-        const topIndex = startItem
-          ? newItems.findIndex((newItem) => getItemId(newItem) === getItemId(startItem[0]))
-          : 0;
-
-        const newestItems: Array<[T]> = (newItems || []).slice(0, topIndex).map((item) => [item]);
-
-        const prevItems = [...newestItems, ...prevItemWithAds];
-
-        let runningAdIndex = currentAdIndex;
-        let runningIndex = currentIndex;
-        const suffixItems: Array<[T] | [T, Amity.Ad]> = newItems
-          .slice(startIndex)
-          .map((newItem) => {
-            runningIndex = runningIndex + 1;
-            const shouldPlaceAd = runningIndex % frequency.value === 0;
-
-            if (!shouldPlaceAd) return [newItem];
-
-            const ad = recommendedAds[runningAdIndex];
-            runningAdIndex =
-              runningAdIndex + 1 > recommendedAds.length - 1 ? 0 : runningAdIndex + 1;
-            return [newItem, ad];
-          });
-
-        setCurrentAdIndex(runningAdIndex);
-        setCurrentIndex(runningIndex);
-        setItemWithAds([...prevItems, ...suffixItems]);
-        return [...prevItems, ...suffixItems].flatMap((item) => item);
-      } else if (frequency?.type === 'time-window') {
-        return [...newItems.slice(0, 1), recommendedAds[0], ...newItems.slice(1)];
-      }
+  const combineItemsWithAds = (newItems: T[]) => {
+    if (!adSettings?.enabled) {
       return newItems;
-    },
-    [frequency, recommendedAds, adSettings?.enabled, getItemId],
-  );
+    }
+    if (frequency?.type === 'fixed') {
+      const newItemIds = new Set(newItems.map((item) => getItemId(item)));
 
-  return { combineItemsWithAds };
+      const prevItemWithAds = itemWithAds
+        .map((itemWithAd) => {
+          const itemId = getItemId(itemWithAd[0]);
+
+          if (!newItemIds.has(itemId)) {
+            return null;
+          }
+          return itemWithAd;
+        })
+        .filter(isNonNullable);
+
+      const startItem = prevItemWithAds[0];
+
+      const topIndex = (() => {
+        if (startItem) {
+          const foundedIndex = newItems.findIndex(
+            (newItem) => getItemId(newItem) === getItemId(startItem[0]),
+          );
+          if (foundedIndex === -1) {
+            return 0;
+          }
+          return foundedIndex;
+        }
+        return 0;
+      })();
+
+      const newestItems: Array<[T]> = (newItems || []).slice(0, topIndex).map((item) => [item]);
+
+      const prevItems = [...newestItems, ...prevItemWithAds];
+
+      const filteredNewItems = newItems.slice(topIndex).filter((newItem) => {
+        const itemId = getItemId(newItem);
+        return !prevItems.some((prevItem) => getItemId(prevItem[0]) === itemId);
+      });
+
+      let runningAdIndex = currentAdIndex;
+      let runningIndex = currentIndex;
+      const suffixItems: Array<[T] | [T, Amity.Ad]> = filteredNewItems.map((newItem) => {
+        runningIndex = runningIndex + 1;
+        const shouldPlaceAd = runningIndex % frequency.value === 0;
+
+        if (!shouldPlaceAd) return [newItem];
+
+        const ad = recommendedAds[runningAdIndex];
+        runningAdIndex = runningAdIndex + 1 > recommendedAds.length - 1 ? 0 : runningAdIndex + 1;
+        return [newItem, ad];
+      });
+
+      setCurrentAdIndex(runningAdIndex);
+      setCurrentIndex(runningIndex);
+      const newItemsWithAds = [...prevItems, ...suffixItems];
+      setItemWithAds([...prevItems, ...suffixItems]);
+      if (newItemsWithAds.length === 0) {
+        setCurrentAdIndex(0);
+        setCurrentIndex(0);
+      }
+      return [...prevItems, ...suffixItems].flatMap((item) => item);
+    } else if (frequency?.type === 'time-window') {
+      return [...newItems.slice(0, 1), recommendedAds[0], ...newItems.slice(1)].filter(
+        isNonNullable,
+      );
+    }
+    return newItems;
+  };
+
+  return { combineItemsWithAds, reset };
 };
 
 export const usePaginator = <TCallback, TParams>({
@@ -158,10 +174,10 @@ export const usePaginatorApi = <T>(params: {
   communityId?: string;
   getItemId: (item: T) => string;
 }) => {
-  const { items } = params;
-  const { combineItemsWithAds } = usePaginatorCore(params);
+  const { items, ...rest } = params;
+  const { combineItemsWithAds, reset } = usePaginatorCore(rest);
 
   const itemWithAds = useMemo(() => combineItemsWithAds(items), [items]);
 
-  return { itemWithAds };
+  return { itemWithAds, reset };
 };

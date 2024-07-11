@@ -27,7 +27,6 @@ import { defaultConfig, Config, CustomizationProvider } from './CustomizationPro
 import { ThemeProvider } from './ThemeProvider';
 import { PageBehavior, PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { UIStyles } from '~/core/providers/UiKitProvider/styles';
 import AmityUIKitManager from '../AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
 import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
@@ -35,9 +34,9 @@ import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
 import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
 import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 import { CustomReactionProvider } from './CustomReactionProvider';
-import { PostProvider } from '~/v4/social/providers/PostProvider';
 import { AdEngineProvider } from './AdEngineProvider';
 import { AdEngine } from '../AdEngine';
+import { GlobalFeedProvider } from '~/v4/social/providers/GlobalFeedProvider';
 
 export type AmityUIKitConfig = Config;
 
@@ -166,7 +165,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
                                         <PostRendererProvider config={postRendererConfig}>
                                           <NavigationProvider>
                                             <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                              <PostProvider>{children}</PostProvider>
+                                              <GlobalFeedProvider>{children}</GlobalFeedProvider>
                                             </PageBehaviorProvider>
                                           </NavigationProvider>
                                         </PostRendererProvider>

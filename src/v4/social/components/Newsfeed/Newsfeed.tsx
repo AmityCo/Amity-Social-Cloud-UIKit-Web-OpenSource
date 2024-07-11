@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StoryTab } from '~/v4/social/components/StoryTab';
-import { useGlobalFeed } from '~/v4/core/hooks/collections/useGlobalFeed';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed';
 import { GlobalFeed } from '~/v4/social/components/GlobalFeed';
 
 import styles from './Newsfeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
 
 const Spinner = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -55,7 +55,12 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
   const touchStartY = useRef(0);
   const [touchDiff, setTouchDiff] = useState(0);
 
-  const { itemWithAds, hasMore, isLoading, loadMore, refetch, removeItem } = useGlobalFeed();
+  const { itemWithAds, hasMore, isLoading, loadMore, fetch, refetch, removeItem } =
+    useGlobalFeedContext();
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   const onFeedReachBottom = () => {
     if (hasMore && !isLoading) loadMore();

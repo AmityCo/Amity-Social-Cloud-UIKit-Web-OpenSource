@@ -3,7 +3,6 @@ import { PostContent, PostContentSkeleton } from '../PostContent';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed/EmptyNewsFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { usePostContext } from '~/v4/social/providers/PostProvider';
 
 import styles from './GlobalFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -19,7 +18,7 @@ interface GlobalFeedProps {
 }
 
 const isAmityAd = (item: Amity.Post | Amity.Ad): item is Amity.Ad => {
-  return 'adId' in item;
+  return (item as Amity.Ad)?.adId !== undefined;
 };
 
 export const GlobalFeed = ({
@@ -38,7 +37,6 @@ export const GlobalFeed = ({
   const intersectionRef = useRef<HTMLDivElement>(null);
 
   const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
-  const { post: newPost } = usePostContext();
 
   useIntersectionObserver({
     ref: intersectionRef,
@@ -53,23 +51,8 @@ export const GlobalFeed = ({
 
   return (
     <div className={styles.global_feed} style={themeStyles} data-qa-anchor={accessibilityId}>
-      {newPost && (
-        <>
-          <div className={styles.global_feed__postContainer}>
-            <PostContent
-              pageId={pageId}
-              post={newPost}
-              type="feed"
-              onClick={() => {
-                AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: newPost.postId });
-              }}
-            />
-          </div>
-          <div className={styles.global_feed__divider} />
-        </>
-      )}
       {items.map((item, index) => (
-        <div key={item.postId}>
+        <div key={item.postId || item.adId}>
           {index !== 0 ? <div className={styles.global_feed__divider} /> : null}
           {isAmityAd(item) ? (
             <PostAd key={item.adId} ad={item} />

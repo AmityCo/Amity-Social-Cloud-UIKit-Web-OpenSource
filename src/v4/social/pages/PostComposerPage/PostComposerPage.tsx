@@ -23,6 +23,7 @@ import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
 import { MediaAttachment } from '~/v4/social/components/MediaAttachment';
 import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
 import { isMobile } from '~/v4/social/utils/isMobile';
+import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
 
 export enum Mode {
   CREATE = 'create',
@@ -96,10 +97,10 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
   const editorRef = useRef<LexicalEditor | null>(null);
   const { AmityPostComposerPageBehavior } = usePageBehavior();
   const { confirm } = useConfirmContext();
-  const isOnline = useConnectionState();
   const [snap, setSnap] = useState<number | string | null>(HEIGHT_MEDIA_ATTACHMENT_MENU);
   const [isShowBottomMenu] = useState<boolean>(true);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const { prependItem } = useGlobalFeedContext();
 
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
@@ -142,8 +143,9 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
       mutationFn: async (params: Parameters<typeof PostRepository.createPost>[0]) => {
         return PostRepository.createPost(params);
       },
-      onSuccess: () => {
+      onSuccess: (response) => {
         AmityPostComposerPageBehavior.goToSocialHomePage();
+        prependItem(response.data);
       },
       onError: (error) => {
         console.error('Failed to create post', error);

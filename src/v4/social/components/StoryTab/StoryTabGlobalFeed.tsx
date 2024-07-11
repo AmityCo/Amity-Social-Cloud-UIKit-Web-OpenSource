@@ -30,50 +30,29 @@ export const StoryTabGlobalFeed = ({
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const observerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (containerRef.current) {
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          const lastStory = entries[0];
-
-          if (lastStory.isIntersecting && hasMore) {
-            loadMoreStories();
-          }
-        },
-        { root: containerRef.current, rootMargin: '0px', threshold: 0.9 },
-      );
-
-      if (stories.length > 0) {
-        const lastStoryElement = containerRef.current.children[stories.length - 1];
-        if (lastStoryElement) {
-          observerRef.current.observe(lastStoryElement);
-        }
-      }
+    if (!containerRef.current) {
+      return;
     }
+    const intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        const lastStory = entries[0];
+
+        if (lastStory.isIntersecting && hasMore) {
+          loadMoreStories();
+        }
+      },
+      { root: containerRef.current, rootMargin: '0px', threshold: 0.9 },
+    );
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
+      if (intersectionObserver) {
+        intersectionObserver.disconnect();
       }
     };
-  }, [stories, hasMore, loadMoreStories]);
-
-  if (isExcluded) return null;
-
-  if (isLoading) {
-    return (
-      <div style={themeStyles} className={styles.storyTabContainer}>
-        {Array.from({ length: 10 }).map((_, index) => (
-          <div key={index} className={styles.storyTabSkeleton}>
-            <div className={styles.storyTabSkeletonAvatar} />
-            <div className={styles.storyTabSkeletonUsername} />
-          </div>
-        ))}
-      </div>
-    );
-  }
+  }, [containerRef?.current]);
 
   if (isExcluded) return null;
 
@@ -86,25 +65,33 @@ export const StoryTabGlobalFeed = ({
       className={styles.storyTabContainer}
       ref={containerRef}
     >
-      {stories.map((story) => {
-        return (
-          <StoryTabItem
-            pageId={pageId}
-            componentId={componentId}
-            key={story.targetId}
-            targetId={story.targetId}
-            hasUnseen={story.hasUnseen}
-            isErrored={story.failedStoriesCount > 0}
-            onClick={() =>
-              goToViewStoryPage({
-                storyTargets: stories,
-                storyTarget: story,
-              })
-            }
-            size={64}
-          />
-        );
-      })}
+      {isLoading
+        ? Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className={styles.storyTabSkeleton}>
+              <div className={styles.storyTabSkeletonAvatar} />
+              <div className={styles.storyTabSkeletonUsername} />
+            </div>
+          ))
+        : stories.map((story) => {
+            return (
+              <StoryTabItem
+                pageId={pageId}
+                componentId={componentId}
+                key={story.targetId}
+                targetId={story.targetId}
+                hasUnseen={story.hasUnseen}
+                isErrored={story.failedStoriesCount > 0}
+                onClick={() =>
+                  goToViewStoryPage({
+                    storyTargets: stories,
+                    storyTarget: story,
+                  })
+                }
+                size={64}
+              />
+            );
+          })}
+      <div ref={observerRef} style={{ height: '1px', width: '1px' }} />
     </div>
   );
 };
