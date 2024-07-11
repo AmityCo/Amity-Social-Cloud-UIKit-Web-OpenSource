@@ -11,6 +11,7 @@ import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
 
 enum EnumTabNames {
   Newsfeed = 'Newsfeed',
@@ -25,15 +26,32 @@ export function SocialHomePage() {
   });
   const { goToSocialGlobalSearchPage, goToMyCommunitiesSearchPage } = useNavigation();
 
+  const { scrollPosition, onScroll } = useGlobalFeedContext();
+
   const [activeTab, setActiveTab] = useState(EnumTabNames.Newsfeed);
 
   const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
   const createPostMenuRef = useRef<HTMLDivElement | null>(null);
   const createPostButtonRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const initialLoad = useRef(true);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    containerRef.current.scrollTop = scrollPosition;
+    setTimeout(() => {
+      initialLoad.current = false;
+    }, 100);
+  }, [containerRef.current]);
 
   const handleClickButton = (event: React.MouseEvent) => {
     event.stopPropagation();
     setIsShowCreatePostMenu((prev) => !prev);
+  };
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (initialLoad.current) return;
+    onScroll(event);
   };
 
   const handleGlobalSearchClick = () => {
@@ -97,7 +115,7 @@ export function SocialHomePage() {
           />
         </div>
       </div>
-      <div className={styles.socialHomePage__contents}>
+      <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
         {activeTab === EnumTabNames.Newsfeed && <Newsfeed pageId={pageId} />}
         {activeTab === EnumTabNames.Explore && <div>Explore</div>}
         {activeTab === EnumTabNames.MyCommunities && <MyCommunities pageId={pageId} />}

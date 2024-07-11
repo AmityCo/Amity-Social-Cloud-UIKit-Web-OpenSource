@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react';
 import { FeedRepository, PostRepository } from '@amityco/ts-sdk';
 
 import { usePaginatorApi } from '~/v4/core/hooks/usePagination';
@@ -10,6 +18,7 @@ const useGlobalFeed = () => {
   const [queryToken, setQueryToken] = useState<string | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
   const [hasBeenFetched, setHasBeenFetched] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const limit = 10;
 
   const { itemWithAds, reset } = usePaginatorApi({
@@ -18,6 +27,11 @@ const useGlobalFeed = () => {
     placement: 'feed' as Amity.AdPlacement,
     getItemId: (item) => item.postId,
   });
+
+  const onScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLDivElement;
+    setScrollPosition(target.scrollTop);
+  };
 
   async function fetchMore() {
     try {
@@ -102,6 +116,8 @@ const useGlobalFeed = () => {
     loadMoreHasBeenCalled,
     fetch,
     refetch,
+    scrollPosition,
+    onScroll,
   };
 };
 
@@ -117,6 +133,8 @@ const GlobalFeedContext = createContext<GlobalFeedContextType>({
   loadMoreHasBeenCalled: false,
   fetch: () => {},
   refetch: () => {},
+  scrollPosition: 0,
+  onScroll: () => {},
 });
 
 export const useGlobalFeedContext = () => {
