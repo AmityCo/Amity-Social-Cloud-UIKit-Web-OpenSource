@@ -1,6 +1,6 @@
 import { CommentRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
-import { usePaginator } from '~/v4/core/hooks/usePagination';
+import { usePaginator } from '~/v4/core/hooks/usePaginator';
 
 type useCommentsParams = {
   parentId?: string | null;

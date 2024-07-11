@@ -1,6 +1,6 @@
 import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
-import { usePaginator } from '~/v4/core/hooks/usePagination';
+import { usePaginator } from '~/v4/core/hooks/usePaginator';
 
 export const useGetActiveStoriesByTarget = (params: Amity.GetStoriesByTargetParam) => {
   const { items, ...rest } = usePaginator({

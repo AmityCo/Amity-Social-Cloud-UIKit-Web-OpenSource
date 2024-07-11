@@ -103,6 +103,9 @@ const usePaginatorCore = <T>({
       }
       return [...prevItems, ...suffixItems].flatMap((item) => item);
     } else if (frequency?.type === 'time-window') {
+      if (newItems.length === 0) {
+        return newItems;
+      }
       return [...newItems.slice(0, 1), recommendedAds[0], ...newItems.slice(1)].filter(
         isNonNullable,
       );

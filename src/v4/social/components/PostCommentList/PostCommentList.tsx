@@ -7,7 +7,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
 import useUserSubscription from '~/v4/core/hooks/subscriptions/useUserSubscription';
 import { CommentRepository, SubscriptionLevels } from '@amityco/ts-sdk';
 import useCommunitySubscription from '~/v4/core/hooks/subscriptions/useCommunitySubscription';
-import { usePaginator } from '~/v4/core/hooks/usePagination';
+import { usePaginator } from '~/v4/core/hooks/usePaginator';
 import { CommentAd } from '../../internal-components/CommentAd/CommentAd';
 
 type PostCommentListProps = {

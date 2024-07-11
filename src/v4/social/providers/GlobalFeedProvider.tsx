@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { FeedRepository, PostRepository } from '@amityco/ts-sdk';
 
-import { usePaginatorApi } from '~/v4/core/hooks/usePagination';
+import { usePaginatorApi } from '~/v4/core/hooks/usePaginator';
 import { isNonNullable } from '~/v4/helpers/utils';
 
 const useGlobalFeed = () => {
