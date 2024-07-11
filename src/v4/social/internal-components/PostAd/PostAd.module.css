@@ -80,10 +80,6 @@
   border-radius: var(--asc-border-radius-md);
 }
 
-.footer__content__button:hover:not(.disabled) {
-  background-color: var(--asc-color-primary-50);
-}
-
 .infoIcon__button {
   position: absolute;
   width: 1rem;
