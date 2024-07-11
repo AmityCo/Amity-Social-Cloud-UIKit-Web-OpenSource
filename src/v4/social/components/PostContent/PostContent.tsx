@@ -33,6 +33,7 @@ import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscription';
 import { ReactionList } from '../index';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
+import millify from 'millify';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -357,7 +358,9 @@ export const PostContent = ({
                 </div>
               ) : null}
               <Typography.Caption className={styles.postContent__reactionsBar__reactions__count}>
-                {`${post?.reactionsCount || 0} ${post?.reactionsCount === 1 ? 'like' : 'likes'}`}
+                {`${millify(post?.reactionsCount || 0)} ${
+                  post?.reactionsCount === 1 ? 'like' : 'likes'
+                }`}
               </Typography.Caption>
             </div>
 

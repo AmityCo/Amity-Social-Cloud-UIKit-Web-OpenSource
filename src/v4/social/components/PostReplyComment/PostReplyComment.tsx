@@ -1,5 +1,6 @@
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
 import clsx from 'clsx';
+import millify from 'millify';
 import React, { useCallback, useState } from 'react';
 import EllipsisH from '~/icons/EllipsisH';
 import { BottomSheet, Typography } from '~/v4/core/components/index';
@@ -194,7 +195,7 @@ const PostReplyComment = ({
               </div>
               {comment.reactionsCount > 0 && (
                 <div className={styles.postReplyComment__secondRow__rightPane}>
-                  <Typography.Caption>{comment.reactionsCount}</Typography.Caption>
+                  <Typography.Caption>{millify(comment.reactionsCount)}</Typography.Caption>
                   <Like className={styles.postReplyComment__secondRow__rightPane__like} />
                 </div>
               )}

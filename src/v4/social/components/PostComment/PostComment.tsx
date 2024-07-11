@@ -20,6 +20,7 @@ import { CommentOptions } from '../CommentOptions/CommentOptions';
 import { CreateCommentParams } from '../PostCommentComposer/PostCommentComposer';
 import useCommentSubscription from '~/v4/core/hooks/subscriptions/useCommentSubscription';
 import { TextWithMention } from '../../internal-components/TextWithMention/TextWithMention';
+import millify from 'millify';
 
 const EllipsisH = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -249,7 +250,7 @@ export const PostComment = ({
               </div>
               {comment.reactionsCount > 0 && (
                 <div className={styles.postComment__secondRow__rightPane}>
-                  <Typography.Caption>{comment.reactionsCount}</Typography.Caption>
+                  <Typography.Caption>{millify(comment.reactionsCount)}</Typography.Caption>
                   <Like className={styles.postComment__secondRow__rightPane__like} />
                 </div>
               )}
