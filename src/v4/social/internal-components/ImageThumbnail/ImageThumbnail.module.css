@@ -13,7 +13,7 @@
 
 .thumbnail__container[data-images-amount='2'] {
   grid-template-columns: repeat(2, 1fr);
-  height: 21rem;
+  max-height: 21rem;
 }
 
 .thumbnail__container[data-images-amount='3'] {
@@ -24,6 +24,7 @@
   position: relative;
   text-align: center;
   width: 100%;
+  max-height: 21rem;
 }
 
 .thumbnail__wrapper[data-images-height='true'] {
