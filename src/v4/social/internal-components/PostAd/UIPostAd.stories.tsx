@@ -1,5 +1,5 @@
 import React from 'react';
-import { PostAd } from './PostAd';
+import { UIPostAd } from './UIPostAd';
 
 export default {
   title: 'v4-social/internal-components/PostAd',
@@ -8,7 +8,7 @@ export default {
 export const PostAdStory = {
   render: () => (
     <div style={{ width: '80%', margin: 'auto' }}>
-      <PostAd />
+      <UIPostAd />
     </div>
   ),
 };

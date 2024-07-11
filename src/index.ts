@@ -53,21 +53,3 @@ export {
   StoryPreview as AmityStoryPreview,
   StoryPreviewThumbnail as AmityStoryPreviewThumbnail,
 } from './v4/social/internal-components/StoryPreview';
-
-// import AmityComment from './components/Comment';
-// import AmityCommentComposeBar from './components/CommentComposeBar';
-// import AmityCommentLikeButton from './components/CommentLikeButton';
-// import AmityCommunity from './components/Community';
-// import AmityCommunityItem from './components/CommunityItem';
-// import AmityEmptyFeed from './components/EmptyFeed';
-// import AmityFiles from './components/Files';
-// import AmityImageGallery from './components/ImageGallery';
-// import AmityImages from './components/Images';
-// import AmityMessage from './components/Message';
-// import AmityMessageComposeBar from './components/MessageComposeBar';
-// import AmityMessageList from './components/MessageList';
-// import AmityPost from './components/Post';
-// import AmityPostCreator from './components/PostCreator';
-// import AmityPostLikeButton from './components/PostLikeButton';
-// import AmityRecentChat from './components/RecentChat';
-// import AmitySideMenu from './components/SideMenu';
