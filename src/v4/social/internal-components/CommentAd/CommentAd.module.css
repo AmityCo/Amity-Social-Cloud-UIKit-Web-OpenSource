@@ -2,6 +2,7 @@
   width: 100%;
   position: relative;
   height: 100%;
+  max-width: 24rem;
 }
 
 .commentAd__container {
@@ -34,8 +35,16 @@
   max-width: max-content;
 }
 
-.commentAd__content__username {
+.commentAd__content__advertiserName__container {
+  width: 100%;
+}
+
+.commentAd__content__advertiserName {
   color: var(--asc-color-base-default);
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .commentAd__content__text {
@@ -86,7 +95,7 @@
 .commentAd__adCard__description {
   color: var(--asc-color-base-shade1);
   width: 100%;
-  word-wrap: break-word;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -97,6 +106,9 @@
   word-wrap: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
 }
 
 .commentAd__adCard__button {
@@ -113,6 +125,9 @@
   word-wrap: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
 }
 
 .infoIcon__button {

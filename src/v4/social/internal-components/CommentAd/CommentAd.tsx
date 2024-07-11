@@ -44,8 +44,8 @@ export const CommentAd = ({ pageId = '*', ad }: CommentAdProps) => {
         </div>
         <div className={styles.commentAd__details}>
           <div className={styles.commentAd__content}>
-            <Typography.BodyBold className={styles.commentAd__content__username}>
-              {ad.advertiser?.name}
+            <Typography.BodyBold className={styles.commentAd__content__advertiserName__container}>
+              <div className={styles.commentAd__content__advertiserName}>{ad.advertiser?.name}</div>
             </Typography.BodyBold>
 
             <AdsBadge />
