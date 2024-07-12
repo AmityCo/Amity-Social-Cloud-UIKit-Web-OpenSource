@@ -2,8 +2,10 @@ import React from 'react';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
+import { Button } from '~/v4/core/natives/Button';
 import styles from './CreateStoryButton.module.css';
 import clsx from 'clsx';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 const CreateStoryButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="17" height="18" viewBox="0 0 17 18" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -37,11 +39,13 @@ export function CreateStoryButton({
       elementId,
     });
 
+  const { AmityCreatePostMenuComponentBehavior } = usePageBehavior();
+
   if (isExcluded) return null;
   return (
-    <div
+    <Button
       className={styles.createStoryButton}
-      onClick={() => {}} //TODO : Add event create story
+      onPress={() => AmityCreatePostMenuComponentBehavior.goToStoryTargetSelectionPage()}
       data-qa-anchor={accessibilityId}
       style={themeStyles}
     >
@@ -56,7 +60,7 @@ export function CreateStoryButton({
         defaultIconName={defaultConfig.image}
       />
       <Typography.Body className={styles.createStoryButton__text}>{config.text}</Typography.Body>
-    </div>
+    </Button>
   );
 }
 

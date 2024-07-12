@@ -48,11 +48,9 @@ export const PlainDraftStoryPage = ({
 }) => {
   const { page } = useNavigation();
   const pageId = 'create_story_page';
-  const { accessibilityId, themeStyles, isExcluded } = useAmityPage({
+  const { accessibilityId, themeStyles } = useAmityPage({
     pageId,
   });
-
-  if (isExcluded) return null;
 
   const { file, setFile } = useStoryContext();
   const { community } = useCommunityInfo(targetId);
@@ -293,7 +291,6 @@ export const PlainDraftStoryPage = ({
 };
 
 export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
-  const { page } = useNavigation();
   const { AmityDraftStoryPageBehavior } = usePageBehavior();
 
   return (

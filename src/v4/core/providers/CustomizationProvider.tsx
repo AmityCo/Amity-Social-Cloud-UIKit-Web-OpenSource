@@ -439,6 +439,12 @@ export const defaultConfig: DefaultConfig = {
     'select_post_target_page/*/my_timeline_text': {
       text: 'My Timeline',
     },
+    'select_story_target_page/*/close_button': {
+      image: 'platformValue',
+    },
+    'select_story_target_page/*/title': {
+      text: 'Share to',
+    },
     '*/*/community_official_badge': {
       image: 'platformValue',
     },

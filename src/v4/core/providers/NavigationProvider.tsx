@@ -20,6 +20,7 @@ export enum PageTypes {
   DraftPage = 'DraftPage',
   PostComposerPage = 'PostComposerPage',
   MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
+  StoryTargetSelectionPage = 'StoryTargetSelectionPage',
 }
 
 type Page =
@@ -88,7 +89,6 @@ type Page =
     }
   | {
       type: PageTypes.PostComposerPage;
-
       context: {
         targetId: string | null;
         targetType: 'community' | 'user';
@@ -96,6 +96,9 @@ type Page =
         community?: Amity.Community;
         post?: Amity.Post;
       };
+    }
+  | {
+      type: PageTypes.StoryTargetSelectionPage;
     };
 
 type ContextValue = {
@@ -115,6 +118,7 @@ type ContextValue = {
   goToSocialGlobalSearchPage: (tab?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
   goToSelectPostTargetPage: () => void;
+  goToStoryTargetSelectionPage: () => void;
   goToDraftStoryPage: (context: {
     targetId: string;
     targetType: string;
@@ -143,6 +147,12 @@ type ContextValue = {
     community?: Amity.Community,
     post?: Amity.Post,
   ) => void;
+  goToStoryCreationPage: (context: {
+    targetId: string;
+    targetType: Amity.StoryTargetType;
+    mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
+    storyType: 'communityFeed' | 'globalFeed';
+  }) => void;
   goToSocialHomePage: () => void;
 };
 
@@ -172,6 +182,7 @@ let defaultValue: ContextValue = {
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
+  goToStoryTargetSelectionPage: () => {},
   goToPostComposerPage: (
     mode: Mode,
     targetId: string | null,
@@ -179,6 +190,7 @@ let defaultValue: ContextValue = {
     community?: Amity.Community,
     post?: Amity.Post,
   ) => {},
+  goToStoryCreationPage: () => {},
   goToSocialHomePage: () => {},
   goToMyCommunitiesSearchPage: () => {},
   setNavigationBlocker: () => {},
@@ -211,6 +223,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToSocialGlobalSearchPage: (tab) =>
       console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
+    goToStoryTargetSelectionPage: () =>
+      console.log('NavigationContext goToStoryTargetSelectionPage()'),
     goToDraftStoryPage: ({ targetId, targetType, mediaType, storyType }) =>
       console.log(
         `NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType}), ${storyType})`,
@@ -219,6 +233,7 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(
         `NavigationContext goToPostComposerPage(${mode} ${targetId}) ${targetType} ${community} ${post}`,
       ),
+    goToStoryCreationPage: () => console.log('NavigationContext goToStoryCreationPage()'),
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
     goToMyCommunitiesSearchPage: () =>
       console.log('NavigationContext goToMyCommunitiesSearchPage()'),
@@ -499,6 +514,31 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
+  const goToStoryTargetSelectionPage = useCallback(() => {
+    const next = {
+      type: PageTypes.StoryTargetSelectionPage,
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
+  const goToStoryCreationPage = useCallback(
+    ({ targetId, targetType, mediaType, storyType }) => {
+      const next = {
+        type: PageTypes.DraftPage,
+        context: {
+          targetId,
+          targetType,
+          mediaType,
+          storyType,
+        },
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   const goToDraftStoryPage = useCallback(
     ({ targetId, targetType, mediaType, storyType }) => {
       const next = {
@@ -570,6 +610,8 @@ export default function NavigationProvider({
         goToCommunityProfilePage,
         goToViewStoryPage,
         goToSelectPostTargetPage,
+        goToStoryTargetSelectionPage,
+        goToStoryCreationPage,
         goToDraftStoryPage,
         goToPostComposerPage,
         goToSocialHomePage,

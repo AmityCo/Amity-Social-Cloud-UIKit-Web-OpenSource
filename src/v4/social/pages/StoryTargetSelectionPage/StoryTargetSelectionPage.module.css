@@ -1,0 +1,55 @@
+.selectStoryTargetPage {
+  max-width: 100vw;
+  flex: 1;
+  padding: var(--asc-spacing-none) var(--asc-spacing-m1);
+  background-color: var(--asc-color-background-default);
+}
+
+.selectStoryTargetPage__topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--asc-spacing-m1);
+  background-color: var(--asc-color-background-default);
+}
+
+.selectStoryTargetPage__timeline {
+  display: flex;
+  align-items: center;
+  padding: var(--asc-spacing-s1) var(--asc-spacing-none);
+}
+
+.selectStoryTargetPage__line {
+  margin-top: var(--asc-spacing-s1);
+  border-top: 1px solid var(--asc-color-base-shade4);
+}
+
+.selectStoryTargetPage__myCommunities__container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--asc-spacing-m1) var(--asc-spacing-none);
+  flex: 1;
+  height: 100%;
+}
+
+.selectStoryTargetPage__myCommunities {
+  display: flex;
+  padding: 0.5rem 3.25rem 0.5rem 1rem;
+  gap: 0.75rem;
+  cursor: pointer;
+  align-items: center;
+}
+
+.selectStoryTargetPage__communityAvatar {
+  margin-right: var(--asc-spacing-s1);
+}
+
+.selectStoryTargetPage__closeButton {
+  display: flex;
+  fill: var(--asc-color-base-default);
+}
+
+.selectStoryTargetPage__title {
+  color: var(--asc-color-base-default);
+  text-align: center;
+}

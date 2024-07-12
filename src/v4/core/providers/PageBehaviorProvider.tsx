@@ -32,6 +32,7 @@ export interface PageBehavior {
   };
   AmityCreatePostMenuComponentBehavior: {
     goToSelectPostTargetPage(): void;
+    goToStoryTargetSelectionPage(): void;
   };
   AmityPostTargetSelectionPage: {
     goToPostComposerPage: (context: {
@@ -41,6 +42,14 @@ export interface PageBehavior {
       community?: Amity.Community;
       post?: Amity.Post;
     }) => void;
+  };
+  AmityStoryTargetSelectionPage: {
+    goToStoryCreationPage(context: {
+      targetId: string | null;
+      targetType: Amity.StoryTargetType;
+      mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
+      storyType: 'communityFeed' | 'globalFeed';
+    }): void;
   };
   AmityPostComposerPageBehavior: {
     goToSocialHomePage(): void;
@@ -67,6 +76,8 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToViewStoryPage,
     onChangePage,
     goToSelectPostTargetPage,
+    goToStoryTargetSelectionPage,
+    goToStoryCreationPage,
     goToPostComposerPage,
     goToSocialHomePage,
   } = useNavigation();
@@ -154,6 +165,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToSelectPostTargetPage();
       },
+      goToStoryTargetSelectionPage() {
+        if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToStoryTargetSelectionPage) {
+          return pageBehavior.AmityCreatePostMenuComponentBehavior.goToStoryTargetSelectionPage();
+        }
+        goToStoryTargetSelectionPage();
+      },
     },
     AmityPostTargetSelectionPage: {
       goToPostComposerPage: (context: {
@@ -173,6 +190,19 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           context.community,
           context.post,
         );
+      },
+    },
+    AmityStoryTargetSelectionPage: {
+      goToStoryCreationPage: (context: {
+        targetId: string;
+        targetType: Amity.StoryTargetType;
+        mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
+        storyType: 'communityFeed' | 'globalFeed';
+      }) => {
+        if (pageBehavior?.AmityStoryTargetSelectionPage?.goToStoryCreationPage) {
+          return pageBehavior.AmityStoryTargetSelectionPage.goToStoryCreationPage(context);
+        }
+        goToStoryCreationPage(context);
       },
     },
     AmityPostComposerPageBehavior: {
