@@ -8,7 +8,7 @@ const REPLIES_PER_PAGE = 5;
 
 interface CommentTrayProps {
   referenceType: Amity.CommentReferenceType;
-  referenceId: string;
+  referenceId?: string;
   community: Amity.Community;
   shouldAllowInteraction: boolean;
   shouldAllowCreation?: boolean;

@@ -33,8 +33,8 @@ export type CustomStory = Story & { story?: Amity.Story; ad?: Amity.Ad } & {
   increaseIndex: () => void;
   pageId?: string;
   dragEventTarget?: React.RefObject<HTMLElement>;
+  setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isBottomSheetOpen: boolean;
-  setIsBottomSheetOpen: (isOpen: React.SetStateAction<boolean>) => void;
 };
 
 export type CustomRendererProps = RendererProps & {

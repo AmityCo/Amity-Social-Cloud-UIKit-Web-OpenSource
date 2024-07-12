@@ -15,12 +15,12 @@ import styles from './Footer.module.css';
 const Footer: React.FC<
   React.PropsWithChildren<{
     pageId?: string;
-    storyId: string;
+    storyId?: string;
     showImpression: boolean;
-    reach: number | null;
+    reach?: number | null;
     commentsCount: number;
     reactionsCount: number;
-    isLiked: boolean;
+    isLiked?: boolean;
     onClickComment: () => void;
     syncState?: Amity.SyncState;
     isMember?: boolean;

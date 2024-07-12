@@ -49,7 +49,9 @@ interface CommunityFeedStoryProps {
   }) => void;
 }
 
-const DURATION = 5000;
+const MIN_IMAGE_DURATION = 5000; // 5 seconds
+const MAX_IMAGE_DURATION = 10000; // 10 seconds
+const DEFAULT_IMAGE_DURATION = 7000; // 7 seconds
 
 const isStory = (story: Amity.Story | Amity.Ad): story is Amity.Story =>
   !!(story as Amity.Story)?.storyId;
@@ -256,6 +258,8 @@ export const CommunityFeedStory = ({
         increaseIndex,
         pageId,
         dragEventTarget: dragEventTarget.current,
+        setIsBottomSheetOpen,
+        isBottomSheetOpen,
       };
     } else {
       return {
@@ -354,7 +358,7 @@ export const CommunityFeedStory = ({
             currentIndex={currentIndex}
             stories={formattedStories}
             renderers={communityFeedRenderers as RendererObject[]}
-            defaultInterval={DURATION}
+            defaultInterval={DEFAULT_IMAGE_DURATION}
             onStoryStart={() => isStory(currentStory) && currentStory?.analytics.markAsSeen()}
             onStoryEnd={nextStory}
             onNext={nextStory}

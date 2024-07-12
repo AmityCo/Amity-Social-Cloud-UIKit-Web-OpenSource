@@ -25,7 +25,9 @@ import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStori
 
 import styles from './StoryPage.module.css';
 
-const DURATION = 5000;
+const MIN_IMAGE_DURATION = 5000; // 5 seconds
+const MAX_IMAGE_DURATION = 10000; // 10 seconds
+const DEFAULT_IMAGE_DURATION = 7000; // 7 seconds
 
 const isStory = (story: Amity.Story | Amity.Ad): story is Amity.Story =>
   !!(story as Amity.Story)?.storyId;
@@ -369,7 +371,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
             currentIndex={currentIndex}
             stories={formattedStories}
             renderers={globalFeedRenderers as RendererObject[]}
-            defaultInterval={DURATION}
+            defaultInterval={DEFAULT_IMAGE_DURATION}
             onStoryStart={() => isStory(currentStory) && currentStory?.analytics.markAsSeen()}
             onStoryEnd={increaseIndex}
             onNext={nextStory}

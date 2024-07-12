@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import {
@@ -44,6 +44,7 @@ export const renderer: CustomRenderer = ({
 }) => {
   const { formatMessage } = useIntl();
   const [loaded, setLoaded] = useState(false);
+  const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const { loader } = config;
@@ -65,8 +66,6 @@ export const renderer: CustomRenderer = ({
     myReactions,
     data,
     items,
-    isBottomSheetOpen,
-    setIsBottomSheetOpen,
   } = story as Amity.Story;
 
   const { members } = useCommunityMembersCollection({
@@ -87,38 +86,45 @@ export const renderer: CustomRenderer = ({
   const haveStoryPermission =
     isGlobalAdmin || isModeratorUser || checkStoryPermission(client, community?.communityId);
 
-  const heading = <div data-qa-anchor="community_display_name">{community?.displayName}</div>;
-  const subheading =
-    createdAt && creator?.displayName ? (
-      <span>
-        <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-        <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
-      </span>
-    ) : (
-      ''
-    );
-
+  const heading = useMemo(
+    () => <div data-qa-anchor="community_display_name">{community?.displayName}</div>,
+    [community?.displayName],
+  );
+  const subheading = useMemo(
+    () =>
+      createdAt && creator?.displayName ? (
+        <span>
+          <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
+          <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+        </span>
+      ) : (
+        ''
+      ),
+    [createdAt, creator?.displayName],
+  );
   const targetRootId = 'asc-uikit-stories-viewer';
 
-  const extractColors = () => {
-    const colorThief = new ColorThief();
-    const palette = colorThief.getPalette(imageRef.current, 2);
-    if (palette) {
-      const gradient = `linear-gradient(to top, rgb(${palette[0].join(',')}), rgb(${palette[1].join(
-        ',',
-      )})`;
-      setBackgroundGradient(gradient);
+  const extractColors = useCallback(() => {
+    if (imageRef.current && imageRef.current.complete) {
+      const colorThief = new ColorThief();
+      const palette = colorThief.getPalette(imageRef.current, 2);
+      if (palette) {
+        const gradient = `linear-gradient(to top, rgb(${palette[0].join(
+          ',',
+        )}), rgb(${palette[1].join(',')})`;
+        setBackgroundGradient(gradient);
+      }
     }
-  };
+  }, []);
 
-  const imageLoaded = () => {
+  const imageLoaded = useCallback(() => {
     setLoaded(true);
     if (isPaused) {
       setIsPaused(false);
     }
     action('play', true);
     extractColors();
-  };
+  }, [action, isPaused, extractColors]);
 
   const play = () => {
     action('play', true);
@@ -131,11 +137,11 @@ export const renderer: CustomRenderer = ({
 
   const openBottomSheet = () => {
     action('pause', true);
-    setIsBottomSheetOpen(true);
+    setIsOpenBottomSheet(true);
   };
   const closeBottomSheet = () => {
     action('play', true);
-    setIsBottomSheetOpen(false);
+    setIsOpenBottomSheet(false);
   };
   const openCommentSheet = () => {
     action('pause', true);
@@ -153,6 +159,12 @@ export const renderer: CustomRenderer = ({
   const handleProgressComplete = () => {
     increaseIndex();
   };
+
+  useEffect(() => {
+    if (imageRef.current && imageRef.current.complete) {
+      extractColors();
+    }
+  }, []);
 
   useEffect(() => {
     if (fileInputRef.current) {
@@ -210,7 +222,7 @@ export const renderer: CustomRenderer = ({
         duration={5000}
         currentIndex={currentIndex}
         storiesCount={storiesCount}
-        isPaused={isPaused || isBottomSheetOpen || isOpenCommentSheet}
+        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet}
         onComplete={handleProgressComplete}
       />
       <Header
@@ -253,7 +265,7 @@ export const renderer: CustomRenderer = ({
 
       <BottomSheet
         rootId={targetRootId}
-        isOpen={isBottomSheetOpen}
+        isOpen={isOpenBottomSheet}
         onClose={closeBottomSheet}
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
         detent="content-height"
