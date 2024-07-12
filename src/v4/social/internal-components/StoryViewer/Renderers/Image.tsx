@@ -254,7 +254,7 @@ export const renderer: CustomRenderer = ({
             [styles.imageFill]: data.imageDisplayMode === 'fill',
           })}
           data-qa-anchor="image_view"
-          src={url}
+          src={url ?? (story?.data.fileData as string)}
           onLoad={imageLoaded}
           alt="Story Image"
           crossOrigin="anonymous"
