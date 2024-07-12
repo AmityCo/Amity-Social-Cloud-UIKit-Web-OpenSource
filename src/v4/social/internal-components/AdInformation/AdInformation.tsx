@@ -13,10 +13,19 @@ interface AdInformationProps {
 
 export const AdInformation = ({ isOpen, onOpenChange, ad }: AdInformationProps) => {
   return (
-    <Drawer.Root open={isOpen} onOpenChange={onOpenChange}>
+    <Drawer.Root
+      open={isOpen}
+      onOpenChange={onOpenChange}
+      onDrag={(event) => event.stopPropagation()}
+    >
       <Drawer.Portal>
         <Drawer.Overlay className={styles.drawer__overlay} />
-        <Drawer.Content className={styles.drawer__content}>
+        <Drawer.Content
+          className={styles.drawer__content}
+          onTouchStart={(event) => event.stopPropagation()}
+          onTouchMove={(event) => event.stopPropagation()}
+          onTouchEnd={(event) => event.stopPropagation()}
+        >
           <div className={styles.drawer__innerContent}>
             <div className={styles.drawer__placeholder} />
             <Drawer.Title className={styles.drawer__title}>

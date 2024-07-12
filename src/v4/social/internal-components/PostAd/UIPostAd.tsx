@@ -59,7 +59,7 @@ export const UIPostAd = ({
         data-has-url={!!ad.callToActionUrl}
         onClick={handleCallToActionClick}
       >
-        <div>
+        <div className={styles.footer__left}>
           <Typography.Body className={styles.footer__content__description}>
             {ad.description}
           </Typography.Body>
@@ -68,9 +68,13 @@ export const UIPostAd = ({
           </Typography.BodyBold>
         </div>
         {ad.callToActionUrl ? (
-          <Button className={styles.footer__content__button} onPress={handleCallToActionClick}>
-            <Typography.CaptionBold>{ad.callToAction}</Typography.CaptionBold>
-          </Button>
+          <div className={styles.footer__right}>
+            <Button className={styles.footer__content__button} onPress={handleCallToActionClick}>
+              <Typography.CaptionBold className={styles.footer__content__button__text}>
+                {ad.callToAction}
+              </Typography.CaptionBold>
+            </Button>
+          </div>
         ) : null}
       </div>
       <AdInformation

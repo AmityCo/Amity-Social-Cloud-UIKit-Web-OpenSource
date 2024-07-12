@@ -4,6 +4,7 @@ import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './VideoContent.module.css';
 import usePost from '~/v4/core/hooks/objects/usePost';
+import { Button } from '~/v4/core/natives/Button';
 
 const PlayButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -53,10 +54,10 @@ const Video = ({
   }
 
   return (
-    <div
+    <Button
       className={styles.videoContent__videoContainer}
       data-videos-amount={Math.min(postAmount, 4)}
-      onClick={() => onVideoClick()}
+      onPress={() => onVideoClick()}
     >
       <VideoThumbnail fileId={videoPost.data.thumbnailFileId} />
       {videoLeftCount > 0 && index === postAmount - 1 && (
@@ -71,7 +72,7 @@ const Video = ({
           </div>
         </div>
       ) : null}
-    </div>
+    </Button>
   );
 };
 

@@ -5,6 +5,7 @@ import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 import styles from './ImageContent.module.css';
 import usePost from '~/v4/core/hooks/objects/usePost';
+import { Button } from '~/v4/core/natives/Button';
 
 interface ImageContentProps {
   pageId?: string;
@@ -42,10 +43,10 @@ const Image = ({
   }
 
   return (
-    <div
+    <Button
       key={imagePost.postId}
       className={styles.imageContent__imgContainer}
-      onClick={() => onImageClick()}
+      onPress={() => onImageClick()}
     >
       <ImageThumbnail fileId={imagePost.data.fileId} />
       {imageLeftCount > 0 && index === postAmount - 1 && (
@@ -53,7 +54,7 @@ const Image = ({
           + {imageLeftCount}
         </Typography.Heading>
       )}
-    </div>
+    </Button>
   );
 };
 

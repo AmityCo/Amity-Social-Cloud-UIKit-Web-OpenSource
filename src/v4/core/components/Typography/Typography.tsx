@@ -62,49 +62,49 @@ Typography.Subtitle = ({ children, className = '', style, ...rest }) => {
 
 Typography.Body = ({ children, className = '', style, ...rest }) => {
   return (
-    <p
+    <span
       className={clsx(typography['typography'], typography['typography-body'], className)}
       style={style}
       {...rest}
     >
       {children}
-    </p>
+    </span>
   );
 };
 
 Typography.BodyBold = ({ children, className = '', style, ...rest }) => {
   return (
-    <p
+    <span
       className={clsx(typography['typography'], typography['typography-body-bold'], className)}
       style={style}
       {...rest}
     >
       {children}
-    </p>
+    </span>
   );
 };
 
 Typography.Caption = ({ children, className = '', style, ...rest }) => {
   return (
-    <p
+    <span
       className={clsx(typography['typography'], typography['typography-caption'], className)}
       style={style}
       {...rest}
     >
       {children}
-    </p>
+    </span>
   );
 };
 
 Typography.CaptionBold = ({ children, className = '', style, ...rest }) => {
   return (
-    <p
+    <span
       className={clsx(typography['typography'], typography['typography-caption-bold'], className)}
       style={style}
       {...rest}
     >
       {children}
-    </p>
+    </span>
   );
 };
 

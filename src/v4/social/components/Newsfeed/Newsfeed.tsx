@@ -74,6 +74,7 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
     <div
       className={styles.newsfeed}
       style={themeStyles}
+      onDrag={(event) => event.stopPropagation()}
       onTouchStart={(ev) => {
         touchStartY.current = ev.touches[0].clientY;
       }}
@@ -85,11 +86,8 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
         }
 
         setTouchDiff(Math.min(touchY - touchStartY.current, 100));
-        if (touchDiff > 0 && window.scrollY === 0) {
-          ev.preventDefault();
-        }
       }}
-      onTouchEnd={() => {
+      onTouchEnd={(ev) => {
         touchStartY.current = 0;
         if (touchDiff >= 75) {
           refetch();

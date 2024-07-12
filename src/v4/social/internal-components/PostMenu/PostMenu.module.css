@@ -22,6 +22,12 @@
   border-radius: var(--asc-border-radius-md);
 }
 
+@media (hover: none) {
+  .postMenu__item:hover {
+    background-color: inherit;
+  }
+}
+
 .postMenu__editPost__text {
   color: var(--asc-color-secondary-default);
 }

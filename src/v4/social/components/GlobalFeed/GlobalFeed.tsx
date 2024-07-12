@@ -49,13 +49,24 @@ export const GlobalFeed = ({
     return <EmptyNewsfeed pageId={pageId} />;
   }
 
+  const getItemKey = (item: Amity.Post | Amity.Ad, prevItem: Amity.Post | Amity.Ad | undefined) => {
+    if (isAmityAd(item)) {
+      if (prevItem && isAmityAd(prevItem)) {
+        return `${prevItem.adId}-${item.adId}`;
+      } else {
+        return `${prevItem.postId}-${item.adId}`;
+      }
+    }
+    return item.postId;
+  };
+
   return (
     <div className={styles.global_feed} style={themeStyles} data-qa-anchor={accessibilityId}>
       {items.map((item, index) => (
-        <div key={item.postId || item.adId}>
+        <div key={getItemKey(item, items[Math.max(0, index - 1)])}>
           {index !== 0 ? <div className={styles.global_feed__divider} /> : null}
           {isAmityAd(item) ? (
-            <PostAd key={item.adId} ad={item} />
+            <PostAd ad={item} />
           ) : (
             <div className={styles.global_feed__postContainer}>
               <PostContent

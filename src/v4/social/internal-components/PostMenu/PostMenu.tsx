@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { Button } from '~/v4/core/natives/Button';
 
 import styles from './PostMenu.module.css';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
@@ -160,11 +161,10 @@ export const PostMenu = ({
         <PenSvg className={styles.postMenu__editPost__icon} />
         <span>Edit post</span>
       </button> */}
-      {showReportPostButton ? (
-        <button
+      {showReportPostButton && !isLoading ? (
+        <Button
           className={styles.postMenu__item}
-          disabled={isLoading}
-          onClick={() => {
+          onPress={() => {
             if (isFlaggedByMe) {
               mutateUnReportPost();
             } else {
@@ -176,13 +176,13 @@ export const PostMenu = ({
           <span className={styles.postMenu__reportPost__text}>
             {isFlaggedByMe ? 'Unreport post' : 'Report post'}
           </span>
-        </button>
+        </Button>
       ) : null}
       {showDeletePostButton ? (
-        <button className={styles.postMenu__item} onClick={() => onDeleteClick()}>
+        <Button className={styles.postMenu__item} onPress={() => onDeleteClick()}>
           <TrashSvg className={styles.postMenu__deletePost__icon} />
           <span className={styles.postMenu__deletePost__text}>Delete post</span>
-        </button>
+        </Button>
       ) : null}
     </div>
   );

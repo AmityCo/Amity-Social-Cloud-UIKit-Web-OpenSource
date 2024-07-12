@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
+import { Button } from '~/v4/core/natives/Button';
 import styles from './MenuButton.module.css';
 
 const EllipsisH = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
@@ -34,13 +35,13 @@ export function MenuButton({ pageId = '*', componentId = '*', onClick }: MenuBut
   if (isExcluded) return null;
 
   return (
-    <div onClick={onClick} data-qa-anchor={accessibilityId}>
+    <Button onPress={onClick} data-qa-anchor={accessibilityId}>
       <IconComponent
         defaultIcon={() => <EllipsisH className={styles.menuButton} style={themeStyles} />}
         imgIcon={() => <img src={config.icon} alt={uiReference} />}
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-    </div>
+    </Button>
   );
 }
