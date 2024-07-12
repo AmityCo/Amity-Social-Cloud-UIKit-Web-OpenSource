@@ -1,1 +1,1 @@
-export { Avatar, AVATAR_SIZE } from './Avatar';
+export { Avatar } from './Avatar';

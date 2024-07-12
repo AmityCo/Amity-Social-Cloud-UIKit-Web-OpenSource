@@ -1,1 +1,1 @@
-export { SocialHomePage } from './SocialHomePage';
+export { SocialHomePage, HomePageTab } from './SocialHomePage';

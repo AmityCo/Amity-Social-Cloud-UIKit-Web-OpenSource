@@ -1,21 +1,19 @@
-import { config } from 'process';
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
 import styles from './CancelButton.module.css';
 
 interface CancelButtonProps {
   pageId?: string;
   componentId?: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onPress?: ButtonProps['onPress'];
 }
 
 export const CancelButton = ({
   pageId = '*',
   componentId = '*',
-  onClick = () => {},
+  onPress = () => {},
 }: CancelButtonProps) => {
   const elementId = 'cancel_button';
   const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
@@ -27,8 +25,13 @@ export const CancelButton = ({
   if (isExcluded) return null;
 
   return (
-    <button data-qa-anchor={accessibilityId} style={themeStyles} onClick={onClick}>
-      <Typography.Body className={styles.clearButton}>{config.cancel_button_text}</Typography.Body>
-    </button>
+    <Button
+      data-qa-anchor={accessibilityId}
+      className={styles.cancelButton}
+      style={themeStyles}
+      onPress={onPress}
+    >
+      <Typography.Body>{config.text}</Typography.Body>
+    </Button>
   );
 };

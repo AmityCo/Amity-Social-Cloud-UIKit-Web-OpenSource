@@ -5,6 +5,7 @@ import { PressEvent } from 'react-aria';
 import { Typography } from '~/v4/core/components/index';
 import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 import { IconComponent } from '~/v4/core/IconComponent';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 import styles from './StoryCommentButton.module.css';
 
@@ -28,10 +29,10 @@ const StoryCommentSvg = (props: React.SVGProps<SVGSVGElement>) => {
 
 interface StoryCommentButtonProps {
   commentsCount: number;
-  onPress: (e: PressEvent) => void;
   pageId?: string;
   componentId?: string;
   imgClassName?: string;
+  onPress: ButtonProps['onPress'];
 }
 
 export const StoryCommentButton = ({
@@ -52,26 +53,30 @@ export const StoryCommentButton = ({
   if (isExcluded) return null;
 
   return (
-    <IconComponent
+    <Button
       data-qa-anchor={accessibilityId}
-      defaultIconName={defaultConfig.icon}
-      configIconName={config.icon}
-      className={clsx(styles.storyCommentButton)}
-      imgIcon={() => (
-        <img
-          src={config.icon}
-          alt={uiReference}
-          className={clsx(imgClassName)}
-          style={themeStyles}
-        />
-      )}
-      defaultIcon={() => (
-        <div className={clsx(styles.storyCommentIcon)}>
-          <StoryCommentSvg />
-          <Typography.BodyBold>{millify(commentsCount)}</Typography.BodyBold>
-        </div>
-      )}
       onPress={onPress}
-    />
+      style={themeStyles}
+      className={clsx(styles.storyCommentButton)}
+    >
+      <IconComponent
+        defaultIconName={defaultConfig.icon}
+        configIconName={config.icon}
+        imgIcon={() => (
+          <img
+            src={config.icon}
+            alt={uiReference}
+            className={clsx(imgClassName)}
+            style={themeStyles}
+          />
+        )}
+        defaultIcon={() => (
+          <div className={clsx(styles.storyCommentIcon)}>
+            <StoryCommentSvg />
+            <Typography.BodyBold>{millify(commentsCount)}</Typography.BodyBold>
+          </div>
+        )}
+      />
+    </Button>
   );
 };

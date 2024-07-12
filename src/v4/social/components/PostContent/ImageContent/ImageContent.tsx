@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 
-import useImage from '~/v4/core/hooks/useImage';
-import usePostByIds from '~/v4/core/hooks/usePostByIds';
+import { useImage } from '~/v4/core/hooks/useImage';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 import styles from './ImageContent.module.css';
+import usePost from '~/v4/core/hooks/objects/usePost';
+import { Button } from '~/v4/core/natives/Button';
 
 interface ImageContentProps {
   pageId?: string;
@@ -14,12 +15,47 @@ interface ImageContentProps {
   onImageClick: (imageIndex: number) => void;
 }
 
-const Image = ({ fileId }: { fileId: string }) => {
+const ImageThumbnail = ({ fileId }: { fileId: string }) => {
   const imageUrl = useImage({
     fileId,
   });
 
   return <img loading="lazy" className={styles.imageContent__img} src={imageUrl} alt={fileId} />;
+};
+
+const Image = ({
+  postId,
+  index,
+  imageLeftCount,
+  postAmount,
+  onImageClick,
+}: {
+  postId: string;
+  index: number;
+  imageLeftCount: number;
+  postAmount: number;
+  onImageClick: () => void;
+}) => {
+  const { post: imagePost, isLoading } = usePost(postId);
+
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <Button
+      key={imagePost.postId}
+      className={styles.imageContent__imgContainer}
+      onPress={() => onImageClick()}
+    >
+      <ImageThumbnail fileId={imagePost.data.fileId} />
+      {imageLeftCount > 0 && index === postAmount - 1 && (
+        <Typography.Heading className={styles.imageContent__imgCover}>
+          + {imageLeftCount}
+        </Typography.Heading>
+      )}
+    </Button>
+  );
 };
 
 export const ImageContent = ({
@@ -35,15 +71,17 @@ export const ImageContent = ({
     elementId,
   });
 
-  const first4Images = useMemo(() => post.children.slice(0, 4), [post.children]);
+  const first4Images = post.children.slice(0, 4);
 
   const imageLeftCount = Math.max(0, post.children.length - 4);
 
-  const posts = usePostByIds(first4Images);
+  const { post: childPost, isLoading } = usePost(post.children?.[0]);
 
-  const imagePosts = posts.filter((post) => post.dataType === 'image');
+  if (isLoading) {
+    return null;
+  }
 
-  if (imagePosts.length === 0) {
+  if (childPost?.dataType !== 'image') {
     return null;
   }
 
@@ -53,15 +91,15 @@ export const ImageContent = ({
       style={themeStyles}
       data-images-amount={Math.min(post.children.length, 4)}
     >
-      {imagePosts.map((post, index) => (
-        <div className={styles.imageContent__imgContainer} onClick={() => onImageClick(index)}>
-          <Image fileId={post.data.fileId} />
-          {imageLeftCount > 0 && index === posts.length - 1 && (
-            <Typography.Heading className={styles.imageContent__imgCover}>
-              + {imageLeftCount}
-            </Typography.Heading>
-          )}
-        </div>
+      {first4Images.map((postId: string, index: number) => (
+        <Image
+          key={postId}
+          postId={postId}
+          index={index}
+          imageLeftCount={imageLeftCount}
+          postAmount={post.children.length}
+          onImageClick={() => onImageClick(index)}
+        />
       ))}
     </div>
   );

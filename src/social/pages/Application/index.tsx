@@ -100,7 +100,6 @@ const Community = () => {
               mediaType={page.mediaType}
               targetId={page.targetId}
               targetType={page.targetType}
-              storyType={page.storyType}
             />
           )}
 

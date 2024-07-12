@@ -1,34 +1,29 @@
 import React from 'react';
 import { useNavigation } from '~/social/providers/NavigationProvider';
+
 import { StoryTabCommunityFeed } from '~/v4/social/components/StoryTab/StoryTabCommunity';
 import { StoryTabGlobalFeed } from '~/v4/social/components/StoryTab/StoryTabGlobalFeed';
 import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 
-type StoryTabType = 'communityFeed' | 'globalFeed';
+type StoryTabProps = { type: 'communityFeed'; communityId: string } | { type: 'globalFeed' };
 
-type StoryTabProps<T extends StoryTabType> = {
-  type: T;
-  communityId?: T extends 'communityFeed' ? string : never;
-};
-
-export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTabProps<T>) => {
+export const StoryTab: React.FC<StoryTabProps> = (props) => {
   const componentId = 'story_tab_component';
   const { onClickStory, goToDraftStoryPage } = useNavigation();
-
   const { setFile } = useStoryContext();
 
   const renderStoryTab = () => {
-    switch (type) {
+    switch (props.type) {
       case 'communityFeed':
         return (
           <StoryTabCommunityFeed
             componentId={componentId}
-            communityId={communityId || ''}
+            communityId={props.communityId}
             onFileChange={(file) => {
               setFile(file);
               if (file) {
                 goToDraftStoryPage(
-                  communityId || '',
+                  props.communityId,
                   'community',
                   file.type.includes('image')
                     ? { type: 'image', url: URL.createObjectURL(file) }
@@ -37,7 +32,7 @@ export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTab
                 );
               }
             }}
-            onStoryClick={() => onClickStory(communityId || '', 'communityFeed')}
+            onStoryClick={() => onClickStory(props.communityId, 'communityFeed')}
           />
         );
       case 'globalFeed':
@@ -53,8 +48,6 @@ export const StoryTab = <T extends StoryTabType>({ type, communityId }: StoryTab
             }}
           />
         );
-      default:
-        return null;
     }
   };
 

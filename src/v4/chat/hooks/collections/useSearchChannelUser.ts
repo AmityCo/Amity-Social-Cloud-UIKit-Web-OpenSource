@@ -1,15 +1,23 @@
-import useLiveCollection from '~/core/hooks/useLiveCollection';
+import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 import { ChannelRepository } from '@amityco/ts-sdk';
 
-const useSearchChannelUser = (
-  channelId: Amity.Channel['channelId'],
-  memberships: Amity.QueryChannelMembers['memberships'],
-  search?: string | null,
-) => {
+export const useSearchChannelUser = ({
+  channelId,
+  memberships,
+  search,
+  limit = 20,
+  shouldCall = true,
+}: {
+  channelId: Amity.Channel['channelId'];
+  memberships: Amity.QueryChannelMembers['memberships'];
+  limit?: number;
+  search?: string | null;
+  shouldCall?: boolean;
+}) => {
   const { items, ...rest } = useLiveCollection({
     fetcher: ChannelRepository.Membership.searchMembers,
-    params: { channelId, search: search || '', memberships },
-    shouldCall: () => !!channelId,
+    params: { channelId, search: search || '', memberships, limit },
+    shouldCall: !!channelId && shouldCall,
   });
 
   return {
@@ -17,5 +25,3 @@ const useSearchChannelUser = (
     ...rest,
   };
 };
-
-export default useSearchChannelUser;

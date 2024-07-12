@@ -3,6 +3,7 @@ import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 import styles from './ClearButton.module.css';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 function ClearButtonSvg(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -24,7 +25,7 @@ interface ClearButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onPress?: () => void;
+  onPress?: ButtonProps['onPress'];
 }
 
 export const ClearButton = ({
@@ -32,7 +33,7 @@ export const ClearButton = ({
   componentId = '*',
   defaultClassName,
   imgClassName,
-  onPress = () => {},
+  onPress,
 }: ClearButtonProps) => {
   const elementId = 'clear_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -45,14 +46,18 @@ export const ClearButton = ({
   if (isExcluded) return null;
 
   return (
-    <button data-qa-anchor={accessibilityId} className={styles.clearButton} style={themeStyles}>
+    <Button
+      data-qa-anchor={accessibilityId}
+      className={styles.clearButton}
+      style={themeStyles}
+      onPress={onPress}
+    >
       <IconComponent
-        onPress={onPress}
         defaultIcon={() => <ClearButtonSvg className={defaultClassName} />}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-    </button>
+    </Button>
   );
 };

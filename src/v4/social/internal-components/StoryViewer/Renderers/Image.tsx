@@ -1,36 +1,45 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useIntl } from 'react-intl';
 import Truncate from 'react-truncate-markup';
 import {
   CustomRenderer,
   Tester,
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
+import ColorThief from 'colorthief';
 import { CommentTray } from '~/v4/social/components';
 import { HyperLink } from '~/v4/social/elements/HyperLink';
 import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
 import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Header';
-import { motion, PanInfo, useAnimationControls } from 'framer-motion';
 import { BottomSheet } from '~/v4/core/components/BottomSheet';
 import { Typography } from '~/v4/core/components';
-import { Button } from '~/v4/core/components/Button';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
-import useUser from '~/v4/core/hooks/objects/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';
+import { Button } from '~/v4/core/natives/Button';
 
 import styles from './Renderers.module.css';
 import clsx from 'clsx';
 
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
-import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 export const renderer: CustomRenderer = ({
-  story,
+  story: {
+    actions,
+    fileInputRef,
+    addStoryButton,
+    currentIndex,
+    storiesCount,
+    increaseIndex,
+    pageId,
+    dragEventTarget,
+    story,
+    url,
+  },
   action,
   config,
   onClose,
-  onSwipeDown,
   onClickCommunity,
 }) => {
   const { formatMessage } = useIntl();
@@ -40,9 +49,11 @@ export const renderer: CustomRenderer = ({
   const [isPaused, setIsPaused] = useState(false);
   const { loader } = config;
   const { client } = useSDK();
+  const [backgroundGradient, setBackgroundGradient] = useState('');
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const isLiked = !!(story && story.myReactions && story.myReactions.includes(LIKE_REACTION_KEY));
-  const reactionsCount = story.reactionsCount || 0;
+  const reactionsCount = story?.reactionsCount || 0;
 
   const {
     storyId,
@@ -52,30 +63,28 @@ export const renderer: CustomRenderer = ({
     createdAt,
     creator,
     community,
-    actions,
-    addStoryButton,
-    fileInputRef,
-    storyStyles,
     myReactions,
-    currentIndex,
-    storiesCount,
-    increaseIndex,
-    pageId,
-  } = story;
+    data,
+    items,
+  } = story as Amity.Story;
 
-  const { members } = useCommunityMembersCollection(community?.communityId as string);
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: community?.communityId as string,
+    },
+    shouldCall: !!community?.communityId,
+  });
   const member = members?.find((member) => member.userId === client?.userId);
   const isMember = member != null;
 
   const { user } = useUser(client?.userId);
-  const controls = useAnimationControls();
 
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isCommunityModerator = isModerator(user?.roles);
+  const isModeratorUser = isModerator(user?.roles);
   const haveStoryPermission =
-    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, community?.communityId);
+    isGlobalAdmin || isModeratorUser || checkStoryPermission(client, community?.communityId);
 
   const heading = useMemo(
     () => <div data-qa-anchor="community_display_name">{community?.displayName}</div>,
@@ -95,45 +104,52 @@ export const renderer: CustomRenderer = ({
   );
   const targetRootId = 'asc-uikit-stories-viewer';
 
-  const imageLoaded = () => {
+  const extractColors = useCallback(() => {
+    if (imageRef.current && imageRef.current.complete) {
+      const colorThief = new ColorThief();
+      const palette = colorThief.getPalette(imageRef.current, 2);
+      if (palette) {
+        const gradient = `linear-gradient(to top, rgb(${palette[0].join(
+          ',',
+        )}), rgb(${palette[1].join(',')})`;
+        setBackgroundGradient(gradient);
+      }
+    }
+  }, []);
+
+  const imageLoaded = useCallback(() => {
     setLoaded(true);
     if (isPaused) {
       setIsPaused(false);
     }
     action('play', true);
+    extractColors();
+  }, [action, isPaused, extractColors]);
+
+  const play = () => {
+    action('play', true);
+    setIsPaused(false);
   };
-
-  const play = () => setIsPaused(false);
-  const pause = () => setIsPaused(true);
-
-  const openBottomSheet = () => setIsOpenBottomSheet(true);
-  const closeBottomSheet = () => setIsOpenBottomSheet(false);
-  const openCommentSheet = () => setIsOpenCommentSheet(true);
-  const closeCommentSheet = () => setIsOpenCommentSheet(false);
-
-  const handleSwipeDown = () => {
-    controls
-      .start({
-        y: '100%',
-        transition: { duration: 0.3, ease: 'easeOut' },
-      })
-      .then(() => {
-        onSwipeDown?.();
-      });
-  };
-
-  const handleDragStart = () => {
+  const pause = () => {
     action('pause', true);
+    setIsPaused(true);
   };
 
-  const handleDragEnd = (_event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (info.offset.y > 100) {
-      handleSwipeDown();
-    } else {
-      controls.start({ y: 0, transition: { duration: 0.3, ease: 'easeOut' } }).then(() => {
-        action('play', true);
-      });
-    }
+  const openBottomSheet = () => {
+    action('pause', true);
+    setIsOpenBottomSheet(true);
+  };
+  const closeBottomSheet = () => {
+    action('play', true);
+    setIsOpenBottomSheet(false);
+  };
+  const openCommentSheet = () => {
+    action('pause', true);
+    setIsOpenCommentSheet(true);
+  };
+  const closeCommentSheet = () => {
+    action('play', true);
+    setIsOpenCommentSheet(false);
   };
 
   const handleOnClose = () => {
@@ -145,18 +161,21 @@ export const renderer: CustomRenderer = ({
   };
 
   useEffect(() => {
-    if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
-      action('pause', true);
-    } else {
-      action('play', true);
+    if (imageRef.current && imageRef.current.complete) {
+      extractColors();
     }
-  }, [isPaused, isOpenBottomSheet, isOpenCommentSheet, action]);
+  }, []);
 
   useEffect(() => {
-    action('pause', true);
     if (fileInputRef.current) {
-      const handleClick = () => action('pause', true);
-      const handleCancel = () => action('play', true);
+      const handleClick = () => {
+        action('pause', true);
+        setIsPaused(true);
+      };
+      const handleCancel = () => {
+        action('play', true);
+        setIsPaused(false);
+      };
 
       fileInputRef.current.addEventListener('click', handleClick);
       fileInputRef.current.addEventListener('cancel', handleCancel);
@@ -168,18 +187,35 @@ export const renderer: CustomRenderer = ({
         }
       };
     }
-  }, [action, fileInputRef]);
+  }, [fileInputRef]);
+
+  useEffect(() => {
+    if (dragEventTarget) {
+      const handleDragStart = () => {
+        action('pause', true);
+        setIsPaused(true);
+      };
+      const handleDragEnd = () => {
+        action('play', true);
+        setIsPaused(false);
+      };
+
+      dragEventTarget.current?.addEventListener('dragstart', handleDragStart);
+      dragEventTarget.current?.addEventListener('dragend', handleDragEnd);
+
+      return () => {
+        dragEventTarget.current?.removeEventListener('dragstart', handleDragStart);
+        dragEventTarget.current?.removeEventListener('dragend', handleDragEnd);
+      };
+    }
+  }, [dragEventTarget]);
 
   return (
-    <motion.div
+    <div
       className={styles.rendererContainer}
-      animate={controls}
-      drag="y"
-      dragConstraints={{ top: 0, bottom: 0 }}
-      dragElastic={0.7}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
+      style={{
+        background: backgroundGradient,
+      }}
     >
       <StoryProgressBar
         pageId={pageId}
@@ -206,19 +242,22 @@ export const renderer: CustomRenderer = ({
       />
 
       <div
-        className={clsx(styles.storyImageContainer)}
-        style={
-          {
-            '--asc-story-image-background': storyStyles?.background,
-          } as React.CSSProperties
-        }
+        className={clsx(styles.storyImageContainer, {
+          [styles.imageFit]: data.imageDisplayMode === 'fit',
+          [styles.imageFill]: data.imageDisplayMode === 'fill',
+        })}
       >
         <img
-          className={styles.storyImage}
+          ref={imageRef}
+          className={clsx(styles.storyImage, {
+            [styles.imageFit]: data.imageDisplayMode === 'fit',
+            [styles.imageFill]: data.imageDisplayMode === 'fill',
+          })}
           data-qa-anchor="image_view"
-          src={story.url}
+          src={url ?? (story?.data.fileData as string)}
           onLoad={imageLoaded}
           alt="Story Image"
+          crossOrigin="anonymous"
         />
       </div>
 
@@ -235,15 +274,10 @@ export const renderer: CustomRenderer = ({
           <Button
             key={bottomSheetAction.name}
             className={styles.actionButton}
-            onClick={() => {
-              bottomSheetAction.action();
-            }}
-            variant="secondary"
+            onPress={() => bottomSheetAction?.action()}
           >
             {bottomSheetAction?.icon && bottomSheetAction.icon}
-            <Typography.BodyBold>
-              {formatMessage({ id: bottomSheetAction.name })}
-            </Typography.BodyBold>
+            <Typography.BodyBold>{bottomSheetAction.name}</Typography.BodyBold>
           </Button>
         ))}
       </BottomSheet>
@@ -265,22 +299,21 @@ export const renderer: CustomRenderer = ({
         />
       </BottomSheet>
 
-      {story.items?.[0]?.data?.url && (
+      {items?.[0]?.data?.url && (
         <div className={styles.hyperLinkContainer}>
           <HyperLink
             href={
-              story.items[0].data.url.startsWith('http')
-                ? story.items[0].data.url
-                : `https://${story.items[0].data.url}`
+              items[0].data.url.startsWith('http')
+                ? items[0].data.url
+                : `https://${items[0].data.url}`
             }
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => story.analytics.markLinkAsClicked()}
+            onClick={() => story?.analytics.markLinkAsClicked()}
           >
             <Truncate lines={1}>
               <span>
-                {story.items[0]?.data?.customText ||
-                  story.items[0].data.url.replace(/^https?:\/\//, '')}
+                {items[0]?.data?.customText || items[0].data.url.replace(/^https?:\/\//, '')}
               </span>
             </Truncate>
           </HyperLink>
@@ -288,6 +321,7 @@ export const renderer: CustomRenderer = ({
       )}
 
       <Footer
+        pageId={pageId}
         storyId={storyId}
         syncState={syncState}
         reach={reach}
@@ -296,16 +330,17 @@ export const renderer: CustomRenderer = ({
         isLiked={isLiked}
         myReactions={myReactions}
         onClickComment={openCommentSheet}
-        showImpression={isCreator || haveStoryPermission}
+        // Only story-creator and moderator of the community should be able to see impression count.
+        showImpression={isCreator || checkStoryPermission(client, community?.communityId)}
         isMember={isMember}
       />
-    </motion.div>
+    </div>
   );
 };
 
 export const tester: Tester = (story) => {
   return {
-    condition: !story.content && (!story.type || story.type === 'image'),
+    condition: !!story.story?.storyId && (!story.type || story.type === 'image'),
     priority: 2,
   };
 };

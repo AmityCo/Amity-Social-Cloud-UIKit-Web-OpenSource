@@ -4,7 +4,7 @@
 }
 
 .global_feed__postContainer {
-  padding: 0.25rem 1rem 0.75rem 0.75rem;
+  padding: 0.25rem 1rem 0.75rem;
 }
 
 .global_feed__postSkeletonContainer {
@@ -73,6 +73,10 @@
 
 .global_feed__intersection {
   height: 1px;
+}
+
+.global_feed__commentContainer {
+  padding: 0.25rem 1rem 0 0.75rem;
 }
 
 @keyframes spin {

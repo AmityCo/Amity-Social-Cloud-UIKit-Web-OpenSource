@@ -45,15 +45,28 @@ export const useCommentFlaggedByMe = (commentId?: string) => {
     }
   };
 
-  const toggleFlagComment = async () => {
+  const toggleFlagComment = async (arg?: {
+    onFlagSuccess?: () => void;
+    onUnFlagSuccss?: () => void;
+  }) => {
     if (commentId == null) return;
     if (isFlaggedByMe) {
       await unflagComment();
+
+      if (arg?.onUnFlagSuccss) {
+        return arg.onUnFlagSuccss();
+      }
+
       notification.success({
         content: 'Comment unreported',
       });
     } else {
       await flagComment();
+
+      if (arg?.onFlagSuccess) {
+        return arg.onFlagSuccess();
+      }
+
       notification.success({
         content: 'Comment reported',
       });

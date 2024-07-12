@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
-  background: var(--asc-color-base-background, #fff);
+  background: var(--asc-color-background-default, #fff);
   border: 1px solid var(--asc-color-base-shade4);
   border-radius: 1.5rem;
   cursor: pointer;

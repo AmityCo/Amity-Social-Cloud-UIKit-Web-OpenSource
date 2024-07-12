@@ -31,7 +31,7 @@ export function ExploreButton({
       componentId={componentId}
       elementId={elementId}
       isActive={isActive}
-      onClick={() => onClick?.()}
+      onPress={() => onClick?.()}
       data-qa-anchor={accessibilityId}
     >
       {config.text}

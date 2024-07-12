@@ -256,14 +256,21 @@
 }
 
 .actionButton {
-  width: 100%;
   display: flex;
   justify-content: flex-start;
+  align-items: center;
   text-align: left;
   gap: var(--asc-spacing-s1);
   border: none;
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
+  padding: var(--asc-spacing-m1) var(--asc-spacing-m2);
+  cursor: pointer;
+  border-radius: var(--asc-border-radius-sm);
+}
+
+.actionButton:hover {
+  background-color: var(--asc-color-base-shade4);
 }
 
 .navigationOverlay {
@@ -280,4 +287,12 @@
 
 .rightOverlay {
   right: 0;
+}
+
+.imageFit {
+  object-fit: contain;
+}
+
+.imageFill {
+  object-fit: cover;
 }

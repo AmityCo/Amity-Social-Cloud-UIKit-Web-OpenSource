@@ -4,7 +4,7 @@ import FallbackReaction from '~/v4/icons/FallbackReaction';
 import { ReactionIcon } from '~/v4/social/components/ReactionList/ReactionIcon';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { AVATAR_SIZE } from '~/v4/core/components/Avatar/Avatar';
+import User from '~/v4/icons/User';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 import styles from './ReactionList.module.css';
@@ -16,7 +16,6 @@ export const ReactionListPanel = ({
   loadMore,
   isLoading,
   currentRef,
-  showReactionUserDetails,
 }: {
   filteredReactions: Amity.Reactor[];
   removeReaction: (reaction: string) => Promise<void>;
@@ -24,7 +23,6 @@ export const ReactionListPanel = ({
   loadMore: () => void;
   isLoading: boolean;
   currentRef: HTMLDivElement | null;
-  showReactionUserDetails?: boolean;
 }) => {
   const { currentUserId } = useSDK();
   const { config } = useCustomReaction();
@@ -51,14 +49,16 @@ export const ReactionListPanel = ({
                 <div className={styles.userItem}>
                   <div className={styles.userDetailsContainer}>
                     <div className={styles.userDetailsProfile}>
-                      <Avatar
-                        data-qa-anchor="user_avatar_view"
-                        size={AVATAR_SIZE.SMALL}
-                        avatar={reaction.user?.avatar?.fileUrl}
-                      />
+                      <div className={styles.avatar}>
+                        <Avatar
+                          data-qa-anchor="user_avatar_view"
+                          avatarUrl={reaction.user?.avatar?.fileUrl}
+                          defaultImage={<User />}
+                        />
+                      </div>
                       <Typography.BodyBold data-qa-anchor="user_display_name">
                         {reaction.user?.displayName}
-                        {currentUserId === reaction.user?.userId && showReactionUserDetails && (
+                        {currentUserId === reaction.user?.userId && (
                           <>
                             <br />
                             <div onClick={() => removeReaction(reaction.reactionName)}>
@@ -71,20 +71,18 @@ export const ReactionListPanel = ({
                       </Typography.BodyBold>
                     </div>
 
-                    {showReactionUserDetails && (
-                      <div className={styles.userDetailsReaction}>
-                        {reactionList.includes(reaction.reactionName) ? (
-                          <ReactionIcon
-                            reactionConfigItem={
-                              config.find(({ name }) => name === reaction.reactionName)!
-                            }
-                            className={styles.reactionIcon}
-                          />
-                        ) : (
-                          <FallbackReaction className={styles.reactionIcon} />
-                        )}
-                      </div>
-                    )}
+                    <div className={styles.userDetailsReaction}>
+                      {reactionList.includes(reaction.reactionName) ? (
+                        <ReactionIcon
+                          reactionConfigItem={
+                            config.find(({ name }) => name === reaction.reactionName)!
+                          }
+                          className={styles.reactionIcon}
+                        />
+                      ) : (
+                        <FallbackReaction className={styles.reactionIcon} />
+                      )}
+                    </div>
                   </div>
                 </div>
               </Fragment>
