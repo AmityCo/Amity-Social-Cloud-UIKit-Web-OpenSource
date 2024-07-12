@@ -51,6 +51,9 @@ interface CommunityFeedStoryProps {
 
 const DURATION = 5000;
 
+const isStory = (story: Amity.Story | Amity.Ad): story is Amity.Story =>
+  !!(story as Amity.Story)?.storyId;
+
 export const CommunityFeedStory = ({
   pageId = '*',
   communityId,
@@ -103,8 +106,14 @@ export const CommunityFeedStory = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const { file, setFile } = useStoryContext();
 
-  const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const isModerator = checkStoryPermission(client, communityId);
+  const currentStory = stories[currentIndex];
+
+  const isStoryCreator = isStory(currentStory)
+    ? currentStory?.creator?.userId === currentUserId
+    : false;
+  const isModerator = isStory(currentStory)
+    ? checkStoryPermission(client, currentStory?.targetId)
+    : false;
 
   const nextStory = () => {
     if (currentIndex === stories.length - 1) {
@@ -213,59 +222,73 @@ export const CommunityFeedStory = ({
   };
 
   const formattedStories = stories?.map((story) => {
-    const isImage = story?.dataType === 'image';
-    const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
+    if (isStory(story)) {
+      const isImage = story?.dataType === 'image';
+      const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
 
-    return {
-      ...story,
-      url,
-      type: isImage ? 'image' : 'video',
-      actions: [
-        isStoryCreator || isModerator
-          ? {
-              name: 'Delete',
-              action: () => deleteStory(story?.storyId as string),
-              icon: (
-                <Trash2Icon
-                  fill={getComputedStyle(document.documentElement).getPropertyValue(
-                    '--asc-color-base-default',
-                  )}
-                />
-              ),
-            }
-          : null,
-      ].filter(isNonNullable),
-      onCreateStory,
-      discardStory,
-      addStoryButton,
-      fileInputRef,
-      currentIndex,
-      storiesCount: stories?.length,
-      increaseIndex,
-      pageId,
-      dragEventTarget: dragEventTarget.current,
-    };
+      return {
+        story,
+        url,
+        type: isImage ? 'image' : 'video',
+        actions: [
+          isStoryCreator || isModerator
+            ? {
+                name: 'Delete',
+                action: () => deleteStory(story?.storyId as string),
+                icon: (
+                  <Trash2Icon
+                    fill={getComputedStyle(document.documentElement).getPropertyValue(
+                      '--asc-color-base-default',
+                    )}
+                  />
+                ),
+              }
+            : null,
+        ].filter(isNonNullable),
+        onCreateStory,
+        discardStory,
+        addStoryButton,
+        fileInputRef,
+        currentIndex,
+        storiesCount: stories?.length,
+        increaseIndex,
+        pageId,
+        dragEventTarget: dragEventTarget.current,
+      };
+    } else {
+      return {
+        ad: story,
+        actions: [],
+        pageId,
+        currentIndex,
+        storiesCount: stories?.length,
+        increaseIndex,
+      };
+    }
   });
 
   const targetRootId = 'asc-uikit-stories-viewer';
 
   useEffect(() => {
-    if (stories[stories.length - 1]?.syncState === 'syncing') {
+    const lastStory = stories[stories.length - 1];
+    if (isStory(lastStory) && lastStory?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);
     }
-    if (stories[currentIndex]) {
-      stories[currentIndex]?.analytics.markAsSeen();
+    if (currentStory && isStory(currentStory)) {
+      currentStory?.analytics.markAsSeen();
     }
   }, [currentIndex, stories]);
 
   useEffect(() => {
-    if (stories.every((story) => story?.isSeen)) return;
-    const firstUnseenStoryIndex = stories.findIndex((story) => !story?.isSeen);
+    if (stories.filter(isStory).every((story) => story?.isSeen)) return;
+    const firstUnseenStoryIndex = stories.findIndex((story) =>
+      isStory(story) ? !story?.isSeen : false,
+    );
 
     if (firstUnseenStoryIndex !== -1) {
       setCurrentIndex(firstUnseenStoryIndex);
     }
-  }, [stories]);
+  }, []);
 
   useCommunityStoriesSubscription({
     targetId: communityId,
@@ -330,7 +353,7 @@ export const CommunityFeedStory = ({
             stories={formattedStories}
             renderers={communityFeedRenderers as RendererObject[]}
             defaultInterval={DURATION}
-            onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
+            onStoryStart={() => isStory(currentStory) && currentStory?.analytics.markAsSeen()}
             onStoryEnd={nextStory}
             onNext={nextStory}
             onPrevious={previousStory}

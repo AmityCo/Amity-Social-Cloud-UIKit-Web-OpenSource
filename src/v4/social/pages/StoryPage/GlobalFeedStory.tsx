@@ -296,12 +296,14 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   useEffect(() => {
     if (stories.filter(isStory).every((story) => story?.isSeen)) return;
-    const firstUnseenStoryIndex = stories.filter(isStory).findIndex((story) => !story?.isSeen);
+    const firstUnseenStoryIndex = stories.findIndex((story) =>
+      isStory(story) ? !story?.isSeen : false,
+    );
 
     if (firstUnseenStoryIndex !== -1) {
       setCurrentIndex(firstUnseenStoryIndex);
     }
-  }, [stories]);
+  }, []);
 
   useEffect(() => {
     if (!file) return;

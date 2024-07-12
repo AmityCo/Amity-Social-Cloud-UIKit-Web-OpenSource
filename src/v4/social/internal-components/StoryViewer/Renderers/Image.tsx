@@ -277,9 +277,7 @@ export const renderer: CustomRenderer = ({
             onPress={() => bottomSheetAction?.action()}
           >
             {bottomSheetAction?.icon && bottomSheetAction.icon}
-            <Typography.BodyBold>
-              {formatMessage({ id: bottomSheetAction.name })}
-            </Typography.BodyBold>
+            <Typography.BodyBold>{bottomSheetAction.name}</Typography.BodyBold>
           </Button>
         ))}
       </BottomSheet>
