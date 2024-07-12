@@ -96,11 +96,6 @@ export function SocialHomePage() {
             createPostButtonRef={createPostButtonRef}
           />
         </div>
-        {isShowCreatePostMenu && (
-          <div ref={createPostMenuRef}>
-            <CreatePostMenu pageId={pageId} />
-          </div>
-        )}
         <div className={styles.socialHomePage__tabs}>
           <NewsfeedButton
             pageId={pageId}
@@ -120,6 +115,11 @@ export function SocialHomePage() {
         {activeTab === EnumTabNames.Explore && <div>Explore</div>}
         {activeTab === EnumTabNames.MyCommunities && <MyCommunities pageId={pageId} />}
       </div>
+      {isShowCreatePostMenu && (
+        <div ref={createPostMenuRef} className={styles.socialHomePage__createPostMenu}>
+          <CreatePostMenu pageId={pageId} />
+        </div>
+      )}
     </div>
   );
 }

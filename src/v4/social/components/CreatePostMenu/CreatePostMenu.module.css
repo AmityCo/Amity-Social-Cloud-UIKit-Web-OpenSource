@@ -2,9 +2,6 @@
   background-color: var(--asc-color-background-default);
   padding: 0.75rem 1rem;
   border-radius: 0.75rem;
-  position: absolute;
-  right: 1rem;
-  top: 3.25rem;
-  width: 12.5rem;
+  width: 100%;
   box-shadow: var(--asc-box-shadow-03);
 }

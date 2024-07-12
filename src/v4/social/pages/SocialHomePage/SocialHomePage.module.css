@@ -46,3 +46,10 @@
 .socialHomePage__contents::-webkit-scrollbar {
   display: none;
 }
+
+.socialHomePage__createPostMenu {
+  position: absolute;
+  right: 1rem;
+  top: 3.25rem;
+  width: 12.5rem;
+}
