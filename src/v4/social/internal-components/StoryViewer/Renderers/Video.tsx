@@ -44,7 +44,6 @@ export const renderer: CustomRenderer = ({
   const [loaded, setLoaded] = useState(false);
   const [muted, setMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [isOpenBottomSheet, setIsOpenBottomSheet] = useState(false);
   const [isOpenCommentSheet, setIsOpenCommentSheet] = useState(false);
   const { loader } = config;
   const { client } = useSDK();
@@ -64,6 +63,8 @@ export const renderer: CustomRenderer = ({
     myReactions,
     data,
     items,
+    isBottomSheetOpen,
+    setIsBottomSheetOpen,
   } = story as Amity.Story;
 
   const { members } = useCommunityMembersCollection({
@@ -131,11 +132,10 @@ export const renderer: CustomRenderer = ({
 
   const openBottomSheet = () => {
     action('pause', true);
-    setIsOpenBottomSheet(true);
   };
   const closeBottomSheet = () => {
     action('play', true);
-    setIsOpenBottomSheet(false);
+    setIsBottomSheetOpen(false);
   };
   const openCommentSheet = () => {
     action('pause', true);
@@ -162,7 +162,7 @@ export const renderer: CustomRenderer = ({
 
   useEffect(() => {
     if (vid.current) {
-      if (isPaused || isOpenBottomSheet || isOpenCommentSheet) {
+      if (isPaused || isBottomSheetOpen || isOpenCommentSheet) {
         vid.current.pause();
         action('pause', true);
       } else {
@@ -170,7 +170,7 @@ export const renderer: CustomRenderer = ({
         action('play', true);
       }
     }
-  }, [isPaused, isOpenBottomSheet, isOpenCommentSheet]);
+  }, [isPaused, isBottomSheetOpen, isOpenCommentSheet]);
 
   useEffect(() => {
     if (fileInputRef.current) {
@@ -213,7 +213,7 @@ export const renderer: CustomRenderer = ({
         duration={5000}
         currentIndex={currentIndex}
         storiesCount={storiesCount}
-        isPaused={isPaused || isOpenBottomSheet || isOpenCommentSheet}
+        isPaused={isPaused || isBottomSheetOpen || isOpenCommentSheet}
         onComplete={handleProgressComplete}
       />
       <SpeakerButton
@@ -258,7 +258,7 @@ export const renderer: CustomRenderer = ({
 
       <BottomSheet
         rootId={targetRootId}
-        isOpen={isOpenBottomSheet}
+        isOpen={isBottomSheetOpen}
         onClose={closeBottomSheet}
         mountPoint={document.getElementById(targetRootId) as HTMLElement}
         detent="content-height"

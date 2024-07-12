@@ -71,6 +71,7 @@ export const CommunityFeedStory = ({
   const y = useMotionValue(0);
   const motionRef = useRef<HTMLDivElement>(null);
   const dragEventTarget = useRef(new EventTarget());
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const { stories } = useGetActiveStoriesByTarget({
     targetId: communityId,
@@ -136,6 +137,7 @@ export const CommunityFeedStory = ({
         "This story will be permanently deleted. You'll no longer to see and find this story.",
       okText: 'Delete',
       onOk: async () => {
+        setIsBottomSheetOpen(false);
         await StoryRepository.softDeleteStory(storyId);
         if (currentIndex === 0) {
           onClose(communityId);
@@ -149,7 +151,7 @@ export const CommunityFeedStory = ({
     });
   };
 
-  const deleteStory = async (storyId: string) => {
+  const deleteStory = (storyId: string) => {
     confirmDeleteStory(storyId);
   };
 

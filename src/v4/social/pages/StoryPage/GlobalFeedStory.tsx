@@ -142,7 +142,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
           onChangePage?.();
         } else if (isLastStory) {
           // If it's the last story, move to the previous one
-          setCurrentIndex((prevIndex) => prevIndex - 1);
+          previousStory();
         } else {
           // For any other case (including first story), stay on the same index
           // The next story will automatically take its place

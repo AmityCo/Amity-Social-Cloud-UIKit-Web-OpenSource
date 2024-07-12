@@ -170,7 +170,7 @@ export const HyperLinkConfig = ({
         <Typography.Title>
           {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
         </Typography.Title>
-        <DoneButton pageId={pageId} componentId={componentId} formId={formId} />
+        <DoneButton type="submit" pageId={pageId} componentId={componentId} form={formId} />
       </div>
       <div className={styles.divider} />
       <div className={styles.hyperlinkFormContainer}>

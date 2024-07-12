@@ -6,6 +6,7 @@ import { ExpandIcon, MinusCircleIcon } from '~/v4/social/icons';
 import { LoadMoreWrapper } from '~/v4/core/components/LoadMoreWrapper/LoadMoreWrapper';
 import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
 import { CommentBubbleDeleted } from '~/v4/social/elements/CommentBubbleDeleted';
+import { Typography } from '~/v4/core/components/index';
 
 interface CommentListProps {
   parentId?: string;
@@ -79,6 +80,14 @@ export const CommentList = ({
       );
     });
   };
+
+  if (commentCount === 0) {
+    return (
+      <div className={styles.noCommentsContainer}>
+        <Typography.Body>No comments yet</Typography.Body>
+      </div>
+    );
+  }
 
   return (
     <LoadMoreWrapper

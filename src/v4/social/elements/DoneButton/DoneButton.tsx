@@ -1,20 +1,20 @@
 import React from 'react';
-import { Button, ButtonProps } from '~/v4/core/natives/Button';
+import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './DoneButton.module.css';
 
-export interface DoneButtonProps extends ButtonProps {
+export interface DoneButtonProps extends React.ComponentProps<typeof Button> {
   pageId?: string;
   componentId?: string;
-  formId?: string;
+  className?: string;
 }
 
 export function DoneButton({
   pageId = '*',
   componentId = '*',
-  formId,
   className,
+
   ...buttonProps
 }: DoneButtonProps) {
   const elementId = 'done_button';
