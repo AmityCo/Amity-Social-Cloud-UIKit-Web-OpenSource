@@ -9,11 +9,9 @@ import { MyCommunitiesButton } from '~/v4/social/elements/MyCommunitiesButton';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
 
-enum EnumTabNames {
+export enum HomePageTab {
   Newsfeed = 'Newsfeed',
   Explore = 'Explore',
   MyCommunities = 'My communities',
@@ -24,15 +22,12 @@ export function SocialHomePage() {
   const { themeStyles } = useAmityPage({
     pageId,
   });
-  const { goToSocialGlobalSearchPage, goToMyCommunitiesSearchPage } = useNavigation();
 
   const { scrollPosition, onScroll } = useGlobalFeedContext();
 
-  const [activeTab, setActiveTab] = useState(EnumTabNames.Newsfeed);
+  const [activeTab, setActiveTab] = useState(HomePageTab.Newsfeed);
 
   const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
-  const createPostMenuRef = useRef<HTMLDivElement | null>(null);
-  const createPostButtonRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialLoad = useRef(true);
 
@@ -44,8 +39,7 @@ export function SocialHomePage() {
     }, 100);
   }, [containerRef.current]);
 
-  const handleClickButton = (event: React.MouseEvent) => {
-    event.stopPropagation();
+  const handleClickButton = () => {
     setIsShowCreatePostMenu((prev) => !prev);
   };
 
@@ -54,36 +48,19 @@ export function SocialHomePage() {
     onScroll(event);
   };
 
-  const handleGlobalSearchClick = () => {
-    switch (activeTab) {
-      case EnumTabNames.Newsfeed:
-        goToSocialGlobalSearchPage();
-        break;
-      case EnumTabNames.Explore:
-        break;
-      case EnumTabNames.MyCommunities:
-        goToMyCommunitiesSearchPage();
-
-        break;
-    }
-  };
-
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        createPostMenuRef.current &&
-        !createPostMenuRef.current.contains(event.target as Node) &&
-        createPostButtonRef.current !== event.target
-      ) {
+    const handleClickOutside = () => {
+      if (isShowCreatePostMenu) {
         setIsShowCreatePostMenu(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
+    if (isShowCreatePostMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
       document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+    }
+  }, [isShowCreatePostMenu]);
 
   return (
     <div className={styles.socialHomePage} style={themeStyles}>
@@ -91,32 +68,31 @@ export function SocialHomePage() {
         <div className={styles.socialHomePage__topNavigation}>
           <TopNavigation
             pageId={pageId}
+            selectedTab={activeTab}
             onClickPostCreationButton={handleClickButton}
-            onGlobalSearchButtonClick={handleGlobalSearchClick}
-            createPostButtonRef={createPostButtonRef}
           />
         </div>
         <div className={styles.socialHomePage__tabs}>
           <NewsfeedButton
             pageId={pageId}
-            isActive={activeTab === EnumTabNames.Newsfeed}
-            onClick={() => setActiveTab(EnumTabNames.Newsfeed)}
+            isActive={activeTab === HomePageTab.Newsfeed}
+            onClick={() => setActiveTab(HomePageTab.Newsfeed)}
           />
-          <ExploreButton pageId={pageId} isActive={activeTab === EnumTabNames.Explore} />
+          <ExploreButton pageId={pageId} isActive={activeTab === HomePageTab.Explore} />
           <MyCommunitiesButton
             pageId={pageId}
-            isActive={activeTab === EnumTabNames.MyCommunities}
-            onClick={() => setActiveTab(EnumTabNames.MyCommunities)}
+            isActive={activeTab === HomePageTab.MyCommunities}
+            onClick={() => setActiveTab(HomePageTab.MyCommunities)}
           />
         </div>
       </div>
       <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
-        {activeTab === EnumTabNames.Newsfeed && <Newsfeed pageId={pageId} />}
-        {activeTab === EnumTabNames.Explore && <div>Explore</div>}
-        {activeTab === EnumTabNames.MyCommunities && <MyCommunities pageId={pageId} />}
+        {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
+        {activeTab === HomePageTab.Explore && <div>Explore</div>}
+        {activeTab === HomePageTab.MyCommunities && <MyCommunities pageId={pageId} />}
       </div>
       {isShowCreatePostMenu && (
-        <div ref={createPostMenuRef} className={styles.socialHomePage__createPostMenu}>
+        <div className={styles.socialHomePage__createPostMenu}>
           <CreatePostMenu pageId={pageId} />
         </div>
       )}

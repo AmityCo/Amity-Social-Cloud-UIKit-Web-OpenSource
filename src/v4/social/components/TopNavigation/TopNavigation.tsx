@@ -4,25 +4,39 @@ import { GlobalSearchButton } from '~/v4/social/elements/GlobalSearchButton';
 import { HeaderLabel } from '~/v4/social/elements/HeaderLabel';
 import styles from './TopNavigation.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { HomePageTab } from '../../pages/SocialHomePage/SocialHomePage';
 
 export interface TopNavigationProps {
   pageId?: string;
-  onGlobalSearchButtonClick: () => void;
-  onClickPostCreationButton: (event: React.MouseEvent) => void;
-  createPostButtonRef: React.RefObject<HTMLDivElement>;
+  selectedTab?: HomePageTab;
+  onClickPostCreationButton?: () => void;
 }
 
 export function TopNavigation({
   pageId = '*',
-  onGlobalSearchButtonClick,
+  selectedTab,
   onClickPostCreationButton,
-  createPostButtonRef,
 }: TopNavigationProps) {
   const componentId = 'top_navigation';
+  const { goToSocialGlobalSearchPage, goToMyCommunitiesSearchPage } = useNavigation();
   const { isExcluded, themeStyles } = useAmityComponent({
     pageId,
     componentId,
   });
+
+  const handleGlobalSearchClick = () => {
+    switch (selectedTab) {
+      case HomePageTab.Newsfeed:
+        goToSocialGlobalSearchPage();
+        break;
+      case HomePageTab.Explore:
+        break;
+      case HomePageTab.MyCommunities:
+        goToMyCommunitiesSearchPage();
+        break;
+    }
+  };
 
   if (isExcluded) return null;
 
@@ -35,13 +49,12 @@ export function TopNavigation({
         <GlobalSearchButton
           pageId={pageId}
           componentId={componentId}
-          onPress={onGlobalSearchButtonClick}
+          onPress={handleGlobalSearchClick}
         />
         <PostCreationButton
           pageId={pageId}
           componentId={componentId}
           onClick={onClickPostCreationButton}
-          createPostButtonRef={createPostButtonRef}
         />
       </div>
     </div>
