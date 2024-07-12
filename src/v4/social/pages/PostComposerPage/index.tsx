@@ -1,1 +1,1 @@
-export { PostComposerPage } from './PostComposerPage';
+export { PostComposerPage, Mode } from './PostComposerPage';

@@ -15,7 +15,7 @@ import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { Mode } from '../PostComposerPage/PostComposerPage';
+import { Mode } from '~/v4/social/pages/PostComposerPage/';
 
 export function SelectPostTargetPage() {
   const pageId = 'select_post_target_page';
@@ -43,7 +43,7 @@ export function SelectPostTargetPage() {
     return (
       <div
         onClick={() => {
-          AmityPostTargetSelectionPage.goToPostComposerPage({
+          AmityPostTargetSelectionPage?.goToPostComposerPage?.({
             targetId: community.communityId,
             targetType: 'community',
             mode: Mode.CREATE,
@@ -78,7 +78,7 @@ export function SelectPostTargetPage() {
       </div>
       <div
         onClick={() => {
-          AmityPostTargetSelectionPage.goToPostComposerPage({
+          AmityPostTargetSelectionPage?.goToPostComposerPage?.({
             mode: Mode.CREATE,
             targetId: null,
             targetType: 'user',

@@ -22,8 +22,8 @@ interface CreatePostButtonProps {
 export function CreatePostButton({
   pageId = '*',
   componentId = '*',
-  onClick,
   defaultClassName,
+  onClick,
 }: CreatePostButtonProps) {
   const elementId = 'create_post_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =

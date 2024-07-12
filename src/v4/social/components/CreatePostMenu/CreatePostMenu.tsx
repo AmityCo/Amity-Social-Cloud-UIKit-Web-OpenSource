@@ -18,12 +18,12 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
       <CreatePostButton
         pageId={pageId}
         componentId={componentId}
-        onClick={() => AmityCreatePostMenuComponentBehavior.goToSelectPostTargetPage()}
+        onClick={() => AmityCreatePostMenuComponentBehavior?.goToSelectPostTargetPage?.()}
       />
       <CreateStoryButton
         pageId={pageId}
         componentId={componentId}
-        onClick={() => AmityCreatePostMenuComponentBehavior.goToStoryTargetSelectionPage()}
+        onClick={() => AmityCreatePostMenuComponentBehavior?.goToStoryTargetSelectionPage?.()}
       />
     </div>
   );

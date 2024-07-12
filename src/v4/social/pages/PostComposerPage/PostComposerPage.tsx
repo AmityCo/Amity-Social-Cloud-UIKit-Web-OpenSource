@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './PostComposerPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
@@ -15,7 +15,6 @@ import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { useForm } from 'react-hook-form';
 import { Mentioned } from '~/v4/helpers/utils';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import useConnectionState from '~/v4/social/hooks/useConnectionState';
 import { Drawer } from 'vaul';
 import ReactDOM from 'react-dom';
 import { DetailedMediaAttachment } from '~/v4/social/components/DetailedMediaAttachment';
@@ -144,7 +143,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
         return PostRepository.createPost(params);
       },
       onSuccess: (response) => {
-        AmityPostComposerPageBehavior.goToSocialHomePage();
+        AmityPostComposerPageBehavior?.goToSocialHomePage?.();
         prependItem(response.data);
       },
       onError: (error) => {
@@ -197,7 +196,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
       title: 'Discard this post?',
       content: 'The post will be permanently deleted. It cannot be undone.',
       onOk: () => {
-        AmityPostComposerPageBehavior.goToSocialHomePage();
+        AmityPostComposerPageBehavior?.goToSocialHomePage?.();
       },
       okText: 'Discard',
       cancelText: 'Keep editing',

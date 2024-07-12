@@ -35,9 +35,9 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
       <ViewGlobalFeedStoryPage
         pageId={pageId}
         targetId={targetId}
-        onChangePage={() => AmityStoryViewPageBehavior.onCloseAction()}
-        onClose={() => AmityStoryViewPageBehavior.onCloseAction()}
-        onSwipeDown={() => AmityStoryViewPageBehavior.onCloseAction()}
+        onChangePage={() => AmityStoryViewPageBehavior?.onCloseAction?.()}
+        onClose={() => AmityStoryViewPageBehavior?.onCloseAction?.()}
+        onSwipeDown={() => AmityStoryViewPageBehavior?.onCloseAction?.()}
         onClickStory={(targetId) =>
           goToViewStoryPage({
             storyType: 'globalFeed',

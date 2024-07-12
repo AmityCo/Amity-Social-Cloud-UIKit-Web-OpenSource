@@ -297,9 +297,9 @@ export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
   return (
     <PlainDraftStoryPage
       {...props}
-      onDiscardCreateStory={() => AmityDraftStoryPageBehavior.onCloseAction()}
-      goToCommunityPage={(communityId) => AmityDraftStoryPageBehavior.onCloseAction()}
-      goToGlobalFeedPage={() => AmityDraftStoryPageBehavior.onCloseAction()}
+      onDiscardCreateStory={() => AmityDraftStoryPageBehavior?.onCloseAction?.()}
+      goToCommunityPage={(communityId) => AmityDraftStoryPageBehavior?.onCloseAction?.()}
+      goToGlobalFeedPage={() => AmityDraftStoryPageBehavior?.onCloseAction?.()}
     />
   );
 };

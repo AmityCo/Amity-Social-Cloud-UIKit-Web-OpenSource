@@ -6,9 +6,11 @@ import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { StoryTabCommunityFeed } from './StoryTabCommunity';
 import { StoryTabGlobalFeed } from './StoryTabGlobalFeed';
 
-type StoryTabProps = { type: 'communityFeed'; communityId: string } | { type: 'globalFeed' };
+type StoryTabProps = ({ type: 'communityFeed'; communityId: string } | { type: 'globalFeed' }) & {
+  pageId?: string;
+};
 
-export const StoryTab: React.FC<StoryTabProps> = (props) => {
+export const StoryTab: React.FC<StoryTabProps> = ({ pageId = '*', ...props }) => {
   const componentId = 'story_tab_component';
   const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
   const { goToViewStoryPage, goToDraftStoryPage } = useNavigation();
@@ -19,6 +21,7 @@ export const StoryTab: React.FC<StoryTabProps> = (props) => {
       case 'communityFeed':
         return (
           <StoryTabCommunityFeed
+            pageId={pageId}
             componentId={componentId}
             communityId={props.communityId || ''}
             onFileChange={(file) => {
@@ -46,9 +49,10 @@ export const StoryTab: React.FC<StoryTabProps> = (props) => {
       case 'globalFeed':
         return (
           <StoryTabGlobalFeed
+            pageId={pageId}
             componentId={componentId}
             goToViewStoryPage={({ storyTarget, storyTargets }) => {
-              AmityGlobalFeedComponentBehavior.goToViewStoryPage({
+              AmityGlobalFeedComponentBehavior?.goToViewStoryPage?.({
                 targetId: storyTarget.targetId,
                 targetType: storyTarget.targetType as Amity.StoryTargetType,
                 storyType: 'globalFeed',

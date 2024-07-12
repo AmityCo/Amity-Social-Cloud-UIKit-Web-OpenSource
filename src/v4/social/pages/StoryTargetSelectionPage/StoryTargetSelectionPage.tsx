@@ -70,7 +70,7 @@ export function StoryTargetSelectionPage() {
 
   useEffect(() => {
     if (file) {
-      AmityStoryTargetSelectionPage.goToStoryCreationPage({
+      AmityStoryTargetSelectionPage?.goToStoryCreationPage?.({
         targetId: selectedCommunityId,
         targetType: 'community',
         mediaType:
