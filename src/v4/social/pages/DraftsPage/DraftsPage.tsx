@@ -250,13 +250,14 @@ export const PlainDraftStoryPage = ({
             />
           </div>
         ) : mediaType?.type === 'video' ? (
-          <VideoPreview
-            mediaFit="contain"
+          <video
             className={styles.videoPreview}
             src={file ? URL.createObjectURL(file) : mediaType.url}
             autoPlay
             loop
+            muted
             controls={false}
+            playsInline
           />
         ) : null}
         {hyperLink[0]?.data?.url && (
