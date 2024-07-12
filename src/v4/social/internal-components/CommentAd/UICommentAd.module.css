@@ -32,7 +32,7 @@
   background-color: var(--asc-color-base-shade4);
   border-radius: 0 0.75rem 0.75rem;
   padding: 0.75rem;
-  max-width: max-content;
+  width: 100%;
 }
 
 .commentAd__content__advertiserName__container {
