@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Avatar, Button } from '~/v4/core/components/index';
-import useUser from '~/v4/core/hooks/objects/useUser';
-import useImage from '~/v4/core/hooks/useImage';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
+import { useImage } from '~/v4/core/hooks/useImage';
 import useSDK from '~/v4/core/hooks/useSDK';
 import User from '~/v4/icons/User';
 import { PostCommentInput, PostCommentInputRef } from './PostCommentInput';

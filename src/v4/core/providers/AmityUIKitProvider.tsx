@@ -27,7 +27,7 @@ import { defaultConfig, Config, CustomizationProvider } from './CustomizationPro
 import { ThemeProvider } from './ThemeProvider';
 import { PageBehavior, PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import AmityUIKitManager from '../AmityUIKitManager';
+import { AmityUIKitManager } from '../AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
 import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';

@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import useSDK from '~/core/hooks/useSDK';
 
-const useChannelPermission = (subChannelId: Amity.SubChannel['subChannelId']) => {
+export const useChannelPermission = (subChannelId?: Amity.SubChannel['subChannelId']) => {
   const { client } = useSDK();
-  const [isModerator, setIsModerator] = useState(false);
 
-  useEffect(() => {
+  const isModerator = useMemo(() => {
+    if (!subChannelId) return false;
     const currentUser = client?.hasPermission('MUTE_CHANNEL').currentUser() || false;
     const currentUserInChannel =
       client?.hasPermission('MUTE_CHANNEL').channel(subChannelId) || false;
-    setIsModerator(currentUser || currentUserInChannel);
+    return currentUser || currentUserInChannel;
   }, [subChannelId]);
 
   return {
     isModerator,
   };
 };
-
-export default useChannelPermission;

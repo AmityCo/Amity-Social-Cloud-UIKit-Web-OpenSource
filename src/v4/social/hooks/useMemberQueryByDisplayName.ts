@@ -57,7 +57,7 @@ export const useMemberQueryByDisplayName = ({
   }, [communityId, displayName, enabled]);
 
   return {
-    users: items,
+    members: items,
     isLoading,
     hasMore,
     loadMore,

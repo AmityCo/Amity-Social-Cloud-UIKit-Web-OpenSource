@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import useImage from '~/v4/core/hooks/useImage';
+import { useImage } from '~/v4/core/hooks/useImage';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit/index';
 import styles from './ImageContent.module.css';

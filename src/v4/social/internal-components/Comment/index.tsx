@@ -24,7 +24,7 @@ import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicat
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
 
-import useImage from '~/v4/core/hooks/useImage';
+import { useImage } from '~/v4/core/hooks/useImage';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 import styles from './Comment.module.css';

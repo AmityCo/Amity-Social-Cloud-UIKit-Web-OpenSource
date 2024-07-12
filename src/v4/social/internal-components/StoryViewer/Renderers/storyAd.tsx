@@ -2,8 +2,8 @@ import { Tester, CustomRenderer } from './types';
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-import useImage from '~/v4/core/hooks/useImage';
 import { UIStoryAd } from '../../StoryAd/UIStoryAd';
+import { useImage } from '~/v4/core/hooks/useImage';
 
 export const renderer: CustomRenderer = ({ story, action, config, onClose }) => {
   const [isPaused, setIsPaused] = useState(false);

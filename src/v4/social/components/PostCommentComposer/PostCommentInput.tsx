@@ -1,23 +1,16 @@
-import React, { forwardRef, MutableRefObject, useEffect, useImperativeHandle } from 'react';
-import { InitialEditorStateType, LexicalComposer } from '@lexical/react/LexicalComposer';
+import React, { forwardRef, MutableRefObject, useImperativeHandle } from 'react';
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
 import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   $getRoot,
-  EditorState,
   LexicalEditor,
   SerializedLexicalNode,
-  $createParagraphNode,
-  $createTextNode,
   SerializedTextNode,
   SerializedRootNode,
   SerializedParagraphNode,
-  RootNode,
-  TextNode,
-  ParagraphNode,
 } from 'lexical';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
@@ -30,8 +23,7 @@ import styles from './PostCommentInput.module.css';
 import { PostCommentMentionInput } from '../PostCommentMentionInput';
 import { useMentionUsers } from '../../hooks/useMentionUser';
 import { CreateCommentParams } from '../PostCommentComposer/PostCommentComposer';
-import { Mentioned, Mentionees, Metadata } from '~/v4/helpers/utils';
-import { text } from '../../elements/HyperLink/HyperLink.module.css';
+import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 
 const theme = {
   ltr: 'ltr',

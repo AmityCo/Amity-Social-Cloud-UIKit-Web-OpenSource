@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 import { $createMentionNode } from './MentionNodes';
 import { CommunityMember } from '../CommunityMember';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
-import useCommunity from '~/v4/chat/hooks/useCommunity';
+import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 

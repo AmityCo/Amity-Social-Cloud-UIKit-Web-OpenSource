@@ -12,7 +12,7 @@ import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadg
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
-import useUser from '~/v4/core/hooks/objects/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Mode } from '../PostComposerPage/PostComposerPage';

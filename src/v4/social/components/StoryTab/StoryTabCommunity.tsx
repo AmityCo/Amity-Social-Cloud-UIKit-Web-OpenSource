@@ -5,7 +5,7 @@ import { StoryRing } from '~/v4/social/elements/StoryRing/StoryRing';
 import clsx from 'clsx';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 import useSDK from '~/v4/core/hooks/useSDK';
-import useUser from '~/v4/core/hooks/objects/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin, isModerator } from '~/v4/utils/permissions';
 import { checkStoryPermission } from '~/v4/social/utils';
 import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';

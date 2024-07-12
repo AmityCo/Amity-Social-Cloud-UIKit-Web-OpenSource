@@ -16,7 +16,7 @@ import Header from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappe
 import Footer from '~/v4/social/internal-components/StoryViewer/Renderers/Wrappers/Footer';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
-import useUser from '~/v4/core/hooks/objects/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import clsx from 'clsx';
 import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { checkStoryPermission, formatTimeAgo, isAdmin, isModerator } from '~/v4/social/utils';

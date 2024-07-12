@@ -19,7 +19,7 @@ export { default as AmityExpandableText } from '~/social/components/Comment/Comm
 export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
-export { default as AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
+export { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
 export {
   AmityDraftStoryPage,
   ViewStoryPage as AmityViewStoryPage,
@@ -31,26 +31,23 @@ export {
 } from '~/v4/social/components';
 
 // Chat v4
-export {
-  AmityLiveChatHeader,
-  AmityLiveChatMessageList,
-  AmityLiveChatMessageReceiverView,
-  AmityLiveChatMessageSenderView,
-  AmityLiveChatMessageComposeBar,
-} from '~/v4/chat/components';
+
+export { ChatHeader as AmityLiveChatHeader } from '~/v4/chat/components/ChatHeader';
+export { MessageList as AmityLiveChatMessageList } from '~/v4/chat/components/MessageList';
+export { MessageComposer as AmityLiveChatMessageComposeBar } from '~/v4/chat/components/MessageComposer';
 
 export { MessageReactionPreview as AmityLiveChatMessageReactionPreview } from '~/v4/chat/components/MessageReactionPreview';
 export { MessageReactionPicker as AmityLiveChatMessageReactionPicker } from '~/v4/chat/components/MessageReactionPicker';
 export { MessageQuickReaction as AmityLiveChatMessageQuickReaction } from '~/v4/chat/components/MessageQuickReaction';
 export { ReactionList as AmityReactionList } from '~/v4/social/components/ReactionList';
 
-import type { AmityMessageActionType } from '~/v4/chat/components';
+import type { MessageActionType } from '~/v4/chat/internal-components/LiveChatMessageContent/MessageAction';
 import type { ReactionListProps } from '~/v4/social/components/ReactionList';
 
-export type { AmityMessageActionType };
+export type { MessageActionType as AmityMessageActionType };
 export type { ReactionListProps as AmityReactionListProps };
 
-export { AmityLiveChatPage } from '~/v4/chat/pages';
+export { LiveChat as AmityLiveChatPage } from '~/v4/chat/pages/LiveChat';
 
 // v4 internal use only (Amity Console)
 export {

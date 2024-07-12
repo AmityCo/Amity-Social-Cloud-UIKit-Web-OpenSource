@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
-import useImage from '~/v4/core/hooks/useImage';
 import { UICommentAd } from './UICommentAd';
+import { useImage } from '~/v4/core/hooks/useImage';
 
 interface CommentAdProps {
   pageId?: string;

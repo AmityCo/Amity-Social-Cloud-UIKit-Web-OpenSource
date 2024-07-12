@@ -5,7 +5,7 @@ const useGetStoryByStoryId = (storyId: string | undefined) => {
   const story = useLiveObject({
     fetcher: StoryRepository.getStoryByStoryId,
     params: storyId,
-    shouldCall: () => !!storyId,
+    shouldCall: !!storyId,
   });
 
   return story;
