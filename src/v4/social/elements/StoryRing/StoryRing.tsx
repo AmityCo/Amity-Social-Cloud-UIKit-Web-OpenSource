@@ -3,7 +3,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 import styles from './StoryRing.module.css';
 
-const EmptyStateRingSvg = ({
+const SeenStateRingSvg = ({
   pageId,
   componentId,
   elementId,
@@ -152,9 +152,6 @@ const UploadingRingSvg = ({
         strokeLinecap="round"
         stroke="url(#story-ring-gradient)"
         fill="none"
-        strokeDasharray={339}
-        strokeDashoffset={339}
-        transform={`rotate(-90 ${size / 2} ${size / 2})`}
       />
     </svg>
   );
@@ -179,13 +176,14 @@ export const StoryRing = ({
   ...props
 }: StoryRingProps) => {
   const elementId = 'story_ring';
-  const { isExcluded, config } = useAmityElement({
+  const { isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
 
   if (isExcluded) return null;
+
   if (isErrored) {
     return (
       <svg
@@ -200,7 +198,9 @@ export const StoryRing = ({
           cx={size / 2}
           cy={size / 2}
           r={size / 2 - 1}
-          stroke={getComputedStyle(document.documentElement).getPropertyValue('--asc-color-alert')}
+          stroke={getComputedStyle(document.documentElement).getPropertyValue(
+            '--asc-color-alert-default',
+          )}
           strokeWidth="2"
         ></circle>
       </svg>
@@ -225,11 +225,6 @@ export const StoryRing = ({
   }
 
   return (
-    <EmptyStateRingSvg
-      pageId={pageId}
-      componentId={componentId}
-      elementId={elementId}
-      size={size}
-    />
+    <SeenStateRingSvg pageId={pageId} componentId={componentId} elementId={elementId} size={size} />
   );
 };

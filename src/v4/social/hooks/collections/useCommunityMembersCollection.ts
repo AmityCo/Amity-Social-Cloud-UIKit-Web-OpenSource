@@ -1,11 +1,17 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
-import useLiveCollection from '~/core/hooks/useLiveCollection';
+import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
-export default function useCommunityMembersCollection(communityId?: string, limit: number = 5) {
+export default function useCommunityMembersCollection({
+  queryParams,
+  shouldCall = true,
+}: {
+  queryParams?: Parameters<typeof CommunityRepository.Membership.getMembers>[0];
+  shouldCall?: boolean;
+}) {
   const { items, ...rest } = useLiveCollection({
     fetcher: CommunityRepository.Membership.getMembers,
-    params: { communityId: communityId as string, limit, memberships: ['member'] },
-    shouldCall: () => !!communityId,
+    params: queryParams as Parameters<typeof CommunityRepository.Membership.getMembers>[0],
+    shouldCall: !!queryParams?.communityId && shouldCall,
   });
 
   return {

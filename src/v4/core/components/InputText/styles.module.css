@@ -9,7 +9,7 @@
   transition: background 0.2s, border-color 0.2s;
 
   &.invalid {
-    border-color: var(--asc-color-alert);
+    border-color: var(--asc-color-alert-default);
   }
 
   &.disabled {
@@ -61,6 +61,7 @@
 .live-chat-mention-input {
   padding: var(--asc-spacing-s1);
   width: calc(100% - 1rem);
+  background-color: var(--asc-color-background-default);
 
   > div:first-child {
     > div:first-child {

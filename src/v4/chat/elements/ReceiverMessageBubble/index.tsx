@@ -1,0 +1,1 @@
+export { ReceiverMessageBubble } from './ReceiverMessageBubble';

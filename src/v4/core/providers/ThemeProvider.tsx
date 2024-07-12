@@ -15,14 +15,6 @@ const generateShades = (hexColor?: string, isDarkMode = false): string[] => {
     return ['#4a82f2', '#a0bdf8', '#d9e5fc', '#ffffff'];
   }
 
-  if (isDarkMode === true && hexColor === defaultConfig.theme.dark.secondary_color) {
-    return ['#a5a9b5', '#6e7487', '#40434e', '#292b32'];
-  }
-
-  if (isDarkMode === false && hexColor === defaultConfig.theme.light.secondary_color) {
-    return ['#636878', '#898e9e', '#a5a9b5', '#ebecef'];
-  }
-
   const hslColor = parseToHsl(hexColor);
 
   const shades = SHADE_PERCENTAGES.map((percentage) => {
@@ -36,102 +28,53 @@ const generateShades = (hexColor?: string, isDarkMode = false): string[] => {
   return shades;
 };
 
-export function useGenerateStylesShadeColors(inputConfig?: GetConfigReturnValue) {
+export function useGenerateStylesShadeColors(config: GetConfigReturnValue) {
   const currentTheme = useTheme();
 
-  const inputThemeConfig = inputConfig?.theme;
-
   const preferredTheme = useMemo(() => {
-    if (inputConfig?.preferred_theme && inputConfig?.preferred_theme !== 'default') {
-      return inputConfig.preferred_theme;
+    if (config?.preferred_theme && config?.preferred_theme !== 'default') {
+      return config.preferred_theme;
     }
 
     return 'default';
-  }, [inputConfig?.preferred_theme, currentTheme]);
-
-  const generatedLightColors = (() => {
-    if (inputThemeConfig?.light) {
-      const lightThemeConfig = inputThemeConfig?.light || defaultConfig.theme.light;
-
-      const lightPrimary = generateShades(lightThemeConfig.primary_color);
-      const lightSecondary = generateShades(lightThemeConfig.secondary_color);
-      return {
-        '--asc-color-primary-default': lightThemeConfig.primary_color,
-        '--asc-color-primary-shade1': lightPrimary[0],
-        '--asc-color-primary-shade2': lightPrimary[1],
-        '--asc-color-primary-shade3': lightPrimary[2],
-        '--asc-color-primary-shade4': lightPrimary[3],
-
-        '--asc-color-secondary-default': lightThemeConfig.secondary_color,
-        '--asc-color-secondary-shade1': lightSecondary[0],
-        '--asc-color-secondary-shade2': lightSecondary[1],
-        '--asc-color-secondary-shade3': lightSecondary[2],
-        '--asc-color-secondary-shade4': lightSecondary[3],
-        '--asc-color-secondary-shade5': '#f9f9fa',
-
-        '--asc-color-alert': '#fa4d30',
-        '--asc-color-black': '#000000',
-        '--asc-color-white': '#ffffff',
-
-        '--asc-color-base-inverse': '#000000',
-
-        '--asc-color-base-default': '#292b32',
-        '--asc-color-base-shade1': '#636878',
-        '--asc-color-base-shade2': '#898e9e',
-        '--asc-color-base-shade3': '#a5a9b5',
-        '--asc-color-base-shade4': '#ebecef',
-        '--asc-color-base-shade5': '#f9f9fa',
-
-        '--asc-color-base-background': defaultConfig.theme.light.background_color,
-      };
-    }
-
-    return {};
-  })();
-
-  const generatedDarkColors = (() => {
-    if (inputThemeConfig?.dark) {
-      const darkThemeConfig = inputThemeConfig?.dark || defaultConfig.theme.dark;
-      const darkPrimary = generateShades(darkThemeConfig.primary_color, true);
-      const darkSecondary = generateShades(darkThemeConfig.secondary_color, true);
-      return {
-        '--asc-color-primary-default': darkThemeConfig.primary_color,
-        '--asc-color-primary-shade1': darkPrimary[0],
-        '--asc-color-primary-shade2': darkPrimary[1],
-        '--asc-color-primary-shade3': darkPrimary[2],
-        '--asc-color-primary-shade4': darkPrimary[3],
-
-        '--asc-color-secondary-default': darkThemeConfig.secondary_color,
-        '--asc-color-secondary-shade1': darkSecondary[0],
-        '--asc-color-secondary-shade2': darkSecondary[1],
-        '--asc-color-secondary-shade3': darkSecondary[2],
-        '--asc-color-secondary-shade4': darkSecondary[3],
-        '--asc-color-secondary-shade5': '#f9f9fa',
-
-        '--asc-color-alert': '#fa4d30',
-        '--asc-color-black': '#000000',
-        '--asc-color-white': '#ffffff',
-
-        '--asc-color-base-inverse': '#ffffff',
-
-        '--asc-color-base-default': '#ebecef',
-        '--asc-color-base-shade1': '#a5a9b5',
-        '--asc-color-base-shade2': '#6e7487',
-        '--asc-color-base-shade3': '#40434e',
-        '--asc-color-base-shade4': '#292b32',
-        '--asc-color-base-shade5': '#f9f9fa',
-
-        '--asc-color-base-background': defaultConfig.theme.dark.background_color,
-      };
-    }
-    return {};
-  })();
+  }, [config?.preferred_theme, currentTheme]);
 
   const computedTheme = preferredTheme === 'default' ? currentTheme : preferredTheme;
 
-  return {
-    ...(computedTheme === 'light' ? generatedLightColors : generatedDarkColors),
-  } as React.CSSProperties;
+  const generatedColors = useMemo(() => {
+    const themeConfig = config?.theme?.[computedTheme] || {};
+
+    const primary = generateShades(themeConfig.primary_color);
+
+    return {
+      '--asc-color-primary-default': themeConfig.primary_color,
+      '--asc-color-primary-shade1': primary[0],
+      '--asc-color-primary-shade2': primary[1],
+      '--asc-color-primary-shade3': primary[2],
+      '--asc-color-primary-shade4': primary[3],
+
+      '--asc-color-secondary-default': themeConfig.secondary_color,
+      '--asc-color-secondary-shade1': themeConfig.secondary_shade1_color,
+      '--asc-color-secondary-shade2': themeConfig.secondary_shade2_color,
+      '--asc-color-secondary-shade3': themeConfig.secondary_shade3_color,
+      '--asc-color-secondary-shade4': themeConfig.secondary_shade4_color,
+
+      '--asc-color-alert-default': themeConfig.alert_color,
+
+      '--asc-color-base-inverse': themeConfig.base_inverse_color,
+
+      '--asc-color-base-default': themeConfig.base_color,
+      '--asc-color-base-shade1': themeConfig.base_shade1_color,
+      '--asc-color-base-shade2': themeConfig.base_shade2_color,
+      '--asc-color-base-shade3': themeConfig.base_shade3_color,
+      '--asc-color-base-shade4': themeConfig.base_shade4_color,
+      '--asc-color-base-shade5': themeConfig.base_shade5_color,
+
+      '--asc-color-background-default': themeConfig.background_color,
+    };
+  }, [config, computedTheme]);
+
+  return generatedColors as React.CSSProperties;
 }
 
 export const ThemeContext = createContext<{

@@ -4,6 +4,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
 import styles from './CreateStoryButton.module.css';
 import clsx from 'clsx';
+import { Button } from '~/v4/core/natives/Button';
 
 const CreateStoryButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="17" height="18" viewBox="0 0 17 18" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -19,8 +20,8 @@ const CreateStoryButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
 interface CreateStoryButtonProps {
   pageId?: string;
   componentId: string;
-  onClick?: (e: React.MouseEvent) => void;
   defaultClassName?: string;
+  onClick?: () => void;
 }
 
 export function CreateStoryButton({
@@ -39,11 +40,11 @@ export function CreateStoryButton({
 
   if (isExcluded) return null;
   return (
-    <div
+    <Button
       className={styles.createStoryButton}
-      onClick={() => {}} //TODO : Add event create story
       data-qa-anchor={accessibilityId}
       style={themeStyles}
+      onPress={() => onClick?.()}
     >
       <IconComponent
         defaultIcon={() => (
@@ -56,7 +57,7 @@ export function CreateStoryButton({
         defaultIconName={defaultConfig.image}
       />
       <Typography.Body className={styles.createStoryButton__text}>{config.text}</Typography.Body>
-    </div>
+    </Button>
   );
 }
 

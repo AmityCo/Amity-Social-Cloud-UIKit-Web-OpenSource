@@ -14,6 +14,7 @@ interface BottomSheetProps {
   headerTitle?: string;
   cancelText?: string;
   okText?: string;
+  style?: React.CSSProperties;
   className?: string;
 }
 

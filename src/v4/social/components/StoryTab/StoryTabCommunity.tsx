@@ -5,14 +5,15 @@ import { StoryRing } from '~/v4/social/elements/StoryRing/StoryRing';
 import clsx from 'clsx';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 import useSDK from '~/v4/core/hooks/useSDK';
-import useUser from '~/v4/core/hooks/objects/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin, isModerator } from '~/v4/utils/permissions';
 import { checkStoryPermission } from '~/v4/social/utils';
 import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
-
-import styles from './StoryTabCommunity.module.css';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
+
+import styles from './StoryTabCommunity.module.css';
 
 const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -48,11 +49,17 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   onFileChange,
   onStoryClick,
 }) => {
+  const { isExcluded, accessibilityId, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
+
   const { stories } = useGetActiveStoriesByTarget({
     targetId: communityId,
     targetType: 'community',
     options: { orderBy: 'asc', sortBy: 'createdAt' },
   });
+
   const { community } = useCommunityInfo(communityId);
 
   const { currentUserId, client } = useSDK();
@@ -71,10 +78,16 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
     onStoryClick();
   };
 
+  if (isExcluded) return null;
+
   if (!hasStories && !hasStoryPermission) return null;
 
   return (
-    <div className={clsx(styles.storyTabContainer)}>
+    <div
+      data-qa-anchor={accessibilityId}
+      style={themeStyles}
+      className={clsx(styles.storyTabContainer)}
+    >
       <div className={clsx(styles.storyWrapper)}>
         {hasStories && (
           <StoryRing

@@ -2,10 +2,11 @@ import React, { ReactNode } from 'react';
 
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 import styles from './TabButton.module.css';
 
-export interface TabButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface TabButtonProps extends ButtonProps {
   pageId?: string;
   componentId?: string;
   elementId?: string;
@@ -29,7 +30,7 @@ export function TabButton({
     });
 
   return (
-    <button
+    <Button
       style={themeStyles}
       className={styles.tabButton}
       data-active={isActive}
@@ -45,6 +46,6 @@ export function TabButton({
           {children}
         </Typography.Caption>
       )}
-    </button>
+    </Button>
   );
 }

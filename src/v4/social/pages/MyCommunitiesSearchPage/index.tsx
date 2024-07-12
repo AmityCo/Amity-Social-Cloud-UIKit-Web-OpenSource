@@ -1,0 +1,1 @@
+export { MyCommunitiesSearchPage } from './MyCommunitiesSearchPage';

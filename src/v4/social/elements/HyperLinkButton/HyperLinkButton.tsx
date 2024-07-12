@@ -2,6 +2,7 @@ import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
 import clsx from 'clsx';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 import styles from './HyperLinkButton.module.css';
 
@@ -29,7 +30,7 @@ interface HyperLinkButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onPress: (e: React.MouseEvent) => void;
+  onPress: ButtonProps['onPress'];
 }
 
 export const HyperLinkButton = ({
@@ -40,25 +41,24 @@ export const HyperLinkButton = ({
   onPress = () => {},
 }: HyperLinkButtonProps) => {
   const elementId = 'story_hyperlink_button';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
   return (
-    <IconComponent
-      data-qa-anchor={accessibilityId}
-      className={clsx(styles.hyperLinkButton, defaultClassName)}
-      defaultIcon={() => <HyperLinkButtonSvg />}
-      imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgClassName)} />}
-      defaultIconName={defaultConfig.icon}
-      configIconName={config.icon}
-      onPress={onPress}
-      style={themeStyles}
-    />
+    <Button className={styles.hyperLinkButton} onPress={onPress} data-qa-anchor={accessibilityId}>
+      <IconComponent
+        defaultIcon={() => (
+          <HyperLinkButtonSvg className={clsx(styles.hyperLinkButton, defaultClassName)} />
+        )}
+        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+        defaultIconName={defaultConfig.icon}
+        configIconName={config.icon}
+      />
+    </Button>
   );
 };

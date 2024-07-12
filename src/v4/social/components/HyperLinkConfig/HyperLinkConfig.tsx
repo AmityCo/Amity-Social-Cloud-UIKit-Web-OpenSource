@@ -4,24 +4,23 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
-
 import { BottomSheet, Typography } from '~/v4/core/components';
-
-import styles from './HyperLinkConfig.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Button } from '~/v4/core/components/Button';
 import useSDK from '~/v4/core/hooks/useSDK';
 import Trash from '~/v4/social/icons/trash';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { CancelButton } from '~/v4/social/elements/CancelButton';
 import { DoneButton } from '~/v4/social/elements/DoneButton';
+import { EditCancelButton } from '~/v4/social/elements/EditCancelButton';
+
+import styles from './HyperLinkConfig.module.css';
 
 interface HyperLinkConfigProps {
   pageId: string;
   isHaveHyperLink: boolean;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: { url: string; customText?: string }) => void;
   onRemove: () => void;
 }
 
@@ -37,17 +36,18 @@ export const HyperLinkConfig = ({
 }: HyperLinkConfigProps) => {
   const componentId = 'hyper_link_config_component';
   const { confirm } = useConfirmContext();
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { accessibilityId, config, isExcluded, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   if (isExcluded) return null;
 
   const { formatMessage } = useIntl();
   const { client } = useSDK();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  const formId = 'asc-story-hyperlink-form';
 
   const schema = z.object({
     url: z
@@ -116,7 +116,7 @@ export const HyperLinkConfig = ({
     setHasUnsavedChanges(url !== '' || customText !== '');
   }, [url, customText]);
 
-  const onSubmitForm = async (data: HyperLinkFormInputs) => {
+  const onSubmitForm = (data: HyperLinkFormInputs) => {
     onSubmit(data);
     onClose();
   };
@@ -156,27 +156,25 @@ export const HyperLinkConfig = ({
 
   return (
     <BottomSheet
+      data-qa-anchor={accessibilityId}
       detent="full-height"
       mountPoint={document.getElementById('asc-uikit-create-story') as HTMLElement}
       rootId="asc-uikit-create-story"
       isOpen={isOpen}
       onClose={handleClose}
       className={styles.bottomSheet}
+      style={themeStyles}
     >
       <div className={styles.headerContainer}>
-        <CancelButton pageId="*" componentId={componentId} onClick={handleClose} />
+        <EditCancelButton pageId={pageId} componentId={componentId} onPress={handleClose} />
         <Typography.Title>
           {formatMessage({ id: 'storyCreation.hyperlink.bottomSheet.title' })}
         </Typography.Title>
-        <DoneButton pageId="*" componentId={componentId} onClick={handleSubmit(onSubmitForm)} />
+        <DoneButton type="submit" pageId={pageId} componentId={componentId} form={formId} />
       </div>
       <div className={styles.divider} />
       <div className={styles.hyperlinkFormContainer}>
-        <form
-          id="asc-story-hyperlink-form"
-          onSubmit={handleSubmit(onSubmitForm)}
-          className={styles.form}
-        >
+        <form onSubmit={handleSubmit(onSubmitForm)} id={formId} className={styles.form}>
           <div className={styles.inputContainer}>
             <Typography.Title>
               <label

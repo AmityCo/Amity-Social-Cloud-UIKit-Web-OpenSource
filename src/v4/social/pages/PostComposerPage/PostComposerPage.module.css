@@ -1,0 +1,67 @@
+.postComposerPage {
+  position: relative;
+  display: block;
+  background-color: var(--asc-color-background-default);
+  height: 100%;
+}
+
+.postComposerPage__topBar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--asc-spacing-m1);
+}
+
+.postComposerPage__status {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  display: flex;
+  justify-content: start;
+  padding: unset;
+  font-size: var(--asc-text-font-size-md);
+  gap: 0.75rem;
+  margin: 0 auto 1rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--asc-box-shadow-03);
+  background-color: var(--asc-color-secondary-default);
+  color: var(--asc-color-background-default);
+}
+
+.selectPostTargetPag_infoIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-background-default);
+}
+
+.postComposerPage__notiWrap {
+  position: relative;
+  top: 0;
+}
+
+.postComposerPage__formLong {
+  max-height: calc(100% - 92px);
+  overflow: auto;
+}
+
+.postComposerPage__formShort {
+  max-height: calc(100% - 236px); /* 290px including file button */
+  overflow: auto;
+}
+
+.postComposerPage__formLong::-webkit-scrollbar,
+.postComposerPage__formShort::-webkit-scrollbar {
+  display: none;
+}
+
+/* vaul */
+
+.drawer__content {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  outline: none;
+}

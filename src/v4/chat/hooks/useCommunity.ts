@@ -1,15 +1,21 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
+import useLiveObject from '~/v4/core/hooks/useLiveObject';
 
-import useLiveObject from '~/core/hooks/useLiveObject';
-
-// breaking changes
-
-const useCommunity = (communityId: string | null | undefined) => {
-  return useLiveObject({
+export const useCommunity = ({
+  communityId,
+  shouldCall = true,
+}: {
+  communityId: string | null | undefined;
+  shouldCall?: boolean;
+}) => {
+  const { item, ...rest } = useLiveObject({
     fetcher: CommunityRepository.getCommunity,
     params: communityId,
-    shouldCall: () => !!communityId,
+    shouldCall: !!communityId && shouldCall,
   });
-};
 
-export default useCommunity;
+  return {
+    community: item,
+    ...rest,
+  };
+};

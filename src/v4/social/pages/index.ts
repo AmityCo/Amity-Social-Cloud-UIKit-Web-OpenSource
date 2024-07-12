@@ -1,2 +1,9 @@
 export { AmityDraftStoryPage } from './DraftsPage';
 export { ViewStoryPage } from './StoryPage';
+export { StoryTargetSelectionPage } from './StoryTargetSelectionPage';
+export { SocialHomePage } from './SocialHomePage';
+export { PostComposerPage } from './PostComposerPage';
+export { SelectPostTargetPage } from './SelectPostTargetPage';
+export { MyCommunitiesSearchPage } from './MyCommunitiesSearchPage';
+export { SocialGlobalSearchPage } from './SocialGlobalSearchPage';
+export { PostDetailPage } from './PostDetailPage';

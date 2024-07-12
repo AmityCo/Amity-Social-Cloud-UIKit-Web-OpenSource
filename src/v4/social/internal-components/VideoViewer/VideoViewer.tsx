@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import useFile from '~/core/hooks/useFile';
 import { VideoFileStatus } from '~/social/constants';
 import usePostByIds from '~/social/hooks/usePostByIds';
@@ -7,8 +7,23 @@ import AngleRight from '~/v4/icons/AngleRight';
 import { ClearButton } from '~/v4/social/elements/ClearButton/ClearButton';
 import styles from './VideoViewer.module.css';
 
-const VideoPlayer = memo(({ videoFileId }: { videoFileId: string }) => {
+import { VideoSize } from '@amityco/ts-sdk';
+
+const VideoPlayer = memo(({ videoPost }: { videoPost?: Amity.Post<'video'> }) => {
+  const videoFileId = useMemo(() => {
+    return (
+      videoPost?.data.videoFileId.high ||
+      videoPost?.data.videoFileId.medium ||
+      videoPost?.data.videoFileId.low ||
+      videoPost?.data.videoFileId.original ||
+      undefined
+    );
+  }, [videoPost]);
+
   const file: Amity.File<'video'> | undefined = useFile<Amity.File<'video'>>(videoFileId);
+  const posterUrl = useFile(videoPost?.data.thumbnailFileId);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   /*
    * It's possible that certain video formats uploaded by the user are not
@@ -35,10 +50,29 @@ const VideoPlayer = memo(({ videoFileId }: { videoFileId: string }) => {
     return file.fileUrl;
   }, [file]);
 
+  /*
+  The video initially doesn't change because in essence you're only modifying the <source> element
+  and React understands that <video> should remain unchanged,
+  so it does not update it on the DOM and doesn't trigger a new load event for that source.
+  A new load event should be triggered for <video>.
+
+  ref: https://stackoverflow.com/a/47382850
+  */
+  useEffect(() => {
+    videoRef.current?.load();
+  }, [url]);
+
   if (url == null) return <></>;
 
   return (
-    <video controls controlsList="nodownload" autoPlay className={styles.fullImage}>
+    <video
+      controls
+      controlsList="nodownload"
+      autoPlay
+      className={styles.fullImage}
+      ref={videoRef}
+      poster={posterUrl?.fileUrl}
+    >
       <source src={url} type="video/mp4" />
       <p>
         Your browser does not support this format of video. Please try again later once the server
@@ -73,15 +107,7 @@ export function VideoViewer({
 
   const videoPosts = posts.filter((post) => post.dataType === 'video');
 
-  const videoFileId = useMemo(() => {
-    return (
-      videoPosts?.[selectedVideoIndex]?.data.videoFileId.high ||
-      videoPosts?.[selectedVideoIndex]?.data.videoFileId.medium ||
-      videoPosts?.[selectedVideoIndex]?.data.videoFileId.low ||
-      videoPosts?.[selectedVideoIndex]?.data.videoFileId.original ||
-      undefined
-    );
-  }, [videoPosts, selectedVideoIndex]);
+  const videoPost = videoPosts[selectedVideoIndex];
 
   const hasNext = selectedVideoIndex < videoPosts.length - 1;
   const hasPrev = selectedVideoIndex > 0;
@@ -104,7 +130,7 @@ export function VideoViewer({
     <div style={themeStyles}>
       <div className={styles.modal} onClick={onClose}>
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          <VideoPlayer videoFileId={videoFileId} />
+          <VideoPlayer videoPost={videoPost} />
           <div className={styles.overlayPanel}>
             {hasPrev && (
               <div className={styles.overlayPanel__prev} onClick={prev}>
@@ -118,12 +144,13 @@ export function VideoViewer({
               </div>
             )}
           </div>
-          <span className={styles.closeButton} onClick={onClose}>
+          <span className={styles.closeButton}>
             <ClearButton
               pageId={pageId}
               componentId={componentId}
               defaultClassName={styles.videoViewer__clearButton}
               imgClassName={styles.videoViewer__clearButton__img}
+              onPress={onClose}
             />
           </span>
         </div>

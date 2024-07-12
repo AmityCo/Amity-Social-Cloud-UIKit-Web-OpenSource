@@ -5,17 +5,18 @@
 }
 
 .errorRing {
-  stroke: var(--asc-color-alert);
+  stroke: var(--asc-color-alert-default);
 }
 
 .uploadingProgressRing {
   stroke-dasharray: 339;
   stroke-dashoffset: 339;
   transform: rotate(-90deg);
-  animation: progress 2s linear infinite;
+  transform-origin: 50% 50%;
+  animation: upload-progress 2s linear infinite;
 }
 
-@keyframes progress {
+@keyframes upload-progress {
   0% {
     stroke-dashoffset: 339;
   }

@@ -33,7 +33,7 @@ export function MyCommunitiesButton({
       componentId={componentId}
       elementId={elementId}
       isActive={isActive}
-      onClick={() => onClick?.()}
+      onPress={() => onClick?.()}
     >
       {config.text}
     </TabButton>

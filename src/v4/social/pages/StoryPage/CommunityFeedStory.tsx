@@ -1,14 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import useStories from '~/social/hooks/useStories';
-import useSDK from '~/core/hooks/useSDK';
-import { useIntl } from 'react-intl';
-import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
 import { Trash2Icon } from '~/icons';
 import { isNonNullable } from '~/v4/helpers/utils';
-import { extractColors } from 'extract-colors';
 
 import Stories from 'react-insta-stories';
 import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
@@ -25,9 +20,14 @@ import clsx from 'clsx';
 import { ArrowLeftButton } from '~/v4/social/elements/ArrowLeftButton';
 import { ArrowRightButton } from '~/v4/social/elements/ArrowRightButton';
 
-import styles from './StoryPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { FileTrigger } from 'react-aria-components';
+
+import styles from './StoryPage.module.css';
+import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
+import { useMotionValue, motion } from 'framer-motion';
+import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 interface CommunityFeedStoryProps {
   pageId?: string;
@@ -49,7 +49,12 @@ interface CommunityFeedStoryProps {
   }) => void;
 }
 
-const DURATION = 5000;
+const MIN_IMAGE_DURATION = 5000; // 5 seconds
+const MAX_IMAGE_DURATION = 10000; // 10 seconds
+const DEFAULT_IMAGE_DURATION = 7000; // 7 seconds
+
+const isStory = (story: Amity.Story | Amity.Ad): story is Amity.Story =>
+  !!(story as Amity.Story)?.storyId;
 
 export const CommunityFeedStory = ({
   pageId = '*',
@@ -65,8 +70,12 @@ export const CommunityFeedStory = ({
   });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
+  const y = useMotionValue(0);
+  const motionRef = useRef<HTMLDivElement>(null);
+  const dragEventTarget = useRef(new EventTarget());
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
-  const { stories } = useStories({
+  const { stories } = useGetActiveStoriesByTarget({
     targetId: communityId,
     targetType: 'community',
     options: {
@@ -82,7 +91,6 @@ export const CommunityFeedStory = ({
           renderer({
             ...props,
             onClose: () => onClose(communityId),
-            onSwipeDown: () => onSwipeDown(communityId),
             onClickCommunity: () => onClickCommunity(communityId),
           });
 
@@ -91,39 +99,61 @@ export const CommunityFeedStory = ({
           tester,
         };
       }),
-    [renderers, onClose, onSwipeDown, onClickCommunity, communityId],
+    [renderers, onClose, onClickCommunity, communityId],
   );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { client, currentUserId } = useSDK();
 
-  const { formatMessage } = useIntl();
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const { file, setFile } = useStoryContext();
-  const [colors, setColors] = useState<FinalColor[]>([]);
 
-  const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
-  const isModerator = checkStoryPermission(client, communityId);
+  const currentStory = stories[currentIndex];
+
+  const isStoryCreator = isStory(currentStory)
+    ? currentStory?.creator?.userId === currentUserId
+    : false;
+  const isModerator = isStory(currentStory)
+    ? checkStoryPermission(client, currentStory?.targetId)
+    : false;
+
+  const nextStory = () => {
+    if (currentIndex === stories.length - 1) {
+      onBack();
+      return;
+    }
+    setCurrentIndex(currentIndex + 1);
+  };
+
+  const previousStory = () => {
+    if (currentIndex === 0) return;
+    setCurrentIndex(currentIndex - 1);
+  };
 
   const confirmDeleteStory = (storyId: string) => {
     confirm({
       pageId,
-      title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
-      content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
-      okText: formatMessage({ id: 'delete' }),
+      title: 'Delete this story?',
+      content:
+        "This story will be permanently deleted. You'll no longer to see and find this story.",
+      okText: 'Delete',
       onOk: async () => {
+        setIsBottomSheetOpen(false);
         await StoryRepository.softDeleteStory(storyId);
+        if (currentIndex === 0) {
+          onClose(communityId);
+        } else {
+          setCurrentIndex(currentIndex - 1);
+        }
         notification.success({
-          content: formatMessage({ id: 'storyViewer.notification.deleted' }),
+          content: 'Story deleted',
         });
-        if (stories.length === 1) onClose(communityId);
       },
     });
   };
 
-  const deleteStory = async (storyId: string) => {
+  const deleteStory = (storyId: string) => {
     confirmDeleteStory(storyId);
   };
 
@@ -139,7 +169,7 @@ export const CommunityFeedStory = ({
         formData.append('files', file);
         setFile(null);
         if (file?.type.includes('image') && currentUserId) {
-          const { data: imageData } = await StoryRepository.createImageStory(
+          await StoryRepository.createImageStory(
             'user',
             currentUserId,
             formData,
@@ -147,174 +177,129 @@ export const CommunityFeedStory = ({
             imageMode,
             items,
           );
-          if (imageData) {
-            notification.success({
-              content: formatMessage({ id: 'storyViewer.notification.success' }),
-            });
-          }
         } else {
           if (currentUserId) {
-            const { data: videoData } = await StoryRepository.createVideoStory(
+            await StoryRepository.createVideoStory(
               'user',
               currentUserId,
               formData,
               metadata,
               items,
             );
-            if (videoData) {
-              notification.success({
-                content: formatMessage({ id: 'storyViewer.notification.success' }),
-              });
-            }
           }
         }
-      } catch (error) {
-        notification.error({
-          content: formatMessage({ id: 'storyViewer.notification.error' }),
+        notification.success({
+          content: 'Successfully shared story',
         });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          notification.info({
+            content: error.message ?? 'Failed to share story',
+          });
+        }
       }
     },
-    [currentUserId, formatMessage, notification, setFile],
+    [currentUserId, notification, setFile],
   );
 
   const discardStory = () => {
     setFile(null);
   };
-  const addStoryButton = useMemo(
-    () => (
-      <FileTrigger
-        ref={fileInputRef}
-        onSelect={(e) => {
-          const files = Array.from(e as FileList);
-          setFile(files[0]);
-        }}
-      >
-        <CreateNewStoryButton pageId={pageId} />
-      </FileTrigger>
-    ),
-    [pageId, setFile],
-  );
-
-  const storyStyles = useMemo(
-    () => ({
-      width: '100%',
-      height: '100%',
-      objectFit:
-        stories[currentIndex]?.dataType === 'image' &&
-        stories[currentIndex]?.data?.imageDisplayMode === 'fill'
-          ? 'cover'
-          : 'contain',
-      background: `linear-gradient(
-               180deg,
-               ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
-               ${colors?.length > 0 ? colors[colors?.length - 1].hex : '#000'} 100%
-             )`,
-    }),
-    [stories, currentIndex, colors],
+  const addStoryButton = (
+    <FileTrigger
+      ref={fileInputRef}
+      onSelect={(e) => {
+        const files = Array.from(e as FileList);
+        setFile(files[0]);
+      }}
+    >
+      <CreateNewStoryButton pageId={pageId} />
+    </FileTrigger>
   );
 
   const increaseIndex = () => {
-    setCurrentIndex((prevIndex) => prevIndex + 1);
-  };
-
-  const formattedStories = useMemo(
-    () =>
-      stories?.map((story) => {
-        const isImage = story?.dataType === 'image';
-        const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
-
-        return {
-          ...story,
-          url,
-          type: isImage ? 'image' : 'video',
-          actions: [
-            isStoryCreator || isModerator
-              ? {
-                  name: 'delete',
-                  action: () => deleteStory(story?.storyId as string),
-                  icon: (
-                    <Trash2Icon
-                      fill={getComputedStyle(document.documentElement).getPropertyValue(
-                        '--asc-color-base-default',
-                      )}
-                    />
-                  ),
-                }
-              : null,
-          ].filter(isNonNullable),
-          onCreateStory,
-          discardStory,
-          addStoryButton,
-          fileInputRef,
-          storyStyles,
-          currentIndex,
-          storiesCount: stories?.length,
-          increaseIndex,
-          pageId,
-        };
-      }),
-    [
-      stories,
-      deleteStory,
-      onCreateStory,
-      discardStory,
-      addStoryButton,
-      fileInputRef,
-      storyStyles,
-      currentIndex,
-      increaseIndex,
-    ],
-  );
-
-  const nextStory = () => {
     if (currentIndex === stories.length - 1) {
       onBack();
       return;
     }
-    setCurrentIndex(currentIndex + 1);
+    setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
-  const previousStory = () => {
-    if (currentIndex === 0) return;
-    setCurrentIndex(currentIndex - 1);
-  };
+  const formattedStories = stories?.map((story) => {
+    if (isStory(story)) {
+      const isImage = story?.dataType === 'image';
+      const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
+
+      return {
+        story,
+        url,
+        type: isImage ? 'image' : 'video',
+        actions: [
+          isStoryCreator || isModerator
+            ? {
+                name: 'Delete',
+                action: () => deleteStory(story?.storyId as string),
+                icon: (
+                  <Trash2Icon
+                    fill={getComputedStyle(document.documentElement).getPropertyValue(
+                      '--asc-color-base-default',
+                    )}
+                  />
+                ),
+              }
+            : null,
+        ].filter(isNonNullable),
+        onCreateStory,
+        discardStory,
+        addStoryButton,
+        fileInputRef,
+        currentIndex,
+        storiesCount: stories?.length,
+        increaseIndex,
+        pageId,
+        dragEventTarget: dragEventTarget.current,
+        setIsBottomSheetOpen,
+        isBottomSheetOpen,
+      };
+    } else {
+      return {
+        ad: story,
+        actions: [],
+        pageId,
+        currentIndex,
+        storiesCount: stories?.length,
+        increaseIndex,
+      };
+    }
+  });
 
   const targetRootId = 'asc-uikit-stories-viewer';
 
   useEffect(() => {
-    if (stories[stories.length - 1]?.syncState === 'syncing') {
+    const lastStory = stories[stories.length - 1];
+    if (isStory(lastStory) && lastStory?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);
     }
-    if (stories[currentIndex]) {
-      stories[currentIndex]?.analytics.markAsSeen();
+    if (currentStory && isStory(currentStory)) {
+      currentStory?.analytics.markAsSeen();
     }
   }, [currentIndex, stories]);
 
   useEffect(() => {
-    if (stories.every((story) => story?.isSeen)) return;
-    const firstUnseenStoryIndex = stories.findIndex((story) => !story?.isSeen);
+    if (stories.filter(isStory).every((story) => story?.isSeen)) return;
+    const firstUnseenStoryIndex = stories.findIndex((story) =>
+      isStory(story) ? !story?.isSeen : false,
+    );
 
     if (firstUnseenStoryIndex !== -1) {
       setCurrentIndex(firstUnseenStoryIndex);
     }
-  }, [stories]);
+  }, []);
 
-  useEffect(() => {
-    if (!stories) return;
-    const extractColorsFromImage = async (url: string) => {
-      const colorsFromImage = await extractColors(url, {
-        crossOrigin: 'anonymous',
-      });
-
-      setColors(colorsFromImage);
-    };
-
-    if (file?.type.includes('image') || stories[currentIndex]?.dataType === 'image') {
-      extractColorsFromImage((stories[currentIndex]?.imageData?.fileUrl as string) ?? file);
-    } else {
-      setColors([]);
-    }
-  }, [stories, currentIndex]);
+  useCommunityStoriesSubscription({
+    targetId: communityId,
+    targetType: 'community',
+  });
 
   if (file) {
     goToDraftStoryPage({
@@ -327,34 +312,61 @@ export const CommunityFeedStory = ({
     });
   }
 
+  if (!stories || stories.length === 0) return null;
+
   return (
-    <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
+    <div className={clsx(styles.storyWrapper)}>
       <ArrowLeftButton onClick={previousStory} />
-      <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
+      <motion.div
+        id={targetRootId}
+        ref={motionRef}
+        data-qa-anchor={accessibilityId}
+        initial={{ y: 0 }}
+        drag="y"
+        whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
+        dragConstraints={{ top: 0, bottom: 200 }}
+        dragElastic={{ top: 0, bottom: 0.5 }}
+        onDragStart={() => {
+          dragEventTarget.current.dispatchEvent(new Event('dragstart'));
+        }}
+        onDrag={(_, info) => {
+          // Prevent dragging upwards
+          if (info.point.y < info.point.y - info.offset.y) {
+            y.set(0);
+          }
+        }}
+        onDragEnd={(_, info) => {
+          dragEventTarget.current.dispatchEvent(new Event('dragend'));
+          if (info.offset.y > 100) {
+            onSwipeDown(communityId);
+          } else {
+            y.set(0);
+          }
+        }}
+        className={clsx(styles.viewStoryContainer)}
+      >
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
           <div className={clsx(styles.viewStoryOverlay)} />
-          {formattedStories?.length > 0 ? (
-            // NOTE: Do not use isPaused prop, it will cause the first video story skipped
-            <Stories
-              progressWrapperStyles={{
-                display: 'none',
-              }}
-              preventDefault
-              currentIndex={currentIndex}
-              stories={formattedStories}
-              renderers={communityFeedRenderers as RendererObject[]}
-              defaultInterval={DURATION}
-              onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
-              onStoryEnd={increaseIndex}
-              onNext={nextStory}
-              onPrevious={previousStory}
-              onAllStoriesEnd={nextStory}
-            />
-          ) : null}
+          <Stories
+            key={stories?.length}
+            progressWrapperStyles={{
+              display: 'none',
+            }}
+            preventDefault
+            currentIndex={currentIndex}
+            stories={formattedStories}
+            renderers={communityFeedRenderers as RendererObject[]}
+            defaultInterval={DEFAULT_IMAGE_DURATION}
+            onStoryStart={() => isStory(currentStory) && currentStory?.analytics.markAsSeen()}
+            onStoryEnd={nextStory}
+            onNext={nextStory}
+            onPrevious={previousStory}
+            onAllStoriesEnd={nextStory}
+          />
         </div>
-      </div>
+      </motion.div>
       <ArrowRightButton onClick={nextStory} />
     </div>
   );

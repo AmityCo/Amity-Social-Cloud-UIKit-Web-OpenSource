@@ -4,10 +4,10 @@ import useUserSubscription from './useUserSubscription';
 export default function useUserReactionSubscription({
   userId,
   callback,
-  shouldSubscribe,
+  shouldSubscribe = true,
 }: {
   userId?: string | null;
-  shouldSubscribe?: () => boolean;
+  shouldSubscribe?: boolean;
   callback?: Amity.Listener;
 }) {
   return useUserSubscription({
