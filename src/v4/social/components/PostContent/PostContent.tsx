@@ -34,6 +34,8 @@ import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscripti
 import { ReactionList } from '../index';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 import millify from 'millify';
+import { Button } from '~/v4/core/natives/Button';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -49,19 +51,30 @@ const PostTitle = ({ pageId, post }: PostTitleProps) => {
   });
 
   const { user: postedUser } = useUser(post.postedUserId);
+  const { onClickCommunity, onClickUser } = useNavigation();
 
   if (targetCommunity) {
     return (
       <div className={styles.postTitle}>
-        <Typography.BodyBold className={styles.postTitle__text}>
-          {postedUser?.displayName}
-        </Typography.BodyBold>
+        {postedUser && (
+          <Button onPress={() => onClickUser(postedUser?.userId)}>
+            <Typography.BodyBold className={styles.postTitle__text}>
+              {postedUser?.displayName}
+            </Typography.BodyBold>
+          </Button>
+        )}
         {targetCommunity && (
           <>
             <AngleRight className={styles.postTitle__icon} />
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {targetCommunity.displayName}
-            </Typography.BodyBold>{' '}
+            <Button
+              onPress={() => {
+                onClickCommunity(targetCommunity.communityId);
+              }}
+            >
+              <Typography.BodyBold className={styles.postTitle__text}>
+                {targetCommunity.displayName}
+              </Typography.BodyBold>
+            </Button>
           </>
         )}
       </div>

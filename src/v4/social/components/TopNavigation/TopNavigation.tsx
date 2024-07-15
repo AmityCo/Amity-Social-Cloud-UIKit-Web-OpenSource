@@ -51,11 +51,13 @@ export function TopNavigation({
           componentId={componentId}
           onPress={handleGlobalSearchClick}
         />
-        <PostCreationButton
-          pageId={pageId}
-          componentId={componentId}
-          onClick={onClickPostCreationButton}
-        />
+        {selectedTab !== HomePageTab.Explore && (
+          <PostCreationButton
+            pageId={pageId}
+            componentId={componentId}
+            onClick={onClickPostCreationButton}
+          />
+        )}
       </div>
     </div>
   );

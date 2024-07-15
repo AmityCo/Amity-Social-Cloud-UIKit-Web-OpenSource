@@ -253,7 +253,16 @@ interface NavigationProviderProps {
     onCancel: () => void;
   }) => void;
   children: React.ReactNode;
-  onChangePage?: (data: { type: string; [x: string]: string | boolean }) => void;
+  onChangePage?: (
+    data:
+      | { type: string; [x: string]: string | boolean }
+      | {
+          type: string;
+          context: {
+            [x: string]: string | boolean;
+          };
+        },
+  ) => void;
   onClickCategory?: (categoryId: string) => void;
   onClickCommunity?: (communityId: string) => void;
   onClickUser?: (userId: string) => void;
@@ -313,7 +322,16 @@ export default function NavigationProvider({
   };
 
   const onChangePage = onChangePageProp
-    ? async (data: { type: string; [x: string]: string | boolean }) => {
+    ? async (
+        data:
+          | { type: string; [x: string]: string | boolean }
+          | {
+              type: string;
+              context: {
+                [x: string]: string | boolean;
+              };
+            },
+      ) => {
         onChangePageProp(data);
       }
     : null;
@@ -329,7 +347,9 @@ export default function NavigationProvider({
     (communityId) => {
       const next = {
         type: PageTypes.CommunityFeed,
-        communityId,
+        context: {
+          communityId,
+        },
       };
 
       if (onChangePage) return onChangePage(next);
@@ -337,7 +357,7 @@ export default function NavigationProvider({
 
       pushPage(next);
     },
-    [onChangePage, onClickCommunity, pushPage],
+    [onClickCommunity, pushPage],
   );
 
   const handleCommunityCreated = useCallback(
@@ -375,7 +395,9 @@ export default function NavigationProvider({
     (userId, pageType) => {
       const next = {
         type: pageType ?? PageTypes.UserFeed,
-        userId,
+        context: {
+          userId,
+        },
       };
 
       if (onChangePage) return onChangePage(next);
