@@ -12,11 +12,7 @@ interface VideoButtonProps {
   componentId?: string;
   imgIconClassName?: string;
   defaultIconClassName?: string;
-  onChangeVideos?: (files: File[]) => void;
-  onChangeThumbnail?: (
-    thumbnail: { file: File; videoUrl: string; thumbnail: string | undefined }[],
-  ) => void;
-  videoThumbnail?: { file: File; videoUrl: string; thumbnail: string | undefined }[];
+  onVideoFileChange?: (files: File[]) => void;
 }
 
 const VideoButtonSvg = (props: React.SVGProps<SVGSVGElement>) => {
@@ -51,9 +47,7 @@ export function VideoButton({
   componentId = '*',
   imgIconClassName,
   defaultIconClassName,
-  onChangeVideos,
-  onChangeThumbnail,
-  videoThumbnail,
+  onVideoFileChange,
 }: VideoButtonProps) {
   const elementId = 'video_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
@@ -68,62 +62,10 @@ export function VideoButton({
     fileInput.click();
   };
 
-  const onLoad: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const targetFiles = e.target.files ? [...e.target.files] : [];
-      const existingVideosCount = videoThumbnail ? videoThumbnail.length : 0;
-
-      if (targetFiles.length + existingVideosCount > 10) {
-        confirm({
-          pageId: pageId,
-          type: 'info',
-          title: 'Maximum upload limit reached',
-          content:
-            'You’ve reached the upload limit of 10 videos. Any additional videos will not be saved. ',
-          okText: 'Close',
-        });
-        return;
-      }
-
-      if (targetFiles.length) {
-        onChangeVideos?.(targetFiles);
-        const updatedVideos = targetFiles.map((file) => ({
-          file,
-          videoUrl: URL.createObjectURL(file),
-          thumbnail: null,
-        }));
-        onChangeThumbnail?.((prevVideo) => [...prevVideo, ...updatedVideos]);
-        videoThumbnail &&
-          updatedVideos.forEach((video, index) =>
-            generateThumbnail(video.file, index + videoThumbnail.length),
-          );
-      }
-    },
-    [onChangeVideos, videoThumbnail?.length, onChangeThumbnail],
-  );
-
-  const generateThumbnail = (file: File, index: number) => {
-    const videoElement = document.createElement('video');
-    const canvasElement = document.createElement('canvas');
-    const context = canvasElement.getContext('2d');
-
-    videoElement.src = URL.createObjectURL(file);
-    videoElement.currentTime = 10; // Seek to 10 seconds (you can adjust this)
-
-    videoElement.addEventListener('loadeddata', () => {
-      videoElement.pause();
-      canvasElement.width = videoElement.videoWidth;
-      canvasElement.height = videoElement.videoHeight;
-      context?.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-      const thumbnail = canvasElement.toDataURL('image/png');
-      onChangeThumbnail?.((prevVideos) => {
-        const newVideos = [...prevVideos];
-        newVideos[index].thumbnail = thumbnail;
-        return newVideos;
-      });
-    });
+  const onVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onVideoFileChange?.(e.target.files ? [...e.target.files] : []);
   };
 
   return (
@@ -146,7 +88,7 @@ export function VideoButton({
       <input
         type="file"
         accept="video/*"
-        onChange={onLoad}
+        onChange={onVideoChange}
         multiple
         id="video-upload"
         className={styles.videoButton__input}

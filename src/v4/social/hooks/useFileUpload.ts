@@ -47,7 +47,7 @@ export default function useFileUpload({
           uploaded: remaining,
           uploading: fileList,
         });
-      } else if (index) {
+      } else if (index !== undefined) {
         const remaining = uploadedFiles.filter((_, i) => i !== index);
 
         onChange({
@@ -62,7 +62,7 @@ export default function useFileUpload({
         });
       }
     },
-    [onChange],
+    [onChange, uploadedFiles, fileList],
   );
 
   // file upload function

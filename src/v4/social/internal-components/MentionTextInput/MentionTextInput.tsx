@@ -133,7 +133,7 @@ function Mention({
   let options: MentionTypeaheadOption[] = [];
   const intersectionRef = useRef<HTMLDivElement>(null);
   const {
-    users: members,
+    members,
     hasMore: hasMoreMember,
     isLoading: isLoadingMember,
     loadMore: loadMoreMember,
@@ -162,7 +162,7 @@ function Mention({
     ref: intersectionRef,
   });
 
-  const community = useCommunity(communityId || '');
+  const community = useCommunity({ communityId }).community;
   const isPublic = community?.isPublic;
 
   if (communityId && !isPublic) {

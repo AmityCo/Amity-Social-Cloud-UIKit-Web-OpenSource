@@ -9,25 +9,20 @@ import clsx from 'clsx';
 interface MediaAttachmentProps {
   pageId: string;
   uploadLoading?: boolean;
-  onChangeImages?: (files: File[]) => void;
-  onChangeVideos?: (files: File[]) => void;
-  onChangeThumbnail?: (thumbnail: { file: File; videoUrl: string; thumbnail: string | undefined }[]) => void;
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;
-  videoThumbnail?: { file: File; videoUrl: string; thumbnail: string | undefined }[];
+  onVideoFileChange?: (files: File[]) => void;
+  onImageFileChange?: (files: File[]) => void;
 }
 
 export function MediaAttachment({
   pageId,
-  uploadLoading,
-  onChangeImages,
-  onChangeVideos,
-  onChangeThumbnail,
   isVisibleCamera,
   isVisibleImage,
   isVisibleVideo,
-  videoThumbnail,
+  onVideoFileChange,
+  onImageFileChange,
 }: MediaAttachmentProps) {
   const componentId = 'media_attachment';
   const { themeStyles, accessibilityId, isExcluded } = useAmityComponent({ pageId, componentId });
@@ -48,25 +43,25 @@ export function MediaAttachment({
           <CameraButton
             pageId={pageId}
             componentId={componentId}
-            onChange={onChangeImages}
             isVisibleImage={isVisibleImage}
             isVisibleVideo={isVisibleVideo}
-            onChangeVideos={onChangeVideos}
-            videoThumbnail={videoThumbnail}
-            onChangeThumbnail={onChangeThumbnail}
+            onVideoFileChange={onVideoFileChange}
+            onImageFileChange={onImageFileChange}
           />
         )}
         {isVisibleImage && (
-          <ImageButton pageId={pageId} componentId={componentId} onChange={onChangeImages} />
+          <ImageButton
+            pageId={pageId}
+            componentId={componentId}
+            onImageFileChange={onImageFileChange}
+          />
         )}
 
         {isVisibleVideo && (
           <VideoButton
             pageId={pageId}
             componentId={componentId}
-            onChangeVideos={onChangeVideos}
-            onChangeThumbnail={onChangeThumbnail}
-            videoThumbnail={videoThumbnail}
+            onVideoFileChange={onVideoFileChange}
           />
         )}
       </div>

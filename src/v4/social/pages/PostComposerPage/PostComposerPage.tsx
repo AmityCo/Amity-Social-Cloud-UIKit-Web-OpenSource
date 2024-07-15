@@ -22,7 +22,8 @@ import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
 import { MediaAttachment } from '~/v4/social/components/MediaAttachment';
 import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
 import { isMobile } from '~/v4/social/utils/isMobile';
-import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
+import { generateThumbnailVideo } from '~/v4/social/utils/generateThumbnailVideo';
 
 export enum Mode {
   CREATE = 'create',
@@ -127,6 +128,8 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
   const [incomingVideos, setIncomingVideos] = useState<File[]>([]);
   const [uploadLoading, setUploadLoading] = useState(false);
 
+  const [uploadedImagesCount, setUploadedImagesCount] = useState<File[]>([]);
+
   // Visible menu attachment
   const [isVisibleCamera, setIsVisibleCamera] = useState(false);
   const [isVisibleImage, setIsVisibleImage] = useState(true);
@@ -225,14 +228,63 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
     }
   }, []);
 
-  const handleThumbnailChange = (
-    updatedThumbnails: { file: File; videoUrl: string; thumbnail: string | undefined }[],
-  ) => {
-    setVideoThumbnail(updatedThumbnails);
-  };
-
   const handleRemoveThumbnail = (index: number) => {
     setVideoThumbnail((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleImageFileChange = (file: File[]) => {
+    if (file.length + uploadedImagesCount.length > 10) {
+      confirm({
+        pageId: pageId,
+        type: 'info',
+        title: 'Maximum upload limit reached',
+        content:
+          'You’ve reached the upload limit of 10 images. Any additional images will not be saved. ',
+        okText: 'Close',
+      });
+      return;
+    }
+
+    if (file.length > 0) {
+      setUploadedImagesCount((prevImages) => [...prevImages, ...file]);
+      setIncomingImages(file);
+    }
+  };
+
+  const handleVideoFileChange = async (file: File[]) => {
+    const existingVideosCount = videoThumbnail ? videoThumbnail.length : 0;
+
+    if (file.length + existingVideosCount > 10) {
+      confirm({
+        pageId: pageId,
+        type: 'info',
+        title: 'Maximum upload limit reached',
+        content:
+          'You’ve reached the upload limit of 10 videos. Any additional videos will not be saved. ',
+        okText: 'Close',
+      });
+      return;
+    }
+
+    if (file.length > 0) {
+      setIncomingVideos?.(file);
+      const updatedVideos = file.map((file) => ({
+        file,
+        videoUrl: URL.createObjectURL(file),
+        thumbnail: undefined,
+      }));
+
+      const thumbnailVideo = await Promise.all(
+        updatedVideos.map(async (video) => {
+          const thumbnail = await generateThumbnailVideo(video.file);
+          return {
+            ...video,
+            thumbnail: thumbnail,
+          };
+        }),
+      );
+      setVideoThumbnail((prev) => [...prev, ...thumbnailVideo]);
+    }
   };
 
   return (
@@ -312,26 +364,20 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
                   snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU ? (
                     <DetailedMediaAttachment
                       pageId={pageId}
-                      uploadLoading={uploadLoading}
-                      onChangeImages={(newImageFiles) => setIncomingImages(newImageFiles)}
-                      onChangeThumbnail={handleThumbnailChange}
-                      videoThumbnail={videoThumbnail}
-                      onChangeVideos={setIncomingVideos}
                       isVisibleCamera={isVisibleCamera}
                       isVisibleImage={isVisibleImage}
                       isVisibleVideo={isVisibleVideo}
+                      onVideoFileChange={handleVideoFileChange}
+                      onImageFileChange={handleImageFileChange}
                     />
                   ) : (
                     <MediaAttachment
                       pageId={pageId}
-                      uploadLoading={uploadLoading}
-                      onChangeImages={(newImageFiles) => setIncomingImages(newImageFiles)}
-                      onChangeThumbnail={(updatedVideo) => handleThumbnailChange(updatedVideo)}
-                      videoThumbnail={videoThumbnail}
-                      onChangeVideos={setIncomingVideos}
                       isVisibleCamera={isVisibleCamera}
                       isVisibleImage={isVisibleImage}
                       isVisibleVideo={isVisibleVideo}
+                      onVideoFileChange={handleVideoFileChange}
+                      onImageFileChange={handleImageFileChange}
                     />
                   )}
                 </Drawer.Content>
