@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.css';
 import { Typography } from '~/v4/core/components';
-import HyperLinkText from '~/v4/core/components/HyperlinkText/index';
+import HyperLinkText from '~/v4/core/components/HyperlinkText';
 
 interface MessageTextWithMentionProps {
   message: Amity.Message<'text'>;

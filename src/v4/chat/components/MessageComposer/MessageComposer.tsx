@@ -2,14 +2,14 @@ import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react'
 import ReactDOM from 'react-dom';
 import { MessageRepository } from '@amityco/ts-sdk';
 import ArrowTop from '~/v4/icons/ArrowTop';
-import { HomeIndicator } from '../../internal-components/HomeIndicator/index';
+import { HomeIndicator } from '~/v4/chat/internal-components/HomeIndicator';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useLiveChatNotifications } from '~/v4/chat/providers/LiveChatNotificationProvider';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
 import styles from './MessageComposer.module.css';
-import { useSearchChannelUser } from '../../hooks/collections/useSearchChannelUser';
+import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
 import {
   $getRoot,
   COMMAND_PRIORITY_HIGH,
@@ -263,7 +263,7 @@ export const MessageComposer = ({
               onQueryChange={onQueryChange}
               $createNode={(data) =>
                 $createMentionNode({
-                  text: `@${data.displayName}` || '',
+                  text: `@${data.displayName || ''}`,
                   data,
                 })
               }

@@ -83,7 +83,7 @@ export const VideoSkeleton = () => (
   </SizeMe>
 );
 
-const StyledRemoveIcon = styled(Remove).attrs<{ icon?: ReactNode }>({width: 24, height: 24})``;
+const StyledRemoveIcon = styled(Remove).attrs<{ icon?: ReactNode }>({ width: 24, height: 24 })``;
 
 export const RemoveButton = styled(Button).attrs<{
   variant?: string;

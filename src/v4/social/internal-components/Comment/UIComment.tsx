@@ -17,7 +17,7 @@ import InputText from '~/v4/core/components/InputText';
 import { Avatar, Typography } from '~/v4/core/components';
 import Button from '~/v4/core/components/Button/Button';
 import clsx from 'clsx';
-import { ModeratorBadge } from '../../elements/ModeratorBadge/ModeratorBadge';
+import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge/ModeratorBadge';
 import User from '~/v4/icons/User';
 
 import styles from './UIComment.module.css';

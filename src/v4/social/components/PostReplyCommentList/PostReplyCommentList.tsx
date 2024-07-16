@@ -1,8 +1,8 @@
 import React from 'react';
-import { Typography } from '~/v4/core/components/index';
+import { Typography } from '~/v4/core/components';
 import ReplyComment from '~/v4/icons/ReplyComment';
-import useCommentsCollection from '../../hooks/collections/useCommentsCollection';
-import PostReplyComment from '../PostReplyComment/PostReplyComment';
+import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
+import PostReplyComment from '~/v4/social/components/PostReplyComment/PostReplyComment';
 import styles from './PostReplyCommentList.module.css';
 
 interface PostReplyCommentProps {

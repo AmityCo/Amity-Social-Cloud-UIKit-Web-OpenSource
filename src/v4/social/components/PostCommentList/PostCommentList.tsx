@@ -1,14 +1,14 @@
 import React, { useRef } from 'react';
 import styles from './PostCommentList.module.css';
-import { PostComment } from '../PostComment/PostComment';
+import { PostComment } from '~/v4/social/components/PostComment/PostComment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
-import useCommentsCollection from '../../hooks/collections/useCommentsCollection';
-import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
+import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import useUserSubscription from '~/v4/core/hooks/subscriptions/useUserSubscription';
 import { CommentRepository, SubscriptionLevels } from '@amityco/ts-sdk';
 import useCommunitySubscription from '~/v4/core/hooks/subscriptions/useCommunitySubscription';
 import { usePaginator } from '~/v4/core/hooks/usePaginator';
-import { CommentAd } from '../../internal-components/CommentAd/CommentAd';
+import { CommentAd } from '~/v4/social/internal-components/CommentAd/CommentAd';
 
 type PostCommentListProps = {
   post: Amity.Post;

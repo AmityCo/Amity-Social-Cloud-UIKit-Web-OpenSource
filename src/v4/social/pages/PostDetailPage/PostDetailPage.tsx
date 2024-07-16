@@ -11,8 +11,8 @@ import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import styles from './PostDetailPage.module.css';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { PostCommentComposer } from '../../components/PostCommentComposer/PostCommentComposer';
-import { PostCommentList } from '../../components/PostCommentList/PostCommentList';
+import { PostCommentComposer } from '~/v4/social/components/PostCommentComposer/PostCommentComposer';
+import { PostCommentList } from '~/v4/social/components/PostCommentList/PostCommentList';
 
 interface PostDetailPageProps {
   id: string;

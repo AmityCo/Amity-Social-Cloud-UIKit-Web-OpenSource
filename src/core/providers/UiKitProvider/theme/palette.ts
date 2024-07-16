@@ -45,7 +45,7 @@ export const lightenHex = (lightenAmount: number, hexColorString: string) => {
 // Lightness values for color variations.
 export const COLOR_SHADES = [0.25, 0.4, 0.5, 0.75];
 
-type PaletteTheme = typeof defaultTheme['palette'];
+type PaletteTheme = (typeof defaultTheme)['palette'];
 
 /**
  * Converts all colors from hex format to hsl/hsla format.
@@ -70,11 +70,14 @@ export const buildPaletteTheme = (mergedPaletteTheme: PaletteTheme) => {
   const colorThemeExtended = (Object.keys(hslColorTheme) as string[]).reduce(
     (acc, colorKey) => {
       const currentHexColor = otherColors[colorKey as keyof typeof otherColors];
-      const shades = COLOR_SHADES.reduce((shadeAcc, shade, index) => {
-        const shadeKey = `shade${index + 1}`;
-        shadeAcc[shadeKey] = lightenHex(shade, currentHexColor);
-        return shadeAcc;
-      }, {} as Record<string, string>);
+      const shades = COLOR_SHADES.reduce(
+        (shadeAcc, shade, index) => {
+          const shadeKey = `shade${index + 1}`;
+          shadeAcc[shadeKey] = lightenHex(shade, currentHexColor);
+          return shadeAcc;
+        },
+        {} as Record<string, string>,
+      );
       const main = hslColorTheme[colorKey];
       if (main && typeof main === 'object') {
         acc[colorKey] = { ...shades, ...main };

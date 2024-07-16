@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
-import { AdEngine } from '../AdEngine';
-import { useAdSettings, useRecommendAds } from '../providers/AdEngineProvider';
+import { AdEngine } from '~/v4/core/AdEngine';
+import { useAdSettings, useRecommendAds } from '~/v4/core/providers/AdEngineProvider';
 import { isNonNullable } from '~/v4/helpers/utils';
 
 const usePaginatorCore = <T>({

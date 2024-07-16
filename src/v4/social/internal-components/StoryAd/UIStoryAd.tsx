@@ -4,10 +4,10 @@ import clsx from 'clsx';
 import { Button } from '~/v4/core/natives/Button';
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 import InfoCircle from '~/v4/icons/InfoCircle';
-import { Avatar, Typography } from '~/v4/core/components/index';
+import { Avatar, Typography } from '~/v4/core/components';
 import Broadcast from '~/v4/icons/Broadcast';
-import { PauseIcon, PlayIcon } from '~/icons/index';
-import { CloseButton } from '~/v4/social/elements/index';
+import { PauseIcon, PlayIcon } from '~/icons';
+import { CloseButton } from '~/v4/social/elements';
 import { StoryAdInformation } from '~/v4/social/internal-components/StoryAdInformation/StoryAdInformation';
 import { AdsBadge } from '~/v4/social/internal-components/AdsBadge/AdsBadge';
 

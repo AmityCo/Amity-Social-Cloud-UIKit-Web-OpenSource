@@ -6,7 +6,7 @@ import { CommunitySearchResult } from '~/v4/social/components/CommunitySearchRes
 import { TabsBar } from '~/v4/social/internal-components/TabsBar';
 import useCommunitiesCollection from '~/v4/core/hooks/collections/useCommunitiesCollection';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
-import { UserSearchResult } from '../../components/UserSearchResult';
+import { UserSearchResult } from '~/v4/social/components/UserSearchResult';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 
 enum AmityGlobalSearchType {

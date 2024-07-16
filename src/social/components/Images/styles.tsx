@@ -22,7 +22,7 @@ export const CloseIcon = styled(Close).attrs({ width: 18, height: 18 })`
   fill: #fff;
 `;
 
-export const ImageContainer = styled.div<{ editing?: Boolean }>`
+export const ImageContainer = styled.div<{ editing?: boolean }>`
   position: relative;
   overflow: hidden;
   ${({ editing }) => !editing && 'cursor: pointer;'}
@@ -148,9 +148,9 @@ export const FileInput = styled.input.attrs({ type: 'file' })`
   }
 `;
 
-export const Label = styled.label<{ disabled?: Boolean }>``;
+export const Label = styled.label<{ disabled?: boolean }>``;
 
-export const ImageIcon = styled(ImageAttachment).attrs<{ disabled?: Boolean; icon?: ReactNode }>({
+export const ImageIcon = styled(ImageAttachment).attrs<{ disabled?: boolean; icon?: ReactNode }>({
   width: 18,
   height: 18,
 })`

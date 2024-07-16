@@ -6,7 +6,9 @@ export const Container = styled.div`
   min-width: 278px;
   min-height: 289px;
   cursor: pointer;
-  box-shadow: 0 0 1px rgba(40, 41, 61, 0.08), 0 0.5px 2px rgba(96, 97, 112, 0.16);
+  box-shadow:
+    0 0 1px rgba(40, 41, 61, 0.08),
+    0 0.5px 2px rgba(96, 97, 112, 0.16);
   border-radius: 8px;
   background: ${({ theme }) => theme.palette.system.background};
   overflow: hidden;

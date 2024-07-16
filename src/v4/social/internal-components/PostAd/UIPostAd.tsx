@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Avatar, Typography } from '~/v4/core/components';
-import { AdsBadge } from '../AdsBadge/AdsBadge';
+import { AdsBadge } from '~/v4/social/internal-components/AdsBadge/AdsBadge';
 import Broadcast from '~/v4/icons/Broadcast';
 import InfoCircle from '~/v4/icons/InfoCircle';
 import { Button } from '~/v4/core/natives/Button';
-import { AdInformation } from '../AdInformation/AdInformation';
+import { AdInformation } from '~/v4/social/internal-components/AdInformation/AdInformation';
 
 import styles from './UIPostAd.module.css';
 

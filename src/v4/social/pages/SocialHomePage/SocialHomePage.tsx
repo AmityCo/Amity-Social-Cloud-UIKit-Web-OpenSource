@@ -9,7 +9,7 @@ import { MyCommunitiesButton } from '~/v4/social/elements/MyCommunitiesButton';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
-import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import ExplorePage from '~/social/pages/Explore';
 
 export enum HomePageTab {
@@ -92,7 +92,7 @@ export function SocialHomePage() {
         </div>
       </div>
       <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
-      {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
+        {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
         {activeTab === HomePageTab.Explore && <ExplorePage />}
         {activeTab === HomePageTab.MyCommunities && <MyCommunities pageId={pageId} />}
       </div>

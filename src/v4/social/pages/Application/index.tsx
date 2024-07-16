@@ -7,8 +7,8 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
 import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
-import { SelectPostTargetPage } from '../SelectPostTargetPage';
-import { MyCommunitiesSearchPage } from '../MyCommunitiesSearchPage/MyCommunitiesSearchPage';
+import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
+import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 
 import styles from './Application.module.css';
 import { AmityDraftStoryPage } from '..';
@@ -16,13 +16,11 @@ import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelection
 import CommunityFeed from '~/social/pages/CommunityFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 
-
 const Application = () => {
   const { page } = useNavigation();
 
   const [open, setOpen] = useState(false);
   const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
-
 
   const toggleOpen = () => {
     setOpen(!open);

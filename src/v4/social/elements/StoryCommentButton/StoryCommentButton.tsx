@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import millify from 'millify';
 import React from 'react';
-import { PressEvent } from 'react-aria';
-import { Typography } from '~/v4/core/components/index';
-import { useAmityElement } from '~/v4/core/hooks/uikit/index';
+import { Typography } from '~/v4/core/components';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Button, ButtonProps } from '~/v4/core/natives/Button';
 

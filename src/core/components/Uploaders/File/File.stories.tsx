@@ -10,7 +10,7 @@ export default {
 export const SimpleFile = {
   render: () => {
     const [{ remove, ...args }] = useArgs();
-    // eslint-disable-next-line no-param-reassign
+
     if (!remove) delete args.onRemove;
     return <UiKitFile {...args} />;
   },

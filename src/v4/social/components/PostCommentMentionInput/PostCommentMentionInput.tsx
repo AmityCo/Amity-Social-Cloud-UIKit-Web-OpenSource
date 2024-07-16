@@ -8,8 +8,8 @@ import {
 import { TextNode } from 'lexical';
 import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { $createMentionNode } from '../../internal-components/MentionTextInput/MentionNodes';
-import { CommunityMember } from '../../internal-components/CommunityMember/CommunityMember';
+import { $createMentionNode } from '~/v4/social/internal-components/MentionTextInput/MentionNodes';
+import { CommunityMember } from '~/v4/social/internal-components/CommunityMember/CommunityMember';
 
 const MAX_LENGTH = 5000;
 

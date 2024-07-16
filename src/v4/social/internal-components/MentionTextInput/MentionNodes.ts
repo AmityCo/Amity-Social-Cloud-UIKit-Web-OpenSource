@@ -100,7 +100,6 @@ export class MentionNode extends TextNode {
     this.__userId = userId;
     this.__userInternalId = userInternalId;
     this.__userPublicId = userPublicId;
-
   }
 
   exportJSON(): SerializedMentionNode {

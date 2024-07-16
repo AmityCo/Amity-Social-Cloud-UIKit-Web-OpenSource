@@ -9,7 +9,7 @@ import { TextNode } from 'lexical';
 import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { $createMentionNode } from './MentionNodes';
-import { CommunityMember } from '../CommunityMember';
+import { CommunityMember } from '~/v4/social/internal-components/CommunityMember';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';

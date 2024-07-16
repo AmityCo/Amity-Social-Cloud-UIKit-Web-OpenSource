@@ -9,7 +9,11 @@ interface MyTimelineAvatarProps {
   userId?: string | null;
 }
 
-export function MyTimelineAvatar({ pageId = '*', componentId = '*', userId }: MyTimelineAvatarProps) {
+export function MyTimelineAvatar({
+  pageId = '*',
+  componentId = '*',
+  userId,
+}: MyTimelineAvatarProps) {
   const elementId = 'my_timeline_avatar';
   const { accessibilityId, isExcluded } = useAmityElement({
     pageId,

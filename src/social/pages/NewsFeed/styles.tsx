@@ -41,7 +41,9 @@ export const CommunitySideMenuOverlay = styled.div<{ isOpen: boolean }>`
   z-index: 998;
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  transition:
+    opacity 0.3s ease-in-out,
+    visibility 0.3s ease-in-out;
   cursor: pointer;
 `;
 

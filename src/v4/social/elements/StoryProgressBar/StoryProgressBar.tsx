@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useAmityElement } from '~/v4/core/hooks/uikit/index';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import clsx from 'clsx';
 import styles from './StoryProgressBar.module.css';
 

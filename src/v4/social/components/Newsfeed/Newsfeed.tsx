@@ -5,7 +5,7 @@ import { GlobalFeed } from '~/v4/social/components/GlobalFeed';
 
 import styles from './Newsfeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 
 const Spinner = (props: React.SVGProps<SVGSVGElement>) => {
   return (

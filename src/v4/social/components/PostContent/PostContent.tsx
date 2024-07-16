@@ -31,7 +31,7 @@ import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoVi
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscription';
-import { ReactionList } from '../index';
+import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 import millify from 'millify';
 import { Button } from '~/v4/core/natives/Button';

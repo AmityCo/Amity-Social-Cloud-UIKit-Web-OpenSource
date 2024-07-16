@@ -20,9 +20,9 @@ import {
   SerializedMentionNode,
 } from '~/v4/social/internal-components/MentionTextInput/MentionNodes';
 import styles from './PostCommentInput.module.css';
-import { PostCommentMentionInput } from '../PostCommentMentionInput';
-import { useMentionUsers } from '../../hooks/useMentionUser';
-import { CreateCommentParams } from '../PostCommentComposer/PostCommentComposer';
+import { PostCommentMentionInput } from '~/v4/social/components/PostCommentMentionInput';
+import { useMentionUsers } from '~/v4/social/hooks/useMentionUser';
+import { CreateCommentParams } from '~/v4/social/components/PostCommentComposer/PostCommentComposer';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 
 const theme = {

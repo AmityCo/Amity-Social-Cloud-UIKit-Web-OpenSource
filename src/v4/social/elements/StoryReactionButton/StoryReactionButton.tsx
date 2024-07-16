@@ -5,7 +5,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 import styles from './StoryReactionButton.module.css';
-import { Typography } from '~/v4/core/components/index';
+import { Typography } from '~/v4/core/components';
 import millify from 'millify';
 
 const StoryReactionSvg = (props: React.SVGProps<SVGSVGElement>) => {
