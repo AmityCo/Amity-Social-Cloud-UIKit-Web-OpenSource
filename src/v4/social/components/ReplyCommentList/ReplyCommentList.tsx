@@ -1,26 +1,26 @@
 import React from 'react';
 import { Typography } from '~/v4/core/components';
-import ReplyComment from '~/v4/icons/ReplyComment';
+import ReplyCommentIcon from '~/v4/icons/ReplyComment';
 import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
-import PostReplyComment from '~/v4/social/components/PostReplyComment/PostReplyComment';
-import styles from './PostReplyCommentList.module.css';
+import ReplyComment from '~/v4/social/components/ReplyComment/ReplyComment';
+import styles from './ReplyCommentList.module.css';
 
-interface PostReplyCommentProps {
-  postTargetType: Amity.PostTargetType;
-  postTargetId: string;
+interface ReplyCommentProps {
+  targetType: Amity.PostTargetType;
+  targetId: string;
   referenceId: string;
   parentId: string;
 }
 
-export const PostReplyCommentList = ({
+export const ReplyCommentList = ({
   referenceId,
-  postTargetId,
-  postTargetType,
+  targetId,
+  targetType,
   parentId,
-}: PostReplyCommentProps) => {
+}: ReplyCommentProps) => {
   const { comments, hasMore, loadMore } = useCommentsCollection({
     referenceId: referenceId,
-    referenceType: 'post',
+    referenceType: targetType,
     parentId: parentId,
     limit: 5,
     shouldCall: true,
@@ -35,9 +35,9 @@ export const PostReplyCommentList = ({
     <div>
       {comments.map((comment) => {
         return (
-          <PostReplyComment
-            postTargetId={postTargetId}
-            postTargetType={postTargetType}
+          <ReplyComment
+            targetId={targetId}
+            targetType={targetType}
             comment={comment as Amity.Comment}
           />
         );
@@ -47,7 +47,7 @@ export const PostReplyCommentList = ({
           className={styles.postReplyCommentList__viewReply_button}
           onClick={handleClickLoadMore}
         >
-          <ReplyComment className={styles.postReplyCommentList__viewReply_icon} />
+          <ReplyCommentIcon className={styles.postReplyCommentList__viewReply_icon} />
           <Typography.CaptionBold className={styles.postReplyCommentList__viewReply_text}>
             View more replies
           </Typography.CaptionBold>

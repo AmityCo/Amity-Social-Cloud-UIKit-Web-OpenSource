@@ -1,4 +1,4 @@
-import styles from './PostCommentMentionInput.module.css';
+import styles from './CommentMentionInput.module.css';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   LexicalTypeaheadMenuPlugin,
@@ -108,7 +108,7 @@ export class MentionTypeaheadOption extends MenuOption {
   }
 }
 
-export const PostCommentMentionInput = ({
+export const CommentMentionInput = ({
   mentionUsers,
   offsetBottom = 0,
   onQueryChange,

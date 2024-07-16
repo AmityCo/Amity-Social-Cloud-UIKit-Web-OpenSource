@@ -1,17 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
-
-import styles from './PostCommentSkeleton.module.css';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
+import styles from './CommentSkeleton.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
 interface PostCommentSkeletonProps {
   pageId?: string;
+  componentId?: string;
 }
 
-export const PostCommentSkeleton = ({ pageId = '*' }: PostCommentSkeletonProps) => {
-  const componentId = 'post_comment';
+export const CommentSkeleton = ({ pageId = '*', componentId = '*' }: PostCommentSkeletonProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
     componentId,

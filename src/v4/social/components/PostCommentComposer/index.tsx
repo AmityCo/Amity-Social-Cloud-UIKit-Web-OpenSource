@@ -1,1 +1,0 @@
-export { PostCommentComposer } from './PostCommentComposer';

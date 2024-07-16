@@ -1,21 +1,16 @@
 import React from 'react';
-import styles from './PostMentionUser.module.css';
+import styles from './MentionUser.module.css';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
-import { MentionTypeaheadOption } from './PostCommentMentionInput';
+import { MentionTypeaheadOption } from './CommentMentionInput';
 
-interface PostMentionUserProps {
+interface MentionUserProps {
   isSelected: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
   option: MentionTypeaheadOption;
 }
 
-export function PostMentionUser({
-  isSelected,
-  onClick,
-  onMouseEnter,
-  option,
-}: PostMentionUserProps) {
+export function MentionUser({ isSelected, onClick, onMouseEnter, option }: MentionUserProps) {
   let className = 'item';
   if (isSelected) {
     className += ' selected';

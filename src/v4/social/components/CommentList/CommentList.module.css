@@ -1,0 +1,26 @@
+.commentList__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.commentList__viewAllComments__button {
+  width: 100%;
+  padding: var(--asc-spacing-s2) 0;
+  margin: auto;
+  border-top: 0.0625rem solid var(--asc-color-base-shade4);
+  cursor: pointer;
+  text-align: center;
+}
+
+.commentList__container_intersection {
+  height: 1px;
+}
+
+.noCommentsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: var(--asc-color-base-shade2);
+}

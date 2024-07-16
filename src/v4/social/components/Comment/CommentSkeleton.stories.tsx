@@ -1,10 +1,10 @@
 import React from 'react';
 import useOnePost from '~/mock/useOnePost';
 
-import { PostCommentSkeleton } from './PostCommentSkeleton';
+import { CommentSkeleton } from './CommentSkeleton';
 
 export default {
-  title: 'v4-social/components/PostCommentSkeleton',
+  title: 'v4-social/components/CommentSkeleton',
 };
 
 export const PostCommentSkeletonStory = {
@@ -13,8 +13,8 @@ export const PostCommentSkeletonStory = {
 
     if (post == null) return null;
 
-    return <PostCommentSkeleton />;
+    return <CommentSkeleton />;
   },
 
-  name: 'PostCommentSkeleton',
+  name: 'CommentSkeleton',
 };

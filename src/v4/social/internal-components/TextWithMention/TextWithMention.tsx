@@ -2,7 +2,7 @@ import { SerializedTextNode } from 'lexical';
 import React, { useMemo } from 'react';
 import { Typography } from '~/v4/core/components';
 import { Mentioned } from '~/v4/helpers/utils';
-import { TextToEditorState } from '~/v4/social/components/PostCommentComposer/PostCommentInput';
+import { TextToEditorState } from '~/v4/social/components/CommentComposer/CommentInput';
 import styles from './TextWithMention.module.css';
 
 interface TextWithMentionProps {

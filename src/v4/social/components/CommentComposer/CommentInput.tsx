@@ -19,10 +19,10 @@ import {
   MentionNode,
   SerializedMentionNode,
 } from '~/v4/social/internal-components/MentionTextInput/MentionNodes';
-import styles from './PostCommentInput.module.css';
-import { PostCommentMentionInput } from '~/v4/social/components/PostCommentMentionInput';
+import styles from './CommentInput.module.css';
+import { CommentMentionInput } from '~/v4/social/components/CommentMentionInput';
 import { useMentionUsers } from '~/v4/social/hooks/useMentionUser';
-import { CreateCommentParams } from '~/v4/social/components/PostCommentComposer/PostCommentComposer';
+import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 
 const theme = {
@@ -33,7 +33,7 @@ const theme = {
 };
 
 const editorConfig = {
-  namespace: 'PostCommentInput',
+  namespace: 'CommentInput',
   theme: theme,
   onError(error: Error) {
     throw error;
@@ -45,9 +45,9 @@ interface EditorStateJson extends SerializedLexicalNode {
   children: [];
 }
 
-interface PostCommentInputProps {
-  postTargetType: Amity.PostTargetType;
-  postTargetId: string;
+interface CommentInputProps {
+  targetType: Amity.PostTargetType | Amity.StoryTargetType;
+  targetId: string;
   value?: CreateCommentParams;
   mentionOffsetBottom?: number;
   maxLines?: number;
@@ -56,7 +56,7 @@ interface PostCommentInputProps {
   onChange: (data: CreateCommentParams) => void;
 }
 
-export interface PostCommentInputRef {
+export interface CommentInputRef {
   clearEditorState: () => void;
 }
 
@@ -223,17 +223,9 @@ export function TextToEditorState(value: {
   return { root: rootNode };
 }
 
-export const PostCommentInput = forwardRef<PostCommentInputRef, PostCommentInputProps>(
+export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
   (
-    {
-      postTargetType,
-      postTargetId,
-      mentionOffsetBottom = 0,
-      value,
-      onChange,
-      maxLines = 10,
-      placehoder,
-    },
+    { targetType, targetId, mentionOffsetBottom = 0, value, onChange, maxLines = 10, placehoder },
     ref,
   ) => {
     const editorRef = React.useRef<LexicalEditor | null | undefined>(null);
@@ -241,8 +233,8 @@ export const PostCommentInput = forwardRef<PostCommentInputRef, PostCommentInput
 
     const { mentionUsers } = useMentionUsers({
       displayName: queryMentionUser || '',
-      postTargetType: postTargetType,
-      postTargetId: postTargetId,
+      targetType,
+      targetId,
     });
 
     const clearEditorState = () => {
@@ -286,7 +278,7 @@ export const PostCommentInput = forwardRef<PostCommentInputRef, PostCommentInput
           <HistoryPlugin />
           <AutoFocusPlugin />
           <EditorRefPlugin editorRef={editorRef} />
-          <PostCommentMentionInput
+          <CommentMentionInput
             mentionUsers={mentionUsers as Amity.User[]}
             onQueryChange={(query: string) => setQueryMentionUser(query)}
             offsetBottom={mentionOffsetBottom}

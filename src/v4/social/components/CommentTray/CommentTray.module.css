@@ -55,6 +55,7 @@
 .commentListContainer {
   overflow-y: auto;
   flex-grow: 1;
+  padding: var(--asc-spacing-m1);
 }
 
 .mobileSheetComposeBarContainer {

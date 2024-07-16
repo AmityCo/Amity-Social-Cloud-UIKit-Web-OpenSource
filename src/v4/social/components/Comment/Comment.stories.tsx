@@ -1,20 +1,20 @@
 import React from 'react';
 import useOneComment from '~/mock/useOneComment';
 
-import { PostComment } from './PostComment';
+import { Comment } from './Comment';
 
 export default {
-  title: 'v4-social/components/PostComment',
+  title: 'v4-social/components/Comment',
 };
 
-export const PostCommentStory = {
+export const CommentStory = {
   render: () => {
     const [comment] = useOneComment();
 
     if (comment == null) return null;
 
-    return <PostComment comment={comment} />;
+    return <Comment comment={comment} />;
   },
 
-  name: 'PostComment',
+  name: 'Comment',
 };

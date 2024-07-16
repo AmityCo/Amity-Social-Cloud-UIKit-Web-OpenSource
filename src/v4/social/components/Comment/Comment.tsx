@@ -3,10 +3,10 @@ import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
-import styles from './PostComment.module.css';
+import styles from './Comment.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import ReplyComment from '~/v4/icons/ReplyComment';
-import { PostReplyCommentList } from '~/v4/social/components/PostReplyCommentList/PostReplyCommentList';
+import { ReplyCommentList } from '~/v4/social/components/ReplyCommentList/ReplyCommentList';
 import { MinusCircleIcon } from '~/v4/social/icons';
 import { Mentionees } from '~/v4/helpers/utils';
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
@@ -15,9 +15,9 @@ import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { EditCancelButton } from '~/v4/social/elements/EditCancelButton/EditCancelButton';
 import { SaveButton } from '~/v4/social/elements/SaveButton/SaveButton';
 import clsx from 'clsx';
-import { PostCommentInput } from '~/v4/social/components/PostCommentComposer/PostCommentInput';
+import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInput';
 import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOptions';
-import { CreateCommentParams } from '~/v4/social/components/PostCommentComposer/PostCommentComposer';
+import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
 import useCommentSubscription from '~/v4/core/hooks/subscriptions/useCommentSubscription';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 import millify from 'millify';
@@ -65,23 +65,25 @@ const Like = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-interface PostCommentProps {
+interface CommentProps {
   pageId?: string;
   componentId?: string;
   comment: Amity.Comment;
-  postTargetType: Amity.PostTargetType;
-  postTargetId: string;
+  targetType: Amity.PostTargetType | Amity.StoryTargetType;
+  targetId: string;
   onClickReply: (comment: Amity.Comment) => void;
+  shoudAllowInteraction?: boolean;
 }
 
-export const PostComment = ({
+export const Comment = ({
   pageId = '*',
   componentId = 'comment_bubble',
   comment,
-  postTargetType,
-  postTargetId,
+  targetType,
+  targetId,
   onClickReply,
-}: PostCommentProps) => {
+  shoudAllowInteraction = true,
+}: CommentProps) => {
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
     useAmityComponent({
       pageId,
@@ -162,9 +164,9 @@ export const PostComment = ({
           <UserAvatar userId={comment.userId} />
           <div className={styles.postComment__edit__inputWrap}>
             <div className={styles.postComment__edit__input}>
-              <PostCommentInput
-                postTargetType={postTargetType}
-                postTargetId={postTargetId}
+              <CommentInput
+                targetType={targetType}
+                targetId={targetId}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,
@@ -219,35 +221,37 @@ export const PostComment = ({
               />
             </div>
             <div className={styles.postComment__secondRow}>
-              <div className={styles.postComment__secondRow__leftPane}>
-                <Typography.Caption className={styles.postComment__secondRow__timestamp}>
-                  <Timestamp
-                    pageId={pageId}
-                    componentId={componentId}
-                    timestamp={comment.createdAt}
+              {shoudAllowInteraction && (
+                <div className={styles.postComment__secondRow__leftPane}>
+                  <Typography.Caption className={styles.postComment__secondRow__timestamp}>
+                    <Timestamp
+                      pageId={pageId}
+                      componentId={componentId}
+                      timestamp={comment.createdAt}
+                    />
+                    {comment.createdAt !== comment.editedAt && ' (edited)'}
+                  </Typography.Caption>
+
+                  <div onClick={handleLike}>
+                    <Typography.CaptionBold
+                      className={styles.postComment__secondRow__like}
+                      data-is-liked={isLiked}
+                    >
+                      {isLiked ? 'Liked' : 'Like'}
+                    </Typography.CaptionBold>
+                  </div>
+                  <div onClick={() => onClickReply(comment)}>
+                    <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
+                      Reply
+                    </Typography.CaptionBold>
+                  </div>
+
+                  <EllipsisH
+                    className={styles.postComment__secondRow__actionButton}
+                    onClick={() => setBottomSheetOpen(true)}
                   />
-                  {comment.createdAt !== comment.editedAt && ' (edited)'}
-                </Typography.Caption>
-
-                <div onClick={handleLike}>
-                  <Typography.CaptionBold
-                    className={styles.postComment__secondRow__like}
-                    data-is-liked={isLiked}
-                  >
-                    {isLiked ? 'Liked' : 'Like'}
-                  </Typography.CaptionBold>
                 </div>
-                <div onClick={() => onClickReply(comment)}>
-                  <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
-                    Reply
-                  </Typography.CaptionBold>
-                </div>
-
-                <EllipsisH
-                  className={styles.postComment__secondRow__actionButton}
-                  onClick={() => setBottomSheetOpen(true)}
-                />
-              </div>
+              )}
               {comment.reactionsCount > 0 && (
                 <div className={styles.postComment__secondRow__rightPane}>
                   <Typography.Caption>{millify(comment.reactionsCount)}</Typography.Caption>
@@ -269,9 +273,9 @@ export const PostComment = ({
             )}
 
             {hasClickLoadMore && (
-              <PostReplyCommentList
-                postTargetType={postTargetType}
-                postTargetId={postTargetId}
+              <ReplyCommentList
+                targetType={targetType}
+                targetId={targetId}
                 referenceId={comment.referenceId}
                 parentId={comment.commentId}
               />

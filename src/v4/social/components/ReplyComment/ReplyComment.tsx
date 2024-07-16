@@ -18,23 +18,18 @@ import { MinusCircleIcon } from '~/v4/social/icons';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
 import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOptions';
-import { CreateCommentParams } from '~/v4/social/components/PostCommentComposer/PostCommentComposer';
-import { PostCommentInput } from '~/v4/social/components/PostCommentComposer/PostCommentInput';
-import styles from './PostReplyComment.module.css';
+import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
+import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInput';
+import styles from './ReplyComment.module.css';
 
-type PostReplyCommentProps = {
+type ReplyCommentProps = {
   pageId?: string;
-  postTargetId: string;
-  postTargetType: Amity.PostTargetType;
+  targetId: string;
+  targetType: Amity.PostTargetType;
   comment: Amity.Comment;
 };
 
-const PostReplyComment = ({
-  pageId = '*',
-  postTargetId,
-  postTargetType,
-  comment,
-}: PostReplyCommentProps) => {
+const PostReplyComment = ({ pageId = '*', targetId, targetType, comment }: ReplyCommentProps) => {
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -112,9 +107,9 @@ const PostReplyComment = ({
           <UserAvatar userId={comment.userId} />
           <div className={styles.postReplyComment__edit__inputWrap}>
             <div className={styles.postReplyComment__edit__input}>
-              <PostCommentInput
-                postTargetType={postTargetType}
-                postTargetId={postTargetId}
+              <CommentInput
+                targetType={targetType}
+                targetId={targetId}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,

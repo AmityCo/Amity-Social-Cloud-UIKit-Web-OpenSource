@@ -7,25 +7,25 @@ export type MentionUser = Amity.Membership<'community'> | Amity.User;
 export const useMentionUsers = ({
   displayName,
   limit = 10,
-  postTargetType,
-  postTargetId,
+  targetType,
+  targetId,
 }: {
   displayName: string;
   limit?: number;
-  postTargetType: Amity.PostTargetType;
-  postTargetId: string;
+  targetType: Amity.PostTargetType;
+  targetId: string;
 }) => {
-  const community = useCommunity(postTargetType === 'community' ? postTargetId : undefined);
+  const community = useCommunity(targetType === 'community' ? targetId : undefined);
 
   const fetcher =
-    postTargetType === 'community' && community && !community.isPublic
+    targetType === 'community' && community && !community.isPublic
       ? CommunityRepository.Membership.getMembers
       : UserRepository.getUsers;
 
   const params =
-    postTargetType === 'community' && community && !community.isPublic
+    targetType === 'community' && community && !community.isPublic
       ? ({
-          communityId: postTargetId,
+          communityId: targetId,
           displayName,
           limit,
         } as Amity.SearchCommunityMemberLiveCollection)
@@ -37,7 +37,10 @@ export const useMentionUsers = ({
   >({
     fetcher: fetcher as any,
     params,
-    shouldCall: (postTargetType === 'community' && !!community) || postTargetType === 'user',
+    shouldCall:
+      (targetType === 'community' && !!community) ||
+      targetType === 'user' ||
+      targetType === 'story',
   });
 
   return {

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import styles from './PostCommentList.module.css';
-import { PostComment } from '~/v4/social/components/PostComment/PostComment';
+
+import { Comment } from '~/v4/social/components/Comment/Comment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -9,18 +9,37 @@ import { CommentRepository, SubscriptionLevels } from '@amityco/ts-sdk';
 import useCommunitySubscription from '~/v4/core/hooks/subscriptions/useCommunitySubscription';
 import { usePaginator } from '~/v4/core/hooks/usePaginator';
 import { CommentAd } from '~/v4/social/internal-components/CommentAd/CommentAd';
+import styles from './CommentList.module.css';
+import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
+import { Typography } from '~/v4/core/components';
 
-type PostCommentListProps = {
-  post: Amity.Post;
+type CommentListProps = {
+  referenceId: string;
+  referenceType: Amity.CommentReferenceType;
   pageId?: string;
   onClickReply: (comment: Amity.Comment) => void;
+  limit?: number;
+  includeDeleted?: boolean;
+  community?: Amity.Community;
+  post?: Amity.Post;
+  shouldAllowInteraction?: boolean;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
   return 'adId' in item;
 };
 
-export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommentListProps) => {
+export const CommentList = ({
+  referenceId,
+  referenceType,
+  pageId = '*',
+  onClickReply,
+  limit = 5,
+  includeDeleted = false,
+  community,
+  post,
+  shouldAllowInteraction = true,
+}: CommentListProps) => {
   const componentId = 'comment_tray_component';
 
   const { themeStyles, accessibilityId } = useAmityComponent({
@@ -34,14 +53,15 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
   const { items, loadMore, hasMore, isLoading } = usePaginator({
     fetcher: CommentRepository.getComments,
     params: {
-      referenceId: post.postId,
-      referenceType: 'post',
-      limit: 5,
-      includeDeleted: true,
+      referenceId,
+      referenceType,
+      limit,
+      includeDeleted,
     },
     placement: 'comment' as Amity.AdPlacement,
     pageSize: 5,
     getItemId: (item) => item.commentId,
+    shouldCall: true,
   });
 
   useIntersectionObserver({
@@ -54,20 +74,35 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
   });
 
   useUserSubscription({
-    userId: post.targetId,
+    userId: post?.targetId,
     level: SubscriptionLevels.COMMENT,
-    shouldSubscribe: post.targetType === 'user',
+    shouldSubscribe: !!post?.targetId,
   });
 
   useCommunitySubscription({
-    communityId: post.targetId,
+    communityId: community?.communityId,
     level: SubscriptionLevels.COMMENT,
-    shouldSubscribe: post.targetType === 'community',
+    shouldSubscribe: !!community?.communityId,
   });
+
+  useCommunityStoriesSubscription({
+    targetId: referenceId,
+    // TODO: fix type it's actually have the same type but different name
+    targetType: referenceType as Amity.StoryTargetType,
+    shouldSubscribe: referenceType === 'story' && !!referenceId,
+  });
+
+  if (items.length === 0) {
+    return (
+      <div className={styles.noCommentsContainer}>
+        <Typography.Body>No comments yet</Typography.Body>
+      </div>
+    );
+  }
 
   return (
     <div
-      className={styles.postCommentList__container}
+      className={styles.commentList__container}
       style={themeStyles}
       ref={containerRef}
       data-qa-anchor={accessibilityId}
@@ -76,13 +111,14 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
         return isAmityAd(item) ? (
           <CommentAd key={item.adId} ad={item} />
         ) : (
-          <PostComment
+          <Comment
             key={item.commentId}
             comment={item as Amity.Comment}
             onClickReply={(comment) => onClickReply?.(comment)}
             componentId={componentId}
-            postTargetId={post.targetId}
-            postTargetType={post.targetType}
+            targetId={referenceId}
+            targetType={referenceType}
+            shoudAllowInteraction={shouldAllowInteraction}
           />
         );
       })}
@@ -91,7 +127,7 @@ export const PostCommentList = ({ post, pageId = '*', onClickReply }: PostCommen
         <Typography.BodyBold>View all comments...</Typography.BodyBold>
       </div> */}
       {!isLoading && (
-        <div ref={intersectionRef} className={styles.postCommentList__container_intersection} />
+        <div ref={intersectionRef} className={styles.commentList__container_intersection} />
       )}
     </div>
   );
