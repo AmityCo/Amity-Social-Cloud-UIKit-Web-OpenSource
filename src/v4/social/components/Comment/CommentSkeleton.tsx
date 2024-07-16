@@ -3,12 +3,17 @@ import clsx from 'clsx';
 import styles from './CommentSkeleton.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
-interface PostCommentSkeletonProps {
+interface CommentSkeletonProps {
   pageId?: string;
   componentId?: string;
+  numberOfSkeletons?: number;
 }
 
-export const CommentSkeleton = ({ pageId = '*', componentId = '*' }: PostCommentSkeletonProps) => {
+export const CommentSkeleton = ({
+  pageId = '*',
+  componentId = '*',
+  numberOfSkeletons = 1,
+}: CommentSkeletonProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
     componentId,
@@ -16,8 +21,9 @@ export const CommentSkeleton = ({ pageId = '*', componentId = '*' }: PostComment
 
   if (isExcluded) return null;
 
-  return (
+  const skeletons = Array.from({ length: numberOfSkeletons }, (_, index) => (
     <div
+      key={index} // Use index as key for each skeleton
       data-qa-anchor={accessibilityId}
       className={clsx(styles.postCommentSkeleton, styles.postCommentSkeleton__animation)}
       style={themeStyles}
@@ -37,5 +43,7 @@ export const CommentSkeleton = ({ pageId = '*', componentId = '*' }: PostComment
         <div className={styles.postCommentSkeleton__content__bar} />
       </div>
     </div>
-  );
+  ));
+
+  return <div className={styles.postCommentSkeleton__container}>{skeletons}</div>;
 };

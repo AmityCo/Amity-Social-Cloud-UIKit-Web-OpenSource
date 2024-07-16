@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -58,8 +58,8 @@ const Like = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
         y2="39.2"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#63A1FF" />
-        <stop offset="1" stop-color="#0041BE" />
+        <stop stopColor="#63A1FF" />
+        <stop offset="1" stopColor="#0041BE" />
       </linearGradient>
     </defs>
   </svg>
@@ -96,6 +96,8 @@ export const Comment = ({
   const [hasClickLoadMore, setHasClickLoadMore] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+
+  const [isShowMore, setIsShowMore] = useState(false);
 
   const toggleBottomSheet = () => setBottomSheetOpen((prev) => !prev);
 

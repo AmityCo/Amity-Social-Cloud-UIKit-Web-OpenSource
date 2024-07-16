@@ -28,6 +28,7 @@
 }
 
 .commentComposer__button {
+  color: var(--asc-color-primary-default);
   cursor: pointer;
   margin-bottom: 0.5rem;
 }
@@ -56,6 +57,7 @@
   justify-content: space-between;
   padding: 0.625rem 1rem;
   background-color: var(--asc-color-base-shade4);
+  bottom: var(--asc-reply-container-offset-bottom);
 }
 
 .commentComposer__replyContainer__text {

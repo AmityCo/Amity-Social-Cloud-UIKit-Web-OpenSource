@@ -73,8 +73,8 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
       </div>
       {post && (
         <CommentComposer
-          referenceId={post.targetId}
-          referenceType={post.targetType}
+          referenceId={post.postId}
+          referenceType={'post'}
           replyTo={replyComment}
           onCancelReply={() => setReplyComment(undefined)}
         />

@@ -1,3 +1,38 @@
+.textWithMention__container {
+  background-color: inherit;
+  overflow-wrap: break-word;
+  width: 100%;
+}
+
+.textWithMention__clamp {
+  position: relative;
+  background-color: inherit;
+  overflow: hidden;
+  max-height: calc(var(--asc-text-with-mention-max-lines) * var(--asc-line-height-md));
+}
+
+.textWithMention__clamp[data-expanded='true'] {
+  position: relative;
+  background-color: inherit;
+  overflow: hidden;
+  max-height: max-content;
+}
+
+.textWithMention__fullContent {
+  visibility: hidden;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: auto;
+  overflow: visible;
+  overflow-wrap: break-word;
+  width: 100%;
+}
+
+.textWithMention__fullContent[data-hidden='true'] {
+  display: none;
+}
+
 .textWithMention__mention {
   color: var(--asc-color-primary-default);
   display: inline;
@@ -6,4 +41,16 @@
 .textWithMention__text {
   color: var(--asc-color-base-default);
   display: inline;
+}
+
+.textWithMention__showMoreLess {
+  padding-left: 0.2rem;
+  color: var(--asc-color-primary-default);
+  cursor: pointer;
+  text-decoration: none;
+  width: max-content;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: inherit;
 }

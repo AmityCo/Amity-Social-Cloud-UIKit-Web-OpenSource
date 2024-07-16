@@ -44,7 +44,8 @@
   background-color: var(--asc-color-base-shade4);
   border-radius: 0 0.75rem 0.75rem;
   padding: 0.75rem;
-  max-width: max-content;
+  width: max-content;
+  max-width: 100%;
 }
 
 .postComment__content__username {
@@ -172,4 +173,9 @@
   color: var(--asc-color-white);
   border-radius: var(--asc-border-radius-sm);
   background: var(--asc-color-primary-default);
+}
+
+.postComment__seeMore {
+  cursor: pointer;
+  color: var(--asc-color-primary-default);
 }

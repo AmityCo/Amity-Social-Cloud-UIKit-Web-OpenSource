@@ -52,8 +52,10 @@ export const CommentComposer = ({
   const avatarUrl = useImage({ fileId: user?.avatar?.fileId, imageSize: 'small' });
   const editorRef = useRef<CommentInputRef | null>(null);
   const composerRef = useRef<HTMLDivElement | null>(null);
+  const composerInputRef = useRef<HTMLDivElement | null>(null);
 
   const [composerHeight, setComposerHeight] = useState(0);
+  const [mentionOffsetBottom, setMentionOffsetBottom] = useState(0);
 
   const [textValue, setTextValue] = useState<CreateCommentParams>({
     data: {
@@ -97,6 +99,15 @@ export const CommentComposer = ({
   });
 
   useEffect(() => {
+    if (composerInputRef.current) {
+      // NOTE: Cannot use ref to get padding of the container and inside input
+      const containerPaddingBottom = 8;
+      const inputPaddingBottom = 10;
+      setMentionOffsetBottom(
+        composerInputRef.current.offsetHeight - inputPaddingBottom + containerPaddingBottom,
+      );
+    }
+
     if (composerRef.current) {
       setComposerHeight(composerRef.current.offsetHeight);
     }
@@ -116,13 +127,13 @@ export const CommentComposer = ({
       <div className={styles.commentComposer__avatar}>
         <Avatar avatarUrl={avatarUrl} defaultImage={<User />} />
       </div>
-      <div className={styles.commentComposer__input}>
+      <div className={styles.commentComposer__input} ref={composerInputRef}>
         <CommentInput
           ref={editorRef}
           onChange={onChange}
           targetType={referenceType}
           targetId={referenceId}
-          mentionOffsetBottom={-composerHeight}
+          mentionOffsetBottom={-mentionOffsetBottom}
           value={textValue}
           placehoder="Say something nice..."
         />
@@ -135,7 +146,14 @@ export const CommentComposer = ({
         <Typography.Body>Post</Typography.Body>
       </Button>
       {replyTo && (
-        <div className={styles.commentComposer__replyContainer} style={{ bottom: composerHeight }}>
+        <div
+          className={styles.commentComposer__replyContainer}
+          style={
+            {
+              '--asc-reply-container-offset-bottom': `${composerHeight}px`,
+            } as React.CSSProperties
+          }
+        >
           <div className={styles.commentComposer__replyContainer__text}>
             <span>Replying to </span>
             <span className={styles.commentComposer__replyContainer__username}>

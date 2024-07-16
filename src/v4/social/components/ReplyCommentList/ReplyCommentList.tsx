@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography } from '~/v4/core/components';
+import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton';
 import ReplyCommentIcon from '~/v4/icons/ReplyComment';
 import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
 import ReplyComment from '~/v4/social/components/ReplyComment/ReplyComment';
@@ -18,11 +19,11 @@ export const ReplyCommentList = ({
   targetType,
   parentId,
 }: ReplyCommentProps) => {
-  const { comments, hasMore, loadMore } = useCommentsCollection({
+  const { comments, hasMore, isLoading, loadMore } = useCommentsCollection({
     referenceId: referenceId,
     referenceType: targetType,
     parentId: parentId,
-    limit: 5,
+    limit: 10,
     shouldCall: true,
     includeDeleted: true,
   });
@@ -33,6 +34,7 @@ export const ReplyCommentList = ({
 
   return (
     <div>
+      {isLoading && <CommentSkeleton numberOfSkeletons={3} />}
       {comments.map((comment) => {
         return (
           <ReplyComment

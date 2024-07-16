@@ -2,13 +2,13 @@ import React, { useRef } from 'react';
 
 import { Comment } from '~/v4/social/components/Comment/Comment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
-import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import useUserSubscription from '~/v4/core/hooks/subscriptions/useUserSubscription';
 import { CommentRepository, SubscriptionLevels } from '@amityco/ts-sdk';
 import useCommunitySubscription from '~/v4/core/hooks/subscriptions/useCommunitySubscription';
 import { usePaginator } from '~/v4/core/hooks/usePaginator';
 import { CommentAd } from '~/v4/social/internal-components/CommentAd/CommentAd';
+import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton';
 import styles from './CommentList.module.css';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 import { Typography } from '~/v4/core/components';
@@ -126,6 +126,9 @@ export const CommentList = ({
       {/* <div className={styles.postCommentList__viewAllComments__button}>
         <Typography.BodyBold>View all comments...</Typography.BodyBold>
       </div> */}
+      {isLoading && (
+        <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={3} />
+      )}
       {!isLoading && (
         <div ref={intersectionRef} className={styles.commentList__container_intersection} />
       )}

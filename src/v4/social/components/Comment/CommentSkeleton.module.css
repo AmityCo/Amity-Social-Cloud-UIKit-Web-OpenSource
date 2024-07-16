@@ -1,3 +1,9 @@
+.postCommentSkeleton__container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .postCommentSkeleton {
   display: flex;
   gap: 0.5rem;

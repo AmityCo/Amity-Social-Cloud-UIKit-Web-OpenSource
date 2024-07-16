@@ -195,9 +195,11 @@ function Mention({ anchorRef, mentionUsers, offsetBottom = 0, onQueryChange }: M
           ? ReactDOM.createPortal(
               <div
                 className={styles.mentionTextInput_item}
-                style={{
-                  transform: `translateY(${offsetBottom}px)`,
-                }}
+                style={
+                  {
+                    '--asc-mention-offset-bottom': `${offsetBottom}px`,
+                  } as React.CSSProperties
+                }
               >
                 {options.map((option, i: number) => (
                   <CommunityMember
