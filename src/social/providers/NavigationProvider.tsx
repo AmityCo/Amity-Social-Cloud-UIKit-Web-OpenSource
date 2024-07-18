@@ -15,6 +15,11 @@ type Page =
       communityId: string;
       isNewCommunity: boolean;
     }
+    | {
+      type: PageTypes.Chat;
+      defaultChannelId: 'canal-teste';
+      communityId?: string;
+    }
   | {
       type: PageTypes.CommunityEdit;
       communityId: string;

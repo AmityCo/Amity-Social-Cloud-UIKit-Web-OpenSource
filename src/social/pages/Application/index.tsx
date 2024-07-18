@@ -21,6 +21,7 @@ import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import CommunityFeed from '../CommunityFeed';
 import ViewStoryPage from '../ViewStoryPage';
 import AmityDraftStoryPage from '../DraftPage';
+import ChatApplication from '~/chat/pages/Application';
 
 const ApplicationContainer = styled.div`
   height: 100%;
@@ -114,6 +115,10 @@ const Community = () => {
 
           {page.type === PageTypes.UserFeed && (
             <UserFeedPage userId={page.userId} socialSettings={socialSettings} />
+          )}
+
+          {page.type === PageTypes.Chat && (
+            <ChatApplication defaultChannelId="canal-teste" />
           )}
 
           {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.userId} />}

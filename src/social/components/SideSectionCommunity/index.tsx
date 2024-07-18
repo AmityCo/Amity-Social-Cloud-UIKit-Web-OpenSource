@@ -31,6 +31,15 @@ const SideSectionCommunity = ({ shouldHideExplore, children }: SideSectionCommun
         <FormattedMessage id="sidesectioncommunity.newfeed" />
       </SideMenuActionItem>
 
+            <SideMenuActionItem
+        data-qa-anchor="side-section-community-side-menu-action-item-news-feed-button"
+        icon={<NewsIcon />}
+        active={page.type === PageTypes.Chat}
+        onClick={() => onChangePage(PageTypes.Chat)}
+      >
+        <FormattedMessage id="sidesectioncommunity.chat" />
+      </SideMenuActionItem>
+
       {!shouldHideExplore && (
         <SideMenuActionItem
           data-qa-anchor="side-section-community-side-menu-action-item-explore-button"

@@ -6,6 +6,7 @@ export enum PageTypes {
   NewsFeed = 'newsFeed',
   CommunityFeed = 'communityFeed',
   CommunityEdit = 'communityEdit',
+  Chat = 'chat',
   Category = 'category',
   UserFeed = 'userFeed',
   UserEdit = 'userEdit',
@@ -30,6 +31,10 @@ type Page =
         communityId: string;
         isNewCommunity: boolean;
       };
+    }
+    | {
+      type: PageTypes.Chat;
+      defaultChannelId: 'canal-teste';
     }
   | {
       type: PageTypes.CommunityEdit;
@@ -66,6 +71,7 @@ type Page =
         postId: string;
         communityId?: string;
       };
+      
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string } }
   | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }

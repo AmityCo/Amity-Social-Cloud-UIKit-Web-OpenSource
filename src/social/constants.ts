@@ -2,6 +2,7 @@ export const enum PageTypes {
   Explore = 'explore',
   Category = 'category',
   NewsFeed = 'newsfeed',
+  Chat = 'chat',
   UserFeed = 'userfeed',
   CommunityFeed = 'communityfeed',
   CommunityEdit = 'communityedit',
