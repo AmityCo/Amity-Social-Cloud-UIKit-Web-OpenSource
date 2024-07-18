@@ -106,7 +106,7 @@ const PostCreatorBar = ({
   targetId,
   enablePostTargetPicker,
   communities = [],
-  placeholder = "What's going on...",
+  placeholder = "Qual a boa?",
   hasMoreCommunities,
   loadMoreCommunities,
   onCreateSuccess,

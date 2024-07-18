@@ -193,9 +193,10 @@
 
   "profile.setting": "Profile Settings",
 
-  "sidesectioncommunity.newfeed": "NewsFeed",
-  "sidesectioncommunity.explore": "Explore",
-  "sidesectioncommunity.community": "Community",
+  "sidesectioncommunity.newfeed": "Homepage",
+  "sidesectioncommunity.chat": "Chat",
+  "sidesectioncommunity.explore": "Explorar",
+  "sidesectioncommunity.community": "Comnudidade",
 
   "communityFeed.join": "Join community to interact with all posts",
   "communityFeed.members": "Members",
@@ -243,7 +244,7 @@
   "reply.deleteBody": "This reply will be permanently deleted. Continue?",
   "reply.edit": "Edit reply",
   "reply.deleted": "This reply has been deleted",
-  "tabs.editProfile": "Edit profile",
+  "tabs.editProfile": "Editar pefil",
   "tabs.timeline": "Timeline",
   "tabs.followers": "Followers",
   "tabs.followings": "Followings",

@@ -14,7 +14,7 @@ interface PostEditorProps {
 
 const PostEditor = ({
   postId,
-  placeholder = "What's going on...",
+  placeholder = "Qual a boa?",
   className,
   onSave,
 }: PostEditorProps) => {
