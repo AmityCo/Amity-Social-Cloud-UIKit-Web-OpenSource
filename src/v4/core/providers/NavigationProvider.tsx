@@ -1,10 +1,11 @@
 import React, { createContext, useCallback, useContext, useState, useMemo, ReactNode } from 'react';
 import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
+import { NavigationContext as NavigationContextV3 } from '~/social/providers/NavigationProvider';
 
 export enum PageTypes {
   Explore = 'explore',
-  NewsFeed = 'newsFeed',
+  NewsFeed = 'newsfeed',
   CommunityFeed = 'communityFeed',
   CommunityEdit = 'communityEdit',
   Category = 'category',
@@ -119,12 +120,12 @@ type ContextValue = {
   goToMyCommunitiesSearchPage: () => void;
   goToSelectPostTargetPage: () => void;
   goToStoryTargetSelectionPage: () => void;
-  goToDraftStoryPage: (context: {
-    targetId: string;
-    targetType: string;
-    mediaType: AmityStoryMediaType;
-    storyType: 'communityFeed' | 'globalFeed';
-  }) => void;
+  goToDraftStoryPage: (
+    targetId: string,
+    targetType: string,
+    mediaType: AmityStoryMediaType,
+    storyType: 'communityFeed' | 'globalFeed',
+  ) => void;
   goToViewStoryPage: (context: {
     targetId: string;
     targetType: Amity.StoryTargetType;
@@ -154,6 +155,12 @@ type ContextValue = {
     storyType: 'communityFeed' | 'globalFeed';
   }) => void;
   goToSocialHomePage: () => void;
+  //V3 functions
+  onClickStory: (
+    storyId: string,
+    storyType: 'communityFeed' | 'globalFeed',
+    targetId?: string[],
+  ) => void;
 };
 
 let defaultValue: ContextValue = {
@@ -173,12 +180,12 @@ let defaultValue: ContextValue = {
     targetType: Amity.StoryTargetType;
     storyType: 'communityFeed' | 'globalFeed';
   }) => {},
-  goToDraftStoryPage: (context: {
-    targetId: string;
-    targetType: string;
-    mediaType: AmityStoryMediaType;
-    storyType: 'communityFeed' | 'globalFeed';
-  }) => {},
+  goToDraftStoryPage: (
+    targetId: string,
+    targetType: string,
+    mediaType: AmityStoryMediaType,
+    storyType: 'communityFeed' | 'globalFeed',
+  ) => {},
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
@@ -195,6 +202,12 @@ let defaultValue: ContextValue = {
   goToMyCommunitiesSearchPage: () => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
+  //V3 functions
+  onClickStory: (
+    storyId: string,
+    storyType: 'communityFeed' | 'globalFeed',
+    targetId?: string[],
+  ) => {},
 };
 
 if (process.env.NODE_ENV !== 'production') {
@@ -225,10 +238,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
     goToStoryTargetSelectionPage: () =>
       console.log('NavigationContext goToStoryTargetSelectionPage()'),
-    goToDraftStoryPage: ({ targetId, targetType, mediaType, storyType }) =>
-      console.log(
-        `NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType}), ${storyType})`,
-      ),
+    goToDraftStoryPage: (data) => console.log(`NavigationContext goToDraftStoryPage()`),
     goToPostComposerPage: (mode, targetId, targetType, community, post) =>
       console.log(
         `NavigationContext goToPostComposerPage(${mode} ${targetId}) ${targetType} ${community} ${post}`,
@@ -237,6 +247,10 @@ if (process.env.NODE_ENV !== 'production') {
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
     goToMyCommunitiesSearchPage: () =>
       console.log('NavigationContext goToMyCommunitiesSearchPage()'),
+
+    //V3 functions
+    onClickStory: (storyId, storyType, targetIds) =>
+      console.log(`NavigationContext onClickStory(${storyId}, ${storyType}, ${targetIds})`),
   };
 }
 
@@ -271,17 +285,23 @@ interface NavigationProviderProps {
     storyType: 'communityFeed' | 'globalFeed';
     targetType: Amity.StoryTargetType;
   }) => void;
-  goToDraftStoryPage?: (context: {
-    targetId: string;
-    targetType: string;
-    mediaType: AmityStoryMediaType;
-    storyType: 'communityFeed' | 'globalFeed';
-  }) => void;
+  goToDraftStoryPage?: (
+    targetId: string,
+    targetType: string,
+    mediaType: AmityStoryMediaType,
+    storyType: 'communityFeed' | 'globalFeed',
+  ) => void;
   onCommunityCreated?: (communityId: string) => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
   onMessageUser?: (userId: string) => void;
   onBack?: () => void;
+  //V3 functions
+  onClickStory?: (
+    storyId: string,
+    storyType: 'communityFeed' | 'globalFeed',
+    targetId?: string[],
+  ) => void;
 }
 
 export default function NavigationProvider({
@@ -412,7 +432,9 @@ export default function NavigationProvider({
     (userId) => {
       const next = {
         type: PageTypes.UserEdit,
-        userId,
+        context: {
+          userId,
+        },
       };
 
       if (onChangePage) return onChangePage(next);
@@ -427,8 +449,10 @@ export default function NavigationProvider({
     (communityId, tab) => {
       const next = {
         type: PageTypes.CommunityEdit,
-        communityId,
-        tab,
+        context: {
+          communityId,
+          tab,
+        },
       };
 
       if (onChangePage) return onChangePage(next);
@@ -506,7 +530,7 @@ export default function NavigationProvider({
   const goToCommunityProfilePage = useCallback(
     (communityId) => {
       const next = {
-        type: PageTypes.CommunityProfilePage,
+        type: PageTypes.CommunityFeed,
         context: {
           communityId,
         },
@@ -562,7 +586,7 @@ export default function NavigationProvider({
   );
 
   const goToDraftStoryPage = useCallback(
-    ({ targetId, targetType, mediaType, storyType }) => {
+    (targetId, targetType, mediaType, storyType) => {
       const next = {
         type: PageTypes.DraftPage,
         context: {
@@ -613,6 +637,24 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
+  const handleClickStory = useCallback(
+    (targetId, storyType, targetIds) => {
+      const next = {
+        type: PageTypes.ViewStoryPage,
+        context: {
+          targetId,
+          storyType,
+          targetIds,
+        },
+      };
+
+      if (onChangePage) return onChangePage(next);
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   return (
     <NavigationContext.Provider
       value={{
@@ -639,9 +681,28 @@ export default function NavigationProvider({
         goToSocialHomePage,
         goToMyCommunitiesSearchPage,
         setNavigationBlocker,
+        onClickStory: handleClickStory,
       }}
     >
-      {children}
+      <NavigationContextV3.Provider
+        value={{
+          page: currentPage as any, //TODO : Fix any type
+          onChangePage: handleChangePage,
+          onClickCategory: handleClickCategory,
+          onClickCommunity: handleClickCommunity,
+          onClickUser: handleClickUser,
+          onCommunityCreated: handleCommunityCreated,
+          onEditCommunity: handleEditCommunity,
+          onEditUser: handleEditUser,
+          onMessageUser: handleMessageUser,
+          onBack: handleBack,
+          setNavigationBlocker,
+          goToDraftStoryPage,
+          onClickStory: handleClickStory,
+        }}
+      >
+        {children}
+      </NavigationContextV3.Provider>
     </NavigationContext.Provider>
   );
 }

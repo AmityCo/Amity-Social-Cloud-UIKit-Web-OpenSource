@@ -38,12 +38,12 @@ interface GlobalFeedStoryProps {
   targetIds: string[];
   onChangePage?: () => void;
   onClickStory: (targetId: string) => void;
-  goToDraftStoryPage: (data: {
-    mediaType: { type: 'image' | 'video'; url: string };
-    targetId: string;
-    targetType: string;
-    storyType: 'globalFeed';
-  }) => void;
+  goToDraftStoryPage: (
+    targetId: string,
+    targetType: string,
+    mediaType: { type: 'image' | 'video'; url: string },
+    storyType: 'globalFeed',
+  ) => void;
   onClose: (targetId: string) => void;
   onSwipeDown: (targetId: string) => void;
   onClickCommunity: (targetId: string) => void;
@@ -309,14 +309,14 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   useEffect(() => {
     if (!file) return;
-    goToDraftStoryPage({
+    goToDraftStoryPage(
       targetId,
-      targetType: 'community',
-      mediaType: file.type.includes('image')
+      'community',
+      file.type.includes('image')
         ? { type: 'image', url: URL.createObjectURL(file) }
         : { type: 'video', url: URL.createObjectURL(file) },
-      storyType: 'globalFeed',
-    });
+      'globalFeed',
+    );
   }, [file, goToDraftStoryPage, targetId]);
 
   useCommunityStoriesSubscription({

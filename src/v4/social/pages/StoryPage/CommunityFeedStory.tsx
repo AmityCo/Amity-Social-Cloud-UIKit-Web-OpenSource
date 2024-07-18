@@ -36,17 +36,12 @@ interface CommunityFeedStoryProps {
   onClose: (communityId: string) => void;
   onSwipeDown: (communityId: string) => void;
   onClickCommunity: (communityId: string) => void;
-  goToDraftStoryPage: ({
-    targetId,
-    targetType,
-    mediaType,
-    storyType,
-  }: {
-    targetId: string;
-    targetType: string;
-    mediaType: any;
-    storyType: 'communityFeed' | 'globalFeed';
-  }) => void;
+  goToDraftStoryPage: (
+    targetId: string,
+    targetType: string,
+    mediaType: any,
+    storyType: 'communityFeed' | 'globalFeed',
+  ) => void;
 }
 
 const MIN_IMAGE_DURATION = 5000; // 5 seconds
@@ -302,14 +297,14 @@ export const CommunityFeedStory = ({
   });
 
   if (file) {
-    goToDraftStoryPage({
-      targetId: communityId,
-      targetType: 'community',
-      mediaType: file.type.includes('image')
+    goToDraftStoryPage(
+      communityId,
+      'community',
+      file.type.includes('image')
         ? { type: 'image', url: URL.createObjectURL(file) }
         : { type: 'video', url: URL.createObjectURL(file) },
-      storyType: 'communityFeed',
-    });
+      'communityFeed',
+    );
   }
 
   if (!stories || stories.length === 0) return null;

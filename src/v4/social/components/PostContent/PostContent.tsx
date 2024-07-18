@@ -57,9 +57,9 @@ const PostTitle = ({ pageId, post }: PostTitleProps) => {
     return (
       <div className={styles.postTitle}>
         {postedUser && (
-          <Button onPress={() => onClickUser(postedUser?.userId)}>
+          <Button onPress={() => onClickUser(postedUser.userId)}>
             <Typography.BodyBold className={styles.postTitle__text}>
-              {postedUser?.displayName}
+              {postedUser.displayName}
             </Typography.BodyBold>
           </Button>
         )}
@@ -82,9 +82,11 @@ const PostTitle = ({ pageId, post }: PostTitleProps) => {
   }
 
   return (
-    <Typography.BodyBold className={styles.postTitle__text}>
-      {postedUser?.displayName}
-    </Typography.BodyBold>
+    <Button onPress={() => postedUser && onClickUser(postedUser.userId)}>
+      <Typography.BodyBold className={styles.postTitle__text}>
+        {postedUser?.displayName}
+      </Typography.BodyBold>
+    </Button>
   );
 };
 

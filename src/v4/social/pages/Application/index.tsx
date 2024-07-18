@@ -15,6 +15,8 @@ import { AmityDraftStoryPage } from '..';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import CommunityFeed from '~/social/pages/CommunityFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
+import CommunityEditPage from '~/social/pages/CommunityEdit';
+import ProfileSettings from '~/social/components/ProfileSettings';
 
 const Application = () => {
   const { page } = useNavigation();
@@ -34,7 +36,7 @@ const Application = () => {
         {page.type === PageTypes.PostDetailPage && <PostDetailPage id={page.context?.postId} />}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
         {page.type === PageTypes.ViewStoryPage && (
-          <ViewStoryPage type="globalFeed" targetId={page.context?.targetId} />
+          <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />
         )}
         {page.type === PageTypes.DraftPage && (
           <AmityDraftStoryPage
@@ -67,6 +69,12 @@ const Application = () => {
         {page.type === PageTypes.UserFeed && (
           <UserFeedPage userId={page.context.userId} socialSettings={socialSettings} />
         )}
+        {page.type === PageTypes.CommunityEdit && (
+          <CommunityEditPage communityId={page.context.communityId} tab={page.context.tab} />
+        )}
+
+        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.context.userId} />}
+
         {/*End of V3 */}
       </div>
     </StoryProvider>
