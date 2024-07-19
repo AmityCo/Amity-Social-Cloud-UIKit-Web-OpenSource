@@ -12,6 +12,9 @@ import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton'
 import styles from './CommentList.module.css';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 import { Typography } from '~/v4/core/components';
+import useStory from '~/v4/social/hooks/useStory';
+import usePost from '~/v4/core/hooks/objects/usePost';
+import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscription';
 
 type CommentListProps = {
   referenceId: string;
@@ -21,7 +24,6 @@ type CommentListProps = {
   limit?: number;
   includeDeleted?: boolean;
   community?: Amity.Community;
-  post?: Amity.Post;
   shouldAllowInteraction?: boolean;
 };
 
@@ -37,7 +39,6 @@ export const CommentList = ({
   limit = 5,
   includeDeleted = false,
   community,
-  post,
   shouldAllowInteraction = true,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
@@ -64,6 +65,13 @@ export const CommentList = ({
     shouldCall: true,
   });
 
+  const { story } = useStory({
+    storyId: referenceId,
+    shouldCall: referenceType === 'story',
+  });
+
+  const { post } = usePost(referenceType === 'post' ? referenceId : undefined);
+
   useIntersectionObserver({
     ref: intersectionRef,
     onIntersect: () => {
@@ -73,16 +81,10 @@ export const CommentList = ({
     },
   });
 
-  useUserSubscription({
-    userId: post?.targetId,
+  usePostSubscription({
+    postId: referenceId,
     level: SubscriptionLevels.COMMENT,
-    shouldSubscribe: !!post?.targetId,
-  });
-
-  useCommunitySubscription({
-    communityId: community?.communityId,
-    level: SubscriptionLevels.COMMENT,
-    shouldSubscribe: !!community?.communityId,
+    shouldSubscribe: referenceType === 'post',
   });
 
   useCommunityStoriesSubscription({
@@ -116,8 +118,9 @@ export const CommentList = ({
             comment={item as Amity.Comment}
             onClickReply={(comment) => onClickReply?.(comment)}
             componentId={componentId}
-            targetId={referenceId}
-            targetType={referenceType}
+            community={community}
+            // targetId={post?.targetId || story?.targetId}
+            // targetType={post?.targetType || story?.targetType}
             shoudAllowInteraction={shouldAllowInteraction}
           />
         );

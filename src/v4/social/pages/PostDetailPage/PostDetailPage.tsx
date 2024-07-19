@@ -45,7 +45,6 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
             <CommentList
               referenceId={post.postId}
               referenceType="post"
-              post={post}
               onClickReply={(comment: Amity.Comment) => setReplyComment(comment)}
             />
           )}

@@ -7,22 +7,22 @@ import ReplyComment from '~/v4/social/components/ReplyComment/ReplyComment';
 import styles from './ReplyCommentList.module.css';
 
 interface ReplyCommentProps {
-  targetType: Amity.PostTargetType;
-  targetId: string;
+  community?: Amity.Community;
   referenceId: string;
+  referenceType: string;
   parentId: string;
 }
 
 export const ReplyCommentList = ({
   referenceId,
-  targetId,
-  targetType,
+  referenceType,
+  community,
   parentId,
 }: ReplyCommentProps) => {
   const { comments, hasMore, isLoading, loadMore } = useCommentsCollection({
-    referenceId: referenceId,
-    referenceType: targetType,
-    parentId: parentId,
+    referenceId,
+    referenceType: referenceType as Amity.CommentReferenceType,
+    parentId,
     limit: 10,
     shouldCall: true,
     includeDeleted: true,
@@ -36,13 +36,7 @@ export const ReplyCommentList = ({
     <div>
       {isLoading && <CommentSkeleton numberOfSkeletons={3} />}
       {comments.map((comment) => {
-        return (
-          <ReplyComment
-            targetId={targetId}
-            targetType={targetType}
-            comment={comment as Amity.Comment}
-          />
-        );
+        return <ReplyComment community={community} comment={comment as Amity.Comment} />;
       })}
       {hasMore && (
         <div

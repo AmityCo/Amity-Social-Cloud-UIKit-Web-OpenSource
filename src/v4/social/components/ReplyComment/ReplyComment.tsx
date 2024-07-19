@@ -24,12 +24,11 @@ import styles from './ReplyComment.module.css';
 
 type ReplyCommentProps = {
   pageId?: string;
-  targetId: string;
-  targetType: Amity.PostTargetType;
+  community?: Amity.Community;
   comment: Amity.Comment;
 };
 
-const PostReplyComment = ({ pageId = '*', targetId, targetType, comment }: ReplyCommentProps) => {
+const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProps) => {
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -108,8 +107,7 @@ const PostReplyComment = ({ pageId = '*', targetId, targetType, comment }: Reply
           <div className={styles.postReplyComment__edit__inputWrap}>
             <div className={styles.postReplyComment__edit__input}>
               <CommentInput
-                targetType={targetType}
-                targetId={targetId}
+                community={community}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,
@@ -158,7 +156,6 @@ const PostReplyComment = ({ pageId = '*', targetId, targetType, comment }: Reply
               </Typography.BodyBold>
 
               <ModeratorBadge pageId={pageId} componentId={componentId} />
-
               <TextWithMention
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}

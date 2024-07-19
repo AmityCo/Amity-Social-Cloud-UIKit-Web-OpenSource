@@ -42,7 +42,7 @@ export const TextWithMention = ({ maxLines = 8, ...props }: TextWithMentionProps
     }
 
     setIsHidden(true);
-  }, [props.data.text]);
+  }, []);
 
   const renderText = (paragraph: SerializedParagraphNode) => {
     return paragraph.children.map((text) => {

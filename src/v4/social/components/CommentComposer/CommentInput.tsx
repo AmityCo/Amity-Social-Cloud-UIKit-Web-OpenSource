@@ -46,8 +46,7 @@ interface EditorStateJson extends SerializedLexicalNode {
 }
 
 interface CommentInputProps {
-  targetType: Amity.PostTargetType | Amity.StoryTargetType;
-  targetId: string;
+  community?: Amity.Community;
   value?: CreateCommentParams;
   mentionOffsetBottom?: number;
   maxLines?: number;
@@ -224,17 +223,13 @@ export function TextToEditorState(value: {
 }
 
 export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
-  (
-    { targetType, targetId, mentionOffsetBottom = 0, value, onChange, maxLines = 10, placehoder },
-    ref,
-  ) => {
+  ({ community, mentionOffsetBottom = 0, value, onChange, maxLines = 10, placehoder }, ref) => {
     const editorRef = React.useRef<LexicalEditor | null | undefined>(null);
     const [queryMentionUser, setQueryMentionUser] = React.useState<string | null>(null);
 
     const { mentionUsers } = useMentionUsers({
       displayName: queryMentionUser || '',
-      targetType,
-      targetId,
+      community,
     });
 
     const clearEditorState = () => {

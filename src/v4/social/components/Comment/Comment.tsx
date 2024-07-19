@@ -69,8 +69,7 @@ interface CommentProps {
   pageId?: string;
   componentId?: string;
   comment: Amity.Comment;
-  targetType: Amity.PostTargetType | Amity.StoryTargetType;
-  targetId: string;
+  community?: Amity.Community;
   onClickReply: (comment: Amity.Comment) => void;
   shoudAllowInteraction?: boolean;
 }
@@ -79,8 +78,7 @@ export const Comment = ({
   pageId = '*',
   componentId = 'comment_bubble',
   comment,
-  targetType,
-  targetId,
+  community,
   onClickReply,
   shoudAllowInteraction = true,
 }: CommentProps) => {
@@ -167,8 +165,7 @@ export const Comment = ({
           <div className={styles.postComment__edit__inputWrap}>
             <div className={styles.postComment__edit__input}>
               <CommentInput
-                targetType={targetType}
-                targetId={targetId}
+                community={community}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,
@@ -276,9 +273,9 @@ export const Comment = ({
 
             {hasClickLoadMore && (
               <ReplyCommentList
-                targetType={targetType}
-                targetId={targetId}
+                community={community}
                 referenceId={comment.referenceId}
+                referenceType={comment.referenceType}
                 parentId={comment.commentId}
               />
             )}
