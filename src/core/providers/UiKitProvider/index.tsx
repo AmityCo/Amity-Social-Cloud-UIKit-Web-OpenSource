@@ -66,7 +66,6 @@ const UiKitProvider = ({
   apiKey,
   apiRegion,
   apiEndpoint,
-  authToken,
   userId,
   displayName,
   customComponents = {},
@@ -175,11 +174,7 @@ const UiKitProvider = ({
                       <ConfirmProviderV4>
                         <NotificationProvider>
                           <NotificationProviderV4>
-                            <CustomizationProvider
-                              initialConfig={{
-                                preferred_theme: 'light',
-                              }}
-                            >
+                            <CustomizationProvider initialConfig={{}}>
                               <CustomComponentsProvider config={customComponents}>
                                 <ConfigProvider
                                   config={{

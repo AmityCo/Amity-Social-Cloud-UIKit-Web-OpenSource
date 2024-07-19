@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styles from './SocialGlobalSearchPage.module.css';
 
 import { TopSearchBar } from '~/v4/social/components/TopSearchBar';
@@ -20,49 +20,35 @@ const useGlobalSearchViewModel = () => {
   const [searchType, setSearchType] = useState<AmityGlobalSearchType>(
     AmityGlobalSearchType.Community,
   );
-
-  const enabledUserSearch = useMemo(
-    () => searchType === AmityGlobalSearchType.User && searchKeyword.length > 0,
-    [searchType, searchKeyword],
-  );
-
   const communityCollection = useCommunitiesCollection(
     { displayName: searchKeyword, limit: 20 },
-    () => searchType === AmityGlobalSearchType.Community && searchKeyword.length > 0,
+    () => searchType === AmityGlobalSearchType.Community,
   );
+  const userCollection = useUserQueryByDisplayName({ displayName: searchKeyword, limit: 20 });
 
-  const userCollection = useUserQueryByDisplayName({
-    displayName: searchKeyword,
-    limit: 20,
-    enabled: enabledUserSearch,
-  });
-
-  const search = useCallback(
-    (keyword: string) => {
-      setSearchKeyword(keyword);
-    },
-    [setSearchKeyword],
-  );
+  const search = useCallback((keyword: string) => {
+    setSearchKeyword(keyword);
+  }, []);
 
   return {
     userCollection,
     communityCollection,
     searchType,
     search,
-    searchValue: searchKeyword,
     setSearchType,
   };
 };
 
 export function SocialGlobalSearchPage() {
   const pageId = 'social_global_search_page';
-  const { themeStyles } = useAmityPage({
-    pageId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+    useAmityPage({
+      pageId,
+    });
 
   const [activeTab, setActiveTab] = useState('communities');
 
-  const { userCollection, communityCollection, search, searchValue, setSearchType } =
+  const { userCollection, communityCollection, searchType, search, setSearchType } =
     useGlobalSearchViewModel();
 
   const tabs = [
@@ -103,21 +89,12 @@ export function SocialGlobalSearchPage() {
   return (
     <div className={styles.socialGlobalSearchPage} style={themeStyles}>
       <TopSearchBar pageId={pageId} search={search} />
-      {searchValue.length > 0 && (
-        <TabsBar
-          pageId={pageId}
-          tabs={tabs}
-          activeTab={activeTab}
-          onTabChange={(newTab) => {
-            setActiveTab(newTab);
-            setSearchType(
-              newTab === 'communities'
-                ? AmityGlobalSearchType.Community
-                : AmityGlobalSearchType.User,
-            );
-          }}
-        />
-      )}
+      <TabsBar
+        pageId={pageId}
+        tabs={tabs}
+        activeTab={activeTab}
+        onTabChange={(newTab) => setActiveTab(newTab)}
+      />
     </div>
   );
 }

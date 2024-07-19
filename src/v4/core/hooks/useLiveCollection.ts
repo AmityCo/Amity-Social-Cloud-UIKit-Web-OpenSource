@@ -6,7 +6,7 @@ function useLiveCollection<TCallback, TParams>({
   params,
   callback = () => {},
   config,
-  shouldCall = true,
+  shouldCall = () => true,
 }: {
   fetcher: (
     params: Amity.LiveCollectionParams<TParams>,
@@ -16,7 +16,7 @@ function useLiveCollection<TCallback, TParams>({
   params: Amity.LiveCollectionParams<TParams>;
   callback?: Amity.LiveCollectionCallback<TCallback>;
   config?: Amity.LiveCollectionConfig;
-  shouldCall?: boolean;
+  shouldCall?: () => boolean;
 }): {
   items: TCallback[];
   isLoading: boolean;
@@ -27,7 +27,7 @@ function useLiveCollection<TCallback, TParams>({
 } {
   const { subscribe } = useSDKLiveCollectionConnector();
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
-  const [isLoading, setIsLoading] = useState(shouldCall ? shouldCall : true);
+  const [isLoading, setIsLoading] = useState(shouldCall ? shouldCall() : true);
   const [items, setItems] = useState<TCallback[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -42,7 +42,7 @@ function useLiveCollection<TCallback, TParams>({
 
   const callbackFn = useCallback(
     (response) => {
-      if (!shouldCall) return;
+      if (!shouldCall()) return;
       if (response.data) setItems(response.data);
       setIsLoading(response.loading);
       setHasMore(response.hasNextPage);
@@ -50,11 +50,11 @@ function useLiveCollection<TCallback, TParams>({
       loadMoreFnRef.current = response.onNextPage;
       callback(response);
     },
-    [shouldCall, loadMoreFnRef],
+    [shouldCall, setItems, setIsLoading, setHasMore, loadMoreFnRef, callback],
   );
 
   useEffect(() => {
-    if (!shouldCall) return;
+    if (!shouldCall()) return;
     const { unsubscribe } = subscribe({
       fetcher,
       params,

@@ -1,7 +1,5 @@
 .avatar {
   margin-right: var(--asc-spacing-s1);
-  width: 2rem;
-  height: 2rem;
 }
 
 .container {
@@ -149,7 +147,7 @@
 
 .deletedCommentBlock {
   padding: var(--asc-spacing-m1);
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
   border-radius: var(--asc-border-radius-sm);
   text-align: center;
   color: var(--asc-color-base-shade2);

@@ -1,6 +1,6 @@
 .drawer__content {
   padding: 1rem;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
   max-height: 50%;
   position: fixed;
   bottom: 0;
@@ -18,7 +18,7 @@
 }
 
 .drawer__innerContent {
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
   border-top-left-radius: 0.625rem;
   border-top-right-radius: 0.625rem;
   flex: 1;
@@ -35,7 +35,7 @@
 }
 
 .drawer__overlay {
-  background-color: color(from var(--asc-color-background-default) srgb r g b / 50%);
+  background-color: color(from var(--asc-color-base-background) srgb r g b / 50%);
   inset: 0;
   position: fixed;
 }

@@ -46,7 +46,7 @@
   gap: 0.25rem;
   padding: 0.25rem 0.375rem;
   border-radius: 1.75rem;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
   box-shadow: var(--asc-box-shadow-03);
 }
 

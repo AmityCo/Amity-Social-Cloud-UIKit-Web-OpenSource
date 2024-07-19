@@ -1,19 +1,15 @@
 import { StoryRepository } from '@amityco/ts-sdk';
-import { isNonNullable } from '~/v4/helpers/utils';
-import { usePaginator } from '~/v4/core/hooks/usePaginator';
+import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
 export const useGetActiveStoriesByTarget = (params: Amity.GetStoriesByTargetParam) => {
-  const { items, ...rest } = usePaginator({
+  const { items, ...rest } = useLiveCollection({
     fetcher: StoryRepository.getActiveStoriesByTarget,
     params,
-    shouldCall: true,
-    pageSize: 10,
-    placement: 'story' as Amity.AdPlacement,
-    getItemId: (item) => item?.storyId || '',
+    shouldCall: () => true,
   });
 
   return {
-    stories: items.filter(isNonNullable),
+    stories: items,
     ...rest,
   };
 };

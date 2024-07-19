@@ -8,34 +8,30 @@ export type RendererObject = NonNullable<StoriesProps['renderers']>[number];
 
 export type RendererProps = React.ComponentProps<RendererObject['renderer']>;
 export type Renderer = RendererObject['renderer'];
-type TesterProp = RendererObject['tester'];
-
-export type Tester = (story: CustomStory) => ReturnType<TesterProp>;
+export type Tester = RendererObject['tester'];
 
 type Action = RendererProps['action'];
 type Story = RendererProps['story'];
 
-export type CustomStory = Story & { story?: Amity.Story; ad?: Amity.Ad } & {
-  actions: Array<{
-    name: string;
-    action: () => void;
-    icon: JSX.Element;
-  }>;
-  onChange: (file: File) => void;
-  handleAddIconClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
-  addStoryButton: JSX.Element;
-  fileInputRef: React.RefObject<HTMLInputElement>;
-  storyStyles: {
-    background: string;
+export type CustomStory = Story &
+  Amity.Story & {
+    actions: Array<{
+      name: string;
+      action: () => void;
+      icon: JSX.Element;
+    }>;
+    onChange: (file: File) => void;
+    handleAddIconClick: (e: React.MouseEvent<Element, MouseEvent>) => void;
+    addStoryButton: JSX.Element;
+    fileInputRef: React.RefObject<HTMLInputElement>;
+    storyStyles: {
+      background: string;
+    };
+    currentIndex: number;
+    storiesCount: number;
+    increaseIndex: () => void;
+    pageId?: string;
   };
-  currentIndex: number;
-  storiesCount: number;
-  increaseIndex: () => void;
-  pageId?: string;
-  dragEventTarget?: React.RefObject<HTMLElement>;
-  setIsBottomSheetOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isBottomSheetOpen: boolean;
-};
 
 export type CustomRendererProps = RendererProps & {
   story: CustomStory;

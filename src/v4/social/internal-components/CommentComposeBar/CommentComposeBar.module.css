@@ -1,7 +1,5 @@
 .avatar {
-  margin-right: var(--asc-spacing-s1);
-  width: 2rem;
-  height: 2rem;
+  margin-right: 8px;
 }
 
 .replyContainer {
@@ -35,7 +33,7 @@
 
 .commentComposeBarContainer {
   width: 100%;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-base-background);
   display: flex;
   gap: var(--asc-spacing-s1);
   align-items: center;

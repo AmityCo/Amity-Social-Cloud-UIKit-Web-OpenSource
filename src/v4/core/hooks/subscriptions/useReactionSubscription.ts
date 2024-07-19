@@ -5,22 +5,22 @@ export default function useReactionSubscription({
   targetId,
   targetType,
   callback,
-  shouldSubscribe = true,
+  shouldSubscribe = () => true,
 }: {
   targetId?: string | null;
   targetType: 'user' | 'community';
-  shouldSubscribe?: boolean;
+  shouldSubscribe?: () => boolean;
   callback?: Amity.Listener;
 }) {
   const { unsubscribe: userUnsubscribe } = useUserReactionSubscription({
     userId: targetId,
-    shouldSubscribe: shouldSubscribe && targetType === 'user',
+    shouldSubscribe: () => shouldSubscribe() && targetType === 'user',
     callback,
   });
 
   const { unsubscribe: communityUnsubscribe } = useCommunityReactionSubscription({
     communityId: targetId,
-    shouldSubscribe: shouldSubscribe && targetType === 'community',
+    shouldSubscribe: () => shouldSubscribe() && targetType === 'community',
     callback,
   });
 

@@ -1,5 +1,5 @@
 .myTimelineText {
-  font-size: var(--asc-text-font-size-md);
+  font-size: 0.9375rem;
   font-weight: var(--asc-text-font-weight-bold);
   line-height: var(--asc-line-height-md);
   letter-spacing: -0.015rem;

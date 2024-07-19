@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChannelRepository, CommunityRepository, UserRepository } from '@amityco/ts-sdk';
 import { extractMetadata, formatMentionees, isNonNullable } from '~/v4/helpers/utils';
-import { useCommunity } from './useCommunity';
+import useCommunity from './useCommunity';
 
 interface UseMentionProps {
   targetId?: string;
@@ -22,7 +22,7 @@ export type QueryMentioneesFnType = (query?: string) => Promise<
 const useMention = ({ targetId, targetType, remoteText, remoteMarkup }: UseMentionProps) => {
   const isCommunityFeed = targetType === 'community';
   const isChannel = targetType === 'channel';
-  const { community } = useCommunity({ communityId: targetId });
+  const community = useCommunity(targetId);
 
   const [text, setText] = useState(remoteText ?? '');
   const [markup, setMarkup] = useState(remoteMarkup ?? remoteText);

@@ -1,58 +1,36 @@
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 
 export interface PageBehavior {
-  AmityStoryViewPageBehavior?: {
-    onCloseAction?(): void;
+  AmityStoryViewPageBehavior: {
+    onCloseAction(): void;
     hyperLinkAction?(context: Record<string, unknown>): void;
   };
-  AmityDraftStoryPageBehavior?: {
-    onCloseAction?(): void;
+  AmityDraftStoryPageBehavior: {
+    onCloseAction(): void;
   };
-  onClickHyperLink?(): void;
-  AmitySocialHomePageBehavior?: Record<string, unknown>;
-  AmityGlobalFeedComponentBehavior?: {
-    goToPostDetailPage?: (context: { postId: string }) => void;
-    goToViewStoryPage?: (context: {
+  onClickHyperLink(): void;
+  AmitySocialHomePageBehavior: Record<string, unknown>;
+  AmityGlobalFeedComponentBehavior: {
+    goToPostDetailPage: (context: { postId: string }) => void;
+    goToViewStoryPage: (context: {
       targetId: string;
       targetType: Amity.StoryTargetType;
       storyType: 'communityFeed' | 'globalFeed';
       targetIds?: string[];
     }) => void;
   };
-  AmityPostDetailPageBehavior?: Record<string, unknown>;
-  AmityPostContentComponentBehavior?: {
-    goToCommunityProfilePage?: (context: { communityId: string }) => void;
-    goToUserProfilePage?: (context: { userId: string }) => void;
+  AmityPostDetailPageBehavior: Record<string, unknown>;
+  AmityPostContentComponentBehavior: {
+    goToCommunityProfilePage: (context: { communityId: string }) => void;
+    goToUserProfilePage: (context: { userId: string }) => void;
   };
-  AmitySocialGlobalSearchPageBehavior?: Record<string, unknown>;
-  AmityCommunitySearchResultComponentBehavior?: {
-    goToCommunityProfilePage?: (context: { communityId: string }) => void;
+  AmitySocialGlobalSearchPageBehavior: Record<string, unknown>;
+  AmityCommunitySearchResultComponentBehavior: {
+    goToCommunityProfilePage: (context: { communityId: string }) => void;
   };
-  AmityCreatePostMenuComponentBehavior?: {
-    goToSelectPostTargetPage?(): void;
-    goToStoryTargetSelectionPage?(): void;
-  };
-  AmityPostTargetSelectionPage?: {
-    goToPostComposerPage?: (context: {
-      mode: Mode.CREATE | Mode.EDIT;
-      targetId: string | null;
-      targetType: 'community' | 'user';
-      community?: Amity.Community;
-      post?: Amity.Post;
-    }) => void;
-  };
-  AmityStoryTargetSelectionPage?: {
-    goToStoryCreationPage?(context: {
-      targetId: string | null;
-      targetType: Amity.StoryTargetType;
-      mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-      storyType: 'communityFeed' | 'globalFeed';
-    }): void;
-  };
-  AmityPostComposerPageBehavior?: {
-    goToSocialHomePage?(): void;
+  AmityCreatePostMenuComponentBehavior: {
+    goToSelectPostTargetPage(): void;
   };
 }
 
@@ -68,7 +46,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
   pageBehavior = {},
 }) => {
   const {
-    page,
     onBack,
     goToPostDetailPage,
     goToCommunityProfilePage,
@@ -76,10 +53,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToViewStoryPage,
     onChangePage,
     goToSelectPostTargetPage,
-    goToStoryTargetSelectionPage,
-    goToStoryCreationPage,
-    goToPostComposerPage,
-    goToSocialHomePage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -100,11 +73,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityDraftStoryPageBehavior?.onCloseAction) {
           return pageBehavior.AmityDraftStoryPageBehavior.onCloseAction();
         }
-        if (page.type === PageTypes.DraftPage && page.context.storyType === 'communityFeed') {
-          goToCommunityProfilePage(page.context.targetId);
-        } else {
-          goToSocialHomePage();
-        }
+        onBack();
       },
     },
     onClickHyperLink: () => {},
@@ -146,7 +115,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         goToUserProfilePage(context.userId);
       },
     },
-
     AmitySocialGlobalSearchPageBehavior: {},
     AmityCommunitySearchResultComponentBehavior: {
       goToCommunityProfilePage: (context: { communityId: string }) => {
@@ -164,53 +132,6 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCreatePostMenuComponentBehavior.goToSelectPostTargetPage();
         }
         goToSelectPostTargetPage();
-      },
-      goToStoryTargetSelectionPage() {
-        if (pageBehavior?.AmityCreatePostMenuComponentBehavior?.goToStoryTargetSelectionPage) {
-          return pageBehavior.AmityCreatePostMenuComponentBehavior.goToStoryTargetSelectionPage();
-        }
-        goToStoryTargetSelectionPage();
-      },
-    },
-    AmityPostTargetSelectionPage: {
-      goToPostComposerPage: (context: {
-        mode: Mode.CREATE | Mode.EDIT;
-        targetId: string | null;
-        targetType: 'community' | 'user';
-        community?: Amity.Community;
-        post?: Amity.Post;
-      }) => {
-        if (pageBehavior?.AmityPostTargetSelectionPage?.goToPostComposerPage) {
-          return pageBehavior.AmityPostTargetSelectionPage.goToPostComposerPage(context);
-        }
-        goToPostComposerPage(
-          context.mode,
-          context.targetId,
-          context.targetType,
-          context.community,
-          context.post,
-        );
-      },
-    },
-    AmityStoryTargetSelectionPage: {
-      goToStoryCreationPage: (context: {
-        targetId: string;
-        targetType: Amity.StoryTargetType;
-        mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-        storyType: 'communityFeed' | 'globalFeed';
-      }) => {
-        if (pageBehavior?.AmityStoryTargetSelectionPage?.goToStoryCreationPage) {
-          return pageBehavior.AmityStoryTargetSelectionPage.goToStoryCreationPage(context);
-        }
-        goToStoryCreationPage(context);
-      },
-    },
-    AmityPostComposerPageBehavior: {
-      goToSocialHomePage() {
-        if (pageBehavior?.AmityPostComposerPageBehavior?.goToSocialHomePage) {
-          return pageBehavior.AmityPostComposerPageBehavior.goToSocialHomePage();
-        }
-        goToSocialHomePage();
       },
     },
   };

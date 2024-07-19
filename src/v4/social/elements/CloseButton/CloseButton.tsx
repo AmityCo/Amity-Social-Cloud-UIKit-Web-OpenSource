@@ -3,7 +3,6 @@ import styles from './CloseButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import clsx from 'clsx';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 const CloseIconSVG = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -28,7 +27,8 @@ const CloseIconSVG = (props: React.SVGProps<SVGSVGElement>) => (
 interface CloseButtonProps {
   pageId?: string;
   componentId?: string;
-  onPress?: ButtonProps['onPress'];
+  onPress?: () => void;
+  'data-qa-anchor'?: string;
   defaultClassName?: string;
   imgClassName?: string;
 }
@@ -41,7 +41,7 @@ export const CloseButton = ({
   imgClassName,
 }: CloseButtonProps) => {
   const elementId = 'close_button';
-  const { isExcluded, config, uiReference, accessibilityId } = useAmityElement({
+  const { isExcluded, config, uiReference } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -50,14 +50,12 @@ export const CloseButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button className={styles.closeButton} data-qa-anchor={accessibilityId} onPress={onPress}>
-      <IconComponent
-        defaultIcon={() => (
-          <CloseIconSVG className={clsx(styles.closeButton__icon, defaultClassName)} />
-        )}
-        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
-        configIconName={config.icon}
-      />
-    </Button>
+    <IconComponent
+      onPress={onPress}
+      data-qa-anchor="close_button"
+      defaultIcon={() => <CloseIconSVG className={clsx(styles.closeButton, defaultClassName)} />}
+      imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+      configIconName={config.icon}
+    />
   );
 };

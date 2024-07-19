@@ -7,13 +7,13 @@ import { PageTypes } from '~/social/constants';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
 export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
-  const { page, onChangePage, onClickCommunity } = useNavigation();
+  const { onChangePage, onClickCommunity } = useNavigation();
 
   return (
     <PlainDraftStoryPage
       {...props}
       onDiscardCreateStory={() => {
-        if (page.type === PageTypes.DraftPage && page.storyType === 'communityFeed') {
+        if (props.storyType === 'communityFeed') {
           onClickCommunity(props.targetId);
         } else {
           onChangePage(PageTypes.NewsFeed);
@@ -21,6 +21,7 @@ export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
       }}
       goToCommunityPage={(communityId) => onClickCommunity(communityId)}
       goToGlobalFeedPage={() => onChangePage(PageTypes.NewsFeed)}
+      storyType={props.storyType}
     />
   );
 };

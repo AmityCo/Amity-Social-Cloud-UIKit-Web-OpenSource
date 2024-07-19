@@ -1,10 +1,9 @@
 import React, { useMemo } from 'react';
-import { useImage } from '~/v4/core/hooks/useImage';
+import useImage from '~/v4/core/hooks/useImage';
+import usePostByIds from '~/v4/core/hooks/usePostByIds';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './VideoContent.module.css';
-import usePost from '~/v4/core/hooks/objects/usePost';
-import { Button } from '~/v4/core/natives/Button';
 
 const PlayButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -15,7 +14,7 @@ const PlayButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <g id="Icon " clipPath="url(#clip0_1936_14348)">
+    <g id="Icon " clip-path="url(#clip0_1936_14348)">
       <path id="Vector" d="M8.95117 5V19L19.9512 12L8.95117 5Z" />
     </g>
     <defs>
@@ -26,56 +25,6 @@ const PlayButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-const VideoThumbnail = ({ fileId }: { fileId: string }) => {
-  const videoThumbnailUrl = useImage({
-    fileId,
-  });
-
-  return <img className={styles.videoContent__video} src={videoThumbnailUrl} alt={fileId} />;
-};
-
-const Video = ({
-  postId,
-  postAmount,
-  videoLeftCount,
-  index,
-  onVideoClick,
-}: {
-  postId: string;
-  postAmount: number;
-  videoLeftCount: number;
-  index: number;
-  onVideoClick: () => void;
-}) => {
-  const { post: videoPost, isLoading } = usePost(postId);
-
-  if (isLoading) {
-    return null;
-  }
-
-  return (
-    <Button
-      className={styles.videoContent__videoContainer}
-      data-videos-amount={Math.min(postAmount, 4)}
-      onPress={() => onVideoClick()}
-    >
-      <VideoThumbnail fileId={videoPost.data.thumbnailFileId} />
-      {videoLeftCount > 0 && index === postAmount - 1 && (
-        <Typography.Heading className={styles.videoContent__videoCover}>
-          + {videoLeftCount}
-        </Typography.Heading>
-      )}
-      {videoLeftCount === 0 || index < postAmount - 1 ? (
-        <div className={styles.videoContent__playButtonCover}>
-          <div className={styles.videoContent__playButton} onClick={() => onVideoClick()}>
-            <PlayButtonSvg className={styles.videoContent__playButton__svg} />
-          </div>
-        </div>
-      ) : null}
-    </Button>
-  );
-};
-
 interface VideoContentProps {
   pageId?: string;
   componentId?: string;
@@ -83,6 +32,14 @@ interface VideoContentProps {
   post: Amity.Post<'video'>;
   onVideoClick: (index: number) => void;
 }
+
+const Video = ({ fileId }: { fileId: string }) => {
+  const videoThumbnailUrl = useImage({
+    fileId,
+  });
+
+  return <img className={styles.videoContent__video} src={videoThumbnailUrl} alt={fileId} />;
+};
 
 export const VideoContent = ({
   pageId = '*',
@@ -97,13 +54,15 @@ export const VideoContent = ({
     elementId,
   });
 
-  const first4Videos = post.children.slice(0, 4);
+  const first4Videos = useMemo(() => post.children.slice(0, 4), [post.children]);
 
-  const { post: childPost } = usePost(post.children[0]);
+  const posts = usePostByIds(first4Videos);
+
+  const videoPosts = posts.filter((post) => post.dataType === 'video');
 
   const videoLeftCount = Math.max(0, post.children.length - 4);
 
-  if (childPost?.dataType !== 'video') {
+  if (videoPosts.length === 0) {
     return null;
   }
 
@@ -114,15 +73,29 @@ export const VideoContent = ({
         style={themeStyles}
         data-videos-amount={Math.min(post.children.length, 4)}
       >
-        {first4Videos.map((postId: string, index: number) => (
-          <Video
-            key={postId}
-            index={index}
-            postId={postId}
-            videoLeftCount={videoLeftCount}
-            postAmount={post.children.length}
-            onVideoClick={() => onVideoClick(index)}
-          />
+        {videoPosts.map((post, index) => (
+          <div
+            className={styles.videoContent__videoContainer}
+            data-videos-amount={Math.min(post.children.length, 4)}
+            onClick={() => onVideoClick(index)}
+          >
+            <Video fileId={post.data.thumbnailFileId} />
+            {videoLeftCount > 0 && index === posts.length - 1 && (
+              <Typography.Heading className={styles.videoContent__videoCover}>
+                + {videoLeftCount}
+              </Typography.Heading>
+            )}
+            {videoLeftCount === 0 || index < posts.length - 1 ? (
+              <div className={styles.videoContent__playButtonCover}>
+                <div
+                  className={styles.videoContent__playButton}
+                  onClick={() => onVideoClick(index)}
+                >
+                  <PlayButtonSvg className={styles.videoContent__playButton__svg} />
+                </div>
+              </div>
+            ) : null}
+          </div>
         ))}
       </div>
     </div>

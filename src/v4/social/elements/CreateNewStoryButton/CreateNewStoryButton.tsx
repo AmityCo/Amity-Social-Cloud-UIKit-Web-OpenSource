@@ -4,7 +4,6 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import clsx from 'clsx';
 
 import styles from './CreateNewStoryButton.module.css';
-import { Button } from '~/v4/core/natives/Button';
 
 const CreateNewStoryButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -49,18 +48,15 @@ export const CreateNewStoryButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button
-      style={themeStyles}
-      className={clsx(styles.createNewStoryButton, defaultClassName)}
+    <IconComponent
       data-qa-anchor={accessibilityId}
+      className={clsx(styles.createNewStoryIcon, defaultClassName)}
+      defaultIcon={() => <CreateNewStoryButtonSvg />}
+      imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgClassName)} />}
+      defaultIconName={defaultConfig.icon}
+      configIconName={config.icon}
       onPress={onPress}
-    >
-      <IconComponent
-        defaultIcon={() => <CreateNewStoryButtonSvg />}
-        imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgClassName)} />}
-        defaultIconName={defaultConfig.icon}
-        configIconName={config.icon}
-      />
-    </Button>
+      style={themeStyles}
+    />
   );
 };

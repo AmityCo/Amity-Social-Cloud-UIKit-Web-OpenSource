@@ -1,13 +1,13 @@
 import useSDK from '~/core/hooks/useSDK';
-import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
+import useSearchChannelUser from '~/v4/chat/hooks/collections/useSearchChannelUser';
 
 const useCurrentUserChannelMembership = (channelId: Amity.Channel['channelId']) => {
   const { currentUserId } = useSDK();
-  const { channelMembers, isLoading } = useSearchChannelUser({
+  const { channelMembers, isLoading } = useSearchChannelUser(
     channelId,
-    memberships: ['member', 'banned', 'muted'],
-    search: currentUserId,
-  });
+    ['member', 'banned', 'muted'],
+    currentUserId,
+  );
 
   if (isLoading) return null;
 

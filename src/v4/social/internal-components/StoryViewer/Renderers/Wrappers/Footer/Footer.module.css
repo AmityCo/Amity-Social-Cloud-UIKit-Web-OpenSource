@@ -20,7 +20,7 @@
   width: 100%;
   height: var(--asc-spacing-l4);
   padding: var(--asc-spacing-s2);
-  background-color: var(--asc-color-alert-default);
+  background-color: var(--asc-color-alert);
   color: var(--asc-color-white);
   z-index: 0;
 }

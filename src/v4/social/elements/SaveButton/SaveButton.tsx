@@ -1,25 +1,24 @@
 import React from 'react';
-import { useAmityElement } from '~/v4/core/hooks/uikit';
-import styles from './SaveButton.module.css';
-
-import { Button } from '~/v4/core/natives/Button';
 import clsx from 'clsx';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+
+import { Button } from '~/v4/core/components';
 
 interface SaveButtonProps {
   pageId?: string;
   componentId?: string;
   className?: string;
-  onPress?: () => void;
+  onClick?: () => void;
 }
 
 export function SaveButton({
   pageId = '*',
   componentId = '*',
-  onPress,
+  onClick,
   className,
 }: SaveButtonProps) {
   const elementId = 'save_button';
-  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+  const { accessibilityId, config, isExcluded } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -29,12 +28,12 @@ export function SaveButton({
 
   return (
     <Button
-      className={clsx(styles.saveButton, className)}
+      variant="primary"
+      className={clsx(className)}
       data-qa-anchor={accessibilityId}
-      style={{ ...themeStyles, backgroundColor: config.background_color as string | undefined }}
-      onPress={onPress}
+      onClick={onClick}
     >
-      {config.save_button_text}
+      {config.text}
     </Button>
   );
 }

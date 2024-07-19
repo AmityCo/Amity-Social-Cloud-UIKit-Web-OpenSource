@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { Button } from '~/v4/core/natives/Button';
+import { getDefaultConfig, useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 import styles from './PostCreationButton.module.css';
 
 const PostCreationButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
-    style={{ pointerEvents: 'none' }}
     width="14"
     height="15"
     viewBox="0 0 14 15"
@@ -24,7 +24,8 @@ export interface PostCreationButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent) => void;
+  // createPostButtonRef: React.RefObject<HTMLDivElement>;
 }
 
 export function PostCreationButton({
@@ -33,6 +34,7 @@ export function PostCreationButton({
   defaultClassName,
   imgClassName,
   onClick,
+  // createPostButtonRef,
 }: PostCreationButtonProps) {
   const elementId = 'post_creation_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -47,16 +49,17 @@ export function PostCreationButton({
   return (
     <IconComponent
       defaultIcon={() => (
-        <Button
+        <div
           style={themeStyles}
           className={styles.postCreationButton}
-          onPress={onClick}
+          onClick={onClick}
           data-qa-anchor={accessibilityId}
+          // ref={createPostButtonRef}
         >
           <PostCreationButtonSvg
             className={clsx(styles.postCreationButton__icon, defaultClassName)}
           />
-        </Button>
+        </div>
       )}
       imgIcon={() => (
         <img

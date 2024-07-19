@@ -7,7 +7,7 @@ interface UseImageProps {
   imageSize?: 'small' | 'medium' | 'large' | 'full';
 }
 
-export const useImage = ({ fileId, imageSize = 'medium' }: UseImageProps) => {
+const useImage = ({ fileId, imageSize = 'medium' }: UseImageProps) => {
   const file = useFile(fileId);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
 
@@ -27,3 +27,5 @@ export const useImage = ({ fileId, imageSize = 'medium' }: UseImageProps) => {
 
   return imageUrl;
 };
+
+export default useImage;

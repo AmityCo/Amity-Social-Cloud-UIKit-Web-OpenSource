@@ -12,13 +12,17 @@ jobs:
 
     environment:
       name: dev/${{ github.event.pull_request.number }}
-      url: https://ui-kit.dev.amity.co/${{ github.event.pull_request.number }}
+      url: https://ui-kit-open-source.dev.amity.co/${{ github.event.pull_request.number }}
 
     env:
-      NPM_FONT_AWESOME_TOKEN: ${{ secrets.NPM_FONT_AWESOME_TOKEN }}
       STORYBOOK_API_REGION: ${{ secrets.STORYBOOK_API_REGION }}
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
-      STORYBOOK_USERS: ${{ secrets.STORYBOOK_USERS }}
+      STORYBOOK_USER1: ${{ secrets.STORYBOOK_USER1 }}
+      STORYBOOK_USER2: ${{ secrets.STORYBOOK_USER2 }}
+      STORYBOOK_USER3: ${{ secrets.STORYBOOK_USER3 }}
+      STORYBOOK_USER4: ${{ secrets.STORYBOOK_USER4 }}
+      STORYBOOK_USER5: ${{ secrets.STORYBOOK_USER5 }}
+      STORYBOOK_USER6: ${{ secrets.STORYBOOK_USER6 }}
 
     steps:
       - name: git checkout
@@ -82,6 +86,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_BUCKET: ui-kit.dev.amity.co
+          AWS_S3_BUCKET: ui-kit-open-source.dev.amity.co
           SOURCE_DIR: ./storybook-build
           DEST_DIR: ${{ github.event.pull_request.number }}

@@ -3,12 +3,10 @@
   flex-direction: column;
   position: relative;
   height: 100%;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
 }
 
 .postDetailPage__container {
-  flex: 1;
-  margin-top: 3.625rem;
   overflow-y: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -29,7 +27,7 @@
   left: 0;
   right: 0;
   top: 0;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
 }
 
 .postDetailPage__topBar__title {
@@ -84,6 +82,12 @@
   flex-direction: column;
   gap: 1rem;
   padding: 0.75rem 1rem;
+}
+
+.postDetailPage__commentComposeBar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
 }
 
 @keyframes skeleton-pulse {

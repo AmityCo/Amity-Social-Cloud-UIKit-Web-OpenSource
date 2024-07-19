@@ -15,16 +15,19 @@ interface CommunitySearchResultProps {
 export const CommunitySearchResult = ({
   pageId = '*',
   communityCollection = [],
-  isLoading,
+  // isLoading,
   onLoadMore,
 }: CommunitySearchResultProps) => {
   const componentId = 'community_search_result';
-  const { themeStyles } = useAmityComponent({
-    pageId,
-    componentId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+    useAmityComponent({
+      pageId,
+      componentId,
+    });
 
   const intersectionRef = useRef<HTMLDivElement>(null);
+
+  const isLoading = true;
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), ref: intersectionRef });
 

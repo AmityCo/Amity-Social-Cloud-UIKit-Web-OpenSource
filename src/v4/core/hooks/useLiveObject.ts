@@ -7,7 +7,7 @@ function useLiveObject<TParams, TCallback, TConfig>({
   params,
   callback = () => {},
   options,
-  shouldCall = true,
+  shouldCall = () => true,
   getSubscribedTopic,
 }: {
   fetcher: (
@@ -18,7 +18,7 @@ function useLiveObject<TParams, TCallback, TConfig>({
   params: TParams | undefined | null;
   callback?: Amity.LiveObjectCallback<TCallback>;
   options?: Amity.LiveObjectOptions<TConfig>;
-  shouldCall?: boolean;
+  shouldCall?: () => boolean;
   getSubscribedTopic?: () => string;
 }) {
   const { subscribe } = useSDKLiveObjectConnector();
@@ -31,7 +31,7 @@ function useLiveObject<TParams, TCallback, TConfig>({
 
   const callbackFn: Amity.LiveObjectCallback<TCallback> = useCallback(
     (response) => {
-      if (!shouldCall) return;
+      if (shouldCall && !shouldCall()) return;
       if (params == null) return;
       setIsLoading(response.loading);
       if (response.data) setItem(response.data);
@@ -54,7 +54,7 @@ function useLiveObject<TParams, TCallback, TConfig>({
 
   useEffect(() => {
     if (params == null) return;
-    if (!shouldCall) return;
+    if (shouldCall && !shouldCall()) return;
 
     const { unsubscribe } = subscribe({
       fetcher,

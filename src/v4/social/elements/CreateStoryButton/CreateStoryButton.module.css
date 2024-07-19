@@ -1,8 +1,6 @@
 .createStoryButton {
   display: flex;
   padding: 0.75rem 0;
-  width: 100%;
-  cursor: pointer;
 }
 
 .createStoryButton__text {

@@ -29,11 +29,12 @@ export function SearchIcon({
   imgClassName,
 }: SearchIconProps) {
   const elementId = 'search_icon';
-  const { config, defaultConfig, isExcluded, uiReference, themeStyles } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 

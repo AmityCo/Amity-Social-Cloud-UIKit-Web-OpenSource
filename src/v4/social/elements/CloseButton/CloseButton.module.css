@@ -20,13 +20,9 @@
   }
 }
 
-.closeButton__icon {
-  fill: var(--asc-color-base-default);
-}
-
 .closeButton {
-  all: unset;
   cursor: pointer;
+  fill: var(--asc-color-base-default);
   width: 1.5rem;
   height: 1.25rem;
 }

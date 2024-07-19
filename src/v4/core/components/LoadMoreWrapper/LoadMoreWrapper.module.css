@@ -1,7 +1,7 @@
 .loadMoreButton {
   display: inline-flex;
   justify-items: center;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-base-background);
   color: var(--asc-color-base-shade2);
   border: 1px solid var(--asc-color-base-shade4);
   padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;

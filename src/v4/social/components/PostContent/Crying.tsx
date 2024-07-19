@@ -9,7 +9,7 @@ const Crying = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
     xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
-    <g clipPath="url(#clip0_1709_7904)">
+    <g clip-path="url(#clip0_1709_7904)">
       <path
         d="M16 32.5C24.8366 32.5 32 25.3366 32 16.5C32 7.66344 24.8366 0.5 16 0.5C7.16344 0.5 0 7.66344 0 16.5C0 25.3366 7.16344 32.5 16 32.5Z"
         fill="#FFD54F"

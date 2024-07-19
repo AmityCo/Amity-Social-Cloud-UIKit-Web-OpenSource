@@ -40,13 +40,17 @@ const Modal = ({
   return (
     <div className={styles.overlay} onClick={onOverlayClick} style={themeStyles}>
       <div
-        className={clsx(styles.modalWindow)}
+        className={clsx(styles.modalWindow, `${size === 'small' ? 'smallModalWindow' : ''}`)}
         data-qa-anchor={accessibilityId}
         ref={modalRef}
         tabIndex={0}
       >
-        {onCancel && <Close className={styles.closeIcon} onClick={onCancel} />}
-        {title && <div className={styles.title}>{title}</div>}
+        {(title || onCancel) && (
+          <div className={styles.header}>
+            {title}
+            {onCancel && <Close className={styles.closeIcon} onClick={onCancel} />}
+          </div>
+        )}
 
         <div className={clsx(styles.content)}>{children}</div>
         {footer && <div className={styles.footer}>{footer}</div>}

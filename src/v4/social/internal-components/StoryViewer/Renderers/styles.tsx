@@ -20,12 +20,13 @@ export const IconButton = styled.button`
   border: none;
   top: 6rem;
   left: 1.25rem;
-  z-index: 10;
+  z-index: 9999;
   cursor: pointer;
 `;
 
 export const RendererContainer = styled.div`
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 `;
@@ -68,6 +69,7 @@ export const StoryImage = styled.img<{ customStyles?: string }>`
   max-width: 100%;
   max-height: 100%;
   margin: auto;
+  flex-grow: 1;
   ${(props) => props.customStyles};
 `;
 
@@ -82,9 +84,9 @@ export const PauseStoryButton = styled(PauseIcon)`
 `;
 
 export const CloseButton = styled(Close)`
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: #ffffff;
+  color: #ffffff;
+  width: 1.25rem;
+  height: 1.25rem;
   cursor: pointer;
 `;
 

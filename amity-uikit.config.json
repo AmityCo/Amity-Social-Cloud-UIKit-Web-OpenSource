@@ -177,46 +177,28 @@
     "live_chat/*/*": {
       "theme": {
         "light": {
-          "primary_color": "#1054de",
-          "base_inverse_color": "#fff",
+          "primary_color": "#1054DE",
+          "secondary_color": "#ebecef",
           "base_color": "#ebecef",
           "base_shade1_color": "#a5a9b5",
           "base_shade2_color": "#6e7487",
           "base_shade3_color": "#40434e",
           "base_shade4_color": "#292b32",
-          "secondary_color": "#292b32",
-          "secondary_shade1_color": "#a5a9b5",
-          "secondary_shade2_color": "#898e9e",
-          "secondary_shade3_color": "#a5a9b5",
-          "secondary_shade4_color": "#40434e",
-          "secondary_shade5_color": "#292b32",
-          "alert_color": "#fa4d30",
-          "highlight_color": "#1054de",
-          "message_bubble_primary_color": "#1054de",
-          "message_bubble_secondary_color": "#292b32",
+          "alert_color": "#FA4D30",
           "background_color": "#191919",
-          "background_shade1_color": "#40434e"
+          "base_inverse_color": "#FFFFFF"
         },
         "dark": {
-          "primary_color": "#1054de",
-          "base_inverse_color": "#fff",
+          "primary_color": "#1054DE",
+          "secondary_color": "#ebecef",
           "base_color": "#ebecef",
           "base_shade1_color": "#a5a9b5",
           "base_shade2_color": "#6e7487",
           "base_shade3_color": "#40434e",
           "base_shade4_color": "#292b32",
-          "secondary_color": "#292b32",
-          "secondary_shade1_color": "#a5a9b5",
-          "secondary_shade2_color": "#898e9e",
-          "secondary_shade3_color": "#a5a9b5",
-          "secondary_shade4_color": "#40434e",
-          "secondary_shade5_color": "#292b32",
-          "alert_color": "#fa4d30",
-          "highlight_color": "#1054de",
-          "message_bubble_primary_color": "#1054de",
-          "message_bubble_secondary_color": "#292b32",
+          "alert_color": "#FA4D30",
           "background_color": "#191919",
-          "background_shade1_color": "#40434e"
+          "base_inverse_color": "#FFFFFF"
         }
       }
     },

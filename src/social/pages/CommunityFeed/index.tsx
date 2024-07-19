@@ -19,17 +19,20 @@ import useCommunitySubscription from '~/social/hooks/useCommunitySubscription';
 
 import usePostsCollection from '~/social/hooks/collections/usePostsCollection';
 
+import useFile from '~/core/hooks/useFile';
+
 import {
   CommunitySideMenuOverlay,
   HeadTitle,
   MobileContainer,
   StyledCommunitySideMenu,
 } from '../NewsFeed/styles';
+import useStories from '~/social/hooks/useStories';
 
 import { BarsIcon } from '~/icons';
 
+import { useStoryContext } from '~/v4/social/providers/StoryProvider';
 import { useNavigation } from '~/social/providers/NavigationProvider';
-import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 
 interface CommunityFeedProps {
   communityId: string;
@@ -40,7 +43,7 @@ interface CommunityFeedProps {
 
 const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: CommunityFeedProps) => {
   const { goToDraftStoryPage } = useNavigation();
-  const { stories } = useGetActiveStoriesByTarget({
+  const { stories } = useStories({
     targetId: communityId,
     targetType: 'community',
     options: {

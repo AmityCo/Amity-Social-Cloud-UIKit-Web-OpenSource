@@ -3,8 +3,8 @@ import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Typography } from '~/v4/core/components';
 import styles from './CreatePostButton.module.css';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import clsx from 'clsx';
-import { Button } from '~/v4/core/natives/Button/Button';
 
 const CreatePostButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg width="21" height="20" viewBox="0 0 21 20" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -15,15 +15,15 @@ const CreatePostButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
 interface CreatePostButtonProps {
   pageId?: string;
   componentId: string;
+  onClick?: (e: React.MouseEvent) => void;
   defaultClassName?: string;
-  onClick?: () => void;
 }
 
 export function CreatePostButton({
   pageId = '*',
   componentId = '*',
-  defaultClassName,
   onClick,
+  defaultClassName,
 }: CreatePostButtonProps) {
   const elementId = 'create_post_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -32,13 +32,14 @@ export function CreatePostButton({
       componentId,
       elementId,
     });
+  const { AmityCreatePostMenuComponentBehavior } = usePageBehavior();
 
   if (isExcluded) return null;
 
   return (
-    <Button
+    <button
       className={styles.createPostButton}
-      onPress={() => onClick?.()}
+      onClick={() => AmityCreatePostMenuComponentBehavior.goToSelectPostTargetPage()}
       data-qa-anchor={accessibilityId}
       style={themeStyles}
     >
@@ -51,7 +52,7 @@ export function CreatePostButton({
         defaultIconName={defaultConfig.image}
       />
       <Typography.Body className={styles.createPostButton__text}>{config.text}</Typography.Body>
-    </Button>
+    </button>
   );
 }
 

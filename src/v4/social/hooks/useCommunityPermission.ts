@@ -3,7 +3,7 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 
 const useCommunityPermission = ({ community }: { community?: Amity.Community | null }) => {
   const { currentUserId, userRoles } = useSDK();
-  const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
+  const { moderators } = useCommunityModeratorsCollection(community?.communityId);
 
   const moderator = moderators.find((moderator) => moderator.userId === currentUserId);
 

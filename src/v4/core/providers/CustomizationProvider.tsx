@@ -1,34 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AmityReactionType } from './CustomReactionProvider';
-import { useTheme } from './ThemeProvider';
-
-export const getCustomizationKeys = ({
-  page,
-  component,
-  element,
-}: {
-  page: string;
-  component: string;
-  element: string;
-}) => {
-  if (element !== '*') {
-    return [
-      `${page}/${component}/${element}`,
-      `*/${component}/${element}`,
-      `${page}/*/${element}`,
-      `*/*/${element}`,
-      `${page}/${component}/*`,
-      `*/${component}/*`,
-      `${page}/*/*`,
-    ];
-  } else if (component !== '*') {
-    return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`];
-  } else if (page !== '*') {
-    return [`${page}/*/*`];
-  }
-
-  return [];
-};
 
 export type GetConfigReturnValue = IconConfiguration &
   TextConfiguration &
@@ -44,34 +15,38 @@ interface CustomizationContextValue {
   ) => IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
 }
 
-type ThemeValue = {
-  primary_color: string;
-  secondary_color: string;
-  secondary_shade1_color: string;
-  secondary_shade2_color: string;
-  secondary_shade3_color: string;
-  secondary_shade4_color: string;
-  base_color: string;
-  base_shade1_color: string;
-  base_shade2_color: string;
-  base_shade3_color: string;
-  base_shade4_color: string;
-  base_shade5_color: string;
-  alert_color: string;
-  background_color: string;
-  base_inverse_color: string;
-};
-
 export type Theme = {
-  light: ThemeValue;
-  dark: ThemeValue;
+  light: {
+    primary_color: string;
+    secondary_color: string;
+    base_color: string;
+    base_shade1_color: string;
+    base_shade2_color: string;
+    base_shade3_color: string;
+    base_shade4_color: string;
+    alert_color: string;
+    background_color: string;
+    base_inverse_color: string;
+  };
+  dark: {
+    primary_color: string;
+    secondary_color: string;
+    base_color: string;
+    base_shade1_color: string;
+    base_shade2_color: string;
+    base_shade3_color: string;
+    base_shade4_color: string;
+    alert_color: string;
+    background_color: string;
+    base_inverse_color: string;
+  };
 };
 
 type ThemeConfiguration = {
   preferred_theme?: 'light' | 'dark' | 'default';
   theme?: {
-    light?: Partial<Theme['light']>;
-    dark?: Partial<Theme['dark']>;
+    light?: Partial<Pick<Theme['light'], 'primary_color' | 'secondary_color'>>;
+    dark?: Partial<Pick<Theme['dark'], 'primary_color' | 'secondary_color'>>;
   };
 };
 
@@ -135,35 +110,25 @@ export const defaultConfig: DefaultConfig = {
   preferred_theme: 'default',
   theme: {
     light: {
-      primary_color: '#36486c',
-      secondary_color: '#292b32',
-      secondary_shade1_color: '#636878',
-      secondary_shade2_color: '#898e9e',
-      secondary_shade3_color: '#a5a9b5',
-      secondary_shade4_color: '#ebecef',
+      primary_color: '#1054DE',
+      secondary_color: '#292B32',
       base_color: '#292b32',
       base_shade1_color: '#636878',
       base_shade2_color: '#898e9e',
       base_shade3_color: '#a5a9b5',
       base_shade4_color: '#ebecef',
-      base_shade5_color: '#F9F9FA',
       alert_color: '#FA4D30',
       background_color: '#FFFFFF',
       base_inverse_color: '#000000',
     },
     dark: {
       primary_color: '#1054DE',
-      secondary_color: '#ebecef',
-      secondary_shade1_color: '#a5a9b5',
-      secondary_shade2_color: '#898e9e',
-      secondary_shade3_color: '#40434e',
-      secondary_shade4_color: '#292b32',
+      secondary_color: '#292B32',
       base_color: '#ebecef',
       base_shade1_color: '#a5a9b5',
       base_shade2_color: '#6e7487',
       base_shade3_color: '#40434e',
       base_shade4_color: '#292b32',
-      base_shade5_color: '#f9f9fa',
       alert_color: '#FA4D30',
       background_color: '#191919',
       base_inverse_color: '#FFFFFF',
@@ -248,10 +213,10 @@ export const defaultConfig: DefaultConfig = {
     '*/edit_comment_component/*': {
       theme: {},
     },
-    '*/edit_comment_component/edit_cancel_button': {
+    '*/edit_comment_component/cancel_button': {
       cancel_icon: '',
-      cancel_button_text: 'Cancel',
-      background_color: '',
+      cancel_button_text: 'cancel',
+      background_color: '#1243EE',
     },
     '*/edit_comment_component/save_button': {
       save_icon: '',
@@ -266,7 +231,7 @@ export const defaultConfig: DefaultConfig = {
       done_button_text: 'Done',
       background_color: '#1243EE',
     },
-    '*/hyper_link_config_component/edit_cancel_button': {
+    '*/hyper_link_config_component/cancel_button': {
       cancel_icon: '',
       cancel_button_text: 'Cancel',
     },
@@ -369,7 +334,7 @@ export const defaultConfig: DefaultConfig = {
       image: 'platformValue',
     },
     'post_composer_page/*/community_display_name': {},
-    'post_composer_page/*/create_new_post_button': {
+    'post_composer_page/*/create_button': {
       text: 'Post',
     },
     'post_composer_page/*/edit_post_button': {
@@ -407,8 +372,8 @@ export const defaultConfig: DefaultConfig = {
       text: 'Video',
       image: 'platformValue',
     },
-    'post_composer_page/detailed_media_attachment/file_button': {
-      text: 'Attachment',
+    'create_post_page/detailed_media_attachment/file_button': {
+      textpost_composer_page: 'Attachment',
       image: 'platformValue',
     },
     'social_home_page/*/*': {},
@@ -439,12 +404,6 @@ export const defaultConfig: DefaultConfig = {
     'select_post_target_page/*/my_timeline_text': {
       text: 'My Timeline',
     },
-    'select_story_target_page/*/close_button': {
-      image: 'platformValue',
-    },
-    'select_story_target_page/*/title': {
-      text: 'Share to',
-    },
     '*/*/community_official_badge': {
       image: 'platformValue',
     },
@@ -452,9 +411,7 @@ export const defaultConfig: DefaultConfig = {
       image: 'platformValue',
     },
     'social_global_search_page/*/*': {},
-    'social_global_search_page/top_search_bar/*': {
-      text: 'Search community and user',
-    },
+    'social_global_search_page/top_search_bar/*': {},
     'social_global_search_page/top_search_bar/search_icon': {
       icon: 'search',
     },
@@ -474,29 +431,32 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_global_search_page/community_search_result/community_category_name': {},
     'social_global_search_page/community_search_result/community_members_count': {},
-    'my_communities_search_page/top_search_bar/*': {
-      text: 'Search my community',
-    },
-    'my_communities_search_page/*/community_avatar': {},
-    'my_communities_search_page/*/community_display_name': {},
-    'my_communities_search_page/*/community_private_badge': {
-      icon: 'lockIcon',
-    },
-    'my_communities_search_page/*/community_official_badge': {
-      icon: 'officialBadgeIcon',
-    },
-    'my_communities_search_page/*/community_category_name': {},
-    'my_communities_search_page/*/community_members_count': {},
-    'my_communities_search_page/top_search_bar/cancel_button': {
-      text: 'Cancel',
-    },
   },
 };
 
 export const getDefaultConfig: CustomizationContextValue['getConfig'] = (path: string) => {
   const [page, component, element] = path.split('/');
 
-  const customizationKeys = getCustomizationKeys({ page, component, element });
+  const customizationKeys = (() => {
+    if (element !== '*') {
+      return [
+        `${page}/${component}/${element}`,
+        `${page}/*/${element}`,
+        `${page}/${component}/*`,
+        `${page}/*/*`,
+        `*/${component}/${element}`,
+        `*/*/${element}`,
+        `*/${component}/*`,
+        `*/*/*`,
+      ];
+    } else if (component !== '*') {
+      return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
+    } else if (page !== '*') {
+      return [`${page}/*/*`, `*/*/*`];
+    }
+
+    return [];
+  })();
 
   return new Proxy<
     IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
@@ -520,8 +480,6 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
 }) => {
   const [config, setConfig] = useState<Config | null>(null);
 
-  const currentTheme = useTheme();
-
   useEffect(() => {
     if (validateConfig(initialConfig)) {
       parseConfig(initialConfig);
@@ -541,7 +499,26 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   const isExcluded = (path: string) => {
     const [page, component, element] = path.split('/');
 
-    const customizationKeys = getCustomizationKeys({ page, component, element });
+    const customizationKeys = (() => {
+      if (element !== '*') {
+        return [
+          `${page}/${component}/${element}`,
+          `${page}/*/${element}`,
+          `${page}/${component}/*`,
+          `${page}/*/*`,
+          `*/${component}/${element}`,
+          `*/*/${element}`,
+          `*/${component}/*`,
+          `*/*/*`,
+        ];
+      } else if (component !== '*') {
+        return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
+      } else if (page !== '*') {
+        return [`${page}/*/*`, `*/*/*`];
+      }
+
+      return [];
+    })();
 
     return (
       config?.excludes?.some((excludedPath) => {
@@ -553,33 +530,26 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
   const getConfig: CustomizationContextValue['getConfig'] = (path: string) => {
     const [page, component, element] = path.split('/');
 
-    const customizationKeys = getCustomizationKeys({ page, component, element });
+    const customizationKeys = (() => {
+      if (element !== '*') {
+        return [
+          `${page}/${component}/${element}`,
+          `${page}/*/${element}`,
+          `${page}/${component}/*`,
+          `${page}/*/*`,
+          `*/${component}/${element}`,
+          `*/*/${element}`,
+          `*/${component}/*`,
+          `*/*/*`,
+        ];
+      } else if (component !== '*') {
+        return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`, `*/*/*`];
+      } else if (page !== '*') {
+        return [`${page}/*/*`, `*/*/*`];
+      }
 
-    const buildThemeProxyHandler = (
-      themeName: 'light' | 'dark',
-    ): ProxyHandler<
-      IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
-    > => ({
-      get(_, prop: keyof ThemeValue) {
-        for (const key of customizationKeys) {
-          if (config?.customizations?.[key]?.theme?.[themeName]?.[prop]) {
-            return config.customizations[key].theme?.[themeName]?.[prop];
-          }
-        }
-
-        if (config?.theme?.[themeName]?.[prop]) {
-          return config.theme[themeName]?.[prop];
-        }
-
-        for (const key of customizationKeys) {
-          if (defaultConfig.customizations?.[key]?.theme?.[themeName]?.[prop]) {
-            return defaultConfig.customizations[key].theme?.[themeName]?.[prop];
-          }
-        }
-
-        return defaultConfig.theme[themeName][prop];
-      },
-    });
+      return [];
+    })();
 
     return new Proxy<
       IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
@@ -587,27 +557,27 @@ export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
       {},
       {
         get(target, prop: string) {
-          if (prop === 'theme') {
-            return {
-              light: new Proxy({}, buildThemeProxyHandler('light')),
-              dark: new Proxy({}, buildThemeProxyHandler('dark')),
-            };
-          }
-
-          if (prop === 'preferred_theme') {
-            return config?.preferred_theme ?? defaultConfig.preferred_theme;
-          }
-
           for (const key of customizationKeys) {
             if (config?.customizations?.[key]?.[prop]) {
               return config.customizations[key][prop];
             }
           }
 
+          if (prop === 'theme' && !!config?.theme) {
+            return config.theme;
+          }
+
           for (const key of customizationKeys) {
             if (defaultConfig?.customizations?.[key]?.[prop]) {
               return defaultConfig.customizations[key][prop];
             }
+          }
+
+          if (prop === 'theme') {
+            return defaultConfig.theme;
+          }
+          if (prop === 'preferred_theme') {
+            return defaultConfig.preferred_theme;
           }
         },
       },

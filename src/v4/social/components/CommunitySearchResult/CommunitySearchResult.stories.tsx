@@ -13,13 +13,7 @@ export const CommunitySearchResultStory = {
 
     if (community == null) return null;
 
-    return (
-      <CommunitySearchResult
-        isLoading={false}
-        communityCollection={[community]}
-        onLoadMore={() => {}}
-      />
-    );
+    return <CommunitySearchResult communityCollection={[community]} onLoadMore={() => {}} />;
   },
 
   name: 'CommunitySearchResult',

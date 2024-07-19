@@ -3,15 +3,11 @@ import { useEffect, useRef, useState } from 'react';
 
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
-export const useUserQueryByDisplayName = ({
-  displayName,
-  limit,
-  enabled = true,
-}: {
-  displayName: string;
-  limit: number;
-  enabled?: boolean;
-}) => {
+const MINIMUM_STRING_LENGTH_TO_TRIGGER_QUERY = 1;
+
+export const useUserQueryByDisplayName = (
+  params: Parameters<typeof UserRepository.searchUserByDisplayName>[0],
+) => {
   const [items, setItems] = useState<Amity.User[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(false);
@@ -32,29 +28,19 @@ export const useUserQueryByDisplayName = ({
       unSubRef.current = null;
     }
 
-    if (!enabled) {
-      return;
-    }
-
-    const unSubFn = UserRepository.searchUserByDisplayName(
-      {
-        displayName,
-        limit,
-      },
-      (response) => {
-        setHasMore(response.hasNextPage || false);
-        setIsLoading(response.loading);
-        loadMoreRef.current = response.onNextPage || null;
-        setItems(response.data);
-      },
-    );
+    const unSubFn = UserRepository.searchUserByDisplayName(params, (response) => {
+      setHasMore(response.hasNextPage || false);
+      setIsLoading(response.loading);
+      loadMoreRef.current = response.onNextPage || null;
+      setItems(response.data);
+    });
     unSubRef.current = unSubFn;
 
     return () => {
       unSubRef.current?.();
       unSubRef.current = null;
     };
-  }, [displayName, limit, enabled]);
+  }, [params]);
 
   return {
     users: items,

@@ -3,7 +3,7 @@
   grid-template-columns: minmax(0, 1fr) min-content;
   align-items: center;
   gap: 0.5rem;
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
 }
 
 .topSearchBar__inputBar {
@@ -26,6 +26,7 @@
   fill: var(--asc-color-base-default);
   width: 1.25rem;
   height: 1.25rem;
+  cursor: pointer;
 }
 
 .topSearchBar__searchIcon_img {

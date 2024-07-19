@@ -43,6 +43,7 @@ const RenderCondition = ({
   removeReaction,
   error,
   currentRef,
+  showReactionUserDetails = false,
 }: {
   filteredReactions: Amity.Reactor[];
   isLoading: boolean;
@@ -51,6 +52,7 @@ const RenderCondition = ({
   removeReaction: (reaction: string) => Promise<void>;
   error: Error | null;
   currentRef: HTMLDivElement | null;
+  showReactionUserDetails?: boolean;
 }) => {
   if (isLoading) {
     return <ReactionListLoadingState />;
@@ -76,6 +78,7 @@ const RenderCondition = ({
       isLoading={isLoading}
       filteredReactions={filteredReactions}
       removeReaction={removeReaction}
+      showReactionUserDetails={showReactionUserDetails}
     />
   );
 };
