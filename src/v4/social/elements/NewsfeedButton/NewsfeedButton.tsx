@@ -33,7 +33,7 @@ export function NewsfeedButton({
       componentId={componentId}
       elementId={elementId}
       isActive={isActive}
-      onPress={() => onClick?.()}
+      onClick={() => onClick?.()}
     >
       {config.text}
     </TabButton>

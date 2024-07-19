@@ -1,9 +1,0 @@
-.textWithMention__mention {
-  color: var(--asc-color-primary-default);
-  display: inline;
-}
-
-.textWithMention__text {
-  color: var(--asc-color-base-default);
-  display: inline;
-}

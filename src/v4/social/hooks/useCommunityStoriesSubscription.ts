@@ -4,12 +4,12 @@ import useSubscription from '~/v4/core/hooks/subscriptions/useSubscription';
 export default function useCommunityStoriesSubscription({
   targetId,
   targetType,
-  shouldSubscribe = true,
+  shouldSubscribe = () => true,
   callback,
 }: {
   targetId: string;
   targetType: Amity.StoryTargetType;
-  shouldSubscribe?: boolean;
+  shouldSubscribe?: () => boolean;
   callback?: Amity.Listener;
 }) {
   return useSubscription({
@@ -19,7 +19,7 @@ export default function useCommunityStoriesSubscription({
       targetType,
     },
     callback,
-    shouldSubscribe: !!targetId && shouldSubscribe,
+    shouldSubscribe: () => !!targetId && shouldSubscribe(),
     getSubscribedTopic: () =>
       getCommunityStoriesTopic({
         targetId,

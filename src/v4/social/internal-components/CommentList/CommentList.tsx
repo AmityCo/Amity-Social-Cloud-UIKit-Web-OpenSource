@@ -2,11 +2,10 @@ import React, { memo } from 'react';
 
 import { Comment } from '~/v4/social/internal-components/Comment/';
 import styles from './CommentList.module.css';
-import { ExpandIcon, MinusCircleIcon } from '~/v4/social/icons';
+import { ExpandIcon } from '~/v4/social/icons';
 import { LoadMoreWrapper } from '~/v4/core/components/LoadMoreWrapper/LoadMoreWrapper';
 import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
 import { CommentBubbleDeleted } from '~/v4/social/elements/CommentBubbleDeleted';
-import { Typography } from '~/v4/core/components/index';
 
 interface CommentListProps {
   parentId?: string;
@@ -57,37 +56,27 @@ export const CommentList = ({
     </div>
   ) : null;
 
-  const renderComments = () => {
-    return comments.map((comment) => {
-      if (comment.isDeleted) {
-        return (
-          <div className={styles.deletedCommentBlock}>
-            <MinusCircleIcon />
-            This comment has been deleted
-          </div>
-        );
-      }
-      return (
-        <Comment
-          key={comment.commentId}
-          pageId={pageId}
-          componentId={componentId}
-          commentId={comment.commentId}
-          readonly={readonly}
-          onClickReply={() => onClickReply?.(comment as Amity.Comment)}
-          shouldAllowInteraction={shouldAllowInteraction}
-        />
-      );
-    });
-  };
-
-  if (commentCount === 0) {
-    return (
-      <div className={styles.noCommentsContainer}>
-        <Typography.Body>No comments yet</Typography.Body>
-      </div>
-    );
+  if (comments.length === 0 && isReplyComment) {
+    return <CommentBubbleDeleted componentId="comment_tray_component" />;
   }
+
+  if (comments?.length === 0) {
+    return <div className={styles.noCommentsContainer}>No comments yet</div>;
+  }
+
+  const renderComments = () => {
+    return comments.map((comment) => (
+      <Comment
+        key={comment.commentId}
+        pageId={pageId}
+        componentId={componentId}
+        commentId={comment.commentId}
+        readonly={readonly}
+        onClickReply={() => onClickReply?.(comment as Amity.Comment)}
+        shouldAllowInteraction={shouldAllowInteraction}
+      />
+    ));
+  };
 
   return (
     <LoadMoreWrapper

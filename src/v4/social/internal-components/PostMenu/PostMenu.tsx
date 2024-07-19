@@ -4,7 +4,6 @@ import { useMutation } from '@tanstack/react-query';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { Button } from '~/v4/core/natives/Button';
 
 import styles from './PostMenu.module.css';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
@@ -55,7 +54,6 @@ interface PostMenuProps {
   componentId?: string;
   elementId?: string;
   onCloseMenu: () => void;
-  onPostDeleted?: (post: Amity.Post) => void;
 }
 
 export const PostMenu = ({
@@ -64,15 +62,12 @@ export const PostMenu = ({
   componentId = '*',
   elementId = '*',
   onCloseMenu,
-  onPostDeleted,
 }: PostMenuProps) => {
   const { success, error } = useNotifications();
 
-  const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
-
   const { community } = useCommunity({
     communityId: post?.targetId,
-    shouldCall,
+    shouldCall: () => post?.targetType === 'community',
   });
 
   const { isCommunityModerator, isOwner } = usePostPermissions({ post, community });
@@ -135,7 +130,6 @@ export const PostMenu = ({
     },
     onSuccess: () => {
       success({ content: 'Post deleted' });
-      onPostDeleted?.(post);
     },
     onError: () => {
       error({ content: 'Failed to delete post' });
@@ -161,10 +155,11 @@ export const PostMenu = ({
         <PenSvg className={styles.postMenu__editPost__icon} />
         <span>Edit post</span>
       </button> */}
-      {showReportPostButton && !isLoading ? (
-        <Button
+      {showReportPostButton ? (
+        <button
           className={styles.postMenu__item}
-          onPress={() => {
+          disabled={isLoading}
+          onClick={() => {
             if (isFlaggedByMe) {
               mutateUnReportPost();
             } else {
@@ -176,13 +171,13 @@ export const PostMenu = ({
           <span className={styles.postMenu__reportPost__text}>
             {isFlaggedByMe ? 'Unreport post' : 'Report post'}
           </span>
-        </Button>
+        </button>
       ) : null}
       {showDeletePostButton ? (
-        <Button className={styles.postMenu__item} onPress={() => onDeleteClick()}>
+        <button className={styles.postMenu__item} onClick={() => onDeleteClick()}>
           <TrashSvg className={styles.postMenu__deletePost__icon} />
           <span className={styles.postMenu__deletePost__text}>Delete post</span>
-        </Button>
+        </button>
       ) : null}
     </div>
   );

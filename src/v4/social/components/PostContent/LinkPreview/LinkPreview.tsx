@@ -31,7 +31,7 @@ const usePreviewLink = ({ url }: { url: string }) => {
 
   return useQuery({
     enabled: !!client,
-    queryKey: ['asc-uikit', 'previewLink', url],
+    queryKey: ['asc-uikit', 'previewLink'],
     queryFn: async () => {
       const data = await client?.http.get<{
         title: string;

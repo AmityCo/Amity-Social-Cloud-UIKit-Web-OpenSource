@@ -12,7 +12,7 @@
 }
 
 .mentionItem:hover {
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
 }
 
 .userDisplayName {
@@ -31,14 +31,8 @@
 
 .mentionAll {
   justify-content: space-between;
-
   div {
     display: flex;
     align-items: center;
   }
-}
-
-.avatar {
-  width: 2rem;
-  height: 2rem;
 }

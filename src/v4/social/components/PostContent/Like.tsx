@@ -23,8 +23,8 @@ const Like = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
         y2="39.2"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stopColor="#63A1FF" />
-        <stop offset="1" stopColor="#0041BE" />
+        <stop stop-color="#63A1FF" />
+        <stop offset="1" stop-color="#0041BE" />
       </linearGradient>
     </defs>
   </svg>

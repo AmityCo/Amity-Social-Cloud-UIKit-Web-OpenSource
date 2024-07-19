@@ -26,8 +26,8 @@ const Love = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
         y2="39.2"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stopColor="#EE5C91" />
-        <stop offset="0.833333" stopColor="#E02222" />
+        <stop stop-color="#EE5C91" />
+        <stop offset="0.833333" stop-color="#E02222" />
       </linearGradient>
     </defs>
   </svg>

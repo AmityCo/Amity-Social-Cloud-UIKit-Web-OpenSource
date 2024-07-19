@@ -12,10 +12,7 @@ import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadg
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
-import { useUser } from '~/v4/core/hooks/objects/useUser';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import useSDK from '~/v4/core/hooks/useSDK';
-import { Mode } from '~/v4/social/pages/PostComposerPage/';
+import useUser from '~/v4/core/hooks/objects/useUser';
 
 export function SelectPostTargetPage() {
   const pageId = 'select_post_target_page';
@@ -24,12 +21,12 @@ export function SelectPostTargetPage() {
   });
   const { onBack } = useNavigation();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    sortBy: 'displayName',
+    limit: 20,
   });
-  const { AmityPostTargetSelectionPage } = usePageBehavior();
   const intersectionRef = useRef<HTMLDivElement>(null);
-  const { currentUserId } = useSDK();
-  const { user } = useUser(currentUserId);
+  const { user } = useUser();
+
   useIntersectionObserver({
     onIntersect: () => {
       if (hasMore && isLoading === false) {
@@ -43,12 +40,7 @@ export function SelectPostTargetPage() {
     return (
       <div
         onClick={() => {
-          AmityPostTargetSelectionPage?.goToPostComposerPage?.({
-            targetId: community.communityId,
-            targetType: 'community',
-            mode: Mode.CREATE,
-            community: community,
-          });
+          //TODO: Navigate to create post page
         }}
         key={community.communityId}
         className={styles.selectPostTargetPage__timeline}
@@ -71,19 +63,14 @@ export function SelectPostTargetPage() {
         <CloseButton
           imgClassName={styles.selectPostTargetPage__closeButton}
           pageId={pageId}
-          onPress={onBack}
+          onClick={onBack}
         />
         <Title pageId={pageId} titleClassName={styles.selectPostTargetPage__title} />
         <div />
       </div>
       <div
         onClick={() => {
-          AmityPostTargetSelectionPage?.goToPostComposerPage?.({
-            mode: Mode.CREATE,
-            targetId: null,
-            targetType: 'user',
-            community: undefined,
-          });
+          // TODO: Navigate to create post page
         }}
         className={styles.selectPostTargetPage__timeline}
       >

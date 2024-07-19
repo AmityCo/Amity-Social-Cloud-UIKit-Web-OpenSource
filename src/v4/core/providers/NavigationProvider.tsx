@@ -1,6 +1,5 @@
 import React, { createContext, useCallback, useContext, useState, useMemo, ReactNode } from 'react';
 import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
-import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -19,9 +18,6 @@ export enum PageTypes {
   SocialGlobalSearchPage = 'SocialGlobalSearchPage',
   SelectPostTargetPage = 'SelectPostTargetPage',
   DraftPage = 'DraftPage',
-  PostComposerPage = 'PostComposerPage',
-  MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
-  StoryTargetSelectionPage = 'StoryTargetSelectionPage',
 }
 
 type Page =
@@ -81,30 +77,13 @@ type Page =
   | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
   | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } }
-  | { type: PageTypes.MyCommunitiesSearchPage; context: { communityId?: string } }
   | { type: PageTypes.SelectPostTargetPage }
   | {
       type: PageTypes.DraftPage;
-      context: {
-        communityId?: string;
-        mediaType: AmityStoryMediaType;
-        targetId: string;
-        targetType: Amity.StoryTargetType;
-        storyType: 'communityFeed' | 'globalFeed';
-      };
-    }
-  | {
-      type: PageTypes.PostComposerPage;
-      context: {
-        targetId: string | null;
-        targetType: 'community' | 'user';
-        mode: Mode;
-        community?: Amity.Community;
-        post?: Amity.Post;
-      };
-    }
-  | {
-      type: PageTypes.StoryTargetSelectionPage;
+      communityId?: string;
+      mediaType: AmityStoryMediaType;
+      targetId: string;
+      targetType: Amity.StoryTargetType;
     };
 
 type ContextValue = {
@@ -122,9 +101,7 @@ type ContextValue = {
   goToPostDetailPage: (postId: string) => void;
   goToCommunityProfilePage: (communityId: string) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
-  goToMyCommunitiesSearchPage: () => void;
   goToSelectPostTargetPage: () => void;
-  goToStoryTargetSelectionPage: () => void;
   goToDraftStoryPage: (context: {
     targetId: string;
     targetType: string;
@@ -146,20 +123,6 @@ type ContextValue = {
       | null
       | undefined,
   ) => void;
-  goToPostComposerPage: (
-    mode: Mode,
-    targetId: string | null,
-    targetType: 'community' | 'user',
-    community?: Amity.Community,
-    post?: Amity.Post,
-  ) => void;
-  goToStoryCreationPage: (context: {
-    targetId: string;
-    targetType: Amity.StoryTargetType;
-    mediaType: { type: 'image'; url: string } | { type: 'video'; url: string };
-    storyType: 'communityFeed' | 'globalFeed';
-  }) => void;
-  goToSocialHomePage: () => void;
 };
 
 let defaultValue: ContextValue = {
@@ -183,22 +146,10 @@ let defaultValue: ContextValue = {
     targetId: string;
     targetType: string;
     mediaType: AmityStoryMediaType;
-    storyType: 'communityFeed' | 'globalFeed';
   }) => {},
   goToCommunityProfilePage: (communityId: string) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
-  goToStoryTargetSelectionPage: () => {},
-  goToPostComposerPage: (
-    mode: Mode,
-    targetId: string | null,
-    targetType: 'community' | 'user',
-    community?: Amity.Community,
-    post?: Amity.Post,
-  ) => {},
-  goToStoryCreationPage: () => {},
-  goToSocialHomePage: () => {},
-  goToMyCommunitiesSearchPage: () => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
 };
@@ -229,20 +180,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToSocialGlobalSearchPage: (tab) =>
       console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
-    goToStoryTargetSelectionPage: () =>
-      console.log('NavigationContext goToStoryTargetSelectionPage()'),
-    goToDraftStoryPage: ({ targetId, targetType, mediaType, storyType }) =>
-      console.log(
-        `NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType}), ${storyType})`,
-      ),
-    goToPostComposerPage: (mode, targetId, targetType, community, post) =>
-      console.log(
-        `NavigationContext goToPostComposerPage(${mode} ${targetId}) ${targetType} ${community} ${post}`,
-      ),
-    goToStoryCreationPage: () => console.log('NavigationContext goToStoryCreationPage()'),
-    goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
-    goToMyCommunitiesSearchPage: () =>
-      console.log('NavigationContext goToMyCommunitiesSearchPage()'),
+    goToDraftStoryPage: ({ targetId, targetType, mediaType }) =>
+      console.log(`NavigationContext goToDraftStoryPage(${targetId}, ${targetType}, ${mediaType})`),
   };
 }
 
@@ -272,7 +211,6 @@ interface NavigationProviderProps {
     targetId: string;
     targetType: string;
     mediaType: AmityStoryMediaType;
-    storyType: 'communityFeed' | 'globalFeed';
   }) => void;
   onCommunityCreated?: (communityId: string) => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
@@ -520,82 +458,21 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
-  const goToStoryTargetSelectionPage = useCallback(() => {
-    const next = {
-      type: PageTypes.StoryTargetSelectionPage,
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToStoryCreationPage = useCallback(
-    ({ targetId, targetType, mediaType, storyType }) => {
-      const next = {
-        type: PageTypes.DraftPage,
-        context: {
-          targetId,
-          targetType,
-          mediaType,
-          storyType,
-        },
-      };
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
   const goToDraftStoryPage = useCallback(
-    ({ targetId, targetType, mediaType, storyType }) => {
+    ({ targetId, targetType, mediaType }) => {
       const next = {
         type: PageTypes.DraftPage,
-        context: {
-          targetId,
-          targetType,
-          mediaType,
-          storyType,
-        },
+        targetId,
+        targetType,
+        mediaType,
       };
+
+      if (onChangePage) return onChangePage(next);
 
       pushPage(next);
     },
     [onChangePage, pushPage],
   );
-
-  const goToSocialHomePage = useCallback(() => {
-    const next = {
-      type: PageTypes.SocialHomePage,
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
-
-  const goToPostComposerPage = useCallback(
-    (mode, targetId, targetType, community, post) => {
-      const next = {
-        type: PageTypes.PostComposerPage,
-        context: {
-          mode,
-          targetId,
-          targetType,
-          community,
-          post,
-        },
-      };
-
-      pushPage(next);
-    },
-    [onChangePage, pushPage],
-  );
-
-  const goToMyCommunitiesSearchPage = useCallback(() => {
-    const next = {
-      type: PageTypes.MyCommunitiesSearchPage,
-      context: {},
-    };
-
-    pushPage(next);
-  }, [onChangePage, pushPage]);
 
   return (
     <NavigationContext.Provider
@@ -616,12 +493,7 @@ export default function NavigationProvider({
         goToCommunityProfilePage,
         goToViewStoryPage,
         goToSelectPostTargetPage,
-        goToStoryTargetSelectionPage,
-        goToStoryCreationPage,
         goToDraftStoryPage,
-        goToPostComposerPage,
-        goToSocialHomePage,
-        goToMyCommunitiesSearchPage,
         setNavigationBlocker,
       }}
     >

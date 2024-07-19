@@ -1,0 +1,24 @@
+.messageListSheet {
+  z-index: 1000 !important;
+
+  @media (width >= 768px) {
+    width: 375px !important;
+  }
+
+  .messageListSheetContainer {
+    height: 100% !important;
+    background-color: var(--asc-color-base-background) !important;
+  }
+}
+
+.messageListHeaderWrap {
+  box-shadow: var(--asc-box-shadow-01);
+}
+
+.amtiyLivechatPage {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--asc-color-base-background);
+  height: 100%;
+  overflow-y: hidden;
+}

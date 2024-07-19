@@ -5,11 +5,11 @@ which have higher specificity.
 */
 
 .bottomSheet__container {
-  background-color: var(--asc-color-background-default) !important;
+  background-color: var(--asc-color-base-background) !important;
 }
 
 .bottomSheet__header {
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
   border-top-left-radius: var(--asc-border-radius-xl);
   border-top-right-radius: var(--asc-border-radius-xl);
   text-align: center;
@@ -19,7 +19,7 @@ which have higher specificity.
 }
 
 .bottomSheet__content {
-  background-color: var(--asc-color-background-default);
+  background-color: var(--asc-color-base-background);
   padding: var(--asc-spacing-m1);
 }
 

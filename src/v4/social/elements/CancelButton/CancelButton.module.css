@@ -1,5 +1,17 @@
-.cancelButton {
+button {
+  appearance: none;
+  border-radius: 0;
+  text-align: inherit;
+  background: none;
+  box-shadow: none;
+  padding: 0;
   cursor: pointer;
-  color: var(--asc-color-primary-default);
-  background-color: var(--asc-color-background-default);
+  border: none;
+  color: inherit;
+  font: inherit;
+}
+
+.clearButton {
+  color: var(--asc-color-base-default);
+  background-color: var(--asc-color-base-background);
 }

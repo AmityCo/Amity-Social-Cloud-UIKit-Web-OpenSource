@@ -14,7 +14,7 @@ interface SessionHandler {
 /**
  * Manages the Amity SDK client and authentication state.
  */
-export class AmityUIKitManager {
+class AmityUIKitManager {
   private static instance: AmityUIKitManager | null = null;
   private client: Amity.Client | null = null;
   private isConnected: boolean = false;
@@ -151,3 +151,5 @@ export class AmityUIKitManager {
     return this.isConnected;
   }
 }
+
+export default AmityUIKitManager;

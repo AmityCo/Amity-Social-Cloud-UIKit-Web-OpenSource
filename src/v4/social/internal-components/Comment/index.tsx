@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { FormattedMessage, useIntl } from 'react-intl';
+
 import useComment from '~/social/hooks/useComment';
 import useMention from '~/v4/chat/hooks/useMention';
+
 import {
   extractMetadata,
   isCommunityMember,
@@ -9,26 +12,32 @@ import {
   Metadata,
   parseMentionsMarkup,
 } from '~/v4/helpers/utils';
+
+import useSDK from '~/core/hooks/useSDK';
+import useUser from '~/core/hooks/useUser';
 import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
+
 import useCommentPermission from '~/social/hooks/useCommentPermission';
+import useCommentSubscription from '~/social/hooks/useCommentSubscription';
+import useImage from '~/core/hooks/useImage';
+
 import UIComment from './UIComment';
+
 import { LIKE_REACTION_KEY } from '~/constants';
 import { CommentList } from '~/v4/social/internal-components/CommentList';
 import { ReactionList } from '~/v4/social/components/ReactionList';
-import useGetStoryByStoryId from '~/v4/social/hooks/useGetStoryByStoryId';
+import useGetStoryByStoryId from '../../hooks/useGetStoryByStoryId';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+
 import { Button, BottomSheet, Typography } from '~/v4/core/components';
-import { TrashIcon, PenIcon, FlagIcon } from '~/v4/social/icons';
+
+import styles from './Comment.module.css';
+import { TrashIcon, PenIcon, FlagIcon, MinusCircleIcon } from '~/v4/social/icons';
 import { LoadingIndicator } from '~/v4/social/internal-components/LoadingIndicator';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks';
-
-import { useImage } from '~/v4/core/hooks/useImage';
-import useSDK from '~/v4/core/hooks/useSDK';
-
-import styles from './Comment.module.css';
-import { isModerator } from '~/v4/utils/permissions';
+import { isModerator } from '~/helpers/permissions';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -63,31 +72,21 @@ export const Comment = ({
   onClickReply,
 }: CommentProps) => {
   const comment = useComment(commentId);
-
-  const { item: story } = useGetStoryByStoryId(comment?.referenceId);
-  const { members } = useCommunityMembersCollection({
-    queryParams: {
-      communityId: story?.community?.communityId as string,
-      limit: 10,
-    },
-    shouldCall: !!story?.community?.communityId,
-  });
+  const story = useGetStoryByStoryId(comment?.referenceId);
+  const { members } = useCommunityMembersCollection(story?.community?.communityId);
 
   const [bottomSheet, setBottomSheet] = useState(false);
   const [selectedCommentId, setSelectedCommentId] = useState('');
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
-  const commentAuthor = members?.find((member) => member.userId === comment?.userId);
-  const commentAuthorAvatar = useImage({
-    fileId: commentAuthor?.user?.avatarFileId,
-    imageSize: 'small',
-  });
-
-  const { userRoles } = useSDK();
+  const commentAuthor = useUser(comment?.userId);
+  const commentAuthorAvatar = useImage({ fileId: commentAuthor?.avatarFileId, imageSize: 'small' });
+  const { userRoles, currentUserId } = useSDK();
   const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(commentId);
 
   const [isEditing, setIsEditing] = useState(false);
+  const { formatMessage } = useIntl();
   const [isExpanded, setExpanded] = useState(false);
 
   const toggleBottomSheet = () => setBottomSheet((prev) => !prev);
@@ -132,11 +131,11 @@ export const Comment = ({
       await handleReportComment();
       if (isFlaggedByMe) {
         notification.success({
-          content: 'Unreport sent',
+          content: formatMessage({ id: 'report.unreportSent' }),
         });
       } else {
         notification.success({
-          content: 'Report sent',
+          content: formatMessage({ id: 'report.reportSent' }),
         });
       }
     } catch (err) {
@@ -181,42 +180,47 @@ export const Comment = ({
   const isReplyComment = !!comment?.parentId;
 
   const deleteComment = () => {
-    const title = isReplyComment ? 'Delete reply' : 'Delete comment';
-    const content = isReplyComment
-      ? 'This reply will be permanently deleted. Continue?'
-      : 'This comment will be permanently removed.';
+    const title = isReplyComment ? 'reply.delete' : 'comment.delete';
+    const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
     confirm({
       pageId,
       componentId,
-      title,
-      content,
-      cancelText: 'Cancel',
-      okText: 'Delete',
+      title: <FormattedMessage id={title} />,
+      content: <FormattedMessage id={content} />,
+      cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),
+      okText: formatMessage({ id: 'comment.deleteConfirmOkText' }),
       onOk: handleDeleteComment,
     });
   };
 
-  const isCommunityModerator = isModerator(commentAuthor?.roles);
-  const isMember = isCommunityMember(commentAuthor);
+  const currentMember = members.find((member) => member.userId === currentUserId);
+  const isCommunityModerator = isModerator(currentMember?.roles);
+  const isMember = isCommunityMember(currentMember);
 
   const options = [
     canEdit
       ? {
-          name: isReplyComment ? 'Edit reply' : 'Edit comment',
+          name: isReplyComment
+            ? formatMessage({ id: 'reply.edit' })
+            : formatMessage({ id: 'comment.edit' }),
           action: startEditing,
           icon: <PenIcon className={styles.actionIcon} />,
         }
       : null,
     canReport
       ? {
-          name: isFlaggedByMe ? 'Undo Report' : 'Report',
+          name: isFlaggedByMe
+            ? formatMessage({ id: 'report.undoReport' })
+            : formatMessage({ id: 'report.doReport' }),
           action: handleReportComment,
           icon: <FlagIcon className={styles.actionIcon} />,
         }
       : null,
     canDelete
       ? {
-          name: isReplyComment ? 'Delete reply' : 'Delete comment',
+          name: isReplyComment
+            ? formatMessage({ id: 'reply.delete' })
+            : formatMessage({ id: 'comment.delete' }),
           action: deleteComment,
           icon: <TrashIcon className={styles.actionIcon} />,
         }
@@ -225,16 +229,28 @@ export const Comment = ({
 
   if (comment == null) return null;
 
+  if (comment?.isDeleted) {
+    return isReplyComment ? null : (
+      <div className={styles.deletedCommentBlock}>
+        <MinusCircleIcon />
+        <FormattedMessage id="comment.deleted" />
+      </div>
+    );
+  }
+
   const renderedComment = (
     <UIComment
       commentId={comment?.commentId}
-      authorName={commentAuthor?.user?.displayName || commentAuthor?.userId || 'Anonymous'}
+      authorName={
+        commentAuthor?.displayName || commentAuthor?.userId || formatMessage({ id: 'anonymous' })
+      }
       authorAvatar={commentAuthorAvatar}
       canDelete={canDelete}
       canEdit={canEdit}
       canLike={canLike}
       canReply={canReply}
       canReport={canReport}
+      isBanned={commentAuthor?.isGlobalBanned}
       createdAt={comment?.createdAt ? new Date(comment.createdAt) : undefined}
       editedAt={comment?.editedAt ? new Date(comment?.editedAt) : undefined}
       mentionees={comment?.metadata?.mentioned as Mentioned[]}
@@ -260,7 +276,7 @@ export const Comment = ({
       options={options}
       onClickReply={() =>
         onClickReply?.(
-          commentAuthor?.user?.displayName,
+          commentAuthor?.displayName,
           comment.referenceType,
           comment.referenceId,
           comment.commentId,
@@ -284,7 +300,6 @@ export const Comment = ({
           <div data-qa-anchor="comment">{renderedComment}</div>
           {comment.children.length > 0 && (
             <CommentList
-              componentId={componentId}
               parentId={comment.commentId}
               referenceType={comment.referenceType}
               referenceId={comment.referenceId}

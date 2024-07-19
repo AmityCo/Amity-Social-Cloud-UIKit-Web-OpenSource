@@ -1,7 +1,5 @@
 .aspectRatioButton {
-  all: unset;
   fill: var(--asc-color-white);
-  cursor: pointer;
 }
 
 .aspectRatioButton__icon {

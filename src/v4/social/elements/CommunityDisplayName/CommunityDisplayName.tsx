@@ -6,7 +6,7 @@ import styles from './CommunityDisplayName.module.css';
 export interface CommunityDisplayNameProps {
   pageId?: string;
   componentId?: string;
-  community?: Amity.Community;
+  community: Amity.Community;
 }
 
 export function CommunityDisplayName({
@@ -15,11 +15,12 @@ export function CommunityDisplayName({
   community,
 }: CommunityDisplayNameProps) {
   const elementId = 'community_display_name';
-  const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
@@ -29,7 +30,7 @@ export function CommunityDisplayName({
       style={themeStyles}
       data-qa-anchor={accessibilityId}
     >
-      {community?.displayName ?? 'My Timeline'}
+      {community.displayName}
     </Typography.BodyBold>
   );
 }

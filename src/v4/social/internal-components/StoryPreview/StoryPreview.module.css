@@ -2,24 +2,6 @@
   color: var(--asc-color-white);
 }
 
-.contentWrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.storyPreviewWrapper {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 .storyPreview_description {
   color: var(--asc-color-white);
 }
@@ -60,7 +42,7 @@
 .userInfo {
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
 }
@@ -77,7 +59,7 @@
 
 .hyperLinkContainer {
   position: absolute;
-  bottom: 2rem;
+  bottom: 0;
   z-index: 1;
   display: flex;
   justify-content: center;
@@ -90,110 +72,10 @@
 .mediaContainer {
   width: 100%;
   height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .media {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.avatarContainer {
-  width: 2rem;
-  height: 2rem;
-}
-
-.imageFit {
-  object-fit: contain;
-}
-
-.imageCover {
-  object-fit: cover;
-}
-
-.headerContent {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.userInfoContent {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-.shadowOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgb(0 0 0 / 16%) 100%, rgb(255 255 255 / 0%) 55.05%);
-  pointer-events: none;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.6;
-  }
-}
-
-.skeleton {
-  background-color: #e0e0e0;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-.progressBar.skeleton {
-  height: 0.25rem;
-  width: 100%;
-}
-
-.avatarContainer.skeleton {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-}
-
-.storyPreviewTitle.skeleton {
-  width: 60%;
-  height: 1rem;
-  border-radius: 0.25rem;
-}
-
-.mediaContainer.skeleton {
-  width: 100%;
-  height: 100%;
-}
-
-.textSkeleton {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.nameSkeleton {
-  width: 80%;
-  height: 0.5rem;
-  background-color: #e0e0e0;
-  margin-bottom: 0.25rem;
-  border-radius: 0.25rem;
-}
-
-.timeSkeleton {
-  width: 40%;
-  height: 0.5rem;
-  background-color: #e0e0e0;
-  border-radius: 0.25rem;
 }

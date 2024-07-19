@@ -9,8 +9,6 @@ import Like from '~/v4/social/elements/ReactionButton/Like';
 import Love from '~/v4/social/elements/ReactionButton/Love';
 import styles from './ReactionButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { Button } from '~/v4/core/natives/Button';
-import millify from 'millify';
 
 const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -28,7 +26,7 @@ const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
 interface ReactionButtonProps {
   pageId?: string;
   componentId?: string;
-  myReaction?: string | null;
+  myReactions: string[];
   reactionsCount?: number;
   defaultIconClassName?: string;
   imgIconClassName?: string;
@@ -40,7 +38,7 @@ const MOUSE_DURATION = 250;
 export function ReactionButton({
   pageId = '*',
   componentId = '*',
-  myReaction,
+  myReactions,
   reactionsCount,
   defaultIconClassName,
   imgIconClassName,
@@ -54,7 +52,44 @@ export function ReactionButton({
       elementId,
     });
 
+  const clickTimerRef = useRef(0);
+  const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isShowReactionPanel, setIsShowReactionPanel] = useState(false);
+
+  const likeRef = useRef<HTMLDivElement>(null);
+  const loveRef = useRef<HTMLDivElement>(null);
+  const fireRef = useRef<HTMLDivElement>(null);
+  const happyRef = useRef<HTMLDivElement>(null);
+  const cryingRef = useRef<HTMLDivElement>(null);
+
+  const myReaction = myReactions && myReactions.length > 0 ? myReactions[0] : null;
   const hasMyReaction = myReaction != null;
+
+  const [selectedReaction, setSelectedReaction] = useState<string | null>(null);
+  const [activeReaction, setActiveReaction] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (selectedReaction) {
+      setTimeout(() => {
+        setSelectedReaction(null);
+        setIsShowReactionPanel(false);
+      }, 250);
+    }
+  }, [selectedReaction]);
+
+  const hideReactionPanel = (ev: MouseEvent) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    setIsShowReactionPanel(false);
+  };
+
+  useEffect(() => {
+    if (isShowReactionPanel) {
+      window.addEventListener('click', hideReactionPanel);
+    } else {
+      window.removeEventListener('click', hideReactionPanel);
+    }
+  }, [isShowReactionPanel]);
 
   if (isExcluded) return null;
 
@@ -76,12 +111,149 @@ export function ReactionButton({
   };
 
   return (
-    <Button
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
+    <div
       className={styles.reactButton}
-      onPress={() => {
-        onReactionClick('like');
+      data-qa-anchor={accessibilityId}
+      style={themeStyles}
+      onMouseDown={(ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        clickTimerRef.current = Date.now();
+
+        touchTimerRef.current = setTimeout(() => {
+          setIsShowReactionPanel(true);
+        }, MOUSE_DURATION);
+      }}
+      onTouchStart={(ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        clickTimerRef.current = Date.now();
+
+        touchTimerRef.current = setTimeout(() => {
+          setIsShowReactionPanel(true);
+        }, MOUSE_DURATION);
+      }}
+      onMouseMove={(ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        if (
+          likeRef.current &&
+          likeRef.current.offsetLeft < ev.clientX &&
+          ev.clientX < likeRef.current.offsetLeft + likeRef.current.clientWidth
+        ) {
+          setActiveReaction('like');
+          return;
+        }
+        if (
+          loveRef.current &&
+          loveRef.current.offsetLeft < ev.clientX &&
+          ev.clientX < loveRef.current.offsetLeft + loveRef.current.clientWidth
+        ) {
+          setActiveReaction('love');
+          return;
+        }
+        if (
+          fireRef.current &&
+          fireRef.current.offsetLeft < ev.clientX &&
+          ev.clientX < fireRef.current.offsetLeft + fireRef.current.clientWidth
+        ) {
+          setActiveReaction('fire');
+          return;
+        }
+        if (
+          happyRef.current &&
+          happyRef.current.offsetLeft < ev.clientX &&
+          ev.clientX < happyRef.current.offsetLeft + happyRef.current.clientWidth
+        ) {
+          setActiveReaction('happy');
+          return;
+        }
+        if (
+          cryingRef.current &&
+          cryingRef.current.offsetLeft < ev.clientX &&
+          ev.clientX < cryingRef.current.offsetLeft + cryingRef.current.clientWidth
+        ) {
+          setActiveReaction('crying');
+          return;
+        }
+
+        setActiveReaction(null);
+      }}
+      onTouchMove={(ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        if (
+          likeRef.current &&
+          likeRef.current.offsetLeft < ev.touches[0].clientX &&
+          ev.touches[0].clientX < likeRef.current.offsetLeft + likeRef.current.clientWidth
+        ) {
+          setActiveReaction('like');
+          return;
+        }
+        if (
+          loveRef.current &&
+          loveRef.current.offsetLeft < ev.touches[0].clientX &&
+          ev.touches[0].clientX < loveRef.current.offsetLeft + loveRef.current.clientWidth
+        ) {
+          setActiveReaction('love');
+          return;
+        }
+        if (
+          fireRef.current &&
+          fireRef.current.offsetLeft < ev.touches[0].clientX &&
+          ev.touches[0].clientX < fireRef.current.offsetLeft + fireRef.current.clientWidth
+        ) {
+          setActiveReaction('fire');
+          return;
+        }
+        if (
+          happyRef.current &&
+          happyRef.current.offsetLeft < ev.touches[0].clientX &&
+          ev.touches[0].clientX < happyRef.current.offsetLeft + happyRef.current.clientWidth
+        ) {
+          setActiveReaction('happy');
+          return;
+        }
+        if (
+          cryingRef.current &&
+          cryingRef.current.offsetLeft < ev.touches[0].clientX &&
+          ev.touches[0].clientX < cryingRef.current.offsetLeft + cryingRef.current.clientWidth
+        ) {
+          setActiveReaction('crying');
+          return;
+        }
+
+        setActiveReaction(null);
+      }}
+      onTouchEnd={(ev) => {
+        touchTimerRef.current && clearTimeout(touchTimerRef.current);
+        touchTimerRef.current = null;
+        setIsShowReactionPanel(false);
+        if (activeReaction) {
+          setSelectedReaction(activeReaction);
+          onReactionClick(activeReaction);
+          setActiveReaction(null);
+        } else {
+          setSelectedReaction('like');
+          onReactionClick('like');
+        }
+      }}
+      onMouseUp={(ev) => {
+        touchTimerRef.current && clearTimeout(touchTimerRef.current);
+        touchTimerRef.current = null;
+        setIsShowReactionPanel(false);
+        if (activeReaction) {
+          setSelectedReaction(activeReaction);
+          onReactionClick(activeReaction);
+          setActiveReaction(null);
+        } else {
+          setSelectedReaction('like');
+          onReactionClick('like');
+        }
       }}
     >
       {myReaction ? (
@@ -103,8 +275,57 @@ export function ReactionButton({
         className={styles.reactButton__reactionsText}
         data-has-my-reaction={hasMyReaction}
       >
-        {typeof reactionsCount === 'number' ? millify(reactionsCount) : myReaction || config.text}
+        {typeof reactionsCount === 'number' ? reactionsCount : myReaction || config.text}
       </Typography.BodyBold>
-    </Button>
+      {isShowReactionPanel ? (
+        <div className={styles.reactButton__panel}>
+          <div
+            className={styles.reactButton__panel__reaction}
+            data-active={selectedReaction === 'like'}
+            data-touch-over={activeReaction === 'like'}
+            ref={likeRef}
+          >
+            <div className={styles.reactButton__panel__reaction__text}>Like</div>
+            <Like />
+          </div>
+          <div
+            className={styles.reactButton__panel__reaction}
+            data-active={selectedReaction === 'love'}
+            data-touch-over={activeReaction === 'love'}
+            ref={loveRef}
+          >
+            <div className={styles.reactButton__panel__reaction__text}>Love</div>
+            <Love />
+          </div>
+          <div
+            className={styles.reactButton__panel__reaction}
+            data-active={selectedReaction === 'fire'}
+            data-touch-over={activeReaction === 'fire'}
+            ref={fireRef}
+          >
+            <div className={styles.reactButton__panel__reaction__text}>Fire</div>
+            <Fire />
+          </div>
+          <div
+            className={styles.reactButton__panel__reaction}
+            data-active={selectedReaction === 'happy'}
+            data-touch-over={activeReaction === 'happy'}
+            ref={happyRef}
+          >
+            <div className={styles.reactButton__panel__reaction__text}>Happy</div>
+            <Happy />
+          </div>
+          <div
+            className={styles.reactButton__panel__reaction}
+            data-active={selectedReaction === 'crying'}
+            data-touch-over={activeReaction === 'crying'}
+            ref={cryingRef}
+          >
+            <div className={styles.reactButton__panel__reaction__text}>Crying</div>
+            <Crying />
+          </div>
+        </div>
+      ) : null}
+    </div>
   );
 }

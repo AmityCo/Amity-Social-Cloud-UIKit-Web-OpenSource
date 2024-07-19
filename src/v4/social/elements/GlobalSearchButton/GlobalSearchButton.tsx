@@ -1,8 +1,9 @@
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { Button, ButtonProps } from '~/v4/core/natives/Button';
+import { getDefaultConfig, useCustomization } from '~/v4/core/providers/CustomizationProvider';
+import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 import styles from './GlobalSearchButton.module.css';
 
 const GlobalSearchSvg = (props: React.SVGProps<SVGSVGElement>) => (
@@ -23,7 +24,7 @@ export interface GlobalSearchButtonProps {
   componentId?: string;
   defaultClassName?: string;
   imgClassName?: string;
-  onPress: ButtonProps['onPress'];
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 export function GlobalSearchButton({
@@ -31,7 +32,7 @@ export function GlobalSearchButton({
   componentId = '*',
   defaultClassName,
   imgClassName,
-  onPress,
+  onClick,
 }: GlobalSearchButtonProps) {
   const elementId = 'global_search_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -44,30 +45,29 @@ export function GlobalSearchButton({
   if (isExcluded) return null;
 
   return (
-    <Button
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
-      className={styles.globalSearchButton}
-      onPress={onPress}
-    >
-      <IconComponent
-        defaultIcon={() => (
-          <div className={styles.globalSearchButton__icon}>
-            <GlobalSearchSvg className={clsx(styles.globalSearchButton__svg, defaultClassName)} />
-          </div>
-        )}
-        imgIcon={() => (
-          <img
-            style={themeStyles}
-            src={config.icon}
-            alt={uiReference}
-            className={clsx(styles.globalSearchButton__icon, imgClassName)}
-            data-qa-anchor={accessibilityId}
-          />
-        )}
-        defaultIconName={defaultConfig.icon}
-        configIconName={config.icon}
-      />
-    </Button>
+    <IconComponent
+      defaultIcon={() => (
+        <div
+          style={themeStyles}
+          className={styles.globalSearchButton}
+          onClick={onClick}
+          data-qa-anchor={accessibilityId}
+        >
+          <GlobalSearchSvg className={clsx(styles.globalSearchButton__icon, defaultClassName)} />
+        </div>
+      )}
+      imgIcon={() => (
+        <img
+          style={themeStyles}
+          src={config.icon}
+          alt={uiReference}
+          className={clsx(styles.globalSearchButton__icon, imgClassName)}
+          onClick={onClick}
+          data-qa-anchor={accessibilityId}
+        />
+      )}
+      defaultIconName={defaultConfig.icon}
+      configIconName={config.icon}
+    />
   );
 }

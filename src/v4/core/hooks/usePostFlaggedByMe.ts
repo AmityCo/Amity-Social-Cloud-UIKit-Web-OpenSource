@@ -1,10 +1,6 @@
 import { PostRepository } from '@amityco/ts-sdk';
-import {
-  UseMutateAsyncFunction,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 export const usePostFlaggedByMe = ({
   post,
@@ -20,12 +16,7 @@ export const usePostFlaggedByMe = ({
   onReportError?: (error: Error) => void;
   onUnreportSuccess?: () => void;
   onUnreportError?: (error: Error) => void;
-}): {
-  isLoading: boolean;
-  isFlaggedByMe: boolean;
-  mutateReportPost: UseMutateAsyncFunction<boolean, Error, void, void>;
-  mutateUnReportPost: UseMutateAsyncFunction<boolean, Error, void, void>;
-} => {
+}) => {
   const queryClient = useQueryClient();
   const postId = post?.postId || undefined;
 
@@ -101,7 +92,7 @@ export const usePostFlaggedByMe = ({
 
   return {
     isLoading,
-    isFlaggedByMe: data || false,
+    isFlaggedByMe: data,
     mutateReportPost,
     mutateUnReportPost,
   };

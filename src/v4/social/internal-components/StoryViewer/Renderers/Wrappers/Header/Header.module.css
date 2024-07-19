@@ -53,15 +53,11 @@
 }
 
 .playStoryButton {
-  width: 1.5rem;
-  height: 1.5rem;
   fill: var(--asc-color-white);
   cursor: pointer;
 }
 
 .pauseStoryButton {
-  width: 1.5rem;
-  height: 1.5rem;
   fill: var(--asc-color-white);
   cursor: pointer;
 }

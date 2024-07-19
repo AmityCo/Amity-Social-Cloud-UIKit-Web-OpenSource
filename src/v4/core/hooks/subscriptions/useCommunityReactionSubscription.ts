@@ -3,11 +3,11 @@ import useCommunitySubscription from './useCommunitySubscription';
 
 export default function useCommunityReactionSubscription({
   communityId,
-  shouldSubscribe = true,
+  shouldSubscribe = () => true,
   callback,
 }: {
   communityId?: string | null;
-  shouldSubscribe?: boolean;
+  shouldSubscribe?: () => boolean;
   callback?: Amity.Listener;
 }) {
   return useCommunitySubscription({

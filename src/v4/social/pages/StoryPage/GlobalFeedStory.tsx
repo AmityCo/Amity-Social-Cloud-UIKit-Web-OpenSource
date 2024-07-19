@@ -1,6 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
+import { FinalColor } from 'extract-colors/lib/types/Color';
 import { StoryRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/v4/helpers/utils';
+import { extractColors } from 'extract-colors';
 import Stories from 'react-insta-stories';
 import { renderers } from '~/v4/social/internal-components/StoryViewer/Renderers';
 import { checkStoryPermission } from '~/utils';
@@ -18,19 +21,12 @@ import {
 } from '~/v4/social/internal-components/StoryViewer/Renderers/types';
 import { TrashIcon } from '~/v4/social/icons';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
-import { useAmityPage } from '~/v4/core/hooks/uikit';
-import { FileTrigger } from 'react-aria-components';
-import { useMotionValue, motion } from 'framer-motion';
-import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 
 import styles from './StoryPage.module.css';
+import { useAmityPage } from '~/v4/core/hooks/uikit/index';
+import { FileTrigger } from 'react-aria-components';
 
-const MIN_IMAGE_DURATION = 5000; // 5 seconds
-const MAX_IMAGE_DURATION = 10000; // 10 seconds
-const DEFAULT_IMAGE_DURATION = 7000; // 7 seconds
-
-const isStory = (story: Amity.Story | Amity.Ad): story is Amity.Story =>
-  !!(story as Amity.Story)?.storyId;
+const DURATION = 5000;
 
 interface GlobalFeedStoryProps {
   pageId?: string;
@@ -63,13 +59,12 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   const { accessibilityId } = useAmityPage({ pageId });
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
+  const { formatMessage } = useIntl();
   const { client, currentUserId } = useSDK();
   const { file, setFile } = useStoryContext();
-  const y = useMotionValue(0);
-  const motionRef = useRef<HTMLDivElement>(null);
-  const dragEventTarget = useRef(new EventTarget());
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [colors, setColors] = useState<FinalColor[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -82,32 +77,8 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     },
   });
 
-  const globalFeedRenderers = useMemo(
-    () =>
-      renderers.map(({ renderer, tester }) => {
-        const newRenderer = (props: CustomRendererProps) =>
-          renderer({
-            ...props,
-            onClose: () => onClose(targetId),
-            onClickCommunity: () => onClickCommunity(targetId),
-          });
-
-        return {
-          renderer: newRenderer,
-          tester,
-        };
-      }),
-    [renderers, onClose, onSwipeDown, onClickCommunity, targetId],
-  );
-
-  const currentStory = stories[currentIndex];
-
-  const isStoryCreator = isStory(currentStory)
-    ? currentStory?.creator?.userId === currentUserId
-    : false;
-  const isModerator = isStory(currentStory)
-    ? checkStoryPermission(client, currentStory?.targetId)
-    : false;
+  const isStoryCreator = stories[currentIndex]?.creator?.userId === currentUserId;
+  const isModerator = checkStoryPermission(client, stories[currentIndex]?.targetId);
 
   const previousStory = () => {
     if (currentIndex === 0) {
@@ -127,28 +98,23 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
   };
 
   const confirmDeleteStory = (storyId: string) => {
-    const isLastStory = currentIndex === stories.length - 1;
+    const isLastStory = currentIndex === 0;
     confirm({
       pageId,
-      title: 'Delete this story?',
-      content:
-        'This story will be permanently deleted. You’ll no longer to see and find this story.',
-      okText: 'Delete',
+      title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
+      content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
+      okText: formatMessage({ id: 'delete' }),
       onOk: async () => {
+        previousStory();
+        if (isLastStory) onChangePage?.();
         await StoryRepository.softDeleteStory(storyId);
         notification.success({
-          content: 'Story deleted',
+          content: formatMessage({ id: 'storyViewer.notification.deleted' }),
         });
-        if (stories.length === 1) {
-          // If it's the only story, close the ViewStory screen
+        if (isLastStory && stories.length > 1) {
+          setCurrentIndex((prevIndex) => prevIndex - 1);
+        } else if (stories.length === 1) {
           onChangePage?.();
-        } else if (isLastStory) {
-          // If it's the last story, move to the previous one
-          previousStory();
-        } else {
-          // For any other case (including first story), stay on the same index
-          // The next story will automatically take its place
-          setCurrentIndex((prevIndex) => prevIndex);
         }
       },
     });
@@ -158,114 +124,145 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     confirmDeleteStory(storyId);
   };
 
-  const onCreateStory = async (
-    file: File,
-    imageMode: 'fit' | 'fill',
-    metadata?: Amity.Metadata,
-    items?: Amity.StoryItem[],
-  ) => {
-    try {
-      const formData = new FormData();
-      formData.append('files', file);
-      setFile(null);
-      if (file?.type.includes('image') && currentUserId) {
-        const { data: imageData } = await StoryRepository.createImageStory(
-          'user',
-          currentUserId,
-          formData,
-          metadata,
-          imageMode,
-          items,
-        );
-        if (imageData) {
-          notification.success({
-            content: 'Successfully shared story',
-          });
-        }
-      } else {
-        if (currentUserId) {
-          const { data: videoData } = await StoryRepository.createVideoStory(
+  const onCreateStory = useCallback(
+    async (
+      file: File,
+      imageMode: 'fit' | 'fill',
+      metadata?: Amity.Metadata,
+      items?: Amity.StoryItem[],
+    ) => {
+      try {
+        const formData = new FormData();
+        formData.append('files', file);
+        setFile(null);
+        if (file?.type.includes('image') && currentUserId) {
+          const { data: imageData } = await StoryRepository.createImageStory(
             'user',
             currentUserId,
             formData,
             metadata,
+            imageMode,
             items,
           );
-          if (videoData) {
+          if (imageData) {
             notification.success({
-              content: 'Successfully shared story',
+              content: formatMessage({ id: 'storyViewer.notification.success' }),
             });
           }
+        } else {
+          if (currentUserId) {
+            const { data: videoData } = await StoryRepository.createVideoStory(
+              'user',
+              currentUserId,
+              formData,
+              metadata,
+              items,
+            );
+            if (videoData) {
+              notification.success({
+                content: formatMessage({ id: 'storyViewer.notification.success' }),
+              });
+            }
+          }
         }
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        notification.info({
-          content: error.message ?? 'Failed to share story',
+      } catch (error) {
+        notification.error({
+          content: formatMessage({ id: 'storyViewer.notification.error' }),
         });
       }
-    }
-  };
+    },
+    [currentUserId, formatMessage, notification, setFile],
+  );
 
   const discardStory = () => {
     setFile(null);
   };
 
-  const addStoryButton = (
-    <FileTrigger
-      ref={fileInputRef}
-      onSelect={(e) => {
-        const files = Array.from(e as FileList);
-        setFile(files[0]);
-      }}
-    >
-      <CreateNewStoryButton pageId={pageId} />
-    </FileTrigger>
+  const addStoryButton = useMemo(
+    () => (
+      <FileTrigger
+        ref={fileInputRef}
+        onSelect={(e) => {
+          const files = Array.from(e as FileList);
+          setFile(files[0]);
+        }}
+      >
+        <CreateNewStoryButton pageId={pageId} />
+      </FileTrigger>
+    ),
+    [pageId, setFile],
+  );
+
+  const storyStyles = useMemo(
+    () => ({
+      width: '100%',
+      height: '100%',
+      objectFit:
+        stories[currentIndex]?.dataType === 'image' &&
+        stories[currentIndex]?.data?.imageDisplayMode === 'fill'
+          ? 'cover'
+          : 'contain',
+      background: `linear-gradient(
+               180deg,
+               ${colors?.length > 0 ? colors[0].hex : '#000'} 0%,
+               ${colors?.length > 0 ? colors[colors?.length - 1].hex : '#000'} 100%
+             )`,
+    }),
+    [stories, currentIndex, colors],
   );
 
   const increaseIndex = () => {
-    if (currentIndex === stories.length - 1) return;
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
-  const formattedStories = stories?.map((story) => {
-    if (isStory(story)) {
-      const isImage = story?.dataType === 'image';
-      const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
+  const formattedStories = useMemo(
+    () =>
+      stories?.map((story) => {
+        const isImage = story?.dataType === 'image';
+        const url = isImage ? story?.imageData?.fileUrl : story?.videoData?.videoUrl?.['720p'];
 
-      return {
-        story,
-        url,
-        type: isImage ? 'image' : 'video',
-        actions: [
-          isStoryCreator || isModerator
-            ? {
-                name: 'Delete',
-                action: () => deleteStory(story?.storyId as string),
-                icon: <TrashIcon className={styles.deleteIcon} />,
-              }
-            : null,
-        ].filter(isNonNullable),
-        onCreateStory,
-        discardStory,
-        addStoryButton,
-        fileInputRef,
-        currentIndex,
-        storiesCount: stories?.length,
-        increaseIndex,
-        pageId,
-      };
-    } else {
-      return {
-        ad: story,
-        actions: [],
-        pageId,
-        currentIndex,
-        storiesCount: stories?.length,
-        increaseIndex,
-      };
-    }
-  });
+        return {
+          ...story,
+          url,
+          type: isImage ? 'image' : 'video',
+          actions: [
+            isStoryCreator || isModerator
+              ? {
+                  name: 'delete',
+                  action: () => deleteStory(story?.storyId as string),
+                  icon: (
+                    <TrashIcon
+                      fill={getComputedStyle(document.documentElement).getPropertyValue(
+                        '--asc-color-base-default',
+                      )}
+                    />
+                  ),
+                }
+              : null,
+          ].filter(isNonNullable),
+          onCreateStory,
+          discardStory,
+          addStoryButton,
+          fileInputRef,
+          storyStyles,
+          currentIndex,
+          storiesCount: stories?.length,
+          increaseIndex,
+          pageId,
+        };
+      }),
+    [
+      stories,
+      deleteStory,
+      onCreateStory,
+      discardStory,
+      addStoryButton,
+      fileInputRef,
+      storyStyles,
+      currentIndex,
+      increaseIndex,
+    ],
+  );
 
   const nextStory = () => {
     if (currentIndex === formattedStories?.length - 1) {
@@ -284,31 +281,63 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
     setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
+  const globalFeedRenderers = useMemo(
+    () =>
+      renderers.map(({ renderer, tester }) => {
+        const newRenderer = (props: CustomRendererProps) =>
+          renderer({
+            ...props,
+            onClose: () => onClose(targetId),
+            onSwipeDown: () => onSwipeDown(targetId),
+            onClickCommunity: () => onClickCommunity(targetId),
+          });
+
+        return {
+          renderer: newRenderer,
+          tester,
+        };
+      }),
+    [renderers, onClose, onSwipeDown, onClickCommunity, targetId],
+  );
+
   const targetRootId = 'asc-uikit-stories-viewer';
 
   useEffect(() => {
-    const lastStory = stories[stories.length - 1];
-    if (isStory(lastStory) && lastStory?.syncState === 'syncing') {
+    if (stories[stories.length - 1]?.syncState === 'syncing') {
       setCurrentIndex(stories.length - 1);
     }
-    if (currentStory && isStory(currentStory)) {
-      currentStory?.analytics.markAsSeen();
+    if (stories[currentIndex]) {
+      stories[currentIndex]?.analytics.markAsSeen();
     }
-  }, [currentStory, stories]);
+  }, [currentIndex, stories]);
 
   useEffect(() => {
-    if (stories.filter(isStory).every((story) => story?.isSeen)) return;
-    const firstUnseenStoryIndex = stories.findIndex((story) =>
-      isStory(story) ? !story?.isSeen : false,
-    );
+    if (stories.every((story) => story?.isSeen)) return;
+    const firstUnseenStoryIndex = stories.findIndex((story) => !story?.isSeen);
 
     if (firstUnseenStoryIndex !== -1) {
       setCurrentIndex(firstUnseenStoryIndex);
     }
-  }, []);
+  }, [stories]);
 
   useEffect(() => {
-    if (!file) return;
+    if (!stories) return;
+    const extractColorsFromImage = async (url: string) => {
+      const colorsFromImage = await extractColors(url, {
+        crossOrigin: 'anonymous',
+      });
+
+      setColors(colorsFromImage);
+    };
+
+    if (stories[currentIndex]?.dataType === 'image') {
+      extractColorsFromImage(stories[currentIndex]?.imageData?.fileUrl as string);
+    } else {
+      setColors([]);
+    }
+  }, [stories, currentIndex]);
+
+  if (file) {
     goToDraftStoryPage({
       targetId,
       targetType: 'community',
@@ -317,69 +346,37 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         : { type: 'video', url: URL.createObjectURL(file) },
       storyType: 'globalFeed',
     });
-  }, [file, goToDraftStoryPage, targetId]);
-
-  useCommunityStoriesSubscription({
-    targetId,
-    targetType: 'community',
-  });
-
-  if (!stories || stories.length === 0) return null;
+  }
 
   return (
     <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
       <ArrowLeftButton onClick={previousStory} />
-      <motion.div
-        id={targetRootId}
-        ref={motionRef}
-        data-qa-anchor={accessibilityId}
-        initial={{ y: 0 }}
-        drag="y"
-        whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}
-        dragConstraints={{ top: 0, bottom: 200 }}
-        dragElastic={{ top: 0, bottom: 0.5 }}
-        onDragStart={() => {
-          dragEventTarget.current.dispatchEvent(new Event('dragstart'));
-        }}
-        onDrag={(_, info) => {
-          // Prevent dragging upwards
-          if (info.point.y < info.point.y - info.offset.y) {
-            y.set(0);
-          }
-        }}
-        onDragEnd={(_, info) => {
-          dragEventTarget.current.dispatchEvent(new Event('dragend'));
-          if (info.offset.y > 100) {
-            onSwipeDown(targetId);
-          } else {
-            y.set(0);
-          }
-        }}
-        className={clsx(styles.viewStoryContainer)}
-      >
+      <div id={targetRootId} className={clsx(styles.viewStoryContainer)}>
         <div className={clsx(styles.viewStoryContent)}>
           <div className={clsx(styles.overlayLeft)} onClick={previousStory} />
           <div className={clsx(styles.overlayRight)} onClick={nextStory} />
           <div className={clsx(styles.viewStoryOverlay)} />
-          {/* NOTE: Do not use isPaused prop, it will cause the first video story skipped */}
-          <Stories
-            // hide default progress bar
-            progressWrapperStyles={{
-              display: 'none',
-            }}
-            preventDefault
-            currentIndex={currentIndex}
-            stories={formattedStories}
-            renderers={globalFeedRenderers as RendererObject[]}
-            defaultInterval={DEFAULT_IMAGE_DURATION}
-            onStoryStart={() => isStory(currentStory) && currentStory?.analytics.markAsSeen()}
-            onStoryEnd={increaseIndex}
-            onNext={nextStory}
-            onPrevious={previousStory}
-            onAllStoriesEnd={nextStory}
-          />
+          {formattedStories?.length > 0 ? (
+            // NOTE: Do not use isPaused prop, it will cause the first video story skipped
+            <Stories
+              // hide default progress bar
+              progressWrapperStyles={{
+                display: 'none',
+              }}
+              preventDefault
+              currentIndex={currentIndex}
+              stories={formattedStories}
+              renderers={globalFeedRenderers as RendererObject[]}
+              defaultInterval={DURATION}
+              onStoryStart={() => stories[currentIndex]?.analytics.markAsSeen()}
+              onStoryEnd={increaseIndex}
+              onNext={nextStory}
+              onPrevious={previousStory}
+              onAllStoriesEnd={nextStory}
+            />
+          ) : null}
         </div>
-      </motion.div>
+      </div>
       <ArrowRightButton onClick={nextStory} />
     </div>
   );
