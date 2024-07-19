@@ -1,1 +1,1 @@
-export { AmityLiveChatPage } from './AmityLiveChatPage';
+export { LiveChat as AmityLiveChatPage } from './LiveChat';

@@ -1,9 +1,12 @@
 .closeIcon {
-  width: 1.125rem;
-  height: 1.125rem;
+  display: flex;
+  justify-content: flex-end;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 0 0.375rem;
   cursor: pointer;
   margin-left: auto;
+  color: var(--asc-color-base-shade3);
 
   &.svg-inline--fa {
     width: auto;
@@ -21,7 +24,6 @@
 }
 
 .overlay {
-  z-index: 9999;
   position: fixed;
   inset: 0;
   overflow-y: auto;
@@ -38,9 +40,8 @@
   border-radius: var(--asc-border-radius-lg);
   max-width: 32.5rem;
   min-width: 20rem;
-
-  /* TOFIX --asc-color-base-background is not defined some how */
-  background-color: var(--asc-color-white);
+  padding: 1.5rem;
+  background-color: var(--asc-color-background-default);
 }
 
 .modalWindow:focus {
@@ -48,25 +49,41 @@
 }
 
 .smallModalWindow {
-  width: 27.5rem !important;
+  width: 16.8rem;
 }
 
-.header {
-  padding: var(--asc-spacing-m1) var(--asc-spacing-m1) 0 var(--asc-spacing-m1);
+.title {
   display: flex;
   align-items: center;
-  color: var(--asc-color-base-inverse);
-  border-bottom: 1px solid var(--theme-palette-base-shade4);
-  font-size: var(--asc-text-font-size-lg) !important;
-  font-weight: var(--asc-text-font-weight-bold);
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-default);
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .content {
-  color: var(--asc-color-base-default);
-  padding: var(--asc-spacing-m2) var(--asc-spacing-m1);
+  margin-top: 0.5rem;
+  line-height: 1.25rem;
+  font-size: 0.875rem;
+  color: var(--asc-color-base-shade1);
 }
 
 .footer {
-  padding: var(--asc-spacing-m2) var(--asc-spacing-s2);
-  padding-top: var(--asc-spacing-xxs2);
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+}
+
+@media (width <= 768px) {
+  .modalWindow {
+    max-width: 16.8rem;
+  }
+
+  .title {
+    font-size: 1rem;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+  }
 }

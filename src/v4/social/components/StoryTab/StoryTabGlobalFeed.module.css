@@ -2,7 +2,7 @@
   display: flex;
   overflow: auto;
   padding: 0.625rem;
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
   gap: var(--asc-spacing-s1);
 }
 

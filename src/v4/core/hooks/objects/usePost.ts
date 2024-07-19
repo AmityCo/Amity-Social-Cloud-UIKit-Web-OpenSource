@@ -6,7 +6,7 @@ const usePost = (postId?: string) => {
   const { item, ...rest } = useLiveObject({
     fetcher: PostRepository.getPost,
     params: postId as string,
-    shouldCall: () => !!postId,
+    shouldCall: !!postId,
   });
 
   return {

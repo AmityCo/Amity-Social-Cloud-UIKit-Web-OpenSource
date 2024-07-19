@@ -7,17 +7,15 @@ type UiKitLinkifyProps = Omit<React.ComponentProps<typeof Linkify>, 'componentDe
 
 export const UiKitLinkify = (props: UiKitLinkifyProps) => (
   <Linkify
-    componentDecorator={(decoratedHref?: string, decoratedText?: string, key?: string) => (
-      <a
-        className={styles.link}
-        key={key}
-        target="blank"
-        rel="noopener noreferrer"
-        href={decoratedHref}
-      >
-        {decoratedText}
-      </a>
-    )}
-    {...props}
+    options={{
+      render: ({ attributes, content }) => {
+        const { href, ...props } = attributes;
+        return (
+          <a className={styles.link} target="blank" rel="noopener noreferrer" href={href}>
+            {content}
+          </a>
+        );
+      },
+    }}
   />
 );

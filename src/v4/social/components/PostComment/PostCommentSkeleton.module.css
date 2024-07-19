@@ -1,0 +1,51 @@
+.postCommentSkeleton {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.postCommentSkeleton__avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--asc-color-base-shade4);
+}
+
+.postCommentSkeleton__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.postCommentSkeleton__content {
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0 0.75rem 0.75rem;
+  width: 13.875rem;
+  height: 4.25rem;
+}
+
+.postCommentSkeleton__content__bar {
+  width: 10.3269rem;
+  height: 0.5rem;
+  border-radius: 0.75rem;
+  background: var(--asc-color-base-shade4);
+  padding-top: 0.19rem;
+  padding-bottom: 0.19rem;
+}
+
+.postCommentSkeleton__animation {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}

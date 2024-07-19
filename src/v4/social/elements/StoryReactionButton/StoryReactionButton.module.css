@@ -1,4 +1,5 @@
 .storyReactionButton {
+  all: unset;
   display: flex;
   padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
   align-items: center;

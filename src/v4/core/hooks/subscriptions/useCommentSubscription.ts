@@ -3,18 +3,18 @@ import useSubscription from './useSubscription';
 
 export default function useCommentSubscription({
   commentId,
-  shouldSubscribe = () => true,
+  shouldSubscribe = true,
   callback,
 }: {
   commentId?: string | null;
-  shouldSubscribe?: () => boolean;
+  shouldSubscribe?: boolean;
   callback?: Amity.Listener;
 }) {
   return useSubscription({
     fetcher: CommentRepository.getComment,
     params: commentId,
     callback,
-    shouldSubscribe: () => !!commentId && shouldSubscribe(),
+    shouldSubscribe: !!commentId && shouldSubscribe,
     getSubscribedTopic: ({ data: comment }) => getCommentTopic(comment),
   });
 }

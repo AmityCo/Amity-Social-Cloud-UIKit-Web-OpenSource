@@ -1,10 +1,12 @@
 import React, { ReactNode } from 'react';
 import Modal from '~/v4/core/components/Modal';
-import { Button } from '~/v4/core/components/Button';
+import { Button } from '~/v4/core/natives/Button';
 import clsx from 'clsx';
-import styles from './styles.module.css';
 import { ConfirmType, useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { useAmityElement } from '~/v4/core/hooks/uikit/index';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
+
+import styles from './styles.module.css';
+import { Typography } from '~/v4/core/components/Typography';
 
 interface ConfirmProps extends ConfirmType {
   className?: string;
@@ -27,6 +29,7 @@ const Confirm = ({
   type = 'confirm',
 }: ConfirmProps) => {
   const { accessibilityId, themeStyles } = useAmityElement({ pageId, componentId, elementId });
+
   return (
     <Modal
       className={clsx(className, styles.modal)}
@@ -39,19 +42,21 @@ const Confirm = ({
         <div className={styles.footer}>
           {type === 'confirm' && (
             <Button
+              style={themeStyles}
               className={styles.cancelButton}
               data-qa-anchor="confirm-modal-cancel-button"
-              onClick={onCancel}
+              onPress={onCancel}
             >
-              {cancelText}
+              <Typography.BodyBold>{cancelText}</Typography.BodyBold>
             </Button>
           )}
           <Button
+            style={themeStyles}
             className={styles.okButton}
             data-qa-anchor={`confirm-modal-${accessibilityId}-ok-button`}
-            onClick={onOk}
+            onPress={onOk}
           >
-            {okText}
+            <Typography.BodyBold>{okText}</Typography.BodyBold>
           </Button>
         </div>
       }

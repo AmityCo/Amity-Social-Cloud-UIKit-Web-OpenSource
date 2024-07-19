@@ -18,9 +18,7 @@ export { default as AmityPostEngagementBar } from '~/social/components/Engagemen
 export { default as AmityExpandableText } from '~/social/components/Comment/CommentText';
 export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
-// v4
-export { default as AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
-export { AmityDraftStoryPage, ViewStoryPage as AmityViewStoryPage } from '~/v4/social/pages';
+export { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
 export {
   CommentTray as AmityCommentTrayComponent,
   StoryTab as AmityStoryTabComponent,
@@ -33,22 +31,22 @@ import type { ReactionListProps } from '~/v4/social/components/ReactionList';
 export type { ReactionListProps as AmityReactionListProps };
 
 // v4 internal use only (Amity Console)
-export { StoryPreview as AmityStoryPreview } from './v4/social/internal-components/StoryPreview';
+export {
+  StoryPreview as AmityStoryPreview,
+  StoryPreviewThumbnail as AmityStoryPreviewThumbnail,
+} from './v4/social/internal-components/StoryPreview';
 
-// import AmityComment from './components/Comment';
-// import AmityCommentComposeBar from './components/CommentComposeBar';
-// import AmityCommentLikeButton from './components/CommentLikeButton';
-// import AmityCommunity from './components/Community';
-// import AmityCommunityItem from './components/CommunityItem';
-// import AmityEmptyFeed from './components/EmptyFeed';
-// import AmityFiles from './components/Files';
-// import AmityImageGallery from './components/ImageGallery';
-// import AmityImages from './components/Images';
-// import AmityMessage from './components/Message';
-// import AmityMessageComposeBar from './components/MessageComposeBar';
-// import AmityMessageList from './components/MessageList';
-// import AmityPost from './components/Post';
-// import AmityPostCreator from './components/PostCreator';
-// import AmityPostLikeButton from './components/PostLikeButton';
-// import AmityRecentChat from './components/RecentChat';
-// import AmitySideMenu from './components/SideMenu';
+// v4 Social
+export {
+  SocialHomePage as AmitySocialHomePage,
+  AmityDraftStoryPage,
+  ViewStoryPage as AmityViewStoryPage,
+  StoryTargetSelectionPage as AmityStoryTargetSelectionPage,
+  PostDetailPage as AmityPostDetailPage,
+  SocialGlobalSearchPage as AmitySocialGlobalSearchPage,
+  MyCommunitiesSearchPage as AmityMyCommunitiesSearchPage,
+  SelectPostTargetPage as AmityPostTargetSelectionPage,
+  PostComposerPage as AmityPostComposerPage,
+} from '~/v4/social/pages';
+
+export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/pages/SocialHomePage';

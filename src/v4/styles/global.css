@@ -27,7 +27,6 @@
   font-family: Inter, sans-serif;
 
   /* color palette */
-  --asc-color-alert: #fa4d30;
   --asc-color-black: #000;
   --asc-color-white: #fff;
   --asc-color-primary-default: #1054de;
@@ -41,13 +40,20 @@
   --asc-color-base-shade2: #898e9e;
   --asc-color-base-shade3: #a5a9b5;
   --asc-color-base-shade4: #ebecef;
-  --asc-color-base-shade5: #f9f9fa;
   --asc-color-secondary-default: #292b32;
   --asc-color-secondary-shade1: #636878;
   --asc-color-secondary-shade2: #898e9e;
   --asc-color-secondary-shade3: #a5a9b5;
   --asc-color-secondary-shade4: #ebecef;
   --asc-color-secondary-shade5: #f9f9fa;
+  --asc-color-alert-default: #fa4d30;
+  --asc-color-highlight-default: #1054de;
+  --asc-color-message-bubble-primary: #1054de;
+  --asc-color-message-bubble-secondary: #ebecef;
+  --asc-color-background-default: #fff;
+  --asc-color-background-shade1: #f6f7f8;
+  --asc-color-background-transparent-black: #00000080;
+  --asc-color-background-transparent-white: #fffc;
 
   /* Font */
   --asc-text-global-font-family: inter, -apple-system, blinkmacsystemfont, arial, sans-serif;
@@ -118,7 +124,6 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    --asc-color-alert: #fa4d30;
     --asc-color-black: #000;
     --asc-color-white: #fff;
     --asc-color-primary-default: #1054de;
@@ -132,20 +137,25 @@
     --asc-color-base-shade2: #898e9e;
     --asc-color-base-shade3: #a5a9b5;
     --asc-color-base-shade4: #ebecef;
-    --asc-color-base-shade5: #f9f9fa;
     --asc-color-secondary-default: #292b32;
     --asc-color-secondary-shade1: #636878;
     --asc-color-secondary-shade2: #898e9e;
     --asc-color-secondary-shade3: #a5a9b5;
     --asc-color-secondary-shade4: #ebecef;
     --asc-color-secondary-shade5: #f9f9fa;
-    --asc-color-base-background: #fff;
+    --asc-color-alert-default: #fa4d30;
+    --asc-color-highlight-default: #1054de;
+    --asc-color-message-bubble-primary: #1054de;
+    --asc-color-message-bubble-secondary: #ebecef;
+    --asc-color-background-default: #fff;
+    --asc-color-background-shade1: #f6f7f8;
+    --asc-color-background-transparent-black: #00000080;
+    --asc-color-background-transparent-white: #fffc;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --asc-color-alert: #fa4d30;
     --asc-color-black: #000;
     --asc-color-white: #fff;
     --asc-color-primary-default: #1054de;
@@ -159,13 +169,26 @@
     --asc-color-base-shade2: #6e7487;
     --asc-color-base-shade3: #40434e;
     --asc-color-base-shade4: #292b32;
-    --asc-color-base-shade5: #f9f9fa;
     --asc-color-secondary-default: #292b32;
-    --asc-color-secondary-shade1: #636878;
+    --asc-color-secondary-shade1: #a5a9b5;
     --asc-color-secondary-shade2: #898e9e;
     --asc-color-secondary-shade3: #a5a9b5;
-    --asc-color-secondary-shade4: #ebecef;
-    --asc-color-secondary-shade5: #f9f9fa;
-    --asc-color-base-background: #191919;
+    --asc-color-secondary-shade4: #40434e;
+    --asc-color-secondary-shade5: #292b32;
+    --asc-color-alert-default: #fa4d30;
+    --asc-color-highlight-default: #1054de;
+    --asc-color-message-bubble-primary: #1054de;
+    --asc-color-message-bubble-secondary: #292b32;
+    --asc-color-background-default: #191919;
+    --asc-color-background-shade1: #40434e;
+    --asc-color-background-transparent-black: #00000080;
+    --asc-color-background-transparent-white: #fffc;
+  }
+}
+
+/* vaul */
+.asc-uikit {
+  [vaul-drawer][vaul-drawer-direction='bottom']::after {
+    height: unset;
   }
 }

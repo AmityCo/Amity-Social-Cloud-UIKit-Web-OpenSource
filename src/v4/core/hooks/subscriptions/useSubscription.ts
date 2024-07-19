@@ -7,7 +7,7 @@ export default function useSubscription<TParams, TCallback, TConfig>({
   params,
   callback = () => {},
   options,
-  shouldSubscribe = () => true,
+  shouldSubscribe = true,
   getSubscribedTopic,
 }: {
   fetcher: (
@@ -18,7 +18,7 @@ export default function useSubscription<TParams, TCallback, TConfig>({
   params: TParams | undefined | null;
   callback?: Amity.Listener;
   options?: Amity.LiveObjectOptions<TConfig>;
-  shouldSubscribe?: () => boolean;
+  shouldSubscribe?: boolean;
   getSubscribedTopic: (response: Amity.LiveObject<TCallback>) => string;
 }) {
   const { subscribe } = useSDKSubscribersConnector();

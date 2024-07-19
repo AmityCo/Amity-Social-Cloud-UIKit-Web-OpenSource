@@ -27,14 +27,16 @@ import { defaultConfig, Config, CustomizationProvider } from './CustomizationPro
 import { ThemeProvider } from './ThemeProvider';
 import { PageBehavior, PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { UIStyles } from '~/core/providers/UiKitProvider/styles';
-import AmityUIKitManager from '../AmityUIKitManager';
+import { AmityUIKitManager } from '../AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
 import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
 import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
 import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 import { CustomReactionProvider } from './CustomReactionProvider';
+import { AdEngineProvider } from './AdEngineProvider';
+import { AdEngine } from '../AdEngine';
+import { GlobalFeedProvider } from '~/v4/social/providers/GlobalFeedProvider';
 
 export type AmityUIKitConfig = Config;
 
@@ -104,6 +106,8 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
         // Set up the AmityUIKitManager
         AmityUIKitManager.setup({ apiKey, apiRegion, apiEndpoint });
 
+        AdEngine.instance;
+
         // Register the device and get the client instance
         await AmityUIKitManager.registerDevice(
           userId,
@@ -135,57 +139,59 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   if (!client) return null;
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Localization locale="en">
-        <CustomizationProvider initialConfig={configs || defaultConfig}>
-          <StyledThemeProvider theme={buildGlobalTheme(theme)}>
-            <ThemeProvider>
-              <UIStyles>
+    <div className="asc-uikit">
+      <QueryClientProvider client={queryClient}>
+        <Localization locale="en">
+          <CustomizationProvider initialConfig={configs || defaultConfig}>
+            <StyledThemeProvider theme={buildGlobalTheme(theme)}>
+              <ThemeProvider>
                 <CustomReactionProvider>
-                  <SDKContextV3.Provider value={sdkContextValue}>
-                    <SDKContext.Provider value={sdkContextValue}>
-                      <SDKConnectorProviderV3>
-                        <SDKConnectorProvider>
-                          <NotificationProvider>
-                            <DrawerProvider>
-                              <LegacyNotificationProvider>
-                                <ConfirmProvider>
-                                  <LegacyConfirmProvider>
-                                    <ConfigProvider
-                                      config={{
-                                        socialCommunityCreationButtonVisible:
-                                          socialCommunityCreationButtonVisible || true,
-                                      }}
-                                    >
-                                      <PostRendererProvider config={postRendererConfig}>
-                                        <NavigationProvider>
-                                          <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                            {children}
-                                          </PageBehaviorProvider>
-                                        </NavigationProvider>
-                                      </PostRendererProvider>
-                                    </ConfigProvider>
-                                    <NotificationsContainer />
-                                    <LegacyNotificationsContainer />
-                                    <ConfirmComponent />
-                                    <DrawerContainer />
-                                    <LegacyConfirmComponent />
-                                  </LegacyConfirmProvider>
-                                </ConfirmProvider>
-                              </LegacyNotificationProvider>
-                            </DrawerProvider>
-                          </NotificationProvider>
-                        </SDKConnectorProvider>
-                      </SDKConnectorProviderV3>
-                    </SDKContext.Provider>
-                  </SDKContextV3.Provider>
+                  <AdEngineProvider>
+                    <SDKContextV3.Provider value={sdkContextValue}>
+                      <SDKContext.Provider value={sdkContextValue}>
+                        <SDKConnectorProviderV3>
+                          <SDKConnectorProvider>
+                            <NotificationProvider>
+                              <DrawerProvider>
+                                <LegacyNotificationProvider>
+                                  <ConfirmProvider>
+                                    <LegacyConfirmProvider>
+                                      <ConfigProvider
+                                        config={{
+                                          socialCommunityCreationButtonVisible:
+                                            socialCommunityCreationButtonVisible || true,
+                                        }}
+                                      >
+                                        <PostRendererProvider config={postRendererConfig}>
+                                          <NavigationProvider>
+                                            <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                              <GlobalFeedProvider>{children}</GlobalFeedProvider>
+                                            </PageBehaviorProvider>
+                                          </NavigationProvider>
+                                        </PostRendererProvider>
+                                      </ConfigProvider>
+                                      <NotificationsContainer />
+                                      <LegacyNotificationsContainer />
+                                      <ConfirmComponent />
+                                      <DrawerContainer />
+                                      <LegacyConfirmComponent />
+                                    </LegacyConfirmProvider>
+                                  </ConfirmProvider>
+                                </LegacyNotificationProvider>
+                              </DrawerProvider>
+                            </NotificationProvider>
+                          </SDKConnectorProvider>
+                        </SDKConnectorProviderV3>
+                      </SDKContext.Provider>
+                    </SDKContextV3.Provider>
+                  </AdEngineProvider>
                 </CustomReactionProvider>
-              </UIStyles>
-            </ThemeProvider>
-          </StyledThemeProvider>
-        </CustomizationProvider>
-      </Localization>
-    </QueryClientProvider>
+              </ThemeProvider>
+            </StyledThemeProvider>
+          </CustomizationProvider>
+        </Localization>
+      </QueryClientProvider>
+    </div>
   );
 };
 

@@ -2,8 +2,7 @@ import React from 'react';
 import { CommunityFeedStory } from '~/v4/social/pages/StoryPage/CommunityFeedStory';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { ViewGlobalFeedStoryPage } from './ViewGlobalFeedStory';
-import { useAmityPage } from '~/v4/core/hooks/uikit/index';
+import { ViewGlobalFeedStoryPage } from '~/v4/social/pages/StoryPage/ViewGlobalFeedStory';
 
 type ViewStoryPageType = 'communityFeed' | 'globalFeed';
 
@@ -36,9 +35,9 @@ const ViewStoryPage: React.FC<AmityViewStoryPageProps> = ({ type, targetId }) =>
       <ViewGlobalFeedStoryPage
         pageId={pageId}
         targetId={targetId}
-        onChangePage={() => AmityStoryViewPageBehavior.onCloseAction()}
-        onClose={() => AmityStoryViewPageBehavior.onCloseAction()}
-        onSwipeDown={() => AmityStoryViewPageBehavior.onCloseAction()}
+        onChangePage={() => AmityStoryViewPageBehavior?.onCloseAction?.()}
+        onClose={() => AmityStoryViewPageBehavior?.onCloseAction?.()}
+        onSwipeDown={() => AmityStoryViewPageBehavior?.onCloseAction?.()}
         onClickStory={(targetId) =>
           goToViewStoryPage({
             storyType: 'globalFeed',

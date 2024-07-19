@@ -33,31 +33,35 @@ export function CommentBubbleDeleted({
   imgIconClassName,
 }: CommentBubbleDeletedProps) {
   const elementId = 'comment_bubble_deleted_view';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference } = useAmityElement({
-    pageId,
-    componentId,
-    elementId,
-  });
+  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
+    useAmityElement({
+      pageId,
+      componentId,
+      elementId,
+    });
 
   if (isExcluded) return null;
 
   return (
-    <IconComponent
-      className={clsx(styles.commentBubbleDeletedBlock)}
-      defaultIcon={() => (
-        <div
-          className={clsx(styles.commentBubbleDeleted, defaultIconClassName)}
-          data-qa-anchor={accessibilityId}
-        >
-          <CommentBubbleDeletedSvg
-            className={clsx(styles.commentBubbleDeletedIcon, defaultIconClassName)}
-          />
-          <Typography.Caption>{config.text}</Typography.Caption>
-        </div>
-      )}
-      imgIcon={() => <img src={config.icon} alt={uiReference} className={clsx(imgIconClassName)} />}
-      defaultIconName={defaultConfig.icon}
-      configIconName={config.icon}
-    />
+    <div style={themeStyles} data-qa-anchor={accessibilityId}>
+      <IconComponent
+        defaultIcon={() => (
+          <div
+            className={clsx(styles.commentBubbleDeleted, defaultIconClassName)}
+            data-qa-anchor={accessibilityId}
+          >
+            <CommentBubbleDeletedSvg
+              className={clsx(styles.commentBubbleDeletedIcon, defaultIconClassName)}
+            />
+            <Typography.Caption>{config.text}</Typography.Caption>
+          </div>
+        )}
+        imgIcon={() => (
+          <img src={config.icon} alt={uiReference} className={clsx(imgIconClassName)} />
+        )}
+        defaultIconName={defaultConfig.icon}
+        configIconName={config.icon}
+      />
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 import { UserRepository } from '@amityco/ts-sdk';
 import { useEffect, useRef, useState } from 'react';
 
-const MINIMUM_STRING_LENGTH_TO_TRIGGER_QUERY = 1;
+const MINIMUM_STRING_LENGTH_TO_TRIGGER_QUERY = 3;
 
 export const useUserQueryByDisplayName = (
   displayName: string,

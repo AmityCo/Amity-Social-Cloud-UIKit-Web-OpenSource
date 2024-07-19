@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { extractColors } from 'extract-colors';
-import { readFileAsync } from '~/helpers';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import {
   AspectRatioButton,
@@ -17,10 +14,12 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useCommunityInfo } from '~/social/components/CommunityInfo/hooks';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
+import { useAmityPage } from '~/v4/core/hooks/uikit';
+import ColorThief from 'colorthief';
 
 import styles from './DraftsPage.module.css';
-import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 
 export type AmityStoryMediaType = { type: 'image'; url: string } | { type: 'video'; url: string };
 
@@ -28,7 +27,6 @@ export type AmityDraftStoryPageProps = {
   targetId: string;
   targetType: Amity.StoryTargetType;
   mediaType?: AmityStoryMediaType;
-  storyType: 'communityFeed' | 'globalFeed';
 };
 
 export type HyperLinkFormInputs = {
@@ -43,14 +41,17 @@ export const PlainDraftStoryPage = ({
   goToCommunityPage,
   goToGlobalFeedPage,
   onDiscardCreateStory,
-  storyType,
 }: AmityDraftStoryPageProps & {
   goToCommunityPage: (communityId: string) => void;
   goToGlobalFeedPage: () => void;
   onDiscardCreateStory: () => void;
-  storyType: 'communityFeed' | 'globalFeed';
 }) => {
+  const { page } = useNavigation();
   const pageId = 'create_story_page';
+  const { accessibilityId, themeStyles } = useAmityPage({
+    pageId,
+  });
+
   const { file, setFile } = useStoryContext();
   const { community } = useCommunityInfo(targetId);
   const [isHyperLinkBottomSheetOpen, setIsHyperLinkBottomSheetOpen] = useState(false);
@@ -76,10 +77,8 @@ export const PlainDraftStoryPage = ({
     setIsHyperLinkBottomSheetOpen(false);
   };
 
-  const { formatMessage } = useIntl();
-
   const [imageMode, setImageMode] = useState<'fit' | 'fill'>('fit');
-  const [colors, setColors] = useState<Awaited<ReturnType<typeof extractColors>>>([]);
+  const [colors, setColors] = useState<string[]>([]);
 
   const onClickImageMode = () => {
     setImageMode(imageMode === 'fit' ? 'fill' : 'fit');
@@ -99,13 +98,13 @@ export const PlainDraftStoryPage = ({
       const formData = new FormData();
       formData.append('files', file);
       setFile(null);
-      if (storyType === 'globalFeed') {
+      if (page.type === PageTypes.DraftPage && page.context.storyType === 'globalFeed') {
         goToGlobalFeedPage();
       } else {
         goToCommunityPage(targetId);
       }
       if (mediaType?.type === 'image' && targetId) {
-        const { data: imageData } = await StoryRepository.createImageStory(
+        await StoryRepository.createImageStory(
           targetType,
           targetId,
           formData,
@@ -113,38 +112,29 @@ export const PlainDraftStoryPage = ({
           imageMode,
           items,
         );
-        if (imageData) {
-          notification.success({
-            content: formatMessage({ id: 'storyViewer.notification.success' }),
-          });
-        }
       } else if (mediaType?.type === 'video' && targetId) {
-        const { data: videoData } = await StoryRepository.createVideoStory(
-          targetType,
-          targetId,
-          formData,
-          metadata,
-          items,
-        );
-        if (videoData) {
-          notification.success({
-            content: formatMessage({ id: 'storyViewer.notification.success' }),
-          });
-        }
+        await StoryRepository.createVideoStory(targetType, targetId, formData, metadata, items);
       }
-    } catch (error) {
-      notification.error({
-        content: formatMessage({ id: 'storyViewer.notification.error' }),
+      notification.success({
+        content: 'Successfully shared story',
       });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        notification.info({
+          content: error.message ?? 'Failed to share story',
+        });
+      }
     }
   };
 
   const discardCreateStory = () => {
     confirm({
-      title: formatMessage({ id: 'storyViewer.action.confirmModal.title' }),
-      content: formatMessage({ id: 'storyViewer.action.confirmModal.content' }),
-      cancelText: formatMessage({ id: 'general.action.cancel' }),
-      okText: formatMessage({ id: 'delete' }),
+      pageId,
+      title: 'Delete this story?',
+      content:
+        'This story will be permanently deleted. You’ll no longer to see and find this story.',
+      cancelText: 'Cancel',
+      okText: 'Delete',
       onOk: () => {
         setFile(null);
         onDiscardCreateStory();
@@ -181,45 +171,44 @@ export const PlainDraftStoryPage = ({
   const handleOnClickHyperLinkActionButton = () => {
     if (hyperLink[0]?.data?.url) {
       notification.info({
-        content: formatMessage({ id: 'storyDraft.notification.hyperlink.error' }),
+        content: 'Can’t add more than one link to your story.',
       });
       return;
     }
     setIsHyperLinkBottomSheetOpen(true);
   };
 
+  const extractColorsFromImage = useCallback(async (imageUrl: string) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = imageUrl;
+
+    img.onload = () => {
+      const colorThief = new ColorThief();
+      const palette = colorThief.getPalette(img, 2);
+      if (palette) {
+        setColors(palette.map((color) => `rgb(${color.join(',')})`));
+      }
+    };
+  }, []);
+
   useEffect(() => {
-    const extractColorsFromImage = async (fileTarget: File) => {
-      const img = await readFileAsync(fileTarget);
-
-      if (fileTarget?.type.includes('image')) {
-        const image = new Image();
-        image.src = img as string;
-
-        const colorsFromImage = await extractColors(image, {
-          crossOrigin: 'anonymous',
-        });
-
-        setColors(colorsFromImage);
+    const extractColors = async () => {
+      if (mediaType?.type === 'image') {
+        if (file) {
+          const imageUrl = URL.createObjectURL(file);
+          await extractColorsFromImage(imageUrl);
+        } else if (mediaType.url) {
+          await extractColorsFromImage(mediaType.url);
+        }
       }
     };
 
-    if (mediaType?.type === 'image') {
-      if (file) {
-        extractColorsFromImage(file);
-      } else if (mediaType.url) {
-        fetch(mediaType.url)
-          .then((response) => response.blob())
-          .then((blob) => {
-            const fileFromUrl = new File([blob], 'image', { type: 'image/jpeg' });
-            extractColorsFromImage(fileFromUrl);
-          });
-      }
-    }
-  }, [file, imageMode, mediaType]);
+    extractColors();
+  }, [file, mediaType, extractColorsFromImage]);
 
   return (
-    <div className={styles.storyWrapper}>
+    <div data-qa-anchor={accessibilityId} style={themeStyles} className={styles.storyWrapper}>
       <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
         <div className={styles.headerContainer}>
           <div className={styles.header}>
@@ -238,10 +227,10 @@ export const PlainDraftStoryPage = ({
             className={styles.mainContainer}
             style={{
               background: `linear-gradient(
-              180deg,
-              ${colors?.length > 0 ? colors[0].hex : 'var(--asc-color-black)'} 0%,
-              ${colors?.length > 0 ? colors[colors?.length - 1].hex : 'var(--asc-color-black)'} 100%
-            )`,
+                180deg,
+                ${colors[0] || 'var(--asc-color-black)'} 0%,
+                ${colors[1] || 'var(--asc-color-black)'} 100%
+              )`,
             }}
           >
             <img
@@ -253,16 +242,22 @@ export const PlainDraftStoryPage = ({
                 objectFit: imageMode === 'fit' ? 'contain' : 'cover',
               }}
               alt="Draft"
+              onLoad={(e) => {
+                if (imageMode === 'fill') {
+                  extractColorsFromImage((e.target as HTMLImageElement).src);
+                }
+              }}
             />
           </div>
         ) : mediaType?.type === 'video' ? (
-          <VideoPreview
-            mediaFit="contain"
+          <video
             className={styles.videoPreview}
             src={file ? URL.createObjectURL(file) : mediaType.url}
             autoPlay
             loop
+            muted
             controls={false}
+            playsInline
           />
         ) : null}
         {hyperLink[0]?.data?.url && (
@@ -297,16 +292,14 @@ export const PlainDraftStoryPage = ({
 };
 
 export const AmityDraftStoryPage = (props: AmityDraftStoryPageProps) => {
-  const { page } = useNavigation();
   const { AmityDraftStoryPageBehavior } = usePageBehavior();
 
   return (
     <PlainDraftStoryPage
       {...props}
-      onDiscardCreateStory={() => AmityDraftStoryPageBehavior.onCloseAction()}
-      goToCommunityPage={(communityId) => AmityDraftStoryPageBehavior.onCloseAction()}
-      goToGlobalFeedPage={() => AmityDraftStoryPageBehavior.onCloseAction()}
-      storyType={page.type === 'communityFeed' ? 'communityFeed' : 'globalFeed'}
+      onDiscardCreateStory={() => AmityDraftStoryPageBehavior?.onCloseAction?.()}
+      goToCommunityPage={(communityId) => AmityDraftStoryPageBehavior?.onCloseAction?.()}
+      goToGlobalFeedPage={() => AmityDraftStoryPageBehavior?.onCloseAction?.()}
     />
   );
 };

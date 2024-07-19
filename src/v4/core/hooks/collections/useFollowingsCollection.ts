@@ -16,7 +16,7 @@ export default function useFollowingsCollection({
       userId: userId as string,
       status: status ?? undefined,
     },
-    shouldCall: () => !!userId,
+    shouldCall: !!userId,
   });
 
   return {

@@ -1,7 +1,8 @@
-import clsx from 'clsx';
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
+
 import styles from './OverflowMenuButton.module.css';
 
 const OverflowMenuSvg = (props: React.SVGProps<SVGSVGElement>) => {
@@ -25,7 +26,7 @@ const OverflowMenuSvg = (props: React.SVGProps<SVGSVGElement>) => {
 interface OverflowMenuButtonProps {
   pageId?: string;
   componentId?: string;
-  onPress?: () => void;
+  onPress?: ButtonProps['onPress'];
   defaultClassName?: string;
   imgClassName?: string;
   'data-qa-anchor'?: string;
@@ -39,21 +40,25 @@ export const OverflowMenuButton = ({
   imgClassName,
 }: OverflowMenuButtonProps) => {
   const elementId = 'overflow_menu';
-  const { config, defaultConfig, uiReference } = useAmityElement({
+  const { config, defaultConfig, uiReference, themeStyles, accessibilityId } = useAmityElement({
     pageId,
     componentId,
     elementId,
   });
 
   return (
-    <IconComponent
+    <Button
+      style={themeStyles}
+      data-qa-anchor={accessibilityId}
+      className={styles.overflowMenuButton}
       onPress={onPress}
-      defaultIcon={() => (
-        <OverflowMenuSvg className={clsx(styles.overflowMenuIcon, defaultClassName)} />
-      )}
-      imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
-      defaultIconName={defaultConfig.icon}
-      configIconName={config.icon}
-    />
+    >
+      <IconComponent
+        defaultIcon={() => <OverflowMenuSvg className={defaultClassName} />}
+        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+        defaultIconName={defaultConfig.icon}
+        configIconName={config.icon}
+      />
+    </Button>
   );
 };

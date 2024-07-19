@@ -6,7 +6,7 @@ import { Typography } from '~/v4/core/components';
 import Verified from '~/v4/icons/Verified';
 import clsx from 'clsx';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
-import useImage from '~/v4/core/hooks/useImage';
+import { useImage } from '~/v4/core/hooks/useImage';
 
 import styles from './StoryTabItem.module.css';
 

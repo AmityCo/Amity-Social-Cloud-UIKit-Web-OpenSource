@@ -11,17 +11,13 @@ jobs:
 
     environment:
       name: staging
-      url: https://ui-kit-open-source.staging.amity.co/
+      url: https://ui-kit.staging.amity.co/
 
     env:
+      NPM_FONT_AWESOME_TOKEN: ${{ secrets.NPM_FONT_AWESOME_TOKEN }}
       STORYBOOK_API_REGION: ${{ secrets.STORYBOOK_API_REGION }}
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
-      STORYBOOK_USER1: ${{ secrets.STORYBOOK_USER1 }}
-      STORYBOOK_USER2: ${{ secrets.STORYBOOK_USER2 }}
-      STORYBOOK_USER3: ${{ secrets.STORYBOOK_USER3 }}
-      STORYBOOK_USER4: ${{ secrets.STORYBOOK_USER4 }}
-      STORYBOOK_USER5: ${{ secrets.STORYBOOK_USER5 }}
-      STORYBOOK_USER6: ${{ secrets.STORYBOOK_USER6 }}
+      STORYBOOK_USERS: ${{ secrets.STORYBOOK_USERS }}
 
     steps:
       - name: git checkout
@@ -50,6 +46,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: build storybook
         run: pnpm run storybook:build
 
@@ -60,6 +59,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_BUCKET: ui-kit-open-source.staging.amity.co
+          AWS_S3_BUCKET: ui-kit.staging.amity.co
           SOURCE_DIR: ./storybook-build
           DEST_DIR: ''

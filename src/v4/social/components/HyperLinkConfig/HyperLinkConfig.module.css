@@ -21,7 +21,7 @@
 }
 
 .bottomSheet .react-modal-sheet-content {
-  background-color: var(--asc-color-base-background);
+  background-color: var(--asc-color-background-default);
   padding: 16px;
 }
 
@@ -57,8 +57,8 @@
 }
 
 .input.hasError {
-  border-bottom-color: var(--asc-color-alert);
-  color: var(--asc-color-alert);
+  border-bottom-color: var(--asc-color-alert-default);
+  color: var(--asc-color-alert-default);
 }
 
 .label {
@@ -67,12 +67,12 @@
 
 .label::after {
   content: none;
-  color: var(--asc-color-alert);
+  color: var(--asc-color-alert-default);
 }
 
 .label.required::after {
   content: '*';
-  color: var(--asc-color-alert);
+  color: var(--asc-color-alert-default);
 }
 
 .description {
@@ -80,7 +80,7 @@
 }
 
 .errorText {
-  color: var(--asc-color-alert);
+  color: var(--asc-color-alert-default);
 }
 
 .characterCount {
@@ -122,7 +122,7 @@
 .removeIcon {
   width: 1.5rem;
   height: 1.5rem;
-  fill: var(--asc-color-alert);
+  fill: var(--asc-color-alert-default);
 }
 
 .removeLinkButton {
@@ -130,7 +130,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: var(--asc-spacing-s1);
-  color: var(--asc-color-alert);
+  color: var(--asc-color-alert-default);
   border-radius: 0;
   background-color: transparent;
   transition: color 0.3s ease;

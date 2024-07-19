@@ -1,0 +1,17 @@
+.commentOptions__actionButton {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  align-items: center;
+  cursor: pointer;
+}
+
+.commentOptions__actionButton__icon {
+  color: var(--asc-color-base-default);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.commentOptions__actionButton__text {
+  color: var(--asc-color-base-default);
+}

@@ -5,6 +5,7 @@ import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 import styles from './CommentButton.module.css';
+import { Button, ButtonProps } from '~/v4/core/natives/Button';
 
 const CommentSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -26,14 +27,13 @@ interface CommentButtonProps {
   className?: string;
   defaultIconClassName?: string;
   imgIconClassName?: string;
-  onPress?: () => void;
+  onPress?: ButtonProps['onPress'];
 }
 
 export function CommentButton({
   pageId = '*',
   componentId = '*',
   commentsCount,
-  className = '',
   defaultIconClassName,
   imgIconClassName,
   onPress = () => {},
@@ -48,21 +48,21 @@ export function CommentButton({
   if (isExcluded) return null;
 
   return (
-    <IconComponent
-      className={clsx(className)}
-      data-qa-anchor={accessibilityId}
-      onPress={onPress}
-      defaultIcon={() => (
-        <div className={clsx(styles.commentButton)}>
-          <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
-          <Typography.BodyBold className={styles.commentButton__text}>
-            {typeof commentsCount === 'number' ? commentsCount : config.text}
-          </Typography.BodyBold>
-        </div>
-      )}
-      imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
-      defaultIconName={defaultConfig.icon}
-      configIconName={config.icon}
-    />
+    <Button onPress={onPress}>
+      <IconComponent
+        data-qa-anchor={accessibilityId}
+        defaultIcon={() => (
+          <div className={clsx(styles.commentButton)}>
+            <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
+            <Typography.BodyBold className={styles.commentButton__text}>
+              {typeof commentsCount === 'number' ? commentsCount : config.text}
+            </Typography.BodyBold>
+          </div>
+        )}
+        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
+        defaultIconName={defaultConfig.icon}
+        configIconName={config.icon}
+      />
+    </Button>
   );
 }
