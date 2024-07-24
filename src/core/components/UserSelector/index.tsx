@@ -14,8 +14,8 @@ interface UserSelectorProps {
   onChange?: (newValues: string[]) => void;
 }
 
-const UserSelector = ({ value, onChange }: UserSelectorProps) => {
-  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([] || value);
+const UserSelector = ({ value = [], onChange }: UserSelectorProps) => {
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>(value);
 
   const [query, setQuery] = useState('');
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { IconComponent } from '~/v4/core/IconComponent';
-import {  Typography } from '~/v4/core/components';
+import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './CameraButton.module.css';
 import clsx from 'clsx';

@@ -120,9 +120,8 @@ const PostCreatorBar = ({
 
   // default to me
   if (targetType === 'global' || targetType === 'myFeed') {
-    /* eslint-disable no-param-reassign */
     targetType = 'user';
-    /* eslint-disable no-param-reassign */
+
     targetId = currentUserId || '';
   }
 

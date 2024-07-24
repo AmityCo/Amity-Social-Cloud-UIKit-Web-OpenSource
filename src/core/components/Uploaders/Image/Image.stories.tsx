@@ -11,7 +11,7 @@ export const SimpleImage = {
   render: () => {
     const [props] = useArgs();
     const { remove: removeFn, ...rest } = props;
-    // eslint-disable-next-line no-param-reassign
+
     if (!removeFn) {
       return <UiKitImage {...rest} />;
     }

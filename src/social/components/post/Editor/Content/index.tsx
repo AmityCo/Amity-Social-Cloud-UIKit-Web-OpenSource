@@ -14,13 +14,13 @@ const ALL_DATA_TYPE = [...TEXT_DATA_TYPE, ...BASE_DATA_TYPE] as const;
 
 type ItemsProps = {
   data: Array<unknown>;
-  dataType: typeof BASE_DATA_TYPE[number];
+  dataType: (typeof BASE_DATA_TYPE)[number];
   onRemoveChild: (postId: string) => void;
 };
 
 type ItemProps = {
   data: unknown;
-  dataType: typeof BASE_DATA_TYPE[number];
+  dataType: (typeof BASE_DATA_TYPE)[number];
   placeholder: string;
   onChangeText: (newValue: {
     text: string;
@@ -37,7 +37,7 @@ type ItemProps = {
 
 type TextItemProps = {
   data?: string | null;
-  dataType: typeof TEXT_DATA_TYPE[number];
+  dataType: (typeof TEXT_DATA_TYPE)[number];
   placeholder?: string | null;
   onChangeText?: (newValue: {
     text: string;

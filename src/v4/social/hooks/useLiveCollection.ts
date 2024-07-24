@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSDKLiveCollectionConnector } from '~/v4/core/providers/SDKConnectorProvider';
 
-
 function useLiveCollection<TCallback, TParams>({
   fetcher,
   params,

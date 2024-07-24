@@ -4,7 +4,7 @@ import UiKitAvatar from '~/core/components/Avatar';
 import { SIZE_ALIAS } from '~/core/hocs/withSize';
 
 export interface UserAvatarProps {
-  size?: typeof SIZE_ALIAS[keyof typeof SIZE_ALIAS] | null;
+  size?: (typeof SIZE_ALIAS)[keyof typeof SIZE_ALIAS] | null;
   avatarUrl?: string | null;
   avatarFileId?: string | null;
   avatarFile?: File | null;

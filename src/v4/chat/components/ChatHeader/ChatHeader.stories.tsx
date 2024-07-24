@@ -1,6 +1,6 @@
 import React from 'react';
 import useChannelsCollection from '~/chat/hooks/collections/useChannelsCollection';
-import { ChatHeader } from './index';
+import { ChatHeader } from './';
 
 export default {
   title: 'V4/ChatHeader',
