@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './PostComposerPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
@@ -90,9 +90,10 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
   });
 
   // const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU = '290px'; //Including file button
-  const HEIGHT_MEDIA_ATTACHMENT_MENU = '92px';
-  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU = '236px'; //Not including file button
-  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 = '176px'; //Show 2 menus
+  const HEIGHT_MEDIA_ATTACHMENT_MENU = '6.75rem';
+  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1 = '8.5rem'; //Show 1 menus
+  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 = '11rem'; //Show 2 menus
+  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3 = '14.5rem'; //Not including file button
 
   const editorRef = useRef<LexicalEditor | null>(null);
   const { AmityPostComposerPageBehavior } = usePageBehavior();
@@ -139,6 +140,8 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
   const [videoThumbnail, setVideoThumbnail] = useState<
     { file: File; videoUrl: string; thumbnail: string | undefined }[]
   >([]);
+
+  const mentionRef = useRef<HTMLDivElement | null>(null);
 
   const useMutateCreatePost = () =>
     useMutation({
@@ -228,6 +231,23 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
     }
   }, []);
 
+  useEffect(() => {
+    if (
+      (!isVisibleCamera && isVisibleImage && isVisibleVideo) ||
+      (isVisibleCamera && isVisibleImage && !isVisibleVideo) ||
+      (isVisibleCamera && !isVisibleImage && isVisibleVideo)
+    ) {
+      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2);
+    } else if (
+      (!isVisibleCamera && isVisibleImage && !isVisibleVideo) ||
+      (!isVisibleCamera && !isVisibleImage && isVisibleVideo)
+    ) {
+      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1);
+    } else {
+      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3);
+    }
+  }, [isVisibleCamera, isVisibleImage, isVisibleVideo]);
+
   const handleRemoveThumbnail = (index: number) => {
     setVideoThumbnail((prev) => prev.filter((_, i) => i !== index));
   };
@@ -289,7 +309,11 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
 
   return (
     <div className={styles.postComposerPage} style={themeStyles}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
+        className={styles.postComposerPage__formMediaAttachment}
+      >
         <div className={styles.postComposerPage__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
           <CommunityDisplayName pageId={pageId} community={community} />
@@ -299,7 +323,19 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
             isValid={textValue.text.length > 0 || postImages.length > 0 || postVideos.length > 0}
           />
         </div>
-        <PostTextField ref={editorRef} onChange={onChange} communityId={targetId} />
+        <PostTextField
+          ref={editorRef}
+          onChange={onChange}
+          communityId={targetId}
+          onChangeSnap={
+            snap == HEIGHT_MEDIA_ATTACHMENT_MENU
+              ? 0
+              : snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3
+                ? 2
+                : 1
+          }
+          mentionContainer={mentionRef.current}
+        />
         <ImageThumbnail
           files={incomingImages}
           uploadedFiles={postImages}
@@ -312,6 +348,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
           onError={setIsErrorUpload}
           isErrorUpload={isErrorUpload}
         />
+        <div ref={mentionRef} />
         <VideoThumbnail
           files={incomingVideos}
           uploadedFiles={postVideos}
@@ -326,6 +363,7 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
           videoThumbnail={videoThumbnail}
           removeThumbnail={handleRemoveThumbnail}
         />
+        <div ref={mentionRef} />
       </form>
       <div ref={drawerRef}></div>
       {drawerRef.current
@@ -333,8 +371,9 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
             <Drawer.Root
               snapPoints={[
                 HEIGHT_MEDIA_ATTACHMENT_MENU,
+                HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1,
                 HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2,
-                HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU,
+                HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
               ]}
               activeSnapPoint={snap}
               setActiveSnapPoint={handleSnapChange}
@@ -360,8 +399,9 @@ const CreateInternal = ({ community, targetType, targetId }: AmityPostComposerCr
                       />
                     )}
                   </div>
-                  {snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 ||
-                  snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU ? (
+                  {snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1 ||
+                  snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 ||
+                  snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3 ? (
                     <DetailedMediaAttachment
                       pageId={pageId}
                       isVisibleCamera={isVisibleCamera}

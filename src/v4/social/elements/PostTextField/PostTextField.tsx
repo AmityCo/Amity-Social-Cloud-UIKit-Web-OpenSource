@@ -35,6 +35,8 @@ interface EditorStateJson extends SerializedLexicalNode {
 interface PostTextFieldProps {
   onChange: (data: CreatePostParams) => void;
   communityId?: string | null;
+  onChangeSnap: number;
+  mentionContainer: HTMLElement | null;
 }
 
 function editorStateToText(editor: LexicalEditor) {
@@ -75,7 +77,7 @@ function editorStateToText(editor: LexicalEditor) {
 }
 
 export const PostTextField = forwardRef<LexicalEditor, PostTextFieldProps>(
-  ({ onChange, communityId }) => {
+  ({ onChange, communityId, onChangeSnap, mentionContainer }) => {
     return (
       <>
         <LexicalComposer initialConfig={editorConfig}>
@@ -92,7 +94,11 @@ export const PostTextField = forwardRef<LexicalEditor, PostTextFieldProps>(
             />
             <HistoryPlugin />
             <AutoFocusPlugin />
-            <MentionTextInputPlugin communityId={communityId} />
+            <MentionTextInputPlugin
+              communityId={communityId}
+              onChangeSnap={onChangeSnap}
+              mentionContainer={mentionContainer}
+            />
           </div>
         </LexicalComposer>
       </>
