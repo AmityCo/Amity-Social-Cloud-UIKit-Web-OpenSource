@@ -74,6 +74,9 @@ export const CommentList = ({
 
   useIntersectionObserver({
     ref: intersectionRef,
+    options: {
+      threshold: 0.8,
+    },
     onIntersect: () => {
       if (hasMore && isLoading === false) {
         loadMore();
@@ -121,7 +124,7 @@ export const CommentList = ({
             community={community}
             // targetId={post?.targetId || story?.targetId}
             // targetType={post?.targetType || story?.targetType}
-            shoudAllowInteraction={shouldAllowInteraction}
+            shouldAllowInteraction={shouldAllowInteraction}
           />
         );
       })}
@@ -132,9 +135,8 @@ export const CommentList = ({
       {isLoading && (
         <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={3} />
       )}
-      {!isLoading && (
-        <div ref={intersectionRef} className={styles.commentList__container_intersection} />
-      )}
+
+      <div ref={intersectionRef} className={styles.commentList__container_intersection} />
     </div>
   );
 };

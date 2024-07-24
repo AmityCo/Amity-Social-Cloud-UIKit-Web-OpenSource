@@ -71,7 +71,7 @@ interface CommentProps {
   comment: Amity.Comment;
   community?: Amity.Community;
   onClickReply: (comment: Amity.Comment) => void;
-  shoudAllowInteraction?: boolean;
+  shouldAllowInteraction?: boolean;
 }
 
 export const Comment = ({
@@ -80,7 +80,7 @@ export const Comment = ({
   comment,
   community,
   onClickReply,
-  shoudAllowInteraction = true,
+  shouldAllowInteraction = true,
 }: CommentProps) => {
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
     useAmityComponent({
@@ -220,7 +220,7 @@ export const Comment = ({
               />
             </div>
             <div className={styles.postComment__secondRow}>
-              {shoudAllowInteraction && (
+              {shouldAllowInteraction && (
                 <div className={styles.postComment__secondRow__leftPane}>
                   <Typography.Caption className={styles.postComment__secondRow__timestamp}>
                     <Timestamp
