@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 import { SubscriptionLevels, UserRepository } from '@amityco/ts-sdk';
 
 import useLiveObject from './useLiveObject';

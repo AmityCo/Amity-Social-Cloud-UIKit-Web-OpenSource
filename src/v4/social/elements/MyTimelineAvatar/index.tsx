@@ -1,1 +1,1 @@
-export { MyTimelineAvatar } from './MyTimelineAvatar'
+export { MyTimelineAvatar } from './MyTimelineAvatar';

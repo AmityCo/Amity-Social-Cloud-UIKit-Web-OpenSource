@@ -71,7 +71,14 @@ interface ImagesUploadedProps {
   onError: (error: string) => void;
 }
 
-const ImagesUploaded = ({ files, uploadedFiles, onChange, onLoadingChange, uploadLoading, onError }: ImagesUploadedProps) => {
+const ImagesUploaded = ({
+  files,
+  uploadedFiles,
+  onChange,
+  onLoadingChange,
+  uploadLoading,
+  onError,
+}: ImagesUploadedProps) => {
   const useFileUploadProps = useFileUpload({
     files,
     uploadedFiles,
@@ -84,7 +91,7 @@ const ImagesUploaded = ({ files, uploadedFiles, onChange, onLoadingChange, uploa
 
   if (allFiles.length === 0) return null;
 
-  return <ImagesGallery {...useFileUploadProps} uploadLoading={uploadLoading} />
+  return <ImagesGallery {...useFileUploadProps} uploadLoading={uploadLoading} />;
 };
 
 export default ImagesUploaded;

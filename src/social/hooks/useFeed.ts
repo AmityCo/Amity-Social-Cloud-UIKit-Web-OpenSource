@@ -8,13 +8,23 @@ const useFeed = () => {
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
 
   async function fetchMore() {
+    if (isLoading) {
+      return;
+    }
     try {
+      setIsLoading(true);
       const newPosts = await FeedRepository.queryGlobalFeed({
         limit: 10,
         queryToken: queryToken || undefined,
       });
       setQueryToken(newPosts.paging.next || null);
-      setItems((prevItems) => [...prevItems, ...newPosts.data]);
+      setItems((prevItems: Amity.Post[]) => {
+        const currentItemIds = new Set([...prevItems.map((item) => item.postId)]);
+        return [
+          ...prevItems,
+          ...newPosts.data.filter((item: Amity.Post) => !currentItemIds.has(item.postId)),
+        ];
+      });
     } finally {
       setIsLoading(false);
     }
@@ -30,7 +40,13 @@ const useFeed = () => {
   }, []);
 
   const prependItem = (post: Amity.Post) => {
-    setItems((prevItems) => [post, ...prevItems]);
+    setItems((prevItems) => {
+      const currentItemIds = new Set([...prevItems.map((item) => item.postId)]);
+      if (!currentItemIds.has(post.postId)) {
+        return [post, ...prevItems];
+      }
+      return prevItems;
+    });
   };
 
   const removeItem = (postId: string) => {
@@ -42,7 +58,7 @@ const useFeed = () => {
 
   const loadMore = () => {
     setLoadMoreHasBeenCalled(true);
-    if (hasMore) {
+    if (hasMore && !isLoading) {
       fetchMore();
     }
   };

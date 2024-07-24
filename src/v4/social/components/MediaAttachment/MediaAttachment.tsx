@@ -11,7 +11,9 @@ interface MediaAttachmentProps {
   uploadLoading?: boolean;
   onChangeImages?: (files: File[]) => void;
   onChangeVideos?: (files: File[]) => void;
-  onChangeThumbnail?: (thumbnail: { file: File; videoUrl: string; thumbnail: string | undefined }[]) => void;
+  onChangeThumbnail?: (
+    thumbnail: { file: File; videoUrl: string; thumbnail: string | undefined }[],
+  ) => void;
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;

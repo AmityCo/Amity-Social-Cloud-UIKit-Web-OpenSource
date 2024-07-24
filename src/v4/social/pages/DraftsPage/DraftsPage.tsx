@@ -221,7 +221,6 @@ export const PlainDraftStoryPage = ({
             </div>
           </div>
         </div>
-
         {mediaType?.type === 'image' ? (
           <div
             className={styles.mainContainer}
@@ -267,7 +266,6 @@ export const PlainDraftStoryPage = ({
             </HyperLink>
           </div>
         )}
-
         <HyperLinkConfig
           pageId={pageId}
           isOpen={isHyperLinkBottomSheetOpen}
@@ -276,7 +274,6 @@ export const PlainDraftStoryPage = ({
           onRemove={onRemoveHyperLink}
           isHaveHyperLink={hyperLink?.[0]?.data?.url !== ''}
         />
-
         <div className={styles.footer}>
           <ShareStoryButton
             community={community}

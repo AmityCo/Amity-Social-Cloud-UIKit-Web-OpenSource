@@ -1,0 +1,21 @@
+.postReplyCommentList__viewReply_button {
+  display: flex;
+  padding: 0.3125rem 0.75rem 0.3125rem 0.5rem;
+  cursor: pointer;
+  align-items: flex-start;
+  gap: 0.25rem;
+  background: var(--asc-color-background-default);
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+  width: max-content;
+}
+
+.postReplyCommentList__viewReply_icon {
+  color: var(--asc-color-secondary-shade1);
+  width: 1rem;
+  height: 1rem;
+}
+
+.postReplyCommentList__viewReply_text {
+  color: var(--asc-color-secondary-shade1);
+}

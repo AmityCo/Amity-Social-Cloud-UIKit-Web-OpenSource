@@ -7,7 +7,7 @@ import ConnectionSpinner from '~/v4/icons/ConnectionSpinner';
 import { Typography } from '~/v4/core/components';
 import useChatInfo from '~/v4/chat/hooks/useChatInfo';
 import { Avatar } from '~/v4/core/components/Avatar/Avatar';
-import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import styles from './ChatHeader.module.css';
 
 interface ChatHeaderProps {

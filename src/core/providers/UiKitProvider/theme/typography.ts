@@ -12,13 +12,16 @@ export const filterStyleKeys = (styleObject: {
   fontWeight?: string | number;
   fontSize?: string;
 }) => {
-  const filteredStyleObject = Object.keys(styleObject).reduce((acc, styleKey) => {
-    const styleObjectForKey = styleObject[styleKey];
-    if (styleKey && styleObjectForKey && ALLOWED_PROPERTIES.includes(styleKey)) {
-      acc[styleKey] = styleObjectForKey;
-    }
-    return acc;
-  }, {} as Record<string, string | number>);
+  const filteredStyleObject = Object.keys(styleObject).reduce(
+    (acc, styleKey) => {
+      const styleObjectForKey = styleObject[styleKey];
+      if (styleKey && styleObjectForKey && ALLOWED_PROPERTIES.includes(styleKey)) {
+        acc[styleKey] = styleObjectForKey;
+      }
+      return acc;
+    },
+    {} as Record<string, string | number>,
+  );
   return filteredStyleObject;
 };
 
@@ -35,13 +38,16 @@ export const buildTypographyTheme = (mergedTypographyTheme: {
     fontSize?: string;
   };
 }) => {
-  const filteredTheme = Object.keys(mergedTypographyTheme).reduce((acc, curr) => {
-    acc[curr] = filterStyleKeys({
-      ...mergedTypographyTheme.global,
-      ...mergedTypographyTheme[curr],
-    });
-    return acc;
-  }, {} as Record<string, Record<string, string | number>>);
+  const filteredTheme = Object.keys(mergedTypographyTheme).reduce(
+    (acc, curr) => {
+      acc[curr] = filterStyleKeys({
+        ...mergedTypographyTheme.global,
+        ...mergedTypographyTheme[curr],
+      });
+      return acc;
+    },
+    {} as Record<string, Record<string, string | number>>,
+  );
 
   return filteredTheme;
 };

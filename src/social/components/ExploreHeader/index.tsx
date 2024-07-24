@@ -19,7 +19,9 @@ import { useNavigation } from '~/social/providers/NavigationProvider';
 const Background = styled.div`
   width: 100%;
   height: 100%;
-  background: ${SkyBg} right bottom no-repeat, linear-gradient(to right, #111f48 0, #2b4491 100%);
+  background:
+    ${SkyBg} right bottom no-repeat,
+    linear-gradient(to right, #111f48 0, #2b4491 100%);
 `;
 
 const Foreground = styled.div`
