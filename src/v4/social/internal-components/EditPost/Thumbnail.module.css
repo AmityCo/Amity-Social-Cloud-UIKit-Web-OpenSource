@@ -3,7 +3,7 @@
   display: grid;
   gap: 0.5rem;
   padding: 0 1rem;
-  width: 100%rem;
+  width: 100%;
 }
 
 .thumbnail__container[data-images-amount='1'] {
@@ -13,7 +13,7 @@
 
 .thumbnail__container[data-images-amount='2'] {
   grid-template-columns: repeat(2, 1fr);
-  height: 21rem;
+  max-height: 21rem;
 }
 
 .thumbnail__container[data-images-amount='3'] {
@@ -24,10 +24,10 @@
   position: relative;
   text-align: center;
   width: 100%;
-  max-height: 21rem;
+  height: 21rem;
 }
 
-.thumbnail__wrapper_item_3 {
+.thumbnail__wrapper[data-images-height='true'] {
   height: 6.8rem;
 }
 
@@ -38,16 +38,24 @@
   object-fit: cover;
 }
 
-.closeIcon {
+.thumbnail__closeButton {
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
   padding: 0.19rem;
   background-color: rgb(0 0 0 / 50%);
-  fill: var(--asc-color-primary-shade4);
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.thumbnail__closeIcon {
+  fill: var(--asc-color-primary-shade4);
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .icon__status {

@@ -36,6 +36,7 @@ import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformati
 import millify from 'millify';
 import { Button } from '~/v4/core/natives/Button';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import dayjs from 'dayjs';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -46,7 +47,7 @@ const PostTitle = ({ pageId, post }: PostTitleProps) => {
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
   const { community: targetCommunity } = useCommunity({
-    communityId: post.targetId,
+    communityId: post?.targetId,
     shouldCall,
   });
 
@@ -174,8 +175,6 @@ export const PostContent = ({
   const { post: postData } = usePost(initialPost?.postId);
   const { setDrawerData, removeDrawerData } = useDrawer();
 
-  const post = postData || initialPost;
-
   const [shouldSubscribe, setShouldSubscribe] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
@@ -184,6 +183,21 @@ export const PostContent = ({
 
   const [reactionByMe, setReactionByMe] = useState<string | null>(null);
   const [reactionsCount, setReactionsCount] = useState<number>(0);
+
+  const post = useMemo(() => {
+    if (initialPost != null && postData != null) {
+      if (dayjs(initialPost?.updatedAt).unix() > dayjs(postData?.updatedAt).unix()) {
+        return initialPost;
+      }
+      return postData;
+    }
+    if (postData != null) {
+      return postData;
+    }
+    if (initialPost != null) {
+      return initialPost;
+    }
+  }, [initialPost, postData]);
 
   usePostSubscription({
     postId: post?.postId,
@@ -212,7 +226,7 @@ export const PostContent = ({
   useEffect(() => {
     if (post == null) return;
     setReactionByMe(post.myReactions?.[0] || null);
-  }, [post.myReactions]);
+  }, [post?.myReactions]);
 
   useEffect(() => {
     if (post == null) return;

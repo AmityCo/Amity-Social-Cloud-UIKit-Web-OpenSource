@@ -142,11 +142,14 @@ type ContextValue = {
       | undefined,
   ) => void;
   goToPostComposerPage: (
-    mode: Mode,
-    targetId: string | null,
-    targetType: 'community' | 'user',
-    community?: Amity.Community,
-    post?: Amity.Post,
+    context:
+      | {
+          mode: Mode.CREATE;
+          targetId: string | null;
+          targetType: 'community' | 'user';
+          community?: Amity.Community;
+        }
+      | { mode: Mode.EDIT; post: Amity.Post },
   ) => void;
   goToStoryCreationPage: (context: {
     targetId: string;
@@ -190,13 +193,7 @@ let defaultValue: ContextValue = {
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
   goToStoryTargetSelectionPage: () => {},
-  goToPostComposerPage: (
-    mode: Mode,
-    targetId: string | null,
-    targetType: 'community' | 'user',
-    community?: Amity.Community,
-    post?: Amity.Post,
-  ) => {},
+  goToPostComposerPage: () => {},
   goToStoryCreationPage: () => {},
   goToSocialHomePage: () => {},
   goToMyCommunitiesSearchPage: () => {},
@@ -239,10 +236,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToStoryTargetSelectionPage: () =>
       console.log('NavigationContext goToStoryTargetSelectionPage()'),
     goToDraftStoryPage: (data) => console.log(`NavigationContext goToDraftStoryPage()`),
-    goToPostComposerPage: (mode, targetId, targetType, community, post) =>
-      console.log(
-        `NavigationContext goToPostComposerPage(${mode} ${targetId}) ${targetType} ${community} ${post}`,
-      ),
+    goToPostComposerPage: () => console.log(`NavigationContext goToPostComposerPage()`),
     goToStoryCreationPage: () => console.log('NavigationContext goToStoryCreationPage()'),
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
     goToMyCommunitiesSearchPage: () =>
@@ -611,16 +605,19 @@ export default function NavigationProvider({
   }, [onChangePage, pushPage]);
 
   const goToPostComposerPage = useCallback(
-    (mode, targetId, targetType, community, post) => {
+    (
+      context:
+        | {
+            mode: Mode.CREATE;
+            targetId: string | null;
+            targetType: 'community' | 'user';
+            community?: Amity.Community;
+          }
+        | { mode: Mode.EDIT; post: Amity.Post },
+    ) => {
       const next = {
         type: PageTypes.PostComposerPage,
-        context: {
-          mode,
-          targetId,
-          targetType,
-          community,
-          post,
-        },
+        context,
       };
 
       pushPage(next);

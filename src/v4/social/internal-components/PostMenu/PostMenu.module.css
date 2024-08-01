@@ -29,21 +29,22 @@
 }
 
 .postMenu__editPost__text {
-  color: var(--asc-color-secondary-default);
+  color: var(--asc-color-base-default);
+  font-weight: 600;
 }
 
 .postMenu__editPost__icon {
-  fill: var(--asc-color-secondary-default);
+  fill: var(--asc-color-base-default);
   width: 1.5rem;
   height: 1.25rem;
 }
 
 .postMenu__reportPost__text {
-  color: var(--asc-color-secondary-default);
+  color: var(--asc-color-base-default);
 }
 
 .postMenu__reportPost__icon {
-  fill: var(--asc-color-secondary-default);
+  fill: var(--asc-color-base-default);
   width: 1.5rem;
   height: 1.25rem;
 }

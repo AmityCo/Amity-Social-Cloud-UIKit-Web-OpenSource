@@ -1,0 +1,65 @@
+.createPost {
+  position: relative;
+  display: block;
+  background-color: var(--asc-color-background-default);
+  height: 100%;
+}
+
+.createPost__topBar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--asc-spacing-m1);
+}
+
+.createPost__status {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  display: flex;
+  justify-content: start;
+  padding: unset;
+  font-size: var(--asc-text-font-size-md);
+  gap: 0.75rem;
+  margin: 0 auto 1rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--asc-box-shadow-03);
+  background-color: var(--asc-color-secondary-default);
+  color: var(--asc-color-background-default);
+}
+
+.createPost_infoIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-background-default);
+}
+
+.createPost__notiWrap {
+  position: relative;
+  top: 0;
+}
+
+.createPost__formMediaAttachment {
+  max-height: calc(100% - 6.75rem); /* for form scroll */
+  overflow-y: scroll;
+}
+
+.createPost__formMediaAttachment[data-from-media='false'] {
+  max-height: calc(
+    100% - 14.875rem
+  ); /* 290px including file button for open detail media attachment */
+
+  overflow-y: scroll;
+}
+
+/* vaul */
+
+.drawer__content {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  outline: none;
+}

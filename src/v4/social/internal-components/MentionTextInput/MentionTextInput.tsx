@@ -116,7 +116,7 @@ export const MentionTextInputPlugin = ({
   mentionContainer,
 }: {
   communityId?: string | null;
-  onChangeSnap: number;
+  onChangeSnap?: number;
   mentionContainer: HTMLElement | null;
 }) => {
   return (
@@ -137,7 +137,7 @@ function Mention({
 }: {
   anchorElement: HTMLElement | null;
   communityId?: string | null;
-  onChangeSnap: number;
+  onChangeSnap?: number;
 }) {
   const [editor] = useLexicalComposerContext();
 

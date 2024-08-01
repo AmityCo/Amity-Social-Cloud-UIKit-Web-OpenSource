@@ -11,21 +11,14 @@ import { MentionNode } from '~/v4/social/internal-components/MentionTextInput/Me
 import { MentionTextInputPlugin } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
 import { CreatePostParams, MetaData } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import styles from './PostTextField.module.css';
+import { Mentioned, Mentionees } from '~/v4/helpers/utils';
+import { textToEditorState } from '~/v4/social/utils/textToEditorState';
 
 const theme = {
   ltr: 'ltr',
   rtl: 'rtl',
   placeholder: styles.editorPlaceholder,
   paragraph: styles.editorParagraph,
-};
-
-const editorConfig = {
-  namespace: 'PostTextField',
-  theme: theme,
-  onError(error: Error) {
-    throw error;
-  },
-  nodes: [MentionNode],
 };
 
 interface EditorStateJson extends SerializedLexicalNode {
@@ -35,8 +28,15 @@ interface EditorStateJson extends SerializedLexicalNode {
 interface PostTextFieldProps {
   onChange: (data: CreatePostParams) => void;
   communityId?: string | null;
-  onChangeSnap: number;
+  onChangeSnap?: number;
   mentionContainer: HTMLElement | null;
+  dataValue: {
+    data: { text: string };
+    metadata?: {
+      mentioned?: Mentioned[];
+    };
+    mentionees?: Mentionees;
+  };
 }
 
 function editorStateToText(editor: LexicalEditor) {
@@ -77,10 +77,25 @@ function editorStateToText(editor: LexicalEditor) {
 }
 
 export const PostTextField = forwardRef<LexicalEditor, PostTextFieldProps>(
-  ({ onChange, communityId, onChangeSnap, mentionContainer }) => {
+  ({ onChange, communityId, onChangeSnap, mentionContainer, dataValue }) => {
+    const editorConfig = {
+      namespace: 'PostTextField',
+      theme: theme,
+      onError(error: Error) {
+        throw error;
+      },
+      nodes: [MentionNode],
+    };
     return (
       <>
-        <LexicalComposer initialConfig={editorConfig}>
+        <LexicalComposer
+          initialConfig={{
+            ...editorConfig,
+            ...(dataValue?.data.text
+              ? { editorState: JSON.stringify(textToEditorState(dataValue)) }
+              : {}),
+          }}
+        >
           <div className={styles.editorContainer}>
             <RichTextPlugin
               contentEditable={<ContentEditable />}
