@@ -1,0 +1,42 @@
+name: Check release label
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+      - labeled
+      - unlabeled
+
+jobs:
+  it-has-a-release-label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Release label
+        id: check_release_label
+        run: |
+          echo "Debugging: Contents of GITHUB_EVENT_PATH"
+          cat "$GITHUB_EVENT_PATH"
+
+          echo "Debugging: Extracting labels"
+          labels=$(jq -r '.pull_request.labels[].name' "$GITHUB_EVENT_PATH")
+          echo "Extracted labels: $labels"
+
+          echo "Debugging: Checking for Release label"
+          if echo "$labels" | grep -q "^Release/"; then
+            echo "Release label found"
+            echo "has_release_label=true" >> $GITHUB_OUTPUT
+          else
+            echo "No Release label found"
+            echo "has_release_label=false" >> $GITHUB_OUTPUT
+          fi
+
+          echo "Debugging: Final GITHUB_OUTPUT"
+          cat $GITHUB_OUTPUT
+      - name: Fail if PR does not have a release label
+        if: steps.check_release_label.outputs.has_release_label == 'false'
+        run: |
+          echo "This PR must have a release label."
+          exit 1
