@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 
@@ -35,8 +35,9 @@ import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 import millify from 'millify';
 import { Button } from '~/v4/core/natives/Button';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import dayjs from 'dayjs';
+import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -183,6 +184,9 @@ export const PostContent = ({
 
   const [reactionByMe, setReactionByMe] = useState<string | null>(null);
   const [reactionsCount, setReactionsCount] = useState<number>(0);
+  const { page } = useNavigation();
+
+  const elementRef = useRef<HTMLDivElement>(null);
 
   const post = useMemo(() => {
     if (initialPost != null && postData != null) {
@@ -204,12 +208,6 @@ export const PostContent = ({
     level: SubscriptionLevels.POST,
     shouldSubscribe: shouldSubscribe,
   });
-
-  useEffect(() => {
-    if (post) {
-      post.analytics?.markAsViewed();
-    }
-  }, [post]);
 
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
@@ -298,8 +296,20 @@ export const PostContent = ({
 
   const hasReaction = hasLike || hasLove || hasFire || hasHappy || hasCrying;
 
+  const { isVisible } = useVisibilitySensor({
+    threshold: 0.6,
+    elementRef,
+  });
+
+  useEffect(() => {
+    if (page.type === PageTypes.PostDetailPage) return;
+    if (isVisible) {
+      post.analytics?.markAsViewed();
+    }
+  }, [post, isVisible, page.type]);
+
   return (
-    <div className={styles.postContent} style={themeStyles}>
+    <div ref={elementRef} className={styles.postContent} style={themeStyles}>
       <div className={styles.postContent__bar} data-type={type}>
         <div className={styles.postContent__bar__userAvatar}>
           <UserAvatar userId={post?.postedUserId} />
