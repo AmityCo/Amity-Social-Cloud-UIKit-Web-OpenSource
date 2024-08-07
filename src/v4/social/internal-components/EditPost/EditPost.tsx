@@ -157,7 +157,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           dataValue={{
             data: { text: post.data.text },
             metadata: {
-              mentioned: post.metadata.mentioned,
+              mentioned: post.metadata?.mentioned || [],
             },
             mentionees: post.mentionees,
           }}
