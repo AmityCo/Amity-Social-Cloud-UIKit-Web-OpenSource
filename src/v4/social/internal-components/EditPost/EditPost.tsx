@@ -21,6 +21,7 @@ import usePostByIds from '~/v4/core/hooks/usePostByIds';
 import { ExclamationCircle } from '~/icons';
 import { Thumbnail } from './Thumbnail';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
+import { arraysContainSameElements } from '~/v4/social/utils/arraysContainSameElements';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -53,6 +54,9 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [postImages, setPostImages] = useState<Amity.File[]>([]);
   const [postVideos, setPostVideos] = useState<Amity.File[]>([]);
 
+  const [defaultPostImages, setDefaultPostImages] = useState<Amity.File[]>([]);
+  const [defaultPostVideo, setDefaultPostVideo] = useState<Amity.File[]>([]);
+
   const mentionRef = useRef<HTMLDivElement | null>(null);
 
   const useMutateUpdatePost = () =>
@@ -76,8 +80,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   useEffect(() => {
     const imagePosts = posts.filter((post) => post.dataType === 'image');
+    setDefaultPostImages(imagePosts);
     setPostImages(imagePosts);
     const videoPosts = posts.filter((post) => post.dataType === 'video');
+    setDefaultPostVideo(videoPosts);
     setPostVideos(videoPosts);
   }, [posts]);
 
@@ -135,6 +141,9 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     });
   };
 
+  const isImageChanged = !arraysContainSameElements(defaultPostImages, postImages);
+  const isVideoChanged = !arraysContainSameElements(defaultPostVideo, postVideos);
+
   return (
     <div className={styles.editPost} style={themeStyles}>
       <form onSubmit={handleSubmit(onSave)} className={styles.editPost__formMediaAttachment}>
@@ -146,6 +155,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             type="submit"
             onPress={() => handleSubmit(onSave)}
             isDisabled={
+              (post.data.text == textValue.text && !isImageChanged && !isVideoChanged) ||
               !(textValue.text.length > 0 || postImages.length > 0 || postVideos.length > 0)
             }
           />
