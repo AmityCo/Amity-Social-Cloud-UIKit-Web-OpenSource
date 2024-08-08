@@ -326,6 +326,11 @@ export const PostContent = ({
               </div>
             ) : null}
             <Timestamp timestamp={post.createdAt} />
+            {post.createdAt !== post.editedAt && (
+              <Typography.Caption className={styles.postContent__bar__information__editedTag}>
+                (edited)
+              </Typography.Caption>
+            )}
           </div>
         </div>
         <div className={styles.postContent__bar__actionButton}>
