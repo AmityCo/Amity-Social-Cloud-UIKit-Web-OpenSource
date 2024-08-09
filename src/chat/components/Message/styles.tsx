@@ -7,6 +7,8 @@ import { Close, EllipsisV, Save, TrashIcon } from '~/icons';
 export const EditingContainer = styled.div`
   display: flex;
   align-items: center;
+  gap: 10px;
+  padding: 0 10px;
 `;
 
 export const EditingInput = styled.input`
@@ -18,21 +20,19 @@ export const EditingInput = styled.input`
   border-radius: 4px;
 `;
 
-export const SaveIcon = styled(Save)<{ icon?: ReactNode }>`
+export const SaveIcon = styled(Save).attrs<{ icon?: ReactNode }>({
+  width: 14,
+  height: 14,
+})`
   opacity: 0.7;
-  padding: 0 10px;
   cursor: pointer;
 `;
 
-export const DeleteIcon = styled(TrashIcon)`
+export const CloseIcon = styled(Close).attrs<{ icon?: ReactNode }>({
+  width: 14,
+  height: 14,
+})`
   opacity: 0.7;
-  padding: 0 10px;
-  cursor: pointer;
-`;
-
-export const CloseIcon = styled(Close)<{ icon?: ReactNode }>`
-  opacity: 0.7;
-  padding: 0 10px;
   cursor: pointer;
 `;
 
