@@ -47,7 +47,6 @@ interface AmityUIKitProviderProps {
     http?: string;
     mqtt?: string;
   };
-  authToken?: string;
   userId: string;
   displayName: string;
   postRendererConfig?: any;
@@ -68,6 +67,7 @@ interface AmityUIKitProviderProps {
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
+  getAuthToken?: () => Promise<string>;
   configs?: AmityUIKitConfig;
 }
 
@@ -75,7 +75,6 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   apiKey,
   apiRegion,
   apiEndpoint,
-  authToken,
   userId,
   displayName,
   postRendererConfig,
@@ -85,6 +84,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
+  getAuthToken,
   configs,
 }) => {
   const queryClient = new QueryClient();
@@ -102,6 +102,12 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
 
   useEffect(() => {
     const setup = async () => {
+      let authToken;
+
+      if (getAuthToken) {
+        authToken = await getAuthToken();
+      }
+
       try {
         // Set up the AmityUIKitManager
         AmityUIKitManager.setup({ apiKey, apiRegion, apiEndpoint });
@@ -115,13 +121,16 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
           {
             sessionWillRenewAccessToken: (renewal) => {
               // Handle access token renewal
-              if (authToken) {
-                renewal.renewWithAuthToken(authToken);
+              if (getAuthToken) {
+                getAuthToken().then((newToken) => {
+                  renewal.renewWithAuthToken(newToken);
+                });
               } else {
                 renewal.renew();
               }
             },
           },
+          authToken,
           onConnectionStatusChange,
           onDisconnected,
         );
@@ -134,7 +143,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
     };
 
     setup();
-  }, [userId, displayName, authToken, onConnectionStatusChange, onDisconnected]);
+  }, [userId, displayName, onConnectionStatusChange, onDisconnected]);
 
   if (!client) return null;
 
