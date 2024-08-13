@@ -69,7 +69,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         updateItem(response.data);
       },
       onError: (error) => {
-        console.error('Failed to create post', error);
+        console.error('Failed to edit post', error);
       },
     });
 
@@ -187,7 +187,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           )}
           {isError && (
             <Notification
-              content="Failed to create post"
+              content="Failed to edit post"
               icon={<ExclamationCircle className={styles.editPost_infoIcon} />}
               className={styles.editPost__status}
               duration={3000}
