@@ -58,6 +58,7 @@ export class AmityUIKitManager {
    * @param userId - The user ID to be used for login.
    * @param displayName - The display name of the user.
    * @param sessionHandler - The session handler for access token renewal.
+   * @param authToken - The authentication token to be used for login.
    * @param onConnectionStatusChange - The callback function for connection status changes.
    * @param onConnected - The callback function to be called when connected.
    * @param onDisconnected - The callback function to be called when disconnected.
@@ -66,6 +67,7 @@ export class AmityUIKitManager {
     userId: string,
     displayName: string,
     sessionHandler: SessionHandler,
+    authToken?: string,
     onConnectionStatusChange?: (state: Amity.SessionStates) => void,
     onConnected?: () => void,
     onDisconnected?: () => void,
@@ -78,7 +80,12 @@ export class AmityUIKitManager {
     AmityUIKitManager.instance.onConnected = onConnected;
     AmityUIKitManager.instance.onDisconnected = onDisconnected;
 
-    await AmityUIKitManager.instance.connectAndLogin(userId, displayName, sessionHandler);
+    await AmityUIKitManager.instance.connectAndLogin(
+      userId,
+      displayName,
+      sessionHandler,
+      authToken,
+    );
   }
 
   /**
@@ -105,9 +112,10 @@ export class AmityUIKitManager {
     userId: string,
     displayName: string,
     sessionHandler: SessionHandler,
+    authToken?: string,
   ): Promise<void> {
     await ASCClient.login(
-      { userId, displayName },
+      { userId, displayName, authToken },
       {
         sessionWillRenewAccessToken:
           sessionHandler.sessionWillRenewAccessToken.bind(sessionHandler),

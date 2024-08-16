@@ -3,7 +3,7 @@ import React, { useState, useMemo, ReactNode, useEffect } from 'react';
 import { Linkify } from '~/v4/social/internal-components/Linkify';
 import { Mentioned, findChunks, processChunks } from '~/v4/helpers/utils';
 import { Typography } from '~/v4/core/components';
-import { LinkPreview } from '../LinkPreview/LinkPreview';
+import { LinkPreview } from '~/v4/social/components/PostContent/LinkPreview/LinkPreview';
 import styles from './TextContent.module.css';
 import * as linkify from 'linkifyjs';
 

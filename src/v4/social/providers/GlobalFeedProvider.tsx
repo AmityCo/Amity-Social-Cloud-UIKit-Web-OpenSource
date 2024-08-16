@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
 import { FeedRepository, PostRepository } from '@amityco/ts-sdk';
-
 import { usePaginatorApi } from '~/v4/core/hooks/usePaginator';
 import { isNonNullable } from '~/v4/helpers/utils';
 
@@ -67,11 +66,27 @@ const useGlobalFeed = () => {
   }
 
   const prependItem = (post: Amity.Post) => {
-    setItems((prevItems) => [post, ...prevItems]);
+    setItems((prevItems) => {
+      const currentItemIds = new Set([...prevItems.map((item) => item.postId)]);
+      if (!currentItemIds.has(post.postId)) {
+        return [post, ...prevItems];
+      }
+      return prevItems;
+    });
   };
 
   const removeItem = (postId: string) => {
     const newItems = items.filter((item) => item.postId !== postId);
+    setItems(newItems);
+  };
+
+  const updateItem = (post: Amity.Post) => {
+    const newItems = items.map((item) => {
+      if (item.postId === post.postId) {
+        return { ...item, ...post };
+      }
+      return item;
+    });
     setItems(newItems);
   };
 
@@ -103,6 +118,7 @@ const useGlobalFeed = () => {
     isLoading,
     prependItem,
     removeItem,
+    updateItem,
     loadMore,
     hasMore,
     loadMoreHasBeenCalled,
@@ -120,6 +136,7 @@ const GlobalFeedContext = createContext<GlobalFeedContextType>({
   isLoading: false,
   prependItem: () => {},
   removeItem: () => {},
+  updateItem: () => {},
   loadMore: () => {},
   hasMore: false,
   loadMoreHasBeenCalled: false,

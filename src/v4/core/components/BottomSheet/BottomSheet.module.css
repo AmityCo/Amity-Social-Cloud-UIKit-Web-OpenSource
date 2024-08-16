@@ -20,7 +20,6 @@ which have higher specificity.
 
 .bottomSheet__content {
   background-color: var(--asc-color-background-default);
-  padding: var(--asc-spacing-m1);
 }
 
 .bottomSheet__backdrop {

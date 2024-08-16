@@ -53,23 +53,33 @@ async function getAvatarUrl({
   return null;
 }
 
-async function getChatAvatar(
-  channel?: Amity.Channel | null,
-  otherUser?: { avatarUrl?: string } | null,
-  currentUser?: { avatarUrl?: string } | null,
-) {
+async function getChatAvatar({
+  channelAvatarFileId,
+  channelAvatarCustomUrl,
+  otherUserAvatarUrl,
+  currentUserAvatarUrl,
+  isDirectChat,
+  memberCount = 0,
+}: {
+  channelAvatarFileId?: string;
+  channelAvatarCustomUrl?: string;
+  otherUserAvatarUrl?: string;
+  currentUserAvatarUrl?: string;
+  isDirectChat?: boolean;
+  memberCount?: number;
+}) {
   // It is direct chat but only one user - show current user instead
-  if (channel?.memberCount === MEMBER_COUNT_PER_CASE.ONLY_ME_CHAT) {
-    return getAvatarUrl({ avatarCustomUrl: currentUser?.avatarUrl });
+  if (memberCount === MEMBER_COUNT_PER_CASE.ONLY_ME_CHAT) {
+    return getAvatarUrl({ avatarCustomUrl: currentUserAvatarUrl });
   }
 
-  if (channel?.metadata?.isDirectChat && otherUser?.avatarUrl) {
-    return getAvatarUrl({ avatarCustomUrl: otherUser.avatarUrl });
+  if (isDirectChat && otherUserAvatarUrl) {
+    return getAvatarUrl({ avatarCustomUrl: otherUserAvatarUrl });
   }
 
   return getAvatarUrl({
-    avatarFileId: channel?.avatarFileId,
-    avatarCustomUrl: channel?.metadata?.avatarCustomUrl,
+    avatarFileId: channelAvatarFileId,
+    avatarCustomUrl: channelAvatarCustomUrl,
   });
 }
 
@@ -89,17 +99,27 @@ function useChatInfo({ channel }: { channel: Amity.Channel | null }) {
 
   useEffect(() => {
     async function run() {
-      setChatAvatar(null);
-      const url = await getChatAvatar(
-        channel,
-        { avatarUrl: otherUser?.avatarCustomUrl || otherUserAvatarUrl },
-        { avatarUrl: currentUser?.avatarCustomUrl || currentUserAvatarUrl },
-      );
+      const url = await getChatAvatar({
+        channelAvatarFileId: channel?.avatarFileId,
+        channelAvatarCustomUrl: channel?.metadata?.avatarCustomUrl,
+        otherUserAvatarUrl: otherUser?.avatarCustomUrl || otherUserAvatarUrl,
+        currentUserAvatarUrl: currentUser?.avatarCustomUrl || currentUserAvatarUrl,
+        isDirectChat: channel?.metadata?.isDirectChat,
+        memberCount: channel?.memberCount,
+      });
 
       setChatAvatar(url);
     }
     run();
-  }, [otherUser?.avatarCustomUrl, channel, currentUserAvatarUrl, currentUser?.avatarCustomUrl]);
+  }, [
+    otherUser?.avatarCustomUrl,
+    channel?.metadata?.isDirectChat,
+    channel?.memberCount,
+    channel?.avatarFileId,
+    channel?.metadata?.avatarCustomUrl,
+    currentUserAvatarUrl,
+    currentUser?.avatarCustomUrl,
+  ]);
 
   const chatName = useMemo(() => {
     if (channel == null) return;

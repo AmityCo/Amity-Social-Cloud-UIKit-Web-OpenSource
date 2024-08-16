@@ -59,3 +59,18 @@
   height: 1.75rem;
   fill: var(--asc-color-primary-shade4);
 }
+
+.playIcon {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.32rem;
+  background-color: rgb(0 0 0 / 30%);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

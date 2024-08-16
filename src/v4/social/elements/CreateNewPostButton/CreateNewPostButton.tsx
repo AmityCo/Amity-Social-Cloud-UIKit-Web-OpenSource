@@ -1,4 +1,4 @@
-import React, { FormEventHandler } from 'react';
+import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './CreateNewPostButton.module.css';
 

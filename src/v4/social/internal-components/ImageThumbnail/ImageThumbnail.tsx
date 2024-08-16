@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './ImageThumbnail.module.css';
 import { CloseIcon, ExclamationCircle } from '~/icons';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
-import clsx from 'clsx';
 import useFileUpload from '~/v4/social/hooks/useFileUpload';
 import { FileRepository } from '@amityco/ts-sdk';
 
@@ -25,8 +24,6 @@ export function ImageThumbnail({
   onError,
   isErrorUpload,
 }: ImageThumbnailProps) {
-  // Images/files incoming from uploads.
-
   const useFileUploadProps = useFileUpload({
     files,
     uploadedFiles,

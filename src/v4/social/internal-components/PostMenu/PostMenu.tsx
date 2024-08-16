@@ -9,6 +9,9 @@ import { Button } from '~/v4/core/natives/Button';
 import styles from './PostMenu.module.css';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { Mode } from '~/v4/social/pages/PostComposerPage';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 
 const PenSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -76,6 +79,8 @@ export const PostMenu = ({
   });
 
   const { isCommunityModerator, isOwner } = usePostPermissions({ post, community });
+  const { AmityPostContentComponentBehavior } = usePageBehavior();
+  const { removeDrawerData } = useDrawer();
 
   const { showEditPostButton, showDeletePostButton, showReportPostButton } = useMemo(() => {
     if (isCommunityModerator) {
@@ -157,10 +162,6 @@ export const PostMenu = ({
 
   return (
     <div className={styles.postMenu}>
-      {/* <button className={styles.postMenu__item} onClick={onEdit}>
-        <PenSvg className={styles.postMenu__editPost__icon} />
-        <span>Edit post</span>
-      </button> */}
       {showReportPostButton && !isLoading ? (
         <Button
           className={styles.postMenu__item}
@@ -176,6 +177,21 @@ export const PostMenu = ({
           <span className={styles.postMenu__reportPost__text}>
             {isFlaggedByMe ? 'Unreport post' : 'Report post'}
           </span>
+        </Button>
+      ) : null}
+      {showEditPostButton ? (
+        <Button
+          className={styles.postMenu__item}
+          onPress={() => {
+            removeDrawerData();
+            AmityPostContentComponentBehavior?.goToPostComposerPage?.({
+              mode: Mode.EDIT,
+              post,
+            });
+          }}
+        >
+          <PenSvg className={styles.postMenu__editPost__icon} />
+          <span className={styles.postMenu__editPost__text}>Edit post</span>
         </Button>
       ) : null}
       {showDeletePostButton ? (

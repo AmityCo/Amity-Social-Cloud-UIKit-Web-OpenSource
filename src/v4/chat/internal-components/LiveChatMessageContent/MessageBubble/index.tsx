@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './styles.module.css';
 import useUser from '~/core/hooks/useUser';
 import useMessage from '~/chat/hooks/useMessage';
-import MessageTextWithMention from '../MessageTextWithMention/index';
+import MessageTextWithMention from '~/v4/chat/internal-components/LiveChatMessageContent/MessageTextWithMention';
 import { Typography } from '~/v4/core/components';
 import useSDK from '~/core/hooks/useSDK';
 

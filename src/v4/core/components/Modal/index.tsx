@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useRef } from 'react';
 import styles from './styles.module.css';
 import clsx from 'clsx';
 import Close from '~/v4/icons/Close';
-import { useAmityElement } from '../../hooks/uikit';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 export interface ModalProps {
   pageId?: string;

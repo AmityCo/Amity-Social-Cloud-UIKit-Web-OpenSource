@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 import { useImage } from '~/v4/core/hooks/useImage';
 import { Typography } from '~/v4/core/components';
-import { useAmityElement } from '~/v4/core/hooks/uikit/index';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './ImageContent.module.css';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { Button } from '~/v4/core/natives/Button';

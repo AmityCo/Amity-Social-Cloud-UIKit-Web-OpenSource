@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { CommentList } from '~/v4/social/internal-components/CommentList';
-import { StoryCommentComposeBar } from '~/v4/social/internal-components/StoryCommentComposeBar';
-import styles from './CommentTray.module.css';
+import { CommentComposer } from '~/v4/social/components/CommentComposer';
+import { CommentList } from '~/v4/social/components/CommentList';
 
-const REPLIES_PER_PAGE = 5;
+import styles from './CommentTray.module.css';
 
 interface CommentTrayProps {
   referenceType: Amity.CommentReferenceType;
-  referenceId?: string;
+  referenceId: string;
   community: Amity.Community;
   shouldAllowInteraction: boolean;
   shouldAllowCreation?: boolean;
@@ -29,16 +28,13 @@ export const CommentTray = ({
     componentId,
   });
 
-  const [isReplying, setIsReplying] = useState(false);
   const [replyTo, setReplyTo] = useState<Amity.Comment | null>(null);
 
   const onClickReply = (comment: Amity.Comment) => {
-    setIsReplying(true);
     setReplyTo(comment);
   };
 
   const onCancelReply = () => {
-    setIsReplying(false);
     setReplyTo(null);
   };
 
@@ -50,27 +46,21 @@ export const CommentTray = ({
     >
       <div className={styles.commentListContainer}>
         <CommentList
-          pageId={pageId}
-          componentId={componentId}
           referenceId={referenceId}
           referenceType={referenceType}
+          community={community}
+          includeDeleted
           onClickReply={onClickReply}
           shouldAllowInteraction={shouldAllowInteraction}
-          limit={REPLIES_PER_PAGE}
-          includeDeleted
         />
       </div>
-      <div className={styles.mobileSheetComposeBarContainer}>
-        <StoryCommentComposeBar
-          communityId={community.communityId}
-          referenceId={referenceId}
-          isReplying={isReplying}
-          replyTo={replyTo}
-          isJoined={community.isJoined}
-          shouldAllowCreation={shouldAllowCreation}
-          onCancelReply={onCancelReply}
-        />
-      </div>
+      <CommentComposer
+        referenceId={referenceId}
+        referenceType={referenceType}
+        onCancelReply={onCancelReply}
+        replyTo={replyTo as Amity.Comment}
+        shouldAllowCreation={shouldAllowCreation}
+      />
     </div>
   );
 };

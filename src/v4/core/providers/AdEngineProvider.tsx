@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, createContext } from 'react';
-import { AdEngine } from '../AdEngine';
-import { AdSupplier } from '../AdSupplier';
-import { TimeWindowTracker } from '../TimeWindowTracker';
+import { AdEngine } from '~/v4/core/AdEngine';
+import { AdSupplier } from '~/v4/core/AdSupplier';
+import { TimeWindowTracker } from '~/v4/core/TimeWindowTracker';
 
 export const AdEngineContext = createContext<{
   ads: Amity.Ad[];

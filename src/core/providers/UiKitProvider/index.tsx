@@ -36,7 +36,6 @@ interface UiKitProviderProps {
     http?: string;
     mqtt?: string;
   };
-  authToken?: string;
   userId: string;
   displayName: string;
   customComponents?: CustomComponentType;
@@ -59,13 +58,13 @@ interface UiKitProviderProps {
   onConnected?: () => void;
   onDisconnected?: () => void;
   pageBehavior?: Record<string, unknown>;
+  getAuthToken?: () => Promise<string>;
 }
 
 const UiKitProvider = ({
   apiKey,
   apiRegion,
   apiEndpoint,
-  authToken,
   userId,
   displayName,
   customComponents = {},
@@ -76,6 +75,7 @@ const UiKitProvider = ({
   actionHandlers,
   onConnectionStatusChange,
   onDisconnected,
+  getAuthToken,
 }: UiKitProviderProps) => {
   const queryClient = new QueryClient();
   const [isConnected, setIsConnected] = useState(false);
@@ -105,20 +105,25 @@ const UiKitProvider = ({
       setClient(ascClient);
     }
 
-    await ASCClient.login(
-      { userId, displayName, authToken },
-      {
-        sessionWillRenewAccessToken(renewal) {
-          // secure mode
-          if (authToken) {
-            renewal.renewWithAuthToken(authToken);
-            return;
-          }
+    let params: Amity.ConnectClientParams = { userId, displayName };
 
+    if (getAuthToken) {
+      const authToken = await getAuthToken();
+      params = { ...params, authToken };
+    }
+
+    await ASCClient.login(params, {
+      sessionWillRenewAccessToken(renewal) {
+        // secure mode
+        if (getAuthToken) {
+          getAuthToken().then((authToken) => {
+            renewal.renewWithAuthToken(authToken);
+          });
+        } else {
           renewal.renew();
-        },
+        }
       },
-    );
+    });
     setIsConnected(true);
 
     if (stateChangeRef.current == null) {

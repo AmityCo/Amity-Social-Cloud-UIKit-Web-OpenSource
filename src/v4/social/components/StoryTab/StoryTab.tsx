@@ -27,14 +27,14 @@ export const StoryTab: React.FC<StoryTabProps> = ({ pageId = '*', ...props }) =>
             onFileChange={(file) => {
               setFile(file);
               if (file) {
-                goToDraftStoryPage({
-                  targetId: props.communityId || '',
-                  targetType: 'community',
-                  mediaType: file.type.includes('image')
+                goToDraftStoryPage(
+                  props.communityId || '',
+                  'community',
+                  file.type.includes('image')
                     ? { type: 'image', url: URL.createObjectURL(file) }
                     : { type: 'video', url: URL.createObjectURL(file) },
-                  storyType: 'communityFeed',
-                });
+                  'communityFeed',
+                );
               }
             }}
             onStoryClick={() =>

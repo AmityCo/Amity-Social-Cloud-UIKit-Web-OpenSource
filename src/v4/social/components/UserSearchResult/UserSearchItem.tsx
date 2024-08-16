@@ -1,6 +1,6 @@
 import React from 'react';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
-import { Typography } from '~/v4/core/components/index';
+import { Typography } from '~/v4/core/components';
 import styles from './UserSearchItem.module.css';
 
 interface UserSearchItemProps {

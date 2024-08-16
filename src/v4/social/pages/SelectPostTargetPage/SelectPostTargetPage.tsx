@@ -16,6 +16,7 @@ import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Mode } from '~/v4/social/pages/PostComposerPage/';
+import { Button } from '~/v4/core/natives/Button';
 
 export function SelectPostTargetPage() {
   const pageId = 'select_post_target_page';
@@ -76,8 +77,8 @@ export function SelectPostTargetPage() {
         <Title pageId={pageId} titleClassName={styles.selectPostTargetPage__title} />
         <div />
       </div>
-      <div
-        onClick={() => {
+      <Button
+        onPress={() => {
           AmityPostTargetSelectionPage?.goToPostComposerPage?.({
             mode: Mode.CREATE,
             targetId: null,
@@ -89,7 +90,7 @@ export function SelectPostTargetPage() {
       >
         <MyTimelineAvatar pageId={pageId} userId={user?.userId} />
         <MyTimelineText pageId={pageId} />
-      </div>
+      </Button>
       <div className={styles.selectPostTargetPage__line} />
       <div className={styles.selectPostTargetPage__myCommunities}>My Communities</div>
       {renderCommunity}

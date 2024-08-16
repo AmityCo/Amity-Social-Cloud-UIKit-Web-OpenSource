@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
-import { ChatHeader } from '~/v4/chat/components/ChatHeader/index';
-import ChatContainer from './ChatContainer/index';
+import { ChatHeader } from '~/v4/chat/components/ChatHeader';
+import ChatContainer from './ChatContainer';
 import { LiveChatNotificationProvider } from '~/v4/chat/providers/LiveChatNotificationProvider';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 

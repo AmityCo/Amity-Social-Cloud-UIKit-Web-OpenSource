@@ -1,7 +1,7 @@
 .commentOptions__actionButton {
   display: flex;
   gap: 0.75rem;
-  padding: 1rem 0;
+  padding: 1rem 1.25rem;
   align-items: center;
   cursor: pointer;
 }

@@ -3,9 +3,9 @@ import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { Typography } from '~/v4/core/components/index';
+import { Typography } from '~/v4/core/components';
 import { isNonNullable } from '~/v4/helpers/utils';
-import { FlagIcon, PenIcon, TrashIcon } from '../../icons/index';
+import { FlagIcon, PenIcon, TrashIcon } from '~/v4/social/icons';
 import styles from './CommentOptions.module.css';
 
 interface CommentOptionsProps {

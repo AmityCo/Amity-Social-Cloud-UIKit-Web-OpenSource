@@ -36,7 +36,6 @@ export const StoryPreviewThumbnail: React.FC<StoryPreviewThumbnailProps> = ({
   const imageRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
-    console.log('Effect start - thumbnailUrl:', thumbnailUrl);
     setIsLoading(true);
     setImageError(false);
 

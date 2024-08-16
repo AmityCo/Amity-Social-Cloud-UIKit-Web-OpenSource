@@ -1,10 +1,22 @@
 .mentionTextInput_item {
   position: absolute;
-  bottom: 0;
   left: 0;
   width: 100%;
   height: 12.5rem;
   overflow-y: scroll;
+  background-color: var(--asc-color-background-default);
+}
+
+.mentionTextInput_item[data-media-attachement='0'] {
+  bottom: 6rem;
+}
+
+.mentionTextInput_item[data-media-attachement='1'] {
+  bottom: 13rem;
+}
+
+.mentionTextInput_item[data-media-attachement='2'] {
+  bottom: 16rem;
 }
 
 .mentionTextInput_item::-webkit-scrollbar {

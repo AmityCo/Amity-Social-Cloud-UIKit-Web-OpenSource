@@ -41,19 +41,17 @@
   top: 0;
 }
 
-.postComposerPage__formLong {
-  max-height: calc(100% - 92px);
-  overflow: auto;
+.postComposerPage__formMediaAttachment {
+  max-height: calc(100% - 6.75rem); /* for form scroll */
+  overflow-y: scroll;
 }
 
-.postComposerPage__formShort {
-  max-height: calc(100% - 236px); /* 290px including file button */
-  overflow: auto;
-}
+.postComposerPage__formMediaAttachment[data-from-media='false'] {
+  max-height: calc(
+    100% - 14.875rem
+  ); /* 290px including file button for open detail media attachment */
 
-.postComposerPage__formLong::-webkit-scrollbar,
-.postComposerPage__formShort::-webkit-scrollbar {
-  display: none;
+  overflow-y: scroll;
 }
 
 /* vaul */

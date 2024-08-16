@@ -13,6 +13,7 @@ import {
 } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useChannelsCollection from '~/chat/hooks/collections/useChannelsCollection';
+import { ChannelRepository, SubChannelRepository } from '@amityco/ts-sdk';
 
 interface RecentChatProps {
   onChannelSelect?: (data: { channelId: string; type: string }) => void;
@@ -33,6 +34,13 @@ const RecentChat = ({
     limit: 20,
   });
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const onClickChannel = async ({ channelId, type }: { channelId: string; type: string }) => {
+    if (type !== 'conversation') {
+      await ChannelRepository.joinChannel(channelId);
+    }
+    await SubChannelRepository.startReading(channelId);
+  };
 
   return (
     <RecentContainer>
@@ -66,6 +74,7 @@ const RecentChat = ({
                   channelId={channel.channelId}
                   isSelected={selectedChannelId === channel.channelId}
                   onSelect={(data) => {
+                    onClickChannel(data);
                     onChannelSelect?.(data);
                   }}
                 />

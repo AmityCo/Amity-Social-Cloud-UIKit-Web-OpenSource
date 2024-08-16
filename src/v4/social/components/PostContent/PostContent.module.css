@@ -163,3 +163,8 @@
 .postContent__reactionsBar__reactions__count {
   color: var(--asc-color-base-shade2);
 }
+
+.postContent__bar__information__editedTag {
+  margin-left: 0.125rem;
+  color: var(--asc-color-base-shade2);
+}

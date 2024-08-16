@@ -25,6 +25,7 @@ export interface PageBehavior {
   AmityPostContentComponentBehavior?: {
     goToCommunityProfilePage?: (context: { communityId: string }) => void;
     goToUserProfilePage?: (context: { userId: string }) => void;
+    goToPostComposerPage?: (context: { mode: Mode.EDIT; post: Amity.Post }) => void;
   };
   AmitySocialGlobalSearchPageBehavior?: Record<string, unknown>;
   AmityCommunitySearchResultComponentBehavior?: {
@@ -36,11 +37,10 @@ export interface PageBehavior {
   };
   AmityPostTargetSelectionPage?: {
     goToPostComposerPage?: (context: {
-      mode: Mode.CREATE | Mode.EDIT;
+      mode: Mode.CREATE;
       targetId: string | null;
       targetType: 'community' | 'user';
       community?: Amity.Community;
-      post?: Amity.Post;
     }) => void;
   };
   AmityStoryTargetSelectionPage?: {
@@ -145,6 +145,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToUserProfilePage(context.userId);
       },
+      goToPostComposerPage: (context: { mode: Mode.EDIT; post: Amity.Post }) => {
+        if (pageBehavior?.AmityPostContentComponentBehavior?.goToPostComposerPage) {
+          return pageBehavior.AmityPostContentComponentBehavior.goToPostComposerPage(context);
+        }
+        goToPostComposerPage(context);
+      },
     },
 
     AmitySocialGlobalSearchPageBehavior: {},
@@ -174,22 +180,15 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     },
     AmityPostTargetSelectionPage: {
       goToPostComposerPage: (context: {
-        mode: Mode.CREATE | Mode.EDIT;
+        mode: Mode.CREATE;
         targetId: string | null;
         targetType: 'community' | 'user';
         community?: Amity.Community;
-        post?: Amity.Post;
       }) => {
         if (pageBehavior?.AmityPostTargetSelectionPage?.goToPostComposerPage) {
           return pageBehavior.AmityPostTargetSelectionPage.goToPostComposerPage(context);
         }
-        goToPostComposerPage(
-          context.mode,
-          context.targetId,
-          context.targetType,
-          context.community,
-          context.post,
-        );
+        goToPostComposerPage(context);
       },
     },
     AmityStoryTargetSelectionPage: {

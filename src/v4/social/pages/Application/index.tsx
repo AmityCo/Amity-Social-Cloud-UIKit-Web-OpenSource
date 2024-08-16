@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { SocialHomePage } from '~/v4/social/pages/SocialHomePage';
 import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
@@ -7,15 +7,26 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
 import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
-import { SelectPostTargetPage } from '../SelectPostTargetPage';
-import { MyCommunitiesSearchPage } from '../MyCommunitiesSearchPage/MyCommunitiesSearchPage';
+import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
+import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
 
 import styles from './Application.module.css';
 import { AmityDraftStoryPage } from '..';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
+import CommunityFeed from '~/social/pages/CommunityFeed';
+import UserFeedPage from '~/social/pages/UserFeed';
+import CommunityEditPage from '~/social/pages/CommunityEdit';
+import ProfileSettings from '~/social/components/ProfileSettings';
 
 const Application = () => {
   const { page } = useNavigation();
+
+  const [open, setOpen] = useState(false);
+  const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
+
+  const toggleOpen = () => {
+    setOpen(!open);
+  };
 
   return (
     <StoryProvider>
@@ -25,7 +36,7 @@ const Application = () => {
         {page.type === PageTypes.PostDetailPage && <PostDetailPage id={page.context?.postId} />}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
         {page.type === PageTypes.ViewStoryPage && (
-          <ViewStoryPage type="globalFeed" targetId={page.context?.targetId} />
+          <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />
         )}
         {page.type === PageTypes.DraftPage && (
           <AmityDraftStoryPage
@@ -45,6 +56,26 @@ const Application = () => {
         )}
         {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />}
         {page.type === PageTypes.MyCommunitiesSearchPage && <MyCommunitiesSearchPage />}
+        {/* V3 */}
+        {page.type === PageTypes.Explore}
+        {page.type === PageTypes.CommunityFeed && (
+          <CommunityFeed
+            communityId={page.context.communityId}
+            isNewCommunity={page.context.isNewCommunity}
+            isOpen={open}
+            toggleOpen={toggleOpen}
+          />
+        )}
+        {page.type === PageTypes.UserFeed && (
+          <UserFeedPage userId={page.context.userId} socialSettings={socialSettings} />
+        )}
+        {page.type === PageTypes.CommunityEdit && (
+          <CommunityEditPage communityId={page.context.communityId} tab={page.context.tab} />
+        )}
+
+        {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.context.userId} />}
+
+        {/*End of V3 */}
       </div>
     </StoryProvider>
   );
