@@ -6,7 +6,6 @@ import { LexicalEditor } from 'lexical';
 import { useForm } from 'react-hook-form';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import {
   AmityPostComposerEditOptions,
   CreatePostParams,
@@ -22,6 +21,7 @@ import { ExclamationCircle } from '~/icons';
 import { Thumbnail } from './Thumbnail';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { arraysContainSameElements } from '~/v4/social/utils/arraysContainSameElements';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -30,7 +30,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   });
 
   const editorRef = useRef<LexicalEditor | null>(null);
-  const { AmityPostComposerPageBehavior } = usePageBehavior();
+  const { onBack } = useNavigation();
   const { confirm } = useConfirmContext();
   const { updateItem } = useGlobalFeedContext();
 
@@ -65,7 +65,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         return await PostRepository.editPost(post.postId, params);
       },
       onSuccess: (response) => {
-        AmityPostComposerPageBehavior?.goToSocialHomePage?.();
+        onBack();
         updateItem(response.data);
       },
       onError: (error) => {
@@ -134,7 +134,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       title: 'Discard this post?',
       content: 'The post will be permanently deleted. It cannot be undone.',
       onOk: () => {
-        AmityPostComposerPageBehavior?.goToSocialHomePage?.();
+        onBack();
       },
       okText: 'Discard',
       cancelText: 'Keep editing',

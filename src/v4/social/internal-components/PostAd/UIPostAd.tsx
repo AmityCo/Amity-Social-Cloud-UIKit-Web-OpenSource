@@ -54,10 +54,10 @@ export const UIPostAd = ({
         <InfoCircle className={styles.infoIcon} />
       </Button>
 
-      <div
+      <Button
         className={styles.footer}
         data-has-url={!!ad.callToActionUrl}
-        onClick={handleCallToActionClick}
+        onPress={handleCallToActionClick}
       >
         <div className={styles.footer__left}>
           <Typography.Body className={styles.footer__content__description}>
@@ -76,7 +76,7 @@ export const UIPostAd = ({
             </Button>
           </div>
         ) : null}
-      </div>
+      </Button>
       <AdInformation
         ad={ad}
         isOpen={isAdvertisementInfoOpen}
