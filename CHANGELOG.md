@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.11 (2024-08-16)
+
+
+### Bug Fixes
+
+* ASC-24857 - link preview button ([#570](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/570)) ([5a91c31](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/5a91c314201f53c5eb28fea95d471b208359a474))
+
 ## 4.0.0-beta.10 (2024-07-24)
 
 ## 4.0.0-beta.8 (2024-06-24)
