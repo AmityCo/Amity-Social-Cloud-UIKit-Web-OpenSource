@@ -1,6 +1,6 @@
 import React from 'react';
 import { CommunitySearchResult } from '~/v4/social/components/CommunitySearchResult/';
-import useCommunitiesCollection from '~/v4/core/hooks/collections/useCommunitiesCollection';
+import useCommunitiesCollection from '~/v4/social/hooks/collections/useCommunitiesCollection';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
 import styles from './MyCommunities.module.css';
@@ -11,14 +11,13 @@ interface MyCommunitiesProps {
 
 export const MyCommunities = ({ pageId = '*' }: MyCommunitiesProps) => {
   const componentId = 'my_communities';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
-  const { communities, isLoading, error, hasMore, loadMore } = useCommunitiesCollection({
-    membership: 'member',
+  const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
+    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
   });
 
   return (

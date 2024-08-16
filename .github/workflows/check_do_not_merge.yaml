@@ -1,0 +1,21 @@
+name: Check do not merge
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+      - labeled
+      - unlabeled
+
+jobs:
+  ok-to-merge:
+    if: contains(github.event.pull_request.labels.*.name, 'DO NOT MERGE') == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: This PR is not labeled with do not merge
+        run: |
+          echo "This PR can be merged"
+          exit 0

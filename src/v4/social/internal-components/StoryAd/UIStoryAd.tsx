@@ -4,10 +4,10 @@ import clsx from 'clsx';
 import { Button } from '~/v4/core/natives/Button';
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 import InfoCircle from '~/v4/icons/InfoCircle';
-import { Avatar, Typography } from '~/v4/core/components/index';
+import { Avatar, Typography } from '~/v4/core/components';
 import Broadcast from '~/v4/icons/Broadcast';
-import { PauseIcon, PlayIcon } from '~/icons/index';
-import { CloseButton } from '~/v4/social/elements/index';
+import { PauseIcon, PlayIcon } from '~/icons';
+import { CloseButton } from '~/v4/social/elements';
 import { StoryAdInformation } from '~/v4/social/internal-components/StoryAdInformation/StoryAdInformation';
 import { AdsBadge } from '~/v4/social/internal-components/AdsBadge/AdsBadge';
 
@@ -69,79 +69,87 @@ export const UIStoryAd = ({
   };
 
   return (
-    <div className={styles.rendererContainer}>
-      <StoryProgressBar
-        pageId={pageId}
-        duration={5000}
-        currentIndex={currentIndex}
-        storiesCount={storiesCount}
-        isPaused={isPaused}
-        onComplete={onComplete}
-      />
+    <div className={styles.rendererContainer} ref={targetRef}>
+      <div className={styles.storyAd__main}>
+        <StoryProgressBar
+          pageId={pageId}
+          duration={5000}
+          currentIndex={currentIndex}
+          storiesCount={storiesCount}
+          isPaused={isPaused}
+          onComplete={onComplete}
+        />
 
-      <div className={styles.storyAd__topBar}>
-        <div className={styles.storyAd__topBar__left}>
-          <div className={styles.storyAd__topBar__avatar}>
-            <Avatar defaultImage={<Broadcast />} avatarUrl={avatarUrl} />
+        <div className={styles.storyAd__topBar}>
+          <div className={styles.storyAd__topBar__left}>
+            <div className={styles.storyAd__topBar__avatar}>
+              <Avatar defaultImage={<Broadcast />} avatarUrl={avatarUrl} />
+            </div>
+            <div className={styles.storyAd__topBar__text}>
+              <Typography.BodyBold className={styles.storyAd__topBar__advertiserName}>
+                {ad.advertiser?.name}
+              </Typography.BodyBold>
+              <AdsBadge />
+            </div>
           </div>
-          <div className={styles.storyAd__topBar__text}>
-            <Typography.BodyBold className={styles.storyAd__topBar__advertiserName}>
-              {ad.advertiser?.name}
-            </Typography.BodyBold>
-            <AdsBadge />
+          <div className={styles.storyAd__topBar__right}>
+            {isPaused ? (
+              <PlayIcon
+                className={styles.playStoryButton}
+                data-qa-anchor="play_button"
+                onClick={() => onPlayClick?.()}
+              />
+            ) : (
+              <PauseIcon
+                className={styles.pauseStoryButton}
+                data-qa-anchor="pause_button"
+                onClick={() => onPauseClick?.()}
+              />
+            )}
+            <CloseButton
+              defaultClassName={clsx(styles.storyAd__closeButton)}
+              pageId={pageId}
+              onPress={onClose}
+            />
           </div>
         </div>
-        <div className={styles.storyAd__topBar__right}>
-          {isPaused ? (
-            <PlayIcon
-              className={styles.playStoryButton}
-              data-qa-anchor="play_button"
-              onClick={() => onPlayClick?.()}
-            />
-          ) : (
-            <PauseIcon
-              className={styles.pauseStoryButton}
-              data-qa-anchor="pause_button"
-              onClick={() => onPauseClick?.()}
-            />
-          )}
-          <CloseButton
-            defaultClassName={clsx(styles.storyAd__closeButton)}
-            pageId={pageId}
-            onPress={onClose}
+
+        <div className={clsx(styles.storyImageContainer)}>
+          <img
+            ref={imageRef}
+            className={clsx(styles.storyImage)}
+            data-qa-anchor="image_view"
+            src={adImageUrl}
+            onLoad={handleImageLoaded}
+            alt="Story Image"
+            crossOrigin="anonymous"
           />
         </div>
+
+        {!isImageLoaded && <div className={styles.loadingOverlay}>{renderLoader()}</div>}
+
+        {ad.callToActionUrl && (
+          <div className={styles.hyperLinkContainer}>
+            <a
+              className={styles.hyperLink__text}
+              href={ad.callToActionUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {ad.callToAction}
+            </a>
+          </div>
+        )}
+        <Button
+          className={styles.infoIcon__button}
+          onPress={() => {
+            console.log('openAdvertisementInfo');
+            openAdvertisementInfo();
+          }}
+        >
+          <InfoCircle className={styles.infoIcon} />
+        </Button>
       </div>
-
-      <div className={clsx(styles.storyImageContainer)}>
-        <img
-          ref={imageRef}
-          className={clsx(styles.storyImage)}
-          data-qa-anchor="image_view"
-          src={adImageUrl}
-          onLoad={handleImageLoaded}
-          alt="Story Image"
-          crossOrigin="anonymous"
-        />
-      </div>
-
-      {!isImageLoaded && <div className={styles.loadingOverlay}>{renderLoader()}</div>}
-
-      {ad.callToActionUrl && (
-        <div className={styles.hyperLinkContainer}>
-          <a
-            className={styles.hyperLink__text}
-            href={ad.callToActionUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {ad.callToAction}
-          </a>
-        </div>
-      )}
-      <Button className={styles.infoIcon__button} onPress={() => openAdvertisementInfo()}>
-        <InfoCircle className={styles.infoIcon} />
-      </Button>
       <StoryAdInformation
         ad={ad}
         isOpen={isAdvertisementInfoOpen}

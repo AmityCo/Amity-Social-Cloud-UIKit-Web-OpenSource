@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 
@@ -31,9 +31,13 @@ import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoVi
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscription';
-import { ReactionList } from '../index';
+import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 import millify from 'millify';
+import { Button } from '~/v4/core/natives/Button';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import dayjs from 'dayjs';
+import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 
 interface PostTitleProps {
   post: Amity.Post;
@@ -44,24 +48,35 @@ const PostTitle = ({ pageId, post }: PostTitleProps) => {
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
   const { community: targetCommunity } = useCommunity({
-    communityId: post.targetId,
+    communityId: post?.targetId,
     shouldCall,
   });
 
   const { user: postedUser } = useUser(post.postedUserId);
+  const { onClickCommunity, onClickUser } = useNavigation();
 
   if (targetCommunity) {
     return (
       <div className={styles.postTitle}>
-        <Typography.BodyBold className={styles.postTitle__text}>
-          {postedUser?.displayName}
-        </Typography.BodyBold>
+        {postedUser && (
+          <Button onPress={() => onClickUser(postedUser.userId)}>
+            <Typography.BodyBold className={styles.postTitle__text}>
+              {postedUser.displayName}
+            </Typography.BodyBold>
+          </Button>
+        )}
         {targetCommunity && (
           <>
             <AngleRight className={styles.postTitle__icon} />
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {targetCommunity.displayName}
-            </Typography.BodyBold>{' '}
+            <Button
+              onPress={() => {
+                onClickCommunity(targetCommunity.communityId);
+              }}
+            >
+              <Typography.BodyBold className={styles.postTitle__text}>
+                {targetCommunity.displayName}
+              </Typography.BodyBold>
+            </Button>
           </>
         )}
       </div>
@@ -69,9 +84,11 @@ const PostTitle = ({ pageId, post }: PostTitleProps) => {
   }
 
   return (
-    <Typography.BodyBold className={styles.postTitle__text}>
-      {postedUser?.displayName}
-    </Typography.BodyBold>
+    <Button onPress={() => postedUser && onClickUser(postedUser.userId)}>
+      <Typography.BodyBold className={styles.postTitle__text}>
+        {postedUser?.displayName}
+      </Typography.BodyBold>
+    </Button>
   );
 };
 
@@ -159,8 +176,6 @@ export const PostContent = ({
   const { post: postData } = usePost(initialPost?.postId);
   const { setDrawerData, removeDrawerData } = useDrawer();
 
-  const post = postData || initialPost;
-
   const [shouldSubscribe, setShouldSubscribe] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
@@ -169,18 +184,30 @@ export const PostContent = ({
 
   const [reactionByMe, setReactionByMe] = useState<string | null>(null);
   const [reactionsCount, setReactionsCount] = useState<number>(0);
+  const { page } = useNavigation();
+
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  const post = useMemo(() => {
+    if (initialPost != null && postData != null) {
+      if (dayjs(initialPost?.updatedAt).unix() > dayjs(postData?.updatedAt).unix()) {
+        return initialPost;
+      }
+      return postData;
+    }
+    if (postData != null) {
+      return postData;
+    }
+    if (initialPost != null) {
+      return initialPost;
+    }
+  }, [initialPost, postData]);
 
   usePostSubscription({
     postId: post?.postId,
     level: SubscriptionLevels.POST,
     shouldSubscribe: shouldSubscribe,
   });
-
-  useEffect(() => {
-    if (post) {
-      post.analytics?.markAsViewed();
-    }
-  }, [post]);
 
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
@@ -197,7 +224,7 @@ export const PostContent = ({
   useEffect(() => {
     if (post == null) return;
     setReactionByMe(post.myReactions?.[0] || null);
-  }, [post.myReactions]);
+  }, [post?.myReactions]);
 
   useEffect(() => {
     if (post == null) return;
@@ -269,8 +296,20 @@ export const PostContent = ({
 
   const hasReaction = hasLike || hasLove || hasFire || hasHappy || hasCrying;
 
+  const { isVisible } = useVisibilitySensor({
+    threshold: 0.6,
+    elementRef,
+  });
+
+  useEffect(() => {
+    if (page.type === PageTypes.PostDetailPage) return;
+    if (isVisible) {
+      post.analytics?.markAsViewed();
+    }
+  }, [post, isVisible, page.type]);
+
   return (
-    <div className={styles.postContent} style={themeStyles}>
+    <div ref={elementRef} className={styles.postContent} style={themeStyles}>
       <div className={styles.postContent__bar} data-type={type}>
         <div className={styles.postContent__bar__userAvatar}>
           <UserAvatar userId={post?.postedUserId} />
@@ -287,6 +326,11 @@ export const PostContent = ({
               </div>
             ) : null}
             <Timestamp timestamp={post.createdAt} />
+            {post.createdAt !== post.editedAt && (
+              <Typography.Caption className={styles.postContent__bar__information__editedTag}>
+                (edited)
+              </Typography.Caption>
+            )}
           </div>
         </div>
         <div className={styles.postContent__bar__actionButton}>

@@ -8,6 +8,9 @@
   border-top-left-radius: 1.25rem;
   border-top-right-radius: 1.25rem;
   box-shadow: var(--asc-box-shadow-04);
+  margin-top: 0.75rem;
+  position: absolute;
+  bottom: -0.4rem;
 }
 
 .mediaAttachment__swipeDown {

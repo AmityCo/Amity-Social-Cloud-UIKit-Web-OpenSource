@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Drawer.module.css';
-import { useDrawer, useDrawerData } from '../../providers/DrawerProvider';
+import { useDrawer, useDrawerData } from '~/v4/core/providers/DrawerProvider';
 import { Drawer } from 'vaul';
 
 export const DrawerContainer = () => {

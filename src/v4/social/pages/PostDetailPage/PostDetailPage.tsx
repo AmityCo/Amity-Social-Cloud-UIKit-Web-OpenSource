@@ -11,8 +11,8 @@ import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import styles from './PostDetailPage.module.css';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { PostCommentComposer } from '../../components/PostCommentComposer/PostCommentComposer';
-import { PostCommentList } from '../../components/PostCommentList/PostCommentList';
+import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
+import { CommentList } from '~/v4/social/components/CommentList/CommentList';
 
 interface PostDetailPageProps {
   id: string;
@@ -20,7 +20,7 @@ interface PostDetailPageProps {
 
 export function PostDetailPage({ id }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
-  const { post, isLoading: isPostLoading, error } = usePost(id);
+  const { post, isLoading: isPostLoading } = usePost(id);
   const { themeStyles } = useAmityPage({
     pageId,
   });
@@ -42,8 +42,9 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
         <div className={styles.postDetailPage__comments__divider} data-is-loading={isPostLoading} />
         <div className={styles.postDetailPage__comments}>
           {post && (
-            <PostCommentList
-              post={post}
+            <CommentList
+              referenceId={post.postId}
+              referenceType="post"
               onClickReply={(comment: Amity.Comment) => setReplyComment(comment)}
             />
           )}
@@ -70,8 +71,9 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
         </div>
       </div>
       {post && (
-        <PostCommentComposer
-          post={post}
+        <CommentComposer
+          referenceId={post.postId}
+          referenceType={'post'}
           replyTo={replyComment}
           onCancelReply={() => setReplyComment(undefined)}
         />

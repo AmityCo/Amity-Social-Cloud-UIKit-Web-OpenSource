@@ -6,8 +6,8 @@
 }
 
 .fileButton__icon {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 2rem;
   stroke: var(--asc-color-base-default);
   background: var(--asc-color-base-shade4);
   border-radius: 50%;

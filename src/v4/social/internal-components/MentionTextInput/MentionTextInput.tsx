@@ -9,7 +9,7 @@ import { TextNode } from 'lexical';
 import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { $createMentionNode } from './MentionNodes';
-import { CommunityMember } from '../CommunityMember';
+import { CommunityMember } from '~/v4/social/internal-components/CommunityMember';
 import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
@@ -110,22 +110,34 @@ export class MentionTypeaheadOption extends MenuOption {
   }
 }
 
-export const MentionTextInputPlugin = ({ communityId }: { communityId?: string | null }) => {
-  const mentionTextInputItemRef = useRef<HTMLDivElement>(null);
+export const MentionTextInputPlugin = ({
+  communityId,
+  onChangeSnap,
+  mentionContainer,
+}: {
+  communityId?: string | null;
+  onChangeSnap?: number;
+  mentionContainer: HTMLElement | null;
+}) => {
   return (
     <div>
-      <div ref={mentionTextInputItemRef}></div>
-      <Mention anchorRef={mentionTextInputItemRef} communityId={communityId} />
+      <Mention
+        anchorElement={mentionContainer}
+        communityId={communityId}
+        onChangeSnap={onChangeSnap}
+      />
     </div>
   );
 };
 
 function Mention({
-  anchorRef,
+  anchorElement,
   communityId,
+  onChangeSnap,
 }: {
-  anchorRef: RefObject<HTMLDivElement>;
+  anchorElement: HTMLElement | null;
   communityId?: string | null;
+  onChangeSnap?: number;
 }) {
   const [editor] = useLexicalComposerContext();
 
@@ -133,7 +145,7 @@ function Mention({
   let options: MentionTypeaheadOption[] = [];
   const intersectionRef = useRef<HTMLDivElement>(null);
   const {
-    users: members,
+    members,
     hasMore: hasMoreMember,
     isLoading: isLoadingMember,
     loadMore: loadMoreMember,
@@ -162,7 +174,7 @@ function Mention({
     ref: intersectionRef,
   });
 
-  const community = useCommunity(communityId || '');
+  const community = useCommunity({ communityId, shouldCall: !!communityId }).community;
   const isPublic = community?.isPublic;
 
   if (communityId && !isPublic) {
@@ -213,10 +225,10 @@ function Mention({
         anchorElementRef,
         { selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
       ) =>
-        anchorRef.current && options.length > 0
+        anchorElement && options.length > 0
           ? ReactDOM.createPortal(
               <>
-                <div className={styles.mentionTextInput_item}>
+                <div data-media-attachement={onChangeSnap} className={styles.mentionTextInput_item}>
                   {options.map((option, i: number) => (
                     <CommunityMember
                       isSelected={selectedIndex === i}
@@ -234,7 +246,7 @@ function Mention({
                 </div>
                 <div ref={intersectionRef} />
               </>,
-              anchorRef.current,
+              anchorElement,
             )
           : null
       }

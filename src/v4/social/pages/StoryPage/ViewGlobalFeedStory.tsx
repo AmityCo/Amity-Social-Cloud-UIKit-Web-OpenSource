@@ -17,17 +17,12 @@ export const ViewGlobalFeedStoryPage = ({
   targetId: string;
   onChangePage?: () => void;
   onClickStory: (targetId: string) => void;
-  goToDraftStoryPage: ({
-    targetId,
-    targetType,
-    mediaType,
-    storyType,
-  }: {
-    targetId: string;
-    targetType: string;
-    mediaType: AmityStoryMediaType;
-    storyType: 'globalFeed';
-  }) => void;
+  goToDraftStoryPage: (
+    targetId: string,
+    targetType: string,
+    mediaType: AmityStoryMediaType,
+    storyType: 'globalFeed',
+  ) => void;
   onClose: (targetId: string) => void;
   onSwipeDown: (targetId: string) => void;
   onClickCommunity: (targetId: string) => void;

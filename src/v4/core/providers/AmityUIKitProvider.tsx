@@ -1,6 +1,6 @@
-import '../../../core/providers/UiKitProvider/inter.css';
+import '~/core/providers/UiKitProvider/inter.css';
 import './index.css';
-import '../../styles/global.css';
+import '~/v4/styles/global.css';
 
 import React, { useEffect, useMemo, useState } from 'react';
 import useUser from '~/core/hooks/useUser';
@@ -27,7 +27,7 @@ import { defaultConfig, Config, CustomizationProvider } from './CustomizationPro
 import { ThemeProvider } from './ThemeProvider';
 import { PageBehavior, PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AmityUIKitManager } from '../AmityUIKitManager';
+import { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
 import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
 import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
@@ -35,7 +35,7 @@ import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
 import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 import { CustomReactionProvider } from './CustomReactionProvider';
 import { AdEngineProvider } from './AdEngineProvider';
-import { AdEngine } from '../AdEngine';
+import { AdEngine } from '~/v4/core/AdEngine';
 import { GlobalFeedProvider } from '~/v4/social/providers/GlobalFeedProvider';
 
 export type AmityUIKitConfig = Config;
@@ -47,7 +47,6 @@ interface AmityUIKitProviderProps {
     http?: string;
     mqtt?: string;
   };
-  authToken?: string;
   userId: string;
   displayName: string;
   postRendererConfig?: any;
@@ -68,6 +67,7 @@ interface AmityUIKitProviderProps {
   onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   onConnected?: () => void;
   onDisconnected?: () => void;
+  getAuthToken?: () => Promise<string>;
   configs?: AmityUIKitConfig;
 }
 
@@ -75,7 +75,6 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   apiKey,
   apiRegion,
   apiEndpoint,
-  authToken,
   userId,
   displayName,
   postRendererConfig,
@@ -85,6 +84,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   pageBehavior,
   onConnectionStatusChange,
   onDisconnected,
+  getAuthToken,
   configs,
 }) => {
   const queryClient = new QueryClient();
@@ -102,6 +102,12 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
 
   useEffect(() => {
     const setup = async () => {
+      let authToken;
+
+      if (getAuthToken) {
+        authToken = await getAuthToken();
+      }
+
       try {
         // Set up the AmityUIKitManager
         AmityUIKitManager.setup({ apiKey, apiRegion, apiEndpoint });
@@ -115,13 +121,16 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
           {
             sessionWillRenewAccessToken: (renewal) => {
               // Handle access token renewal
-              if (authToken) {
-                renewal.renewWithAuthToken(authToken);
+              if (getAuthToken) {
+                getAuthToken().then((newToken) => {
+                  renewal.renewWithAuthToken(newToken);
+                });
               } else {
                 renewal.renew();
               }
             },
           },
+          authToken,
           onConnectionStatusChange,
           onDisconnected,
         );
@@ -134,7 +143,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
     };
 
     setup();
-  }, [userId, displayName, authToken, onConnectionStatusChange, onDisconnected]);
+  }, [userId, displayName, onConnectionStatusChange, onDisconnected]);
 
   if (!client) return null;
 
@@ -152,33 +161,34 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
                         <SDKConnectorProviderV3>
                           <SDKConnectorProvider>
                             <NotificationProvider>
-                              <DrawerProvider>
-                                <LegacyNotificationProvider>
-                                  <ConfirmProvider>
-                                    <LegacyConfirmProvider>
-                                      <ConfigProvider
-                                        config={{
-                                          socialCommunityCreationButtonVisible:
-                                            socialCommunityCreationButtonVisible || true,
-                                        }}
-                                      >
-                                        <PostRendererProvider config={postRendererConfig}>
-                                          <NavigationProvider>
-                                            <PageBehaviorProvider pageBehavior={pageBehavior}>
+                              <LegacyNotificationProvider>
+                                <ConfirmProvider>
+                                  <LegacyConfirmProvider>
+                                    <ConfigProvider
+                                      config={{
+                                        socialCommunityCreationButtonVisible:
+                                          socialCommunityCreationButtonVisible || true,
+                                      }}
+                                    >
+                                      <PostRendererProvider config={postRendererConfig}>
+                                        <NavigationProvider>
+                                          <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                            <DrawerProvider>
                                               <GlobalFeedProvider>{children}</GlobalFeedProvider>
-                                            </PageBehaviorProvider>
-                                          </NavigationProvider>
-                                        </PostRendererProvider>
-                                      </ConfigProvider>
-                                      <NotificationsContainer />
-                                      <LegacyNotificationsContainer />
-                                      <ConfirmComponent />
-                                      <DrawerContainer />
-                                      <LegacyConfirmComponent />
-                                    </LegacyConfirmProvider>
-                                  </ConfirmProvider>
-                                </LegacyNotificationProvider>
-                              </DrawerProvider>
+                                              <DrawerContainer />
+                                            </DrawerProvider>
+                                          </PageBehaviorProvider>
+                                        </NavigationProvider>
+                                      </PostRendererProvider>
+                                    </ConfigProvider>
+                                    <NotificationsContainer />
+                                    <LegacyNotificationsContainer />
+                                    <ConfirmComponent />
+
+                                    <LegacyConfirmComponent />
+                                  </LegacyConfirmProvider>
+                                </ConfirmProvider>
+                              </LegacyNotificationProvider>
                             </NotificationProvider>
                           </SDKConnectorProvider>
                         </SDKConnectorProviderV3>

@@ -7,6 +7,9 @@
   box-shadow: var(--asc-box-shadow-04);
   padding-bottom: 2rem;
   padding-top: 0.75rem;
+  margin-top: -1rem;
+  position: absolute;
+  bottom: -0.9rem;
 }
 
 .detailedMediaAttachment__swipeDown {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAmityComponent } from '~/v4/core/hooks/uikit/index';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { UIPostAd } from './UIPostAd';
 import { useImage } from '~/v4/core/hooks/useImage';
 

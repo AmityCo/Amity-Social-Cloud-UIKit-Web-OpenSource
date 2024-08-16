@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import clsx from 'clsx';
-import { Typography } from '~/v4/core/components/index';
+import { Typography } from '~/v4/core/components';
 import { useLiveChatNotificationData } from '~/v4/chat/providers/LiveChatNotificationProvider';
 
 import styles from './LiveChatNotification.module.css';

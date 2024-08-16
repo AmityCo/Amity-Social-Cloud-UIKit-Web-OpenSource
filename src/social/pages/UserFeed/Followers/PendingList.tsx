@@ -90,7 +90,7 @@ const PendingList = ({ userId }: { userId?: string | null }) => {
           isLoadingItem(item) ? (
             <Skeleton style={{ fontSize: 8 }} />
           ) : (
-            <PendingItem key={`${item.from}-${item.to}`} userId={item.to} />
+            <PendingItem key={`${item.from}-${item.to}`} userId={item.from} />
           ),
         )}
       </Grid>

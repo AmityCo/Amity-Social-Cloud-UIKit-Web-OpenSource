@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import useImage from '~/core/hooks/useImage';
 import usePostByIds from '~/social/hooks/usePostByIds';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { ClearButton } from '../../elements/ClearButton/ClearButton';
+import { ClearButton } from '~/v4/social/elements/ClearButton';
 
 import styles from './ImageViewer.module.css';
 

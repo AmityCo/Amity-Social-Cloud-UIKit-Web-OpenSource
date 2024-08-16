@@ -2,7 +2,7 @@ import { Tester, CustomRenderer } from './types';
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { UIStoryAd } from '../../StoryAd/UIStoryAd';
+import { UIStoryAd } from '~/v4/social/internal-components/StoryAd/UIStoryAd';
 import { useImage } from '~/v4/core/hooks/useImage';
 
 export const renderer: CustomRenderer = ({ story, action, config, onClose }) => {

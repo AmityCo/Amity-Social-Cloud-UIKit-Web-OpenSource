@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { PostContent, PostContentSkeleton } from '../PostContent';
+import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed/EmptyNewsFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
@@ -7,6 +7,7 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import styles from './GlobalFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PostAd } from '~/v4/social/internal-components/PostAd/PostAd';
+import { Button } from '~/v4/core/natives/Button';
 
 interface GlobalFeedProps {
   pageId?: string;
@@ -68,7 +69,12 @@ export const GlobalFeed = ({
           {isAmityAd(item) ? (
             <PostAd ad={item} />
           ) : (
-            <div className={styles.global_feed__postContainer}>
+            <Button
+              className={styles.global_feed__postContainer}
+              onPress={() =>
+                AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId })
+              }
+            >
               <PostContent
                 pageId={pageId}
                 post={item}
@@ -78,7 +84,7 @@ export const GlobalFeed = ({
                 }}
                 onPostDeleted={onPostDeleted}
               />
-            </div>
+            </Button>
           )}
         </div>
       ))}

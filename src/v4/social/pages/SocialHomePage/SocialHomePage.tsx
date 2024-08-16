@@ -9,7 +9,8 @@ import { MyCommunitiesButton } from '~/v4/social/elements/MyCommunitiesButton';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
-import { useGlobalFeedContext } from '../../providers/GlobalFeedProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
+import ExplorePage from '~/social/pages/Explore';
 
 export enum HomePageTab {
   Newsfeed = 'Newsfeed',
@@ -78,7 +79,11 @@ export function SocialHomePage() {
             isActive={activeTab === HomePageTab.Newsfeed}
             onClick={() => setActiveTab(HomePageTab.Newsfeed)}
           />
-          <ExploreButton pageId={pageId} isActive={activeTab === HomePageTab.Explore} />
+          <ExploreButton
+            pageId={pageId}
+            isActive={activeTab === HomePageTab.Explore}
+            onClick={() => setActiveTab(HomePageTab.Explore)}
+          />
           <MyCommunitiesButton
             pageId={pageId}
             isActive={activeTab === HomePageTab.MyCommunities}
@@ -88,7 +93,7 @@ export function SocialHomePage() {
       </div>
       <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
         {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
-        {activeTab === HomePageTab.Explore && <div>Explore</div>}
+        {activeTab === HomePageTab.Explore && <ExplorePage />}
         {activeTab === HomePageTab.MyCommunities && <MyCommunities pageId={pageId} />}
       </div>
       {isShowCreatePostMenu && (

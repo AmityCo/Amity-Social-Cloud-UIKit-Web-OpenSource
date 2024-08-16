@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CommunityMember.module.css';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
-import { MentionTypeaheadOption } from '../MentionTextInput/MentionTextInput';
+import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { MentionTypeaheadOption } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
 
 interface CommunityMemberProps {
   isSelected: boolean;

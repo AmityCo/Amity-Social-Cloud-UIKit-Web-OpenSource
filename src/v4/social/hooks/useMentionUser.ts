@@ -1,31 +1,26 @@
 import { CommunityRepository, UserRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
-import useCommunity from '~/social/hooks/useCommunity';
 
 export type MentionUser = Amity.Membership<'community'> | Amity.User;
 
 export const useMentionUsers = ({
   displayName,
   limit = 10,
-  postTargetType,
-  postTargetId,
+  community,
 }: {
   displayName: string;
   limit?: number;
-  postTargetType: Amity.PostTargetType;
-  postTargetId: string;
+  community?: Amity.Community;
 }) => {
-  const community = useCommunity(postTargetType === 'community' ? postTargetId : undefined);
-
   const fetcher =
-    postTargetType === 'community' && community && !community.isPublic
+    community && !community.isPublic
       ? CommunityRepository.Membership.getMembers
       : UserRepository.getUsers;
 
   const params =
-    postTargetType === 'community' && community && !community.isPublic
+    community && !community.isPublic
       ? ({
-          communityId: postTargetId,
+          communityId: community.communityId,
           displayName,
           limit,
         } as Amity.SearchCommunityMemberLiveCollection)
@@ -37,7 +32,6 @@ export const useMentionUsers = ({
   >({
     fetcher: fetcher as any,
     params,
-    shouldCall: (postTargetType === 'community' && !!community) || postTargetType === 'user',
   });
 
   return {

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import {
   AspectRatioButton,
-  BackButton,
   HyperLinkButton,
   ShareStoryButton,
   HyperLink,
@@ -17,6 +16,7 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { VideoPreview } from '~/v4/social/internal-components/VideoPreview';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
+import { RoundedBackButton } from '~/v4/social/elements/RoundedBackButton';
 import ColorThief from 'colorthief';
 
 import styles from './DraftsPage.module.css';
@@ -212,7 +212,7 @@ export const PlainDraftStoryPage = ({
       <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
         <div className={styles.headerContainer}>
           <div className={styles.header}>
-            <BackButton pageId={pageId} onPress={discardCreateStory} />
+            <RoundedBackButton pageId={pageId} onPress={discardCreateStory} />
             <div className={styles.topRightButtons}>
               {mediaType?.type === 'image' && (
                 <AspectRatioButton pageId={pageId} onPress={onClickImageMode} />

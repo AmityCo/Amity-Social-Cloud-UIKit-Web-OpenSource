@@ -5,8 +5,7 @@ import styles from './CommentList.module.css';
 import { ExpandIcon, MinusCircleIcon } from '~/v4/social/icons';
 import { LoadMoreWrapper } from '~/v4/core/components/LoadMoreWrapper/LoadMoreWrapper';
 import useCommentsCollection from '~/v4/social/hooks/collections/useCommentsCollection';
-import { CommentBubbleDeleted } from '~/v4/social/elements/CommentBubbleDeleted';
-import { Typography } from '~/v4/core/components/index';
+import { Typography } from '~/v4/core/components';
 
 interface CommentListProps {
   parentId?: string;

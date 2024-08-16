@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './VideoThumbnail.module.css';
 import useFileUpload from '~/v4/social/hooks/useFileUpload';
 import clsx from 'clsx';
-import { CloseIcon, ExclamationCircle } from '~/icons';
+import { CloseIcon, ExclamationCircle, Play } from '~/icons';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 
 interface VideoThumbnailProps {
@@ -78,6 +78,9 @@ export const VideoThumbnail = ({
               >
                 <CloseIcon className={styles.closeIcon} />
               </button>
+              <div className={styles.playIcon}>
+                <Play />
+              </div>
             </>
           )}
         </div>

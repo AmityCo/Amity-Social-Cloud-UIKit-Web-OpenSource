@@ -90,11 +90,14 @@ export const HyperLinkConfig = ({
     customText: z
       .string()
       .optional()
-      .refine(async (value) => {
-        if (!value) return true;
-        const hasBlockedWord = await client?.validateTexts([value]).catch(() => false);
-        return hasBlockedWord;
-      }, formatMessage({ id: 'storyCreation.hyperlink.validation.error.blocked' })),
+      .refine(
+        async (value) => {
+          if (!value) return true;
+          const hasBlockedWord = await client?.validateTexts([value]).catch(() => false);
+          return hasBlockedWord;
+        },
+        formatMessage({ id: 'storyCreation.hyperlink.validation.error.blocked' }),
+      ),
   });
 
   type HyperLinkFormInputs = z.infer<typeof schema>;

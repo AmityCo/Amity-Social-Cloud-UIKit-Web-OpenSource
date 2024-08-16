@@ -7,6 +7,8 @@ import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadg
 import { CommunityCategoryName } from '~/v4/social/elements/CommunityCategoryName';
 import { CommunityMembersCount } from '~/v4/social/elements/CommunityMembersCount';
 import styles from './CommunityItem.module.css';
+import { Button } from '~/v4/core/natives/Button';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 const CommunityCategories = ({
   community,
@@ -52,8 +54,15 @@ export const CommunityItem = ({
   pageId: string;
   componentId: string;
 }) => {
+  const { onClickCommunity } = useNavigation();
   return (
-    <div key={community.communityId} className={styles.communityItem}>
+    <Button
+      key={community.communityId}
+      className={styles.communityItem}
+      onPress={() => {
+        onClickCommunity(community.communityId);
+      }}
+    >
       <div className={styles.communityItem__leftPane}>
         <CommunityAvatar pageId={pageId} componentId={componentId} community={community} />
       </div>
@@ -80,6 +89,6 @@ export const CommunityItem = ({
           />
         </div>
       </div>
-    </div>
+    </Button>
   );
 };

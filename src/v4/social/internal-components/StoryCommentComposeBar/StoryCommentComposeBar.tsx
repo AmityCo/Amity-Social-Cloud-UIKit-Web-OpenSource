@@ -3,7 +3,7 @@ import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import { Close, Lock2Icon } from '~/icons';
-import { CommentComposeBar } from '../CommentComposeBar';
+import { CommentComposeBar } from '~/v4/social/internal-components/CommentComposeBar';
 import styles from './StoryCommentComposeBar.module.css';
 
 interface StoryCommentComposeBarProps {

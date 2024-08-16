@@ -12,7 +12,7 @@ interface ImageButtonProps {
   componentId?: string;
   imgIconClassName?: string;
   defaultIconClassName?: string;
-  onChange?: (files: File[]) => void;
+  onImageFileChange?: (files: File[]) => void;
 }
 
 const ImageButtonSvg = (props: React.SVGProps<SVGSVGElement>) => {
@@ -49,15 +49,11 @@ export function ImageButton({
   componentId = '*',
   imgIconClassName,
   defaultIconClassName,
-  onChange,
+  onImageFileChange,
 }: ImageButtonProps) {
   const elementId = 'image_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
     useAmityElement({ pageId, componentId, elementId });
-
-  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
-
-  const { confirm } = useConfirmContext();
 
   if (isExcluded) return null;
 
@@ -66,31 +62,11 @@ export function ImageButton({
     fileInput.click();
   };
 
-  const onLoad: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const targetFiles = e.target.files ? [...e.target.files] : [];
-
-      if (targetFiles.length + uploadedImages.length > 10) {
-        confirm({
-          pageId: pageId,
-          type: 'info',
-          title: 'Maximum upload limit reached',
-          content:
-            'You’ve reached the upload limit of 10 images. Any additional images will not be saved. ',
-          okText: 'Close',
-        });
-        return;
-      }
-
-      if (targetFiles.length) {
-        setUploadedImages((prevImages) => [...prevImages, ...targetFiles]);
-        onChange?.(targetFiles);
-      }
-    },
-    [onChange],
-  );
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onImageFileChange?.(e.target.files ? [...e.target.files] : []);
+  };
 
   return (
     <Button
@@ -111,7 +87,7 @@ export function ImageButton({
       {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
       <input
         type="file"
-        onChange={onLoad}
+        onChange={onChangeImage}
         multiple
         id="image-upload"
         accept="image/*"

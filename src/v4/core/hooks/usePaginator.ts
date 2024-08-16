@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
-import { AdEngine } from '../AdEngine';
-import { useAdSettings, useRecommendAds } from '../providers/AdEngineProvider';
+import { AdEngine } from '~/v4/core/AdEngine';
+import { useAdSettings, useRecommendAds } from '~/v4/core/providers/AdEngineProvider';
 import { isNonNullable } from '~/v4/helpers/utils';
 
 const usePaginatorCore = <T>({
@@ -45,13 +45,23 @@ const usePaginatorCore = <T>({
     if (frequency?.type === 'fixed') {
       const newItemIds = new Set(newItems.map((item) => getItemId(item)));
 
-      const prevItemWithAds = itemWithAds
+      const prevItemWithAds: Array<[T] | [T, Amity.Ad]> = itemWithAds
         .map((itemWithAd) => {
           const itemId = getItemId(itemWithAd[0]);
 
           if (!newItemIds.has(itemId)) {
             return null;
           }
+
+          const updatedItem = newItems.find((newItem) => getItemId(newItem) === itemId);
+
+          if (updatedItem) {
+            if (itemWithAd.length === 1) {
+              return [updatedItem] as [T];
+            }
+            return [updatedItem, itemWithAd[1]] as [T, Amity.Ad];
+          }
+
           return itemWithAd;
         })
         .filter(isNonNullable);

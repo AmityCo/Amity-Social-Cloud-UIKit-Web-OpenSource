@@ -1,7 +1,7 @@
 .drawer__content {
   padding-top: 1rem;
   background-color: var(--asc-color-background-default);
-  max-height: 70%;
+  max-height: 50%;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -79,7 +79,21 @@
 }
 
 .drawer__content__emptySpace {
-  min-height: 15rem;
+  min-height: 5rem;
   width: 100%;
   background-color: var(--asc-color-background-default);
+}
+
+.drawer__container {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.drawer__innerContainer {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }

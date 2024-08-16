@@ -120,7 +120,7 @@ function useFollowerListItems({ userId }: { userId?: string | null }) {
   const { followers, isLoading, loadMore, hasMore, loadMoreHasBeenCalled } = useFollowersCollection(
     {
       userId,
-      status: 'all',
+      status: 'accepted',
     },
   );
 

@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './CameraButton.module.css';
 import clsx from 'clsx';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Button } from '~/v4/core/natives/Button';
 
 interface CameraButtonProps {
@@ -12,14 +11,10 @@ interface CameraButtonProps {
   componentId?: string;
   imgIconClassName?: string;
   defaultIconClassName?: string;
-  onChange?: (files: File[]) => void;
   isVisibleImage?: boolean;
   isVisibleVideo?: boolean;
-  onChangeVideos?: (files: File[]) => void;
-  onChangeThumbnail?: (
-    thumbnail: { file: File; videoUrl: string; thumbnail: string | undefined }[],
-  ) => void;
-  videoThumbnail?: { file: File; videoUrl: string; thumbnail: string | undefined }[];
+  onVideoFileChange?: (files: File[]) => void;
+  onImageFileChange?: (files: File[]) => void;
 }
 
 const CameraSvg = (props: React.SVGProps<SVGSVGElement>) => {
@@ -55,128 +50,44 @@ export function CameraButton({
   componentId = '*',
   imgIconClassName,
   defaultIconClassName,
-  onChange,
   isVisibleImage,
   isVisibleVideo,
-  onChangeVideos,
-  videoThumbnail,
-  onChangeThumbnail,
+  onVideoFileChange,
+  onImageFileChange,
 }: CameraButtonProps) {
   const elementId = 'camera_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
     useAmityElement({ pageId, componentId, elementId });
 
   if (isExcluded) return null;
-  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
-
-  const { confirm } = useConfirmContext();
 
   const triggerFileInput = () => {
     const fileInput = document.getElementById('upload') as HTMLInputElement;
     fileInput.click();
   };
 
-  const onLoadVideo: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const targetFiles = e.target.files ? [...e.target.files] : [];
+  const onLoadMedia: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const targetFiles = e.target.files ? [...e.target.files] : [];
+    const isImage = targetFiles.some((file) => file.type.startsWith('image/'));
+    const isVideo = targetFiles.some((file) => file.type.startsWith('video/'));
 
-      const existingVideosCount = videoThumbnail ? videoThumbnail.length : 0;
+    if (isImage) {
+      onImageFileChange?.(e.target.files ? [...e.target.files] : []);
+    } else if (isVideo) {
+      onVideoFileChange?.(e.target.files ? [...e.target.files] : []);
+    }
+  }, []);
 
-      if (targetFiles.length + existingVideosCount > 10) {
-        confirm({
-          pageId: pageId,
-          type: 'info',
-          title: 'Maximum upload limit reached',
-          content:
-            'You’ve reached the upload limit of 10 videos. Any additional videos will not be saved. ',
-          okText: 'Close',
-        });
-        return;
-      }
+  const onImageChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    onImageFileChange?.(e.target.files ? [...e.target.files] : []);
+  }, []);
 
-      if (targetFiles.length) {
-        onChangeVideos?.(targetFiles);
-        const updatedVideos = targetFiles.map((file) => ({
-          file,
-          videoUrl: URL.createObjectURL(file),
-          thumbnail: null,
-        }));
-        onChangeThumbnail?.((prevVideos) => [...prevVideos, ...updatedVideos]);
-        videoThumbnail &&
-          updatedVideos.forEach((video, index) =>
-            generateThumbnail(video.file, index + videoThumbnail.length),
-          );
-      }
-    },
-    [onChangeVideos, videoThumbnail?.length, onChangeThumbnail],
-  );
+  const onVideoChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    onImageFileChange?.(e.target.files ? [...e.target.files] : []);
+  }, []);
 
-  const onLoadImage: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const targetFiles = e.target.files ? [...e.target.files] : [];
-
-      if (targetFiles.length + uploadedImages.length > 10) {
-        confirm({
-          pageId: pageId,
-          type: 'info',
-          title: 'Maximum upload limit reached',
-          content:
-            'You’ve reached the upload limit of 10 images. Any additional images will not be saved. ',
-          okText: 'Close',
-        });
-        return;
-      }
-
-      if (targetFiles.length) {
-        setUploadedImages((prevImages) => [...prevImages, ...targetFiles]);
-        onChange?.(targetFiles);
-      }
-    },
-    [onChange],
-  );
-
-  const onLoadMedia: React.ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const targetFiles = e.target.files ? [...e.target.files] : [];
-      const isImage = targetFiles.some((file) => file.type.startsWith('image/'));
-      const isVideo = targetFiles.some((file) => file.type.startsWith('video/'));
-
-      if (isImage) {
-        onLoadImage(e);
-      } else if (isVideo) {
-        onLoadVideo(e);
-      }
-    },
-    [onLoadImage, onLoadVideo],
-  );
-
-  const generateThumbnail = (file: File, index: number) => {
-    const videoElement = document.createElement('video');
-    const canvasElement = document.createElement('canvas');
-    const context = canvasElement.getContext('2d');
-
-    videoElement.src = URL.createObjectURL(file);
-    videoElement.currentTime = 10; // Seek to 10 seconds (you can adjust this)
-
-    videoElement.addEventListener('loadeddata', () => {
-      videoElement.pause();
-      canvasElement.width = videoElement.videoWidth;
-      canvasElement.height = videoElement.videoHeight;
-      context?.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
-      const thumbnail = canvasElement.toDataURL('image/png');
-      onChangeThumbnail?.((prevVideos) => {
-        const newVideos = [...prevVideos];
-        newVideos[index].thumbnail = thumbnail;
-        return newVideos;
-      });
-    });
-  };
   return (
     <Button
       style={themeStyles}
@@ -197,7 +108,7 @@ export function CameraButton({
       {isVisibleImage && !isVisibleVideo && (
         <input
           type="file"
-          onChange={onLoadImage}
+          onChange={onImageChange}
           id="upload"
           accept="image/*"
           className={styles.cameraButton_input}
@@ -207,7 +118,7 @@ export function CameraButton({
       {!isVisibleImage && isVisibleVideo && (
         <input
           type="file"
-          onChange={onLoadVideo}
+          onChange={onVideoChange}
           id="upload"
           accept="video/*"
           className={styles.cameraButton_input}
