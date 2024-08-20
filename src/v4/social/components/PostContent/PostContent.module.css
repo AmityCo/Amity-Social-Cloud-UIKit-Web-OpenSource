@@ -1,5 +1,6 @@
 .postContent {
   background-color: var(--asc-color-background-default);
+  padding: 0.25rem 1rem 0.75rem;
 }
 
 .postContent__bar {

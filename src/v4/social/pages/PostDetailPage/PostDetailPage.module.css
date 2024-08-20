@@ -40,10 +40,6 @@
   cursor: pointer;
 }
 
-.postDetailPage__postContent {
-  padding: 0.5rem 1rem;
-}
-
 .postDetailPage__backIcon {
   fill: var(--asc-color-base-default);
   cursor: pointer;

@@ -32,7 +32,7 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
       <div className={styles.postDetailPage__container}>
-        <div className={styles.postDetailPage__postContent}>
+        <div>
           {isPostLoading ? (
             <PostContentSkeleton pageId={pageId} />
           ) : post ? (
