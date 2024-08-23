@@ -70,6 +70,7 @@ type Page =
       context: {
         postId: string;
         communityId?: string;
+        hideTarget?: boolean;
       };
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string } }
@@ -114,7 +115,7 @@ type ContextValue = {
   onMessageUser: (userId: string) => void;
   onBack: () => void;
   goToUserProfilePage: (userId: string) => void;
-  goToPostDetailPage: (postId: string) => void;
+  goToPostDetailPage: (postId: string, hideTarget?: boolean) => void;
   goToCommunityProfilePage: (communityId: string) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
@@ -177,7 +178,7 @@ let defaultValue: ContextValue = {
   onEditUser: (userId: string) => {},
   onMessageUser: (userId: string) => {},
   goToUserProfilePage: (userId: string) => {},
-  goToPostDetailPage: (postId: string) => {},
+  goToPostDetailPage: (postId: string, hideTarget?: boolean) => {},
   goToViewStoryPage: (context: {
     targetId: string;
     targetType: Amity.StoryTargetType;
@@ -227,7 +228,8 @@ if (process.env.NODE_ENV !== 'production') {
     onBack: () => console.log('NavigationContext onBack()'),
     goToUserProfilePage: (userId) =>
       console.log(`NavigationContext goToUserProfilePage(${userId})`),
-    goToPostDetailPage: (postId) => console.log(`NavigationContext goToPostDetailPage(${postId})`),
+    goToPostDetailPage: (postId, hideTarget) =>
+      console.log(`NavigationContext goToPostDetailPage(${postId} ${hideTarget})`),
     goToCommunityProfilePage: (communityId) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId})`),
     goToSocialGlobalSearchPage: (tab) =>
@@ -360,7 +362,7 @@ export default function NavigationProvider({
   const handleClickCommunity = useCallback(
     (communityId) => {
       const next = {
-        type: PageTypes.CommunityFeed,
+        type: PageTypes.CommunityProfilePage,
         context: {
           communityId,
         },
@@ -508,11 +510,12 @@ export default function NavigationProvider({
   );
 
   const goToPostDetailPage = useCallback(
-    (postId) => {
+    (postId, hideTarget) => {
       const next = {
         type: PageTypes.PostDetailPage,
         context: {
           postId,
+          hideTarget,
         },
       };
 
@@ -524,7 +527,7 @@ export default function NavigationProvider({
   const goToCommunityProfilePage = useCallback(
     (communityId) => {
       const next = {
-        type: PageTypes.CommunityFeed,
+        type: PageTypes.CommunityProfilePage,
         context: {
           communityId,
         },

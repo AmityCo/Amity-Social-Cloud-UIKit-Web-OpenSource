@@ -1,0 +1,24 @@
+.lockPrivateContent__wrap {
+  margin: 5rem auto 3rem;
+  text-align: center;
+}
+
+.lockPrivateContent__lockIcon {
+  width: 3.75rem;
+  height: 2.8125rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+.lockPrivateContent__title {
+  margin-top: 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.lockPrivateContent__body {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--asc-color-base-shade3);
+}

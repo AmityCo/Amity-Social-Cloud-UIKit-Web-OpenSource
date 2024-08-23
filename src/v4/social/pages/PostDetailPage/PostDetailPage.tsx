@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
@@ -6,19 +6,25 @@ import { MenuButton } from '~/v4/social/elements/MenuButton';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePost from '~/v4/core/hooks/objects/usePost';
 
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import styles from './PostDetailPage.module.css';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentList } from '~/v4/social/components/CommentList/CommentList';
+import {
+  AmityPostCategory,
+  AmityPostContentComponentStyle,
+} from '~/v4/social/components/PostContent/PostContent';
+import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 
 interface PostDetailPageProps {
   id: string;
+  hideTarget?: boolean;
 }
 
-export function PostDetailPage({ id }: PostDetailPageProps) {
+export function PostDetailPage({ id, hideTarget }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
   const { post, isLoading: isPostLoading } = usePost(id);
   const { themeStyles } = useAmityPage({
@@ -28,6 +34,15 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
 
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const [communityId, setCommunityId] = useState<string | null | undefined>(null);
+
+  useEffect(() => {
+    if (post?.targetId) {
+      setCommunityId(post.targetId);
+    }
+  }, [post?.targetId]);
+
+  const { community } = useCommunity({ communityId });
 
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
@@ -36,7 +51,13 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
           {isPostLoading ? (
             <PostContentSkeleton pageId={pageId} />
           ) : post ? (
-            <PostContent pageId={pageId} post={post} type="detail" />
+            <PostContent
+              pageId={pageId}
+              post={post}
+              category={AmityPostCategory.GENERAL}
+              style={AmityPostContentComponentStyle.DETAIL}
+              hideTarget={hideTarget}
+            />
           ) : null}
         </div>
         <div className={styles.postDetailPage__comments__divider} data-is-loading={isPostLoading} />
@@ -70,13 +91,22 @@ export function PostDetailPage({ id }: PostDetailPageProps) {
           />
         </div>
       </div>
-      {post && (
-        <CommentComposer
-          referenceId={post.postId}
-          referenceType={'post'}
-          replyTo={replyComment}
-          onCancelReply={() => setReplyComment(undefined)}
-        />
+      {post?.targetType === 'community' && !community?.isJoined ? (
+        <div>
+          <div className={styles.postDetailPage__divider} />
+          <Typography.Body className={styles.postDetailPage__notMember}>
+            Join community to interact with all posts
+          </Typography.Body>
+        </div>
+      ) : (
+        post && (
+          <CommentComposer
+            referenceId={post.postId}
+            referenceType={'post'}
+            replyTo={replyComment}
+            onCancelReply={() => setReplyComment(undefined)}
+          />
+        )
       )}
     </div>
   );

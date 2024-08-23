@@ -17,6 +17,8 @@ import CommunityFeed from '~/social/pages/CommunityFeed';
 import UserFeedPage from '~/social/pages/UserFeed';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
+import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
+import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
 
 const Application = () => {
   const { page } = useNavigation();
@@ -33,8 +35,15 @@ const Application = () => {
       <div className={styles.applicationContainer}>
         {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
         {page.type === PageTypes.SocialGlobalSearchPage && <SocialGlobalSearchPage />}
-        {page.type === PageTypes.PostDetailPage && <PostDetailPage id={page.context?.postId} />}
+        {page.type === PageTypes.PostDetailPage && (
+          <PostDetailPage id={page.context?.postId} hideTarget={page.context?.hideTarget} />
+        )}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
+        {page.type === PageTypes.CommunityProfilePage && (
+          <CommunityTabProvider>
+            <CommunityProfilePage communityId={page.context.communityId} />
+          </CommunityTabProvider>
+        )}
         {page.type === PageTypes.ViewStoryPage && (
           <ViewStoryPage type={page.context.storyType} targetId={page.context?.targetId} />
         )}

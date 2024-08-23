@@ -1,0 +1,25 @@
+.communityTabs__container {
+  background-color: var(--asc-color-base-background);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.communityTabs__tab {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+  flex-grow: 1;
+  width: 4.5rem;
+
+  --asc-icon-color: var(--asc-color-base-shade3);
+
+  color: var(--asc-icon-color);
+}
+
+.communityTabs__tab[data-is-active='true'] {
+  border-bottom: 2px solid var(--asc-color-primary-default);
+
+  --asc-icon-color: var(--asc-color-base-default);
+}

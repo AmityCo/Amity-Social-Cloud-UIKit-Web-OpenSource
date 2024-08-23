@@ -51,6 +51,8 @@ interface CommentInputProps {
   mentionOffsetBottom?: number;
   maxLines?: number;
   placehoder?: string;
+  targetType?: string;
+  targetId?: string;
   ref: MutableRefObject<LexicalEditor | null | undefined>;
   onChange: (data: CreateCommentParams) => void;
 }

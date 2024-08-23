@@ -8,6 +8,10 @@ import styles from './GlobalFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PostAd } from '~/v4/social/internal-components/PostAd/PostAd';
 import { Button } from '~/v4/core/natives/Button';
+import {
+  AmityPostCategory,
+  AmityPostContentComponentStyle,
+} from '~/v4/social/components/PostContent/PostContent';
 
 interface GlobalFeedProps {
   pageId?: string;
@@ -78,7 +82,8 @@ export const GlobalFeed = ({
               <PostContent
                 pageId={pageId}
                 post={item}
-                type="feed"
+                category={AmityPostCategory.GENERAL}
+                style={AmityPostContentComponentStyle.FEED}
                 onClick={() => {
                   AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId });
                 }}

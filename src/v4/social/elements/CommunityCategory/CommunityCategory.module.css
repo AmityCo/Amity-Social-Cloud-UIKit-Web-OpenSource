@@ -1,0 +1,11 @@
+.community__category {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: scroll;
+  width: 100%;
+}
+
+.community__category::-webkit-scrollbar {
+  display: none;
+}

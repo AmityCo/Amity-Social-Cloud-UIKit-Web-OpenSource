@@ -39,18 +39,32 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import dayjs from 'dayjs';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 
+export enum AmityPostContentComponentStyle {
+  FEED = 'feed',
+  DETAIL = 'detail',
+}
+
+export enum AmityPostCategory {
+  GENERAL = 'general',
+  ANNOUNCEMENT = 'announcement',
+  PIN = 'pin',
+}
+
 interface PostTitleProps {
   post: Amity.Post;
   pageId?: string;
+  hideTarget?: boolean;
 }
 
-const PostTitle = ({ pageId, post }: PostTitleProps) => {
+const PostTitle = ({ pageId, post, hideTarget }: PostTitleProps) => {
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
   const { community: targetCommunity } = useCommunity({
     communityId: post?.targetId,
     shouldCall,
   });
+
+  const { goToCommunityProfilePage } = useNavigation();
 
   const { user: postedUser } = useUser(post.postedUserId);
   const { onClickCommunity, onClickUser } = useNavigation();
@@ -65,19 +79,13 @@ const PostTitle = ({ pageId, post }: PostTitleProps) => {
             </Typography.BodyBold>
           </Button>
         )}
-        {targetCommunity && (
-          <>
+        {targetCommunity && !hideTarget && (
+          <Button onPress={() => goToCommunityProfilePage(targetCommunity.communityId)}>
             <AngleRight className={styles.postTitle__icon} />
-            <Button
-              onPress={() => {
-                onClickCommunity(targetCommunity.communityId);
-              }}
-            >
-              <Typography.BodyBold className={styles.postTitle__text}>
-                {targetCommunity.displayName}
-              </Typography.BodyBold>
-            </Button>
-          </>
+            <Typography.BodyBold className={styles.postTitle__text}>
+              {targetCommunity.displayName}
+            </Typography.BodyBold>{' '}
+          </Button>
         )}
       </div>
     );
@@ -151,21 +159,25 @@ const ChildrenPostContent = ({
 };
 
 interface PostContentProps {
-  pageId?: string;
   post: Amity.Post;
-  type: 'feed' | 'detail';
-  drawerRef?: React.RefObject<HTMLDivElement>;
   onClick?: () => void;
   onPostDeleted?: (post: Amity.Post) => void;
+  style: AmityPostContentComponentStyle;
+  category: AmityPostCategory;
+  hideMenu?: boolean;
+  hideTarget?: boolean;
+  pageId?: string;
 }
 
 export const PostContent = ({
   pageId = '*',
   post: initialPost,
-  type,
-  drawerRef,
   onClick,
   onPostDeleted,
+  category,
+  hideMenu = false,
+  hideTarget,
+  style,
 }: PostContentProps) => {
   const componentId = 'post_content';
   const { themeStyles } = useAmityComponent({
@@ -288,11 +300,17 @@ export const PostContent = ({
     setClickedVideoIndex(null);
   };
 
-  const hasLike = post?.reactions.like > 0;
-  const hasLove = post?.reactions.love > 0;
-  const hasFire = post?.reactions.fire > 0;
-  const hasHappy = post?.reactions.happy > 0;
-  const hasCrying = post?.reactions.crying > 0;
+  const handleUnpinPost = async () => {};
+
+  const handleEditPost = () => {};
+
+  const handleDeletePost = () => {};
+
+  const hasLike = post?.reactions?.like > 0;
+  const hasLove = post?.reactions?.love > 0;
+  const hasFire = post?.reactions?.fire > 0;
+  const hasHappy = post?.reactions?.happy > 0;
+  const hasCrying = post?.reactions?.crying > 0;
 
   const hasReaction = hasLike || hasLove || hasFire || hasHappy || hasCrying;
 
@@ -310,13 +328,13 @@ export const PostContent = ({
 
   return (
     <div ref={elementRef} className={styles.postContent} style={themeStyles}>
-      <div className={styles.postContent__bar} data-type={type}>
+      <div className={styles.postContent__bar} data-type={style}>
         <div className={styles.postContent__bar__userAvatar}>
           <UserAvatar userId={post?.postedUserId} />
         </div>
         <div>
           <div>
-            <PostTitle post={post} />
+            <PostTitle post={post} hideTarget={hideTarget} />
           </div>
           <div className={styles.postContent__bar__information__subtitle}>
             {isCommunityModerator ? (
@@ -333,27 +351,30 @@ export const PostContent = ({
             )}
           </div>
         </div>
-        <div className={styles.postContent__bar__actionButton}>
-          {type === 'feed' ? (
-            <MenuButton
-              pageId={pageId}
-              componentId={componentId}
-              onClick={() =>
-                setDrawerData({
-                  content: (
-                    <PostMenu
-                      post={post}
-                      onCloseMenu={() => removeDrawerData()}
-                      pageId={pageId}
-                      componentId={componentId}
-                      onPostDeleted={onPostDeleted}
-                    />
-                  ),
-                })
-              }
-            />
-          ) : null}
-        </div>
+
+        {style === AmityPostContentComponentStyle.FEED ? (
+          <div className={styles.postContent__bar__actionButton}>
+            {!hideMenu && (
+              <MenuButton
+                pageId={pageId}
+                componentId={componentId}
+                onClick={() =>
+                  setDrawerData({
+                    content: (
+                      <PostMenu
+                        post={post}
+                        onCloseMenu={() => removeDrawerData()}
+                        pageId={pageId}
+                        componentId={componentId}
+                        onPostDeleted={onPostDeleted}
+                      />
+                    ),
+                  })
+                }
+              />
+            )}
+          </div>
+        ) : null}
       </div>
       <div className={styles.postContent__content_and_reactions}>
         <div className={styles.postContent__content}>
@@ -366,7 +387,7 @@ export const PostContent = ({
             />
           ) : null}
         </div>
-        {type === 'detail' ? (
+        {style === AmityPostContentComponentStyle.DETAIL ? (
           <div className={styles.postContent__reactions_and_comments}>
             <div
               className={styles.postContent__reactionsBar}
@@ -413,31 +434,45 @@ export const PostContent = ({
             </Typography.Caption>
           </div>
         ) : null}
-        <div className={styles.postContent__divider} />
-        <div className={styles.postContent__reactionBar}>
-          <div className={styles.postContent__reactionBar__leftPane}>
-            <ReactionButton
-              pageId={pageId}
-              componentId={componentId}
-              reactionsCount={type === 'feed' ? reactionsCount : undefined}
-              myReaction={reactionByMe}
-              defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-              imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-              onReactionClick={handleReactionClick}
-            />
-            <CommentButton
-              pageId={pageId}
-              componentId={componentId}
-              commentsCount={type === 'feed' ? post.commentsCount : undefined}
-              defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-              imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-              onPress={() => onClick?.()}
-            />
-          </div>
-          <div className={styles.postContent__reactionBar__rightPane}>
-            <ShareButton pageId={pageId} componentId={componentId} />
-          </div>
-        </div>
+        {!targetCommunity?.isJoined && page.type === PageTypes.CommunityProfilePage ? (
+          <>
+            <Typography.Body className={styles.postContent__notMember}>
+              Join community to interact with all posts
+            </Typography.Body>
+          </>
+        ) : !targetCommunity?.isJoined && page.type === PageTypes.PostDetailPage ? null : (
+          <>
+            <div className={styles.postContent__divider} />
+            <div className={styles.postContent__reactionBar}>
+              <div className={styles.postContent__reactionBar__leftPane}>
+                <ReactionButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  reactionsCount={
+                    style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
+                  }
+                  myReaction={reactionByMe}
+                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                  onReactionClick={handleReactionClick}
+                />
+                <CommentButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  commentsCount={
+                    style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                  }
+                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                  onPress={() => onClick?.()}
+                />
+              </div>
+              <div className={styles.postContent__reactionBar__rightPane}>
+                <ShareButton pageId={pageId} componentId={componentId} />
+              </div>
+            </div>
+          </>
+        )}
       </div>
       {isImageViewerOpen && typeof clickedImageIndex === 'number' ? (
         <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={clickedImageIndex} />
