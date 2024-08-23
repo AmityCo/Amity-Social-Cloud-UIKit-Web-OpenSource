@@ -3,35 +3,30 @@ import { AmityUIKitProvider } from '../../src/v4/core/providers';
 import { Preview } from '@storybook/react';
 import amityConfig from '../../amity-uikit.config.json';
 import { Config } from '../../src/v4/core/providers/CustomizationProvider';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-const users = import.meta.env.STORYBOOK_USERS.split(',');
+const FALLBACK_USER = 'Web-Test';
 
-const GLOBAL_NAME = 'user';
-const global = {
-  [GLOBAL_NAME]: {
-    name: 'User selector',
-    description: 'User switcher for SDK',
-    defaultValue: 'Web-Test',
-    toolbar: {
-      icon: 'user',
-      items: [
-        { value: 'Web-Test,Web-test', title: 'Web-Test' },
-        ...users.map((user) => {
-          return { value: `${user},${user}`, title: user };
-        }),
-      ],
-    },
-  },
-};
+const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) => {
+  const { args } = context;
 
-const FALLBACK_USER = 'Web-Test,Web-Test';
+  const [userId, setUserId] = useState<string>(args.userId || FALLBACK_USER);
+  const [displayNameState, setDisplayNameState] = useState<string | undefined>(
+    args.displayName || args.userId || userId,
+  );
 
-const decorator: NonNullable<Preview['decorators']>[number] = (
-  Story,
-  { globals: { [GLOBAL_NAME]: val, theme } },
-) => {
-  const user = val || FALLBACK_USER;
-  const [userId, displayName] = user.split(',');
+  useEffect(() => {
+    if (!args.submit) return;
+    if (args.userId) {
+      setUserId(args.userId);
+    }
+    if (args.displayName) {
+      setDisplayNameState(args.displayName);
+    }
+  }, [args.submit]);
+
+  const displayName = displayNameState || userId;
 
   const handleConnectionStatusChange = useCallback((...args) => {
     console.log(`[UiKitProvider.handleConnectionStatusChange]`, ...args);
@@ -47,8 +42,8 @@ const decorator: NonNullable<Preview['decorators']>[number] = (
 
   return (
     <AmityUIKitProvider
-      apiKey={import.meta.env.STORYBOOK_API_KEY}
-      apiRegion={import.meta.env.STORYBOOK_API_REGION}
+      apiKey={args.apiKey || import.meta.env.STORYBOOK_API_KEY}
+      apiRegion={args.apiRegion || import.meta.env.STORYBOOK_API_REGION}
       key={userId}
       userId={userId}
       displayName={displayName || userId}
