@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 
 export interface PageBehavior {
@@ -62,7 +63,11 @@ export interface PageBehavior {
       community?: Amity.Community;
       post?: Amity.Post;
     }): void;
-    goToPostDetailPage?(context: { postId: string; hideTarget?: boolean }): void;
+    goToPostDetailPage?(context: {
+      postId: string;
+      hideTarget?: boolean;
+      category?: AmityPostCategory;
+    }): void;
     goToCreateStoryPage?(context: { communityId: string }): void;
     // goToCommunitySettingPage?(context: { communityId: string }): void;
     // goToPendingPostPage?(context: { communityId: string }): void;
@@ -239,11 +244,15 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToPostComposerPage(context);
       },
-      goToPostDetailPage(context: { postId: string; hideTarget?: boolean }) {
+      goToPostDetailPage(context: {
+        postId: string;
+        hideTarget?: boolean;
+        category?: AmityPostCategory;
+      }) {
         if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityCommunityProfilePageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage(context.postId, context.hideTarget);
+        goToPostDetailPage(context.postId, context.hideTarget, context.category);
       },
       // goToPendingPostPage(context) {
       //   if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToPendingPostPage) {

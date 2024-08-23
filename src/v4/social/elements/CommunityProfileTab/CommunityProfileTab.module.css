@@ -7,11 +7,12 @@
 
 .communityTabs__tab {
   display: flex;
-  align-items: flex-start;
   justify-content: center;
   padding: 1rem;
   flex-grow: 1;
   width: 4.5rem;
+  height: 1rem;
+  align-items: center;
 
   --asc-icon-color: var(--asc-color-base-shade3);
 

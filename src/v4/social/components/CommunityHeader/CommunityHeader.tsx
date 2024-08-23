@@ -86,6 +86,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         )}
         <CommunityProfileTab pageId={pageId} activeTab={activeTab} onTabChange={handleTabChange} />
       </div>
+      <div className={styles.communityProfile__divider} />
     </div>
   );
 };

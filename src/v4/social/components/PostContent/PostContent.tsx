@@ -38,6 +38,7 @@ import { Button } from '~/v4/core/natives/Button';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import dayjs from 'dayjs';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
+import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -176,7 +177,7 @@ export const PostContent = ({
   onPostDeleted,
   category,
   hideMenu = false,
-  hideTarget,
+  hideTarget = false,
   style,
 }: PostContentProps) => {
   const componentId = 'post_content';
@@ -328,6 +329,9 @@ export const PostContent = ({
 
   return (
     <div ref={elementRef} className={styles.postContent} style={themeStyles}>
+      {category === AmityPostCategory.ANNOUNCEMENT && (
+        <AnnouncementBadge pageId={pageId} componentId={componentId} />
+      )}
       <div className={styles.postContent__bar} data-type={style}>
         <div className={styles.postContent__bar__userAvatar}>
           <UserAvatar userId={post?.postedUserId} />

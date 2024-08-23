@@ -36,7 +36,11 @@ const Application = () => {
         {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
         {page.type === PageTypes.SocialGlobalSearchPage && <SocialGlobalSearchPage />}
         {page.type === PageTypes.PostDetailPage && (
-          <PostDetailPage id={page.context?.postId} hideTarget={page.context?.hideTarget} />
+          <PostDetailPage
+            id={page.context?.postId}
+            hideTarget={page.context?.hideTarget}
+            category={page.context?.category}
+          />
         )}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
         {page.type === PageTypes.CommunityProfilePage && (

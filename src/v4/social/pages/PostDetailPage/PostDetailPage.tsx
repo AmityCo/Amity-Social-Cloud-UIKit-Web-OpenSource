@@ -22,9 +22,10 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 interface PostDetailPageProps {
   id: string;
   hideTarget?: boolean;
+  category?: AmityPostCategory;
 }
 
-export function PostDetailPage({ id, hideTarget }: PostDetailPageProps) {
+export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
   const { post, isLoading: isPostLoading } = usePost(id);
   const { themeStyles } = useAmityPage({
@@ -54,7 +55,7 @@ export function PostDetailPage({ id, hideTarget }: PostDetailPageProps) {
             <PostContent
               pageId={pageId}
               post={post}
-              category={AmityPostCategory.GENERAL}
+              category={category ?? AmityPostCategory.GENERAL}
               style={AmityPostContentComponentStyle.DETAIL}
               hideTarget={hideTarget}
             />
