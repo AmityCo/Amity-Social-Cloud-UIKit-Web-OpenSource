@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useNotificationData } from '~/core/providers/NotificationProvider';
+import { ModalContainer } from '../ModalContainer';
 
 import { NotificationContainer, Notifications } from './styles';
 
@@ -20,11 +21,13 @@ export const NotificationsContainer = () => {
   const notifications = useNotificationData();
 
   return (
-    <Notifications>
-      {notifications.map((notificationData) => {
-        return <Notification {...notificationData} key={notificationData.id} />;
-      })}
-    </Notifications>
+    <ModalContainer>
+      <Notifications>
+        {notifications.map((notificationData) => {
+          return <Notification {...notificationData} key={notificationData.id} />;
+        })}
+      </Notifications>
+    </ModalContainer>
   );
 };
 

@@ -2,7 +2,7 @@ import './inter.css';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Client as ASCClient } from '@amityco/ts-sdk';
 
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
 import { ConfirmComponent } from '~/core/components/Confirm';
 import { NotificationsContainer as NotificationsContainerV4 } from '~/v4/core/components/Notification';

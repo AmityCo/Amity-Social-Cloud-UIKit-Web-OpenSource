@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 
 import usePost from '~/social/hooks/usePost';
 import usePoll from '~/social/hooks/usePoll';
@@ -29,17 +29,6 @@ const Post = ({ postId, className, hidePostTarget, readonly, onDeleted }: PostPr
   const { userRoles } = useSDK();
   const postRenderFn = usePostRenderer(post?.dataType);
   const { currentUserId } = useSDK();
-
-  usePostSubscription({
-    postId,
-    level: SubscriptionLevels.POST,
-  });
-
-  useReactionSubscription({
-    targetType: post?.targetType,
-    targetId: post?.targetId,
-    shouldSubscribe: () => !!post,
-  });
 
   const pollPost = (childrenPosts || []).find((childPost) => childPost.dataType === 'poll');
 

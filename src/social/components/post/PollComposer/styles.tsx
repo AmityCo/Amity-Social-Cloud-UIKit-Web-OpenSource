@@ -46,6 +46,7 @@ export const OptionInput = styled(TextInput)`
   background: ${({ theme }) => theme.palette.base.shade4};
   width: 100%;
   padding-right: 60px;
+  color: ${({ theme }) => theme.palette.neutral.main};
 `;
 
 export const CloseIcon = styled(CircleRemove)``;

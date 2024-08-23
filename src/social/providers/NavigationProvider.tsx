@@ -75,6 +75,7 @@ type ContextValue = {
           title: ReactNode;
           content: ReactNode;
           okText: ReactNode;
+          onOk?: () => void;
         }
       | null
       | undefined,
@@ -182,6 +183,7 @@ export default function NavigationProvider({
         title: ReactNode;
         content: ReactNode;
         okText: ReactNode;
+        onOk?: () => void;
       }
     | null
     | undefined
@@ -207,7 +209,7 @@ export default function NavigationProvider({
     }
 
     return true;
-  }, [askForConfirmation, navigationBlocker]);
+  }, [askForConfirmation, navigationBlocker, setNavigationBlocker]);
 
   const pushPage = useCallback(
     async (newPage) => {

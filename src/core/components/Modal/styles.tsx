@@ -44,9 +44,15 @@ export const ModalWindow = styled.div`
   max-width: 520px;
   min-width: 360px;
   ${({ theme }) => theme.typography.body}
+  color: ${({ theme }) => theme.palette.neutral.main};
 
   &:focus {
     outline: none;
+  }
+
+  @media (max-width: 520px) {
+    width: 95vw;
+    min-width: unset;
   }
 `;
 
