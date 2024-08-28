@@ -65,9 +65,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   const { currentUserId, client } = useSDK();
   const { user } = useUser(currentUserId);
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isCommunityModerator = isModerator(user?.roles);
-  const hasStoryPermission =
-    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, communityId);
+  const hasStoryPermission = isGlobalAdmin || checkStoryPermission(client, communityId);
   const hasStories = stories?.length > 0;
   const hasUnSeen = stories.some((story) => !story?.isSeen);
   const uploading = stories.some((story) => story?.syncState === 'syncing');
@@ -80,7 +78,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
 
   if (isExcluded) return null;
 
-  if (!hasStories && !hasStoryPermission) return null;
+  if (!hasStories && !hasStoryPermission && !community?.isJoined) return null;
 
   return (
     <div

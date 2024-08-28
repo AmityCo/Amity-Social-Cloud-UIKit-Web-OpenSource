@@ -133,8 +133,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: ^6.29.2
-        version: 6.29.2
+        specifier: 6.29.3-1b05de6.0
+        version: 6.29.3-1b05de6.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -315,8 +315,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@6.29.2':
-    resolution: {integrity: sha512-g6+5gWmOKKgbQeWj8wC+zNEeTmYIMjOFqCSc+X/kog5Cs2EjlWgZzL3QrIb7ulnjQDZ/h8CC8ZepkGcEBJIkjQ==}
+  '@amityco/ts-sdk@6.29.3-1b05de6.0':
+    resolution: {integrity: sha512-mG6foz1TktBuj80uQMhIn969zR8McC+nZCsQ7gjL76q39UyHNF3zSiBYP14wDz9COVJkuklLBzGRPMHUNOeyBQ==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -7690,7 +7690,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@6.29.2':
+  '@amityco/ts-sdk@6.29.3-1b05de6.0':
     dependencies:
       agentkeepalive: 4.5.0
       axios: 1.7.4(debug@4.3.6)
@@ -8550,7 +8550,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.24.7
       '@babel/parser': 7.24.7
       '@babel/types': 7.24.7
-      debug: 4.3.5
+      debug: 4.3.6
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -11622,7 +11622,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
-      debug: 4.3.5
+      debug: 4.3.6
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.6.2
@@ -11651,7 +11651,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 7.16.1
       '@typescript-eslint/visitor-keys': 7.16.1
-      debug: 4.3.5
+      debug: 4.3.6
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.4
@@ -12888,7 +12888,7 @@ snapshots:
 
   esbuild-register@3.5.0(esbuild@0.18.20):
     dependencies:
-      debug: 4.3.5
+      debug: 4.3.6
       esbuild: 0.18.20
     transitivePeerDependencies:
       - supports-color
@@ -13602,7 +13602,7 @@ snapshots:
   https-proxy-agent@4.0.0:
     dependencies:
       agent-base: 5.1.1
-      debug: 4.3.5
+      debug: 4.3.6
     transitivePeerDependencies:
       - supports-color
 
@@ -15063,7 +15063,7 @@ snapshots:
   puppeteer-core@2.1.1:
     dependencies:
       '@types/mime-types': 2.1.4
-      debug: 4.3.5
+      debug: 4.3.6
       extract-zip: 1.7.0
       https-proxy-agent: 4.0.0
       mime: 2.6.0

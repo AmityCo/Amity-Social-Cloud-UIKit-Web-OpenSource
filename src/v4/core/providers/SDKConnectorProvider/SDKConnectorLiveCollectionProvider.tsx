@@ -6,6 +6,7 @@ const SDKConnectorLiveCollectionContext = createContext({
     params,
     callback,
     config,
+    refresh = false,
   }: {
     fetcher: (
       params: Amity.LiveCollectionParams<TParams>,
@@ -15,6 +16,7 @@ const SDKConnectorLiveCollectionContext = createContext({
     params: Amity.LiveCollectionParams<TParams>;
     callback: Amity.LiveCollectionCallback<TCallback>;
     config?: Amity.LiveCollectionConfig;
+    refresh?: boolean;
   }) => {
     return { unsubscribe: () => {} };
   },
@@ -47,6 +49,7 @@ export default function SDKConnectorLiveCollectionProvider({
     params,
     callback,
     config,
+    refresh = false,
   }: {
     fetcher: (
       params: Amity.LiveCollectionParams<TParams>,
@@ -56,9 +59,15 @@ export default function SDKConnectorLiveCollectionProvider({
     params: Amity.LiveCollectionParams<TParams>;
     callback: Amity.LiveCollectionCallback<TCallback>;
     config?: Amity.LiveCollectionConfig;
+    refresh?: boolean;
   }) => {
     if (currentUserId == null) return { unsubscribe() {} };
     const key = getSubscriberKey(fetcher.name, params);
+
+    if (refresh) {
+      delete responseMap.current[key];
+      delete subscriberMap.current[key];
+    }
 
     if (subscriberMap.current[key] && responseMap.current[key]) {
       callback?.(responseMap.current[key] as Amity.LiveCollection<TCallback>);

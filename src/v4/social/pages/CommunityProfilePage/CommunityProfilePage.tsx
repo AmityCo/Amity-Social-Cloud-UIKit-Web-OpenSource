@@ -27,6 +27,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
 
   const touchStartY = useRef(0);
   const [touchDiff, setTouchDiff] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -39,7 +40,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     }
   };
 
-  const handleRefresh = async () => {};
+  const handleRefresh = async () => {
+    setRefreshKey((prevKey) => prevKey + 1);
+  };
 
   return (
     <div
@@ -81,7 +84,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
 
       {community ? <CommunityHeader community={community} /> : <CommunityProfileSkeleton />}
 
-      {renderTabContent()}
+      <div key={refreshKey}>{renderTabContent()}</div>
     </div>
   );
 };

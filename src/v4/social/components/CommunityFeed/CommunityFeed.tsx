@@ -58,11 +58,14 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     limit: 10,
   });
 
-  const { pinnedPost: announcementPosts, isLoading: isLoadingAnnouncementPosts } =
-    usePinnedPostsCollection({
-      communityId,
-      placement: 'announcement',
-    });
+  const {
+    pinnedPost: announcementPosts,
+    isLoading: isLoadingAnnouncementPosts,
+    refresh,
+  } = usePinnedPostsCollection({
+    communityId,
+    placement: 'announcement',
+  });
 
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
 
@@ -90,6 +93,10 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
       }
     };
   }, [hasMore, loadMore]);
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   if (isExcluded) return null;
 
@@ -174,6 +181,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                     hideTarget: true,
                   })
                 }
+                onPostDeleted={() => refresh()}
               />
             </Button>
           );

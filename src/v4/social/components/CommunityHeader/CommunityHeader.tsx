@@ -79,11 +79,11 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         <div>
           <StoryTab type="communityFeed" communityId={community.communityId} />
         </div>
-        {isShowPendingPost && (
+        {/* {isShowPendingPost && (
           <div className={styles.communityProfile__pendingPost__container}>
             <CommunityPendingPost />
           </div>
-        )}
+        )} */}
         <CommunityProfileTab pageId={pageId} activeTab={activeTab} onTabChange={handleTabChange} />
       </div>
       <div className={styles.communityProfile__divider} />
