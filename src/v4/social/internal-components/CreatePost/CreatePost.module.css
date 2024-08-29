@@ -38,7 +38,12 @@
 
 .createPost__notiWrap {
   position: relative;
-  top: 0;
+  bottom: 6rem;
+}
+
+.createPost__notiWrap[data-item-position='false'] {
+  position: relative;
+  bottom: 11rem;
 }
 
 .createPost__formMediaAttachment {

@@ -330,7 +330,10 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
             >
               <Drawer.Portal container={drawerRef.current}>
                 <Drawer.Content className={styles.drawer__content}>
-                  <div className={styles.createPost__notiWrap}>
+                  <div
+                    data-item-position={snap === HEIGHT_MEDIA_ATTACHMENT_MENU}
+                    className={styles.createPost__notiWrap}
+                  >
                     {isPending && (
                       <Notification
                         content="Posting..."
