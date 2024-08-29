@@ -143,7 +143,6 @@ export const UIStoryAd = ({
         <Button
           className={styles.infoIcon__button}
           onPress={() => {
-            console.log('openAdvertisementInfo');
             openAdvertisementInfo();
           }}
         >

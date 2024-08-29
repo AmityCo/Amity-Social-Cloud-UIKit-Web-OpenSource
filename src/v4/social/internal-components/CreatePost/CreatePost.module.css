@@ -68,3 +68,42 @@
   left: 0;
   outline: none;
 }
+
+.mentionTextInput_item {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  max-height: 12.5rem;
+  overflow-y: scroll;
+  background-color: var(--asc-color-background-default);
+  bottom: var(--asc-mention-bottom, 0);
+}
+
+.drawerContentContainer {
+  position: absolute;
+  box-shadow: var(--asc-box-shadow-04);
+  border-top-left-radius: 1.25rem;
+  border-top-right-radius: 1.25rem;
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.drawerContentContainer[data-show-detail-media-attachment='false'] {
+  padding: 0.5rem 1rem;
+  bottom: -0.4rem;
+  margin-top: 0.75rem;
+}
+
+.drawerContentContainer[data-show-detail-media-attachment='true'] {
+  bottom: -0.9rem;
+  margin-top: -1rem;
+  padding-bottom: 2rem;
+  padding-top: 0.75rem;
+}
+
+.mentionTextInput_item::-webkit-scrollbar {
+  display: none;
+}

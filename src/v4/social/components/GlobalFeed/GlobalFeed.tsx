@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed/EmptyNewsFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -39,12 +39,12 @@ export const GlobalFeed = ({
     componentId,
   });
 
-  const intersectionRef = useRef<HTMLDivElement>(null);
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
 
   useIntersectionObserver({
-    ref: intersectionRef,
+    node: intersectionNode,
     onIntersect: () => {
       onFeedReachBottom();
     },
@@ -103,7 +103,12 @@ export const GlobalFeed = ({
             </div>
           ))
         : null}
-      {!isLoading && <div ref={intersectionRef} className={styles.global_feed__intersection} />}
+      {!isLoading && (
+        <div
+          ref={(node) => setIntersectionNode(node)}
+          className={styles.global_feed__intersection}
+        />
+      )}
     </div>
   );
 };
