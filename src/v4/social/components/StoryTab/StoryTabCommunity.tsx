@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
-import { isAdmin, isModerator } from '~/v4/utils/permissions';
+import { isAdmin } from '~/v4/utils/permissions';
 import { checkStoryPermission } from '~/v4/social/utils';
 import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
@@ -78,7 +78,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
 
   if (isExcluded) return null;
 
-  if (!hasStories && !hasStoryPermission && !community?.isJoined) return null;
+  if (!hasStories && !hasStoryPermission) return null;
 
   return (
     <div
