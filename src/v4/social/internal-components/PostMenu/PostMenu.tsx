@@ -172,6 +172,7 @@ export const PostMenu = ({
             } else {
               mutateReportPost();
             }
+            removeDrawerData();
           }}
         >
           <FlagSvg className={styles.postMenu__reportPost__icon} />
