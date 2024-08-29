@@ -32,6 +32,9 @@ export interface PageBehavior {
   AmityCommunitySearchResultComponentBehavior?: {
     goToCommunityProfilePage?: (context: { communityId: string }) => void;
   };
+  AmityUserSearchResultComponentBehavior?: {
+    goToUserProfilePage?: (context: { userId: string }) => void;
+  };
   AmityCreatePostMenuComponentBehavior?: {
     goToSelectPostTargetPage?(): void;
     goToStoryTargetSelectionPage?(): void;
@@ -181,6 +184,14 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           );
         }
         goToCommunityProfilePage(context.communityId);
+      },
+    },
+    AmityUserSearchResultComponentBehavior: {
+      goToUserProfilePage: (context: { userId: string }) => {
+        if (pageBehavior?.AmityUserSearchResultComponentBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityUserSearchResultComponentBehavior.goToUserProfilePage(context);
+        }
+        goToUserProfilePage(context.userId);
       },
     },
     AmityCreatePostMenuComponentBehavior: {

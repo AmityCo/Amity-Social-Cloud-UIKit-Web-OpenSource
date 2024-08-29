@@ -500,7 +500,7 @@ export default function NavigationProvider({
   const goToUserProfilePage = useCallback(
     (userId) => {
       const next = {
-        type: PageTypes.UserProfilePage,
+        type: PageTypes.UserFeed,
         context: {
           userId,
         },

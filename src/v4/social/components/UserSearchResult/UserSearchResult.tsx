@@ -4,6 +4,7 @@ import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { UserSearchItem } from './UserSearchItem';
 import { UserSearchItemSkeleton } from './UserSearchItemSkeleton';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 interface UserSearchResultProps {
   pageId?: string;
@@ -26,13 +27,20 @@ export const UserSearchResult = ({
     });
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const { AmityUserSearchResultComponentBehavior } = usePageBehavior();
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
 
   return (
     <div className={styles.userSearchResult} style={themeStyles}>
       {userCollection.map((user) => (
-        <UserSearchItem key={user.userId} user={user} />
+        <UserSearchItem
+          key={user.userId}
+          user={user}
+          onClick={() =>
+            AmityUserSearchResultComponentBehavior?.goToUserProfilePage?.({ userId: user.userId })
+          }
+        />
       ))}
       {isLoading
         ? Array.from({ length: 5 }).map((_, index) => (
