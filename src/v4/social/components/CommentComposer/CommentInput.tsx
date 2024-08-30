@@ -46,7 +46,7 @@ interface EditorStateJson extends SerializedLexicalNode {
 }
 
 interface CommentInputProps {
-  community?: Amity.Community;
+  community?: Amity.Community | null;
   value?: CreateCommentParams;
   mentionOffsetBottom?: number;
   maxLines?: number;

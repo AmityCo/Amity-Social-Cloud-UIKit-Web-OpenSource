@@ -35,15 +35,10 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
 
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const [communityId, setCommunityId] = useState<string | null | undefined>(null);
 
-  useEffect(() => {
-    if (post?.targetId) {
-      setCommunityId(post.targetId);
-    }
-  }, [post?.targetId]);
-
-  const { community } = useCommunity({ communityId });
+  const { community } = useCommunity({
+    communityId: post?.targetType === 'community' ? post.targetId : null,
+  });
 
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
@@ -106,6 +101,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
             referenceType={'post'}
             replyTo={replyComment}
             onCancelReply={() => setReplyComment(undefined)}
+            community={community}
           />
         )
       )}
