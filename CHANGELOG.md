@@ -2,10 +2,57 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+
+## 3.10.0 (2024-09-02)
+
 ## 3.9.0 (2024-08-16)
 
 ## 3.8.0 (2024-07-12)
 
+### Bug Fixes
+
+* pnpm install in pipeline ([4d48319](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/4d48319dbc3dfe41899495ef5181fed35035c3bf))
+
+## 3.7.0 (2024-06-24)
+
+### Bug Fixes
+
+- remove expose v4 component ([dbf1665](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/dbf1665b9bb1aac7f717814b3df901f4c6caa6b4))
+
+## 3.6.0 (2024-06-07)
+
+### Bug Fixes
+
+- remove v4 ([c3d005c](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/c3d005ce97203cd412fb38c9a6e8539b4e16613e))
+
+## 3.5.0 (2024-04-26)
+
+## 3.5.0 (2024-04-26)
+
+### Bug Fixes
+
+- cherry-pick fix comment disappear bug ([d70f874](https://github.com/EkoCommunications/AmityUiKitWeb/commit/d70f8748d2e6f4588a19a1fe061ad7b74ce37907))
+
+## 3.4.0 (2024-04-05)
+
+### Bug Fixes
+
+- ASC-21481 - remove unnecessary request to prevent rate limit ([#230](https://github.com/EkoCommunications/AmityUiKitWeb/issues/230)) ([b2f2ce1](https://github.com/EkoCommunications/AmityUiKitWeb/commit/b2f2ce116b301f8fe9af124b506050abee1f29d2))
+
+## 3.3.0 (2024-03-22)
+
+### Bug Fixes
+
+- ASC-21052 - fix undefined runtime error ([#184](https://github.com/EkoCommunications/AmityUiKitWeb/issues/184)) ([2385d3e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/2385d3ec364ea74e4edf59ecffc0db088db7570e))
+
+### 3.2.4 (2024-03-11)
+
+### Bug Fixes
+
+- ASC-20601 - comment with blocked word should show noti ([#154](https://github.com/EkoCommunications/AmityUiKitWeb/issues/154)) ([ba4e3f0](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ba4e3f044f08a3aef4d78910203350661cc59076))
+
+### 3.2.3 (2024-03-01)
+=======
 ## 3.7.0 (2024-06-24)
 
 ### Bug Fixes
