@@ -15,11 +15,6 @@
   background-color: var(--asc-color-background-default);
 }
 
-.editorParagraph span {
-  color: var(--asc-color-base-default);
-  background-color: var(--asc-color-background-default);
-}
-
 .editorContainer {
   height: 100%;
   font-size: var(--asc-text-font-size-md);
@@ -31,4 +26,23 @@
 .editorContainer :focus {
   border: none;
   outline: none;
+}
+
+.editorRoot {
+  width: 100%;
+  background-color: var(--asc-color-secondary-shade4);
+  border-radius: 1.25rem;
+  min-height: 2.5rem;
+  padding: 0.625rem 0.75rem;
+  border: 0 solid var(--asc-color-background-default);
+  outline: 0;
+}
+
+.editorLink {
+  color: var(--asc-color-primary-shade1);
+  text-decoration: none;
+}
+
+.editorLink:hover {
+  text-decoration: underline;
 }

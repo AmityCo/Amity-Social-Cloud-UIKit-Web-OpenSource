@@ -4,7 +4,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 
 import { PrimaryButton } from '~/core/components/Button';
-
 import AvatarUploader from '~/social/components/CommunityForm/AvatarUploader';
 
 // TODO: should not be importing styles from another component.
@@ -22,9 +21,6 @@ import {
   LabelCounterWrapper,
   TextField,
 } from '~/social/components/CommunityForm/styles';
-import useSDK from '~/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
-import { isAdmin as isAdminFn } from '~/helpers/permissions';
 
 const ButtonContainer = styled.div`
   margin-top: 16px;
@@ -47,14 +43,13 @@ interface UserProfileFormProps {
   onSubmit: (
     data: Partial<Pick<Amity.User, 'displayName'>> &
       Pick<Amity.User, 'description' | 'avatarFileId'>,
-  ) => void;
+  ) => Promise<void>;
   className?: string;
 }
 
 const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) => {
-  const { currentUserId } = useSDK();
-  const currentUser = useUser(currentUserId);
   const { formatMessage } = useIntl();
+
   const {
     register,
     handleSubmit,
@@ -69,8 +64,6 @@ const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) =>
     },
   });
 
-  const isAdmin = isAdminFn(currentUser?.roles);
-
   const description = watch('description');
   const displayName = watch('displayName');
 
@@ -78,13 +71,13 @@ const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) =>
     <Form
       className={className}
       onSubmit={handleSubmit((data) => {
-        if (isAdmin) {
-          onSubmit(data);
-        } else {
+        if (user.displayName === data.displayName) {
           onSubmit({
             description: data.description,
             avatarFileId: data.avatarFileId,
           });
+        } else {
+          onSubmit(data);
         }
       })}
     >
@@ -111,7 +104,6 @@ const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) =>
               data-qa-anchor="user-profile-form-display-name-input"
               placeholder={formatMessage({ id: 'UserProfileForm.namePlaceholder' })}
               maxLength={100}
-              disabled={!isAdmin}
             />
             <ErrorMessage errors={errors} name="displayName" />
           </Field>

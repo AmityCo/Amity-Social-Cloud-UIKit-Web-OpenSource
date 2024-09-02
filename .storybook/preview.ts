@@ -2,6 +2,20 @@ import { Preview } from '@storybook/react';
 import { FluidControl, UiKitDecorator, UiKitV4Decorator } from './decorators';
 
 const preview: Preview = {
+  args: {
+    apiKey: undefined,
+    apiRegion: undefined,
+    userId: undefined,
+    displayName: undefined,
+    submit: false,
+  },
+  argTypes: {
+    apiKey: { control: { type: 'text' } },
+    apiRegion: { control: { type: 'text' } },
+    userId: { control: { type: 'text' } },
+    displayName: { control: { type: 'text' } },
+    submit: { control: { type: 'boolean' } },
+  },
   decorators: [
     FluidControl.decorator,
     (Story, ctx) => {
@@ -29,8 +43,6 @@ const preview: Preview = {
   },
   globalTypes: {
     ...FluidControl.global,
-    ...UiKitDecorator.global,
-    ...UiKitV4Decorator.global,
   },
 };
 

@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import CommunitySideMenu from '~/social/components/CommunitySideMenu';
+import { BarsIcon } from '~/icons/index';
 
 export const Wrapper = styled.div`
   height: 100%;
-  max-width: 550px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 28px 0;
   overflow-y: auto;
@@ -56,4 +57,8 @@ export const StyledCommunitySideMenu = styled(CommunitySideMenu)<{ isOpen: boole
   z-index: 999;
   transform: translateX(${({ isOpen }) => (isOpen ? 0 : '-100%')});
   transition: transform 0.3s ease-in-out;
+`;
+
+export const StyledBarsIcon = styled(BarsIcon)`
+  cursor: pointer;
 `;

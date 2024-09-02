@@ -93,7 +93,9 @@ export function SocialHomePage() {
       </div>
       <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
         {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
-        {activeTab === HomePageTab.Explore && <ExplorePage />}
+        {activeTab === HomePageTab.Explore && (
+          <ExplorePage isOpen={false} toggleOpen={() => {}} hideSideMenu={true} />
+        )}
         {activeTab === HomePageTab.MyCommunities && <MyCommunities pageId={pageId} />}
       </div>
       {isShowCreatePostMenu && (

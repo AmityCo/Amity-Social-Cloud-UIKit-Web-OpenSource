@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import cx from 'clsx';
 
 import Square from '~/core/components/Square';
@@ -34,64 +34,101 @@ import Square from '~/core/components/Square';
   => ((100% / 3) / .75)
 */
 
-const Gallery = styled.div<{ count?: number }>`
+const Gallery = styled.div<{ count?: number; grid?: boolean }>`
   display: grid;
   width: 100%;
-  height: 100%;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 1fr calc((100% / 3) / 0.75);
-  grid-gap: 0.5rem;
+
+  gap: 0.5rem;
   border-radius: 4px;
 
-  &.one > :nth-child(1) {
-    grid-column: 1 / 7;
-    grid-row: 1 / 3;
-  }
+  ${({ grid }) =>
+    grid &&
+    css`
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
 
-  &.two > :nth-child(1) {
-    grid-column: 1 / 4;
-    grid-row: 1 / 3;
-  }
+      > * {
+        position: relative;
+        box-sizing: border-box;
 
-  &.two > :nth-child(2) {
-    grid-column: 4 / 7;
-    grid-row: 1 / 3;
-  }
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
 
-  &.three > :nth-child(1),
-  &.four > :nth-child(1),
-  &.many > :nth-child(1) {
-    grid-column: 1 / 7;
-    grid-row: 1 / 2;
-  }
+        > * {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 100%;
+        }
 
-  &.three > :nth-child(2) {
-    grid-column: 1 / 4;
-    grid-row: 2 / 3;
-  }
+        &::before {
+          content: '';
+          display: block;
+          padding-top: 100%;
+        }
+      }
+    `}
 
-  &.three > :nth-child(3) {
-    grid-column: 4 / 7;
-    grid-row: 2 / 3;
-  }
+  ${({ grid }) =>
+    !grid &&
+    css`
+      height: 100%;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: 1fr calc((100% / 3) / 0.75);
 
-  &.four > :nth-child(2),
-  &.many > :nth-child(2) {
-    grid-column: 1 / 3;
-    grid-row: 2 / 3;
-  }
+      &.one > :nth-child(1) {
+        grid-column: 1 / 7;
+        grid-row: 1 / 3;
+      }
 
-  &.four > :nth-child(3),
-  &.many > :nth-child(3) {
-    grid-column: 3 / 5;
-    grid-row: 2 / 3;
-  }
+      &.two > :nth-child(1) {
+        grid-column: 1 / 4;
+        grid-row: 1 / 3;
+      }
 
-  &.four > :nth-child(4),
-  &.many > :nth-child(4) {
-    grid-column: 5 / 7;
-    grid-row: 2 / 3;
-  }
+      &.two > :nth-child(2) {
+        grid-column: 4 / 7;
+        grid-row: 1 / 3;
+      }
+
+      &.three > :nth-child(1),
+      &.four > :nth-child(1),
+      &.many > :nth-child(1) {
+        grid-column: 1 / 7;
+        grid-row: 1 / 2;
+      }
+
+      &.three > :nth-child(2) {
+        grid-column: 1 / 4;
+        grid-row: 2 / 3;
+      }
+
+      &.three > :nth-child(3) {
+        grid-column: 4 / 7;
+        grid-row: 2 / 3;
+      }
+
+      &.four > :nth-child(2),
+      &.many > :nth-child(2) {
+        grid-column: 1 / 3;
+        grid-row: 2 / 3;
+      }
+
+      &.four > :nth-child(3),
+      &.many > :nth-child(3) {
+        grid-column: 3 / 5;
+        grid-row: 2 / 3;
+      }
+
+      &.four > :nth-child(4),
+      &.many > :nth-child(4) {
+        grid-column: 5 / 7;
+        grid-row: 2 / 3;
+      }
+    `}
 `;
 
 export const TruncatedGridCell = styled.div`
@@ -128,6 +165,7 @@ interface TruncatedGridProps<T extends Amity.Post> {
   itemKey?: keyof T;
   onClick?: (index: number) => void;
   renderItem: (item: T) => React.ReactNode;
+  grid?: boolean;
 }
 
 const TruncatedGrid = <T extends Amity.Post>({
@@ -136,6 +174,7 @@ const TruncatedGrid = <T extends Amity.Post>({
   renderItem,
   items = [],
   itemKey,
+  grid,
 }: TruncatedGridProps<T>) => {
   const config = useMemo(() => {
     switch (items.length) {
@@ -154,7 +193,7 @@ const TruncatedGrid = <T extends Amity.Post>({
 
   return (
     <Square ratio={0.75} className={className}>
-      <Gallery className={cx(config)} count={items.length}>
+      <Gallery className={cx(config)} count={items.length} grid={grid}>
         {items.slice(0, 3).map((item, index) => (
           <TruncatedGridCell
             key={`#${itemKey ? item[itemKey] : index}`}

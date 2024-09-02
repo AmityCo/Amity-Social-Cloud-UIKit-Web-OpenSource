@@ -5,11 +5,13 @@ export const generateThumbnailVideo = (file: File): Promise<string> => {
     const context = canvasElement.getContext('2d');
 
     videoElement.src = URL.createObjectURL(file);
-    videoElement.currentTime = 10;
 
-    videoElement.addEventListener('loadeddata', () => {
+    const handleCanPlay = () => {
+      videoElement.currentTime = 10;
+    };
+
+    const handleSeeked = () => {
       try {
-        videoElement.pause();
         canvasElement.width = videoElement.videoWidth;
         canvasElement.height = videoElement.videoHeight;
         context?.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
@@ -17,11 +19,22 @@ export const generateThumbnailVideo = (file: File): Promise<string> => {
         resolve(thumbnail);
       } catch (error) {
         reject(error);
+      } finally {
+        videoElement.removeEventListener('canplay', handleCanPlay);
+        videoElement.removeEventListener('seeked', handleSeeked);
+        videoElement.removeEventListener('error', handleError);
+        URL.revokeObjectURL(videoElement.src);
       }
-    });
+    };
 
-    videoElement.addEventListener('error', (event) => {
-      reject(new Error(`Error loading video: ${event.message}`));
-    });
+    const handleError = (event: Event) => {
+      reject(new Error(`Error loading video: ${event}`));
+    };
+
+    videoElement.addEventListener('canplay', handleCanPlay);
+    videoElement.addEventListener('seeked', handleSeeked);
+    videoElement.addEventListener('error', handleError);
+
+    videoElement.load();
   });
 };

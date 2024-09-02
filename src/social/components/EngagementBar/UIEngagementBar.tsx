@@ -38,11 +38,6 @@ const UIEngagementBar = ({
 }: UIEngagementBarProps) => {
   const { postId, targetType, targetId, reactions = {}, commentsCount, latestComments } = post;
 
-  usePostSubscription({
-    postId,
-    level: SubscriptionLevels.POST,
-  });
-
   const totalLikes = reactions[LIKE_REACTION_KEY] || 0;
 
   return (

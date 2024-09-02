@@ -13,6 +13,8 @@ import ChatHeader from '~/chat/components/ChatHeader';
 
 import { ChannelContainer } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import { useChannelPermission } from '~/chat/hooks/useChannelPermission';
+import useChannel from '~/chat/hooks/useChannel';
 
 interface ChatProps {
   channelId: string;
@@ -27,12 +29,22 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProp
     };
   }, [channelId]);
 
+  const { isModerator } = useChannelPermission(channelId);
+  const channel = useChannel(channelId);
+
   const sendMessage = async (text: string) => {
     return MessageRepository.createMessage({
       subChannelId: channelId,
       data: { text },
       dataType: 'text',
     });
+  };
+
+  const renderMessageComposeBar = () => {
+    if (channel?.type !== 'broadcast' || (channel?.type === 'broadcast' && isModerator)) {
+      return <MessageComposeBar onSubmit={sendMessage} />;
+    }
+    return null;
   };
 
   return (
@@ -43,7 +55,7 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProp
         onChatDetailsClick={onChatDetailsClick}
       />
       <MessageList channelId={channelId} />
-      <MessageComposeBar onSubmit={sendMessage} />
+      {renderMessageComposeBar()}
     </ChannelContainer>
   );
 };

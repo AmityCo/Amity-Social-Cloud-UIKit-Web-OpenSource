@@ -22,6 +22,7 @@ import { Thumbnail } from './Thumbnail';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { arraysContainSameElements } from '~/v4/social/utils/arraysContainSameElements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -29,20 +30,14 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     pageId,
   });
 
-  const editorRef = useRef<LexicalEditor | null>(null);
   const { onBack } = useNavigation();
   const { confirm } = useConfirmContext();
   const { updateItem } = useGlobalFeedContext();
 
   const [textValue, setTextValue] = useState<CreatePostParams>({
-    text: '',
-    mentioned: [],
-    mentionees: [
-      {
-        type: 'user',
-        userIds: [''],
-      },
-    ],
+    text: post.data.text ?? '',
+    mentioned: post.metadata?.mentioned || [],
+    mentionees: post.mentionees,
     attachments: [
       {
         fileId: '',
@@ -123,8 +118,13 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     }
   };
 
-  const onChange = (val: CreatePostParams) => {
-    setTextValue(val);
+  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
+    setTextValue((prev) => ({
+      ...prev,
+      mentioned: val.mentioned,
+      text: val.text,
+      mentionees: val.mentionees,
+    }));
   };
 
   const onClickClose = () => {
@@ -161,7 +161,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           />
         </div>
         <PostTextField
-          ref={editorRef}
+          communityId={post.targetType === 'community' ? post.targetId : undefined}
           onChange={onChange}
           mentionContainer={mentionRef.current}
           dataValue={{
@@ -176,7 +176,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         <Thumbnail postMedia={postImages} onRemove={handleRemoveThumbnailImage} />
         <Thumbnail postMedia={postVideos} onRemove={handleRemoveThumbnailVideo} />
 
-        <div ref={mentionRef} />
+        <div ref={mentionRef} className={styles.mentionTextInput_item} />
         <div className={styles.editPost__notiWrap}>
           {isPending && (
             <Notification

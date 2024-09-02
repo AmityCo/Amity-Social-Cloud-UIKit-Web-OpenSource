@@ -27,7 +27,7 @@ export function StoryTargetSelectionPage() {
   });
   const { AmityStoryTargetSelectionPage } = usePageBehavior();
   const { file, setFile } = useStoryContext();
-  const intersectionRef = useRef<HTMLDivElement>(null);
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
 
   const handleOnClickCommunity = (communityId: string) => {
@@ -65,7 +65,7 @@ export function StoryTargetSelectionPage() {
         loadMore();
       }
     },
-    ref: intersectionRef,
+    node: intersectionNode,
   });
 
   useEffect(() => {
@@ -98,7 +98,7 @@ export function StoryTargetSelectionPage() {
       <div className={styles.selectStoryTargetPage__myCommunities__container}>
         {renderCommunity}
       </div>
-      <div ref={intersectionRef} />
+      <div ref={(node) => setIntersectionNode(node)} />
     </div>
   );
 }

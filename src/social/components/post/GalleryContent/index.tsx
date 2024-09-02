@@ -54,6 +54,7 @@ export interface GalleryContentProps<T extends PostWithSkeleton> {
   renderVideoThumbnail?: (item: Amity.Post<'video'>) => ReactNode;
   renderImageThumbnail?: (item: Amity.Post<'image'>) => ReactNode;
   renderLiveStreamThumbnail?: (item: Amity.Post<'liveStream'>) => ReactNode;
+  grid?: boolean;
 }
 
 const GalleryContent = <T extends PostWithSkeleton>({
@@ -63,6 +64,7 @@ const GalleryContent = <T extends PostWithSkeleton>({
   loadingMore = false,
   showCounter = false,
   truncate = false,
+  grid = false,
   renderVideoItem,
   renderImageItem,
   renderLiveStreamItem,
@@ -112,6 +114,7 @@ const GalleryContent = <T extends PostWithSkeleton>({
         className={className}
         items={items}
         truncate={truncate}
+        grid={grid}
         onClick={(i) => {
           if (!isLoadingItem(items[i])) {
             setIndex(i);

@@ -38,6 +38,7 @@ interface CommentComposerProps {
   replyTo?: Amity.Comment;
   onCancelReply: () => void;
   shouldAllowCreation?: boolean;
+  community?: Amity.Community | null;
 }
 
 export const CommentComposer = ({
@@ -46,6 +47,7 @@ export const CommentComposer = ({
   replyTo,
   onCancelReply,
   shouldAllowCreation = true,
+  community,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
   const { user } = useUser(userId);
@@ -136,6 +138,7 @@ export const CommentComposer = ({
           mentionOffsetBottom={-mentionOffsetBottom}
           value={textValue}
           placehoder="Say something nice..."
+          community={community}
         />
       </div>
       <Button

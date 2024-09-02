@@ -79,7 +79,8 @@ const StyledFile = ({
             <RemoveButton
               data-qa-anchor="uploaders-file-remove-button"
               onClick={removeCallback}
-              disabled={isUploading}
+              // NOTE: This component also be used to show files when edit, The progress is not increased, remain -1 all the time
+              disabled={progress !== -1 && isUploading}
             />
           )}
         </ButtonContainer>

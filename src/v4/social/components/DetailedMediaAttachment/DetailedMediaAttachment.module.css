@@ -2,14 +2,6 @@
   display: block;
   width: 100%;
   background-color: var(--asc-color-background-default);
-  border-top-left-radius: 1.25rem;
-  border-top-right-radius: 1.25rem;
-  box-shadow: var(--asc-box-shadow-04);
-  padding-bottom: 2rem;
-  padding-top: 0.75rem;
-  margin-top: -1rem;
-  position: absolute;
-  bottom: -0.9rem;
 }
 
 .detailedMediaAttachment__swipeDown {

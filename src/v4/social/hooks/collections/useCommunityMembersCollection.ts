@@ -10,7 +10,10 @@ export default function useCommunityMembersCollection({
 }) {
   const { items, ...rest } = useLiveCollection({
     fetcher: CommunityRepository.Membership.getMembers,
-    params: queryParams as Parameters<typeof CommunityRepository.Membership.getMembers>[0],
+    params: {
+      ...(queryParams as Parameters<typeof CommunityRepository.Membership.getMembers>[0]),
+      includeDeleted: false,
+    },
     shouldCall: !!queryParams?.communityId && shouldCall,
   });
 

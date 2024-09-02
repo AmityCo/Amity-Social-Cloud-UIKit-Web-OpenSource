@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './SelectPostTargetPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
@@ -28,7 +28,7 @@ export function SelectPostTargetPage() {
     queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
   });
   const { AmityPostTargetSelectionPage } = usePageBehavior();
-  const intersectionRef = useRef<HTMLDivElement>(null);
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { currentUserId } = useSDK();
   const { user } = useUser(currentUserId);
   useIntersectionObserver({
@@ -37,7 +37,7 @@ export function SelectPostTargetPage() {
         loadMore();
       }
     },
-    ref: intersectionRef,
+    node: intersectionNode,
   });
 
   const renderCommunity = communities.map((community) => {
@@ -94,7 +94,7 @@ export function SelectPostTargetPage() {
       <div className={styles.selectPostTargetPage__line} />
       <div className={styles.selectPostTargetPage__myCommunities}>My Communities</div>
       {renderCommunity}
-      <div ref={intersectionRef} />
+      <div ref={(node) => setIntersectionNode(node)} />
     </div>
   );
 }

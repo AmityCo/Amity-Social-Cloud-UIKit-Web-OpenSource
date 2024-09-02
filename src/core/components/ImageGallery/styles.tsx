@@ -8,14 +8,6 @@ export const Container = styled.div`
   position: fixed;
   overflow: hidden;
 
-  display: grid;
-  grid-gap: 1rem 3rem;
-  grid-template-columns: 2rem auto 2rem;
-  grid-template-rows: min-content auto;
-  grid-template-areas:
-    'none counter close'
-    'left image right';
-
   align-items: center;
 
   top: 0;
@@ -24,7 +16,6 @@ export const Container = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  padding: 3rem;
 
   background: rgba(0, 0, 0, 0.75);
   color: ${({ theme }) => theme.palette.system.background};
@@ -45,6 +36,34 @@ export const Container = styled.div`
   }
 `;
 
+export const InnerContainer = styled.div`
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  position: relative;
+`;
+
+export const GridContainer = styled.div`
+  position: relative;
+  z-index: 9999;
+  display: grid;
+  grid-gap: 1rem 3rem;
+  grid-template-columns: 2rem auto 2rem;
+  grid-template-rows: min-content auto;
+  grid-template-areas:
+    'none counter close'
+    'left image right';
+
+  width: 100%;
+  height: 100%;
+
+  padding: 2rem 1rem 2rem 1rem;
+
+  @media (min-width: 768px) {
+    padding: 3rem;
+  }
+`;
+
 const Image = styled.img.attrs({ loading: 'lazy' })`
   display: block;
   width: 100%;
@@ -56,10 +75,21 @@ const Image = styled.img.attrs({ loading: 'lazy' })`
 export const ImageRenderer = (url: string) => <Image key={url} src={url} />;
 
 export const Frame = styled.div`
-  grid-area: image;
+  z-index: 9999;
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  @media (min-width: 768px) {
+    position: unset;
+    top: unset;
+    left: unset;
+    grid-area: image;
+  }
 `;
 
 export const Counter = styled.div`

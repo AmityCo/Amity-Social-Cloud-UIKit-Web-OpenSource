@@ -1,0 +1,59 @@
+.communityProfilePage__container {
+  overflow-y: auto;
+  height: 100%;
+  position: relative;
+  background-color: var(--asc-color-background-default);
+}
+
+.communityProfilePage__header {
+  position: sticky;
+  top: 0;
+  background-color: var(--asc-color-background-default);
+}
+
+.communityProfilePage__content {
+  position: relative;
+}
+
+.communityProfilePage__refreshIndicator {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.communityProfilePage__tabContainer {
+  position: relative;
+  z-index: 1;
+}
+
+.communityProfilePage__tabContainer.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--asc-color-background-default);
+}
+
+.communityProfilePage__createPostButton {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.communityProfilePage__pullToRefresh {
+  height: var(--asc-pull-to-refresh-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.communityProfilePage__pullToRefresh__spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  animation-name: spin;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}

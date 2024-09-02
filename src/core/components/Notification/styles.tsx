@@ -54,4 +54,12 @@ export const NotificationContainer = styled.div`
     }
   }
   pointer-events: auto;
+
+  @media (max-width: 780px) {
+    width: calc(100% - 32px);
+    padding: 8px 16px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+  }
 `;

@@ -1,34 +1,38 @@
-import React, { forwardRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { LexicalEditor, SerializedLexicalNode } from 'lexical';
+import { COMMAND_PRIORITY_HIGH, Klass, LexicalNode } from 'lexical';
 import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { MentionNode } from '~/v4/social/internal-components/MentionTextInput/MentionNodes';
-import { MentionTextInputPlugin } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
-import { CreatePostParams, MetaData } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
+import {
+  $createMentionNode,
+  MentionNode,
+} from '~/v4/social/internal-components/Lexical/nodes/MentionNode';
+import { MentionPlugin } from '~/v4/social/internal-components/Lexical/plugins/MentionPlugin';
 import styles from './PostTextField.module.css';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
-import { textToEditorState } from '~/v4/social/utils/textToEditorState';
-
-const theme = {
-  ltr: 'ltr',
-  rtl: 'rtl',
-  placeholder: styles.editorPlaceholder,
-  paragraph: styles.editorParagraph,
-};
-
-interface EditorStateJson extends SerializedLexicalNode {
-  children: [];
-}
+import { LinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkPlugin';
+import { AutoLinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/AutoLinkPlugin';
+import {
+  editorStateToText,
+  getEditorConfig,
+  MentionData,
+  textToEditorState,
+} from '~/v4/social/internal-components/Lexical/utils';
+import ReactDOM from 'react-dom';
+import { useMemberQueryByDisplayName } from '~/v4/social/hooks/useMemberQueryByDisplayName';
+import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
+import { AutoLinkNode, LinkNode } from '@lexical/link';
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
+import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import { MentionItem } from '~/v4/social/internal-components/Lexical/MentionItem';
 
 interface PostTextFieldProps {
-  onChange: (data: CreatePostParams) => void;
   communityId?: string | null;
-  onChangeSnap?: number;
+  attachmentAmount?: number;
   mentionContainer: HTMLElement | null;
   dataValue: {
     data: { text: string };
@@ -37,86 +41,192 @@ interface PostTextFieldProps {
     };
     mentionees?: Mentionees;
   };
+  onChange: (data: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => void;
 }
 
-function editorStateToText(editor: LexicalEditor) {
-  const editorStateTextString: string[] = [];
-  const paragraphs = editor.getEditorState().toJSON().root.children as EditorStateJson[];
+const useSuggestions = (communityId?: string | null) => {
+  const [queryString, setQueryString] = useState<string | null>(null);
 
-  const mentioned: MetaData[] = [];
-  const mentionees: {
-    type: string;
-    userIds: string[];
-  }[] = [{ type: 'user', userIds: [] }];
-  let runningIndex = 0;
+  const { community, isLoading: isCommunityLoading } = useCommunity({ communityId });
 
-  paragraphs.forEach((paragraph) => {
-    const children = paragraph.children;
-    const paragraphText: string[] = [];
+  const isSearchCommunityMembers = useMemo(
+    () => !!communityId && !isCommunityLoading && !community?.isPublic,
+    [communityId, isCommunityLoading, community],
+  );
 
-    children.forEach((child: { type: string; text: string; userId: string }) => {
-      if (child.text) {
-        paragraphText.push(child.text);
-      }
-      if (child.type === 'mention') {
-        mentioned.push({
-          index: runningIndex,
-          length: child.text.length,
-          type: 'user',
-          userId: child.userId,
-        });
-
-        mentionees.length && mentionees[0].userIds.push(child.userId);
-      }
-      runningIndex += child.text.length;
-    });
-    runningIndex += 1;
-    editorStateTextString.push(paragraphText.join(''));
+  const {
+    members,
+    hasMore: hasMoreMember,
+    isLoading: isLoadingMember,
+    loadMore: loadMoreMember,
+  } = useMemberQueryByDisplayName({
+    communityId: communityId || '',
+    displayName: queryString || '',
+    limit: 10,
+    enabled: isSearchCommunityMembers,
   });
-  return { mentioned, text: editorStateTextString.join('\n'), mentionees };
-}
+  const {
+    users,
+    hasMore: hasMoreUser,
+    loadMore: loadMoreUser,
+    isLoading: isLoadingUser,
+  } = useUserQueryByDisplayName({
+    displayName: queryString || '',
+    limit: 10,
+    enabled: !communityId,
+  });
 
-export const PostTextField = forwardRef<LexicalEditor, PostTextFieldProps>(
-  ({ onChange, communityId, onChangeSnap, mentionContainer, dataValue }) => {
-    const editorConfig = {
-      namespace: 'PostTextField',
-      theme: theme,
-      onError(error: Error) {
-        throw error;
-      },
-      nodes: [MentionNode],
-    };
-    return (
-      <>
-        <LexicalComposer
-          initialConfig={{
-            ...editorConfig,
-            ...(dataValue?.data.text
-              ? { editorState: JSON.stringify(textToEditorState(dataValue)) }
-              : {}),
-          }}
-        >
-          <div className={styles.editorContainer}>
-            <RichTextPlugin
-              contentEditable={<ContentEditable />}
-              placeholder={<div className={styles.editorPlaceholder}>What’s going on...</div>}
-              ErrorBoundary={LexicalErrorBoundary}
-            />
-            <OnChangePlugin
-              onChange={(editorState, editor) => {
-                onChange(editorStateToText(editor));
-              }}
-            />
-            <HistoryPlugin />
-            <AutoFocusPlugin />
-            <MentionTextInputPlugin
-              communityId={communityId}
-              onChangeSnap={onChangeSnap}
-              mentionContainer={mentionContainer}
-            />
-          </div>
-        </LexicalComposer>
-      </>
-    );
-  },
-);
+  const onQueryChange = (newQuery: string | null) => {
+    setQueryString(newQuery);
+  };
+
+  const suggestions = useMemo(() => {
+    if (!!communityId && isCommunityLoading) return [];
+
+    if (isSearchCommunityMembers) {
+      return members.map(({ user, userId }) => ({
+        userId: user?.userId || userId,
+        displayName: user?.displayName,
+      }));
+    }
+
+    return users.map(({ displayName, userId }) => ({
+      userId: userId,
+      displayName: displayName,
+    }));
+  }, [users, members, isSearchCommunityMembers, isCommunityLoading]);
+
+  const hasMore = useMemo(() => {
+    if (communityId) {
+      return hasMoreMember;
+    } else {
+      return hasMoreUser;
+    }
+  }, [communityId, hasMoreMember, hasMoreUser]);
+
+  const loadMore = () => {
+    if (isLoading || !hasMore) return;
+    if (communityId) {
+      loadMoreMember();
+    } else {
+      loadMoreUser();
+    }
+  };
+
+  const isLoading = useMemo(() => {
+    if (communityId) {
+      return isLoadingMember;
+    } else {
+      return isLoadingUser;
+    }
+  }, [isLoadingMember, isLoadingUser, communityId]);
+
+  return { suggestions, queryString, onQueryChange, loadMore, hasMore, isLoading };
+};
+
+const nodes = [AutoLinkNode, LinkNode, MentionNode] as Array<Klass<LexicalNode>>;
+
+export const PostTextField = ({
+  onChange,
+  communityId,
+  mentionContainer,
+  dataValue,
+}: PostTextFieldProps) => {
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+
+  const editorConfig = getEditorConfig({
+    namespace: 'PostTextField',
+    theme: {
+      link: styles.editorLink,
+      placeholder: styles.editorPlaceholder,
+      paragraph: styles.editorParagraph,
+    },
+    nodes,
+  });
+
+  const { onQueryChange, suggestions, isLoading, loadMore } = useSuggestions(communityId);
+
+  useIntersectionObserver({
+    onIntersect: () => {
+      if (isLoading === false) {
+        loadMore();
+      }
+    },
+    node: intersectionNode,
+    options: {
+      threshold: 0.7,
+    },
+  });
+
+  return (
+    <>
+      <LexicalComposer
+        initialConfig={{
+          ...editorConfig,
+          ...(dataValue?.data.text
+            ? { editorState: JSON.stringify(textToEditorState(dataValue)) }
+            : {}),
+        }}
+      >
+        <div className={styles.editorContainer}>
+          <RichTextPlugin
+            contentEditable={<ContentEditable />}
+            placeholder={<div className={styles.editorPlaceholder}>What’s going on...</div>}
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <OnChangePlugin
+            onChange={(_, editor) => {
+              onChange(editorStateToText(editor));
+            }}
+          />
+          <HistoryPlugin />
+          <AutoFocusPlugin />
+          <LinkPlugin />
+          <AutoLinkPlugin />
+          <MentionPlugin<MentionData, MentionNode<MentionData>>
+            suggestions={suggestions}
+            getSuggestionId={(suggestion) => suggestion.userId}
+            onQueryChange={onQueryChange}
+            $createNode={(data) =>
+              $createMentionNode({
+                text: `@${data?.displayName || ''}`,
+                data,
+              })
+            }
+            menuRenderFn={(
+              _,
+              { options, selectedIndex, setHighlightedIndex, selectOptionAndCleanUp },
+            ) => {
+              if (!mentionContainer || options.length === 0) {
+                return null;
+              }
+              return ReactDOM.createPortal(
+                <>
+                  {options.map((option, i: number) => {
+                    return (
+                      <MentionItem
+                        isSelected={selectedIndex === i}
+                        onClick={() => {
+                          setHighlightedIndex(i);
+                          selectOptionAndCleanUp(option);
+                        }}
+                        onMouseEnter={() => {
+                          setHighlightedIndex(i);
+                        }}
+                        key={option.key}
+                        option={option}
+                      />
+                    );
+                  })}
+                  <div ref={(node) => setIntersectionNode(node)} style={{ height: '4px' }} />
+                </>,
+                mentionContainer,
+              );
+            }}
+            commandPriority={COMMAND_PRIORITY_HIGH}
+          />
+        </div>
+      </LexicalComposer>
+    </>
+  );
+};
