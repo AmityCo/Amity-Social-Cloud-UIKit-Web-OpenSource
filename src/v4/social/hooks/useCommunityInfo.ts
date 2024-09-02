@@ -13,6 +13,7 @@ export const useCommunityInfo = (communityId?: string) => {
     communityId,
     shouldCall: !!communityId,
   });
+
   const avatarFileUrl = useImage({ fileId: community?.avatarFileId, imageSize: 'medium' });
 
   const { posts: reviewingPosts } = usePostsCollection({

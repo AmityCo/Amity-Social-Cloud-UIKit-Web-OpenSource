@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { PrimaryButton } from '~/core/components/Button';
 
 export const PostEditorContainer = styled.div`
-  width: 520px;
+  width: 100%;
   padding: 0;
   border: none;
   display: flex;

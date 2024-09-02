@@ -18,16 +18,6 @@ const CommentLikeButton = ({
 }: CommentLikeButtonProps) => {
   const comment = useComment(commentId);
 
-  useUserReactionSubscription({
-    userId: comment?.targetId,
-    shouldSubscribe: () => comment?.targetType === 'user',
-  });
-
-  useCommunityReactionSubscription({
-    communityId: comment?.targetId,
-    shouldSubscribe: () => comment?.targetType === 'community',
-  });
-
   return (
     <UICommentLikeButton
       comment={comment}

@@ -19,10 +19,6 @@ export { default as AmityExpandableText } from '~/social/components/Comment/Comm
 export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 export { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
-export {
-  CommentTray as AmityCommentTrayComponent,
-  StoryTab as AmityStoryTabComponent,
-} from '~/v4/social/components';
 
 export { ReactionList as AmityReactionList } from '~/v4/social/components/ReactionList';
 
@@ -48,6 +44,7 @@ export {
   MyCommunitiesSearchPage as AmityMyCommunitiesSearchPage,
   SelectPostTargetPage as AmityPostTargetSelectionPage,
   PostComposerPage as AmityPostComposerPage,
+  CommunityProfilePage as AmityCommunityProfilePage,
 } from '~/v4/social/pages';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/pages/SocialHomePage';

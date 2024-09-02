@@ -26,7 +26,7 @@ export const Frame = styled.div<{
   scrollableHeight?: number;
 }>`
   position: absolute;
-  z-index: 2;
+  z-index: 10;
   ${({ position }) => getCssPosition(position)}
   ${({ align }) => align && getCssPosition(align)}
   background: ${({ theme }) => theme.palette.system.background};

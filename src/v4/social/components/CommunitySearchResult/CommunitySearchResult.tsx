@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './CommunitySearchResult.module.css';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -24,9 +24,9 @@ export const CommunitySearchResult = ({
     componentId,
   });
 
-  const intersectionRef = useRef<HTMLDivElement>(null);
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
-  useIntersectionObserver({ onIntersect: () => onLoadMore(), ref: intersectionRef });
+  useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
 
   return (
     <div className={styles.communitySearchResult} style={themeStyles}>
@@ -43,7 +43,7 @@ export const CommunitySearchResult = ({
             <CommunityItemSkeleton key={index} pageId={pageId} componentId={componentId} />
           ))
         : null}
-      <div ref={intersectionRef} />
+      <div ref={(node) => setIntersectionNode(node)} />
     </div>
   );
 };

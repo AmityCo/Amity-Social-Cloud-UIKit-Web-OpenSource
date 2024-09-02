@@ -41,6 +41,13 @@ const AvatarUploadButton = styled.div`
   padding: 10px 16px;
   border-radius: 4px;
   color: #ffffff;
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    text-align: center;
+  }
 `;
 
 const CoverImageLoader = styled(Loader)`

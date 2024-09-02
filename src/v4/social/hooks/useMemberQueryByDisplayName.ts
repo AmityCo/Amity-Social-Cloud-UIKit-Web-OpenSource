@@ -40,6 +40,7 @@ export const useMemberQueryByDisplayName = ({
         search: displayName,
         limit,
         sortBy: 'displayName',
+        includeDeleted: false,
       },
       (response) => {
         setHasMore(response.hasNextPage || false);

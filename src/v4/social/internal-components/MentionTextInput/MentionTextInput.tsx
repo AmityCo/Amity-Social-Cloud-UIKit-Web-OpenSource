@@ -112,11 +112,11 @@ export class MentionTypeaheadOption extends MenuOption {
 
 export const MentionTextInputPlugin = ({
   communityId,
-  onChangeSnap,
+  attachmentAmount,
   mentionContainer,
 }: {
   communityId?: string | null;
-  onChangeSnap?: number;
+  attachmentAmount?: number;
   mentionContainer: HTMLElement | null;
 }) => {
   return (
@@ -124,7 +124,7 @@ export const MentionTextInputPlugin = ({
       <Mention
         anchorElement={mentionContainer}
         communityId={communityId}
-        onChangeSnap={onChangeSnap}
+        attachmentAmount={attachmentAmount}
       />
     </div>
   );
@@ -133,17 +133,17 @@ export const MentionTextInputPlugin = ({
 function Mention({
   anchorElement,
   communityId,
-  onChangeSnap,
+  attachmentAmount,
 }: {
   anchorElement: HTMLElement | null;
   communityId?: string | null;
-  onChangeSnap?: number;
+  attachmentAmount?: number;
 }) {
   const [editor] = useLexicalComposerContext();
 
   const [queryString, setQueryString] = useState<string | null>(null);
   let options: MentionTypeaheadOption[] = [];
-  const intersectionRef = useRef<HTMLDivElement>(null);
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const {
     members,
     hasMore: hasMoreMember,
@@ -171,7 +171,7 @@ function Mention({
         }
       }
     },
-    ref: intersectionRef,
+    node: intersectionNode,
   });
 
   const community = useCommunity({ communityId, shouldCall: !!communityId }).community;
@@ -228,7 +228,10 @@ function Mention({
         anchorElement && options.length > 0
           ? ReactDOM.createPortal(
               <>
-                <div data-media-attachement={onChangeSnap} className={styles.mentionTextInput_item}>
+                <div
+                  data-media-attachment={attachmentAmount}
+                  className={styles.mentionTextInput_item}
+                >
                   {options.map((option, i: number) => (
                     <CommunityMember
                       isSelected={selectedIndex === i}
@@ -244,7 +247,7 @@ function Mention({
                     />
                   ))}
                 </div>
-                <div ref={intersectionRef} />
+                <div ref={(node) => setIntersectionNode(node)} />
               </>,
               anchorElement,
             )

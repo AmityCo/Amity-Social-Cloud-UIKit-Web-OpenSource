@@ -46,11 +46,13 @@ interface EditorStateJson extends SerializedLexicalNode {
 }
 
 interface CommentInputProps {
-  community?: Amity.Community;
+  community?: Amity.Community | null;
   value?: CreateCommentParams;
   mentionOffsetBottom?: number;
   maxLines?: number;
   placehoder?: string;
+  targetType?: string;
+  targetId?: string;
   ref: MutableRefObject<LexicalEditor | null | undefined>;
   onChange: (data: CreateCommentParams) => void;
 }

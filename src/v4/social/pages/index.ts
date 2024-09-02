@@ -7,3 +7,4 @@ export { SelectPostTargetPage } from './SelectPostTargetPage';
 export { MyCommunitiesSearchPage } from './MyCommunitiesSearchPage';
 export { SocialGlobalSearchPage } from './SocialGlobalSearchPage';
 export { PostDetailPage } from './PostDetailPage';
+export { CommunityProfilePage } from './CommunityProfilePage';

@@ -1,0 +1,98 @@
+.communityProfileSkeleton__container {
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--asc-color-background-default);
+  overflow: hidden;
+  box-shadow: 0 0.0625rem 0.1875rem rgb(0 0 0 / 10%);
+}
+
+.communityProfileSkeleton__headerImage {
+  width: 100%;
+  height: 12.5rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.communityProfileSkeleton__content {
+  padding: 1rem;
+}
+
+.communityProfileSkeleton__title {
+  height: 1.5rem;
+  width: 60%;
+  background-color: var(--asc-color-base-shade4);
+  margin-bottom: 1rem;
+  border-radius: 0.25rem;
+}
+
+.communityProfileSkeleton__category__container {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.communityProfileSkeleton__category__item {
+  height: 1.25rem;
+  width: 3.75rem;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.625rem;
+}
+
+.communityProfileSkeleton__description {
+  height: 1rem;
+  width: 100%;
+  background-color: var(--asc-color-base-shade4);
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.communityProfileSkeleton__communityInfo__container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.communityProfileSkeleton__communityInfo__info {
+  height: 1.25rem;
+  width: 5rem;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+}
+
+.communityProfileSkeleton__storyTab {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade4);
+  margin-bottom: 0.5rem;
+}
+
+.communityProfileSkeleton__storyTab__title {
+  height: 1rem;
+  width: 2.5rem;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.communityProfileSkeleton__headerImage,
+.communityProfileSkeleton__title,
+.communityProfileSkeleton__tag,
+.communityProfileSkeleton__description,
+.communityProfileSkeleton__stat,
+.communityProfileSkeleton__avatar,
+.communityProfileSkeleton__username {
+  animation: pulse 1.5s ease-in-out infinite;
+}

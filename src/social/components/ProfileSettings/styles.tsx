@@ -12,6 +12,10 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 600px;
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+  }
 `;
 
 export const PageHeader = styled.div`

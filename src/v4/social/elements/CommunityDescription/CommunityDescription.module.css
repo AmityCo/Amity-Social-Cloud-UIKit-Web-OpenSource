@@ -1,0 +1,26 @@
+.descriptionWrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-height: 1.5rem;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.description.expanded {
+  overflow: visible;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: var(--asc-color-primary-default);
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+}

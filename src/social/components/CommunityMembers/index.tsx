@@ -199,11 +199,6 @@ interface CommunityMembersProps {
 const CommunityMembers = ({ communityId }: CommunityMembersProps) => {
   const { formatMessage } = useIntl();
 
-  useCommunitySubscription({
-    level: SubscriptionLevels.COMMUNITY,
-    communityId,
-  });
-
   const { hasMore, loadMore, loadMoreHasBeenCalled, isLoading, members } =
     useCommunityMembersCollection(communityId);
 

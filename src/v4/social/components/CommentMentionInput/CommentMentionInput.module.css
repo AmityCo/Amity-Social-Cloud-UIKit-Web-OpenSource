@@ -6,6 +6,7 @@
   height: 12.5rem;
   overflow-y: scroll;
   transform: translateY(var(--asc-mention-offset-bottom));
+  background-color: var(--asc-color-background-default);
 }
 
 .mentionTextInput_item::-webkit-scrollbar {

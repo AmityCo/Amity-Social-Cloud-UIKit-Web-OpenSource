@@ -20,18 +20,16 @@ import {
   Avatar,
   AvatarContainer,
 } from './styles';
-import useSDK from '~/core/hooks/useSDK';
-import useFile from '~/core/hooks/useFile';
 import { UserRepository } from '@amityco/ts-sdk';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useImage from '~/core/hooks/useImage';
+import { useNotifications } from '~/core/providers/NotificationProvider';
 
 interface ProfileSettingsProps {
   userId?: string;
 }
 
 const ProfileSettings = ({ userId }: ProfileSettingsProps) => {
-  // const { currentUserId } = useSDK();
   const { formatMessage } = useIntl();
   const { onClickUser } = useNavigation();
 
@@ -39,6 +37,13 @@ const ProfileSettings = ({ userId }: ProfileSettingsProps) => {
 
   const user = useUser(userId);
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
+  const notification = useNotifications();
+
+  const handleError = (error: Error) => {
+    notification.error({
+      content: error.message,
+    });
+  };
 
   const handleSubmit = async (
     data: Partial<Pick<Amity.User, 'displayName'>> &
@@ -49,6 +54,7 @@ const ProfileSettings = ({ userId }: ProfileSettingsProps) => {
       await UserRepository.updateUser(userId, data);
       onClickUser(userId);
     } catch (err) {
+      handleError(err as Error);
       console.log(err);
     }
   };

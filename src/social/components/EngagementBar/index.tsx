@@ -30,17 +30,6 @@ const EngagementBar = ({ postId, readonly = false }: EngagementBarProps) => {
     targetId: post?.targetId,
   });
 
-  usePostSubscription({
-    postId,
-    level: SubscriptionLevels.POST,
-  });
-
-  useReactionSubscription({
-    targetType: post?.targetType,
-    targetId: post?.targetId,
-    shouldSubscribe: () => !!post,
-  });
-
   if (!post) return null;
 
   const handleAddComment = async (

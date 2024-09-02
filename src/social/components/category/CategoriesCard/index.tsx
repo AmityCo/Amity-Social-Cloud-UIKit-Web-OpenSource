@@ -51,7 +51,6 @@ const List = () => {
   return (
     <HorizontalList
       columns={{
-        360: 1,
         720: 2,
         1024: 3,
         1280: 5,

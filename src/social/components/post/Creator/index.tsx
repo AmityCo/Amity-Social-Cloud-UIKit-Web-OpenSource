@@ -286,6 +286,16 @@ const PostCreatorBar = ({
         title: <FormattedMessage id="post.discard.title" />,
         content: <FormattedMessage id="post.discard.content" />,
         okText: <FormattedMessage id="general.action.discard" />,
+        onOk: () => {
+          clearAll();
+          setPostImages([]);
+          setPostVideos([]);
+          setPostFiles([]);
+          setIncomingImages([]);
+          setIncomingVideos([]);
+          setIncomingFiles([]);
+          setNavigationBlocker?.(null);
+        },
       });
     } else {
       setNavigationBlocker?.(null);

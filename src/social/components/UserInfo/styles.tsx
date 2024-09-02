@@ -44,12 +44,15 @@ export const Avatar = styled(UIAvatar)`
 
 export const ActionButtonContainer = styled.div`
   display: flex;
-  gap: 8px;
   margin-right: 8px;
 
   > button {
-    min-width: 136px;
-    height: 40px;
+    min-width: 160px;
+    gap: 8px;
+    padding: 10px 16px;
+    @media (max-width: 768px) {
+      min-width: 130px;
+    }
   }
 `;
 

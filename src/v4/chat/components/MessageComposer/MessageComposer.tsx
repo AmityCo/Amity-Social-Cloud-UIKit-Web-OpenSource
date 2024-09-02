@@ -19,11 +19,8 @@ import {
   LexicalNode,
 } from 'lexical';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
-import {
-  MentionPlugin,
-  MentionTypeaheadOption,
-} from '~/v4/social/internal-components/Lexical/plugins/MentionPlugin';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { MentionPlugin } from '~/v4/social/internal-components/Lexical/plugins/MentionPlugin';
+
 import { useMutation } from '@tanstack/react-query';
 import {
   editorStateToText,
@@ -44,6 +41,8 @@ import { LinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/Link
 import { AutoLinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/AutoLinkPlugin';
 import { EditorRefPlugin } from '@lexical/react/LexicalEditorRefPlugin';
 import { EnterKeyInterceptorPlugin } from '~/v4/social/internal-components/Lexical/plugins/EnterKeyInterceptorPlugin';
+import { AllMentionItem } from '~/v4/social/internal-components/Lexical/AllMentionItem';
+import { MentionItem } from '~/v4/social/internal-components/Lexical/MentionItem';
 
 const COMPOSEBAR_MAX_CHARACTER_LIMIT = 200;
 
@@ -91,53 +90,6 @@ const useSuggestions = (channelId?: string | null) => {
 
   return { suggestions, queryString, onQueryChange };
 };
-
-interface MentionItemProps {
-  isSelected: boolean;
-  onClick: () => void;
-  onMouseEnter: () => void;
-  option: MentionTypeaheadOption<MentionData>;
-}
-
-function MentionItem({ option, isSelected, onClick, onMouseEnter }: MentionItemProps) {
-  return (
-    <li
-      key={option.key}
-      tabIndex={-1}
-      data-is-selected={isSelected}
-      className={styles.userMentionItem__item}
-      ref={option.setRefElement}
-      role="option"
-      aria-selected={isSelected}
-      onMouseEnter={onMouseEnter}
-      onClick={onClick}
-    >
-      <div>
-        <UserAvatar className={styles.userMentionItem__avatar} userId={option.data.userId} />
-      </div>
-      <p className={styles.userMentionItem__displayName}>{option.data.displayName}</p>
-    </li>
-  );
-}
-
-function AllMentionItem({ option, isSelected, onClick, onMouseEnter }: MentionItemProps) {
-  return (
-    <li
-      key={option.key}
-      tabIndex={-1}
-      data-is-selected={isSelected}
-      className={styles.allMentionItem__item}
-      ref={option.setRefElement}
-      role="option"
-      aria-selected={isSelected}
-      onMouseEnter={onMouseEnter}
-      onClick={onClick}
-    >
-      <div className={styles.allMentionItem__atSign}>@</div>
-      <p className={styles.allMentionItem__displayName}>{option.data.displayName}</p>
-    </li>
-  );
-}
 
 const nodes = [AutoLinkNode, LinkNode, MentionNode] as Array<Klass<LexicalNode>>;
 
