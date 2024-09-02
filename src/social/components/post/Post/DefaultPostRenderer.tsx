@@ -216,11 +216,6 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
   const community = useCommunity(communityId);
   const { currentUserId } = useSDK();
 
-  usePostSubscription({
-    postId: post?.postId,
-    level: SubscriptionLevels.POST,
-  });
-
   const { canReview, isPostUnderReview } = useCommunityPostPermission({
     community,
     post,

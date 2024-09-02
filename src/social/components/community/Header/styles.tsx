@@ -26,7 +26,7 @@ export const CommunityHeaderContainer = styled.a.attrs(
     css`
       &:hover {
         cursor: pointer;
-        background-color: ${({ theme }) => theme.palette.base.shade4};
+        background-color: ${({ theme }) => theme.palette.primary.shade3};
       }
     `}
 

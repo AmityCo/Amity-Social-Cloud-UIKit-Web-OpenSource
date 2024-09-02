@@ -26,7 +26,12 @@ const SideMenuActionItem = ({
 }: SideMenuActionItemProps) => {
   if (element === 'a') {
     return (
-      <AnchorActionItem data-qa-anchor={dataQaAnchor} className={className} onClick={onClick}>
+      <AnchorActionItem
+        data-qa-anchor={dataQaAnchor}
+        className={className}
+        onClick={onClick}
+        active={active}
+      >
         {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
         <span className="actionItemChild">{children}</span>
       </AnchorActionItem>

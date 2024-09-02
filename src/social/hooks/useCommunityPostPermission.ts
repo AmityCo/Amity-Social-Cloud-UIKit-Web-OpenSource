@@ -1,9 +1,9 @@
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import { useMemo } from 'react';
-import useUser from '~/core/hooks/useUser';
 import usePostsCollection from '~/social/hooks/collections/usePostsCollection';
-import useCommunityModeratorsCollection from './collections/useCommunityModeratorsCollection';
-import useCommunityMembersCollection from './collections/useCommunityMembersCollection';
+import useSDK from '~/core/hooks/useSDK';
+import { Permissions } from '~/social/constants';
+import useCommunityModeratorsCollection from '~/social/hooks/collections/useCommunityModeratorsCollection';
 
 const useCommunityPostPermission = ({
   post,
@@ -17,13 +17,13 @@ const useCommunityPostPermission = ({
   userId?: string;
 }) => {
   const { moderators } = useCommunityModeratorsCollection(community?.communityId);
-  const { members } = useCommunityMembersCollection(community?.communityId);
+  const { client } = useSDK();
+
   const { posts: reviewingPosts } = usePostsCollection({
     targetType: 'community',
     targetId: community?.communityId,
     feedType: 'reviewing',
   });
-  const user = useUser(userId);
 
   const isEditable = useMemo(() => {
     if (
@@ -36,7 +36,6 @@ const useCommunityPostPermission = ({
     return true;
   }, [childrenPosts]);
 
-  const member = members.find((member) => member.userId === userId);
   const moderator = moderators.find((moderator) => moderator.userId === userId);
   const isMyPost = post?.postedUserId === userId;
   const isPostUnderReview = useMemo(() => {
@@ -45,29 +44,57 @@ const useCommunityPostPermission = ({
     }
     return false;
   }, [community, reviewingPosts]);
-  const isGlobalAdmin = user?.roles.find((role) => role === 'global-admin') != null;
 
   const isModerator = moderator != null;
-  const isMember = member != null;
 
-  if (community == null) {
-    return {
-      isPostUnderReview: false,
-      isModerator: false,
-      canEdit: (isGlobalAdmin || isMyPost) && isEditable,
-      canReport: isGlobalAdmin || !isMyPost,
-      canDelete: isGlobalAdmin || isMyPost,
-      canReview: false,
-    };
+  const permissions: {
+    canEdit: boolean;
+    canReport: boolean;
+    canDelete: boolean;
+    canReview: boolean;
+  } = {
+    canEdit: false,
+    canReport: false,
+    canDelete: false,
+    canReview: false,
+  };
+
+  if (isMyPost) {
+    if (!isPostUnderReview && isEditable) {
+      permissions.canEdit = true;
+    }
+    permissions.canDelete = true;
+  } else {
+    if (community != null) {
+      const canEdit =
+        client
+          ?.hasPermission(Permissions.EditCommunityFeedPostPermission)
+          .community(community.communityId) ?? false;
+
+      permissions.canEdit = canEdit && isEditable;
+
+      const canDelete =
+        client
+          ?.hasPermission(Permissions.DeleteCommunityFeedPostPermission)
+          .community(community.communityId) ?? false;
+
+      permissions.canDelete = canDelete;
+    } else {
+      const canDelete =
+        client?.hasPermission(Permissions.EditUserFeedPostPermission).currentUser() ?? false;
+
+      permissions.canDelete = canDelete;
+    }
+
+    if (!isPostUnderReview) {
+      permissions.canReport = true;
+    }
   }
 
   return {
     isPostUnderReview,
     isModerator,
-    canEdit: (isGlobalAdmin || isModerator) && isEditable,
-    canReview: isGlobalAdmin || isModerator,
-    canDelete: (!isPostUnderReview && isModerator) || (isMyPost && isMember),
-    canReport: !isPostUnderReview ? !isMyPost && (isModerator || isMember) : !isMyPost,
+    ...permissions,
   };
 };
 

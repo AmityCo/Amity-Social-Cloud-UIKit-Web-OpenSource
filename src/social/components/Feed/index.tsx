@@ -239,11 +239,6 @@ const CommunityFeed = ({
     feedType,
   });
 
-  useCommunitySubscription({
-    communityId: targetId,
-    level: SubscriptionLevels.COMMUNITY,
-  });
-
   function renderLoadingSkeleton() {
     return new Array(3).fill(3).map((_, index) => <DefaultPostRenderer key={index} loading />);
   }

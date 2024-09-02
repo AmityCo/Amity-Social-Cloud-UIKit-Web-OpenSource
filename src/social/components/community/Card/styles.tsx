@@ -3,8 +3,6 @@ import styled, { css } from 'styled-components';
 import SocialCommunityName from '~/social/components/community/Name';
 
 export const Container = styled.div`
-  min-width: 278px;
-  min-height: 289px;
   cursor: pointer;
   box-shadow:
     0 0 1px rgba(40, 41, 61, 0.08),

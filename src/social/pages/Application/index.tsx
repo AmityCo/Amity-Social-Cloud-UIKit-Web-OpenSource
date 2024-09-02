@@ -70,11 +70,17 @@ const Community = () => {
     run();
   }, [client]);
 
+  useEffect(() => {
+    if (open) {
+      setOpen(false);
+    }
+  }, [page.type, page.communityId]);
+
   return (
     <StoryProvider>
       <ApplicationContainer>
         <MainLayout aside={<StyledCommunitySideMenu activeCommunity={page.communityId} />}>
-          {page.type === PageTypes.Explore && <ExplorePage />}
+          {page.type === PageTypes.Explore && <ExplorePage isOpen={open} toggleOpen={toggleOpen} />}
 
           {page.type === PageTypes.NewsFeed && (
             <NewsFeedPage toggleOpen={toggleOpen} isOpen={open} />

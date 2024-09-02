@@ -38,6 +38,7 @@ import useCommentSubscription from '~/social/hooks/useCommentSubscription';
 import { ERROR_RESPONSE } from '~/social/constants';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 import { useNotifications } from '~/core/providers/NotificationProvider';
+import { useNavigation } from '~/social/providers/NavigationProvider';
 
 const REPLIES_PER_PAGE = 5;
 
@@ -87,6 +88,7 @@ interface CommentProps {
 }
 
 const Comment = ({ commentId, readonly }: CommentProps) => {
+  const { onClickUser } = useNavigation();
   const comment = useComment(commentId);
   const post = usePost(comment?.referenceId);
   const { confirm } = useConfirmContext();
@@ -100,10 +102,6 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const { formatMessage } = useIntl();
   const [isExpanded, setExpanded] = useState(false);
-
-  useCommentSubscription({
-    commentId,
-  });
 
   const { text, markup, mentions, onChange, queryMentionees, resetState, clearAll } =
     useSocialMention({
@@ -250,6 +248,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
       isReplyComment={isReplyComment}
       onClickReply={onClickReply}
       onChange={onChange}
+      onClickUser={() => onClickUser(comment.userId)}
     />
   );
 

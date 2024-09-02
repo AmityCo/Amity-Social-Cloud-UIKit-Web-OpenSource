@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 const Container = styled.div<{ withHeader?: boolean }>`
   display: grid;
-
   grid-template-areas: 'main side';
   grid-template-columns: auto min-content;
 
@@ -21,12 +20,27 @@ const Container = styled.div<{ withHeader?: boolean }>`
   overflow: hidden;
   margin: 0 auto;
   padding: 20px 0;
+
+  @media (max-width: 768px) {
+    grid-template-areas:
+      ${({ withHeader }) => (withHeader ? `'header'` : ``)}
+      'main'
+      'side';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: auto;
+    overflow: unset;
+  }
 `;
 
 const HeaderContainer = styled.div`
   grid-area: header;
   width: 100%;
   height: 100%;
+
+  @media (max-width: 768px) {
+    height: unset;
+  }
 `;
 
 const Main = styled.div`
@@ -34,6 +48,10 @@ const Main = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
+
+  @media (max-width: 768px) {
+    height: unset;
+  }
 `;
 
 const Side = styled.div`
@@ -42,6 +60,11 @@ const Side = styled.div`
   height: 100%;
   max-width: 20rem;
   overflow: auto;
+
+  @media (max-width: 768px) {
+    max-width: unset;
+    height: unset;
+  }
 
   & > :not(:first-child) {
     margin-top: 20px;

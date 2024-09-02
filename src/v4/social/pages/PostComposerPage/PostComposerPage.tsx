@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mentioned } from '~/v4/helpers/utils';
+import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { CreatePost } from '~/v4/social/internal-components/CreatePost';
 import { EditPost } from '~/v4/social/internal-components/EditPost';
 
@@ -52,10 +52,7 @@ export function PostComposerPage(props: PostComposerPageProps) {
 export type CreatePostParams = {
   text: string;
   mentioned: Mentioned[];
-  mentionees: {
-    type: string;
-    userIds: string[];
-  }[];
+  mentionees: Mentionees;
   attachments?: {
     fileId: string;
     type: string;

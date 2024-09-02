@@ -1,3 +1,14 @@
 .menuButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   fill: var(--asc-color-base-default);
+}
+
+.menuButton__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.125rem;
 }

@@ -1,0 +1,49 @@
+.userMentionItem__item,
+.allMentionItem__item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--asc-color-background-default);
+  color: var(--asc-color-base-default);
+}
+
+.userMentionItem__item[data-is-selected='true'],
+.allMentionItem__item[data-is-selected='true'] {
+  background-color: var(--asc-color-base-shade4);
+}
+
+.userMentionItem__item:focus,
+.allMentionItem__item:focus {
+  background-color: var(--asc-color-base-shade4);
+}
+
+.userMentionItem__avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.allMentionItem__atSign {
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--asc-color-primary-default);
+  color: var(--asc-color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1.2rem;
+  font-size: 1rem;
+}
+
+.userMentionItem__displayName,
+.allMentionItem__displayName {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--asc-color-base-default);
+}

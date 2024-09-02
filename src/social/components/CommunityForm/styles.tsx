@@ -44,6 +44,9 @@ export const Selector = styled.div`
   cursor: pointer;
   max-height: 200px;
   overflow-y: auto;
+  @media (max-width: 768px) {
+    max-height: unset;
+  }
 `;
 
 export const IconWrapper = styled.div`
@@ -66,7 +69,7 @@ export const Counter = styled.div`
 
 export const Label = styled.label`
   ${({ theme }) => theme.typography.bodyBold};
-  margin-bottom: 4px;
+  margin: 8px 0;
   ${({ theme }) => css`
     &.required {
       &::after {
@@ -92,6 +95,10 @@ export const Radio = styled.input.attrs({ type: 'radio' })`
 
 export const Form = styled.form`
   min-width: 520px;
+
+  @media (max-width: 768px) {
+    min-width: 100%;
+  }
 `;
 
 export const SubmitButton = styled(PrimaryButton).attrs<{ edit?: boolean }>({
@@ -120,9 +127,6 @@ export const FormBlockContainer = styled.div<{ edit?: boolean }>`
   ${({ theme, edit }) =>
     edit
       ? css`
-          > :not(:first-child) {
-            margin-top: 12px;
-          }
           border: 1px solid #edeef2;
           border-radius: 4px;
         `
@@ -163,6 +167,10 @@ export const Description = styled.div`
   color: ${({ theme }) => theme.palette.base.shade1};
   ${({ theme }) => theme.typography.body};
   width: 357px;
+
+  @media (max-width: 768px) {
+    width: unset;
+  }
 `;
 
 export const InformationBlock = styled.div`
@@ -240,6 +248,7 @@ export const AboutTextarea = styled(TextareaAutosize).attrs({ minRows: 3, maxRow
   resize: none;
   border: 1px solid #e3e4e8;
   padding: 10px 12px;
+  background: ${({ theme }) => theme.palette.system.background};
   &:focus-within {
     border-color: ${({ theme }) => theme.palette.primary.main};
   }
@@ -261,11 +270,11 @@ export const SelectIcon = styled(ChevronDown).attrs({ width: 16, height: 16 })`
 `;
 
 export const Field = styled.div<{ error?: ReactNode }>`
-  > :not(:first-child) {
-    margin-top: 20px;
-  }
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 
   ${({ error }) =>
     error &&

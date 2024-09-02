@@ -11,6 +11,9 @@ export const ExtraActionContainer = styled.div`
   padding: 16px;
   width: 330px;
   flex-shrink: 0;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const ExtraActionContainerHeader = styled.div`

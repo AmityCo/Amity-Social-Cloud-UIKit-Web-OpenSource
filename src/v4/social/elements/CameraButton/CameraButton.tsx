@@ -66,27 +66,22 @@ export function CameraButton({
     fileInput.click();
   };
 
-  const onLoadMedia: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const targetFiles = e.target.files ? [...e.target.files] : [];
-    const isImage = targetFiles.some((file) => file.type.startsWith('image/'));
-    const isVideo = targetFiles.some((file) => file.type.startsWith('video/'));
+  const onLoadMedia: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const targetFiles = e.target.files ? [...e.target.files] : [];
+      const isImage = targetFiles.some((file) => file.type.startsWith('image/'));
+      const isVideo = targetFiles.some((file) => file.type.startsWith('video/'));
 
-    if (isImage) {
-      onImageFileChange?.(e.target.files ? [...e.target.files] : []);
-    } else if (isVideo) {
-      onVideoFileChange?.(e.target.files ? [...e.target.files] : []);
-    }
-  }, []);
-
-  const onImageChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    onImageFileChange?.(e.target.files ? [...e.target.files] : []);
-  }, []);
-
-  const onVideoChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    onImageFileChange?.(e.target.files ? [...e.target.files] : []);
-  }, []);
+      if (isImage) {
+        onImageFileChange?.(targetFiles);
+      } else if (isVideo) {
+        onVideoFileChange?.(targetFiles);
+      }
+    },
+    [onImageFileChange, onVideoFileChange],
+  );
 
   return (
     <Button
@@ -105,35 +100,19 @@ export function CameraButton({
       />
       {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}
 
-      {isVisibleImage && !isVisibleVideo && (
-        <input
-          type="file"
-          onChange={onImageChange}
-          id="upload"
-          accept="image/*"
-          className={styles.cameraButton_input}
-        />
-      )}
-
-      {!isVisibleImage && isVisibleVideo && (
-        <input
-          type="file"
-          onChange={onVideoChange}
-          id="upload"
-          accept="video/*"
-          className={styles.cameraButton_input}
-        />
-      )}
-
-      {isVisibleVideo && isVisibleVideo && (
-        <input
-          type="file"
-          onChange={onLoadMedia}
-          id="upload"
-          accept="image/*,video/*"
-          className={styles.cameraButton_input}
-        />
-      )}
+      <input
+        type="file"
+        onChange={onLoadMedia}
+        id="upload"
+        accept={
+          isVisibleImage && isVisibleVideo
+            ? 'image/*,video/*'
+            : isVisibleImage
+              ? 'image/*'
+              : 'video/*'
+        }
+        className={styles.cameraButton_input}
+      />
     </Button>
   );
 }

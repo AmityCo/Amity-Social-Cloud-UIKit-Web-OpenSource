@@ -80,56 +80,6 @@ const InnerCommentList = ({
 };
 
 const PostCommentList = (props: CommentListProps) => {
-  const {
-    parentId,
-    referenceId,
-    referenceType,
-    limit = 5,
-    // TODO: breaking change
-    // filterByParentId = false,
-    readonly = false,
-    isExpanded = true,
-  } = props;
-  const { formatMessage } = useIntl();
-  const [firstRender, setFirstRender] = useState(true);
-  const isReplyComment = !!parentId;
-  const post = usePost(referenceId);
-
-  usePostSubscription({
-    postId: referenceId,
-    level: SubscriptionLevels.COMMENT,
-    shouldSubscribe: () => referenceType === 'post' && !parentId,
-  });
-
-  const loadMoreText = isReplyComment
-    ? formatMessage({ id: 'collapsible.viewMoreReplies' })
-    : formatMessage({ id: 'collapsible.viewMoreComments' });
-
-  const prependIcon = isReplyComment ? (
-    <TabIconContainer>
-      <TabIcon />
-    </TabIconContainer>
-  ) : null;
-
-  if (firstRender) {
-    return (
-      <LoadMoreWrapper
-        hasMore={(post?.comments.length || 0) > (post?.latestComments?.length || 0)}
-        loadMore={() => {
-          setFirstRender(false);
-        }}
-        text={loadMoreText}
-        className={isReplyComment ? 'reply-button' : 'comments-button'}
-        prependIcon={prependIcon}
-        appendIcon={null}
-        isExpanded={isExpanded}
-        contentSlot={(post?.latestComments || []).map((comment: Amity.Comment) => (
-          <Comment key={comment.commentId} commentId={comment.commentId} readonly={readonly} />
-        ))}
-      />
-    );
-  }
-
   return <InnerCommentList {...props} callLoadMoreAgain />;
 };
 
