@@ -115,6 +115,23 @@ function useLiveCollection<TCallback, TParams>({
     return () => unsubscribe();
   }, []);
 
+  const refresh = useCallback(() => {
+    if (unsubscribeRef.current) {
+      unsubscribeRef.current();
+    }
+
+    const { unsubscribe } = subscribe({
+      fetcher,
+      params,
+      callback: callbackFn,
+      refresh: true,
+    });
+
+    unsubscribeRef.current = unsubscribe;
+
+    return () => unsubscribe();
+  }, []);
+
   return {
     items,
     hasMore,
