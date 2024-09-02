@@ -2,6 +2,7 @@ import React from 'react';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
 import { Typography } from '~/v4/core/components';
 import styles from './UserSearchItem.module.css';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button';
 
 interface UserSearchItemProps {
@@ -9,9 +10,11 @@ interface UserSearchItemProps {
   onClick?: () => void;
 }
 
-export const UserSearchItem = ({ user, onClick }: UserSearchItemProps) => {
+export const UserSearchItem = ({ user }: UserSearchItemProps) => {
+  const { onClickUser } = useNavigation();
+
   return (
-    <Button key={user.userId} className={styles.userItem} onPress={onClick}>
+    <Button key={user.userId} className={styles.userItem} onPress={() => onClickUser(user.userId)}>
       <div className={styles.userItem__leftPane}>
         <UserAvatar userId={user.userId} className={styles.userItem__avatar} />
       </div>

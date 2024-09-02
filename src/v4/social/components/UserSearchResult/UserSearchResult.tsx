@@ -27,20 +27,13 @@ export const UserSearchResult = ({
     });
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
-  const { AmityUserSearchResultComponentBehavior } = usePageBehavior();
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
 
   return (
     <div className={styles.userSearchResult} style={themeStyles}>
       {userCollection.map((user) => (
-        <UserSearchItem
-          key={user.userId}
-          user={user}
-          onClick={() =>
-            AmityUserSearchResultComponentBehavior?.goToUserProfilePage?.({ userId: user.userId })
-          }
-        />
+        <UserSearchItem key={user.userId} user={user} />
       ))}
       {isLoading
         ? Array.from({ length: 5 }).map((_, index) => (
