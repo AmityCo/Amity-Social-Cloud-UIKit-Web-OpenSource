@@ -72,6 +72,7 @@ function useLiveCollection<TCallback, TParams>({
       params,
       callback: callbackFn,
     });
+    unsubscribeRef.current = unsubscribe;
 
     unsubscribeRef.current = unsubscribe;
 
@@ -89,6 +90,23 @@ function useLiveCollection<TCallback, TParams>({
       fetcher: fetcherRef.current,
       params: paramsRef.current,
       callback: callbackFnRef.current,
+      refresh: true,
+    });
+
+    unsubscribeRef.current = unsubscribe;
+
+    return () => unsubscribe();
+  }, []);
+
+  const refresh = useCallback(() => {
+    if (unsubscribeRef.current) {
+      unsubscribeRef.current();
+    }
+
+    const { unsubscribe } = subscribe({
+      fetcher,
+      params,
+      callback: callbackFn,
       refresh: true,
     });
 

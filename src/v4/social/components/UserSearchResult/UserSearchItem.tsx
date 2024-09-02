@@ -5,6 +5,8 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BrandBadge } from '~/v4/social/elements';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import styles from './UserSearchItem.module.css';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { Button } from '~/v4/core/natives/Button';
 
 interface UserSearchItemProps {
   pageId?: string;

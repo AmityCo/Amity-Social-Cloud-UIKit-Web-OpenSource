@@ -353,6 +353,8 @@ export function textToEditorState(value: {
           runningIndex += 1;
           globalIndex += 1;
         }
+        runningIndex += textSegment.length;
+        globalIndex += textSegment.length;
       }
     }
 

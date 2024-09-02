@@ -520,6 +520,11 @@ export function CreatePost({
     return null;
   };
 
+  const isShowDetailMediaAttachmentMenu =
+    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1 ||
+    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 ||
+    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3;
+
   return (
     <div className={styles.createPost} style={themeStyles}>
       {isDesktop && notifications}
