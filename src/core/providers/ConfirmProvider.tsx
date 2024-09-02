@@ -12,6 +12,7 @@ type ConfirmType = {
   okText?: ReactNode;
   cancelText?: ReactNode;
   'data-qa-anchor'?: string;
+  onSuccess?: () => void;
 };
 
 interface ConfirmContextProps {

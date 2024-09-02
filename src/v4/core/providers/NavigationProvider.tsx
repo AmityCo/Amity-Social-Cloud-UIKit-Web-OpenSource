@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useContext, useState, useMemo, React
 import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { NavigationContext as NavigationContextV3 } from '~/social/providers/NavigationProvider';
+import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -70,6 +71,8 @@ type Page =
       context: {
         postId: string;
         communityId?: string;
+        hideTarget?: boolean;
+        category?: AmityPostCategory;
       };
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string } }
@@ -114,7 +117,7 @@ type ContextValue = {
   onMessageUser: (userId: string) => void;
   onBack: () => void;
   goToUserProfilePage: (userId: string) => void;
-  goToPostDetailPage: (postId: string) => void;
+  goToPostDetailPage: (postId: string, hideTarget?: boolean, category?: AmityPostCategory) => void;
   goToCommunityProfilePage: (communityId: string) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
@@ -177,7 +180,7 @@ let defaultValue: ContextValue = {
   onEditUser: (userId: string) => {},
   onMessageUser: (userId: string) => {},
   goToUserProfilePage: (userId: string) => {},
-  goToPostDetailPage: (postId: string) => {},
+  goToPostDetailPage: (postId: string, hideTarget?: boolean, category?: AmityPostCategory) => {},
   goToViewStoryPage: (context: {
     targetId: string;
     targetType: Amity.StoryTargetType;
@@ -227,7 +230,8 @@ if (process.env.NODE_ENV !== 'production') {
     onBack: () => console.log('NavigationContext onBack()'),
     goToUserProfilePage: (userId) =>
       console.log(`NavigationContext goToUserProfilePage(${userId})`),
-    goToPostDetailPage: (postId) => console.log(`NavigationContext goToPostDetailPage(${postId})`),
+    goToPostDetailPage: (postId, hideTarget, category) =>
+      console.log(`NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category})`),
     goToCommunityProfilePage: (communityId) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId})`),
     goToSocialGlobalSearchPage: (tab) =>
@@ -360,7 +364,7 @@ export default function NavigationProvider({
   const handleClickCommunity = useCallback(
     (communityId) => {
       const next = {
-        type: PageTypes.CommunityFeed,
+        type: PageTypes.CommunityProfilePage,
         context: {
           communityId,
         },
@@ -496,7 +500,7 @@ export default function NavigationProvider({
   const goToUserProfilePage = useCallback(
     (userId) => {
       const next = {
-        type: PageTypes.UserProfilePage,
+        type: PageTypes.UserFeed,
         context: {
           userId,
         },
@@ -508,11 +512,13 @@ export default function NavigationProvider({
   );
 
   const goToPostDetailPage = useCallback(
-    (postId) => {
+    (postId, hideTarget, category) => {
       const next = {
         type: PageTypes.PostDetailPage,
         context: {
           postId,
+          hideTarget,
+          category,
         },
       };
 
@@ -524,7 +530,7 @@ export default function NavigationProvider({
   const goToCommunityProfilePage = useCallback(
     (communityId) => {
       const next = {
-        type: PageTypes.CommunityFeed,
+        type: PageTypes.CommunityProfilePage,
         context: {
           communityId,
         },

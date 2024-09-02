@@ -170,6 +170,7 @@ interface StyledCommentProps {
   isBanned?: boolean;
   mentionees?: Mentioned[];
   metadata?: Metadata;
+  onClickUser?: () => void;
 }
 
 const StyledComment = (props: StyledCommentProps) => {
@@ -192,6 +193,7 @@ const StyledComment = (props: StyledCommentProps) => {
     queryMentionees,
     isBanned,
     mentionees,
+    onClickUser,
   } = props;
   const { formatMessage } = useIntl();
 
@@ -214,7 +216,7 @@ const StyledComment = (props: StyledCommentProps) => {
 
   return (
     <>
-      <Avatar avatar={authorAvatar} backgroundImage={UserImage} />
+      <Avatar onClick={onClickUser} avatar={authorAvatar} backgroundImage={UserImage} />
       <Content>
         <Truncate
           ellipsis={
@@ -231,7 +233,8 @@ const StyledComment = (props: StyledCommentProps) => {
           lines={2}
         >
           <CommentHeader>
-            <AuthorName>{authorName}</AuthorName>
+            <AuthorName onClick={onClickUser}>{authorName}</AuthorName>
+
             <Truncate.Atom>
               <>
                 {isBanned && (

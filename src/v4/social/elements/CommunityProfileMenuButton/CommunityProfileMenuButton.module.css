@@ -1,0 +1,6 @@
+.menuButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  fill: var(--asc-color-primary-shade4);
+}

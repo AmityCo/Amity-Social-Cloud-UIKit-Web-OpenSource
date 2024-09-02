@@ -100,55 +100,47 @@ export function textToEditorState(value: {
 
   const textArray = value.data.text.split('\n');
 
-  const mentions = value.metadata?.mentioned;
+  const mentions = value.metadata?.mentioned || [];
 
-  let start = 0;
-  let stop = -1;
-  let mentionRunningIndex = 0;
+  let mentionIndex = 0;
+  let globalIndex = 0;
 
-  for (let i = 0; i < textArray.length; i++) {
-    start = stop + 1;
-    stop = start + textArray[i].length;
-
+  for (let i = 0; i < textArray.length; i += 1) {
     const paragraph = createParagraphNode();
+    let runningIndex = 0;
 
-    if (Array.isArray(mentions) && mentions?.length > 0) {
-      let runningIndex = 0;
-
-      while (runningIndex < textArray[i].length) {
-        if (mentionRunningIndex >= mentions.length) {
-          paragraph.children.push(createSerializeTextNode(textArray[i].slice(runningIndex)));
-          runningIndex = textArray[i].length;
-          break;
+    while (runningIndex < textArray[i].length) {
+      if (mentionIndex < mentions.length && mentions[mentionIndex].index === globalIndex) {
+        paragraph.children.push(createSerializeMentionNode(mentions[mentionIndex]));
+        runningIndex += mentions[mentionIndex].length;
+        globalIndex += mentions[mentionIndex].length;
+        mentionIndex += 1;
+      } else {
+        const nextMentionIndex =
+          mentionIndex < mentions.length
+            ? mentions[mentionIndex].index
+            : globalIndex + textArray[i].length;
+        const textSegment = textArray[i].slice(
+          runningIndex,
+          nextMentionIndex - globalIndex + runningIndex,
+        );
+        if (textSegment) {
+          paragraph.children.push(createSerializeTextNode(textSegment));
         }
-
-        if (mentions[mentionRunningIndex].index >= stop) {
-          paragraph.children.push(createSerializeTextNode(textArray[i]));
-          runningIndex = textArray[i].length;
-        } else {
-          const text = textArray[i].slice(
-            runningIndex,
-            runningIndex + mentions[mentionRunningIndex]?.index - start,
-          );
-
-          if (text) {
-            paragraph.children.push(createSerializeTextNode(text));
-          }
-
-          paragraph.children.push(createSerializeMentionNode(mentions[mentionRunningIndex]));
-
-          runningIndex +=
-            mentions[mentionRunningIndex].index + mentions[mentionRunningIndex].length - start;
-
-          mentionRunningIndex++;
-        }
+        runningIndex += textSegment.length;
+        globalIndex += textSegment.length;
       }
     }
 
-    if (!mentions || mentions?.length === 0) {
-      const textNode = createSerializeTextNode(textArray[i]);
-      paragraph.children.push(textNode);
+    if (runningIndex < textArray[i].length) {
+      const textSegment = textArray[i].slice(runningIndex);
+      if (textSegment) {
+        paragraph.children.push(createSerializeTextNode(textSegment));
+      }
+      globalIndex += textSegment.length;
     }
+
+    globalIndex += 1;
 
     rootNode.children.push(paragraph);
   }

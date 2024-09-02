@@ -33,15 +33,27 @@ export const usePostEditor = ({ postId, onSave }: { postId?: string; onSave: () 
     setLocalRemovedChildren((prevRemovedChildren) => [...prevRemovedChildren, childPostId]);
   };
 
-  const handleSave = async () => {
-    localRemovedChildren.forEach((childPostId) => {
-      PostRepository.deletePost(childPostId);
-    });
+  const formattedAttachment = (post: Amity.Post) => {
+    if (post.dataType === 'file' || post.dataType === 'image') {
+      return {
+        type: post.dataType,
+        fileId: post.data.fileId,
+      };
+    }
+    if (post.dataType === 'video') {
+      return {
+        type: post.dataType,
+        fileId: post.data.videoFileId.original,
+      };
+    }
+  };
 
+  const handleSave = async () => {
     await PostRepository.updatePost(post.postId, {
       data: { text },
       mentionees,
       metadata,
+      attachments: childrenPosts.map(formattedAttachment),
     });
     clearAll();
     onSave();

@@ -22,6 +22,11 @@ const Main = styled.div`
   min-width: 20rem;
   max-width: 90.75rem;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    max-width: unset;
+    min-width: unset;
+  }
 `;
 
 const Side = styled.div`

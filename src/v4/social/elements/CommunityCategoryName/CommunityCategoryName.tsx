@@ -1,9 +1,7 @@
 import React from 'react';
+import styles from './CommunityCategoryName.module.css';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
-import styles from './CommunityCategoryName.module.css';
 
 export interface CommunityCategoryNameProps {
   pageId?: string;
@@ -17,12 +15,11 @@ export function CommunityCategoryName({
   categoryName,
 }: CommunityCategoryNameProps) {
   const elementId = 'community_category_name';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 

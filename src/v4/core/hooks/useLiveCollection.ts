@@ -24,6 +24,7 @@ function useLiveCollection<TCallback, TParams>({
   loadMore: () => void;
   error: Error | null;
   loadMoreHasBeenCalled: boolean;
+  refresh: () => void;
 } {
   const { subscribe } = useSDKLiveCollectionConnector();
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
@@ -32,6 +33,7 @@ function useLiveCollection<TCallback, TParams>({
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const loadMoreFnRef = useRef<(() => void) | null>(null);
+  const unsubscribeRef = useRef<Amity.Unsubscriber | null>(null);
 
   const loadMore = useCallback(() => {
     if (loadMoreFnRef.current) {
@@ -60,11 +62,29 @@ function useLiveCollection<TCallback, TParams>({
       params,
       callback: callbackFn,
     });
+    unsubscribeRef.current = unsubscribe;
 
     return () => {
       unsubscribe();
     };
   }, [params, shouldCall]);
+
+  const refresh = useCallback(() => {
+    if (unsubscribeRef.current) {
+      unsubscribeRef.current();
+    }
+
+    const { unsubscribe } = subscribe({
+      fetcher,
+      params,
+      callback: callbackFn,
+      refresh: true,
+    });
+
+    unsubscribeRef.current = unsubscribe;
+
+    return () => unsubscribe();
+  }, []);
 
   return {
     items,
@@ -73,6 +93,7 @@ function useLiveCollection<TCallback, TParams>({
     loadMore,
     error,
     loadMoreHasBeenCalled,
+    refresh,
   };
 }
 

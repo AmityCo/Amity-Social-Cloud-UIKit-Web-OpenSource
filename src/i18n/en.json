@@ -204,6 +204,7 @@
   "files.all": "View all files",
 
   "sidebar.community": "Community",
+  "sidebar.explore": "Explore",
 
   "CategoryCommunitiesList.emptyTitle": "It's empty here...",
   "CategoryCommunitiesList.emptyDescription": "No community found in this category",

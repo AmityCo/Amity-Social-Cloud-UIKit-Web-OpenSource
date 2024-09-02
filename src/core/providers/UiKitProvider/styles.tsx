@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
+import skeletonCss from 'react-loading-skeleton/dist/skeleton.css?inline';
+
 export const UIStyles = styled.div`
+  color-scheme: only light;
   ${({ theme }) => theme.typography.body};
   color: ${({ theme }) => theme.palette.base.main};
   width: 100%;
@@ -20,4 +23,12 @@ export const UIStyles = styled.div`
   & pre {
     ${({ theme }) => theme.typography.body}
   }
+
+  @keyframes react-loading-skeleton {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  ${skeletonCss}
 `;

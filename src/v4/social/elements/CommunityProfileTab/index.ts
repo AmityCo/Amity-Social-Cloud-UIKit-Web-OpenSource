@@ -1,0 +1,1 @@
+export { CommunityProfileTab } from './CommunityProfileTab';

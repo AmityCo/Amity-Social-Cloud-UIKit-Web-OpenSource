@@ -10,19 +10,20 @@ export const useMentionUsers = ({
 }: {
   displayName: string;
   limit?: number;
-  community?: Amity.Community;
+  community?: Amity.Community | null;
 }) => {
   const fetcher =
     community && !community.isPublic
-      ? CommunityRepository.Membership.getMembers
+      ? CommunityRepository.Membership.searchMembers
       : UserRepository.getUsers;
 
   const params =
     community && !community.isPublic
       ? ({
           communityId: community.communityId,
-          displayName,
+          search: displayName,
           limit,
+          includeDeleted: false,
         } as Amity.SearchCommunityMemberLiveCollection)
       : ({ displayName, limit } as Amity.UserLiveCollection);
 

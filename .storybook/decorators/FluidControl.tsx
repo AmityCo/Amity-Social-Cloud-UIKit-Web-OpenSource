@@ -143,7 +143,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (
   Story,
   { globals: { [GLOBAL_NAME]: val } },
 ) => {
-  if (val === 'none') return <Centered>{Story()}</Centered>;
+  if (val === 'none') return <FullScreen>{Story()}</FullScreen>;
   else if (val === 'fullscreen') return <FullScreen>{Story()}</FullScreen>;
   else if (val === 'framed') return <Framed>{Story()}</Framed>;
   else if (val === 'boundingbox')

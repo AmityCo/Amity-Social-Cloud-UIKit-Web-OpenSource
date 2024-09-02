@@ -1,5 +1,6 @@
 import React from 'react';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import { ModalContainer } from '../ModalContainer';
 
 import {
   ConfirmModal,
@@ -61,9 +62,14 @@ export const ConfirmComponent = () => {
   const onOk = () => {
     closeConfirm();
     confirmData?.onOk && confirmData.onOk();
+    confirmData?.onSuccess && confirmData?.onSuccess();
   };
 
-  return <Confirm {...confirmData} onCancel={onCancel} onOk={onOk} />;
+  return (
+    <ModalContainer>
+      <Confirm {...confirmData} onCancel={onCancel} onOk={onOk} />
+    </ModalContainer>
+  );
 };
 
 export default Confirm;

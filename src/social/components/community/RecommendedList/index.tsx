@@ -22,7 +22,13 @@ const RecommendedList = () => {
   if (!communities?.length) return null;
 
   return (
-    <HorizontalList title={title}>
+    <HorizontalList
+      title={title}
+      columns={{
+        1024: 2,
+        1280: 3,
+      }}
+    >
       {isLoading && new Array(4).fill(1).map((x, index) => <UICommunityCard key={index} loading />)}
 
       {!isLoading &&

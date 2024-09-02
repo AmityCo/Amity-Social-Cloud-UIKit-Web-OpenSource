@@ -10,6 +10,7 @@ interface GalleryGridProps<T> {
   truncate?: boolean;
   onClick?: (index: number) => void;
   renderItem: (item: T) => React.ReactNode;
+  grid?: boolean;
 }
 
 const GalleryGrid = <T,>({
@@ -19,6 +20,7 @@ const GalleryGrid = <T,>({
   truncate,
   onClick,
   renderItem,
+  grid,
 }: GalleryGridProps<T>) => {
   if (truncate || items.length <= 4) {
     return (
@@ -28,6 +30,7 @@ const GalleryGrid = <T,>({
         renderItem={renderItem}
         items={items}
         itemKey={itemKey}
+        grid={grid}
       />
     );
   }

@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
-import { isAdmin, isModerator } from '~/v4/utils/permissions';
+import { isAdmin } from '~/v4/utils/permissions';
 import { checkStoryPermission } from '~/v4/social/utils';
 import { useCommunityInfo } from '~/v4/social/hooks/useCommunityInfo';
 import { CreateNewStoryButton } from '~/v4/social/elements/CreateNewStoryButton';
@@ -65,9 +65,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   const { currentUserId, client } = useSDK();
   const { user } = useUser(currentUserId);
   const isGlobalAdmin = isAdmin(user?.roles);
-  const isCommunityModerator = isModerator(user?.roles);
-  const hasStoryPermission =
-    isGlobalAdmin || isCommunityModerator || checkStoryPermission(client, communityId);
+  const hasStoryPermission = isGlobalAdmin || checkStoryPermission(client, communityId);
   const hasStories = stories?.length > 0;
   const hasUnSeen = stories.some((story) => !story?.isSeen);
   const uploading = stories.some((story) => story?.syncState === 'syncing');
