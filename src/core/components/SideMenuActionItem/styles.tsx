@@ -20,7 +20,7 @@ const actionItemContainerStyles = css`
   color: ${({ theme }) => theme.palette.neutral.main};
   justify-content: left;
   &:hover:not(:disabled) {
-    background-color: ${({ theme }) => theme.palette.base.shade4};
+    background-color: ${({ theme }) => theme.palette.primary.shade3};
   }
   &:disabled {
     color: ${({ theme }) => theme.palette.neutral.shade2};
@@ -34,11 +34,17 @@ export const ButtonActionItem = styled(SecondaryButton)`
   width: 100%;
 `;
 
-export const AnchorActionItem = styled.a`
+export const AnchorActionItem = styled.a<{ active?: boolean }>`
   cursor: pointer;
   border-radius: 4px;
   ${actionItemContainerStyles}
   ${({ theme }) => theme.typography.bodyBold}
+   ${({ active, theme }) =>
+    active &&
+    css`
+      color: ${theme.palette.primary.main};
+      background-color: ${theme.palette.primary.shade3};
+    `};
 `;
 
 export const IconWrapper = styled.div<{ active?: boolean }>`

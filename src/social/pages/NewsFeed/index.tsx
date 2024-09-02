@@ -9,10 +9,10 @@ import {
   CommunitySideMenuOverlay,
   HeadTitle,
   MobileContainer,
+  StyledBarsIcon,
   StyledCommunitySideMenu,
   Wrapper,
 } from './styles';
-import { BarsIcon } from '~/icons';
 import { useIntl } from 'react-intl';
 import { StoryTab } from '~/social/components/StoryTab';
 
@@ -30,7 +30,7 @@ const NewsFeed = ({ isOpen, toggleOpen }: NewsFeedProps) => {
       <CommunitySideMenuOverlay isOpen={isOpen} onClick={toggleOpen} />
       <StyledCommunitySideMenu isOpen={isOpen} />
       <MobileContainer>
-        <BarsIcon onClick={toggleOpen} />
+        <StyledBarsIcon onClick={toggleOpen} />
         <HeadTitle>{formatMessage({ id: 'sidebar.community' })}</HeadTitle>
       </MobileContainer>
       <StoryTab type="globalFeed" />

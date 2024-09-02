@@ -16,7 +16,7 @@ export const useSearchChannelUser = ({
 }) => {
   const { items, ...rest } = useLiveCollection({
     fetcher: ChannelRepository.Membership.searchMembers,
-    params: { channelId, search: search || '', memberships, limit },
+    params: { channelId, search: search || '', memberships, limit, includeDeleted: false },
     shouldCall: !!channelId && shouldCall,
   });
 

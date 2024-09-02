@@ -2,8 +2,18 @@ import React, { ReactNode } from 'react';
 
 import useKeyboard from '~/core/hooks/useKeyboard';
 
-import { Container, Frame, Counter, LeftButton, RightButton, CloseButton } from './styles';
+import {
+  Container,
+  Frame,
+  Counter,
+  LeftButton,
+  RightButton,
+  CloseButton,
+  InnerContainer,
+  GridContainer,
+} from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import { useMedia } from 'react-use';
 
 interface ImageGalleryProps<T extends Amity.Post> {
   index?: number;
@@ -29,16 +39,40 @@ const ImageGallery = <T extends Amity.Post>({
   useKeyboard('ArrowRight', next);
   useKeyboard('Escape', handleClose);
 
+  const isDesktop = useMedia('(min-width: 768px)');
+
+  if (isDesktop) {
+    return (
+      <Container>
+        <InnerContainer>
+          <GridContainer>
+            <Frame>{renderItem(items[index])}</Frame>
+
+            {showCounter && <Counter>{`${index + 1} / ${items.length}`}</Counter>}
+
+            {items.length > 1 && <LeftButton onClick={prev} />}
+            {items.length > 1 && <RightButton onClick={next} />}
+
+            <CloseButton onClick={handleClose} />
+          </GridContainer>
+        </InnerContainer>
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      <Frame>{renderItem(items[index])}</Frame>
+      <InnerContainer>
+        <Frame>{renderItem(items[index])}</Frame>
+        <GridContainer>
+          {showCounter && <Counter>{`${index + 1} / ${items.length}`}</Counter>}
 
-      {showCounter && <Counter>{`${index + 1} / ${items.length}`}</Counter>}
+          {items.length > 1 && <LeftButton onClick={prev} />}
+          {items.length > 1 && <RightButton onClick={next} />}
 
-      {items.length > 1 && <LeftButton onClick={prev} />}
-      {items.length > 1 && <RightButton onClick={next} />}
-
-      <CloseButton onClick={handleClose} />
+          <CloseButton onClick={handleClose} />
+        </GridContainer>
+      </InnerContainer>
     </Container>
   );
 };

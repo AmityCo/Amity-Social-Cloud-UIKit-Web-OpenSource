@@ -23,10 +23,9 @@ import {
   CommunitySideMenuOverlay,
   HeadTitle,
   MobileContainer,
+  StyledBarsIcon,
   StyledCommunitySideMenu,
 } from '../NewsFeed/styles';
-
-import { BarsIcon } from '~/icons';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import { useGetActiveStoriesByTarget } from '~/v4/social/hooks/useGetActiveStories';
@@ -68,11 +67,6 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
 
   const [activeTab, setActiveTab] = useState(CommunityFeedTabs.TIMELINE);
 
-  useCommunitySubscription({
-    communityId,
-    level: SubscriptionLevels.POST,
-  });
-
   const isJoined = community?.isJoined || false;
 
   const [isCreatedModalOpened, setCreatedModalOpened] = useState(isNewCommunity);
@@ -88,7 +82,7 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
       <CommunitySideMenuOverlay isOpen={isOpen} onClick={toggleOpen} />
       <StyledCommunitySideMenu isOpen={isOpen} />
       <MobileContainer>
-        <BarsIcon onClick={toggleOpen} />
+        <StyledBarsIcon onClick={toggleOpen} />
         <HeadTitle>
           <FormattedMessage id="sidebar.community" />
         </HeadTitle>
@@ -112,7 +106,7 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
       )}
 
       {activeTab === CommunityFeedTabs.GALLERY && (
-        <MediaGallery targetType={'community'} targetId={communityId} />
+        <MediaGallery targetType={'community'} targetId={communityId} grid />
       )}
 
       {activeTab === CommunityFeedTabs.MEMBERS && <CommunityMembers communityId={communityId} />}

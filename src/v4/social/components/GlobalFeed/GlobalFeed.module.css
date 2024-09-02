@@ -4,8 +4,7 @@
 }
 
 .global_feed__postContainer {
-  padding: 0.25rem 1rem 0.75rem;
-  width: 94%;
+  width: 100%;
 }
 
 .global_feed__postSkeletonContainer {

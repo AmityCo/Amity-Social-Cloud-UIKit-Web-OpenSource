@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { Comment } from '~/v4/social/components/Comment/Comment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -49,7 +49,7 @@ export const CommentList = ({
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const intersectionRef = useRef<HTMLDivElement>(null);
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   const { items, loadMore, hasMore, isLoading } = usePaginator({
     fetcher: CommentRepository.getComments,
@@ -73,7 +73,7 @@ export const CommentList = ({
   const { post } = usePost(referenceType === 'post' ? referenceId : undefined);
 
   useIntersectionObserver({
-    ref: intersectionRef,
+    node: intersectionNode,
     options: {
       threshold: 0.8,
     },
@@ -136,7 +136,10 @@ export const CommentList = ({
         <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={3} />
       )}
 
-      <div ref={intersectionRef} className={styles.commentList__container_intersection} />
+      <div
+        ref={(node) => setIntersectionNode(node)}
+        className={styles.commentList__container_intersection}
+      />
     </div>
   );
 };

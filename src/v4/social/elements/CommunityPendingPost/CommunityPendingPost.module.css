@@ -1,0 +1,41 @@
+.communityPendingPost__container {
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+
+.communityPendingPost__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.communityPendingPost__icon {
+  width: 0.375rem;
+  height: 0.375rem;
+  background-color: var(--asc-color-primary-default);
+  border-radius: 50%;
+}
+
+.communityPendingPost__textContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.communityPendingPost__title__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+}
+
+.communityPendingPost__title {
+  color: var(--asc-color-base-default);
+  margin: 0;
+}
+
+.communityPendingPost__subtext {
+  color: var(--asc-color-base-shade1);
+  margin: 0;
+}

@@ -20,10 +20,6 @@ export { useSDK as useAmitySDK } from '~/core/hooks/useSDK';
 
 // v4
 export { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
-export {
-  CommentTray as AmityCommentTrayComponent,
-  StoryTab as AmityStoryTabComponent,
-} from '~/v4/social/components';
 
 // Chat v4
 
@@ -60,6 +56,7 @@ export {
   MyCommunitiesSearchPage as AmityMyCommunitiesSearchPage,
   SelectPostTargetPage as AmityPostTargetSelectionPage,
   PostComposerPage as AmityPostComposerPage,
+  CommunityProfilePage as AmityCommunityProfilePage,
 } from '~/v4/social/pages';
 
 export {
@@ -76,6 +73,11 @@ export {
   CreatePostMenu as AmityCreatePostMenuComponent,
   ReactionList as AmityReactionListComponent,
   TopNavigation as AmitySocialHomeTopNavigationComponent,
+  CommentTray as AmityCommentTrayComponent,
+  StoryTab as AmityStoryTabComponent,
+  CommunityHeader as AmityCommunityHeaderComponent,
+  CommunityFeed as AmityCommunityFeedComponent,
+  CommunityPinnedPost as AmityCommunityPinnedPostComponent,
 } from '~/v4/social/components/';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/pages/SocialHomePage';

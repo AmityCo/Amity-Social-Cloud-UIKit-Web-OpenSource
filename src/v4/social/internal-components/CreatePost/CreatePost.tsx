@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { RefObject, useEffect, useRef, useState } from 'react';
 import styles from './CreatePost.module.css';
 import { PostRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
@@ -27,6 +27,30 @@ import { MediaAttachment } from '~/v4/social/components/MediaAttachment';
 import { DetailedMediaAttachment } from '~/v4/social/components/DetailedMediaAttachment';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Notification } from '~/v4/core/components/Notification';
+import { Mentioned, Mentionees } from '~/v4/helpers/utils';
+
+const useResizeObserver = ({ ref }: { ref: RefObject<HTMLDivElement> }) => {
+  const [height, setHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (ref.current == null) return;
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setHeight(entry.target.clientHeight);
+      }
+    });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [ref.current]);
+
+  return height;
+};
 
 export function CreatePost({ community, targetType, targetId }: AmityPostComposerCreateOptions) {
   const pageId = 'post_composer_page';
@@ -40,13 +64,17 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
   const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 = '11rem'; //Show 2 menus
   const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3 = '14.5rem'; //Not including file button
 
-  const editorRef = useRef<LexicalEditor | null>(null);
   const { AmityPostComposerPageBehavior } = usePageBehavior();
   const { confirm } = useConfirmContext();
-  const [snap, setSnap] = useState<number | string | null>(HEIGHT_MEDIA_ATTACHMENT_MENU);
+  const [snap, setSnap] = useState<string>(HEIGHT_MEDIA_ATTACHMENT_MENU);
   const [isShowBottomMenu] = useState<boolean>(true);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const drawerContentRef = useRef<HTMLDivElement>(null);
   const { prependItem } = useGlobalFeedContext();
+
+  const drawerHeight = useResizeObserver({ ref: drawerContentRef });
+
+  const { handleSubmit } = useForm();
 
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
@@ -104,8 +132,6 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
 
   const { mutateAsync: mutateCreatePostAsync, isPending, isError } = useMutateCreatePost();
 
-  const { handleSubmit } = useForm();
-
   const onSubmit = () => {
     const attachmentsImage = postImages.map((file) => ({
       type: 'image',
@@ -129,11 +155,16 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
     });
   };
 
-  const onChange = (val: CreatePostParams) => {
-    setTextValue(val);
+  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
+    setTextValue((prev) => ({
+      ...prev,
+      mentioned: val.mentioned,
+      text: val.text,
+      mentionees: val.mentionees,
+    }));
   };
 
-  const handleSnapChange = (newSnap: string | number | null) => {
+  const handleSnapChange = (newSnap: string) => {
     if (snap === HEIGHT_MEDIA_ATTACHMENT_MENU && newSnap === '0px') {
       return;
     }
@@ -252,6 +283,11 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
     }
   };
 
+  const isShowDetailMediaAttachmentMenu =
+    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1 ||
+    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 ||
+    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3;
+
   return (
     <div className={styles.createPost} style={themeStyles}>
       <form
@@ -269,16 +305,8 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           />
         </div>
         <PostTextField
-          ref={editorRef}
           onChange={onChange}
           communityId={targetId}
-          onChangeSnap={
-            snap == HEIGHT_MEDIA_ATTACHMENT_MENU
-              ? 0
-              : snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3
-                ? 2
-                : 1
-          }
           mentionContainer={mentionRef.current}
           dataValue={{
             data: { text: textValue.text },
@@ -296,7 +324,6 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           onError={setIsErrorUpload}
           isErrorUpload={isErrorUpload}
         />
-        <div ref={mentionRef} />
         <VideoThumbnail
           files={incomingVideos}
           uploadedFiles={postVideos}
@@ -311,7 +338,15 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           videoThumbnail={videoThumbnail}
           removeThumbnail={handleRemoveThumbnail}
         />
-        <div ref={mentionRef} />
+        <div
+          ref={mentionRef}
+          style={
+            {
+              '--asc-mention-bottom': `${drawerHeight ?? 0}px`,
+            } as React.CSSProperties
+          }
+          className={styles.mentionTextInput_item}
+        />
       </form>
       <div ref={drawerRef}></div>
       {drawerRef.current
@@ -324,13 +359,18 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
                 HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
               ]}
               activeSnapPoint={snap}
-              setActiveSnapPoint={handleSnapChange}
+              setActiveSnapPoint={(newSnapPoint) => {
+                typeof newSnapPoint === 'string' && handleSnapChange(newSnapPoint);
+              }}
               open={isShowBottomMenu}
               modal={false}
             >
               <Drawer.Portal container={drawerRef.current}>
                 <Drawer.Content className={styles.drawer__content}>
-                  <div className={styles.createPost__notiWrap}>
+                  <div
+                    data-item-position={snap === HEIGHT_MEDIA_ATTACHMENT_MENU}
+                    className={styles.createPost__notiWrap}
+                  >
                     {isPending && (
                       <Notification
                         content="Posting..."
@@ -347,27 +387,31 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
                       />
                     )}
                   </div>
-                  {snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1 ||
-                  snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 ||
-                  snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3 ? (
-                    <DetailedMediaAttachment
-                      pageId={pageId}
-                      isVisibleCamera={isVisibleCamera}
-                      isVisibleImage={isVisibleImage}
-                      isVisibleVideo={isVisibleVideo}
-                      onVideoFileChange={handleVideoFileChange}
-                      onImageFileChange={handleImageFileChange}
-                    />
-                  ) : (
-                    <MediaAttachment
-                      pageId={pageId}
-                      isVisibleCamera={isVisibleCamera}
-                      isVisibleImage={isVisibleImage}
-                      isVisibleVideo={isVisibleVideo}
-                      onVideoFileChange={handleVideoFileChange}
-                      onImageFileChange={handleImageFileChange}
-                    />
-                  )}
+                  <div
+                    ref={drawerContentRef}
+                    className={styles.drawerContentContainer}
+                    data-show-detail-media-attachment={isShowDetailMediaAttachmentMenu}
+                  >
+                    {isShowDetailMediaAttachmentMenu ? (
+                      <DetailedMediaAttachment
+                        pageId={pageId}
+                        isVisibleCamera={isVisibleCamera}
+                        isVisibleImage={isVisibleImage}
+                        isVisibleVideo={isVisibleVideo}
+                        onVideoFileChange={handleVideoFileChange}
+                        onImageFileChange={handleImageFileChange}
+                      />
+                    ) : (
+                      <MediaAttachment
+                        pageId={pageId}
+                        isVisibleCamera={isVisibleCamera}
+                        isVisibleImage={isVisibleImage}
+                        isVisibleVideo={isVisibleVideo}
+                        onVideoFileChange={handleVideoFileChange}
+                        onImageFileChange={handleImageFileChange}
+                      />
+                    )}
+                  </div>
                 </Drawer.Content>
               </Drawer.Portal>
             </Drawer.Root>,

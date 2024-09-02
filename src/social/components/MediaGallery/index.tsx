@@ -13,9 +13,10 @@ import useMediaCollection from '~/social/hooks/collections/useMediaCollection';
 interface MediaGalleryProps {
   targetId?: string | null;
   targetType: string;
+  grid?: boolean;
 }
 
-const MediaGallery = ({ targetId, targetType }: MediaGalleryProps) => {
+const MediaGallery = ({ targetId, targetType, grid = false }: MediaGalleryProps) => {
   const [activeTab, setActiveTab] = useState<EnumContentType>(EnumContentType.Image);
 
   const { media, isLoading, hasMore, loadMore, loadMoreHasBeenCalled } = useMediaCollection({
@@ -43,6 +44,7 @@ const MediaGallery = ({ targetId, targetType }: MediaGalleryProps) => {
               items={media}
               loading={isLoading}
               loadingMore={loadMoreHasBeenCalled}
+              grid={grid}
               renderVideoThumbnail={(item) => (
                 <VideoItem.Thumbnail item={item} showPlayIcon showVideoDuration />
               )}

@@ -1,0 +1,45 @@
+.communityCover__container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio for mobile */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+@media (width >= 768px) {
+  .communityCover__container {
+    padding-top: 33.33%; /* 3:1 Aspect Ratio for desktop */
+    max-height: 11.75rem; /* Limit the maximum height on larger screens */
+  }
+}
+
+.communityCover__topBar {
+  position: absolute;
+  top: 3rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.communityCover__backButton {
+  fill: var(--asc-color-primary-shade4);
+  background: rgb(0 0 0 / 50%);
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.communityCover__menuButton {
+  fill: var(--asc-color-primary-shade4);
+  background: rgb(0 0 0 / 50%);
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}

@@ -15,3 +15,6 @@ export * from './GlobalFeed';
 export * from './EmptyNewsFeed';
 export * from './Newsfeed';
 export * from './TopNavigation';
+export * from './CommunityHeader';
+export * from './CommunityFeed';
+export * from './CommunityPinnedPost';
