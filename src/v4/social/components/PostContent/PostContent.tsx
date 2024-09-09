@@ -39,6 +39,7 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import dayjs from 'dayjs';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
+import { PinBadge } from '~/v4/social/elements/PinBadge';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -49,6 +50,7 @@ export enum AmityPostCategory {
   GENERAL = 'general',
   ANNOUNCEMENT = 'announcement',
   PIN = 'pin',
+  PIN_AND_ANNOUNCEMENT = 'pin_and_announcement',
 }
 
 interface PostTitleProps {
@@ -329,7 +331,8 @@ export const PostContent = ({
 
   return (
     <div ref={elementRef} className={styles.postContent} style={themeStyles}>
-      {category === AmityPostCategory.ANNOUNCEMENT && (
+      {(category === AmityPostCategory.ANNOUNCEMENT ||
+        category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
         <AnnouncementBadge pageId={pageId} componentId={componentId} />
       )}
       <div className={styles.postContent__bar} data-type={style}>
@@ -356,29 +359,36 @@ export const PostContent = ({
           </div>
         </div>
 
-        {style === AmityPostContentComponentStyle.FEED ? (
-          <div className={styles.postContent__bar__actionButton}>
-            {!hideMenu && (
-              <MenuButton
-                pageId={pageId}
-                componentId={componentId}
-                onClick={() =>
-                  setDrawerData({
-                    content: (
-                      <PostMenu
-                        post={post}
-                        onCloseMenu={() => removeDrawerData()}
-                        pageId={pageId}
-                        componentId={componentId}
-                        onPostDeleted={onPostDeleted}
-                      />
-                    ),
-                  })
-                }
-              />
-            )}
-          </div>
-        ) : null}
+        <div className={styles.postContent__wrapRightMenu}>
+          {(category === AmityPostCategory.PIN ||
+            category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
+            <PinBadge pageId={pageId} componentId={componentId} />
+          )}
+
+          {style === AmityPostContentComponentStyle.FEED ? (
+            <div className={styles.postContent__bar__actionButton}>
+              {!hideMenu && (
+                <MenuButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  onClick={() =>
+                    setDrawerData({
+                      content: (
+                        <PostMenu
+                          post={post}
+                          onCloseMenu={() => removeDrawerData()}
+                          pageId={pageId}
+                          componentId={componentId}
+                          onPostDeleted={onPostDeleted}
+                        />
+                      ),
+                    })
+                  }
+                />
+              )}
+            </div>
+          ) : null}
+        </div>
       </div>
       <div className={styles.postContent__content_and_reactions}>
         <div className={styles.postContent__content}>

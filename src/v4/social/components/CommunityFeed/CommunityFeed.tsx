@@ -16,7 +16,7 @@ import { Button } from '~/v4/core/natives/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import usePinnedPostsCollection from '~/v4/social/hooks/collections/usePinnedPostCollection';
 
-const CommunityFeedPostContentSkeleton = () => {
+export const CommunityFeedPostContentSkeleton = () => {
   return (
     <div className={styles.communityFeed__postSkeleton}>
       <div className={styles.communityFeed__postSkeletonHeader}>
