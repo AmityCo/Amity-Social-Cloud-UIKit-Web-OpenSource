@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.10.1 (2024-09-10)
+
+
+### Bug Fixes
+
+* change provider export path ([4c4b0a2](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/4c4b0a2c371c979880fd29ed04d9b97496dc125e))
+
 ## 3.10.0 (2024-09-02)
 
 ## 3.9.0 (2024-08-16)
