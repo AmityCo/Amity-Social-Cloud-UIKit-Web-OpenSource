@@ -73,7 +73,7 @@ const useSuggestions = (communityId?: string | null) => {
   } = useUserQueryByDisplayName({
     displayName: queryString || '',
     limit: 10,
-    enabled: !communityId,
+    enabled: !isSearchCommunityMembers,
   });
 
   const onQueryChange = (newQuery: string | null) => {
@@ -97,16 +97,16 @@ const useSuggestions = (communityId?: string | null) => {
   }, [users, members, isSearchCommunityMembers, isCommunityLoading]);
 
   const hasMore = useMemo(() => {
-    if (communityId) {
+    if (isSearchCommunityMembers) {
       return hasMoreMember;
     } else {
       return hasMoreUser;
     }
-  }, [communityId, hasMoreMember, hasMoreUser]);
+  }, [isSearchCommunityMembers, hasMoreMember, hasMoreUser]);
 
   const loadMore = () => {
     if (isLoading || !hasMore) return;
-    if (communityId) {
+    if (isSearchCommunityMembers) {
       loadMoreMember();
     } else {
       loadMoreUser();
@@ -114,12 +114,12 @@ const useSuggestions = (communityId?: string | null) => {
   };
 
   const isLoading = useMemo(() => {
-    if (communityId) {
+    if (isSearchCommunityMembers) {
       return isLoadingMember;
     } else {
       return isLoadingUser;
     }
-  }, [isLoadingMember, isLoadingUser, communityId]);
+  }, [isLoadingMember, isLoadingUser, isSearchCommunityMembers]);
 
   return { suggestions, queryString, onQueryChange, loadMore, hasMore, isLoading };
 };
@@ -218,7 +218,10 @@ export const PostTextField = ({
                       />
                     );
                   })}
-                  <div ref={(node) => setIntersectionNode(node)} style={{ height: '4px' }} />
+                  <div
+                    ref={(node) => setIntersectionNode(node)}
+                    className={styles.postTextField__mentionInterceptor}
+                  />
                 </>,
                 mentionContainer,
               );
