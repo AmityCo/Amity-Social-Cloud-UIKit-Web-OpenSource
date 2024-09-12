@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.10.1 (2024-09-12)
+
+
+### Bug Fixes
+
+* skeleton style ([#646](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/646)) ([8ebc957](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8ebc9574189116ee2d70af2ee58fce97f81fabd5))
 
 ## 3.10.0 (2024-09-02)
 
