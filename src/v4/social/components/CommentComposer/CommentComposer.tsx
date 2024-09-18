@@ -33,6 +33,7 @@ export type CreateCommentParams = {
 };
 
 interface CommentComposerProps {
+  pageId?: string;
   referenceId: string;
   referenceType: Amity.CommentReferenceType;
   replyTo?: Amity.Comment;
@@ -42,6 +43,7 @@ interface CommentComposerProps {
 }
 
 export const CommentComposer = ({
+  pageId = '*',
   referenceId,
   referenceType,
   replyTo,
@@ -55,6 +57,7 @@ export const CommentComposer = ({
   const editorRef = useRef<CommentInputRef | null>(null);
   const composerRef = useRef<HTMLDivElement | null>(null);
   const composerInputRef = useRef<HTMLDivElement | null>(null);
+  const componentId = 'comment_composer_bar';
 
   const [composerHeight, setComposerHeight] = useState(0);
   const [mentionOffsetBottom, setMentionOffsetBottom] = useState(0);
@@ -129,7 +132,12 @@ export const CommentComposer = ({
       <div className={styles.commentComposer__avatar}>
         <Avatar avatarUrl={avatarUrl} defaultImage={<User />} />
       </div>
-      <div className={styles.commentComposer__input} ref={composerInputRef}>
+
+      <div
+        data-qa-anchor={`${pageId}/${componentId}/comment_composer`}
+        className={styles.commentComposer__input}
+        ref={composerInputRef}
+      >
         <CommentInput
           ref={editorRef}
           onChange={onChange}
@@ -142,6 +150,7 @@ export const CommentComposer = ({
         />
       </div>
       <Button
+        data-qa-anchor={`${pageId}/${componentId}/create_comment_button`}
         isDisabled={!textValue.data.text}
         className={styles.commentComposer__button}
         onPress={() => mutateAsync({ params: textValue })}

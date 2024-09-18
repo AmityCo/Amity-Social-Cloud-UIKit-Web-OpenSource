@@ -117,6 +117,7 @@ export const CommentList = ({
           <CommentAd key={item.adId} ad={item} />
         ) : (
           <Comment
+            pageId={pageId}
             key={item.commentId}
             comment={item as Amity.Comment}
             onClickReply={(comment) => onClickReply?.(comment)}

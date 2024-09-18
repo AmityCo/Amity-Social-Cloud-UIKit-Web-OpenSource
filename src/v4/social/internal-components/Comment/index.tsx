@@ -284,6 +284,7 @@ export const Comment = ({
           <div data-qa-anchor="comment">{renderedComment}</div>
           {comment.children.length > 0 && (
             <CommentList
+              pageId={pageId}
               componentId={componentId}
               parentId={comment.commentId}
               referenceType={comment.referenceType}

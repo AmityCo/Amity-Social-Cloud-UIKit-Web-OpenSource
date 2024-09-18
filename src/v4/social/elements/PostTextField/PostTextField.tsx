@@ -31,6 +31,8 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { MentionItem } from '~/v4/social/internal-components/Lexical/MentionItem';
 
 interface PostTextFieldProps {
+  pageId?: string;
+  componentId?: string;
   communityId?: string | null;
   attachmentAmount?: number;
   mentionContainer: HTMLElement | null;
@@ -131,8 +133,11 @@ export const PostTextField = ({
   communityId,
   mentionContainer,
   dataValue,
+  pageId = '*',
+  componentId = '*',
 }: PostTextFieldProps) => {
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const elementId = 'post_text_field';
 
   const editorConfig = getEditorConfig({
     namespace: 'PostTextField',
@@ -168,7 +173,10 @@ export const PostTextField = ({
             : {}),
         }}
       >
-        <div className={styles.editorContainer}>
+        <div
+          className={styles.editorContainer}
+          data-qa-anchor={`${pageId}/${componentId}/${elementId}`}
+        >
           <RichTextPlugin
             contentEditable={<ContentEditable />}
             placeholder={<div className={styles.editorPlaceholder}>What’s going on...</div>}

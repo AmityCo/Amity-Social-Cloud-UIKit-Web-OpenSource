@@ -239,7 +239,10 @@ export const Comment = ({
                       {isLiked ? 'Liked' : 'Like'}
                     </Typography.CaptionBold>
                   </div>
-                  <div onClick={() => onClickReply(comment)}>
+                  <div
+                    data-qa-anchor={`${pageId}/${componentId}/reply_button`}
+                    onClick={() => onClickReply(comment)}
+                  >
                     <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
                       Reply
                     </Typography.CaptionBold>

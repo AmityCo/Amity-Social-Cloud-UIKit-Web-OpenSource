@@ -183,7 +183,7 @@ export const PostContent = ({
   style,
 }: PostContentProps) => {
   const componentId = 'post_content';
-  const { themeStyles } = useAmityComponent({
+  const { themeStyles, accessibilityId } = useAmityComponent({
     pageId,
     componentId,
   });
@@ -330,7 +330,12 @@ export const PostContent = ({
   }, [post, isVisible, page.type]);
 
   return (
-    <div ref={elementRef} className={styles.postContent} style={themeStyles}>
+    <div
+      data-qa-anchor={accessibilityId}
+      ref={elementRef}
+      className={styles.postContent}
+      style={themeStyles}
+    >
       {(category === AmityPostCategory.ANNOUNCEMENT ||
         category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
         <AnnouncementBadge pageId={pageId} componentId={componentId} />

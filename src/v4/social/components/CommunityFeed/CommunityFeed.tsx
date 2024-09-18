@@ -148,6 +148,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                 }
               >
                 <PostContent
+                  pageId={pageId}
                   key={post.postId}
                   post={post}
                   category={

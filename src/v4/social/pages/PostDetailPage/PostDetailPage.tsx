@@ -60,6 +60,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
         <div className={styles.postDetailPage__comments}>
           {post && (
             <CommentList
+              pageId={pageId}
               referenceId={post.postId}
               referenceType="post"
               onClickReply={(comment: Amity.Comment) => setReplyComment(comment)}
@@ -97,6 +98,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
       ) : (
         post && (
           <CommentComposer
+            pageId={pageId}
             referenceId={post.postId}
             referenceType={'post'}
             replyTo={replyComment}

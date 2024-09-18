@@ -161,6 +161,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           />
         </div>
         <PostTextField
+          pageId={pageId}
           communityId={post.targetType === 'community' ? post.targetId : undefined}
           onChange={onChange}
           mentionContainer={mentionRef.current}
