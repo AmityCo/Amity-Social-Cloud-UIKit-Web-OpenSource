@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -21,6 +21,7 @@ import { CreateCommentParams } from '~/v4/social/components/CommentComposer/Comm
 import useCommentSubscription from '~/v4/core/hooks/subscriptions/useCommentSubscription';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 import millify from 'millify';
+import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermission';
 
 const EllipsisH = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -69,7 +70,7 @@ interface CommentProps {
   pageId?: string;
   componentId?: string;
   comment: Amity.Comment;
-  community?: Amity.Community;
+  community?: Amity.Community | null;
   onClickReply: (comment: Amity.Comment) => void;
   shouldAllowInteraction?: boolean;
 }
@@ -82,11 +83,10 @@ export const Comment = ({
   onClickReply,
   shouldAllowInteraction = true,
 }: CommentProps) => {
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   const { confirm } = useConfirmContext();
 
@@ -96,6 +96,11 @@ export const Comment = ({
   const [commentData, setCommentData] = useState<CreateCommentParams>();
 
   const [isShowMore, setIsShowMore] = useState(false);
+
+  const { isModerator: isModeratorUser } = useCommunityPostPermission({
+    community,
+    userId: comment.creator?.userId,
+  });
 
   const toggleBottomSheet = () => setBottomSheetOpen((prev) => !prev);
 
@@ -211,7 +216,7 @@ export const Comment = ({
                 {comment.creator?.displayName}
               </Typography.BodyBold>
 
-              <ModeratorBadge pageId={pageId} componentId={componentId} />
+              {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
 
               <TextWithMention
                 data={{ text: (comment.data as Amity.ContentDataText).text }}

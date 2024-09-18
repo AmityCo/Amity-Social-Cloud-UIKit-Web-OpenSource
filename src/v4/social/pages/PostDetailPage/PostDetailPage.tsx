@@ -64,6 +64,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
               referenceId={post.postId}
               referenceType="post"
               onClickReply={(comment: Amity.Comment) => setReplyComment(comment)}
+              community={community}
             />
           )}
         </div>

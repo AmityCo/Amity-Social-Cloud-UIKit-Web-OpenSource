@@ -23,7 +23,7 @@ type CommentListProps = {
   onClickReply: (comment: Amity.Comment) => void;
   limit?: number;
   includeDeleted?: boolean;
-  community?: Amity.Community;
+  community?: Amity.Community | null;
   shouldAllowInteraction?: boolean;
 };
 

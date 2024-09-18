@@ -21,6 +21,7 @@ import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOpt
 import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInput';
 import styles from './ReplyComment.module.css';
+import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermission';
 
 type ReplyCommentProps = {
   pageId?: string;
@@ -40,6 +41,11 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+
+  const { isModerator: isModeratorUser } = useCommunityPostPermission({
+    community,
+    userId: comment.creator?.userId,
+  });
 
   const isLiked = (comment.myReactions || []).some((reaction) => reaction === 'like');
 
@@ -154,8 +160,7 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
               <Typography.BodyBold className={styles.postReplyComment__content__username}>
                 {comment.creator?.displayName}
               </Typography.BodyBold>
-
-              <ModeratorBadge pageId={pageId} componentId={componentId} />
+              {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
               <TextWithMention
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}
