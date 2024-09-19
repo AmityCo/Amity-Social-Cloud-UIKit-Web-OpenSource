@@ -305,6 +305,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           />
         </div>
         <PostTextField
+          pageId={pageId}
           onChange={onChange}
           communityId={targetId}
           mentionContainer={mentionRef.current}
@@ -313,6 +314,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           }}
         />
         <ImageThumbnail
+          pageId={pageId}
           files={incomingImages}
           uploadedFiles={postImages}
           uploadLoading={uploadLoading}
@@ -325,6 +327,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           isErrorUpload={isErrorUpload}
         />
         <VideoThumbnail
+          pageId={pageId}
           files={incomingVideos}
           uploadedFiles={postVideos}
           uploadLoading={uploadLoading}

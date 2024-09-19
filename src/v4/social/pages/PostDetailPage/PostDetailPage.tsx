@@ -6,7 +6,7 @@ import { MenuButton } from '~/v4/social/elements/MenuButton';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePost from '~/v4/core/hooks/objects/usePost';
 
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import styles from './PostDetailPage.module.css';
@@ -60,9 +60,11 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
         <div className={styles.postDetailPage__comments}>
           {post && (
             <CommentList
+              pageId={pageId}
               referenceId={post.postId}
               referenceType="post"
               onClickReply={(comment: Amity.Comment) => setReplyComment(comment)}
+              community={community}
             />
           )}
         </div>
@@ -97,6 +99,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
       ) : (
         post && (
           <CommentComposer
+            pageId={pageId}
             referenceId={post.postId}
             referenceType={'post'}
             replyTo={replyComment}

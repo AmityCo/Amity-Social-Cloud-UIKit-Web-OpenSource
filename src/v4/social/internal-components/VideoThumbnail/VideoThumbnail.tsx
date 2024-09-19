@@ -6,6 +6,7 @@ import { CloseIcon, ExclamationCircle, Play } from '~/icons';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 
 interface VideoThumbnailProps {
+  pageId?: string;
   files: File[];
   uploadedFiles: Amity.File[];
   onLoadingChange: (loading: boolean) => void;
@@ -18,6 +19,7 @@ interface VideoThumbnailProps {
 }
 
 export const VideoThumbnail = ({
+  pageId = '*',
   files,
   uploadedFiles,
   onLoadingChange,
@@ -69,8 +71,13 @@ export const VideoThumbnail = ({
             </div>
           ) : (
             <>
-              <img className={styles.thumbnail} src={file.thumbnail} />
+              <img
+                data-qa-anchor={`${pageId}/*/video_thumbnail`}
+                className={styles.thumbnail}
+                src={file.thumbnail}
+              />
               <button
+                data-qa-anchor={`${pageId}/*/remove_thumbnail`}
                 type="reset"
                 onClick={() => {
                   handleRemoveThumbnail(file.file, index);

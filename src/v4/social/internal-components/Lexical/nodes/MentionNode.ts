@@ -89,6 +89,7 @@ export class MentionNode<T> extends TextNode {
   createDOM(config: EditorConfig): HTMLElement {
     const dom = super.createDOM(config);
     dom.className = styles.mention; //create css
+    dom.setAttribute('data-qa-anchor', 'mention-preview');
     return dom;
   }
 

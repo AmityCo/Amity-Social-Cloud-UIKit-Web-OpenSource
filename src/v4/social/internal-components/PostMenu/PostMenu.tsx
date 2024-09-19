@@ -183,6 +183,7 @@ export const PostMenu = ({
       ) : null}
       {showEditPostButton ? (
         <Button
+          data-qa-anchor={`${pageId}/${componentId}/edit_post`}
           className={styles.postMenu__item}
           onPress={() => {
             removeDrawerData();
@@ -197,7 +198,11 @@ export const PostMenu = ({
         </Button>
       ) : null}
       {showDeletePostButton ? (
-        <Button className={styles.postMenu__item} onPress={() => onDeleteClick()}>
+        <Button
+          data-qa-anchor={`${pageId}/${componentId}/delete_post`}
+          className={styles.postMenu__item}
+          onPress={() => onDeleteClick()}
+        >
           <TrashSvg className={styles.postMenu__deletePost__icon} />
           <Typography.Title className={styles.postMenu__deletePost__text}>
             Delete post

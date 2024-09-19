@@ -6,6 +6,8 @@ import { PostContentType } from '@amityco/ts-sdk';
 import { Button } from '~/v4/core/natives/Button';
 
 const MediaComponent = ({
+  pageId = '*',
+  componentId = '*',
   fieldId,
   onRemove,
   type,
@@ -13,14 +15,23 @@ const MediaComponent = ({
   fieldId: string;
   onRemove: () => void;
   type: 'image' | 'video';
+  pageId?: string;
+  componentId?: string;
 }) => {
   const thumbnailUrl = useImage({ fileId: fieldId });
+
+  const elementId = 'remove_thumbnail';
 
   if (!thumbnailUrl) return null;
   return (
     <>
       <img className={styles.thumbnail} src={thumbnailUrl} alt="thumbnail" />
-      <Button type="reset" onPress={() => onRemove()} className={styles.thumbnail__closeButton}>
+      <Button
+        data-qa-anchor={`${pageId}/${componentId}/${elementId}`}
+        type="reset"
+        onPress={() => onRemove()}
+        className={styles.thumbnail__closeButton}
+      >
         <CloseIcon className={styles.thumbnail__closeIcon} />
       </Button>
       {type === PostContentType.VIDEO && (

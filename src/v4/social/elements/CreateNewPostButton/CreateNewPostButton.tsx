@@ -16,7 +16,7 @@ export function CreateNewPostButton({
   onSubmit,
 }: CreateNewPostButtonProps) {
   const elementId = 'create_new_post_button';
-  const { config, isExcluded, themeStyles } = useAmityElement({
+  const { config, isExcluded, themeStyles, accessibilityId } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -30,6 +30,7 @@ export function CreateNewPostButton({
       disabled={!isValid}
       className={styles.createNewPostButton}
       type="submit"
+      data-qa-anchor={accessibilityId}
     >
       {config.text}
     </button>
