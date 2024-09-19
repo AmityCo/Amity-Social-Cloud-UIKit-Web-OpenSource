@@ -1,4 +1,3 @@
-import '~/core/providers/UiKitProvider/inter.css';
 import './index.css';
 import '~/v4/styles/global.css';
 
@@ -30,7 +29,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AmityUIKitManager } from '~/v4/core/AmityUIKitManager';
 import { ConfirmProvider } from '~/v4/core/providers/ConfirmProvider';
 import { ConfirmProvider as LegacyConfirmProvider } from '~/core/providers/ConfirmProvider';
-import { NotificationProvider } from '~/v4/core/providers/NotificationProvider';
+import { NotificationProvider, useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { DrawerProvider } from '~/v4/core/providers/DrawerProvider';
 import { NotificationProvider as LegacyNotificationProvider } from '~/core/providers/NotificationProvider';
 import { CustomReactionProvider } from './CustomReactionProvider';
@@ -38,40 +37,7 @@ import { AdEngineProvider } from './AdEngineProvider';
 import { AdEngine } from '~/v4/core/AdEngine';
 import { GlobalFeedProvider } from '~/v4/social/providers/GlobalFeedProvider';
 
-export type AmityUIKitConfig = Config;
-
-interface AmityUIKitProviderProps {
-  apiKey: string;
-  apiRegion: string;
-  apiEndpoint?: {
-    http?: string;
-    mqtt?: string;
-  };
-  userId: string;
-  displayName: string;
-  postRendererConfig?: any;
-  theme?: Record<string, unknown>;
-  children?: React.ReactNode;
-  socialCommunityCreationButtonVisible?: boolean;
-  actionHandlers?: {
-    onChangePage?: (data: { type: string; [x: string]: string | boolean }) => void;
-    onClickCategory?: (categoryId: string) => void;
-    onClickCommunity?: (communityId: string) => void;
-    onClickUser?: (userId: string) => void;
-    onCommunityCreated?: (communityId: string) => void;
-    onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
-    onEditUser?: (userId: string) => void;
-    onMessageUser?: (userId: string) => void;
-  };
-  pageBehavior?: PageBehavior;
-  onConnectionStatusChange?: (state: Amity.SessionStates) => void;
-  onConnected?: () => void;
-  onDisconnected?: () => void;
-  getAuthToken?: () => Promise<string>;
-  configs?: AmityUIKitConfig;
-}
-
-const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
+const InternalComponent = ({
   apiKey,
   apiRegion,
   apiEndpoint,
@@ -86,10 +52,12 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
   onDisconnected,
   getAuthToken,
   configs,
-}) => {
+}: AmityUIKitProviderProps) => {
   const queryClient = new QueryClient();
   const [client, setClient] = useState<Amity.Client | null>(null);
   const currentUser = useUser(userId);
+
+  const { error } = useNotifications();
 
   const sdkContextValue = useMemo(
     () => ({
@@ -137,8 +105,13 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
 
         const newClient = AmityUIKitManager.getClient();
         setClient(newClient);
-      } catch (error) {
-        console.error('Error setting up AmityUIKitManager:', error);
+      } catch (_error) {
+        console.error('Error setting up AmityUIKitManager:', _error);
+        if (_error instanceof Error) {
+          error({
+            content: _error.message,
+          });
+        }
       }
     };
 
@@ -160,36 +133,23 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
                       <SDKContext.Provider value={sdkContextValue}>
                         <SDKConnectorProviderV3>
                           <SDKConnectorProvider>
-                            <NotificationProvider>
-                              <LegacyNotificationProvider>
-                                <ConfirmProvider>
-                                  <LegacyConfirmProvider>
-                                    <ConfigProvider
-                                      config={{
-                                        socialCommunityCreationButtonVisible:
-                                          socialCommunityCreationButtonVisible || true,
-                                      }}
-                                    >
-                                      <PostRendererProvider config={postRendererConfig}>
-                                        <NavigationProvider>
-                                          <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                            <DrawerProvider>
-                                              <GlobalFeedProvider>{children}</GlobalFeedProvider>
-                                              <DrawerContainer />
-                                            </DrawerProvider>
-                                          </PageBehaviorProvider>
-                                        </NavigationProvider>
-                                      </PostRendererProvider>
-                                    </ConfigProvider>
-                                    <NotificationsContainer />
-                                    <LegacyNotificationsContainer />
-                                    <ConfirmComponent />
-
-                                    <LegacyConfirmComponent />
-                                  </LegacyConfirmProvider>
-                                </ConfirmProvider>
-                              </LegacyNotificationProvider>
-                            </NotificationProvider>
+                            <ConfigProvider
+                              config={{
+                                socialCommunityCreationButtonVisible:
+                                  socialCommunityCreationButtonVisible || true,
+                              }}
+                            >
+                              <PostRendererProvider config={postRendererConfig}>
+                                <NavigationProvider>
+                                  <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                    <DrawerProvider>
+                                      <GlobalFeedProvider>{children}</GlobalFeedProvider>
+                                      <DrawerContainer />
+                                    </DrawerProvider>
+                                  </PageBehaviorProvider>
+                                </NavigationProvider>
+                              </PostRendererProvider>
+                            </ConfigProvider>
                           </SDKConnectorProvider>
                         </SDKConnectorProviderV3>
                       </SDKContext.Provider>
@@ -202,6 +162,57 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = ({
         </Localization>
       </QueryClientProvider>
     </div>
+  );
+};
+
+export type AmityUIKitConfig = Config;
+
+interface AmityUIKitProviderProps {
+  apiKey: string;
+  apiRegion: string;
+  apiEndpoint?: {
+    http?: string;
+    mqtt?: string;
+  };
+  userId: string;
+  displayName?: string;
+  postRendererConfig?: any;
+  theme?: Record<string, unknown>;
+  children?: React.ReactNode;
+  socialCommunityCreationButtonVisible?: boolean;
+  actionHandlers?: {
+    onChangePage?: (data: { type: string; [x: string]: string | boolean }) => void;
+    onClickCategory?: (categoryId: string) => void;
+    onClickCommunity?: (communityId: string) => void;
+    onClickUser?: (userId: string) => void;
+    onCommunityCreated?: (communityId: string) => void;
+    onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
+    onEditUser?: (userId: string) => void;
+    onMessageUser?: (userId: string) => void;
+  };
+  pageBehavior?: PageBehavior;
+  onConnectionStatusChange?: (state: Amity.SessionStates) => void;
+  onConnected?: () => void;
+  onDisconnected?: () => void;
+  getAuthToken?: () => Promise<string>;
+  configs?: AmityUIKitConfig;
+}
+
+const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
+  return (
+    <NotificationProvider>
+      <LegacyNotificationProvider>
+        <ConfirmProvider>
+          <LegacyConfirmProvider>
+            <InternalComponent {...props} />
+            <NotificationsContainer />
+            <LegacyNotificationsContainer />
+            <ConfirmComponent />
+            <LegacyConfirmComponent />
+          </LegacyConfirmProvider>
+        </ConfirmProvider>
+      </LegacyNotificationProvider>
+    </NotificationProvider>
   );
 };
 

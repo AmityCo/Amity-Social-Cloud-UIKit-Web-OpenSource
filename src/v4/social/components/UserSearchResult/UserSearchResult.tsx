@@ -20,18 +20,17 @@ export const UserSearchResult = ({
   onLoadMore,
 }: UserSearchResultProps) => {
   const componentId = 'user_search_result';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { accessibilityId, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
 
   return (
-    <div className={styles.userSearchResult} style={themeStyles}>
+    <div className={styles.userSearchResult} style={themeStyles} data-qa-anchor={accessibilityId}>
       {userCollection.map((user) => (
         <UserSearchItem key={user.userId} user={user} />
       ))}

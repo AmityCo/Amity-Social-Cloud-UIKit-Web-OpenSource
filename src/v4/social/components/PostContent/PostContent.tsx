@@ -6,7 +6,6 @@ import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { MenuButton } from '~/v4/social/elements/MenuButton';
 import { ShareButton } from '~/v4/social/elements/ShareButton';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
-import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { Typography } from '~/v4/core/components';
 import AngleRight from '~/v4/icons/AngleRight';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
@@ -40,6 +39,11 @@ import dayjs from 'dayjs';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
 import { PinBadge } from '~/v4/social/elements/PinBadge';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
+import clsx from 'clsx';
+import { Lock } from '~/icons';
+import Verified from '~/v4/icons/Verified';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -60,89 +64,100 @@ interface PostTitleProps {
 }
 
 const PostTitle = ({ pageId, post, hideTarget }: PostTitleProps) => {
-  const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
+  const shouldCallCommunity = useMemo(() => post?.targetType === 'community', [post?.targetType]);
+  const shouldCallUser = useMemo(
+    () => post?.targetType === 'user' && post?.postedUserId !== post?.targetId,
+    [post?.targetType, post?.postedUserId, post?.targetId],
+  );
 
   const { community: targetCommunity } = useCommunity({
     communityId: post?.targetId,
-    shouldCall,
+    shouldCall: shouldCallCommunity,
   });
 
-  const { goToCommunityProfilePage } = useNavigation();
+  const { user: targetUser } = useUser({
+    userId: post?.targetId,
+    shouldCall: shouldCallUser,
+  });
 
-  const { user: postedUser } = useUser(post.postedUserId);
-  const { onClickCommunity, onClickUser } = useNavigation();
+  const { goToCommunityProfilePage, onClickUser } = useNavigation();
 
-  if (targetCommunity) {
-    return (
-      <div className={styles.postTitle}>
-        {postedUser && (
-          <Button onPress={() => onClickUser(postedUser.userId)}>
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {postedUser.displayName}
-            </Typography.BodyBold>
-          </Button>
-        )}
-        {targetCommunity && !hideTarget && (
-          <Button onPress={() => goToCommunityProfilePage(targetCommunity.communityId)}>
-            <AngleRight className={styles.postTitle__icon} />
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {targetCommunity.displayName}
-            </Typography.BodyBold>{' '}
-          </Button>
-        )}
-      </div>
-    );
-  }
+  const showTargetCommunity = targetCommunity && !hideTarget;
+  const showTargetUser = targetUser && !hideTarget;
+  const showBrandBadge = post.creator.isBrand;
+  const showPrivateBadge = targetCommunity?.isPublic === false;
+  const showOfficialBadge = targetCommunity?.isOfficial === true;
+
+  const showTarget = showTargetCommunity || showTargetUser;
 
   return (
-    <Button onPress={() => postedUser && onClickUser(postedUser.userId)}>
-      <Typography.BodyBold className={styles.postTitle__text}>
-        {postedUser?.displayName}
-      </Typography.BodyBold>
-    </Button>
+    <div className={styles.postTitle} data-show-target-community={showTargetCommunity === true}>
+      {post.creator && (
+        <div
+          className={styles.postTitle__user__container}
+          data-show-brand-badge={showBrandBadge === true}
+          data-show-target={showTarget === true}
+        >
+          <Typography.BodyBold
+            renderer={({ typoClassName }) => (
+              <Button
+                className={clsx(typoClassName, styles.postTitle__text)}
+                onPress={() => onClickUser(post.creator.userId)}
+              >
+                {post.creator.displayName}
+              </Button>
+            )}
+          />
+          {showBrandBadge ? <BrandBadge className={styles.postTitle__brandIcon} /> : null}
+          {showTarget ? <AngleRight className={styles.postTitle__icon} /> : null}
+        </div>
+      )}
+      {showTargetCommunity && (
+        <div
+          className={styles.postTitle__community}
+          data-show-private-badge={showPrivateBadge === true}
+          data-show-official-badge={showOfficialBadge === true}
+        >
+          {showPrivateBadge && <Lock className={styles.postTitle__community__privateIcon} />}
+          <Typography.BodyBold
+            renderer={({ typoClassName }) => (
+              <Button
+                className={clsx(typoClassName, styles.postTitle__communityText)}
+                onPress={() => {
+                  goToCommunityProfilePage(targetCommunity.communityId);
+                }}
+              >
+                {targetCommunity.displayName}
+              </Button>
+            )}
+          />
+          {showOfficialBadge && <Verified className={styles.postTitle__community__verifiedIcon} />}
+        </div>
+      )}
+      {showTargetUser && (
+        <div
+          className={styles.postTitle__user__container}
+          data-show-brand-badge={targetUser?.isBrand === true}
+          data-show-target={false}
+        >
+          <Typography.BodyBold
+            renderer={({ typoClassName }) => (
+              <Button
+                className={clsx(typoClassName, styles.postTitle__text)}
+                onPress={() => onClickUser(targetUser.userId)}
+              >
+                {targetUser.displayName}
+              </Button>
+            )}
+          />
+          {targetUser?.isBrand === true ? (
+            <BrandBadge className={styles.postTitle__brandIcon} />
+          ) : null}
+        </div>
+      )}
+    </div>
   );
 };
-
-const useMutateAddReaction = ({
-  postId,
-  reactionByMe,
-}: {
-  postId: string;
-  reactionByMe: string | null;
-}) =>
-  useMutation({
-    mutationFn: async (reactionKey: string) => {
-      if (reactionByMe) {
-        try {
-          await ReactionRepository.removeReaction('post', postId, reactionByMe);
-        } catch {
-          console.log("Can't remove reaction.");
-        }
-      }
-      return ReactionRepository.addReaction('post', postId, reactionKey);
-    },
-  });
-
-const useMutateRemoveReaction = ({
-  postId,
-  reactionsByMe,
-}: {
-  postId: string;
-  reactionsByMe: string[];
-}) =>
-  useMutation({
-    mutationFn: async () => {
-      return Promise.all(
-        reactionsByMe.map((reaction) => {
-          try {
-            return ReactionRepository.removeReaction('post', postId, reaction);
-          } catch (e) {
-            console.log("Can't remove reaction.");
-          }
-        }),
-      );
-    },
-  });
 
 const ChildrenPostContent = ({
   post,
@@ -344,7 +359,7 @@ export const PostContent = ({
         <div className={styles.postContent__bar__userAvatar}>
           <UserAvatar userId={post?.postedUserId} />
         </div>
-        <div>
+        <div className={styles.postContent__bar__detail}>
           <div>
             <PostTitle post={post} hideTarget={hideTarget} />
           </div>
@@ -397,7 +412,11 @@ export const PostContent = ({
       </div>
       <div className={styles.postContent__content_and_reactions}>
         <div className={styles.postContent__content}>
-          <TextContent text={post.data.text} mentionees={post?.metadata?.mentioned} />
+          <TextContent
+            text={post?.data?.text}
+            mentioned={post?.metadata?.mentioned}
+            mentionees={post?.mentioness}
+          />
           {post.children.length > 0 ? (
             <ChildrenPostContent
               post={post}

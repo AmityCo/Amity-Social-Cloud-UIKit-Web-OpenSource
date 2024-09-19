@@ -1,6 +1,5 @@
 import { CommentRepository } from '@amityco/ts-sdk';
 import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 import { Close, Lock2Icon } from '~/icons';
 import { CommentComposeBar } from '~/v4/social/internal-components/CommentComposeBar';
@@ -27,8 +26,6 @@ export const StoryCommentComposeBar = ({
   onCancelReply,
   referenceId,
 }: StoryCommentComposeBarProps) => {
-  const { formatMessage } = useIntl();
-
   const handleAddComment = async (
     commentText: string,
     mentionees: Mentionees,
@@ -68,7 +65,7 @@ export const StoryCommentComposeBar = ({
     return (
       <div className={styles.disabledCommentComposerBarContainer}>
         <Lock2Icon />
-        {formatMessage({ id: 'storyViewer.commentSheet.disabled' })}
+        Comments are disabled for this story
       </div>
     );
   }
@@ -78,7 +75,7 @@ export const StoryCommentComposeBar = ({
       {isReplying && (
         <div className={styles.replyingBlock}>
           <div className={styles.replyingToText}>
-            <FormattedMessage id="storyViewer.commentSheet.replyingTo" />{' '}
+            {'Replying to '}
             <span className={styles.replyingToUsername}>{replyTo?.userId}</span>
           </div>
           <Close onClick={onCancelReply} className={styles.closeButton} />
@@ -86,12 +83,14 @@ export const StoryCommentComposeBar = ({
       )}
       {!isReplying ? (
         <CommentComposeBar
+          targetType="story"
           targetId={communityId}
           onSubmit={(text, mentionees, metadata) => handleAddComment(text, mentionees, metadata)}
         />
       ) : (
         <CommentComposeBar
           targetId={communityId}
+          targetType="story"
           userToReply={replyTo?.userId}
           onSubmit={(replyText, mentionees, metadata) => {
             handleReplyToComment(replyText, mentionees, metadata);

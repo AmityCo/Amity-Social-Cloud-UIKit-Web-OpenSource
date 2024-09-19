@@ -18,6 +18,14 @@
   height: 2.5rem;
 }
 
+.communityMember__rightPane {
+  display: grid;
+  grid-template-columns: auto 1.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .communityMember__displayName {
   font-size: 1rem;
   display: block;
@@ -25,4 +33,9 @@
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--asc-color-base-default);
+}
+
+.communityMember__brandIcon {
+  width: 1.5rem;
+  height: 1.5rem;
 }

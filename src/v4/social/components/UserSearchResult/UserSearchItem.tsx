@@ -4,6 +4,7 @@ import { Typography } from '~/v4/core/components';
 import styles from './UserSearchItem.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 
 interface UserSearchItemProps {
   user: Amity.User;
@@ -23,6 +24,11 @@ export const UserSearchItem = ({ user }: UserSearchItemProps) => {
           <Typography.BodyBold className={styles.userItem__userName__text}>
             {user.displayName}
           </Typography.BodyBold>
+          {!user.isBrand ? (
+            <div className={styles.userItem__brandIcon__container}>
+              <BrandBadge className={styles.userItem__brandIcon} />
+            </div>
+          ) : null}
         </div>
       </div>
     </Button>

@@ -113,7 +113,7 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
           <div className={styles.postReplyComment__edit__inputWrap}>
             <div className={styles.postReplyComment__edit__input}>
               <CommentInput
-                community={community}
+                communityId={community?.communityId}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,
@@ -121,8 +121,16 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
                   mentionees: comment.mentionees as Mentionees,
                   metadata: comment.metadata || {},
                 }}
-                onChange={(value: CreateCommentParams) => {
-                  setCommentData(value);
+                onChange={(value) => {
+                  setCommentData({
+                    data: {
+                      text: value.text,
+                    },
+                    mentionees: value.mentionees as Amity.UserMention[],
+                    metadata: {
+                      mentioned: value.mentioned,
+                    },
+                  });
                 }}
               />
             </div>

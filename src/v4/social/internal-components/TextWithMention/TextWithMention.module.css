@@ -18,6 +18,12 @@
   max-height: max-content;
 }
 
+.textWithMention__paragraph {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .textWithMention__fullContent {
   visibility: hidden;
   position: relative;
@@ -41,6 +47,13 @@
 .textWithMention__text {
   color: var(--asc-color-base-default);
   display: inline;
+}
+
+.textWithMention__link {
+  display: inline;
+  color: var(--asc-color-primary-shade1);
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .textWithMention__showMoreLess {

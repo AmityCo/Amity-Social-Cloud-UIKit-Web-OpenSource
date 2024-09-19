@@ -17,7 +17,7 @@ import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { LinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkPlugin';
 import { AutoLinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/AutoLinkPlugin';
 import {
-  editorStateToText,
+  editorToText,
   getEditorConfig,
   MentionData,
   textToEditorState,
@@ -136,8 +136,8 @@ export const PostTextField = ({
   pageId = '*',
   componentId = '*',
 }: PostTextFieldProps) => {
-  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const elementId = 'post_text_field';
+  const [intersectionNode, setIntersectionNode] = useState<HTMLElement | null>(null);
 
   const editorConfig = getEditorConfig({
     namespace: 'PostTextField',
@@ -153,9 +153,7 @@ export const PostTextField = ({
 
   useIntersectionObserver({
     onIntersect: () => {
-      if (isLoading === false) {
-        loadMore();
-      }
+      loadMore();
     },
     node: intersectionNode,
     options: {
@@ -184,7 +182,7 @@ export const PostTextField = ({
           />
           <OnChangePlugin
             onChange={(_, editor) => {
-              onChange(editorStateToText(editor));
+              onChange(editorToText(editor));
             }}
           />
           <HistoryPlugin />
@@ -222,14 +220,18 @@ export const PostTextField = ({
                           setHighlightedIndex(i);
                         }}
                         key={option.key}
-                        option={option}
+                        option={{
+                          ...option,
+                          setRefElement: (element) => {
+                            if (i === options.length - 1) {
+                              setIntersectionNode(element);
+                            }
+                            option.setRefElement(element);
+                          },
+                        }}
                       />
                     );
                   })}
-                  <div
-                    ref={(node) => setIntersectionNode(node)}
-                    className={styles.postTextField__mentionInterceptor}
-                  />
                 </>,
                 mentionContainer,
               );

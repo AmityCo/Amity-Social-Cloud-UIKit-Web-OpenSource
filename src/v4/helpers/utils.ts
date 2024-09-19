@@ -1,7 +1,13 @@
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import isEmpty from 'lodash/isEmpty';
 
-export type Mentioned = { userId?: string; length: number; index: number; type: string };
+export type Mentioned = {
+  userId?: string;
+  length: number;
+  index: number;
+  type: string;
+  displayName?: string;
+};
 export type Mentionees = (Amity.UserMention | Amity.ChannelMention)[];
 export type Metadata = {
   mentioned?: Mentioned[];

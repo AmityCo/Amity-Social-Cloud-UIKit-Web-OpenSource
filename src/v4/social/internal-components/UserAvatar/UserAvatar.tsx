@@ -32,7 +32,7 @@ interface UserAvatarProps {
 }
 
 export function UserAvatar({ userId, className }: UserAvatarProps) {
-  const { user } = useUser(userId);
+  const { user } = useUser({ userId });
 
   const userImage = useImage({ fileId: user?.avatar?.fileId });
 

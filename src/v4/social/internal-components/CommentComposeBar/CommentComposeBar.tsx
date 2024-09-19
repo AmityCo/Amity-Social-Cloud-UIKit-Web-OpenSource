@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import useUser from '~/core/hooks/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useMention from '~/v4/chat/hooks/useMention';
 
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
@@ -36,7 +36,7 @@ export const CommentComposeBar = ({
   targetType,
 }: CommentComposeBarProps) => {
   const { currentUserId } = useSDK();
-  const user = useUser(currentUserId);
+  const { user } = useUser({ userId: currentUserId });
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { text, markup, mentions, mentionees, metadata, onChange, clearAll, queryMentionees } =
     useMention({

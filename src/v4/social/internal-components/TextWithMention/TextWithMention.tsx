@@ -1,41 +1,67 @@
 import { SerializedParagraphNode, SerializedTextNode } from 'lexical';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
-import { Mentioned } from '~/v4/helpers/utils';
-import { TextToEditorState } from '~/v4/social/components/CommentComposer/CommentInput';
+import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import styles from './TextWithMention.module.css';
-import { v4 } from 'uuid';
+import {
+  textToEditorState,
+  $isSerializedMentionNode,
+  $isSerializedAutoLinkNode,
+  $isSerializedTextNode,
+  MentionData,
+  $isSerializedLinkNode,
+} from '~/v4/social/internal-components/Lexical/utils';
+import clsx from 'clsx';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { Button } from '~/v4/core/natives/Button/Button';
 
 interface TextWithMentionProps {
   maxLines?: number;
   data: {
     text: string;
   };
-  mentionees: Amity.UserMention[];
+  mentionees: Mentionees;
   metadata?: {
     mentioned?: Mentioned[];
   };
 }
 
-export const TextWithMention = ({ maxLines = 8, ...props }: TextWithMentionProps) => {
+export const TextWithMention = ({
+  maxLines = 8,
+  data,
+  mentionees,
+  metadata,
+}: TextWithMentionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
   const fullContentRef = useRef<HTMLDivElement>(null);
 
-  const editorState = useMemo(() => {
-    return TextToEditorState(props);
-  }, [props]);
+  const { goToUserProfilePage } = useNavigation();
+
+  const editorState = useMemo(
+    () =>
+      textToEditorState({
+        data,
+        mentionees,
+        metadata,
+      }),
+    [data, mentionees, metadata],
+  );
 
   useEffect(() => {
     // check if should be clamped or not, then hide the full content
     const fullContentHeight = fullContentRef.current?.clientHeight || 0;
 
+    const rootFontSize = parseInt(
+      window.getComputedStyle(document.body).getPropertyValue('font-size'),
+      10,
+    );
+
     const clampHeight =
       parseFloat(
         getComputedStyle(document.documentElement).getPropertyValue('--asc-line-height-md'),
-      ) * 16;
+      ) * rootFontSize;
 
     if (fullContentHeight > clampHeight * maxLines) {
       setIsClamped(true);
@@ -44,21 +70,38 @@ export const TextWithMention = ({ maxLines = 8, ...props }: TextWithMentionProps
     setIsHidden(true);
   }, []);
 
-  const renderText = (paragraph: SerializedParagraphNode) => {
-    return paragraph.children.map((text) => {
-      const uid = v4();
-      if ((text as SerializedTextNode).type === 'mention') {
+  const renderText = (paragraph: SerializedParagraphNode, typoClassName: string) => {
+    return paragraph.children.map((child) => {
+      if ($isSerializedMentionNode<MentionData>(child)) {
         return (
-          <span key={uid} className={styles.textWithMention__mention}>
-            {(text as SerializedTextNode).text}
-          </span>
+          <Button
+            key={child.data.userId}
+            className={clsx(typoClassName, styles.textWithMention__mention)}
+            onPress={() => goToUserProfilePage(child.data.userId)}
+          >
+            {child.text}
+          </Button>
         );
       }
-      return (
-        <span key={uid} className={styles.textWithMention__text}>
-          {(text as SerializedTextNode).text}
-        </span>
-      );
+      if ($isSerializedAutoLinkNode(child) || $isSerializedLinkNode(child)) {
+        return (
+          <a
+            key={child.url}
+            href={child.url}
+            className={clsx(typoClassName, styles.textWithMention__link)}
+          >
+            {$isSerializedTextNode(child.children[0]) ? child.children[0]?.text : child.url}
+          </a>
+        );
+      }
+
+      if ($isSerializedTextNode(child)) {
+        return (
+          <span className={clsx(typoClassName, styles.textWithMention__text)}>{child.text}</span>
+        );
+      }
+
+      return null;
     });
   };
 
@@ -69,13 +112,23 @@ export const TextWithMention = ({ maxLines = 8, ...props }: TextWithMentionProps
         className={styles.textWithMention__fullContent}
         data-hidden={isHidden}
       >
-        {editorState.root.children.map((child) => {
-          const uuid = v4();
-          return <Typography.Body key={uuid}>{renderText(child)}</Typography.Body>;
+        {editorState.root.children.map((paragraph) => {
+          return (
+            <p className={styles.textWithMention__paragraph}>
+              {paragraph.children.length > 0 ? (
+                <Typography.Body
+                  renderer={({ typoClassName }) => {
+                    return <>{renderText(paragraph, typoClassName)}</>;
+                  }}
+                />
+              ) : (
+                <br />
+              )}
+            </p>
+          );
         })}
       </div>
       <div
-        key={isExpanded ? 'expanded' : 'collapsed'}
         data-expanded={isExpanded}
         className={styles.textWithMention__clamp}
         style={
@@ -89,9 +142,20 @@ export const TextWithMention = ({ maxLines = 8, ...props }: TextWithMentionProps
             <Typography.Body>...See more</Typography.Body>
           </div>
         )}
-        {editorState.root.children.map((child, index) => {
-          const uuid = v4();
-          return <Typography.Body key={uuid}>{renderText(child)}</Typography.Body>;
+        {editorState.root.children.map((paragraph, index) => {
+          return (
+            <p className={styles.textWithMention__paragraph}>
+              {paragraph.children.length > 0 ? (
+                <Typography.Body
+                  renderer={({ typoClassName }) => {
+                    return <>{renderText(paragraph, typoClassName)}</>;
+                  }}
+                />
+              ) : (
+                <br />
+              )}
+            </p>
+          );
         })}
       </div>
     </div>

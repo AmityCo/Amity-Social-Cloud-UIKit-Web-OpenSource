@@ -9,6 +9,7 @@ import {
   UserHeaderTitle,
 } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge/BrandBadge';
 
 interface UIUserHeaderProps {
   userId?: string | null;
@@ -16,6 +17,7 @@ interface UIUserHeaderProps {
   avatarFileUrl?: string | null;
   children?: ReactNode;
   isBanned?: boolean;
+  isBrand?: boolean;
   onClick?: (userId: string) => void;
 }
 
@@ -26,6 +28,7 @@ const UIUserHeader = ({
   children,
   onClick,
   isBanned,
+  isBrand,
 }: UIUserHeaderProps) => {
   const onClickUser = () => userId && onClick?.(userId);
   return (
@@ -36,7 +39,7 @@ const UIUserHeader = ({
         onClick={onClickUser}
       />
       <UserHeaderTitle title={userId || undefined} onClick={onClickUser}>
-        <div>{displayName}</div> {isBanned && <BanIcon />}
+        <div>{displayName}</div> {isBanned && <BanIcon />} {isBrand && <BrandBadge />}
       </UserHeaderTitle>
       {children && <UserHeaderSubtitle>{children}</UserHeaderSubtitle>}
     </UserHeaderContainer>

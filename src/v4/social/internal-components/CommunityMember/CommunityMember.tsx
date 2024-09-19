@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './CommunityMember.module.css';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
 import { MentionTypeaheadOption } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 
 interface CommunityMemberProps {
   isSelected: boolean;
@@ -39,7 +40,12 @@ export function CommunityMember({
             userId={option.user.avatarFileId}
           />
         </div>
-        <p className={styles.communityMember__displayName}>{option.user.displayName}</p>
+        <div className={styles.communityMember__rightPane}>
+          <p className={styles.communityMember__displayName}>{option.user.displayName}</p>
+          {option.user.isBrand ? (
+            <BrandBadge className={styles.communityMember__brandIcon} />
+          ) : null}
+        </div>
       </div>
     </div>
   );

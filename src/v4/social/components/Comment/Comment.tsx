@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -94,6 +94,7 @@ export const Comment = ({
   const [hasClickLoadMore, setHasClickLoadMore] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+  const mentionRef = useRef<HTMLDivElement>(null);
 
   const [isShowMore, setIsShowMore] = useState(false);
 
@@ -169,8 +170,9 @@ export const Comment = ({
           <UserAvatar userId={comment.userId} />
           <div className={styles.postComment__edit__inputWrap}>
             <div className={styles.postComment__edit__input}>
+              <div className={styles.postComment__edit__mentionContainer} ref={mentionRef} />
               <CommentInput
-                community={community}
+                communityId={community?.communityId}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,
@@ -178,11 +180,19 @@ export const Comment = ({
                   mentionees: comment.mentionees as Mentionees,
                   metadata: comment.metadata || {},
                 }}
-                onChange={(value: CreateCommentParams) => {
-                  setCommentData(value);
+                onChange={(value) => {
+                  setCommentData({
+                    data: {
+                      text: value.text,
+                    },
+                    mentionees: value.mentionees as Amity.UserMention[],
+                    metadata: {
+                      mentioned: value.mentioned,
+                    },
+                  });
                 }}
                 maxLines={5}
-                mentionOffsetBottom={215}
+                mentionContainer={mentionRef?.current}
               />
             </div>
             <div className={styles.postComment__edit__buttonWrap}>
@@ -281,7 +291,7 @@ export const Comment = ({
 
             {hasClickLoadMore && (
               <ReplyCommentList
-                community={community}
+                community={community ?? undefined}
                 referenceId={comment.referenceId}
                 referenceType={comment.referenceType}
                 parentId={comment.commentId}
