@@ -46,6 +46,7 @@ export const CommentTray = ({
     >
       <div className={styles.commentListContainer}>
         <CommentList
+          pageId={pageId}
           referenceId={referenceId}
           referenceType={referenceType}
           community={community}

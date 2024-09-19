@@ -106,6 +106,7 @@ export function SocialGlobalSearchPage() {
       {searchValue.length > 0 && (
         <TabsBar
           pageId={pageId}
+          componentId="top_search_bar"
           tabs={tabs}
           activeTab={activeTab}
           onTabChange={(newTab) => {

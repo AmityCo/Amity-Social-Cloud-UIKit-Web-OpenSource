@@ -38,7 +38,7 @@ export const ShareStoryButton = ({
   onClick,
 }: ShareButtonProps) => {
   const elementId = 'share_story_button';
-  const { config, isExcluded } = useAmityElement({
+  const { config, isExcluded, accessibilityId } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -50,7 +50,7 @@ export const ShareStoryButton = ({
     <button
       role="button"
       className={clsx(styles.shareStoryButton)}
-      data-qa-anchor="share_story_button"
+      data-qa-anchor={accessibilityId}
       onClick={onClick}
       data-hideAvatar={config?.hide_avatar}
     >

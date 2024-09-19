@@ -16,7 +16,7 @@ import { Button } from '~/v4/core/natives/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import usePinnedPostsCollection from '~/v4/social/hooks/collections/usePinnedPostCollection';
 
-const CommunityFeedPostContentSkeleton = () => {
+export const CommunityFeedPostContentSkeleton = () => {
   return (
     <div className={styles.communityFeed__postSkeleton}>
       <div className={styles.communityFeed__postSkeletonHeader}>
@@ -59,12 +59,11 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   });
 
   const {
-    pinnedPost: announcementPosts,
-    isLoading: isLoadingAnnouncementPosts,
+    pinnedPost: allPinnedPost,
+    isLoading: isLoadingAllPinnedPosts,
     refresh,
   } = usePinnedPostsCollection({
     communityId,
-    placement: 'announcement',
   });
 
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
@@ -72,6 +71,32 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   useCommunitySubscription({ communityId, level: SubscriptionLevels.POST });
 
   const observerTarget = useRef(null);
+
+  const announcementPosts = allPinnedPost.filter((item) => item.placement === 'announcement');
+
+  const pinnedPosts = allPinnedPost.filter(
+    (item) =>
+      item.placement === 'default' &&
+      !announcementPosts.map((item) => item.post.postId).includes(item.post.postId),
+  );
+
+  const isAnnouncePostWasPinned = allPinnedPost.some(
+    (item) =>
+      item.placement === 'default' &&
+      announcementPosts.map((item) => item.post.postId).includes(item.post.postId),
+  );
+
+  const filteredPosts = posts.filter(
+    (post) =>
+      !announcementPosts.some((announcementPost) => announcementPost.post.postId === post.postId),
+  );
+
+  filteredPosts.forEach((post) => {
+    const matchedPinnedPost = pinnedPosts.find((pinned) => pinned.post.postId === post.postId);
+    if (matchedPinnedPost) {
+      post.placement = matchedPinnedPost.placement;
+    }
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -101,14 +126,6 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   if (isExcluded) return null;
 
   const renderPublicCommunityFeed = () => {
-    //TODO : Change any type to be Amity.PinnedPost after SDK deploy to PROD
-    const filteredPosts = posts.filter(
-      (post) =>
-        !announcementPosts.some(
-          (announcementPost: any) => announcementPost.post.postId === post.postId,
-        ),
-    );
-
     return (
       <>
         {isLoading
@@ -123,19 +140,32 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                   AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
                     postId: post.postId,
                     hideTarget: true,
+                    category:
+                      post?.placement && post?.placement === 'default'
+                        ? AmityPostCategory.PIN
+                        : AmityPostCategory.GENERAL,
                   })
                 }
               >
                 <PostContent
+                  pageId={pageId}
                   key={post.postId}
                   post={post}
-                  category={AmityPostCategory.GENERAL}
+                  category={
+                    post?.placement && post?.placement === 'default'
+                      ? AmityPostCategory.PIN
+                      : AmityPostCategory.GENERAL
+                  }
                   style={AmityPostContentComponentStyle.FEED}
                   hideTarget
                   onClick={() =>
                     AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
                       postId: post.postId,
                       hideTarget: true,
+                      category:
+                        post?.placement && post?.placement === 'default'
+                          ? AmityPostCategory.PIN
+                          : AmityPostCategory.GENERAL,
                     })
                   }
                 />
@@ -153,7 +183,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   };
 
   const renderAnnouncementPost = () => {
-    return isLoadingAnnouncementPosts ? (
+    return isLoadingAllPinnedPosts ? (
       <CommunityFeedPostContentSkeleton />
     ) : (
       announcementPosts &&
@@ -164,7 +194,9 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                 AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
                   postId: post.postId,
                   hideTarget: true,
-                  category: AmityPostCategory.ANNOUNCEMENT,
+                  category: isAnnouncePostWasPinned
+                    ? AmityPostCategory.PIN_AND_ANNOUNCEMENT
+                    : AmityPostCategory.ANNOUNCEMENT,
                 });
               }}
               className={styles.communityFeed__announcePost}
@@ -172,7 +204,11 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
               <PostContent
                 key={post.postId}
                 post={post}
-                category={AmityPostCategory.ANNOUNCEMENT}
+                category={
+                  isAnnouncePostWasPinned
+                    ? AmityPostCategory.PIN_AND_ANNOUNCEMENT
+                    : AmityPostCategory.ANNOUNCEMENT
+                }
                 style={AmityPostContentComponentStyle.FEED}
                 hideTarget
                 onClick={() =>

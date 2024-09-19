@@ -82,7 +82,11 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
         <RefreshSpinner className={styles.communityProfilePage__pullToRefresh__spinner} />
       </div>
 
-      {community ? <CommunityHeader community={community} /> : <CommunityProfileSkeleton />}
+      {community ? (
+        <CommunityHeader pageId={pageId} community={community} />
+      ) : (
+        <CommunityProfileSkeleton />
+      )}
 
       <div key={refreshKey}>{renderTabContent()}</div>
     </div>

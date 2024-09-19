@@ -14,7 +14,7 @@ export interface TopSearchBarProps {
 
 export function TopSearchBar({ pageId = '*', search }: TopSearchBarProps) {
   const componentId = 'top_search_bar';
-  const { config, isExcluded, themeStyles } = useAmityComponent({
+  const { config, isExcluded, themeStyles, accessibilityId } = useAmityComponent({
     pageId,
     componentId,
   });
@@ -44,6 +44,7 @@ export function TopSearchBar({ pageId = '*', search }: TopSearchBarProps) {
           value={searchValue}
           placeholder={config.text}
           onChange={(ev) => setSearchValue(ev.target.value)}
+          data-qa-anchor={accessibilityId}
         />
         {searchValue != '' ? (
           <ClearButton

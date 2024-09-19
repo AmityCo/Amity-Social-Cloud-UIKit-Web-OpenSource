@@ -46,3 +46,9 @@
 .editorLink:hover {
   text-decoration: underline;
 }
+
+.postTextField__mentionInterceptor {
+  width: 100%;
+  height: 1px;
+  background-color: var(--asc-color-background-default);
+}

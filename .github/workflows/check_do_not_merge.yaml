@@ -12,10 +12,16 @@ on:
 
 jobs:
   ok-to-merge:
-    if: contains(github.event.pull_request.labels.*.name, 'DO NOT MERGE') == false
     runs-on: ubuntu-latest
     steps:
+      - name: This PR is labeled with do not merge
+        if: contains(github.event.pull_request.labels.*.name, 'DO NOT MERGE') == true
+        run: |
+          echo "This PR cannot be merged"
+          exit 1
+
       - name: This PR is not labeled with do not merge
+        if: contains(github.event.pull_request.labels.*.name, 'DO NOT MERGE') == false
         run: |
           echo "This PR can be merged"
           exit 0

@@ -137,7 +137,7 @@ importers:
     devDependencies:
       '@amityco/ts-sdk':
         specifier: ^6.30.0
-        version: 6.30.0
+        version: 6.30.1
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -315,8 +315,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@6.30.0':
-    resolution: {integrity: sha512-kyW0ytV6Go3tAZ5EFmzeVLm2PE2jzgmlKnKygpK9iJPgY46wsGCVkhRFMCLMXGvpNPz3D1Tnmq+83wL/xNTJKg==}
+  '@amityco/ts-sdk@6.30.1':
+    resolution: {integrity: sha512-aD3e2wf0QdrT0qv62slB7TdBhKQkZv7IrUgX5U7yJt2BrjxM1wE0pMBE5Tx8bNalXwgnQFVtbeJkSmrZ8XCZUQ==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -6329,6 +6329,7 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qs@6.11.0:
@@ -7767,7 +7768,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@6.30.0':
+  '@amityco/ts-sdk@6.30.1':
     dependencies:
       agentkeepalive: 4.5.0
       axios: 1.7.2(debug@4.3.5)

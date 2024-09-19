@@ -37,7 +37,11 @@ export const TabsBar = ({
     >
       <Tabs.List className={styles.tabsList}>
         {tabs.map((tab) => (
-          <Tabs.Trigger value={tab.value} className={styles.tabsTrigger}>
+          <Tabs.Trigger
+            data-qa-anchor={`${pageId}/${componentId}/${tab.value}_tab`}
+            value={tab.value}
+            className={styles.tabsTrigger}
+          >
             <Typography.Title>{tab.label}</Typography.Title>
           </Tabs.Trigger>
         ))}

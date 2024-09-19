@@ -261,6 +261,12 @@
   color: var(--asc-color-base-shade2);
 }
 
+.postContent__wrapRightMenu {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
