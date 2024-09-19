@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.13 (2024-09-19)
+
+
+### Bug Fixes
+
+* ASC-25689 - add condition to show moderator badge ([#652](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/652)) ([90ba4f7](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/90ba4f7fa63c0cbd06c4c49437934fd134807f52))
+
 ## 4.0.0-beta.12 (2024-09-02)
 
 ## 4.0.0-beta.11 (2024-08-16)
