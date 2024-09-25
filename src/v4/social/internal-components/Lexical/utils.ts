@@ -156,7 +156,19 @@ export function textToEditorState(value: {
       type: 'url',
     }));
 
-  const mentionsAndLinks = [...mentions, ...links].sort((a, b) => a.index - b.index);
+  const indexMap: Record<number, boolean> = {};
+
+  const mentionsAndLinks = [...mentions, ...links]
+    .sort((a, b) => a.index - b.index)
+    .reduce((acc, mentionAndLink) => {
+      // this function is used to remove duplicate mentions and links that cause an infinite loop
+      if (indexMap[mentionAndLink.index]) {
+        return acc;
+      }
+
+      indexMap[mentionAndLink.index] = true;
+      return [...acc, mentionAndLink];
+    }, [] as Mentioned[]);
 
   let mentionAndLinkIndex = 0;
   let globalIndex = 0;
