@@ -128,15 +128,33 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   const renderPublicCommunityFeed = () => {
     return (
       <>
-        {isLoading
-          ? Array.from({ length: 2 }).map((_, index) => (
-              <CommunityFeedPostContentSkeleton key={index} />
-            ))
-          : filteredPosts &&
-            filteredPosts.map((post) => (
-              <Button
-                className={styles.communityFeed__postContent}
-                onPress={() =>
+        {filteredPosts &&
+          filteredPosts.map((post) => (
+            <Button
+              className={styles.communityFeed__postContent}
+              onPress={() =>
+                AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
+                  postId: post.postId,
+                  hideTarget: true,
+                  category:
+                    post?.placement && post?.placement === 'default'
+                      ? AmityPostCategory.PIN
+                      : AmityPostCategory.GENERAL,
+                })
+              }
+            >
+              <PostContent
+                pageId={pageId}
+                key={post.postId}
+                post={post}
+                category={
+                  post?.placement && post?.placement === 'default'
+                    ? AmityPostCategory.PIN
+                    : AmityPostCategory.GENERAL
+                }
+                style={AmityPostContentComponentStyle.FEED}
+                hideTarget
+                onClick={() =>
                   AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
                     postId: post.postId,
                     hideTarget: true,
@@ -146,31 +164,13 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                         : AmityPostCategory.GENERAL,
                   })
                 }
-              >
-                <PostContent
-                  pageId={pageId}
-                  key={post.postId}
-                  post={post}
-                  category={
-                    post?.placement && post?.placement === 'default'
-                      ? AmityPostCategory.PIN
-                      : AmityPostCategory.GENERAL
-                  }
-                  style={AmityPostContentComponentStyle.FEED}
-                  hideTarget
-                  onClick={() =>
-                    AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
-                      postId: post.postId,
-                      hideTarget: true,
-                      category:
-                        post?.placement && post?.placement === 'default'
-                          ? AmityPostCategory.PIN
-                          : AmityPostCategory.GENERAL,
-                    })
-                  }
-                />
-              </Button>
-            ))}
+              />
+            </Button>
+          ))}
+        {isLoading &&
+          Array.from({ length: 2 }).map((_, index) => (
+            <CommunityFeedPostContentSkeleton key={index} />
+          ))}
         {posts?.length === 0 && !isLoading && (
           <div className={styles.communityFeed__emptyPost}>
             <EmptyPost className={styles.communityFeed__emptyPostIcon} />
