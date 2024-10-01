@@ -1,0 +1,90 @@
+.explore {
+  display: flex;
+  flex-direction: column;
+}
+
+.explore__recommendedForYou {
+  width: 100%;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.explore__recommendedForYou::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.explore__recommendedForYou[data-is-loading='true'] {
+  padding: 1.5rem 1rem;
+}
+
+.explore__trendingNow {
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.explore__trendingTitleSkeleton {
+  width: 9.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  background: var(--asc-color-base-shade4);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  margin-top: 0.75rem;
+  margin-bottom: 0.31rem;
+}
+
+.explore__recommendedForYouTitle {
+  color: var(--asc-color-base-default);
+}
+
+.explore__exploreCategories {
+  width: 100%;
+  padding: 0.75rem 1rem;
+}
+
+.explore__exploreCategories::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.explore__pullToRefresh {
+  height: var(--asc-pull-to-refresh-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.explore__pullToRefresh__spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  animation-name: spin;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.explore__divider {
+  background-color: var(--asc-color-base-shade4);
+  height: 0.5rem;
+  width: 100%;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}

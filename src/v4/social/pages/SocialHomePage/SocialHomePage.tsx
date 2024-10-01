@@ -10,7 +10,8 @@ import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
-import ExplorePage from '~/social/pages/Explore';
+import { Explore } from './Explore';
+import { ExploreProvider } from '~/v4/social/providers/ExploreProvider';
 
 export enum HomePageTab {
   Newsfeed = 'Newsfeed',
@@ -33,21 +34,25 @@ export function SocialHomePage() {
   const initialLoad = useRef(true);
 
   useEffect(() => {
+    if (activeTab !== HomePageTab.Newsfeed) return;
     if (!containerRef.current) return;
     containerRef.current.scrollTop = scrollPosition;
     setTimeout(() => {
       initialLoad.current = false;
     }, 100);
-  }, [containerRef.current]);
+  }, [containerRef.current, activeTab]);
 
   const handleClickButton = () => {
     setIsShowCreatePostMenu((prev) => !prev);
   };
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (activeTab !== HomePageTab.Newsfeed) return;
     if (initialLoad.current) return;
     onScroll(event);
   };
+
+  console.log('scrollPosition', scrollPosition);
 
   useEffect(() => {
     const handleClickOutside = () => {
@@ -94,7 +99,9 @@ export function SocialHomePage() {
       <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
         {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
         {activeTab === HomePageTab.Explore && (
-          <ExplorePage isOpen={false} toggleOpen={() => {}} hideSideMenu={true} />
+          <ExploreProvider>
+            <Explore pageId={pageId} />
+          </ExploreProvider>
         )}
         {activeTab === HomePageTab.MyCommunities && <MyCommunities pageId={pageId} />}
       </div>

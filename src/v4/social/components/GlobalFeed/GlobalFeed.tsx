@@ -1,17 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed/EmptyNewsFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-
-import styles from './GlobalFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PostAd } from '~/v4/social/internal-components/PostAd/PostAd';
-import { Button } from '~/v4/core/natives/Button';
 import {
   AmityPostCategory,
   AmityPostContentComponentStyle,
 } from '~/v4/social/components/PostContent/PostContent';
+import { ClickableArea } from '~/v4/core/natives/ClickableArea';
+import styles from './GlobalFeed.module.css';
 
 interface GlobalFeedProps {
   pageId?: string;
@@ -68,12 +67,13 @@ export const GlobalFeed = ({
   return (
     <div className={styles.global_feed} style={themeStyles} data-qa-anchor={accessibilityId}>
       {items.map((item, index) => (
-        <div key={getItemKey(item, items[Math.max(0, index - 1)])}>
+        <React.Fragment key={getItemKey(item, items[Math.max(0, index - 1)])}>
           {index !== 0 ? <div className={styles.global_feed__divider} /> : null}
           {isAmityAd(item) ? (
             <PostAd ad={item} />
           ) : (
-            <Button
+            <ClickableArea
+              elementType="div"
               className={styles.global_feed__postContainer}
               onPress={() =>
                 AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId })
@@ -89,17 +89,18 @@ export const GlobalFeed = ({
                 }}
                 onPostDeleted={onPostDeleted}
               />
-            </Button>
+            </ClickableArea>
           )}
-        </div>
+        </React.Fragment>
       ))}
+      {items.length > 0 ? <div className={styles.global_feed__divider} /> : null}
       {isLoading
         ? Array.from({ length: 2 }).map((_, index) => (
             <div key={index}>
-              <div className={styles.global_feed__divider} />
               <div className={styles.global_feed__postSkeletonContainer}>
                 <PostContentSkeleton />
               </div>
+              {index !== 1 ? <div className={styles.global_feed__divider} /> : null}
             </div>
           ))
         : null}

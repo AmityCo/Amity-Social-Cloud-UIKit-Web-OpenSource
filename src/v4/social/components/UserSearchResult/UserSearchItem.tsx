@@ -37,7 +37,7 @@ export const UserSearchItem = ({ pageId = '*', componentId = '*', user }: UserSe
           >
             {user.displayName}
           </Typography.BodyBold>
-          {!user.isBrand ? (
+          {user.isBrand ? (
             <div className={styles.userItem__brandIcon__container}>
               <BrandBadge className={styles.userItem__brandIcon} />
             </div>

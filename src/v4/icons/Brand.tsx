@@ -26,8 +26,8 @@ const Brand = (props: React.SVGProps<SVGSVGElement>) => (
         y2="23.3984"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#FFDB7D" />
-        <stop offset="1" stop-color="#D49900" />
+        <stop stopColor="#FFDB7D" />
+        <stop offset="1" stopColor="#D49900" />
       </linearGradient>
     </defs>
   </svg>

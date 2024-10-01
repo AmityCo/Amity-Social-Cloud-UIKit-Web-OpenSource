@@ -123,43 +123,37 @@ const InternalComponent = ({
   return (
     <div className="asc-uikit">
       <QueryClientProvider client={queryClient}>
-        <Localization locale="en">
-          <CustomizationProvider initialConfig={configs || defaultConfig}>
-            <StyledThemeProvider theme={buildGlobalTheme(theme)}>
-              <ThemeProvider>
-                <CustomReactionProvider>
-                  <AdEngineProvider>
-                    <SDKContextV3.Provider value={sdkContextValue}>
-                      <SDKContext.Provider value={sdkContextValue}>
-                        <SDKConnectorProviderV3>
-                          <SDKConnectorProvider>
-                            <ConfigProvider
-                              config={{
-                                socialCommunityCreationButtonVisible:
-                                  socialCommunityCreationButtonVisible || true,
-                              }}
-                            >
-                              <PostRendererProvider config={postRendererConfig}>
-                                <NavigationProvider>
-                                  <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                    <DrawerProvider>
-                                      <GlobalFeedProvider>{children}</GlobalFeedProvider>
-                                      <DrawerContainer />
-                                    </DrawerProvider>
-                                  </PageBehaviorProvider>
-                                </NavigationProvider>
-                              </PostRendererProvider>
-                            </ConfigProvider>
-                          </SDKConnectorProvider>
-                        </SDKConnectorProviderV3>
-                      </SDKContext.Provider>
-                    </SDKContextV3.Provider>
-                  </AdEngineProvider>
-                </CustomReactionProvider>
-              </ThemeProvider>
-            </StyledThemeProvider>
-          </CustomizationProvider>
-        </Localization>
+        <CustomizationProvider initialConfig={configs || defaultConfig}>
+          <CustomReactionProvider>
+            <AdEngineProvider>
+              <SDKContextV3.Provider value={sdkContextValue}>
+                <SDKContext.Provider value={sdkContextValue}>
+                  <SDKConnectorProviderV3>
+                    <SDKConnectorProvider>
+                      <ConfigProvider
+                        config={{
+                          socialCommunityCreationButtonVisible:
+                            socialCommunityCreationButtonVisible || true,
+                        }}
+                      >
+                        <PostRendererProvider config={postRendererConfig}>
+                          <NavigationProvider>
+                            <PageBehaviorProvider pageBehavior={pageBehavior}>
+                              <DrawerProvider>
+                                <GlobalFeedProvider>{children}</GlobalFeedProvider>
+                                <DrawerContainer />
+                              </DrawerProvider>
+                            </PageBehaviorProvider>
+                          </NavigationProvider>
+                        </PostRendererProvider>
+                      </ConfigProvider>
+                    </SDKConnectorProvider>
+                  </SDKConnectorProviderV3>
+                </SDKContext.Provider>
+              </SDKContextV3.Provider>
+            </AdEngineProvider>
+          </CustomReactionProvider>
+        </CustomizationProvider>
       </QueryClientProvider>
     </div>
   );
@@ -200,19 +194,25 @@ interface AmityUIKitProviderProps {
 
 const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
   return (
-    <NotificationProvider>
-      <LegacyNotificationProvider>
-        <ConfirmProvider>
-          <LegacyConfirmProvider>
-            <InternalComponent {...props} />
-            <NotificationsContainer />
-            <LegacyNotificationsContainer />
-            <ConfirmComponent />
-            <LegacyConfirmComponent />
-          </LegacyConfirmProvider>
-        </ConfirmProvider>
-      </LegacyNotificationProvider>
-    </NotificationProvider>
+    <Localization locale="en">
+      <ThemeProvider>
+        <StyledThemeProvider theme={buildGlobalTheme(props.theme)}>
+          <NotificationProvider>
+            <LegacyNotificationProvider>
+              <ConfirmProvider>
+                <LegacyConfirmProvider>
+                  <InternalComponent {...props} />
+                  <NotificationsContainer />
+                  <LegacyNotificationsContainer />
+                  <ConfirmComponent />
+                  <LegacyConfirmComponent />
+                </LegacyConfirmProvider>
+              </ConfirmProvider>
+            </LegacyNotificationProvider>
+          </NotificationProvider>
+        </StyledThemeProvider>
+      </ThemeProvider>
+    </Localization>
   );
 };
 

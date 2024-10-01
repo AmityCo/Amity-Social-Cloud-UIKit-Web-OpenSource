@@ -5,6 +5,7 @@ import styles from './CommunityJoinButton.module.css';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Plus as PlusIcon } from '~/v4/icons/Plus';
 import clsx from 'clsx';
+import { Typography } from '~/v4/core/components/Typography';
 
 interface CommunityJoinButtonProps {
   pageId?: string;
@@ -35,7 +36,7 @@ export const CommunityJoinButton = ({
     <Button
       data-qa-anchor={accessibilityId}
       style={themeStyles}
-      onPress={onClick}
+      onPress={() => onClick?.()}
       className={clsx(styles.communityJoinButton, className)}
     >
       <IconComponent
@@ -44,7 +45,9 @@ export const CommunityJoinButton = ({
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
       />
-      Join
+      <Typography.CaptionBold className={styles.communityJoinButton__text}>
+        {config.text}
+      </Typography.CaptionBold>
     </Button>
   );
 };

@@ -8,6 +8,7 @@ import { CreateCommunityButton } from '~/v4/social/elements/CreateCommunityButto
 
 import styles from './EmptyNewsFeed.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 interface EmptyNewsfeedProps {
   pageId?: string;
@@ -15,23 +16,29 @@ interface EmptyNewsfeedProps {
 
 export function EmptyNewsfeed({ pageId = '*' }: EmptyNewsfeedProps) {
   const componentId = 'empty_newsfeed';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+
+  const { goToCommunityCreatePage } = useNavigation();
+
+  const { isExcluded, themeStyles, accessibilityId } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   if (isExcluded) return null;
 
   return (
-    <div className={styles.emptyNewsfeed}>
+    <div className={styles.emptyNewsfeed} style={themeStyles} data-qa-anchor={accessibilityId}>
       <Illustration pageId={pageId} componentId={componentId} />
       <div className={styles.emptyNewsfeed__text}>
         <Title pageId={pageId} componentId={componentId} />
         <Description pageId={pageId} componentId={componentId} />
       </div>
       <ExploreCommunitiesButton pageId={pageId} componentId={componentId} />
-      <CreateCommunityButton pageId={pageId} componentId={componentId} onClick={() => {}} />
+      <CreateCommunityButton
+        pageId={pageId}
+        componentId={componentId}
+        onClick={goToCommunityCreatePage}
+      />
     </div>
   );
 }

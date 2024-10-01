@@ -139,3 +139,14 @@
   background-color: var(--asc-color-base-shade4);
   margin-bottom: 0.25rem;
 }
+
+.communityProfile__communityCategories {
+  overflow-x: scroll;
+  width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.communityProfile__communityCategories::-webkit-scrollbar {
+  display: none;
+}

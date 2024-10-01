@@ -133,8 +133,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: ^6.30.0
-        version: 6.30.0
+        specifier: 6.30.3-04eeddb.0
+        version: 6.30.3-04eeddb.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -315,8 +315,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@6.30.0':
-    resolution: {integrity: sha512-kyW0ytV6Go3tAZ5EFmzeVLm2PE2jzgmlKnKygpK9iJPgY46wsGCVkhRFMCLMXGvpNPz3D1Tnmq+83wL/xNTJKg==}
+  '@amityco/ts-sdk@6.30.3-04eeddb.0':
+    resolution: {integrity: sha512-lqc3K/0jKQn2M5+ZDWCGj4sM2IGt7y2snfdr0CevALP7VfVObmjgNp86ZaVQgGo7kLQzcokt+OgcxIaD/RSMFg==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -3468,8 +3468,8 @@ packages:
     resolution: {integrity: sha512-QbUdXJVTpvUTHU7871ppZkdOLBeGUKBQWHkHrvN2V9IQWGMt61zf3B45BtzjxEJzYuj0JBjBZP/hmYS/R9pmAw==}
     engines: {node: '>=4'}
 
-  axios@1.7.4:
-    resolution: {integrity: sha512-DukmaFRnY6AzAALSH4J2M3k6PkaC+MfaAGdEERRWcC9q3/TWQwLpHR8ZRLKTdQ3aBDL64EdluRDjJqKw+BPZEw==}
+  axios@1.7.7:
+    resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
   babel-core@7.0.0-bridge.0:
     resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
@@ -4580,8 +4580,8 @@ packages:
     resolution: {integrity: sha512-VE7XSv1epljsIN2YeBnxCmGJihpNIAnLLu/pPOdA+Gkso7qDltJwUi6vfHjgxdBbjSdAuPGnhuOHJUQG+yYwIg==}
     engines: {node: '>=0.4.0'}
 
-  follow-redirects@1.15.6:
-    resolution: {integrity: sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==}
+  follow-redirects@1.15.9:
+    resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -7704,10 +7704,10 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@6.30.0':
+  '@amityco/ts-sdk@6.30.3-04eeddb.0':
     dependencies:
       agentkeepalive: 4.5.0
-      axios: 1.7.4(debug@4.3.6)
+      axios: 1.7.7(debug@4.3.6)
       debug: 4.3.6
       hls.js: 1.5.11
       js-base64: 3.7.7
@@ -12020,9 +12020,9 @@ snapshots:
 
   axe-core@4.9.1: {}
 
-  axios@1.7.4(debug@4.3.6):
+  axios@1.7.7(debug@4.3.6):
     dependencies:
-      follow-redirects: 1.15.6(debug@4.3.6)
+      follow-redirects: 1.15.9(debug@4.3.6)
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -13312,7 +13312,7 @@ snapshots:
 
   flow-parser@0.238.0: {}
 
-  follow-redirects@1.15.6(debug@4.3.6):
+  follow-redirects@1.15.9(debug@4.3.6):
     optionalDependencies:
       debug: 4.3.6
 

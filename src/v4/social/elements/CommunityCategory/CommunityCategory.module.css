@@ -1,11 +1,16 @@
-.community__category {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  overflow-x: scroll;
-  width: 100%;
+.communityCategory {
+  padding: 0.12rem 0.5rem;
+  border-radius: 1.25rem;
+  background-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-default);
+  line-height: 1.125rem;
+  font-size: 0.8125rem;
+  white-space: nowrap;
 }
 
-.community__category::-webkit-scrollbar {
-  display: none;
+.communityCategory[data-truncated='true'] {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  min-width: var(--asc-community-category-min-characters, unset);
+  max-width: var(--asc-community-category-max-characters, unset);
 }
