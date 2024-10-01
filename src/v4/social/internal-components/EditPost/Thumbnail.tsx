@@ -23,6 +23,7 @@ const MediaComponent = ({
   const elementId = 'remove_thumbnail';
 
   if (!thumbnailUrl) return null;
+
   return (
     <>
       <img className={styles.thumbnail} src={thumbnailUrl} alt="thumbnail" />
@@ -44,9 +45,11 @@ const MediaComponent = ({
 };
 
 export const Thumbnail = ({
+  pageId = '*',
   postMedia,
   onRemove,
 }: {
+  pageId?: string;
   postMedia: Amity.Post<'image' | 'video'>[];
   onRemove: (fileId: string) => void;
 }) => {
@@ -61,6 +64,7 @@ export const Thumbnail = ({
           className={styles.thumbnail__wrapper}
         >
           <MediaComponent
+            pageId={pageId}
             type={file.dataType}
             key={index}
             fieldId={

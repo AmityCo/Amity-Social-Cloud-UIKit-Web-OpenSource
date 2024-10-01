@@ -167,7 +167,7 @@ export const Comment = ({
         </div>
       ) : isEditing ? (
         <div className={styles.postComment__edit}>
-          <UserAvatar userId={comment.userId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postComment__edit__inputWrap}>
             <div className={styles.postComment__edit__input}>
               <div className={styles.postComment__edit__mentionContainer} ref={mentionRef} />
@@ -219,16 +219,21 @@ export const Comment = ({
         </div>
       ) : (
         <div className={styles.postComment}>
-          <UserAvatar userId={comment.userId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postComment__details}>
             <div className={styles.postComment__content}>
-              <Typography.BodyBold className={styles.postComment__content__username}>
+              <Typography.BodyBold
+                data-qa-anchor={`${pageId}/${componentId}/username`}
+                className={styles.postComment__content__username}
+              >
                 {comment.creator?.displayName}
               </Typography.BodyBold>
 
               {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
 
               <TextWithMention
+                pageId={pageId}
+                componentId={componentId}
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
@@ -279,6 +284,7 @@ export const Comment = ({
 
             {replyAmount > 0 && !hasClickLoadMore && (
               <div
+                data-qa-anchor={`${pageId}/${componentId}/view_reply_button`}
                 className={styles.postComment__viewReply_button}
                 onClick={() => setHasClickLoadMore(true)}
               >
@@ -291,6 +297,8 @@ export const Comment = ({
 
             {hasClickLoadMore && (
               <ReplyCommentList
+                pageId={pageId}
+                componentId={componentId}
                 community={community ?? undefined}
                 referenceId={comment.referenceId}
                 referenceType={comment.referenceType}
@@ -307,6 +315,8 @@ export const Comment = ({
         detent="content-height"
       >
         <CommentOptions
+          pageId={pageId}
+          componentId={componentId}
           comment={comment}
           handleEditComment={handleEditComment}
           handleDeleteComment={handleDeleteComment}

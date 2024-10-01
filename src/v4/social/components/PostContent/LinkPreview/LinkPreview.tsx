@@ -52,10 +52,12 @@ const usePreviewLink = ({ url }: { url: string }) => {
 };
 
 interface LinkPreviewProps {
+  pageId?: string;
+  componentId?: string;
   url: string;
 }
 
-export function LinkPreview({ url }: LinkPreviewProps) {
+export function LinkPreview({ pageId = '*', componentId = '*', url }: LinkPreviewProps) {
   const urlObject = new URL(url);
 
   const previewData = usePreviewLink({ url });
@@ -82,7 +84,11 @@ export function LinkPreview({ url }: LinkPreviewProps) {
   }
 
   return (
-    <Button onPress={handleClick} className={styles.linkPreview}>
+    <Button
+      data-qa-anchor={`${pageId}/${componentId}/post_preview_link`}
+      onPress={handleClick}
+      className={styles.linkPreview}
+    >
       <div className={styles.linkPreview__top}>
         {previewData.data?.image ? (
           <object data={previewData.data.image} className={styles.linkPreview__object}>

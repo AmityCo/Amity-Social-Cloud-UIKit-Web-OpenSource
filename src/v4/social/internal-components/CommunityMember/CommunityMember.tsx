@@ -5,6 +5,8 @@ import { MentionTypeaheadOption } from '~/v4/social/internal-components/MentionT
 import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 
 interface CommunityMemberProps {
+  pageId?: string;
+  componentId?: string;
   isSelected: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
@@ -12,6 +14,8 @@ interface CommunityMemberProps {
 }
 
 export function CommunityMember({
+  pageId = '*',
+  componentId = '*',
   isSelected,
   onClick,
   onMouseEnter,
@@ -36,6 +40,8 @@ export function CommunityMember({
       <div key={option.key} className={styles.communityMember__item}>
         <div>
           <UserAvatar
+            pageId={pageId}
+            componentId={componentId}
             className={styles.communityMember__avatar}
             userId={option.user.avatarFileId}
           />

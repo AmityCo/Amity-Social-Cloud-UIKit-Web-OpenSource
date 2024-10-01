@@ -24,7 +24,12 @@ export function MyTimelineAvatar({
   if (isExcluded) return null;
   return (
     <div className={styles.myTimelineAvatar} data-qa-anchor={accessibilityId}>
-      <UserAvatar className={styles.myTimelineAvatar__userAvatar} userId={userId} />
+      <UserAvatar
+        pageId={pageId}
+        componentId={componentId}
+        className={styles.myTimelineAvatar__userAvatar}
+        userId={userId}
+      />
     </div>
   );
 }

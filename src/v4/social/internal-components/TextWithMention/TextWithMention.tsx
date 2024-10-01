@@ -16,6 +16,8 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button/Button';
 
 interface TextWithMentionProps {
+  pageId?: string;
+  componentId?: string;
   maxLines?: number;
   data: {
     text: string;
@@ -27,6 +29,8 @@ interface TextWithMentionProps {
 }
 
 export const TextWithMention = ({
+  pageId = '*',
+  componentId = '*',
   maxLines = 8,
   data,
   mentionees,
@@ -75,6 +79,7 @@ export const TextWithMention = ({
       if ($isSerializedMentionNode<MentionData>(child)) {
         return (
           <Button
+            data-qa-anchor={`${pageId}/${componentId}/mention`}
             key={child.data.userId}
             className={clsx(typoClassName, styles.textWithMention__mention)}
             onPress={() => goToUserProfilePage(child.data.userId)}
@@ -89,6 +94,7 @@ export const TextWithMention = ({
             key={child.url}
             href={child.url}
             className={clsx(typoClassName, styles.textWithMention__link)}
+            data-qa-anchor={`${pageId}/${componentId}/post_link`}
           >
             {$isSerializedTextNode(child.children[0]) ? child.children[0]?.text : child.url}
           </a>
@@ -129,6 +135,7 @@ export const TextWithMention = ({
         })}
       </div>
       <div
+        data-qa-anchor={`${pageId}/${componentId}/text_with_mention`}
         data-expanded={isExpanded}
         className={styles.textWithMention__clamp}
         style={

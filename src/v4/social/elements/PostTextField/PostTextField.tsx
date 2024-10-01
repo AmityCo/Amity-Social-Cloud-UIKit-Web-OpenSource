@@ -29,6 +29,7 @@ import { AutoLinkNode, LinkNode } from '@lexical/link';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { MentionItem } from '~/v4/social/internal-components/Lexical/MentionItem';
+import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 interface PostTextFieldProps {
   pageId?: string;
@@ -139,6 +140,8 @@ export const PostTextField = ({
   const elementId = 'post_text_field';
   const [intersectionNode, setIntersectionNode] = useState<HTMLElement | null>(null);
 
+  const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
+
   const editorConfig = getEditorConfig({
     namespace: 'PostTextField',
     theme: {
@@ -171,10 +174,7 @@ export const PostTextField = ({
             : {}),
         }}
       >
-        <div
-          className={styles.editorContainer}
-          data-qa-anchor={`${pageId}/${componentId}/${elementId}`}
-        >
+        <div className={styles.editorContainer} data-qa-anchor={accessibilityId}>
           <RichTextPlugin
             contentEditable={<ContentEditable />}
             placeholder={<div className={styles.editorPlaceholder}>What’s going on...</div>}

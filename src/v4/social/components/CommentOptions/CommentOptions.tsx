@@ -9,6 +9,8 @@ import { FlagIcon, PenIcon, TrashIcon } from '~/v4/social/icons';
 import styles from './CommentOptions.module.css';
 
 interface CommentOptionsProps {
+  pageId?: string;
+  componentId?: string;
   comment: Amity.Comment;
   handleEditComment: () => void;
   handleDeleteComment: () => void;
@@ -16,6 +18,8 @@ interface CommentOptionsProps {
 }
 
 export const CommentOptions = ({
+  pageId = '*',
+  componentId = '*',
   comment,
   handleEditComment,
   handleDeleteComment,
@@ -55,6 +59,7 @@ export const CommentOptions = ({
           name: 'Edit comment',
           action: handleEditComment,
           icon: <PenIcon className={styles.commentOptions__actionButton__icon} />,
+          accessibilityId: 'edit_comment',
         }
       : null,
     canReport
@@ -62,6 +67,7 @@ export const CommentOptions = ({
           name: isFlaggedByMe ? 'Unreport comment' : 'Report comment',
           action: handleReportComment,
           icon: <FlagIcon className={styles.commentOptions__actionButton__icon} />,
+          accessibilityId: 'report_comment',
         }
       : null,
     canDelete
@@ -69,6 +75,7 @@ export const CommentOptions = ({
           name: 'Delete comment',
           action: handleDeleteComment,
           icon: <TrashIcon className={styles.commentOptions__actionButton__icon} />,
+          accessibilityId: 'delete_comment',
         }
       : null,
   ].filter(isNonNullable);
@@ -77,6 +84,7 @@ export const CommentOptions = ({
     <>
       {options.map((option, index) => (
         <div
+          data-qa-anchor={`${pageId}/${componentId}/${option.accessibilityId}`}
           className={styles.commentOptions__actionButton}
           key={index}
           onClick={() => {

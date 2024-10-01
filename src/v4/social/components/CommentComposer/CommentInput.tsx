@@ -36,7 +36,6 @@ import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 interface CommentInputProps {
   pageId?: string;
   componentId?: string;
-  elementId?: string;
   communityId?: string;
   value?: CreateCommentParams;
   maxLines?: number;
@@ -139,7 +138,6 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
     {
       pageId = '*',
       componentId = '*',
-      elementId = '*',
       communityId,
       value,
       onChange,
@@ -150,6 +148,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
     ref,
   ) => {
     const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+    const elementId = 'comment_input';
     const { themeStyles, uiReference, config, accessibilityId } = useAmityElement({
       pageId,
       componentId,
@@ -203,6 +202,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
         }}
       >
         <div
+          data-qa-anchor={accessibilityId}
           className={styles.editorContainer}
           style={
             {

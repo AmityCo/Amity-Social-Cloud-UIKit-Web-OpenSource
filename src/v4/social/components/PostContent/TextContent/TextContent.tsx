@@ -20,12 +20,20 @@ const MentionHighlightTag = ({ children }: MentionHighlightTagProps) => {
 const MAX_TEXT_LENGTH = 500;
 
 interface TextContentProps {
+  pageId?: string;
+  componentId?: string;
   text?: string;
   mentioned?: Mentioned[];
   mentionees?: Mentionees;
 }
 
-export const TextContent = ({ text = '', mentionees = [], mentioned }: TextContentProps) => {
+export const TextContent = ({
+  pageId = '*',
+  componentId = '*',
+  text = '',
+  mentionees = [],
+  mentioned,
+}: TextContentProps) => {
   if (!text) {
     return null;
   }
@@ -35,13 +43,17 @@ export const TextContent = ({ text = '', mentionees = [], mentioned }: TextConte
   return (
     <>
       <TextWithMention
+        pageId={pageId}
+        componentId={componentId}
         data={{ text: text }}
         mentionees={mentionees}
         metadata={{
           mentioned,
         }}
       />
-      {linksFounded && linksFounded.length > 0 && <LinkPreview url={linksFounded[0].href} />}
+      {linksFounded && linksFounded.length > 0 && (
+        <LinkPreview pageId={pageId} componentId={componentId} url={linksFounded[0].href} />
+      )}
     </>
   );
 };

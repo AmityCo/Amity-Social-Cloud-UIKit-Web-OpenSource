@@ -60,10 +60,11 @@ export enum AmityPostCategory {
 interface PostTitleProps {
   post: Amity.Post;
   pageId?: string;
+  componentId?: string;
   hideTarget?: boolean;
 }
 
-const PostTitle = ({ pageId, post, hideTarget }: PostTitleProps) => {
+const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) => {
   const shouldCallCommunity = useMemo(() => post?.targetType === 'community', [post?.targetType]);
   const shouldCallUser = useMemo(
     () => post?.targetType === 'user' && post?.postedUserId !== post?.targetId,
@@ -103,13 +104,20 @@ const PostTitle = ({ pageId, post, hideTarget }: PostTitleProps) => {
               <Button
                 className={clsx(typoClassName, styles.postTitle__text)}
                 onPress={() => onClickUser(post.creator.userId)}
+                data-qa-anchor={`${pageId}/${componentId}/username`}
               >
                 {post.creator.displayName}
               </Button>
             )}
           />
           {showBrandBadge ? <BrandBadge className={styles.postTitle__brandIcon} /> : null}
-          {showTarget ? <AngleRight className={styles.postTitle__icon} /> : null}
+
+          {showTarget ? (
+            <AngleRight
+              data-qa-anchor={`${pageId}/${componentId}/arrow_right`}
+              className={styles.postTitle__icon}
+            />
+          ) : null}
         </div>
       )}
       {showTargetCommunity && (
@@ -122,6 +130,7 @@ const PostTitle = ({ pageId, post, hideTarget }: PostTitleProps) => {
           <Typography.BodyBold
             renderer={({ typoClassName }) => (
               <Button
+                data-qa-anchor={`${pageId}/${componentId}/community_name`}
                 className={clsx(typoClassName, styles.postTitle__communityText)}
                 onPress={() => {
                   goToCommunityProfilePage(targetCommunity.communityId);
@@ -160,18 +169,32 @@ const PostTitle = ({ pageId, post, hideTarget }: PostTitleProps) => {
 };
 
 const ChildrenPostContent = ({
+  pageId,
+  componentId,
   post,
   onImageClick,
   onVideoClick,
 }: {
+  pageId?: string;
+  componentId?: string;
   post: Amity.Post[];
   onImageClick: (imageIndex: number) => void;
   onVideoClick: (videoIndex: number) => void;
 }) => {
   return (
     <>
-      <ImageContent post={post} onImageClick={onImageClick} />
-      <VideoContent post={post} onVideoClick={onVideoClick} />
+      <ImageContent
+        pageId={pageId}
+        componentId={componentId}
+        post={post}
+        onImageClick={onImageClick}
+      />
+      <VideoContent
+        pageId={pageId}
+        componentId={componentId}
+        post={post}
+        onVideoClick={onVideoClick}
+      />
     </>
   );
 };
@@ -357,11 +380,16 @@ export const PostContent = ({
       )}
       <div className={styles.postContent__bar} data-type={style}>
         <div className={styles.postContent__bar__userAvatar}>
-          <UserAvatar userId={post?.postedUserId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={post?.postedUserId} />
         </div>
         <div className={styles.postContent__bar__detail}>
           <div>
-            <PostTitle post={post} hideTarget={hideTarget} />
+            <PostTitle
+              post={post}
+              hideTarget={hideTarget}
+              pageId={pageId}
+              componentId={componentId}
+            />
           </div>
           <div className={styles.postContent__bar__information__subtitle}>
             {isCommunityModerator ? (
@@ -413,12 +441,16 @@ export const PostContent = ({
       <div className={styles.postContent__content_and_reactions}>
         <div className={styles.postContent__content}>
           <TextContent
+            pageId={pageId}
+            componentId={componentId}
             text={post?.data?.text}
             mentioned={post?.metadata?.mentioned}
             mentionees={post?.mentioness}
           />
           {post.children.length > 0 ? (
             <ChildrenPostContent
+              pageId={pageId}
+              componentId={componentId}
               post={post}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
@@ -460,14 +492,20 @@ export const PostContent = ({
                   )}
                 </div>
               ) : null}
-              <Typography.Caption className={styles.postContent__reactionsBar__reactions__count}>
+              <Typography.Caption
+                data-qa-anchor={`${pageId}/${componentId}/like_count`}
+                className={styles.postContent__reactionsBar__reactions__count}
+              >
                 {`${millify(post?.reactionsCount || 0)} ${
                   post?.reactionsCount === 1 ? 'like' : 'likes'
                 }`}
               </Typography.Caption>
             </div>
 
-            <Typography.Caption className={styles.postContent__commentsCount}>
+            <Typography.Caption
+              data-qa-anchor={`${pageId}/${componentId}/comment_count`}
+              className={styles.postContent__commentsCount}
+            >
               {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
             </Typography.Caption>
           </div>

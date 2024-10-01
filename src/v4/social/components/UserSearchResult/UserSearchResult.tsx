@@ -32,7 +32,7 @@ export const UserSearchResult = ({
   return (
     <div className={styles.userSearchResult} style={themeStyles} data-qa-anchor={accessibilityId}>
       {userCollection.map((user) => (
-        <UserSearchItem key={user.userId} user={user} />
+        <UserSearchItem pageId={pageId} componentId={componentId} key={user.userId} user={user} />
       ))}
       {isLoading
         ? Array.from({ length: 5 }).map((_, index) => (

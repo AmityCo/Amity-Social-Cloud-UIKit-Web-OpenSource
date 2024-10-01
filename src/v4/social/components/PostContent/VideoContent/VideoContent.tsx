@@ -35,12 +35,16 @@ const VideoThumbnail = ({ fileId }: { fileId: string }) => {
 };
 
 const Video = ({
+  pageId = '*',
+  componentId = '*',
   postId,
   postAmount,
   videoLeftCount,
   index,
   onVideoClick,
 }: {
+  pageId?: string;
+  componentId?: string;
   postId: string;
   postAmount: number;
   videoLeftCount: number;
@@ -58,6 +62,7 @@ const Video = ({
       className={styles.videoContent__videoContainer}
       data-videos-amount={Math.min(postAmount, 4)}
       onPress={() => onVideoClick()}
+      data-qa-anchor={`${pageId}/${componentId}/post_video`}
     >
       <VideoThumbnail fileId={videoPost.data.thumbnailFileId} />
       {videoLeftCount > 0 && index === postAmount - 1 && (
@@ -91,7 +96,7 @@ export const VideoContent = ({
   post,
   onVideoClick,
 }: VideoContentProps) => {
-  const { themeStyles } = useAmityElement({
+  const { themeStyles, accessibilityId } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -116,6 +121,8 @@ export const VideoContent = ({
       >
         {first4Videos.map((postId: string, index: number) => (
           <Video
+            pageId={pageId}
+            componentId={componentId}
             key={postId}
             index={index}
             postId={postId}

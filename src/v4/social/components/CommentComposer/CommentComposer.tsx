@@ -120,7 +120,10 @@ export const CommentComposer = ({
               } as React.CSSProperties
             }
           >
-            <div className={styles.commentComposer__replyContainer__text}>
+            <div
+              data-qa-anchor={`${pageId}/${componentId}/comment_composer_reply_text`}
+              className={styles.commentComposer__replyContainer__text}
+            >
               <span>Replying to </span>
               <span className={styles.commentComposer__replyContainer__username}>
                 {replyTo?.userId}
@@ -135,7 +138,12 @@ export const CommentComposer = ({
       </div>
       <div className={styles.commentComposer__container}>
         <div className={styles.commentComposer__avatar}>
-          <Avatar avatarUrl={avatarUrl} defaultImage={<User />} />
+          <Avatar
+            pageId={pageId}
+            componentId={componentId}
+            avatarUrl={avatarUrl}
+            defaultImage={<User />}
+          />
         </div>
         <div
           className={styles.commentComposer__input}
@@ -164,6 +172,7 @@ export const CommentComposer = ({
           />
         </div>
         <Button
+          data-qa-anchor={`${pageId}/${componentId}/comment_composer_post`}
           isDisabled={!textValue?.data?.text}
           className={styles.commentComposer__button}
           onPress={() => mutateAsync({ params: textValue })}

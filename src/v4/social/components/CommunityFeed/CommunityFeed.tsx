@@ -202,6 +202,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
               className={styles.communityFeed__announcePost}
             >
               <PostContent
+                pageId={pageId}
                 key={post.postId}
                 post={post}
                 category={

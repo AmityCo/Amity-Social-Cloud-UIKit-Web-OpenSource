@@ -75,7 +75,12 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
           defaultClassName={styles.postDetailPage__backIcon}
           onPress={() => onBack()}
         />
-        <Typography.Title className={styles.postDetailPage__topBar__title}>Post</Typography.Title>
+        <Typography.Title
+          data-qa-anchor={`${pageId}/page_title`}
+          className={styles.postDetailPage__topBar__title}
+        >
+          Post
+        </Typography.Title>
         <div className={styles.postDetailPage__topBar__menuBar}>
           <MenuButton
             pageId={pageId}

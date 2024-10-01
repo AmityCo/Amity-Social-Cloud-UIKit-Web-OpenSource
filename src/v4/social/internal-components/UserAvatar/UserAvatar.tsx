@@ -27,11 +27,19 @@ const UserSvg = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
 );
 
 interface UserAvatarProps {
+  pageId?: string;
+  componentId?: string;
   userId?: string | null;
   className?: string;
 }
 
-export function UserAvatar({ userId, className }: UserAvatarProps) {
+export function UserAvatar({
+  pageId = '*',
+  componentId = '*',
+  userId,
+  className,
+}: UserAvatarProps) {
+  const elementId = 'user_avatar';
   const { user } = useUser({ userId });
 
   const userImage = useImage({ fileId: user?.avatar?.fileId });
@@ -39,7 +47,12 @@ export function UserAvatar({ userId, className }: UserAvatarProps) {
   if (user == null || userId == null || userImage == null) return <UserSvg className={className} />;
 
   return (
-    <object data={userImage} type="image/png" className={clsx(styles.userAvatar__img, className)}>
+    <object
+      data-qa-anchor={`${pageId}/${componentId}/${elementId}`}
+      data={userImage}
+      type="image/png"
+      className={clsx(styles.userAvatar__img, className)}
+    >
       <UserSvg className={className} />
     </object>
   );
