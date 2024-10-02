@@ -192,8 +192,8 @@ export function textToEditorState(value: {
               url: mentionOrLink.href,
             }),
           );
-          runningIndex += mentionOrLink.length;
-          globalIndex += mentionOrLink.length;
+          runningIndex += mentionOrLink.value.length;
+          globalIndex += mentionOrLink.value.length;
         } else {
           paragraph.children.push(
             createSerializeMentionNode({
@@ -211,6 +211,7 @@ export function textToEditorState(value: {
           mentionAndLinkIndex < mentionsAndLinks.length
             ? mentionOrLink.index
             : globalIndex + currentLine.length;
+
         const textSegment = currentLine.slice(
           runningIndex,
           nextMentionIndex - globalIndex + runningIndex,
@@ -263,7 +264,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
           paragraphText.push(child.text);
           runningIndex += child.text.length;
         }
-        if ($isSerializedAutoLinkNode(child)) {
+        if ($isSerializedLinkNode(child) || $isSerializedAutoLinkNode(child)) {
           child.children.forEach((c) => {
             if (!$isSerializedTextNode(c)) return;
             paragraphText.push(c.text);
