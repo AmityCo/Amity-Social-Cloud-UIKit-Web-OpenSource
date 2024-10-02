@@ -120,13 +120,22 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
 
   const { goToCommunitiesByCategoryPage, goToCommunityProfilePage } = useNavigation();
 
-  const { recommendedCommunities, isLoading, fetchRecommendedCommunities } = useExplore();
+  const {
+    recommendedCommunities,
+    isLoading,
+    fetchRecommendedCommunities,
+    refetchRecommendedCommunities,
+  } = useExplore();
 
   useEffect(() => {
     fetchRecommendedCommunities();
   }, []);
 
-  const { joinCommunity, leaveCommunity } = useCommunityActions();
+  const { joinCommunity, leaveCommunity } = useCommunityActions({
+    onJoinSuccess: () => {
+      refetchRecommendedCommunities();
+    },
+  });
 
   const handleJoinButtonClick = (communityId: string) => joinCommunity(communityId);
 
@@ -135,7 +144,7 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
   if (isLoading) {
     return (
       <div className={styles.recommendedCommunities}>
-        {[1, 2, 3, 4].map((index) => (
+        {Array.from({ length: 4 }).map((_, index) => (
           <RecommendedCommunityCardSkeleton key={index} />
         ))}
       </div>

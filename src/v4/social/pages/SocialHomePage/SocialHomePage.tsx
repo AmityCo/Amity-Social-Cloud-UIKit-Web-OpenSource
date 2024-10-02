@@ -52,8 +52,6 @@ export function SocialHomePage() {
     onScroll(event);
   };
 
-  console.log('scrollPosition', scrollPosition);
-
   useEffect(() => {
     const handleClickOutside = () => {
       if (isShowCreatePostMenu) {

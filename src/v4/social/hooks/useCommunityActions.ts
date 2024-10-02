@@ -2,10 +2,20 @@ import { CommunityRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
-export const useCommunityActions: () => {
+export const useCommunityActions = ({
+  onJoinSuccess,
+  onJoinError,
+  onLeaveSuccess,
+  onLeaveError,
+}: {
+  onJoinSuccess?: () => void;
+  onJoinError?: (error: Error) => void;
+  onLeaveSuccess?: () => void;
+  onLeaveError?: (error: Error) => void;
+} = {}): {
   joinCommunity: (communityId: string) => void;
   leaveCommunity: (communityId: string) => void;
-} = () => {
+} => {
   const { error: errorFn, success } = useNotifications();
 
   const { mutate: joinCommunity } = useMutation({
@@ -14,11 +24,13 @@ export const useCommunityActions: () => {
       success({
         content: 'Successfully joined the community.',
       });
+      onJoinSuccess?.();
     },
-    onError: () => {
+    onError: (error) => {
       errorFn({
         content: 'Failed to join the community',
       });
+      onJoinError?.(error);
     },
   });
 
@@ -28,11 +40,13 @@ export const useCommunityActions: () => {
       success({
         content: 'Successfully left the community',
       });
+      onLeaveSuccess?.();
     },
-    onError: () => {
+    onError: (error) => {
       errorFn({
         content: 'Failed to leave the community',
       });
+      onLeaveError?.(error);
     },
   });
 

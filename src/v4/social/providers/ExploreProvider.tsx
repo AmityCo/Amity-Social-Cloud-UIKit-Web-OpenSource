@@ -7,6 +7,7 @@ type ExploreContextType = {
   fetchTrendingCommunities: () => void;
   fetchRecommendedCommunities: () => void;
   fetchCommunityCategories: () => void;
+  refetchRecommendedCommunities: () => void;
   isLoading: boolean;
   error: Error | null;
   trendingCommunities: Amity.Community[];
@@ -23,6 +24,7 @@ const ExploreContext = createContext<ExploreContextType>({
   fetchTrendingCommunities: () => {},
   fetchRecommendedCommunities: () => {},
   fetchCommunityCategories: () => {},
+  refetchRecommendedCommunities: () => {},
   trendingCommunities: [],
   recommendedCommunities: [],
   categories: [],
@@ -67,20 +69,18 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const isLoading = trendingData.isLoading || recommendedData.isLoading || categoriesData.isLoading;
   const error = trendingData.error && recommendedData.error && categoriesData.error;
 
+  const refetchRecommendedCommunities = () => recommendedData.refresh();
+
   const refresh = () => {
     trendingData.refresh();
-    recommendedData.refresh();
+    refetchRecommendedCommunities();
     categoriesData.refresh();
   };
-
-  const filteredRecommendedCommunities = recommendedData.recommendedCommunities.filter(
-    (community) => community.isJoined != true,
-  );
 
   const noCategories = categoriesData.categories.length === 0 && !categoriesData.isLoading;
 
   const noRecommendedCommunities =
-    filteredRecommendedCommunities.length === 0 && !recommendedData.isLoading;
+    recommendedData.recommendedCommunities.length === 0 && !recommendedData.isLoading;
 
   const noTrendingCommunities =
     trendingData.trendingCommunities.length === 0 && !trendingData.isLoading;
@@ -99,8 +99,9 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
         fetchTrendingCommunities,
         fetchRecommendedCommunities,
         fetchCommunityCategories,
+        refetchRecommendedCommunities,
         trendingCommunities: trendingData.trendingCommunities,
-        recommendedCommunities: filteredRecommendedCommunities,
+        recommendedCommunities: recommendedData.recommendedCommunities,
         categories: categoriesData.categories,
         noRecommendedCommunities,
         noTrendingCommunities,
