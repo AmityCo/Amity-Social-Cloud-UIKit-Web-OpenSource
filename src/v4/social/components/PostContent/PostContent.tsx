@@ -516,7 +516,9 @@ export const PostContent = ({
               Join community to interact with all posts
             </Typography.Body>
           </>
-        ) : !targetCommunity?.isJoined && page.type === PageTypes.PostDetailPage ? null : (
+        ) : targetCommunity &&
+          !targetCommunity?.isJoined &&
+          page.type === PageTypes.PostDetailPage ? null : (
           <>
             <div className={styles.postContent__divider} />
             <div className={styles.postContent__reactionBar}>
