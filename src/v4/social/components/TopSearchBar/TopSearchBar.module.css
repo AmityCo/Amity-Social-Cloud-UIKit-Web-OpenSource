@@ -20,6 +20,7 @@
   border: none;
   background-color: var(--asc-color-base-shade4);
   color: var(--asc-color-base-shade2);
+  outline: none;
 }
 
 .topSearchBar__searchIcon {

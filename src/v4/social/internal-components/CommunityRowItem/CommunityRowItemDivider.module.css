@@ -1,0 +1,12 @@
+.communityRowItemDivider {
+  background-color: var(--asc-color-base-shade4);
+  height: 0.0625rem;
+  width: 100%;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.communityRowItemDivider:first-child {
+  all: unset;
+  margin-top: 0.75rem;
+}

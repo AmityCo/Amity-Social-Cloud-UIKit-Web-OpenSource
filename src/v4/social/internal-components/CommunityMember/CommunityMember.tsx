@@ -2,8 +2,11 @@ import React from 'react';
 import styles from './CommunityMember.module.css';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
 import { MentionTypeaheadOption } from '~/v4/social/internal-components/MentionTextInput/MentionTextInput';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 
 interface CommunityMemberProps {
+  pageId?: string;
+  componentId?: string;
   isSelected: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
@@ -11,6 +14,8 @@ interface CommunityMemberProps {
 }
 
 export function CommunityMember({
+  pageId = '*',
+  componentId = '*',
   isSelected,
   onClick,
   onMouseEnter,
@@ -35,11 +40,18 @@ export function CommunityMember({
       <div key={option.key} className={styles.communityMember__item}>
         <div>
           <UserAvatar
+            pageId={pageId}
+            componentId={componentId}
             className={styles.communityMember__avatar}
             userId={option.user.avatarFileId}
           />
         </div>
-        <p className={styles.communityMember__displayName}>{option.user.displayName}</p>
+        <div className={styles.communityMember__rightPane}>
+          <p className={styles.communityMember__displayName}>{option.user.displayName}</p>
+          {option.user.isBrand ? (
+            <BrandBadge className={styles.communityMember__brandIcon} />
+          ) : null}
+        </div>
       </div>
     </div>
   );

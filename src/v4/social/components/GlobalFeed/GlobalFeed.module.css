@@ -45,6 +45,10 @@
   width: 100%;
 }
 
+.global_feed__divider + .global_feed__divider {
+  display: none;
+}
+
 .global_feed__post__divider {
   width: 100%;
   background-color: var(--asc-color-base-shade4);

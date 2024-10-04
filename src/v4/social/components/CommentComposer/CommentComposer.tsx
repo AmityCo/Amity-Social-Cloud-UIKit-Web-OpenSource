@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Avatar, Typography } from '~/v4/core/components';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useImage } from '~/v4/core/hooks/useImage';
@@ -52,15 +52,14 @@ export const CommentComposer = ({
   community,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
-  const { user } = useUser(userId);
+  const { user } = useUser({ userId });
   const avatarUrl = useImage({ fileId: user?.avatar?.fileId, imageSize: 'small' });
   const editorRef = useRef<CommentInputRef | null>(null);
-  const composerRef = useRef<HTMLDivElement | null>(null);
   const composerInputRef = useRef<HTMLDivElement | null>(null);
   const componentId = 'comment_composer_bar';
+  const mentionContainerRef = useRef<HTMLDivElement | null>(null);
 
   const [composerHeight, setComposerHeight] = useState(0);
-  const [mentionOffsetBottom, setMentionOffsetBottom] = useState(0);
 
   const [textValue, setTextValue] = useState<CreateCommentParams>({
     data: {
@@ -74,10 +73,6 @@ export const CommentComposer = ({
     ],
     metadata: {},
   });
-
-  const onChange = (val: any) => {
-    setTextValue(val);
-  };
 
   const { mutateAsync } = useMutation({
     mutationFn: async ({ params }: { params: CreateCommentParams }) => {
@@ -103,21 +98,6 @@ export const CommentComposer = ({
     },
   });
 
-  useEffect(() => {
-    if (composerInputRef.current) {
-      // NOTE: Cannot use ref to get padding of the container and inside input
-      const containerPaddingBottom = 8;
-      const inputPaddingBottom = 10;
-      setMentionOffsetBottom(
-        composerInputRef.current.offsetHeight - inputPaddingBottom + containerPaddingBottom,
-      );
-    }
-
-    if (composerRef.current) {
-      setComposerHeight(composerRef.current.offsetHeight);
-    }
-  }, []);
-
   if (!shouldAllowCreation) {
     return (
       <div className={styles.commentComposer__disableContainer}>
@@ -128,56 +108,78 @@ export const CommentComposer = ({
   }
 
   return (
-    <div className={styles.commentComposer__container} ref={composerRef}>
-      <div className={styles.commentComposer__avatar}>
-        <Avatar avatarUrl={avatarUrl} defaultImage={<User />} />
-      </div>
-
-      <div
-        data-qa-anchor={`${pageId}/${componentId}/comment_composer`}
-        className={styles.commentComposer__input}
-        ref={composerInputRef}
-      >
-        <CommentInput
-          ref={editorRef}
-          onChange={onChange}
-          targetType={referenceType}
-          targetId={referenceId}
-          mentionOffsetBottom={-mentionOffsetBottom}
-          value={textValue}
-          placehoder="Say something nice..."
-          community={community}
-        />
-      </div>
-      <Button
-        data-qa-anchor={`${pageId}/${componentId}/create_comment_button`}
-        isDisabled={!textValue.data.text}
-        className={styles.commentComposer__button}
-        onPress={() => mutateAsync({ params: textValue })}
-      >
-        <Typography.Body>Post</Typography.Body>
-      </Button>
-      {replyTo && (
-        <div
-          className={styles.commentComposer__replyContainer}
-          style={
-            {
-              '--asc-reply-container-offset-bottom': `${composerHeight}px`,
-            } as React.CSSProperties
-          }
-        >
-          <div className={styles.commentComposer__replyContainer__text}>
-            <span>Replying to </span>
-            <span className={styles.commentComposer__replyContainer__username}>
-              {replyTo?.userId}
-            </span>
+    <div className={styles.commentComposer}>
+      <div className={styles.commentComposer__top}>
+        <div className={styles.commentComposer__mentionContainer} ref={mentionContainerRef} />
+        {replyTo && (
+          <div
+            className={styles.commentComposer__replyContainer}
+            style={
+              {
+                '--asc-reply-container-offset-bottom': `${composerHeight}px`,
+              } as React.CSSProperties
+            }
+          >
+            <div
+              data-qa-anchor={`${pageId}/${componentId}/comment_composer_reply_text`}
+              className={styles.commentComposer__replyContainer__text}
+            >
+              <span>Replying to </span>
+              <span className={styles.commentComposer__replyContainer__username}>
+                {replyTo?.userId}
+              </span>
+            </div>
+            <Close
+              onClick={onCancelReply}
+              className={styles.commentComposer__replyContainer__closeButton}
+            />
           </div>
-          <Close
-            onClick={onCancelReply}
-            className={styles.commentComposer__replyContainer__closeButton}
+        )}
+      </div>
+      <div className={styles.commentComposer__container}>
+        <div className={styles.commentComposer__avatar}>
+          <Avatar
+            pageId={pageId}
+            componentId={componentId}
+            avatarUrl={avatarUrl}
+            defaultImage={<User />}
           />
         </div>
-      )}
+        <div
+          className={styles.commentComposer__input}
+          ref={composerInputRef}
+          data-qa-anchor={`${pageId}/${componentId}/comment_composer`}
+        >
+          <CommentInput
+            ref={editorRef}
+            mentionContainer={mentionContainerRef?.current}
+            onChange={({ text, mentioned, mentionees }) => {
+              setTextValue({
+                data: {
+                  text: text,
+                },
+                mentionees: mentionees,
+                metadata: {
+                  mentioned: mentioned,
+                },
+              });
+            }}
+            targetType={referenceType}
+            targetId={referenceId}
+            value={textValue}
+            placehoder="Say something nice..."
+            communityId={community?.communityId}
+          />
+        </div>
+        <Button
+          data-qa-anchor={`${pageId}/${componentId}/comment_composer_post`}
+          isDisabled={!textValue?.data?.text}
+          className={styles.commentComposer__button}
+          onPress={() => mutateAsync({ params: textValue })}
+        >
+          <Typography.Body>Post</Typography.Body>
+        </Button>
+      </div>
     </div>
   );
 };

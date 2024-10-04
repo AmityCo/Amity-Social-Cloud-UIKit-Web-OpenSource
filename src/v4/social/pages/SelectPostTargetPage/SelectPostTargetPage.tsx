@@ -30,7 +30,7 @@ export function SelectPostTargetPage() {
   const { AmityPostTargetSelectionPage } = usePageBehavior();
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { currentUserId } = useSDK();
-  const { user } = useUser(currentUserId);
+  const { user } = useUser({ userId: currentUserId });
   useIntersectionObserver({
     onIntersect: () => {
       if (hasMore && isLoading === false) {

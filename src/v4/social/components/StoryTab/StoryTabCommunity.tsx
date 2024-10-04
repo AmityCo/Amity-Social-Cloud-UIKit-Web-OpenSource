@@ -115,7 +115,12 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
         {isErrored && <ErrorIcon className={clsx(styles.errorIcon)} />}
       </div>
       <Truncate lines={1}>
-        <div className={clsx(styles.storyTitle)}>Story</div>
+        <div
+          data-qa-anchore={`${pageId}/${componentId}/story_title`}
+          className={clsx(styles.storyTitle)}
+        >
+          Story
+        </div>
       </Truncate>
     </div>
   );

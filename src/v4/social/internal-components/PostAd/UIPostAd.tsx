@@ -7,6 +7,7 @@ import { Button } from '~/v4/core/natives/Button';
 import { AdInformation } from '~/v4/social/internal-components/AdInformation/AdInformation';
 
 import styles from './UIPostAd.module.css';
+import clsx from 'clsx';
 
 interface UIPostAdProps {
   ad: Amity.Ad;
@@ -60,9 +61,13 @@ export const UIPostAd = ({
         onPress={handleCallToActionClick}
       >
         <div className={styles.footer__left}>
-          <Typography.Body className={styles.footer__content__description}>
-            {ad.description}
-          </Typography.Body>
+          <Typography.Body
+            renderer={({ typoClassName }) => (
+              <div className={clsx(typoClassName, styles.footer__content__description)}>
+                {ad.description}
+              </div>
+            )}
+          />
           <Typography.BodyBold className={styles.footer__content__headline}>
             {ad.headline}
           </Typography.BodyBold>
@@ -70,9 +75,13 @@ export const UIPostAd = ({
         {ad.callToActionUrl ? (
           <div className={styles.footer__right}>
             <Button className={styles.footer__content__button} onPress={handleCallToActionClick}>
-              <Typography.CaptionBold className={styles.footer__content__button__text}>
-                {ad.callToAction}
-              </Typography.CaptionBold>
+              <Typography.CaptionBold
+                renderer={({ typoClassName }) => (
+                  <div className={clsx(typoClassName, styles.footer__content__button__text)}>
+                    {ad.callToAction}
+                  </div>
+                )}
+              />
             </Button>
           </div>
         ) : null}

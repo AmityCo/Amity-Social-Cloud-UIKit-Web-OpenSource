@@ -165,6 +165,7 @@ export const PostMenu = ({
     <div className={styles.postMenu}>
       {showReportPostButton && !isLoading ? (
         <Button
+          data-qa-anchor={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
           onPress={() => {
             if (isFlaggedByMe) {

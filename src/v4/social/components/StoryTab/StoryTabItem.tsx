@@ -86,7 +86,10 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
           isErrored={isErrored}
         />
 
-        <div className={styles.avatarBackground}>
+        <div
+          data-qa-anchor={`${pageId}/${componentId}/community_avatar`}
+          className={styles.avatarBackground}
+        >
           {communityAvatar && (
             <img className={styles.avatar} src={communityAvatar} alt={community?.displayName} />
           )}
@@ -95,7 +98,10 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
         {community?.isOfficial && !isErrored && <Verified className={styles.verifiedIcon} />}
       </div>
 
-      <Typography.Caption className={clsx(styles.displayName)}>
+      <Typography.Caption
+        data-qa-anchor={`${pageId}/${componentId}/community_name`}
+        className={clsx(styles.displayName)}
+      >
         {!community?.isPublic && <LockIcon />}
         {community?.displayName}
       </Typography.Caption>

@@ -96,6 +96,14 @@ const EditCommunityForm = ({
       await onSubmit?.({ ...data, avatarFileId: data.avatarFileId || undefined });
 
       notification.success({ content: <FormattedMessage id="community.updateSuccess" /> });
+    } catch (error) {
+      console.log('error', error);
+      if (error instanceof Error) {
+        if (error.message.indexOf(':') > -1) {
+          const [, errorMessage] = error.message.split(':');
+          notification.error({ content: errorMessage });
+        }
+      }
     } finally {
       setSubmitting(false);
     }

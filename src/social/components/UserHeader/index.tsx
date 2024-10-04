@@ -22,6 +22,7 @@ const UserHeader = ({ userId, children, onClick, isBanned = false }: UserHeaderP
       displayName={user?.displayName}
       avatarFileUrl={avatarFileUrl}
       isBanned={isBanned}
+      isBrand={user?.isBrand}
       onClick={onClick}
     >
       {children}

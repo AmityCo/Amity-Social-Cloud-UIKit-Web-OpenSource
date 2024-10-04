@@ -11,8 +11,8 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { CommunityVerifyBadge } from '~/v4/social/elements/CommunityVerifyBadge';
 import { CommunityDescription } from '~/v4/social/elements/CommunityDescription';
 import { CommunityName } from '~/v4/social/elements/CommunityName';
-import { CommunityCategory } from '~/v4/social/elements/CommunityCategory';
 import { CommunityInfo } from '~/v4/social/elements/CommunityInfo';
+import { CommunityCategories } from '~/v4/social/internal-components/CommunityCategories/CommunityCategories';
 import Lock from '~/v4/icons/Lock';
 
 interface CommunityProfileHeaderProps {
@@ -59,11 +59,14 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
           {community.isOfficial && <CommunityVerifyBadge />}
         </div>
 
-        <CommunityCategory
-          pageId={pageId}
-          componentId={componentId}
-          categories={communityCategories}
-        />
+        <div className={styles.communityProfile__communityCategories}>
+          <CommunityCategories
+            pageId={pageId}
+            componentId={componentId}
+            community={community}
+            minCategoryCharacters={10}
+          />
+        </div>
 
         <CommunityDescription
           pageId={pageId}

@@ -6,6 +6,7 @@ import Broadcast from '~/v4/icons/Broadcast';
 import InfoCircle from '~/v4/icons/InfoCircle';
 import { Button } from '~/v4/core/natives/Button';
 import { AdInformation } from '~/v4/social/internal-components/AdInformation/AdInformation';
+import clsx from 'clsx';
 
 interface UICommentAdProps {
   ad: Amity.Ad;
@@ -57,9 +58,13 @@ export const UICommentAd = ({
               </div>
               <div className={styles.commentAd__adCard__detail}>
                 <div className={styles.commentAd__adCard__textContainer}>
-                  <Typography.Caption className={styles.commentAd__adCard__description}>
-                    {ad.description}
-                  </Typography.Caption>
+                  <Typography.Caption
+                    renderer={({ typoClassName }) => (
+                      <div className={clsx(typoClassName, styles.commentAd__adCard__description)}>
+                        {ad.description}
+                      </div>
+                    )}
+                  />
                   <Typography.BodyBold className={styles.commentAd__adCard__headline}>
                     {ad.headline}
                   </Typography.BodyBold>

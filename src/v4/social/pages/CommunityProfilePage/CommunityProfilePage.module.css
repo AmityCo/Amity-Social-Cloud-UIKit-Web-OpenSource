@@ -22,19 +22,6 @@
   transform: translateX(-50%);
 }
 
-.communityProfilePage__tabContainer {
-  position: relative;
-  z-index: 1;
-}
-
-.communityProfilePage__tabContainer.sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: var(--asc-color-background-default);
-}
-
 .communityProfilePage__createPostButton {
   position: fixed;
   bottom: 1rem;
