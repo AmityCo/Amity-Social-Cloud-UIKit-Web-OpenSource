@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.0.0-beta.14 (2024-10-04)
+
+
+### Bug Fixes
+
+* condition check target community ([#663](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/663)) ([0bdb50f](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/0bdb50f30be6b3d1e0b251f701da3d78b68f12fe))
+
 ## 4.0.0-beta.13 (2024-09-19)
 
 
