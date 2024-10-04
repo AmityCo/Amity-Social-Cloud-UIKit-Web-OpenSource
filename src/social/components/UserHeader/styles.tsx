@@ -27,6 +27,7 @@ export const UserHeaderTitle = styled.div`
   display: flex;
   min-width: 0;
   align-items: center;
+  gap: 8px;
 
   > div {
     text-overflow: ellipsis;

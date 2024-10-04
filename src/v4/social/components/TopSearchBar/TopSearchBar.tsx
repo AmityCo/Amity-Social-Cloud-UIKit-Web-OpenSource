@@ -6,6 +6,7 @@ import { SearchIcon } from '~/v4/social/elements/SearchIcon';
 import styles from './TopSearchBar.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { Input } from 'react-aria-components';
 
 export interface TopSearchBarProps {
   pageId?: string;
@@ -38,7 +39,7 @@ export function TopSearchBar({ pageId = '*', search }: TopSearchBarProps) {
           defaultClassName={styles.topSearchBar__searchIcon}
           imgClassName={styles.topSearchBar__searchIcon_img}
         />
-        <input
+        <Input
           className={styles.topSearchBar__textInput}
           type="text"
           value={searchValue}

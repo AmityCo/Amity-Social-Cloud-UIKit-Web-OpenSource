@@ -137,7 +137,18 @@
   width: 100%;
 }
 
+.postComment__edit__mentionContainer {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-100%);
+  max-height: 8rem;
+  overflow: scroll;
+}
+
 .postComment__edit__input {
+  position: relative;
   display: flex;
   height: 7.5rem;
   padding: 0.75rem;

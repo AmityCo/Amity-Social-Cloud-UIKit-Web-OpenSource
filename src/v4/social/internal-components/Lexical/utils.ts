@@ -1,10 +1,11 @@
-import { SerializedAutoLinkNode } from '@lexical/link';
+import { SerializedAutoLinkNode, SerializedLinkNode } from '@lexical/link';
 import { InitialConfigType, InitialEditorStateType } from '@lexical/react/LexicalComposer';
 import {
   EditorThemeClasses,
   Klass,
   LexicalEditor,
   LexicalNode,
+  SerializedEditorState,
   SerializedLexicalNode,
   SerializedParagraphNode,
   SerializedRootNode,
@@ -12,6 +13,7 @@ import {
 } from 'lexical';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { SerializedMentionNode } from './nodes/MentionNode';
+import * as linkify from 'linkifyjs';
 
 export interface EditorStateJson extends SerializedLexicalNode {
   children: [];
@@ -33,6 +35,10 @@ export function $isSerializedAutoLinkNode(
   return node.type === 'autolink';
 }
 
+export function $isSerializedLinkNode(node: SerializedLexicalNode): node is SerializedLinkNode {
+  return node.type === 'link';
+}
+
 export type MentionData = {
   userId: string;
   displayName?: string;
@@ -51,6 +57,7 @@ function createRootNode(): SerializedRootNode<SerializedParagraphNode> {
 
 function createParagraphNode(): SerializedParagraphNode {
   return {
+    textStyle: '',
     children: [],
     direction: 'ltr',
     format: '',
@@ -73,20 +80,56 @@ function createSerializeTextNode(text: string): SerializedTextNode {
   };
 }
 
-function createSerializeMentionNode(mention: Mentioned): SerializedMentionNode<MentionData> {
+function createSerializeMentionNode({
+  text,
+  mention,
+}: {
+  text: string;
+  mention: Mentioned;
+}): SerializedMentionNode<MentionData> {
   return {
     detail: 0,
     format: 0,
     mode: 'normal',
     style: '',
-    text: ('@' + mention.userId) as string,
+    text: text.substring(mention.index, mention.index + mention.length + 1),
     type: 'mention',
     version: 1,
     data: {
-      displayName: mention.userId as string,
+      displayName: mention.displayName || (mention.userId as string),
       userId: mention.userId as string,
     },
   };
+}
+
+function createSerializeLinkNode({
+  url,
+  title,
+}: {
+  url: string;
+  title: string;
+}): SerializedLinkNode {
+  return {
+    children: [createSerializeTextNode(title)],
+    format: '',
+    direction: 'ltr',
+    indent: 0,
+    type: 'link',
+    version: 1,
+    url,
+    rel: null,
+    target: null,
+    title: null,
+  };
+}
+
+type LinkData = Mentioned & {
+  href: string;
+  value: string;
+};
+
+function isLinkData(data: Mentioned | LinkData): data is LinkData {
+  return (data as LinkData)?.type === 'url';
 }
 
 export function textToEditorState(value: {
@@ -100,27 +143,76 @@ export function textToEditorState(value: {
 
   const textArray = value.data.text.split('\n');
 
-  const mentions = value.metadata?.mentioned || [];
+  const mentions = value.metadata?.mentioned ?? [];
 
-  let mentionIndex = 0;
+  const links: Array<LinkData> = linkify
+    .find(value.data.text)
+    .filter((link) => link.type === 'url')
+    .map((link) => ({
+      index: link.start,
+      length: link.end - link.start + 1,
+      href: link.href,
+      value: link.value,
+      type: 'url',
+    }));
+
+  const indexMap: Record<number, boolean> = {};
+
+  const mentionsAndLinks = [...mentions, ...links]
+    .sort((a, b) => a.index - b.index)
+    .reduce((acc, mentionAndLink) => {
+      // this function is used to remove duplicate mentions and links that cause an infinite loop
+      if (indexMap[mentionAndLink.index]) {
+        return acc;
+      }
+
+      indexMap[mentionAndLink.index] = true;
+      return [...acc, mentionAndLink];
+    }, [] as Mentioned[]);
+
+  let mentionAndLinkIndex = 0;
   let globalIndex = 0;
 
   for (let i = 0; i < textArray.length; i += 1) {
     const paragraph = createParagraphNode();
     let runningIndex = 0;
 
-    while (runningIndex < textArray[i].length) {
-      if (mentionIndex < mentions.length && mentions[mentionIndex].index === globalIndex) {
-        paragraph.children.push(createSerializeMentionNode(mentions[mentionIndex]));
-        runningIndex += mentions[mentionIndex].length;
-        globalIndex += mentions[mentionIndex].length;
-        mentionIndex += 1;
+    const currentLine = textArray[i];
+
+    while (runningIndex < currentLine.length) {
+      const mentionOrLink = mentionsAndLinks[mentionAndLinkIndex];
+
+      if (mentionAndLinkIndex < mentionsAndLinks.length && mentionOrLink.index === globalIndex) {
+        const mentionOrLink = mentionsAndLinks[mentionAndLinkIndex];
+
+        if (isLinkData(mentionOrLink)) {
+          paragraph.children.push(
+            createSerializeLinkNode({
+              title: mentionOrLink.value,
+              url: mentionOrLink.href,
+            }),
+          );
+          runningIndex += mentionOrLink.value.length;
+          globalIndex += mentionOrLink.value.length;
+        } else {
+          paragraph.children.push(
+            createSerializeMentionNode({
+              text: value.data.text,
+              mention: mentionOrLink,
+            }),
+          );
+          runningIndex += mentionOrLink.length + 1;
+          globalIndex += mentionOrLink.length + 1;
+        }
+
+        mentionAndLinkIndex += 1;
       } else {
         const nextMentionIndex =
-          mentionIndex < mentions.length
-            ? mentions[mentionIndex].index
-            : globalIndex + textArray[i].length;
-        const textSegment = textArray[i].slice(
+          mentionAndLinkIndex < mentionsAndLinks.length
+            ? mentionOrLink.index
+            : globalIndex + currentLine.length;
+
+        const textSegment = currentLine.slice(
           runningIndex,
           nextMentionIndex - globalIndex + runningIndex,
         );
@@ -132,8 +224,8 @@ export function textToEditorState(value: {
       }
     }
 
-    if (runningIndex < textArray[i].length) {
-      const textSegment = textArray[i].slice(runningIndex);
+    if (runningIndex < currentLine.length) {
+      const textSegment = currentLine.slice(runningIndex);
       if (textSegment) {
         paragraph.children.push(createSerializeTextNode(textSegment));
       }
@@ -148,9 +240,14 @@ export function textToEditorState(value: {
   return { root: rootNode };
 }
 
-export function editorStateToText(editor: LexicalEditor) {
+export function editorToText(editor: LexicalEditor) {
+  const editorState = editor.getEditorState().toJSON();
+  return editorStateToText(editorState);
+}
+
+export function editorStateToText(editorState: SerializedEditorState) {
   const editorStateTextString: string[] = [];
-  const paragraphs = editor.getEditorState().toJSON().root.children as EditorStateJson[];
+  const paragraphs = editorState.root.children as EditorStateJson[];
 
   const mentioned: Mentioned[] = [];
   let isChannelMentioned = false;
@@ -167,7 +264,7 @@ export function editorStateToText(editor: LexicalEditor) {
           paragraphText.push(child.text);
           runningIndex += child.text.length;
         }
-        if ($isSerializedAutoLinkNode(child)) {
+        if ($isSerializedLinkNode(child) || $isSerializedAutoLinkNode(child)) {
           child.children.forEach((c) => {
             if (!$isSerializedTextNode(c)) return;
             paragraphText.push(c.text);
@@ -176,6 +273,8 @@ export function editorStateToText(editor: LexicalEditor) {
         }
 
         if ($isSerializedMentionNode<MentionData>(child)) {
+          const isStartWithAtSign = child.text.charAt(0) === '@';
+
           if (child.data.userId === 'all') {
             mentioned.push({
               index: runningIndex,
@@ -184,11 +283,13 @@ export function editorStateToText(editor: LexicalEditor) {
             });
             isChannelMentioned = true;
           } else {
+            const textLength = isStartWithAtSign ? child.text.length - 1 : child.text.length;
             mentioned.push({
               index: runningIndex,
-              length: child.text.length,
+              length: textLength,
               type: 'user',
               userId: child.data.userId,
+              displayName: child.data.displayName,
             });
             mentioneeUserIds.push(child.data.userId);
           }

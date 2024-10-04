@@ -174,7 +174,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           }}
         />
 
-        <Thumbnail postMedia={postImages} onRemove={handleRemoveThumbnailImage} />
+        <Thumbnail pageId={pageId} postMedia={postImages} onRemove={handleRemoveThumbnailImage} />
         <Thumbnail postMedia={postVideos} onRemove={handleRemoveThumbnailVideo} />
 
         <div ref={mentionRef} className={styles.mentionTextInput_item} />

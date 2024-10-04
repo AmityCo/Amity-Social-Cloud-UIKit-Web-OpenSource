@@ -23,7 +23,7 @@ import { MentionPlugin } from '~/v4/social/internal-components/Lexical/plugins/M
 
 import { useMutation } from '@tanstack/react-query';
 import {
-  editorStateToText,
+  editorToText,
   getEditorConfig,
   MentionData,
 } from '~/v4/social/internal-components/Lexical/utils';
@@ -148,7 +148,7 @@ export const MessageComposer = ({
     if (!channel) return;
     if (!editorRef.current) return;
 
-    const { mentioned, mentionees, text } = editorStateToText(editorRef.current);
+    const { mentioned, mentionees, text } = editorToText(editorRef.current);
 
     if (text?.trim().length === 0) return;
 

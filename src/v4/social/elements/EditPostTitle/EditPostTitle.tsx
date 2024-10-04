@@ -9,7 +9,7 @@ interface EditPostTitleProps {
 
 export function EditPostTitle({ pageId = '*', componentId = '*' }: EditPostTitleProps) {
   const elementId = 'edit_post_title';
-  const { config, isExcluded, themeStyles } = useAmityElement({
+  const { config, isExcluded, themeStyles, accessibilityId } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -17,7 +17,7 @@ export function EditPostTitle({ pageId = '*', componentId = '*' }: EditPostTitle
   if (isExcluded) return null;
 
   return (
-    <div style={themeStyles} className={styles.editPostTitle}>
+    <div data-qa-anchor={accessibilityId} style={themeStyles} className={styles.editPostTitle}>
       {config.text}
     </div>
   );

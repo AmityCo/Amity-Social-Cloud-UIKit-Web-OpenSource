@@ -47,6 +47,10 @@
   width: 100%;
 }
 
+.newsfeed__divider + .newsfeed__divider {
+  display: none;
+}
+
 .newsfeed__post__divider {
   width: 100%;
   background-color: var(--asc-color-base-shade4);

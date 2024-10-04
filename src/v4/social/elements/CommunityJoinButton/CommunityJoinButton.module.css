@@ -10,7 +10,34 @@
   margin-top: 1rem;
 }
 
+.communityJoinButton[data-is-joined='true'] {
+  background: var(--asc-color-background-transparent-white);
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
 .joinButton {
   width: 1.25rem;
   height: 1rem;
+  fill: var(--asc-color-white);
+}
+
+.checkButton {
+  width: 1.25rem;
+  height: 1rem;
+  fill: var(--asc-color-black);
+}
+
+.communityJoinButton__text {
+  color: var(--asc-color-white);
+
+  /* IOS / 13 Caption Bold */
+  font-size: 0.8125rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.125rem; /* 138.462% */
+  letter-spacing: -0.005rem;
+}
+
+.communityJoinButton__text[data-is-joined='true'] {
+  color: var(--asc-color-black);
 }
