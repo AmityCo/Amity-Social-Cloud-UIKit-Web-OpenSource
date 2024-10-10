@@ -63,7 +63,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   const { community } = useCommunityInfo(communityId);
 
   const { currentUserId, client } = useSDK();
-  const { user } = useUser(currentUserId);
+  const { user } = useUser({ userId: currentUserId });
   const isGlobalAdmin = isAdmin(user?.roles);
   const hasStoryPermission = isGlobalAdmin || checkStoryPermission(client, communityId);
   const hasStories = stories?.length > 0;
