@@ -175,7 +175,7 @@ export const CommentComposer = ({
           data-qa-anchor={`${pageId}/${componentId}/comment_composer_post`}
           isDisabled={!textValue?.data?.text}
           className={styles.commentComposer__button}
-          onPress={() => mutateAsync({ params: textValue })}
+          onPressStart={() => mutateAsync({ params: textValue })}
         >
           <Typography.Body>Post</Typography.Body>
         </Button>
