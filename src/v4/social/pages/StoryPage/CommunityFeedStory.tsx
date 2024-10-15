@@ -115,7 +115,7 @@ export const CommunityFeedStory = ({
 
   const nextStory = () => {
     if (currentIndex === stories.length - 1) {
-      onBack();
+      onClose(communityId);
       return;
     }
     setCurrentIndex(currentIndex + 1);
@@ -214,7 +214,7 @@ export const CommunityFeedStory = ({
 
   const increaseIndex = () => {
     if (currentIndex === stories.length - 1) {
-      onBack();
+      onClose(communityId);
       return;
     }
     setCurrentIndex((prevIndex) => prevIndex + 1);
