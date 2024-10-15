@@ -177,9 +177,9 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
         const root = $getRoot();
         root.clear();
       });
-      requestAnimationFrame(() => {
+      setTimeout(() => {
         editorRef.current?.blur();
-      });
+      }, 500);
     };
 
     useImperativeHandle(ref, () => ({
