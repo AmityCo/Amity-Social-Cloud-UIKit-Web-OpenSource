@@ -400,7 +400,10 @@ export const PostContent = ({
             ) : null}
             <Timestamp timestamp={post.createdAt} />
             {post.createdAt !== post.editedAt && (
-              <Typography.Caption className={styles.postContent__bar__information__editedTag}>
+              <Typography.Caption
+                data-qa-anchor={`${pageId}/${componentId}/post_edited_text`}
+                className={styles.postContent__bar__information__editedTag}
+              >
                 (edited)
               </Typography.Caption>
             )}

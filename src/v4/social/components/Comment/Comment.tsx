@@ -248,7 +248,9 @@ export const Comment = ({
                       componentId={componentId}
                       timestamp={comment.createdAt}
                     />
-                    {comment.createdAt !== comment.editedAt && ' (edited)'}
+                    <span data-qa-anchor={`${pageId}/${componentId}/comment_edited_text`}>
+                      {comment.createdAt !== comment.editedAt && ' (edited)'}
+                    </span>
                   </Typography.Caption>
 
                   <div onClick={handleLike}>

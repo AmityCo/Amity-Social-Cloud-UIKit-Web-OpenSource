@@ -187,7 +187,9 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
                     componentId={componentId}
                     timestamp={comment.createdAt}
                   />
-                  {comment.createdAt !== comment.editedAt && ' (edited)'}
+                  <span data-qa-anchor={`${pageId}/${componentId}/reply_comment_edited_text`}>
+                    {comment.createdAt !== comment.editedAt && ' (edited)'}
+                  </span>
                 </Typography.Caption>
                 <div onClick={handleLike}>
                   <Typography.CaptionBold
