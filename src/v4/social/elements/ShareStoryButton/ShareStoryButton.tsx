@@ -55,7 +55,12 @@ export const ShareStoryButton = ({
       data-hideAvatar={config?.hide_avatar}
     >
       {!config?.hide_avatar && (
-        <CommunityAvatar pageId={pageId} componentId={componentId} community={community} />
+        <CommunityAvatar
+          pageId={pageId}
+          community={community}
+          componentId={componentId}
+          className={styles.shareStoryButton__image}
+        />
       )}
       <Typography.BodyBold>{config?.text || 'Share story'}</Typography.BodyBold>
       <ArrowRightIcon />
