@@ -9,6 +9,7 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useImage } from '~/v4/core/hooks/useImage';
 
 import styles from './StoryTabItem.module.css';
+import Lock from '~/v4/icons/Lock';
 
 const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -102,7 +103,7 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
         data-qa-anchor={`${pageId}/${componentId}/community_name`}
         className={clsx(styles.displayName)}
       >
-        {!community?.isPublic && <LockIcon />}
+        {!community?.isPublic && <Lock className={styles.lockIcon} />}
         {community?.displayName}
       </Typography.Caption>
     </div>
