@@ -6,8 +6,14 @@ import {
 } from '@amityco/ts-sdk';
 import isEmpty from 'lodash/isEmpty';
 
-export type Mentioned = { userId: string; length: number; index: number; type: string };
-export type Mentionees = Parameters<typeof CommentRepository.updateComment>[1]['mentionees'];
+export type Mentioned = {
+  userId: string;
+  length: number;
+  index: number;
+  type: string;
+  displayName: string;
+};
+export type Mentionees = Amity.UserMention[];
 export type Metadata = {
   mentioned?: Mentioned[];
 };
@@ -116,6 +122,7 @@ export function extractMetadata(
           length: displayName.length - AT_SIGN_LENGTH,
           type: 'user',
           userId: id,
+          displayName,
         })),
     ];
 
@@ -159,4 +166,27 @@ export function parseMentionsMarkup(
 
 export function isNonNullable<TValue>(value: TValue | undefined | null): value is TValue {
   return value != null;
+}
+
+export function reconstructMentions(
+  metadata?: Metadata,
+  mentionees?: Mentionees,
+): { plainTextIndex: number; id: string; display: string }[] {
+  if (!metadata?.mentioned || mentionees?.length === 0) {
+    return [];
+  }
+
+  const userIds = mentionees?.find((mentionee) => mentionee.type === 'user')?.userIds || [];
+
+  return metadata?.mentioned?.map((mention, index) => {
+    const id = userIds[index];
+    const displayName = mention.displayName;
+    const display = '@' + (displayName ?? id);
+
+    return {
+      plainTextIndex: mention.index,
+      id,
+      display,
+    };
+  });
 }

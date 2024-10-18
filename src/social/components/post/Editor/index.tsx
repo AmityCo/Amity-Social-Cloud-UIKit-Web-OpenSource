@@ -6,20 +6,19 @@ import { PostEditorContainer, Footer, ContentContainer, PostButton } from './sty
 import { usePostEditor } from './usePostEditor';
 
 interface PostEditorProps {
-  postId?: string;
+  post: Amity.Post;
   onSave: () => void;
   className?: string;
   placeholder?: string;
 }
 
 const PostEditor = ({
-  postId,
+  post,
   placeholder = "What's going on...",
   className,
   onSave,
 }: PostEditorProps) => {
   const {
-    post,
     markup,
     onChange,
     queryMentionees,
@@ -30,7 +29,7 @@ const PostEditor = ({
     isEmpty,
     handleSave,
   } = usePostEditor({
-    postId,
+    post,
     onSave,
   });
 
