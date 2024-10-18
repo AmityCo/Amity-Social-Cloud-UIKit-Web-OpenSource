@@ -46,6 +46,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--asc-color-secondary-default);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .errorIcon {
@@ -53,4 +55,10 @@
   bottom: 0;
   right: 0;
   cursor: pointer;
+}
+
+.lockIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  fill: currentcolor;
 }

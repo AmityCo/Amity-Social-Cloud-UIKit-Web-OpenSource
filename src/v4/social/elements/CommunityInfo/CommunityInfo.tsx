@@ -28,7 +28,11 @@ export const CommunityInfo = ({
   });
   if (isExcluded) return null;
   return (
-    <Button onPress={onClick} className={styles.communityInfo__container}>
+    <Button
+      data-qa-anchor={accessibilityId}
+      onPress={onClick}
+      className={styles.communityInfo__container}
+    >
       <div className={styles.communityInfo__wrapper}>
         <Typography.BodyBold className={styles.communityInfo__count}>
           {millify(count)}

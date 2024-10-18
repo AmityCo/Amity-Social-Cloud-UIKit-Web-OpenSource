@@ -161,6 +161,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           />
         </div>
         <PostTextField
+          pageId={pageId}
           communityId={post.targetType === 'community' ? post.targetId : undefined}
           onChange={onChange}
           mentionContainer={mentionRef.current}
@@ -173,7 +174,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           }}
         />
 
-        <Thumbnail postMedia={postImages} onRemove={handleRemoveThumbnailImage} />
+        <Thumbnail pageId={pageId} postMedia={postImages} onRemove={handleRemoveThumbnailImage} />
         <Thumbnail postMedia={postVideos} onRemove={handleRemoveThumbnailVideo} />
 
         <div ref={mentionRef} className={styles.mentionTextInput_item} />

@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './MentionUser.module.css';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
 import { MentionTypeaheadOption } from './CommentMentionInput';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 
 interface MentionUserProps {
   isSelected: boolean;
@@ -34,7 +35,12 @@ export function MentionUser({ isSelected, onClick, onMouseEnter, option }: Menti
             userId={option.user.avatarFileId}
           />
         </div>
-        <p className={styles.communityMember__displayName}>{option.user.displayName}</p>
+        <div className={styles.communityMember__rightPane}>
+          <p className={styles.communityMember__displayName}>{option.user.displayName}</p>
+          {option.user.isBrand ? (
+            <BrandBadge className={styles.communityMember__brandIcon} />
+          ) : null}
+        </div>
       </div>
     </div>
   );

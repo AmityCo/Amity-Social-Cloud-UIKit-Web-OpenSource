@@ -4,7 +4,7 @@ import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 export const useGlobalStoryTargets = (
   params: Amity.LiveCollectionParams<Amity.StoryGlobalQuery>,
 ) => {
-  const { items, hasMore, loadMore, isLoading, ...rest } = useLiveCollection({
+  const { items, hasMore, loadMore, isLoading, refresh, ...rest } = useLiveCollection({
     fetcher: StoryRepository.getGlobalStoryTargets,
     params,
     shouldCall: true,
@@ -21,6 +21,7 @@ export const useGlobalStoryTargets = (
     hasMore,
     isLoading,
     loadMoreStories,
+    refresh,
     ...rest,
   };
 };

@@ -33,11 +33,11 @@ const CommunityEditPage = ({
 
   useEffect(() => setActiveTab(tab), [tab]);
 
-  const { onClickCommunity } = useNavigation();
+  const { onBack } = useNavigation();
   const community = useCommunity(communityId);
   const avatarFileUrl = useImage({ fileId: community?.avatarFileId, imageSize: 'medium' });
 
-  const handleReturnToCommunity = () => communityId && onClickCommunity(communityId);
+  const handleReturnToCommunity = () => communityId && onBack();
 
   const handleEditCommunity = async (
     data: Parameters<typeof CommunityRepository.updateCommunity>[1],

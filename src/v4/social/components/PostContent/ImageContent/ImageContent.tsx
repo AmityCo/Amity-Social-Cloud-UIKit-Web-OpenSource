@@ -24,12 +24,16 @@ const ImageThumbnail = ({ fileId }: { fileId: string }) => {
 };
 
 const Image = ({
+  pageId = '*',
+  componentId = '*',
   postId,
   index,
   imageLeftCount,
   postAmount,
   onImageClick,
 }: {
+  pageId?: string;
+  componentId?: string;
   postId: string;
   index: number;
   imageLeftCount: number;
@@ -44,6 +48,7 @@ const Image = ({
 
   return (
     <Button
+      data-qa-anchor={`${pageId}/${componentId}/post_image`}
       key={imagePost.postId}
       className={styles.imageContent__imgContainer}
       onPress={() => onImageClick()}
@@ -93,6 +98,8 @@ export const ImageContent = ({
     >
       {first4Images.map((postId: string, index: number) => (
         <Image
+          pageId={pageId}
+          componentId={componentId}
           key={postId}
           postId={postId}
           index={index}

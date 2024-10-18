@@ -48,13 +48,15 @@ export function CommentButton({
   if (isExcluded) return null;
 
   return (
-    <Button onPress={onPress}>
+    <Button onPress={onPress} data-qa-anchor={accessibilityId}>
       <IconComponent
-        data-qa-anchor={accessibilityId}
         defaultIcon={() => (
           <div className={clsx(styles.commentButton)}>
             <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
-            <Typography.BodyBold className={styles.commentButton__text}>
+            <Typography.BodyBold
+              data-qa-anchor={`${pageId}/${componentId}/comment_count`}
+              className={styles.commentButton__text}
+            >
               {typeof commentsCount === 'number' ? commentsCount : config.text}
             </Typography.BodyBold>
           </div>

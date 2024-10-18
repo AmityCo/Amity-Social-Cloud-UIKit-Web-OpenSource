@@ -38,7 +38,7 @@ export function CreateCommunityButton({
         configIconName={config.icon}
         defaultIconName={defaultConfig.icon}
       />
-      <Typography.Body>{config.text}</Typography.Body>
+      <Typography.Body>Create Community</Typography.Body>
     </div>
   );
 }

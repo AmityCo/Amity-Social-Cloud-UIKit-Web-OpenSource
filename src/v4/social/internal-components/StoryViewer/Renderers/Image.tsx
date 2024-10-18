@@ -77,7 +77,7 @@ export const renderer: CustomRenderer = ({
   const member = members?.find((member) => member.userId === client?.userId);
   const isMember = member != null;
 
-  const { user } = useUser(client?.userId);
+  const { user } = useUser({ userId: client?.userId });
 
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;

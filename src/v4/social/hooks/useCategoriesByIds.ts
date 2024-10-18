@@ -8,9 +8,11 @@ const useCategoriesByIds = (categoryIds?: string[]) => {
     async function run() {
       if (categoryIds == null || categoryIds.length === 0) return;
       const categories = await Promise.all(
-        categoryIds.map(
-          async (categoryId) => (await CategoryRepository.getCategory(categoryId)).data,
-        ),
+        categoryIds.map(async (categoryId) => {
+          const cache = CategoryRepository.getCategory.locally(categoryId);
+          if (cache?.data) return cache.data;
+          return (await CategoryRepository.getCategory(categoryId)).data;
+        }),
       );
       setCategories(categories);
     }
@@ -19,5 +21,4 @@ const useCategoriesByIds = (categoryIds?: string[]) => {
 
   return categories;
 };
-
 export default useCategoriesByIds;

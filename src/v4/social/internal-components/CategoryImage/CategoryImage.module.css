@@ -1,0 +1,7 @@
+.categoryImage__placeHolderRect {
+  fill: var(--asc-color-primary-shade2);
+}
+
+.categoryImage__placeHolderPath {
+  fill: var(--asc-color-white);
+}

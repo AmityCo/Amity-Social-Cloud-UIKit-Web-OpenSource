@@ -19,9 +19,12 @@ import CommunityEditPage from '~/social/pages/CommunityEdit';
 import ProfileSettings from '~/social/components/ProfileSettings';
 import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
 import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
+import { AllCategoriesPage } from '~/v4/social/pages/AllCategoriesPage';
+import { CommunitiesByCategoryPage } from '~/v4/social/pages/CommunitiesByCategoryPage';
+import CommunityCreationModal from '~/social/components/CommunityCreationModal';
 
 const Application = () => {
-  const { page } = useNavigation();
+  const { page, onBack } = useNavigation();
 
   const [open, setOpen] = useState(false);
   const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
@@ -69,8 +72,11 @@ const Application = () => {
         )}
         {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />}
         {page.type === PageTypes.MyCommunitiesSearchPage && <MyCommunitiesSearchPage />}
+        {page.type === PageTypes.AllCategoriesPage && <AllCategoriesPage />}
+        {page.type === PageTypes.CommunitiesByCategoryPage && (
+          <CommunitiesByCategoryPage categoryId={page.context.categoryId} />
+        )}
         {/* V3 */}
-        {page.type === PageTypes.Explore}
         {page.type === PageTypes.CommunityFeed && (
           <CommunityFeed
             communityId={page.context.communityId}
@@ -87,6 +93,9 @@ const Application = () => {
         )}
 
         {page.type === PageTypes.UserEdit && <ProfileSettings userId={page.context.userId} />}
+        {page.type === PageTypes.CommunityCreatePage && (
+          <CommunityCreationModal isOpen={true} onClose={onBack} />
+        )}
 
         {/*End of V3 */}
       </div>

@@ -326,6 +326,13 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
 
   if (!stories || stories.length === 0) return null;
 
+  const getCurrentIndex = () => {
+    if (formattedStories[currentIndex]) return currentIndex;
+    const lastStoryIndex = formattedStories.length - 1;
+    setCurrentIndex(lastStoryIndex);
+    return lastStoryIndex;
+  };
+
   return (
     <div className={clsx(styles.storyWrapper)} data-qa-anchor={accessibilityId}>
       <ArrowLeftButton onClick={previousStory} />
@@ -368,7 +375,7 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
               display: 'none',
             }}
             preventDefault
-            currentIndex={currentIndex}
+            currentIndex={getCurrentIndex()}
             stories={formattedStories}
             renderers={globalFeedRenderers as RendererObject[]}
             defaultInterval={DEFAULT_IMAGE_DURATION}

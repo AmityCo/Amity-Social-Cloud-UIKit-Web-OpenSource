@@ -7,6 +7,8 @@ import ReplyComment from '~/v4/social/components/ReplyComment/ReplyComment';
 import styles from './ReplyCommentList.module.css';
 
 interface ReplyCommentProps {
+  pageId?: string;
+  componentId?: string;
   community?: Amity.Community;
   referenceId: string;
   referenceType: string;
@@ -14,6 +16,8 @@ interface ReplyCommentProps {
 }
 
 export const ReplyCommentList = ({
+  pageId = '*',
+  componentId = '*',
   referenceId,
   referenceType,
   community,
@@ -36,7 +40,9 @@ export const ReplyCommentList = ({
     <div>
       {isLoading && <CommentSkeleton numberOfSkeletons={3} />}
       {comments.map((comment) => {
-        return <ReplyComment community={community} comment={comment as Amity.Comment} />;
+        return (
+          <ReplyComment pageId={pageId} community={community} comment={comment as Amity.Comment} />
+        );
       })}
       {hasMore && (
         <div

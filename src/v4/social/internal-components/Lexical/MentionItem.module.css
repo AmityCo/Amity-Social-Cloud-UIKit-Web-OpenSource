@@ -47,3 +47,16 @@
   overflow: hidden;
   color: var(--asc-color-base-default);
 }
+
+.userMentionItem__rightPane {
+  display: grid;
+  grid-template-columns: auto 1.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.userMentionItem__brandIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

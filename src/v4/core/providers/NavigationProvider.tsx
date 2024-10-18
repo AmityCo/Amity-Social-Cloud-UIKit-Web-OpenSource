@@ -23,6 +23,9 @@ export enum PageTypes {
   PostComposerPage = 'PostComposerPage',
   MyCommunitiesSearchPage = 'MyCommunitiesSearchPage',
   StoryTargetSelectionPage = 'StoryTargetSelectionPage',
+  AllCategoriesPage = 'AllCategoriesPage',
+  CommunitiesByCategoryPage = 'CommunitiesByCategoryPage',
+  CommunityCreatePage = 'CommunityCreatePage',
 }
 
 type Page =
@@ -103,6 +106,18 @@ type Page =
     }
   | {
       type: PageTypes.StoryTargetSelectionPage;
+    }
+  | {
+      type: PageTypes.AllCategoriesPage;
+    }
+  | {
+      type: PageTypes.CommunitiesByCategoryPage;
+      context: {
+        categoryId: string;
+      };
+    }
+  | {
+      type: PageTypes.CommunityCreatePage;
     };
 
 type ContextValue = {
@@ -123,6 +138,7 @@ type ContextValue = {
   goToMyCommunitiesSearchPage: () => void;
   goToSelectPostTargetPage: () => void;
   goToStoryTargetSelectionPage: () => void;
+  goToCommunityCreatePage: () => void;
   goToDraftStoryPage: (
     targetId: string,
     targetType: string,
@@ -161,6 +177,8 @@ type ContextValue = {
     storyType: 'communityFeed' | 'globalFeed';
   }) => void;
   goToSocialHomePage: () => void;
+  goToAllCategoriesPage: () => void;
+  goToCommunitiesByCategoryPage: (context: { categoryId: string }) => void;
   //V3 functions
   onClickStory: (
     storyId: string,
@@ -196,10 +214,13 @@ let defaultValue: ContextValue = {
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
   goToStoryTargetSelectionPage: () => {},
+  goToCommunityCreatePage: () => {},
   goToPostComposerPage: () => {},
   goToStoryCreationPage: () => {},
   goToSocialHomePage: () => {},
   goToMyCommunitiesSearchPage: () => {},
+  goToAllCategoriesPage: () => {},
+  goToCommunitiesByCategoryPage: (context: { categoryId: string }) => {},
   setNavigationBlocker: () => {},
   onBack: () => {},
   //V3 functions
@@ -237,6 +258,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToSocialGlobalSearchPage: (tab) =>
       console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
+    goToCommunityCreatePage: () => console.log('NavigationContext goToCommunityCreatePage()'),
     goToStoryTargetSelectionPage: () =>
       console.log('NavigationContext goToStoryTargetSelectionPage()'),
     goToDraftStoryPage: (data) => console.log(`NavigationContext goToDraftStoryPage()`),
@@ -245,6 +267,9 @@ if (process.env.NODE_ENV !== 'production') {
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
     goToMyCommunitiesSearchPage: () =>
       console.log('NavigationContext goToMyCommunitiesSearchPage()'),
+    goToAllCategoriesPage: () => console.log('NavigationContext goToAllCategoriesPage()'),
+    goToCommunitiesByCategoryPage: (context) =>
+      console.log(`NavigationContext goToCommunitiesByCategoryPage(${context})`),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -289,7 +314,10 @@ interface NavigationProviderProps {
     mediaType: AmityStoryMediaType,
     storyType: 'communityFeed' | 'globalFeed',
   ) => void;
+  goToAllCategoriesPage?: () => void;
+  goToCommunitiesByCategoryPage?: (context: { categoryId: string }) => void;
   onCommunityCreated?: (communityId: string) => void;
+  goToCommunityCreatePage?: () => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
   onMessageUser?: (userId: string) => void;
@@ -541,6 +569,15 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToCommunityCreatePage = useCallback(() => {
+    const next = {
+      type: PageTypes.CommunityCreatePage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
   const goToSocialGlobalSearchPage = useCallback(
     (tab?: string) => {
       const next = {
@@ -640,6 +677,27 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
+  const goToAllCategoriesPage = useCallback(() => {
+    const next = {
+      type: PageTypes.AllCategoriesPage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
+  const goToCommunitiesByCategoryPage = useCallback(
+    (context) => {
+      const next = {
+        type: PageTypes.CommunitiesByCategoryPage,
+        context,
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   const handleClickStory = useCallback(
     (targetId, storyType, targetIds) => {
       const next = {
@@ -683,6 +741,9 @@ export default function NavigationProvider({
         goToPostComposerPage,
         goToSocialHomePage,
         goToMyCommunitiesSearchPage,
+        goToAllCategoriesPage,
+        goToCommunitiesByCategoryPage,
+        goToCommunityCreatePage,
         setNavigationBlocker,
         onClickStory: handleClickStory,
       }}

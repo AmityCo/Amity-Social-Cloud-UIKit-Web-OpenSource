@@ -6,6 +6,7 @@ import useFileUpload from '~/v4/social/hooks/useFileUpload';
 import { FileRepository } from '@amityco/ts-sdk';
 
 interface ImageThumbnailProps {
+  pageId?: string;
   files: File[];
   uploadedFiles: Amity.File[];
   onChange: (data: { uploaded: Array<Amity.File>; uploading: Array<File> }) => void;
@@ -16,6 +17,7 @@ interface ImageThumbnailProps {
 }
 
 export function ImageThumbnail({
+  pageId = '*',
   files,
   uploadedFiles,
   onChange,
@@ -59,11 +61,16 @@ export function ImageThumbnail({
             ) : (
               <>
                 <img
+                  data-qa-anchor={`${pageId}/*/image_thumbnail`}
                   className={styles.thumbnail}
                   src={FileRepository.fileUrlWithSize((file as Amity.File)?.fileUrl, 'medium')}
                   alt={(file as Amity.File).attributes?.name}
                 />
-                <button type="reset" onClick={() => removeFile(file)}>
+                <button
+                  data-qa-anchor={`${pageId}/*/remove_thumbnail`}
+                  type="reset"
+                  onClick={() => removeFile(file)}
+                >
                   <CloseIcon className={styles.closeIcon} />
                 </button>
               </>

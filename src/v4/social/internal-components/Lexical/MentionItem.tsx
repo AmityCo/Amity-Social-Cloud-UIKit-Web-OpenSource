@@ -4,15 +4,30 @@ import { MentionTypeaheadOption } from './plugins/MentionPlugin';
 import { MentionData } from './utils';
 
 import styles from './MentionItem.module.css';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 
 interface MentionItemProps {
+  pageId?: string;
+  componentId?: string;
   isSelected: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
   option: MentionTypeaheadOption<MentionData>;
 }
 
-export function MentionItem({ option, isSelected, onClick, onMouseEnter }: MentionItemProps) {
+export function MentionItem({
+  pageId = '*',
+  componentId = '*',
+  option,
+  isSelected,
+  onClick,
+  onMouseEnter,
+}: MentionItemProps) {
+  const { user } = useUser({
+    userId: option.data.userId,
+  });
+
   return (
     <li
       key={option.key}
@@ -26,9 +41,17 @@ export function MentionItem({ option, isSelected, onClick, onMouseEnter }: Menti
       onClick={onClick}
     >
       <div>
-        <UserAvatar className={styles.userMentionItem__avatar} userId={option.data.userId} />
+        <UserAvatar
+          pageId={pageId}
+          componentId={componentId}
+          className={styles.userMentionItem__avatar}
+          userId={option.data.userId}
+        />
       </div>
-      <p className={styles.userMentionItem__displayName}>{option.data.displayName}</p>
+      <div className={styles.userMentionItem__rightPane}>
+        <p className={styles.userMentionItem__displayName}>{user?.displayName}</p>
+        {user?.isBrand ? <BrandBadge className={styles.userMentionItem__brandIcon} /> : null}
+      </div>
     </li>
   );
 }

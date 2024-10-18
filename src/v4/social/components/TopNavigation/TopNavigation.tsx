@@ -28,9 +28,8 @@ export function TopNavigation({
   const handleGlobalSearchClick = () => {
     switch (selectedTab) {
       case HomePageTab.Newsfeed:
-        goToSocialGlobalSearchPage();
-        break;
       case HomePageTab.Explore:
+        goToSocialGlobalSearchPage();
         break;
       case HomePageTab.MyCommunities:
         goToMyCommunitiesSearchPage();
