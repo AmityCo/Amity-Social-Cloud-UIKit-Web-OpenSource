@@ -21,7 +21,6 @@ export const ShareStoryButton = ({
   componentId = '*',
 }: ShareButtonProps) => {
   const elementId = 'share_story_button';
-
   const { config, isExcluded, accessibilityId } = useAmityElement({
     pageId,
     componentId,

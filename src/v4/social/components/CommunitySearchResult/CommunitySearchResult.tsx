@@ -13,6 +13,7 @@ import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInter
 type CommunitySearchResultProps = {
   pageId?: string;
   isLoading: boolean;
+  showJoinButton?: boolean;
   onLoadMore: () => void;
   showJoinButton?: boolean;
   onClosePopover?: () => void;
@@ -35,6 +36,8 @@ export const CommunitySearchResult = ({
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
+
+  const { joinCommunity, leaveCommunity } = useCommunityActions();
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.communitySearchResult}>

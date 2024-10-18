@@ -4,6 +4,7 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Plus as PlusIcon } from '~/v4/icons/Plus';
 import clsx from 'clsx';
+import { Typography } from '~/v4/core/components/Typography';
 
 type CommunityJoinButtonProps = ButtonProps & {
   pageId?: string;

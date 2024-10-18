@@ -6,6 +6,8 @@ import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { Button } from '~/v4/core/components/AriaButton';
 import { BrandBadge } from '~/v4/social/elements';
 import styles from './MentionItem.module.css';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 
 type MentionItemProps = {
   pageId?: string;

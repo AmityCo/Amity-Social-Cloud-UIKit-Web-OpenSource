@@ -23,6 +23,7 @@ const MediaComponent = ({
   const elementId = 'remove_thumbnail';
 
   if (!thumbnailUrl) return null;
+
   return (
     <>
       <img className={styles.thumbnail} src={thumbnailUrl} alt="thumbnail" />

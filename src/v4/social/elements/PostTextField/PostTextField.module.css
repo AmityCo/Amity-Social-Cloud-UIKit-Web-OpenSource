@@ -74,3 +74,9 @@
   height: 1.5rem;
   fill: var(--asc-color-white);
 }
+
+.postTextField__mentionInterceptor {
+  width: 100%;
+  height: 1px;
+  background-color: var(--asc-color-background-default);
+}

@@ -108,6 +108,11 @@ export const Comment = ({
 
   const { onClickUser } = useNavigation();
 
+  const { isModerator: isModeratorUser } = useCommunityPostPermission({
+    community,
+    userId: comment.creator?.userId,
+  });
+
   const toggleBottomSheet = () => setBottomSheetOpen((prev) => !prev);
 
   const {

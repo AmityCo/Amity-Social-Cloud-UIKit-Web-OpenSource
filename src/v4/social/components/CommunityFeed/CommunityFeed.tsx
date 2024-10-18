@@ -138,6 +138,32 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     },
   });
 
+  const announcementPosts = allPinnedPost.filter((item) => item.placement === 'announcement');
+
+  const pinnedPosts = allPinnedPost.filter(
+    (item) =>
+      item.placement === 'default' &&
+      !announcementPosts.map((item) => item.post.postId).includes(item.post.postId),
+  );
+
+  const isAnnouncePostWasPinned = allPinnedPost.some(
+    (item) =>
+      item.placement === 'default' &&
+      announcementPosts.map((item) => item.post.postId).includes(item.post.postId),
+  );
+
+  const filteredPosts = posts.filter(
+    (post) =>
+      !announcementPosts.some((announcementPost) => announcementPost.post.postId === post.postId),
+  );
+
+  filteredPosts.forEach((post) => {
+    const matchedPinnedPost = pinnedPosts.find((pinned) => pinned.post.postId === post.postId);
+    if (matchedPinnedPost) {
+      post.placement = matchedPinnedPost.placement;
+    }
+  });
+
   useEffect(() => {
     refreshPosts();
     refreshPinnedPosts();

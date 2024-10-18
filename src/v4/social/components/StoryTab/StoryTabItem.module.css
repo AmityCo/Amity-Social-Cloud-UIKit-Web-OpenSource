@@ -54,6 +54,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   color: var(--asc-color-secondary-default);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .errorIcon {

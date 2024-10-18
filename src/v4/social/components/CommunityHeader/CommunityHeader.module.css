@@ -171,3 +171,14 @@
     overflow: hidden;
   }
 }
+
+.communityProfile__communityCategories {
+  overflow-x: scroll;
+  width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.communityProfile__communityCategories::-webkit-scrollbar {
+  display: none;
+}

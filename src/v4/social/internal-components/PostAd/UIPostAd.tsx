@@ -8,6 +8,7 @@ import { AdInformation } from '~/v4/social/internal-components/AdInformation/AdI
 import Truncate from 'react-truncate-markup';
 
 import styles from './UIPostAd.module.css';
+import clsx from 'clsx';
 
 interface UIPostAdProps {
   ad: Amity.Ad;
@@ -75,9 +76,13 @@ export const UIPostAd = ({
         {ad.callToActionUrl ? (
           <div className={styles.footer__right}>
             <Button className={styles.footer__content__button} onPress={handleCallToActionClick}>
-              <Typography.CaptionBold className={styles.footer__content__button__text}>
-                {ad.callToAction}
-              </Typography.CaptionBold>
+              <Typography.CaptionBold
+                renderer={({ typoClassName }) => (
+                  <div className={clsx(typoClassName, styles.footer__content__button__text)}>
+                    {ad.callToAction}
+                  </div>
+                )}
+              />
             </Button>
           </div>
         ) : null}

@@ -1067,6 +1067,15 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToCommunityCreatePage = useCallback(() => {
+    const next = {
+      type: PageTypes.CommunityCreatePage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
   const goToSocialGlobalSearchPage = useCallback(
     (tab?: string, keyword?: string) => {
       const next = {

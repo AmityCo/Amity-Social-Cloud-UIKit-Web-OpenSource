@@ -38,6 +38,7 @@ type ImageThumbnailProps = {
 };
 
 export function ImageThumbnail({
+  pageId = '*',
   files,
   progress,
   removeFile,
