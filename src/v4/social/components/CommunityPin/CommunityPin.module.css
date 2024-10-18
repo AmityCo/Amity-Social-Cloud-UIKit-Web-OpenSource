@@ -31,3 +31,8 @@
   padding-bottom: 0.75rem;
   background-color: var(--asc-color-base-shade4);
 }
+
+.communityPin__feed {
+  padding-bottom: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+}

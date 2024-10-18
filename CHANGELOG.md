@@ -160,8 +160,15 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 3.2.0 (2024-02-27)
 
-### Features
+- ASC-21052 - fix undefined runtime error ([#184](https://github.com/EkoCommunications/AmityUiKitWeb/issues/184)) ([2385d3e](https://github.com/EkoCommunications/AmityUiKitWeb/commit/2385d3ec364ea74e4edf59ecffc0db088db7570e))
 
+### 3.2.4 (2024-03-11)
+
+### Bug Fixes
+
+- ASC-20601 - comment with blocked word should show noti ([#154](https://github.com/EkoCommunications/AmityUiKitWeb/issues/154)) ([ba4e3f0](https://github.com/EkoCommunications/AmityUiKitWeb/commit/ba4e3f044f08a3aef4d78910203350661cc59076))
+
+### 3.2.3 (2024-03-01)
 - ASC-19739 - remove font awesome pro ([#129](https://github.com/EkoCommunications/AmityUiKitWeb/issues/129)) ([f7b35bc](https://github.com/EkoCommunications/AmityUiKitWeb/commit/f7b35bcb75fab8457aa5fd41ed31c6ea8b03487f)), closes [#127](https://github.com/EkoCommunications/AmityUiKitWeb/issues/127) [#118](https://github.com/EkoCommunications/AmityUiKitWeb/issues/118) [#116](https://github.com/EkoCommunications/AmityUiKitWeb/issues/116) [#128](https://github.com/EkoCommunications/AmityUiKitWeb/issues/128) [#123](https://github.com/EkoCommunications/AmityUiKitWeb/issues/123) [#142](https://github.com/EkoCommunications/AmityUiKitWeb/issues/142)
 
 ## 3.1.0 (2024-01-25)

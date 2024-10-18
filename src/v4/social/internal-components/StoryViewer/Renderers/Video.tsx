@@ -185,6 +185,8 @@ export const renderer: CustomRenderer = ({
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const videoLoaded = useCallback(() => {
     messageHandler('UPDATE_VIDEO_DURATION', {
       // TODO: need to fix video type from TS-SDK
