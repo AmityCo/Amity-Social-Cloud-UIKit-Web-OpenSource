@@ -6,6 +6,7 @@ import {
   isCommunityMember,
   isNonNullable,
   Mentioned,
+  Mentionees,
   Metadata,
   parseMentionsMarkup,
 } from '~/v4/helpers/utils';
@@ -111,18 +112,14 @@ export const Comment = ({
     return toggleFlagComment();
   };
 
-  const handleEditComment = async (
-    text: string,
-    mentionees: Amity.UserMention[],
-    metadata: Metadata,
-  ) =>
+  const handleEditComment = async (text: string, mentionees: Mentionees, metadata: Metadata) =>
     commentId &&
     CommentRepository.updateComment(commentId, {
       data: {
         text,
       },
       metadata,
-      mentionees,
+      mentionees: mentionees as Amity.UserMention[],
     });
 
   const handleDeleteComment = async () => commentId && CommentRepository.deleteComment(commentId);
@@ -284,6 +281,7 @@ export const Comment = ({
           <div data-qa-anchor="comment">{renderedComment}</div>
           {comment.children.length > 0 && (
             <CommentList
+              pageId={pageId}
               componentId={componentId}
               parentId={comment.commentId}
               referenceType={comment.referenceType}

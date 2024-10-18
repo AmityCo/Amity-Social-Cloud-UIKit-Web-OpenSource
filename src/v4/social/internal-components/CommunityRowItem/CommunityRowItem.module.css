@@ -1,0 +1,93 @@
+.communityRowItem {
+  display: grid;
+  grid-template-columns: [image-start] 5rem [image-end content-start] 1fr 1fr 1fr 1fr 1fr 1fr [content-end];
+  grid-template-rows:
+    [name-start] auto
+    [name-end member-start] auto
+    [member-end];
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.communityRowItem[data-has-categories='true'] {
+  grid-template-rows:
+    [name-start] auto
+    [name-end cat-start] auto
+    [cat-end member-start] auto
+    [member-end];
+}
+
+.communityRowItem__image {
+  grid-column: image-start / image-end;
+  grid-row: name-start / member-end;
+  place-self: center;
+  height: 5rem;
+  width: 5rem;
+  border-radius: var(--asc-border-radius-sm);
+  position: relative;
+}
+
+.communityRowItem__order {
+  position: absolute;
+  left: 0.5rem;
+  bottom: 0.37rem;
+  color: var(--asc-color-white);
+}
+
+.communityRowItem__content {
+  display: grid;
+  grid-column: content-start / content-end;
+  grid-row: name-start / member-end;
+  grid-template-columns: subgrid [sub-a] [sub-b] [sub-c] [sub-d] [sub-e] [sub-f] [sub-g];
+  grid-template-rows: subgrid;
+  width: 100%;
+  padding: 0.62rem;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+}
+
+.communityRowItem__communityName {
+  grid-column: sub-a / sub-g;
+  grid-row: name-start / name-end;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.communityRowItem__categories {
+  grid-column: sub-a / sub-g;
+  grid-row: cat-start / cat-end;
+}
+
+.communityRowItem__categories[data-show-join-button='true'] {
+  grid-column: sub-a / sub-e;
+  grid-row: cat-start / cat-end;
+}
+
+.communityRowItem__member {
+  grid-column: sub-a / sub-e;
+  grid-row: member-start / member-end;
+}
+
+.communityRowItem__joinButton {
+  grid-row: name-start / member-end;
+  grid-column: sub-e / sub-g;
+  width: 4rem;
+  place-self: end end;
+}
+
+.communityRowItem__joinButton[data-has-categories='true'] {
+  grid-row: cat-start / member-end;
+}
+
+.communityRowItem__communityName__private {
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.22rem;
+  padding-bottom: 0.28rem;
+}

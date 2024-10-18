@@ -6,7 +6,6 @@ import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { MenuButton } from '~/v4/social/elements/MenuButton';
 import { ShareButton } from '~/v4/social/elements/ShareButton';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
-import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { Typography } from '~/v4/core/components';
 import AngleRight from '~/v4/icons/AngleRight';
 import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
@@ -39,6 +38,12 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import dayjs from 'dayjs';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
+import { PinBadge } from '~/v4/social/elements/PinBadge';
+import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
+import clsx from 'clsx';
+import { Lock } from '~/icons';
+import Verified from '~/v4/icons/Verified';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -49,112 +54,147 @@ export enum AmityPostCategory {
   GENERAL = 'general',
   ANNOUNCEMENT = 'announcement',
   PIN = 'pin',
+  PIN_AND_ANNOUNCEMENT = 'pin_and_announcement',
 }
 
 interface PostTitleProps {
   post: Amity.Post;
   pageId?: string;
+  componentId?: string;
   hideTarget?: boolean;
 }
 
-const PostTitle = ({ pageId, post, hideTarget }: PostTitleProps) => {
-  const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
+const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) => {
+  const shouldCallCommunity = useMemo(() => post?.targetType === 'community', [post?.targetType]);
+  const shouldCallUser = useMemo(
+    () => post?.targetType === 'user' && post?.postedUserId !== post?.targetId,
+    [post?.targetType, post?.postedUserId, post?.targetId],
+  );
 
   const { community: targetCommunity } = useCommunity({
     communityId: post?.targetId,
-    shouldCall,
+    shouldCall: shouldCallCommunity,
   });
 
-  const { goToCommunityProfilePage } = useNavigation();
+  const { user: targetUser } = useUser({
+    userId: post?.targetId,
+    shouldCall: shouldCallUser,
+  });
 
-  const { user: postedUser } = useUser(post.postedUserId);
-  const { onClickCommunity, onClickUser } = useNavigation();
+  const { goToCommunityProfilePage, onClickUser } = useNavigation();
 
-  if (targetCommunity) {
-    return (
-      <div className={styles.postTitle}>
-        {postedUser && (
-          <Button onPress={() => onClickUser(postedUser.userId)}>
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {postedUser.displayName}
-            </Typography.BodyBold>
-          </Button>
-        )}
-        {targetCommunity && !hideTarget && (
-          <Button onPress={() => goToCommunityProfilePage(targetCommunity.communityId)}>
-            <AngleRight className={styles.postTitle__icon} />
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {targetCommunity.displayName}
-            </Typography.BodyBold>{' '}
-          </Button>
-        )}
-      </div>
-    );
-  }
+  const showTargetCommunity = targetCommunity && !hideTarget;
+  const showTargetUser = targetUser && !hideTarget;
+  const showBrandBadge = post.creator.isBrand;
+  const showPrivateBadge = targetCommunity?.isPublic === false;
+  const showOfficialBadge = targetCommunity?.isOfficial === true;
+
+  const showTarget = showTargetCommunity || showTargetUser;
 
   return (
-    <Button onPress={() => postedUser && onClickUser(postedUser.userId)}>
-      <Typography.BodyBold className={styles.postTitle__text}>
-        {postedUser?.displayName}
-      </Typography.BodyBold>
-    </Button>
+    <div className={styles.postTitle} data-show-target-community={showTargetCommunity === true}>
+      {post.creator && (
+        <div
+          className={styles.postTitle__user__container}
+          data-show-brand-badge={showBrandBadge === true}
+          data-show-target={showTarget === true}
+        >
+          <Typography.BodyBold
+            renderer={({ typoClassName }) => (
+              <Button
+                className={clsx(typoClassName, styles.postTitle__text)}
+                onPress={() => onClickUser(post.creator.userId)}
+                data-qa-anchor={`${pageId}/${componentId}/username`}
+              >
+                {post.creator.displayName}
+              </Button>
+            )}
+          />
+          {showBrandBadge ? <BrandBadge className={styles.postTitle__brandIcon} /> : null}
+
+          {showTarget ? (
+            <AngleRight
+              data-qa-anchor={`${pageId}/${componentId}/arrow_right`}
+              className={styles.postTitle__icon}
+            />
+          ) : null}
+        </div>
+      )}
+      {showTargetCommunity && (
+        <div
+          className={styles.postTitle__community}
+          data-show-private-badge={showPrivateBadge === true}
+          data-show-official-badge={showOfficialBadge === true}
+        >
+          {showPrivateBadge && <Lock className={styles.postTitle__community__privateIcon} />}
+          <Typography.BodyBold
+            renderer={({ typoClassName }) => (
+              <Button
+                data-qa-anchor={`${pageId}/${componentId}/community_name`}
+                className={clsx(typoClassName, styles.postTitle__communityText)}
+                onPress={() => {
+                  goToCommunityProfilePage(targetCommunity.communityId);
+                }}
+              >
+                {targetCommunity.displayName}
+              </Button>
+            )}
+          />
+          {showOfficialBadge && <Verified className={styles.postTitle__community__verifiedIcon} />}
+        </div>
+      )}
+      {showTargetUser && (
+        <div
+          className={styles.postTitle__user__container}
+          data-show-brand-badge={targetUser?.isBrand === true}
+          data-show-target={false}
+        >
+          <Typography.BodyBold
+            renderer={({ typoClassName }) => (
+              <Button
+                className={clsx(typoClassName, styles.postTitle__text)}
+                onPress={() => onClickUser(targetUser.userId)}
+              >
+                {targetUser.displayName}
+              </Button>
+            )}
+          />
+          {targetUser?.isBrand === true ? (
+            <BrandBadge className={styles.postTitle__brandIcon} />
+          ) : null}
+        </div>
+      )}
+    </div>
   );
 };
 
-const useMutateAddReaction = ({
-  postId,
-  reactionByMe,
-}: {
-  postId: string;
-  reactionByMe: string | null;
-}) =>
-  useMutation({
-    mutationFn: async (reactionKey: string) => {
-      if (reactionByMe) {
-        try {
-          await ReactionRepository.removeReaction('post', postId, reactionByMe);
-        } catch {
-          console.log("Can't remove reaction.");
-        }
-      }
-      return ReactionRepository.addReaction('post', postId, reactionKey);
-    },
-  });
-
-const useMutateRemoveReaction = ({
-  postId,
-  reactionsByMe,
-}: {
-  postId: string;
-  reactionsByMe: string[];
-}) =>
-  useMutation({
-    mutationFn: async () => {
-      return Promise.all(
-        reactionsByMe.map((reaction) => {
-          try {
-            return ReactionRepository.removeReaction('post', postId, reaction);
-          } catch (e) {
-            console.log("Can't remove reaction.");
-          }
-        }),
-      );
-    },
-  });
-
 const ChildrenPostContent = ({
+  pageId,
+  componentId,
   post,
   onImageClick,
   onVideoClick,
 }: {
+  pageId?: string;
+  componentId?: string;
   post: Amity.Post[];
   onImageClick: (imageIndex: number) => void;
   onVideoClick: (videoIndex: number) => void;
 }) => {
   return (
     <>
-      <ImageContent post={post} onImageClick={onImageClick} />
-      <VideoContent post={post} onVideoClick={onVideoClick} />
+      <ImageContent
+        pageId={pageId}
+        componentId={componentId}
+        post={post}
+        onImageClick={onImageClick}
+      />
+      <VideoContent
+        pageId={pageId}
+        componentId={componentId}
+        post={post}
+        onVideoClick={onVideoClick}
+      />
     </>
   );
 };
@@ -181,7 +221,7 @@ export const PostContent = ({
   style,
 }: PostContentProps) => {
   const componentId = 'post_content';
-  const { themeStyles } = useAmityComponent({
+  const { themeStyles, accessibilityId } = useAmityComponent({
     pageId,
     componentId,
   });
@@ -328,17 +368,28 @@ export const PostContent = ({
   }, [post, isVisible, page.type]);
 
   return (
-    <div ref={elementRef} className={styles.postContent} style={themeStyles}>
-      {category === AmityPostCategory.ANNOUNCEMENT && (
+    <div
+      data-qa-anchor={accessibilityId}
+      ref={elementRef}
+      className={styles.postContent}
+      style={themeStyles}
+    >
+      {(category === AmityPostCategory.ANNOUNCEMENT ||
+        category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
         <AnnouncementBadge pageId={pageId} componentId={componentId} />
       )}
       <div className={styles.postContent__bar} data-type={style}>
         <div className={styles.postContent__bar__userAvatar}>
-          <UserAvatar userId={post?.postedUserId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={post?.postedUserId} />
         </div>
-        <div>
+        <div className={styles.postContent__bar__detail}>
           <div>
-            <PostTitle post={post} hideTarget={hideTarget} />
+            <PostTitle
+              post={post}
+              hideTarget={hideTarget}
+              pageId={pageId}
+              componentId={componentId}
+            />
           </div>
           <div className={styles.postContent__bar__information__subtitle}>
             {isCommunityModerator ? (
@@ -349,42 +400,60 @@ export const PostContent = ({
             ) : null}
             <Timestamp timestamp={post.createdAt} />
             {post.createdAt !== post.editedAt && (
-              <Typography.Caption className={styles.postContent__bar__information__editedTag}>
+              <Typography.Caption
+                data-qa-anchor={`${pageId}/${componentId}/post_edited_text`}
+                className={styles.postContent__bar__information__editedTag}
+              >
                 (edited)
               </Typography.Caption>
             )}
           </div>
         </div>
 
-        {style === AmityPostContentComponentStyle.FEED ? (
-          <div className={styles.postContent__bar__actionButton}>
-            {!hideMenu && (
-              <MenuButton
-                pageId={pageId}
-                componentId={componentId}
-                onClick={() =>
-                  setDrawerData({
-                    content: (
-                      <PostMenu
-                        post={post}
-                        onCloseMenu={() => removeDrawerData()}
-                        pageId={pageId}
-                        componentId={componentId}
-                        onPostDeleted={onPostDeleted}
-                      />
-                    ),
-                  })
-                }
-              />
-            )}
-          </div>
-        ) : null}
+        <div className={styles.postContent__wrapRightMenu}>
+          {(category === AmityPostCategory.PIN ||
+            category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
+            <PinBadge pageId={pageId} componentId={componentId} />
+          )}
+
+          {style === AmityPostContentComponentStyle.FEED ? (
+            <div className={styles.postContent__bar__actionButton}>
+              {!hideMenu && (
+                <MenuButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  onClick={() =>
+                    setDrawerData({
+                      content: (
+                        <PostMenu
+                          post={post}
+                          onCloseMenu={() => removeDrawerData()}
+                          pageId={pageId}
+                          componentId={componentId}
+                          onPostDeleted={onPostDeleted}
+                        />
+                      ),
+                    })
+                  }
+                />
+              )}
+            </div>
+          ) : null}
+        </div>
       </div>
       <div className={styles.postContent__content_and_reactions}>
         <div className={styles.postContent__content}>
-          <TextContent text={post.data.text} mentionees={post?.metadata?.mentioned} />
+          <TextContent
+            pageId={pageId}
+            componentId={componentId}
+            text={post?.data?.text}
+            mentioned={post?.metadata?.mentioned}
+            mentionees={post?.mentioness}
+          />
           {post.children.length > 0 ? (
             <ChildrenPostContent
+              pageId={pageId}
+              componentId={componentId}
               post={post}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
@@ -426,14 +495,20 @@ export const PostContent = ({
                   )}
                 </div>
               ) : null}
-              <Typography.Caption className={styles.postContent__reactionsBar__reactions__count}>
+              <Typography.Caption
+                data-qa-anchor={`${pageId}/${componentId}/like_count`}
+                className={styles.postContent__reactionsBar__reactions__count}
+              >
                 {`${millify(post?.reactionsCount || 0)} ${
                   post?.reactionsCount === 1 ? 'like' : 'likes'
                 }`}
               </Typography.Caption>
             </div>
 
-            <Typography.Caption className={styles.postContent__commentsCount}>
+            <Typography.Caption
+              data-qa-anchor={`${pageId}/${componentId}/comment_count`}
+              className={styles.postContent__commentsCount}
+            >
               {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
             </Typography.Caption>
           </div>
@@ -444,7 +519,9 @@ export const PostContent = ({
               Join community to interact with all posts
             </Typography.Body>
           </>
-        ) : !targetCommunity?.isJoined && page.type === PageTypes.PostDetailPage ? null : (
+        ) : targetCommunity &&
+          !targetCommunity?.isJoined &&
+          page.type === PageTypes.PostDetailPage ? null : (
           <>
             <div className={styles.postContent__divider} />
             <div className={styles.postContent__reactionBar}>

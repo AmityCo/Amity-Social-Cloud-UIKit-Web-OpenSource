@@ -1,12 +1,26 @@
-.container {
+.commentComposer {
+  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+}
+
+.commentComposer__top {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  transform: translateY(-100%);
+  max-height: 12rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.commentComposer__mentionContainer {
+  max-height: 100%;
+  overflow-y: scroll;
 }
 
 .commentComposer__container {
-  position: relative;
   display: flex;
   align-items: flex-end;
   gap: 0.5rem;
@@ -49,15 +63,12 @@
 }
 
 .commentComposer__replyContainer {
-  position: absolute;
-  left: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.625rem 1rem;
   background-color: var(--asc-color-base-shade4);
-  bottom: var(--asc-reply-container-offset-bottom);
 }
 
 .commentComposer__replyContainer__text {

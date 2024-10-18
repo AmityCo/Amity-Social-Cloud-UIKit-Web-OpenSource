@@ -1,0 +1,1 @@
+export { CategoryChip } from './CategoryChip';

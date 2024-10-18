@@ -97,7 +97,7 @@ export const renderer: CustomRenderer = ({
   const [loaded, setLoaded] = useState(false);
   const { loader } = config;
   const { client } = useSDK();
-  const { user } = useUser(client?.userId);
+  const { user } = useUser({ userId: client?.userId });
   const vid = useRef<HTMLVideoElement>(null);
 
   const { muted, mute, unmute } = useAudioControl();
@@ -140,6 +140,8 @@ export const renderer: CustomRenderer = ({
   const haveStoryPermission =
     isGlobalAdmin || isModeratorUser || checkStoryPermission(client, community?.communityId);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const videoLoaded = useCallback(() => {
     messageHandler('UPDATE_VIDEO_DURATION', {
       // TODO: need to fix video type from TS-SDK
@@ -166,6 +168,7 @@ export const renderer: CustomRenderer = ({
         vid.current.pause();
         action('pause', true);
       } else {
+        videoLoaded();
         vid.current.play();
         action('play', true);
       }
@@ -268,12 +271,19 @@ export const renderer: CustomRenderer = ({
         controls={false}
         onLoadedData={videoLoaded}
         playsInline
-        onWaiting={() => action('pause', true)}
-        onPlaying={() => action('play', true)}
+        onCanPlay={() => {
+          setIsLoading(false);
+        }}
+        onWaiting={() => {
+          action('pause', true);
+        }}
+        onPlaying={() => {
+          action('play', true);
+        }}
         muted={muted}
         autoPlay
       />
-      {!loaded && (
+      {(!loaded || isLoading) && (
         <div className={clsx(rendererStyles.loadingOverlay)}>{loader || <div>loading...</div>}</div>
       )}
       <BottomSheet

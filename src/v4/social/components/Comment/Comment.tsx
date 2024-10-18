@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -21,6 +21,7 @@ import { CreateCommentParams } from '~/v4/social/components/CommentComposer/Comm
 import useCommentSubscription from '~/v4/core/hooks/subscriptions/useCommentSubscription';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 import millify from 'millify';
+import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermission';
 
 const EllipsisH = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -69,7 +70,7 @@ interface CommentProps {
   pageId?: string;
   componentId?: string;
   comment: Amity.Comment;
-  community?: Amity.Community;
+  community?: Amity.Community | null;
   onClickReply: (comment: Amity.Comment) => void;
   shouldAllowInteraction?: boolean;
 }
@@ -82,11 +83,10 @@ export const Comment = ({
   onClickReply,
   shouldAllowInteraction = true,
 }: CommentProps) => {
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityComponent({
-      pageId,
-      componentId,
-    });
+  const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
+    pageId,
+    componentId,
+  });
 
   const { confirm } = useConfirmContext();
 
@@ -94,8 +94,14 @@ export const Comment = ({
   const [hasClickLoadMore, setHasClickLoadMore] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+  const mentionRef = useRef<HTMLDivElement>(null);
 
   const [isShowMore, setIsShowMore] = useState(false);
+
+  const { isModerator: isModeratorUser } = useCommunityPostPermission({
+    community,
+    userId: comment.creator?.userId,
+  });
 
   const toggleBottomSheet = () => setBottomSheetOpen((prev) => !prev);
 
@@ -161,11 +167,12 @@ export const Comment = ({
         </div>
       ) : isEditing ? (
         <div className={styles.postComment__edit}>
-          <UserAvatar userId={comment.userId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postComment__edit__inputWrap}>
             <div className={styles.postComment__edit__input}>
+              <div className={styles.postComment__edit__mentionContainer} ref={mentionRef} />
               <CommentInput
-                community={community}
+                communityId={community?.communityId}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,
@@ -173,11 +180,19 @@ export const Comment = ({
                   mentionees: comment.mentionees as Mentionees,
                   metadata: comment.metadata || {},
                 }}
-                onChange={(value: CreateCommentParams) => {
-                  setCommentData(value);
+                onChange={(value) => {
+                  setCommentData({
+                    data: {
+                      text: value.text,
+                    },
+                    mentionees: value.mentionees as Amity.UserMention[],
+                    metadata: {
+                      mentioned: value.mentioned,
+                    },
+                  });
                 }}
                 maxLines={5}
-                mentionOffsetBottom={215}
+                mentionContainer={mentionRef?.current}
               />
             </div>
             <div className={styles.postComment__edit__buttonWrap}>
@@ -204,16 +219,21 @@ export const Comment = ({
         </div>
       ) : (
         <div className={styles.postComment}>
-          <UserAvatar userId={comment.userId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postComment__details}>
             <div className={styles.postComment__content}>
-              <Typography.BodyBold className={styles.postComment__content__username}>
+              <Typography.BodyBold
+                data-qa-anchor={`${pageId}/${componentId}/username`}
+                className={styles.postComment__content__username}
+              >
                 {comment.creator?.displayName}
               </Typography.BodyBold>
 
-              <ModeratorBadge pageId={pageId} componentId={componentId} />
+              {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
 
               <TextWithMention
+                pageId={pageId}
+                componentId={componentId}
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
@@ -228,7 +248,9 @@ export const Comment = ({
                       componentId={componentId}
                       timestamp={comment.createdAt}
                     />
-                    {comment.createdAt !== comment.editedAt && ' (edited)'}
+                    <span data-qa-anchor={`${pageId}/${componentId}/comment_edited_text`}>
+                      {comment.createdAt !== comment.editedAt && ' (edited)'}
+                    </span>
                   </Typography.Caption>
 
                   <div onClick={handleLike}>
@@ -239,7 +261,10 @@ export const Comment = ({
                       {isLiked ? 'Liked' : 'Like'}
                     </Typography.CaptionBold>
                   </div>
-                  <div onClick={() => onClickReply(comment)}>
+                  <div
+                    data-qa-anchor={`${pageId}/${componentId}/reply_button`}
+                    onClick={() => onClickReply(comment)}
+                  >
                     <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
                       Reply
                     </Typography.CaptionBold>
@@ -261,6 +286,7 @@ export const Comment = ({
 
             {replyAmount > 0 && !hasClickLoadMore && (
               <div
+                data-qa-anchor={`${pageId}/${componentId}/view_reply_button`}
                 className={styles.postComment__viewReply_button}
                 onClick={() => setHasClickLoadMore(true)}
               >
@@ -273,7 +299,9 @@ export const Comment = ({
 
             {hasClickLoadMore && (
               <ReplyCommentList
-                community={community}
+                pageId={pageId}
+                componentId={componentId}
+                community={community ?? undefined}
                 referenceId={comment.referenceId}
                 referenceType={comment.referenceType}
                 parentId={comment.commentId}
@@ -289,6 +317,8 @@ export const Comment = ({
         detent="content-height"
       >
         <CommentOptions
+          pageId={pageId}
+          componentId={componentId}
           comment={comment}
           handleEditComment={handleEditComment}
           handleDeleteComment={handleDeleteComment}

@@ -3,17 +3,13 @@ import React, { useRef, useState } from 'react';
 import { Comment } from '~/v4/social/components/Comment/Comment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import useUserSubscription from '~/v4/core/hooks/subscriptions/useUserSubscription';
 import { CommentRepository, SubscriptionLevels } from '@amityco/ts-sdk';
-import useCommunitySubscription from '~/v4/core/hooks/subscriptions/useCommunitySubscription';
 import { usePaginator } from '~/v4/core/hooks/usePaginator';
 import { CommentAd } from '~/v4/social/internal-components/CommentAd/CommentAd';
 import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton';
 import styles from './CommentList.module.css';
 import useCommunityStoriesSubscription from '~/v4/social/hooks/useCommunityStoriesSubscription';
 import { Typography } from '~/v4/core/components';
-import useStory from '~/v4/social/hooks/useStory';
-import usePost from '~/v4/core/hooks/objects/usePost';
 import usePostSubscription from '~/v4/core/hooks/subscriptions/usePostSubscription';
 
 type CommentListProps = {
@@ -23,7 +19,7 @@ type CommentListProps = {
   onClickReply: (comment: Amity.Comment) => void;
   limit?: number;
   includeDeleted?: boolean;
-  community?: Amity.Community;
+  community?: Amity.Community | null;
   shouldAllowInteraction?: boolean;
 };
 
@@ -65,13 +61,6 @@ export const CommentList = ({
     shouldCall: true,
   });
 
-  const { story } = useStory({
-    storyId: referenceId,
-    shouldCall: referenceType === 'story',
-  });
-
-  const { post } = usePost(referenceType === 'post' ? referenceId : undefined);
-
   useIntersectionObserver({
     node: intersectionNode,
     options: {
@@ -97,7 +86,7 @@ export const CommentList = ({
     shouldSubscribe: referenceType === 'story' && !!referenceId,
   });
 
-  if (items.length === 0) {
+  if (!isLoading && items.length === 0) {
     return (
       <div className={styles.noCommentsContainer}>
         <Typography.Body>No comments yet</Typography.Body>
@@ -117,13 +106,12 @@ export const CommentList = ({
           <CommentAd key={item.adId} ad={item} />
         ) : (
           <Comment
+            pageId={pageId}
             key={item.commentId}
             comment={item as Amity.Comment}
             onClickReply={(comment) => onClickReply?.(comment)}
             componentId={componentId}
             community={community}
-            // targetId={post?.targetId || story?.targetId}
-            // targetType={post?.targetType || story?.targetType}
             shouldAllowInteraction={shouldAllowInteraction}
           />
         );

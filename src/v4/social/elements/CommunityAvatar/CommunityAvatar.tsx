@@ -2,6 +2,7 @@ import React from 'react';
 import useImage from '~/core/hooks/useImage';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './CommunityAvatar.module.css';
+import clsx from 'clsx';
 
 const CommunityAvatarSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -23,6 +24,7 @@ const CommunityAvatarSvg = (props: React.SVGProps<SVGSVGElement>) => (
 
 export interface CommunityAvatarProps {
   pageId?: string;
+  className?: string;
   componentId?: string;
   community?: Amity.Community | null;
 }
@@ -31,6 +33,7 @@ export function CommunityAvatar({
   pageId = '*',
   componentId = '*',
   community,
+  className,
 }: CommunityAvatarProps) {
   const elementId = 'community_avatar';
   const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
@@ -47,11 +50,11 @@ export function CommunityAvatar({
 
   return (
     <object
-      data={avatarFile}
       type="image/png"
-      className={styles.communityAvatar__image}
-      data-qa-anchor={accessibilityId}
+      data={avatarFile}
       style={themeStyles}
+      data-qa-anchor={accessibilityId}
+      className={clsx(styles.communityAvatar__image, className)}
     >
       <CommunityAvatarSvg />
     </object>

@@ -8,6 +8,7 @@ interface UseSocialMentionProps {
   targetType?: 'user' | 'community' | string;
   remoteText?: string;
   remoteMarkup?: string;
+  remoteMentions?: { plainTextIndex: number; id: string; display: string }[];
 }
 
 export type QueryMentioneesFnType = (query?: string) => Promise<
@@ -24,15 +25,15 @@ const useSocialMention = ({
   targetType,
   remoteText,
   remoteMarkup,
+  remoteMentions = [],
 }: UseSocialMentionProps) => {
   const isCommunityFeed = targetType === 'community';
   const community = useCommunity(targetId);
 
   const [text, setText] = useState(remoteText ?? '');
   const [markup, setMarkup] = useState(remoteMarkup ?? remoteText);
-  const [mentions, setMentions] = useState<
-    { plainTextIndex: number; id: string; display: string }[]
-  >([]);
+  const [mentions, setMentions] =
+    useState<{ plainTextIndex: number; id: string; display: string }[]>(remoteMentions);
 
   useEffect(() => {
     setText(remoteText || '');

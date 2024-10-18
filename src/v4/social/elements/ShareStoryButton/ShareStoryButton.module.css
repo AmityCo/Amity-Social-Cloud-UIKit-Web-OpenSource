@@ -19,3 +19,8 @@
 .shareStoryIcon {
   margin-left: var(--asc-spacing-s1);
 }
+
+.shareStoryButton__image {
+  width: 2rem;
+  height: 2rem;
+}

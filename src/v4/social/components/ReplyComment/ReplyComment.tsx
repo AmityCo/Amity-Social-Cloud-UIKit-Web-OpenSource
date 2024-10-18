@@ -21,6 +21,7 @@ import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOpt
 import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInput';
 import styles from './ReplyComment.module.css';
+import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermission';
 
 type ReplyCommentProps = {
   pageId?: string;
@@ -40,6 +41,11 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+
+  const { isModerator: isModeratorUser } = useCommunityPostPermission({
+    community,
+    userId: comment.creator?.userId,
+  });
 
   const isLiked = (comment.myReactions || []).some((reaction) => reaction === 'like');
 
@@ -103,11 +109,13 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
         </div>
       ) : isEditing ? (
         <div className={styles.postReplyComment__edit}>
-          <UserAvatar userId={comment.userId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postReplyComment__edit__inputWrap}>
             <div className={styles.postReplyComment__edit__input}>
               <CommentInput
-                community={community}
+                pageId={pageId}
+                componentId={componentId}
+                communityId={community?.communityId}
                 value={{
                   data: {
                     text: (comment.data as Amity.ContentDataText).text,
@@ -115,8 +123,16 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
                   mentionees: comment.mentionees as Mentionees,
                   metadata: comment.metadata || {},
                 }}
-                onChange={(value: CreateCommentParams) => {
-                  setCommentData(value);
+                onChange={(value) => {
+                  setCommentData({
+                    data: {
+                      text: value.text,
+                    },
+                    mentionees: value.mentionees as Amity.UserMention[],
+                    metadata: {
+                      mentioned: value.mentioned,
+                    },
+                  });
                 }}
               />
             </div>
@@ -148,15 +164,16 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
           style={themeStyles}
           data-qa-anchor={accessibilityId}
         >
-          <UserAvatar userId={comment.userId} />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postReplyComment__details}>
             <div className={styles.postReplyComment__content}>
               <Typography.BodyBold className={styles.postReplyComment__content__username}>
                 {comment.creator?.displayName}
               </Typography.BodyBold>
-
-              <ModeratorBadge pageId={pageId} componentId={componentId} />
+              {isModeratorUser && <ModeratorBadge pageId={pageId} componentId={componentId} />}
               <TextWithMention
+                pageId={pageId}
+                componentId={componentId}
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
@@ -170,10 +187,13 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
                     componentId={componentId}
                     timestamp={comment.createdAt}
                   />
-                  {comment.createdAt !== comment.editedAt && ' (edited)'}
+                  <span data-qa-anchor={`${pageId}/${componentId}/reply_comment_edited_text`}>
+                    {comment.createdAt !== comment.editedAt && ' (edited)'}
+                  </span>
                 </Typography.Caption>
                 <div onClick={handleLike}>
                   <Typography.CaptionBold
+                    data-qa-anchor={`${pageId}/${componentId}/reply_comment_like`}
                     className={styles.postReplyComment__secondRow__like}
                     data-is-liked={isLiked}
                   >
@@ -181,6 +201,7 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
                   </Typography.CaptionBold>
                 </div>
                 <EllipsisH
+                  data-qa-anchor={`${pageId}/${componentId}/reply_comment_options`}
                   className={styles.postReplyComment__secondRow__actionButton}
                   onClick={() => setBottomSheetOpen(true)}
                 />
@@ -202,6 +223,8 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
         detent="content-height"
       >
         <CommentOptions
+          pageId={pageId}
+          componentId={componentId}
           comment={comment}
           onCloseBottomSheet={toggleBottomSheet}
           handleEditComment={handleEditComment}

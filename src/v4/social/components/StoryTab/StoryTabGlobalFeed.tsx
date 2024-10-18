@@ -24,13 +24,17 @@ export const StoryTabGlobalFeed = ({
     pageId,
     componentId,
   });
-  const { stories, isLoading, hasMore, loadMoreStories } = useGlobalStoryTargets({
+  const { stories, isLoading, hasMore, loadMoreStories, refresh } = useGlobalStoryTargets({
     seenState: 'smart' as Amity.StorySeenQuery,
     limit: STORIES_PER_PAGE,
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current) {

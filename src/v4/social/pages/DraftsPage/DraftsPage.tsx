@@ -46,7 +46,7 @@ export const PlainDraftStoryPage = ({
   goToGlobalFeedPage: () => void;
   onDiscardCreateStory: () => void;
 }) => {
-  const { page } = useNavigation();
+  const { page, onBack } = useNavigation();
   const pageId = 'create_story_page';
   const { accessibilityId, themeStyles } = useAmityPage({
     pageId,
@@ -101,7 +101,7 @@ export const PlainDraftStoryPage = ({
       if (page.type === PageTypes.DraftPage && page.context.storyType === 'globalFeed') {
         goToGlobalFeedPage();
       } else {
-        goToCommunityPage(targetId);
+        onBack();
       }
       if (mediaType?.type === 'image' && targetId) {
         await StoryRepository.createImageStory(

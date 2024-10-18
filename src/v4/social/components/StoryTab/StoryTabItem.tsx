@@ -9,6 +9,7 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useImage } from '~/v4/core/hooks/useImage';
 
 import styles from './StoryTabItem.module.css';
+import Lock from '~/v4/icons/Lock';
 
 const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -86,7 +87,10 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
           isErrored={isErrored}
         />
 
-        <div className={styles.avatarBackground}>
+        <div
+          data-qa-anchor={`${pageId}/${componentId}/community_avatar`}
+          className={styles.avatarBackground}
+        >
           {communityAvatar && (
             <img className={styles.avatar} src={communityAvatar} alt={community?.displayName} />
           )}
@@ -95,8 +99,11 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
         {community?.isOfficial && !isErrored && <Verified className={styles.verifiedIcon} />}
       </div>
 
-      <Typography.Caption className={clsx(styles.displayName)}>
-        {!community?.isPublic && <LockIcon />}
+      <Typography.Caption
+        data-qa-anchor={`${pageId}/${componentId}/community_name`}
+        className={clsx(styles.displayName)}
+      >
+        {!community?.isPublic && <Lock className={styles.lockIcon} />}
         {community?.displayName}
       </Typography.Caption>
     </div>

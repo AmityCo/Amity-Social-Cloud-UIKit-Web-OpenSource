@@ -1,12 +1,13 @@
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { Button } from '~/v4/core/natives/Button';
 import styles from './CreateNewPostButton.module.css';
 
 interface CreateNewPostButtonProps {
   pageId: string;
   componentId?: string;
   isValid: boolean;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit: () => void;
 }
 
 export function CreateNewPostButton({
@@ -16,7 +17,7 @@ export function CreateNewPostButton({
   onSubmit,
 }: CreateNewPostButtonProps) {
   const elementId = 'create_new_post_button';
-  const { config, isExcluded, themeStyles } = useAmityElement({
+  const { config, isExcluded, themeStyles, accessibilityId } = useAmityElement({
     pageId,
     componentId,
     elementId,
@@ -24,14 +25,15 @@ export function CreateNewPostButton({
   if (isExcluded) return null;
 
   return (
-    <button
-      onSubmit={onSubmit}
+    <Button
+      onPress={onSubmit}
       style={themeStyles}
-      disabled={!isValid}
+      isDisabled={!isValid}
       className={styles.createNewPostButton}
       type="submit"
+      data-qa-anchor={accessibilityId}
     >
       {config.text}
-    </button>
+    </Button>
   );
 }

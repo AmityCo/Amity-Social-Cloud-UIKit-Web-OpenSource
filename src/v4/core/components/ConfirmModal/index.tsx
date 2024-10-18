@@ -18,7 +18,6 @@ interface ConfirmProps extends ConfirmType {
 const Confirm = ({
   pageId = '*',
   componentId = '*',
-  elementId = '*',
   className,
   title,
   content,
@@ -28,6 +27,7 @@ const Confirm = ({
   onCancel,
   type = 'confirm',
 }: ConfirmProps) => {
+  const elementId = 'confirm_modal';
   const { accessibilityId, themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
   return (

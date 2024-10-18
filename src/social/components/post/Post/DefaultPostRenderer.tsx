@@ -320,13 +320,13 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
             </ReviewButtonsContainer>
           )}
 
-          {isEditing && (
+          {isEditing && post && (
             <Modal
               data-qa-anchor="post-editor-modal"
               title={formatMessage({ id: 'post.editPost' })}
               onCancel={closeEditingPostModal}
             >
-              <PostEditor postId={post?.postId} onSave={closeEditingPostModal} />
+              <PostEditor post={post} onSave={closeEditingPostModal} />
             </Modal>
           )}
         </>

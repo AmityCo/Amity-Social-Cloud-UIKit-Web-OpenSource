@@ -1,12 +1,12 @@
 .communityCategoryName {
-  display: flex;
+  width: 100%;
   padding: 0.12rem 0.5rem;
-  justify-content: center;
-  align-items: center;
   border-radius: 1.25rem;
   background-color: var(--asc-color-base-shade4);
   color: var(--asc-color-base-default);
   line-height: 1.125rem;
   font-size: 0.8125rem;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
