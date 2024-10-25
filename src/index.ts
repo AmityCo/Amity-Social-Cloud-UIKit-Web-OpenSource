@@ -94,7 +94,6 @@ export {
   MediaAttachment as AmityMediaAttachmentComponent,
   CreatePostMenu as AmityCreatePostMenuComponent,
   ReactionList as AmityReactionListComponent,
-  TopNavigation as AmitySocialHomeTopNavigationComponent,
   CommentTray as AmityCommentTrayComponent,
   StoryTab as AmityStoryTabComponent,
   CommunityHeader as AmityCommunityHeaderComponent,
