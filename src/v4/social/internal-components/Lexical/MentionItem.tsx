@@ -38,6 +38,7 @@ export function MentionItem({
       aria-selected={isSelected}
       onHoverStart={onMouseEnter}
       data-is-selected={isSelected}
+      data-qa-ancgor={`${pageId}/${componentId}/mention_item`}
       className={styles.userMentionItem__item}
       data-testid={`${pageId}/${componentId}/mention_item`}
       variant="text"

@@ -6,7 +6,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 4.15.0-beta.4 (2026-03-04)
 
-
 ### Bug Fixes
 
 * merge conflict ([08ebf76](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/08ebf76a0280118a7dac3811ad2f6484a37e7057))

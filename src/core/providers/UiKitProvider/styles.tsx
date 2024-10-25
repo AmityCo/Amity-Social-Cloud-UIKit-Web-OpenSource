@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import skeletonCss from 'react-loading-skeleton/dist/skeleton.css?inline';
+
 export const UIStyles = styled.div`
   color-scheme: only light;
   ${({ theme }) => theme.typography.body};
