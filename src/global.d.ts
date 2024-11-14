@@ -14,11 +14,6 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-declare module '*skeleton.css' {
-  const classes: string;
-  export default classes;
-}
-
 declare module '*.css?inline' {
   const classes: string;
   export default classes;

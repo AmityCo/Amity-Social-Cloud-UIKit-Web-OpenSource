@@ -9125,6 +9125,12 @@ snapshots:
       '@formatjs/intl-localematcher': 0.5.8
       tslib: 2.6.3
 
+  '@formatjs/ecma402-abstract@2.2.3':
+    dependencies:
+      '@formatjs/fast-memoize': 2.2.3
+      '@formatjs/intl-localematcher': 0.5.7
+      tslib: 2.6.3
+
   '@formatjs/fast-memoize@2.2.0':
     dependencies:
       tslib: 2.8.1
@@ -9132,6 +9138,10 @@ snapshots:
   '@formatjs/fast-memoize@2.2.3':
     dependencies:
       tslib: 2.8.1
+
+  '@formatjs/fast-memoize@2.2.3':
+    dependencies:
+      tslib: 2.6.3
 
   '@formatjs/fast-memoize@2.2.3':
     dependencies:
@@ -9153,6 +9163,12 @@ snapshots:
     dependencies:
       '@formatjs/ecma402-abstract': 2.2.4
       '@formatjs/icu-skeleton-parser': 1.8.8
+      tslib: 2.6.3
+
+  '@formatjs/icu-messageformat-parser@2.9.3':
+    dependencies:
+      '@formatjs/ecma402-abstract': 2.2.3
+      '@formatjs/icu-skeleton-parser': 1.8.7
       tslib: 2.6.3
 
   '@formatjs/icu-skeleton-parser@1.8.2':
@@ -14228,6 +14244,13 @@ snapshots:
       '@formatjs/ecma402-abstract': 2.2.4
       '@formatjs/fast-memoize': 2.2.3
       '@formatjs/icu-messageformat-parser': 2.9.4
+      tslib: 2.6.3
+
+  intl-messageformat@10.7.6:
+    dependencies:
+      '@formatjs/ecma402-abstract': 2.2.3
+      '@formatjs/fast-memoize': 2.2.3
+      '@formatjs/icu-messageformat-parser': 2.9.3
       tslib: 2.6.3
 
   invariant@2.2.4:
