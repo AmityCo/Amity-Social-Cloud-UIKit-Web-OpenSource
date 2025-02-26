@@ -17,7 +17,7 @@ export const MyCommunities = ({ pageId = '*' }: MyCommunitiesProps) => {
   });
 
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member' },
   });
 
   return (

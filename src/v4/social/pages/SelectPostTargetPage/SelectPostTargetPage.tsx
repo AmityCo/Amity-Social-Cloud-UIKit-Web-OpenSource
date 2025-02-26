@@ -35,7 +35,7 @@ export function SelectPostTargetPage() {
   const { AmityPostTargetSelectionPage } = usePageBehavior();
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member' },
   });
 
   useIntersectionObserver({
