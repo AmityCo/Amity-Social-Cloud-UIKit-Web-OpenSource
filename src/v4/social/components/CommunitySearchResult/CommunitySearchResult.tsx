@@ -47,7 +47,10 @@ export const CommunitySearchResult = ({
       data-qa-anchor={accessibilityId}
       className={styles.communitySearchResult}
     >
-      <NoInternetConnectionHoc page="global-search">
+      <NoInternetConnectionHoc
+        page="global-search"
+        className={styles.communitySearchResult__noInternetConnectionHoc}
+      >
         {communityCollection.length > 0 &&
           communityCollection.map((community) => (
             <CommunityRowItem

@@ -10,3 +10,10 @@
   -ms-overflow-style: none;
   background-color: var(--asc-color-background-default);
 }
+
+.userSearchResult__noInternetConnectionHoc {
+  height: calc(100vh - 10rem);
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
