@@ -25,6 +25,14 @@ const config: StorybookConfig = {
         storyFileName: 'icons.stories.tsx',
       }),
     );
+
+    // Force HTTPS for all assets
+    config.server = {
+      ...config.server,
+      https: true,
+      force: true,
+    };
+
     return config;
   },
 };
