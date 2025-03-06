@@ -15,6 +15,7 @@ import useSemanticSearchPostCollection from '~/v4/social/hooks/collections/useSe
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './SocialGlobalSearchPage.module.css';
+import useSearchCommunitiesCollection from '~/v4/social/hooks/collections/useSearchCommunitiesCollection';
 
 enum AmityGlobalSearchType {
   User = 'user',
