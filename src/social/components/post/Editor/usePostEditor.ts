@@ -49,11 +49,11 @@ export const usePostEditor = ({ post, onSave }: { post: Amity.Post; onSave: () =
   };
 
   const handleSave = async () => {
-    await PostRepository.updatePost(post.postId, {
+    await PostRepository.editPost(post.postId, {
       data: { text },
       mentionees,
       metadata,
-      attachments: childrenPosts.map(formattedAttachment),
+      attachments: childrenPosts.map(formattedAttachment).filter((value) => !!value),
     });
     clearAll();
     onSave();

@@ -39,7 +39,7 @@ const RecentChat = ({
     if (type !== 'conversation') {
       await ChannelRepository.joinChannel(channelId);
     }
-    await SubChannelRepository.startReading(channelId);
+    await SubChannelRepository.startMessageReceiptSync(channelId);
   };
 
   return (

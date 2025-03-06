@@ -13,7 +13,11 @@ export default function useCommunityModeratorsCollection({
 }) {
   const { items, ...rest } = useLiveCollection({
     fetcher: CommunityRepository.Membership.getMembers,
-    params: { communityId: communityId as string, roles: [COMMUNITY_MODERATOR] },
+    params: {
+      communityId: communityId as string,
+      roles: [COMMUNITY_MODERATOR],
+      limit: 20,
+    },
     shouldCall: !!communityId && shouldCall,
   });
 

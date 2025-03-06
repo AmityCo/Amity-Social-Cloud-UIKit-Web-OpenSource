@@ -13,6 +13,7 @@ export default function useCommunityMembersCollection({
     params: {
       ...(queryParams as Parameters<typeof CommunityRepository.Membership.getMembers>[0]),
       includeDeleted: false,
+      limit: 20,
     },
     shouldCall: !!queryParams?.communityId && shouldCall,
   });
