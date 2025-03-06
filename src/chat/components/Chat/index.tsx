@@ -25,7 +25,7 @@ interface ChatProps {
 const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProps) => {
   useEffect(() => {
     return () => {
-      SubChannelRepository.stopReading(channelId);
+      SubChannelRepository.stopMessageReceiptSync(channelId);
     };
   }, [channelId]);
 

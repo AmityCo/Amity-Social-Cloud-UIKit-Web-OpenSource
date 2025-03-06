@@ -28,7 +28,7 @@ export function SelectPostTargetPage() {
   });
   const { onBack } = useNavigation();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member' },
   });
   const { AmityPostTargetSelectionPage } = usePageBehavior();
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);

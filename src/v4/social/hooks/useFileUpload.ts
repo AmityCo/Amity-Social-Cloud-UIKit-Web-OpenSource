@@ -78,9 +78,9 @@ export default function useFileUpload({
             formData.append('files', file);
             const uploadedFile = await (async () => {
               if (file.type.includes(FileType.IMAGE)) {
-                return FileRepository.createImage(formData);
+                return FileRepository.uploadImage(formData);
               } else if (file.type.includes(FileType.VIDEO)) {
-                return FileRepository.createVideo(formData);
+                return FileRepository.uploadVideo(formData);
               }
             })();
 

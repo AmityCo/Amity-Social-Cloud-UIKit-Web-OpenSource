@@ -35,7 +35,7 @@ const ChatItem = ({ channelId, isSelected, onSelect }: ChatItemProps) => {
   const channel = useChannel(channelId);
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
-  const normalizedUnreadCount = getNormalizedUnreadCount(channel?.unreadCount || 0);
+  const normalizedUnreadCount = getNormalizedUnreadCount(channel?.subChannelsUnreadCount || 0);
 
   useChannelSubscription({
     channelId: channel?.channelId,
