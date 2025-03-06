@@ -29,7 +29,7 @@ export function StoryTargetSelectionPage() {
   const { onBack } = useNavigation();
   const { closePopup } = usePopupContext();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member' },
   });
   const { AmityStoryTargetSelectionPage } = usePageBehavior();
   const { file, setFile } = useStoryContext();

@@ -7,9 +7,9 @@ import { TopSearchBar } from '~/v4/social/components/TopSearchBar';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { UserSearchResult } from '~/v4/social/components/UserSearchResult';
 import { CommunitySearchResult } from '~/v4/social/components/CommunitySearchResult';
-import useCommunitiesCollection from '~/v4/core/hooks/collections/useCommunitiesCollection';
 import { useUserQueryByDisplayName } from '~/v4/core/hooks/collections/useUsersCollection';
 import styles from './SocialGlobalSearchPage.module.css';
+import useSearchCommunitiesCollection from '~/v4/social/hooks/collections/useSearchCommunitiesCollection';
 
 enum AmityGlobalSearchType {
   User = 'user',
@@ -28,10 +28,13 @@ const useGlobalSearchViewModel = () => {
     [searchType, searchKeyword],
   );
 
-  const communityCollection = useCommunitiesCollection(
-    { displayName: searchKeyword, limit: 20 },
-    () => searchType === AmityGlobalSearchType.Community && searchKeyword.length > 0,
-  );
+  const communityCollection = useSearchCommunitiesCollection({
+    queryParams: {
+      displayName: searchKeyword,
+      limit: 20,
+    },
+    shouldCall: searchType === AmityGlobalSearchType.Community && searchKeyword.length > 0,
+  });
 
   const userCollection = useUserQueryByDisplayName({
     displayName: searchKeyword,

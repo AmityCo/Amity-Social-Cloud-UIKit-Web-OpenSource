@@ -147,7 +147,10 @@ export const GlobalFeedStory: React.FC<GlobalFeedStoryProps> = ({
         notification.success({
           content: 'Story deleted',
           alignment:
-            page.type === PageTypes.ViewStoryPage && !isLastStory ? 'fullscreen' : 'withSidebar',
+            (page.type === PageTypes.ViewStoryPage && stories.length > 1 && isLastStory) ||
+            !isLastStory
+              ? 'fullscreen'
+              : 'withSidebar',
         });
         refresh();
         if (stories.length === 1) {

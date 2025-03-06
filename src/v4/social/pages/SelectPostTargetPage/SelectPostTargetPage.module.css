@@ -89,4 +89,9 @@
   .selectPostTargetPage__timeline[data-focus-visible] {
     background-color: var(--asc-color-base-shade4);
   }
+
+  .selectPostTargetPage__myCommunitiesList {
+    max-height: 34rem;
+    overflow-y: scroll;
+  }
 }

@@ -30,7 +30,7 @@ export function PollTargetSelectionPage() {
   });
   const { onBack } = useNavigation();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member' },
   });
   const { AmityPollTargetSelectionPageBehavior } = usePageBehavior();
   const { currentUserId } = useSDK();

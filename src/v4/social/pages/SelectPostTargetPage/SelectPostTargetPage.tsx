@@ -35,7 +35,7 @@ export function SelectPostTargetPage() {
   const { AmityPostTargetSelectionPage } = usePageBehavior();
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member' },
   });
 
   useIntersectionObserver({
@@ -106,65 +106,67 @@ export function SelectPostTargetPage() {
       </div>
       <div className={styles.selectPostTargetPage__line} />
       <div className={styles.selectPostTargetPage__myCommunities}>My Communities</div>
-      {communities
-        .filter((community) => canCreatePostCommunity(client, community))
-        .map((community) => {
-          return (
-            <Button
-              key={community.communityId}
-              className={styles.selectPostTargetPage__timeline}
-              onPress={() => {
-                isDesktop
-                  ? openPopup({
-                      pageId,
-                      view: 'desktop',
-                      isDismissable: false,
-                      onClose: ({ close }) => {
-                        confirm({
-                          onOk: close,
-                          type: 'confirm',
-                          okText: 'Discard',
-                          cancelText: 'Keep editing',
-                          title: 'Discard this post?',
-                          pageId: 'post_composer_page',
-                          content: 'The post will be permanently discarded. It cannot be undone.',
-                        });
-                      },
-                      header: (
-                        <CommunityDisplayName
-                          community={community}
-                          pageId="post_composer_page"
-                          className={styles.selectPostTargetPage__displayName}
-                        />
-                      ),
-                      children: (
-                        <PostComposerPage
-                          mode={Mode.CREATE}
-                          community={community}
-                          targetType="community"
-                          targetId={community.communityId}
-                        />
-                      ),
-                    })
-                  : AmityPostTargetSelectionPage?.goToPostComposerPage?.({
-                      mode: Mode.CREATE,
-                      community: community,
-                      targetType: 'community',
-                      targetId: community.communityId,
-                    });
-              }}
-            >
-              <div className={styles.selectPostTargetPage__communityAvatar}>
-                <CommunityAvatar pageId={pageId} community={community} />
-              </div>
-              <div className={styles.selectPostTargetPage__communityName}>
-                {!community.isPublic && <CommunityPrivateBadge />}
-                <CommunityDisplayName pageId={pageId} community={community} />
-                {community.isOfficial && <CommunityOfficialBadge />}
-              </div>
-            </Button>
-          );
-        })}
+      <div className={styles.selectPostTargetPage__myCommunitiesList}>
+        {communities
+          .filter((community) => canCreatePostCommunity(client, community))
+          .map((community) => {
+            return (
+              <Button
+                key={community.communityId}
+                className={styles.selectPostTargetPage__timeline}
+                onPress={() => {
+                  isDesktop
+                    ? openPopup({
+                        pageId,
+                        view: 'desktop',
+                        isDismissable: false,
+                        onClose: ({ close }) => {
+                          confirm({
+                            onOk: close,
+                            type: 'confirm',
+                            okText: 'Discard',
+                            cancelText: 'Keep editing',
+                            title: 'Discard this post?',
+                            pageId: 'post_composer_page',
+                            content: 'The post will be permanently discarded. It cannot be undone.',
+                          });
+                        },
+                        header: (
+                          <CommunityDisplayName
+                            community={community}
+                            pageId="post_composer_page"
+                            className={styles.selectPostTargetPage__displayName}
+                          />
+                        ),
+                        children: (
+                          <PostComposerPage
+                            mode={Mode.CREATE}
+                            community={community}
+                            targetType="community"
+                            targetId={community.communityId}
+                          />
+                        ),
+                      })
+                    : AmityPostTargetSelectionPage?.goToPostComposerPage?.({
+                        mode: Mode.CREATE,
+                        community: community,
+                        targetType: 'community',
+                        targetId: community.communityId,
+                      });
+                }}
+              >
+                <div className={styles.selectPostTargetPage__communityAvatar}>
+                  <CommunityAvatar pageId={pageId} community={community} />
+                </div>
+                <div className={styles.selectPostTargetPage__communityName}>
+                  {!community.isPublic && <CommunityPrivateBadge />}
+                  <CommunityDisplayName pageId={pageId} community={community} />
+                  {community.isOfficial && <CommunityOfficialBadge />}
+                </div>
+              </Button>
+            );
+          })}
+      </div>
       <div ref={(node) => setIntersectionNode(node)} />
     </div>
   );

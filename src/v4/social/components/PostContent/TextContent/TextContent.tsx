@@ -23,7 +23,7 @@ interface TextContentProps {
   text?: string;
   mentioned?: Mentioned[];
   mentionees?: Mentionees;
-  post?: Amity.Post<'image'>;
+  post?: Amity.Post;
 }
 
 export const TextContent = ({
@@ -42,7 +42,10 @@ export const TextContent = ({
 
   const linksFounded = linkify.find(text).filter((link) => link.type === 'url');
 
-  const isHasMedia = childPost?.dataType === 'image' || childPost?.dataType === 'video';
+  const isHasMedia =
+    childPost?.dataType === 'image' ||
+    childPost?.dataType === 'video' ||
+    childPost?.dataType === 'poll';
 
   return (
     <>

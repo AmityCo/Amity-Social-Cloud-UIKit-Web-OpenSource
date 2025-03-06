@@ -57,7 +57,7 @@ export const CommunityMemberItem = ({
   const isGlobalBanned = user?.isGlobalBan;
   const isCurrentUser = currentUserId === user?.userId;
 
-  const onReportUser = async () => {
+  const onReportMember = async () => {
     removeDrawerData();
 
     if (!online) {
@@ -69,7 +69,7 @@ export const CommunityMemberItem = ({
 
     try {
       await toggleFlagUser();
-      notification.success({ content: isFlaggedByMe ? 'User unreported.' : 'User reported.' });
+      notification.success({ content: isFlaggedByMe ? 'Member unreported.' : 'Member reported.' });
     } catch (err) {
       notification.info({ content: 'Failed to report member. Please try again.' });
     }
@@ -149,7 +149,7 @@ export const CommunityMemberItem = ({
       : null,
 
     {
-      action: onReportUser,
+      action: onReportMember,
       accessibilityId: 'report_member',
       name: isFlaggedByMe ? 'Unreport user' : 'Report user',
       icon: isFlaggedByMe ? (
