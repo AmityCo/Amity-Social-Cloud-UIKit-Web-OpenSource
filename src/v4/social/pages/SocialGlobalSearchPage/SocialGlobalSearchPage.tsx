@@ -1,5 +1,6 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import styles from './SocialGlobalSearchPage.module.css';
+import useSearchCommunitiesCollection from '~/v4/social/hooks/collections/useSearchCommunitiesCollection';
 
 import { TopSearchBar } from '~/v4/social/components/TopSearchBar';
 import { CommunitySearchResult } from '~/v4/social/components/CommunitySearchResult';
@@ -26,10 +27,13 @@ const useGlobalSearchViewModel = () => {
     [searchType, searchKeyword],
   );
 
-  const communityCollection = useCommunitiesCollection(
-    { displayName: searchKeyword, limit: 20 },
-    () => searchType === AmityGlobalSearchType.Community && searchKeyword.length > 0,
-  );
+  const communityCollection = useSearchCommunitiesCollection({
+    queryParams: {
+      displayName: searchKeyword,
+      limit: 20,
+    },
+    shouldCall: searchType === AmityGlobalSearchType.Community && searchKeyword.length > 0,
+  });
 
   const userCollection = useUserQueryByDisplayName({
     displayName: searchKeyword,

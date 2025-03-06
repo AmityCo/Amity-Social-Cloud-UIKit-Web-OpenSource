@@ -79,7 +79,7 @@ const useSocialMention = ({
       if (isCommunityFeed && !community?.isPublic && targetId != null) {
         users = await new Promise((resolve) => {
           unsub?.();
-          unsub = CommunityRepository.Membership.getMembers(
+          unsub = CommunityRepository.Membership.searchMembers(
             {
               communityId: targetId,
               search: keyword,
@@ -94,8 +94,8 @@ const useSocialMention = ({
       } else {
         users = await new Promise((resolve) => {
           unsub?.();
-          unsub = UserRepository.getUsers(
-            { displayName: keyword, limit: 20, sortBy: 'displayName' },
+          unsub = UserRepository.searchUserByDisplayName(
+            { displayName: keyword, limit: 20 },
             (response) => {
               if (response.loading) return;
               resolve(response.data);

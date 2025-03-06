@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import styles from './MyCommunitiesSearchPage.module.css';
-
+import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { TopSearchBar } from '~/v4/social/components/TopSearchBar';
 import { CommunitySearchResult } from '~/v4/social/components/CommunitySearchResult';
-import useCommunitiesCollection from '~/v4/core/hooks/collections/useCommunitiesCollection';
-import { useAmityPage } from '~/v4/core/hooks/uikit';
+import useSearchCommunitiesCollection from '~/v4/social/hooks/collections/useSearchCommunitiesCollection';
+import styles from './MyCommunitiesSearchPage.module.css';
 
 export function MyCommunitiesSearchPage() {
   const pageId = 'my_communities_search_page';
@@ -14,10 +13,13 @@ export function MyCommunitiesSearchPage() {
 
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const { communities, isLoading, hasMore, loadMore } = useCommunitiesCollection({
-    displayName: searchValue,
-    limit: 20,
-    membership: 'member',
+  const { communities, isLoading, hasMore, loadMore } = useSearchCommunitiesCollection({
+    queryParams: {
+      displayName: searchValue,
+      limit: 20,
+      membership: 'member',
+    },
+    shouldCall: searchValue.length > 0,
   });
 
   return (

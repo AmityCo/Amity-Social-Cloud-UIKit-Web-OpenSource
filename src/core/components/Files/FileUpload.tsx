@@ -26,7 +26,7 @@ export const FileUpload = ({ disabled, addFiles, setProgress, updateFiles }: Fil
       uploadingFiles.map(async (file: File) => {
         const formData = new FormData();
         uploadingFiles.forEach((f) => formData.append('files[]', f));
-        const response = await FileRepository.createFile(formData, (currentPercent) => {
+        const response = await FileRepository.uploadFile(formData, (currentPercent) => {
           setProgress({
             name: file.name,
             progress: Math.round(currentPercent * 100),

@@ -5,12 +5,10 @@ const useStream = (streamId?: string) => {
   const [stream, setStream] = useState<Amity.Stream | null>(null);
 
   useEffect(() => {
-    async function run() {
-      if (streamId == null) return;
-      const response = await StreamRepository.getStream(streamId);
-      setStream(response.data);
-    }
-    run();
+    if (streamId == null) return;
+    StreamRepository.getStreamById(streamId, ({ data }) => {
+      setStream(data);
+    });
   }, [streamId]);
 
   return stream;

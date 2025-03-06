@@ -97,15 +97,15 @@ export default function useFileUpload({
             formData.append('files', file);
             const uploadedFile = await (async () => {
               if (file.type.includes(FileType.VIDEO)) {
-                return FileRepository.createVideo(formData, undefined, (currentPercent) => {
+                return FileRepository.uploadVideo(formData, undefined, (currentPercent) => {
                   onProgress(file, currentPercent);
                 });
               } else if (file.type.includes(FileType.IMAGE)) {
-                return FileRepository.createImage(formData, (currentPercent) => {
+                return FileRepository.uploadImage(formData, (currentPercent) => {
                   onProgress(file, currentPercent);
                 });
               } else {
-                return FileRepository.createFile(formData, (currentPercent) => {
+                return FileRepository.uploadFile(formData, (currentPercent) => {
                   onProgress(file, currentPercent);
                 });
               }
