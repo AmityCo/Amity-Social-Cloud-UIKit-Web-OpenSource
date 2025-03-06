@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.3.0 (2025-03-06)
+
+
+### Features
+
+* ASC-28345 - sdk v7 integration ([#975](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/975)) ([a7b1c45](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/a7b1c45e946e8a7aad5037e7e8c284c9e435ee84))
+
 ### 4.2.1 (2025-02-25)
 
 
