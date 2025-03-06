@@ -31,7 +31,10 @@ export const UserSearchResult = ({
 
   return (
     <div className={styles.userSearchResult} style={themeStyles} data-qa-anchor={accessibilityId}>
-      <NoInternetConnectionHoc page="global-search">
+      <NoInternetConnectionHoc
+        page="global-search"
+        className={styles.userSearchResult__noInternetConnectionHoc}
+      >
         {userCollection.length > 0 &&
           userCollection.map((user) => (
             <UserSearchItem

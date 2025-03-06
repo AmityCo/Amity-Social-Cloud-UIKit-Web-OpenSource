@@ -50,7 +50,6 @@ export const CommunityAddMemberPage = ({
   const { users, hasMore, loadMore, isLoading } = useAllUsersCollection({
     queryParams: {
       limit: 20,
-      sortBy: 'displayName',
     },
     shouldCall: memberSearch.length === 0,
   });

@@ -16,7 +16,6 @@ export default function useCommunityModeratorsCollection({
     params: {
       communityId: communityId as string,
       roles: [COMMUNITY_MODERATOR],
-      sortBy: 'displayName',
       limit: 20,
     },
     shouldCall: !!communityId && shouldCall,

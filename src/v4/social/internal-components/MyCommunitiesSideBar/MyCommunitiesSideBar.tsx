@@ -22,7 +22,7 @@ export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps
   const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
   const { goToCommunityProfilePage, goToCommunitiesByCategoryPage, page } = useNavigation();
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
-    queryParams: { sortBy: 'displayName', limit: 20, membership: 'member' },
+    queryParams: { limit: 20, membership: 'member' },
   });
 
   useIntersectionObserver({

@@ -50,7 +50,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
     const formData = new FormData();
     formData.append('files', image);
     try {
-      const { data } = await FileRepository.createImage(formData);
+      const { data } = await FileRepository.uploadImage(formData);
       setNewImage(data[0]);
     } catch (error) {
       if (error instanceof Error && error.message.includes(ERROR_RESPONSE.IMAGE_NUDITY)) {

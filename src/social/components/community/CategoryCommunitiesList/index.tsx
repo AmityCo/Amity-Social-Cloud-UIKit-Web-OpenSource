@@ -19,7 +19,6 @@ const CategoryCommunitiesList = ({ categoryId }: CategoryCommunitiesListProps) =
   const { communities, hasMore, loadMore, isLoading, loadMoreHasBeenCalled } =
     useCommunitiesCollection({
       categoryId,
-      sortBy: 'displayName',
     });
 
   const items = useMemo(() => {

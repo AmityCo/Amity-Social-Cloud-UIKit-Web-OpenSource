@@ -44,7 +44,7 @@ export const AvatarUpload = ({ disabled, setAvatarFileId, value }: AvatarUploadP
     // FIXME: SSR issue formData is client only
     const formData = new FormData();
     formData.append('files', event.target.files![0]);
-    const result = await FileRepository.createFile(formData);
+    const result = await FileRepository.uploadFile(formData);
     setAvatarFileId(result.data[0].fileUrl);
   };
 

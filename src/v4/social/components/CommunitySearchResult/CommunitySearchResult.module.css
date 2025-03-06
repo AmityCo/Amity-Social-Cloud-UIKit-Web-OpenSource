@@ -66,3 +66,10 @@
   justify-content: center;
   align-items: center;
 }
+
+.communitySearchResult__noInternetConnectionHoc {
+  height: calc(100vh - 10rem);
+  width: 100%;
+  display: flex;
+  align-items: center;
+}

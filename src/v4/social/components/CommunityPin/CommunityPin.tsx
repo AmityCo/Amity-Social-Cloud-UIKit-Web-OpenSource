@@ -57,14 +57,21 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
 
   const pinnedPosts = pinnedPost.filter((post) => post.placement === 'default');
 
+  const handlePostDeleted = () => {
+    refresh();
+  };
+
   const renderAnnouncementPost = () => {
     return isLoading ? (
       <CommunityFeedPostContentSkeleton />
     ) : (
       announcementPosts &&
         announcementPosts.map(({ post }: Amity.Post) => {
+          if (!post || !post.postId) return null;
+
           return (
             <Button
+              key={post.postId}
               onPress={() => {
                 AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
                   postId: post.postId,
@@ -87,7 +94,7 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
                     category: post.category,
                   })
                 }
-                onPostDeleted={() => refresh()}
+                onPostDeleted={handlePostDeleted}
               />
             </Button>
           );
@@ -103,8 +110,11 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
       <>
         {!isLoading &&
           pinnedPostsFilter.map(({ post }: Amity.Post) => {
+            if (!post || !post.postId) return null;
+
             return (
               <Button
+                key={post.postId}
                 onPress={() => {
                   AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
                     postId: post.postId,
@@ -127,7 +137,7 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
                       category: AmityPostCategory.PIN,
                     })
                   }
-                  onPostDeleted={() => refresh()}
+                  onPostDeleted={handlePostDeleted}
                 />
               </Button>
             );

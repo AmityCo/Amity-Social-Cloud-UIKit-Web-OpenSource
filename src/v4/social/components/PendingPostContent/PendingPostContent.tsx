@@ -230,6 +230,7 @@ export const PendingPostContent = ({
             text={post?.data?.text}
             mentioned={post?.metadata?.mentioned}
             mentionees={post?.mentioness}
+            post={post}
           />
           {post.children.length > 0 && (
             <ChildrenPostContent
