@@ -28,9 +28,10 @@ import { Button } from '~/v4/core/natives/Button';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import styles from './Comment.module.css';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNetworkState } from 'react-use';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import styles from './Comment.module.css';
 
 const Like = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -165,6 +166,20 @@ export const Comment = ({
       data: commentData.data,
       mentionees: commentData.mentionees as Amity.UserMention[],
       metadata: commentData.metadata,
+    }).catch((error) => {
+      if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+        notification.info({
+          content: 'Your comment contains inappropriate word. Please review and delete it.',
+        });
+      } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+        notification.info({
+          content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
+        });
+      } else {
+        notification.info({
+          content: 'Oops, something went wrong',
+        });
+      }
     });
 
     setIsEditing(false);

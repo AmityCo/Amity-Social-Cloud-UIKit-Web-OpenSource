@@ -11,7 +11,6 @@ import { CommentRepository } from '@amityco/ts-sdk';
 import Close from '~/v4/icons/Close';
 import { Mentionees, Metadata } from '~/v4/helpers/utils';
 
-import styles from './CommentComposer.module.css';
 import clsx from 'clsx';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
@@ -19,6 +18,8 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { Notification } from '~/v4/core/components/Notification';
 import { useNetworkState } from 'react-use';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import styles from './CommentComposer.module.css';
 
 const LockSvg = () => {
   return (
@@ -99,10 +100,20 @@ export const CommentComposer = ({
         mentionees: params.mentionees as Amity.UserMention[],
       });
     },
-    onError: () => {
-      notification.info({
-        content: 'Oops, something went wrong',
-      });
+    onError: (error) => {
+      if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+        notification.info({
+          content: 'Your comment contains inappropriate word. Please review and delete it.',
+        });
+      } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+        notification.info({
+          content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
+        });
+      } else {
+        notification.info({
+          content: 'Oops, something went wrong',
+        });
+      }
     },
     onSuccess: () => {
       setTextValue({

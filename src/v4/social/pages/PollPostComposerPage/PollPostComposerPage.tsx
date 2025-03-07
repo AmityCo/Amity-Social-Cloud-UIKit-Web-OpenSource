@@ -197,7 +197,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       setIsError(true);
       if (error instanceof Error) {
         if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
-          notification.error({
+          notification.info({
             content: 'Text contain blocked word.',
           });
         }
