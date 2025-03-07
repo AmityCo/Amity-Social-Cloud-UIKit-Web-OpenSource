@@ -157,7 +157,14 @@ export const PostMenu = ({
       content: 'This post will be permanently deleted.',
       cancelText: 'Cancel',
       okText: 'Delete',
-      onOk: () => mutateDeletePost(),
+      onOk: () => {
+        const isCurrentlyOnline = navigator.onLine;
+        if (!isCurrentlyOnline) {
+          notification.info({ content: 'Oops, something went wrong.' });
+          return;
+        }
+        mutateDeletePost();
+      },
       pageId,
       componentId,
     });
@@ -207,7 +214,14 @@ export const PostMenu = ({
       content: `The Poll duration you've set will be ignored and your poll will be closed immediately.`,
       cancelText: 'Cancel',
       okText: 'Close poll',
-      onOk: () => mutateClosePoll(),
+      onOk: () => {
+        const isCurrentlyOnline = navigator.onLine;
+        if (!isCurrentlyOnline) {
+          notification.info({ content: 'Oops, something went wrong.' });
+          return;
+        }
+        mutateClosePoll();
+      },
       pageId,
       componentId,
     });
@@ -219,13 +233,7 @@ export const PostMenu = ({
         <Button
           data-qa-anchor={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
-          onPress={() => {
-            if (!online) {
-              notification.info({ content: 'Oops, something went wrong.' });
-              return;
-            }
-            onClosePollClick();
-          }}
+          onPress={onClosePollClick}
         >
           <ClosePollIcon className={styles.postMenu__closePoll__icon} />
           <Typography.BodyBold className={styles.postMenu__reportPost__text}>
@@ -269,13 +277,7 @@ export const PostMenu = ({
         <Button
           data-qa-anchor={`${pageId}/${componentId}/delete_post`}
           className={styles.postMenu__item}
-          onPress={() => {
-            if (!online) {
-              notification.info({ content: 'Oops, something went wrong.' });
-              return;
-            }
-            onDeleteClick();
-          }}
+          onPress={onDeleteClick}
         >
           <TrashIcon className={styles.postMenu__deletePost__icon} />
           <Typography.BodyBold className={styles.postMenu__deletePost__text}>
