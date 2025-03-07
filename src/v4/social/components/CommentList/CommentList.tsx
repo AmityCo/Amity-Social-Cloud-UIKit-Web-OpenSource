@@ -23,6 +23,7 @@ type CommentListProps = {
   includeDeleted?: boolean;
   community?: Amity.Community | null;
   shouldAllowInteraction?: boolean;
+  commentCount?: number;
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
 };
 
@@ -36,9 +37,10 @@ export const CommentList = ({
   pageId = '*',
   onClickReply,
   limit = 5,
-  includeDeleted = false,
+  includeDeleted = true,
   community,
   shouldAllowInteraction = true,
+  commentCount = 0,
   renderReplyComment,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
@@ -112,10 +114,9 @@ export const CommentList = ({
         return isAmityAd(item) ? (
           <CommentAd key={item.adId} ad={item} />
         ) : (
-          <div>
+          <div key={(item as Amity.Comment).commentId}>
             <Comment
               pageId={pageId}
-              key={item.commentId}
               comment={item as Amity.Comment}
               onClickReply={(comment) => onClickReply?.(comment)}
               componentId={componentId}
@@ -127,7 +128,7 @@ export const CommentList = ({
         );
       })}
 
-      {isDesktop && !expanded && (
+      {isDesktop && !expanded && items.length < commentCount && (
         <Button
           className={styles.commentList__viewAllComments__button}
           variant="text"

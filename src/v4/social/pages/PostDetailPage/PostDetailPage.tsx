@@ -92,6 +92,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
                 referenceType="post"
                 onClickReply={handleReplyClick}
                 community={community}
+                commentCount={post.commentsCount}
                 renderReplyComment={(comment) => {
                   if (replyComment && comment.commentId === replyComment.commentId && isDesktop) {
                     return (
