@@ -10,7 +10,7 @@ export const Thumbnail = ({ item }: ThumbnailProps) => {
     <Image
       key={item?.data.fileId}
       fileId={item?.data.fileId}
-      data-qa-anchor="post-gallery-content-image-thumbnail-item"
+      data-testid="post-gallery-content-image-thumbnail-item"
       mediaFit="cover"
     />
   );
@@ -24,7 +24,7 @@ export const Item = ({ item }: ItemProps) => {
   return (
     <Image
       fileId={item?.data.fileId}
-      data-qa-anchor="post-gallery-content-image-item"
+      data-testid="post-gallery-content-image-item"
       mediaFit="contain"
       noBorder
     />

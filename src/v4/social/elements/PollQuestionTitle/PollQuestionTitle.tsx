@@ -15,7 +15,7 @@ export const PollQuestionTitle = ({ pageId = '*', componentId = '*' }: PollQuest
     elementId,
   });
   return (
-    <Typography.TitleBold style={themeStyles} data-qa-anchor={accessibilityId}>
+    <Typography.TitleBold style={themeStyles} data-testid={accessibilityId}>
       {config.text}
     </Typography.TitleBold>
   );

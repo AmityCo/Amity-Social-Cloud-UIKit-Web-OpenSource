@@ -29,7 +29,7 @@ export const CancelButton = ({
       onPress={onPress}
       style={themeStyles}
       className={styles.cancelButton}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       <Typography.Body>{config.text}</Typography.Body>
     </Button>

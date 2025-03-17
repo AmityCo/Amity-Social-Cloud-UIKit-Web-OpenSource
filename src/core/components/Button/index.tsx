@@ -11,7 +11,7 @@ export interface ButtonProps {
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   type?: 'button' | 'submit' | 'reset';
 }
 

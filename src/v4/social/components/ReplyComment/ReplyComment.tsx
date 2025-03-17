@@ -185,17 +185,13 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
           </div>
         </div>
       ) : (
-        <div
-          className={styles.postReplyComment}
-          style={themeStyles}
-          data-qa-anchor={accessibilityId}
-        >
+        <div className={styles.postReplyComment} style={themeStyles} data-testid={accessibilityId}>
           <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postReplyComment__details}>
             <div className={styles.postReplyComment__content}>
               <div className={styles.postReplyComment__userInfo}>
                 <Typography.BodyBold
-                  data-qa-anchor={`${pageId}/${componentId}/username`}
+                  data-testid={`${pageId}/${componentId}/username`}
                   className={styles.postReplyComment__content__username}
                 >
                   {comment.creator?.displayName}
@@ -219,13 +215,13 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
                     componentId={componentId}
                     timestamp={comment.createdAt}
                   />
-                  <span data-qa-anchor={`${pageId}/${componentId}/reply_comment_edited_text`}>
+                  <span data-testid={`${pageId}/${componentId}/reply_comment_edited_text`}>
                     {comment.createdAt !== comment.editedAt && ' (edited)'}
                   </span>
                 </Typography.Caption>
                 <div onClick={handleLike}>
                   <Typography.CaptionBold
-                    data-qa-anchor={`${pageId}/${componentId}/reply_comment_like`}
+                    data-testid={`${pageId}/${componentId}/reply_comment_like`}
                     className={styles.postReplyComment__secondRow__like}
                     data-is-liked={isLiked}
                   >

@@ -26,7 +26,7 @@ export const MyCommunitiesSideBarTitle = ({
   return (
     <Typography.TitleBold
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.myCommunitiesSideBarTitle}
     >
       {config.text}

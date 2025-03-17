@@ -56,7 +56,7 @@ export const TextWithMention = ({
     if ($isSerializedMentionNode<MentionData>(child)) {
       return (
         <span
-          data-qa-anchor={`${pageId}/${componentId}/mention`}
+          data-testid={`${pageId}/${componentId}/mention`}
           key={uuidv4()}
           className={clsx(styles.textWithMention__mention)}
           onClick={() => goToUserProfilePage(child.data.userId)}
@@ -72,7 +72,7 @@ export const TextWithMention = ({
           key={child.url}
           href={child.url}
           className={clsx(styles.textWithMention__link)}
-          data-qa-anchor={`${pageId}/${componentId}/post_link`}
+          data-testid={`${pageId}/${componentId}/post_link`}
           target="_blank"
         >
           {$isSerializedTextNode(child.children[0]) ? child.children[0]?.text : child.url}

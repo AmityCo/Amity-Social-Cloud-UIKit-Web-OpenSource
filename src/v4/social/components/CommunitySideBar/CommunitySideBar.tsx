@@ -33,7 +33,7 @@ export const CommunitySideBar = ({
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.communitySideBar, className)}
     >
       <div className={styles.communitySideBar__header}>

@@ -23,7 +23,7 @@ export function HeaderLabel({ pageId = '*', componentId = '*' }: HeaderLabelProp
     <Typography.Headline
       className={styles.headerLabel}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.Headline>

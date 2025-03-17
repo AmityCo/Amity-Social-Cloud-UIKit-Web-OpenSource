@@ -10,14 +10,14 @@ import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useCategoriesCollection from '~/social/hooks/collections/useCategoriesCollection';
 
 interface CategorySelectorProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   value?: string[];
   onChange?: (categoryIds: string[]) => void;
   parentContainer?: HTMLElement | null;
 }
 
 const CategorySelector = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   value,
   onChange,
   parentContainer = null,
@@ -60,11 +60,11 @@ const CategorySelector = ({
 
   return (
     <Select
-      data-qa-anchor={`${dataQaAnchor}-category`}
+      data-testid={`${dataQaAnchor}-category`}
       value={selectedCategories}
       options={options}
       renderTrigger={({ selected, remove, ...props }) => (
-        <Selector {...props} onClick={toggle} data-qa-anchor={`${dataQaAnchor}-category-selector`}>
+        <Selector {...props} onClick={toggle} data-testid={`${dataQaAnchor}-category-selector`}>
           {selected.map((selectedItem) => (
             <CategoryChip
               key={selectedItem.value}
@@ -74,7 +74,7 @@ const CategorySelector = ({
           ))}
           <CategorySelectorInput
             ref={inputRef}
-            data-qa-anchor="category-selector-input"
+            data-testid="category-selector-input"
             type="text"
             value={query}
             placeholder={formatMessage({ id: 'selectACategory' })}

@@ -21,7 +21,7 @@ export function MyTimelineText({ pageId = '*', componentId = '*' }: MyTimelineTe
     <Typography.Body
       className={styles.myTimelineText}
       style={{ ...themeStyles }}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.Body>

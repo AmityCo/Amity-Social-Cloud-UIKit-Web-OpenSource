@@ -29,7 +29,7 @@ export const UserListUnblockUserButton: React.FC<UserListUnblockUserButtonProps>
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.userListUnblockUserButton}
       onPress={onClick}
     >

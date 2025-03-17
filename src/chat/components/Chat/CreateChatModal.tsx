@@ -40,7 +40,7 @@ const CreateChatModal = ({ onClose }: Props) => {
 
   return (
     <Modal
-      data-qa-anchor="create-chat-modal"
+      data-testid="create-chat-modal"
       title={formatMessage({ id: 'chat_modal.title' })}
       onCancel={closeConfirm}
     >

@@ -29,7 +29,7 @@ export const EditCancelButton = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.editCancelButton, className)}
       style={{
         ...themeStyles,

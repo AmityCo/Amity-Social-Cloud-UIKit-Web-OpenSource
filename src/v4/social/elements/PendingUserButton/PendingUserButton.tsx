@@ -28,7 +28,7 @@ export const PendingUserButton: React.FC<PendingUserButtonProps> = ({
   if (isExcluded) return null;
 
   return (
-    <Button data-qa-anchor={accessibilityId} className={styles.pendingUserButton} onPress={onClick}>
+    <Button data-testid={accessibilityId} className={styles.pendingUserButton} onPress={onClick}>
       <div className={styles.pendingUserButton__inner}>
         <IconComponent
           defaultIcon={() => <PendingUser className={styles.pendingUserButton__icon} />}

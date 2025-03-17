@@ -46,7 +46,7 @@ export const BlockedUserPage = () => {
   };
 
   return (
-    <div className={styles.blockedUserPage} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div className={styles.blockedUserPage} style={themeStyles} data-testid={accessibilityId}>
       <div className={styles.blockedUserPage__topBar}>
         <BackButton pageId={pageId} onPress={() => onBack()} />
         <Title pageId={pageId} titleClassName={styles.blockedUserPage__topBar__text} />

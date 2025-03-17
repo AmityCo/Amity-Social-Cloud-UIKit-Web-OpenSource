@@ -99,7 +99,7 @@ export const PollDurationOptions = ({
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.pollDurationOptions__container}
     >
       {isShowDateTimePicker ? (
@@ -152,7 +152,7 @@ export const PollDurationOptions = ({
               </div>
               <Input
                 aria-label="poll_duration_options_radio"
-                data-qa-anchor={`${pageId}/${componentId}/poll_duration_options_radio`}
+                data-testid={`${pageId}/${componentId}/poll_duration_options_radio`}
                 type="radio"
                 id={`duration-${time.value}`}
                 value={time.value}

@@ -51,12 +51,9 @@ const RecentChat = ({
         {/* this component work only with Callback and User selector on Eko Side, during Personal Mode
         development selector was not add as there is not specific suitable design for UI Kit.
         Need to be done internaly by ASC when needed. */}
-        <CreateNewChatIcon
-          data-qa-anchor="chat-create-chat-button"
-          onClick={onAddNewChannelClick}
-        />
+        <CreateNewChatIcon data-testid="chat-create-chat-button" onClick={onAddNewChannelClick} />
       </RecentHeader>
-      <InfiniteScrollContainer ref={containerRef} data-qa-anchor="chat-list">
+      <InfiniteScrollContainer ref={containerRef} data-testid="chat-list">
         {containerRef.current ? (
           <InfiniteScroll
             scrollableTarget={containerRef.current}

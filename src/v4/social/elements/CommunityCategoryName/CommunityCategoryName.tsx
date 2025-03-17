@@ -24,11 +24,7 @@ export function CommunityCategoryName({
   if (isExcluded) return null;
 
   return (
-    <div
-      className={styles.communityCategoryName}
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
-    >
+    <div className={styles.communityCategoryName} style={themeStyles} data-testid={accessibilityId}>
       <Typography.Caption>{categoryName}</Typography.Caption>
     </div>
   );

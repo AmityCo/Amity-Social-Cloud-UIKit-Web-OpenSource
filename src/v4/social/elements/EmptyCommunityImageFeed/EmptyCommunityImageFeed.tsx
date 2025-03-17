@@ -25,7 +25,7 @@ export const EmptyCommunityImageFeed = ({
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.emptyCommunityImageFeed__container}
     >
       <IconComponent

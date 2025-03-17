@@ -34,7 +34,7 @@ export function CreatePostButton({
     <Button
       className={styles.createPostButton}
       onPress={() => onClick?.()}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
     >
       <IconComponent

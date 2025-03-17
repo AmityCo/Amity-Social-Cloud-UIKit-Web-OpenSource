@@ -119,7 +119,7 @@ export function PostComposer({
   };
 
   return (
-    <div className={styles.postComposer} data-qa-anchor={accessibilityId} style={themeStyles}>
+    <div className={styles.postComposer} data-testid={accessibilityId} style={themeStyles}>
       <UserAvatar
         pageId={pageId}
         userId={user?.userId}

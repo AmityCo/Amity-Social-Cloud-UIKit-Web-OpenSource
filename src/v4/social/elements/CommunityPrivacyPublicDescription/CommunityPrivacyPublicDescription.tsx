@@ -23,7 +23,7 @@ export const CommunityPrivacyPublicDescription = ({
   return (
     <Typography.Caption
       className={styles.communityPrivacyPublicDescription__text}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.Caption>

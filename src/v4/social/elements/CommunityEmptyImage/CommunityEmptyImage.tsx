@@ -23,7 +23,7 @@ export const CommunityEmptyImage = ({
 
   return (
     <IconComponent
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       defaultIcon={() => (
         <svg
           width="55"

@@ -7,7 +7,7 @@ export const ReactionListLoadingState = () => {
   return (
     <div
       className={clsx(styles.reactionCustomStateContainer, styles.loadingState)}
-      data-qa-anchor="reaction_list"
+      data-testid="reaction_list"
     >
       {Array.from({ length: 8 }).map((_, index) => (
         <ReactionListSkeleton key={`loading_${index}`} />

@@ -34,7 +34,7 @@ export function MenuButton({
   return (
     <Button
       onPress={onClick}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.menuButton__button, className)}
     >
       <IconComponent

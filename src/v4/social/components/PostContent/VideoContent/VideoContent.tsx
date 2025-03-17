@@ -78,7 +78,7 @@ const Video = ({
       onPress={() => onVideoClick()}
       data-videos-amount={Math.min(postAmount, 4)}
       className={styles.videoContent__videoContainer}
-      data-qa-anchor={`${pageId}/${componentId}/post_video`}
+      data-testid={`${pageId}/${componentId}/post_video`}
     >
       <VideoThumbnail
         fileId={videoPost.data.thumbnailFileId}

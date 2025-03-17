@@ -3,7 +3,7 @@ import InsideInputText from './InsideInputText';
 import { QueryMentioneesFnType } from '~/v4/chat/hooks/useMention';
 
 export interface InputTextProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   id?: string;
   input?: unknown;
   name?: string;

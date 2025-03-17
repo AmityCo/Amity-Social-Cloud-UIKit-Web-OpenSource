@@ -29,7 +29,7 @@ export const CommunitySideBarMenuItem = ({
       style={themeStyles}
       data-active={isActive}
       isDisabled={isDisabled}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.communitySideBarMenuItem, className)}
     >
       {icon && (

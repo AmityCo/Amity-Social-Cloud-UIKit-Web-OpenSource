@@ -35,7 +35,7 @@ export const CommunityPrivacyPrivateIcon = ({
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
         defaultIconName={defaultConfig.icon}
         configIconName={config.icon}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
       />
     </div>
   );

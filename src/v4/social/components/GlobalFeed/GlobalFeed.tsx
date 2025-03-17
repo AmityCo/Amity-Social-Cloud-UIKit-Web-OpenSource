@@ -75,7 +75,7 @@ export const GlobalFeed = ({
   };
 
   return (
-    <div className={styles.global_feed} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div className={styles.global_feed} style={themeStyles} data-testid={accessibilityId}>
       {globalFeaturedPosts?.map((item) => (
         <React.Fragment key={item.post.postId}>
           <ClickableArea

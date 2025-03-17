@@ -3,7 +3,7 @@ import React from 'react';
 import StyledFile from './StyledFile';
 
 interface LocalFileProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   file?: File;
   progress?: number;
   onRemove?: () => void;
@@ -12,7 +12,7 @@ interface LocalFileProps {
 }
 
 const LocalFile = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   file,
   progress = -1,
   onRemove,
@@ -25,7 +25,7 @@ const LocalFile = ({
 
   return (
     <StyledFile
-      data-qa-anchor={dataQaAnchor}
+      data-testid={dataQaAnchor}
       name={file.name}
       size={file.size}
       type={file.type}

@@ -119,7 +119,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
           onPress={() => onBack()}
         />
         <Typography.TitleBold
-          data-qa-anchor={`${pageId}/page_title`}
+          data-testid={`${pageId}/page_title`}
           className={styles.postDetailPage__topBar__title}
         >
           Post

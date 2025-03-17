@@ -48,7 +48,7 @@ export function VideoViewer({
   const hasPrev = selectedVideoIndex > 0;
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId} className={styles.videoViewer__modal}>
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.videoViewer__modal}>
       <span className={styles.videoViewer__close}>
         <ClearButton
           pageId={pageId}

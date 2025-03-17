@@ -7,7 +7,7 @@ import useImage from '~/core/hooks/useImage';
 
 interface DistantImageProps {
   className?: string;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   fileId?: string;
   loading?: boolean;
   mediaFit?: 'cover' | 'contain';
@@ -18,7 +18,7 @@ interface DistantImageProps {
 
 const DistantImage = ({
   className,
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   fileId,
   loading = false,
   mediaFit = 'cover',
@@ -33,7 +33,7 @@ const DistantImage = ({
   return (
     <StyledImage
       className={className}
-      data-qa-anchor={dataQaAnchor}
+      data-testid={dataQaAnchor}
       url={imageUrl}
       mediaFit={mediaFit}
       noBorder={noBorder}

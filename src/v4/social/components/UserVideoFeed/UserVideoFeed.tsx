@@ -72,7 +72,7 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
   };
 
   return (
-    <div data-qa-anchor={accessibilityId} style={themeStyles}>
+    <div data-testid={accessibilityId} style={themeStyles}>
       <NoInternetConnectionHoc page="feed" refresh={refresh}>
         <>
           {renderVideoFeed()}

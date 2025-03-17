@@ -46,7 +46,7 @@ export function GlobalSearchButton({
   return (
     <Button
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.globalSearchButton}
       onPress={onPress}
     >
@@ -62,7 +62,7 @@ export function GlobalSearchButton({
             src={config.icon}
             alt={uiReference}
             className={clsx(styles.globalSearchButton__icon, imgClassName)}
-            data-qa-anchor={accessibilityId}
+            data-testid={accessibilityId}
           />
         )}
         defaultIconName={defaultConfig.icon}

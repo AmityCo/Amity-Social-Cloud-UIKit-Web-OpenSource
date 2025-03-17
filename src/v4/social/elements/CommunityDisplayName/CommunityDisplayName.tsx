@@ -29,7 +29,7 @@ export function CommunityDisplayName({
   return (
     <Typography.BodyBold
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.communityDisplayName, className)}
     >
       {community?.displayName ?? 'My Timeline'}

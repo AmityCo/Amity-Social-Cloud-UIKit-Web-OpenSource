@@ -21,7 +21,7 @@ const SwitchItem = ({ onChange, value, title, promptText }: SwitchItemProps) => 
         {title && <SwitchItemName>{title}</SwitchItemName>}
         {promptText && <SwitchItemPrompt>{promptText}</SwitchItemPrompt>}
       </SwitchItemDescription>
-      <Switch value={value} data-qa-anchor="community-permissions" onChange={onChange} />
+      <Switch value={value} data-testid="community-permissions" onChange={onChange} />
     </SwitchItemContainer>
   );
 };

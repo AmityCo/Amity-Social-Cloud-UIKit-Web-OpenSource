@@ -17,7 +17,7 @@ export const PostContentSkeleton = ({ pageId = '*' }: PostContentSkeletonProps) 
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={clsx(styles.postContentSkeleton, styles.postContentSkeleton__animation)}
     >

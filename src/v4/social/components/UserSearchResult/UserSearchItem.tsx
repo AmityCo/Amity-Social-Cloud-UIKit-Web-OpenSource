@@ -31,7 +31,7 @@ export const UserSearchItem = ({
       }}
     >
       <div
-        data-qa-anchor={`${pageId}/${componentId}/search_user_avatar`}
+        data-testid={`${pageId}/${componentId}/search_user_avatar`}
         className={styles.userItem__leftPane}
       >
         <UserAvatar
@@ -45,7 +45,7 @@ export const UserSearchItem = ({
         <div className={styles.userItem__userName}>
           <Typography.BodyBold
             className={styles.userItem__userName__text}
-            data-qa-anchor={`${pageId}/${componentId}/search_username`}
+            data-testid={`${pageId}/${componentId}/search_username`}
           >
             {user.displayName}
           </Typography.BodyBold>

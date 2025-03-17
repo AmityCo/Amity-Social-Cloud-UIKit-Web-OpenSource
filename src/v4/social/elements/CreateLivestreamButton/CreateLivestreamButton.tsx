@@ -44,7 +44,7 @@ export function CreateLivestreamButton({
     <div
       className={styles.createLivestreamButton}
       onClick={() => {}} //TODO : Add event create livestream
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
     >
       <IconComponent

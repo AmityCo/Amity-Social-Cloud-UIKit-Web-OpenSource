@@ -76,7 +76,7 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
   }, []);
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId} className={styles.memberList}>
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.memberList}>
       <div className={styles.memberList__searchWrap}>
         <Search
           className={styles.memberList__searchIcon}
@@ -88,14 +88,14 @@ export const MemberList = ({ pageId = '*', community }: MemberListProps) => {
           placeholder="Search member"
           onChange={(e) => handleSearchUser(e)}
           className={styles.memberList__searchInput}
-          data-qa-anchor={`${accessibilityId}_search_input`}
+          data-testid={`${accessibilityId}_search_input`}
         />
         <Button
           aria-label="Close"
           onPress={() => setMemberSearch('')}
           data-search-value={memberSearch.length > 0}
           className={styles.memberList__clearSearchButton}
-          data-qa-anchor={`${accessibilityId}_add_member_button`}
+          data-testid={`${accessibilityId}_add_member_button`}
         >
           <Clear className={styles.memberList__clearSearch} />
         </Button>

@@ -17,7 +17,7 @@ export function EditPostButton({ pageId = '*', componentId = '*', ...props }: Ed
   if (isExcluded) return null;
 
   return (
-    <Button type="submit" style={themeStyles} data-qa-anchor={accessibilityId} {...props}>
+    <Button type="submit" style={themeStyles} data-testid={accessibilityId} {...props}>
       {config.text}
     </Button>
   );

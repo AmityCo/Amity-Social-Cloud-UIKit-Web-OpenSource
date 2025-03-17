@@ -34,12 +34,12 @@ export const CommunityProfileTab: React.FC<CommunityTabsProps> = ({
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={styles.communityTabs__container}
     >
       <Button
-        data-qa-anchor={`${accessibilityId}_feed`}
+        data-testid={`${accessibilityId}_feed`}
         data-is-active={activeTab === 'community_feed'}
         onPress={() => onTabChange('community_feed')}
         className={styles.communityTabs__tab}
@@ -47,7 +47,7 @@ export const CommunityProfileTab: React.FC<CommunityTabsProps> = ({
         <FeedIcon className={styles.communityTabs__icon} />
       </Button>
       <Button
-        data-qa-anchor={`${accessibilityId}_pin`}
+        data-testid={`${accessibilityId}_pin`}
         data-is-active={activeTab === 'community_pin'}
         onPress={() => onTabChange('community_pin')}
         className={styles.communityTabs__tab}
@@ -55,7 +55,7 @@ export const CommunityProfileTab: React.FC<CommunityTabsProps> = ({
         <PinIcon className={styles.communityTabs__pinIcon} />
       </Button>
       <Button
-        data-qa-anchor={`${accessibilityId}_image_feed`}
+        data-testid={`${accessibilityId}_image_feed`}
         data-is-active={activeTab === 'community_image_feed'}
         onPress={() => onTabChange('community_image_feed')}
         className={styles.communityTabs__tab}
@@ -63,7 +63,7 @@ export const CommunityProfileTab: React.FC<CommunityTabsProps> = ({
         <ImageIcon className={styles.communityTabs__icon} />
       </Button>
       <Button
-        data-qa-anchor={`${accessibilityId}_video_feed`}
+        data-testid={`${accessibilityId}_video_feed`}
         data-is-active={activeTab === 'community_video_feed'}
         onPress={() => onTabChange('community_video_feed')}
         className={styles.communityTabs__tab}

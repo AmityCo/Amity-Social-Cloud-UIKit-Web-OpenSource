@@ -62,7 +62,7 @@ export function LinkPreview({ pageId = '*', componentId = '*', url }: LinkPrevie
 
   return (
     <Button
-      data-qa-anchor={`${pageId}/${componentId}/post_preview_link`}
+      data-testid={`${pageId}/${componentId}/post_preview_link`}
       onPress={handleClick}
       className={styles.linkPreview}
     >

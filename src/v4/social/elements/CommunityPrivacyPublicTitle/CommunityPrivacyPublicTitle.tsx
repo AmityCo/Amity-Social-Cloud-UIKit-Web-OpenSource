@@ -23,7 +23,7 @@ export const CommunityPrivacyPublicTitle = ({
   return (
     <Typography.BodyBold
       className={styles.communityPrivacyPublicTitle__text}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.BodyBold>

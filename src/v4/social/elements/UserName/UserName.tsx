@@ -21,7 +21,7 @@ export const UserName: React.FC<UserNameProps> = ({ name, pageId = '*', componen
   if (isExcluded) return null;
 
   return (
-    <div className={styles.userName__displayName} data-qa-anchor={accessibilityId}>
+    <div className={styles.userName__displayName} data-testid={accessibilityId}>
       <Typography.Headline>
         <Truncate lines={4}>
           <div className={styles.userName__displayName__text}>{name}</div>

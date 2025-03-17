@@ -35,7 +35,7 @@ export function MentionItem({
       onHoverStart={onMouseEnter}
       data-is-selected={isSelected}
       className={styles.userMentionItem__item}
-      data-qa-anchor={`${pageId}/${componentId}/mention_item`}
+      data-testid={`${pageId}/${componentId}/mention_item`}
       variant="text"
     >
       <div>

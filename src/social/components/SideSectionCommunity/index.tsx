@@ -23,7 +23,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }: SideSectionCommun
   return (
     <SideMenuSection heading={<FormattedMessage id="sidesectioncommunity.community" />}>
       <SideMenuActionItem
-        data-qa-anchor="side-section-community-side-menu-action-item-news-feed-button"
+        data-testid="side-section-community-side-menu-action-item-news-feed-button"
         icon={<NewsIcon />}
         active={page.type === PageTypes.NewsFeed}
         onClick={() => onChangePage(PageTypes.NewsFeed)}
@@ -33,7 +33,7 @@ const SideSectionCommunity = ({ shouldHideExplore, children }: SideSectionCommun
 
       {!shouldHideExplore && (
         <SideMenuActionItem
-          data-qa-anchor="side-section-community-side-menu-action-item-explore-button"
+          data-testid="side-section-community-side-menu-action-item-explore-button"
           icon={<SearchIcon />}
           active={page.type === PageTypes.Explore}
           onClick={() => onChangePage(PageTypes.Explore)}

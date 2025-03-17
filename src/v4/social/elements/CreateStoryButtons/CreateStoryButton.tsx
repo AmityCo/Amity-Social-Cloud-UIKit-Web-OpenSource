@@ -46,7 +46,7 @@ export function CreateStoryButton({
     <Button
       className={styles.createStoryButton}
       onPress={() => AmityCreatePostMenuComponentBehavior?.goToStoryTargetSelectionPage?.()}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
     >
       <IconComponent

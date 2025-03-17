@@ -23,11 +23,7 @@ export const CommunityEditTitle = ({
   if (isExcluded) return null;
 
   return (
-    <Typography.TitleBold
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
-      className={className}
-    >
+    <Typography.TitleBold style={themeStyles} data-testid={accessibilityId} className={className}>
       {config.text}
     </Typography.TitleBold>
   );

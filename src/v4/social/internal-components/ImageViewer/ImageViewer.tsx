@@ -50,7 +50,7 @@ export function ImageViewer({
   const { handleTouchEnd, handleTouchMove, handleTouchStart } = useSwiper({ next, prev });
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId} className={styles.imageViewer__modal}>
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.imageViewer__modal}>
       <span className={styles.imageViewer__close}>
         <ClearButton
           pageId={pageId}

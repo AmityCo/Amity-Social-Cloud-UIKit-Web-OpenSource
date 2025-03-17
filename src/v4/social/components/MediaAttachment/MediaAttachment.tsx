@@ -30,7 +30,7 @@ export function MediaAttachment({
   if (isExcluded) return null;
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId} className={styles.mediaAttachment}>
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.mediaAttachment}>
       <div className={styles.mediaAttachment__swipeDown} />
       <div
         className={clsx(

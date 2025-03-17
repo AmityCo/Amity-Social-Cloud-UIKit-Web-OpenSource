@@ -28,7 +28,7 @@ const MediaComponent = ({
     <>
       <img className={styles.thumbnail} src={thumbnailUrl} alt="thumbnail" />
       <Button
-        data-qa-anchor={`${pageId}/${componentId}/${elementId}`}
+        data-testid={`${pageId}/${componentId}/${elementId}`}
         type="reset"
         onPress={() => onRemove()}
         className={styles.thumbnail__closeButton}

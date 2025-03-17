@@ -160,7 +160,7 @@ export const CommunityAddMemberPage = ({
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={styles.communityAddMemberPage__container}
     >
@@ -257,7 +257,7 @@ export const CommunityAddMemberPage = ({
           color="primary"
           onPress={handleAddMember}
           isDisabled={selectedMembers.length === 0}
-          data-qa-anchor={`${pageId}/*/add_member_button`}
+          data-testid={`${pageId}/*/add_member_button`}
           className={styles.communityAddMemberPage__button}
         >
           Add member

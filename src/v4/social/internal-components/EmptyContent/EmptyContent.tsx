@@ -37,7 +37,7 @@ export const EmptyContent: React.FC<EmptyContentProps> = ({
   if (isExcluded) return null;
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId} className={styles.emptyContent}>
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.emptyContent}>
       <IconComponent
         defaultIcon={defaultIcon}
         configIconName={config.image}

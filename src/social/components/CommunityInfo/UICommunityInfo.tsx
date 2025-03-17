@@ -72,11 +72,11 @@ const UICommunityInfo = ({
   const { formatMessage } = useIntl();
 
   return (
-    <Container data-qa-anchor="community-info">
+    <Container data-testid="community-info">
       <Cover backgroundImage={avatarFileUrl!}>
         <CoverContent>
           <CommunityName
-            data-qa-anchor="community-info"
+            data-testid="community-info"
             isOfficial={isOfficial}
             isPublic={isPublic}
             isTitle
@@ -106,7 +106,7 @@ const UICommunityInfo = ({
 
           {isJoined && (
             <OptionMenu
-              data-qa-anchor="community-info-options-button"
+              data-testid="community-info-options-button"
               options={[
                 canEditCommunity
                   ? {
@@ -129,13 +129,13 @@ const UICommunityInfo = ({
 
         {description && (
           <Truncate lines={3}>
-            <Description data-qa-anchor="community-info-description">{description}</Description>
+            <Description data-testid="community-info-description">{description}</Description>
           </Truncate>
         )}
 
         {!isJoined && (
           <JoinButton
-            data-qa-anchor="community-info-join-button"
+            data-testid="community-info-join-button"
             onClick={() => joinCommunity(communityId)}
           >
             <PlusIcon /> <FormattedMessage id="community.join" />
@@ -147,7 +147,7 @@ const UICommunityInfo = ({
         {isJoined && canEditCommunity && (
           <Button
             fullWidth
-            data-qa-anchor="community-info-edit-button"
+            data-testid="community-info-edit-button"
             onClick={() => onEditCommunity(communityId)}
           >
             <PencilIcon /> <FormattedMessage id="community.editProfile" />

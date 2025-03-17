@@ -32,7 +32,7 @@ export const Icon: React.FC<IconProps> = ({
 
   return (
     <IconComponent
-      data-qa-anchor={`${name}-icon`}
+      data-testid={`${name}-icon`}
       width={size}
       height={size}
       className={className}

@@ -34,7 +34,7 @@ export const CommunityPendingPost: React.FC<CommunityPendingPostProps> = ({
     <Button
       className={styles.communityPendingPost__container}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onClick}
     >
       <div className={styles.communityPendingPost__content}>

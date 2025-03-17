@@ -109,7 +109,7 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communitySettingPage__container}
     >
       <div className={styles.communitySettingPage__communityTitleWrap}>

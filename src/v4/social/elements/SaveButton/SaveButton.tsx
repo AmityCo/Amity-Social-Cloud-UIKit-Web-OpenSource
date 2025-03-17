@@ -33,7 +33,7 @@ export function SaveButton({
     <Button
       style={themeStyles}
       className={clsx(styles.saveButton, className)}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onPress}
       isDisabled={isDisabled}
     >

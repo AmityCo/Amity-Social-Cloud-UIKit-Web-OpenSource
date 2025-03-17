@@ -86,7 +86,7 @@ export function CameraButton({
   return (
     <Button
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.cameraButton}
       onPress={triggerFileInput}
     >

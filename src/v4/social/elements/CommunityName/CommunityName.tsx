@@ -24,10 +24,7 @@ export const CommunityName = ({
   if (isExcluded) return null;
 
   return (
-    <Typography.Headline
-      data-qa-anchor={accessibilityId}
-      className={styles.communityName__truncate}
-    >
+    <Typography.Headline data-testid={accessibilityId} className={styles.communityName__truncate}>
       {name}
     </Typography.Headline>
   );

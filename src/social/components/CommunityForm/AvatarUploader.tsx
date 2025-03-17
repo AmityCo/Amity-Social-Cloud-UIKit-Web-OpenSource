@@ -98,14 +98,14 @@ const ImageRenderer = ({ uploading, uploaded, progress }: ImageRendererProps) =>
 };
 
 interface AvatarUploaderProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   onChange: (fileId: string) => void;
   value?: string | null;
   mimeType?: string;
 }
 
 const AvatarUploader = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   onChange,
   value: avatarFileId,
   mimeType,
@@ -142,7 +142,7 @@ const AvatarUploader = ({
       <ImageRenderer uploading={uploading} uploaded={uploaded} progress={progress} />
       <BgImage src={fileUrl ?? communityCoverPlaceholder} />
       <CoverImageLoader
-        data-qa-anchor={`${dataQaAnchor}-avatar-uploader`}
+        data-testid={`${dataQaAnchor}-avatar-uploader`}
         mimeType={mimeType}
         onChange={(newAvatar: File[]) => setLoadedAvatar(newAvatar)}
       >

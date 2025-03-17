@@ -33,7 +33,7 @@ export const EditProfile = ({
       onPress={onClick}
       type="button"
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.editProfile__button}
     >
       <div className={styles.editProfile__leftWrap}>

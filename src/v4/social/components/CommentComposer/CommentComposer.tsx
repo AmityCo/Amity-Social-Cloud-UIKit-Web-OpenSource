@@ -157,7 +157,7 @@ export const CommentComposer = ({
             }
           >
             <div
-              data-qa-anchor={`${pageId}/${componentId}/comment_composer_reply_text`}
+              data-testid={`${pageId}/${componentId}/comment_composer_reply_text`}
               className={styles.commentComposer__replyContainer__text}
             >
               <span>Replying to </span>
@@ -184,7 +184,7 @@ export const CommentComposer = ({
         <div
           className={styles.commentComposer__input}
           ref={composerInputRef}
-          data-qa-anchor={`${pageId}/${componentId}/comment_composer`}
+          data-testid={`${pageId}/${componentId}/comment_composer`}
         >
           <CommentInput
             ref={editorRef}
@@ -211,7 +211,7 @@ export const CommentComposer = ({
         </div>
         <Button
           variant="text"
-          data-qa-anchor={`${pageId}/${componentId}/comment_composer_post`}
+          data-testid={`${pageId}/${componentId}/comment_composer_post`}
           isDisabled={!textValue?.data?.text || isPending}
           className={styles.commentComposer__button}
           onPressStart={() => {

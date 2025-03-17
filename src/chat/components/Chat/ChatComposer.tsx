@@ -122,7 +122,7 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
               <TextInput
                 {...register('displayName')}
                 placeholder={formatMessage({ id: 'chat_composer.placeholder.displayName' })}
-                data-qa-anchor="chat-composer-display-name-input"
+                data-testid="chat-composer-display-name-input"
               />
               <ErrorMessage errors={errors} name="displayName" />
             </Field>
@@ -148,7 +148,7 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
                   <UserSelector
                     parentContainer={formBodyRef.current}
                     {...rest}
-                    data-qa-anchor="chat-composer-select-user-input"
+                    data-testid="chat-composer-select-user-input"
                   />
                 )}
                 control={control}
@@ -167,7 +167,7 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
           >
             <FormattedMessage id="cancel" />
           </Button>
-          <SubmitButton data-qa-anchor="chat-composer-submit-button" disabled={disabled}>
+          <SubmitButton data-testid="chat-composer-submit-button" disabled={disabled}>
             <FormattedMessage id="create" />
           </SubmitButton>
         </Footer>

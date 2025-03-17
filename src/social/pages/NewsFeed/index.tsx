@@ -26,7 +26,7 @@ const NewsFeed = ({ isOpen, toggleOpen }: NewsFeedProps) => {
   const { formatMessage } = useIntl();
 
   return (
-    <Wrapper data-qa-anchor="news-feed">
+    <Wrapper data-testid="news-feed">
       <CommunitySideMenuOverlay isOpen={isOpen} onClick={toggleOpen} />
       <StyledCommunitySideMenu isOpen={isOpen} />
       <MobileContainer>

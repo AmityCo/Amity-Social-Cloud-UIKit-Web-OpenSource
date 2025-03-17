@@ -42,7 +42,7 @@ export function ShareButton({
   if (isExcluded) return null;
 
   // return (
-  //   <div className={styles.shareButton} data-qa-anchor={accessibilityId} style={themeStyles}>
+  //   <div className={styles.shareButton} data-testid={accessibilityId} style={themeStyles}>
   //     <IconComponent
   //       defaultIcon={() => (
   //         <ShareSvg className={clsx(styles.shareButton__icon, defaultIconClassName)} />

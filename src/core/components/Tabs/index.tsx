@@ -4,7 +4,7 @@ import { TabsContainer, TabsList, TabItem, TabButton } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 export interface TabsProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   className?: string;
   tabs: {
     value: string;
@@ -15,18 +15,18 @@ export interface TabsProps {
 }
 
 const Tabs = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   className = '',
   tabs,
   activeTab,
   onChange,
 }: TabsProps) => (
   <TabsContainer className={className}>
-    <TabsList data-qa-anchor={`${dataQaAnchor}-tabs-list`}>
+    <TabsList data-testid={`${dataQaAnchor}-tabs-list`}>
       {tabs.map(({ value, label }) => (
-        <TabItem key={value} data-qa-anchor={`${dataQaAnchor}-${value}-tab-item`}>
+        <TabItem key={value} data-testid={`${dataQaAnchor}-${value}-tab-item`}>
           <TabButton
-            data-qa-anchor={
+            data-testid={
               value === activeTab
                 ? `${dataQaAnchor}-${value}-tab-button-active`
                 : `${dataQaAnchor}-${value}-tab-button`

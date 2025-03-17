@@ -37,14 +37,14 @@ const OptionItem = ({ option, removeOption, updateOption }: OptionItemProps) => 
     <OptionItemContainer>
       <OptionInputContainer>
         <OptionInput
-          data-qa-anchor="poll-composer-option-item-input"
+          data-testid="poll-composer-option-item-input"
           value={text}
           maxLength={MAX_OPTION_TEXT_LENGTH}
           onChange={handleChange}
         />
         <Counter>{`${text.length}/${MAX_OPTION_TEXT_LENGTH}`}</Counter>
       </OptionInputContainer>
-      <CloseButton data-qa-anchor="poll-composer-option-item-close-button" onClick={removeOption}>
+      <CloseButton data-testid="poll-composer-option-item-close-button" onClick={removeOption}>
         <CloseIcon height={16} />
       </CloseButton>
     </OptionItemContainer>
@@ -119,7 +119,7 @@ const OptionsComposer = ({ onChange, optionsLimit }: OptionsComposerProps) => {
       ))}
       <div>
         <Button
-          data-qa-anchor="poll-composer-add-option-button"
+          data-testid="poll-composer-add-option-button"
           fullWidth
           disabled={!addOptionEnabled}
           onClick={(e) => {

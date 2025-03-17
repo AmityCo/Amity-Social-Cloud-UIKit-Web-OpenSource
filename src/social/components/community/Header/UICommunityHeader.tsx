@@ -34,7 +34,7 @@ const UICommunityHeader = ({
   loading,
 }: UICommunityHeaderProps) => (
   <CommunityHeaderContainer
-    data-qa-anchor="community-header"
+    data-testid="community-header"
     isActive={isActive}
     loading={loading}
     onClick={() => onClick?.(communityId)}
@@ -48,7 +48,7 @@ const UICommunityHeader = ({
       <Skeleton style={{ fontSize: 8, maxWidth: 120 }} />
     ) : (
       <CommunityName
-        data-qa-anchor="community-header"
+        data-testid="community-header"
         isActive={isActive}
         isOfficial={isOfficial}
         isPublic={isPublic}

@@ -20,7 +20,7 @@ export const SearchResultSkeleton = ({
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.searchResultSkeleton__postSkeleton}
     >
       <div className={styles.searchResultSkeleton__postSkeletonHeader}>

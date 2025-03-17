@@ -78,7 +78,7 @@ export function ReactionButton({
   return (
     <Button
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.reactButton}
       onPress={() => {
         onReactionClick('like');

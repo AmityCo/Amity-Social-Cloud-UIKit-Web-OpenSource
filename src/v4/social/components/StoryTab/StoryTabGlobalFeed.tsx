@@ -73,7 +73,7 @@ export const StoryTabGlobalFeed = ({
       rightArrowClassName={clsx(styles.storyTabGlobalFeeed__arrow, styles.right)}
     >
       <div
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         style={themeStyles}
         className={styles.storyTabContainer}
         ref={containerRef}

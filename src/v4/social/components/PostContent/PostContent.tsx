@@ -102,7 +102,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
         >
           <Button
             onPress={() => onClickUser(post.creator.userId)}
-            data-qa-anchor={`${pageId}/${componentId}/username`}
+            data-testid={`${pageId}/${componentId}/username`}
           >
             <Typography.BodyBold className={styles.postTitle__text}>
               {post.creator.displayName}
@@ -111,7 +111,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
           {showBrandBadge ? <BrandBadge className={styles.postTitle__brandIcon} /> : null}
           {showTarget ? (
             <AngleRight
-              data-qa-anchor={`${pageId}/${componentId}/arrow_right`}
+              data-testid={`${pageId}/${componentId}/arrow_right`}
               className={styles.postTitle__icon}
             />
           ) : null}
@@ -126,7 +126,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
           {showPrivateBadge && <CommunityPrivateBadge />}
           <Button
             className={styles.postTitle__communityText}
-            data-qa-anchor={`${pageId}/${componentId}/community_name`}
+            data-testid={`${pageId}/${componentId}/community_name`}
             onPress={() => goToCommunityProfilePage(targetCommunity.communityId)}
           >
             <Typography.BodyBold>{targetCommunity.displayName}</Typography.BodyBold>
@@ -369,7 +369,7 @@ export const PostContent = ({
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       ref={elementRef}
       className={clsx(styles.postContent, className)}
       style={themeStyles}
@@ -401,7 +401,7 @@ export const PostContent = ({
             <Timestamp timestamp={post.createdAt} />
             {post.createdAt !== post.editedAt && (
               <Typography.Caption
-                data-qa-anchor={`${pageId}/${componentId}/post_edited_text`}
+                data-testid={`${pageId}/${componentId}/post_edited_text`}
                 className={styles.postContent__bar__information__editedTag}
               >
                 (edited)
@@ -526,7 +526,7 @@ export const PostContent = ({
                 </div>
               ) : null}
               <Typography.Caption
-                data-qa-anchor={`${pageId}/${componentId}/like_count`}
+                data-testid={`${pageId}/${componentId}/like_count`}
                 className={styles.postContent__reactionsBar__reactions__count}
               >
                 {`${millify(post?.reactionsCount || 0)} ${
@@ -536,7 +536,7 @@ export const PostContent = ({
             </div>
 
             <Typography.Caption
-              data-qa-anchor={`${pageId}/${componentId}/comment_count`}
+              data-testid={`${pageId}/${componentId}/comment_count`}
               className={styles.postContent__commentsCount}
             >
               {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}

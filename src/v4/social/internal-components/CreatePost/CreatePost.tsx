@@ -502,7 +502,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
         <div
           ref={mentionRef}
           className={styles.createPost__mention}
-          data-qa-anchor={`${pageId}/mention_text_input_options`}
+          data-testid={`${pageId}/mention_text_input_options`}
           style={{ '--asc-mention-bottom': `${drawerHeight ?? 0}px` } as React.CSSProperties}
         />
       </form>

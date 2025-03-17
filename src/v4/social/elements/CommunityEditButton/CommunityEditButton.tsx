@@ -36,7 +36,7 @@ export const CommunityEditButton = ({
       onPress={onPress}
       style={themeStyles}
       isDisabled={isDisabled}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityEditButton__button}
     >
       {config.text}

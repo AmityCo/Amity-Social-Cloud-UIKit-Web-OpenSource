@@ -28,7 +28,7 @@ export const FollowUserButton: React.FC<FollowUserButtonProps> = ({
   if (isExcluded) return null;
 
   return (
-    <Button data-qa-anchor={accessibilityId} className={styles.followUserButton} onPress={onClick}>
+    <Button data-testid={accessibilityId} className={styles.followUserButton} onPress={onClick}>
       <div className={styles.followUserButton__inner}>
         <IconComponent
           defaultIcon={() => <Plus className={styles.followUserButton__icon} />}

@@ -13,7 +13,7 @@ import {
 
 export interface StyledImageProps {
   className?: string;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   url?: string;
   progress?: number;
   mediaFit?: 'cover' | 'contain';
@@ -26,7 +26,7 @@ export interface StyledImageProps {
 
 const StyledImage = ({
   className,
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   url,
   progress,
   mediaFit,
@@ -57,7 +57,7 @@ const StyledImage = ({
   );
 
   return (
-    <ImageContainer className={className} border={!noBorder} data-qa-anchor={dataQaAnchor}>
+    <ImageContainer className={className} border={!noBorder} data-testid={dataQaAnchor}>
       <Content>
         {url ? (
           <ImgPreview

@@ -217,7 +217,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
           <RichTextPlugin
             contentEditable={
               <ContentEditable
-                data-qa-anchor={accessibilityId}
+                data-testid={accessibilityId}
                 className={styles.editorEditableContent}
               />
             }

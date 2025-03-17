@@ -47,7 +47,7 @@ export function VideoButton({
     <Button
       style={themeStyles}
       className={styles.videoButton}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onPress ? onPress : triggerFileInput}
     >
       <IconComponent

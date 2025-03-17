@@ -73,7 +73,7 @@ export function ImageThumbnail({
                 <img src={URL.createObjectURL(file as File)} className={styles.thumbnail} alt="" />
                 <div className={styles.thumbnail__overlay} />
                 <Button
-                  data-qa-anchor={`${pageId}/${componentId}/remove_thumbnail`}
+                  data-testid={`${pageId}/${componentId}/remove_thumbnail`}
                   type="reset"
                   className={styles.closeButton}
                   onPress={() => removeFile(file)}
@@ -87,13 +87,13 @@ export function ImageThumbnail({
             ) : (
               <>
                 <img
-                  data-qa-anchor={`${pageId}/${componentId}/image_thumbnail`}
+                  data-testid={`${pageId}/${componentId}/image_thumbnail`}
                   className={styles.thumbnail}
                   src={FileRepository.fileUrlWithSize((file as Amity.File)?.fileUrl, 'medium')}
                   alt={(file as Amity.File).attributes?.name}
                 />
                 <Button
-                  data-qa-anchor={`${pageId}/${componentId}/remove_thumbnail`}
+                  data-testid={`${pageId}/${componentId}/remove_thumbnail`}
                   type="reset"
                   className={styles.closeButton}
                   onPress={() => removeFile(file)}

@@ -273,7 +273,7 @@ export const PlainDraftStoryPage = ({
   }, [file, mediaType, imageMode]);
 
   return (
-    <div data-qa-anchor={accessibilityId} style={themeStyles} className={styles.storyWrapper}>
+    <div data-testid={accessibilityId} style={themeStyles} className={styles.storyWrapper}>
       <div id="asc-uikit-create-story" className={styles.draftPageContainer}>
         <div className={styles.headerContainer}>
           <div className={styles.header}>

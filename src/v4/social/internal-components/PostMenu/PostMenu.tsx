@@ -231,7 +231,7 @@ export const PostMenu = ({
     <div className={styles.postMenu}>
       {showClosePollButton && (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/report_post_button`}
+          data-testid={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
           onPress={onClosePollClick}
         >
@@ -243,7 +243,7 @@ export const PostMenu = ({
       )}
       {showReportPostButton && !isLoading ? (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/report_post_button`}
+          data-testid={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
           onPress={() => {
             onCloseMenu();
@@ -263,7 +263,7 @@ export const PostMenu = ({
       ) : null}
       {showEditPostButton && !isPollPost ? (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/edit_post`}
+          data-testid={`${pageId}/${componentId}/edit_post`}
           className={styles.postMenu__item}
           onPress={onEditClick}
         >
@@ -275,7 +275,7 @@ export const PostMenu = ({
       ) : null}
       {showDeletePostButton ? (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/delete_post`}
+          data-testid={`${pageId}/${componentId}/delete_post`}
           className={styles.postMenu__item}
           onPress={onDeleteClick}
         >

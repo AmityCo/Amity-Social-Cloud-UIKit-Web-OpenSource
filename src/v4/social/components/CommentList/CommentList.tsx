@@ -108,7 +108,7 @@ export const CommentList = ({
       className={styles.commentList__container}
       style={themeStyles}
       ref={containerRef}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {items.map((item) => {
         return isAmityAd(item) ? (

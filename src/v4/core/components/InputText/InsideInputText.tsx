@@ -17,7 +17,7 @@ import styles from './styles.module.css';
 import typographyStyles from '~/v4/core/components/Typography/Typography.module.css';
 
 interface InsideInputTextProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   id?: string;
   input?: unknown;
   name?: string;
@@ -55,7 +55,7 @@ interface InsideInputTextProps {
 const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, InsideInputTextProps>(
   (
     {
-      'data-qa-anchor': dataQaAnchor = '',
+      'data-testid': dataQaAnchor = '',
       id,
       name = '',
       value = '',
@@ -118,7 +118,7 @@ const InsideInputText = forwardRef<HTMLInputElement | HTMLTextAreaElement, Insid
       placeholder,
       disabled,
       className: classNames,
-      'data-qa-anchor': dataQaAnchor,
+      'data-testid': dataQaAnchor,
     };
 
     return (

@@ -43,7 +43,7 @@ export const TimeField = ({
     >
       <div className={styles.timeField__wrap}>
         <Label className={styles.timeField__label}>Time</Label>
-        <DateInput data-qa-anchor={accessibilityId} className={styles.timeField__dateInput}>
+        <DateInput data-testid={accessibilityId} className={styles.timeField__dateInput}>
           {(segment) => <DateSegment segment={segment} className={styles.timeField__dateSegment} />}
         </DateInput>
       </div>

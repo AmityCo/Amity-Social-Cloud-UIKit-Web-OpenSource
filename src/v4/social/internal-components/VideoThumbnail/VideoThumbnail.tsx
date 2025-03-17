@@ -75,7 +75,7 @@ export const VideoThumbnail = ({
           ) : isErrorUpload ? (
             <>
               <Button
-                data-qa-anchor={`${pageId}/${componentId}/remove_thumbnail`}
+                data-testid={`${pageId}/${componentId}/remove_thumbnail`}
                 type="reset"
                 className={styles.closeButton}
                 onPress={() => handleRemoveThumbnail(file.file, index)}
@@ -89,12 +89,12 @@ export const VideoThumbnail = ({
           ) : (
             <>
               <img
-                data-qa-anchor={`${pageId}/${componentId}/video_thumbnail`}
+                data-testid={`${pageId}/${componentId}/video_thumbnail`}
                 className={styles.thumbnail}
                 src={file.thumbnail}
               />
               <Button
-                data-qa-anchor={`${pageId}/${componentId}/remove_thumbnail`}
+                data-testid={`${pageId}/${componentId}/remove_thumbnail`}
                 type="reset"
                 className={styles.closeButton}
                 onPress={() => handleRemoveThumbnail(file.file, index)}

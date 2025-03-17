@@ -5,22 +5,22 @@ interface SwitchProps {
   disabled?: boolean;
   value: boolean;
   onChange?: (value: boolean) => void;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
 }
 
 const Switch = ({
   disabled,
   value,
   onChange = () => {},
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   ...props
 }: SwitchProps) => {
   return (
-    <SwitchLabel {...props} disabled={disabled} data-qa-anchor={`${dataQaAnchor}-label`}>
+    <SwitchLabel {...props} disabled={disabled} data-testid={`${dataQaAnchor}-label`}>
       <SwitchInput
         type="checkbox"
         checked={value}
-        data-qa-anchor={`${dataQaAnchor}-switch`}
+        data-testid={`${dataQaAnchor}-switch`}
         onChange={(event) => onChange?.(event.target.checked)}
       />
       <SwitchSlider disabled={disabled} />

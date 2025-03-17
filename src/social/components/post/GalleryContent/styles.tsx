@@ -105,7 +105,7 @@ const BaseThumbnail = ({
 
   return fileId ? (
     <Image
-      data-qa-anchor="post-gallery-content-thumbnail"
+      data-testid="post-gallery-content-thumbnail"
       className={className}
       fileId={fileId}
       mediaFit="cover"
@@ -113,7 +113,7 @@ const BaseThumbnail = ({
         <>
           {overlayElements}
 
-          {showPlayIcon && <PlayIcon data-qa-anchor="post-gallery-content-play-button" />}
+          {showPlayIcon && <PlayIcon data-testid="post-gallery-content-play-button" />}
 
           {duration != null ? <Duration>{formatDuration(duration)}</Duration> : null}
         </>
@@ -121,11 +121,11 @@ const BaseThumbnail = ({
       onRemove={onRemove}
     />
   ) : (
-    <ImageContainer data-qa-anchor="post-gallery-content-thumbnail" className={className}>
+    <ImageContainer data-testid="post-gallery-content-thumbnail" className={className}>
       <ButtonContainer>
         {overlayElements}
 
-        {showPlayIcon && <PlayIcon data-qa-anchor="post-gallery-content-play-button" />}
+        {showPlayIcon && <PlayIcon data-testid="post-gallery-content-play-button" />}
 
         {duration != null ? <Duration>{formatDuration(duration)}</Duration> : null}
 

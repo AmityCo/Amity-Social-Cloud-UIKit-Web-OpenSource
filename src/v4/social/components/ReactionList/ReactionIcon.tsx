@@ -10,7 +10,7 @@ export const ReactionIcon = ({
 }) => {
   return (
     <img
-      data-qa-anchor="reaction_image_view"
+      data-testid="reaction_image_view"
       key={reactionConfigItem.name}
       src={reactionConfigItem.image}
       alt={reactionConfigItem.name}

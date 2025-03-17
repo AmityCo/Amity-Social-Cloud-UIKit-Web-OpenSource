@@ -29,7 +29,7 @@ interface OverflowMenuButtonProps {
   onPress?: ButtonProps['onPress'];
   defaultClassName?: string;
   imgClassName?: string;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
 }
 
 export const OverflowMenuButton = ({
@@ -49,7 +49,7 @@ export const OverflowMenuButton = ({
   return (
     <Button
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.overflowMenuButton}
       onPress={onPress}
     >

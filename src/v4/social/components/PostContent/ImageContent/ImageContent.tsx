@@ -51,7 +51,7 @@ const Image = ({
     <Button
       onPress={() => onImageClick()}
       className={styles.imageContent__imgContainer}
-      data-qa-anchor={`${pageId}/${componentId}/post_image`}
+      data-testid={`${pageId}/${componentId}/post_image`}
     >
       <ImageThumbnail
         fileId={imagePost.data.fileId}

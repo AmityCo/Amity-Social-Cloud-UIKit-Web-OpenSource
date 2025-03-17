@@ -186,7 +186,7 @@ export const Comment = ({
   }, [commentData]);
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div style={themeStyles} data-testid={accessibilityId}>
       {comment.isDeleted ? (
         <div className={styles.postComment__deleteComment_container}>
           <MinusCircleIcon className={styles.postComment__deleteComment_icon} />
@@ -271,7 +271,7 @@ export const Comment = ({
                 className={styles.postComment__userInfo}
               >
                 <Typography.BodyBold
-                  data-qa-anchor={`${pageId}/${componentId}/username`}
+                  data-testid={`${pageId}/${componentId}/username`}
                   className={styles.postComment__content__username}
                 >
                   {comment.creator?.displayName}
@@ -300,7 +300,7 @@ export const Comment = ({
                       componentId={componentId}
                       timestamp={comment.createdAt}
                     />
-                    <span data-qa-anchor={`${pageId}/${componentId}/comment_edited_text`}>
+                    <span data-testid={`${pageId}/${componentId}/comment_edited_text`}>
                       {comment.createdAt !== comment.editedAt && ' (edited)'}
                     </span>
                   </Typography.Caption>
@@ -314,7 +314,7 @@ export const Comment = ({
                     </Typography.CaptionBold>
                   </div>
                   <div
-                    data-qa-anchor={`${pageId}/${componentId}/reply_button`}
+                    data-testid={`${pageId}/${componentId}/reply_button`}
                     onClick={() => onClickReply(comment)}
                   >
                     <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
@@ -371,7 +371,7 @@ export const Comment = ({
 
             {replyAmount > 0 && !hasClickLoadMore && (
               <div
-                data-qa-anchor={`${pageId}/${componentId}/view_reply_button`}
+                data-testid={`${pageId}/${componentId}/view_reply_button`}
                 className={styles.postComment__viewReply_button}
                 onClick={() => setHasClickLoadMore(true)}
               >

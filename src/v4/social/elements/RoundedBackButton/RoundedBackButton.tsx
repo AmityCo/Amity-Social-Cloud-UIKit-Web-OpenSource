@@ -50,7 +50,7 @@ export const RoundedBackButton = ({
   return (
     <Button style={themeStyles} className={styles.roundedBackButton} onPress={onPress}>
       <IconComponent
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         defaultIcon={() => <RoundedBackButtonSvg className={defaultClassName} />}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
         defaultIconName={defaultConfig.icon}

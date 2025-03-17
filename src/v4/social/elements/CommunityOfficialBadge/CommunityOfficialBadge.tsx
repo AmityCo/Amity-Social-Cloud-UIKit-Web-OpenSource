@@ -53,7 +53,7 @@ export function CommunityOfficialBadge({
       defaultIcon={() => (
         <OfficialBadgeIconSvg
           style={themeStyles}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
           className={clsx(styles.communityOfficialBadge, className)}
         />
       )}
@@ -61,7 +61,7 @@ export function CommunityOfficialBadge({
         <img
           alt={uiReference}
           src={config.icon}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
           className={styles.communityOfficialBadge}
         />
       )}

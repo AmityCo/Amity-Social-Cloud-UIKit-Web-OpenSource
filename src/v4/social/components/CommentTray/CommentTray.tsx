@@ -39,11 +39,7 @@ export const CommentTray = ({
   );
 
   return (
-    <div
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
-      className={styles.commentTrayContainer}
-    >
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.commentTrayContainer}>
       <div className={styles.commentListContainer}>
         <CommentList
           includeDeleted

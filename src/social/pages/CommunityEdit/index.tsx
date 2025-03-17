@@ -95,7 +95,7 @@ const CommunityEditPage = ({
     >
       {activeTab === PageTabs.EDIT_PROFILE && !!community?.communityId && (
         <CommunityForm
-          data-qa-anchor="community-edit"
+          data-testid="community-edit"
           community={community}
           edit
           onSubmit={(data) =>

@@ -28,7 +28,7 @@ export function NewsfeedButton({
 
   return (
     <TabButton
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       pageId={pageId}
       componentId={componentId}
       elementId={elementId}

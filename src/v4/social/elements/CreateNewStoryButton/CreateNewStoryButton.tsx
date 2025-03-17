@@ -56,7 +56,7 @@ export const CreateNewStoryButton = ({
       isDisabled={isDisabled}
       style={themeStyles}
       className={clsx(styles.createNewStoryButton, defaultClassName)}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onPress}
     >
       <IconComponent

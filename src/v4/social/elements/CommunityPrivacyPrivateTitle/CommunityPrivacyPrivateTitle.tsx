@@ -22,7 +22,7 @@ export const CommunityPrivacyPrivateTitle = ({
   if (isExcluded) return null;
   return (
     <Typography.BodyBold
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityPrivacyPrivateTitle__text}
     >
       {config.text}

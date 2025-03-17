@@ -33,14 +33,14 @@ const MessageBody = ({
   [key: string]: unknown;
 }) => {
   if (isDeleted) {
-    return <DeletedMessageBody {...otherProps} data-qa-anchor="message-body-deleted" />;
+    return <DeletedMessageBody {...otherProps} data-testid="message-body-deleted" />;
   }
 
   if (!isSupportedMessageType) {
-    return <UnsupportedMessageBody {...otherProps} data-qa-anchor="message-body-unsupported" />;
+    return <UnsupportedMessageBody {...otherProps} data-testid="message-body-unsupported" />;
   }
 
-  return <GeneralMessageBody {...otherProps} data-qa-anchor="message-body-general" />;
+  return <GeneralMessageBody {...otherProps} data-testid="message-body-general" />;
 };
 
 interface MessageProps {
@@ -82,7 +82,7 @@ const Message = ({
       <MessageWrapper>
         {isIncoming && <AvatarWrapper>{!isConsequent && renderAvatar()}</AvatarWrapper>}
 
-        <MessageContainer data-qa-anchor="message">
+        <MessageContainer data-testid="message">
           {shouldShowUserName && <UserName>{userDisplayName}</UserName>}
           <MessageBody
             type={type}

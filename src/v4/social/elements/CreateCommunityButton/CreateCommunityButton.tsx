@@ -29,7 +29,7 @@ export function CreateCommunityButton({
     <div
       className={styles.createCommunityButton}
       onClick={() => onClick()}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
     >
       <IconComponent

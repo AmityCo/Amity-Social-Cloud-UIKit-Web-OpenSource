@@ -15,7 +15,7 @@ export const PollOptionsTitle = ({ pageId = '*', componentId = '*' }: PollOption
     elementId,
   });
   return (
-    <Typography.TitleBold style={themeStyles} data-qa-anchor={accessibilityId}>
+    <Typography.TitleBold style={themeStyles} data-testid={accessibilityId}>
       {config.text}
     </Typography.TitleBold>
   );

@@ -178,11 +178,11 @@ export const ExploreEmptyImage = ({ pageId = '*', componentId = '*' }: ExploreEm
           style={themeStyles}
           src={config.icon}
           alt={uiReference}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
         />
       )}
       defaultIcon={() => (
-        <div data-qa-anchor={accessibilityId} style={themeStyles}>
+        <div data-testid={accessibilityId} style={themeStyles}>
           {currentTheme === 'light' ? <ExploreEmptyImageSvg /> : <DarkExploreEmptyImageSvg />}
         </div>
       )}

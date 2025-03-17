@@ -30,7 +30,7 @@ export const UserSearchResult = ({
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
 
   return (
-    <div className={styles.userSearchResult} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div className={styles.userSearchResult} style={themeStyles} data-testid={accessibilityId}>
       <NoInternetConnectionHoc
         page="global-search"
         className={styles.userSearchResult__noInternetConnectionHoc}
