@@ -17,6 +17,13 @@
   object-fit: cover;
 }
 
+.imageViewer__itemContainer {
+  max-height: 30.1875rem;
+  height: 100%;
+  width: 100%;
+  background-color: var(--asc-color-base-shade4);
+}
+
 .imageViewer__prev {
   z-index: 888;
   left: 1.5rem;
@@ -84,6 +91,14 @@
   .imageViewer__fullImage {
     max-width: 37.5rem;
     max-height: 37.5rem;
+  }
+
+  .imageViewer__itemContainer {
+    max-width: 37.5rem;
+    max-height: 37.5rem;
+    width: 100%;
+    height: 100%;
+    background-color: var(--asc-color-base-shade4);
   }
 
   .imageViewer__prev,

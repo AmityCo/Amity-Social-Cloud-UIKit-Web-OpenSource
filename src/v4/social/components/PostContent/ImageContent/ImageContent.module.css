@@ -83,6 +83,12 @@
   animation: pulse 1.5s ease-in-out infinite;
 }
 
+.imageContent__brokenImage {
+  width: 100%;
+  height: 100%;
+  background-color: var(--asc-color-base-shade4);
+}
+
 @keyframes pulse {
   0% {
     opacity: 0.6;

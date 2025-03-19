@@ -27,7 +27,7 @@
   max-height: 21rem;
 }
 
-.thumbnail__wrapper_item_3 {
+.thumbnail__wrapper[data-video-height='true'] {
   height: 8.625rem;
 }
 
@@ -72,8 +72,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--asc-color-black);
-  opacity: 0.5;
+  background-color: var(--asc-color-background-transparent-black);
   border-radius: 0.25rem;
 }
 
@@ -94,6 +93,6 @@
 
 @media (width >= 48em) {
   .thumbnail__container {
-    padding: 0 1.5rem 1rem;
+    padding: 0.75rem 1.5rem;
   }
 }

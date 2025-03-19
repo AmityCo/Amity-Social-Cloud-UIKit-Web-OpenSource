@@ -1,6 +1,8 @@
-import React, { RefObject, useEffect, useRef, useState } from 'react';
-import { CommunityPostSettings, FileType, PostRepository } from '@amityco/ts-sdk';
+import React, { useRef, useState } from 'react';
+import { CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
+import { FileType } from '@amityco/ts-sdk';
 import { useForm } from 'react-hook-form';
+import { useNetworkState } from 'react-use';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
@@ -10,8 +12,6 @@ import {
 } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
-import { isMobile } from '~/v4/social/utils/isMobile';
-import { generateThumbnailVideo } from '~/v4/social/utils/generateThumbnailVideo';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { CreateNewPostButton } from '~/v4/social/elements/CreateNewPostButton';
 import { PostTextField } from '~/v4/social/elements/PostTextField';
@@ -26,46 +26,23 @@ import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Notification } from '~/v4/core/components/Notification';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import styles from './CreatePost.module.css';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin } from '~/v4/utils/permissions';
-
-const useResizeObserver = ({ ref }: { ref: RefObject<HTMLDivElement> }) => {
-  const [height, setHeight] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    if (ref.current == null) return;
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setHeight(entry.target.clientHeight);
-      }
-    });
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [ref.current]);
-
-  return height;
-};
+import { useMediaAttachmentVisible } from '~/v4/social/hooks/useMediaAttachmentVisible';
+import { useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
+import { useMutation } from '@tanstack/react-query';
+import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
+import styles from './CreatePost.module.css';
+import { Typography } from '~/v4/core/components';
 
 export function CreatePost({ community, targetType, targetId }: AmityPostComposerCreateOptions) {
   const pageId = 'post_composer_page';
-  const HEIGHT_MEDIA_ATTACHMENT_MENU = '6.75rem'; // const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU = '290px';Including file button
-  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1 = '8.5rem'; //Show 1 menus
-  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 = '11rem'; //Show 2 menus
-  const HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3 = '14.5rem'; //Not including file button
 
   const drawerRef = useRef<HTMLDivElement>(null);
   const mentionRef = useRef<HTMLDivElement | null>(null);
@@ -76,7 +53,6 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
   const { handleSubmit } = useForm();
   const { info } = useConfirmContext();
   const { isDesktop } = useResponsive();
-  const notification = useNotifications();
   const { confirm } = useConfirmContext();
   const { closePopup } = usePopupContext();
   const { onBack, prevPage } = useNavigation();
@@ -85,32 +61,13 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
   const { AmityPostComposerPageBehavior } = usePageBehavior();
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
-
-  const [isShowBottomMenu] = useState<boolean>(true);
-  const [snap, setSnap] = useState<string>(HEIGHT_MEDIA_ATTACHMENT_MENU);
-
-  //Upload media
-  const [postImages, setPostImages] = useState<Amity.File[]>([]);
-  const [postVideos, setPostVideos] = useState<Amity.File[]>([]);
-
-  // Images/files incoming from uploads.
-  const [incomingImages, setIncomingImages] = useState<File[]>([]);
-  const [incomingVideos, setIncomingVideos] = useState<File[]>([]);
-  const [uploadLoading, setUploadLoading] = useState(false);
-  const [uploadedImagesCount, setUploadedImagesCount] = useState<number>(0);
-
-  // Visible menu attachment
-  const [isVisibleCamera, setIsVisibleCamera] = useState(false);
-  const [isVisibleImage, setIsVisibleImage] = useState(true);
-  const [isVisibleVideo, setIsVisibleVideo] = useState(true);
+  const { online } = useNetworkState();
+  const { files, progress, isLoading, removeFile, handleFileChange } = useFilePostUpload(pageId);
 
   const [isCreating, setIsCreating] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [isErrorUpload, setIsErrorUpload] = useState<string | undefined>();
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
-  const [videoThumbnail, setVideoThumbnail] = useState<
-    { file: File; videoUrl: string; thumbnail: string | undefined }[]
-  >([]);
+
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
@@ -128,62 +85,42 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
     ],
   });
 
-  // Check connection
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const {
+    HEIGHT_MEDIA_ATTACHMENT_MENU,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
+    snap,
+    isShowDetailMediaAttachmentMenu,
+    isVisibleCamera,
+    isVisibleImage,
+    isVisibleVideo,
+    handleSnapChange,
+    showToastPosition,
+  } = useMediaAttachmentVisible({ files });
 
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
+  const { mutate: createPost } = useMutation({
+    mutationFn: async (params: Parameters<typeof PostRepository.createPost>[0]) =>
+      PostRepository.createPost(params),
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    // Cleanup on unmount
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
-
-  const onClearFailedUpload = () => {
-    setIsErrorUpload(undefined);
-    setIncomingImages([]);
-    setIncomingVideos([]);
-    setPostImages([]);
-    setPostVideos([]);
-  };
-  useEffect(() => {
-    if (incomingImages.length == 0 && incomingVideos.length == 0) {
-      setIsErrorUpload(undefined);
-    }
-  }, [incomingImages.length, incomingVideos.length]);
-
-  async function createPost(createPostParams: Parameters<typeof PostRepository.createPost>[0]) {
-    let shouldRunFinallyLogic = true;
-    if (!isOnline) {
-      return;
-    }
-
-    try {
+    onMutate: () => {
       setIsCreating(true);
+      setIsError(false);
+      setPostErrorText(undefined);
+    },
 
-      const postData = await PostRepository.createPost(createPostParams);
-      const post = postData.data;
-
-      setPostImages([]);
-      setPostVideos([]);
-      setIncomingImages([]);
-      setIncomingVideos([]);
+    onSuccess: (response) => {
+      const post = response.data;
 
       const isModerator =
         (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
-      if (!targetId) prependItem(postData.data);
+      if (!targetId) prependItem(post);
 
       // TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
       if (
         ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
-          .needApprovalOnPostCreation ||
+          ?.needApprovalOnPostCreation ||
           community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED) &&
         !isModerator &&
         !isAdmin(user?.roles)
@@ -196,71 +133,63 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           okText: 'OK',
         });
       } else {
-        prependItem(postData.data);
+        prependItem(post);
       }
-    } catch (error) {
+
+      setIsCreating(false);
+      handlePostSuccess();
+    },
+
+    onError: (error: Error) => {
       setIsCreating(false);
       setIsError(true);
-
-      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
-        setPostErrorText("Your post wasn't posted because it contains a blocked word.");
-        shouldRunFinallyLogic = false; // Skip finally logic for specific errors
-        return;
-      } else if (
-        error instanceof Error &&
-        error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)
-      ) {
-        setPostErrorText("Your post wasn't posted because it contains a link that’s not allowed.");
-        shouldRunFinallyLogic = false; // Skip finally logic for specific errors
-        return;
-      } else {
-        setPostErrorText('Failed to post.');
-      }
-    }
-
-    if (shouldRunFinallyLogic) {
-      if (!isError) {
-        setIsCreating(false);
-        if (isDesktop) {
-          closePopup();
-        } else if (prevPage?.type === PageTypes.SelectPostTargetPage) {
-          AmityPostComposerPageBehavior?.goToSocialHomePage?.();
-        } else {
-          onBack();
-        }
-      }
-    }
-  }
+      handlePostError(error);
+    },
+  });
 
   async function onCreatePost() {
-    const attachments = [];
-
-    if (textValue.text?.length && textValue.text.length > MAXIMUM_POST_CHARACTERS) {
-      setPostErrorText('You have reached maximum 50,000 characters in a post.');
+    if (textValue.text?.length > MAXIMUM_POST_CHARACTERS) {
+      setPostErrorText('You have reached the maximum of 50,000 characters in a post.');
       return;
     }
 
-    if (postImages.length) {
-      attachments.push(...postImages.map((i) => ({ fileId: i.fileId, type: FileType.IMAGE })));
-    }
-
-    if (postVideos.length) {
-      attachments.push(...postVideos.map((i) => ({ fileId: i.fileId, type: FileType.VIDEO })));
-    }
+    const attachments = files.map(({ file }) => ({
+      fileId: (file as Amity.File).fileId,
+      type: file.type,
+    }));
 
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
-      targetId: targetId,
-      targetType: targetType,
+      targetId,
+      targetType,
       data: { text: textValue.text },
       dataType: 'text',
       metadata: { mentioned: textValue.mentioned },
       mentionees: textValue.mentionees,
-      attachments: attachments,
+      attachments,
     };
 
-    return createPost(createPostParams);
+    createPost(createPostParams);
   }
 
+  const handlePostSuccess = () => {
+    if (isDesktop) {
+      closePopup();
+    } else if (prevPage?.type === PageTypes.SelectPostTargetPage) {
+      AmityPostComposerPageBehavior?.goToSocialHomePage?.();
+    } else {
+      onBack();
+    }
+  };
+
+  const handlePostError = (error: Error) => {
+    if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+      setPostErrorText("Your post wasn't posted because it contains a blocked word.");
+    } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+      setPostErrorText("Your post wasn't posted because it contains a link that's not allowed.");
+    } else {
+      setPostErrorText('Failed to create post. Please try again.');
+    }
+  };
   //TODO : Make the function works the issues is can't remove extra mention from DOM
 
   const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
@@ -271,14 +200,9 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
       mentionees: val.mentionees,
     }));
   };
-  const handleSnapChange = (newSnap: string) => {
-    if (snap === HEIGHT_MEDIA_ATTACHMENT_MENU && newSnap === '0px') {
-      return;
-    }
-    setSnap(newSnap);
-  };
 
   const onClickClose = () => {
+    if (hasNoChanges) return onBack();
     confirm({
       pageId: pageId,
       type: 'confirm',
@@ -296,115 +220,22 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
     });
   };
 
-  useEffect(() => {
-    if (postImages.length > 0) {
-      setIsVisibleImage(true);
-      setIsVisibleVideo(false);
-    } else if (postVideos.length > 0 && videoThumbnail.length > 0) {
-      setIsVisibleImage(false);
-      setIsVisibleVideo(true);
-    } else if (postImages.length == 0 || videoThumbnail.length == 0) {
-      setIsVisibleImage(true);
-      setIsVisibleVideo(true);
-    }
-  }, [postImages, postVideos, isVisibleImage, isVisibleVideo, videoThumbnail]);
-
-  useEffect(() => {
-    setIsVisibleCamera(isMobile());
-  }, []);
-
-  useEffect(() => {
-    if (
-      (!isVisibleCamera && isVisibleImage && isVisibleVideo) ||
-      (isVisibleCamera && isVisibleImage && !isVisibleVideo) ||
-      (isVisibleCamera && !isVisibleImage && isVisibleVideo)
-    ) {
-      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2);
-    } else if (
-      (!isVisibleCamera && isVisibleImage && !isVisibleVideo) ||
-      (!isVisibleCamera && !isVisibleImage && isVisibleVideo)
-    ) {
-      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1);
-    } else {
-      setSnap(HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3);
-    }
-  }, [isVisibleCamera, isVisibleImage, isVisibleVideo]);
-
-  const handleRemoveThumbnail = (index: number) => {
-    setVideoThumbnail((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleImageFileChange = (file: File[]) => {
-    if (file.length + uploadedImagesCount > 10) {
-      confirm({
-        pageId: pageId,
-        type: 'info',
-        title: 'Maximum upload limit reached',
-        content:
-          'You’ve reached the upload limit of 10 images. Any additional images will not be saved. ',
-        okText: 'Close',
-      });
-      return;
-    }
-
-    if (file.length > 0) {
-      setUploadedImagesCount((prevImageCount) => prevImageCount + file.length);
-      setIncomingImages(file);
-    }
-  };
-
-  const handleVideoFileChange = async (file: File[]) => {
-    const existingVideosCount = videoThumbnail ? videoThumbnail.length : 0;
-
-    if (file.length + existingVideosCount > 10) {
-      confirm({
-        pageId: pageId,
-        type: 'info',
-        title: 'Maximum upload limit reached',
-        content:
-          'You’ve reached the upload limit of 10 videos. Any additional videos will not be saved. ',
-        okText: 'Close',
-      });
-      return;
-    }
-
-    if (file.length > 0) {
-      setIncomingVideos?.(file);
-      const updatedVideos = file.map((file) => ({
-        file,
-        videoUrl: URL.createObjectURL(file),
-        thumbnail: undefined,
-      }));
-
-      const thumbnailVideo = await Promise.all(
-        updatedVideos.map(async (video) => {
-          const thumbnail = await generateThumbnailVideo(video.file);
-          return {
-            ...video,
-            thumbnail: thumbnail,
-          };
-        }),
-      );
-      setVideoThumbnail((prev) => [...prev, ...thumbnailVideo]);
-    }
-  };
-
   const notifications = (
     <div
       className={styles.createPost__notificationWrapper}
       data-item-position={snap === HEIGHT_MEDIA_ATTACHMENT_MENU}
     >
-      {(isCreating || !isOnline) && (
+      {(isCreating || !online) && (
         <Notification
           icon={<Spinner />}
-          content={isOnline ? 'Posting...' : 'Waiting for network...'}
+          content={online ? 'Posting...' : 'Waiting for network...'}
           alignment="fixed"
         />
       )}
       {(isError || postErrorText) && (
         <Notification
           duration={3000}
-          content={postErrorText ? postErrorText : 'Failed to create post.'}
+          content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
           alignment="fixed"
           icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
           onClose={() => {
@@ -416,16 +247,12 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
     </div>
   );
 
-  const isDisabledPostButton =
-    !(textValue.text.length > 0 || postImages.length > 0 || postVideos.length > 0) ||
-    isCreating ||
-    !isOnline ||
-    uploadLoading;
+  const hasContent = textValue.text.length > 0 || files.length > 0;
+  const hasErrors = files.some((file) => file.errorText !== undefined);
+  const hasNoChanges = textValue.text.length === 0 && files.length === 0;
 
-  const isShowDetailMediaAttachmentMenu =
-    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1 ||
-    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2 ||
-    snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3;
+  const canSubmitPost =
+    !hasNoChanges && hasContent && !hasErrors && !isCreating && online && !isLoading;
 
   return (
     <div className={styles.createPost} style={themeStyles}>
@@ -438,7 +265,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
         <div className={styles.createPost__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
           <CommunityDisplayName pageId={pageId} community={community} />
-          <CreateNewPostButton pageId={pageId} variant="text" isDisabled={isDisabledPostButton} />
+          <CreateNewPostButton pageId={pageId} variant="text" isDisabled={!canSubmitPost} />
         </div>
         <div className={styles.createPost__formContent}>
           <PostTextField
@@ -452,43 +279,26 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
             mentionContainerClassName={styles.createPost__mentionContainer}
           />
           <ImageThumbnail
+            files={files}
             pageId={pageId}
-            files={incomingImages}
-            uploadedFiles={postImages}
-            onError={setIsErrorUpload}
-            uploadLoading={uploadLoading}
-            isErrorUpload={isErrorUpload}
-            onLoadingChange={setUploadLoading}
-            onChange={({ uploaded, uploading }) => {
-              setPostImages(uploaded);
-              setIncomingImages(uploading);
-              setUploadedImagesCount(uploaded.length);
-            }}
+            progress={progress}
+            removeFile={removeFile}
           />
           <VideoThumbnail
+            files={files}
             pageId={pageId}
-            files={incomingVideos}
-            uploadedFiles={postVideos}
-            onError={setIsErrorUpload}
-            uploadLoading={uploadLoading}
-            isErrorUpload={isErrorUpload}
-            videoThumbnail={videoThumbnail}
-            onLoadingChange={setUploadLoading}
-            removeThumbnail={handleRemoveThumbnail}
-            onChange={({ uploaded, uploading }) => {
-              setPostVideos(uploaded);
-              setIncomingVideos(uploading);
-            }}
+            progress={progress}
+            removeFile={removeFile}
           />
         </div>
         <div className={styles.createPost__attachment}>
           <MediaAttachment
             pageId={pageId}
+            isVisibleCamera={isVisibleCamera}
             isVisibleImage={isVisibleImage}
             isVisibleVideo={isVisibleVideo}
-            isVisibleCamera={isVisibleCamera}
-            onVideoFileChange={handleVideoFileChange}
-            onImageFileChange={handleImageFileChange}
+            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
+            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
           />
         </div>
         <div className={styles.createPost__ctaWrapper}>
@@ -496,7 +306,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
             variant="fill"
             pageId={pageId}
             className={styles.createPost__cta}
-            isDisabled={isDisabledPostButton}
+            isDisabled={!canSubmitPost}
           />
         </div>
         <div
@@ -514,7 +324,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
                 <Drawer.Root
                   noBodyStyles
                   modal={false}
-                  open={isShowBottomMenu}
+                  open
                   activeSnapPoint={snap}
                   snapPoints={[
                     HEIGHT_MEDIA_ATTACHMENT_MENU,
@@ -536,20 +346,20 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
                         {isShowDetailMediaAttachmentMenu ? (
                           <DetailedMediaAttachment
                             pageId={pageId}
+                            isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
-                            isVisibleCamera={isVisibleCamera}
-                            onImageFileChange={handleImageFileChange}
-                            onVideoFileChange={handleVideoFileChange}
+                            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
+                            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
                           />
                         ) : (
                           <MediaAttachment
                             pageId={pageId}
+                            isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
-                            isVisibleCamera={isVisibleCamera}
-                            onImageFileChange={handleImageFileChange}
-                            onVideoFileChange={handleVideoFileChange}
+                            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
+                            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
                           />
                         )}
                       </div>
@@ -560,30 +370,28 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
               )
             : null}
 
-          {(isCreating || !isOnline) && (
-            <div className={styles.createPost__notification}>
+          {(isCreating || !online) && (
+            <Typography.Body
+              className={styles.createPost__notification}
+              data-show-detail-media-attachment={showToastPosition()}
+            >
               <Notification
                 className={styles.createPost__notificationToast}
-                content={isOnline ? 'Posting...' : 'Waiting for network...'}
+                content={online ? 'Posting...' : 'Waiting for network...'}
                 icon={<Spinner />}
                 alignment="fixed"
-                isShowAttributes={
-                  isShowDetailMediaAttachmentMenu
-                    ? snap == HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2
-                      ? '2'
-                      : '3'
-                    : '1'
-                }
               />
-            </div>
+            </Typography.Body>
           )}
           {(isError || postErrorText) && (
-            <div className={styles.createPost__notification}>
+            <Typography.Body
+              className={styles.createPost__notification}
+              data-show-detail-media-attachment={showToastPosition()}
+            >
               <Notification
-                content={postErrorText ? postErrorText : 'Failed to create post.'}
+                content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
                 icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
                 alignment="fixed"
-                data-show-detail-media-attachment={isShowDetailMediaAttachmentMenu}
                 duration={3000}
                 className={styles.createPost__notificationToast}
                 onClose={() => {
@@ -591,7 +399,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
                   setIsError(false);
                 }}
               />
-            </div>
+            </Typography.Body>
           )}
         </div>
       )}

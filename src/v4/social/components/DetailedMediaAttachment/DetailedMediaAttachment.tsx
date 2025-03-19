@@ -1,9 +1,9 @@
 import React from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import styles from './DetailedMediaAttachment.module.css';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton/VideoButton';
+import styles from './DetailedMediaAttachment.module.css';
 
 interface DetailedMediaAttachmentProps {
   pageId: string;

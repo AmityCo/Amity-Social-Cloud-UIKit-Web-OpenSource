@@ -1,19 +1,18 @@
 import React from 'react';
-import styles from './MediaAttachment.module.css';
+import clsx from 'clsx';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
-import clsx from 'clsx';
+import styles from './MediaAttachment.module.css';
 
 interface MediaAttachmentProps {
   pageId: string;
-  uploadLoading?: boolean;
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;
-  onVideoFileChange?: (files: File[]) => void;
-  onImageFileChange?: (files: File[]) => void;
+  onVideoFileChange?: (files: File[], fileType?: string) => void;
+  onImageFileChange?: (files: File[], fileType?: string) => void;
 }
 
 export function MediaAttachment({

@@ -73,7 +73,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   return (
     <div
       style={themeStyles}
-      data-qa-anhor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityMembershipPage}
     >
       <div className={styles.communityMembershipPage__topBar}>

@@ -33,8 +33,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--asc-color-white);
-  opacity: 0.8;
+  background-color: var(--asc-color-background-transparent-black);
+  border-radius: 0.25rem;
 }
 
 .thumbnail__failed__placeholder {
@@ -82,7 +82,7 @@
   transform: translate(-50%, -50%);
   width: 1.75rem;
   height: 1.75rem;
-  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
 }
 
 .icon__status {
@@ -97,6 +97,6 @@
 
 @media (width >= 48em) {
   .thumbnail__container {
-    padding: 0 1.5rem 1rem;
+    padding: 0.75rem 1.5rem;
   }
 }

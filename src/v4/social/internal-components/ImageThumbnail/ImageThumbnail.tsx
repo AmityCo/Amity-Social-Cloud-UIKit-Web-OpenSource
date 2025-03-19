@@ -1,82 +1,138 @@
 import React from 'react';
-import styles from './ImageThumbnail.module.css';
-import { CloseIcon, ExclamationCircle } from '~/icons';
-import { Spinner } from '~/v4/social/internal-components/Spinner';
-import useFileUpload from '~/v4/social/hooks/useFileUpload';
-import { FileRepository } from '@amityco/ts-sdk';
 import { Button } from '~/v4/core/natives/Button';
+import { FileItem as TFileItem } from '~/v4/social/hooks/useFilePostUpload';
+import CloseIcon from '~/v4/icons/Close';
+import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner/ProgressSpinner';
+import { getImageUrl } from '~/v4/utils/getImageUrl';
+import { isAmityFile, isImageFile } from '~/v4/utils/checkFileType';
+import styles from './ImageThumbnail.module.css';
+import { useImage } from '~/v4/core/hooks/useImage';
+
+interface PostImageItemProps {
+  post: Amity.Post<'image'>;
+  onRemovePostImage: (fileId: string) => void;
+  pageId: string;
+  componentId: string;
+  totalImages: number;
+}
+
+// Separate component for each post image to properly handle hooks
+const PostImageItem = ({
+  post,
+  onRemovePostImage,
+  pageId,
+  componentId,
+  totalImages,
+}: PostImageItemProps) => {
+  const thumbnailUrl = useImage({ fileId: post.data.fileId });
+
+  if (!thumbnailUrl) return null;
+
+  return (
+    <div
+      key={`post-${post.data.fileId}`}
+      data-images-height={totalImages > 2}
+      className={styles.thumbnail__wrapper}
+    >
+      <img className={styles.thumbnail} src={thumbnailUrl} alt="post thumbnail" />
+      <Button
+        data-testid={`${pageId}/${componentId}/remove_thumbnail`}
+        type="reset"
+        className={styles.closeButton}
+        onPress={() => onRemovePostImage(post.data.fileId)}
+      >
+        <CloseIcon className={styles.closeIcon} />
+      </Button>
+    </div>
+  );
+};
 
 interface ImageThumbnailProps {
   pageId?: string;
   componentId?: string;
-  files: File[];
-  uploadedFiles: Amity.File[];
-  onChange: (data: { uploaded: Array<Amity.File>; uploading: Array<File> }) => void;
-  onLoadingChange: (loading: boolean) => void;
-  uploadLoading: boolean;
-  onError: (message: string) => void;
-  isErrorUpload?: string;
-  onUploadFailed?: (message: string) => void;
+  progress: { [key: string]: number };
+  files: TFileItem[];
+  removeFile: (file: File | Amity.File, index?: number) => void;
+  postImages?: Amity.Post<'image'>[];
+  onRemovePostImage?: (fileId: string) => void;
 }
 
 export function ImageThumbnail({
   pageId = '*',
   componentId = '*',
+  progress,
+  removeFile,
   files,
-  uploadedFiles,
-  onChange,
-  onLoadingChange,
-  uploadLoading,
-  onError,
-  isErrorUpload,
+  postImages = [],
+  onRemovePostImage,
 }: ImageThumbnailProps) {
-  const useFileUploadProps = useFileUpload({
-    files,
-    uploadedFiles,
-    onChange,
-    onLoadingChange,
-    onError,
-  });
+  const hasNewImages = files.length > 0 && files.some((file) => isImageFile(file));
+  const hasPostImages = postImages.length > 0;
 
-  const { allFiles, removeFile } = useFileUploadProps;
+  if (!hasNewImages && !hasPostImages) return null;
 
-  if (allFiles.length === 0) return null;
-
-  const getImageUrl = (file: File | Amity.File) => {
-    return 'fileUrl' in file
-      ? FileRepository.fileUrlWithSize(file.fileUrl, 'medium')
-      : URL.createObjectURL(file);
-  };
+  // Calculate total images for layout
+  const totalImages =
+    (hasNewImages ? files.filter((file) => isImageFile(file)).length : 0) +
+    (hasPostImages ? postImages.length : 0);
 
   return (
-    allFiles && (
-      <div
-        data-images-amount={Math.min(allFiles.length, 3)}
-        className={styles.thumbnail__container}
-      >
-        {allFiles?.map((file, index: number) => (
+    <div data-images-amount={Math.min(totalImages, 3)} className={styles.thumbnail__container}>
+      {/* Render existing post images */}
+      {postImages?.map((post) => (
+        <PostImageItem
+          key={post.data.fileId}
+          post={post}
+          onRemovePostImage={onRemovePostImage || (() => {})}
+          pageId={pageId}
+          componentId={componentId}
+          totalImages={totalImages}
+        />
+      ))}
+
+      {/* Render new uploads */}
+      {files
+        .filter((file) => isImageFile(file))
+        .map((file, index) => (
           <div
-            key={index}
-            data-images-height={allFiles.length > 2}
+            key={`file-${file.id}`}
+            data-images-height={totalImages > 2}
             className={styles.thumbnail__wrapper}
           >
-            {uploadLoading ? (
+            {progress[file.id] ? (
               <>
-                <img src={getImageUrl(file)} className={styles.thumbnail} alt="" />
-                <div className={styles.thumbnail__overlay} />
-                <div className={styles.icon__status}>
-                  <Spinner />
-                </div>
-              </>
-            ) : isErrorUpload && !('fileId' in file) ? (
-              <>
-                <img src={URL.createObjectURL(file as File)} className={styles.thumbnail} alt="" />
+                <img
+                  src={getImageUrl(file)}
+                  className={styles.thumbnail}
+                  alt={isAmityFile(file.file) ? file.file.attributes?.name : 'image thumbnail'}
+                />
                 <div className={styles.thumbnail__overlay} />
                 <Button
                   data-testid={`${pageId}/${componentId}/remove_thumbnail`}
                   type="reset"
                   className={styles.closeButton}
-                  onPress={() => removeFile(file)}
+                  onPress={() => removeFile(file.file)}
+                >
+                  <CloseIcon className={styles.closeIcon} />
+                </Button>
+                <div className={styles.icon__status}>
+                  <ProgressSpinner progress={progress[file.id]} />
+                </div>
+              </>
+            ) : file.errorText && !('fileId' in file) ? (
+              <>
+                <img
+                  src={getImageUrl(file)}
+                  className={styles.thumbnail}
+                  alt={isAmityFile(file.file) ? file.file.attributes?.name : 'image thumbnail'}
+                />
+                <div className={styles.thumbnail__overlay} />
+                <Button
+                  data-testid={`${pageId}/${componentId}/remove_thumbnail`}
+                  type="reset"
+                  className={styles.closeButton}
+                  onPress={() => removeFile(file.file)}
                 >
                   <CloseIcon className={styles.closeIcon} />
                 </Button>
@@ -89,14 +145,14 @@ export function ImageThumbnail({
                 <img
                   data-testid={`${pageId}/${componentId}/image_thumbnail`}
                   className={styles.thumbnail}
-                  src={FileRepository.fileUrlWithSize((file as Amity.File)?.fileUrl, 'medium')}
-                  alt={(file as Amity.File).attributes?.name}
+                  src={getImageUrl(file)}
+                  alt={isAmityFile(file.file) ? file.file.attributes?.name : 'image thumbnail'}
                 />
                 <Button
                   data-testid={`${pageId}/${componentId}/remove_thumbnail`}
                   type="reset"
                   className={styles.closeButton}
-                  onPress={() => removeFile(file)}
+                  onPress={() => removeFile(file.file)}
                 >
                   <CloseIcon className={styles.closeIcon} />
                 </Button>
@@ -104,7 +160,6 @@ export function ImageThumbnail({
             )}
           </div>
         ))}
-      </div>
-    )
+    </div>
   );
 }

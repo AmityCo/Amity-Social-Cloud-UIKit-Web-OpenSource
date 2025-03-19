@@ -35,6 +35,7 @@ export function ImageViewer({
   const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
   const { post: imagePost } = usePost(post?.children[selectedImageIndex]);
   const imageUrl = useImage({ fileId: imagePost?.data?.fileId });
+  const [isBrokenImg, setIsBrokenImg] = useState(false);
 
   const next = () => {
     if (hasNext) setSelectedImageIndex((prev) => prev + 1);
@@ -70,14 +71,20 @@ export function ImageViewer({
           <ChevronRight className={styles.imageViewer__prevButton} />
         </Button>
       )}
-      <img
-        src={imageUrl}
-        alt={imageUrl || ''}
-        onTouchEnd={handleTouchEnd}
-        onTouchMove={handleTouchMove}
-        onTouchStart={handleTouchStart}
-        className={styles.imageViewer__fullImage}
-      />
+      {imageUrl && !isBrokenImg ? (
+        <img
+          src={imageUrl}
+          alt={imageUrl || ''}
+          onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
+          onTouchStart={handleTouchStart}
+          className={styles.imageViewer__fullImage}
+          onError={() => setIsBrokenImg(true)}
+        />
+      ) : (
+        <div className={styles.imageViewer__itemContainer} />
+      )}
+
       {hasNext && (
         <Button className={styles.imageViewer__next} onPress={next}>
           <ChevronRight className={styles.imageViewer__nextButton} />

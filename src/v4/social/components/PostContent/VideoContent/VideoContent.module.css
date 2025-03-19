@@ -43,6 +43,15 @@
   margin: auto;
 }
 
+.videoContent__brokenImg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform: translateY(-50%);
+  top: 50%;
+  background-color: var(--asc-color-base-shade4);
+}
+
 .videoContent__videoContainer {
   cursor: pointer;
   position: relative;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useImage } from '~/v4/core/hooks/useImage';
@@ -35,18 +35,20 @@ const VideoThumbnail = ({
   placeholder: React.ReactNode;
 }) => {
   const videoThumbnailUrl = useImage({ fileId });
+  const [isBrokenImg, setIsBrokenImg] = useState(false);
 
   return (
     <>
-      {!videoThumbnailUrl ? (
-        placeholder
-      ) : (
+      {videoThumbnailUrl && !isBrokenImg ? (
         <img
           loading="lazy"
           className={styles.videoContent__video}
           src={videoThumbnailUrl}
           alt={fileId}
+          onError={() => setIsBrokenImg(true)}
         />
+      ) : (
+        <div className={styles.videoContent__brokenImg} />
       )}
     </>
   );
