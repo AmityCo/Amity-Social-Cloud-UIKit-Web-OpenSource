@@ -22,7 +22,7 @@ import { CreatePost } from '~/v4/icons/CreatePost';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import usePoll from '~/v4/social/hooks/usePoll';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
-import { useNetworkState } from 'react-use';
+import UnFlag from '~/v4/icons/UnFlag';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -43,13 +43,17 @@ export const PostMenu = ({
   onCloseMenu,
   onPostDeleted,
 }: PostMenuProps) => {
-  const { success, error } = useNotifications();
+  const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
   const { post: childPost } = usePost(post.children?.[0]);
   const { item: poll } = usePoll(childPost?.data?.pollId);
   const notification = useNotifications();
-  const { online } = useNetworkState();
+
+  const isLiveStreamPost = useMemo(
+    () => childPost?.dataType === 'liveStream',
+    [childPost?.dataType],
+  );
 
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
@@ -110,19 +114,20 @@ export const PostMenu = ({
       success({ content: 'Post reported.' });
     },
     onReportError: () => {
-      error({ content: 'Failed to report post.' });
+      info({ content: 'Failed to report post. Please try again.' });
     },
     onUnreportSuccess: () => {
       success({ content: 'Post unreported.' });
     },
     onUnreportError: () => {
-      error({ content: 'Failed to unreport post.' });
+      info({ content: 'Failed to unreport post. Please try again.' });
     },
   });
 
   const { confirm } = useConfirmContext();
 
   const { mutateAsync: mutateDeletePost } = useMutation({
+    networkMode: 'always',
     mutationFn: async () => {
       onCloseMenu();
       return PostRepository.softDeletePost(post.postId);
@@ -132,11 +137,12 @@ export const PostMenu = ({
       onPostDeleted?.(post);
     },
     onError: () => {
-      error({ content: 'Failed to delete post.' });
+      info({ content: 'Failed to delete post. Please try again.' });
     },
   });
 
   const { mutateAsync: mutateClosePoll } = useMutation({
+    networkMode: 'always',
     mutationFn: async () => {
       if (!poll) return;
       return PollRepository.closePoll(poll.pollId);
@@ -146,7 +152,7 @@ export const PostMenu = ({
       onPostDeleted?.(post);
     },
     onError: () => {
-      error({ content: 'Oops, something went wrong.' });
+      info({ content: 'Oops, something went wrong.' });
     },
   });
 
@@ -255,13 +261,17 @@ export const PostMenu = ({
             removeDrawerData();
           }}
         >
-          <FlagIcon className={styles.postMenu__reportPost__icon} />
+          {isFlaggedByMe ? (
+            <UnFlag className={styles.postMenu__reportPost__icon} />
+          ) : (
+            <FlagIcon className={styles.postMenu__reportPost__icon} />
+          )}
           <Typography.BodyBold className={styles.postMenu__reportPost__text}>
             {isFlaggedByMe ? 'Unreport post' : 'Report post'}
           </Typography.BodyBold>
         </Button>
       ) : null}
-      {showEditPostButton && !isPollPost ? (
+      {showEditPostButton && !isPollPost && !isLiveStreamPost ? (
         <Button
           data-testid={`${pageId}/${componentId}/edit_post`}
           className={styles.postMenu__item}

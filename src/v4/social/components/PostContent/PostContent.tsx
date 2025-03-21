@@ -45,6 +45,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import styles from './PostContent.module.css';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
+import { LiveStreamContent } from './LiveStreamContent';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -154,21 +155,25 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
   );
 };
 
-export const ChildrenPostContent = ({
-  pageId,
-  componentId,
-  post,
-  disabledContent = false,
-  onImageClick,
-  onVideoClick,
-}: {
+type ChildrenPostContentProps = {
   pageId?: string;
-  componentId?: string;
   post: Amity.Post[];
+  componentId?: string;
   disabledContent?: boolean;
   onImageClick: (imageIndex: number) => void;
   onVideoClick: (videoIndex: number) => void;
-}) => {
+  goToPostDetail?: () => void;
+};
+
+export const ChildrenPostContent = ({
+  post,
+  pageId,
+  componentId,
+  onImageClick,
+  onVideoClick,
+  goToPostDetail,
+  disabledContent = false,
+}: ChildrenPostContentProps) => {
   return (
     <>
       <PollContent
@@ -189,6 +194,7 @@ export const ChildrenPostContent = ({
         post={post}
         onVideoClick={onVideoClick}
       />
+      <LiveStreamContent post={post} goToPostDetail={goToPostDetail} />
     </>
   );
 };
@@ -489,6 +495,7 @@ export const PostContent = ({
               post={post}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
+              goToPostDetail={onClick}
               disabledContent={isNotJoinedCommunity || disabledContent}
             />
           ) : null}

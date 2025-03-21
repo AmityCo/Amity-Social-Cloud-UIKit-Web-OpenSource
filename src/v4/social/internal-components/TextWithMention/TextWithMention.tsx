@@ -89,10 +89,10 @@ export const TextWithMention = ({
 
   const renderText = (paragraph: SerializedParagraphNode[]) => {
     return paragraph.map((p, index) => (
-      <React.Fragment key={index}>
+      <span key={index}>
         {p.children.map((child, childIndex) => convertSerializedToText(child, childIndex))}
         <br />
-      </React.Fragment>
+      </span>
     ));
   };
 
@@ -105,7 +105,7 @@ export const TextWithMention = ({
           lines={maxLines}
           ellipsis={
             <>
-              ...
+              ...{' '}
               <Button
                 className={styles.textWithMention__seeMore}
                 onPress={() => setIsExpanded(true)}

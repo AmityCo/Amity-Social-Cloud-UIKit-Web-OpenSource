@@ -17,6 +17,8 @@ import {
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { AmityRoute } from './AmityUIKitProvider';
+import { LiveStreamPlayerPageProps } from '~/v4/social/pages/LiveStreamPlayerPage';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -52,6 +54,8 @@ export enum PageTypes {
   CommunityMembershipPage = 'CommunityMembershipPage',
   CommunityCreatePage = 'CommunityCreatePage',
   PollPostComposerPage = 'PollPostComposerPage',
+  LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
+  LiveStreamPlayerPage = 'LiveStreamPlayerPage',
 }
 
 type Page =
@@ -202,6 +206,13 @@ type Page =
     }
   | {
       type: PageTypes.PollTargetSelectionPage;
+    }
+  | {
+      type: PageTypes.LiveStreamTerminatedPage;
+    }
+  | {
+      type: PageTypes.LiveStreamPlayerPage;
+      context: LiveStreamPlayerPageProps;
     };
 
 type ContextValue = {
@@ -288,6 +299,8 @@ type ContextValue = {
   goToPostPermissionPage?: (community: Amity.Community) => void;
   goToStorySettingPage?: (community: Amity.Community) => void;
   goToPendingPostPage?: (communityId: string) => void;
+  goToLiveStreamTerminatedPage?: () => void;
+  goToLiveStreamPlayerPage?: (context: LiveStreamPlayerPageProps) => void;
 
   //V3 functions
   onClickStory: (
@@ -344,6 +357,8 @@ let defaultValue: ContextValue = {
   goToPostPermissionPage: (community: Amity.Community) => {},
   goToStorySettingPage: (community: Amity.Community) => {},
   goToPendingPostPage: (communityId: string) => {},
+  goToLiveStreamTerminatedPage: () => {},
+  goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -408,6 +423,10 @@ if (process.env.NODE_ENV !== 'production') {
     goToAddMemberPage: () => console.log('NavigationContext goToAddMemberPage()'),
     goToCommunitySettingPage: (community) =>
       console.log(`NavigationContext goToCommunitySettingPage(${community})`),
+    goToLiveStreamTerminatedPage: () =>
+      console.log('NavigationContext goToLiveStreamTerminatedPage()'),
+    goToLiveStreamPlayerPage: (context) =>
+      console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -541,6 +560,8 @@ export default function NavigationProvider({
   >();
 
   const confirmation = askForConfirmation ?? confirm;
+
+  const { setStreamPlayer } = useLayoutContext();
 
   const pushPage = useCallback(async (newPage) => {
     setPages((prevState) => [...prevState, newPage]);
@@ -1104,6 +1125,22 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToLiveStreamTerminatedPage = useCallback(() => {
+    const next = {
+      type: PageTypes.LiveStreamTerminatedPage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
+  const goToLiveStreamPlayerPage = useCallback(
+    (context: LiveStreamPlayerPageProps) => {
+      setStreamPlayer(context); // modal as page
+    },
+    [onChangePage, pushPage, setStreamPlayer],
+  );
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1162,6 +1199,8 @@ export default function NavigationProvider({
         goToUserRelationshipPage,
         goToPendingFollowRequestPage,
         goToBlockedUsersPage,
+        goToLiveStreamTerminatedPage,
+        goToLiveStreamPlayerPage,
         onClickStory: handleClickStory,
       }}
     >

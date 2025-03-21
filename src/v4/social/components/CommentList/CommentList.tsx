@@ -128,7 +128,7 @@ export const CommentList = ({
         );
       })}
 
-      {isDesktop && !expanded && items.length < commentCount && (
+      {isDesktop && hasMore && !expanded && items.length < commentCount && (
         <Button
           className={styles.commentList__viewAllComments__button}
           variant="text"

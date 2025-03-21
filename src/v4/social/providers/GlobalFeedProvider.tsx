@@ -46,7 +46,8 @@ const useGlobalFeed = () => {
               if (!childPost) {
                 return post;
               }
-              if (['liveStream', 'poll', 'file'].includes(childPost.dataType)) {
+              // remove after these types of posts are supported
+              if (['file'].includes(childPost.dataType)) {
                 return null;
               }
               return post;

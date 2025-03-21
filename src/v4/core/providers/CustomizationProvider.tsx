@@ -902,6 +902,8 @@ export const defaultConfig: DefaultConfig = {
     'select_poll_target_page/*/my_timeline_text': {
       text: 'My Timeline',
     },
+    'livestream_terminated_page/*/*': {},
+    'livestream_terminated_page/*/livestream_terminated_action_button': {},
   },
 };
 

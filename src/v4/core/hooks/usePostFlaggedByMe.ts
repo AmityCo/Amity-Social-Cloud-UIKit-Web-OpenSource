@@ -30,6 +30,7 @@ export const usePostFlaggedByMe = ({
   const postId = post?.postId || undefined;
 
   const { data, isLoading } = useQuery({
+    networkMode: 'always',
     queryKey: ['asc-uikit', 'PostRepository', 'isPostFlaggedByMe', postId],
     queryFn: () => {
       return PostRepository.isPostFlaggedByMe(postId);
@@ -38,6 +39,7 @@ export const usePostFlaggedByMe = ({
   });
 
   const { mutateAsync: mutateReportPost } = useMutation({
+    networkMode: 'always',
     mutationFn: async () => {
       return PostRepository.flagPost(post.postId);
     },
@@ -69,6 +71,7 @@ export const usePostFlaggedByMe = ({
   });
 
   const { mutateAsync: mutateUnReportPost } = useMutation({
+    networkMode: 'always',
     mutationFn: async () => {
       return PostRepository.unflagPost(post.postId);
     },

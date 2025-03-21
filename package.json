@@ -123,6 +123,7 @@
     "lodash": "^4.17.21",
     "millify": "^6.1.0",
     "modern-normalize": "^2.0.0",
+    "plyr": "^3.7.8",
     "polished": "^4.3.1",
     "react-aria": "^3.33.1",
     "react-aria-components": "^1.2.1",
