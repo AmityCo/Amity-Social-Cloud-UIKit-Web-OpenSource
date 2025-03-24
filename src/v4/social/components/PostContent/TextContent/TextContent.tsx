@@ -62,7 +62,7 @@ export const TextContent = ({
             componentId={componentId}
             data={{ text: stream?.title ?? '' }}
           />
-          {stream?.description && (
+          {stream?.description?.trim() && (
             <TextWithMention
               pageId={pageId}
               mentionees={mentionees}

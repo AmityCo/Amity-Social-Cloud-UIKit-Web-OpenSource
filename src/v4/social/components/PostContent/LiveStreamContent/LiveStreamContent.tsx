@@ -69,12 +69,7 @@ export function LiveStreamContent({ post, goToPostDetail }: LiveStreamContentPro
       data-idle={stream.status === liveStreamStatus.idle || isUpcoming}
       onPress={() => {
         if (stream.status !== liveStreamStatus.idle && !isUpcoming) {
-          goToLiveStreamPlayerPage?.({
-            goToPostDetail,
-            postId: post.postId,
-            streamId: stream.streamId,
-            streamStatus: stream.status,
-          });
+          goToLiveStreamPlayerPage?.({ post, goToDetailPage: goToPostDetail });
         }
       }}
     >

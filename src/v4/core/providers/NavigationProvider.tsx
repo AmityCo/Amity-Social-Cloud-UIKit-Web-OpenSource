@@ -1138,7 +1138,7 @@ export default function NavigationProvider({
     (context: LiveStreamPlayerPageProps) => {
       setStreamPlayer(context); // modal as page
     },
-    [onChangePage, pushPage, setStreamPlayer],
+    [setStreamPlayer],
   );
 
   useEffect(() => {

@@ -19,10 +19,8 @@ import 'plyr/dist/plyr.css';
 import styles from './LiveStreamPlayer.module.css';
 
 export type LiveStreamPlayerPageProps = {
-  postId: string;
-  streamId?: string;
-  goToPostDetail?: () => void;
-  streamStatus?: Amity.Stream['status'];
+  post: Amity.Post;
+  goToDetailPage?: () => void;
 };
 
 const usePostSubscription = (postId: string) => {
@@ -38,13 +36,10 @@ const usePostSubscription = (postId: string) => {
   return { post };
 };
 
-const useLiveStreamPlayer = ({
-  streamId,
-  streamStatus,
-}: {
-  streamId?: string;
-  streamStatus?: Amity.Stream['status'];
-}) => {
+const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
+  const { post: childPost } = usePost(post.children?.[0]);
+  const stream = useStream(childPost?.data?.streamId);
+
   const [muted, setMuted] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const liveStreamPlayerRef = useRef<HTMLDivElement>(null);
@@ -62,7 +57,7 @@ const useLiveStreamPlayer = ({
     player.setAttribute('playsinline', ''); // prevent fullscreen on iOS
     player.setAttribute('webkit-playsinline', '');
 
-    if (streamStatus === 'live') player.controls = false;
+    if (stream?.status === 'live') player.controls = false;
 
     player.onvolumechange = () => setMuted(!player.muted);
     player.classList.add(styles.liveStreamPlayer__video);
@@ -94,7 +89,7 @@ const useLiveStreamPlayer = ({
       : liveStreamPlayerRef.current?.appendChild(player);
     setVideo(player);
 
-    if (streamStatus === 'live' && player) {
+    if (stream?.status === 'live' && player) {
       plyrRef.current = new Plyr(player, {
         controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip'],
         fullscreen: { enabled: false },
@@ -126,7 +121,7 @@ const useLiveStreamPlayer = ({
   };
 
   useEffect(() => {
-    if (streamId) getLiveStreamPlayer(streamId);
+    if (stream?.streamId) getLiveStreamPlayer(stream?.streamId);
 
     return () => {
       if (video) {
@@ -142,31 +137,28 @@ const useLiveStreamPlayer = ({
         plyrRef.current.destroy();
       }
     };
-  }, [streamId]);
+  }, [stream?.streamId]);
 
   return {
     isLoading,
     isPoorConnection,
     playerInitialized,
     liveStreamPlayerRef,
+    streamId: stream?.streamId,
   };
 };
 
-export function LiveStreamPlayerPage({
-  postId,
-  streamId,
-  streamStatus,
-  goToPostDetail,
-}: LiveStreamPlayerPageProps) {
+export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerPageProps) {
   const pageId = 'livestream_player_page';
 
   const { isDesktop } = useResponsive();
-  const { post } = usePostSubscription(postId);
+  const { post: subscribedPost } = usePostSubscription(post.postId);
+
   const { setStreamPlayer } = useLayoutContext();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
   const { goToLiveStreamTerminatedPage } = useNavigation();
-  const { isLoading, isPoorConnection, liveStreamPlayerRef, playerInitialized } =
-    useLiveStreamPlayer({ streamId, streamStatus });
+  const { isLoading, isPoorConnection, liveStreamPlayerRef, playerInitialized, streamId } =
+    useLiveStreamPlayer({ post });
 
   const onClose = useCallback(() => setStreamPlayer(null), []);
 
@@ -185,11 +177,11 @@ export function LiveStreamPlayerPage({
   }, [stream?.moderation?.terminateLabels, stream?.status, isDesktop]);
 
   useEffect(() => {
-    if (stream?.isDeleted || post?.isDeleted) {
+    if (stream?.isDeleted || subscribedPost?.isDeleted) {
       onClose();
-      goToPostDetail?.();
+      goToDetailPage?.();
     }
-  }, [stream?.isDeleted, post?.isDeleted]);
+  }, [stream?.isDeleted, subscribedPost?.isDeleted]);
 
   return (
     <ModalOverlay
