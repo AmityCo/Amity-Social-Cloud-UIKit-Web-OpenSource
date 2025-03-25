@@ -36,7 +36,9 @@
     "lint": "eslint . && stylelint \"**/*.css\"",
     "stylelint": "stylelint",
     "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "gist": "node ./code-snippets/scripts/create-gist.mjs",
+    "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
   },
   "peerDependencies": {
     "@amityco/ts-sdk": "^7.0.0",
@@ -46,6 +48,7 @@
   "devDependencies": {
     "@amityco/ts-sdk": "^7.0.0",
     "@eslint/js": "^9.4.0",
+    "@octokit/core": "^6.1.4",
     "@storybook/addon-a11y": "^7.6.7",
     "@storybook/addon-actions": "^7.6.7",
     "@storybook/addon-backgrounds": "^7.6.7",
@@ -75,6 +78,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "browserslist": "^4.23.0",
+    "dotenv": "^16.4.7",
     "esbuild-plugin-replace": "^1.4.0",
     "eslint": "^9.4.0",
     "eslint-config-prettier": "^9.1.0",

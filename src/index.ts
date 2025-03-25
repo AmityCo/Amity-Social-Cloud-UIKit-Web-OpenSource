@@ -56,9 +56,29 @@ export {
   MyCommunitiesSearchPage as AmityMyCommunitiesSearchPage,
   SelectPostTargetPage as AmityPostTargetSelectionPage,
   PostComposerPage as AmityPostComposerPage,
-  CommunityProfilePage as AmityCommunityProfilePage,
   UserProfilePage as AmityUserProfilePage,
   EditUserProfilePage as AmityEditUserProfilePage,
+  BlockedUserPage as AmityBlockedUserPage,
+  UserRelationshipPage as AmityUserRelationshipPage,
+  UserPendingFollowRequestPage as AmityUserPendingFollowRequestPage,
+  PollPostComposerPage as AmityPollPostComposerPage,
+  PollTargetSelectionPage as AmityPollTargetSelectionPage,
+  AllCategoriesPage as AmityAllCategoriesPage,
+  CommunitiesByCategoryPage as AmityCommunitiesByCategoryPage,
+  CommunitySetupPage as AmityCommunitySetupPage,
+  CommunityAddCategoryPage as AmityCommunityAddCategoryPage,
+  CommunityAddMemberPage as AmityCommunityAddMemberPage,
+  CommunityProfilePage as AmityCommunityProfilePage,
+  PendingPostsPage as AmityPendingPostsPage,
+  CommunitySettingPage as AmityCommunitySettingPage,
+  CommunityPostPermissionPage as AmityCommunityPostPermissionPage,
+  CommunityStorySettingPage as AmityCommunityStorySettingPage,
+  CommunityMembershipPage as AmityCommunityMembershipPage,
+} from '~/v4/social/pages';
+
+export {
+  AmityCommunitySetupPageMode,
+  UserRelationshipPageTabs as AmityUserRelationshipPageTabs,
 } from '~/v4/social/pages';
 
 export {
@@ -79,7 +99,14 @@ export {
   StoryTab as AmityStoryTabComponent,
   CommunityHeader as AmityCommunityHeaderComponent,
   CommunityFeed as AmityCommunityFeedComponent,
+  CommunityImageFeed as AmityCommunityImageFeedComponent,
+  CommunityVideoFeed as AmityCommunityVideoFeedComponent,
   CommunityPinnedPost as AmityCommunityPinnedPostComponent,
+  PendingPostContent as AmityPendingPostContentComponent,
+  UserProfileHeader as AmityUserProfileHeaderComponent,
+  UserFeed as AmityUserFeedComponent,
+  UserImageFeed as AmityUserImageFeedComponent,
+  UserVideoFeed as AmityUserVideoFeedComponent,
 } from '~/v4/social/components/';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
