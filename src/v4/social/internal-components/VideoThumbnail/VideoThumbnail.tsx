@@ -1,6 +1,5 @@
 import React from 'react';
 import { FileItem as TFileItem } from '~/v4/social/hooks/useFilePostUpload';
-import clsx from 'clsx';
 import { CloseIcon, ExclamationCircle, Play } from '~/icons';
 import { Button } from '~/v4/core/natives/Button';
 import { ProgressSpinner } from '~/v4/social/internal-components/ProgressSpinner';
@@ -28,10 +27,8 @@ const PostVideoThumbnail = ({
   return (
     <div
       key={`post-${post.data.videoFileId.original}`}
-      className={clsx(
-        styles.thumbnail__wrapper,
-        totalVideos > 2 && styles.thumbnail__wrapper_item_3,
-      )}
+      data-video-height={String(totalVideos > 2)}
+      className={styles.thumbnail__wrapper}
     >
       <img src={thumbnailUrl} className={styles.thumbnail} alt="video thumbnail" />
       <Button
@@ -110,7 +107,7 @@ export const VideoThumbnail = ({
         .map((file) => (
           <div
             key={`file-${file.id}`}
-            data-video-height={totalVideos > 2}
+            data-video-height={String(totalVideos > 2)}
             className={styles.thumbnail__wrapper}
           >
             {progress[file.id] ? (

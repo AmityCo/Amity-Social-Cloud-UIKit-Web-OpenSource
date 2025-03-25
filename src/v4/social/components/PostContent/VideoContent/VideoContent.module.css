@@ -22,7 +22,7 @@
 
 .videoContent[data-videos-amount='3'] {
   grid-template:
-    'video1 video1 video1 video1' 66%
+    'video1 video1 video1 video1' 67%
     'video2 video2 video3 video3' 33%
     / 25% 25% 25% 25%;
 }
@@ -41,6 +41,7 @@
   top: 50%;
   transform: translateY(-50%);
   margin: auto;
+  object-fit: cover;
 }
 
 .videoContent__brokenImg {
