@@ -154,7 +154,16 @@ export function useFilePostUpload(pageId?: string) {
     return FileRepository.uploadFile;
   };
 
-  const handleFileChange = (file: File[], fileType: string) => {
+  const handleFileChange = (file: File[], fileType: string, localFile?: Amity.File[]) => {
+    // localFile use for calculate remaining files
+    // file use for calculate incoming files
+
+    const filesAmount = localFile
+      ? files.length > 0
+        ? files?.length + file.length + localFile?.length
+        : file?.length + localFile.length
+      : file.length + files.length;
+
     let contentText = '';
     switch (fileType) {
       case FileType.IMAGE:
@@ -170,7 +179,7 @@ export function useFilePostUpload(pageId?: string) {
           'You’ve reached the upload limit of 10 videos. Any additional videos will not be saved. ';
         break;
     }
-    if (file.length + files.length > 10) {
+    if (filesAmount && filesAmount > 10) {
       info({
         pageId: pageId,
         type: 'info',

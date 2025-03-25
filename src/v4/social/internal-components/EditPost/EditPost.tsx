@@ -91,17 +91,27 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [postVideos, setPostVideos] = useState<Amity.Post[]>([]);
 
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const useMutateUpdatePost = () =>
     useMutation({
       mutationFn: async (params: Parameters<typeof PostRepository.editPost>[0]) => {
         return await PostRepository.editPost(post.postId, params);
       },
+      onMutate: () => {
+        setIsUpdating(true);
+        setIsError(false);
+        setPostErrorText(undefined);
+      },
       onSuccess: (response) => {
+        setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
         updateItem(response.data);
       },
       onError: (error) => {
+        setIsUpdating(false);
+        setIsError(true);
+
         if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
           setPostErrorText("Your post wasn't posted because it contains a blocked word.");
           return;
@@ -117,7 +127,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       },
     });
 
-  const { mutateAsync: mutateUpdatePostAsync, isPending, isError } = useMutateUpdatePost();
+  const { mutateAsync: mutateUpdatePostAsync, isPending } = useMutateUpdatePost();
 
   const { handleSubmit } = useForm();
 
@@ -233,6 +243,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           icon={<ExclamationCircle className={styles.editPost__notificationIcon} />}
           onClose={() => {
             setPostErrorText(undefined);
+            setIsError(false);
           }}
         />
       )}
@@ -305,8 +316,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             isVisibleCamera={isVisibleCamera}
             isVisibleImage={isVisibleImage}
             isVisibleVideo={isVisibleVideo}
-            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
-            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
+            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO, localPost)}
+            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE, localPost)}
           />
         </div>
         <div className={styles.editPost__ctaWrapper}>
@@ -358,8 +369,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
-                            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
-                            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
+                            onImageFileChange={(files) =>
+                              handleFileChange(files, FileType.IMAGE, localPost)
+                            }
+                            onVideoFileChange={(files) =>
+                              handleFileChange(files, FileType.VIDEO, localPost)
+                            }
                           />
                         ) : (
                           <MediaAttachment
@@ -367,8 +382,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
-                            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
-                            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
+                            onImageFileChange={(files) =>
+                              handleFileChange(files, FileType.IMAGE, localPost)
+                            }
+                            onVideoFileChange={(files) =>
+                              handleFileChange(files, FileType.VIDEO, localPost)
+                            }
                           />
                         )}
                       </div>
@@ -405,6 +424,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                 className={styles.editPost__notificationToast}
                 onClose={() => {
                   setPostErrorText(undefined);
+                  setIsError(false);
                 }}
               />
             </Typography.Body>
@@ -428,17 +448,18 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         )}
         {postErrorText && (
           <div
-            className={styles.createPost__notification}
+            className={styles.editPost__notification}
             data-show-detail-media-attachment={showToastPosition()}
           >
             <Notification
               content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
-              icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+              icon={<ExclamationCircle className={styles.editPost__notificationIcon} />}
               alignment="fixed"
               duration={3000}
-              className={styles.createPost__notificationToast}
+              className={styles.editPost__notificationToast}
               onClose={() => {
                 setPostErrorText(undefined);
+                setIsError(false);
               }}
             />
           </div>
