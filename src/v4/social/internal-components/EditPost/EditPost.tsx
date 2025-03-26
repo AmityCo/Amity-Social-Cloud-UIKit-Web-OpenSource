@@ -262,7 +262,13 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   );
 
   const isButtonDisabled =
-    !online || hasNoChanges || hasNoContent || isLoading || isPending || isError;
+    !online ||
+    hasNoChanges ||
+    hasNoContent ||
+    isLoading ||
+    isPending ||
+    isError ||
+    files.some((file) => !isAmityFile(file.file)); // to make sure that files are uploaded with fileId
 
   return (
     <div className={styles.editPost} style={themeStyles}>

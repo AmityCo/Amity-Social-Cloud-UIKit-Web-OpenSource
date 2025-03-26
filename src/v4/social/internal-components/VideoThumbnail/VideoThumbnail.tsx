@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileItem as TFileItem } from '~/v4/social/hooks/useFilePostUpload';
 import { CloseIcon, ExclamationCircle, Play } from '~/icons';
 import { Button } from '~/v4/core/natives/Button';
@@ -30,7 +30,7 @@ const PostVideoThumbnail = ({
       data-video-height={String(totalVideos > 2)}
       className={styles.thumbnail__wrapper}
     >
-      <img src={thumbnailUrl} className={styles.thumbnail} alt="video thumbnail" />
+      <img src={thumbnailUrl} className={styles.thumbnail} alt="video thumbnail uploaded" />
       <Button
         data-testid={`${pageId}/${componentId}/remove_thumbnail`}
         type="reset"
@@ -65,6 +65,8 @@ export const VideoThumbnail = ({
   postVideos = [],
   onRemovePostVideo,
 }: VideoThumbnailProps) => {
+  const [isBrokenImg, setIsBrokenImg] = useState(false);
+
   const isVideoFile = (file: TFileItem) => {
     if (isAmityFile(file.file)) {
       return (
@@ -128,6 +130,18 @@ export const VideoThumbnail = ({
               </>
             ) : file.errorText ? (
               <>
+                {isBrokenImg || !file.thumbnailVideo ? (
+                  <div className={styles.thumbnailVideo__broken} />
+                ) : (
+                  <img
+                    src={file.thumbnailVideo}
+                    className={styles.thumbnail}
+                    alt="thumbnail-video"
+                    onError={() => setIsBrokenImg(true)}
+                  />
+                )}
+
+                <div className={styles.thumbnail__overlay} />
                 <Button
                   data-testid={`${pageId}/${componentId}/remove_thumbnail`}
                   type="reset"

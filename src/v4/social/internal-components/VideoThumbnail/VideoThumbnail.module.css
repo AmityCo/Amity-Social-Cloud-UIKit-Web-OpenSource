@@ -63,7 +63,7 @@
   transform: translate(-50%, -50%);
   width: 1.75rem;
   height: 1.75rem;
-  fill: var(--asc-color-primary-shade4);
+  color: var(--asc-color-primary-shade4);
 }
 
 .thumbnail__overlay {
@@ -89,6 +89,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.thumbnailVideo__broken {
+  width: 100%;
+  height: 100%;
+  background-color: var(--asc-color-base-shade4);
 }
 
 @media (width >= 48em) {
