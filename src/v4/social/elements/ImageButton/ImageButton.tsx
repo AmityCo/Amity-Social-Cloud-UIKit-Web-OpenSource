@@ -16,6 +16,7 @@ type ImageButtonProps = {
   imgIconClassName?: string;
   defaultIconClassName?: string;
   onImageFileChange?: (files: File[]) => void;
+  isDisabled?: boolean;
 };
 
 export function ImageButton({
@@ -26,6 +27,7 @@ export function ImageButton({
   onImageFileChange,
   defaultIconClassName,
   isSingleUpload = false,
+  isDisabled = false,
 }: ImageButtonProps) {
   const elementId = 'image_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
@@ -40,13 +42,22 @@ export function ImageButton({
   };
 
   const button = (
-    <Button type="button" onPress={onPress} style={themeStyles} className={styles.imageButton}>
+    <Button
+      type="button"
+      onPress={onPress}
+      style={themeStyles}
+      className={styles.imageButton}
+      isDisabled={isDisabled}
+    >
       <IconComponent
         configIconName={config.icon}
         defaultIconName={defaultConfig.icon}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
         defaultIcon={() => (
-          <ImageIcon className={clsx(styles.imageButton__icon, defaultIconClassName)} />
+          <ImageIcon
+            data-disabled={isDisabled}
+            className={clsx(styles.imageButton__icon, defaultIconClassName)}
+          />
         )}
       />
       {config.text && <Typography.BodyBold>{config.text}</Typography.BodyBold>}

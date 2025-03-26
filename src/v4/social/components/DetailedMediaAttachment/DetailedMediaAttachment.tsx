@@ -5,11 +5,14 @@ import { ImageButton } from '~/v4/social/elements/ImageButton/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton/VideoButton';
 import styles from './DetailedMediaAttachment.module.css';
 
+const MAX_UPLOAD_MEDIA = 10;
+
 interface DetailedMediaAttachmentProps {
   pageId: string;
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;
+  totalMedia?: number;
   onVideoFileChange?: (files: File[]) => void;
   onImageFileChange?: (files: File[]) => void;
 }
@@ -19,6 +22,7 @@ export function DetailedMediaAttachment({
   isVisibleCamera,
   isVisibleImage,
   isVisibleVideo,
+  totalMedia = 0,
   onVideoFileChange,
   onImageFileChange,
 }: DetailedMediaAttachmentProps) {
@@ -40,6 +44,7 @@ export function DetailedMediaAttachment({
           componentId={componentId}
           isVisibleImage={isVisibleImage}
           isVisibleVideo={isVisibleVideo}
+          isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           onVideoFileChange={onVideoFileChange}
           onImageFileChange={onImageFileChange}
         />
@@ -48,6 +53,7 @@ export function DetailedMediaAttachment({
         <ImageButton
           pageId={pageId}
           componentId={componentId}
+          isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           onImageFileChange={onImageFileChange}
         />
       )}
@@ -56,6 +62,7 @@ export function DetailedMediaAttachment({
         <VideoButton
           pageId={pageId}
           componentId={componentId}
+          isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           onVideoFileChange={onVideoFileChange}
         />
       )}

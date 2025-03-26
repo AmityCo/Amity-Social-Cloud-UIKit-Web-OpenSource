@@ -297,6 +297,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
             isVisibleCamera={isVisibleCamera}
             isVisibleImage={isVisibleImage}
             isVisibleVideo={isVisibleVideo}
+            totalMedia={files.length}
             onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
             onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
           />
@@ -349,6 +350,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
+                            totalMedia={files.length}
                             onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
                             onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
                           />
@@ -358,6 +360,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
+                            totalMedia={files.length}
                             onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
                             onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
                           />

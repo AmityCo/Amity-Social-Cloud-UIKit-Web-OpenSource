@@ -6,11 +6,14 @@ import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
 import styles from './MediaAttachment.module.css';
 
+const MAX_UPLOAD_MEDIA = 10;
+
 interface MediaAttachmentProps {
   pageId: string;
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;
+  totalMedia?: number;
   onVideoFileChange?: (files: File[], fileType?: string) => void;
   onImageFileChange?: (files: File[], fileType?: string) => void;
 }
@@ -20,6 +23,7 @@ export function MediaAttachment({
   isVisibleCamera,
   isVisibleImage,
   isVisibleVideo,
+  totalMedia = 0,
   onVideoFileChange,
   onImageFileChange,
 }: MediaAttachmentProps) {
@@ -46,6 +50,7 @@ export function MediaAttachment({
             isVisibleVideo={isVisibleVideo}
             onVideoFileChange={onVideoFileChange}
             onImageFileChange={onImageFileChange}
+            isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           />
         )}
         {isVisibleImage && (
@@ -53,6 +58,7 @@ export function MediaAttachment({
             pageId={pageId}
             componentId={componentId}
             onImageFileChange={onImageFileChange}
+            isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           />
         )}
 
@@ -61,6 +67,7 @@ export function MediaAttachment({
             pageId={pageId}
             componentId={componentId}
             onVideoFileChange={onVideoFileChange}
+            isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           />
         )}
       </div>

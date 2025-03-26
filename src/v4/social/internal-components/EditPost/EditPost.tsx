@@ -223,6 +223,11 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     });
   };
 
+  const totalMedia =
+    ((files && files?.length) || 0) +
+    ((postImages && postImages?.length) || 0) +
+    ((postVideos && postVideos?.length) || 0);
+
   const notifications = (
     <div
       className={styles.editPost__notificationWrapper}
@@ -316,9 +321,11 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             onRemovePostVideo={handleRemoveThumbnailVideo}
           />
         </div>
+        {/* TODO: Handle file type */}
         <div className={styles.editPost__attachment}>
           <MediaAttachment
             pageId={pageId}
+            totalMedia={totalMedia}
             isVisibleCamera={isVisibleCamera}
             isVisibleImage={isVisibleImage}
             isVisibleVideo={isVisibleVideo}
@@ -375,6 +382,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
+                            totalMedia={totalMedia}
                             onImageFileChange={(files) =>
                               handleFileChange(files, FileType.IMAGE, localPost)
                             }
@@ -388,6 +396,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleCamera={isVisibleCamera}
                             isVisibleImage={isVisibleImage}
                             isVisibleVideo={isVisibleVideo}
+                            totalMedia={totalMedia}
                             onImageFileChange={(files) =>
                               handleFileChange(files, FileType.IMAGE, localPost)
                             }
