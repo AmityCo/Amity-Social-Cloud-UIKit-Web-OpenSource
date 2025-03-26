@@ -30,12 +30,14 @@ export const TextContent = ({
 
   const linksFounded = linkify.find(text).filter((link) => link.type === 'url');
 
-  const isHasMedia = [
-    PostContentType.IMAGE,
-    PostContentType.VIDEO,
-    PostContentType.POLL,
-    PostContentType.LIVESTREAM,
-  ].includes(childPost?.dataType);
+  const isHasMedia =
+    post?.children?.[0] &&
+    [
+      PostContentType.IMAGE,
+      PostContentType.VIDEO,
+      PostContentType.POLL,
+      PostContentType.LIVESTREAM,
+    ].includes(childPost?.dataType);
 
   const canPreviewShown = linksFounded && linksFounded.length > 0 && !isHasMedia;
 
