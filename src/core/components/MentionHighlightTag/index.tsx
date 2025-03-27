@@ -19,7 +19,7 @@ const MentionHighlightTag = ({ children, mentionee }: MentionHighlightTagProps) 
   const { userId: mentioneeId } = mentionee;
 
   return (
-    <Highlighted data-qa-anchor="mention-hilight-tag" onClick={() => onClickUser(mentioneeId)}>
+    <Highlighted data-testid="mention-hilight-tag" onClick={() => onClickUser(mentioneeId)}>
       {children}
     </Highlighted>
   );

@@ -109,6 +109,15 @@
       }
     ]
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "src/global.d.ts", "**/*.module.css"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "src/global.d.ts",
+    "**/*.module.css",
+    "code-snippets/scripts/update-code-snippets.mjs",
+    "code-snippets/scripts/create-gist.mjs"
+  ],
   "exclude": ["node_modules", "vite.config.ts", "./dist"]
 }

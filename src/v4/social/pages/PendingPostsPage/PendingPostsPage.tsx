@@ -45,7 +45,7 @@ export const PendingPostsPage = ({ communityId }: PendingPostsPageProps) => {
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.pendingPostsPage__container}
       style={themeStyles}
     >

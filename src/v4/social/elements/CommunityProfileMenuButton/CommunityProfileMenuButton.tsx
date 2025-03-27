@@ -36,7 +36,7 @@ export function CommunityProfileMenuButton({
       {...props}
       onPress={onPress}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.menuButton, className)}
       aria-label="Menu icon to open community profile settings page"
     >

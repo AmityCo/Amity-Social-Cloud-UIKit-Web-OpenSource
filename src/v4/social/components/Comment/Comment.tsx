@@ -28,9 +28,10 @@ import { Button } from '~/v4/core/natives/Button';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import styles from './Comment.module.css';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useNetworkState } from 'react-use';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import styles from './Comment.module.css';
 
 const Like = ({ ...props }: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -165,13 +166,27 @@ export const Comment = ({
       data: commentData.data,
       mentionees: commentData.mentionees as Amity.UserMention[],
       metadata: commentData.metadata,
+    }).catch((error) => {
+      if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+        notification.info({
+          content: 'Your comment contains inappropriate word. Please review and delete it.',
+        });
+      } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+        notification.info({
+          content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
+        });
+      } else {
+        notification.info({
+          content: 'Oops, something went wrong',
+        });
+      }
     });
 
     setIsEditing(false);
   }, [commentData]);
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div style={themeStyles} data-testid={accessibilityId}>
       {comment.isDeleted ? (
         <div className={styles.postComment__deleteComment_container}>
           <MinusCircleIcon className={styles.postComment__deleteComment_icon} />
@@ -256,7 +271,7 @@ export const Comment = ({
                 className={styles.postComment__userInfo}
               >
                 <Typography.BodyBold
-                  data-qa-anchor={`${pageId}/${componentId}/username`}
+                  data-testid={`${pageId}/${componentId}/username`}
                   className={styles.postComment__content__username}
                 >
                   {comment.creator?.displayName}
@@ -285,7 +300,7 @@ export const Comment = ({
                       componentId={componentId}
                       timestamp={comment.createdAt}
                     />
-                    <span data-qa-anchor={`${pageId}/${componentId}/comment_edited_text`}>
+                    <span data-testid={`${pageId}/${componentId}/comment_edited_text`}>
                       {comment.createdAt !== comment.editedAt && ' (edited)'}
                     </span>
                   </Typography.Caption>
@@ -299,7 +314,7 @@ export const Comment = ({
                     </Typography.CaptionBold>
                   </div>
                   <div
-                    data-qa-anchor={`${pageId}/${componentId}/reply_button`}
+                    data-testid={`${pageId}/${componentId}/reply_button`}
                     onClick={() => onClickReply(comment)}
                   >
                     <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
@@ -356,7 +371,7 @@ export const Comment = ({
 
             {replyAmount > 0 && !hasClickLoadMore && (
               <div
-                data-qa-anchor={`${pageId}/${componentId}/view_reply_button`}
+                data-testid={`${pageId}/${componentId}/view_reply_button`}
                 className={styles.postComment__viewReply_button}
                 onClick={() => setHasClickLoadMore(true)}
               >

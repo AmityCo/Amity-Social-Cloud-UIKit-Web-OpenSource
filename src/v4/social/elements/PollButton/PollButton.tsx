@@ -33,7 +33,7 @@ export function PollButton({
     <Button
       style={themeStyles}
       className={styles.pollButton}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onPress}
     >
       <IconComponent

@@ -50,7 +50,7 @@ export function FileButton({
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.fileButton}
       onClick={() => {}}
     >

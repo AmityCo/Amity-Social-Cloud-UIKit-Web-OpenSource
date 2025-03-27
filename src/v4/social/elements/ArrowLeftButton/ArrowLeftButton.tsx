@@ -30,7 +30,7 @@ export const ArrowLeftButton = ({
 
   return (
     <button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.storyButton, styles.desktopOnly)}
       onClick={onClick}
       style={themeStyles}

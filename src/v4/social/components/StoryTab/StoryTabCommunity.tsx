@@ -80,7 +80,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={clsx(styles.storyTabContainer)}
     >
@@ -112,7 +112,7 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
         )}
         {isErrored && <ErrorIcon className={clsx(styles.errorIcon)} />}
       </div>
-      <Typography.Caption data-qa-anchor={`${pageId}/${componentId}/story_title`}>
+      <Typography.Caption data-testid={`${pageId}/${componentId}/story_title`}>
         Story
       </Typography.Caption>
     </div>

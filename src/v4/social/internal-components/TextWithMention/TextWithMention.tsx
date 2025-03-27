@@ -1,79 +1,80 @@
-import { SerializedLexicalNode, SerializedParagraphNode } from 'lexical';
+import clsx from 'clsx';
+import { v4 as uuidv4 } from 'uuid';
+import Truncate from 'react-truncate-markup';
 import React, { useMemo, useState } from 'react';
+import { SerializedLexicalNode, SerializedParagraphNode } from 'lexical';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
-import styles from './TextWithMention.module.css';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import {
+  MentionData,
   textToEditorState,
+  $isSerializedTextNode,
+  $isSerializedLinkNode,
   $isSerializedMentionNode,
   $isSerializedAutoLinkNode,
-  $isSerializedTextNode,
-  MentionData,
-  $isSerializedLinkNode,
 } from '~/v4/social/internal-components/Lexical/utils';
-import clsx from 'clsx';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { Button } from '~/v4/core/natives/Button/Button';
 import { Typography } from '~/v4/core/components';
-import Truncate from 'react-truncate-markup';
-import { v4 as uuidv4 } from 'uuid';
+import { Button } from '~/v4/core/natives/Button/Button';
+import styles from './TextWithMention.module.css';
 
-interface TextWithMentionProps {
+type TextWithMentionProps = {
   pageId?: string;
-  componentId?: string;
+  isBold?: boolean;
   maxLines?: number;
-  data: {
-    text: string;
-  };
+  componentId?: string;
+  data: { text: string };
   mentionees: Mentionees;
-  metadata?: {
-    mentioned?: Mentioned[];
-  };
-}
+  metadata?: { mentioned?: Mentioned[] };
+};
 
 export const TextWithMention = ({
-  pageId = '*',
-  componentId = '*',
-  maxLines = 8,
   data,
-  mentionees,
   metadata,
+  mentionees,
+  pageId = '*',
+  maxLines = 8,
+  isBold = false,
+  componentId = '*',
 }: TextWithMentionProps) => {
+  const { goToUserProfilePage } = useNavigation();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { goToUserProfilePage } = useNavigation();
+  const Component = isBold ? Typography.BodyBold : Typography.Body;
 
   const editorState = useMemo(
-    () =>
-      textToEditorState({
-        data,
-        mentionees,
-        metadata,
-      }),
+    () => textToEditorState({ data, mentionees, metadata }),
     [data, mentionees, metadata],
   );
 
   const convertSerializedToText = (child: SerializedLexicalNode, childIndex: number) => {
     if ($isSerializedMentionNode<MentionData>(child)) {
       return (
-        <span
-          data-qa-anchor={`${pageId}/${componentId}/mention`}
+        <Button
           key={uuidv4()}
+          data-testid={`${pageId}/${componentId}/mention`}
           className={clsx(styles.textWithMention__mention)}
-          onClick={() => goToUserProfilePage(child.data.userId)}
-          tabIndex={0}
+          onPress={() => goToUserProfilePage(child.data.userId)}
         >
           {child.text}
-        </span>
+        </Button>
       );
     }
+
     if ($isSerializedAutoLinkNode(child) || $isSerializedLinkNode(child)) {
       return (
         <a
+          target="_blank"
           key={child.url}
           href={child.url}
+          rel="noopener noreferrer"
+          onMouseUp={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
           className={clsx(styles.textWithMention__link)}
-          data-qa-anchor={`${pageId}/${componentId}/post_link`}
-          target="_blank"
+          data-testid={`${pageId}/${componentId}/post_link`}
         >
           {$isSerializedTextNode(child.children[0]) ? child.children[0]?.text : child.url}
         </a>
@@ -81,7 +82,7 @@ export const TextWithMention = ({
     }
 
     if ($isSerializedTextNode(child)) {
-      return <React.Fragment key={childIndex}>{child.text}</React.Fragment>;
+      return <span key={childIndex}>{child.text}</span>;
     }
 
     return null;
@@ -89,15 +90,15 @@ export const TextWithMention = ({
 
   const renderText = (paragraph: SerializedParagraphNode[]) => {
     return paragraph.map((p, index) => (
-      <React.Fragment key={index}>
+      <span key={index}>
         {p.children.map((child, childIndex) => convertSerializedToText(child, childIndex))}
         <br />
-      </React.Fragment>
+      </span>
     ));
   };
 
   return (
-    <Typography.Body className={styles.textWithMention__container}>
+    <Component className={styles.textWithMention__container}>
       {isExpanded ? (
         renderText(editorState.root.children)
       ) : (
@@ -105,7 +106,7 @@ export const TextWithMention = ({
           lines={maxLines}
           ellipsis={
             <>
-              ...
+              ...{' '}
               <Button
                 className={styles.textWithMention__seeMore}
                 onPress={() => setIsExpanded(true)}
@@ -118,6 +119,6 @@ export const TextWithMention = ({
           <div>{renderText(editorState.root.children)}</div>
         </Truncate>
       )}
-    </Typography.Body>
+    </Component>
   );
 };

@@ -56,7 +56,7 @@ export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryP
     <div
       className={styles.communitiesByCategoryPage}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       <div className={styles.communitiesByCategoryPage__navigation}>
         <div className={styles.communitiesByCategoryPage__navigationBackButton}>

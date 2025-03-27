@@ -30,7 +30,7 @@ export const CommunityCreatePostButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button onPress={onPress} data-qa-anchor={accessibilityId} style={themeStyles}>
+    <Button onPress={onPress} data-testid={accessibilityId} style={themeStyles}>
       <IconComponent
         defaultIcon={() => <CommunityCreatePostButtonIcon className={defaultClassName} />}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}

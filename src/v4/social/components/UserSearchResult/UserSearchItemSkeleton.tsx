@@ -19,7 +19,7 @@ export const UserSearchItemSkeleton = ({
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.userSearchItemSkeleton, styles.userSearchItemSkeleton__animation)}
     >
       <div className={styles.userSearchItemSkeleton__leftPane}>

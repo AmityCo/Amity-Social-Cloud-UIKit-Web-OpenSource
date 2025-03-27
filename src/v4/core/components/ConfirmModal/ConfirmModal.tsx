@@ -41,7 +41,7 @@ const Confirm = ({
       isOpen={isOpen}
       onOpenChange={onCancel}
       className={clsx(styles.overlay)}
-      data-qa-anchor={`${elementId}-${accessibilityId}`}
+      data-testid={`${elementId}-${accessibilityId}`}
     >
       <Modal className={clsx(styles.popup, className)}>
         <Dialog className={styles.dialog}>
@@ -51,7 +51,7 @@ const Confirm = ({
                 <div className={clsx(styles.popup__header)}>
                   <Typography.TitleBold
                     className={styles.popup__header__title}
-                    data-qa-anchor={`${pageId}/${componentId}/modal-title`}
+                    data-testid={`${pageId}/${componentId}/modal-title`}
                   >
                     {title}
                   </Typography.TitleBold>
@@ -64,7 +64,7 @@ const Confirm = ({
                 </div>
                 <div
                   className={clsx(styles.popup__content)}
-                  data-qa-anchor={`${pageId}/${componentId}/modal-content`}
+                  data-testid={`${pageId}/${componentId}/modal-content`}
                 >
                   {content}
                 </div>
@@ -76,7 +76,7 @@ const Confirm = ({
                       variant="outlined"
                       onPress={onCancel}
                       style={themeStyles}
-                      data-qa-anchor={`${elementId}-cancel-button`}
+                      data-testid={`${elementId}-cancel-button`}
                       className={styles.popup__footer__cancelButton}
                       isDisabled={isLoading}
                     >
@@ -89,7 +89,7 @@ const Confirm = ({
                     style={themeStyles}
                     className={styles.popup__footer__okButton}
                     color={type === 'info' ? 'primary' : 'alert'}
-                    data-qa-anchor={`${elementId}-${accessibilityId}-ok-button`}
+                    data-testid={`${elementId}-${accessibilityId}-ok-button`}
                     isDisabled={isLoading}
                     onPress={async () => {
                       setIsLoading(true);

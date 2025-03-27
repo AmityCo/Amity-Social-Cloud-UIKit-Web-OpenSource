@@ -40,7 +40,7 @@ const CommentText = ({
   const expand = () => setIsExpanded(true);
 
   const textContent = text ? (
-    <div data-qa-anchor="comment-content" className={clsx(styles.commentContent, className)}>
+    <div data-testid="comment-content" className={clsx(styles.commentContent, className)}>
       <Truncate.Atom>
         {chunks.map((chunk) => {
           const key = `${text}-${chunk.start}-${chunk.end}`;

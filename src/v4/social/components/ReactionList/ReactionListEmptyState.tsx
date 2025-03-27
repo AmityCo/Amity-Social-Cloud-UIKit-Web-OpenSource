@@ -6,7 +6,7 @@ import SmilePlus from '~/v4/icons/SmilePlus';
 
 export const ReactionListEmptyState = () => {
   return (
-    <div className={styles.reactionCustomStateContainer} data-qa-anchor="reaction_list">
+    <div className={styles.reactionCustomStateContainer} data-testid="reaction_list">
       <div className={styles.reactionState}>
         <SmilePlus />
         <div className={styles.reactionState2Line}>

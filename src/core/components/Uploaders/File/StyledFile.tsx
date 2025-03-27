@@ -17,7 +17,7 @@ import {
 } from './styles';
 
 export interface StyledFileProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   name?: string;
   url?: string;
   type?: string;
@@ -29,7 +29,7 @@ export interface StyledFileProps {
 }
 
 const StyledFile = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   name,
   url,
   type,
@@ -64,7 +64,7 @@ const StyledFile = ({
   const isUploading = progress < 100;
 
   return (
-    <FileContainer href={url} download data-qa-anchor={dataQaAnchor}>
+    <FileContainer href={url} download data-testid={dataQaAnchor}>
       <Content>
         {isImg && !!url ? (
           <ImgPreview src={url} />
@@ -77,7 +77,7 @@ const StyledFile = ({
 
           {!!onRemove && (
             <RemoveButton
-              data-qa-anchor="uploaders-file-remove-button"
+              data-testid="uploaders-file-remove-button"
               onClick={removeCallback}
               // NOTE: This component also be used to show files when edit, The progress is not increased, remain -1 all the time
               disabled={progress !== -1 && isUploading}

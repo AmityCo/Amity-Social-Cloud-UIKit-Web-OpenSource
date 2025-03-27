@@ -21,7 +21,7 @@ export const PinBadge = ({ pageId, componentId }: PinBadgeProps) => {
 
   return (
     <IconComponent
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       defaultIcon={() => <PinBadgeIcon className={styles.pinBadge__icon} />}
       imgIcon={() => <img src={config.icon} alt={uiReference} />}
       defaultIconName={defaultConfig.icon}

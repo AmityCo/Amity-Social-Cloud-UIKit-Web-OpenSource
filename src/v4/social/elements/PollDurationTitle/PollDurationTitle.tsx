@@ -16,7 +16,7 @@ export const PollDurationTitle = ({ pageId = '*', componentId = '*' }: PollDurat
     elementId,
   });
   return (
-    <Typography.TitleBold data-qa-anchor={accessibilityId} style={themeStyles}>
+    <Typography.TitleBold data-testid={accessibilityId} style={themeStyles}>
       {config.text}
     </Typography.TitleBold>
   );

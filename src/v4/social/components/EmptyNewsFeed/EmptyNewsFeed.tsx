@@ -28,7 +28,7 @@ export function EmptyNewsfeed({ pageId = '*' }: EmptyNewsfeedProps) {
   if (isExcluded) return null;
 
   return (
-    <div className={styles.emptyNewsfeed} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div className={styles.emptyNewsfeed} style={themeStyles} data-testid={accessibilityId}>
       <Illustration pageId={pageId} componentId={componentId} />
       <div className={styles.emptyNewsfeed__text}>
         <Title pageId={pageId} componentId={componentId} />

@@ -121,7 +121,7 @@ export interface PageBehavior {
     goToStorySettingPage?(context: { community: Amity.Community }): void;
     goToSocialHomePage?(): void;
   };
-  AmityCommunityMembershipPage?: {
+  AmityCommunityMembershipPageBehavior?: {
     goToAddMemberPage?(context: {
       members?: MemberCommunitySetup[];
       communityId?: string;
@@ -138,20 +138,20 @@ export interface PageBehavior {
     goToBlockedUsersPage?(): void;
     goToPostComposerPage?(context: { userId: string }): void;
   };
-  AmityUserProfileHeaderComponentBehavior: {
+  AmityUserProfileHeaderComponentBehavior?: {
     goToUserRelationshipPage?(context: {
       userId: string;
       selectedTab: UserRelationshipPageTabs;
     }): void;
     goToPendingFollowRequestPage?(): void;
   };
-  AmityUserRelationshipPageBehavior: {
+  AmityUserRelationshipPageBehavior?: {
     goToUserProfilePage?(context: { userId: string }): void;
   };
-  AmityUserPendingFollowRequestsPageBehavior: {
+  AmityUserPendingFollowRequestsPageBehavior?: {
     goToUserProfilePage?(context: { userId: string }): void;
   };
-  AmityBlockedUsersPageBehavior: {
+  AmityBlockedUsersPageBehavior?: {
     goToUserProfilePage?(context: { userId: string }): void;
   };
   AmityPollTargetSelectionPageBehavior?: {
@@ -479,20 +479,20 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         goToSocialHomePage();
       },
     },
-    AmityCommunityMembershipPage: {
+    AmityCommunityMembershipPageBehavior: {
       goToAddMemberPage(context: {
         members?: MemberCommunitySetup[];
         communityId?: string;
         onAddedAction?: (userId: string[]) => void;
       }) {
-        if (pageBehavior?.AmityCommunityMembershipPage?.goToAddMemberPage) {
-          return pageBehavior.AmityCommunityMembershipPage.goToAddMemberPage(context);
+        if (pageBehavior?.AmityCommunityMembershipPageBehavior?.goToAddMemberPage) {
+          return pageBehavior.AmityCommunityMembershipPageBehavior.goToAddMemberPage(context);
         }
         goToAddMemberPage?.(context);
       },
       goToUserProfilePage: (context: { userId: string }) => {
-        if (pageBehavior?.AmityCommunityMembershipPage?.goToUserProfilePage) {
-          return pageBehavior.AmityCommunityMembershipPage.goToUserProfilePage(context);
+        if (pageBehavior?.AmityCommunityMembershipPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityCommunityMembershipPageBehavior.goToUserProfilePage(context);
         }
         goToUserProfilePage(context.userId);
       },

@@ -120,7 +120,7 @@ const Suggestions = <T,>({
       {append && <MenuItem>{append}</MenuItem>}
     </MenuList>
   ) : (
-    <Placeholder data-qa-anchor="suggestions-placeholder-no-results">
+    <Placeholder data-testid="suggestions-placeholder-no-results">
       <FormattedMessage id="placeholder.noResults" />
     </Placeholder>
   );

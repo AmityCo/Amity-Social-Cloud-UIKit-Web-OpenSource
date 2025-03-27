@@ -45,6 +45,8 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import styles from './PostContent.module.css';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
+import { LiveStreamContent } from './LiveStreamContent';
+import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -102,7 +104,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
         >
           <Button
             onPress={() => onClickUser(post.creator.userId)}
-            data-qa-anchor={`${pageId}/${componentId}/username`}
+            data-testid={`${pageId}/${componentId}/username`}
           >
             <Typography.BodyBold className={styles.postTitle__text}>
               {post.creator.displayName}
@@ -111,7 +113,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
           {showBrandBadge ? <BrandBadge className={styles.postTitle__brandIcon} /> : null}
           {showTarget ? (
             <AngleRight
-              data-qa-anchor={`${pageId}/${componentId}/arrow_right`}
+              data-testid={`${pageId}/${componentId}/arrow_right`}
               className={styles.postTitle__icon}
             />
           ) : null}
@@ -126,7 +128,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
           {showPrivateBadge && <CommunityPrivateBadge />}
           <Button
             className={styles.postTitle__communityText}
-            data-qa-anchor={`${pageId}/${componentId}/community_name`}
+            data-testid={`${pageId}/${componentId}/community_name`}
             onPress={() => goToCommunityProfilePage(targetCommunity.communityId)}
           >
             <Typography.BodyBold>{targetCommunity.displayName}</Typography.BodyBold>
@@ -154,21 +156,25 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
   );
 };
 
-export const ChildrenPostContent = ({
-  pageId,
-  componentId,
-  post,
-  disabledContent = false,
-  onImageClick,
-  onVideoClick,
-}: {
+type ChildrenPostContentProps = {
   pageId?: string;
-  componentId?: string;
   post: Amity.Post[];
+  componentId?: string;
   disabledContent?: boolean;
   onImageClick: (imageIndex: number) => void;
   onVideoClick: (videoIndex: number) => void;
-}) => {
+  goToPostDetail?: () => void;
+};
+
+export const ChildrenPostContent = ({
+  post,
+  pageId,
+  componentId,
+  onImageClick,
+  onVideoClick,
+  goToPostDetail,
+  disabledContent = false,
+}: ChildrenPostContentProps) => {
   return (
     <>
       <PollContent
@@ -189,6 +195,7 @@ export const ChildrenPostContent = ({
         post={post}
         onVideoClick={onVideoClick}
       />
+      <LiveStreamContent post={post} goToPostDetail={goToPostDetail} />
     </>
   );
 };
@@ -230,6 +237,9 @@ export const PostContent = ({
   const { openPopup } = usePopupContext();
   const { confirm } = useConfirmContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const { moderators } = useCommunityModeratorsCollection({ communityId: post?.targetId });
+  const isModerator =
+    (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
   const [shouldSubscribe, setShouldSubscribe] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
@@ -350,6 +360,7 @@ export const PostContent = ({
 
   //TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
   const shouldShowConfirmEdit =
+    !isModerator &&
     isGlobalFeaturePost &&
     ((targetCommunity as Amity.Community & { needApprovalOnPostCreation?: boolean })
       ?.needApprovalOnPostCreation ||
@@ -369,7 +380,7 @@ export const PostContent = ({
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       ref={elementRef}
       className={clsx(styles.postContent, className)}
       style={themeStyles}
@@ -401,7 +412,7 @@ export const PostContent = ({
             <Timestamp timestamp={post.createdAt} />
             {post.createdAt !== post.editedAt && (
               <Typography.Caption
-                data-qa-anchor={`${pageId}/${componentId}/post_edited_text`}
+                data-testid={`${pageId}/${componentId}/post_edited_text`}
                 className={styles.postContent__bar__information__editedTag}
               >
                 (edited)
@@ -489,6 +500,7 @@ export const PostContent = ({
               post={post}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
+              goToPostDetail={onClick}
               disabledContent={isNotJoinedCommunity || disabledContent}
             />
           ) : null}
@@ -526,7 +538,7 @@ export const PostContent = ({
                 </div>
               ) : null}
               <Typography.Caption
-                data-qa-anchor={`${pageId}/${componentId}/like_count`}
+                data-testid={`${pageId}/${componentId}/like_count`}
                 className={styles.postContent__reactionsBar__reactions__count}
               >
                 {`${millify(post?.reactionsCount || 0)} ${
@@ -536,7 +548,7 @@ export const PostContent = ({
             </div>
 
             <Typography.Caption
-              data-qa-anchor={`${pageId}/${componentId}/comment_count`}
+              data-testid={`${pageId}/${componentId}/comment_count`}
               className={styles.postContent__commentsCount}
             >
               {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}

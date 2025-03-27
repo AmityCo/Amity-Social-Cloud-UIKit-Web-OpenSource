@@ -174,7 +174,7 @@ export const HyperLinkConfig = ({
   };
 
   return (
-    <div data-qa-anchor={accessibilityId} style={themeStyles}>
+    <div data-testid={accessibilityId} style={themeStyles}>
       <div className={styles.headerContainer}>
         <EditCancelButton
           pageId={pageId}

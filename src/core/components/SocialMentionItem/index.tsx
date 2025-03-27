@@ -66,7 +66,7 @@ const SocialMentionItem = ({
   return (
     <Item
       ref={isLastItem ? targetRef : null}
-      data-qa-anchor="social-mention-item"
+      data-testid="social-mention-item"
       focused={focused}
       isBanned={user?.isGlobalBanned}
       maxWidth={containerRef?.current?.clientWidth}

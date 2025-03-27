@@ -28,7 +28,7 @@ export function ExploreRecommendedTitle({
     <Typography.TitleBold
       className={clsx(styles.exploreRecommendedTitle, titleClassName)}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.TitleBold>

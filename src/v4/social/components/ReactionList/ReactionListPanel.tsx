@@ -61,7 +61,7 @@ export const ReactionListPanel = ({
                     <div className={styles.userDetailsProfile}>
                       <div className={styles.avatar}>
                         <Avatar
-                          data-qa-anchor="user_avatar_view"
+                          data-testid="user_avatar_view"
                           avatarUrl={reaction.user?.avatar?.fileUrl}
                           defaultImage={<User />}
                           onClick={() => onClickUserDetails(reaction.user?.userId as string)}
@@ -73,7 +73,7 @@ export const ReactionListPanel = ({
                           onPress={() => onClickUserDetails(reaction.user?.userId as string)}
                         >
                           <Typography.BodyBold
-                            data-qa-anchor="user_display_name"
+                            data-testid="user_display_name"
                             className={styles.userDetailsName}
                           >
                             {reaction.user?.displayName}

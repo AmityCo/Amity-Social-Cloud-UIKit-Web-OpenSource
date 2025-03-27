@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useImage } from '~/v4/core/hooks/useImage';
@@ -6,26 +6,6 @@ import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './VideoContent.module.css';
 import VideoControl from '~/v4/icons/VideoControl';
-
-const PlayButtonSvg = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    width="25"
-    height="24"
-    viewBox="0 0 25 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <g id="Icon " clipPath="url(#clip0_1936_14348)">
-      <path id="Vector" d="M8.95117 5V19L19.9512 12L8.95117 5Z" />
-    </g>
-    <defs>
-      <clipPath id="clip0_1936_14348">
-        <rect width="24" height="24" transform="translate(0.951172)" />
-      </clipPath>
-    </defs>
-  </svg>
-);
 
 const VideoThumbnail = ({
   fileId,
@@ -35,18 +15,20 @@ const VideoThumbnail = ({
   placeholder: React.ReactNode;
 }) => {
   const videoThumbnailUrl = useImage({ fileId });
+  const [isBrokenImg, setIsBrokenImg] = useState(false);
 
   return (
     <>
-      {!videoThumbnailUrl ? (
-        placeholder
-      ) : (
+      {videoThumbnailUrl && !isBrokenImg ? (
         <img
           loading="lazy"
           className={styles.videoContent__video}
           src={videoThumbnailUrl}
           alt={fileId}
+          onError={() => setIsBrokenImg(true)}
         />
+      ) : (
+        <div className={styles.videoContent__brokenImg} />
       )}
     </>
   );
@@ -78,7 +60,7 @@ const Video = ({
       onPress={() => onVideoClick()}
       data-videos-amount={Math.min(postAmount, 4)}
       className={styles.videoContent__videoContainer}
-      data-qa-anchor={`${pageId}/${componentId}/post_video`}
+      data-testid={`${pageId}/${componentId}/post_video`}
     >
       <VideoThumbnail
         fileId={videoPost.data.thumbnailFileId}
@@ -95,8 +77,8 @@ const Video = ({
       )}
       {videoLeftCount === 0 || !isLastVideo ? (
         <div className={styles.videoContent__playButtonCover}>
-          <div className={styles.videoContent__playButton} onClick={() => onVideoClick()}>
-            <PlayButtonSvg className={styles.videoContent__playButton__svg} />
+          <div className={styles.videoContent__playButton}>
+            <VideoControl className={styles.videoContent__playButton__icon} />
           </div>
         </div>
       ) : null}

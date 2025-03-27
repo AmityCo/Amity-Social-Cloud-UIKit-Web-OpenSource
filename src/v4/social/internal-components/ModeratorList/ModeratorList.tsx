@@ -39,7 +39,7 @@ export const ModeratorList = ({ pageId = '*', community }: ModeratorListProps) =
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.moderatorList}
       data-hidden={moderators.length <= 0}
     >

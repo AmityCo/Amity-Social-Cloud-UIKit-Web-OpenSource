@@ -57,7 +57,7 @@ const PollModal = ({ targetId, targetType, onClose, onCreatePoll }: PollModalPro
 
   return (
     <Modal
-      data-qa-anchor="poll-composer-modal"
+      data-testid="poll-composer-modal"
       title={formatMessage({ id: 'poll_modal.title' })}
       clean={false}
       onCancel={isDirty ? closeConfirm : onClose}

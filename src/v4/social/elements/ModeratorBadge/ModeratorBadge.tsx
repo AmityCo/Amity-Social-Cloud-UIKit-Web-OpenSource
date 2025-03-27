@@ -36,7 +36,7 @@ export function ModeratorBadge({ pageId = '*', componentId = '*' }: ModeratorBad
   if (isExcluded) return null;
 
   return (
-    <div className={styles.moderatorBadge} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div className={styles.moderatorBadge} style={themeStyles} data-testid={accessibilityId}>
       <Badge className={styles.moderatorBadge__icon} />
       <div className={styles.moderatorBadge__text}>{config.text}</div>
     </div>

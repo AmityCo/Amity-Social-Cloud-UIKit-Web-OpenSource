@@ -1,1 +1,1 @@
-export { UserImageFeed } from './UserImageFeed';
+export { UserVideoFeed } from './UserVideoFeed';

@@ -149,7 +149,7 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityPin__container}
       style={themeStyles}
     >

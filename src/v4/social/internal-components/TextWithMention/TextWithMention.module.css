@@ -1,61 +1,28 @@
 .textWithMention__container {
+  width: 100%;
   background-color: inherit;
   overflow-wrap: break-word;
-  width: 100%;
   color: var(--asc-color-base-default);
-}
-
-.textWithMention__clamp {
-  position: relative;
-  background-color: inherit;
-  overflow: hidden;
-  max-height: calc(var(--asc-text-with-mention-max-lines) * var(--asc-line-height-md));
-}
-
-.textWithMention__clamp[data-expanded='true'] {
-  position: relative;
-  background-color: inherit;
-  overflow: hidden;
-  max-height: max-content;
-}
-
-.textWithMention__paragraph {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.textWithMention__fullContent {
-  visibility: hidden;
-  position: relative;
-  top: 0;
-  left: 0;
-  height: auto;
-  overflow: visible;
-  overflow-wrap: break-word;
-  width: 100%;
-}
-
-.textWithMention__fullContent[data-hidden='true'] {
-  display: none;
 }
 
 .textWithMention__mention {
+  border: none;
+  outline: none;
   cursor: pointer;
-  color: var(--asc-color-primary-default);
   display: inline;
+  background-color: transparent;
+  color: var(--asc-color-primary-default);
 }
 
-.textWithMention__text {
-  color: var(--asc-color-base-default);
-  display: inline;
+.textWithMention__mention[data-focus-visible] {
+  outline: 2px solid var(--asc-color-primary-default);
 }
 
 .textWithMention__link {
   display: inline;
-  color: var(--asc-color-primary-default);
-  text-decoration: none;
   cursor: pointer;
+  text-decoration: none;
+  color: var(--asc-color-primary-default);
 }
 
 .textWithMention__seeMore {

@@ -23,7 +23,7 @@ export function Title({ pageId = '*', componentId = '*', titleClassName }: Title
   return (
     <Typography.TitleBold
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.title, titleClassName)}
     >
       {config.text}

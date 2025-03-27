@@ -15,6 +15,7 @@ type VideoButtonProps = {
   componentId?: string;
   imgIconClassName?: string;
   defaultIconClassName?: string;
+  isDisabled?: boolean;
   onVideoFileChange?: (files: File[]) => void;
 };
 
@@ -25,6 +26,7 @@ export function VideoButton({
   imgIconClassName,
   onVideoFileChange,
   defaultIconClassName,
+  isDisabled = false,
 }: VideoButtonProps) {
   const elementId = 'video_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
@@ -47,15 +49,19 @@ export function VideoButton({
     <Button
       style={themeStyles}
       className={styles.videoButton}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onPress ? onPress : triggerFileInput}
+      isDisabled={isDisabled}
     >
       <IconComponent
         configIconName={config.icon}
         defaultIconName={defaultConfig.icon}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
         defaultIcon={() => (
-          <VideoIcon className={clsx(styles.videoButton__icon, defaultIconClassName)} />
+          <VideoIcon
+            data-disabled={isDisabled}
+            className={clsx(styles.videoButton__icon, defaultIconClassName)}
+          />
         )}
       />
       {config.text && (

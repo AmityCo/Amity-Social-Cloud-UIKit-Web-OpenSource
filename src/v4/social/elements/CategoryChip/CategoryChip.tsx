@@ -34,7 +34,7 @@ export const CategoryChip: React.FC<CategoryChipProps> = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={styles.categoryChip}
       onPress={() => onClick?.(category.categoryId)}

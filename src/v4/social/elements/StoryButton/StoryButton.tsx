@@ -32,7 +32,7 @@ export function StoryButton({
   if (isExcluded) return null;
 
   return (
-    <Button data-qa-anchor={accessibilityId} className={styles.storyButton} onPress={onPress}>
+    <Button data-testid={accessibilityId} className={styles.storyButton} onPress={onPress}>
       <IconComponent
         configIconName={config.icon}
         defaultIconName={defaultConfig.icon}

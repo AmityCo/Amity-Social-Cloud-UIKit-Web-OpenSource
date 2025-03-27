@@ -25,7 +25,7 @@ export const CloseCommunityDescription = ({
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.closeCommunityDescription__container}
     >
       {config.text && (

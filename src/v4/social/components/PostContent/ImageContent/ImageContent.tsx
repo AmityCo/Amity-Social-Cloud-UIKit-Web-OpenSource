@@ -14,13 +14,20 @@ const ImageThumbnail = ({
   placeholder: React.ReactNode;
 }) => {
   const imageUrl = useImage({ fileId });
+  const [isBrokenImg, setIsBrokenImg] = useState(false);
 
   return (
     <>
-      {!imageUrl ? (
-        placeholder
+      {imageUrl && !isBrokenImg ? (
+        <img
+          loading="lazy"
+          className={styles.imageContent__img}
+          src={imageUrl}
+          alt={fileId}
+          onError={() => setIsBrokenImg(true)}
+        />
       ) : (
-        <img loading="lazy" className={styles.imageContent__img} src={imageUrl} alt={fileId} />
+        <div className={styles.imageContent__brokenImage} />
       )}
     </>
   );
@@ -51,7 +58,7 @@ const Image = ({
     <Button
       onPress={() => onImageClick()}
       className={styles.imageContent__imgContainer}
-      data-qa-anchor={`${pageId}/${componentId}/post_image`}
+      data-testid={`${pageId}/${componentId}/post_image`}
     >
       <ImageThumbnail
         fileId={imagePost.data.fileId}

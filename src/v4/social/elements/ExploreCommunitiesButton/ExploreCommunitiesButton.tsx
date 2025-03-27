@@ -36,7 +36,7 @@ export function ExploreCommunitiesButton({ pageId = '*', componentId = '*' }: De
   return (
     <div
       className={styles.exploreCommunitiesButton}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
     >
       <Globe className={styles.exploreCommunitiesButton__icon} />

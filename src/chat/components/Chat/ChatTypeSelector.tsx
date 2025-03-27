@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl';
 import { StyledSelect } from './styles';
 
 const itemRenderer = ({ name }: { name?: string }) => (
-  <div data-qa-anchor={`chat-type-selector-item-${name}`}>{name}</div>
+  <div data-testid={`chat-type-selector-item-${name}`}>{name}</div>
 );
 
 interface ChatTypeSelectorProps {
@@ -22,7 +22,7 @@ const ChatTypeSelector = ({ onChange, parentContainer }: ChatTypeSelectorProps) 
 
   return (
     <StyledSelect
-      data-qa-anchor="chat-type"
+      data-testid="chat-type"
       options={options}
       value={[options[0]]}
       parentContainer={parentContainer}

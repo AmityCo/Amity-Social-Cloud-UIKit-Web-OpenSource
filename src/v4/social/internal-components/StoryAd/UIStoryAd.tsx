@@ -96,13 +96,13 @@ export const UIStoryAd = ({
             {isPaused ? (
               <PlayIcon
                 className={styles.playStoryButton}
-                data-qa-anchor="play_button"
+                data-testid="play_button"
                 onClick={() => onPlayClick?.()}
               />
             ) : (
               <PauseIcon
                 className={styles.pauseStoryButton}
-                data-qa-anchor="pause_button"
+                data-testid="pause_button"
                 onClick={() => onPauseClick?.()}
               />
             )}
@@ -118,7 +118,7 @@ export const UIStoryAd = ({
           <img
             ref={imageRef}
             className={clsx(styles.storyImage)}
-            data-qa-anchor="image_view"
+            data-testid="image_view"
             src={adImageUrl}
             onLoad={handleImageLoaded}
             alt="Story Image"

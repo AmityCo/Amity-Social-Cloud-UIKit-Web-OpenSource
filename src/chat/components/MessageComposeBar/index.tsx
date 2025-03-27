@@ -28,7 +28,7 @@ const MessageComposeBar = ({ onSubmit }: MessageComposeBarProps) => {
   return (
     <MessageComposeBarContainer>
       <MessageComposeBarInput
-        data-qa-anchor="message-compose-bar-input"
+        data-testid="message-compose-bar-input"
         type="text"
         value={message}
         placeholder={formatMessage({ id: 'MessageComposeBar.placeholder' })}
@@ -36,7 +36,7 @@ const MessageComposeBar = ({ onSubmit }: MessageComposeBarProps) => {
         onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
       />
       <SendMessageIcon
-        data-qa-anchor="message-compose-bar-send-message-button"
+        data-testid="message-compose-bar-send-message-button"
         onClick={sendMessage}
       />
     </MessageComposeBarContainer>

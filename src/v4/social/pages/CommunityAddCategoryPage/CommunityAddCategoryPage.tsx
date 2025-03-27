@@ -94,7 +94,7 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityAddCategoryPage__container}
     >
       <div className={styles.communityAddCategoryPage__topMenuSticky}>
@@ -192,7 +192,7 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
           color="primary"
           onPress={handleAddCategory}
           isDisabled={selectedCategories.length === 0}
-          data-qa-anchor={`${pageId}/*/add_category_button`}
+          data-testid={`${pageId}/*/add_category_button`}
           className={styles.communityAddCategoryPage__button}
         >
           Add category

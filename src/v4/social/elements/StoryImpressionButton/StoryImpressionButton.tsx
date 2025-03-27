@@ -52,7 +52,7 @@ export function StoryImpressionButton({
       defaultIcon={() => (
         <div
           className={clsx(styles.impressionButton, defaultIconClassName)}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
         >
           <StoryImpressionSvg />
           <Typography.BodyBold>{reach}</Typography.BodyBold>

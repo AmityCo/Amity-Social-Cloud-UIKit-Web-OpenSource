@@ -83,7 +83,7 @@ export function UserAvatar({
     >
       <img
         src={userImage}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         className={clsx(styles.userAvatar__img, className)}
       />
       {isShowModeratorBadge && <Badge className={styles.userAvatar__badge} />}

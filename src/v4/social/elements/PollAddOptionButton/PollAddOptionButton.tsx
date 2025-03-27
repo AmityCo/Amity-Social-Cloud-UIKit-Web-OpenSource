@@ -27,7 +27,7 @@ export const PollAddOptionButton = ({
   return (
     <Button
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       size="medium"
       variant="outlined"
       color="secondary"

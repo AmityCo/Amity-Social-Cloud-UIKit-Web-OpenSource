@@ -36,7 +36,7 @@ export const SecondaryTab = ({
             id={tab.value}
             key={tab.value}
             className={styles.tab}
-            data-qa-anchor={tab.accessibilityId}
+            data-testid={tab.accessibilityId}
           >
             <Typography.TitleBold className={labelClassName}>{tab.label}</Typography.TitleBold>
           </Tab>

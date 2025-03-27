@@ -17,6 +17,7 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { ErrorPostDetail } from '~/v4/social/internal-components/ErrorPostDetail/ErrorPostDetail';
 
 interface PostDetailPageProps {
   id: string;
@@ -51,6 +52,8 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
   );
 
   const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
+
+  if (post?.isDeleted) return <ErrorPostDetail />;
 
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
@@ -92,6 +95,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
                 referenceType="post"
                 onClickReply={handleReplyClick}
                 community={community}
+                commentCount={post.commentsCount}
                 renderReplyComment={(comment) => {
                   if (replyComment && comment.commentId === replyComment.commentId && isDesktop) {
                     return (
@@ -118,7 +122,7 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
           onPress={() => onBack()}
         />
         <Typography.TitleBold
-          data-qa-anchor={`${pageId}/page_title`}
+          data-testid={`${pageId}/page_title`}
           className={styles.postDetailPage__topBar__title}
         >
           Post

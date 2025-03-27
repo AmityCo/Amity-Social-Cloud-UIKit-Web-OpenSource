@@ -29,7 +29,7 @@ export const CommunityInfo = ({
   if (isExcluded) return null;
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onClick}
       className={styles.communityInfo__container}
     >

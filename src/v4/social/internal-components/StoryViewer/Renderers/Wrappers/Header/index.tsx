@@ -55,7 +55,7 @@ const Header: React.FC<
             <Truncate lines={1}>
               <div
                 className={styles.viewStoryHeadingTitle}
-                data-qa-anchor="community_display_name"
+                data-testid="community_display_name"
                 onClick={onClickCommunity}
               >
                 {heading}
@@ -68,15 +68,11 @@ const Header: React.FC<
       </div>
       <div className={styles.viewStoryHeaderListActionsContainer}>
         {isPaused ? (
-          <PlayIcon
-            className={styles.playStoryButton}
-            data-qa-anchor="play_button"
-            onClick={onPlay}
-          />
+          <PlayIcon className={styles.playStoryButton} data-testid="play_button" onClick={onPlay} />
         ) : (
           <PauseIcon
             className={styles.pauseStoryButton}
-            data-qa-anchor="pause_button"
+            data-testid="pause_button"
             onClick={onPause}
           />
         )}

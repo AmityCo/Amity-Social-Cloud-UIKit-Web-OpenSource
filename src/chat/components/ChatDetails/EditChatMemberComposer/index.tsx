@@ -122,7 +122,7 @@ const EditChatMemberComposerForm = ({
                   <UserSelector
                     parentContainer={formBodyRef.current}
                     {...rest}
-                    data-qa-anchor="edit-chat-members-composer-select-user-input"
+                    data-testid="edit-chat-members-composer-select-user-input"
                   />
                 )}
                 control={control}
@@ -142,10 +142,7 @@ const EditChatMemberComposerForm = ({
           >
             <FormattedMessage id="cancel" />
           </Button>
-          <SubmitButton
-            data-qa-anchor="edit-chat-members-composer-submit-button"
-            disabled={disabled}
-          >
+          <SubmitButton data-testid="edit-chat-members-composer-submit-button" disabled={disabled}>
             <FormattedMessage id="save" />
           </SubmitButton>
         </Footer>

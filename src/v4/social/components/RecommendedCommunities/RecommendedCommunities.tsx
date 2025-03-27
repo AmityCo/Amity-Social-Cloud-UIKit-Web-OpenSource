@@ -163,7 +163,7 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     >
       <div
         style={themeStyles}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         className={styles.recommendedCommunities}
       >
         {isLoading

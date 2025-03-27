@@ -42,7 +42,7 @@ const FileInput = styled.input.attrs({ type: 'file' })`
 
 interface FileLoaderProps {
   className?: string;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   mimeType?: string;
   multiple?: boolean;
   disabled?: boolean;
@@ -55,7 +55,7 @@ interface FileLoaderProps {
 
 const FileLoader: React.FC<FileLoaderProps> = ({
   className = '',
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   mimeType,
   multiple,
   disabled,
@@ -158,7 +158,7 @@ const FileLoader: React.FC<FileLoaderProps> = ({
 
   return (
     <FileLoaderContainer
-      data-qa-anchor={`${dataQaAnchor}`}
+      data-testid={`${dataQaAnchor}`}
       id={uniqId}
       className={cx(className, { hover, disabled })}
       onDragEnter={onDragEnter}

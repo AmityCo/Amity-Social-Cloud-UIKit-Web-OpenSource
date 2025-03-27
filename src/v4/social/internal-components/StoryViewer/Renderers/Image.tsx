@@ -95,15 +95,15 @@ export const renderer: CustomRenderer = ({
   const isCreator = creator?.userId === user?.userId;
 
   const heading = useMemo(
-    () => <div data-qa-anchor="community_display_name">{community?.displayName}</div>,
+    () => <div data-testid="community_display_name">{community?.displayName}</div>,
     [community?.displayName],
   );
   const subheading = useMemo(
     () =>
       createdAt && creator?.displayName ? (
         <span>
-          <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-          <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+          <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
+          <span data-testid="creator_display_name">{creator?.displayName}</span>
         </span>
       ) : (
         ''
@@ -332,7 +332,7 @@ export const renderer: CustomRenderer = ({
               [styles.hidden]: !isVisible,
             },
           )}
-          data-qa-anchor="image_view"
+          data-testid="image_view"
           src={url ?? (story?.data.fileData as string)}
           onLoad={imageLoaded}
           alt="Story Image"

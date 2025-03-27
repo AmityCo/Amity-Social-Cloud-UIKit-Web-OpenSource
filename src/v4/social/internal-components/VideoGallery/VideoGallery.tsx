@@ -33,9 +33,12 @@ const VideoItem = ({
     );
 
   return isBrokenImg ? (
-    <div className={styles.videoGallery__itemContainer}>
+    <Button
+      className={styles.videoGallery__itemContainer}
+      onPress={() => onClickVideoItem(postIndex)}
+    >
       <div className={styles.videoGallery__brokenImg} />
-    </div>
+    </Button>
   ) : (
     <Button
       className={styles.videoGallery__itemContainer}

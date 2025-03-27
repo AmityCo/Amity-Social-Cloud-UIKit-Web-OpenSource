@@ -24,7 +24,7 @@ export function CommunitySideBarTitle({
   return (
     <Typography.TitleBold
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.community_sideBar__title}
     >
       {config.text}

@@ -27,7 +27,7 @@ export const Avatar = ({
   const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.avatarContainer, containerClassName)}
       data-clickable={!!onClick}
       onClick={onClick}

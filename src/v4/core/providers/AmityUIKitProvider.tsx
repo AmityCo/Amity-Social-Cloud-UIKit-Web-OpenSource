@@ -40,6 +40,7 @@ import { PopupProvider } from '~/v4/core/providers/PopupProvider';
 import { Popup } from '~/v4/core/components/AriaPopup';
 import { CommunitySetupProvider } from '~/v4/social/providers/CommunitySetupProvider';
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
+import { LayoutProvider } from '~/v4/social/providers/LayoutProvider';
 
 const InternalComponent = ({
   apiKey,
@@ -144,26 +145,28 @@ const InternalComponent = ({
                         }}
                       >
                         <PostRendererProvider config={postRendererConfig}>
-                          <NavigationProvider
-                            activeRoute={activeRoute}
-                            onRouteChange={onRouteChange}
-                          >
-                            <PageBehaviorProvider pageBehavior={pageBehavior}>
-                              <StoryProvider>
-                                <CommunitySetupProvider>
-                                  <DrawerProvider>
-                                    <GlobalFeedProvider>
-                                      <PopupProvider>
-                                        <Popup />
-                                        {children}
-                                      </PopupProvider>
-                                    </GlobalFeedProvider>
-                                    <DrawerContainer />
-                                  </DrawerProvider>
-                                </CommunitySetupProvider>
-                              </StoryProvider>
-                            </PageBehaviorProvider>
-                          </NavigationProvider>
+                          <LayoutProvider>
+                            <NavigationProvider
+                              activeRoute={activeRoute}
+                              onRouteChange={onRouteChange}
+                            >
+                              <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                <StoryProvider>
+                                  <CommunitySetupProvider>
+                                    <DrawerProvider>
+                                      <GlobalFeedProvider>
+                                        <PopupProvider>
+                                          <Popup />
+                                          {children}
+                                        </PopupProvider>
+                                      </GlobalFeedProvider>
+                                      <DrawerContainer />
+                                    </DrawerProvider>
+                                  </CommunitySetupProvider>
+                                </StoryProvider>
+                              </PageBehaviorProvider>
+                            </NavigationProvider>
+                          </LayoutProvider>
                         </PostRendererProvider>
                       </ConfigProvider>
                     </SDKConnectorProvider>

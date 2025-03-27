@@ -33,7 +33,7 @@ export const StorySetting = ({
       onPress={onClick}
       type="button"
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.storySetting__button}
     >
       <div className={styles.storySetting__leftWrap}>

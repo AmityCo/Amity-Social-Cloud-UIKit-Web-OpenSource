@@ -90,7 +90,7 @@ export const StoryReactionButton = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.storyReactionButton)}
       onPress={onPress}
       style={themeStyles}

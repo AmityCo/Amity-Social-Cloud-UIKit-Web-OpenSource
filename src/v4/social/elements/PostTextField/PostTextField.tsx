@@ -187,7 +187,7 @@ export const PostTextField = ({
       <div
         data-input-validation={dataInputAttributes}
         className={clsx(styles.editorContainer, className)}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
       >
         <RichTextPlugin
           contentEditable={<ContentEditable />}

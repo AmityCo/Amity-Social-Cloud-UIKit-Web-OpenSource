@@ -141,7 +141,7 @@ const SocialSearch = ({ className, sticky = false, searchBy }: SocialSearchProps
         {([placeholder]) => (
           <Container ref={containerRef}>
             <InputText
-              data-qa-anchor="social-search-input"
+              data-testid="social-search-input"
               value={searchValue}
               prepend={
                 <SearchIconContainer>

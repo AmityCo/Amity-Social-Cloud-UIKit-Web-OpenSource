@@ -37,7 +37,7 @@ export const PostDeclineButton = ({
     >
       <Typography.BodyBold
         style={themeStyles}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         className={styles.postDeclineButton__text}
       >
         {config?.text}

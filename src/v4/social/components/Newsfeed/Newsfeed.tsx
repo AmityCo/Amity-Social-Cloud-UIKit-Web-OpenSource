@@ -17,8 +17,16 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
   const componentId = 'newsfeed';
 
   const { themeStyles } = useAmityComponent({ pageId, componentId });
-  const { itemWithAds, hasMore, isLoading, loadMore, fetch, refetch, removeItem } =
-    useGlobalFeedContext();
+  const {
+    itemWithAds,
+    hasMore,
+    isLoading,
+    globalFeaturedPostsItems,
+    isGlobalFeaturedPostsLoading,
+    loadMore,
+    refetch,
+    removeItem,
+  } = useGlobalFeedContext();
 
   useEffect(() => {
     refetch();
@@ -42,7 +50,13 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
         isLoading={isLoading}
         componentId={componentId}
         onFeedReachBottom={() => onFeedReachBottom()}
-        onPostDeleted={(post) => removeItem(post?.postId)}
+        onPostDeleted={(post) => {
+          if (post && post.postId) {
+            removeItem(post.postId);
+          }
+        }}
+        globalFeaturedPosts={globalFeaturedPostsItems}
+        isGlobalFeaturedPostsLoading={isGlobalFeaturedPostsLoading}
       />
     </PullToRefresh>
   );

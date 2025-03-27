@@ -7,7 +7,7 @@ import { Avatar } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 interface CommunityItemProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   community: Amity.Community;
   currentTargetId?: string | null;
   onChange: (data: { targetId: string; targetType: string }) => void;
@@ -15,7 +15,7 @@ interface CommunityItemProps {
 }
 
 const CommunityItem = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   community,
   currentTargetId,
   onChange,
@@ -25,7 +25,7 @@ const CommunityItem = ({
 
   return (
     <MenuItem
-      data-qa-anchor={dataQaAnchor}
+      data-testid={dataQaAnchor}
       active={community.communityId === currentTargetId}
       onClick={() => {
         onChange({

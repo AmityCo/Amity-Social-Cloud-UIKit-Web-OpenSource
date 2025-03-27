@@ -38,7 +38,7 @@ const TextContent = ({ text, placeholder, onChange, queryMentionees }: TextConte
   return (
     <TextareaWrapper>
       <Textarea
-        data-qa-anchor="post-editor-textarea"
+        data-testid="post-editor-textarea"
         placeholder={placeholder}
         value={text}
         multiline

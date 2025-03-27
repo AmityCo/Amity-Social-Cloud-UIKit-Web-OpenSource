@@ -32,7 +32,7 @@ export function ExploreCreateCommunity({
       icon={<Plus />}
       onPress={onClick}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Button>

@@ -46,7 +46,7 @@ const GlobalFeed = ({
     <>
       {showPostCreator ? (
         <PostCreator
-          data-qa-anchor="feed-post-creator-textarea"
+          data-testid="feed-post-creator-textarea"
           targetType={'user'}
           targetId={currentUserId || undefined}
           enablePostTargetPicker={false}
@@ -153,7 +153,7 @@ const MyFeed = ({
   return (
     <>
       <PostCreator
-        data-qa-anchor="feed-post-creator-textarea"
+        data-testid="feed-post-creator-textarea"
         targetType={'user'}
         targetId={targetId || undefined}
         communities={communities}
@@ -251,7 +251,7 @@ const CommunityFeed = ({
     <>
       {showPostCreator ? (
         <PostCreator
-          data-qa-anchor="feed-post-creator-textarea"
+          data-testid="feed-post-creator-textarea"
           targetType={targetType}
           targetId={targetId}
           enablePostTargetPicker={false}
@@ -353,7 +353,7 @@ const BaseFeed = ({
     <>
       {showPostCreator && (
         <PostCreator
-          data-qa-anchor="feed-post-creator-textarea"
+          data-testid="feed-post-creator-textarea"
           targetType={targetType}
           targetId={targetId}
           communities={communities}

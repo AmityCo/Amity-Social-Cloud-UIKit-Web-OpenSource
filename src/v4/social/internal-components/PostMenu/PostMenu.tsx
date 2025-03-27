@@ -22,7 +22,7 @@ import { CreatePost } from '~/v4/icons/CreatePost';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import usePoll from '~/v4/social/hooks/usePoll';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
-import { useNetworkState } from 'react-use';
+import UnFlag from '~/v4/icons/UnFlag';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -43,13 +43,17 @@ export const PostMenu = ({
   onCloseMenu,
   onPostDeleted,
 }: PostMenuProps) => {
-  const { success, error } = useNotifications();
+  const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
   const { post: childPost } = usePost(post.children?.[0]);
   const { item: poll } = usePoll(childPost?.data?.pollId);
   const notification = useNotifications();
-  const { online } = useNetworkState();
+
+  const isLiveStreamPost = useMemo(
+    () => childPost?.dataType === 'liveStream',
+    [childPost?.dataType],
+  );
 
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
@@ -110,19 +114,20 @@ export const PostMenu = ({
       success({ content: 'Post reported.' });
     },
     onReportError: () => {
-      error({ content: 'Failed to report post.' });
+      info({ content: 'Failed to report post. Please try again.' });
     },
     onUnreportSuccess: () => {
       success({ content: 'Post unreported.' });
     },
     onUnreportError: () => {
-      error({ content: 'Failed to unreport post.' });
+      info({ content: 'Failed to unreport post. Please try again.' });
     },
   });
 
   const { confirm } = useConfirmContext();
 
   const { mutateAsync: mutateDeletePost } = useMutation({
+    networkMode: 'always',
     mutationFn: async () => {
       onCloseMenu();
       return PostRepository.softDeletePost(post.postId);
@@ -132,11 +137,12 @@ export const PostMenu = ({
       onPostDeleted?.(post);
     },
     onError: () => {
-      error({ content: 'Failed to delete post.' });
+      info({ content: 'Failed to delete post. Please try again.' });
     },
   });
 
   const { mutateAsync: mutateClosePoll } = useMutation({
+    networkMode: 'always',
     mutationFn: async () => {
       if (!poll) return;
       return PollRepository.closePoll(poll.pollId);
@@ -146,7 +152,7 @@ export const PostMenu = ({
       onPostDeleted?.(post);
     },
     onError: () => {
-      error({ content: 'Oops, something went wrong.' });
+      info({ content: 'Oops, something went wrong.' });
     },
   });
 
@@ -157,7 +163,14 @@ export const PostMenu = ({
       content: 'This post will be permanently deleted.',
       cancelText: 'Cancel',
       okText: 'Delete',
-      onOk: () => mutateDeletePost(),
+      onOk: () => {
+        const isCurrentlyOnline = navigator.onLine;
+        if (!isCurrentlyOnline) {
+          notification.info({ content: 'Oops, something went wrong.' });
+          return;
+        }
+        mutateDeletePost();
+      },
       pageId,
       componentId,
     });
@@ -207,7 +220,14 @@ export const PostMenu = ({
       content: `The Poll duration you've set will be ignored and your poll will be closed immediately.`,
       cancelText: 'Cancel',
       okText: 'Close poll',
-      onOk: () => mutateClosePoll(),
+      onOk: () => {
+        const isCurrentlyOnline = navigator.onLine;
+        if (!isCurrentlyOnline) {
+          notification.info({ content: 'Oops, something went wrong.' });
+          return;
+        }
+        mutateClosePoll();
+      },
       pageId,
       componentId,
     });
@@ -217,15 +237,9 @@ export const PostMenu = ({
     <div className={styles.postMenu}>
       {showClosePollButton && (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/report_post_button`}
+          data-testid={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
-          onPress={() => {
-            if (!online) {
-              notification.info({ content: 'Oops, something went wrong.' });
-              return;
-            }
-            onClosePollClick();
-          }}
+          onPress={onClosePollClick}
         >
           <ClosePollIcon className={styles.postMenu__closePoll__icon} />
           <Typography.BodyBold className={styles.postMenu__reportPost__text}>
@@ -235,7 +249,7 @@ export const PostMenu = ({
       )}
       {showReportPostButton && !isLoading ? (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/report_post_button`}
+          data-testid={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
           onPress={() => {
             onCloseMenu();
@@ -247,15 +261,19 @@ export const PostMenu = ({
             removeDrawerData();
           }}
         >
-          <FlagIcon className={styles.postMenu__reportPost__icon} />
+          {isFlaggedByMe ? (
+            <UnFlag className={styles.postMenu__reportPost__icon} />
+          ) : (
+            <FlagIcon className={styles.postMenu__reportPost__icon} />
+          )}
           <Typography.BodyBold className={styles.postMenu__reportPost__text}>
             {isFlaggedByMe ? 'Unreport post' : 'Report post'}
           </Typography.BodyBold>
         </Button>
       ) : null}
-      {showEditPostButton && !isPollPost ? (
+      {showEditPostButton && !isPollPost && !isLiveStreamPost ? (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/edit_post`}
+          data-testid={`${pageId}/${componentId}/edit_post`}
           className={styles.postMenu__item}
           onPress={onEditClick}
         >
@@ -267,15 +285,9 @@ export const PostMenu = ({
       ) : null}
       {showDeletePostButton ? (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/delete_post`}
+          data-testid={`${pageId}/${componentId}/delete_post`}
           className={styles.postMenu__item}
-          onPress={() => {
-            if (!online) {
-              notification.info({ content: 'Oops, something went wrong.' });
-              return;
-            }
-            onDeleteClick();
-          }}
+          onPress={onDeleteClick}
         >
           <TrashIcon className={styles.postMenu__deletePost__icon} />
           <Typography.BodyBold className={styles.postMenu__deletePost__text}>

@@ -30,7 +30,7 @@ export const UserFollower: React.FC<UserFollowerProps> = ({
   return (
     <Button
       className={styles.userFollower__container}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       onPress={() => {
         AmityUserProfileHeaderComponentBehavior.goToUserRelationshipPage?.({

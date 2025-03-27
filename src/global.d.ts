@@ -29,6 +29,11 @@ declare module '*.module.css' {
   export default classes;
 }
 
+declare module '*.png' {
+  const value: string;
+  export default value;
+}
+
 declare module 'colorthief' {
   export type RGBColor = [number, number, number];
   export default class ColorThief {

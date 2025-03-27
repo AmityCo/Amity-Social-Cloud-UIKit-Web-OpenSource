@@ -30,7 +30,7 @@ export const CloseButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button {...props} className={styles.closeButton} data-qa-anchor={accessibilityId}>
+    <Button {...props} className={styles.closeButton} data-testid={accessibilityId}>
       <IconComponent
         configIconName={config.icon}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}

@@ -30,9 +30,12 @@ const ImageItem = ({
       />
     </Button>
   ) : (
-    <div className={styles.imageGallery__itemContainer}>
+    <Button
+      className={styles.imageGallery__itemContainer}
+      onPress={() => onClickImageItem(postIndex)}
+    >
       <div className={styles.imageGallery__brokenImg} />
-    </div>
+    </Button>
   );
 };
 

@@ -33,7 +33,7 @@ export const ShareStoryButton = ({
   return (
     <Button
       onPress={onClick}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       data-hideAvatar={config?.hide_avatar}
       className={clsx(styles.shareStoryButton)}
     >

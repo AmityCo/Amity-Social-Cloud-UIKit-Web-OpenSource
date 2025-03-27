@@ -35,7 +35,7 @@ const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
 
   const leaveCommunityConfirmModal = ({ onOk }: { onOk: () => void }) =>
     confirm({
-      'data-qa-anchor': 'leave-community',
+      'data-testid': 'leave-community',
       title: <FormattedMessage id="community.leaveCommunityTitle" />,
       content: <FormattedMessage id="community.leaveCommunityBody" />,
       okText: <FormattedMessage id="community.leaveCommunityButtonText" />,

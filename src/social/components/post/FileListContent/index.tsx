@@ -44,7 +44,7 @@ interface FileListContentProps {
 
 const FileListContent = ({ items }: FileListContentProps) => {
   return (
-    <List data-qa-anchor="post-file-list-content">
+    <List data-testid="post-file-list-content">
       <Collapsible
         items={items}
         renderTrigger={renderTrigger}

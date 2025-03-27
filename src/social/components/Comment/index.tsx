@@ -44,12 +44,12 @@ const REPLIES_PER_PAGE = 5;
 
 const DeletedComment = () => {
   return (
-    <DeletedCommentContainer data-qa-anchor="comment-deleted-comment">
+    <DeletedCommentContainer data-testid="comment-deleted-comment">
       <IconContainer>
         <DeletedIcon />
       </IconContainer>
       <MessageContainer>
-        <Text data-qa-anchor="comment-deleted-comment-text">
+        <Text data-testid="comment-deleted-comment-text">
           <FormattedMessage id="comment.deleted" />
         </Text>
       </MessageContainer>
@@ -60,12 +60,12 @@ const DeletedComment = () => {
 const DeletedReply = () => {
   return (
     <div>
-      <DeletedReplyContainer data-qa-anchor="reply-deleted-reply">
+      <DeletedReplyContainer data-testid="reply-deleted-reply">
         <IconContainer className="reply">
           <DeletedIcon />
         </IconContainer>
         <MessageContainer>
-          <Text data-qa-anchor="reply-deleted-reply-text">
+          <Text data-testid="reply-deleted-reply-text">
             <FormattedMessage id="reply.deleted" />
           </Text>
         </MessageContainer>
@@ -203,7 +203,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
     const title = isReplyComment ? 'reply.delete' : 'comment.delete';
     const content = isReplyComment ? 'reply.deleteBody' : 'comment.deleteBody';
     confirm({
-      'data-qa-anchor': 'delete-comment',
+      'data-testid': 'delete-comment',
       title: <FormattedMessage id={title} />,
       content: <FormattedMessage id={content} />,
       cancelText: formatMessage({ id: 'comment.deleteConfirmCancelText' }),
@@ -257,10 +257,10 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   );
 
   return isReplyComment ? (
-    <ReplyContainer data-qa-anchor="reply">{renderedComment}</ReplyContainer>
+    <ReplyContainer data-testid="reply">{renderedComment}</ReplyContainer>
   ) : (
     <CommentBlock>
-      <CommentContainer data-qa-anchor="comment">{renderedComment}</CommentContainer>
+      <CommentContainer data-testid="comment">{renderedComment}</CommentContainer>
       {comment.children.length > 0 && (
         <CommentList
           parentId={comment.commentId}

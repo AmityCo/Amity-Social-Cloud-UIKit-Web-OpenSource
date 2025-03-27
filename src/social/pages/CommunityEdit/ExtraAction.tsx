@@ -38,7 +38,7 @@ interface AddMemberButtonProps {
 
 const AddMemberButton = ({ onClick }: AddMemberButtonProps) => {
   return (
-    <ExtraActionPrimaryButton data-qa-anchor="community-edit-add-member-button" onClick={onClick}>
+    <ExtraActionPrimaryButton data-testid="community-edit-add-member-button" onClick={onClick}>
       <PlusIcon />
       <FormattedMessage id="add" />
     </ExtraActionPrimaryButton>
@@ -85,7 +85,7 @@ export const CloseCommunityAction = ({
 
   const closeConfirm = () =>
     confirm({
-      'data-qa-anchor': 'close-community',
+      'data-testid': 'close-community',
       title: formatMessage({ id: 'CloseCommunityAction.closeConfirm.title' }),
       content: formatMessage({ id: 'CloseCommunityAction.closeConfirm.description' }),
       cancelText: formatMessage({ id: 'cancel' }),
@@ -103,7 +103,7 @@ export const CloseCommunityAction = ({
       bodyText={<FormattedMessage id="CloseCommunityAction.description" />}
       actionButton={
         <CloseCommunityButton
-          data-qa-anchor="community-edit-close-community-button"
+          data-testid="community-edit-close-community-button"
           onClick={closeConfirm}
         />
       }

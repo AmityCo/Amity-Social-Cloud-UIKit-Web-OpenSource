@@ -4,7 +4,7 @@ import StyledImage from './StyledImage';
 
 interface LocalImageProps {
   className?: string;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   file?: File;
   progress?: number;
   mediaFit?: 'cover' | 'contain';
@@ -17,7 +17,7 @@ interface LocalImageProps {
 
 const LocalImage = ({
   className,
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   file,
   progress = -1,
   mediaFit,
@@ -34,7 +34,7 @@ const LocalImage = ({
   return (
     <StyledImage
       className={className}
-      data-qa-anchor={dataQaAnchor}
+      data-testid={dataQaAnchor}
       url={fileUrl}
       progress={progress}
       mediaFit={mediaFit}

@@ -71,7 +71,7 @@ export const useInputAutocomplete = <T,>({
 };
 
 export interface InputAutocompleteProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   value: string | string[];
   searchValue: string;
   placeholder?: string;
@@ -88,7 +88,7 @@ export interface InputAutocompleteProps {
 }
 
 const InputAutocomplete = <T,>({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   items,
   value,
   searchValue,
@@ -146,7 +146,7 @@ const InputAutocomplete = <T,>({
   return (
     <Container ref={containerRef}>
       <InputText
-        data-qa-anchor={dataQaAnchor}
+        data-testid={dataQaAnchor}
         value={searchValue}
         invalid={invalid}
         disabled={disabled}

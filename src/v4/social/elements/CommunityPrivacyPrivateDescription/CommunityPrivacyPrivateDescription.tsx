@@ -22,7 +22,7 @@ export const CommunityPrivacyPrivateDescription = ({
   if (isExcluded) return null;
   return (
     <Typography.Caption
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityPrivacyPrivateDescription__text}
     >
       {config.text}

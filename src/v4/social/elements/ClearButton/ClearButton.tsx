@@ -37,7 +37,7 @@ export const ClearButton = ({
     <Button
       onPress={onPress}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.clearButton, buttonClassName)}
     >
       <IconComponent

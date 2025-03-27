@@ -28,7 +28,7 @@ export function ExploreTrendingTitle({
     <Typography.TitleBold
       className={clsx(styles.exploreTrendingTitle, titleClassName)}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.TitleBold>

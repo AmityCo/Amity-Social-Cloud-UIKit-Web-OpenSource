@@ -31,7 +31,7 @@ const GroupSettings = ({
 
   return (
     <Modal
-      data-qa-anchor="group-settings-modal"
+      data-testid="group-settings-modal"
       size="small"
       title={title || formatMessage({ id: 'chat.create.modalTitle' })}
       footer={

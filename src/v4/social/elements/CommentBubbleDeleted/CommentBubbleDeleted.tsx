@@ -43,12 +43,12 @@ export function CommentBubbleDeleted({
   if (isExcluded) return null;
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div style={themeStyles} data-testid={accessibilityId}>
       <IconComponent
         defaultIcon={() => (
           <div
             className={clsx(styles.commentBubbleDeleted, defaultIconClassName)}
-            data-qa-anchor={accessibilityId}
+            data-testid={accessibilityId}
           >
             <CommentBubbleDeletedSvg
               className={clsx(styles.commentBubbleDeletedIcon, defaultIconClassName)}

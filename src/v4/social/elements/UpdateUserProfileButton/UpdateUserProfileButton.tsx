@@ -28,7 +28,7 @@ export const UpdateUserProfileButton: React.FC<UpdateUserProfileButtonProps> = (
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.updateUserProfileButton}
       onPress={onClick}
       isDisabled={disabled}

@@ -28,11 +28,7 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
 
   if (isLoading) {
     return (
-      <div
-        style={themeStyles}
-        data-qa-anchor={accessibilityId}
-        className={styles.trendingCommunities}
-      >
+      <div style={themeStyles} data-testid={accessibilityId} className={styles.trendingCommunities}>
         {Array.from({ length: 5 }).map((_, index) => (
           <CommunityRowItemSkeleton key={index} />
         ))}
@@ -43,11 +39,7 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
   if (trendingCommunities.length === 0) return null;
 
   return (
-    <div
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
-      className={styles.trendingCommunities}
-    >
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.trendingCommunities}>
       {trendingCommunities.map((community, index) => (
         <CommunityRowItem
           showJoinButton

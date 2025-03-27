@@ -129,7 +129,7 @@ const UIComment = ({
           <div className={styles.commentEditContainer}>
             <InputText
               className={clsx(styles.commentEditTextarea)}
-              data-qa-anchor="edit_comment_component/text_field"
+              data-testid="edit_comment_component/text_field"
               multiline
               mentionAllowed
               value={markup}
@@ -139,14 +139,14 @@ const UIComment = ({
             <div className={clsx(styles.buttonContainer)}>
               <Button
                 variant="secondary"
-                data-qa-anchor="edit_comment_component/cancel_button"
+                data-testid="edit_comment_component/cancel_button"
                 onClick={cancelEditing}
               >
                 <FormattedMessage id="cancel" />
               </Button>
               <Button
                 variant="primary"
-                data-qa-anchor="edit_comment_component/save_button"
+                data-testid="edit_comment_component/save_button"
                 onClick={() => handleEdit?.(text)}
               >
                 <FormattedMessage id="save" />
@@ -187,7 +187,7 @@ const UIComment = ({
                 <Button
                   variant="ghost"
                   className={clsx(styles.commentInteractionButton)}
-                  data-qa-anchor="comment-reply-button"
+                  data-testid="comment-reply-button"
                   onClick={() => onClickReply?.(authorName, referenceType, referenceId, commentId)}
                 >
                   <FormattedMessage id="reply" />

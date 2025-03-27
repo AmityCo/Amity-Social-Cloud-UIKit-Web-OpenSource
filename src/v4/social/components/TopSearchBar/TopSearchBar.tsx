@@ -29,7 +29,7 @@ export function TopSearchBar({ pageId = '*', search, onFocus }: TopSearchBarProp
   if (isExcluded) return null;
 
   return (
-    <div className={styles.topSearchBar} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div className={styles.topSearchBar} style={themeStyles} data-testid={accessibilityId}>
       <div className={styles.topSearchBar__inputBar}>
         <SearchIcon
           pageId={pageId}

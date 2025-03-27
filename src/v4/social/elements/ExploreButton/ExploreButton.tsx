@@ -32,7 +32,7 @@ export function ExploreButton({
       elementId={elementId}
       isActive={isActive}
       onPress={() => onClick?.()}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </TabButton>

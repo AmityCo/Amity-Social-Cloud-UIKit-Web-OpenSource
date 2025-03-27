@@ -31,7 +31,7 @@ const SideSectionMyCommunity = ({ className, activeCommunity }: SideSectionMyCom
     <SideMenuSection heading={<FormattedMessage id="SideSectionMyCommunity.myCommunity" />}>
       {socialCommunityCreationButtonVisible && (
         <SideMenuActionItem
-          data-qa-anchor="side-section-my-community-create-community-button"
+          data-testid="side-section-my-community-create-community-button"
           icon={<Plus height="20px" />}
           element="button"
           onClick={open}

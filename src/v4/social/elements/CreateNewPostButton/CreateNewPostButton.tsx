@@ -26,7 +26,7 @@ export function CreateNewPostButton({
   if (isExcluded) return null;
 
   return (
-    <Button {...props} type="submit" style={themeStyles} data-qa-anchor={accessibilityId}>
+    <Button {...props} type="submit" style={themeStyles} data-testid={accessibilityId}>
       {config.text}
     </Button>
   );

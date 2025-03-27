@@ -32,7 +32,7 @@ export function CreateStoryButton({
   return (
     <Button
       className={styles.createStoryButton}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       onPress={() => onClick?.()}
     >

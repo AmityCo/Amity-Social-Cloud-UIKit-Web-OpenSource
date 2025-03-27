@@ -66,7 +66,7 @@ export const CommunityImageFeed = ({ pageId = '*', communityId }: CommunityImage
     );
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div style={themeStyles} data-testid={accessibilityId}>
       <NoInternetConnectionHoc page="feed" refresh={refresh}>
         <div className={styles.communityImageFeed__container}>
           {posts?.length === 0 && !isLoading && (

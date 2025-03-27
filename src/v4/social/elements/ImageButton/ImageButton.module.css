@@ -9,6 +9,11 @@
   outline: none;
 }
 
+.imageButton:disabled {
+  cursor: not-allowed;
+  color: var(--asc-color-secondary-shade3);
+}
+
 .imageButton__icon {
   width: 2rem;
   height: 2rem;
@@ -16,6 +21,10 @@
   background: var(--asc-color-background-shade1);
   border-radius: 50%;
   padding: 0.25rem;
+}
+
+.imageButton__icon[data-disabled='true'] {
+  color: var(--asc-color-secondary-shade3);
 }
 
 .imageButton_input {
