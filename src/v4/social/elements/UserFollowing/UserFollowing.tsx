@@ -30,7 +30,7 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={styles.userFollowing__container}
       onPress={() =>

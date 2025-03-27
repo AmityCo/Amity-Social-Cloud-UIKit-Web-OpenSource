@@ -95,7 +95,7 @@ export const CommentOptions = ({
     <>
       {options.map((option, index) => (
         <div
-          data-qa-anchor={`${pageId}/${componentId}/${option.accessibilityId}`}
+          data-testid={`${pageId}/${componentId}/${option.accessibilityId}`}
           className={styles.commentOptions__actionButton}
           key={index}
           onClick={() => {

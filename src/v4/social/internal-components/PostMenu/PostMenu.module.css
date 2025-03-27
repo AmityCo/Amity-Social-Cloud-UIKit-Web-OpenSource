@@ -18,7 +18,7 @@
 }
 
 .postMenu__item:hover {
-  background-color: var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-shade1);
   border-radius: var(--asc-border-radius-md);
 }
 
@@ -81,6 +81,6 @@
   .postMenu__item:hover,
   .postMenu__item[data-focus-visible] {
     border-radius: 0;
-    background-color: var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-shade1);
   }
 }

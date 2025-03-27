@@ -46,6 +46,7 @@
   --asc-color-secondary-shade4: #ebecef;
   --asc-color-secondary-shade5: #f9f9fa;
   --asc-color-alert-default: #fa4d30;
+  --asc-color-live: #ff305a;
   --asc-color-highlight-default: #1054de;
   --asc-color-message-bubble-primary: #1054de;
   --asc-color-message-bubble-secondary: #ebecef;
@@ -56,6 +57,8 @@
   --asc-color-primary-background-hover: #0d47ba;
   --asc-color-primary-background-pressed: #0b3997;
   --asc-color-primary-background-disabled: #d9e5fc;
+  --plyr-color-main: #f6f7f8;
+  --plyr-video-control-background-hover: rgb(0 0 0 / 30%);
 
   /* Font */
   --asc-text-global-font-family: inter, -apple-system, blinkmacsystemfont, arial, sans-serif;
@@ -147,6 +150,7 @@
     --asc-color-secondary-shade4: #ebecef;
     --asc-color-secondary-shade5: #f9f9fa;
     --asc-color-alert-default: #fa4d30;
+    --asc-color-live: #ff305a;
     --asc-color-highlight-default: #1054de;
     --asc-color-message-bubble-primary: #1054de;
     --asc-color-message-bubble-secondary: #ebecef;
@@ -157,6 +161,8 @@
     --asc-color-primary-background-hover: #0d47ba;
     --asc-color-primary-background-pressed: #0b3997;
     --asc-color-primary-background-disabled: #d9e5fc;
+    --plyr-color-main: #f6f7f8;
+    --plyr-video-control-background-hover: rgb(0 0 0 / 30%);
   }
 }
 
@@ -182,6 +188,7 @@
     --asc-color-secondary-shade4: #40434e;
     --asc-color-secondary-shade5: #292b32;
     --asc-color-alert-default: #fa4d30;
+    --asc-color-live: #ff305a;
     --asc-color-highlight-default: #1054de;
     --asc-color-message-bubble-primary: #1054de;
     --asc-color-message-bubble-secondary: #292b32;
@@ -192,6 +199,8 @@
     --asc-color-primary-background-hover: #0d47ba;
     --asc-color-primary-background-pressed: #0b3997;
     --asc-color-primary-background-disabled: #d9e5fc;
+    --plyr-color-main: #f6f7f8;
+    --plyr-video-control-background-hover: rgb(0 0 0 / 30%);
   }
 }
 
@@ -219,4 +228,25 @@
 body {
   pointer-events: auto !important;
   color: var(--asc-color-base-default);
+}
+
+.plyr__volume {
+  width: 2rem;
+  position: relative;
+}
+
+.plyr__volume input[data-plyr='volume'] {
+  top: -1rem;
+  height: 2rem;
+  right: 1.25rem;
+  position: absolute;
+  transform-origin: left;
+  display: none !important;
+  transform: rotate(-90deg);
+  padding-left: 0.25rem !important;
+}
+
+.plyr__volume:hover input[data-plyr='volume'],
+.plyr__volume input[data-plyr='volume']:hover {
+  display: block !important;
 }

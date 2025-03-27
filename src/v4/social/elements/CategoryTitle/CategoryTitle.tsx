@@ -25,7 +25,7 @@ export const CategoryTitle = ({
 
   return (
     <Typography.TitleBold
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.categoryTitle}
       style={themeStyles}
     >

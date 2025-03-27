@@ -38,7 +38,7 @@ export const BackButton = ({
       {...props}
       onPress={onPress}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       aria-label="Back to the previous page"
       className={clsx(styles.backButton, className)}
     >

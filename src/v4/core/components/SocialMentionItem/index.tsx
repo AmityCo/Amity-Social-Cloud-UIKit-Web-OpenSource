@@ -53,7 +53,7 @@ const UserMentionItem = ({
   return (
     <div
       ref={isLastItem ? targetRef : null}
-      data-qa-anchor="social-mention-item"
+      data-testid="social-mention-item"
       className={clsx(styles.mentionItem, user?.isGlobalBanned && 'isBanned')}
       onMouseEnter={(e) => onMouseEnter(e, user?.isGlobalBanned)}
     >
@@ -79,7 +79,7 @@ const CustomMentionItem = ({
   return (
     <div
       ref={isLastItem ? targetRef : null}
-      data-qa-anchor="custom-mention-item"
+      data-testid="custom-mention-item"
       className={clsx(styles.mentionItem, styles.mentionAll)}
       onMouseEnter={(e) => onMouseEnter(e, false)}
     >

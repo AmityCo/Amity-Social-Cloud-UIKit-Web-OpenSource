@@ -40,7 +40,7 @@ export function AspectRatioButton({
   if (isExcluded) return null;
 
   return (
-    <Button className={styles.aspectRatioButton} data-qa-anchor={accessibilityId} onPress={onPress}>
+    <Button className={styles.aspectRatioButton} data-testid={accessibilityId} onPress={onPress}>
       <IconComponent
         defaultIcon={() => <AspectRatioSvg className={defaultIconClassName} />}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}

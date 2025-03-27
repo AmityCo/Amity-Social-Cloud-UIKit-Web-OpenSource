@@ -358,7 +358,7 @@ export const CommunityFeedStory = ({
       <motion.div
         id={targetRootId}
         ref={motionRef}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         initial={{ y: 0 }}
         drag="y"
         whileDrag={{ scale: 0.95, borderRadius: '8px', cursor: 'grabbing' }}

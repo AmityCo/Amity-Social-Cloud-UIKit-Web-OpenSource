@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styles from './EditPost.module.css';
-import { PostContentType, PostRepository } from '@amityco/ts-sdk';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { FileType, PostContentType, PostRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
-import { LexicalEditor } from 'lexical';
 import { useForm } from 'react-hook-form';
+import { useNetworkState } from 'react-use';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import {
@@ -17,29 +16,61 @@ import { Notification } from '~/v4/core/components/Notification';
 import { EditPostButton } from '~/v4/social/elements/EditPostButton';
 import { EditPostTitle } from '~/v4/social/elements/EditPostTitle';
 import usePostByIds from '~/v4/core/hooks/usePostByIds';
-import { ExclamationCircle } from '~/icons';
-import { Thumbnail } from './Thumbnail';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
-import { arraysContainSameElements } from '~/v4/social/utils/arraysContainSameElements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
+import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
+import { FileItem, useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
+import { DetailedMediaAttachment, MediaAttachment } from '~/v4/social/components';
+import ReactDOM from 'react-dom';
+import { useMediaAttachmentVisible } from '~/v4/social/hooks/useMediaAttachmentVisible';
+import { Drawer } from 'vaul';
+import { isAmityFile } from '~/v4/utils/checkFileType';
+import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
+import { Typography } from '~/v4/core/components';
+import styles from './EditPost.module.css';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
+
+  const mentionRef = useRef<HTMLDivElement | null>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const drawerContentRef = useRef<HTMLDivElement>(null);
+
   const { isDesktop } = useResponsive();
-  const { closePopup } = usePopupContext();
   const { themeStyles } = useAmityPage({
     pageId,
   });
+  const { closePopup } = usePopupContext();
 
+  const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { onBack } = useNavigation();
   const { confirm } = useConfirmContext();
-  const { updateItem } = useGlobalFeedContext();
-  const { info } = useConfirmContext();
+  const { updateItem, updateGlobalFeaturedPosts } = useGlobalFeedContext();
+  const { files, progress, isLoading, removeFile, handleFileChange } = useFilePostUpload(pageId);
+  const posts = usePostByIds(post?.children || []);
+
+  const [localPost, setLocalPost] = useState<Amity.Post[]>(posts);
+
+  const {
+    HEIGHT_MEDIA_ATTACHMENT_MENU,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
+    snap,
+    isShowDetailMediaAttachmentMenu,
+    isVisibleCamera,
+    isVisibleImage,
+    isVisibleVideo,
+    handleSnapChange,
+    showToastPosition,
+  } = useMediaAttachmentVisible({ files, posts: localPost });
 
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: post.data.text ?? '',
@@ -53,41 +84,35 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     ],
   });
 
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const online = useNetworkState();
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
-  const [postImages, setPostImages] = useState<Amity.File[]>([]);
-  const [postVideos, setPostVideos] = useState<Amity.File[]>([]);
+  const [postImages, setPostImages] = useState<Amity.Post[]>([]);
+  const [postVideos, setPostVideos] = useState<Amity.Post[]>([]);
 
-  const [defaultPostImages, setDefaultPostImages] = useState<Amity.File[]>([]);
-  const [defaultPostVideo, setDefaultPostVideo] = useState<Amity.File[]>([]);
-
-  const mentionRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    // Cleanup on unmount
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const useMutateUpdatePost = () =>
     useMutation({
       mutationFn: async (params: Parameters<typeof PostRepository.editPost>[0]) => {
         return await PostRepository.editPost(post.postId, params);
       },
+      onMutate: () => {
+        setIsUpdating(true);
+        setIsError(false);
+        setPostErrorText(undefined);
+      },
       onSuccess: (response) => {
+        setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
         updateItem(response.data);
+        updateGlobalFeaturedPosts(response.data);
       },
       onError: (error) => {
+        setIsUpdating(false);
+        setIsError(true);
+
         if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
           setPostErrorText("Your post wasn't posted because it contains a blocked word.");
           return;
@@ -103,37 +128,43 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       },
     });
 
-  const { mutateAsync: mutateUpdatePostAsync, isPending, isError } = useMutateUpdatePost();
+  const { mutateAsync: mutateUpdatePostAsync, isPending } = useMutateUpdatePost();
 
   const { handleSubmit } = useForm();
-  const posts = usePostByIds(post?.children || []);
 
   useEffect(() => {
+    setLocalPost(posts);
     const imagePosts = posts.filter((post) => post.dataType === 'image');
-    setDefaultPostImages(imagePosts);
     setPostImages(imagePosts);
     const videoPosts = posts.filter((post) => post.dataType === 'video');
-    setDefaultPostVideo(videoPosts);
     setPostVideos(videoPosts);
   }, [posts]);
 
-  const handleRemoveThumbnailImage = (fieldId: string) => {
+  const handleRemoveThumbnailImage = useCallback((fieldId: string) => {
     setPostImages((prevImages) =>
       prevImages.filter((item: Amity.Post<'image'>) => item.data.fileId !== fieldId),
     );
-  };
+    setLocalPost((prevPost: Amity.Post[]) =>
+      prevPost.filter((item: Amity.Post) => item.data.fileId !== fieldId),
+    );
+  }, []);
 
-  const handleRemoveThumbnailVideo = (fieldId: string) => {
+  const handleRemoveThumbnailVideo = useCallback((fieldId: string) => {
     setPostVideos((prevVideos) =>
       prevVideos.filter((item: Amity.Post<'video'>) => item.data.videoFileId.original !== fieldId),
     );
-  };
+    setLocalPost((prevPost) =>
+      prevPost.filter((item: Amity.Post) => item.data.videoFileId.original !== fieldId),
+    );
+  }, []);
 
   const onSave = () => {
     if (textValue.text?.length && textValue.text.length > MAXIMUM_POST_CHARACTERS) {
       setPostErrorText('You have reached maximum 50,000 characters in a post.');
       return;
     }
+
+    // Handle existing post images
     const attachmentsImage = postImages.map((item: Amity.Post<'image'>) => {
       return {
         fileId: item.data.fileId,
@@ -141,11 +172,23 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       };
     });
 
+    // Handle existing post videos
     const attachmentsVideo = postVideos.map((item: Amity.Post<'video'>) => {
       return { fileId: item.data.videoFileId.original, type: 'video' };
     });
 
-    const attachments = [...attachmentsImage, ...attachmentsVideo];
+    // Handle newly uploaded files
+    const newAttachments = files.map((file: FileItem) => ({
+      fileId: isAmityFile(file.file) ? file.file.fileId : file.id,
+      type: isAmityFile(file.file)
+        ? file.file.type
+        : file.file.type.startsWith('image/')
+          ? PostContentType.IMAGE
+          : PostContentType.VIDEO,
+    }));
+
+    // Combine all attachments
+    const attachments = [...attachmentsImage, ...attachmentsVideo, ...newAttachments];
 
     if (textValue) {
       mutateUpdatePostAsync({
@@ -167,6 +210,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   };
 
   const onClickClose = () => {
+    if (hasNoChanges) return onBack();
     confirm({
       pageId: pageId,
       type: 'confirm',
@@ -180,24 +224,70 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     });
   };
 
-  const isImageChanged = !arraysContainSameElements(defaultPostImages, postImages);
-  const isVideoChanged = !arraysContainSameElements(defaultPostVideo, postVideos);
+  const totalMedia =
+    ((files && files?.length) || 0) +
+    ((postImages && postImages?.length) || 0) +
+    ((postVideos && postVideos?.length) || 0);
+
+  const notifications = (
+    <div
+      className={styles.editPost__notificationWrapper}
+      data-item-position={snap === HEIGHT_MEDIA_ATTACHMENT_MENU}
+    >
+      {(isUpdating || !online) && (
+        <Notification
+          icon={<Spinner />}
+          content={online ? 'Posting...' : 'Waiting for network...'}
+          alignment="fixed"
+        />
+      )}
+      {(isError || postErrorText) && (
+        <Notification
+          duration={3000}
+          content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
+          alignment="fixed"
+          icon={<ExclamationCircle className={styles.editPost__notificationIcon} />}
+          onClose={() => {
+            setPostErrorText(undefined);
+            setIsError(false);
+          }}
+        />
+      )}
+    </div>
+  );
+
+  const hasMediaChange = files.length > 0 || posts.length !== localPost.length;
+
+  const hasNoChanges = post.data.text === textValue.text && !hasMediaChange;
+  const hasNoContent = !(
+    textValue.text.trim().length > 0 ||
+    files.length > 0 ||
+    postImages.length > 0 ||
+    postVideos.length > 0 ||
+    localPost.length > 0
+  );
+
+  const isButtonDisabled =
+    !online ||
+    hasNoChanges ||
+    hasNoContent ||
+    isLoading ||
+    isPending ||
+    isError ||
+    files.some((file) => !isAmityFile(file.file)); // to make sure that files are uploaded with fileId
 
   return (
     <div className={styles.editPost} style={themeStyles}>
-      <form onSubmit={handleSubmit(onSave)} className={styles.editPost__form}>
+      {isDesktop && notifications}
+      <form
+        className={styles.editPost__form}
+        onSubmit={handleSubmit(onSave)}
+        data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
+      >
         <div className={styles.editPost__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
           <EditPostTitle pageId={pageId} />
-          <EditPostButton
-            variant="text"
-            pageId={pageId}
-            isDisabled={
-              !isOnline ||
-              (post.data.text == textValue.text && !isImageChanged && !isVideoChanged) ||
-              !(textValue.text.length > 0 || postImages.length > 0 || postVideos.length > 0)
-            }
-          />
+          <EditPostButton variant="text" pageId={pageId} isDisabled={isButtonDisabled} />
         </div>
         <div className={styles.editPost__formContent}>
           <PostTextField
@@ -214,8 +304,35 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
               metadata: { mentioned: post.metadata?.mentioned || [] },
             }}
           />
-          <Thumbnail pageId={pageId} postMedia={postImages} onRemove={handleRemoveThumbnailImage} />
-          <Thumbnail postMedia={postVideos} onRemove={handleRemoveThumbnailVideo} />
+
+          <ImageThumbnail
+            files={files}
+            pageId={pageId}
+            progress={progress}
+            removeFile={removeFile}
+            postImages={postImages}
+            onRemovePostImage={handleRemoveThumbnailImage}
+          />
+          <VideoThumbnail
+            files={files}
+            pageId={pageId}
+            progress={progress}
+            removeFile={removeFile}
+            postVideos={postVideos}
+            onRemovePostVideo={handleRemoveThumbnailVideo}
+          />
+        </div>
+        {/* TODO: Handle file type */}
+        <div className={styles.editPost__attachment}>
+          <MediaAttachment
+            pageId={pageId}
+            totalMedia={totalMedia}
+            isVisibleCamera={isVisibleCamera}
+            isVisibleImage={isVisibleImage}
+            isVisibleVideo={isVisibleVideo}
+            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO, localPost)}
+            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE, localPost)}
+          />
         </div>
         <div className={styles.editPost__ctaWrapper}>
           <EditPostButton
@@ -223,35 +340,147 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             pageId={pageId}
             className={styles.editPost__cta}
             onPress={() => handleSubmit(onSave)}
-            isDisabled={
-              (post.data.text == textValue.text && !isImageChanged && !isVideoChanged) ||
-              !(textValue.text.length > 0 || postImages.length > 0 || postVideos.length > 0) ||
-              isPending
-            }
+            isDisabled={isButtonDisabled}
           />
         </div>
-        <div ref={mentionRef} className={styles.editPost__mention} />
-        <div className={styles.editPost__notificationContainer}>
-          {(isPending || !isOnline) && (
-            <Notification
-              icon={<Spinner />}
-              content={isOnline ? 'Posting...' : 'Waiting for network...'}
+        <div
+          ref={mentionRef}
+          className={styles.editPost__mention}
+          data-testid={`${pageId}/mention_text_input_options`}
+          style={{ '--asc-mention-bottom': `${drawerHeight ?? 0}px` } as React.CSSProperties}
+        />
+      </form>
+      {!isDesktop && (
+        <div className={styles.editPost__attachmentDrawer}>
+          <div ref={drawerRef}></div>
+          {drawerRef.current
+            ? ReactDOM.createPortal(
+                <Drawer.Root
+                  noBodyStyles
+                  modal={false}
+                  open
+                  activeSnapPoint={snap}
+                  snapPoints={[
+                    HEIGHT_MEDIA_ATTACHMENT_MENU,
+                    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1,
+                    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2,
+                    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
+                  ]}
+                  setActiveSnapPoint={(newSnapPoint) => {
+                    typeof newSnapPoint === 'string' && handleSnapChange(newSnapPoint);
+                  }}
+                >
+                  <Drawer.Portal container={drawerRef.current}>
+                    <Drawer.Content className={styles.editPost__attachmentDrawer__content}>
+                      <div
+                        ref={drawerContentRef}
+                        className={styles.editPost__attachmentDrawer__contentContainer}
+                        data-show-detail-media-attachment={isShowDetailMediaAttachmentMenu}
+                      >
+                        {isShowDetailMediaAttachmentMenu ? (
+                          <DetailedMediaAttachment
+                            pageId={pageId}
+                            isVisibleCamera={isVisibleCamera}
+                            isVisibleImage={isVisibleImage}
+                            isVisibleVideo={isVisibleVideo}
+                            totalMedia={totalMedia}
+                            onImageFileChange={(files) =>
+                              handleFileChange(files, FileType.IMAGE, localPost)
+                            }
+                            onVideoFileChange={(files) =>
+                              handleFileChange(files, FileType.VIDEO, localPost)
+                            }
+                          />
+                        ) : (
+                          <MediaAttachment
+                            pageId={pageId}
+                            isVisibleCamera={isVisibleCamera}
+                            isVisibleImage={isVisibleImage}
+                            isVisibleVideo={isVisibleVideo}
+                            totalMedia={totalMedia}
+                            onImageFileChange={(files) =>
+                              handleFileChange(files, FileType.IMAGE, localPost)
+                            }
+                            onVideoFileChange={(files) =>
+                              handleFileChange(files, FileType.VIDEO, localPost)
+                            }
+                          />
+                        )}
+                      </div>
+                    </Drawer.Content>
+                  </Drawer.Portal>
+                </Drawer.Root>,
+                drawerRef.current,
+              )
+            : null}
+
+          {(isUpdating || !online) && (
+            <Typography.Body
               className={styles.editPost__notification}
-            />
+              data-show-detail-media-attachment={showToastPosition()}
+            >
+              <Notification
+                className={styles.editPost__notificationToast}
+                content={online ? 'Posting...' : 'Waiting for network...'}
+                icon={<Spinner />}
+                alignment="fixed"
+              />
+            </Typography.Body>
           )}
-          {postErrorText && (
-            <Notification
-              duration={3000}
-              content={postErrorText || 'Failed to post.'}
+          {(isError || postErrorText) && (
+            <Typography.Body
               className={styles.editPost__notification}
-              icon={<ExclamationCircle className={styles.editPost__notificationIcon} />}
-              onClose={() => {
-                setPostErrorText(undefined);
-              }}
-            />
+              data-show-detail-media-attachment={showToastPosition()}
+            >
+              <Notification
+                content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
+                icon={<ExclamationCircle className={styles.editPost_notificationIcon} />}
+                alignment="fixed"
+                duration={3000}
+                className={styles.editPost__notificationToast}
+                onClose={() => {
+                  setPostErrorText(undefined);
+                  setIsError(false);
+                }}
+              />
+            </Typography.Body>
           )}
         </div>
-      </form>
+      )}
+
+      <div className={styles.editPost__notificationContainer}>
+        {(isPending || !online) && (
+          <div
+            className={styles.editPost__notification}
+            data-show-detail-media-attachment={showToastPosition()}
+          >
+            <Notification
+              className={styles.editPost__notificationToast}
+              content={online ? 'Posting...' : 'Waiting for network...'}
+              icon={<Spinner />}
+              alignment="fixed"
+            />
+          </div>
+        )}
+        {postErrorText && (
+          <div
+            className={styles.editPost__notification}
+            data-show-detail-media-attachment={showToastPosition()}
+          >
+            <Notification
+              content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
+              icon={<ExclamationCircle className={styles.editPost__notificationIcon} />}
+              alignment="fixed"
+              duration={3000}
+              className={styles.editPost__notificationToast}
+              onClose={() => {
+                setPostErrorText(undefined);
+                setIsError(false);
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

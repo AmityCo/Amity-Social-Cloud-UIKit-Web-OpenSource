@@ -43,7 +43,7 @@ export const CommunityCover: React.FC<CommunityCoverProps> = ({
   return (
     <div
       data-cover-scroll={isSticky}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityCover__container}
       style={{ ...themeStyles, ...backgroundStyle }}
     >

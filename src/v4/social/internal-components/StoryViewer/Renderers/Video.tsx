@@ -345,12 +345,12 @@ export const renderer: CustomRenderer = ({
       />
       <Header
         community={community}
-        heading={<div data-qa-anchor="community_display_name">{community?.displayName}</div>}
+        heading={<div data-testid="community_display_name">{community?.displayName}</div>}
         subheading={
           createdAt && creator?.displayName ? (
             <span>
-              <span data-qa-anchor="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
-              <span data-qa-anchor="creator_display_name">{creator?.displayName}</span>
+              <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
+              <span data-testid="creator_display_name">{creator?.displayName}</span>
             </span>
           ) : (
             ''
@@ -371,7 +371,7 @@ export const renderer: CustomRenderer = ({
         actionButton={renderMenuButton}
       />
       <video
-        data-qa-anchor="video_view"
+        data-testid="video_view"
         ref={vid}
         className={clsx(rendererStyles.storyVideo)}
         src={videoSrc}

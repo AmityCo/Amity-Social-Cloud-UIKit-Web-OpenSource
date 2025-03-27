@@ -197,7 +197,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       setIsError(true);
       if (error instanceof Error) {
         if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
-          notification.error({
+          notification.info({
             content: 'Text contain blocked word.',
           });
         }
@@ -337,7 +337,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.pollPostComposerPage__container}
     >
       <Form
@@ -395,7 +395,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
         <div
           ref={mentionRef}
           className={styles.pollPostComposerPage__pollQuestion__mention}
-          data-qa-anchor={`${pageId}/mention_text_input_options`}
+          data-testid={`${pageId}/mention_text_input_options`}
         />
 
         <TextField name="answers" className={styles.pollPostComposerPage__pollOptions}>
@@ -443,7 +443,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
             <PollMultipleSelectionTitle pageId={pageId} />
             <PollMultipleSelectionDesc pageId={pageId} />
           </Label>
-          <Switch isSelected={isMultiple} onChange={handleToggleChange} data-qa-anchor={pageId} />
+          <Switch isSelected={isMultiple} onChange={handleToggleChange} data-testid={pageId} />
         </TextField>
 
         <TextField

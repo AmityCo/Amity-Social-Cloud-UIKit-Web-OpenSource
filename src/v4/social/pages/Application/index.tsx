@@ -37,13 +37,15 @@ import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
 import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
+import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
+import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 const Application = () => {
   const { isDesktop } = useResponsive();
   const [open, setOpen] = useState(false);
-  const { page, onBack, goToSocialHomePage } = useNavigation();
-  const [socialSettings, setSocialSettings] = useState<Amity.SocialSettings | null>(null);
-
+  const { page, goToSocialHomePage } = useNavigation();
+  const { liveStreamPlayer } = useLayoutContext();
   const toggleOpen = () => setOpen((open) => !open);
 
   useEffect(() => {
@@ -142,6 +144,10 @@ const Application = () => {
         )}
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
+        {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
+
+        {/* modal as page */}
+        {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
 
         {/* V3 */}
         {page.type === PageTypes.CommunityFeed && (

@@ -53,7 +53,7 @@ export const StoryCommentButton = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       onPress={onPress}
       style={themeStyles}
       className={clsx(styles.storyCommentButton)}

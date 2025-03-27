@@ -32,7 +32,7 @@ const defaultTriggerRenderer: SelectProps['renderTrigger'] = ({
 type Option = { name?: string; value: string };
 
 export interface SelectProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   value?: Option[];
   options?: Option[];
   multiple?: boolean;
@@ -66,7 +66,7 @@ const Select = ({
   handleClose,
   placeholder = 'Select...',
   className = '',
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
 }: SelectProps) => {
   const [isOpenInternal, setIsOpenInternal] = useState(isOpen);
   const [selected, setSelected] = useState(value);
@@ -115,7 +115,7 @@ const Select = ({
 
   return (
     <Dropdown
-      data-qa-anchor={`${dataQaAnchor}-select-dropdown`}
+      data-testid={`${dataQaAnchor}-select-dropdown`}
       isOpen={isOpen || isOpenInternal}
       renderTrigger={(props) =>
         renderTrigger({ ...props, onClick: handleClick, selected, remove, placeholder })
@@ -133,7 +133,7 @@ const Select = ({
           {options.map((option) => (
             <MenuItem
               key={option.value}
-              data-qa-anchor={`${dataQaAnchor}-select-menu-item`}
+              data-testid={`${dataQaAnchor}-select-menu-item`}
               active={selected.find((item) => item.value === option.value) != null}
               onClick={() => handleSelect(option)}
             >

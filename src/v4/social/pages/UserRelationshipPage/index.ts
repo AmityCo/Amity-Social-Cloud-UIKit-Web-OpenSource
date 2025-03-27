@@ -1,1 +1,1 @@
-export { UserRelationshipPage } from './UserRelationshipPage';
+export { UserRelationshipPage, UserRelationshipPageTabs } from './UserRelationshipPage';

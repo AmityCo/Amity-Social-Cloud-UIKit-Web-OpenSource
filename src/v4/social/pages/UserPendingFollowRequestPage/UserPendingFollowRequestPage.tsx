@@ -28,7 +28,7 @@ export const UserPendingFollowRequestPage = () => {
     <div
       className={styles.userPendingFollowRequestPage}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       <div className={styles.userPendingFollowRequestPage__container}>
         <div className={styles.userPendingFollowRequestPage__topBar}>

@@ -51,7 +51,7 @@ export const CommunityCategory = ({
             : undefined,
         } as React.CSSProperties
       }
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       data-truncated={categoryNameLength > (minCharacters ?? 0) ? truncate : false}
       className={clsx(styles.communityCategory, className)}
       onPress={() => onClick?.()}

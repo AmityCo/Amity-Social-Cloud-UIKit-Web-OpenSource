@@ -30,7 +30,7 @@ export function CommunityMembersCount({
     <Typography.Caption
       className={styles.communityMembersCount}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >{`${millify(memberCount) || 0} ${
       memberCount !== 1 ? 'members' : 'member'
     }`}</Typography.Caption>

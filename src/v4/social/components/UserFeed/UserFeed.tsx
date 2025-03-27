@@ -118,7 +118,7 @@ export const UserFeed = ({ pageId = '*', userId }: UserFeedProps) => {
   };
 
   return (
-    <div data-qa-anchor={accessibilityId} style={themeStyles}>
+    <div data-testid={accessibilityId} style={themeStyles}>
       <NoInternetConnectionHoc page="feed" refresh={refresh}>
         <div className={styles.userFeed__container}>
           {renderUserFeed()}

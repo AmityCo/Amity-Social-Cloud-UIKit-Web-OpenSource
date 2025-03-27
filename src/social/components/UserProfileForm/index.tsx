@@ -86,7 +86,7 @@ const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) =>
           <Controller
             name="avatarFileId"
             render={({ field: { ref, ...rest } }) => (
-              <AvatarUploader {...rest} data-qa-anchor="user-profile-form-avatar-uploader" />
+              <AvatarUploader {...rest} data-testid="user-profile-form-avatar-uploader" />
             )}
             control={control}
           />
@@ -101,7 +101,7 @@ const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) =>
               {...register('displayName', {
                 required: formatMessage({ id: 'UserProfileForm.requiredDisplayName' }),
               })}
-              data-qa-anchor="user-profile-form-display-name-input"
+              data-testid="user-profile-form-display-name-input"
               placeholder={formatMessage({ id: 'UserProfileForm.namePlaceholder' })}
               maxLength={100}
             />
@@ -116,14 +116,14 @@ const UserProfileForm = ({ user, onSubmit, className }: UserProfileFormProps) =>
             </LabelCounterWrapper>
             <AboutTextarea
               {...register('description')}
-              data-qa-anchor="user-profile-form-description-textarea"
+              data-testid="user-profile-form-description-textarea"
               placeholder={formatMessage({ id: 'UserProfileForm.requiredDescription' })}
               maxLength={180}
             />
             <ErrorMessage errors={errors} name="description" />
           </Field>
           <ButtonContainer>
-            <PrimaryButton data-qa-anchor="user-profile-form-save-button" type="submit">
+            <PrimaryButton data-testid="user-profile-form-save-button" type="submit">
               <FormattedMessage id="save" />
             </PrimaryButton>
           </ButtonContainer>

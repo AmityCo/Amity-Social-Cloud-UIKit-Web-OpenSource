@@ -71,7 +71,7 @@ const CommunityMemberItem = ({
 
   const onRemoveFromCommunityClick = () => {
     confirm({
-      'data-qa-anchor': 'remove-user',
+      'data-testid': 'remove-user',
       title: <FormattedMessage id="community.removeUserFromCommunityTitle" />,
       content: <FormattedMessage id="community.removeUserFromCommunityBody" />,
       cancelText: 'Cancel',
@@ -84,14 +84,14 @@ const CommunityMemberItem = ({
   const isCurrentUser = currentUserId === userId;
 
   return (
-    <CommunityMemberContainer data-qa-anchor="community-member-item">
+    <CommunityMemberContainer data-testid="community-member-item">
       <MemberInfo>
         <UserHeader userId={userId} isBanned={isBanned || isGlobalBanned} onClick={onClick} />
       </MemberInfo>
 
       {!isCurrentUser && isJoined && (
         <OptionMenu
-          data-qa-anchor="community-members-option-menu"
+          data-testid="community-members-option-menu"
           options={[
             {
               name: isFlaggedByMe

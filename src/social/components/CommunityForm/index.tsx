@@ -5,7 +5,7 @@ import CreateCommunityForm from './CreateCommunityForm';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 export interface CommunityFormProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   community?: Amity.Community;
   edit?: boolean;
   onSubmit?: (data: FormValues) => void;

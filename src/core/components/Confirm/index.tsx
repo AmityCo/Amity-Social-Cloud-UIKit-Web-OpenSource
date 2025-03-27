@@ -11,7 +11,7 @@ import {
 } from './styles';
 
 const Confirm = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   className,
   title,
   content,
@@ -25,18 +25,18 @@ const Confirm = ({
 }: any) => {
   return (
     <ConfirmModal
-      data-qa-anchor={`confirm-modal-${dataQaAnchor}`}
+      data-testid={`confirm-modal-${dataQaAnchor}`}
       clean
       className={className}
       title={title}
       footer={
         <Footer>
           {type === 'confirm' && (
-            <CancelButton data-qa-anchor="confirm-modal-cancel-button" onClick={onCancel}>
+            <CancelButton data-testid="confirm-modal-cancel-button" onClick={onCancel}>
               {cancelText}
             </CancelButton>
           )}
-          <OkButton data-qa-anchor={`confirm-modal-${dataQaAnchor}-ok-button`} onClick={onOk}>
+          <OkButton data-testid={`confirm-modal-${dataQaAnchor}-ok-button`} onClick={onOk}>
             {okText}
           </OkButton>
         </Footer>

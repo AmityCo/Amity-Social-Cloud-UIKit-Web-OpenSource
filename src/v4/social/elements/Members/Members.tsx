@@ -33,7 +33,7 @@ export const Members = ({
       onPress={onClick}
       type="button"
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.members__button}
     >
       <div className={styles.members__leftWrap}>

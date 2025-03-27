@@ -33,7 +33,7 @@ export function Title({
     <Typography.TitleBold
       className={clsx(styles.title, titleClassName)}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text ?? labelText}
       {required && <span className={styles.title__requiredIndicator}>*</span>}

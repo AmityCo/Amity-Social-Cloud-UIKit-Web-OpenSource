@@ -53,7 +53,7 @@ export function CommunityAvatar({
       type="image/png"
       data={avatarFile}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.communityAvatar__image, className)}
     >
       <CommunityAvatarSvg className={className} />

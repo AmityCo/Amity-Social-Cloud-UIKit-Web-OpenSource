@@ -39,7 +39,7 @@ export const CommunityJoinButton = ({
       onPress={onClick}
       style={themeStyles}
       className={className}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       icon={({ className }) => (
         <IconComponent
           configIconName={config.icon}

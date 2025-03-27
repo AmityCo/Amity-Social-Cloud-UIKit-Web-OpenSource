@@ -25,7 +25,7 @@ export const CommunityCardImage = ({
     <Img
       src={imgSrc}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       alt="Placeholder Community Cover"
       className={clsx(styles.communityCardImage, className)}
       fallBackRenderer={() => <PlaceholderImage className={className} />}

@@ -11,7 +11,7 @@ type ConfirmType = {
   content?: ReactNode;
   okText?: ReactNode;
   cancelText?: ReactNode;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   onSuccess?: () => void;
 };
 

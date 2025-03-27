@@ -37,7 +37,7 @@ export const ExploreCommunityCategories = ({ pageId = '*' }: ExploreCommunityCat
     >
       <div
         style={themeStyles}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         className={styles.exploreCommunityCategories}
       >
         {isCategoryLoading ? (

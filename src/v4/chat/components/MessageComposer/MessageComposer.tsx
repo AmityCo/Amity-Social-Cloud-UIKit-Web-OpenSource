@@ -186,11 +186,7 @@ export const MessageComposer = ({
   });
 
   return (
-    <div
-      className={styles.composeBarContainer}
-      data-qa-anchor={accessibilityId}
-      style={themeStyles}
-    >
+    <div className={styles.composeBarContainer} data-testid={accessibilityId} style={themeStyles}>
       <div className={styles.composeBar}>
         <div ref={optionsRef} className={styles.optionContainer}></div>
         <div className={styles.editorContainer}>

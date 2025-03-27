@@ -18,7 +18,7 @@ export const PollDurationDesc = ({ pageId = '*', componentId = '*' }: PollDurati
   });
   return (
     <Typography.Caption
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={styles.pollDurationDesc__text}
     >

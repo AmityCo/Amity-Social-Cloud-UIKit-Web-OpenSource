@@ -21,7 +21,7 @@ export const AnnouncementBadge = ({ pageId = '*', componentId = '*' }: Announcem
 
   return (
     <IconComponent
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       defaultIcon={() => <FeaturedIcon className={styles.announcementBadge} />}
       imgIcon={() => <img src={config.icon} alt={uiReference} />}
       configIconName={config.icon}

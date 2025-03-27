@@ -19,7 +19,7 @@ export function ExploreEmpty({ pageId = '*' }: ExploreEmptyProps) {
   const { themeStyles, accessibilityId } = useAmityComponent({ componentId, pageId });
 
   return (
-    <div className={styles.exploreEmpty} style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div className={styles.exploreEmpty} style={themeStyles} data-testid={accessibilityId}>
       <ExploreEmptyImage pageId={pageId} componentId={componentId} />
       <div className={styles.exploreEmpty__text}>
         <Title pageId={pageId} componentId={componentId} />

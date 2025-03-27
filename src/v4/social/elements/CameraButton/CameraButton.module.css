@@ -6,6 +6,11 @@
   cursor: pointer;
 }
 
+.cameraButton:disabled {
+  cursor: not-allowed;
+  color: var(--asc-color-secondary-shade3);
+}
+
 .cameraButton__icon {
   width: 2rem;
   height: 2rem;
@@ -13,6 +18,10 @@
   background: var(--asc-color-background-shade1);
   border-radius: 50%;
   padding: 0.25rem;
+}
+
+.cameraButton__icon[data-disabled='true'] {
+  stroke: var(--asc-color-secondary-shade3);
 }
 
 .cameraButton_input {

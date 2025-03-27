@@ -21,7 +21,7 @@ export const PollMultipleSelectionDesc = ({
   });
   return (
     <Typography.Caption
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={styles.pollMultipleSelectionDesc__text}
     >

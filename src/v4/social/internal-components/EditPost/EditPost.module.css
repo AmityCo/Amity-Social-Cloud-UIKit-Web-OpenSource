@@ -1,13 +1,17 @@
 .editPost {
   height: 100%;
-  display: block;
   position: relative;
   background-color: var(--asc-color-background-default);
 }
 
 .editPost__form {
-  max-height: 100%;
   overflow-y: scroll;
+  max-height: calc(100% - 6.75rem);
+}
+
+.editPost__form[data-from-media='false'] {
+  overflow-y: scroll;
+  max-height: calc(100% - 14.875rem);
 }
 
 .editPost__form::-webkit-scrollbar {
@@ -40,6 +44,10 @@
   display: none;
 }
 
+.editPost__attachment {
+  display: none;
+}
+
 .editPost__ctaWrapper {
   display: none;
 }
@@ -50,16 +58,71 @@
 
 .editPost__mention {
   left: 0;
-  bottom: 0;
   width: 100%;
   position: absolute;
   overflow-y: scroll;
   max-height: 12.5rem;
+  bottom: var(--asc-mention-bottom, 0);
   background-color: var(--asc-color-background-default);
 }
 
 .editPost__mention::-webkit-scrollbar {
   display: none;
+}
+
+.editPost__notificationWrapper {
+  bottom: 6rem;
+  position: relative;
+}
+
+.editPost__notificationWrapper[data-item-position='false'] {
+  bottom: 11rem;
+  position: relative;
+}
+
+.editPost__notification {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 15rem;
+  left: 1rem;
+  display: flex;
+  justify-content: start;
+  margin: 0 auto 1rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--asc-box-shadow-03);
+  background-color: var(--asc-color-secondary-default);
+  color: var(--asc-color-background-default);
+}
+
+.editPost__notificationToast {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.editPost__notification[data-show-detail-media-attachment='0'] {
+  bottom: 6rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='1'] {
+  bottom: 10rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='2'] {
+  bottom: 12rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='3'] {
+  bottom: 15rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='4'] {
+  bottom: 19rem;
+}
+
+.editPost__notificationIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-background-default);
 }
 
 .editPost__notificationContainer {
@@ -68,27 +131,46 @@
   position: absolute;
 }
 
-.editPost__notification {
-  bottom: 0;
-  left: 1rem;
-  gap: 0.75rem;
-  display: flex;
-  padding: 1rem;
-  position: absolute;
-  margin: 0 auto 1rem;
-  border-radius: 0.5rem;
-  justify-content: start;
-  width: calc(100% - 2rem);
-  box-shadow: var(--asc-box-shadow-03);
-  font-size: var(--asc-text-font-size-md);
-  color: var(--asc-color-background-default);
-  background-color: var(--asc-color-secondary-default);
+.editPost__attachmentDrawer {
+  display: block;
 }
 
-.editPost__notificationIcon {
+.editPost__attachmentDrawer__content {
+  top: 0;
+  left: 0;
+  width: 100%;
+  outline: none;
+  position: absolute;
+}
+
+.editPost_notificationIcon {
   width: 1.5rem;
   height: 1.5rem;
   fill: var(--asc-color-background-default);
+}
+
+.editPost__attachmentDrawer__contentContainer {
+  position: absolute;
+  box-shadow: var(--asc-box-shadow-04);
+  border-top-left-radius: 1.25rem;
+  border-top-right-radius: 1.25rem;
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.editPost__attachmentDrawer__contentContainer[data-show-detail-media-attachment='false'] {
+  padding: 0.5rem 2rem;
+  bottom: -0.4rem;
+  margin-top: 0.75rem;
+}
+
+.editPost__attachmentDrawer__contentContainer[data-show-detail-media-attachment='true'] {
+  bottom: -0.9rem;
+  margin-top: -1rem;
+  padding: 0.75rem 1rem 2rem;
 }
 
 @media (width >= 48em) {
@@ -107,6 +189,14 @@
     max-height: 50vh;
     min-height: 13rem;
     position: relative;
+  }
+
+  .editPost__attachment {
+    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1.5rem;
+    background-color: var(--asc-color-background-default);
   }
 
   .editPost__input {
@@ -157,5 +247,9 @@
     margin: 0;
     width: 22rem;
     position: static;
+  }
+
+  .editPost__attachmentDrawer {
+    display: none;
   }
 }

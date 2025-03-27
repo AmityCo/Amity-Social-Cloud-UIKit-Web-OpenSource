@@ -63,7 +63,7 @@ const UserFeed = ({ userId, socialSettings }: UserFeedProps) => {
       />
 
       <FeedHeaderTabs
-        data-qa-anchor="user-feed-header"
+        data-testid="user-feed-header"
         tabs={filteredTabs}
         activeTab={activeTab}
         onChange={setActiveTab}

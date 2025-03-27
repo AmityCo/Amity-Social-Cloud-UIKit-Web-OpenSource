@@ -173,9 +173,9 @@ export const Illustration = ({ pageId = '*', componentId = '*' }: IllustrationPr
     <IconComponent
       defaultIconName={defaultConfig.icon}
       configIconName={config.icon}
-      imgIcon={() => <img src={config.icon} alt={uiReference} data-qa-anchor={accessibilityId} />}
+      imgIcon={() => <img src={config.icon} alt={uiReference} data-testid={accessibilityId} />}
       defaultIcon={() => (
-        <div data-qa-anchor={accessibilityId}>
+        <div data-testid={accessibilityId}>
           {currentTheme === 'light' ? <IllustrationSvg /> : <DarkIllustrationSvg />}
         </div>
       )}

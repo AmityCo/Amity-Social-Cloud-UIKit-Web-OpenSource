@@ -31,7 +31,7 @@ export const UserDescription: React.FC<UserDescriptionProps> = ({
   if (isExcluded) return null;
 
   return (
-    <div className={styles.userDescription__description} data-qa-anchor={accessibilityId}>
+    <div className={styles.userDescription__description} data-testid={accessibilityId}>
       <Typography.Body className={styles.userDescription__description__text}>
         {isExpanded ? (
           description

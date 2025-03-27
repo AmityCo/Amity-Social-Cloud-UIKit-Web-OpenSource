@@ -6,7 +6,7 @@ import Redo from '~/v4/icons/Redo';
 
 export const ReactionListError = () => {
   return (
-    <div className={styles.reactionCustomStateContainer} data-qa-anchor="reaction_list">
+    <div className={styles.reactionCustomStateContainer} data-testid="reaction_list">
       <div className={styles.reactionState}>
         <Redo className={styles.retryIcon} />
         <Typography.Body>

@@ -37,7 +37,7 @@ export const CommunityAddMemberButton = ({
   return (
     <Button
       onPress={onPress}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       style={themeStyles}
       className={styles.communityAddMemberButton__button}
       isDisabled={isDisabled}

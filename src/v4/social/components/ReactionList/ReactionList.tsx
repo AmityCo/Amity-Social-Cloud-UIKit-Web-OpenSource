@@ -135,9 +135,9 @@ export const ReactionList = ({ pageId = '*', referenceId, referenceType }: React
   );
 
   return (
-    <div className={styles.reactionListContainer} data-qa-anchor={`${accessibilityId}_header`}>
+    <div className={styles.reactionListContainer} data-testid={`${accessibilityId}_header`}>
       <div className={styles.tabListContainer}>
-        <div className={styles.tabList} data-qa-anchor={`${accessibilityId}_tab`}>
+        <div className={styles.tabList} data-testid={`${accessibilityId}_tab`}>
           <div
             data-active={activeTab === 'All'}
             className={styles.tabItem}

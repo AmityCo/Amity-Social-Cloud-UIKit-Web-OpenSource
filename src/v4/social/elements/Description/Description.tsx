@@ -25,7 +25,7 @@ export function Description({ pageId = '*', componentId = '*' }: DescriptionProp
     <Typography.Caption
       className={styles.description}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.Caption>

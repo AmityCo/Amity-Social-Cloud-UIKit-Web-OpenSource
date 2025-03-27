@@ -15861,7 +15861,7 @@ snapshots:
       object-component: 0.0.3
       parseqs: 0.0.5
       parseuri: 0.0.5
-      socket.io-parser: 3.3.3
+      socket.io-parser: 3.3.4
       to-array: 0.1.4
     transitivePeerDependencies:
       - bufferutil

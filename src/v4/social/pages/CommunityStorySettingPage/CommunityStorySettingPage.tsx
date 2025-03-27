@@ -46,7 +46,7 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityStorySettingPage__container}
     >
       <div className={styles.communityStorySettingPage__communityTitleWrap}>
@@ -66,7 +66,7 @@ export const CommunityStorySettingPage = ({ community }: CommunityStorySettingPa
           </Typography.Caption>
         </Label>
         <Switch
-          data-qa-anchor={pageId}
+          data-testid={pageId}
           onChange={handleToggleChange}
           isSelected={isSelected ?? true}
         />

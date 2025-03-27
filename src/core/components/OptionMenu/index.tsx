@@ -11,7 +11,7 @@ import { OptionsIcon, OptionsButton, Option, Container } from './styles';
 
 export interface OptionMenuProps {
   className?: string;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   icon?: ReactNode;
   options?: {
     name: string;
@@ -33,7 +33,7 @@ export interface OptionMenuProps {
 
 const OptionMenu: React.FC<OptionMenuProps> = ({
   className = '',
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   icon,
   options,
   position = POSITION_BOTTOM,
@@ -54,7 +54,7 @@ const OptionMenu: React.FC<OptionMenuProps> = ({
   return (
     <Container className={className} pullRight={pullRight}>
       <UiKitDropdown
-        data-qa-anchor={dataQaAnchor}
+        data-testid={dataQaAnchor}
         isOpen={isOpen}
         renderTrigger={(props) => (
           <OptionsButton {...props} onClick={toggle} className={className} icon={icon}>
@@ -68,7 +68,7 @@ const OptionMenu: React.FC<OptionMenuProps> = ({
         {options.map(({ name, action, className: optionClassName }) => (
           <Option
             key={name}
-            data-qa-anchor={`${dataQaAnchor}-${name}`}
+            data-testid={`${dataQaAnchor}-${name}`}
             className={optionClassName}
             onClick={attachCanceling(action)}
           >

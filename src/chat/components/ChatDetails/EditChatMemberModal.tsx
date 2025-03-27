@@ -42,7 +42,7 @@ const EditChatMemberModal = ({ channelId, onClose }: Props) => {
 
   return (
     <Modal
-      data-qa-anchor="edit-chat-members-modal"
+      data-testid="edit-chat-members-modal"
       title={formatMessage({ id: 'editChatMembersModal.title' })}
       onCancel={closeConfirm}
     >

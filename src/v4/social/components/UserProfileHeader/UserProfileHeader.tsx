@@ -138,7 +138,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
     <div
       className={styles.userProfileHeader__container}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       <div className={styles.userProfileHeader__header}>
         <Button variant="text" onPress={() => setIsImageViewerOpen(true)}>

@@ -29,7 +29,7 @@ export const UserFeedTabButton: React.FC<UserFeedTabButtonProps> = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       data-active={isActive}
       className={styles.userFeedTabButton}
       onPress={onClick}

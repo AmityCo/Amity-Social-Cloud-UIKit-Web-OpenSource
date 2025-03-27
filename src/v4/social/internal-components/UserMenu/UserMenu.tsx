@@ -48,7 +48,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
     <div className={styles.userMenu}>
       {isCurrentUser && (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/edit_user_profile_button`}
+          data-testid={`${pageId}/${componentId}/edit_user_profile_button`}
           className={styles.userMenu__button}
           onPress={onEditProfile}
         >
@@ -60,7 +60,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
       )}
       {!isCurrentUser && (
         <Button
-          data-qa-anchor={`${pageId}/${componentId}/block_user_button`}
+          data-testid={`${pageId}/${componentId}/block_user_button`}
           className={styles.userMenu__button}
           onPress={() => {
             onCloseMenu();
@@ -82,7 +82,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
       )}
 
       <Button
-        data-qa-anchor={`${pageId}/${componentId}/manage_blocked_users_button`}
+        data-testid={`${pageId}/${componentId}/manage_blocked_users_button`}
         className={styles.userMenu__button}
         onPress={() => {
           onCloseMenu();

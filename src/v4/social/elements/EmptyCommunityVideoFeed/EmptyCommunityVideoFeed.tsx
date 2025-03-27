@@ -25,7 +25,7 @@ export const EmptyCommunityVideoFeed = ({
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.emptyCommunityVideoFeed__container}
     >
       <IconComponent

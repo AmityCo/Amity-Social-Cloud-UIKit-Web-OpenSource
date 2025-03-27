@@ -132,17 +132,17 @@ const UIUserInfo = ({
   ].filter(isNonNullable);
 
   return (
-    <Container data-qa-anchor="user-info">
+    <Container data-testid="user-info">
       <Header>
         <Avatar
-          data-qa-anchor="user-info-profile-image"
+          data-testid="user-info-profile-image"
           avatar={fileUrl}
           backgroundImage={UserImage}
         />
         <ActionButtonContainer>
           {isMyProfile ? (
             <Button
-              data-qa-anchor="user-info-edit-profile-button"
+              data-testid="user-info-edit-profile-button"
               onClick={() => user?.userId && onEditUser?.(user.userId)}
             >
               <PencilIcon /> <FormattedMessage id="user.editProfile" />
@@ -169,7 +169,7 @@ const UIUserInfo = ({
       </Header>
       <ProfileNameWrapper>
         <Truncate lines={3}>
-          <ProfileName data-qa-anchor="user-info-profile-name">{displayName}</ProfileName>
+          <ProfileName data-testid="user-info-profile-name">{displayName}</ProfileName>
         </Truncate>
 
         {user?.isGlobalBanned ? (
@@ -198,7 +198,7 @@ const UIUserInfo = ({
         </ClickableCount>
         <FormattedMessage id="counter.followers" />
       </CountContainer>
-      <Description data-qa-anchor="user-info-description">{description}</Description>
+      <Description data-testid="user-info-description">{description}</Description>
 
       {isMyProfile && pendingUsers.length > 0 && isPrivateNetwork && (
         <PendingNotification

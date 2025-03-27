@@ -42,11 +42,7 @@ export const CommunitySearchResult = ({
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
 
   return (
-    <div
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
-      className={styles.communitySearchResult}
-    >
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.communitySearchResult}>
       <NoInternetConnectionHoc
         page="global-search"
         className={styles.communitySearchResult__noInternetConnectionHoc}

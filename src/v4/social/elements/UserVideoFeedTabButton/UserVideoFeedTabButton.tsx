@@ -29,7 +29,7 @@ export const UserVideoFeedTabButton: React.FC<UserVideoFeedTabButtonProps> = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       data-active={isActive}
       className={styles.userVideoFeedTabButton}
       onPress={onClick}

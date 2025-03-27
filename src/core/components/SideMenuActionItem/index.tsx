@@ -4,7 +4,7 @@ import { IconWrapper, ButtonActionItem, AnchorActionItem } from './styles';
 export const ALLOWED_ELEMENTS = ['button', 'a'];
 
 interface SideMenuActionItemProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   element?: 'button' | 'a';
   icon?: React.ReactNode;
   children?: React.ReactNode;
@@ -15,7 +15,7 @@ interface SideMenuActionItemProps {
 }
 
 const SideMenuActionItem = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   icon,
   children,
   active,
@@ -27,7 +27,7 @@ const SideMenuActionItem = ({
   if (element === 'a') {
     return (
       <AnchorActionItem
-        data-qa-anchor={dataQaAnchor}
+        data-testid={dataQaAnchor}
         className={className}
         onClick={onClick}
         active={active}
@@ -40,7 +40,7 @@ const SideMenuActionItem = ({
 
   return (
     <ButtonActionItem
-      data-qa-anchor={dataQaAnchor}
+      data-testid={dataQaAnchor}
       className={className}
       active={active}
       disabled={disabled}

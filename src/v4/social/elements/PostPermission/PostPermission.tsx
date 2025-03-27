@@ -33,7 +33,7 @@ export const PostPermission = ({
       onPress={onClick}
       type="button"
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.postPermission__button}
     >
       <div className={styles.postPermission__leftWrap}>

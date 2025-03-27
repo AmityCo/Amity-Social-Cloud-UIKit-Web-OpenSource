@@ -35,7 +35,7 @@ export function DoneButton({
     <Button
       variant={isDesktop ? 'fill' : 'text'}
       className={clsx(styles.doneButton, className)}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       isDisabled={isDisabled}
       {...buttonProps}
     >

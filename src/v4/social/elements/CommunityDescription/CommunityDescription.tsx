@@ -30,11 +30,7 @@ export const CommunityDescription: React.FC<CommunityDescriptionProps> = ({
   if (isExcluded || description.length === 0) return null;
 
   return (
-    <div
-      style={themeStyles}
-      data-qa-anchor={accessibilityId}
-      className={styles.communityDescription}
-    >
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.communityDescription}>
       <Typography.Body className={styles.communityDescription__text}>
         {isExpanded ? (
           description

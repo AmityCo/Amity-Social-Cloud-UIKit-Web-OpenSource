@@ -28,7 +28,7 @@ export const UnblockUserButton: React.FC<UnblockUserButtonProps> = ({
   if (isExcluded) return null;
 
   return (
-    <Button data-qa-anchor={accessibilityId} className={styles.unblockUserButton} onPress={onClick}>
+    <Button data-testid={accessibilityId} className={styles.unblockUserButton} onPress={onClick}>
       <div className={styles.unblockUserButton__inner}>
         <IconComponent
           defaultIcon={() => <UnblockUser className={styles.unblockUserButton__icon} />}

@@ -20,7 +20,7 @@ export const CommunityFeedTabButton = ({
   if (isExcluded) return null;
 
   return (
-    <div data-qa-anchor={accessibilityId} style={themeStyles}>
+    <div data-testid={accessibilityId} style={themeStyles}>
       CommunityFeedTabButton
     </div>
   );

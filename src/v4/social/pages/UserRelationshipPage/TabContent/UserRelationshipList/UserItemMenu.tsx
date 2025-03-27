@@ -41,7 +41,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
         <>
           <Button
             variant="text"
-            data-qa-anchor={`${pageId}/${componentId}/report_user_button`}
+            data-testid={`${pageId}/${componentId}/report_user_button`}
             className={styles.userItem__menuButton}
             onPress={() => {
               closePopover();
@@ -64,7 +64,7 @@ export const UserItemMenu: FC<UserItemMenuProps> = ({
           <Button
             variant="text"
             className={styles.userItem__menuButton}
-            data-qa-anchor={`${pageId}/${componentId}/block_user_button`}
+            data-testid={`${pageId}/${componentId}/block_user_button`}
             onPress={() => {
               closePopover();
               removeDrawerData();

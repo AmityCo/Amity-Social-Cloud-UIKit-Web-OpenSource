@@ -95,7 +95,6 @@
   left: 1rem;
   display: flex;
   justify-content: start;
-  font-size: var(--asc-text-font-size-md);
   margin: 0 auto 1rem;
   border-radius: 0.5rem;
   box-shadow: var(--asc-box-shadow-03);
@@ -108,20 +107,12 @@
   margin-top: 0;
 }
 
-.createPost__status[data-show-detail-media-attachment='1'] {
+.createPost__notification[data-show-detail-media-attachment='0'] {
   bottom: 6rem;
-}
-
-.createPost__status[data-show-detail-media-attachment='2'] {
-  bottom: 12rem;
-}
-
-.createPost__status[data-show-detail-media-attachment='3'] {
-  bottom: 15rem;
 }
 
 .createPost__notification[data-show-detail-media-attachment='1'] {
-  bottom: 6rem;
+  bottom: 10rem;
 }
 
 .createPost__notification[data-show-detail-media-attachment='2'] {
@@ -130,6 +121,10 @@
 
 .createPost__notification[data-show-detail-media-attachment='3'] {
   bottom: 15rem;
+}
+
+.createPost__notification[data-show-detail-media-attachment='4'] {
+  bottom: 19rem;
 }
 
 .createPost_notificationIcon {

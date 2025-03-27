@@ -5,7 +5,7 @@ import styles from './Switch.module.css';
 
 type SwitchProps = $SwitchProps & {
   label?: React.ReactNode;
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
 };
 
 export function Switch({ label, className, ...props }: SwitchProps) {

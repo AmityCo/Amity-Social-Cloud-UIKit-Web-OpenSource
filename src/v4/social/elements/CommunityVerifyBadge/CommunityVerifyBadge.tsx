@@ -24,7 +24,7 @@ export const CommunityVerifyBadge = ({
 
   return (
     <IconComponent
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       defaultIcon={() => <VerifyBadgeIcon />}
       imgIcon={() => <img src={config.icon} alt={uiReference} />}
       defaultIconName={defaultConfig.icon}

@@ -85,7 +85,7 @@ export const CommunityPostPermissionPage = ({ community }: CommunityPostPermissi
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityPostPermissionPage__container}
     >
       <div className={styles.communityPostPermissionPage__communityTitleWrap}>

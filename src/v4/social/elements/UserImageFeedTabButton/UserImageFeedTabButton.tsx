@@ -29,7 +29,7 @@ export const UserImageFeedTabButton: React.FC<UserImageFeedTabButtonProps> = ({
 
   return (
     <Button
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       data-active={isActive}
       className={styles.userImageFeedTabButton}
       onPress={onClick}

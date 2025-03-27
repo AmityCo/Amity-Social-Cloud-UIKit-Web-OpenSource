@@ -34,7 +34,7 @@ export function TabButton({
       style={themeStyles}
       className={styles.tabButton}
       data-active={isActive}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       {...rest}
     >
       {isActive ? (

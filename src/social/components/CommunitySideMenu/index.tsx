@@ -16,7 +16,7 @@ export interface CommunitySideMenuProps {
 }
 
 const CommunitySideMenu = ({ className, activeCommunity }: CommunitySideMenuProps) => (
-  <SideMenu data-qa-anchor="community-side-menu" className={className}>
+  <SideMenu data-testid="community-side-menu" className={className}>
     <SocialSearch sticky searchBy="communities" />
 
     <SideSectionCommunity />

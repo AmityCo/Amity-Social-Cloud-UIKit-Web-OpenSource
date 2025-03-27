@@ -67,12 +67,12 @@ const triggerRenderer: DropdownProps['renderTrigger'] = (props) => {
 };
 
 interface DropdownProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   isOpen?: boolean;
   renderTrigger?: (props: {
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     disabled: boolean;
-    'data-qa-anchor': string;
+    'data-testid': string;
   }) => React.ReactNode;
   children?: React.ReactNode;
   position?: string;
@@ -87,7 +87,7 @@ interface DropdownProps {
 }
 
 const Dropdown = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   isOpen,
   renderTrigger = triggerRenderer,
   children,
@@ -164,7 +164,7 @@ const Dropdown = ({
   return (
     <DropdownContainer ref={dropdownRef} className={className}>
       <ButtonContainer ref={buttonContainerRef}>
-        {renderTrigger({ ...defaultTriggerParams, 'data-qa-anchor': dataQaAnchor })}
+        {renderTrigger({ ...defaultTriggerParams, 'data-testid': dataQaAnchor })}
       </ButtonContainer>
       {(isOpen || isOpenInternal) && (
         <FrameContainer>

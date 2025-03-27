@@ -119,7 +119,7 @@ const OptionMenu = ({
           {options.map(({ name, action }) => (
             <Option
               key={name}
-              data-qa-anchor={`post-options-button-${name}`}
+              data-testid={`post-options-button-${name}`}
               onClick={() => {
                 action?.();
                 onClose();
@@ -266,11 +266,11 @@ const StyledComment = (props: StyledCommentProps) => {
               onChange={(data) => onChange?.(data)}
             />
             <ButtonContainer>
-              <Button data-qa-anchor="comment-cancel-edit-button" onClick={cancelEditing}>
+              <Button data-testid="comment-cancel-edit-button" onClick={cancelEditing}>
                 <FormattedMessage id="cancel" />
               </Button>
               <PrimaryButton
-                data-qa-anchor="comment-save-edit-button"
+                data-testid="comment-save-edit-button"
                 onClick={() => handleEdit?.(text)}
               >
                 <FormattedMessage id="save" />
@@ -286,7 +286,7 @@ const StyledComment = (props: StyledCommentProps) => {
             {canLike && <CommentLikeButton commentId={commentId} />}
 
             {canReply && (
-              <ReplyButton data-qa-anchor="comment-reply-button" onClick={onClickReply}>
+              <ReplyButton data-testid="comment-reply-button" onClick={onClickReply}>
                 <ReplyIcon /> <FormattedMessage id="reply" />
               </ReplyButton>
             )}

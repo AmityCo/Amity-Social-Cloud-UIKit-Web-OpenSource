@@ -13,6 +13,7 @@ interface CameraButtonProps {
   defaultIconClassName?: string;
   isVisibleImage?: boolean;
   isVisibleVideo?: boolean;
+  isDisabled?: boolean;
   onVideoFileChange?: (files: File[]) => void;
   onImageFileChange?: (files: File[]) => void;
 }
@@ -52,6 +53,7 @@ export function CameraButton({
   defaultIconClassName,
   isVisibleImage,
   isVisibleVideo,
+  isDisabled,
   onVideoFileChange,
   onImageFileChange,
 }: CameraButtonProps) {
@@ -86,13 +88,17 @@ export function CameraButton({
   return (
     <Button
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.cameraButton}
       onPress={triggerFileInput}
+      isDisabled={isDisabled}
     >
       <IconComponent
         defaultIcon={() => (
-          <CameraSvg className={clsx(styles.cameraButton__icon, defaultIconClassName)} />
+          <CameraSvg
+            data-disabled={isDisabled}
+            className={clsx(styles.cameraButton__icon, defaultIconClassName)}
+          />
         )}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
         defaultIconName={defaultConfig.icon}

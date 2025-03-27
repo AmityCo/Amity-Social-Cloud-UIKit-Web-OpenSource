@@ -54,7 +54,7 @@ export const Thumbnail = ({
     return <LivestreamEndedThumbnail />;
   }
 
-  const mp4Recording = stream.recordings.find((recording) => recording.mp4)?.mp4;
+  const mp4Recording = stream?.recordings?.find((recording) => recording.mp4)?.mp4;
 
   return (
     <LivestreamThumbnail

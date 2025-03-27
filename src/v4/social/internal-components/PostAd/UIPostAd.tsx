@@ -5,9 +5,9 @@ import Broadcast from '~/v4/icons/Broadcast';
 import InfoCircle from '~/v4/icons/InfoCircle';
 import { Button } from '~/v4/core/natives/Button';
 import { AdInformation } from '~/v4/social/internal-components/AdInformation/AdInformation';
+import Truncate from 'react-truncate-markup';
 
 import styles from './UIPostAd.module.css';
-import clsx from 'clsx';
 
 interface UIPostAdProps {
   ad: Amity.Ad;
@@ -45,7 +45,7 @@ export const UIPostAd = ({
           </div>
         </div>
         <div>
-          <Typography.Body className={styles.content__text}>{ad.body}</Typography.Body>
+          {ad.body && <Typography.Body className={styles.content__text}>{ad.body}</Typography.Body>}
           <div className={styles.content__imageContainer}>
             <img className={styles.content__image} src={adImageUrl} />
           </div>
@@ -61,12 +61,16 @@ export const UIPostAd = ({
         onPress={handleCallToActionClick}
       >
         <div className={styles.footer__left}>
-          <Typography.Body className={styles.footer__content__description}>
-            {ad.description}
-          </Typography.Body>
-          <Typography.BodyBold className={styles.footer__content__headline}>
-            {ad.headline}
-          </Typography.BodyBold>
+          <Typography.CaptionSmall className={styles.footer__content__description}>
+            <Truncate lines={1}>
+              <div>{ad.description}</div>
+            </Truncate>
+          </Typography.CaptionSmall>
+          <Typography.CaptionBold className={styles.footer__content__headline}>
+            <Truncate lines={2}>
+              <div>{ad.headline}</div>
+            </Truncate>
+          </Typography.CaptionBold>
         </div>
         {ad.callToActionUrl ? (
           <div className={styles.footer__right}>

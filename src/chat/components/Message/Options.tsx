@@ -93,13 +93,13 @@ const Options = ({
   const menu = (
     <Menu>
       {!isIncoming && isSupportedMessageType && (
-        <MenuItem data-qa-anchor="message-menu-item-edit" onClick={edit}>
+        <MenuItem data-testid="message-menu-item-edit" onClick={edit}>
           <FormattedMessage id="message.edit" />
         </MenuItem>
       )}
       {isIncoming && <Flagging messageId={messageId} />}
       {!isIncoming && (
-        <MenuItem data-qa-anchor="message-menu-item-delete" onClick={deleteMessage}>
+        <MenuItem data-testid="message-menu-item-delete" onClick={deleteMessage}>
           <FormattedMessage id="message.delete" />
         </MenuItem>
       )}
@@ -109,7 +109,7 @@ const Options = ({
   const editing = (
     <EditingContainer>
       <EditingInput
-        data-qa-anchor="message-edit-input"
+        data-testid="message-edit-input"
         autoFocus
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -118,7 +118,7 @@ const Options = ({
           if (e.key === 'Escape') close();
         }}
       />
-      <SaveIcon data-qa-anchor="message-save-button" onClick={save} />
+      <SaveIcon data-testid="message-save-button" onClick={save} />
       <CloseIcon onClick={close} />
     </EditingContainer>
   );
@@ -133,7 +133,7 @@ const Options = ({
       onClickOutside={close}
     >
       <div
-        data-qa-anchor="message-options-button"
+        data-testid="message-options-button"
         role="button"
         tabIndex={0}
         onClick={open}

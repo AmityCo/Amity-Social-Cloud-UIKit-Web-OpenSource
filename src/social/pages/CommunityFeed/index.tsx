@@ -77,7 +77,7 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
       </MobileContainer>
       <CommunityInfo communityId={communityId} />
       <FeedHeaderTabs
-        data-qa-anchor="community-feed-header"
+        data-testid="community-feed-header"
         tabs={tabs}
         activeTab={activeTab}
         onChange={setActiveTab}

@@ -222,7 +222,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
 
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityFeed__container}
       style={themeStyles}
     >

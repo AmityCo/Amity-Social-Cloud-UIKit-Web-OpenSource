@@ -66,7 +66,7 @@ const TextContent = ({ text, postMaxLines = 8, mentionees }: TextContentProps) =
       ref={contentRef}
       isExpanded={isExpanded}
       postMaxLines={postMaxLines}
-      data-qa-anchor="post-text-content"
+      data-testid="post-text-content"
     >
       {chunks.map((chunk) => {
         const key = `${text}-${chunk.start}-${chunk.end}`;

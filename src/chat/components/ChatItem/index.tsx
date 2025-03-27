@@ -44,7 +44,7 @@ const ChatItem = ({ channelId, isSelected, onSelect }: ChatItemProps) => {
 
   return (
     <ChatItemContainer
-      data-qa-anchor="chat-item"
+      data-testid="chat-item"
       active={isSelected}
       onClick={(e) => {
         e.stopPropagation();
@@ -61,7 +61,7 @@ const ChatItem = ({ channelId, isSelected, onSelect }: ChatItemProps) => {
         <Title>{chatName}</Title>
       </ChatItemLeft>
       {normalizedUnreadCount && (
-        <UnreadCount data-qa-anchor="chat-item-unread-count">{normalizedUnreadCount}</UnreadCount>
+        <UnreadCount data-testid="chat-item-unread-count">{normalizedUnreadCount}</UnreadCount>
       )}
     </ChatItemContainer>
   );

@@ -19,7 +19,7 @@ export const PollOptionsDesc = ({ pageId = '*', componentId = '*' }: PollOptions
     <Typography.Caption
       className={styles.pollOptionsDesc__title}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.Caption>

@@ -231,7 +231,7 @@ function Mention({
                 <div
                   data-media-attachment={attachmentAmount}
                   className={styles.mentionTextInput_item}
-                  data-qa-anchor="mention_text_input"
+                  data-testid="mention_text_input"
                 >
                   {options.map((option, i: number) => (
                     <CommunityMember

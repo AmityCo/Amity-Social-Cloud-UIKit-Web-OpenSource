@@ -85,7 +85,7 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
         />
 
         <div
-          data-qa-anchor={`${pageId}/${componentId}/community_avatar`}
+          data-testid={`${pageId}/${componentId}/community_avatar`}
           className={styles.avatarBackground}
         >
           {communityAvatar && (
@@ -97,7 +97,7 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
       </div>
 
       <Typography.Caption
-        data-qa-anchor={`${pageId}/${componentId}/community_name`}
+        data-testid={`${pageId}/${componentId}/community_name`}
         className={clsx(styles.displayName)}
       >
         {!community?.isPublic && <CommunityPrivateBadge className={styles.lockIcon} />}

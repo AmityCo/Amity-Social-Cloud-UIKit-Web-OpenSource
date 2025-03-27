@@ -13,7 +13,7 @@ import {
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 export interface CommunityNameProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   isActive?: boolean;
   isOfficial?: boolean;
   isPublic?: boolean;
@@ -27,7 +27,7 @@ export interface CommunityNameProps {
 }
 
 const CommunityName = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   isActive = false,
   isOfficial = false,
   isPublic = false,
@@ -51,9 +51,9 @@ const CommunityName = ({
         </Name>
       ) : (
         <Truncate lines={truncate}>
-          <Name data-qa-anchor={`${dataQaAnchor}-community-name`} title={name}>
+          <Name data-testid={`${dataQaAnchor}-community-name`} title={name}>
             <>
-              {!isPublic && <PrivateIcon data-qa-anchor={`${dataQaAnchor}-private-icon`} />}
+              {!isPublic && <PrivateIcon data-testid={`${dataQaAnchor}-private-icon`} />}
               {name}
             </>
           </Name>

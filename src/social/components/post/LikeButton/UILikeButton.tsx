@@ -17,7 +17,7 @@ const UIPostLikeButton = ({ onClick, isActive, isDisabled }: UIPostLikeButtonPro
   <StyledLikeButton
     active={isActive}
     disabled={isDisabled}
-    data-qa-anchor={isActive ? 'post-liked-button' : 'post-like-button'}
+    data-testid={isActive ? 'post-liked-button' : 'post-like-button'}
     onClick={onClick}
   >
     <LikeIcon isLiked={isActive} /> <FormattedMessage id={isActive ? 'post.liked' : 'post.like'} />

@@ -23,7 +23,7 @@ export const AllCategoriesTitle = ({
 
   return (
     <Typography.TitleBold
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityName__truncate}
       style={themeStyles}
     >

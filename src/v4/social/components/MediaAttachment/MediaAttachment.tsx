@@ -1,19 +1,21 @@
 import React from 'react';
-import styles from './MediaAttachment.module.css';
+import clsx from 'clsx';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
-import clsx from 'clsx';
+import styles from './MediaAttachment.module.css';
+
+const MAX_UPLOAD_MEDIA = 10;
 
 interface MediaAttachmentProps {
   pageId: string;
-  uploadLoading?: boolean;
   isVisibleCamera: boolean;
   isVisibleImage: boolean;
   isVisibleVideo: boolean;
-  onVideoFileChange?: (files: File[]) => void;
-  onImageFileChange?: (files: File[]) => void;
+  totalMedia?: number;
+  onVideoFileChange?: (files: File[], fileType?: string) => void;
+  onImageFileChange?: (files: File[], fileType?: string) => void;
 }
 
 export function MediaAttachment({
@@ -21,6 +23,7 @@ export function MediaAttachment({
   isVisibleCamera,
   isVisibleImage,
   isVisibleVideo,
+  totalMedia = 0,
   onVideoFileChange,
   onImageFileChange,
 }: MediaAttachmentProps) {
@@ -30,7 +33,7 @@ export function MediaAttachment({
   if (isExcluded) return null;
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId} className={styles.mediaAttachment}>
+    <div style={themeStyles} data-testid={accessibilityId} className={styles.mediaAttachment}>
       <div className={styles.mediaAttachment__swipeDown} />
       <div
         className={clsx(
@@ -47,6 +50,7 @@ export function MediaAttachment({
             isVisibleVideo={isVisibleVideo}
             onVideoFileChange={onVideoFileChange}
             onImageFileChange={onImageFileChange}
+            isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           />
         )}
         {isVisibleImage && (
@@ -54,6 +58,7 @@ export function MediaAttachment({
             pageId={pageId}
             componentId={componentId}
             onImageFileChange={onImageFileChange}
+            isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           />
         )}
 
@@ -62,6 +67,7 @@ export function MediaAttachment({
             pageId={pageId}
             componentId={componentId}
             onVideoFileChange={onVideoFileChange}
+            isDisabled={!!totalMedia && totalMedia >= MAX_UPLOAD_MEDIA}
           />
         )}
       </div>

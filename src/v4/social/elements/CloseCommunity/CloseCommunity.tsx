@@ -21,7 +21,7 @@ export const CloseCommunity = ({ pageId = '*', componentId = '*' }: CloseCommuni
   return (
     <div
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.closeCommunity__container}
     >
       {config.text && (

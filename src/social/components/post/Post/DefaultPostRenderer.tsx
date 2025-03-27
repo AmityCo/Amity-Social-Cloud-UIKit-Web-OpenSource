@@ -144,7 +144,7 @@ const OptionMenu = ({
           {options.map(({ name, action }) => (
             <Option
               key={name}
-              data-qa-anchor={`post-options-button-${name}`}
+              data-testid={`post-options-button-${name}`}
               onClick={() => {
                 action?.();
                 onClose();
@@ -254,7 +254,7 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
   );
 
   return (
-    <PostContainer data-qa-anchor="post" className={className}>
+    <PostContainer data-testid="post" className={className}>
       <PostHeadContainer>
         <PostHeader postId={post?.postId} hidePostTarget={hidePostTarget} loading={loading} />
         {!loading && (
@@ -300,16 +300,16 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
           {!isPostUnderReview && <EngagementBar readonly={readonly} postId={post?.postId} />}
 
           {isPostUnderReview && canReview && (
-            <ReviewButtonsContainer data-qa-anchor="post-review">
+            <ReviewButtonsContainer data-testid="post-review">
               <PrimaryButton
-                data-qa-anchor="post-review-accept-button"
+                data-testid="post-review-accept-button"
                 disabled={approving || declining}
                 onClick={onApprove}
               >
                 <FormattedMessage id="general.action.accept" />
               </PrimaryButton>
               <Button
-                data-qa-anchor="post-review-decline-button"
+                data-testid="post-review-decline-button"
                 disabled={approving || declining}
                 onClick={onDecline}
               >
@@ -320,7 +320,7 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
 
           {isEditing && post && (
             <Modal
-              data-qa-anchor="post-editor-modal"
+              data-testid="post-editor-modal"
               title={formatMessage({ id: 'post.editPost' })}
               onCancel={closeEditingPostModal}
             >

@@ -91,7 +91,7 @@
   }
 
   .selectPostTargetPage__myCommunitiesList {
-    max-height: 34rem;
+    max-height: calc(100% - 24rem);
     overflow-y: scroll;
   }
 }

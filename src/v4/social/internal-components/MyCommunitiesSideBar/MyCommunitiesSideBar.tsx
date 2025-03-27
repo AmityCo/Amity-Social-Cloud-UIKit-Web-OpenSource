@@ -33,7 +33,7 @@ export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps
   });
 
   return (
-    <div style={themeStyles} className={styles.myCommunitiesList} data-qa-anchor={accessibilityId}>
+    <div style={themeStyles} className={styles.myCommunitiesList} data-testid={accessibilityId}>
       {communities.map((community) => (
         <MyCommunitiesSideBarItem
           pageId={pageId}

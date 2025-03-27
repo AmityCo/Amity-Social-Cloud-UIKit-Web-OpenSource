@@ -17,7 +17,7 @@ export const EmptyPinnedPost = ({ pageId = '*' }: EmptyPinnedPostProps) => {
   if (isExcluded) return null;
   return (
     <div
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.emptyPinnedPost__container}
       style={themeStyles}
     >

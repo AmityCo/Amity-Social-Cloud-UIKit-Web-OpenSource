@@ -28,7 +28,7 @@ export const CommunityEmptyTitle = ({
     <Typography.TitleBold
       style={themeStyles}
       className={styles.communityEmptyTitle}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {config.text}
     </Typography.TitleBold>

@@ -9,3 +9,5 @@ storybook-build/
 .eslintcache
 
 dist/
+
+_temporary

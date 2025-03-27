@@ -17,7 +17,7 @@ export function EditPostTitle({ pageId = '*', componentId = '*' }: EditPostTitle
   if (isExcluded) return null;
 
   return (
-    <div data-qa-anchor={accessibilityId} style={themeStyles} className={styles.editPostTitle}>
+    <div data-testid={accessibilityId} style={themeStyles} className={styles.editPostTitle}>
       {config.text}
     </div>
   );

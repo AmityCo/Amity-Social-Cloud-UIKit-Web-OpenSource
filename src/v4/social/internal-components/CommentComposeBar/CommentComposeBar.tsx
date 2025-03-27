@@ -90,7 +90,7 @@ export const CommentComposeBar = ({
       </div>
       <InputText
         ref={commentInputRef}
-        data-qa-anchor="comment-compose-bar-textarea"
+        data-testid="comment-compose-bar-textarea"
         placeholder={placeholder}
         value={markup}
         multiline
@@ -102,7 +102,7 @@ export const CommentComposeBar = ({
       />
       <Button
         variant="ghost"
-        data-qa-anchor={
+        data-testid={
           userToReply
             ? 'comment-compose-bar-reply-button'
             : 'comment-compose-bar-add-comment-button'

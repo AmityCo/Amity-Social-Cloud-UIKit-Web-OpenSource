@@ -81,7 +81,7 @@ export function Timestamp({ pageId = '*', componentId = '*', timestamp }: Timest
     <Typography.Caption
       className={styles.timestamp}
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
     >
       {relativeTimeStr}
     </Typography.Caption>

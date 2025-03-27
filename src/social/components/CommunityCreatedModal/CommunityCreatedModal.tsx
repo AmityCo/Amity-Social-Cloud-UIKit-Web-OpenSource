@@ -14,26 +14,26 @@ export default function CommunityCreatedModal({
   onGoSettings,
 }: CommunityCreatedModalProps) {
   return (
-    <Modal data-qa-anchor="community-created-modal">
+    <Modal data-testid="community-created-modal">
       <Content>
         <MagicWand />
 
-        <Title data-qa-anchor="community-created-modal-title">
+        <Title data-testid="community-created-modal-title">
           <FormattedMessage id="communityCreatedModal.title" />
         </Title>
 
-        <Message data-qa-anchor="community-created-modal-message">
+        <Message data-testid="community-created-modal-message">
           <FormattedMessage id="communityCreatedModal.message" />
         </Message>
 
         <GoToSettingsButton
-          data-qa-anchor="community-created-modal-go-to-settings-button"
+          data-testid="community-created-modal-go-to-settings-button"
           onClick={onGoSettings}
         >
           <FormattedMessage id="communityCreatedModal.goToSettings" />
         </GoToSettingsButton>
 
-        <SkipButton data-qa-anchor="community-created-modal-skip-button" onClick={onClose}>
+        <SkipButton data-testid="community-created-modal-skip-button" onClick={onClose}>
           <FormattedMessage id="communityCreatedModal.skip" />
         </SkipButton>
       </Content>

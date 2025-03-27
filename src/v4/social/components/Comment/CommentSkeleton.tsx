@@ -24,7 +24,7 @@ export const CommentSkeleton = ({
   const skeletons = Array.from({ length: numberOfSkeletons }, (_, index) => (
     <div
       key={index} // Use index as key for each skeleton
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={clsx(styles.postCommentSkeleton, styles.postCommentSkeleton__animation)}
       style={themeStyles}
     >

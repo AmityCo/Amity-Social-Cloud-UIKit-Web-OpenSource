@@ -50,7 +50,7 @@ export const HyperLinkButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button className={styles.hyperLinkButton} onPress={onPress} data-qa-anchor={accessibilityId}>
+    <Button className={styles.hyperLinkButton} onPress={onPress} data-testid={accessibilityId}>
       <IconComponent
         defaultIcon={() => (
           <HyperLinkButtonSvg className={clsx(styles.hyperLinkButton, defaultClassName)} />

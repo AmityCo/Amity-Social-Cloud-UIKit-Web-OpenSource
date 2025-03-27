@@ -61,7 +61,7 @@ export const AddMemberModal = ({ className = '', closeConfirm, onSubmit }: AddMe
 
   return (
     <Modal
-      data-qa-anchor="add-member-modal"
+      data-testid="add-member-modal"
       title={formatMessage({ id: 'AddMemberModal.addMembers' })}
       onCancel={closeConfirm}
     >
@@ -72,9 +72,7 @@ export const AddMemberModal = ({ className = '', closeConfirm, onSubmit }: AddMe
               <MembersField error={errors.members}>
                 <Controller
                   name="members"
-                  render={({ field }) => (
-                    <UserSelector {...field} data-qa-anchor="add-member-modal" />
-                  )}
+                  render={({ field }) => <UserSelector {...field} data-testid="add-member-modal" />}
                   control={control}
                 />
                 <ErrorMessage errors={errors} name="members" />

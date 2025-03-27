@@ -273,12 +273,12 @@ export const Comment = ({
   return (
     <>
       {isReplyComment ? (
-        <div className={styles.replyContainer} data-qa-anchor="reply">
+        <div className={styles.replyContainer} data-testid="reply">
           {renderedComment}
         </div>
       ) : (
         <div>
-          <div data-qa-anchor="comment">{renderedComment}</div>
+          <div data-testid="comment">{renderedComment}</div>
           {comment.children.length > 0 && (
             <CommentList
               pageId={pageId}

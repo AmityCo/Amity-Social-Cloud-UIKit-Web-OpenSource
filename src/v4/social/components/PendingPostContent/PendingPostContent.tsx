@@ -146,7 +146,7 @@ export const PendingPostContent = ({
   return (
     <>
       <div
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         style={themeStyles}
         className={styles.pendingPostContent__container}
         key={post.postId}
@@ -157,7 +157,7 @@ export const PendingPostContent = ({
             <div>
               <Typography.BodyBold
                 className={styles.pendingPostContent__username}
-                data-qa-anchor={`${pageId}/${componentId}/username`}
+                data-testid={`${pageId}/${componentId}/username`}
               >
                 {post.creator.displayName}
               </Typography.BodyBold>
@@ -165,7 +165,7 @@ export const PendingPostContent = ({
                 <Timestamp timestamp={post.createdAt} />
                 {post.createdAt !== post.editedAt && (
                   <Typography.Caption
-                    data-qa-anchor={`${pageId}/${componentId}/post_edited_text`}
+                    data-testid={`${pageId}/${componentId}/post_edited_text`}
                     className={styles.pendingPostContent__editedTag}
                   >
                     (edited)
@@ -186,7 +186,7 @@ export const PendingPostContent = ({
                       content: (
                         <Button
                           className={styles.pendingPostContent__item}
-                          data-qa-anchor={`${pageId}/${componentId}/delete_post`}
+                          data-testid={`${pageId}/${componentId}/delete_post`}
                           onPress={() => {
                             closePopover();
                             handleDeletePost(post.postId);
@@ -207,7 +207,7 @@ export const PendingPostContent = ({
                 {({ closePopover }) => (
                   <Button
                     className={styles.pendingPostContent__item}
-                    data-qa-anchor={`${pageId}/${componentId}/delete_post`}
+                    data-testid={`${pageId}/${componentId}/delete_post`}
                     onPress={() => {
                       closePopover();
                       handleDeletePost(post.postId);

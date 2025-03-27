@@ -33,7 +33,7 @@ export function CommunityPrivateBadge({
       defaultIcon={() => (
         <Lock
           style={themeStyles}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
           className={clsx(styles.communityPrivateBadge, className)}
         />
       )}
@@ -41,7 +41,7 @@ export function CommunityPrivateBadge({
         <img
           src={config.icon}
           alt={uiReference}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
           className={styles.communityPrivateBadge}
         />
       )}

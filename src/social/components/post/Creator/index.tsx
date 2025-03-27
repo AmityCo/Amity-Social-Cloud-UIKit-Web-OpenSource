@@ -342,7 +342,7 @@ const PostCreatorBar = ({
 
       <PostContainer>
         <PostInputText
-          data-qa-anchor="post-creator-textarea"
+          data-testid="post-creator-textarea"
           multiline
           value={markup}
           placeholder={placeholder}
@@ -398,7 +398,7 @@ const PostCreatorBar = ({
             onChange({ text, plainText: plainTextVal, mentions });
           }}
         />
-        <Footer data-qa-anchor="post-creator-footer">
+        <Footer data-testid="post-creator-footer">
           <UploaderButtons
             imageUploadDisabled={postFiles.length > 0 || postVideos.length > 0 || uploadLoading}
             videoUploadDisabled={postFiles.length > 0 || postImages.length > 0 || uploadLoading}
@@ -411,14 +411,14 @@ const PostCreatorBar = ({
             onMaxFilesLimit={onMaxFilesLimit}
             onFileSizeLimit={onFileSizeLimit}
           />
-          <PollButton data-qa-anchor="post-creator-poll-button" onClick={openPollModal}>
+          <PollButton data-testid="post-creator-poll-button" onClick={openPollModal}>
             <FileLoaderContainer>
               <PollIcon />
             </FileLoaderContainer>
           </PollButton>
           <PostButton
             disabled={isDisabled}
-            data-qa-anchor="post-creator-post-button"
+            data-testid="post-creator-post-button"
             onClick={onCreatePost}
           >
             <FormattedMessage id="post" />

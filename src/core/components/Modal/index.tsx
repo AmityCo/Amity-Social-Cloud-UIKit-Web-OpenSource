@@ -2,7 +2,7 @@ import React, { ReactElement, ReactNode, useEffect, useRef } from 'react';
 import { Overlay, Header, Content, Footer, CloseIcon, StyledModalWindow } from './styles';
 
 export interface ModalProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   size?: 'small' | '';
   className?: string;
   onOverlayClick?: () => void;
@@ -14,7 +14,7 @@ export interface ModalProps {
 }
 
 const Modal = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   size = '',
   className,
   onOverlayClick = () => {},
@@ -40,7 +40,7 @@ const Modal = ({
         tabIndex={0}
         className={className}
         ref={modalRef}
-        data-qa-anchor={dataQaAnchor}
+        data-testid={dataQaAnchor}
       >
         {(title || onCancel) && (
           <Header clean={clean}>

@@ -93,7 +93,7 @@ const CommentComposeBar = ({
       <Avatar avatar={avatarFileUrl} backgroundImage={UserImage} />
       <CommentComposeBarInput
         ref={commentInputRef}
-        data-qa-anchor="comment-compose-bar-textarea"
+        data-testid="comment-compose-bar-textarea"
         placeholder={placeholder}
         value={markup}
         multiline
@@ -103,7 +103,7 @@ const CommentComposeBar = ({
         onKeyPress={(e) => e.key === 'Enter' && addComment()}
       />
       <AddCommentButton
-        data-qa-anchor={
+        data-testid={
           userToReply
             ? 'comment-compose-bar-reply-button'
             : 'comment-compose-bar-add-comment-button'

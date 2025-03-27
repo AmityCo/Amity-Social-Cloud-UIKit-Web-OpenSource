@@ -20,7 +20,7 @@
   position: fixed;
   align-items: center;
   justify-content: center;
-  background: rgb(from var(--asc-color-black) r g b / 50%);
+  background: rgb(from var(--asc-color-black) r g b / 60%);
 }
 
 .overlay[data-view='mobile'] {

@@ -29,7 +29,7 @@ const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: Ch
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
   return (
-    <ChatHeaderContainer data-qa-anchor="chat-header">
+    <ChatHeaderContainer data-testid="chat-header">
       <Channel>
         <UserAvatar
           avatarUrl={chatAvatar || undefined}
@@ -39,11 +39,9 @@ const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: Ch
               : userBackgroundImage
           }
         />
-        <ChannelInfo data-qa-anchor="chat-header-channel-info">
-          <ChannelName data-qa-anchor="chat-header-channel-info-channel-name">
-            {chatName}
-          </ChannelName>
-          <MemberCount data-qa-anchor="chat-header-channel-info-member-count">
+        <ChannelInfo data-testid="chat-header-channel-info">
+          <ChannelName data-testid="chat-header-channel-info-channel-name">{chatName}</ChannelName>
+          <MemberCount data-testid="chat-header-channel-info-member-count">
             <FormattedMessage id="chat.members.count" values={{ count: channel?.memberCount }} />
           </MemberCount>
         </ChannelInfo>

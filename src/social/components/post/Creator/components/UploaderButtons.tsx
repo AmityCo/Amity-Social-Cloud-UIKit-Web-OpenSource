@@ -43,7 +43,7 @@ const PostCreatorUploaders = ({
 }: UploaderButtonsProps): JSX.Element => (
   <>
     <StyledLoader
-      data-qa-anchor="post-creator-image-attachment-button"
+      data-testid="post-creator-image-attachment-button"
       disabled={imageUploadDisabled}
       uploadLoading={uploadLoading}
       fileLimitRemaining={fileLimitRemaining}
@@ -57,7 +57,7 @@ const PostCreatorUploaders = ({
     </StyledLoader>
 
     <StyledLoader
-      data-qa-anchor="post-creator-video-attachment-button"
+      data-testid="post-creator-video-attachment-button"
       disabled={videoUploadDisabled}
       uploadLoading={uploadLoading}
       fileLimitRemaining={fileLimitRemaining}
@@ -76,7 +76,7 @@ const PostCreatorUploaders = ({
     </StyledLoader>
 
     <StyledLoader
-      data-qa-anchor="post-creator-file-attachment-button"
+      data-testid="post-creator-file-attachment-button"
       disabled={fileUploadDisabled}
       uploadLoading={uploadLoading}
       fileLimitRemaining={fileLimitRemaining}

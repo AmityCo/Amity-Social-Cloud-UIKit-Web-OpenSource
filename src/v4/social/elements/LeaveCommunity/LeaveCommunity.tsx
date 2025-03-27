@@ -28,7 +28,7 @@ export const LeaveCommunity = ({
       onPress={onClick}
       type="button"
       style={themeStyles}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.leaveCommunity__button}
     >
       {config.text && (

@@ -81,7 +81,7 @@ export const CalendarComponent = ({
       <CalendarGrid className={styles.calendar__grid}>
         {(dateVal) => (
           <CalendarCell
-            data-qa-anchor={accessibilityId}
+            data-testid={accessibilityId}
             data-istoday={dateVal.toString() === currentDate.toString()}
             date={dateVal}
             className={styles.calendar__cell}

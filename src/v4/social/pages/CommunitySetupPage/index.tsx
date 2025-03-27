@@ -1,5 +1,1 @@
-export {
-  CommunitySetupPage,
-  // MemberCommunitySetup,
-  AmityCommunitySetupPageMode,
-} from './CommunitySetupPage';
+export { CommunitySetupPage, AmityCommunitySetupPageMode } from './CommunitySetupPage';

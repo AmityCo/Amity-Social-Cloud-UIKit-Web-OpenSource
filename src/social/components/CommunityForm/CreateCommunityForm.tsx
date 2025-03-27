@@ -62,7 +62,7 @@ const CommunityTypeItem = ({ type, description, icon }: CommunityTypeItemProps) 
 );
 
 interface CreateCommunityFormProps {
-  'data-qa-anchor'?: string;
+  'data-testid'?: string;
   community?: Amity.Community;
   onSubmit?: (data: Parameters<typeof CommunityRepository.createCommunity>[0]) => void;
   className?: string;
@@ -70,7 +70,7 @@ interface CreateCommunityFormProps {
 }
 
 const CreateCommunityForm = ({
-  'data-qa-anchor': dataQaAnchor = '',
+  'data-testid': dataQaAnchor = '',
   className,
   onSubmit,
   onCancel,
@@ -139,7 +139,7 @@ const CreateCommunityForm = ({
                 <AvatarUploader
                   mimeType="image/png, image/jpeg"
                   {...rest}
-                  data-qa-anchor={dataQaAnchor}
+                  data-testid={dataQaAnchor}
                 />
               )}
             />
@@ -153,7 +153,7 @@ const CreateCommunityForm = ({
             </LabelCounterWrapper>
             <TextField
               {...register('displayName')}
-              data-qa-anchor={`${dataQaAnchor}-community-name-input`}
+              data-testid={`${dataQaAnchor}-community-name-input`}
               placeholder="Enter community name"
             />
             <ErrorMessage errors={errors} name="displayName" />
@@ -169,7 +169,7 @@ const CreateCommunityForm = ({
               {...register('description', {
                 maxLength: { value: 180, message: 'Description text is too long' },
               })}
-              data-qa-anchor={`${dataQaAnchor}-community-description-textarea`}
+              data-testid={`${dataQaAnchor}-community-description-textarea`}
               placeholder="Enter description"
             />
             <ErrorMessage errors={errors} name="description" />
@@ -188,7 +188,7 @@ const CreateCommunityForm = ({
                     setValue('categoryIds', categoryIds as any, { shouldValidate: true })
                   }
                   {...rest}
-                  data-qa-anchor={`${dataQaAnchor}`}
+                  data-testid={`${dataQaAnchor}`}
                 />
               )}
               control={control}
@@ -206,7 +206,7 @@ const CreateCommunityForm = ({
                   {...field}
                   value={field.value === true}
                   onChange={(event) => field.onChange(event.target.checked)}
-                  data-qa-anchor={`community-form-public-type-community-type`}
+                  data-testid={`community-form-public-type-community-type`}
                   label="Public"
                   renderer={() => (
                     <CommunityTypeItem
@@ -220,7 +220,7 @@ const CreateCommunityForm = ({
                   {...field}
                   value={field.value === false}
                   onChange={(event) => field.onChange(!event.target.checked)}
-                  data-qa-anchor={`community-form-private-type-community-type`}
+                  data-testid={`community-form-private-type-community-type`}
                   label="Private"
                   renderer={() => (
                     <CommunityTypeItem
@@ -247,7 +247,7 @@ const CreateCommunityForm = ({
                 render={({ field: { ref, ...rest } }) => (
                   <UserSelector
                     parentContainer={formBodyRef.current}
-                    data-qa-anchor={dataQaAnchor}
+                    data-testid={dataQaAnchor}
                     {...rest}
                   />
                 )}
@@ -268,7 +268,7 @@ const CreateCommunityForm = ({
           <FormattedMessage id="cancel" />
         </Button>
 
-        <SubmitButton data-qa-anchor={`${dataQaAnchor}-save-button`} disabled={disabled}>
+        <SubmitButton data-testid={`${dataQaAnchor}-save-button`} disabled={disabled}>
           <FormattedMessage id="create" />
         </SubmitButton>
       </Footer>

@@ -51,7 +51,7 @@ export function PostCreationButton({
           style={themeStyles}
           className={styles.postCreationButton}
           onPress={onClick}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
         >
           <PostCreationButtonSvg
             className={clsx(styles.postCreationButton__icon, defaultClassName)}
@@ -64,7 +64,7 @@ export function PostCreationButton({
           alt={uiReference}
           className={clsx(styles.postCreationButton, imgClassName)}
           onClick={onClick}
-          data-qa-anchor={accessibilityId}
+          data-testid={accessibilityId}
         />
       )}
       defaultIconName={defaultConfig.icon}

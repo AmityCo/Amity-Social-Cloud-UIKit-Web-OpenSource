@@ -40,7 +40,7 @@ export const CommunityCreateButton = ({
       onPress={onPress}
       style={themeStyles}
       isDisabled={isDisabled}
-      data-qa-anchor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityCreateButton__button}
       icon={({ className }) => (
         <IconComponent

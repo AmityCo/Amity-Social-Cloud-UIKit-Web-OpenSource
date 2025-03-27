@@ -35,7 +35,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   const { openPopup } = usePopupContext();
   const notification = useNotifications();
   const { members } = useCommunitySetupContext();
-  const { AmityCommunityMembershipPage } = usePageBehavior();
+  const { AmityCommunityMembershipPageBehavior } = usePageBehavior();
   const [activeTab, setActiveTab] = useState<Key>('members');
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
   const { hasModeratorPermissions } = useModerator({ community, user });
@@ -73,7 +73,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   return (
     <div
       style={themeStyles}
-      data-qa-anhor={accessibilityId}
+      data-testid={accessibilityId}
       className={styles.communityMembershipPage}
     >
       <div className={styles.communityMembershipPage__topBar}>
@@ -95,7 +95,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
                     />
                   ),
                 })
-              : AmityCommunityMembershipPage?.goToAddMemberPage?.({
+              : AmityCommunityMembershipPageBehavior?.goToAddMemberPage?.({
                   members,
                   onAddedAction: onClickAddMember,
                   communityId: community.communityId,

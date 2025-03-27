@@ -68,7 +68,7 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
     );
 
   return (
-    <div style={themeStyles} data-qa-anchor={accessibilityId}>
+    <div style={themeStyles} data-testid={accessibilityId}>
       <NoInternetConnectionHoc page="feed" refresh={refresh}>
         <div className={styles.communityVideoFeed__container}>
           {posts?.length === 0 && !isLoading && (

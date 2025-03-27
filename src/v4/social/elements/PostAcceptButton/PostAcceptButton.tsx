@@ -35,7 +35,7 @@ export const PostAcceptButton = ({
     >
       <Typography.BodyBold
         style={themeStyles}
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         className={styles.postAcceptButton__text}
       >
         {config?.text}

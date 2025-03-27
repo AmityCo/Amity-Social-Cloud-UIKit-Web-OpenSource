@@ -71,7 +71,7 @@ export function SpeakerButton({
   return (
     <Button className={clsx(styles.speakerButton)} onPress={onPress}>
       <IconComponent
-        data-qa-anchor={accessibilityId}
+        data-testid={accessibilityId}
         defaultIcon={() =>
           isMuted ? (
             <SpeakerUnmuteSvg className={styles.speakerButton__icon} />

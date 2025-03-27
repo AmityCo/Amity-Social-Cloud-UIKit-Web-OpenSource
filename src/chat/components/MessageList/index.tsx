@@ -70,7 +70,7 @@ const MessageList = ({ channelId }: MessageListProps) => {
           style={{ display: 'flex', flexDirection: 'column-reverse' }}
           height={containerRef.current.clientHeight}
         >
-          <MessageListContainer ref={containerRef} data-qa-anchor="message-list">
+          <MessageListContainer ref={containerRef} data-testid="message-list">
             {messages.map((message, i) => {
               const nextMessage = messages[i + 1];
               const isConsequent = nextMessage && nextMessage.creatorId === message.creatorId;

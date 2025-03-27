@@ -40,7 +40,7 @@ const FileRows = ({
     {uploaded.map((file) => (
       <File
         key={file.fileId}
-        data-qa-anchor={rowDataQaAnchor}
+        data-testid={rowDataQaAnchor}
         fileId={file.fileId}
         onRemove={() => removeFile(file)}
       />
@@ -49,7 +49,7 @@ const FileRows = ({
     {uploading.map((file) => (
       <File
         key={file.name}
-        data-qa-anchor={rowDataQaAnchor}
+        data-testid={rowDataQaAnchor}
         file={file}
         progress={progress[file.name]}
         isRejected={rejected.includes(file.name)}

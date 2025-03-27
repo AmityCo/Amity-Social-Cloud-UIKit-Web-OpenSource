@@ -50,7 +50,7 @@ const Image = ({ image, onClick, onRemove, numberOfHiddenImages }: ImageProps) =
   };
 
   return (
-    <ImageContainer data-qa-anchor="image" onClick={onClick}>
+    <ImageContainer data-testid="image" onClick={onClick}>
       {numberOfHiddenImages && numberOfHiddenImages > 0 && (
         <NumberOfHiddenImagesOverlay>+ {numberOfHiddenImages}</NumberOfHiddenImagesOverlay>
       )}
