@@ -44,7 +44,7 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
   const [isLoading, setIsLoading] = useState(false);
   const liveStreamPlayerRef = useRef<HTMLDivElement>(null);
   const [isPoorConnection, setIsPoorConnection] = useState(false);
-  const [video, setVideo] = useState<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [playerInitialized, setPlayerInitialized] = useState(false);
   const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const plyrRef = useRef<Plyr | null>(null);
@@ -60,34 +60,40 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
     if (stream?.status === 'live') player.controls = false;
 
     player.onvolumechange = () => setMuted(!player.muted);
+
     player.classList.add(styles.liveStreamPlayer__video);
 
-    const detectOrientation = () => {
-      const orientation = player.videoHeight > player.videoWidth ? 'portrait' : 'landscape';
-      player.setAttribute('data-orientation', orientation);
-    };
+    player.addEventListener('loadedmetadata', () => {
+      detectOrientation(player);
+    });
 
-    player.addEventListener('loadedmetadata', detectOrientation);
-
-    player.addEventListener('loadeddata', detectOrientation);
+    player.addEventListener('loadeddata', () => {
+      detectOrientation(player);
+    });
 
     player.addEventListener('loadstart', () => {
       handleLoadStart();
     });
+
     player.addEventListener('waiting', () => {
       handleWaiting();
     });
+
     player.addEventListener('playing', () => {
       handlePlaying();
     });
+
     player.addEventListener('canplay', () => {
       handleCanPlay();
     });
 
-    video
-      ? liveStreamPlayerRef.current?.replaceChild(player, video)
+    window.addEventListener('online', reloadPlayer);
+
+    videoRef.current
+      ? liveStreamPlayerRef.current?.replaceChild(player, videoRef.current)
       : liveStreamPlayerRef.current?.appendChild(player);
-    setVideo(player);
+
+    videoRef.current = player;
 
     if (stream?.status === 'live' && player) {
       plyrRef.current = new Plyr(player, {
@@ -97,6 +103,22 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
     }
 
     setPlayerInitialized(true);
+  };
+
+  const reloadPlayer = useCallback(() => {
+    if (videoRef.current) videoRef.current.remove();
+
+    videoRef.current = null;
+    setIsLoading(true);
+    setIsPoorConnection(false);
+    setPlayerInitialized(false);
+
+    if (stream?.streamId) getLiveStreamPlayer(stream.streamId);
+  }, [stream?.streamId, videoRef.current]);
+
+  const detectOrientation = (player: HTMLVideoElement) => {
+    const orientation = player.videoHeight > player.videoWidth ? 'portrait' : 'landscape';
+    player.setAttribute('data-orientation', orientation);
   };
 
   const handleLoadStart = () => {
@@ -124,11 +146,20 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
     if (stream?.streamId) getLiveStreamPlayer(stream?.streamId);
 
     return () => {
-      if (video) {
-        video.removeEventListener('loadstart', handleLoadStart);
-        video.removeEventListener('waiting', handleWaiting);
-        video.removeEventListener('playing', handlePlaying);
-        video.removeEventListener('canplay', handleCanPlay);
+      if (videoRef.current) {
+        videoRef.current.removeEventListener('loadedmetadata', () =>
+          detectOrientation(videoRef.current!),
+        );
+        videoRef.current.removeEventListener('loadeddata', () =>
+          detectOrientation(videoRef.current!),
+        );
+        videoRef.current.removeEventListener('loadstart', handleLoadStart);
+        videoRef.current.removeEventListener('waiting', handleWaiting);
+        videoRef.current.removeEventListener('playing', handlePlaying);
+        videoRef.current.removeEventListener('canplay', handleCanPlay);
+        videoRef.current.removeEventListener('canplaythrough', handleCanPlay);
+        videoRef.current.removeEventListener('progress', handleCanPlay);
+        window.removeEventListener('online', reloadPlayer);
       }
       if (loadingTimerRef.current) {
         clearTimeout(loadingTimerRef.current);
