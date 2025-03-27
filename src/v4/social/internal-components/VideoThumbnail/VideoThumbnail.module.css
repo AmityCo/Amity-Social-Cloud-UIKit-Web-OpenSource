@@ -101,4 +101,8 @@
   .thumbnail__container {
     padding: 0.75rem 1.5rem;
   }
+
+  .thumbnail__wrapper[data-video-height='true'] {
+    height: 8.625rem;
+  }
 }

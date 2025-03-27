@@ -117,7 +117,7 @@ export function ImageThumbnail({
                   <CloseIcon className={styles.closeIcon} />
                 </Button>
                 <div className={styles.icon__status}>
-                  <ProgressSpinner progress={progress[file.id]} />
+                  <ProgressSpinner progress={progress[file.id] ?? 100} />
                 </div>
               </>
             ) : file.errorText && !('fileId' in file) ? (
