@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.4.0 (2025-03-27)
+
+
+### Bug Fixes
+
+* ASC-29221 - reloading player after internet connection is back ([#1005](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1005)) ([d16ff11](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/d16ff11089f407e7ce9cfc7551a461aa28abbbf5))
+
 ## 4.3.0 (2025-03-06)
 
 
