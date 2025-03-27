@@ -46,6 +46,7 @@ import styles from './PostContent.module.css';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
 import { LiveStreamContent } from './LiveStreamContent';
+import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -236,6 +237,9 @@ export const PostContent = ({
   const { openPopup } = usePopupContext();
   const { confirm } = useConfirmContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const { moderators } = useCommunityModeratorsCollection({ communityId: post?.targetId });
+  const isModerator =
+    (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
   const [shouldSubscribe, setShouldSubscribe] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
@@ -356,6 +360,7 @@ export const PostContent = ({
 
   //TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
   const shouldShowConfirmEdit =
+    !isModerator &&
     isGlobalFeaturePost &&
     ((targetCommunity as Amity.Community & { needApprovalOnPostCreation?: boolean })
       ?.needApprovalOnPostCreation ||

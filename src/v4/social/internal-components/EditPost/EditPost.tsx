@@ -52,7 +52,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { onBack } = useNavigation();
   const { confirm } = useConfirmContext();
-  const { updateItem } = useGlobalFeedContext();
+  const { updateItem, updateGlobalFeaturedPosts } = useGlobalFeedContext();
   const { files, progress, isLoading, removeFile, handleFileChange } = useFilePostUpload(pageId);
   const posts = usePostByIds(post?.children || []);
 
@@ -107,6 +107,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
         updateItem(response.data);
+        updateGlobalFeaturedPosts(response.data);
       },
       onError: (error) => {
         setIsUpdating(false);

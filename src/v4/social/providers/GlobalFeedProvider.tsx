@@ -1,10 +1,12 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
 import { FeedRepository, PostRepository } from '@amityco/ts-sdk';
 import { usePaginatorApi } from '~/v4/core/hooks/usePaginator';
 import { isNonNullable } from '~/v4/helpers/utils';
+import useGlobalPinnedPostsCollection from '~/v4/social/hooks/collections/useGlobalPinnedPostsCollection';
 
 const useGlobalFeed = () => {
   const [items, setItems] = useState<Array<Amity.Post>>([]);
+  const [globalFeaturedPostsItems, setGlobalFeaturedPostsItems] = useState<Array<Amity.Post>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [queryToken, setQueryToken] = useState<string | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
@@ -18,6 +20,15 @@ const useGlobalFeed = () => {
     placement: 'feed' as Amity.AdPlacement,
     getItemId: (item) => item.postId,
   });
+
+  const { globalFeaturedPosts, isLoading: isGlobalFeaturedPostsLoading } =
+    useGlobalPinnedPostsCollection();
+
+  useEffect(() => {
+    if (globalFeaturedPosts) {
+      setGlobalFeaturedPostsItems(globalFeaturedPosts);
+    }
+  }, [globalFeaturedPosts]);
 
   const onScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.target as HTMLDivElement;
@@ -91,6 +102,19 @@ const useGlobalFeed = () => {
     setItems(newItems);
   };
 
+  const updateGlobalFeaturedPosts = (incomingPost: Amity.Post) => {
+    if (!globalFeaturedPosts) return;
+
+    const newItems = globalFeaturedPosts.map((item) => {
+      if (item.post.postId === incomingPost.postId) {
+        return { ...item, post: { ...item.post, ...incomingPost } };
+      }
+      return item;
+    });
+
+    setGlobalFeaturedPostsItems(newItems);
+  };
+
   const hasMore = useMemo(() => queryToken !== null, [queryToken]);
 
   const loadMore = useCallback(() => {
@@ -120,6 +144,8 @@ const useGlobalFeed = () => {
     prependItem,
     removeItem,
     updateItem,
+    updateGlobalFeaturedPosts,
+    globalFeaturedPostsItems,
     loadMore,
     hasMore,
     loadMoreHasBeenCalled,
@@ -127,6 +153,7 @@ const useGlobalFeed = () => {
     refetch,
     scrollPosition,
     onScroll,
+    isGlobalFeaturedPostsLoading,
   };
 };
 
@@ -138,6 +165,7 @@ const GlobalFeedContext = createContext<GlobalFeedContextType>({
   prependItem: () => {},
   removeItem: () => {},
   updateItem: () => {},
+  updateGlobalFeaturedPosts: () => {},
   loadMore: () => {},
   hasMore: false,
   loadMoreHasBeenCalled: false,
@@ -145,6 +173,8 @@ const GlobalFeedContext = createContext<GlobalFeedContextType>({
   refetch: () => {},
   scrollPosition: 0,
   onScroll: () => {},
+  isGlobalFeaturedPostsLoading: false,
+  globalFeaturedPostsItems: [],
 });
 
 export const useGlobalFeedContext = () => {
