@@ -11,7 +11,6 @@ import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { Explore } from '~/v4/social/components/Explore';
-import { ExploreProvider } from '~/v4/social/providers/ExploreProvider';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
@@ -94,11 +93,7 @@ export function SocialHomePage() {
       <NoInternetConnectionHoc page="feed" className={styles.socialHomePage__noConnection}>
         <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
           {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
-          {activeTab === HomePageTab.Explore && (
-            <ExploreProvider>
-              <Explore pageId={pageId} />
-            </ExploreProvider>
-          )}
+          {activeTab === HomePageTab.Explore && <Explore pageId={pageId} />}
           {activeTab === HomePageTab.MyCommunities && <MyCommunities pageId={pageId} />}
         </div>
       </NoInternetConnectionHoc>
