@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.4.1 (2025-03-31)
+
+
+### Bug Fixes
+
+* remove duplicate provider ([#1010](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1010)) ([c2759b8](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/c2759b80609175f3dcfa1deb977885dae8d4cdb3))
+
 ## 4.4.0 (2025-03-27)
 
 
