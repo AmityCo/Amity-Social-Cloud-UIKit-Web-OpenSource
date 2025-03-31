@@ -10,7 +10,7 @@ import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
-import { Explore } from './Explore';
+import { Explore } from '~/v4/social/components/Explore';
 import { ExploreProvider } from '~/v4/social/providers/ExploreProvider';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';

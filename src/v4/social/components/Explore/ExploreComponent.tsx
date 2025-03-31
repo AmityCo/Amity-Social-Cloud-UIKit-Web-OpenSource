@@ -3,8 +3,7 @@ import { ExploreCommunityCategories } from '~/v4/social/components/ExploreCommun
 import { RecommendedCommunities } from '~/v4/social/components/RecommendedCommunities';
 import { TrendingCommunities } from '~/v4/social/components/TrendingCommunities';
 import { useExplore } from '~/v4/social/providers/ExploreProvider';
-
-import styles from './Explore.module.css';
+import styles from './ExploreComponent.module.css';
 import { ExploreError } from './ExploreError';
 import { ExploreEmpty } from '~/v4/social/components/ExploreEmpty';
 import { ExploreCommunityEmpty } from '~/v4/social/components/ExploreCommunityEmpty';
@@ -14,10 +13,10 @@ import { Divider } from '~/v4/social/elements/Divider';
 import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
 
 type ExploreProps = {
-  pageId: string;
+  pageId?: string;
 };
 
-export function Explore({ pageId }: ExploreProps) {
+export function Explore({ pageId = '*' }: ExploreProps) {
   const {
     refresh,
     isLoading,

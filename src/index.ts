@@ -109,6 +109,7 @@ export {
   UserFeed as AmityUserFeedComponent,
   UserImageFeed as AmityUserImageFeedComponent,
   UserVideoFeed as AmityUserVideoFeedComponent,
+  Explore as AmityExploreComponent,
 } from '~/v4/social/components/';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
