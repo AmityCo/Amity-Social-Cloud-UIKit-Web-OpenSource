@@ -25,3 +25,4 @@ export * from './UserProfileHeader';
 export * from './UserFeed';
 export * from './UserImageFeed';
 export * from './UserVideoFeed';
+export * from './Explore';

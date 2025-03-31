@@ -29,3 +29,6 @@ export { PollTargetSelectionPage } from './PollTargetSelectionPage';
 
 export { AllCategoriesPage } from './AllCategoriesPage';
 export { CommunitiesByCategoryPage } from './CommunitiesByCategoryPage';
+
+export { LiveStreamPlayerPage } from './LiveStreamPlayerPage';
+export { LivestreamTerminatedPage } from './LivestreamTerminatedPage';

@@ -74,6 +74,8 @@ export {
   CommunityPostPermissionPage as AmityCommunityPostPermissionPage,
   CommunityStorySettingPage as AmityCommunityStorySettingPage,
   CommunityMembershipPage as AmityCommunityMembershipPage,
+  LiveStreamPlayerPage as AmityLiveStreamPlayerPage,
+  LivestreamTerminatedPage as AmityLivestreamTerminatedPage,
 } from '~/v4/social/pages';
 
 export {
@@ -107,6 +109,7 @@ export {
   UserFeed as AmityUserFeedComponent,
   UserImageFeed as AmityUserImageFeedComponent,
   UserVideoFeed as AmityUserVideoFeedComponent,
+  Explore as AmityExploreComponent,
 } from '~/v4/social/components/';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
