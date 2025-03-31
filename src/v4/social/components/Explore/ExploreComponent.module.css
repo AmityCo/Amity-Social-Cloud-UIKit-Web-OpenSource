@@ -1,0 +1,103 @@
+.explore {
+  height: 100%;
+  display: flex;
+  padding-bottom: 2rem;
+  flex-direction: column;
+}
+
+.explore__recommendedForYou {
+  gap: 1rem;
+  width: 100%;
+  display: flex;
+  padding: 0 1rem;
+  scrollbar-width: none;
+  flex-direction: column;
+  -ms-overflow-style: none;
+}
+
+.explore__recommendedForYou::-webkit-scrollbar {
+  display: none;
+}
+
+.explore__recommendedForYou[data-is-loading='true'] {
+  padding: 1rem;
+}
+
+.explore__trendingNow {
+  gap: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.explore__trendingTitleSkeleton {
+  width: 9.75rem;
+  height: 0.75rem;
+  flex-shrink: 0;
+  border-radius: 0.75rem;
+  background: var(--asc-color-base-shade4);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.explore__recommendedForYouTitle {
+  color: var(--asc-color-base-default);
+}
+
+.explore__exploreCategories {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.explore__exploreCategories::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.explore__divider {
+  display: none;
+  background-color: var(--asc-color-background-default);
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@media (width >= 48em) {
+  .explore {
+    height: auto;
+    background-color: var(--asc-color-background-shade1);
+  }
+
+  .explore__divider {
+    display: block;
+    background-color: var(--asc-color-background-shade1);
+  }
+
+  .explore__exploreCategories {
+    padding: 1rem 0;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .explore__trendingNow,
+  .explore__recommendedForYou {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .explore__trendingTitleSkeleton {
+    height: 1.25rem;
+  }
+}
