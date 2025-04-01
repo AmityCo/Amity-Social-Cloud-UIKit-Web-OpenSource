@@ -128,20 +128,25 @@ export const CommentList = ({
         );
       })}
 
-      {isDesktop && hasMore && !expanded && items.length < commentCount && (
-        <Button
-          className={styles.commentList__viewAllComments__button}
-          variant="text"
-          onPress={() => {
-            loadMore();
-            setExpanded(true);
-          }}
-        >
-          <Typography.BodyBold className={styles.commentList__viewAllComments__button__text}>
-            View all comments...
-          </Typography.BodyBold>
-        </Button>
-      )}
+      {isDesktop &&
+        hasMore &&
+        !expanded &&
+        items
+          .filter((item) => !isAmityAd(item))
+          .filter((item) => !(item as Amity.Comment).isDeleted).length < commentCount && (
+          <Button
+            className={styles.commentList__viewAllComments__button}
+            variant="text"
+            onPress={() => {
+              loadMore();
+              setExpanded(true);
+            }}
+          >
+            <Typography.BodyBold className={styles.commentList__viewAllComments__button__text}>
+              View all comments...
+            </Typography.BodyBold>
+          </Button>
+        )}
 
       {isLoading && (
         <CommentSkeleton pageId={pageId} componentId={componentId} numberOfSkeletons={3} />
