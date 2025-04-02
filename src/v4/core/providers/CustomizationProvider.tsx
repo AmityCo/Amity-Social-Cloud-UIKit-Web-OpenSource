@@ -75,6 +75,10 @@ type ThemeConfiguration = {
   };
 };
 
+export type NetworkConfig = {
+  config: DefaultConfig;
+};
+
 export interface Config {
   preferred_theme?: 'light' | 'dark' | 'default';
   theme?: {

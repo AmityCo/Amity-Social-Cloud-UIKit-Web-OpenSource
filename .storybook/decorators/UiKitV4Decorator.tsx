@@ -51,6 +51,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
       configs={amityConfig as Config}
+      syncNetworkConfig={args.syncNetworkConfig}
     >
       <Story />
     </AmityUIKitProvider>

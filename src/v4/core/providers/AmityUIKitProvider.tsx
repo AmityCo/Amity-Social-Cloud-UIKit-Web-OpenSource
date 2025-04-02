@@ -41,6 +41,8 @@ import { Popup } from '~/v4/core/components/AriaPopup';
 import { CommunitySetupProvider } from '~/v4/social/providers/CommunitySetupProvider';
 import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { LayoutProvider } from '~/v4/social/providers/LayoutProvider';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useNetworkConfig } from '~/v4/core/hooks/useNetworkConfig';
 
 const InternalComponent = ({
   apiKey,
@@ -60,12 +62,12 @@ const InternalComponent = ({
   activeRoute,
   onRouteChange,
   seoOptimizationEnabled = false,
+  syncNetworkConfig = true,
 }: AmityUIKitProviderProps) => {
-  const queryClient = new QueryClient();
-  const [client, setClient] = useState<Amity.Client | null>(null);
   const currentUser = useUser(userId);
-
   const { error } = useNotifications();
+  const [client, setClient] = useState<Amity.Client | null>(null);
+  const { networkConfig, isNetworkConfigLoading } = useNetworkConfig(client);
 
   const sdkContextValue = useMemo(
     () => ({
@@ -75,6 +77,34 @@ const InternalComponent = ({
     }),
     [client, userId, currentUser?.roles],
   );
+
+  const initialConfig = useMemo(() => {
+    let initialConfig = { ...defaultConfig };
+
+    if (configs) {
+      initialConfig = {
+        ...initialConfig,
+        ...configs,
+        theme: {
+          light: configs.theme?.light ?? initialConfig.theme.light,
+          dark: configs.theme?.dark ?? initialConfig.theme.dark,
+        },
+      };
+    }
+
+    if (networkConfig && syncNetworkConfig) {
+      if (
+        networkConfig.config?.preferred_theme === 'dark' ||
+        networkConfig.config?.preferred_theme === 'light'
+      )
+        initialConfig = {
+          ...initialConfig,
+          ...networkConfig.config,
+        };
+    }
+
+    return initialConfig;
+  }, [configs, networkConfig]);
 
   useEffect(() => {
     const setup = async () => {
@@ -126,57 +156,55 @@ const InternalComponent = ({
     setup();
   }, [userId, displayName, onConnectionStatusChange, onDisconnected]);
 
-  if (!client) return null;
+  if (!client || isNetworkConfigLoading) return null;
 
   return (
     <div className="asc-uikit">
-      <QueryClientProvider client={queryClient}>
-        <CustomizationProvider initialConfig={configs || defaultConfig}>
-          <CustomReactionProvider>
-            <AdEngineProvider>
-              <SDKContextV3.Provider value={sdkContextValue}>
-                <SDKContext.Provider value={sdkContextValue}>
-                  <SDKConnectorProviderV3>
-                    <SDKConnectorProvider>
-                      <ConfigProvider
-                        config={{
-                          socialCommunityCreationButtonVisible:
-                            socialCommunityCreationButtonVisible || true,
-                        }}
-                      >
-                        <PostRendererProvider config={postRendererConfig}>
-                          <LayoutProvider>
-                            <NavigationProvider
-                              activeRoute={activeRoute}
-                              onRouteChange={onRouteChange}
-                            >
-                              <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                <StoryProvider>
-                                  <CommunitySetupProvider>
-                                    <DrawerProvider>
-                                      <GlobalFeedProvider>
-                                        <PopupProvider>
-                                          <Popup />
-                                          {children}
-                                        </PopupProvider>
-                                      </GlobalFeedProvider>
-                                      <DrawerContainer />
-                                    </DrawerProvider>
-                                  </CommunitySetupProvider>
-                                </StoryProvider>
-                              </PageBehaviorProvider>
-                            </NavigationProvider>
-                          </LayoutProvider>
-                        </PostRendererProvider>
-                      </ConfigProvider>
-                    </SDKConnectorProvider>
-                  </SDKConnectorProviderV3>
-                </SDKContext.Provider>
-              </SDKContextV3.Provider>
-            </AdEngineProvider>
-          </CustomReactionProvider>
-        </CustomizationProvider>
-      </QueryClientProvider>
+      <CustomizationProvider initialConfig={initialConfig}>
+        <CustomReactionProvider>
+          <AdEngineProvider>
+            <SDKContextV3.Provider value={sdkContextValue}>
+              <SDKContext.Provider value={sdkContextValue}>
+                <SDKConnectorProviderV3>
+                  <SDKConnectorProvider>
+                    <ConfigProvider
+                      config={{
+                        socialCommunityCreationButtonVisible:
+                          socialCommunityCreationButtonVisible || true,
+                      }}
+                    >
+                      <PostRendererProvider config={postRendererConfig}>
+                        <LayoutProvider>
+                          <NavigationProvider
+                            activeRoute={activeRoute}
+                            onRouteChange={onRouteChange}
+                          >
+                            <PageBehaviorProvider pageBehavior={pageBehavior}>
+                              <StoryProvider>
+                                <CommunitySetupProvider>
+                                  <DrawerProvider>
+                                    <GlobalFeedProvider>
+                                      <PopupProvider>
+                                        <Popup />
+                                        {children}
+                                      </PopupProvider>
+                                    </GlobalFeedProvider>
+                                    <DrawerContainer />
+                                  </DrawerProvider>
+                                </CommunitySetupProvider>
+                              </StoryProvider>
+                            </PageBehaviorProvider>
+                          </NavigationProvider>
+                        </LayoutProvider>
+                      </PostRendererProvider>
+                    </ConfigProvider>
+                  </SDKConnectorProvider>
+                </SDKConnectorProviderV3>
+              </SDKContext.Provider>
+            </SDKContextV3.Provider>
+          </AdEngineProvider>
+        </CustomReactionProvider>
+      </CustomizationProvider>
     </div>
   );
 };
@@ -220,28 +248,34 @@ interface AmityUIKitProviderProps {
   activeRoute?: AmityRoute;
   onRouteChange?: (route: AmityRoute) => void;
   seoOptimizationEnabled?: boolean;
+  syncNetworkConfig?: boolean;
 }
+
+const queryClient = new QueryClient();
 
 const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
   return (
     <Localization locale="en">
-      <ThemeProvider>
-        <StyledThemeProvider theme={buildGlobalTheme(props.theme)}>
-          <NotificationProvider>
-            <LegacyNotificationProvider>
-              <ConfirmProvider>
-                <LegacyConfirmProvider>
-                  <InternalComponent {...props} />
-                  <NotificationsContainer />
-                  <LegacyNotificationsContainer />
-                  <ConfirmModal />
-                  <LegacyConfirmComponent />
-                </LegacyConfirmProvider>
-              </ConfirmProvider>
-            </LegacyNotificationProvider>
-          </NotificationProvider>
-        </StyledThemeProvider>
-      </ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <StyledThemeProvider theme={buildGlobalTheme(props.theme)}>
+            <NotificationProvider>
+              <LegacyNotificationProvider>
+                <ConfirmProvider>
+                  <LegacyConfirmProvider>
+                    <InternalComponent {...props} />
+                    <NotificationsContainer />
+                    <LegacyNotificationsContainer />
+                    <ConfirmModal />
+                    <LegacyConfirmComponent />
+                  </LegacyConfirmProvider>
+                </ConfirmProvider>
+              </LegacyNotificationProvider>
+            </NotificationProvider>
+          </StyledThemeProvider>
+        </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+      </QueryClientProvider>
     </Localization>
   );
 };
