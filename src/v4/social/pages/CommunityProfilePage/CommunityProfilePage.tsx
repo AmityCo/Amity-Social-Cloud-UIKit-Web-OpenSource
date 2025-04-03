@@ -44,6 +44,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const [isSticky, setIsSticky] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const profileTabRef = useRef<HTMLDivElement>(null);
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { activeTab, setActiveTab } = useCommunityTabContext();
   const { hasStoryPermission } = useStoryPermission(communityId);
@@ -118,9 +119,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
 
   useEffect(() => {
     const handleScroll = () => {
-      if (containerRef.current) {
+      if (containerRef.current && profileTabRef.current) {
         const scrollPosition = containerRef.current.scrollTop;
-        setIsSticky(scrollPosition > 95);
+        setIsSticky(scrollPosition > profileTabRef.current.offsetTop - 90);
       }
     };
 
@@ -146,6 +147,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
           <CommunityHeader pageId={pageId} community={community} isSticky={isSticky} page={page} />
           <CommunityProfileTab
             pageId={pageId}
+            ref={profileTabRef}
             activeTab={activeTab}
             onTabChange={handleTabChange}
           />
