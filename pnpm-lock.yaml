@@ -44,6 +44,9 @@ importers:
       hls.js:
         specifier: ^1.4.14
         version: 1.5.11
+      js-sha256:
+        specifier: ^0.11.0
+        version: 0.11.0
       lexical:
         specifier: ^0.18.0
         version: 0.18.0
@@ -174,6 +177,9 @@ importers:
       '@storybook/theming':
         specifier: ^7.6.7
         version: 7.6.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.69.0
+        version: 5.71.5(@tanstack/react-query@5.45.1(react@18.3.1))(react@18.3.1)
       '@types/eslint__js':
         specifier: ^8.42.3
         version: 8.42.3
@@ -2966,6 +2972,15 @@ packages:
   '@tanstack/query-core@5.45.0':
     resolution: {integrity: sha512-RVfIZQmFUTdjhSAAblvueimfngYyfN6HlwaJUPK71PKd7yi43Vs1S/rdimmZedPWX/WGppcq/U1HOj7O7FwYxw==}
 
+  '@tanstack/query-devtools@5.71.5':
+    resolution: {integrity: sha512-Fq1JeAp+I52Md/KnyeFxzG7G0RpdHgeOfDNhSPkZQs/JqqXuAfpUf+wFHDz+vP0GZbSnla2JmcLSQebOkIb1yA==}
+
+  '@tanstack/react-query-devtools@5.71.5':
+    resolution: {integrity: sha512-VErQ29hgwmLrZjMmHp83iv+UdeCbqAyj/JR1mZjDbf+ghyJT+Hmh8jfbh6WYzKh8Fnej7uwl3nHbCsqd3VjoWw==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.71.5
+      react: ^18 || ^19
+
   '@tanstack/react-query@5.45.1':
     resolution: {integrity: sha512-mYYfJujKg2kxmkRRjA6nn4YKG3ITsKuH22f1kteJ5IuVQqgKUgbaSQfYwVP0gBS05mhwxO03HVpD0t7BMN7WOA==}
     peerDependencies:
@@ -5417,6 +5432,9 @@ packages:
 
   js-sdsl@4.3.0:
     resolution: {integrity: sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==}
+
+  js-sha256@0.11.0:
+    resolution: {integrity: sha512-6xNlKayMZvds9h1Y1VWc0fQHQ82BxTXizWPEtEeGvmOUYpBRy4gbWroHLpzowe6xiQhHpelCQiE7HEdznyBL9Q==}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -11492,6 +11510,14 @@ snapshots:
 
   '@tanstack/query-core@5.45.0': {}
 
+  '@tanstack/query-devtools@5.71.5': {}
+
+  '@tanstack/react-query-devtools@5.71.5(@tanstack/react-query@5.45.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-devtools': 5.71.5
+      '@tanstack/react-query': 5.45.1(react@18.3.1)
+      react: 18.3.1
+
   '@tanstack/react-query@5.45.1(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.45.0
@@ -14378,6 +14404,8 @@ snapshots:
   js-cookie@2.2.1: {}
 
   js-sdsl@4.3.0: {}
+
+  js-sha256@0.11.0: {}
 
   js-tokens@4.0.0: {}
 

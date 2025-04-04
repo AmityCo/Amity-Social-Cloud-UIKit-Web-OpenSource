@@ -2,6 +2,7 @@
   width: 100%;
   background-color: inherit;
   overflow-wrap: break-word;
+  word-break: break-all;
   color: var(--asc-color-base-default);
 }
 

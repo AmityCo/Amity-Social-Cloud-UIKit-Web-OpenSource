@@ -1,54 +1,50 @@
-.communityCover__container {
-  position: relative;
+.communityCover {
   width: 100%;
-  padding-top: 56.25%;
+  position: relative;
+  aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-image: var(--background-image);
-}
-
-.communityCover__container[data-cover-scroll='true'] {
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  padding-top: 6.375rem;
-  transition: transform 0.3s ease-in;
-  transform: translateY(-5%);
-}
-
-.communityCover__container::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--background-image);
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  filter: blur(25px);
-  backdrop-filter: blur(1px);
-  z-index: -1;
-}
-
-.communityCover__privateIcon {
-  width: 1.25rem;
-  height: 1rem;
-  fill: var(--asc-color-white);
-  margin-left: 0.5rem;
 }
 
 .communityCover__topBar {
-  position: absolute;
-  top: 2rem;
-  left: 1rem;
-  right: 1rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
   display: flex;
+  position: fixed;
+  padding: 2rem 1rem;
+  transform: translateY(-5%);
   justify-content: space-between;
+  transition: transform 0.3s ease-in;
+}
+
+.communityCover__topBar[data-scroll='true']::before {
+  inset: 0;
+  content: '';
+  z-index: -1;
+  filter: blur(25px);
+  position: absolute;
+  background-size: cover;
+  backdrop-filter: blur(1px);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: var(--background-image);
 }
 
 .communityCover__topBarLeft {
+  gap: 0.5rem;
   display: flex;
   align-items: center;
+}
+
+.communityCover__privateIcon {
+  height: 1rem;
+  width: 1.25rem;
+  margin-left: 0.25rem;
+  fill: var(--asc-color-white);
 }
 
 .communityCover__communityName {
@@ -72,23 +68,18 @@
 }
 
 @media (width >= 48em) {
-  .communityCover__container {
-    padding-top: 50%;
-    max-height: 17.0625rem;
+  .communityCover {
+    aspect-ratio: 2 / 1;
     border-radius: 0.5rem 0.5rem 0 0;
   }
 
-  .communityCover__container[data-cover-scroll='true'] {
-    width: 100%;
-    padding-top: 50%;
-    position: relative;
-  }
-
-  .communityCover__container::before {
-    content: none;
-  }
-
   .communityCover__topBar {
-    top: 1rem;
+    padding: 1rem;
+    position: absolute;
+    transform: translateY(0);
+  }
+
+  .communityCover__topBar::before {
+    content: none;
   }
 }

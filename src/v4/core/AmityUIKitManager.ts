@@ -1,4 +1,6 @@
 import { Client as ASCClient } from '@amityco/ts-sdk';
+import { NetworkConfig } from './providers/CustomizationProvider';
+import { v4 as uuid } from 'uuid';
 
 /**
  * Interface representing the session handler for the Amity SDK.
@@ -157,5 +159,24 @@ export class AmityUIKitManager {
    */
   public isClientConnected(): boolean {
     return this.isConnected;
+  }
+
+  public static async syncNetworkConfig(): Promise<NetworkConfig> {
+    try {
+      const response = await AmityUIKitManager.instance?.client?.http.get(
+        '/api/v3/network-settings/uikit',
+        {
+          headers: {
+            'X-No-Cache': uuid(),
+          },
+        },
+      );
+
+      const networkConfig = response?.data;
+
+      return networkConfig;
+    } catch (e) {
+      throw new Error('Network configuration sync failed');
+    }
   }
 }
