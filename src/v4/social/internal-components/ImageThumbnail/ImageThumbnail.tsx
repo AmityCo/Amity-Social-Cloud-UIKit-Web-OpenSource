@@ -100,7 +100,7 @@ export function ImageThumbnail({
             data-images-height={totalImages > 2}
             className={styles.thumbnail__wrapper}
           >
-            {progress[file.id] || !isAmityFile(file.file) ? (
+            {progress[file.id] && !isAmityFile(file.file) ? (
               <>
                 <img
                   src={getImageUrl(file)}

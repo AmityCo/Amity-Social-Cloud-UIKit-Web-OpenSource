@@ -112,7 +112,7 @@ export const VideoThumbnail = ({
             data-video-height={String(totalVideos > 2)}
             className={styles.thumbnail__wrapper}
           >
-            {progress[file.id] || !isAmityFile(file.file) ? (
+            {progress[file.id] && !isAmityFile(file.file) ? (
               <>
                 <img src={file.thumbnailVideo} className={styles.thumbnail} alt="thumbnail-video" />
                 <div className={styles.thumbnail__overlay} />

@@ -36,27 +36,28 @@ export const CommunityCover: React.FC<CommunityCoverProps> = ({
 
   if (isExcluded) return null;
 
-  const backgroundStyle = image
-    ? { '--background-image': `url(${image})` }
-    : { background: 'linear-gradient(188deg, #A5A9B5 6.23%, #898E9E 93.77%)' };
+  const communityCoverStyle = {
+    '--background-image': image
+      ? `url(${image})`
+      : 'linear-gradient(188deg, #A5A9B5 6.23%, #898E9E 93.77%)',
+  };
 
   return (
     <div
-      data-cover-scroll={isSticky}
       data-testid={accessibilityId}
-      className={styles.communityCover__container}
-      style={{ ...themeStyles, ...backgroundStyle }}
+      className={styles.communityCover}
+      style={{ ...themeStyles, ...communityCoverStyle }}
     >
-      <div className={styles.communityCover__topBar}>
+      <div className={styles.communityCover__topBar} data-scroll={isSticky}>
         <div className={styles.communityCover__topBarLeft}>
           <BackButton
             onPress={onBack}
             className={styles.communityCover__backButton}
             defaultClassName={styles.communityCover__backButton__icon}
           />
-          {isSticky && community && (
+          {isSticky && (
             <>
-              {!community.isPublic && <Lock className={styles.communityCover__privateIcon} />}
+              {!community?.isPublic && <Lock className={styles.communityCover__privateIcon} />}
               <Typography.TitleBold className={styles.communityCover__communityName}>
                 {community?.displayName}
               </Typography.TitleBold>
