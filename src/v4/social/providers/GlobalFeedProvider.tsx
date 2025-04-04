@@ -69,7 +69,13 @@ const useGlobalFeed = () => {
       ).filter(isNonNullable);
 
       setQueryToken(newPosts.paging.next || null);
-      setItems((prev) => [...prev, ...filteredPosts]);
+      setItems((prev) => {
+        const currentItemIds = new Set([...prev.map((item) => item.postId)]);
+        const newItems = filteredPosts.filter(
+          (item: Amity.Post) => !currentItemIds.has(item.postId),
+        );
+        return [...prev, ...newItems];
+      });
     } finally {
       setTimeout(() => {
         setIsLoading(false);
@@ -132,7 +138,10 @@ const useGlobalFeed = () => {
   };
 
   const refetch = () => {
-    setItems([]);
+    setItems((prevItems) => {
+      const prependedItemCount = prevItems.length % limit;
+      return prependedItemCount ? prevItems.slice(0, prependedItemCount) : prevItems;
+    });
     setQueryToken(null);
     fetchMore(null);
     reset();
