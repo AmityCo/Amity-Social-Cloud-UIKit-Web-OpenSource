@@ -62,7 +62,7 @@ const InternalComponent = ({
   activeRoute,
   onRouteChange,
   seoOptimizationEnabled = false,
-  syncNetworkConfig = true,
+  syncNetworkConfig = false,
 }: AmityUIKitProviderProps) => {
   const currentUser = useUser(userId);
   const { error } = useNotifications();
