@@ -35,8 +35,14 @@ const RecentChat = ({
   });
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const onClickChannel = async ({ channelId, type }: { channelId: string; type: string }) => {
-    if (type !== 'conversation') {
+  const onClickChannel = async ({
+    channelId,
+    type,
+  }: {
+    channelId: string;
+    type: Amity.ChannelType;
+  }) => {
+    if (!['community', 'conversation'].includes(type)) {
       await ChannelRepository.joinChannel(channelId);
     }
     await SubChannelRepository.startMessageReceiptSync(channelId);
@@ -71,7 +77,7 @@ const RecentChat = ({
               channels.map((channel) => (
                 <ChatItem
                   key={channel.channelId}
-                  channelId={channel.channelId}
+                  channel={channel}
                   isSelected={selectedChannelId === channel.channelId}
                   onSelect={(data) => {
                     onClickChannel(data);
