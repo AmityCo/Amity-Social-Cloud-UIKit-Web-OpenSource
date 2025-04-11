@@ -356,7 +356,6 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           {drawerRef.current
             ? ReactDOM.createPortal(
                 <Drawer.Root
-                  noBodyStyles
                   modal={false}
                   open
                   activeSnapPoint={snap}
