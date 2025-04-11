@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import MessageComponent from '~/chat/components/Message';
@@ -6,7 +6,6 @@ import MessageComponent from '~/chat/components/Message';
 import { InfiniteScrollContainer, MessageListContainer } from './styles';
 import useSDK from '~/core/hooks/useSDK';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
-import useChannelSubscription from '~/social/hooks/useChannelSubscription';
 import useUser from '~/core/hooks/useUser';
 import useImage from '~/core/hooks/useImage';
 import useMessagesCollection from '~/chat/hooks/collections/useMessagesCollection';
@@ -52,9 +51,11 @@ const MessageList = ({ channelId }: MessageListProps) => {
     limit: 20,
   });
 
-  useChannelSubscription({
-    channelId,
-  });
+  useEffect(() => {
+    if (!isLoading && messages.length > 0) {
+      messages[0].markRead();
+    }
+  }, [isLoading, messages]);
 
   return (
     <InfiniteScrollContainer ref={containerRef}>

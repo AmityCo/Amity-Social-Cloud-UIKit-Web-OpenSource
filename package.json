@@ -1,6 +1,6 @@
 {
   "name": "@amityco/ui-kit",
-  "version": "3.12.0",
+  "version": "3.13.0",
   "engines": {
     "node": ">=16",
     "pnpm": ">=8"
@@ -39,12 +39,12 @@
     "tsc": "tsc"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "^7.0.0",
+    "@amityco/ts-sdk": "^7.2.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "^7.0.0",
+    "@amityco/ts-sdk": "^7.2.0",
     "@eslint/js": "^9.4.0",
     "@storybook/addon-a11y": "^7.6.7",
     "@storybook/addon-actions": "^7.6.7",
