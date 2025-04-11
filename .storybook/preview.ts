@@ -8,7 +8,7 @@ const preview: Preview = {
     userId: undefined,
     displayName: undefined,
     submit: false,
-    syncNetworkConfig: true,
+    syncNetworkConfig: false,
   },
   argTypes: {
     apiKey: { control: { type: 'text' } },

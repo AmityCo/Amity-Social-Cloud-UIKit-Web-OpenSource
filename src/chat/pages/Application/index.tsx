@@ -72,18 +72,6 @@ const ChatApplication = ({
   };
 
   useEffect(() => {
-    async function startUnreadSync() {
-      return ASCClient.startUnreadSync();
-    }
-
-    startUnreadSync();
-
-    return () => {
-      ASCClient.stopUnreadSync();
-    };
-  }, []);
-
-  useEffect(() => {
     if (!defaultChannelId) return;
     handleChannelSelect({ channelId: defaultChannelId, type: 'standard' });
   }, [defaultChannelId]);

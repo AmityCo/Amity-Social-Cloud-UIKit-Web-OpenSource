@@ -26,21 +26,14 @@ function getNormalizedUnreadCount(channelUnreadCount: number) {
 }
 
 interface ChatItemProps {
-  channelId: string;
+  channel: Amity.Channel;
   isSelected: boolean;
-  onSelect: ({ channelId, type }: { channelId: string; type: string }) => void;
+  onSelect: ({ channelId, type }: { channelId: string; type: Amity.ChannelType }) => void;
 }
 
-const ChatItem = ({ channelId, isSelected, onSelect }: ChatItemProps) => {
-  const channel = useChannel(channelId);
+const ChatItem = ({ channel, isSelected, onSelect }: ChatItemProps) => {
   const { chatName, chatAvatar } = useChatInfo({ channel });
-
-  const normalizedUnreadCount = getNormalizedUnreadCount(channel?.subChannelsUnreadCount || 0);
-
-  useChannelSubscription({
-    channelId: channel?.channelId,
-    shouldSubscribe: () => !!channel?.channelId,
-  });
+  const normalizedUnreadCount = getNormalizedUnreadCount(channel?.unreadCount || 0);
 
   return (
     <ChatItemContainer
