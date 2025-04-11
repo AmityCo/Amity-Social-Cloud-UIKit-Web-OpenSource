@@ -323,7 +323,6 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           {drawerRef.current
             ? ReactDOM.createPortal(
                 <Drawer.Root
-                  noBodyStyles
                   modal={false}
                   open
                   activeSnapPoint={snap}
