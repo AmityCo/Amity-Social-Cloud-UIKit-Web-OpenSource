@@ -52,7 +52,10 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { hasStoryPermission } = useStoryPermission(communityId);
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
-  const { community } = useCommunity({ communityId, shouldCall: !!communityId });
+  const { community, isLoading, refresh } = useCommunity({
+    communityId,
+    shouldCall: !!communityId,
+  });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { onBack } = useNavigation();
@@ -107,6 +110,10 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   );
 
   useEffect(() => {
+    refresh();
+  }, []);
+
+  useEffect(() => {
     if (file) {
       AmityCommunityProfilePageBehavior?.goToStoryCreationPage?.({
         targetId: communityId,
@@ -137,9 +144,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     };
   }, []);
 
-  return community?.isDeleted ? (
-    <FailedToShow pageId={pageId} onBack={onBack} />
-  ) : (
+  return (
     <PullToRefresh
       ref={containerRef}
       style={themeStyles}
@@ -147,7 +152,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       onTouchEndCallback={handleRefresh}
       className={styles.communityProfilePage__container}
     >
-      {community ? (
+      {isLoading && <CommunityProfileSkeleton />}
+      {!isLoading && community?.isDeleted && <FailedToShow pageId={pageId} onBack={onBack} />}
+      {!isLoading && community && !community.isDeleted && (
         <>
           <CommunityHeader pageId={pageId} community={community} isSticky={isSticky} page={page} />
           <CommunityProfileTab
@@ -157,10 +164,8 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
             onTabChange={handleTabChange}
           />
         </>
-      ) : (
-        <CommunityProfileSkeleton />
       )}
-      {activeTab === 'community_feed' && checkPostPermission() && (
+      {activeTab === 'community_feed' && checkPostPermission() && !community?.isDeleted && (
         <div className={styles.communityProfilePage__poseComposer}>
           <PostComposer
             pageId={pageId}
@@ -201,8 +206,8 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
           />
         </div>
       )}
-      <div key={refreshKey}>{renderTabContent()}</div>
-      {community?.isJoined && checkPostPermission() && (
+      {!community?.isDeleted && <div key={refreshKey}>{renderTabContent()}</div>}
+      {community?.isJoined && !community?.isDeleted && checkPostPermission() && (
         <div className={styles.communityProfilePage__createPostButton}>
           <CommunityCreatePostButton
             pageId={pageId}

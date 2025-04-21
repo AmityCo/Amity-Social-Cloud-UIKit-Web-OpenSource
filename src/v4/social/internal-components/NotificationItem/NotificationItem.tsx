@@ -44,7 +44,10 @@ export const NotificationItem = ({
       });
     } else {
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
-        postId: item.referenceId!,
+        postId:
+          item.trayItemCategory === 'reaction_on_post'
+            ? item.actionReferenceId!
+            : item.referenceId!,
         commentId: item.actionReferenceId || undefined,
         parentId: item.parentId || undefined,
         hideTarget: item.targetType === 'user' ? true : false,

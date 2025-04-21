@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton, EmptyNotification, NoInternetConnection, Title } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -22,6 +22,8 @@ interface NotificationTrayPageProps {
 
 export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => {
   const pageId = 'notification_tray_page';
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
@@ -54,9 +56,33 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
     refresh();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        setIsScrolled(containerRef.current.scrollTop > 0);
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
   return (
-    <div data-testid={accessibilityId} style={themeStyles} className={styles.notificationTrayPage}>
-      <div className={styles.notificationTrayPage__topBar}>
+    <div
+      data-testid={accessibilityId}
+      style={themeStyles}
+      className={styles.notificationTrayPage}
+      ref={containerRef}
+    >
+      <div data-scrolled={isScrolled} className={styles.notificationTrayPage__topBar}>
         {!isDesktop && (
           <BackButton
             pageId={pageId}

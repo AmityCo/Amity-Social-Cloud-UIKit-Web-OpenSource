@@ -3,6 +3,7 @@
   height: 100%;
   overflow-y: scroll;
   background-color: var(--asc-color-background-default);
+  scroll-behavior: smooth;
 }
 
 .notificationTrayPage__topBar {
@@ -14,6 +15,12 @@
   top: 0;
   z-index: 1;
   background-color: var(--asc-color-background-default);
+  transition: border-bottom 0.2s ease;
+  border-bottom: 0 solid var(--asc-color-base-shade4);
+}
+
+.notificationTrayPage__topBar[data-scrolled='true'] {
+  border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 
 .notificationTrayPage__closeButton {
