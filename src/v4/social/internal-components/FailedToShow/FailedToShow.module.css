@@ -1,0 +1,36 @@
+.failedToShow {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--asc-color-background-default);
+}
+
+.failedToShow__icon {
+  width: 3.7rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  color: var(--asc-color-base-shade4);
+}
+
+.failedToShow__title {
+  color: var(--asc-color-base-shade3);
+  margin-top: 1rem;
+}
+
+.failedToShow__desc {
+  color: var(--asc-color-base-shade2);
+  margin-top: 0.5rem;
+}
+
+.failedToShow__button {
+  margin-top: 1.5rem;
+}
+
+@media (width >= 48em) {
+  .failedToShow {
+    border-radius: 0.5rem;
+  }
+}

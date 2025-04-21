@@ -14,7 +14,7 @@ import Like from '~/v4/social/elements/ReactionButton/Like';
 import { Timestamp } from '~/v4/social/elements/Timestamp/Timestamp';
 import { MinusCircleIcon } from '~/v4/social/icons';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOptions';
 import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInput';

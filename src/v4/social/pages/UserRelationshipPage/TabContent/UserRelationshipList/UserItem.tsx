@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styles from './UserItem.module.css';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { Popover } from '~/v4/core/components/AriaPopover';
@@ -26,7 +26,7 @@ export const UserItem: FC<UserItemProps> = ({ userId, pageId = '*', componentId 
   return (
     <div className={styles.userItem}>
       <Button
-        onPress={() => AmityUserRelationshipPageBehavior.goToUserProfilePage?.({ userId })}
+        onPress={() => AmityUserRelationshipPageBehavior?.goToUserProfilePage?.({ userId })}
         className={styles.userItem__buttonWrap}
       >
         <UserAvatar

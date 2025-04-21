@@ -12,3 +12,8 @@ export { ShareStoryButton } from './ShareStoryButton';
 export { SpeakerButton } from './SpeakerButton';
 export { HyperLink } from './HyperLink';
 export { CreateNewStoryButton } from './CreateNewStoryButton';
+export { NotificationTrayButton } from './NotificationTrayButton';
+export { Title } from './Title';
+export { EmptyNotification } from './EmptyNotification';
+export { NoInternetConnection } from './NoInternetConnection';
+export { UserAvatar } from './UserAvatar';

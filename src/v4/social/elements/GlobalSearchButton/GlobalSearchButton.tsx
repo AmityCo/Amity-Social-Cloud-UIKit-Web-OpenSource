@@ -59,14 +59,14 @@ export function GlobalSearchButton({
         imgIcon={() => (
           <img
             style={themeStyles}
-            src={config.icon}
+            src={config.image}
             alt={uiReference}
             className={clsx(styles.globalSearchButton__icon, imgClassName)}
             data-testid={accessibilityId}
           />
         )}
-        defaultIconName={defaultConfig.icon}
-        configIconName={config.icon}
+        defaultIconName={defaultConfig.image}
+        configIconName={config.image}
       />
     </Button>
   );

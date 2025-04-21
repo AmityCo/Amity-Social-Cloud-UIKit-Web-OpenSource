@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './CommunityMemberItem.module.css';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Typography } from '~/v4/core/components';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { Button } from '~/v4/core/natives/Button/Button';

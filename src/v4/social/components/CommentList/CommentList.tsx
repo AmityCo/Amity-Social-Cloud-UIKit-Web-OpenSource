@@ -25,6 +25,8 @@ type CommentListProps = {
   shouldAllowInteraction?: boolean;
   commentCount?: number;
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
+  highlightedCommentId?: string;
+  parentId?: string;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -42,6 +44,8 @@ export const CommentList = ({
   shouldAllowInteraction = true,
   commentCount = 0,
   renderReplyComment,
+  highlightedCommentId,
+  parentId,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -53,15 +57,17 @@ export const CommentList = ({
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const highlightedCommentRef = useRef<HTMLDivElement>(null);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(false);
 
   const { items, refresh, loadMore, hasMore, isLoading } = usePaginator({
     fetcher: CommentRepository.getComments,
     params: {
       referenceId,
       referenceType,
-      limit,
+      limit: highlightedCommentId ? 20 : limit,
       includeDeleted,
     },
     placement: 'comment' as Amity.AdPlacement,
@@ -69,6 +75,23 @@ export const CommentList = ({
     getItemId: (item) => item.commentId,
     shouldCall: true,
   });
+
+  // Find highlighted comment from items if highlightedCommentId is provided
+  const highlightedComment = highlightedCommentId
+    ? (items.find(
+        (item) =>
+          !isAmityAd(item) &&
+          (item as Amity.Comment).commentId === (parentId ? parentId : highlightedCommentId),
+      ) as Amity.Comment | undefined)
+    : undefined;
+
+  // Filter out highlighted comment from items to avoid duplication
+  const filteredItems = items.filter(
+    (item) =>
+      isAmityAd(item) ||
+      !highlightedCommentId ||
+      (item as Amity.Comment).commentId !== highlightedCommentId,
+  );
 
   useIntersectionObserver({
     node: intersectionNode,
@@ -85,6 +108,24 @@ export const CommentList = ({
   useEffect(() => {
     refresh();
   }, []);
+
+  // Effect to scroll to highlighted comment with animation
+  useEffect(() => {
+    if (highlightedComment && highlightedCommentRef.current) {
+      // Add small delay to ensure the component is fully rendered
+      setTimeout(() => {
+        highlightedCommentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setIsHighlighted(true);
+
+        // Reset the animation after it completes
+        const timer = setTimeout(() => {
+          setIsHighlighted(false);
+        }, 1000); // Animation duration
+
+        return () => clearTimeout(timer);
+      }, 300);
+    }
+  }, [highlightedComment, highlightedCommentId]);
 
   if (!online) {
     return (
@@ -110,7 +151,28 @@ export const CommentList = ({
       ref={containerRef}
       data-testid={accessibilityId}
     >
-      {items.map((item) => {
+      {/* Render highlighted comment at the top if it exists */}
+      {highlightedComment && (
+        <div
+          className={`${styles.commentList__highlightedComment} ${isHighlighted ? styles.commentList__bounceAnimation : ''}`}
+          ref={highlightedCommentRef}
+        >
+          <Comment
+            pageId={pageId}
+            comment={highlightedComment}
+            onClickReply={(comment) => onClickReply?.(comment)}
+            componentId={componentId}
+            community={community}
+            shouldAllowInteraction={shouldAllowInteraction}
+            highlightedCommentId={highlightedCommentId}
+            parentId={parentId}
+          />
+          {renderReplyComment?.(highlightedComment)}
+        </div>
+      )}
+
+      {/* Render regular comments without the highlighted one */}
+      {filteredItems.map((item) => {
         return isAmityAd(item) ? (
           <CommentAd key={item.adId} ad={item} />
         ) : (
@@ -131,7 +193,7 @@ export const CommentList = ({
       {isDesktop &&
         hasMore &&
         !expanded &&
-        items
+        filteredItems
           .filter((item) => !isAmityAd(item))
           .filter((item) => !(item as Amity.Comment).isDeleted).length < commentCount && (
           <Button

@@ -10,7 +10,8 @@
 }
 
 .postComposer__avatar {
-  height: 2.5rem;
+  min-height: 2.5rem;
+  max-height: 2.5rem;
   min-width: 2.5rem;
   max-width: 2.5rem;
   border-radius: 50%;

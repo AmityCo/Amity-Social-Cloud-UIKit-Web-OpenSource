@@ -8,7 +8,7 @@ import { Search } from '~/v4/icons/Search';
 import { Input } from 'react-aria-components';
 import { Button } from '~/v4/core/natives/Button';
 import { Clear } from '~/v4/icons/Clear';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CheckboxGroup } from '~/v4/core/components/AriaCheckboxGroup';
 import useAllUsersCollection from '~/v4/core/hooks/collections/useAllUsersCollection';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';

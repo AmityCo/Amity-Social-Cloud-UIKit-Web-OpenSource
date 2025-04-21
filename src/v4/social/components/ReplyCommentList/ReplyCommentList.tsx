@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { CommentSkeleton } from '~/v4/social/components/Comment/CommentSkeleton';
 import ReplyCommentIcon from '~/v4/icons/ReplyComment';
@@ -13,6 +13,7 @@ interface ReplyCommentProps {
   referenceId: string;
   referenceType: string;
   parentId: string;
+  highlightedCommentId?: string;
 }
 
 export const ReplyCommentList = ({
@@ -22,29 +23,69 @@ export const ReplyCommentList = ({
   referenceType,
   community,
   parentId,
+  highlightedCommentId,
 }: ReplyCommentProps) => {
+  const [showFilteredComments, setShowFilteredComments] = useState(!highlightedCommentId);
   const { comments, hasMore, isLoading, loadMore } = useCommentsCollection({
     referenceId,
     referenceType: referenceType as Amity.CommentReferenceType,
     parentId,
-    limit: 10,
+    limit: 20,
     shouldCall: true,
     includeDeleted: true,
   });
 
+  // Filter out the highlighted comment from the regular comments list
+  const filteredComments = comments.filter(
+    (comment) => !highlightedCommentId || comment.commentId !== highlightedCommentId,
+  );
+
+  const highlightedComment = comments.filter(
+    (comment) => highlightedCommentId == comment.commentId,
+  );
+
   const handleClickLoadMore = () => {
-    loadMore();
+    if (highlightedCommentId && !showFilteredComments) {
+      // First show the filtered comments
+      setShowFilteredComments(true);
+      // If there are more comments to load, load them as well
+      if (hasMore) {
+        loadMore();
+      }
+    } else {
+      loadMore();
+    }
   };
 
   return (
     <div className={styles.replyCommentList}>
       {isLoading && <CommentSkeleton numberOfSkeletons={3} />}
-      {comments.map((comment) => {
-        return (
-          <ReplyComment pageId={pageId} community={community} comment={comment as Amity.Comment} />
-        );
-      })}
-      {hasMore && (
+
+      {/* Display highlighted comment at the top if it exists */}
+      {highlightedComment.length > 0 &&
+        highlightedComment.map((comment) => (
+          <ReplyComment
+            key={comment.commentId}
+            pageId={pageId}
+            community={community}
+            comment={comment as Amity.Comment}
+          />
+        ))}
+
+      {/* Display other comments only if showFilteredComments is true */}
+      {showFilteredComments &&
+        filteredComments.map((comment) => (
+          <ReplyComment
+            key={comment.commentId}
+            pageId={pageId}
+            community={community}
+            comment={comment as Amity.Comment}
+          />
+        ))}
+
+      {/* Show "View more replies" if there are either more comments to load or filtered comments to show */}
+      {(hasMore ||
+        (highlightedCommentId && filteredComments.length > 0 && !showFilteredComments)) && (
         <div
           className={styles.postReplyCommentList__viewReply_button}
           onClick={handleClickLoadMore}

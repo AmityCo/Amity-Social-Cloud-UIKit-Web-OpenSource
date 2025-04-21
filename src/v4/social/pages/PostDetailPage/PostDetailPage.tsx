@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
@@ -23,12 +23,21 @@ interface PostDetailPageProps {
   id: string;
   hideTarget?: boolean;
   category?: AmityPostCategory;
+  commentId?: string;
+  parentId?: string;
 }
 
-export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps) {
+export function PostDetailPage({
+  id,
+  hideTarget,
+  category,
+  commentId,
+  parentId,
+}: PostDetailPageProps) {
   const pageId = 'post_detail_page';
 
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
+  const commentListRef = useRef<HTMLDivElement>(null);
 
   const { isDesktop } = useResponsive();
   const { onBack } = useNavigation();
@@ -42,6 +51,36 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
   useEffect(() => {
     refresh();
   }, []);
+
+  // Add this useEffect to handle scrolling to comment when commentId is provided
+  useEffect(() => {
+    if (commentId && commentListRef.current) {
+      // Wait for post content to load and DOM to fully update
+      const outerTimeout = setTimeout(() => {
+        if (commentListRef.current) {
+          // First make sure the container is scrolled to the top
+          const container = document.querySelector(`.${styles.postDetailPage__container}`);
+          if (container) {
+            container.scrollTo({
+              top: 0,
+              behavior: 'auto',
+            });
+          }
+
+          // Then scroll to the comment with a small delay to ensure proper positioning
+          const innerTimeout = setTimeout(() => {
+            commentListRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 150);
+
+          // Clear inner timeout when we're done scrolling or if the component unmounts
+          return () => clearTimeout(innerTimeout);
+        }
+      }, 300);
+
+      // Clear outer timeout if the component unmounts
+      return () => clearTimeout(outerTimeout);
+    }
+  }, [commentId, post, commentListRef.current]);
 
   const handleReplyClick = useCallback(
     (comment: Amity.Comment) =>
@@ -57,64 +96,6 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
 
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
-      <div className={styles.postDetailPage__container}>
-        <div>
-          {isPostLoading ? (
-            <PostContentSkeleton pageId={pageId} />
-          ) : post ? (
-            <PostContent
-              pageId={pageId}
-              post={post}
-              className={styles.postDetailPage__postContent}
-              category={category ?? AmityPostCategory.GENERAL}
-              style={AmityPostContentComponentStyle.DETAIL}
-              hideTarget={hideTarget}
-              disabledContent={isNotJoinedCommunity}
-            />
-          ) : null}
-        </div>
-        <div className={styles.postDetailPage__comments__divider} data-is-loading={isPostLoading} />
-        {post && isDesktop && !isNotJoinedCommunity && (
-          <CommentComposer
-            pageId={pageId}
-            referenceId={post.postId}
-            referenceType={'post'}
-            onCancelReply={() => setReplyComment(undefined)}
-            community={community}
-            containerClassName={
-              post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
-            }
-          />
-        )}
-        {post?.commentsCount > 0 && (
-          <div className={styles.postDetailPage__comments}>
-            {post && (
-              <CommentList
-                pageId={pageId}
-                referenceId={post.postId}
-                referenceType="post"
-                onClickReply={handleReplyClick}
-                community={community}
-                commentCount={post.commentsCount}
-                renderReplyComment={(comment) => {
-                  if (replyComment && comment.commentId === replyComment.commentId && isDesktop) {
-                    return (
-                      <CommentComposer
-                        pageId={pageId}
-                        referenceId={post.postId}
-                        referenceType={'post'}
-                        replyTo={replyComment}
-                        onCancelReply={() => setReplyComment(undefined)}
-                        community={community}
-                      />
-                    );
-                  }
-                }}
-              />
-            )}
-          </div>
-        )}
-      </div>
       <div className={styles.postDetailPage__topBar}>
         <BackButton
           pageId={pageId}
@@ -160,6 +141,68 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
           )}
         </Popover>
       </div>
+
+      <div className={styles.postDetailPage__container}>
+        <div>
+          {isPostLoading ? (
+            <PostContentSkeleton pageId={pageId} />
+          ) : post ? (
+            <PostContent
+              pageId={pageId}
+              post={post}
+              className={styles.postDetailPage__postContent}
+              category={category ?? AmityPostCategory.GENERAL}
+              style={AmityPostContentComponentStyle.DETAIL}
+              hideTarget={hideTarget}
+              disabledContent={isNotJoinedCommunity}
+            />
+          ) : null}
+        </div>
+        <div className={styles.postDetailPage__comments__divider} data-is-loading={isPostLoading} />
+        {post && isDesktop && !isNotJoinedCommunity && (
+          <CommentComposer
+            pageId={pageId}
+            referenceId={post.postId}
+            referenceType={'post'}
+            onCancelReply={() => setReplyComment(undefined)}
+            community={community}
+            containerClassName={
+              post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
+            }
+          />
+        )}
+        {post?.commentsCount > 0 && (
+          <div ref={commentListRef} className={styles.postDetailPage__comments}>
+            {post && (
+              <CommentList
+                pageId={pageId}
+                referenceId={post.postId}
+                referenceType="post"
+                onClickReply={handleReplyClick}
+                community={community}
+                commentCount={post.commentsCount}
+                highlightedCommentId={commentId}
+                parentId={parentId}
+                renderReplyComment={(comment) => {
+                  if (replyComment && comment.commentId === replyComment.commentId && isDesktop) {
+                    return (
+                      <CommentComposer
+                        pageId={pageId}
+                        referenceId={post.postId}
+                        referenceType={'post'}
+                        replyTo={replyComment}
+                        onCancelReply={() => setReplyComment(undefined)}
+                        community={community}
+                      />
+                    );
+                  }
+                }}
+              />
+            )}
+          </div>
+        )}
+      </div>
+
       {post?.targetType === 'community' && !community?.isJoined ? (
         <div>
           <div className={styles.postDetailPage__divider} />

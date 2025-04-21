@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './UserProfileHeader.module.css';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { UserFollowing } from '~/v4/social/elements/UserFollowing/UserFollowing';
 import { UserFollower } from '~/v4/social/elements/UserFollower/UserFollower';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';

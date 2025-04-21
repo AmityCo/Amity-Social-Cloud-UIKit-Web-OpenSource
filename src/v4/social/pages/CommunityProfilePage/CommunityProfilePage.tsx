@@ -28,6 +28,8 @@ import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 interface CommunityProfileProps {
   communityId: string;
@@ -53,6 +55,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { community } = useCommunity({ communityId, shouldCall: !!communityId });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
+  const { onBack } = useNavigation();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -134,7 +137,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     };
   }, []);
 
-  return (
+  return community?.isDeleted ? (
+    <FailedToShow pageId={pageId} onBack={onBack} />
+  ) : (
     <PullToRefresh
       ref={containerRef}
       style={themeStyles}

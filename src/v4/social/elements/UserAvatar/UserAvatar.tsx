@@ -19,6 +19,7 @@ type UserAvatarProps = {
   imageContainerClassName?: string;
   textPlaceholderClassName?: string;
   shouldRedirectToUserProfile?: boolean;
+  onPressAvatar?: () => void;
 };
 
 export function UserAvatar({
@@ -30,6 +31,7 @@ export function UserAvatar({
   isShowModeratorBadge = false,
   textPlaceholderClassName = '',
   shouldRedirectToUserProfile = false,
+  onPressAvatar,
 }: UserAvatarProps) {
   const elementId = 'user_avatar';
 
@@ -44,19 +46,23 @@ export function UserAvatar({
 
   if (isLoading) return <div className={clsx(styles.userAvatar__skeleton, className)} />;
 
+  const handleAvatarClick = () => {
+    if (!userId) return;
+    if (userId && shouldRedirectToUserProfile) {
+      closePopup();
+      onClickUser(userId);
+    } else if (onPressAvatar && !shouldRedirectToUserProfile) {
+      onPressAvatar();
+    } else {
+      onClickUser(userId);
+    }
+  };
+
   if (!user || !userId || !userImage) {
     return (
       <Button
         className={clsx(styles.userAvatar__placeholder, className)}
-        onPress={() => {
-          if (!userId) return;
-          if (userId && shouldRedirectToUserProfile) {
-            closePopup();
-            onClickUser(userId);
-          } else {
-            onClickUser(userId);
-          }
-        }}
+        onPress={() => handleAvatarClick()}
       >
         <Typography.TitleBold
           className={clsx(styles.userAvatar__placeholder__text, textPlaceholderClassName)}
@@ -70,15 +76,7 @@ export function UserAvatar({
 
   return (
     <Button
-      onPress={() => {
-        if (!userId) return;
-        if (userId && shouldRedirectToUserProfile) {
-          closePopup();
-          onClickUser(userId);
-        } else {
-          onClickUser(userId);
-        }
-      }}
+      onPress={() => handleAvatarClick()}
       className={clsx(styles.userAvatar__container, imageContainerClassName)}
     >
       <img

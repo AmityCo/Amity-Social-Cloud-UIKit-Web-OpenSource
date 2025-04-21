@@ -8,7 +8,7 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Title } from '~/v4/social/elements/Title/Title';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { UpdateUserProfileButton } from '~/v4/social/elements/UpdateUserProfileButton';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useMutation } from '@tanstack/react-query';
 import { FileRepository, UserRepository } from '@amityco/ts-sdk';
