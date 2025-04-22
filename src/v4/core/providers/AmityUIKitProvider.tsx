@@ -122,8 +122,8 @@ const InternalComponent = ({
 
         // Register the device and get the client instance
         await AmityUIKitManager.registerDevice(
-          userId,
-          displayName || userId,
+          userId.toString(),
+          displayName?.toString() || userId.toString(),
           {
             sessionWillRenewAccessToken: (renewal) => {
               // Handle access token renewal
