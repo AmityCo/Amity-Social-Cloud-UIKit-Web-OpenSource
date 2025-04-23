@@ -1,6 +1,6 @@
 /* begin_sample_code
-  gistId: d70b8b63bb26958f88ec6eb5857f0623
-  gistUrl: https://gist.github.com/amythee/d70b8b63bb26958f88ec6eb5857f0623
+  gistId: abd8cfcd6c0c3b899d3ced73c50428bc
+  gistUrl: https://gist.github.com/amythee/abd8cfcd6c0c3b899d3ced73c50428bc
   ascPage: https://docs.social.plus/social-plus-uikit/uikit-v4/social/discover-and-search/social-home-page
   filename: SocialHomePage.tsx
   description: Social Home Page
@@ -17,6 +17,13 @@ const SampleAmitySocialHomePage = () => {
       userId="userId"
       displayName="displayName"
       configs={config} //put your customized config json object
+      pageBehavior={{
+        AmitySocialHomePageBehavior: {
+          goToNotificationTrayPage: () => {
+            console.log('goToNotificationTrayPage');
+          },
+        },
+      }}
     >
       <AmitySocialHomePage />
     </AmityUiKitProvider>
