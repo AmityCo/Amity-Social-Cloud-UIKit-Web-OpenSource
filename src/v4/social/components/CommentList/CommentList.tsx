@@ -90,7 +90,7 @@ export const CommentList = ({
     (item) =>
       isAmityAd(item) ||
       !highlightedCommentId ||
-      (item as Amity.Comment).commentId !== highlightedCommentId,
+      (item as Amity.Comment).commentId !== (parentId ? parentId : highlightedCommentId),
   );
 
   useIntersectionObserver({
