@@ -45,7 +45,9 @@ export const NotificationItem = ({
     } else {
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
         postId:
-          item.trayItemCategory === 'reaction_on_post'
+          item.trayItemCategory === 'reaction_on_post' ||
+          item.trayItemCategory === 'mention_in_post' ||
+          item.trayItemCategory === 'mention_in_poll'
             ? item.actionReferenceId!
             : item.referenceId!,
         commentId: item.actionReferenceId || undefined,
@@ -61,7 +63,7 @@ export const NotificationItem = ({
       data-testid={`${accessibilityId}_notification_item`}
       onPress={() => onClickItem()}
       className={styles.notificationItem__button}
-      data-isSeen={item.isSeen}
+      data-isseen={item.isSeen}
     >
       <div className={styles.notificationItem}>
         <div className={styles.notificationItem__userInfo}>

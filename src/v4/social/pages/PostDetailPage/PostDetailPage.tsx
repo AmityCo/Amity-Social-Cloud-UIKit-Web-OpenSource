@@ -18,6 +18,7 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { ErrorPostDetail } from '~/v4/social/internal-components/ErrorPostDetail/ErrorPostDetail';
+import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 
 interface PostDetailPageProps {
   id: string;
@@ -42,7 +43,7 @@ export function PostDetailPage({
   const { isDesktop } = useResponsive();
   const { onBack } = useNavigation();
   const { themeStyles } = useAmityPage({ pageId });
-  const { post, refresh, isLoading: isPostLoading } = usePost(id);
+  const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { community } = useCommunity({
     communityId: post?.targetType === 'community' ? post.targetId : null,
@@ -50,6 +51,14 @@ export function PostDetailPage({
 
   useEffect(() => {
     refresh();
+    // This refresh will not work for desktop because the postId is not available yet when the page is mounted
+  }, []);
+
+  useEffect(() => {
+    if (post?.postId !== id) {
+      // When postId is undefined because the post is deleted, we need to refresh the page to get the latest data
+      refresh();
+    }
   }, []);
 
   // Add this useEffect to handle scrolling to comment when commentId is provided
@@ -92,7 +101,8 @@ export function PostDetailPage({
 
   const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
 
-  if (post?.isDeleted) return <ErrorPostDetail />;
+  if (error || (post === null && !isPostLoading) || community?.isDeleted || post?.isDeleted)
+    return <FailedToShow pageId={pageId} onBack={onBack} />;
 
   return (
     <div className={styles.postDetailPage} style={themeStyles}>

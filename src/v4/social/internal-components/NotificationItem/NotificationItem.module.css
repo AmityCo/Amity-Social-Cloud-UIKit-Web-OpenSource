@@ -3,7 +3,7 @@
   background-color: rgb(from var(--asc-color-primary-shade3) r g b / 30%);
 }
 
-.notificationItem__button[data-isSeen='true'] {
+.notificationItem__button[data-isseen='true'] {
   background-color: var(--asc-color-background-default);
 }
 
