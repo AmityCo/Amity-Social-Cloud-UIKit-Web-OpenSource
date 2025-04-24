@@ -77,7 +77,7 @@ export const NotificationItem = ({
             {highlightedText(item.templatedText, item.text)}
           </Typography.Body>
         </div>
-        <Timestamp timestamp={item.lastOccurredAt} />
+        <Timestamp pageId={pageId} timestamp={item.lastOccurredAt} />
       </div>
     </Button>
   );
