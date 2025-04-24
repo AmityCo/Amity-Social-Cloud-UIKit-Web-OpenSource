@@ -50,7 +50,10 @@ export const NotificationItem = ({
           item.trayItemCategory === 'mention_in_poll'
             ? item.actionReferenceId!
             : item.referenceId!,
-        commentId: item.actionReferenceId || undefined,
+        commentId:
+          item.trayItemCategory === 'reaction_on_post'
+            ? undefined
+            : item.actionReferenceId || undefined,
         parentId: item.parentId || undefined,
         hideTarget: item.targetType === 'user' ? true : false,
       });

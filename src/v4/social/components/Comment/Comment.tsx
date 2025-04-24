@@ -193,6 +193,14 @@ export const Comment = ({
 
   const isHighlightedComment = highlightedCommentId === comment.commentId && !parentId;
 
+  const isShowViewMoreReplies =
+    replyAmount > 0 &&
+    !hasClickLoadMore &&
+    (!isHighlightedReply || (isHighlightedComment && !hasClickLoadMore));
+
+  const isShowReplyList =
+    (hasClickLoadMore && replyAmount > 0 && !parentId) || (isHighlightedReply && replyAmount > 0);
+
   return (
     <div style={themeStyles} data-testid={accessibilityId}>
       {comment.isDeleted ? (
@@ -377,34 +385,30 @@ export const Comment = ({
               )}
             </div>
 
-            {replyAmount > 0 &&
-              !hasClickLoadMore &&
-              !isHighlightedReply &&
-              !isHighlightedComment && (
-                <div
-                  data-testid={`${pageId}/${componentId}/view_reply_button`}
-                  className={styles.postComment__viewReply_button}
-                  onClick={() => setHasClickLoadMore(true)}
-                >
-                  <ReplyComment className={styles.postComment__viewReply_icon} />
-                  <Typography.CaptionBold className={styles.postComment__viewReply_text}>
-                    View {replyAmount} {replyAmount > 1 ? 'replies' : 'reply'}
-                  </Typography.CaptionBold>
-                </div>
-              )}
+            {isShowViewMoreReplies && (
+              <div
+                data-testid={`${pageId}/${componentId}/view_reply_button`}
+                className={styles.postComment__viewReply_button}
+                onClick={() => setHasClickLoadMore(true)}
+              >
+                <ReplyComment className={styles.postComment__viewReply_icon} />
+                <Typography.CaptionBold className={styles.postComment__viewReply_text}>
+                  View {replyAmount} {replyAmount > 1 ? 'replies' : 'reply'}
+                </Typography.CaptionBold>
+              </div>
+            )}
 
-            {((hasClickLoadMore && !parentId) || isHighlightedComment || isHighlightedReply) &&
-              (isHighlightedReply || replyAmount > 0) && (
-                <ReplyCommentList
-                  pageId={pageId}
-                  componentId={componentId}
-                  community={community ?? undefined}
-                  referenceId={comment.referenceId}
-                  referenceType={comment.referenceType}
-                  parentId={comment.commentId}
-                  highlightedCommentId={isHighlightedReply ? highlightedCommentId : undefined}
-                />
-              )}
+            {isShowReplyList && (
+              <ReplyCommentList
+                pageId={pageId}
+                componentId={componentId}
+                community={community ?? undefined}
+                referenceId={comment.referenceId}
+                referenceType={comment.referenceType}
+                parentId={comment.commentId}
+                highlightedCommentId={isHighlightedReply ? highlightedCommentId : undefined}
+              />
+            )}
           </div>
         </div>
       )}
