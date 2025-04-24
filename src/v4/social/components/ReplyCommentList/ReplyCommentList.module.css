@@ -1,5 +1,5 @@
 .replyCommentList {
-  gap: 1rem;
+  gap: 0.5rem;
   display: grid;
   margin-top: 1rem;
 }
