@@ -9,9 +9,10 @@ import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 
 interface CommunityInfoProps {
   communityId: string;
+  goToPendingTab?: () => void;
 }
 
-const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
+const CommunityInfo = ({ communityId, goToPendingTab }: CommunityInfoProps) => {
   const {
     community,
     communityCategories,
@@ -45,6 +46,7 @@ const CommunityInfo = ({ communityId }: CommunityInfoProps) => {
   return (
     <UICommunityInfo
       communityId={communityId}
+      goToPendingTab={goToPendingTab}
       communityCategories={categoryNames}
       pendingPostsCount={pendingPostsCount}
       postsCount={community.postsCount ?? 0}
