@@ -394,7 +394,7 @@ export const Comment = ({
               )}
 
             {((hasClickLoadMore && !parentId) || isHighlightedComment || isHighlightedReply) &&
-              replyAmount > 0 && (
+              (isHighlightedReply || replyAmount > 0) && (
                 <ReplyCommentList
                   pageId={pageId}
                   componentId={componentId}

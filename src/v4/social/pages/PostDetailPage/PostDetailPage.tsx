@@ -64,6 +64,12 @@ export function PostDetailPage({
   // Add this useEffect to handle scrolling to comment when commentId is provided
   useEffect(() => {
     if (commentId && commentListRef.current) {
+      // Create a custom event to signal when scrolling is complete
+      const scrollCompleteEvent = new CustomEvent('comment-scroll-complete', {
+        bubbles: true,
+        detail: { commentId },
+      });
+
       // Wait for post content to load and DOM to fully update
       const outerTimeout = setTimeout(() => {
         if (commentListRef.current) {
@@ -79,6 +85,15 @@ export function PostDetailPage({
           // Then scroll to the comment with a small delay to ensure proper positioning
           const innerTimeout = setTimeout(() => {
             commentListRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Wait for the smooth scroll animation to complete (approximately 500ms is typical)
+            // before dispatching the event for the bounce animation
+            const bounceTimeout = setTimeout(() => {
+              document.dispatchEvent(scrollCompleteEvent);
+            }, 500);
+
+            // Clean up timeout if component unmounts
+            return () => clearTimeout(bounceTimeout);
           }, 150);
 
           // Clear inner timeout when we're done scrolling or if the component unmounts

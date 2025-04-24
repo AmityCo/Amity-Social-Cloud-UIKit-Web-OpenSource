@@ -111,21 +111,34 @@ export const CommentList = ({
 
   // Effect to scroll to highlighted comment with animation
   useEffect(() => {
-    if (highlightedComment && highlightedCommentRef.current) {
-      // Add small delay to ensure the component is fully rendered
-      setTimeout(() => {
-        highlightedCommentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setIsHighlighted(true);
+    if (!parentId && highlightedComment && highlightedCommentRef.current) {
+      // Create event listener for the scroll complete event
+      const handleScrollComplete = (e: CustomEvent) => {
+        if (e.detail.commentId === highlightedComment.commentId) {
+          // Only start the bounce animation after the scroll is complete
+          setIsHighlighted(true);
 
-        // Reset the animation after it completes
-        const timer = setTimeout(() => {
-          setIsHighlighted(false);
-        }, 1000); // Animation duration
+          // Reset the animation after it completes
+          const timer = setTimeout(() => {
+            setIsHighlighted(false);
+          }, 1000); // Animation duration
 
-        return () => clearTimeout(timer);
-      }, 300);
+          return () => clearTimeout(timer);
+        }
+      };
+
+      // Add event listener for the custom scroll complete event
+      document.addEventListener('comment-scroll-complete', handleScrollComplete as EventListener);
+
+      // Clean up the event listener when component unmounts
+      return () => {
+        document.removeEventListener(
+          'comment-scroll-complete',
+          handleScrollComplete as EventListener,
+        );
+      };
     }
-  }, [highlightedComment, highlightedCommentId]);
+  }, [highlightedComment, highlightedCommentId, parentId]);
 
   if (!online) {
     return (
