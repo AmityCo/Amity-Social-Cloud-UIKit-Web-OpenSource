@@ -22,6 +22,7 @@ import {
   Divider,
   Content,
   CommunityName,
+  PendingButton,
 } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import millify from 'millify';
@@ -47,6 +48,7 @@ interface UICommunityInfoProps {
   canReviewPosts: boolean;
   name: string;
   postSetting: ValueOf<typeof CommunityPostSettings>;
+  goToPendingTab?: () => void;
 }
 
 const UICommunityInfo = ({
@@ -68,6 +70,7 @@ const UICommunityInfo = ({
   canReviewPosts,
   name,
   postSetting,
+  goToPendingTab,
 }: UICommunityInfoProps) => {
   const { formatMessage } = useIntl();
 
@@ -157,7 +160,9 @@ const UICommunityInfo = ({
         {postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED &&
           isJoined &&
           pendingPostsCount > 0 && (
-            <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
+            <PendingButton onClick={goToPendingTab} fullWidth>
+              <PendingPostsBanner canReviewPosts={canReviewPosts} postsCount={pendingPostsCount} />
+            </PendingButton>
           )}
       </Content>
     </Container>
