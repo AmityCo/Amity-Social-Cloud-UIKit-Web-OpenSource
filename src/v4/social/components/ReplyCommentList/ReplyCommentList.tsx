@@ -48,6 +48,10 @@ export const ReplyCommentList = ({
     (comment) => highlightedCommentId == comment.commentId,
   );
 
+  const highlightedCommentDeleted = comments.filter(
+    (comment) => highlightedCommentId == comment.commentId && comment.isDeleted,
+  );
+
   const handleClickLoadMore = () => {
     if (highlightedCommentId && !showFilteredComments) {
       // First show the filtered comments
@@ -108,6 +112,9 @@ export const ReplyCommentList = ({
               pageId={pageId}
               community={community}
               comment={comment as Amity.Comment}
+              isHighlightDeleted={
+                highlightedComment.length > 0 && showFilteredComments ? false : true
+              }
             />
           </div>
         ))}
@@ -127,6 +134,7 @@ export const ReplyCommentList = ({
       {(hasMore ||
         (highlightedCommentId && filteredComments.length > 0 && !showFilteredComments)) && (
         <div
+          data-isdeleted-highlight={highlightedCommentDeleted.length > 0}
           className={styles.postReplyCommentList__viewReply_button}
           onClick={handleClickLoadMore}
         >

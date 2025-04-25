@@ -14,6 +14,11 @@
   border: 1px solid var(--asc-color-base-shade4);
   border-radius: 0.25rem;
   width: max-content;
+  margin-left: 2.5rem;
+}
+
+.postReplyCommentList__viewReply_button[data-isdeleted-highlight='true'] {
+  margin-left: unset;
 }
 
 .postReplyCommentList__viewReply_icon {

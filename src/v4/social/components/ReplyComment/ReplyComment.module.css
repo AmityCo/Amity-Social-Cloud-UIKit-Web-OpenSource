@@ -142,6 +142,11 @@
   border: 1px solid var(--asc-color-base-shade4);
   width: max-content;
   align-items: center;
+  margin-left: 2.5rem;
+}
+
+.postReplyComment__deleteComment_container[data-isdeleted-highlight='true'] {
+  margin-left: unset;
 }
 
 .postReplyComment__deleteComment_icon {

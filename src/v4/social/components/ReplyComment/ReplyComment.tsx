@@ -35,9 +35,15 @@ type ReplyCommentProps = {
   pageId?: string;
   community?: Amity.Community;
   comment: Amity.Comment;
+  isHighlightDeleted?: boolean;
 };
 
-const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProps) => {
+const PostReplyComment = ({
+  pageId = '*',
+  community,
+  comment,
+  isHighlightDeleted = false,
+}: ReplyCommentProps) => {
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
   const { isDesktop } = useResponsive();
@@ -126,7 +132,11 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
   return (
     <>
       {comment.isDeleted ? (
-        <div className={styles.postReplyComment__deleteComment_container} style={themeStyles}>
+        <div
+          data-isdeleted-highlight={isHighlightDeleted}
+          className={styles.postReplyComment__deleteComment_container}
+          style={themeStyles}
+        >
           <MinusCircleIcon className={styles.postReplyComment__deleteComment_icon} />
           <Typography.Caption className={styles.postReplyComment__deleteComment_text}>
             This reply has been deleted
