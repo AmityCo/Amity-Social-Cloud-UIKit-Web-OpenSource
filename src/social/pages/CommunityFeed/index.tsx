@@ -65,6 +65,8 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
     }
   }, [activeTab, tabs]);
 
+  const goToPendingTab = () => setActiveTab(CommunityFeedTabs.PENDING);
+
   return (
     <Wrapper>
       <CommunitySideMenuOverlay isOpen={isOpen} onClick={toggleOpen} />
@@ -75,7 +77,7 @@ const CommunityFeed = ({ communityId, isNewCommunity, isOpen, toggleOpen }: Comm
           <FormattedMessage id="sidebar.community" />
         </HeadTitle>
       </MobileContainer>
-      <CommunityInfo communityId={communityId} />
+      <CommunityInfo communityId={communityId} goToPendingTab={goToPendingTab} />
       <FeedHeaderTabs
         data-qa-anchor="community-feed-header"
         tabs={tabs}
