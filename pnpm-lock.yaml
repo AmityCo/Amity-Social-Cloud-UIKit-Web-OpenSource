@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@amityco/ts-sdk':
-        specifier: 7.2.1-96eab49.0
-        version: 7.2.1-96eab49.0
+        specifier: 7.3.0
+        version: 7.3.0
       '@hookform/error-message':
         specifier: ^2.0.1
         version: 2.0.1(react-dom@18.3.1(react@18.3.1))(react-hook-form@7.52.0(react@18.3.1))(react@18.3.1)
@@ -321,8 +321,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.2.1-96eab49.0':
-    resolution: {integrity: sha512-Toqg3EtzWRMRw/HotNYfVgCVrMeTqA9pqo9Duu1/9S2MKEG/fCkySwkjtLDMd2dq5wU0rcDYl30SErHb45vQpQ==}
+  '@amityco/ts-sdk@7.3.0':
+    resolution: {integrity: sha512-2bSowChyHlDwVPXUJeIXIlIrB3bQlRcjEglRaEbH1DNNTspBXRFYrrjfGq5W2Hy8LgnS6HNMgnJ607ozC4CdLA==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -7925,7 +7925,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.2.1-96eab49.0':
+  '@amityco/ts-sdk@7.3.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.8.4(debug@4.3.6)

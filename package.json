@@ -108,7 +108,7 @@
     "vite-tsconfig-paths": "^4.2.3"
   },
   "dependencies": {
-    "@amityco/ts-sdk": "7.2.1-96eab49.0",
+    "@amityco/ts-sdk": "7.3.0",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^3.3.4",
     "@internationalized/date": "^3.6.0",
