@@ -7,8 +7,8 @@ import { useImage } from '~/v4/core/hooks/useImage';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import styles from './UserAvatar.module.css';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import styles from './UserAvatar.module.css';
 
 type UserAvatarProps = {
   pageId?: string;
@@ -20,6 +20,7 @@ type UserAvatarProps = {
   textPlaceholderClassName?: string;
   shouldRedirectToUserProfile?: boolean;
   onPressAvatar?: () => void;
+  userData?: Amity.User;
 };
 
 export function UserAvatar({
@@ -32,19 +33,24 @@ export function UserAvatar({
   textPlaceholderClassName = '',
   shouldRedirectToUserProfile = false,
   onPressAvatar,
+  userData,
 }: UserAvatarProps) {
   const elementId = 'user_avatar';
 
   const { onClickUser } = useNavigation();
-  const { user, isLoading } = useUser({ userId });
-  const userImage = useImage({ fileId: user?.avatar?.fileId });
+  const { user, isLoading } = useUser({ userId, shouldCall: !!userId });
+  const userImage = useImage({
+    fileId: userData?.avatarFileId || user?.avatar?.fileId,
+  });
   const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
   const { closePopup } = usePopupContext();
 
-  const displayName = user?.displayName || user?.userId || '';
+  const displayName =
+    userData?.displayName || userData?.userId || user?.displayName || user?.userId || '';
   const firstChar = displayName?.trim().charAt(0).toUpperCase();
 
-  if (isLoading) return <div className={clsx(styles.userAvatar__skeleton, className)} />;
+  if (isLoading && !userData)
+    return <div className={clsx(styles.userAvatar__skeleton, className)} />;
 
   const handleAvatarClick = () => {
     if (!userId) return;
@@ -58,17 +64,17 @@ export function UserAvatar({
     }
   };
 
-  if (!user || !userId || !userImage) {
+  if (userImage) {
     return (
       <Button
-        className={clsx(styles.userAvatar__placeholder, className)}
         onPress={() => handleAvatarClick()}
+        className={clsx(styles.userAvatar__container, imageContainerClassName)}
       >
-        <Typography.TitleBold
-          className={clsx(styles.userAvatar__placeholder__text, textPlaceholderClassName)}
-        >
-          {firstChar}
-        </Typography.TitleBold>
+        <img
+          src={userImage}
+          data-testid={accessibilityId}
+          className={clsx(styles.userAvatar__img, className)}
+        />
         {isShowModeratorBadge && <Badge className={styles.userAvatar__badge} />}
       </Button>
     );
@@ -76,14 +82,14 @@ export function UserAvatar({
 
   return (
     <Button
+      className={clsx(styles.userAvatar__placeholder, className)}
       onPress={() => handleAvatarClick()}
-      className={clsx(styles.userAvatar__container, imageContainerClassName)}
     >
-      <img
-        src={userImage}
-        data-testid={accessibilityId}
-        className={clsx(styles.userAvatar__img, className)}
-      />
+      <Typography.TitleBold
+        className={clsx(styles.userAvatar__placeholder__text, textPlaceholderClassName)}
+      >
+        {firstChar}
+      </Typography.TitleBold>
       {isShowModeratorBadge && <Badge className={styles.userAvatar__badge} />}
     </Button>
   );

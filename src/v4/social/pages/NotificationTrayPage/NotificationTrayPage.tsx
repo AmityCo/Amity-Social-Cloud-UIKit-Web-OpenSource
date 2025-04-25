@@ -109,7 +109,7 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                     {recentItems.map((item) => (
                       <NotificationItem
                         pageId={pageId}
-                        key={item.actionReferenceId}
+                        key={item._id}
                         item={item}
                         onClose={onClose}
                       />
@@ -125,7 +125,7 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                     {unRecentItems.map((item) => (
                       <NotificationItem
                         pageId={pageId}
-                        key={item.actionReferenceId}
+                        key={item._id}
                         item={item}
                         onClose={onClose}
                       />

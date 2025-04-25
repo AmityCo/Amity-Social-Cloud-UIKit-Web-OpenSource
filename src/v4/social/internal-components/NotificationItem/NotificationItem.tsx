@@ -75,7 +75,7 @@ export const NotificationItem = ({
             onPressAvatar={onClickItem}
             pageId={pageId}
             componentId={componentId}
-            userId={item.actors[0].publicId}
+            userData={item.users[0]}
             className={styles.notificationItem__avatar}
           />
           <Typography.Body className={styles.notificationItem__text}>
