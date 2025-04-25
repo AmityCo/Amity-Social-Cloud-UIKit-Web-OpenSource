@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
@@ -99,6 +99,9 @@ export const Comment = ({
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [hasClickLoadMore, setHasClickLoadMore] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+  const [highlightedReplyComment, setHighlightedReplyComment] = useState<Amity.Comment | undefined>(
+    undefined,
+  );
   const notification = useNotifications();
   const { online } = useNetworkState();
   const { page } = useNavigation();
@@ -119,6 +122,15 @@ export const Comment = ({
   const replyAmount = comment.childrenNumber;
 
   if (isExcluded) return null;
+
+  useEffect(() => {
+    highlightedCommentId &&
+      parentId &&
+      CommentRepository.getComment(highlightedCommentId, (resp) => {
+        console.log('response', resp);
+        setHighlightedReplyComment(resp.data as Amity.Comment);
+      });
+  }, [highlightedCommentId, parentId]);
 
   const deleteComment = async () =>
     comment.commentId && CommentRepository.deleteComment(comment.commentId);
@@ -199,7 +211,9 @@ export const Comment = ({
     (!isHighlightedReply || (isHighlightedComment && !hasClickLoadMore));
 
   const isShowReplyList =
-    (hasClickLoadMore && replyAmount > 0 && !parentId) || (isHighlightedReply && replyAmount > 0);
+    (hasClickLoadMore && replyAmount > 0 && !parentId) ||
+    (isHighlightedReply && replyAmount > 0) ||
+    highlightedReplyComment?.isDeleted;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId}>
