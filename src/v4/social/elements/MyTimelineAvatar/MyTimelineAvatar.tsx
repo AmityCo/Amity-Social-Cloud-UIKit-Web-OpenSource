@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './MyTimelineAvatar.module.css';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 
 interface MyTimelineAvatarProps {

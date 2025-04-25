@@ -14,6 +14,7 @@ import {
   CommunityMembershipPage,
   CommunityPostPermissionPage,
   CommunityStorySettingPage,
+  NotificationTrayPage,
 } from '..';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import CommunityFeed from '~/social/pages/CommunityFeed';
@@ -69,6 +70,8 @@ const Application = () => {
             id={page.context?.postId}
             hideTarget={page.context?.hideTarget}
             category={page.context?.category}
+            commentId={page.context?.commentId}
+            parentId={page.context?.parentId}
           />
         )}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
@@ -145,6 +148,7 @@ const Application = () => {
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
         {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
+        {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
 
         {/* modal as page */}
         {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}

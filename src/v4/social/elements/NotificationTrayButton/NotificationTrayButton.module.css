@@ -1,0 +1,36 @@
+.notificationTrayButton {
+  cursor: pointer;
+  position: relative;
+}
+
+.notificationTrayButton__icon {
+  background-color: var(--asc-color-secondary-shade4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+}
+
+.notificationTrayButton__svg {
+  fill: var(--asc-color-secondary-default);
+  width: 1rem;
+  height: 1rem;
+}
+
+.notificationTrayButton__redDotWrapper {
+  position: absolute;
+  top: -0.15rem;
+  right: -0.15rem;
+  background-color: var(--asc-color-white);
+  padding: 0.15rem;
+  border-radius: 50%;
+}
+
+.notificationTrayButton__redDot {
+  background-color: var(--asc-color-alert-default);
+  border-radius: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+}

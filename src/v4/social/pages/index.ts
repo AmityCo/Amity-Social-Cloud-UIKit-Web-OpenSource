@@ -32,3 +32,5 @@ export { CommunitiesByCategoryPage } from './CommunitiesByCategoryPage';
 
 export { LiveStreamPlayerPage } from './LiveStreamPlayerPage';
 export { LivestreamTerminatedPage } from './LivestreamTerminatedPage';
+
+export { NotificationTrayPage } from './NotificationTrayPage';

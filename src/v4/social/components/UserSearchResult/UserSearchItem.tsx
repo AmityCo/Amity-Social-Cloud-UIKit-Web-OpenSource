@@ -3,7 +3,7 @@ import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import styles from './UserSearchItem.module.css';
 
 interface UserSearchItemProps {

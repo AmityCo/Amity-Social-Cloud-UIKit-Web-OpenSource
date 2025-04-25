@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { ReactNode } from 'react';
 
 import UIOptionMenu from '~/core/components/OptionMenu';
-import { PrimaryButton } from '~/core/components/Button';
+import { PrimaryButton, SecondaryButton } from '~/core/components/Button';
 import { Plus, Pencil } from '~/icons';
 import SocialCommunityName from '~/social/components/community/Name';
 
@@ -116,10 +116,16 @@ export const CountsContainer = styled.div`
   gap: 20px;
 `;
 
+export const PendingButton = styled(SecondaryButton)`
+  width: 100%;
+  padding: 0;
+  display: block;
+  margin-top: 8px;
+`;
+
 export const PendingPostsBannerContainer = styled.div`
   background: ${({ theme }) => theme.palette.base.shade4};
   padding: 12px;
-  margin-top: 8px;
   border-radius: 4px;
   text-align: center;
 `;

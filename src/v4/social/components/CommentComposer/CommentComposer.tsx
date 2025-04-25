@@ -1,9 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Avatar, Typography } from '~/v4/core/components';
+import { Typography } from '~/v4/core/components';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useImage } from '~/v4/core/hooks/useImage';
 import useSDK from '~/v4/core/hooks/useSDK';
-import User from '~/v4/icons/User';
 import { Button } from '~/v4/core/components/AriaButton';
 import { CommentInput, CommentInputRef } from './CommentInput';
 import { useMutation } from '@tanstack/react-query';
@@ -19,6 +18,7 @@ import { Notification } from '~/v4/core/components/Notification';
 import { useNetworkState } from 'react-use';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { UserAvatar } from '~/v4/social/elements';
 import styles from './CommentComposer.module.css';
 
 const LockSvg = () => {
@@ -66,7 +66,6 @@ export const CommentComposer = ({
   const { isDesktop } = useResponsive();
   const notification = useNotifications();
   const { online } = useNetworkState();
-  const avatarUrl = useImage({ fileId: user?.avatar?.fileId, imageSize: 'small' });
   const editorRef = useRef<CommentInputRef | null>(null);
   const composerInputRef = useRef<HTMLDivElement | null>(null);
   const componentId = 'comment_composer_bar';
@@ -174,12 +173,7 @@ export const CommentComposer = ({
       </div>
       <div className={clsx(styles.commentComposer__container, containerClassName)}>
         <div className={styles.commentComposer__avatar}>
-          <Avatar
-            pageId={pageId}
-            componentId={componentId}
-            avatarUrl={avatarUrl}
-            defaultImage={<User />}
-          />
+          <UserAvatar pageId={pageId} componentId={componentId} userId={userId} />
         </div>
         <div
           className={styles.commentComposer__input}

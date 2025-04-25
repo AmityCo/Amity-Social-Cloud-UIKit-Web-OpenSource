@@ -14,7 +14,7 @@ import Like from '~/v4/social/elements/ReactionButton/Like';
 import { Timestamp } from '~/v4/social/elements/Timestamp/Timestamp';
 import { MinusCircleIcon } from '~/v4/social/icons';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { CommentOptions } from '~/v4/social/components/CommentOptions/CommentOptions';
 import { CreateCommentParams } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentInput } from '~/v4/social/components/CommentComposer/CommentInput';
@@ -35,9 +35,15 @@ type ReplyCommentProps = {
   pageId?: string;
   community?: Amity.Community;
   comment: Amity.Comment;
+  isHighlightDeleted?: boolean;
 };
 
-const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProps) => {
+const PostReplyComment = ({
+  pageId = '*',
+  community,
+  comment,
+  isHighlightDeleted = false,
+}: ReplyCommentProps) => {
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
   const { isDesktop } = useResponsive();
@@ -126,7 +132,11 @@ const PostReplyComment = ({ pageId = '*', community, comment }: ReplyCommentProp
   return (
     <>
       {comment.isDeleted ? (
-        <div className={styles.postReplyComment__deleteComment_container} style={themeStyles}>
+        <div
+          data-isdeleted-highlight={isHighlightDeleted}
+          className={styles.postReplyComment__deleteComment_container}
+          style={themeStyles}
+        >
           <MinusCircleIcon className={styles.postReplyComment__deleteComment_icon} />
           <Typography.Caption className={styles.postReplyComment__deleteComment_text}>
             This reply has been deleted

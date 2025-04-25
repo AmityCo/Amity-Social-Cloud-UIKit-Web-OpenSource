@@ -19,7 +19,7 @@ import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPa
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import styles from './PostComposer.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 
 type PostComposerProps = {
   pageId?: string;

@@ -56,6 +56,7 @@ export enum PageTypes {
   PollPostComposerPage = 'PollPostComposerPage',
   LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
   LiveStreamPlayerPage = 'LiveStreamPlayerPage',
+  NotificationTrayPage = 'NotificationTrayPage',
 }
 
 type Page =
@@ -99,6 +100,8 @@ type Page =
         communityId?: string;
         hideTarget?: boolean;
         category?: AmityPostCategory;
+        commentId?: string;
+        parentId?: string;
       };
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string; page?: number } }
@@ -213,6 +216,9 @@ type Page =
   | {
       type: PageTypes.LiveStreamPlayerPage;
       context: LiveStreamPlayerPageProps;
+    }
+  | {
+      type: PageTypes.NotificationTrayPage;
     };
 
 type ContextValue = {
@@ -231,7 +237,13 @@ type ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
   goToBlockedUsersPage: () => void;
-  goToPostDetailPage: (postId: string, hideTarget?: boolean, category?: AmityPostCategory) => void;
+  goToPostDetailPage: (
+    postId: string,
+    hideTarget?: boolean,
+    category?: AmityPostCategory,
+    commentId?: string,
+    parentId?: string,
+  ) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
@@ -253,6 +265,7 @@ type ContextValue = {
     targetType: Amity.StoryTargetType;
     storyType: 'communityFeed' | 'globalFeed';
   }) => void;
+  goToNotificationTrayPage: () => void;
   setNavigationBlocker?: (
     params:
       | {
@@ -324,7 +337,13 @@ let defaultValue: ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
-  goToPostDetailPage: (postId: string, hideTarget?: boolean, category?: AmityPostCategory) => {},
+  goToPostDetailPage: (
+    postId: string,
+    hideTarget?: boolean,
+    category?: AmityPostCategory,
+    commentId?: string,
+    parentId?: string,
+  ) => {},
   goToViewStoryPage: (context: {
     targetId: string;
     targetType: Amity.StoryTargetType;
@@ -359,6 +378,7 @@ let defaultValue: ContextValue = {
   goToPendingPostPage: (communityId: string) => {},
   goToLiveStreamTerminatedPage: () => {},
   goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
+  goToNotificationTrayPage: () => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -395,8 +415,10 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingFollowRequestPage: () =>
       console.log(`NavigationContext goToPendingFollowRequestPage()`),
     goToBlockedUsersPage: () => console.log(`NavigationContext goToBlockedUsersPage()`),
-    goToPostDetailPage: (postId, hideTarget, category) =>
-      console.log(`NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category})`),
+    goToPostDetailPage: (postId, hideTarget, category, commentId, parentId) =>
+      console.log(
+        `NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category} ${commentId} ${parentId})`,
+      ),
     goToCommunityProfilePage: (communityId, page) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId} ${page})`),
     goToSocialGlobalSearchPage: (tab) =>
@@ -427,6 +449,7 @@ if (process.env.NODE_ENV !== 'production') {
       console.log('NavigationContext goToLiveStreamTerminatedPage()'),
     goToLiveStreamPlayerPage: (context) =>
       console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
+    goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -808,13 +831,15 @@ export default function NavigationProvider({
   );
 
   const goToPostDetailPage = useCallback(
-    (postId, hideTarget, category) => {
+    (postId, hideTarget, category, commentId, parentId) => {
       const next = {
         type: PageTypes.PostDetailPage,
         context: {
           postId,
           hideTarget,
           category,
+          commentId,
+          parentId,
         },
       };
 
@@ -1141,6 +1166,15 @@ export default function NavigationProvider({
     [setStreamPlayer],
   );
 
+  const goToNotificationTrayPage = useCallback(() => {
+    const next = {
+      type: PageTypes.NotificationTrayPage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1202,6 +1236,7 @@ export default function NavigationProvider({
         goToLiveStreamTerminatedPage,
         goToLiveStreamPlayerPage,
         onClickStory: handleClickStory,
+        goToNotificationTrayPage,
       }}
     >
       <NavigationContextV3.Provider

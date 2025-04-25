@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styles from './BlockedUserItem.module.css';
 import { UserListUnblockUserButton } from '~/v4/social/elements/UserListUnblockUserButton';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Typography } from '~/v4/core/components';
 import useUserBlock from '~/v4/social/hooks/useUserBlock';
 import { Button } from '~/v4/core/components/AriaButton';

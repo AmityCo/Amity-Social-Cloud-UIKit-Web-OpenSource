@@ -13,6 +13,12 @@
   flex-shrink: 0;
 }
 
+.communitySideBar__headerLeft {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .communitySideBar__menuSection {
   flex-shrink: 0;
   display: grid;
@@ -33,4 +39,13 @@
   max-height: 55vh;
   overflow-y: scroll;
   padding-bottom: 1rem;
+}
+
+.communitySideBar__notificationTray {
+  border-radius: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: var(--asc-color-background-default);
+  box-shadow:
+    0 0 2px 0 rgb(40 41 61 / 10%),
+    0 4px 8px 0 rgb(96 97 112 / 20%);
 }

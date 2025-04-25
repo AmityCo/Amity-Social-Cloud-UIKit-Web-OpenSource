@@ -32,7 +32,7 @@ import { CommunityAddMemberButton } from '~/v4/social/elements/CommunityAddMembe
 import { Input, Label, TextField, TextArea, FileTrigger } from 'react-aria-components';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useCommunitySetupContext } from '~/v4/social/providers/CommunitySetupProvider';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Clear } from '~/v4/icons/Clear';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Category } from '~/v4/icons/Category';

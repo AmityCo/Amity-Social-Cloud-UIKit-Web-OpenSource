@@ -2,67 +2,33 @@ import React, { ReactNode } from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './Timestamp.module.css';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import updateLocale from 'dayjs/plugin/updateLocale';
 import { Typography } from '~/v4/core/components';
-
-dayjs.extend(updateLocale);
-dayjs.extend(relativeTime);
-
-dayjs.updateLocale('en', {
-  relativeTime: {
-    future: 'in %s',
-    past: '%s',
-    s: 'Just now',
-    m: '1m',
-    mm: '%dm',
-    h: '1h',
-    hh: '%dh',
-    d: '1d',
-    dd: '%dd',
-    M: function (number: number, withoutSuffix: string, key: string, isFuture: boolean) {
-      if (isFuture) return number + 'M';
-      const date = dayjs().subtract(number, 'M');
-      const currentDate = dayjs();
-      if (date.get('year') === currentDate.get('year')) {
-        return date.format('D MMM');
-      }
-      return date.format('D MMM YYYY');
-    },
-    MM: function (number: number, withoutSuffix: string, key: string, isFuture: boolean) {
-      if (isFuture) return number + 'M';
-      const date = dayjs().subtract(number, 'M');
-      const currentDate = dayjs();
-      if (date.get('year') === currentDate.get('year')) {
-        return date.format('D MMM');
-      }
-      return date.format('D MMM YYYY');
-    },
-    y: function (number: number, withoutSuffix: string, key: string, isFuture: boolean) {
-      if (isFuture) return number + 'y';
-      const date = dayjs().subtract(number, 'y');
-      const currentDate = dayjs();
-      if (date.get('year') === currentDate.get('year')) {
-        return date.format('D MMM');
-      }
-      return date.format('D MMM YYYY');
-    },
-    yy: function (number: number, withoutSuffix: string, key: string, isFuture: boolean) {
-      if (isFuture) return number + 'y';
-      const date = dayjs().subtract(number, 'y');
-      const currentDate = dayjs();
-      if (date.get('year') === currentDate.get('year')) {
-        return date.format('D MMM');
-      }
-      return date.format('D MMM YYYY');
-    },
-  },
-});
 
 interface TimestampProps {
   pageId?: string;
   componentId?: string;
   timestamp: Date | string;
+}
+
+function formatTimestamp(input: Date | string): string {
+  const now = dayjs();
+  const time = dayjs(input);
+  const diffInSeconds = now.diff(time, 'second');
+  const diffInMinutes = now.diff(time, 'minute');
+  const diffInHours = now.diff(time, 'hour');
+  const diffInDays = now.diff(time, 'day');
+  const diffInWeeks = now.diff(time, 'week');
+  const diffInMonths = now.diff(time, 'month');
+  const diffInYears = now.diff(time, 'year');
+
+  if (diffInSeconds < 60) return 'Just now';
+  if (diffInMinutes < 60) return `${diffInMinutes}m`;
+  if (diffInHours < 24) return `${diffInHours}h`;
+  if (diffInDays === 1) return '1d';
+  if (diffInDays <= 7) return `${diffInDays}d`;
+  if (diffInWeeks <= 4) return time.format('D MMM');
+  if (diffInMonths < 12) return time.format('D MMM');
+  return time.format('D MMM YYYY');
 }
 
 export function Timestamp({ pageId = '*', componentId = '*', timestamp }: TimestampProps) {
@@ -73,8 +39,6 @@ export function Timestamp({ pageId = '*', componentId = '*', timestamp }: Timest
     elementId,
   });
 
-  const relativeTimeStr = dayjs(timestamp).fromNow();
-
   if (isExcluded) return null;
 
   return (
@@ -83,7 +47,7 @@ export function Timestamp({ pageId = '*', componentId = '*', timestamp }: Timest
       style={themeStyles}
       data-testid={accessibilityId}
     >
-      {relativeTimeStr}
+      {formatTimestamp(timestamp)}
     </Typography.Caption>
   );
 }

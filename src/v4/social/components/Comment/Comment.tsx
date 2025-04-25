@@ -1,8 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Typography, BottomSheet } from '~/v4/core/components';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import ReplyComment from '~/v4/icons/ReplyComment';
 import { ReplyCommentList } from '~/v4/social/components/ReplyCommentList/ReplyCommentList';
@@ -70,6 +70,8 @@ interface CommentProps {
   community?: Amity.Community | null;
   onClickReply: (comment: Amity.Comment) => void;
   shouldAllowInteraction?: boolean;
+  highlightedCommentId?: string;
+  parentId?: string;
 }
 
 export const Comment = ({
@@ -79,6 +81,8 @@ export const Comment = ({
   community,
   onClickReply,
   shouldAllowInteraction = true,
+  highlightedCommentId = undefined,
+  parentId = undefined,
 }: CommentProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -95,6 +99,9 @@ export const Comment = ({
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const [hasClickLoadMore, setHasClickLoadMore] = useState(false);
   const [commentData, setCommentData] = useState<CreateCommentParams>();
+  const [highlightedReplyComment, setHighlightedReplyComment] = useState<Amity.Comment | undefined>(
+    undefined,
+  );
   const notification = useNotifications();
   const { online } = useNetworkState();
   const { page } = useNavigation();
@@ -115,6 +122,15 @@ export const Comment = ({
   const replyAmount = comment.childrenNumber;
 
   if (isExcluded) return null;
+
+  useEffect(() => {
+    highlightedCommentId &&
+      parentId &&
+      CommentRepository.getComment(highlightedCommentId, (resp) => {
+        console.log('response', resp);
+        setHighlightedReplyComment(resp.data as Amity.Comment);
+      });
+  }, [highlightedCommentId, parentId]);
 
   const deleteComment = async () =>
     comment.commentId && CommentRepository.deleteComment(comment.commentId);
@@ -184,6 +200,20 @@ export const Comment = ({
 
     setIsEditing(false);
   }, [commentData]);
+
+  const isHighlightedReply = parentId === comment.commentId;
+
+  const isHighlightedComment = highlightedCommentId === comment.commentId && !parentId;
+
+  const isShowViewMoreReplies =
+    replyAmount > 0 &&
+    !hasClickLoadMore &&
+    (!isHighlightedReply || (isHighlightedComment && !hasClickLoadMore));
+
+  const isShowReplyList =
+    (hasClickLoadMore && replyAmount > 0 && !parentId) ||
+    (isHighlightedReply && replyAmount > 0) ||
+    highlightedReplyComment?.isDeleted;
 
   return (
     <div style={themeStyles} data-testid={accessibilityId}>
@@ -369,7 +399,7 @@ export const Comment = ({
               )}
             </div>
 
-            {replyAmount > 0 && !hasClickLoadMore && (
+            {isShowViewMoreReplies && (
               <div
                 data-testid={`${pageId}/${componentId}/view_reply_button`}
                 className={styles.postComment__viewReply_button}
@@ -382,7 +412,7 @@ export const Comment = ({
               </div>
             )}
 
-            {hasClickLoadMore && (
+            {isShowReplyList && (
               <ReplyCommentList
                 pageId={pageId}
                 componentId={componentId}
@@ -390,6 +420,7 @@ export const Comment = ({
                 referenceId={comment.referenceId}
                 referenceType={comment.referenceType}
                 parentId={comment.commentId}
+                highlightedCommentId={isHighlightedReply ? highlightedCommentId : undefined}
               />
             )}
           </div>

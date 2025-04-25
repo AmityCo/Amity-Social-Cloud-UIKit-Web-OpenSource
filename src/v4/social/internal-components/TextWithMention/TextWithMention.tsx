@@ -82,7 +82,7 @@ export const TextWithMention = ({
     }
 
     if ($isSerializedTextNode(child)) {
-      return <span key={childIndex}>{child.text}</span>;
+      return <React.Fragment key={childIndex}>{child.text}</React.Fragment>;
     }
 
     return null;
@@ -90,10 +90,10 @@ export const TextWithMention = ({
 
   const renderText = (paragraph: SerializedParagraphNode[]) => {
     return paragraph.map((p, index) => (
-      <span key={index}>
+      <React.Fragment key={index}>
         {p.children.map((child, childIndex) => convertSerializedToText(child, childIndex))}
         <br />
-      </span>
+      </React.Fragment>
     ));
   };
 

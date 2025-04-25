@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import styles from './PendingUserItem.module.css';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { UserRepository } from '@amityco/ts-sdk';
