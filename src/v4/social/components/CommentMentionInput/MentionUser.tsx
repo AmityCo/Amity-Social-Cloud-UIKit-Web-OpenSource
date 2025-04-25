@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './MentionUser.module.css';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { MentionTypeaheadOption } from './CommentMentionInput';
 import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 

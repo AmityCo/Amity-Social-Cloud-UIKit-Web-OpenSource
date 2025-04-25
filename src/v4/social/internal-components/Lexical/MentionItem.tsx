@@ -3,7 +3,7 @@ import { MentionData } from './utils';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { MentionTypeaheadOption } from './plugins/MentionPlugin';
 import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { Button } from '~/v4/core/components/AriaButton';
 import styles from './MentionItem.module.css';
 

@@ -1,0 +1,33 @@
+.notificationItem__button {
+  width: 100%;
+  background-color: rgb(from var(--asc-color-primary-shade3) r g b / 30%);
+}
+
+.notificationItem__button[data-isseen='true'] {
+  background-color: var(--asc-color-background-default);
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  gap: 0.75rem;
+}
+
+.notificationItem__userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.notificationItem__avatar {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+}
+
+.notificationItem__text {
+  flex: 1;
+  word-break: break-word;
+}

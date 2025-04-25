@@ -190,7 +190,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'create_story_page/*/*': {},
     'create_story_page/*/back_button': {
-      back_icon: 'back.png',
+      image: 'back.png',
       background_color: '#1234DB',
     },
     'create_story_page/*/aspect_ratio_button': {
@@ -297,10 +297,13 @@ export const defaultConfig: DefaultConfig = {
       text: 'Community',
     },
     'social_home_page/top_navigation/global_search_button': {
-      icon: 'searchButtonIcon',
+      image: 'searchButtonIcon',
     },
     'social_home_page/top_navigation/post_creation_button': {
-      icon: 'postCreationIcon',
+      image: 'postCreationIcon',
+    },
+    'social_home_page/top_navigation/notification_tray_button': {
+      image: 'value',
     },
     'social_home_page/*/newsfeed_button': {
       text: 'Newsfeed',
@@ -351,7 +354,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'global_search_page/*/*': {},
     'post_detail_page/*/back_button': {
-      icon: 'backButtonIcon',
+      image: 'backButtonIcon',
     },
     'post_detail_page/*/menu_button': {
       icon: 'menuIcon',
@@ -746,7 +749,9 @@ export const defaultConfig: DefaultConfig = {
       text: 'Unblock to see their posts.',
     },
     'edit_user_profile_page/*/*': {},
-    'edit_user_profile_page/*/back_button': {},
+    'edit_user_profile_page/*/back_button': {
+      image: 'ArrowLeft',
+    },
     'edit_user_profile_page/*/title': {
       text: 'Edit profile',
     },
@@ -908,6 +913,27 @@ export const defaultConfig: DefaultConfig = {
     },
     'livestream_terminated_page/*/*': {},
     'livestream_terminated_page/*/livestream_terminated_action_button': {},
+    'notification_tray_page/*/*': {},
+    'notification_tray_page/*/back_button': {
+      image: 'value',
+    },
+    'notification_tray_page/*/title': {
+      text: 'Notifications',
+    },
+    'notification_tray_page/*/empty_notification': {
+      image: 'value',
+      text: 'No notifications',
+    },
+    'notification_tray_page/*/no_internet_connection': {
+      image: 'value',
+      text: 'No internet connection',
+    },
+    'notification_tray_page/*/user_avatar': {
+      image: 'value',
+    },
+    '*/*/notification_section_text': {
+      text: 'value',
+    },
   },
 };
 

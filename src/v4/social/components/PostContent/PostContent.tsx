@@ -7,7 +7,7 @@ import { ShareButton } from '~/v4/social/elements/ShareButton';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { Typography } from '~/v4/core/components';
 import AngleRight from '~/v4/icons/AngleRight';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useMutation } from '@tanstack/react-query';

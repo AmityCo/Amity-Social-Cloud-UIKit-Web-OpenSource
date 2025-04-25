@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import styles from './PendingPostContent.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { UserAvatar } from '~/v4/social/internal-components/UserAvatar';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { Timestamp } from '~/v4/social/elements/Timestamp';

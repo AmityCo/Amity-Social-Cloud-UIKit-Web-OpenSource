@@ -6,7 +6,7 @@ const meta: Meta<typeof Typography> = {
   tags: ['autodocs'],
   component: Typography,
   parameters: { layout: 'centered' },
-  title: 'V4/core/components/TypographyV4',
+  title: 'V4/core/components/TypographyV3',
 };
 
 export default meta;

@@ -43,9 +43,9 @@ export const BackButton = ({
       className={clsx(styles.backButton, className)}
     >
       <IconComponent
-        configIconName={config.icon}
-        defaultIconName={defaultConfig.icon}
-        imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}
+        configIconName={config.image}
+        defaultIconName={defaultConfig.image}
+        imgIcon={() => <img src={config.image} alt={uiReference} className={imgClassName} />}
         defaultIcon={() => (
           <ArrowLeft className={clsx(styles.backButton__icon, defaultClassName)} />
         )}

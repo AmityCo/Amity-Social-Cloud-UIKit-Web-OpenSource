@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useNavigation, PageTypes } from '~/v4/core/providers/NavigationProvider';
@@ -21,7 +21,7 @@ export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps
 
   const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
   const { goToCommunityProfilePage, goToCommunitiesByCategoryPage, page } = useNavigation();
-  const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
+  const { communities, hasMore, loadMore, isLoading, refresh } = useCommunitiesCollection({
     queryParams: { limit: 20, membership: 'member' },
   });
 
@@ -31,6 +31,10 @@ export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps
       if (hasMore && !isLoading) loadMore();
     },
   });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   return (
     <div style={themeStyles} className={styles.myCommunitiesList} data-testid={accessibilityId}>

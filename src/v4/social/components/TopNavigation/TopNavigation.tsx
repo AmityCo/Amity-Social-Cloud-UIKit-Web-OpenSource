@@ -1,12 +1,14 @@
 import React from 'react';
+import { notificationTray } from '@amityco/ts-sdk';
 import { PostCreationButton } from '~/v4/social/elements/PostCreationButton';
 import { GlobalSearchButton } from '~/v4/social/elements/GlobalSearchButton';
 import { HeaderLabel } from '~/v4/social/elements/HeaderLabel';
-import styles from './TopNavigation.module.css';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
+import { NotificationTrayButton } from '~/v4/social/elements/NotificationTrayButton/NotificationTrayButton';
+import styles from './TopNavigation.module.css';
 
 export interface TopNavigationProps {
   pageId?: string;
@@ -20,8 +22,12 @@ export function TopNavigation({
   onClickPostCreationButton,
 }: TopNavigationProps) {
   const componentId = 'top_navigation';
-  const { goToSocialGlobalSearchPage, goToMyCommunitiesSearchPage, goToCreateCommunityPage } =
-    useNavigation();
+  const {
+    goToSocialGlobalSearchPage,
+    goToMyCommunitiesSearchPage,
+    goToCreateCommunityPage,
+    goToNotificationTrayPage,
+  } = useNavigation();
   const { isExcluded, themeStyles } = useAmityComponent({
     pageId,
     componentId,
@@ -41,12 +47,22 @@ export function TopNavigation({
 
   if (isExcluded) return null;
 
+  const handleNotificationTrayButtonClick = () => {
+    notificationTray.markTraySeen(new Date().toISOString());
+    goToNotificationTrayPage();
+  };
+
   return (
     <div className={styles.topNavigation} style={themeStyles}>
       <div className={styles.topNavigationLeftPane}>
         <HeaderLabel pageId={pageId} componentId={componentId} />
       </div>
       <div className={styles.topNavigationRightPane}>
+        <NotificationTrayButton
+          pageId={pageId}
+          componentId={componentId}
+          onPress={handleNotificationTrayButtonClick}
+        />
         <GlobalSearchButton
           pageId={pageId}
           componentId={componentId}

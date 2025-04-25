@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import Typography from './Typography';
+import { Typography } from './Typography';
 
 export default {
   title: 'v4/Core/Components/Typography',

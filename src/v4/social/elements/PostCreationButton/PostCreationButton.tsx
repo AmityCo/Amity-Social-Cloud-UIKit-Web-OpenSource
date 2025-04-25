@@ -60,15 +60,15 @@ export function PostCreationButton({
       )}
       imgIcon={() => (
         <img
-          src={config.icon}
+          src={config.image}
           alt={uiReference}
           className={clsx(styles.postCreationButton, imgClassName)}
           onClick={onClick}
           data-testid={accessibilityId}
         />
       )}
-      defaultIconName={defaultConfig.icon}
-      configIconName={config.icon}
+      defaultIconName={defaultConfig.image}
+      configIconName={config.image}
     />
   );
 }

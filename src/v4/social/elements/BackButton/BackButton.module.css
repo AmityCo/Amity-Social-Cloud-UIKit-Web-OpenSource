@@ -1,7 +1,7 @@
 .backButton {
   all: unset;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   display: grid;
   cursor: pointer;
   place-content: center;

@@ -17,7 +17,9 @@ export interface PageBehavior {
     closeAction?(): void;
   };
   onClickHyperLink?(): void;
-  AmitySocialHomePageBehavior?: Record<string, unknown>;
+  AmitySocialHomePageBehavior?: {
+    goToNotificationTrayPage?: () => void;
+  };
   AmityGlobalFeedComponentBehavior?: {
     goToPostDetailPage?: (context: {
       postId: string;
@@ -160,6 +162,16 @@ export interface PageBehavior {
       targetType: 'community' | 'user';
     }): void;
   };
+  AmityNotificationTrayPageBehavior?: {
+    goToCommunityProfilePage?(context: { communityId: string }): void;
+    goToPostDetailPage?(context: {
+      postId: string;
+      hideTarget?: boolean;
+      category?: AmityPostCategory;
+      commentId?: string;
+      parentId?: string;
+    }): void;
+  };
 }
 
 const PageBehaviorContext = React.createContext<PageBehavior | undefined>(undefined);
@@ -200,6 +212,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToStorySettingPage,
     goToPendingPostPage,
     goToPollPostComposerPage,
+    goToNotificationTrayPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -224,7 +237,14 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       },
     },
     onClickHyperLink: () => {},
-    AmitySocialHomePageBehavior: {},
+    AmitySocialHomePageBehavior: {
+      goToNotificationTrayPage: () => {
+        if (pageBehavior?.AmitySocialHomePageBehavior?.goToNotificationTrayPage) {
+          return pageBehavior.AmitySocialHomePageBehavior.goToNotificationTrayPage();
+        }
+        onChangePage(PageTypes.NotificationTrayPage);
+      },
+    },
     AmityGlobalFeedComponentBehavior: {
       goToPostDetailPage: (context: {
         postId: string;
@@ -570,6 +590,32 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityBlockedUsersPageBehavior.goToUserProfilePage(context);
         }
         goToUserProfilePage(context.userId);
+      },
+    },
+    AmityNotificationTrayPageBehavior: {
+      goToCommunityProfilePage: (context: { communityId: string }) => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToCommunityProfilePage) {
+          return pageBehavior.AmityNotificationTrayPageBehavior.goToCommunityProfilePage(context);
+        }
+        goToCommunityProfilePage(context.communityId);
+      },
+      goToPostDetailPage: (context: {
+        postId: string;
+        hideTarget?: boolean;
+        category?: AmityPostCategory;
+        commentId?: string;
+        parentId?: string;
+      }) => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToPostDetailPage) {
+          return pageBehavior.AmityNotificationTrayPageBehavior.goToPostDetailPage(context);
+        }
+        goToPostDetailPage(
+          context.postId,
+          context.hideTarget,
+          context.category,
+          context.commentId,
+          context.parentId,
+        );
       },
     },
   };
