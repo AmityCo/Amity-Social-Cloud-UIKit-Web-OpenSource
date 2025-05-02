@@ -17,3 +17,7 @@
   background-color: var(--asc-color-background-shade1);
   border-radius: 0.5rem;
 }
+
+.menuButton__button[data-focus-visible] {
+  outline: 2px solid var(--asc-color-primary-default);
+}

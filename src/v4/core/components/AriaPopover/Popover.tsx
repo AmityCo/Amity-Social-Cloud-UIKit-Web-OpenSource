@@ -50,7 +50,7 @@ export const Popover = ({
           aria-label="menu"
           aria-expanded={isOpen}
           onClick={() => (isDesktop ? openPopover() : trigger.onClick?.({ closePopover }))}
-          className={isOpen ? styles.popover__menuButton : ''}
+          className={clsx(isOpen && styles.popover__menuButton, trigger.className)}
         />
       )}
       {isDesktop && (

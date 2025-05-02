@@ -10,6 +10,10 @@
   animation: popup-zoom 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.popup[data-animation='false'][data-entering] {
+  animation: none;
+}
+
 .overlay {
   top: 0;
   left: 0;
@@ -37,6 +41,15 @@
 
 .overlay[data-exiting] {
   animation: overlay-fade 250ms reverse ease-in;
+}
+
+.overlay[data-animation='false'][data-entering],
+.overlay[data-animation='false'][data-exiting] {
+  animation: none;
+}
+
+.overlay[data-view='none'] {
+  display: none;
 }
 
 .dialog {

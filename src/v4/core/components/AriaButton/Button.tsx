@@ -8,6 +8,7 @@ export type ButtonProps = $ButtonProps & {
   size?: 'small' | 'medium';
   color?: 'primary' | 'secondary' | 'alert';
   variant?: 'fill' | 'outlined' | 'text';
+  fullWidth?: boolean;
   ref?: React.Ref<any>;
   icon?: React.ReactNode | ((props: { className?: string }) => React.ReactNode);
 };
@@ -21,6 +22,7 @@ export const Button = forwardRef(function (
     size = 'medium',
     variant = 'fill',
     color = 'primary',
+    fullWidth = false,
     ...props
   }: ButtonProps,
   ref: React.Ref<HTMLButtonElement>,
@@ -31,7 +33,14 @@ export const Button = forwardRef(function (
       ref={ref}
       data-icon={!!icon}
       data-label={!!children}
-      className={clsx(styles.button, styles[variant], styles[size], styles[color], className)}
+      className={clsx(
+        styles.button,
+        styles[variant],
+        styles[size],
+        styles[color],
+        fullWidth && styles.fullWidth,
+        className,
+      )}
     >
       {typeof icon === 'function'
         ? icon({ className: styles.icon })

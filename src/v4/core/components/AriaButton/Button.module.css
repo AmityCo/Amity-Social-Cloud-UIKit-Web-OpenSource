@@ -8,6 +8,10 @@
   transition: background-color 0.3s ease;
 }
 
+.fullWidth {
+  width: 100%;
+}
+
 .text {
   font-weight: normal;
 }
@@ -34,7 +38,7 @@
 .text.primary[data-disabled='true'],
 .text.primary[data-disabled='true']:hover {
   cursor: not-allowed;
-  color: var(--asc-color-primary-shade1);
+  color: var(--asc-color-primary-shade2);
 }
 
 .fill,

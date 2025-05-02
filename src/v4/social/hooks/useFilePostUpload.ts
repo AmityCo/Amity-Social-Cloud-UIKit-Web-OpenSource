@@ -5,9 +5,9 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { generateThumbnailVideo } from '~/v4/social/utils/generateThumbnailVideo';
 import { isAmityFile } from '~/v4/utils/checkFileType';
 
-export type FileItem = {
+export type FileItem<T extends Amity.FileType = any> = {
   id: string;
-  file: File | Amity.File;
+  file: File | Amity.File<T>;
   status: 'failed' | 'uploaded' | 'selected';
   errorText?: string;
   thumbnailVideo?: string;
@@ -195,6 +195,21 @@ export function useFilePostUpload(pageId?: string) {
     }
   };
 
+  const handleAltTextChange = (file: Amity.File<'image'>, altText: string) => {
+    setFiles((files) =>
+      files.map((item) => {
+        if (
+          isAmityFile(item.file) &&
+          item.file.type === 'image' &&
+          item.file.fileId === file.fileId
+        ) {
+          return { ...item, file: { ...file, altText } };
+        }
+        return item;
+      }),
+    );
+  };
+
   return {
     files,
     progress,
@@ -203,5 +218,6 @@ export function useFilePostUpload(pageId?: string) {
     uploadFile,
     removeFile,
     handleFileChange,
+    handleAltTextChange,
   };
 }

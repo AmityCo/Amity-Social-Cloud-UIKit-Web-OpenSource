@@ -1,77 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
-import { useImage } from '~/v4/core/hooks/useImage';
+import { formatAltText } from '~/v4/social/utils';
 import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
 import styles from './ImageContent.module.css';
-
-const ImageThumbnail = ({
-  fileId,
-  placeholder,
-}: {
-  fileId: string;
-  placeholder: React.ReactNode;
-}) => {
-  const imageUrl = useImage({ fileId });
-  const [isBrokenImg, setIsBrokenImg] = useState(false);
-
-  return (
-    <>
-      {imageUrl && !isBrokenImg ? (
-        <img
-          loading="lazy"
-          className={styles.imageContent__img}
-          src={imageUrl}
-          alt={fileId}
-          onError={() => setIsBrokenImg(true)}
-        />
-      ) : (
-        <div className={styles.imageContent__brokenImage} />
-      )}
-    </>
-  );
-};
-
-type ImageProps = {
-  postId: string;
-  pageId?: string;
-  componentId?: string;
-  isLastImage: boolean;
-  imageLeftCount: number;
-  onImageClick: () => void;
-};
-
-const Image = ({
-  postId,
-  isLastImage,
-  pageId = '*',
-  onImageClick,
-  imageLeftCount,
-  componentId = '*',
-}: ImageProps) => {
-  const { post: imagePost, isLoading } = usePost(postId);
-
-  if (isLoading) return null;
-
-  return (
-    <Button
-      onPress={() => onImageClick()}
-      className={styles.imageContent__imgContainer}
-      data-testid={`${pageId}/${componentId}/post_image`}
-    >
-      <ImageThumbnail
-        fileId={imagePost.data.fileId}
-        placeholder={<div className={styles.imageContent__skeleton}></div>}
-      />
-      {imageLeftCount > 0 && isLastImage && (
-        <Typography.Headline className={styles.imageContent__imgCover}>
-          + {imageLeftCount + 1}
-        </Typography.Headline>
-      )}
-    </Button>
-  );
-};
 
 type ImageContentProps = {
   pageId?: string;
@@ -105,10 +39,12 @@ export const ImageContent = ({
       {first4Images.map((postId: string, index: number) => (
         <Image
           key={postId}
+          index={index}
           postId={postId}
           pageId={pageId}
           componentId={componentId}
           imageLeftCount={imageLeftCount}
+          totalCount={post.children.length}
           onImageClick={() => onImageClick(index)}
           isLastImage={index === first4Images.length - 1}
         />
@@ -116,3 +52,70 @@ export const ImageContent = ({
     </div>
   );
 };
+
+type ImageProps = {
+  index: number;
+  postId: string;
+  pageId?: string;
+  totalCount: number;
+  componentId?: string;
+  isLastImage: boolean;
+  imageLeftCount: number;
+  onImageClick: () => void;
+};
+
+function Image({
+  index,
+  postId,
+  isLastImage,
+  totalCount,
+  pageId = '*',
+  onImageClick,
+  imageLeftCount,
+  componentId = '*',
+}: ImageProps) {
+  const { post: imagePost, isLoading } = usePost(postId);
+  const [isBrokenImg, setIsBrokenImg] = useState(false);
+
+  const file = imagePost?.getImageInfo();
+
+  if (isLoading) return null;
+
+  return (
+    <Button
+      onPress={() => onImageClick()}
+      className={styles.imageContent__imgContainer}
+      data-testid={`${pageId}/${componentId}/post_image`}
+      aria-label={formatAltText({
+        isLastImage,
+        total: totalCount,
+        current: index + 1,
+        altText: file?.altText,
+        leftCount: imageLeftCount + 1,
+      })}
+    >
+      {file && file.fileUrl && !isBrokenImg ? (
+        <img
+          loading="lazy"
+          onError={() => setIsBrokenImg(true)}
+          className={styles.imageContent__img}
+          src={getFileUrlWithSize(file.fileUrl)}
+          alt={formatAltText({
+            isLastImage,
+            total: totalCount,
+            current: index + 1,
+            altText: file?.altText,
+            leftCount: imageLeftCount + 1,
+          })}
+        />
+      ) : (
+        <div className={styles.imageContent__brokenImage} />
+      )}
+      {imageLeftCount > 0 && isLastImage && (
+        <Typography.Headline className={styles.imageContent__imgCover}>
+          + {imageLeftCount + 1}
+        </Typography.Headline>
+      )}
+    </Button>
+  );
+}

@@ -37,6 +37,7 @@ export const ClearButton = ({
     <Button
       onPress={onPress}
       style={themeStyles}
+      aria-label="Click to close"
       data-testid={accessibilityId}
       className={clsx(styles.clearButton, buttonClassName)}
     >

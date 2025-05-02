@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import { CloseButton } from '~/v4/social/elements';
 import React, { Fragment, PropsWithChildren } from 'react';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import styles from './Popup.module.css';
 
 export function Popup() {
+  const { isDesktop } = useResponsive();
   const { popups, closePopup } = usePopupContext();
 
   return (
@@ -18,22 +20,32 @@ export function Popup() {
           children,
           className,
           view = 'all',
+          overlayClassName,
+          keepPrevious = true,
           isDismissable = true,
+          disabledAnimation = false,
           ...props
         } = popup;
         const close = () => closePopup(props.id);
+        const isLastPopup = index + 1 === popups.length;
 
-        return (
+        return isDesktop ? (
           <ModalOverlay
             {...props}
             key={props.id}
-            data-view={view}
-            className={styles.overlay}
             isDismissable={isDismissable}
-            isOpen={index + 1 === popups.length}
+            data-animation={!disabledAnimation}
+            isOpen={keepPrevious || isLastPopup}
+            className={clsx(styles.overlay, overlayClassName)}
+            data-view={keepPrevious && !isLastPopup ? 'none' : view}
             onOpenChange={(open) => (!open && onClose ? onClose({ close }) : close())}
           >
-            <Modal className={clsx(styles.popup, className)} style={style}>
+            <Modal
+              style={style}
+              aria-modal="true"
+              data-animation={!disabledAnimation}
+              className={clsx(styles.popup, className)}
+            >
               <Dialog className={styles.dialog}>
                 {({ close }) => {
                   return (
@@ -46,6 +58,31 @@ export function Popup() {
               </Dialog>
             </Modal>
           </ModalOverlay>
+        ) : (
+          (keepPrevious || isLastPopup) && (
+            <div
+              role="dialog"
+              key={props.id}
+              aria-modal="true"
+              data-animation={!disabledAnimation}
+              className={clsx(styles.overlay, overlayClassName)}
+              data-view={keepPrevious && !isLastPopup ? 'none' : view}
+            >
+              <Dialog
+                data-animation={!disabledAnimation}
+                className={clsx(styles.popup, styles.dialog, className)}
+              >
+                {({ close }) => {
+                  return (
+                    <Fragment>
+                      {header && <Popup.Header onClose={close}>{header}</Popup.Header>}
+                      {typeof children === 'function' ? children({ close }) : children}
+                    </Fragment>
+                  );
+                }}
+              </Dialog>
+            </div>
+          )
         );
       })}
     </Fragment>
