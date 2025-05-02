@@ -1,0 +1,60 @@
+.textField {
+  padding-top: 1.5rem;
+  color: var(--asc-color-base-default);
+}
+
+.textField__labelWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.textField__label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.textField__counter {
+  color: var(--asc-color-base-shade1);
+}
+
+.textField__optional {
+  color: var(--asc-color-base-shade3);
+}
+
+.textField__error {
+  border-color: var(--asc-color-alert-default);
+}
+
+.textField__disabled {
+  opacity: 0.7;
+  background: var(--asc-color-base-shade4);
+}
+
+.textField__readonly {
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.textField__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 1rem 0;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  letter-spacing: -0.015rem;
+  color: var(--asc-color-base-default);
+  background-color: var(--asc-color-background-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  resize: none;
+  align-content: center;
+}
+
+.textField__input::placeholder {
+  font-size: 0.9375rem;
+  color: var(--asc-color-base-shade3);
+}

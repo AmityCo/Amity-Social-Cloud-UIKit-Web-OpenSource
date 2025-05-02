@@ -8,6 +8,7 @@
   color: var(--asc-color-base-default);
   flex-direction: row-reverse;
   justify-content: space-between;
+  width: 100%;
 }
 
 .radio::before {
@@ -19,6 +20,7 @@
   transition: all 200ms;
   border: 2px solid var(--asc-color-base-shade3);
   background: var(--asc-color-background-default);
+  flex-shrink: 0;
 }
 
 .radio[data-pressed]::before {

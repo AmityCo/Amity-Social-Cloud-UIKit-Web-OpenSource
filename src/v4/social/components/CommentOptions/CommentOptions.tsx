@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import useCommentPermission from '~/social/hooks/useCommentPermission';
@@ -6,8 +6,12 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { Typography } from '~/v4/core/components';
 import { isNonNullable } from '~/v4/helpers/utils';
 import { FlagIcon, TrashIcon } from '~/v4/social/icons';
-import styles from './CommentOptions.module.css';
 import { CreatePost } from '~/v4/icons/CreatePost';
+import { ContentReportReason } from '~/v4/social/internal-components/ContentReportReason';
+import { ContentFlagReasonEnum } from '@amityco/ts-sdk';
+import styles from './CommentOptions.module.css';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 interface CommentOptionsProps {
   pageId?: string;
@@ -27,32 +31,70 @@ export const CommentOptions = ({
   onCloseMenu,
 }: CommentOptionsProps) => {
   const { userRoles } = useSDK();
-  const { toggleFlagComment, isFlaggedByMe } = useCommentFlaggedByMe(comment.commentId);
+  const [reasonReport, setReasonReport] = useState<
+    ContentFlagReasonEnum | (string & Record<string, never>)
+  >(ContentFlagReasonEnum.Others);
+
   const isReplyComment = comment.parentId != null;
+
+  const { openPopup, closePopup } = usePopupContext();
+  const { isDesktop } = useResponsive();
+
+  const [isShowReportReason, setIsShowReportReason] = useState(false);
+
+  const handleCloseReportReason = () => {
+    closePopup();
+    onCloseMenu();
+  };
+
+  const {
+    isFlaggedByMe,
+    mutateReportComment,
+    mutateUnreportComment,
+    isCommentDeleted,
+    isFlagLoading,
+  } = useCommentFlaggedByMe({
+    commentId: comment.commentId,
+    reasonReport,
+    onCloseMenu: handleCloseReportReason,
+    isReplyComment,
+  });
 
   // TODO: change to useCommentPermission v4 - remove readonly
   const { canDelete, canEdit, canReport } = useCommentPermission(comment, false, userRoles);
-  const notification = useNotifications();
+  useNotifications();
 
-  const handleReportComment = async () => {
-    try {
-      await toggleFlagComment({
-        onFlagSuccess: () =>
-          notification.success({
-            content: 'Report sent',
-          }),
-        onUnFlagSuccss: () =>
-          notification.success({
-            content: 'Unreport sent',
-          }),
+  const handleClickReportComment = () => {
+    if (isDesktop) {
+      onCloseMenu();
+      openPopup({
+        pageId,
+        view: 'desktop',
+        isDismissable: false,
+        children: (
+          <ContentReportReason
+            pageId={pageId}
+            componentId={componentId}
+            handleSubmit={handleSubmitReport}
+            isError={isCommentDeleted}
+            isLoading={isFlagLoading}
+            onClose={handleCloseReportReason}
+          />
+        ),
       });
-    } catch (err) {
-      if (err instanceof Error) {
-        notification.error({
-          content: err.message,
-        });
-      }
+    } else {
+      setIsShowReportReason(true);
     }
+  };
+
+  const handleClickUnReportComment = () => {
+    onCloseMenu();
+    mutateUnreportComment();
+  };
+
+  const handleSubmitReport = (value: ContentFlagReasonEnum | (string & Record<string, never>)) => {
+    setReasonReport(value);
+    mutateReportComment();
   };
 
   const options = [
@@ -74,7 +116,7 @@ export const CommentOptions = ({
             : isReplyComment
               ? 'Report reply'
               : 'Report comment',
-          action: handleReportComment,
+          action: isFlaggedByMe ? handleClickUnReportComment : handleClickReportComment,
           icon: <FlagIcon className={styles.commentOptions__actionButton__icon} />,
           accessibilityId: 'report_comment',
           textStyle: styles.commentOptions__actionButton__text,
@@ -93,22 +135,34 @@ export const CommentOptions = ({
 
   return (
     <>
-      {options.map((option, index) => (
-        <div
-          data-testid={`${pageId}/${componentId}/${option.accessibilityId}`}
-          className={styles.commentOptions__actionButton}
-          key={index}
-          onClick={() => {
-            onCloseMenu();
-            option.action();
-          }}
-        >
-          {option.icon}
-          <div className={option.textStyle}>
-            <Typography.BodyBold>{option.name}</Typography.BodyBold>
+      {!isShowReportReason &&
+        options.map((option, index) => (
+          <div
+            data-testid={`${pageId}/${componentId}/${option.accessibilityId}`}
+            className={styles.commentOptions__actionButton}
+            key={index}
+            onClick={() => {
+              option.action();
+            }}
+          >
+            {option.icon}
+            <div className={option.textStyle}>
+              <Typography.BodyBold>{option.name}</Typography.BodyBold>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+
+      {isShowReportReason && (
+        <ContentReportReason
+          pageId={pageId}
+          componentId={componentId}
+          className={styles.commentOptions__reportReason}
+          handleSubmit={handleSubmitReport}
+          isError={isCommentDeleted}
+          isLoading={isFlagLoading}
+          onClose={handleCloseReportReason}
+        />
+      )}
     </>
   );
 };

@@ -26,7 +26,7 @@ const usePostFlaggedByMe = (post?: Amity.Post) => {
   const flagPost = async () => {
     if (postId == null || isUnableToFlag) return;
     try {
-      await PostRepository.flagPost(postId);
+      await PostRepository.flagPost(postId, '');
     } catch (_error) {
       setIsFlaggedByMe(false);
     } finally {

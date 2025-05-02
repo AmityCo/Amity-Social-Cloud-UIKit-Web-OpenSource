@@ -1,4 +1,4 @@
-import { PostRepository } from '@amityco/ts-sdk';
+import { ContentFlagReasonEnum, PostRepository } from '@amityco/ts-sdk';
 import {
   UseMutateAsyncFunction,
   useMutation,
@@ -8,6 +8,7 @@ import {
 
 export const usePostFlaggedByMe = ({
   post,
+  reasonReport,
   isFlaggable,
   onReportSuccess,
   onReportError,
@@ -15,12 +16,14 @@ export const usePostFlaggedByMe = ({
   onUnreportError,
 }: {
   post?: Amity.Post;
+  reasonReport: ContentFlagReasonEnum | (string & Record<string, never>);
   isFlaggable: boolean;
   onReportSuccess?: () => void;
   onReportError?: (error: Error) => void;
   onUnreportSuccess?: () => void;
   onUnreportError?: (error: Error) => void;
 }): {
+  isPending: boolean;
   isLoading: boolean;
   isFlaggedByMe: boolean;
   mutateReportPost: UseMutateAsyncFunction<boolean, Error, void, void>;
@@ -38,10 +41,10 @@ export const usePostFlaggedByMe = ({
     enabled: postId != null && isFlaggable,
   });
 
-  const { mutateAsync: mutateReportPost } = useMutation({
+  const { mutateAsync: mutateReportPost, isPending } = useMutation({
     networkMode: 'always',
     mutationFn: async () => {
-      return PostRepository.flagPost(post.postId);
+      return PostRepository.flagPost(post.postId, reasonReport);
     },
     onMutate: async () => {
       await queryClient.cancelQueries({
@@ -107,5 +110,6 @@ export const usePostFlaggedByMe = ({
     isFlaggedByMe: data || false,
     mutateReportPost,
     mutateUnReportPost,
+    isPending,
   };
 };

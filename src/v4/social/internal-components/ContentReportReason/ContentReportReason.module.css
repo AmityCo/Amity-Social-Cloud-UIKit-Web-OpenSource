@@ -1,0 +1,116 @@
+.contentReportReason__container {
+  height: 80vh;
+  max-height: 80vh;
+  background-color: var(--asc-color-background-default);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-left: -1rem;
+  margin-right: -1rem;
+}
+
+.contentReportReason__titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--asc-color-background-default);
+}
+
+.contentReportReason__leftSpace {
+  width: 1.75rem;
+}
+
+.contentReportReason__titleContainer__leftMenu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contentReportReason__title {
+  padding: 0.75rem 0;
+}
+
+.contentReportReason__description {
+  padding: 0.75rem 0;
+  color: var(--asc-color-base-shade1);
+}
+
+.contentReportReason__option {
+  padding: 1.13rem 0;
+  width: 100%;
+  display: block;
+}
+
+.contentReportReason__angleRight {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.contentReportReason__bottomContainer {
+  width: 100%;
+  padding: 1rem;
+  border-top: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-default);
+  z-index: 1;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.contentReportReason__submitButton {
+  width: 100%;
+  padding: 0.75rem 0;
+  text-align: center;
+}
+
+.contentReportReason__content {
+  flex: 1;
+  overflow-y: scroll;
+  padding: 1rem 1rem 3rem;
+  width: 100%;
+}
+
+@media (width >= 48em) {
+  .contentReportReason__container {
+    max-height: 100%;
+    min-height: 23rem;
+    height: 100%;
+    max-width: 30rem;
+    width: 100%;
+    min-width: 30rem;
+    margin: unset;
+  }
+
+  .contentReportReason__bottomContainer {
+    padding: 1rem 1.5rem 1.5rem;
+    position: unset;
+  }
+
+  .contentReportReason__content {
+    padding: 0.75rem 1.5rem;
+  }
+
+  .contentReportReason__titleContainer {
+    padding: 1.25rem 1.25rem 1rem 1.5rem;
+  }
+
+  .contentReportReason__title {
+    padding: unset;
+  }
+
+  .contentReportReason__leftSpace {
+    display: none;
+  }
+
+  .contentReportReason__titleContainer__leftMenu {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+  }
+}

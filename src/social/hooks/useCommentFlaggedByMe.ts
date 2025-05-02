@@ -23,7 +23,7 @@ const useCommentFlaggedByMe = (commentId?: string) => {
     if (commentId == null) return;
     try {
       setIsFlaggedByMe(true);
-      await CommentRepository.flagComment(commentId);
+      await CommentRepository.flagComment(commentId, '');
     } catch (_error) {
       setIsFlaggedByMe(false);
     } finally {
