@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import clsx from 'clsx';
 import {
   TextField as $TextField,
   TextFieldProps as $TextFieldProps,
   Label,
   FieldError,
-  Input as $Input,
   TextArea as $TextArea,
 } from 'react-aria-components';
 import type { ValidationResult } from 'react-aria-components';
@@ -36,13 +35,59 @@ export const TextArea = React.forwardRef<
   HTMLTextAreaElement,
   React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ className, ...props }, ref) => {
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Combine forwarded ref with internal ref
+  const setRefs = (element: HTMLTextAreaElement | null) => {
+    textareaRef.current = element;
+
+    // Handle forwarded ref
+    if (typeof ref === 'function') {
+      ref(element);
+    } else if (ref) {
+      ref.current = element;
+    }
+  };
+
+  // Function to adjust height based on content
+  const adjustHeight = () => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    // Reset height first to get the correct scrollHeight
+    textarea.style.height = '3rem';
+    // Set the height to match the content
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+
+  // Adjust height on content change
+  useEffect(() => {
+    adjustHeight();
+    // Add event listener for dynamic adjustments (e.g. window resize)
+    window.addEventListener('resize', adjustHeight);
+
+    return () => {
+      window.removeEventListener('resize', adjustHeight);
+    };
+  }, []);
+
+  // Handle input changes
+  const handleInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
+    adjustHeight();
+
+    // Call the original onInput handler if provided
+    if (props.onInput) {
+      props.onInput(event);
+    }
+  };
+
   return (
     <$TextArea
       aria-multiline
       className={clsx(styles.textField__input, className)}
-      style={{ fontSize: '16px' }} // Adding minimum font-size of 16px to prevent auto zoom on mobile
+      onInput={handleInput}
+      ref={setRefs}
       {...props}
-      ref={ref}
     />
   );
 });

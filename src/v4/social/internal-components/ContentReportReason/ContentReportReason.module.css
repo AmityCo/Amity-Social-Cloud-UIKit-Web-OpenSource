@@ -27,8 +27,14 @@
 }
 
 .contentReportReason__titleContainer__leftMenu {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentReportReason__titleContainer__leftMenu[data-options='true'] {
+  justify-content: stretch;
 }
 
 .contentReportReason__title {
@@ -50,6 +56,7 @@
   width: 1.5rem;
   height: 1.5rem;
   fill: var(--asc-color-base-default);
+  padding: 0.125rem 0;
 }
 
 .contentReportReason__bottomContainer {
@@ -61,6 +68,7 @@
   position: fixed;
   bottom: 0;
   left: 0;
+  right: 0;
 }
 
 .contentReportReason__submitButton {
@@ -71,29 +79,45 @@
 
 .contentReportReason__content {
   flex: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   padding: 1rem 1rem 3rem;
   width: 100%;
+  -webkit-overflow-scrolling: touch; /* Add smooth scrolling on iOS */
 }
 
 @media (width >= 48em) {
   .contentReportReason__container {
-    max-height: 100%;
+    max-height: 90vh;
     min-height: 23rem;
-    height: 100%;
+    height: auto;
     max-width: 30rem;
     width: 100%;
     min-width: 30rem;
     margin: unset;
+    overflow: hidden;
   }
 
-  .contentReportReason__bottomContainer {
-    padding: 1rem 1.5rem 1.5rem;
-    position: unset;
+  .contentReportReason__description {
+    padding: 0 0 0.75rem;
   }
 
   .contentReportReason__content {
-    padding: 0.75rem 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem 1.5rem 5rem;
+    max-height: calc(90vh - 8rem);
+    -ms-overflow-style: -ms-autohiding-scrollbar; /* For IE/Edge */
+  }
+
+  .contentReportReason__bottomContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 1.5rem 1.5rem;
+    border-top: none;
+    background-color: var(--asc-color-background-default);
+    z-index: 1;
   }
 
   .contentReportReason__titleContainer {
@@ -112,5 +136,17 @@
     display: flex;
     justify-content: flex-start;
     gap: 1rem;
+  }
+
+  .contentReportReason__closeButton {
+    fill: var(--asc-color-base-shade3);
+  }
+
+  .contentReportReason__radioGroup {
+    gap: 0;
+  }
+
+  .contentReportReason__angleRight {
+    padding: 0.1875rem 0;
   }
 }

@@ -61,9 +61,9 @@ export const PostMenu = ({
   });
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
-  const [reasonReport, setReasonReport] = useState<
-    ContentFlagReasonEnum | (string & Record<string, never>)
-  >(ContentFlagReasonEnum.Others);
+  const [reasonReport, setReasonReport] = useState<Amity.ContentFlagReason>(
+    ContentFlagReasonEnum.Others,
+  );
   const [isError, setIsError] = useState(false);
 
   const { isCommunityModerator, isOwner } = usePostPermissions({ post, community });
@@ -260,7 +260,7 @@ export const PostMenu = ({
     });
   };
 
-  const handleSubmitReport = (value: ContentFlagReasonEnum | (string & Record<string, never>)) => {
+  const handleSubmitReport = (value: Amity.ContentFlagReason) => {
     setReasonReport(value);
     mutateReportPost();
   };

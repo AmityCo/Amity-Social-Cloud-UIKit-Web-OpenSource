@@ -31,9 +31,9 @@ export const CommentOptions = ({
   onCloseMenu,
 }: CommentOptionsProps) => {
   const { userRoles } = useSDK();
-  const [reasonReport, setReasonReport] = useState<
-    ContentFlagReasonEnum | (string & Record<string, never>)
-  >(ContentFlagReasonEnum.Others);
+  const [reasonReport, setReasonReport] = useState<Amity.ContentFlagReason>(
+    ContentFlagReasonEnum.Others,
+  );
 
   const isReplyComment = comment.parentId != null;
 
@@ -92,7 +92,7 @@ export const CommentOptions = ({
     mutateUnreportComment();
   };
 
-  const handleSubmitReport = (value: ContentFlagReasonEnum | (string & Record<string, never>)) => {
+  const handleSubmitReport = (value: Amity.ContentFlagReason) => {
     setReasonReport(value);
     mutateReportComment();
   };

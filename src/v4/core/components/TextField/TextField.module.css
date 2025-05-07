@@ -50,11 +50,18 @@
   color: var(--asc-color-base-default);
   background-color: var(--asc-color-background-default);
   border-bottom: 1px solid var(--asc-color-base-shade4);
-  resize: none;
   align-content: center;
+  overflow-y: hidden;
+  resize: none;
 }
 
 .textField__input::placeholder {
   font-size: 0.9375rem;
   color: var(--asc-color-base-shade3);
+}
+
+@media (width < 48em) {
+  .textField__input {
+    font-size: 1rem;
+  }
 }

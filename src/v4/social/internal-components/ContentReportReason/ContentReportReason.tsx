@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, useEffect, useMemo } from 'react';
 import { ContentFlagReasonEnum } from '@amityco/ts-sdk';
 import clsx from 'clsx';
 import { BackButton, CloseButton } from '~/v4/social/elements';
@@ -16,7 +16,7 @@ import styles from './ContentReportReason.module.css';
 type ContentReportReasonProps = {
   pageId?: string;
   componentId?: string;
-  handleSubmit?: (reason: ContentFlagReasonEnum | (string & Record<string, never>)) => void;
+  handleSubmit?: (reason: Amity.ContentFlagReason) => void;
   isError?: boolean;
   isLoading?: boolean;
   className?: string;
@@ -55,7 +55,7 @@ export const ContentReportReason = ({
 
   const handleSubmitReport = () => {
     selectedReason === ContentFlagReasonEnum.Others
-      ? handleSubmit?.(otherReasonText as string & Record<string, never>)
+      ? handleSubmit?.(otherReasonText)
       : handleSubmit?.(selectedReason as ContentFlagReasonEnum);
   };
 
@@ -77,6 +77,35 @@ export const ContentReportReason = ({
     }
   }, [online]);
 
+  const reportReasons = useMemo(() => {
+    const reasons = [
+      {
+        value: ContentFlagReasonEnum.CommunityGuidelines,
+      },
+      {
+        value: ContentFlagReasonEnum.HarassmentOrBullying,
+      },
+      {
+        value: ContentFlagReasonEnum.ViolenceOrThreateningContent,
+      },
+      {
+        value: ContentFlagReasonEnum.SellingRestrictedItems,
+      },
+      {
+        value: ContentFlagReasonEnum.SexualContentOrNudity,
+      },
+      {
+        value: ContentFlagReasonEnum.SpamOrScams,
+      },
+      {
+        value: ContentFlagReasonEnum.Others,
+        hasAngleRight: true,
+      },
+    ];
+
+    return reasons;
+  }, []);
+
   return (
     <div className={clsx(styles.contentReportReason__container, className)}>
       {isError ? (
@@ -84,7 +113,10 @@ export const ContentReportReason = ({
       ) : (
         <>
           <div className={styles.contentReportReason__titleContainer}>
-            <div className={styles.contentReportReason__titleContainer__leftMenu}>
+            <div
+              data-options={!isDesktop && isShowOthersOption}
+              className={styles.contentReportReason__titleContainer__leftMenu}
+            >
               {isShowOthersOption ? (
                 <BackButton
                   onPress={() => {
@@ -100,7 +132,10 @@ export const ContentReportReason = ({
               </Typography.TitleBold>
             </div>
 
-            <CloseButton onPress={onClose} />
+            <CloseButton
+              onPress={onClose}
+              defaultClassName={styles.contentReportReason__closeButton}
+            />
           </div>
 
           <div className={styles.contentReportReason__content}>
@@ -133,76 +168,23 @@ export const ContentReportReason = ({
                   moderators and kept confidential.
                 </Typography.Caption>
                 <RadioGroup
-                  radios={[
-                    {
-                      value: ContentFlagReasonEnum.CommunityGuidelines,
-                      label: (
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          Against community guidelines
-                        </Typography.BodyBold>
-                      ),
-                      isDisabled: isLoading,
-                    },
-                    {
-                      value: ContentFlagReasonEnum.HarassmentOrBullying,
-                      label: (
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          Harassment or bullying
-                        </Typography.BodyBold>
-                      ),
-                      isDisabled: isLoading,
-                    },
-                    {
-                      value: ContentFlagReasonEnum.ViolenceOrThreateningContent,
-                      label: (
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          Violence or threatening content
-                        </Typography.BodyBold>
-                      ),
-                      isDisabled: isLoading,
-                    },
-                    {
-                      value: ContentFlagReasonEnum.SellingRestrictedItems,
-                      label: (
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          Selling and promoting restricted items
-                        </Typography.BodyBold>
-                      ),
-                      isDisabled: isLoading,
-                    },
-                    {
-                      value: ContentFlagReasonEnum.SexualContentOrNudity,
-                      label: (
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          Sexual content or nudity
-                        </Typography.BodyBold>
-                      ),
-                      isDisabled: isLoading,
-                    },
-                    {
-                      value: ContentFlagReasonEnum.SpamOrScams,
-                      label: (
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          Spam or scams
-                        </Typography.BodyBold>
-                      ),
-                      isDisabled: isLoading,
-                    },
-                    {
-                      value: ContentFlagReasonEnum.Others,
-                      label: (
-                        <Typography.BodyBold className={styles.contentReportReason__option}>
-                          Others
-                        </Typography.BodyBold>
-                      ),
-                      isDisabled: isLoading,
+                  className={styles.contentReportReason__radioGroup}
+                  radios={reportReasons.map((reason) => ({
+                    value: reason.value,
+                    label: (
+                      <Typography.BodyBold className={styles.contentReportReason__option}>
+                        {reason.value}
+                      </Typography.BodyBold>
+                    ),
+                    isDisabled: isLoading,
+                    ...(reason.hasAngleRight && {
                       icon: <AngleRight className={styles.contentReportReason__angleRight} />,
                       onIconClick: () => {
                         setSelectedReason(ContentFlagReasonEnum.Others);
                         setIsShowOthersOption(true);
                       },
-                    },
-                  ]}
+                    }),
+                  }))}
                   onChange={handleRadioChange}
                   value={selectedReason || undefined}
                 />
