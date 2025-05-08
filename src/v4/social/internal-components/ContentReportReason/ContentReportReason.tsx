@@ -12,36 +12,39 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './ContentReportReason.module.css';
+import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
 
 type ContentReportReasonProps = {
   pageId?: string;
   componentId?: string;
-  handleSubmit?: (reason: Amity.ContentFlagReason) => void;
-  isError?: boolean;
-  isLoading?: boolean;
   className?: string;
-  onClose: () => void;
+  onCloseMenu?: () => void;
+  post?: Amity.Post;
+  comment?: Amity.Comment;
+  showReportPostButton: boolean;
 };
 
 export const ContentReportReason = ({
   pageId = '*',
   componentId = '*',
-  handleSubmit,
-  isError = false,
-  isLoading = false,
   className,
-  onClose,
+  onCloseMenu,
+  post,
+  comment,
+  showReportPostButton,
 }: ContentReportReasonProps) => {
   const MAX_LENGTH_DESCRIBE = 300;
 
   const [isShowOthersOption, setIsShowOthersOption] = useState(false);
   const [otherReasonText, setOtherReasonText] = useState('');
-  const [selectedReason, setSelectedReason] = useState<ContentFlagReasonEnum | null>(null);
+  const [selectedReason, setSelectedReason] = useState<Amity.ContentFlagReason | null>(null);
+  const [isError, setIsError] = useState(false);
   const { online } = useNetworkState();
-  const notification = useNotifications();
   const { isDesktop } = useResponsive();
-
-  const isDisabledSubmitButton = !selectedReason || !online || isLoading;
+  const { success, info } = useNotifications();
+  const { closePopup } = usePopupContext();
 
   const handleTextAreaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setOtherReasonText(event.target.value);
@@ -54,9 +57,7 @@ export const ContentReportReason = ({
   };
 
   const handleSubmitReport = () => {
-    selectedReason === ContentFlagReasonEnum.Others
-      ? handleSubmit?.(otherReasonText)
-      : handleSubmit?.(selectedReason as ContentFlagReasonEnum);
+    post ? mutateReportPost() : comment && mutateReportComment();
   };
 
   const handleRadioChange = (value: string) => {
@@ -68,9 +69,64 @@ export const ContentReportReason = ({
     }
   };
 
+  const handleCloseReportReason = () => {
+    closePopup();
+    onCloseMenu?.();
+  };
+
+  const {
+    isLoading: isReportPostLoading,
+    isPending: isReportPending,
+    mutateReportPost,
+  } = usePostFlaggedByMe({
+    post,
+    reasonReport: selectedReason || otherReasonText,
+    isFlaggable: showReportPostButton,
+    onReportSuccess: () => {
+      success({ content: 'Post reported.' });
+      onCloseMenu?.();
+      closePopup();
+    },
+    onReportError: (error) => {
+      if (error.message?.includes('400400')) {
+        setIsError(true);
+      } else {
+        info({
+          content: 'Failed to report post. Please try again.',
+          alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+        });
+      }
+    },
+    onUnreportSuccess: () => {
+      success({ content: 'Post unreported.' });
+      onCloseMenu?.();
+    },
+    onUnreportError: () => {
+      info({
+        content: 'Failed to unreport post. Please try again.',
+        alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+      });
+      onCloseMenu?.();
+    },
+  });
+
+  const {
+    mutateReportComment,
+    isCommentDeleted,
+    isFlagLoading: isReportCommentLoading,
+  } = useCommentFlaggedByMe({
+    commentId: comment?.commentId as string,
+    reasonReport: selectedReason || otherReasonText,
+    onCloseMenu: handleCloseReportReason,
+    isReplyComment: comment?.parentId != null,
+  });
+
+  const isDisabledSubmitButton =
+    !selectedReason || !online || isReportPending || isReportCommentLoading;
+
   useEffect(() => {
     if (!online) {
-      notification.info({
+      info({
         content: 'No internet connection.',
         alignment: isDesktop ? 'fullscreen' : 'withSidebar',
       });
@@ -107,8 +163,11 @@ export const ContentReportReason = ({
   }, []);
 
   return (
-    <div className={clsx(styles.contentReportReason__container, className)}>
-      {isError ? (
+    <div
+      data-iserror={isError || isCommentDeleted}
+      className={clsx(styles.contentReportReason__container, className)}
+    >
+      {isError || isCommentDeleted ? (
         <FailedToShow className={styles.contentReportReason__failed} />
       ) : (
         <>
@@ -133,7 +192,7 @@ export const ContentReportReason = ({
             </div>
 
             <CloseButton
-              onPress={onClose}
+              onPress={handleCloseReportReason}
               defaultClassName={styles.contentReportReason__closeButton}
             />
           </div>
@@ -157,7 +216,7 @@ export const ContentReportReason = ({
                     onChange={handleTextAreaChange}
                     onKeyDown={handleKeyDown}
                     maxLength={MAX_LENGTH_DESCRIBE}
-                    disabled={isLoading}
+                    disabled={isReportPostLoading || isReportCommentLoading}
                   />
                 </TextField>
               </div>
@@ -176,7 +235,7 @@ export const ContentReportReason = ({
                         {reason.value}
                       </Typography.BodyBold>
                     ),
-                    isDisabled: isLoading,
+                    isDisabled: isReportPostLoading || isReportCommentLoading,
                     ...(reason.hasAngleRight && {
                       icon: <AngleRight className={styles.contentReportReason__angleRight} />,
                       onIconClick: () => {
@@ -195,11 +254,11 @@ export const ContentReportReason = ({
       )}
 
       <div className={styles.contentReportReason__bottomContainer}>
-        {isError ? (
+        {isError || isCommentDeleted ? (
           <Button
             data-testid={`${pageId}/${componentId}/close_button`}
             className={styles.contentReportReason__submitButton}
-            onPress={onClose}
+            onPress={handleCloseReportReason}
           >
             Close
           </Button>

@@ -97,6 +97,17 @@
     overflow: hidden;
   }
 
+  .contentReportReason__container[data-iserror='true'] {
+    min-height: 15rem;
+    min-width: 25rem;
+    max-width: 25rem;
+    width: 100%;
+  }
+
+  .contentReportReason__failed {
+    padding: 1.5rem;
+  }
+
   .contentReportReason__description {
     padding: 0 0 0.75rem;
   }

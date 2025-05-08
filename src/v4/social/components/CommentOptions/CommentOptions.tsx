@@ -37,26 +37,14 @@ export const CommentOptions = ({
 
   const isReplyComment = comment.parentId != null;
 
-  const { openPopup, closePopup } = usePopupContext();
+  const { openPopup } = usePopupContext();
   const { isDesktop } = useResponsive();
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
 
-  const handleCloseReportReason = () => {
-    closePopup();
-    onCloseMenu();
-  };
-
-  const {
-    isFlaggedByMe,
-    mutateReportComment,
-    mutateUnreportComment,
-    isCommentDeleted,
-    isFlagLoading,
-  } = useCommentFlaggedByMe({
+  const { isFlaggedByMe, mutateUnreportComment } = useCommentFlaggedByMe({
     commentId: comment.commentId,
     reasonReport,
-    onCloseMenu: handleCloseReportReason,
     isReplyComment,
   });
 
@@ -75,10 +63,9 @@ export const CommentOptions = ({
           <ContentReportReason
             pageId={pageId}
             componentId={componentId}
-            handleSubmit={handleSubmitReport}
-            isError={isCommentDeleted}
-            isLoading={isFlagLoading}
-            onClose={handleCloseReportReason}
+            comment={comment}
+            showReportPostButton={false}
+            onCloseMenu={onCloseMenu}
           />
         ),
       });
@@ -90,11 +77,6 @@ export const CommentOptions = ({
   const handleClickUnReportComment = () => {
     onCloseMenu();
     mutateUnreportComment();
-  };
-
-  const handleSubmitReport = (value: Amity.ContentFlagReason) => {
-    setReasonReport(value);
-    mutateReportComment();
   };
 
   const options = [
@@ -157,10 +139,9 @@ export const CommentOptions = ({
           pageId={pageId}
           componentId={componentId}
           className={styles.commentOptions__reportReason}
-          handleSubmit={handleSubmitReport}
-          isError={isCommentDeleted}
-          isLoading={isFlagLoading}
-          onClose={handleCloseReportReason}
+          comment={comment}
+          showReportPostButton={false}
+          onCloseMenu={onCloseMenu}
         />
       )}
     </>

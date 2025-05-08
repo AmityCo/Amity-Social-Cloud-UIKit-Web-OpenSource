@@ -363,7 +363,10 @@ export const Comment = ({
                         componentId={componentId}
                         comment={comment}
                         handleEditComment={handleEditComment}
-                        handleDeleteComment={handleDeleteComment}
+                        handleDeleteComment={() => {
+                          closePopover();
+                          handleDeleteComment();
+                        }}
                         onCloseMenu={closePopover}
                       />
                     )}

@@ -1,4 +1,4 @@
-import { ContentFlagReasonEnum, PostRepository } from '@amityco/ts-sdk';
+import { PostRepository } from '@amityco/ts-sdk';
 import {
   UseMutateAsyncFunction,
   useMutation,

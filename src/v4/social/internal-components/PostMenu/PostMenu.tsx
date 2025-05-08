@@ -61,9 +61,7 @@ export const PostMenu = ({
   });
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
-  const [reasonReport, setReasonReport] = useState<Amity.ContentFlagReason>(
-    ContentFlagReasonEnum.Others,
-  );
+
   const [isError, setIsError] = useState(false);
 
   const { isCommunityModerator, isOwner } = usePostPermissions({ post, community });
@@ -110,31 +108,11 @@ export const PostMenu = ({
     return !!poll;
   }, [poll]);
 
-  const {
-    isFlaggedByMe,
-    isLoading,
-    isPending: isReportPending,
-    mutateReportPost,
-    mutateUnReportPost,
-  } = usePostFlaggedByMe({
+  const { isFlaggedByMe, isLoading, mutateUnReportPost } = usePostFlaggedByMe({
     post,
-    reasonReport,
+    reasonReport: ContentFlagReasonEnum.Others,
     isFlaggable: showReportPostButton,
-    onReportSuccess: () => {
-      success({ content: 'Post reported.' });
-      onCloseMenu();
-      closePopup();
-    },
-    onReportError: (error) => {
-      if (error.message?.includes('400400')) {
-        setIsError(true);
-      } else {
-        info({
-          content: 'Failed to report post. Please try again.',
-          alignment: isDesktop ? 'fullscreen' : 'withSidebar',
-        });
-      }
-    },
+
     onUnreportSuccess: () => {
       success({ content: 'Post unreported.' });
       onCloseMenu();
@@ -260,19 +238,9 @@ export const PostMenu = ({
     });
   };
 
-  const handleSubmitReport = (value: Amity.ContentFlagReason) => {
-    setReasonReport(value);
-    mutateReportPost();
-  };
-
   const handleUnreportPost = () => {
     onCloseMenu();
     mutateUnReportPost();
-  };
-
-  const handleCloseReportReason = () => {
-    closePopup();
-    onCloseMenu();
   };
 
   const onClickReportPost = () => {
@@ -287,10 +255,9 @@ export const PostMenu = ({
           <ContentReportReason
             pageId={pageId}
             componentId={componentId}
-            handleSubmit={handleSubmitReport}
-            isError={isError}
-            isLoading={isReportPending}
-            onClose={handleCloseReportReason}
+            onCloseMenu={onCloseMenu}
+            post={post}
+            showReportPostButton={showReportPostButton}
           />
         ),
       });
@@ -357,10 +324,9 @@ export const PostMenu = ({
         <ContentReportReason
           pageId={pageId}
           componentId={componentId}
-          handleSubmit={handleSubmitReport}
-          isError={isError}
-          isLoading={isReportPending}
-          onClose={handleCloseReportReason}
+          onCloseMenu={onCloseMenu}
+          post={post}
+          showReportPostButton={showReportPostButton}
         />
       )}
     </div>

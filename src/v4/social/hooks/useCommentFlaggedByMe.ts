@@ -64,7 +64,6 @@ export const useCommentFlaggedByMe = ({
           content: `Failed to report ${isReplyComment ? 'reply' : 'comment'}. Please try again.`,
           alignment: isDesktop ? 'fullscreen' : 'withSidebar',
         });
-        onCloseMenu?.();
       }
     },
     onSettled: () => {
