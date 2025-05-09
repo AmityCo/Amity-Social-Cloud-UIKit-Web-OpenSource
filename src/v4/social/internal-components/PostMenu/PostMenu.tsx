@@ -286,7 +286,7 @@ export const PostMenu = ({
           className={styles.postMenu__item}
           onPress={() => (isFlaggedByMe ? handleUnreportPost() : onClickReportPost())}
         >
-          {!!isShowReportReason && isFlaggedByMe ? (
+          {isFlaggedByMe ? (
             <UnFlag className={styles.postMenu__reportPost__icon} />
           ) : (
             <FlagIcon className={styles.postMenu__reportPost__icon} />
