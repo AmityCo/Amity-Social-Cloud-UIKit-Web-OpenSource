@@ -224,6 +224,7 @@ type Page =
 type ContextValue = {
   page: Page;
   prevPage?: Page;
+  setDefaultPage: (page: Page) => void;
   onChangePage: (type: string) => void;
   onClickCategory: (categoryId: string) => void;
   onClickCommunity: (communityId: string) => void;
@@ -325,6 +326,7 @@ type ContextValue = {
 
 let defaultValue: ContextValue = {
   page: { type: PageTypes.SocialHomePage, context: { communityId: undefined } },
+  setDefaultPage: (page: Page) => {},
   onChangePage: (type: string) => {},
   onClickCategory: (categoryId: string) => {},
   onClickCommunity: (communityId: string) => {},
@@ -393,6 +395,7 @@ let defaultValue: ContextValue = {
 if (process.env.NODE_ENV !== 'production') {
   defaultValue = {
     page: { type: PageTypes.SocialHomePage, context: { communityId: undefined } },
+    setDefaultPage: (page: Page) => console.log(`Default page ${page}`),
     onChangePage: (type) => console.log(`NavigationContext onChangePage(${type})`),
     onClickCategory: (categoryId) =>
       console.log(`NavigationContext onClickCategory(${categoryId})`),
@@ -588,6 +591,10 @@ export default function NavigationProvider({
 
   const pushPage = useCallback(async (newPage) => {
     setPages((prevState) => [...prevState, newPage]);
+  }, []);
+
+  const setDefaultPage = useCallback((defaultPage) => {
+    setPages([defaultPage]);
   }, []);
 
   const popPage = (page?: number) => {
@@ -1195,6 +1202,7 @@ export default function NavigationProvider({
       value={{
         page: currentPage,
         prevPage,
+        setDefaultPage,
         onChangePage: handleChangePage,
         onClickCategory: handleClickCategory,
         onClickCommunity: handleClickCommunity,
