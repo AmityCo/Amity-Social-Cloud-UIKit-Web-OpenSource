@@ -34,6 +34,7 @@ export function MenuButton({
   return (
     <Button
       onPress={onClick}
+      aria-label="Click to open menu"
       data-testid={accessibilityId}
       className={clsx(styles.menuButton__button, className)}
     >

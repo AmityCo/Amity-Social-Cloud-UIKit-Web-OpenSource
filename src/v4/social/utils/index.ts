@@ -284,3 +284,20 @@ export const checkDeleteCommunityPermission = (
 
   return false;
 };
+
+export const formatAltText = ({
+  total,
+  altText,
+  current,
+  leftCount = 0,
+  isLastImage = false,
+}: {
+  total: number;
+  current: number;
+  altText?: string;
+  leftCount?: number;
+  isLastImage?: boolean;
+}) =>
+  leftCount && isLastImage && total > 4
+    ? `Activate to view ${leftCount} more photos`
+    : `Photo ${current} of ${total}: ${altText || 'No description available'}`;

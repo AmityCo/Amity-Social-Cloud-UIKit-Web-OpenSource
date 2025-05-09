@@ -5,7 +5,6 @@ import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
-import clsx from 'clsx';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { PostAcceptButton } from '~/v4/social/elements/PostAcceptButton';
@@ -20,9 +19,9 @@ import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoVi
 import usePost from '~/v4/core/hooks/objects/usePost';
 import dayjs from 'dayjs';
 import { Popover } from '~/v4/core/components/AriaPopover';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNetworkState } from 'react-use';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type PendingPostContentProps = {
   pageId?: string;
@@ -47,12 +46,11 @@ export const PendingPostContent = ({
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const notification = useNotifications();
-  const { info } = useConfirmContext();
   const { online } = useNetworkState();
+  const { openPopup, closePopup } = usePopupContext();
+  const { isDesktop } = useResponsive();
 
-  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
-  const [clickedImageIndex, setClickedImageIndex] = useState<number | null>(null);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
 
   const post = useMemo(() => {
@@ -124,13 +122,20 @@ export const PendingPostContent = ({
   };
 
   const openImageViewer = (imageIndex: number) => {
-    setIsImageViewerOpen(true);
-    setClickedImageIndex(imageIndex);
+    openPopup({
+      id: 'image-viewer',
+      disabledAnimation: true,
+      isDismissable: isDesktop,
+      className: styles.pendingPostContent__imageViewer,
+      overlayClassName: styles.pendingPostContent__imageViewerOverlay,
+      children: (
+        <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={imageIndex} />
+      ),
+    });
   };
 
   const closeImageViewer = () => {
-    setIsImageViewerOpen(false);
-    setClickedImageIndex(null);
+    closePopup('image-viewer');
   };
 
   const openVideoViewer = (imageIndex: number) => {
@@ -274,13 +279,6 @@ export const PendingPostContent = ({
             />
           </div>
         )}
-        {isImageViewerOpen && typeof clickedImageIndex === 'number' ? (
-          <ImageViewer
-            post={post}
-            onClose={closeImageViewer}
-            initialImageIndex={clickedImageIndex}
-          />
-        ) : null}
         {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
           <VideoViewer
             post={post}

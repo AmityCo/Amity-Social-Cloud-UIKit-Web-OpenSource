@@ -1,14 +1,9 @@
 .imageViewer__modal {
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000;
   display: flex;
-  position: fixed;
   align-items: center;
   justify-content: center;
-  background-color: var(--asc-color-black);
 }
 
 .imageViewer__fullImage {
@@ -18,9 +13,9 @@
 }
 
 .imageViewer__itemContainer {
-  max-height: 30.1875rem;
-  height: 100%;
   width: 100%;
+  height: 100%;
+  max-height: 30.1875rem;
   background-color: var(--asc-color-base-shade4);
 }
 
@@ -29,6 +24,8 @@
   left: 1.5rem;
   display: none;
   position: absolute;
+  justify-content: center;
+  align-items: center;
 }
 
 .imageViewer__next {
@@ -36,6 +33,13 @@
   right: 1.5rem;
   display: none;
   position: absolute;
+  justify-content: center;
+  align-items: center;
+}
+
+.imageViewer__prev[data-focus-visible],
+.imageViewer__next[data-focus-visible] {
+  outline: 2px solid var(--asc-color-primary-default);
 }
 
 .imageViewer__prev:hover,
@@ -43,14 +47,14 @@
   opacity: 0.8;
 }
 
-.imageViewer__prevButton,
-.imageViewer__nextButton {
+.imageViewer__prev__icon,
+.imageViewer__next__icon {
   width: 1.5rem;
   height: 1.5rem;
   fill: var(--asc-color-background-default);
 }
 
-.imageViewer__prevButton {
+.imageViewer__prev__icon {
   transform: rotate(180deg);
 }
 
@@ -58,8 +62,11 @@
   top: 0;
   left: 0;
   width: 100%;
+  display: flex;
   position: absolute;
+  align-items: center;
   padding: 2rem 1rem 1rem;
+  justify-content: space-between;
   background-color: rgb(from var(--asc-color-black) r g b / 50%);
 }
 
@@ -74,6 +81,17 @@
   height: 1.5rem;
 }
 
+.imageViewer__menuButton,
+.imageViewer__menuButton:hover {
+  background-color: transparent;
+}
+
+.imageViewer__menuButton__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-background-default);
+}
+
 .imageViewer__count {
   top: 2rem;
   left: 50%;
@@ -84,10 +102,6 @@
 }
 
 @media only screen and (width >= 48em) {
-  .imageViewer__modal {
-    background-color: rgb(from var(--asc-color-black) r g b / 80%);
-  }
-
   .imageViewer__fullImage {
     max-width: 37.5rem;
     max-height: 37.5rem;
@@ -103,7 +117,7 @@
 
   .imageViewer__prev,
   .imageViewer__next {
-    display: initial;
+    display: flex;
   }
 
   .imageViewer__close {

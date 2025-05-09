@@ -1,0 +1,56 @@
+.altTextConfig {
+  width: 30rem;
+}
+
+.altTextConfig__content {
+  padding: 0 1.5rem;
+}
+
+.altTextConfig__imageContainer {
+  display: flex;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.altTextConfig__image {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+}
+
+.altTextConfig__input {
+  width: 100%;
+  border: none;
+  height: auto;
+  resize: none;
+  outline: none;
+  min-height: auto;
+  line-height: 1.5;
+  font-size: 0.875rem;
+  caret-color: var(--asc-color-primary-default);
+}
+
+.altTextConfig__cta {
+  margin: 1rem 0 1.5rem;
+}
+
+@media only screen and (width <= 768px) {
+  .altTextConfig {
+    width: auto;
+  }
+
+  .altTextConfig__content {
+    padding: 0 1rem;
+  }
+
+  .altTextConfig__cta {
+    display: none;
+  }
+
+  .altTextConfig__input {
+    font-size: 1rem;
+    min-height: 70vh;
+  }
+}

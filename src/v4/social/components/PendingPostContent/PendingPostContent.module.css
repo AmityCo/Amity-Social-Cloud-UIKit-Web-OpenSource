@@ -72,6 +72,16 @@
   border-top: 1px solid var(--asc-color-base-shade4);
 }
 
+.pendingPostContent__imageViewer {
+  border-radius: 0 !important; /* need to find a way to remove !important */
+  max-height: none !important;
+  background-color: transparent !important;
+}
+
+.pendingPostContent__imageViewerOverlay {
+  background-color: var(--asc-color-black) !important;
+}
+
 @media (width >= 48em) {
   .pendingPostContent__container {
     border-radius: 0.5rem;
@@ -80,5 +90,9 @@
 
   .pendingPostContent__container:last-child {
     margin-bottom: 0;
+  }
+
+  .pendingPostContent__imageViewerOverlay {
+    background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
   }
 }

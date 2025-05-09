@@ -1,18 +1,26 @@
 import React from 'react';
 import { UserProfilePage } from './UserProfilePage';
+import { Meta, StoryObj } from '@storybook/react';
+import { PageRenderer } from '~/v4/core/providers';
 
-export default {
-  title: 'v4-social/pages/UserProfilePage',
+const meta: Meta<typeof UserProfilePage> = {
+  tags: ['autodocs'],
   component: UserProfilePage,
-  argTypes: {
-    userId: { control: { type: 'text' } },
-  },
+  args: { userId: 'Web-Test' },
+  title: 'v4-social/pages/UserProfilePage',
+  argTypes: { userId: { control: { type: 'text' } } },
 };
 
-const Template = (args) => <UserProfilePage {...args} />;
+export default meta;
 
-export const Default = Template.bind({});
+type StoryProps = StoryObj<typeof UserProfilePage>;
 
-Default.args = {
-  userId: 'Web-Test',
+export const Story: StoryProps = {
+  render: (props) => {
+    return (
+      <PageRenderer>
+        <UserProfilePage {...props} />
+      </PageRenderer>
+    );
+  },
 };

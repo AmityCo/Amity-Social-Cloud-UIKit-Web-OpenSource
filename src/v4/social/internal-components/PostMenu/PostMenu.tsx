@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { PollRepository, PostRepository } from '@amityco/ts-sdk';
+import React, { useMemo, useState } from 'react';
+import { ContentFlagReasonEnum, PollRepository, PostRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -9,13 +9,11 @@ import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { Typography } from '~/v4/core/components';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { EditPostTitle } from '~/v4/social/elements/EditPostTitle';
 import FlagIcon from '~/v4/icons/Flag';
-import { PenIcon } from '~/v4/icons/Pen';
 import { TrashIcon } from '~/v4/icons/Trash';
 import styles from './PostMenu.module.css';
 import { CreatePost } from '~/v4/icons/CreatePost';
@@ -23,6 +21,7 @@ import usePost from '~/v4/core/hooks/objects/usePost';
 import usePoll from '~/v4/social/hooks/usePoll';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
 import UnFlag from '~/v4/icons/UnFlag';
+import { ContentReportReason } from '~/v4/social/internal-components/ContentReportReason/ContentReportReason';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -45,10 +44,9 @@ export const PostMenu = ({
 }: PostMenuProps) => {
   const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
-  const { openPopup } = usePopupContext();
+  const { openPopup, closePopup } = usePopupContext();
   const { post: childPost } = usePost(post.children?.[0]);
   const { item: poll } = usePoll(childPost?.data?.pollId);
-  const notification = useNotifications();
 
   const isLiveStreamPost = useMemo(
     () => childPost?.dataType === 'liveStream',
@@ -62,9 +60,12 @@ export const PostMenu = ({
     shouldCall,
   });
 
+  const [isShowReportReason, setIsShowReportReason] = useState(false);
+
+  const [isError, setIsError] = useState(false);
+
   const { isCommunityModerator, isOwner } = usePostPermissions({ post, community });
   const { AmityPostContentComponentBehavior } = usePageBehavior();
-  const { removeDrawerData } = useDrawer();
 
   const { showEditPostButton, showDeletePostButton, showReportPostButton } = useMemo(() => {
     if (isCommunityModerator) {
@@ -85,7 +86,7 @@ export const PostMenu = ({
       if (isOwner) {
         return {
           showEditPostButton: true,
-          showDeletePostButton: true,
+          showDeletePostButton: false,
           showReportPostButton: false,
         };
       } else {
@@ -107,20 +108,21 @@ export const PostMenu = ({
     return !!poll;
   }, [poll]);
 
-  const { isFlaggedByMe, isLoading, mutateReportPost, mutateUnReportPost } = usePostFlaggedByMe({
+  const { isFlaggedByMe, isLoading, mutateUnReportPost } = usePostFlaggedByMe({
     post,
+    reasonReport: ContentFlagReasonEnum.Others,
     isFlaggable: showReportPostButton,
-    onReportSuccess: () => {
-      success({ content: 'Post reported.' });
-    },
-    onReportError: () => {
-      info({ content: 'Failed to report post. Please try again.' });
-    },
+
     onUnreportSuccess: () => {
       success({ content: 'Post unreported.' });
+      onCloseMenu();
     },
     onUnreportError: () => {
-      info({ content: 'Failed to unreport post. Please try again.' });
+      info({
+        content: 'Failed to unreport post. Please try again.',
+        alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+      });
+      onCloseMenu();
     },
   });
 
@@ -137,7 +139,10 @@ export const PostMenu = ({
       onPostDeleted?.(post);
     },
     onError: () => {
-      info({ content: 'Failed to delete post. Please try again.' });
+      info({
+        content: 'Failed to delete post. Please try again.',
+        alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+      });
     },
   });
 
@@ -166,7 +171,7 @@ export const PostMenu = ({
       onOk: () => {
         const isCurrentlyOnline = navigator.onLine;
         if (!isCurrentlyOnline) {
-          notification.info({ content: 'Oops, something went wrong.' });
+          info({ content: 'Oops, something went wrong.' });
           return;
         }
         mutateDeletePost();
@@ -198,7 +203,7 @@ export const PostMenu = ({
         },
       });
     }
-    removeDrawerData();
+    onCloseMenu();
     AmityPostContentComponentBehavior?.goToPostComposerPage?.({
       mode: Mode.EDIT,
       post,
@@ -223,7 +228,7 @@ export const PostMenu = ({
       onOk: () => {
         const isCurrentlyOnline = navigator.onLine;
         if (!isCurrentlyOnline) {
-          notification.info({ content: 'Oops, something went wrong.' });
+          info({ content: 'Oops, something went wrong.' });
           return;
         }
         mutateClosePoll();
@@ -233,11 +238,39 @@ export const PostMenu = ({
     });
   };
 
+  const handleUnreportPost = () => {
+    onCloseMenu();
+    mutateUnReportPost();
+  };
+
+  const onClickReportPost = () => {
+    if (isDesktop) {
+      onCloseMenu();
+      openPopup({
+        id: 'report_post_reason',
+        pageId,
+        view: 'desktop',
+        isDismissable: false,
+        children: (
+          <ContentReportReason
+            pageId={pageId}
+            componentId={componentId}
+            onCloseMenu={onCloseMenu}
+            post={post}
+            showReportPostButton={showReportPostButton}
+          />
+        ),
+      });
+    } else {
+      setIsShowReportReason(true);
+    }
+  };
+
   return (
     <div className={styles.postMenu}>
-      {showClosePollButton && (
+      {!isShowReportReason && showClosePollButton && (
         <Button
-          data-testid={`${pageId}/${componentId}/report_post_button`}
+          data-testid={`${pageId}/${componentId}/close_poll_button`}
           className={styles.postMenu__item}
           onPress={onClosePollClick}
         >
@@ -247,19 +280,11 @@ export const PostMenu = ({
           </Typography.BodyBold>
         </Button>
       )}
-      {showReportPostButton && !isLoading ? (
+      {!isShowReportReason && showReportPostButton && !isLoading ? (
         <Button
           data-testid={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
-          onPress={() => {
-            onCloseMenu();
-            if (isFlaggedByMe) {
-              mutateUnReportPost();
-            } else {
-              mutateReportPost();
-            }
-            removeDrawerData();
-          }}
+          onPress={() => (isFlaggedByMe ? handleUnreportPost() : onClickReportPost())}
         >
           {isFlaggedByMe ? (
             <UnFlag className={styles.postMenu__reportPost__icon} />
@@ -271,7 +296,7 @@ export const PostMenu = ({
           </Typography.BodyBold>
         </Button>
       ) : null}
-      {showEditPostButton && !isPollPost && !isLiveStreamPost ? (
+      {!isShowReportReason && showEditPostButton && !isPollPost && !isLiveStreamPost ? (
         <Button
           data-testid={`${pageId}/${componentId}/edit_post`}
           className={styles.postMenu__item}
@@ -283,7 +308,7 @@ export const PostMenu = ({
           </Typography.BodyBold>
         </Button>
       ) : null}
-      {showDeletePostButton ? (
+      {!isShowReportReason && showDeletePostButton ? (
         <Button
           data-testid={`${pageId}/${componentId}/delete_post`}
           className={styles.postMenu__item}
@@ -295,6 +320,15 @@ export const PostMenu = ({
           </Typography.BodyBold>
         </Button>
       ) : null}
+      {isShowReportReason && !isDesktop && (
+        <ContentReportReason
+          pageId={pageId}
+          componentId={componentId}
+          onCloseMenu={onCloseMenu}
+          post={post}
+          showReportPostButton={showReportPostButton}
+        />
+      )}
     </div>
   );
 };

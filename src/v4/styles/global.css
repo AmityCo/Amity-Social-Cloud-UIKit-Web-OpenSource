@@ -59,6 +59,7 @@
   --asc-color-primary-background-disabled: #d9e5fc;
   --plyr-color-main: #f6f7f8;
   --plyr-video-control-background-hover: rgb(0 0 0 / 30%);
+  --asc-color-transparent-black: rgb(0 0 0 / 50%);
 
   /* Font */
   --asc-text-global-font-family: inter, -apple-system, blinkmacsystemfont, arial, sans-serif;
@@ -163,6 +164,7 @@
     --asc-color-primary-background-disabled: #d9e5fc;
     --plyr-color-main: #f6f7f8;
     --plyr-video-control-background-hover: rgb(0 0 0 / 30%);
+    --asc-color-transparent-black: rgb(0 0 0 / 50%);
   }
 }
 
@@ -201,6 +203,7 @@
     --asc-color-primary-background-disabled: #d9e5fc;
     --plyr-color-main: #f6f7f8;
     --plyr-video-control-background-hover: rgb(0 0 0 / 30%);
+    --asc-color-transparent-black: rgb(0 0 0 / 50%);
   }
 }
 
@@ -249,4 +252,15 @@ body {
 .plyr__volume:hover input[data-plyr='volume'],
 .plyr__volume input[data-plyr='volume']:hover {
   display: block !important;
+}
+
+.srOnly {
+  border: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
 }

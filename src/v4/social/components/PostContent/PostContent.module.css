@@ -337,6 +337,16 @@
   gap: 0.25rem;
 }
 
+.postContent__imageViewer {
+  border-radius: 0 !important;
+  max-height: none !important;
+  background-color: transparent !important;
+}
+
+.postContent__imageViewerOverlay {
+  background-color: var(--asc-color-black) !important;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -378,6 +388,10 @@
 }
 
 @media (width >= 48em) {
+  .postContent__imageViewerOverlay {
+    background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
+  }
+
   .postContent {
     border-radius: 0.5rem;
   }
