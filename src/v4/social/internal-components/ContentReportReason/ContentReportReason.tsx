@@ -39,7 +39,9 @@ export const ContentReportReason = ({
 
   const [isShowOthersOption, setIsShowOthersOption] = useState(false);
   const [otherReasonText, setOtherReasonText] = useState('');
-  const [selectedReason, setSelectedReason] = useState<Amity.ContentFlagReason | null>(null);
+  const [selectedReason, setSelectedReason] = useState<Amity.ContentFlagReason | undefined>(
+    undefined,
+  );
   const [isError, setIsError] = useState(false);
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
@@ -80,7 +82,8 @@ export const ContentReportReason = ({
     mutateReportPost,
   } = usePostFlaggedByMe({
     post,
-    reasonReport: selectedReason || otherReasonText,
+    reasonReport:
+      selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
     isFlaggable: showReportPostButton,
     onReportSuccess: () => {
       success({ content: 'Post reported.' });
@@ -116,7 +119,8 @@ export const ContentReportReason = ({
     isFlagLoading: isReportCommentLoading,
   } = useCommentFlaggedByMe({
     commentId: comment?.commentId as string,
-    reasonReport: selectedReason || otherReasonText,
+    reasonReport:
+      selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
     onCloseMenu: handleCloseReportReason,
     isReplyComment: comment?.parentId != null,
   });
@@ -142,6 +146,9 @@ export const ContentReportReason = ({
         value: ContentFlagReasonEnum.HarassmentOrBullying,
       },
       {
+        value: ContentFlagReasonEnum.SelfHarmOrSuicide,
+      },
+      {
         value: ContentFlagReasonEnum.ViolenceOrThreateningContent,
       },
       {
@@ -152,6 +159,9 @@ export const ContentReportReason = ({
       },
       {
         value: ContentFlagReasonEnum.SpamOrScams,
+      },
+      {
+        value: ContentFlagReasonEnum.FalseInformation,
       },
       {
         value: ContentFlagReasonEnum.Others,
@@ -179,7 +189,7 @@ export const ContentReportReason = ({
               {isShowOthersOption ? (
                 <BackButton
                   onPress={() => {
-                    setSelectedReason(null);
+                    setSelectedReason(undefined);
                     setIsShowOthersOption(false);
                   }}
                 />

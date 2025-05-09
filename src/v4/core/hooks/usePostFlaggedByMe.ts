@@ -16,7 +16,7 @@ export const usePostFlaggedByMe = ({
   onUnreportError,
 }: {
   post?: Amity.Post;
-  reasonReport: Amity.ContentFlagReason;
+  reasonReport?: Amity.ContentFlagReason;
   isFlaggable: boolean;
   onReportSuccess?: () => void;
   onReportError?: (error: Error) => void;

@@ -11,7 +11,7 @@ export const useCommentFlaggedByMe = ({
   isReplyComment,
 }: {
   commentId: string;
-  reasonReport: Amity.ContentFlagReason;
+  reasonReport?: Amity.ContentFlagReason;
   onCloseMenu?: () => void;
   isReplyComment?: boolean;
 }): {
