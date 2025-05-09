@@ -25,3 +25,7 @@
 .commentOptions__deleteButton__text {
   color: var(--asc-color-alert-default);
 }
+
+.commentOptions__reportReason {
+  padding: 0 1rem;
+}

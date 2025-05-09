@@ -62,7 +62,8 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { online } = useNetworkState();
-  const { files, progress, isLoading, removeFile, handleFileChange } = useFilePostUpload(pageId);
+  const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
+    useFilePostUpload(pageId);
 
   const [isCreating, setIsCreating] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -283,6 +284,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
             pageId={pageId}
             progress={progress}
             removeFile={removeFile}
+            onAltTextChange={handleAltTextChange}
           />
           <VideoThumbnail
             files={files}

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
-
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { ShareButton } from '~/v4/social/elements/ShareButton';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
@@ -24,14 +23,12 @@ import { VideoContent } from './VideoContent';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
-import usePost from '~/v4/core/hooks/objects/usePost';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 import millify from 'millify';
 import { Button } from '~/v4/core/natives/Button';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
-import dayjs from 'dayjs';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
 import { PinBadge } from '~/v4/social/elements/PinBadge';
@@ -42,11 +39,11 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import styles from './PostContent.module.css';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
 import { LiveStreamContent } from './LiveStreamContent';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
+import styles from './PostContent.module.css';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -234,7 +231,7 @@ export const PostContent = ({
   });
 
   const { isDesktop } = useResponsive();
-  const { openPopup } = usePopupContext();
+  const { openPopup, closePopup } = usePopupContext();
   const { confirm } = useConfirmContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { moderators } = useCommunityModeratorsCollection({ communityId: post?.targetId });
@@ -242,9 +239,7 @@ export const PostContent = ({
     (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
   const [shouldSubscribe, setShouldSubscribe] = useState(false);
-  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
-  const [clickedImageIndex, setClickedImageIndex] = useState<number | null>(null);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
 
   const [reactionByMe, setReactionByMe] = useState<string | null>(null);
@@ -313,13 +308,20 @@ export const PostContent = ({
   };
 
   const openImageViewer = (imageIndex: number) => {
-    setIsImageViewerOpen(true);
-    setClickedImageIndex(imageIndex);
+    openPopup({
+      id: 'image-viewer',
+      disabledAnimation: true,
+      isDismissable: isDesktop,
+      className: styles.postContent__imageViewer,
+      overlayClassName: styles.postContent__imageViewerOverlay,
+      children: (
+        <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={imageIndex} />
+      ),
+    });
   };
 
   const closeImageViewer = () => {
-    setIsImageViewerOpen(false);
-    setClickedImageIndex(null);
+    closePopup('image-viewer');
   };
 
   const openVideoViewer = (imageIndex: number) => {
@@ -598,9 +600,6 @@ export const PostContent = ({
           </>
         )}
       </div>
-      {isImageViewerOpen && typeof clickedImageIndex === 'number' ? (
-        <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={clickedImageIndex} />
-      ) : null}
       {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
         <VideoViewer post={post} onClose={closeVideoViewer} initialVideoIndex={clickedVideoIndex} />
       ) : null}

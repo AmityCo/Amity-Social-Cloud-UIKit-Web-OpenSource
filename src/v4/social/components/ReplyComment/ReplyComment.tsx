@@ -254,7 +254,10 @@ const PostReplyComment = ({
                       comment={comment}
                       onCloseMenu={closePopover}
                       handleEditComment={handleEditComment}
-                      handleDeleteComment={handleDeleteComment}
+                      handleDeleteComment={() => {
+                        closePopover();
+                        handleDeleteComment();
+                      }}
                     />
                   )}
                 </Popover>

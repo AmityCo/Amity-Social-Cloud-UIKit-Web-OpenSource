@@ -222,6 +222,7 @@ interface AmityUIKitProviderProps {
   apiEndpoint?: {
     http?: string;
     mqtt?: string;
+    upload?: string;
   };
   userId: string;
   displayName?: string;

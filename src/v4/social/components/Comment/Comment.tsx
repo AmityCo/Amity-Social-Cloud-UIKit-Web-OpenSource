@@ -127,7 +127,6 @@ export const Comment = ({
     highlightedCommentId &&
       parentId &&
       CommentRepository.getComment(highlightedCommentId, (resp) => {
-        console.log('response', resp);
         setHighlightedReplyComment(resp.data as Amity.Comment);
       });
   }, [highlightedCommentId, parentId]);
@@ -364,7 +363,10 @@ export const Comment = ({
                         componentId={componentId}
                         comment={comment}
                         handleEditComment={handleEditComment}
-                        handleDeleteComment={handleDeleteComment}
+                        handleDeleteComment={() => {
+                          closePopover();
+                          handleDeleteComment();
+                        }}
                         onCloseMenu={closePopover}
                       />
                     )}

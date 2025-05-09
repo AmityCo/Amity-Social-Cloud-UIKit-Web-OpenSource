@@ -53,7 +53,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const { onBack } = useNavigation();
   const { confirm } = useConfirmContext();
   const { updateItem, updateGlobalFeaturedPosts } = useGlobalFeedContext();
-  const { files, progress, isLoading, removeFile, handleFileChange } = useFilePostUpload(pageId);
+  const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
+    useFilePostUpload(pageId);
   const posts = usePostByIds(post?.children || []);
 
   const [localPost, setLocalPost] = useState<Amity.Post[]>(posts);
@@ -311,6 +312,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             progress={progress}
             removeFile={removeFile}
             postImages={postImages}
+            onAltTextChange={handleAltTextChange}
             onRemovePostImage={handleRemoveThumbnailImage}
           />
           <VideoThumbnail
