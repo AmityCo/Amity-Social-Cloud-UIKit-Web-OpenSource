@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
+import { isAdmin } from '~/v4/social/utils';
 
 export const usePostPermissions = ({
   post,
@@ -10,6 +12,7 @@ export const usePostPermissions = ({
   community?: Amity.Community | null;
 }) => {
   const { currentUserId } = useSDK();
+  const { user } = useUser({ userId: currentUserId });
 
   const isCommunityPost = useMemo(
     () => post.targetType === 'community' && post.targetId === community?.communityId,

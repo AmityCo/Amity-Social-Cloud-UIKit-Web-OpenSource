@@ -22,6 +22,8 @@ import usePoll from '~/v4/social/hooks/usePoll';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
 import UnFlag from '~/v4/icons/UnFlag';
 import { ContentReportReason } from '~/v4/social/internal-components/ContentReportReason/ContentReportReason';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { checkDeleteCommunityPostPermission } from '~/v4/social/utils';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -37,16 +39,16 @@ export const PostMenu = ({
   post,
   pageId = '*',
   componentId = '*',
-  elementId = '*',
   onConfirmEditPost,
   onCloseMenu,
   onPostDeleted,
 }: PostMenuProps) => {
   const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
-  const { openPopup, closePopup } = usePopupContext();
+  const { openPopup } = usePopupContext();
   const { post: childPost } = usePost(post.children?.[0]);
   const { item: poll } = usePoll(childPost?.data?.pollId);
+  const { client } = useSDK();
 
   const isLiveStreamPost = useMemo(
     () => childPost?.dataType === 'liveStream',
@@ -61,8 +63,6 @@ export const PostMenu = ({
   });
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
-
-  const [isError, setIsError] = useState(false);
 
   const { isCommunityModerator, isOwner } = usePostPermissions({ post, community });
   const { AmityPostContentComponentBehavior } = usePageBehavior();
@@ -86,8 +86,14 @@ export const PostMenu = ({
       if (isOwner) {
         return {
           showEditPostButton: true,
-          showDeletePostButton: false,
+          showDeletePostButton: true,
           showReportPostButton: false,
+        };
+      } else if (checkDeleteCommunityPostPermission(client, post?.targetType)) {
+        return {
+          showEditPostButton: false,
+          showDeletePostButton: true,
+          showReportPostButton: true,
         };
       } else {
         return {
@@ -97,7 +103,7 @@ export const PostMenu = ({
         };
       }
     }
-  }, [isCommunityModerator, isOwner]);
+  }, [isCommunityModerator, isOwner, client, post]);
 
   const showClosePollButton = useMemo(() => {
     if (poll && poll.status === 'open' && isOwner) return true;
