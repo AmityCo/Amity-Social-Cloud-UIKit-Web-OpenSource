@@ -1,50 +1,25 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AmityReactionType } from './CustomReactionProvider';
-import { useTheme } from './ThemeProvider';
-
-export const getCustomizationKeys = ({
-  page,
-  component,
-  element,
-}: {
-  page: string;
-  component: string;
-  element: string;
-}) => {
-  if (element !== '*') {
-    return [
-      `${page}/${component}/${element}`,
-      `*/${component}/${element}`,
-      `${page}/*/${element}`,
-      `*/*/${element}`,
-      `${page}/${component}/*`,
-      `*/${component}/*`,
-      `${page}/*/*`,
-    ];
-  } else if (component !== '*') {
-    return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`];
-  } else if (page !== '*') {
-    return [`${page}/*/*`];
-  }
-
-  return [];
+export type IconConfiguration = {
+  icon?: string;
+  image?: string;
 };
 
-export type GetConfigReturnValue = IconConfiguration &
-  TextConfiguration &
-  ThemeConfiguration &
-  CustomConfiguration;
+export type TextConfiguration = {
+  text?: string;
+};
 
-interface CustomizationContextValue {
-  config: Config | null;
-  parseConfig: (config: Config) => void;
-  isExcluded: (path: string) => boolean;
-  getConfig: (
-    path: string,
-  ) => IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
-}
+export type CustomConfiguration = {
+  [key: string]: string | undefined | boolean | Array<string> | number | Record<string, unknown>;
+};
 
-type ThemeValue = {
+export type ThemeConfiguration = {
+  preferred_theme?: 'light' | 'dark' | 'default';
+  theme?: {
+    light?: Partial<Theme['light']>;
+    dark?: Partial<Theme['dark']>;
+  };
+};
+
+export type ConfigurableThemeValue = {
   primary_color: string;
   secondary_color: string;
   secondary_shade1_color: string;
@@ -63,36 +38,16 @@ type ThemeValue = {
 };
 
 export type Theme = {
-  light: ThemeValue;
-  dark: ThemeValue;
+  light: ConfigurableThemeValue;
+  dark: ConfigurableThemeValue;
 };
 
-type ThemeConfiguration = {
-  preferred_theme?: 'light' | 'dark' | 'default';
-  theme?: {
-    light?: Partial<Theme['light']>;
-    dark?: Partial<Theme['dark']>;
-  };
-};
+export type GetConfigReturnValue = IconConfiguration &
+  TextConfiguration &
+  ThemeConfiguration &
+  CustomConfiguration;
 
-export type NetworkConfig = {
-  config: DefaultConfig;
-};
-
-export interface Config {
-  preferred_theme?: 'light' | 'dark' | 'default';
-  theme?: {
-    light?: Theme['light'];
-    dark?: Theme['dark'];
-  };
-  excludes?: string[];
-  message_reactions?: AmityReactionType[];
-  customizations?: {
-    [key: string]: IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
-  };
-}
-
-type DefaultConfig = {
+export type DefaultConfig = {
   preferred_theme: 'light' | 'dark' | 'default';
   theme: {
     light: Theme['light'];
@@ -100,39 +55,56 @@ type DefaultConfig = {
   };
   excludes: string[];
   customizations?: {
-    [key: string]: IconConfiguration & TextConfiguration & ThemeConfiguration & CustomConfiguration;
+    [key: string]: GetConfigReturnValue;
   };
 };
 
-const CustomizationContext = createContext<CustomizationContextValue>({
-  config: null,
-  parseConfig: () => {},
-  isExcluded: () => false,
-  getConfig: () => ({}),
-});
-
-export const useCustomization = () => {
-  const context = useContext(CustomizationContext);
-  if (!context) {
-    throw new Error('useCustomization must be used within a CustomizationProvider');
-  }
-  return context;
+type BaseThemeValue = {
+  background_shade1_color: string;
+  live_color: string;
+  black_color: string;
+  white_color: string;
+  highlight_color: string;
+  message_bubble_primary_color: string;
+  message_bubble_secondary_color: string;
+  background_transparent_black_color: string;
+  background_transparent_white_color: string;
+  primary_background_hover_color: string;
+  primary_background_pressed_color: string;
+  primary_background_disabled_color: string;
+  plyr_color_main: string;
+  plyr_video_control_background_hover: string;
 };
 
-interface CustomizationProviderProps {
-  children: React.ReactNode;
-  initialConfig: Config | undefined;
-}
+export type ThemeValue = ConfigurableThemeValue & BaseThemeValue;
 
-type IconConfiguration = {
-  icon?: string;
-  image?: string;
+const defaultBase = {
+  black_color: '#000000',
+  white_color: '#ffffff',
+  live_color: '#ff305a',
+  highlight_color: '#1054de',
+  background_transparent_black_color: '#00000080',
+  background_transparent_white_color: '#fffc',
+  message_bubble_primary_color: '#1054de',
+  primary_background_hover_color: '#0d47ba',
+  primary_background_pressed_color: '#0b3997',
+  primary_background_disabled_color: '#d9e5fc',
+  plyr_color_main: '#f6f7f8',
+  plyr_video_control_background_hover: 'rgb(0 0 0 / 30%)',
+  trasparent_black_color: 'rgb(0 0 0 / 50%)',
 };
-type TextConfiguration = {
-  text?: string;
-};
-type CustomConfiguration = {
-  [key: string]: string | undefined | boolean | Array<string> | number | Record<string, unknown>;
+
+export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValue } = {
+  dark: {
+    background_shade1_color: '#40434e',
+    message_bubble_secondary_color: '#292b32',
+    ...defaultBase,
+  },
+  light: {
+    background_shade1_color: '#f6f7f8',
+    message_bubble_secondary_color: '#ebecef',
+    ...defaultBase,
+  },
 };
 
 export const defaultConfig: DefaultConfig = {
@@ -937,135 +909,73 @@ export const defaultConfig: DefaultConfig = {
   },
 };
 
-export const getDefaultConfig: CustomizationContextValue['getConfig'] = (path: string) => {
-  const [page, component, element] = path.split('/');
+export const getCustomizationKeys = ({
+  page,
+  component,
+  element,
+}: {
+  page: string;
+  component: string;
+  element: string;
+}) => {
+  if (element !== '*') {
+    return [
+      `${page}/${component}/${element}`,
+      `*/${component}/${element}`,
+      `${page}/*/${element}`,
+      `*/*/${element}`,
+      `${page}/${component}/*`,
+      `*/${component}/*`,
+      `${page}/*/*`,
+    ];
+  } else if (component !== '*') {
+    return [`${page}/${component}/*`, `${page}/*/*`, `*/${component}/*`];
+  } else if (page !== '*') {
+    return [`${page}/*/*`];
+  }
 
-  const customizationKeys = getCustomizationKeys({ page, component, element });
-
-  return new Proxy<
-    IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
-  >(
-    {},
-    {
-      get(target, prop: string) {
-        for (const key of customizationKeys) {
-          if (defaultConfig?.customizations?.[key]?.[prop]) {
-            return defaultConfig.customizations[key][prop];
-          }
-        }
-      },
-    },
-  );
+  return [];
 };
 
-export const CustomizationProvider: React.FC<CustomizationProviderProps> = ({
-  children,
-  initialConfig = {},
-}) => {
-  const [config, setConfig] = useState<Config | null>(null);
+const propertyMappings: Record<keyof ThemeValue, string> = {
+  primary_color: '--asc-color-primary-default',
+  secondary_color: '--asc-color-secondary-default',
+  secondary_shade1_color: '--asc-color-secondary-shade1',
+  secondary_shade2_color: '--asc-color-secondary-shade2',
+  secondary_shade3_color: '--asc-color-secondary-shade3',
+  secondary_shade4_color: '--asc-color-secondary-shade4',
+  base_color: '--asc-color-base-default',
+  base_shade1_color: '--asc-color-base-shade1',
+  base_shade2_color: '--asc-color-base-shade2',
+  base_shade3_color: '--asc-color-base-shade3',
+  base_shade4_color: '--asc-color-base-shade4',
+  base_shade5_color: '--asc-color-base-shade5',
+  alert_color: '--asc-color-alert-default',
+  background_color: '--asc-color-background-default',
+  base_inverse_color: '--asc-color-base-inverse',
+  background_shade1_color: '--asc-color-background-shade1',
+  black_color: '--asc-color-black',
+  white_color: '--asc-color-white',
+  live_color: '--asc-color-live',
+  highlight_color: '--asc-color-highlight-default',
+  message_bubble_primary_color: '--asc-color-message-bubble-primary',
+  message_bubble_secondary_color: '--asc-color-message-bubble-secondary',
+  background_transparent_black_color: '--asc-color-background-transparent-black',
+  background_transparent_white_color: '--asc-color-background-transparent-white',
+  primary_background_hover_color: '--asc-color-primary-background-hover',
+  primary_background_pressed_color: '--asc-color-primary-background-pressed',
+  primary_background_disabled_color: '--asc-color-primary-background-disabled',
+  plyr_color_main: '--plyr-color-main',
+  plyr_video_control_background_hover: '--plyr-video-control-background-hover',
+};
 
-  const currentTheme = useTheme();
+export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> }) => {
+  if (!theme) return;
 
-  useEffect(() => {
-    if (validateConfig(initialConfig)) {
-      parseConfig(initialConfig);
-    } else {
-      console.error('Invalid configuration provided to CustomizationProvider');
+  Object.entries(theme).forEach(([key, value]) => {
+    const cssVar = propertyMappings[key as keyof ThemeValue];
+    if (cssVar && value) {
+      document.documentElement.style.setProperty(cssVar, value);
     }
-  }, [initialConfig]);
-
-  const validateConfig = (config: Config): boolean => {
-    return true;
-  };
-
-  const parseConfig = (newConfig: Config) => {
-    setConfig(newConfig);
-  };
-
-  const isExcluded = (path: string) => {
-    const [page, component, element] = path.split('/');
-
-    const customizationKeys = getCustomizationKeys({ page, component, element });
-
-    return (
-      config?.excludes?.some((excludedPath) => {
-        return customizationKeys.some((key) => key === excludedPath);
-      }) || false
-    );
-  };
-
-  const getConfig: CustomizationContextValue['getConfig'] = (path: string) => {
-    const [page, component, element] = path.split('/');
-
-    const customizationKeys = getCustomizationKeys({ page, component, element });
-
-    const buildThemeProxyHandler = (
-      themeName: 'light' | 'dark',
-    ): ProxyHandler<
-      IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
-    > => ({
-      get(_, prop: keyof ThemeValue) {
-        for (const key of customizationKeys) {
-          if (config?.customizations?.[key]?.theme?.[themeName]?.[prop]) {
-            return config.customizations[key].theme?.[themeName]?.[prop];
-          }
-        }
-
-        if (config?.theme?.[themeName]?.[prop]) {
-          return config.theme[themeName]?.[prop];
-        }
-
-        for (const key of customizationKeys) {
-          if (defaultConfig.customizations?.[key]?.theme?.[themeName]?.[prop]) {
-            return defaultConfig.customizations[key].theme?.[themeName]?.[prop];
-          }
-        }
-
-        return defaultConfig.theme[themeName][prop];
-      },
-    });
-
-    return new Proxy<
-      IconConfiguration & TextConfiguration & { theme?: Partial<Theme> } & CustomConfiguration
-    >(
-      {},
-      {
-        get(target, prop: string) {
-          if (prop === 'theme') {
-            return {
-              light: new Proxy({}, buildThemeProxyHandler('light')),
-              dark: new Proxy({}, buildThemeProxyHandler('dark')),
-            };
-          }
-
-          if (prop === 'preferred_theme') {
-            return config?.preferred_theme ?? defaultConfig.preferred_theme;
-          }
-
-          for (const key of customizationKeys) {
-            if (config?.customizations?.[key]?.[prop]) {
-              return config.customizations[key][prop];
-            }
-          }
-
-          for (const key of customizationKeys) {
-            if (defaultConfig?.customizations?.[key]?.[prop]) {
-              return defaultConfig.customizations[key][prop];
-            }
-          }
-        },
-      },
-    );
-  };
-
-  const contextValue: CustomizationContextValue = {
-    config,
-    parseConfig,
-    isExcluded,
-    getConfig,
-  };
-
-  return (
-    <CustomizationContext.Provider value={contextValue}>{children}</CustomizationContext.Provider>
-  );
+  });
 };

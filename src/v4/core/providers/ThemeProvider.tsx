@@ -1,6 +1,13 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { lighten, parseToHsl, darken, hslToColorString } from 'polished';
-import { defaultConfig, GetConfigReturnValue } from './CustomizationProvider';
+import { Config, defaultConfig, GetConfigReturnValue } from './CustomizationProvider';
 
 const SHADE_PERCENTAGES = [0.25, 0.4, 0.5, 0.75];
 
@@ -85,21 +92,38 @@ export const ThemeContext = createContext<{
   toggleTheme: () => {},
 });
 
-export const ThemeProvider: React.FC = ({ children }) => {
+export const ThemeProvider: React.FC<PropsWithChildren<{ config?: Config }>> = ({
+  children,
+  config,
+}) => {
   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const isDefaultTheme = config?.preferred_theme === 'default' || !config?.preferred_theme;
 
   const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>(
-    mediaQuery.matches ? 'dark' : 'light',
+    !isDefaultTheme
+      ? (config.preferred_theme as 'dark' | 'light')
+      : mediaQuery.matches
+        ? 'dark'
+        : 'light',
   );
 
   useEffect(() => {
+    if (!isDefaultTheme) {
+      setCurrentTheme(config.preferred_theme as 'dark' | 'light');
+    } else {
+      setCurrentTheme(mediaQuery.matches ? 'dark' : 'light');
+    }
+  }, [config?.preferred_theme]);
+
+  useEffect(() => {
     const handleChange = (e: MediaQueryListEvent) => {
+      if (!isDefaultTheme) return;
       setCurrentTheme(e.matches ? 'dark' : 'light');
     };
 
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  }, [config?.preferred_theme]);
 
   const toggleTheme = () => {
     setCurrentTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
