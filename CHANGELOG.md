@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.8.1 (2025-05-22)
+
+
+### Bug Fixes
+
+* ASC-29944 - use theme configuration for all value ([#1065](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1065)) ([0442b92](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/0442b92fad976ceff6bceb2242f05e8c02c1f961))
+
 ## 4.8.0 (2025-05-09)
 
 
