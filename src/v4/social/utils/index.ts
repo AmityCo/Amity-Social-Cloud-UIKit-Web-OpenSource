@@ -285,6 +285,20 @@ export const checkDeleteCommunityPermission = (
   return false;
 };
 
+export const checkDeleteCommunityPostPermission = (
+  client: Amity.Client | null | undefined,
+  targetType: string,
+) => {
+  if (!client || !targetType) {
+    return false;
+  }
+
+  const communityPermission =
+    client.hasPermission(Permissions.DeleteCommunityFeedPostPermission).currentUser() &&
+    targetType === 'community';
+  return communityPermission;
+};
+
 export const formatAltText = ({
   total,
   altText,

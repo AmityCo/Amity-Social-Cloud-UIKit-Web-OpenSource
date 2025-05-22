@@ -22,7 +22,11 @@ import Localization from '~/core/providers/UiKitProvider/Localization';
 
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import buildGlobalTheme from '~/core/providers/UiKitProvider/theme';
-import { defaultConfig, Config, CustomizationProvider } from './CustomizationProvider';
+import {
+  defaultConfig,
+  Config,
+  CustomizationProvider,
+} from '~/v4/core/providers/CustomizationProvider';
 import { ThemeProvider } from './ThemeProvider';
 import { PageBehavior, PageBehaviorProvider } from './PageBehaviorProvider';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -258,7 +262,7 @@ const AmityUIKitProvider: React.FC<AmityUIKitProviderProps> = (props) => {
   return (
     <Localization locale="en">
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
+        <ThemeProvider config={props.configs}>
           <StyledThemeProvider theme={buildGlobalTheme(props.theme)}>
             <NotificationProvider>
               <LegacyNotificationProvider>

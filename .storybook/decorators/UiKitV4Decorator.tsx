@@ -15,6 +15,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
   const [displayNameState, setDisplayNameState] = useState<string | undefined>(
     args.displayName || args.userId || userId,
   );
+  const [config, setConfig] = useState<Config>(amityConfig as Config);
 
   useEffect(() => {
     if (!args.submit) return;
@@ -40,6 +41,15 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
     console.log(`[UiKitProvider.handleDisconnected]`, ...args);
   }, []);
 
+  useEffect(() => {
+    if (args.theme) {
+      setConfig((prevConfig) => ({
+        ...prevConfig,
+        preferred_theme: args.theme,
+      }));
+    }
+  }, [args.theme]);
+
   return (
     <AmityUIKitProvider
       apiKey={args.apiKey || import.meta.env.STORYBOOK_API_KEY}
@@ -50,7 +60,7 @@ const decorator: NonNullable<Preview['decorators']>[number] = (Story, context) =
       onConnectionStatusChange={handleConnectionStatusChange}
       onConnected={handleConnected}
       onDisconnected={handleDisconnected}
-      configs={amityConfig as Config}
+      configs={config as Config}
       syncNetworkConfig={args.syncNetworkConfig}
     >
       <Story />
