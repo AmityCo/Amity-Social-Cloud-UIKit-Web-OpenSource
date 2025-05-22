@@ -17,6 +17,12 @@ const preview: Preview = {
     displayName: { control: { type: 'text' } },
     submit: { control: { type: 'boolean' } },
     syncNetworkConfig: { control: { type: 'boolean' } },
+    theme: {
+      options: ['default', 'light', 'dark'],
+      control: {
+        type: 'radio',
+      },
+    },
   },
   decorators: [
     FluidControl.decorator,
