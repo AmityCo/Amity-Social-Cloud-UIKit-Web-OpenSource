@@ -513,6 +513,15 @@ export const defaultConfig: DefaultConfig = {
     'community_profile_page/community_header/menu_button': {
       image: 'value',
     },
+    'community_profile_page/community_header/community_cancel_request_button': {
+      image: 'value',
+    },
+    'community_profile_page/invitation_banner/join_button': {
+      text: 'Join',
+    },
+    'community_profile_page/invitation_banner/reject_button': {
+      text: 'Decline',
+    },
     'community_profile_page/community_profile_tab/*': {},
     'community_profile_page/community_profile_tab/community_feed_tab_button': {
       image: 'value',
@@ -784,13 +793,24 @@ export const defaultConfig: DefaultConfig = {
       text: 'Public',
     },
     'community_setup_page/*/community_privacy_public_description': {
-      text: 'Anyone can join, view, and search the posts in this community.',
+      text: 'Community is discoverable by anyone. Content is visible to anyone.',
     },
     'community_setup_page/*/community_add_member_title': {
       text: 'Member',
     },
     'community_setup_page/*/community_add_member_button': {
       text: 'Add',
+      image: 'value',
+    },
+    'community_setup_page/*/community_invite_member_title': {
+      text: 'Invite members',
+    },
+    'community_setup_page/*/community_invite_member_button': {
+      text: 'Invite',
+      image: 'value',
+    },
+    'community_setup_page/*/community_invite_member_description': {
+      text: 'They will join as members after accepting your invitation.',
       image: 'value',
     },
     'community_setup_page/*/community_create_button': {
@@ -809,16 +829,46 @@ export const defaultConfig: DefaultConfig = {
       text: 'Camera',
       image: 'value',
     },
+    'community_setup_page/*/community_membership_title': {
+      text: 'Membership',
+    },
+    'community_setup_page/*/community_membership_description': {
+      text: 'Requires moderator approval',
+    },
+    'community_setup_page/*/community_membership_sub_description': {
+      text: 'Users will become members only when their join request is approved by a moderator of this community.',
+    },
+    'community_setup_page/*/community_privacy_private_and_visible_icon': {
+      image: 'value',
+    },
+    'community_setup_page/*/community_privacy_private_and_visible_title': {
+      text: 'Private & visible',
+    },
+    'community_setup_page/*/community_privacy_private_and_visible_description': {
+      text: 'Community is discoverable by anyone. Content is hidden from non-members.',
+    },
+    'community_setup_page/*/community_privacy_private_and_hidden_icon': {
+      image: 'value',
+    },
+    'community_setup_page/*/community_privacy_private_and_hidden_title': {
+      text: 'Private & hidden',
+    },
+    'community_setup_page/*/community_privacy_private_and_hidden_description': {
+      text: 'Community and content are hidden from non-members.',
+    },
     'community_add_category_page/*/*': {},
     'community_add_member_page/*/*': {},
     'community_membership_page/*/*': {},
     'community_setting_page/*/*': {},
 
     'community_setting_page/*/edit_profile': {
-      text: 'Edit profile',
+      text: 'Community profile',
     },
     'community_setting_page/*/members': {
       text: 'Members',
+    },
+    'community_setting_page/*/pending_invitations': {
+      text: 'Pending invitations',
     },
     'community_setting_page/*/notifications': {
       text: 'Notifications',
@@ -827,7 +877,7 @@ export const defaultConfig: DefaultConfig = {
       text: 'Post permission',
     },
     'community_setting_page/*/story_setting': {
-      text: 'Story comments',
+      text: 'Story comment',
     },
     'community_setting_page/*/leave_community': {
       text: 'Leave community',
@@ -905,6 +955,106 @@ export const defaultConfig: DefaultConfig = {
     },
     '*/*/notification_section_text': {
       text: 'value',
+    },
+    'notification_tray_page/invitation_section/*': {},
+    'notification_tray_page/invitation_section/invitation_section_title': {
+      text: 'Requests',
+    },
+    'notification_tray_page/invitation_section/user_avatar': {},
+    'notification_tray_page/invitation_section/invitation_description': {},
+    'notification_tray_page/invitation_section/invitation_date': {},
+    'notification_tray_page/invitation_section/accept_invite_button': {
+      text: 'Join',
+    },
+    'notification_tray_page/invitation_section/decline_invite_button': {
+      text: 'Decline',
+    },
+    'community_invite_member_page/top_search_bar/*': {
+      text: 'Search user',
+    },
+    'community_invite_member_page/top_search_bar/search_icon': {
+      image: 'value',
+    },
+    'community_invite_member_page/top_search_bar/clear_button': {
+      image: 'value',
+    },
+    'community_invite_member_page/*/close_button': {
+      image: 'value',
+    },
+    'community_invite_member_page/*/invite_button': {
+      text: 'Invite',
+    },
+    'community_invite_member_page/*/title': {
+      text: 'Invite member',
+    },
+    'community_invite_member_page/*/no_result_title': {
+      text: 'No results found',
+    },
+    'community_invite_member_page/*/no_result_icon': {
+      image: 'value',
+    },
+    'community_invite_member_page/*/empty_result_title': {
+      text: 'No users available',
+    },
+    'community_invite_member_page/*/empty_result_icon': {
+      image: 'value',
+    },
+    'community_invite_member_page/*/no_internet_title': {
+      text: 'No internet connection',
+    },
+    'community_invite_member_page/*/no_internet_icon': {
+      image: 'value',
+    },
+    'community_pending_invitation_page/*/back_button': {
+      image: 'value',
+    },
+    'community_pending_invitation_page/*/title': {
+      text: 'Pending invitations',
+    },
+    'community_pending_invitation_page/*/empty_result_title': {
+      text: 'Nothing here to see yet',
+    },
+    'community_pending_invitation_page/*/empty_result_icon': {
+      image: 'value',
+    },
+    'community_pending_invitation_page/*/no_internet_title': {
+      text: 'No internet connection',
+    },
+    'community_pending_invitation_page/*/no_internet_icon': {
+      image: 'value',
+    },
+    'pending_request_page/*/*': {},
+    'pending_request_page/*/back_button': {
+      image: 'backIcon',
+    },
+    'pending_request_page/*/title': {
+      text: 'Pending requests',
+    },
+    'pending_request_page/pending_post_list/*': {},
+    'pending_request_page/pending_post_list/timestamp': {},
+    'pending_request_page/pending_post_list/post_accept_button': {
+      text: 'Accept',
+    },
+    'pending_request_page/pending_post_list/post_decline_button': {
+      text: 'Decline',
+    },
+    'pending_request_page/*/posts_button_tab': {
+      text: 'Posts',
+    },
+    'pending_request_page/pending_post_list/posts_tab_description': {
+      text: 'Decline pending post will permanently delete the selected post from community.',
+    },
+    'pending_request_page/*/join_requests_button_tab': {
+      text: 'Join requests',
+    },
+    'pending_request_page/join_request_content/join_requests_tab_description': {
+      text: 'Declining a join request is irreversible. The user must send a new request if declined.',
+    },
+    'pending_request_page/join_request_content/join_accept_button': {
+      text: 'Accept',
+    },
+    'pending_request_page/join_request_content/join_decline_button': {
+      text: 'Decline',
     },
   },
 };

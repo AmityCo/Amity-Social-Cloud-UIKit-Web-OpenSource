@@ -1,0 +1,1 @@
+export { EmptyResultTitle } from './EmptyResultTitle';

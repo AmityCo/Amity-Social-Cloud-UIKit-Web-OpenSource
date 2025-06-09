@@ -8,7 +8,7 @@ import { Button } from '~/v4/core/natives/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useCommunitySetupContext } from '~/v4/social/providers/CommunitySetupProvider';
 import { MemberList } from '~/v4/social/internal-components/MemberList';
-import { CommunityRepository } from '@amityco/ts-sdk';
+import { CommunityRepository, MembershipAcceptanceTypeEnum } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { ModeratorList } from '~/v4/social/internal-components/ModeratorList';
 import { useSDK } from '~/v4/core/hooks/useSDK';
@@ -18,7 +18,9 @@ import { SecondaryTab } from '~/v4/core/components/SecondaryTab';
 import { Key } from 'react-aria';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { CommunityAddMemberPage } from '~/v4/social/pages';
+import { CommunityAddMemberPage, CommunityInviteMemberPage } from '~/v4/social/pages';
+import { useNetworkState } from 'react-use';
+import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
 import styles from './CommunityMembershipPage.module.css';
 
 type CommunityMembershipPageProps = {
@@ -31,14 +33,19 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
   const { onBack } = useNavigation();
   const { currentUserId } = useSDK();
   const user = useUser(currentUserId);
+  const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
   const notification = useNotifications();
+  const { socialSettings } = useSocialSettings();
   const { members } = useCommunitySetupContext();
   const { AmityCommunityMembershipPageBehavior } = usePageBehavior();
   const [activeTab, setActiveTab] = useState<Key>('members');
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
   const { hasModeratorPermissions } = useModerator({ community, user });
+
+  const isInvitation =
+    socialSettings?.membershipAcceptance === MembershipAcceptanceTypeEnum.INVITATION;
 
   const onClickAddMember = async (
     userIds: Parameters<typeof CommunityRepository.Membership.addMembers>[1],
@@ -57,6 +64,25 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
     }
   };
 
+  const onClickInviteMember = async (userIds: string[]) => {
+    if (community.communityId == null) return;
+
+    if (!community.isJoined || !hasModeratorPermissions) {
+      return notification.error({ content: 'Failed to invite members to this community' });
+    }
+
+    if (!online) {
+      return notification.info({ content: 'No internet connection.' });
+    }
+
+    try {
+      await community.createInvitations(userIds);
+      notification.success({ content: 'Successfully invited members to this community.' });
+    } catch (err) {
+      notification.error({ content: 'Failed to invite members. Please try again.' });
+    }
+  };
+
   const tabs = [
     {
       label: 'Members',
@@ -69,6 +95,46 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
       content: () => <ModeratorList pageId={pageId} community={community} />,
     },
   ];
+
+  const openAddMemberPage = () => {
+    if (isDesktop) {
+      openPopup({
+        children: ({ close }) => (
+          <CommunityAddMemberPage
+            member={members}
+            closePopup={close}
+            onAddedAction={onClickAddMember}
+            communityId={community.communityId}
+          />
+        ),
+      });
+    } else {
+      AmityCommunityMembershipPageBehavior?.goToAddMemberPage?.({
+        members,
+        onAddedAction: onClickAddMember,
+        communityId: community.communityId,
+      });
+    }
+  };
+
+  const openInviteMemberPage = () => {
+    if (isDesktop) {
+      openPopup({
+        id: 'community_invite_member_page',
+        children: (
+          <CommunityInviteMemberPage
+            onSubmit={onClickInviteMember}
+            communityId={community.communityId}
+          />
+        ),
+      });
+    } else {
+      AmityCommunityMembershipPageBehavior?.goToInviteMemberPage?.({
+        onSubmit: onClickInviteMember,
+        communityId: community.communityId,
+      });
+    }
+  };
 
   return (
     <div
@@ -83,24 +149,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
         </Typography.TitleBold>
         <Button
           className={styles.communityMembershipPage__addMemberButton}
-          onPress={() => {
-            isDesktop
-              ? openPopup({
-                  children: ({ close }) => (
-                    <CommunityAddMemberPage
-                      member={members}
-                      closePopup={close}
-                      onAddedAction={onClickAddMember}
-                      communityId={community.communityId}
-                    />
-                  ),
-                })
-              : AmityCommunityMembershipPageBehavior?.goToAddMemberPage?.({
-                  members,
-                  onAddedAction: onClickAddMember,
-                  communityId: community.communityId,
-                });
-          }}
+          onPress={() => (isInvitation ? openInviteMemberPage() : openAddMemberPage())}
         >
           <Plus className={styles.communityMembershipPage__plusIcon} />
         </Button>

@@ -19,6 +19,7 @@
 
 .createCommunity__form {
   border: none;
+  padding-bottom: 5rem;
 }
 
 .createCommunity__coverImageButton {
@@ -52,6 +53,11 @@
 
 .createCommunity__formContent {
   padding: 0.5rem 1rem 0;
+}
+
+.createCommunity__inviteMemberLabel {
+  display: block;
+  padding: 1.5rem 0 1rem;
 }
 
 .createCommunity__label {
@@ -199,6 +205,7 @@
 
 .createCommunity__formDivider {
   border-top: 1px solid var(--asc-color-base-shade4);
+  margin: 0 1rem;
 }
 
 .createCommunity__selectedUserWrap {
@@ -208,8 +215,9 @@
 }
 
 .createCommunity__selectedUser {
-  display: block;
+  display: flex;
   text-align: center;
+  flex-direction: column;
 }
 
 .createCommunity__selectedUserAvatar {
@@ -218,7 +226,7 @@
   justify-content: center;
 }
 
-.createCommunity__selectedUserAvatarImage {
+.createCommunity .createCommunity__selectedUserAvatarImage {
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -257,13 +265,41 @@
 
 .createCommunity__createButton {
   bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   display: flex;
   padding: 1rem;
-  position: sticky;
-  margin-top: 1.5rem;
+  position: fixed;
   justify-content: center;
   border-top: 1px solid var(--asc-color-base-shade4);
   background-color: var(--asc-color-background-default);
+  z-index: 10;
+}
+
+.createCommunity__privacyIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.createCommunity__public__privacyIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+  padding: 0.125rem 0;
+}
+
+.createCommunity__requireJoinApproval {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+}
+
+.createCommunity__switch {
+  position: relative;
 }
 
 @media only screen and (width >=48em) {
@@ -289,6 +325,7 @@
     border-radius: 0.5rem;
     border: 1px solid var(--asc-color-base-shade4);
     background-color: var(--asc-color-background-default);
+    padding-bottom: 0;
   }
 
   .createCommunity__coverImageButton {
@@ -311,7 +348,8 @@
     background-color: var(--asc-color-background-default);
   }
 
-  .createCommunity__label {
+  .createCommunity__label,
+  .createCommunity__inviteMemberLabel {
     padding: 1.5rem 0 0;
   }
 
@@ -326,6 +364,9 @@
     margin-top: 0;
     border-top: none;
     position: static;
+    width: auto;
+    left: auto;
+    right: auto;
     border-radius: 0 0 0.5rem 0.5rem;
   }
 
@@ -339,5 +380,9 @@
 
   .createCommunity__selectedUserWrap .createCommunity__selectedUserHeader {
     border-bottom: none;
+  }
+
+  .createCommunity__requireJoinApproval {
+    padding: 1rem 0;
   }
 }

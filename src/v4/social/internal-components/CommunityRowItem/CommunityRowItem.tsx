@@ -12,6 +12,8 @@ import { CommunityJoinedButton } from '~/v4/social/elements/CommunityJoinedButto
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge/CommunityOfficialBadge';
 import { CommunityCategories } from '~/v4/social/internal-components/CommunityCategories/CommunityCategories';
 import styles from './CommunityRowItem.module.css';
+import Clock from '~/v4/icons/Clock';
+import { IconButton } from '~/v4/core/components/IconButton';
 
 type CommunityRowItemProps<TShowJoinButton extends boolean | undefined> = {
   community: Amity.Community;
@@ -27,12 +29,16 @@ type CommunityRowItemProps<TShowJoinButton extends boolean | undefined> = {
   onCategoryClick: (categoryId: string) => void;
 } & (TShowJoinButton extends true
   ? {
-      onJoinButtonClick: (communityId: string) => void;
-      onLeaveButtonClick: (communityId: string) => void;
+      onJoinButtonClick: (community: Amity.Community) => void;
+      onLeaveButtonClick: (community: Amity.Community) => void;
+      joinRequest?: Amity.JoinRequest;
+      onPendingButtonClick?: () => void;
     }
   : {
       onJoinButtonClick?: undefined | null;
       onLeaveButtonClick?: undefined | null;
+      onPendingButtonClick?: undefined | null;
+      joinRequest?: undefined;
     });
 
 const formatOrder = (order: number) => (order < 10 ? `0${order}` : `${order}`);
@@ -46,11 +52,13 @@ export const CommunityRowItem = <T extends boolean | undefined>({
   onCategoryClick,
   elementId = '*',
   onJoinButtonClick,
+  onPendingButtonClick,
   componentId = '*',
   onLeaveButtonClick,
   maxCategoriesLength,
   maxCategoryCharacters,
   minCategoryCharacters,
+  joinRequest,
 }: CommunityRowItemProps<T>) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
@@ -107,7 +115,16 @@ export const CommunityRowItem = <T extends boolean | undefined>({
             componentId={componentId}
             className={styles.communityRowItem__joinButton}
             data-has-categories={community.categoryIds.length > 0}
-            onClick={() => onLeaveButtonClick?.(community.communityId)}
+            onClick={() => onLeaveButtonClick?.(community)}
+          />
+        ) : joinRequest?.status === 'pending' ? (
+          <IconButton
+            size="small"
+            color="secondary"
+            variant="outlined"
+            defaultIcon={<Clock className={styles.communityRowItem__pendingButton} />}
+            onPress={() => onPendingButtonClick?.()}
+            text="Pending"
           />
         ) : (
           <CommunityJoinButton
@@ -115,7 +132,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
             componentId={componentId}
             className={styles.communityRowItem__joinButton}
             data-has-categories={community.categoryIds.length > 0}
-            onClick={() => onJoinButtonClick?.(community.communityId)}
+            onClick={() => onJoinButtonClick?.(community)}
           />
         ))}
     </Button>

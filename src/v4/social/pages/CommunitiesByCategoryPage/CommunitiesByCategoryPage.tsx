@@ -35,8 +35,8 @@ export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryP
 
   const { joinCommunity, leaveCommunity } = useCommunityActions();
 
-  const handleJoinButtonClick = (communityId: string) => joinCommunity(communityId);
-  const handleLeaveButtonClick = (communityId: string) => leaveCommunity(communityId);
+  const handleJoinButtonClick = (community: Amity.Community) => joinCommunity(community);
+  const handleLeaveButtonClick = (community: Amity.Community) => leaveCommunity(community);
 
   useIntersectionObserver({
     onIntersect: () => {

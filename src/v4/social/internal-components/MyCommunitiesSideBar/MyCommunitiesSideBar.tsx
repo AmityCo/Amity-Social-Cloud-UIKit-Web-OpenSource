@@ -7,6 +7,7 @@ import {
   MyCommunitiesSideBarItem,
   MyCommunitiesSideBarItemSkeleton,
 } from '~/v4/social/internal-components/MyCommunitiesSideBarItem';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import styles from './MyCommunitiesSideBar.module.css';
 
 type MyCommunitiesSideBarProps = {
@@ -16,6 +17,7 @@ type MyCommunitiesSideBarProps = {
 export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps) => {
   const componentId = 'my_communities';
 
+  const { acceptedInvitation } = useLayoutContext();
   const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
@@ -35,6 +37,13 @@ export const MyCommunitiesSideBar = ({ pageId = '*' }: MyCommunitiesSideBarProps
   useEffect(() => {
     refresh();
   }, []);
+
+  useEffect(() => {
+    if (acceptedInvitation) {
+      refresh();
+      setSelectedCommunityId(acceptedInvitation.targetId);
+    }
+  }, [acceptedInvitation]);
 
   return (
     <div style={themeStyles} className={styles.myCommunitiesList} data-testid={accessibilityId}>

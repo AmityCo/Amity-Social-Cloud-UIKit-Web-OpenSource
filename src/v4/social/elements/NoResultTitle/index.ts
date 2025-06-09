@@ -1,0 +1,1 @@
+export { NoResultTitle } from './NoResultTitle';

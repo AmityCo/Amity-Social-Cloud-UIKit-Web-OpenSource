@@ -35,7 +35,7 @@ export const useCommunityInfo = (communityId?: string) => {
   const updateCommunity = (payload: Parameters<updateCommunityFnType>[1]) =>
     communityId && CommunityRepository.updateCommunity(communityId, payload);
 
-  const joinCommunity = () => communityId && CommunityRepository.joinCommunity(communityId);
+  const joinCommunity = () => communityId && community?.join();
   const leaveCommunity = () => communityId && CommunityRepository.leaveCommunity(communityId);
   const closeCommunity = () => communityId && CommunityRepository.deleteCommunity(communityId);
 

@@ -50,8 +50,6 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
 
   const { community } = useCommunity({ communityId, shouldCall: !!communityId });
 
-  const isMemberPrivateCommunity = community?.isJoined && !community?.isPublic;
-
   const {
     posts,
     hasMore,
@@ -65,11 +63,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     limit: 10,
   });
 
-  const {
-    pinnedPost: allPinnedPost,
-    isLoading: isLoadingAllPinnedPosts,
-    refresh: refreshPinnedPosts,
-  } = usePinnedPostsCollection({
+  const { pinnedPost: allPinnedPost, refresh: refreshPinnedPosts } = usePinnedPostsCollection({
     communityId,
   });
 
@@ -234,14 +228,20 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
         }}
         className={styles.communityFeed__noInternet}
       >
-        {isMemberPrivateCommunity || community?.isPublic ? (
-          <>
-            {renderAnnouncementPost()}
-            {renderPublicCommunityFeed()}
-          </>
-        ) : (
-          <>{!isLoading && !isLoadingAllPinnedPosts && <LockPrivateContent />}</>
-        )}
+        <>
+          {community?.isJoined || community?.isPublic ? (
+            <>
+              {renderAnnouncementPost()}
+              {renderPublicCommunityFeed()}
+            </>
+          ) : isLoading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <CommunityFeedPostContentSkeleton key={index} />
+            ))
+          ) : (
+            <LockPrivateContent />
+          )}
+        </>
       </NoInternetConnectionHoc>
     </div>
   );

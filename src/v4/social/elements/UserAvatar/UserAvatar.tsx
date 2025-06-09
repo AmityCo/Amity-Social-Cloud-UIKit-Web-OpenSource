@@ -60,7 +60,7 @@ export function UserAvatar({
     } else if (onPressAvatar && !shouldRedirectToUserProfile) {
       onPressAvatar();
     } else {
-      onClickUser(userId);
+      shouldRedirectToUserProfile && onClickUser(userId);
     }
   };
 

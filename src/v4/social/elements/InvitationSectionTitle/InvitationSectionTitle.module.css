@@ -1,0 +1,5 @@
+.invitationSectionTitle {
+  padding: 0.5rem 1rem;
+  color: var(--asc-color-base-shade1);
+  background-color: var(--asc-color-background-default);
+}

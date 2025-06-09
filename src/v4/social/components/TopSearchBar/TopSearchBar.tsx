@@ -5,15 +5,22 @@ import { SearchIcon } from '~/v4/social/elements/SearchIcon';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
 import { CancelButton } from '~/v4/social/elements/CancelButton';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useDebounce } from 'react-use';
 import styles from './TopSearchBar.module.css';
 
 export type TopSearchBarProps = {
   pageId?: string;
   onFocus?: () => void;
+  hasCancelButton?: boolean;
   search: (keyword: string) => void;
 };
 
-export function TopSearchBar({ pageId = '*', search, onFocus }: TopSearchBarProps) {
+export function TopSearchBar({
+  pageId = '*',
+  search,
+  onFocus,
+  hasCancelButton = true,
+}: TopSearchBarProps) {
   const componentId = 'top_search_bar';
   const { onBack } = useNavigation();
   const [searchValue, setSearchValue] = useState('');
@@ -22,9 +29,7 @@ export function TopSearchBar({ pageId = '*', search, onFocus }: TopSearchBarProp
     componentId,
   });
 
-  useEffect(() => {
-    search(searchValue);
-  }, [searchValue]);
+  useDebounce(() => search(searchValue), 500, [searchValue]);
 
   if (isExcluded) return null;
 
@@ -49,18 +54,18 @@ export function TopSearchBar({ pageId = '*', search, onFocus }: TopSearchBarProp
           <ClearButton
             pageId={pageId}
             componentId={componentId}
+            onPress={() => setSearchValue('')}
             buttonClassName={styles.topSearchBar__clearButton}
             imgClassName={styles.topSearchBar__clearButton__img}
             defaultClassName={styles.topSearchBar__clearButton__default}
-            onPress={() => {
-              setSearchValue('');
-            }}
           />
         ) : null}
       </div>
-      <div className={styles.topSearchBar__cancelButton}>
-        <CancelButton pageId={pageId} componentId={componentId} onPress={() => onBack()} />
-      </div>
+      {hasCancelButton && (
+        <div className={styles.topSearchBar__cancelButton}>
+          <CancelButton pageId={pageId} componentId={componentId} onPress={() => onBack()} />
+        </div>
+      )}
     </div>
   );
 }

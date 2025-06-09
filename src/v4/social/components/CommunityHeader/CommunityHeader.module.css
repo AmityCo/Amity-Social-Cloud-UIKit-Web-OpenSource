@@ -99,6 +99,7 @@
 }
 
 .communityProfile__joinButton__container {
+  margin-top: 0.5rem;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -140,6 +141,24 @@
 
 .communityProfile__communityCategories::-webkit-scrollbar {
   display: none;
+}
+
+.communityProfile__cancelJoinButton__container {
+  padding: 0.5rem 0;
+  width: 100%;
+}
+
+.communityProfile__pendingIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-secondary-default);
+}
+
+.communityProfile__cancelJoinButton {
+  gap: 0.5rem;
+  width: 100%;
+  display: flex;
+  padding: 0.62rem 1rem !important;
 }
 
 @media (width >= 48em) {

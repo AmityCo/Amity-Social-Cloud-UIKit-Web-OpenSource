@@ -1,0 +1,1 @@
+export { CommunityInviteMemberDescription } from './CommunityInviteMemberDescription';

@@ -47,16 +47,19 @@ export enum PageTypes {
   CommunitiesByCategoryPage = 'CommunitiesByCategoryPage',
   CommunityAddCategoryPage = 'CommunityAddCategoryPage',
   CommunityAddMemberPage = 'CommunityAddMemberPage',
+  CommunityInviteMemberPage = 'CommunityInviteMemberPage',
   CommunitySettingPage = 'CommunitySettingPage',
   CommunityPostPermissionPage = 'CommunityPostPermissionPage',
   CommunityStorySettingPage = 'CommunityStorySettingPage',
   PendingPostsPage = 'PendingPostsPage',
   CommunityMembershipPage = 'CommunityMembershipPage',
+  CommunityPendingInvitationPage = 'CommunityPendingInvitationPage',
   CommunityCreatePage = 'CommunityCreatePage',
   PollPostComposerPage = 'PollPostComposerPage',
   LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
   LiveStreamPlayerPage = 'LiveStreamPlayerPage',
   NotificationTrayPage = 'NotificationTrayPage',
+  PendingRequestPage = 'PendingRequestPage',
 }
 
 type Page =
@@ -178,6 +181,13 @@ type Page =
       };
     }
   | {
+      type: PageTypes.CommunityInviteMemberPage;
+      context: {
+        communityId?: string;
+        onSubmit?: (userId: string[]) => void;
+      };
+    }
+  | {
       type: PageTypes.CommunitySettingPage;
       context: {
         community: Amity.Community;
@@ -208,6 +218,12 @@ type Page =
       };
     }
   | {
+      type: PageTypes.CommunityPendingInvitationPage;
+      context: {
+        community: Amity.Community;
+      };
+    }
+  | {
       type: PageTypes.PollTargetSelectionPage;
     }
   | {
@@ -219,6 +235,12 @@ type Page =
     }
   | {
       type: PageTypes.NotificationTrayPage;
+    }
+  | {
+      type: PageTypes.PendingRequestPage;
+      context: {
+        community: Amity.Community;
+      };
     };
 
 type ContextValue = {
@@ -304,17 +326,23 @@ type ContextValue = {
     communityId?: string;
     onAddedAction?: (userId: string[]) => void;
   }) => void;
+  goToInviteMemberPage?: (context: {
+    communityId?: string;
+    onSubmit?: (userId: string[]) => void;
+  }) => void;
   goToCommunitySettingPage?: (community: Amity.Community) => void;
   goToEditCommunityPage?: (context: {
     mode: AmityCommunitySetupPageMode;
     community: Amity.Community;
   }) => void;
   goToMembershipPage?: (community: Amity.Community) => void;
+  goToPendingInvitationPage?: (community: Amity.Community) => void;
   goToPostPermissionPage?: (community: Amity.Community) => void;
   goToStorySettingPage?: (community: Amity.Community) => void;
   goToPendingPostPage?: (communityId: string) => void;
   goToLiveStreamTerminatedPage?: () => void;
   goToLiveStreamPlayerPage?: (context: LiveStreamPlayerPageProps) => void;
+  goToPendingRequestPage?: (community: Amity.Community) => void;
 
   //V3 functions
   onClickStory: (
@@ -372,9 +400,11 @@ let defaultValue: ContextValue = {
   goToCreateCommunityPage: () => {},
   goToAddCategoryPage: () => {},
   goToAddMemberPage: () => {},
+  goToInviteMemberPage: () => {},
   goToCommunitySettingPage: (community: Amity.Community) => {},
   goToEditCommunityPage: () => {},
   goToMembershipPage: (community: Amity.Community) => {},
+  goToPendingInvitationPage: (community: Amity.Community) => {},
   goToPostPermissionPage: (community: Amity.Community) => {},
   goToStorySettingPage: (community: Amity.Community) => {},
   goToPendingPostPage: (communityId: string) => {},
@@ -446,6 +476,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToEditCommunityPage: () => console.log('NavigationContext goToEditCommunityPage()'),
     goToAddCategoryPage: () => console.log('NavigationContext goToAddCategoryPage()'),
     goToAddMemberPage: () => console.log('NavigationContext goToAddMemberPage()'),
+    goToInviteMemberPage: () => console.log('NavigationContext goToInviteMemberPage()'),
+    goToPendingInvitationPage: () => console.log('NavigationContext goToPendingInvitationsPage()'),
     goToCommunitySettingPage: (community) =>
       console.log(`NavigationContext goToCommunitySettingPage(${community})`),
     goToLiveStreamTerminatedPage: () =>
@@ -453,6 +485,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToLiveStreamPlayerPage: (context) =>
       console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
+    goToPendingRequestPage: (context) =>
+      console.log(`NavigationContext goToPendingRequestPage(${context})`),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -504,6 +538,7 @@ interface NavigationProviderProps {
     mode: AmityCommunitySetupPageMode;
     community: Amity.Community;
   }) => void;
+  goToPendingRequestPage?: (context: { community: Amity.Community }) => void;
 
   onCommunityCreated?: (communityId: string) => void;
   goToCommunityCreatePage?: () => void;
@@ -1054,6 +1089,17 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToInviteMemberPage = useCallback(
+    ({ communityId, onSubmit }) => {
+      const next = {
+        type: PageTypes.CommunityInviteMemberPage,
+        context: { communityId, onSubmit },
+      };
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   const handleClickStory = useCallback(
     (targetId, storyType, targetIds) => {
       const next = {
@@ -1142,6 +1188,17 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToPendingInvitationPage = useCallback(
+    (community) => {
+      const next = {
+        type: PageTypes.CommunityPendingInvitationPage,
+        context: { community },
+      };
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   const goToPollPostComposerPage = useCallback(
     ({ targetId, targetType }) => {
       const next = {
@@ -1181,6 +1238,20 @@ export default function NavigationProvider({
 
     pushPage(next);
   }, [onChangePage, pushPage]);
+
+  const goToPendingRequestPage = useCallback(
+    (community) => {
+      const next = {
+        type: PageTypes.PendingRequestPage,
+        context: {
+          community,
+        },
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
 
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
@@ -1231,11 +1302,13 @@ export default function NavigationProvider({
         goToEditCommunityPage,
         goToAddCategoryPage,
         goToAddMemberPage,
+        goToInviteMemberPage,
         goToCommunitySettingPage,
         goToPostPermissionPage,
         goToStorySettingPage,
         goToPendingPostPage,
         goToMembershipPage,
+        goToPendingInvitationPage,
         goToPollPostComposerPage,
         setNavigationBlocker,
         goToUserRelationshipPage,
@@ -1245,6 +1318,7 @@ export default function NavigationProvider({
         goToLiveStreamPlayerPage,
         onClickStory: handleClickStory,
         goToNotificationTrayPage,
+        goToPendingRequestPage,
       }}
     >
       <NavigationContextV3.Provider

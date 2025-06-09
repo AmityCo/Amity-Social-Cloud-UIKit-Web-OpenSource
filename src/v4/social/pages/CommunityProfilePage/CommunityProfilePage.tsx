@@ -30,6 +30,8 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 import useSDK from '~/v4/core/hooks/useSDK';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { useGetInvitation } from '~/v4/social/hooks';
 
 interface CommunityProfileProps {
   communityId: string;
@@ -56,9 +58,11 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     communityId,
     shouldCall: !!communityId,
   });
+  const { invitation } = useGetInvitation(community as Amity.Community);
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { onBack } = useNavigation();
+  const { acceptedInvitation } = useLayoutContext();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -111,7 +115,15 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
 
   useEffect(() => {
     refresh();
+    handleRefresh();
   }, []);
+
+  useEffect(() => {
+    if (acceptedInvitation) {
+      refresh();
+      handleRefresh();
+    }
+  }, [acceptedInvitation]);
 
   useEffect(() => {
     if (file) {
@@ -144,6 +156,13 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     };
   }, []);
 
+  const isShowFailed =
+    (!isLoading && community?.isDeleted) ||
+    (!isLoading &&
+      !community?.isJoined &&
+      community?.isDiscoverable == false &&
+      invitation == undefined);
+
   return (
     <PullToRefresh
       ref={containerRef}
@@ -153,7 +172,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       className={styles.communityProfilePage__container}
     >
       {isLoading && <CommunityProfileSkeleton />}
-      {!isLoading && community?.isDeleted && <FailedToShow pageId={pageId} onBack={onBack} />}
+      {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
       {!isLoading && community && !community.isDeleted && (
         <>
           <CommunityHeader pageId={pageId} community={community} isSticky={isSticky} page={page} />

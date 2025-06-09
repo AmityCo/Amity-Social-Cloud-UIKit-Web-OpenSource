@@ -29,6 +29,8 @@ export const NotificationItem = ({
 
   const { AmityNotificationTrayPageBehavior } = usePageBehavior();
 
+  const communityActionTypes = ['poll', 'post', 'join_request'];
+
   const onClickItem = () => {
     onClose?.();
     notificationTray.markItemsSeen([
@@ -38,7 +40,7 @@ export const NotificationItem = ({
       },
     ]);
 
-    if (item.actionType === 'poll' || item.actionType === 'post') {
+    if (communityActionTypes.includes(item.actionType)) {
       return AmityNotificationTrayPageBehavior?.goToCommunityProfilePage?.({
         communityId: item.targetId,
       });

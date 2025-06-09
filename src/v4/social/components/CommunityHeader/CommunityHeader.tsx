@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './CommunityHeader.module.css';
+import { JoinRequestStatusEnum } from '@amityco/ts-sdk';
 import { StoryTab } from '~/v4/social/components/StoryTab';
 import { CommunityPendingPost } from '~/v4/social/elements/CommunityPendingPost';
 import { CommunityCover } from '~/v4/social/elements/CommunityCover';
@@ -13,11 +13,21 @@ import { CommunityInfo } from '~/v4/social/elements/CommunityInfo';
 import { CommunityCategories } from '~/v4/social/internal-components/CommunityCategories/CommunityCategories';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
-import { CommunityPostSettings } from '@amityco/ts-sdk';
+import { CommunityPostSettings, InvitationStatusEnum } from '@amityco/ts-sdk';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge/CommunityPrivateBadge';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { InvitationBanner } from '~/v4/social/components';
+import { useGetInvitation } from '~/v4/social/hooks';
+import { IconButton } from '~/v4/core/components/IconButton';
+import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
+import Clock from '~/v4/icons/Clock';
+import styles from './CommunityHeader.module.css';
+import { useGetJoinRequests } from '~/v4/social/hooks/useGetJoinRequests';
+import { useGetMyJoinRequest } from '~/v4/social/hooks/useGetMyJoinRequest';
+
+//TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
 
 interface CommunityProfileHeaderProps {
   pageId?: string;
@@ -39,26 +49,31 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const { currentUserId } = useSDK();
   const { online } = useNetworkState();
   const notification = useNotifications();
+  const { invitation, setInvitation } = useGetInvitation(community);
+  const { myJoinRequest } = useGetMyJoinRequest(community);
+  const { joinRequests } = useGetJoinRequests(community);
 
-  const {
-    avatarFileUrl,
-    joinCommunity,
-    pendingPostsCount,
-    reviewingPosts,
-    canReviewCommunityPosts,
-  } = useCommunityInfo(community.communityId);
+  const { avatarFileUrl, pendingPostsCount, reviewingPosts, canReviewCommunityPosts } =
+    useCommunityInfo(community.communityId);
+
+  const { joinCommunity, cancelJoinCommunity } = useCommunityActions();
 
   const isPostOwner = reviewingPosts.some((post) => post.postedUserId === currentUserId);
 
-  //TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
+  const isPendingJoinRequest = myJoinRequest?.status === JoinRequestStatusEnum.Pending;
+
+  const joinRequestCount = (joinRequests && joinRequests?.length) ?? 0;
+
   const isShowPendingPost =
-    community.isJoined &&
     pendingPostsCount > 0 &&
     reviewingPosts.length > 0 &&
     (canReviewCommunityPosts || isPostOwner) &&
     ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
       .needApprovalOnPostCreation ||
       community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED);
+
+  const isShowJoinRequest = joinRequestCount > 0 && canReviewCommunityPosts;
+  const isShowPendingBanner = isShowPendingPost || isShowJoinRequest;
 
   return (
     <>
@@ -119,49 +134,80 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
             count={community.membersCount}
             text={`member${community.membersCount === 1 ? '' : 's'}`}
             onClick={() => {
-              AmityCommunityProfilePageBehavior?.goToMembershipPage?.({
-                community: community,
-              });
+              community.isJoined &&
+                AmityCommunityProfilePageBehavior?.goToMembershipPage?.({ community: community });
             }}
           />
         </div>
 
-        {!community.isJoined && community.isPublic && (
-          <div className={styles.communityProfile__joinButton__container}>
-            <CommunityJoinButton
-              size="medium"
+        {invitation && invitation.status === InvitationStatusEnum.Pending && (
+          <InvitationBanner
+            pageId={pageId}
+            community={community}
+            invitation={invitation}
+            removeInvitation={() => setInvitation(undefined)}
+          />
+        )}
+        {(!invitation || invitation.status !== InvitationStatusEnum.Pending) &&
+          !community.isJoined &&
+          !isPendingJoinRequest &&
+          community.isPublic && (
+            <div className={styles.communityProfile__joinButton__container}>
+              <CommunityJoinButton
+                size="medium"
+                pageId={pageId}
+                onClick={() => {
+                  if (!online) {
+                    notification.info({
+                      content: 'Failed to join community. Please try again.',
+                    });
+                    return;
+                  }
+                  joinCommunity(community);
+                }}
+                componentId={componentId}
+                className={styles.communityProfile__joinButton}
+              />
+            </div>
+          )}
+        {!community.isJoined && isPendingJoinRequest && (
+          <div className={styles.communityProfile__cancelJoinButton__container}>
+            <IconButton
               pageId={pageId}
-              onClick={() => {
-                if (!online) {
-                  notification.info({
-                    content: 'Failed to join community. Please try again.',
-                  });
-                  return;
-                }
-                joinCommunity();
-              }}
               componentId={componentId}
-              className={styles.communityProfile__joinButton}
+              elementId="community_cancel_request_button"
+              className={styles.communityProfile__cancelJoinButton}
+              size="small"
+              color="secondary"
+              variant="outlined"
+              defaultIcon={<Clock className={styles.communityProfile__pendingIcon} />}
+              onPress={cancelJoinCommunity}
+              text="Cancel request"
             />
           </div>
         )}
-        <div>
-          <StoryTab type="communityFeed" pageId={pageId} communityId={community.communityId} />
-        </div>
+        {(community.isJoined || community.isPublic) && (
+          <div>
+            <StoryTab type="communityFeed" pageId={pageId} communityId={community.communityId} />
+          </div>
+        )}
 
-        {isShowPendingPost && (
+        {isShowPendingBanner && (
           <div className={styles.communityProfile__pendingPost__container}>
             <CommunityPendingPost
               pageId={pageId}
               componentId={componentId}
               pendingPostsCount={pendingPostsCount}
               onClick={() => {
-                AmityCommunityProfilePageBehavior?.goToPendingPostPage?.({
-                  communityId: community.communityId,
+                AmityCommunityProfilePageBehavior?.goToPendingRequestPage?.({
+                  community: community,
                 });
               }}
               isPostOwner={isPostOwner}
               canReviewCommunityPosts={canReviewCommunityPosts}
+              isShowJoinRequest={isShowJoinRequest}
+              isShowPendingPost={isShowPendingPost}
+              joinRequestsCount={joinRequestCount}
             />
           </div>
         )}

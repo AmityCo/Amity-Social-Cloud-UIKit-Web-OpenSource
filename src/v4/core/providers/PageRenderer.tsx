@@ -31,6 +31,7 @@ import {
   UserProfilePage,
   UserRelationshipPage,
   ViewStoryPage,
+  CommunityInviteMemberPage,
 } from '~/v4/social/pages';
 import CommunityFeed from '~/social/pages/CommunityFeed';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
@@ -124,6 +125,13 @@ const PageRenderer = ({ children }: PageRendererProps) => {
           member={page.context?.members}
           communityId={page.context?.communityId}
           onAddedAction={page.context?.onAddedAction}
+        />
+      );
+    case PageTypes.CommunityInviteMemberPage:
+      return (
+        <CommunityInviteMemberPage
+          onSubmit={page.context?.onSubmit}
+          communityId={page.context?.communityId}
         />
       );
     case PageTypes.CommunitySettingPage:

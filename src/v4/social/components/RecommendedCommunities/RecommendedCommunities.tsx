@@ -19,6 +19,7 @@ import { CommunityJoinedButton } from '~/v4/social/elements/CommunityJoinedButto
 import styles from './RecommendedCommunities.module.css';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useGetJoinRequestList } from '~/v4/social/hooks/useGetJoinRequestList';
 
 type RecommendedCommunityCardProps = {
   pageId: string;
@@ -26,8 +27,8 @@ type RecommendedCommunityCardProps = {
   community: Amity.Community;
   onClick: (communityId: string) => void;
   onCategoryClick?: (categoryId: string) => void;
-  onJoinButtonClick: (communityId: string) => void;
-  onLeaveButtonClick: (communityId: string) => void;
+  onJoinButtonClick: (community: Amity.Community) => void;
+  onLeaveButtonClick: (community: Amity.Community) => void;
 };
 
 const RecommendedCommunityCard = ({
@@ -86,13 +87,13 @@ const RecommendedCommunityCard = ({
               <CommunityJoinedButton
                 pageId={pageId}
                 componentId={componentId}
-                onClick={() => onLeaveButtonClick(community.communityId)}
+                onClick={() => onLeaveButtonClick(community)}
               />
             ) : (
               <CommunityJoinButton
                 pageId={pageId}
                 componentId={componentId}
-                onClick={() => onJoinButtonClick(community.communityId)}
+                onClick={() => onJoinButtonClick(community)}
               />
             )}
           </div>
@@ -123,6 +124,17 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     refetchRecommendedCommunities,
   } = useExplore();
 
+  const communityIds = recommendedCommunities.map((community) => community.communityId);
+
+  const { joinRequestList } = useGetJoinRequestList(communityIds);
+
+  const recommendedCommunitiesWithOutJoinRequests = joinRequestList
+    ? recommendedCommunities.filter(
+        (community) =>
+          !joinRequestList.some((request) => request.targetId === community.communityId),
+      )
+    : recommendedCommunities;
+
   useEffect(() => {
     fetchRecommendedCommunities();
   }, []);
@@ -133,31 +145,31 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     },
   });
 
-  const handleJoinButtonClick = (communityId: string) => {
+  const handleJoinButtonClick = async (community: Amity.Community) => {
     if (!online) {
       notification.info({
         content: 'Failed to join community. Please try again.',
       });
       return;
     }
-    joinCommunity(communityId);
+    joinCommunity(community);
   };
 
-  const handleLeaveButtonClick = (communityId: string) => {
+  const handleLeaveButtonClick = (community: Amity.Community) => {
     if (!online) {
       notification.info({
         content: 'Failed to leave community. Please try again.',
       });
       return;
     }
-    leaveCommunity(communityId);
+    leaveCommunity(community);
   };
 
   return (
     <Carousel
       scrollOffset={400}
       iconClassName={styles.recommendedCommunityCard__arrowIcon}
-      isHidden={isLoading || recommendedCommunities.length < 3}
+      isHidden={isLoading || recommendedCommunitiesWithOutJoinRequests.length < 3}
       leftArrowClassName={clsx(styles.recommendedCommunityCard__arrow, styles.left)}
       rightArrowClassName={clsx(styles.recommendedCommunityCard__arrow, styles.right)}
     >
@@ -170,16 +182,16 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
           ? Array.from({ length: 4 }).map((_, index) => (
               <RecommendedCommunityCardSkeleton key={index} />
             ))
-          : recommendedCommunities.length === 0
+          : recommendedCommunitiesWithOutJoinRequests.length === 0
             ? null
-            : recommendedCommunities.map((community) => (
+            : recommendedCommunitiesWithOutJoinRequests.map((community) => (
                 <RecommendedCommunityCard
                   pageId={pageId}
                   community={community}
                   componentId={componentId}
                   key={community.communityId}
-                  onJoinButtonClick={handleJoinButtonClick}
-                  onLeaveButtonClick={handleLeaveButtonClick}
+                  onJoinButtonClick={(community) => handleJoinButtonClick(community)}
+                  onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
                   onClick={(communityId) => goToCommunityProfilePage(communityId)}
                   onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
                 />

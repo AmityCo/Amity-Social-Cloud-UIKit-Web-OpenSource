@@ -11,6 +11,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 
 type CommunitySearchResultProps = {
   pageId?: string;
@@ -38,6 +39,7 @@ export const CommunitySearchResult = ({
   const notification = useNotifications();
   const { goToCommunityProfilePage, goToCommunitiesByCategoryPage } = useNavigation();
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const { confirm } = useConfirmContext();
 
   useIntersectionObserver({ onIntersect: () => onLoadMore(), node: intersectionNode });
 
@@ -57,23 +59,31 @@ export const CommunitySearchResult = ({
               key={community.communityId}
               showJoinButton={showJoinButton}
               maxCategoriesLength={isDesktop ? 2 : 5}
-              onJoinButtonClick={(communityId) => {
+              onJoinButtonClick={(community) => {
                 if (!online) {
                   notification.info({
                     content: 'Failed to join community. Please try again.',
                   });
                   return;
                 }
-                joinCommunity(communityId);
+                joinCommunity(community);
               }}
-              onLeaveButtonClick={(communityId) => {
+              onLeaveButtonClick={(community) => {
                 if (!online) {
                   notification.info({
                     content: 'Failed to leave community. Please try again.',
                   });
                   return;
                 }
-                leaveCommunity(communityId);
+                if (community.requiresJoinApproval) {
+                  confirm({
+                    title: 'Leave Community',
+                    content: 'If you change your mind, you’ll have to request to join again.',
+                    onOk: () => leaveCommunity(community),
+                  });
+                  return;
+                }
+                leaveCommunity(community);
               }}
               onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
               onClick={(communityId) => {

@@ -1,0 +1,27 @@
+.communityInviteMemberButton {
+  display: flex;
+  text-align: center;
+  padding: 0 0.75rem;
+  flex-direction: column;
+}
+
+.communityInviteMemberButton__iconContainer {
+  width: 2.5rem;
+  display: flex;
+  height: 2.5rem;
+  border-radius: 50%;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  justify-content: center;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.communityInviteMemberButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.communityInviteMemberButton__text {
+  line-height: 1.65rem;
+}

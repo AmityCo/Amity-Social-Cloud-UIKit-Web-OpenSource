@@ -3,20 +3,10 @@ import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPag
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { BackButton, CloseButton } from '~/v4/social/elements';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { CommunityNameTitle } from '~/v4/social/elements/CommunityNameTitle';
 import { Button } from '~/v4/core/natives/Button';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Camera } from '~/v4/icons/Camera';
 import { Avatar, Typography } from '~/v4/core/components';
-import { CommunityAboutTitle } from '~/v4/social/elements/CommunityAboutTitle';
-import { CommunityCategoryTitle } from '~/v4/social/elements/CommunityCategoryTitle';
-import { CommunityPrivacyTitle } from '~/v4/social/elements/CommunityPrivacyTitle';
-import { CommunityPrivacyPrivateIcon } from '~/v4/social/elements/CommunityPrivacyPrivateIcon/';
-import { CommunityPrivacyPrivateTitle } from '~/v4/social/elements/CommunityPrivacyPrivateTitle/';
-import { CommunityPrivacyPrivateDescription } from '~/v4/social/elements/CommunityPrivacyPrivateDescription';
-import { CommunityPrivacyPublicIcon } from '~/v4/social/elements/CommunityPrivacyPublicIcon';
-import { CommunityPrivacyPublicTitle } from '~/v4/social/elements/CommunityPrivacyPublicTitle';
-import { CommunityPrivacyPublicDescription } from '~/v4/social/elements/CommunityPrivacyPublicDescription';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { CameraButton } from '~/v4/social/elements/CameraButton';
@@ -42,10 +32,33 @@ import styles from './EditCommunity.module.css';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
 import { useNetworkState } from 'react-use';
+import { AmityCommunitySetupPrivacy } from '~/v4/social/providers/CommunitySetupProvider';
+import { CommunityPrivacyIcon } from '~/v4/social/elements/CommunityPrivacyIcon';
+import { CommunityPrivacyTitleOption } from '~/v4/social/elements/CommunityPrivacyTitleOption';
+import World from '~/v4/icons/World';
+import { CommunityPrivacyDescription } from '~/v4/social/elements/CommunityPrivacyDescription';
+import WorldWithLock from '~/v4/icons/WorldWithLock';
+import Lock from '~/v4/icons/Lock';
+import { TitleForm } from '~/v4/core/components/TitleForm';
+import { Description } from '~/v4/core/components/Description';
+import { SubDescription } from '~/v4/core/components/SubDescription';
+import { Switch } from '~/v4/core/components/AriaSwitch';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 
 type EditCommunityProps = {
   community: Amity.Community;
   mode: AmityCommunitySetupPageMode;
+};
+
+type UpdateCommunityParams = {
+  displayName: string;
+  avatarFileId?: string;
+  categoryIds?: string[];
+  isPublic: boolean;
+  description?: string;
+  tags?: string[];
+  isDiscoverable?: boolean;
+  requiresJoinApproval?: boolean;
 };
 
 export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
@@ -56,7 +69,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
   const { isDesktop } = useResponsive();
   const notification = useNotifications();
   const { online } = useNetworkState();
-  const { confirm } = useConfirmContext();
+  const { confirm, info } = useConfirmContext();
   const { themeStyles } = useAmityPage({ pageId });
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { onBack, goToCommunityProfilePage } = useNavigation();
@@ -72,15 +85,29 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
 
   const {
     about,
-    isPublic,
+    privacySettings,
     setAbout,
     categories,
-    setIsPublic,
+    setPrivacySettings,
     setCategories,
     communityName,
     setCoverImages,
     setCommunityName,
+    requiresJoinApproval,
+    setRequiresJoinApproval,
+    isDiscoverable,
+    setIsDiscoverable,
   } = useCommunitySetupContext();
+
+  const hasPendingJoinRequests = community.getJoinRequests && community.getJoinRequests.length > 0;
+
+  const { globalFeaturedPostsItems } = useGlobalFeedContext();
+
+  const hasGlobalFeaturedPostsInCommunity = globalFeaturedPostsItems.some(
+    (post) => post.targetId === community.communityId,
+  );
+
+  const isPublic = privacySettings === AmityCommunitySetupPrivacy.PUBLIC;
 
   const displayName = watch('displayName');
   const description = watch('description');
@@ -96,8 +123,21 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     if (categories.length == 0 && communityCategories.length > 0) {
       setCategories(communityCategories);
     }
-    if (community.isPublic == false) {
-      setIsPublic(community.isPublic);
+    if (requiresJoinApproval !== community.requiresJoinApproval) {
+      setRequiresJoinApproval(community.requiresJoinApproval ?? false);
+    }
+    if (!community.isPublic) {
+      setPrivacySettings(
+        community?.isDiscoverable
+          ? AmityCommunitySetupPrivacy.PRIVATE_VISIBLE
+          : AmityCommunitySetupPrivacy.PRIVATE_HIDDEN,
+      );
+    }
+    if (community.isPublic) {
+      setPrivacySettings(AmityCommunitySetupPrivacy.PUBLIC);
+    }
+    if (isDiscoverable !== community.isDiscoverable) {
+      setIsDiscoverable(community.isDiscoverable ?? true);
     }
   }, [displayName, description, communityCategories, coverImage]);
 
@@ -106,7 +146,8 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     if (file.length > 0) setIncomingImage(file);
   };
 
-  const handlePrivacyChange = (value: string) => setIsPublic(value === 'true');
+  const handlePrivacyChange = (value: string) =>
+    setPrivacySettings(value as AmityCommunitySetupPrivacy);
 
   const handleRemoveCategory = (categoryId: string) => {
     setCategories(categories.filter((c) => c.categoryId !== categoryId));
@@ -130,7 +171,9 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
           setCommunityName('');
           setAbout('');
           setCategories([]);
-          setIsPublic(true);
+          setPrivacySettings(AmityCommunitySetupPrivacy.PUBLIC);
+          setIsDiscoverable(true);
+          setRequiresJoinApproval(false);
           onBack();
         },
         okText: 'Leave',
@@ -141,19 +184,14 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       setCommunityName('');
       setAbout('');
       setCategories([]);
-      setIsPublic(true);
+      setPrivacySettings(AmityCommunitySetupPrivacy.PUBLIC);
+      setIsDiscoverable(true);
+      setRequiresJoinApproval(false);
       onBack();
     }
   };
 
-  const onSubmit = async (data: {
-    displayName: string;
-    avatarFileId?: string;
-    categoryIds?: string[];
-    isPublic: boolean;
-    description?: string;
-    tags?: string[];
-  }) => {
+  const onSubmit = async (data: UpdateCommunityParams) => {
     const communities = await CommunityRepository.updateCommunity(community.communityId, data);
     if (!communities) return null;
     if (communities) {
@@ -162,6 +200,18 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       });
       goToCommunityProfilePage(community.communityId);
     }
+  };
+
+  const submitCommunityUpdate = async (data: EditFormValues) => {
+    await onSubmit({
+      ...data,
+      displayName: communityName,
+      avatarFileId: coverImage.length > 0 ? coverImage[coverImage.length - 1].fileId : undefined,
+      categoryIds: categories.length > 0 ? categories.map((c) => c.categoryId) : [],
+      isPublic,
+      isDiscoverable,
+      requiresJoinApproval,
+    });
   };
 
   const validateAndSubmit = async (data: EditFormValues) => {
@@ -174,13 +224,31 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     try {
       setSubmitting(true);
 
-      await onSubmit({
-        ...data,
-        displayName: communityName,
-        avatarFileId: coverImage.length > 0 ? coverImage[coverImage.length - 1].fileId : undefined,
-        categoryIds: categories.length > 0 ? categories.map((c) => c.categoryId) : [],
-        isPublic,
-      });
+      if (community.requiresJoinApproval && !requiresJoinApproval && hasPendingJoinRequests) {
+        return info({
+          pageId: pageId,
+          title: 'You have pending join requests',
+          content: 'Please address these requests before switching off membership approval.',
+        });
+      }
+
+      if (
+        community.isPublic &&
+        privacySettings !== AmityCommunitySetupPrivacy.PUBLIC &&
+        hasGlobalFeaturedPostsInCommunity
+      ) {
+        confirm({
+          pageId: pageId,
+          title: 'Change community privacy settings?',
+          content: `This community has globally featured posts. Changing the community from public to ${AmityCommunitySetupPrivacy.PRIVATE_VISIBLE ? 'private & visible' : 'private & hidden'} will remove these posts from being featured globally.`,
+          onOk: async () => {
+            await submitCommunityUpdate(data);
+          },
+        });
+        return;
+      }
+
+      await submitCommunityUpdate(data);
     } catch (error) {
       notification.info({
         content: 'Failed to update community. Please try again.',
@@ -190,7 +258,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       setCoverImages([]);
       setCommunityName('');
       setCategories([]);
-      setIsPublic(true);
+      setPrivacySettings(AmityCommunitySetupPrivacy.PUBLIC);
       setAbout('');
     }
   };
@@ -204,7 +272,10 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       coverImage.length === 0 &&
       categories.length === communityCategories.length &&
       categories.sort().every((value, index) => value === communityCategories.sort()[index]) &&
-      community.isPublic === isPublic);
+      community.isPublic === isPublic &&
+      requiresJoinApproval === community?.requiresJoinApproval &&
+      !isPublic === !community.isPublic &&
+      isDiscoverable === community.isDiscoverable);
 
   return (
     <div style={themeStyles} className={styles.editCommunity}>
@@ -308,7 +379,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
         <div className={styles.editCommunity__formContent}>
           <TextField>
             <Label className={styles.editCommunity__label}>
-              <CommunityNameTitle pageId={pageId} />
+              <TitleForm pageId={pageId} elementId="community_name_title" />
               <Typography.Body className={styles.editCommunity__charactersCount}>
                 {displayName.length}/{MAX_LENGTH_COMMUNITY_NAME}
               </Typography.Body>
@@ -329,7 +400,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
           <TextField>
             <Label className={styles.editCommunity__label}>
               <div className={styles.editCommunity__description}>
-                <CommunityAboutTitle pageId={pageId} />
+                <TitleForm pageId={pageId} elementId="community_about_title" />
                 <Typography.Body className={styles.editCommunity__optionalText}>
                   (Optional)
                 </Typography.Body>
@@ -349,7 +420,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
         </div>
         <div className={styles.editCommunity__formContent}>
           <label className={styles.editCommunity__label}>
-            <CommunityCategoryTitle pageId={pageId} />
+            <TitleForm pageId={pageId} elementId="community_category_title" />
           </label>
           <Popover
             trigger={({ isDesktop, isOpen, openPopover }) => {
@@ -427,38 +498,103 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
         </div>
         <RadioGroup
           onChange={handlePrivacyChange}
-          value={isPublic ? 'true' : 'false'}
+          value={privacySettings}
           labelClassName={styles.editCommunity__label}
           className={styles.editCommunity__formContent}
-          label={<CommunityPrivacyTitle pageId={pageId} />}
+          label={<TitleForm pageId={pageId} elementId="community_privacy_title" />}
           radioProps={{ className: styles.editCommunity__formRadio }}
           radios={[
             {
-              value: 'true',
+              value: AmityCommunitySetupPrivacy.PUBLIC,
               label: (
                 <div className={styles.editCommunity__privacy}>
-                  <CommunityPrivacyPublicIcon pageId={pageId} />
+                  <CommunityPrivacyIcon
+                    pageId={pageId}
+                    elementId="community_privacy_public_icon"
+                    defaultIcon={<World className={styles.editCommunity__public__privacyIcon} />}
+                  />
                   <div>
-                    <CommunityPrivacyPublicTitle pageId={pageId} />
-                    <CommunityPrivacyPublicDescription pageId={pageId} />
+                    <CommunityPrivacyTitleOption
+                      pageId={pageId}
+                      elementId="community_privacy_public_title"
+                    />
+                    <CommunityPrivacyDescription
+                      pageId={pageId}
+                      elementId="community_privacy_public_description"
+                    />
                   </div>
                 </div>
               ),
             },
             {
-              value: 'false',
+              value: AmityCommunitySetupPrivacy.PRIVATE_VISIBLE,
               label: (
                 <div className={styles.editCommunity__privacy}>
-                  <CommunityPrivacyPrivateIcon pageId={pageId} />
+                  <CommunityPrivacyIcon
+                    pageId={pageId}
+                    elementId="community_privacy_private_and_hidden_icon"
+                    defaultIcon={<WorldWithLock className={styles.editCommunity__privacyIcon} />}
+                  />
                   <div>
-                    <CommunityPrivacyPrivateTitle pageId={pageId} />
-                    <CommunityPrivacyPrivateDescription pageId={pageId} />
+                    <CommunityPrivacyTitleOption
+                      pageId={pageId}
+                      elementId="community_privacy_private_and_visible_title"
+                    />
+                    <CommunityPrivacyDescription
+                      pageId={pageId}
+                      elementId="community_privacy_private_and_visible_description"
+                    />
+                  </div>
+                </div>
+              ),
+            },
+            {
+              value: AmityCommunitySetupPrivacy.PRIVATE_HIDDEN,
+              label: (
+                <div className={styles.editCommunity__privacy}>
+                  <CommunityPrivacyIcon
+                    pageId={pageId}
+                    elementId="community_privacy_private_and_hidden_icon"
+                    defaultIcon={<Lock className={styles.editCommunity__privacyIcon} />}
+                  />
+                  <div>
+                    <CommunityPrivacyTitleOption
+                      pageId={pageId}
+                      elementId="community_privacy_private_and_hidden_title"
+                    />
+                    <CommunityPrivacyDescription
+                      pageId={pageId}
+                      elementId="community_privacy_private_and_hidden_description"
+                    />
                   </div>
                 </div>
               ),
             },
           ]}
         />
+
+        <div className={styles.editCommunity__formDivider} />
+        <div className={styles.editCommunity__formContent}>
+          <label className={styles.editCommunity__label}>
+            <TitleForm pageId={pageId} elementId="community_membership_title" />
+          </label>
+          <div className={styles.editCommunity__requireJoinApproval}>
+            <div>
+              <Description pageId={pageId} elementId="community_membership_description" />
+              <SubDescription pageId={pageId} elementId="community_membership_sub_description" />
+            </div>
+            <Switch
+              isSelected={
+                privacySettings === AmityCommunitySetupPrivacy.PRIVATE_HIDDEN ||
+                requiresJoinApproval
+              }
+              onChange={() => setRequiresJoinApproval(!requiresJoinApproval)}
+              className={styles.editCommunity__switch}
+              isDisabled={privacySettings === AmityCommunitySetupPrivacy.PRIVATE_HIDDEN}
+            />
+          </div>
+        </div>
+
         <div className={styles.editCommunity__createButton}>
           <CommunityEditButton pageId={pageId} isDisabled={disabled} />
         </div>
