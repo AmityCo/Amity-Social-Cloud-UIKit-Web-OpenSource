@@ -420,7 +420,12 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
         </div>
         <div className={styles.editCommunity__formContent}>
           <label className={styles.editCommunity__label}>
-            <TitleForm pageId={pageId} elementId="community_category_title" />
+            <div className={styles.editCommunity__description}>
+              <TitleForm pageId={pageId} elementId="community_category_title" />
+              <Typography.Body className={styles.editCommunity__optionalText}>
+                (Optional)
+              </Typography.Body>
+            </div>
           </label>
           <Popover
             trigger={({ isDesktop, isOpen, openPopover }) => {

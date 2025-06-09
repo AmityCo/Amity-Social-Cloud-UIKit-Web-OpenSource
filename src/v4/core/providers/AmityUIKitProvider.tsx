@@ -90,8 +90,8 @@ const InternalComponent = ({
         ...initialConfig,
         ...configs,
         theme: {
-          light: configs.theme?.light ?? initialConfig.theme.light,
-          dark: configs.theme?.dark ?? initialConfig.theme.dark,
+          light: { ...initialConfig.theme.light, ...configs.theme?.light },
+          dark: { ...initialConfig.theme.dark, ...configs.theme?.dark },
         },
       };
     }

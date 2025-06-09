@@ -352,6 +352,7 @@ function SelectedMember({ user, handleRemoveUser }: SelectedMemberProps) {
         <UserAvatar
           userId={user.userId}
           className={styles.communityInviteMemberPage__selectedUserAvatarImage}
+          imageContainerClassName={styles.communityInviteMemberPage__selectedUserAvatarImage}
           textPlaceholderClassName={styles.communityInviteMemberPage__selectedUserAvatarImage}
         />
         <Button

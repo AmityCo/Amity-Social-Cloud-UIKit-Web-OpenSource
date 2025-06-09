@@ -34,7 +34,12 @@ export function TopSearchBar({
   if (isExcluded) return null;
 
   return (
-    <div className={styles.topSearchBar} style={themeStyles} data-testid={accessibilityId}>
+    <div
+      className={styles.topSearchBar}
+      data-cancel={!!hasCancelButton}
+      style={themeStyles}
+      data-testid={accessibilityId}
+    >
       <div className={styles.topSearchBar__inputBar}>
         <SearchIcon
           pageId={pageId}

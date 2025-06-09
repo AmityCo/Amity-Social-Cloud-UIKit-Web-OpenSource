@@ -432,7 +432,12 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
         </div>
         <div className={styles.createCommunity__formContent}>
           <label className={styles.createCommunity__label}>
-            <TitleForm pageId={pageId} elementId="community_category_title" />
+            <div className={styles.createCommunity__description}>
+              <TitleForm pageId={pageId} elementId="community_category_title" />
+              <Typography.Body className={styles.createCommunity__optionalText}>
+                (Optional)
+              </Typography.Body>
+            </div>
           </label>
           <Popover
             trigger={({ isDesktop, isOpen, openPopover }) => {

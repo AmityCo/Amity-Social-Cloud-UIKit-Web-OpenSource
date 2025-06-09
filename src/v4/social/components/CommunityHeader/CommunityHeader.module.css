@@ -50,7 +50,6 @@
   align-items: flex-start;
   overflow: hidden;
   background: var(--asc-color-background-default);
-  border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 
 .communityProfile__name {
@@ -163,7 +162,6 @@
 
 @media (width >= 48em) {
   .content {
-    border-bottom: none;
     border-left: 1px solid var(--asc-color-base-shade4);
     border-right: 1px solid var(--asc-color-base-shade4);
   }

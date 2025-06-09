@@ -1,3 +1,5 @@
+import { generateShades } from '~/v4/core/providers/ThemeProvider';
+
 export type IconConfiguration = {
   icon?: string;
   image?: string;
@@ -74,9 +76,17 @@ type BaseThemeValue = {
   primary_background_disabled_color: string;
   plyr_color_main: string;
   plyr_video_control_background_hover: string;
+  transparent_black: string;
 };
 
-export type ThemeValue = ConfigurableThemeValue & BaseThemeValue;
+type GeneratedThemeValue = {
+  primary_shade1_color: string;
+  primary_shade2_color: string;
+  primary_shade3_color: string;
+  primary_shade4_color: string;
+};
+
+export type ThemeValue = ConfigurableThemeValue & BaseThemeValue & GeneratedThemeValue;
 
 const defaultBase = {
   black_color: '#000000',
@@ -91,7 +101,7 @@ const defaultBase = {
   primary_background_disabled_color: '#d9e5fc',
   plyr_color_main: '#f6f7f8',
   plyr_video_control_background_hover: 'rgb(0 0 0 / 30%)',
-  trasparent_black_color: 'rgb(0 0 0 / 50%)',
+  transparent_black: 'rgb(0 0 0 / 50%)',
 };
 
 export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValue } = {
@@ -1089,6 +1099,10 @@ export const getCustomizationKeys = ({
 
 const propertyMappings: Record<keyof ThemeValue, string> = {
   primary_color: '--asc-color-primary-default',
+  primary_shade1_color: '--asc-color-primary-shade1',
+  primary_shade2_color: '--asc-color-primary-shade2',
+  primary_shade3_color: '--asc-color-primary-shade3',
+  primary_shade4_color: '--asc-color-primary-shade4',
   secondary_color: '--asc-color-secondary-default',
   secondary_shade1_color: '--asc-color-secondary-shade1',
   secondary_shade2_color: '--asc-color-secondary-shade2',
@@ -1117,12 +1131,22 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   primary_background_disabled_color: '--asc-color-primary-background-disabled',
   plyr_color_main: '--plyr-color-main',
   plyr_video_control_background_hover: '--plyr-video-control-background-hover',
+  transparent_black: '--asc-color-transparent-black',
 };
 
 export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> }) => {
   if (!theme) return;
 
-  Object.entries(theme).forEach(([key, value]) => {
+  const primary = generateShades(theme.primary_color);
+  const mergedTheme = {
+    ...theme,
+    primary_shade1_color: primary[0],
+    primary_shade2_color: primary[1],
+    primary_shade3_color: primary[2],
+    primary_shade4_color: primary[3],
+  };
+
+  Object.entries(mergedTheme).forEach(([key, value]) => {
     const cssVar = propertyMappings[key as keyof ThemeValue];
     if (cssVar && value) {
       document.documentElement.style.setProperty(cssVar, value);

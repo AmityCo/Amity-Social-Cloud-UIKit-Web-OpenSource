@@ -4,7 +4,6 @@ import { Bell } from '~/v4/icons/Bell';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Button, ButtonProps } from '~/v4/core/natives/Button';
-import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import useGetNotificationTraySeen from '~/v4/social/hooks/useGetNotificationTraySeen';
 import styles from './NotificationTrayButton.module.css';
 
@@ -33,7 +32,6 @@ export function NotificationTrayButton({
 
   if (isExcluded) return null;
 
-  const { invitationNotificationTray } = useLayoutContext();
   const { notificationTraySeen, isLoading } = useGetNotificationTraySeen();
 
   return (
@@ -43,12 +41,11 @@ export function NotificationTrayButton({
       className={styles.notificationTrayButton}
       onPress={onPress}
     >
-      {!isLoading &&
-        (!notificationTraySeen?.isSeen || invitationNotificationTray.hasUnseenInvitations) && (
-          <div className={styles.notificationTrayButton__redDotWrapper}>
-            <div className={styles.notificationTrayButton__redDot} />{' '}
-          </div>
-        )}
+      {!isLoading && !notificationTraySeen?.isSeen && (
+        <div className={styles.notificationTrayButton__redDotWrapper}>
+          <div className={styles.notificationTrayButton__redDot} />{' '}
+        </div>
+      )}
       <IconComponent
         defaultIcon={() => (
           <div className={styles.notificationTrayButton__icon}>

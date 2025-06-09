@@ -160,10 +160,6 @@
     border-radius: 0.75rem;
   }
 
-  .communityInviteMemberPage__topBarSticky {
-    border-bottom: 1px solid var(--asc-color-base-shade4);
-  }
-
   .communityInviteMemberPage__navbar {
     flex-direction: row-reverse;
     padding: 1.25rem 1.5rem 1rem;
@@ -179,7 +175,6 @@
 
   .communityInviteMemberPage__selectedUsers {
     margin-bottom: 0;
-    border-bottom: none;
   }
 
   .communityInviteMemberPage__memberList {

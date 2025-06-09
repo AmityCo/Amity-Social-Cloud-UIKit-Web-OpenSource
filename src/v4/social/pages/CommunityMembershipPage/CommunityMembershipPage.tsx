@@ -147,12 +147,16 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
         <Typography.TitleBold className={styles.communityMembershipPage__title}>
           All members
         </Typography.TitleBold>
-        <Button
-          className={styles.communityMembershipPage__addMemberButton}
-          onPress={() => (isInvitation ? openInviteMemberPage() : openAddMemberPage())}
-        >
-          <Plus className={styles.communityMembershipPage__plusIcon} />
-        </Button>
+        {hasModeratorPermissions ? (
+          <Button
+            className={styles.communityMembershipPage__addMemberButton}
+            onPress={() => (isInvitation ? openInviteMemberPage() : openAddMemberPage())}
+          >
+            <Plus className={styles.communityMembershipPage__plusIcon} />
+          </Button>
+        ) : (
+          <div />
+        )}
       </div>
       <SecondaryTab
         tabs={tabs}

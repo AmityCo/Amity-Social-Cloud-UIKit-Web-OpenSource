@@ -210,8 +210,9 @@
 
 .createCommunity__selectedUserWrap {
   gap: 1rem;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
 }
 
 .createCommunity__selectedUser {

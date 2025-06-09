@@ -74,7 +74,8 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   if (
     (!hasStories && !hasStoryPermission) ||
     // if community has setting to only allow admin to post
-    (community && !canCreatePostCommunity(client, community))
+    (community && !canCreatePostCommunity(client, community)) ||
+    (community?.isPublic && !community.isJoined && !hasStories)
   )
     return null;
 
