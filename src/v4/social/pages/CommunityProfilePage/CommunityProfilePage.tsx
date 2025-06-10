@@ -58,7 +58,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     communityId,
     shouldCall: !!communityId,
   });
-  const { invitation } = useGetInvitation(community as Amity.Community);
+  const { invitation, isLoading: isInvitationLoading } = useGetInvitation(
+    community as Amity.Community,
+  );
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { onBack } = useNavigation();
@@ -172,9 +174,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       onTouchEndCallback={handleRefresh}
       className={styles.communityProfilePage__container}
     >
-      {isLoading && <CommunityProfileSkeleton />}
+      {(isLoading || isInvitationLoading) && <CommunityProfileSkeleton />}
       {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
-      {!isLoading && community && !community.isDeleted && (
+      {!isLoading && !isInvitationLoading && community && !community.isDeleted && (
         <>
           <CommunityHeader pageId={pageId} community={community} isSticky={isSticky} page={page} />
           <CommunityProfileTab
