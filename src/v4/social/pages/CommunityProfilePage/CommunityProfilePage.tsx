@@ -160,7 +160,8 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     (!isLoading && community?.isDeleted) ||
     (!isLoading &&
       !community?.isJoined &&
-      community?.isDiscoverable == false &&
+      !community?.isPublic &&
+      community?.isDiscoverable === false &&
       invitation == undefined);
 
   return (

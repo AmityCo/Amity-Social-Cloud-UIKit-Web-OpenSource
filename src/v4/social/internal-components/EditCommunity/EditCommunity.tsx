@@ -146,8 +146,18 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     if (file.length > 0) setIncomingImage(file);
   };
 
-  const handlePrivacyChange = (value: string) =>
+  const handlePrivacyChange = (value: string) => {
     setPrivacySettings(value as AmityCommunitySetupPrivacy);
+    if (
+      value === AmityCommunitySetupPrivacy.PUBLIC ||
+      value === AmityCommunitySetupPrivacy.PRIVATE_VISIBLE
+    ) {
+      setIsDiscoverable?.(true);
+    } else {
+      setRequiresJoinApproval?.(true);
+      setIsDiscoverable?.(false);
+    }
+  };
 
   const handleRemoveCategory = (categoryId: string) => {
     setCategories(categories.filter((c) => c.categoryId !== categoryId));
