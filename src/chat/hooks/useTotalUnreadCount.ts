@@ -6,7 +6,7 @@ interface TotalUnreadData {
   isMentioned: boolean;
 }
 
-const useTotalUnreadCount = () => {
+const useTotalUnreadCount = (channels: any[]) => {
   const [totalUnread, setTotalUnread] = useState<TotalUnreadData>({
     unreadCount: 0,
     isMentioned: false,
@@ -43,7 +43,7 @@ const useTotalUnreadCount = () => {
     return () => {
       unsubscriberRef.current?.();
     };
-  }, []);
+  }, [channels.length]);
 
   return {
     totalUnread: totalUnread.unreadCount,

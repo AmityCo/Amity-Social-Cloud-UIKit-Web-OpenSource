@@ -53,7 +53,7 @@ const RecentChat = ({
   });
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const { totalUnread } = useTotalUnreadCount();
+  const { totalUnread } = useTotalUnreadCount(channels);
   const normalizedTotalUnreadCount = getNormalizedUnreadCount(totalUnread);
 
   const onClickChannel = async ({
