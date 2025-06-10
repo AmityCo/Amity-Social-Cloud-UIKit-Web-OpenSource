@@ -49,8 +49,9 @@ export function InvitationBanner({
         return;
       }
       notification.info({ content: 'Failed to accept invitation. Please try again.' });
+    } finally {
+      invitationNotificationTray.refresh();
     }
-    invitationNotificationTray.refresh();
   };
 
   const handleRejectInvitation = async () => {
@@ -65,8 +66,9 @@ export function InvitationBanner({
         return;
       }
       notification.info({ content: 'Failed to decline invitation. Please try again.' });
+    } finally {
+      invitationNotificationTray.refresh();
     }
-    invitationNotificationTray.refresh();
   };
 
   const onRejectClick = async () => {

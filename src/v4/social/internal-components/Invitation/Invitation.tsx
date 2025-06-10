@@ -58,8 +58,9 @@ export const Invitation = ({
         return notification.info({ content: 'This invitation is no longer available.' });
       }
       notification.info({ content: 'Failed to accept invitation. Please try again.' });
+    } finally {
+      invitationNotificationTray.refresh();
     }
-    invitationNotificationTray.refresh();
   };
 
   const handleRejectInvitation = async () => {
@@ -72,8 +73,9 @@ export const Invitation = ({
         return notification.info({ content: 'This invitation is no longer available.' });
       }
       notification.info({ content: 'Failed to decline invitation. Please try again.' });
+    } finally {
+      invitationNotificationTray.refresh();
     }
-    invitationNotificationTray.refresh();
   };
 
   const onRejectClick = () => {
