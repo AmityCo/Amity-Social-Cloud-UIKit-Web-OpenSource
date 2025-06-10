@@ -35,6 +35,22 @@ export const RecentHeaderLabel = styled.span`
   ${({ theme }) => theme.typography.title};
   line-height: 28px;
   color: ${({ theme }) => theme.palette.neutral.shade1};
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const TotalUnreadCount = styled.div`
+  flex-shrink: 0;
+  height: 20px;
+  padding: 1px 6px;
+  font-size: 13px;
+  color: #fff;
+  background: #f9563a;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const InfiniteScrollContainer = styled.div`

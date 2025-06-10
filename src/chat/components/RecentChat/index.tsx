@@ -10,10 +10,28 @@ import {
   RecentHeader,
   RecentHeaderLabel,
   InfiniteScrollContainer,
+  TotalUnreadCount,
 } from './styles';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useChannelsCollection from '~/chat/hooks/collections/useChannelsCollection';
 import { ChannelRepository, SubChannelRepository } from '@amityco/ts-sdk';
+import useTotalUnreadCount from '~/chat/hooks/useTotalUnreadCount';
+
+function getNormalizedUnreadCount(channelUnreadCount: number) {
+  // Within this range the unread counter will show an actual number
+  const ACTUAL_NUMBER_AS_COUNTER_EDGES = {
+    BOTTOM: 1,
+    TOP: 99,
+  };
+
+  if (!channelUnreadCount) return '';
+
+  if (channelUnreadCount < ACTUAL_NUMBER_AS_COUNTER_EDGES.BOTTOM) return '';
+
+  if (channelUnreadCount <= ACTUAL_NUMBER_AS_COUNTER_EDGES.TOP) return channelUnreadCount;
+
+  return `${ACTUAL_NUMBER_AS_COUNTER_EDGES.TOP}+`;
+}
 
 interface RecentChatProps {
   onChannelSelect?: (data: { channelId: string; type: string }) => void;
@@ -35,6 +53,9 @@ const RecentChat = ({
   });
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  const { totalUnread } = useTotalUnreadCount();
+  const normalizedTotalUnreadCount = getNormalizedUnreadCount(totalUnread);
+
   const onClickChannel = async ({
     channelId,
     type,
@@ -53,6 +74,11 @@ const RecentChat = ({
       <RecentHeader>
         <RecentHeaderLabel>
           <FormattedMessage id="chat.chats" />
+          {normalizedTotalUnreadCount && (
+            <TotalUnreadCount data-testid="total-unread-count">
+              {normalizedTotalUnreadCount}
+            </TotalUnreadCount>
+          )}
         </RecentHeaderLabel>
         {/* this component work only with Callback and User selector on Eko Side, during Personal Mode
         development selector was not add as there is not specific suitable design for UI Kit.
