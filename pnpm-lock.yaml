@@ -130,8 +130,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.5.1-37cf937.0
-        version: 7.5.1-37cf937.0
+        specifier: 7.5.1-d432304.0
+        version: 7.5.1-d432304.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -293,10 +293,10 @@ importers:
         version: 8.0.1(stylelint@16.6.1(typescript@4.9.5))
       svg-url-loader:
         specifier: ^7.1.1
-        version: 7.1.1(webpack@5.92.0(esbuild@0.19.12))
+        version: 7.1.1(webpack@5.92.0(esbuild@0.18.20))
       ts-jest:
         specifier: ^29.1.1
-        version: 29.1.5(@babel/core@7.24.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.7))(esbuild@0.19.12)(jest@29.7.0(@types/node@20.14.4))(typescript@4.9.5)
+        version: 29.1.5(@babel/core@7.24.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.7))(esbuild@0.18.20)(jest@29.7.0(@types/node@20.14.4))(typescript@4.9.5)
       tsup:
         specifier: ^7.3.0
         version: 7.3.0(postcss@8.4.38)(typescript@4.9.5)
@@ -321,8 +321,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.5.1-37cf937.0':
-    resolution: {integrity: sha512-6BUgi4yD7Wb68+Z5HRGi/fksyIxSoEhxiwpS8tCc5oIZIsu5Qbpu/TOIJ1ZceYSlIocAbetXACBKCdvkGH5YGw==}
+  '@amityco/ts-sdk@7.5.1-d432304.0':
+    resolution: {integrity: sha512-PJClKV3jSGa9CtdPqrgOI/kOb4G1O3p/URN7Da11D8/Oapj/aD4YForMIjqBIPbgwhHBr3QBG4c0dK9WB9zs1Q==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -8004,7 +8004,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.5.1-37cf937.0':
+  '@amityco/ts-sdk@7.5.1-d432304.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.9.0(debug@4.4.1)
@@ -13711,11 +13711,11 @@ snapshots:
     dependencies:
       flat-cache: 5.0.0
 
-  file-loader@6.2.0(webpack@5.92.0(esbuild@0.19.12)):
+  file-loader@6.2.0(webpack@5.92.0(esbuild@0.18.20)):
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: 5.92.0(esbuild@0.19.12)
+      webpack: 5.92.0(esbuild@0.18.20)
 
   file-system-cache@2.3.0:
     dependencies:
@@ -16648,11 +16648,11 @@ snapshots:
 
   svg-tags@1.0.0: {}
 
-  svg-url-loader@7.1.1(webpack@5.92.0(esbuild@0.19.12)):
+  svg-url-loader@7.1.1(webpack@5.92.0(esbuild@0.18.20)):
     dependencies:
-      file-loader: 6.2.0(webpack@5.92.0(esbuild@0.19.12))
+      file-loader: 6.2.0(webpack@5.92.0(esbuild@0.18.20))
       loader-utils: 2.0.4
-      webpack: 5.92.0(esbuild@0.19.12)
+      webpack: 5.92.0(esbuild@0.18.20)
 
   synchronous-promise@2.0.17: {}
 
@@ -16713,16 +16713,16 @@ snapshots:
       type-fest: 0.16.0
       unique-string: 2.0.0
 
-  terser-webpack-plugin@5.3.14(esbuild@0.19.12)(webpack@5.92.0(esbuild@0.19.12)):
+  terser-webpack-plugin@5.3.14(esbuild@0.18.20)(webpack@5.92.0(esbuild@0.18.20)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 4.3.2
       serialize-javascript: 6.0.2
       terser: 5.40.0
-      webpack: 5.92.0(esbuild@0.19.12)
+      webpack: 5.92.0(esbuild@0.18.20)
     optionalDependencies:
-      esbuild: 0.19.12
+      esbuild: 0.18.20
 
   terser@5.40.0:
     dependencies:
@@ -16812,7 +16812,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-jest@29.1.5(@babel/core@7.24.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.7))(esbuild@0.19.12)(jest@29.7.0(@types/node@20.14.4))(typescript@4.9.5):
+  ts-jest@29.1.5(@babel/core@7.24.7)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.7))(esbuild@0.18.20)(jest@29.7.0(@types/node@20.14.4))(typescript@4.9.5):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
@@ -16829,7 +16829,7 @@ snapshots:
       '@jest/transform': 29.7.0
       '@jest/types': 29.6.3
       babel-jest: 29.7.0(@babel/core@7.24.7)
-      esbuild: 0.19.12
+      esbuild: 0.18.20
 
   tsconfck@3.1.0(typescript@4.9.5):
     optionalDependencies:
@@ -17175,7 +17175,7 @@ snapshots:
 
   webpack-virtual-modules@0.6.2: {}
 
-  webpack@5.92.0(esbuild@0.19.12):
+  webpack@5.92.0(esbuild@0.18.20):
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.7
@@ -17198,7 +17198,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.2
-      terser-webpack-plugin: 5.3.14(esbuild@0.19.12)(webpack@5.92.0(esbuild@0.19.12))
+      terser-webpack-plugin: 5.3.14(esbuild@0.18.20)(webpack@5.92.0(esbuild@0.18.20))
       watchpack: 2.4.4
       webpack-sources: 3.3.0
     transitivePeerDependencies:
