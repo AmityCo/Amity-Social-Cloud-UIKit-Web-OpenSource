@@ -177,10 +177,10 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
         ...data,
         avatarFileId: coverImage.length > 0 ? coverImage[coverImage.length - 1].fileId : undefined,
         categoryIds: categories.map((c) => c.categoryId),
-        isPublic: isPublic,
+        isPublic,
         userIds: members && !isPublic && !isInvitation ? members.map((m) => m.userId) : undefined,
-        isDiscoverable: isPublic,
-        requiresJoinApproval: false,
+        isDiscoverable,
+        requiresJoinApproval,
       });
     } catch (error) {
       notification.info({
