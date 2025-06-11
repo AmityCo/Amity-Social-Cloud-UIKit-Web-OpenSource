@@ -44,6 +44,7 @@ import { Description } from '~/v4/core/components/Description';
 import { SubDescription } from '~/v4/core/components/SubDescription';
 import { Switch } from '~/v4/core/components/AriaSwitch';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
+import { useGetJoinRequests } from '~/v4/social/hooks/useGetJoinRequests';
 
 type EditCommunityProps = {
   community: Amity.Community;
@@ -99,7 +100,9 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     setIsDiscoverable,
   } = useCommunitySetupContext();
 
-  const hasPendingJoinRequests = community.getJoinRequests && community.getJoinRequests.length > 0;
+  const { joinRequests } = useGetJoinRequests(community);
+
+  const hasPendingJoinRequests = joinRequests && joinRequests.length > 0;
 
   const { globalFeaturedPostsItems } = useGlobalFeedContext();
 
@@ -263,6 +266,10 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       notification.info({
         content: 'Failed to update community. Please try again.',
       });
+
+      setSubmitting(false);
+      setRequiresJoinApproval(community.requiresJoinApproval ?? false);
+      return;
     } finally {
       setSubmitting(false);
       setCoverImages([]);

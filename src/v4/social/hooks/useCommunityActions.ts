@@ -20,7 +20,7 @@ export const useCommunityActions = (
     onCancelJoinSuccess?: () => void;
     onCancelJoinError?: (error: Error) => void;
     community?: Amity.Community;
-    joinRequest: Amity.JoinRequest | undefined;
+    joinRequest?: Amity.JoinRequest | undefined;
   } = {
     community: {} as Amity.Community,
     onJoinSuccess: () => {},

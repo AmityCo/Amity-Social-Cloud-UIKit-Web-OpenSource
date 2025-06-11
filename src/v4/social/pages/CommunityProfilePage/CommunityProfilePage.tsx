@@ -176,7 +176,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     >
       {(isLoading || isInvitationLoading) && <CommunityProfileSkeleton />}
       {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
-      {!isLoading && !isInvitationLoading && community && !community.isDeleted && (
+      {!isLoading && !isShowFailed && !isInvitationLoading && community && !community.isDeleted && (
         <>
           <CommunityHeader pageId={pageId} community={community} isSticky={isSticky} page={page} />
           <CommunityProfileTab
@@ -187,49 +187,52 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
           />
         </>
       )}
-      {activeTab === 'community_feed' && checkPostPermission() && !community?.isDeleted && (
-        <div className={styles.communityProfilePage__poseComposer}>
-          <PostComposer
-            pageId={pageId}
-            communityId={communityId}
-            onSelectFile={handleFileSelect}
-            onClickPost={() => {
-              openPopup({
-                pageId,
-                view: 'desktop',
-                isDismissable: false,
-                onClose: onCloseCreatePostPopup,
-                header: CreatePostHeader,
-                children: (
-                  <PostComposerPage
-                    mode={Mode.CREATE}
-                    targetType="community"
-                    community={community as Amity.Community}
-                    targetId={community?.communityId as string}
-                  />
-                ),
-              });
-            }}
-            onClickPoll={() => {
-              openPopup({
-                pageId,
-                view: 'desktop',
-                isDismissable: false,
-                onClose: onCloseCreatePostPopup,
-                header: CreatePostHeader,
-                children: (
-                  <PollPostComposerPage
-                    targetId={community?.communityId as string}
-                    targetType="community"
-                  />
-                ),
-              });
-            }}
-          />
-        </div>
-      )}
-      {!community?.isDeleted && <div key={refreshKey}>{renderTabContent()}</div>}
-      {community?.isJoined && !community?.isDeleted && checkPostPermission() && (
+      {!isShowFailed &&
+        activeTab === 'community_feed' &&
+        checkPostPermission() &&
+        !community?.isDeleted && (
+          <div className={styles.communityProfilePage__poseComposer}>
+            <PostComposer
+              pageId={pageId}
+              communityId={communityId}
+              onSelectFile={handleFileSelect}
+              onClickPost={() => {
+                openPopup({
+                  pageId,
+                  view: 'desktop',
+                  isDismissable: false,
+                  onClose: onCloseCreatePostPopup,
+                  header: CreatePostHeader,
+                  children: (
+                    <PostComposerPage
+                      mode={Mode.CREATE}
+                      targetType="community"
+                      community={community as Amity.Community}
+                      targetId={community?.communityId as string}
+                    />
+                  ),
+                });
+              }}
+              onClickPoll={() => {
+                openPopup({
+                  pageId,
+                  view: 'desktop',
+                  isDismissable: false,
+                  onClose: onCloseCreatePostPopup,
+                  header: CreatePostHeader,
+                  children: (
+                    <PollPostComposerPage
+                      targetId={community?.communityId as string}
+                      targetType="community"
+                    />
+                  ),
+                });
+              }}
+            />
+          </div>
+        )}
+      {!isShowFailed && !community?.isDeleted && <div key={refreshKey}>{renderTabContent()}</div>}
+      {!isShowFailed && community?.isJoined && !community?.isDeleted && checkPostPermission() && (
         <div className={styles.communityProfilePage__createPostButton}>
           <CommunityCreatePostButton
             pageId={pageId}
