@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Key } from 'react-aria';
 import { useAmityElement, useAmityPage } from '~/v4/core/hooks/uikit';
 import styles from './PendingRequestPage.module.css';
@@ -39,7 +39,7 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
 
   if (isExcluded) return null;
 
-  const { pendingPostsCount, canReviewCommunityPosts } = useCommunityInfo(community.communityId);
+  const { canReviewCommunityPosts } = useCommunityInfo(community.communityId);
   const {
     posts: reviewingPosts,
     isLoading,
@@ -50,7 +50,7 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     feedType: 'reviewing',
   });
 
-  const { joinRequests } = useGetJoinRequests(community);
+  const { joinRequests, isLoading: isJoinRequestsLoading } = useGetJoinRequests(community);
 
   const isPostOwner = reviewingPosts.some((post) => post.postedUserId === currentUserId);
   const joinRequestsCount = (joinRequests && joinRequests?.length) || 0;
@@ -59,34 +59,43 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     return count > 10 ? '10+' : count;
   };
 
+  useEffect(() => {
+    if (joinRequestsCount > 0 && reviewingPosts.length === 0) {
+      setActiveTab('join_requests_button_tab');
+    } else {
+      setActiveTab('posts_button_tab');
+    }
+  }, [reviewingPosts.length, joinRequestsCount]);
+
   const tabs = [
     {
       value: 'posts_button_tab',
-      label: `${postsTab?.config?.text} ${renderAmouts(reviewingPosts.length)}`,
+      label: `${postsTab?.config?.text} (${renderAmouts(reviewingPosts.length)})`,
       accessibilityId: `${pageId}}/*/posts_button_tab`,
       content: () =>
         !isLoading &&
-        pendingPostsCount > 0 &&
         (canReviewCommunityPosts || isPostOwner) && (
-          <>
-            {reviewingPosts.length > 0 && (
-              <div className={styles.pendingPostsPage__list}>
-                <PendingPostList
-                  reviewingPosts={reviewingPosts}
-                  pageId={pageId}
-                  canReviewCommunityPosts={canReviewCommunityPosts}
-                  refresh={refresh}
-                />
-              </div>
-            )}
-          </>
+          <div className={styles.pendingPostsPage__list}>
+            <PendingPostList
+              reviewingPosts={reviewingPosts}
+              pageId={pageId}
+              canReviewCommunityPosts={canReviewCommunityPosts}
+              refresh={refresh}
+            />
+          </div>
         ),
     },
     {
       value: 'join_requests_button_tab',
-      label: `${joinRequestsTab?.config?.text} ${renderAmouts(joinRequestsCount)}`,
+      label: `${joinRequestsTab?.config?.text} (${renderAmouts(joinRequestsCount)})`,
       accessibilityId: `${pageId}/*/join_requests_button_tab`,
-      content: () => <JoinRequestContent pageId={pageId} joinRequests={joinRequests} />,
+      content: () => (
+        <JoinRequestContent
+          pageId={pageId}
+          joinRequests={joinRequests}
+          isLoading={isJoinRequestsLoading}
+        />
+      ),
     },
   ];
 

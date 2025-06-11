@@ -1,8 +1,6 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { useGetJoinRequests } from './useGetJoinRequests';
 
 export const useCommunityActions = (
   {
@@ -13,6 +11,7 @@ export const useCommunityActions = (
     onCancelJoinSuccess,
     onCancelJoinError,
     community,
+    joinRequest,
   }: {
     onJoinSuccess?: () => void;
     onJoinError?: (error: Error) => void;
@@ -21,6 +20,7 @@ export const useCommunityActions = (
     onCancelJoinSuccess?: () => void;
     onCancelJoinError?: (error: Error) => void;
     community?: Amity.Community;
+    joinRequest: Amity.JoinRequest | undefined;
   } = {
     community: {} as Amity.Community,
     onJoinSuccess: () => {},
@@ -29,6 +29,7 @@ export const useCommunityActions = (
     onLeaveError: () => {},
     onCancelJoinSuccess: () => {},
     onCancelJoinError: () => {},
+    joinRequest: undefined,
   },
 ): {
   joinCommunity: (community: Amity.Community) => void;
@@ -36,8 +37,6 @@ export const useCommunityActions = (
   cancelJoinCommunity: () => void;
 } => {
   const { success, info } = useNotifications();
-
-  const { joinRequests } = useGetJoinRequests(community);
 
   const { mutate: joinCommunity } = useMutation({
     mutationFn: async (community: Amity.Community) => await community.join(),
@@ -76,11 +75,7 @@ export const useCommunityActions = (
   });
 
   const { mutate: cancelJoinCommunity } = useMutation({
-    mutationFn: async () => {
-      if (Array.isArray(joinRequests) && joinRequests.length > 0) {
-        await joinRequests[0].cancel();
-      }
-    },
+    mutationFn: async () => await joinRequest?.cancel(),
     onSuccess: () => {
       success({
         content: 'Canceled to join the community.',

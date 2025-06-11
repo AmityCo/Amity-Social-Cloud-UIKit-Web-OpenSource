@@ -45,6 +45,14 @@
 
 .joinRequestContent__username {
   color: var(--asc-color-base-default);
+  cursor: pointer;
+}
+
+.joinRequestContent__skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
 }
 
 @media (width >= 48em) {

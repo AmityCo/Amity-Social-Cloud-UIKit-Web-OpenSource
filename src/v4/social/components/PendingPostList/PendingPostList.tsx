@@ -22,6 +22,7 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './PendingPostList.module.css';
 import FireworkPaper from '~/v4/icons/FireworkPaper';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 type PendingPostListProps = {
   pageId?: string;
@@ -49,6 +50,7 @@ export const PendingPostList = ({
   const { online } = useNetworkState();
   const { openPopup, closePopup } = usePopupContext();
   const { isDesktop } = useResponsive();
+  const { goToUserProfilePage } = useNavigation();
 
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
@@ -138,11 +140,19 @@ export const PendingPostList = ({
       <div className={styles.pendingPostList__wrapper} key={post.postId}>
         <div className={styles.pendingPostList__bar}>
           <div className={styles.pendingPostList__userDetail}>
-            <UserAvatar pageId={pageId} componentId={componentId} userId={post?.postedUserId} />
+            <UserAvatar
+              pageId={pageId}
+              componentId={componentId}
+              userId={post?.postedUserId}
+              onPressAvatar={() => {
+                goToUserProfilePage(post?.postedUserId);
+              }}
+            />
             <div>
               <Typography.BodyBold
                 className={styles.pendingPostList__username}
                 data-testid={`${pageId}/${componentId}/username`}
+                onClick={() => goToUserProfilePage(post?.postedUserId)}
               >
                 {post.creator.displayName}
               </Typography.BodyBold>

@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 
 export function useGetJoinRequests(community?: Amity.Community) {
   const [joinRequests, setJoinRequests] = useState<Amity.JoinRequest[] | undefined>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (community === undefined || !community.communityId) return;
+    setIsLoading(true);
     const unsubscribe = community.getJoinRequests(
       {
         communityId: community.communityId,
@@ -18,11 +20,13 @@ export function useGetJoinRequests(community?: Amity.Community) {
       },
       ({ data }) => setJoinRequests(data),
     );
+    setIsLoading(false);
 
     return () => unsubscribe();
   }, [community?.communityId]);
 
   return {
     joinRequests,
+    isLoading,
   };
 }

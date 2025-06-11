@@ -50,17 +50,33 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const { online } = useNetworkState();
   const notification = useNotifications();
   const { invitation, setInvitation } = useGetInvitation(community);
-  const { myJoinRequest } = useGetMyJoinRequest(community);
+  const { myJoinRequest, refreshJoinRequest } = useGetMyJoinRequest(community);
   const { joinRequests } = useGetJoinRequests(community);
 
   const { avatarFileUrl, pendingPostsCount, reviewingPosts, canReviewCommunityPosts } =
     useCommunityInfo(community.communityId);
 
-  const { joinCommunity, cancelJoinCommunity } = useCommunityActions();
+  const [isCancelJoinRequestSuccess, setIsCancelJoinRequestSuccess] = React.useState(false);
+
+  const { joinCommunity, cancelJoinCommunity } = useCommunityActions({
+    community,
+    joinRequest: myJoinRequest,
+    onJoinSuccess: () => {
+      refreshJoinRequest();
+    },
+    onLeaveSuccess: () => {
+      refreshJoinRequest();
+    },
+    onCancelJoinSuccess: () => {
+      refreshJoinRequest();
+      setIsCancelJoinRequestSuccess(true);
+    },
+  });
 
   const isPostOwner = reviewingPosts.some((post) => post.postedUserId === currentUserId);
 
-  const isPendingJoinRequest = myJoinRequest?.status === JoinRequestStatusEnum.Pending;
+  const isPendingJoinRequest =
+    myJoinRequest?.status === JoinRequestStatusEnum.Pending && !isCancelJoinRequestSuccess;
 
   const joinRequestCount = (joinRequests && joinRequests?.length) ?? 0;
 
@@ -151,7 +167,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         {(!invitation || invitation.status !== InvitationStatusEnum.Pending) &&
           !community.isJoined &&
           !isPendingJoinRequest &&
-          community.isPublic && (
+          (community.isPublic || community.isDiscoverable) && (
             <div className={styles.communityProfile__joinButton__container}>
               <CommunityJoinButton
                 size="medium"

@@ -110,6 +110,7 @@
 
 .pendingPostList__username {
   color: var(--asc-color-base-default);
+  cursor: pointer;
 }
 
 @media (width >= 48em) {
