@@ -137,6 +137,9 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
       value === AmityCommunitySetupPrivacy.PRIVATE_VISIBLE
     ) {
       setIsDiscoverable?.(true);
+      if (value === AmityCommunitySetupPrivacy.PRIVATE_VISIBLE) {
+        setRequiresJoinApproval?.(true);
+      }
     } else {
       setRequiresJoinApproval?.(true);
       setIsDiscoverable?.(false);
