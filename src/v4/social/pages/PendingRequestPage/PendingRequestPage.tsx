@@ -11,6 +11,7 @@ import { PendingPostList } from '~/v4/social/components/PendingPostList';
 import { useCommunityInfo } from '~/v4/social/hooks';
 import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection';
 import { useGetJoinRequests } from '~/v4/social/hooks/useGetJoinRequests';
+import { CommunityPostSettings } from '@amityco/ts-sdk';
 
 type PendingRequestPageProps = {
   community: Amity.Community;
@@ -24,7 +25,15 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
 
   const { onBack } = useNavigation();
   const { currentUserId } = useSDK();
-  const [activeTab, setActiveTab] = useState<Key>('communities');
+  const { canReviewCommunityPosts } = useCommunityInfo(community.communityId);
+  const { joinRequests, isLoading: isJoinRequestsLoading } = useGetJoinRequests(community);
+
+  const defaultActiveTab = [
+    canReviewCommunityPosts ? 'posts_button_tab' : null,
+    joinRequests?.length ? 'join_requests_button_tab' : null,
+  ].filter(Boolean) as Key[];
+
+  const [activeTab, setActiveTab] = useState<Key>(defaultActiveTab[0] || 'posts_button_tab');
 
   const postsTab = useAmityElement({
     pageId,
@@ -39,7 +48,6 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
 
   if (isExcluded) return null;
 
-  const { canReviewCommunityPosts } = useCommunityInfo(community.communityId);
   const {
     posts: reviewingPosts,
     isLoading,
@@ -50,14 +58,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     feedType: 'reviewing',
   });
 
-  const { joinRequests, isLoading: isJoinRequestsLoading } = useGetJoinRequests(community);
-
   const isPostOwner = reviewingPosts.some((post) => post.postedUserId === currentUserId);
   const joinRequestsCount = (joinRequests && joinRequests?.length) || 0;
-
-  const renderAmouts = (count: number) => {
-    return count > 10 ? '10+' : count;
-  };
 
   useEffect(() => {
     if (joinRequestsCount > 0 && reviewingPosts.length === 0) {
@@ -67,14 +69,25 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     }
   }, [reviewingPosts.length, joinRequestsCount]);
 
-  const tabs = [
-    {
+  const renderAmouts = (count: number) => {
+    return count > 10 ? '10+' : count;
+  };
+
+  const visibleTabs = [];
+
+  // Only add the posts tab if the user has permission to review posts
+  if (
+    (community.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED ||
+      (community as Amity.Community & { needApprovalOnPostCreation?: boolean })
+        .needApprovalOnPostCreation) &&
+    (canReviewCommunityPosts || isPostOwner)
+  ) {
+    visibleTabs.push({
       value: 'posts_button_tab',
       label: `${postsTab?.config?.text} (${renderAmouts(reviewingPosts.length)})`,
       accessibilityId: `${pageId}}/*/posts_button_tab`,
       content: () =>
-        !isLoading &&
-        (canReviewCommunityPosts || isPostOwner) && (
+        !isLoading && (
           <div className={styles.pendingPostsPage__list}>
             <PendingPostList
               reviewingPosts={reviewingPosts}
@@ -84,8 +97,12 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
             />
           </div>
         ),
-    },
-    {
+    });
+  }
+
+  // Only add the join requests tab if the user has permission to review community posts
+  if (community.requiresJoinApproval && canReviewCommunityPosts) {
+    visibleTabs.push({
       value: 'join_requests_button_tab',
       label: `${joinRequestsTab?.config?.text} (${renderAmouts(joinRequestsCount)})`,
       accessibilityId: `${pageId}/*/join_requests_button_tab`,
@@ -96,8 +113,15 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
           isLoading={isJoinRequestsLoading}
         />
       ),
-    },
-  ];
+    });
+  }
+
+  const tabs = visibleTabs;
+
+  // If no tabs are visible, don't render anything
+  if (visibleTabs.length === 0) {
+    return null;
+  }
 
   return (
     <div
