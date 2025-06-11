@@ -66,9 +66,7 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
     } else {
       confirm({
         title: 'Leave community?',
-        content: community?.requiresJoinApproval
-          ? 'If you change your mind, you’ll have to request to join again.'
-          : 'Leave the community. You will no longer be able to post and interact in this community.',
+        content: 'You will no longer be able to post and interact in this community.',
         okText: 'Leave',
         onOk: () => {
           leaveCommunity();

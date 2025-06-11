@@ -54,6 +54,7 @@ export const PendingPostList = ({
 
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
+  const [selectedPost, setSelectedPost] = useState<Amity.Post | null>(null);
 
   const handleApprovePost = async (postId: string) => {
     if (postId == null) return;
@@ -108,7 +109,7 @@ export const PendingPostList = ({
     return postedUserId === currentUserId;
   };
 
-  const openImageViewer = (post: Amity.Post) => {
+  const openImageViewer = (imageIndex: number, post: Amity.Post) => {
     openPopup({
       id: 'image-viewer',
       disabledAnimation: true,
@@ -116,7 +117,7 @@ export const PendingPostList = ({
       className: styles.pendingPostList__imageViewer,
       overlayClassName: styles.pendingPostList__imageViewerOverlay,
       children: (
-        <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={post.imageIndex} />
+        <ImageViewer post={post} onClose={closeImageViewer} initialImageIndex={imageIndex} />
       ),
     });
   };
@@ -125,14 +126,16 @@ export const PendingPostList = ({
     closePopup('image-viewer');
   };
 
-  const openVideoViewer = (imageIndex: number) => {
+  const openVideoViewer = (videoIndex: number, post: Amity.Post) => {
     setIsVideoViewerOpen(true);
-    setClickedVideoIndex(imageIndex);
+    setClickedVideoIndex(videoIndex);
+    setSelectedPost(post);
   };
 
   const closeVideoViewer = () => {
     setIsVideoViewerOpen(false);
     setClickedVideoIndex(null);
+    setSelectedPost(null);
   };
 
   const renderPendingPost = (post: Amity.Post) => {
@@ -232,8 +235,8 @@ export const PendingPostList = ({
               pageId={pageId}
               componentId={componentId}
               post={post}
-              onImageClick={(post) => openImageViewer(post)}
-              onVideoClick={openVideoViewer}
+              onImageClick={(imageIndex) => openImageViewer(imageIndex, post)}
+              onVideoClick={(videoIndex) => openVideoViewer(videoIndex, post)}
             />
           )}
         </div>
@@ -269,13 +272,6 @@ export const PendingPostList = ({
             />
           </div>
         )}
-        {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
-          <VideoViewer
-            post={post}
-            onClose={closeVideoViewer}
-            initialVideoIndex={clickedVideoIndex}
-          />
-        ) : null}
       </div>
     );
   };
@@ -291,6 +287,15 @@ export const PendingPostList = ({
             No pending posts
           </Typography.TitleBold>
         </div>
+      )}
+
+      {/* Render VideoViewer at the root level of the component to ensure proper z-index stacking */}
+      {isVideoViewerOpen && typeof clickedVideoIndex === 'number' && selectedPost && (
+        <VideoViewer
+          post={selectedPost}
+          onClose={closeVideoViewer}
+          initialVideoIndex={clickedVideoIndex}
+        />
       )}
     </div>
   );
