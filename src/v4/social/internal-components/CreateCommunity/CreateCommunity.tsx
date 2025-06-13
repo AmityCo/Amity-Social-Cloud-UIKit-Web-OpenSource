@@ -131,18 +131,23 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
   const isPublic = privacySettings === AmityCommunitySetupPrivacy.PUBLIC;
 
   const handlePrivacyChange = (value: string) => {
-    setPrivacySettings(value as AmityCommunitySetupPrivacy);
-    if (
-      value === AmityCommunitySetupPrivacy.PUBLIC ||
-      value === AmityCommunitySetupPrivacy.PRIVATE_VISIBLE
-    ) {
-      setIsDiscoverable?.(true);
-      if (value === AmityCommunitySetupPrivacy.PRIVATE_VISIBLE) {
+    const privacyValue = value as AmityCommunitySetupPrivacy;
+    setPrivacySettings(privacyValue);
+
+    switch (privacyValue) {
+      case AmityCommunitySetupPrivacy.PUBLIC:
+        setIsDiscoverable?.(true);
+        setRequiresJoinApproval?.(false);
+        break;
+      case AmityCommunitySetupPrivacy.PRIVATE_VISIBLE:
+        setIsDiscoverable?.(true);
         setRequiresJoinApproval?.(true);
-      }
-    } else {
-      setRequiresJoinApproval?.(true);
-      setIsDiscoverable?.(false);
+        break;
+      case AmityCommunitySetupPrivacy.PRIVATE_HIDDEN:
+      default:
+        setIsDiscoverable?.(false);
+        setRequiresJoinApproval?.(true);
+        break;
     }
   };
 
@@ -206,17 +211,27 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
 
   // to set default value
   useEffect(() => {
-    if (communityName && !displayName) {
-      setValue('displayName', communityName);
-    }
-    if (about && !description) {
-      setValue('description', about);
-    }
-    if (categories.length > 0) {
-      setCategories(categories);
-    }
-    if (coverImages.length > 0 && coverImage.length === 0) {
-      setCoverImage(coverImages);
+    setRequiresJoinApproval?.(false);
+    if (isDesktop) {
+      setValue('displayName', '');
+      setValue('description', '');
+      setIsDiscoverable(true);
+      setPrivacySettings(AmityCommunitySetupPrivacy.PUBLIC);
+      setCoverImages([]);
+      setCategories([]);
+    } else {
+      if (communityName && !displayName) {
+        setValue('displayName', communityName);
+      }
+      if (about && !description) {
+        setValue('description', about);
+      }
+      if (categories.length > 0) {
+        setCategories(categories);
+      }
+      if (coverImages.length > 0 && coverImage.length === 0) {
+        setCoverImage(coverImages);
+      }
     }
   }, []);
 
