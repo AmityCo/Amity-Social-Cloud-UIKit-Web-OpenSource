@@ -13,6 +13,7 @@ type IconButtonProps = ButtonProps & {
   elementId?: string;
   defaultIcon: JSX.Element;
   text?: string;
+  typographyVariant?: 'captionBold' | 'bodyBold';
 };
 
 export const IconButton = ({
@@ -24,6 +25,7 @@ export const IconButton = ({
   elementId = '*',
   defaultIcon,
   text = '',
+  typographyVariant = 'captionBold',
   ...props
 }: IconButtonProps) => {
   const { config, themeStyles, accessibilityId, isExcluded, uiReference, defaultConfig } =
@@ -54,7 +56,11 @@ export const IconButton = ({
       )}
       {...props}
     >
-      <Typography.BodyBold>{config.text ? config.text : text}</Typography.BodyBold>
+      {typographyVariant === 'captionBold' ? (
+        <Typography.CaptionBold>{config.text ? config.text : text}</Typography.CaptionBold>
+      ) : (
+        <Typography.BodyBold>{config.text ? config.text : text}</Typography.BodyBold>
+      )}
     </Button>
   );
 };

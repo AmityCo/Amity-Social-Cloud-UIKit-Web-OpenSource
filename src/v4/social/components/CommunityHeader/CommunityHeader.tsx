@@ -199,6 +199,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               defaultIcon={<Clock className={styles.communityProfile__pendingIcon} />}
               onPress={cancelJoinCommunity}
               text="Cancel request"
+              typographyVariant="bodyBold"
             />
           </div>
         )}

@@ -68,7 +68,10 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
     enabled: communityCategoriesEnable,
   });
 
-  const isLoading = trendingData.isLoading || recommendedData.isLoading || categoriesData.isLoading;
+  const isLoading =
+    trendingData.isLoading ||
+    (recommendedData.isLoading && recommendedCommunitiesEnable) ||
+    categoriesData.isLoading;
   const error = trendingData.error && recommendedData.error && categoriesData.error;
 
   const refetchRecommendedCommunities = () => recommendedData.refresh();
@@ -82,7 +85,9 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const noCategories = categoriesData.categories.length === 0 && !categoriesData.isLoading;
 
   const noRecommendedCommunities =
-    recommendedData.recommendedCommunities.length === 0 && !recommendedData.isLoading;
+    recommendedData.recommendedCommunities.length === 0 &&
+    !recommendedData.isLoading &&
+    recommendedCommunitiesEnable;
 
   const noTrendingCommunities =
     trendingData.trendingCommunities.length === 0 && !trendingData.isLoading;

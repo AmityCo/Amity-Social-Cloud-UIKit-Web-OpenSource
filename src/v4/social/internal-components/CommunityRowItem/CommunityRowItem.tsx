@@ -14,6 +14,8 @@ import { CommunityCategories } from '~/v4/social/internal-components/CommunityCa
 import styles from './CommunityRowItem.module.css';
 import Clock from '~/v4/icons/Clock';
 import { IconButton } from '~/v4/core/components/IconButton';
+import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
 
 type CommunityRowItemProps<TShowJoinButton extends boolean | undefined> = {
   community: Amity.Community;
@@ -63,6 +65,11 @@ export const CommunityRowItem = <T extends boolean | undefined>({
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
 
+  const { cancelJoinCommunity } = useCommunityActions({
+    joinRequest,
+    community,
+  });
+
   return (
     <Button
       type="button"
@@ -109,32 +116,41 @@ export const CommunityRowItem = <T extends boolean | undefined>({
         />
       </div>
       {!!showJoinButton &&
-        (community.isJoined ? (
-          <CommunityJoinedButton
-            pageId={pageId}
-            componentId={componentId}
-            className={styles.communityRowItem__joinButton}
-            data-has-categories={community.categoryIds.length > 0}
-            onClick={() => onLeaveButtonClick?.(community)}
-          />
-        ) : joinRequest?.status === 'pending' ? (
-          <IconButton
-            size="small"
-            color="secondary"
-            variant="outlined"
-            defaultIcon={<Clock className={styles.communityRowItem__pendingButton} />}
-            onPress={() => onPendingButtonClick?.()}
-            text="Pending"
-          />
-        ) : (
-          <CommunityJoinButton
-            pageId={pageId}
-            componentId={componentId}
-            className={styles.communityRowItem__joinButton}
-            data-has-categories={community.categoryIds.length > 0}
-            onClick={() => onJoinButtonClick?.(community)}
-          />
-        ))}
+        (() => {
+          if (community?.isJoined) {
+            return (
+              <CommunityJoinedButton
+                pageId={pageId}
+                componentId={componentId}
+                className={styles.communityRowItem__joinButton}
+                data-has-categories={community.categoryIds.length > 0}
+                onClick={() => onLeaveButtonClick?.(community)}
+              />
+            );
+          } else if (joinRequest?.status === 'pending') {
+            return (
+              <IconButton
+                size="small"
+                color="secondary"
+                variant="outlined"
+                defaultIcon={<Clock className={styles.communityRowItem__pendingButton} />}
+                onPress={() => onPendingButtonClick?.() ?? cancelJoinCommunity()}
+                text="Pending"
+                className={styles.communityRowItem__pendingButtonWrapper}
+              />
+            );
+          } else {
+            return (
+              <CommunityJoinButton
+                pageId={pageId}
+                componentId={componentId}
+                className={styles.communityRowItem__joinButton}
+                data-has-categories={community.categoryIds.length > 0}
+                onClick={() => onJoinButtonClick?.(community)}
+              />
+            );
+          }
+        })()}
     </Button>
   );
 };

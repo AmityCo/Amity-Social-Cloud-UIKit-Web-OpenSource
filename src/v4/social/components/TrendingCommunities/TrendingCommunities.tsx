@@ -16,7 +16,7 @@ type TrendingCommunitiesProps = {
 export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) => {
   const componentId = 'trending_communities';
 
-  const { joinCommunity, leaveCommunity, cancelJoinCommunity } = useCommunityActions();
+  const { joinCommunity, leaveCommunity } = useCommunityActions();
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
   const { trendingCommunities, isLoading, fetchTrendingCommunities } = useExplore();
   const { goToCommunitiesByCategoryPage, goToCommunityProfilePage } = useNavigation();
@@ -26,7 +26,9 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
 
   const { joinRequestList } = useGetJoinRequestList(communityIds);
 
-  const handleJoinButtonClick = (community: Amity.Community) => joinCommunity(community);
+  const handleJoinButtonClick = (community: Amity.Community) => {
+    joinCommunity(community);
+  };
   const handleLeaveButtonClick = (community: Amity.Community) => {
     if (community.requiresJoinApproval) {
       confirm({
@@ -38,7 +40,6 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
     }
     leaveCommunity(community);
   };
-  const handlePendingButtonClick = () => cancelJoinCommunity();
 
   useEffect(() => {
     fetchTrendingCommunities();
@@ -58,28 +59,30 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
 
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.trendingCommunities}>
-      {trendingCommunities.map((community, index) => (
-        <CommunityRowItem
-          showJoinButton
-          pageId={pageId}
-          order={index + 1}
-          community={community}
-          maxCategoriesLength={2}
-          minCategoryCharacters={3}
-          componentId={componentId}
-          maxCategoryCharacters={36}
-          key={community.communityId}
-          onJoinButtonClick={(community) => handleJoinButtonClick(community)}
-          onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
-          onPendingButtonClick={handlePendingButtonClick}
-          onClick={(communityId) => goToCommunityProfilePage(communityId)}
-          onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
-          joinRequest={
-            joinRequestList &&
-            joinRequestList?.find((request) => request.targetId === community.communityId)
-          }
-        />
-      ))}
+      {trendingCommunities.map((community, index) => {
+        const joinRequest = joinRequestList?.find(
+          (request) => request.targetId === community.communityId,
+        );
+
+        return (
+          <CommunityRowItem
+            showJoinButton
+            pageId={pageId}
+            order={index + 1}
+            community={community}
+            maxCategoriesLength={2}
+            minCategoryCharacters={3}
+            componentId={componentId}
+            maxCategoryCharacters={36}
+            key={community.communityId}
+            onJoinButtonClick={(community) => handleJoinButtonClick(community)}
+            onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
+            onClick={(communityId) => goToCommunityProfilePage(communityId)}
+            onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
+            joinRequest={joinRequest}
+          />
+        );
+      })}
     </div>
   );
 };
