@@ -158,6 +158,7 @@
   width: 100%;
   display: flex;
   padding: 0.62rem 1rem !important;
+  border-radius: 0.5rem !important;
 }
 
 @media (width >= 48em) {

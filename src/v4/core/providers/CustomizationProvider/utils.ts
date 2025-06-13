@@ -864,7 +864,7 @@ export const defaultConfig: DefaultConfig = {
       text: 'Private & hidden',
     },
     'community_setup_page/*/community_privacy_private_and_hidden_description': {
-      text: 'Community and content are hidden from non-members.',
+      text: 'Community and content are hidden from non-members, and cannot be discovered via search.',
     },
     'community_add_category_page/*/*': {},
     'community_add_member_page/*/*': {},

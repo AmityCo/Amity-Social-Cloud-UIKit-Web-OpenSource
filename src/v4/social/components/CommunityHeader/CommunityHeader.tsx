@@ -192,7 +192,6 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               pageId={pageId}
               componentId={componentId}
               elementId="community_cancel_request_button"
-              className={styles.communityProfile__cancelJoinButton}
               size="small"
               color="secondary"
               variant="outlined"
@@ -200,6 +199,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               onPress={cancelJoinCommunity}
               text="Cancel request"
               typographyVariant="bodyBold"
+              className={styles.communityProfile__cancelJoinButton}
             />
           </div>
         )}

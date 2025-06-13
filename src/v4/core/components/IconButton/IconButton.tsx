@@ -39,7 +39,6 @@ export const IconButton = ({
 
   return (
     <Button
-      className={className}
       size={props.size || 'small'}
       variant={props.variant || 'fill'}
       color={props.color || 'primary'}
@@ -55,6 +54,7 @@ export const IconButton = ({
         />
       )}
       {...props}
+      className={className}
     >
       {typographyVariant === 'captionBold' ? (
         <Typography.CaptionBold>{config.text ? config.text : text}</Typography.CaptionBold>
