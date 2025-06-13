@@ -56,7 +56,7 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   });
 
   const recommendedData = useRecommendedCommunitiesCollection({
-    params: { limit: 4 },
+    params: { limit: 20 },
     enabled: recommendedCommunitiesEnable,
   });
 

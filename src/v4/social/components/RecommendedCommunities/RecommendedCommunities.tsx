@@ -131,7 +131,9 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
   const recommendedCommunitiesWithOutJoinRequests = joinRequestList
     ? recommendedCommunities.filter(
         (community) =>
-          !joinRequestList.some((request) => request.targetId === community.communityId),
+          !joinRequestList.some(
+            (request) => request.targetId === community.communityId && request.status === 'pending',
+          ),
       )
     : recommendedCommunities;
 
@@ -184,18 +186,20 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
             ))
           : recommendedCommunitiesWithOutJoinRequests.length === 0
             ? null
-            : recommendedCommunitiesWithOutJoinRequests.map((community) => (
-                <RecommendedCommunityCard
-                  pageId={pageId}
-                  community={community}
-                  componentId={componentId}
-                  key={community.communityId}
-                  onJoinButtonClick={(community) => handleJoinButtonClick(community)}
-                  onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
-                  onClick={(communityId) => goToCommunityProfilePage(communityId)}
-                  onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
-                />
-              ))}
+            : recommendedCommunitiesWithOutJoinRequests
+                .slice(0, 4)
+                .map((community) => (
+                  <RecommendedCommunityCard
+                    pageId={pageId}
+                    community={community}
+                    componentId={componentId}
+                    key={community.communityId}
+                    onJoinButtonClick={(community) => handleJoinButtonClick(community)}
+                    onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
+                    onClick={(communityId) => goToCommunityProfilePage(communityId)}
+                    onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
+                  />
+                ))}
       </div>
     </Carousel>
   );

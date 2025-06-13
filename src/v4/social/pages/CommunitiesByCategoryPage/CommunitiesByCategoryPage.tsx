@@ -77,9 +77,7 @@ export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryP
                 pageId={pageId}
                 onClick={(communityId) => goToCommunityProfilePage(communityId)}
                 onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
-                onJoinButtonClick={handleJoinButtonClick}
-                onLeaveButtonClick={handleLeaveButtonClick}
-                showJoinButton
+                showJoinButton={false}
                 minCategoryCharacters={4}
                 maxCategoryCharacters={30}
                 maxCategoriesLength={2}
