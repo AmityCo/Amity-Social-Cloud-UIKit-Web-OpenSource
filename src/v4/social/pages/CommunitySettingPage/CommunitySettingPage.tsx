@@ -26,6 +26,7 @@ import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPag
 import { useNetworkState } from 'react-use';
 import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
 import { MembershipAcceptanceTypeEnum } from '@amityco/ts-sdk';
+import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
 
 type CommunitySettingPageProps = {
   community: Amity.Community;
@@ -41,7 +42,8 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
   const { online } = useNetworkState();
 
   const { client, currentUserId } = useSDK();
-  const { leaveCommunity, closeCommunity } = useCommunityInfo(community.communityId);
+  const { closeCommunity } = useCommunityInfo(community.communityId);
+  const { leaveCommunity } = useCommunityActions();
   const { confirm, info } = useConfirmContext();
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { socialSettings } = useSocialSettings();
@@ -69,7 +71,7 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
         content: 'You will no longer be able to post and interact in this community.',
         okText: 'Leave',
         onOk: () => {
-          leaveCommunity();
+          leaveCommunity(community);
           onBack();
         },
       });

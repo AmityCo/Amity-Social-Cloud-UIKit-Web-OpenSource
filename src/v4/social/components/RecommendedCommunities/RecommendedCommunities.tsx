@@ -109,6 +109,9 @@ interface RecommendedCommunitiesProps {
 
 export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesProps) => {
   const componentId = 'recommended_communities';
+
+  const MAX_DISPLAYED_COMMUNITIES = 4;
+
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
     componentId,
@@ -181,13 +184,13 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
         className={styles.recommendedCommunities}
       >
         {isLoading
-          ? Array.from({ length: 4 }).map((_, index) => (
+          ? Array.from({ length: MAX_DISPLAYED_COMMUNITIES }).map((_, index) => (
               <RecommendedCommunityCardSkeleton key={index} />
             ))
           : recommendedCommunitiesWithOutJoinRequests.length === 0
             ? null
             : recommendedCommunitiesWithOutJoinRequests
-                .slice(0, 4)
+                .slice(0, MAX_DISPLAYED_COMMUNITIES)
                 .map((community) => (
                   <RecommendedCommunityCard
                     pageId={pageId}

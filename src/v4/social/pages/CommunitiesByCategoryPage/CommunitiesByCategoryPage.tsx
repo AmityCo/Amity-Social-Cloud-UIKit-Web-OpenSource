@@ -9,7 +9,6 @@ import { BackButton } from '~/v4/social/elements/BackButton';
 import { CommunityRowItem } from '~/v4/social/internal-components/CommunityRowItem';
 import { CommunityRowItemSkeleton } from '~/v4/social/internal-components/CommunityRowItem/CommunityRowItemSkeleton';
 import { EmptyCommunity } from './EmptyCommunity';
-import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
 import styles from './CommunitiesByCategoryPage.module.css';
 
 interface CommunitiesByCategoryPageProps {
@@ -32,11 +31,6 @@ export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryP
   });
 
   const category = useCategory({ categoryId });
-
-  const { joinCommunity, leaveCommunity } = useCommunityActions();
-
-  const handleJoinButtonClick = (community: Amity.Community) => joinCommunity(community);
-  const handleLeaveButtonClick = (community: Amity.Community) => leaveCommunity(community);
 
   useIntersectionObserver({
     onIntersect: () => {
