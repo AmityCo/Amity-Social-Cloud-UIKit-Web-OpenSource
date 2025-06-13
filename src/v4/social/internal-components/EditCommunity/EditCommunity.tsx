@@ -612,7 +612,6 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
               }
               onChange={() => setRequiresJoinApproval(!requiresJoinApproval)}
               className={styles.editCommunity__switch}
-              isDisabled={privacySettings === AmityCommunitySetupPrivacy.PRIVATE_HIDDEN}
             />
           </div>
         </div>

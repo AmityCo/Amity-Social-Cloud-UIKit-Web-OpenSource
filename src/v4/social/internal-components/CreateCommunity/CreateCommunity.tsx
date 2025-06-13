@@ -621,7 +621,6 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                 requiresJoinApproval
               }
               onChange={() => setRequiresJoinApproval(!requiresJoinApproval)}
-              isDisabled={privacySettings === AmityCommunitySetupPrivacy.PRIVATE_HIDDEN}
             />
           </div>
         </div>
