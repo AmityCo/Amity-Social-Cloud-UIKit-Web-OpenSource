@@ -154,15 +154,16 @@ export function useFilePostUpload(pageId?: string) {
     return FileRepository.uploadFile;
   };
 
-  const handleFileChange = (file: File[], fileType: string, localFile?: Amity.File[]) => {
+  const handleFileChange = (file: File[], fileType: string, localFileLength?: number) => {
     // localFile use for calculate remaining files
     // file use for calculate incoming files
 
-    const filesAmount = localFile
-      ? files.length > 0
-        ? files?.length + file.length + localFile?.length
-        : file?.length + localFile.length
-      : file.length + files.length;
+    const filesAmount =
+      typeof localFileLength === 'number'
+        ? files.length > 0
+          ? files?.length + file.length + localFileLength
+          : file?.length + localFileLength
+        : file.length + files.length;
 
     let contentText = '';
     switch (fileType) {

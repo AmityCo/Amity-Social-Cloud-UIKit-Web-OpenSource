@@ -224,13 +224,15 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       return;
     }
 
+    if (!targetId) return;
+
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
       targetId: targetId,
       targetType: targetType,
       data: { pollId, text: textValue.text },
       dataType: 'poll',
       metadata: { mentioned: textValue.mentioned },
-      mentionees: textValue.mentionees,
+      mentionees: textValue.mentionees as Amity.UserMention[],
       attachments: [],
     };
 

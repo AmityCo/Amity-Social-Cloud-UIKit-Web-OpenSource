@@ -43,7 +43,7 @@ export const PollContent: FC<PollContentProps> = ({
 
   const showAllChoices = pageId === 'post_detail_page';
   const maxChoicesShown = 4;
-  const isAuthor = post.creator.userId === currentUserId;
+  const isAuthor = post?.creator?.userId === currentUserId;
   const isVoteDisabled = post.feedType === 'reviewing' || disabled;
   const isVoteButtonDisabled = isVoteDisabled || !answers || answers?.length < 1 || disabled;
   const isPollEneded = poll?.status === 'closed';

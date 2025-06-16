@@ -5,11 +5,11 @@ export default function usePinnedPostsCollection({
   communityId,
   placement,
   shouldCall,
-}: Partial<Parameters<typeof PostRepository.getPinnedPosts>[0]>) {
+}: Partial<Parameters<typeof PostRepository.getPinnedPosts>[0]> & { shouldCall?: boolean }) {
   const { items, ...rest } = useLiveCollection({
     fetcher: PostRepository.getPinnedPosts,
     params: {
-      communityId: communityId,
+      communityId: communityId!,
       placement: placement,
       sortBy: 'lastPinned',
     },

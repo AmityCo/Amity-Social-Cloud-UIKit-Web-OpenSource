@@ -100,13 +100,19 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
       ),
   );
 
-  filteredPosts.forEach((post) => {
-    if (!post) return;
-    const matchedPinnedPost = pinnedPosts?.find((pinned) => pinned?.post?.postId === post?.postId);
-    if (matchedPinnedPost) {
-      post.placement = matchedPinnedPost.placement;
-    }
-  });
+  const filteredPostWithPlacement: (Amity.Post & { placement?: string })[] = filteredPosts.map(
+    (post) => {
+      const matchedPinnedPost = pinnedPosts?.find(
+        (pinned) => pinned?.post?.postId === post?.postId,
+      );
+      if (matchedPinnedPost)
+        return {
+          ...post,
+          placement: matchedPinnedPost.placement,
+        };
+      return post;
+    },
+  );
 
   useIntersectionObserver({
     node: intersectionNode,
@@ -135,8 +141,8 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   const renderPublicCommunityFeed = () => {
     return (
       <>
-        {filteredPosts.length > 0 &&
-          filteredPosts
+        {filteredPostWithPlacement.length > 0 &&
+          filteredPostWithPlacement
             .filter((post) => post && !!post.postId)
             .map((post) => {
               if (!post || !post.postId) return null;
@@ -186,7 +192,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     return announcementPosts.length > 0
       ? announcementPosts
           .filter(({ post }) => !!post && !!post.postId)
-          .map(({ post }: Amity.Post) => {
+          .map(({ post }) => {
             if (!post || !post.postId) return null;
 
             const category = isAnnouncePostWasPinned

@@ -17,6 +17,7 @@ import { LiveStreamIdleThumbnail } from '~/v4/social/internal-components/LiveStr
 import { LiveStreamTerminatedThumbnail } from '~/v4/social/internal-components/LiveStreamTerminatedThumbnail';
 import 'plyr/dist/plyr.css';
 import styles from './LiveStreamPlayer.module.css';
+import { isStreamPost } from '~/v4/social/utils/postTypeChecker';
 
 export type LiveStreamPlayerPageProps = {
   post: Amity.Post;
@@ -38,7 +39,8 @@ const usePostSubscription = (postId: string) => {
 
 const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
   const { post: childPost } = usePost(post.children?.[0]);
-  const stream = useStream(childPost?.data?.streamId);
+
+  const stream = useStream(isStreamPost(childPost) ? childPost?.data?.streamId : '');
 
   const [muted, setMuted] = useState(true);
   const [isLoading, setIsLoading] = useState(false);

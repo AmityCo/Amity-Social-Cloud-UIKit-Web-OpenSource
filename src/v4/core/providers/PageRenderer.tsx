@@ -32,6 +32,7 @@ import {
   UserRelationshipPage,
   ViewStoryPage,
   CommunityInviteMemberPage,
+  Mode,
 } from '~/v4/social/pages';
 import CommunityFeed from '~/social/pages/CommunityFeed';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
@@ -98,7 +99,7 @@ const PageRenderer = ({ children }: PageRendererProps) => {
     case PageTypes.PostComposerPage:
       return (
         <PostComposerPage
-          mode={page.context?.mode}
+          mode={page.context?.mode as any}
           targetId={page.context?.targetId}
           targetType={page.context?.targetType}
           community={page.context?.community}

@@ -130,8 +130,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.5.3-d6ee46d.0
-        version: 7.5.3-d6ee46d.0
+        specifier: 7.5.3-69a90234.0
+        version: 7.5.3-69a90234.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -321,8 +321,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.5.3-d6ee46d.0':
-    resolution: {integrity: sha512-BuKxV2c471d39KUD0SwzmHqThlLVXFOQesugZ08KUCzb2pKqX7k3TTOESMBaIV+AljutBmAFI4ouKx11bs7cmw==}
+  '@amityco/ts-sdk@7.5.3-69a90234.0':
+    resolution: {integrity: sha512-Cd5Nlb9w2JDf2haE7xzZfVXuIZpbb61ZC4VMDELyznlZUggjL0mdyaJPcvvQf81cyFn2YCktXT4BEwbO8h+HBg==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -3634,8 +3634,8 @@ packages:
     resolution: {integrity: sha512-QbUdXJVTpvUTHU7871ppZkdOLBeGUKBQWHkHrvN2V9IQWGMt61zf3B45BtzjxEJzYuj0JBjBZP/hmYS/R9pmAw==}
     engines: {node: '>=4'}
 
-  axios@1.9.0:
-    resolution: {integrity: sha512-re4CqKTJaURpzbLHtIi6XpDv20/CnpXOtjRY5/CU32L8gU8ek9UIivcfvSWvmKEngmVbrUtPpdDwWDWL7DNHvg==}
+  axios@1.10.0:
+    resolution: {integrity: sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==}
 
   babel-core@7.0.0-bridge.0:
     resolution: {integrity: sha512-poPX9mZH/5CSanm50Q+1toVci6pv5KSRv/5TWCwtzQS5XEwn40BcCrgIeMFWP9CKKIniKXNxoIOnOq4VVlGXhg==}
@@ -8004,10 +8004,10 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.5.3-d6ee46d.0':
+  '@amityco/ts-sdk@7.5.3-69a90234.0':
     dependencies:
       agentkeepalive: 4.6.0
-      axios: 1.9.0(debug@4.4.1)
+      axios: 1.10.0(debug@4.4.1)
       debug: 4.4.1
       hls.js: 1.5.11
       js-base64: 3.7.7
@@ -12469,7 +12469,7 @@ snapshots:
 
   axe-core@4.9.1: {}
 
-  axios@1.9.0(debug@4.4.1):
+  axios@1.10.0(debug@4.4.1):
     dependencies:
       follow-redirects: 1.15.9(debug@4.4.1)
       form-data: 4.0.0

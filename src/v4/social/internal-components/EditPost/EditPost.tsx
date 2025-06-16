@@ -35,6 +35,7 @@ import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
 import { Typography } from '~/v4/core/components';
 import styles from './EditPost.module.css';
+import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -74,9 +75,9 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   } = useMediaAttachmentVisible({ files, posts: localPost });
 
   const [textValue, setTextValue] = useState<CreatePostParams>({
-    text: post.data.text ?? '',
+    text: (post as Amity.Post<'text'>)?.data?.text ?? '',
     mentioned: post.metadata?.mentioned || [],
-    mentionees: post.mentionees,
+    mentionees: post.mentionees as Amity.UserMention[],
     attachments: [
       {
         fileId: '',
@@ -88,15 +89,15 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const online = useNetworkState();
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
-  const [postImages, setPostImages] = useState<Amity.Post[]>([]);
-  const [postVideos, setPostVideos] = useState<Amity.Post[]>([]);
+  const [postImages, setPostImages] = useState<Amity.Post<'image'>[]>([]);
+  const [postVideos, setPostVideos] = useState<Amity.Post<'video'>[]>([]);
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [isError, setIsError] = useState(false);
 
   const useMutateUpdatePost = () =>
     useMutation({
-      mutationFn: async (params: Parameters<typeof PostRepository.editPost>[0]) => {
+      mutationFn: async (params: Parameters<typeof PostRepository.editPost>[1]) => {
         return await PostRepository.editPost(post.postId, params);
       },
       onMutate: () => {
@@ -135,27 +136,31 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   useEffect(() => {
     setLocalPost(posts);
-    const imagePosts = posts.filter((post) => post.dataType === 'image');
+    const imagePosts = posts.filter((post) => post.dataType === 'image') as Amity.Post<'image'>[];
     setPostImages(imagePosts);
-    const videoPosts = posts.filter((post) => post.dataType === 'video');
+    const videoPosts = posts.filter((post) => post.dataType === 'video') as Amity.Post<'video'>[];
     setPostVideos(videoPosts);
   }, [posts]);
 
   const handleRemoveThumbnailImage = useCallback((fieldId: string) => {
     setPostImages((prevImages) =>
-      prevImages.filter((item: Amity.Post<'image'>) => item.data.fileId !== fieldId),
+      prevImages.filter((item: Amity.Post<'image'>) => item?.data?.fileId !== fieldId),
     );
-    setLocalPost((prevPost: Amity.Post[]) =>
-      prevPost.filter((item: Amity.Post) => item.data.fileId !== fieldId),
+    setLocalPost((prevPost) =>
+      prevPost.filter((item) => (item as Amity.Post<'image'>)?.data?.fileId !== fieldId),
     );
   }, []);
 
   const handleRemoveThumbnailVideo = useCallback((fieldId: string) => {
     setPostVideos((prevVideos) =>
-      prevVideos.filter((item: Amity.Post<'video'>) => item.data.videoFileId.original !== fieldId),
+      prevVideos.filter(
+        (item: Amity.Post<'video'>) => item?.data?.videoFileId.original !== fieldId,
+      ),
     );
     setLocalPost((prevPost) =>
-      prevPost.filter((item: Amity.Post) => item.data.videoFileId.original !== fieldId),
+      prevPost.filter(
+        (item: Amity.Post) => (item as Amity.Post<'video'>)?.data?.videoFileId.original !== fieldId,
+      ),
     );
   }, []);
 
@@ -168,14 +173,14 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     // Handle existing post images
     const attachmentsImage = postImages.map((item: Amity.Post<'image'>) => {
       return {
-        fileId: item.data.fileId,
+        fileId: item?.data?.fileId as string,
         type: PostContentType.IMAGE,
       };
     });
 
     // Handle existing post videos
     const attachmentsVideo = postVideos.map((item: Amity.Post<'video'>) => {
-      return { fileId: item.data.videoFileId.original, type: 'video' };
+      return { fileId: item?.data?.videoFileId.original as string, type: 'video' };
     });
 
     // Handle newly uploaded files
@@ -259,7 +264,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const hasMediaChange = files.length > 0 || posts.length !== localPost.length;
 
-  const hasNoChanges = post.data.text === textValue.text && !hasMediaChange;
+  const hasNoChanges = isTextPost(post) && post.data?.text === textValue.text && !hasMediaChange;
   const hasNoContent = !(
     textValue.text.trim().length > 0 ||
     files.length > 0 ||
@@ -301,7 +306,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             communityId={post.targetType === 'community' ? post.targetId : undefined}
             dataValue={{
               mentionees: post.mentionees,
-              data: { text: post.data.text },
+              data: { text: (post as Amity.Post<'text'>)?.data?.text || '' },
               metadata: { mentioned: post.metadata?.mentioned || [] },
             }}
           />
@@ -311,7 +316,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             pageId={pageId}
             progress={progress}
             removeFile={removeFile}
-            postImages={postImages}
+            postImages={postImages as Amity.Post<'image'>[]}
             onAltTextChange={handleAltTextChange}
             onRemovePostImage={handleRemoveThumbnailImage}
           />
@@ -320,7 +325,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             pageId={pageId}
             progress={progress}
             removeFile={removeFile}
-            postVideos={postVideos}
+            postVideos={postVideos as Amity.Post<'video'>[]}
             onRemovePostVideo={handleRemoveThumbnailVideo}
           />
         </div>
@@ -332,8 +337,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             isVisibleCamera={isVisibleCamera}
             isVisibleImage={isVisibleImage}
             isVisibleVideo={isVisibleVideo}
-            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO, localPost)}
-            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE, localPost)}
+            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO, localPost.length)}
+            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE, localPost.length)}
           />
         </div>
         <div className={styles.editPost__ctaWrapper}>
@@ -386,10 +391,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleVideo={isVisibleVideo}
                             totalMedia={totalMedia}
                             onImageFileChange={(files) =>
-                              handleFileChange(files, FileType.IMAGE, localPost)
+                              handleFileChange(files, FileType.IMAGE, localPost.length)
                             }
                             onVideoFileChange={(files) =>
-                              handleFileChange(files, FileType.VIDEO, localPost)
+                              handleFileChange(files, FileType.VIDEO, localPost.length)
                             }
                           />
                         ) : (
@@ -400,10 +405,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
                             isVisibleVideo={isVisibleVideo}
                             totalMedia={totalMedia}
                             onImageFileChange={(files) =>
-                              handleFileChange(files, FileType.IMAGE, localPost)
+                              handleFileChange(files, FileType.IMAGE, localPost.length)
                             }
                             onVideoFileChange={(files) =>
-                              handleFileChange(files, FileType.VIDEO, localPost)
+                              handleFileChange(files, FileType.VIDEO, localPost.length)
                             }
                           />
                         )}

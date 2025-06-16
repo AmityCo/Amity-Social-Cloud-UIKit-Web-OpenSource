@@ -94,7 +94,7 @@ const Application = () => {
         )}
         {page.type === PageTypes.PostComposerPage && (
           <PostComposerPage
-            mode={page.context?.mode}
+            mode={page.context?.mode as any}
             targetId={page.context?.targetId}
             targetType={page.context?.targetType}
             community={page.context?.community}
