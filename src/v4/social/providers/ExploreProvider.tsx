@@ -19,6 +19,9 @@ type ExploreContextType = {
   isCommunityEmpty: boolean;
   categories: Amity.Category[];
   refresh: () => void;
+  pendingJoinCommunities: string[];
+  setPendingJoinCommunity: (communityId: string) => void;
+  removePendingJoinCommunity: (communityId: string) => void;
 };
 
 const ExploreContext = createContext<ExploreContextType>({
@@ -37,6 +40,9 @@ const ExploreContext = createContext<ExploreContextType>({
   isCategoryLoading: false,
   error: null,
   refresh: () => {},
+  pendingJoinCommunities: [],
+  setPendingJoinCommunity: () => {},
+  removePendingJoinCommunity: () => {},
 });
 
 export const useExplore = () => useContext(ExploreContext);
@@ -49,6 +55,7 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const [trendingCommunitiesEnable, setTrendingCommunitiesEnable] = useState(false);
   const [recommendedCommunitiesEnable, setRecommendedCommunitiesEnable] = useState(false);
   const [communityCategoriesEnable, setCommunityCategoriesEnable] = useState(false);
+  const [pendingJoinCommunities, setPendingJoinCommunities] = useState<string[]>([]);
 
   const trendingData = useTrendingCommunitiesCollection({
     params: { limit: 5 },
@@ -100,6 +107,14 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const fetchRecommendedCommunities = () => setRecommendedCommunitiesEnable(true);
   const fetchCommunityCategories = () => setCommunityCategoriesEnable(true);
 
+  const setPendingJoinCommunity = (communityId: string) => {
+    setPendingJoinCommunities((prev) => [...prev, communityId]);
+  };
+
+  const removePendingJoinCommunity = (communityId: string) => {
+    setPendingJoinCommunities((prev) => prev.filter((id) => id !== communityId));
+  };
+
   return (
     <ExploreContext.Provider
       value={{
@@ -118,6 +133,9 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
         isCategoryLoading: categoriesData.isLoading,
         error,
         refresh,
+        pendingJoinCommunities,
+        setPendingJoinCommunity,
+        removePendingJoinCommunity,
       }}
     >
       {children}

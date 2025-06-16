@@ -1,5 +1,5 @@
 import React from 'react';
-import { JoinRequestStatusEnum } from '@amityco/ts-sdk';
+import { JoinRequestStatusEnum, JoinResultStatusEnum } from '@amityco/ts-sdk';
 import { StoryTab } from '~/v4/social/components/StoryTab';
 import { CommunityPendingPost } from '~/v4/social/elements/CommunityPendingPost';
 import { CommunityCover } from '~/v4/social/elements/CommunityCover';
@@ -50,8 +50,9 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const { online } = useNetworkState();
   const notification = useNotifications();
   const { invitation, setInvitation } = useGetInvitation(community);
-  const { myJoinRequest, refreshJoinRequest } = useGetMyJoinRequest(community);
+  const { myJoinRequest, setMyJoinRequest, refreshJoinRequest } = useGetMyJoinRequest(community);
   const { joinRequests } = useGetJoinRequests(community);
+  const [isPendingLocal, setIsPendingLocal] = React.useState(false);
 
   const { avatarFileUrl, pendingPostsCount, reviewingPosts, canReviewCommunityPosts } =
     useCommunityInfo(community.communityId);
@@ -61,7 +62,12 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const { joinCommunity, cancelJoinCommunity } = useCommunityActions({
     community,
     joinRequest: myJoinRequest,
-    onJoinSuccess: () => {
+    onJoinSuccess: ({ data }: { data?: Amity.JoinResult }) => {
+      if (data?.status === JoinResultStatusEnum.Pending) {
+        setMyJoinRequest(data?.request);
+        setIsPendingLocal(true);
+      }
+
       refreshJoinRequest();
     },
     onLeaveSuccess: () => {
@@ -70,6 +76,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
     onCancelJoinSuccess: () => {
       refreshJoinRequest();
       setIsCancelJoinRequestSuccess(true);
+      setIsPendingLocal(false);
     },
   });
 
@@ -167,7 +174,8 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         {(!invitation || invitation.status !== InvitationStatusEnum.Pending) &&
           !community.isJoined &&
           !isPendingJoinRequest &&
-          (community.isPublic || community.isDiscoverable) && (
+          (community.isPublic || community.isDiscoverable) &&
+          !isPendingLocal && (
             <div className={styles.communityProfile__joinButton__container}>
               <CommunityJoinButton
                 size="medium"
@@ -186,7 +194,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
               />
             </div>
           )}
-        {!community.isJoined && isPendingJoinRequest && (
+        {((!community.isJoined && isPendingJoinRequest) || isPendingLocal) && (
           <div className={styles.communityProfile__cancelJoinButton__container}>
             <IconButton
               pageId={pageId}

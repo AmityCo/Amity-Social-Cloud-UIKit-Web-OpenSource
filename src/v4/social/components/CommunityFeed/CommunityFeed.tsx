@@ -65,6 +65,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
 
   const { pinnedPost: allPinnedPost, refresh: refreshPinnedPosts } = usePinnedPostsCollection({
     communityId,
+    shouldCall: !!communityId && community?.isJoined,
   });
 
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();

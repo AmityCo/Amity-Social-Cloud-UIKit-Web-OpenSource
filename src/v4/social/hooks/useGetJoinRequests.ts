@@ -6,7 +6,7 @@ export function useGetJoinRequests(community?: Amity.Community) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (community === undefined || !community.communityId) return;
+    if (community === undefined || !community.communityId || !community.isJoined) return;
     setIsLoading(true);
     const unsubscribe = community.getJoinRequests(
       {

@@ -29,6 +29,7 @@ type RecommendedCommunityCardProps = {
   onCategoryClick?: (categoryId: string) => void;
   onJoinButtonClick: (community: Amity.Community) => void;
   onLeaveButtonClick: (community: Amity.Community) => void;
+  isPendingJoin?: boolean;
 };
 
 const RecommendedCommunityCard = ({
@@ -39,6 +40,7 @@ const RecommendedCommunityCard = ({
   onCategoryClick,
   onJoinButtonClick,
   onLeaveButtonClick,
+  isPendingJoin = false,
 }: RecommendedCommunityCardProps) => {
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
 
@@ -83,7 +85,7 @@ const RecommendedCommunityCard = ({
             />
           </div>
           <div className={styles.recommendedCommunities__content__right}>
-            {community.isJoined ? (
+            {community.isJoined && isPendingJoin ? (
               <CommunityJoinedButton
                 pageId={pageId}
                 componentId={componentId}
@@ -125,9 +127,13 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     isLoading,
     fetchRecommendedCommunities,
     refetchRecommendedCommunities,
+    pendingJoinCommunities,
+    setPendingJoinCommunity,
   } = useExplore();
 
-  const communityIds = recommendedCommunities.map((community) => community.communityId);
+  const communityIds = recommendedCommunities
+    .map((community) => community.communityId)
+    .filter((id) => !pendingJoinCommunities.includes(id));
 
   const { joinRequestList } = useGetJoinRequestList(communityIds);
 
@@ -136,16 +142,22 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
         (community) =>
           !joinRequestList.some(
             (request) => request.targetId === community.communityId && request.status === 'pending',
-          ),
+          ) && !pendingJoinCommunities.includes(community.communityId),
       )
-    : recommendedCommunities;
+    : recommendedCommunities.filter(
+        (community) => !pendingJoinCommunities.includes(community.communityId),
+      );
 
   useEffect(() => {
     fetchRecommendedCommunities();
   }, []);
 
   const { joinCommunity, leaveCommunity } = useCommunityActions({
-    onJoinSuccess: () => {
+    onJoinSuccess: ({ data, communityId }: { data?: Amity.JoinResult; communityId?: string }) => {
+      if (data?.status === 'pending' && communityId) {
+        setPendingJoinCommunity(communityId);
+      }
+
       refetchRecommendedCommunities();
     },
   });
@@ -197,6 +209,13 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
                     community={community}
                     componentId={componentId}
                     key={community.communityId}
+                    isPendingJoin={
+                      joinRequestList?.some(
+                        (request) =>
+                          request.targetId === community.communityId &&
+                          request.status === 'pending',
+                      ) || pendingJoinCommunities.includes(community.communityId)
+                    }
                     onJoinButtonClick={(community) => handleJoinButtonClick(community)}
                     onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
                     onClick={(communityId) => goToCommunityProfilePage(communityId)}

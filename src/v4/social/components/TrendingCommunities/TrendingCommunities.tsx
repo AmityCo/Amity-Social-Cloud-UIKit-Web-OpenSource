@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { JoinRequestStatusEnum } from '@amityco/ts-sdk';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useExplore } from '~/v4/social/providers/ExploreProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -16,30 +17,14 @@ type TrendingCommunitiesProps = {
 export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) => {
   const componentId = 'trending_communities';
 
-  const { joinCommunity, leaveCommunity } = useCommunityActions();
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
-  const { trendingCommunities, isLoading, fetchTrendingCommunities } = useExplore();
+  const { trendingCommunities, isLoading, fetchTrendingCommunities, pendingJoinCommunities } =
+    useExplore();
   const { goToCommunitiesByCategoryPage, goToCommunityProfilePage } = useNavigation();
-  const { confirm } = useConfirmContext();
 
   const communityIds = trendingCommunities.map((community) => community.communityId);
 
   const { joinRequestList } = useGetJoinRequestList(communityIds);
-
-  const handleJoinButtonClick = (community: Amity.Community) => {
-    joinCommunity(community);
-  };
-  const handleLeaveButtonClick = (community: Amity.Community) => {
-    if (community.requiresJoinApproval) {
-      confirm({
-        title: 'Leave Community',
-        content: 'If you change your mind, you’ll have to request to join again.',
-        onOk: () => leaveCommunity(community),
-      });
-      return;
-    }
-    leaveCommunity(community);
-  };
 
   useEffect(() => {
     fetchTrendingCommunities();
@@ -64,6 +49,15 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
           (request) => request.targetId === community.communityId,
         );
 
+        // Check if this community is in pending join state from shared context
+        const isPendingJoin = pendingJoinCommunities.includes(community.communityId);
+
+        // Update status to pending for existing join requests in pending communities
+        let pendingJoinRequest = joinRequest;
+        if (isPendingJoin && joinRequest) {
+          pendingJoinRequest = { ...joinRequest, status: JoinRequestStatusEnum.Pending };
+        }
+
         return (
           <CommunityRowItem
             showJoinButton
@@ -75,11 +69,9 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
             componentId={componentId}
             maxCategoryCharacters={36}
             key={community.communityId}
-            onJoinButtonClick={(community) => handleJoinButtonClick(community)}
-            onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
             onClick={(communityId) => goToCommunityProfilePage(communityId)}
             onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
-            joinRequest={joinRequest}
+            joinRequest={pendingJoinRequest}
           />
         );
       })}

@@ -13,7 +13,13 @@ export const useCommunityActions = (
     community,
     joinRequest,
   }: {
-    onJoinSuccess?: () => void;
+    onJoinSuccess?: ({
+      data,
+      communityId,
+    }: {
+      data?: Amity.JoinResult;
+      communityId?: string;
+    }) => void;
     onJoinError?: (error: Error) => void;
     onLeaveSuccess?: () => void;
     onLeaveError?: (error: Error) => void;
@@ -23,7 +29,7 @@ export const useCommunityActions = (
     joinRequest?: Amity.JoinRequest | undefined;
   } = {
     community: {} as Amity.Community,
-    onJoinSuccess: () => {},
+    onJoinSuccess: ({ data, communityId }) => {},
     onJoinError: () => {},
     onLeaveSuccess: () => {},
     onLeaveError: () => {},
@@ -47,7 +53,7 @@ export const useCommunityActions = (
             ? `You joined ${community.displayName}.`
             : 'Requested to join. You will be notified once your request is accepted.',
       });
-      onJoinSuccess?.();
+      onJoinSuccess?.({ data, communityId: community.communityId });
     },
     onError: (error) => {
       info({

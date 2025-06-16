@@ -4,6 +4,7 @@ import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 export default function usePinnedPostsCollection({
   communityId,
   placement,
+  shouldCall,
 }: Partial<Parameters<typeof PostRepository.getPinnedPosts>[0]>) {
   const { items, ...rest } = useLiveCollection({
     fetcher: PostRepository.getPinnedPosts,
@@ -12,7 +13,7 @@ export default function usePinnedPostsCollection({
       placement: placement,
       sortBy: 'lastPinned',
     },
-    shouldCall: !!communityId,
+    shouldCall: shouldCall,
   });
 
   return {
