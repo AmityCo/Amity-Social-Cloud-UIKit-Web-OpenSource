@@ -39,7 +39,6 @@ export const GlobalFeed = ({
   onFeedReachBottom,
   onPostDeleted,
 }: GlobalFeedProps) => {
-  console.log('globalFeaturePosts', globalFeaturedPosts);
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
     componentId,

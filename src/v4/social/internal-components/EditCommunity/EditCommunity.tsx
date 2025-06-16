@@ -107,7 +107,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
   const { globalFeaturedPostsItems } = useGlobalFeedContext();
 
   const hasGlobalFeaturedPostsInCommunity = globalFeaturedPostsItems.some(
-    (post) => post.targetId === community.communityId,
+    (post) => post.post?.targetId === community.communityId,
   );
 
   const isPublic = privacySettings === AmityCommunitySetupPrivacy.PUBLIC;
@@ -157,7 +157,6 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     ) {
       setIsDiscoverable?.(true);
     } else {
-      setRequiresJoinApproval?.(true);
       setIsDiscoverable?.(false);
     }
   };
@@ -227,6 +226,33 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     });
   };
 
+  const resetFormState = () => {
+    setCoverImages([]);
+    setCommunityName('');
+    setCategories([]);
+    setPrivacySettings(AmityCommunitySetupPrivacy.PUBLIC);
+    setAbout('');
+  };
+
+  const handleSubmitError = (error: any) => {
+    notification.info({
+      content: 'Failed to update community. Please try again.',
+    });
+    setRequiresJoinApproval(community.requiresJoinApproval ?? false);
+  };
+
+  const performCommunityUpdate = async (data: EditFormValues) => {
+    try {
+      setSubmitting(true);
+      await submitCommunityUpdate(data);
+      resetFormState();
+    } catch (error) {
+      handleSubmitError(error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const validateAndSubmit = async (data: EditFormValues) => {
     if (!online) {
       notification.info({
@@ -234,50 +260,39 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
       });
       return;
     }
-    try {
-      setSubmitting(true);
 
-      if (community.requiresJoinApproval && !requiresJoinApproval && hasPendingJoinRequests) {
-        return info({
-          pageId: pageId,
-          title: 'You have pending join requests',
-          content: 'Please address these requests before switching off membership approval.',
-        });
-      }
+    setSubmitting(true);
 
-      if (
-        community.isPublic &&
-        privacySettings !== AmityCommunitySetupPrivacy.PUBLIC &&
-        hasGlobalFeaturedPostsInCommunity
-      ) {
-        confirm({
-          pageId: pageId,
-          title: 'Change community privacy settings?',
-          content: `This community has globally featured posts. Changing the community from public to ${AmityCommunitySetupPrivacy.PRIVATE_VISIBLE ? 'private & visible' : 'private & hidden'} will remove these posts from being featured globally.`,
-          onOk: async () => {
-            await submitCommunityUpdate(data);
-          },
-        });
-        return;
-      }
-
-      await submitCommunityUpdate(data);
-    } catch (error) {
-      notification.info({
-        content: 'Failed to update community. Please try again.',
+    // Check for pending join requests
+    if (community.requiresJoinApproval && !requiresJoinApproval && hasPendingJoinRequests) {
+      setSubmitting(false);
+      info({
+        pageId: pageId,
+        title: 'You have pending join requests',
+        content: 'Please address these requests before switching off membership approval.',
       });
-
-      setSubmitting(false);
-      setRequiresJoinApproval(community.requiresJoinApproval ?? false);
       return;
-    } finally {
-      setSubmitting(false);
-      setCoverImages([]);
-      setCommunityName('');
-      setCategories([]);
-      setPrivacySettings(AmityCommunitySetupPrivacy.PUBLIC);
-      setAbout('');
     }
+
+    // Check for global featured posts
+    if (
+      community.isPublic &&
+      privacySettings !== AmityCommunitySetupPrivacy.PUBLIC &&
+      hasGlobalFeaturedPostsInCommunity
+    ) {
+      setSubmitting(false);
+      confirm({
+        pageId: pageId,
+        title: 'Change community privacy settings?',
+        content: `This community has globally featured posts. Changing the community from public to ${AmityCommunitySetupPrivacy.PRIVATE_VISIBLE ? 'private & visible' : 'private & hidden'} will remove these posts from being featured globally.`,
+        okText: 'Confirm',
+        onOk: () => performCommunityUpdate(data),
+      });
+      return;
+    }
+
+    // No early returns, proceed with the update
+    await performCommunityUpdate(data);
   };
 
   const disabled =
@@ -606,10 +621,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
               <SubDescription pageId={pageId} elementId="community_membership_sub_description" />
             </div>
             <Switch
-              isSelected={
-                privacySettings === AmityCommunitySetupPrivacy.PRIVATE_HIDDEN ||
-                requiresJoinApproval
-              }
+              isSelected={requiresJoinApproval}
               onChange={() => setRequiresJoinApproval(!requiresJoinApproval)}
               className={styles.editCommunity__switch}
             />
