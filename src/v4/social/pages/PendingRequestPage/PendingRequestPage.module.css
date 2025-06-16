@@ -31,6 +31,13 @@
   padding: 0 1rem;
 }
 
+.pendingRequestsPage__skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+
 @media (width >= 48em) {
   .pendingRequestsPage__topBar {
     border-radius: 0.5rem 0.5rem 0 0;

@@ -16,7 +16,7 @@ import { UserListSkeleton } from '~/v4/core/components/UserListSkeleton';
 
 type JoinRequestContentProps = {
   pageId?: string;
-  joinRequests?: Amity.JoinRequest[];
+  joinRequests: Amity.JoinRequest[] | null;
   isLoading: boolean;
 };
 
@@ -50,8 +50,7 @@ export const JoinRequestContent = ({
           ))}
         </div>
       )}
-
-      {!isLoading &&
+      {joinRequests &&
         joinRequests.length > 0 &&
         joinRequests.map((joinRequest) => (
           <div className={styles.joinRequestContent__container}>
@@ -87,7 +86,7 @@ export const JoinRequestContent = ({
           </div>
         ))}
 
-      {!isLoading && joinRequests.length === 0 && (
+      {!isLoading && joinRequests && joinRequests.length === 0 && (
         <div className={styles.joinRequestContent__noJoinRequest}>
           <FireworkPaper className={styles.joinRequestContent__fireworkIcon} />
           <Typography.TitleBold className={styles.joinRequestContent__noJoinRequestText}>

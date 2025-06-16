@@ -10,8 +10,10 @@ import { JoinRequestContent } from '~/v4/social/components/JoinRequestContent';
 import { PendingPostList } from '~/v4/social/components/PendingPostList';
 import { useCommunityInfo } from '~/v4/social/hooks';
 import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection';
-import { useGetJoinRequests } from '~/v4/social/hooks/useGetJoinRequests';
 import { CommunityPostSettings } from '@amityco/ts-sdk';
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
+import useJoinRequestsCollection from '~/v4/social/hooks/collections/useJoinRequestsCollection';
+import { UserListSkeleton } from '~/v4/core/components/UserListSkeleton';
 
 type PendingRequestPageProps = {
   community: Amity.Community;
@@ -26,7 +28,13 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   const { onBack } = useNavigation();
   const { currentUserId } = useSDK();
   const { canReviewCommunityPosts } = useCommunityInfo(community.communityId);
-  const { joinRequests, isLoading: isJoinRequestsLoading } = useGetJoinRequests(community);
+
+  const {
+    joinRequests,
+    hasMore: hasMoreJoinRequests,
+    loadMore: loadMoreJoinRequests,
+    loading: isJoinRequestsLoading,
+  } = useJoinRequestsCollection({ community });
 
   const defaultActiveTab = [
     canReviewCommunityPosts ? 'posts_button_tab' : null,
@@ -34,6 +42,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   ].filter(Boolean) as Key[];
 
   const [activeTab, setActiveTab] = useState<Key>(defaultActiveTab[0] || 'posts_button_tab');
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const [intersectionNodePost, setIntersectionNodePost] = useState<HTMLDivElement | null>(null);
 
   const postsTab = useAmityElement({
     pageId,
@@ -52,6 +62,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     posts: reviewingPosts,
     isLoading,
     refresh,
+    loadMore: loadMorePosts,
+    hasMore: hasMorePosts,
   } = usePostsCollection({
     targetType: 'community',
     targetId: community.communityId,
@@ -60,6 +72,24 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
 
   const isPostOwner = reviewingPosts.some((post) => post.postedUserId === currentUserId);
   const joinRequestsCount = (joinRequests && joinRequests?.length) || 0;
+
+  useIntersectionObserver({
+    onIntersect: () => {
+      if (hasMoreJoinRequests && isJoinRequestsLoading === false) {
+        loadMoreJoinRequests();
+      }
+    },
+    node: intersectionNode,
+  });
+
+  useIntersectionObserver({
+    onIntersect: () => {
+      if (hasMorePosts && !isLoading) {
+        loadMorePosts();
+      }
+    },
+    node: intersectionNodePost,
+  });
 
   useEffect(() => {
     if (joinRequestsCount > 0 && reviewingPosts.length === 0) {
@@ -86,8 +116,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
       value: 'posts_button_tab',
       label: `${postsTab?.config?.text} (${renderAmouts(reviewingPosts.length)})`,
       accessibilityId: `${pageId}}/*/posts_button_tab`,
-      content: () =>
-        !isLoading && (
+      content: () => (
+        <>
           <div className={styles.pendingPostsPage__list}>
             <PendingPostList
               reviewingPosts={reviewingPosts}
@@ -96,7 +126,16 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
               refresh={refresh}
             />
           </div>
-        ),
+          {isLoading && reviewingPosts && reviewingPosts.length > 0 && (
+            <div className={styles.pendingRequestsPage__skeletonContainer}>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <UserListSkeleton key={`loading-more-posts-${index}`} />
+              ))}
+            </div>
+          )}
+          <div ref={(node) => setIntersectionNodePost(node)} />
+        </>
+      ),
     });
   }
 
@@ -107,11 +146,22 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
       label: `${joinRequestsTab?.config?.text} (${renderAmouts(joinRequestsCount)})`,
       accessibilityId: `${pageId}/*/join_requests_button_tab`,
       content: () => (
-        <JoinRequestContent
-          pageId={pageId}
-          joinRequests={joinRequests}
-          isLoading={isJoinRequestsLoading}
-        />
+        <>
+          <JoinRequestContent
+            pageId={pageId}
+            joinRequests={joinRequests}
+            isLoading={isJoinRequestsLoading}
+          />
+
+          {isJoinRequestsLoading && joinRequests && joinRequests.length > 0 && (
+            <div className={styles.pendingRequestsPage__skeletonContainer}>
+              {Array.from({ length: 3 }).map((_, index) => (
+                <UserListSkeleton key={`loading-more-${index}`} />
+              ))}
+            </div>
+          )}
+          <div ref={(node) => setIntersectionNode(node)} />
+        </>
       ),
     });
   }

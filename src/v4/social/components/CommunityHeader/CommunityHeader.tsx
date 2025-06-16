@@ -24,8 +24,8 @@ import { IconButton } from '~/v4/core/components/IconButton';
 import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
 import Clock from '~/v4/icons/Clock';
 import styles from './CommunityHeader.module.css';
-import { useGetJoinRequests } from '~/v4/social/hooks/useGetJoinRequests';
 import { useGetMyJoinRequest } from '~/v4/social/hooks/useGetMyJoinRequest';
+import useJoinRequestsCollection from '~/v4/social/hooks/collections/useJoinRequestsCollection';
 
 //TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
 
@@ -51,7 +51,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const notification = useNotifications();
   const { invitation, setInvitation } = useGetInvitation(community);
   const { myJoinRequest, setMyJoinRequest, refreshJoinRequest } = useGetMyJoinRequest(community);
-  const { joinRequests } = useGetJoinRequests(community);
+  const { joinRequests } = useJoinRequestsCollection({ community });
   const [isPendingLocal, setIsPendingLocal] = React.useState(false);
 
   const { avatarFileUrl, pendingPostsCount, reviewingPosts, canReviewCommunityPosts } =

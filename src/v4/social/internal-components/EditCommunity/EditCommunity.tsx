@@ -44,7 +44,7 @@ import { Description } from '~/v4/core/components/Description';
 import { SubDescription } from '~/v4/core/components/SubDescription';
 import { Switch } from '~/v4/core/components/AriaSwitch';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
-import { useGetJoinRequests } from '~/v4/social/hooks/useGetJoinRequests';
+import useJoinRequestsCollection from '~/v4/social/hooks/collections/useJoinRequestsCollection';
 
 type EditCommunityProps = {
   community: Amity.Community;
@@ -100,7 +100,7 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
     setIsDiscoverable,
   } = useCommunitySetupContext();
 
-  const { joinRequests } = useGetJoinRequests(community);
+  const { joinRequests } = useJoinRequestsCollection({ community });
 
   const hasPendingJoinRequests = joinRequests && joinRequests.length > 0;
 

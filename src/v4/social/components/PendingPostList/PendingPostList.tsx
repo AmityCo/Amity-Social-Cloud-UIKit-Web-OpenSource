@@ -157,7 +157,7 @@ export const PendingPostList = ({
                 data-testid={`${pageId}/${componentId}/username`}
                 onClick={() => goToUserProfilePage(post?.postedUserId)}
               >
-                {post.creator.displayName}
+                {post?.creator?.displayName}
               </Typography.BodyBold>
               <div className={styles.pendingPostList__information__subtitle}>
                 <Timestamp timestamp={post.createdAt} />
@@ -227,7 +227,7 @@ export const PendingPostList = ({
             componentId={componentId}
             text={post?.data?.text}
             mentioned={post?.metadata?.mentioned}
-            mentionees={post?.mentioness}
+            mentionees={post?.mentionees}
             post={post}
           />
           {post.children.length > 0 && (

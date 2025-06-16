@@ -1,28 +1,63 @@
-import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
+import { JoinRequestStatusEnum } from '@amityco/ts-sdk';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+type useJoinRequestsCollectionParams = {
+  community: Amity.Community;
+  status?: Amity.JoinRequestStatus;
+};
 export default function useJoinRequestsCollection({
   community,
-  status,
-  shouldCall = true,
-}: {
-  community: Amity.Community;
-  status: Amity.JoinRequestStatus;
-  shouldCall?: boolean;
-}) {
-  const { items, ...rest } = useLiveCollection({
-    fetcher: community.getJoinRequests,
-    params: {
-      communityId: community.communityId,
-      type: 'communityJoinRequest',
-      targetType: 'community',
-      limit: 20,
-      status,
-    },
-    shouldCall,
-  });
+  status = JoinRequestStatusEnum.Pending,
+}: useJoinRequestsCollectionParams) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState();
+  const [items, setItems] = useState<Amity.JoinRequest[] | null>(null);
+  const [hasMore, setHasMore] = useState<boolean>();
+
+  const loadMoreRef = useRef<(() => void) | null>();
+
+  const loadMore = useCallback(() => {
+    if (loadMoreRef.current) {
+      loadMoreRef.current();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!community.communityId) return;
+
+    const unsubscriber = community.getJoinRequests(
+      {
+        communityId: community.communityId,
+        type: 'communityJoinRequest',
+        targetType: 'community',
+        status,
+        options: {
+          limit: 20,
+        },
+      },
+      ({ data, loading, error, hasNextPage, onNextPage }) => {
+        setIsLoading(loading);
+
+        if (!loading && data) {
+          setItems([...data]);
+          setHasMore(hasNextPage);
+          loadMoreRef.current = hasNextPage ? onNextPage : null;
+        }
+
+        if (error) setError(error);
+      },
+    );
+
+    return () => {
+      unsubscriber();
+    };
+  }, [community.communityId, status]);
 
   return {
-    items,
-    ...rest,
+    joinRequests: items,
+    loading: isLoading,
+    hasMore,
+    loadMore,
+    error,
   };
 }

@@ -1,7 +1,7 @@
 import { PostRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
-const QUERY_LIMIT = 10;
+const QUERY_LIMIT = 20;
 
 export default function usePostsCollection({
   targetType,
