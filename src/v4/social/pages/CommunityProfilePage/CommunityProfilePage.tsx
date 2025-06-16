@@ -54,7 +54,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { hasStoryPermission } = useStoryPermission(communityId);
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
-  const { community, isLoading, refresh } = useCommunity({
+  const { community, isLoading, refresh, error } = useCommunity({
     communityId,
     shouldCall: !!communityId,
   });
@@ -158,13 +158,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     };
   }, []);
 
-  const isShowFailed =
-    (!isLoading && community?.isDeleted) ||
-    (!isLoading &&
-      !community?.isJoined &&
-      !community?.isPublic &&
-      community?.isDiscoverable === false &&
-      invitation == undefined);
+  const isShowFailed = (!isLoading && community?.isDeleted) || error;
 
   return (
     <PullToRefresh

@@ -174,7 +174,6 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         {(!invitation || invitation.status !== InvitationStatusEnum.Pending) &&
           !community.isJoined &&
           !isPendingJoinRequest &&
-          (community.isPublic || community.isDiscoverable) &&
           !isPendingLocal && (
             <div className={styles.communityProfile__joinButton__container}>
               <CommunityJoinButton
