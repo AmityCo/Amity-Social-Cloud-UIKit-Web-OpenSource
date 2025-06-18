@@ -51,6 +51,7 @@ function TextContent({ text, postMaxLines, mentionees }) {
         options={{
           overrides: renderOverrides,
           wrapper: React.Fragment,
+          disableParsingRawHTML: true,
         }}
       >
         {textWithMentions}
