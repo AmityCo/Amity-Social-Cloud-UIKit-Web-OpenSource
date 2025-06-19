@@ -14,6 +14,8 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { SearchResultSkeleton } from '~/v4/social/internal-components/SearchResultSkeleton/SearchResultSkeleton';
 import styles from './CommunityPendingInvitationPage.module.css';
+import { IconComponent } from '~/v4/core/IconComponent';
+import GoldenBadge from '~/v4/icons/GoldenBadge';
 
 type CommunityPendingInvitationPageProps = {
   community: Amity.Community;
@@ -138,6 +140,19 @@ export function CommunityPendingInvitationPage(props: CommunityPendingInvitation
               <Typography.BodyBold className={styles.communityPendingInvitationPage__memberName}>
                 {invitation.user?.displayName ?? invitation.userId}
               </Typography.BodyBold>
+              {invitation.user?.isBrand && (
+                <div aria-label="Golden badge for brand user">
+                  <IconComponent
+                    defaultIconName="badge icon"
+                    imgIcon={() => (
+                      <GoldenBadge className={styles.communityPendingInvitationPage__badge} />
+                    )}
+                    defaultIcon={() => (
+                      <GoldenBadge className={styles.communityPendingInvitationPage__badge} />
+                    )}
+                  />
+                </div>
+              )}
             </div>
           ))}
         {isFetching && (
