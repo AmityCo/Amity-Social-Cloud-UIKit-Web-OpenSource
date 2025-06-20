@@ -8,6 +8,7 @@ interface TimestampProps {
   pageId?: string;
   componentId?: string;
   timestamp: Date | string;
+  elementId?: string;
 }
 
 function formatTimestamp(input: Date | string): string {
@@ -31,8 +32,13 @@ function formatTimestamp(input: Date | string): string {
   return time.format('D MMM YYYY');
 }
 
-export function Timestamp({ pageId = '*', componentId = '*', timestamp }: TimestampProps) {
-  const elementId = 'timestamp';
+export function Timestamp({
+  pageId = '*',
+  componentId = '*',
+  elementId: $elementId,
+  timestamp,
+}: TimestampProps) {
+  const elementId = $elementId ? $elementId : 'timestamp';
   const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
     pageId,
     componentId,

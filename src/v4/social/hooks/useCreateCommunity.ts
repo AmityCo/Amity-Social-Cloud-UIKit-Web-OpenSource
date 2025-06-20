@@ -10,6 +10,8 @@ const baseCommunitySchema = z.object({
   tags: z.string().array().optional(),
   isPublic: z.boolean(),
   userIds: z.string().array(),
+  isDiscoverable: z.boolean().default(true),
+  requireApproval: z.boolean().default(false),
 });
 
 export const createCommunitySchema = baseCommunitySchema
@@ -38,6 +40,8 @@ export const useCreateCommunity = () => {
     tags: [],
     userIds: [],
     categoryIds: [],
+    isDiscoverable: true,
+    requireApproval: false,
   };
 
   return useForm({
@@ -55,6 +59,8 @@ export const useEditCommunity = (initialValue: Amity.Community) => {
       isPublic: initialValue?.isPublic,
       tags: initialValue?.tags ?? [],
       categoryIds: initialValue?.categoryIds ?? [],
+      isDiscoverable: initialValue?.isDiscoverable ?? true,
+      requireApproval: initialValue?.requiresJoinApproval ?? false,
     },
     resolver: zodResolver(editCommunitySchema),
   });

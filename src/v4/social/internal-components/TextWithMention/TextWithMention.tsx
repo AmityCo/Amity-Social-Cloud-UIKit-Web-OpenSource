@@ -49,14 +49,14 @@ export const TextWithMention = ({
   const convertSerializedToText = (child: SerializedLexicalNode, childIndex: number) => {
     if ($isSerializedMentionNode<MentionData>(child)) {
       return (
-        <Button
+        <div
           key={uuidv4()}
           data-testid={`${pageId}/${componentId}/mention`}
           className={clsx(styles.textWithMention__mention)}
-          onPress={() => goToUserProfilePage(child.data.userId)}
+          onClick={() => goToUserProfilePage(child.data.userId)}
         >
           {child.text}
-        </Button>
+        </div>
       );
     }
 

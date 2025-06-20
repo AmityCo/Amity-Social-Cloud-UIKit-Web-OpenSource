@@ -32,6 +32,8 @@ const useGlobalSearchViewModel = () => {
     queryParams: {
       displayName: searchKeyword,
       limit: 20,
+      includeDiscoverablePrivateCommunity: true,
+      membership: 'all',
     },
     shouldCall: searchType === AmityGlobalSearchType.Community && searchKeyword.length > 0,
   });

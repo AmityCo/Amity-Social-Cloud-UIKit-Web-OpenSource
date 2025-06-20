@@ -9,7 +9,7 @@ const FilesContainer = styled.div`
 `;
 
 interface FileContentListProps {
-  items: Amity.Post[];
+  items: Amity.Post<'file'>[];
   onRemove: (id: string) => void;
 }
 

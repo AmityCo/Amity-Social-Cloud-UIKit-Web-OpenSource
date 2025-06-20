@@ -1,0 +1,1 @@
+export { NoResultIcon } from './NoResultIcon';

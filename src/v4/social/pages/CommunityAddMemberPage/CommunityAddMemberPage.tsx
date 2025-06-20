@@ -127,7 +127,8 @@ export const CommunityAddMemberPage = ({
             <div className={styles.communityAddMemberPage__selectedUserAvatar}>
               <UserAvatar
                 userId={user.userId}
-                className={styles.communityAddMemberPage__memberAvatar}
+                className={styles.communityAddMemberPage__selectedUserAvatarImage}
+                textPlaceholderClassName={styles.communityAddMemberPage__selectedUserAvatarImage}
               />
               <Button
                 aria-label="close"

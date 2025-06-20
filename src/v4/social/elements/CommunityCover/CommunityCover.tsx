@@ -65,7 +65,7 @@ export const CommunityCover: React.FC<CommunityCoverProps> = ({
             </>
           )}
         </div>
-        <CommunityProfileMenuButton onPress={onClickMenu} />
+        {community?.isJoined && <CommunityProfileMenuButton onPress={onClickMenu} />}
       </div>
     </div>
   );

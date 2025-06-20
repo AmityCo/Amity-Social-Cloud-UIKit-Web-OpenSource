@@ -50,8 +50,6 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
 
   const { community } = useCommunity({ communityId, shouldCall: !!communityId });
 
-  const isMemberPrivateCommunity = community?.isJoined && !community?.isPublic;
-
   const {
     posts,
     hasMore,
@@ -65,12 +63,9 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     limit: 10,
   });
 
-  const {
-    pinnedPost: allPinnedPost,
-    isLoading: isLoadingAllPinnedPosts,
-    refresh: refreshPinnedPosts,
-  } = usePinnedPostsCollection({
+  const { pinnedPost: allPinnedPost, refresh: refreshPinnedPosts } = usePinnedPostsCollection({
     communityId,
+    shouldCall: !!communityId && community?.isJoined,
   });
 
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
@@ -105,13 +100,19 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
       ),
   );
 
-  filteredPosts.forEach((post) => {
-    if (!post) return;
-    const matchedPinnedPost = pinnedPosts?.find((pinned) => pinned?.post?.postId === post?.postId);
-    if (matchedPinnedPost) {
-      post.placement = matchedPinnedPost.placement;
-    }
-  });
+  const filteredPostWithPlacement: (Amity.Post & { placement?: string })[] = filteredPosts.map(
+    (post) => {
+      const matchedPinnedPost = pinnedPosts?.find(
+        (pinned) => pinned?.post?.postId === post?.postId,
+      );
+      if (matchedPinnedPost)
+        return {
+          ...post,
+          placement: matchedPinnedPost.placement,
+        };
+      return post;
+    },
+  );
 
   useIntersectionObserver({
     node: intersectionNode,
@@ -140,8 +141,8 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
   const renderPublicCommunityFeed = () => {
     return (
       <>
-        {filteredPosts.length > 0 &&
-          filteredPosts
+        {filteredPostWithPlacement.length > 0 &&
+          filteredPostWithPlacement
             .filter((post) => post && !!post.postId)
             .map((post) => {
               if (!post || !post.postId) return null;
@@ -191,7 +192,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     return announcementPosts.length > 0
       ? announcementPosts
           .filter(({ post }) => !!post && !!post.postId)
-          .map(({ post }: Amity.Post) => {
+          .map(({ post }) => {
             if (!post || !post.postId) return null;
 
             const category = isAnnouncePostWasPinned
@@ -234,14 +235,20 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
         }}
         className={styles.communityFeed__noInternet}
       >
-        {isMemberPrivateCommunity || community?.isPublic ? (
-          <>
-            {renderAnnouncementPost()}
-            {renderPublicCommunityFeed()}
-          </>
-        ) : (
-          <>{!isLoading && !isLoadingAllPinnedPosts && <LockPrivateContent />}</>
-        )}
+        <>
+          {community?.isJoined || community?.isPublic ? (
+            <>
+              {renderAnnouncementPost()}
+              {renderPublicCommunityFeed()}
+            </>
+          ) : isLoading ? (
+            Array.from({ length: 3 }).map((_, index) => (
+              <CommunityFeedPostContentSkeleton key={index} />
+            ))
+          ) : (
+            <LockPrivateContent />
+          )}
+        </>
       </NoInternetConnectionHoc>
     </div>
   );

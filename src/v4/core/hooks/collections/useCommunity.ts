@@ -8,7 +8,7 @@ const useCommunity = ({
   communityId: string | null | undefined;
   shouldCall?: boolean;
 }) => {
-  const { item, ...rest } = useLiveObject({
+  const { item, error, ...rest } = useLiveObject({
     fetcher: CommunityRepository.getCommunity,
     params: communityId,
     shouldCall: shouldCall && !!communityId,
@@ -16,6 +16,7 @@ const useCommunity = ({
 
   return {
     community: item,
+    error,
     ...rest,
   };
 };

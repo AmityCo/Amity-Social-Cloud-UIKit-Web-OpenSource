@@ -1,0 +1,1 @@
+export { JoinRequestsTabDescription } from './JoinRequestsTabDescription';

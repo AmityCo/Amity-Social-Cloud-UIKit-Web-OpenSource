@@ -33,6 +33,7 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { pinnedPost, isLoading, refresh } = usePinnedPostsCollection({
     communityId,
+    shouldCall: !!communityId && community?.isJoined,
   });
 
   const isMemberPrivateCommunity = community?.isJoined && !community?.isPublic;

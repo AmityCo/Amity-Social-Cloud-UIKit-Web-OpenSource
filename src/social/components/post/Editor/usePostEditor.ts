@@ -1,9 +1,9 @@
 import { PostRepository } from '@amityco/ts-sdk';
 import { useMemo, useState } from 'react';
 import { parseMentionsMarkup, reconstructMentions } from '~/helpers/utils';
-import usePost from '~/social/hooks/usePost';
 import usePostByIds from '~/social/hooks/usePostByIds';
 import useSocialMention from '~/social/hooks/useSocialMention';
+import { isFilePost, isImagePost, isVideoPost } from '~/v4/social/utils/postTypeChecker';
 
 export const usePostEditor = ({ post, onSave }: { post: Amity.Post; onSave: () => void }) => {
   const initialChildrenPosts = usePostByIds(post?.children);
@@ -34,16 +34,16 @@ export const usePostEditor = ({ post, onSave }: { post: Amity.Post; onSave: () =
   };
 
   const formattedAttachment = (post: Amity.Post) => {
-    if (post.dataType === 'file' || post.dataType === 'image') {
+    if (isImagePost(post) || isFilePost(post)) {
       return {
-        type: post.dataType,
-        fileId: post.data.fileId,
+        type: post.dataType as 'file' | 'image',
+        fileId: post.data?.fileId as string,
       };
     }
-    if (post.dataType === 'video') {
+    if (isVideoPost(post)) {
       return {
-        type: post.dataType,
-        fileId: post.data.videoFileId.original,
+        type: post.dataType as 'video',
+        fileId: post.data?.videoFileId.original as string,
       };
     }
   };
@@ -53,7 +53,9 @@ export const usePostEditor = ({ post, onSave }: { post: Amity.Post; onSave: () =
       data: { text },
       mentionees,
       metadata,
-      attachments: childrenPosts.map(formattedAttachment).filter((value) => !!value),
+      attachments: childrenPosts
+        .map(formattedAttachment)
+        .filter((value): value is NonNullable<typeof value> => value != null),
     });
     clearAll();
     onSave();

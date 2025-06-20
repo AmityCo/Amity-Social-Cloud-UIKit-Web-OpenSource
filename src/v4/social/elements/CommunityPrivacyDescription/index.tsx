@@ -1,0 +1,1 @@
+export { CommunityPrivacyDescription } from './CommunityPrivacyDescription';

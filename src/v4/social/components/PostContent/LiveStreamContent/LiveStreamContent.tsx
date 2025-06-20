@@ -23,7 +23,7 @@ export function LiveStreamContent({ post, goToPostDetail }: LiveStreamContentPro
   const [isUpcoming, setIsUpcoming] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { post: childPost, isLoading } = usePost(post.children?.[0]);
-  const stream = useStream(childPost?.data?.streamId);
+  const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
 
   useEffect(() => {
     const updateUpcomingStatus = () => {

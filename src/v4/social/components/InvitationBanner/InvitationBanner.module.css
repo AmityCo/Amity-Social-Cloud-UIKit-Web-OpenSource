@@ -1,0 +1,39 @@
+.invitationBanner {
+  width: 100%;
+  gap: 0.75rem;
+  display: grid;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 0.5rem;
+  background-color: var(--asc-color-background-shade1);
+}
+
+.invitationBanner__inviter {
+  gap: 0.375rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.invitationBanner__inviter[data-truncate='false'] {
+  align-items: center;
+}
+
+.invitationBanner .invitationBanner__avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.invitationBanner__displayName {
+  word-break: break-all;
+  color: var(--asc-color-base-default);
+}
+
+.invitationBanner__actions {
+  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.capitalize {
+  word-break: break-all;
+}

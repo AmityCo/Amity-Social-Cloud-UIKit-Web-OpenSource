@@ -14,13 +14,13 @@ import {
   RecordedBadge,
 } from './StyledStreamItem';
 
-function getUrl(stream: Amity.Post<'liveStream'>) {
+function getUrl(stream: Amity.Stream) {
   if (stream.status === 'live') {
     return stream.watcherUrl?.hls?.url;
   }
 
   if (stream.status === 'recorded') {
-    return stream?.recordings?.find((recording: any) => recording.mp4)?.mp4.url;
+    return stream?.recordings?.find((recording: any) => recording.mp4)?.mp4?.url;
   }
 
   return undefined;
@@ -39,7 +39,7 @@ export const Thumbnail = ({
   showLivestreamRecordedBadge,
   showLivestreamTitle,
 }: ThumbnailProps) => {
-  const stream = useStream(item?.data.streamId);
+  const stream = useStream(item?.data?.streamId);
   const file = useFile(stream?.thumbnailFileId);
 
   if (stream == null) {

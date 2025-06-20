@@ -15,6 +15,7 @@ import {
   CommunityPostPermissionPage,
   CommunityStorySettingPage,
   NotificationTrayPage,
+  PendingRequestPage,
 } from '..';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import CommunityFeed from '~/social/pages/CommunityFeed';
@@ -32,7 +33,6 @@ import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
 import { UserPendingFollowRequestPage } from '~/v4/social/pages/UserPendingFollowRequestPage/UserPendingFollowRequestPage';
 import { BlockedUserPage } from '~/v4/social/pages/BlockedUserPage/BlockedUserPage';
 import { CommunitySetupPage } from '~/v4/social/pages/CommunitySetupPage';
-import { CommunitySetupProvider } from '~/v4/social/providers/CommunitySetupProvider';
 import { CommunityAddMemberPage } from '~/v4/social/pages/CommunityAddMemberPage/CommunityAddMemberPage';
 import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
 import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
@@ -41,6 +41,8 @@ import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
 import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
 import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
+import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
 
 const Application = () => {
   const { isDesktop } = useResponsive();
@@ -92,7 +94,7 @@ const Application = () => {
         )}
         {page.type === PageTypes.PostComposerPage && (
           <PostComposerPage
-            mode={page.context?.mode}
+            mode={page.context?.mode as any}
             targetId={page.context?.targetId}
             targetType={page.context?.targetType}
             community={page.context?.community}
@@ -121,6 +123,12 @@ const Application = () => {
             onAddedAction={page.context?.onAddedAction}
           />
         )}
+        {page.type === PageTypes.CommunityInviteMemberPage && (
+          <CommunityInviteMemberPage
+            onSubmit={page.context?.onSubmit}
+            communityId={page.context?.communityId}
+          />
+        )}
         {page.type === PageTypes.CommunitySettingPage && (
           <CommunitySettingPage community={page.context.community} />
         )}
@@ -136,6 +144,9 @@ const Application = () => {
         {page.type === PageTypes.CommunityMembershipPage && (
           <CommunityMembershipPage community={page.context.community} />
         )}
+        {page.type === PageTypes.CommunityPendingInvitationPage && (
+          <CommunityPendingInvitationPage community={page.context.community} />
+        )}
         {page.type === PageTypes.EditUserProfilePage && (
           <EditUserProfilePage userId={page.context.userId} />
         )}
@@ -149,6 +160,9 @@ const Application = () => {
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
         {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
         {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
+        {page.type === PageTypes.PendingRequestPage && (
+          <PendingRequestPage community={page.context.community} />
+        )}
 
         {/* modal as page */}
         {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}

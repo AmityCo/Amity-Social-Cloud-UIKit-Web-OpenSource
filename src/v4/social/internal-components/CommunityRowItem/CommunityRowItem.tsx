@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import { useImage } from '~/v4/core/hooks/useImage';
@@ -12,6 +12,14 @@ import { CommunityJoinedButton } from '~/v4/social/elements/CommunityJoinedButto
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge/CommunityOfficialBadge';
 import { CommunityCategories } from '~/v4/social/internal-components/CommunityCategories/CommunityCategories';
 import styles from './CommunityRowItem.module.css';
+import Clock from '~/v4/icons/Clock';
+import { IconButton } from '~/v4/core/components/IconButton';
+
+import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useNetworkState } from 'react-use';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useExplore } from '~/v4/social/providers/ExploreProvider';
 
 type CommunityRowItemProps<TShowJoinButton extends boolean | undefined> = {
   community: Amity.Community;
@@ -25,15 +33,9 @@ type CommunityRowItemProps<TShowJoinButton extends boolean | undefined> = {
   showJoinButton?: TShowJoinButton;
   onClick: (communityId: string) => void;
   onCategoryClick: (categoryId: string) => void;
-} & (TShowJoinButton extends true
-  ? {
-      onJoinButtonClick: (communityId: string) => void;
-      onLeaveButtonClick: (communityId: string) => void;
-    }
-  : {
-      onJoinButtonClick?: undefined | null;
-      onLeaveButtonClick?: undefined | null;
-    });
+  joinRequest?: Amity.JoinRequest;
+  onPendingButtonClick?: () => void;
+};
 
 const formatOrder = (order: number) => (order < 10 ? `0${order}` : `${order}`);
 
@@ -45,15 +47,69 @@ export const CommunityRowItem = <T extends boolean | undefined>({
   showJoinButton,
   onCategoryClick,
   elementId = '*',
-  onJoinButtonClick,
+  onPendingButtonClick,
   componentId = '*',
-  onLeaveButtonClick,
   maxCategoriesLength,
   maxCategoryCharacters,
   minCategoryCharacters,
+  joinRequest,
 }: CommunityRowItemProps<T>) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
+  const { confirm } = useConfirmContext();
+  const { online } = useNetworkState();
+  const [isCommunityPendingJoin, setIsCommunityPendingJoin] = useState<{
+    communityId: string | undefined;
+    isPending: boolean;
+  }>({
+    communityId: '',
+    isPending: false,
+  });
+
+  const { removePendingJoinCommunity, setPendingJoinCommunity } = useExplore();
+
+  const { joinCommunity, leaveCommunity, cancelJoinCommunity } = useCommunityActions({
+    joinRequest,
+    community,
+    // handle pending join state
+    onJoinSuccess: ({ data, communityId }: { data?: Amity.JoinResult; communityId?: string }) => {
+      if (data?.status === 'pending') {
+        communityId && setPendingJoinCommunity(communityId);
+        setIsCommunityPendingJoin({
+          communityId: communityId,
+          isPending: true,
+        });
+      }
+    },
+    // handle cancel join state
+    onCancelJoinSuccess: () => {
+      removePendingJoinCommunity(community.communityId);
+      setIsCommunityPendingJoin({
+        communityId: community.communityId,
+        isPending: false,
+      });
+    },
+  });
+  const notification = useNotifications();
+
+  const handleLeaveButtonClick = (community: Amity.Community) => {
+    if (!online) {
+      notification.info({
+        content: 'Failed to leave community. Please try again.',
+      });
+      return;
+    }
+
+    if (community.requiresJoinApproval) {
+      return confirm({
+        title: 'Leave Community',
+        content: "If you change your mind, you'll have to request to join again.",
+        onOk: () => leaveCommunity(community),
+      });
+    }
+
+    leaveCommunity(community);
+  };
 
   return (
     <Button
@@ -101,23 +157,53 @@ export const CommunityRowItem = <T extends boolean | undefined>({
         />
       </div>
       {!!showJoinButton &&
-        (community.isJoined ? (
-          <CommunityJoinedButton
-            pageId={pageId}
-            componentId={componentId}
-            className={styles.communityRowItem__joinButton}
-            data-has-categories={community.categoryIds.length > 0}
-            onClick={() => onLeaveButtonClick?.(community.communityId)}
-          />
-        ) : (
-          <CommunityJoinButton
-            pageId={pageId}
-            componentId={componentId}
-            className={styles.communityRowItem__joinButton}
-            data-has-categories={community.categoryIds.length > 0}
-            onClick={() => onJoinButtonClick?.(community.communityId)}
-          />
-        ))}
+        (() => {
+          if (community?.isJoined) {
+            return (
+              <CommunityJoinedButton
+                pageId={pageId}
+                componentId={componentId}
+                className={styles.communityRowItem__joinButton}
+                data-has-categories={community.categoryIds.length > 0}
+                onClick={() => handleLeaveButtonClick(community)}
+              />
+            );
+          } else if (
+            joinRequest?.status === 'pending' ||
+            (isCommunityPendingJoin?.communityId === community.communityId &&
+              isCommunityPendingJoin.isPending)
+          ) {
+            return (
+              <IconButton
+                size="small"
+                color="secondary"
+                variant="outlined"
+                defaultIcon={<Clock className={styles.communityRowItem__pendingButton} />}
+                onPress={() => onPendingButtonClick?.() ?? cancelJoinCommunity()}
+                text="Pending"
+                className={styles.communityRowItem__pendingButtonWrapper}
+              />
+            );
+          } else {
+            return (
+              <CommunityJoinButton
+                pageId={pageId}
+                componentId={componentId}
+                className={styles.communityRowItem__joinButton}
+                data-has-categories={community.categoryIds.length > 0}
+                onClick={() => {
+                  if (!online) {
+                    notification.info({
+                      content: 'Failed to join community. Please try again.',
+                    });
+                    return;
+                  }
+                  joinCommunity(community);
+                }}
+              />
+            );
+          }
+        })()}
     </Button>
   );
 };

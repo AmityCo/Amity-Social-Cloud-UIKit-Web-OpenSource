@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 const useReactionByReference = (referenceType: Amity.ReactableType, referenceId: string) => {
   const [reactionCount, setReactionCount] = useState(0);
   const [reactions, setReactions] = useState<Record<string, number>>({});
-  const [myReaction, setMyReaction] = useState<Amity.Reaction | null>(null);
+  const [myReaction, setMyReaction] = useState<string | null>(null);
 
   const updateReaction = ({
     data,
@@ -20,7 +20,7 @@ const useReactionByReference = (referenceType: Amity.ReactableType, referenceId:
 
     setReactionCount(data.reactionsCount);
     setReactions(data.reactions);
-    setMyReaction(data.myReaction);
+    setMyReaction(data.myReactions?.[0] ?? null);
   };
 
   useEffect(() => {

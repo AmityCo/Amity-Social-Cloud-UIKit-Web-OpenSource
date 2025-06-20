@@ -6,7 +6,9 @@ import useGlobalPinnedPostsCollection from '~/v4/social/hooks/collections/useGlo
 
 const useGlobalFeed = () => {
   const [items, setItems] = useState<Array<Amity.Post>>([]);
-  const [globalFeaturedPostsItems, setGlobalFeaturedPostsItems] = useState<Array<Amity.Post>>([]);
+  const [globalFeaturedPostsItems, setGlobalFeaturedPostsItems] = useState<Array<Amity.PinnedPost>>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [queryToken, setQueryToken] = useState<string | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
@@ -112,7 +114,7 @@ const useGlobalFeed = () => {
     if (!globalFeaturedPosts) return;
 
     const newItems = globalFeaturedPosts.map((item) => {
-      if (item.post.postId === incomingPost.postId) {
+      if (item.post?.postId === incomingPost.postId) {
         return { ...item, post: { ...item.post, ...incomingPost } };
       }
       return item;

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { CommunityRowItem } from '~/v4/social/internal-components/CommunityRowItem';
 import { EmptySearchResult } from '~/v4/social/internal-components/EmptySearchResult';
@@ -9,8 +8,6 @@ import { CommunityRowItemSkeleton } from '~/v4/social/internal-components/Commun
 import styles from './CommunitySearchResult.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
-import { useNetworkState } from 'react-use';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 type CommunitySearchResultProps = {
   pageId?: string;
@@ -32,10 +29,7 @@ export const CommunitySearchResult = ({
   const componentId = 'community_search_result';
 
   const { isDesktop } = useResponsive();
-  const { joinCommunity, leaveCommunity } = useCommunityActions();
   const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
-  const { online } = useNetworkState();
-  const notification = useNotifications();
   const { goToCommunityProfilePage, goToCommunitiesByCategoryPage } = useNavigation();
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
@@ -57,24 +51,6 @@ export const CommunitySearchResult = ({
               key={community.communityId}
               showJoinButton={showJoinButton}
               maxCategoriesLength={isDesktop ? 2 : 5}
-              onJoinButtonClick={(communityId) => {
-                if (!online) {
-                  notification.info({
-                    content: 'Failed to join community. Please try again.',
-                  });
-                  return;
-                }
-                joinCommunity(communityId);
-              }}
-              onLeaveButtonClick={(communityId) => {
-                if (!online) {
-                  notification.info({
-                    content: 'Failed to leave community. Please try again.',
-                  });
-                  return;
-                }
-                leaveCommunity(communityId);
-              }}
               onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
               onClick={(communityId) => {
                 onClosePopover?.();

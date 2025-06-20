@@ -63,7 +63,7 @@ const Video = ({
       data-testid={`${pageId}/${componentId}/post_video`}
     >
       <VideoThumbnail
-        fileId={videoPost.data.thumbnailFileId}
+        fileId={(videoPost as Amity.Post<'video'>)?.data?.thumbnailFileId as string}
         placeholder={
           <div className={styles.videoContent__skeleton}>
             <VideoControl className={styles.videoContent__skeleton__icon} />

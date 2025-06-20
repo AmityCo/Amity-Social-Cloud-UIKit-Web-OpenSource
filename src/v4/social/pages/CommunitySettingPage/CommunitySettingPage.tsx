@@ -3,7 +3,7 @@ import styles from './CommunitySettingPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { EditProfile } from '~/v4/social/elements/EditProfile';
-import { BackButton } from '~/v4/social/elements';
+import { BackButton, PendingInvitations } from '~/v4/social/elements';
 import { Typography } from '~/v4/core/components';
 import { Members } from '~/v4/social/elements/Members';
 import { PostPermission } from '~/v4/social/elements/PostPermission';
@@ -24,6 +24,9 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage';
 import { useNetworkState } from 'react-use';
+import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
+import { MembershipAcceptanceTypeEnum } from '@amityco/ts-sdk';
+import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
 
 type CommunitySettingPageProps = {
   community: Amity.Community;
@@ -39,10 +42,11 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
   const { online } = useNetworkState();
 
   const { client, currentUserId } = useSDK();
-  const { leaveCommunity, closeCommunity } = useCommunityInfo(community.communityId);
+  const { closeCommunity } = useCommunityInfo(community.communityId);
+  const { leaveCommunity } = useCommunityActions();
   const { confirm, info } = useConfirmContext();
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
-
+  const { socialSettings } = useSocialSettings();
   const isCommunityModerator = moderators.some((moderator) => moderator.userId === currentUserId);
 
   const handleLeaveCommunity = () => {
@@ -63,12 +67,11 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
       });
     } else {
       confirm({
-        title: 'Leave community',
-        content:
-          'Leave the community. You will no longer be able to post and interact in this community.',
+        title: 'Leave community?',
+        content: 'You will no longer be able to post and interact in this community.',
         okText: 'Leave',
         onOk: () => {
-          leaveCommunity();
+          leaveCommunity(community);
           onBack();
         },
       });
@@ -122,7 +125,7 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
       <div className={styles.communitySettingPage__content}>
         <div className={styles.communitySettingPage__basicInfoWrap}>
           <Typography.TitleBold className={styles.communitySettingPage__basicInfo}>
-            Basic info
+            Community information
           </Typography.TitleBold>
           {checkEditCommunityPermission(client, community?.communityId) && (
             <EditProfile
@@ -139,6 +142,17 @@ export const CommunitySettingPage = ({ community }: CommunitySettingPageProps) =
             pageId={pageId}
             onClick={() => AmityCommunitySettingPageBehavior?.goToMembershipPage?.({ community })}
           />
+          {socialSettings?.membershipAcceptance === MembershipAcceptanceTypeEnum.INVITATION &&
+            isCommunityModerator && (
+              <PendingInvitations
+                pageId={pageId}
+                onPress={() =>
+                  AmityCommunitySettingPageBehavior?.goToPendingInvitationPage?.({
+                    community,
+                  })
+                }
+              />
+            )}
         </div>
         {(checkReviewPostPermission(client, community?.communityId) ||
           checkEditCommunityPermission(client, community?.communityId) ||

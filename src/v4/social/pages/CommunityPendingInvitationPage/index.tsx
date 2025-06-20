@@ -1,0 +1,1 @@
+export { CommunityPendingInvitationPage } from './CommunityPendingInvitationPage';

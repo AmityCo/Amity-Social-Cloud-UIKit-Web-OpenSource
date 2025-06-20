@@ -9,7 +9,6 @@ import { BackButton } from '~/v4/social/elements/BackButton';
 import { CommunityRowItem } from '~/v4/social/internal-components/CommunityRowItem';
 import { CommunityRowItemSkeleton } from '~/v4/social/internal-components/CommunityRowItem/CommunityRowItemSkeleton';
 import { EmptyCommunity } from './EmptyCommunity';
-import { useCommunityActions } from '~/v4/social/hooks/useCommunityActions';
 import styles from './CommunitiesByCategoryPage.module.css';
 
 interface CommunitiesByCategoryPageProps {
@@ -32,11 +31,6 @@ export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryP
   });
 
   const category = useCategory({ categoryId });
-
-  const { joinCommunity, leaveCommunity } = useCommunityActions();
-
-  const handleJoinButtonClick = (communityId: string) => joinCommunity(communityId);
-  const handleLeaveButtonClick = (communityId: string) => leaveCommunity(communityId);
 
   useIntersectionObserver({
     onIntersect: () => {
@@ -77,9 +71,7 @@ export function CommunitiesByCategoryPage({ categoryId }: CommunitiesByCategoryP
                 pageId={pageId}
                 onClick={(communityId) => goToCommunityProfilePage(communityId)}
                 onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
-                onJoinButtonClick={handleJoinButtonClick}
-                onLeaveButtonClick={handleLeaveButtonClick}
-                showJoinButton
+                showJoinButton={false}
                 minCategoryCharacters={4}
                 maxCategoryCharacters={30}
                 maxCategoriesLength={2}

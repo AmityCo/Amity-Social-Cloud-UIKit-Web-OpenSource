@@ -119,6 +119,8 @@ export function PostDetailPage({
   if (error || (post === null && !isPostLoading) || community?.isDeleted || post?.isDeleted)
     return <FailedToShow pageId={pageId} onBack={onBack} />;
 
+  if (!post) return null;
+
   return (
     <div className={styles.postDetailPage} style={themeStyles}>
       <div className={styles.postDetailPage__topBar}>

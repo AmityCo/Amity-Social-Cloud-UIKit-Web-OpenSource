@@ -74,7 +74,8 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
   if (
     (!hasStories && !hasStoryPermission) ||
     // if community has setting to only allow admin to post
-    (community && !canCreatePostCommunity(client, community))
+    (community && !canCreatePostCommunity(client, community)) ||
+    (community?.isPublic && !community.isJoined && !hasStories)
   )
     return null;
 
@@ -100,16 +101,19 @@ export const StoryTabCommunityFeed: React.FC<StoryTabCommunityFeedProps> = ({
           <CommunityAvatar pageId={pageId} componentId={componentId} community={community} />
         </button>
 
-        {hasStoryPermission && community && canCreatePostCommunity(client, community) && (
-          <FileTrigger
-            onSelect={(e) => {
-              const files = Array.from(e as FileList);
-              onFileChange(files[0]);
-            }}
-          >
-            <CreateNewStoryButton pageId={pageId} componentId={componentId} />
-          </FileTrigger>
-        )}
+        {community?.isJoined &&
+          hasStoryPermission &&
+          community &&
+          canCreatePostCommunity(client, community) && (
+            <FileTrigger
+              onSelect={(e) => {
+                const files = Array.from(e as FileList);
+                onFileChange(files[0]);
+              }}
+            >
+              <CreateNewStoryButton pageId={pageId} componentId={componentId} />
+            </FileTrigger>
+          )}
         {isErrored && <ErrorIcon className={clsx(styles.errorIcon)} />}
       </div>
       <Typography.Caption data-testid={`${pageId}/${componentId}/story_title`}>

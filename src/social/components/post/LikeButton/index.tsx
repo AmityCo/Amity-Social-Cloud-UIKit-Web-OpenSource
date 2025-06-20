@@ -17,10 +17,10 @@ function isPostLikedByMe(post?: Amity.Post) {
 }
 
 const PostLikeButton = ({ postId, onLikeSuccess, onUnlikeSuccess }: PostLikeButtonProps) => {
-  const post: Amity.Post = usePost(postId);
-  const [isActive, setIsActive] = useState(isPostLikedByMe(post));
+  const post = usePost(postId);
+  const [isActive, setIsActive] = useState(post && isPostLikedByMe(post));
   useEffect(() => {
-    setIsActive(isPostLikedByMe(post));
+    setIsActive(post && isPostLikedByMe(post));
   }, [post?.myReactions]);
 
   const handleToggleLike = async () => {
@@ -36,7 +36,9 @@ const PostLikeButton = ({ postId, onLikeSuccess, onUnlikeSuccess }: PostLikeButt
     }
   };
 
-  return <UILikeButton isActive={isActive} isDisabled={post == null} onClick={handleToggleLike} />;
+  return (
+    <UILikeButton isActive={!!isActive} isDisabled={post == null} onClick={handleToggleLike} />
+  );
 };
 
 export default PostLikeButton;

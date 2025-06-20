@@ -13,10 +13,10 @@ interface ThumbnailProps {
 export const Thumbnail = ({ item, showPlayIcon, showVideoDuration }: ThumbnailProps) => {
   return (
     <VideoThumbnail
-      key={item?.data.thumbnailFileId}
-      fileId={item?.data.thumbnailFileId}
+      key={item?.data?.thumbnailFileId}
+      fileId={item?.data?.thumbnailFileId}
       showPlayIcon={showPlayIcon}
-      videoFileId={showVideoDuration && item?.data.videoFileId.original}
+      videoFileId={showVideoDuration ? item?.data?.videoFileId.original : undefined}
     />
   );
 };
@@ -27,10 +27,10 @@ interface ItemProps {
 
 export const Item = ({ item }: ItemProps) => {
   const videoFileId =
-    item?.data.videoFileId.high ||
-    item?.data.videoFileId.medium ||
-    item?.data.videoFileId.low ||
-    item?.data.videoFileId.original;
+    item?.data?.videoFileId.high ||
+    item?.data?.videoFileId.medium ||
+    item?.data?.videoFileId.low ||
+    item?.data?.videoFileId.original;
 
   if (!videoFileId) {
     return (
