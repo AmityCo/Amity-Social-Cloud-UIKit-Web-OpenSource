@@ -43,3 +43,15 @@
   margin-left: auto;
   align-self: flex-end;
 }
+
+.communityRowItem__pendingButton {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-secondary-default);
+}
+
+.communityRowItem__pendingButtonWrapper {
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: flex-end;
+}

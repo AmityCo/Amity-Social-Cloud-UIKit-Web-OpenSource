@@ -22,6 +22,7 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { useNetworkState } from 'react-use';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 
 type PendingPostContentProps = {
   pageId?: string;
@@ -122,6 +123,7 @@ export const PendingPostContent = ({
   };
 
   const openImageViewer = (imageIndex: number) => {
+    if (!post) return;
     openPopup({
       id: 'image-viewer',
       disabledAnimation: true,
@@ -148,6 +150,8 @@ export const PendingPostContent = ({
     setClickedVideoIndex(null);
   };
 
+  if (!post) return null;
+
   return (
     <>
       <div
@@ -164,7 +168,7 @@ export const PendingPostContent = ({
                 className={styles.pendingPostContent__username}
                 data-testid={`${pageId}/${componentId}/username`}
               >
-                {post.creator.displayName}
+                {post.creator?.displayName ?? ''}
               </Typography.BodyBold>
               <div className={styles.pendingPostContent__information__subtitle}>
                 <Timestamp timestamp={post.createdAt} />
@@ -232,9 +236,9 @@ export const PendingPostContent = ({
           <TextContent
             pageId={pageId}
             componentId={componentId}
-            text={post?.data?.text}
+            text={isTextPost(post) ? post?.data?.text : ''}
             mentioned={post?.metadata?.mentioned}
-            mentionees={post?.mentioness}
+            mentionees={post?.mentionees}
             post={post}
           />
           {post.children.length > 0 && (
@@ -279,7 +283,7 @@ export const PendingPostContent = ({
             />
           </div>
         )}
-        {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
+        {isVideoViewerOpen && post && typeof clickedVideoIndex === 'number' ? (
           <VideoViewer
             post={post}
             onClose={closeVideoViewer}

@@ -20,13 +20,13 @@ const PostVideoThumbnail = ({
   onRemovePostVideo?: (fileId: string) => void;
   totalVideos: number;
 }) => {
-  const thumbnailUrl = useImage({ fileId: post.data.thumbnailFileId });
+  const thumbnailUrl = useImage({ fileId: post.data?.thumbnailFileId });
 
   if (!thumbnailUrl) return null;
 
   return (
     <div
-      key={`post-${post.data.videoFileId.original}`}
+      key={`post-${post.data?.videoFileId.original}`}
       data-video-height={String(totalVideos > 2)}
       className={styles.thumbnail__wrapper}
     >
@@ -35,7 +35,9 @@ const PostVideoThumbnail = ({
         data-testid={`${pageId}/${componentId}/remove_thumbnail`}
         type="reset"
         className={styles.closeButton}
-        onPress={() => onRemovePostVideo?.(post.data.videoFileId.original)}
+        onPress={() =>
+          post.data?.videoFileId?.original && onRemovePostVideo?.(post.data.videoFileId.original)
+        }
       >
         <CloseIcon className={styles.closeIcon} />
       </Button>
@@ -94,7 +96,7 @@ export const VideoThumbnail = ({
       {/* Render existing post videos using the extracted component */}
       {postVideos.map((post) => (
         <PostVideoThumbnail
-          key={post.data.videoFileId.original}
+          key={post.data?.videoFileId.original}
           post={post}
           pageId={pageId}
           componentId={componentId}

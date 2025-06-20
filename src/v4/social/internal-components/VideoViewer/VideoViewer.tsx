@@ -68,7 +68,7 @@ export function VideoViewer({
           <ChevronRight className={styles.videoViewer__prevButton} />
         </Button>
       )}
-      <VideoPlayer videoPost={videoPost} next={next} prev={prev} />
+      <VideoPlayer videoPost={videoPost as Amity.Post<'video'>} next={next} prev={prev} />
       {hasNext && (
         <Button className={styles.videoViewer__next} onPress={next}>
           <ChevronRight className={styles.videoViewer__nextButton} />
@@ -90,10 +90,10 @@ const VideoPlayer = memo(
   }) => {
     const videoFileId = useMemo(() => {
       return (
-        videoPost?.data.videoFileId.high ||
-        videoPost?.data.videoFileId.medium ||
-        videoPost?.data.videoFileId.low ||
-        videoPost?.data.videoFileId.original ||
+        videoPost?.data?.videoFileId.high ||
+        videoPost?.data?.videoFileId.medium ||
+        videoPost?.data?.videoFileId.low ||
+        videoPost?.data?.videoFileId.original ||
         undefined
       );
     }, [videoPost]);
@@ -105,7 +105,7 @@ const VideoPlayer = memo(
     });
 
     const file: Amity.File<'video'> | undefined = useFile<Amity.File<'video'>>(videoFileId);
-    const posterUrl = useFile(videoPost?.data.thumbnailFileId);
+    const posterUrl = useFile(videoPost?.data?.thumbnailFileId);
 
     const videoRef = useRef<HTMLVideoElement>(null);
 

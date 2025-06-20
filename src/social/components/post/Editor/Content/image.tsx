@@ -3,7 +3,7 @@ import GalleryGrid from '~/core/components/GalleryGrid';
 import Image from '~/core/components/Uploaders/Image';
 
 interface ImageContentListProps {
-  items: Amity.Post[];
+  items: Amity.Post<'image'>[];
   onRemove: (id: string) => void;
 }
 

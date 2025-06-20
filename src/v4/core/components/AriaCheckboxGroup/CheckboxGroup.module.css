@@ -4,3 +4,11 @@
   flex-direction: column;
   color: var(--asc-color-base-default);
 }
+
+.checkBox[data-alignment='row-reverse'] {
+  flex-direction: row-reverse;
+}
+
+.checkBox[data-alignment='row'] {
+  flex-direction: row;
+}

@@ -13,6 +13,7 @@ type CheckboxGroupProps = $CheckboxGroupProps & {
   errorMessage?: string;
   label?: React.ReactNode;
   labelClassName?: string;
+  alignment?: 'row' | 'row-reverse';
   checkboxProps?: Partial<CheckboxProps>;
   checkboxes: { value: string; label: string | React.ReactNode }[];
 };
@@ -24,13 +25,20 @@ export function CheckboxGroup({
   errorMessage,
   checkboxProps,
   labelClassName,
+  alignment = 'row-reverse',
   ...props
 }: CheckboxGroupProps) {
   return (
     <$CheckboxGroup {...props} className={clsx(styles.checkboxGroup, className)}>
       {label && <Label className={labelClassName}>{label}</Label>}
       {checkboxes.map((checkbox) => (
-        <Checkbox {...checkboxProps} {...checkbox} key={checkbox.value} />
+        <Checkbox
+          {...checkbox}
+          {...checkboxProps}
+          key={checkbox.value}
+          data-alignment={alignment}
+          className={clsx(styles.checkBox, checkboxProps?.className)}
+        />
       ))}
       {errorMessage && <FieldError>{errorMessage}</FieldError>}
     </$CheckboxGroup>

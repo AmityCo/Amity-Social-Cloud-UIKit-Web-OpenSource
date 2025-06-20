@@ -160,12 +160,12 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
     }));
 
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
-      targetId,
+      targetId: targetId!,
       targetType,
       data: { text: textValue.text },
       dataType: 'text',
       metadata: { mentioned: textValue.mentioned },
-      mentionees: textValue.mentionees,
+      mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
     };
 

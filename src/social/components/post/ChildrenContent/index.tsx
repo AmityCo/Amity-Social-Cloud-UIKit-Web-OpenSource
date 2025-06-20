@@ -44,12 +44,19 @@ const ChildrenContent = ({ contents }: { contents: Amity.Post[] }) => {
               />
             );
           case 'file':
-            return <FileListContent key={dataType} items={items} />;
+            return (
+              <FileListContent
+                key={dataType}
+                items={items.map(({ data }) => ({
+                  data: (data as Amity.ContentDataFile)!,
+                }))}
+              />
+            );
           case 'poll':
             return (
               <>
-                {items.map((poll) => (
-                  <PollContent key={poll.data.pollId} pollId={poll.data.pollId} />
+                {(items as Amity.Post<'poll'>[]).map((poll) => (
+                  <PollContent key={poll.data?.pollId} pollId={poll.data?.pollId} />
                 ))}
               </>
             );

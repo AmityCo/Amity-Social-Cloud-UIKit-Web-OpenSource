@@ -2,8 +2,11 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) min-content;
   align-items: center;
-  gap: 0.5rem;
   background-color: var(--asc-color-background-default);
+}
+
+.topSearchBar[data-cancel='true'] {
+  gap: 0.5rem;
 }
 
 .topSearchBar__inputBar {

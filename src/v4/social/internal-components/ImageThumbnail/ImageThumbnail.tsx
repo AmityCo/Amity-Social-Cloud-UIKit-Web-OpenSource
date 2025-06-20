@@ -53,7 +53,7 @@ export function ImageThumbnail({
         <PostImageItem
           post={post}
           pageId={pageId}
-          key={post.data.fileId}
+          key={post.data?.fileId}
           componentId={componentId}
           totalImages={totalImages}
           onRemovePostImage={onRemovePostImage || (() => {})}
@@ -99,7 +99,7 @@ function PostImageItem({
 
   return (
     <div
-      key={`post-${post.data.fileId}`}
+      key={`post-${post.data?.fileId}`}
       data-images-height={totalImages > 2}
       className={styles.thumbnail__wrapper}
     >
@@ -111,7 +111,7 @@ function PostImageItem({
       <Button
         type="reset"
         className={styles.closeButton}
-        onPress={() => onRemovePostImage(post.data.fileId)}
+        onPress={() => post.data?.fileId && onRemovePostImage(post.data.fileId)}
         data-testid={`${pageId}/${componentId}/remove_thumbnail`}
       >
         <CloseIcon className={styles.closeIcon} />

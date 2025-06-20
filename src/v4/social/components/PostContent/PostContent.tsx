@@ -44,6 +44,7 @@ import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadg
 import { LiveStreamContent } from './LiveStreamContent';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import styles from './PostContent.module.css';
+import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -85,7 +86,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
 
   const showTargetCommunity = targetCommunity && !hideTarget;
   const showTargetUser = targetUser && !hideTarget;
-  const showBrandBadge = post.creator.isBrand;
+  const showBrandBadge = post?.creator?.isBrand;
   const showPrivateBadge = targetCommunity?.isPublic === false;
   const showOfficialBadge = targetCommunity?.isOfficial === true;
 
@@ -93,14 +94,14 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
 
   return (
     <div className={styles.postTitle} data-show-target-community={showTargetCommunity === true}>
-      {post.creator && (
+      {post && post?.creator && (
         <div
           className={styles.postTitle__user__container}
           data-show-brand-badge={showBrandBadge === true}
           data-show-target={showTarget === true}
         >
           <Button
-            onPress={() => onClickUser(post.creator.userId)}
+            onPress={() => post?.creator?.userId && onClickUser(post.creator.userId)}
             data-testid={`${pageId}/${componentId}/username`}
           >
             <Typography.BodyBold className={styles.postTitle__text}>
@@ -155,7 +156,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
 
 type ChildrenPostContentProps = {
   pageId?: string;
-  post: Amity.Post[];
+  post: Amity.Post;
   componentId?: string;
   disabledContent?: boolean;
   onImageClick: (imageIndex: number) => void;
@@ -183,13 +184,13 @@ export const ChildrenPostContent = ({
       <ImageContent
         pageId={pageId}
         componentId={componentId}
-        post={post}
+        post={post as Amity.Post<'image'>}
         onImageClick={onImageClick}
       />
       <VideoContent
         pageId={pageId}
         componentId={componentId}
-        post={post}
+        post={post as Amity.Post<'video'>}
         onVideoClick={onVideoClick}
       />
       <LiveStreamContent post={post} goToPostDetail={goToPostDetail} />
@@ -490,12 +491,12 @@ export const PostContent = ({
           <TextContent
             pageId={pageId}
             componentId={componentId}
-            text={post?.data?.text}
+            text={isTextPost(post) ? post?.data?.text : ''}
             mentioned={post?.metadata?.mentioned}
-            mentionees={post?.mentioness}
+            mentionees={post?.mentionees}
             post={post}
           />
-          {post.children.length > 0 ? (
+          {post && post?.children?.length > 0 ? (
             <ChildrenPostContent
               pageId={pageId}
               componentId={componentId}

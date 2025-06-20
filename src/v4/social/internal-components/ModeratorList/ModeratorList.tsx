@@ -47,6 +47,7 @@ export const ModeratorList = ({ pageId = '*', community }: ModeratorListProps) =
         moderators.length > 0 &&
         moderators.map(({ user, roles }) => (
           <CommunityMemberItem
+            key={user?.userId}
             user={user}
             roles={roles}
             isModeratorTab

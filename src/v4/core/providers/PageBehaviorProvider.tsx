@@ -101,6 +101,7 @@ export interface PageBehavior {
       targetId: string | null;
       targetType: 'community' | 'user';
     }): void;
+    goToPendingRequestPage?(context: { community: Amity.Community }): void;
   };
   AmitySocialHomeTopNavigationComponentBehavior?: {
     goToCreateCommunityPage?(context: { mode: AmityCommunitySetupPageMode }): void;
@@ -112,6 +113,10 @@ export interface PageBehavior {
       communityId?: string;
       onAddedAction?: (userId: string[]) => void;
     }): void;
+    goToInviteMemberPage?(context: {
+      communityId?: string;
+      onSubmit?: (userId: string[]) => void;
+    }): void;
   };
   AmityCommunitySettingPageBehavior?: {
     goToEditCommunityPage?(context: {
@@ -119,6 +124,7 @@ export interface PageBehavior {
       community: Amity.Community;
     }): void;
     goToMembershipPage?(context: { community: Amity.Community }): void;
+    goToPendingInvitationPage?(context: { community: Amity.Community }): void;
     goToPostPermissionPage?(context: { community: Amity.Community }): void;
     goToStorySettingPage?(context: { community: Amity.Community }): void;
     goToSocialHomePage?(): void;
@@ -130,8 +136,17 @@ export interface PageBehavior {
       onAddedAction?: (userId: string[]) => void;
     }): void;
     goToUserProfilePage?: (context: { userId: string }) => void;
+    goToInviteMemberPage?(context: {
+      communityId?: string;
+      onSubmit?: (userId: string[]) => void;
+    }): void;
   };
-
+  AmityCommunityPendingInvitationPageBehavior?: {
+    goToUserProfilePage?: (context: { userId: string }) => void;
+  };
+  AmityCommunityInviteMemberPageBehavior?: {
+    goToUserProfilePage?: (context: { userId: string }) => void;
+  };
   AmityUserFeedComponentBehavior?: {
     goToPostDetailPage?(context: { postId: string }): void;
   };
@@ -212,7 +227,9 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToStorySettingPage,
     goToPendingPostPage,
     goToPollPostComposerPage,
-    goToNotificationTrayPage,
+    goToInviteMemberPage,
+    goToPendingInvitationPage,
+    goToPendingRequestPage,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -442,6 +459,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToPollPostComposerPage(context);
       },
+      goToPendingRequestPage: (context: { community: Amity.Community }) => {
+        if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToPendingRequestPage) {
+          return pageBehavior.AmityCommunityProfilePageBehavior.goToPendingRequestPage(context);
+        }
+        goToPendingRequestPage?.(context.community);
+      },
     },
     AmityCommunitySetupPageBehavior: {
       goToAddCategoryPage(context: { categories?: Amity.Category[] }) {
@@ -459,6 +482,15 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCommunitySetupPageBehavior.goToAddMemberPage(context);
         }
         goToAddMemberPage?.(context);
+      },
+      goToInviteMemberPage(context: {
+        communityId?: string;
+        onSubmit?: (userId: string[]) => void;
+      }) {
+        if (pageBehavior?.AmityCommunitySetupPageBehavior?.goToInviteMemberPage) {
+          return pageBehavior.AmityCommunitySetupPageBehavior.goToInviteMemberPage(context);
+        }
+        goToInviteMemberPage?.(context);
       },
     },
     AmityCommunitySettingPageBehavior: {
@@ -479,6 +511,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityCommunitySettingPageBehavior.goToMembershipPage(context);
         }
         goToMembershipPage?.(context.community);
+      },
+      goToPendingInvitationPage(context: { community: Amity.Community }) {
+        if (pageBehavior?.AmityCommunitySettingPageBehavior?.goToPendingInvitationPage) {
+          return pageBehavior.AmityCommunitySettingPageBehavior.goToPendingInvitationPage(context);
+        }
+        goToPendingInvitationPage?.(context.community);
       },
       goToPostPermissionPage(context: { community: Amity.Community }) {
         if (pageBehavior?.AmityCommunitySettingPageBehavior?.goToPostPermissionPage) {
@@ -513,6 +551,33 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       goToUserProfilePage: (context: { userId: string }) => {
         if (pageBehavior?.AmityCommunityMembershipPageBehavior?.goToUserProfilePage) {
           return pageBehavior.AmityCommunityMembershipPageBehavior.goToUserProfilePage(context);
+        }
+        goToUserProfilePage(context.userId);
+      },
+      goToInviteMemberPage(context: {
+        communityId?: string;
+        onSubmit?: (userId: string[]) => void;
+      }) {
+        if (pageBehavior?.AmityCommunitySetupPageBehavior?.goToInviteMemberPage) {
+          return pageBehavior.AmityCommunitySetupPageBehavior.goToInviteMemberPage(context);
+        }
+        goToInviteMemberPage?.(context);
+      },
+    },
+    AmityCommunityPendingInvitationPageBehavior: {
+      goToUserProfilePage: (context: { userId: string }) => {
+        if (pageBehavior?.AmityCommunityPendingInvitationPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityCommunityPendingInvitationPageBehavior.goToUserProfilePage(
+            context,
+          );
+        }
+        goToUserProfilePage(context.userId);
+      },
+    },
+    AmityCommunityInviteMemberPageBehavior: {
+      goToUserProfilePage: (context: { userId: string }) => {
+        if (pageBehavior?.AmityCommunityInviteMemberPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityCommunityInviteMemberPageBehavior.goToUserProfilePage(context);
         }
         goToUserProfilePage(context.userId);
       },

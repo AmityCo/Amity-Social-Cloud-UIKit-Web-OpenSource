@@ -40,7 +40,7 @@ const ImageItem = ({
 };
 
 interface ImageGalleryProps {
-  posts?: Amity.Post[] | null;
+  posts?: Amity.Post<'image'>[] | null;
   pageId?: string;
   componentId?: string;
   elementId?: string;
@@ -65,14 +65,14 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
       {posts?.map((post, index) => (
         <ImageItem
           key={post?.data?.fileId}
-          fileId={post?.data?.fileId}
+          fileId={post?.data?.fileId as string}
           postIndex={index}
           onClickImageItem={onClickImageItem}
         />
       ))}
       {posts && isImageViewerOpen && selectedImageIndex !== null && (
         <SingleImageViewer
-          fileId={posts[selectedImageIndex]?.data?.fileId}
+          fileId={posts[selectedImageIndex]?.data?.fileId as string}
           onClose={() => setIsImageViewerOpen(false)}
           pageId={pageId}
           componentId={componentId}

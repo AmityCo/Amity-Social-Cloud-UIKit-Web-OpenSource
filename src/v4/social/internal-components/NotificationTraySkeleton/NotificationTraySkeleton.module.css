@@ -1,5 +1,5 @@
 .notificationTraySkeleton__header {
-  width: 20%;
+  width: 30%;
   height: 0.625rem;
   background-color: var(--asc-color-base-shade4);
   border-radius: 0.75rem;
@@ -37,7 +37,7 @@
 }
 
 .notificationTraySkeleton__description {
-  width: 50%;
+  width: 40%;
   height: 0.625rem;
   background-color: var(--asc-color-base-shade4);
   border-radius: 0.75rem;

@@ -75,7 +75,11 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
             <EmptyCommunityVideoFeed pageId={pageId} componentId={componentId} />
           )}
           {posts?.length > 0 && (
-            <VideoGallery posts={posts} pageId={pageId} componentId={communityId} />
+            <VideoGallery
+              posts={posts as Amity.Post<'video'>[]}
+              pageId={pageId}
+              componentId={communityId}
+            />
           )}
           {isLoading && renderLoading()}
         </div>

@@ -1,0 +1,144 @@
+.pendingPostList__container {
+  display: block;
+  padding: 0 1rem;
+  background-color: var(--asc-color-background-default);
+}
+
+.pendingPostList__container:last-child {
+  margin-bottom: 0.5rem;
+}
+
+.pendingPostList__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  width: 100%;
+}
+
+.pendingPostList__userDetail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pendingPostList__deletePost__icon {
+  fill: var(--asc-color-alert-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+.pendingPostList__deletePost__text {
+  color: var(--asc-color-alert-default);
+}
+
+.pendingPostList__wrapRightMenu {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pendingPostList__actionButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: flex-end;
+  cursor: pointer;
+  gap: 0.5rem;
+}
+
+.pendingPostList__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pendingPostList__textPost {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.pendingPostList__buttonWrapper {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--asc-color-base-shade4);
+}
+
+.pendingPostList__imageViewer {
+  border-radius: 0 !important; /* need to find a way to remove !important */
+  max-height: none !important;
+  background-color: transparent !important;
+}
+
+.pendingPostList__imageViewerOverlay {
+  background-color: var(--asc-color-black) !important;
+}
+
+.pendingPostList__wrapper {
+  padding: 0 1rem;
+  background-color: var(--asc-color-background-default);
+  border-bottom: 0.5rem solid var(--asc-color-base-shade4);
+}
+
+.pendingPostList__noJoinRequest {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: calc(100vh - 13rem);
+  background-color: var(--asc-color-background-default);
+}
+
+.pendingPostList__fireworkIcon {
+  fill: var(--asc-color-secondary-shade4);
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
+.pendingPostList__noJoinRequestText {
+  color: var(--asc-color-base-shade3);
+}
+
+.pendingPostList__username {
+  color: var(--asc-color-base-default);
+  cursor: pointer;
+}
+
+@media (width >= 48em) {
+  .pendingPostList__container {
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+  }
+
+  .pendingPostList__container:last-child {
+    margin-bottom: 0;
+  }
+
+  .pendingPostList__imageViewerOverlay {
+    background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
+  }
+
+  .pendingPostList__wrapper {
+    border-bottom: unset;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    margin-top: 0.75rem;
+  }
+
+  .pendingPostList__noJoinRequest {
+    height: calc(100vh - 10rem);
+    border-radius: 0.5rem;
+    margin-top: 0.75rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+}

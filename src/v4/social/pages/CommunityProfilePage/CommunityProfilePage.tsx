@@ -30,6 +30,8 @@ import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useC
 import useSDK from '~/v4/core/hooks/useSDK';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { useGetInvitation } from '~/v4/social/hooks';
 
 interface CommunityProfileProps {
   communityId: string;
@@ -52,13 +54,17 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { hasStoryPermission } = useStoryPermission(communityId);
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
-  const { community, isLoading, refresh } = useCommunity({
+  const { community, isLoading, refresh, error } = useCommunity({
     communityId,
     shouldCall: !!communityId,
   });
+  const { invitation, isLoading: isInvitationLoading } = useGetInvitation(
+    community as Amity.Community,
+  );
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { onBack } = useNavigation();
+  const { acceptedInvitation } = useLayoutContext();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -111,7 +117,15 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
 
   useEffect(() => {
     refresh();
+    handleRefresh();
   }, []);
+
+  useEffect(() => {
+    if (acceptedInvitation) {
+      refresh();
+      handleRefresh();
+    }
+  }, [acceptedInvitation]);
 
   useEffect(() => {
     if (file) {
@@ -144,6 +158,8 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     };
   }, []);
 
+  const isShowFailed = (!isLoading && community?.isDeleted) || error;
+
   return (
     <PullToRefresh
       ref={containerRef}
@@ -152,9 +168,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       onTouchEndCallback={handleRefresh}
       className={styles.communityProfilePage__container}
     >
-      {isLoading && <CommunityProfileSkeleton />}
-      {!isLoading && community?.isDeleted && <FailedToShow pageId={pageId} onBack={onBack} />}
-      {!isLoading && community && !community.isDeleted && (
+      {(isLoading || isInvitationLoading) && <CommunityProfileSkeleton />}
+      {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
+      {!isLoading && !isShowFailed && !isInvitationLoading && community && !community.isDeleted && (
         <>
           <CommunityHeader pageId={pageId} community={community} isSticky={isSticky} page={page} />
           <CommunityProfileTab
@@ -165,49 +181,52 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
           />
         </>
       )}
-      {activeTab === 'community_feed' && checkPostPermission() && !community?.isDeleted && (
-        <div className={styles.communityProfilePage__poseComposer}>
-          <PostComposer
-            pageId={pageId}
-            communityId={communityId}
-            onSelectFile={handleFileSelect}
-            onClickPost={() => {
-              openPopup({
-                pageId,
-                view: 'desktop',
-                isDismissable: false,
-                onClose: onCloseCreatePostPopup,
-                header: CreatePostHeader,
-                children: (
-                  <PostComposerPage
-                    mode={Mode.CREATE}
-                    targetType="community"
-                    community={community as Amity.Community}
-                    targetId={community?.communityId as string}
-                  />
-                ),
-              });
-            }}
-            onClickPoll={() => {
-              openPopup({
-                pageId,
-                view: 'desktop',
-                isDismissable: false,
-                onClose: onCloseCreatePostPopup,
-                header: CreatePostHeader,
-                children: (
-                  <PollPostComposerPage
-                    targetId={community?.communityId as string}
-                    targetType="community"
-                  />
-                ),
-              });
-            }}
-          />
-        </div>
-      )}
-      {!community?.isDeleted && <div key={refreshKey}>{renderTabContent()}</div>}
-      {community?.isJoined && !community?.isDeleted && checkPostPermission() && (
+      {!isShowFailed &&
+        activeTab === 'community_feed' &&
+        checkPostPermission() &&
+        !community?.isDeleted && (
+          <div className={styles.communityProfilePage__poseComposer}>
+            <PostComposer
+              pageId={pageId}
+              communityId={communityId}
+              onSelectFile={handleFileSelect}
+              onClickPost={() => {
+                openPopup({
+                  pageId,
+                  view: 'desktop',
+                  isDismissable: false,
+                  onClose: onCloseCreatePostPopup,
+                  header: CreatePostHeader,
+                  children: (
+                    <PostComposerPage
+                      mode={Mode.CREATE}
+                      targetType="community"
+                      community={community as Amity.Community}
+                      targetId={community?.communityId as string}
+                    />
+                  ),
+                });
+              }}
+              onClickPoll={() => {
+                openPopup({
+                  pageId,
+                  view: 'desktop',
+                  isDismissable: false,
+                  onClose: onCloseCreatePostPopup,
+                  header: CreatePostHeader,
+                  children: (
+                    <PollPostComposerPage
+                      targetId={community?.communityId as string}
+                      targetType="community"
+                    />
+                  ),
+                });
+              }}
+            />
+          </div>
+        )}
+      {!isShowFailed && !community?.isDeleted && <div key={refreshKey}>{renderTabContent()}</div>}
+      {!isShowFailed && community?.isJoined && !community?.isDeleted && checkPostPermission() && (
         <div className={styles.communityProfilePage__createPostButton}>
           <CommunityCreatePostButton
             pageId={pageId}

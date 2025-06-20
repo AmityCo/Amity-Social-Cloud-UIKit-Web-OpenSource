@@ -94,7 +94,7 @@
   justify-content: center;
 }
 
-.communityAddMemberPage__selectedUserAvatarImage {
+.communityAddMemberPage__container .communityAddMemberPage__selectedUserAvatarImage {
   width: 2.5rem;
   height: 2.5rem;
 }

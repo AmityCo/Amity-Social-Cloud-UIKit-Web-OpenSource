@@ -19,6 +19,7 @@ import { CommunityJoinedButton } from '~/v4/social/elements/CommunityJoinedButto
 import styles from './RecommendedCommunities.module.css';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useGetJoinRequestList } from '~/v4/social/hooks/useGetJoinRequestList';
 
 type RecommendedCommunityCardProps = {
   pageId: string;
@@ -26,8 +27,9 @@ type RecommendedCommunityCardProps = {
   community: Amity.Community;
   onClick: (communityId: string) => void;
   onCategoryClick?: (categoryId: string) => void;
-  onJoinButtonClick: (communityId: string) => void;
-  onLeaveButtonClick: (communityId: string) => void;
+  onJoinButtonClick: (community: Amity.Community) => void;
+  onLeaveButtonClick: (community: Amity.Community) => void;
+  isPendingJoin?: boolean;
 };
 
 const RecommendedCommunityCard = ({
@@ -38,6 +40,7 @@ const RecommendedCommunityCard = ({
   onCategoryClick,
   onJoinButtonClick,
   onLeaveButtonClick,
+  isPendingJoin = false,
 }: RecommendedCommunityCardProps) => {
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
 
@@ -82,17 +85,17 @@ const RecommendedCommunityCard = ({
             />
           </div>
           <div className={styles.recommendedCommunities__content__right}>
-            {community.isJoined ? (
+            {community.isJoined && isPendingJoin ? (
               <CommunityJoinedButton
                 pageId={pageId}
                 componentId={componentId}
-                onClick={() => onLeaveButtonClick(community.communityId)}
+                onClick={() => onLeaveButtonClick(community)}
               />
             ) : (
               <CommunityJoinButton
                 pageId={pageId}
                 componentId={componentId}
-                onClick={() => onJoinButtonClick(community.communityId)}
+                onClick={() => onJoinButtonClick(community)}
               />
             )}
           </div>
@@ -108,6 +111,9 @@ interface RecommendedCommunitiesProps {
 
 export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesProps) => {
   const componentId = 'recommended_communities';
+
+  const MAX_DISPLAYED_COMMUNITIES = 4;
+
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
     componentId,
@@ -121,43 +127,66 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     isLoading,
     fetchRecommendedCommunities,
     refetchRecommendedCommunities,
+    pendingJoinCommunities,
+    setPendingJoinCommunity,
   } = useExplore();
+
+  const communityIds = recommendedCommunities
+    .map((community) => community.communityId)
+    .filter((id) => !pendingJoinCommunities.includes(id));
+
+  const { joinRequestList } = useGetJoinRequestList(communityIds);
+
+  const recommendedCommunitiesWithOutJoinRequests = joinRequestList
+    ? recommendedCommunities.filter(
+        (community) =>
+          !joinRequestList.some(
+            (request) => request.targetId === community.communityId && request.status === 'pending',
+          ) && !pendingJoinCommunities.includes(community.communityId),
+      )
+    : recommendedCommunities.filter(
+        (community) => !pendingJoinCommunities.includes(community.communityId),
+      );
 
   useEffect(() => {
     fetchRecommendedCommunities();
   }, []);
 
   const { joinCommunity, leaveCommunity } = useCommunityActions({
-    onJoinSuccess: () => {
+    onJoinSuccess: ({ data, communityId }: { data?: Amity.JoinResult; communityId?: string }) => {
+      if (data?.status === 'pending' && communityId) {
+        setPendingJoinCommunity(communityId);
+      }
+
       refetchRecommendedCommunities();
     },
   });
 
-  const handleJoinButtonClick = (communityId: string) => {
+  const handleJoinButtonClick = async (community: Amity.Community) => {
     if (!online) {
       notification.info({
         content: 'Failed to join community. Please try again.',
       });
       return;
     }
-    joinCommunity(communityId);
+    joinCommunity(community);
   };
 
-  const handleLeaveButtonClick = (communityId: string) => {
+  const handleLeaveButtonClick = (community: Amity.Community) => {
     if (!online) {
       notification.info({
         content: 'Failed to leave community. Please try again.',
       });
       return;
     }
-    leaveCommunity(communityId);
+    leaveCommunity(community);
   };
 
   return (
     <Carousel
       scrollOffset={400}
       iconClassName={styles.recommendedCommunityCard__arrowIcon}
-      isHidden={isLoading || recommendedCommunities.length < 3}
+      isHidden={isLoading || recommendedCommunitiesWithOutJoinRequests.length < 3}
       leftArrowClassName={clsx(styles.recommendedCommunityCard__arrow, styles.left)}
       rightArrowClassName={clsx(styles.recommendedCommunityCard__arrow, styles.right)}
     >
@@ -167,23 +196,32 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
         className={styles.recommendedCommunities}
       >
         {isLoading
-          ? Array.from({ length: 4 }).map((_, index) => (
+          ? Array.from({ length: MAX_DISPLAYED_COMMUNITIES }).map((_, index) => (
               <RecommendedCommunityCardSkeleton key={index} />
             ))
-          : recommendedCommunities.length === 0
+          : recommendedCommunitiesWithOutJoinRequests.length === 0
             ? null
-            : recommendedCommunities.map((community) => (
-                <RecommendedCommunityCard
-                  pageId={pageId}
-                  community={community}
-                  componentId={componentId}
-                  key={community.communityId}
-                  onJoinButtonClick={handleJoinButtonClick}
-                  onLeaveButtonClick={handleLeaveButtonClick}
-                  onClick={(communityId) => goToCommunityProfilePage(communityId)}
-                  onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
-                />
-              ))}
+            : recommendedCommunitiesWithOutJoinRequests
+                .slice(0, MAX_DISPLAYED_COMMUNITIES)
+                .map((community) => (
+                  <RecommendedCommunityCard
+                    pageId={pageId}
+                    community={community}
+                    componentId={componentId}
+                    key={community.communityId}
+                    isPendingJoin={
+                      joinRequestList?.some(
+                        (request) =>
+                          request.targetId === community.communityId &&
+                          request.status === 'pending',
+                      ) || pendingJoinCommunities.includes(community.communityId)
+                    }
+                    onJoinButtonClick={(community) => handleJoinButtonClick(community)}
+                    onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
+                    onClick={(communityId) => goToCommunityProfilePage(communityId)}
+                    onCategoryClick={(categoryId) => goToCommunitiesByCategoryPage({ categoryId })}
+                  />
+                ))}
       </div>
     </Carousel>
   );

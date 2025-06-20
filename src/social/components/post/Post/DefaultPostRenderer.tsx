@@ -104,7 +104,7 @@ const OptionMenu = ({
         id: isPostUnderReview ? 'post.confirmPendingDelete' : 'post.confirmDelete',
       }),
       okText: formatMessage({ id: 'delete' }),
-      onOk: () => handleDeletePost?.(post?.postId),
+      onOk: () => post?.postId && handleDeletePost?.(post.postId),
     });
   };
 
@@ -249,9 +249,9 @@ const DefaultPostRenderer = (props: DefaultPostRendererProps) => {
   const postMaxLines = hasChildrenPosts ? MAX_TEXT_LINES_WITH_CHILDREN : MAX_TEXT_LINES_DEFAULT;
 
   // live stream post = empty text post + child liveStream post
-  const liveStreamContent: Amity.Post<'liveStream'> = childrenPosts.find(
-    (childPost) => childPost.dataType === 'liveStream',
-  );
+  const liveStreamContent = childrenPosts.find((childPost) => childPost.dataType === 'liveStream');
+
+  if (!post) return null;
 
   return (
     <PostContainer data-testid="post" className={className}>

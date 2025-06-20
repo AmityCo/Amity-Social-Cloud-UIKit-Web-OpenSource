@@ -1,9 +1,9 @@
-import React from 'react';
 import clsx from 'clsx';
+import React from 'react';
+import { Bell } from '~/v4/icons/Bell';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { Button, ButtonProps } from '~/v4/core/natives/Button';
-import { Bell } from '~/v4/icons/Bell';
 import useGetNotificationTraySeen from '~/v4/social/hooks/useGetNotificationTraySeen';
 import styles from './NotificationTrayButton.module.css';
 

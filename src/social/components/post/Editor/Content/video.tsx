@@ -10,13 +10,13 @@ const StyledVideoMessage = styled(VideoMessage)`
 `;
 
 interface VideoContentListProps {
-  items: Amity.Post[];
+  items: Amity.Post<'video'>[];
   onRemove: (postId: string) => void;
 }
 
 // TODO minimize duplication across video related files
 const VideoContentList = ({ items, onRemove }: VideoContentListProps) => {
-  const [playingPostId, setPlayingPostId] = useState(undefined);
+  const [playingPostId, setPlayingPostId] = useState<string | undefined>(undefined);
 
   return (
     <GalleryGrid
@@ -26,10 +26,10 @@ const VideoContentList = ({ items, onRemove }: VideoContentListProps) => {
       renderItem={(item) => {
         if (playingPostId === item.postId) {
           const fileId =
-            item.data.videoFileId.high ||
-            item.data.videoFileId.medium ||
-            item.data.videoFileId.low ||
-            item.data.videoFileId.original;
+            item.data?.videoFileId.high ||
+            item.data?.videoFileId.medium ||
+            item.data?.videoFileId.low ||
+            item.data?.videoFileId.original;
 
           if (!fileId) {
             return (
@@ -41,7 +41,7 @@ const VideoContentList = ({ items, onRemove }: VideoContentListProps) => {
 
           return (
             <Video
-              key={item.data.videoFileId.original}
+              key={item.data?.videoFileId.original}
               fileId={fileId}
               mediaFit="cover"
               noBorder
@@ -53,8 +53,8 @@ const VideoContentList = ({ items, onRemove }: VideoContentListProps) => {
 
         return (
           <VideoThumbnail
-            key={item.data.thumbnailFileId}
-            fileId={item.data.thumbnailFileId}
+            key={item.data?.thumbnailFileId}
+            fileId={item.data?.thumbnailFileId}
             onRemove={() => onRemove(item.postId)}
           />
         );

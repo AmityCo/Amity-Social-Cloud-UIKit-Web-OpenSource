@@ -14,6 +14,8 @@ import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import Notification from '~/v4/core/components/Notification';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { InvitationSection } from '~/v4/social/components';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import styles from './NotificationTrayPage.module.css';
 
 interface NotificationTrayPageProps {
@@ -24,6 +26,7 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
   const pageId = 'notification_tray_page';
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { invitationNotificationTray } = useLayoutContext();
 
   const { themeStyles, accessibilityId, isExcluded } = useAmityPage({
     pageId,
@@ -39,21 +42,28 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { online } = useNetworkState();
   const { isDesktop } = useResponsive();
+  const [notificationItemLoading, setNotificationItemLoading] = useState(false);
 
   useIntersectionObserver({
     onIntersect: () => {
       if (hasMore && isLoading === false) {
+        setNotificationItemLoading(true);
         loadMore();
       }
     },
     node: intersectionNode,
   });
 
+  useEffect(() => {
+    !isLoading && setNotificationItemLoading(isLoading);
+  }, [isLoading]);
+
   const recentItems = items.filter((item) => item.isRecent);
   const unRecentItems = items.filter((item) => !item.isRecent);
 
   useEffect(() => {
     refresh();
+    invitationNotificationTray.refresh();
   }, []);
 
   useEffect(() => {
@@ -90,17 +100,23 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
             imgClassName={styles.notificationTrayPage__closeButton}
           />
         )}
-
         <Title pageId={pageId} titleClassName={styles.notificationTrayPage__title} />
         <div className={styles.notificationTrayPage__topBarGap} />
       </div>
       <div className={styles.notificationTrayPage__content}>
         {online && !error ? (
           <>
-            {isLoading && items.length === 0 && <NotificationTraySkeleton />}
-
-            {items.length > 0 && (
+            {isLoading || invitationNotificationTray.isLoading ? (
+              <NotificationTraySkeleton />
+            ) : (
               <div className={styles.notificationTrayPage__itemsWrapper}>
+                {invitationNotificationTray.invitations.length > 0 && (
+                  <InvitationSection
+                    pageId={pageId}
+                    onClose={onClose}
+                    invitations={invitationNotificationTray.invitations}
+                  />
+                )}
                 {recentItems.length > 0 && (
                   <>
                     <Typography.CaptionBold as="p" className={styles.notificationTrayPage__header}>
@@ -116,7 +132,6 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                     ))}
                   </>
                 )}
-
                 {unRecentItems.length > 0 && (
                   <>
                     <Typography.CaptionBold as="p" className={styles.notificationTrayPage__header}>
@@ -134,15 +149,15 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                 )}
               </div>
             )}
-
-            {!isLoading && items.length === 0 && <EmptyNotification pageId={pageId} />}
-
-            {isLoading &&
+            {!isLoading &&
+              !invitationNotificationTray.isLoading &&
+              invitationNotificationTray.invitations.length === 0 &&
+              items.length === 0 && <EmptyNotification pageId={pageId} />}
+            {notificationItemLoading &&
               items.length > 0 &&
               Array.from({ length: 3 }, (_, index) => (
                 <NotificationItemSkeleton key={index} index={index} />
               ))}
-
             {error && !isLoading && (
               <div className={styles.notificationTrayPage__errorWrapper}>
                 <NotificationTraySkeleton />
@@ -156,7 +171,6 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                 />
               </div>
             )}
-
             <div
               ref={(node) => setIntersectionNode(node)}
               className={styles.notificationTrayPage__observerTarget}

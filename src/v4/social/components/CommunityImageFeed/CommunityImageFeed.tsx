@@ -73,7 +73,11 @@ export const CommunityImageFeed = ({ pageId = '*', communityId }: CommunityImage
             <EmptyCommunityImageFeed pageId={pageId} componentId={componentId} />
           )}
           {posts?.length > 0 && (
-            <ImageGallery posts={posts} pageId={pageId} componentId={communityId} />
+            <ImageGallery
+              posts={posts as Amity.Post<'image'>[]}
+              pageId={pageId}
+              componentId={communityId}
+            />
           )}
           {isLoading && renderLoading()}
         </div>

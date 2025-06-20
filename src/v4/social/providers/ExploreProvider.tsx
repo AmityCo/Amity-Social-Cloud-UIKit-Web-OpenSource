@@ -19,6 +19,9 @@ type ExploreContextType = {
   isCommunityEmpty: boolean;
   categories: Amity.Category[];
   refresh: () => void;
+  pendingJoinCommunities: string[];
+  setPendingJoinCommunity: (communityId: string) => void;
+  removePendingJoinCommunity: (communityId: string) => void;
 };
 
 const ExploreContext = createContext<ExploreContextType>({
@@ -37,6 +40,9 @@ const ExploreContext = createContext<ExploreContextType>({
   isCategoryLoading: false,
   error: null,
   refresh: () => {},
+  pendingJoinCommunities: [],
+  setPendingJoinCommunity: () => {},
+  removePendingJoinCommunity: () => {},
 });
 
 export const useExplore = () => useContext(ExploreContext);
@@ -49,6 +55,7 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const [trendingCommunitiesEnable, setTrendingCommunitiesEnable] = useState(false);
   const [recommendedCommunitiesEnable, setRecommendedCommunitiesEnable] = useState(false);
   const [communityCategoriesEnable, setCommunityCategoriesEnable] = useState(false);
+  const [pendingJoinCommunities, setPendingJoinCommunities] = useState<string[]>([]);
 
   const trendingData = useTrendingCommunitiesCollection({
     params: { limit: 5 },
@@ -56,7 +63,7 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   });
 
   const recommendedData = useRecommendedCommunitiesCollection({
-    params: { limit: 4 },
+    params: { limit: 20 },
     enabled: recommendedCommunitiesEnable,
   });
 
@@ -68,7 +75,10 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
     enabled: communityCategoriesEnable,
   });
 
-  const isLoading = trendingData.isLoading || recommendedData.isLoading || categoriesData.isLoading;
+  const isLoading =
+    trendingData.isLoading ||
+    (recommendedData.isLoading && recommendedCommunitiesEnable) ||
+    categoriesData.isLoading;
   const error = trendingData.error && recommendedData.error && categoriesData.error;
 
   const refetchRecommendedCommunities = () => recommendedData.refresh();
@@ -82,7 +92,9 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const noCategories = categoriesData.categories.length === 0 && !categoriesData.isLoading;
 
   const noRecommendedCommunities =
-    recommendedData.recommendedCommunities.length === 0 && !recommendedData.isLoading;
+    recommendedData.recommendedCommunities.length === 0 &&
+    !recommendedData.isLoading &&
+    recommendedCommunitiesEnable;
 
   const noTrendingCommunities =
     trendingData.trendingCommunities.length === 0 && !trendingData.isLoading;
@@ -94,6 +106,14 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const fetchTrendingCommunities = () => setTrendingCommunitiesEnable(true);
   const fetchRecommendedCommunities = () => setRecommendedCommunitiesEnable(true);
   const fetchCommunityCategories = () => setCommunityCategoriesEnable(true);
+
+  const setPendingJoinCommunity = (communityId: string) => {
+    setPendingJoinCommunities((prev) => [...prev, communityId]);
+  };
+
+  const removePendingJoinCommunity = (communityId: string) => {
+    setPendingJoinCommunities((prev) => prev.filter((id) => id !== communityId));
+  };
 
   return (
     <ExploreContext.Provider
@@ -113,6 +133,9 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
         isCategoryLoading: categoriesData.isLoading,
         error,
         refresh,
+        pendingJoinCommunities,
+        setPendingJoinCommunity,
+        removePendingJoinCommunity,
       }}
     >
       {children}

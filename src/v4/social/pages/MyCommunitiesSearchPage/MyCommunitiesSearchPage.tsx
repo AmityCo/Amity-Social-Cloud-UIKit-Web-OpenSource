@@ -18,6 +18,7 @@ export function MyCommunitiesSearchPage() {
       displayName: searchValue,
       limit: 20,
       membership: 'member',
+      includeDiscoverablePrivateCommunity: true,
     },
     shouldCall: searchValue.length > 0,
   });

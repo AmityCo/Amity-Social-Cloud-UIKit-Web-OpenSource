@@ -17,6 +17,7 @@ export { UserPendingFollowRequestPage } from './UserPendingFollowRequestPage';
 export { CommunitySetupPage, AmityCommunitySetupPageMode } from './CommunitySetupPage';
 export { CommunityAddCategoryPage } from './CommunityAddCategoryPage';
 export { CommunityAddMemberPage } from './CommunityAddMemberPage';
+export { CommunityInviteMemberPage } from './CommunityInviteMemberPage';
 export { CommunityProfilePage } from './CommunityProfilePage';
 export { CommunitySettingPage } from './CommunitySettingPage';
 export { CommunityPostPermissionPage } from './CommunityPostPermissionPage';
@@ -34,3 +35,5 @@ export { LiveStreamPlayerPage } from './LiveStreamPlayerPage';
 export { LivestreamTerminatedPage } from './LivestreamTerminatedPage';
 
 export { NotificationTrayPage } from './NotificationTrayPage';
+
+export { PendingRequestPage } from './PendingRequestPage';

@@ -11,7 +11,7 @@ import { Config, defaultConfig, GetConfigReturnValue } from './CustomizationProv
 
 const SHADE_PERCENTAGES = [0.25, 0.4, 0.5, 0.75];
 
-const generateShades = (hexColor?: string, isDarkMode = false): string[] => {
+export const generateShades = (hexColor?: string, isDarkMode = false): string[] => {
   if (!hexColor) return Array(SHADE_PERCENTAGES.length).fill('');
 
   if (isDarkMode === true && hexColor === defaultConfig.theme.dark.primary_color) {

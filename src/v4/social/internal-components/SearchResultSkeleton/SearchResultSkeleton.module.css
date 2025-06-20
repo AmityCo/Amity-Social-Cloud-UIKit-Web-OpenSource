@@ -44,11 +44,11 @@
 }
 
 .searchResultSkeleton__postSkeletonLine {
-  height: 1.25rem;
+  height: 0.625rem;
   background-color: var(--asc-color-base-shade4);
   border-radius: 0.25rem;
   width: 100%;
-  max-width: calc(100% - 3rem);
+  max-width: 45%;
   flex-grow: 1;
 }
 

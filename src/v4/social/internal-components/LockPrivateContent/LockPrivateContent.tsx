@@ -11,7 +11,7 @@ export const LockPrivateContent = () => {
         This community is private
       </Typography.TitleBold>
       <Typography.Body className={styles.lockPrivateContent__body}>
-        Only invited members can see the posts.
+        Join this community to see its content and members.
       </Typography.Body>
     </div>
   );
