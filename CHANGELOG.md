@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.9.0 (2025-06-20)
+
+
+### Features
+
+* update sdk PROD ([8e583aa](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8e583aa5a0fface494ae6fadc729be608e4884f5))
+
 ### 4.8.1 (2025-05-22)
 
 
