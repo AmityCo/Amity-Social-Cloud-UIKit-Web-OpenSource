@@ -81,14 +81,22 @@ const GalleryContent = <T extends PostWithSkeleton>({
   const thumbnailRenderer = (item: PostWithSkeleton) => {
     switch (item.dataType) {
       case 'image':
-        return renderImageThumbnail ? renderImageThumbnail(item) : <ImageThumbnail item={item} />;
+        return renderImageThumbnail ? (
+          renderImageThumbnail(item as PostWithSkeleton<'image'>)
+        ) : (
+          <ImageThumbnail item={item as PostWithSkeleton<'image'>} />
+        );
       case 'video':
-        return renderVideoThumbnail ? renderVideoThumbnail(item) : <VideoThumbnail item={item} />;
+        return renderVideoThumbnail ? (
+          renderVideoThumbnail(item as PostWithSkeleton<'video'>)
+        ) : (
+          <VideoThumbnail item={item as PostWithSkeleton<'video'>} />
+        );
       case 'liveStream':
         return renderLiveStreamThumbnail ? (
-          renderLiveStreamThumbnail(item)
+          renderLiveStreamThumbnail(item as PostWithSkeleton<'liveStream'>)
         ) : (
-          <LiveStreamThumbnail item={item} />
+          <LiveStreamThumbnail item={item as PostWithSkeleton<'liveStream'>} />
         );
       default:
         return null;
@@ -98,11 +106,23 @@ const GalleryContent = <T extends PostWithSkeleton>({
   const itemRenderer = (item: Amity.Post) => {
     switch (item.dataType) {
       case 'image':
-        return renderImageItem ? renderImageItem(item) : <ImageItem item={item} />;
+        return renderImageItem ? (
+          renderImageItem(item as Amity.Post<'image'>)
+        ) : (
+          <ImageItem item={item as Amity.Post<'image'>} />
+        );
       case 'video':
-        return renderVideoItem ? renderVideoItem(item) : <VideoItem item={item} />;
+        return renderVideoItem ? (
+          renderVideoItem(item as Amity.Post<'video'>)
+        ) : (
+          <VideoItem item={item as Amity.Post<'video'>} />
+        );
       case 'liveStream':
-        return renderLiveStreamItem ? renderLiveStreamItem(item) : <LiveStreamItem item={item} />;
+        return renderLiveStreamItem ? (
+          renderLiveStreamItem(item as Amity.Post<'liveStream'>)
+        ) : (
+          <LiveStreamItem item={item as Amity.Post<'liveStream'>} />
+        );
       default:
         return null;
     }

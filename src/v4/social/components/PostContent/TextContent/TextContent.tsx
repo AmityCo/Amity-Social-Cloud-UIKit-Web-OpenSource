@@ -41,7 +41,7 @@ export const TextContent = ({
 
   const canPreviewShown = linksFounded && linksFounded.length > 0 && !isHasMedia;
 
-  const stream = useStream(childPost?.data?.streamId);
+  const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
 
   return (
     <>

@@ -68,7 +68,7 @@ export const UserImageFeed = ({ pageId = '*', userId }: UserImageFeedProps) => {
 
     return (
       <div className={styles.userImageFeed__container}>
-        <ImageGallery posts={posts} />
+        <ImageGallery posts={posts as Amity.Post<'image'>[]} />
       </div>
     );
   };

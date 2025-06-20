@@ -165,7 +165,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
       data: { text: textValue.text },
       dataType: 'text',
       metadata: { mentioned: textValue.mentioned },
-      mentionees: textValue.mentionees,
+      mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
     };
 

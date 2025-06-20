@@ -200,7 +200,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       mutateUpdatePostAsync({
         data: { text: textValue.text },
         metadata: { mentioned: textValue.mentioned ?? [] },
-        mentionees: textValue.mentionees ?? [],
+        mentionees: (textValue.mentionees ?? []) as Amity.UserMention[],
         attachments: attachments,
       });
     }

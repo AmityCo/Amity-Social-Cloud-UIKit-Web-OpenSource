@@ -23,7 +23,7 @@ const VideoItem = ({
 
   const image = useImage({ fileId: thumbnailFileId, imageSize: 'medium' });
 
-  const file = useFile<Amity.File<'video'>>(videoFileId);
+  const file = useFile<'video'>(videoFileId);
 
   if (!image || !file)
     return (
@@ -51,14 +51,14 @@ const VideoItem = ({
         onError={() => setIsBrokenImg(true)}
       />
       <Typography.Caption className={styles.videoGallery__duration}>
-        {formatDuration((file?.attributes.metadata.video as any)?.duration)}
+        {formatDuration((file?.attributes.metadata as any).video?.duration)}
       </Typography.Caption>
     </Button>
   );
 };
 
 interface VideoGalleryProps {
-  posts?: Amity.Post[] | null;
+  posts?: Amity.Post<'video'>[] | null;
   pageId?: string;
   componentId?: string;
   elementId?: string;
@@ -83,8 +83,8 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
       {posts?.map((post, index) => (
         <VideoItem
           key={post?.data?.videoFileId?.original}
-          videoFileId={post?.data?.videoFileId?.original}
-          thumbnailFileId={post?.data?.thumbnailFileId}
+          videoFileId={post?.data?.videoFileId?.original ?? ''}
+          thumbnailFileId={post?.data?.thumbnailFileId ?? ''}
           postIndex={index}
           onClickVideoItem={onClickVideoItem}
         />
@@ -94,8 +94,8 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
           pageId={pageId}
           componentId={componentId}
           elementId={elementId}
-          fileId={posts[selectedIndex]?.data?.videoFileId?.original}
-          thumbnailFileId={posts[selectedIndex]?.data?.thumbnailFileId?.fileId}
+          fileId={posts[selectedIndex]?.data?.videoFileId?.original ?? ''}
+          thumbnailFileId={posts[selectedIndex]?.data?.thumbnailFileId ?? ''}
           onClose={() => setIsImageViewerOpen(false)}
         />
       )}

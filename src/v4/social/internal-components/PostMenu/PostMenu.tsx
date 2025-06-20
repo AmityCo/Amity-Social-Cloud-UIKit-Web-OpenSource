@@ -47,7 +47,7 @@ export const PostMenu = ({
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
   const { post: childPost } = usePost(post.children?.[0]);
-  const { item: poll } = usePoll(childPost?.data?.pollId);
+  const { item: poll } = usePoll((childPost as Amity.Post<'poll'>).data?.pollId);
   const { client } = useSDK();
 
   const isLiveStreamPost = useMemo(

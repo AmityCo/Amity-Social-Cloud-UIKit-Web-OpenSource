@@ -66,7 +66,7 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
 
     return (
       <div className={styles.userVideoFeed__container}>
-        <VideoGallery posts={posts} />
+        <VideoGallery posts={posts as Amity.Post<'video'>[]} />
       </div>
     );
   };

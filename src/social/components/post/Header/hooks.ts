@@ -44,9 +44,12 @@ export const usePostHeaderProps = ({
     avatarFileUrl: avatarFileUrl,
     postAuthorName: user?.displayName || formatMessage({ id: 'anonymous' }),
     postTargetName: postTargetName,
-    timeAgo: new Date(post?.createdAt),
+    timeAgo: post?.createdAt ? new Date(post?.createdAt) : undefined,
     isModerator: isCommunityModerator || isModerator(user?.roles) || isAdmin(user?.roles),
-    isEdited: new Date(post?.createdAt).getTime() < new Date(post?.editedAt).getTime(),
+    isEdited:
+      post?.createdAt && post?.editedAt
+        ? new Date(post?.createdAt).getTime() < new Date(post?.editedAt).getTime()
+        : false,
     isBanned: user?.isGlobalBanned,
     hidePostTarget: hidePostTarget,
     loading: loading,
