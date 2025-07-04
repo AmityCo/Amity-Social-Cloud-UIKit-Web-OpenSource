@@ -49,6 +49,7 @@ interface CommentComposerProps {
   shouldAllowCreation?: boolean;
   community?: Amity.Community | null;
   containerClassName?: string;
+  commentComposerClassName?: string;
 }
 
 export const CommentComposer = ({
@@ -60,6 +61,7 @@ export const CommentComposer = ({
   shouldAllowCreation = true,
   community,
   containerClassName,
+  commentComposerClassName,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
   const { user } = useUser({ userId });
@@ -135,7 +137,10 @@ export const CommentComposer = ({
   }
 
   return (
-    <div className={styles.commentComposer}>
+    <div
+      className={clsx(styles.commentComposer, commentComposerClassName)}
+      data-testid={`${pageId}/${componentId}/comment_composer`}
+    >
       {!online && isPending && page.type == PageTypes.ViewStoryPage && (
         <Notification
           icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}

@@ -3,7 +3,7 @@ import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import usePost from '~/v4/core/hooks/objects/usePost';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -19,6 +19,7 @@ import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { ErrorPostDetail } from '~/v4/social/internal-components/ErrorPostDetail/ErrorPostDetail';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 interface PostDetailPageProps {
   id: string;
@@ -26,6 +27,7 @@ interface PostDetailPageProps {
   category?: AmityPostCategory;
   commentId?: string;
   parentId?: string;
+  posts?: Amity.Post<'clip' | 'video'>[];
 }
 
 export function PostDetailPage({
@@ -34,14 +36,16 @@ export function PostDetailPage({
   category,
   commentId,
   parentId,
+  posts = [],
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
 
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
   const commentListRef = useRef<HTMLDivElement>(null);
 
+  const { AmityPostDetailPageBehavior } = usePageBehavior();
   const { isDesktop } = useResponsive();
-  const { onBack } = useNavigation();
+  const { onBack, prevPage } = useNavigation();
   const { themeStyles } = useAmityPage({ pageId });
   const { post, refresh, isLoading: isPostLoading, error } = usePost(id);
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -127,7 +131,14 @@ export function PostDetailPage({
         <BackButton
           pageId={pageId}
           defaultClassName={styles.postDetailPage__backIcon}
-          onPress={() => onBack()}
+          onPress={() =>
+            prevPage?.type === PageTypes.ClipFeedPage
+              ? AmityPostDetailPageBehavior?.goToClipFeedPage?.({
+                  currentPostId: post.children?.[0],
+                  posts,
+                })
+              : onBack()
+          }
         />
         <Typography.TitleBold
           data-testid={`${pageId}/page_title`}

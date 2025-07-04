@@ -14,6 +14,9 @@ import { Explore } from '~/v4/social/components/Explore';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
+import { ClipsFeedButton } from '~/v4/social/elements/ClipsFeedButton';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import useQueryClipGlobalFeed from '~/v4/social/hooks/useQueryClipGlobalFeed';
 
 export function SocialHomePage() {
   const pageId = 'social_home_page';
@@ -24,6 +27,8 @@ export function SocialHomePage() {
   const { scrollPosition, onScroll } = useGlobalFeedContext();
 
   const { activeTab, setActiveTab } = useLayoutContext();
+  const { AmitySocialHomePageBehavior } = usePageBehavior();
+  const { posts } = useQueryClipGlobalFeed();
 
   const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -82,6 +87,17 @@ export function SocialHomePage() {
             pageId={pageId}
             isActive={activeTab === HomePageTab.Explore}
             onClick={() => setActiveTab(HomePageTab.Explore)}
+          />
+          <ClipsFeedButton
+            pageId={pageId}
+            isActive={activeTab === HomePageTab.Clips}
+            onClick={() => {
+              setActiveTab(HomePageTab.Clips);
+              AmitySocialHomePageBehavior?.goToClipFeedPage?.({
+                posts,
+                currentPostId: posts[0]?.children[0] || '',
+              });
+            }}
           />
           <MyCommunitiesButton
             pageId={pageId}

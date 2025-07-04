@@ -25,6 +25,8 @@ interface CommentButtonProps {
   componentId?: string;
   commentsCount?: number;
   className?: string;
+  buttonClassName?: string;
+  commentsCountClassName?: string;
   defaultIconClassName?: string;
   imgIconClassName?: string;
   onPress?: ButtonProps['onPress'];
@@ -34,8 +36,10 @@ export function CommentButton({
   pageId = '*',
   componentId = '*',
   commentsCount,
+  buttonClassName,
   defaultIconClassName,
   imgIconClassName,
+  commentsCountClassName,
   onPress = () => {},
 }: CommentButtonProps) {
   const elementId = 'comment_button';
@@ -51,11 +55,11 @@ export function CommentButton({
     <Button onPress={onPress} data-testid={accessibilityId}>
       <IconComponent
         defaultIcon={() => (
-          <div className={clsx(styles.commentButton)}>
+          <div className={(clsx(styles.commentButton), buttonClassName)}>
             <CommentSvg className={clsx(styles.commentButton__icon, defaultIconClassName)} />
             <Typography.BodyBold
               data-testid={`${pageId}/${componentId}/comment_count`}
-              className={styles.commentButton__text}
+              className={clsx(styles.commentButton__text, commentsCountClassName)}
             >
               {typeof commentsCount === 'number' ? commentsCount : config.text}
             </Typography.BodyBold>

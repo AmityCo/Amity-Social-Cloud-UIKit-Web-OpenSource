@@ -60,6 +60,8 @@ export enum PageTypes {
   LiveStreamPlayerPage = 'LiveStreamPlayerPage',
   NotificationTrayPage = 'NotificationTrayPage',
   PendingRequestPage = 'PendingRequestPage',
+  DraftClipPage = 'DraftClipPage',
+  ClipFeedPage = 'ClipFeedPage',
 }
 
 type Page =
@@ -105,6 +107,7 @@ type Page =
         category?: AmityPostCategory;
         commentId?: string;
         parentId?: string;
+        posts?: Amity.Post<'clip' | 'video'>[];
       };
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string; page?: number } }
@@ -119,7 +122,7 @@ type Page =
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
   | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } }
   | { type: PageTypes.MyCommunitiesSearchPage; context: { communityId?: string } }
-  | { type: PageTypes.SelectPostTargetPage }
+  | { type: PageTypes.SelectPostTargetPage; context?: { isClipPost?: boolean } }
   | {
       type: PageTypes.DraftPage;
       context: {
@@ -138,6 +141,7 @@ type Page =
         mode: Mode;
         community?: Amity.Community;
         post?: Amity.Post;
+        isClipPost?: boolean;
       };
     }
   | {
@@ -241,11 +245,28 @@ type Page =
       context: {
         community: Amity.Community;
       };
+    }
+  | {
+      type: PageTypes.DraftClipPage;
+      context: {
+        targetId: string;
+        targetType: 'community' | 'user';
+        community?: Amity.Community;
+      };
+    }
+  | {
+      type: PageTypes.ClipFeedPage;
+      context: {
+        posts: Amity.Post<'clip' | 'video'>[];
+        currentPostId?: string;
+      };
     };
 
 type ContextValue = {
   page: Page;
   prevPage?: Page;
+  prev2Page?: Page;
+  prev3Page?: Page;
   setDefaultPage: (page: Page) => void;
   onChangePage: (type: string) => void;
   onClickCategory: (categoryId: string) => void;
@@ -266,11 +287,13 @@ type ContextValue = {
     category?: AmityPostCategory,
     commentId?: string,
     parentId?: string,
+    posts?: Amity.Post<'clip' | 'video'>[],
   ) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
   goToSelectPostTargetPage: () => void;
+  goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => void;
   goToSelectPollPostTargetPage: () => void;
   goToStoryTargetSelectionPage: () => void;
   goToPollPostComposerPage: (context: {
@@ -306,8 +329,9 @@ type ContextValue = {
           targetId: string | null;
           targetType: 'community' | 'user';
           community?: Amity.Community;
+          isClipPost?: boolean;
         }
-      | { mode: Mode.EDIT; post: Amity.Post },
+      | { mode: Mode.EDIT; post: Amity.Post; isClipPost?: boolean },
   ) => void;
   goToStoryCreationPage: (context: {
     targetId: string;
@@ -343,6 +367,15 @@ type ContextValue = {
   goToLiveStreamTerminatedPage?: () => void;
   goToLiveStreamPlayerPage?: (context: LiveStreamPlayerPageProps) => void;
   goToPendingRequestPage?: (community: Amity.Community) => void;
+  goToDraftClipPage?: (context: {
+    targetId: string | null;
+    targetType: 'community' | 'user';
+    community?: Amity.Community;
+  }) => void;
+  goToClipFeedPage?: (context: {
+    posts?: Amity.Post<'clip' | 'video'>[];
+    currentPostId?: string;
+  }) => void;
 
   //V3 functions
   onClickStory: (
@@ -373,6 +406,7 @@ let defaultValue: ContextValue = {
     category?: AmityPostCategory,
     commentId?: string,
     parentId?: string,
+    posts?: Amity.Post<'clip' | 'video'>[],
   ) => {},
   goToViewStoryPage: (context: {
     targetId: string;
@@ -388,11 +422,17 @@ let defaultValue: ContextValue = {
   goToCommunityProfilePage: (communityId: string, page?: number) => {},
   goToSocialGlobalSearchPage: (tab?: string) => {},
   goToSelectPostTargetPage: () => {},
+  goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => {},
   goToStoryTargetSelectionPage: () => {},
   goToSelectPollPostTargetPage: () => {},
   goToPollPostComposerPage: () => {},
   goToPostComposerPage: () => {},
   goToStoryCreationPage: () => {},
+  goToDraftClipPage: (context: {
+    targetId: string | null;
+    targetType: 'community' | 'user';
+    community?: Amity.Community;
+  }) => {},
   goToSocialHomePage: () => {},
   goToMyCommunitiesSearchPage: () => {},
   goToAllCategoriesPage: () => {},
@@ -411,6 +451,10 @@ let defaultValue: ContextValue = {
   goToLiveStreamTerminatedPage: () => {},
   goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
   goToNotificationTrayPage: () => {},
+  goToClipFeedPage: (context: {
+    posts?: Amity.Post<'clip' | 'video'>[];
+    currentPostId?: string;
+  }) => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -448,15 +492,17 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingFollowRequestPage: () =>
       console.log(`NavigationContext goToPendingFollowRequestPage()`),
     goToBlockedUsersPage: () => console.log(`NavigationContext goToBlockedUsersPage()`),
-    goToPostDetailPage: (postId, hideTarget, category, commentId, parentId) =>
+    goToPostDetailPage: (postId, hideTarget, category, commentId, parentId, posts) =>
       console.log(
-        `NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category} ${commentId} ${parentId})`,
+        `NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category} ${commentId} ${parentId} ${posts})`,
       ),
     goToCommunityProfilePage: (communityId, page) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId} ${page})`),
     goToSocialGlobalSearchPage: (tab) =>
       console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
+    goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) =>
+      console.log(`NavigationContext goToSelectClipPostTargetPage(${context.isClipPost})`),
     goToSelectPollPostTargetPage: () =>
       console.log(`NavigationContext goToSelectPollPostTargetPage()`),
     goToPollPostComposerPage: (context) =>
@@ -466,6 +512,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToDraftStoryPage: (data) => console.log(`NavigationContext goToDraftStoryPage()`),
     goToPostComposerPage: () => console.log(`NavigationContext goToPostComposerPage()`),
     goToStoryCreationPage: () => console.log('NavigationContext goToStoryCreationPage()'),
+    goToDraftClipPage: (context) => console.log(`NavigationContext goToDraftClipPage(${context})`),
     goToSocialHomePage: () => console.log('NavigationContext goToSocialHomePage()'),
     goToMyCommunitiesSearchPage: () =>
       console.log('NavigationContext goToMyCommunitiesSearchPage()'),
@@ -487,6 +534,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
     goToPendingRequestPage: (context) =>
       console.log(`NavigationContext goToPendingRequestPage(${context})`),
+    goToClipFeedPage: (context) => console.log(`NavigationContext goToClipFeedPage(${context})`),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -539,6 +587,7 @@ interface NavigationProviderProps {
     community: Amity.Community;
   }) => void;
   goToPendingRequestPage?: (context: { community: Amity.Community }) => void;
+  goToClipFeedPage?: (context: { post: Amity.Post<'clip' | 'video'>[] }) => void;
 
   onCommunityCreated?: (communityId: string) => void;
   goToCommunityCreatePage?: () => void;
@@ -609,7 +658,9 @@ export default function NavigationProvider({
 }: NavigationProviderProps) {
   const [pages, setPages] = useState<Page[]>([getDefaultRoute(activeRoute)]);
   const currentPage = useMemo(() => pages[pages.length - 1], [pages]);
-  const prevPage = useMemo(() => pages[pages.length - 2], [pages]);
+  const prevPage = useMemo((page = 2) => pages[pages.length - page], [pages]);
+  const prev2Page = useMemo((page = 3) => pages[pages.length - page], [pages]);
+
   const [navigationBlocker, setNavigationBlocker] = useState<
     | {
         title: ReactNode;
@@ -873,7 +924,7 @@ export default function NavigationProvider({
   );
 
   const goToPostDetailPage = useCallback(
-    (postId, hideTarget, category, commentId, parentId) => {
+    (postId, hideTarget, category, commentId, parentId, posts) => {
       const next = {
         type: PageTypes.PostDetailPage,
         context: {
@@ -882,6 +933,7 @@ export default function NavigationProvider({
           category,
           commentId,
           parentId,
+          posts,
         },
       };
 
@@ -924,6 +976,20 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
+  const goToSelectClipPostTargetPage = useCallback(
+    ({ isClipPost }) => {
+      const next = {
+        type: PageTypes.SelectPostTargetPage,
+        context: {
+          isClipPost,
+        },
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   const goToStoryTargetSelectionPage = useCallback(() => {
     const next = {
       type: PageTypes.StoryTargetSelectionPage,
@@ -949,6 +1015,22 @@ export default function NavigationProvider({
           targetType,
           mediaType,
           storyType,
+        },
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
+  const goToDraftClipPage = useCallback(
+    ({ targetId, targetType, community }) => {
+      const next = {
+        type: PageTypes.DraftClipPage,
+        context: {
+          targetId,
+          targetType,
+          community,
         },
       };
 
@@ -990,8 +1072,9 @@ export default function NavigationProvider({
             targetId: string | null;
             targetType: 'community' | 'user';
             community?: Amity.Community;
+            isClipPost?: boolean;
           }
-        | { mode: Mode.EDIT; post: Amity.Post },
+        | { mode: Mode.EDIT; post: Amity.Post; isClipPost?: boolean },
     ) => {
       const next = {
         type: PageTypes.PostComposerPage,
@@ -1253,6 +1336,21 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToClipFeedPage = useCallback(
+    ({ posts, currentPostId }) => {
+      const next = {
+        type: PageTypes.ClipFeedPage,
+        context: {
+          posts,
+          currentPostId,
+        },
+      };
+
+      pushPage(next);
+    },
+    [onChangePage, pushPage],
+  );
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1273,6 +1371,7 @@ export default function NavigationProvider({
       value={{
         page: currentPage,
         prevPage,
+        prev2Page,
         setDefaultPage,
         onChangePage: handleChangePage,
         onClickCategory: handleClickCategory,
@@ -1289,9 +1388,11 @@ export default function NavigationProvider({
         goToCommunityProfilePage,
         goToViewStoryPage,
         goToSelectPostTargetPage,
+        goToSelectClipPostTargetPage,
         goToStoryTargetSelectionPage,
         goToSelectPollPostTargetPage,
         goToStoryCreationPage,
+        goToDraftClipPage,
         goToDraftStoryPage,
         goToPostComposerPage,
         goToSocialHomePage,
@@ -1319,6 +1420,7 @@ export default function NavigationProvider({
         onClickStory: handleClickStory,
         goToNotificationTrayPage,
         goToPendingRequestPage,
+        goToClipFeedPage,
       }}
     >
       <NavigationContextV3.Provider

@@ -77,6 +77,8 @@ export {
   CommunityMembershipPage as AmityCommunityMembershipPage,
   LiveStreamPlayerPage as AmityLiveStreamPlayerPage,
   LivestreamTerminatedPage as AmityLivestreamTerminatedPage,
+  DraftClipPage as AmityDraftClipPage,
+  ClipFeedPage as AmityClipFeedPage,
 } from '~/v4/social/pages';
 
 export {

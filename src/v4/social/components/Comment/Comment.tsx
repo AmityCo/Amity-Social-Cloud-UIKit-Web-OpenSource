@@ -139,6 +139,7 @@ export const Comment = ({
   };
 
   const handleDeleteComment = () => {
+    toggleBottomSheet();
     if (!online) {
       notification.info({
         content: 'Oops, something went wrong',

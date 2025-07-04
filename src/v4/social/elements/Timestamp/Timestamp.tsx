@@ -3,12 +3,14 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './Timestamp.module.css';
 import dayjs from 'dayjs';
 import { Typography } from '~/v4/core/components';
+import clsx from 'clsx';
 
 interface TimestampProps {
   pageId?: string;
   componentId?: string;
   timestamp: Date | string;
   elementId?: string;
+  className?: string;
 }
 
 function formatTimestamp(input: Date | string): string {
@@ -37,6 +39,7 @@ export function Timestamp({
   componentId = '*',
   elementId: $elementId,
   timestamp,
+  className,
 }: TimestampProps) {
   const elementId = $elementId ? $elementId : 'timestamp';
   const { accessibilityId, isExcluded, themeStyles } = useAmityElement({
@@ -49,7 +52,7 @@ export function Timestamp({
 
   return (
     <Typography.Caption
-      className={styles.timestamp}
+      className={clsx(styles.timestamp, className)}
       style={themeStyles}
       data-testid={accessibilityId}
     >

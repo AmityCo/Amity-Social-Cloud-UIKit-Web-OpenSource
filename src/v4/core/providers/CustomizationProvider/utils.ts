@@ -316,7 +316,7 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/my_communities/community_avatar': {},
     'social_home_page/my_communities/community_display_name': {},
     'social_home_page/my_communities/community_private_badge': {
-      icon: 'lockIcon',
+      image: 'lockIcon',
     },
     'social_home_page/my_communities/community_official_badge': {
       icon: 'officalBadgeIcon',
@@ -333,6 +333,13 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_home_page/post_composer/story_button': {
       icon: 'ImageIcon',
+    },
+    'social_home_page/create_post_menu/create_clip_button': {
+      text: 'Clip',
+      image: 'value',
+    },
+    'social_home_page/*/clipsfeed_button': {
+      text: 'Clips',
     },
     'global_search_page/*/*': {},
     'post_detail_page/*/back_button': {
@@ -468,7 +475,7 @@ export const defaultConfig: DefaultConfig = {
     'social_global_search_page/community_search_result/community_avatar': {},
     'social_global_search_page/community_search_result/community_display_name': {},
     'social_global_search_page/community_search_result/community_private_badge': {
-      icon: 'lockIcon',
+      image: 'lockIcon',
     },
     'social_global_search_page/community_search_result/community_official_badge': {
       icon: 'officialBadgeIcon',
@@ -481,7 +488,7 @@ export const defaultConfig: DefaultConfig = {
     'my_communities_search_page/*/community_avatar': {},
     'my_communities_search_page/*/community_display_name': {},
     'my_communities_search_page/*/community_private_badge': {
-      icon: 'lockIcon',
+      image: 'lockIcon',
     },
     'my_communities_search_page/*/community_official_badge': {
       icon: 'officialBadgeIcon',
@@ -553,7 +560,19 @@ export const defaultConfig: DefaultConfig = {
     'community_profile_page/*/create_poll_button': {
       text: 'Poll',
     },
-
+    'community_profile_page/*/create_clip_button': {
+      text: 'Clip',
+    },
+    'community_profile_page/community_video_feed/videos_button': {
+      text: 'Videos',
+    },
+    'community_profile_page/community_video_feed/clips_button': {
+      text: 'Clips',
+    },
+    'community_profile_page/community_video_feed/empty_clip_feed': {
+      text: 'No clips yet',
+      image: 'emptyClipIcon',
+    },
     'pending_posts_page/*/*': {},
     'pending_posts_page/*/back_button': {
       image: 'value',
@@ -739,6 +758,18 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/user_video_feed/blocked_user_video_feed_info': {
       text: 'Unblock to see their posts.',
     },
+
+    'user_profile_page/user_video_feed/videos_button': {
+      text: 'Videos',
+    },
+    'user_profile_page/user_video_feed/clips_button': {
+      text: 'Clips',
+    },
+    'user_profile_page/user_video_feed/empty_clip_feed': {
+      text: 'No clips yet',
+      image: 'emptyClipIcon',
+    },
+
     'edit_user_profile_page/*/*': {},
     'edit_user_profile_page/*/back_button': {
       image: 'ArrowLeft',
@@ -1065,6 +1096,50 @@ export const defaultConfig: DefaultConfig = {
     },
     'pending_request_page/join_request_content/join_decline_button': {
       text: 'Decline',
+    },
+
+    'draft_clip_page/*/back_button': {
+      image: 'value',
+    },
+    'draft_clip_page/*/mute_button': {
+      image: 'value',
+    },
+    'draft_clip_page/*/aspect_ratio_button': {
+      image: 'value',
+    },
+    'draft_clip_page/*/next_button': {
+      image: 'value',
+    },
+    'clip_feed_page/*/*': {
+      theme: {},
+    },
+    'clip_feed_page/*/back_button': {
+      image: 'value',
+    },
+    'clip_feed_page/*/title': {
+      text: 'value',
+    },
+    'clip_feed_page/*/create_new_clip_button': {
+      image: 'value',
+    },
+    'clip_feed_page/*/reaction_button': {
+      image: 'value',
+    },
+    'clip_feed_page/*/comment_button': {
+      image: 'value',
+    },
+    'clip_feed_page/*/mute_button': {
+      image: 'value',
+    },
+    'clip_feed_page/*/option_button': {
+      image: 'value',
+    },
+    'clip_feed_page/*/community_display_name': {},
+    'clip_feed_page/*/community_private_badge': {
+      image: 'lockIcon',
+    },
+    'clip_feed_page/*/community_official_badge': {
+      image: 'officialBadgeIcon',
     },
   },
 };

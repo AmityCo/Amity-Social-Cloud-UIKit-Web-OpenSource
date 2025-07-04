@@ -14,7 +14,7 @@ import {
   $isSerializedAutoLinkNode,
 } from '~/v4/social/internal-components/Lexical/utils';
 import { Typography } from '~/v4/core/components';
-import { Button } from '~/v4/core/natives/Button/Button';
+import { Button } from '~/v4/core/components/AriaButton';
 import styles from './TextWithMention.module.css';
 
 type TextWithMentionProps = {
@@ -25,6 +25,11 @@ type TextWithMentionProps = {
   data: { text: string };
   mentionees: Mentionees;
   metadata?: { mentioned?: Mentioned[] };
+  onClickSeeMoreButton?: () => void;
+  seeMoreClassName?: string;
+  textClassName?: string;
+  linkClassName?: string;
+  mentionClassName?: string;
 };
 
 export const TextWithMention = ({
@@ -35,6 +40,11 @@ export const TextWithMention = ({
   maxLines = 8,
   isBold = false,
   componentId = '*',
+  seeMoreClassName,
+  onClickSeeMoreButton,
+  textClassName,
+  linkClassName,
+  mentionClassName,
 }: TextWithMentionProps) => {
   const { goToUserProfilePage } = useNavigation();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -49,14 +59,14 @@ export const TextWithMention = ({
   const convertSerializedToText = (child: SerializedLexicalNode, childIndex: number) => {
     if ($isSerializedMentionNode<MentionData>(child)) {
       return (
-        <div
+        <span
           key={uuidv4()}
           data-testid={`${pageId}/${componentId}/mention`}
-          className={clsx(styles.textWithMention__mention)}
+          className={clsx(styles.textWithMention__mention, mentionClassName)}
           onClick={() => goToUserProfilePage(child.data.userId)}
         >
           {child.text}
-        </div>
+        </span>
       );
     }
 
@@ -73,7 +83,7 @@ export const TextWithMention = ({
           onPointerUp={(e) => e.stopPropagation()}
           onPointerDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
-          className={clsx(styles.textWithMention__link)}
+          className={clsx(styles.textWithMention__link, linkClassName)}
           data-testid={`${pageId}/${componentId}/post_link`}
         >
           {$isSerializedTextNode(child.children[0]) ? child.children[0]?.text : child.url}
@@ -90,10 +100,10 @@ export const TextWithMention = ({
 
   const renderText = (paragraph: SerializedParagraphNode[]) => {
     return paragraph.map((p, index) => (
-      <span key={index}>
+      <React.Fragment key={index}>
         {p.children.map((child, childIndex) => convertSerializedToText(child, childIndex))}
         <br />
-      </span>
+      </React.Fragment>
     ));
   };
 
@@ -108,15 +118,18 @@ export const TextWithMention = ({
             <>
               ...{' '}
               <Button
-                className={styles.textWithMention__seeMore}
-                onPress={() => setIsExpanded(true)}
+                variant="text"
+                className={clsx(styles.textWithMention__seeMore, seeMoreClassName)}
+                onPress={() =>
+                  onClickSeeMoreButton ? onClickSeeMoreButton() : setIsExpanded(true)
+                }
               >
-                See more
+                <Typography.BodyBold> See more</Typography.BodyBold>
               </Button>
             </>
           }
         >
-          <div>{renderText(editorState.root.children)}</div>
+          <div className={clsx(textClassName)}>{renderText(editorState.root.children)}</div>
         </Truncate>
       )}
     </Component>

@@ -6,7 +6,15 @@ import { ClearButton } from '~/v4/social/elements/ClearButton/ClearButton';
 import styles from './SingleVideoViewer.module.css';
 
 export const VideoPlayer = memo(
-  ({ fileId, thumbnailFileId }: { fileId?: string; thumbnailFileId: string }) => {
+  ({
+    fileId,
+    thumbnailFileId,
+    isMuted = false,
+  }: {
+    fileId?: string;
+    thumbnailFileId: string;
+    isMuted?: boolean;
+  }) => {
     const file: Amity.File<'video'> | undefined = useFile<Amity.File<'video'>>(fileId);
     const posterUrl = useFile(thumbnailFileId);
 
@@ -59,6 +67,7 @@ export const VideoPlayer = memo(
         className={styles.fullImage}
         ref={videoRef}
         poster={posterUrl?.fileUrl}
+        muted={isMuted}
       >
         <source src={url} type="video/mp4" />
         <p>
@@ -77,6 +86,7 @@ interface SingleVideoViewerProps {
   fileId: string;
   thumbnailFileId: string;
   onClose(): void;
+  isMuted?: boolean;
 }
 
 export function SingleVideoViewer({
@@ -85,6 +95,7 @@ export function SingleVideoViewer({
   elementId = '*',
   fileId,
   thumbnailFileId,
+  isMuted = false,
   onClose,
 }: SingleVideoViewerProps) {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
@@ -93,7 +104,7 @@ export function SingleVideoViewer({
     <div style={themeStyles}>
       <div className={styles.modal} onClick={onClose}>
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          <VideoPlayer fileId={fileId} thumbnailFileId={thumbnailFileId} />
+          <VideoPlayer fileId={fileId} thumbnailFileId={thumbnailFileId} isMuted={isMuted} />
           <span className={styles.closeButton}>
             <ClearButton
               pageId={pageId}

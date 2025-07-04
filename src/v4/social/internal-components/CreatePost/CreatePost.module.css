@@ -36,6 +36,11 @@
   top: 4.8rem;
 }
 
+.createPost__formContent .createPost__placeholder[data-isclip='true'] {
+  left: 1rem;
+  top: 15.3rem;
+}
+
 .createPost__mentionContainer {
   display: none;
 }
@@ -155,6 +160,48 @@
   bottom: -0.9rem;
   margin-top: -1rem;
   padding: 0.75rem 1rem 2rem;
+}
+
+.createPost__clipPostThumbnaiContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.createPost__clipPostThumbnail {
+  width: 5rem;
+  height: 8.5rem;
+  border-radius: 0.25rem;
+  object-fit: cover;
+}
+
+.createPost__clipPostThumbnail[data-aspect-fill='false'] {
+  object-fit: contain;
+  background-color: var(--asc-color-black);
+}
+
+.createPost__clipPostPlayIconWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: rgb(0 0 0 / 30%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.createPost__clipPostPlayIcon {
+  width: 0.85rem;
+  height: 0.85rem;
 }
 
 @media (width >= 48em) {

@@ -80,6 +80,7 @@ const PostReplyComment = ({
   };
 
   const handleDeleteComment = () => {
+    toggleBottomSheet();
     confirm({
       pageId,
       componentId,

@@ -1,0 +1,11 @@
+.emptyClipFeed__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: var(--asc-color-base-shade4);
+}
+
+@media screen and (width >= 48em) {
+  .emptyClipFeed {
+    border: none !important;
+  }
+}

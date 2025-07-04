@@ -248,6 +248,7 @@ export const PendingPostContent = ({
               post={post}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
+              onClipClick={() => {}}
             />
           )}
         </div>

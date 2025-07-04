@@ -30,8 +30,11 @@ interface ReactionButtonProps {
   componentId?: string;
   myReaction?: string | null;
   reactionsCount?: number;
+  buttonClassName?: string;
+  reactionsCountClassName?: string;
   defaultIconClassName?: string;
   imgIconClassName?: string;
+  reactButtonClassName?: string;
   onReactionClick: (reactionKey: string) => void;
 }
 
@@ -42,8 +45,11 @@ export function ReactionButton({
   componentId = '*',
   myReaction,
   reactionsCount,
+  buttonClassName,
+  reactionsCountClassName,
   defaultIconClassName,
   imgIconClassName,
+  reactButtonClassName,
   onReactionClick,
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
@@ -61,7 +67,7 @@ export function ReactionButton({
   const renderMyReaction = () => {
     switch (myReaction) {
       case 'like':
-        return <Like className={styles.reactButton__icon} />;
+        return <Like className={clsx(styles.reactButton__icon, reactButtonClassName)} />;
       case 'love':
         return <Love className={styles.reactButton__icon} />;
       case 'fire':
@@ -79,7 +85,7 @@ export function ReactionButton({
     <Button
       style={themeStyles}
       data-testid={accessibilityId}
-      className={styles.reactButton}
+      className={clsx(styles.reactButton, buttonClassName)}
       onPress={() => {
         onReactionClick('like');
       }}
@@ -100,7 +106,7 @@ export function ReactionButton({
         />
       )}
       <Typography.BodyBold
-        className={styles.reactButton__reactionsText}
+        className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
         data-has-my-reaction={hasMyReaction}
       >
         {typeof reactionsCount === 'number' ? millify(reactionsCount) : myReaction || config.text}

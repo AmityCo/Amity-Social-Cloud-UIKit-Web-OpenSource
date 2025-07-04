@@ -119,6 +119,9 @@ importers:
       stylis:
         specifier: ^4.3.1
         version: 4.3.2
+      swiper:
+        specifier: ^11.2.8
+        version: 11.2.8
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
@@ -130,8 +133,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.6.0
-        version: 7.6.0
+        specifier: 7.6.1-fbc0a75.0
+        version: 7.6.1-fbc0a75.0
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -321,8 +324,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.6.0':
-    resolution: {integrity: sha512-fmfdZWYaB4s2fe3Wxd1ZR0T7t+omT29wHvJFU4K5fcLVfpN0ALTQI1Sl/csFkwuOVCgfJNN6qgUeBfSEPC1sIw==}
+  '@amityco/ts-sdk@7.6.1-fbc0a75.0':
+    resolution: {integrity: sha512-Rb69k0hSPkNGHxBNFEr75WdBW9hMpIkCsuAqXpq0XacrH2BJognrDR0b7WajBrEp6mMhWunhtwWEe0ltM6jOYw==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -7261,6 +7264,10 @@ packages:
     peerDependencies:
       webpack: ^4.0.0 || ^5.0.0
 
+  swiper@11.2.8:
+    resolution: {integrity: sha512-S5FVf6zWynPWooi7pJ7lZhSUe2snTzqLuUzbd5h5PHUOhzgvW0bLKBd2wv0ixn6/5o9vwc/IkQT74CRcLJQzeg==}
+    engines: {node: '>= 4.7.0'}
+
   synchronous-promise@2.0.17:
     resolution: {integrity: sha512-AsS729u2RHUfEra9xJrE39peJcc2stq2+poBXX8bcM08Y6g9j/i/PUzwNQqkaJde7Ntg1TO7bSREbR5sdosQ+g==}
 
@@ -8007,7 +8014,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.6.0':
+  '@amityco/ts-sdk@7.6.1-fbc0a75.0':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.10.0(debug@4.4.1)
@@ -16659,6 +16666,8 @@ snapshots:
       file-loader: 6.2.0(webpack@5.92.0(esbuild@0.19.12))
       loader-utils: 2.0.4
       webpack: 5.92.0(esbuild@0.19.12)
+
+  swiper@11.2.8: {}
 
   synchronous-promise@2.0.17: {}
 

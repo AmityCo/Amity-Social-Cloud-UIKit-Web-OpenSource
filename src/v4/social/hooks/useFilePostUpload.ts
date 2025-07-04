@@ -15,6 +15,7 @@ export type FileItem<T extends Amity.FileType = any> = {
 
 const MAX_PERCENT = 100;
 const MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024; // 1GB in bytes
+const MAX_2GB_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2GB in bytes
 
 export const getUpdatedTime = (file: File | Amity.File) => {
   if (!isAmityFile(file)) return file.lastModified;
@@ -50,17 +51,21 @@ export function useFilePostUpload(pageId?: string) {
     }
   };
 
-  const uploadFile = async (fileList: File[]) => {
+  const uploadFile = async (fileList: File[], fileType?: string) => {
     if (!fileList.length) return;
 
-    const oversizedFiles = fileList.filter((file) => file.size > MAX_FILE_SIZE);
+    const oversizedFiles =
+      fileType === FileType.CLIP
+        ? fileList.filter((file) => file.size > MAX_2GB_FILE_SIZE)
+        : fileList.filter((file) => file.size > MAX_FILE_SIZE);
+
     const validFiles = fileList.filter((file) => file.size <= MAX_FILE_SIZE);
 
     const failedFiles = oversizedFiles.map<FileItem>((file) => ({
       file,
       id: uuid(),
       status: 'failed',
-      errorText: 'File size exceeds 1GB.',
+      errorText: 'File size exceed the limit',
     }));
 
     if (failedFiles.length > 0) {
@@ -78,8 +83,12 @@ export function useFilePostUpload(pageId?: string) {
           status: 'selected',
         };
 
-        if (file.type.includes(FileType.VIDEO)) {
+        if (file.type.includes(FileType.VIDEO) || file.type.includes(FileType.CLIP)) {
           const thumbnail = await generateThumbnailVideo(file);
+          setVideoThumbnail((prev) => [
+            ...prev,
+            { file, videoUrl: URL.createObjectURL(file), thumbnail },
+          ]);
           if (thumbnail) {
             fileItem.thumbnailVideo = thumbnail;
           }
@@ -89,10 +98,10 @@ export function useFilePostUpload(pageId?: string) {
       }),
     );
 
-    initializeUpload(processedFiles);
+    initializeUpload(processedFiles, fileType);
 
     try {
-      await Promise.allSettled(processedFiles.map(uploadSingleFile));
+      await Promise.allSettled(processedFiles.map((file) => uploadSingleFile(file, fileType)));
       setProgress({});
     } catch (error) {
       console.error('error >>', error);
@@ -101,17 +110,17 @@ export function useFilePostUpload(pageId?: string) {
     }
   };
 
-  const initializeUpload = (fileList: FileItem[]) => {
+  const initializeUpload = (fileList: FileItem[], fileType?: string) => {
     setIsLoading(true);
     setFiles((files) => [...files, ...fileList]);
     setProgress(fileList.reduce((acc, item) => ({ ...acc, [item.id]: 0 }), {}));
   };
 
-  const uploadSingleFile = async (item: FileItem) => {
+  const uploadSingleFile = async (item: FileItem, fileType?: string) => {
     const formData = new FormData();
     formData.append('files', item.file as File);
 
-    const uploadFunction = getUploadFunction(item.file.type);
+    const uploadFunction = getUploadFunction(fileType ?? item.file.type);
     try {
       const response = await uploadFunction(formData, (currentPercent: number) => {
         onProgress(item, currentPercent);
@@ -150,6 +159,10 @@ export function useFilePostUpload(pageId?: string) {
     }
     if (fileType.includes(FileType.IMAGE)) {
       return FileRepository.uploadImage;
+    }
+    if (fileType.includes(FileType.CLIP)) {
+      return (formData: FormData, onProgress: (percent: number) => void) =>
+        FileRepository.uploadClip(formData, undefined, onProgress);
     }
     return FileRepository.uploadFile;
   };

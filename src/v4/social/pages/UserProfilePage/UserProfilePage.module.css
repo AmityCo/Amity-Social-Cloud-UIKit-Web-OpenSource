@@ -88,6 +88,7 @@
 
   .userProfilePage__feedTabs {
     position: static;
+    border-bottom: none;
   }
 
   .userProfilePage__floatingButton {

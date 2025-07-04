@@ -9,8 +9,6 @@ import AngleRight from '~/v4/icons/AngleRight';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { useMutation } from '@tanstack/react-query';
-import { ReactionRepository } from '@amityco/ts-sdk';
 import { PollContent } from './PollContent/PollContent';
 import Crying from './Crying';
 import Happy from './Happy';
@@ -20,6 +18,7 @@ import Like from './Like';
 import { TextContent } from './TextContent';
 import { ImageContent } from './ImageContent';
 import { VideoContent } from './VideoContent';
+import { ClipContent } from './ClipContent';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
@@ -45,6 +44,7 @@ import { LiveStreamContent } from './LiveStreamContent';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import styles from './PostContent.module.css';
 import { isTextPost } from '~/v4/social/utils/postTypeChecker';
+import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -161,6 +161,7 @@ type ChildrenPostContentProps = {
   disabledContent?: boolean;
   onImageClick: (imageIndex: number) => void;
   onVideoClick: (videoIndex: number) => void;
+  onClipClick: (postId: string) => void;
   goToPostDetail?: () => void;
 };
 
@@ -170,6 +171,7 @@ export const ChildrenPostContent = ({
   componentId,
   onImageClick,
   onVideoClick,
+  onClipClick,
   goToPostDetail,
   disabledContent = false,
 }: ChildrenPostContentProps) => {
@@ -192,6 +194,12 @@ export const ChildrenPostContent = ({
         componentId={componentId}
         post={post as Amity.Post<'video'>}
         onVideoClick={onVideoClick}
+      />
+      <ClipContent
+        pageId={pageId}
+        componentId={componentId}
+        post={post as Amity.Post<'clip'>}
+        onClipClick={onClipClick}
       />
       <LiveStreamContent post={post} goToPostDetail={goToPostDetail} />
     </>
@@ -236,16 +244,16 @@ export const PostContent = ({
   const { confirm } = useConfirmContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { moderators } = useCommunityModeratorsCollection({ communityId: post?.targetId });
+  const { mutateAddReactionAsync, mutateRemoveReactionAsync, reactionByMe, reactionsCount } =
+    usePostReaction({ post });
+
   const isModerator =
     (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
-  const [shouldSubscribe, setShouldSubscribe] = useState(false);
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
 
-  const [reactionByMe, setReactionByMe] = useState<string | null>(null);
-  const [reactionsCount, setReactionsCount] = useState<number>(0);
-  const { page } = useNavigation();
+  const { page, goToClipFeedPage } = useNavigation();
 
   const elementRef = useRef<HTMLDivElement>(null);
 
@@ -259,45 +267,6 @@ export const PostContent = ({
   const { isCommunityModerator } = usePostedUserInformation({
     post,
     community: targetCommunity,
-  });
-
-  useEffect(() => {
-    if (post == null) return;
-    setReactionByMe(post.myReactions?.[0] || null);
-  }, [post?.myReactions]);
-
-  useEffect(() => {
-    if (post == null) return;
-    setReactionsCount(post?.reactionsCount || 0);
-  }, [post?.reactionsCount]);
-
-  const { mutateAsync: mutateAddReactionAsync } = useMutation({
-    mutationFn: async (reactionKey: string) => {
-      if (reactionByMe && reactionByMe !== reactionKey) {
-        try {
-          await ReactionRepository.removeReaction('post', post?.postId, reactionByMe);
-        } catch {
-          console.log();
-        }
-      }
-      return ReactionRepository.addReaction('post', post?.postId, reactionKey);
-    },
-    onMutate: (reactionKey) => {
-      setShouldSubscribe(true);
-      setReactionsCount(reactionsCount + 1);
-      setReactionByMe(reactionKey);
-    },
-  });
-
-  const { mutateAsync: mutateRemoveReactionAsync } = useMutation({
-    mutationFn: async (reactionKey: string) => {
-      return ReactionRepository.removeReaction('post', post?.postId, reactionKey);
-    },
-    onMutate: () => {
-      setShouldSubscribe(true);
-      setReactionsCount(Math.max(0, reactionsCount - 1));
-      setReactionByMe(null);
-    },
   });
 
   const handleReactionClick = (reactionKey: string) => {
@@ -503,6 +472,12 @@ export const PostContent = ({
               post={post}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
+              onClipClick={() => {
+                goToClipFeedPage?.({
+                  posts: [],
+                  currentPostId: post.children[0],
+                });
+              }}
               goToPostDetail={onClick}
               disabledContent={isNotJoinedCommunity || disabledContent}
             />
@@ -589,6 +564,7 @@ export const PostContent = ({
                   commentsCount={
                     style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
                   }
+                  buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
                   defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
                   imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
                   onPress={() => onClick?.()}

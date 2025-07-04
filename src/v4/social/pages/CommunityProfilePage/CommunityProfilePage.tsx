@@ -32,6 +32,9 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { useGetInvitation } from '~/v4/social/hooks';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
+import { useClipContext } from '~/v4/social/providers/ClipProvider';
 
 interface CommunityProfileProps {
   communityId: string;
@@ -45,6 +48,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { confirm } = useConfirmContext();
   const { currentUserId } = useSDK();
   const { file, setFile } = useStoryContext();
+  const { file: clipFile, setFile: setClipFile } = useClipContext();
   const [isSticky, setIsSticky] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -65,6 +69,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { onBack } = useNavigation();
   const { acceptedInvitation } = useLayoutContext();
+  const { isDesktop } = useResponsive();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -87,6 +92,11 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
 
   const handleFileSelect = (files: FileList | null) => {
     if (files && files.length > 0) setFile(files[0]);
+    removeDrawerData();
+  };
+
+  const handleClipFileSelect = (files: FileList | null) => {
+    if (files && files.length > 0) setClipFile(files[0]);
     removeDrawerData();
   };
 
@@ -157,6 +167,16 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       if (container) container.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    if (clipFile) {
+      AmityCommunityProfilePageBehavior?.goToDraftClipPage?.({
+        targetId: communityId,
+        targetType: 'community',
+        community: community as Amity.Community,
+      });
+    }
+  }, [clipFile]);
 
   const isShowFailed = (!isLoading && community?.isDeleted) || error;
 
@@ -246,11 +266,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                         removeDrawerData();
                       }}
                     />
-                    {hasStoryPermission && (
-                      <FileTrigger onSelect={handleFileSelect}>
-                        <CreateStoryButton pageId={pageId} />
-                      </FileTrigger>
-                    )}
                     <CreatePollButton
                       pageId={pageId}
                       componentId={communityId}
@@ -262,6 +277,16 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                         removeDrawerData();
                       }}
                     />
+                    {hasStoryPermission && (
+                      <FileTrigger onSelect={handleFileSelect}>
+                        <CreateStoryButton pageId={pageId} />
+                      </FileTrigger>
+                    )}
+                    {!isDesktop && (
+                      <FileTrigger onSelect={handleClipFileSelect} acceptedFileTypes={['video/*']}>
+                        <CreateClipButton pageId={pageId} componentId={communityId} />
+                      </FileTrigger>
+                    )}
                   </>
                 ),
               })

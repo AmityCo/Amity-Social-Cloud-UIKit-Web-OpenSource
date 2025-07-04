@@ -100,6 +100,14 @@
   height: 1.25rem;
 }
 
+.postContent__reactionBar__leftPane__commentButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 0.25rem;
+}
+
 .postTitle {
   display: grid;
   align-items: center;

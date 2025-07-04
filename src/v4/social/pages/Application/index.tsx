@@ -10,10 +10,12 @@ import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPa
 import styles from './Application.module.css';
 import {
   AmityDraftStoryPage,
+  ClipFeedPage,
   CommunityAddCategoryPage,
   CommunityMembershipPage,
   CommunityPostPermissionPage,
   CommunityStorySettingPage,
+  DraftClipPage,
   NotificationTrayPage,
   PendingRequestPage,
 } from '..';
@@ -74,6 +76,7 @@ const Application = () => {
             category={page.context?.category}
             commentId={page.context?.commentId}
             parentId={page.context?.parentId}
+            posts={page.context?.posts}
           />
         )}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
@@ -99,9 +102,12 @@ const Application = () => {
             targetType={page.context?.targetType}
             community={page.context?.community}
             post={page.context?.post}
+            isClipPost={page.context?.isClipPost}
           />
         )}
-        {page.type === PageTypes.SelectPostTargetPage && <SelectPostTargetPage />}
+        {page.type === PageTypes.SelectPostTargetPage && (
+          <SelectPostTargetPage isClipPost={page.context?.isClipPost} />
+        )}
         {page.type === PageTypes.MyCommunitiesSearchPage && <MyCommunitiesSearchPage />}
         {page.type === PageTypes.AllCategoriesPage && <AllCategoriesPage />}
         {page.type === PageTypes.CommunitiesByCategoryPage && (
@@ -185,6 +191,16 @@ const Application = () => {
             targetId={page.context.targetId}
             targetType={page.context.targetType}
           />
+        )}
+        {page.type === PageTypes.DraftClipPage && (
+          <DraftClipPage
+            targetId={page.context.targetId}
+            targetType={page.context.targetType}
+            community={page.context.community}
+          />
+        )}
+        {page.type === PageTypes.ClipFeedPage && (
+          <ClipFeedPage posts={page.context.posts} currentPostId={page.context.currentPostId} />
         )}
         {/*End of V3 */}
       </MainLayout>
