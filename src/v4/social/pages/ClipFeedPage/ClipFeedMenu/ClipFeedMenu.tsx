@@ -10,6 +10,7 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentList } from '~/v4/social/components/CommentList';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 type ClipFeedMenuProps = {
   pageId?: string;
@@ -42,6 +43,7 @@ export const ClipFeedMenu = ({
 
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const notification = useNotifications();
 
   // Get community data if the post is from a community
   const { community } = useCommunity({
@@ -50,6 +52,11 @@ export const ClipFeedMenu = ({
   });
 
   const handleReactionClick = async (reactionKey: string) => {
+    if (post?.targetType === 'community' && !community?.isJoined) {
+      return notification.info({
+        content: 'Join community to interact with this clip.',
+      });
+    }
     if (reactionByMe === reactionKey) {
       await mutateRemoveReactionAsync(reactionKey);
     } else {
