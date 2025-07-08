@@ -76,6 +76,7 @@ const PostReplyComment = ({
     comment.commentId && CommentRepository.deleteComment(comment.commentId);
 
   const handleEditComment = () => {
+    toggleBottomSheet();
     setIsEditing(true);
   };
 

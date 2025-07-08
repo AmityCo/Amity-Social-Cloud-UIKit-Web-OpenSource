@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import styles from './ClipFeedMenu.module.css';
 import { ReactionButton } from '~/v4/social/elements';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
@@ -8,9 +8,8 @@ import { MenuButton } from '~/v4/social/elements/MenuButton';
 import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
-import { CommentList } from '~/v4/social/components/CommentList';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { CommentDrawer } from './CommentDrawer';
 
 type ClipFeedMenuProps = {
   pageId?: string;
@@ -41,9 +40,8 @@ export const ClipFeedMenu = ({
       post: post as Amity.Post<'video' | 'clip'>,
     });
 
-  const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
-  const { setDrawerData, removeDrawerData } = useDrawer();
   const notification = useNotifications();
+  const { setDrawerData } = useDrawer();
 
   // Get community data if the post is from a community
   const { community } = useCommunity({
@@ -64,42 +62,10 @@ export const ClipFeedMenu = ({
     }
   };
 
-  const handleReplyClick = useCallback(
-    (comment: Amity.Comment) =>
-      setReplyComment((prevComment) =>
-        prevComment?.commentId === comment?.commentId ? undefined : comment,
-      ),
-    [],
-  );
-
   const handleCommentClick = () => {
     if (post) {
       setDrawerData({
-        content: (
-          <div
-            data-no-comment={post.commentsCount === 0}
-            className={styles.clipFeedMenu__commentContainer}
-          >
-            <CommentList
-              pageId={pageId}
-              referenceId={post.postId}
-              referenceType="post"
-              onClickReply={handleReplyClick}
-              community={community}
-              commentCount={post.commentsCount}
-              commentListClassName={styles.clipFeedMenu__commentListContainer}
-            />
-            <CommentComposer
-              pageId={pageId}
-              referenceId={post.postId}
-              referenceType={'post'}
-              replyTo={replyComment}
-              onCancelReply={() => setReplyComment(undefined)}
-              community={community}
-              commentComposerClassName={styles.clipFeedMenu__commentComposer}
-            />
-          </div>
-        ),
+        content: <CommentDrawer pageId={pageId} post={post} community={community} />,
       });
     }
   };
