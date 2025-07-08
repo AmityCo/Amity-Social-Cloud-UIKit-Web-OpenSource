@@ -473,10 +473,12 @@ export const PostContent = ({
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
               onClipClick={() => {
-                goToClipFeedPage?.({
-                  posts: [],
-                  currentPostId: post.children[0],
-                });
+                isDesktop
+                  ? openVideoViewer(0)
+                  : goToClipFeedPage?.({
+                      posts: [],
+                      currentPostId: post.children[0],
+                    });
               }}
               goToPostDetail={onClick}
               disabledContent={isNotJoinedCommunity || disabledContent}

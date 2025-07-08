@@ -34,8 +34,6 @@ export const VideoFullScreen = ({
   const [isLoading, setIsLoading] = useState(true);
   const fileUrl = getFileUrl(post as Amity.Post<'clip' | 'video'>);
 
-  
-
   useEffect(() => {
     const video = videoRefs.current[post.postId];
     if (video) {
