@@ -4,12 +4,10 @@ import { useImage } from '~/v4/core/hooks/useImage';
 import useFile from '~/v4/core/hooks/useFile';
 import { SingleVideoViewer } from '~/v4/social/internal-components/SingleVideoViewer';
 import { formatDuration } from '~/v4/social/utils/formatDuration';
-import VideoControl from '~/v4/icons/VideoControl';
-import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { CaptionSmall } from '~/v4/core/components/Typography/Typography.stories';
+import { Button } from '~/v4/core/components/AriaButton';
 
 const ClipItem = ({
   videoFileId,
@@ -19,7 +17,7 @@ const ClipItem = ({
   displayMode = 'fill',
 }: {
   videoFileId: string;
-  thumbnailFileId: string;
+  thumbnailFileId?: string;
   postIndex: number;
   onClickVideoItem: (postIndex: number) => void;
   displayMode?: 'fill' | 'fit';
@@ -30,10 +28,16 @@ const ClipItem = ({
 
   const file = useFile<'clip'>(videoFileId);
 
-  if (!image || !file) return <div className={styles.clipGallery__skeleton__itemContainer} />;
+  if (!image || !file)
+    return (
+      <Button variant="text" onPress={() => onClickVideoItem(postIndex)}>
+        <div className={styles.clipGallery__skeleton__itemContainer} />
+      </Button>
+    );
 
   return isBrokenImg ? (
     <Button
+      variant="text"
       className={styles.clipGallery__itemContainer}
       onPress={() => onClickVideoItem(postIndex)}
     >
@@ -41,6 +45,7 @@ const ClipItem = ({
     </Button>
   ) : (
     <Button
+      variant="text"
       className={styles.clipGallery__itemContainer}
       onPress={() => onClickVideoItem(postIndex)}
     >
@@ -94,7 +99,7 @@ export const ClipGallery: React.FC<ClipGalleryProps> = ({
         <ClipItem
           key={post?.data?.fileId}
           videoFileId={post?.data?.fileId as string}
-          thumbnailFileId={post.data?.thumbnailFileId as string}
+          thumbnailFileId={post.data?.thumbnailFileId || undefined}
           postIndex={index}
           onClickVideoItem={onClickVideoItem}
           displayMode={post.data?.displayMode || 'fill'}

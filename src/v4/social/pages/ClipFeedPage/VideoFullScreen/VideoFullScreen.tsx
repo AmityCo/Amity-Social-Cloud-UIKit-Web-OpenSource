@@ -17,6 +17,7 @@ type VideoFullScreenProps = {
   isDragging: boolean;
   onDragging: (val: boolean) => void;
   isLocalMuted: boolean;
+  onClipFailed?: (val: boolean) => void;
 };
 
 export const VideoFullScreen = ({
@@ -28,6 +29,7 @@ export const VideoFullScreen = ({
   onClickVideo,
   onNextVideo,
   isLocalMuted,
+  onClipFailed,
 }: VideoFullScreenProps) => {
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -94,7 +96,8 @@ export const VideoFullScreen = ({
     };
   }, [post.postId, videoRefs, isActive]);
 
-  if (!fileUrl)
+  if (!fileUrl) {
+    onClipFailed?.(true);
     return (
       <div className={styles.videoFullScreen__errorStateWrapper}>
         <IconComponent
@@ -115,6 +118,7 @@ export const VideoFullScreen = ({
         </Button>
       </div>
     );
+  }
 
   const isMuted = (post as Amity.Post<'clip'>)?.data?.isMuted || isLocalMuted;
 

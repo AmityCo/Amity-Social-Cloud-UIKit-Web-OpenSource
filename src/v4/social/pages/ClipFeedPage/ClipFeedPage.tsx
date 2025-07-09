@@ -27,7 +27,7 @@ type ClipFeedPageProps = {
 export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
   const pageId = 'clip_feed_page';
 
-  const { accessibilityId, themeStyles, config } = useAmityPage({
+  const { accessibilityId, themeStyles } = useAmityPage({
     pageId,
   });
   const { onBack } = useNavigation();
@@ -40,6 +40,7 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
   const swiperRef = useRef<SwiperCore | null>(null);
   const [isLocalMuted, setIsLocalMuted] = useState(false);
   const [isShowInteractionMenu, setIsShowInteractionMenu] = useState(true);
+  const [isClipFailed, setIsClipFailed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
   // for post content render with no posts
@@ -122,6 +123,8 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
     });
   };
 
+  const handleClipFailed = () => setIsClipFailed(true);
+
   // Preload next/prev videos
   useEffect(() => {
     const preloadVideo = (index: number) => {
@@ -199,6 +202,7 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
                   isDragging={isDragging}
                   onDragging={handleDragging}
                   isLocalMuted={isLocalMuted}
+                  onClipFailed={handleClipFailed}
                 />
                 <div className={styles.clipFeedPage__header}>
                   <BackButton
@@ -223,15 +227,18 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
                     <div />
                   )}
                 </div>
-                <ClipFeedMenu
-                  postId={post.parentPostId}
-                  childPost={post}
-                  isShowInteractionMenu={isShowInteractionMenu}
-                  isDragging={isDragging}
-                  handleMuteToggle={handleMuteToggle}
-                  isLocalMuted={isLocalMuted}
-                  onClickMenuButton={() => handleMenuClick(post.parentPostId)}
-                />
+                {!isClipFailed && (
+                  <ClipFeedMenu
+                    postId={post.parentPostId}
+                    childPost={post}
+                    isShowInteractionMenu={isShowInteractionMenu}
+                    isDragging={isDragging}
+                    handleMuteToggle={handleMuteToggle}
+                    isLocalMuted={isLocalMuted}
+                    onClickMenuButton={() => handleMenuClick(post.parentPostId)}
+                  />
+                )}
+
                 <ClipCaption
                   postId={post.parentPostId}
                   creator={post.creator}
