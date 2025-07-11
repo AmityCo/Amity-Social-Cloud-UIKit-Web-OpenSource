@@ -13,7 +13,7 @@ import { CreateNewClipButton } from '~/v4/social/elements/CreateNewClipButton';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { ClipFeedMenu } from './ClipFeedMenu/ClipFeedMenu';
 import { ClipCaption } from './ClipCaption/ClipCaption';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { useDrawer, useDrawerData } from '~/v4/core/providers/DrawerProvider';
 import { Button } from '~/v4/core/components/AriaButton';
 import { ViewPost } from '~/v4/icons/ViewPost';
 import { Typography } from '~/v4/core/components';
@@ -38,6 +38,7 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
   const { AmityClipFeedPageBehavior } = usePageBehavior();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { setActiveTab } = useLayoutContext();
+  const drawerData = useDrawerData();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRefs = useRef<Record<string, HTMLVideoElement>>({});
@@ -65,6 +66,29 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
       setIsShowInteractionMenu(false);
     }
   }, []);
+
+  // Pause/resume video based on drawer state
+  useEffect(() => {
+    const currentPost = posts?.[activeIndex] || (currentPostId && post ? post : null);
+    if (!currentPost) return;
+
+    const video = videoRefs.current[currentPost.postId];
+    if (!video) return;
+
+    if (drawerData) {
+      // Drawer is open, pause video
+      if (!video.paused) {
+        video.pause();
+      }
+    } else {
+      // Drawer is closed, resume video if it was playing
+      if (video.paused) {
+        video.play().catch((error) => {
+          console.warn('Failed to play video:', error);
+        });
+      }
+    }
+  }, [drawerData, activeIndex, posts, currentPostId, post]);
 
   // Set initial active index based on currentPostId
   useEffect(() => {
