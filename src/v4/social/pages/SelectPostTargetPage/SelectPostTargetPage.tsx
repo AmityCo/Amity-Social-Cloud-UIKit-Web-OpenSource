@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -19,10 +19,12 @@ import { Button } from '~/v4/core/natives/Button';
 import { canCreatePostCommunity } from '~/v4/social/utils';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { FileTrigger } from 'react-aria-components';
 import styles from './SelectPostTargetPage.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import { useClipContext } from '~/v4/social/providers/ClipProvider';
 
-export function SelectPostTargetPage() {
+export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: boolean }) {
   const pageId = 'select_post_target_page';
 
   const { onBack } = useNavigation();
@@ -37,6 +39,8 @@ export function SelectPostTargetPage() {
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
     queryParams: { limit: 20, membership: 'member' },
   });
+  const { file, setFile } = useClipContext();
+  const [selectedCommunity, setSelectedCommunity] = useState<null | { communityId: string }>(null);
 
   useIntersectionObserver({
     node: intersectionNode,
@@ -44,6 +48,25 @@ export function SelectPostTargetPage() {
       if (hasMore && !isLoading) loadMore();
     },
   });
+
+  useEffect(() => {
+    if (file) {
+      if (selectedCommunity) {
+        AmityPostTargetSelectionPage?.goToDraftClipPage?.({
+          targetId: selectedCommunity.communityId,
+          targetType: 'community',
+          community: communities.find(
+            (community) => community.communityId === selectedCommunity.communityId,
+          ),
+        });
+      } else {
+        AmityPostTargetSelectionPage?.goToDraftClipPage?.({
+          targetId: null,
+          targetType: 'user',
+        });
+      }
+    }
+  }, [file, selectedCommunity]);
 
   return (
     <div className={styles.selectPostTargetPage} style={themeStyles}>
@@ -57,52 +80,72 @@ export function SelectPostTargetPage() {
         <div />
       </div>
       <div className={styles.selectPostTargetPage__timelineContainer}>
-        <Button
-          className={styles.selectPostTargetPage__timeline}
-          onPress={() => {
-            isDesktop
-              ? openPopup({
-                  pageId,
-                  view: 'desktop',
-                  isDismissable: false,
-                  onClose: () => {
-                    confirm({
-                      type: 'confirm',
-                      onOk: closePopup,
-                      okText: 'Discard',
-                      cancelText: 'Keep editing',
-                      title: 'Discard this post?',
-                      pageId: 'post_composer_page',
-                      content: 'The post will be permanently discarded. It cannot be undone.',
-                    });
-                  },
-                  header: (
-                    <CommunityDisplayName
-                      community={undefined}
-                      pageId="post_composer_page"
-                      className={styles.selectPostTargetPage__displayName}
-                    />
-                  ),
-                  children: (
-                    <PostComposerPage
-                      targetId={null}
-                      targetType="user"
-                      mode={Mode.CREATE}
-                      community={undefined}
-                    />
-                  ),
-                })
-              : AmityPostTargetSelectionPage?.goToPostComposerPage?.({
-                  mode: Mode.CREATE,
-                  targetId: null,
-                  targetType: 'user',
-                  community: undefined,
-                });
-          }}
-        >
-          <MyTimelineAvatar pageId={pageId} userId={user?.userId} />
-          <MyTimelineText pageId={pageId} />
-        </Button>
+        {isClipPost ? (
+          <FileTrigger
+            acceptedFileTypes={['video/*']}
+            onSelect={(e) => {
+              if (e) {
+                const files = Array.from(e as FileList);
+                if (files.length > 0) {
+                  setSelectedCommunity(null);
+                  setFile(files[0]);
+                }
+              }
+            }}
+          >
+            <Button className={styles.selectPostTargetPage__timeline} key="timeline-button">
+              <MyTimelineAvatar pageId={pageId} userId={user?.userId} />
+              <MyTimelineText pageId={pageId} />
+            </Button>
+          </FileTrigger>
+        ) : (
+          <Button
+            className={styles.selectPostTargetPage__timeline}
+            onPress={() => {
+              isDesktop
+                ? openPopup({
+                    pageId,
+                    view: 'desktop',
+                    isDismissable: false,
+                    onClose: () => {
+                      confirm({
+                        type: 'confirm',
+                        onOk: closePopup,
+                        okText: 'Discard',
+                        cancelText: 'Keep editing',
+                        title: 'Discard this post?',
+                        pageId: 'post_composer_page',
+                        content: 'The post will be permanently discarded. It cannot be undone.',
+                      });
+                    },
+                    header: (
+                      <CommunityDisplayName
+                        community={undefined}
+                        pageId="post_composer_page"
+                        className={styles.selectPostTargetPage__displayName}
+                      />
+                    ),
+                    children: (
+                      <PostComposerPage
+                        targetId={null}
+                        targetType="user"
+                        mode={Mode.CREATE}
+                        community={undefined}
+                      />
+                    ),
+                  })
+                : AmityPostTargetSelectionPage?.goToPostComposerPage?.({
+                    mode: Mode.CREATE,
+                    targetId: null,
+                    targetType: 'user',
+                    community: undefined,
+                  });
+            }}
+          >
+            <MyTimelineAvatar pageId={pageId} userId={user?.userId} />
+            <MyTimelineText pageId={pageId} />
+          </Button>
+        )}
       </div>
       <div className={styles.selectPostTargetPage__line} />
       <div className={styles.selectPostTargetPage__myCommunities}>My Communities</div>
@@ -110,7 +153,32 @@ export function SelectPostTargetPage() {
         {communities
           .filter((community) => canCreatePostCommunity(client, community))
           .map((community) => {
-            return (
+            return isClipPost ? (
+              <FileTrigger
+                key={community.communityId}
+                acceptedFileTypes={['video/*']}
+                onSelect={(e) => {
+                  if (e) {
+                    const files = Array.from(e as FileList);
+                    if (files.length > 0) {
+                      setSelectedCommunity(community); // Mark that the file is from this specific community
+                      setFile(files[0]);
+                    }
+                  }
+                }}
+              >
+                <Button className={styles.selectPostTargetPage__timeline}>
+                  <div className={styles.selectPostTargetPage__communityAvatar}>
+                    <CommunityAvatar pageId={pageId} community={community} />
+                  </div>
+                  <div className={styles.selectPostTargetPage__communityName}>
+                    {!community.isPublic && <CommunityPrivateBadge />}
+                    <CommunityDisplayName pageId={pageId} community={community} />
+                    {community.isOfficial && <CommunityOfficialBadge />}
+                  </div>
+                </Button>
+              </FileTrigger>
+            ) : (
               <Button
                 key={community.communityId}
                 className={styles.selectPostTargetPage__timeline}

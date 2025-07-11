@@ -3,4 +3,5 @@ export const ERROR_RESPONSE = Object.freeze({
   NOT_INCLUDE_WHITELIST_LINK: 'Data contain link that is not in whitelist',
   CONTAIN_BLOCKLISTED_WORD: 'Your text contains a blocklisted word.',
   IMAGE_NUDITY: 'Amity SDK (500000): Image uploading failed: Nudity content is not permitted',
+  DELETED_POST: '400400',
 });

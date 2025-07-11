@@ -27,5 +27,10 @@
 }
 
 .textWithMention__seeMore {
+  display: inline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
   color: var(--asc-color-primary-default);
 }

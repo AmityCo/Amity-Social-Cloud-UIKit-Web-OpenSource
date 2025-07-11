@@ -28,8 +28,8 @@ export function CommunityPrivateBadge({
 
   return (
     <IconComponent
-      configIconName={config.icon}
-      defaultIconName={defaultConfig.icon}
+      configIconName={config.image}
+      defaultIconName={defaultConfig.image}
       defaultIcon={() => (
         <Lock
           style={themeStyles}
@@ -39,7 +39,7 @@ export function CommunityPrivateBadge({
       )}
       imgIcon={() => (
         <img
-          src={config.icon}
+          src={config.image}
           alt={uiReference}
           data-testid={accessibilityId}
           className={styles.communityPrivateBadge}

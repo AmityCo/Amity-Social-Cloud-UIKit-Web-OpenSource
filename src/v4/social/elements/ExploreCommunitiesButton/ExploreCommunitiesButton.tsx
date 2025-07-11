@@ -1,8 +1,9 @@
 import React from 'react';
-import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { Typography } from '~/v4/core/components';
 import styles from './ExploreCommunitiesButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import clsx from 'clsx';
+import { Button } from '~/v4/core/components/AriaButton';
 
 const Globe = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -20,9 +21,16 @@ const Globe = (props: React.SVGProps<SVGSVGElement>) => (
 interface DescriptionProps {
   pageId?: string;
   componentId?: string;
+  className?: string;
+  onClick?: () => void;
 }
 
-export function ExploreCommunitiesButton({ pageId = '*', componentId = '*' }: DescriptionProps) {
+export function ExploreCommunitiesButton({
+  pageId = '*',
+  componentId = '*',
+  className,
+  onClick,
+}: DescriptionProps) {
   const elementId = 'explore_communities_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
     useAmityElement({
@@ -34,15 +42,16 @@ export function ExploreCommunitiesButton({ pageId = '*', componentId = '*' }: De
   if (isExcluded) return null;
 
   return (
-    <div
-      className={styles.exploreCommunitiesButton}
+    <Button
+      className={clsx(styles.exploreCommunitiesButton, className)}
       data-testid={accessibilityId}
       style={themeStyles}
+      onPress={onClick}
     >
       <Globe className={styles.exploreCommunitiesButton__icon} />
       <Typography.BodyBold className={styles.exploreCommunitiesButton__text}>
         {config.text}
       </Typography.BodyBold>
-    </div>
+    </Button>
   );
 }

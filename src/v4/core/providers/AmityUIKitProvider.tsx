@@ -47,6 +47,7 @@ import { StoryProvider } from '~/v4/social/providers/StoryProvider';
 import { LayoutProvider } from '~/v4/social/providers/LayoutProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNetworkConfig } from '~/v4/core/hooks/useNetworkConfig';
+import { ClipProvider } from '~/v4/social/providers/ClipProvider';
 
 const InternalComponent = ({
   apiKey,
@@ -185,17 +186,19 @@ const InternalComponent = ({
                           >
                             <PageBehaviorProvider pageBehavior={pageBehavior}>
                               <StoryProvider>
-                                <CommunitySetupProvider>
-                                  <DrawerProvider>
-                                    <GlobalFeedProvider>
-                                      <PopupProvider>
-                                        <Popup />
-                                        {children}
-                                      </PopupProvider>
-                                    </GlobalFeedProvider>
-                                    <DrawerContainer />
-                                  </DrawerProvider>
-                                </CommunitySetupProvider>
+                                <ClipProvider>
+                                  <CommunitySetupProvider>
+                                    <DrawerProvider>
+                                      <GlobalFeedProvider>
+                                        <PopupProvider>
+                                          <Popup />
+                                          {children}
+                                        </PopupProvider>
+                                      </GlobalFeedProvider>
+                                      <DrawerContainer />
+                                    </DrawerProvider>
+                                  </CommunitySetupProvider>
+                                </ClipProvider>
                               </StoryProvider>
                             </PageBehaviorProvider>
                           </NavigationProvider>

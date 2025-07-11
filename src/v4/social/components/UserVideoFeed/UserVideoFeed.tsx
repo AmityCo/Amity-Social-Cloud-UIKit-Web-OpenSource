@@ -9,6 +9,10 @@ import { BlockedUserVideoFeed } from '~/v4/social/elements/BlockedUserVideoFeed'
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { ErrorContent } from '~/v4/social/internal-components/ErrorContent';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
+import { TabButton } from '~/v4/social/elements/TabButton';
+import { ClipGallery } from '~/v4/social/internal-components/ClipGallery/ClipGallery';
+import { TabType } from '~/v4/social/constants/videoTabs';
+import { EmptyClipFeed } from '~/v4/social/elements/EmptyClipFeed';
 import styles from './UserVideoFeed.module.css';
 
 interface UserVideoFeedProps {
@@ -19,6 +23,9 @@ interface UserVideoFeedProps {
 export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
   const componentId = 'user_video_feed';
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const [intersectionClipNode, setIntersectionClipNode] = useState<HTMLDivElement | null>(null);
+
+  const [activeTab, setActiveTab] = useState<TabType>(TabType.VIDEOS);
 
   const { followStatus } = useFollowCount(userId);
 
@@ -34,6 +41,20 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
     dataTypes: ['video'],
   });
 
+  const {
+    posts: clipPost,
+    hasMore: hasMoreClips,
+    loadMore: loadMoreClips,
+    refresh: refreshClips,
+    error: errorClips,
+    isLoading: isLoadingClips,
+  } = usePostsCollection({
+    targetId: userId,
+    targetType: 'user',
+    limit: 10,
+    dataTypes: ['clip'],
+  });
+
   useIntersectionObserver({
     onIntersect: () => {
       if (isLoading === false) {
@@ -46,11 +67,53 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
     },
   });
 
+  useIntersectionObserver({
+    onIntersect: () => {
+      if (isLoadingClips === false) {
+        loadMoreClips();
+      }
+    },
+    node: intersectionClipNode,
+    options: {
+      threshold: 0.7,
+    },
+  });
+
   useEffect(() => {
     refresh();
+    refreshClips();
   }, []);
 
-  const renderVideoFeed = () => {
+  const tabs = [
+    {
+      type: TabType.VIDEOS,
+      elementId: 'videos_button',
+    },
+    {
+      type: TabType.CLIPS,
+      elementId: 'clips_button',
+    },
+  ];
+
+  const renderTabs = () => {
+    return (
+      <div className={styles.userVideoFeed__videoFeedTabs}>
+        {tabs.map((tab) => (
+          <TabButton
+            key={tab.type}
+            pageId={pageId}
+            componentId={componentId}
+            elementId={tab.elementId}
+            tab={tab}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  const renderFeed = (posts: Amity.Post[], isLoading: boolean, error: Error | null) => {
     if (followStatus === 'blocked')
       return <BlockedUserVideoFeed pageId={pageId} componentId={componentId} />;
 
@@ -61,27 +124,58 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
         <ErrorContent />
       );
     }
-    if (!isLoading && posts.length === 0)
+
+    if (activeTab === TabType.VIDEOS && !isLoading && posts.length === 0)
       return <EmptyUserVideoFeed pageId={pageId} componentId={componentId} />;
+
+    if (activeTab === TabType.CLIPS && !isLoadingClips && clipPost.length === 0)
+      return <EmptyClipFeed pageId={pageId} componentId={componentId} />;
 
     return (
       <div className={styles.userVideoFeed__container}>
-        <VideoGallery posts={posts as Amity.Post<'video'>[]} />
+        {activeTab === TabType.VIDEOS ? (
+          <VideoGallery posts={posts as Amity.Post<'video'>[]} />
+        ) : (
+          <ClipGallery posts={posts as Amity.Post<'clip'>[]} />
+        )}
       </div>
     );
   };
 
-  return (
-    <div data-testid={accessibilityId} style={themeStyles}>
-      <NoInternetConnectionHoc page="feed" refresh={refresh}>
+  const renderContent = () => {
+    if (activeTab === TabType.VIDEOS) {
+      return (
         <>
-          {renderVideoFeed()}
+          {renderFeed(posts, isLoading, error)}
           {hasMore && (
             <div
               ref={(node) => setIntersectionNode(node)}
               className={styles.userVideoFeed__observerTarget}
             />
           )}
+        </>
+      );
+    } else {
+      return (
+        <>
+          {renderFeed(clipPost, isLoadingClips, errorClips)}
+          {hasMoreClips && (
+            <div
+              ref={(node) => setIntersectionClipNode(node)}
+              className={styles.userVideoFeed__observerTarget}
+            />
+          )}
+        </>
+      );
+    }
+  };
+
+  return (
+    <div data-testid={accessibilityId} style={themeStyles}>
+      <NoInternetConnectionHoc page="feed" refresh={refresh}>
+        <>
+          {renderTabs()}
+          {renderContent()}
         </>
       </NoInternetConnectionHoc>
     </div>

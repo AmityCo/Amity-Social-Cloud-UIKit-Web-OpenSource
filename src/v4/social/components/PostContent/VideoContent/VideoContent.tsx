@@ -11,7 +11,7 @@ const VideoThumbnail = ({
   fileId,
   placeholder,
 }: {
-  fileId: string;
+  fileId: Amity.File<'image'>['fileId'];
   placeholder: React.ReactNode;
 }) => {
   const videoThumbnailUrl = useImage({ fileId });

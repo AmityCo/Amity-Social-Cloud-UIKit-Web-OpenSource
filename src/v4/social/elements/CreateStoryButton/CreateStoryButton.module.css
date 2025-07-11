@@ -3,6 +3,7 @@
   padding: 0.75rem 0;
   width: 100%;
   cursor: pointer;
+  align-items: center;
 }
 
 .createStoryButton__text {
@@ -12,8 +13,8 @@
 
 .createStoryButton__icon {
   color: var(--asc-color-base-default);
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 @media (width >= 48em) {
