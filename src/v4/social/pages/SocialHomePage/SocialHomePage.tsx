@@ -14,8 +14,11 @@ import { Explore } from '~/v4/social/components/Explore';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
+import { ClipsFeedButton } from '~/v4/social/elements/ClipsFeedButton';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import useQueryClipGlobalFeed from '~/v4/social/hooks/useQueryClipGlobalFeed';
 
-export function SocialHomePage() {
+export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: HomePageTab }) {
   const pageId = 'social_home_page';
   const { themeStyles } = useAmityPage({
     pageId,
@@ -24,13 +27,17 @@ export function SocialHomePage() {
   const { scrollPosition, onScroll } = useGlobalFeedContext();
 
   const { activeTab, setActiveTab } = useLayoutContext();
+  const { AmitySocialHomePageBehavior } = usePageBehavior();
+  const { posts } = useQueryClipGlobalFeed();
 
   const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const initialLoad = useRef(true);
 
   useEffect(() => {
-    if (activeTab !== HomePageTab.Newsfeed) return;
+    if (initialActiveTab == HomePageTab.Explore) {
+      setActiveTab(HomePageTab.Explore);
+    }
     if (!containerRef.current) return;
     containerRef.current.scrollTop = scrollPosition;
     setTimeout(() => {
@@ -82,6 +89,14 @@ export function SocialHomePage() {
             pageId={pageId}
             isActive={activeTab === HomePageTab.Explore}
             onClick={() => setActiveTab(HomePageTab.Explore)}
+          />
+          <ClipsFeedButton
+            pageId={pageId}
+            isActive={activeTab === HomePageTab.Clips}
+            onClick={() => {
+              setActiveTab(HomePageTab.Clips);
+              AmitySocialHomePageBehavior?.goToClipFeedPage?.({});
+            }}
           />
           <MyCommunitiesButton
             pageId={pageId}

@@ -10,6 +10,7 @@ export enum Mode {
 export interface AmityPostComposerEditOptions {
   mode: Mode.EDIT;
   post: Amity.Post;
+  isClipPost?: boolean;
 }
 
 export interface AmityPostComposerCreateOptions {
@@ -17,6 +18,7 @@ export interface AmityPostComposerCreateOptions {
   targetId: string | null;
   targetType: 'community' | 'user';
   community?: Amity.Community;
+  isClipPost?: boolean;
 }
 
 export interface MetaData {
@@ -34,18 +36,19 @@ const isCreatePage = (props: PostComposerPageProps): props is AmityPostComposerC
 
 export function PostComposerPage(props: PostComposerPageProps) {
   if (isCreatePage(props)) {
-    const { targetId, targetType, community } = props;
+    const { targetId, targetType, community, isClipPost } = props;
     return (
       <CreatePost
         mode={Mode.CREATE}
         targetId={targetId}
         targetType={targetType}
         community={community}
+        isClipPost={isClipPost}
       />
     );
   } else {
-    const { post } = props;
-    return <EditPost mode={Mode.EDIT} post={post} />;
+    const { post, isClipPost } = props;
+    return <EditPost mode={Mode.EDIT} post={post} isClipPost={isClipPost} />;
   }
 }
 

@@ -42,7 +42,7 @@ export function VideoViewer({
     if (hasPrev) setSelectedVideoIndex((prev) => prev - 1);
   };
 
-  const videoPosts = posts.filter((post) => post.dataType === 'video');
+  const videoPosts = posts.filter((post) => post.dataType === 'video' || post.dataType === 'clip');
   const videoPost = videoPosts[selectedVideoIndex];
   const hasNext = selectedVideoIndex < videoPosts.length - 1;
   const hasPrev = selectedVideoIndex > 0;
@@ -68,7 +68,7 @@ export function VideoViewer({
           <ChevronRight className={styles.videoViewer__prevButton} />
         </Button>
       )}
-      <VideoPlayer videoPost={videoPost as Amity.Post<'video'>} next={next} prev={prev} />
+      <VideoPlayer videoPost={videoPost as Amity.Post<'video' | 'clip'>} next={next} prev={prev} />
       {hasNext && (
         <Button className={styles.videoViewer__next} onPress={next}>
           <ChevronRight className={styles.videoViewer__nextButton} />
@@ -84,16 +84,20 @@ const VideoPlayer = memo(
     prev,
     next,
   }: {
-    videoPost?: Amity.Post<'video'>;
+    videoPost?: Amity.Post<'video' | 'clip'>;
     prev: () => void;
     next: () => void;
   }) => {
     const videoFileId = useMemo(() => {
+      if (videoPost?.dataType === 'clip') {
+        return (videoPost?.data as Amity.ContentDataClip)?.fileId;
+      }
+
       return (
-        videoPost?.data?.videoFileId.high ||
-        videoPost?.data?.videoFileId.medium ||
-        videoPost?.data?.videoFileId.low ||
-        videoPost?.data?.videoFileId.original ||
+        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.high ||
+        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.medium ||
+        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.low ||
+        (videoPost?.data as Amity.ContentDataVideo)?.videoFileId.original ||
         undefined
       );
     }, [videoPost]);
@@ -104,7 +108,9 @@ const VideoPlayer = memo(
       threshold: 100,
     });
 
-    const file: Amity.File<'video'> | undefined = useFile<Amity.File<'video'>>(videoFileId);
+    const file: Amity.File<'video' | 'clip'> | undefined =
+      useFile<Amity.File<'video' | 'clip'>>(videoFileId);
+
     const posterUrl = useFile(videoPost?.data?.thumbnailFileId);
 
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -119,8 +125,8 @@ const VideoPlayer = memo(
      */
     const url = useMemo(() => {
       if (file == null) return null;
-      if (file.status === VideoFileStatus.Transcoded) {
-        const { videoUrl } = file;
+      if ((file as Amity.File<'video' | 'clip'>).status === VideoFileStatus.Transcoded) {
+        const { videoUrl } = file as Amity.File<'video' | 'clip'>;
 
         return (
           videoUrl?.['1080p'] ||
@@ -158,6 +164,14 @@ const VideoPlayer = memo(
         poster={posterUrl?.fileUrl}
         onTouchMove={handleTouchMove}
         onTouchStart={handleTouchStart}
+        onVolumeChange={(e) => {
+          if (
+            videoPost?.dataType === 'clip' &&
+            (videoPost?.data as Amity.ContentDataClip)?.isMuted
+          ) {
+            e.currentTarget.muted = true;
+          }
+        }}
         className={styles.videoViewer__fullImage}
       >
         <source src={url} type="video/mp4" />

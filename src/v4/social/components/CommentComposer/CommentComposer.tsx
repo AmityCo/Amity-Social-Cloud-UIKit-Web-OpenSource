@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
-import { useImage } from '~/v4/core/hooks/useImage';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/components/AriaButton';
 import { CommentInput, CommentInputRef } from './CommentInput';
@@ -20,6 +19,7 @@ import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { UserAvatar } from '~/v4/social/elements';
 import styles from './CommentComposer.module.css';
+import usePost from '~/v4/core/hooks/objects/usePost';
 
 const LockSvg = () => {
   return (
@@ -49,6 +49,7 @@ interface CommentComposerProps {
   shouldAllowCreation?: boolean;
   community?: Amity.Community | null;
   containerClassName?: string;
+  commentComposerClassName?: string;
 }
 
 export const CommentComposer = ({
@@ -60,6 +61,7 @@ export const CommentComposer = ({
   shouldAllowCreation = true,
   community,
   containerClassName,
+  commentComposerClassName,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
   const { user } = useUser({ userId });
@@ -71,6 +73,8 @@ export const CommentComposer = ({
   const componentId = 'comment_composer_bar';
   const mentionContainerRef = useRef<HTMLDivElement | null>(null);
   const { page } = useNavigation();
+
+  const { post } = usePost(referenceId);
 
   const [composerHeight, setComposerHeight] = useState(0);
 
@@ -108,6 +112,10 @@ export const CommentComposer = ({
         notification.info({
           content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
         });
+      } else if (error.message.includes(ERROR_RESPONSE.DELETED_POST) && post?.dataType === 'clip') {
+        notification.info({
+          content: 'This clip is no longer available.',
+        });
       } else {
         notification.info({
           content: 'Oops, something went wrong',
@@ -135,7 +143,10 @@ export const CommentComposer = ({
   }
 
   return (
-    <div className={styles.commentComposer}>
+    <div
+      className={clsx(styles.commentComposer, commentComposerClassName)}
+      data-testid={`${pageId}/${componentId}/comment_composer`}
+    >
       {!online && isPending && page.type == PageTypes.ViewStoryPage && (
         <Notification
           icon={<ExclamationCircle className={styles.commentComposer__notificationIcon} />}

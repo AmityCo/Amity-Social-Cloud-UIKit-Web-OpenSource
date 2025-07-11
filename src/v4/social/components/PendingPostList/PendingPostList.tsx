@@ -50,7 +50,7 @@ export const PendingPostList = ({
   const { online } = useNetworkState();
   const { openPopup, closePopup } = usePopupContext();
   const { isDesktop } = useResponsive();
-  const { goToUserProfilePage } = useNavigation();
+  const { goToUserProfilePage, goToClipFeedPage } = useNavigation();
 
   const [isVideoViewerOpen, setIsVideoViewerOpen] = useState(false);
   const [clickedVideoIndex, setClickedVideoIndex] = useState<number | null>(null);
@@ -225,7 +225,7 @@ export const PendingPostList = ({
           <TextContent
             pageId={pageId}
             componentId={componentId}
-            text={post?.data?.text}
+            text={(post as Amity.Post<'text'>)?.data?.text || ''}
             mentioned={post?.metadata?.mentioned}
             mentionees={post?.mentionees}
             post={post}
@@ -237,6 +237,12 @@ export const PendingPostList = ({
               post={post}
               onImageClick={(imageIndex) => openImageViewer(imageIndex, post)}
               onVideoClick={(videoIndex) => openVideoViewer(videoIndex, post)}
+              onClipClick={() => {
+                goToClipFeedPage?.({
+                  currentPostId: post.children[0],
+                  posts: [],
+                });
+              }}
             />
           )}
         </div>

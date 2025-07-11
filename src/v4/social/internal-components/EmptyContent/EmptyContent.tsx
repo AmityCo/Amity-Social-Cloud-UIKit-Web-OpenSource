@@ -3,6 +3,7 @@ import styles from './EmptyContent.module.css';
 import { Typography } from '~/v4/core/components';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
+import clsx from 'clsx';
 
 interface EmptyContentProps {
   pageId?: string;
@@ -10,6 +11,7 @@ interface EmptyContentProps {
   elementId?: string;
   infoElementId?: string;
   text?: string;
+  emptyContentClassName?: string;
   defaultIcon: () => JSX.Element;
 }
 
@@ -19,6 +21,7 @@ export const EmptyContent: React.FC<EmptyContentProps> = ({
   elementId = '*',
   infoElementId = '*',
   text,
+  emptyContentClassName,
   defaultIcon,
 }) => {
   const { config, defaultConfig, isExcluded, themeStyles, accessibilityId, uiReference } =
@@ -37,7 +40,11 @@ export const EmptyContent: React.FC<EmptyContentProps> = ({
   if (isExcluded) return null;
 
   return (
-    <div style={themeStyles} data-testid={accessibilityId} className={styles.emptyContent}>
+    <div
+      style={themeStyles}
+      data-testid={accessibilityId}
+      className={clsx(styles.emptyContent, emptyContentClassName)}
+    >
       <IconComponent
         defaultIcon={defaultIcon}
         configIconName={config.image}

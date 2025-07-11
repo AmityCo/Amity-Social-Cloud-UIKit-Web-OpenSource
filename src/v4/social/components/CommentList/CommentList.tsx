@@ -13,6 +13,7 @@ import { Button } from '~/v4/core/components/AriaButton';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNetworkState } from 'react-use';
 import Redo from '~/v4/icons/Redo';
+import clsx from 'clsx';
 
 type CommentListProps = {
   referenceId: string;
@@ -27,6 +28,7 @@ type CommentListProps = {
   renderReplyComment?: (comment: Amity.Comment) => React.ReactNode;
   highlightedCommentId?: string;
   parentId?: string;
+  commentListClassName?: string;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -46,6 +48,7 @@ export const CommentList = ({
   renderReplyComment,
   highlightedCommentId,
   parentId,
+  commentListClassName,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -159,7 +162,7 @@ export const CommentList = ({
 
   return (
     <div
-      className={styles.commentList__container}
+      className={clsx(styles.commentList__container, commentListClassName)}
       style={themeStyles}
       ref={containerRef}
       data-testid={accessibilityId}

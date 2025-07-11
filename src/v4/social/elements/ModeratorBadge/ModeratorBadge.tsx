@@ -3,6 +3,7 @@ import styles from './ModeratorBadge.module.css';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
 import { useGenerateStylesShadeColors } from '~/v4/core/providers/ThemeProvider';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import clsx from 'clsx';
 
 const Badge = (props: React.SVGProps<SVGSVGElement>) => {
   return (
@@ -22,9 +23,14 @@ const Badge = (props: React.SVGProps<SVGSVGElement>) => {
 interface ModeratorBadgeProps {
   pageId?: string;
   componentId?: string;
+  className?: string;
 }
 
-export function ModeratorBadge({ pageId = '*', componentId = '*' }: ModeratorBadgeProps) {
+export function ModeratorBadge({
+  pageId = '*',
+  componentId = '*',
+  className,
+}: ModeratorBadgeProps) {
   const elementId = 'moderator_badge';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
     useAmityElement({
@@ -36,7 +42,11 @@ export function ModeratorBadge({ pageId = '*', componentId = '*' }: ModeratorBad
   if (isExcluded) return null;
 
   return (
-    <div className={styles.moderatorBadge} style={themeStyles} data-testid={accessibilityId}>
+    <div
+      className={clsx(styles.moderatorBadge, className)}
+      style={themeStyles}
+      data-testid={accessibilityId}
+    >
       <Badge className={styles.moderatorBadge__icon} />
       <div className={styles.moderatorBadge__text}>{config.text}</div>
     </div>

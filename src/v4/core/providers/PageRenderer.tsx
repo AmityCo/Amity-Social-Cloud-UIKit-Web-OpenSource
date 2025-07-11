@@ -33,6 +33,8 @@ import {
   ViewStoryPage,
   CommunityInviteMemberPage,
   Mode,
+  DraftClipPage,
+  ClipFeedPage,
 } from '~/v4/social/pages';
 import CommunityFeed from '~/social/pages/CommunityFeed';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
@@ -186,6 +188,20 @@ const PageRenderer = ({ children }: PageRendererProps) => {
           goToDetailPage={page.context.goToDetailPage}
         />
       );
+    case PageTypes.DraftClipPage:
+      return (
+        <DraftClipPage targetId={page.context.targetId} targetType={page.context.targetType} />
+      );
+    case PageTypes.ClipFeedPage:
+      return (
+        <ClipFeedPage
+          currentPostId={page.context.currentPostId}
+          postIndex={page.context.postIndex}
+          targetId={page.context.targetId}
+          targetType={page.context.targetType}
+        />
+      );
+
     default:
       return <Fragment>{children}</Fragment>;
   }

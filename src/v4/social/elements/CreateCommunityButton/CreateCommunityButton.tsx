@@ -8,12 +8,14 @@ export interface CreateCommunityButtonProps {
   pageId?: string;
   componentId?: string;
   onClick: () => void;
+  textClassName?: string;
 }
 
 export function CreateCommunityButton({
   pageId = '*',
   componentId = '*',
   onClick,
+  textClassName,
 }: CreateCommunityButtonProps) {
   const elementId = 'create_community_button';
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -38,7 +40,7 @@ export function CreateCommunityButton({
         configIconName={config.icon}
         defaultIconName={defaultConfig.icon}
       />
-      <Typography.Body>Create Community</Typography.Body>
+      <Typography.Body className={textClassName}>Create Community</Typography.Body>
     </div>
   );
 }

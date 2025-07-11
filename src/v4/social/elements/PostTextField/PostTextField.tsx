@@ -192,7 +192,10 @@ export const PostTextField = ({
         <RichTextPlugin
           contentEditable={<ContentEditable />}
           placeholder={
-            <div className={clsx(styles.editorPlaceholder, placeholderClassName)}>
+            <div
+              className={clsx(styles.editorPlaceholder, placeholderClassName)}
+              data-isclip={componentId === 'clipPost'}
+            >
               {placeholder ?? "What's going on..."}
             </div>
           }

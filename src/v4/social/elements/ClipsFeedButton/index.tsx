@@ -1,0 +1,1 @@
+export { ClipsFeedButton } from './ClipsFeedButton';

@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useNetworkState } from 'react-use';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import {
   AmityPostComposerCreateOptions,
   CreatePostParams,
@@ -30,7 +29,6 @@ import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin } from '~/v4/utils/permissions';
@@ -40,8 +38,17 @@ import { useMutation } from '@tanstack/react-query';
 import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
 import styles from './CreatePost.module.css';
 import { Typography } from '~/v4/core/components';
+import { useClipContext } from '~/v4/social/providers/ClipProvider';
+import { Play } from '~/v4/icons/Play';
+import { isAmityFile } from '~/v4/utils/checkFileType';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
-export function CreatePost({ community, targetType, targetId }: AmityPostComposerCreateOptions) {
+export function CreatePost({
+  community,
+  targetType,
+  targetId,
+  isClipPost = false,
+}: AmityPostComposerCreateOptions) {
   const pageId = 'post_composer_page';
 
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -54,16 +61,25 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
   const { info } = useConfirmContext();
   const { isDesktop } = useResponsive();
   const { confirm } = useConfirmContext();
-  const { closePopup } = usePopupContext();
-  const { onBack, prevPage } = useNavigation();
+  const { onBack, prevPage, prev2Page } = useNavigation();
+  const { AmityPostComposerPageBehavior } = usePageBehavior();
   const { prependItem } = useGlobalFeedContext();
   const { themeStyles } = useAmityPage({ pageId });
-  const { AmityPostComposerPageBehavior } = usePageBehavior();
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { online } = useNetworkState();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
     useFilePostUpload(pageId);
+
+  const {
+    file: clipFile,
+    setFile: setClipFile,
+    clipThumbnail,
+    isMuted,
+    isAspectFill,
+    setIsMuted,
+    setIsAspectFill,
+  } = useClipContext();
 
   const [isCreating, setIsCreating] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -136,7 +152,8 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
       } else {
         prependItem(post);
       }
-
+      setIsMuted(false);
+      setIsAspectFill(true);
       setIsCreating(false);
       handlePostSuccess();
     },
@@ -154,16 +171,24 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
       return;
     }
 
-    const attachments = files.map(({ file }) => ({
-      fileId: (file as Amity.File).fileId,
-      type: file.type,
-    }));
+    const attachments = isClipPost
+      ? [
+          {
+            fileId: clipFile && isAmityFile(clipFile) ? clipFile.fileId : '',
+            type: 'clip',
+            displayMode: isAspectFill ? 'fill' : 'fit',
+            isMuted: isMuted,
+          },
+        ]
+      : files.map(({ file }) => ({
+          fileId: (file as Amity.File).fileId,
+          type: file.type,
+        }));
 
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
       targetId: targetId!,
       targetType,
       data: { text: textValue.text },
-      dataType: 'text',
       metadata: { mentioned: textValue.mentioned },
       mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
@@ -173,13 +198,8 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
   }
 
   const handlePostSuccess = () => {
-    if (isDesktop) {
-      closePopup();
-    } else if (prevPage?.type === PageTypes.SelectPostTargetPage) {
-      AmityPostComposerPageBehavior?.goToSocialHomePage?.();
-    } else {
-      onBack();
-    }
+    setClipFile(null);
+    checkRedirectPage();
   };
 
   const handlePostError = (error: Error) => {
@@ -210,11 +230,8 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
       title: 'Discard this post?',
       content: 'The post will be permanently discarded. It cannot be undone.',
       onOk: () => {
-        if (prevPage?.type === PageTypes.SelectPostTargetPage) {
-          AmityPostComposerPageBehavior?.goToSocialHomePage?.();
-        } else {
-          onBack();
-        }
+        setClipFile(null);
+        checkRedirectPage();
       },
       okText: 'Discard',
       cancelText: 'Keep editing',
@@ -248,12 +265,67 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
     </div>
   );
 
-  const hasContent = textValue.text.length > 0 || files.length > 0;
+  const checkRedirectPage = () => {
+    if (
+      prevPage?.type === PageTypes.SelectPostTargetPage ||
+      prev2Page?.type === PageTypes.SelectPostTargetPage
+    ) {
+      return AmityPostComposerPageBehavior?.goToSocialHomePage?.();
+    } else if (
+      prev2Page?.type === PageTypes.UserProfilePage ||
+      prev2Page?.type === PageTypes.CommunityProfilePage
+    ) {
+      return onBack(2);
+    } else {
+      return onBack();
+    }
+  };
+
+  const hasContent = textValue.text.length > 0 || files.length > 0 || clipFile !== undefined;
   const hasErrors = files.some((file) => file.errorText !== undefined);
-  const hasNoChanges = textValue.text.length === 0 && files.length === 0;
+  const hasNoChanges = textValue.text.length === 0 && files.length === 0 && clipFile == undefined;
 
   const canSubmitPost =
     !hasNoChanges && hasContent && !hasErrors && !isCreating && online && !isLoading;
+
+  const renderPosting = () => {
+    if (isCreating || !online) {
+      <Typography.Body
+        className={styles.createPost__notification}
+        data-show-detail-media-attachment={showToastPosition()}
+      >
+        <Notification
+          className={styles.createPost__notificationToast}
+          content={online ? 'Posting...' : 'Waiting for network...'}
+          icon={<Spinner />}
+          alignment="fixed"
+        />
+      </Typography.Body>;
+    }
+    return;
+  };
+
+  const renderError = () => {
+    if (isError || postErrorText) {
+      <Typography.Body
+        className={styles.createPost__notification}
+        data-show-detail-media-attachment={showToastPosition()}
+      >
+        <Notification
+          content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
+          icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+          alignment="fixed"
+          duration={3000}
+          className={styles.createPost__notificationToast}
+          onClose={() => {
+            setPostErrorText(undefined);
+            setIsError(false);
+          }}
+        />
+      </Typography.Body>;
+    }
+    return;
+  };
 
   return (
     <div className={styles.createPost} style={themeStyles}>
@@ -268,9 +340,23 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           <CommunityDisplayName pageId={pageId} community={community} />
           <CreateNewPostButton pageId={pageId} variant="text" isDisabled={!canSubmitPost} />
         </div>
+        {isClipPost && (
+          <div className={styles.createPost__clipPostThumbnaiContainer}>
+            <img
+              data-aspect-fill={isAspectFill}
+              src={clipThumbnail ?? undefined}
+              alt="thumbnail clip"
+              className={styles.createPost__clipPostThumbnail}
+            />
+            <div className={styles.createPost__clipPostPlayIconWrap}>
+              <Play className={styles.createPost__clipPostPlayIcon} />
+            </div>
+          </div>
+        )}
         <div className={styles.createPost__formContent}>
           <PostTextField
             pageId={pageId}
+            componentId={isClipPost ? 'clipPost' : undefined}
             onChange={onChange}
             communityId={targetId}
             className={styles.createPost__input}
@@ -319,7 +405,7 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
           style={{ '--asc-mention-bottom': `${drawerHeight ?? 0}px` } as React.CSSProperties}
         />
       </form>
-      {!isDesktop && (
+      {!isDesktop && !isClipPost && (
         <div className={styles.createPost__attachmentDrawer}>
           <div ref={drawerRef}></div>
           {drawerRef.current
@@ -374,38 +460,15 @@ export function CreatePost({ community, targetType, targetId }: AmityPostCompose
               )
             : null}
 
-          {(isCreating || !online) && (
-            <Typography.Body
-              className={styles.createPost__notification}
-              data-show-detail-media-attachment={showToastPosition()}
-            >
-              <Notification
-                className={styles.createPost__notificationToast}
-                content={online ? 'Posting...' : 'Waiting for network...'}
-                icon={<Spinner />}
-                alignment="fixed"
-              />
-            </Typography.Body>
-          )}
-          {(isError || postErrorText) && (
-            <Typography.Body
-              className={styles.createPost__notification}
-              data-show-detail-media-attachment={showToastPosition()}
-            >
-              <Notification
-                content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
-                icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
-                alignment="fixed"
-                duration={3000}
-                className={styles.createPost__notificationToast}
-                onClose={() => {
-                  setPostErrorText(undefined);
-                  setIsError(false);
-                }}
-              />
-            </Typography.Body>
-          )}
+          {renderPosting()}
+          {renderError()}
         </div>
+      )}
+      {isClipPost && (
+        <>
+          {renderPosting()}
+          {renderError()}
+        </>
       )}
     </div>
   );

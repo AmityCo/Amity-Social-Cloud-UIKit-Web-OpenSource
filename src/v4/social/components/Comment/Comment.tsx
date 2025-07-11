@@ -135,10 +135,12 @@ export const Comment = ({
     comment.commentId && CommentRepository.deleteComment(comment.commentId);
 
   const handleEditComment = () => {
+    toggleBottomSheet();
     setIsEditing(true);
   };
 
   const handleDeleteComment = () => {
+    toggleBottomSheet();
     if (!online) {
       notification.info({
         content: 'Oops, something went wrong',
@@ -362,7 +364,10 @@ export const Comment = ({
                         pageId={pageId}
                         componentId={componentId}
                         comment={comment}
-                        handleEditComment={handleEditComment}
+                        handleEditComment={() => {
+                          closePopover();
+                          handleEditComment();
+                        }}
                         handleDeleteComment={() => {
                           closePopover();
                           handleDeleteComment();

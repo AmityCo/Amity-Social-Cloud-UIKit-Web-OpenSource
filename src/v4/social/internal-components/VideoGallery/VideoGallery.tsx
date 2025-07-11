@@ -51,7 +51,7 @@ const VideoItem = ({
         onError={() => setIsBrokenImg(true)}
       />
       <Typography.Caption className={styles.videoGallery__duration}>
-        {formatDuration((file?.attributes.metadata as any).video?.duration)}
+        {formatDuration((file?.attributes.metadata?.video as any).duration)}
       </Typography.Caption>
     </Button>
   );

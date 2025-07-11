@@ -40,7 +40,7 @@ const useGlobalFeed = () => {
   async function fetchMore(token: string | null) {
     try {
       setIsLoading(true);
-      const newPosts = await FeedRepository.getCustomRankingGlobalFeed({
+      const newPosts = await FeedRepository.queryGlobalFeed({
         limit: 10,
         queryToken: token || undefined,
       });
