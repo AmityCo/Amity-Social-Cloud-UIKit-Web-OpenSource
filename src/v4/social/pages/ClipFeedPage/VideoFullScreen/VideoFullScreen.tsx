@@ -16,6 +16,7 @@ type VideoFullScreenProps = {
   onDragging: (val: boolean) => void;
   isLocalMuted: boolean;
   onClipFailed?: (val: boolean) => void;
+  isLoading?: boolean;
 };
 
 export const VideoFullScreen = ({
@@ -28,10 +29,11 @@ export const VideoFullScreen = ({
   onNextVideo,
   isLocalMuted,
   onClipFailed,
+  isLoading,
 }: VideoFullScreenProps) => {
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isClipLoading, setIsClipLoading] = useState(true);
   const fileUrl = getFileUrl(post as Amity.Post<'clip' | 'video'>);
 
   useEffect(() => {
@@ -46,20 +48,23 @@ export const VideoFullScreen = ({
         setIsPaused(true); // Set paused state when video is not active
       }
     }
-  }, [isActive, post.postId]);
+  }, [isActive, post.postId, videoRefs]);
 
-  // Initialize video state when video element is first set
+  // Initialize video state when video element is first set or when video ref changes
   useEffect(() => {
     const video = videoRefs.current[post.postId];
-    if (video && isActive) {
-      // Set initial paused state based on video's actual state
-      setIsPaused(video.paused);
-      // Ensure video plays if it's the active clip
-      if (video.paused) {
-        video.play().catch(() => {});
+    if (video) {
+      setVideoElement(video); // Ensure videoElement state is updated
+      if (isActive) {
+        // Set initial paused state based on video's actual state
+        setIsPaused(video.paused);
+        // Ensure video plays if it's the active clip
+        if (video.paused) {
+          video.play().catch(() => {});
+        }
       }
     }
-  }, [videoElement, isActive, post.postId]);
+  }, [post.postId, videoRefs, isActive]);
 
   // Add event listeners to track video play/pause state
   useEffect(() => {
@@ -68,16 +73,18 @@ export const VideoFullScreen = ({
 
     const handlePlay = () => setIsPaused(false);
     const handlePause = () => setIsPaused(true);
-    const handleLoadStart = () => setIsLoading(true);
+    const handleLoadStart = () => setIsClipLoading(true);
     const handleLoadedData = () => {
       // When video is loaded and this is the active clip, ensure it starts playing
       if (isActive) {
         video.play().catch(() => {});
         setIsPaused(false);
       }
-      setIsLoading(false); // Video has finished loading
+      setIsClipLoading(false); // Video has finished loading
     };
-    const handleCanPlay = () => setIsLoading(false);
+    const handleCanPlay = () => {
+      setIsClipLoading(false);
+    };
 
     video.addEventListener('play', handlePlay);
     video.addEventListener('pause', handlePause);
@@ -103,7 +110,9 @@ export const VideoFullScreen = ({
 
   return (
     <div className={styles.videoFullScreen__container}>
-      {isLoading && <div className={styles.videoFullScreen__loadingBackground} />}
+      {(isClipLoading || isLoading) && (
+        <div className={styles.videoFullScreen__loadingBackground} />
+      )}
 
       <video
         ref={(el) => {
@@ -119,13 +128,13 @@ export const VideoFullScreen = ({
         muted={isMuted}
         preload="auto"
         onClick={(e) => onClickVideo(post.postId, e)}
-        autoPlay
-        style={{ opacity: isLoading ? 0 : 1 }}
+        autoPlay={isActive}
+        style={{ opacity: isClipLoading ? 0 : 1 }}
       />
 
       <div className={styles.videoFullScreen__overlay} />
 
-      {isPaused && isActive && !isLoading && (
+      {isPaused && isActive && !isClipLoading && !isLoading && (
         <Button
           variant="text"
           className={styles.videoFullScreen__playButtonOverlay}
@@ -139,7 +148,7 @@ export const VideoFullScreen = ({
 
       <VideoProgressBar
         video={videoElement}
-        isVisible={isActive && !isLoading}
+        isVisible={isActive && !isClipLoading && !isLoading}
         isDragging={isDragging}
         onDragging={onDragging}
       />

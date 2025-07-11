@@ -257,8 +257,10 @@ type Page =
   | {
       type: PageTypes.ClipFeedPage;
       context: {
-        posts: Amity.Post<'clip' | 'video'>[];
         currentPostId?: string;
+        postIndex?: number;
+        targetType?: 'community' | 'user';
+        targetId?: string;
       };
     };
 
@@ -373,8 +375,10 @@ type ContextValue = {
     community?: Amity.Community;
   }) => void;
   goToClipFeedPage?: (context: {
-    posts?: Amity.Post<'clip' | 'video'>[];
     currentPostId?: string;
+    postIndex?: number;
+    targetType?: 'community' | 'user';
+    targetId?: string;
   }) => void;
 
   //V3 functions
@@ -452,8 +456,10 @@ let defaultValue: ContextValue = {
   goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
   goToNotificationTrayPage: () => {},
   goToClipFeedPage: (context: {
-    posts?: Amity.Post<'clip' | 'video'>[];
     currentPostId?: string;
+    postIndex?: number;
+    targetType?: 'community' | 'user';
+    targetId?: string;
   }) => {},
 
   setNavigationBlocker: () => {},
@@ -587,7 +593,12 @@ interface NavigationProviderProps {
     community: Amity.Community;
   }) => void;
   goToPendingRequestPage?: (context: { community: Amity.Community }) => void;
-  goToClipFeedPage?: (context: { post: Amity.Post<'clip' | 'video'>[] }) => void;
+  goToClipFeedPage?: (context: {
+    currentPostId?: string;
+    postIndex?: number;
+    targetType?: 'community' | 'user';
+    targetId?: string;
+  }) => void;
 
   onCommunityCreated?: (communityId: string) => void;
   goToCommunityCreatePage?: () => void;
@@ -1337,12 +1348,14 @@ export default function NavigationProvider({
   );
 
   const goToClipFeedPage = useCallback(
-    ({ posts, currentPostId }) => {
+    ({ currentPostId, postIndex, targetType, targetId }) => {
       const next = {
         type: PageTypes.ClipFeedPage,
         context: {
-          posts,
           currentPostId,
+          postIndex,
+          targetType,
+          targetId,
         },
       };
 

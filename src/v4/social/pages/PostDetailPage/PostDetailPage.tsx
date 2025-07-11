@@ -119,17 +119,11 @@ export function PostDetailPage({
 
   const handlePostDeleted = useCallback(() => {
     if (prevPage?.type === PageTypes.ClipFeedPage) {
-      // Filter out the deleted post from posts array
-      const filteredPosts = posts.filter((p) => {
-        const firstChildPostId =
-          post && Array.isArray(post?.children) && post.children.length > 0
-            ? post.children[0]
-            : undefined;
-        return p.postId !== firstChildPostId;
-      });
       AmityPostDetailPageBehavior?.goToClipFeedPage?.({
         currentPostId: post?.children?.[0],
-        posts: filteredPosts.length > 0 ? filteredPosts : undefined,
+        targetId: post?.targetId,
+        targetType: post?.targetType,
+        postIndex: 0,
       });
     } else {
       onBack();
@@ -153,7 +147,8 @@ export function PostDetailPage({
             prevPage?.type === PageTypes.ClipFeedPage
               ? AmityPostDetailPageBehavior?.goToClipFeedPage?.({
                   currentPostId: post?.children?.[0],
-                  posts,
+                  targetId: post?.targetId,
+                  targetType: post?.targetType,
                 })
               : onBack()
           }

@@ -476,7 +476,6 @@ export const PostContent = ({
                 isDesktop
                   ? openVideoViewer(0)
                   : goToClipFeedPage?.({
-                      posts: [],
                       currentPostId: post.children[0],
                     });
               }}

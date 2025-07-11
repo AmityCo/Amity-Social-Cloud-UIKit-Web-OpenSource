@@ -79,16 +79,22 @@ export const ClipGallery: React.FC<ClipGalleryProps> = ({
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const { isDesktop } = useResponsive();
-  const { AmityCommunityProfilePageBehavior } = usePageBehavior();
+  const { AmityCommunityProfilePageBehavior, AmityUserProfilePageBehavior } = usePageBehavior();
 
   const onClickVideoItem = (postIndex: number) => {
     if (isDesktop) {
       setSelectedIndex(postIndex);
       setIsImageViewerOpen(true);
     } else {
-      return AmityCommunityProfilePageBehavior?.goToClipFeedPage?.({
-        posts: posts || [],
+      return (
+        posts?.[postIndex]?.targetType === 'community'
+          ? AmityCommunityProfilePageBehavior
+          : AmityUserProfilePageBehavior
+      )?.goToClipFeedPage?.({
         currentPostId: posts?.[postIndex]?.postId || undefined,
+        postIndex,
+        targetId: posts?.[postIndex]?.targetId || undefined,
+        targetType: posts?.[postIndex]?.targetType || undefined,
       });
     }
   };

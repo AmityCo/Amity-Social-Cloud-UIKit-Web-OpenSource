@@ -95,10 +95,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
             isActive={activeTab === HomePageTab.Clips}
             onClick={() => {
               setActiveTab(HomePageTab.Clips);
-              AmitySocialHomePageBehavior?.goToClipFeedPage?.({
-                posts,
-                currentPostId: posts[0]?.children[0] || '',
-              });
+              AmitySocialHomePageBehavior?.goToClipFeedPage?.({});
             }}
           />
           <MyCommunitiesButton

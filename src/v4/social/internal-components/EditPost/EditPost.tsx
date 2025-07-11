@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { FileType, PostContentType, PostRepository } from '@amityco/ts-sdk';
+import { FileType, PostContentType, PostRepository, CommunityPostSettings } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNetworkState } from 'react-use';
@@ -34,11 +34,15 @@ import { isAmityFile } from '~/v4/utils/checkFileType';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
 import { Typography } from '~/v4/core/components';
+import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
+import { useSDK } from '~/v4/core/hooks/useSDK';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
+import { isAdmin } from '~/v4/social/utils';
 import styles from './EditPost.module.css';
 import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { Play } from '~/v4/icons/Play';
 import { useImage } from '~/v4/core/hooks/useImage';
-import { getPost } from '@amityco/ts-sdk/dist/postRepository';
 import usePost from '~/v4/core/hooks/objects/usePost';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
@@ -56,11 +60,24 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { onBack } = useNavigation();
-  const { confirm } = useConfirmContext();
+  const { confirm, info } = useConfirmContext();
   const { updateItem, updateGlobalFeaturedPosts } = useGlobalFeedContext();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
     useFilePostUpload(pageId);
   const posts = usePostByIds(post?.children || []);
+
+  // Add community and user permissions related hooks
+  const { currentUserId } = useSDK();
+  const { user } = useUser({ userId: currentUserId });
+  const shouldCallCommunity = post?.targetType === 'community' && !!post?.targetId;
+  const { community } = useCommunity({
+    communityId: post?.targetId,
+    shouldCall: shouldCallCommunity,
+  });
+  const { moderators } = useCommunityModeratorsCollection({
+    communityId: post?.targetId,
+    shouldCall: shouldCallCommunity,
+  });
 
   const [localPost, setLocalPost] = useState<Amity.Post[]>(posts);
   const [isBrokenImage, setIsBrokenImage] = useState(false);
@@ -126,7 +143,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           return;
         } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
           setPostErrorText(
-            "Your post wasn't posted because it contains a link that’s not allowed.",
+            "Your post wasn't posted because it contains a link that's not allowed.",
           );
           return;
         } else {
@@ -172,12 +189,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     );
   }, []);
 
-  const onSave = () => {
-    if (textValue.text?.length && textValue.text.length > MAXIMUM_POST_CHARACTERS) {
-      setPostErrorText('You have reached maximum 50,000 characters in a post.');
-      return;
-    }
-
+  const performPostUpdate = () => {
     const attachments: { fileId: string; type: string }[] = [];
 
     if (!isClipPost) {
@@ -221,6 +233,40 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             mentionees: textValue.mentionees as Amity.UserMention[],
             attachments: attachments,
           });
+    }
+  };
+
+  const onSave = () => {
+    if (textValue.text?.length && textValue.text.length > MAXIMUM_POST_CHARACTERS) {
+      setPostErrorText('You have reached maximum 50,000 characters in a post.');
+      return;
+    }
+
+    // Check if post needs approval and show confirmation popup before API call
+    const isModerator =
+      (moderators || []).find((moderator) => moderator.userId === currentUserId) != null;
+
+    if (
+      shouldCallCommunity &&
+      ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
+        ?.needApprovalOnPostCreation ||
+        community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED) &&
+      !isModerator &&
+      !isAdmin(user?.roles)
+    ) {
+      confirm({
+        pageId,
+        title: 'Post will be sent for review',
+        content:
+          'Posting in this community requires approval. Your edited post will be published once approved by the community moderator.',
+        okText: 'OK',
+        cancelText: 'Cancel',
+        onOk: () => {
+          performPostUpdate();
+        },
+      });
+    } else {
+      performPostUpdate();
     }
   };
 
@@ -412,7 +458,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           style={{ '--asc-mention-bottom': `${drawerHeight ?? 0}px` } as React.CSSProperties}
         />
       </form>
-      {!isDesktop && !isAmityFile && (
+      {!isDesktop && !isClipPost && (
         <div className={styles.editPost__attachmentDrawer}>
           <div ref={drawerRef}></div>
           {drawerRef.current
@@ -479,6 +525,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             <Typography.Body
               className={styles.editPost__notification}
               data-show-detail-media-attachment={showToastPosition()}
+              data-isclip={isClipPost}
             >
               <Notification
                 className={styles.editPost__notificationToast}
@@ -492,6 +539,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             <Typography.Body
               className={styles.editPost__notification}
               data-show-detail-media-attachment={showToastPosition()}
+              data-isclip={isClipPost}
             >
               <Notification
                 content={postErrorText ? postErrorText : 'Failed to edit post. Please try again.'}
@@ -514,6 +562,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           <div
             className={styles.editPost__notification}
             data-show-detail-media-attachment={showToastPosition()}
+            data-isclip={isClipPost}
           >
             <Notification
               className={styles.editPost__notificationToast}
@@ -526,6 +575,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         {postErrorText && (
           <div
             className={styles.editPost__notification}
+            data-isclip={isClipPost}
             data-show-detail-media-attachment={showToastPosition()}
           >
             <Notification

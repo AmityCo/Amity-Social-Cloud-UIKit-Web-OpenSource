@@ -22,13 +22,23 @@ import { EmptyFeed } from './EmptyFeed/EmptyFeed';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import styles from './ClipFeedPage.module.css';
+import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection';
+import { useQueryClipGlobalFeed } from '~/v4/social/hooks/useQueryClipGlobalFeed';
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 
 type ClipFeedPageProps = {
-  posts?: Amity.Post<'video' | 'clip'>[];
   currentPostId?: string;
+  postIndex?: number;
+  targetType?: 'community' | 'user';
+  targetId?: string;
 };
 
-export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
+export const ClipFeedPage = ({
+  currentPostId,
+  postIndex,
+  targetType,
+  targetId,
+}: ClipFeedPageProps) => {
   const pageId = 'clip_feed_page';
 
   const { accessibilityId, themeStyles } = useAmityPage({
@@ -41,15 +51,65 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
   const drawerData = useDrawerData();
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [initialSlideSet, setInitialSlideSet] = useState(false);
   const videoRefs = useRef<Record<string, HTMLVideoElement>>({});
   const swiperRef = useRef<SwiperCore | null>(null);
   const [isLocalMuted, setIsLocalMuted] = useState(false);
   const [isShowInteractionMenu, setIsShowInteractionMenu] = useState(true);
   const [isClipFailed, setIsClipFailed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+
+  // Use global clip feed when no props are passed, otherwise use collection
+  const shouldUseGlobalFeed = !targetType && !targetId && !currentPostId;
+
+  const {
+    posts: globalPosts,
+    refresh: refreshGlobal,
+    isLoading: isGlobalFeedLoading,
+    hasMore: hasMoreGlobalPosts,
+    loadMore: loadMoreGlobalPosts,
+  } = useQueryClipGlobalFeed({
+    limit: 20,
+    enabled: shouldUseGlobalFeed,
+  });
+
+  const {
+    posts: collectionPosts,
+    refresh: refreshCollection,
+    isLoading: isLoadingCollectionPosts,
+    hasMore: hasMoreCollectionPosts,
+    loadMore: loadMoreCollectionPosts,
+  } = usePostsCollection({
+    targetType,
+    targetId,
+    dataTypes: ['clip'],
+    limit: 20,
+  });
+
+  const posts = shouldUseGlobalFeed ? globalPosts : collectionPosts;
+  const refresh = shouldUseGlobalFeed ? refreshGlobal : refreshCollection;
+
+  useIntersectionObserver({
+    onIntersect: () => {
+      // Only load more if there are more posts available
+      if (!shouldUseGlobalFeed && hasMoreCollectionPosts && isLoadingCollectionPosts === false) {
+        loadMoreCollectionPosts();
+      }
+
+      if (shouldUseGlobalFeed && hasMoreGlobalPosts && isGlobalFeedLoading === false) {
+        loadMoreGlobalPosts();
+      }
+    },
+    node: intersectionNode,
+  });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   // for post content render with no posts
-  const { post, isLoading } = usePost(currentPostId, posts?.length == 0 && posts !== undefined);
+  const { post, isLoading } = usePost(currentPostId, posts?.length === 0);
 
   // Check if currentPostId exists in the posts array
   const isCurrentPostInPosts =
@@ -57,6 +117,10 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
 
   // Determine if we should show deleted clip view
   const shouldShowDeletedClip = currentPostId && posts && posts.length > 0 && !isCurrentPostInPosts;
+
+  // Determine if we should enable infinite loop
+  const hasMorePosts = shouldUseGlobalFeed ? hasMoreGlobalPosts : hasMoreCollectionPosts;
+  const shouldEnableLoop = posts && posts.length >= 10 && !hasMorePosts && !shouldShowDeletedClip;
 
   const BACK_NAVIGATION_STEPS = 3;
 
@@ -69,7 +133,18 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
 
   // Pause/resume video based on drawer state
   useEffect(() => {
-    const currentPost = posts?.[activeIndex] || (currentPostId && post ? post : null);
+    let currentPost = null;
+
+    if (posts && posts.length > 0) {
+      // Calculate actual post index (accounting for deleted clip view offset)
+      const actualPostIndex = shouldShowDeletedClip ? activeIndex - 1 : activeIndex;
+      if (actualPostIndex >= 0 && actualPostIndex < posts.length) {
+        currentPost = posts[actualPostIndex];
+      }
+    } else if (currentPostId && post) {
+      currentPost = post;
+    }
+
     if (!currentPost) return;
 
     const video = videoRefs.current[currentPost.postId];
@@ -88,32 +163,130 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
         });
       }
     }
-  }, [drawerData, activeIndex, posts, currentPostId, post]);
+  }, [drawerData, activeIndex, posts, currentPostId, post, shouldShowDeletedClip]);
 
-  // Set initial active index based on currentPostId
+  // Set initial active index based on postIndex or currentPostId
   useEffect(() => {
-    if (currentPostId && posts && posts.length > 0) {
-      const index = posts.findIndex((post) => post.postId === currentPostId);
-      if (index !== -1) {
-        // Post found in the list
-        const actualIndex = shouldShowDeletedClip ? index + 1 : index;
-        setActiveIndex(actualIndex);
-        // If Swiper is already initialized, slide to the new index
-        if (swiperRef.current) {
-          swiperRef.current.slideTo(actualIndex);
+    if (posts && posts.length > 0 && !initialSlideSet) {
+      let targetIndex = 0;
+
+      // Priority 1: Use postIndex if provided
+      if (postIndex !== undefined && postIndex >= 0 && postIndex < posts.length) {
+        targetIndex = postIndex;
+      }
+      // Priority 2: Use currentPostId if postIndex is not provided
+      else if (currentPostId) {
+        const index = posts.findIndex((post) => post.postId === currentPostId);
+        if (index !== -1) {
+          targetIndex = index;
+        } else if (shouldShowDeletedClip) {
+          // Post not found, show deleted clip view at index 0
+          setActiveIndex(0);
+          setInitialSlideSet(true);
+          if (swiperRef.current) {
+            swiperRef.current.slideTo(0);
+          }
+          return;
         }
-      } else if (shouldShowDeletedClip) {
-        // Post not found, show deleted clip view at index 0
-        setActiveIndex(0);
-        if (swiperRef.current) {
-          swiperRef.current.slideTo(0);
+      }
+
+      // Calculate actual index accounting for deleted clip view
+      const actualIndex = shouldShowDeletedClip ? targetIndex + 1 : targetIndex;
+      setActiveIndex(actualIndex);
+      setInitialSlideSet(true);
+
+      // If Swiper is already initialized, slide to the new index
+      if (swiperRef.current) {
+        swiperRef.current.slideTo(actualIndex);
+      }
+    }
+  }, [postIndex, currentPostId, posts, shouldShowDeletedClip, initialSlideSet]);
+
+  // Preload next/prev videos
+  useEffect(() => {
+    const preloadVideo = (index: number) => {
+      const post = posts?.[index];
+      if (!post) return;
+
+      const url = getFileUrl(post as Amity.Post<'video' | 'clip'>);
+      if (!url) return;
+
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'video';
+      link.href = url;
+      document.head.appendChild(link);
+
+      // Cleanup to avoid too many <link> tags
+      return () => document.head.removeChild(link);
+    };
+
+    const cleanups: (() => void)[] = [];
+
+    if (posts) {
+      // Calculate actual post index (accounting for deleted clip view offset)
+      const actualPostIndex = shouldShowDeletedClip ? activeIndex - 1 : activeIndex;
+
+      // Only preload if we're not on the deleted clip view
+      if (actualPostIndex >= 0) {
+        // Load more posts early if we're getting close to the end
+        if (actualPostIndex >= posts.length - 5 && hasMorePosts) {
+          // We're within 5 videos of the end and there are more posts to load
+          if (shouldUseGlobalFeed && hasMoreGlobalPosts && !isGlobalFeedLoading) {
+            loadMoreGlobalPosts();
+          } else if (!shouldUseGlobalFeed && hasMoreCollectionPosts && !isLoadingCollectionPosts) {
+            loadMoreCollectionPosts();
+          }
+        }
+
+        // Preload next video (swipe down)
+        if (actualPostIndex + 1 < posts.length) {
+          const cleanup = preloadVideo(actualPostIndex + 1);
+          if (cleanup) cleanups.push(cleanup);
+        }
+
+        // Preload previous video (swipe up)
+        if (actualPostIndex - 1 >= 0) {
+          const cleanup = preloadVideo(actualPostIndex - 1);
+          if (cleanup) cleanups.push(cleanup);
         }
       }
     }
-  }, [currentPostId, posts, shouldShowDeletedClip]);
+
+    return () => cleanups.forEach((fn) => fn());
+  }, [
+    activeIndex,
+    posts,
+    shouldShowDeletedClip,
+    postIndex,
+    hasMorePosts,
+    shouldUseGlobalFeed,
+    hasMoreGlobalPosts,
+    isGlobalFeedLoading,
+    hasMoreCollectionPosts,
+    isLoadingCollectionPosts,
+    loadMoreGlobalPosts,
+    loadMoreCollectionPosts,
+  ]);
 
   const handleSlideChange = (swiper: SwiperCore) => {
-    setActiveIndex(swiper.activeIndex);
+    const newIndex = swiper.activeIndex;
+    setActiveIndex(newIndex);
+
+    // Handle looping when reaching the end
+    if (shouldEnableLoop && posts) {
+      const totalSlides = posts.length;
+
+      // If we're at the last slide, prepare to loop back
+      if (newIndex === totalSlides - 1) {
+        // Use a timeout to allow the current slide to settle, then loop back
+        setTimeout(() => {
+          if (swiperRef.current) {
+            swiperRef.current.slideTo(0, 300); // Smooth transition back to first slide
+          }
+        }, 1000); // Wait 1 second before looping
+      }
+    }
   };
 
   const handleVideoToggle = (postId: string, e?: React.MouseEvent) => {
@@ -137,8 +310,13 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
   const handleNextVideo = () => {
     if (swiperRef.current && posts) {
       const totalSlides = shouldShowDeletedClip ? posts.length + 1 : posts.length;
+
       if (activeIndex < totalSlides - 1) {
         swiperRef.current.slideNext();
+      } else if (shouldEnableLoop) {
+        // Loop back to the first clip
+        const firstClipIndex = shouldShowDeletedClip ? 1 : 0;
+        swiperRef.current.slideTo(firstClipIndex, 300);
       }
     }
   };
@@ -177,7 +355,7 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
           onPress={() => {
             AmityClipFeedPageBehavior?.goToPostDetailPage?.({
               postId,
-              posts,
+              posts: posts as Amity.Post<'video' | 'clip'>[],
             });
             removeDrawerData();
           }}
@@ -193,50 +371,6 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
 
   const handleClipFailed = () => setIsClipFailed(true);
 
-  // Preload next/prev videos
-  useEffect(() => {
-    const preloadVideo = (index: number) => {
-      const post = posts?.[index];
-      if (!post) return;
-
-      const url = getFileUrl(post as Amity.Post<'video' | 'clip'>);
-      if (!url) return;
-
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'video';
-      link.href = url;
-      document.head.appendChild(link);
-
-      // Cleanup to avoid too many <link> tags
-      return () => document.head.removeChild(link);
-    };
-
-    const cleanups: (() => void)[] = [];
-
-    if (posts) {
-      // Calculate actual post index (accounting for deleted clip view offset)
-      const actualPostIndex = shouldShowDeletedClip ? activeIndex - 1 : activeIndex;
-
-      // Only preload if we're not on the deleted clip view
-      if (actualPostIndex >= 0) {
-        // Preload next video
-        if (actualPostIndex + 1 < posts.length) {
-          const cleanup = preloadVideo(actualPostIndex + 1);
-          if (cleanup) cleanups.push(cleanup);
-        }
-
-        // Preload previous video
-        if (actualPostIndex - 1 >= 0) {
-          const cleanup = preloadVideo(actualPostIndex - 1);
-          if (cleanup) cleanups.push(cleanup);
-        }
-      }
-    }
-
-    return () => cleanups.forEach((fn) => fn());
-  }, [activeIndex, posts, shouldShowDeletedClip]);
-
   const handleDragging = (val: boolean) => setIsDragging(val);
 
   const handleOnBack = () => {
@@ -246,13 +380,23 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
     onBack();
   };
 
+  const isLoadingVideo =
+    posts.length == 0 && currentPostId
+      ? isLoading
+      : shouldUseGlobalFeed
+        ? isGlobalFeedLoading
+        : isLoadingCollectionPosts;
+
   return (
     <div
       style={themeStyles}
       data-testid={accessibilityId}
       className={styles.clipFeedPage__container}
     >
-      {posts === undefined ? (
+      {(post === undefined || post?.isDeleted) &&
+      posts.length === 0 &&
+      !isLoading &&
+      !isLoadingCollectionPosts ? (
         <EmptyFeed
           pageId={pageId}
           onClickBack={() => onBack(BACK_NAVIGATION_STEPS)}
@@ -267,13 +411,13 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
           direction={'vertical'}
           pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
-          mousewheel={currentPostId && (!posts || posts.length === 0) ? false : true}
+          mousewheel={true}
           freeMode={false}
-          allowTouchMove={currentPostId && (!posts || posts.length === 0) ? false : true}
+          allowTouchMove={true}
           modules={[Scrollbar, Mousewheel, FreeMode]}
           className={styles.clipFeedPage__swiperContainer}
           slidesPerView={1}
-          initialSlide={activeIndex}
+          initialSlide={initialSlideSet ? activeIndex : 0}
           onSwiper={(swiper: SwiperCore) => (swiperRef.current = swiper)}
           onSlideChange={handleSlideChange}
         >
@@ -300,6 +444,9 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
               {/* Render actual posts */}
               {posts.map((post, index) => {
                 const actualIndex = shouldShowDeletedClip ? index + 1 : index;
+                // Show intersection observer on 3rd to last post when there are more posts to load
+                const isThirdLastPost = index === posts.length - 3;
+                const shouldShowIntersectionNode = isThirdLastPost && hasMorePosts;
                 return (
                   <SwiperSlide
                     key={post.postId}
@@ -317,6 +464,7 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
                         onDragging={handleDragging}
                         isLocalMuted={isLocalMuted}
                         onClipFailed={handleClipFailed}
+                        isLoading={isLoadingVideo}
                       />
                       <div className={styles.clipFeedPage__header}>
                         <BackButton
@@ -344,7 +492,7 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
                       {!isClipFailed && (
                         <ClipFeedMenu
                           postId={post.parentPostId}
-                          childPost={post}
+                          childPost={post as Amity.Post<'video' | 'clip'>}
                           isShowInteractionMenu={isShowInteractionMenu}
                           isDragging={isDragging}
                           handleMuteToggle={handleMuteToggle}
@@ -362,83 +510,87 @@ export const ClipFeedPage = ({ posts, currentPostId }: ClipFeedPageProps) => {
                             userId: post.creator?.userId as string,
                           })
                         }
-                        isLoading={isLoading}
+                        isLoading={isLoadingVideo}
                       />
+                      {/* Intersection observer trigger for loading more clips - only when more posts are available */}
+                      {shouldShowIntersectionNode && (
+                        <div ref={(node) => setIntersectionNode(node)} />
+                      )}
                     </div>
                   </SwiperSlide>
                 );
               })}
             </>
-          ) : currentPostId && post ? (
-            <SwiperSlide
-              key={post.postId}
-              className={styles.clipFeedPage__swiperSlide}
-              onClick={() => handleVideoToggle(post.postId)}
-            >
-              <div className={styles.clipFeedPage__clipContainer}>
-                <VideoFullScreen
-                  post={post as Amity.Post}
-                  isActive={true}
-                  videoRefs={videoRefs}
-                  onClickVideo={handleVideoToggle}
-                  onNextVideo={handleNextVideo}
-                  isDragging={isDragging}
-                  onDragging={handleDragging}
-                  isLocalMuted={isLocalMuted}
-                  onClipFailed={handleClipFailed}
-                />
-                <div className={styles.clipFeedPage__header}>
-                  <BackButton
-                    pageId={pageId}
-                    onPress={() => onBack()}
-                    defaultClassName={styles.clipFeedPage__backButton}
-                  />
-                  <ClipHeader
-                    pageId={pageId}
-                    targetId={post.targetId}
-                    targetType={post.targetType}
-                  />
-                  {isShowInteractionMenu ? (
-                    <CreateNewClipButton
-                      onClick={() =>
-                        AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
-                          isClipPost: true,
-                        })
-                      }
-                    />
-                  ) : (
-                    <div />
-                  )}
-                </div>
-                {!isClipFailed && (
-                  <ClipFeedMenu
-                    postId={post.parentPostId}
-                    childPost={post as Amity.Post<'video' | 'clip'>}
-                    isShowInteractionMenu={isShowInteractionMenu}
-                    isDragging={isDragging}
-                    handleMuteToggle={handleMuteToggle}
-                    isLocalMuted={isLocalMuted}
-                    onClickMenuButton={() => handleMenuClick(post.parentPostId)}
-                  />
-                )}
-                <ClipCaption
-                  postId={post.parentPostId}
-                  creator={post.creator}
-                  isDragging={isDragging}
-                  onClickSeeMoreButton={() => handleMenuClick(post.parentPostId)}
-                  onClickUser={() =>
-                    AmityClipFeedPageBehavior?.goToUserProfilePage?.({
-                      userId: post.creator?.userId as string,
-                    })
-                  }
-                  isLoading={isLoading}
-                />
-              </div>
-            </SwiperSlide>
           ) : (
-            <SwiperSlide className={styles.clipFeedPage__swiperSlide}>
-              <div className={styles.emptyState}>No clips available</div>
-            </SwiperSlide>
+            currentPostId &&
+            post && (
+              <SwiperSlide
+                key={post.postId}
+                className={styles.clipFeedPage__swiperSlide}
+                onClick={() => handleVideoToggle(post.postId)}
+              >
+                <div className={styles.clipFeedPage__clipContainer}>
+                  <VideoFullScreen
+                    post={post as Amity.Post}
+                    isActive={true}
+                    videoRefs={videoRefs}
+                    onClickVideo={handleVideoToggle}
+                    onNextVideo={handleNextVideo}
+                    isDragging={isDragging}
+                    onDragging={handleDragging}
+                    isLocalMuted={isLocalMuted}
+                    onClipFailed={handleClipFailed}
+                    isLoading={isLoadingVideo}
+                  />
+                  <div className={styles.clipFeedPage__header}>
+                    <BackButton
+                      pageId={pageId}
+                      onPress={() => onBack()}
+                      defaultClassName={styles.clipFeedPage__backButton}
+                    />
+                    <ClipHeader
+                      pageId={pageId}
+                      targetId={post.targetId}
+                      targetType={post.targetType}
+                    />
+                    {isShowInteractionMenu ? (
+                      <CreateNewClipButton
+                        onClick={() =>
+                          AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
+                            isClipPost: true,
+                          })
+                        }
+                      />
+                    ) : (
+                      <div />
+                    )}
+                  </div>
+                  {!isClipFailed && (
+                    <ClipFeedMenu
+                      postId={post.parentPostId}
+                      childPost={post as Amity.Post<'video' | 'clip'>}
+                      isShowInteractionMenu={isShowInteractionMenu}
+                      isDragging={isDragging}
+                      handleMuteToggle={handleMuteToggle}
+                      isLocalMuted={isLocalMuted}
+                      onClickMenuButton={() => handleMenuClick(post.parentPostId)}
+                    />
+                  )}
+                  <ClipCaption
+                    postId={post.parentPostId}
+                    creator={post.creator}
+                    isDragging={isDragging}
+                    onClickSeeMoreButton={() => handleMenuClick(post.parentPostId)}
+                    onClickUser={() =>
+                      AmityClipFeedPageBehavior?.goToUserProfilePage?.({
+                        userId: post.creator?.userId as string,
+                      })
+                    }
+                    isLoading={isLoading}
+                  />
+                </div>
+              </SwiperSlide>
+            )
           )}
         </Swiper>
       )}

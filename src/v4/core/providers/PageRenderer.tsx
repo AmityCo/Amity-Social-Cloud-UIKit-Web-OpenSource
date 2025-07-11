@@ -193,7 +193,14 @@ const PageRenderer = ({ children }: PageRendererProps) => {
         <DraftClipPage targetId={page.context.targetId} targetType={page.context.targetType} />
       );
     case PageTypes.ClipFeedPage:
-      return <ClipFeedPage posts={page.context.posts} currentPostId={page.context.currentPostId} />;
+      return (
+        <ClipFeedPage
+          currentPostId={page.context.currentPostId}
+          postIndex={page.context.postIndex}
+          targetId={page.context.targetId}
+          targetType={page.context.targetType}
+        />
+      );
 
     default:
       return <Fragment>{children}</Fragment>;

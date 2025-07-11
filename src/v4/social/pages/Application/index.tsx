@@ -200,7 +200,12 @@ const Application = () => {
           />
         )}
         {page.type === PageTypes.ClipFeedPage && (
-          <ClipFeedPage posts={page.context.posts} currentPostId={page.context.currentPostId} />
+          <ClipFeedPage
+            currentPostId={page.context.currentPostId}
+            postIndex={page.context.postIndex}
+            targetType={page.context.targetType}
+            targetId={page.context.targetId}
+          />
         )}
         {/*End of V3 */}
       </MainLayout>

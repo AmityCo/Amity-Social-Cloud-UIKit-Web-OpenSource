@@ -85,10 +85,24 @@
   position: relative;
 }
 
-.editPost__notification {
+.editPost__notification[data-isclip='false'] {
   width: calc(100% - 2rem);
   position: absolute;
   bottom: 15rem;
+  left: 1rem;
+  display: flex;
+  justify-content: start;
+  margin: 0 auto 1rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--asc-box-shadow-03);
+  background-color: var(--asc-color-secondary-default);
+  color: var(--asc-color-background-default);
+}
+
+.editPost__notification[data-isclip='true'] {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 1rem !important;
   left: 1rem;
   display: flex;
   justify-content: start;
