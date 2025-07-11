@@ -68,11 +68,6 @@
   color: var(--asc-color-white);
 }
 
-.videoFullScreen__emptyState {
-  color: var(--asc-color-white);
-  font-size: 18px;
-}
-
 .videoFullScreen__loadingBackground {
   position: absolute;
   top: 0;
@@ -81,35 +76,4 @@
   height: 100%;
   background-color: var(--asc-color-secondary-shade1);
   z-index: 2;
-}
-
-.videoFullScreen__errorStateWrapper {
-  background-color: var(--asc-color-secondary-shade1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  gap: 1rem;
-}
-
-.videoFullScreen__failedClipIcon {
-  width: 3.75rem;
-  height: 3.75rem;
-  color: var(--asc-color-base-shade3);
-}
-
-.videoFullScreen__errorStateText {
-  color: var(--asc-color-white);
-}
-
-.videoFullScreen__errorStateButton {
-  display: flex;
-  padding: 0.625rem 1rem;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.5rem;
-  border: 1px solid var(--asc-color-secondary-shade4);
-  color: var(--asc-color-white);
 }

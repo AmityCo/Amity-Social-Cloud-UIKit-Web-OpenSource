@@ -17,7 +17,6 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { ErrorPostDetail } from '~/v4/social/internal-components/ErrorPostDetail/ErrorPostDetail';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
@@ -118,6 +117,25 @@ export function PostDetailPage({
     [],
   );
 
+  const handlePostDeleted = useCallback(() => {
+    if (prevPage?.type === PageTypes.ClipFeedPage) {
+      // Filter out the deleted post from posts array
+      const filteredPosts = posts.filter((p) => {
+        const firstChildPostId =
+          post && Array.isArray(post?.children) && post.children.length > 0
+            ? post.children[0]
+            : undefined;
+        return p.postId !== firstChildPostId;
+      });
+      AmityPostDetailPageBehavior?.goToClipFeedPage?.({
+        currentPostId: post?.children?.[0],
+        posts: filteredPosts.length > 0 ? filteredPosts : undefined,
+      });
+    } else {
+      onBack();
+    }
+  }, [prevPage, posts, post, AmityPostDetailPageBehavior, onBack]);
+
   const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
 
   if (error || (post === null && !isPostLoading) || community?.isDeleted || post?.isDeleted)
@@ -134,7 +152,7 @@ export function PostDetailPage({
           onPress={() =>
             prevPage?.type === PageTypes.ClipFeedPage
               ? AmityPostDetailPageBehavior?.goToClipFeedPage?.({
-                  currentPostId: post.children?.[0],
+                  currentPostId: post?.children?.[0],
                   posts,
                 })
               : onBack()
@@ -156,7 +174,7 @@ export function PostDetailPage({
                   <PostMenu
                     post={post}
                     pageId={pageId}
-                    onPostDeleted={() => onBack()}
+                    onPostDeleted={handlePostDeleted}
                     onCloseMenu={() => {
                       closePopover();
                       removeDrawerData();
@@ -170,7 +188,7 @@ export function PostDetailPage({
             <PostMenu
               post={post}
               pageId={pageId}
-              onPostDeleted={() => onBack()}
+              onPostDeleted={handlePostDeleted}
               onCloseMenu={() => {
                 closePopover();
                 removeDrawerData();

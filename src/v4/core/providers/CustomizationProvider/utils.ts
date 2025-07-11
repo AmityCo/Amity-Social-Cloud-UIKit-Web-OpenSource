@@ -1141,6 +1141,14 @@ export const defaultConfig: DefaultConfig = {
     'clip_feed_page/*/community_official_badge': {
       image: 'officialBadgeIcon',
     },
+    'clip_feed_page/*/explore_communities_button': {
+      icon: 'exploreCommunityIcon',
+      text: 'Explore Community',
+    },
+    'clip_feed_page/*/create_community_button': {
+      icon: 'createCommunityIcon',
+      text: 'Create Community',
+    },
   },
 };
 

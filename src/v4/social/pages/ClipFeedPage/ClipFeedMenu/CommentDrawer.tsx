@@ -23,21 +23,20 @@ export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerPr
   const isNonMemberCommunity = post?.targetType === 'community' && !community?.isJoined;
 
   return (
-    <div className={styles.clipFeedMenu__commentContainer}>
-      {post?.commentsCount > 0 && (
-        <div>
-          {post && (
-            <CommentList
-              pageId={pageId}
-              referenceId={post.postId}
-              referenceType="post"
-              onClickReply={handleReplyClick}
-              community={community}
-              commentCount={post.commentsCount}
-              commentListClassName={styles.clipFeedMenu__commentListContainer}
-            />
-          )}
-        </div>
+    <div
+      className={styles.clipFeedMenu__commentContainer}
+      data-no-comment={post?.commentsCount === 0}
+    >
+      {post && (
+        <CommentList
+          pageId={pageId}
+          referenceId={post.postId}
+          referenceType="post"
+          onClickReply={handleReplyClick}
+          community={community}
+          commentCount={post.commentsCount}
+          commentListClassName={styles.clipFeedMenu__commentListContainer}
+        />
       )}
 
       {!isNonMemberCommunity && post && (

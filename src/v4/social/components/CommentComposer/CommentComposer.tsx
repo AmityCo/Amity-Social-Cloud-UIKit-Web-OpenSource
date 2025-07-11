@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
-import { useImage } from '~/v4/core/hooks/useImage';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/components/AriaButton';
 import { CommentInput, CommentInputRef } from './CommentInput';
@@ -20,6 +19,7 @@ import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { UserAvatar } from '~/v4/social/elements';
 import styles from './CommentComposer.module.css';
+import usePost from '~/v4/core/hooks/objects/usePost';
 
 const LockSvg = () => {
   return (
@@ -74,6 +74,8 @@ export const CommentComposer = ({
   const mentionContainerRef = useRef<HTMLDivElement | null>(null);
   const { page } = useNavigation();
 
+  const { post } = usePost(referenceId);
+
   const [composerHeight, setComposerHeight] = useState(0);
 
   const [textValue, setTextValue] = useState<CreateCommentParams>({
@@ -109,6 +111,10 @@ export const CommentComposer = ({
       } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
         notification.info({
           content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
+        });
+      } else if (error.message.includes(ERROR_RESPONSE.DELETED_POST) && post?.dataType === 'clip') {
+        notification.info({
+          content: 'This clip is no longer available.',
         });
       } else {
         notification.info({

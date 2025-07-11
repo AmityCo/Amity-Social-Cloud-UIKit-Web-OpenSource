@@ -18,7 +18,7 @@ import { ClipsFeedButton } from '~/v4/social/elements/ClipsFeedButton';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useQueryClipGlobalFeed from '~/v4/social/hooks/useQueryClipGlobalFeed';
 
-export function SocialHomePage() {
+export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: HomePageTab }) {
   const pageId = 'social_home_page';
   const { themeStyles } = useAmityPage({
     pageId,
@@ -35,7 +35,9 @@ export function SocialHomePage() {
   const initialLoad = useRef(true);
 
   useEffect(() => {
-    if (activeTab !== HomePageTab.Newsfeed) return;
+    if (initialActiveTab == HomePageTab.Explore) {
+      setActiveTab(HomePageTab.Explore);
+    }
     if (!containerRef.current) return;
     containerRef.current.scrollTop = scrollPosition;
     setTimeout(() => {

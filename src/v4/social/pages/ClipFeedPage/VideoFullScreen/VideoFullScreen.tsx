@@ -3,10 +3,8 @@ import { getFileUrl } from '~/v4/utils/getFileUrl';
 import { VideoProgressBar } from '~/v4/social/internal-components/VideoProgressBar';
 import { Play } from '~/v4/icons/Play';
 import { Button } from '~/v4/core/components/AriaButton';
+import { DeletedClipView } from '~/v4/social/pages/ClipFeedPage/DeletedClipView/DeletedClipView';
 import styles from './VideoFullScreen.module.css';
-import FailedClip from '~/v4/icons/FailedClip';
-import { IconComponent } from '~/v4/core/IconComponent';
-import { Typography } from '~/v4/core/components';
 
 type VideoFullScreenProps = {
   post: Amity.Post;
@@ -98,26 +96,7 @@ export const VideoFullScreen = ({
 
   if (!fileUrl) {
     onClipFailed?.(true);
-    return (
-      <div className={styles.videoFullScreen__errorStateWrapper}>
-        <IconComponent
-          defaultIcon={() => <FailedClip className={styles.videoFullScreen__failedClipIcon} />}
-          imgIcon={() => <FailedClip className={styles.videoFullScreen__failedClipIcon} />}
-        />
-        <Typography.Body className={styles.videoFullScreen__errorStateText}>
-          This clip is no longer available.
-        </Typography.Body>
-        <Button
-          variant="text"
-          className={styles.videoFullScreen__errorStateButton}
-          onPress={() => onNextVideo()}
-        >
-          <Typography.BodyBold className={styles.videoFullScreen__errorStateText}>
-            Watch next clip
-          </Typography.BodyBold>
-        </Button>
-      </div>
-    );
+    return <DeletedClipView onWatchNext={onNextVideo} />;
   }
 
   const isMuted = (post as Amity.Post<'clip'>)?.data?.isMuted || isLocalMuted;
