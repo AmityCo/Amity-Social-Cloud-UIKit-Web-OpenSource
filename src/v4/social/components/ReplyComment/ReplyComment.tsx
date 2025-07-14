@@ -231,15 +231,18 @@ const PostReplyComment = ({
                     {comment.createdAt !== comment.editedAt && ' (edited)'}
                   </span>
                 </Typography.Caption>
-                <div onClick={handleLike}>
-                  <Typography.CaptionBold
-                    data-testid={`${pageId}/${componentId}/reply_comment_like`}
-                    className={styles.postReplyComment__secondRow__like}
-                    data-is-liked={isLiked}
-                  >
-                    Like
-                  </Typography.CaptionBold>
-                </div>
+                {community && community.isJoined && (
+                  <div onClick={handleLike}>
+                    <Typography.CaptionBold
+                      data-testid={`${pageId}/${componentId}/reply_comment_like`}
+                      className={styles.postReplyComment__secondRow__like}
+                      data-is-liked={isLiked}
+                    >
+                      Like
+                    </Typography.CaptionBold>
+                  </div>
+                )}
+
                 <Popover
                   trigger={{
                     pageId,
