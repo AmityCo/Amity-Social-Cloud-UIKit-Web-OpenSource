@@ -1,5 +1,6 @@
 import { CommunityPostSettings } from '@amityco/ts-sdk';
 import isEmpty from 'lodash/isEmpty';
+import ReactDOMServer from 'react-dom/server';
 
 export type Mentioned = {
   userId?: string;
@@ -234,4 +235,27 @@ export function validateUrl(url: string): boolean {
   // TODO Fix UI for link insertion; it should never default to an invalid URL such as https://.
   // Maybe show a dialog where they user can type the URL before inserting it.
   return url === 'https://' || urlRegExp.test(url);
+}
+
+function fixSvgCaseIssues(svg: string): string {
+  return svg
+    .replace(/<clipPath/g, '<clip-path')
+    .replace(/<\/clipPath/g, '</clip-path')
+    .replace(/clipPath="/g, 'clip-path="')
+    .replace(/fillOpacity=/g, 'fill-opacity=')
+    .replace(/strokeWidth=/g, 'stroke-width=');
+}
+
+export function convertSvgElementToSymbol(id: string, element: JSX.Element): string {
+  const svgString = ReactDOMServer.renderToStaticMarkup(element);
+  const match = svgString.match(/<svg[^>]*viewBox="([^"]+)"[^>]*>([\s\S]+)<\/svg>/);
+
+  if (!match) {
+    console.warn(`Unable to extract <symbol> from element with id "${id}".`);
+    return '';
+  }
+
+  const [, viewBox, innerSvg] = match;
+
+  return fixSvgCaseIssues(`<symbol id="${id}" viewBox="${viewBox}">${innerSvg}</symbol>`);
 }

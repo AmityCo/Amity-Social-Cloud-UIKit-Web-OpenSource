@@ -85,6 +85,10 @@
   -webkit-overflow-scrolling: touch; /* Add smooth scrolling on iOS */
 }
 
+.contentReportReason__textInput__label {
+  color: var(--asc-color-base-default);
+}
+
 @media (width >= 48em) {
   .contentReportReason__container {
     max-height: 90vh;

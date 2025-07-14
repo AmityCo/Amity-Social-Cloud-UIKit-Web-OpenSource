@@ -40,7 +40,9 @@ export function ImageViewer({
   const { post: imagePost } = usePost(post?.children[selectedImageIndex]);
   const [isBrokenImg, setIsBrokenImg] = useState(false);
 
-  const imageFile = imagePost?.getImageInfo();
+  console.log(post);
+
+  const imageFile = post?.getImageInfo();
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const [isOpen, setIsOpen] = React.useState(false);
@@ -72,7 +74,6 @@ export function ImageViewer({
           <Popover
             trigger={{
               pageId,
-
               className: styles.imageViewer__menuButton,
               iconClassName: styles.imageViewer__menuButton__icon,
               onClick: () => {

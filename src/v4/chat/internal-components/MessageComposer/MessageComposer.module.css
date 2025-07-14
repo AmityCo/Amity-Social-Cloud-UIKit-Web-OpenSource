@@ -20,13 +20,15 @@
   justify-content: center;
   width: 2rem;
   height: 2rem;
+  margin-bottom: 0.25rem;
 }
 
 .composeBarContainer {
-  height: 3.5rem;
+  min-height: 3.5rem;
   width: 100%;
   position: relative;
   background-color: var(--asc-color-background-default);
+  overflow-y: auto;
 }
 
 .optionContainer {
@@ -38,16 +40,10 @@
 }
 
 .composeBar {
-  /* display: flex;
-  align-items: center;
-  gap: var(--asc-spacing-s2);
-  padding: var(--asc-spacing-s1) var(--asc-spacing-s2);
-  box-shadow: 0 -1px 0 0 var(--asc-color-base-shade4); */
-  height: 3.5rem;
   width: 100%;
   padding: 0.5rem;
   display: grid;
-  align-items: center;
+  align-items: flex-end;
   grid-template-columns: minmax(0, 1fr) 2rem;
   gap: var(--asc-spacing-s2);
   box-sizing: border-box;
@@ -76,7 +72,7 @@
 }
 
 .editorPlaceholder {
-  color: #999;
+  color: var(--asc-color-secondary-shade2);
   overflow: hidden;
   position: absolute;
   top: 0.625rem;
@@ -90,6 +86,7 @@
   height: 100%;
   font-size: var(--asc-text-font-size-md);
   color: var(--asc-color-base-default);
+  max-height: calc(1.25rem + var(--asc-line-height-md) * 5);
   padding: 0 0 0 1rem;
   position: relative;
 }
@@ -99,14 +96,25 @@
   background-color: var(--asc-color-secondary-shade4);
   border-radius: 1.25rem;
   min-height: 2.5rem;
+  max-height: calc(1.25rem + var(--asc-line-height-md) * var(--asc-max-lines));
+  overflow: scroll;
   padding: 0.625rem 0.75rem;
   border: 0 solid var(--asc-color-background-default);
   outline: 0;
 }
 
+.editorRoot:focus {
+  background-color: var(--asc-color-base-shade4);
+  border: none;
+}
+
 .editorParagraph {
   margin: 0;
   position: relative;
+}
+
+.editorParagraph__oneLine > span {
+  white-space: nowrap;
 }
 
 .editorContainer:focus {
@@ -185,4 +193,45 @@
   text-overflow: ellipsis;
   overflow: hidden;
   color: var(--asc-color-base-default);
+}
+
+.notification__icon {
+  color: var(--asc-color-white);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.notification__container {
+  margin-bottom: unset;
+  background-color: var(--asc-color-custom-toast-background);
+  bottom: calc(3.5rem + 0.125rem);
+  position: absolute;
+  width: calc(100% - 2rem);
+  right: 50%;
+  transform: translate(50%, 0);
+}
+
+@media only screen and (width >= 48em) {
+  .editorPlaceholder {
+    top: 0.75rem;
+    left: 0.75rem;
+  }
+
+  .editorRoot {
+    background: transparent;
+    border: 1px var(--asc-color-secondary-shade1) solid;
+  }
+
+  .editorContainer {
+    padding: 0;
+  }
+
+  .composeBar {
+    padding: 1rem;
+  }
+
+  .notification__container {
+    bottom: 4.5rem;
+    position: absolute;
+  }
 }

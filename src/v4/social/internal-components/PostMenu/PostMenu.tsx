@@ -21,7 +21,7 @@ import usePost from '~/v4/core/hooks/objects/usePost';
 import usePoll from '~/v4/social/hooks/usePoll';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
 import UnFlag from '~/v4/icons/UnFlag';
-import { ContentReportReason } from '~/v4/social/internal-components/ContentReportReason/ContentReportReason';
+import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason/ContentReportReason';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { checkDeleteCommunityPostPermission } from '~/v4/social/utils';
 

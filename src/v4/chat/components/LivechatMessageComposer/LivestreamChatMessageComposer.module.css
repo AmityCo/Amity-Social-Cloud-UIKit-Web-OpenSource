@@ -1,0 +1,118 @@
+.livestreamChatMessageComposer {
+  background-color: var(--asc-color-black);
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.livestreamChatMessageComposer__unJoined__container {
+  padding: 1.125rem 1rem;
+}
+
+.livestreamChatMessageComposer__mute__container {
+  margin-left: 0.75rem;
+  display: flex;
+  align-items: center;
+  padding: 1.125rem 1rem;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.livestreamChatMessageComposer__mute__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.livestreamChatMessageComposer__mute__text {
+  flex-grow: 1;
+}
+
+.livestreamChatMessageComposer__mute__icon,
+.livestreamChatMessageComposer__mute__text,
+.livestreamChatMessageComposer__unJoined__text {
+  color: var(--asc-color-secondary-shade2);
+}
+
+.livestreamChatMessageComposer__like__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.livestreamChatMessageComposer__composeBar__container {
+  min-height: 3.5rem;
+  width: 100%;
+  overflow-y: auto;
+  padding: 1rem;
+  display: grid;
+  align-items: center;
+  grid-template-columns: minmax(0, 1fr) 2.5rem;
+  gap: var(--asc-spacing-s2);
+  box-sizing: border-box;
+}
+
+.livestreamChatMessageComposer__sendButton__container {
+  width: max-content;
+  flex: 1;
+}
+
+.livestreamChatMessageComposer__notification__refPosition {
+  position: relative;
+  width: 100%;
+}
+
+.livestreamChatMessageComposer__notification__container {
+  margin-bottom: unset;
+  background-color: var(--asc-color-custom-toast-background);
+  bottom: 5.5rem;
+  position: absolute;
+  width: calc(100% - 2rem);
+  right: 50%;
+  transform: translate(50%, 0);
+}
+
+.livestreamChatMessageComposer__notification__icon {
+  color: var(--asc-color-white);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.livestreamChatMessageComposer__reactionButton {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.livestreamChatMessageComposer__reactionPopOver {
+  background: none;
+}
+
+@media only screen and (width >= 48em) {
+  .livestreamChatMessageComposer__unJoined__container {
+    padding: 1rem;
+  }
+
+  .livestreamChatMessageComposer {
+    height: 4.5rem;
+    border-radius: 0 0 1rem 1rem;
+    background-color: var(--asc-color-background-default);
+  }
+
+  .livestreamChatMessageComposer__notification__refPosition {
+    position: absolute;
+    bottom: 4.5rem;
+  }
+
+  .livestreamChatMessageComposer__notification__container {
+    position: absolute;
+    bottom: 0.125rem;
+  }
+
+  .livestreamChatMessageComposer__composeBar__container {
+    background: transparent;
+  }
+
+  .livestreamChatMessageComposer__composeBar__container[data-disabled='true'] {
+    opacity: 0.3;
+  }
+}

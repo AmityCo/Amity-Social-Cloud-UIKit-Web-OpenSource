@@ -13,13 +13,13 @@ import useUser from '~/core/hooks/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { PollSingleAnswer } from './PollSingleAnswer';
 import { PollMultipleAnswer } from './PollMultipleAnswer';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 
 type PollContentProps = {
   pageId?: string;
   componentId?: string;
   elementId?: string;
-  post: Amity.Post;
+  posts: Amity.Post<'poll'>[];
+  parentPost: Amity.Post;
   disabled?: boolean;
 };
 
@@ -27,11 +27,11 @@ export const PollContent: FC<PollContentProps> = ({
   pageId = '*',
   componentId = '*',
   elementId = '*',
-  post,
+  parentPost,
+  posts,
   disabled = false,
 }) => {
   const { error } = useNotifications();
-  const { post: childPost } = usePost(post.children?.[0]);
   const { currentUserId } = useSDK();
 
   const [answers, setAnswers] = useState<string[] | undefined>();
@@ -39,12 +39,12 @@ export const PollContent: FC<PollContentProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const user = useUser(currentUserId);
-  const { item: poll } = usePoll((childPost?.data as Amity.ContentDataPoll)?.pollId);
 
+  const poll = posts[0]?.getPollInfo();
   const showAllChoices = pageId === 'post_detail_page';
   const maxChoicesShown = 4;
-  const isAuthor = post?.creator?.userId === currentUserId;
-  const isVoteDisabled = post.feedType === 'reviewing' || disabled;
+  const isAuthor = parentPost.creator?.userId === currentUserId;
+  const isVoteDisabled = parentPost.feedType === 'reviewing' || disabled;
   const isVoteButtonDisabled = isVoteDisabled || !answers || answers?.length < 1 || disabled;
   const isPollEneded = poll?.status === 'closed';
 
@@ -90,7 +90,7 @@ export const PollContent: FC<PollContentProps> = ({
     return Number.isInteger(count) ? String(count) : count.toFixed(2);
   };
 
-  if (childPost?.dataType !== 'poll' || !poll) return null;
+  if (posts[0]?.dataType !== 'poll' || !poll) return null;
 
   return (
     <>
@@ -180,7 +180,7 @@ export const PollContent: FC<PollContentProps> = ({
         {isAuthor &&
           !poll.isVoted &&
           !isAuthorSeeingPoll &&
-          post.feedType !== 'reviewing' &&
+          parentPost.feedType !== 'reviewing' &&
           !isPollEneded && (
             <Button variant="text" onPress={() => setIsAuthorSeeingPoll(true)}>
               <Typography.CaptionBold className={styles.pollContent__pollDetail__seeResult}>

@@ -8,6 +8,17 @@ export type TypographyProps = ComponentPropsWithoutRef<TypographyElement> & {
   as?: TypographyElement;
 };
 
+export const enum TypographyVariant {
+  Headline = 'headline',
+  TitleBold = 'titleBold',
+  Title = 'title',
+  BodyBold = 'bodyBold',
+  Body = 'body',
+  CaptionBold = 'captionBold',
+  Caption = 'caption',
+  CaptionSmall = 'captionSmall',
+}
+
 export function Typography({ as: Element = 'p', children, className, ...props }: TypographyProps) {
   return (
     <Element className={clsx(styles.typography, className)} {...props}>

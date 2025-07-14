@@ -11,6 +11,8 @@ interface NotificationProps {
   duration?: number;
   isShowAttributes?: string | boolean;
   className?: string;
+  iconClassName?: string;
+  textClassName?: string;
   onClose?: () => void;
 }
 
@@ -21,6 +23,8 @@ export const Notification = ({
   duration,
   isShowAttributes,
   className,
+  iconClassName,
+  textClassName,
   onClose,
 }: NotificationProps) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -41,9 +45,11 @@ export const Notification = ({
         className={clsx(styles.notificationContainer, className)}
         data-alignment={alignment}
       >
-        <div className={clsx(styles.icon__container)}>{icon}</div>{' '}
+        <div className={clsx(styles.icon__container, iconClassName)}>{icon}</div>{' '}
         {typeof content === 'string' ? (
-          <Typography.Body className={styles.notification__text}>{content}</Typography.Body>
+          <Typography.Body className={clsx(styles.notification__text, textClassName)}>
+            {content}
+          </Typography.Body>
         ) : (
           content
         )}

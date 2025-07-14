@@ -1,11 +1,33 @@
 .divider {
-  width: 100%;
-  min-height: 0.5rem;
   background-color: var(--asc-color-base-shade4);
+  width: 100%;
+
+  /* support alphabet */
+  display: flex;
+  justify-content: center;
+}
+
+.divider[data-type='post'] {
+  min-height: 0.5rem;
+}
+
+.divider[data-type='fullWidth'],
+.divider[data-type='content'] {
+  min-height: unset;
+  height: 0.0625rem;
+}
+
+.divider[data-type='alphabet'] {
+  height: 1.875rem;
+}
+
+.divider__alphabet {
+  color: var(--asc-color-base-shade3);
+  margin-left: 1rem;
 }
 
 @media (width >= 48em) {
-  .divider {
+  .divider[data-type='post'] {
     min-height: 0.75rem;
     background-color: var(--asc-color-background-shade1);
   }

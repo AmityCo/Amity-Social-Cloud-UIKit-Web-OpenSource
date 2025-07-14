@@ -33,6 +33,7 @@ export { CommunitiesByCategoryPage } from './CommunitiesByCategoryPage';
 
 export { LiveStreamPlayerPage } from './LiveStreamPlayerPage';
 export { LivestreamTerminatedPage } from './LivestreamTerminatedPage';
+export { LiveStreamBannedPage } from './LiveStreamBannedPage';
 
 export { NotificationTrayPage } from './NotificationTrayPage';
 

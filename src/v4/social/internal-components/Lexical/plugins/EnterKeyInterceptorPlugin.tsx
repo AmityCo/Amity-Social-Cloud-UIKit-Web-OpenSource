@@ -32,9 +32,13 @@ const $isVisualKeyboardOpen = (window: Window) => {
 };
 
 export const EnterKeyInterceptorPlugin = ({
+  allowEnterNewLine = true,
+  allowEnterToSend = false,
   commandPriority,
   onEnter,
 }: {
+  allowEnterNewLine?: boolean;
+  allowEnterToSend?: boolean;
   commandPriority: CommandListenerPriority;
   onEnter: () => void;
 }) => {
@@ -47,7 +51,7 @@ export const EnterKeyInterceptorPlugin = ({
         if (!$isRangeSelection(selection)) {
           return false;
         }
-        if ($isVisualKeyboardOpen(window)) {
+        if (allowEnterNewLine && $isVisualKeyboardOpen(window)) {
           return false;
         }
 
@@ -58,11 +62,12 @@ export const EnterKeyInterceptorPlugin = ({
           return editor.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
         }
 
-        onEnter();
+        !allowEnterNewLine && allowEnterToSend && onEnter();
         return true;
       },
       commandPriority,
     );
   }, [editor, onEnter]);
+
   return null;
 };

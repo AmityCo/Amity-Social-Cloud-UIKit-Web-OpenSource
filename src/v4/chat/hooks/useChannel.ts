@@ -1,12 +1,26 @@
 import { ChannelRepository } from '@amityco/ts-sdk';
-import useLiveObject from '~/v4/core/hooks/useLiveObject';
+import { useEffect, useState } from 'react';
 
 export const useChannel = ({ channelId }: { channelId?: string }) => {
-  const { item, ...rest } = useLiveObject({
-    fetcher: ChannelRepository.getChannel,
-    params: channelId,
-    shouldCall: !!channelId,
-  });
+  // TODO: add hook to use with live object
+  const [channel, setChannel] = useState<Amity.Channel>();
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(true);
 
-  return { channel: item, ...rest };
+  useEffect(() => {
+    if (!channelId) return;
+
+    const getChannel = () =>
+      ChannelRepository.getChannel(channelId, ({ data, loading, error }) => {
+        setLoading(loading);
+        if (!loading && data) setChannel(data);
+        if (error) setError(error);
+      });
+
+    const unsubscribe = getChannel();
+
+    return () => unsubscribe();
+  }, [channelId]);
+
+  return { channel, error, loading };
 };

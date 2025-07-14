@@ -35,6 +35,7 @@ interface ReactionButtonProps {
   defaultIconClassName?: string;
   imgIconClassName?: string;
   reactButtonClassName?: string;
+  defaultIcon?: () => JSX.Element;
   onReactionClick: (reactionKey: string) => void;
 }
 
@@ -50,9 +51,11 @@ export function ReactionButton({
   defaultIconClassName,
   imgIconClassName,
   reactButtonClassName,
+  defaultIcon,
   onReactionClick,
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
+
   const { isExcluded, accessibilityId, config, defaultConfig, uiReference, themeStyles } =
     useAmityElement({
       pageId,
@@ -81,6 +84,13 @@ export function ReactionButton({
     }
   };
 
+  const renderDefaultIcon = () => (
+    <LikeSvg
+      className={clsx(styles.reactButton__icon, defaultIconClassName)}
+      data-has-my-reaction="false"
+    />
+  );
+
   return (
     <Button
       style={themeStyles}
@@ -94,12 +104,7 @@ export function ReactionButton({
         renderMyReaction()
       ) : (
         <IconComponent
-          defaultIcon={() => (
-            <LikeSvg
-              className={clsx(styles.reactButton__icon, defaultIconClassName)}
-              data-has-my-reaction="false"
-            />
-          )}
+          defaultIcon={defaultIcon ?? renderDefaultIcon}
           imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
           defaultIconName={defaultConfig.icon}
           configIconName={config.icon}

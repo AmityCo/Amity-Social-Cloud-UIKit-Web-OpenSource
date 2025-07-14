@@ -156,7 +156,8 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
 
 type ChildrenPostContentProps = {
   pageId?: string;
-  post: Amity.Post;
+  parentPost: Amity.Post;
+  posts: Amity.Post[];
   componentId?: string;
   disabledContent?: boolean;
   onImageClick: (imageIndex: number) => void;
@@ -166,7 +167,8 @@ type ChildrenPostContentProps = {
 };
 
 export const ChildrenPostContent = ({
-  post,
+  parentPost,
+  posts,
   pageId,
   componentId,
   onImageClick,
@@ -180,28 +182,33 @@ export const ChildrenPostContent = ({
       <PollContent
         pageId={pageId}
         componentId={componentId}
-        post={post}
+        parentPost={parentPost}
+        posts={posts as Amity.Post<'poll'>[]}
         disabled={disabledContent}
       />
       <ImageContent
         pageId={pageId}
         componentId={componentId}
-        post={post as Amity.Post<'image'>}
+        posts={posts as Amity.Post<'image'>[]}
         onImageClick={onImageClick}
       />
       <VideoContent
         pageId={pageId}
         componentId={componentId}
-        post={post as Amity.Post<'video'>}
+        posts={posts as Amity.Post<'video'>[]}
         onVideoClick={onVideoClick}
+      />
+      <LiveStreamContent
+        posts={posts as Amity.Post<'liveStream'>[]}
+        goToPostDetail={goToPostDetail}
+        parentPost={parentPost}
       />
       <ClipContent
         pageId={pageId}
         componentId={componentId}
-        post={post as Amity.Post<'clip'>}
+        posts={posts as Amity.Post<'clip'>[]}
         onClipClick={onClipClick}
       />
-      <LiveStreamContent post={post} goToPostDetail={goToPostDetail} />
     </>
   );
 };
@@ -465,11 +472,12 @@ export const PostContent = ({
             mentionees={post?.mentionees}
             post={post}
           />
-          {post && post?.children?.length > 0 ? (
+          {post.childrenPosts?.length > 0 ? (
             <ChildrenPostContent
               pageId={pageId}
               componentId={componentId}
-              post={post}
+              parentPost={post}
+              posts={post.childrenPosts}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
               onClipClick={() => {

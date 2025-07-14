@@ -15,6 +15,7 @@ import styles from './ContentReportReason.module.css';
 import { usePostFlaggedByMe } from '~/v4/core/hooks/usePostFlaggedByMe';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useCommentFlaggedByMe } from '~/v4/social/hooks/useCommentFlaggedByMe';
+import { useMessageFlaggedByMe } from '~/v4/chat/hooks/useMessageFlaggedByMe';
 
 type ContentReportReasonProps = {
   pageId?: string;
@@ -23,6 +24,7 @@ type ContentReportReasonProps = {
   onCloseMenu?: () => void;
   post?: Amity.Post;
   comment?: Amity.Comment;
+  message?: Amity.Message;
   showReportPostButton: boolean;
 };
 
@@ -33,6 +35,7 @@ export const ContentReportReason = ({
   onCloseMenu,
   post,
   comment,
+  message,
   showReportPostButton,
 }: ContentReportReasonProps) => {
   const MAX_LENGTH_DESCRIBE = 300;
@@ -59,7 +62,10 @@ export const ContentReportReason = ({
   };
 
   const handleSubmitReport = () => {
-    post ? mutateReportPost() : comment && mutateReportComment();
+    if (post) return mutateReportPost();
+    if (comment) return mutateReportComment();
+    if (message) return mutateReportMessage();
+    return;
   };
 
   const handleRadioChange = (value: string) => {
@@ -125,8 +131,19 @@ export const ContentReportReason = ({
     isReplyComment: comment?.parentId != null,
   });
 
+  const { mutateReportMessage, isFlagLoading: isMessageReportLoading } = useMessageFlaggedByMe({
+    messageId: message?.messageId as string,
+    reasonReport:
+      selectedReason === ContentFlagReasonEnum.Others ? otherReasonText : selectedReason,
+    onCloseMenu: handleCloseReportReason,
+  });
+
   const isDisabledSubmitButton =
-    !selectedReason || !online || isReportPending || isReportCommentLoading;
+    !selectedReason ||
+    !online ||
+    isReportPending ||
+    isReportCommentLoading ||
+    isMessageReportLoading;
 
   useEffect(() => {
     if (!online) {
@@ -209,7 +226,7 @@ export const ContentReportReason = ({
 
           <div className={styles.contentReportReason__content}>
             {isShowOthersOption ? (
-              <div className={styles.contentReportReason__describeReason}>
+              <div>
                 <TextField
                   label="Describe the reason"
                   description="(Optional)"
@@ -217,7 +234,7 @@ export const ContentReportReason = ({
                   isRequired={false}
                   maxLength={MAX_LENGTH_DESCRIBE}
                   counter={(value) => `${value.length}/${MAX_LENGTH_DESCRIBE}`}
-                  className={styles.contentReportReason__textField}
+                  labelClassName={styles.contentReportReason__textInput__label}
                   value={otherReasonText}
                 >
                   <TextArea
