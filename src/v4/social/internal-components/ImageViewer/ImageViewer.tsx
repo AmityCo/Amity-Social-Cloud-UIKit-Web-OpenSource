@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { formatAltText } from '~/v4/social/utils';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import useSwiper from '~/v4/social/hooks/useSwiper';
-import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
@@ -14,8 +13,6 @@ import { AltTextMenu } from '~/v4/social/internal-components/AltTextMenu';
 import { AltTextBottomSheet } from '~/v4/social/internal-components/ImageThumbnail/ImageThumbnail';
 import styles from './ImageViewer.module.css';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
-
-//TODO: After SDK update getPostChildren should be used instead of usePost
 
 type ImageViewerProps = {
   pageId?: string;
@@ -37,12 +34,9 @@ export function ImageViewer({
   const { isOwner } = usePostPermissions({ post });
   const [selectedImageIndex, setSelectedImageIndex] = useState(initialImageIndex);
   const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
-  const { post: imagePost } = usePost(post?.children[selectedImageIndex]);
   const [isBrokenImg, setIsBrokenImg] = useState(false);
 
-  console.log(post);
-
-  const imageFile = post?.getImageInfo();
+  const imageFile = post.childrenPosts[selectedImageIndex]?.getImageInfo();
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const [isOpen, setIsOpen] = React.useState(false);

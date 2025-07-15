@@ -245,8 +245,7 @@ export const PendingPostContent = ({
             <ChildrenPostContent
               pageId={pageId}
               componentId={componentId}
-              parentPost={post}
-              posts={post.childrenPosts}
+              post={post}
               onImageClick={openImageViewer}
               onVideoClick={openVideoViewer}
               onClipClick={() => {}}
