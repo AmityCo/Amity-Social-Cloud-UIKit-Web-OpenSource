@@ -50,7 +50,7 @@ const usePostSubscription = (postId: string) => {
   return { post };
 };
 
-const useLiveStreamPlayer = ({ stream }: { post?: Amity.Post; stream: Amity.Stream }) => {
+const useLiveStreamPlayer = ({ stream }: { post?: Amity.Post; stream?: Amity.Stream | null }) => {
   const [muted, setMuted] = useState(true);
   const [streamId, setStreamId] = useState<string | undefined>();
 
@@ -206,12 +206,12 @@ const useLiveStreamPlayer = ({ stream }: { post?: Amity.Post; stream: Amity.Stre
   };
 };
 
-const useLivechat = (stream: Amity.Stream) => {
+const useLivechat = (stream?: Amity.Stream | null) => {
   const [channel, setChannel] = useState<Amity.Channel<'live'> | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isLoading && stream.status === 'live' && !channel) {
+    if (!isLoading && stream?.status === 'live' && !channel) {
       setIsLoading(true);
       stream.getLiveChat().then((channel: Amity.Channel<'live'> | undefined) => {
         setChannel(channel);
@@ -227,7 +227,8 @@ const useLivechat = (stream: Amity.Stream) => {
 export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerPageProps) {
   const pageId = 'livestream_player_page';
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const stream = post.childrenPosts[0]?.getLivestreamInfo() as Amity.Stream;
+  // const stream = post.childrenPosts[0]?.getLivestreamInfo() as Amity.Stream;
+  const stream = useStream(post.childrenPosts[0]?.getLivestreamInfo()?.streamId);
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
   const { isDesktop } = useResponsive();
   const { post: subscribedPost } = usePostSubscription(post.postId);
@@ -252,17 +253,17 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
 
   const onClose = useCallback(() => setStreamPlayer(null), []);
 
-  const isUserBanned = stream.isBanned;
+  const isUserBanned = stream?.isBanned;
 
   useEffect(() => {
     let unsubscribe: () => void;
 
-    if (stream.status === 'live' && stream.streamId) {
+    if (stream?.status === 'live' && stream?.streamId) {
       subscribeTopic(getLiveStreamTopic() + `/${stream.streamId}`);
     }
 
     return () => unsubscribe?.();
-  }, [stream.status, stream.streamId]);
+  }, [stream?.status, stream?.streamId]);
 
   useEffect(() => {
     if (!playerInitialized) return;
@@ -351,8 +352,6 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
 
   const isLive = stream?.status === liveStreamStatus.live;
   const isEnded = stream?.status === liveStreamStatus.ended && !stream?.moderation?.terminateLabels;
-
-
 
   return (
     <ModalOverlay
