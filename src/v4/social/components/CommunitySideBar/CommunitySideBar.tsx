@@ -77,6 +77,7 @@ export const CommunitySideBar = ({
       <div className={styles.communitySideBar__menuSection}>
         <NewsFeedMenuItem pageId={pageId} componentId={componentId} />
         {!isExploreHidden && <ExploreMenuItem pageId={pageId} componentId={componentId} />}
+        <h2>test div to check uploaded editing</h2>
       </div>
       <div className={styles.communitySideBar__myCommunitiesSection}>
         <MyCommunitiesSideBarTitle pageId={pageId} componentId={componentId} />
