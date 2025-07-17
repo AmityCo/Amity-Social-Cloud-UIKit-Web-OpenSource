@@ -48,7 +48,8 @@ export function ModeratorBadge({
       data-testid={accessibilityId}
     >
       <Badge className={styles.moderatorBadge__icon} />
-      <div className={styles.moderatorBadge__text}>{config.text}</div>
+      <div className={styles.moderatorBadge__text}>Moderatore Test</div>
+      {/* <div className={styles.moderatorBadge__text}>{config.text}</div> */}
     </div>
   );
 }
