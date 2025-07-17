@@ -76,7 +76,7 @@
   overflow: hidden;
   position: absolute;
   top: 0.625rem;
-  left: 1.75rem;
+  left: 0.75rem;
   background-color: transparent;
   user-select: none;
   pointer-events: none;
@@ -87,7 +87,8 @@
   font-size: var(--asc-text-font-size-md);
   color: var(--asc-color-base-default);
   max-height: calc(1.25rem + var(--asc-line-height-md) * 5);
-  padding: 0 0 0 1rem;
+
+  /* padding: 0 0 0 1rem; */
   position: relative;
 }
 

@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: sticky;
 }
 
 .livestreamChatMessageComposer__unJoined__container {
@@ -93,6 +94,7 @@
   }
 
   .livestreamChatMessageComposer {
+    position: unset;
     height: 4.5rem;
     border-radius: 0 0 1rem 1rem;
     background-color: var(--asc-color-background-default);

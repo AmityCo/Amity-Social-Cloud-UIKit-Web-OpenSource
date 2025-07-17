@@ -3,11 +3,9 @@ import InternalMessageComposer from '~/v4/chat/internal-components/MessageCompos
 import styles from './LivestreamChatMessageComposer.module.css';
 import { Typography } from '~/v4/core/components';
 import ChatMuted from '~/v4/icons/ChatMuted';
-import Like from '~/v4/social/elements/ReactionButton/Like';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { ImageIconButton } from '~/v4/core/internal-components/ButtonIcon/ImageIconButton';
 import { useCreateMessage } from '~/v4/chat/hooks/useCreateMessage';
-import { $getRoot, LexicalEditor } from 'lexical';
+import { $getRoot, $getSelection, $isRangeSelection, LexicalEditor } from 'lexical';
 import { ActionButton } from '~/v4/core/components/ActionButton/ActionButton';
 import ArrowTop from '~/v4/icons/ArrowTop';
 import Notification from '~/v4/core/components/Notification';
@@ -18,8 +16,6 @@ import Liked from '~/v4/icons/Liked';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import { ReactionBar } from '~/v4/chat/components/ReactionBar/ReactionBar';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
-import useSDK from '~/v4/core/hooks/useSDK';
-import { useSearchChannelUser } from '~/v4/chat/hooks/collections/useSearchChannelUser';
 
 interface LivestreamChatMessageComposerProps {
   channelId: Amity.Channel['channelId'];
@@ -40,6 +36,8 @@ export const LivestreamChatMessageComposer = ({
 }: LivestreamChatMessageComposerProps) => {
   const componentId = 'livestream_chat_compose_bar';
   const editorRef = useRef<LexicalEditor | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const { channel, loading: isChannelLoading } = useChannel({ channelId });
 
   const [error, setError] = useState<string | null>(null);
@@ -65,6 +63,53 @@ export const LivestreamChatMessageComposer = ({
       setError(message);
     },
   });
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleContainerTouch = (event: TouchEvent) => {
+      const target = event.target as HTMLElement;
+
+      // ✅ Check for ActionButton and other interactive elements
+      const isActionButton = target.closest('button, [role="button"], [data-element-id]');
+
+      if (isActionButton) {
+        return; // Don't interfere with buttons
+      }
+
+      // ✅ Check if touching the editor area
+      const editorElement = container.querySelector('[contenteditable="true"]') as HTMLElement;
+      const isTouchingEditor =
+        editorElement && (target === editorElement || editorElement.contains(target));
+
+      if (isTouchingEditor) {
+        event.preventDefault();
+        editorElement.focus();
+
+        // ✅ Also focus using Lexical editor reference
+        if (editorRef.current) {
+          editorRef.current.focus();
+
+          // ✅ Move cursor to end
+          editorRef.current.update(() => {
+            const root = $getRoot();
+            const selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+              root.selectEnd();
+            }
+          });
+        }
+      }
+    };
+
+    // ✅ Use capture phase to handle before child components
+    container.addEventListener('touchstart', handleContainerTouch, true);
+
+    return () => {
+      container.removeEventListener('touchstart', handleContainerTouch, true);
+    };
+  }, [containerRef.current]);
 
   useEffect(() => {
     let unsubscribe: () => void;
@@ -147,6 +192,11 @@ export const LivestreamChatMessageComposer = ({
     });
 
     clearMessage();
+    setTimeout(() => {
+      if (editorRef.current) {
+        editorRef.current.blur();
+      }
+    }, 50);
   };
 
   const renderContent = useCallback(() => {
@@ -181,6 +231,7 @@ export const LivestreamChatMessageComposer = ({
           data-testid={accessibilityId}
           style={themeStyles}
           data-disabled={disabled}
+          ref={containerRef}
         >
           <InternalMessageComposer
             ref={editorRef}
@@ -205,7 +256,9 @@ export const LivestreamChatMessageComposer = ({
                 pageId={pageId}
                 componentId={componentId}
                 elementId={'create_message_button'}
-                onPress={sendMessage}
+                onPress={() => {
+                  sendMessage();
+                }}
                 size="large"
                 defaultIcon={<ArrowTop />}
                 isDisabled={disabled}

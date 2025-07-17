@@ -31,6 +31,7 @@ import { UserAvatar } from '~/v4/social/elements';
 import ChatFeed from '~/v4/chat/internal-components/ChatFeed/ChatFeed';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail';
+import { useKeyboardVisibility } from './useKeyboardVisibility';
 
 export type LiveStreamPlayerPageProps = {
   post: Amity.Post;
@@ -159,7 +160,9 @@ const useLiveStreamPlayer = ({ stream }: { post?: Amity.Post; stream?: Amity.Str
     setIsPoorConnection(false);
   };
 
-  const resetLiveStreamPlayerRef = () => setStreamId(undefined);
+  const resetLiveStreamPlayerRef = () => {
+    if (streamId) document.getElementById(streamId)?.remove();
+  };
 
   useEffect(() => {
     if (stream?.streamId) setStreamId(stream.streamId);
@@ -168,7 +171,9 @@ const useLiveStreamPlayer = ({ stream }: { post?: Amity.Post; stream?: Amity.Str
   useEffect(() => {
     if (streamId) {
       getLiveStreamPlayer(streamId);
-    } else videoRef?.current?.remove();
+    } else {
+      videoRef?.current?.remove();
+    }
 
     return () => {
       if (videoRef.current) {
@@ -227,9 +232,10 @@ const useLivechat = (stream?: Amity.Stream | null) => {
 export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerPageProps) {
   const pageId = 'livestream_player_page';
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  // const stream = post.childrenPosts[0]?.getLivestreamInfo() as Amity.Stream;
   const stream = useStream(post.childrenPosts[0]?.getLivestreamInfo()?.streamId);
+  const { keyboardOffset } = useKeyboardVisibility();
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
+  const [hideChatFeed, setHideChatFeed] = useState(false);
   const { isDesktop } = useResponsive();
   const { post: subscribedPost } = usePostSubscription(post.postId);
   const { community } = useCommunity({
@@ -254,6 +260,11 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
   const onClose = useCallback(() => setStreamPlayer(null), []);
 
   const isUserBanned = stream?.isBanned;
+
+  useEffect(() => {
+    if (keyboardOffset) setHideChatFeed(true);
+    else setHideChatFeed(false);
+  }, [keyboardOffset]);
 
   useEffect(() => {
     let unsubscribe: () => void;
@@ -337,7 +348,6 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentRect) {
-          console.log('entry', entry.contentRect.height);
           setChatContainerHeight(entry.contentRect.height);
         }
       }
@@ -359,6 +369,12 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
       className={styles.liveStreamPlayer__overlay}
       onOpenChange={(open) => !open && onClose()}
       data-is-live={isLive}
+      style={{
+        // ✅ Move the entire modal up when keyboard is open
+        transform:
+          keyboardOffset > 0 && !isDesktop ? `translateY(-${keyboardOffset * 0.5}px)` : 'none',
+        transition: 'transform 0.3s ease-in-out',
+      }}
     >
       <Modal
         className={styles.livestreamPlayer__modal}
@@ -366,95 +382,103 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
         data-is-ended={isEnded}
       >
         <Dialog className={styles.liveStreamPlayer__dialog} data-is-live={isLive}>
-          {isLive || isEnded ? (
-            <div className={styles.liveStreamPlayer__liveDetail}>
-              <Button
-                variant="text"
-                onPress={onClose}
-                className={styles.liveStreamPlayer__closeButton}
-                data-is-live={isLive}
-              >
-                <CloseIcon
-                  className={styles.liveStreamPlayer__closeButton__icon}
-                  data-is-live={isLive}
-                  data-is-ended={isEnded}
-                />
-              </Button>
-              {!isEnded && !isUserBanned && (
-                <div className={styles.liveStreamPlayer__liveDetail__detail}>
-                  <UserAvatar
-                    userId={post.creator?.userId}
-                    shouldRedirectToUserProfile={false}
-                    pageId={pageId}
-                    imageContainerClassName={styles.liveStreamPlayer__liveDetail__avatar}
-                  />
-                  <div>
-                    <Typography.CaptionBold className={styles.livestreamPlayer__liveDetail__text}>
-                      {stream?.title}
-                    </Typography.CaptionBold>
-                    <Typography.CaptionSmall className={styles.livestreamPlayer__liveDetail__text}>
-                      By {post.creator?.displayName}
-                    </Typography.CaptionSmall>
-                  </div>
-                </div>
-              )}
-            </div>
+          {isUserBanned ? (
+            <>
+              <ClearButton
+                onPress={() => onClose()}
+                buttonClassName={styles.liveStreamPlayer__closeButton}
+                defaultClassName={styles.liveStreamPlayer__closeButton__icon}
+              />
+              <LiveStreamBanThumbnail view="full-screen" />
+            </>
           ) : (
-            <ClearButton
-              onPress={() => onClose()}
-              buttonClassName={styles.liveStreamPlayer__closeButton}
-              defaultClassName={styles.liveStreamPlayer__closeButton__icon}
-            />
-          )}
-
-          <div
-            style={themeStyles}
-            ref={liveStreamPlayerRef}
-            data-testid={accessibilityId}
-            className={styles.liveStreamPlayer}
-            data-is-live={isLive}
-          >
-            {isLoading && (
-              <div className={styles.liveStreamPlayer__loading}>
-                <div className={styles.liveStreamPlayer__slowConnection}>
-                  <div className={styles.liveStreamPlayer__loadingSpinner} />
-                  {isPoorConnection && (
-                    <>
-                      <Typography.TitleBold>Reconnecting</Typography.TitleBold>
-                      <Typography.Caption>
-                        Due to poor connection, this live stream has been <br /> paused. It will
-                        resume automatically <br />
-                        once the connection is stable.
-                      </Typography.Caption>
-                    </>
+            <>
+              {isLive || isEnded ? (
+                <div className={styles.liveStreamPlayer__liveDetail}>
+                  <Button
+                    variant="text"
+                    onPress={onClose}
+                    className={styles.liveStreamPlayer__closeButton}
+                    data-is-live={isLive}
+                  >
+                    <CloseIcon
+                      className={styles.liveStreamPlayer__closeButton__icon}
+                      data-is-live={isLive}
+                      data-is-ended={isEnded}
+                    />
+                  </Button>
+                  {!isEnded && (
+                    <div className={styles.liveStreamPlayer__liveDetail__detail}>
+                      <UserAvatar
+                        userId={post.creator?.userId}
+                        shouldRedirectToUserProfile={false}
+                        pageId={pageId}
+                        imageContainerClassName={styles.liveStreamPlayer__liveDetail__avatar}
+                      />
+                      <div>
+                        <Typography.CaptionBold
+                          className={styles.livestreamPlayer__liveDetail__text}
+                        >
+                          {stream?.title}
+                        </Typography.CaptionBold>
+                        <Typography.CaptionSmall
+                          className={styles.livestreamPlayer__liveDetail__text}
+                        >
+                          By {post.creator?.displayName}
+                        </Typography.CaptionSmall>
+                      </div>
+                    </div>
                   )}
                 </div>
-              </div>
-            )}
-            {isDesktop &&
-              (stream?.status === liveStreamStatus.live ||
-                stream?.status === liveStreamStatus.ended) &&
-              stream?.moderation?.terminateLabels &&
-              stream?.moderation?.terminateLabels?.length > 0 && <LiveStreamTerminatedThumbnail />}
-            {isLive && <LiveStreamLiveBadge />}
-            {stream?.status === liveStreamStatus.idle && (
-              <LiveStreamIdleThumbnail view="full-screen" />
-            )}
-            {isEnded && <LiveStreamEndThumbnail view="full-screen" />}
-            {isLive && isDesktop && stream?.post && (
-              <ReactionFloating post={stream.post as Amity.Post} />
-            )}
-            {isUserBanned && (
-              <>
+              ) : (
                 <ClearButton
                   onPress={() => onClose()}
                   buttonClassName={styles.liveStreamPlayer__closeButton}
                   defaultClassName={styles.liveStreamPlayer__closeButton__icon}
                 />
-                <LiveStreamBanThumbnail view="full-screen" />
-              </>
-            )}
-          </div>
+              )}
+              <div
+                style={themeStyles}
+                ref={liveStreamPlayerRef}
+                data-testid={accessibilityId}
+                className={styles.liveStreamPlayer}
+                data-is-live={isLive}
+              >
+                {isLoading && (
+                  <div className={styles.liveStreamPlayer__loading}>
+                    <div className={styles.liveStreamPlayer__slowConnection}>
+                      <div className={styles.liveStreamPlayer__loadingSpinner} />
+                      {isPoorConnection && (
+                        <>
+                          <Typography.TitleBold>Reconnecting</Typography.TitleBold>
+                          <Typography.Caption>
+                            Due to poor connection, this live stream has been <br /> paused. It will
+                            resume automatically <br />
+                            once the connection is stable.
+                          </Typography.Caption>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {isDesktop &&
+                  (stream?.status === liveStreamStatus.live ||
+                    stream?.status === liveStreamStatus.ended) &&
+                  stream?.moderation?.terminateLabels &&
+                  stream?.moderation?.terminateLabels?.length > 0 && (
+                    <LiveStreamTerminatedThumbnail />
+                  )}
+                {isLive && <LiveStreamLiveBadge />}
+                {stream?.status === liveStreamStatus.idle && (
+                  <LiveStreamIdleThumbnail view="full-screen" />
+                )}
+                {isEnded && <LiveStreamEndThumbnail view="full-screen" />}
+                {isLive && isDesktop && stream?.post && (
+                  <ReactionFloating post={stream.post as Amity.Post} />
+                )}
+              </div>
+            </>
+          )}
         </Dialog>
 
         {isLive && channel && (
@@ -476,31 +500,35 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                 {plyrContainer &&
                   ReactDOM.createPortal(
                     <>
-                      <div className={styles.livestreamChat__overlay__top} />
-                      <div className={styles.livestreamChat__overlay__bottom} />
-                      <div
-                        className={styles.livestreamChat__reactionLane__ref}
-                        style={{ bottom: chatContainerHeight }}
-                      >
-                        {channel.attachedTo?.videoStreamId && (
-                          <ReactionFloating post={stream.post as Amity.Post} />
-                        )}
-                      </div>
-                      <div
-                        className={styles.livestreamChat__container__inner}
-                        ref={chatContainerRef}
-                      >
-                        <ChatFeed channel={channel} />
-                        <LivestreamChatMessageComposer
-                          pageId={pageId}
-                          channelId={channel.channelId}
-                          disabled={stream?.status === liveStreamStatus.ended || isPoorConnection}
-                          isJoined={!!community?.isJoined}
-                        />
-                      </div>
+                      {!hideChatFeed && (
+                        <>
+                          <div className={styles.livestreamChat__overlay__top} />
+                          <div className={styles.livestreamChat__overlay__bottom} />
+                          <div
+                            className={styles.livestreamChat__reactionLane__ref}
+                            style={{ bottom: chatContainerHeight }}
+                          >
+                            {channel.attachedTo?.videoStreamId && (
+                              <ReactionFloating post={stream?.post as Amity.Post} />
+                            )}
+                          </div>
+                          <div
+                            className={styles.livestreamChat__container__inner}
+                            ref={chatContainerRef}
+                          >
+                            <ChatFeed channel={channel} />
+                          </div>
+                        </>
+                      )}
                     </>,
                     plyrContainer,
                   )}
+                <LivestreamChatMessageComposer
+                  pageId={pageId}
+                  channelId={channel.channelId}
+                  disabled={stream?.status === liveStreamStatus.ended || isPoorConnection}
+                  isJoined={!!community?.isJoined}
+                />
               </>
             )}
           </>

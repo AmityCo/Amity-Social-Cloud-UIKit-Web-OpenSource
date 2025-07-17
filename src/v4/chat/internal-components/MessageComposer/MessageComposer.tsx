@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useRef, forwardRef, useImperativeHandle, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './MessageComposer.module.css';
