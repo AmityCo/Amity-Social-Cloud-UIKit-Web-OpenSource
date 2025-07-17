@@ -211,18 +211,25 @@ const useLiveStreamPlayer = ({ stream }: { post?: Amity.Post; stream?: Amity.Str
   };
 };
 
-const useLivechat = (stream?: Amity.Stream | null) => {
+const useLivechat = ({
+  stream,
+  targetType,
+}: {
+  stream?: Amity.Stream | null;
+  targetType: Amity.PostTargetType;
+}) => {
   const [channel, setChannel] = useState<Amity.Channel<'live'> | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isLoading && stream?.status === 'live' && !channel) {
+    if (!isLoading && stream?.status === 'live' && !channel && targetType !== 'user') {
       setIsLoading(true);
       stream.getLiveChat().then((channel: Amity.Channel<'live'> | undefined) => {
         setChannel(channel);
       });
     }
   }, [stream, channel, isLoading]);
+
   return {
     channel,
     isLoading,
@@ -255,7 +262,10 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
     resetLiveStreamPlayerRef,
   } = useLiveStreamPlayer({ stream });
 
-  const { channel, isLoading: isChannelLoading } = useLivechat(stream);
+  const { channel, isLoading: isChannelLoading } = useLivechat({
+    stream,
+    targetType: post.targetType,
+  });
 
   const onClose = useCallback(() => setStreamPlayer(null), []);
 
@@ -481,7 +491,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
           )}
         </Dialog>
 
-        {isLive && channel && (
+        {isLive && channel && post.targetType !== 'user' && (
           <>
             {isDesktop ? (
               <div className={styles.livestreamChat__container}>
@@ -497,7 +507,8 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
               </div>
             ) : (
               <>
-                {plyrContainer &&
+                {post.targetType !== 'user' &&
+                  plyrContainer &&
                   ReactDOM.createPortal(
                     <>
                       {!hideChatFeed && (

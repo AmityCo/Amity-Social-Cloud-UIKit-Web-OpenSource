@@ -1,6 +1,6 @@
 .reactionFloating__reactionItem {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
   animation: fading 5s linear;
   position: absolute;
   pointer-events: none;
@@ -15,13 +15,6 @@
   bottom: 0;
   right: 0;
   z-index: 1000;
-}
-
-@media only screen and (width >= 48em) {
-  .reactionFloating__reactionItem {
-    width: 2rem;
-    height: 2rem;
-  }
 }
 
 @keyframes fading {

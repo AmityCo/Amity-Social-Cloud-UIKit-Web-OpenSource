@@ -16,9 +16,10 @@ import Liked from '~/v4/icons/Liked';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import { ReactionBar } from '~/v4/chat/components/ReactionBar/ReactionBar';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
+import { LiveReactionRepository } from '@amityco/ts-sdk';
 
 interface LivestreamChatMessageComposerProps {
-  channelId: Amity.Channel['channelId'];
+  channelId?: Amity.Channel['channelId'];
   postId?: Amity.Post['postId'];
   disabled?: boolean;
   pageId?: string;
@@ -63,6 +64,26 @@ export const LivestreamChatMessageComposer = ({
       setError(message);
     },
   });
+
+  const onClickReaction = useCallback(
+    ({
+      reaction,
+      targetId,
+      streamId,
+    }: {
+      reaction: string;
+      targetId: string;
+      streamId: string;
+    }) => {
+      LiveReactionRepository.createReaction({
+        referenceId: targetId,
+        referenceType: 'post',
+        reactionName: reaction,
+        streamId,
+      });
+    },
+    [],
+  );
 
   useEffect(() => {
     const container = containerRef.current;
@@ -135,7 +156,16 @@ export const LivestreamChatMessageComposer = ({
             <ReactionButton
               pageId={pageId}
               componentId={componentId}
-              onReactionClick={() => openPopover()}
+              onReactionClick={(reaction: string) =>
+                onClickReaction({
+                  reaction,
+                  targetId,
+                  streamId,
+                })
+              }
+              onHover={openPopover}
+              onLongPress={openPopover}
+              hoverDuration={600}
               defaultIcon={() => (
                 <Liked className={styles.livestreamChatMessageComposer__reactionButton} />
               )}
