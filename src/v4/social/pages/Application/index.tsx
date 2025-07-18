@@ -41,6 +41,7 @@ import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
 import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
+import { LiveStreamBannedPage } from '~/v4/social/pages/LiveStreamBannedPage';
 import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
@@ -165,6 +166,7 @@ const Application = () => {
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
         {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
+        {page.type === PageTypes.LiveStreamBannedPage && <LiveStreamBannedPage />}
         {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
         {page.type === PageTypes.PendingRequestPage && (
           <PendingRequestPage community={page.context.community} />

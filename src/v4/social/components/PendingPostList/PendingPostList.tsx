@@ -240,7 +240,6 @@ export const PendingPostList = ({
               onClipClick={() => {
                 goToClipFeedPage?.({
                   currentPostId: post.children[0],
-                  posts: [],
                 });
               }}
             />

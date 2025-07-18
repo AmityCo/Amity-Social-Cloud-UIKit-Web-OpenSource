@@ -328,14 +328,16 @@ export const getEditorConfig = ({
   theme,
   nodes,
   editorState,
+  editable = true,
 }: {
   namespace: string;
   theme: EditorThemeClasses;
   nodes: Array<Klass<LexicalNode>>;
   editorState?: InitialEditorStateType;
+  editable?: boolean;
 }): InitialConfigType => ({
   namespace,
-  editable: true,
+  editable,
   theme: { ...defaultTheme, ...theme },
   onError(error: Error) {
     throw error;

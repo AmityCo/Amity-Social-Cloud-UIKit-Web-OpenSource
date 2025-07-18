@@ -1,0 +1,41 @@
+.messageBubbleSkeleton__container {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-live-steram-chat-bubble);
+}
+
+.messageBubbleSkeleton__firstLine,
+.messageBubbleSkeleton__secondLine {
+  height: 0.75rem;
+  background-color: var(--asc-color-secondary-shade3);
+  border-radius: 0.5rem;
+}
+
+.messageBubbleSkeleton__firstLine {
+  width: 20%;
+  margin-bottom: 0.34rem;
+}
+
+.messageBubbleSkeleton__secondLine {
+  width: 75%;
+}
+
+.messageBubbleSkeleton__container,
+.messageBubbleSkeleton__firstLine,
+.messageBubbleSkeleton__secondLine {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}

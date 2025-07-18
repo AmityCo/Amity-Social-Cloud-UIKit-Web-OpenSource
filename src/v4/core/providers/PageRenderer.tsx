@@ -17,6 +17,7 @@ import {
   EditUserProfilePage,
   LiveStreamPlayerPage,
   LivestreamTerminatedPage,
+  LiveStreamBannedPage,
   PendingPostsPage,
   MyCommunitiesSearchPage,
   PollPostComposerPage,
@@ -159,6 +160,8 @@ const PageRenderer = ({ children }: PageRendererProps) => {
       return <BlockedUserPage />;
     case PageTypes.LiveStreamTerminatedPage:
       return <LivestreamTerminatedPage />;
+    case PageTypes.LiveStreamBannedPage:
+      return <LiveStreamBannedPage />;
     case PageTypes.NotificationTrayPage:
       return <NotificationTrayPage />;
     case PageTypes.CommunityFeed:

@@ -1,0 +1,81 @@
+.messageBubble__container {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-live-steram-chat-bubble);
+}
+
+.messageBubble__topSectionWrap {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.messageBubble__displayName {
+  color: var(--asc-color-secondary-default);
+}
+
+.messageBubble__optionIcon {
+  fill: var(--asc-color-white);
+}
+
+.messageBubble__deletedMessageText__container {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.messageBubble__deletedMessageText {
+  color: var(--asc-color-base-shade2);
+}
+
+.messageBubble__deletedMessageText__icon {
+  width: 1rem;
+  height: 1rem;
+  padding-bottom: 0.12rem;
+  fill: var(--asc-color-base-shade2);
+}
+
+.messageBubble__messageText__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.messageBubble__messageText {
+  color: var(--asc-color-white);
+}
+
+.messageBubble__optionsButton__container {
+  padding: 0.5rem 0;
+}
+
+.messageBubble__optionButton {
+  padding: 0.75rem 0.5rem;
+}
+
+.messageBubble__optionButton__text {
+  color: var(--asc-color-base-default);
+}
+
+.messageBubble__optionButton__deleteText {
+  color: var(--asc-color-alert-default);
+}
+
+.messageBubble__optionButton__icon {
+  margin-right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.messageBubble__optionButton__deleteIcon {
+  margin-right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-alert-default);
+}
+
+.messageBubble__exclamationIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-white);
+}

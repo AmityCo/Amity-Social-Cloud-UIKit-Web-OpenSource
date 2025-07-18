@@ -42,6 +42,7 @@ import { useClipContext } from '~/v4/social/providers/ClipProvider';
 import { Play } from '~/v4/icons/Play';
 import { isAmityFile } from '~/v4/utils/checkFileType';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 
 export function CreatePost({
   community,
@@ -67,6 +68,8 @@ export function CreatePost({
   const { themeStyles } = useAmityPage({ pageId });
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
+  const { closePopup } = usePopupContext();
+
   const { online } = useNetworkState();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
     useFilePostUpload(pageId);
@@ -200,6 +203,7 @@ export function CreatePost({
   const handlePostSuccess = () => {
     setClipFile(null);
     checkRedirectPage();
+    isDesktop && closePopup();
   };
 
   const handlePostError = (error: Error) => {

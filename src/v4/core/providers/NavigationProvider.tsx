@@ -57,6 +57,7 @@ export enum PageTypes {
   CommunityCreatePage = 'CommunityCreatePage',
   PollPostComposerPage = 'PollPostComposerPage',
   LiveStreamTerminatedPage = 'LiveStreamTerminatedPage',
+  LiveStreamBannedPage = 'LiveStreamBannedPage',
   LiveStreamPlayerPage = 'LiveStreamPlayerPage',
   NotificationTrayPage = 'NotificationTrayPage',
   PendingRequestPage = 'PendingRequestPage',
@@ -234,6 +235,9 @@ type Page =
       type: PageTypes.LiveStreamTerminatedPage;
     }
   | {
+      type: PageTypes.LiveStreamBannedPage;
+    }
+  | {
       type: PageTypes.LiveStreamPlayerPage;
       context: LiveStreamPlayerPageProps;
     }
@@ -367,6 +371,7 @@ type ContextValue = {
   goToStorySettingPage?: (community: Amity.Community) => void;
   goToPendingPostPage?: (communityId: string) => void;
   goToLiveStreamTerminatedPage?: () => void;
+  goToLiveStreamBannedPage?: () => void;
   goToLiveStreamPlayerPage?: (context: LiveStreamPlayerPageProps) => void;
   goToPendingRequestPage?: (community: Amity.Community) => void;
   goToDraftClipPage?: (context: {
@@ -453,6 +458,7 @@ let defaultValue: ContextValue = {
   goToStorySettingPage: (community: Amity.Community) => {},
   goToPendingPostPage: (communityId: string) => {},
   goToLiveStreamTerminatedPage: () => {},
+  goToLiveStreamBannedPage: () => {},
   goToLiveStreamPlayerPage: (context: LiveStreamPlayerPageProps) => {},
   goToNotificationTrayPage: () => {},
   goToClipFeedPage: (context: {
@@ -535,6 +541,7 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext goToCommunitySettingPage(${community})`),
     goToLiveStreamTerminatedPage: () =>
       console.log('NavigationContext goToLiveStreamTerminatedPage()'),
+    goToLiveStreamBannedPage: () => console.log('NavigationContext goToLiveStreamTerminatedPage()'),
     goToLiveStreamPlayerPage: (context) =>
       console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
@@ -1317,6 +1324,15 @@ export default function NavigationProvider({
     pushPage(next);
   }, [onChangePage, pushPage]);
 
+  const goToLiveStreamBannedPage = useCallback(() => {
+    const next = {
+      type: PageTypes.LiveStreamBannedPage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [onChangePage, pushPage]);
+
   const goToLiveStreamPlayerPage = useCallback(
     (context: LiveStreamPlayerPageProps) => {
       setStreamPlayer(context); // modal as page
@@ -1429,6 +1445,7 @@ export default function NavigationProvider({
         goToPendingFollowRequestPage,
         goToBlockedUsersPage,
         goToLiveStreamTerminatedPage,
+        goToLiveStreamBannedPage,
         goToLiveStreamPlayerPage,
         onClickStory: handleClickStory,
         goToNotificationTrayPage,

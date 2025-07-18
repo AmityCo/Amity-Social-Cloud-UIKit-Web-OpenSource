@@ -1,6 +1,7 @@
+import ReactDOM from 'react-dom';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Plyr from 'plyr';
-import { Typography } from '~/v4/core/components';
+import { Avatar, Typography } from '~/v4/core/components';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import useStream from '~/v4/social/hooks/useStream';
 import usePost from '~/v4/core/hooks/objects/usePost';
@@ -10,14 +11,31 @@ import { liveStreamStatus } from '~/v4/social/constants/livestream';
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
-import { getPostTopic, LiveStreamPlayer, subscribeTopic } from '@amityco/ts-sdk';
+import {
+  getCommunityTopic,
+  getLiveStreamTopic,
+  getPostTopic,
+  LiveStreamPlayer,
+  subscribeTopic,
+  SubscriptionLevels,
+} from '@amityco/ts-sdk';
 import { LiveStreamLiveBadge } from '~/v4/social/internal-components/LiveStreamLiveBadge';
 import { LiveStreamEndThumbnail } from '~/v4/social/internal-components/LiveStreamEndThumbnail/';
 import { LiveStreamIdleThumbnail } from '~/v4/social/internal-components/LiveStreamIdleThumbnail';
 import { LiveStreamTerminatedThumbnail } from '~/v4/social/internal-components/LiveStreamTerminatedThumbnail';
 import 'plyr/dist/plyr.css';
 import styles from './LiveStreamPlayer.module.css';
-import { isStreamPost } from '~/v4/social/utils/postTypeChecker';
+import { LivestreamChatMessageComposer } from '~/v4/chat/components/LivechatMessageComposer';
+import { useCommunity } from '~/v4/chat/hooks/useCommunity';
+import { Button } from '~/v4/core/components/AriaButton/Button';
+import CloseIcon from '~/v4/icons/Close';
+import ChatFeed from '~/v4/chat/internal-components/ChatFeed/ChatFeed';
+import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
+import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail';
+import { useKeyboardVisibility } from './useKeyboardVisibility';
+import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export type LiveStreamPlayerPageProps = {
   post: Amity.Post;
@@ -37,18 +55,17 @@ const usePostSubscription = (postId: string) => {
   return { post };
 };
 
-const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
-  const { post: childPost } = usePost(post.children?.[0]);
-
-  const stream = useStream(isStreamPost(childPost) ? childPost?.data?.streamId : '');
-
+const useLiveStreamPlayer = ({ stream }: { post?: Amity.Post; stream?: Amity.Stream | null }) => {
   const [muted, setMuted] = useState(true);
+  const [streamId, setStreamId] = useState<string | undefined>();
+
   const [isLoading, setIsLoading] = useState(false);
-  const liveStreamPlayerRef = useRef<HTMLDivElement>(null);
   const [isPoorConnection, setIsPoorConnection] = useState(false);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [playerInitialized, setPlayerInitialized] = useState(false);
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const loadingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const liveStreamPlayerRef = useRef<HTMLDivElement>(null);
   const plyrRef = useRef<Plyr | null>(null);
 
   const getLiveStreamPlayer = async (streamId: string) => {
@@ -64,6 +81,8 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
     player.onvolumechange = () => setMuted(!player.muted);
 
     player.classList.add(styles.liveStreamPlayer__video);
+    player.setAttribute('data-is-live', 'true');
+    // if (stream?.status === 'live') player.setAttribute('data-is-live', 'true');
 
     player.addEventListener('loadedmetadata', () => {
       detectOrientation(player);
@@ -99,8 +118,9 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
 
     if (stream?.status === 'live' && player) {
       plyrRef.current = new Plyr(player, {
-        controls: ['play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip'],
+        controls: ['pause', 'play'],
         fullscreen: { enabled: false },
+        clickToPlay: true,
       });
     }
 
@@ -144,8 +164,20 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
     setIsPoorConnection(false);
   };
 
+  const resetLiveStreamPlayerRef = () => {
+    if (streamId) document.getElementById(streamId)?.remove();
+  };
+
   useEffect(() => {
-    if (stream?.streamId) getLiveStreamPlayer(stream?.streamId);
+    if (stream?.streamId) setStreamId(stream.streamId);
+  }, [stream?.streamId]);
+
+  useEffect(() => {
+    if (streamId) {
+      getLiveStreamPlayer(streamId);
+    } else {
+      videoRef?.current?.remove();
+    }
 
     return () => {
       if (videoRef.current) {
@@ -170,34 +202,115 @@ const useLiveStreamPlayer = ({ post }: { post: Amity.Post }) => {
         plyrRef.current.destroy();
       }
     };
-  }, [stream?.streamId]);
+  }, [streamId]);
 
   return {
     isLoading,
     isPoorConnection,
     playerInitialized,
     liveStreamPlayerRef,
-    streamId: stream?.streamId,
+    streamId: streamId,
+    plyrContainer: plyrRef.current?.elements.container,
+    resetLiveStreamPlayerRef,
+  };
+};
+
+const useLivechat = ({
+  stream,
+  targetType,
+}: {
+  stream?: Amity.Stream | null;
+  targetType: Amity.PostTargetType;
+}) => {
+  const [channel, setChannel] = useState<Amity.Channel<'live'> | undefined>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isLoading && stream?.status === 'live' && !channel && targetType !== 'user') {
+      setIsLoading(true);
+      stream.getLiveChat().then((channel: Amity.Channel<'live'> | undefined) => {
+        setChannel(channel);
+      });
+    }
+  }, [stream, channel, isLoading]);
+
+  return {
+    channel,
+    isLoading,
   };
 };
 
 export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerPageProps) {
   const pageId = 'livestream_player_page';
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const stream = useStream(post.childrenPosts[0]?.getLivestreamInfo()?.streamId);
 
+  const { currentUserId } = useSDK();
+  const { keyboardOffset } = useKeyboardVisibility();
+  const [chatContainerHeight, setChatContainerHeight] = useState<number>();
+  const [hideChatFeed, setHideChatFeed] = useState(false);
   const { isDesktop } = useResponsive();
   const { post: subscribedPost } = usePostSubscription(post.postId);
+  const { community } = useCommunity({
+    communityId: post.targetId,
+  });
 
   const { setStreamPlayer } = useLayoutContext();
   const { themeStyles, accessibilityId } = useAmityPage({ pageId });
-  const { goToLiveStreamTerminatedPage } = useNavigation();
-  const { isLoading, isPoorConnection, liveStreamPlayerRef, playerInitialized, streamId } =
-    useLiveStreamPlayer({ post });
+  const { goToLiveStreamTerminatedPage, goToLiveStreamBannedPage } = useNavigation();
+  const {
+    isLoading,
+    isPoorConnection,
+    liveStreamPlayerRef,
+    playerInitialized,
+    streamId,
+    plyrContainer,
+    resetLiveStreamPlayerRef,
+  } = useLiveStreamPlayer({ stream });
+
+  const { channel, isLoading: isChannelLoading } = useLivechat({
+    stream,
+    targetType: post.targetType,
+  });
+
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: community?.communityId as string,
+    },
+  });
+
+  const myMembership = members.find((member) => member.userId === currentUserId);
 
   const onClose = useCallback(() => setStreamPlayer(null), []);
 
-  const stream = useStream(playerInitialized ? streamId : undefined);
+  const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
 
   useEffect(() => {
+    if (keyboardOffset) setHideChatFeed(true);
+    else setHideChatFeed(false);
+  }, [keyboardOffset]);
+
+  useEffect(() => {
+    const unsubscribers: (() => void)[] = [];
+
+    if (stream?.status === 'live' && stream?.streamId) {
+      unsubscribers.push(subscribeTopic(getLiveStreamTopic() + `/${stream.streamId}`));
+    }
+
+    if (community?.communityId) {
+      unsubscribers.push(
+        subscribeTopic(getCommunityTopic(community, SubscriptionLevels.COMMUNITY)),
+      );
+    }
+
+    return () => {
+      unsubscribers.forEach((fn) => fn());
+    };
+  }, [stream?.status, stream?.streamId, community?.communityId]);
+
+  useEffect(() => {
+    if (!playerInitialized) return;
+
     const isTerminated =
       stream?.moderation?.terminateLabels && stream?.moderation?.terminateLabels?.length > 0;
     const isLiveOrEnded =
@@ -207,65 +320,268 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
       onClose();
       goToLiveStreamTerminatedPage?.();
     }
-  }, [stream?.moderation?.terminateLabels, stream?.status, isDesktop]);
+  }, [playerInitialized, stream?.moderation?.terminateLabels, stream?.status, isDesktop]);
 
   useEffect(() => {
+    if (!isDesktop && isUserBanned) goToLiveStreamBannedPage?.();
+
+    if (isDesktop && isUserBanned) resetLiveStreamPlayerRef();
+  }, [isDesktop, isUserBanned]);
+
+  useEffect(() => {
+    if (!playerInitialized) return;
+
     if (stream?.isDeleted || subscribedPost?.isDeleted) {
       onClose();
       goToDetailPage?.();
     }
-  }, [stream?.isDeleted, subscribedPost?.isDeleted]);
+  }, [playerInitialized, stream?.isDeleted, subscribedPost?.isDeleted]);
+
+  useEffect(() => {
+    if (!chatContainerRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect) {
+          setChatContainerHeight(entry.contentRect.height);
+        }
+      }
+    });
+
+    observer.observe(chatContainerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [chatContainerRef.current]);
+
+  useEffect(() => {
+    if (!chatContainerRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect) {
+          console.log('entry', entry.contentRect.height);
+          setChatContainerHeight(entry.contentRect.height);
+        }
+      }
+    });
+
+    observer.observe(chatContainerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [chatContainerRef.current]);
+
+  useEffect(() => {
+    if (!chatContainerRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect) {
+          setChatContainerHeight(entry.contentRect.height);
+        }
+      }
+    });
+
+    observer.observe(chatContainerRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [chatContainerRef.current]);
+
+  const isLive = stream?.status === liveStreamStatus.live;
+  const isEnded = stream?.status === liveStreamStatus.ended && !stream?.moderation?.terminateLabels;
 
   return (
     <ModalOverlay
-      isOpen={!!streamId}
+      isOpen={(!!streamId && !isUserBanned) || isDesktop}
       className={styles.liveStreamPlayer__overlay}
       onOpenChange={(open) => !open && onClose()}
+      data-is-live={isLive}
+      style={{
+        // ✅ Move the entire modal up when keyboard is open
+        transform:
+          keyboardOffset > 0 && !isDesktop ? `translateY(-${keyboardOffset * 0.5}px)` : 'none',
+        transition: 'transform 0.3s ease-in-out',
+      }}
     >
-      <Modal>
-        <Dialog className={styles.liveStreamPlayer__dialog}>
-          <ClearButton
-            onPress={() => onClose()}
-            buttonClassName={styles.liveStreamPlayer__closeButton}
-            defaultClassName={styles.liveStreamPlayer__closeButton__icon}
-          />
-          <div
-            style={themeStyles}
-            ref={liveStreamPlayerRef}
-            data-testid={accessibilityId}
-            className={styles.liveStreamPlayer}
-          >
-            {isLoading && (
-              <div className={styles.liveStreamPlayer__loading}>
-                <div className={styles.liveStreamPlayer__slowConnection}>
-                  <div className={styles.liveStreamPlayer__loadingSpinner} />
-                  {isPoorConnection && (
-                    <>
-                      <Typography.TitleBold>Reconnecting</Typography.TitleBold>
-                      <Typography.Caption>
-                        Due to poor connection, this live stream has been <br /> paused. It will
-                        resume automatically <br />
-                        once the connection is stable.
-                      </Typography.Caption>
-                    </>
+      <Modal
+        className={styles.livestreamPlayer__modal}
+        data-is-live={isLive}
+        data-is-ended={isEnded}
+      >
+        <Dialog className={styles.liveStreamPlayer__dialog} data-is-live={isLive}>
+          {isUserBanned ? (
+            <>
+              <ClearButton
+                onPress={() => onClose()}
+                buttonClassName={styles.liveStreamPlayer__closeButton}
+                defaultClassName={styles.liveStreamPlayer__closeButton__icon}
+              />
+              <LiveStreamBanThumbnail view="full-screen" />
+            </>
+          ) : (
+            <>
+              {isLive || isEnded ? (
+                <div className={styles.liveStreamPlayer__liveDetail}>
+                  <Button
+                    variant="text"
+                    onPress={onClose}
+                    className={styles.liveStreamPlayer__closeButton}
+                    data-is-live={isLive}
+                  >
+                    <CloseIcon
+                      className={styles.liveStreamPlayer__closeButton__icon}
+                      data-is-live={isLive}
+                      data-is-ended={isEnded}
+                    />
+                  </Button>
+                  {!isEnded && (
+                    <div className={styles.liveStreamPlayer__liveDetail__detail}>
+                      <CommunityAvatar
+                        pageId={pageId}
+                        community={community}
+                        className={styles.liveStreamPlayer__liveDetail__avatar}
+                      />
+
+                      <div>
+                        <Typography.CaptionBold
+                          className={styles.livestreamPlayer__liveDetail__text}
+                        >
+                          {community?.displayName}
+                        </Typography.CaptionBold>
+                        <Typography.CaptionSmall
+                          className={styles.livestreamPlayer__liveDetail__text}
+                        >
+                          By {post.creator?.displayName}
+                        </Typography.CaptionSmall>
+                      </div>
+                    </div>
                   )}
                 </div>
+              ) : (
+                <ClearButton
+                  onPress={() => onClose()}
+                  buttonClassName={styles.liveStreamPlayer__closeButton}
+                  defaultClassName={styles.liveStreamPlayer__closeButton__icon}
+                />
+              )}
+
+              <div
+                style={themeStyles}
+                ref={liveStreamPlayerRef}
+                data-testid={accessibilityId}
+                className={styles.liveStreamPlayer}
+                data-is-live={isLive}
+              >
+                {isLive && isDesktop && post.feedType === 'reviewing' && (
+                  <div className={styles.liveStreamPlayer__pendingPost__banner}>
+                    <div className={styles.livestreamChat__overlay__top} />
+                    <div className={styles.livestreamChat__overlay__bottom}>
+                      <div className={styles.livestreamChat__pendingPost__text}>
+                        <Typography.Body>
+                          This live stream has started, but with limited visibility until the post
+                          has been approved.
+                        </Typography.Body>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {isLoading && (
+                  <div className={styles.liveStreamPlayer__loading}>
+                    <div className={styles.liveStreamPlayer__slowConnection}>
+                      <div className={styles.liveStreamPlayer__loadingSpinner} />
+                      {isPoorConnection && (
+                        <>
+                          <Typography.TitleBold>Reconnecting</Typography.TitleBold>
+                          <Typography.Caption>
+                            Due to poor connection, this live stream has been <br /> paused. It will
+                            resume automatically <br />
+                            once the connection is stable.
+                          </Typography.Caption>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {isDesktop &&
+                  (stream?.status === liveStreamStatus.live ||
+                    stream?.status === liveStreamStatus.ended) &&
+                  stream?.moderation?.terminateLabels &&
+                  stream?.moderation?.terminateLabels?.length > 0 && (
+                    <LiveStreamTerminatedThumbnail />
+                  )}
+                {isLive && <LiveStreamLiveBadge />}
+                {stream?.status === liveStreamStatus.idle && (
+                  <LiveStreamIdleThumbnail view="full-screen" />
+                )}
+                {isEnded && <LiveStreamEndThumbnail view="full-screen" />}
+                {isLive && isDesktop && stream?.post && (
+                  <ReactionFloating post={stream.post as Amity.Post} />
+                )}
               </div>
-            )}
-            {isDesktop &&
-              (stream?.status === liveStreamStatus.live ||
-                stream?.status === liveStreamStatus.ended) &&
-              stream?.moderation?.terminateLabels &&
-              stream?.moderation?.terminateLabels?.length > 0 && <LiveStreamTerminatedThumbnail />}
-            {stream?.status === liveStreamStatus.live && <LiveStreamLiveBadge />}
-            {stream?.status === liveStreamStatus.idle && (
-              <LiveStreamIdleThumbnail view="full-screen" />
-            )}
-            {stream?.status === liveStreamStatus.ended && !stream?.moderation?.terminateLabels && (
-              <LiveStreamEndThumbnail view="full-screen" />
-            )}
-          </div>
+            </>
+          )}
         </Dialog>
+
+        {isLive && channel && post.targetType !== 'user' && (
+          <>
+            {isDesktop ? (
+              <div className={styles.livestreamChat__container}>
+                <div className={styles.livestreamChat__container__inner}>
+                  <ChatFeed channel={channel} />
+                  <LivestreamChatMessageComposer
+                    pageId={pageId}
+                    channelId={channel.channelId}
+                    disabled={stream?.status === liveStreamStatus.ended || isPoorConnection}
+                    isJoined={!!community?.isJoined}
+                    isPendingPost={post.feedType === 'reviewing'}
+                  />
+                </div>
+              </div>
+            ) : (
+              <>
+                {post.targetType !== 'user' &&
+                  plyrContainer &&
+                  ReactDOM.createPortal(
+                    <>
+                      {!hideChatFeed && (
+                        <>
+                          <div className={styles.livestreamChat__overlay__top} />
+                          <div className={styles.livestreamChat__overlay__bottom} />
+                          <div
+                            className={styles.livestreamChat__reactionLane__ref}
+                            style={{ bottom: chatContainerHeight }}
+                          >
+                            {channel.attachedTo?.videoStreamId && (
+                              <ReactionFloating post={stream?.post as Amity.Post} />
+                            )}
+                          </div>
+                          <div
+                            className={styles.livestreamChat__container__inner}
+                            ref={chatContainerRef}
+                          >
+                            <ChatFeed channel={channel} />
+                          </div>
+                        </>
+                      )}
+                    </>,
+                    plyrContainer,
+                  )}
+                <LivestreamChatMessageComposer
+                  pageId={pageId}
+                  channelId={channel.channelId}
+                  disabled={stream?.status === liveStreamStatus.ended || isPoorConnection}
+                  isJoined={!!community?.isJoined}
+                  isPendingPost={post.feedType === 'reviewing'}
+                />
+              </>
+            )}
+          </>
+        )}
       </Modal>
     </ModalOverlay>
   );

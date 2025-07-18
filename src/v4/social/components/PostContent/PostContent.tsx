@@ -156,6 +156,7 @@ const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) =>
 
 type ChildrenPostContentProps = {
   pageId?: string;
+  // Parent Post
   post: Amity.Post;
   componentId?: string;
   disabledContent?: boolean;
@@ -180,28 +181,33 @@ export const ChildrenPostContent = ({
       <PollContent
         pageId={pageId}
         componentId={componentId}
-        post={post}
+        parentPost={post}
+        posts={post.childrenPosts as Amity.Post<'poll'>[]}
         disabled={disabledContent}
       />
       <ImageContent
         pageId={pageId}
         componentId={componentId}
-        post={post as Amity.Post<'image'>}
+        posts={post.childrenPosts as Amity.Post<'image'>[]}
         onImageClick={onImageClick}
       />
       <VideoContent
         pageId={pageId}
         componentId={componentId}
-        post={post as Amity.Post<'video'>}
+        posts={post.childrenPosts as Amity.Post<'video'>[]}
         onVideoClick={onVideoClick}
+      />
+      <LiveStreamContent
+        posts={post.childrenPosts as Amity.Post<'liveStream'>[]}
+        goToPostDetail={goToPostDetail}
+        parentPost={post}
       />
       <ClipContent
         pageId={pageId}
         componentId={componentId}
-        post={post as Amity.Post<'clip'>}
+        posts={post.childrenPosts as Amity.Post<'clip'>[]}
         onClipClick={onClipClick}
       />
-      <LiveStreamContent post={post} goToPostDetail={goToPostDetail} />
     </>
   );
 };
@@ -465,7 +471,7 @@ export const PostContent = ({
             mentionees={post?.mentionees}
             post={post}
           />
-          {post && post?.children?.length > 0 ? (
+          {post.childrenPosts?.length > 0 ? (
             <ChildrenPostContent
               pageId={pageId}
               componentId={componentId}

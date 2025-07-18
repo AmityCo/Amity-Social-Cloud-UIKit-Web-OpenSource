@@ -7,7 +7,7 @@ import { Typography } from '~/v4/core/components';
 import { isNonNullable } from '~/v4/helpers/utils';
 import { FlagIcon, TrashIcon } from '~/v4/social/icons';
 import { CreatePost } from '~/v4/icons/CreatePost';
-import { ContentReportReason } from '~/v4/social/internal-components/ContentReportReason';
+import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
 import { ContentFlagReasonEnum } from '@amityco/ts-sdk';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';

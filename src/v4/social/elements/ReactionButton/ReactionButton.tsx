@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef } from 'react';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -9,6 +9,7 @@ import Like from '~/v4/social/elements/ReactionButton/Like';
 import Love from '~/v4/social/elements/ReactionButton/Love';
 import styles from './ReactionButton.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Button } from '~/v4/core/natives/Button';
 import millify from 'millify';
 
@@ -35,10 +36,16 @@ interface ReactionButtonProps {
   defaultIconClassName?: string;
   imgIconClassName?: string;
   reactButtonClassName?: string;
+  defaultIcon?: () => JSX.Element;
   onReactionClick: (reactionKey: string) => void;
+  onHover?: () => void;
+  onLongPress?: () => void;
+  hoverDuration?: number;
+  longPressDuration?: number;
 }
 
 const MOUSE_DURATION = 250;
+const LONG_PRESS_DURATION = 500;
 
 export function ReactionButton({
   pageId = '*',
@@ -50,15 +57,64 @@ export function ReactionButton({
   defaultIconClassName,
   imgIconClassName,
   reactButtonClassName,
+  hoverDuration = MOUSE_DURATION,
+  longPressDuration = LONG_PRESS_DURATION,
+  onHover,
+  onLongPress,
+  defaultIcon,
   onReactionClick,
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
+
   const { isExcluded, accessibilityId, config, defaultConfig, uiReference, themeStyles } =
     useAmityElement({
       pageId,
       componentId,
       elementId,
     });
+
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { isDesktop } = useResponsive();
+
+  const handleMouseEnter = useCallback(() => {
+    if (!onHover) return;
+
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+
+    hoverTimeoutRef.current = setTimeout(() => {
+      onHover();
+    }, hoverDuration);
+  }, [hoverDuration, onHover]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+      hoverTimeoutRef.current = null;
+    }
+  }, []);
+
+  const handleTouchStart = useCallback(() => {
+    if (!onLongPress || isDesktop) return;
+
+    if (longPressTimeoutRef.current) {
+      clearTimeout(longPressTimeoutRef.current);
+    }
+
+    longPressTimeoutRef.current = setTimeout(() => {
+      onLongPress();
+    }, longPressDuration);
+  }, [onLongPress, longPressDuration, isDesktop]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimeoutRef.current) {
+      clearTimeout(longPressTimeoutRef.current);
+      longPressTimeoutRef.current = null;
+    }
+  }, []);
 
   const hasMyReaction = myReaction != null;
 
@@ -81,25 +137,35 @@ export function ReactionButton({
     }
   };
 
+  const renderDefaultIcon = () => (
+    <LikeSvg
+      className={clsx(styles.reactButton__icon, defaultIconClassName)}
+      data-has-my-reaction="false"
+    />
+  );
+
   return (
-    <Button
+    <div
       style={themeStyles}
       data-testid={accessibilityId}
       className={clsx(styles.reactButton, buttonClassName)}
-      onPress={() => {
+      onClick={() => {
+        handleMouseLeave();
+        handleTouchEnd();
         onReactionClick('like');
       }}
+      role="button"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
     >
       {myReaction ? (
         renderMyReaction()
       ) : (
         <IconComponent
-          defaultIcon={() => (
-            <LikeSvg
-              className={clsx(styles.reactButton__icon, defaultIconClassName)}
-              data-has-my-reaction="false"
-            />
-          )}
+          defaultIcon={defaultIcon ?? renderDefaultIcon}
           imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
           defaultIconName={defaultConfig.icon}
           configIconName={config.icon}
@@ -111,6 +177,6 @@ export function ReactionButton({
       >
         {typeof reactionsCount === 'number' ? millify(reactionsCount) : myReaction || config.text}
       </Typography.BodyBold>
-    </Button>
+    </div>
   );
 }

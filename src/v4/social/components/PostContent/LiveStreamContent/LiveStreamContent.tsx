@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import VideoControl from '~/v4/icons/VideoControl';
-import useStream from '~/v4/social/hooks/useStream';
-import usePost from '~/v4/core/hooks/objects/usePost';
 import { liveStreamStatus } from '~/v4/social/constants/livestream';
 import { LiveStreamThumbnail } from '~/v4/social/internal-components/LiveStreamThumbnail';
 import { LiveStreamLiveBadge } from '~/v4/social/internal-components/LiveStreamLiveBadge';
@@ -12,18 +10,37 @@ import { LiveStreamUpcomingBadge } from '~/v4/social/internal-components/LiveStr
 import { LiveStreamRecordedBadge } from '~/v4/social/internal-components/LiveStreamRecordedBadge';
 import styles from './LiveStreamContent.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail/LiveStreamBanThumbnail';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 
 type LiveStreamContentProps = {
-  post: Amity.Post;
+  parentPost: Amity.Post;
+  posts: Amity.Post<'liveStream'>[];
   goToPostDetail?: () => void;
 };
 
-export function LiveStreamContent({ post, goToPostDetail }: LiveStreamContentProps) {
+export function LiveStreamContent({ parentPost, posts, goToPostDetail }: LiveStreamContentProps) {
   const { goToLiveStreamPlayerPage } = useNavigation();
   const [isUpcoming, setIsUpcoming] = useState(false);
+
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { post: childPost, isLoading } = usePost(post.children?.[0]);
-  const stream = useStream((childPost as Amity.Post<'liveStream'>)?.data?.streamId);
+  const stream = posts?.[0]?.getLivestreamInfo();
+
+  const { currentUserId } = useSDK();
+  const { community } = useCommunity({
+    communityId: parentPost.targetId,
+  });
+
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: community?.communityId as string,
+    },
+  });
+
+  const myMembership = members.find((member) => member.userId === currentUserId);
+  const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
 
   useEffect(() => {
     const updateUpcomingStatus = () => {
@@ -57,7 +74,9 @@ export function LiveStreamContent({ post, goToPostDetail }: LiveStreamContentPro
     };
   }, [stream]);
 
-  if (isLoading || childPost?.dataType !== 'liveStream' || !stream) return null;
+  if (!posts || posts[0]?.dataType !== 'liveStream' || !stream) return null;
+
+  if (isUserBanned) return <LiveStreamBanThumbnail />;
 
   if (stream.isDeleted) return <LiveStreamIdleThumbnail />;
 
@@ -69,12 +88,11 @@ export function LiveStreamContent({ post, goToPostDetail }: LiveStreamContentPro
       data-idle={stream.status === liveStreamStatus.idle || isUpcoming}
       onPress={() => {
         if (stream.status !== liveStreamStatus.idle && !isUpcoming) {
-          goToLiveStreamPlayerPage?.({ post, goToDetailPage: goToPostDetail });
+          goToLiveStreamPlayerPage?.({ post: parentPost, goToDetailPage: goToPostDetail });
         }
       }}
     >
       <LiveStreamThumbnail fileId={stream.thumbnailFileId} alt={stream.title} />
-
       {(stream.status === liveStreamStatus.idle || isUpcoming) && <LiveStreamUpcomingBadge />}
       {stream.status === liveStreamStatus.live && !isUpcoming && <LiveStreamLiveBadge />}
       {stream.status === liveStreamStatus.recorded && <LiveStreamRecordedBadge />}
