@@ -6,6 +6,7 @@ interface LocalImageProps {
   className?: string;
   'data-qa-anchor'?: string;
   file?: File;
+  fileUrl?: string;
   progress?: number;
   mediaFit?: 'cover' | 'contain';
   noBorder?: boolean;
@@ -19,6 +20,7 @@ const LocalImage = ({
   className,
   'data-qa-anchor': dataQaAnchor = '',
   file,
+  fileUrl,
   progress = -1,
   mediaFit,
   noBorder,
@@ -27,15 +29,15 @@ const LocalImage = ({
   retry = () => {},
   overlayElements,
 }: LocalImageProps) => {
-  if (file == null) return null;
+  if (file == null && !fileUrl) return null;
 
-  const fileUrl = URL.createObjectURL(file);
+  const url = fileUrl ?? URL.createObjectURL(file);
 
   return (
     <StyledImage
       className={className}
       data-qa-anchor={dataQaAnchor}
-      url={fileUrl}
+      url={url}
       progress={progress}
       mediaFit={mediaFit}
       noBorder={noBorder}

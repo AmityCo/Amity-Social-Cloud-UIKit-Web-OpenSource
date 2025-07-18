@@ -4,6 +4,47 @@ import { isNonNullable } from '~/helpers/utils';
 
 const MAX_PERCENT = 0.999;
 
+const generateThumbnailVideo = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const videoElement = document.createElement('video');
+    const canvasElement = document.createElement('canvas');
+    const context = canvasElement.getContext('2d');
+
+    videoElement.src = URL.createObjectURL(file);
+
+    const handleCanPlay = () => {
+      videoElement.currentTime = 10;
+    };
+
+    const handleSeeked = () => {
+      try {
+        canvasElement.width = videoElement.videoWidth;
+        canvasElement.height = videoElement.videoHeight;
+        context?.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+        const thumbnail = canvasElement.toDataURL('image/png');
+        resolve(thumbnail);
+      } catch (error) {
+        reject(error);
+      } finally {
+        videoElement.removeEventListener('canplay', handleCanPlay);
+        videoElement.removeEventListener('seeked', handleSeeked);
+        videoElement.removeEventListener('error', handleError);
+        URL.revokeObjectURL(videoElement.src);
+      }
+    };
+
+    const handleError = (event: Event) => {
+      reject(new Error(`Error loading video: ${event}`));
+    };
+
+    videoElement.addEventListener('canplay', handleCanPlay);
+    videoElement.addEventListener('seeked', handleSeeked);
+    videoElement.addEventListener('error', handleError);
+
+    videoElement.load();
+  });
+};
+
 export function isAmityFile(file: Amity.File | File): file is Amity.File {
   return (file as Amity.File).fileId !== undefined;
 }
@@ -97,9 +138,19 @@ export default function useFileUpload({
             formData.append('files', file);
             const uploadedFile = await (async () => {
               if (file.type.includes(FileType.VIDEO)) {
-                return FileRepository.uploadVideo(formData, undefined, (currentPercent) => {
-                  onProgress(file, currentPercent);
-                });
+                const thumbnail = await generateThumbnailVideo(file);
+                const result = await FileRepository.uploadVideo(
+                  formData,
+                  undefined,
+                  (currentPercent) => {
+                    onProgress(file, currentPercent);
+                  },
+                );
+
+                const fileId = result.data?.[0]?.fileId;
+                if (fileId) sessionStorage.setItem('thumbnail_' + fileId, thumbnail);
+
+                return result;
               } else if (file.type.includes(FileType.IMAGE)) {
                 return FileRepository.uploadImage(formData, (currentPercent) => {
                   onProgress(file, currentPercent);
