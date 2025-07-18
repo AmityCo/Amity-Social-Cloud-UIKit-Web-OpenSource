@@ -29,11 +29,11 @@ import { LivestreamChatMessageComposer } from '~/v4/chat/components/LivechatMess
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import CloseIcon from '~/v4/icons/Close';
-import { UserAvatar } from '~/v4/social/elements';
 import ChatFeed from '~/v4/chat/internal-components/ChatFeed/ChatFeed';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail';
 import { useKeyboardVisibility } from './useKeyboardVisibility';
+import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 
@@ -441,17 +441,17 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                   </Button>
                   {!isEnded && (
                     <div className={styles.liveStreamPlayer__liveDetail__detail}>
-                      <UserAvatar
-                        userId={post.creator?.userId}
-                        shouldRedirectToUserProfile={false}
+                      <CommunityAvatar
                         pageId={pageId}
-                        imageContainerClassName={styles.liveStreamPlayer__liveDetail__avatar}
+                        community={community}
+                        className={styles.liveStreamPlayer__liveDetail__avatar}
                       />
+
                       <div>
                         <Typography.CaptionBold
                           className={styles.livestreamPlayer__liveDetail__text}
                         >
-                          {stream?.title}
+                          {community?.displayName}
                         </Typography.CaptionBold>
                         <Typography.CaptionSmall
                           className={styles.livestreamPlayer__liveDetail__text}
@@ -469,6 +469,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                   defaultClassName={styles.liveStreamPlayer__closeButton__icon}
                 />
               )}
+
               <div
                 style={themeStyles}
                 ref={liveStreamPlayerRef}
@@ -476,6 +477,19 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                 className={styles.liveStreamPlayer}
                 data-is-live={isLive}
               >
+                {isLive && isDesktop && post.feedType === 'reviewing' && (
+                  <div className={styles.liveStreamPlayer__pendingPost__banner}>
+                    <div className={styles.livestreamChat__overlay__top} />
+                    <div className={styles.livestreamChat__overlay__bottom}>
+                      <div className={styles.livestreamChat__pendingPost__text}>
+                        <Typography.Body>
+                          This live stream has started, but with limited visibility until the post
+                          has been approved.
+                        </Typography.Body>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 {isLoading && (
                   <div className={styles.liveStreamPlayer__loading}>
                     <div className={styles.liveStreamPlayer__slowConnection}>
@@ -524,6 +538,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                     channelId={channel.channelId}
                     disabled={stream?.status === liveStreamStatus.ended || isPoorConnection}
                     isJoined={!!community?.isJoined}
+                    isPendingPost={post.feedType === 'reviewing'}
                   />
                 </div>
               </div>
@@ -561,6 +576,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                   channelId={channel.channelId}
                   disabled={stream?.status === liveStreamStatus.ended || isPoorConnection}
                   isJoined={!!community?.isJoined}
+                  isPendingPost={post.feedType === 'reviewing'}
                 />
               </>
             )}

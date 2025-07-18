@@ -12,6 +12,11 @@
   padding: 1.125rem 1rem;
 }
 
+.livestreamChatMessageComposer__pendingPost__container {
+  text-align: center;
+  padding: 1.125rem 1rem;
+}
+
 .livestreamChatMessageComposer__mute__container {
   margin-left: 0.75rem;
   display: flex;
@@ -32,8 +37,13 @@
 
 .livestreamChatMessageComposer__mute__icon,
 .livestreamChatMessageComposer__mute__text,
+.livestreamChatMessageComposer__pendingPost__text,
 .livestreamChatMessageComposer__unJoined__text {
   color: var(--asc-color-secondary-shade2);
+}
+
+.livestreamChatMessageComposer__pendingPost__text {
+  text-align: center;
 }
 
 .livestreamChatMessageComposer__like__icon {

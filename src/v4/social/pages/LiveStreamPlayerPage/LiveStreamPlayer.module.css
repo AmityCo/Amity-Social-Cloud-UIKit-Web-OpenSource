@@ -251,4 +251,20 @@
     display: flex;
     flex-direction: column;
   }
+
+  .liveStreamPlayer__pendingPost__banner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+  }
+
+  .livestreamChat__pendingPost__text {
+    padding-bottom: 1.5rem;
+    color: var(--asc-color-secondary-shade2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
+  }
 }

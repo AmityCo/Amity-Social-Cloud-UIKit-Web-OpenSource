@@ -17,13 +17,14 @@ import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import { ReactionBar } from '~/v4/chat/components/ReactionBar/ReactionBar';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
-  postId?: Amity.Post['postId'];
   disabled?: boolean;
   pageId?: string;
-  isJoined: boolean;
+  isJoined?: boolean;
+  isPendingPost?: boolean;
 }
 
 const LIVESTREAM_MESSAGE_MAX_CHARACTOR = 200;
@@ -31,13 +32,14 @@ const LIVESTREAM_MESSAGE_MAX_CHARACTOR = 200;
 export const LivestreamChatMessageComposer = ({
   pageId = '*',
   channelId,
-  postId,
   disabled = false,
   isJoined,
+  isPendingPost = false,
 }: LivestreamChatMessageComposerProps) => {
   const componentId = 'livestream_chat_compose_bar';
   const editorRef = useRef<LexicalEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { isDesktop } = useResponsive();
 
   const { channel, loading: isChannelLoading } = useChannel({ channelId });
 
@@ -182,17 +184,28 @@ export const LivestreamChatMessageComposer = ({
   );
 
   const renderReadOnlyState = useCallback(
-    ({ message, targetId, streamId }: { message: string; targetId: string; streamId: string }) => {
+    ({
+      message,
+      targetId,
+      streamId,
+      allowReaction,
+    }: {
+      message: string;
+      targetId: string;
+      streamId: string;
+      allowReaction?: boolean;
+    }) => {
       return (
         <div className={styles.livestreamChatMessageComposer__mute__container}>
           <ChatMuted className={styles.livestreamChatMessageComposer__mute__icon} />
           <Typography.Body className={styles.livestreamChatMessageComposer__mute__text}>
             {message}
           </Typography.Body>
-          {renderReactionButton({
-            targetId,
-            streamId,
-          })}
+          {allowReaction &&
+            renderReactionButton({
+              targetId,
+              streamId,
+            })}
         </div>
       );
     },
@@ -231,6 +244,18 @@ export const LivestreamChatMessageComposer = ({
 
   const renderContent = useCallback(() => {
     if (isChannelLoading || isLoadingMembership) return null;
+
+    if (isDesktop && isPendingPost) return null;
+
+    if (!isDesktop && isPendingPost)
+      return (
+        <div className={styles.livestreamChatMessageComposer__pendingPost__container}>
+          <Typography.Body className={styles.livestreamChatMessageComposer__pendingPost__text}>
+            This live stream has started, but with limited visibility until the post has been
+            approved.
+          </Typography.Body>
+        </div>
+      );
 
     if (!isJoined)
       return (
@@ -300,6 +325,8 @@ export const LivestreamChatMessageComposer = ({
     );
   }, [
     isJoined,
+    isPendingPost,
+    isDesktop,
     isEmpty,
     isSpacebar,
     channel?.isMuted,
