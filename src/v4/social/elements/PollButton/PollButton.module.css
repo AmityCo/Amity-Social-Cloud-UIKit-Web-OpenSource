@@ -10,8 +10,6 @@
   width: 2rem;
   height: 2rem;
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-background-shade1);
-  border-radius: 50%;
   padding: 0.25rem;
 }
 
@@ -33,7 +31,7 @@
   }
 
   .pollButton:focus-visible {
-    border-radius: 100%;
+    border-radius: 8px;
     outline: 1px solid var(--asc-color-primary-default);
   }
 }

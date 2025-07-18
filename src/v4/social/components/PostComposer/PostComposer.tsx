@@ -11,6 +11,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { PollButton } from '~/v4/social/elements/PollButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
+import { FileButton } from '~/v4/social/elements/FileButton';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
 import { StoryButton } from '~/v4/social/elements/StoryButton/StoryButton';
@@ -137,13 +138,24 @@ export function PostComposer({
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
       />
+      <FileButton
+        pageId={pageId}
+        componentId={componentId}
+        defaultIconClassName={styles.postComposer__button}
+      />
+
       <VideoButton
         onPress={handlePostClick}
         pageId={pageId}
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
       />
-      <PollButton onPress={handlePollClick} pageId="post_composer_page" componentId="poll_button" />
+      <PollButton
+        onPress={handlePollClick}
+        pageId="post_composer_page"
+        componentId="poll_button"
+        defaultIconClassName={styles.postComposer__button}
+      />
       {renderStoryButton()}
     </div>
   );
