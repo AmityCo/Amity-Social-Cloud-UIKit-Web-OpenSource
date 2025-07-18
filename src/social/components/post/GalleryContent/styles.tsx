@@ -64,6 +64,7 @@ export interface BaseThumbnailProps {
   className?: string;
   duration?: number;
   fileId?: string;
+  fileUrl?: string;
   onRemove?: () => void;
   overlayElements?: React.ReactNode;
   showPlayIcon?: boolean;
@@ -73,6 +74,7 @@ const BaseThumbnail = ({
   className,
   duration = 0,
   fileId,
+  fileUrl,
   onRemove,
   overlayElements,
   showPlayIcon,
@@ -103,11 +105,12 @@ const BaseThumbnail = ({
     return `${hour}:${minute}:${second}`;
   };
 
-  return fileId ? (
+  return fileId || fileUrl ? (
     <Image
       data-qa-anchor="post-gallery-content-thumbnail"
       className={className}
       fileId={fileId}
+      fileUrl={fileUrl}
       mediaFit="cover"
       overlayElements={
         <>
@@ -160,7 +163,12 @@ export const VideoThumbnail = ({ fileId, videoFileId, ...props }: VideoThumbnail
       ? (videoFile?.attributes?.metadata?.video as any).duration
       : undefined;
 
-  if (thumbnailFile == null) return null;
+  if (!thumbnailFile) {
+    const localThumbnailUrl = sessionStorage.getItem('thumbnail_' + videoFileId);
+
+    if (!localThumbnailUrl) return null;
+    return <Thumbnail {...props} duration={duration} fileUrl={localThumbnailUrl} />;
+  }
 
   return <Thumbnail {...props} duration={duration} fileId={fileId} />;
 };

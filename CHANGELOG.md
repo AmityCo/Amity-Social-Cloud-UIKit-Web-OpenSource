@@ -14,10 +14,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 3.11.7 (2025-02-25)
 
-
 ### Bug Fixes
 
-* update displayName v3 ([c072278](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/c07227897c87ece7ecb3f94bcf9000b912402a79))
+- update displayName v3 ([c072278](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/c07227897c87ece7ecb3f94bcf9000b912402a79))
 
 ### 3.11.6 (2025-01-14)
 
@@ -27,33 +26,29 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 3.11.4 (2024-12-02)
 
-
 ### Bug Fixes
 
-* ASC-27509 - file upload ([#750](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/750)) ([53a5b4e](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/53a5b4e1057762e61f839730a3568d253ec0602a))
+- ASC-27509 - file upload ([#750](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/750)) ([53a5b4e](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/53a5b4e1057762e61f839730a3568d253ec0602a))
 
 ### 3.11.3 (2024-11-28)
 
 ### 3.11.3 (2024-11-28)
 
-
 ### Bug Fixes
 
-* ASC-27000 - prepend post on feed ([#743](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/743)) ([56af0ae](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/56af0ae3ead6b7b8e8a2c217e976b15ae79e54a0))
+- ASC-27000 - prepend post on feed ([#743](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/743)) ([56af0ae](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/56af0ae3ead6b7b8e8a2c217e976b15ae79e54a0))
 
 ### 3.11.2 (2024-11-22)
 
-
 ### Bug Fixes
 
-* lint error ([8dfea91](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8dfea918096e59128389064ce471e0e55e75ad49))
+- lint error ([8dfea91](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8dfea918096e59128389064ce471e0e55e75ad49))
 
 ### 3.10.1 (2024-09-12)
 
-
 ### Bug Fixes
 
-* skeleton style ([#646](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/646)) ([8ebc957](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8ebc9574189116ee2d70af2ee58fce97f81fabd5))
+- skeleton style ([#646](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/646)) ([8ebc957](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8ebc9574189116ee2d70af2ee58fce97f81fabd5))
 
 ## 3.11.0 (2024-10-25)
 
@@ -61,10 +56,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 3.10.1 (2024-09-12)
 
-
 ### Bug Fixes
 
-* skeleton style ([#646](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/646)) ([8ebc957](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8ebc9574189116ee2d70af2ee58fce97f81fabd5))
+- skeleton style ([#646](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/646)) ([8ebc957](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8ebc9574189116ee2d70af2ee58fce97f81fabd5))
 
 ## 3.10.0 (2024-09-02)
 
@@ -74,7 +68,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* pnpm install in pipeline ([4d48319](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/4d48319dbc3dfe41899495ef5181fed35035c3bf))
+- pnpm install in pipeline ([4d48319](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/4d48319dbc3dfe41899495ef5181fed35035c3bf))
 
 ## 3.7.0 (2024-06-24)
 
