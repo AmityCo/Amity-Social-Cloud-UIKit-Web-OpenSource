@@ -1,10 +1,10 @@
 .moderatorBadge {
   display: flex;
-  padding: 6px;
+  padding: 5px 6px;
   justify-content: center;
   align-items: center;
   gap: 0.0625rem;
-  background-color: #bdd62e;
+  background-color: var(--asc-color-secondary-default);
   border-radius: 100px;
 }
 
