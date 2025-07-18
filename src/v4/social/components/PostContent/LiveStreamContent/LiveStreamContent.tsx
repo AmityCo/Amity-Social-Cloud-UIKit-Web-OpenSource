@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import VideoControl from '~/v4/icons/VideoControl';
 import { liveStreamStatus } from '~/v4/social/constants/livestream';
@@ -11,8 +11,9 @@ import { LiveStreamRecordedBadge } from '~/v4/social/internal-components/LiveStr
 import styles from './LiveStreamContent.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail/LiveStreamBanThumbnail';
-import useCurrentUserChannelMembership from '~/v4/chat/hooks/useCurrentUserChannelMembership';
-import { useChannel } from '~/v4/chat/hooks/useChannel';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 
 type LiveStreamContentProps = {
   parentPost: Amity.Post;
@@ -27,7 +28,19 @@ export function LiveStreamContent({ parentPost, posts, goToPostDetail }: LiveStr
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stream = posts?.[0]?.getLivestreamInfo();
 
-  const isUserBanned = stream?.isBanned;
+  const { currentUserId } = useSDK();
+  const { community } = useCommunity({
+    communityId: parentPost.targetId,
+  });
+
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: community?.communityId as string,
+    },
+  });
+
+  const myMembership = members.find((member) => member.userId === currentUserId);
+  const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
 
   useEffect(() => {
     const updateUpcomingStatus = () => {

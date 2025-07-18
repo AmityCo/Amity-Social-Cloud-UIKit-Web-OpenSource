@@ -12,10 +12,12 @@ import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import {
+  getCommunityTopic,
   getLiveStreamTopic,
   getPostTopic,
   LiveStreamPlayer,
   subscribeTopic,
+  SubscriptionLevels,
 } from '@amityco/ts-sdk';
 import { LiveStreamLiveBadge } from '~/v4/social/internal-components/LiveStreamLiveBadge';
 import { LiveStreamEndThumbnail } from '~/v4/social/internal-components/LiveStreamEndThumbnail/';
@@ -32,6 +34,8 @@ import ChatFeed from '~/v4/chat/internal-components/ChatFeed/ChatFeed';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail';
 import { useKeyboardVisibility } from './useKeyboardVisibility';
+import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export type LiveStreamPlayerPageProps = {
   post: Amity.Post;
@@ -240,6 +244,8 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
   const pageId = 'livestream_player_page';
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const stream = useStream(post.childrenPosts[0]?.getLivestreamInfo()?.streamId);
+
+  const { currentUserId } = useSDK();
   const { keyboardOffset } = useKeyboardVisibility();
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
   const [hideChatFeed, setHideChatFeed] = useState(false);
@@ -267,9 +273,17 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
     targetType: post.targetType,
   });
 
+  const { members } = useCommunityMembersCollection({
+    queryParams: {
+      communityId: community?.communityId as string,
+    },
+  });
+
+  const myMembership = members.find((member) => member.userId === currentUserId);
+
   const onClose = useCallback(() => setStreamPlayer(null), []);
 
-  const isUserBanned = stream?.isBanned;
+  const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
 
   useEffect(() => {
     if (keyboardOffset) setHideChatFeed(true);
@@ -277,14 +291,22 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
   }, [keyboardOffset]);
 
   useEffect(() => {
-    let unsubscribe: () => void;
+    const unsubscribers: (() => void)[] = [];
 
     if (stream?.status === 'live' && stream?.streamId) {
-      subscribeTopic(getLiveStreamTopic() + `/${stream.streamId}`);
+      unsubscribers.push(subscribeTopic(getLiveStreamTopic() + `/${stream.streamId}`));
     }
 
-    return () => unsubscribe?.();
-  }, [stream?.status, stream?.streamId]);
+    if (community?.communityId) {
+      unsubscribers.push(
+        subscribeTopic(getCommunityTopic(community, SubscriptionLevels.COMMUNITY)),
+      );
+    }
+
+    return () => {
+      unsubscribers.forEach((fn) => fn());
+    };
+  }, [stream?.status, stream?.streamId, community?.communityId]);
 
   useEffect(() => {
     if (!playerInitialized) return;
