@@ -12,6 +12,7 @@ import { PollButton } from '~/v4/social/elements/PollButton';
 import { ImageButton } from '~/v4/social/elements/ImageButton';
 import { VideoButton } from '~/v4/social/elements/VideoButton';
 import { FileButton } from '~/v4/social/elements/FileButton';
+import { Icon } from '~/v4/core/components/Icon/Icon';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
 import { StoryButton } from '~/v4/social/elements/StoryButton/StoryButton';
@@ -130,7 +131,7 @@ export function PostComposer({
         textPlaceholderClassName={styles.postComposer__avatarPlaceholder}
       />
       <Button className={styles.postComposer__input} onPress={handlePostClick}>
-        What's going on?
+        <Icon name="Search" /> What's going on?
       </Button>
       <ImageButton
         onPress={handlePostClick}
@@ -138,14 +139,13 @@ export function PostComposer({
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
       />
-      <FileButton
+      <VideoButton
+        onPress={handlePostClick}
         pageId={pageId}
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
       />
-
-      <VideoButton
-        onPress={handlePostClick}
+      <FileButton
         pageId={pageId}
         componentId={componentId}
         defaultIconClassName={styles.postComposer__button}
