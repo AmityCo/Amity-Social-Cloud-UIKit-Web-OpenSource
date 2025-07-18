@@ -335,23 +335,27 @@ export const Comment = ({
                       {comment.createdAt !== comment.editedAt && ' (edited)'}
                     </span>
                   </Typography.Caption>
+                  {community && community.isJoined && (
+                    <>
+                      <div onClick={handleLike}>
+                        <Typography.CaptionBold
+                          className={styles.postComment__secondRow__like}
+                          data-is-liked={isLiked}
+                        >
+                          Like
+                        </Typography.CaptionBold>
+                      </div>
+                      <div
+                        data-testid={`${pageId}/${componentId}/reply_button`}
+                        onClick={() => onClickReply(comment)}
+                      >
+                        <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
+                          Reply
+                        </Typography.CaptionBold>
+                      </div>
+                    </>
+                  )}
 
-                  <div onClick={handleLike}>
-                    <Typography.CaptionBold
-                      className={styles.postComment__secondRow__like}
-                      data-is-liked={isLiked}
-                    >
-                      Like
-                    </Typography.CaptionBold>
-                  </div>
-                  <div
-                    data-testid={`${pageId}/${componentId}/reply_button`}
-                    onClick={() => onClickReply(comment)}
-                  >
-                    <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
-                      Reply
-                    </Typography.CaptionBold>
-                  </div>
                   <Popover
                     trigger={{
                       onClick: () => setBottomSheetOpen(true),

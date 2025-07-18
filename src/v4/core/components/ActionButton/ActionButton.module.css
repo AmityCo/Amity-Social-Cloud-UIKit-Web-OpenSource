@@ -1,0 +1,96 @@
+.button {
+  border: none;
+  outline: none;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  border-radius: var(--asc-border-radius-xxl);
+}
+
+/* Sizes */
+.tiny {
+  padding: 0.13rem;
+}
+
+.small {
+  padding: 0.13rem;
+}
+
+.medium {
+  padding: 0.25rem;
+}
+
+.large {
+  padding: 0.25rem;
+}
+
+/* Icon Sizing */
+.icon {
+  background: transparent;
+  display: inline-block;
+}
+
+.icon.tiny {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon.small {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon.medium {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon.large {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Icon Colors */
+.button.primary .icon {
+  color: var(--asc-color-white);
+}
+
+.button.secondary .icon {
+  color: var(--asc-color-base-default);
+}
+
+.button.tertiary .icon {
+  color: var(--asc-color-white);
+}
+
+/* Example button background styles (adjust based on your design) */
+
+/* Primary (dark gray) */
+.primary {
+  background-color: var(--asc-color-primary-default);
+}
+
+/* Secondary (light gray) */
+.secondary {
+  background-color: var(--asc-color-base-shade4);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--asc-color-base-shade3);
+}
+
+/* Tertiary (transparent) */
+.tertiary {
+  background-color: var(--asc-color-background-transparent-black);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.icon[data-disabled='true'] {
+  color: var(--asc-color-base-shade3);
+}

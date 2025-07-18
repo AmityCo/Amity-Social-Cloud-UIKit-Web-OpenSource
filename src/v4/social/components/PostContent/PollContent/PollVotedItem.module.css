@@ -34,8 +34,8 @@
 }
 
 .pollVotedItem__voteCount__avatar {
-  width: 1rem;
-  height: 1rem;
+  width: 1rem !important;
+  height: 1rem !important;
 }
 
 .pollVotedItem__voteCount__textPlaceholder {

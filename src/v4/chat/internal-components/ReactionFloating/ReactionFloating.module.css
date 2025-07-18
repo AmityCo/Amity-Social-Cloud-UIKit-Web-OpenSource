@@ -1,0 +1,33 @@
+.reactionFloating__reactionItem {
+  width: 2.25rem;
+  height: 2.25rem;
+  animation: fading 5s linear;
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+.reactionFloating__container {
+  overflow: visible;
+  height: 0;
+  position: absolute;
+  width: 25%;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+@keyframes fading {
+  0% {
+    opacity: 1;
+  }
+
+  40% {
+    opacity: 0;
+    transform: scale(-10%);
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

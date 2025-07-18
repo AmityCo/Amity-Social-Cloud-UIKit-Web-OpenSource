@@ -3,10 +3,12 @@ import { useEffect } from 'react';
 const useIntersectionObserver = ({
   node,
   onIntersect,
+  onLeave,
   options,
 }: {
   node?: HTMLElement | null;
   onIntersect: () => void;
+  onLeave?: () => void;
   options?: IntersectionObserverInit;
 }) => {
   useEffect(() => {
@@ -19,7 +21,7 @@ const useIntersectionObserver = ({
     observer.observe(node);
 
     return () => observer.disconnect();
-  }, [node, onIntersect, options]);
+  }, [node, onIntersect, options, onLeave]);
 };
 
 export default useIntersectionObserver;

@@ -5,13 +5,15 @@ import { Button } from '~/v4/core/natives/Button';
 import { IconComponent } from '~/v4/core/IconComponent';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './MenuButton.module.css';
+import { PressEvent } from 'react-aria';
 
 export type MenuButtonProps = {
   pageId?: string;
   className?: string;
   componentId?: string;
-  onClick?: () => void;
+  onClick?: (event: PressEvent) => void;
   iconClassName?: string;
+  onMouseEnter?: () => void;
 };
 
 export function MenuButton({

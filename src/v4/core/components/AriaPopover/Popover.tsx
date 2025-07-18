@@ -8,6 +8,7 @@ import styles from './Popover.module.css';
 type PopoverProps = Omit<$PopoverProps, 'children' | 'trigger'> & {
   containerClassName?: string;
   children: React.ReactNode | (({ closePopover }: { closePopover: () => void }) => React.ReactNode);
+  forceShowPopUp?: boolean;
   trigger:
     | (Omit<MenuButtonProps, 'onClick'> & {
         onClick?: ({ closePopover }: { closePopover: () => void }) => void;
@@ -31,6 +32,7 @@ export const Popover = ({
   className,
   containerClassName,
   placement = 'bottom right',
+  forceShowPopUp,
   ...props
 }: PopoverProps) => {
   const { isDesktop } = useResponsive();
@@ -53,7 +55,8 @@ export const Popover = ({
           className={clsx(isOpen && styles.popover__menuButton, trigger.className)}
         />
       )}
-      {isDesktop && (
+      {/* force = true */}
+      {(forceShowPopUp || isDesktop) && (
         <$Popover
           {...props}
           isOpen={isOpen}

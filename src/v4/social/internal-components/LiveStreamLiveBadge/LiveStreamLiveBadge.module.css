@@ -1,6 +1,6 @@
 .liveStreamLiveBadge {
-  top: 1rem;
-  left: 1rem;
+  top: 1.5rem;
+  right: 1rem;
   z-index: 100;
   position: absolute;
   display: inline-block;
