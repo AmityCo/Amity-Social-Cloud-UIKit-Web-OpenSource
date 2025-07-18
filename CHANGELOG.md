@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.11.0 (2025-07-18)
+
+
+### Features
+
+* bump sdk version ([#1169](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1169)) ([3478d4b](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/3478d4bf697e7c49f0d02a27ef331d7877c6b154))
+
 ## 4.10.0 (2025-07-11)
 
 
