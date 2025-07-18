@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.13.2 (2025-07-18)
+
+
+### Bug Fixes
+
+* show thumbnail for video right away after create ([#1168](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1168)) ([3ac0998](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/3ac09986a8fa001a13c2c227a55db1e2dca91969))
+
 ### 3.13.1 (2025-04-25)
 
 ## 3.13.0 (2025-04-11)
