@@ -26,6 +26,7 @@ export function PollButton({
   const elementId = 'poll_button';
   const { themeStyles, isExcluded, config, accessibilityId, uiReference, defaultConfig } =
     useAmityElement({ pageId, componentId, elementId });
+  console.log('🚀 ~ config:', config);
 
   if (isExcluded) return null;
 
