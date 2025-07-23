@@ -924,6 +924,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
 
         goToLiveStreamPlayerPage?.(context);
       },
+      goToUserProfilePage: (context: { userId: string }) => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityNotificationTrayPageBehavior.goToUserProfilePage(context);
+        }
+        goToUserProfilePage(context.userId);
+      },
     },
     AmityDraftClipPageBehavior: {
       goToPostComposerPage: (context: {
