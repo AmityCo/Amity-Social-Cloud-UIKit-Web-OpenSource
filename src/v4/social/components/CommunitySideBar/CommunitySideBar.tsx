@@ -25,6 +25,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   const { isVisitorOrBot } = useSDK();
   const { searchValue } = useSearchResultContext();
   const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
+  const { searchValue } = useSearchResultContext();
 
   const handleNotificationTrayButtonClick = () => {
     notificationTray.markTraySeen(new Date().toISOString());

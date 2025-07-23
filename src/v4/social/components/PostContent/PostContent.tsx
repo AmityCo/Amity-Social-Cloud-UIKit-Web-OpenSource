@@ -646,6 +646,49 @@ export const PostContent = ({
               </Button>
             )}
           </div>
+          {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
+            <>
+              <div className={styles.postContent__divider} />
+              <Typography.Body className={styles.postContent__notMember}>
+                Join community to interact with all posts
+              </Typography.Body>
+            </>
+          ) : targetCommunity &&
+            !targetCommunity?.isJoined &&
+            page.type === PageTypes.PostDetailPage ? null : (
+            <>
+              <div className={styles.postContent__divider} />
+              <div className={styles.postContent__reactionBar}>
+                <div className={styles.postContent__reactionBar__leftPane}>
+                  <ReactionButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    reactionsCount={
+                      style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
+                    }
+                    myReaction={reactionByMe}
+                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                    onReactionClick={handleReactionClick}
+                  />
+                  <CommentButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    commentsCount={
+                      style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                    }
+                    buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
+                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                    onPress={() => onClick?.()}
+                  />
+                </div>
+                <div className={styles.postContent__reactionBar__rightPane}>
+                  <ShareButton pageId={pageId} componentId={componentId} />
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Reaction Bar */}
           <>

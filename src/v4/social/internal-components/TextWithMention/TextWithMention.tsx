@@ -17,6 +17,7 @@ import {
 import { Typography } from '~/v4/core/components';
 import { isEmoji } from '~/v4/social/utils/isEmoji';
 import { Button } from '~/v4/core/components/AriaButton';
+import { isEmoji } from '~/v4/social/utils/isEmoji';
 import styles from './TextWithMention.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
@@ -185,14 +186,12 @@ export const TextWithMention = ({
       if (matchIndex === -1) {
         return hashtagText;
       }
-
       const beforeMatch = hashtagWithoutHash.slice(0, matchIndex);
       const matchedPart = hashtagWithoutHash.slice(
         matchIndex,
         matchIndex + keywordWithoutHash.length,
       );
       const afterMatch = hashtagWithoutHash.slice(matchIndex + keywordWithoutHash.length);
-
       return (
         <>
           {hasHashSymbol && '#'}
