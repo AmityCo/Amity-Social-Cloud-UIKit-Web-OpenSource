@@ -825,6 +825,101 @@ export const PostContent = ({
             />
           ) : null}
         </div>
+        {style === AmityPostContentComponentStyle.DETAIL ? (
+          <div className={styles.postContent__reactions_and_comments}>
+            <div
+              className={styles.postContent__reactionsBar}
+              onClick={() => {
+                const reactionList = (
+                  <ReactionList pageId={pageId} referenceId={post.postId} referenceType={'post'} />
+                );
+                isDesktop
+                  ? openPopup({ view: 'desktop', children: reactionList })
+                  : setDrawerData({ content: reactionList });
+              }}
+            >
+              {hasReaction ? (
+                <div className={styles.postContent__reactionsBar__reactions}>
+                  {hasCrying && (
+                    <Crying className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasHappy && (
+                    <Happy className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasFire && (
+                    <Fire className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasLove && (
+                    <Love className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                  {hasLike && (
+                    <Like className={styles.postContent__reactionsBar__reactions__icon} />
+                  )}
+                </div>
+              ) : null}
+              <Typography.Caption
+                data-testid={`${pageId}/${componentId}/like_count`}
+                className={styles.postContent__reactionsBar__reactions__count}
+              >
+                {`${millify(post?.reactionsCount || 0)} ${
+                  post?.reactionsCount === 1 ? 'like' : 'likes'
+                }`}
+              </Typography.Caption>
+            </div>
+
+            <Typography.Caption
+              data-testid={`${pageId}/${componentId}/comment_count`}
+              className={styles.postContent__commentsCount}
+            >
+              {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
+            </Typography.Caption>
+          </div>
+        ) : null}
+        {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
+          <>
+            <div className={styles.postContent__divider} />
+            <Button onPress={() => goToCommunityProfilePage(post?.targetId)}>
+              <Typography.Body className={styles.postContent__notMember}>
+                Join community to interact with all posts
+              </Typography.Body>
+            </Button>
+          </>
+        ) : targetCommunity &&
+          !targetCommunity?.isJoined &&
+          page.type === PageTypes.PostDetailPage ? null : (
+          <>
+            <div className={styles.postContent__divider} />
+            <div className={styles.postContent__reactionBar}>
+              <div className={styles.postContent__reactionBar__leftPane}>
+                <ReactionButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  reactionsCount={
+                    style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
+                  }
+                  myReaction={reactionByMe}
+                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                  onReactionClick={handleReactionClick}
+                />
+                <CommentButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  commentsCount={
+                    style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                  }
+                  buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
+                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                  onPress={() => onClick?.()}
+                />
+              </div>
+              <div className={styles.postContent__reactionBar__rightPane}>
+                <ShareButton pageId={pageId} componentId={componentId} />
+              </div>
+            </div>
+          </>
+        )}
       </div>
       {disabledInlineComment &&
         !(isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage) && (
