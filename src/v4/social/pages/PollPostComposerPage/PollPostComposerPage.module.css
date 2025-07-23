@@ -199,6 +199,12 @@
   fill: var(--asc-color-background-default);
 }
 
+.createPost_notificationIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-background-default);
+}
+
 @media (width >= 48em) {
   .pollPostComposerPage__container {
     width: 34.125rem;

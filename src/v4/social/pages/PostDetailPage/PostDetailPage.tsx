@@ -20,13 +20,19 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
-interface PostDetailPageProps {
+export interface PostDetailPageProps {
   id: string;
   hideTarget?: boolean;
   category?: AmityPostCategory;
   commentId?: string;
   parentId?: string;
   posts?: Amity.Post<'clip' | 'video'>[];
+  selectedReplyComment?: Amity.Comment;
+  showReplyCommentAt?: string;
+}
+
+export interface GoToPostDetailPageParams extends Omit<PostDetailPageProps, 'id'> {
+  postId: string;
 }
 
 export function PostDetailPage({
@@ -36,11 +42,13 @@ export function PostDetailPage({
   commentId,
   parentId,
   posts = [],
+  selectedReplyComment,
+  showReplyCommentAt,
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
-
-  const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
+  const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
   const commentListRef = useRef<HTMLDivElement>(null);
+  const hasScrolledRef = useRef(false); // Track if we've already scrolled to this commentId
 
   const { AmityPostDetailPageBehavior } = usePageBehavior();
   const { isDesktop } = useResponsive();
@@ -66,7 +74,13 @@ export function PostDetailPage({
 
   // Add this useEffect to handle scrolling to comment when commentId is provided
   useEffect(() => {
-    if (commentId && commentListRef.current) {
+    hasScrolledRef.current = false;
+
+    // Only scroll if we haven't already and the comment list is available
+    if (commentId && commentListRef.current && !hasScrolledRef.current) {
+      // Mark that we're processing this scroll
+      hasScrolledRef.current = true;
+
       // Create a custom event to signal when scrolling is complete
       const scrollCompleteEvent = new CustomEvent('comment-scroll-complete', {
         bubbles: true,
@@ -234,6 +248,7 @@ export function PostDetailPage({
                 commentCount={post.commentsCount}
                 highlightedCommentId={commentId}
                 parentId={parentId}
+                showReplyCommentAt={showReplyCommentAt}
                 renderReplyComment={(comment) => {
                   if (replyComment && comment.commentId === replyComment.commentId && isDesktop) {
                     return (

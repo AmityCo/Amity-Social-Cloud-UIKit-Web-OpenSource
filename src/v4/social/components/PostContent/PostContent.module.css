@@ -1,6 +1,9 @@
+.postContent__container {
+  background-color: var(--asc-color-background-default);
+}
+
 .postContent {
   padding: 0.75rem 1rem;
-  background-color: var(--asc-color-background-default);
 }
 
 .postContent__bar {
@@ -106,6 +109,18 @@
   justify-content: center;
   cursor: pointer;
   gap: 0.25rem;
+}
+
+.postContent__inlineComment__container {
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.postContent__inlineComment__divider {
+  min-height: unset !important;
+  height: 1px;
+  width: 100%;
 }
 
 .postTitle {
@@ -400,7 +415,7 @@
     background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
   }
 
-  .postContent {
+  .postContent__container {
     border-radius: 0.5rem;
   }
 }

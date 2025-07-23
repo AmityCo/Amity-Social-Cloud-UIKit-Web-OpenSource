@@ -6,6 +6,7 @@ import {
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
+import { type GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 
 export interface PageBehavior {
@@ -22,11 +23,7 @@ export interface PageBehavior {
     goToClipFeedPage?: (context: { currentPostId?: string; postIndex?: number }) => void;
   };
   AmityGlobalFeedComponentBehavior?: {
-    goToPostDetailPage?: (context: {
-      postId: string;
-      hideTarget?: boolean;
-      category?: AmityPostCategory;
-    }) => void;
+    goToPostDetailPage?: (context: GoToPostDetailPageParams) => void;
     goToViewStoryPage?: (context: {
       targetId: string;
       targetType: Amity.StoryTargetType;
@@ -98,11 +95,7 @@ export interface PageBehavior {
       post?: Amity.Post;
       isClipPost?: boolean;
     }): void;
-    goToPostDetailPage?(context: {
-      postId: string;
-      hideTarget?: boolean;
-      category?: AmityPostCategory;
-    }): void;
+    goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToStoryCreationPage?(context: {
       targetId: string | null;
       targetType: Amity.StoryTargetType;
@@ -178,7 +171,7 @@ export interface PageBehavior {
     goToUserProfilePage?: (context: { userId: string }) => void;
   };
   AmityUserFeedComponentBehavior?: {
-    goToPostDetailPage?(context: { postId: string }): void;
+    goToPostDetailPage?(context: GoToPostDetailPageParams): void;
   };
   AmityUserProfilePageBehavior?: {
     goToEditUserPage?(context: { userId: string }): void;
@@ -220,13 +213,7 @@ export interface PageBehavior {
   };
   AmityNotificationTrayPageBehavior?: {
     goToCommunityProfilePage?(context: { communityId: string }): void;
-    goToPostDetailPage?(context: {
-      postId: string;
-      hideTarget?: boolean;
-      category?: AmityPostCategory;
-      commentId?: string;
-      parentId?: string;
-    }): void;
+    goToPostDetailPage?(context: GoToPostDetailPageParams): void;
   };
   AmityDraftClipPageBehavior?: {
     goToPostComposerPage?(context: {
@@ -239,14 +226,7 @@ export interface PageBehavior {
   };
   AmityClipFeedPageBehavior?: {
     goToSelectClipPostTargetPage?(context: { isClipPost: boolean }): void;
-    goToPostDetailPage?(context: {
-      postId: string;
-      hideTarget?: boolean;
-      category?: AmityPostCategory;
-      commentId?: string;
-      parentId?: string;
-      posts?: Amity.Post<'clip' | 'video'>[];
-    }): void;
+    goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToUserProfilePage?(context: { userId: string }): void;
     goToCommunityProfilePage?(context: { communityId: string }): void;
   };
@@ -335,15 +315,11 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       },
     },
     AmityGlobalFeedComponentBehavior: {
-      goToPostDetailPage: (context: {
-        postId: string;
-        hideTarget?: boolean;
-        category?: AmityPostCategory;
-      }) => {
+      goToPostDetailPage: (context: GoToPostDetailPageParams) => {
         if (pageBehavior?.AmityGlobalFeedComponentBehavior?.goToPostDetailPage) {
           return pageBehavior?.AmityGlobalFeedComponentBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage(context.postId, context.hideTarget, context.category);
+        goToPostDetailPage({ ...context, id: context.postId });
       },
       goToViewStoryPage: (context: {
         targetId: string;
@@ -517,11 +493,14 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         postId: string;
         hideTarget?: boolean;
         category?: AmityPostCategory;
+        commentId?: string;
+        parentId?: string;
+        selectedReplyComment?: Amity.Comment;
       }) {
         if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityCommunityProfilePageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage(context.postId, context.hideTarget, context.category);
+        goToPostDetailPage({ ...context, id: context.postId });
       },
       goToCommunitySettingPage(context: { community: Amity.Community }) {
         if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToCommunitySettingPage) {
@@ -708,12 +687,11 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       },
     },
     AmityUserFeedComponentBehavior: {
-      goToPostDetailPage(context: { postId: string }) {
+      goToPostDetailPage(context: GoToPostDetailPageParams) {
         if (pageBehavior?.AmityUserFeedComponentBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityUserFeedComponentBehavior.goToPostDetailPage(context);
         }
-
-        goToPostDetailPage(context.postId);
+        goToPostDetailPage({ ...context, id: context.postId });
       },
     },
     AmityUserProfilePageBehavior: {
@@ -816,13 +794,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityNotificationTrayPageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage(
-          context.postId,
-          context.hideTarget,
-          context.category,
-          context.commentId,
-          context.parentId,
-        );
+        goToPostDetailPage({ ...context, id: context.postId });
       },
     },
     AmityDraftClipPageBehavior: {
@@ -857,14 +829,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityClipFeedPageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityClipFeedPageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage(
-          context.postId,
-          context.hideTarget,
-          context.category,
-          context.commentId,
-          context.parentId,
-          context.posts,
-        );
+        goToPostDetailPage({ ...context, id: context.postId });
       },
       goToUserProfilePage: (context: { userId: string }) => {
         if (pageBehavior?.AmityClipFeedPageBehavior?.goToUserProfilePage) {

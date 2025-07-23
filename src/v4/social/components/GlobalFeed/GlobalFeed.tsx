@@ -110,11 +110,15 @@ export const GlobalFeed = ({
                   style={AmityPostContentComponentStyle.FEED}
                   isGlobalFeaturePost={true}
                   onPostDeleted={() => onPostDeleted?.(item.post!)}
-                  onClick={() => {
+                  onClick={(context) => {
                     AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
                       hideTarget: true,
                       postId: item.post?.postId as string,
                       category: AmityPostCategory.ANNOUNCEMENT,
+                      commentId: context?.commentId,
+                      parentId: context?.parentId,
+                      selectedReplyComment: context?.selectedReplyComment,
+                      showReplyCommentAt: context?.showReplyCommentAt,
                     });
                   }}
                 />
@@ -141,8 +145,14 @@ export const GlobalFeed = ({
                 post={item}
                 category={AmityPostCategory.GENERAL}
                 style={AmityPostContentComponentStyle.FEED}
-                onClick={() => {
-                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId });
+                onClick={(context) => {
+                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
+                    postId: item?.postId,
+                    commentId: context?.commentId,
+                    parentId: context?.parentId,
+                    selectedReplyComment: context?.selectedReplyComment,
+                    showReplyCommentAt: context?.showReplyCommentAt,
+                  });
                 }}
                 onPostDeleted={onPostDeleted}
               />

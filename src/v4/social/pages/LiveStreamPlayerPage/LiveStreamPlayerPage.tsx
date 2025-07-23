@@ -32,6 +32,7 @@ import CloseIcon from '~/v4/icons/Close';
 import ChatFeed from '~/v4/chat/internal-components/ChatFeed/ChatFeed';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail';
+import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { useKeyboardVisibility } from './useKeyboardVisibility';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
@@ -39,7 +40,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 
 export type LiveStreamPlayerPageProps = {
   post: Amity.Post;
-  goToDetailPage?: () => void;
+  goToDetailPage?: (context?: GoToPostDetailPageParams) => void;
 };
 
 const usePostSubscription = (postId: string) => {
@@ -336,43 +337,6 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
       goToDetailPage?.();
     }
   }, [playerInitialized, stream?.isDeleted, subscribedPost?.isDeleted]);
-
-  useEffect(() => {
-    if (!chatContainerRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.contentRect) {
-          setChatContainerHeight(entry.contentRect.height);
-        }
-      }
-    });
-
-    observer.observe(chatContainerRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [chatContainerRef.current]);
-
-  useEffect(() => {
-    if (!chatContainerRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.contentRect) {
-          console.log('entry', entry.contentRect.height);
-          setChatContainerHeight(entry.contentRect.height);
-        }
-      }
-    });
-
-    observer.observe(chatContainerRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [chatContainerRef.current]);
 
   useEffect(() => {
     if (!chatContainerRef.current) return;

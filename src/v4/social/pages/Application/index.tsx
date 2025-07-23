@@ -70,16 +70,12 @@ const Application = () => {
       <MainLayout aside={<CommunitySideBar />}>
         {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
         {page.type === PageTypes.SocialGlobalSearchPage && !isDesktop && <SocialGlobalSearchPage />}
-        {page.type === PageTypes.PostDetailPage && (
-          <PostDetailPage
-            id={page.context?.postId}
-            hideTarget={page.context?.hideTarget}
-            category={page.context?.category}
-            commentId={page.context?.commentId}
-            parentId={page.context?.parentId}
-            posts={page.context?.posts}
-          />
-        )}
+        {page.type === PageTypes.PostDetailPage &&
+          (() => {
+            const { postId, ...rest } = page.context || {};
+            // change only postId to be id and pass the rest context fields as props
+            return <PostDetailPage id={postId} {...rest} />;
+          })()}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
         {page.type === PageTypes.CommunityProfilePage && (
           <CommunityTabProvider>

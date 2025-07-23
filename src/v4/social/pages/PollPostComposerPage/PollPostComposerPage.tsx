@@ -16,7 +16,7 @@ import { PollOptionsTitle } from '~/v4/social/elements/PollOptionsTitle';
 import { PollOptionsDesc } from '~/v4/social/elements/PollOptionsDesc';
 import { TrashIcon } from '~/v4/icons/Trash';
 import { CommunityPostSettings, PollRepository, PostRepository } from '@amityco/ts-sdk';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { PollAddOptionButton } from '~/v4/social/elements/PollAddOptionButton/PollAddOptionButton';
 import { PollMultipleSelectionTitle } from '~/v4/social/elements/PollMultipleSelectionTitle';
 import { PollMultipleSelectionDesc } from '~/v4/social/elements/PollMultipleSelectionDesc';
@@ -31,7 +31,6 @@ import { formatTime } from '~/v4/social/utils/formatTime';
 import { formatToDayMonth } from '~/v4/social/utils/formatToDayMonth';
 import { calculateMilliseconds } from '~/v4/social/utils/calculateMilliseconds';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
-import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
@@ -93,7 +92,6 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   const { user } = useUser({ userId: currentUserId });
 
   const timeNow = now(getLocalTimeZone());
-  const { prependItem } = useGlobalFeedContext();
   const { isDesktop } = useResponsive();
 
   const [isCreating, setIsCreating] = useState(false);
@@ -190,8 +188,6 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
             'Your post has been submitted to pending list. It will be review by community moderator.',
           okText: 'OK',
         });
-      } else {
-        prependItem(postData.data);
       }
     } catch (error: unknown) {
       setIsError(true);
@@ -439,7 +435,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
         </TextField>
 
         <TextField name="answerType" className={styles.pollPostComposerPage__answerType}>
-          <Label className={styles.pollPostComposerPage__answerType__label}>
+          <Label>
             <PollMultipleSelectionTitle pageId={pageId} />
             <PollMultipleSelectionDesc pageId={pageId} />
           </Label>

@@ -64,7 +64,6 @@ export function CreatePost({
   const { confirm } = useConfirmContext();
   const { onBack, prevPage, prev2Page } = useNavigation();
   const { AmityPostComposerPageBehavior } = usePageBehavior();
-  const { prependItem } = useGlobalFeedContext();
   const { themeStyles } = useAmityPage({ pageId });
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
@@ -135,8 +134,6 @@ export function CreatePost({
       const isModerator =
         (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 
-      if (!targetId) prependItem(post);
-
       // TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
       if (
         ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
@@ -152,8 +149,6 @@ export function CreatePost({
             'Your post has been submitted to the pending list. It will be published once approved by the community moderator.',
           okText: 'OK',
         });
-      } else {
-        prependItem(post);
       }
       setIsMuted(false);
       setIsAspectFill(true);
@@ -270,6 +265,7 @@ export function CreatePost({
   );
 
   const checkRedirectPage = () => {
+    if (isDesktop) closePopup();
     if (
       prevPage?.type === PageTypes.SelectPostTargetPage ||
       prev2Page?.type === PageTypes.SelectPostTargetPage

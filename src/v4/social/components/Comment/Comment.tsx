@@ -69,9 +69,18 @@ interface CommentProps {
   comment: Amity.Comment;
   community?: Amity.Community | null;
   onClickReply: (comment: Amity.Comment) => void;
+  // If should not allow Interaction, it will hide timestamp also
   shouldAllowInteraction?: boolean;
+  // Hide only interaction button
+  shouldShowInteractionButton?: boolean;
   highlightedCommentId?: string;
   parentId?: string;
+  hideOptionButton?: boolean;
+  maxLines?: number;
+  // support inline comment - expaned reply comment for a highlight comment as default
+  showReply?: boolean;
+  // support inline comment behavior - behavior when click show reply
+  onClickShowReply?: () => void;
 }
 
 export const Comment = ({
@@ -80,9 +89,14 @@ export const Comment = ({
   comment,
   community,
   onClickReply,
+  hideOptionButton = false,
   shouldAllowInteraction = true,
+  shouldShowInteractionButton = true,
   highlightedCommentId = undefined,
   parentId = undefined,
+  showReply,
+  onClickShowReply,
+  maxLines,
 }: CommentProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -320,6 +334,7 @@ export const Comment = ({
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
+                maxLines={maxLines}
               />
             </div>
             <div className={styles.postComment__secondRow}>
@@ -337,49 +352,50 @@ export const Comment = ({
                   </Typography.Caption>
                   {community && community.isJoined && (
                     <>
-                      <div onClick={handleLike}>
+                      <Button onPress={handleLike}>
                         <Typography.CaptionBold
                           className={styles.postComment__secondRow__like}
                           data-is-liked={isLiked}
                         >
                           Like
                         </Typography.CaptionBold>
-                      </div>
-                      <div
+                      </Button>
+                      <Button
                         data-testid={`${pageId}/${componentId}/reply_button`}
-                        onClick={() => onClickReply(comment)}
+                        onPress={() => onClickReply(comment)}
                       >
                         <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
                           Reply
                         </Typography.CaptionBold>
-                      </div>
+                      </Button>
                     </>
                   )}
-
-                  <Popover
-                    trigger={{
-                      onClick: () => setBottomSheetOpen(true),
-                      className: styles.postComment__secondRow__actionButton,
-                      iconClassName: styles.postComment__secondRow__actionButton__icon,
-                    }}
-                  >
-                    {({ closePopover }) => (
-                      <CommentOptions
-                        pageId={pageId}
-                        componentId={componentId}
-                        comment={comment}
-                        handleEditComment={() => {
-                          closePopover();
-                          handleEditComment();
-                        }}
-                        handleDeleteComment={() => {
-                          closePopover();
-                          handleDeleteComment();
-                        }}
-                        onCloseMenu={closePopover}
-                      />
-                    )}
-                  </Popover>
+                  {!hideOptionButton && (
+                    <Popover
+                      trigger={{
+                        onClick: () => setBottomSheetOpen(true),
+                        className: styles.postComment__secondRow__actionButton,
+                        iconClassName: styles.postComment__secondRow__actionButton__icon,
+                      }}
+                    >
+                      {({ closePopover }) => (
+                        <CommentOptions
+                          pageId={pageId}
+                          componentId={componentId}
+                          comment={comment}
+                          handleEditComment={() => {
+                            closePopover();
+                            handleEditComment();
+                          }}
+                          handleDeleteComment={() => {
+                            closePopover();
+                            handleDeleteComment();
+                          }}
+                          onCloseMenu={closePopover}
+                        />
+                      )}
+                    </Popover>
+                  )}
                 </div>
               ) : (
                 <div />
@@ -410,20 +426,23 @@ export const Comment = ({
               )}
             </div>
 
-            {isShowViewMoreReplies && (
-              <div
+            {isShowViewMoreReplies && !showReply && (
+              <Button
                 data-testid={`${pageId}/${componentId}/view_reply_button`}
                 className={styles.postComment__viewReply_button}
-                onClick={() => setHasClickLoadMore(true)}
+                onPress={() => {
+                  if (onClickShowReply) return onClickShowReply();
+                  setHasClickLoadMore(true);
+                }}
               >
                 <ReplyComment className={styles.postComment__viewReply_icon} />
                 <Typography.CaptionBold className={styles.postComment__viewReply_text}>
                   View {replyAmount} {replyAmount > 1 ? 'replies' : 'reply'}
                 </Typography.CaptionBold>
-              </div>
+              </Button>
             )}
 
-            {isShowReplyList && (
+            {(isShowReplyList || showReply) && (
               <ReplyCommentList
                 pageId={pageId}
                 componentId={componentId}
@@ -437,7 +456,7 @@ export const Comment = ({
           </div>
         </div>
       )}
-      {!isDesktop && (
+      {!isDesktop && !hideOptionButton && (
         <BottomSheet
           onClose={toggleBottomSheet}
           isOpen={bottomSheetOpen}

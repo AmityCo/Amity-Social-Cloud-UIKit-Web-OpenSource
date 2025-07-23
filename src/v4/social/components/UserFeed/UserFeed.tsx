@@ -107,11 +107,15 @@ export const UserFeed = ({ pageId = '*', userId }: UserFeedProps) => {
           key={post.postId}
           post={post}
           style={AmityPostContentComponentStyle.FEED}
-          onClick={() =>
+          onClick={(context) => {
             AmityUserFeedComponentBehavior?.goToPostDetailPage?.({
               postId: post.postId,
-            })
-          }
+              commentId: context?.commentId,
+              parentId: context?.parentId,
+              selectedReplyComment: context?.selectedReplyComment,
+              showReplyCommentAt: context?.showReplyCommentAt,
+            });
+          }}
         />
       </Button>
     ));

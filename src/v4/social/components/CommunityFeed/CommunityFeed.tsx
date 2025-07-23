@@ -128,13 +128,24 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
 
   if (isExcluded) return null;
 
-  const handlePostNavigation = (postId?: string, category?: AmityPostCategory) => {
+  const handlePostNavigation = (
+    postId?: string,
+    category?: AmityPostCategory,
+    commentId?: string,
+    parentId?: string,
+    selectedReplyComment?: Amity.Comment,
+    showReplyCommentAt?: string,
+  ) => {
     if (!postId) return;
 
     AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
       postId,
       hideTarget: true,
       category: category || AmityPostCategory.GENERAL,
+      commentId,
+      parentId,
+      selectedReplyComment,
+      showReplyCommentAt,
     });
   };
 
@@ -163,7 +174,16 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                     category={category}
                     style={AmityPostContentComponentStyle.FEED}
                     hideTarget
-                    onClick={() => handlePostNavigation(post.postId, category)}
+                    onClick={(context) =>
+                      handlePostNavigation(
+                        post.postId,
+                        category,
+                        context?.commentId,
+                        context?.parentId,
+                        context?.selectedReplyComment,
+                        context?.showReplyCommentAt,
+                      )
+                    }
                   />
                 </Button>
               );
@@ -212,7 +232,16 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                   category={category}
                   style={AmityPostContentComponentStyle.FEED}
                   hideTarget
-                  onClick={() => handlePostNavigation(post.postId, category)}
+                  onClick={(context) =>
+                    handlePostNavigation(
+                      post.postId,
+                      category,
+                      context?.commentId,
+                      context?.parentId,
+                      context?.selectedReplyComment,
+                      context?.showReplyCommentAt,
+                    )
+                  }
                   onPostDeleted={() => refreshPinnedPosts()}
                 />
               </Button>

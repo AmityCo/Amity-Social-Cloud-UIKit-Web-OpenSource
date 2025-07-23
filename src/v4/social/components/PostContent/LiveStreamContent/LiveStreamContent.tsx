@@ -11,6 +11,7 @@ import { LiveStreamRecordedBadge } from '~/v4/social/internal-components/LiveStr
 import styles from './LiveStreamContent.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail/LiveStreamBanThumbnail';
+import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useCommunity } from '~/v4/chat/hooks/useCommunity';
@@ -18,7 +19,12 @@ import { useCommunity } from '~/v4/chat/hooks/useCommunity';
 type LiveStreamContentProps = {
   parentPost: Amity.Post;
   posts: Amity.Post<'liveStream'>[];
-  goToPostDetail?: () => void;
+  goToPostDetail?: (
+    context?: Pick<
+      PostDetailPageProps,
+      'commentId' | 'selectedReplyComment' | 'parentId' | 'showReplyCommentAt'
+    >,
+  ) => void;
 };
 
 export function LiveStreamContent({ parentPost, posts, goToPostDetail }: LiveStreamContentProps) {

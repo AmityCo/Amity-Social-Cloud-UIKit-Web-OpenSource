@@ -29,6 +29,7 @@ type CommentListProps = {
   highlightedCommentId?: string;
   parentId?: string;
   commentListClassName?: string;
+  showReplyCommentAt?: string;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -49,6 +50,7 @@ export const CommentList = ({
   highlightedCommentId,
   parentId,
   commentListClassName,
+  showReplyCommentAt,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -74,7 +76,7 @@ export const CommentList = ({
       includeDeleted,
     },
     placement: 'comment' as Amity.AdPlacement,
-    pageSize: 5,
+    pageSize: highlightedCommentId ? 20 : limit,
     getItemId: (item) => item.commentId,
     shouldCall: true,
   });
@@ -182,6 +184,7 @@ export const CommentList = ({
             shouldAllowInteraction={shouldAllowInteraction}
             highlightedCommentId={highlightedCommentId}
             parentId={parentId}
+            showReply={showReplyCommentAt === highlightedCommentId}
           />
           {renderReplyComment?.(highlightedComment)}
         </div>
@@ -200,6 +203,7 @@ export const CommentList = ({
               componentId={componentId}
               community={community}
               shouldAllowInteraction={shouldAllowInteraction}
+              showReply={showReplyCommentAt === highlightedCommentId}
             />
             {renderReplyComment?.(item as Amity.Comment)}
           </div>

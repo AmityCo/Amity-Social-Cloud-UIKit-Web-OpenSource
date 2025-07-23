@@ -19,6 +19,7 @@ import {
 import { AmityRoute } from './AmityUIKitProvider';
 import { LiveStreamPlayerPageProps } from '~/v4/social/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -109,6 +110,8 @@ type Page =
         commentId?: string;
         parentId?: string;
         posts?: Amity.Post<'clip' | 'video'>[];
+        selectedReplyComment?: Amity.Comment;
+        showReplyCommentAt?: string;
       };
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string; page?: number } }
@@ -287,14 +290,7 @@ type ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
   goToBlockedUsersPage: () => void;
-  goToPostDetailPage: (
-    postId: string,
-    hideTarget?: boolean,
-    category?: AmityPostCategory,
-    commentId?: string,
-    parentId?: string,
-    posts?: Amity.Post<'clip' | 'video'>[],
-  ) => void;
+  goToPostDetailPage: (context: PostDetailPageProps) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
@@ -409,14 +405,7 @@ let defaultValue: ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
-  goToPostDetailPage: (
-    postId: string,
-    hideTarget?: boolean,
-    category?: AmityPostCategory,
-    commentId?: string,
-    parentId?: string,
-    posts?: Amity.Post<'clip' | 'video'>[],
-  ) => {},
+  goToPostDetailPage: (context: PostDetailPageProps) => {},
   goToViewStoryPage: (context: {
     targetId: string;
     targetType: Amity.StoryTargetType;
@@ -504,9 +493,9 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingFollowRequestPage: () =>
       console.log(`NavigationContext goToPendingFollowRequestPage()`),
     goToBlockedUsersPage: () => console.log(`NavigationContext goToBlockedUsersPage()`),
-    goToPostDetailPage: (postId, hideTarget, category, commentId, parentId, posts) =>
+    goToPostDetailPage: ({ id, hideTarget, category, commentId, parentId, posts }) =>
       console.log(
-        `NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category} ${commentId} ${parentId} ${posts})`,
+        `NavigationContext goToPostDetailPage(${id} ${hideTarget} ${category} ${commentId} ${parentId} ${posts})`,
       ),
     goToCommunityProfilePage: (communityId, page) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId} ${page})`),
@@ -942,7 +931,16 @@ export default function NavigationProvider({
   );
 
   const goToPostDetailPage = useCallback(
-    (postId, hideTarget, category, commentId, parentId, posts) => {
+    ({
+      postId,
+      hideTarget,
+      category,
+      commentId,
+      parentId,
+      posts,
+      selectedReplyComment,
+      showReplyCommentAt,
+    }) => {
       const next = {
         type: PageTypes.PostDetailPage,
         context: {
@@ -952,9 +950,10 @@ export default function NavigationProvider({
           commentId,
           parentId,
           posts,
+          selectedReplyComment,
+          showReplyCommentAt,
         },
       };
-
       pushPage(next);
     },
     [onChangePage, pushPage],

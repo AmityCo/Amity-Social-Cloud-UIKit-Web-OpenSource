@@ -28,12 +28,8 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
     removeItem,
   } = useGlobalFeedContext();
 
-  useEffect(() => {
-    refetch();
-  }, []);
-
   const onFeedReachBottom = () => {
-    if (hasMore && !isLoading) loadMore();
+    if (hasMore && !isLoading) loadMore?.();
   };
 
   if (itemWithAds.length === 0 && !isLoading) return <EmptyNewsfeed pageId={pageId} />;
