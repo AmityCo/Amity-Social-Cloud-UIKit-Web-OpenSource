@@ -7,16 +7,26 @@ const URL_MATCHER =
 const MATCHERS = [
   (text: string) => {
     const match = URL_MATCHER.exec(text);
-    if (match === null) {
-      return null;
+    if (!match) return null;
+
+    const originalMatch = match[0];
+    let truncatedMatch = originalMatch;
+    const matchIndex = match.index;
+
+    // If there's a hash fragment but not preceded by "/", truncate it
+    const hashIndex = originalMatch.indexOf('#');
+    if (hashIndex > 0 && originalMatch[hashIndex - 1] !== '/') {
+      truncatedMatch = originalMatch.substring(0, hashIndex);
     }
-    const fullMatch = match[0];
+
+    // If we truncated completely, don't link anything
+    if (truncatedMatch.length === 0) return null;
+
     return {
-      index: match.index,
-      length: fullMatch.length,
-      text: fullMatch,
-      url: fullMatch.startsWith('http') ? fullMatch : `https://${fullMatch}`,
-      // attributes: { rel: 'noreferrer', target: '_blank' }, // Optional link attributes
+      index: matchIndex,
+      length: truncatedMatch.length,
+      text: truncatedMatch,
+      url: truncatedMatch.startsWith('http') ? truncatedMatch : `https://${truncatedMatch}`,
     };
   },
 ];

@@ -14,6 +14,10 @@ type TextContentProps = {
   componentId?: string;
   mentioned?: Mentioned[];
   mentionees?: Mentionees;
+  hashtagged?: Amity.Hashtag[];
+  hashtags?: string[];
+  keyword?: string;
+  isSearchPost?: boolean;
 };
 
 export const TextContent = ({
@@ -23,6 +27,10 @@ export const TextContent = ({
   pageId = '*',
   componentId = '*',
   mentionees = [],
+  hashtagged,
+  hashtags = [],
+  keyword,
+  isSearchPost = false,
 }: TextContentProps) => {
   if (!text) return null;
 
@@ -52,7 +60,8 @@ export const TextContent = ({
             isBold
             pageId={pageId}
             mentionees={mentionees}
-            metadata={{ mentioned }}
+            metadata={{ mentioned, hashtagged }}
+            hashtags={hashtags}
             componentId={componentId}
             data={{ text: stream?.title ?? '' }}
           />
@@ -60,7 +69,8 @@ export const TextContent = ({
             <TextWithMention
               pageId={pageId}
               mentionees={mentionees}
-              metadata={{ mentioned }}
+              metadata={{ mentioned, hashtagged }}
+              hashtags={hashtags}
               componentId={componentId}
               data={{ text: stream.description }}
             />
@@ -72,7 +82,10 @@ export const TextContent = ({
           componentId={componentId}
           data={{ text: text }}
           mentionees={mentionees}
-          metadata={{ mentioned }}
+          metadata={{ mentioned, hashtagged }}
+          hashtags={hashtags}
+          keyword={keyword}
+          isSearchPost={isSearchPost}
         />
       )}
       {canPreviewShown && (

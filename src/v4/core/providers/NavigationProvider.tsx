@@ -112,6 +112,7 @@ type Page =
         posts?: Amity.Post<'clip' | 'video'>[];
         selectedReplyComment?: Amity.Comment;
         showReplyCommentAt?: string;
+        keyword?: string;
       };
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string; page?: number } }
@@ -124,7 +125,7 @@ type Page =
   | { type: PageTypes.UserPendingFollowRequestPage; context: { userId: string } }
   | { type: PageTypes.BlockedUsersPage }
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
-  | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } }
+  | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string; keyword?: string } }
   | { type: PageTypes.MyCommunitiesSearchPage; context: { communityId?: string } }
   | { type: PageTypes.SelectPostTargetPage; context?: { isClipPost?: boolean } }
   | {
@@ -292,7 +293,7 @@ type ContextValue = {
   goToBlockedUsersPage: () => void;
   goToPostDetailPage: (context: PostDetailPageProps) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
-  goToSocialGlobalSearchPage: (tab?: string) => void;
+  goToSocialGlobalSearchPage: (tab?: string, keyword?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
   goToSelectPostTargetPage: () => void;
   goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => void;
@@ -418,7 +419,7 @@ let defaultValue: ContextValue = {
     storyType: 'communityFeed' | 'globalFeed',
   ) => {},
   goToCommunityProfilePage: (communityId: string, page?: number) => {},
-  goToSocialGlobalSearchPage: (tab?: string) => {},
+  goToSocialGlobalSearchPage: (tab?: string, keyword?: string) => {},
   goToSelectPostTargetPage: () => {},
   goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) => {},
   goToStoryTargetSelectionPage: () => {},
@@ -493,14 +494,14 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingFollowRequestPage: () =>
       console.log(`NavigationContext goToPendingFollowRequestPage()`),
     goToBlockedUsersPage: () => console.log(`NavigationContext goToBlockedUsersPage()`),
-    goToPostDetailPage: ({ id, hideTarget, category, commentId, parentId, posts }) =>
+    goToPostDetailPage: ({ id, hideTarget, category, commentId, parentId, posts, keyword }) =>
       console.log(
-        `NavigationContext goToPostDetailPage(${id} ${hideTarget} ${category} ${commentId} ${parentId} ${posts})`,
+        `NavigationContext goToPostDetailPage(${id} ${hideTarget} ${category} ${commentId} ${parentId} ${posts} ${keyword})`,
       ),
     goToCommunityProfilePage: (communityId, page) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId} ${page})`),
-    goToSocialGlobalSearchPage: (tab) =>
-      console.log(`NavigationContext goToSocialGlobalSearchPage(${tab})`),
+    goToSocialGlobalSearchPage: (tab, keyword) =>
+      console.log(`NavigationContext goToSocialGlobalSearchPage(${tab} ${keyword})`),
     goToSelectPostTargetPage: () => console.log('NavigationContext goToTargetPage()'),
     goToSelectClipPostTargetPage: (context: { isClipPost: boolean }) =>
       console.log(`NavigationContext goToSelectClipPostTargetPage(${context.isClipPost})`),
@@ -940,6 +941,7 @@ export default function NavigationProvider({
       posts,
       selectedReplyComment,
       showReplyCommentAt,
+      keyword,
     }) => {
       const next = {
         type: PageTypes.PostDetailPage,
@@ -952,6 +954,7 @@ export default function NavigationProvider({
           posts,
           selectedReplyComment,
           showReplyCommentAt,
+          keyword,
         },
       };
       pushPage(next);
@@ -975,10 +978,10 @@ export default function NavigationProvider({
   );
 
   const goToSocialGlobalSearchPage = useCallback(
-    (tab?: string) => {
+    (tab?: string, keyword?: string) => {
       const next = {
         type: PageTypes.SocialGlobalSearchPage,
-        context: { tab },
+        context: { tab, keyword },
       };
 
       pushPage(next);

@@ -34,3 +34,14 @@
   padding: 0;
   color: var(--asc-color-primary-default);
 }
+
+.textWithMention__hashtag {
+  display: inline;
+  color: var(--asc-color-highlight-default);
+  cursor: pointer;
+}
+
+.textWithMention__highlight {
+  background-color: rgb(from var(--asc-color-primary-shade1) r g b / 10%);
+  font-weight: 700;
+}

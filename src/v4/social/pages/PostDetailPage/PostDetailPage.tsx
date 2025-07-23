@@ -29,6 +29,7 @@ export interface PostDetailPageProps {
   posts?: Amity.Post<'clip' | 'video'>[];
   selectedReplyComment?: Amity.Comment;
   showReplyCommentAt?: string;
+  keyword?: string;
 }
 
 export interface GoToPostDetailPageParams extends Omit<PostDetailPageProps, 'id'> {
@@ -44,6 +45,7 @@ export function PostDetailPage({
   posts = [],
   selectedReplyComment,
   showReplyCommentAt,
+  keyword,
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
@@ -164,7 +166,11 @@ export function PostDetailPage({
                   targetId: post?.targetId,
                   targetType: post?.targetType,
                 })
-              : onBack()
+              : prevPage?.type === PageTypes.SocialGlobalSearchPage
+                ? AmityPostDetailPageBehavior?.goToSocialGlobalSearchPage?.({
+                    keyword: keyword || '',
+                  })
+                : onBack()
           }
         />
         <Typography.TitleBold

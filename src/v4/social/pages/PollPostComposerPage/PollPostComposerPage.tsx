@@ -71,6 +71,7 @@ export type CreatePollPostParams = {
   text: string;
   mentioned: Mentioned[];
   mentionees: Mentionees;
+  hashtags: Amity.Hashtag[];
 };
 
 export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerPageProps) => {
@@ -115,6 +116,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     pollId: '',
     text: '',
     mentioned: [],
+    hashtags: [],
     mentionees: [
       {
         type: 'user',
@@ -225,8 +227,12 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       targetType: targetType,
       data: { pollId, text: textValue.text },
       dataType: 'poll',
-      metadata: { mentioned: textValue.mentioned },
+      metadata: {
+        mentioned: textValue.mentioned,
+        hashtags: textValue.hashtags,
+      },
       mentionees: textValue.mentionees as Amity.UserMention[],
+      hashtags: textValue.hashtags.map((hashtag) => hashtag.text),
       attachments: [],
     };
 
@@ -277,12 +283,18 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     });
   };
 
-  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) =>
+  const onChange = (val: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    hashtags: Amity.Hashtag[];
+    text: string;
+  }) =>
     setTextValue((prev) => ({
       ...prev,
       mentioned: val.mentioned,
       text: val.text,
       mentionees: val.mentionees,
+      hashtags: val.hashtags,
     }));
 
   const addOption = () => {

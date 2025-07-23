@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   min-height: 20rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
   overflow: hidden scroll;
   align-items: start;
   scrollbar-width: none;

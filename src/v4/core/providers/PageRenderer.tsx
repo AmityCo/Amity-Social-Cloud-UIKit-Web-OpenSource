@@ -70,7 +70,7 @@ const PageRenderer = ({ children }: PageRendererProps) => {
     case PageTypes.SocialHomePage:
       return <SocialHomePage />;
     case PageTypes.SocialGlobalSearchPage:
-      return !isDesktop ? <SocialGlobalSearchPage /> : null;
+      return !isDesktop ? <SocialGlobalSearchPage keyword={page.context?.keyword} /> : null;
     case PageTypes.PostDetailPage:
       return (
         <PostDetailPage
@@ -79,6 +79,8 @@ const PageRenderer = ({ children }: PageRendererProps) => {
           category={page.context?.category}
           commentId={page.context?.commentId}
           parentId={page.context?.parentId}
+          posts={page.context?.posts}
+          keyword={page.context?.keyword}
         />
       );
     case PageTypes.StoryTargetSelectionPage:

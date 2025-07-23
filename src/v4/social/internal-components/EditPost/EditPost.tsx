@@ -99,6 +99,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: (post as Amity.Post<'text'>)?.data?.text ?? '',
     mentioned: post.metadata?.mentioned || [],
+    hashtagsMetadata: [],
     mentionees: post.mentionees as Amity.UserMention[],
     attachments: [
       {
@@ -223,13 +224,21 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       isClipPost
         ? mutateUpdatePostAsync({
             data: { text: textValue.text },
-            metadata: { mentioned: textValue.mentioned ?? [] },
+            metadata: {
+              mentioned: textValue.mentioned ?? [],
+              hashtags: textValue.hashtagsMetadata,
+            },
             mentionees: textValue.mentionees as Amity.UserMention[],
+            hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
           })
         : mutateUpdatePostAsync({
             data: { text: textValue.text },
-            metadata: { mentioned: textValue.mentioned ?? [] },
+            metadata: {
+              mentioned: textValue.mentioned ?? [],
+              hashtags: textValue.hashtagsMetadata,
+            },
             mentionees: textValue.mentionees as Amity.UserMention[],
+            hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             attachments: attachments,
           });
     }
@@ -269,12 +278,18 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     }
   };
 
-  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
+  const onChange = (val: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    hashtags: Amity.Hashtag[];
+    text: string;
+  }) => {
     setTextValue((prev) => ({
       ...prev,
       mentioned: val.mentioned,
       text: val.text,
       mentionees: val.mentionees,
+      hashtagsMetadata: val.hashtags,
     }));
   };
 
@@ -400,7 +415,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             dataValue={{
               mentionees: post.mentionees,
               data: { text: (post as Amity.Post<'text'>)?.data?.text || '' },
-              metadata: { mentioned: post.metadata?.mentioned || [] },
+              metadata: {
+                mentioned: post.metadata?.mentioned || [],
+                hashtags: post.metadata?.hashtags || [],
+              },
             }}
           />
 

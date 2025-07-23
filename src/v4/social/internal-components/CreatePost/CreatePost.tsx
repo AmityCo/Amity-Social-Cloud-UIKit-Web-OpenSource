@@ -90,6 +90,7 @@ export function CreatePost({
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
+    hashtagsMetadata: [],
     mentionees: [
       {
         type: 'user',
@@ -187,9 +188,10 @@ export function CreatePost({
       targetId: targetId!,
       targetType,
       data: { text: textValue.text },
-      metadata: { mentioned: textValue.mentioned },
+      metadata: { mentioned: textValue.mentioned, hashtags: textValue.hashtagsMetadata },
       mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
+      hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text),
     };
 
     createPost(createPostParams);
@@ -212,12 +214,18 @@ export function CreatePost({
   };
   //TODO : Make the function works the issues is can't remove extra mention from DOM
 
-  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
+  const onChange = (val: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    hashtags: Amity.Hashtag[];
+    text: string;
+  }) => {
     setTextValue((prev) => ({
       ...prev,
       mentioned: val.mentioned,
       text: val.text,
       mentionees: val.mentionees,
+      hashtagsMetadata: val.hashtags,
     }));
   };
 
@@ -290,41 +298,45 @@ export function CreatePost({
 
   const renderPosting = () => {
     if (isCreating || !online) {
-      <Typography.Body
-        className={styles.createPost__notification}
-        data-show-detail-media-attachment={showToastPosition()}
-      >
-        <Notification
-          className={styles.createPost__notificationToast}
-          content={online ? 'Posting...' : 'Waiting for network...'}
-          icon={<Spinner />}
-          alignment="fixed"
-        />
-      </Typography.Body>;
+      return (
+        <Typography.Body
+          className={styles.createPost__notification}
+          data-show-detail-media-attachment={showToastPosition()}
+        >
+          <Notification
+            className={styles.createPost__notificationToast}
+            content={online ? 'Posting...' : 'Waiting for network...'}
+            icon={<Spinner />}
+            alignment="fixed"
+          />
+        </Typography.Body>
+      );
     }
-    return;
+    return null;
   };
 
   const renderError = () => {
     if (isError || postErrorText) {
-      <Typography.Body
-        className={styles.createPost__notification}
-        data-show-detail-media-attachment={showToastPosition()}
-      >
-        <Notification
-          content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
-          icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
-          alignment="fixed"
-          duration={3000}
-          className={styles.createPost__notificationToast}
-          onClose={() => {
-            setPostErrorText(undefined);
-            setIsError(false);
-          }}
-        />
-      </Typography.Body>;
+      return (
+        <Typography.Body
+          className={styles.createPost__notification}
+          data-show-detail-media-attachment={showToastPosition()}
+        >
+          <Notification
+            content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
+            icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+            alignment="fixed"
+            duration={3000}
+            className={styles.createPost__notificationToast}
+            onClose={() => {
+              setPostErrorText(undefined);
+              setIsError(false);
+            }}
+          />
+        </Typography.Body>
+      );
     }
-    return;
+    return null;
   };
 
   return (

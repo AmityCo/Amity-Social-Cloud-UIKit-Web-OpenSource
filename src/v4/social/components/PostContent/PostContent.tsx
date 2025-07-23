@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
@@ -10,11 +10,6 @@ import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PollContent } from './PollContent/PollContent';
-import Crying from './Crying';
-import Happy from './Happy';
-import Fire from './Fire';
-import Love from './Love';
-import Like from './Like';
 import { TextContent } from './TextContent';
 import { ImageContent } from './ImageContent';
 import { VideoContent } from './VideoContent';
@@ -23,9 +18,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
-import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
-import millify from 'millify';
 import { Button } from '~/v4/core/natives/Button';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
@@ -47,10 +40,7 @@ import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
 import { Comment, CommentSkeleton } from '~/v4/social/components/Comment';
 import { Divider } from '~/v4/social/elements/Divider';
-import {
-  GoToPostDetailPageParams,
-  PostDetailPageProps,
-} from '~/v4/social/pages/PostDetailPage/PostDetailPage';
+import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -240,6 +230,8 @@ interface PostContentProps {
   disabledContent?: boolean;
   isGlobalFeaturePost?: boolean;
   className?: string;
+  keyword?: string;
+  isSearchPost?: boolean;
 }
 
 const useInlineComment = ({ post, disabled }: { post: Amity.Post; disabled: boolean }) => {
@@ -283,6 +275,8 @@ export const PostContent = ({
   disabledContent = false,
   isGlobalFeaturePost = false,
   className,
+  keyword,
+  isSearchPost = false,
 }: PostContentProps) => {
   const componentId = 'post_content';
 
@@ -516,68 +510,6 @@ export const PostContent = ({
           </div>
         </div>
 
-        <div className={styles.postContent__wrapRightMenu}>
-          {(category === AmityPostCategory.PIN ||
-            category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
-            <PinBadge pageId={pageId} componentId={componentId} />
-          )}
-          {style === AmityPostContentComponentStyle.FEED && (
-            <Popover
-              containerClassName={styles.postContent__bar__actionButton}
-              trigger={{
-                pageId,
-                componentId,
-                onClick: ({ closePopover }) =>
-                  setDrawerData({
-                    content: (
-                      <PostMenu
-                        post={post}
-                        pageId={pageId}
-                        componentId={componentId}
-                        onPostDeleted={onPostDeleted}
-                        onConfirmEditPost={
-                          shouldShowConfirmEdit
-                            ? ({ onConfirm }) => {
-                                closePopover();
-                                removeDrawerData();
-                                onEditFeaturePost({ onConfirm });
-                              }
-                            : undefined
-                        }
-                        onCloseMenu={() => {
-                          closePopover();
-                          removeDrawerData();
-                        }}
-                      />
-                    ),
-                  }),
-              }}
-            >
-              {({ closePopover }) => (
-                <PostMenu
-                  post={post}
-                  pageId={pageId}
-                  componentId={componentId}
-                  onPostDeleted={onPostDeleted}
-                  onConfirmEditPost={
-                    shouldShowConfirmEdit
-                      ? ({ onConfirm }) => {
-                          closePopover();
-                          removeDrawerData();
-                          onEditFeaturePost({ onConfirm });
-                        }
-                      : undefined
-                  }
-                  onCloseMenu={() => {
-                    closePopover();
-                    removeDrawerData();
-                  }}
-                />
-              )}
-            </Popover>
-          )}
-        </div>
-
         <div className={styles.postContent__content_and_reactions}>
           <div className={styles.postContent__content}>
             <TextContent
@@ -586,7 +518,11 @@ export const PostContent = ({
               text={isTextPost(post) ? post?.data?.text : ''}
               mentioned={post?.metadata?.mentioned}
               mentionees={post?.mentionees}
+              hashtagged={post?.metadata?.hashtags}
+              hashtags={post?.hashtags}
               post={post}
+              keyword={keyword}
+              isSearchPost={isSearchPost}
             />
             {post.childrenPosts?.length > 0 ? (
               <ChildrenPostContent
@@ -606,53 +542,50 @@ export const PostContent = ({
                 disabledContent={isNotJoinedCommunity || disabledContent}
               />
             ) : null}
-
-            {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
-              <>
-                <div className={styles.postContent__divider} />
-                <Typography.Body className={styles.postContent__notMember}>
-                  Join community to interact with all posts
-                </Typography.Body>
-              </>
-            ) : targetCommunity &&
-              !targetCommunity?.isJoined &&
-              page.type === PageTypes.PostDetailPage ? null : (
-              <>
-                <div className={styles.postContent__divider} />
-                <div className={styles.postContent__reactionBar}>
-                  <div className={styles.postContent__reactionBar__leftPane}>
-                    <ReactionButton
-                      pageId={pageId}
-                      componentId={componentId}
-                      reactionsCount={
-                        style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
-                      }
-                      myReaction={reactionByMe}
-                      defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                      imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                      onReactionClick={handleReactionClick}
-                    />
-                    <CommentButton
-                      pageId={pageId}
-                      componentId={componentId}
-                      commentsCount={
-                        style === AmityPostContentComponentStyle.FEED
-                          ? post.commentsCount
-                          : undefined
-                      }
-                      buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
-                      defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                      imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                      onPress={() => onClick?.()}
-                    />
-                  </div>
-                  <div className={styles.postContent__reactionBar__rightPane}>
-                    <ShareButton pageId={pageId} componentId={componentId} />
-                  </div>
-                </div>
-              </>
-            )}
           </div>
+          {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
+            <>
+              <div className={styles.postContent__divider} />
+              <Typography.Body className={styles.postContent__notMember}>
+                Join community to interact with all posts
+              </Typography.Body>
+            </>
+          ) : targetCommunity &&
+            !targetCommunity?.isJoined &&
+            page.type === PageTypes.PostDetailPage ? null : (
+            <>
+              <div className={styles.postContent__divider} />
+              <div className={styles.postContent__reactionBar}>
+                <div className={styles.postContent__reactionBar__leftPane}>
+                  <ReactionButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    reactionsCount={
+                      style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
+                    }
+                    myReaction={reactionByMe}
+                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                    onReactionClick={handleReactionClick}
+                  />
+                  <CommentButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    commentsCount={
+                      style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                    }
+                    buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
+                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                    onPress={() => onClick?.()}
+                  />
+                </div>
+                <div className={styles.postContent__reactionBar__rightPane}>
+                  <ShareButton pageId={pageId} componentId={componentId} />
+                </div>
+              </div>
+            </>
+          )}
 
           {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
             <VideoViewer

@@ -477,7 +477,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_global_search_page/*/*': {},
     'social_global_search_page/top_search_bar/*': {
-      text: 'Search community and user',
+      text: 'Search',
     },
     'social_global_search_page/top_search_bar/search_icon': {
       icon: 'search',
