@@ -38,6 +38,10 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
     if (posts.length === 0 && !isLoading) setLinkToPost(null);
   }, [posts.length, isLoading]);
 
+  useEffect(() => {
+    if (posts.length === 0 && !isLoading) setLinkToPost(null);
+  }, [posts.length, isLoading]);
+
   useIntersectionObserver({
     node: intersectionNode,
     onIntersect: () => hasMore && !isLoading && loadMore(),
