@@ -229,7 +229,28 @@ export function PostDetailPage({
             disabledContent={isNotJoinedCommunity}
           />
         </div>
-        <div className={styles.postDetailPage__comments__divider} data-is-loading={isPostLoading} />
+
+        {post?.targetType === 'community' && !community?.isJoined ? (
+          <div>
+            <div className={styles.postDetailPage__divider} />
+            <Typography.Body className={styles.postDetailPage__notMember}>
+              Join community to interact with all posts
+            </Typography.Body>
+            <div className={styles.postDetailPage__divider} />
+          </div>
+        ) : (
+          post &&
+          !isDesktop && (
+            <CommentComposer
+              pageId={pageId}
+              referenceId={post.postId}
+              referenceType={'post'}
+              replyTo={replyComment}
+              onCancelReply={() => setReplyComment(undefined)}
+              community={community}
+            />
+          )
+        )}
         {post && isDesktop && !isNotJoinedCommunity && (
           <CommentComposer
             pageId={pageId}
@@ -274,27 +295,6 @@ export function PostDetailPage({
           </div>
         )}
       </div>
-
-      {post?.targetType === 'community' && !community?.isJoined ? (
-        <div>
-          <div className={styles.postDetailPage__divider} />
-          <Typography.Body className={styles.postDetailPage__notMember}>
-            Join community to interact with all posts
-          </Typography.Body>
-        </div>
-      ) : (
-        post &&
-        !isDesktop && (
-          <CommentComposer
-            pageId={pageId}
-            referenceId={post.postId}
-            referenceType={'post'}
-            replyTo={replyComment}
-            onCancelReply={() => setReplyComment(undefined)}
-            community={community}
-          />
-        )
-      )}
     </div>
   );
 }

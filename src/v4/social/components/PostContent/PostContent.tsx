@@ -1,46 +1,50 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { ShareButton } from '~/v4/social/elements/ShareButton';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { Typography } from '~/v4/core/components';
-import AngleRight from '~/v4/icons/AngleRight';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { PollContent } from './PollContent/PollContent';
+import Crying from './Crying';
+import Happy from './Happy';
+import Fire from './Fire';
+import Love from './Love';
+import Like from './Like';
 import { TextContent } from './TextContent';
-import { ImageContent } from './ImageContent';
-import { VideoContent } from './VideoContent';
-import { ClipContent } from './ClipContent';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
 import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoViewer';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
+import millify from 'millify';
 import { Button } from '~/v4/core/natives/Button';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
 import { PinBadge } from '~/v4/social/elements/PinBadge';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 import clsx from 'clsx';
-import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
-import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
-import { LiveStreamContent } from './LiveStreamContent';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import styles from './PostContent.module.css';
 import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { usePostReaction } from '~/v4/social/hooks/usePostReaction';
+import { Share } from '~/v4/icons/Share';
+import { IconButton } from '~/v4/core/components/IconButton';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
+import { PostTitle } from './PostTitle';
+import { ChildrenPostContent } from './ChildrenPostContent';
+import { SharableModel } from '~/v4/utils/sharableLink';
 import { Comment, CommentSkeleton } from '~/v4/social/components/Comment';
 import { Divider } from '~/v4/social/elements/Divider';
 import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
+import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -53,165 +57,6 @@ export enum AmityPostCategory {
   PIN = 'pin',
   PIN_AND_ANNOUNCEMENT = 'pin_and_announcement',
 }
-
-interface PostTitleProps {
-  post: Amity.Post;
-  pageId?: string;
-  componentId?: string;
-  hideTarget?: boolean;
-}
-
-const PostTitle = ({ pageId, componentId, post, hideTarget }: PostTitleProps) => {
-  const shouldCallCommunity = useMemo(() => post?.targetType === 'community', [post?.targetType]);
-  const shouldCallUser = useMemo(
-    () => post?.targetType === 'user' && post?.postedUserId !== post?.targetId,
-    [post?.targetType, post?.postedUserId, post?.targetId],
-  );
-
-  const { community: targetCommunity } = useCommunity({
-    communityId: post?.targetId,
-    shouldCall: shouldCallCommunity,
-  });
-
-  const { user: targetUser } = useUser({
-    userId: post?.targetId,
-    shouldCall: shouldCallUser,
-  });
-
-  const { goToCommunityProfilePage, onClickUser } = useNavigation();
-
-  const showTargetCommunity = targetCommunity && !hideTarget;
-  const showTargetUser = targetUser && !hideTarget;
-  const showBrandBadge = post?.creator?.isBrand;
-  const showPrivateBadge = targetCommunity?.isPublic === false;
-  const showOfficialBadge = targetCommunity?.isOfficial === true;
-
-  const showTarget = showTargetCommunity || showTargetUser;
-
-  return (
-    <div className={styles.postTitle} data-show-target-community={showTargetCommunity === true}>
-      {post && post?.creator && (
-        <div
-          className={styles.postTitle__user__container}
-          data-show-brand-badge={showBrandBadge === true}
-          data-show-target={showTarget === true}
-        >
-          <Button
-            onPress={() => post?.creator?.userId && onClickUser(post.creator.userId)}
-            data-testid={`${pageId}/${componentId}/username`}
-          >
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {post.creator.displayName}
-            </Typography.BodyBold>
-          </Button>
-          {showBrandBadge ? <BrandBadge className={styles.postTitle__brandIcon} /> : null}
-          {showTarget ? (
-            <AngleRight
-              data-testid={`${pageId}/${componentId}/arrow_right`}
-              className={styles.postTitle__icon}
-            />
-          ) : null}
-        </div>
-      )}
-      {showTargetCommunity && (
-        <div
-          className={styles.postTitle__community}
-          data-show-private-badge={showPrivateBadge === true}
-          data-show-official-badge={showOfficialBadge === true}
-        >
-          {showPrivateBadge && <CommunityPrivateBadge />}
-          <Button
-            className={styles.postTitle__communityText}
-            data-testid={`${pageId}/${componentId}/community_name`}
-            onPress={() => goToCommunityProfilePage(targetCommunity.communityId)}
-          >
-            <Typography.BodyBold>{targetCommunity.displayName}</Typography.BodyBold>
-          </Button>
-          {showOfficialBadge && <CommunityOfficialBadge />}
-        </div>
-      )}
-      {showTargetUser && (
-        <div
-          className={styles.postTitle__user__container}
-          data-show-brand-badge={targetUser?.isBrand === true}
-          data-show-target={false}
-        >
-          <Button onPress={() => onClickUser(targetUser.userId)}>
-            <Typography.BodyBold className={styles.postTitle__text}>
-              {targetUser.displayName}
-            </Typography.BodyBold>
-          </Button>
-          {targetUser?.isBrand === true ? (
-            <BrandBadge className={styles.postTitle__brandIcon} />
-          ) : null}
-        </div>
-      )}
-    </div>
-  );
-};
-
-type ChildrenPostContentProps = {
-  pageId?: string;
-  // Parent Post
-  post: Amity.Post;
-  componentId?: string;
-  disabledContent?: boolean;
-  onImageClick: (imageIndex: number) => void;
-  onVideoClick: (videoIndex: number) => void;
-  onClipClick: (postId: string) => void;
-  goToPostDetail?: (
-    context?: Pick<
-      PostDetailPageProps,
-      'commentId' | 'selectedReplyComment' | 'parentId' | 'showReplyCommentAt'
-    >,
-  ) => void;
-};
-
-export const ChildrenPostContent = ({
-  post,
-  pageId,
-  componentId,
-  onImageClick,
-  onVideoClick,
-  onClipClick,
-  goToPostDetail,
-  disabledContent = false,
-}: ChildrenPostContentProps) => {
-  return (
-    <>
-      <PollContent
-        pageId={pageId}
-        componentId={componentId}
-        parentPost={post}
-        posts={post.childrenPosts as Amity.Post<'poll'>[]}
-        disabled={disabledContent}
-      />
-      <ImageContent
-        pageId={pageId}
-        componentId={componentId}
-        posts={post.childrenPosts as Amity.Post<'image'>[]}
-        onImageClick={onImageClick}
-      />
-      <VideoContent
-        pageId={pageId}
-        componentId={componentId}
-        posts={post.childrenPosts as Amity.Post<'video'>[]}
-        onVideoClick={onVideoClick}
-      />
-      <LiveStreamContent
-        posts={post.childrenPosts as Amity.Post<'liveStream'>[]}
-        goToPostDetail={goToPostDetail}
-        parentPost={post}
-      />
-      <ClipContent
-        pageId={pageId}
-        componentId={componentId}
-        posts={post.childrenPosts as Amity.Post<'clip'>[]}
-        onClipClick={onClipClick}
-      />
-    </>
-  );
-};
 
 interface PostContentProps {
   post: Amity.Post;
@@ -543,6 +388,60 @@ export const PostContent = ({
               />
             ) : null}
           </div>
+          {style === AmityPostContentComponentStyle.DETAIL ? (
+            <div className={styles.postContent__reactions_and_comments}>
+              <div
+                className={styles.postContent__reactionsBar}
+                onClick={() => {
+                  const reactionList = (
+                    <ReactionList
+                      pageId={pageId}
+                      referenceId={post.postId}
+                      referenceType={'post'}
+                    />
+                  );
+                  isDesktop
+                    ? openPopup({ view: 'desktop', children: reactionList })
+                    : setDrawerData({ content: reactionList });
+                }}
+              >
+                {hasReaction ? (
+                  <div className={styles.postContent__reactionsBar__reactions}>
+                    {hasCrying && (
+                      <Crying className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasHappy && (
+                      <Happy className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasFire && (
+                      <Fire className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasLove && (
+                      <Love className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasLike && (
+                      <Like className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                  </div>
+                ) : null}
+                <Typography.Caption
+                  data-testid={`${pageId}/${componentId}/like_count`}
+                  className={styles.postContent__reactionsBar__reactions__count}
+                >
+                  {`${millify(post?.reactionsCount || 0)} ${
+                    post?.reactionsCount === 1 ? 'like' : 'likes'
+                  }`}
+                </Typography.Caption>
+              </div>
+
+              <Typography.Caption
+                data-testid={`${pageId}/${componentId}/comment_count`}
+                className={styles.postContent__commentsCount}
+              >
+                {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
+              </Typography.Caption>
+            </div>
+          ) : null}
           {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
             <>
               <div className={styles.postContent__divider} />

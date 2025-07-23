@@ -107,11 +107,6 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         community={community}
         onBack={() => onBack(page)}
         isSticky={!isDesktop && isSticky}
-        onClickMenu={() => {
-          AmityCommunityProfilePageBehavior?.goToCommunitySettingPage?.({
-            community: community,
-          });
-        }}
       />
       <div className={styles.content}>
         <div className={styles.communityProfile__name}>

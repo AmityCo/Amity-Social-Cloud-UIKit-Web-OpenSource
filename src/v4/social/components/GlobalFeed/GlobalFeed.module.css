@@ -76,5 +76,6 @@
   .global_feed__postContainer {
     border-radius: 0.5rem;
     border: 1px solid var(--asc-color-base-shade4);
+    margin-bottom: 0.75rem;
   }
 }

@@ -135,10 +135,6 @@
     border-radius: 0 0 0.5rem 0.5rem;
   }
 
-  .postDetailPage__comments {
-    border-top: 1px solid var(--asc-color-base-shade4);
-  }
-
   .postDetailPage__notMember {
     border-radius: 0 0 0.5rem 0.5rem;
     background-color: var(--asc-color-background-default);

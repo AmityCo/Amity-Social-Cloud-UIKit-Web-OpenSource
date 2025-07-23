@@ -100,7 +100,11 @@ export function LiveStreamContent({ parentPost, posts, goToPostDetail }: LiveStr
     >
       <LiveStreamThumbnail fileId={stream.thumbnailFileId} alt={stream.title} />
       {(stream.status === liveStreamStatus.idle || isUpcoming) && <LiveStreamUpcomingBadge />}
-      {stream.status === liveStreamStatus.live && !isUpcoming && <LiveStreamLiveBadge />}
+      {stream.status === liveStreamStatus.live && !isUpcoming && (
+        <div className={styles.liveStreamContent__statusBadge}>
+          <LiveStreamLiveBadge />
+        </div>
+      )}
       {stream.status === liveStreamStatus.recorded && <LiveStreamRecordedBadge />}
 
       {stream.status !== liveStreamStatus.idle && !isUpcoming && (

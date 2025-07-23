@@ -133,6 +133,9 @@ export class AmityUIKitManager {
     });
 
     this.onConnected && this.onConnected();
+
+    const sharableLinkConfig = await ASCClient.getShareableLinkConfiguration();
+    localStorage.setItem('sharableLinkConfig', JSON.stringify(sharableLinkConfig || {}));
   }
 
   /**

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type SwiperCore from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Scrollbar, Mousewheel, FreeMode } from 'swiper/modules';
@@ -25,6 +25,9 @@ import styles from './ClipFeedPage.module.css';
 import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection';
 import { useQueryClipGlobalFeed } from '~/v4/social/hooks/useQueryClipGlobalFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
+import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
+import { SharableModel } from '~/v4/utils/sharableLink';
+import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 
 type ClipFeedPageProps = {
   currentPostId?: string;
@@ -110,6 +113,9 @@ export const ClipFeedPage = ({
 
   // for post content render with no posts
   const { post, isLoading } = usePost(currentPostId, posts?.length === 0);
+  const { community } = useCommunity({
+    communityId: post?.targetType === 'community' ? post?.targetId : undefined,
+  });
 
   // Check if currentPostId exists in the posts array
   const isCurrentPostInPosts =
@@ -345,29 +351,42 @@ export const ClipFeedPage = ({
     setIsLocalMuted((prev) => !prev);
   };
 
-  const handleMenuClick = (postId: string) => {
-    setDrawerData({
-      content: (
-        <Button
-          variant="text"
-          className={styles.clipFeedPage__viewPostButton}
-          data-testid={`${pageId}/*/view_post_button`}
-          onPress={() => {
-            AmityClipFeedPageBehavior?.goToPostDetailPage?.({
-              postId,
-              posts: posts as Amity.Post<'video' | 'clip'>[],
-            });
-            removeDrawerData();
-          }}
-        >
-          <ViewPost className={styles.clipFeedPage__viewPostIcon} />
-          <Typography.BodyBold className={styles.clipFeedPage__viewPostText}>
-            View post
-          </Typography.BodyBold>
-        </Button>
-      ),
-    });
-  };
+  const handleMenuClick = useCallback(
+    (postId: string) => {
+      setDrawerData({
+        content: (
+          <>
+            <Button
+              variant="text"
+              className={styles.clipFeedPage__viewPostButton}
+              data-testid={`${pageId}/*/view_post_button`}
+              onPress={() => {
+                AmityClipFeedPageBehavior?.goToPostDetailPage?.({
+                  postId,
+                  posts: posts as Amity.Post<'video' | 'clip'>[],
+                });
+                removeDrawerData();
+              }}
+            >
+              <ViewPost className={styles.clipFeedPage__viewPostIcon} />
+              <Typography.BodyBold className={styles.clipFeedPage__viewPostText}>
+                View post
+              </Typography.BodyBold>
+            </Button>
+            {community?.isPublic && (
+              <CopyLinkButton
+                pageId={pageId}
+                model={SharableModel.POST}
+                referenceId={post?.postId}
+                onDone={removeDrawerData}
+              />
+            )}
+          </>
+        ),
+      });
+    },
+    [community?.isPublic],
+  );
 
   const handleClipFailed = () => setIsClipFailed(true);
 

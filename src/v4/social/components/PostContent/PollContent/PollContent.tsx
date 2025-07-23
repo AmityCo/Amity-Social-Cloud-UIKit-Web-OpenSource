@@ -1,6 +1,4 @@
 import React, { FC, useMemo, useState } from 'react';
-import usePost from '~/v4/core/hooks/objects/usePost';
-import usePoll from '~/v4/social/hooks/usePoll';
 import { Typography } from '~/v4/core/components';
 import styles from './PollContent.module.css';
 import { Button } from '~/v4/core/components/AriaButton/Button';
@@ -40,11 +38,11 @@ export const PollContent: FC<PollContentProps> = ({
 
   const user = useUser(currentUserId);
 
-  const poll = posts[0]?.getPollInfo();
+  const poll = posts?.[0]?.getPollInfo();
   const showAllChoices = pageId === 'post_detail_page';
   const maxChoicesShown = 4;
-  const isAuthor = parentPost.creator?.userId === currentUserId;
-  const isVoteDisabled = parentPost.feedType === 'reviewing' || disabled;
+  const isAuthor = parentPost?.creator?.userId === currentUserId;
+  const isVoteDisabled = parentPost?.feedType === 'reviewing' || disabled;
   const isVoteButtonDisabled = isVoteDisabled || !answers || answers?.length < 1 || disabled;
   const isPollEneded = poll?.status === 'closed';
 

@@ -102,8 +102,8 @@ export const VideoContent = ({
 }: VideoContentProps) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
-  const first4Videos = posts.slice(0, 4);
-  const videoLeftCount = Math.max(0, posts.length - 4);
+  const first4Videos = posts?.slice(0, 4);
+  const videoLeftCount = Math.max(0, posts?.length - 4);
 
   if (!posts || posts[0]?.dataType !== 'video') return null;
 
@@ -118,7 +118,7 @@ export const VideoContent = ({
           <Video
             key={post.postId}
             pageId={pageId}
-            videoPost={post}
+            videoPost={posts[0]}
             componentId={componentId}
             videoLeftCount={videoLeftCount}
             postAmount={posts.length}

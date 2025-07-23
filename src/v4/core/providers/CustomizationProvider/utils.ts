@@ -1191,6 +1191,62 @@ export const defaultConfig: DefaultConfig = {
       icon: 'createCommunityIcon',
       text: 'Create Community',
     },
+    'livestream_player_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'livestream_player_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy live stream link',
+    },
+    'create_livestream_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'create_livestream_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy live stream link',
+    },
+    'clip_feed_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'clip_feed_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy clip link',
+    },
+    'post_detail_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'post_detail_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy post link',
+    },
+    '*/post_content/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    '*/post_content/copy_link': {
+      image: 'icon',
+      text: 'Copy post link',
+    },
+    'user_profile_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'user_profile_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy profile link',
+    },
+    'community_profile_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'community_profile_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy profile link',
+    },
   },
 };
 

@@ -13,6 +13,7 @@ import { ClickableArea } from '~/v4/core/natives/ClickableArea';
 import styles from './GlobalFeed.module.css';
 import { Divider } from '~/v4/social/elements/Divider';
 import useGlobalPinnedPostsCollection from '~/v4/social/hooks/collections/useGlobalPinnedPostsCollection';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 interface GlobalFeedProps {
   pageId?: string;
@@ -45,6 +46,7 @@ export const GlobalFeed = ({
   });
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const { isDesktop } = useResponsive();
 
   const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
 
@@ -123,13 +125,13 @@ export const GlobalFeed = ({
                   }}
                 />
               </ClickableArea>
-              <Divider />
+              <Divider isShown={!isDesktop} />
             </React.Fragment>
           );
         })}
       {filteredItems.map((item, index) => (
         <React.Fragment key={getItemKey(item, filteredItems[Math.max(0, index - 1)])}>
-          <Divider isShown={index !== 0} />
+          <Divider isShown={!isDesktop && index !== 0} />
           {isAmityAd(item) ? (
             <PostAd ad={item} />
           ) : (
@@ -160,12 +162,12 @@ export const GlobalFeed = ({
           )}
         </React.Fragment>
       ))}
-      <Divider isShown={filteredItems.length > 0} />
+      <Divider isShown={!isDesktop && filteredItems.length > 0} />
       {isLoading
         ? Array.from({ length: 5 }).map((_, index) => (
             <div key={index}>
               <PostContentSkeleton />
-              <Divider isShown={index !== 5} />
+              <Divider isShown={!isDesktop && index !== 5} />
             </div>
           ))
         : null}
