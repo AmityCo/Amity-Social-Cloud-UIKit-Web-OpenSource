@@ -10,7 +10,7 @@ export const ErrorContent = () => {
       <ErrorFeed className={styles.errorContent__icon} />
       <div className={styles.errorContent__text}>
         <Typography.TitleBold>Something went wrong</Typography.TitleBold>
-        <Typography.Caption>We couldn’t recognize this feed.</Typography.Caption>
+        <Typography.Caption>Please try again.</Typography.Caption>
       </div>
     </div>
   );

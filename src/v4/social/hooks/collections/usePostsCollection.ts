@@ -1,5 +1,5 @@
 import { PostRepository } from '@amityco/ts-sdk';
-import useLiveCollectionV4 from '~/v4/core/hooks/useLiveCollectionV4';
+import { useLiveCollectionV4 } from '~/v4/core/hooks/useLiveCollectionV4';
 
 const QUERY_LIMIT = 20;
 

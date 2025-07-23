@@ -11,6 +11,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { UnavailableMediaViewer } from '~/v4/social/internal-components/UnavailableMediaViewer';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 
 const VideoItem = ({
   videoFileId,
@@ -67,6 +68,7 @@ interface VideoGalleryProps {
   componentId?: string;
   elementId?: string;
   isLoading?: boolean;
+  feedSources?: FeedSourceEnum[];
 }
 
 export const VideoGallery: React.FC<VideoGalleryProps> = ({
@@ -75,6 +77,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
   componentId,
   elementId,
   isLoading,
+  feedSources,
 }) => {
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -155,6 +158,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
       {posts && isImageViewerOpen && selectedIndex !== null && (
         <SingleVideoViewer
           isFromGallery
+          feedSources={feedSources}
           selectedImageIndex={selectedIndex}
           post={posts[selectedIndex]}
           pageId={pageId}

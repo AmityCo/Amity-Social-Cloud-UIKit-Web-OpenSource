@@ -37,7 +37,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build --output-dir ./storybook-build",
+    "storybook:build": "NODE_OPTIONS=--max-old-space-size=4096 storybook build --output-dir ./storybook-build",
     "lint": "eslint . && stylelint \"**/*.css\"",
     "stylelint": "stylelint",
     "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
@@ -46,12 +46,12 @@
     "gist:update": "node ./code-snippets/scripts/update-code-snippets.mjs"
   },
   "peerDependencies": {
-    "@amityco/ts-sdk": "7.8.1-35d9c53.0",
+    "@amityco/ts-sdk": "7.8.1-2915b77.0",
     "react": ">=17.0.2",
     "react-dom": ">=17.0.2"
   },
   "devDependencies": {
-    "@amityco/ts-sdk": "7.8.1-35d9c53.0",
+    "@amityco/ts-sdk": "7.8.1-2915b77.0",
     "@eslint/js": "^9.4.0",
     "@octokit/core": "^6.1.4",
     "@storybook/addon-a11y": "^7.6.7",
@@ -101,7 +101,7 @@
     "react-router-dom": "^6.21.1",
     "standard-version": "^9.5.0",
     "storybook": "^7.6.7",
-    "styled-components": "^6.1.6",
+    "styled-components": "6.1.11",
     "stylelint": "^16.6.1",
     "stylelint-config-standard": "^36.0.0",
     "stylelint-no-unsupported-browser-features": "^8.0.1",

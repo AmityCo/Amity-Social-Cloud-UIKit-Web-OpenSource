@@ -3,10 +3,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /*
  * This hook is used to manage live collections without having cache in UIKit level.
  * It provides same functionalities of useLiveCollection.
- * TODO: refactor
  */
 
-function useLiveCollectionV4<TCallback, TParams>({
+export function useLiveCollectionV4<TCallback, TParams>({
   fetcher,
   params,
   callback = () => {},
@@ -59,15 +58,11 @@ function useLiveCollectionV4<TCallback, TParams>({
 
   useEffect(() => {
     if (!shouldCall) return;
-    const { unsubscribe } = subscribe({
-      fetcher,
-      params,
-      callback: callbackFn,
-    });
+    const { unsubscribe } = subscribe({ fetcher, params, callback: callbackFn });
     unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
-  }, [shouldCall]);
+  }, [JSON.stringify(params), shouldCall]);
 
   const refresh = useCallback(() => {
     if (unsubscribeRef.current) unsubscribeRef.current();
@@ -93,8 +88,6 @@ function useLiveCollectionV4<TCallback, TParams>({
     loadMoreHasBeenCalled,
   };
 }
-
-export default useLiveCollectionV4;
 
 const subscribe = <TParams, TCallback>({
   fetcher,

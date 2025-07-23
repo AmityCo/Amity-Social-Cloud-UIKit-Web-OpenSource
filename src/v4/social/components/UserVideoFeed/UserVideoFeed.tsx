@@ -1,45 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { VideoGallery } from '~/v4/social/internal-components/VideoGallery';
 import { EmptyUserVideoFeed } from '~/v4/social/elements/EmptyUserVideoFeed/EmptyUserVideoFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { PrivateUserVideoFeed } from '~/v4/social/elements/PrivateUserVideoFeed';
 import { BlockedUserVideoFeed } from '~/v4/social/elements/BlockedUserVideoFeed';
-import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { ErrorContent } from '~/v4/social/internal-components/ErrorContent';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
 import { TabButton } from '~/v4/social/elements/TabButton';
 import { ClipGallery } from '~/v4/social/internal-components/ClipGallery/ClipGallery';
 import { TabType } from '~/v4/social/constants/videoTabs';
 import { EmptyClipFeed } from '~/v4/social/elements/EmptyClipFeed';
+import { MediaFeedSkeleton } from '~/v4/social/internal-components/MediaFeedSkeleton';
+import useUserFeed from '~/v4/social/hooks/collections/useUserFeed';
 import styles from './UserVideoFeed.module.css';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { FeedSourceEnum, FeedDataTypeEnum } from '@amityco/ts-sdk';
 
 interface UserVideoFeedProps {
   userId: string;
   pageId?: string;
+  feedSources?: FeedSourceEnum[];
+  followStatus?: Amity.FollowStatus['status'] | null;
 }
 
-export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
+export const UserVideoFeed = ({
+  pageId = '*',
+  userId,
+  feedSources,
+  followStatus,
+}: UserVideoFeedProps) => {
   const componentId = 'user_video_feed';
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [intersectionClipNode, setIntersectionClipNode] = useState<HTMLDivElement | null>(null);
   const { linkToPost, setLinkToPost } = useLayoutContext();
   const [activeTab, setActiveTab] = useState<TabType>(TabType.VIDEOS);
 
-  const { followStatus } = useFollowCount(userId);
-
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
     componentId,
   });
 
-  const { posts, hasMore, loadMore, refresh, error, isLoading } = usePostsCollection({
-    targetId: userId,
-    targetType: 'user',
-    limit: linkToPost ? (linkToPost.index >= 10 ? linkToPost.index + 10 : 10) : 10,
-    dataTypes: ['video'],
+  const limit = useRef(linkToPost ? (linkToPost.index >= 10 ? linkToPost.index + 10 : 10) : 10);
+
+  const { posts, hasMore, loadMore, refresh, error, isLoading } = useUserFeed({
+    userId,
+    feedSources,
+    limit: limit.current,
+    dataTypes: [FeedDataTypeEnum.Video],
   });
 
   const {
@@ -49,11 +57,11 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
     refresh: refreshClips,
     error: errorClips,
     isLoading: isLoadingClips,
-  } = usePostsCollection({
-    targetId: userId,
-    targetType: 'user',
-    limit: 10,
-    dataTypes: ['clip'],
+  } = useUserFeed({
+    userId,
+    feedSources,
+    limit: limit.current,
+    dataTypes: [FeedDataTypeEnum.Clip],
   });
 
   useIntersectionObserver({
@@ -81,9 +89,8 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
   });
 
   useEffect(() => {
-    refresh();
-    refreshClips();
-  }, []);
+    if (posts.length === 0 && !isLoading) setLinkToPost(null);
+  }, [posts, isLoading]);
 
   useEffect(() => {
     if (posts.length === 0 && !isLoading) setLinkToPost(null);
@@ -119,16 +126,13 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
   };
 
   const renderFeed = (posts: Amity.Post[], isLoading: boolean, error: Error | null) => {
-    if (followStatus === 'blocked')
+    if (!isLoading && followStatus === 'blocked')
       return <BlockedUserVideoFeed pageId={pageId} componentId={componentId} />;
 
-    if (error) {
-      return error.message.includes('You are not following this user') ? (
-        <PrivateUserVideoFeed pageId={pageId} componentId={componentId} />
-      ) : (
-        <ErrorContent />
-      );
-    }
+    if (!isLoading && !isLoadingClips && (followStatus === 'none' || followStatus === 'pending'))
+      return <PrivateUserVideoFeed pageId={pageId} componentId={componentId} />;
+
+    if (!isLoading && !isLoadingClips && error) return <ErrorContent />;
 
     if (activeTab === TabType.VIDEOS && !isLoading && posts.length === 0)
       return <EmptyUserVideoFeed pageId={pageId} componentId={componentId} />;
@@ -139,7 +143,14 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
     return (
       <div className={styles.userVideoFeed__container}>
         {activeTab === TabType.VIDEOS ? (
-          <VideoGallery posts={posts as Amity.Post<'video'>[]} isLoading={isLoading} />
+          <>
+            <VideoGallery
+              posts={posts as Amity.Post<'video'>[]}
+              isLoading={isLoading}
+              feedSources={feedSources}
+            />
+            {isLoading && <MediaFeedSkeleton />}
+          </>
         ) : (
           <ClipGallery posts={posts as Amity.Post<'clip'>[]} />
         )}
@@ -176,8 +187,14 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
   };
 
   return (
-    <div data-testid={accessibilityId} style={themeStyles}>
-      <NoInternetConnectionHoc page="feed" refresh={refresh}>
+    <div data-testid={accessibilityId} style={themeStyles} className={styles.userVideoFeed}>
+      <NoInternetConnectionHoc
+        page="feed"
+        refresh={() => {
+          refresh();
+          refreshClips();
+        }}
+      >
         <>
           {renderTabs()}
           {renderContent()}

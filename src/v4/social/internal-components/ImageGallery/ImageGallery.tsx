@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './ImageGallery.module.css';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 import { useImage } from '~/v4/core/hooks/useImage';
 import { Button } from '~/v4/core/natives/Button';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
@@ -49,14 +50,16 @@ interface ImageGalleryProps {
   componentId?: string;
   target?: 'community' | 'user';
   isLoading?: boolean;
+  feedSources?: FeedSourceEnum[];
 }
 
 export const ImageGallery = ({
   posts,
   pageId,
-  componentId,
   target,
   isLoading,
+  feedSources,
+  componentId,
 }: ImageGalleryProps) => {
   const { isDesktop } = useResponsive();
   const { openPopup, closePopup } = usePopupContext();
@@ -90,6 +93,7 @@ export const ImageGallery = ({
             post={post}
             isFromGallery
             target={target}
+            feedSources={feedSources}
             initialImageIndex={postIndex}
             onClose={() => {
               setLinkToPost(null);

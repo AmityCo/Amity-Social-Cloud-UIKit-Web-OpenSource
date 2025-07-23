@@ -124,6 +124,7 @@ export function PostComposer({
         pageId={pageId}
         userId={user?.userId}
         componentId={componentId}
+        shouldRedirectToUserProfile
         className={styles.postComposer__avatar}
         imageContainerClassName={styles.postComposer__avatar}
         textPlaceholderClassName={styles.postComposer__avatarPlaceholder}

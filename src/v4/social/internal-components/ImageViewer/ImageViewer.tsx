@@ -16,6 +16,7 @@ import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 
 type ImageViewerProps = {
   pageId?: string;
@@ -26,6 +27,7 @@ type ImageViewerProps = {
   initialImageIndex: number;
   isFromGallery?: boolean;
   target?: 'community' | 'user';
+  feedSources?: FeedSourceEnum[];
 };
 
 export function ImageViewer({
@@ -37,6 +39,7 @@ export function ImageViewer({
   componentId = '*',
   initialImageIndex,
   isFromGallery,
+  feedSources,
 }: ImageViewerProps) {
   const { isOwner } = usePostPermissions({ post });
   const [isOpen, setIsOpen] = useState(false);
@@ -76,6 +79,7 @@ export function ImageViewer({
           target: 'community',
           parentPostId: post.parentPostId,
           postId: post.postId,
+          feedSources,
         });
       }
       goToPostDetailPage?.(postId, false);
@@ -88,6 +92,7 @@ export function ImageViewer({
           target: 'user',
           parentPostId: post.parentPostId,
           postId: post.postId,
+          feedSources,
         });
       }
       goToPostDetailPage?.(postId, false);

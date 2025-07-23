@@ -10,6 +10,7 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 
 export const VideoPlayer = memo(
   ({
@@ -96,6 +97,7 @@ interface SingleVideoViewerProps {
   isFromGallery?: boolean;
   post: Amity.Post;
   selectedImageIndex: number;
+  feedSources?: FeedSourceEnum[];
 }
 
 export function SingleVideoViewer({
@@ -109,6 +111,7 @@ export function SingleVideoViewer({
   isFromGallery,
   post,
   selectedImageIndex,
+  feedSources,
 }: SingleVideoViewerProps) {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -124,6 +127,7 @@ export function SingleVideoViewer({
         target: 'community',
         parentPostId: post.parentPostId,
         postId: post.postId,
+        feedSources,
       });
       goToPostDetailPage?.(postId, false);
     }
@@ -134,6 +138,7 @@ export function SingleVideoViewer({
         target: 'user',
         parentPostId: post.parentPostId,
         postId: post.postId,
+        feedSources,
       });
       goToPostDetailPage?.(postId, false);
     }

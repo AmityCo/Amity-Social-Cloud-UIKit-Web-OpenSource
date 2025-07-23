@@ -1,3 +1,4 @@
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 import { useState } from 'react';
 import { CommunityTab } from '~/v4/core/providers/CommunityTabProvider';
 import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
@@ -9,6 +10,7 @@ export type LinkToPost = {
   fileId?: Amity.File['fileId'];
   postId?: string;
   parentPostId?: string;
+  feedSources?: FeedSourceEnum[];
 };
 
 export function useLinkToPost() {
