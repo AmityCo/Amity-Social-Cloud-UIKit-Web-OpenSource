@@ -24,6 +24,7 @@ export { CommunityPostPermissionPage } from './CommunityPostPermissionPage';
 export { CommunityStorySettingPage } from './CommunityStorySettingPage';
 export { PendingPostsPage } from './PendingPostsPage';
 export { CommunityMembershipPage } from './CommunityMembershipPage';
+export { CommunityPendingInvitationPage } from './CommunityPendingInvitationPage';
 
 export { PollPostComposerPage } from './PollPostComposerPage';
 export { PollTargetSelectionPage } from './PollTargetSelectionPage';

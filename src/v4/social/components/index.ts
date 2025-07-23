@@ -29,3 +29,5 @@ export * from './Explore';
 export * from './InvitationBanner';
 export * from './InvitationSection';
 export * from './PostSearchResult';
+export * from './PendingPostList';
+export * from './JoinRequestContent';
