@@ -91,6 +91,56 @@ const useGlobalFeed = () => {
     fetch();
   };
 
+  const fetch = useCallback(() => {
+    const unsubscriber = FeedRepository.getGlobalFeed(
+      {
+        limit: 10,
+      },
+      ({ data, loading, error, hasNextPage, onNextPage }) => {
+        setIsLoading(loading);
+
+        if (data && !loading) {
+          setHasNextPage(!!hasNextPage);
+          onNextPageRef.current = onNextPage;
+          setItems(data);
+        }
+        if (error) {
+          console.error('error', error);
+        }
+      },
+    );
+
+    unsubscriberRef.current = unsubscriber;
+    return unsubscriber;
+  }, []);
+
+  useEffect(() => {
+    const unsubscriber = fetch();
+
+    return () => {
+      unsubscriber();
+    };
+  }, [fetch]);
+
+  const refetch = useCallback(async () => {
+    // Cleanup current subscription
+    if (unsubscriberRef.current) {
+      unsubscriberRef.current();
+    }
+
+    // Reset state
+    setItems([]);
+    setHasNextPage(false);
+    onNextPageRef.current = undefined;
+    reset();
+
+    // Small delay to ensure cleanup
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Setup new subscription
+    fetch();
+  }, [fetch, reset]);
+
   const onScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.target as HTMLDivElement;
     setScrollPosition(target.scrollTop);

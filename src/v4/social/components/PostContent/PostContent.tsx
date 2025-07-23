@@ -178,6 +178,13 @@ export const PostContent = ({
     disabled: disabledInlineComment,
   });
 
+  const disabledInlineComment = pageId === 'post_detail_page' || pageId === 'pending_posts_page';
+
+  const { inlineComment, isLoading: loadingInlineComment } = useInlineComment({
+    post,
+    disabled: disabledInlineComment,
+  });
+
   const isModerator =
     (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
 

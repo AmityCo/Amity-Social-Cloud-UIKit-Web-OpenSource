@@ -66,6 +66,7 @@ export const Comment = ({
   onClickReply,
   hideOptionButton = false,
   shouldAllowInteraction = true,
+  shouldShowInteractionButton = true,
   highlightedCommentId = undefined,
   parentId = undefined,
   showReply,
