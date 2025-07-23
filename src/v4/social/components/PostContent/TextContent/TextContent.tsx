@@ -8,6 +8,7 @@ import { LinkPreview } from '~/v4/social/components/PostContent/LinkPreview/Link
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 
 type TextContentProps = {
+  title?: string;
   text?: string;
   pageId?: string;
   post?: Amity.Post;
@@ -24,6 +25,7 @@ export const TextContent = ({
   post,
   text = '',
   mentioned,
+  title = '',
   pageId = '*',
   componentId = '*',
   mentionees = [],
@@ -32,8 +34,6 @@ export const TextContent = ({
   keyword,
   isSearchPost = false,
 }: TextContentProps) => {
-  if (!text) return null;
-
   const { post: childPost } = usePost(post?.children?.[0]);
 
   const linksFounded = linkify.find(text).filter((link) => link.type === 'url');
@@ -77,16 +77,29 @@ export const TextContent = ({
           )}
         </>
       ) : (
-        <TextWithMention
-          pageId={pageId}
-          componentId={componentId}
-          data={{ text: text }}
-          mentionees={mentionees}
-          metadata={{ mentioned, hashtagged }}
-          hashtags={hashtags}
-          keyword={keyword}
-          isSearchPost={isSearchPost}
-        />
+        <>
+          {title && (
+            <TextWithMention
+              isBold
+              pageId={pageId}
+              data={{ text: title }}
+              mentionees={mentionees}
+              componentId={componentId}
+            />
+          )}
+          {text && (
+            <TextWithMention
+              pageId={pageId}
+              componentId={componentId}
+              data={{ text: text }}
+              mentionees={mentionees}
+              metadata={{ mentioned, hashtagged }}
+              hashtags={hashtags}
+              keyword={keyword}
+              isSearchPost={isSearchPost}
+            />
+          )}
+        </>
       )}
       {canPreviewShown && (
         <LinkPreview pageId={pageId} componentId={componentId} url={linksFounded[0].href} />

@@ -31,6 +31,20 @@
   min-height: auto;
 }
 
+.editPost__formContent .editPost__titleInput {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 1rem 1rem 0;
+}
+
+.editPost__formContent .editPost__titleInput::placeholder {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 .editPost__input {
   padding: 1rem;
 }
@@ -261,13 +275,12 @@
     background-color: var(--asc-color-background-default);
   }
 
-  .editPost__input {
-    padding: 1rem 1.5rem;
+  .editPost__formContent .editPost__titleInput {
+    padding: 1rem 1.5rem 0;
   }
 
-  .editPost__placeholder {
-    top: 1rem;
-    left: 1.5rem;
+  .editPost__input {
+    padding: 1rem 1.5rem;
   }
 
   .editPost__mentionContainer {

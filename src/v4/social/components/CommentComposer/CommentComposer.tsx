@@ -104,11 +104,11 @@ export const CommentComposer = ({
       });
     },
     onError: (error) => {
-      if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+      if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
         notification.info({
           content: 'Your comment contains inappropriate word. Please review and delete it.',
         });
-      } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+      } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
         notification.info({
           content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
         });

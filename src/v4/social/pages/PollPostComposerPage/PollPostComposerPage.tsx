@@ -33,7 +33,14 @@ import { calculateMilliseconds } from '~/v4/social/utils/calculateMilliseconds';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
+import {
+  MAX_POST_TITLE_LENGTH,
+  MAXIMUM_POST_CHARACTERS,
+  MAX_OPTIONS,
+  MAX_OPTION_LENGTH,
+  MAX_POLL_QUESTION_LENGTH,
+  MILLISECONDS_IN_DAY,
+} from '~/v4/social/constants';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { Notification } from '~/v4/core/components/Notification';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
@@ -45,6 +52,9 @@ import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin } from '~/v4/utils/permissions';
 import { useNetworkState } from 'react-use';
+import { TextArea as $TextArea } from '~/v4/core/components/TextField';
+import { FormLabel } from '~/v4/social/elements/FormLabel';
+import { COMPONENT_ID, ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization';
 
 type PollPostComposerPageProps = {
   targetId: string | null;
@@ -52,11 +62,6 @@ type PollPostComposerPageProps = {
 };
 
 type FormValues = Parameters<typeof PollRepository.createPoll>[0];
-
-const MAX_POLL_QUESTION_LENGTH = 500;
-const MAX_OPTIONS = 10;
-const MAX_OPTION_LENGTH = 60;
-const MILLISECONDS_IN_DAY = 86400000;
 
 const timeDuration = [
   { value: 1, label: '1 day' },
@@ -103,7 +108,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   ]);
   const [isMultiple, setIsMultiple] = useState(false);
 
-  //Poll options radio value
+  const [title, setTitle] = useState('');
   const [duration, setDuration] = useState<{ value: number; label: string } | undefined>(
     timeDuration[4],
   );
@@ -111,7 +116,6 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   const [selectedDate, setSelectedDate] = useState<CalendarDate | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<Time | undefined>(undefined);
 
-  //Create poll post
   const [textValue, setTextValue] = useState<CreatePollPostParams>({
     pollId: '',
     text: '',
@@ -147,6 +151,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   const milliseconds = calculateMilliseconds(selectedDate, selectedTime);
 
   const isDirty =
+    title.trim() !== '' ||
     textValue.text.length > 0 ||
     options.some((option) => option.data.length > 0 || option.data.trim() !== '') ||
     isMultiple ||
@@ -192,13 +197,13 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
         });
       }
     } catch (error: unknown) {
+      setIsCreating(false);
       setIsError(true);
-      if (error instanceof Error) {
-        if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
-          notification.info({
-            content: 'Text contain blocked word.',
-          });
-        }
+      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+        notification.info({
+          content: "Your post wasn't posted as it contains an inappropriate word.",
+          alignment: 'fullscreen',
+        });
       }
     } finally {
       setIsCreating(false);
@@ -225,7 +230,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
       targetId: targetId!,
       targetType: targetType,
-      data: { pollId, text: textValue.text },
+      data: { pollId, text: textValue.text, title: title?.trim() },
       dataType: 'poll',
       metadata: {
         mentioned: textValue.mentioned,
@@ -255,15 +260,23 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
         answers: options,
         answerType,
         closedIn,
+        title: title?.trim(),
       };
 
       const createdPoll = await PollRepository.createPoll(
         payload as Parameters<typeof PollRepository.createPoll>[0],
       );
       await onCreatePost(createdPoll.data.pollId);
-    } finally {
       setIsCreating(false);
       isDesktop && closePopup();
+    } catch (error: unknown) {
+      setIsCreating(false);
+      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+        notification.info({
+          content: "Your post wasn't posted as it contains an inappropriate word.",
+          alignment: 'fullscreen',
+        });
+      }
     }
   };
 
@@ -370,6 +383,30 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
             Post
           </AriaButton>
         </div>
+        <TextField name="title" className={styles.pollPostComposerPage__pollQuestion}>
+          <FormLabel
+            optional
+            length={title.length}
+            maxLength={MAX_POST_TITLE_LENGTH}
+            elementId={ELEMENT_ID.POST_TITLE}
+            componentId={COMPONENT_ID.WILD_CARD}
+            pageId={PAGE_ID.POLL_POST_COMPOSER_PAGE}
+            className={styles.pollPostComposerPage__postTitle__label}
+          />
+          <$TextArea
+            name="title"
+            value={title}
+            maxLength={MAX_POST_TITLE_LENGTH}
+            placeholder="Give your poll a headline"
+            className={styles.pollPostComposerPage__postTitle__input}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+            onChange={(e) => {
+              e.target.value.length > MAX_POST_TITLE_LENGTH
+                ? setTitle(e.target.value.slice(0, MAX_POST_TITLE_LENGTH))
+                : setTitle(e.target.value);
+            }}
+          />
+        </TextField>
         <TextField name="question" className={styles.pollPostComposerPage__pollQuestion}>
           <Label className={styles.pollPostComposerPage__pollQuestion__label}>
             <PollQuestionTitle pageId={pageId} />
@@ -538,23 +575,14 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       </Form>
 
       <div className={styles.pollPostComposerPage__notificationWrapper}>
-        {isCreating && (
-          <>
-            <div className={styles.pollPostComposerPage__overlay} />
-            <Notification icon={<Spinner />} content="Posting..." alignment="fixed" />
-          </>
-        )}
+        {isCreating && <Notification icon={<Spinner />} content="Posting..." alignment="fixed" />}
         {isError && (
-          <>
-            <div className={styles.pollPostComposerPage__overlay} />
-
-            <Notification
-              duration={3000}
-              content="Failed to create post"
-              alignment="fixed"
-              icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
-            />
-          </>
+          <Notification
+            duration={3000}
+            content="Failed to create post. Please try again."
+            alignment="fixed"
+            icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+          />
         )}
       </div>
     </div>

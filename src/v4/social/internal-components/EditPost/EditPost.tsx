@@ -43,7 +43,7 @@ import styles from './EditPost.module.css';
 import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { Play } from '~/v4/icons/Play';
 import { useImage } from '~/v4/core/hooks/useImage';
-import usePost from '~/v4/core/hooks/objects/usePost';
+import { TextArea } from '~/v4/core/components/TextField';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -96,6 +96,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     showToastPosition,
   } = useMediaAttachmentVisible({ files, posts: localPost });
 
+  const [title, setTitle] = useState<string>((post as Amity.Post<'text'>)?.data?.title || '');
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: (post as Amity.Post<'text'>)?.data?.text ?? '',
     mentioned: post.metadata?.mentioned || [],
@@ -138,17 +139,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         setIsUpdating(false);
         setIsError(true);
 
-        if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
-          setPostErrorText("Your post wasn't posted because it contains a blocked word.");
-          return;
-        } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
-          setPostErrorText(
-            "Your post wasn't posted because it contains a link that's not allowed.",
-          );
-          return;
+        if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+          setPostErrorText("Your post wasn't posted as it contains an inappropriate word.");
+        } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
+          setPostErrorText("Your post wasn't posted as it contains a link that's not allowed.");
         } else {
-          setPostErrorText('Failed to post.');
-          return;
+          setPostErrorText('Failed to create post. Please try again.');
         }
       },
     });
@@ -232,7 +228,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
           })
         : mutateUpdatePostAsync({
-            data: { text: textValue.text },
+            data: { text: textValue.text, title: title.trim() },
             metadata: {
               mentioned: textValue.mentioned ?? [],
               hashtags: textValue.hashtagsMetadata,
@@ -344,7 +340,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const hasMediaChange = files.length > 0 || posts.length !== localPost.length;
 
-  const hasNoChanges = isTextPost(post) && post.data?.text === textValue.text && !hasMediaChange;
+  const hasNoChanges =
+    isTextPost(post) &&
+    post.data?.text === textValue.text &&
+    post.data?.title === title &&
+    !hasMediaChange;
+
   const hasNoContent = !(
     textValue.text.trim().length > 0 ||
     files.length > 0 ||
@@ -368,8 +369,6 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     fileId: thumbnailFileId,
     imageSize: 'medium',
   });
-
-  const { post: newPost } = usePost(post.postId);
 
   return (
     <div className={styles.editPost} style={themeStyles}>
@@ -403,6 +402,19 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           </div>
         )}
         <div className={styles.editPost__formContent}>
+          <TextArea
+            name="title"
+            value={title}
+            maxLength={150}
+            placeholder="Title (optional)"
+            className={styles.editPost__titleInput}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+            onChange={(e) => {
+              e.target.value.length > 150
+                ? setTitle(e.target.value.slice(0, 150))
+                : setTitle(e.target.value);
+            }}
+          />
           <PostTextField
             pageId={pageId}
             onChange={onChange}

@@ -4,7 +4,7 @@ import TruncateMarkup from 'react-truncate-markup';
 import { useGetInvitation } from '~/v4/social/hooks';
 import { CommunityRepository } from '@amityco/ts-sdk';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { ERROR_CODE } from '~/v4/social/constants/errorCode';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { JoinButton, RejectButton, UserAvatar } from '~/v4/social/elements';
@@ -43,7 +43,7 @@ export function InvitationBanner({
       invitation && setAcceptedInvitation(invitation);
       removeInvitation?.();
     } catch (error: any) {
-      if (error.code === ERROR_CODE.UNAVAILABLE) {
+      if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
         notification.info({ content: 'This invitation is no longer available.' });
         community.isPublic || community.isDiscoverable ? removeInvitation?.() : onBack();
         return;
@@ -60,7 +60,7 @@ export function InvitationBanner({
       notification.success({ content: 'Invitation declined.' });
       community.isPublic || community.isDiscoverable ? removeInvitation?.() : onBack();
     } catch (error: any) {
-      if (error.code === ERROR_CODE.UNAVAILABLE) {
+      if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
         notification.info({ content: 'This invitation is no longer available.' });
         community.isPublic || community.isDiscoverable ? removeInvitation?.() : onBack();
         return;

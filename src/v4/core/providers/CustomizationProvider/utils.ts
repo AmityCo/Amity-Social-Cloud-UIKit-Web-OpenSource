@@ -952,6 +952,9 @@ export const defaultConfig: DefaultConfig = {
     'community_comments_notification_page/*/*': {},
     'community_stories_notification_page/*/*': {},
     'poll_post_composer_page/*/*': {},
+    'poll_post_composer_page/*/post_title': {
+      text: 'Post title',
+    },
     'poll_post_composer_page/*/poll_question_title': {
       text: 'Poll question',
     },

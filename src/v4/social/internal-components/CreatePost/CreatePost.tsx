@@ -43,6 +43,7 @@ import { Play } from '~/v4/icons/Play';
 import { isAmityFile } from '~/v4/utils/checkFileType';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { TextArea } from '~/v4/core/components/TextField';
 
 export function CreatePost({
   community,
@@ -87,6 +88,7 @@ export function CreatePost({
   const [isError, setIsError] = useState(false);
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
+  const [title, setTitle] = useState<string>('');
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
@@ -187,7 +189,7 @@ export function CreatePost({
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
       targetId: targetId!,
       targetType,
-      data: { text: textValue.text },
+      data: { title: title.trim(), text: textValue.text },
       metadata: { mentioned: textValue.mentioned, hashtags: textValue.hashtagsMetadata },
       mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
@@ -199,19 +201,19 @@ export function CreatePost({
 
   const handlePostSuccess = () => {
     setClipFile(null);
-    checkRedirectPage();
-    isDesktop && closePopup();
+    isDesktop ? closePopup() : checkRedirectPage();
   };
 
   const handlePostError = (error: Error) => {
-    if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
-      setPostErrorText("Your post wasn't posted because it contains a blocked word.");
-    } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
-      setPostErrorText("Your post wasn't posted because it contains a link that's not allowed.");
+    if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+      setPostErrorText("Your post wasn't posted as it contains an inappropriate word.");
+    } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
+      setPostErrorText("Your post wasn't posted as it contains a link that's not allowed.");
     } else {
       setPostErrorText('Failed to create post. Please try again.');
     }
   };
+
   //TODO : Make the function works the issues is can't remove extra mention from DOM
 
   const onChange = (val: {
@@ -366,6 +368,19 @@ export function CreatePost({
           </div>
         )}
         <div className={styles.createPost__formContent}>
+          <TextArea
+            name="title"
+            value={title}
+            maxLength={150}
+            onChange={(e) => {
+              e.target.value.length > 150
+                ? setTitle(e.target.value.slice(0, 150))
+                : setTitle(e.target.value);
+            }}
+            placeholder="Title (optional)"
+            className={styles.createPost__titleInput}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+          />
           <PostTextField
             pageId={pageId}
             componentId={isClipPost ? 'clipPost' : undefined}
@@ -373,7 +388,6 @@ export function CreatePost({
             communityId={targetId}
             className={styles.createPost__input}
             dataValue={{ data: { text: textValue.text } }}
-            placeholderClassName={styles.createPost__placeholder}
             mentionContainer={isDesktop ? null : mentionRef.current}
             mentionContainerClassName={styles.createPost__mentionContainer}
           />

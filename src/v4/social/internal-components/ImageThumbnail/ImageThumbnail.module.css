@@ -66,6 +66,7 @@
 
 .closeIcon {
   fill: var(--asc-color-primary-shade4);
+  color: var(--asc-color-primary-shade4);
   width: 1.25rem;
   height: 1.25rem;
 }

@@ -26,7 +26,20 @@
   color: var(--asc-color-base-default);
 }
 
-/* Poll Question */
+.pollPostComposerPage__postTitle__label {
+  display: flex;
+  margin-bottom: 0.25rem;
+  justify-content: space-between;
+}
+
+.pollPostComposerPage__postTitle__input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
 
 .pollPostComposerPage__pollQuestion {
   background-color: var(--asc-color-background-default);
@@ -68,12 +81,9 @@
 
 .pollPostComposerPage__pollQuestion__placeholder {
   position: relative;
-  top: -1rem;
-  left: 0;
   font-size: 0.9375rem;
 }
 
-/* Poll Options */
 .pollPostComposerPage__pollOptions {
   padding: 1.5rem 0 0.75rem;
   border-bottom: 1px solid var(--asc-color-base-shade4);
