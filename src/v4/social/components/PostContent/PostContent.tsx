@@ -646,6 +646,60 @@ export const PostContent = ({
               </Button>
             )}
           </div>
+          {style === AmityPostContentComponentStyle.DETAIL ? (
+            <div className={styles.postContent__reactions_and_comments}>
+              <div
+                className={styles.postContent__reactionsBar}
+                onClick={() => {
+                  const reactionList = (
+                    <ReactionList
+                      pageId={pageId}
+                      referenceId={post.postId}
+                      referenceType={'post'}
+                    />
+                  );
+                  isDesktop
+                    ? openPopup({ view: 'desktop', children: reactionList })
+                    : setDrawerData({ content: reactionList });
+                }}
+              >
+                {hasReaction ? (
+                  <div className={styles.postContent__reactionsBar__reactions}>
+                    {hasCrying && (
+                      <Crying className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasHappy && (
+                      <Happy className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasFire && (
+                      <Fire className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasLove && (
+                      <Love className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                    {hasLike && (
+                      <Like className={styles.postContent__reactionsBar__reactions__icon} />
+                    )}
+                  </div>
+                ) : null}
+                <Typography.Caption
+                  data-testid={`${pageId}/${componentId}/like_count`}
+                  className={styles.postContent__reactionsBar__reactions__count}
+                >
+                  {`${millify(post?.reactionsCount || 0)} ${
+                    post?.reactionsCount === 1 ? 'like' : 'likes'
+                  }`}
+                </Typography.Caption>
+              </div>
+
+              <Typography.Caption
+                data-testid={`${pageId}/${componentId}/comment_count`}
+                className={styles.postContent__commentsCount}
+              >
+                {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
+              </Typography.Caption>
+            </div>
+          ) : null}
           {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
             <>
               <div className={styles.postContent__divider} />
