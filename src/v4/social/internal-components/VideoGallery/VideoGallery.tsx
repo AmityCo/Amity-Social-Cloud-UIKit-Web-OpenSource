@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './VideoGallery.module.css';
 import { useImage } from '~/v4/core/hooks/useImage';
 import useFile from '~/v4/core/hooks/useFile';
@@ -7,6 +7,10 @@ import { formatDuration } from '~/v4/social/utils/formatDuration';
 import VideoControl from '~/v4/icons/VideoControl';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { UnavailableMediaViewer } from '~/v4/social/internal-components/UnavailableMediaViewer';
 
 const VideoItem = ({
   videoFileId,
@@ -62,6 +66,7 @@ interface VideoGalleryProps {
   pageId?: string;
   componentId?: string;
   elementId?: string;
+  isLoading?: boolean;
 }
 
 export const VideoGallery: React.FC<VideoGalleryProps> = ({
@@ -69,17 +74,75 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
   pageId,
   componentId,
   elementId,
+  isLoading,
 }) => {
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const { isDesktop } = useResponsive();
+  const { linkToPost, setLinkToPost } = useLayoutContext();
+  const galleryRef = useRef<HTMLDivElement>(null);
+  const { openPopup, closePopup } = usePopupContext();
 
   const onClickVideoItem = (postIndex: number) => {
     setSelectedIndex(postIndex);
     setIsImageViewerOpen(true);
   };
 
+  const showVideoViewer = (postIndex: number) => {
+    const isParentPostDeleted =
+      linkToPost && !posts?.find((post) => post.parentPostId === linkToPost?.parentPostId);
+
+    const post = posts?.[postIndex];
+
+    if (isParentPostDeleted || !post) {
+      openPopup({
+        id: 'video-viewer',
+        pageId,
+        componentId,
+        media: true,
+        disabledAnimation: true,
+        isDismissable: isDesktop,
+        children: (
+          <UnavailableMediaViewer
+            type="video"
+            onClose={() => {
+              setLinkToPost(null);
+              closePopup('video-viewer');
+            }}
+          />
+        ),
+      });
+    } else {
+      onClickVideoItem(postIndex);
+    }
+  };
+
+  const scrollToVideo = (index: number) => {
+    const targetElement = galleryRef?.current?.children[index];
+    if (targetElement) {
+      requestAnimationFrame(() => {
+        targetElement.scrollIntoView({ behavior: 'auto', block: 'center' });
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (linkToPost && galleryRef.current && posts && !isLoading) {
+      const videoIndex = posts?.findIndex((post) => post.postId === linkToPost?.postId);
+      !isDesktop && showVideoViewer(videoIndex);
+      scrollToVideo(
+        videoIndex > -1
+          ? videoIndex
+          : linkToPost.index > posts.length - 1
+            ? posts.length - 1
+            : linkToPost.index,
+      );
+      isDesktop && setLinkToPost(null);
+    }
+  }, [linkToPost, posts, isDesktop, isLoading]);
+
   return (
-    <div className={styles.videoGallery}>
+    <div className={styles.videoGallery} ref={galleryRef}>
       {posts?.map((post, index) => (
         <VideoItem
           key={post?.data?.videoFileId?.original}
@@ -91,12 +154,18 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
       ))}
       {posts && isImageViewerOpen && selectedIndex !== null && (
         <SingleVideoViewer
+          isFromGallery
+          selectedImageIndex={selectedIndex}
+          post={posts[selectedIndex]}
           pageId={pageId}
           componentId={componentId}
           elementId={elementId}
           fileId={posts[selectedIndex]?.data?.videoFileId?.original ?? ''}
           thumbnailFileId={posts[selectedIndex]?.data?.thumbnailFileId ?? ''}
-          onClose={() => setIsImageViewerOpen(false)}
+          onClose={() => {
+            setLinkToPost(null);
+            setIsImageViewerOpen(false);
+          }}
         />
       )}
     </div>

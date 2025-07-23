@@ -14,6 +14,7 @@ import { ClipGallery } from '~/v4/social/internal-components/ClipGallery/ClipGal
 import { TabType } from '~/v4/social/constants/videoTabs';
 import { EmptyClipFeed } from '~/v4/social/elements/EmptyClipFeed';
 import styles from './UserVideoFeed.module.css';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 interface UserVideoFeedProps {
   userId: string;
@@ -24,7 +25,7 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
   const componentId = 'user_video_feed';
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [intersectionClipNode, setIntersectionClipNode] = useState<HTMLDivElement | null>(null);
-
+  const { linkToPost, setLinkToPost } = useLayoutContext();
   const [activeTab, setActiveTab] = useState<TabType>(TabType.VIDEOS);
 
   const { followStatus } = useFollowCount(userId);
@@ -37,7 +38,7 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
   const { posts, hasMore, loadMore, refresh, error, isLoading } = usePostsCollection({
     targetId: userId,
     targetType: 'user',
-    limit: 10,
+    limit: linkToPost ? (linkToPost.index >= 10 ? linkToPost.index + 10 : 10) : 10,
     dataTypes: ['video'],
   });
 
@@ -83,6 +84,10 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
     refresh();
     refreshClips();
   }, []);
+
+  useEffect(() => {
+    if (posts.length === 0 && !isLoading) setLinkToPost(null);
+  }, [posts, isLoading]);
 
   const tabs = [
     {
@@ -134,7 +139,7 @@ export const UserVideoFeed = ({ pageId = '*', userId }: UserVideoFeedProps) => {
     return (
       <div className={styles.userVideoFeed__container}>
         {activeTab === TabType.VIDEOS ? (
-          <VideoGallery posts={posts as Amity.Post<'video'>[]} />
+          <VideoGallery posts={posts as Amity.Post<'video'>[]} isLoading={isLoading} />
         ) : (
           <ClipGallery posts={posts as Amity.Post<'clip'>[]} />
         )}

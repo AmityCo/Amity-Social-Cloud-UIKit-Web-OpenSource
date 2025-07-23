@@ -114,6 +114,9 @@ export const ClipGallery: React.FC<ClipGalleryProps> = ({
       {posts && isDesktop && isImageViewerOpen && selectedIndex !== null && (
         <SingleVideoViewer
           pageId={pageId}
+          isFromGallery
+          selectedImageIndex={selectedIndex}
+          post={posts[selectedIndex]}
           componentId={componentId}
           elementId={elementId}
           fileId={posts[selectedIndex]?.data?.fileId as string}

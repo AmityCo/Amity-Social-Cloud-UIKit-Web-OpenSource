@@ -10,6 +10,7 @@ type PopupContent = Omit<ModalOverlayProps, 'children'> & {
   header?: React.ReactNode;
   overlayClassName?: string;
   disabledAnimation?: boolean;
+  media?: boolean;
   view?: 'desktop' | 'mobile' | 'all' | 'none';
   onClose?: ({ close }: { close: () => void }) => void;
   children: React.ReactNode | (({ close }: { close: () => void }) => React.ReactNode);

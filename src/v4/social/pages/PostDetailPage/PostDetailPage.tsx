@@ -148,6 +148,10 @@ export function PostDetailPage({
 
   const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
 
+  if (isPostLoading) {
+    return <PostContentSkeleton pageId={pageId} />;
+  }
+
   if (error || (post === null && !isPostLoading) || community?.isDeleted || post?.isDeleted)
     return <FailedToShow pageId={pageId} onBack={onBack} />;
 
@@ -215,19 +219,15 @@ export function PostDetailPage({
 
       <div className={styles.postDetailPage__container}>
         <div>
-          {isPostLoading ? (
-            <PostContentSkeleton pageId={pageId} />
-          ) : post ? (
-            <PostContent
-              pageId={pageId}
-              post={post}
-              className={styles.postDetailPage__postContent}
-              category={category ?? AmityPostCategory.GENERAL}
-              style={AmityPostContentComponentStyle.DETAIL}
-              hideTarget={hideTarget}
-              disabledContent={isNotJoinedCommunity}
-            />
-          ) : null}
+          <PostContent
+            pageId={pageId}
+            post={post}
+            className={styles.postDetailPage__postContent}
+            category={category ?? AmityPostCategory.GENERAL}
+            style={AmityPostContentComponentStyle.DETAIL}
+            hideTarget={hideTarget}
+            disabledContent={isNotJoinedCommunity}
+          />
         </div>
         <div className={styles.postDetailPage__comments__divider} data-is-loading={isPostLoading} />
         {post && isDesktop && !isNotJoinedCommunity && (

@@ -1,0 +1,49 @@
+.unavailableMediaViewer__modal {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.unavailableMediaViewer__close {
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  padding: 2rem 1rem 1rem;
+  justify-content: space-between;
+  background-color: rgb(from var(--asc-color-black) r g b / 50%);
+}
+
+.unavailableMediaViewer__closeButton {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+.unavailableMediaViewer__closeButton__img {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.unavailableMediaViewer__failedIcon {
+  width: 3.5rem;
+  height: 3.5rem;
+  fill: var(--asc-color-secondary-shade3);
+  color: var(--asc-color-secondary-shade3);
+}
+
+.unavailableMediaViewer__failedText {
+  color: var(--asc-color-secondary-shade3);
+}
+
+@media only screen and (width >= 48em) {
+  .unavailableMediaViewer__close {
+    background-color: transparent;
+  }
+}

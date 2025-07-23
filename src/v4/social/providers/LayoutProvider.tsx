@@ -5,6 +5,8 @@ import {
   useInvitationNotificationTray,
   InvitationNotificationTray,
   initialInvitationNotificationTray,
+  useLinkToPost,
+  LinkToPost,
 } from '~/v4/social/hooks';
 
 type LayoutContextType = {
@@ -15,6 +17,8 @@ type LayoutContextType = {
   acceptedInvitation: Amity.Invitation | null;
   setAcceptedInvitation: (invitation: Amity.Invitation) => void;
   invitationNotificationTray: InvitationNotificationTray;
+  linkToPost: LinkToPost | null;
+  setLinkToPost: (linkToPost: LinkToPost | null) => void;
 };
 
 const LayoutContext = createContext<LayoutContextType>({
@@ -25,6 +29,8 @@ const LayoutContext = createContext<LayoutContextType>({
   acceptedInvitation: null,
   setAcceptedInvitation: () => {},
   invitationNotificationTray: initialInvitationNotificationTray,
+  linkToPost: null,
+  setLinkToPost: () => {},
 });
 
 export const useLayoutContext = () => {
@@ -42,6 +48,7 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const [acceptedInvitation, setAcceptedInvitation] = useState<Amity.Invitation | null>(null);
   const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);
   const invitationNotificationTray = useInvitationNotificationTray();
+  const { linkToPost, setLinkToPost } = useLinkToPost();
 
   return (
     <LayoutContext.Provider
@@ -53,6 +60,8 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
         acceptedInvitation,
         setAcceptedInvitation,
         invitationNotificationTray,
+        linkToPost,
+        setLinkToPost,
       }}
     >
       {children}

@@ -10,3 +10,4 @@ export { default as useLiveCollection } from './useLiveCollection';
 export { useUserQueryByDisplayName } from './useUserQueryByDisplayName';
 export * from './useInvitationNotificationTray';
 export { useGetInvitation } from './useGetInvitation';
+export * from './useLinkToPost';

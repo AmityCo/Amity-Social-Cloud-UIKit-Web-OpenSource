@@ -4,8 +4,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--asc-color-background-transparent-black);
   z-index: 1000;
+  background-color: var(--asc-color-black);
 }
 
 .modalContent {
@@ -16,11 +16,16 @@
   height: 100%;
 }
 
-.closeButton {
+.modalActions {
   position: absolute;
   top: 2rem;
-  left: 1rem;
+  left: 0;
+  right: 0;
+  padding: 0 1rem;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .fullImage {
@@ -41,7 +46,7 @@
 }
 
 .singleImageViewer__clearButton {
-  fill: var(--asc-color-base-shade3);
+  fill: var(--asc-color-base-shade4);
   width: 2rem;
   height: 2rem;
   cursor: pointer;

@@ -26,12 +26,13 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage/PollPostComposerPage';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 type UserProfilePageProps = {
   userId: string;
 };
 
-const enum UserProfileTabs {
+export const enum UserProfileTabs {
   FEED = 'feed',
   IMAGE = 'image',
   VIDEO = 'video',
@@ -49,12 +50,17 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
   const { openPopup } = usePopupContext();
+  const { linkToPost } = useLayoutContext();
 
   const isCurrentUser = user?.userId === currentUserId;
 
   const [isScroll, setIsScroll] = useState(false);
   const [currentActiveTab, setCurrentActiveTab] = React.useState<UserProfileTabs>(
-    UserProfileTabs.FEED,
+    linkToPost?.tab === UserProfileTabs.FEED ||
+      linkToPost?.tab === UserProfileTabs.IMAGE ||
+      linkToPost?.tab === UserProfileTabs.VIDEO
+      ? linkToPost?.tab
+      : UserProfileTabs.FEED,
   );
 
   const onChangeTab = (tab: UserProfileTabs) => {
