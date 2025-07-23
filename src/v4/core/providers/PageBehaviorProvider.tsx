@@ -214,6 +214,7 @@ export interface PageBehavior {
   AmityNotificationTrayPageBehavior?: {
     goToCommunityProfilePage?(context: { communityId: string }): void;
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
+    goToUserProfilePage?(context: { userId: string }): void;
   };
   AmityDraftClipPageBehavior?: {
     goToPostComposerPage?(context: {
@@ -795,6 +796,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityNotificationTrayPageBehavior.goToPostDetailPage(context);
         }
         goToPostDetailPage({ ...context, id: context.postId });
+      },
+      goToUserProfilePage: (context: { userId: string }) => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityNotificationTrayPageBehavior.goToUserProfilePage(context);
+        }
+        goToUserProfilePage(context.userId);
       },
     },
     AmityDraftClipPageBehavior: {

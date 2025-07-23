@@ -44,6 +44,10 @@ export const NotificationItem = ({
       return AmityNotificationTrayPageBehavior?.goToCommunityProfilePage?.({
         communityId: item.targetId,
       });
+    } else if (item.trayItemCategory === 'follow') {
+      return AmityNotificationTrayPageBehavior?.goToUserProfilePage?.({
+        userId: item.actionReferenceId!,
+      });
     } else {
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
         postId:
