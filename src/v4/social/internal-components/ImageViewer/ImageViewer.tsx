@@ -82,7 +82,10 @@ export function ImageViewer({
           feedSources,
         });
       }
-      goToPostDetailPage?.(postId, false);
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
     }
     if (target === 'user') {
       if (post) {
@@ -95,7 +98,10 @@ export function ImageViewer({
           feedSources,
         });
       }
-      goToPostDetailPage?.(postId, false);
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
     }
   };
 

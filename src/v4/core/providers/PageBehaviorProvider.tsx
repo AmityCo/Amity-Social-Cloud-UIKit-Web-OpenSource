@@ -329,7 +329,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityGlobalFeedComponentBehavior?.goToPostDetailPage) {
           return pageBehavior?.AmityGlobalFeedComponentBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage({ ...context, id: context.postId });
+        goToPostDetailPage(context);
       },
       goToViewStoryPage: (context: {
         targetId: string;
@@ -391,7 +391,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmitySocialGlobalSearchPageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmitySocialGlobalSearchPageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage({ ...context, id: context.postId });
+        goToPostDetailPage(context);
       },
     },
     AmityCommunitySearchResultComponentBehavior: {
@@ -516,7 +516,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityCommunityProfilePageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage({ ...context, id: context.postId });
+        goToPostDetailPage(context);
       },
       goToCommunitySettingPage(context: { community: Amity.Community }) {
         if (pageBehavior?.AmityCommunityProfilePageBehavior?.goToCommunitySettingPage) {
@@ -707,7 +707,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityUserFeedComponentBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityUserFeedComponentBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage({ ...context, id: context.postId });
+        goToPostDetailPage(context);
       },
     },
     AmityUserProfilePageBehavior: {
@@ -810,7 +810,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityNotificationTrayPageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage({ ...context, id: context.postId });
+        goToPostDetailPage(context);
       },
       goToUserProfilePage: (context: { userId: string }) => {
         if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToUserProfilePage) {
@@ -844,7 +844,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityClipFeedPageBehavior?.goToPostDetailPage) {
           return pageBehavior.AmityClipFeedPageBehavior.goToPostDetailPage(context);
         }
-        goToPostDetailPage({ ...context, id: context.postId });
+        goToPostDetailPage(context);
       },
       goToUserProfilePage: (context: { userId: string }) => {
         if (pageBehavior?.AmityClipFeedPageBehavior?.goToUserProfilePage) {

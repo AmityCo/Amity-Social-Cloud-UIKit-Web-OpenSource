@@ -96,14 +96,8 @@ const useInlineComment = ({ post, disabled }: { post: Amity.Post; disabled: bool
       setIsLoading(false);
     };
 
-    // Initial update
     updateLatestComment();
-
-    // Set up an interval to check for changes (if SDK doesn't provide subscription)
-    const interval = setInterval(updateLatestComment, 1000);
-
-    return () => clearInterval(interval);
-  }, [post.latestComments?.[0]?.updatedAt, post.latestComments[0]?.commentId]); // Only depend on postId to avoid infinite re-renders
+  }, [post.latestComments?.[0]?.updatedAt, post.latestComments[0]?.commentId]);
 
   return { inlineComment, isLoading };
 };

@@ -24,11 +24,6 @@
   ],
   "types": "dist/index.d.ts",
   "description": "React Ui-Kit for Amity Social Cloud",
-  "pnpm": {
-    "overrides": {
-      "stylus": "git+https://github.com/stylus/stylus.git"
-    }
-  },
   "scripts": {
     "prepare": "husky install",
     "build": "tsup --minify",

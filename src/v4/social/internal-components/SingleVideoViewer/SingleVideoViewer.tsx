@@ -129,7 +129,10 @@ export function SingleVideoViewer({
         postId: post.postId,
         feedSources,
       });
-      goToPostDetailPage?.(postId, false);
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
     }
     if (page.type === PageTypes.UserProfilePage) {
       setLinkToPost({
@@ -140,7 +143,10 @@ export function SingleVideoViewer({
         postId: post.postId,
         feedSources,
       });
-      goToPostDetailPage?.(postId, false);
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
     }
   };
 

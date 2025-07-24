@@ -19,7 +19,7 @@ import {
 import { AmityRoute } from './AmityUIKitProvider';
 import { LiveStreamPlayerPageProps } from '~/v4/social/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
-import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
+import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -291,7 +291,7 @@ type ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
   goToBlockedUsersPage: () => void;
-  goToPostDetailPage: (context: PostDetailPageProps) => void;
+  goToPostDetailPage: (context: GoToPostDetailPageParams) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
   goToSocialGlobalSearchPage: (tab?: string, keyword?: string) => void;
   goToMyCommunitiesSearchPage: () => void;
@@ -406,7 +406,7 @@ let defaultValue: ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
-  goToPostDetailPage: (context: PostDetailPageProps) => {},
+  goToPostDetailPage: (context: GoToPostDetailPageParams) => {},
   goToViewStoryPage: (context: {
     targetId: string;
     targetType: Amity.StoryTargetType;
@@ -494,9 +494,9 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingFollowRequestPage: () =>
       console.log(`NavigationContext goToPendingFollowRequestPage()`),
     goToBlockedUsersPage: () => console.log(`NavigationContext goToBlockedUsersPage()`),
-    goToPostDetailPage: ({ id, hideTarget, category, commentId, parentId, posts, keyword }) =>
+    goToPostDetailPage: ({ postId, hideTarget, category, commentId, parentId, posts, keyword }) =>
       console.log(
-        `NavigationContext goToPostDetailPage(${id} ${hideTarget} ${category} ${commentId} ${parentId} ${posts} ${keyword})`,
+        `NavigationContext goToPostDetailPage(${postId} ${hideTarget} ${category} ${commentId} ${parentId} ${posts} ${keyword})`,
       ),
     goToCommunityProfilePage: (communityId, page) =>
       console.log(`NavigationContext goToCommunityProfilePage(${communityId} ${page})`),

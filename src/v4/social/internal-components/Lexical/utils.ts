@@ -303,11 +303,14 @@ export function textToEditorState(value: {
           runningIndex,
           nextItemIndex - globalIndex + runningIndex,
         );
-        if (textSegment) {
+        if (textSegment && textSegment.length > 0) {
           paragraph.children.push(createSerializeTextNode(textSegment));
+          runningIndex += textSegment.length;
+          globalIndex += textSegment.length;
+        } else {
+          runningIndex += 1;
+          globalIndex += 1;
         }
-        runningIndex += textSegment.length;
-        globalIndex += textSegment.length;
       }
     }
 
