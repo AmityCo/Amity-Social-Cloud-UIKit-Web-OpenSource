@@ -42,6 +42,14 @@
   gap: 0.5rem;
 }
 
+.pollContent__votedItemsContainer[data-image-poll='true'] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
 .pollContent__seeMore__button {
   width: 100%;
 }
