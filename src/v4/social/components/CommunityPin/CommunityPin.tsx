@@ -67,7 +67,7 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
       <CommunityFeedPostContentSkeleton />
     ) : (
       announcementPosts &&
-        announcementPosts.map(({ post }: Amity.Post) => {
+        announcementPosts.map(({ post }: Amity.PinnedPost) => {
           if (!post || !post.postId) return null;
 
           return (
@@ -92,10 +92,11 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
                   AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
                     postId: post.postId,
                     hideTarget: true,
-                    category: post.category,
+                    category: AmityPostCategory.PIN_AND_ANNOUNCEMENT,
                   })
                 }
                 onPostDeleted={handlePostDeleted}
+                onPollPostDeleted={handlePostDeleted}
               />
             </Button>
           );
@@ -110,7 +111,7 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
     return (
       <>
         {!isLoading &&
-          pinnedPostsFilter.map(({ post }: Amity.Post) => {
+          pinnedPostsFilter.map(({ post }: Amity.PinnedPost) => {
             if (!post || !post.postId) return null;
 
             return (
@@ -139,6 +140,7 @@ export const CommunityPin = ({ pageId = '*', communityId }: CommunityPinProps) =
                     })
                   }
                   onPostDeleted={handlePostDeleted}
+                  onPollPostDeleted={handlePostDeleted}
                 />
               </Button>
             );

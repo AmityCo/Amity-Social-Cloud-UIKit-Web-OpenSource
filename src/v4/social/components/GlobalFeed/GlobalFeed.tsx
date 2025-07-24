@@ -112,6 +112,7 @@ export const GlobalFeed = ({
                   style={AmityPostContentComponentStyle.FEED}
                   isGlobalFeaturePost={true}
                   onPostDeleted={() => onPostDeleted?.(item.post!)}
+                  onPollPostDeleted={onPostDeleted}
                   onClick={(context) => {
                     AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
                       hideTarget: true,
@@ -157,6 +158,7 @@ export const GlobalFeed = ({
                   });
                 }}
                 onPostDeleted={onPostDeleted}
+                onPollPostDeleted={onPostDeleted}
               />
             </ClickableArea>
           )}

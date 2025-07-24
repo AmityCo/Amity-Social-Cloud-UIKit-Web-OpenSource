@@ -11,6 +11,7 @@ import useUser from '~/core/hooks/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { PollSingleAnswer } from './PollSingleAnswer';
 import { PollMultipleAnswer } from './PollMultipleAnswer';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 
 type PollContentProps = {
   pageId?: string;
@@ -19,6 +20,7 @@ type PollContentProps = {
   posts: Amity.Post<'poll'>[];
   parentPost: Amity.Post;
   disabled?: boolean;
+  onPostDeleted?: (post: Amity.Post) => void;
 };
 
 export const PollContent: FC<PollContentProps> = ({
@@ -28,6 +30,7 @@ export const PollContent: FC<PollContentProps> = ({
   parentPost,
   posts,
   disabled = false,
+  onPostDeleted,
 }) => {
   const { error } = useNotifications();
   const { currentUserId } = useSDK();
@@ -62,7 +65,7 @@ export const PollContent: FC<PollContentProps> = ({
       return processPollAnswers.slice(0, maxChoicesShown);
     }
 
-    return poll.isVoted ? processPollAnswers : poll.answers;
+    return poll.status === 'closed' ? processPollAnswers : poll.answers;
   }, [poll?.answers, isExpanded]) as (Amity.PollAnswer & { isTopVoted: boolean })[];
 
   const isShowMore = useMemo(
@@ -78,8 +81,14 @@ export const PollContent: FC<PollContentProps> = ({
     mutationFn: async ({ pollId, answerIds }: { pollId: string; answerIds: string[] }) => {
       return PollRepository.votePoll(pollId, answerIds);
     },
-    onError: () => {
-      error({ content: 'Oops, something went wrong.' });
+    onError: (err: any) => {
+      if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) error({ content: 'Poll ended.' });
+      if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
+        error({ content: 'This post is no longer available.' });
+        onPostDeleted?.(parentPost);
+      } else {
+        error({ content: 'Oops, something went wrong.' });
+      }
     },
   });
 
@@ -94,7 +103,10 @@ export const PollContent: FC<PollContentProps> = ({
     <>
       {poll.isVoted || isAuthorSeeingPoll || isPollEneded ? (
         <>
-          <div className={styles.pollContent__votedItemsContainer}>
+          <div
+            className={styles.pollContent__votedItemsContainer}
+            data-image-poll={pollAnswers?.[0].dataType === 'image'}
+          >
             {pollAnswers.map((answer) => (
               <PollVotedItem
                 label={answer.data}
@@ -105,6 +117,8 @@ export const PollContent: FC<PollContentProps> = ({
                 currentUserId={answer.isVotedByUser ? user?.userId : undefined}
                 isTopVoted={answer.isTopVoted}
                 key={answer.id}
+                imageFileId={answer.fileId}
+                isOwner={isAuthor}
               />
             ))}
           </div>
@@ -128,6 +142,7 @@ export const PollContent: FC<PollContentProps> = ({
               answers={pollAnswers}
               disabled={isVoteDisabled}
               onAnswerChanged={(ans) => setAnswers([ans])}
+              isOwner={isAuthor}
             />
           ) : (
             <PollMultipleAnswer
@@ -135,6 +150,7 @@ export const PollContent: FC<PollContentProps> = ({
               answers={pollAnswers}
               disabled={isVoteDisabled}
               onAnswerChanged={setAnswers}
+              isOwner={isAuthor}
             />
           )}
           {isShowMore && !isExpanded && (

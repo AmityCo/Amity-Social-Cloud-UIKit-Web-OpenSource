@@ -65,6 +65,27 @@
   background-color: var(--asc-color-base-shade4);
 }
 
+.singleImageViewer__optionWrapper {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.singleImageViewer__menuButton,
+.singleImageViewer__menuButton:hover {
+  background-color: transparent;
+}
+
+.singleImageViewer__menuButton__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-background-default);
+}
+
 @media only screen and (width >= 48em) {
   .singleImageViewer__brokenImage {
     max-width: 37.5rem;

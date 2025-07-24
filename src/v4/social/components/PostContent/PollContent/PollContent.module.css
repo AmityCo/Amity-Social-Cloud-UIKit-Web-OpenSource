@@ -4,6 +4,22 @@
   margin-top: 1rem;
 }
 
+.pollContent__checkboxGroup,
+.pollContent__radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pollContent__radioGroup[data-image-option='true'],
+.pollContent__checkboxGroup[data-image-option='true'] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
 .pollContent__pollOptionContainer {
   display: flex;
   flex-direction: column;
@@ -14,6 +30,14 @@
 .pollContent__votedItemsContainer {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pollContent__votedItemsContainer[data-image-poll='true'] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  align-items: stretch;
   gap: 0.5rem;
 }
 
@@ -55,6 +79,107 @@
   padding: 0.75rem;
 }
 
+.pollContent__formRadio[data-selected],
+.pollContent__checkbox[data-selected] {
+  border: 1px solid var(--asc-color-primary-default);
+  box-shadow: 0 0 0 1px var(--asc-color-primary-default);
+}
+
+.pollContent__formRadio[data-image-option='true'],
+.pollContent__checkbox[data-image-option='true'] {
+  width: 100%;
+  height: 100%;
+  padding: 0.75rem;
+  display: block;
+}
+
+.pollContent__formRadio[data-image-option='true']::before {
+  position: absolute;
+  left: 1.125rem;
+  top: 1.125rem;
+  border: 2px solid transparent;
+  background-color: transparent;
+}
+
+.pollContent__imageCheckbox__icon {
+  border: unset !important;
+  z-index: 1;
+  position: absolute;
+  left: 1.125rem;
+  top: 1.125rem;
+}
+
+.pollContent__imageCheckbox__icon[data-selected] {
+  z-index: 1;
+  display: block;
+}
+
+.pollContent__formRadio[data-image-option='true'][data-selected]::before {
+  background-color: var(--asc-color-white);
+  border-width: 0.475rem;
+  border-color: var(--asc-color-primary-default);
+  z-index: 1;
+}
+
+.pollContent__imageOption__wrapper {
+  position: relative;
+  border: 0;
+}
+
+.pollContent__imageOption__wrapper[data-is-voted='true'] {
+  padding: 0.75rem;
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+}
+
+.pollContent__imageOption__wrapper[data-is-voted='true'][data-is-top-voted='true'] {
+  border: 1px solid var(--asc-color-primary-default);
+  box-shadow: 0 0 0 1px var(--asc-color-primary-default);
+}
+
+.pollContent__imageOption__container {
+  width: 100%;
+  position: relative;
+  display: inline-block;
+}
+
+.pollContent__imageOption {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 0.5rem;
+}
+
+.pollContent__imageOption__text {
+  margin-top: 0.75rem;
+  color: var(--asc-color-base-default);
+}
+
+.pollContent__imageOption__text[data-disabled='true'] {
+  color: var(--asc-color-base-shade3);
+}
+
+.pollContent__imageOption__button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: var(--asc-color-background-transparent-black) !important;
+  border-radius: 6.25rem;
+  height: 1.25rem;
+  width: 1.25rem;
+  padding: 0.125rem;
+}
+
+.pollContent__imageOption__button[data-is-voted='true'] {
+  top: 1.25rem;
+  right: 1.25rem;
+}
+
+.pollContent__imageOption__buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--asc-color-white);
+}
+
 .pollContent__formRadio__disabled,
 .pollContent__checkbox__disabled {
   color: var(--asc-color-base-shade3);
@@ -63,4 +188,39 @@
 .pollContent__formRadio__disabled::before,
 .pollContent__checkbox__disabled::before {
   border: 2px solid var(--asc-color-base-shade4);
+}
+
+.pollContent__imageOption__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgb(0 0 0 / 30%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  aspect-ratio: 4/3;
+}
+
+.pollContent__imageOption__overlay__topVoted {
+  position: absolute;
+  inset: 0;
+  background-color: var(--asc-color-primary-default);
+  opacity: 0.3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  aspect-ratio: 4/3;
+}
+
+.pollContent__imageOption__percentage {
+  color: var(--asc-color-white);
+}
+
+.pollContent__imageOption__count {
+  color: var(--asc-color-white);
+  text-align: center;
+  margin-top: 0.25rem;
 }

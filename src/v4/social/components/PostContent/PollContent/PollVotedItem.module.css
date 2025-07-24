@@ -6,6 +6,7 @@
 
 .pollVotedItem[data-top-voted='true'] {
   border: 1px solid var(--asc-color-primary-default);
+  box-shadow: 0 0 0 1px var(--asc-color-primary-default);
 }
 
 .pollVotedItem__title {
@@ -30,7 +31,15 @@
 .pollVotedItem__voteCount {
   display: flex;
   gap: 0.25rem;
+}
+
+.pollVotedItem__voteCount__text {
   color: var(--asc-color-base-shade2);
+}
+
+.pollVotedItem__imageAnswer {
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .pollVotedItem__voteCount__avatar {

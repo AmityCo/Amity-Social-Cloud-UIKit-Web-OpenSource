@@ -16,6 +16,8 @@ type CheckboxGroupProps = $CheckboxGroupProps & {
   alignment?: 'row' | 'row-reverse';
   checkboxProps?: Partial<CheckboxProps>;
   checkboxes: { value: string; label: string | React.ReactNode }[];
+  optionContainerClassname?: string;
+  isImageOption?: boolean;
 };
 
 export function CheckboxGroup({
@@ -25,21 +27,31 @@ export function CheckboxGroup({
   errorMessage,
   checkboxProps,
   labelClassName,
+  isImageOption,
+  optionContainerClassname,
   alignment = 'row-reverse',
   ...props
 }: CheckboxGroupProps) {
   return (
-    <$CheckboxGroup {...props} className={clsx(styles.checkboxGroup, className)}>
+    <$CheckboxGroup
+      {...props}
+      className={clsx(styles.checkboxGroup, className)}
+      data-image-option={isImageOption}
+    >
       {label && <Label className={labelClassName}>{label}</Label>}
-      {checkboxes.map((checkbox) => (
-        <Checkbox
-          {...checkbox}
-          {...checkboxProps}
-          key={checkbox.value}
-          data-alignment={alignment}
-          className={clsx(styles.checkBox, checkboxProps?.className)}
-        />
-      ))}
+      <div className={optionContainerClassname} data-image-option={isImageOption}>
+        {checkboxes.map((checkbox) => (
+          <Checkbox
+            {...checkbox}
+            {...checkboxProps}
+            key={checkbox.value}
+            data-alignment={alignment}
+            className={clsx(styles.checkBox, checkboxProps?.className)}
+            checkboxIconClassname={checkboxProps?.checkboxIconClassname}
+            data-image-option={isImageOption}
+          />
+        ))}
+      </div>
       {errorMessage && <FieldError>{errorMessage}</FieldError>}
     </$CheckboxGroup>
   );

@@ -15,6 +15,7 @@ type ChildrenPostContentProps = {
   onVideoClick: (videoIndex: number) => void;
   onClipClick: (postId: string) => void;
   goToPostDetail?: () => void;
+  onPollPostDeleted?: (post: Amity.Post) => void;
 };
 
 export const ChildrenPostContent = ({
@@ -25,6 +26,7 @@ export const ChildrenPostContent = ({
   onVideoClick,
   onClipClick,
   goToPostDetail,
+  onPollPostDeleted,
   disabledContent = false,
 }: ChildrenPostContentProps) => {
   return (
@@ -35,6 +37,7 @@ export const ChildrenPostContent = ({
         parentPost={post}
         posts={post.childrenPosts as Amity.Post<'poll'>[]}
         disabled={disabledContent}
+        onPostDeleted={onPollPostDeleted}
       />
       <ImageContent
         pageId={pageId}

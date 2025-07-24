@@ -67,6 +67,7 @@ interface PostContentProps {
     >,
   ) => void;
   onPostDeleted?: (post: Amity.Post) => void;
+  onPollPostDeleted?: (post: Amity.Post) => void;
   style: AmityPostContentComponentStyle;
   category: AmityPostCategory;
   hideMenu?: boolean;
@@ -107,6 +108,7 @@ export const PostContent = ({
   post,
   onClick,
   onPostDeleted,
+  onPollPostDeleted,
   category,
   hideMenu = false,
   hideTarget = false,
@@ -385,6 +387,7 @@ export const PostContent = ({
                       });
                 }}
                 goToPostDetail={onClick}
+                onPollPostDeleted={pageId === 'post_detail_page' ? onPollPostDeleted : undefined}
                 disabledContent={isNotJoinedCommunity || disabledContent}
               />
             ) : null}

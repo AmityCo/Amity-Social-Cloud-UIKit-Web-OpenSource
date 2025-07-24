@@ -184,6 +184,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                         context?.showReplyCommentAt,
                       )
                     }
+                    onPollPostDeleted={() => refreshPosts()}
                   />
                 </Button>
               );
@@ -243,6 +244,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                     )
                   }
                   onPostDeleted={() => refreshPinnedPosts()}
+                  onPollPostDeleted={() => refreshPinnedPosts()}
                 />
               </Button>
             );

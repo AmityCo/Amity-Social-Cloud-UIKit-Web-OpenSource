@@ -110,6 +110,7 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
           key={post.postId}
           post={post}
           style={AmityPostContentComponentStyle.FEED}
+          onPollPostDeleted={() => refresh()}
           onClick={(context) => {
             AmityUserFeedComponentBehavior?.goToPostDetailPage?.({
               postId: post.postId,

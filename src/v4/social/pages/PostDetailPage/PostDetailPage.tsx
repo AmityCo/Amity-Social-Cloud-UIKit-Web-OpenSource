@@ -49,6 +49,7 @@ export function PostDetailPage({
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
+  const [failedToShow, setFailedToShow] = useState(false);
   const commentListRef = useRef<HTMLDivElement>(null);
   const hasScrolledRef = useRef(false); // Track if we've already scrolled to this commentId
 
@@ -152,7 +153,13 @@ export function PostDetailPage({
     return <PostContentSkeleton pageId={pageId} />;
   }
 
-  if (error || (post === null && !isPostLoading) || community?.isDeleted || post?.isDeleted)
+  if (
+    error ||
+    (post === null && !isPostLoading) ||
+    community?.isDeleted ||
+    post?.isDeleted ||
+    failedToShow
+  )
     return <FailedToShow pageId={pageId} onBack={onBack} />;
 
   if (!post) return null;
@@ -227,6 +234,7 @@ export function PostDetailPage({
             style={AmityPostContentComponentStyle.DETAIL}
             hideTarget={hideTarget}
             disabledContent={isNotJoinedCommunity}
+            onPollPostDeleted={() => setFailedToShow(true)}
           />
         </div>
 
