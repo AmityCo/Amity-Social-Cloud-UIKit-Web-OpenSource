@@ -13,7 +13,6 @@
 .communitySideBarMenuItem:hover,
 .communitySideBarMenuItem:active {
   color: var(--asc-color-base-default);
-  background-color: var(--asc-color-primary-shade3);
 }
 
 .communitySideBarMenuItem:disabled {
@@ -23,7 +22,13 @@
 
 .communitySideBarMenuItem[data-active='true'] {
   color: var(--asc-color-primary-default);
-  background-color: var(--asc-color-primary-shade3);
+  background: linear-gradient(
+    74deg,
+    rgb(252 203 47 / 30%) -1.61%,
+    rgb(243 230 60 / 30%) 52.67%,
+    rgb(212 236 70 / 30%) 106.95%
+  );
+  width: 100%;
 }
 
 .communitySideBarMenuItem__iconWrapper {

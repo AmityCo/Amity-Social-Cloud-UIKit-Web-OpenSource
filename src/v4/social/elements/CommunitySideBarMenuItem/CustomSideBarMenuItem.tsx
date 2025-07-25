@@ -1,14 +1,14 @@
 import React from 'react';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { IconComponent } from '~/v4/core/IconComponent';
 import { CommunitySideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
+import { Icon, IconProps } from '~/v4/core/components/Icon/Icon';
 
 interface CustomMenuItemProps {
   pageId?: string;
   componentId?: string;
   elementId: string;
   text: string;
-  icon: React.ComponentType<any>;
+  icon?: IconProps['name'];
   isActive?: boolean;
   onPress: () => void;
   className?: string;
@@ -19,17 +19,16 @@ export function CustomSideBarMenuItem({
   componentId = '*',
   elementId,
   text,
-  icon: IconComp,
+  icon,
   isActive,
   onPress,
   className,
 }: CustomMenuItemProps) {
-  const { accessibilityId, config, isExcluded, uiReference, defaultConfig, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 
@@ -40,14 +39,7 @@ export function CustomSideBarMenuItem({
       className={className}
       accessibilityId={accessibilityId}
       themeStyles={themeStyles}
-      icon={(props) => (
-        <IconComponent
-          configIconName={config?.icon}
-          defaultIconName={defaultConfig?.icon}
-          defaultIcon={() => <IconComp {...props} />}
-          imgIcon={() => <img src={config?.icon} alt={uiReference} />}
-        />
-      )}
+      icon={icon ? (iconProps) => <Icon name={icon} {...iconProps} /> : undefined}
     >
       {config?.text || text}
     </CommunitySideBarMenuItem>
