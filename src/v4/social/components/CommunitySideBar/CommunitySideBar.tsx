@@ -3,13 +3,9 @@ import clsx from 'clsx';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useConfig } from '~/v4/social/providers/ConfigProvider';
 import { useNavigation, PageTypes } from '~/v4/core/providers/NavigationProvider';
-import { AmityCommunitySetupPageMode } from '~/v4/social/pages';
-import { MyCommunitiesSideBar } from '~/v4/social/internal-components/MyCommunitiesSideBar';
-import { MyCommunitiesSideBarTitle } from '~/v4/social/elements/MyCommunitiesSideBarTitle';
 import { CustomSideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
 import { Breadcrumb } from '~/v4/core/components';
 import styles from './CommunitySideBar.module.css';
-import { notificationTray } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 type CommunitySideBarProps = {
@@ -68,13 +64,6 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   const isChatActive = false;
   const isSettingsActive = false;
 
-  const handleNotificationTrayButtonClick = () => {
-    notificationTray.markTraySeen(new Date().toISOString());
-  };
-  const handleCreateCommunityClick = () => {
-    goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE });
-  };
-
   return (
     <div
       style={themeStyles}
@@ -87,6 +76,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
 
       <div className={styles.communitySideBar__menuSection}>
         <div className={styles.communitySideBar__menuButton}>
+          {/* TODO profile shoud be a separate component - too many differences to be same as the others */}
           <CustomSideBarMenuItem
             pageId={pageId}
             componentId={componentId}
