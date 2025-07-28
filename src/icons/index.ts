@@ -54,6 +54,9 @@ export { default as FireIcon } from './Fire';
 export { default as HeartIcon } from './Heart';
 export { default as MentionIcon } from './Mention';
 export { default as HomeIcon } from './Home';
+export { default as NotificationBell } from './NotificationBell';
+export { default as ChatBubbleIcon } from './ChatBubbleIcon';
+export { default as GearIcon } from './GearIcon';
 
 // files
 export { default as AudioFile } from './files/Audio';
