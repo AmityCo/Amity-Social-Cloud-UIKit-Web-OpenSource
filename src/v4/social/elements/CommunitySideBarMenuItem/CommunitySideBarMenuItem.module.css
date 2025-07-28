@@ -44,13 +44,14 @@
 }
 
 .communitySideBarMenuItem__iconWrapper[data-active='true'] {
-  background-color: var(--asc-color-primary-default);
+  background: none;
 }
 
 .communitySideBarMenuItem__icon {
   width: 1.25rem;
   height: 1.25rem;
-  fill: var(--asc-color-base-default);
+
+  /* fill: var(--asc-color-base-default); */
 }
 
 .communitySideBarMenuItem__icon[data-active='true'] {

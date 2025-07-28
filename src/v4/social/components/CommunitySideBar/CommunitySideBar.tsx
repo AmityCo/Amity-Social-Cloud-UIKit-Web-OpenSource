@@ -115,7 +115,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
             componentId={componentId}
             elementId="notifications_sidebar_menu_item"
             text="Notifications"
-            icon="Balloon"
+            icon="NotificationBell"
             isActive={isNotificationsActive}
             onPress={handleNotificationsClick}
           />
@@ -125,8 +125,8 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
             pageId={pageId}
             componentId={componentId}
             elementId="chat_sidebar_menu_item"
-            text="Chat"
-            icon="Message"
+            text="Community Chat"
+            icon="ChatBubbleIcon"
             isActive={isChatActive}
             onPress={handleChatClick}
           />
@@ -137,7 +137,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
             componentId={componentId}
             elementId="settings_sidebar_menu_item"
             text="Settings"
-            icon="BarsIcon"
+            icon="GearIcon"
             isActive={isSettingsActive}
             onPress={handleSettingsClick}
           />
