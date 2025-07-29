@@ -126,6 +126,11 @@ export function HashtagPlugin(): null {
         if (hashtagContinuation) {
           const currentHashtagCount = countHashtags();
 
+          // Reset warning flag when hashtag count is below limit
+          if (currentHashtagCount < MAX_HASHTAGS) {
+            hasShownLimitWarningRef.current = false;
+          }
+
           // Only show warning if we're actually exceeding the limit after this merge
           if (currentHashtagCount > MAX_HASHTAGS) {
             if (!hasShownLimitWarningRef.current) {
@@ -286,9 +291,8 @@ export function HashtagPlugin(): null {
               currentHashtagCount + nodes.filter((node) => $isHashtagNode(node)).length;
 
             if (actualHashtagCount >= MAX_HASHTAGS) {
-              // Only show warning if this would be the first hashtag to exceed the limit
-              // and we haven't already shown the warning for this transformation
-              if (actualHashtagCount === MAX_HASHTAGS && !hasShownWarningThisTransform) {
+              // Only show warning once per session when limit is exceeded
+              if (!hasShownLimitWarningRef.current && !hasShownWarningThisTransform) {
                 hasShownLimitWarningRef.current = true;
                 hasShownWarningThisTransform = true;
                 info({
