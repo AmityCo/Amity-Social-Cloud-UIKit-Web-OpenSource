@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styles from './PollPostComposerPage.module.css';
-import { Form, Label, TextArea, TextField } from 'react-aria-components';
+import { FileTrigger, Form, Label, TextArea, TextField } from 'react-aria-components';
 import { Button as AriaButton } from '~/v4/core/components/AriaButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements';
@@ -15,8 +15,8 @@ import { Typography } from '~/v4/core/components';
 import { PollOptionsTitle } from '~/v4/social/elements/PollOptionsTitle';
 import { PollOptionsDesc } from '~/v4/social/elements/PollOptionsDesc';
 import { TrashIcon } from '~/v4/icons/Trash';
-import { CommunityPostSettings, PollRepository, PostRepository } from '@amityco/ts-sdk';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { CommunityPostSettings, PollRepository, PostRepository, FileType } from '@amityco/ts-sdk';
 import { PollAddOptionButton } from '~/v4/social/elements/PollAddOptionButton/PollAddOptionButton';
 import { PollMultipleSelectionTitle } from '~/v4/social/elements/PollMultipleSelectionTitle';
 import { PollMultipleSelectionDesc } from '~/v4/social/elements/PollMultipleSelectionDesc';
@@ -55,14 +55,26 @@ import { useNetworkState } from 'react-use';
 import { TextArea as $TextArea } from '~/v4/core/components/TextField';
 import { FormLabel } from '~/v4/social/elements/FormLabel';
 import { COMPONENT_ID, ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization';
+import { UploadImageArea } from '~/v4/icons/UploadImageArea';
+import CloseCircle from '~/v4/icons/CloseCircle';
+import { Plus } from '~/v4/icons/Plus';
+import { useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
+import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
 
 type PollPostComposerPageProps = {
   targetId: string | null;
   targetType: 'community' | 'user';
+  pollType?: 'text' | 'image';
 };
 
 type FormValues = Parameters<typeof PollRepository.createPoll>[0];
-
+type ImageOption = {
+  dataType: 'image';
+  data: string;
+  fileId: string;
+  id: string;
+  indexOfFiles: number | undefined;
+};
 const timeDuration = [
   { value: 1, label: '1 day' },
   { value: 3, label: '3 days' },
@@ -79,7 +91,11 @@ export type CreatePollPostParams = {
   hashtags: Amity.Hashtag[];
 };
 
-export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerPageProps) => {
+export const PollPostComposerPage = ({
+  targetId,
+  targetType,
+  pollType,
+}: PollPostComposerPageProps) => {
   const pageId = 'poll_post_composer_page';
 
   const { themeStyles, accessibilityId } = useAmityPage({
@@ -96,6 +112,8 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   const mentionRef = useRef<HTMLDivElement | null>(null);
   const { currentUserId } = useSDK();
   const { user } = useUser({ userId: currentUserId });
+  const { files, progress, removeFile, handleFileChange, handleAltTextChange } =
+    useFilePostUpload(pageId);
 
   const timeNow = now(getLocalTimeZone());
   const { isDesktop } = useResponsive();
@@ -106,6 +124,10 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     { dataType: 'text', data: '' },
     { dataType: 'text', data: '' },
   ]);
+  const [imageOptions, setImageOptions] = useState<ImageOption[]>([
+    { dataType: 'image', data: '', fileId: '', id: '', indexOfFiles: undefined },
+    { dataType: 'image', data: '', fileId: '', id: '', indexOfFiles: undefined },
+  ]);
   const [isMultiple, setIsMultiple] = useState(false);
 
   const [title, setTitle] = useState('');
@@ -115,6 +137,9 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
 
   const [selectedDate, setSelectedDate] = useState<CalendarDate | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<Time | undefined>(undefined);
+  const [currentUploadImageIndex, setCurrentUploadImageIndex] = useState<number | undefined>(
+    undefined,
+  );
 
   const [textValue, setTextValue] = useState<CreatePollPostParams>({
     pollId: '',
@@ -191,6 +216,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       ) {
         info({
           pageId,
+          title: 'Posts sent for review',
           content:
             'Your post has been submitted to pending list. It will be review by community moderator.',
           okText: 'OK',
@@ -257,7 +283,12 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
 
       const payload = {
         question: textValue.text,
-        answers: options,
+        answers:
+          pollType === 'image'
+            ? imageOptions
+                .filter((option) => option.data.trim().length > 0 && option.fileId)
+                .map(({ id, indexOfFiles, ...option }) => option)
+            : options.filter((option) => option.data.trim().length > 0),
         answerType,
         closedIn,
         title: title?.trim(),
@@ -315,6 +346,14 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       setOptions([...options, { dataType: 'text', data: '' }]);
     }
   };
+  const addImageOption = () => {
+    if (imageOptions.length < MAX_OPTIONS) {
+      setImageOptions([
+        ...imageOptions,
+        { dataType: 'image', data: '', fileId: '', id: '', indexOfFiles: undefined },
+      ]);
+    }
+  };
 
   const updateOption = (index: number, value: string) => {
     const updatedOptions = options.map((option, i) =>
@@ -322,10 +361,23 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     );
     setOptions(updatedOptions);
   };
+  const updateImageOption = (index: number, value: string) => {
+    const updatedImageOptions = imageOptions.map((option, i) =>
+      i === index ? { ...option, data: value } : option,
+    );
+    setImageOptions(updatedImageOptions);
+  };
 
   const deleteOption = (index: number) => {
     const updatedOptions = options.filter((_, i) => i !== index);
     setOptions(updatedOptions);
+  };
+  const deleteImageOption = (index: number) => {
+    const updatedImageOptions = imageOptions.filter((_, i) => i !== index);
+    if (updatedImageOptions.length < 2) {
+      addImageOption();
+    }
+    setImageOptions(updatedImageOptions);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -348,12 +400,54 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     textValue.text.trim() === '' ||
     textValue.text.length > MAX_POLL_QUESTION_LENGTH ||
     options.length < 2 ||
-    options.some(
+    options.filter((option) => option.data.trim().length > 0).length < 2 ||
+    options.some((option) => option.data.length > MAX_OPTION_LENGTH);
+
+  const isDisabledImagePollSubmitButton =
+    isCreating ||
+    textValue.text.trim() === '' ||
+    textValue.text.length > MAX_POLL_QUESTION_LENGTH ||
+    imageOptions.length < 2 ||
+    imageOptions.filter((option) => option.data.trim().length > 0 && option.fileId).length < 2 ||
+    imageOptions.some((option) => option.data.length > MAX_OPTION_LENGTH) ||
+    imageOptions.some(
       (option) =>
-        option.data.length > MAX_OPTION_LENGTH ||
-        option.data.length === 0 ||
-        option.data.trim() === '',
+        (option.data?.trim().length > 0 && !option.fileId) ||
+        (option.data?.trim().length === 0 && option.fileId),
     );
+
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    setCurrentUploadImageIndex(index);
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileChange([e.target.files[0]], FileType.IMAGE);
+    }
+  };
+  const triggerFileInput = (index: number) => {
+    const fileInput = document.getElementById(`upload-${index}`) as HTMLInputElement;
+    fileInput.click();
+  };
+
+  useEffect(() => {
+    const currentImageOptions = [...imageOptions];
+    if (
+      files?.length > 0 &&
+      files[files.length - 1]?.id &&
+      typeof currentUploadImageIndex === 'number'
+    ) {
+      currentImageOptions[currentUploadImageIndex].id = files[files.length - 1]?.id;
+      currentImageOptions[currentUploadImageIndex].indexOfFiles = files.length - 1;
+    }
+    if (
+      files?.length > 0 &&
+      (files[files.length - 1]?.file as Amity.File).fileId &&
+      typeof currentUploadImageIndex === 'number'
+    ) {
+      currentImageOptions[currentUploadImageIndex].fileId = (
+        files[files.length - 1]?.file as Amity.File
+      ).fileId;
+      setImageOptions(currentImageOptions);
+    }
+  }, [progress, files]);
 
   return (
     <div
@@ -378,7 +472,9 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
             variant="text"
             color="primary"
             type="submit"
-            isDisabled={isDisabledSubmitButton}
+            isDisabled={
+              pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
+            }
           >
             Post
           </AriaButton>
@@ -446,40 +542,117 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
         <TextField name="answers" className={styles.pollPostComposerPage__pollOptions}>
           <Label className={styles.pollPostComposerPage__pollOptions__label}>
             <PollOptionsTitle pageId={pageId} />
-            <PollOptionsDesc pageId={pageId} />
+            {pollType === 'text' ? (
+              <PollOptionsDesc pageId={pageId} />
+            ) : (
+              <Typography.Caption className={styles.pollPostComposerPage__pollOptions__desc}>
+                Poll must contain at least 2 options, and an image must be uploaded for every
+                option.
+              </Typography.Caption>
+            )}
           </Label>
-          {options.map((option, index) => (
-            <div className={styles.pollPostComposerPage__pollOptions__options}>
-              <div className={styles.pollPostComposerPage__pollOptions__optionsWrapper}>
-                <TextArea
-                  data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
-                  className={styles.pollPostComposerPage__pollOptions__input}
-                  value={option.data}
-                  placeholder={`Option ${index + 1}`}
-                  onChange={(e) => updateOption(index, e.target.value)}
-                  rows={1}
-                  onKeyDown={handleKeyDown}
-                />
-                <Button
-                  className={styles.pollPostComposerPage__pollOptions__trashButton}
-                  onPress={() => deleteOption(index)}
-                >
-                  <TrashIcon className={styles.pollPostComposerPage__pollOptions__trashIcon} />
-                </Button>
-              </div>
-              {option.data.length > MAX_OPTION_LENGTH && (
-                <div className={styles.pollPostComposerPage__pollOptions__validationWrap}>
-                  <Typography.Caption
-                    className={styles.pollPostComposerPage__pollQuestion__validationText}
+          {pollType === 'text' ? (
+            <div>
+              {options.map((option, index) => (
+                <div className={styles.pollPostComposerPage__pollOptions__options}>
+                  <div className={styles.pollPostComposerPage__pollOptions__optionsWrapper}>
+                    <TextArea
+                      data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
+                      className={styles.pollPostComposerPage__pollOptions__input}
+                      value={option.data}
+                      placeholder={`Option ${index + 1}`}
+                      onChange={(e) => updateOption(index, e.target.value)}
+                      rows={1}
+                      onKeyDown={handleKeyDown}
+                    />
+                    <Button
+                      className={styles.pollPostComposerPage__pollOptions__trashButton}
+                      onPress={() => deleteOption(index)}
+                    >
+                      <TrashIcon className={styles.pollPostComposerPage__pollOptions__trashIcon} />
+                    </Button>
+                  </div>
+                  {option.data.length > MAX_OPTION_LENGTH && (
+                    <div className={styles.pollPostComposerPage__pollOptions__validationWrap}>
+                      <Typography.Caption
+                        className={styles.pollPostComposerPage__pollQuestion__validationText}
+                      >
+                        Poll option cannot exceed 60 characters.
+                      </Typography.Caption>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {options.length < MAX_OPTIONS && (
+                <PollAddOptionButton onPress={addOption} pageId={pageId} />
+              )}
+            </div>
+          ) : (
+            <div className={styles.pollPostComposerPage__imagePollOptions__wrapper}>
+              {imageOptions.map((option, index) => (
+                <div key={index} className={styles.pollPostComposerPage__imagePollOptions}>
+                  <Button
+                    className={styles.pollPostComposerPage__imagePollOptions__closeButton}
+                    onPress={() => deleteImageOption(index)}
                   >
-                    Poll option cannot exceed 60 characters.
-                  </Typography.Caption>
+                    <CloseCircle
+                      className={styles.pollPostComposerPage__imagePollOptions__closeIcon}
+                    />
+                  </Button>
+                  <div className={styles.pollPostComposerPage__imagePollOptions__card}>
+                    <input
+                      className={styles.uploadPollImage_input}
+                      type="file"
+                      onChange={(e) => onChangeImage(e, index)}
+                      id={`upload-${index}`}
+                      accept={'image/png,image/jpg'}
+                    />
+                    {option.id && typeof option.indexOfFiles === 'number' ? (
+                      <div className={styles.pollPostComposerPage__imagePollOptions__image}>
+                        <ImageThumbnail
+                          files={[files[option.indexOfFiles]]}
+                          pageId={pageId}
+                          progress={progress}
+                          removeFile={removeFile}
+                          onAltTextChange={handleAltTextChange}
+                          isImagePollPost
+                        />
+                      </div>
+                    ) : (
+                      <UploadImageArea
+                        onClick={() => triggerFileInput(index)}
+                        className={styles.pollPostComposerPage__imagePollOptions__icon}
+                      />
+                    )}
+
+                    <TextArea
+                      data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
+                      className={styles.pollPostComposerPage__pollOptions__input}
+                      value={option.data}
+                      placeholder={`Option ${index + 1}`}
+                      onChange={(e) => updateImageOption(index, e.target.value)}
+                      rows={1}
+                      onKeyDown={handleKeyDown}
+                    />
+                  </div>
+                </div>
+              ))}
+              {imageOptions.length < MAX_OPTIONS && (
+                <div className={styles.pollPostComposerPage__imagePollOptions__card}>
+                  <div
+                    onClick={addImageOption}
+                    className={styles.pollPostComposerPage__imagePollOptions__addImageOption}
+                  >
+                    <Plus className={styles.pollPostComposerPage__imagePollOptions__plusIcon} />
+                    <Typography.CaptionBold
+                      className={styles.pollPostComposerPage__imagePollOptions__addOptionCaption}
+                    >
+                      Add option
+                    </Typography.CaptionBold>
+                  </div>
                 </div>
               )}
             </div>
-          ))}
-          {options.length < MAX_OPTIONS && (
-            <PollAddOptionButton onPress={addOption} pageId={pageId} />
           )}
         </TextField>
 
@@ -565,8 +738,10 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
           <div className={styles.pollPostComposerPage__postButtonWrap}>
             <AriaButton
               type="submit"
-              isDisabled={isDisabledSubmitButton}
               className={styles.pollPostComposerPage__postButton}
+              isDisabled={
+                pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
+              }
             >
               Post
             </AriaButton>

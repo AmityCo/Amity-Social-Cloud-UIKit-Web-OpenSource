@@ -20,11 +20,26 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
+.thumbnail__container[data-image-poll='true'] {
+  width: 100%;
+  display: block;
+  height: auto;
+  padding: 0;
+}
+
 .thumbnail__wrapper {
   position: relative;
   text-align: center;
   width: 100%;
   height: 21rem;
+}
+
+.thumbnail__wrapper[data-image-poll='true'] {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
 }
 
 .thumbnail__overlay {

@@ -3,14 +3,14 @@ import styles from './FloatingActionButtonMenu.module.css';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import { CreatePost } from '~/v4/icons/CreatePost';
-import { CreateStory } from '~/v4/icons/CreateStory';
 import CreatePoll from '~/v4/icons/CreatePoll';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { CreateClip } from '~/v4/icons/CreateClip';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
 import { FileTrigger } from 'react-aria-components';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 
 type FloatingActionButtonMenuProps = {
   onPressMenu?: () => void;
@@ -21,8 +21,9 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
   userId,
   onPressMenu,
 }) => {
+  const { setDrawerData, removeDrawerData } = useDrawer();
   const navigation = useNavigation();
-  const { goToPostComposerPage, goToPollPostComposerPage, goToDraftClipPage } = navigation;
+  const { goToPostComposerPage, goToDraftClipPage } = navigation;
   const { file, setFile } = useClipContext();
 
   useEffect(() => {
@@ -52,7 +53,13 @@ export const FloatingActionButtonMenu: FC<FloatingActionButtonMenuProps> = ({
       id: 'poll',
       label: 'Poll',
       icon: <CreatePoll className={styles.floatingActionButtonMenu__icon} />,
-      onPress: () => goToPollPostComposerPage({ targetId: null, targetType: 'user' }),
+      onPress: () => {
+        setDrawerData({
+          content: (
+            <PollTypeSelection targetId={null} targetType="user" onClickNext={removeDrawerData} />
+          ),
+        });
+      },
     },
   ];
 

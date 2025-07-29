@@ -120,6 +120,7 @@ export interface PageBehavior {
     goToPollPostComposerPage?(context: {
       targetId: string | null;
       targetType: 'community' | 'user';
+      pollType?: 'text' | 'image';
     }): void;
     goToPendingRequestPage?(context: { community: Amity.Community }): void;
     goToDraftClipPage?(context: {
@@ -217,6 +218,7 @@ export interface PageBehavior {
     goToPollPostComposerPage?(context: {
       targetId: string | null;
       targetType: 'community' | 'user';
+      pollType?: 'text' | 'image';
     }): void;
   };
   AmityNotificationTrayPageBehavior?: {
@@ -481,6 +483,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       goToPollPostComposerPage: (context: {
         targetId: string | null;
         targetType: 'community' | 'user';
+        pollType?: 'text' | 'image';
       }) => {
         if (pageBehavior?.AmityPollTargetSelectionPageBehavior?.goToPollPostComposerPage) {
           return pageBehavior.AmityPollTargetSelectionPageBehavior.goToPollPostComposerPage(
@@ -550,6 +553,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       goToPollPostComposerPage: (context: {
         targetId: string | null;
         targetType: 'community' | 'user';
+        pollType?: 'text' | 'image';
       }) => {
         if (pageBehavior?.AmityPollTargetSelectionPageBehavior?.goToPollPostComposerPage) {
           return pageBehavior.AmityPollTargetSelectionPageBehavior.goToPollPostComposerPage(

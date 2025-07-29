@@ -188,6 +188,7 @@ const Application = () => {
           <PollPostComposerPage
             targetId={page.context.targetId}
             targetType={page.context.targetType}
+            pollType={page.context.pollType}
           />
         )}
         {page.type === PageTypes.DraftClipPage && (

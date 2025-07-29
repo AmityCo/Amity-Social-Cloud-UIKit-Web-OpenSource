@@ -23,7 +23,7 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage/PollPostComposerPage';
+import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { Button } from '~/v4/core/natives/Button';
@@ -131,9 +131,10 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   pageId,
                   view: 'desktop',
                   isDismissable: false,
-                  onClose: onCloseCreatePostPopup,
-                  header: CreatePostHeader,
-                  children: <PollPostComposerPage targetId={null} targetType="user" />,
+                  header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                  children: ({ close }) => (
+                    <PollTypeSelection onClickNext={close} targetId={null} targetType="user" />
+                  ),
                 });
               }}
             />

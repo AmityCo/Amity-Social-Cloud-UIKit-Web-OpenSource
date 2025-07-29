@@ -179,6 +179,7 @@ type Page =
       context: {
         targetId: string | null;
         targetType: 'community' | 'user';
+        pollType?: 'text' | 'image';
       };
     }
   | {
@@ -302,6 +303,7 @@ type ContextValue = {
   goToPollPostComposerPage: (context: {
     targetId: string | null;
     targetType: 'community' | 'user';
+    pollType?: 'text' | 'image';
   }) => void;
   goToDraftStoryPage: (
     targetId: string,
@@ -1303,15 +1305,15 @@ export default function NavigationProvider({
   );
 
   const goToPollPostComposerPage = useCallback(
-    ({ targetId, targetType }) => {
+    ({ targetId, targetType, pollType }) => {
       const next = {
         type: PageTypes.PollPostComposerPage,
         context: {
           targetId,
           targetType,
+          pollType,
         },
       };
-
       pushPage(next);
     },
     [onChangePage, pushPage],
