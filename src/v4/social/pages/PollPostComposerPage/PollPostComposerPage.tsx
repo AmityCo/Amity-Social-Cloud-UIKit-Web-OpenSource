@@ -370,6 +370,12 @@ export const PollPostComposerPage = ({
     );
     setOptions(updatedOptions);
   };
+  const updateImageOption = (index: number, value: string) => {
+    const updatedImageOptions = imageOptions.map((option, i) =>
+      i === index ? { ...option, data: value } : option,
+    );
+    setImageOptions(updatedImageOptions);
+  };
 
   const updateImageOption = (index: number, value: string) => {
     const updatedImageOptions = imageOptions.map((option, i) => {
@@ -533,6 +539,39 @@ export const PollPostComposerPage = ({
       </Popover>
     );
   };
+
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    setCurrentUploadImageIndex(index);
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileChange([e.target.files[0]], FileType.IMAGE);
+    }
+  };
+  const triggerFileInput = (index: number) => {
+    const fileInput = document.getElementById(`upload-${index}`) as HTMLInputElement;
+    fileInput.click();
+  };
+
+  useEffect(() => {
+    const currentImageOptions = [...imageOptions];
+    if (
+      files?.length > 0 &&
+      files[files.length - 1]?.id &&
+      typeof currentUploadImageIndex === 'number'
+    ) {
+      currentImageOptions[currentUploadImageIndex].id = files[files.length - 1]?.id;
+      currentImageOptions[currentUploadImageIndex].indexOfFiles = files.length - 1;
+    }
+    if (
+      files?.length > 0 &&
+      (files[files.length - 1]?.file as Amity.File).fileId &&
+      typeof currentUploadImageIndex === 'number'
+    ) {
+      currentImageOptions[currentUploadImageIndex].fileId = (
+        files[files.length - 1]?.file as Amity.File
+      ).fileId;
+      setImageOptions(currentImageOptions);
+    }
+  }, [progress, files]);
 
   return (
     <div

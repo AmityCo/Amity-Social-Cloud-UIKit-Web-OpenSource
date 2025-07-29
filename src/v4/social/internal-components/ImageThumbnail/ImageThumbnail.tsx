@@ -165,7 +165,6 @@ function FileImageItem({
     >
       <Thumbnail file={file} />
       {(isUploading || hasError) && <div className={styles.thumbnail__overlay} />}
-
       {!isImagePollPost && (
         <RemoveButton testId={`${pageId}/${componentId}/remove_thumbnail`} onPress={onRemoveFile} />
       )}
