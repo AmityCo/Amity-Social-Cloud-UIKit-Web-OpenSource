@@ -185,11 +185,6 @@ export function Breadcrumb({
 
   const breadcrumbItems = buildLocationBreadcrumb();
 
-  // Don't render if only one item or no items
-  if (breadcrumbItems.length <= 1) {
-    return null;
-  }
-
   return (
     <nav className={styles.breadcrumb} aria-label="Breadcrumb navigation">
       <Typography.Caption className={styles.breadcrumb__text}>
