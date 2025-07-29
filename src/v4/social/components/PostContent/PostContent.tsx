@@ -312,6 +312,7 @@ export const PostContent = ({
                           post={post}
                           pageId={pageId}
                           componentId={componentId}
+                          isSearchPost={isSearchPost}
                           onPostDeleted={onPostDeleted}
                           onConfirmEditPost={
                             shouldShowConfirmEdit
@@ -336,6 +337,7 @@ export const PostContent = ({
                     post={post}
                     pageId={pageId}
                     componentId={componentId}
+                    isSearchPost={isSearchPost}
                     onPostDeleted={onPostDeleted}
                     onConfirmEditPost={
                       shouldShowConfirmEdit

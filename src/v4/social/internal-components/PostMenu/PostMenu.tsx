@@ -33,6 +33,7 @@ interface PostMenuProps {
   onCloseMenu: () => void;
   onConfirmEditPost?: ({ onConfirm }: { onConfirm: () => void }) => void;
   onPostDeleted?: (post: Amity.Post) => void;
+  isSearchPost?: boolean;
 }
 
 export const PostMenu = ({
@@ -42,6 +43,7 @@ export const PostMenu = ({
   onConfirmEditPost,
   onCloseMenu,
   onPostDeleted,
+  isSearchPost = false,
 }: PostMenuProps) => {
   const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
@@ -78,9 +80,15 @@ export const PostMenu = ({
         };
       }
     } else {
-      if (isOwner) {
+      if (isOwner && !isSearchPost) {
         return {
           showEditPostButton: true,
+          showDeletePostButton: true,
+          showReportPostButton: false,
+        };
+      } else if (isOwner && isSearchPost) {
+        return {
+          showEditPostButton: false,
           showDeletePostButton: true,
           showReportPostButton: false,
         };
@@ -98,7 +106,7 @@ export const PostMenu = ({
         };
       }
     }
-  }, [isCommunityModerator, isOwner, client, post]);
+  }, [isCommunityModerator, isOwner, client, post, isSearchPost]);
 
   const showClosePollButton = useMemo(() => {
     if (poll && poll.status === 'open' && isOwner) return true;
