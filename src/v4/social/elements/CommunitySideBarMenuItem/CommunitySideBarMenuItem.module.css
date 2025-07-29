@@ -21,7 +21,6 @@
 }
 
 .communitySideBarMenuItem[data-active='true'] {
-  color: var(--asc-color-primary-default);
   background: linear-gradient(
     74deg,
     rgb(252 203 47 / 30%) -1.61%,
@@ -61,10 +60,6 @@
 .communitySideBarMenuItem__label {
   font-size: var(--asc-text-font-size-sm);
   font-weight: var(--asc-text-font-weight-bold);
-}
-
-.communitySideBarMenuItem__label[data-active='true'] {
-  color: var(--asc-color-primary-default);
 }
 
 @media (width >= 48em) {

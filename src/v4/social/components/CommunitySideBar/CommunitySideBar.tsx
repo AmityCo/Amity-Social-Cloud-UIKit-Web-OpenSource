@@ -1,10 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { useConfig } from '~/v4/social/providers/ConfigProvider';
 import { useNavigation, PageTypes } from '~/v4/core/providers/NavigationProvider';
 import { CustomSideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
-import { Breadcrumb } from '~/v4/core/components';
+import { CustomProfileMenuItem } from '~/v4/social/elements/CustomProfileMenuItem';
 import styles from './CommunitySideBar.module.css';
 import useSDK from '~/v4/core/hooks/useSDK';
 
@@ -15,17 +14,7 @@ type CommunitySideBarProps = {
 };
 
 export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarProps) => {
-  const { currentUserId } = useSDK();
-
   //#region button navigators
-  const handleProfileClick = () => {
-    if (currentUserId) {
-      goToUserProfilePage(currentUserId);
-    } else {
-      console.log('Navigate to --> profile (user not logged in)');
-    }
-  };
-
   const handleHomeClick = () => {
     goToSocialHomePage();
   };
@@ -35,30 +24,23 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   };
 
   const handleChatClick = () => {
-    console.log('Navigate to --> chat');
+    window.location.href = '/chat'; // Placeholder for chat navigation, replace with actual navigation logic if needed
+    console.log('Navigate to --> community chat');
   };
 
   const handleSettingsClick = () => {
-    console.log('Navigate to --> settings');
+    console.log('Navigate to settings');
   };
+
   //#endregion
 
   const componentId = 'community_sidebar';
-  const {
-    goToCreateCommunityPage,
-    page,
-    goToUserProfilePage,
-    goToSocialHomePage,
-    goToNotificationTrayPage,
-  } = useNavigation();
-  const { socialCommunityCreationButtonVisible } = useConfig();
+  const { page, goToSocialHomePage, goToNotificationTrayPage } = useNavigation();
   const { accessibilityId, themeStyles, config, uiReference, defaultConfig } = useAmityComponent({
     componentId,
     pageId,
   });
-
-  const isProfileActive =
-    page.type === PageTypes.UserProfilePage || page.type === PageTypes.EditUserProfilePage;
+  const { currentUserId } = useSDK();
   const isHomeActive = page.type === PageTypes.SocialHomePage;
   const isNotificationsActive = page.type === PageTypes.NotificationTrayPage;
   const isChatActive = false;
@@ -70,21 +52,15 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
       data-testid={accessibilityId}
       className={clsx(styles.communitySideBar, className)}
     >
-      <div className={styles.communitySideBar__breadcrumbContainer}>
-        <Breadcrumb pageId={pageId} componentId={componentId} maxItems={3} />
-      </div>
-
       <div className={styles.communitySideBar__menuSection}>
         <div className={styles.communitySideBar__menuButton}>
-          {/* TODO profile shoud be a separate component - too many differences to be same as the others */}
-          <CustomSideBarMenuItem
+          <CustomProfileMenuItem
             pageId={pageId}
             componentId={componentId}
-            elementId="profile_sidebar_menu_item"
-            icon="User" //TODO > replace with profile picture
-            text="Profile"
-            isActive={isProfileActive}
-            onPress={handleProfileClick}
+            userName="My Profile"
+            userTitle="View & Edit Profile"
+            userId={currentUserId}
+            userBadgeTitle="Lupo Solitario"
           />
         </div>
 

@@ -4,6 +4,10 @@
   height: 100vh;
   border-right: 1px solid var(--asc-color-base-shade4);
   background-color: var(--asc-color-background-default);
+  border-radius: var(--global-image-radius-big, 16px) var(--global-image-radius-big, 16px) 0 16px;
+  box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
+    var(--effect-elevation-sm-blur, 16px) var(--effect-elevation-sm-spread, 0)
+    var(--effect-surface-effect, rgb(0 0 0 / 12%));
 }
 
 .communitySideBar__breadcrumbContainer {
@@ -28,8 +32,6 @@
 .communitySideBar__menuSection {
   flex-shrink: 0;
   display: grid;
-  grid-gap: 0.5rem;
-  padding: 0.5rem 0;
   border-top: 1px solid var(--asc-color-base-shade4);
   overflow: hidden;
 }
