@@ -45,6 +45,8 @@ import { isEqual } from 'lodash';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import { EventHostBadge } from '~/v4/social/elements';
+import { ProductCarousel } from '~/v4/social/features/product-tagged/internal-components';
+import useProductCatalogueSettings from '~/v4/social/hooks/useProductCatalogueSettings';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -163,6 +165,10 @@ export const PostContent = ({
   } = usePostReaction({ post });
   const { goToCommunityProfilePage } = useNavigation();
   const { socialReactions } = useCustomReaction();
+  const { productCatalogueSettings } = useProductCatalogueSettings();
+
+  const canShowProductTags =
+    productCatalogueSettings?.product.enabled && !(post?.childrenPosts?.[0]?.dataType === 'room');
 
   // State to force poll results view when poll is closed from menu
   const [forceShowPollResults, setForceShowPollResults] = useState(false);
@@ -170,13 +176,6 @@ export const PostContent = ({
   const handlePollClosed = useCallback(() => {
     setForceShowPollResults(true);
   }, []);
-
-  const disabledInlineComment = pageId === 'post_detail_page' || pageId === 'pending_posts_page';
-
-  const { inlineComment, isLoading: loadingInlineComment } = useInlineComment({
-    post,
-    disabled: disabledInlineComment,
-  });
 
   const disabledInlineComment = pageId === 'post_detail_page' || pageId === 'pending_posts_page';
 
@@ -476,7 +475,7 @@ export const PostContent = ({
               category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
               <PinBadge pageId={pageId} componentId={componentId} />
             )}
-            {style === AmityPostContentComponentStyle.FEED && sharableLink && (
+            {style === AmityPostContentComponentStyle.FEED && (
               <Popover
                 containerClassName={styles.postContent__bar__actionButton}
                 trigger={{
@@ -506,6 +505,7 @@ export const PostContent = ({
                             closePopover();
                             removeDrawerData();
                           }}
+                          sharableLink={sharableLink}
                         />
                       ),
                     }),
@@ -533,6 +533,7 @@ export const PostContent = ({
                       closePopover();
                       removeDrawerData();
                     }}
+                    sharableLink={sharableLink}
                   />
                 )}
               </Popover>
@@ -556,6 +557,9 @@ export const PostContent = ({
               mentionees={post?.mentionees}
               hashtagged={post?.metadata?.hashtags}
               hashtags={post?.hashtags}
+              productTags={post?.productTags?.filter(
+                (tag): tag is Amity.TextProductTag => 'index' in tag && 'length' in tag,
+              )}
               post={post}
               keyword={keyword}
               isSearchPost={isSearchPost}
@@ -585,6 +589,9 @@ export const PostContent = ({
               />
             ) : null}
           </Button>
+          {canShowProductTags && (
+            <ProductCarousel pageId={pageId} componentId={componentId} post={post} />
+          )}
 
           <div className={styles.postContent__reactions_and_comments}>
             {post?.reactionsCount > 0 && (
@@ -646,140 +653,6 @@ export const PostContent = ({
               </Button>
             )}
           </div>
-          {style === AmityPostContentComponentStyle.DETAIL ? (
-            <div className={styles.postContent__reactions_and_comments}>
-              <div
-                className={styles.postContent__reactionsBar}
-                onClick={() => {
-                  const reactionList = (
-                    <ReactionList
-                      pageId={pageId}
-                      referenceId={post.postId}
-                      referenceType={'post'}
-                    />
-                  );
-                  isDesktop
-                    ? openPopup({ view: 'desktop', children: reactionList })
-                    : setDrawerData({ content: reactionList });
-                }}
-              >
-                {hasReaction ? (
-                  <div className={styles.postContent__reactionsBar__reactions}>
-                    {hasCrying && (
-                      <Crying className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasHappy && (
-                      <Happy className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasFire && (
-                      <Fire className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasLove && (
-                      <Love className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasLike && (
-                      <Like className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                  </div>
-                ) : null}
-                <Typography.Caption
-                  data-testid={`${pageId}/${componentId}/like_count`}
-                  className={styles.postContent__reactionsBar__reactions__count}
-                >
-                  {`${millify(post?.reactionsCount || 0)} ${
-                    post?.reactionsCount === 1 ? 'like' : 'likes'
-                  }`}
-                </Typography.Caption>
-              </div>
-
-              <Typography.Caption
-                data-testid={`${pageId}/${componentId}/comment_count`}
-                className={styles.postContent__commentsCount}
-              >
-                {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
-              </Typography.Caption>
-            </div>
-          ) : null}
-          {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
-            <>
-              <div className={styles.postContent__divider} />
-              <Typography.Body className={styles.postContent__notMember}>
-                Join community to interact with all posts
-              </Typography.Body>
-            </>
-          ) : targetCommunity &&
-            !targetCommunity?.isJoined &&
-            page.type === PageTypes.PostDetailPage ? null : (
-            <>
-              <div className={styles.postContent__divider} />
-              <div className={styles.postContent__reactionBar}>
-                <div className={styles.postContent__reactionBar__leftPane}>
-                  <ReactionButton
-                    pageId={pageId}
-                    componentId={componentId}
-                    reactionsCount={
-                      style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
-                    }
-                    myReaction={reactionByMe}
-                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                    onReactionClick={handleReactionClick}
-                  />
-                  <CommentButton
-                    pageId={pageId}
-                    componentId={componentId}
-                    commentsCount={
-                      style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
-                    }
-                    buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
-                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                    onPress={() => onClick?.()}
-                  />
-                </div>
-                <div className={styles.postContent__reactionBar__rightPane}>
-                  {targetCommunity?.isPublic && (
-                    <Popover
-                      containerClassName={styles.postContent__bar__actionButton}
-                      trigger={({ openPopover }) => (
-                        <IconButton
-                          variant="text"
-                          pageId={pageId}
-                          componentId={componentId}
-                          defaultIcon={<Share className={styles.postContent__shareIcon} />}
-                          onPress={() =>
-                            isDesktop
-                              ? openPopover()
-                              : setDrawerData({
-                                  content: (
-                                    <CopyLinkButton
-                                      pageId={pageId}
-                                      componentId={componentId}
-                                      model={SharableModel.POST}
-                                      referenceId={post.postId}
-                                      onDone={removeDrawerData}
-                                    />
-                                  ),
-                                })
-                          }
-                        />
-                      )}
-                    >
-                      {({ closePopover }) => (
-                        <CopyLinkButton
-                          pageId={pageId}
-                          componentId={componentId}
-                          model={SharableModel.POST}
-                          referenceId={post.postId}
-                          onDone={isDesktop ? closePopover : removeDrawerData}
-                        />
-                      )}
-                    </Popover>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
 
           {/* Reaction Bar */}
           <>
