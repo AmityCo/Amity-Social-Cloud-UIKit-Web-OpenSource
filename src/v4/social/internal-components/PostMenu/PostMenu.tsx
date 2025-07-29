@@ -106,8 +106,8 @@ export const PostMenu = ({
   }, [isOwner, poll]);
 
   const showCopyLinkButton = useMemo(() => {
-    return community?.isPublic && !community?.isJoined;
-  }, [community?.isPublic, community?.isJoined]);
+    return community?.isPublic;
+  }, [community?.isPublic]);
 
   const isPollPost = useMemo(() => {
     return !!poll;

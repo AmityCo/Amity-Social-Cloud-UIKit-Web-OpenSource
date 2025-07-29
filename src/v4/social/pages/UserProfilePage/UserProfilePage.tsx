@@ -229,6 +229,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   setDrawerData({
                     content: (
                       <UserMenu
+                        pageId={pageId}
                         user={user}
                         onCloseMenu={() => {
                           closePopover();
@@ -241,6 +242,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
             >
               {({ closePopover }) => (
                 <UserMenu
+                  pageId={pageId}
                   user={user}
                   onCloseMenu={() => {
                     closePopover();

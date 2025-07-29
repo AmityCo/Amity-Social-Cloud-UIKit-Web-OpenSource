@@ -484,7 +484,44 @@ export const PostContent = ({
                   />
                 </div>
                 <div className={styles.postContent__reactionBar__rightPane}>
-                  <ShareButton pageId={pageId} componentId={componentId} />
+                  {targetCommunity?.isPublic && (
+                    <Popover
+                      containerClassName={styles.postContent__bar__actionButton}
+                      trigger={({ openPopover }) => (
+                        <IconButton
+                          variant="text"
+                          pageId={pageId}
+                          componentId={componentId}
+                          defaultIcon={<Share className={styles.postContent__shareIcon} />}
+                          onPress={() =>
+                            isDesktop
+                              ? openPopover()
+                              : setDrawerData({
+                                  content: (
+                                    <CopyLinkButton
+                                      pageId={pageId}
+                                      componentId={componentId}
+                                      model={SharableModel.POST}
+                                      referenceId={post.postId}
+                                      onDone={removeDrawerData}
+                                    />
+                                  ),
+                                })
+                          }
+                        />
+                      )}
+                    >
+                      {({ closePopover }) => (
+                        <CopyLinkButton
+                          pageId={pageId}
+                          componentId={componentId}
+                          model={SharableModel.POST}
+                          referenceId={post.postId}
+                          onDone={isDesktop ? closePopover : removeDrawerData}
+                        />
+                      )}
+                    </Popover>
+                  )}
                 </div>
               </div>
             </>
