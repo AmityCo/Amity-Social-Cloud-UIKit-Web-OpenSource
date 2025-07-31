@@ -4,6 +4,10 @@
   height: 100vh;
   border-right: 1px solid var(--asc-color-base-shade4);
   background-color: var(--asc-color-background-default);
+  border-radius: var(--global-image-radius-big, 16px) var(--global-image-radius-big, 16px) 0 16px;
+  box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
+    var(--effect-elevation-sm-blur, 16px) var(--effect-elevation-sm-spread, 0)
+    var(--effect-surface-effect, rgb(0 0 0 / 12%));
 }
 
 .communitySideBar__header {
@@ -20,11 +24,12 @@
 }
 
 .communitySideBar__menuSection {
-  flex-shrink: 0;
-  display: grid;
-  grid-gap: 0.5rem;
-  padding: 0.5rem 0;
-  border-top: 1px solid var(--asc-color-base-shade4);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--global-layout-gap-sm-base, 0.5rem);
+  align-self: stretch;
+  overflow: hidden;
 }
 
 .communitySideBar__myCommunitiesSection {
@@ -48,4 +53,55 @@
   box-shadow:
     0 0 2px 0 rgb(40 41 61 / 10%),
     0 4px 8px 0 rgb(96 97 112 / 20%);
+}
+
+.communitySideBar__menuButton {
+  width: 100%;
+}
+
+.communitySideBar__menuButton .communitySideBarMenuItem {
+  padding: 0 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+/* Profile (fistr child) higher fonna change this to custom component */
+.communitySideBar__menuButton:first-child .communitySideBarMenuItem {
+  height: 80px !important;
+  min-height: 80px !important;
+  display: flex;
+  align-items: center;
+}
+
+.communitySideBar__menuButton:not(:first-child) .communitySideBarMenuItem {
+  height: 48px !important;
+  min-height: 48px !important;
+  display: flex;
+  align-items: center;
+}
+
+/* Hover state for all menu items */
+.communitySideBar__menuButton .communitySideBarMenuItem:hover {
+  background-color: var(--asc-color-background-shade1);
+}
+
+.communitySideBar__menuButton .communitySideBarMenuItem[data-active='true'] {
+  background-color: var(--asc-color-primary-shade3);
+  color: var(--asc-color-primary-default);
+}
+
+.communitySideBar__menuButton .communitySideBarMenuItem .icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}
+
+/* Text styling */
+.communitySideBar__menuButton .communitySideBarMenuItem .text {
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
 }

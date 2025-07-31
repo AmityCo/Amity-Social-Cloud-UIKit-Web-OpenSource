@@ -45,6 +45,7 @@ import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
+import { Breadcrumb } from '~/v4/core/components';
 
 const Application = () => {
   const { isDesktop } = useResponsive();
@@ -66,6 +67,7 @@ const Application = () => {
 
   return (
     <div className={styles.applicationContainer}>
+      <Breadcrumb maxItems={3} />
       <MainLayout aside={<CommunitySideBar />}>
         {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
         {page.type === PageTypes.SocialGlobalSearchPage && !isDesktop && <SocialGlobalSearchPage />}

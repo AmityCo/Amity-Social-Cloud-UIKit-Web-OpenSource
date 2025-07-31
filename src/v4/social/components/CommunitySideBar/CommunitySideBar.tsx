@@ -1,25 +1,11 @@
-import clsx from 'clsx';
 import React from 'react';
+import clsx from 'clsx';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { useConfig } from '~/v4/social/providers/ConfigProvider';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { CommunitySideBarTitle } from '~/v4/social/elements/CommunitySideBarTitle';
-import {
-  AmityCommunitySetupPageMode,
-  NotificationTrayPage,
-  SocialGlobalSearchPage,
-} from '~/v4/social/pages';
-import { MyCommunitiesSideBar } from '~/v4/social/internal-components/MyCommunitiesSideBar';
-import { MyCommunitiesSideBarTitle } from '~/v4/social/elements/MyCommunitiesSideBarTitle';
-import {
-  ExploreMenuItem,
-  NewsFeedMenuItem,
-  CreateCommunityMenuItem,
-} from '~/v4/social/elements/CommunitySideBarMenuItem';
-import { NotificationTrayButton } from '~/v4/social/elements';
+import { useNavigation, PageTypes } from '~/v4/core/providers/NavigationProvider';
+import { CustomSideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenuItem';
+import { CustomProfileMenuItem } from '~/v4/social/elements/CustomProfileMenuItem';
 import styles from './CommunitySideBar.module.css';
-import { notificationTray } from '@amityco/ts-sdk';
-import { Popover } from '~/v4/core/components/AriaPopover';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type CommunitySideBarProps = {
   pageId?: string;
@@ -27,19 +13,38 @@ type CommunitySideBarProps = {
   isExploreHidden?: boolean;
 };
 
-export const CommunitySideBar = ({
-  className,
-  pageId = '*',
-  isExploreHidden,
-}: CommunitySideBarProps) => {
-  const componentId = 'community_sidebar';
-  const { goToCreateCommunityPage } = useNavigation();
-  const { socialCommunityCreationButtonVisible } = useConfig();
-  const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
-
-  const handleNotificationTrayButtonClick = () => {
-    notificationTray.markTraySeen(new Date().toISOString());
+export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarProps) => {
+  //#region button navigators
+  const handleHomeClick = () => {
+    goToSocialHomePage();
   };
+
+  const handleNotificationsClick = () => {
+    goToNotificationTrayPage();
+  };
+
+  const handleChatClick = () => {
+    window.location.href = '/chat'; // Placeholder for chat navigation, replace with actual navigation logic if needed
+    console.log('Navigate to --> community chat');
+  };
+
+  const handleSettingsClick = () => {
+    console.log('Navigate to settings');
+  };
+
+  //#endregion
+
+  const componentId = 'community_sidebar';
+  const { page, goToSocialHomePage, goToNotificationTrayPage } = useNavigation();
+  const { accessibilityId, themeStyles, config, uiReference, defaultConfig } = useAmityComponent({
+    componentId,
+    pageId,
+  });
+  const { currentUserId } = useSDK();
+  const isHomeActive = page.type === PageTypes.SocialHomePage;
+  const isNotificationsActive = page.type === PageTypes.NotificationTrayPage;
+  const isChatActive = false;
+  const isSettingsActive = false;
 
   return (
     <div
@@ -47,47 +52,62 @@ export const CommunitySideBar = ({
       data-testid={accessibilityId}
       className={clsx(styles.communitySideBar, className)}
     >
-      <div className={styles.communitySideBar__header}>
-        <div className={styles.communitySideBar__headerLeft}>
-          <CommunitySideBarTitle pageId={pageId} componentId={componentId} />
-          <Popover
-            placement="bottom left"
-            className={styles.communitySideBar__notificationTray}
-            trigger={({ openPopover }) => {
-              return (
-                <NotificationTrayButton
-                  pageId={pageId}
-                  componentId={componentId}
-                  onPress={() => {
-                    openPopover();
-                    handleNotificationTrayButtonClick();
-                  }}
-                />
-              );
-            }}
-            aria-label="notification_tray"
-          >
-            {({ closePopover }) => <NotificationTrayPage onClose={closePopover} />}
-          </Popover>
-        </div>
-
-        <SocialGlobalSearchPage />
-      </div>
-
       <div className={styles.communitySideBar__menuSection}>
-        <NewsFeedMenuItem pageId={pageId} componentId={componentId} />
-        {!isExploreHidden && <ExploreMenuItem pageId={pageId} componentId={componentId} />}
-      </div>
-      <div className={styles.communitySideBar__myCommunitiesSection}>
-        <MyCommunitiesSideBarTitle pageId={pageId} componentId={componentId} />
-        {socialCommunityCreationButtonVisible && (
-          <CreateCommunityMenuItem
+        <div className={styles.communitySideBar__menuButton}>
+          <CustomProfileMenuItem
             pageId={pageId}
             componentId={componentId}
-            onPress={() => goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE })}
+            userName="My Profile"
+            userTitle="View & Edit Profile"
+            userId={currentUserId}
+            userBadgeTitle="Lupo Solitario"
           />
-        )}
-        <MyCommunitiesSideBar pageId={pageId} />
+        </div>
+
+        <div className={styles.communitySideBar__menuButton}>
+          <CustomSideBarMenuItem
+            pageId={pageId}
+            componentId={componentId}
+            elementId="home_sidebar_menu_item"
+            text="Home"
+            icon="HomeIcon"
+            isActive={isHomeActive}
+            onPress={handleHomeClick}
+          />
+        </div>
+        <div className={styles.communitySideBar__menuButton}>
+          <CustomSideBarMenuItem
+            pageId={pageId}
+            componentId={componentId}
+            elementId="notifications_sidebar_menu_item"
+            text="Notifications"
+            icon="NotificationBell"
+            isActive={isNotificationsActive}
+            onPress={handleNotificationsClick}
+          />
+        </div>
+        <div className={styles.communitySideBar__menuButton}>
+          <CustomSideBarMenuItem
+            pageId={pageId}
+            componentId={componentId}
+            elementId="chat_sidebar_menu_item"
+            text="Community Chat"
+            icon="ChatBubbleIcon"
+            isActive={isChatActive}
+            onPress={handleChatClick}
+          />
+        </div>
+        <div className={styles.communitySideBar__menuButton}>
+          <CustomSideBarMenuItem
+            pageId={pageId}
+            componentId={componentId}
+            elementId="settings_sidebar_menu_item"
+            text="Settings"
+            icon="GearIcon"
+            isActive={isSettingsActive}
+            onPress={handleSettingsClick}
+          />
+        </div>
       </div>
     </div>
   );
