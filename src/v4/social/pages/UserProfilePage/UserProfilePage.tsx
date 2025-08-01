@@ -14,21 +14,20 @@ import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
 import { UserFeed } from '~/v4/social/components/UserFeed/UserFeed';
 import { UserImageFeed } from '~/v4/social/components/UserImageFeed/UserImageFeed';
 import { UserVideoFeed } from '~/v4/social/components/UserVideoFeed/UserVideoFeed';
-import { Typography } from '~/v4/core/components';
-import { PostComposer } from '~/v4/social/components/PostComposer';
+import { Button, Typography } from '~/v4/core/components';
 import { FloatingActionButton } from '~/v4/core/components/FloatingActionButton/FloatingActionButton';
 import { Plus } from '~/v4/icons/Plus';
+import Pencil from '~/v4/icons/Pencil';
 import { FloatingActionButtonMenu } from './FloatingActionButtonMenu/FloatingActionButtonMenu';
-import { Popover } from '~/v4/core/components/AriaPopover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage/PollPostComposerPage';
-import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 type UserProfilePageProps = {
   userId: string;
+  userBadgeTitle?: string;
 };
 
 const enum UserProfileTabs {
@@ -37,7 +36,7 @@ const enum UserProfileTabs {
   VIDEO = 'video',
 }
 
-export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
+export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBadgeTitle }) => {
   const pageId = 'user_profile_page';
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDesktop } = useResponsive();
@@ -49,6 +48,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
   const { openPopup } = usePopupContext();
+  const { AmityUserProfilePageBehavior } = usePageBehavior();
 
   const isCurrentUser = user?.userId === currentUserId;
 
@@ -63,38 +63,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
 
   const renderTabContent = () => {
     if (currentActiveTab === UserProfileTabs.FEED) {
-      return (
-        <>
-          {isCurrentUser && (
-            <PostComposer
-              pageId={pageId}
-              onClickPost={() => {
-                openPopup({
-                  pageId,
-                  view: 'desktop',
-                  isDismissable: false,
-                  onClose: onCloseCreatePostPopup,
-                  header: CreatePostHeader,
-                  children: (
-                    <PostComposerPage mode={Mode.CREATE} targetType="user" targetId={null} />
-                  ),
-                });
-              }}
-              onClickPoll={() => {
-                openPopup({
-                  pageId,
-                  view: 'desktop',
-                  isDismissable: false,
-                  onClose: onCloseCreatePostPopup,
-                  header: CreatePostHeader,
-                  children: <PollPostComposerPage targetId={null} targetType="user" />,
-                });
-              }}
-            />
-          )}
-          <UserFeed pageId={pageId} userId={userId} />
-        </>
-      );
+      return <UserFeed pageId={pageId} userId={userId} />;
     } else if (currentActiveTab === UserProfileTabs.IMAGE) {
       return <UserImageFeed pageId={pageId} userId={userId} />;
     } else if (currentActiveTab === UserProfileTabs.VIDEO) {
@@ -144,6 +113,33 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
       }
     };
   }, []);
+  const onEditProfile = () => {
+    if (user?.userId) {
+      AmityUserProfilePageBehavior?.goToEditUserPage?.({ userId: user.userId });
+    }
+  };
+
+  const renderActivityTabs = () => {
+    return (
+      <div className={styles.userProfilePage__feedTabs}>
+        <UserFeedTabButton
+          pageId={pageId}
+          isActive={currentActiveTab === UserProfileTabs.FEED}
+          onClick={() => onChangeTab(UserProfileTabs.FEED)}
+        />
+        <UserImageFeedTabButton
+          pageId={pageId}
+          isActive={currentActiveTab === UserProfileTabs.IMAGE}
+          onClick={() => onChangeTab(UserProfileTabs.IMAGE)}
+        />
+        <UserVideoFeedTabButton
+          pageId={pageId}
+          isActive={currentActiveTab === UserProfileTabs.VIDEO}
+          onClick={() => onChangeTab(UserProfileTabs.VIDEO)}
+        />
+      </div>
+    );
+  };
 
   return (
     <>
@@ -158,53 +154,19 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
               >
                 {user?.displayName}
               </Typography.TitleBold>
-              <Popover
-                trigger={{
-                  pageId,
-                  onClick: ({ closePopover }) =>
-                    setDrawerData({
-                      content: (
-                        <UserMenu
-                          user={user}
-                          onCloseMenu={() => {
-                            closePopover();
-                            removeDrawerData();
-                          }}
-                        />
-                      ),
-                    }),
-                }}
-              >
-                {({ closePopover }) => (
-                  <UserMenu
-                    user={user}
-                    onCloseMenu={() => {
-                      closePopover();
-                      removeDrawerData();
-                    }}
-                  />
-                )}
-              </Popover>
+              {isCurrentUser && (
+                <Button
+                  data-testid={`${pageId}/'*'/edit_user_profile_button`}
+                  className={styles.userMenu__button}
+                  onClick={onEditProfile}
+                >
+                  <Pencil className={styles.userMenu__editProfile__icon} />
+                </Button>
+              )}
             </div>
-            <UserProfileHeader user={user} pageId={pageId} />
+            <UserProfileHeader user={user} pageId={pageId} userBadgeTitle={userBadgeTitle} />
 
-            <div className={styles.userProfilePage__feedTabs}>
-              <UserFeedTabButton
-                pageId={pageId}
-                isActive={currentActiveTab === UserProfileTabs.FEED}
-                onClick={() => onChangeTab(UserProfileTabs.FEED)}
-              />
-              <UserImageFeedTabButton
-                pageId={pageId}
-                isActive={currentActiveTab === UserProfileTabs.IMAGE}
-                onClick={() => onChangeTab(UserProfileTabs.IMAGE)}
-              />
-              <UserVideoFeedTabButton
-                pageId={pageId}
-                isActive={currentActiveTab === UserProfileTabs.VIDEO}
-                onClick={() => onChangeTab(UserProfileTabs.VIDEO)}
-              />
-            </div>
+            {renderActivityTabs()}
           </div>
 
           {renderTabContent()}

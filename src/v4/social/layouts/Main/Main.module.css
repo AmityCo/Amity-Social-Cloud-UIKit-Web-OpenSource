@@ -15,8 +15,7 @@
   width: 100%;
   margin: 0 auto;
   overflow: scroll;
-  max-width: 37.125rem; /* 594px */
-  padding: 1rem 1.5rem 0;
+  padding: 3.375rem 5rem;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
 }

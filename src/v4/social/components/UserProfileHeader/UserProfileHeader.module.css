@@ -13,6 +13,13 @@
 
 .userProfileHeader__displayName {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.userProfileHeader__nameRow {
+  display: flex;
   align-items: center;
   gap: 0.25rem;
 }
@@ -40,6 +47,23 @@
   height: 1.25rem;
 }
 
+.userBadge {
+  display: flex;
+  padding: 5px 6px;
+  justify-content: center;
+  align-items: center;
+  gap: 0.0625rem;
+  background-color: var(--asc-color-secondary-default);
+  border-radius: 100px;
+  width: fit-content;
+  color: var(--global-text-default, #222);
+  font-family: var(--typography-scale-body-caption-bold-family, Roboto);
+  font-size: var(--typography-scale-body-caption-bold-size, 12px);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--typography-scale-body-caption-bold-line-height, 14px);
+}
+
 .userProfileHeader__description {
   margin: 0.5rem 0;
   color: var(--asc-color-base-default);
@@ -48,7 +72,6 @@
 .userProfileHeader__relationship {
   display: flex;
   gap: 0.75rem;
-  padding: 0.25rem 0 1rem;
 }
 
 .userProfileHeader__relationship__separator {

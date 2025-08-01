@@ -1,5 +1,5 @@
 .userFollowing__container {
-  display: inline-block;
+  display: flex;
 }
 
 .userFollowing__count {

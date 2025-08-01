@@ -30,6 +30,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 interface UserProfileHeaderProps {
   user?: Amity.User | null;
   pageId?: string;
+  userBadgeTitle?: string;
 }
 
 const UserProfileHeaderSkeleton: React.FC = () => {
@@ -51,7 +52,11 @@ const UserProfileHeaderSkeleton: React.FC = () => {
   );
 };
 
-export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, pageId = '*' }) => {
+export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
+  user,
+  pageId = '*',
+  userBadgeTitle = 'Lupo Solitario',
+}) => {
   const componentId = 'user_profile_header';
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 
@@ -151,16 +156,19 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
           />
         </Button>
         <div className={styles.userProfileHeader__displayName}>
-          <UserName
-            name={user.displayName ?? user.userId}
-            pageId={pageId}
-            componentId={componentId}
-          />
-          {user.isBrand && (
-            <div className={styles.userProfileHeader__badge__container}>
-              <UserOfficialBadge className={styles.userProfileHeader__badge} />
-            </div>
-          )}
+          <div className={styles.userProfileHeader__nameRow}>
+            <UserName
+              name={user.displayName ?? user.userId}
+              pageId={pageId}
+              componentId={componentId}
+            />
+            {user.isBrand && (
+              <div className={styles.userProfileHeader__badge__container}>
+                <UserOfficialBadge className={styles.userProfileHeader__badge} />
+              </div>
+            )}
+          </div>
+          {userBadgeTitle && <div className={styles.userBadge}>{userBadgeTitle}</div>}
         </div>
       </div>
 
@@ -170,6 +178,8 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
         <UserFollowing userId={user.userId} pageId={pageId} componentId={componentId} />
         <div className={styles.userProfileHeader__relationship__separator}></div>
         <UserFollower userId={user.userId} pageId={pageId} componentId={componentId} />
+        <div className={styles.userProfileHeader__relationship__separator}></div>
+        {/* TO ADD group counter */}
       </div>
       {pendingCount > 0 && (
         <Button
