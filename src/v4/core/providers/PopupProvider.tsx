@@ -56,12 +56,11 @@ export const PopupProvider: React.FC<PopupProviderProps> = ({ children }) => {
       // Add class to prevent scroll
       document.body.classList.add('popup-no-scroll');
       document.body.style.top = `-${scrollYRef.current}px`;
-      return () => {
-        // Remove class and restore scroll position
-        document.body.classList.remove('popup-no-scroll');
-        document.body.style.top = '';
-        window.scrollTo(0, scrollYRef.current);
-      };
+    } else {
+      // Remove class and restore scroll position
+      document.body.classList.remove('popup-no-scroll');
+      document.body.style.top = '';
+      window.scrollTo(0, scrollYRef.current);
     }
   }, [popups.length]);
 

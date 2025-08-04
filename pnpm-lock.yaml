@@ -133,8 +133,8 @@ importers:
         version: 3.23.8
     devDependencies:
       '@amityco/ts-sdk':
-        specifier: 7.8.1-680d3cc.0
-        version: 7.8.1-680d3cc.0
+        specifier: ^7.8.1
+        version: 7.8.1
       '@eslint/js':
         specifier: ^9.4.0
         version: 9.7.0
@@ -324,8 +324,8 @@ packages:
   '@adobe/css-tools@4.3.3':
     resolution: {integrity: sha512-rE0Pygv0sEZ4vBWHlAgJLGDU7Pm8xoO6p3wsEceb7GYAjScrOHpEo8KK/eVkAcnSM+slAEtXjA2JpdjLp4fJQQ==}
 
-  '@amityco/ts-sdk@7.8.1-680d3cc.0':
-    resolution: {integrity: sha512-KzC7sKyBajZZVfGD/LNo3675MbB6V8D7KnECXWplEunyMPHw0yhisryv+Bi3X6oB7ReGL7AYcQUYZZBOwqWS/g==}
+  '@amityco/ts-sdk@7.8.1':
+    resolution: {integrity: sha512-7JbJcNUXRtBzhbwhTXnE02HcDGH1RkNgoqZ3YIHCiTqS3s/hAvDm05xeRKLZaok5Tp8kWMfPSqo2NaS6XpRQ0w==}
     engines: {node: '>=12', npm: '>=6'}
 
   '@ampproject/remapping@2.3.0':
@@ -4789,8 +4789,8 @@ packages:
     resolution: {integrity: sha512-VE7XSv1epljsIN2YeBnxCmGJihpNIAnLLu/pPOdA+Gkso7qDltJwUi6vfHjgxdBbjSdAuPGnhuOHJUQG+yYwIg==}
     engines: {node: '>=0.4.0'}
 
-  follow-redirects@1.15.9:
-    resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
+  follow-redirects@1.15.11:
+    resolution: {integrity: sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -8018,7 +8018,7 @@ snapshots:
 
   '@adobe/css-tools@4.3.3': {}
 
-  '@amityco/ts-sdk@7.8.1-680d3cc.0':
+  '@amityco/ts-sdk@7.8.1':
     dependencies:
       agentkeepalive: 4.6.0
       axios: 1.11.0(debug@4.4.1)
@@ -12486,7 +12486,7 @@ snapshots:
 
   axios@1.11.0(debug@4.4.1):
     dependencies:
-      follow-redirects: 1.15.9(debug@4.4.1)
+      follow-redirects: 1.15.11(debug@4.4.1)
       form-data: 4.0.4
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -13810,7 +13810,7 @@ snapshots:
 
   flow-parser@0.238.0: {}
 
-  follow-redirects@1.15.9(debug@4.4.1):
+  follow-redirects@1.15.11(debug@4.4.1):
     optionalDependencies:
       debug: 4.4.1
 
