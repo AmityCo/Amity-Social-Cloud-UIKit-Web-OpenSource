@@ -88,6 +88,10 @@
   border-bottom: 0.5rem solid var(--asc-color-base-shade4);
 }
 
+.pendingPostList__wrapper:last-of-type {
+  border-bottom: none;
+}
+
 .pendingPostList__noJoinRequest {
   gap: 1rem;
   display: flex;
