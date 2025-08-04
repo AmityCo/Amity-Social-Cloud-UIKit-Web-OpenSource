@@ -616,10 +616,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             <Switch
               defaultSelected
               className={styles.createCommunity__switch}
-              isSelected={
-                privacySettings === AmityCommunitySetupPrivacy.PRIVATE_HIDDEN ||
-                requiresJoinApproval
-              }
+              isSelected={requiresJoinApproval}
               onChange={() => setRequiresJoinApproval(!requiresJoinApproval)}
             />
           </div>
