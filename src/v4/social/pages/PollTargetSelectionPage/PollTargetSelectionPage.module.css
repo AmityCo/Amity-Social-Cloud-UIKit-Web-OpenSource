@@ -61,6 +61,10 @@
   color: var(--asc-color-base-default);
 }
 
+.pollTargetSelectionPage__intersectionObserver {
+  height: 1rem;
+}
+
 @media (width >= 48em) {
   .pollTargetSelectionPage {
     width: 30rem;

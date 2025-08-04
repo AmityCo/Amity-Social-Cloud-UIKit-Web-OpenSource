@@ -47,6 +47,9 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
     onIntersect: () => {
       if (hasMore && !isLoading) loadMore();
     },
+    options: {
+      threshold: 0.7,
+    },
   });
 
   useEffect(() => {
@@ -235,7 +238,10 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
             );
           })}
       </div>
-      <div ref={(node) => setIntersectionNode(node)} />
+      <div
+        ref={(node) => setIntersectionNode(node)}
+        className={styles.selectPostTargetPage__intersectionObserver}
+      />
     </div>
   );
 }

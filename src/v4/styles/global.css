@@ -150,3 +150,10 @@ body {
   position: absolute;
   clip: rect(0, 0, 0, 0);
 }
+
+/* Prevent body scroll when popup is open */
+body.popup-no-scroll {
+  overflow: hidden !important;
+  position: fixed;
+  width: 100%;
+}

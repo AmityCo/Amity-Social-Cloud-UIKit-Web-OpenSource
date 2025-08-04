@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styles from './PollTargetSelectionPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -21,6 +20,7 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { Typography } from '~/v4/core/components';
+import styles from './PollTargetSelectionPage.module.css';
 
 export function PollTargetSelectionPage() {
   const { client } = useSDK();
@@ -46,6 +46,9 @@ export function PollTargetSelectionPage() {
       if (hasMore && isLoading === false) {
         loadMore();
       }
+    },
+    options: {
+      threshold: 0.7,
     },
     node: intersectionNode,
   });
@@ -138,7 +141,10 @@ export function PollTargetSelectionPage() {
             </Button>
           );
         })}
-      <div ref={(node) => setIntersectionNode(node)} />
+      <div
+        ref={(node) => setIntersectionNode(node)}
+        className={styles.pollTargetSelectionPage__intersectionObserver}
+      />
     </div>
   );
 }

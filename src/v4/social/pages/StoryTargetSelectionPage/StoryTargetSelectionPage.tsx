@@ -84,6 +84,9 @@ export function StoryTargetSelectionPage() {
         loadMore();
       }
     },
+    options: {
+      threshold: 0.7,
+    },
     node: intersectionNode,
   });
 
@@ -122,7 +125,10 @@ export function StoryTargetSelectionPage() {
         {renderCommunity}
         {isLoading && renderSkeleton()}
       </div>
-      <div ref={(node) => setIntersectionNode(node)} />
+      <div
+        ref={(node) => setIntersectionNode(node)}
+        className={styles.selectStoryTargetPage__intersectionObserver}
+      />
     </div>
   );
 }
