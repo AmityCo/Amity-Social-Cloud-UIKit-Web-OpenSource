@@ -67,10 +67,11 @@ export const useCommunityActions = (
     mutationFn: (community: Amity.Community) =>
       CommunityRepository.leaveCommunity(community.communityId),
     onSuccess: () => {
-      success({
-        content: 'Successfully left the community',
-      });
-      onLeaveSuccess?.();
+      onLeaveSuccess?.()
+        ? onLeaveSuccess?.()
+        : success({
+            content: 'Successfully left the group',
+          });
     },
     onError: (error) => {
       info({

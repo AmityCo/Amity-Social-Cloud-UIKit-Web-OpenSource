@@ -89,6 +89,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
         isPending: false,
       });
     },
+    onLeaveSuccess: () => true,
   });
   const notification = useNotifications();
 
@@ -105,6 +106,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
         title: 'Leave Community',
         content: "If you change your mind, you'll have to request to join again.",
         onOk: () => leaveCommunity(community),
+        okText: 'Leave',
       });
     }
 
