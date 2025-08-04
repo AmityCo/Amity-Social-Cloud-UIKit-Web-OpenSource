@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Key } from 'react-aria';
 import { useAmityElement, useAmityPage } from '~/v4/core/hooks/uikit';
 import styles from './PendingRequestPage.module.css';
@@ -36,12 +36,22 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     loading: isJoinRequestsLoading,
   } = useJoinRequestsCollection({ community });
 
-  const defaultActiveTab = [
-    canReviewCommunityPosts ? 'posts_button_tab' : null,
-    joinRequests?.length ? 'join_requests_button_tab' : null,
-  ].filter(Boolean) as Key[];
+  // Determine initial active tab - prioritize posts tab when user can review posts
+  const getInitialActiveTab = () => {
+    // If user can review posts, start with posts tab
+    if (canReviewCommunityPosts) {
+      return 'posts_button_tab';
+    }
+    // Otherwise, check if there are join requests to show
+    if (joinRequests?.length) {
+      return 'join_requests_button_tab';
+    }
+    // Default fallback
+    return 'posts_button_tab';
+  };
 
-  const [activeTab, setActiveTab] = useState<Key>(defaultActiveTab[0] || 'posts_button_tab');
+  const [activeTab, setActiveTab] = useState<Key>(getInitialActiveTab());
+  const isManualTabChangeRef = useRef<boolean>(false);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [intersectionNodePost, setIntersectionNodePost] = useState<HTMLDivElement | null>(null);
 
@@ -92,12 +102,27 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
   });
 
   useEffect(() => {
-    if (joinRequestsCount > 0 && reviewingPosts.length === 0) {
-      setActiveTab('join_requests_button_tab');
-    } else {
-      setActiveTab('posts_button_tab');
+    // Only auto-switch if it's not a manual tab change
+    if (isManualTabChangeRef.current) {
+      isManualTabChangeRef.current = false; // Reset the flag
+      return;
     }
-  }, [reviewingPosts.length, joinRequestsCount]);
+
+    // Auto-switch logic based on current active tab and counts
+    if (activeTab === 'posts_button_tab') {
+      // If currently on posts tab, only switch to join requests tab when:
+      // - No reviewing posts left AND there are join requests to show
+      if (reviewingPosts.length === 0 && joinRequestsCount > 0) {
+        setActiveTab('join_requests_button_tab');
+      }
+    } else if (activeTab === 'join_requests_button_tab') {
+      // If currently on join requests tab, only switch to posts tab when:
+      // - No join requests left AND there are reviewing posts to show
+      if (joinRequestsCount === 0 && reviewingPosts.length > 0) {
+        setActiveTab('posts_button_tab');
+      }
+    }
+  }, [reviewingPosts.length, joinRequestsCount, activeTab]);
 
   const renderAmouts = (count: number) => {
     return count > 10 ? '10+' : count;
@@ -190,7 +215,11 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
         <SecondaryTab
           tabs={tabs}
           activeTab={activeTab}
-          onChange={(key) => setActiveTab(key)}
+          onChange={(key) => {
+            // Mark as manual change using ref for immediate effect
+            isManualTabChangeRef.current = true;
+            setActiveTab(key);
+          }}
           className={styles.pendingRequestsPage__secondaryTab}
           tabListClassName={styles.pendingRequestsPage__tabList}
         />
