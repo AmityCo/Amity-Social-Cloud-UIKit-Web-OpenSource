@@ -138,6 +138,10 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   }, [acceptedInvitation]);
 
   useEffect(() => {
+    setActiveTab('community_feed');
+  }, [communityId, setActiveTab]);
+
+  useEffect(() => {
     if (file) {
       AmityCommunityProfilePageBehavior?.goToStoryCreationPage?.({
         targetId: communityId,
