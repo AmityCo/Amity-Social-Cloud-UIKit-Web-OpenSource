@@ -7,8 +7,9 @@ interface SearchResultContextProps {
   openSearchResult: boolean;
   setOpenSearchResult: (open: boolean) => void;
   openSearchResultModal: (searchValue: string) => void;
-  searchValue?: string;
+  searchValue: string;
   resetSearchValue: () => void;
+  setSearchValue: (value: string) => void;
 }
 
 const SearchResultContext = createContext<SearchResultContextProps>({
@@ -17,6 +18,7 @@ const SearchResultContext = createContext<SearchResultContextProps>({
   openSearchResultModal: () => {},
   searchValue: '',
   resetSearchValue: () => {},
+  setSearchValue: () => {},
 });
 
 export const useSearchResultContext = () => {
@@ -46,6 +48,7 @@ export const SearchResultProvider: React.FC<SearchResultProviderProps> = ({
       setSearchValue(searchValue);
       setOpenSearchResult(true);
     } else {
+      setSearchValue(searchValue);
       AmityPostDetailPageBehavior?.goToSocialGlobalSearchPage?.({ keyword: searchValue });
     }
   };
@@ -62,6 +65,7 @@ export const SearchResultProvider: React.FC<SearchResultProviderProps> = ({
         openSearchResultModal,
         searchValue,
         resetSearchValue,
+        setSearchValue,
       }}
     >
       {children}

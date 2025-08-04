@@ -13,6 +13,7 @@ import { PostSearchResult } from '~/v4/social/components/PostSearchResult';
 import useSearchPostWithHashtagCollection from '~/v4/social/hooks/collections/useSearchPostWithHashtagCollection';
 import useSemanticSearchPostCollection from '~/v4/social/hooks/collections/useSemanticSearchPostCollection';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './SocialGlobalSearchPage.module.css';
 
 enum AmityGlobalSearchType {
@@ -21,48 +22,53 @@ enum AmityGlobalSearchType {
 }
 
 const useGlobalSearchViewModel = ({ keyword }: { keyword?: string }) => {
-  const [searchKeyword, setSearchKeyword] = useState<string>(keyword || '');
-  const previousKeywordRef = useRef<string | undefined>(keyword);
+  const { searchValue, setSearchValue } = useSearchResultContext();
+  const previousKeywordRef = useRef<string | undefined>(keyword ?? searchValue);
   const isInitialMount = useRef<boolean>(true);
 
   const [searchType, setSearchType] = useState<AmityGlobalSearchType>(
     AmityGlobalSearchType.Community,
   );
 
-  // Update searchKeyword when keyword prop changes (for navigation back from post detail)
+  // Update searchValue when keyword prop changes (for navigation back from post detail)
   useEffect(() => {
     // On initial mount, just update the ref and don't change the search value
     if (isInitialMount.current) {
       isInitialMount.current = false;
-      previousKeywordRef.current = keyword;
+      previousKeywordRef.current = keyword || searchValue;
+
+      // If keyword is provided and different from current searchValue, update it
+      if (keyword !== undefined && keyword !== searchValue) {
+        setSearchValue?.(keyword);
+      }
 
       return;
     }
 
     // Only update search value if keyword prop actually changed (indicates back navigation)
     if (keyword !== undefined && keyword !== previousKeywordRef.current) {
-      setSearchKeyword(keyword);
+      setSearchValue(keyword);
       previousKeywordRef.current = keyword;
     }
-  }, [keyword]);
+  }, [keyword, searchValue, setSearchValue]);
 
   const enabledUserSearch = useMemo(
-    () => searchType === AmityGlobalSearchType.User && searchKeyword.length > 0,
-    [searchType, searchKeyword],
+    () => searchType === AmityGlobalSearchType.User && searchValue.length > 0,
+    [searchType, searchValue],
   );
 
   const communityCollection = useSearchCommunitiesCollection({
     queryParams: {
-      displayName: searchKeyword,
+      displayName: searchValue,
       limit: 20,
       includeDiscoverablePrivateCommunity: true,
       membership: 'all',
     },
-    shouldCall: searchType === AmityGlobalSearchType.Community && searchKeyword.length > 0,
+    shouldCall: searchType === AmityGlobalSearchType.Community && searchValue.length > 0,
   });
 
   const userCollection = useUserQueryByDisplayName({
-    displayName: searchKeyword,
+    displayName: searchValue,
     limit: 20,
     enabled: enabledUserSearch,
     matchType: UserRepository.AmityUserSearchMatchType.PARTIAL,
@@ -70,29 +76,25 @@ const useGlobalSearchViewModel = ({ keyword }: { keyword?: string }) => {
 
   const postWithHashtagCollection = useSearchPostWithHashtagCollection({
     hashtags:
-      searchKeyword && searchKeyword.length > 0 && searchKeyword.startsWith('#')
-        ? [searchKeyword.startsWith('#') ? searchKeyword.slice(1) : searchKeyword]
+      searchValue && searchValue.length > 0 && searchValue.startsWith('#')
+        ? [searchValue.startsWith('#') ? searchValue.slice(1) : searchValue]
         : [],
-    dataTypes: ['text', 'image'],
   });
 
   const semanticPostCollection = useSemanticSearchPostCollection({
-    query:
-      searchKeyword && searchKeyword.length > 0 && !searchKeyword.startsWith('#')
-        ? searchKeyword
-        : '',
+    query: searchValue && searchValue.length > 0 && !searchValue.startsWith('#') ? searchValue : '',
   });
 
   // Use the appropriate collection based on search type
-  const activePostCollection = searchKeyword.startsWith('#')
+  const activePostCollection = searchValue.startsWith('#')
     ? postWithHashtagCollection
     : semanticPostCollection;
 
   const search = useCallback(
     (keyword: string) => {
-      setSearchKeyword(keyword);
+      setSearchValue(keyword);
     },
-    [setSearchKeyword],
+    [setSearchValue],
   );
 
   return {
@@ -101,7 +103,7 @@ const useGlobalSearchViewModel = ({ keyword }: { keyword?: string }) => {
     postCollection: activePostCollection,
     searchType,
     search,
-    searchValue: searchKeyword,
+    searchValue,
     setSearchType,
   };
 };
@@ -122,6 +124,7 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
     searchValue,
     setSearchType,
   } = useGlobalSearchViewModel({ keyword });
+  const { isDesktop } = useResponsive();
 
   // Show search results if there's an initial keyword or current search value
   useEffect(() => {
@@ -138,8 +141,11 @@ export function SocialGlobalSearchPage({ keyword }: { keyword?: string }) {
   }, [keyword]);
 
   useClickAway(ref, () => {
-    resetSearchValue();
-    setOpenSearchResult(false);
+    if (isDesktop) {
+      resetSearchValue();
+      setActiveTab(DEFAULT_ACTIVE_TAB);
+      setOpenSearchResult(false);
+    }
   });
 
   const tabs = [

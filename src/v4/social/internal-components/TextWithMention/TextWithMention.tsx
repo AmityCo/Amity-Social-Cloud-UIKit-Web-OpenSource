@@ -61,7 +61,7 @@ export const TextWithMention = ({
   const { goToUserProfilePage, goToSocialGlobalSearchPage } = useNavigation();
   const [isExpanded, setIsExpanded] = useState(false);
   const { isDesktop } = useResponsive();
-  const { openSearchResultModal } = useSearchResultContext();
+  const { openSearchResultModal, setSearchValue } = useSearchResultContext();
 
   const Component = isBold ? Typography.BodyBold : Typography.Body;
 
@@ -152,6 +152,11 @@ export const TextWithMention = ({
     [isSearchPost, keyword],
   );
 
+  const handleMobileHashtagClick = (hashtag: string) => {
+    setSearchValue(hashtag);
+    goToSocialGlobalSearchPage(undefined, hashtag);
+  };
+
   const convertSerializedToText = (child: SerializedLexicalNode, childIndex: number) => {
     if ($isSerializedMentionNode<MentionData>(child)) {
       return (
@@ -159,7 +164,17 @@ export const TextWithMention = ({
           key={uuidv4()}
           data-testid={`${pageId}/${componentId}/mention`}
           className={clsx(styles.textWithMention__mention, mentionClassName)}
-          onClick={() => goToUserProfilePage(child.data.userId)}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            goToUserProfilePage(child.data.userId);
+          }}
+          onMouseUp={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
         >
           {child.text}
         </span>
@@ -172,11 +187,17 @@ export const TextWithMention = ({
           key={uuidv4()}
           data-testid={`${pageId}/${componentId}/hashtag`}
           className={clsx(styles.textWithMention__hashtag, hashtagClassName)}
-          onClick={() => {
-            isDesktop
-              ? openSearchResultModal(child.text)
-              : goToSocialGlobalSearchPage(undefined, child.text);
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            isDesktop ? openSearchResultModal(child.text) : handleMobileHashtagClick(child.text);
           }}
+          onMouseUp={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
+          onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
         >
           {isSearchPost ? getHighlightedHashtag(child.text) : child.text}
         </span>

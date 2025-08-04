@@ -11,6 +11,7 @@ import { Divider } from '~/v4/social/elements/Divider';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './PostSearchResult.module.css';
 
 type PostSearchResultProps = {
@@ -35,6 +36,7 @@ export const PostSearchResult = ({
   const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { AmitySocialGlobalSearchPageBehavior } = usePageBehavior();
+  const { isDesktop } = useResponsive();
 
   // Filter posts based on keyword in data.text
   const filteredPosts = React.useMemo(() => {
@@ -72,7 +74,9 @@ export const PostSearchResult = ({
               <div
                 key={post.postId}
                 onClick={() => {
-                  onClosePopover?.();
+                  if (isDesktop) {
+                    onClosePopover?.();
+                  }
                   AmitySocialGlobalSearchPageBehavior?.goToPostDetailPage?.({
                     postId: post.postId,
                     keyword: keyword,
