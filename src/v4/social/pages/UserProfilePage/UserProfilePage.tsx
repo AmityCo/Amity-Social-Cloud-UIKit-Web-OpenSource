@@ -215,6 +215,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
     (socialSettings?.userPrivacySetting === 'public' && followStatus !== 'blocked') ||
     followStatus === 'accepted';
 
+  const isFilterAvailable =
+    isCurrentUser || socialSettings?.userPrivacySetting === 'public' || followStatus === 'accepted';
+
   return (
     <>
       <PullToRefresh className={styles.userProfilePage} style={themeStyles}>
