@@ -25,6 +25,8 @@ export class AmityUIKitManager {
   private onConnectionStatusChange?: (state: Amity.SessionStates) => void;
   private onConnected?: () => void;
   private onDisconnected?: () => void;
+  private globalBannedUnsubscribe?: Amity.Unsubscriber;
+  private onGlobalBanned?: (users: Amity.UserPayload) => void;
 
   /**
    * Private constructor to prevent direct instantiation.
@@ -73,6 +75,7 @@ export class AmityUIKitManager {
     onConnectionStatusChange?: (state: Amity.SessionStates) => void,
     onConnected?: () => void,
     onDisconnected?: () => void,
+    onGlobalBanned?: (payload: Amity.UserPayload) => void,
   ): Promise<void> {
     if (!AmityUIKitManager.instance) {
       throw new Error('AmityUIKitManager must be set up first using the setup method.');
@@ -81,6 +84,7 @@ export class AmityUIKitManager {
     AmityUIKitManager.instance.onConnectionStatusChange = onConnectionStatusChange;
     AmityUIKitManager.instance.onConnected = onConnected;
     AmityUIKitManager.instance.onDisconnected = onDisconnected;
+    AmityUIKitManager.instance.onGlobalBanned = onGlobalBanned;
 
     await AmityUIKitManager.instance.connectAndLogin(
       userId,
@@ -134,6 +138,10 @@ export class AmityUIKitManager {
 
     this.onConnected && this.onConnected();
 
+    this.globalBannedUnsubscribe = ASCClient.onClientBanned((payload) => {
+      this.onGlobalBanned?.(payload);
+    });
+
     const sharableLinkConfig = await ASCClient.getShareableLinkConfiguration();
     localStorage.setItem('sharableLinkConfig', JSON.stringify(sharableLinkConfig || {}));
   }
@@ -144,6 +152,7 @@ export class AmityUIKitManager {
   public disconnect(): void {
     this.stateChangeHandler?.();
     this.disconnectedHandler?.();
+    this.globalBannedUnsubscribe?.();
     this.client = null;
     this.isConnected = false;
   }

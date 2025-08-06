@@ -605,7 +605,7 @@ export const PollPostComposerPage = ({
                       type="file"
                       onChange={(e) => onChangeImage(e, index)}
                       id={`upload-${index}`}
-                      accept={'image/png,image/jpg'}
+                      accept={'image/png,image/jpeg'}
                     />
                     {option.id && typeof option.indexOfFiles === 'number' ? (
                       <div className={styles.pollPostComposerPage__imagePollOptions__image}>

@@ -33,6 +33,7 @@ import { ChevronDown } from '~/v4/icons/ChevronDown';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { FeedSourceEnum } from '@amityco/ts-sdk';
+import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
 
 type UserProfilePageProps = {
   userId: string;
@@ -79,6 +80,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { confirm } = useConfirmContext();
   const { openPopup } = usePopupContext();
   const { linkToPost } = useLayoutContext();
+  const { socialSettings } = useSocialSettings();
 
   const isCurrentUser = user?.userId === currentUserId;
 
@@ -211,6 +213,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
     };
   }, []);
 
+  const isFilterAvailable =
+    isCurrentUser || socialSettings?.userPrivacySetting === 'public' || followStatus === 'accepted';
+
   return (
     <>
       <PullToRefresh className={styles.userProfilePage} style={themeStyles}>
@@ -274,7 +279,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                 onClick={() => onChangeTab(UserProfileTabs.VIDEO)}
               />
             </div>
-            {(isCurrentUser || followStatus === 'accepted') && (
+            {isFilterAvailable && (
               <Popover
                 placement="bottom left"
                 containerClassName={styles.userProfilePage__feedTypePopover}

@@ -6,4 +6,5 @@ export const ERROR_RESPONSE = Object.freeze({
   UNAVAILABLE: '500000',
   BLOCKED_WORD: '400308',
   BLOCKED_URL: '400309',
+  GLOBAL_BAN: '400312',
 });
