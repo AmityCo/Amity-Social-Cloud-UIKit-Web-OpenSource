@@ -84,33 +84,6 @@
 
 /* .userProfilePage__cardContentSection {} */
 
-.userMenu__button {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem;
-  cursor: pointer;
-  border: none;
-  background: transparent;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s ease;
-}
-
-.userMenu__button:hover {
-  background-color: var(--asc-color-base-shade4);
-}
-
-.userMenu__editProfile__icon {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: var(--asc-color-base-default);
-  color: var(--asc-color-base-default);
-}
-
-.userMenu__editProfile__text {
-  color: var(--asc-color-base-default);
-}
-
 @media (width >=48em) {
   .userProfilePage {
     background-color: transparent;

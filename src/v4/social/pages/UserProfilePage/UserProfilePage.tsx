@@ -130,14 +130,16 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
             </Typography.Caption>
             <div className={styles.userProfilePage__cardPositioner}>
               <div className={styles.userProfilePage__card}>
-                <div>percentuale</div>
-                <div>
-                  <Typography.Headline>Arricchisci il tuo profilo</Typography.Headline>
-                  <Typography.Body>
-                    Rendi unico il tuo profilo aggiungi altre info su di te
-                  </Typography.Body>
+                <div className={styles.userProfilePage__cardContentSection}>
+                  <div>percentuale</div>
+                  <div>
+                    <Typography.Headline>Arricchisci il tuo profilo</Typography.Headline>
+                    <Typography.Body>
+                      Rendi unico il tuo profilo aggiungi altre info su di te
+                    </Typography.Body>
+                  </div>
+                  <div>chevronright</div>
                 </div>
-                <div>chevronright</div>
               </div>
             </div>
             <div className={styles.userProfilePage__cardPositioner}>
