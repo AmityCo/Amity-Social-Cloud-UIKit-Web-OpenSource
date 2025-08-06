@@ -92,7 +92,6 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
     trendingData.isLoading ||
     (recommendedData.isLoading && recommendedCommunitiesEnable) ||
     categoriesData.isLoading;
-
   const error = trendingData.error || recommendedData.error || categoriesData.error || null;
 
   const refetchRecommendedCommunities = () => recommendedData.refresh();

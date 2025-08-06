@@ -87,7 +87,6 @@ export const CommunityRowItem = <T extends boolean | undefined>({
       onLeaveSuccess?.(community);
       return true;
     },
-    onLeaveSuccess: () => true,
   });
   const notification = useNotifications();
 

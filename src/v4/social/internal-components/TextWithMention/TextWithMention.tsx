@@ -185,12 +185,14 @@ export const TextWithMention = ({
       if (matchIndex === -1) {
         return hashtagText;
       }
+
       const beforeMatch = hashtagWithoutHash.slice(0, matchIndex);
       const matchedPart = hashtagWithoutHash.slice(
         matchIndex,
         matchIndex + keywordWithoutHash.length,
       );
       const afterMatch = hashtagWithoutHash.slice(matchIndex + keywordWithoutHash.length);
+
       return (
         <>
           {hasHashSymbol && '#'}
