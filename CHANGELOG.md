@@ -4,19 +4,17 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 4.11.0 (2025-07-18)
 
-
 ### Features
 
-* pnpm lock update ([a25f6fb](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/a25f6fb565fa973f933ce6be8c9f8effcb58b674))
+- pnpm lock update ([a25f6fb](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/a25f6fb565fa973f933ce6be8c9f8effcb58b674))
 
 ## 4.10.0 (2025-07-11)
 
 ## 4.9.0 (2025-06-20)
 
-
 ### Bug Fixes
 
-* remove unused file ([4dc4eba](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/4dc4eba1ba606fefb5129366fcf6fa77560932e1))
+- remove unused file ([4dc4eba](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/4dc4eba1ba606fefb5129366fcf6fa77560932e1))
 
 ### 4.8.1 (2025-05-22)
 
@@ -24,10 +22,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 4.7.0 (2025-04-25)
 
-
 ### Bug Fixes
 
-* remove unused files ([37ba184](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/37ba184c95681a8380ce1803816231b406cd49da))
+- remove unused files ([37ba184](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/37ba184c95681a8380ce1803816231b406cd49da))
 
 ### 4.6.1 (2025-04-11)
 
@@ -47,10 +44,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### 4.0.2 (2025-01-17)
 
-
 ### Bug Fixes
 
-* version to deploy ([ba1fd59](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/ba1fd59c2960ffc505a63ab0875d87ebc9eee937))
+- version to deploy ([ba1fd59](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/ba1fd59c2960ffc505a63ab0875d87ebc9eee937))
 
 ## 4.0.0-beta.18 (2024-11-22)
 

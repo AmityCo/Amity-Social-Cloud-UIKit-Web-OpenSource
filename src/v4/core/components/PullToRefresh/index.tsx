@@ -15,10 +15,11 @@ type PullToRefreshProps = ComponentPropsWithRef<'div'> &
     accessibilityId?: string;
     style?: React.CSSProperties;
     onTouchEndCallback?: () => void;
+    onScroll?: (event: React.UIEvent<HTMLDivElement, UIEvent>) => void;
   }>;
 
 export const PullToRefresh = forwardRef(function (
-  { style, children, className, accessibilityId, onTouchEndCallback }: PullToRefreshProps,
+  { style, children, className, accessibilityId, onScroll, onTouchEndCallback }: PullToRefreshProps,
   ref: Ref<HTMLDivElement>,
 ) {
   const touchStartY = useRef(0);
@@ -43,6 +44,7 @@ export const PullToRefresh = forwardRef(function (
         if (touchDiff >= 75) onTouchEndCallback?.();
         setTouchDiff(0);
       }}
+      onScroll={onScroll}
     >
       <div
         className={styles.pullToRefresh}

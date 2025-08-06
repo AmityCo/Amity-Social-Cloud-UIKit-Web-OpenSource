@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
-import { FeedRepository, PostRepository } from '@amityco/ts-sdk';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { FeedRepository } from '@amityco/ts-sdk';
 import { usePaginatorApi } from '~/v4/core/hooks/usePaginator';
-import { isNonNullable } from '~/v4/helpers/utils';
 import useGlobalPinnedPostsCollection from '~/v4/social/hooks/collections/useGlobalPinnedPostsCollection';
 
 const useGlobalFeed = () => {
@@ -10,10 +9,13 @@ const useGlobalFeed = () => {
     [],
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [queryToken, setQueryToken] = useState<string | null>(null);
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
-  const [hasBeenFetched, setHasBeenFetched] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [scrollPosition, setScrollPosition] = useState(0);
+
+  const onNextPageRef = useRef<(() => void) | undefined>();
+  const unsubscriberRef = useRef<(() => void) | undefined>();
+
   const limit = 10;
 
   const { itemWithAds, reset } = usePaginatorApi({
@@ -32,58 +34,60 @@ const useGlobalFeed = () => {
     }
   }, [globalFeaturedPosts]);
 
+  const fetch = useCallback(() => {
+    const unsubscriber = FeedRepository.getGlobalFeed(
+      {
+        limit,
+      },
+      ({ data, loading, error, hasNextPage, onNextPage }) => {
+        setIsLoading(loading);
+
+        if (data && !loading) {
+          setHasNextPage(!!hasNextPage);
+          onNextPageRef.current = onNextPage;
+          setItems(data);
+        }
+        if (error) {
+          console.error('error', error);
+        }
+      },
+    );
+
+    unsubscriberRef.current = unsubscriber;
+    return unsubscriber;
+  }, []);
+
+  useEffect(() => {
+    const unsubscriber = fetch();
+
+    return () => {
+      unsubscriber();
+    };
+  }, [fetch]);
+
+  const refetch = useCallback(async () => {
+    // Cleanup current subscription
+    if (unsubscriberRef.current) {
+      unsubscriberRef.current();
+    }
+
+    // Reset state
+    setItems([]);
+    setHasNextPage(false);
+    onNextPageRef.current = undefined;
+    reset();
+
+    // Small delay to ensure cleanup
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Setup new subscription
+    fetch();
+  }, [fetch, reset]);
+
   const onScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.target as HTMLDivElement;
     setScrollPosition(target.scrollTop);
   };
-
-  async function fetchMore(token: string | null) {
-    try {
-      setIsLoading(true);
-      const newPosts = await FeedRepository.queryGlobalFeed({
-        limit: 10,
-        queryToken: token || undefined,
-      });
-
-      const filteredPosts = (
-        await Promise.all(
-          newPosts.data.map(async (post: Amity.Post) => {
-            if (post?.children?.length > 0) {
-              let unsub = () => {};
-              const childPost = await new Promise<Amity.Post>((resolve) => {
-                unsub = PostRepository.getPost(post.children[0], (response) => {
-                  return resolve(response.data);
-                });
-              });
-              unsub();
-              if (!childPost) {
-                return post;
-              }
-              // remove after these types of posts are supported
-              if (['file'].includes(childPost.dataType)) {
-                return null;
-              }
-              return post;
-            }
-            return post;
-          }),
-        )
-      ).filter(isNonNullable);
-
-      setQueryToken(newPosts.paging.next || null);
-      setItems((prev) => {
-        const currentItemIds = new Set([...prev.map((item) => item.postId)]);
-        const newItems = filteredPosts.filter(
-          (item: Amity.Post) => !currentItemIds.has(item.postId),
-        );
-        return [...prev, ...newItems];
-      });
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 300);
-    }
-  }
 
   const prependItem = (post: Amity.Post) => {
     setItems((prevItems) => {
@@ -123,31 +127,11 @@ const useGlobalFeed = () => {
     setGlobalFeaturedPostsItems(newItems);
   };
 
-  const hasMore = useMemo(() => queryToken !== null, [queryToken]);
-
   const loadMore = useCallback(() => {
-    setLoadMoreHasBeenCalled(true);
-    if (isLoading) return;
-    if (hasMore) {
-      fetchMore(queryToken);
+    if (onNextPageRef.current) {
+      onNextPageRef.current();
     }
-  }, [queryToken, hasMore, isLoading]);
-
-  const fetch = () => {
-    if (hasBeenFetched) return;
-    refetch();
-    setHasBeenFetched(true);
-  };
-
-  const refetch = () => {
-    setItems((prevItems) => {
-      const prependedItemCount = prevItems.length % limit;
-      return prependedItemCount ? prevItems.slice(0, prependedItemCount) : prevItems;
-    });
-    setQueryToken(null);
-    fetchMore(null);
-    reset();
-  };
+  }, []);
 
   return {
     itemWithAds,
@@ -158,9 +142,8 @@ const useGlobalFeed = () => {
     updateGlobalFeaturedPosts,
     globalFeaturedPostsItems,
     loadMore,
-    hasMore,
+    hasMore: hasNextPage,
     loadMoreHasBeenCalled,
-    fetch,
     refetch,
     scrollPosition,
     onScroll,
@@ -180,8 +163,7 @@ const GlobalFeedContext = createContext<GlobalFeedContextType>({
   loadMore: () => {},
   hasMore: false,
   loadMoreHasBeenCalled: false,
-  fetch: () => {},
-  refetch: () => {},
+  refetch: () => Promise.resolve(),
   scrollPosition: 0,
   onScroll: () => {},
   isGlobalFeaturedPostsLoading: false,
