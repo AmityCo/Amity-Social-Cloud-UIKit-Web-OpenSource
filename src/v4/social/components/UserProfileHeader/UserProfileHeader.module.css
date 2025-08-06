@@ -1,14 +1,24 @@
 .userProfileHeader__container {
-  padding: 0 1rem;
-  background-color: var(--asc-color-background-default);
   margin-bottom: 0.75rem;
+  background-color: var(--asc-color-background-default);
+
+  /* border: 2px solid purple; */
 }
 
 .userProfileHeader__header {
   display: flex;
+  justify-content: space-between;
+
+  /* border: 2px solid blue; */
+}
+
+.userProfileHeader__leftWrapper {
+  display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
+
+  /* border: 2px solid black; */
 }
 
 .userProfileHeader__displayName {
@@ -22,6 +32,8 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+
+  /* border: 2px solid green; */
 }
 
 .userProfileHeader__avatar {
@@ -64,6 +76,33 @@
   line-height: var(--typography-scale-body-caption-bold-line-height, 14px);
 }
 
+.userProfileHeader__button {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  border: none;
+  background: transparent !important;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.userProfileHeader__button:hover {
+  background-color: var(--asc-color-base-shade4) !important;
+}
+
+.userProfileHeader__button .userProfileHeader__editProfile__icon {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  fill: var(--asc-color-base-default) !important;
+  color: var(--asc-color-base-default) !important;
+}
+
+.userProfileHeader__editProfile__text {
+  color: var(--asc-color-base-default);
+}
+
 .userProfileHeader__description {
   margin: 0.5rem 0;
   color: var(--asc-color-base-default);
@@ -72,6 +111,8 @@
 .userProfileHeader__relationship {
   display: flex;
   gap: 0.75rem;
+
+  /* border: 2px solid red; */
 }
 
 .userProfileHeader__relationship__separator {

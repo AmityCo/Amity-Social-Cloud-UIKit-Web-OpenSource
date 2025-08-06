@@ -1,5 +1,6 @@
 .userFollower__container {
   display: flex;
+  align-items: center;
 }
 
 .userFollower__count {

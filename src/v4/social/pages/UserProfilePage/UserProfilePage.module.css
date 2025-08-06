@@ -4,6 +4,7 @@
   position: relative;
   height: 100%;
   background-color: var(--asc-color-background-default);
+  gap: 1rem;
 }
 
 .userProfilePage__container {
@@ -60,41 +61,28 @@
   color: var(--asc-color-base-default);
 }
 
-@media (width >=48em) {
-  .userProfilePage {
-    background-color: transparent;
-  }
-
-  .userProfilePage__topBar {
-    background-color: var(--asc-color-background-default);
-    position: static;
-  }
-
-  .userProfilePage__topSection {
-    background-color: var(--asc-color-background-default);
-    border-radius: 0.5rem;
-    border: 1px solid var(--asc-color-base-shade4);
-    margin-bottom: 0.75rem;
-    overflow: hidden;
-  }
-
-  .userProfilePage__displayName {
-    display: none;
-  }
-
-  .userProfilePage__container {
-    margin-top: 0;
-  }
-
-  .userProfilePage__feedTabs {
-    position: static;
-    border-bottom: none;
-  }
-
-  .userProfilePage__floatingButton {
-    display: none;
-  }
+.userProfilePage__cardPositioner {
+  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
+
+.userProfilePage__card {
+  display: flex;
+  width: 100%;
+  padding: var(--component-card-multipuropse-layout-padding-default, 1rem);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--global-layout-gap-lg, 1rem);
+  border-radius: var(--component-card-multipuropse-layout-radius-default, 0.5rem);
+  background: var(--component-card-multipuropse-surface-even, #fff);
+  box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
+    var(--effect-elevation-sm-blur, 16px) var(--effect-elevation-sm-spread, 0)
+    var(--effect-surface-effect, rgb(0 0 0 / 12%));
+}
+
+/* .userProfilePage__cardContentSection {} */
 
 .userMenu__button {
   display: flex;
@@ -121,4 +109,56 @@
 
 .userMenu__editProfile__text {
   color: var(--asc-color-base-default);
+}
+
+@media (width >=48em) {
+  .userProfilePage {
+    background-color: transparent;
+  }
+
+  .userProfilePage__topBar {
+    background-color: var(--asc-color-background-default);
+    position: static;
+  }
+
+  .userProfilePage__topSection {
+    background-color: var(--asc-color-background-default);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    padding: 0 1rem 1rem;
+    border-radius: var(--global-image-radius-base, 0.5rem);
+    border: 1px solid var(--global-border-neutral, #d3d3d3);
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .userProfilePage__displayName {
+    display: none;
+  }
+
+  .userProfilePage__container {
+    margin-top: 0;
+  }
+
+  .userProfilePage__feedTabs {
+    position: static;
+    border-bottom: none;
+  }
+
+  .userProfilePage__floatingButton {
+    display: none;
+  }
+
+  .userProfilePage__cardPositioner {
+    flex-direction: row;
+  }
+
+  /* .userProfilePage__card {} */
+
+  .userProfilePage__cardContentSection {
+    display: flex;
+    place-content: center space-between;
+    width: 100%;
+  }
 }
