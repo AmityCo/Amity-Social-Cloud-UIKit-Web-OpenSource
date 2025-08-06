@@ -48,6 +48,7 @@ import { LayoutProvider } from '~/v4/social/providers/LayoutProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNetworkConfig } from '~/v4/core/hooks/useNetworkConfig';
 import { ClipProvider } from '~/v4/social/providers/ClipProvider';
+import { FeedScrollProvider } from '~/v4/core/providers/FeedScrollProvider';
 
 const InternalComponent = ({
   apiKey,
@@ -168,47 +169,49 @@ const InternalComponent = ({
       <CustomizationProvider initialConfig={initialConfig}>
         <CustomReactionProvider>
           <AdEngineProvider>
-            <SDKContextV3.Provider value={sdkContextValue}>
-              <SDKContext.Provider value={sdkContextValue}>
-                <SDKConnectorProviderV3>
-                  <SDKConnectorProvider>
-                    <ConfigProvider
-                      config={{
-                        socialCommunityCreationButtonVisible:
-                          socialCommunityCreationButtonVisible || true,
-                      }}
-                    >
-                      <PostRendererProvider config={postRendererConfig}>
-                        <LayoutProvider>
-                          <NavigationProvider
-                            activeRoute={activeRoute}
-                            onRouteChange={onRouteChange}
-                          >
-                            <PageBehaviorProvider pageBehavior={pageBehavior}>
-                              <StoryProvider>
-                                <ClipProvider>
-                                  <CommunitySetupProvider>
-                                    <DrawerProvider>
-                                      <GlobalFeedProvider>
-                                        <PopupProvider>
-                                          <Popup />
-                                          {children}
-                                        </PopupProvider>
-                                      </GlobalFeedProvider>
-                                      <DrawerContainer />
-                                    </DrawerProvider>
-                                  </CommunitySetupProvider>
-                                </ClipProvider>
-                              </StoryProvider>
-                            </PageBehaviorProvider>
-                          </NavigationProvider>
-                        </LayoutProvider>
-                      </PostRendererProvider>
-                    </ConfigProvider>
-                  </SDKConnectorProvider>
-                </SDKConnectorProviderV3>
-              </SDKContext.Provider>
-            </SDKContextV3.Provider>
+            <FeedScrollProvider>
+              <SDKContextV3.Provider value={sdkContextValue}>
+                <SDKContext.Provider value={sdkContextValue}>
+                  <SDKConnectorProviderV3>
+                    <SDKConnectorProvider>
+                      <ConfigProvider
+                        config={{
+                          socialCommunityCreationButtonVisible:
+                            socialCommunityCreationButtonVisible || true,
+                        }}
+                      >
+                        <PostRendererProvider config={postRendererConfig}>
+                          <LayoutProvider>
+                            <NavigationProvider
+                              activeRoute={activeRoute}
+                              onRouteChange={onRouteChange}
+                            >
+                              <PageBehaviorProvider pageBehavior={pageBehavior}>
+                                <StoryProvider>
+                                  <ClipProvider>
+                                    <CommunitySetupProvider>
+                                      <DrawerProvider>
+                                        <GlobalFeedProvider>
+                                          <PopupProvider>
+                                            <Popup />
+                                            {children}
+                                          </PopupProvider>
+                                        </GlobalFeedProvider>
+                                        <DrawerContainer />
+                                      </DrawerProvider>
+                                    </CommunitySetupProvider>
+                                  </ClipProvider>
+                                </StoryProvider>
+                              </PageBehaviorProvider>
+                            </NavigationProvider>
+                          </LayoutProvider>
+                        </PostRendererProvider>
+                      </ConfigProvider>
+                    </SDKConnectorProvider>
+                  </SDKConnectorProviderV3>
+                </SDKContext.Provider>
+              </SDKContextV3.Provider>
+            </FeedScrollProvider>
           </AdEngineProvider>
         </CustomReactionProvider>
       </CustomizationProvider>

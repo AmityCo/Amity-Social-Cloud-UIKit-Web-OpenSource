@@ -35,6 +35,7 @@ import { useGetInvitation } from '~/v4/social/hooks';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
+import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
 
 interface CommunityProfileProps {
   communityId: string;
@@ -44,6 +45,7 @@ interface CommunityProfileProps {
 export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communityId, page }) => {
   const pageId = 'community_profile_page';
 
+  const { onScroll, scrollPosition } = useFeedScrollContext();
   const { openPopup } = usePopupContext();
   const { confirm } = useConfirmContext();
   const { currentUserId } = useSDK();
@@ -70,6 +72,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { onBack } = useNavigation();
   const { acceptedInvitation } = useLayoutContext();
   const { isDesktop } = useResponsive();
+  const initialLoad = useRef(true);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -178,6 +181,30 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     }
   }, [clipFile]);
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Check if page has loaded successfully
+    const isPageLoaded = !isLoading && !isInvitationLoading && community && !community.isDeleted;
+
+    if (isPageLoaded && scrollPosition > 0) {
+      // Use scrollTo for more reliable scroll positioning
+      containerRef.current.scrollTo({
+        top: scrollPosition,
+        behavior: 'auto',
+      });
+    }
+
+    setTimeout(() => {
+      initialLoad.current = false;
+    }, 100);
+  }, [containerRef.current, isLoading, isInvitationLoading, community, scrollPosition]);
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (initialLoad.current) return;
+    onScroll(event);
+  };
+
   const isShowFailed = (!isLoading && community?.isDeleted) || error;
 
   return (
@@ -187,6 +214,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       accessibilityId={accessibilityId}
       onTouchEndCallback={handleRefresh}
       className={styles.communityProfilePage__container}
+      onScroll={handleScroll}
     >
       {(isLoading || isInvitationLoading) && <CommunityProfileSkeleton />}
       {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
