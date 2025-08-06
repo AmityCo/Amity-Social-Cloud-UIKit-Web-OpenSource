@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { JoinRequestStatusEnum, JoinResultStatusEnum } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import { useImage } from '~/v4/core/hooks/useImage';
@@ -35,6 +36,8 @@ type CommunityRowItemProps<TShowJoinButton extends boolean | undefined> = {
   onCategoryClick: (categoryId: string) => void;
   joinRequest?: Amity.JoinRequest;
   onPendingButtonClick?: () => void;
+  onJoinSuccess?: (community: Amity.Community, data?: Amity.JoinResult) => void;
+  onLeaveSuccess?: (community: Amity.Community) => void;
 };
 
 const formatOrder = (order: number) => (order < 10 ? `0${order}` : `${order}`);
@@ -53,18 +56,15 @@ export const CommunityRowItem = <T extends boolean | undefined>({
   maxCategoryCharacters,
   minCategoryCharacters,
   joinRequest,
+  onJoinSuccess,
+  onLeaveSuccess,
 }: CommunityRowItemProps<T>) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
   const { confirm } = useConfirmContext();
   const { online } = useNetworkState();
-  const [isCommunityPendingJoin, setIsCommunityPendingJoin] = useState<{
-    communityId: string | undefined;
-    isPending: boolean;
-  }>({
-    communityId: '',
-    isPending: false,
-  });
+  const [isPendingLocal, setIsPendingLocal] = useState(false);
+  const [isCancelJoinRequestSuccess, setIsCancelJoinRequestSuccess] = useState(false);
 
   const { removePendingJoinCommunity, setPendingJoinCommunity } = useExplore();
 
@@ -72,26 +72,27 @@ export const CommunityRowItem = <T extends boolean | undefined>({
     joinRequest,
     community,
     // handle pending join state
-    onJoinSuccess: ({ data, communityId }: { data?: Amity.JoinResult; communityId?: string }) => {
-      if (data?.status === 'pending') {
-        communityId && setPendingJoinCommunity(communityId);
-        setIsCommunityPendingJoin({
-          communityId: communityId,
-          isPending: true,
-        });
+    onJoinSuccess: ({ data }: { data?: Amity.JoinResult }) => {
+      if (data?.status === JoinResultStatusEnum.Pending) {
+        setIsPendingLocal(true);
       }
+      onJoinSuccess?.(community, data);
     },
     // handle cancel join state
     onCancelJoinSuccess: () => {
-      removePendingJoinCommunity(community.communityId);
-      setIsCommunityPendingJoin({
-        communityId: community.communityId,
-        isPending: false,
-      });
+      setIsCancelJoinRequestSuccess(true);
+      setIsPendingLocal(false);
     },
-    onLeaveSuccess: () => true,
+    onLeaveSuccess: () => {
+      onLeaveSuccess?.(community);
+      return true;
+    },
   });
   const notification = useNotifications();
+
+  // Check if there's a pending join request from props or if we have local pending state
+  const isPendingJoinRequest =
+    joinRequest?.status === JoinRequestStatusEnum.Pending && !isCancelJoinRequestSuccess;
 
   const handleLeaveButtonClick = (community: Amity.Community) => {
     if (!online) {
@@ -170,11 +171,7 @@ export const CommunityRowItem = <T extends boolean | undefined>({
                 onClick={() => handleLeaveButtonClick(community)}
               />
             );
-          } else if (
-            joinRequest?.status === 'pending' ||
-            (isCommunityPendingJoin?.communityId === community.communityId &&
-              isCommunityPendingJoin.isPending)
-          ) {
+          } else if (isPendingJoinRequest || isPendingLocal) {
             return (
               <IconButton
                 size="small"

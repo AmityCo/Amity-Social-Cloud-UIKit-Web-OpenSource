@@ -15,13 +15,14 @@ import {
   $isSerializedHashtagNode,
 } from '~/v4/social/internal-components/Lexical/utils';
 import { Typography } from '~/v4/core/components';
-import { Button } from '~/v4/core/components/AriaButton';
 import { isEmoji } from '~/v4/social/utils/isEmoji';
+import { Button } from '~/v4/core/components/AriaButton';
 import styles from './TextWithMention.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
+import { hashtagRegex } from '~/v4/social/utils/hashtagRegex';
 
-type TextWithMentionProps = {
+interface TextWithMentionProps {
   pageId?: string;
   isBold?: boolean;
   maxLines?: number;
@@ -38,7 +39,7 @@ type TextWithMentionProps = {
   hashtagClassName?: string;
   keyword?: string;
   isSearchPost?: boolean;
-};
+}
 
 export const TextWithMention = ({
   data,
@@ -116,6 +117,13 @@ export const TextWithMention = ({
     // Check if hashtag matches keyword (with or without # symbol)
     const hashtagWithoutHash = hashtagText.replace(/^#/, '');
     const keywordWithoutHash = keyword.replace(/^#/, '');
+
+    // For exact word matching when keyword starts with #
+    if (keyword.startsWith('#')) {
+      return hashtagWithoutHash.toLowerCase() === keywordWithoutHash.toLowerCase();
+    }
+
+    // For partial matching when keyword doesn't start with #
     return hashtagWithoutHash.toLowerCase().includes(keywordWithoutHash.toLowerCase());
   };
 
@@ -127,19 +135,31 @@ export const TextWithMention = ({
       const hashtagWithoutHash = hashtagText.replace(/^#/, '');
       const keywordWithoutHash = keyword.replace(/^#/, '');
       const hasHashSymbol = hashtagText.startsWith('#');
-      // Find the matching part (case insensitive)
+      const keywordStartsWithHash = keyword.startsWith('#');
+
+      // For exact matching when keyword starts with #, highlight the entire hashtag
+      if (
+        keywordStartsWithHash &&
+        hashtagWithoutHash.toLowerCase() === keywordWithoutHash.toLowerCase()
+      ) {
+        return <span className={styles.textWithMention__highlight}>{hashtagText}</span>;
+      }
+
+      // For partial matching, find the matching part (case insensitive)
       const lowerHashtag = hashtagWithoutHash.toLowerCase();
       const lowerKeyword = keywordWithoutHash.toLowerCase();
       const matchIndex = lowerHashtag.indexOf(lowerKeyword);
       if (matchIndex === -1) {
         return hashtagText;
       }
+
       const beforeMatch = hashtagWithoutHash.slice(0, matchIndex);
       const matchedPart = hashtagWithoutHash.slice(
         matchIndex,
         matchIndex + keywordWithoutHash.length,
       );
       const afterMatch = hashtagWithoutHash.slice(matchIndex + keywordWithoutHash.length);
+
       return (
         <>
           {hasHashSymbol && '#'}
@@ -152,10 +172,115 @@ export const TextWithMention = ({
     [isSearchPost, keyword],
   );
 
-  const handleMobileHashtagClick = (hashtag: string) => {
-    setSearchValue(hashtag);
-    goToSocialGlobalSearchPage(undefined, hashtag);
-  };
+  const isValidHashtag = useCallback(
+    (hashtagText: string) => {
+      // Remove the # symbol to get the hashtag content
+      const hashtagContent = hashtagText.replace(/^#/, '');
+
+      // Check if hashtag exists in props hashtags array
+      if (hashtags.includes(hashtagContent)) {
+        return true;
+      }
+
+      // Check if hashtag exists in metadata.hashtagged array
+      if (metadata?.hashtagged?.some((tag) => tag.text === hashtagContent)) {
+        return true;
+      }
+
+      return false;
+    },
+    [hashtags, metadata],
+  );
+
+  const parseTextWithHashtags = useCallback(
+    (text: string) => {
+      // Regex to match hashtags: # followed by alphanumeric characters and underscores, max 101 characters
+      const parts = [];
+      let lastIndex = 0;
+      let match;
+
+      while ((match = hashtagRegex.exec(text)) !== null) {
+        // Add text before hashtag
+        if (match.index > lastIndex) {
+          const beforeText = text.slice(lastIndex, match.index);
+          if (isSearchPost) {
+            parts.push(getHighlightedText(beforeText, [keyword]));
+          } else {
+            parts.push(beforeText);
+          }
+        }
+
+        // Add hashtag with styling only if it's a valid hashtag
+        const hashtagText = match[0];
+        const shouldStyleAsHashtag = isValidHashtag(hashtagText);
+
+        if (shouldStyleAsHashtag) {
+          parts.push(
+            <span
+              key={`hashtag-${match.index}`}
+              data-testid={`${pageId}/${componentId}/hashtag`}
+              className={clsx(styles.textWithMention__hashtag, hashtagClassName)}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                isDesktop
+                  ? (() => {
+                      window.parent.postMessage('parentNeedsScrollToTop', '*');
+                      openSearchResultModal(hashtagText);
+                    })()
+                  : (() => {
+                      setSearchValue(hashtagText);
+                      goToSocialGlobalSearchPage(undefined, hashtagText);
+                    })();
+              }}
+              onMouseUp={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+              onPointerUp={(e) => e.stopPropagation()}
+              onPointerDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+            >
+              {isSearchPost ? getHighlightedHashtag(hashtagText) : hashtagText}
+            </span>,
+          );
+        } else {
+          // Render as plain text if not a valid hashtag
+          const textToRender = isSearchPost
+            ? getHighlightedText(hashtagText, [keyword])
+            : hashtagText;
+          parts.push(textToRender);
+        }
+
+        lastIndex = match.index + match[0].length;
+      }
+
+      // Add remaining text
+      if (lastIndex < text.length) {
+        const remainingText = text.slice(lastIndex);
+        if (isSearchPost) {
+          parts.push(getHighlightedText(remainingText, [keyword]));
+        } else {
+          parts.push(remainingText);
+        }
+      }
+
+      return parts.length > 0 ? parts : [isSearchPost ? getHighlightedText(text, [keyword]) : text];
+    },
+    [
+      pageId,
+      componentId,
+      hashtagClassName,
+      isDesktop,
+      openSearchResultModal,
+      setSearchValue,
+      goToSocialGlobalSearchPage,
+      isSearchPost,
+      getHighlightedHashtag,
+      getHighlightedText,
+      keyword,
+      isValidHashtag,
+    ],
+  );
 
   const convertSerializedToText = (child: SerializedLexicalNode, childIndex: number) => {
     if ($isSerializedMentionNode<MentionData>(child)) {
@@ -182,26 +307,45 @@ export const TextWithMention = ({
     }
 
     if ($isSerializedHashtagNode(child)) {
-      return (
-        <span
-          key={uuidv4()}
-          data-testid={`${pageId}/${componentId}/hashtag`}
-          className={clsx(styles.textWithMention__hashtag, hashtagClassName)}
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            isDesktop ? openSearchResultModal(child.text) : handleMobileHashtagClick(child.text);
-          }}
-          onMouseUp={(e) => e.stopPropagation()}
-          onTouchEnd={(e) => e.stopPropagation()}
-          onMouseDown={(e) => e.stopPropagation()}
-          onPointerUp={(e) => e.stopPropagation()}
-          onPointerDown={(e) => e.stopPropagation()}
-          onTouchStart={(e) => e.stopPropagation()}
-        >
-          {isSearchPost ? getHighlightedHashtag(child.text) : child.text}
-        </span>
-      );
+      const shouldStyleAsHashtag = isValidHashtag(child.text);
+
+      if (shouldStyleAsHashtag) {
+        return (
+          <span
+            key={uuidv4()}
+            data-testid={`${pageId}/${componentId}/hashtag`}
+            className={clsx(styles.textWithMention__hashtag, hashtagClassName)}
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              isDesktop
+                ? (() => {
+                    window.parent.postMessage('parentNeedsScrollToTop', '*');
+                    openSearchResultModal(child.text);
+                  })()
+                : (() => {
+                    setSearchValue(child.text);
+                    goToSocialGlobalSearchPage(undefined, child.text);
+                  })();
+            }}
+            onMouseUp={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onPointerUp={(e) => e.stopPropagation()}
+            onPointerDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+          >
+            {isSearchPost ? getHighlightedHashtag(child.text) : child.text}
+          </span>
+        );
+      } else {
+        // Render as plain text if not a valid hashtag
+        return (
+          <React.Fragment key={childIndex}>
+            {isSearchPost ? getHighlightedText(child.text, [keyword]) : child.text}
+          </React.Fragment>
+        );
+      }
     }
 
     if ($isSerializedAutoLinkNode(child) || $isSerializedLinkNode(child)) {
@@ -226,11 +370,7 @@ export const TextWithMention = ({
     }
 
     if ($isSerializedTextNode(child)) {
-      return (
-        <React.Fragment key={childIndex}>
-          {isSearchPost ? getHighlightedText(child.text, [keyword]) : child.text}
-        </React.Fragment>
-      );
+      return <React.Fragment key={childIndex}>{parseTextWithHashtags(child.text)}</React.Fragment>;
     }
 
     return null;

@@ -32,7 +32,7 @@ export const PollContent: FC<PollContentProps> = ({
   disabled = false,
   onPostDeleted,
 }) => {
-  const { error } = useNotifications();
+  const { info } = useNotifications();
   const { currentUserId } = useSDK();
 
   const [answers, setAnswers] = useState<string[] | undefined>();
@@ -82,12 +82,12 @@ export const PollContent: FC<PollContentProps> = ({
       return PollRepository.votePoll(pollId, answerIds);
     },
     onError: (err: any) => {
-      if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) error({ content: 'Poll ended.' });
-      if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
-        error({ content: 'This post is no longer available.' });
+      if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) info({ content: 'Poll ended.' });
+      else if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
+        info({ content: 'This post is no longer available.' });
         onPostDeleted?.(parentPost);
       } else {
-        error({ content: 'Oops, something went wrong.' });
+        info({ content: 'Oops, something went wrong.' });
       }
     },
   });

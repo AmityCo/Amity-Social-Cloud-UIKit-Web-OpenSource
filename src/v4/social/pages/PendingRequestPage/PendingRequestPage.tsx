@@ -31,6 +31,7 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
 
   const {
     joinRequests,
+    refresh: refreshJoinRequests,
     hasMore: hasMoreJoinRequests,
     loadMore: loadMoreJoinRequests,
     loading: isJoinRequestsLoading,
@@ -172,11 +173,14 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
       accessibilityId: `${pageId}/*/join_requests_button_tab`,
       content: () => (
         <>
-          <JoinRequestContent
-            pageId={pageId}
-            joinRequests={joinRequests}
-            isLoading={isJoinRequestsLoading}
-          />
+          {!isJoinRequestsLoading && (
+            <JoinRequestContent
+              pageId={pageId}
+              joinRequests={joinRequests}
+              isLoading={isJoinRequestsLoading}
+              refresh={() => refreshJoinRequests()}
+            />
+          )}
 
           {isJoinRequestsLoading && joinRequests && joinRequests.length > 0 && (
             <div className={styles.pendingRequestsPage__skeletonContainer}>

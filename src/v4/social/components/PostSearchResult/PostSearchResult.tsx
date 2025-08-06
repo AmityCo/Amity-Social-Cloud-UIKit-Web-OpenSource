@@ -12,6 +12,7 @@ import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { hashtagRegex } from '~/v4/social/utils/hashtagRegex';
 import styles from './PostSearchResult.module.css';
 
 type PostSearchResultProps = {
@@ -53,6 +54,22 @@ export const PostSearchResult = ({
         'text' in post.data
       ) {
         const postText = (post.data as { text: string }).text || '';
+
+        // For hashtag searches (starting with #), use exact word matching
+        if (keyword.startsWith('#')) {
+          const searchTerm = keyword.slice(1).toLowerCase(); // Remove # from search term
+          // Use the shared hashtag regex pattern for consistent matching
+          const hashtags = postText.matchAll(hashtagRegex);
+
+          for (const match of hashtags) {
+            if (match[1] && match[1].toLowerCase() === searchTerm) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        // For regular text searches, use partial matching
         return postText.toLowerCase().includes(keyword.toLowerCase());
       }
       return false;

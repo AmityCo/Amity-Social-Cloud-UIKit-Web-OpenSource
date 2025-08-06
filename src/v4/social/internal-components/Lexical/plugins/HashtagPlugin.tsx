@@ -6,6 +6,8 @@ import {
   $getRoot,
   TextNode,
   $isElementNode,
+  COMMAND_PRIORITY_LOW,
+  KEY_ENTER_COMMAND,
 } from 'lexical';
 import { useEffect, useRef } from 'react';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
@@ -15,10 +17,12 @@ import {
   $isHashtagNode,
 } from '~/v4/social/internal-components/Lexical/nodes/HashtagNode';
 import { $isLinkNode } from '@lexical/link';
-import { hashtagRegex, hashtagTextRegex } from '~/v4/social/utils/hashtagRegex';
-
-const MAX_HASHTAGS = 30; // Maximum number of hashtags allowed in the editor
-const MAX_HASHTAG_LENGTH = 101; // Maximum characters in a hashtag (including #)
+import {
+  hashtagRegex,
+  hashtagTextRegex,
+  MAX_HASHTAG_LENGTH,
+  MAX_HASHTAGS,
+} from '~/v4/social/utils/hashtagRegex';
 
 // Helper function to check if a text node is inside a link node
 function $isTextNodeInsideLink(textNode: TextNode): boolean {
@@ -29,47 +33,6 @@ function $isTextNodeInsideLink(textNode: TextNode): boolean {
     }
     parent = parent.getParent();
   }
-  return false;
-}
-
-function shouldSkipHashtagProcessing(textContent: string, hashtagMatch: RegExpExecArray): boolean {
-  const hashtagIndex = hashtagMatch.index;
-
-  // Check if there's a space immediately before the hashtag
-  const charBeforeHashtag = hashtagIndex > 0 ? textContent[hashtagIndex - 1] : '';
-  if (charBeforeHashtag === ' ') {
-    // If there's a space before the hashtag, it should be treated as a separate hashtag
-    return false;
-  }
-
-  // Comprehensive URL patterns to catch various URL formats with hashtags
-  const urlPatterns = [
-    // Standard URLs with protocols (no spaces allowed)
-    /https?:\/\/[^\s]+/g,
-    // URLs starting with www (no spaces allowed)
-    /www\.[^\s]+/g,
-    // URLs with fragments and query parameters (no spaces allowed)
-    /((https?:\/\/)|(www\.))[a-zA-Z0-9@:%._+~#=?&/-]+/g,
-    // Simple domain patterns that might contain hashtags (no spaces allowed)
-    /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}[^\s]*/g,
-  ];
-
-  // Check against all URL patterns
-  for (const urlPattern of urlPatterns) {
-    urlPattern.lastIndex = 0;
-    let urlMatch;
-
-    while ((urlMatch = urlPattern.exec(textContent)) !== null) {
-      const urlStart = urlMatch.index;
-      const urlEnd = urlStart + urlMatch[0].length;
-
-      // If the hashtag is within any URL boundaries, skip processing
-      if (hashtagIndex >= urlStart && hashtagIndex < urlEnd) {
-        return true;
-      }
-    }
-  }
-
   return false;
 }
 
@@ -93,13 +56,173 @@ function countHashtags(): number {
   return count;
 }
 
+// Function to trigger immediate hashtag transformation
+function $transformHashtagsInSelection(
+  checkAndUpdateWarningState: (count: number) => boolean,
+  showHashtagLimitWarning: () => void,
+): void {
+  const selection = $getSelection();
+  if (!$isRangeSelection(selection)) return;
+
+  const anchor = selection.anchor;
+  const anchorNode = anchor.getNode();
+
+  if (anchorNode.getType() === 'text' && !$isTextNodeInsideLink(anchorNode as TextNode)) {
+    const textNode = anchorNode as TextNode;
+    const textContent = textNode.getTextContent();
+    const anchorOffset = anchor.offset;
+
+    // Look for potential hashtag at cursor position in the full text content
+    // Use regex to find hashtags that match our pattern
+    hashtagRegex.lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = hashtagRegex.exec(textContent)) !== null) {
+      const fullMatch = match[0]; // includes any leading whitespace
+      const hashtagText = match[1]; // just the hashtag content without #
+      const matchStart = match.index;
+
+      // Check if the match starts with whitespace only when hashtag isn't at start (index ≠ 0)
+      const startsWithWhitespace = matchStart !== 0 && /^\s/.test(fullMatch);
+      const hashtagStart = startsWithWhitespace ? matchStart + 1 : matchStart; // adjust for leading whitespace
+      const hashtagEnd = hashtagStart + hashtagText.length + 1; // +1 for the #
+      const fullHashtagText = '#' + hashtagText;
+
+      // Check if this hashtag is part of a consecutive hashtag sequence
+      // If the previous character before this hashtag (excluding whitespace) is #, skip this hashtag
+      const textBeforeHashtag = textContent.slice(0, hashtagStart);
+      let lastNonWhitespaceChar = '';
+      for (let i = textBeforeHashtag.length - 1; i >= 0; i--) {
+        if (textBeforeHashtag[i] !== ' ' && textBeforeHashtag[i] !== '\t') {
+          lastNonWhitespaceChar = textBeforeHashtag[i];
+          break;
+        }
+      }
+
+      // If the last non-whitespace character before this hashtag is #, skip transformation
+      if (lastNonWhitespaceChar === '#') {
+        continue;
+      }
+
+      // Only transform if the cursor is at or near the end of this hashtag
+      if (hashtagEnd >= anchorOffset - 1 && hashtagEnd <= anchorOffset) {
+        if (hashtagTextRegex.test(hashtagText)) {
+          const currentHashtagCount = countHashtags();
+
+          // Check if we can add another hashtag or if we should show warning
+          if (currentHashtagCount < MAX_HASHTAGS) {
+            const limitedHashtagText =
+              fullHashtagText.length > MAX_HASHTAG_LENGTH + 1 // +1 to account for '#'
+                ? fullHashtagText.slice(0, MAX_HASHTAG_LENGTH + 1) // +1 to account for '#'
+                : fullHashtagText;
+            const limitedHashtagPureText = limitedHashtagText.slice(1);
+
+            // Split the text node
+            const beforeText = textContent.slice(0, hashtagStart);
+            const afterText = textContent.slice(hashtagEnd);
+
+            const nodes = [];
+
+            if (beforeText) {
+              nodes.push($createTextNode(beforeText));
+            }
+
+            nodes.push(
+              $createHashtagNode({
+                text: limitedHashtagText,
+                hashtag: limitedHashtagPureText,
+              }),
+            );
+
+            if (fullHashtagText.length > MAX_HASHTAG_LENGTH + 1) {
+              // +1 to account for '#'
+              const remainingText = fullHashtagText.slice(MAX_HASHTAG_LENGTH + 1) + afterText;
+              if (remainingText) {
+                nodes.push($createTextNode(remainingText));
+              }
+            } else if (afterText) {
+              nodes.push($createTextNode(afterText));
+            }
+
+            // Replace the text node with new nodes
+            if (nodes.length > 0) {
+              textNode.insertBefore(nodes[0]);
+              for (let i = 1; i < nodes.length; i++) {
+                nodes[i - 1].insertAfter(nodes[i]);
+              }
+
+              // Update selection to be after the hashtag
+              const hashtagNode = nodes.find((node) => $isHashtagNode(node));
+              if (hashtagNode) {
+                hashtagNode.select();
+              }
+
+              textNode.remove();
+            }
+            break; // Only transform the first matching hashtag
+          } else {
+            // Check if we should show the warning
+            if (checkAndUpdateWarningState(currentHashtagCount)) {
+              showHashtagLimitWarning();
+            }
+          }
+        }
+      }
+    }
+
+    hashtagRegex.lastIndex = 0;
+  }
+}
+
 export function HashtagPlugin(): null {
   const [editor] = useLexicalComposerContext();
   const isTransformingRef = useRef(false);
   const hasShownLimitWarningRef = useRef(false);
+  const lastHashtagCountRef = useRef(0);
   const { info } = useConfirmContext();
 
+  // Helper function to check if we should show the warning and update the warning state
+  const checkAndUpdateWarningState = (currentCount: number): boolean => {
+    // If we go below the limit, reset the warning flag
+    if (currentCount < MAX_HASHTAGS) {
+      hasShownLimitWarningRef.current = false;
+    }
+
+    // Update the last known count
+    lastHashtagCountRef.current = currentCount;
+
+    // Return whether we should show the warning
+    return currentCount >= MAX_HASHTAGS && !hasShownLimitWarningRef.current;
+  };
+
+  const showHashtagLimitWarning = (): void => {
+    hasShownLimitWarningRef.current = true;
+    info({
+      title: 'Hashtag limit reached',
+      content: `You can only add hashtag up to ${MAX_HASHTAGS} hashtags per post.`,
+    });
+  };
+
   useEffect(() => {
+    // Register enter command to trigger hashtag transformation
+    const removeEnterCommand = editor.registerCommand(
+      KEY_ENTER_COMMAND,
+      () => {
+        editor.update(() => {
+          if (!isTransformingRef.current) {
+            isTransformingRef.current = true;
+            try {
+              $transformHashtagsInSelection(checkAndUpdateWarningState, showHashtagLimitWarning);
+            } finally {
+              isTransformingRef.current = false;
+            }
+          }
+        });
+        return false; // Don't prevent default enter behavior
+      },
+      COMMAND_PRIORITY_LOW,
+    );
+
     const removeHashtagNodeTransform = editor.registerNodeTransform(HashtagNode, (node) => {
       if (isTransformingRef.current || !node.getParent() || !node.isAttached()) return;
 
@@ -126,20 +249,12 @@ export function HashtagPlugin(): null {
         if (hashtagContinuation) {
           const currentHashtagCount = countHashtags();
 
-          // Reset warning flag when hashtag count is below limit
-          if (currentHashtagCount < MAX_HASHTAGS) {
-            hasShownLimitWarningRef.current = false;
-          }
-
-          // Only show warning if we're actually exceeding the limit after this merge
-          if (currentHashtagCount > MAX_HASHTAGS) {
-            if (!hasShownLimitWarningRef.current) {
-              hasShownLimitWarningRef.current = true;
-              info({
-                title: 'Hashtag limit reached',
-                content: `You can only add hashtag up to ${MAX_HASHTAGS} hashtags per post.`,
-              });
-            }
+          // Check if we should show the warning and update the state
+          if (
+            checkAndUpdateWarningState(currentHashtagCount) &&
+            currentHashtagCount > MAX_HASHTAGS
+          ) {
+            showHashtagLimitWarning();
             editor.update(() => {
               if (node.getParent() && node.isAttached()) {
                 isTransformingRef.current = true;
@@ -154,9 +269,10 @@ export function HashtagPlugin(): null {
           }
 
           const mergedText = textContent + hashtagContinuation[0];
-          if (mergedText.length > MAX_HASHTAG_LENGTH) {
-            const hashtagPart = mergedText.slice(0, MAX_HASHTAG_LENGTH);
-            const remainingPart = mergedText.slice(MAX_HASHTAG_LENGTH);
+          if (mergedText.length > MAX_HASHTAG_LENGTH + 1) {
+            // +1 to account for '#'
+            const hashtagPart = mergedText.slice(0, MAX_HASHTAG_LENGTH + 1); // +1 to account for '#'
+            const remainingPart = mergedText.slice(MAX_HASHTAG_LENGTH + 1); // +1 to account for '#'
             const remainingText = nextTextContent.slice(hashtagContinuation[0].length);
 
             if (hashtagPart !== textContent) {
@@ -222,6 +338,7 @@ export function HashtagPlugin(): null {
       }
     });
 
+    // Re-enable text transformation with proper hashtag detection
     const textTransform = editor.registerNodeTransform(TextNode, (textNode) => {
       if (
         isTransformingRef.current ||
@@ -246,22 +363,36 @@ export function HashtagPlugin(): null {
           let lastIndex = 0;
           const currentHashtagCount = countHashtags();
 
-          if (currentHashtagCount < MAX_HASHTAGS) {
-            hasShownLimitWarningRef.current = false;
-          }
+          // Check and update warning state based on current count
+          checkAndUpdateWarningState(currentHashtagCount);
 
           hashtagRegex.lastIndex = 0;
           let match: RegExpExecArray | null;
           let hasShownWarningThisTransform = false;
 
           while ((match = hashtagRegex.exec(textContent)) !== null) {
-            const [fullHashtagText] = match;
+            const fullMatch = match[0]; // includes any leading whitespace
+            const hashtagText = match[1]; // just the hashtag content without #
             const matchStart = match.index;
-            const matchEnd = matchStart + fullHashtagText.length;
+            const matchEnd = matchStart + fullMatch.length;
 
-            if (shouldSkipHashtagProcessing(textContent, match)) {
-              if (matchStart > lastIndex) {
-                const beforeText = textContent.slice(lastIndex, matchStart);
+            // Check if the match starts with whitespace only when hashtag isn't at start (index ≠ 0)
+            const startsWithWhitespace = matchStart !== 0 && /^\s/.test(fullMatch);
+            const hashtagStart = startsWithWhitespace ? matchStart + 1 : matchStart; // adjust for leading whitespace
+            const fullHashtagText = '#' + hashtagText;
+
+            if (!hashtagTextRegex.test(hashtagText)) continue;
+
+            // Check if this hashtag is part of a consecutive hashtag sequence
+            // If the previous character before this hashtag (excluding whitespace) is #, skip this hashtag
+            const textBeforeHashtag = textContent.slice(0, hashtagStart);
+            const lastNonWhitespaceChar = textBeforeHashtag.replace(/\s+$/, '').slice(-1);
+
+            // If the last non-whitespace character before this hashtag is #, treat this as plain text
+            if (lastNonWhitespaceChar === '#') {
+              // Add the full hashtag text as plain text and continue
+              if (hashtagStart > lastIndex) {
+                const beforeText = textContent.slice(lastIndex, hashtagStart);
                 if (beforeText) {
                   nodes.push($createTextNode(beforeText));
                 }
@@ -271,48 +402,47 @@ export function HashtagPlugin(): null {
               continue;
             }
 
-            const limitedHashtagText =
-              fullHashtagText.length > MAX_HASHTAG_LENGTH
-                ? fullHashtagText.slice(0, MAX_HASHTAG_LENGTH)
-                : fullHashtagText;
-            const hashtagText = limitedHashtagText.slice(1);
-
-            if (!hashtagTextRegex.test(hashtagText)) continue;
-
-            if (matchStart > lastIndex) {
-              const beforeText = textContent.slice(lastIndex, matchStart);
+            // Add text before this hashtag
+            if (hashtagStart > lastIndex) {
+              const beforeText = textContent.slice(lastIndex, hashtagStart);
               if (beforeText) {
                 nodes.push($createTextNode(beforeText));
               }
             }
 
-            // Count only hashtags that will actually be processed (not in URLs)
+            // Count only hashtags that will actually be processed
             const actualHashtagCount =
               currentHashtagCount + nodes.filter((node) => $isHashtagNode(node)).length;
 
+            const shouldShowHashtagLimitWarning =
+              actualHashtagCount === MAX_HASHTAGS &&
+              !hasShownWarningThisTransform &&
+              checkAndUpdateWarningState(actualHashtagCount);
+
             if (actualHashtagCount >= MAX_HASHTAGS) {
-              // Only show warning once per session when limit is exceeded
-              if (!hasShownLimitWarningRef.current && !hasShownWarningThisTransform) {
-                hasShownLimitWarningRef.current = true;
+              // Check if we should show the warning for this attempt to exceed the limit
+              if (shouldShowHashtagLimitWarning) {
                 hasShownWarningThisTransform = true;
-                info({
-                  title: 'Hashtag limit reached',
-                  content: `You can only add hashtag up to ${MAX_HASHTAGS} hashtags per post.`,
-                });
+                showHashtagLimitWarning();
               }
-              nodes.push($createTextNode(limitedHashtagText));
-              if (fullHashtagText.length > MAX_HASHTAG_LENGTH) {
-                nodes.push($createTextNode(fullHashtagText.slice(MAX_HASHTAG_LENGTH)));
-              }
+              nodes.push($createTextNode(fullHashtagText));
             } else {
+              const limitedHashtagText =
+                fullHashtagText.length > MAX_HASHTAG_LENGTH + 1 // +1 to account for '#'
+                  ? fullHashtagText.slice(0, MAX_HASHTAG_LENGTH + 1) // +1 to account for '#'
+                  : fullHashtagText;
+              const limitedHashtagPureText = limitedHashtagText.slice(1);
+
               nodes.push(
                 $createHashtagNode({
                   text: limitedHashtagText,
-                  hashtag: hashtagText,
+                  hashtag: limitedHashtagPureText,
                 }),
               );
-              if (fullHashtagText.length > MAX_HASHTAG_LENGTH) {
-                nodes.push($createTextNode(fullHashtagText.slice(MAX_HASHTAG_LENGTH)));
+
+              if (fullHashtagText.length > MAX_HASHTAG_LENGTH + 1) {
+                // +1 to account for '#'
+                nodes.push($createTextNode(fullHashtagText.slice(MAX_HASHTAG_LENGTH + 1)));
               }
             }
             lastIndex = matchEnd;
@@ -386,6 +516,7 @@ export function HashtagPlugin(): null {
     });
 
     return () => {
+      removeEnterCommand();
       removeHashtagNodeTransform();
       textTransform();
     };
