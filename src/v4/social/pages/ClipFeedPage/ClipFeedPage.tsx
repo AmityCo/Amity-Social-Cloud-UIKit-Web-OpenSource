@@ -55,7 +55,6 @@ export const ClipFeedPage = ({
   const { setActiveTab } = useLayoutContext();
   const drawerData = useDrawerData();
 
-  // const [activeIndex, setActiveIndex] = useState(0);
   const [initialSlideSet, setInitialSlideSet] = useState(false);
   const videoRefs = useRef<Record<string, HTMLVideoElement>>({});
   const swiperRef = useRef<SwiperCore | null>(null);
