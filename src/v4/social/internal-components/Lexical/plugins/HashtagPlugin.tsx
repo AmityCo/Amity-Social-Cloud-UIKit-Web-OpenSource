@@ -91,16 +91,17 @@ function $transformHashtagsInSelection(
       // Check if this hashtag is part of a consecutive hashtag sequence
       // If the previous character before this hashtag (excluding whitespace) is #, skip this hashtag
       const textBeforeHashtag = textContent.slice(0, hashtagStart);
-      let lastNonWhitespaceChar = '';
-      for (let i = textBeforeHashtag.length - 1; i >= 0; i--) {
-        if (textBeforeHashtag[i] !== ' ' && textBeforeHashtag[i] !== '\t') {
-          lastNonWhitespaceChar = textBeforeHashtag[i];
-          break;
-        }
-      }
 
-      // If the last non-whitespace character before this hashtag is #, skip transformation
-      if (lastNonWhitespaceChar === '#') {
+      // Look for any # character immediately before this hashtag (without any whitespace in between)
+      const immediateCharBeforeHashtag = hashtagStart > 0 ? textContent[hashtagStart - 1] : '';
+      const isConsecutiveHashtag =
+        immediateCharBeforeHashtag !== ' ' &&
+        immediateCharBeforeHashtag !== '\t' &&
+        immediateCharBeforeHashtag !== '\n' &&
+        textBeforeHashtag.includes('#');
+
+      // If this hashtag immediately follows another hashtag without whitespace, skip transformation
+      if (isConsecutiveHashtag) {
         continue;
       }
 
@@ -354,6 +355,10 @@ export function HashtagPlugin(): null {
       const textContent = textNode.getTextContent();
       if (!textContent.includes('#')) return;
 
+      // Check if this text node immediately follows a hashtag node
+      const previousSibling = textNode.getPreviousSibling();
+      const isAfterHashtagNode = previousSibling && $isHashtagNode(previousSibling);
+
       editor.update(() => {
         if (!textNode.getParent() || !textNode.isAttached() || isTransformingRef.current) return;
         isTransformingRef.current = true;
@@ -384,12 +389,30 @@ export function HashtagPlugin(): null {
             if (!hashtagTextRegex.test(hashtagText)) continue;
 
             // Check if this hashtag is part of a consecutive hashtag sequence
-            // If the previous character before this hashtag (excluding whitespace) is #, skip this hashtag
+            // This can happen in two ways:
+            // 1. Within the same text node: #ux#ui (before transformation)
+            // 2. After a hashtag node: [HashtagNode:#ux][TextNode:#ui] (after #ux transformation)
             const textBeforeHashtag = textContent.slice(0, hashtagStart);
-            const lastNonWhitespaceChar = textBeforeHashtag.replace(/\s+$/, '').slice(-1);
 
-            // If the last non-whitespace character before this hashtag is #, treat this as plain text
-            if (lastNonWhitespaceChar === '#') {
+            // Check within current text node
+            const immediateCharBeforeHashtag =
+              hashtagStart > 0 ? textContent[hashtagStart - 1] : '';
+            const isConsecutiveInSameNode =
+              immediateCharBeforeHashtag !== ' ' &&
+              immediateCharBeforeHashtag !== '\t' &&
+              immediateCharBeforeHashtag !== '\n' &&
+              textBeforeHashtag.includes('#');
+
+            // Check if this text node starts with # and follows a hashtag node
+            const isConsecutiveAfterHashtagNode =
+              hashtagStart === 0 && // hashtag is at the start of this text node
+              textContent.startsWith('#') && // text starts with #
+              isAfterHashtagNode; // previous sibling is a hashtag node
+
+            const isConsecutiveHashtag = isConsecutiveInSameNode || isConsecutiveAfterHashtagNode;
+
+            // If this hashtag immediately follows another hashtag without whitespace, treat as plain text
+            if (isConsecutiveHashtag) {
               // Add the full hashtag text as plain text and continue
               if (hashtagStart > lastIndex) {
                 const beforeText = textContent.slice(lastIndex, hashtagStart);

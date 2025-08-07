@@ -373,7 +373,7 @@ export function editorStateToText(editorState: SerializedEditorState) {
           hashtags.push({
             text: child.hashtag,
             index: runningIndex,
-            length: child.text.length,
+            length: child.text.length - 1,
           });
           paragraphText.push(child.text);
           runningIndex += child.text.length;
