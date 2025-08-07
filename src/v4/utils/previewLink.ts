@@ -23,6 +23,30 @@ export const getLinkPreviewMetadata = async (url: string): Promise<PreviewMetada
   };
 };
 
+const parseMetadata = (text: string, url: string, domain: string): PreviewMetadataCacheType => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(text, 'text/html');
+
+  const title =
+    doc.querySelector('meta[property="og:title"]')?.getAttribute('content') ||
+    doc.querySelector('title')?.textContent ||
+    '';
+
+  const imageUrl =
+    doc.querySelector('meta[property="og:image"]')?.getAttribute('content') ||
+    doc.querySelector('meta[property="twitter:image"]')?.getAttribute('content') ||
+    doc.querySelector('meta[name="thumbnail"]')?.getAttribute('content') ||
+    '';
+
+  return {
+    url,
+    domain,
+    title,
+    imageUrl,
+    timestamp: new Date(),
+  };
+};
+
 export const isCacheValid = (cache: PreviewMetadataCacheType): boolean => {
   const oneDayAgo = new Date();
   oneDayAgo.setDate(oneDayAgo.getDate() - 1);

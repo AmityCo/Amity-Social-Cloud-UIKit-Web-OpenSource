@@ -94,7 +94,7 @@ const useGlobalFeed = () => {
   const fetch = useCallback(() => {
     const unsubscriber = FeedRepository.getGlobalFeed(
       {
-        limit: 10,
+        limit,
       },
       ({ data, loading, error, hasNextPage, onNextPage }) => {
         setIsLoading(loading);

@@ -173,6 +173,30 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     }
   }, [clipFile]);
 
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Check if page has loaded successfully
+    const isPageLoaded = !isLoading && !isInvitationLoading && community && !community.isDeleted;
+
+    if (isPageLoaded && scrollPosition > 0) {
+      // Use scrollTo for more reliable scroll positioning
+      containerRef.current.scrollTo({
+        top: scrollPosition,
+        behavior: 'auto',
+      });
+    }
+
+    setTimeout(() => {
+      initialLoad.current = false;
+    }, 100);
+  }, [containerRef.current, isLoading, isInvitationLoading, community, scrollPosition]);
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (initialLoad.current) return;
+    onScroll(event);
+  };
+
   const isShowFailed = (!isLoading && community?.isDeleted) || error;
 
   return (
