@@ -295,7 +295,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         if (pageBehavior?.AmityStoryViewPageBehavior?.onCloseAction) {
           return pageBehavior.AmityStoryViewPageBehavior.onCloseAction();
         }
-        onChangePage(PageTypes.SocialHomePage);
+        onBack();
       },
       hyperLinkAction: (context: Record<string, unknown>) => {
         if (pageBehavior?.AmityStoryViewPageBehavior?.hyperLinkAction) {

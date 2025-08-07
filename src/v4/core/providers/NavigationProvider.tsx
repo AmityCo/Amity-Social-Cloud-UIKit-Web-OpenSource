@@ -278,6 +278,8 @@ type ContextValue = {
   prevPage?: Page;
   prev2Page?: Page;
   prev3Page?: Page;
+  currentClip: number;
+  setCurrentClip: (index: number) => void;
   setDefaultPage: (page: Page) => void;
   onChangePage: (type: string) => void;
   onClickCategory: (categoryId: string) => void;
@@ -395,6 +397,8 @@ type ContextValue = {
 
 let defaultValue: ContextValue = {
   page: { type: PageTypes.SocialHomePage, context: { communityId: undefined } },
+  currentClip: 0,
+  setCurrentClip: (index: number) => {},
   setDefaultPage: (page: Page) => {},
   onChangePage: (type: string) => {},
   onClickCategory: (categoryId: string) => {},
@@ -473,6 +477,8 @@ let defaultValue: ContextValue = {
 if (process.env.NODE_ENV !== 'production') {
   defaultValue = {
     page: { type: PageTypes.SocialHomePage, context: { communityId: undefined } },
+    currentClip: 0,
+    setCurrentClip: (index: number) => console.log(`Current Clip ${index}`),
     setDefaultPage: (page: Page) => console.log(`Default page ${page}`),
     onChangePage: (type) => console.log(`NavigationContext onChangePage(${type})`),
     onClickCategory: (categoryId) =>
@@ -670,6 +676,7 @@ export default function NavigationProvider({
   const currentPage = useMemo(() => pages[pages.length - 1], [pages]);
   const prevPage = useMemo((page = 2) => pages[pages.length - page], [pages]);
   const prev2Page = useMemo((page = 3) => pages[pages.length - page], [pages]);
+  const [currentClip, setCurrentClip] = useState(0);
 
   const [navigationBlocker, setNavigationBlocker] = useState<
     | {
@@ -1405,6 +1412,8 @@ export default function NavigationProvider({
         page: currentPage,
         prevPage,
         prev2Page,
+        currentClip,
+        setCurrentClip,
         setDefaultPage,
         onChangePage: handleChangePage,
         onClickCategory: handleClickCategory,

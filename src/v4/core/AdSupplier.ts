@@ -29,7 +29,7 @@ export class AdSupplier {
     // calculate score for all ads
     const scores = new Map<string, number>();
     ads.forEach((ad) => {
-      const relevancy = (ad.targets?.communityIds || []).includes(communityId || '') ? 1 : 0;
+      const relevancy = (ad.target?.communityIds || []).includes(communityId || '') ? 1 : 0;
       const impressionAge = impressionAges.get(ad.adId);
       if (impressionAge == null) return;
       const score = relevancy + Math.pow(Math.E, 2 * impressionAge);
@@ -51,7 +51,8 @@ export class AdSupplier {
     const minLastSeen = AdEngine.instance.getLastSeen(
       recencySortedAds?.[recencySortedAds.length - 1]?.adId,
     );
-    const maxLastSeen = AdEngine.instance.getLastSeen(recencySortedAds[0].adId);
+
+    const maxLastSeen = AdEngine.instance.getLastSeen(recencySortedAds[0]?.adId);
 
     if (maxLastSeen === minLastSeen) {
       recencySortedAds.forEach((ad) => {

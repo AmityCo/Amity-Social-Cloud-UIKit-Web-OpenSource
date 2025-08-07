@@ -26,6 +26,7 @@ import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
 import { Button } from '~/v4/core/natives/Button';
 import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
 import { ChevronTop } from '~/v4/icons/ChevronTop';
@@ -70,8 +71,10 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const pageId = 'user_profile_page';
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDesktop } = useResponsive();
+  const initialLoad = useRef(true);
   const { followStatus } = useFollowCount(userId);
 
+  const { onScroll, scrollPosition } = useFeedScrollContext();
   const { themeStyles } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
   const { onBack } = useNavigation();
@@ -83,6 +86,39 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { socialSettings } = useSocialSettings();
 
   const isCurrentUser = user?.userId === currentUserId;
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    if (scrollPosition > 0) {
+      // Use scrollTo for more reliable scroll positioning
+      containerRef.current.scrollTo({
+        top: scrollPosition,
+        behavior: 'auto',
+      });
+    }
+
+    const timer = setTimeout(() => {
+      initialLoad.current = false;
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [containerRef.current]);
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
+    if (!initialLoad.current) {
+      onScroll(event);
+    }
+
+    // Handle isScroll state for sticky header
+    if (containerRef.current) {
+      const scrollPosition = containerRef.current.scrollTop;
+      if (scrollPosition > 0) {
+        setIsScroll(true);
+      } else {
+        setIsScroll(false);
+      }
+    }
+  };
 
   const [isScroll, setIsScroll] = useState(false);
   const [feedSource, setFeedSource] = useState(
@@ -110,6 +146,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   };
 
   const renderTabContent = () => {
+    console.log('tab', currentActiveTab);
     if (currentActiveTab === UserProfileTabs.FEED) {
       return (
         <>
@@ -188,38 +225,17 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
     </Typography.Headline>
   );
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (containerRef.current) {
-        const scrollPosition = containerRef.current.scrollTop;
-
-        if (scrollPosition > 0) {
-          setIsScroll(true);
-        } else {
-          setIsScroll(false);
-        }
-      }
-    };
-
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-    }
-
-    return () => {
-      if (container) {
-        container.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
   const isFilterAvailable =
     isCurrentUser || socialSettings?.userPrivacySetting === 'public' || followStatus === 'accepted';
 
   return (
     <>
       <PullToRefresh className={styles.userProfilePage} style={themeStyles}>
-        <div className={styles.userProfilePage__container} ref={containerRef}>
+        <div
+          className={styles.userProfilePage__container}
+          ref={containerRef}
+          onScroll={handleScroll}
+        >
           <div className={styles.userProfilePage__topBar}>
             <BackButton pageId={pageId} onPress={() => onBack()} />
             <Typography.TitleBold

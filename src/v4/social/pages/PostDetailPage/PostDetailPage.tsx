@@ -19,6 +19,7 @@ import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 
 export interface PostDetailPageProps {
   id: string;
@@ -48,6 +49,9 @@ export function PostDetailPage({
   keyword,
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
+
+  const { removeItem } = useGlobalFeedContext();
+
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
   const [failedToShow, setFailedToShow] = useState(false);
   const commentListRef = useRef<HTMLDivElement>(null);
@@ -134,18 +138,13 @@ export function PostDetailPage({
     [],
   );
 
-  const handlePostDeleted = useCallback(() => {
-    if (prevPage?.type === PageTypes.ClipFeedPage) {
-      AmityPostDetailPageBehavior?.goToClipFeedPage?.({
-        currentPostId: post?.children?.[0],
-        targetId: post?.targetId,
-        targetType: post?.targetType,
-        postIndex: 0,
-      });
-    } else {
+  const handlePostDeleted = useCallback(
+    (post: Amity.Post) => {
+      removeItem(post.postId);
       onBack();
-    }
-  }, [prevPage, posts, post, AmityPostDetailPageBehavior, onBack]);
+    },
+    [onBack],
+  );
 
   const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
 
@@ -170,19 +169,7 @@ export function PostDetailPage({
         <BackButton
           pageId={pageId}
           defaultClassName={styles.postDetailPage__backIcon}
-          onPress={() =>
-            prevPage?.type === PageTypes.ClipFeedPage
-              ? AmityPostDetailPageBehavior?.goToClipFeedPage?.({
-                  currentPostId: post?.children?.[0],
-                  targetId: post?.targetId,
-                  targetType: post?.targetType,
-                })
-              : prevPage?.type === PageTypes.SocialGlobalSearchPage
-                ? AmityPostDetailPageBehavior?.goToSocialGlobalSearchPage?.({
-                    keyword: keyword || '',
-                  })
-                : onBack()
-          }
+          onPress={() => onBack()}
         />
         <Typography.TitleBold
           data-testid={`${pageId}/page_title`}

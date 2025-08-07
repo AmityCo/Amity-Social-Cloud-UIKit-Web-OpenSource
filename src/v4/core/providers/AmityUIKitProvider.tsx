@@ -48,6 +48,7 @@ import { LayoutProvider } from '~/v4/social/providers/LayoutProvider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNetworkConfig } from '~/v4/core/hooks/useNetworkConfig';
 import { ClipProvider } from '~/v4/social/providers/ClipProvider';
+import { FeedScrollProvider } from '~/v4/core/providers/FeedScrollProvider';
 import { SearchResultProvider } from '~/v4/social/providers/SearchResultProvider';
 import { GlobalBan } from '~/v4/social/internal-components/GlobalBan';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
@@ -184,24 +185,24 @@ const InternalComponent = ({
       <CustomizationProvider initialConfig={initialConfig}>
         <CustomReactionProvider>
           <AdEngineProvider>
-            <SDKContextV3.Provider value={sdkContextValue}>
-              <SDKContext.Provider value={sdkContextValue}>
-                <SDKConnectorProviderV3>
-                  <SDKConnectorProvider>
-                    <ConfigProvider
-                      config={{
-                        socialCommunityCreationButtonVisible:
-                          socialCommunityCreationButtonVisible || true,
-                      }}
-                    >
-                      <PostRendererProvider config={postRendererConfig}>
-                        <LayoutProvider>
-                          <NavigationProvider
-                            activeRoute={activeRoute}
-                            onRouteChange={onRouteChange}
-                          >
-                            <PageBehaviorProvider pageBehavior={pageBehavior}>
-                              <SearchResultProvider>
+            <FeedScrollProvider>
+              <SDKContextV3.Provider value={sdkContextValue}>
+                <SDKContext.Provider value={sdkContextValue}>
+                  <SDKConnectorProviderV3>
+                    <SDKConnectorProvider>
+                      <ConfigProvider
+                        config={{
+                          socialCommunityCreationButtonVisible:
+                            socialCommunityCreationButtonVisible || true,
+                        }}
+                      >
+                        <PostRendererProvider config={postRendererConfig}>
+                          <LayoutProvider>
+                            <NavigationProvider
+                              activeRoute={activeRoute}
+                              onRouteChange={onRouteChange}
+                            >
+                              <PageBehaviorProvider pageBehavior={pageBehavior}>
                                 <StoryProvider>
                                   <ClipProvider>
                                     <CommunitySetupProvider>
@@ -217,16 +218,16 @@ const InternalComponent = ({
                                     </CommunitySetupProvider>
                                   </ClipProvider>
                                 </StoryProvider>
-                              </SearchResultProvider>
-                            </PageBehaviorProvider>
-                          </NavigationProvider>
-                        </LayoutProvider>
-                      </PostRendererProvider>
-                    </ConfigProvider>
-                  </SDKConnectorProvider>
-                </SDKConnectorProviderV3>
-              </SDKContext.Provider>
-            </SDKContextV3.Provider>
+                              </PageBehaviorProvider>
+                            </NavigationProvider>
+                          </LayoutProvider>
+                        </PostRendererProvider>
+                      </ConfigProvider>
+                    </SDKConnectorProvider>
+                  </SDKConnectorProviderV3>
+                </SDKContext.Provider>
+              </SDKContextV3.Provider>
+            </FeedScrollProvider>
           </AdEngineProvider>
         </CustomReactionProvider>
       </CustomizationProvider>
