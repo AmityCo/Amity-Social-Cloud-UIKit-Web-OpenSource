@@ -203,21 +203,23 @@ const InternalComponent = ({
                               onRouteChange={onRouteChange}
                             >
                               <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                <StoryProvider>
-                                  <ClipProvider>
-                                    <CommunitySetupProvider>
-                                      <DrawerProvider>
-                                        <GlobalFeedProvider>
-                                          <PopupProvider>
-                                            <Popup />
-                                            {children}
-                                          </PopupProvider>
-                                        </GlobalFeedProvider>
-                                        <DrawerContainer />
-                                      </DrawerProvider>
-                                    </CommunitySetupProvider>
-                                  </ClipProvider>
-                                </StoryProvider>
+                                <SearchResultProvider>
+                                  <StoryProvider>
+                                    <ClipProvider>
+                                      <CommunitySetupProvider>
+                                        <DrawerProvider>
+                                          <GlobalFeedProvider>
+                                            <PopupProvider>
+                                              <Popup />
+                                              {children}
+                                            </PopupProvider>
+                                          </GlobalFeedProvider>
+                                          <DrawerContainer />
+                                        </DrawerProvider>
+                                      </CommunitySetupProvider>
+                                    </ClipProvider>
+                                  </StoryProvider>
+                                </SearchResultProvider>
                               </PageBehaviorProvider>
                             </NavigationProvider>
                           </LayoutProvider>
