@@ -37,9 +37,15 @@
 }
 
 .typography__captionBold {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  font-weight: 600;
+  color: var(--component-form-filter-copy-all-use, #fff);
+  text-align: center;
+
+  /* body/caption-bold */
+  font-family: var(--typography-scale-body-caption-bold-family, Roboto);
+  font-size: var(--typography-scale-body-caption-bold-size, 0.75rem);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--typography-scale-body-caption-bold-line-height, 0.875rem);
 }
 
 .typography__caption {

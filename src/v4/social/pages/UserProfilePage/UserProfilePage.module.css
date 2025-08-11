@@ -74,7 +74,7 @@
   padding: var(--component-card-multipuropse-layout-padding-default, 1rem);
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--global-layout-gap-lg, 1rem);
+  gap: var(--global-layout-gap-sm, 00.5rem);
   border-radius: var(--component-card-multipuropse-layout-radius-default, 0.5rem);
   background: var(--component-card-multipuropse-surface-even, #fff);
   box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
@@ -82,7 +82,39 @@
     var(--effect-surface-effect, rgb(0 0 0 / 12%));
 }
 
-/* .userProfilePage__cardContentSection {} */
+.userProfilePage__cardContentSection {
+  display: flex;
+  place-content: flex-start space-between;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.userProfilePage__cardContentSection__grow {
+  flex-grow: 1;
+}
+
+.userProfilePage__chipContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.userProfilePage__chip {
+  display: flex;
+  height: var(--component-form-filter-layout-size-height, 1.875rem);
+  padding: 0.5rem var(--component-form-filter-layout-padding-horizontal, 1rem);
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--component-form-filter-layout-radius-default, 6.25rem);
+  background: var(--component-form-filter-surface-active, #435864);
+}
+
+.userProfilePage__chartWrapper {
+  border: 1px solid red;
+  width: 1200px;
+  height: 400px;
+}
 
 @media (width >=48em) {
   .userProfilePage {
@@ -130,8 +162,6 @@
   /* .userProfilePage__card {} */
 
   .userProfilePage__cardContentSection {
-    display: flex;
-    place-content: center space-between;
-    width: 100%;
+    gap: 1rem;
   }
 }
