@@ -25,9 +25,14 @@
 }
 
 .typography__bodyBold {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 600;
+  color: var(--global-text-default, #222);
+
+  /* body/p-bold */
+  font-family: var(--typography-scale-body-p-bold-family, Roboto);
+  font-size: var(--typography-scale-body-p-bold-size, 0.875rem);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--typography-scale-body-p-bold-line-height, 1rem); /* 114.286% */
 }
 
 .typography__body {
@@ -58,4 +63,41 @@
   font-size: 0.75rem;
   line-height: 0.75rem;
   font-weight: 400;
+}
+
+.typography__link {
+  color: var(--global-text-default, #222);
+
+  /* interaction/link */
+  font-family: var(--typography-scale-interaction-link-family, Roboto);
+  font-size: var(--typography-scale-interaction-link-size, 0.875rem);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--typography-scale-interaction-link-line-height, 0.875rem); /* 100% */
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-skip-ink: none;
+  text-decoration-thickness: auto;
+  text-underline-offset: auto;
+  text-underline-position: from-font;
+}
+
+.typography__ticketSizeTitle {
+  color: var(--font-color-black-blue, #262c2f);
+  text-align: center;
+  font-family: var(--font-family-caption, Roboto);
+  font-size: var(--accordion-ticket-size-text, 0.75rem);
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--accordion-ticket-size-title, 0.875rem); /* 116.667% */
+}
+
+.typography__ticketSizeText {
+  color: var(--font-color-secondary, #6b6b6b);
+  text-align: center;
+  font-family: var(--font-family-caption, Roboto);
+  font-size: var(--accordion-ticket-size-text, 0.75rem);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--accordion-ticket-size-title, 0.875rem); /* 116.667% */
 }

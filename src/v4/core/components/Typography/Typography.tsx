@@ -2,7 +2,7 @@ import React, { ComponentPropsWithoutRef } from 'react';
 import styles from './Typography.module.css';
 import clsx from 'clsx';
 
-type TypographyElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
+type TypographyElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' | 'a';
 
 export type TypographyProps = ComponentPropsWithoutRef<TypographyElement> & {
   as?: TypographyElement;
@@ -10,7 +10,7 @@ export type TypographyProps = ComponentPropsWithoutRef<TypographyElement> & {
 
 export function Typography({ as: Element = 'p', children, className, ...props }: TypographyProps) {
   return (
-    <Element className={clsx(styles.typography, className)} {...props}>
+    <Element className={clsx(styles.typography, className)} {...(props as any)}>
       {children}
     </Element>
   );
@@ -51,5 +51,25 @@ Typography.Caption = function ({ as = 'span', className, ...props }: TypographyP
 Typography.CaptionSmall = function ({ as = 'span', className, ...props }: TypographyProps) {
   return (
     <Typography as={as} className={clsx(styles.typography__captionSmall, className)} {...props} />
+  );
+};
+
+Typography.Link = function ({ as = 'a', className, ...props }: TypographyProps) {
+  return <Typography as={as} className={clsx(styles.typography__link, className)} {...props} />;
+};
+
+Typography.TicketSizeTitle = function ({ as = 'span', className, ...props }: TypographyProps) {
+  return (
+    <Typography
+      as={as}
+      className={clsx(styles.typography__ticketSizeTitle, className)}
+      {...props}
+    />
+  );
+};
+
+Typography.TicketSizeText = function ({ as = 'span', className, ...props }: TypographyProps) {
+  return (
+    <Typography as={as} className={clsx(styles.typography__ticketSizeText, className)} {...props} />
   );
 };

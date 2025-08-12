@@ -20,7 +20,8 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Button, Typography } from '~/v4/core/components';
 import { Input } from 'react-aria-components';
-import * as echarts from 'echarts';
+import { initChart } from './chartConfig';
+import Star from '~/v4/icons/Star';
 type UserProfilePageProps = {
   userId: string;
   userBadgeTitle?: string;
@@ -31,6 +32,12 @@ const enum UserProfileTabs {
   IMAGE = 'image',
   VIDEO = 'video',
 }
+
+const mockSports = [
+  { name: 'Calcio', icon: <Star color="#FFA500" />, percentage: 30 },
+  { name: 'Tennis', icon: <Star color="#FF6B6B" />, percentage: 25 },
+  { name: 'Basket', icon: <Star color="#4ECDC4" />, percentage: 45 },
+];
 
 export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBadgeTitle }) => {
   const pageId = 'user_profile_page';
@@ -52,137 +59,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
   );
 
   useEffect(() => {
-    const initChart = () => {
-      const chartElement = document.getElementById('tipsterChart');
-      if (chartElement && chartElement.clientWidth > 0 && chartElement.clientHeight > 0) {
-        const myChart = echarts.init(chartElement);
-        const radarOptions = {
-          color: ['#67F9D8', '#FFE434', '#56A3F1', '#FF917C'],
-          title: {
-            text: 'Customized Radar Chart',
-          },
-          legend: {},
-          radar: [
-            {
-              indicator: [
-                { text: 'Indicator1' },
-                { text: 'Indicator2' },
-                { text: 'Indicator3' },
-                { text: 'Indicator4' },
-                { text: 'Indicator5' },
-              ],
-              center: ['25%', '50%'],
-              radius: 120,
-              startAngle: 90,
-              splitNumber: 4,
-              shape: 'circle',
-              axisName: {
-                formatter: (value: string) => {
-                  return ['{icon|🎯}', '{label|' + value + '}', '{number|}', '{media|}'].join('\n');
-                },
-                rich: {
-                  icon: {
-                    fontSize: 16,
-                    lineHeight: 20,
-                    align: 'center',
-                  },
-                  label: {
-                    color: '#6B6B6B',
-                    align: 'center',
-                    fontFamily: 'Roboto, sans-serif',
-                    fontSize: 12,
-                    fontWeight: 400,
-                    lineHeight: 14,
-                  },
-                  number: {
-                    color: '#00653B',
-                    align: 'center',
-                    fontFamily: 'Roboto, sans-serif',
-                    fontSize: 16,
-                    fontWeight: 900,
-                    lineHeight: 16,
-                  },
-                  media: {
-                    color: '#00653B',
-                    align: 'center',
-                    fontFamily: 'Roboto, sans-serif',
-                    fontSize: 12,
-                    fontWeight: 400,
-                    lineHeight: 14,
-                  },
-                },
-              },
-              splitArea: {
-                areaStyle: {
-                  color: ['#77EADF', '#26C3BE', '#64AFE9', '#428BD4'],
-                  shadowColor: 'rgba(0, 0, 0, 0.2)',
-                  shadowBlur: 10,
-                },
-              },
-              axisLine: {
-                lineStyle: {
-                  color: 'rgba(211, 253, 250, 0.8)',
-                },
-              },
-              splitLine: {
-                lineStyle: {
-                  color: 'rgba(211, 253, 250, 0.8)',
-                },
-              },
-            },
-            {
-              indicator: [
-                { text: 'Indicator1', max: 150 },
-                { text: 'Indicator2', max: 150 },
-                { text: 'Indicator3', max: 150 },
-                { text: 'Indicator4', max: 120 },
-                { text: 'Indicator5', max: 108 },
-                { text: 'Indicator6', max: 72 },
-              ],
-              center: ['75%', '50%'],
-              radius: 120,
-              axisName: {
-                color: '#fff',
-                backgroundColor: '#666',
-                borderRadius: 3,
-                padding: [3, 5],
-              },
-            },
-          ],
-          series: [
-            {
-              type: 'radar',
-              emphasis: {
-                lineStyle: {
-                  width: 4,
-                },
-              },
-              data: [
-                {
-                  value: [100, 8, 0.4, -80, 2000],
-                  name: 'Data A',
-                },
-                {
-                  value: [60, 5, 0.3, -100, 1500],
-                  name: 'Data B',
-                  areaStyle: {
-                    color: 'rgba(255, 228, 52, 0.6)',
-                  },
-                },
-              ],
-            },
-          ],
-        };
-        myChart.setOption(radarOptions);
-
-        // Cleanup function
-        return () => {
-          myChart.dispose();
-        };
-      }
-      return null;
-    };
-
     const timer = setTimeout(initChart, 100);
 
     return () => {
@@ -267,7 +143,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
               setPercentage(+e.target.value);
             }}
           />
-          <div className={styles.userProfilePage__topSection}>
+          <div className={styles.userProfilePage__cardBorders}>
             <UserProfileHeader
               user={user}
               pageId={pageId}
@@ -309,7 +185,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
               <div className={styles.userProfilePage__card}>
                 <div className={styles.userProfilePage__cardContentSection}>
                   <Typography.Headline>Il Tuo status Cliente</Typography.Headline>
-                  <div>Vedi</div>
+                  <Typography.Link>Vedi</Typography.Link>
                 </div>
                 <div className={styles.userProfilePage__cardContentSection}>
                   <div>Icona</div>
@@ -320,12 +196,14 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
             </div>
           </div>
           {/* second big card tipster */}
+          {/* Icon and link */}
           <div className={styles.userProfilePage__card}>
             <div className={styles.userProfilePage__cardContentSection}>
               <div>Tipster</div>
-              <div>vedi</div>
+              <Typography.Link>Vedi</Typography.Link>
             </div>
-            <div className={styles.userProfilePage__chipContainer}>
+            {/* Chip container => relace with buttons */}
+            <div className={styles.userProfilePage__flexContainer}>
               <div className={styles.userProfilePage__chip}>
                 <Typography.CaptionBold>Scommesse</Typography.CaptionBold>
               </div>
@@ -339,9 +217,27 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
                 <Typography.CaptionBold>Bingo</Typography.CaptionBold>
               </div>
             </div>
-            <div>
-              <h1>CHART IS GONNA GO HERE</h1>
-              <div id="tipsterChart" className={styles.userProfilePage__chartWrapper}></div>
+            {/* chart block */}
+            <div className={styles.userProfilePage__tipsterCard}>
+              <div className={styles.userProfilePage__cardBorders}>
+                <div className={styles.userProfilePage__chartCardBorders}>
+                  <Typography.BodyBold>Social Index</Typography.BodyBold>
+                  <Typography.Link>Cos'è</Typography.Link>
+                </div>
+                <div id="tipsterChart" className={styles.userProfilePage__chartWrapper}></div>
+              </div>
+              <div>
+                <Typography.BodyBold>Giochi principalmente a</Typography.BodyBold>
+                <div className={styles.userProfilePage__flexContainer}>
+                  {mockSports.map((sport, index) => (
+                    <div key={index} className={styles.userProfilePage__gameStatCard}>
+                      {sport.icon}
+                      <Typography.TicketSizeTitle>{sport.name}</Typography.TicketSizeTitle>
+                      <Typography.TicketSizeText>({sport.percentage}%)</Typography.TicketSizeText>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>

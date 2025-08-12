@@ -93,10 +93,11 @@
   flex-grow: 1;
 }
 
-.userProfilePage__chipContainer {
+.userProfilePage__flexContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-flow: row wrap;
+  gap: 1rem;
+  margin: 0.75rem 0;
 }
 
 .userProfilePage__chip {
@@ -111,9 +112,42 @@
 }
 
 .userProfilePage__chartWrapper {
-  border: 1px solid red;
-  width: 1200px;
-  height: 400px;
+  width: 30rem;
+  height: 20rem;
+  padding: var(--global-layout-gap-md, 0.75rem) 0 var(--global-layout-gap-sm-base, 0.5rem) 0;
+}
+
+.userProfilePage__cardBorders {
+  background-color: var(--asc-color-background-default);
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  padding: 0 1rem 1rem;
+  border-radius: var(--global-image-radius-base, 0.5rem);
+  border: 1px solid var(--global-border-neutral, #d3d3d3);
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.userProfilePage__gameStatCard {
+  height: 4rem;
+  width: 6rem;
+  padding: 0.25rem 0.5rem 0.5rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  border: 1px solid var(--colors-neutrals-grey-30, #d9d9d9);
+  display: flex;
+  gap: 0.5rem;
+  align-self: stretch;
+}
+
+.userProfilePage__tipsterCard {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+  padding: 1rem;
 }
 
 @media (width >=48em) {
@@ -126,24 +160,18 @@
     position: static;
   }
 
-  .userProfilePage__topSection {
-    background-color: var(--asc-color-background-default);
-    margin-bottom: 0.75rem;
-    overflow: hidden;
-    padding: 0 1rem 1rem;
-    border-radius: var(--global-image-radius-base, 0.5rem);
-    border: 1px solid var(--global-border-neutral, #d3d3d3);
-    gap: 1rem;
+  .userProfilePage__tipsterCard {
+    flex-direction: row;
+  }
+
+  .userProfilePage__chartCardBorders {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
   }
 
   .userProfilePage__displayName {
     display: none;
-  }
-
-  .userProfilePage__container {
-    margin-top: 0;
   }
 
   .userProfilePage__feedTabs {
@@ -158,8 +186,6 @@
   .userProfilePage__cardPositioner {
     flex-direction: row;
   }
-
-  /* .userProfilePage__card {} */
 
   .userProfilePage__cardContentSection {
     gap: 1rem;
