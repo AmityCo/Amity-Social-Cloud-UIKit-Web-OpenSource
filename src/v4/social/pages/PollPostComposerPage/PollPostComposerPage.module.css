@@ -5,6 +5,10 @@
   overflow-y: auto;
 }
 
+.pollPostComposerPage__container[data-open-popover='true'] {
+  overflow: hidden;
+}
+
 .pollPostComposerPage__form {
   padding-bottom: 1.5rem;
 }
@@ -132,8 +136,32 @@
   field-sizing: content;
 }
 
+.pollPostComposerPage__pollOptions__input[data-image-poll='true'] {
+  field-sizing: unset;
+}
+
 .pollPostComposerPage__pollOptions__input[data-isvalid='false'] {
   border: 1px solid var(--asc-color-alert-default);
+}
+
+.pollPostComposerPage__imagePollOptions__uploadButton {
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.pollPostComposerPage__imagePollOptions__uploadButton:disabled {
+  cursor: not-allowed;
+}
+
+.pollPostComposerPage__pollOptions__addPollOption__Container {
+  margin-right: 2rem;
+}
+
+.pollPostComposerPage__pollOptions__input[data-isvalid='false'],
+.pollPostComposerPage__pollOptions__input:focus-within[data-isvalid='false'] {
+  background-color: var(--asc-color-alert-shade2);
+  border-radius: 0.25rem;
+  border: 1px solid var(--asc-color-alert-shade1);
 }
 
 .pollPostComposerPage__pollOptions__input::placeholder {
@@ -267,7 +295,6 @@
   cursor: pointer;
   top: -0.25rem;
   right: -0.25rem;
-  z-index: 2;
 }
 
 .pollPostComposerPage__imagePollOptions__closeIcon {
@@ -291,6 +318,29 @@
   display: none;
 }
 
+.pollPostComposer__errorImageOption__popOver__container,
+.pollPostComposer__errorImageOption__popOver__triggerButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pollPostComposer__errorImageOption__container {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.pollPostComposer__errorImageOption__item {
+  padding: 0.75rem 1rem;
+}
+
+.pollPostComposer__errorImageOption__text {
+  color: var(--asc-color-base-default);
+}
+
 @media (width >= 48em) {
   .pollPostComposerPage__container {
     width: 34.125rem;
@@ -299,6 +349,10 @@
     position: static;
     border-radius: 0.75rem;
     padding: 0 1.5rem;
+  }
+
+  .pollPostComposerPage__container[data-open-popover='true'] {
+    overflow-y: hidden;
   }
 
   .pollPostComposerPage__topBar {

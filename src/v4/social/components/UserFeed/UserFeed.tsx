@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import {
   PostContent,
@@ -16,6 +16,7 @@ import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInter
 import styles from './UserFeed.module.css';
 import useUserFeed from '~/v4/social/hooks/collections/useUserFeed';
 import { FeedDataTypeEnum, FeedSourceEnum } from '@amityco/ts-sdk';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 
 interface UserFeedProps {
   userId: string;
@@ -56,18 +57,22 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
     componentId,
   });
 
-  const { posts, hasMore, loadMore, refresh, isLoading, error } = useUserFeed({
-    userId,
-    feedSources,
-    matchingOnlyParentPost: true,
-    dataTypes: [
+  const dataTypes = useMemo(() => {
+    return [
       FeedDataTypeEnum.Text,
       FeedDataTypeEnum.Image,
       FeedDataTypeEnum.Video,
       FeedDataTypeEnum.Poll,
       FeedDataTypeEnum.Clip,
       FeedDataTypeEnum.LiveStream,
-    ],
+    ];
+  }, []);
+
+  const { posts, hasMore, loadMore, refresh, isLoading, error } = useUserFeed({
+    userId,
+    feedSources,
+    matchingOnlyParentPost: true,
+    dataTypes,
   });
 
   useIntersectionObserver({
@@ -86,7 +91,7 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
     if (!isLoading && followStatus === 'blocked')
       return <BlockedUserFeed pageId={pageId} componentId={componentId} />;
 
-    if (!isLoading && (followStatus === 'none' || followStatus === 'pending'))
+    if (!isLoading && error?.message.includes(ERROR_RESPONSE.NOT_FOLLOWING_USER))
       return <PrivateUserFeed pageId={pageId} componentId={componentId} />;
 
     if (!isLoading && error) return <ErrorContent />;

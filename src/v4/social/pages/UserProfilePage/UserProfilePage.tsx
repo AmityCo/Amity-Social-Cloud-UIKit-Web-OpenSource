@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './UserProfilePage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -122,12 +122,16 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
 
   const [isScroll, setIsScroll] = useState(false);
   const [feedSource, setFeedSource] = useState(
-    linkToPost && linkToPost?.feedSources?.length === 1
-      ? linkToPost?.feedSources[0]
-      : FeedSourceEnum.User,
+    linkToPost && linkToPost?.feedSources?.length === 1 ? linkToPost?.feedSources[0] : 'all',
   );
-  const feedSources =
-    feedSource === FeedSource.ALL ? [FeedSourceEnum.User, FeedSourceEnum.Community] : [feedSource];
+
+  const feedSources: FeedSourceEnum[] = useMemo(
+    () =>
+      feedSource === FeedSource.ALL
+        ? [FeedSourceEnum.User, FeedSourceEnum.Community]
+        : [feedSource as FeedSourceEnum],
+    [feedSource],
+  );
 
   useEffect(() => {
     containerRef.current?.scrollTo({ top: 0, behavior: 'auto' });

@@ -142,8 +142,12 @@ export class AmityUIKitManager {
       this.onGlobalBanned?.(payload);
     });
 
-    const sharableLinkConfig = await ASCClient.getShareableLinkConfiguration();
-    localStorage.setItem('sharableLinkConfig', JSON.stringify(sharableLinkConfig || {}));
+    try {
+      const sharableLinkConfig = await ASCClient.getShareableLinkConfiguration();
+      localStorage.setItem('sharableLinkConfig', JSON.stringify(sharableLinkConfig || {}));
+    } catch (e) {
+      localStorage.setItem('sharableLinkConfig', JSON.stringify({}));
+    }
   }
 
   /**

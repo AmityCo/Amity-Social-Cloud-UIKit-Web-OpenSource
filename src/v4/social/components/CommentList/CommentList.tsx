@@ -119,7 +119,7 @@ export const CommentList = ({
     if (!parentId && highlightedComment && highlightedCommentRef.current) {
       // Create event listener for the scroll complete event
       const handleScrollComplete = (e: CustomEvent) => {
-        if (e.detail.commentId === highlightedComment.commentId) {
+        if (e.detail.commentId === highlightedComment.commentId && !showReplyCommentAt) {
           // Only start the bounce animation after the scroll is complete
           setIsHighlighted(true);
 
@@ -143,7 +143,7 @@ export const CommentList = ({
         );
       };
     }
-  }, [highlightedComment, highlightedCommentId, parentId]);
+  }, [highlightedComment, highlightedCommentId, parentId, showReplyCommentAt]);
 
   if (!online) {
     return (

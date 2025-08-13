@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageGallery } from '~/v4/social/internal-components/ImageGallery';
 import { EmptyUserImageFeed } from '~/v4/social/elements/EmptyUserImageFeed/EmptyUserImageFeed';
@@ -12,6 +12,7 @@ import useUserFeed from '~/v4/social/hooks/collections/useUserFeed';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import styles from './UserImageFeed.module.css';
 import { FeedSourceEnum, FeedDataTypeEnum } from '@amityco/ts-sdk';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 
 interface UserImageFeedProps {
   userId: string;
@@ -38,11 +39,15 @@ export const UserImageFeed = ({
 
   const limit = useRef(linkToPost ? (linkToPost.index >= 10 ? linkToPost.index + 10 : 10) : 10);
 
+  const dataTypes = useMemo(() => {
+    return [FeedDataTypeEnum.Image];
+  }, []);
+
   const { posts, hasMore, loadMore, refresh, error, isLoading } = useUserFeed({
     userId,
     feedSources,
     limit: limit.current,
-    dataTypes: [FeedDataTypeEnum.Image],
+    dataTypes,
   });
 
   useEffect(() => {
@@ -61,7 +66,7 @@ export const UserImageFeed = ({
     if (!isLoading && followStatus === 'blocked')
       return <BlockedUserImageFeed pageId={pageId} componentId={componentId} />;
 
-    if (!isLoading && (followStatus === 'none' || followStatus === 'pending'))
+    if (!isLoading && error?.message.includes(ERROR_RESPONSE.NOT_FOLLOWING_USER))
       return <PrivateUserImageFeed pageId={pageId} componentId={componentId} />;
 
     if (!isLoading && error) return <ErrorContent />;

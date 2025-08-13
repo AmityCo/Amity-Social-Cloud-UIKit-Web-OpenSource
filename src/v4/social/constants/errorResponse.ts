@@ -6,5 +6,6 @@ export const ERROR_RESPONSE = Object.freeze({
   UNAVAILABLE: '500000',
   BLOCKED_WORD: '400308',
   BLOCKED_URL: '400309',
+  NOT_FOLLOWING_USER: 'You are not following this user',
   GLOBAL_BAN: '400312',
 });

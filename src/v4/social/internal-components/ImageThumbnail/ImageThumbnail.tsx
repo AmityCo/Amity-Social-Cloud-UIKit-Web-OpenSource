@@ -27,6 +27,7 @@ type ImageThumbnailProps = {
   onRemovePostImage?: (fileId: string) => void;
   onAltTextChange: (file: Amity.File<'image'>, altText: string) => void;
   isImagePollPost?: boolean;
+  ErrorImageMenuButton?: () => void;
 };
 
 export function ImageThumbnail({
@@ -39,6 +40,7 @@ export function ImageThumbnail({
   onRemovePostImage,
   onAltTextChange,
   isImagePollPost = false,
+  ErrorImageMenuButton,
 }: ImageThumbnailProps) {
   const hasNewImages = files.length > 0 && files.some((file) => isImageFile(file));
   const hasPostImages = postImages.length > 0;
@@ -79,6 +81,7 @@ export function ImageThumbnail({
             onRemoveFile={() => removeFile(file.file)}
             onAltTextChange={onAltTextChange}
             isImagePollPost={isImagePollPost}
+            ErrorImageMenuButton={ErrorImageMenuButton}
           />
         ))}
     </div>
@@ -136,6 +139,7 @@ type FileImageItemProps = {
   progress: { [key: string]: number };
   onAltTextChange: ImageThumbnailProps['onAltTextChange'];
   isImagePollPost?: boolean;
+  ErrorImageMenuButton?: () => void;
 };
 
 function FileImageItem({
@@ -146,6 +150,7 @@ function FileImageItem({
   componentId,
   onRemoveFile,
   onAltTextChange,
+  ErrorImageMenuButton,
   isImagePollPost = false,
 }: FileImageItemProps) {
   const isUploading = progress[file.id] && !isAmityFile(file.file);
@@ -160,6 +165,7 @@ function FileImageItem({
     >
       <Thumbnail file={file} />
       {(isUploading || hasError) && <div className={styles.thumbnail__overlay} />}
+
       {!isImagePollPost && (
         <RemoveButton testId={`${pageId}/${componentId}/remove_thumbnail`} onPress={onRemoveFile} />
       )}
@@ -173,6 +179,7 @@ function FileImageItem({
           <ExclamationCircle />
         </div>
       )}
+      {hasError && ErrorImageMenuButton?.()}
       {isAmityFile(file.file) && !isUploading && !hasError && (
         <AltText file={file.file} onAltTextChange={onAltTextChange} />
       )}

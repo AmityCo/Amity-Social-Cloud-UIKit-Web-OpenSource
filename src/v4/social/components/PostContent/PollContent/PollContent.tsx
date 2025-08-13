@@ -42,7 +42,7 @@ export const PollContent: FC<PollContentProps> = ({
   const user = useUser(currentUserId);
 
   const poll = posts?.[0]?.getPollInfo();
-  const showAllChoices = pageId === 'post_detail_page';
+  const showAllChoices = pageId === 'post_detail_page' || pageId === 'pending_request_page';
   const maxChoicesShown = 4;
   const isAuthor = parentPost?.creator?.userId === currentUserId;
   const isVoteDisabled = parentPost?.feedType === 'reviewing' || disabled;

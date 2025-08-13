@@ -16,6 +16,7 @@ import useUserFeed from '~/v4/social/hooks/collections/useUserFeed';
 import styles from './UserVideoFeed.module.css';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { FeedSourceEnum, FeedDataTypeEnum } from '@amityco/ts-sdk';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 
 interface UserVideoFeedProps {
   userId: string;
@@ -129,7 +130,7 @@ export const UserVideoFeed = ({
     if (!isLoading && followStatus === 'blocked')
       return <BlockedUserVideoFeed pageId={pageId} componentId={componentId} />;
 
-    if (!isLoading && !isLoadingClips && (followStatus === 'none' || followStatus === 'pending'))
+    if (!isLoading && error?.message.includes(ERROR_RESPONSE.NOT_FOLLOWING_USER))
       return <PrivateUserVideoFeed pageId={pageId} componentId={componentId} />;
 
     if (!isLoading && !isLoadingClips && error) return <ErrorContent />;

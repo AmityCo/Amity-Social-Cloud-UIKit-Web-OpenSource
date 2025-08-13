@@ -45,6 +45,7 @@ import { Comment, CommentSkeleton } from '~/v4/social/components/Comment';
 import { Divider } from '~/v4/social/elements/Divider';
 import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
+import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -161,6 +162,11 @@ export const PostContent = ({
   const { isCommunityModerator } = usePostedUserInformation({
     post,
     community: targetCommunity,
+  });
+
+  const { link: sharableLink } = useSharableLink({
+    model: SharableModel.POST,
+    referenceId: post.postId,
   });
 
   const handleReactionClick = (reactionKey: string) => {
@@ -299,7 +305,7 @@ export const PostContent = ({
               category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
               <PinBadge pageId={pageId} componentId={componentId} />
             )}
-            {style === AmityPostContentComponentStyle.FEED && (
+            {style === AmityPostContentComponentStyle.FEED && sharableLink && (
               <Popover
                 containerClassName={styles.postContent__bar__actionButton}
                 trigger={{
@@ -486,7 +492,7 @@ export const PostContent = ({
                   />
                 </div>
                 <div className={styles.postContent__reactionBar__rightPane}>
-                  {targetCommunity?.isPublic && (
+                  {(!targetCommunity || targetCommunity?.isPublic) && (
                     <Popover
                       containerClassName={styles.postContent__bar__actionButton}
                       trigger={({ openPopover }) => (

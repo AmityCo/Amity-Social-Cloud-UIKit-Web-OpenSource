@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { IconButton } from '~/v4/core/components/IconButton';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { CopyToClipboard } from '~/v4/icons/CopyToClipboard';
-import { getShareableLink, SharableModel } from '~/v4/utils/sharableLink';
+import { SharableModel } from '~/v4/utils/sharableLink';
+import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import styles from './CopyLinkButton.module.css';
 
 interface CopyLinkButtonProps {
@@ -23,18 +24,12 @@ export const CopyLinkButton = ({
   const notification = useNotifications();
   const elementId = 'copy_link';
 
-  const [link, setLink] = useState<string>();
+  const { link, isLoading, error } = useSharableLink({
+    model,
+    referenceId,
+  });
 
-  useEffect(() => {
-    if (!referenceId) return;
-
-    getShareableLink({
-      model,
-      referenceId,
-    }).then((result) => setLink(result));
-  }, [referenceId]);
-
-  if (!link) return null;
+  if (!link || isLoading) return null;
 
   return (
     <IconButton

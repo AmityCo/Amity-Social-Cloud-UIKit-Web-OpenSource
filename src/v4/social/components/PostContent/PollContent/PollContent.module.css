@@ -225,3 +225,39 @@
   text-align: center;
   margin-top: 0.25rem;
 }
+
+.pollContent__imageOption__loading {
+  aspect-ratio: 5/4;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+.pollContent__imageOption__imageBroken {
+  border-radius: 0.5rem;
+  aspect-ratio: 5/4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.pollContent__imageOption__imageBroken__icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--asc-color-base-shade3);
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}

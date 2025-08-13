@@ -6,6 +6,7 @@ import { Button } from '~/v4/core/components/AriaButton';
 import ExpandImage from '~/v4/icons/Expand';
 import useFile from '~/v4/core/hooks/useFile';
 import { FileRepository } from '@amityco/ts-sdk';
+import { BrokenImage } from '~/v4/icons/BrokenImage';
 
 interface ImagePollAnswerProps {
   fileId?: string;
@@ -29,11 +30,10 @@ export const ImagePollAnswer: FC<ImagePollAnswerProps> = ({
   isDisabled,
 }) => {
   const [openImageViewer, setOpenImageViewer] = useState(false);
+  const [isBrokenImage, setIsBrokenImage] = useState(false);
 
   const imageFile = useFile(fileId) as Amity.File<'image'>;
   const url = imageFile ? FileRepository.fileUrlWithSize(imageFile?.fileUrl, 'medium') : '';
-
-  if (!fileId || !url) return null;
 
   return (
     <>
@@ -44,11 +44,21 @@ export const ImagePollAnswer: FC<ImagePollAnswerProps> = ({
         data-disabled={isDisabled}
       >
         <div className={styles.pollContent__imageOption__container}>
-          <img
-            src={url}
-            className={styles.pollContent__imageOption}
-            alt={imageFile.altText ?? label}
-          />
+          {!fileId || isBrokenImage ? (
+            <div className={styles.pollContent__imageOption__imageBroken}>
+              <BrokenImage className={styles.pollContent__imageOption__imageBroken__icon} />
+            </div>
+          ) : fileId && !url ? (
+            <div className={styles.pollContent__imageOption__loading} />
+          ) : (
+            <img
+              src={url}
+              className={styles.pollContent__imageOption}
+              alt={imageFile.altText ?? label}
+              onError={() => setIsBrokenImage(true)}
+            />
+          )}
+
           {/* Move overlay to cover only the image */}
           {votedPrecentage && (
             <>
@@ -80,7 +90,7 @@ export const ImagePollAnswer: FC<ImagePollAnswerProps> = ({
           <ExpandImage className={styles.pollContent__imageOption__buttonIcon} />
         </Button>
       </div>
-      {openImageViewer && (
+      {openImageViewer && fileId && (
         <SingleImageViewer
           fileId={fileId}
           onClose={() => setOpenImageViewer(false)}

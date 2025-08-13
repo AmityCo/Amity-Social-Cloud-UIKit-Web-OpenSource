@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Menu } from '~/v4/icons/Menu';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -58,6 +58,13 @@ export function CommunityProfileMenuButton({
   const isCommunityModerator = moderators.some((moderator) => moderator.userId === currentUserId);
   const isMember = community?.isJoined;
 
+  const shouldShowCopyButton = useMemo(() => {
+    if (community?.isPublic) return true;
+    if (community?.isDiscoverable) return true;
+    if (isCommunityModerator) return false;
+    return false;
+  }, [community?.isDiscoverable, isCommunityModerator, community?.isPublic]);
+
   const renderMenu = useCallback(
     ({ closePopover }: { closePopover?: () => void } = {}) => {
       return (
@@ -88,13 +95,15 @@ export function CommunityProfileMenuButton({
               typographyVariant="bodyBold"
             />
           )}
-          <CopyLinkButton
-            pageId={pageId}
-            componentId={componentId}
-            model={SharableModel.COMMUNITY}
-            referenceId={community?.communityId}
-            onDone={isDesktop ? removeDrawerData : closePopover}
-          />
+          {shouldShowCopyButton && (
+            <CopyLinkButton
+              pageId={pageId}
+              componentId={componentId}
+              model={SharableModel.COMMUNITY}
+              referenceId={community?.communityId}
+              onDone={isDesktop ? removeDrawerData : closePopover}
+            />
+          )}
         </div>
       );
     },

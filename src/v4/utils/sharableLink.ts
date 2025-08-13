@@ -1,16 +1,20 @@
 import { Client as ASCClient } from '@amityco/ts-sdk';
 
-export const getShareableLinkConfiguration = async () => {
-  const config = localStorage.getItem('sharableLinkConfig');
-  if (!config) {
-    const sharableLinkConfig = await ASCClient.getShareableLinkConfiguration();
-    localStorage.setItem('sharableLinkConfig', JSON.stringify(sharableLinkConfig || {}));
-
-    return sharableLinkConfig;
-  }
-
-  return JSON.parse(config as string) as Amity.ShareableLinkConfiguration;
-};
+export const getShareableLinkConfiguration =
+  async (): Promise<Amity.ShareableLinkConfiguration> => {
+    try {
+      const config = localStorage.getItem('sharableLinkConfig');
+      if (!config) {
+        const sharableLinkConfig = await ASCClient.getShareableLinkConfiguration();
+        localStorage.setItem('sharableLinkConfig', JSON.stringify(sharableLinkConfig || {}));
+        return sharableLinkConfig;
+      }
+      return JSON.parse(config as string) as Amity.ShareableLinkConfiguration;
+    } catch (e) {
+      localStorage.setItem('sharableLinkConfig', JSON.stringify({}));
+      return {} as Amity.ShareableLinkConfiguration;
+    }
+  };
 
 export const enum SharableModel {
   POST = 'posts',

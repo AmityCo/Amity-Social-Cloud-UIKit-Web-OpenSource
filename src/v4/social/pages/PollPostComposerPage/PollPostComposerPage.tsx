@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './PollPostComposerPage.module.css';
-import { FileTrigger, Form, Label, TextArea, TextField } from 'react-aria-components';
+import { FileTrigger, Form, Input, Label, TextArea, TextField } from 'react-aria-components';
 import { Button as AriaButton } from '~/v4/core/components/AriaButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements';
@@ -112,8 +112,17 @@ export const PollPostComposerPage = ({
   const mentionRef = useRef<HTMLDivElement | null>(null);
   const { currentUserId } = useSDK();
   const { user } = useUser({ userId: currentUserId });
-  const { files, progress, removeFile, handleFileChange, handleAltTextChange } =
-    useFilePostUpload(pageId);
+  const {
+    files,
+    progress,
+    removeFile,
+    handleFileChange,
+    isLoading,
+    handleAltTextChange,
+    retryUpload,
+  } = useFilePostUpload(pageId);
+
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const timeNow = now(getLocalTimeZone());
   const { isDesktop } = useResponsive();
@@ -449,11 +458,90 @@ export const PollPostComposerPage = ({
     }
   }, [progress, files]);
 
+  const errorImageMenu = useCallback(
+    ({
+      fileIndex,
+      closeMenu,
+      fileId,
+    }: {
+      fileIndex: number;
+      closeMenu: () => void;
+      fileId: string;
+    }) => {
+      return (
+        <div className={styles.pollPostComposer__errorImageOption__container}>
+          <Button
+            className={styles.pollPostComposer__errorImageOption__item}
+            onPress={() => {
+              closeMenu();
+              if (fileId) {
+                retryUpload(fileId);
+              }
+            }}
+          >
+            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
+              Retry
+            </Typography.Body>
+          </Button>
+          <Button
+            className={styles.pollPostComposer__errorImageOption__item}
+            onPress={() => {
+              closeMenu();
+              triggerFileInput(fileIndex);
+            }}
+          >
+            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
+              Upload new image
+            </Typography.Body>
+          </Button>
+        </div>
+      );
+    },
+    [styles, retryUpload, imageOptions],
+  );
+
+  const ErrorImageMenuButton = ({ fileIndex, fileId }: { fileIndex: number; fileId: string }) => {
+    return (
+      <Popover
+        placement="bottom"
+        containerClassName={styles.pollPostComposer__errorImageOption__popOver__container}
+        trigger={({ openPopover, isOpen, isDesktop, closePopover }) => {
+          setIsPopoverOpen(isOpen);
+          return (
+            <AriaButton
+              className={styles.pollPostComposer__errorImageOption__popOver__triggerButton}
+              variant="text"
+              onPress={() => {
+                isDesktop
+                  ? openPopover()
+                  : setDrawerData({
+                      content: errorImageMenu({
+                        fileIndex,
+                        closeMenu: () => {
+                          closePopover();
+                          removeDrawerData();
+                        },
+                        fileId,
+                      }),
+                    });
+              }}
+            />
+          );
+        }}
+      >
+        {({ closePopover }) => (
+          <>{errorImageMenu({ fileIndex, closeMenu: closePopover, fileId })}</>
+        )}
+      </Popover>
+    );
+  };
+
   return (
     <div
       style={themeStyles}
       data-testid={accessibilityId}
       className={styles.pollPostComposerPage__container}
+      data-open-popover={isPopoverOpen}
     >
       <Form
         id="pollPostComposer"
@@ -616,6 +704,13 @@ export const PollPostComposerPage = ({
                           removeFile={removeFile}
                           onAltTextChange={handleAltTextChange}
                           isImagePollPost
+                          ErrorImageMenuButton={() =>
+                            typeof option.indexOfFiles === 'number' &&
+                            ErrorImageMenuButton({
+                              fileIndex: index,
+                              fileId: files[option.indexOfFiles].id,
+                            })
+                          }
                         />
                       </div>
                     ) : (
@@ -624,16 +719,18 @@ export const PollPostComposerPage = ({
                         className={styles.pollPostComposerPage__imagePollOptions__icon}
                       />
                     )}
-
-                    <TextArea
+                    <TextField
                       data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
-                      className={styles.pollPostComposerPage__pollOptions__input}
                       value={option.data}
-                      placeholder={`Option ${index + 1}`}
-                      onChange={(e) => updateImageOption(index, e.target.value)}
-                      rows={1}
+                      onChange={(text) => updateImageOption(index, text)}
                       onKeyDown={handleKeyDown}
-                    />
+                    >
+                      <Input
+                        className={styles.pollPostComposerPage__pollOptions__input}
+                        data-image-poll={true}
+                        placeholder={`Option ${index + 1}`}
+                      />
+                    </TextField>
                   </div>
                 </div>
               ))}
