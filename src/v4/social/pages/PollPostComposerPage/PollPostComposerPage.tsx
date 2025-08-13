@@ -573,6 +573,84 @@ export const PollPostComposerPage = ({
     }
   }, [progress, files]);
 
+  const errorImageMenu = useCallback(
+    ({
+      fileIndex,
+      closeMenu,
+      fileId,
+    }: {
+      fileIndex: number;
+      closeMenu: () => void;
+      fileId: string;
+    }) => {
+      return (
+        <div className={styles.pollPostComposer__errorImageOption__container}>
+          <Button
+            className={styles.pollPostComposer__errorImageOption__item}
+            onPress={() => {
+              closeMenu();
+              if (fileId) {
+                retryUpload(fileId);
+              }
+            }}
+          >
+            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
+              Retry
+            </Typography.Body>
+          </Button>
+          <Button
+            className={styles.pollPostComposer__errorImageOption__item}
+            onPress={() => {
+              closeMenu();
+              triggerFileInput(fileIndex);
+            }}
+          >
+            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
+              Upload new image
+            </Typography.Body>
+          </Button>
+        </div>
+      );
+    },
+    [styles, retryUpload, imageOptions],
+  );
+
+  const ErrorImageMenuButton = ({ fileIndex, fileId }: { fileIndex: number; fileId: string }) => {
+    return (
+      <Popover
+        placement="bottom"
+        containerClassName={styles.pollPostComposer__errorImageOption__popOver__container}
+        trigger={({ openPopover, isOpen, isDesktop, closePopover }) => {
+          setIsPopoverOpen(isOpen);
+          return (
+            <AriaButton
+              className={styles.pollPostComposer__errorImageOption__popOver__triggerButton}
+              variant="text"
+              onPress={() => {
+                isDesktop
+                  ? openPopover()
+                  : setDrawerData({
+                      content: errorImageMenu({
+                        fileIndex,
+                        closeMenu: () => {
+                          closePopover();
+                          removeDrawerData();
+                        },
+                        fileId,
+                      }),
+                    });
+              }}
+            />
+          );
+        }}
+      >
+        {({ closePopover }) => (
+          <>{errorImageMenu({ fileIndex, closeMenu: closePopover, fileId })}</>
+        )}
+      </Popover>
+    );
+  };
+
   return (
     <div
       style={themeStyles}

@@ -475,7 +475,7 @@ export const PostContent = ({
               category === AmityPostCategory.PIN_AND_ANNOUNCEMENT) && (
               <PinBadge pageId={pageId} componentId={componentId} />
             )}
-            {style === AmityPostContentComponentStyle.FEED && (
+            {style === AmityPostContentComponentStyle.FEED && sharableLink && (
               <Popover
                 containerClassName={styles.postContent__bar__actionButton}
                 trigger={{
