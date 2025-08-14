@@ -102,6 +102,7 @@ export function PollTargetSelectionPage() {
             <Button
               key={community.communityId}
               className={styles.pollTargetSelectionPage__timeline}
+              data-testid="poll-target-community-item"
               onPress={() => {
                 isDesktop
                   ? openPopup({

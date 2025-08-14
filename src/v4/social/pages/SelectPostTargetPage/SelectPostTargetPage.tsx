@@ -170,10 +170,14 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
                   }
                 }}
               >
-                <Button className={styles.selectPostTargetPage__timeline}>
-                  <div className={styles.selectPostTargetPage__communityAvatar}>
+                <Button
+                  className={styles.selectPostTargetPage__timeline}
+                  data-testid="post-target-community-item"
+                >
+                  <div className={styles.selectPostTargetPage__communityAvatar} data-whta="is">
                     <CommunityAvatar pageId={pageId} community={community} />
                   </div>
+                  Test
                   <div className={styles.selectPostTargetPage__communityName}>
                     {!community.isPublic && <CommunityPrivateBadge />}
                     <CommunityDisplayName pageId={pageId} community={community} />
@@ -185,6 +189,7 @@ export function SelectPostTargetPage({ isClipPost = false }: { isClipPost?: bool
               <Button
                 key={community.communityId}
                 className={styles.selectPostTargetPage__timeline}
+                data-testid="post-target-community-item"
                 onPress={() => {
                   isDesktop
                     ? openPopup({
