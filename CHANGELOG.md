@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.11.2 (2025-08-20)
+
+
+### Bug Fixes
+
+* add props redirect ([7d7f996](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/7d7f996948675c64ee21663168d963307e0d1a38))
+
 ### 4.11.1 (2025-08-06)
 
 ## 4.11.0 (2025-07-18)
