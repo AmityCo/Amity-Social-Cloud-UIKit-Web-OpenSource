@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
+* update redirect user profile ([af039b4](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/af039b4437f237636b5bd2e91fd5c599933824af))
+
+### 4.11.2 (2025-08-20)
+
+
+### Bug Fixes
+
 * add props redirect ([7d7f996](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/7d7f996948675c64ee21663168d963307e0d1a38))
 
 ### 4.11.1 (2025-08-06)
