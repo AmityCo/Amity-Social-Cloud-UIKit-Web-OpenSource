@@ -94,17 +94,7 @@ export const GlobalFeed = ({
 
           return (
             <React.Fragment key={item.post.postId}>
-              <ClickableArea
-                elementType="div"
-                className={styles.global_feed__postContainer}
-                onPress={() =>
-                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
-                    hideTarget: true,
-                    postId: item.post?.postId as string,
-                    category: AmityPostCategory.ANNOUNCEMENT,
-                  })
-                }
-              >
+              <div className={styles.global_feed__postContainer}>
                 <PostContent
                   pageId={pageId}
                   post={item.post}
@@ -125,7 +115,7 @@ export const GlobalFeed = ({
                     });
                   }}
                 />
-              </ClickableArea>
+              </div>
               <Divider isShown={!isDesktop} />
             </React.Fragment>
           );
@@ -136,13 +126,7 @@ export const GlobalFeed = ({
           {isAmityAd(item) ? (
             <PostAd ad={item} />
           ) : (
-            <ClickableArea
-              elementType="div"
-              className={styles.global_feed__postContainer}
-              onPress={() =>
-                AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId })
-              }
-            >
+            <div className={styles.global_feed__postContainer}>
               <PostContent
                 pageId={pageId}
                 post={item}
@@ -160,7 +144,7 @@ export const GlobalFeed = ({
                 onPostDeleted={onPostDeleted}
                 onPollPostDeleted={onPostDeleted}
               />
-            </ClickableArea>
+            </div>
           )}
         </React.Fragment>
       ))}

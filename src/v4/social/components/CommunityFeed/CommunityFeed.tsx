@@ -162,11 +162,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                 post?.placement === 'default' ? AmityPostCategory.PIN : AmityPostCategory.GENERAL;
 
               return (
-                <Button
-                  key={post.postId}
-                  className={styles.communityFeed__postContent}
-                  onPress={() => handlePostNavigation(post.postId, category)}
-                >
+                <div key={post.postId} className={styles.communityFeed__postContent}>
                   <PostContent
                     pageId={pageId}
                     key={post.postId}
@@ -186,7 +182,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                     }
                     onPollPostDeleted={() => refreshPosts()}
                   />
-                </Button>
+                </div>
               );
             })}
         {isLoading &&

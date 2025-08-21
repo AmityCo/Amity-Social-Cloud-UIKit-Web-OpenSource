@@ -18,6 +18,7 @@
 }
 
 .postReplyComment__content {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -27,6 +28,10 @@
   border-radius: 0 0.75rem 0.75rem;
   padding: 0.75rem;
   max-width: max-content;
+}
+
+.postReplyComment__content[data-has-reaction='true'] {
+  margin-bottom: 1rem;
 }
 
 .postReplyComment__content__username {
@@ -56,18 +61,95 @@
 }
 
 .postReplyComment__secondRow__rightPane {
+  position: absolute;
+  bottom: -1rem;
+  left: 0;
   display: flex;
   gap: 0.25rem;
   align-items: center;
+  padding: 0.25rem 0.375rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-default);
 }
 
 .postReplyComment__secondRow__rightPane__reactionCount {
-  color: var(--asc-color-base-shade2);
+  color: var(--asc-color-base-default);
 }
 
 .postReplyComment__secondRow__rightPane__like {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+.postReplyComment__secondRow__rightPane__reactions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+/* Compensate for overlapping translations when multiple icons exist */
+.postReplyComment__secondRow__rightPane__reactions:has(:nth-child(2)) {
+  margin-right: -0.25rem;
+}
+
+.postReplyComment__secondRow__rightPane__reactions:has(:nth-child(3)) {
+  margin-right: -1rem;
+}
+
+.postReplyComment__secondRow__rightPane__reactions:has(:nth-child(4)) {
+  margin-right: -1.25rem;
+}
+
+.postReplyComment__secondRow__rightPane__reactions:has(:nth-child(5)) {
+  margin-right: -2rem;
+}
+
+.postReplyComment__secondRow__rightPane__reactions:has(:nth-child(6)) {
+  margin-right: -2.25rem;
+}
+
+.postReplyComment__secondRow__rightPane__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--asc-color-white);
+  position: relative;
+}
+
+.postReplyComment__secondRow__rightPane__iconFallback {
+  color: var(--asc-color-base-shade3);
+}
+
+.postReplyComment__secondRow__rightPane__icon:nth-child(1) {
+  transform: translateX(0);
+  z-index: 5;
+}
+
+.postReplyComment__secondRow__rightPane__icon:nth-child(2) {
+  transform: translateX(-0.45rem);
+  z-index: 4;
+}
+
+.postReplyComment__secondRow__rightPane__icon:nth-child(3) {
+  transform: translateX(-0.95rem);
+  z-index: 3;
+}
+
+.postReplyComment__secondRow__rightPane__icon:nth-child(4) {
+  transform: translateX(-1.45rem);
+  z-index: 2;
+}
+
+.postReplyComment__secondRow__rightPane__icon:nth-child(5) {
+  transform: translateX(-2rem);
+  z-index: 1;
+}
+
+.postReplyComment__secondRow__rightPane__icon:nth-child(6) {
+  transform: translateX(-2.5rem);
+  z-index: 0;
 }
 
 .postReplyComment__secondRow__like {
@@ -235,4 +317,12 @@
   border-radius: 0.5rem;
   box-shadow: var(--asc-box-shadow-04);
   background-color: var(--asc-color-background-default);
+}
+
+.postReplyComment__reactionPicker {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  z-index: 9999;
+  margin-bottom: 0.5rem;
 }

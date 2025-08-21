@@ -1,0 +1,192 @@
+.reactionPickerContainer {
+  display: flex;
+  cursor: pointer;
+  gap: 0.5rem;
+  width: max-content;
+}
+
+.reactionButton {
+  position: relative;
+}
+
+.reactionButton__icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--asc-border-radius-full);
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.reactionButton__icon[data-active='true'] {
+  transform: scale(1);
+}
+
+.reactionButton__iconContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.reactionButton__icon:hover,
+.reactionButton__iconContainer:hover .reactionButton__icon {
+  animation: bounce 0.8s ease-in-out;
+}
+
+.reactionButton__activeBackground {
+  display: none;
+}
+
+.reactionButton__activeBackground[data-active='true'] {
+  display: block;
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.reactionButton__text {
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 4rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: var(--asc-color-white);
+  background-color: rgb(0 0 0 / 50%);
+  padding: 0.125rem 0.375rem;
+  border-radius: 1.75rem;
+  opacity: 0;
+  visibility: hidden;
+  text-transform: capitalize;
+  transition:
+    opacity 0.2s ease-in-out,
+    visibility 0.2s ease-in-out;
+}
+
+/* When panel is positioned below, show text below the icon */
+.reactionPickerContainer[data-position='below'] .reactionButton__text {
+  top: 2.5rem;
+}
+
+.reactionButton__icon:hover + .reactionButton__text,
+.reactionButton__iconContainer:hover .reactionButton__text {
+  opacity: 1;
+  visibility: visible;
+  animation: bounce-text 0.8s ease-in-out;
+}
+
+/* Different animation when panel is positioned below */
+.reactionPickerContainer[data-position='below'] .reactionButton__icon:hover + .reactionButton__text,
+.reactionPickerContainer[data-position='below']
+  .reactionButton__iconContainer:hover
+  .reactionButton__text {
+  animation: bounce-text-below 0.8s ease-in-out;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+
+  15% {
+    transform: translateY(-12px) scale(1.1);
+  }
+
+  30% {
+    transform: translateY(0) scale(1.05);
+  }
+
+  45% {
+    transform: translateY(-6px) scale(1.08);
+  }
+
+  60% {
+    transform: translateY(0) scale(1.02);
+  }
+
+  75% {
+    transform: translateY(-3px) scale(1.04);
+  }
+
+  90% {
+    transform: translateY(0) scale(1.01);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce-text {
+  0% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  15% {
+    transform: translateX(-50%) translateY(-12px) scale(1.1);
+  }
+
+  30% {
+    transform: translateX(-50%) translateY(0) scale(1.05);
+  }
+
+  45% {
+    transform: translateX(-50%) translateY(-6px) scale(1.08);
+  }
+
+  60% {
+    transform: translateX(-50%) translateY(0) scale(1.02);
+  }
+
+  75% {
+    transform: translateX(-50%) translateY(-3px) scale(1.04);
+  }
+
+  90% {
+    transform: translateX(-50%) translateY(0) scale(1.01);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes bounce-text-below {
+  0% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  15% {
+    transform: translateX(-50%) translateY(-12px) scale(1.1);
+  }
+
+  30% {
+    transform: translateX(-50%) translateY(0) scale(1.05);
+  }
+
+  45% {
+    transform: translateX(-50%) translateY(-6px) scale(1.08);
+  }
+
+  60% {
+    transform: translateX(-50%) translateY(0) scale(1.02);
+  }
+
+  75% {
+    transform: translateX(-50%) translateY(-3px) scale(1.04);
+  }
+
+  90% {
+    transform: translateX(-50%) translateY(0) scale(1.01);
+  }
+
+  100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}

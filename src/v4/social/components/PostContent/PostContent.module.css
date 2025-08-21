@@ -59,8 +59,10 @@
 .postContent__content {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 1rem;
   padding: 0.5rem 0;
+  cursor: pointer;
 }
 
 .postContent__content_and_reactions {
@@ -85,6 +87,10 @@
   align-items: center;
   justify-content: start;
   gap: 0.75rem;
+}
+
+.postContent__reactionPopOver {
+  z-index: 50;
 }
 
 .postContent__reactionBar__rightPane {
@@ -118,6 +124,7 @@
 }
 
 .postContent__inlineComment__container {
+  justify-content: start;
   padding: 0.75rem 1rem;
   box-sizing: border-box;
   width: 100%;
@@ -172,46 +179,85 @@
 
 .postContent__commentsCount {
   color: var(--asc-color-base-shade2);
+  cursor: pointer;
 }
 
 .postContent__reactionsBar__reactions {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row-reverse;
+  flex-direction: row;
+}
+
+/* Compensate for overlapping translations when multiple icons exist */
+.postContent__reactionsBar__reactions:has(:nth-child(2)) {
+  margin-right: -0.25rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(3)) {
+  margin-right: -1rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(4)) {
+  margin-right: -1.25rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(5)) {
+  margin-right: -2rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(6)) {
+  margin-right: -2.25rem;
 }
 
 .postContent__reactionsBar__reactions__icon {
   width: 1.25rem;
   height: 1.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--asc-color-white);
+  position: relative;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(1) {
+.postContent__reactionsBar__reactions__iconFallback {
+  color: var(--asc-color-base-shade3);
+}
+
+.postContent__reactionsBar__reactions__icon:nth-child(1) {
   transform: translateX(0);
+  z-index: 5;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(2) {
-  transform: translateX(-0.25rem);
+.postContent__reactionsBar__reactions__icon:nth-child(2) {
+  transform: translateX(-0.45rem);
+  z-index: 4;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(3) {
-  transform: translateX(-0.5rem);
+.postContent__reactionsBar__reactions__icon:nth-child(3) {
+  transform: translateX(-0.95rem);
+  z-index: 3;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(4) {
-  transform: translateX(-0.75rem);
+.postContent__reactionsBar__reactions__icon:nth-child(4) {
+  transform: translateX(-1.45rem);
+  z-index: 2;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(5) {
-  transform: translateX(-1rem);
+.postContent__reactionsBar__reactions__icon:nth-child(5) {
+  transform: translateX(-2rem);
+  z-index: 1;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(6) {
-  transform: translateX(-1.25rem);
+.postContent__reactionsBar__reactions__icon:nth-child(6) {
+  transform: translateX(-2.5rem);
+  z-index: 0;
 }
 
 .postContent__reactionsBar__reactions__count {
   color: var(--asc-color-base-shade2);
+}
+
+.postContent__reactionsBar__reactions__count:hover {
+  color: var(--asc-color-base-shade1);
 }
 
 .postContent__bar__information__editedTag {
@@ -304,6 +350,7 @@
   padding-top: 0.25rem;
   line-height: 1.25rem;
   color: var(--asc-color-base-shade2);
+  cursor: pointer;
 }
 
 .postContent__wrapRightMenu {

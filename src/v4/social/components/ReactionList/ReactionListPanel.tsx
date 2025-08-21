@@ -29,7 +29,7 @@ export const ReactionListPanel = ({
 }) => {
   const { currentUserId } = useSDK();
   const { goToUserProfilePage } = useNavigation();
-  const { config } = useCustomReaction();
+  const { socialReactions: config } = useCustomReaction();
   const { closePopup } = usePopupContext();
   const reactionList = useMemo(() => config.map(({ name }) => name), [config]);
 

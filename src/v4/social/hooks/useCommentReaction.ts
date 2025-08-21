@@ -3,46 +3,52 @@ import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
-interface UsePostReactionParams {
-  post: Amity.Post;
+interface UseCommentReactionParams {
+  comment: Amity.Comment;
 }
 
-interface UsePostReactionReturn {
+interface UseCommentReactionReturn {
   reactionByMe: string | null;
   reactionsCount: number;
-  mutateAddReactionAsync: (reactionKey: string) => Promise<any>;
-  mutateRemoveReactionAsync: (reactionKey: string) => Promise<any>;
+  mutateAddReactionAsync: (
+    reactionKey: string,
+  ) => ReturnType<typeof ReactionRepository.addReaction>;
+  mutateRemoveReactionAsync: (
+    reactionKey: string,
+  ) => ReturnType<typeof ReactionRepository.removeReaction>;
   setReactionByMe: (reaction: string | null) => void;
 }
 
-export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactionReturn => {
+export const useCommentReaction = ({
+  comment,
+}: UseCommentReactionParams): UseCommentReactionReturn => {
   const [reactionsCount, setReactionsCount] = useState(0);
   const [shouldSubscribe, setShouldSubscribe] = useState(false);
   const [reactionByMe, setReactionByMe] = useState<string | null>(null);
   const { info } = useNotifications();
 
   useEffect(() => {
-    if (post == null) return;
-    setReactionByMe(post.myReactions?.[0] || null);
-  }, [post?.myReactions]);
+    if (comment == null) return;
+    setReactionByMe(comment.myReactions?.[0] || null);
+  }, [comment?.myReactions]);
 
   useEffect(() => {
-    if (post == null) return;
-    setReactionsCount(post?.reactionsCount || 0);
-  }, [post?.reactionsCount]);
+    if (comment == null) return;
+    setReactionsCount(comment?.reactionsCount || 0);
+  }, [comment?.reactionsCount]);
 
   const { mutateAsync: mutateAddReactionAsync } = useMutation({
     mutationFn: async (reactionKey: string) => {
       if (reactionByMe && reactionByMe !== reactionKey) {
         try {
-          await ReactionRepository.removeReaction('post', post?.postId, reactionByMe);
+          await ReactionRepository.removeReaction('comment', comment?.commentId, reactionByMe);
         } catch (err) {
           info({
             content: 'Oops, something went wrong.',
           });
         }
       }
-      return ReactionRepository.addReaction('post', post?.postId, reactionKey);
+      return ReactionRepository.addReaction('comment', comment?.commentId, reactionKey);
     },
 
     onMutate: (reactionKey) => {
@@ -54,8 +60,8 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
     },
 
     onError: () => {
-      setReactionByMe(post?.myReactions?.[0] || null);
-      setReactionsCount(post?.reactionsCount || 0);
+      setReactionByMe(comment?.myReactions?.[0] || null);
+      setReactionsCount(comment?.reactionsCount || 0);
       info({
         content: 'Oops, something went wrong.',
       });
@@ -64,7 +70,7 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
 
   const { mutateAsync: mutateRemoveReactionAsync } = useMutation({
     mutationFn: async (reactionKey: string) => {
-      return ReactionRepository.removeReaction('post', post?.postId, reactionKey);
+      return ReactionRepository.removeReaction('comment', comment?.commentId, reactionKey);
     },
     onMutate: () => {
       setShouldSubscribe(true);
@@ -73,8 +79,8 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
     },
 
     onError: () => {
-      setReactionByMe(post?.myReactions?.[0] || null);
-      setReactionsCount(post?.reactionsCount || 0);
+      setReactionByMe(comment?.myReactions?.[0] || null);
+      setReactionsCount(comment?.reactionsCount || 0);
       info({
         content: 'Oops, something went wrong.',
       });

@@ -8,9 +8,24 @@ export const DrawerContainer = () => {
   const { removeDrawerData } = useDrawer();
 
   const isOpen = drawerData != null;
+  const { snapPoints, activeSnapPoint, onSnapPointChange } = drawerData || {};
+
+  const handleSnapPointChange = (snapPoint: string | number | null) => {
+    if (onSnapPointChange) {
+      onSnapPointChange(snapPoint);
+    }
+  };
 
   return (
-    <Drawer.Root open={isOpen} onOpenChange={(open) => open === false && removeDrawerData()}>
+    <Drawer.Root
+      open={isOpen}
+      onOpenChange={(open) => open === false && removeDrawerData()}
+      {...(snapPoints && { snapPoints })}
+      {...(activeSnapPoint !== undefined && { activeSnapPoint })}
+      setActiveSnapPoint={handleSnapPointChange}
+      modal={true}
+      dismissible={true}
+    >
       <Drawer.Portal>
         <Drawer.Overlay className={styles.drawer__overlay} />
         <Drawer.Content className={styles.drawer__content}>

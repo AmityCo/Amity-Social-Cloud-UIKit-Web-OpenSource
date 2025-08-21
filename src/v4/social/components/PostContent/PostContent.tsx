@@ -8,11 +8,7 @@ import { Typography } from '~/v4/core/components';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { CommentButton } from '~/v4/social/elements/CommentButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import Crying from './Crying';
-import Happy from './Happy';
-import Fire from './Fire';
-import Love from './Love';
-import Like from './Like';
+import FallbackReaction from '~/v4/icons/FallbackReaction';
 import { TextContent } from './TextContent';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
@@ -20,7 +16,6 @@ import { VideoViewer } from '~/v4/social/internal-components/VideoViewer/VideoVi
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
 import { usePostedUserInformation } from '~/v4/core/hooks/usePostedUserInformation';
 import millify from 'millify';
-import { Button } from '~/v4/core/natives/Button';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useVisibilitySensor } from '~/v4/social/hooks/useVisibilitySensor';
 import { AnnouncementBadge } from '~/v4/social/elements/AnnouncementBadge';
@@ -46,6 +41,8 @@ import { Divider } from '~/v4/social/elements/Divider';
 import { PostDetailPageProps } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
+import { Button } from '~/v4/core/components/AriaButton';
+import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -131,9 +128,15 @@ export const PostContent = ({
   const { confirm } = useConfirmContext();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { moderators } = useCommunityModeratorsCollection({ communityId: post?.targetId });
-  const { mutateAddReactionAsync, mutateRemoveReactionAsync, reactionByMe, reactionsCount } =
-    usePostReaction({ post });
+  const {
+    mutateAddReactionAsync,
+    mutateRemoveReactionAsync,
+    reactionByMe,
+    setReactionByMe,
+    reactionsCount,
+  } = usePostReaction({ post });
   const { goToCommunityProfilePage } = useNavigation();
+  const { socialReactions } = useCustomReaction();
 
   const disabledInlineComment = pageId === 'post_detail_page' || pageId === 'pending_posts_page';
 
@@ -170,10 +173,16 @@ export const PostContent = ({
   });
 
   const handleReactionClick = (reactionKey: string) => {
-    if (reactionByMe) {
-      mutateRemoveReactionAsync(reactionByMe);
-    } else {
+    if (reactionByMe === null) {
       mutateAddReactionAsync(reactionKey);
+      setReactionByMe(reactionKey);
+    } else if (reactionByMe !== reactionKey) {
+      mutateRemoveReactionAsync(reactionByMe);
+      mutateAddReactionAsync(reactionKey);
+      setReactionByMe(reactionKey);
+    } else {
+      mutateRemoveReactionAsync(reactionByMe);
+      setReactionByMe(null);
     }
   };
 
@@ -214,21 +223,70 @@ export const PostContent = ({
     });
   };
 
-  const handleUnpinPost = async () => {};
-
-  const handleEditPost = () => {};
-
-  const handleDeletePost = () => {};
-
   const isNotJoinedCommunity = !targetCommunity?.isJoined && post?.targetType === 'community';
 
-  const hasLike = post?.reactions?.like > 0;
-  const hasLove = post?.reactions?.love > 0;
-  const hasFire = post?.reactions?.fire > 0;
-  const hasHappy = post?.reactions?.happy > 0;
-  const hasCrying = post?.reactions?.crying > 0;
+  const allConfigReactions = useMemo(
+    () => socialReactions.map((reactionConfigItem) => reactionConfigItem.name),
+    [socialReactions],
+  );
 
-  const hasReaction = hasLike || hasLove || hasFire || hasHappy || hasCrying;
+  const configuredReactions = useMemo(() => {
+    if (!socialReactions || !post?.reactions) return [];
+
+    return socialReactions
+      .filter((reaction) => post.reactions[reaction.name] > 0)
+      .sort((a, b) => {
+        const countA = post.reactions[a.name] || 0;
+        const countB = post.reactions[b.name] || 0;
+
+        // First sort by count (descending)
+        if (countB !== countA) {
+          return countB - countA;
+        }
+
+        // If counts are equal, sort alphabetically by reaction name (ascending)
+        return a.name.localeCompare(b.name);
+      });
+  }, [socialReactions, post?.reactions]);
+
+  const unknownReactions = useMemo(() => {
+    if (!post?.reactions) return [];
+
+    return Object.keys(post.reactions).filter(
+      (reactionType) =>
+        !allConfigReactions.includes(reactionType) && post.reactions[reactionType] > 0,
+    );
+  }, [post?.reactions, allConfigReactions]);
+
+  const sortedReactions = useMemo(() => {
+    if (!post?.reactions) return [];
+
+    // Combine configured and unknown reactions with their counts
+    const allReactions = [
+      ...configuredReactions.map((reaction) => ({
+        type: 'configured' as const,
+        reaction,
+        count: post.reactions[reaction.name] || 0,
+      })),
+      ...unknownReactions.map((reactionName) => ({
+        type: 'unknown' as const,
+        reactionName,
+        count: post.reactions[reactionName] || 0,
+      })),
+    ];
+
+    return allReactions.sort((a, b) => {
+      if (b.count !== a.count) {
+        return b.count - a.count;
+      }
+
+      const nameA = a.type === 'configured' ? a.reaction.name : a.reactionName;
+      const nameB = b.type === 'configured' ? b.reaction.name : b.reactionName;
+      return nameA.localeCompare(nameB);
+    });
+  }, [configuredReactions, unknownReactions, post?.reactions]);
+
+  const hasReaction = sortedReactions.length > 0;
 
   //TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
   const shouldShowConfirmEdit =
@@ -366,7 +424,11 @@ export const PostContent = ({
         </div>
 
         <div className={styles.postContent__content_and_reactions}>
-          <div className={styles.postContent__content}>
+          <Button
+            variant="default"
+            className={styles.postContent__content}
+            onPress={() => onClick?.()}
+          >
             <TextContent
               pageId={pageId}
               componentId={componentId}
@@ -399,12 +461,14 @@ export const PostContent = ({
                 disabledContent={isNotJoinedCommunity || disabledContent}
               />
             ) : null}
-          </div>
-          {style === AmityPostContentComponentStyle.DETAIL ? (
-            <div className={styles.postContent__reactions_and_comments}>
-              <div
+          </Button>
+
+          <div className={styles.postContent__reactions_and_comments}>
+            {post?.reactionsCount > 0 && (
+              <Button
+                variant="default"
                 className={styles.postContent__reactionsBar}
-                onClick={() => {
+                onPress={() => {
                   const reactionList = (
                     <ReactionList
                       pageId={pageId}
@@ -414,52 +478,68 @@ export const PostContent = ({
                   );
                   isDesktop
                     ? openPopup({ view: 'desktop', children: reactionList })
-                    : setDrawerData({ content: reactionList });
+                    : setDrawerData({
+                        content: reactionList,
+                        snapPoints: [0.7, 1],
+                        activeSnapPoint: 0.7,
+                      });
                 }}
               >
                 {hasReaction ? (
                   <div className={styles.postContent__reactionsBar__reactions}>
-                    {hasCrying && (
-                      <Crying className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasHappy && (
-                      <Happy className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasFire && (
-                      <Fire className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasLove && (
-                      <Love className={styles.postContent__reactionsBar__reactions__icon} />
-                    )}
-                    {hasLike && (
-                      <Like className={styles.postContent__reactionsBar__reactions__icon} />
+                    {sortedReactions.map((item) =>
+                      item.type === 'configured' ? (
+                        <img
+                          key={item.reaction.name}
+                          src={item.reaction.image}
+                          alt={item.reaction.name}
+                          className={styles.postContent__reactionsBar__reactions__icon}
+                        />
+                      ) : (
+                        <FallbackReaction
+                          key={item.reactionName}
+                          className={clsx(
+                            styles.postContent__reactionsBar__reactions__iconFallback,
+                            styles.postContent__reactionsBar__reactions__icon,
+                          )}
+                          backgroundColor={getComputedStyle(
+                            document.documentElement,
+                          ).getPropertyValue('--asc-color-base-shade3')}
+                        />
+                      ),
                     )}
                   </div>
                 ) : null}
+
                 <Typography.Caption
                   data-testid={`${pageId}/${componentId}/like_count`}
                   className={styles.postContent__reactionsBar__reactions__count}
                 >
-                  {`${millify(post?.reactionsCount || 0)} ${
-                    post?.reactionsCount === 1 ? 'like' : 'likes'
-                  }`}
+                  {`${millify(post?.reactionsCount || 0)}`}
                 </Typography.Caption>
-              </div>
+              </Button>
+            )}
 
-              <Typography.Caption
-                data-testid={`${pageId}/${componentId}/comment_count`}
-                className={styles.postContent__commentsCount}
-              >
-                {`${post?.commentsCount || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
-              </Typography.Caption>
-            </div>
-          ) : null}
+            {post?.commentsCount > 0 && (
+              <Button variant="default" onPress={() => onClick?.()}>
+                <Typography.Caption
+                  data-testid={`${pageId}/${componentId}/comment_count`}
+                  className={styles.postContent__commentsCount}
+                >
+                  {`${millify(post?.commentsCount) || 0} ${post?.commentsCount === 1 ? 'comment' : 'comments'}`}
+                </Typography.Caption>
+              </Button>
+            )}
+          </div>
+
           {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
             <>
               <div className={styles.postContent__divider} />
-              <Typography.Body className={styles.postContent__notMember}>
-                Join community to interact with all posts
-              </Typography.Body>
+              <Button variant="default" onPress={() => goToCommunityProfilePage(post.targetId)}>
+                <Typography.Body className={styles.postContent__notMember}>
+                  Join community to interact with all posts
+                </Typography.Body>
+              </Button>
             </>
           ) : targetCommunity &&
             !targetCommunity?.isJoined &&
@@ -555,6 +635,7 @@ export const PostContent = ({
             <>
               {inlineComment && (
                 <Button
+                  variant="default"
                   className={styles.postContent__inlineComment__container}
                   onPress={() => onClick?.({ commentId: inlineComment.commentId })}
                 >

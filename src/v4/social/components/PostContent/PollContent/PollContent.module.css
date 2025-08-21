@@ -30,6 +30,7 @@
 .pollContent__votedItemsContainer {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 0.5rem;
 }
 
@@ -51,6 +52,7 @@
 
 .pollContent__pollDetail__container {
   display: flex;
+  width: 100%;
   justify-content: space-between;
 }
 
@@ -65,6 +67,7 @@
 }
 
 .pollContent__pollLabel {
+  text-align: left;
   color: var(--asc-color-base-shade2);
 }
 
@@ -151,6 +154,7 @@
 }
 
 .pollContent__imageOption__text {
+  text-align: left;
   margin-top: 0.75rem;
   color: var(--asc-color-base-default);
 }

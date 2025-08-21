@@ -1,6 +1,7 @@
 export * from './collections/useReactionsCollection';
 export { useGetActiveStoriesByTarget } from './useGetActiveStories';
 export { useCommentFlaggedByMe } from './useCommentFlaggedByMe';
+export { useCommentReaction } from './useCommentReaction';
 export { default as useCommunityPermission } from './useCommunityPermission';
 export { useCommunityInfo } from './useCommunityInfo';
 export { default as useCategoriesByIds } from './useCategoriesByIds';

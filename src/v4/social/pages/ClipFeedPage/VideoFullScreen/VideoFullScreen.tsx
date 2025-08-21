@@ -113,24 +113,29 @@ export const VideoFullScreen = ({
       {(isClipLoading || isLoading) && (
         <div className={styles.videoFullScreen__loadingBackground} />
       )}
-
-      <video
-        ref={(el) => {
-          if (el) {
-            videoRefs.current[post.postId] = el;
-            setVideoElement(el); // Update state to trigger progress bar re-render
-          }
+      <Button
+        variant="default"
+        onPress={() => {
+          onClickVideo(post.postId);
         }}
-        src={fileUrl}
-        loop
-        playsInline
-        className={styles.videoFullScreen__player}
-        muted={isMuted}
-        preload="auto"
-        onClick={(e) => onClickVideo(post.postId, e)}
-        autoPlay={isActive}
-        style={{ opacity: isClipLoading ? 0 : 1 }}
-      />
+      >
+        <video
+          ref={(el) => {
+            if (el) {
+              videoRefs.current[post.postId] = el;
+              setVideoElement(el); // Update state to trigger progress bar re-render
+            }
+          }}
+          src={fileUrl}
+          loop
+          playsInline
+          className={styles.videoFullScreen__player}
+          muted={isMuted}
+          preload="auto"
+          autoPlay={isActive}
+          style={{ opacity: isClipLoading ? 0 : 1 }}
+        />
+      </Button>
 
       <div className={styles.videoFullScreen__overlay} />
 
@@ -138,7 +143,9 @@ export const VideoFullScreen = ({
         <Button
           variant="text"
           className={styles.videoFullScreen__playButtonOverlay}
-          onPress={() => onClickVideo(post.postId)}
+          onPress={() => {
+            onClickVideo(post.postId);
+          }}
         >
           <div className={styles.videoFullScreen__playButton}>
             <Play className={styles.videoFullScreen__playButtonIcon} />

@@ -23,8 +23,8 @@
 }
 
 .clipFeedMenu__reactButton {
-  width: 2rem;
-  height: 2rem;
+  max-width: 2rem;
+  max-height: 2rem;
 }
 
 .clipFeedMenu__reactionsCount[data-has-my-reaction='true'],

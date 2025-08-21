@@ -35,10 +35,15 @@ export const ClipFeedMenu = ({
   isLocalMuted,
 }: ClipFeedMenuProps) => {
   const { post, isLoading } = usePost(postId);
-  const { mutateAddReactionAsync, mutateRemoveReactionAsync, reactionByMe, reactionsCount } =
-    usePostReaction({
-      post: post as Amity.Post<'video' | 'clip'>,
-    });
+  const {
+    mutateAddReactionAsync,
+    mutateRemoveReactionAsync,
+    reactionByMe,
+    setReactionByMe,
+    reactionsCount,
+  } = usePostReaction({
+    post: post as Amity.Post<'video' | 'clip'>,
+  });
 
   const notification = useNotifications();
   const { setDrawerData } = useDrawer();
@@ -49,16 +54,22 @@ export const ClipFeedMenu = ({
     shouldCall: post?.targetType === 'community',
   });
 
-  const handleReactionClick = async (reactionKey: string) => {
+  const handleReactionClick = (reactionKey: string) => {
     if (post?.targetType === 'community' && !community?.isJoined) {
       return notification.info({
         content: 'Join community to interact with this clip.',
       });
     }
-    if (reactionByMe === reactionKey) {
-      await mutateRemoveReactionAsync(reactionKey);
+    if (reactionByMe === null) {
+      mutateAddReactionAsync(reactionKey);
+      setReactionByMe(reactionKey);
+    } else if (reactionByMe !== reactionKey) {
+      mutateRemoveReactionAsync(reactionByMe);
+      mutateAddReactionAsync(reactionKey);
+      setReactionByMe(reactionKey);
     } else {
-      await mutateAddReactionAsync(reactionKey);
+      mutateRemoveReactionAsync(reactionByMe);
+      setReactionByMe(null);
     }
   };
 
@@ -83,6 +94,7 @@ export const ClipFeedMenu = ({
           reactButtonClassName={styles.clipFeedMenu__reactButton}
           reactionsCount={reactionsCount || 0}
           myReaction={reactionByMe || null}
+          isClipReaction
         />
       )}
       {isShowInteractionMenu && !isDragging && (
