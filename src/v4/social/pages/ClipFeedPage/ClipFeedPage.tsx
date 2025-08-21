@@ -571,8 +571,49 @@ export const ClipFeedPage = ({
                               })
                             }
                           />
-                        ) : (
-                          <div />
+                          <ClipHeader
+                            pageId={pageId}
+                            targetId={post.targetId}
+                            targetType={post.targetType}
+                          />
+                          {isShowInteractionMenu ? (
+                            <CreateNewClipButton
+                              onClick={() =>
+                                AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
+                                  isClipPost: true,
+                                })
+                              }
+                            />
+                          ) : (
+                            <div />
+                          )}
+                        </div>
+                        {!isClipFailed && (
+                          <ClipFeedMenu
+                            postId={post.parentPostId}
+                            childPost={post as Amity.Post<'video' | 'clip'>}
+                            isShowInteractionMenu={isShowInteractionMenu}
+                            isDragging={isDragging}
+                            handleMuteToggle={handleMuteToggle}
+                            isLocalMuted={isLocalMuted}
+                            onClickMenuButton={() => handleMenuClick(post.parentPostId)}
+                          />
+                        )}
+                        <ClipCaption
+                          postId={post.parentPostId}
+                          creator={post.creator}
+                          isDragging={isDragging}
+                          onClickSeeMoreButton={() => handleMenuClick(post.parentPostId)}
+                          onClickUser={() =>
+                            AmityClipFeedPageBehavior?.goToUserProfilePage?.({
+                              userId: post.creator?.userId as string,
+                            })
+                          }
+                          isLoading={isLoadingVideo}
+                        />
+                        {/* Intersection observer trigger for loading more clips - only when more posts are available */}
+                        {shouldShowIntersectionNode && (
+                          <div ref={(node) => setIntersectionNode(node)} />
                         )}
                       </div>
                       {!isClipFailed(post.postId) && (

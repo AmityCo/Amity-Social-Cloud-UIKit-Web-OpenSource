@@ -191,3 +191,7 @@
   display: initial;
   background-color: transparent;
 }
+
+.default {
+  background-color: transparent;
+}

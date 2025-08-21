@@ -47,7 +47,6 @@ const RenderCondition = ({
   removeReaction,
   referenceType,
   error,
-
   customReferenceType,
 }: {
   filteredReactions: Amity.Reactor[];

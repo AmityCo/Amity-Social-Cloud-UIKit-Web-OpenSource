@@ -62,6 +62,14 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
         content: 'Oops, something went wrong.',
       });
     },
+
+    onError: () => {
+      setReactionByMe(post?.myReactions?.[0] || null);
+      setReactionsCount(post?.reactionsCount || 0);
+      info({
+        content: 'Oops, something went wrong.',
+      });
+    },
   });
 
   const { mutateAsync: mutateRemoveReactionAsync } = useMutation({
@@ -72,6 +80,14 @@ export const usePostReaction = ({ post }: UsePostReactionParams): UsePostReactio
     onMutate: () => {
       setShouldSubscribe(true);
       setReactionsCount(Math.max(0, reactionsCount - 1));
+    },
+
+    onError: () => {
+      setReactionByMe(post?.myReactions?.[0] || null);
+      setReactionsCount(post?.reactionsCount || 0);
+      info({
+        content: 'Oops, something went wrong.',
+      });
     },
 
     onError: () => {

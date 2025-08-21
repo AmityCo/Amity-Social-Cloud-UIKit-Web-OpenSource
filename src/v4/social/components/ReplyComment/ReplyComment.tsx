@@ -283,6 +283,35 @@ const PostReplyComment = ({
                       });
                 }}
               />
+              <CommentReactionDisplay
+                pageId={pageId}
+                comment={comment}
+                reactionsCount={reactionsCount}
+                onReactionPress={() => {
+                  const reactionList = (
+                    <ReactionList
+                      pageId={pageId}
+                      referenceType="comment"
+                      referenceId={comment.commentId}
+                      customReferenceType="reply"
+                    />
+                  );
+                  isDesktop
+                    ? openPopup({ view: 'desktop', children: reactionList })
+                    : setDrawerData({
+                        content: reactionList,
+                        snapPoints: [0.7, 1],
+                        activeSnapPoint: 0.7,
+                      });
+                }}
+                className={styles.postReplyComment__secondRow__rightPane}
+                reactionsClassName={styles.postReplyComment__secondRow__rightPane__reactions}
+                iconClassName={styles.postReplyComment__secondRow__rightPane__icon}
+                iconFallbackClassName={styles.postReplyComment__secondRow__rightPane__iconFallback}
+                reactionCountClassName={
+                  styles.postReplyComment__secondRow__rightPane__reactionCount
+                }
+              />
             </div>
             <div className={styles.postReplyComment__secondRow}>
               <div className={styles.postReplyComment__secondRow__leftPane}>
