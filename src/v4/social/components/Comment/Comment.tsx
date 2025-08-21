@@ -149,17 +149,14 @@ export const Comment = ({
     });
   };
 
-  const handleReactionClick = (reactionKey: string) => {
+  const handleReactionClick = async (reactionKey: string) => {
     if (reactionByMe === null) {
-      mutateAddReactionAsync(reactionKey);
-      setReactionByMe(reactionKey);
+      await mutateAddReactionAsync(reactionKey);
     } else if (reactionByMe !== reactionKey) {
-      mutateRemoveReactionAsync(reactionByMe);
-      mutateAddReactionAsync(reactionKey);
-      setReactionByMe(reactionKey);
+      await mutateRemoveReactionAsync(reactionByMe);
+      await mutateAddReactionAsync(reactionKey);
     } else {
-      mutateRemoveReactionAsync(reactionByMe);
-      setReactionByMe(null);
+      await mutateRemoveReactionAsync(reactionByMe);
     }
   };
 

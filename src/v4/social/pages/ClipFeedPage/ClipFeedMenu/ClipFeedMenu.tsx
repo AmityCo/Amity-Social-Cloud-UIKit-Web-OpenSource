@@ -54,22 +54,19 @@ export const ClipFeedMenu = ({
     shouldCall: post?.targetType === 'community',
   });
 
-  const handleReactionClick = (reactionKey: string) => {
+  const handleReactionClick = async (reactionKey: string) => {
     if (post?.targetType === 'community' && !community?.isJoined) {
       return notification.info({
         content: 'Join community to interact with this clip.',
       });
     }
     if (reactionByMe === null) {
-      mutateAddReactionAsync(reactionKey);
-      setReactionByMe(reactionKey);
+      await mutateAddReactionAsync(reactionKey);
     } else if (reactionByMe !== reactionKey) {
-      mutateRemoveReactionAsync(reactionByMe);
-      mutateAddReactionAsync(reactionKey);
-      setReactionByMe(reactionKey);
+      await mutateRemoveReactionAsync(reactionByMe);
+      await mutateAddReactionAsync(reactionKey);
     } else {
-      mutateRemoveReactionAsync(reactionByMe);
-      setReactionByMe(null);
+      await mutateRemoveReactionAsync(reactionByMe);
     }
   };
 

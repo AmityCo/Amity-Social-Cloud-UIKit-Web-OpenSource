@@ -1,6 +1,5 @@
 import { CommentRepository } from '@amityco/ts-sdk';
 import clsx from 'clsx';
-import millify from 'millify';
 import React, { useCallback, useState } from 'react';
 import { BottomSheet, Typography } from '~/v4/core/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
@@ -29,7 +28,6 @@ import { useReactionHandler } from '~/v4/core/hooks/useReactionHandler';
 import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
 import { useCommentReactionDisplay } from '~/v4/social/hooks/useCommentReactionDisplay';
 import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
-import { Button } from '~/v4/core/components/AriaButton';
 import styles from './ReplyComment.module.css';
 
 type ReplyCommentProps = {
@@ -78,19 +76,16 @@ const PostReplyComment = ({
     comment,
   });
 
-  const { sortedReactions, hasReaction } = useCommentReactionDisplay({ comment });
+  useCommentReactionDisplay({ comment });
 
-  const handleReactionClick = (reactionKey: string) => {
+  const handleReactionClick = async (reactionKey: string) => {
     if (reactionByMe === null) {
-      mutateAddReactionAsync(reactionKey);
-      setReactionByMe(reactionKey);
+      await mutateAddReactionAsync(reactionKey);
     } else if (reactionByMe !== reactionKey) {
-      mutateRemoveReactionAsync(reactionByMe);
-      mutateAddReactionAsync(reactionKey);
-      setReactionByMe(reactionKey);
+      await mutateRemoveReactionAsync(reactionByMe);
+      await mutateAddReactionAsync(reactionKey);
     } else {
-      mutateRemoveReactionAsync(reactionByMe);
-      setReactionByMe(null);
+      await mutateRemoveReactionAsync(reactionByMe);
     }
   };
 

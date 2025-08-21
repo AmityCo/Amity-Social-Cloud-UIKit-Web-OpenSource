@@ -41,6 +41,7 @@ export const useCommentReaction = ({
     mutationFn: async (reactionKey: string) => {
       if (reactionByMe && reactionByMe !== reactionKey) {
         try {
+          setReactionByMe(reactionKey);
           await ReactionRepository.removeReaction('comment', comment?.commentId, reactionByMe);
         } catch (err) {
           info({
@@ -56,7 +57,6 @@ export const useCommentReaction = ({
       if (!reactionByMe) {
         setReactionsCount(reactionsCount + 1);
       }
-      setReactionByMe(reactionKey);
     },
 
     onError: () => {
@@ -70,12 +70,12 @@ export const useCommentReaction = ({
 
   const { mutateAsync: mutateRemoveReactionAsync } = useMutation({
     mutationFn: async (reactionKey: string) => {
+      setReactionByMe(null);
       return ReactionRepository.removeReaction('comment', comment?.commentId, reactionKey);
     },
     onMutate: () => {
       setShouldSubscribe(true);
       setReactionsCount(Math.max(0, reactionsCount - 1));
-      setReactionByMe(null);
     },
 
     onError: () => {
