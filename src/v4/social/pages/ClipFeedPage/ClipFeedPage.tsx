@@ -66,6 +66,7 @@ export const ClipFeedPage = ({
   const [isClipFailed, setIsClipFailed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false);
 
   // Use global clip feed when no props are passed, otherwise use collection
   const shouldUseGlobalFeed = !targetType && !targetId && !currentPostId;
@@ -407,6 +408,21 @@ export const ClipFeedPage = ({
     onBack();
   };
 
+  const handleSeeMoreSeeLessClick = (isOpen: boolean) => {
+    setSeeMoreIsOpen(isOpen);
+  };
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.allowTouchMove = !seeMoreIsOpen;
+      if (seeMoreIsOpen) {
+        swiperRef.current.disable();
+      } else {
+        swiperRef.current.enable();
+      }
+    }
+  }, [seeMoreIsOpen]);
+
   const isLoadingVideo =
     posts.length == 0 && currentPostId
       ? isLoading
@@ -437,9 +453,9 @@ export const ClipFeedPage = ({
           direction={'vertical'}
           pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
-          mousewheel={true}
+          mousewheel={!seeMoreIsOpen}
           freeMode={false}
-          allowTouchMove={true}
+          allowTouchMove={!seeMoreIsOpen}
           modules={[Scrollbar, Mousewheel, FreeMode]}
           className={styles.clipFeedPage__swiperContainer}
           slidesPerView={1}
@@ -474,77 +490,76 @@ export const ClipFeedPage = ({
                 const isThirdLastPost = index === posts.length - 3;
                 const shouldShowIntersectionNode = isThirdLastPost && hasMorePosts;
                 return (
-                  <SwiperSlide key={post.postId}>
-                    <Button
-                      variant="default"
-                      onPress={() => handleVideoToggle(post.postId)}
-                      className={styles.clipFeedPage__swiperSlide}
-                    >
-                      <div className={styles.clipFeedPage__clipContainer}>
-                        <VideoFullScreen
-                          post={post as Amity.Post}
-                          isActive={actualIndex === activeIndex}
-                          videoRefs={videoRefs}
-                          onClickVideo={handleVideoToggle}
-                          onNextVideo={handleNextVideo}
-                          isDragging={isDragging}
-                          onDragging={handleDragging}
-                          isLocalMuted={isLocalMuted}
-                          onClipFailed={handleClipFailed}
-                          isLoading={isLoadingVideo}
+                  <SwiperSlide key={post.postId} className={styles.clipFeedPage__swiperSlide}>
+                    <div className={styles.clipFeedPage__clipContainer}>
+                      <VideoFullScreen
+                        post={post as Amity.Post}
+                        isActive={actualIndex === activeIndex}
+                        videoRefs={videoRefs}
+                        onClickVideo={(postId, e) => {
+                          if (seeMoreIsOpen) setSeeMoreIsOpen(false);
+                          else handleVideoToggle(postId, e);
+                        }}
+                        onNextVideo={handleNextVideo}
+                        isDragging={isDragging}
+                        onDragging={handleDragging}
+                        isLocalMuted={isLocalMuted}
+                        onClipFailed={handleClipFailed}
+                        isLoading={isLoadingVideo}
+                        seeMoreIsOpen={seeMoreIsOpen}
+                      />
+                      <div className={styles.clipFeedPage__header}>
+                        <BackButton
+                          pageId={pageId}
+                          onPress={() => handleOnBack()}
+                          defaultClassName={styles.clipFeedPage__backButton}
                         />
-                        <div className={styles.clipFeedPage__header}>
-                          <BackButton
-                            pageId={pageId}
-                            onPress={() => handleOnBack()}
-                            defaultClassName={styles.clipFeedPage__backButton}
-                          />
-                          <ClipHeader
-                            pageId={pageId}
-                            targetId={post.targetId}
-                            targetType={post.targetType}
-                          />
-                          {isShowInteractionMenu ? (
-                            <CreateNewClipButton
-                              onClick={() =>
-                                AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
-                                  isClipPost: true,
-                                })
-                              }
-                            />
-                          ) : (
-                            <div />
-                          )}
-                        </div>
-                        {!isClipFailed && (
-                          <ClipFeedMenu
-                            postId={post.parentPostId}
-                            childPost={post as Amity.Post<'video' | 'clip'>}
-                            isShowInteractionMenu={isShowInteractionMenu}
-                            isDragging={isDragging}
-                            handleMuteToggle={handleMuteToggle}
-                            isLocalMuted={isLocalMuted}
-                            onClickMenuButton={() => handleMenuClick(post.parentPostId)}
-                          />
-                        )}
-                        <ClipCaption
-                          postId={post.parentPostId}
-                          creator={post.creator}
-                          isDragging={isDragging}
-                          onClickSeeMoreButton={() => handleMenuClick(post.parentPostId)}
-                          onClickUser={() =>
-                            AmityClipFeedPageBehavior?.goToUserProfilePage?.({
-                              userId: post.creator?.userId as string,
-                            })
-                          }
-                          isLoading={isLoadingVideo}
+                        <ClipHeader
+                          pageId={pageId}
+                          targetId={post.targetId}
+                          targetType={post.targetType}
                         />
-                        {/* Intersection observer trigger for loading more clips - only when more posts are available */}
-                        {shouldShowIntersectionNode && (
-                          <div ref={(node) => setIntersectionNode(node)} />
+                        {isShowInteractionMenu ? (
+                          <CreateNewClipButton
+                            onClick={() =>
+                              AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
+                                isClipPost: true,
+                              })
+                            }
+                          />
+                        ) : (
+                          <div />
                         )}
                       </div>
-                    </Button>
+                      {!isClipFailed && (
+                        <ClipFeedMenu
+                          postId={post.parentPostId}
+                          childPost={post as Amity.Post<'video' | 'clip'>}
+                          isShowInteractionMenu={isShowInteractionMenu}
+                          isDragging={isDragging}
+                          handleMuteToggle={handleMuteToggle}
+                          isLocalMuted={isLocalMuted}
+                          onClickMenuButton={() => handleMenuClick(post.parentPostId)}
+                        />
+                      )}
+                      <ClipCaption
+                        postId={post.parentPostId}
+                        creator={post.creator}
+                        isDragging={isDragging}
+                        onClickSeeMoreButton={handleSeeMoreSeeLessClick}
+                        onClickUser={() =>
+                          AmityClipFeedPageBehavior?.goToUserProfilePage?.({
+                            userId: post.creator?.userId as string,
+                          })
+                        }
+                        seeMoreIsOpen={seeMoreIsOpen}
+                        isLoading={isLoadingVideo}
+                      />
+                      {/* Intersection observer trigger for loading more clips - only when more posts are available */}
+                      {shouldShowIntersectionNode && (
+                        <div ref={(node) => setIntersectionNode(node)} />
+                      )}
+                    </div>
                   </SwiperSlide>
                 );
               })}

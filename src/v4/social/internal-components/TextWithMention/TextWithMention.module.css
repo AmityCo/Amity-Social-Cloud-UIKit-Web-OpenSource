@@ -4,6 +4,8 @@
   overflow-wrap: break-word;
   word-break: break-all;
   color: var(--asc-color-base-default);
+  height: 100%;
+  overflow: scroll;
   text-align: left;
 }
 

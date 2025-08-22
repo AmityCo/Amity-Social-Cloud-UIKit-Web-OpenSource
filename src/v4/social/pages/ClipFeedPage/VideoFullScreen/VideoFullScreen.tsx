@@ -17,6 +17,7 @@ type VideoFullScreenProps = {
   isLocalMuted: boolean;
   onClipFailed?: (val: boolean) => void;
   isLoading?: boolean;
+  seeMoreIsOpen?: boolean;
 };
 
 export const VideoFullScreen = ({
@@ -30,6 +31,7 @@ export const VideoFullScreen = ({
   isLocalMuted,
   onClipFailed,
   isLoading,
+  seeMoreIsOpen,
 }: VideoFullScreenProps) => {
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(false);
@@ -139,7 +141,7 @@ export const VideoFullScreen = ({
 
       <div className={styles.videoFullScreen__overlay} />
 
-      {isPaused && isActive && !isClipLoading && !isLoading && (
+      {!seeMoreIsOpen && isPaused && isActive && !isClipLoading && !isLoading && (
         <Button
           variant="text"
           className={styles.videoFullScreen__playButtonOverlay}

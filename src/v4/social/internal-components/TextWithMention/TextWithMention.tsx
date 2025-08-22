@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { v4 as uuidv4 } from 'uuid';
 import Truncate from 'react-truncate-markup';
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { SerializedLexicalNode, SerializedParagraphNode } from 'lexical';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
@@ -31,7 +31,7 @@ interface TextWithMentionProps {
   mentionees: Mentionees;
   hashtags?: string[];
   metadata?: { mentioned?: Mentioned[]; hashtagged?: Amity.Hashtag[] };
-  onClickSeeMoreButton?: () => void;
+  onClickSeeMoreButton?: (isOpen: boolean) => void;
   seeMoreClassName?: string;
   textClassName?: string;
   linkClassName?: string;
@@ -39,6 +39,8 @@ interface TextWithMentionProps {
   hashtagClassName?: string;
   keyword?: string;
   isSearchPost?: boolean;
+  seeLessSupport?: boolean;
+  seeMoreIsOpen?: boolean;
 }
 
 export const TextWithMention = ({
@@ -57,10 +59,12 @@ export const TextWithMention = ({
   mentionClassName,
   hashtagClassName,
   keyword = '',
+  seeMoreIsOpen = false,
   isSearchPost = false,
+  seeLessSupport = false,
 }: TextWithMentionProps) => {
   const { goToUserProfilePage, goToSocialGlobalSearchPage } = useNavigation();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(seeMoreIsOpen);
   const { isDesktop } = useResponsive();
   const { openSearchResultModal, setSearchValue } = useSearchResultContext();
 
@@ -385,10 +389,28 @@ export const TextWithMention = ({
     ));
   };
 
+  useEffect(() => {
+    setIsExpanded(seeMoreIsOpen);
+  }, [seeMoreIsOpen]);
+
   return (
-    <Component className={styles.textWithMention__container}>
+    <Component className={clsx(styles.textWithMention__container, textClassName)}>
       {isExpanded ? (
-        renderText(editorState.root.children)
+        <>
+          {renderText(editorState.root.children)}
+          {seeLessSupport && (
+            <Button
+              variant="text"
+              className={clsx(styles.textWithMention__seeMore, seeMoreClassName)}
+              onPress={() => {
+                onClickSeeMoreButton?.(false);
+                setIsExpanded(false);
+              }}
+            >
+              <Typography.BodyBold>See less</Typography.BodyBold>
+            </Button>
+          )}
+        </>
       ) : (
         <Truncate
           lines={maxLines}
@@ -398,9 +420,10 @@ export const TextWithMention = ({
               <Button
                 variant="text"
                 className={clsx(styles.textWithMention__seeMore, seeMoreClassName)}
-                onPress={() =>
-                  onClickSeeMoreButton ? onClickSeeMoreButton() : setIsExpanded(true)
-                }
+                onPress={() => {
+                  onClickSeeMoreButton?.(true);
+                  setIsExpanded(true);
+                }}
               >
                 <Typography.BodyBold> See more</Typography.BodyBold>
               </Button>
