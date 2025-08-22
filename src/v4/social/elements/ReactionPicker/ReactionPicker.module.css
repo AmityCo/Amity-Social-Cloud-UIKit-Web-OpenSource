@@ -29,7 +29,15 @@
 
 .reactionButton__icon:hover,
 .reactionButton__iconContainer:hover .reactionButton__icon {
-  animation: bounce 0.8s ease-in-out;
+  animation: bounce 0.3s ease-in-out forwards;
+}
+
+/* Different animation for icon when panel is positioned below */
+.reactionPickerContainer[data-position='below'] .reactionButton__icon:hover,
+.reactionPickerContainer[data-position='below']
+  .reactionButton__iconContainer:hover
+  .reactionButton__icon {
+  animation: bounce-below 0.3s ease-in-out forwards;
 }
 
 .reactionButton__activeBackground {
@@ -78,7 +86,7 @@
 .reactionButton__iconContainer:hover .reactionButton__text {
   opacity: 1;
   visibility: visible;
-  animation: bounce-text 0.8s ease-in-out;
+  animation: bounce-text 0.3s ease-in-out forwards;
 }
 
 /* Different animation when panel is positioned below */
@@ -86,107 +94,45 @@
 .reactionPickerContainer[data-position='below']
   .reactionButton__iconContainer:hover
   .reactionButton__text {
-  animation: bounce-text-below 0.8s ease-in-out;
+  animation: bounce-text-below 0.3s ease-in-out forwards;
 }
 
 @keyframes bounce {
   0% {
-    transform: translateY(0) scale(1);
-  }
-
-  15% {
-    transform: translateY(-12px) scale(1.1);
-  }
-
-  30% {
-    transform: translateY(0) scale(1.05);
-  }
-
-  45% {
-    transform: translateY(-6px) scale(1.08);
-  }
-
-  60% {
-    transform: translateY(0) scale(1.02);
-  }
-
-  75% {
-    transform: translateY(-3px) scale(1.04);
-  }
-
-  90% {
-    transform: translateY(0) scale(1.01);
+    transform: translateY(0);
   }
 
   100% {
-    transform: translateY(0) scale(1);
+    transform: translateY(-15px);
   }
 }
 
 @keyframes bounce-text {
   0% {
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
-
-  15% {
-    transform: translateX(-50%) translateY(-12px) scale(1.1);
-  }
-
-  30% {
-    transform: translateX(-50%) translateY(0) scale(1.05);
-  }
-
-  45% {
-    transform: translateX(-50%) translateY(-6px) scale(1.08);
-  }
-
-  60% {
-    transform: translateX(-50%) translateY(0) scale(1.02);
-  }
-
-  75% {
-    transform: translateX(-50%) translateY(-3px) scale(1.04);
-  }
-
-  90% {
-    transform: translateX(-50%) translateY(0) scale(1.01);
+    transform: translateX(-50%) translateY(0);
   }
 
   100% {
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translateX(-50%) translateY(-15px);
   }
 }
 
 @keyframes bounce-text-below {
   0% {
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
-
-  15% {
-    transform: translateX(-50%) translateY(-12px) scale(1.1);
-  }
-
-  30% {
-    transform: translateX(-50%) translateY(0) scale(1.05);
-  }
-
-  45% {
-    transform: translateX(-50%) translateY(-6px) scale(1.08);
-  }
-
-  60% {
-    transform: translateX(-50%) translateY(0) scale(1.02);
-  }
-
-  75% {
-    transform: translateX(-50%) translateY(-3px) scale(1.04);
-  }
-
-  90% {
-    transform: translateX(-50%) translateY(0) scale(1.01);
+    transform: translateX(-50%) translateY(0);
   }
 
   100% {
-    transform: translateX(-50%) translateY(0) scale(1);
+    transform: translateX(-50%) translateY(15px);
+  }
+}
+
+@keyframes bounce-below {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(15px);
   }
 }

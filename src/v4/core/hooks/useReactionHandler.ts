@@ -105,14 +105,16 @@ export function useReactionHandler({
       setIsLongPressing(false);
       setHoveredReaction(null);
 
-      if (myReaction === reactionName) {
+      if (displayReaction === reactionName) {
+        setOptimisticReaction(null);
+        onReactionClick(reactionName);
         return;
       }
 
       setOptimisticReaction(reactionName);
       onReactionClick(reactionName);
     },
-    [onReactionClick, myReaction],
+    [onReactionClick, displayReaction],
   );
 
   const handleClickOutside = useCallback(() => {
@@ -215,14 +217,16 @@ export function useReactionHandler({
       longPressTimeoutRef.current = null;
     }
 
-    if (myReaction) {
+    const currentReaction = displayReaction;
+
+    if (currentReaction) {
       setOptimisticReaction(null);
-      onReactionClick(myReaction);
+      onReactionClick(currentReaction);
     } else {
       setOptimisticReaction('like');
       onReactionClick('like');
     }
-  }, [myReaction, onReactionClick]);
+  }, [displayReaction, onReactionClick]);
 
   // Handle reaction hover in picker
   const handleReactionHover = useCallback(
