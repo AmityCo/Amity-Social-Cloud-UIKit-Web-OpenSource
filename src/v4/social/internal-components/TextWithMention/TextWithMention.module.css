@@ -29,13 +29,19 @@
   color: var(--asc-color-primary-default);
 }
 
-.textWithMention__seeMore {
+.textWithMention__seeMore,
+.textWithMention__seeLess {
   display: inline;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   color: var(--asc-color-primary-default);
+}
+
+.textWithMention__seeLess {
+  /* equal to body text line height */
+  margin-top: 1.25rem;
 }
 
 .textWithMention__hashtag {

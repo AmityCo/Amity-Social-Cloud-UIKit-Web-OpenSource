@@ -33,6 +33,7 @@ interface TextWithMentionProps {
   metadata?: { mentioned?: Mentioned[]; hashtagged?: Amity.Hashtag[] };
   onClickSeeMoreButton?: (isOpen: boolean) => void;
   seeMoreClassName?: string;
+  seeLessClassName?: string;
   textClassName?: string;
   linkClassName?: string;
   mentionClassName?: string;
@@ -57,6 +58,7 @@ export const TextWithMention = ({
   textClassName,
   linkClassName,
   mentionClassName,
+  seeLessClassName,
   hashtagClassName,
   keyword = '',
   seeMoreIsOpen = false,
@@ -401,7 +403,7 @@ export const TextWithMention = ({
           {seeLessSupport && (
             <Button
               variant="text"
-              className={clsx(styles.textWithMention__seeMore, seeMoreClassName)}
+              className={clsx(styles.textWithMention__seeLess, seeLessClassName)}
               onPress={() => {
                 onClickSeeMoreButton?.(false);
                 setIsExpanded(false);

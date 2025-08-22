@@ -61,7 +61,8 @@
   gap: 0.13rem;
 }
 
-.clipCaption__seeMore {
+.clipCaption__seeMore,
+.clipCaption__seeLess {
   background: none;
   border: none;
   color: var(--asc-color-white) !important;

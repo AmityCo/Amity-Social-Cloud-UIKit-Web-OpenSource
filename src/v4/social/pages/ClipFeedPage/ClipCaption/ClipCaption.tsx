@@ -162,6 +162,7 @@ export const ClipCaption = ({
               maxLines={3}
               onClickSeeMoreButton={onClickSeeMoreButton}
               seeMoreClassName={styles.clipCaption__seeMore}
+              seeLessClassName={styles.clipCaption__seeLess}
               textClassName={styles.clipCaption__textWhite}
               linkClassName={styles.clipCaption__textWhiteBold}
               mentionClassName={styles.clipCaption__textWhiteBold}
