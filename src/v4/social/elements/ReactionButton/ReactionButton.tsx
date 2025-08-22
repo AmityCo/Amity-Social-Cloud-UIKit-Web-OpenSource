@@ -205,7 +205,7 @@ export function ReactionButton({
             className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
             data-has-my-reaction={hasMyReaction}
           >
-            Like
+            {displayReaction ?? config.text ?? 'Like'}
           </Typography.CaptionBold>
         ) : isClipReaction ? (
           <Typography.BodyBold
