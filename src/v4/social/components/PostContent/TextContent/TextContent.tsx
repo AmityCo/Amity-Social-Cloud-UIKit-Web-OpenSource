@@ -6,6 +6,8 @@ import usePost from '~/v4/core/hooks/objects/usePost';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { LinkPreview } from '~/v4/social/components/PostContent/LinkPreview/LinkPreview';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
+import { Typography } from '~/v4/core/components';
+import styles from './TextContent.module.css';
 
 type TextContentProps = {
   title?: string;
@@ -79,13 +81,9 @@ export const TextContent = ({
       ) : (
         <>
           {title && (
-            <TextWithMention
-              isBold
-              pageId={pageId}
-              data={{ text: title }}
-              mentionees={mentionees}
-              componentId={componentId}
-            />
+            <Typography.TitleBold className={styles.textContent__postTitle}>
+              {title}
+            </Typography.TitleBold>
           )}
           {text && (
             <TextWithMention

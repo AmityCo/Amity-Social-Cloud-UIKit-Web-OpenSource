@@ -1,0 +1,7 @@
+.textContent__postTitle {
+  color: var(--asc-color-base-default);
+  overflow-wrap: break-word;
+  word-break: break-all;
+  text-align: left;
+  width: 100%;
+}
