@@ -611,9 +611,16 @@ export const ClipFeedPage = ({
                           }
                           isLoading={isLoadingVideo}
                         />
-                        {/* Intersection observer trigger for loading more clips - only when more posts are available */}
-                        {shouldShowIntersectionNode && (
-                          <div ref={(node) => setIntersectionNode(node)} />
+                        {isShowInteractionMenu ? (
+                          <CreateNewClipButton
+                            onClick={() =>
+                              AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
+                                isClipPost: true,
+                              })
+                            }
+                          />
+                        ) : (
+                          <div />
                         )}
                       </div>
                       {!isClipFailed(post.postId) && (
