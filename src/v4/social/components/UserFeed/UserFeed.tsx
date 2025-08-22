@@ -115,6 +115,7 @@ export const UserFeed = ({ pageId = '*', userId, feedSources, followStatus }: Us
               parentId: context?.parentId,
               selectedReplyComment: context?.selectedReplyComment,
               showReplyCommentAt: context?.showReplyCommentAt,
+              isFromCommentClick: context?.isFromCommentClick,
             });
           }}
         />

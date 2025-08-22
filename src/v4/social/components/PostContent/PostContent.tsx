@@ -61,7 +61,11 @@ interface PostContentProps {
   onClick?: (
     context?: Pick<
       PostDetailPageProps,
-      'commentId' | 'selectedReplyComment' | 'parentId' | 'showReplyCommentAt'
+      | 'commentId'
+      | 'selectedReplyComment'
+      | 'parentId'
+      | 'showReplyCommentAt'
+      | 'isFromCommentClick'
     >,
   ) => void;
   onPostDeleted?: (post: Amity.Post) => void;
@@ -565,7 +569,7 @@ export const PostContent = ({
                     buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
                     defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
                     imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                    onPress={() => onClick?.()}
+                    onPress={() => onClick?.({ isFromCommentClick: true })}
                   />
                 </div>
                 <div className={styles.postContent__reactionBar__rightPane}>
@@ -620,51 +624,58 @@ export const PostContent = ({
           ) : null}
         </div>
       </div>
+      {disabledInlineComment &&
+        !(isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage) && (
+          <Divider className={styles.postContent__inlineComment__divider} />
+        )}
       {/*
        * Should not see inline comment in post detail page and pending post page
        */}
-      {!disabledInlineComment && (
-        <>
-          <Divider className={styles.postContent__inlineComment__divider} />
-          {loadingInlineComment ? (
-            <CommentSkeleton pageId={pageId} componentId={componentId} />
-          ) : (
-            <>
-              {inlineComment && (
-                <Button
-                  variant="default"
-                  className={styles.postContent__inlineComment__container}
-                  onPress={() => onClick?.({ commentId: inlineComment.commentId })}
-                >
-                  <Comment
-                    key={inlineComment?.commentId} // Add key to force proper re-rendering
-                    pageId={pageId}
-                    comment={inlineComment}
-                    onClickReply={() => {
-                      onClick?.({
-                        commentId: inlineComment?.commentId,
-                        parentId: inlineComment?.parentId,
-                        selectedReplyComment: inlineComment!,
-                      });
-                    }}
-                    onClickShowReply={() => {
-                      onClick?.({
-                        commentId: inlineComment?.commentId,
-                        showReplyCommentAt: inlineComment?.commentId,
-                      });
-                    }}
-                    componentId={componentId}
-                    // hide option buttion for inline comment
-                    hideOptionButton={true}
-                    community={targetCommunity}
-                    maxLines={3}
-                  />
-                </Button>
-              )}
-            </>
-          )}
-        </>
-      )}
+      {!disabledInlineComment &&
+        !(isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage) && (
+          <>
+            <Divider className={styles.postContent__inlineComment__divider} />
+            {loadingInlineComment ? (
+              <CommentSkeleton pageId={pageId} componentId={componentId} />
+            ) : (
+              <>
+                {inlineComment && (
+                  <Button
+                    variant="default"
+                    className={styles.postContent__inlineComment__container}
+                    onPress={() =>
+                      onClick?.({ commentId: inlineComment.commentId, isFromCommentClick: true })
+                    }
+                  >
+                    <Comment
+                      key={inlineComment?.commentId} // Add key to force proper re-rendering
+                      pageId={pageId}
+                      comment={inlineComment}
+                      onClickReply={() => {
+                        onClick?.({
+                          commentId: inlineComment?.commentId,
+                          parentId: inlineComment?.parentId,
+                          selectedReplyComment: inlineComment!,
+                        });
+                      }}
+                      onClickShowReply={() => {
+                        onClick?.({
+                          commentId: inlineComment?.commentId,
+                          showReplyCommentAt: inlineComment?.commentId,
+                        });
+                      }}
+                      componentId={componentId}
+                      // hide option buttion for inline comment
+                      hideOptionButton={true}
+                      community={targetCommunity}
+                      maxLines={3}
+                    />
+                  </Button>
+                )}
+              </>
+            )}
+          </>
+        )}
     </div>
   );
 };

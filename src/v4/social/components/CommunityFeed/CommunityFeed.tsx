@@ -135,6 +135,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     parentId?: string,
     selectedReplyComment?: Amity.Comment,
     showReplyCommentAt?: string,
+    isFromCommentClick?: boolean,
   ) => {
     if (!postId) return;
 
@@ -146,6 +147,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
       parentId,
       selectedReplyComment,
       showReplyCommentAt,
+      isFromCommentClick,
     });
   };
 
@@ -178,6 +180,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                         context?.parentId,
                         context?.selectedReplyComment,
                         context?.showReplyCommentAt,
+                        context?.isFromCommentClick,
                       )
                     }
                     onPollPostDeleted={() => refreshPosts()}
@@ -237,6 +240,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                       context?.parentId,
                       context?.selectedReplyComment,
                       context?.showReplyCommentAt,
+                      context?.isFromCommentClick,
                     )
                   }
                   onPostDeleted={() => refreshPinnedPosts()}

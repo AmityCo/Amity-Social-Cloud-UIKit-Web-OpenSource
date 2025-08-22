@@ -112,6 +112,7 @@ export const GlobalFeed = ({
                       parentId: context?.parentId,
                       selectedReplyComment: context?.selectedReplyComment,
                       showReplyCommentAt: context?.showReplyCommentAt,
+                      isFromCommentClick: context?.isFromCommentClick,
                     });
                   }}
                 />
@@ -139,6 +140,7 @@ export const GlobalFeed = ({
                     parentId: context?.parentId,
                     selectedReplyComment: context?.selectedReplyComment,
                     showReplyCommentAt: context?.showReplyCommentAt,
+                    isFromCommentClick: context?.isFromCommentClick,
                   });
                 }}
                 onPostDeleted={onPostDeleted}

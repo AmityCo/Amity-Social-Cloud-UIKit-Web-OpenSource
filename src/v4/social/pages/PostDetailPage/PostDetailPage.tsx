@@ -31,6 +31,7 @@ export interface PostDetailPageProps {
   selectedReplyComment?: Amity.Comment;
   showReplyCommentAt?: string;
   keyword?: string;
+  isFromCommentClick?: boolean;
 }
 
 export interface GoToPostDetailPageParams extends Omit<PostDetailPageProps, 'id'> {
@@ -47,6 +48,7 @@ export function PostDetailPage({
   selectedReplyComment,
   showReplyCommentAt,
   keyword,
+  isFromCommentClick = false,
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
 
@@ -243,6 +245,7 @@ export function PostDetailPage({
               replyTo={replyComment}
               onCancelReply={() => setReplyComment(undefined)}
               community={community}
+              isFromCommentClick={isFromCommentClick}
             />
           )
         )}
@@ -256,6 +259,7 @@ export function PostDetailPage({
             containerClassName={
               post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
             }
+            isFromCommentClick={isFromCommentClick}
           />
         )}
         {post?.commentsCount > 0 && (
@@ -281,6 +285,7 @@ export function PostDetailPage({
                         replyTo={replyComment}
                         onCancelReply={() => setReplyComment(undefined)}
                         community={community}
+                        isFromCommentClick={isFromCommentClick}
                       />
                     );
                   }

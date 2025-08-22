@@ -113,6 +113,7 @@ type Page =
         selectedReplyComment?: Amity.Comment;
         showReplyCommentAt?: string;
         keyword?: string;
+        isFromCommentClick?: boolean;
       };
     }
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string; page?: number } }
@@ -951,6 +952,7 @@ export default function NavigationProvider({
       selectedReplyComment,
       showReplyCommentAt,
       keyword,
+      isFromCommentClick,
     }) => {
       const next = {
         type: PageTypes.PostDetailPage,
@@ -964,6 +966,7 @@ export default function NavigationProvider({
           selectedReplyComment,
           showReplyCommentAt,
           keyword,
+          isFromCommentClick,
         },
       };
       pushPage(next);

@@ -347,7 +347,7 @@
   justify-content: start;
   align-items: center;
   gap: 0.25rem;
-  padding-top: 0.25rem;
+  padding-top: 0.75rem;
   line-height: 1.25rem;
   color: var(--asc-color-base-shade2);
   cursor: pointer;

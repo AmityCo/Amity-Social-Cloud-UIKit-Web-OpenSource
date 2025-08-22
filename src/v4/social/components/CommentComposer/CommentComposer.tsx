@@ -50,6 +50,7 @@ interface CommentComposerProps {
   community?: Amity.Community | null;
   containerClassName?: string;
   commentComposerClassName?: string;
+  isFromCommentClick?: boolean;
 }
 
 export const CommentComposer = ({
@@ -62,6 +63,7 @@ export const CommentComposer = ({
   community,
   containerClassName,
   commentComposerClassName,
+  isFromCommentClick = false,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
   const { user } = useUser({ userId });
@@ -212,6 +214,7 @@ export const CommentComposer = ({
               replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
             }
             communityId={community?.communityId}
+            shouldAutoFocus={isFromCommentClick}
           />
         </div>
         <Button
