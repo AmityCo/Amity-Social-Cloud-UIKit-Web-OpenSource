@@ -34,7 +34,7 @@ export const PollSingleAnswer: FC<PollSingleAnswerProps> = ({
       value={selected}
       radioContainerClassname={styles.pollContent__radioGroup}
       labelClassName={styles.pollContent__pollLabel}
-      label={<Typography.CaptionBold>{caption}</Typography.CaptionBold>}
+      label={<Typography.CaptionBold data-testid="poll-caption">{caption}</Typography.CaptionBold>}
       radioProps={{
         className: clsx(
           styles.pollContent__formRadio,

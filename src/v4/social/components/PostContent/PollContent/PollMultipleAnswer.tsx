@@ -35,7 +35,7 @@ export const PollMultipleAnswer: FC<PollMultipleAnswerProps> = ({
       labelClassName={styles.pollContent__pollLabel}
       optionContainerClassname={styles.pollContent__checkboxGroup}
       isImageOption={isImagePoll}
-      label={<Typography.CaptionBold>{caption}</Typography.CaptionBold>}
+      label={<Typography.CaptionBold data-testid="poll-caption">{caption}</Typography.CaptionBold>}
       checkboxProps={{
         className: clsx(
           styles.pollContent__checkbox,

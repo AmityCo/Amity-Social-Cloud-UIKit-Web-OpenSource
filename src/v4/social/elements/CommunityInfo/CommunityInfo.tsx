@@ -29,7 +29,7 @@ export const CommunityInfo = ({
   if (isExcluded) return null;
   return (
     <Button
-      data-testid={accessibilityId}
+      data-testid={`${accessibilityId}_${text}`}
       onPress={onClick}
       className={styles.communityInfo__container}
     >

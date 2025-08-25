@@ -369,6 +369,7 @@ export function CreatePost({
         )}
         <div className={styles.createPost__formContent}>
           <TextArea
+            data-testid="create-post-title-input"
             name="title"
             value={title}
             maxLength={150}

@@ -182,7 +182,7 @@ export const PollContent: FC<PollContentProps> = ({
           <Typography.CaptionBold>•</Typography.CaptionBold>
           {!isPollEneded && typeof poll.closedIn === 'number' ? (
             <>
-              <Typography.CaptionBold>
+              <Typography.CaptionBold data-testid="poll-closeIn">
                 {calculateRemainingFromMs(poll.closedIn)}
               </Typography.CaptionBold>
               <Typography.CaptionBold>left</Typography.CaptionBold>

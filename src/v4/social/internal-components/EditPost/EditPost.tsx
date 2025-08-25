@@ -403,6 +403,7 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
         )}
         <div className={styles.editPost__formContent}>
           <TextArea
+            data-testid="edit-post-title-input"
             name="title"
             value={title}
             maxLength={150}

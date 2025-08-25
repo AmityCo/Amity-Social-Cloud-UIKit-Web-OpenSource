@@ -48,6 +48,7 @@ export function ImageButton({
       style={themeStyles}
       className={styles.imageButton}
       isDisabled={isDisabled}
+      data-testid={accessibilityId}
     >
       <IconComponent
         configIconName={config.icon}
@@ -66,6 +67,7 @@ export function ImageButton({
 
   const imageUpload = (
     <FileTrigger
+      data-testid={accessibilityId}
       allowsMultiple={!isSingleUpload}
       onSelect={(files) => onChangeImage(files)}
       acceptedFileTypes={['image/png', 'image/jpg', 'image/jpeg']}

@@ -578,6 +578,7 @@ export const PollPostComposerPage = ({
             className={styles.pollPostComposerPage__postTitle__label}
           />
           <$TextArea
+            data-testid="poll-post-composer-page-title-input"
             name="title"
             value={title}
             maxLength={MAX_POST_TITLE_LENGTH}
@@ -645,6 +646,7 @@ export const PollPostComposerPage = ({
                 <div className={styles.pollPostComposerPage__pollOptions__options}>
                   <div className={styles.pollPostComposerPage__pollOptions__optionsWrapper}>
                     <TextArea
+                      data-testid={`poll-option-${index + 1}`}
                       data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
                       className={styles.pollPostComposerPage__pollOptions__input}
                       value={option.data}
@@ -654,6 +656,7 @@ export const PollPostComposerPage = ({
                       onKeyDown={handleKeyDown}
                     />
                     <Button
+                      data-testid={`poll-option-${index + 1}-delete-button`}
                       className={styles.pollPostComposerPage__pollOptions__trashButton}
                       onPress={() => deleteOption(index)}
                     >
@@ -796,7 +799,7 @@ export const PollPostComposerPage = ({
                         });
                   }}
                 >
-                  <Typography.Body>
+                  <Typography.Body data-testid="poll-duration">
                     {selectedDate
                       ? `Ends on ${formatEndDate} at ${formatEndTime}`
                       : duration && duration.label}
@@ -825,7 +828,10 @@ export const PollPostComposerPage = ({
 
         {!selectedDate && (
           <div className={styles.pollPostComposerPage__duration__captionWrap}>
-            <Typography.Caption className={styles.pollPostComposerPage__duration__caption}>
+            <Typography.Caption
+              data-testid="poll-duration"
+              className={styles.pollPostComposerPage__duration__caption}
+            >
               {`Ends on ${formattedDate} at ${formatEndTime}`}
             </Typography.Caption>
           </div>
@@ -834,6 +840,7 @@ export const PollPostComposerPage = ({
         {isDesktop && (
           <div className={styles.pollPostComposerPage__postButtonWrap}>
             <AriaButton
+              data-testid="poll-post-composer-page-submit-button"
               type="submit"
               className={styles.pollPostComposerPage__postButton}
               isDisabled={
