@@ -25,8 +25,14 @@
 }
 
 .clipFeedMenu__reactButton {
-  max-width: 2rem;
-  max-height: 2rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+.clipFeedMenu__reactButton__fallbackIcon {
+  width: 2rem !important;
+  height: 2rem !important;
+  color: var(--asc-color-base-shade3);
 }
 
 .clipFeedMenu__reactButton__fallbackIcon {

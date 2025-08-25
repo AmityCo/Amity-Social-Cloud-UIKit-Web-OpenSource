@@ -287,6 +287,7 @@ const PostReplyComment = ({
                 pageId={pageId}
                 comment={comment}
                 reactionsCount={reactionsCount}
+                position="replyComment"
                 onReactionPress={() => {
                   const reactionList = (
                     <ReactionList
@@ -304,13 +305,6 @@ const PostReplyComment = ({
                         activeSnapPoint: 0.7,
                       });
                 }}
-                className={styles.postReplyComment__secondRow__rightPane}
-                reactionsClassName={styles.postReplyComment__secondRow__rightPane__reactions}
-                iconClassName={styles.postReplyComment__secondRow__rightPane__icon}
-                iconFallbackClassName={styles.postReplyComment__secondRow__rightPane__iconFallback}
-                reactionCountClassName={
-                  styles.postReplyComment__secondRow__rightPane__reactionCount
-                }
               />
             </div>
             <div className={styles.postReplyComment__secondRow}>

@@ -197,6 +197,38 @@ export function useReactionHandler({
     [isDesktop, isLongPressing, showReactionPicker, hoveredReaction],
   );
 
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (isDesktop || !isLongPressing || !showReactionPicker) return;
+
+      const currentTouch = e.touches[0];
+      if (!currentTouch) return;
+
+      e.preventDefault();
+
+      const elementFromPoint = document.elementFromPoint(
+        currentTouch.clientX,
+        currentTouch.clientY,
+      );
+
+      if (elementFromPoint) {
+        const reactionButton = elementFromPoint.closest('[data-reaction-name]');
+        if (reactionButton) {
+          const reactionName = reactionButton.getAttribute('data-reaction-name');
+          if (reactionName !== hoveredReaction) {
+            setHoveredReaction(reactionName);
+          }
+        } else {
+          const pickerContainer = elementFromPoint.closest('[data-position]');
+          if (!pickerContainer && hoveredReaction) {
+            setHoveredReaction(null);
+          }
+        }
+      }
+    },
+    [isDesktop, isLongPressing, showReactionPicker, hoveredReaction],
+  );
+
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent) => {
       if (longPressTimeoutRef.current) {
