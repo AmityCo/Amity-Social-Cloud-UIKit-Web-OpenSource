@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import styles from './CommunityProfilePage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CommunityHeader } from '~/v4/social/components/CommunityHeader';
@@ -181,30 +181,6 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
     }
   }, [clipFile]);
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    // Check if page has loaded successfully
-    const isPageLoaded = !isLoading && !isInvitationLoading && community && !community.isDeleted;
-
-    if (isPageLoaded && scrollPosition > 0) {
-      // Use scrollTo for more reliable scroll positioning
-      containerRef.current.scrollTo({
-        top: scrollPosition,
-        behavior: 'auto',
-      });
-    }
-
-    setTimeout(() => {
-      initialLoad.current = false;
-    }, 100);
-  }, [containerRef.current, isLoading, isInvitationLoading, community, scrollPosition]);
-
-  const handleScroll = (event: React.UIEvent<HTMLDivElement, UIEvent>) => {
-    if (initialLoad.current) return;
-    onScroll(event);
-  };
-
   const isShowFailed = (!isLoading && community?.isDeleted) || error;
 
   return (
@@ -214,7 +190,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       accessibilityId={accessibilityId}
       onTouchEndCallback={handleRefresh}
       className={styles.communityProfilePage__container}
-      onScroll={handleScroll}
+      onScroll={onScroll}
     >
       {(isLoading || isInvitationLoading) && <CommunityProfileSkeleton />}
       {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
