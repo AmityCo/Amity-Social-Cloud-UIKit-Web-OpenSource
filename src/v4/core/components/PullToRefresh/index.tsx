@@ -29,6 +29,7 @@ export const PullToRefresh = forwardRef(function (
       ref={ref}
       style={style}
       className={className}
+      id={accessibilityId}
       data-testid={accessibilityId}
       onDrag={(event) => event.stopPropagation()}
       onTouchStart={(event) => {
