@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.11.3 (2025-08-25)
+
+
+### Bug Fixes
+
+* to scroll after feed loaded instead ([#1227](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1227)) ([9f2509a](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/9f2509a231ef8adfa9411f99978824bba31e3131))
+
 ### 4.11.2 (2025-08-20)
 
 
