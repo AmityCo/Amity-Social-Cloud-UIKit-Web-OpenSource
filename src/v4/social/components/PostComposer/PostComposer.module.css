@@ -38,7 +38,7 @@
   font-size: 1.25rem;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-white);
 }
 
 .postComposer__popup {

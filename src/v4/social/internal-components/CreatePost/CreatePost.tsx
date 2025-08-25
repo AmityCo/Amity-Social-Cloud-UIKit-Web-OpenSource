@@ -327,6 +327,20 @@ export function CreatePost({
     return;
   };
 
+  const renderTags = () => {
+    return (
+      <>
+        <Typography.Body className={styles.createPost__tagsTitle}>Choose your tags</Typography.Body>
+        <div className={styles.createPost__tagsContent}>
+          <div className={styles.createPost__tagsItem}>#poker</div>
+          <div className={styles.createPost__tagsItem}>#slot</div>
+          <div className={styles.createPost__tagsItem}>#bingo</div>
+          <div className={styles.createPost__tagsItem}>#roulette</div>
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className={styles.createPost} style={themeStyles}>
       {isDesktop && notifications}
@@ -379,6 +393,7 @@ export function CreatePost({
             removeFile={removeFile}
           />
         </div>
+        <div className={styles.createPost__tags}>{renderTags()}</div>
         <div className={styles.createPost__attachment}>
           <MediaAttachment
             pageId={pageId}

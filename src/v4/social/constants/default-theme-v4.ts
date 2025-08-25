@@ -1,11 +1,11 @@
 export const defaultThemeV4 = {
   colors: {
     primary: {
-      default: '#1054DE',
-      shade1: '#4A82F2',
-      shade2: '#A9C4F9',
-      shade3: '#D9E5FC',
-      shade4: '#FFFFFF',
+      default: '#0b7d3e',
+      shade1: '#bed62f',
+      shade2: '#deea96',
+      shade3: '#f2f7d5',
+      shade4: '#ffffff',
     },
     secondary: {
       default: '#292B32',

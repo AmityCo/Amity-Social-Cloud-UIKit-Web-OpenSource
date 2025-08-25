@@ -57,7 +57,7 @@
 }
 
 .userProfilePage__createPostHeader {
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-white);
 }
 
 @media (width >=48em) {

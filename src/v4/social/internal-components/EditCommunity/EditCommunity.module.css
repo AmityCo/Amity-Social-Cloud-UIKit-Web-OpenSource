@@ -28,9 +28,8 @@
 }
 
 .editCommunity__coverImageButton[data-no-image='true'] {
-  background:
-    linear-gradient(0deg, rgb(0 0 0 / 50%) 0%, rgb(0 0 0 / 50%)) 100%,
-    #d9e5fc; /* var(--asc-color-primary-shade3) is not working */
+  background: linear-gradient(0deg, rgb(0 0 0 / 50%) 0%, rgb(0 0 0 / 50%) 100%),
+    var(--asc-color-primary-shade3);
 }
 
 .editCommunity__overlay {

@@ -49,6 +49,10 @@
   display: none;
 }
 
+.createPost__tags {
+  display: none;
+}
+
 .createPost__ctaWrapper {
   display: none;
 }
@@ -245,6 +249,32 @@
     background-color: var(--asc-color-background-default);
   }
 
+  .createPost__tags {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 1.5rem;
+    gap: 0.5rem;
+  }
+
+  .createPost__tagsContent {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .createPost__tagsItem {
+    font-size: 0.75rem;
+    font-weight: 700;
+    height: 1.875rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #909090;
+    border-radius: 6.25rem;
+  }
+
+  .createPost__tagsItem:hover {
+    background-color: var(--asc-color-primary-shade1);
+    border-color: var(--asc-color-primary-shade1);
+  }
+
   .createPost__ctaWrapper {
     display: block;
     padding: 1rem 1.5rem;
@@ -253,6 +283,7 @@
   .createPost__cta {
     width: 100%;
     display: block;
+    color: #222;
   }
 
   .createPost__mentionContainer {

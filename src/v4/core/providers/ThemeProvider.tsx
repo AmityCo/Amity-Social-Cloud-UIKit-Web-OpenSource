@@ -15,11 +15,11 @@ export const generateShades = (hexColor?: string, isDarkMode = false): string[] 
   if (!hexColor) return Array(SHADE_PERCENTAGES.length).fill('');
 
   if (isDarkMode === true && hexColor === defaultConfig.theme.dark.primary_color) {
-    return ['#4a82f2', '#a9c4f9', '#d9e5fc', '#ffffff'];
+    return ['#bed62f', '#deea96', '#f2f7d5', '#ffffff'];
   }
 
   if (isDarkMode === false && hexColor === defaultConfig.theme.light.primary_color) {
-    return ['#4a82f2', '#a9c4f9', '#d9e5fc', '#ffffff'];
+    return ['#bed62f', '#deea96', '#f2f7d5', '#ffffff'];
   }
 
   const hslColor = parseToHsl(hexColor);

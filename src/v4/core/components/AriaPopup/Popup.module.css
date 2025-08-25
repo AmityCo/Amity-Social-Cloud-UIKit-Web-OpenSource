@@ -61,16 +61,17 @@
   align-items: center;
   padding: 1.25rem 1.5rem;
   justify-content: space-between;
+  background-color: var(--asc-color-header-background-color);
   border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 
 .popup__header__title {
   font-size: 1.25rem;
-  color: var(--asc-color-base-default);
+  color: var(--asc-color-white);
 }
 
 .popup__header__closeButton {
-  fill: var(--asc-color-base-shade3);
+  fill: var(--asc-color-white);
 }
 
 @keyframes overlay-fade {
@@ -103,6 +104,6 @@
   }
 
   .popup__header__closeButton[data-focus-visible] {
-    outline: 1px solid var(--asc-color-base-shade2);
+    outline: 1px solid var(--asc-color-white);
   }
 }

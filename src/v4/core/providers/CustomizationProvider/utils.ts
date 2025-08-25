@@ -37,6 +37,7 @@ export type ConfigurableThemeValue = {
   alert_color: string;
   background_color: string;
   base_inverse_color: string;
+  header_background_color: string;
 };
 
 export type Theme = {
@@ -90,15 +91,15 @@ export type ThemeValue = ConfigurableThemeValue & BaseThemeValue & GeneratedThem
 
 const defaultBase = {
   black_color: '#000000',
-  white_color: '#ffffff',
+  white_color: '#FFFFFF',
   live_color: '#ff305a',
-  highlight_color: '#1054de',
+  highlight_color: '#0b7d3e',
   background_transparent_black_color: '#00000080',
-  background_transparent_white_color: '#fffc',
-  message_bubble_primary_color: '#1054de',
-  primary_background_hover_color: '#0d47ba',
-  primary_background_pressed_color: '#0b3997',
-  primary_background_disabled_color: '#d9e5fc',
+  background_transparent_white_color: '#fffFFFc',
+  message_bubble_primary_color: '#0b7d3e',
+  primary_background_hover_color: '#00653b',
+  primary_background_pressed_color: '#00653b',
+  primary_background_disabled_color: '#e6f2eb',
   plyr_color_main: '#f6f7f8',
   plyr_video_control_background_hover: 'rgb(0 0 0 / 30%)',
   transparent_black: 'rgb(0 0 0 / 50%)',
@@ -121,38 +122,46 @@ export const defaultConfig: DefaultConfig = {
   preferred_theme: 'default',
   theme: {
     light: {
-      primary_color: '#1054de',
-      secondary_color: '#292b32',
-      secondary_shade1_color: '#636878',
-      secondary_shade2_color: '#898e9e',
-      secondary_shade3_color: '#a5a9b5',
-      secondary_shade4_color: '#ebecef',
-      base_color: '#292b32',
-      base_shade1_color: '#636878',
-      base_shade2_color: '#898e9e',
-      base_shade3_color: '#a5a9b5',
-      base_shade4_color: '#ebecef',
-      base_shade5_color: '#F9F9FA',
-      alert_color: '#FA4D30',
+      primary_color: '#bed62f',
+      alert_color: '#e32219',
+
+      secondary_color: '#222222',
+      secondary_shade1_color: '#4e4e4e',
+      secondary_shade2_color: '#909090',
+      secondary_shade3_color: '#d3d3d3',
+      secondary_shade4_color: '#f2f2f2',
+
+      base_color: '#222222',
+      base_shade1_color: '#4e4e4e',
+      base_shade2_color: '#909090',
+      base_shade3_color: '#d3d3d3',
+      base_shade4_color: '#f2f2f2',
+      base_shade5_color: '#f8f8f8',
+
       background_color: '#FFFFFF',
-      base_inverse_color: '#000000',
+      base_inverse_color: '#222222',
+      header_background_color: '#2F3C43',
     },
     dark: {
-      primary_color: '#1054de',
-      secondary_color: '#ebecef',
-      secondary_shade1_color: '#a5a9b5',
-      secondary_shade2_color: '#898e9e',
-      secondary_shade3_color: '#40434e',
-      secondary_shade4_color: '#292b32',
-      base_color: '#ebecef',
-      base_shade1_color: '#a5a9b5',
-      base_shade2_color: '#6e7487',
-      base_shade3_color: '#40434e',
-      base_shade4_color: '#292b32',
-      base_shade5_color: '#f9f9fa',
-      alert_color: '#FA4D30',
-      background_color: '#191919',
+      primary_color: '#bed62f',
+      alert_color: '#e32219',
+
+      secondary_color: '#fcfcfc',
+      secondary_shade1_color: '#d3d3d3',
+      secondary_shade2_color: '#909090',
+      secondary_shade3_color: '#4e4e4e',
+      secondary_shade4_color: '#262c2f',
+
+      base_color: '#fcfcfc',
+      base_shade1_color: '#d3d3d3',
+      base_shade2_color: '#909090',
+      base_shade3_color: '#4e4e4e',
+      base_shade4_color: '#262c2f',
+      base_shade5_color: '#f8f8f8',
+
+      background_color: '#222222',
       base_inverse_color: '#FFFFFF',
+      header_background_color: '#2F3C43',
     },
   },
   excludes: [],
@@ -216,7 +225,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'story_page/*/create_new_story_button': {
       create_new_story_icon: 'plus.png',
-      background_color: '#ffffff',
+      background_color: '#FFFFFF',
     },
     'story_page/*/speaker_button': {
       mute_icon: 'mute.png',
@@ -1200,6 +1209,7 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   alert_color: '--asc-color-alert-default',
   background_color: '--asc-color-background-default',
   base_inverse_color: '--asc-color-base-inverse',
+  header_background_color: '--asc-color-header-background-color',
   background_shade1_color: '--asc-color-background-shade1',
   black_color: '--asc-color-black',
   white_color: '--asc-color-white',
