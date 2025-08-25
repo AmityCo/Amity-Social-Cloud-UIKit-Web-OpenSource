@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
 import Crying from '~/v4/icons/Crying';
+import FallbackReaction from '~/v4/icons/FallbackReaction';
 import Fire from '~/v4/icons/Fire';
 import Happy from '~/v4/icons/Happy';
 import Like from '~/v4/icons/Like';
@@ -40,6 +41,7 @@ interface ReactionButtonProps {
   defaultIconClassName?: string;
   imgIconClassName?: string;
   reactButtonClassName?: string;
+  fallbackReactButtonClassName?: string;
   defaultIcon?: () => JSX.Element;
   onReactionClick: (reactionKey: string) => void;
   onHover?: () => void;
@@ -66,6 +68,7 @@ export function ReactionButton({
   defaultIconClassName,
   imgIconClassName,
   reactButtonClassName,
+  fallbackReactButtonClassName,
   hoverDuration = MOUSE_DURATION,
   longPressDuration = LONG_PRESS_DURATION,
   onHover,
@@ -97,11 +100,13 @@ export function ReactionButton({
     showReactionPicker,
     displayReaction,
     hasMyReaction,
+    hoveredReaction,
     handleReactionPickerSelect,
     handleMouseEnter,
     handleCustomMouseLeave,
     handleTouchStart,
     handleTouchEnd,
+    handleTouchMove,
     handleMouseDown,
     handleMouseUp,
     handleQuickReaction,
@@ -169,7 +174,11 @@ export function ReactionButton({
       case 'crying':
         return <Crying className={styles.reactButton__icon} />;
       default:
-        return null;
+        return (
+          <FallbackReaction
+            className={clsx(styles.reactButton__icon, fallbackReactButtonClassName)}
+          />
+        );
     }
   };
 
@@ -251,6 +260,7 @@ export function ReactionButton({
               onReactionClick={handleReactionPickerSelect}
               onReactionHover={handleReactionHover}
               position={showPanelBelow ? 'below' : 'above'}
+              hoveredReaction={hoveredReaction}
             />
           </div>
         )}
@@ -284,6 +294,7 @@ export function ReactionButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleCustomMouseLeave}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}

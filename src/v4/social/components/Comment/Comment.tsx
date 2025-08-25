@@ -320,6 +320,7 @@ export const Comment = ({
                 pageId={pageId}
                 comment={comment}
                 reactionsCount={reactionsCount}
+                position="comment"
                 onReactionPress={() => {
                   const reactionList = (
                     <ReactionList
@@ -336,11 +337,6 @@ export const Comment = ({
                         activeSnapPoint: 0.7,
                       });
                 }}
-                className={styles.postComment__secondRow__rightPane}
-                reactionsClassName={styles.postComment__secondRow__rightPane__reactions}
-                iconClassName={styles.postComment__secondRow__rightPane__icon}
-                iconFallbackClassName={styles.postComment__secondRow__rightPane__iconFallback}
-                reactionCountClassName={styles.postComment__secondRow__rightPane__reactionCount}
               />
             </div>
 

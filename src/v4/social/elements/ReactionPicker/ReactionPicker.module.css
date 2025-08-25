@@ -3,6 +3,8 @@
   cursor: pointer;
   gap: 0.5rem;
   width: max-content;
+  touch-action: none;
+  contain: layout style;
 }
 
 .reactionButton {
@@ -13,8 +15,9 @@
   width: 2rem;
   height: 2rem;
   border-radius: var(--asc-border-radius-full);
-  transition: all 0.15s ease-in-out;
+  transition: transform 0.2s ease-out;
   cursor: pointer;
+  will-change: transform;
 }
 
 .reactionButton__icon[data-active='true'] {
@@ -29,15 +32,26 @@
 
 .reactionButton__icon:hover,
 .reactionButton__iconContainer:hover .reactionButton__icon {
-  animation: bounce 0.3s ease-in-out forwards;
+  animation: bounce 0.2s ease-in-out forwards;
 }
 
-/* Different animation for icon when panel is positioned below */
+.reactionButton[data-touch-hovered='true'] .reactionButton__icon {
+  transform: scale(1.3) translateY(-8px);
+  transition: transform 0.15s ease-out;
+}
+
 .reactionPickerContainer[data-position='below'] .reactionButton__icon:hover,
 .reactionPickerContainer[data-position='below']
   .reactionButton__iconContainer:hover
   .reactionButton__icon {
-  animation: bounce-below 0.3s ease-in-out forwards;
+  animation: bounce-below 0.2s ease-in-out forwards;
+}
+
+.reactionPickerContainer[data-position='below']
+  .reactionButton[data-touch-hovered='true']
+  .reactionButton__icon {
+  transform: scale(1.3) translateY(8px);
+  transition: transform 0.15s ease-out;
 }
 
 .reactionButton__activeBackground {
@@ -58,7 +72,7 @@
 
 .reactionButton__text {
   position: absolute;
-  top: -1.5rem;
+  top: -2.05rem;
   left: 50%;
   transform: translateX(-50%);
   max-width: 4rem;
@@ -73,28 +87,42 @@
   visibility: hidden;
   text-transform: capitalize;
   transition:
-    opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out;
+    opacity 0.15s ease-out,
+    visibility 0.15s ease-out,
+    transform 0.15s ease-out;
+  will-change: opacity, visibility, transform;
 }
 
-/* When panel is positioned below, show text below the icon */
 .reactionPickerContainer[data-position='below'] .reactionButton__text {
-  top: 2.5rem;
+  top: 2.75rem;
 }
 
 .reactionButton__icon:hover + .reactionButton__text,
 .reactionButton__iconContainer:hover .reactionButton__text {
   opacity: 1;
   visibility: visible;
-  animation: bounce-text 0.3s ease-in-out forwards;
+  animation: bounce-text 0.2s ease-in-out forwards;
 }
 
-/* Different animation when panel is positioned below */
+.reactionButton[data-touch-hovered='true'] .reactionButton__text {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-9px);
+}
+
 .reactionPickerContainer[data-position='below'] .reactionButton__icon:hover + .reactionButton__text,
 .reactionPickerContainer[data-position='below']
   .reactionButton__iconContainer:hover
   .reactionButton__text {
-  animation: bounce-text-below 0.3s ease-in-out forwards;
+  animation: bounce-text-below 0.2s ease-in-out forwards;
+}
+
+.reactionPickerContainer[data-position='below']
+  .reactionButton[data-touch-hovered='true']
+  .reactionButton__text {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(9px);
 }
 
 @keyframes bounce {
@@ -134,5 +162,15 @@
 
   100% {
     transform: translateY(15px);
+  }
+}
+
+@media screen and (width >=48em) {
+  .reactionButton__text {
+    top: -1.65rem;
+  }
+
+  .reactionPickerContainer[data-position='below'] .reactionButton__text {
+    top: 2.25rem;
   }
 }

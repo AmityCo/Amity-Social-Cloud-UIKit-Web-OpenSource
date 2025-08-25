@@ -488,27 +488,29 @@ export const PostContent = ({
               >
                 {hasReaction ? (
                   <div className={styles.postContent__reactionsBar__reactions}>
-                    {sortedReactions.map((item) =>
-                      item.type === 'configured' ? (
-                        <img
-                          key={item.reaction.name}
-                          src={item.reaction.image}
-                          alt={item.reaction.name}
-                          className={styles.postContent__reactionsBar__reactions__icon}
-                        />
-                      ) : (
-                        <FallbackReaction
-                          key={item.reactionName}
-                          className={clsx(
-                            styles.postContent__reactionsBar__reactions__iconFallback,
-                            styles.postContent__reactionsBar__reactions__icon,
-                          )}
-                          backgroundColor={getComputedStyle(
-                            document.documentElement,
-                          ).getPropertyValue('--asc-color-base-shade3')}
-                        />
-                      ),
-                    )}
+                    {sortedReactions
+                      .slice(0, 5)
+                      .map((item) =>
+                        item.type === 'configured' ? (
+                          <img
+                            key={item.reaction.name}
+                            src={item.reaction.image}
+                            alt={item.reaction.name}
+                            className={styles.postContent__reactionsBar__reactions__icon}
+                          />
+                        ) : (
+                          <FallbackReaction
+                            key={item.reactionName}
+                            className={clsx(
+                              styles.postContent__reactionsBar__reactions__iconFallback,
+                              styles.postContent__reactionsBar__reactions__icon,
+                            )}
+                            backgroundColor={getComputedStyle(
+                              document.documentElement,
+                            ).getPropertyValue('--asc-color-base-shade3')}
+                          />
+                        ),
+                      )}
                   </div>
                 ) : null}
 

@@ -19,21 +19,29 @@
 
 .clipFeedMenu__reactionButtonIcon {
   width: 2rem;
-  height: 1.75rem;
+  height: 2rem;
+  color: var(--asc-color-white);
+  fill: transparent;
 }
 
 .clipFeedMenu__reactButton {
-  max-width: 2rem;
-  max-height: 2rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+.clipFeedMenu__reactButton__fallbackIcon {
+  width: 2rem !important;
+  height: 2rem !important;
+  color: var(--asc-color-base-shade3);
 }
 
 .clipFeedMenu__reactionsCount[data-has-my-reaction='true'],
 .clipFeedMenu__reactionsCount[data-has-my-reaction='false'] {
-  color: var(--asc-color-white);
+  color: var(--asc-color-white) !important;
 }
 
 .clipFeedMenu__reactionButtonIcon[data-has-my-reaction='false'] {
-  fill: var(--asc-color-white);
+  fill: var(--asc-color-white) !important;
 }
 
 .clipFeedMenu__commentButton {

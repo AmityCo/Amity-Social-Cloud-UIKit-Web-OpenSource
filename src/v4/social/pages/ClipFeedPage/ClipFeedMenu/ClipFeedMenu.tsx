@@ -10,6 +10,7 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { CommentDrawer } from './CommentDrawer';
+import LikeTransparent from '~/v4/icons/LikeTransparent';
 
 type ClipFeedMenuProps = {
   pageId?: string;
@@ -89,9 +90,13 @@ export const ClipFeedMenu = ({
           defaultIconClassName={styles.clipFeedMenu__reactionButtonIcon}
           reactionsCountClassName={styles.clipFeedMenu__reactionsCount}
           reactButtonClassName={styles.clipFeedMenu__reactButton}
+          fallbackReactButtonClassName={styles.clipFeedMenu__reactButton__fallbackIcon}
           reactionsCount={reactionsCount || 0}
           myReaction={reactionByMe || null}
           isClipReaction
+          defaultIcon={() => (
+            <LikeTransparent className={styles.clipFeedMenu__reactionButtonIcon} />
+          )}
         />
       )}
       {isShowInteractionMenu && !isDragging && (

@@ -18,6 +18,7 @@ interface UseReactionHandlerReturn {
   displayReaction: string | null;
   hasMyReaction: boolean;
   hoveredReaction: string | null;
+  isTouchDragging: boolean;
 
   handleReactionPickerSelect: (reactionName: string) => void;
   handleClickOutside: () => void;
@@ -25,6 +26,7 @@ interface UseReactionHandlerReturn {
   handleCustomMouseLeave: () => void;
   handleTouchStart: (e: React.TouchEvent) => void;
   handleTouchEnd: (e: React.TouchEvent) => void;
+  handleTouchMove: (e: React.TouchEvent) => void;
   handleMouseDown: (e: React.MouseEvent) => void;
   handleMouseUp: (e: React.MouseEvent) => void;
   handleQuickReaction: () => void;
@@ -49,11 +51,13 @@ export function useReactionHandler({
   const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartTimeRef = useRef<number | null>(null);
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartPositionRef = useRef<{ x: number; y: number } | null>(null);
 
   const [showReactionPicker, setShowReactionPicker] = useState(false);
   const [optimisticReaction, setOptimisticReaction] = useState<string | null>(null);
   const [isLongPressing, setIsLongPressing] = useState(false);
   const [hoveredReaction, setHoveredReaction] = useState<string | null>(null);
+  const [isTouchDragging, setIsTouchDragging] = useState(false);
   const { isDesktop } = useResponsive();
 
   const displayReaction = optimisticReaction || myReaction || null;
@@ -128,7 +132,12 @@ export function useReactionHandler({
       if (isDesktop) return;
 
       setIsLongPressing(false);
+      setIsTouchDragging(false);
       touchStartTimeRef.current = Date.now();
+      touchStartPositionRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      };
 
       if (longPressTimeoutRef.current) {
         clearTimeout(longPressTimeoutRef.current);
@@ -137,10 +146,43 @@ export function useReactionHandler({
       longPressTimeoutRef.current = setTimeout(() => {
         setIsLongPressing(true);
         setShowReactionPicker(true);
+        setIsTouchDragging(true);
         onLongPress?.();
       }, longPressDuration);
     },
     [longPressDuration, onLongPress, isDesktop],
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (isDesktop || !isLongPressing || !showReactionPicker) return;
+
+      const currentTouch = e.touches[0];
+      if (!currentTouch) return;
+
+      e.preventDefault();
+
+      const elementFromPoint = document.elementFromPoint(
+        currentTouch.clientX,
+        currentTouch.clientY,
+      );
+
+      if (elementFromPoint) {
+        const reactionButton = elementFromPoint.closest('[data-reaction-name]');
+        if (reactionButton) {
+          const reactionName = reactionButton.getAttribute('data-reaction-name');
+          if (reactionName !== hoveredReaction) {
+            setHoveredReaction(reactionName);
+          }
+        } else {
+          const pickerContainer = elementFromPoint.closest('[data-position]');
+          if (!pickerContainer && hoveredReaction) {
+            setHoveredReaction(null);
+          }
+        }
+      }
+    },
+    [isDesktop, isLongPressing, showReactionPicker, hoveredReaction],
   );
 
   const handleTouchEnd = useCallback(
@@ -157,13 +199,28 @@ export function useReactionHandler({
         ? touchEndTime - touchStartTimeRef.current
         : 0;
 
-      if (touchDuration < longPressDuration) {
+      if (isTouchDragging && hoveredReaction && showReactionPicker) {
+        handleReactionPickerSelect(hoveredReaction);
+        setIsTouchDragging(false);
         setIsLongPressing(false);
+        setShowReactionPicker(false);
+        setHoveredReaction(null);
+      } else if (touchDuration < longPressDuration) {
+        setIsLongPressing(false);
+        setIsTouchDragging(false);
       }
 
       touchStartTimeRef.current = null;
+      touchStartPositionRef.current = null;
     },
-    [longPressDuration, isDesktop],
+    [
+      longPressDuration,
+      isDesktop,
+      isTouchDragging,
+      hoveredReaction,
+      showReactionPicker,
+      handleReactionPickerSelect,
+    ],
   );
 
   const handleMouseDown = useCallback(
@@ -278,6 +335,42 @@ export function useReactionHandler({
     }
   }, [isDesktop, isLongPressing, showReactionPicker, hoveredReaction, handleReactionPickerSelect]);
 
+  useEffect(() => {
+    if (!isDesktop && isTouchDragging && showReactionPicker) {
+      const globalTouchMove = (e: TouchEvent) => {
+        const currentTouch = e.touches[0];
+        if (!currentTouch) return;
+
+        e.preventDefault();
+
+        const elementFromPoint = document.elementFromPoint(
+          currentTouch.clientX,
+          currentTouch.clientY,
+        );
+
+        if (elementFromPoint) {
+          const reactionButton = elementFromPoint.closest('[data-reaction-name]');
+          if (reactionButton) {
+            const reactionName = reactionButton.getAttribute('data-reaction-name');
+            if (reactionName !== hoveredReaction) {
+              setHoveredReaction(reactionName);
+            }
+          } else {
+            const pickerContainer = elementFromPoint.closest('[data-position]');
+            if (!pickerContainer && hoveredReaction) {
+              setHoveredReaction(null);
+            }
+          }
+        }
+      };
+
+      document.addEventListener('touchmove', globalTouchMove, { passive: false });
+      return () => {
+        document.removeEventListener('touchmove', globalTouchMove);
+      };
+    }
+  }, [!isDesktop, isTouchDragging, showReactionPicker, hoveredReaction]);
+
   return {
     showReactionPicker,
     optimisticReaction,
@@ -285,6 +378,7 @@ export function useReactionHandler({
     displayReaction,
     hasMyReaction,
     hoveredReaction,
+    isTouchDragging,
 
     handleReactionPickerSelect,
     handleClickOutside,
@@ -292,6 +386,7 @@ export function useReactionHandler({
     handleCustomMouseLeave,
     handleTouchStart,
     handleTouchEnd,
+    handleTouchMove,
     handleMouseDown,
     handleMouseUp,
     handleQuickReaction,

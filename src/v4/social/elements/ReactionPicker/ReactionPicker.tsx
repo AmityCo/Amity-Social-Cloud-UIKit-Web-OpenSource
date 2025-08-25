@@ -10,6 +10,7 @@ export interface ReactionPickerProps {
   onSelectReaction?: (reactionName: string) => void;
   onReactionHover?: (reactionName: string | null) => void;
   position?: 'above' | 'below';
+  hoveredReaction?: string | null;
 }
 
 export const ReactionPicker = ({
@@ -18,6 +19,7 @@ export const ReactionPicker = ({
   onSelectReaction,
   onReactionHover,
   position = 'above',
+  hoveredReaction,
 }: ReactionPickerProps) => {
   const { socialReactions: config } = useCustomReaction();
 
@@ -39,6 +41,8 @@ export const ReactionPicker = ({
               onClickReaction(reaction.name);
             }}
             className={styles.reactionButton}
+            data-reaction-name={reaction.name}
+            data-touch-hovered={hoveredReaction === reaction.name}
           >
             <div
               data-active={myReaction === reaction.name}

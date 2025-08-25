@@ -5,17 +5,15 @@ import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton';
 import FallbackReaction from '~/v4/icons/FallbackReaction';
 import { useCommentReactionDisplay } from '~/v4/social/hooks/useCommentReactionDisplay';
+import styles from './CommentReactionDisplay.module.css';
 
 interface CommentReactionDisplayProps {
   pageId: string;
   comment: Amity.Comment;
   reactionsCount: number;
   onReactionPress: () => void;
+  position?: 'comment' | 'replyComment';
   className?: string;
-  reactionsClassName?: string;
-  iconClassName?: string;
-  iconFallbackClassName?: string;
-  reactionCountClassName?: string;
 }
 
 export const CommentReactionDisplay = ({
@@ -23,32 +21,35 @@ export const CommentReactionDisplay = ({
   comment,
   reactionsCount,
   onReactionPress,
+  position = 'comment',
   className,
-  reactionsClassName,
-  iconClassName,
-  iconFallbackClassName,
-  reactionCountClassName,
 }: CommentReactionDisplayProps) => {
   const { sortedReactions, hasReaction } = useCommentReactionDisplay({ comment });
 
   if (reactionsCount <= 0) return null;
 
+  const containerClassName = clsx(
+    styles.commentReactionDisplay,
+    styles[`commentReactionDisplay--${position}`],
+    className,
+  );
+
   return (
-    <Button variant="default" className={className} onPress={onReactionPress}>
+    <Button variant="default" className={containerClassName} onPress={onReactionPress}>
       {hasReaction ? (
-        <div className={reactionsClassName}>
+        <div className={styles.commentReactionDisplay__reactions}>
           {sortedReactions.map((item) =>
             item.type === 'configured' ? (
               <img
                 key={item.reaction.name}
                 src={item.reaction.image}
                 alt={item.reaction.name}
-                className={iconClassName}
+                className={styles.commentReactionDisplay__icon}
               />
             ) : (
               <FallbackReaction
                 key={item.reactionName}
-                className={clsx(iconClassName, iconFallbackClassName)}
+                className={styles.commentReactionDisplay__iconFallback}
                 backgroundColor={getComputedStyle(document.documentElement).getPropertyValue(
                   '--asc-color-base-shade3',
                 )}
@@ -57,7 +58,7 @@ export const CommentReactionDisplay = ({
           )}
         </div>
       ) : null}
-      <Typography.CaptionBold className={reactionCountClassName}>
+      <Typography.CaptionBold className={styles.commentReactionDisplay__reactionCount}>
         {millify(reactionsCount)}
       </Typography.CaptionBold>
     </Button>

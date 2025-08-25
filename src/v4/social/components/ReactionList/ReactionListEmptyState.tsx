@@ -15,8 +15,12 @@ export const ReactionListEmptyState = ({
       <div className={styles.reactionState}>
         <SmilePlus className={styles.reactionListEmptyState__smileIcon} />
         <div className={styles.reactionState2Line}>
-          <Typography.Body>No reactions yet</Typography.Body>
-          <Typography.Caption>{`Be the first to react to this ${referenceType}!`}</Typography.Caption>
+          <Typography.Body className={styles.reactionListEmptyState__caption}>
+            No reactions yet
+          </Typography.Body>
+          <Typography.Caption
+            className={styles.reactionListEmptyState__caption}
+          >{`Be the first to react to this ${referenceType}!`}</Typography.Caption>
         </div>
       </div>
     </div>

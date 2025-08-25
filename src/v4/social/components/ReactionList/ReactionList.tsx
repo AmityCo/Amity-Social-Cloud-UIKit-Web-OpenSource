@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
+import clsx from 'clsx';
 import { useReactionsCollection } from '~/v4/social/hooks/collections/useReactionsCollection';
 import { Typography } from '~/v4/core/components';
 import { useCustomReaction, AmityReactionType } from '~/v4/core/providers/CustomReactionProvider';
@@ -51,7 +52,7 @@ const RenderCondition = ({
 }: {
   filteredReactions: Amity.Reactor[];
   isLoading: boolean;
-  hasMore: boolean;
+  hasMore: boolean | undefined;
   loadMore: () => void;
   removeReaction: (reaction: string) => Promise<void>;
   referenceType?: string;
@@ -99,7 +100,14 @@ export const ReactionList = ({
     componentId,
   });
 
-  const { reactions, error, isLoading, hasMore, loadMore } = useReactionsCollection({
+  const {
+    reactions,
+    error,
+    loading: isLoading,
+    hasMore,
+    loadMore,
+    refresh,
+  } = useReactionsCollection({
     referenceId,
     referenceType,
     limit: 25,
@@ -123,6 +131,10 @@ export const ReactionList = ({
   };
 
   useEffect(() => {
+    refresh();
+  }, []);
+
+  useEffect(() => {
     if (!isDesktop) return;
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) return;
@@ -143,12 +155,10 @@ export const ReactionList = ({
     return () => {
       scrollContainer.removeEventListener('wheel', handleWheel);
     };
-  }, []);
-
-  if (reactions == null || !config) return null;
+  }, [isDesktop]);
 
   const allConfigReactions = useMemo(
-    () => config.map((reactionConfigItem) => reactionConfigItem.name),
+    () => (config ? config.map((reactionConfigItem) => reactionConfigItem.name) : []),
     [config],
   );
 
@@ -157,15 +167,17 @@ export const ReactionList = ({
       Object.keys(allReacted).filter((reaction) => {
         return !allConfigReactions.includes(reaction);
       }),
-    [allReacted],
+    [allReacted, allConfigReactions],
   );
 
   const totalUnknownReactionCount = useMemo(
     () => unknownReaction.reduce((acc, curr) => acc + allReacted[curr], 0),
-    [allReacted],
+    [allReacted, unknownReaction],
   );
 
   const sortedReactionTabs = useMemo(() => {
+    if (!config) return [];
+
     // Sort known reactions by count (highest to lowest)
     const sortedKnownReactions = config
       .filter((reactionConfigItem) => allReacted[reactionConfigItem.name])
@@ -201,24 +213,41 @@ export const ReactionList = ({
   }, [config, allReacted, unknownReaction, totalUnknownReactionCount]);
 
   const filteredReactions = useMemo(
-    () => filterReactionsByTab(reactions, activeTab, allConfigReactions),
-    [reactions, activeTab],
+    () => filterReactionsByTab(reactions || [], activeTab, allConfigReactions),
+    [reactions, activeTab, allConfigReactions],
   );
+
+  const shouldShowAllTab = sortedReactionTabs.length > 1;
+
+  useEffect(() => {
+    if (!shouldShowAllTab && sortedReactionTabs.length === 1) {
+      const firstTab = sortedReactionTabs[0];
+      if (firstTab.isUnknown) {
+        setActiveTab(UNKNOWN_TAB);
+      } else if (firstTab.reaction && firstTab.reaction.name) {
+        setActiveTab(firstTab.reaction.name);
+      }
+    }
+  }, [shouldShowAllTab, sortedReactionTabs]);
+
+  if (reactions == null || !config) return null;
 
   return (
     <div className={styles.reactionListContainer} data-testid={`${accessibilityId}_header`}>
       <div className={styles.tabListContainer}>
         <div ref={scrollContainerRef} className={styles.tabListScrollContainer}>
           <div className={styles.tabList} data-testid={`${accessibilityId}_tab`}>
-            <div
-              data-active={activeTab === 'All'}
-              className={styles.tabItem}
-              onClick={() => handleTabClick('All')}
-            >
-              <Typography.BodyBold>
-                <span className={styles.reactionEmoji}>All {abbreviateCount(reactionCount)}</span>
-              </Typography.BodyBold>
-            </div>
+            {shouldShowAllTab && (
+              <div
+                data-active={activeTab === 'All'}
+                className={styles.tabItem}
+                onClick={() => handleTabClick('All')}
+              >
+                <Typography.BodyBold>
+                  <span className={styles.reactionEmoji}>All {abbreviateCount(reactionCount)}</span>
+                </Typography.BodyBold>
+              </div>
+            )}
 
             {sortedReactionTabs.map((tabItem) => {
               if (tabItem.isUnknown) {
@@ -231,7 +260,9 @@ export const ReactionList = ({
                   >
                     <Typography.BodyBold>
                       <span className={styles.reactionEmoji}>
-                        <FallbackReaction className={styles.reactionIcon} />
+                        <FallbackReaction
+                          className={clsx(styles.reactionIcon, styles.reactionIcon__fallbackIcon)}
+                        />
                         {abbreviateCount(totalUnknownReactionCount)}
                       </span>
                     </Typography.BodyBold>
