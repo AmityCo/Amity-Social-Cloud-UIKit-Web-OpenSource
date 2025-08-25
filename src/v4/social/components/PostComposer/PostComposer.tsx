@@ -127,6 +127,7 @@ export function PostComposer({
         className={styles.postComposer__avatar}
         imageContainerClassName={styles.postComposer__avatar}
         textPlaceholderClassName={styles.postComposer__avatarPlaceholder}
+        shouldRedirectToUserProfile
       />
       <Button className={styles.postComposer__input} onPress={handlePostClick}>
         What's going on?
