@@ -146,7 +146,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   };
 
   const renderTabContent = () => {
-    console.log('tab', currentActiveTab);
     if (currentActiveTab === UserProfileTabs.FEED) {
       return (
         <>
