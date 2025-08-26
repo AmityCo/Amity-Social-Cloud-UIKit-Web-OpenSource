@@ -42,10 +42,9 @@
   text-transform: capitalize;
 }
 
-.reactButton__panel {
+.reactButton__panel,
+.reactButton__panel[data-reference-type='post'] {
   position: absolute;
-
-  /* bottom: calc(0.25rem + 0.44rem); */
   top: 0;
   left: 0;
   transform: translateY(calc(-100% - 0.4rem));
@@ -124,6 +123,10 @@
 
 .reactionButton__wrapper[data-is-clip='true'] {
   position: relative;
+}
+
+.reactButton__panel[data-reference-type='comment'] {
+  left: -2rem;
 }
 
 @keyframes reaction-scale {

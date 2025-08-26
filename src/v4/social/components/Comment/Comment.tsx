@@ -281,10 +281,11 @@ export const Comment = ({
             shouldRedirectToUserProfile
           />
           <div className={styles.postComment__details}>
-            <div
+            <Button
+              variant="default"
               className={styles.postComment__content}
               data-has-reaction={reactionsCount > 0}
-              onClick={() => onClickUser(comment.creator?.userId ?? '')}
+              onPress={() => onClickUser(comment.creator?.userId ?? '')}
             >
               <Button
                 variant="default"
@@ -338,7 +339,7 @@ export const Comment = ({
                       });
                 }}
               />
-            </div>
+            </Button>
 
             <div className={styles.postComment__secondRow}>
               {shouldAllowInteraction ? (
@@ -362,6 +363,7 @@ export const Comment = ({
                         onReactionClick={handleReactionClick}
                         buttonClassName={styles.postComment__secondRow__like}
                         isCommentReaction
+                        referenceType="comment"
                       />
                       <Button
                         data-testid={`${pageId}/${componentId}/reply_button`}

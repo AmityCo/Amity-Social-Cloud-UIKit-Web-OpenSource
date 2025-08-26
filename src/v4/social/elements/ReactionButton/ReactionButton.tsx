@@ -50,6 +50,7 @@ interface ReactionButtonProps {
   longPressDuration?: number;
   isCommentReaction?: boolean;
   isClipReaction?: boolean;
+  referenceType?: 'post' | 'comment';
 }
 
 const MOUSE_DURATION = 250;
@@ -77,6 +78,7 @@ export function ReactionButton({
   onReactionClick,
   isCommentReaction = false,
   isClipReaction = false,
+  referenceType = 'post',
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
 
@@ -242,6 +244,7 @@ export function ReactionButton({
             )}
             data-is-clip={isClipReaction}
             data-position={showPanelBelow ? 'below' : 'above'}
+            data-reference-type={referenceType}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();

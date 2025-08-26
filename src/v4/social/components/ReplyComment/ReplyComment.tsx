@@ -282,6 +282,7 @@ const PostReplyComment = ({
                     onReactionClick={handleReactionClick}
                     buttonClassName={styles.postReplyComment__secondRow__like}
                     isCommentReaction
+                    referenceType="comment"
                   />
                 )}
 
