@@ -150,7 +150,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   };
 
   const renderTabContent = () => {
-    console.log('tab', currentActiveTab);
     if (currentActiveTab === UserProfileTabs.FEED) {
       return (
         <>
@@ -230,7 +229,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   );
 
   const isFilterAvailable =
-    isCurrentUser || socialSettings?.userPrivacySetting === 'public' || followStatus === 'accepted';
+    isCurrentUser ||
+    (socialSettings?.userPrivacySetting === 'public' && followStatus !== 'blocked') ||
+    followStatus === 'accepted';
 
   return (
     <>

@@ -156,7 +156,8 @@
 }
 
 .pendingCountButton__notification {
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .pendingCountButton__notification__icon {
