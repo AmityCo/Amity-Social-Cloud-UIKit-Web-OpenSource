@@ -61,8 +61,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
     UserProfileTabs.FEED,
   );
 
-  const tipsterImage = '../../../../assets/LogoTipster.svg';
-
   useEffect(() => {
     let cleanup: (() => void) | null = null;
 
@@ -247,7 +245,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
                   <div className={styles.userProfilePage__flexContainer}>
                     {mockSports.map((sport, index) => (
                       <div key={index} className={styles.userProfilePage__gameStatCard}>
-                        {sport.icon}
+                        <div>{sport.icon}</div>
                         <Typography.TicketSizeTitle>{sport.name}</Typography.TicketSizeTitle>
                         <Typography.TicketSizeText>({sport.percentage}%)</Typography.TicketSizeText>
                       </div>

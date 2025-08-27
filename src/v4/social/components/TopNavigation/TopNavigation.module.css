@@ -27,6 +27,7 @@
 
 @media (width >= 48em) {
   .topNavigation {
+    padding: 0 0 1.5rem;
     background: none;
   }
 }
