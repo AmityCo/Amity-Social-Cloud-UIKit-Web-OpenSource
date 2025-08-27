@@ -242,7 +242,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
                     <div id="tipsterChart" className={styles.userProfilePage__chartWrapper}></div>
                   </div>
                 </div>
-                <div style={{ overflowX: 'hidden' }}>
+                <div className={styles.userProfilePage__mainSportsCard}>
                   <Typography.BodyBold>Giochi principalmente a</Typography.BodyBold>
                   <div className={styles.userProfilePage__flexContainer}>
                     {mockSports.map((sport, index) => (

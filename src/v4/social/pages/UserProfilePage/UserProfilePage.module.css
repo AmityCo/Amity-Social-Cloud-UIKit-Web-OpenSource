@@ -1,7 +1,7 @@
 .userProfilePage {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   background-color: var(--asc-color-background-default);
 }
 
@@ -168,6 +168,11 @@
   width: 100%;
 }
 
+.userProfilePage__mainSportsCard {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 @media (width >=48em) {
   .userProfilePage {
     background-color: transparent;
@@ -185,11 +190,14 @@
 
   .userProfilePage__tipsterSection {
     flex-direction: row;
-    flex-basis: 50%;
   }
 
   .userProfilePage__tipsterCard {
     flex-direction: row;
+    width: 50%;
+  }
+
+  .userProfilePage__mainSportsCard {
     width: 50%;
   }
 
@@ -232,7 +240,8 @@
     flex-direction: column;
   }
 
-  .userProfilePage__tipsterCard {
+  .userProfilePage__tipsterCard,
+  .userProfilePage__mainSportsCard {
     width: 100%;
   }
 }
