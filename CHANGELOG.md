@@ -2,12 +2,47 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### 4.11.2 (2025-08-20)
-
+### 4.11.3 (2025-08-25)
 
 ### Bug Fixes
 
-* add props redirect ([7d7f996](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/7d7f996948675c64ee21663168d963307e0d1a38))
+- to scroll after feed loaded instead ([#1227](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1227)) ([9f2509a](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/9f2509a231ef8adfa9411f99978824bba31e3131))
+
+### 4.11.2 (2025-08-20)
+
+### Bug Fixes
+
+- add props redirect ([7d7f996](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/7d7f996948675c64ee21663168d963307e0d1a38))
+
+### 4.11.1 (2025-08-06)
+
+### Bug Fixes
+
+- remove comment ([3eca4c6](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/3eca4c6507b1fcd67f3e2044015b0c73da4992e2))
+
+## 4.11.0 (2025-07-18)
+
+### Features
+
+- bump sdk version ([#1169](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1169)) ([3478d4b](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/3478d4bf697e7c49f0d02a27ef331d7877c6b154))
+
+## 4.10.0 (2025-07-11)
+
+### Features
+
+- update sdk version ([b9c4c37](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/b9c4c37c34bab9fd90dcebbd0cca75ce8551763d))
+
+## 4.9.0 (2025-06-20)
+
+### Features
+
+- update sdk PROD ([8e583aa](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/8e583aa5a0fface494ae6fadc729be608e4884f5))
+
+### 4.8.1 (2025-05-22)
+
+### Bug Fixes
+
+- add props redirect ([7d7f996](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/7d7f996948675c64ee21663168d963307e0d1a38))
 
 ### 4.11.1 (2025-08-06)
 
