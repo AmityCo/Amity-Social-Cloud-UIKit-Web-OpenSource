@@ -47,7 +47,7 @@ const RenderCondition = ({
   removeReaction,
   referenceType,
   error,
-  currentRef,
+
   customReferenceType,
 }: {
   filteredReactions: Amity.Reactor[];
@@ -57,13 +57,9 @@ const RenderCondition = ({
   removeReaction: (reaction: string) => Promise<void>;
   referenceType?: string;
   error: Error | null;
-  currentRef: HTMLDivElement | null;
+
   customReferenceType?: string;
 }) => {
-  if (isLoading) {
-    return <ReactionListLoadingState />;
-  }
-
   if (error) {
     return <ReactionListError />;
   }
@@ -78,7 +74,6 @@ const RenderCondition = ({
 
   return (
     <ReactionListPanel
-      currentRef={currentRef}
       hasMore={hasMore}
       loadMore={loadMore}
       isLoading={isLoading}
@@ -120,7 +115,6 @@ export const ReactionList = ({
 
   const { closePopup } = usePopupContext();
   const [activeTab, setActiveTab] = useState('All');
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { socialReactions: config } = useCustomReaction();
   const { removeReaction } = useReaction(referenceType, referenceId);
@@ -230,7 +224,9 @@ export const ReactionList = ({
     }
   }, [shouldShowAllTab, sortedReactionTabs]);
 
-  if (reactions == null || !config) return null;
+  if (!config) return null;
+
+  if (reactions == null && !isLoading) return null;
 
   return (
     <div className={styles.reactionListContainer} data-testid={`${accessibilityId}_header`}>
@@ -299,9 +295,9 @@ export const ReactionList = ({
         />
       </div>
 
-      <div ref={containerRef} className={styles.reactionPanel}>
+      <div className={styles.reactionPanel}>
+        {isLoading && reactions?.length === 0 && <ReactionListLoadingState />}
         <RenderCondition
-          currentRef={containerRef.current}
           hasMore={hasMore}
           loadMore={loadMore}
           error={error}
