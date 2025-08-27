@@ -33,7 +33,7 @@ export const UserFollower: React.FC<UserFollowerProps> = ({
       data-testid={accessibilityId}
       style={themeStyles}
       onPress={() => {
-        AmityUserProfileHeaderComponentBehavior.goToUserRelationshipPage?.({
+        AmityUserProfileHeaderComponentBehavior?.goToUserRelationshipPage?.({
           userId,
           selectedTab: UserRelationshipPageTabs.FOLLOWER,
         });

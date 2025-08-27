@@ -67,9 +67,7 @@ export const PercentageCircle: React.FC<PercentageCircleProps> = ({
           pointerEvents: 'none',
         }}
       >
-        <Typography.Body style={{ fontWeight: 'bold', fontSize: '14px' }}>
-          {Math.round(percentage)}%
-        </Typography.Body>
+        <Typography.BodyBold>{Math.round(percentage)}%</Typography.BodyBold>
       </div>
     </div>
   );

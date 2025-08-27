@@ -43,9 +43,3 @@
   align-items: center;
   justify-content: center;
 }
-
-@media (width >= 48em) {
-  .newsfeed {
-    background-color: var(--asc-color-background-shade1);
-  }
-}

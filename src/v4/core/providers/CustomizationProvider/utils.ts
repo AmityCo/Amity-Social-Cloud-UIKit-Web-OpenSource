@@ -129,7 +129,7 @@ export const defaultConfig: DefaultConfig = {
       secondary_shade4_color: '#ebecef',
       base_color: '#292b32',
       base_shade1_color: '#636878',
-      base_shade2_color: '#898e9e',
+      base_shade2_color: '#909090',
       base_shade3_color: '#a5a9b5',
       base_shade4_color: '#ebecef',
       base_shade5_color: '#F9F9FA',
@@ -768,6 +768,10 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/user_video_feed/empty_clip_feed': {
       text: 'No clips yet',
       image: 'emptyClipIcon',
+    },
+
+    'user_profile_page/top_navigation/header_label': {
+      text: 'Your Profile',
     },
 
     'edit_user_profile_page/*/*': {},

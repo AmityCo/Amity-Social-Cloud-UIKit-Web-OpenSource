@@ -3,15 +3,3 @@
   display: flex;
   align-items: center;
 }
-
-.userName__displayName__text {
-  word-break: break-all;
-  overflow: hidden;
-  color: var(--global-text-default, #222);
-  text-overflow: ellipsis;
-  font-family: var(--typography-scale-heading-h2-family, Mulish);
-  font-size: var(--typography-scale-heading-h2-size, 1.25rem);
-  font-style: normal;
-  font-weight: 800;
-  line-height: var(--typography-scale-heading-h2-line-height, 1.5rem);
-}

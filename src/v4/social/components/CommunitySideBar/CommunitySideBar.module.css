@@ -4,10 +4,8 @@
   height: 100vh;
   border-right: 1px solid var(--asc-color-base-shade4);
   background-color: var(--asc-color-background-default);
-  border-radius: var(--global-image-radius-big, 16px) var(--global-image-radius-big, 16px) 0 16px;
-  box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
-    var(--effect-elevation-sm-blur, 16px) var(--effect-elevation-sm-spread, 0)
-    var(--effect-surface-effect, rgb(0 0 0 / 12%));
+  border-radius: 16px 16px 0;
+  box-shadow: 0 16px 16px 0 rgb(0 0 0 / 12%);
 }
 
 .communitySideBar__header {

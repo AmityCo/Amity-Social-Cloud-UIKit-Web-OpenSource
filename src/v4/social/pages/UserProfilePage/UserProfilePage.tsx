@@ -19,9 +19,12 @@ import { FloatingActionButtonMenu } from './FloatingActionButtonMenu/FloatingAct
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Button, Typography } from '~/v4/core/components';
-import { Input } from 'react-aria-components';
 import { initChart } from './chartConfig';
 import Star from '~/v4/icons/Star';
+import { TopNavigation } from '~/v4/social/components/TopNavigation';
+import { MasterTrophy } from '~/v4/icons/MasterTrophy';
+import { TipsterLogo } from '~/v4/icons/TipsterLogo';
+
 type UserProfilePageProps = {
   userId: string;
   userBadgeTitle?: string;
@@ -58,11 +61,20 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
     UserProfileTabs.FEED,
   );
 
+  const tipsterImage = '../../../../assets/LogoTipster.svg';
+
   useEffect(() => {
-    const timer = setTimeout(initChart, 100);
+    let cleanup: (() => void) | null = null;
+
+    const timer = setTimeout(() => {
+      cleanup = initChart();
+    }, 100);
 
     return () => {
       clearTimeout(timer);
+      if (cleanup) {
+        cleanup();
+      }
     };
   }, []);
 
@@ -134,15 +146,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
   return (
     <>
       <PullToRefresh className={styles.userProfilePage} style={themeStyles}>
-        <Typography.Headline>Il tuo profilo community</Typography.Headline>
+        <TopNavigation pageId={pageId} />
+
         <div className={styles.userProfilePage__container} ref={containerRef}>
-          <Button onClick={() => setProfilingQuizDone(!profilingQuizDone)}>Quiz !Completed</Button>
-          //Mock input just for seeing the value changing
-          <Input
-            onChange={(e) => {
-              setPercentage(+e.target.value);
-            }}
-          />
           <div className={styles.userProfilePage__cardBorders}>
             <UserProfileHeader
               user={user}
@@ -160,13 +166,18 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
                 <div className={styles.userProfilePage__card}>
                   <div className={styles.userProfilePage__cardContentSection}>
                     <PercentageCircle percentage={percentage} />
-                    <div className={styles.userProfilePage__cardContentSection__grow}>
-                      <Typography.Headline>Arricchisci il tuo profilo</Typography.Headline>
-                      <Typography.Body>
-                        Rendi unico il tuo profilo aggiungi altre info su di te
-                      </Typography.Body>
+
+                    <div className="flex grow gap-2 justify-between">
+                      <div className="flex flex-col gap-2 content-center">
+                        <Typography.BodyBold>Arricchisci il tuo profilo</Typography.BodyBold>
+                        <Typography.Body>
+                          Rendi unico il tuo profilo aggiungi altre info su di te
+                        </Typography.Body>
+                      </div>
+                      <div>
+                        <ChevronRight width={24} height={24} />
+                      </div>
                     </div>
-                    <ChevronRight />
                   </div>
                 </div>
               </div>
@@ -175,7 +186,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
             <div className={styles.userProfilePage__cardPositioner}>
               <div className={styles.userProfilePage__card}>
                 <div className={styles.userProfilePage__cardContentSection}>
-                  <Typography.Headline>Le tue info</Typography.Headline>
+                  <Typography.BodyBold>Le tue info</Typography.BodyBold>
                   <ChevronRight />
                 </div>
                 <div className={styles.userProfilePage__cardContentSection}>
@@ -184,66 +195,72 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
               </div>
               <div className={styles.userProfilePage__card}>
                 <div className={styles.userProfilePage__cardContentSection}>
-                  <Typography.Headline>Il Tuo status Cliente</Typography.Headline>
+                  <Typography.BodyBold>Il Tuo status Cliente</Typography.BodyBold>
                   <Typography.Link>Vedi</Typography.Link>
                 </div>
                 <div className={styles.userProfilePage__cardContentSection}>
-                  <div>Icona</div>
-                  <div>Master</div>
-                  <div>Visibile solo a te</div>
+                  <MasterTrophy />
+                  <div className={styles.userProfilePage__clientStatus}>
+                    <Typography.TitleBold style={{ color: '#DB9628' }}>Master</Typography.TitleBold>{' '}
+                    <Typography.CaptionSmall style={{ color: '#909090' }}>
+                      Visibile solo a te
+                    </Typography.CaptionSmall>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          {/* second big card tipster */}
-          {/* Icon and link */}
-          <div className={styles.userProfilePage__card}>
-            <div className={styles.userProfilePage__cardContentSection}>
-              <div>Tipster</div>
-              <Typography.Link>Vedi</Typography.Link>
-            </div>
-            {/* Chip container => relace with buttons */}
-            <div className={styles.userProfilePage__flexContainer}>
-              <div className={styles.userProfilePage__chip}>
-                <Typography.CaptionBold>Scommesse</Typography.CaptionBold>
+            {/* second big card tipster */}
+            {/* Icon and link */}
+            <div className={styles.userProfilePage__card} id="tipsterParentCard">
+              <div className={styles.userProfilePage__cardContentSection}>
+                <TipsterLogo />
+                <Typography.Link>Vedi</Typography.Link>
               </div>
-              <div className={styles.userProfilePage__chip}>
-                <Typography.CaptionBold>Casino</Typography.CaptionBold>
-              </div>
-              <div className={styles.userProfilePage__chip}>
-                <Typography.CaptionBold>Poker</Typography.CaptionBold>
-              </div>
-              <div className={styles.userProfilePage__chip}>
-                <Typography.CaptionBold>Bingo</Typography.CaptionBold>
-              </div>
-            </div>
-            {/* chart block */}
-            <div className={styles.userProfilePage__tipsterCard}>
-              <div className={styles.userProfilePage__cardBorders}>
-                <div className={styles.userProfilePage__chartCardBorders}>
-                  <Typography.BodyBold>Social Index</Typography.BodyBold>
-                  <Typography.Link>Cos'è</Typography.Link>
+              {/* Chip container => relace with buttons */}
+              <div className={styles.userProfilePage__flexContainer}>
+                <div className={styles.userProfilePage__chip}>
+                  <Typography.CaptionBold>Scommesse</Typography.CaptionBold>
                 </div>
-                <div id="tipsterChart" className={styles.userProfilePage__chartWrapper}></div>
+                <div className={styles.userProfilePage__chip}>
+                  <Typography.CaptionBold>Casino</Typography.CaptionBold>
+                </div>
+                <div className={styles.userProfilePage__chip}>
+                  <Typography.CaptionBold>Poker</Typography.CaptionBold>
+                </div>
+                <div className={styles.userProfilePage__chip}>
+                  <Typography.CaptionBold>Bingo</Typography.CaptionBold>
+                </div>
               </div>
-              <div>
-                <Typography.BodyBold>Giochi principalmente a</Typography.BodyBold>
-                <div className={styles.userProfilePage__flexContainer}>
-                  {mockSports.map((sport, index) => (
-                    <div key={index} className={styles.userProfilePage__gameStatCard}>
-                      {sport.icon}
-                      <Typography.TicketSizeTitle>{sport.name}</Typography.TicketSizeTitle>
-                      <Typography.TicketSizeText>({sport.percentage}%)</Typography.TicketSizeText>
+              {/* chart block */}
+              <div className={styles.userProfilePage__tipsterSection}>
+                <div className={styles.userProfilePage__tipsterCard} id="tipsterCard">
+                  <div className={styles.userProfilePage__cardBorders} style={{ width: '100%' }}>
+                    <div className={styles.userProfilePage__chartCardBorders}>
+                      <Typography.BodyBold>Social Index</Typography.BodyBold>
+                      <Typography.Link>Cos'è</Typography.Link>
                     </div>
-                  ))}
+                    <div id="tipsterChart" className={styles.userProfilePage__chartWrapper}></div>
+                  </div>
+                </div>
+                <div style={{ overflowX: 'hidden' }}>
+                  <Typography.BodyBold>Giochi principalmente a</Typography.BodyBold>
+                  <div className={styles.userProfilePage__flexContainer}>
+                    {mockSports.map((sport, index) => (
+                      <div key={index} className={styles.userProfilePage__gameStatCard}>
+                        {sport.icon}
+                        <Typography.TicketSizeTitle>{sport.name}</Typography.TicketSizeTitle>
+                        <Typography.TicketSizeText>({sport.percentage}%)</Typography.TicketSizeText>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          {renderActivityTabs()}
+          {renderTabContent()}
         </div>
       </PullToRefresh>
-      {renderActivityTabs()}
-      {renderTabContent()}
       {!isDesktop && isCurrentUser && (
         <FloatingActionButton
           icon={Plus}

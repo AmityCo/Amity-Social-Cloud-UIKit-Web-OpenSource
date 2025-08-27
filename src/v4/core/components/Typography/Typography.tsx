@@ -73,3 +73,11 @@ Typography.TicketSizeText = function ({ as = 'span', className, ...props }: Typo
     <Typography as={as} className={clsx(styles.typography__ticketSizeText, className)} {...props} />
   );
 };
+
+Typography.D1 = function ({ as = 'h1', className, ...props }: TypographyProps) {
+  return <Typography as={as} className={clsx(styles.typography__d1, className)} {...props} />;
+};
+
+Typography.D2 = function ({ as = 'h2', className, ...props }: TypographyProps) {
+  return <Typography as={as} className={clsx(styles.typography__d2, className)} {...props} />;
+};

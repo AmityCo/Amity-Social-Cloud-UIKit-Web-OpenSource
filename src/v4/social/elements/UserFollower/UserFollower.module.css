@@ -10,4 +10,5 @@
 
 .userFollower__label {
   color: var(--asc-color-base-shade2);
+  text-decoration: underline;
 }

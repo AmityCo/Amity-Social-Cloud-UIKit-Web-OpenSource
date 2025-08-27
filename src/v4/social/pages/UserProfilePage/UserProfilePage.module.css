@@ -1,30 +1,31 @@
 .userProfilePage {
-  display: flex;
-  flex-direction: column;
   position: relative;
+  width: 100%;
   height: 100%;
   background-color: var(--asc-color-background-default);
-  gap: 1rem;
+}
+
+.userProfilePage__header {
+  background-color: var(--asc-color-base-shade4);
+  color: var(--asc-color-black);
+  display: flex;
+  place-content: flex-start space-between;
+  width: 100%;
+  gap: 0.5rem;
 }
 
 .userProfilePage__container {
   flex: 1;
-  margin-top: 3.62rem;
   overflow-y: scroll;
   scrollbar-width: none;
-}
-
-.userProfilePage__container::-webkit-scrollbar {
-  display: none;
 }
 
 .userProfilePage__topBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 3.625rem;
+  height: 3.5rem;
   padding-inline: 0.75rem 1rem;
-  position: absolute;
   left: 0;
   right: 0;
   top: 0;
@@ -94,10 +95,12 @@
 }
 
 .userProfilePage__flexContainer {
+  width: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-wrap: wrap;
   gap: 1rem;
   margin: 0.75rem 0;
+  overflow-x: scroll;
 }
 
 .userProfilePage__chip {
@@ -112,8 +115,10 @@
 }
 
 .userProfilePage__chartWrapper {
-  width: 30rem;
-  height: 20rem;
+  width: 100%;
+  aspect-ratio: 1.2/1;
+  min-width: 150px;
+  align-self: center;
   padding: var(--global-layout-gap-md, 0.75rem) 0 var(--global-layout-gap-sm-base, 0.5rem) 0;
 }
 
@@ -121,12 +126,18 @@
   background-color: var(--asc-color-background-default);
   margin-bottom: 0.75rem;
   overflow: hidden;
-  padding: 0 1rem 1rem;
-  border-radius: var(--global-image-radius-base, 0.5rem);
-  border: 1px solid var(--global-border-neutral, #d3d3d3);
-  gap: 1rem;
+  padding: 1rem;
+  gap: 1.5rem;
   display: flex;
   flex-direction: column;
+}
+
+.userProfilePage__clientStatus {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .userProfilePage__gameStatCard {
@@ -143,11 +154,18 @@
   align-self: stretch;
 }
 
+.userProfilePage__tipsterSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
 .userProfilePage__tipsterCard {
   display: flex;
   flex-flow: row wrap;
   gap: 1rem;
-  padding: 1rem;
+  width: 100%;
 }
 
 @media (width >=48em) {
@@ -155,13 +173,30 @@
     background-color: transparent;
   }
 
+  .userProfilePage__header {
+    background-color: var(--asc-color-white);
+    color: var(--asc-color-black);
+  }
+
   .userProfilePage__topBar {
     background-color: var(--asc-color-background-default);
     position: static;
   }
 
+  .userProfilePage__tipsterSection {
+    flex-direction: row;
+    flex-basis: 50%;
+  }
+
   .userProfilePage__tipsterCard {
     flex-direction: row;
+    width: 50%;
+  }
+
+  .userProfilePage__cardBorders {
+    gap: 1rem;
+    border-radius: var(--global-image-radius-base, 0.5rem);
+    border: 1px solid var(--global-border-neutral, #d3d3d3);
   }
 
   .userProfilePage__chartCardBorders {
@@ -189,5 +224,15 @@
 
   .userProfilePage__cardContentSection {
     gap: 1rem;
+  }
+}
+
+@media (width <= 64em) {
+  .userProfilePage__tipsterSection {
+    flex-direction: column;
+  }
+
+  .userProfilePage__tipsterCard {
+    width: 100%;
   }
 }

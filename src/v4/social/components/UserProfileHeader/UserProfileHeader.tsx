@@ -164,6 +164,8 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
               componentId={componentId}
             />
           </Button>
+        </div>
+        <div className={styles.userProfileHeader__rightWrapper}>
           <div className={styles.userProfileHeader__displayName}>
             <div className={styles.userProfileHeader__nameRow}>
               <UserName
@@ -179,17 +181,16 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
             </div>
             {userBadgeTitle && <div className={styles.userBadge}>{userBadgeTitle}</div>}
           </div>
+          {isCurrentUser && (
+            <Button
+              data-testid={`${pageId}/'*'/edit_user_profile_button`}
+              className={styles.userProfileHeader__button}
+              onPress={onEditProfile}
+            >
+              <Pencil className={styles.userProfileHeader__editProfile__icon} />
+            </Button>
+          )}
         </div>
-
-        {isCurrentUser && (
-          <Button
-            data-testid={`${pageId}/'*'/edit_user_profile_button`}
-            className={styles.userProfileHeader__button}
-            onPress={onEditProfile}
-          >
-            <Pencil className={styles.userProfileHeader__editProfile__icon} />
-          </Button>
-        )}
       </div>
 
       <UserDescription description={user.description} pageId={pageId} componentId={componentId} />
