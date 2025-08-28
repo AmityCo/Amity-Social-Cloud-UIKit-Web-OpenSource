@@ -3,15 +3,12 @@ import { Typography } from '~/v4/core/components';
 import styles from './PollContent.module.css';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { calculateRemainingFromMs } from '~/v4/social/utils/calculateRemainingFromMs';
-import { useMutation } from '@tanstack/react-query';
-import { PollRepository } from '@amityco/ts-sdk';
-import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useVotePoll, useUnvotePoll } from '~/v4/social/hooks/usePollVote';
 import { PollVotedItem } from './PollVotedItem';
 import useUser from '~/core/hooks/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { PollSingleAnswer } from './PollSingleAnswer';
 import { PollMultipleAnswer } from './PollMultipleAnswer';
-import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 
 type PollContentProps = {
   pageId?: string;
@@ -32,22 +29,21 @@ export const PollContent: FC<PollContentProps> = ({
   disabled = false,
   onPostDeleted,
 }) => {
-  const { info } = useNotifications();
   const { currentUserId } = useSDK();
 
+  const poll = posts?.[0]?.getPollInfo();
   const [answers, setAnswers] = useState<string[] | undefined>();
   const [isAuthorSeeingPoll, setIsAuthorSeeingPoll] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isPollEnded, setIsPollEnded] = useState<boolean>(poll?.status === 'closed');
 
   const user = useUser(currentUserId);
 
-  const poll = posts?.[0]?.getPollInfo();
   const showAllChoices = pageId === 'post_detail_page' || pageId === 'pending_request_page';
   const maxChoicesShown = 4;
   const isAuthor = parentPost?.creator?.userId === currentUserId;
   const isVoteDisabled = parentPost?.feedType === 'reviewing' || disabled;
   const isVoteButtonDisabled = isVoteDisabled || !answers || answers?.length < 1 || disabled;
-  const isPollEneded = poll?.status === 'closed';
 
   const pollAnswers = useMemo(() => {
     if (!poll) return [];
@@ -77,19 +73,15 @@ export const PollContent: FC<PollContentProps> = ({
     [poll?.answers],
   );
 
-  const { mutateAsync: mutateVotePoll } = useMutation({
-    mutationFn: async ({ pollId, answerIds }: { pollId: string; answerIds: string[] }) => {
-      return PollRepository.votePoll(pollId, answerIds);
-    },
-    onError: (err: any) => {
-      if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) info({ content: 'Poll ended.' });
-      else if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
-        info({ content: 'This post is no longer available.' });
-        onPostDeleted?.(parentPost);
-      } else {
-        info({ content: 'Oops, something went wrong.' });
-      }
-    },
+  const handlePollEnd = () => {
+    setIsPollEnded(true);
+  };
+
+  const { mutateAsync: mutateVotePoll } = useVotePoll({ onPostDeleted, parentPost });
+  const { mutateAsync: mutateUnvotePoll } = useUnvotePoll({
+    onPostDeleted,
+    onPollEnded: handlePollEnd,
+    parentPost,
   });
 
   const formatPercentage = (count?: number) => {
@@ -101,7 +93,7 @@ export const PollContent: FC<PollContentProps> = ({
 
   return (
     <>
-      {poll.isVoted || isAuthorSeeingPoll || isPollEneded ? (
+      {poll.isVoted || isAuthorSeeingPoll || isPollEnded ? (
         <>
           <div
             className={styles.pollContent__votedItemsContainer}
@@ -180,7 +172,7 @@ export const PollContent: FC<PollContentProps> = ({
             vote{`${voteCount && voteCount > 1 ? 's' : ''}`}
           </Typography.CaptionBold>
           <Typography.CaptionBold>•</Typography.CaptionBold>
-          {!isPollEneded && typeof poll.closedIn === 'number' ? (
+          {!isPollEnded && typeof poll.closedIn === 'number' ? (
             <>
               <Typography.CaptionBold data-testid="poll-closeIn">
                 {calculateRemainingFromMs(poll.closedIn)}
@@ -191,11 +183,16 @@ export const PollContent: FC<PollContentProps> = ({
             <Typography.CaptionBold>Ended</Typography.CaptionBold>
           )}
         </div>
+        {poll.isVoted && !isPollEnded && (
+          <Button variant="text" onPress={() => mutateUnvotePoll({ pollId: poll.pollId })}>
+            <Typography.CaptionBold>Unvote</Typography.CaptionBold>
+          </Button>
+        )}
         {isAuthor &&
           !poll.isVoted &&
           !isAuthorSeeingPoll &&
           parentPost.feedType !== 'reviewing' &&
-          !isPollEneded && (
+          !isPollEnded && (
             <Button variant="text" onPress={() => setIsAuthorSeeingPoll(true)}>
               <Typography.CaptionBold className={styles.pollContent__pollDetail__seeResult}>
                 See results
@@ -205,7 +202,7 @@ export const PollContent: FC<PollContentProps> = ({
         {isAuthorSeeingPoll && (
           <Button variant="text" onPress={() => setIsAuthorSeeingPoll(false)}>
             <Typography.CaptionBold className={styles.pollContent__pollDetail__seeResult}>
-              Back to vote
+              Back to poll
             </Typography.CaptionBold>
           </Button>
         )}
