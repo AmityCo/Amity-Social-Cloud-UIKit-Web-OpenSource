@@ -21,6 +21,7 @@ export interface InputTextProps {
   isModerator?: boolean;
   queryMentionees?: QueryMentioneesFnType;
   loadMoreMentionees?: (query: string) => Promise<unknown>;
+  floatingPlaceholder?: boolean;
   onChange: (data: {
     text: string;
     plainText: string;

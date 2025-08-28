@@ -6,7 +6,7 @@ import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Title } from '~/v4/social/elements/Title/Title';
-import { Button } from '~/v4/core/natives/Button/Button';
+import { Button as CoreButton } from '~/v4/core/natives/Button/Button';
 import { UpdateUserProfileButton } from '~/v4/social/elements/UpdateUserProfileButton';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
@@ -17,6 +17,10 @@ import { UnderlineInput } from '~/v4/social/internal-components/UnderlineInput';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNetworkState } from 'react-use';
+import InputText from '~/v4/core/components/InputText';
+import { Button, Typography } from '~/v4/core/components';
+import Switch from '~/core/components/Switch';
+import Select from '~/core/components/Select';
 
 interface EditUserProfilePageProps {
   userId: string;
@@ -169,65 +173,248 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
           titleClassName={styles.editUserProfilePage__topSection__title}
         />
       </div>
-      <div className={styles.editUserProfilePage__container}>
-        <div className={styles.editUserProfilePage__avatarContainer}>
-          {newImage ? (
-            <img
-              src={newImage.fileUrl}
-              alt="avatar"
-              className={styles.editUserProfilePage__avatar}
-            />
-          ) : (
-            <UserAvatar
-              userId={userId}
-              className={styles.editUserProfilePage__avatar}
-              textPlaceholderClassName={styles.editUserProfilePage__avatarPlaceholder}
-            />
-          )}
-          <Button className={styles.editUserProfilePage__avatarOverlay} onPress={triggerFileInput}>
-            <Camera className={styles.editUserProfilePage__icon} />
-            <input
-              type="file"
-              onChange={onChangeImage}
-              multiple
-              id="image-upload"
-              accept="image/png,image/jpg"
-              className={styles.editUserProfilePage__imageInput}
-            />
-          </Button>
-        </div>
-
-        <Form onSubmit={submitForm} className={styles.editUserProfilePage__form}>
-          <div className={styles.editUserProfilePage__fromInputWrap}>
-            <UnderlineInput
-              name="userDisplayName"
-              pageId={pageId}
-              elementId="user_display_name_title"
-              maxLength={MAX_DISPLAY_NAME_LENGTH}
-              value={displayName}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setDisplayName(e.target.value)
-              }
-              showCounter={true}
-              // TODO: Add condition to disable/enable the input when we have sdk api to check the user setting
-              // disabled={true}
-            />
-            <UnderlineInput
-              name="userAbout"
-              pageId={pageId}
-              elementId="user_about_title"
-              maxLength={MAX_ABOUT_LENGTH}
-              value={description}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                setDescription(e.target.value)
-              }
-              showCounter={true}
-              optional={true}
-            />
+      <Form onSubmit={submitForm} className={styles.editUserProfilePage__form}>
+        <div className={styles.editUserProfilePage__cardPositioner}>
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <div className={styles.editUserProfilePage__avatarContainer}>
+                {newImage ? (
+                  <img
+                    src={newImage.fileUrl}
+                    alt="avatar"
+                    className={styles.editUserProfilePage__avatar}
+                  />
+                ) : (
+                  <UserAvatar
+                    userId={userId}
+                    className={styles.editUserProfilePage__avatar}
+                    textPlaceholderClassName={styles.editUserProfilePage__avatarPlaceholder}
+                  />
+                )}
+                <CoreButton
+                  className={styles.editUserProfilePage__avatarOverlay}
+                  onPress={triggerFileInput}
+                >
+                  <Camera className={styles.editUserProfilePage__icon} />
+                  <input
+                    type="file"
+                    onChange={onChangeImage}
+                    multiple
+                    id="image-upload"
+                    accept="image/png,image/jpg"
+                    className={styles.editUserProfilePage__imageInput}
+                  />
+                </CoreButton>
+              </div>
+            </div>
           </div>
+
+          {/* <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <UnderlineInput
+                name="userDisplayName"
+                pageId={pageId}
+                elementId="user_display_name_title"
+                maxLength={MAX_DISPLAY_NAME_LENGTH}
+                value={displayName}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setDisplayName(e.target.value)
+                }
+                showCounter={true}
+                // TODO: Add condition to disable/enable the input when we have sdk api to check the user setting
+                // disabled={true}
+              />
+            </div>
+          </div>
+
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <UnderlineInput
+                name="userAbout"
+                pageId={pageId}
+                elementId="user_about_title"
+                maxLength={MAX_ABOUT_LENGTH}
+                value={description}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setDescription(e.target.value)
+                }
+                showCounter={true}
+                optional={true}
+              />
+            </div>
+          </div> */}
+
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Typography.SubTitleBold>La tua Bio</Typography.SubTitleBold>
+            </div>
+
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <InputText invalid onChange={() => console.log('')} />
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <InputText
+                placeholder="NOME"
+                value="NOME"
+                floatingPlaceholder
+                onChange={() => console.log('')}
+              />
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <InputText
+                value="Value of textarea"
+                placeholder="Tell us about yourself"
+                multiline={true}
+                floatingPlaceholder={true}
+                onChange={() => console.log('')}
+              />
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Switch value={false} />
+              <Typography.CaptionSmall>Visibile nel tuo profilo</Typography.CaptionSmall>
+            </div>
+          </div>
+
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Typography.SubTitleBold>Preferenze di gioco</Typography.SubTitleBold>
+            </div>
+
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <div>
+                <Button type="button" onClick={() => console.log('BUTTON')} variant="primary">
+                  Gioco 1
+                </Button>
+                <Button
+                  disabled
+                  type="button"
+                  onClick={() => console.log('BUTTON')}
+                  variant="primary"
+                >
+                  Gioco 1
+                </Button>
+                <Button type="button" onClick={() => console.log('BUTTON')} variant="secondary">
+                  Gioco 2
+                </Button>
+                <Button
+                  disabled
+                  type="button"
+                  onClick={() => console.log('BUTTON')}
+                  variant="secondary"
+                >
+                  Gioco 2
+                </Button>
+                <Button type="button" onClick={() => console.log('BUTTON')} variant="ghost">
+                  Gioco 3
+                </Button>
+                <Button
+                  disabled
+                  type="button"
+                  onClick={() => console.log('BUTTON')}
+                  variant="ghost"
+                >
+                  Gioco 3
+                </Button>
+                <Button type="button" onClick={() => console.log('BUTTON')} context="registration">
+                  Gioco 4
+                </Button>
+                <Button
+                  disabled
+                  type="button"
+                  onClick={() => console.log('BUTTON')}
+                  context="registration"
+                >
+                  Gioco 4
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => console.log('BUTTON')}
+                  context="registration"
+                  variant="secondary"
+                >
+                  Gioco 4
+                </Button>
+              </div>
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Switch value={false} />
+              <Typography.CaptionSmall>Visibile nel tuo profilo</Typography.CaptionSmall>
+            </div>
+          </div>
+
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Typography.SubTitleBold>La tua città</Typography.SubTitleBold>
+            </div>
+
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Select />
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Switch value={false} />
+              <Typography.CaptionSmall>Visibile nel tuo profilo</Typography.CaptionSmall>
+            </div>
+          </div>
+
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Typography.SubTitleBold>I tuoi interessi</Typography.SubTitleBold>
+            </div>
+
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 1</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 2</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 3</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 4</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 5</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 6</div>
+              </div>
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Switch value={false} />
+              <Typography.CaptionSmall>Visibile nel tuo profilo</Typography.CaptionSmall>
+            </div>
+          </div>
+
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Typography.SubTitleBold>I tuoi obiettivi</Typography.SubTitleBold>
+            </div>
+
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 1</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 2</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 3</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 4</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 5</div>
+                <div className={styles.editUserProfilePage__segmentedControl}>GIOCO 6</div>
+              </div>
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Switch value={true} />
+              <Typography.CaptionSmall>Visibile nel tuo profilo</Typography.CaptionSmall>
+            </div>
+          </div>
+
+          <div className={styles.editUserProfilePage__card}>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Typography.SubTitleBold>Che tipo di giocatore sei?</Typography.SubTitleBold>
+            </div>
+
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <InputText multiline onChange={() => console.log('')} />
+            </div>
+            <div className={styles.editUserProfilePage__cardContentSection}>
+              <Switch value={false} />
+              <Typography.CaptionSmall>Visibile nel tuo profilo</Typography.CaptionSmall>
+            </div>
+          </div>
+
           <UpdateUserProfileButton pageId={pageId} disabled={isNoEditing || isPending} />
-        </Form>
-      </div>
+        </div>
+      </Form>
     </div>
   );
 };

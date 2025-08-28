@@ -63,7 +63,7 @@
 }
 
 .userProfilePage__cardPositioner {
-  gap: 1.5rem;
+  gap: 1rem;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -210,6 +210,11 @@
     width: 50%;
   }
 
+  .userProfilePage__cardPositioner {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
   .userProfilePage__cardBorders {
     gap: 1rem;
     border-radius: var(--global-image-radius-base, 0.5rem);
@@ -233,10 +238,6 @@
 
   .userProfilePage__floatingButton {
     display: none;
-  }
-
-  .userProfilePage__cardPositioner {
-    flex-direction: row;
   }
 
   .userProfilePage__cardContentSection {

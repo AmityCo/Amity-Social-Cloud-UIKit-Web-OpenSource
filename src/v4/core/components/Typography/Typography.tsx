@@ -30,6 +30,16 @@ Typography.Title = function ({ as = 'h2', className, ...props }: TypographyProps
   return <Typography as={as} className={clsx(styles.typography__title, className)} {...props} />;
 };
 
+Typography.SubTitleBold = function ({ as = 'h3', className, ...props }: TypographyProps) {
+  return (
+    <Typography as={as} className={clsx(styles.typography__subTitleBold, className)} {...props} />
+  );
+};
+
+Typography.SubTitle = function ({ as = 'h3', className, ...props }: TypographyProps) {
+  return <Typography as={as} className={clsx(styles.typography__subTitle, className)} {...props} />;
+};
+
 Typography.BodyBold = function ({ as = 'p', className, ...props }: TypographyProps) {
   return <Typography as={as} className={clsx(styles.typography__bodyBold, className)} {...props} />;
 };

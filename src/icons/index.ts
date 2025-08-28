@@ -96,6 +96,7 @@ export { default as Shield } from './Shield';
 export { default as ImageAttachment } from './ImageAttachment';
 export { default as FileAttachment } from './FileAttachment';
 export { default as Check } from './Check';
+export { default as DoubleChevron } from './DoubleChevron';
 export { default as ChevronDown } from './ChevronDown';
 export { default as ChevronLeft } from './ChevronLeft';
 export { default as ChevronRight } from './ChevronRight';

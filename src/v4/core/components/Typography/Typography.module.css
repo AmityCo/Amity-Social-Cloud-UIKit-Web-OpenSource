@@ -24,9 +24,21 @@
   font-weight: 400;
 }
 
+.typography__subTitleBold {
+  font-size: 1rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+}
+
+.typography__subTitle {
+  font-size: 1rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+}
+
 .typography__bodyBold {
-  color: var(--global-text-default, #222);
-  font-family: var(--typography-scale-body-p-bold-family, Roboto);
+  color: #222;
+  font-family: Roboto, sans-serif;
   font-size: 0.875rem; /* 14px */
   font-style: normal;
   font-weight: 700;
@@ -40,13 +52,13 @@
 }
 
 .typography__captionBold {
-  color: var(--component-form-filter-copy-all-use, #fff);
+  color: #fff;
   text-align: center;
-  font-family: var(--typography-scale-body-caption-bold-family, Roboto);
-  font-size: var(--typography-scale-body-caption-bold-size, 0.75rem);
+  font-family: Roboto, sans-serif;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 700;
-  line-height: var(--typography-scale-body-caption-bold-line-height, 0.875rem);
+  line-height: 0.875rem;
 }
 
 .typography__d1 {
@@ -76,8 +88,8 @@
 }
 
 .typography__link {
-  color: var(--global-text-default, #222);
-  font-family: var(--typography-scale-interaction-link-family, Roboto);
+  color: #222;
+  font-family: Roboto, sans-serif;
   font-size: 0.875rem; /* 14px */
   font-style: normal;
   font-weight: 700;
@@ -91,23 +103,23 @@
 }
 
 .typography__ticketSizeTitle {
-  color: var(--font-color-black-blue, #262c2f);
+  color: #262c2f;
   text-align: center;
-  font-family: var(--font-family-caption, Roboto);
-  font-size: var(--accordion-ticket-size-text, 0.75rem);
+  font-family: Roboto, sans-serif;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 500;
-  line-height: var(--accordion-ticket-size-title, 0.875rem); /* 116.667% */
+  line-height: 0.875rem; /* 116.667% */
 }
 
 .typography__ticketSizeText {
-  color: var(--font-color-secondary, #6b6b6b);
+  color: #6b6b6b;
   text-align: center;
-  font-family: var(--font-family-caption, Roboto);
-  font-size: var(--accordion-ticket-size-text, 0.75rem);
+  font-family: Roboto, sans-serif;
+  font-size: 0.75rem;
   font-style: normal;
   font-weight: 400;
-  line-height: var(--accordion-ticket-size-title, 0.875rem); /* 116.667% */
+  line-height: 0.875rem; /* 116.667% */
 }
 
 @media (width >= 48rem) {
@@ -126,7 +138,12 @@
     line-height: 1.5rem; /* 24px */
   }
 
-  .typography__subtitle {
+  .typography__subTitleBold {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.25rem; /* 20px */
+  }
+
+  .typography__subTitle {
     font-size: 1.125rem; /* 18px */
     line-height: 1.25rem; /* 20px */
   }
