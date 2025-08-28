@@ -779,6 +779,10 @@ export const defaultConfig: DefaultConfig = {
       image: 'emptyClipIcon',
     },
 
+    'user_profile_page/top_navigation/header_label': {
+      text: 'Your Profile',
+    },
+
     'edit_user_profile_page/*/*': {},
     'edit_user_profile_page/*/back_button': {
       image: 'ArrowLeft',

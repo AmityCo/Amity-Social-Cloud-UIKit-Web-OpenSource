@@ -19,13 +19,15 @@ export function HeaderLabel({ pageId = '*', componentId = '*' }: HeaderLabelProp
 
   if (isExcluded) return null;
 
+  console.log(config, config.text, 'config');
+
   return (
-    <Typography.Headline
+    <Typography.TitleBold
       className={styles.headerLabel}
       style={themeStyles}
       data-testid={accessibilityId}
     >
       {config.text}
-    </Typography.Headline>
+    </Typography.TitleBold>
   );
 }

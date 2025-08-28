@@ -26,10 +26,13 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import Pencil from '~/v4/icons/Pencil';
 
 interface UserProfileHeaderProps {
   user?: Amity.User | null;
   pageId?: string;
+  userBadgeTitle?: string;
+  isCurrentUser?: boolean;
 }
 
 const UserProfileHeaderSkeleton: React.FC = () => {
@@ -50,8 +53,12 @@ const UserProfileHeaderSkeleton: React.FC = () => {
     </div>
   );
 };
-
-export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, pageId = '*' }) => {
+export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
+  user,
+  pageId = '*',
+  userBadgeTitle = 'Lupo Solitario',
+  isCurrentUser = false,
+}) => {
   const componentId = 'user_profile_header';
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 
@@ -64,7 +71,13 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { online } = useNetworkState();
   const notification = useNotifications();
+  const { AmityUserProfilePageBehavior } = usePageBehavior();
 
+  const onEditProfile = () => {
+    if (user?.userId) {
+      AmityUserProfilePageBehavior?.goToEditUserPage?.({ userId: user.userId });
+    }
+  };
   const unFollowUserButton = ({
     onClickButton,
     userId,
@@ -141,25 +154,41 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
       data-testid={accessibilityId}
     >
       <div className={styles.userProfileHeader__header}>
-        <Button variant="text" onPress={() => setIsImageViewerOpen(true)}>
-          <UserAvatar
-            userId={user.userId}
-            className={styles.userProfileHeader__avatar}
-            textPlaceholderClassName={styles.userProfileHeader__avatar__placeholder}
-            pageId={pageId}
-            componentId={componentId}
-          />
-        </Button>
-        <div className={styles.userProfileHeader__displayName}>
-          <UserName
-            name={user.displayName ?? user.userId}
-            pageId={pageId}
-            componentId={componentId}
-          />
-          {user.isBrand && (
-            <div className={styles.userProfileHeader__badge__container}>
-              <UserOfficialBadge className={styles.userProfileHeader__badge} />
+        <div className={styles.userProfileHeader__leftWrapper}>
+          <Button variant="text" onPress={() => setIsImageViewerOpen(true)}>
+            <UserAvatar
+              userId={user.userId}
+              className={styles.userProfileHeader__avatar}
+              textPlaceholderClassName={styles.userProfileHeader__avatar__placeholder}
+              pageId={pageId}
+              componentId={componentId}
+            />
+          </Button>
+        </div>
+        <div className={styles.userProfileHeader__rightWrapper}>
+          <div className={styles.userProfileHeader__displayName}>
+            <div className={styles.userProfileHeader__nameRow}>
+              <UserName
+                name={user.displayName ?? user.userId}
+                pageId={pageId}
+                componentId={componentId}
+              />
+              {user.isBrand && (
+                <div className={styles.userProfileHeader__badge__container}>
+                  <UserOfficialBadge className={styles.userProfileHeader__badge} />
+                </div>
+              )}
             </div>
+            {userBadgeTitle && <div className={styles.userBadge}>{userBadgeTitle}</div>}
+          </div>
+          {isCurrentUser && (
+            <Button
+              data-testid={`${pageId}/'*'/edit_user_profile_button`}
+              className={styles.userProfileHeader__button}
+              onPress={onEditProfile}
+            >
+              <Pencil className={styles.userProfileHeader__editProfile__icon} />
+            </Button>
           )}
         </div>
       </div>
@@ -170,6 +199,8 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
         <UserFollowing userId={user.userId} pageId={pageId} componentId={componentId} />
         <div className={styles.userProfileHeader__relationship__separator}></div>
         <UserFollower userId={user.userId} pageId={pageId} componentId={componentId} />
+        <div className={styles.userProfileHeader__relationship__separator}></div>
+        {/* TO ADD group counter */}
       </div>
       {pendingCount > 0 && (
         <Button

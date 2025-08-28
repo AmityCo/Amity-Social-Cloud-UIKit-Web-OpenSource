@@ -1,9 +1,14 @@
 .topNavigation {
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--asc-color-background-default);
-  height: 3.625rem;
+  height: 3.5rem;
+  padding: 1rem;
+  background: url('../../../../assets/topNavigationBg.svg');
+  background-position: center 15%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .topNavigationLeftPane {
@@ -18,4 +23,11 @@
   gap: 0.625rem;
   justify-content: center;
   align-items: center;
+}
+
+@media (width >= 48em) {
+  .topNavigation {
+    padding: 1.5rem 0;
+    background: none;
+  }
 }

@@ -3,10 +3,13 @@
   display: flex;
   flex-wrap: wrap;
   min-width: 1em;
-  background: var(--asc-color-base-shade4);
-  border: 1px solid var(--asc-color-base-shade4);
-  border-radius: 1.25rem;
-  transition: background 0.2s, border-color 0.2s;
+
+  /* background: var(--asc-color-white);
+  border: 1px solid var(--asc-color-base-shade2);
+  border-radius: 0.25rem; */
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 
   &.invalid {
     border-color: var(--asc-color-alert-default);
@@ -19,18 +22,21 @@
 }
 
 .baseInputStyle {
-  flex: 1 1 auto;
-  display: block;
-  width: 1%;
-  min-width: 0;
-  margin: 0;
-  padding: 0.563rem;
-  background: none;
-  border: none;
-  box-sizing: border-box;
-  outline: none;
-  font: inherit;
-  resize: vertical;
+  height: 2.75rem;
+  min-width: 7rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: stretch;
+  background-color: #fff;
+  color: #000;
+  border-radius: 0.5rem;
+  border: 1px solid #e0e0e0;
+
+  &:focus {
+    outline: none;
+  }
 
   &::placeholder {
     font-weight: 400;
@@ -39,6 +45,134 @@
   &[disabled] {
     background: none;
   }
+}
+
+/* Input border states */
+.inputFilled {
+  border-color: #bed62f; /* Green border when filled */
+}
+
+.inputError {
+  border-color: #ef4444; /* Red border when error */
+}
+
+.inputDisabled {
+  border-color: #d3d3d3; /* Gray border when disabled */
+  background-color: #f8f8f8; /* Gray background when disabled */
+}
+
+.input-label {
+  pointer-events: none;
+  font-size: 0.875rem;
+  position: absolute;
+  left: 0.5rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a0a0a0;
+  border-radius: 9999px;
+  transition-property: all;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: transparent;
+}
+
+/* Floating label states */
+.inputLabelActive {
+  top: 0;
+  font-size: 0.75rem;
+  background-color: white;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  transform: translateY(-50%);
+}
+
+.inputLabelError {
+  color: #ef4444; /* Red for error state */
+}
+
+.inputLabelFocus {
+  color: #3b82f6; /* Blue for focus state */
+}
+
+.inputLabelFilled {
+  color: #bed62f; /* Green for filled state */
+}
+
+.inputLabelDisabled {
+  color: #d3d3d3; /* Gray for disabled state */
+  background-color: #f9fafb;
+}
+
+/* Container classes */
+.labelContainer {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* Textarea label container - label positioned like floating label */
+.textareaLabelContainer {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* Static label for textarea (positioned like active floating label) */
+.textareaLabel {
+  pointer-events: none;
+  font-size: 0.75rem; /* 12px - same as inputLabelActive */
+  font-weight: 400;
+  line-height: 0.875rem; /* 14px */
+  color: #222;
+  position: absolute;
+  left: 0.5rem; /* Same as input-label */
+  top: 0;
+  transform: translateY(-50%);
+  background-color: white; /* White background like floating labels */
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  border-radius: 9999px;
+  z-index: 1; /* Ensure it's above the border */
+}
+
+/* Textarea specific styling */
+.textareaInput {
+  padding: 0.75rem; /* 12px top padding to account for label space */ /* 12px bottom padding */ /* 12px left padding */ /* 12px right padding */
+  resize: vertical;
+  min-height: 2.75rem; /* Same as base input height */
+}
+
+.textareaLabelError {
+  color: #ef4444; /* Red for error state */
+}
+
+.textareaLabelFilled {
+  color: #bed62f; /* Green for filled state */
+}
+
+.textareaLabelDisabled {
+  color: #d3d3d3; /* Gray for disabled state */
+}
+
+/* Peer selector for floating labels - fallback for when CSS classes are used */
+.baseInputStyle.peer:not(:placeholder-shown) + .input-label,
+.baseInputStyle.peer:focus + .input-label {
+  top: 0;
+  font-size: 0.75rem;
+  background-color: white;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  transform: translateY(-50%);
+}
+
+.baseInputStyle.peer:focus + .input-label {
+  color: #3b82f6;
+}
+
+.baseInputStyle.peer:not(:placeholder-shown) + .input-label {
+  color: #9ca3af;
 }
 
 .mentionContainer {

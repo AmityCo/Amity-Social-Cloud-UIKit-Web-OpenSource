@@ -1,10 +1,5 @@
 .userName__displayName {
-  min-height: 3.5rem;
   color: var(--asc-color-base-default);
   display: flex;
   align-items: center;
-}
-
-.userName__displayName__text {
-  word-break: break-all;
 }

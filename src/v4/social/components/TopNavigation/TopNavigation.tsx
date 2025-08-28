@@ -9,6 +9,8 @@ import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { AmityCommunitySetupPageMode } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
 import { NotificationTrayButton } from '~/v4/social/elements/NotificationTrayButton/NotificationTrayButton';
 import styles from './TopNavigation.module.css';
+import { ChevronLeft, DotsIcon } from '~/icons';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 export interface TopNavigationProps {
   pageId?: string;
@@ -22,6 +24,7 @@ export function TopNavigation({
   onClickPostCreationButton,
 }: TopNavigationProps) {
   const componentId = 'top_navigation';
+  const { isDesktop } = useResponsive();
   const {
     goToSocialGlobalSearchPage,
     goToMyCommunitiesSearchPage,
@@ -54,34 +57,9 @@ export function TopNavigation({
 
   return (
     <div className={styles.topNavigation} style={themeStyles}>
-      <div className={styles.topNavigationLeftPane}>
-        <HeaderLabel pageId={pageId} componentId={componentId} />
-      </div>
-      <div className={styles.topNavigationRightPane}>
-        <NotificationTrayButton
-          pageId={pageId}
-          componentId={componentId}
-          onPress={handleNotificationTrayButtonClick}
-        />
-        <GlobalSearchButton
-          pageId={pageId}
-          componentId={componentId}
-          onPress={handleGlobalSearchClick}
-        />
-        {selectedTab !== HomePageTab.Explore && (
-          <PostCreationButton
-            pageId={pageId}
-            componentId={componentId}
-            onClick={() =>
-              selectedTab == HomePageTab.MyCommunities
-                ? goToCreateCommunityPage?.({
-                    mode: AmityCommunitySetupPageMode.CREATE,
-                  })
-                : onClickPostCreationButton?.()
-            }
-          />
-        )}
-      </div>
+      {!isDesktop && <ChevronLeft width={16} height={16} fill="#000" stroke="#000" />}
+      <HeaderLabel pageId={pageId} componentId={componentId} />
+      {!isDesktop && <DotsIcon width={16} height={16} fill="#000" stroke="#000" />}
     </div>
   );
 }

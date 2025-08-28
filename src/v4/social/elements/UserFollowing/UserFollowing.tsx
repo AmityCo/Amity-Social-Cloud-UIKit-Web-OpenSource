@@ -34,7 +34,7 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
       style={themeStyles}
       className={styles.userFollowing__container}
       onPress={() =>
-        AmityUserProfileHeaderComponentBehavior.goToUserRelationshipPage?.({
+        AmityUserProfileHeaderComponentBehavior?.goToUserRelationshipPage?.({
           userId,
           selectedTab: UserRelationshipPageTabs.FOLLOWING,
         })

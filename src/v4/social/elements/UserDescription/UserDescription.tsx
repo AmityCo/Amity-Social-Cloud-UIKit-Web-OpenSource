@@ -28,7 +28,7 @@ export const UserDescription: React.FC<UserDescriptionProps> = ({
     setIsExpanded(true);
   };
 
-  if (isExcluded) return null;
+  if (isExcluded || !description) return null;
 
   return (
     <div className={styles.userDescription__description} data-testid={accessibilityId}>

@@ -1,70 +1,135 @@
+/* Base button styles - specificity: 0,0,1,0 */
 .button {
   display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  outline: none;
+  position: relative;
+}
+
+/* Icon styling - specificity: 0,0,1,0 */
+.icon {
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--asc-spacing-s1) var(--asc-spacing-m1);
-  font-size: var(--asc-text-font-size-md);
-  font-weight: var(--asc-text-font-weight-bold);
-  border-radius: var(--asc-border-radius-sm);
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.primary {
-  background-color: var(--asc-color-primary-default);
-  color: var(--asc-color-white);
-  border: none;
-}
-
-.primary:hover:not(.disabled) {
-  background-color: var(--asc-color-primary-shade1);
-}
-
-.secondary {
-  background-color: var(--asc-color-white);
-  color: var(--asc-color-primary-default);
-  border: 1px solid var(--asc-color-primary-default);
-}
-
-.secondary:hover:not(.disabled) {
-  background-color: var(--asc-color-base-shade4);
-}
-
-.ghost {
-  background-color: transparent;
-  color: var(--asc-color-primary-default);
-  border: 1px solid var(--asc-color-primary-default);
-}
-
-.ghost:hover:not(.disabled) {
-  background-color: var(--asc-color-base-shade4);
+/* Size variants - specificity: 0,0,1,0 */
+.default {
+  height: 36px;
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 14px;
 }
 
 .small {
-  font-size: var(--asc-text-font-size-sm);
-  padding: var(--asc-spacing-xxs2) var(--asc-spacing-s1);
+  height: 24px;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 12px;
 }
 
-.medium {
-  font-size: var(--asc-text-font-size-md);
-  padding: var(--asc-spacing-s1) var(--asc-spacing-m1);
+/* Context and variant combinations - specificity: 0,0,2,0 */
+.default.primary {
+  background-color: #bed62f;
+  color: #222;
+  border-color: #bed62f;
 }
 
-.large {
-  font-size: var(--asc-text-font-size-xl);
-  padding: var(--asc-spacing-s2) var(--asc-spacing-m2);
+.default.secondary {
+  background-color: #fff;
+  color: #222;
+  border-color: #bed62f;
 }
 
-.icon {
-  margin-right: var(--asc-spacing-s1);
+.default.ghost {
+  background-color: transparent;
+  color: #222;
+  border-color: transparent;
+}
+
+.registration.primary {
+  background-color: #ff8e0d;
+  color: #fff;
+  border-color: #ff8e0d;
+}
+
+.registration.secondary {
+  background-color: #fff;
+  color: #222;
+  border-color: #ff8e0d;
+}
+
+/* Disabled states - specificity: 0,0,2,1 */
+.default.primary:disabled {
+  background-color: #f2f7d5;
+  color: #909090;
+  border-color: #f2f7d5;
+  cursor: not-allowed;
+}
+
+.default.secondary:disabled {
+  background-color: transparent;
+  color: #909090;
+  border-color: #f2f7d5;
+  cursor: not-allowed;
+}
+
+.default.ghost:disabled {
+  background-color: transparent;
+  color: #909090;
+  border-color: transparent;
+  cursor: not-allowed;
+}
+
+.registration.primary:disabled {
+  background-color: #ffc685;
+  color: #fff;
+  border-color: #ff8e0d;
+  cursor: not-allowed;
+}
+
+.registration.secondary:disabled {
+  background-color: #ffe8cf;
+  color: #909090;
+  border-color: #ffc685;
+  cursor: not-allowed;
+}
+
+/* Hover states - specificity: 0,0,3,0 */
+.default.primary:hover:not(:disabled),
+.default.primary.active {
+  background-color: #deea96;
+  border-color: #bed62f;
+}
+
+.default.secondary:hover:not(:disabled),
+.default.secondary.active {
+  background-color: #f2f7d5;
+  border-color: #bed62f;
+}
+
+.default.ghost:hover:not(:disabled) {
+  background-color: rgb(242 242 242 / 80%);
+  border-color: transparent;
+}
+
+.registration.primary:hover:not(:disabled) {
+  background-color: #ffc685;
+  border-color: #ff8e0d;
+}
+
+.registration.secondary:hover:not(:disabled) {
+  background-color: #ffe8cf;
+  border-color: #ff8e0d;
 }

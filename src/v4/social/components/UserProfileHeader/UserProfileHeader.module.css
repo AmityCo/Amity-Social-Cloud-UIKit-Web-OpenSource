@@ -1,25 +1,55 @@
 .userProfileHeader__container {
-  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   background-color: var(--asc-color-background-default);
-  margin-bottom: 0.75rem;
+
+  /* border: 2px solid purple; */
 }
 
 .userProfileHeader__header {
   display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  /* border: 2px solid blue; */
+}
+
+.userProfileHeader__leftWrapper {
+  display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+
+  /* border: 2px solid black; */
+}
+
+.userProfileHeader__rightWrapper {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: space-between;
+  height: 52px;
+  align-self: center;
 }
 
 .userProfileHeader__displayName {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.userProfileHeader__nameRow {
+  display: flex;
   align-items: center;
   gap: 0.25rem;
+
+  /* border: 2px solid green; */
 }
 
 .userProfileHeader__avatar {
-  width: 3.5rem !important;
-  height: 3.5rem !important;
+  width: 5rem !important;
+  height: 5rem !important;
   font-size: 2rem;
   flex-shrink: 0;
 }
@@ -40,6 +70,50 @@
   height: 1.25rem;
 }
 
+.userBadge {
+  display: flex;
+  padding: 5px 6px;
+  justify-content: center;
+  align-items: center;
+  gap: 0.0625rem;
+  background-color: var(--asc-color-secondary-default);
+  border-radius: 100px;
+  width: fit-content;
+  color: var(--global-text-default, #222);
+  font-family: var(--typography-scale-body-caption-bold-family, Roboto);
+  font-size: var(--typography-scale-body-caption-bold-size, 12px);
+  font-style: normal;
+  font-weight: 700;
+  line-height: var(--typography-scale-body-caption-bold-line-height, 14px);
+}
+
+.userProfileHeader__button {
+  display: flex;
+  align-self: flex-start;
+  gap: 0.75rem;
+  padding: 0 !important;
+  cursor: pointer;
+  border: none;
+  background: transparent !important;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.userProfileHeader__button:hover {
+  background-color: var(--asc-color-base-shade4) !important;
+}
+
+.userProfileHeader__button .userProfileHeader__editProfile__icon {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  fill: var(--asc-color-base-default) !important;
+  color: var(--asc-color-base-default) !important;
+}
+
+.userProfileHeader__editProfile__text {
+  color: var(--asc-color-base-default);
+}
+
 .userProfileHeader__description {
   margin: 0.5rem 0;
   color: var(--asc-color-base-default);
@@ -48,7 +122,8 @@
 .userProfileHeader__relationship {
   display: flex;
   gap: 0.75rem;
-  padding: 0.25rem 0 1rem;
+
+  /* border: 2px solid red; */
 }
 
 .userProfileHeader__relationship__separator {

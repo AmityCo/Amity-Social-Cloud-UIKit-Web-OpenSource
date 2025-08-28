@@ -1,5 +1,6 @@
 .userFollower__container {
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .userFollower__count {
@@ -9,4 +10,5 @@
 
 .userFollower__label {
   color: var(--asc-color-base-shade2);
+  text-decoration: underline;
 }

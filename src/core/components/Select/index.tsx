@@ -3,7 +3,7 @@ import React, { memo, useState, useEffect, ReactNode } from 'react';
 import useKeyboard from '~/core/hooks/useKeyboard';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import Dropdown from '~/core/components/Dropdown';
-import { ChevronDown } from '~/icons';
+import { DoubleChevron } from '~/icons';
 import { DefaultTrigger, ItemsContainer } from './styles';
 
 const defaultItemRenderer: SelectProps['renderItem'] = ({ value }) => <div>{value}</div>;
@@ -24,7 +24,7 @@ const defaultTriggerRenderer: SelectProps['renderTrigger'] = ({
         <div>{placeholder}</div>
       )}
 
-      <ChevronDown height={14} width={14} />
+      <DoubleChevron height={14} width={14} />
     </DefaultTrigger>
   );
 };

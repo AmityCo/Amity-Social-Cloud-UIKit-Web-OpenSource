@@ -22,11 +22,11 @@ export const UserName: React.FC<UserNameProps> = ({ name, pageId = '*', componen
 
   return (
     <div className={styles.userName__displayName} data-testid={accessibilityId}>
-      <Typography.Headline>
+      <Typography.TitleBold>
         <Truncate lines={4}>
           <div className={styles.userName__displayName__text}>{name}</div>
         </Truncate>
-      </Typography.Headline>
+      </Typography.TitleBold>
     </div>
   );
 };
