@@ -162,9 +162,6 @@ export const CommentList = ({
     );
   }
 
-  const isShowReply =
-    !!showReplyCommentAt && !!highlightedCommentId && showReplyCommentAt === highlightedCommentId;
-
   return (
     <div
       className={clsx(styles.commentList__container, commentListClassName)}
@@ -187,7 +184,7 @@ export const CommentList = ({
             shouldAllowInteraction={shouldAllowInteraction}
             highlightedCommentId={highlightedCommentId}
             parentId={parentId}
-            showReply={isShowReply}
+            showReply={highlightedComment.commentId === showReplyCommentAt}
           />
           {renderReplyComment?.(highlightedComment)}
         </div>
@@ -206,7 +203,7 @@ export const CommentList = ({
               componentId={componentId}
               community={community}
               shouldAllowInteraction={shouldAllowInteraction}
-              showReply={isShowReply}
+              showReply={item.commentId === showReplyCommentAt}
             />
             {renderReplyComment?.(item as Amity.Comment)}
           </div>
