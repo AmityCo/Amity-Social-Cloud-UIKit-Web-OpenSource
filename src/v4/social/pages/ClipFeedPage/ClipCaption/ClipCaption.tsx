@@ -38,9 +38,8 @@ export const ClipCaption = ({
   const elementId = 'clip_caption';
   const containerRef = useRef<HTMLDivElement>(null);
   const gradientRef = useRef<HTMLDivElement>(null);
-  const [containerHeight, setContainerHeight] = useState(0);
 
-  const { post } = usePost(postId);
+  const { post, isLoading: isParentPostLoading } = usePost(postId);
 
   const communityId = post?.targetType === 'community' ? post.targetId : null;
 
@@ -65,7 +64,6 @@ export const ClipCaption = ({
     const updateGradientHeight = () => {
       if (containerRef.current && gradientRef.current) {
         const height = containerRef.current.offsetHeight;
-        setContainerHeight(height);
         gradientRef.current.style.height = `${height + 80}px`; // Add extra 80px to extend beyond bottom
       }
     };
@@ -83,6 +81,8 @@ export const ClipCaption = ({
       resizeObserver.disconnect();
     };
   }, []); // Re-run when content that affects height changes
+
+  const isLoadingContent = (isLoading && !creator) || isParentPostLoading;
 
   if (isDragging) return null;
 
@@ -105,7 +105,7 @@ export const ClipCaption = ({
             userId={creator?.userId}
             onPressAvatar={onClickUser}
           />
-          {isLoading && !creator ? (
+          {isLoadingContent ? (
             <div className={styles.clipCaption__skeleton}>
               <div className={styles.clipCaption__skeleton__title} />
               <div className={styles.clipCaption__skeleton__moderator} />
@@ -146,7 +146,7 @@ export const ClipCaption = ({
             </div>
           )}
         </div>
-        {isLoading && !creator ? (
+        {isLoadingContent ? (
           <div className={styles.clipCaption__skeleton}>
             <div className={styles.clipCaption__skeleton__title} />
             <div className={styles.clipCaption__skeleton__desc} />
