@@ -46,7 +46,7 @@ export const NotificationItem = ({
       });
     } else if (item.trayItemCategory === 'follow') {
       return AmityNotificationTrayPageBehavior?.goToUserProfilePage?.({
-        userId: item.actionReferenceId!,
+        userId: item.actors[0]?.publicId,
       });
     } else {
       AmityNotificationTrayPageBehavior?.goToPostDetailPage?.({
