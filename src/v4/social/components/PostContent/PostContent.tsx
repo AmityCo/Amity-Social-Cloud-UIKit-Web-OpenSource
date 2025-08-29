@@ -535,7 +535,7 @@ export const PostContent = ({
             )}
           </div>
 
-          {isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage ? (
+          {isNotJoinedCommunity && (isSearchPost || page.type !== PageTypes.PostDetailPage) ? (
             <>
               <div className={styles.postContent__divider} />
               <Button variant="default" onPress={() => goToCommunityProfilePage(post.targetId)}>

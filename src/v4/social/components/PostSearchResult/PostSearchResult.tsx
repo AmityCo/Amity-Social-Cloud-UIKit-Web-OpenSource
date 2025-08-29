@@ -109,6 +109,15 @@ export const PostSearchResult = ({
                   keyword={keyword}
                   isSearchPost
                   className={styles.postSearchResult__postContent}
+                  onClick={() => {
+                    if (isDesktop) {
+                      onClosePopover?.();
+                    }
+                    AmitySocialGlobalSearchPageBehavior?.goToPostDetailPage?.({
+                      postId: post.postId,
+                      keyword: keyword,
+                    });
+                  }}
                 />
                 <Divider className={styles.postSearchResult__divider} data-last-item={isLastItem} />
               </div>
