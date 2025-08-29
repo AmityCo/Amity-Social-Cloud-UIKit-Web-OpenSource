@@ -1,10 +1,7 @@
-import styled from 'styled-components';
-
-export const DefaultTrigger = styled.button
-  .withConfig({
-    displayName: 'DefaultTrigger',
-  })
-  .attrs({ role: 'button' })`
+/* ====================================
+   DEFAULT SELECT STYLES (LEGACY)
+   ==================================== */
+.defaultTrigger {
   display: flex;
   height: 44px;
   min-width: 7rem;
@@ -23,27 +20,26 @@ export const DefaultTrigger = styled.button
   outline: none;
   text-align: left;
   width: 300px;
-  > *:last-child {
-    margin-left: auto;
-  }
+  cursor: pointer;
+
   &:hover {
     cursor: pointer;
   }
-`;
 
-export const ItemsContainer = styled.div.withConfig({
-  displayName: 'ItemsContainer',
-})`
+  > *:last-child {
+    margin-left: auto;
+  }
+}
+
+.itemsContainer {
   word-break: break-word;
+
   > * {
     margin: 0 3px;
   }
-`;
+}
 
-// Replica della classe .select da global.css come styled component
-export const SelectContainer = styled.div.withConfig({
-  displayName: 'SelectContainer',
-})`
+.selectContainer {
   display: flex;
   height: 44px;
   min-width: 7rem;
@@ -59,29 +55,18 @@ export const SelectContainer = styled.div.withConfig({
   font-size: 14px;
   font-family: inherit;
   box-sizing: border-box;
-`;
+}
 
 /* ====================================
-   SELECT WITH FLOATING LABEL STYLES
+   FLOATING LABEL SELECT STYLES
    ==================================== */
-export const SelectLabelContainer = styled.div.withConfig({
-  displayName: 'SelectLabelContainer',
-})`
+.selectLabelContainer {
   position: relative;
   display: block;
   width: 100%;
-`;
+}
 
-export const SelectTrigger = styled.button
-  .withConfig({
-    displayName: 'SelectTrigger',
-  })
-  .attrs({ role: 'button' })<{
-  $isOpen?: boolean;
-  $hasValue?: boolean;
-  $error?: boolean;
-  $disabled?: boolean;
-}>`
+.selectTrigger {
   display: flex;
   height: 2.75rem;
   min-width: 7rem;
@@ -99,74 +84,49 @@ export const SelectTrigger = styled.button
   width: 100%;
   cursor: pointer;
   transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Default state */
-  color: #909090;
   border: 1px solid #d3d3d3;
   background-color: #fff;
 
+  /* Default state */
+  color: #909090;
+
   /* Open state */
-  ${({ $isOpen }) =>
-    $isOpen &&
-    `
+  &.isOpen {
     color: #222;
-    border-color: #d3d3d3;
-    background-color: #fff;
-  `}
-
-  /* Filled state */
-  ${({ $hasValue, $isOpen }) =>
-    $hasValue &&
-    !$isOpen &&
-    `
-    color: #222;
-    border-color: #909090;
-  `}
-
-  /* Error state - ONLY when not open */
-  ${({ $error, $isOpen }) =>
-    $error &&
-    !$isOpen &&
-    `
-    color: #222;
-    border-color: #e32219;
-    background-color: #fff;
-  `}
-
-  /* Disabled state */
-  ${({ $disabled }) =>
-    $disabled &&
-    `
-    color: #909090;
-    background-color: #f2f2f2;
-    cursor: not-allowed;
-  `}
-
-  /* Open + hover state - HIGHEST PRIORITY (green border when open, even with errors) */
-  ${({ $isOpen, $disabled }) =>
-    $isOpen &&
-    !$disabled &&
-    `
     border-color: #bed62f;
-    
+    background-color: #fff;
+
     &:hover {
       border-color: #bed62f;
     }
-  `}
+  }
+
+  /* Filled state (when not open) */
+  &.hasValue:not(.isOpen) {
+    color: #222;
+    border-color: #909090;
+  }
+
+  /* Error state (when not open) */
+  &.error:not(.isOpen) {
+    color: #222;
+    border-color: #e32219;
+    background-color: #fff;
+  }
+
+  /* Disabled state */
+  &.disabled {
+    color: #909090;
+    background-color: #f2f2f2;
+    cursor: not-allowed;
+  }
 
   > *:last-child {
     margin-left: auto;
   }
-`;
+}
 
-export const SelectLabel = styled.label.withConfig({
-  displayName: 'SelectLabel',
-})<{
-  $isActive?: boolean;
-  $error?: boolean;
-  $disabled?: boolean;
-  $isOpen?: boolean;
-}>`
+.selectLabel {
   pointer-events: none;
   position: absolute;
   left: 0.5rem;
@@ -184,64 +144,44 @@ export const SelectLabel = styled.label.withConfig({
   color: #909090;
 
   /* Active position (top) */
-  ${({ $isActive }) =>
-    $isActive &&
-    `
+  &.isActive {
     top: 0;
     font-size: 0.75rem;
     transform: translateY(-50%);
-  `}
+  }
 
-  /* Error state */
-  ${({ $error, $isOpen }) =>
-    $error &&
-    !$isOpen &&
-    `
+  /* Error state (when not open) */
+  &.error:not(.isOpen) {
     color: #e32219;
-  `}
+  }
 
-  /* Open + hover state */
-  ${({ $isOpen, $disabled }) =>
-    $isOpen &&
-    !$disabled &&
-    `
+  /* Open state (green label) */
+  &.isOpen:not(.disabled) {
     color: #bed62f;
-  `}
+  }
 
-  /* Filled state */
-  ${({ $isActive, $error, $isOpen }) =>
-    $isActive &&
-    !$error &&
-    !$isOpen &&
-    `
+  /* Filled state (when active but not open and no error) */
+  &.isActive:not(.error):not(.isOpen) {
     color: #909090;
-  `}
+  }
 
   /* Disabled state */
-  ${({ $disabled }) =>
-    $disabled &&
-    `
+  &.disabled {
     background-color: #f2f2f2;
     color: #909090;
-  `}
-`;
+  }
+}
 
-export const SelectPlaceholderText = styled.div.withConfig({
-  displayName: 'SelectPlaceholderText',
-})<{
-  $hasValue?: boolean;
-  $isLabelActive?: boolean;
-}>`
+.selectPlaceholderText {
   color: inherit;
 
   /* Only show when there's a selected value */
-  ${({ $hasValue }) =>
-    $hasValue
-      ? `
+  &.hasValue {
     opacity: 1;
-  `
-      : `
+  }
+
+  &:not(.hasValue) {
     opacity: 0;
     pointer-events: none;
-  `}
-`;
+  }
+}

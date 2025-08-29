@@ -1,12 +1,11 @@
+/* ====================================
+   CONTAINER COMPONENTS
+   ==================================== */
 .inputTextContainer {
   position: relative;
   display: flex;
   flex-wrap: wrap;
   min-width: 1em;
-
-  /* background: var(--asc-color-white);
-  border: 1px solid var(--asc-color-base-shade2);
-  border-radius: 0.25rem; */
   transition:
     background 0.2s,
     border-color 0.2s;
@@ -21,6 +20,28 @@
   }
 }
 
+.labelContainer {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.textareaLabelContainer {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* ====================================
+   LABEL STYLES
+   ==================================== */
+.inputLabelError {
+  color: #e32219;
+}
+
+/* ====================================
+   BASE INPUT STYLES
+   ==================================== */
 .baseInputStyle {
   height: 2.75rem;
   min-width: 7rem;
@@ -30,12 +51,17 @@
   gap: 0.5rem;
   justify-self: stretch;
   background-color: #fff;
-  color: #000;
+  color: #222;
   border-radius: 0.5rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #909090;
 
   &:focus {
+    border-color: #bed62f;
     outline: none;
+
+    + .inputLabelError {
+      color: #bed62f;
+    }
   }
 
   &::placeholder {
@@ -43,24 +69,30 @@
   }
 
   &[disabled] {
-    background: none;
+    background: #f2f2f2;
+    color: #909090;
   }
 }
 
-/* Input border states */
+/* ====================================
+   INPUT STATE MODIFIERS
+   ==================================== */
 .inputFilled {
-  border-color: #bed62f; /* Green border when filled */
+  border-color: #909090;
 }
 
 .inputError {
-  border-color: #ef4444; /* Red border when error */
+  border-color: #e32219;
 }
 
 .inputDisabled {
-  border-color: #d3d3d3; /* Gray border when disabled */
-  background-color: #f8f8f8; /* Gray background when disabled */
+  border-color: #909090;
+  background-color: #f8f8f8;
 }
 
+/* ====================================
+   FLOATING LABEL STYLES
+   ==================================== */
 .input-label {
   pointer-events: none;
   font-size: 0.875rem;
@@ -78,113 +110,92 @@
   background-color: transparent;
 }
 
-/* Floating label states */
 .inputLabelActive {
   top: 0;
   font-size: 0.75rem;
-  background-color: white;
+  background-color: #fff;
   padding-left: 0.25rem;
   padding-right: 0.25rem;
   transform: translateY(-50%);
-}
-
-.inputLabelError {
-  color: #ef4444; /* Red for error state */
 }
 
 .inputLabelFocus {
-  color: #3b82f6; /* Blue for focus state */
+  color: #bed62f;
 }
 
 .inputLabelFilled {
-  color: #bed62f; /* Green for filled state */
+  color: #909090;
 }
 
 .inputLabelDisabled {
-  color: #d3d3d3; /* Gray for disabled state */
-  background-color: #f9fafb;
+  background-color: #f2f2f2;
 }
 
-/* Container classes */
-.labelContainer {
-  position: relative;
-  display: block;
-  width: 100%;
-}
-
-/* Textarea label container - label positioned like floating label */
-.textareaLabelContainer {
-  position: relative;
-  display: block;
-  width: 100%;
-}
-
-/* Static label for textarea (positioned like active floating label) */
+/* ====================================
+   TEXTAREA STYLES
+   ==================================== */
 .textareaLabel {
   pointer-events: none;
-  font-size: 0.75rem; /* 12px - same as inputLabelActive */
+  font-size: 0.75rem;
   font-weight: 400;
-  line-height: 0.875rem; /* 14px */
-  color: #222;
+  line-height: 0.875rem;
+  color: #909090;
   position: absolute;
-  left: 0.5rem; /* Same as input-label */
+  left: 0.5rem;
   top: 0;
   transform: translateY(-50%);
-  background-color: white; /* White background like floating labels */
+  background-color: #fff;
   padding-left: 0.25rem;
   padding-right: 0.25rem;
   border-radius: 9999px;
-  z-index: 1; /* Ensure it's above the border */
+  z-index: 1;
 }
 
-/* Textarea specific styling */
 .textareaInput {
-  padding: 0.75rem; /* 12px top padding to account for label space */ /* 12px bottom padding */ /* 12px left padding */ /* 12px right padding */
+  padding: 0.75rem;
   resize: vertical;
-  min-height: 2.75rem; /* Same as base input height */
+  min-height: 2.75rem;
+
+  &:focus + .textareaLabel {
+    color: #bed62f;
+  }
 }
 
 .textareaLabelError {
-  color: #ef4444; /* Red for error state */
+  color: #e32219;
 }
 
-.textareaLabelFilled {
-  color: #bed62f; /* Green for filled state */
-}
-
-.textareaLabelDisabled {
-  color: #d3d3d3; /* Gray for disabled state */
-}
-
-/* Peer selector for floating labels - fallback for when CSS classes are used */
+/* ====================================
+   PEER SELECTOR FALLBACKS
+   ==================================== */
 .baseInputStyle.peer:not(:placeholder-shown) + .input-label,
 .baseInputStyle.peer:focus + .input-label {
   top: 0;
   font-size: 0.75rem;
-  background-color: white;
+  background-color: #fff;
   padding-left: 0.25rem;
   padding-right: 0.25rem;
   transform: translateY(-50%);
 }
 
 .baseInputStyle.peer:focus + .input-label {
-  color: #3b82f6;
+  color: #bed62f;
 }
 
 .baseInputStyle.peer:not(:placeholder-shown) + .input-label {
   color: #9ca3af;
 }
 
+/* ====================================
+   MENTION FUNCTIONALITY
+   ==================================== */
 .mentionContainer {
   position: relative;
   width: 100%;
 
   > div:first-child {
-    /* Put !important to override inline-css in target element */
     position: absolute !important;
     width: 100%;
-
-    /* Revert all position value */
     top: revert !important;
     left: revert !important;
     right: revert !important;
@@ -192,6 +203,17 @@
   }
 }
 
+.mentions_mention {
+  position: relative;
+  z-index: 1;
+  color: var(--asc-color-primary-dark, var(--asc-color-primary-default));
+  pointer-events: none;
+  background-color: var(--asc-color-base-shade4);
+}
+
+/* ====================================
+   LIVE CHAT MENTION INPUT
+   ==================================== */
 .live-chat-mention-input {
   padding: var(--asc-spacing-s1);
   width: calc(100% - 1rem);
@@ -226,6 +248,10 @@
       background: none;
     }
   }
+
+  .mentions__highlighter {
+    padding: 0 0.4rem;
+  }
 }
 
 .live-chat-mention-input__suggestions__list {
@@ -237,22 +263,6 @@
   max-height: 8rem;
   overflow: auto;
   border-bottom: 1px solid var(--asc-color-base-shade3);
-
-  /* Use !important to override inline-css at target element */
-
-  /* Keep a position of suggest panel strict with the top of compose bar same as design */
   bottom: 2rem !important;
   left: 0 !important;
-}
-
-.mentions_mention {
-  position: relative;
-  z-index: 1;
-  color: var(--asc-color-primary-dark, var(--asc-color-primary-default));
-  pointer-events: none;
-  background-color: var(--asc-color-base-shade4);
-}
-
-.live-chat-mention-input .mentions__highlighter {
-  padding: 0 0.4rem;
 }

@@ -1,31 +1,86 @@
 import React, { memo, useState, useEffect, ReactNode } from 'react';
+import clsx from 'clsx';
 
 import useKeyboard from '~/core/hooks/useKeyboard';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import Dropdown from '~/core/components/Dropdown';
 import { DoubleChevron } from '~/icons';
-import { DefaultTrigger, ItemsContainer } from './styles';
+import styles from './styles.module.css';
 
 const defaultItemRenderer: SelectProps['renderItem'] = ({ value }) => <div>{value}</div>;
+
 const defaultTriggerRenderer: SelectProps['renderTrigger'] = ({
   placeholder,
   selected,
   ...props
 }) => {
   return (
-    <DefaultTrigger {...props}>
+    <button role="button" className={styles.defaultTrigger} {...props}>
       {selected && selected.length ? (
-        <ItemsContainer>
+        <div className={styles.itemsContainer}>
           {selected.map(({ name, value }) => (
             <span key={value}>{name}</span>
           ))}
-        </ItemsContainer>
+        </div>
       ) : (
         <div>{placeholder}</div>
       )}
 
       <DoubleChevron height={14} width={14} />
-    </DefaultTrigger>
+    </button>
+  );
+};
+
+const floatingLabelTriggerRenderer: SelectProps['renderTrigger'] = ({
+  placeholder,
+  selected,
+  isOpen,
+  hasValue,
+  error,
+  disabled,
+  ...props
+}) => {
+  const isLabelActive = isOpen || hasValue;
+
+  return (
+    <div className={styles.selectLabelContainer}>
+      <button
+        role="button"
+        {...props}
+        className={clsx(
+          styles.selectTrigger,
+          isOpen && styles.isOpen,
+          hasValue && styles.hasValue,
+          error && styles.error,
+          disabled && styles.disabled,
+        )}
+      >
+        {selected && selected.length ? (
+          <div className={styles.itemsContainer}>
+            {selected.map(({ name, value }) => (
+              <span key={value}>{name}</span>
+            ))}
+          </div>
+        ) : (
+          <div className={clsx(styles.selectPlaceholderText, hasValue && styles.hasValue)}>
+            {/* This space is only for selected values, label acts as placeholder */}
+          </div>
+        )}
+        <DoubleChevron height={14} width={14} />
+      </button>
+
+      <label
+        className={clsx(
+          styles.selectLabel,
+          isLabelActive && styles.isActive,
+          error && styles.error,
+          disabled && styles.disabled,
+          isOpen && styles.isOpen,
+        )}
+      >
+        {placeholder}
+      </label>
+    </div>
   );
 };
 
@@ -37,11 +92,17 @@ export interface SelectProps {
   options?: Option[];
   multiple?: boolean;
   disabled?: boolean;
+  error?: boolean;
+  floatingLabel?: boolean;
   parentContainer?: Element | null;
   renderItem?: (item: Option) => ReactNode;
   renderTrigger?: (props: {
     placeholder: string;
     selected: Option[];
+    isOpen?: boolean;
+    hasValue?: boolean;
+    error?: boolean;
+    disabled?: boolean;
     remove: (toRemoveItem: Option, callback?: (value: string[]) => void) => void;
     onClick: (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => void;
   }) => ReactNode;
@@ -58,9 +119,11 @@ const Select = ({
   options = [],
   multiple,
   disabled,
+  error = false,
+  floatingLabel = false,
   parentContainer = null,
   renderItem = defaultItemRenderer,
-  renderTrigger = defaultTriggerRenderer,
+  renderTrigger,
   // we pass isOpen and handleClose to manage dropdown state from parent
   isOpen,
   handleClose,
@@ -82,9 +145,6 @@ const Select = ({
   };
 
   useKeyboard('Escape', close);
-  // useKeyboard({
-  //   Escape: close,
-  // });
 
   // sync internal state
   useEffect(() => {
@@ -110,15 +170,34 @@ const Select = ({
 
   const handleClick: React.MouseEventHandler = (e) => {
     e.preventDefault();
-    toggle();
+    if (!disabled) {
+      toggle();
+    }
   };
+
+  const currentIsOpen = isOpen !== undefined ? isOpen : isOpenInternal;
+  const hasValue = selected && selected.length > 0;
+
+  // Choose the appropriate trigger renderer
+  const triggerRenderer =
+    renderTrigger || (floatingLabel ? floatingLabelTriggerRenderer : defaultTriggerRenderer);
 
   return (
     <Dropdown
       data-testid={`${dataQaAnchor}-select-dropdown`}
-      isOpen={isOpen || isOpenInternal}
+      isOpen={currentIsOpen}
       renderTrigger={(props) =>
-        renderTrigger({ ...props, onClick: handleClick, selected, remove, placeholder })
+        triggerRenderer({
+          ...props,
+          onClick: handleClick,
+          selected,
+          remove,
+          placeholder,
+          isOpen: currentIsOpen,
+          hasValue,
+          error,
+          disabled,
+        })
       }
       // when using custom trigger we should handle "close on click outside" (if needed)
       handleClose={close}
