@@ -164,9 +164,6 @@ export const CommentList = ({
     );
   }
 
-  const isShowReply =
-    !!showReplyCommentAt && !!highlightedCommentId && showReplyCommentAt === highlightedCommentId;
-
   return (
     <div
       className={clsx(styles.commentList__container, commentListClassName)}
