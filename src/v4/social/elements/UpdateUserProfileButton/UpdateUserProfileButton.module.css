@@ -1,3 +1,9 @@
+.updateUserProfileActionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .updateUserProfileButton {
   background-color: var(--asc-color-primary-default);
   border-radius: 0.5rem;
@@ -14,4 +20,22 @@
 
 .updateUserProfileButton__text {
   color: var(--asc-color-white);
+}
+
+.cancelUpdateUserProfileButton {
+  border: 1px solid var(--asc-color-primary-default);
+  border-radius: 0.5rem;
+  padding: 0.625rem 1rem;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cancelUpdateUserProfileButton:disabled {
+  background-color: var(--asc-color-primary-shade3);
+  cursor: not-allowed;
+}
+
+.cancelUpdateUserProfileButton__text {
+  color: var(--asc-color-black);
 }

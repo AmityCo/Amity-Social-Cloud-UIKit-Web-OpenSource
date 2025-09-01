@@ -311,11 +311,16 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
                 </CoreButton>
               </div>
             </div>
-            <div className={`${styles.editUserProfilePage__cardContentSection} text-center`}>
+            <div
+              className={`${styles.editUserProfilePage__cardContentSection} ${styles.editUserProfilePage__avatarTextContainer}`}
+            >
               <Typography.Caption>Oppure</Typography.Caption>
-            </div>
-            <div className={`${styles.editUserProfilePage__cardContentSection} text-center`}>
-              <Typography.Caption>Scegli un avatar </Typography.Caption>
+              <Typography.CaptionBold
+                style={{ color: 'var(--asc-color-base-default)', textDecoration: 'underline' }}
+                onClick={triggerFileInput}
+              >
+                Scegli un avatar
+              </Typography.CaptionBold>
             </div>
           </div>
 
@@ -361,7 +366,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
             <div className={styles.editUserProfilePage__cardContentSection}>
               <InputText
                 value={description || ''}
-                placeholder="Raccontaci di te"
+                placeholder="Bio"
                 multiline={true}
                 rows={5}
                 floatingPlaceholder={true}
@@ -513,33 +518,37 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
                       {playerType.icon === 'betting' && <Betting width={24} height={24} />}
                       {playerType.icon === 'poker' && <Poker width={24} height={24} />}
                       {playerType.icon === 'cards' && <CardGames width={24} height={24} />}
-                      <Typography.CaptionBold>{playerType.name}</Typography.CaptionBold>
+                      <Typography.CaptionBold style={{ color: 'var(--asc-color-base-default)' }}>
+                        {playerType.name}
+                      </Typography.CaptionBold>
                     </div>
                     <div className={styles.editUserProfilePage__playerTypeLevels}>
-                      {playerType.levels.map((level) => (
-                        <Button
-                          key={level}
-                          type="button"
-                          variant="secondary"
-                          className={`${styles.editUserProfilePage__levelButton} ${
-                            level <= (playerTypeLevels[playerType.id] || 0)
-                              ? styles.editUserProfilePage__levelButtonActive
-                              : ''
-                          }`}
-                          onClick={() =>
-                            setPlayerTypeLevels((prev) => ({
-                              ...prev,
-                              [playerType.id]: level,
-                            }))
-                          }
-                        >
-                          {level}
-                        </Button>
-                      ))}
-                    </div>
-                    <div className={styles.editUserProfilePage__playerTypeLevelLabels}>
-                      <Typography.Caption>Principiante</Typography.Caption>
-                      <Typography.Caption>Esperto</Typography.Caption>
+                      <div className={styles.editUserProfilePage__playerTypeLevelButtons}>
+                        {playerType.levels.map((level) => (
+                          <Button
+                            key={level}
+                            type="button"
+                            variant="secondary"
+                            className={`${styles.editUserProfilePage__levelButton} ${
+                              level <= (playerTypeLevels[playerType.id] || 0)
+                                ? styles.editUserProfilePage__levelButtonActive
+                                : ''
+                            }`}
+                            onClick={() =>
+                              setPlayerTypeLevels((prev) => ({
+                                ...prev,
+                                [playerType.id]: level,
+                              }))
+                            }
+                          >
+                            {level}
+                          </Button>
+                        ))}
+                      </div>
+                      <div className={styles.editUserProfilePage__playerTypeLevelLabels}>
+                        <Typography.Caption>Principiante</Typography.Caption>
+                        <Typography.Caption>Esperto</Typography.Caption>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -551,7 +560,7 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
             </div>
           </div>
 
-          <UpdateUserProfileButton pageId={pageId} disabled={isNoEditing || isPending} />
+          <UpdateUserProfileButton pageId={pageId} />
         </div>
       </Form>
     </div>

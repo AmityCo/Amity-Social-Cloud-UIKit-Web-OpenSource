@@ -27,18 +27,28 @@ export const UpdateUserProfileButton: React.FC<UpdateUserProfileButtonProps> = (
   if (isExcluded) return null;
 
   return (
-    <Button
-      data-testid={accessibilityId}
-      className={styles.updateUserProfileButton}
-      onPress={onClick}
-      isDisabled={disabled}
-      type="submit"
-    >
-      {config.text && (
-        <Typography.Body className={styles.updateUserProfileButton__text}>
-          {config.text}
+    <div className={styles.updateUserProfileActionsContainer}>
+      <Button
+        data-testid={accessibilityId}
+        className={styles.updateUserProfileButton}
+        onPress={onClick}
+        isDisabled={disabled}
+        type="submit"
+      >
+        {config.text && (
+          <Typography.Body className={styles.updateUserProfileButton__text}>
+            {config.text}
+          </Typography.Body>
+        )}
+      </Button>
+      <Button
+        className={styles.cancelUpdateUserProfileButton}
+        onPress={() => console.log('CANCEL MODIFY')}
+      >
+        <Typography.Body className={styles.cancelUpdateUserProfileButton__text}>
+          Cancel
         </Typography.Body>
-      )}
-    </Button>
+      </Button>
+    </div>
   );
 };

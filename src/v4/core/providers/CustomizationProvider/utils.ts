@@ -90,11 +90,11 @@ type GeneratedThemeValue = {
 export type ThemeValue = ConfigurableThemeValue & BaseThemeValue & GeneratedThemeValue;
 
 const defaultBase = {
-  black_color: '#000000',
+  black_color: '#222222',
   white_color: '#FFFFFF',
   live_color: '#ff305a',
   highlight_color: '#0b7d3e',
-  background_transparent_black_color: '#00000080',
+  background_transparent_black_color: '#22222280',
   background_transparent_white_color: '#fffFFFc',
   message_bubble_primary_color: '#0b7d3e',
   primary_background_hover_color: '#00653b',

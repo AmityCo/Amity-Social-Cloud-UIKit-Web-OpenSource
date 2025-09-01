@@ -19,13 +19,20 @@
   position: relative;
   border-radius: 50%;
   overflow: hidden;
-  margin: 1.75rem auto 0;
+  margin: 0 auto;
 }
 
 .editUserProfilePage__avatar {
   width: 7.5rem;
   height: 7.5rem;
   object-fit: cover;
+}
+
+.editUserProfilePage__avatarTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
 }
 
 .editUserProfilePage__avatarOverlay {
@@ -108,7 +115,7 @@
   padding: var(--component-card-multipuropse-layout-padding-default, 1rem);
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--global-layout-gap-sm, 00.5rem);
+  gap: var(--global-layout-gap-sm, 1rem);
   border-radius: var(--component-card-multipuropse-layout-radius-default, 0.5rem);
   background: var(--component-card-multipuropse-surface-even, #fff);
   box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
@@ -121,10 +128,6 @@
   align-items: center;
   width: 100%;
   gap: 0.5rem;
-
-  &.text-center {
-    justify-content: center;
-  }
 }
 
 .editUserProfilePage__avatarSection {
@@ -201,15 +204,15 @@
 .editUserProfilePage__playerTypeContainer {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.5rem;
+  margin-top: 1rem;
   width: 100%;
 }
 
 .editUserProfilePage__playerTypeItem {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  gap: 0.5rem;
   background: #fff;
   width: 100%;
 }
@@ -218,13 +221,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
 }
 
 .editUserProfilePage__playerTypeLevels {
   display: flex;
+  flex-direction: column;
   gap: 4px;
   width: 100%;
+}
+
+.editUserProfilePage__playerTypeLevelButtons {
+  display: flex;
 }
 
 .editUserProfilePage__levelButton {

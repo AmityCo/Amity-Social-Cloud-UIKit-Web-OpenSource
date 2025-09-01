@@ -4,8 +4,8 @@ const TRANSITION_TIME = '0.3s';
 
 export const SwitchLabel = styled.label<{ disabled?: boolean }>`
   position: relative;
-  width: 48px;
-  height: 28px;
+  width: 52px;
+  height: 30px;
   float: right;
 
   ${({ disabled }) =>
@@ -38,8 +38,8 @@ export const SwitchSlider = styled.span<{ disabled?: boolean }>`
   &:before {
     position: absolute;
     content: '';
-    height: 24px;
-    width: 24px;
+    height: 26px;
+    width: 26px;
     left: 2px;
     bottom: 2px;
     background-color: #fff;
@@ -54,8 +54,8 @@ export const SwitchSlider = styled.span<{ disabled?: boolean }>`
   }
 
   ${SwitchInput}:checked + &:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
+    -webkit-transform: translateX(22px);
+    -ms-transform: translateX(22px);
+    transform: translateX(22px);
   }
 `;
