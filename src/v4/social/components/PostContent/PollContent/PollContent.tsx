@@ -18,6 +18,7 @@ type PollContentProps = {
   parentPost: Amity.Post;
   disabled?: boolean;
   onPostDeleted?: (post: Amity.Post) => void;
+  expandOption?: boolean;
 };
 
 export const PollContent: FC<PollContentProps> = ({
@@ -27,6 +28,7 @@ export const PollContent: FC<PollContentProps> = ({
   parentPost,
   posts,
   disabled = false,
+  expandOption = false,
   onPostDeleted,
 }) => {
   const { currentUserId } = useSDK();
@@ -34,7 +36,7 @@ export const PollContent: FC<PollContentProps> = ({
   const poll = posts?.[0]?.getPollInfo();
   const [answers, setAnswers] = useState<string[] | undefined>();
   const [isAuthorSeeingPoll, setIsAuthorSeeingPoll] = useState<boolean>(false);
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(expandOption);
   const [isPollEnded, setIsPollEnded] = useState<boolean>(poll?.status === 'closed');
 
   const user = useUser(currentUserId);

@@ -21,6 +21,7 @@ type TextContentProps = {
   hashtags?: string[];
   keyword?: string;
   isSearchPost?: boolean;
+  isOpenSeeMore?: boolean;
 };
 
 export const TextContent = ({
@@ -35,6 +36,7 @@ export const TextContent = ({
   hashtags = [],
   keyword,
   isSearchPost = false,
+  isOpenSeeMore = false,
 }: TextContentProps) => {
   const { post: childPost } = usePost(post?.children?.[0]);
 
@@ -95,6 +97,7 @@ export const TextContent = ({
               hashtags={hashtags}
               keyword={keyword}
               isSearchPost={isSearchPost}
+              seeMoreIsOpen={isOpenSeeMore}
             />
           )}
         </>

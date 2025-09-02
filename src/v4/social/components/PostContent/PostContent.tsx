@@ -80,6 +80,7 @@ interface PostContentProps {
   className?: string;
   keyword?: string;
   isSearchPost?: boolean;
+  expandAllContent?: boolean;
 }
 
 const useInlineComment = ({ post, disabled }: { post: Amity.Post; disabled: boolean }) => {
@@ -120,6 +121,7 @@ export const PostContent = ({
   className,
   keyword,
   isSearchPost = false,
+  expandAllContent = false,
 }: PostContentProps) => {
   const componentId = 'post_content';
 
@@ -442,6 +444,7 @@ export const PostContent = ({
               post={post}
               keyword={keyword}
               isSearchPost={isSearchPost}
+              isOpenSeeMore={expandAllContent}
             />
             {post.childrenPosts?.length > 0 ? (
               <ChildrenPostContent
@@ -460,6 +463,7 @@ export const PostContent = ({
                 goToPostDetail={onClick}
                 onPollPostDeleted={pageId === 'post_detail_page' ? onPollPostDeleted : undefined}
                 disabledContent={isNotJoinedCommunity || disabledContent}
+                expandAllContent={expandAllContent}
               />
             ) : null}
           </Button>

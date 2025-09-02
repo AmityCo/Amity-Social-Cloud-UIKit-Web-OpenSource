@@ -11,6 +11,7 @@ type ChildrenPostContentProps = {
   post: Amity.Post;
   componentId?: string;
   disabledContent?: boolean;
+  expandAllContent?: boolean;
   onImageClick: (imageIndex: number) => void;
   onVideoClick: (videoIndex: number) => void;
   onClipClick: (postId: string) => void;
@@ -28,6 +29,7 @@ export const ChildrenPostContent = ({
   goToPostDetail,
   onPollPostDeleted,
   disabledContent = false,
+  expandAllContent = false,
 }: ChildrenPostContentProps) => {
   return (
     <>
@@ -38,6 +40,7 @@ export const ChildrenPostContent = ({
         posts={post.childrenPosts as Amity.Post<'poll'>[]}
         disabled={disabledContent}
         onPostDeleted={onPollPostDeleted}
+        expandOption={expandAllContent}
       />
       <ImageContent
         pageId={pageId}

@@ -20,6 +20,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
+import { isPollPost } from '~/v4/social/utils/postTypeChecker';
 
 export interface PostDetailPageProps {
   id: string;
@@ -224,6 +225,7 @@ export function PostDetailPage({
             hideTarget={hideTarget}
             disabledContent={isNotJoinedCommunity}
             onPollPostDeleted={() => setFailedToShow(true)}
+            expandAllContent={isPollPost(post.childrenPosts[0])}
           />
         </div>
 
