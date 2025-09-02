@@ -116,7 +116,7 @@ export const ImageGallery = ({
   useEffect(() => {
     if (linkToPost && galleryRef.current && posts && !isLoading) {
       const imageIndex = posts?.findIndex((post) => post.postId === linkToPost?.postId);
-      !isDesktop && onClickImageItem(imageIndex);
+      onClickImageItem(imageIndex);
       scrollToImage(
         imageIndex > -1
           ? imageIndex
@@ -124,9 +124,9 @@ export const ImageGallery = ({
             ? posts.length - 1
             : linkToPost.index,
       );
-      isDesktop && setLinkToPost(null);
+      setLinkToPost(null);
     }
-  }, [linkToPost, posts, isDesktop, isLoading]);
+  }, [linkToPost, posts, isLoading]);
 
   return (
     <div className={styles.imageGallery} ref={galleryRef}>

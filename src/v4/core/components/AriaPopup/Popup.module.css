@@ -100,7 +100,7 @@
 
 @media (width >= 48em) {
   .overlay {
-    background: rgb(from var(--asc-color-black) r g b / 60%);
+    background: rgb(from var(--asc-color-black) r g b / 80%);
   }
 
   .overlay[data-view='mobile'] {

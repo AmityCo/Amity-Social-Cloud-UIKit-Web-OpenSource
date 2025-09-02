@@ -71,7 +71,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { onBack } = useNavigation();
-  const { acceptedInvitation } = useLayoutContext();
+  const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
   const initialLoad = useRef(true);
 
@@ -142,8 +142,8 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   }, [acceptedInvitation]);
 
   useEffect(() => {
-    setActiveTab('community_feed');
-  }, [communityId, setActiveTab]);
+    !linkToPost && setActiveTab('community_feed');
+  }, [communityId]);
 
   useEffect(() => {
     if (file) {

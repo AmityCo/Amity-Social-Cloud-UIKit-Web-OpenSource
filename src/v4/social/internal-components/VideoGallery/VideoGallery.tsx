@@ -132,7 +132,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
   useEffect(() => {
     if (linkToPost && galleryRef.current && posts && !isLoading) {
       const videoIndex = posts?.findIndex((post) => post.postId === linkToPost?.postId);
-      !isDesktop && showVideoViewer(videoIndex);
+      showVideoViewer(videoIndex);
       scrollToVideo(
         videoIndex > -1
           ? videoIndex
@@ -140,9 +140,9 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({
             ? posts.length - 1
             : linkToPost.index,
       );
-      isDesktop && setLinkToPost(null);
+      setLinkToPost(null);
     }
-  }, [linkToPost, posts, isDesktop, isLoading]);
+  }, [linkToPost, posts, isLoading]);
 
   return (
     <div className={styles.videoGallery} ref={galleryRef}>
