@@ -62,6 +62,7 @@ export enum PageTypes {
   PendingRequestPage = 'PendingRequestPage',
   DraftClipPage = 'DraftClipPage',
   ClipFeedPage = 'ClipFeedPage',
+  SettingsPage = 'SettingsPage',
 }
 
 type Page =
@@ -262,6 +263,10 @@ type Page =
         targetType?: 'community' | 'user';
         targetId?: string;
       };
+    }
+  | {
+      type: PageTypes.SettingsPage;
+      context: Record<string, never>;
     };
 
 type ContextValue = {
@@ -380,6 +385,7 @@ type ContextValue = {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => void;
+  goToSettingsPage: () => void;
 
   //V3 functions
   onClickStory: (
@@ -461,6 +467,7 @@ let defaultValue: ContextValue = {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => {},
+  goToSettingsPage: () => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -541,6 +548,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToPendingRequestPage: (context) =>
       console.log(`NavigationContext goToPendingRequestPage(${context})`),
     goToClipFeedPage: (context) => console.log(`NavigationContext goToClipFeedPage(${context})`),
+    goToSettingsPage: () => console.log('NavigationContext goToSettingsPage()'),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -1364,6 +1372,14 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToSettingsPage = useCallback(() => {
+    const next = {
+      type: PageTypes.SettingsPage,
+      context: {},
+    };
+    pushPage(next);
+  }, [pushPage]);
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1434,6 +1450,7 @@ export default function NavigationProvider({
         goToNotificationTrayPage,
         goToPendingRequestPage,
         goToClipFeedPage,
+        goToSettingsPage,
       }}
     >
       <NavigationContextV3.Provider

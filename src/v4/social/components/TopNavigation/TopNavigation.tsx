@@ -54,12 +54,19 @@ export function TopNavigation({
     notificationTray.markTraySeen(new Date().toISOString());
     goToNotificationTrayPage();
   };
-
+  const { goToSettingsPage = () => {} } = useNavigation();
+  const handleSettingsClick = () => {
+    goToSettingsPage();
+  };
   return (
     <div className={styles.topNavigation} style={themeStyles}>
       {!isDesktop && <ChevronLeft width={16} height={16} fill="#000" stroke="#000" />}
       <HeaderLabel pageId={pageId} componentId={componentId} />
-      {!isDesktop && <DotsIcon width={16} height={16} fill="#000" stroke="#000" />}
+      {!isDesktop && (
+        <span onClick={handleSettingsClick}>
+          <DotsIcon width={16} height={16} fill="#000" stroke="#000" />
+        </span>
+      )}
     </div>
   );
 }

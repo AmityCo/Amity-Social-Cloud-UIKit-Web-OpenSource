@@ -29,6 +29,7 @@ import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
 import { AllCategoriesPage } from '~/v4/social/pages/AllCategoriesPage';
 import { CommunitiesByCategoryPage } from '~/v4/social/pages/CommunitiesByCategoryPage';
 import { MainLayout } from '~/v4/social/layouts/Main';
+import SettingPage from '~/v4/social/pages/SettingPage';
 import { CommunitySideBar } from '~/v4/social/components/CommunitySideBar';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
@@ -166,6 +167,7 @@ const Application = () => {
         )}
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
+        {page.type === PageTypes.SettingsPage && <SettingPage />}
         {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
         {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
         {page.type === PageTypes.PendingRequestPage && (

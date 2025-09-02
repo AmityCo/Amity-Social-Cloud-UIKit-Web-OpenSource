@@ -1,0 +1,10 @@
+.settingPageContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.settingPageContent {
+  flex: 1;
+  padding: 32px;
+}
