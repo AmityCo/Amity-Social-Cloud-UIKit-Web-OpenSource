@@ -55,7 +55,7 @@ import { useNetworkState } from 'react-use';
 import { TextArea as $TextArea } from '~/v4/core/components/TextField';
 import { FormLabel } from '~/v4/social/elements/FormLabel';
 import { COMPONENT_ID, ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization';
-import { UploadImageArea } from '~/v4/icons/UploadImageArea';
+import { UploadImageArea } from './UploadImageArea';
 import CloseCircle from '~/v4/icons/CloseCircle';
 import { Plus } from '~/v4/icons/Plus';
 import { useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
@@ -699,7 +699,11 @@ export const PollPostComposerPage = ({
                       accept={'image/png,image/jpeg'}
                     />
                     {option.id && typeof option.indexOfFiles === 'number' ? (
-                      <div className={styles.pollPostComposerPage__imagePollOptions__image}>
+                      <Button
+                        className={styles.pollPostComposerPage__imagePollOptions__image}
+                        onPress={() => triggerFileInput(index)}
+                        data-testid={`image-poll-option-uploaded-image-${index + 1}`}
+                      >
                         <ImageThumbnail
                           files={[files[option.indexOfFiles]]}
                           pageId={pageId}
@@ -715,12 +719,16 @@ export const PollPostComposerPage = ({
                             })
                           }
                         />
-                      </div>
+                      </Button>
                     ) : (
-                      <UploadImageArea
-                        onClick={() => triggerFileInput(index)}
-                        className={styles.pollPostComposerPage__imagePollOptions__icon}
-                      />
+                      <Button
+                        onPress={() => triggerFileInput(index)}
+                        isDisabled={isLoading}
+                        className={styles.pollPostComposerPage__imagePollOptions__uploadButton}
+                        data-testid={`image-poll-option-upload-button-${index + 1}`}
+                      >
+                        <UploadImageArea />
+                      </Button>
                     )}
                     <TextField
                       data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
