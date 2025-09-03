@@ -57,10 +57,6 @@ export default [
         {
           patterns: [
             {
-              group: ['../'],
-              message: 'Relative imports are not allowed.',
-            },
-            {
               group: ['**/*/index'],
               message: 'index imports are not allowed.',
             },

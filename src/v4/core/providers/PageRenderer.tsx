@@ -15,6 +15,7 @@ import {
   CommunityProfilePage,
   CommunitySettingPage,
   EditUserProfilePage,
+  ChangeAvatarPage,
   LiveStreamPlayerPage,
   LivestreamTerminatedPage,
   PendingPostsPage,
@@ -149,6 +150,16 @@ const PageRenderer = ({ children }: PageRendererProps) => {
       return <CommunityMembershipPage community={page.context.community} />;
     case PageTypes.EditUserProfilePage:
       return <EditUserProfilePage userId={page.context.userId} />;
+    case PageTypes.ChangeAvatarPage:
+      return (
+        <ChangeAvatarPage
+          userId={page.context.userId}
+          image={page.context.selectedFile || null}
+          pageId={page.context.pageId || 'change_avatar_page'}
+          onBack={page.context.onBack}
+          onImageUploaded={page.context.onImageUploaded}
+        />
+      );
     case PageTypes.UserRelationshipPage:
       return (
         <UserRelationshipPage userId={page.context.userId} selectedTab={page.context.selectedTab} />

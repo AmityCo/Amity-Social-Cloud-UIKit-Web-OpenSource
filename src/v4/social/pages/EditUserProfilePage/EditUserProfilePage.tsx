@@ -1,34 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './EditUserProfilePage.module.css';
-import Camera from '~/v4/icons/Camera';
 import { Form } from 'react-aria-components';
 import { BackButton } from '~/v4/social/elements/BackButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Title } from '~/v4/social/elements/Title/Title';
-import { Button as CoreButton } from '~/v4/core/natives/Button/Button';
 import { UpdateUserProfileButton } from '~/v4/social/elements/UpdateUserProfileButton';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useMutation } from '@tanstack/react-query';
-import { FileRepository, UserRepository } from '@amityco/ts-sdk';
+import { UserRepository } from '@amityco/ts-sdk';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { UnderlineInput } from '~/v4/social/internal-components/UnderlineInput';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNetworkState } from 'react-use';
 import InputText from '~/v4/core/components/InputText';
 import { Button, Typography } from '~/v4/core/components';
 import Switch from '~/core/components/Switch';
 import Select from '~/core/components/Select';
-import { Betting, Poker, CardGames } from '~/icons';
+import Betting from '~/v4/icons/Betting';
+import Poker from '~/v4/icons/Poker';
+import CardGames from '~/v4/icons/CardGames';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import PencilCircle from '~/v4/icons/PencilCircle';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { ChangeAvatarPage } from '../ChangeAvatarPage';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 interface EditUserProfilePageProps {
   userId: string;
 }
-
-const MAX_DISPLAY_NAME_LENGTH = 100;
-const MAX_ABOUT_LENGTH = 180;
 
 export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId }) => {
   const pageId = 'edit_user_profile_page';
@@ -36,10 +36,13 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const { themeStyles } = useAmityPage({ pageId });
+  const { AmityUserProfilePageBehavior } = usePageBehavior();
   const { onBack } = useNavigation();
   const { online } = useNetworkState();
   const { confirm, info } = useConfirmContext();
   const { user } = useUser({ userId });
+  const { isDesktop } = useResponsive();
+  const { openPopup, closePopup } = usePopupContext();
 
   const [displayName, setDisplayName] = useState(user?.displayName || undefined);
   const [description, setDescription] = useState(user?.description || undefined);
@@ -149,37 +152,6 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
     user?.description && setDescription(user.description);
   }, [user?.displayName, user?.description]);
 
-  const uploadImage = async (image: File) => {
-    const formData = new FormData();
-    formData.append('files', image);
-    try {
-      const { data } = await FileRepository.uploadImage(formData);
-      setNewImage(data[0]);
-    } catch (error) {
-      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.IMAGE_NUDITY)) {
-        info({
-          pageId: pageId,
-          type: 'info',
-          title: 'Inappropriate image',
-          content: 'Please choose a different image to upload.',
-        });
-      } else {
-        info({
-          pageId: pageId,
-          type: 'info',
-          title: 'Failed to upload image',
-          content: 'Please try again.',
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (image) {
-      uploadImage(image);
-    }
-  }, [image]);
-
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -231,7 +203,49 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
   const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    setImage(e.target.files?.[0] || null);
+    const selectedFile = e.target.files?.[0] || null;
+    setImage(selectedFile);
+
+    if (selectedFile) {
+      if (isDesktop) {
+        openPopup({
+          pageId,
+          header: (
+            <Title
+              pageId="edit_user_profile_page"
+              titleClassName={styles.EditUserProfilePage__title}
+            />
+          ),
+          children: (
+            <ChangeAvatarPage
+              image={selectedFile}
+              pageId={pageId}
+              onBack={() => {
+                closePopup();
+              }}
+              onImageUploaded={(uploadedImage) => {
+                setNewImage(uploadedImage);
+                closePopup();
+              }}
+            />
+          ),
+        });
+      } else {
+        if (user?.userId) {
+          AmityUserProfilePageBehavior?.goToChangeAvatarPage?.({
+            userId: user.userId,
+            image: selectedFile
+              ? ({ fileUrl: URL.createObjectURL(selectedFile) } as Amity.File<'image'>)
+              : null,
+            selectedFile: selectedFile,
+            pageId: pageId,
+            onImageUploaded: (uploadedImage) => {
+              setNewImage(uploadedImage);
+            },
+          });
+        }
+      }
+    }
   };
 
   const isNoEditing =
@@ -260,18 +274,20 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
 
   return (
     <div className={styles.editUserProfilePage} style={themeStyles}>
-      <div className={styles.editUserProfilePage__topSection}>
-        <BackButton
-          pageId={pageId}
-          onPress={onPressBackButton}
-          defaultClassName={styles.editUserProfilePage__topSection__backButton}
-        />
-        <Title
-          pageId={pageId}
-          componentId={userId}
-          titleClassName={styles.editUserProfilePage__topSection__title}
-        />
-      </div>
+      {!isDesktop && (
+        <div className={styles.editUserProfilePage__topSection}>
+          <BackButton
+            pageId={pageId}
+            onPress={onPressBackButton}
+            defaultClassName={styles.editUserProfilePage__topSection__backButton}
+          />
+          <Title
+            pageId={pageId}
+            componentId={userId}
+            titleClassName={styles.editUserProfilePage__topSection__title}
+          />
+        </div>
+      )}
       <Form onSubmit={submitForm} className={styles.editUserProfilePage__form}>
         <div className={styles.editUserProfilePage__cardPositioner}>
           <div className={styles.editUserProfilePage__card}>
@@ -289,26 +305,26 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
                     className={styles.editUserProfilePage__avatar}
                   />
                 ) : (
-                  <UserAvatar
-                    userId={userId}
-                    className={styles.editUserProfilePage__avatar}
-                    textPlaceholderClassName={styles.editUserProfilePage__avatarPlaceholder}
-                  />
+                  <>
+                    <UserAvatar
+                      userId={userId}
+                      className={styles.editUserProfilePage__avatar}
+                      textPlaceholderClassName={styles.editUserProfilePage__avatarPlaceholder}
+                    />
+                    <PencilCircle
+                      className={styles.editUserProfilePage__avatarEditButton}
+                      onClick={triggerFileInput}
+                    />
+                  </>
                 )}
-                <CoreButton
-                  className={styles.editUserProfilePage__avatarOverlay}
-                  onPress={triggerFileInput}
-                >
-                  <Camera className={styles.editUserProfilePage__icon} />
-                  <input
-                    type="file"
-                    onChange={onChangeImage}
-                    multiple
-                    id="image-upload"
-                    accept="image/png,image/jpg"
-                    className={styles.editUserProfilePage__imageInput}
-                  />
-                </CoreButton>
+                <input
+                  type="file"
+                  onChange={onChangeImage}
+                  multiple
+                  id="image-upload"
+                  accept="image/png,image/jpg"
+                  className={styles.editUserProfilePage__imageInput}
+                />
               </div>
             </div>
             <div
@@ -323,42 +339,6 @@ export const EditUserProfilePage: React.FC<EditUserProfilePageProps> = ({ userId
               </Typography.CaptionBold>
             </div>
           </div>
-
-          {/* <div className={styles.editUserProfilePage__card}>
-            <div className={styles.editUserProfilePage__cardContentSection}>
-              <UnderlineInput
-                name="userDisplayName"
-                pageId={pageId}
-                elementId="user_display_name_title"
-                maxLength={MAX_DISPLAY_NAME_LENGTH}
-                value={displayName}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                  setDisplayName(e.target.value)
-                }
-                showCounter={true}
-                // TODO: Add condition to disable/enable the input when we have sdk api to check the user setting
-                // disabled={true}
-              />
-            </div>
-          </div>
-
-          <div className={styles.editUserProfilePage__card}>
-            <div className={styles.editUserProfilePage__cardContentSection}>
-              <UnderlineInput
-                name="userAbout"
-                pageId={pageId}
-                elementId="user_about_title"
-                maxLength={MAX_ABOUT_LENGTH}
-                value={description}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                  setDescription(e.target.value)
-                }
-                showCounter={true}
-                optional={true}
-              />
-            </div>
-          </div> */}
-
           <div className={styles.editUserProfilePage__card}>
             <div className={styles.editUserProfilePage__cardContentSection}>
               <Typography.BodyBold>La tua Bio</Typography.BodyBold>

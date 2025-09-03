@@ -1,0 +1,1 @@
+export { ChangeAvatarPage } from './ChangeAvatarPage';

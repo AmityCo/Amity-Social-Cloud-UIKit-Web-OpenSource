@@ -182,6 +182,14 @@ export interface PageBehavior {
   };
   AmityUserProfilePageBehavior?: {
     goToEditUserPage?(context: { userId: string }): void;
+    goToChangeAvatarPage?(context: {
+      userId: string;
+      image: Amity.File<'image'> | null;
+      selectedFile?: File | null;
+      pageId?: string;
+      onBack?: () => void;
+      onImageUploaded?: (uploadedImage: Amity.File<'image'>) => void;
+    }): void;
     goToBlockedUsersPage?(): void;
     goToPostComposerPage?(context: { userId: string; isClipPost?: boolean }): void;
     goToDraftClipPage?(context: {
@@ -270,6 +278,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToCommunityProfilePage,
     goToUserProfilePage,
     goToEditUserPage,
+    goToChangeAvatarPage,
     goToViewStoryPage,
     onChangePage,
     goToSelectPostTargetPage,
@@ -723,6 +732,20 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
 
         goToEditUserPage(context.userId);
+      },
+      goToChangeAvatarPage(context: {
+        userId: string;
+        image: Amity.File<'image'> | null;
+        selectedFile?: File | null;
+        pageId?: string;
+        onBack?: () => void;
+        onImageUploaded?: (uploadedImage: Amity.File<'image'>) => void;
+      }) {
+        if (pageBehavior?.AmityUserProfilePageBehavior?.goToChangeAvatarPage) {
+          return pageBehavior.AmityUserProfilePageBehavior.goToChangeAvatarPage(context);
+        }
+
+        goToChangeAvatarPage?.(context);
       },
       goToBlockedUsersPage() {
         if (pageBehavior?.AmityUserProfilePageBehavior?.goToBlockedUsersPage) {

@@ -1,0 +1,174 @@
+/* ImageCropper Component Styles */
+
+/* Main container */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  color: #000000;
+}
+
+/* Cropper section */
+.cropperSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Cropper container */
+.cropperContainer {
+  position: relative;
+  width: 9rem; /* 144px */
+  height: 9rem; /* 144px */
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e5e7eb; /* gray-200 */
+}
+
+/* Info section */
+.infoSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+}
+
+/* File info text */
+.fileInfo {
+  font-size: 0.75rem; /* 12px */
+  font-weight: 400;
+  line-height: 1rem;
+}
+
+.fileInfo p {
+  margin: 0;
+}
+
+/* Bold text within info */
+.bold {
+  font-weight: 700;
+}
+
+/* ZoomSlider Styles */
+.zoomControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.zoomBtn {
+  width: 1.5rem; /* 24px */
+  height: 1.5rem; /* 24px */
+  cursor: pointer;
+  color: #000000;
+}
+
+.zoomSlider {
+  flex-grow: 1;
+  cursor: pointer;
+  height: 0.125rem; /* 2px */
+  width: 10rem; /* 160px */
+  appearance: none;
+  background: #000000;
+  border-radius: 9999px;
+  outline: none;
+}
+
+/* WebKit browsers */
+.zoomSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.75rem; /* 12px */
+  height: 0.75rem; /* 12px */
+  background: #000000;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* Firefox */
+.zoomSlider::-moz-range-thumb {
+  width: 0.75rem; /* 12px */
+  height: 0.75rem; /* 12px */
+  background: #000000;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* PolicyNotice Styles */
+.policyNotice {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 0.75rem; /* 12px */
+  text-align: center;
+}
+
+.checkboxContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.checkboxWrapper {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.checkboxText {
+  text-align: left;
+}
+
+.checkboxText p {
+  margin: 0;
+}
+
+/* Checkbox custom styles */
+.checkbox {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #d1d5db; /* gray-300 */
+  border-radius: 0.25rem;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.checkbox:checked {
+  background-color: #000000;
+  border-color: #000000;
+}
+
+.checkbox:checked::after {
+  content: '✓';
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .container {
+    gap: 0.75rem;
+  }
+
+  .cropperContainer {
+    width: 8rem; /* 128px */
+    height: 8rem; /* 128px */
+  }
+
+  .fileInfo {
+    font-size: 0.6875rem; /* 11px */
+  }
+
+  .zoomSlider {
+    width: 6rem;
+  }
+}

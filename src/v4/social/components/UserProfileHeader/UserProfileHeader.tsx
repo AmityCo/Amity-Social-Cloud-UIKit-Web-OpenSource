@@ -27,6 +27,9 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import Pencil from '~/v4/icons/Pencil';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { EditUserProfilePage } from '../../pages/EditUserProfilePage/EditUserProfilePage';
+import { Title } from '../../elements';
 
 interface UserProfileHeaderProps {
   user?: Amity.User | null;
@@ -70,11 +73,27 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
   const { unblockUser } = useUserBlock();
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { online } = useNetworkState();
+  const { openPopup } = usePopupContext();
   const notification = useNotifications();
   const { AmityUserProfilePageBehavior } = usePageBehavior();
+  const { isDesktop } = useResponsive();
 
   const onEditProfile = () => {
-    if (user?.userId) {
+    if (!user?.userId) return;
+
+    if (isDesktop) {
+      openPopup({
+        pageId,
+        componentId,
+        header: (
+          <Title
+            pageId="edit_user_profile_page"
+            titleClassName={styles.EditUserProfilePage__title}
+          />
+        ),
+        children: <EditUserProfilePage userId={user?.userId || ''} />,
+      });
+    } else {
       AmityUserProfilePageBehavior?.goToEditUserPage?.({ userId: user.userId });
     }
   };
@@ -100,8 +119,6 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
       </Typography.BodyBold>
     </Button>
   );
-
-  const { isDesktop } = useResponsive();
 
   const onPressFollowingButton = (userId: string) => {
     setDrawerData({

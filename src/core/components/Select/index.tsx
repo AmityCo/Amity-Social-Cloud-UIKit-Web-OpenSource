@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import useKeyboard from '~/core/hooks/useKeyboard';
 import Menu, { MenuItem } from '~/core/components/Menu';
 import Dropdown from '~/core/components/Dropdown';
-import { DoubleChevron } from '~/icons';
+import DoubleChevron from '~/v4/icons/DoubleChevron';
 import styles from './styles.module.css';
 
 const defaultItemRenderer: SelectProps['renderItem'] = ({ value }) => <div>{value}</div>;

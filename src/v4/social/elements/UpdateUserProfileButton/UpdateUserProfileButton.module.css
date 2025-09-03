@@ -18,8 +18,10 @@
   cursor: not-allowed;
 }
 
-.updateUserProfileButton__text {
-  color: var(--asc-color-white);
+.updateUserProfileButton__text,
+.cancelUpdateUserProfileButton__text {
+  color: var(--asc-color-black);
+  font-weight: 700;
 }
 
 .cancelUpdateUserProfileButton {
@@ -36,6 +38,13 @@
   cursor: not-allowed;
 }
 
-.cancelUpdateUserProfileButton__text {
-  color: var(--asc-color-black);
+@media (width >=48em) {
+  .updateUserProfileActionsContainer {
+    flex-direction: row-reverse;
+  }
+
+  .updateUserProfileButton,
+  .cancelUpdateUserProfileButton {
+    max-width: 7.5rem;
+  }
 }

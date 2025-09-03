@@ -23,6 +23,7 @@ import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelection
 import CommunityFeed from '~/social/pages/CommunityFeed';
 import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
 import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
+import { ChangeAvatarPage } from '~/v4/social/pages/ChangeAvatarPage';
 import CommunityEditPage from '~/social/pages/CommunityEdit';
 import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
 import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
@@ -157,6 +158,15 @@ const Application = () => {
         )}
         {page.type === PageTypes.EditUserProfilePage && (
           <EditUserProfilePage userId={page.context.userId} />
+        )}
+        {page.type === PageTypes.ChangeAvatarPage && (
+          <ChangeAvatarPage
+            userId={page.context.userId}
+            image={page.context.selectedFile || null}
+            pageId={page.context.pageId || 'change_avatar_page'}
+            onBack={page.context.onBack}
+            onImageUploaded={page.context.onImageUploaded}
+          />
         )}
         {page.type === PageTypes.UserRelationshipPage && (
           <UserRelationshipPage

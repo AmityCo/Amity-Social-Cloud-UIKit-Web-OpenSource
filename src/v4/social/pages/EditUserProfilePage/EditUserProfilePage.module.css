@@ -14,18 +14,23 @@
 }
 
 .editUserProfilePage__avatarContainer {
-  width: 4rem;
-  height: 4rem;
+  width: 5rem;
+  height: 5rem;
   position: relative;
   border-radius: 50%;
-  overflow: hidden;
   margin: 0 auto;
 }
 
 .editUserProfilePage__avatar {
-  width: 7.5rem;
-  height: 7.5rem;
+  width: 5rem;
+  height: 5rem;
   object-fit: cover;
+}
+
+.editUserProfilePage__avatarEditButton {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .editUserProfilePage__avatarTextContainer {
@@ -268,6 +273,10 @@
 @media (width >=48em) {
   .editUserProfilePage {
     background-color: transparent;
+    height: 80dvh;
+    width: 30rem;
+    overflow-y: scroll;
+    padding: 1.5rem 1rem 6rem;
   }
 
   .editUserProfilePage__container {
@@ -294,8 +303,8 @@
   }
 
   .editUserProfilePage__avatarContainer {
-    width: 7.5rem;
-    height: 7.5rem;
+    width: 5rem;
+    height: 5rem;
     margin: 0 auto;
   }
 

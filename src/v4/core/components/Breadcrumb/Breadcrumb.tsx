@@ -50,6 +50,8 @@ const getPageLabel = (pageType: string, context: any, activeTab?: HomePageTab): 
       return context?.mode === 'edit' ? 'Edit Post' : 'Create Post';
     case PageTypes.EditUserProfilePage:
       return 'Edit Profile';
+    case PageTypes.ChangeAvatarPage:
+      return 'Change Avatar';
     case PageTypes.UserRelationshipPage:
       return 'Relationships';
     case PageTypes.BlockedUsersPage:

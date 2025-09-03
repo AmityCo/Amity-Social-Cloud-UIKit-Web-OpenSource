@@ -33,6 +33,7 @@ export enum PageTypes {
   CommunitySetupPage = 'CommunitySetupPage',
   UserProfilePage = 'UserProfilePage',
   EditUserProfilePage = 'EditUserProfilePage',
+  ChangeAvatarPage = 'ChangeAvatarPage',
   UserRelationshipPage = 'UserRelationshipPage',
   BlockedUsersPage = 'BlockedUsersPage',
   UserPendingFollowRequestPage = 'UserPendingFollowRequestPage',
@@ -113,6 +114,17 @@ type Page =
   | { type: PageTypes.CommunityProfilePage; context: { communityId: string; page?: number } }
   | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }
   | { type: PageTypes.EditUserProfilePage; context: { userId: string } }
+  | {
+      type: PageTypes.ChangeAvatarPage;
+      context: {
+        userId: string;
+        image: Amity.File<'image'> | null;
+        selectedFile?: File | null;
+        pageId?: string;
+        onBack?: () => void;
+        onImageUploaded?: (uploadedImage: Amity.File<'image'>) => void;
+      };
+    }
   | {
       type: PageTypes.UserRelationshipPage;
       context: { userId: string; selectedTab: UserRelationshipPageTabs };
@@ -280,6 +292,14 @@ type ContextValue = {
   onBack: (page?: number) => void;
   goToUserProfilePage: (userId: string) => void;
   goToEditUserPage: (userId: string) => void;
+  goToChangeAvatarPage: (context: {
+    userId: string;
+    image: Amity.File<'image'> | null;
+    selectedFile?: File | null;
+    pageId?: string;
+    onBack?: () => void;
+    onImageUploaded?: (uploadedImage: Amity.File<'image'>) => void;
+  }) => void;
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
   goToBlockedUsersPage: () => void;
@@ -401,6 +421,7 @@ let defaultValue: ContextValue = {
   onMessageUser: (userId: string) => {},
   goToUserProfilePage: (userId: string) => {},
   goToEditUserPage: (userId: string) => {},
+  goToChangeAvatarPage: (context: { userId: string; image: Amity.File<'image'> | null }) => {},
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
@@ -493,6 +514,10 @@ if (process.env.NODE_ENV !== 'production') {
     goToUserProfilePage: (userId) =>
       console.log(`NavigationContext goToUserProfilePage(${userId})`),
     goToEditUserPage: (userId) => console.log(`NavigationContext goToEditUserPage(${userId})`),
+    goToChangeAvatarPage: (context) =>
+      console.log(
+        `NavigationContext goToChangeAvatarPage(${context.userId}, ${context.image}, ${context.selectedFile})`,
+      ),
     goToUserRelationshipPage: (userId, selectedTab) =>
       console.log(`NavigationContext goToUserRelationshipPage(${userId}, ${selectedTab})`),
     goToPendingFollowRequestPage: () =>
@@ -604,6 +629,7 @@ interface NavigationProviderProps {
   goToCommunityCreatePage?: () => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
+  onChangeAvatar?: (userId: string, image: Amity.File<'image'> | null) => void;
   onMessageUser?: (userId: string) => void;
   onBack?: (page?: number) => void;
   //V3 functions
@@ -664,6 +690,7 @@ export default function NavigationProvider({
   onCommunityCreated,
   onEditCommunity,
   onEditUser,
+  onChangeAvatar,
   onMessageUser,
   onBack,
 }: NavigationProviderProps) {
@@ -824,6 +851,28 @@ export default function NavigationProvider({
       pushPage(next);
     },
     [onChangePage, onEditUser, pushPage],
+  );
+
+  const goToChangeAvatarPage = useCallback(
+    (context) => {
+      const next = {
+        type: PageTypes.ChangeAvatarPage,
+        context: {
+          userId: context.userId,
+          image: context.image,
+          selectedFile: context.selectedFile,
+          pageId: context.pageId,
+          onBack: context.onBack,
+          onImageUploaded: context.onImageUploaded,
+        },
+      };
+
+      if (onChangePage) return onChangePage(next);
+      if (onChangeAvatar) return onChangeAvatar(context.userId, context.image);
+
+      pushPage(next);
+    },
+    [onChangePage, onChangeAvatar, pushPage],
   );
 
   const goToUserRelationshipPage = useCallback(
@@ -1397,6 +1446,7 @@ export default function NavigationProvider({
         goToUserProfilePage,
         goToPostDetailPage,
         goToEditUserPage,
+        goToChangeAvatarPage,
         goToSocialGlobalSearchPage,
         goToCommunityProfilePage,
         goToViewStoryPage,
