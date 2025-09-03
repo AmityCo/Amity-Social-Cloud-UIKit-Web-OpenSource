@@ -145,11 +145,10 @@ const SettingPage: React.FC = () => {
 
   useEffect(() => {
     if (isDesktop && selectedSetting !== 'settings') {
-      const headercontent = <h1>{getPageTitle()}</h1>;
       const bodycontent = renderChosenSetting();
       openPopup({
         view: 'desktop',
-        header: headercontent,
+        header: getPageTitle(),
         children: bodycontent,
         onClose: ({ close }) => {
           setSelectedSetting('settings'); //handle thecorrect function and add it to the onclose popup  with proper service when ready

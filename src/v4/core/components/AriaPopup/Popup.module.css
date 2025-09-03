@@ -66,8 +66,12 @@
 }
 
 .popup__header__title {
-  font-size: 1.25rem;
-  color: var(--asc-color-white);
+  color: var(--component-modal-header-copy-default, #fff);
+  font-family: var(--typography-scale-heading-h3-family, Mulish);
+  font-size: var(--typography-scale-heading-h3-size, 1.125rem);
+  font-style: normal;
+  font-weight: 800;
+  line-height: var(--typography-scale-heading-h3-line-height, 1.25rem);
 }
 
 .popup__header__closeButton {
