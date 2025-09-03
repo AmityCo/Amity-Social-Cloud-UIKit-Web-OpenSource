@@ -4,7 +4,7 @@ import { useAmityElement, useAmityPage } from '~/v4/core/hooks/uikit';
 import styles from './PendingRequestPage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useSDK } from '~/v4/core/hooks/useSDK';
-import { BackButton, Title } from '~/v4/social/elements';
+import { BackButton, Title, PostsTabDescription } from '~/v4/social/elements';
 import { SecondaryTab } from '~/v4/core/components/SecondaryTab';
 import { JoinRequestContent } from '~/v4/social/components/JoinRequestContent';
 import { PendingPostList } from '~/v4/social/components/PendingPostList';
@@ -115,6 +115,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
       // - No reviewing posts left AND there are join requests to show
       if (reviewingPosts.length === 0 && joinRequestsCount > 0) {
         setActiveTab('join_requests_button_tab');
+      } else {
+        setActiveTab('posts_button_tab');
       }
     } else if (activeTab === 'join_requests_button_tab') {
       // If currently on join requests tab, only switch to posts tab when:
@@ -145,14 +147,17 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
       content: () => (
         <>
           <div className={styles.pendingPostsPage__list}>
-            <PendingPostList
-              reviewingPosts={reviewingPosts}
-              pageId={pageId}
-              canReviewCommunityPosts={canReviewCommunityPosts}
-              refresh={refresh}
-            />
+            {!isLoading && (
+              <PendingPostList
+                reviewingPosts={reviewingPosts}
+                pageId={pageId}
+                canReviewCommunityPosts={canReviewCommunityPosts}
+                refresh={refresh}
+              />
+            )}
+            {isLoading && <PostsTabDescription pageId={pageId} componentId="pending_post_list" />}
           </div>
-          {isLoading && reviewingPosts && reviewingPosts.length > 0 && (
+          {isLoading && (
             <div className={styles.pendingRequestsPage__skeletonContainer}>
               {Array.from({ length: 3 }).map((_, index) => (
                 <UserListSkeleton key={`loading-more-posts-${index}`} />
@@ -165,8 +170,8 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
     });
   }
 
-  // Only add the join requests tab if the user has permission to review community posts
-  if (community.requiresJoinApproval && canReviewCommunityPosts) {
+  // Only add the join requests tab if the user has permission to review community posts AND there are join requests
+  if (community.requiresJoinApproval && canReviewCommunityPosts && joinRequestsCount > 0) {
     visibleTabs.push({
       value: 'join_requests_button_tab',
       label: `${joinRequestsTab?.config?.text} (${renderAmouts(joinRequestsCount)})`,
@@ -197,9 +202,46 @@ export const PendingRequestPage = ({ community }: PendingRequestPageProps) => {
 
   const tabs = visibleTabs;
 
-  // If no tabs are visible, don't render anything
+  // If no tabs are visible, render the posts tab (PendingPostList) as fallback
   if (visibleTabs.length === 0) {
-    return null;
+    return (
+      <div
+        className={styles.pendingRequestsPage__container}
+        style={themeStyles}
+        data-amity-accessibility-id={accessibilityId}
+      >
+        <div className={styles.pendingRequestsPage__topBar}>
+          <BackButton pageId={pageId} onPress={() => onBack()} />
+          <div className={styles.pendingRequestsPage__titleWrap}>
+            <Title pageId={pageId} titleClassName={styles.pendingRequestsPage__title} />
+          </div>
+          <div className={styles.pendingRequestsPage__emptyDiv} />
+        </div>
+        <div className={styles.pendingRequestsPage__content}>
+          <div className={styles.pendingPostsPage__list}>
+            {!isLoading && (
+              <PendingPostList
+                reviewingPosts={reviewingPosts}
+                pageId={pageId}
+                canReviewCommunityPosts={canReviewCommunityPosts}
+                refresh={refresh}
+              />
+            )}
+          </div>
+
+          {isLoading && reviewingPosts && reviewingPosts.length > 0 && (
+            <>
+              <PostsTabDescription pageId={pageId} componentId="pending_post_list" />
+              <div className={styles.pendingRequestsPage__skeletonContainer}>
+                {Array.from({ length: 3 }).map((_, index) => (
+                  <UserListSkeleton key={`loading-more-posts-${index}`} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
   }
 
   return (
