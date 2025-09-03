@@ -782,7 +782,9 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/top_navigation/header_label': {
       text: 'Your Profile',
     },
-
+    'setting_page/top_navigation/header_label': {
+      text: 'Settings',
+    },
     'edit_user_profile_page/*/*': {},
     'edit_user_profile_page/*/back_button': {
       image: 'ArrowLeft',

@@ -57,6 +57,13 @@ export { default as HomeIcon } from './Home';
 export { default as NotificationBell } from './NotificationBell';
 export { default as ChatBubbleIcon } from './ChatBubbleIcon';
 export { default as GearIcon } from './GearIcon';
+export { default as ShareIcon } from './ShareIcon';
+export { default as ChatBubbleDots } from './ChatBubbleDots';
+export { default as UserSettingsIcon } from './UserSettingsIcon';
+export { default as UserLockIcon } from './UserLockIcon';
+export { default as EditIcon } from './EditIcon';
+export { default as PageIcon } from './PageIcon';
+export { default as AssistanceIcon } from './AssistanceIcon';
 
 // files
 export { default as AudioFile } from './files/Audio';

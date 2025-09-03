@@ -1,0 +1,7 @@
+.topNavigation {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
