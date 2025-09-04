@@ -9,7 +9,6 @@ import {
   AmityPostComposerCreateOptions,
   CreatePostParams,
 } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
-import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { CreateNewPostButton } from '~/v4/social/elements/CreateNewPostButton';
@@ -44,6 +43,7 @@ import { isAmityFile } from '~/v4/utils/checkFileType';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { TextArea } from '~/v4/core/components/TextField';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 export function CreatePost({
   community,
@@ -69,6 +69,7 @@ export function CreatePost({
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { closePopup } = usePopupContext();
+  const { setVideoThumbnail } = useLayoutContext();
 
   const { online } = useNetworkState();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
@@ -133,6 +134,16 @@ export function CreatePost({
 
     onSuccess: (response) => {
       const post = response.data;
+
+      setVideoThumbnail({
+        postId: post.postId,
+        videos: files
+          .filter(({ file }) => file.type === 'video')
+          .map(({ file, thumbnailVideo }) => ({
+            fileId: isAmityFile(file) ? file.fileId : '',
+            thumbnailUrl: thumbnailVideo,
+          })),
+      });
 
       const isModerator =
         (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;

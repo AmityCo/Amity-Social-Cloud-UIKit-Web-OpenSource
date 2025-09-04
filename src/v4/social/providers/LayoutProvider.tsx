@@ -9,6 +9,14 @@ import {
   LinkToPost,
 } from '~/v4/social/hooks';
 
+type LocalVideoPost = {
+  postId: string;
+  videos: {
+    fileId: string;
+    thumbnailUrl: string | undefined;
+  }[];
+};
+
 type LayoutContextType = {
   activeTab: HomePageTab;
   setActiveTab: (tab: HomePageTab) => void;
@@ -19,6 +27,8 @@ type LayoutContextType = {
   invitationNotificationTray: InvitationNotificationTray;
   linkToPost: LinkToPost | null;
   setLinkToPost: (linkToPost: LinkToPost | null) => void;
+  videoThumbnail: LocalVideoPost | undefined;
+  setVideoThumbnail: React.Dispatch<React.SetStateAction<LocalVideoPost | undefined>>;
 };
 
 const LayoutContext = createContext<LayoutContextType>({
@@ -31,6 +41,8 @@ const LayoutContext = createContext<LayoutContextType>({
   invitationNotificationTray: initialInvitationNotificationTray,
   linkToPost: null,
   setLinkToPost: () => {},
+  videoThumbnail: undefined,
+  setVideoThumbnail: () => {},
 });
 
 export const useLayoutContext = () => {
@@ -49,6 +61,7 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);
   const invitationNotificationTray = useInvitationNotificationTray();
   const { linkToPost, setLinkToPost } = useLinkToPost();
+  const [videoThumbnail, setVideoThumbnail] = useState<LocalVideoPost | undefined>(undefined);
 
   return (
     <LayoutContext.Provider
@@ -62,6 +75,8 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
         invitationNotificationTray,
         linkToPost,
         setLinkToPost,
+        videoThumbnail,
+        setVideoThumbnail,
       }}
     >
       {children}
