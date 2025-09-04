@@ -72,7 +72,7 @@ export function UserAvatar({
       >
         <img
           src={userImage}
-          data-testid={accessibilityId}
+          data-testid={`${accessibilityId}-${user?.userId}`}
           className={clsx(styles.userAvatar__img, className)}
         />
         {isShowModeratorBadge && <Badge className={styles.userAvatar__badge} />}
@@ -82,6 +82,7 @@ export function UserAvatar({
 
   return (
     <Button
+      data-testid={`${accessibilityId}-${user?.userId}`}
       className={clsx(styles.userAvatar__placeholder, className)}
       onPress={() => handleAvatarClick()}
     >
