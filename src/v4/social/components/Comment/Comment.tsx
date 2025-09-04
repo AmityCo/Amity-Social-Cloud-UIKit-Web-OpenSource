@@ -280,8 +280,9 @@ export const Comment = ({
             userId={comment.userId}
             shouldRedirectToUserProfile
           />
-          <div className={styles.postComment__details}>
+          <div className={styles.postComment__details} data-testid="post-comment-details">
             <Button
+              data-testid="post-comment-button-content"
               variant="default"
               className={styles.postComment__content}
               data-has-reaction={reactionsCount > 0}

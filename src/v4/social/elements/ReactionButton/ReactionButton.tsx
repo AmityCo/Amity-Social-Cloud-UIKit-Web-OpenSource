@@ -157,6 +157,7 @@ export function ReactionButton({
     if (customReaction) {
       return (
         <img
+          data-testid={`${customReaction.name}-button`}
           src={customReaction.image}
           alt={customReaction.name}
           className={clsx(styles.reactButton__icon, reactButtonClassName)}
@@ -286,6 +287,8 @@ export function ReactionButton({
         handleQuickReaction();
       }}
       role="button"
+      tabIndex={0}
+      aria-label="Reaction Button"
       {...longPressEvent}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleCustomMouseLeave}
@@ -303,6 +306,9 @@ export function ReactionButton({
       onMouseUp={handleMouseUp}
       className={styles.reactionButton__wrapper}
       data-is-clip={isClipReaction}
+      role="button"
+      tabIndex={0}
+      aria-label="Reaction Button"
     >
       <Button
         variant="default"

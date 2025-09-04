@@ -56,6 +56,7 @@ export const PollSingleAnswer: FC<PollSingleAnswerProps> = ({
           <Typography.BodyBold>{answer.data}</Typography.BodyBold>
         ),
       }))}
+      testId="poll-single-answer-options"
     />
   );
 };

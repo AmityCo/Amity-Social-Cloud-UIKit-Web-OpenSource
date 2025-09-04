@@ -162,6 +162,7 @@ export const PollContent: FC<PollContentProps> = ({
               mutateVotePoll({ pollId: poll.pollId, answerIds: answers });
             }}
             isDisabled={isVoteButtonDisabled}
+            data-testid="poll-vote-button"
           >
             Vote
           </Button>

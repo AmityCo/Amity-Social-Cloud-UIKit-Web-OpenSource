@@ -22,6 +22,7 @@ type RadioGroupProps = $RadioGroupProps & {
     onIconClick?: (value: string) => void;
     isDisabled?: boolean;
   }[];
+  testId?: string;
 };
 
 export function RadioGroup({
@@ -33,6 +34,7 @@ export function RadioGroup({
   labelClassName,
   radioContainerClassname,
   isImageOption,
+  testId,
   ...props
 }: RadioGroupProps) {
   return (
@@ -43,45 +45,49 @@ export function RadioGroup({
     >
       {label && <Label className={labelClassName}>{label}</Label>}
       <div className={radioContainerClassname} data-image-option={isImageOption}>
-        {radios.map(({ value, label, props: radioItemProps, icon, onIconClick, isDisabled }) => (
-          <div key={value} className={styles.radioItemWrapper}>
-            {!icon && (
-              <Radio
-                {...radioProps}
-                {...radioItemProps}
-                value={value}
-                label={label}
-                isDisabled={isDisabled || radioProps?.isDisabled}
-                data-image-option={isImageOption}
-              />
-            )}
-            {icon && (
-              <div className={styles.iconRadioWrapper}>
+        {radios.map(
+          ({ value, label, props: radioItemProps, icon, onIconClick, isDisabled }, index) => (
+            <div key={value} className={styles.radioItemWrapper}>
+              {!icon && (
                 <Radio
                   {...radioProps}
                   {...radioItemProps}
-                  isDisabled={isDisabled || radioProps?.isDisabled}
                   value={value}
+                  label={label}
+                  isDisabled={isDisabled || radioProps?.isDisabled}
                   data-image-option={isImageOption}
-                  label={
-                    <>
-                      <Button
-                        onPress={() => onIconClick?.(value)}
-                        className={styles.iconWrapper}
-                        variant="text"
-                        isDisabled={isDisabled}
-                      >
-                        {icon}
-                      </Button>
-                      <span>{label}</span>
-                    </>
-                  }
-                  className={styles.iconRadio}
+                  data-testid={`${testId}-${index}`}
                 />
-              </div>
-            )}
-          </div>
-        ))}
+              )}
+              {icon && (
+                <div className={styles.iconRadioWrapper}>
+                  <Radio
+                    {...radioProps}
+                    {...radioItemProps}
+                    isDisabled={isDisabled || radioProps?.isDisabled}
+                    value={value}
+                    data-image-option={isImageOption}
+                    data-testid={`${testId}-${index}`}
+                    label={
+                      <>
+                        <Button
+                          onPress={() => onIconClick?.(value)}
+                          className={styles.iconWrapper}
+                          variant="text"
+                          isDisabled={isDisabled}
+                        >
+                          {icon}
+                        </Button>
+                        <span>{label}</span>
+                      </>
+                    }
+                    className={styles.iconRadio}
+                  />
+                </div>
+              )}
+            </div>
+          ),
+        )}
         {errorMessage && <FieldError>{errorMessage}</FieldError>}
       </div>
     </$RadioGroup>

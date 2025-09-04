@@ -30,6 +30,7 @@ export const PollMultipleAnswer: FC<PollMultipleAnswerProps> = ({
 
   return (
     <CheckboxGroup
+      testId="poll-multiple-answer-options"
       onChange={handleAnswerChange}
       value={selected}
       labelClassName={styles.pollContent__pollLabel}

@@ -83,7 +83,10 @@ export const TextContent = ({
       ) : (
         <>
           {title && (
-            <Typography.TitleBold className={styles.textContent__postTitle}>
+            <Typography.TitleBold
+              data-testid="poll-post-title"
+              className={styles.textContent__postTitle}
+            >
               {title}
             </Typography.TitleBold>
           )}
@@ -91,6 +94,7 @@ export const TextContent = ({
             <TextWithMention
               pageId={pageId}
               componentId={componentId}
+              data-testid="poll-post-question"
               data={{ text: text }}
               mentionees={mentionees}
               metadata={{ mentioned, hashtagged }}

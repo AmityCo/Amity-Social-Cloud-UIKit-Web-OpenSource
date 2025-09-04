@@ -59,6 +59,7 @@ export const PollVotedItem: React.FC<PollVotedItemProps> = ({
         votedCountText={renderVoteByText()}
         isOwner={isOwner}
         isTopVoted={isTopVoted}
+        data-testid="poll-image-answer"
       />
     );
 

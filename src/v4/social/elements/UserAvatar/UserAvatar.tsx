@@ -85,8 +85,10 @@ export function UserAvatar({
       data-testid={`${accessibilityId}-${user?.userId}`}
       className={clsx(styles.userAvatar__placeholder, className)}
       onPress={() => handleAvatarClick()}
+      data-testid={`user-avatar-${userId}`}
     >
       <Typography.TitleBold
+        data-testid={`user-avatar-${userId}`}
         className={clsx(styles.userAvatar__placeholder__text, textPlaceholderClassName)}
       >
         {firstChar}

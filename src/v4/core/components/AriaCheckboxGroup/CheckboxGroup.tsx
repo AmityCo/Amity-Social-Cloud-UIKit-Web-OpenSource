@@ -18,6 +18,7 @@ type CheckboxGroupProps = $CheckboxGroupProps & {
   checkboxes: { value: string; label: string | React.ReactNode }[];
   optionContainerClassname?: string;
   isImageOption?: boolean;
+  testId?: string;
 };
 
 export function CheckboxGroup({
@@ -30,6 +31,7 @@ export function CheckboxGroup({
   isImageOption,
   optionContainerClassname,
   alignment = 'row-reverse',
+  testId,
   ...props
 }: CheckboxGroupProps) {
   return (
@@ -37,10 +39,11 @@ export function CheckboxGroup({
       {...props}
       className={clsx(styles.checkboxGroup, className)}
       data-image-option={isImageOption}
+      data-testid={testId}
     >
       {label && <Label className={labelClassName}>{label}</Label>}
       <div className={optionContainerClassname} data-image-option={isImageOption}>
-        {checkboxes.map((checkbox) => (
+        {checkboxes.map((checkbox, index) => (
           <Checkbox
             {...checkbox}
             {...checkboxProps}
@@ -49,6 +52,7 @@ export function CheckboxGroup({
             className={clsx(styles.checkBox, checkboxProps?.className)}
             checkboxIconClassname={checkboxProps?.checkboxIconClassname}
             data-image-option={isImageOption}
+            data-testid={`${testId}-${index}`}
           />
         ))}
       </div>

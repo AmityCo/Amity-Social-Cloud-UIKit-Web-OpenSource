@@ -42,6 +42,7 @@ interface TextWithMentionProps {
   isSearchPost?: boolean;
   seeLessSupport?: boolean;
   seeMoreIsOpen?: boolean;
+  testId?: string;
 }
 
 export const TextWithMention = ({
@@ -64,6 +65,7 @@ export const TextWithMention = ({
   seeMoreIsOpen = false,
   isSearchPost = false,
   seeLessSupport = false,
+  testId,
 }: TextWithMentionProps) => {
   const { goToUserProfilePage, goToSocialGlobalSearchPage } = useNavigation();
   const [isExpanded, setIsExpanded] = useState(seeMoreIsOpen);
@@ -396,7 +398,10 @@ export const TextWithMention = ({
   }, [seeMoreIsOpen]);
 
   return (
-    <Component className={clsx(styles.textWithMention__container, textClassName)}>
+    <Component
+      data-testid={testId}
+      className={clsx(styles.textWithMention__container, textClassName)}
+    >
       {isExpanded ? (
         <>
           {renderText(editorState.root.children)}

@@ -35,7 +35,12 @@ export const CommentReactionDisplay = ({
   );
 
   return (
-    <Button variant="default" className={containerClassName} onPress={onReactionPress}>
+    <Button
+      data-testid="comment-reaction-list-button"
+      variant="default"
+      className={containerClassName}
+      onPress={onReactionPress}
+    >
       {hasReaction ? (
         <div className={styles.commentReactionDisplay__reactions}>
           {sortedReactions.map((item) =>
@@ -45,6 +50,7 @@ export const CommentReactionDisplay = ({
                 src={item.reaction.image}
                 alt={item.reaction.name}
                 className={styles.commentReactionDisplay__icon}
+                data-testid={`${item.reaction.name}-button`}
               />
             ) : (
               <FallbackReaction
@@ -53,12 +59,16 @@ export const CommentReactionDisplay = ({
                 backgroundColor={getComputedStyle(document.documentElement).getPropertyValue(
                   '--asc-color-base-shade3',
                 )}
+                data-testid={`${item.reactionName}-button`}
               />
             ),
           )}
         </div>
       ) : null}
-      <Typography.CaptionBold className={styles.commentReactionDisplay__reactionCount}>
+      <Typography.CaptionBold
+        data-testid="comment-reaction-count"
+        className={styles.commentReactionDisplay__reactionCount}
+      >
         {millify(reactionsCount)}
       </Typography.CaptionBold>
     </Button>
