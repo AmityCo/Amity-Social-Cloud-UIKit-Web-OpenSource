@@ -24,8 +24,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   };
 
   const handleChatClick = () => {
-    window.location.href = '/chat'; // Placeholder for chat navigation, replace with actual navigation logic if needed
-    console.log('Navigate to --> community chat');
+    goToChatPage();
   };
 
   const handleSettingsClick = () => {
@@ -35,7 +34,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   //#endregion
 
   const componentId = 'community_sidebar';
-  const { page, goToSocialHomePage, goToNotificationTrayPage } = useNavigation();
+  const { page, goToSocialHomePage, goToNotificationTrayPage, goToChatPage } = useNavigation();
   const { accessibilityId, themeStyles, config, uiReference, defaultConfig } = useAmityComponent({
     componentId,
     pageId,
@@ -43,7 +42,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   const { currentUserId } = useSDK();
   const isHomeActive = page.type === PageTypes.SocialHomePage;
   const isNotificationsActive = page.type === PageTypes.NotificationTrayPage;
-  const isChatActive = false;
+  const isChatActive = page.type === PageTypes.ChatPage;
   const isSettingsActive = false;
 
   return (

@@ -63,6 +63,7 @@ export enum PageTypes {
   PendingRequestPage = 'PendingRequestPage',
   DraftClipPage = 'DraftClipPage',
   ClipFeedPage = 'ClipFeedPage',
+  ChatPage = 'ChatPage',
 }
 
 type Page =
@@ -274,6 +275,9 @@ type Page =
         targetType?: 'community' | 'user';
         targetId?: string;
       };
+    }
+  | {
+      type: PageTypes.ChatPage;
     };
 
 type ContextValue = {
@@ -400,6 +404,7 @@ type ContextValue = {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => void;
+  goToChatPage: () => void;
 
   //V3 functions
   onClickStory: (
@@ -482,6 +487,7 @@ let defaultValue: ContextValue = {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => {},
+  goToChatPage: () => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -563,9 +569,7 @@ if (process.env.NODE_ENV !== 'production') {
     goToLiveStreamPlayerPage: (context) =>
       console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
-    goToPendingRequestPage: (context) =>
-      console.log(`NavigationContext goToPendingRequestPage(${context})`),
-    goToClipFeedPage: (context) => console.log(`NavigationContext goToClipFeedPage(${context})`),
+    goToChatPage: () => console.log('NavigationContext goToChatPage()'),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -624,6 +628,7 @@ interface NavigationProviderProps {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => void;
+  goToChatPage: () => void;
 
   onCommunityCreated?: (communityId: string) => void;
   goToCommunityCreatePage?: () => void;
@@ -1413,6 +1418,15 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const goToChatPage = useCallback(() => {
+    const next = {
+      type: PageTypes.ChatPage,
+      context: {},
+    };
+
+    pushPage(next);
+  }, [pushPage]);
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1482,8 +1496,7 @@ export default function NavigationProvider({
         goToLiveStreamPlayerPage,
         onClickStory: handleClickStory,
         goToNotificationTrayPage,
-        goToPendingRequestPage,
-        goToClipFeedPage,
+        goToChatPage,
       }}
     >
       <NavigationContextV3.Provider

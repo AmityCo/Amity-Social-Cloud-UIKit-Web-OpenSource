@@ -42,3 +42,4 @@ export { PendingRequestPage } from './PendingRequestPage';
 export { DraftClipPage } from './DraftClipPage';
 
 export { ClipFeedPage } from './ClipFeedPage';
+export { default as ChatPage } from './ChatPage';

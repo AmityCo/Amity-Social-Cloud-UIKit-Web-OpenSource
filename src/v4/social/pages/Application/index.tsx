@@ -10,6 +10,7 @@ import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPa
 import styles from './Application.module.css';
 import {
   AmityDraftStoryPage,
+  ChatPage,
   ClipFeedPage,
   CommunityAddCategoryPage,
   CommunityMembershipPage,
@@ -181,6 +182,7 @@ const Application = () => {
         {page.type === PageTypes.PendingRequestPage && (
           <PendingRequestPage community={page.context.community} />
         )}
+        {page.type === PageTypes.ChatPage && <ChatPage />}
 
         {/* modal as page */}
         {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
