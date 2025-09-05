@@ -370,10 +370,13 @@ export const PollPostComposerPage = ({
     );
     setOptions(updatedOptions);
   };
+
   const updateImageOption = (index: number, value: string) => {
-    const updatedImageOptions = imageOptions.map((option, i) =>
-      i === index ? { ...option, data: value } : option,
-    );
+    const updatedImageOptions = imageOptions.map((option, i) => {
+      const trimValue =
+        value.length > MAX_OPTION_LENGTH ? value.slice(0, MAX_OPTION_LENGTH) : value;
+      return i === index ? { ...option, data: trimValue } : option;
+    });
     setImageOptions(updatedImageOptions);
   };
 
@@ -414,16 +417,10 @@ export const PollPostComposerPage = ({
 
   const isDisabledImagePollSubmitButton =
     isCreating ||
-    textValue.text.trim() === '' ||
     textValue.text.length > MAX_POLL_QUESTION_LENGTH ||
     imageOptions.length < 2 ||
-    imageOptions.filter((option) => option.data.trim().length > 0 && option.fileId).length < 2 ||
-    imageOptions.some((option) => option.data.length > MAX_OPTION_LENGTH) ||
-    imageOptions.some(
-      (option) =>
-        (option.data?.trim().length > 0 && !option.fileId) ||
-        (option.data?.trim().length === 0 && option.fileId),
-    );
+    imageOptions.filter((option) => !!option.fileId).length < 2 ||
+    imageOptions.some((option) => option.data.length > MAX_OPTION_LENGTH);
 
   const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     setCurrentUploadImageIndex(index);
