@@ -6,10 +6,13 @@ import RecentChat from '~/chat/components/RecentChat';
 import Chat from '~/chat/components/Chat';
 import ChatDetails from '~/chat/components/ChatDetails';
 
-import { ApplicationContainer } from './styles';
+import styles from './styles.module.css';
+
 import CreateChatModal from '~/chat/components/Chat/CreateChatModal';
 import EditChatMemberModal from '~/chat/components/ChatDetails/EditChatMemberModal';
 import { useNotifications } from '~/core/providers/NotificationProvider';
+import { Typography } from '~/v4/core/components';
+import NewChat from '~/v4/icons/NewChat';
 
 type PartialChannel = Pick<Amity.Channel, 'channelId' | 'type'>;
 
@@ -77,43 +80,51 @@ const ChatApplication = ({
   }, [defaultChannelId]);
 
   return (
-    <ApplicationContainer>
-      <RecentChat
-        selectedChannelId={currentChannelData?.channelId}
-        membershipFilter={membershipFilter}
-        onChannelSelect={handleChannelSelect}
-        onAddNewChannelClick={() => {
-          openChatModal();
-          onAddNewChannel?.();
-        }}
-      />
-      {currentChannelData ? (
-        <Chat
-          channelId={currentChannelData.channelId}
-          shouldShowChatDetails={shouldShowChatDetails}
-          onChatDetailsClick={showChatDetails}
-        />
-      ) : null}
-      {shouldShowChatDetails && currentChannelData ? (
-        <ChatDetails
-          channelId={currentChannelData.channelId}
-          leaveChat={leaveChat}
-          onEditChatMemberClick={(newData) => {
-            setIsEditChatMemberModalOpened(true);
-            onEditChatMember?.(newData);
+    <div className={styles.applicationContainer}>
+      <div className={styles.chatHeader}>
+        <Typography.SubTitleBold>Community Chat</Typography.SubTitleBold>
+        <div className={styles.newChatContainer}>
+          <NewChat className={styles.newChatIcon} />
+        </div>
+      </div>
+      <div className={styles.chatContainer}>
+        <RecentChat
+          selectedChannelId={currentChannelData?.channelId}
+          membershipFilter={membershipFilter}
+          onChannelSelect={handleChannelSelect}
+          onAddNewChannelClick={() => {
+            openChatModal();
+            onAddNewChannel?.();
           }}
-          onMemberSelect={onMemberSelect}
-          onClose={hideChatDetails}
         />
-      ) : null}
-      {isChatModalOpened ? <CreateChatModal onClose={() => setChatModalOpened(false)} /> : null}
-      {isEditChatMemberModalOpened && currentChannelData ? (
-        <EditChatMemberModal
-          channelId={currentChannelData?.channelId}
-          onClose={() => setIsEditChatMemberModalOpened(false)}
-        />
-      ) : null}
-    </ApplicationContainer>
+        {currentChannelData ? (
+          <Chat
+            channelId={currentChannelData.channelId}
+            shouldShowChatDetails={false}
+            onChatDetailsClick={showChatDetails}
+          />
+        ) : null}
+        {shouldShowChatDetails && currentChannelData ? (
+          <ChatDetails
+            channelId={currentChannelData.channelId}
+            leaveChat={leaveChat}
+            onEditChatMemberClick={(newData) => {
+              setIsEditChatMemberModalOpened(true);
+              onEditChatMember?.(newData);
+            }}
+            onMemberSelect={onMemberSelect}
+            onClose={hideChatDetails}
+          />
+        ) : null}
+        {isChatModalOpened ? <CreateChatModal onClose={() => setChatModalOpened(false)} /> : null}
+        {isEditChatMemberModalOpened && currentChannelData ? (
+          <EditChatMemberModal
+            channelId={currentChannelData?.channelId}
+            onClose={() => setIsEditChatMemberModalOpened(false)}
+          />
+        ) : null}
+      </div>
+    </div>
   );
 };
 

@@ -4,7 +4,7 @@ import trim from 'lodash/trim';
 import CheckCircleIcon from '~/icons/CheckCircle';
 import UserAvatar from '~/chat/components/UserAvatar';
 
-import { UserContainer, AvatarContainer, ProfileContainer, CheckIconWrapper } from './styles';
+import styles from './styles.module.css';
 
 const DEFAULT_DISPLAY_NAME = 'Anonymous';
 
@@ -30,17 +30,19 @@ const UserItem = ({
   const name = `${firstname} ${lastname}`;
 
   return (
-    <UserContainer onClick={onClick}>
-      <AvatarContainer>
+    <div className={styles.userContainer} onClick={onClick}>
+      <div className={styles.avatarContainer}>
         <UserAvatar avatarCustomUrl={avatarCustomUrl} avatarFileId={avatarFileId} />
-      </AvatarContainer>
-      <ProfileContainer>{displayName || trim(name) || DEFAULT_DISPLAY_NAME}</ProfileContainer>
+      </div>
+      <div className={styles.profileContainer}>
+        {displayName || trim(name) || DEFAULT_DISPLAY_NAME}
+      </div>
       {isSelected && (
-        <CheckIconWrapper>
+        <div className={styles.checkIconWrapper}>
           <CheckCircleIcon />
-        </CheckIconWrapper>
+        </div>
       )}
-    </UserContainer>
+    </div>
   );
 };
 

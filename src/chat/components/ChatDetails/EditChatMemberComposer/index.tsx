@@ -6,27 +6,16 @@ import { FormattedMessage } from 'react-intl';
 import Button from '~/core/components/Button';
 import UserSelector from '~/social/components/UserSelector';
 
-import {
-  FormBlockBody,
-  FormBlockContainer,
-  EditChatMemberComposerContainer,
-  Field,
-  Label,
-  Footer,
-  Form,
-  FormBody,
-  SubmitButton,
-  ErrorMessage,
-} from './styles';
+import styles from './styles.module.css';
 import { ChannelRepository } from '@amityco/ts-sdk';
 import { isNonNullable } from '~/helpers/utils';
 import useChannelMembersCollection from '~/chat/hooks/collections/useChannelMembersCollection';
 import { useNotifications } from '~/core/providers/NotificationProvider';
 
 const FormBlock = ({ children }: { children: ReactNode }) => (
-  <FormBlockContainer>
-    <FormBlockBody>{children}</FormBlockBody>
-  </FormBlockContainer>
+  <div className={styles.formBlockContainer}>
+    <div className={styles.formBlockBody}>{children}</div>
+  </div>
 );
 
 interface EditChatMemberComposerProps {
@@ -108,14 +97,14 @@ const EditChatMemberComposerForm = ({
   const formBodyRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <EditChatMemberComposerContainer>
-      <Form className={className} onSubmit={handleSubmit(validateAndSubmit)}>
-        <FormBody ref={formBodyRef}>
+    <div className={styles.editChatMemberComposerContainer}>
+      <form className={className} onSubmit={handleSubmit(validateAndSubmit)}>
+        <div className={styles.formBody} ref={formBodyRef}>
           <FormBlock>
-            <Field>
-              <Label className="required">
+            <div className={styles.field}>
+              <label className={`${styles.label} required`}>
                 <FormattedMessage id="chatComposer.addUsers" />
-              </Label>
+              </label>
               <Controller
                 name="userIds"
                 render={({ field: { ref, ...rest } }) => (
@@ -127,12 +116,12 @@ const EditChatMemberComposerForm = ({
                 )}
                 control={control}
               />
-              <ErrorMessage errors={errors} name="userIds" />
-            </Field>
+              <div className={styles.errorMessage} data-errors={errors} data-name="userIds" />
+            </div>
           </FormBlock>
-        </FormBody>
+        </div>
 
-        <Footer>
+        <div className={styles.footer}>
           <Button
             onClick={(e) => {
               e.preventDefault();
@@ -142,12 +131,16 @@ const EditChatMemberComposerForm = ({
           >
             <FormattedMessage id="cancel" />
           </Button>
-          <SubmitButton data-testid="edit-chat-members-composer-submit-button" disabled={disabled}>
+          <button
+            className={styles.submitButton}
+            data-testid="edit-chat-members-composer-submit-button"
+            disabled={disabled}
+          >
             <FormattedMessage id="save" />
-          </SubmitButton>
-        </Footer>
-      </Form>
-    </EditChatMemberComposerContainer>
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

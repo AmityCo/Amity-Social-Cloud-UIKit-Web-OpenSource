@@ -1,16 +1,11 @@
 import React, { useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { FormattedMessage } from 'react-intl';
+import { CreateChat } from '~/icons';
 
 import ChatItem from '~/chat/components/ChatItem';
 
-import {
-  CreateNewChatIcon,
-  RecentContainer,
-  RecentHeader,
-  RecentHeaderLabel,
-  InfiniteScrollContainer,
-} from './styles';
+import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useChannelsCollection from '~/chat/hooks/collections/useChannelsCollection';
 import { ChannelRepository, SubChannelRepository } from '@amityco/ts-sdk';
@@ -49,17 +44,8 @@ const RecentChat = ({
   };
 
   return (
-    <RecentContainer>
-      <RecentHeader>
-        <RecentHeaderLabel>
-          <FormattedMessage id="chat.chats" />
-        </RecentHeaderLabel>
-        {/* this component work only with Callback and User selector on Eko Side, during Personal Mode
-        development selector was not add as there is not specific suitable design for UI Kit.
-        Need to be done internaly by ASC when needed. */}
-        <CreateNewChatIcon data-testid="chat-create-chat-button" onClick={onAddNewChannelClick} />
-      </RecentHeader>
-      <InfiniteScrollContainer ref={containerRef} data-testid="chat-list">
+    <div className={styles.recentContainer}>
+      <div className={styles.infiniteScrollContainer} ref={containerRef} data-testid="chat-list">
         {containerRef.current ? (
           <InfiniteScroll
             scrollableTarget={containerRef.current}
@@ -68,7 +54,6 @@ const RecentChat = ({
             next={loadMore}
             loader={hasMore && <span key={0}>Loading...</span>}
             dataLength={channels?.length || 0}
-            height={containerRef.current.clientHeight}
           >
             {Array.isArray(channels) &&
               channels.map((channel) => (
@@ -84,8 +69,8 @@ const RecentChat = ({
               ))}
           </InfiniteScroll>
         ) : null}
-      </InfiniteScrollContainer>
-    </RecentContainer>
+      </div>
+    </div>
   );
 };
 

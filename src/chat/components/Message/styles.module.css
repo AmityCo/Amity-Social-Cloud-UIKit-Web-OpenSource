@@ -1,0 +1,153 @@
+.editingContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.editingInput {
+  height: 34px;
+  padding: 6px;
+  margin: 5px;
+  outline: none;
+  border: 1px solid #e3e4e8;
+  border-radius: 4px;
+}
+
+.saveIcon {
+  opacity: 0.7;
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+.closeIcon {
+  opacity: 0.7;
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+.messageOptionsIcon {
+  opacity: 0.5;
+  margin: 0 5px;
+  cursor: pointer;
+  width: 11px;
+  height: 11px;
+}
+
+.avatar {
+  margin-right: auto;
+}
+
+.messageReservedRow {
+  display: flex;
+  width: 100%;
+}
+
+.messageReservedRow.outgoing {
+  justify-content: flex-end;
+}
+
+.messageWrapper {
+  display: flex;
+  max-width: 60%;
+}
+
+.messageContainer {
+  min-width: 265px;
+}
+
+.avatarWrapper {
+  width: 52px;
+  flex-shrink: 0;
+}
+
+.userName {
+  color: var(--color-neutral-main);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.commonMessageBody {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  padding: 8px;
+  word-break: break-word;
+}
+
+.commonMessageBody pre {
+  white-space: pre-wrap;
+}
+
+.generalMessageBody {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  padding: 8px;
+  word-break: break-word;
+}
+
+.generalMessageBody pre {
+  white-space: pre-wrap;
+}
+
+.generalMessageBody.incoming {
+  background: var(--color-neutral-shade4);
+  border-radius: 0px 6px 6px 6px;
+}
+
+.generalMessageBody.outgoing {
+  background: var(--color-primary-main);
+  color: #fff;
+  border-radius: 6px 0px 6px 6px;
+}
+
+.deletedMessageBody {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  padding: 8px;
+  word-break: break-word;
+}
+
+.deletedMessageBody pre {
+  white-space: pre-wrap;
+}
+
+.deletedMessageBody.incoming {
+  text-align: left;
+}
+
+.deletedMessageBody.outgoing {
+  text-align: right;
+}
+
+.unsupportedMessageBody {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+  padding: 8px;
+  word-break: break-word;
+  text-align: center;
+  background: var(--color-neutral-shade4);
+  border-radius: 10px;
+}
+
+.unsupportedMessageBody pre {
+  white-space: pre-wrap;
+}
+
+.messageDate {
+  font-size: 13px;
+  opacity: 0.5;
+  margin-left: auto;
+}
+
+.bottomLine {
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+}

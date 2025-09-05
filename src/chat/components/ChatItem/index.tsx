@@ -3,8 +3,10 @@ import React from 'react';
 import { backgroundImage as userBackgroundImage } from '~/icons/User';
 import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import useChatInfo from '~/chat/hooks/useChatInfo';
+import UserAvatar from '~/chat/components/UserAvatar';
+import SideMenuItem from '~/core/components/SideMenuItem';
 
-import { ChatItemLeft, Title, Avatar, ChatItemContainer, UnreadCount } from './styles';
+import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useChannelSubscription from '~/social/hooks/useChannelSubscription';
 import useChannel from '~/chat/hooks/useChannel';
@@ -36,27 +38,32 @@ const ChatItem = ({ channel, isSelected, onSelect }: ChatItemProps) => {
   const normalizedUnreadCount = getNormalizedUnreadCount(channel?.unreadCount || 0);
 
   return (
-    <ChatItemContainer
+    <SideMenuItem
+      className={styles.chatItemContainer}
       data-testid="chat-item"
       active={isSelected}
-      onClick={(e) => {
+      onClick={(e: React.MouseEvent) => {
         e.stopPropagation();
         if (channel) onSelect({ channelId: channel.channelId, type: channel.type });
       }}
     >
-      <ChatItemLeft>
-        <Avatar
-          avatarUrl={chatAvatar}
-          defaultImage={
-            (channel?.memberCount || 0) > 2 ? communityBackgroundImage : userBackgroundImage
-          }
-        />
-        <Title>{chatName}</Title>
-      </ChatItemLeft>
+      <div className={styles.chatItemLeft}>
+        <div className={styles.avatar}>
+          <UserAvatar
+            avatarUrl={chatAvatar}
+            defaultImage={
+              (channel?.memberCount || 0) > 2 ? communityBackgroundImage : userBackgroundImage
+            }
+          />
+        </div>
+        <div className={styles.title}>{chatName}</div>
+      </div>
       {normalizedUnreadCount && (
-        <UnreadCount data-testid="chat-item-unread-count">{normalizedUnreadCount}</UnreadCount>
+        <div className={styles.unreadCount} data-testid="chat-item-unread-count">
+          {normalizedUnreadCount}
+        </div>
       )}
-    </ChatItemContainer>
+    </SideMenuItem>
   );
 };
 

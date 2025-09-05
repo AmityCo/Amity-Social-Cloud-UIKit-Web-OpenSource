@@ -1,13 +1,8 @@
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
+import { SendMessage } from '~/icons';
 
-import {
-  MessageComposeBarContainer,
-  MessageComposeBarInput,
-  // ImageMessageIcon,
-  // FileMessageIcon,
-  SendMessageIcon,
-} from './styles';
+import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 interface MessageComposeBarProps {
@@ -26,20 +21,26 @@ const MessageComposeBar = ({ onSubmit }: MessageComposeBarProps) => {
   };
 
   return (
-    <MessageComposeBarContainer>
-      <MessageComposeBarInput
+    <div className={styles.messageComposeBarContainer}>
+      <input
+        className={styles.messageComposeBarInput}
         data-testid="message-compose-bar-input"
         type="text"
         value={message}
         placeholder={formatMessage({ id: 'MessageComposeBar.placeholder' })}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
+        onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) =>
+          e.key === 'Enter' && sendMessage()
+        }
       />
-      <SendMessageIcon
+      <SendMessage
+        className={styles.sendMessageIcon}
         data-testid="message-compose-bar-send-message-button"
         onClick={sendMessage}
+        width={28}
+        height={28}
       />
-    </MessageComposeBarContainer>
+    </div>
   );
 };
 

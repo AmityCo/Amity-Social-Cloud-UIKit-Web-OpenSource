@@ -1,0 +1,38 @@
+.createNewChatIcon {
+  width: 24px !important;
+  cursor: pointer;
+  height: 18px;
+}
+
+.recentContainer {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 280px;
+  border-right: 1px solid #e3e4e8;
+  max-height: 100dvh;
+}
+
+.recentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  margin-bottom: 17px;
+  padding-left: 20px;
+  padding-right: 16px;
+}
+
+.recentHeaderLabel {
+  /* theme.typography.title */
+  line-height: 28px;
+  color: var(--color-neutral-shade1);
+}
+
+.infiniteScrollContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

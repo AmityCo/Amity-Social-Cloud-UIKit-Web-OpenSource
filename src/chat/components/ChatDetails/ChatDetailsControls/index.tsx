@@ -1,17 +1,11 @@
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
+import UserRegular from '~/icons/UserRegular';
+import ChevronRight from '~/icons/ChevronRight';
 
 import MenuGroupSetting from './MenuGroupSetting';
-import {
-  MembersIcon,
-  ControlsContainer,
-  SideWrapper,
-  ControlItem,
-  ControlItemLabel,
-  ControlItemState,
-  ControlItemArrowRight,
-} from './styles';
+import styles from './styles.module.css';
 
 interface ChatDetailsControlsProps {
   channelId: string;
@@ -47,30 +41,30 @@ const ChatDetailsControls = ({
   };
 
   return (
-    <ControlsContainer>
-      <ControlItem onClick={showMembers}>
-        <SideWrapper>
-          <MembersIcon />
-          <ControlItemLabel>
+    <div>
+      <div className={styles.controlItem} onClick={showMembers}>
+        <div className={styles.sideWrapper}>
+          <UserRegular className={styles.membersIcon} width={24} height={24} />
+          <div className={styles.controlItemLabel}>
             <FormattedMessage id="tabs.members" />
-          </ControlItemLabel>
-        </SideWrapper>
-        <SideWrapper>
-          {memberCount && <ControlItemState>{memberCount}</ControlItemState>}
-          <ControlItemArrowRight />
-        </SideWrapper>
-      </ControlItem>
+          </div>
+        </div>
+        <div className={styles.sideWrapper}>
+          {memberCount && <span className={styles.controlItemState}>{memberCount}</span>}
+          <ChevronRight className={styles.controlItemArrowRight} width={16} height={12} />
+        </div>
+      </div>
 
       {!isDirectChat && <MenuGroupSetting channelId={channelId} chatName={chatName} />}
 
       {chatType !== 'conversation' ? (
-        <ControlItem onClick={handleLeaveChatClick}>
-          <ControlItemLabel isDanger>
+        <div className={styles.controlItem} onClick={handleLeaveChatClick}>
+          <div className={`${styles.controlItemLabel} ${styles.isDanger}`}>
             <FormattedMessage id="chat.leaveChat" />
-          </ControlItemLabel>
-        </ControlItem>
+          </div>
+        </div>
       ) : null}
-    </ControlsContainer>
+    </div>
   );
 };
 

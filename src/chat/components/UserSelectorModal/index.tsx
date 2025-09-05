@@ -4,17 +4,11 @@ import { useIntl } from 'react-intl';
 import SearchIcon from '~/icons/Search';
 import Modal from '~/core/components/Modal';
 import UIKitInputText from '~/core/components/InputText';
+import { PrimaryButton, SecondaryButton } from '~/core/components/Button';
 
 import { AllUserList, SearchUserList } from './ContactList';
 
-import {
-  PrependIconWrapper,
-  WrapSearch,
-  WrapResult,
-  FooterContainer,
-  OkButton,
-  CancelButton,
-} from './styles';
+import styles from './styles.module.css';
 
 interface UserSelectorModalProps {
   title?: ReactNode;
@@ -71,8 +65,8 @@ const UserSelectorModal = ({
       size="small"
       title={title || formatMessage({ id: 'chat.create.modalTitle' })}
       footer={
-        <FooterContainer>
-          <CancelButton
+        <div className={styles.footerContainer}>
+          <SecondaryButton
             disabled={disabledCancel}
             onClick={() => {
               onCancel();
@@ -80,30 +74,30 @@ const UserSelectorModal = ({
             }}
           >
             {cancelText || formatMessage({ id: 'general.cancel.capital' })}
-          </CancelButton>
-          <OkButton disabled={disabledOk} onClick={onOk}>
+          </SecondaryButton>
+          <PrimaryButton className={styles.okButton} disabled={disabledOk} onClick={onOk}>
             {okText || formatMessage({ id: 'general.done.capital' })}
-          </OkButton>
-        </FooterContainer>
+          </PrimaryButton>
+        </div>
       }
       onCancel={closeModal}
     >
-      <WrapSearch>
+      <div className={styles.wrapSearch}>
         <UIKitInputText
           placeholder={formatMessage({ id: 'userSelector.placeholder' })}
           prepend={
-            <PrependIconWrapper>
+            <span className={styles.prependIconWrapper}>
               <SearchIcon />
-            </PrependIconWrapper>
+            </span>
           }
           value={query}
           onChange={(e) => {
             setQuery(e.text);
           }}
         />
-      </WrapSearch>
+      </div>
 
-      <WrapResult>
+      <div className={styles.wrapResult}>
         {query?.length > 0 && (
           <SearchUserList
             excludeSelf
@@ -120,7 +114,7 @@ const UserSelectorModal = ({
             onUserItemSelected={selectUser}
           />
         )}
-      </WrapResult>
+      </div>
     </Modal>
   );
 };

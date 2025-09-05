@@ -1,0 +1,62 @@
+.controlItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 52px;
+  padding: 0 24px 0 20px;
+  border-bottom: 1px solid #f7f7f8;
+  cursor: pointer;
+}
+
+.controlItem:hover {
+  background-color: #f7f7f8;
+}
+
+.sideWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.controlItemLabel {
+  padding-right: 8px;
+  /* theme.typography.body */
+  color: var(--color-neutral-main);
+}
+
+.controlItemLabel.isDanger {
+  color: var(--color-alert-main);
+}
+
+.controlItemState {
+  /* theme.typography.body */
+  color: var(--color-neutral-shade3);
+}
+
+.controlItemArrowRight {
+  width: 16px !important;
+  padding-left: 8px;
+  fill: var(--color-neutral-shade3);
+}
+
+.controlIcon {
+  padding-right: 8px;
+  text-align: center;
+  fill: var(--color-neutral-main);
+}
+
+.membersIcon {
+  padding-right: 8px;
+  text-align: center;
+  fill: var(--color-neutral-main);
+  width: 24px;
+  height: 24px;
+}
+
+.groupSettingIcon {
+  padding-right: 8px;
+  text-align: center;
+  fill: var(--color-neutral-main);
+  width: 24px;
+  height: 20px;
+}

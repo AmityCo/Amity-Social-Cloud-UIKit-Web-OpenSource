@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import UserPlusIcon from '~/icons/UserPlus';
 
-import { IconWrapper, ClickableMenuItem, MemberItemInfo } from './styles';
+import styles from './styles.module.css';
 
 interface AddNewMemberProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -11,14 +11,14 @@ interface AddNewMemberProps {
 
 const AddNewMember = ({ onClick }: AddNewMemberProps) => {
   return (
-    <ClickableMenuItem onClick={onClick}>
-      <IconWrapper>
+    <div className={styles.clickableMenuItem} onClick={onClick}>
+      <span className={styles.iconWrapper}>
         <UserPlusIcon />
-      </IconWrapper>
-      <MemberItemInfo>
+      </span>
+      <span className={styles.memberItemInfo}>
         <FormattedMessage id="chat.member.addMore" />
-      </MemberItemInfo>
-    </ClickableMenuItem>
+      </span>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { IconWrapper, SideMenuItemContainer } from './styles';
+import styles from './styles.module.css';
 
 export interface SideMenuItemProps {
   icon?: ReactNode;
@@ -17,10 +17,14 @@ const SideMenuItem = ({
   onClick,
   ...otherProps
 }: SideMenuItemProps) => (
-  <SideMenuItemContainer className={className} active={active} onClick={onClick} {...otherProps}>
-    {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
+  <button
+    className={`${styles.sideMenuItemContainer} ${active ? styles.active : ''} ${className || ''}`}
+    onClick={onClick}
+    {...otherProps}
+  >
+    {icon && <div className={`${styles.iconWrapper} ${active ? styles.active : ''}`}>{icon}</div>}
     {children}
-  </SideMenuItemContainer>
+  </button>
 );
 
 export default SideMenuItem;

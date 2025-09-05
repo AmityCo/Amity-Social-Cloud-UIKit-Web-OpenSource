@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import { ChannelRepository } from '@amityco/ts-sdk';
+import Pencil from '~/icons/Pencil';
 
 import GroupSettings from '~/chat/components/GroupSettings';
 
-import { ControlItem, ControlItemLabel, SideWrapper, GroupSettingIcon } from './styles';
+import styles from './styles.module.css';
 
 interface MenuGroupSettingProps {
   chatName?: string;
@@ -21,14 +22,14 @@ const MenuGroupSetting = ({ chatName, channelId }: MenuGroupSettingProps) => {
 
   return (
     <>
-      <ControlItem onClick={() => setShouldShowSettingsModal(true)}>
-        <SideWrapper>
-          <GroupSettingIcon />
-          <ControlItemLabel>
+      <div className={styles.controlItem} onClick={() => setShouldShowSettingsModal(true)}>
+        <div className={styles.sideWrapper}>
+          <Pencil className={styles.groupSettingIcon} width={24} height={20} />
+          <div className={styles.controlItemLabel}>
             <FormattedMessage id="chat.groupSetting" />
-          </ControlItemLabel>
-        </SideWrapper>
-      </ControlItem>
+          </div>
+        </div>
+      </div>
 
       {shouldShowSettingsModal && (
         <GroupSettings

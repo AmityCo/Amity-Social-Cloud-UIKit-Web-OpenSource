@@ -1,12 +1,13 @@
-import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { MessageRepository } from '@amityco/ts-sdk';
 import { FormattedMessage, useIntl } from 'react-intl';
+import styled from 'styled-components';
 
 import Popover from '~/core/components/Popover';
 import Menu, { MenuItem } from '~/core/components/Menu';
+import { EllipsisV, Save, Close } from '~/icons';
 
-import { MessageOptionsIcon, SaveIcon, CloseIcon, EditingInput, EditingContainer } from './styles';
+import styles from './styles.module.css';
 import useMessageFlaggedByMe from '~/chat/hooks/useMessageFlaggedByMe';
 import useMessageSubscription from '~/social/hooks/useMessageSubscription';
 import { useNotifications } from '~/core/providers/NotificationProvider';
@@ -107,20 +108,27 @@ const Options = ({
   );
 
   const editing = (
-    <EditingContainer>
-      <EditingInput
+    <div className={styles.editingContainer}>
+      <input
+        className={styles.editingInput}
         data-testid="message-edit-input"
         autoFocus
         value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => {
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === 'Enter') save();
           if (e.key === 'Escape') close();
         }}
       />
-      <SaveIcon data-testid="message-save-button" onClick={save} />
-      <CloseIcon onClick={close} />
-    </EditingContainer>
+      <Save
+        className={styles.saveIcon}
+        data-testid="message-save-button"
+        onClick={save}
+        width={14}
+        height={14}
+      />
+      <Close className={styles.closeIcon} onClick={close} width={14} height={14} />
+    </div>
   );
 
   return (
@@ -139,7 +147,7 @@ const Options = ({
         onClick={open}
         onKeyDown={open}
       >
-        <MessageOptionsIcon />
+        <EllipsisV className={styles.messageOptionsIcon} width={11} height={11} />
       </div>
     </StyledPopover>
   );

@@ -3,8 +3,9 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import Modal from '~/core/components/Modal';
 import UIKitInputText from '~/core/components/InputText';
+import { PrimaryButton, SecondaryButton } from '~/core/components/Button';
 
-import { InputGroup, Label, WrapContent, FooterContainer, OkButton, CancelButton } from './styles';
+import styles from './styles.module.css';
 
 interface GroupSettingsProps {
   closeModal?: () => void;
@@ -35,28 +36,32 @@ const GroupSettings = ({
       size="small"
       title={title || formatMessage({ id: 'chat.create.modalTitle' })}
       footer={
-        <FooterContainer>
-          <CancelButton onClick={closeModal}>
+        <div className={styles.footerContainer}>
+          <SecondaryButton onClick={closeModal}>
             <FormattedMessage id="general.cancel.capital" />
-          </CancelButton>
-          <OkButton disabled={groupName.length === 0} onClick={submitGroupName}>
-            {submitButtonName || <FormattedMessage id="general.create.capital" />}
-          </OkButton>
-        </FooterContainer>
+          </SecondaryButton>
+          <PrimaryButton
+            className={styles.okButton}
+            disabled={groupName.length === 0}
+            onClick={submitGroupName}
+          >
+            <FormattedMessage id="done" />
+          </PrimaryButton>
+        </div>
       }
     >
-      <WrapContent>
-        <InputGroup>
-          <Label>
+      <div className={styles.wrapContent}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>
             <FormattedMessage id="groupChat.createPopup.fieldName" />
-          </Label>
+          </label>
           <UIKitInputText
             value={groupName}
             placeholder={formatMessage({ id: 'groupChat.createPopup.placeholder' })}
             onChange={(data) => setGroupName(data.plainText)}
           />
-        </InputGroup>
-      </WrapContent>
+        </div>
+      </div>
     </Modal>
   );
 };

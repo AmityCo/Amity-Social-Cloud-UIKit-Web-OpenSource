@@ -1,0 +1,10 @@
+/* SideMenu component styles */
+.sideMenu {
+  border: 1px solid #e6e6e6;
+  width: 280px;
+  overflow: auto;
+  flex-shrink: 0;
+  font-size: var(--asc-font-size-l);
+  font-weight: var(--asc-font-weight-medium);
+  line-height: var(--asc-line-height-l);
+}

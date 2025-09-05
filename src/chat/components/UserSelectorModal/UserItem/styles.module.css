@@ -1,0 +1,33 @@
+.userContainer {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.userContainer:hover {
+  background-color: #f7f7f8;
+}
+
+.avatarContainer {
+  display: flex;
+  margin-right: 8px;
+}
+
+.profileContainer {
+  display: flex;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.2px;
+}
+
+.checkIconWrapper {
+  display: flex;
+  margin-left: auto;
+  color: var(--color-primary-main);
+}
+
+.checkIconWrapper svg {
+  font-size: 16px;
+}

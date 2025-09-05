@@ -2,45 +2,62 @@ import React from 'react';
 import { FormattedTime } from 'react-intl';
 
 import { backgroundImage as UserImage } from '~/icons/User';
+import UiKitAvatar from '~/core/components/Avatar';
 
 import Options from './Options';
 import MessageContent from './MessageContent';
 
-import {
-  Avatar,
-  AvatarWrapper,
-  MessageReservedRow,
-  MessageWrapper,
-  MessageContainer,
-  GeneralMessageBody,
-  DeletedMessageBody,
-  UnsupportedMessageBody,
-  UserName,
-  BottomLine,
-  MessageDate,
-} from './styles';
+import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 const MessageBody = ({
   isDeleted,
   type,
   isSupportedMessageType,
+  isIncoming,
+  children,
   ...otherProps
 }: {
   isDeleted: boolean;
   type: string;
   isSupportedMessageType: boolean;
+  isIncoming: boolean;
+  children: React.ReactNode;
   [key: string]: unknown;
 }) => {
   if (isDeleted) {
-    return <DeletedMessageBody {...otherProps} data-testid="message-body-deleted" />;
+    return (
+      <div
+        className={`${styles.deletedMessageBody} ${isIncoming ? styles.incoming : styles.outgoing}`}
+        data-testid="message-body-deleted"
+        {...otherProps}
+      >
+        {children}
+      </div>
+    );
   }
 
   if (!isSupportedMessageType) {
-    return <UnsupportedMessageBody {...otherProps} data-testid="message-body-unsupported" />;
+    return (
+      <div
+        className={styles.unsupportedMessageBody}
+        data-testid="message-body-unsupported"
+        {...otherProps}
+      >
+        {children}
+      </div>
+    );
   }
 
-  return <GeneralMessageBody {...otherProps} data-testid="message-body-general" />;
+  return (
+    <div
+      className={`${styles.generalMessageBody} ${isIncoming ? styles.incoming : styles.outgoing}`}
+      data-testid="message-body-general"
+      {...otherProps}
+    >
+      {children}
+    </div>
+  );
 };
 
 interface MessageProps {
@@ -72,18 +89,20 @@ const Message = ({
   const isSupportedMessageType = ['text', 'custom'].includes(type);
 
   const renderAvatar = () => {
-    if (avatar) return <Avatar avatar={avatar} />;
+    if (avatar) return <UiKitAvatar avatar={avatar} className={styles.avatar} />;
 
-    return <Avatar backgroundImage={UserImage} />;
+    return <UiKitAvatar backgroundImage={UserImage} className={styles.avatar} />;
   };
 
   return (
-    <MessageReservedRow isIncoming={isIncoming}>
-      <MessageWrapper>
-        {isIncoming && <AvatarWrapper>{!isConsequent && renderAvatar()}</AvatarWrapper>}
+    <div className={`${styles.messageReservedRow} ${isIncoming ? '' : styles.outgoing}`}>
+      <div className={styles.messageWrapper}>
+        {isIncoming && (
+          <div className={styles.avatarWrapper}>{!isConsequent && renderAvatar()}</div>
+        )}
 
-        <MessageContainer data-testid="message">
-          {shouldShowUserName && <UserName>{userDisplayName}</UserName>}
+        <div className={styles.messageContainer} data-testid="message">
+          {shouldShowUserName && <div className={styles.userName}>{userDisplayName}</div>}
           <MessageBody
             type={type}
             isIncoming={isIncoming}
@@ -92,10 +111,10 @@ const Message = ({
           >
             <MessageContent data={data} type={type} isDeleted={isDeleted} />
             {!isDeleted && (
-              <BottomLine>
-                <MessageDate>
+              <div className={styles.bottomLine}>
+                <div className={styles.messageDate}>
                   <FormattedTime value={createdAt} />
-                </MessageDate>
+                </div>
                 <Options
                   messageId={messageId}
                   data={data}
@@ -103,12 +122,12 @@ const Message = ({
                   isSupportedMessageType={isSupportedMessageType}
                   popupContainerRef={containerRef}
                 />
-              </BottomLine>
+              </div>
             )}
           </MessageBody>
-        </MessageContainer>
-      </MessageWrapper>
-    </MessageReservedRow>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -1,0 +1,53 @@
+/* SideMenuItem component styles */
+
+.sideMenuItemContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 5px 8px;
+  margin-bottom: 6px;
+  justify-content: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: var(--asc-font-size-s);
+  font-weight: var(--asc-font-weight-semibold);
+  line-height: var(--asc-line-height-s);
+  text-align: left;
+  color: inherit;
+  border-radius: 4px;
+}
+
+.sideMenuItemContainer:disabled {
+  color: var(--asc-color-neutral-shade2);
+}
+
+.sideMenuItemContainer:hover:not(:disabled) {
+  background-color: var(--asc-color-base-shade4);
+}
+
+.sideMenuItemContainer.active {
+  background-color: #f2f7d5;
+  color: #222;
+}
+
+.sideMenuItemContainer.active:hover {
+  background-color: #f2f7d5;
+}
+
+.iconWrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  background: var(--asc-color-base-shade4);
+  color: var(--asc-color-base-main);
+}
+
+.iconWrapper.active {
+  background: var(--asc-color-primary-main);
+  color: white;
+}

@@ -1,19 +1,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import ChevronLeft from '~/icons/ChevronLeft';
 
 import UserAvatar from '~/chat/components/UserAvatar';
 import { backgroundImage as backgroundUserImage } from '~/icons/User';
 
 import AddNewMember from './AddNewMember';
 
-import {
-  ChatMembersContainer,
-  MembersReturn,
-  MembersArrowLeft,
-  MembersReturnTitle,
-  MemberItem,
-  MemberItemInfo,
-} from './styles';
+import styles from './styles.module.css';
 import { SIZE_ALIAS } from '~/core/hooks/useSize';
 import LoadMoreWrapper from '~/social/components/LoadMoreWrapper';
 import useChannel from '~/chat/hooks/useChannel';
@@ -62,13 +56,13 @@ const ChatDetailsMembers = ({
   const isShowAddMemberButton = channel?.type === 'live' || channel?.type === 'community';
 
   return (
-    <ChatMembersContainer>
-      <MembersReturn onClick={handleReturnClick}>
-        <MembersArrowLeft />
-        <MembersReturnTitle>
+    <div className={styles.chatMembersContainer}>
+      <div className={styles.membersReturn} onClick={handleReturnClick}>
+        <ChevronLeft className={styles.membersArrowLeft} width={18} height={14} />
+        <span className={styles.membersReturnTitle}>
           <FormattedMessage id="chat.members.return" />
-        </MembersReturnTitle>
-      </MembersReturn>
+        </span>
+      </div>
       {members?.length > 0 ? (
         <LoadMoreWrapper
           hasMore={hasMore}
@@ -76,14 +70,20 @@ const ChatDetailsMembers = ({
           contentSlot={
             <>
               {members.map((member) => (
-                <MemberItem key={member.userId} onClick={() => onMemberSelect?.(member)}>
+                <div
+                  key={member.userId}
+                  className={styles.memberItem}
+                  onClick={() => onMemberSelect?.(member)}
+                >
                   <UserAvatar
                     size={SIZE_ALIAS.SMALL}
                     defaultImage={backgroundUserImage}
                     {...member?.user}
                   />
-                  <MemberItemInfo>{getName(member) || DEFAULT_DISPLAY_NAME}</MemberItemInfo>
-                </MemberItem>
+                  <span className={styles.memberItemInfo}>
+                    {getName(member) || DEFAULT_DISPLAY_NAME}
+                  </span>
+                </div>
               ))}
 
               {isShowAddMemberButton ? (
@@ -93,7 +93,7 @@ const ChatDetailsMembers = ({
           }
         />
       ) : null}
-    </ChatMembersContainer>
+    </div>
   );
 };
 

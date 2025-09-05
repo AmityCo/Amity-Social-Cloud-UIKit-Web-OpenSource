@@ -6,15 +6,9 @@ import UserAvatar from '~/chat/components/UserAvatar';
 import { backgroundImage as userBackgroundImage } from '~/icons/User';
 import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import useChatInfo from '~/chat/hooks/useChatInfo';
+import { BarsIcon } from '~/icons';
 
-import {
-  ChatHeaderContainer,
-  DetailsIcon,
-  Channel,
-  ChannelInfo,
-  ChannelName,
-  MemberCount,
-} from './styles';
+import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useChannel from '~/chat/hooks/useChannel';
 
@@ -29,8 +23,8 @@ const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: Ch
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
   return (
-    <ChatHeaderContainer data-testid="chat-header">
-      <Channel>
+    <div className={styles.chatHeaderContainer} data-testid="chat-header">
+      <div className={styles.channel}>
         <UserAvatar
           avatarUrl={chatAvatar || undefined}
           defaultImage={
@@ -39,15 +33,21 @@ const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: Ch
               : userBackgroundImage
           }
         />
-        <ChannelInfo data-testid="chat-header-channel-info">
-          <ChannelName data-testid="chat-header-channel-info-channel-name">{chatName}</ChannelName>
-          <MemberCount data-testid="chat-header-channel-info-member-count">
-            <FormattedMessage id="chat.members.count" values={{ count: channel?.memberCount }} />
-          </MemberCount>
-        </ChannelInfo>
-      </Channel>
-      {!shouldShowChatDetails && <DetailsIcon onClick={onChatDetailsClick} />}
-    </ChatHeaderContainer>
+        <div className={styles.channelInfo} data-testid="chat-header-channel-info">
+          <div className={styles.channelName} data-testid="chat-header-channel-info-channel-name">
+            {chatName}
+          </div>
+        </div>
+      </div>
+      {shouldShowChatDetails && (
+        <BarsIcon
+          className={styles.detailsIcon}
+          onClick={onChatDetailsClick}
+          width={24}
+          height={24}
+        />
+      )}
+    </div>
   );
 };
 

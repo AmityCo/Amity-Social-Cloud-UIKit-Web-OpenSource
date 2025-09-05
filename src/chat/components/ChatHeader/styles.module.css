@@ -1,0 +1,35 @@
+.detailsIcon {
+  cursor: pointer;
+  fill: var(--color-neutral-main);
+  align-self: center;
+  width: 24px;
+  height: 24px;
+}
+
+.chatHeaderContainer {
+  height: 76px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+  height: 74px;
+}
+
+.channelInfo {
+  margin-left: 8px;
+}
+
+.channelName {
+  font-weight: 600;
+  font-size: 14px;
+  color: #000000;
+}
+
+.memberCount {
+  font-size: 12px;
+  color: #999999;
+}

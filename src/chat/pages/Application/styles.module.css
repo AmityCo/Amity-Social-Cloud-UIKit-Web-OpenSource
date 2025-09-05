@@ -1,0 +1,38 @@
+.chatHeader {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0px;
+}
+
+.applicationContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 5rem;
+  gap: 1rem;
+}
+
+.chatContainer {
+  display: flex;
+  border: 1px solid #909090;
+  border-radius: 8px;
+  flex-grow: 1;
+}
+
+.newChatContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #bed62f;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+}
+
+.newChatIcon {
+  width: 24px;
+  height: 24px;
+}

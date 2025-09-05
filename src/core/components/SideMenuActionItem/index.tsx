@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconWrapper, ButtonActionItem, AnchorActionItem } from './styles';
+import styles from './styles.module.css';
 
 export const ALLOWED_ELEMENTS = ['button', 'a'];
 
@@ -26,29 +26,29 @@ const SideMenuActionItem = ({
 }: SideMenuActionItemProps) => {
   if (element === 'a') {
     return (
-      <AnchorActionItem
+      <a
         data-testid={dataQaAnchor}
-        className={className}
+        className={`${styles.anchorActionItem} ${active ? styles.active : ''} ${className || ''}`}
         onClick={onClick}
-        active={active}
       >
-        {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
-        <span className="actionItemChild">{children}</span>
-      </AnchorActionItem>
+        {icon && (
+          <div className={`${styles.iconWrapper} ${active ? styles.active : ''}`}>{icon}</div>
+        )}
+        <span className={styles.actionItemChild}>{children}</span>
+      </a>
     );
   }
 
   return (
-    <ButtonActionItem
+    <button
       data-testid={dataQaAnchor}
-      className={className}
-      active={active}
+      className={`${styles.buttonActionItem} ${active ? styles.active : ''} ${className || ''}`}
       disabled={disabled}
       onClick={onClick}
     >
-      {icon && <IconWrapper active={active}>{icon}</IconWrapper>}
-      <span className="actionItemChild">{children}</span>
-    </ButtonActionItem>
+      {icon && <div className={`${styles.iconWrapper} ${active ? styles.active : ''}`}>{icon}</div>}
+      <span className={styles.actionItemChild}>{children}</span>
+    </button>
   );
 };
 

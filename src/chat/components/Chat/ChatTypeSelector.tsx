@@ -1,7 +1,8 @@
 import React from 'react';
 import { useIntl } from 'react-intl';
+import Select from '~/core/components/Select';
 
-import { StyledSelect } from './styles';
+import styles from './styles.module.css';
 
 const itemRenderer = ({ name }: { name?: string }) => (
   <div data-testid={`chat-type-selector-item-${name}`}>{name}</div>
@@ -21,13 +22,14 @@ const ChatTypeSelector = ({ onChange, parentContainer }: ChatTypeSelectorProps) 
   }));
 
   return (
-    <StyledSelect
+    <Select
+      className={styles.styledSelect}
       data-testid="chat-type"
       options={options}
       value={[options[0]]}
       parentContainer={parentContainer}
       renderItem={itemRenderer}
-      onSelect={({ value }) => onChange(value)}
+      onSelect={({ value }: { value: string }) => onChange(value)}
     />
   );
 };

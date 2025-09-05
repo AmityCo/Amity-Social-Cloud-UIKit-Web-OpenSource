@@ -8,28 +8,13 @@ import AvatarUploader from '~/social/components/CommunityForm/AvatarUploader';
 import Button from '~/core/components/Button';
 import UserSelector from '~/social/components/UserSelector';
 
-import {
-  FormBlockBody,
-  FormBlockContainer,
-  TextInput,
-  LabelContainer,
-  LabelWrapper,
-  ChatComposerContainer,
-  Field,
-  Label,
-  Footer,
-  Form,
-  ControllerContainer,
-  FormBody,
-  SubmitButton,
-  ErrorMessage,
-} from './styles';
+import styles from './styles.module.css';
 import { ChannelRepository } from '@amityco/ts-sdk';
 
 const FormBlock = ({ children }: { children: ReactNode }) => (
-  <FormBlockContainer>
-    <FormBlockBody>{children}</FormBlockBody>
-  </FormBlockContainer>
+  <div className={styles.formBlockContainer}>
+    <div className={styles.formBlockBody}>{children}</div>
+  </div>
 );
 
 interface ChatComposerProps {
@@ -86,19 +71,19 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
   const formBodyRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <ChatComposerContainer>
-      <Form className={className} onSubmit={handleSubmit(validateAndSubmit)}>
-        <FormBody ref={formBodyRef}>
+    <div className={styles.chatComposerContainer}>
+      <form className={className} onSubmit={handleSubmit(validateAndSubmit)}>
+        <div className={styles.formBody} ref={formBodyRef}>
           <FormBlock>
-            <Field>
-              <LabelWrapper>
-                <LabelContainer>
-                  <Label>
+            <div className={styles.field}>
+              <div className={styles.labelWrapper}>
+                <div className={styles.labelContainer}>
+                  <label className={styles.label}>
                     <FormattedMessage id="chatComposer.label.type" />
-                  </Label>
-                </LabelContainer>
-              </LabelWrapper>
-              <ControllerContainer>
+                  </label>
+                </div>
+              </div>
+              <div className={styles.controllerContainer}>
                 <Controller
                   name="type"
                   rules={{ required: 'Channel type is required' }}
@@ -108,26 +93,27 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
                   control={control}
                   defaultValue=""
                 />
-              </ControllerContainer>
-            </Field>
+              </div>
+            </div>
 
-            <Field>
-              <LabelWrapper>
-                <LabelContainer>
-                  <Label>
+            <div className={styles.field}>
+              <div className={styles.labelWrapper}>
+                <div className={styles.labelContainer}>
+                  <label className={styles.label}>
                     <FormattedMessage id="chatComposer.label.displayName" />
-                  </Label>
-                </LabelContainer>
-              </LabelWrapper>
-              <TextInput
+                  </label>
+                </div>
+              </div>
+              <input
+                className={styles.textInput}
                 {...register('displayName')}
                 placeholder={formatMessage({ id: 'chat_composer.placeholder.displayName' })}
                 data-testid="chat-composer-display-name-input"
               />
-              <ErrorMessage errors={errors} name="displayName" />
-            </Field>
+              <div className={styles.errorMessage} data-errors={errors} data-name="displayName" />
+            </div>
 
-            <Field>
+            <div className={styles.field}>
               <Controller
                 name="avatarFileId"
                 control={control}
@@ -136,12 +122,12 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
                 )}
                 defaultValue={undefined}
               />
-            </Field>
+            </div>
 
-            <Field>
-              <Label className="required">
+            <div className={styles.field}>
+              <label className={`${styles.label} required`}>
                 <FormattedMessage id="chatComposer.addUsers" />
-              </Label>
+              </label>
               <Controller
                 name="userIds"
                 render={({ field: { ref, ...rest } }) => (
@@ -153,12 +139,12 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
                 )}
                 control={control}
               />
-              <ErrorMessage errors={errors} name="userIds" />
-            </Field>
+              <div className={styles.errorMessage} data-errors={errors} data-name="userIds" />
+            </div>
           </FormBlock>
-        </FormBody>
+        </div>
 
-        <Footer>
+        <div className={styles.footer}>
           <Button
             onClick={(e) => {
               e.preventDefault();
@@ -167,12 +153,16 @@ const ChatComposer = ({ className, onCancel, onSubmit }: ChatComposerProps) => {
           >
             <FormattedMessage id="cancel" />
           </Button>
-          <SubmitButton data-testid="chat-composer-submit-button" disabled={disabled}>
+          <button
+            className={styles.submitButton}
+            data-testid="chat-composer-submit-button"
+            disabled={disabled}
+          >
             <FormattedMessage id="create" />
-          </SubmitButton>
-        </Footer>
-      </Form>
-    </ChatComposerContainer>
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 

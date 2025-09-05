@@ -6,15 +6,10 @@ import SolarSystemIcon from '~/icons/SolarSystem';
 import EmptyState from '~/core/components/EmptyState';
 
 import UserItem from '../UserItem';
-import {
-  ListItemContainer,
-  EmptyStateIcon,
-  WrapEmptyState,
-  InfiniteScrollContainer,
-} from './styles';
+import styles from './styles.module.css';
 import useSDK from '~/core/hooks/useSDK';
 import useAllUsersCollection from '~/core/hooks/collections/useAllUsersCollection';
-import useUsersCollection from '~/core/hooks/collections/useUsersCollection';
+import { useUserQueryByDisplayName } from '~/core/hooks/collections/useUsersCollection';
 
 interface UserListProps {
   users: Amity.User[];
@@ -42,20 +37,20 @@ const UserList = ({
   return (
     <>
       {!filterUsers && (
-        <WrapEmptyState>
+        <div className={styles.wrapEmptyState}>
           <EmptyState
             icon={
-              <EmptyStateIcon>
+              <span className={styles.emptyStateIcon}>
                 <SolarSystemIcon />
-              </EmptyStateIcon>
+              </span>
             }
             title={formatMessage({ id: 'userSelector.emptyState.title' })}
             description={formatMessage({ id: 'userSelector.emptyState.description' })}
           />
-        </WrapEmptyState>
+        </div>
       )}
 
-      <InfiniteScrollContainer ref={containerRef}>
+      <div className={styles.infiniteScrollContainer} ref={containerRef}>
         {filterUsers && containerRef.current ? (
           <InfiniteScroll
             hasMore={hasMore}
@@ -63,7 +58,7 @@ const UserList = ({
             loader={<span key={0}>Loading...</span>}
             dataLength={filterUsers?.length || 0}
           >
-            <ListItemContainer>
+            <div>
               {filterUsers.map((userData) => (
                 <UserItem
                   key={userData.userId}
@@ -72,10 +67,10 @@ const UserList = ({
                   onClick={() => onUserItemSelected(userData)}
                 />
               ))}
-            </ListItemContainer>
+            </div>
           </InfiniteScroll>
         ) : null}
-      </InfiniteScrollContainer>
+      </div>
     </>
   );
 };
@@ -117,10 +112,7 @@ export const SearchUserList = ({
   selectedUserIds,
   excludeSelf = false,
 }: SearchUserListProps) => {
-  const { users, hasMore, loadMore } = useUsersCollection({
-    displayName: query,
-    filter: 'all',
-  });
+  const { users, hasMore, loadMore } = useUserQueryByDisplayName(query);
   return (
     <UserList
       users={users}

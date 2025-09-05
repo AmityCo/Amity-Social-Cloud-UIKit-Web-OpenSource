@@ -5,19 +5,12 @@ import useChatInfo from '~/chat/hooks/useChatInfo';
 import useChannel from '~/chat/hooks/useChannel';
 import UserAvatar from '~/chat/components/UserAvatar';
 import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
+import { Close } from '~/icons';
 
 import ChatDetailsControls from './ChatDetailsControls';
 import ChatDetailsMembers from './ChatDetailsMembers';
 
-import {
-  ChatDetailsContainer,
-  ChatDetailsHeader,
-  HeaderCloseIcon,
-  ChatDetailsTitle,
-  TitleInfo,
-  TitleInfoLabel,
-  TitleInfoChatName,
-} from './styles';
+import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 
 interface ChatDetailsProps {
@@ -46,21 +39,21 @@ const ChatDetails = ({
   const [shouldShowMembers, setShouldShowMembers] = useState(false);
 
   return (
-    <ChatDetailsContainer>
-      <ChatDetailsHeader>
+    <div className={styles.chatDetailsContainer}>
+      <div className={styles.chatDetailsHeader}>
         <FormattedMessage id="chat.details.header" />
-        <HeaderCloseIcon onClick={onClose} />
-      </ChatDetailsHeader>
+        <Close className={styles.headerCloseIcon} onClick={onClose} width={20} height={20} />
+      </div>
 
-      <ChatDetailsTitle>
+      <div className={styles.chatDetailsTitle}>
         <UserAvatar avatarUrl={chatAvatar} defaultImage={communityBackgroundImage} />
-        <TitleInfo>
-          <TitleInfoLabel>
+        <div className={styles.titleInfo}>
+          <div className={styles.titleInfoLabel}>
             <FormattedMessage id="chat.details.chatName" />
-          </TitleInfoLabel>
-          <TitleInfoChatName>{chatName}</TitleInfoChatName>
-        </TitleInfo>
-      </ChatDetailsTitle>
+          </div>
+          <div className={styles.titleInfoChatName}>{chatName}</div>
+        </div>
+      </div>
 
       {shouldShowMembers ? (
         <ChatDetailsMembers
@@ -81,7 +74,7 @@ const ChatDetails = ({
           showMembers={() => setShouldShowMembers(true)}
         />
       )}
-    </ChatDetailsContainer>
+    </div>
   );
 };
 

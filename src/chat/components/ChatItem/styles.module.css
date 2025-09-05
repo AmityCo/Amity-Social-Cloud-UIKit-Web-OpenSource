@@ -1,8 +1,4 @@
-import styled from 'styled-components';
-import SideMenuItem from '~/core/components/SideMenuItem';
-import UserAvatar from '~/chat/components/UserAvatar';
-
-export const ChatItemContainer = styled(SideMenuItem)`
+.chatItemContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11,20 +7,20 @@ export const ChatItemContainer = styled(SideMenuItem)`
   margin: 0;
   padding: 0 18px 0 16px;
   border-radius: 0;
-`;
+}
 
-export const ChatItemLeft = styled.div`
+.chatItemLeft {
   display: flex;
   align-items: center;
-`;
+}
 
-export const Avatar = styled(UserAvatar)`
+.avatar {
   flex-shrink: 0;
-`;
+}
 
-export const Title = styled.div`
+.title {
   width: 135px;
-  ${({ theme }) => theme.typography.bodyBold};
+  /* theme.typography.bodyBold */
   line-height: 20px;
   text-align: left;
   color: #000;
@@ -32,9 +28,9 @@ export const Title = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-left: 8px;
-`;
+}
 
-export const UnreadCount = styled.div`
+.unreadCount {
   flex-shrink: 0;
   height: 20px;
   padding: 1px 6px;
@@ -42,4 +38,4 @@ export const UnreadCount = styled.div`
   color: #fff;
   background: #f9563a;
   border-radius: 20px;
-`;
+}

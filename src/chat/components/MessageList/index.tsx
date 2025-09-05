@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import MessageComponent from '~/chat/components/Message';
 
-import { InfiniteScrollContainer, MessageListContainer } from './styles';
+import styles from './styles.module.css';
 import useSDK from '~/core/hooks/useSDK';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useUser from '~/core/hooks/useUser';
@@ -58,7 +58,7 @@ const MessageList = ({ channelId }: MessageListProps) => {
   }, [isLoading, messages]);
 
   return (
-    <InfiniteScrollContainer ref={containerRef}>
+    <div className={styles.infiniteScrollContainer} ref={containerRef}>
       {containerRef.current ? (
         <InfiniteScroll
           scrollableTarget={containerRef.current}
@@ -71,7 +71,11 @@ const MessageList = ({ channelId }: MessageListProps) => {
           style={{ display: 'flex', flexDirection: 'column-reverse' }}
           height={containerRef.current.clientHeight}
         >
-          <MessageListContainer ref={containerRef} data-testid="message-list">
+          <div
+            className={styles.messageListContainer}
+            ref={containerRef}
+            data-testid="message-list"
+          >
             {messages.map((message, i) => {
               const nextMessage = messages[i + 1];
               const isConsequent = nextMessage && nextMessage.creatorId === message.creatorId;
@@ -89,10 +93,10 @@ const MessageList = ({ channelId }: MessageListProps) => {
                 />
               );
             })}
-          </MessageListContainer>
+          </div>
         </InfiniteScroll>
       ) : null}
-    </InfiniteScrollContainer>
+    </div>
   );
 };
 

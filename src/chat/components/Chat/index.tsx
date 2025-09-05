@@ -11,7 +11,7 @@ import MessageComposeBar from '~/chat/components/MessageComposeBar';
 
 import ChatHeader from '~/chat/components/ChatHeader';
 
-import { ChannelContainer } from './styles';
+import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import { useChannelPermission } from '~/chat/hooks/useChannelPermission';
 import useChannel from '~/chat/hooks/useChannel';
@@ -48,7 +48,7 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProp
   };
 
   return (
-    <ChannelContainer>
+    <div className={styles.channelContainer}>
       <ChatHeader
         channelId={channelId}
         shouldShowChatDetails={shouldShowChatDetails}
@@ -56,7 +56,7 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProp
       />
       <MessageList channelId={channelId} />
       {renderMessageComposeBar()}
-    </ChannelContainer>
+    </div>
   );
 };
 

@@ -1,0 +1,24 @@
+.wrapContent {
+  display: flex;
+  padding: 0px 15px 10px;
+}
+
+.inputGroup {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.okButton {
+  margin-left: 15px;
+}
