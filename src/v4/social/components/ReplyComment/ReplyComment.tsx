@@ -285,6 +285,7 @@ const PostReplyComment = ({
               />
               <CommentReactionDisplay
                 pageId={pageId}
+                componentId={componentId}
                 comment={comment}
                 reactionsCount={reactionsCount}
                 position="replyComment"
