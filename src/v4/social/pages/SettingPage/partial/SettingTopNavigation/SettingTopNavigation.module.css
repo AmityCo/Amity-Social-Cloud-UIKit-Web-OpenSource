@@ -5,3 +5,9 @@
   padding: 1rem;
   margin-bottom: 1.5rem;
 }
+
+@media (width >=48rem) {
+  .hiddenOnDesktop {
+    display: none;
+  }
+}

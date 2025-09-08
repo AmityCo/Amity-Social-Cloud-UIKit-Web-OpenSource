@@ -28,6 +28,7 @@ import { TipsterLogo } from '~/v4/icons/TipsterLogo';
 type UserProfilePageProps = {
   userId: string;
   userBadgeTitle?: string;
+  forcePublicView?: boolean;
 };
 
 const enum UserProfileTabs {
@@ -42,7 +43,11 @@ const mockSports = [
   { name: 'Basket', icon: <Star color="#4ECDC4" />, percentage: 45 },
 ];
 
-export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBadgeTitle }) => {
+export const UserProfilePage: React.FC<UserProfilePageProps> = ({
+  userId,
+  userBadgeTitle,
+  forcePublicView,
+}) => {
   const pageId = 'user_profile_page';
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDesktop } = useResponsive();
@@ -52,7 +57,9 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { currentUserId } = useSDK();
 
-  const isCurrentUser = user?.userId === currentUserId;
+  const isCurrentUser = forcePublicView ? false : user?.userId === currentUserId;
+  console.log('🚀 ~ UserProfilePage ~ forcePublicView:', forcePublicView);
+  console.log('🚀 ~ UserProfilePage ~ isCurrentUser:', isCurrentUser);
 
   const [isScroll, setIsScroll] = useState(false);
   const [profilingQuizDone, setProfilingQuizDone] = useState(false);
@@ -159,7 +166,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId, userBa
               nuovi amici. Sempre pronto a tifare e a mettermi in gioco! Milano, Italia
             </Typography.Caption>
 
-            {!profilingQuizDone && (
+            {!profilingQuizDone && isCurrentUser && (
               <div className={styles.userProfilePage__cardPositioner}>
                 <div className={styles.userProfilePage__card}>
                   <div className={styles.userProfilePage__cardContentSection}>

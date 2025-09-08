@@ -283,7 +283,7 @@ type ContextValue = {
   onEditCommunity: (communityId: string, tab?: string) => void;
   onMessageUser: (userId: string) => void;
   onBack: (page?: number) => void;
-  goToUserProfilePage: (userId: string) => void;
+  goToUserProfilePage: (userId: string, forcePublicView?: boolean) => void;
   goToEditUserPage: (userId: string) => void;
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
@@ -405,7 +405,7 @@ let defaultValue: ContextValue = {
   onCommunityCreated: (communityId: string) => {},
   onEditCommunity: (communityId: string) => {},
   onMessageUser: (userId: string) => {},
-  goToUserProfilePage: (userId: string) => {},
+  goToUserProfilePage: (userId: string, forcePublicView?: boolean) => {},
   goToEditUserPage: (userId: string) => {},
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
   goToPendingFollowRequestPage: () => {},
@@ -929,14 +929,14 @@ export default function NavigationProvider({
   );
 
   const goToUserProfilePage = useCallback(
-    (userId) => {
+    (userId, forcePublicView: boolean = false) => {
       const next = {
         type: PageTypes.UserProfilePage,
         context: {
           userId,
+          forcePublicView,
         },
       };
-
       pushPage(next);
     },
     [onChangePage, pushPage],

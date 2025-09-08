@@ -54,6 +54,7 @@
 
 .dialog {
   outline: none;
+  width: 35rem;
 }
 
 .popup__header {

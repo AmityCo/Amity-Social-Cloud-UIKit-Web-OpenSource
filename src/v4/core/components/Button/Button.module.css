@@ -58,6 +58,12 @@
   border-color: transparent;
 }
 
+.default.outlined {
+  background-color: #fff;
+  color: #222;
+  border: 1px solid #bed62f;
+}
+
 .registration.primary {
   background-color: #ff8e0d;
   color: #fff;
@@ -92,6 +98,13 @@
   cursor: not-allowed;
 }
 
+.default.outlined:disabled {
+  background-color: #f2f7d5;
+  color: #909090;
+  border-color: #bed62f;
+  cursor: not-allowed;
+}
+
 .registration.primary:disabled {
   background-color: #ffc685;
   color: #fff;
@@ -122,6 +135,11 @@
 .default.ghost:hover:not(:disabled) {
   background-color: rgb(242 242 242 / 80%);
   border-color: transparent;
+}
+
+.default.outlined:hover:not(:disabled) {
+  background-color: #f2f7d5;
+  border-color: #bed62f;
 }
 
 .registration.primary:hover:not(:disabled) {

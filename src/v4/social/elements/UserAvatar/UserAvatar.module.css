@@ -40,8 +40,8 @@
 .userAvatar__img {
   border-radius: 50%;
   object-fit: cover;
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
 }
 
 .userAvatar__badge {
@@ -53,8 +53,8 @@
 }
 
 .userAvatar__skeleton {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   object-fit: cover;
   border-radius: 50%;
   background-color: var(--asc-color-base-shade4);

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Typography } from '~/v4/core/components';
 import styles from './SettingTopNavigation.module.css';
-
 import ChevronLeft from '~/v4/icons/ChevronLeft';
 
 type SettingTopNavigationProps = {
@@ -12,11 +11,16 @@ type SettingTopNavigationProps = {
 const SettingTopNavigation: React.FC<SettingTopNavigationProps> = ({ pageTitle, onBackFunc }) => {
   return (
     <div className={styles.topNavigation}>
-      {/* {!isDesktop && ( */}
-      <ChevronLeft width={16} height={16} fill="#000" stroke="#000" onClick={onBackFunc} />
-      {/* )} */}
+      <ChevronLeft
+        width={16}
+        height={16}
+        fill="#000"
+        stroke="#000"
+        onClick={onBackFunc}
+        className={styles.hiddenOnDesktop}
+      />
       <Typography.SubTitleBold>{pageTitle}</Typography.SubTitleBold>
-      <span />
+      <span className={styles.hiddenOnDesktop} />
     </div>
   );
 };

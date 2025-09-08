@@ -9,8 +9,10 @@ import CommentSetting from './partial/CommentSetting/CommentSetting';
 import BlockedUserSetting from './partial/BlockedUserSetting/BlockedUserSetting';
 import MentionSetting from './partial/MentionSetting/MentionSetting';
 import SettingTopNavigation from './partial/SettingTopNavigation/SettingTopNavigation';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import useSDK from '~/v4/core/hooks/useSDK';
+import BlockedUserSettingTestPage from './partial/BlockedUserSettingTestPage/BlockedUserSettingTestPage';
 
 const menuItems = [
   {
@@ -69,6 +71,13 @@ const menuItems = [
         elementId: 'blocked-users',
         text: 'Utenti bloccati',
         icon: 'UserLockIcon',
+        pageTitle: 'Utenti bloccati',
+      },
+      {
+        elementId: 'blocked-users-test-page',
+        text: 'Utenti bloccati (Test Page)',
+        icon: 'UserLockIcon',
+        pageTitle: 'Utenti bloccati (Test Page)',
       },
     ],
   },
@@ -91,7 +100,7 @@ const menuItems = [
 const SettingPage: React.FC = () => {
   const { openPopup } = usePopupContext();
   const { isDesktop } = useResponsive();
-
+  const { goToUserProfilePage } = useNavigation();
   const [selectedSetting, setSelectedSetting] = useState<string>('settings');
 
   const handleConfirmDeleteModal = () => {
@@ -103,14 +112,20 @@ const SettingPage: React.FC = () => {
       children: bodycontent,
     });
   };
+  const { currentUserId } = useSDK();
+  const currentUser = { userId: currentUserId };
 
   const handleMenuItemClick = (elementId: string) => {
-    setSelectedSetting(elementId);
+    if (elementId === 'profile-public') {
+      goToUserProfilePage(currentUser.userId, { forcePublicView: true });
+    } else {
+      setSelectedSetting(elementId);
+    }
   };
   const renderChosenSetting = () => {
     switch (selectedSetting) {
       case 'profile-public':
-        return <div>Profile Public Partial TBD</div>;
+        return null;
       case 'profile-share':
         return <div>Profile Share Partial TBD</div>;
       case 'follower-setting':
@@ -125,6 +140,8 @@ const SettingPage: React.FC = () => {
         return <CommentSetting />;
       case 'blocked-users':
         return <BlockedUserSetting />;
+      case 'blocked-users-test-page':
+        return <BlockedUserSettingTestPage />;
       case 'info-terms':
         return <div>Info Terms Partial TBD</div>;
       case 'info-help':
