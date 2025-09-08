@@ -32,13 +32,17 @@ const VideoItem = ({
 
   if (!image || !file)
     return (
-      <div className={styles.videoGallery__skeleton__itemContainer}>
+      <div
+        data-testid={`/*/video-thumbnail-failed-${postIndex}`}
+        className={styles.videoGallery__skeleton__itemContainer}
+      >
         <VideoControl className={styles.videoGallery__skeleton__item} />
       </div>
     );
 
   return isBrokenImg ? (
     <Button
+      data-testid={`/*/video-skeleton-${postIndex}`}
       className={styles.videoGallery__itemContainer}
       onPress={() => onClickVideoItem(postIndex)}
     >
@@ -46,6 +50,7 @@ const VideoItem = ({
     </Button>
   ) : (
     <Button
+      data-testid={`/*/video-item-${postIndex}`}
       className={styles.videoGallery__itemContainer}
       onPress={() => onClickVideoItem(postIndex)}
     >

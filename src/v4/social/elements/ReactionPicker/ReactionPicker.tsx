@@ -5,6 +5,8 @@ import { Typography } from '~/v4/core/components';
 import styles from './ReactionPicker.module.css';
 
 export interface ReactionPickerProps {
+  pageId?: string;
+  componentId?: string;
   myReaction?: string | null;
   onReactionClick: (reactionName: string) => void;
   onSelectReaction?: (reactionName: string) => void;
@@ -14,6 +16,8 @@ export interface ReactionPickerProps {
 }
 
 export const ReactionPicker = ({
+  pageId = '*',
+  componentId = '*',
   myReaction,
   onReactionClick,
   onSelectReaction,
@@ -32,7 +36,7 @@ export const ReactionPicker = ({
 
   return (
     <div className={styles.reactionPickerContainer} data-position={position}>
-      {config.map((reaction) => {
+      {config.map((reaction, index) => {
         return (
           <Button
             key={reaction.name}
@@ -43,6 +47,7 @@ export const ReactionPicker = ({
             className={styles.reactionButton}
             data-reaction-name={reaction.name}
             data-touch-hovered={hoveredReaction === reaction.name}
+            data-testid={`${pageId}/${componentId}/reaction-picker-${index}`}
           >
             <div
               data-active={myReaction === reaction.name}
@@ -53,8 +58,14 @@ export const ReactionPicker = ({
               onMouseEnter={() => onReactionHover?.(reaction.name)}
               onMouseLeave={() => onReactionHover?.(null)}
               className={styles.reactionButton__iconContainer}
+              role="button"
+              tabIndex={0}
+              aria-label="Reaction picker"
             >
-              <Typography.Caption className={styles.reactionButton__text}>
+              <Typography.Caption
+                testId={`${pageId}/${componentId}/reaction-picker-label-${index}`}
+                className={styles.reactionButton__text}
+              >
                 {reaction.name}
               </Typography.Caption>
               <img
@@ -62,6 +73,7 @@ export const ReactionPicker = ({
                 src={reaction.image}
                 alt={reaction.name}
                 className={styles.reactionButton__icon}
+                data-testid={`${pageId}/${componentId}/reaction-picker-icon-${index}`}
               />
             </div>
           </Button>

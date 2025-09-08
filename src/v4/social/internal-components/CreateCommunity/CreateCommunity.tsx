@@ -498,6 +498,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                     ))}
                   </div>
                   <Button
+                    data-testid={`${pageId}/*/select-category`}
                     onPress={() => {
                       isDesktop
                         ? openPopover()
@@ -509,6 +510,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                 </div>
               ) : (
                 <Button
+                  data-testid={`${pageId}/*/select-category`}
                   className={styles.createCommunity__category}
                   onPress={() => {
                     isDesktop

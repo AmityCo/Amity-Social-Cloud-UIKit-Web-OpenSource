@@ -398,10 +398,7 @@ export const TextWithMention = ({
   }, [seeMoreIsOpen]);
 
   return (
-    <Component
-      data-testid={testId}
-      className={clsx(styles.textWithMention__container, textClassName)}
-    >
+    <Component testId={testId} className={clsx(styles.textWithMention__container, textClassName)}>
       {isExpanded ? (
         <>
           {renderText(editorState.root.children)}
@@ -413,6 +410,7 @@ export const TextWithMention = ({
                 onClickSeeMoreButton?.(false);
                 setIsExpanded(false);
               }}
+              data-testid="see-less-button"
             >
               <Typography.BodyBold>See less</Typography.BodyBold>
             </Button>
@@ -431,6 +429,7 @@ export const TextWithMention = ({
                   onClickSeeMoreButton?.(true);
                   setIsExpanded(true);
                 }}
+                data-testid="see-more-button"
               >
                 <Typography.BodyBold> See more</Typography.BodyBold>
               </Button>

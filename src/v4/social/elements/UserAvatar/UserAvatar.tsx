@@ -69,6 +69,7 @@ export function UserAvatar({
       <Button
         onPress={() => handleAvatarClick()}
         className={clsx(styles.userAvatar__container, imageContainerClassName)}
+        data-testid={`user-avatar-button-${userId}`}
       >
         <img
           src={userImage}
@@ -85,7 +86,6 @@ export function UserAvatar({
       data-testid={`${accessibilityId}-${user?.userId}`}
       className={clsx(styles.userAvatar__placeholder, className)}
       onPress={() => handleAvatarClick()}
-      data-testid={`user-avatar-${userId}`}
     >
       <Typography.TitleBold
         data-testid={`user-avatar-${userId}`}

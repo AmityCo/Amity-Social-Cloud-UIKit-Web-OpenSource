@@ -431,6 +431,7 @@ export const PostContent = ({
             variant="default"
             className={styles.postContent__content}
             onPress={() => onClick?.()}
+            data-testid={`${pageId}/${componentId}/post-content-text-button`}
           >
             <TextContent
               pageId={pageId}
@@ -471,6 +472,7 @@ export const PostContent = ({
           <div className={styles.postContent__reactions_and_comments}>
             {post?.reactionsCount > 0 && (
               <Button
+                data-testid={`${pageId}/${componentId}/post-content-reactions-button`}
                 variant="default"
                 className={styles.postContent__reactionsBar}
                 onPress={() => {
@@ -528,7 +530,11 @@ export const PostContent = ({
             )}
 
             {post?.commentsCount > 0 && (
-              <Button variant="default" onPress={() => onClick?.()}>
+              <Button
+                data-testid={`${pageId}/${componentId}/comment_count`}
+                variant="default"
+                onPress={() => onClick?.()}
+              >
                 <Typography.Caption
                   data-testid={`${pageId}/${componentId}/comment_count`}
                   className={styles.postContent__commentsCount}
@@ -587,6 +593,7 @@ export const PostContent = ({
                           variant="text"
                           pageId={pageId}
                           componentId={componentId}
+                          elementId="copy_link_button"
                           defaultIcon={<Share className={styles.postContent__shareIcon} />}
                           onPress={() =>
                             isDesktop
@@ -647,6 +654,7 @@ export const PostContent = ({
               <>
                 {inlineComment && (
                   <Button
+                    data-testid="post-inline-comment-button"
                     variant="default"
                     className={styles.postContent__inlineComment__container}
                     onPress={() =>

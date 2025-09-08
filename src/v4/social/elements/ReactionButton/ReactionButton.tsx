@@ -216,6 +216,7 @@ export function ReactionButton({
           <Typography.CaptionBold
             className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
             data-has-my-reaction={hasMyReaction}
+            testId={`${pageId}/${componentId}/comment-reaction-text`}
           >
             {displayReaction ?? config.text ?? 'Like'}
           </Typography.CaptionBold>
@@ -223,6 +224,7 @@ export function ReactionButton({
           <Typography.BodyBold
             className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
             data-has-my-reaction={hasMyReaction}
+            testId={`${pageId}/${componentId}/comment-reaction-text`}
           >
             {typeof reactionsCount === 'number'
               ? millify(reactionsCount)
@@ -232,6 +234,7 @@ export function ReactionButton({
           <Typography.BodyBold
             className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
             data-has-my-reaction={hasMyReaction}
+            testId={`${pageId}/${componentId}/comment-reaction-text`}
           >
             {displayReaction || config.text}
           </Typography.BodyBold>
@@ -239,6 +242,7 @@ export function ReactionButton({
 
         {showReactionPicker && (
           <div
+            data-testid={`${pageId}/${componentId}/reaction-picker-panel`}
             className={clsx(
               styles.reactButton__panel,
               showPanelBelow && styles.reactButton__panel__below,
@@ -260,6 +264,8 @@ export function ReactionButton({
             }}
           >
             <ReactionPicker
+              pageId={pageId}
+              componentId={componentId}
               myReaction={displayReaction}
               onReactionClick={handleReactionPickerSelect}
               onReactionHover={handleReactionHover}

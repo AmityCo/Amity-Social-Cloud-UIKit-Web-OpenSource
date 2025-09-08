@@ -11,7 +11,10 @@ export type CheckboxProps = $CheckboxProps & {
 export function Checkbox({ label, className, checkboxIconClassname, ...props }: CheckboxProps) {
   return (
     <$Checkbox {...props} className={clsx(styles.checkbox, className)}>
-      <div className={clsx(styles.checkbox__icon, checkboxIconClassname)}>
+      <div
+        data-testid="checkbox-icon"
+        className={clsx(styles.checkbox__icon, checkboxIconClassname)}
+      >
         <svg viewBox="0 0 18 18" aria-hidden="true">
           <polyline points="1 9 7 14 15 4" />
         </svg>

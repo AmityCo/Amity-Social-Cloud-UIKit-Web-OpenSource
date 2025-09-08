@@ -8,7 +8,8 @@ import { useCommentReactionDisplay } from '~/v4/social/hooks/useCommentReactionD
 import styles from './CommentReactionDisplay.module.css';
 
 interface CommentReactionDisplayProps {
-  pageId: string;
+  pageId?: string;
+  componentId?: string;
   comment: Amity.Comment;
   reactionsCount: number;
   onReactionPress: () => void;
@@ -17,7 +18,8 @@ interface CommentReactionDisplayProps {
 }
 
 export const CommentReactionDisplay = ({
-  pageId,
+  pageId = '*',
+  componentId = '*',
   comment,
   reactionsCount,
   onReactionPress,
@@ -36,7 +38,7 @@ export const CommentReactionDisplay = ({
 
   return (
     <Button
-      data-testid="comment-reaction-list-button"
+      data-testid={`${pageId}/${componentId}/comment-reaction-list-button`}
       variant="default"
       className={containerClassName}
       onPress={onReactionPress}
@@ -50,7 +52,7 @@ export const CommentReactionDisplay = ({
                 src={item.reaction.image}
                 alt={item.reaction.name}
                 className={styles.commentReactionDisplay__icon}
-                data-testid={`${item.reaction.name}-button`}
+                data-testid={`${pageId}/${componentId}/${item.reaction.name}-button`}
               />
             ) : (
               <FallbackReaction
@@ -66,7 +68,7 @@ export const CommentReactionDisplay = ({
         </div>
       ) : null}
       <Typography.CaptionBold
-        data-testid="comment-reaction-count"
+        data-testid={`${pageId}/${componentId}/comment-reaction-count`}
         className={styles.commentReactionDisplay__reactionCount}
       >
         {millify(reactionsCount)}

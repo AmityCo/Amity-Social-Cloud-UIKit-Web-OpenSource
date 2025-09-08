@@ -69,14 +69,19 @@ export const ReactionListPanel = ({
                       onPress={() => onClickUserDetails(reaction.user?.userId as string)}
                     >
                       <Typography.BodyBold
-                        data-testid="user_display_name"
+                        testId="user_display_name"
                         className={styles.userDetailsName}
                       >
                         {reaction.user?.displayName}
                       </Typography.BodyBold>
                     </Button>
                     {currentUserId === reaction.user?.userId && (
-                      <div onClick={() => removeReaction(reaction.reactionName)}>
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        aria-label="Click to remove reaction"
+                        onClick={() => removeReaction(reaction.reactionName)}
+                      >
                         <Typography.Caption className={styles.removeBtn}>
                           Click to remove reaction
                         </Typography.Caption>

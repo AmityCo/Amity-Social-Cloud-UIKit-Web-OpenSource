@@ -239,7 +239,7 @@ export const ReactionList = ({
                 className={styles.tabItem}
                 onClick={() => handleTabClick('All')}
               >
-                <Typography.BodyBold>
+                <Typography.BodyBold testId={`${accessibilityId}_tab_all`}>
                   <span className={styles.reactionEmoji}>All {abbreviateCount(reactionCount)}</span>
                 </Typography.BodyBold>
               </div>
@@ -274,7 +274,9 @@ export const ReactionList = ({
                   className={styles.tabItem}
                   onClick={() => handleTabClick(reactionType)}
                 >
-                  <Typography.BodyBold>
+                  <Typography.BodyBold
+                    testId={`${pageId}/${componentId}/reaction-tab-${reactionType}`}
+                  >
                     <span className={styles.reactionEmoji}>
                       <ReactionIcon
                         className={styles.reactionItem}

@@ -144,12 +144,20 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
       </div>
 
       <div className={styles.communityAddCategoryPage__categoryList}>
-        <CheckboxGroup aria-label="add-category-checkbox" className={styles.checkbox__group}>
-          {allCategories.map((category) => (
-            <div className={styles.checkbox__item} key={category.categoryId}>
+        <CheckboxGroup
+          data-testid={`${pageId}/*/add-category-selection`}
+          className={styles.checkbox__group}
+        >
+          {allCategories.map((category, index) => (
+            <div
+              data-testid={`${pageId}/*/category-item-${index}`}
+              className={styles.checkbox__item}
+              key={category.categoryId}
+            >
               <label
                 htmlFor={category.categoryId}
                 className={styles.communityAddCategoryPage__categoryItem}
+                data-testid={`${pageId}/*/category-item-${category.name}`}
               >
                 <div className={styles.communityAddCategoryPage__leftSide}>
                   <div className={styles.communityAddCategoryPage__categoryAvatar}>
@@ -164,7 +172,10 @@ export const CommunityAddCategoryPage = ({ category }: CommunityAddCategoryPageP
                       }
                     />
                   </div>
-                  <Typography.BodyBold className={styles.communityAddCategoryPage__categoryName}>
+                  <Typography.BodyBold
+                    testId={`${pageId}/*/category-item-${category.name}`}
+                    className={styles.communityAddCategoryPage__categoryName}
+                  >
                     {category.name}
                   </Typography.BodyBold>
                 </div>

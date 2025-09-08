@@ -35,6 +35,7 @@ type ReplyCommentProps = {
   community?: Amity.Community;
   comment: Amity.Comment;
   isHighlightDeleted?: boolean;
+  testId?: string;
 };
 
 const PostReplyComment = ({
@@ -42,6 +43,7 @@ const PostReplyComment = ({
   community,
   comment,
   isHighlightDeleted = false,
+  testId,
 }: ReplyCommentProps) => {
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
@@ -214,7 +216,7 @@ const PostReplyComment = ({
           </div>
         </div>
       ) : (
-        <div className={styles.postReplyComment} style={themeStyles} data-testid={accessibilityId}>
+        <div className={styles.postReplyComment} style={themeStyles} data-testid={testId}>
           <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postReplyComment__details}>
             <div
@@ -237,9 +239,11 @@ const PostReplyComment = ({
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
+                testId={`${pageId}/${componentId}/reply-comment-text`}
               />
               <CommentReactionDisplay
                 pageId={pageId}
+                componentId={componentId}
                 comment={comment}
                 reactionsCount={reactionsCount}
                 position="replyComment"

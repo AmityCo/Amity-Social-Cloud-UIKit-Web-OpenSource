@@ -52,6 +52,7 @@ interface CommentProps {
   showReply?: boolean;
   // support inline comment behavior - behavior when click show reply
   onClickShowReply?: () => void;
+  testId?: string;
 }
 
 export const Comment = ({
@@ -67,6 +68,7 @@ export const Comment = ({
   showReply,
   onClickShowReply,
   maxLines,
+  testId,
 }: CommentProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -210,7 +212,10 @@ export const Comment = ({
   return (
     <div style={themeStyles} data-testid={accessibilityId}>
       {comment.isDeleted ? (
-        <div className={styles.postComment__deleteComment_container}>
+        <div
+          data-testid={`${pageId}/${componentId}/comment-deleted-tag`}
+          className={styles.postComment__deleteComment_container}
+        >
           <MinusCircleIcon className={styles.postComment__deleteComment_icon} />
           <Typography.Body className={styles.postComment__deleteComment_text}>
             This comment has been deleted
@@ -273,7 +278,7 @@ export const Comment = ({
           </div>
         </div>
       ) : (
-        <div className={styles.postComment}>
+        <div className={styles.postComment} data-testid={testId}>
           <UserAvatar
             pageId={pageId}
             componentId={componentId}
@@ -295,6 +300,7 @@ export const Comment = ({
                   goToUserProfilePage(comment.creator?.userId as string);
                 }}
                 className={styles.postComment__userInfo}
+                data-testid={`post-comment-user-${comment.creator?.userId}`}
               >
                 <Typography.BodyBold
                   data-testid={`${pageId}/${componentId}/username`}
@@ -316,10 +322,12 @@ export const Comment = ({
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
                 maxLines={maxLines}
+                testId={`${pageId}/${componentId}/comment-text`}
               />
 
               <CommentReactionDisplay
                 pageId={pageId}
+                componentId={componentId}
                 comment={comment}
                 reactionsCount={reactionsCount}
                 position="comment"

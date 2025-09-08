@@ -185,13 +185,14 @@ export const CommentList = ({
             highlightedCommentId={highlightedCommentId}
             parentId={parentId}
             showReply={highlightedComment.commentId === showReplyCommentAt}
+            testId={`comment-highlighted`}
           />
           {renderReplyComment?.(highlightedComment)}
         </div>
       )}
 
       {/* Render regular comments without the highlighted one */}
-      {filteredItems.map((item) => {
+      {filteredItems.map((item, index) => {
         return isAmityAd(item) ? (
           <CommentAd key={item.adId} ad={item} />
         ) : (
@@ -204,6 +205,7 @@ export const CommentList = ({
               community={community}
               shouldAllowInteraction={shouldAllowInteraction}
               showReply={item.commentId === showReplyCommentAt}
+              testId={`comment-${index}`}
             />
             {renderReplyComment?.(item as Amity.Comment)}
           </div>
