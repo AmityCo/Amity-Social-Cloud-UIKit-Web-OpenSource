@@ -58,8 +58,6 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({
   const { currentUserId } = useSDK();
 
   const isCurrentUser = forcePublicView ? false : user?.userId === currentUserId;
-  console.log('🚀 ~ UserProfilePage ~ forcePublicView:', forcePublicView);
-  console.log('🚀 ~ UserProfilePage ~ isCurrentUser:', isCurrentUser);
 
   const [isScroll, setIsScroll] = useState(false);
   const [profilingQuizDone, setProfilingQuizDone] = useState(false);

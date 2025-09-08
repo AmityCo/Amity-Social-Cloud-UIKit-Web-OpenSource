@@ -782,6 +782,13 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/top_navigation/header_label': {
       text: 'Your Profile',
     },
+    'public_profile_page/user_profile_header/user_following': {
+      text: 'Following',
+    },
+    'public_profile_page/user_profile_header/user_follower': {
+      text: 'Followers',
+    },
+
     'setting_page/top_navigation/header_label': {
       text: 'Settings',
     },

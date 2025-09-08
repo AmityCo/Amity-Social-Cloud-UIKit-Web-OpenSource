@@ -10,9 +10,9 @@ import BlockedUserSetting from './partial/BlockedUserSetting/BlockedUserSetting'
 import MentionSetting from './partial/MentionSetting/MentionSetting';
 import SettingTopNavigation from './partial/SettingTopNavigation/SettingTopNavigation';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import BlockedUserSettingTestPage from './partial/BlockedUserSettingTestPage/BlockedUserSettingTestPage';
+import { PublicProfilePage } from '~/v4/social/pages/PublicProfilePage';
 
 const menuItems = [
   {
@@ -21,6 +21,7 @@ const menuItems = [
       {
         elementId: 'profile-public',
         text: 'Vedi il tuo profilo pubblico',
+        pageTitle: 'Il tuo profilo pubblico',
         icon: 'User',
       },
       {
@@ -100,7 +101,6 @@ const menuItems = [
 const SettingPage: React.FC = () => {
   const { openPopup } = usePopupContext();
   const { isDesktop } = useResponsive();
-  const { goToUserProfilePage } = useNavigation();
   const [selectedSetting, setSelectedSetting] = useState<string>('settings');
 
   const handleConfirmDeleteModal = () => {
@@ -116,16 +116,12 @@ const SettingPage: React.FC = () => {
   const currentUser = { userId: currentUserId };
 
   const handleMenuItemClick = (elementId: string) => {
-    if (elementId === 'profile-public') {
-      goToUserProfilePage(currentUser.userId, { forcePublicView: true });
-    } else {
-      setSelectedSetting(elementId);
-    }
+    setSelectedSetting(elementId);
   };
   const renderChosenSetting = () => {
     switch (selectedSetting) {
       case 'profile-public':
-        return null;
+        return <PublicProfilePage userId={currentUser.userId || ''} />;
       case 'profile-share':
         return <div>Profile Share Partial TBD</div>;
       case 'follower-setting':
@@ -161,7 +157,7 @@ const SettingPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isDesktop && selectedSetting !== 'settings') {
+    if (isDesktop && selectedSetting !== 'settings' && selectedSetting !== 'profile-public') {
       const bodycontent = renderChosenSetting();
       openPopup({
         view: 'desktop',
@@ -209,6 +205,8 @@ const SettingPage: React.FC = () => {
                 <Typography.Body>Cancella il profilo community</Typography.Body>
               </div>
             </>
+          ) : selectedSetting === 'profile-public' ? (
+            renderChosenSetting()
           ) : (
             !isDesktop && renderChosenSetting()
           )}
