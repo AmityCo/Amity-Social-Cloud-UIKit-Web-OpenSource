@@ -240,7 +240,7 @@ export const PostMenu = ({
     onCloseMenu();
     confirm({
       title: 'Close poll?',
-      content: `The Poll duration you've set will be ignored and your poll will be closed immediately.`,
+      content: `The poll duration you've set will be ignored and your poll will be closed immediately.`,
       cancelText: 'Cancel',
       okText: 'Close poll',
       onOk: () => {
