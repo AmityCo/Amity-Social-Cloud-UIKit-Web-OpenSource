@@ -58,12 +58,8 @@ export function CommunityProfileMenuButton({
   const isCommunityModerator = moderators.some((moderator) => moderator.userId === currentUserId);
   const isMember = community?.isJoined;
 
-  const shouldShowCopyButton = useMemo(() => {
-    if (community?.isPublic) return true;
-    if (community?.isDiscoverable) return true;
-    if (isCommunityModerator) return false;
-    return false;
-  }, [community?.isDiscoverable, isCommunityModerator, community?.isPublic]);
+  const shouldShowCopyButton =
+    community?.isPublic || community?.isDiscoverable || isCommunityModerator;
 
   const renderMenu = useCallback(
     ({ closePopover }: { closePopover?: () => void } = {}) => {
