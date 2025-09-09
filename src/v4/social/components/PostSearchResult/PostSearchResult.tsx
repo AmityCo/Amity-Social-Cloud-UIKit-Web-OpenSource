@@ -119,7 +119,7 @@ export const PostSearchResult = ({
                     });
                   }}
                 />
-                <Divider className={styles.postSearchResult__divider} data-last-item={isLastItem} />
+                <Divider className={styles.postSearchResult__divider} isLastChild={isLastItem} />
               </div>
             );
           })}

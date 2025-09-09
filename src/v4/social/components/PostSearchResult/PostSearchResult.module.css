@@ -5,7 +5,6 @@
   align-items: start;
   flex-direction: column;
   background-color: var(--asc-color-white);
-  gap: 0.5rem;
 }
 
 .postSearchResult__postContentContainer {
@@ -43,6 +42,7 @@
 @media screen and (width >= 48em) {
   .postSearchResult__postContent {
     border-radius: unset;
+    padding-top: 0.4rem;
   }
 
   .postSearchResult__postContent:hover {
