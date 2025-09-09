@@ -17,6 +17,7 @@ type ChildrenPostContentProps = {
   onClipClick: (postId: string) => void;
   goToPostDetail?: () => void;
   onPollPostDeleted?: (post: Amity.Post) => void;
+  forceShowPollResults?: boolean;
 };
 
 export const ChildrenPostContent = ({
@@ -28,6 +29,7 @@ export const ChildrenPostContent = ({
   onClipClick,
   goToPostDetail,
   onPollPostDeleted,
+  forceShowPollResults,
   disabledContent = false,
   expandAllContent = false,
 }: ChildrenPostContentProps) => {
@@ -40,6 +42,7 @@ export const ChildrenPostContent = ({
         posts={post.childrenPosts as Amity.Post<'poll'>[]}
         disabled={disabledContent}
         onPostDeleted={onPollPostDeleted}
+        forceShowResults={forceShowPollResults}
         expandOption={expandAllContent}
       />
       <ImageContent

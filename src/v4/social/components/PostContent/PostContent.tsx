@@ -144,6 +144,13 @@ export const PostContent = ({
   const { goToCommunityProfilePage } = useNavigation();
   const { socialReactions } = useCustomReaction();
 
+  // State to force poll results view when poll is closed from menu
+  const [forceShowPollResults, setForceShowPollResults] = useState(false);
+
+  const handlePollClosed = useCallback(() => {
+    setForceShowPollResults(true);
+  }, []);
+
   const disabledInlineComment = pageId === 'post_detail_page' || pageId === 'pending_posts_page';
 
   const { inlineComment, isLoading: loadingInlineComment } = useInlineComment({
@@ -381,6 +388,7 @@ export const PostContent = ({
                           componentId={componentId}
                           isSearchPost={isSearchPost}
                           onPostDeleted={onPostDeleted}
+                          onPollClosed={handlePollClosed}
                           onConfirmEditPost={
                             shouldShowConfirmEdit
                               ? ({ onConfirm }) => {
@@ -406,6 +414,7 @@ export const PostContent = ({
                     componentId={componentId}
                     isSearchPost={isSearchPost}
                     onPostDeleted={onPostDeleted}
+                    onPollClosed={handlePollClosed}
                     onConfirmEditPost={
                       shouldShowConfirmEdit
                         ? ({ onConfirm }) => {
@@ -463,6 +472,7 @@ export const PostContent = ({
                 }}
                 goToPostDetail={onClick}
                 onPollPostDeleted={pageId === 'post_detail_page' ? onPollPostDeleted : undefined}
+                forceShowPollResults={forceShowPollResults}
                 disabledContent={isNotJoinedCommunity || disabledContent}
                 expandAllContent={expandAllContent}
               />

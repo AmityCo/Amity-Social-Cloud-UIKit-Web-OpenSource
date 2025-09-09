@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import styles from './PollContent.module.css';
 import { Button } from '~/v4/core/components/AriaButton/Button';
@@ -18,6 +18,7 @@ type PollContentProps = {
   parentPost: Amity.Post;
   disabled?: boolean;
   onPostDeleted?: (post: Amity.Post) => void;
+  forceShowResults?: boolean;
   expandOption?: boolean;
 };
 
@@ -30,14 +31,21 @@ export const PollContent: FC<PollContentProps> = ({
   disabled = false,
   expandOption = false,
   onPostDeleted,
+  forceShowResults = false,
 }) => {
   const { currentUserId } = useSDK();
 
   const poll = posts?.[0]?.getPollInfo();
   const [answers, setAnswers] = useState<string[] | undefined>();
-  const [isAuthorSeeingPoll, setIsAuthorSeeingPoll] = useState<boolean>(false);
+  const [isAuthorSeeingPoll, setIsAuthorSeeingPoll] = useState<boolean>(forceShowResults);
   const [isExpanded, setIsExpanded] = useState<boolean>(expandOption);
   const [isPollEnded, setIsPollEnded] = useState<boolean>(poll?.status === 'closed');
+
+  useEffect(() => {
+    if (forceShowResults) {
+      setIsAuthorSeeingPoll(true);
+    }
+  }, [forceShowResults]);
 
   const user = useUser(currentUserId);
 
@@ -87,7 +95,11 @@ export const PollContent: FC<PollContentProps> = ({
     setIsPollEnded(true);
   };
 
-  const { mutateAsync: mutateVotePoll } = useVotePoll({ onPostDeleted, parentPost });
+  const { mutateAsync: mutateVotePoll } = useVotePoll({
+    onPostDeleted,
+    parentPost,
+    onPollEnded: handlePollEnd,
+  });
   const { mutateAsync: mutateUnvotePoll } = useUnvotePoll({
     onPostDeleted,
     onPollEnded: handlePollEnd,
@@ -210,7 +222,7 @@ export const PollContent: FC<PollContentProps> = ({
               </Typography.CaptionBold>
             </Button>
           )}
-        {isAuthorSeeingPoll && (
+        {isAuthorSeeingPoll && !forceShowResults && (
           <Button variant="text" onPress={() => setIsAuthorSeeingPoll(false)}>
             <Typography.CaptionBold className={styles.pollContent__pollDetail__seeResult}>
               Back to poll

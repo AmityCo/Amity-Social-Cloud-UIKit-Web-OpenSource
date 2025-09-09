@@ -4,9 +4,11 @@ import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 export function useVotePoll({
+  onPollEnded,
   onPostDeleted,
   parentPost,
 }: {
+  onPollEnded?: (val: boolean) => void;
   onPostDeleted?: (post: Amity.Post) => void;
   parentPost: Amity.Post;
 }) {
@@ -16,8 +18,10 @@ export function useVotePoll({
       return PollRepository.votePoll(pollId, answerIds);
     },
     onError: (err: Error) => {
-      if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) info({ content: 'Poll ended.' });
-      else if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
+      if (err.message.includes(ERROR_RESPONSE.POLL_CLOSED)) {
+        info({ content: 'Poll ended.' });
+        onPollEnded?.(true);
+      } else if (err.message.includes(ERROR_RESPONSE.POLL_NOT_FOUND)) {
         info({ content: 'This post is no longer available.' });
         onPostDeleted?.(parentPost);
       } else {

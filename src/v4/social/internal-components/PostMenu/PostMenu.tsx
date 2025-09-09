@@ -33,6 +33,7 @@ interface PostMenuProps {
   onCloseMenu: () => void;
   onConfirmEditPost?: ({ onConfirm }: { onConfirm: () => void }) => void;
   onPostDeleted?: (post: Amity.Post) => void;
+  onPollClosed?: () => void;
   isSearchPost?: boolean;
 }
 
@@ -43,6 +44,7 @@ export const PostMenu = ({
   onConfirmEditPost,
   onCloseMenu,
   onPostDeleted,
+  onPollClosed,
   isSearchPost = false,
 }: PostMenuProps) => {
   const { success, info } = useNotifications();
@@ -170,6 +172,7 @@ export const PostMenu = ({
     onSuccess: () => {
       success({ content: 'Poll closed.' });
       onPostDeleted?.(post);
+      onPollClosed?.();
     },
     onError: () => {
       info({ content: 'Oops, something went wrong.' });
