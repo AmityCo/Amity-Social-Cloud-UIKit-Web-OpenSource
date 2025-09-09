@@ -788,6 +788,9 @@ export const defaultConfig: DefaultConfig = {
     'public_profile_page/user_profile_header/user_follower': {
       text: 'Followers',
     },
+    'public_profile_page/user_profile_header/follow_user_button': {
+      text: 'Segui',
+    },
 
     'setting_page/top_navigation/header_label': {
       text: 'Settings',

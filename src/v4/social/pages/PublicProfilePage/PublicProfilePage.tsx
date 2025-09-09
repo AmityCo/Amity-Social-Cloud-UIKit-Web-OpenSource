@@ -108,6 +108,7 @@ export const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ userId, us
             pageId={pageId}
             userBadgeTitle={userBadgeTitle}
             isCurrentUser={false}
+            forcePublicProfileView={true}
           />
           {/* Public profile cta buttons */}
           <div className=""></div>

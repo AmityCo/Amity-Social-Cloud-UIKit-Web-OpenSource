@@ -33,6 +33,7 @@ interface UserProfileHeaderProps {
   pageId?: string;
   userBadgeTitle?: string;
   isCurrentUser?: boolean;
+  forcePublicProfileView?: boolean;
 }
 
 const UserProfileHeaderSkeleton: React.FC = () => {
@@ -58,6 +59,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
   pageId = '*',
   userBadgeTitle = 'Lupo Solitario',
   isCurrentUser = false,
+  forcePublicProfileView,
 }) => {
   const componentId = 'user_profile_header';
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
@@ -136,14 +138,31 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
   );
 
   const isShowPendingButton =
-    currentUserId && user && currentUserId !== user.userId && followStatus === 'pending';
+    currentUserId &&
+    user &&
+    !forcePublicProfileView &&
+    currentUserId !== user.userId &&
+    followStatus === 'pending';
+
+  // If forcePublicProfileView is true, always show the Follow button
   const isShowFollowButton =
-    currentUserId && user && currentUserId !== user.userId && followStatus === 'none';
+    currentUserId &&
+    user &&
+    (forcePublicProfileView || (currentUserId !== user.userId && followStatus === 'none'));
+
   const isShowFollowingButton =
-    currentUserId && user && currentUserId !== user.userId && followStatus === 'accepted';
+    currentUserId &&
+    user &&
+    !forcePublicProfileView &&
+    currentUserId !== user.userId &&
+    followStatus === 'accepted';
 
   const isShowUnBlockButton =
-    currentUserId && user && currentUserId !== user.userId && followStatus === 'blocked';
+    currentUserId &&
+    user &&
+    !forcePublicProfileView &&
+    currentUserId !== user.userId &&
+    followStatus === 'blocked';
 
   if (!user) return <UserProfileHeaderSkeleton />;
 
@@ -181,7 +200,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
             </div>
             {userBadgeTitle && <div className={styles.userBadge}>{userBadgeTitle}</div>}
           </div>
-          {isCurrentUser && (
+          {isCurrentUser && !forcePublicProfileView && (
             <Button
               data-testid={`${pageId}/'*'/edit_user_profile_button`}
               className={styles.userProfileHeader__button}
@@ -190,94 +209,120 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
               <Pencil className={styles.userProfileHeader__editProfile__icon} />
             </Button>
           )}
+          {/* {forcePublicProfileView && (
+            <>
+              <Button
+                data-testid={`${pageId}/'*'/follow_user_button`}
+                className={styles.userProfileHeader__button}
+                onPress={() => followUser(user.userId)}
+              >
+                follow test
+              </Button>
+              <Button
+                data-testid={`${pageId}/'*'/message_user_button`}
+                className={styles.userProfileHeader__button}
+                onPress={() => {}}
+              >
+                Messaggio test{' '}
+              </Button>
+            </>
+          )} */}
         </div>
       </div>
 
       <UserDescription description={user.description} pageId={pageId} componentId={componentId} />
 
-      <div className={styles.userProfileHeader__relationship}>
-        <UserFollowing userId={user.userId} pageId={pageId} componentId={componentId} />
-        <div className={styles.userProfileHeader__relationship__separator}></div>
-        <UserFollower userId={user.userId} pageId={pageId} componentId={componentId} />
-        <div className={styles.userProfileHeader__relationship__separator}></div>
-        {/* TO ADD group counter */}
+      <div className={styles.userProfileHeader_bottomPositioner}>
+        <div className={styles.userProfileHeader__relationship}>
+          <UserFollowing userId={user.userId} pageId={pageId} componentId={componentId} />
+          <div className={styles.userProfileHeader__relationship__separator}></div>
+          <UserFollower userId={user.userId} pageId={pageId} componentId={componentId} />
+          <div className={styles.userProfileHeader__relationship__separator}></div>
+          {/* TO ADD group counter */}
+        </div>
+
+        <div className={styles.userProfileHeader__relationshipButtons}>
+          {pendingCount > 0 && (
+            <Button
+              variant="outlined"
+              className={styles.pendingCountButton}
+              onPress={() =>
+                AmityUserProfileHeaderComponentBehavior?.goToPendingFollowRequestPage?.()
+              }
+            >
+              <div className={styles.pendingCountButton__inner}>
+                <div className={styles.pendingCountButton__notification}>
+                  <NotificationIndicator
+                    className={styles.pendingCountButton__notification__icon}
+                  />
+                  <Typography.BodyBold className={styles.pendingCountButton__notification__text}>
+                    New follow requests
+                  </Typography.BodyBold>
+                </div>
+                <div>
+                  <Typography.Caption
+                    className={styles.pendingCountButton__notification__requestCount}
+                  >{`${pendingCount} request${pendingCount > 0 ? 's' : ''} need your approval`}</Typography.Caption>
+                </div>
+              </div>
+            </Button>
+          )}
+
+          {isShowFollowButton && (
+            <FollowUserButton
+              pageId={pageId}
+              componentId={componentId}
+              onClick={() => {
+                if (!online) {
+                  notification.info({
+                    content: 'Oops, something went wrong.',
+                  });
+                  return;
+                }
+                followUser(user.userId);
+              }}
+            />
+          )}
+
+          {isShowFollowingButton && renderFollowingButton(user.userId)}
+          {isShowPendingButton && (
+            <PendingUserButton
+              pageId={pageId}
+              componentId={componentId}
+              onClick={() => {
+                if (!online) {
+                  notification.info({
+                    content: 'Oops, something went wrong.',
+                  });
+                  return;
+                }
+                cancelFollow(user.userId);
+              }}
+            />
+          )}
+
+          {isShowUnBlockButton && (
+            <UnblockUserButton
+              pageId={pageId}
+              componentId={componentId}
+              onClick={() => {
+                if (!online) {
+                  notification.info({
+                    content: 'Failed to unblock user. Please try again.',
+                  });
+                  return;
+                }
+                unblockUser({
+                  pageId,
+                  componentId,
+                  userId: user.userId,
+                  displayName: user.displayName ?? user.userId,
+                });
+              }}
+            />
+          )}
+        </div>
       </div>
-      {pendingCount > 0 && (
-        <Button
-          variant="outlined"
-          className={styles.pendingCountButton}
-          onPress={() => AmityUserProfileHeaderComponentBehavior?.goToPendingFollowRequestPage?.()}
-        >
-          <div className={styles.pendingCountButton__inner}>
-            <div className={styles.pendingCountButton__notification}>
-              <NotificationIndicator className={styles.pendingCountButton__notification__icon} />
-              <Typography.BodyBold className={styles.pendingCountButton__notification__text}>
-                New follow requests
-              </Typography.BodyBold>
-            </div>
-            <div>
-              <Typography.Caption
-                className={styles.pendingCountButton__notification__requestCount}
-              >{`${pendingCount} request${pendingCount > 0 ? 's' : ''} need your approval`}</Typography.Caption>
-            </div>
-          </div>
-        </Button>
-      )}
-
-      {isShowFollowButton && (
-        <FollowUserButton
-          pageId={pageId}
-          componentId={componentId}
-          onClick={() => {
-            if (!online) {
-              notification.info({
-                content: 'Oops, something went wrong.',
-              });
-              return;
-            }
-            followUser(user.userId);
-          }}
-        />
-      )}
-
-      {isShowFollowingButton && renderFollowingButton(user.userId)}
-
-      {isShowPendingButton && (
-        <PendingUserButton
-          pageId={pageId}
-          componentId={componentId}
-          onClick={() => {
-            if (!online) {
-              notification.info({
-                content: 'Oops, something went wrong.',
-              });
-              return;
-            }
-            cancelFollow(user.userId);
-          }}
-        />
-      )}
-
-      {isShowUnBlockButton && (
-        <UnblockUserButton
-          pageId={pageId}
-          componentId={componentId}
-          onClick={() => {
-            if (!online) {
-              notification.info({
-                content: 'Failed to unblock user. Please try again.',
-              });
-              return;
-            }
-            unblockUser({
-              pageId,
-              componentId,
-              userId: user.userId,
-              displayName: user.displayName ?? user.userId,
-            });
-          }}
-        />
-      )}
 
       {isImageViewerOpen && user.avatarFileId && (
         <SingleImageViewer
