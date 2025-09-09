@@ -177,6 +177,13 @@ export const PostContent = ({
     setForceShowPollResults(true);
   }, []);
 
+  // State to force poll results view when poll is closed from menu
+  const [forceShowPollResults, setForceShowPollResults] = useState(false);
+
+  const handlePollClosed = useCallback(() => {
+    setForceShowPollResults(true);
+  }, []);
+
   const disabledInlineComment = pageId === 'post_detail_page' || pageId === 'pending_posts_page';
 
   const { inlineComment, isLoading: loadingInlineComment } = useInlineComment({

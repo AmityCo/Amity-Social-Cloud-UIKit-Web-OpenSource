@@ -119,7 +119,6 @@ export const PollContent: FC<PollContentProps> = ({
     parentPost,
     onPollEnded: handlePollEnd,
   });
-
   const { mutateAsync: mutateUnvotePoll } = useUnvotePoll({
     onPostDeleted,
     onPollEnded: handlePollEnd,
