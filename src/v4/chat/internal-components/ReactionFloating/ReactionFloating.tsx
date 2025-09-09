@@ -22,7 +22,7 @@ interface ReactionFloatingProps {
 }
 
 export const ReactionFloating: React.FC<ReactionFloatingProps> = ({ post }) => {
-  const { config: reactionsConfig } = useCustomReaction();
+  const { reactions: reactionsConfig } = useCustomReaction();
   const [lanes, setLanes] = useState<ReactionCount[]>();
   const containerRef = useRef<HTMLDivElement>(null);
   const reactionsRef = useRef<FloatingReaction[]>([]);
@@ -115,7 +115,7 @@ export const ReactionFloating: React.FC<ReactionFloatingProps> = ({ post }) => {
     const topicSubscription = subscribeTopic(getLiveReactionTopic(post));
     let unsubscribe: (() => void) | undefined;
 
-    if (containerRef?.current && reactionsConfig.length > 0 && post.postId) {
+    if (containerRef?.current && reactionsConfig?.length > 0 && post.postId) {
       const reactionObservable = new ReactionObservable(post.postId);
       unsubscribe = reactionObservable.subscribe((reactions) => {
         setLanes([...reactions]);
@@ -126,7 +126,7 @@ export const ReactionFloating: React.FC<ReactionFloatingProps> = ({ post }) => {
       topicSubscription();
       unsubscribe?.();
     };
-  }, [containerRef, reactionsConfig.length, post.postId]);
+  }, [containerRef, reactionsConfig?.length, post.postId]);
 
   useEffect(() => {
     animate();

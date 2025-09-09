@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import styles from './PollContent.module.css';
 import { Button } from '~/v4/core/components/AriaButton/Button';
@@ -47,24 +47,32 @@ export const PollContent: FC<PollContentProps> = ({
   const isVoteDisabled = parentPost?.feedType === 'reviewing' || disabled;
   const isVoteButtonDisabled = isVoteDisabled || !answers || answers?.length < 1 || disabled;
 
-  const pollAnswers = useMemo(() => {
-    if (!poll) return [];
-
-    const maxVoteCount = Math.max(...poll.answers.map((answer) => answer.voteCount));
-
-    const processPollAnswers = poll.answers
+  const processPollAnswer = useCallback((pollAnswer: Amity.PollAnswer[], maxVoteCount: number) => {
+    return pollAnswer
       .map((answer) => ({
         ...answer,
         isTopVoted: answer.voteCount !== 0 && answer.voteCount === maxVoteCount,
       }))
       .sort((a, b) => b.voteCount - a.voteCount);
+  }, []);
 
-    if (!showAllChoices && processPollAnswers.length > maxChoicesShown && !isExpanded) {
-      return processPollAnswers.slice(0, maxChoicesShown);
-    }
+  const pollAnswers = useMemo(() => {
+    if (!poll) return [];
 
-    return poll.status === 'closed' ? processPollAnswers : poll.answers;
-  }, [poll?.answers, isExpanded]) as (Amity.PollAnswer & { isTopVoted: boolean })[];
+    const maxVoteCount = Math.max(...poll.answers.map((answer) => answer.voteCount));
+
+    // Sort if the poll is closed or has voted by current user
+    const processedPollAnswers =
+      poll.status === 'closed' || poll.isVoted
+        ? processPollAnswer(poll.answers, maxVoteCount)
+        : poll.answers;
+
+    return isExpanded || showAllChoices
+      ? processedPollAnswers
+      : processedPollAnswers.slice(0, maxChoicesShown);
+  }, [poll?.answers, poll?.isVoted, isExpanded, processPollAnswer]) as (Amity.PollAnswer & {
+    isTopVoted: boolean;
+  })[];
 
   const isShowMore = useMemo(
     () => poll?.answers && !showAllChoices && poll?.answers.length > maxChoicesShown,
