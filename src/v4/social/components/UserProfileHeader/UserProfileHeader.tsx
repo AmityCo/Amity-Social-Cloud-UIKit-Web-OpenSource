@@ -13,7 +13,8 @@ import { FollowingUserButton } from '~/v4/social/elements/FollowingUserButton';
 import { PendingUserButton } from '~/v4/social/elements/PendingUserButton';
 import { UnblockUserButton } from '~/v4/social/elements/UnblockUserButton/UnblockUserButton';
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
-import { Button } from '~/v4/core/components/AriaButton/Button';
+import { Button } from '~/v4/core/components/AriaButton';
+import { Button as CustomButton } from '~/v4/core/components/Button';
 import { Typography } from '~/v4/core/components';
 import NotificationIndicator from '~/v4/icons/NotificationIndicator';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
@@ -94,7 +95,6 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
         unFollowUser({ pageId, userId });
         onClickButton?.();
       }}
-      variant="text"
     >
       <UnfollowUser className={styles.userProfileHeader__unFollowButton__icon} />
       <Typography.BodyBold className={styles.userProfileHeader__unFollowButton__text}>
@@ -105,7 +105,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
 
   const { isDesktop } = useResponsive();
 
-  const onPressFollowingButton = (userId: string) => {
+  const onClickFollowingButton = (userId: string) => {
     setDrawerData({
       content: unFollowUserButton({
         userId,
@@ -120,7 +120,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
           pageId={pageId}
           componentId={componentId}
           onClick={() => {
-            if (!isDesktop) onPressFollowingButton(userId);
+            if (!isDesktop) onClickFollowingButton(userId);
             else openPopover();
           }}
         />
@@ -135,6 +135,20 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
         </div>
       )}
     </Popover>
+  );
+
+  const renderSendMessageButton = (userId: string) => (
+    <CustomButton
+      className={styles.userProfileHeader__messageButton}
+      onClick={() => {}}
+      variant="outlined"
+    >
+      <div className={styles.userProfileHeader__messageButton__inner}>
+        <Typography.BodyBold className={styles.userProfileHeader__messageButton__text}>
+          Messaggio
+        </Typography.BodyBold>
+      </div>
+    </CustomButton>
   );
 
   const isShowPendingButton =
@@ -174,7 +188,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
     >
       <div className={styles.userProfileHeader__header}>
         <div className={styles.userProfileHeader__leftWrapper}>
-          <Button variant="text" onPress={() => setIsImageViewerOpen(true)}>
+          <Button onPress={() => setIsImageViewerOpen(true)}>
             <UserAvatar
               userId={user.userId}
               className={styles.userProfileHeader__avatar}
@@ -214,14 +228,14 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
               <Button
                 data-testid={`${pageId}/'*'/follow_user_button`}
                 className={styles.userProfileHeader__button}
-                onPress={() => followUser(user.userId)}
+                onClick={() => followUser(user.userId)}
               >
                 follow test
               </Button>
               <Button
                 data-testid={`${pageId}/'*'/message_user_button`}
                 className={styles.userProfileHeader__button}
-                onPress={() => {}}
+                onClick={() => {}}
               >
                 Messaggio test{' '}
               </Button>
@@ -285,6 +299,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
           )}
 
           {isShowFollowingButton && renderFollowingButton(user.userId)}
+          {renderSendMessageButton(user.userId)}
           {isShowPendingButton && (
             <PendingUserButton
               pageId={pageId}

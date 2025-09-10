@@ -791,6 +791,12 @@ export const defaultConfig: DefaultConfig = {
     'public_profile_page/user_profile_header/follow_user_button': {
       text: 'Segui',
     },
+    'public_profile_page/user_profile_header/pending_user_button': {
+      text: 'richiesta inviata',
+    },
+    'public_profile_page/user_profile_header/unblock_user_button': {
+      text: 'Sblocca',
+    },
 
     'setting_page/top_navigation/header_label': {
       text: 'Settings',

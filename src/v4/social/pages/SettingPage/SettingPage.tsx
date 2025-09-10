@@ -11,7 +11,6 @@ import MentionSetting from './partial/MentionSetting/MentionSetting';
 import SettingTopNavigation from './partial/SettingTopNavigation/SettingTopNavigation';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useSDK from '~/v4/core/hooks/useSDK';
-import BlockedUserSettingTestPage from './partial/BlockedUserSettingTestPage/BlockedUserSettingTestPage';
 import { PublicProfilePage } from '~/v4/social/pages/PublicProfilePage';
 
 const menuItems = [
@@ -74,12 +73,6 @@ const menuItems = [
         icon: 'UserLockIcon',
         pageTitle: 'Utenti bloccati',
       },
-      {
-        elementId: 'blocked-users-test-page',
-        text: 'Utenti bloccati (Test Page)',
-        icon: 'UserLockIcon',
-        pageTitle: 'Utenti bloccati (Test Page)',
-      },
     ],
   },
   {
@@ -136,8 +129,6 @@ const SettingPage: React.FC = () => {
         return <CommentSetting />;
       case 'blocked-users':
         return <BlockedUserSetting />;
-      case 'blocked-users-test-page':
-        return <BlockedUserSettingTestPage />;
       case 'info-terms':
         return <div>Info Terms Partial TBD</div>;
       case 'info-help':

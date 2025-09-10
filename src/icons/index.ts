@@ -64,6 +64,7 @@ export { default as UserLockIcon } from './UserLockIcon';
 export { default as EditIcon } from './EditIcon';
 export { default as PageIcon } from './PageIcon';
 export { default as AssistanceIcon } from './AssistanceIcon';
+export { default as CrossIcon } from './Cross';
 
 // files
 export { default as AudioFile } from './files/Audio';

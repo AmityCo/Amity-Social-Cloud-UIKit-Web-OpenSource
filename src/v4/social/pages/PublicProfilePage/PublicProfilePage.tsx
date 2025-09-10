@@ -12,8 +12,11 @@ import { UserImageFeed } from '~/v4/social/components/UserImageFeed/UserImageFee
 import { UserVideoFeed } from '~/v4/social/components/UserVideoFeed/UserVideoFeed';
 import { Typography } from '~/v4/core/components';
 import { TopNavigation } from '~/v4/social/components/TopNavigation';
-import { MasterTrophy } from '~/v4/icons/MasterTrophy';
 import ChevronRight from '~/v4/icons/ChevronRight';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { Button } from '~/v4/core/components';
+import { Check, CrossIcon } from '~/icons';
+import PublicProfileTopNavigation from './partial/PublicProfileTopNavigation/PublicProfileTopNavigation';
 
 type PublicProfilePageProps = {
   userId: string;
@@ -32,11 +35,41 @@ export const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ userId, us
 
   const { themeStyles } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
+  // const { currentUserId } = useSDK();
 
   const [isScroll, setIsScroll] = useState(false);
+  const [hasPendingRequest, setHasPendingRequest] = useState(false);
   const [currentActiveTab, setCurrentActiveTab] = React.useState<UserProfileTabs>(
     UserProfileTabs.FEED,
   );
+
+  //mock for test
+  const togglePendingRequest = () => {
+    setHasPendingRequest((prev) => !prev);
+  };
+
+  // implement request to check if there is a pending request(check buttons const block in the userHeader)
+  /*
+  useEffect(() => {
+    const checkPendingRequests = async () => {
+      }
+    };
+    
+    checkPendingRequests();
+  }, []);
+  */
+
+  const handleAcceptRequest = () => {
+    // Implement accept request logic here
+    console.log('Request accepted');
+    setHasPendingRequest(false);
+  };
+
+  const handleDeclineRequest = () => {
+    // Implement decline request logic here
+    console.log('Request declined');
+    setHasPendingRequest(false);
+  };
 
   const onChangeTab = (tab: UserProfileTabs) => {
     setCurrentActiveTab(tab);
@@ -101,7 +134,39 @@ export const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ userId, us
 
   return (
     <PullToRefresh className={styles.publicProfilePage} style={themeStyles}>
+      <PublicProfileTopNavigation />
+      {/* Mock button to be removed */}
+      <Button className={styles.publicProfilePage__mockButton} onClick={togglePendingRequest}>
+        {hasPendingRequest ? 'Hide Request' : 'Show Request'}
+      </Button>
+
       <div className={styles.publicProfilePage__container} ref={containerRef}>
+        {hasPendingRequest && (
+          <div className={styles.publicProfilePage__cardBorders}>
+            <div className={styles.publicProfilePage__pendingRequest}>
+              <div className={styles.publicProfilePage__pendingRequestContent}>
+                <Typography.BodyBold>Richiesta di amicizia in attesa</Typography.BodyBold>
+                <Typography.Body>{`${user?.displayName || userId} ha inviato una richiesta di amicizia. Accetta per connetterti.`}</Typography.Body>
+              </div>
+              <div className={styles.publicProfilePage__pendingRequestButtons}>
+                <Button
+                  className={styles.publicProfilePage__acceptButton}
+                  onClick={handleAcceptRequest}
+                >
+                  <Check />
+                </Button>
+                <Button
+                  variant="outlined"
+                  className={styles.publicProfilePage__declineButton}
+                  onClick={handleDeclineRequest}
+                >
+                  <CrossIcon />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className={styles.publicProfilePage__cardBorders}>
           <UserProfileHeader
             user={user}
