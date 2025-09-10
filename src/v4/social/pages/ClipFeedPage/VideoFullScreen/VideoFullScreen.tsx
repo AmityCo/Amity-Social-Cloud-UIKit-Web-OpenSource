@@ -15,7 +15,7 @@ type VideoFullScreenProps = {
   isDragging: boolean;
   onDragging: (val: boolean) => void;
   isLocalMuted: boolean;
-  onClipFailed?: (val: boolean) => void;
+  onClipFailed?: (postId: string) => void;
   isLoading?: boolean;
   seeMoreIsOpen?: boolean;
 };
@@ -36,6 +36,7 @@ export const VideoFullScreen = ({
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isClipLoading, setIsClipLoading] = useState(true);
+  const [hasReportedFailure, setHasReportedFailure] = useState(false);
   const fileUrl = getFileUrl(post as Amity.Post<'clip' | 'video'>);
 
   useEffect(() => {
@@ -103,8 +104,15 @@ export const VideoFullScreen = ({
     };
   }, [post.postId, videoRefs, isActive]);
 
+  // Handle clip failure - only report once per post
+  useEffect(() => {
+    if (!fileUrl && !hasReportedFailure) {
+      onClipFailed?.(post.postId);
+      setHasReportedFailure(true);
+    }
+  }, [fileUrl, post.postId, onClipFailed, hasReportedFailure]);
+
   if (!fileUrl) {
-    onClipFailed?.(true);
     return <DeletedClipView onWatchNext={onNextVideo} />;
   }
 

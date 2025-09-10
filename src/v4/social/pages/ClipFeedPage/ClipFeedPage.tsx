@@ -63,7 +63,7 @@ export const ClipFeedPage = ({
   const swiperRef = useRef<SwiperCore | null>(null);
   const [isLocalMuted, setIsLocalMuted] = useState(false);
   const [isShowInteractionMenu, setIsShowInteractionMenu] = useState(true);
-  const [isClipFailed, setIsClipFailed] = useState(false);
+  const [clipFailedStates, setClipFailedStates] = useState<Record<string, boolean>>({});
   const [isDragging, setIsDragging] = useState(false);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false);
@@ -396,7 +396,16 @@ export const ClipFeedPage = ({
     [community?.isPublic],
   );
 
-  const handleClipFailed = () => setIsClipFailed(true);
+  const handleClipFailed = useCallback((postId: string) => {
+    setClipFailedStates((prev) => ({
+      ...prev,
+      [postId]: true,
+    }));
+  }, []);
+
+  const isClipFailed = (postId: string) => {
+    return clipFailedStates[postId] || false;
+  };
 
   const handleDragging = (val: boolean) => setIsDragging(val);
 
@@ -504,7 +513,7 @@ export const ClipFeedPage = ({
                         isDragging={isDragging}
                         onDragging={handleDragging}
                         isLocalMuted={isLocalMuted}
-                        onClipFailed={handleClipFailed}
+                        onClipFailed={(postId) => handleClipFailed(postId)}
                         isLoading={isLoadingVideo}
                         seeMoreIsOpen={seeMoreIsOpen}
                       />
@@ -531,7 +540,7 @@ export const ClipFeedPage = ({
                           <div />
                         )}
                       </div>
-                      {!isClipFailed && (
+                      {!isClipFailed(post.postId) && (
                         <ClipFeedMenu
                           postId={post.parentPostId}
                           childPost={post as Amity.Post<'video' | 'clip'>}
@@ -582,7 +591,7 @@ export const ClipFeedPage = ({
                     isDragging={isDragging}
                     onDragging={handleDragging}
                     isLocalMuted={isLocalMuted}
-                    onClipFailed={handleClipFailed}
+                    onClipFailed={(postId) => handleClipFailed(postId)}
                     isLoading={isLoadingVideo}
                   />
                   <div className={styles.clipFeedPage__header}>
@@ -608,7 +617,7 @@ export const ClipFeedPage = ({
                       <div />
                     )}
                   </div>
-                  {!isClipFailed && (
+                  {!isClipFailed(post.postId) && (
                     <ClipFeedMenu
                       postId={post.parentPostId}
                       childPost={post as Amity.Post<'video' | 'clip'>}
