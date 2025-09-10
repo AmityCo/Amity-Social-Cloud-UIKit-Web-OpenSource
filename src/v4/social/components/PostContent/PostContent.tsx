@@ -43,6 +43,7 @@ import { ReactionList } from '~/v4/social/components/ReactionList/ReactionList';
 import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import { Button } from '~/v4/core/components/AriaButton';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
+import { isEqual } from 'lodash';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -84,26 +85,40 @@ interface PostContentProps {
 }
 
 const useInlineComment = ({ post, disabled }: { post: Amity.Post; disabled: boolean }) => {
-  const [inlineComment, setInlineComment] = useState<Amity.Comment | null>(null);
+  const inlineCommentRef = useRef<Amity.Comment | null>(null);
+  const [inlineComment, setInlineComment] = useState<Amity.Comment | null>(null); // Add this back!
   const [isLoading, setIsLoading] = useState(true);
+
+  const findLastestComment = useCallback((lastestComments: Amity.Comment[]) => {
+    const sortedComments = [...(lastestComments || [])]
+      .sort((a, b) => Date.parse(b?.createdAt || '') - Date.parse(a?.createdAt || ''))
+      .filter((comment) => !comment?.flagCount && !comment?.isDeleted);
+
+    return sortedComments?.[0] || null;
+  }, []);
 
   useEffect(() => {
     if (disabled) return;
 
-    const updateLatestComment = () => {
-      const sortedComments = [...(post.latestComments || [])]
-        .sort((a, b) => Date.parse(b?.createdAt || '') - Date.parse(a?.createdAt || ''))
-        .filter((comment) => !comment?.flagCount && !comment?.isDeleted);
+    const latestComments = post.latestComments;
+    const newLatestComment = findLastestComment(latestComments as Amity.Comment[]);
 
-      const newLatestComment = sortedComments?.[0] || null;
-      setInlineComment(newLatestComment);
+    if (!latestComments || !newLatestComment) {
       setIsLoading(false);
-    };
+      setInlineComment(null); // Clear the state as well
+      inlineCommentRef.current = null;
+      return;
+    }
 
-    updateLatestComment();
-  }, [post.latestComments?.[0]?.updatedAt, post.latestComments[0]?.commentId]);
+    if (!isEqual(inlineCommentRef.current, newLatestComment)) {
+      inlineCommentRef.current = newLatestComment;
+      setInlineComment(newLatestComment); // This triggers re-render!
+    }
 
-  return { inlineComment, isLoading };
+    setIsLoading(false);
+  }, [post.latestComments, findLastestComment, disabled, post.postId]);
+
+  return { inlineComment, isLoading }; // Return the state, not the ref
 };
 
 export const PostContent = ({

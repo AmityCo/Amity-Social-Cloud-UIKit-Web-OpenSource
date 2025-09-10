@@ -363,7 +363,7 @@ export const Comment = ({
                       {comment.createdAt !== comment.editedAt && ' (edited)'}
                     </span>
                   </Typography.Caption>
-                  {community && community.isJoined && (
+                  {((community && community.isJoined) || community === null) && (
                     <>
                       <ReactionButton
                         pageId={pageId}
