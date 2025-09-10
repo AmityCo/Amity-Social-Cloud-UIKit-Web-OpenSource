@@ -69,16 +69,21 @@ export const PollContent: FC<PollContentProps> = ({
 
     const maxVoteCount = Math.max(...poll.answers.map((answer) => answer.voteCount));
 
-    // Sort if the poll is closed or has voted by current user
     const processedPollAnswers =
-      poll.status === 'closed' || poll.isVoted
+      poll.status === 'closed' || poll.isVoted || isAuthorSeeingPoll
         ? processPollAnswer(poll.answers, maxVoteCount)
         : poll.answers;
 
     return isExpanded || showAllChoices
       ? processedPollAnswers
       : processedPollAnswers.slice(0, maxChoicesShown);
-  }, [poll?.answers, poll?.isVoted, isExpanded, processPollAnswer]) as (Amity.PollAnswer & {
+  }, [
+    poll?.answers,
+    poll?.isVoted,
+    isExpanded,
+    processPollAnswer,
+    isAuthorSeeingPoll,
+  ]) as (Amity.PollAnswer & {
     isTopVoted: boolean;
   })[];
 
