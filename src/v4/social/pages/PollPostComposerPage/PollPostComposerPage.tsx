@@ -295,7 +295,7 @@ export const PollPostComposerPage = ({
         answers:
           pollType === 'image'
             ? imageOptions
-                .filter((option) => option.data.trim().length > 0 && option.fileId)
+                .filter((option) => option.fileId)
                 .map(({ id, indexOfFiles, ...option }) => option)
             : options.filter((option) => option.data.trim().length > 0),
         answerType,
@@ -417,6 +417,7 @@ export const PollPostComposerPage = ({
 
   const isDisabledImagePollSubmitButton =
     isCreating ||
+    textValue.text.trim() === '' ||
     textValue.text.length > MAX_POLL_QUESTION_LENGTH ||
     imageOptions.length < 2 ||
     imageOptions.filter((option) => !!option.fileId).length < 2 ||
