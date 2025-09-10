@@ -426,6 +426,7 @@ export const PollPostComposerPage = ({
 
   const isDisabledImagePollSubmitButton =
     isCreating ||
+    textValue.text.trim() === '' ||
     textValue.text.length > MAX_POLL_QUESTION_LENGTH ||
     imageOptions.length < 2 ||
     imageOptions.filter((option) => !!option.fileId).length < 2 ||
