@@ -330,7 +330,18 @@ export function ReactionButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleCustomMouseLeave}
     >
-      {renderReactionButton()}
+      <Button
+        variant="default"
+        onPress={(e) => {
+          if (showReactionPicker || isLongPressing) {
+            return;
+          }
+          handleQuickReaction();
+        }}
+        className={clsx(styles.reactButton, buttonClassName)}
+      >
+        {renderReactionButton()}
+      </Button>
     </div>
   ) : (
     <div
