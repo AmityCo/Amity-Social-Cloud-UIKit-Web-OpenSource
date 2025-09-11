@@ -49,6 +49,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNetworkConfig } from '~/v4/core/hooks/useNetworkConfig';
 import { ClipProvider } from '~/v4/social/providers/ClipProvider';
 import { FeedScrollProvider } from '~/v4/core/providers/FeedScrollProvider';
+import { SearchResultProvider } from '~/v4/social/providers/SearchResultProvider';
+import { GlobalBan } from '~/v4/social/internal-components/GlobalBan';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 
 const InternalComponent = ({
   apiKey,
@@ -74,6 +77,7 @@ const InternalComponent = ({
   const { error } = useNotifications();
   const [client, setClient] = useState<Amity.Client | null>(null);
   const { networkConfig, isNetworkConfigLoading } = useNetworkConfig(client);
+  const [isGlobalBanned, setIsGlobalBanned] = useState<boolean>(false);
 
   const sdkContextValue = useMemo(
     () => ({
@@ -112,6 +116,12 @@ const InternalComponent = ({
     return initialConfig;
   }, [configs, networkConfig]);
 
+  const onGlobalBanned = (payload: Amity.UserPayload) => {
+    if (payload.users.find((user) => user.userId === userId)?.isGlobalBan) {
+      setIsGlobalBanned(true);
+    }
+  };
+
   useEffect(() => {
     const setup = async () => {
       let authToken;
@@ -144,7 +154,9 @@ const InternalComponent = ({
           },
           authToken,
           onConnectionStatusChange,
+          undefined,
           onDisconnected,
+          onGlobalBanned,
         );
 
         const newClient = AmityUIKitManager.getClient();
@@ -152,15 +164,19 @@ const InternalComponent = ({
       } catch (_error) {
         console.error('Error setting up AmityUIKitManager:', _error);
         if (_error instanceof Error) {
-          error({
-            content: _error.message,
-          });
+          if (_error.message.includes(ERROR_RESPONSE.GLOBAL_BAN)) {
+            setIsGlobalBanned(true);
+          } else {
+            error({ content: _error.message });
+          }
         }
       }
     };
 
     setup();
   }, [userId, displayName, onConnectionStatusChange, onDisconnected]);
+
+  if (isGlobalBanned) return <GlobalBan />;
 
   if (!client || isNetworkConfigLoading) return null;
 
@@ -187,21 +203,23 @@ const InternalComponent = ({
                               onRouteChange={onRouteChange}
                             >
                               <PageBehaviorProvider pageBehavior={pageBehavior}>
-                                <StoryProvider>
-                                  <ClipProvider>
-                                    <CommunitySetupProvider>
-                                      <DrawerProvider>
-                                        <GlobalFeedProvider>
-                                          <PopupProvider>
-                                            <Popup />
-                                            {children}
-                                          </PopupProvider>
-                                        </GlobalFeedProvider>
-                                        <DrawerContainer />
-                                      </DrawerProvider>
-                                    </CommunitySetupProvider>
-                                  </ClipProvider>
-                                </StoryProvider>
+                                <SearchResultProvider>
+                                  <StoryProvider>
+                                    <ClipProvider>
+                                      <CommunitySetupProvider>
+                                        <DrawerProvider>
+                                          <GlobalFeedProvider>
+                                            <PopupProvider>
+                                              <Popup />
+                                              {children}
+                                            </PopupProvider>
+                                          </GlobalFeedProvider>
+                                          <DrawerContainer />
+                                        </DrawerProvider>
+                                      </CommunitySetupProvider>
+                                    </ClipProvider>
+                                  </StoryProvider>
+                                </SearchResultProvider>
                               </PageBehaviorProvider>
                             </NavigationProvider>
                           </LayoutProvider>

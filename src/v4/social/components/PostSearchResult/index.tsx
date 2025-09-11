@@ -1,0 +1,1 @@
+export { PostSearchResult } from './PostSearchResult';

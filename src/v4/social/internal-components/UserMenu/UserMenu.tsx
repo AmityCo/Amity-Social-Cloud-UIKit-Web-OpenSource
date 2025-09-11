@@ -13,6 +13,8 @@ import useUserReport from '~/v4/social/hooks/useUserReport';
 import Flag from '~/v4/icons/Flag';
 import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { useNetworkState } from 'react-use';
+import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
+import { SharableModel } from '~/v4/utils/sharableLink';
 
 interface UserMenuProps {
   user?: Amity.User | null;
@@ -121,6 +123,13 @@ export const UserMenu: React.FC<UserMenuProps> = ({
               : 'Block user'}
         </Typography.BodyBold>
       </Button>
+      <CopyLinkButton
+        pageId={pageId}
+        componentId={componentId}
+        model={SharableModel.USER}
+        referenceId={user.userId}
+        onDone={onCloseMenu}
+      />
     </div>
   );
 };

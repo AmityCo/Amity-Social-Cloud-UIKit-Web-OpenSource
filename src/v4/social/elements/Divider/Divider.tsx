@@ -14,6 +14,7 @@ type DividerProps = ComponentPropsWithoutRef<'div'> & {
   isShown?: boolean;
   type?: DividerType;
   alphabet?: string;
+  isLastChild?: boolean;
 };
 
 export function Divider({
@@ -21,9 +22,10 @@ export function Divider({
   type = DividerType.POST,
   className,
   alphabet,
+  isLastChild = false,
 }: DividerProps) {
   return isShown ? (
-    <div className={clsx(styles.divider, className)} data-type={type}>
+    <div className={clsx(styles.divider, className)} data-type={type} data-last-child={isLastChild}>
       {alphabet && (
         <Typography.BodyBold className={styles.divider__alphabet}>{alphabet}</Typography.BodyBold>
       )}

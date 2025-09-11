@@ -24,7 +24,11 @@ export default function SDKConnectorSubscribersProvider({
 
   useEffect(() => {
     return () => {
-      Object.values(unsubscribeFnMap.current).forEach((unsubscribeFn) => unsubscribeFn());
+      try {
+        Object.values(unsubscribeFnMap.current).forEach((unsubscribeFn) => unsubscribeFn());
+      } catch (error) {
+        console.error(error);
+      }
     };
   }, []);
 

@@ -1,0 +1,20 @@
+.copyLinkButton__button {
+  width: 100%;
+  padding: 0.75rem 0;
+  box-sizing: border-box;
+  color: var(--asc-color-base-default) !important;
+  justify-content: unset;
+  gap: 0.5rem;
+}
+
+.copyLinkButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-base-default);
+}
+
+@media only screen and (width >= 48em) {
+  .copyLinkButton__button {
+    padding: 0.75rem 1rem;
+  }
+}

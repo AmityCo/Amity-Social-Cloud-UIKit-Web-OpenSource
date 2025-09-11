@@ -15,8 +15,9 @@ type VideoFullScreenProps = {
   isDragging: boolean;
   onDragging: (val: boolean) => void;
   isLocalMuted: boolean;
-  onClipFailed?: (val: boolean) => void;
+  onClipFailed?: (postId: string) => void;
   isLoading?: boolean;
+  seeMoreIsOpen?: boolean;
 };
 
 export const VideoFullScreen = ({
@@ -30,10 +31,12 @@ export const VideoFullScreen = ({
   isLocalMuted,
   onClipFailed,
   isLoading,
+  seeMoreIsOpen,
 }: VideoFullScreenProps) => {
   const [videoElement, setVideoElement] = useState<HTMLVideoElement | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isClipLoading, setIsClipLoading] = useState(true);
+  const [hasReportedFailure, setHasReportedFailure] = useState(false);
   const fileUrl = getFileUrl(post as Amity.Post<'clip' | 'video'>);
 
   useEffect(() => {
@@ -101,8 +104,15 @@ export const VideoFullScreen = ({
     };
   }, [post.postId, videoRefs, isActive]);
 
+  // Handle clip failure - only report once per post
+  useEffect(() => {
+    if (!fileUrl && !hasReportedFailure) {
+      onClipFailed?.(post.postId);
+      setHasReportedFailure(true);
+    }
+  }, [fileUrl, post.postId, onClipFailed, hasReportedFailure]);
+
   if (!fileUrl) {
-    onClipFailed?.(true);
     return <DeletedClipView onWatchNext={onNextVideo} />;
   }
 
@@ -113,32 +123,39 @@ export const VideoFullScreen = ({
       {(isClipLoading || isLoading) && (
         <div className={styles.videoFullScreen__loadingBackground} />
       )}
-
-      <video
-        ref={(el) => {
-          if (el) {
-            videoRefs.current[post.postId] = el;
-            setVideoElement(el); // Update state to trigger progress bar re-render
-          }
+      <Button
+        variant="default"
+        onPress={() => {
+          onClickVideo(post.postId);
         }}
-        src={fileUrl}
-        loop
-        playsInline
-        className={styles.videoFullScreen__player}
-        muted={isMuted}
-        preload="auto"
-        onClick={(e) => onClickVideo(post.postId, e)}
-        autoPlay={isActive}
-        style={{ opacity: isClipLoading ? 0 : 1 }}
-      />
+      >
+        <video
+          ref={(el) => {
+            if (el) {
+              videoRefs.current[post.postId] = el;
+              setVideoElement(el); // Update state to trigger progress bar re-render
+            }
+          }}
+          src={fileUrl}
+          loop
+          playsInline
+          className={styles.videoFullScreen__player}
+          muted={isMuted}
+          preload="auto"
+          autoPlay={isActive}
+          style={{ opacity: isClipLoading ? 0 : 1 }}
+        />
+      </Button>
 
       <div className={styles.videoFullScreen__overlay} />
 
-      {isPaused && isActive && !isClipLoading && !isLoading && (
+      {!seeMoreIsOpen && isPaused && isActive && !isClipLoading && !isLoading && (
         <Button
           variant="text"
           className={styles.videoFullScreen__playButtonOverlay}
-          onPress={() => onClickVideo(post.postId)}
+          onPress={() => {
+            onClickVideo(post.postId);
+          }}
         >
           <div className={styles.videoFullScreen__playButton}>
             <Play className={styles.videoFullScreen__playButtonIcon} />

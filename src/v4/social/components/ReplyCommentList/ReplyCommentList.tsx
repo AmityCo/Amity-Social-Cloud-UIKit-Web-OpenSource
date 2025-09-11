@@ -107,6 +107,7 @@ export const ReplyCommentList = ({
             key={comment.commentId}
             ref={highlightedCommentRef}
             className={`${styles.replyCommentList__highlightedComment} ${isHighlighted ? styles.replyCommentList__bounceAnimation : ''}`}
+            data-testid="highlighted-comment"
           >
             <ReplyComment
               pageId={pageId}
@@ -121,12 +122,13 @@ export const ReplyCommentList = ({
 
       {/* Display other comments only if showFilteredComments is true */}
       {showFilteredComments &&
-        filteredComments.map((comment) => (
+        filteredComments.map((comment, index) => (
           <ReplyComment
             key={comment.commentId}
             pageId={pageId}
             community={community}
             comment={comment as Amity.Comment}
+            testId={`reply-comment-${index}`}
           />
         ))}
 

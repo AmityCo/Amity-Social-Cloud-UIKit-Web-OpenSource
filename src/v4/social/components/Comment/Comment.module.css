@@ -37,6 +37,7 @@
 }
 
 .postComment__content {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -47,6 +48,10 @@
   padding: 0.75rem;
   width: max-content;
   max-width: 100%;
+}
+
+.postComment__content[data-has-reaction='true'] {
+  margin-bottom: 1rem;
 }
 
 .postComment__content__username {
@@ -68,6 +73,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding-top: 0.5rem;
 }
 
 .postComment__secondRow__leftPane {
@@ -80,21 +86,6 @@
   display: flex;
   color: var(--asc-color-base-shade2);
   white-space: pre;
-}
-
-.postComment__secondRow__rightPane {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-}
-
-.postComment__secondRow__rightPane__reactionCount {
-  color: var(--asc-color-base-shade2);
-}
-
-.postComment__secondRow__rightPane__like {
-  width: 1.25rem;
-  height: 1.25rem;
 }
 
 .postComment__secondRow__like {

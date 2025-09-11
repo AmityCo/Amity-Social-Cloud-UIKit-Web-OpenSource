@@ -54,7 +54,7 @@ export function Timestamp({
     <Typography.Caption
       className={clsx(styles.timestamp, className)}
       style={themeStyles}
-      data-testid={accessibilityId}
+      testId={accessibilityId}
     >
       {formatTimestamp(timestamp)}
     </Typography.Caption>

@@ -18,6 +18,7 @@
 }
 
 .postReplyComment__content {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -27,6 +28,10 @@
   border-radius: 0 0.75rem 0.75rem;
   padding: 0.75rem;
   max-width: max-content;
+}
+
+.postReplyComment__content[data-has-reaction='true'] {
+  margin-bottom: 1rem;
 }
 
 .postReplyComment__content__username {
@@ -53,16 +58,6 @@
   display: flex;
   gap: 0.75rem;
   align-items: center;
-}
-
-.postReplyComment__secondRow__rightPane {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-}
-
-.postReplyComment__secondRow__rightPane__reactionCount {
-  color: var(--asc-color-base-shade2);
 }
 
 .postReplyComment__secondRow__rightPane__like {
@@ -235,4 +230,12 @@
   border-radius: 0.5rem;
   box-shadow: var(--asc-box-shadow-04);
   background-color: var(--asc-color-background-default);
+}
+
+.postReplyComment__reactionPicker {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  z-index: 9999;
+  margin-bottom: 0.5rem;
 }

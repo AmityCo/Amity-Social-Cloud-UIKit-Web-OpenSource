@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './UserProfilePage.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -23,26 +23,56 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage/PollPostComposerPage';
+import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
+import { Button } from '~/v4/core/natives/Button';
+import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
+import { ChevronTop } from '~/v4/icons/ChevronTop';
+import { ChevronDown } from '~/v4/icons/ChevronDown';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
+import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
 
 type UserProfilePageProps = {
   userId: string;
 };
 
-const enum UserProfileTabs {
+export const enum UserProfileTabs {
   FEED = 'feed',
   IMAGE = 'image',
   VIDEO = 'video',
 }
+
+export const FeedSource = {
+  ALL: 'all',
+  COMMUNITY: FeedSourceEnum.Community,
+  USER: FeedSourceEnum.User,
+};
+
+const FEED_TYPE_OPTIONS = [
+  {
+    label: 'Public community & profile posts',
+    value: FeedSource.ALL,
+  },
+  {
+    label: 'Public community posts',
+    value: FeedSource.COMMUNITY,
+  },
+  {
+    label: 'Profile posts',
+    value: FeedSource.USER,
+  },
+];
 
 export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const pageId = 'user_profile_page';
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDesktop } = useResponsive();
   const initialLoad = useRef(true);
+  const { followStatus } = useFollowCount(userId);
 
   const { onScroll, scrollPosition } = useFeedScrollContext();
   const { themeStyles } = useAmityPage({ pageId });
@@ -52,6 +82,8 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   const { currentUserId } = useSDK();
   const { confirm } = useConfirmContext();
   const { openPopup } = usePopupContext();
+  const { linkToPost } = useLayoutContext();
+  const { socialSettings } = useSocialSettings();
 
   const isCurrentUser = user?.userId === currentUserId;
 
@@ -89,8 +121,28 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
   };
 
   const [isScroll, setIsScroll] = useState(false);
+  const [feedSource, setFeedSource] = useState(
+    linkToPost && linkToPost?.feedSources?.length === 1 ? linkToPost?.feedSources[0] : 'all',
+  );
+
+  const feedSources: FeedSourceEnum[] = useMemo(
+    () =>
+      feedSource === FeedSource.ALL
+        ? [FeedSourceEnum.User, FeedSourceEnum.Community]
+        : [feedSource as FeedSourceEnum],
+    [feedSource],
+  );
+
+  useEffect(() => {
+    containerRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [feedSource]);
+
   const [currentActiveTab, setCurrentActiveTab] = React.useState<UserProfileTabs>(
-    UserProfileTabs.FEED,
+    linkToPost?.tab === UserProfileTabs.FEED ||
+      linkToPost?.tab === UserProfileTabs.IMAGE ||
+      linkToPost?.tab === UserProfileTabs.VIDEO
+      ? linkToPost?.tab
+      : UserProfileTabs.FEED,
   );
 
   const onChangeTab = (tab: UserProfileTabs) => {
@@ -122,20 +174,40 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                   pageId,
                   view: 'desktop',
                   isDismissable: false,
-                  onClose: onCloseCreatePostPopup,
-                  header: CreatePostHeader,
-                  children: <PollPostComposerPage targetId={null} targetType="user" />,
+                  header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                  children: ({ close }) => (
+                    <PollTypeSelection onClickNext={close} targetId={null} targetType="user" />
+                  ),
                 });
               }}
             />
           )}
-          <UserFeed pageId={pageId} userId={userId} />
+          <UserFeed
+            pageId={pageId}
+            userId={userId}
+            feedSources={feedSources}
+            followStatus={followStatus}
+          />
         </>
       );
     } else if (currentActiveTab === UserProfileTabs.IMAGE) {
-      return <UserImageFeed pageId={pageId} userId={userId} />;
+      return (
+        <UserImageFeed
+          pageId={pageId}
+          userId={userId}
+          feedSources={feedSources}
+          followStatus={followStatus}
+        />
+      );
     } else if (currentActiveTab === UserProfileTabs.VIDEO) {
-      return <UserVideoFeed pageId={pageId} userId={userId} />;
+      return (
+        <UserVideoFeed
+          pageId={pageId}
+          userId={userId}
+          feedSources={feedSources}
+          followStatus={followStatus}
+        />
+      );
     }
   };
 
@@ -157,6 +229,11 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
     </Typography.Headline>
   );
 
+  const isFilterAvailable =
+    isCurrentUser ||
+    (socialSettings?.userPrivacySetting === 'public' && followStatus !== 'blocked') ||
+    followStatus === 'accepted';
+
   return (
     <>
       <PullToRefresh className={styles.userProfilePage} style={themeStyles}>
@@ -165,45 +242,48 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
           ref={containerRef}
           onScroll={handleScroll}
         >
+          <div className={styles.userProfilePage__topBar}>
+            <BackButton pageId={pageId} onPress={() => onBack()} />
+            <Typography.TitleBold
+              className={styles.userProfilePage__displayName}
+              data-show={isScroll}
+            >
+              {user?.displayName}
+            </Typography.TitleBold>
+            <Popover
+              trigger={{
+                pageId,
+                onClick: ({ closePopover }) =>
+                  setDrawerData({
+                    content: (
+                      <UserMenu
+                        pageId={pageId}
+                        user={user}
+                        onCloseMenu={() => {
+                          closePopover();
+                          removeDrawerData();
+                        }}
+                      />
+                    ),
+                  }),
+              }}
+            >
+              {({ closePopover }) => (
+                <UserMenu
+                  pageId={pageId}
+                  user={user}
+                  onCloseMenu={() => {
+                    closePopover();
+                    removeDrawerData();
+                  }}
+                />
+              )}
+            </Popover>
+          </div>
           <div className={styles.userProfilePage__topSection}>
-            <div className={styles.userProfilePage__topBar}>
-              <BackButton pageId={pageId} onPress={() => onBack()} />
-              <Typography.TitleBold
-                className={styles.userProfilePage__displayName}
-                data-show={isScroll}
-              >
-                {user?.displayName}
-              </Typography.TitleBold>
-              <Popover
-                trigger={{
-                  pageId,
-                  onClick: ({ closePopover }) =>
-                    setDrawerData({
-                      content: (
-                        <UserMenu
-                          user={user}
-                          onCloseMenu={() => {
-                            closePopover();
-                            removeDrawerData();
-                          }}
-                        />
-                      ),
-                    }),
-                }}
-              >
-                {({ closePopover }) => (
-                  <UserMenu
-                    user={user}
-                    onCloseMenu={() => {
-                      closePopover();
-                      removeDrawerData();
-                    }}
-                  />
-                )}
-              </Popover>
-            </div>
             <UserProfileHeader user={user} pageId={pageId} />
-
+          </div>
+          <div className={styles.userProfilePage__stickyHeader}>
             <div className={styles.userProfilePage__feedTabs}>
               <UserFeedTabButton
                 pageId={pageId}
@@ -221,8 +301,66 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({ userId }) => {
                 onClick={() => onChangeTab(UserProfileTabs.VIDEO)}
               />
             </div>
+            {isFilterAvailable && (
+              <Popover
+                placement="bottom left"
+                containerClassName={styles.userProfilePage__feedTypePopover}
+                trigger={({ openPopover, isOpen, isDesktop }) => (
+                  <Button
+                    onPress={() => {
+                      if (isDesktop) {
+                        openPopover();
+                      } else {
+                        setDrawerData({
+                          content: (
+                            <RadioGroup
+                              value={feedSource}
+                              onChange={(value) => {
+                                setFeedSource(value as FeedSourceEnum);
+                                removeDrawerData();
+                              }}
+                              className={styles.userProfilePage__feedTypeRadioGroup}
+                              radioProps={{ className: styles.userProfilePage__feedTypeRadio }}
+                              radios={FEED_TYPE_OPTIONS.map((option) => ({
+                                ...option,
+                                label: <Typography.BodyBold>{option.label}</Typography.BodyBold>,
+                              }))}
+                            />
+                          ),
+                        });
+                      }
+                    }}
+                    className={styles.userProfilePage__feedTypeButton}
+                  >
+                    <Typography.CaptionBold>
+                      {FEED_TYPE_OPTIONS.find((option) => option.value === feedSource)?.label}
+                    </Typography.CaptionBold>
+                    {isOpen ? (
+                      <ChevronTop className={styles.userProfilePage__feedTypeButtonIcon} />
+                    ) : (
+                      <ChevronDown className={styles.userProfilePage__feedTypeButtonIcon} />
+                    )}
+                  </Button>
+                )}
+              >
+                {({ closePopover }) => (
+                  <RadioGroup
+                    value={feedSource}
+                    onChange={(value) => {
+                      setFeedSource(value as FeedSourceEnum);
+                      closePopover();
+                    }}
+                    className={styles.userProfilePage__feedTypeRadioGroup}
+                    radioProps={{ className: styles.userProfilePage__feedTypeRadio }}
+                    radios={FEED_TYPE_OPTIONS.map((option) => ({
+                      ...option,
+                      label: <Typography.BodyBold>{option.label}</Typography.BodyBold>,
+                    }))}
+                  />
+                )}
+              </Popover>
+            )}
           </div>
-
           {renderTabContent()}
         </div>
       </PullToRefresh>

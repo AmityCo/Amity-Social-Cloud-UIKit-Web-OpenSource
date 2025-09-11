@@ -9,7 +9,6 @@ import {
   AmityPostComposerCreateOptions,
   CreatePostParams,
 } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
-import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
 import { CreateNewPostButton } from '~/v4/social/elements/CreateNewPostButton';
@@ -43,6 +42,8 @@ import { Play } from '~/v4/icons/Play';
 import { isAmityFile } from '~/v4/utils/checkFileType';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { TextArea } from '~/v4/core/components/TextField';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 export function CreatePost({
   community,
@@ -64,11 +65,11 @@ export function CreatePost({
   const { confirm } = useConfirmContext();
   const { onBack, prevPage, prev2Page } = useNavigation();
   const { AmityPostComposerPageBehavior } = usePageBehavior();
-  const { prependItem } = useGlobalFeedContext();
   const { themeStyles } = useAmityPage({ pageId });
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const { closePopup } = usePopupContext();
+  const { setVideoThumbnail } = useLayoutContext();
 
   const { online } = useNetworkState();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
@@ -88,9 +89,11 @@ export function CreatePost({
   const [isError, setIsError] = useState(false);
   const [postErrorText, setPostErrorText] = useState<string | undefined>();
 
+  const [title, setTitle] = useState<string>('');
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: '',
     mentioned: [],
+    hashtagsMetadata: [],
     mentionees: [
       {
         type: 'user',
@@ -132,10 +135,18 @@ export function CreatePost({
     onSuccess: (response) => {
       const post = response.data;
 
+      setVideoThumbnail({
+        postId: post.postId,
+        videos: files
+          .filter(({ file }) => file.type === 'video')
+          .map(({ file, thumbnailVideo }) => ({
+            fileId: isAmityFile(file) ? file.fileId : '',
+            thumbnailUrl: thumbnailVideo,
+          })),
+      });
+
       const isModerator =
         (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
-
-      if (!targetId) prependItem(post);
 
       // TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
       if (
@@ -152,8 +163,6 @@ export function CreatePost({
             'Your post has been submitted to the pending list. It will be published once approved by the community moderator.',
           okText: 'OK',
         });
-      } else {
-        prependItem(post);
       }
       setIsMuted(false);
       setIsAspectFill(true);
@@ -191,10 +200,11 @@ export function CreatePost({
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
       targetId: targetId!,
       targetType,
-      data: { text: textValue.text },
-      metadata: { mentioned: textValue.mentioned },
+      data: { title: title.trim(), text: textValue.text },
+      metadata: { mentioned: textValue.mentioned, hashtags: textValue.hashtagsMetadata },
       mentionees: textValue.mentionees as Amity.UserMention[],
       attachments,
+      hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text),
     };
 
     createPost(createPostParams);
@@ -202,27 +212,33 @@ export function CreatePost({
 
   const handlePostSuccess = () => {
     setClipFile(null);
-    checkRedirectPage();
-    isDesktop && closePopup();
+    isDesktop ? closePopup() : checkRedirectPage();
   };
 
   const handlePostError = (error: Error) => {
-    if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
-      setPostErrorText("Your post wasn't posted because it contains a blocked word.");
-    } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
-      setPostErrorText("Your post wasn't posted because it contains a link that's not allowed.");
+    if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+      setPostErrorText("Your post wasn't posted as it contains an inappropriate word.");
+    } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
+      setPostErrorText("Your post wasn't posted as it contains a link that's not allowed.");
     } else {
       setPostErrorText('Failed to create post. Please try again.');
     }
   };
+
   //TODO : Make the function works the issues is can't remove extra mention from DOM
 
-  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
+  const onChange = (val: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    hashtags: Amity.Hashtag[];
+    text: string;
+  }) => {
     setTextValue((prev) => ({
       ...prev,
       mentioned: val.mentioned,
       text: val.text,
       mentionees: val.mentionees,
+      hashtagsMetadata: val.hashtags,
     }));
   };
 
@@ -270,6 +286,7 @@ export function CreatePost({
   );
 
   const checkRedirectPage = () => {
+    if (isDesktop) closePopup();
     if (
       prevPage?.type === PageTypes.SelectPostTargetPage ||
       prev2Page?.type === PageTypes.SelectPostTargetPage
@@ -294,41 +311,45 @@ export function CreatePost({
 
   const renderPosting = () => {
     if (isCreating || !online) {
-      <Typography.Body
-        className={styles.createPost__notification}
-        data-show-detail-media-attachment={showToastPosition()}
-      >
-        <Notification
-          className={styles.createPost__notificationToast}
-          content={online ? 'Posting...' : 'Waiting for network...'}
-          icon={<Spinner />}
-          alignment="fixed"
-        />
-      </Typography.Body>;
+      return (
+        <Typography.Body
+          className={styles.createPost__notification}
+          data-show-detail-media-attachment={showToastPosition()}
+        >
+          <Notification
+            className={styles.createPost__notificationToast}
+            content={online ? 'Posting...' : 'Waiting for network...'}
+            icon={<Spinner />}
+            alignment="fixed"
+          />
+        </Typography.Body>
+      );
     }
-    return;
+    return null;
   };
 
   const renderError = () => {
     if (isError || postErrorText) {
-      <Typography.Body
-        className={styles.createPost__notification}
-        data-show-detail-media-attachment={showToastPosition()}
-      >
-        <Notification
-          content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
-          icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
-          alignment="fixed"
-          duration={3000}
-          className={styles.createPost__notificationToast}
-          onClose={() => {
-            setPostErrorText(undefined);
-            setIsError(false);
-          }}
-        />
-      </Typography.Body>;
+      return (
+        <Typography.Body
+          className={styles.createPost__notification}
+          data-show-detail-media-attachment={showToastPosition()}
+        >
+          <Notification
+            content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
+            icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+            alignment="fixed"
+            duration={3000}
+            className={styles.createPost__notificationToast}
+            onClose={() => {
+              setPostErrorText(undefined);
+              setIsError(false);
+            }}
+          />
+        </Typography.Body>
+      );
     }
-    return;
+    return null;
   };
 
   return (
@@ -358,6 +379,20 @@ export function CreatePost({
           </div>
         )}
         <div className={styles.createPost__formContent}>
+          <TextArea
+            data-testid="create-post-title-input"
+            name="title"
+            value={title}
+            maxLength={150}
+            onChange={(e) => {
+              e.target.value.length > 150
+                ? setTitle(e.target.value.slice(0, 150))
+                : setTitle(e.target.value);
+            }}
+            placeholder="Title (optional)"
+            className={styles.createPost__titleInput}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+          />
           <PostTextField
             pageId={pageId}
             componentId={isClipPost ? 'clipPost' : undefined}
@@ -365,7 +400,6 @@ export function CreatePost({
             communityId={targetId}
             className={styles.createPost__input}
             dataValue={{ data: { text: textValue.text } }}
-            placeholderClassName={styles.createPost__placeholder}
             mentionContainer={isDesktop ? null : mentionRef.current}
             mentionContainerClassName={styles.createPost__mentionContainer}
           />

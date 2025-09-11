@@ -36,11 +36,12 @@
 }
 
 .drawer__overlay {
-  background-color: color(from var(--asc-color-base-inverse) srgb r g b / 50%);
+  background-color: color(from var(--asc-color-base-inverse) srgb r g b / 50%) !important;
   inset: 0;
   position: fixed;
   display: block;
   z-index: 5;
+  opacity: 1 !important;
 }
 
 @media (width >= 48em) {

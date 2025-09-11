@@ -498,6 +498,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                     ))}
                   </div>
                   <Button
+                    data-testid={`${pageId}/*/select-category`}
                     onPress={() => {
                       isDesktop
                         ? openPopover()
@@ -509,6 +510,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
                 </div>
               ) : (
                 <Button
+                  data-testid={`${pageId}/*/select-category`}
                   className={styles.createCommunity__category}
                   onPress={() => {
                     isDesktop
@@ -616,10 +618,7 @@ export function CreateCommunity({ mode }: CreateCommunityProps) {
             <Switch
               defaultSelected
               className={styles.createCommunity__switch}
-              isSelected={
-                privacySettings === AmityCommunitySetupPrivacy.PRIVATE_HIDDEN ||
-                requiresJoinApproval
-              }
+              isSelected={requiresJoinApproval}
               onChange={() => setRequiresJoinApproval(!requiresJoinApproval)}
             />
           </div>

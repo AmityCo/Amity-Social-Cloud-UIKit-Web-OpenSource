@@ -477,7 +477,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_global_search_page/*/*': {},
     'social_global_search_page/top_search_bar/*': {
-      text: 'Search community and user',
+      text: 'Search',
     },
     'social_global_search_page/top_search_bar/search_icon': {
       icon: 'search',
@@ -952,6 +952,9 @@ export const defaultConfig: DefaultConfig = {
     'community_comments_notification_page/*/*': {},
     'community_stories_notification_page/*/*': {},
     'poll_post_composer_page/*/*': {},
+    'poll_post_composer_page/*/post_title': {
+      text: 'Post title',
+    },
     'poll_post_composer_page/*/poll_question_title': {
       text: 'Poll question',
     },
@@ -1190,6 +1193,62 @@ export const defaultConfig: DefaultConfig = {
     'clip_feed_page/*/create_community_button': {
       icon: 'createCommunityIcon',
       text: 'Create Community',
+    },
+    'livestream_player_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'livestream_player_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy live stream link',
+    },
+    'create_livestream_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'create_livestream_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy live stream link',
+    },
+    'clip_feed_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'clip_feed_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy clip link',
+    },
+    'post_detail_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'post_detail_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy post link',
+    },
+    '*/post_content/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    '*/post_content/copy_link': {
+      image: 'icon',
+      text: 'Copy post link',
+    },
+    'user_profile_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'user_profile_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy profile link',
+    },
+    'community_profile_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'community_profile_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy profile link',
     },
   },
 };

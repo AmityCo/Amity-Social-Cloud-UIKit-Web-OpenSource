@@ -166,13 +166,19 @@ export const EditCommunity = ({ mode, community }: EditCommunityProps) => {
   };
 
   const handleClosePage = () => {
-    if (
-      communityName ||
-      about ||
-      categories.length > 0 ||
+    const hasChanges =
+      communityName !== community?.displayName ||
+      about !== (community?.description ?? '') ||
       coverImage.length > 0 ||
-      isPublic == false
-    ) {
+      categories.length !== communityCategories.length ||
+      ![...categories]
+        .sort()
+        .every((value, index) => value === [...communityCategories].sort()[index]) ||
+      community.isPublic !== isPublic ||
+      requiresJoinApproval !== (community?.requiresJoinApproval ?? false) ||
+      isDiscoverable !== (community.isDiscoverable ?? true);
+
+    if (hasChanges) {
       confirm({
         pageId: pageId,
         type: 'confirm',

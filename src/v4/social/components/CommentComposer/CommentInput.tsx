@@ -45,6 +45,7 @@ interface CommentInputProps {
   ref: MutableRefObject<LexicalEditor | null | undefined>;
   mentionContainer?: HTMLElement | null;
   mentionContainerClassName?: string;
+  shouldAutoFocus?: boolean;
   onChange: (data: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => void;
 }
 
@@ -146,6 +147,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
       placehoder,
       mentionContainer,
       mentionContainerClassName,
+      shouldAutoFocus = false,
     },
     ref,
   ) => {
@@ -232,7 +234,7 @@ export const CommentInput = forwardRef<CommentInputRef, CommentInputProps>(
             }}
           />
           <HistoryPlugin />
-          <AutoFocusPlugin />
+          {shouldAutoFocus && <AutoFocusPlugin />}
           <LinkPlugin />
           <AutoLinkPlugin />
           <EditorRefPlugin editorRef={editorRef} />

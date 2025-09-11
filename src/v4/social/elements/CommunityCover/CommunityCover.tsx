@@ -13,7 +13,6 @@ type CommunityCoverProps = {
   isSticky?: boolean;
   onBack?: () => void;
   componentId?: string;
-  onClickMenu?: () => void;
   community?: Amity.Community;
 };
 
@@ -22,7 +21,6 @@ export const CommunityCover: React.FC<CommunityCoverProps> = ({
   onBack,
   isSticky,
   community,
-  onClickMenu,
   pageId = '*',
   componentId = '*',
 }) => {
@@ -65,7 +63,11 @@ export const CommunityCover: React.FC<CommunityCoverProps> = ({
             </>
           )}
         </div>
-        {community?.isJoined && <CommunityProfileMenuButton onPress={onClickMenu} />}
+        <CommunityProfileMenuButton
+          pageId={pageId}
+          componentId={componentId}
+          community={community}
+        />
       </div>
     </div>
   );

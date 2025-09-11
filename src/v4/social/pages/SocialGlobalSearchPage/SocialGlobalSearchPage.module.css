@@ -3,14 +3,14 @@
   width: 100%;
   height: 100%;
   display: flex;
-  padding: 1rem;
+  padding: 1rem 0;
   flex-direction: column;
   background-color: var(--asc-color-background-default);
 }
 
 .socialGlobalSearchPage__tabs {
   left: 1rem;
-  padding: 0;
+  padding: 0 1rem;
   width: 100%;
   z-index: 10;
   gap: 1.25rem;
@@ -27,7 +27,7 @@
 
 .socialGlobalSearchPage__searchResultContainer__footer {
   left: 1rem;
-  top: 30.6rem;
+  top: 31.5rem;
   width: 20rem;
   z-index: 100;
   display: none;
@@ -57,7 +57,7 @@
     position: absolute;
     overflow-y: scroll;
     border-radius: 0.5rem;
-    padding: 0 1rem 1rem;
+    padding: 0 0 1rem;
     box-shadow: var(--asc-box-shadow-04);
     background-color: var(--asc-color-background-default);
   }

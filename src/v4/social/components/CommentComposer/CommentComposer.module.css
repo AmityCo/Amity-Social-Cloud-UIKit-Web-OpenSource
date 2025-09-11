@@ -6,11 +6,12 @@
 
 .commentComposer__top {
   position: absolute;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
   transform: translateY(-100%);
-  max-height: 12rem;
+  max-height: 9rem;
   display: flex;
   flex-direction: column;
 }

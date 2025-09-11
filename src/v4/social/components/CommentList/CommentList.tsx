@@ -29,6 +29,7 @@ type CommentListProps = {
   highlightedCommentId?: string;
   parentId?: string;
   commentListClassName?: string;
+  showReplyCommentAt?: string;
 };
 
 const isAmityAd = (item: Amity.Comment | Amity.InternalComment | Amity.Ad): item is Amity.Ad => {
@@ -49,6 +50,7 @@ export const CommentList = ({
   highlightedCommentId,
   parentId,
   commentListClassName,
+  showReplyCommentAt,
 }: CommentListProps) => {
   const componentId = 'comment_tray_component';
   const { online } = useNetworkState();
@@ -74,7 +76,7 @@ export const CommentList = ({
       includeDeleted,
     },
     placement: 'comment' as Amity.AdPlacement,
-    pageSize: 5,
+    pageSize: highlightedCommentId ? 20 : limit,
     getItemId: (item) => item.commentId,
     shouldCall: true,
   });
@@ -117,7 +119,7 @@ export const CommentList = ({
     if (!parentId && highlightedComment && highlightedCommentRef.current) {
       // Create event listener for the scroll complete event
       const handleScrollComplete = (e: CustomEvent) => {
-        if (e.detail.commentId === highlightedComment.commentId) {
+        if (e.detail.commentId === highlightedComment.commentId && !showReplyCommentAt) {
           // Only start the bounce animation after the scroll is complete
           setIsHighlighted(true);
 
@@ -141,7 +143,7 @@ export const CommentList = ({
         );
       };
     }
-  }, [highlightedComment, highlightedCommentId, parentId]);
+  }, [highlightedComment, highlightedCommentId, parentId, showReplyCommentAt]);
 
   if (!online) {
     return (
@@ -182,13 +184,15 @@ export const CommentList = ({
             shouldAllowInteraction={shouldAllowInteraction}
             highlightedCommentId={highlightedCommentId}
             parentId={parentId}
+            showReply={highlightedComment.commentId === showReplyCommentAt}
+            testId={`comment-highlighted`}
           />
           {renderReplyComment?.(highlightedComment)}
         </div>
       )}
 
       {/* Render regular comments without the highlighted one */}
-      {filteredItems.map((item) => {
+      {filteredItems.map((item, index) => {
         return isAmityAd(item) ? (
           <CommentAd key={item.adId} ad={item} />
         ) : (
@@ -200,6 +204,8 @@ export const CommentList = ({
               componentId={componentId}
               community={community}
               shouldAllowInteraction={shouldAllowInteraction}
+              showReply={item.commentId === showReplyCommentAt}
+              testId={`comment-${index}`}
             />
             {renderReplyComment?.(item as Amity.Comment)}
           </div>

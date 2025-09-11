@@ -1,14 +1,13 @@
 .userProfilePage {
-  display: flex;
-  flex-direction: column;
-  position: relative;
   height: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
   background-color: var(--asc-color-background-default);
 }
 
 .userProfilePage__container {
   flex: 1;
-  margin-top: 3.62rem;
   overflow-y: scroll;
   scrollbar-width: none;
 }
@@ -18,46 +17,88 @@
 }
 
 .userProfilePage__topBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 3.625rem;
-  padding-inline: 0.75rem 1rem;
-  position: absolute;
+  top: 0;
   left: 0;
   right: 0;
-  top: 0;
+  z-index: 1;
+  display: flex;
+  height: 3.5rem;
+  position: sticky;
+  align-items: center;
+  padding: 1rem 0.75rem;
+  justify-content: space-between;
+  background-color: var(--asc-color-background-default);
 }
 
 .userProfilePage__displayName {
-  transition: opacity 0.3s;
   opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .userProfilePage__displayName[data-show='true'] {
   opacity: 1;
 }
 
-.userProfilePage__feedTabs {
-  background-color: var(--asc-color-background-default);
-  position: sticky;
-  top: -0.125rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 1.25rem;
-  border-bottom: 1px solid var(--asc-color-base-shade4);
-  padding: 0 1rem;
+.userProfilePage__stickyHeader {
+  left: 0;
+  right: 0;
   z-index: 1;
+  top: 3.5rem;
+  position: sticky;
+}
+
+.userProfilePage__feedTabs {
+  gap: 1.25rem;
+  display: flex;
+  padding: 0 1rem;
+  justify-content: space-between;
+  background-color: var(--asc-color-background-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 
 .userProfilePage__floatingButton {
-  position: absolute;
-  bottom: 1rem;
   right: 1rem;
+  bottom: 1rem;
+  z-index: 100;
+  position: absolute;
 }
 
 .userProfilePage__createPostHeader {
   color: var(--asc-color-base-default);
+}
+
+.userProfilePage__feedTypePopover {
+  display: flex;
+}
+
+.userProfilePage__feedTypeButton {
+  flex: 1;
+  gap: 0.5rem;
+  display: flex;
+  padding: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--asc-color-base-shade1);
+  background-color: var(--asc-color-background-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.userProfilePage__feedTypeButtonIcon {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-base-shade1);
+}
+
+.userProfilePage__feedTypeRadioGroup {
+  padding: 0.5rem 0;
+  gap: 0;
+  border-radius: 0;
+  box-shadow: none;
+  min-width: auto;
+}
+
+.userProfilePage__feedTypeRadio {
+  padding: 1rem 0;
 }
 
 @media (width >=48em) {
@@ -66,16 +107,18 @@
   }
 
   .userProfilePage__topBar {
-    background-color: var(--asc-color-background-default);
     position: static;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border-top: 1px solid var(--asc-color-base-shade4);
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
   }
 
   .userProfilePage__topSection {
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
     background-color: var(--asc-color-background-default);
-    border-radius: 0.5rem;
-    border: 1px solid var(--asc-color-base-shade4);
-    margin-bottom: 0.75rem;
-    overflow: hidden;
   }
 
   .userProfilePage__displayName {
@@ -88,10 +131,34 @@
 
   .userProfilePage__feedTabs {
     position: static;
-    border-bottom: none;
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .userProfilePage__stickyHeader {
+    position: static;
+    margin-bottom: 0.75rem;
   }
 
   .userProfilePage__floatingButton {
     display: none;
+  }
+
+  .userProfilePage__feedTypeButton {
+    justify-content: flex-start;
+    border-radius: 0 0 0.5rem 0.5rem;
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .userProfilePage__feedTypeRadioGroup {
+    min-width: 20rem;
+    border-radius: 0.75rem;
+  }
+
+  .userProfilePage__feedTypeRadio {
+    padding: 1rem;
   }
 }

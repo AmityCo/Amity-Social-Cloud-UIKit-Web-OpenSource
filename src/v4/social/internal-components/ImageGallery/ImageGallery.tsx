@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './ImageGallery.module.css';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 import { useImage } from '~/v4/core/hooks/useImage';
-import { SingleImageViewer } from '~/v4/social/internal-components/SingleImageViewer';
 import { Button } from '~/v4/core/natives/Button';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { ImageViewer } from '~/v4/social/internal-components/ImageViewer/ImageViewer';
+import { UnavailableMediaViewer } from '~/v4/social/internal-components/UnavailableMediaViewer';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 const ImageItem = ({
   fileId,
@@ -43,25 +48,88 @@ interface ImageGalleryProps {
   posts?: Amity.Post<'image'>[] | null;
   pageId?: string;
   componentId?: string;
-  elementId?: string;
+  target?: 'community' | 'user';
+  isLoading?: boolean;
+  feedSources?: FeedSourceEnum[];
 }
 
-export const ImageGallery: React.FC<ImageGalleryProps> = ({
+export const ImageGallery = ({
   posts,
   pageId,
+  target,
+  isLoading,
+  feedSources,
   componentId,
-  elementId,
-}) => {
-  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+}: ImageGalleryProps) => {
+  const { isDesktop } = useResponsive();
+  const { openPopup, closePopup } = usePopupContext();
+  const { linkToPost, setLinkToPost } = useLayoutContext();
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   const onClickImageItem = (postIndex: number) => {
-    setSelectedImageIndex(postIndex);
-    setIsImageViewerOpen(true);
+    const isParentPostDeleted =
+      linkToPost && !posts?.find((post) => post.parentPostId === linkToPost?.parentPostId);
+
+    const post = posts?.[postIndex];
+
+    openPopup({
+      id: 'image-viewer',
+      pageId,
+      componentId,
+      media: true,
+      disabledAnimation: true,
+      isDismissable: isDesktop,
+      children:
+        !post || isParentPostDeleted ? (
+          <UnavailableMediaViewer
+            type="image"
+            onClose={() => {
+              setLinkToPost(null);
+              closePopup('image-viewer');
+            }}
+          />
+        ) : (
+          <ImageViewer
+            post={post}
+            isFromGallery
+            target={target}
+            feedSources={feedSources}
+            initialImageIndex={postIndex}
+            onClose={() => {
+              setLinkToPost(null);
+              closePopup('image-viewer');
+            }}
+          />
+        ),
+    });
   };
 
+  const scrollToImage = (index: number) => {
+    const targetElement = galleryRef?.current?.children[index];
+    if (targetElement) {
+      requestAnimationFrame(() => {
+        targetElement.scrollIntoView({ behavior: 'auto', block: 'center' });
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (linkToPost && galleryRef.current && posts && !isLoading) {
+      const imageIndex = posts?.findIndex((post) => post.postId === linkToPost?.postId);
+      onClickImageItem(imageIndex);
+      scrollToImage(
+        imageIndex > -1
+          ? imageIndex
+          : linkToPost.index > posts.length - 1
+            ? posts.length - 1
+            : linkToPost.index,
+      );
+      setLinkToPost(null);
+    }
+  }, [linkToPost, posts, isLoading]);
+
   return (
-    <div className={styles.imageGallery}>
+    <div className={styles.imageGallery} ref={galleryRef}>
       {posts?.map((post, index) => (
         <ImageItem
           key={post?.data?.fileId}
@@ -70,15 +138,6 @@ export const ImageGallery: React.FC<ImageGalleryProps> = ({
           onClickImageItem={onClickImageItem}
         />
       ))}
-      {posts && isImageViewerOpen && selectedImageIndex !== null && (
-        <SingleImageViewer
-          fileId={posts[selectedImageIndex]?.data?.fileId as string}
-          onClose={() => setIsImageViewerOpen(false)}
-          pageId={pageId}
-          componentId={componentId}
-          elementId={elementId}
-        />
-      )}
     </div>
   );
 };

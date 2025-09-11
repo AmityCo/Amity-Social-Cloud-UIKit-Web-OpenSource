@@ -170,8 +170,16 @@ export const CommunityMemberItem = ({
   ].filter(isNonNullable);
 
   return (
-    <div className={styles.communityMemberItem} key={user?.userId}>
-      <Button onPress={onClick} className={styles.communityMemberItem__leftSide}>
+    <div
+      data-testid={`${pageId}/*/member-${user?.userId}`}
+      className={styles.communityMemberItem}
+      key={user?.userId}
+    >
+      <Button
+        data-testid={`${pageId}/*/member-${user?.userId}`}
+        onPress={onClick}
+        className={styles.communityMemberItem__leftSide}
+      >
         <div className={styles.communityMemberItem__memberAvatar}>
           <UserAvatar
             userId={user?.userId}

@@ -76,6 +76,10 @@
   text-align: center;
 }
 
+.selectStoryTargetPage__intersectionObserver {
+  height: 1rem;
+}
+
 @media (width >= 48em) {
   .selectStoryTargetPage {
     width: 30rem;

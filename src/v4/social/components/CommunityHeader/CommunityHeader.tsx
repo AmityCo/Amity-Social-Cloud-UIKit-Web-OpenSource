@@ -88,6 +88,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const joinRequestCount = (joinRequests && joinRequests?.length) ?? 0;
 
   const isShowPendingPost =
+    community.isJoined &&
     pendingPostsCount > 0 &&
     reviewingPosts.length > 0 &&
     (canReviewCommunityPosts || isPostOwner) &&
@@ -107,11 +108,6 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
         community={community}
         onBack={() => onBack(page)}
         isSticky={!isDesktop && isSticky}
-        onClickMenu={() => {
-          AmityCommunityProfilePageBehavior?.goToCommunitySettingPage?.({
-            community: community,
-          });
-        }}
       />
       <div className={styles.content}>
         <div className={styles.communityProfile__name}>

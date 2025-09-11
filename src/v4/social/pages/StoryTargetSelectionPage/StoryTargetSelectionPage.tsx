@@ -62,7 +62,10 @@ export function StoryTargetSelectionPage() {
     .map((community) => {
       return (
         <FileTrigger key={community.communityId} onSelect={handleFileSelect}>
-          <Button onPress={() => handleOnClickCommunity(community.communityId)}>
+          <Button
+            onPress={() => handleOnClickCommunity(community.communityId)}
+            data-testid="story-target-community-item"
+          >
             <div className={styles.selectStoryTargetPage__communityItem_container}>
               <div className={styles.selectStoryTargetPage__communityAvatar}>
                 <CommunityAvatar pageId={pageId} community={community} />
@@ -83,6 +86,9 @@ export function StoryTargetSelectionPage() {
       if (hasMore && isLoading === false) {
         loadMore();
       }
+    },
+    options: {
+      threshold: 0.7,
     },
     node: intersectionNode,
   });
@@ -122,7 +128,10 @@ export function StoryTargetSelectionPage() {
         {renderCommunity}
         {isLoading && renderSkeleton()}
       </div>
-      <div ref={(node) => setIntersectionNode(node)} />
+      <div
+        ref={(node) => setIntersectionNode(node)}
+        className={styles.selectStoryTargetPage__intersectionObserver}
+      />
     </div>
   );
 }

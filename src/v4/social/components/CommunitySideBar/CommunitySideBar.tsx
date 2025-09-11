@@ -20,6 +20,7 @@ import { NotificationTrayButton } from '~/v4/social/elements';
 import styles from './CommunitySideBar.module.css';
 import { notificationTray } from '@amityco/ts-sdk';
 import { Popover } from '~/v4/core/components/AriaPopover';
+import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
 
 type CommunitySideBarProps = {
   pageId?: string;
@@ -36,6 +37,7 @@ export const CommunitySideBar = ({
   const { goToCreateCommunityPage } = useNavigation();
   const { socialCommunityCreationButtonVisible } = useConfig();
   const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
+  const { searchValue } = useSearchResultContext();
 
   const handleNotificationTrayButtonClick = () => {
     notificationTray.markTraySeen(new Date().toISOString());
@@ -71,7 +73,7 @@ export const CommunitySideBar = ({
           </Popover>
         </div>
 
-        <SocialGlobalSearchPage />
+        <SocialGlobalSearchPage keyword={searchValue} />
       </div>
 
       <div className={styles.communitySideBar__menuSection}>

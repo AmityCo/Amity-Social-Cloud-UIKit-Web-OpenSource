@@ -11,7 +11,7 @@ export const MessageReactionPreview = ({
   message: Amity.Message;
   onClick?: () => void;
 }) => {
-  const { config: reactionConfig } = useCustomReaction();
+  const { reactions: reactionConfig } = useCustomReaction();
   // find the top 3 reactions
   const topReactions = message.reactions
     ? useMemo(

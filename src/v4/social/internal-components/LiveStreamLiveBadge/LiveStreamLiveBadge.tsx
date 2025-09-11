@@ -4,6 +4,8 @@ import styles from './LiveStreamLiveBadge.module.css';
 
 export function LiveStreamLiveBadge() {
   return (
-    <Typography.CaptionBold className={styles.liveStreamLiveBadge}>Live</Typography.CaptionBold>
+    <div className={styles.liveStreamLiveBadge}>
+      <Typography.CaptionBold>Live</Typography.CaptionBold>
+    </div>
   );
 }

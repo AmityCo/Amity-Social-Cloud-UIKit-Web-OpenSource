@@ -16,10 +16,15 @@
   height: 100%;
 }
 
-.closeButton {
+.modal__actions {
   position: absolute;
-  top: 2rem;
-  left: 1rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   cursor: pointer;
 }
 
@@ -96,4 +101,15 @@
   width: 2rem;
   height: 2rem;
   cursor: pointer;
+}
+
+.videoViewer__menuButton,
+.videoViewer__menuButton:hover {
+  background-color: transparent;
+}
+
+.videoViewer__menuButton__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-background-default);
 }

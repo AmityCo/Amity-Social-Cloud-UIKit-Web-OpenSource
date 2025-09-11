@@ -1,7 +1,5 @@
 import React from 'react';
-import UserIcon from '~/v4/icons/User';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { Avatar } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import { Title } from '~/v4/social/elements/Title';
 import { useImage } from '~/v4/core/hooks/useImage';
@@ -124,6 +122,7 @@ export function PostComposer({
         pageId={pageId}
         userId={user?.userId}
         componentId={componentId}
+        shouldRedirectToUserProfile
         className={styles.postComposer__avatar}
         imageContainerClassName={styles.postComposer__avatar}
         textPlaceholderClassName={styles.postComposer__avatarPlaceholder}

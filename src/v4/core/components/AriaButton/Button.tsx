@@ -7,7 +7,7 @@ export type ButtonProps = $ButtonProps & {
   iconClassName?: string;
   size?: 'small' | 'medium';
   color?: 'primary' | 'secondary' | 'alert';
-  variant?: 'fill' | 'outlined' | 'text';
+  variant?: 'fill' | 'outlined' | 'text' | 'default';
   fullWidth?: boolean;
   ref?: React.Ref<any>;
   icon?: React.ReactNode | ((props: { className?: string }) => React.ReactNode);

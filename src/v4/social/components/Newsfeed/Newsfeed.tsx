@@ -8,6 +8,7 @@ import { PostComposer } from '~/v4/social/components/PostComposer';
 import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import styles from './Newsfeed.module.css';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type NewsfeedProps = {
   pageId?: string;
@@ -28,6 +29,8 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
     removeItem,
   } = useGlobalFeedContext();
 
+  const { isDesktop } = useResponsive();
+
   const onFeedReachBottom = () => {
     if (hasMore && !isLoading) loadMore?.();
   };
@@ -36,9 +39,11 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
 
   return (
     <PullToRefresh className={styles.newsfeed} style={themeStyles} onTouchEndCallback={refetch}>
-      <Divider />
-      <StoryTab type="globalFeed" pageId={pageId} />
-      <Divider />
+      <Divider isShown={!isDesktop} />
+      <div className={styles.newsfeed__storyTab}>
+        <StoryTab type="globalFeed" pageId={pageId} />
+      </div>
+      <Divider isShown={!isDesktop} />
       <PostComposer pageId={pageId} />
       <GlobalFeed
         pageId={pageId}

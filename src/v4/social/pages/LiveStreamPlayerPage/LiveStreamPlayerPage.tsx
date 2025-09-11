@@ -32,6 +32,13 @@ import CloseIcon from '~/v4/icons/Close';
 import ChatFeed from '~/v4/chat/internal-components/ChatFeed/ChatFeed';
 import { ReactionFloating } from '~/v4/chat/internal-components/ReactionFloating/ReactionFloating';
 import { LiveStreamBanThumbnail } from '~/v4/social/internal-components/LiveStreamBanThumbnail';
+import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
+import { IconButton } from '~/v4/core/components/IconButton';
+import Kebub from '~/v4/icons/Kebub';
+import { Popover } from '~/v4/core/components/AriaPopover';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { SharableModel } from '~/v4/utils/sharableLink';
+import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 import { useKeyboardVisibility } from './useKeyboardVisibility';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
@@ -39,7 +46,7 @@ import useSDK from '~/v4/core/hooks/useSDK';
 
 export type LiveStreamPlayerPageProps = {
   post: Amity.Post;
-  goToDetailPage?: () => void;
+  goToDetailPage?: (context?: GoToPostDetailPageParams) => void;
 };
 
 const usePostSubscription = (postId: string) => {
@@ -268,6 +275,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
     resetLiveStreamPlayerRef,
   } = useLiveStreamPlayer({ stream });
 
+  const { setDrawerData, removeDrawerData } = useDrawer();
   const { channel, isLoading: isChannelLoading } = useLivechat({
     stream,
     targetType: post.targetType,
@@ -355,43 +363,6 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
     };
   }, [chatContainerRef.current]);
 
-  useEffect(() => {
-    if (!chatContainerRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.contentRect) {
-          console.log('entry', entry.contentRect.height);
-          setChatContainerHeight(entry.contentRect.height);
-        }
-      }
-    });
-
-    observer.observe(chatContainerRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [chatContainerRef.current]);
-
-  useEffect(() => {
-    if (!chatContainerRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.contentRect) {
-          setChatContainerHeight(entry.contentRect.height);
-        }
-      }
-    });
-
-    observer.observe(chatContainerRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [chatContainerRef.current]);
-
   const isLive = stream?.status === liveStreamStatus.live;
   const isEnded = stream?.status === liveStreamStatus.ended && !stream?.moderation?.terminateLabels;
 
@@ -427,20 +398,20 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
             <>
               {isLive || isEnded ? (
                 <div className={styles.liveStreamPlayer__liveDetail}>
-                  <Button
-                    variant="text"
-                    onPress={onClose}
-                    className={styles.liveStreamPlayer__closeButton}
-                    data-is-live={isLive}
-                  >
-                    <CloseIcon
-                      className={styles.liveStreamPlayer__closeButton__icon}
-                      data-is-live={isLive}
-                      data-is-ended={isEnded}
-                    />
-                  </Button>
-                  {!isEnded && (
+                  {!isEnded && !isUserBanned && (
                     <div className={styles.liveStreamPlayer__liveDetail__detail}>
+                      <Button
+                        variant="text"
+                        onPress={onClose}
+                        className={styles.liveStreamPlayer__closeButton}
+                        data-is-live={isLive}
+                      >
+                        <CloseIcon
+                          className={styles.liveStreamPlayer__closeButton__icon}
+                          data-is-live={isLive}
+                          data-is-ended={isEnded}
+                        />
+                      </Button>
                       <CommunityAvatar
                         pageId={pageId}
                         community={community}
@@ -459,6 +430,47 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                           By {post.creator?.displayName}
                         </Typography.CaptionSmall>
                       </div>
+                    </div>
+                  )}
+                  {!isEnded && !isUserBanned && (
+                    <div className={styles.liveStreamPlayer__liveDetail__optionWrapper}>
+                      <LiveStreamLiveBadge />
+                      {community?.isPublic && (
+                        <Popover
+                          trigger={({ openPopover }) => (
+                            <IconButton
+                              variant="text"
+                              pageId={pageId}
+                              defaultIcon={
+                                <Kebub className={styles.liveStreamPlayer__optionIcon} />
+                              }
+                              onPress={() =>
+                                isDesktop
+                                  ? openPopover()
+                                  : setDrawerData({
+                                      content: (
+                                        <CopyLinkButton
+                                          pageId={pageId}
+                                          model={SharableModel.POST}
+                                          referenceId={post.postId}
+                                          onDone={removeDrawerData}
+                                        />
+                                      ),
+                                    })
+                              }
+                            />
+                          )}
+                        >
+                          {({ closePopover }) => (
+                            <CopyLinkButton
+                              pageId={pageId}
+                              model={SharableModel.POST}
+                              referenceId={post.postId}
+                              onDone={isDesktop ? closePopover : removeDrawerData}
+                            />
+                          )}
+                        </Popover>
+                      )}
                     </div>
                   )}
                 </div>
@@ -514,7 +526,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                   stream?.moderation?.terminateLabels?.length > 0 && (
                     <LiveStreamTerminatedThumbnail />
                   )}
-                {isLive && <LiveStreamLiveBadge />}
+
                 {stream?.status === liveStreamStatus.idle && (
                   <LiveStreamIdleThumbnail view="full-screen" />
                 )}
