@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type SwiperCore from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Scrollbar, Mousewheel, FreeMode } from 'swiper/modules';
@@ -21,13 +21,16 @@ import usePost from '~/v4/core/hooks/objects/usePost';
 import { EmptyFeed } from './EmptyFeed/EmptyFeed';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
-import styles from './ClipFeedPage.module.css';
 import usePostsCollection from '~/v4/social/hooks/collections/usePostsCollection';
 import { useQueryClipGlobalFeed } from '~/v4/social/hooks/useQueryClipGlobalFeed';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { SharableModel } from '~/v4/utils/sharableLink';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import { useSDK } from '~/v4/core/hooks/useSDK';
+import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
+import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
+import styles from './ClipFeedPage.module.css';
 
 type ClipFeedPageProps = {
   currentPostId?: string;
@@ -57,6 +60,8 @@ export const ClipFeedPage = ({
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { setActiveTab } = useLayoutContext();
   const drawerData = useDrawerData();
+  const { currentUserId } = useSDK();
+  const { followStatus } = useFollowCount(currentUserId);
 
   const [initialSlideSet, setInitialSlideSet] = useState(false);
   const videoRefs = useRef<Record<string, HTMLVideoElement>>({});
@@ -67,6 +72,7 @@ export const ClipFeedPage = ({
   const [isDragging, setIsDragging] = useState(false);
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [seeMoreIsOpen, setSeeMoreIsOpen] = useState(false);
+  const { socialSettings } = useSocialSettings();
 
   // Use global clip feed when no props are passed, otherwise use collection
   const shouldUseGlobalFeed = !targetType && !targetId && !currentPostId;
@@ -123,16 +129,37 @@ export const ClipFeedPage = ({
     if (currentPostId) refreshPost();
   }, [currentPostId]);
 
-  const { community } = useCommunity({
-    communityId: post?.targetType === 'community' ? post?.targetId : undefined,
-  });
-
   // Check if currentPostId exists in the posts array
   const isCurrentPostInPosts =
     currentPostId && posts?.some((post) => post.postId === currentPostId);
 
   // Determine if we should show deleted clip view
   const shouldShowDeletedClip = currentPostId && posts && posts.length > 0 && !isCurrentPostInPosts;
+  // Determine the currently visible post (either from the posts list by active index or the single fetched post)
+  const currentVisiblePost = useMemo(() => {
+    if (posts && posts.length > 0) {
+      const idx = shouldShowDeletedClip ? activeIndex - 1 : activeIndex;
+      if (idx >= 0 && idx < posts.length) return posts[idx];
+    }
+    return post;
+  }, [posts, activeIndex, shouldShowDeletedClip, post]);
+
+  // Fetch community data based on the currently visible post (works even when currentPostId prop is absent)
+  const { community } = useCommunity({
+    communityId:
+      currentVisiblePost?.targetType === 'community' ? currentVisiblePost?.targetId : undefined,
+  });
+
+  // Only expose community if the current visible post is a community post and ids match; otherwise undefined
+  const activeCommunity = useMemo(() => {
+    if (
+      currentVisiblePost?.targetType !== 'community' ||
+      !community ||
+      community.communityId !== currentVisiblePost.targetId
+    )
+      return undefined;
+    return community;
+  }, [community, currentVisiblePost]);
 
   // Determine if we should enable infinite loop
   const hasMorePosts = shouldUseGlobalFeed ? hasMoreGlobalPosts : hasMoreCollectionPosts;
@@ -283,6 +310,12 @@ export const ClipFeedPage = ({
     loadMoreCollectionPosts,
   ]);
 
+  const hasPermissionToShare =
+    followStatus === 'accepted' ||
+    (socialSettings?.userPrivacySetting === 'public' && followStatus !== 'blocked');
+
+  const isShowCopyLinkButton = activeCommunity?.isPublic || hasPermissionToShare;
+
   const handleSlideChange = (swiper: SwiperCore) => {
     const newIndex = swiper.activeIndex;
     setActiveIndex(newIndex);
@@ -381,11 +414,11 @@ export const ClipFeedPage = ({
                 View post
               </Typography.BodyBold>
             </Button>
-            {community?.isPublic && (
+            {isShowCopyLinkButton && (
               <CopyLinkButton
                 pageId={pageId}
                 model={SharableModel.POST}
-                referenceId={post?.postId}
+                referenceId={postId || currentVisiblePost?.postId}
                 onDone={removeDrawerData}
               />
             )}
@@ -393,7 +426,7 @@ export const ClipFeedPage = ({
         ),
       });
     },
-    [community?.isPublic],
+    [isShowCopyLinkButton, posts, currentVisiblePost?.postId],
   );
 
   const handleClipFailed = useCallback((postId: string) => {
