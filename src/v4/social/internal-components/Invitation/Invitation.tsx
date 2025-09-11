@@ -3,7 +3,6 @@ import { CommunityRepository } from '@amityco/ts-sdk';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { Timestamp } from '~/v4/social/elements/Timestamp';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
-import { ERROR_CODE } from '~/v4/social/constants/errorCode';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { InvitationDescription, JoinButton, RejectButton } from '~/v4/social/elements';
@@ -11,6 +10,7 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import styles from './Invitation.module.css';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 
 type InvitationProps = {
   pageId?: string;
@@ -54,7 +54,7 @@ export const Invitation = ({
       });
       invitation && setAcceptedInvitation(invitation);
     } catch (error: any) {
-      if (error.code === ERROR_CODE.UNAVAILABLE) {
+      if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
         return notification.info({ content: 'This invitation is no longer available.' });
       }
       notification.info({ content: 'Failed to accept invitation. Please try again.' });
@@ -69,7 +69,7 @@ export const Invitation = ({
       await invitation.reject();
       notification.success({ content: 'Invitation declined.' });
     } catch (error: any) {
-      if (error.code === ERROR_CODE.UNAVAILABLE) {
+      if (error.code === ERROR_RESPONSE.UNAVAILABLE) {
         return notification.info({ content: 'This invitation is no longer available.' });
       }
       notification.info({ content: 'Failed to decline invitation. Please try again.' });

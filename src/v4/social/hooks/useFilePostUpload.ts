@@ -224,6 +224,41 @@ export function useFilePostUpload(pageId?: string) {
     );
   };
 
+  const retryUpload = async (fileId: string) => {
+    const fileToRetry = files.find((file) => file.id === fileId);
+    if (!fileToRetry) {
+      console.warn('Cannot retry upload: File not found');
+      return;
+    }
+
+    // Only retry files that have failed or are not yet uploaded
+    if (fileToRetry.status !== 'failed') {
+      console.warn('Cannot retry upload: File is not in failed state');
+      return;
+    }
+
+    // Ensure it's still a File object (not an uploaded Amity.File)
+    if (isAmityFile(fileToRetry.file)) {
+      console.warn('Cannot retry upload: File is already uploaded');
+      return;
+    }
+
+    // Reset the file status to 'selected' and clear error
+    setFiles((prevFiles) =>
+      prevFiles.map((file) =>
+        file.id === fileId ? { ...file, status: 'selected' as const, errorText: undefined } : file,
+      ),
+    );
+
+    // Reset progress for this file
+    setProgress((prev) => ({ ...prev, [fileId]: 0 }));
+
+    // Retry the upload with the original File object
+
+    await uploadSingleFile(fileToRetry, fileToRetry.file.type);
+    setProgress((prev) => ({ ...prev, [fileId]: undefined }));
+  };
+
   return {
     files,
     progress,
@@ -233,5 +268,6 @@ export function useFilePostUpload(pageId?: string) {
     removeFile,
     handleFileChange,
     handleAltTextChange,
+    retryUpload,
   };
 }

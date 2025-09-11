@@ -1,21 +1,26 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import styles from './ReactionList.module.css';
 import { Typography } from '~/v4/core/components';
 import SmilePlus from '~/v4/icons/SmilePlus';
+import styles from './ReactionList.module.css';
 
-export const ReactionListEmptyState = () => {
+type ReactionListEmptyStateProps = {
+  referenceType?: string;
+};
+
+export const ReactionListEmptyState = ({
+  referenceType = 'message',
+}: ReactionListEmptyStateProps) => {
   return (
     <div className={styles.reactionCustomStateContainer} data-testid="reaction_list">
       <div className={styles.reactionState}>
-        <SmilePlus />
+        <SmilePlus className={styles.reactionListEmptyState__smileIcon} />
         <div className={styles.reactionState2Line}>
-          <Typography.Body>
-            <FormattedMessage id="livechat.reaction.emptyState" />
+          <Typography.Body className={styles.reactionListEmptyState__caption}>
+            No reactions yet
           </Typography.Body>
-          <Typography.Caption>
-            <FormattedMessage id="livechat.reaction.emptyState.description" />
-          </Typography.Caption>
+          <Typography.Caption
+            className={styles.reactionListEmptyState__caption}
+          >{`Be the first to react to this ${referenceType}!`}</Typography.Caption>
         </div>
       </div>
     </div>

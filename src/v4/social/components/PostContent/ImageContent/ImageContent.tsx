@@ -24,8 +24,8 @@ export const ImageContent = ({
 }: ImageContentProps) => {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
-  const first4Images = posts.slice(0, 4);
-  const imageLeftCount = Math.max(0, posts.length - 4);
+  const first4Images = posts?.slice(0, 4);
+  const imageLeftCount = Math.max(0, posts?.length - 4);
 
   if (!posts || posts[0]?.dataType !== 'image') return null;
 

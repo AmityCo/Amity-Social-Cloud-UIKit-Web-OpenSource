@@ -11,6 +11,7 @@ type CloseButtonProps = ButtonProps & {
   componentId?: string;
   imgClassName?: string;
   defaultClassName?: string;
+  className?: string;
 };
 
 export const CloseButton = ({
@@ -18,6 +19,7 @@ export const CloseButton = ({
   imgClassName,
   defaultClassName,
   componentId = '*',
+  className,
   ...props
 }: CloseButtonProps) => {
   const elementId = 'close_button';
@@ -30,7 +32,11 @@ export const CloseButton = ({
   if (isExcluded) return null;
 
   return (
-    <Button {...props} className={styles.closeButton} data-testid={accessibilityId}>
+    <Button
+      {...props}
+      className={clsx(styles.closeButton, className)}
+      data-testid={accessibilityId}
+    >
       <IconComponent
         configIconName={config.icon}
         imgIcon={() => <img src={config.icon} alt={uiReference} className={imgClassName} />}

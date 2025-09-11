@@ -103,7 +103,7 @@ export const ClipGallery: React.FC<ClipGalleryProps> = ({
     <div className={styles.clipGallery}>
       {posts?.map((post, index) => (
         <ClipItem
-          key={post?.data?.fileId}
+          key={post?.postId}
           videoFileId={post?.data?.fileId as string}
           thumbnailFileId={post.data?.thumbnailFileId || undefined}
           postIndex={index}
@@ -114,6 +114,9 @@ export const ClipGallery: React.FC<ClipGalleryProps> = ({
       {posts && isDesktop && isImageViewerOpen && selectedIndex !== null && (
         <SingleVideoViewer
           pageId={pageId}
+          isFromGallery
+          selectedImageIndex={selectedIndex}
+          post={posts[selectedIndex]}
           componentId={componentId}
           elementId={elementId}
           fileId={posts[selectedIndex]?.data?.fileId as string}

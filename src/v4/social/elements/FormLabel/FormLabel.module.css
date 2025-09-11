@@ -1,0 +1,14 @@
+.formLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--asc-color-background-default);
+}
+
+.formLabel__optional {
+  color: var(--asc-color-base-shade3);
+}
+
+.formLabel__length {
+  color: var(--asc-color-base-shade1);
+}

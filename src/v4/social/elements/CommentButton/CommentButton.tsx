@@ -61,7 +61,7 @@ export function CommentButton({
               data-testid={`${pageId}/${componentId}/comment_count`}
               className={clsx(styles.commentButton__text, commentsCountClassName)}
             >
-              {typeof commentsCount === 'number' ? commentsCount : config.text}
+              {config.text}
             </Typography.BodyBold>
           </div>
         )}

@@ -8,6 +8,8 @@ import { EmptyCommunityImageFeed } from '~/v4/social/elements/EmptyCommunityImag
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import LockPrivateContent from '~/v4/social/internal-components/LockPrivateContent';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { MediaFeedSkeleton } from '~/v4/social/internal-components/MediaFeedSkeleton';
 
 type CommunityImageFeedProps = {
   pageId?: string;
@@ -16,18 +18,20 @@ type CommunityImageFeedProps = {
 
 export const CommunityImageFeed = ({ pageId = '*', communityId }: CommunityImageFeedProps) => {
   const componentId = 'community_image_feed';
-  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
-
+  const { linkToPost, setLinkToPost } = useLayoutContext();
   const { community } = useCommunity({ communityId, shouldCall: !!communityId });
+  const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const { isExcluded, accessibilityId, themeStyles } = useAmityComponent({
     pageId,
     componentId,
   });
+
   const { posts, hasMore, loadMore, refresh, isLoading } = usePostsCollection({
     targetId: communityId,
     targetType: 'community',
-    limit: 10,
+    limit: linkToPost ? (linkToPost.index >= 10 ? linkToPost.index + 10 : 10) : 10,
     dataTypes: ['image'],
+    feedType: 'published',
   });
 
   const isMemberPrivateCommunity = community?.isJoined && !community?.isPublic;
@@ -35,8 +39,8 @@ export const CommunityImageFeed = ({ pageId = '*', communityId }: CommunityImage
   if (isExcluded) return null;
 
   useEffect(() => {
-    refresh();
-  }, []);
+    if (posts.length === 0 && !isLoading) setLinkToPost(null);
+  }, [posts, isLoading]);
 
   useIntersectionObserver({
     node: intersectionNode,
@@ -44,19 +48,6 @@ export const CommunityImageFeed = ({ pageId = '*', communityId }: CommunityImage
       if (hasMore && !isLoading) loadMore();
     },
   });
-
-  const renderLoading = () => {
-    return (
-      <div className={styles.communityImageFeed__containerSkeleton}>
-        <div className={styles.communityImageFeed__itemSkeleton}></div>
-        <div className={styles.communityImageFeed__itemSkeleton}></div>
-        <div className={styles.communityImageFeed__itemSkeleton}></div>
-        <div className={styles.communityImageFeed__itemSkeleton}></div>
-        <div className={styles.communityImageFeed__itemSkeleton}></div>
-        <div className={styles.communityImageFeed__itemSkeleton}></div>
-      </div>
-    );
-  };
 
   if (!(isMemberPrivateCommunity || community?.isPublic))
     return (
@@ -72,14 +63,14 @@ export const CommunityImageFeed = ({ pageId = '*', communityId }: CommunityImage
           {posts?.length === 0 && !isLoading && (
             <EmptyCommunityImageFeed pageId={pageId} componentId={componentId} />
           )}
-          {posts?.length > 0 && (
-            <ImageGallery
-              posts={posts as Amity.Post<'image'>[]}
-              pageId={pageId}
-              componentId={communityId}
-            />
-          )}
-          {isLoading && renderLoading()}
+          <ImageGallery
+            isLoading={isLoading}
+            target="community"
+            posts={posts as Amity.Post<'image'>[]}
+            pageId={pageId}
+            componentId={componentId}
+          />
+          {isLoading && <MediaFeedSkeleton />}
         </div>
       </NoInternetConnectionHoc>
       <div ref={(node) => setIntersectionNode(node)} />

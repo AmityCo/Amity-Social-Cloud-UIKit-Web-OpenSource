@@ -26,9 +26,13 @@
   margin-left: 1rem;
 }
 
+.divider[data-type='post'][data-last-child='true'] {
+  min-height: unset;
+  height: 1px;
+}
+
 @media (width >= 48em) {
   .divider[data-type='post'] {
-    min-height: 0.75rem;
-    background-color: var(--asc-color-background-shade1);
+    min-height: 0.5rem;
   }
 }

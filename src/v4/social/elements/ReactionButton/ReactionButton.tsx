@@ -1,16 +1,21 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 import { IconComponent } from '~/v4/core/IconComponent';
-import Crying from '~/v4/social/elements/ReactionButton/Crying';
-import Fire from '~/v4/social/elements/ReactionButton/Fire';
-import Happy from '~/v4/social/elements/ReactionButton/Happy';
-import Like from '~/v4/social/elements/ReactionButton/Like';
-import Love from '~/v4/social/elements/ReactionButton/Love';
-import styles from './ReactionButton.module.css';
+import Crying from '~/v4/icons/Crying';
+import FallbackReaction from '~/v4/icons/FallbackReaction';
+import Fire from '~/v4/icons/Fire';
+import Happy from '~/v4/icons/Happy';
+import Like from '~/v4/icons/Like';
+import Love from '~/v4/icons/Love';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { Button } from '~/v4/core/natives/Button';
+import { useReactionHandler } from '~/v4/core/hooks/useReactionHandler';
+import { ReactionPicker } from '~/v4/social/elements/';
+import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { Button } from '~/v4/core/components/AriaButton';
+import styles from './ReactionButton.module.css';
 import millify from 'millify';
 
 const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
@@ -36,16 +41,23 @@ interface ReactionButtonProps {
   defaultIconClassName?: string;
   imgIconClassName?: string;
   reactButtonClassName?: string;
+  fallbackReactButtonClassName?: string;
   defaultIcon?: () => JSX.Element;
   onReactionClick: (reactionKey: string) => void;
   onHover?: () => void;
   onLongPress?: () => void;
   hoverDuration?: number;
   longPressDuration?: number;
+  isCommentReaction?: boolean;
+  isClipReaction?: boolean;
+  referenceType?: 'post' | 'comment';
 }
 
 const MOUSE_DURATION = 250;
 const LONG_PRESS_DURATION = 500;
+const PANEL_TOP_THRESHOLD_DESKTOP = 95; // Minimum space from top of page to show panel
+const PANEL_TOP_THRESHOLD_MOBILE = 170;
+const PANEL_TOP_THRESHOLD_MOBILE_USER_FEED = 215;
 
 export function ReactionButton({
   pageId = '*',
@@ -57,12 +69,16 @@ export function ReactionButton({
   defaultIconClassName,
   imgIconClassName,
   reactButtonClassName,
+  fallbackReactButtonClassName,
   hoverDuration = MOUSE_DURATION,
   longPressDuration = LONG_PRESS_DURATION,
   onHover,
   onLongPress,
   defaultIcon,
   onReactionClick,
+  isCommentReaction = false,
+  isClipReaction = false,
+  referenceType = 'post',
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
 
@@ -73,55 +89,83 @@ export function ReactionButton({
       elementId,
     });
 
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const { socialReactions } = useCustomReaction();
+
+  const reactionButtonRef = useRef<HTMLButtonElement>(null);
+  const desktopButtonRef = useRef<HTMLDivElement>(null);
+  const [showPanelBelow, setShowPanelBelow] = useState(false);
 
   const { isDesktop } = useResponsive();
+  const { page } = useNavigation();
 
-  const handleMouseEnter = useCallback(() => {
-    if (!onHover) return;
+  const {
+    showReactionPicker,
+    displayReaction,
+    hasMyReaction,
+    hoveredReaction,
+    handleReactionPickerSelect,
+    handleMouseEnter,
+    handleCustomMouseLeave,
+    handleTouchStart,
+    handleTouchEnd,
+    handleTouchMove,
+    handleMouseDown,
+    handleMouseUp,
+    handleQuickReaction,
+    handleReactionHover,
+    longPressEvent,
+    isLongPressing,
+  } = useReactionHandler({
+    myReaction,
+    hoverDuration,
+    longPressDuration,
+    onReactionClick,
+    onHover,
+    onLongPress,
+  });
 
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
+  const checkButtonPosition = useCallback(() => {
+    const buttonElement = isDesktop ? desktopButtonRef.current : reactionButtonRef.current;
+    if (!buttonElement) return;
+
+    const buttonRect = buttonElement.getBoundingClientRect();
+
+    const threshold = isDesktop
+      ? PANEL_TOP_THRESHOLD_DESKTOP
+      : page.type === PageTypes.UserProfilePage
+        ? PANEL_TOP_THRESHOLD_MOBILE_USER_FEED
+        : PANEL_TOP_THRESHOLD_MOBILE;
+
+    const hasSpaceAbove = buttonRect.top >= threshold;
+
+    setShowPanelBelow(!hasSpaceAbove);
+  }, [isDesktop]);
+
+  useEffect(() => {
+    if (showReactionPicker) {
+      checkButtonPosition();
     }
-
-    hoverTimeoutRef.current = setTimeout(() => {
-      onHover();
-    }, hoverDuration);
-  }, [hoverDuration, onHover]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-  }, []);
-
-  const handleTouchStart = useCallback(() => {
-    if (!onLongPress || isDesktop) return;
-
-    if (longPressTimeoutRef.current) {
-      clearTimeout(longPressTimeoutRef.current);
-    }
-
-    longPressTimeoutRef.current = setTimeout(() => {
-      onLongPress();
-    }, longPressDuration);
-  }, [onLongPress, longPressDuration, isDesktop]);
-
-  const handleTouchEnd = useCallback(() => {
-    if (longPressTimeoutRef.current) {
-      clearTimeout(longPressTimeoutRef.current);
-      longPressTimeoutRef.current = null;
-    }
-  }, []);
-
-  const hasMyReaction = myReaction != null;
+  }, [showReactionPicker, checkButtonPosition]);
 
   if (isExcluded) return null;
 
   const renderMyReaction = () => {
-    switch (myReaction) {
+    if (!displayReaction) return null;
+
+    const customReaction = socialReactions?.find((reaction) => reaction.name === displayReaction);
+
+    if (customReaction) {
+      return (
+        <img
+          data-testid={`${customReaction.name}-button`}
+          src={customReaction.image}
+          alt={customReaction.name}
+          className={clsx(styles.reactButton__icon, reactButtonClassName)}
+        />
+      );
+    }
+
+    switch (displayReaction) {
       case 'like':
         return <Like className={clsx(styles.reactButton__icon, reactButtonClassName)} />;
       case 'love':
@@ -133,7 +177,11 @@ export function ReactionButton({
       case 'crying':
         return <Crying className={styles.reactButton__icon} />;
       default:
-        return null;
+        return (
+          <FallbackReaction
+            className={clsx(styles.reactButton__icon, fallbackReactButtonClassName)}
+          />
+        );
     }
   };
 
@@ -144,46 +192,147 @@ export function ReactionButton({
     />
   );
 
-  return (
+  const renderReactionButton = () => {
+    return (
+      <>
+        {!isCommentReaction && (
+          <>
+            {displayReaction ? (
+              renderMyReaction()
+            ) : (
+              <IconComponent
+                defaultIcon={defaultIcon ?? renderDefaultIcon}
+                imgIcon={() => (
+                  <img src={config.icon} alt={uiReference} className={imgIconClassName} />
+                )}
+                defaultIconName={defaultConfig.icon}
+                configIconName={config.icon}
+              />
+            )}
+          </>
+        )}
+
+        {isCommentReaction ? (
+          <Typography.CaptionBold
+            className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
+            data-has-my-reaction={hasMyReaction}
+            testId={`${pageId}/${componentId}/comment-reaction-text`}
+          >
+            {displayReaction ?? config.text ?? 'Like'}
+          </Typography.CaptionBold>
+        ) : isClipReaction ? (
+          <Typography.BodyBold
+            className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
+            data-has-my-reaction={hasMyReaction}
+            testId={`${pageId}/${componentId}/comment-reaction-text`}
+          >
+            {typeof reactionsCount === 'number'
+              ? millify(reactionsCount)
+              : myReaction || config.text}
+          </Typography.BodyBold>
+        ) : (
+          <Typography.BodyBold
+            className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
+            data-has-my-reaction={hasMyReaction}
+            testId={`${pageId}/${componentId}/comment-reaction-text`}
+          >
+            {displayReaction || config.text}
+          </Typography.BodyBold>
+        )}
+
+        {showReactionPicker && (
+          <div
+            data-testid={`${pageId}/${componentId}/reaction-picker-panel`}
+            className={clsx(
+              styles.reactButton__panel,
+              showPanelBelow && styles.reactButton__panel__below,
+            )}
+            data-is-clip={isClipReaction}
+            data-position={showPanelBelow ? 'below' : 'above'}
+            data-reference-type={referenceType}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onTouchStart={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <ReactionPicker
+              pageId={pageId}
+              componentId={componentId}
+              myReaction={displayReaction}
+              onReactionClick={handleReactionPickerSelect}
+              onReactionHover={handleReactionHover}
+              position={showPanelBelow ? 'below' : 'above'}
+              hoveredReaction={hoveredReaction}
+            />
+          </div>
+        )}
+      </>
+    );
+  };
+
+  return isDesktop ? (
     <div
+      ref={desktopButtonRef}
+      style={themeStyles}
+      data-testid={accessibilityId}
+      role="button"
+      tabIndex={0}
+      aria-label="Reaction Button"
+      {...longPressEvent}
       onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onTouchCancel={handleTouchEnd}
+      onMouseLeave={handleCustomMouseLeave}
     >
       <Button
+        variant="default"
+        onPress={(e) => {
+          if (showReactionPicker || isLongPressing) {
+            return;
+          }
+          handleQuickReaction();
+        }}
+        className={clsx(styles.reactButton, buttonClassName)}
+      >
+        {renderReactionButton()}
+      </Button>
+    </div>
+  ) : (
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleCustomMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      className={styles.reactionButton__wrapper}
+      data-is-clip={isClipReaction}
+      role="button"
+      tabIndex={0}
+      aria-label="Reaction Button"
+    >
+      <Button
+        variant="default"
+        ref={reactionButtonRef}
         style={themeStyles}
         data-testid={accessibilityId}
-        aria-pressed={hasMyReaction}
-        aria-label={`${myReaction ? `Remove ${myReaction} reaction` : 'Add reaction'} ${
-          reactionsCount
-            ? `(${reactionsCount} ${reactionsCount === 1 ? 'reaction' : 'reactions'})`
-            : ''
-        }`}
         className={clsx(styles.reactButton, buttonClassName)}
-        onPress={() => {
-          handleMouseLeave();
-          handleTouchEnd();
-          onReactionClick('like');
+        onPress={(e) => {
+          if (showReactionPicker || isLongPressing) {
+            return;
+          }
+
+          handleQuickReaction();
         }}
       >
-        {myReaction ? (
-          renderMyReaction()
-        ) : (
-          <IconComponent
-            defaultIcon={defaultIcon ?? renderDefaultIcon}
-            imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
-            defaultIconName={defaultConfig.icon}
-            configIconName={config.icon}
-          />
-        )}
-        <Typography.BodyBold
-          className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
-          data-has-my-reaction={hasMyReaction}
-        >
-          {typeof reactionsCount === 'number' ? millify(reactionsCount) : myReaction || config.text}
-        </Typography.BodyBold>
+        {renderReactionButton()}
       </Button>
     </div>
   );

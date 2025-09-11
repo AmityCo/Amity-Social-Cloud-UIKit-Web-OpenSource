@@ -7,6 +7,7 @@ export { HyperLinkButton } from './HyperLinkButton';
 export { StoryImpressionButton } from './StoryImpressionButton';
 export { OverflowMenuButton } from './OverflowMenuButton';
 export { ReactionButton } from './ReactionButton';
+export { ReactionPicker } from './ReactionPicker';
 export { SaveButton } from './SaveButton';
 export { ShareStoryButton } from './ShareStoryButton';
 export { SpeakerButton } from './SpeakerButton';

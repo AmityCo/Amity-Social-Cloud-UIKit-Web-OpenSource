@@ -153,13 +153,26 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
 
   if (isExcluded) return null;
 
-  const handlePostNavigation = (postId?: string, category?: AmityPostCategory) => {
+  const handlePostNavigation = (
+    postId?: string,
+    category?: AmityPostCategory,
+    commentId?: string,
+    parentId?: string,
+    selectedReplyComment?: Amity.Comment,
+    showReplyCommentAt?: string,
+    isFromCommentClick?: boolean,
+  ) => {
     if (!postId) return;
 
     AmityCommunityProfilePageBehavior?.goToPostDetailPage?.({
       postId,
       hideTarget: true,
       category: category || AmityPostCategory.GENERAL,
+      commentId,
+      parentId,
+      selectedReplyComment,
+      showReplyCommentAt,
+      isFromCommentClick,
     });
   };
 
@@ -176,11 +189,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                 post?.placement === 'default' ? AmityPostCategory.PIN : AmityPostCategory.GENERAL;
 
               return (
-                <Button
-                  key={post.postId}
-                  className={styles.communityFeed__postContent}
-                  onPress={() => handlePostNavigation(post.postId, category)}
-                >
+                <div key={post.postId} className={styles.communityFeed__postContent}>
                   <PostContent
                     pageId={pageId}
                     key={post.postId}
@@ -188,9 +197,20 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                     category={category}
                     style={AmityPostContentComponentStyle.FEED}
                     hideTarget
-                    onClick={() => handlePostNavigation(post.postId, category)}
+                    onClick={(context) =>
+                      handlePostNavigation(
+                        post.postId,
+                        category,
+                        context?.commentId,
+                        context?.parentId,
+                        context?.selectedReplyComment,
+                        context?.showReplyCommentAt,
+                        context?.isFromCommentClick,
+                      )
+                    }
+                    onPollPostDeleted={() => refreshPosts()}
                   />
-                </Button>
+                </div>
               );
             })}
         {isLoading &&
@@ -237,8 +257,19 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
                   category={category}
                   style={AmityPostContentComponentStyle.FEED}
                   hideTarget
-                  onClick={() => handlePostNavigation(post.postId, category)}
+                  onClick={(context) =>
+                    handlePostNavigation(
+                      post.postId,
+                      category,
+                      context?.commentId,
+                      context?.parentId,
+                      context?.selectedReplyComment,
+                      context?.showReplyCommentAt,
+                      context?.isFromCommentClick,
+                    )
+                  }
                   onPostDeleted={() => refreshPinnedPosts()}
+                  onPollPostDeleted={() => refreshPinnedPosts()}
                 />
               </Button>
             );

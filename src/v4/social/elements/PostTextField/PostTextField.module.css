@@ -1,9 +1,7 @@
 .editorPlaceholder {
   color: #999;
   overflow: hidden;
-  position: absolute;
-  top: 4.3rem;
-  left: 1rem;
+  margin-top: -1rem;
   user-select: none;
   pointer-events: none;
 }
@@ -41,6 +39,11 @@
 .editorLink {
   text-decoration: none;
   color: var(--asc-color-primary-default);
+}
+
+.editorHashtag {
+  color: var(--asc-color-primary-default);
+  font-weight: 500;
 }
 
 .postTextField__mentionInterceptor {

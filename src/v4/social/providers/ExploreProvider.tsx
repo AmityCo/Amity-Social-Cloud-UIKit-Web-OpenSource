@@ -8,6 +8,7 @@ type ExploreContextType = {
   fetchRecommendedCommunities: () => void;
   fetchCommunityCategories: () => void;
   refetchRecommendedCommunities: () => void;
+  refreshBothCommunityCollections: () => void;
   isLoading: boolean;
   isCategoryLoading: boolean;
   error: Error | null;
@@ -17,11 +18,15 @@ type ExploreContextType = {
   noTrendingCommunities: boolean;
   isEmpty: boolean;
   isCommunityEmpty: boolean;
+  isNoCategory: boolean;
   categories: Amity.Category[];
   refresh: () => void;
   pendingJoinCommunities: string[];
   setPendingJoinCommunity: (communityId: string) => void;
   removePendingJoinCommunity: (communityId: string) => void;
+  priorityRecommendedCommunities: string[];
+  addPriorityRecommendedCommunity: (communityId: string) => void;
+  removePriorityRecommendedCommunity: (communityId: string) => void;
 };
 
 const ExploreContext = createContext<ExploreContextType>({
@@ -29,6 +34,7 @@ const ExploreContext = createContext<ExploreContextType>({
   fetchRecommendedCommunities: () => {},
   fetchCommunityCategories: () => {},
   refetchRecommendedCommunities: () => {},
+  refreshBothCommunityCollections: () => {},
   trendingCommunities: [],
   recommendedCommunities: [],
   categories: [],
@@ -38,11 +44,15 @@ const ExploreContext = createContext<ExploreContextType>({
   isCommunityEmpty: false,
   isLoading: false,
   isCategoryLoading: false,
+  isNoCategory: false,
   error: null,
   refresh: () => {},
   pendingJoinCommunities: [],
   setPendingJoinCommunity: () => {},
   removePendingJoinCommunity: () => {},
+  priorityRecommendedCommunities: [],
+  addPriorityRecommendedCommunity: () => {},
+  removePriorityRecommendedCommunity: () => {},
 });
 
 export const useExplore = () => useContext(ExploreContext);
@@ -56,14 +66,17 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
   const [recommendedCommunitiesEnable, setRecommendedCommunitiesEnable] = useState(false);
   const [communityCategoriesEnable, setCommunityCategoriesEnable] = useState(false);
   const [pendingJoinCommunities, setPendingJoinCommunities] = useState<string[]>([]);
+  const [priorityRecommendedCommunities, setPriorityRecommendedCommunities] = useState<string[]>(
+    [],
+  );
 
   const trendingData = useTrendingCommunitiesCollection({
-    params: { limit: 5 },
+    params: { limit: 7 },
     enabled: trendingCommunitiesEnable,
   });
 
   const recommendedData = useRecommendedCommunitiesCollection({
-    params: { limit: 20 },
+    params: { limit: 15 }, // Fetch more to account for filtering
     enabled: recommendedCommunitiesEnable,
   });
 
@@ -79,7 +92,8 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
     trendingData.isLoading ||
     (recommendedData.isLoading && recommendedCommunitiesEnable) ||
     categoriesData.isLoading;
-  const error = trendingData.error && recommendedData.error && categoriesData.error;
+
+  const error = trendingData.error || recommendedData.error || categoriesData.error || null;
 
   const refetchRecommendedCommunities = () => recommendedData.refresh();
 
@@ -89,10 +103,16 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
     categoriesData.refresh();
   };
 
+  const refreshBothCommunityCollections = () => {
+    trendingData.refresh();
+    refetchRecommendedCommunities();
+  };
+
   const noCategories = categoriesData.categories.length === 0 && !categoriesData.isLoading;
 
   const noRecommendedCommunities =
-    recommendedData.recommendedCommunities.length === 0 &&
+    (recommendedData?.recommendedCommunities?.length === 0 ||
+      recommendedData?.recommendedCommunities === null) &&
     !recommendedData.isLoading &&
     recommendedCommunitiesEnable;
 
@@ -115,6 +135,19 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
     setPendingJoinCommunities((prev) => prev.filter((id) => id !== communityId));
   };
 
+  const addPriorityRecommendedCommunity = (communityId: string) => {
+    setPriorityRecommendedCommunities((prev) => {
+      if (!prev.includes(communityId)) {
+        return [...prev, communityId];
+      }
+      return prev;
+    });
+  };
+
+  const removePriorityRecommendedCommunity = (communityId: string) => {
+    setPriorityRecommendedCommunities((prev) => prev.filter((id) => id !== communityId));
+  };
+
   return (
     <ExploreContext.Provider
       value={{
@@ -122,13 +155,15 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
         fetchRecommendedCommunities,
         fetchCommunityCategories,
         refetchRecommendedCommunities,
+        refreshBothCommunityCollections,
         trendingCommunities: trendingData.trendingCommunities,
-        recommendedCommunities: recommendedData.recommendedCommunities,
+        recommendedCommunities: recommendedData.recommendedCommunities || [],
         categories: categoriesData.categories,
         noRecommendedCommunities,
         noTrendingCommunities,
         isEmpty,
         isCommunityEmpty,
+        isNoCategory: noCategories,
         isLoading,
         isCategoryLoading: categoriesData.isLoading,
         error,
@@ -136,6 +171,9 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({ children }) =>
         pendingJoinCommunities,
         setPendingJoinCommunity,
         removePendingJoinCommunity,
+        priorityRecommendedCommunities,
+        addPriorityRecommendedCommunity,
+        removePriorityRecommendedCommunity,
       }}
     >
       {children}

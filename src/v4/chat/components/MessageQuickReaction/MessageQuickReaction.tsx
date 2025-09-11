@@ -21,7 +21,7 @@ export const MessageQuickReaction = ({
   const elementId = 'message_quick_reaction';
 
   const { config } = useAmityElement({ pageId, componentId, elementId });
-  const { config: reactionConfig } = useCustomReaction();
+  const { reactions: reactionConfig } = useCustomReaction();
 
   const onClickQuickReaction = useCallback(() => {
     if (

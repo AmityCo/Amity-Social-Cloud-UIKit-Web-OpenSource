@@ -1,6 +1,9 @@
+.postContent__container {
+  background-color: var(--asc-color-background-default);
+}
+
 .postContent {
   padding: 0.75rem 1rem;
-  background-color: var(--asc-color-background-default);
 }
 
 .postContent__bar {
@@ -56,8 +59,10 @@
 .postContent__content {
   display: flex;
   flex-direction: column;
+  width: 100%;
   gap: 1rem;
   padding: 0.5rem 0;
+  cursor: pointer;
 }
 
 .postContent__content_and_reactions {
@@ -84,6 +89,10 @@
   gap: 0.75rem;
 }
 
+.postContent__reactionPopOver {
+  z-index: 50;
+}
+
 .postContent__reactionBar__rightPane {
   display: flex;
   align-items: center;
@@ -108,6 +117,25 @@
   gap: 0.25rem;
 }
 
+.postContent__shareIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--asc-color-base-shade2);
+}
+
+.postContent__inlineComment__container {
+  justify-content: start;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.postContent__inlineComment__divider {
+  min-height: unset !important;
+  height: 1px;
+  width: 100%;
+}
+
 .postTitle {
   display: grid;
   align-items: center;
@@ -116,73 +144,19 @@
   gap: 0.25rem;
 }
 
-.postTitle[data-show-target-community='true'] {
-  grid-template-columns: minmax(0, max-content) minmax(50%, 1fr);
-}
-
-.postTitle__text {
+.postContent__shareMenu__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
   color: var(--asc-color-base-default);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.postTitle__icon {
-  fill: var(--asc-color-base-shade1);
-  height: 0.75rem;
-  width: 1rem;
-}
-
-.postTitle__user__container {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-auto-flow: column;
-  gap: 0.25rem;
-  align-items: center;
-  max-width: 100%;
-}
-
-.postTitle__user__container[data-show-brand-badge='true'][data-show-target='true'] {
-  grid-template-columns: minmax(0, min-content) min-content min-content;
-}
-
-.postTitle__user__container[data-show-brand-badge='false'][data-show-target='true'],
-.postTitle__user__container[data-show-brand-badge='true'][data-show-target='false'] {
-  grid-template-columns: minmax(0, min-content) min-content;
-}
-
-.postTitle__brandIcon {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.postTitle__community {
-  display: grid;
-  grid-template-columns: minmax(0, min-content);
-  grid-auto-flow: column;
-  gap: 0.25rem;
-  align-items: center;
-  max-width: 100%;
-}
-
-.postTitle__community[data-show-private-badge='true'][data-show-official-badge='true'] {
-  grid-template-columns: min-content minmax(0, min-content) min-content;
-}
-
-.postTitle__community[data-show-private-badge='true'][data-show-official-badge='false'] {
-  grid-template-columns: min-content minmax(0, min-content);
-}
-
-.postTitle__community[data-show-private-badge='false'][data-show-official-badge='true'] {
-  grid-template-columns: minmax(0, min-content) min-content;
-}
-
-.postTitle__communityText {
-  color: var(--asc-color-base-default);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
+.postContent__shareMenu__button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  color: var(--asc-color-base-default) !important;
+  justify-content: unset;
 }
 
 .postContent__comment {
@@ -205,46 +179,85 @@
 
 .postContent__commentsCount {
   color: var(--asc-color-base-shade2);
+  cursor: pointer;
 }
 
 .postContent__reactionsBar__reactions {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row-reverse;
+  flex-direction: row;
+}
+
+/* Compensate for overlapping translations when multiple icons exist */
+.postContent__reactionsBar__reactions:has(:nth-child(2)) {
+  margin-right: -0.25rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(3)) {
+  margin-right: -1rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(4)) {
+  margin-right: -1.25rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(5)) {
+  margin-right: -2rem;
+}
+
+.postContent__reactionsBar__reactions:has(:nth-child(6)) {
+  margin-right: -2.25rem;
 }
 
 .postContent__reactionsBar__reactions__icon {
   width: 1.25rem;
   height: 1.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--asc-color-white);
+  position: relative;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(1) {
+.postContent__reactionsBar__reactions__iconFallback {
+  color: var(--asc-color-base-shade3);
+}
+
+.postContent__reactionsBar__reactions__icon:nth-child(1) {
   transform: translateX(0);
+  z-index: 5;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(2) {
-  transform: translateX(-0.25rem);
+.postContent__reactionsBar__reactions__icon:nth-child(2) {
+  transform: translateX(-0.45rem);
+  z-index: 4;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(3) {
-  transform: translateX(-0.5rem);
+.postContent__reactionsBar__reactions__icon:nth-child(3) {
+  transform: translateX(-0.95rem);
+  z-index: 3;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(4) {
-  transform: translateX(-0.75rem);
+.postContent__reactionsBar__reactions__icon:nth-child(4) {
+  transform: translateX(-1.45rem);
+  z-index: 2;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(5) {
-  transform: translateX(-1rem);
+.postContent__reactionsBar__reactions__icon:nth-child(5) {
+  transform: translateX(-2rem);
+  z-index: 1;
 }
 
-.postContent__reactionsBar__reactions__icon:nth-last-child(6) {
-  transform: translateX(-1.25rem);
+.postContent__reactionsBar__reactions__icon:nth-child(6) {
+  transform: translateX(-2.5rem);
+  z-index: 0;
 }
 
 .postContent__reactionsBar__reactions__count {
   color: var(--asc-color-base-shade2);
+}
+
+.postContent__reactionsBar__reactions__count:hover {
+  color: var(--asc-color-base-shade1);
 }
 
 .postContent__bar__information__editedTag {
@@ -334,9 +347,10 @@
   justify-content: start;
   align-items: center;
   gap: 0.25rem;
-  padding-top: 0.25rem;
+  padding-top: 0.75rem;
   line-height: 1.25rem;
   color: var(--asc-color-base-shade2);
+  cursor: pointer;
 }
 
 .postContent__wrapRightMenu {
@@ -400,7 +414,7 @@
     background-color: rgb(from var(--asc-color-black) r g b / 80%) !important;
   }
 
-  .postContent {
+  .postContent__container {
     border-radius: 0.5rem;
   }
 }

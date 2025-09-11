@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   min-height: 20rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
   align-items: start;
   flex-direction: column;
   background-color: var(--asc-color-background-default);

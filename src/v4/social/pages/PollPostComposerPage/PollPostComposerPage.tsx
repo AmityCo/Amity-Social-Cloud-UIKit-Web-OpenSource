@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './PollPostComposerPage.module.css';
-import { Form, Label, TextArea, TextField } from 'react-aria-components';
+import { FileTrigger, Form, Input, Label, TextArea, TextField } from 'react-aria-components';
 import { Button as AriaButton } from '~/v4/core/components/AriaButton';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements';
@@ -15,8 +15,8 @@ import { Typography } from '~/v4/core/components';
 import { PollOptionsTitle } from '~/v4/social/elements/PollOptionsTitle';
 import { PollOptionsDesc } from '~/v4/social/elements/PollOptionsDesc';
 import { TrashIcon } from '~/v4/icons/Trash';
-import { CommunityPostSettings, PollRepository, PostRepository } from '@amityco/ts-sdk';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { CommunityPostSettings, PollRepository, PostRepository, FileType } from '@amityco/ts-sdk';
 import { PollAddOptionButton } from '~/v4/social/elements/PollAddOptionButton/PollAddOptionButton';
 import { PollMultipleSelectionTitle } from '~/v4/social/elements/PollMultipleSelectionTitle';
 import { PollMultipleSelectionDesc } from '~/v4/social/elements/PollMultipleSelectionDesc';
@@ -31,10 +31,16 @@ import { formatTime } from '~/v4/social/utils/formatTime';
 import { formatToDayMonth } from '~/v4/social/utils/formatToDayMonth';
 import { calculateMilliseconds } from '~/v4/social/utils/calculateMilliseconds';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
-import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
+import {
+  MAX_POST_TITLE_LENGTH,
+  MAXIMUM_POST_CHARACTERS,
+  MAX_OPTIONS,
+  MAX_OPTION_LENGTH,
+  MAX_POLL_QUESTION_LENGTH,
+  MILLISECONDS_IN_DAY,
+} from '~/v4/social/constants';
 import { Spinner } from '~/v4/social/internal-components/Spinner';
 import { Notification } from '~/v4/core/components/Notification';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
@@ -46,19 +52,29 @@ import { useSDK } from '~/v4/core/hooks/useSDK';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin } from '~/v4/utils/permissions';
 import { useNetworkState } from 'react-use';
+import { TextArea as $TextArea } from '~/v4/core/components/TextField';
+import { FormLabel } from '~/v4/social/elements/FormLabel';
+import { COMPONENT_ID, ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization';
+import { UploadImageArea } from './UploadImageArea';
+import CloseCircle from '~/v4/icons/CloseCircle';
+import { Plus } from '~/v4/icons/Plus';
+import { useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
+import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
 
 type PollPostComposerPageProps = {
   targetId: string | null;
   targetType: 'community' | 'user';
+  pollType?: 'text' | 'image';
 };
 
 type FormValues = Parameters<typeof PollRepository.createPoll>[0];
-
-const MAX_POLL_QUESTION_LENGTH = 500;
-const MAX_OPTIONS = 10;
-const MAX_OPTION_LENGTH = 60;
-const MILLISECONDS_IN_DAY = 86400000;
-
+type ImageOption = {
+  dataType: 'image';
+  data: string;
+  fileId: string;
+  id: string;
+  indexOfFiles: number | undefined;
+};
 const timeDuration = [
   { value: 1, label: '1 day' },
   { value: 3, label: '3 days' },
@@ -72,9 +88,14 @@ export type CreatePollPostParams = {
   text: string;
   mentioned: Mentioned[];
   mentionees: Mentionees;
+  hashtags: Amity.Hashtag[];
 };
 
-export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerPageProps) => {
+export const PollPostComposerPage = ({
+  targetId,
+  targetType,
+  pollType,
+}: PollPostComposerPageProps) => {
   const pageId = 'poll_post_composer_page';
 
   const { themeStyles, accessibilityId } = useAmityPage({
@@ -91,9 +112,19 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   const mentionRef = useRef<HTMLDivElement | null>(null);
   const { currentUserId } = useSDK();
   const { user } = useUser({ userId: currentUserId });
+  const {
+    files,
+    progress,
+    removeFile,
+    handleFileChange,
+    isLoading,
+    handleAltTextChange,
+    retryUpload,
+  } = useFilePostUpload(pageId);
+
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const timeNow = now(getLocalTimeZone());
-  const { prependItem } = useGlobalFeedContext();
   const { isDesktop } = useResponsive();
 
   const [isCreating, setIsCreating] = useState(false);
@@ -102,21 +133,28 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     { dataType: 'text', data: '' },
     { dataType: 'text', data: '' },
   ]);
+  const [imageOptions, setImageOptions] = useState<ImageOption[]>([
+    { dataType: 'image', data: '', fileId: '', id: '', indexOfFiles: undefined },
+    { dataType: 'image', data: '', fileId: '', id: '', indexOfFiles: undefined },
+  ]);
   const [isMultiple, setIsMultiple] = useState(false);
 
-  //Poll options radio value
+  const [title, setTitle] = useState('');
   const [duration, setDuration] = useState<{ value: number; label: string } | undefined>(
     timeDuration[4],
   );
 
   const [selectedDate, setSelectedDate] = useState<CalendarDate | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<Time | undefined>(undefined);
+  const [currentUploadImageIndex, setCurrentUploadImageIndex] = useState<number | undefined>(
+    undefined,
+  );
 
-  //Create poll post
   const [textValue, setTextValue] = useState<CreatePollPostParams>({
     pollId: '',
     text: '',
     mentioned: [],
+    hashtags: [],
     mentionees: [
       {
         type: 'user',
@@ -147,6 +185,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
   const milliseconds = calculateMilliseconds(selectedDate, selectedTime);
 
   const isDirty =
+    title.trim() !== '' ||
     textValue.text.length > 0 ||
     options.some((option) => option.data.length > 0 || option.data.trim() !== '') ||
     isMultiple ||
@@ -186,21 +225,20 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       ) {
         info({
           pageId,
+          title: 'Posts sent for review',
           content:
             'Your post has been submitted to pending list. It will be review by community moderator.',
           okText: 'OK',
         });
-      } else {
-        prependItem(postData.data);
       }
     } catch (error: unknown) {
+      setIsCreating(false);
       setIsError(true);
-      if (error instanceof Error) {
-        if (error.message === ERROR_RESPONSE.CONTAIN_BLOCKED_WORD) {
-          notification.info({
-            content: 'Text contain blocked word.',
-          });
-        }
+      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+        notification.info({
+          content: "Your post wasn't posted as it contains an inappropriate word.",
+          alignment: 'fullscreen',
+        });
       }
     } finally {
       setIsCreating(false);
@@ -224,15 +262,17 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       return;
     }
 
-    if (!targetId) return;
-
     const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
-      targetId: targetId,
+      targetId: targetId!,
       targetType: targetType,
-      data: { pollId, text: textValue.text },
+      data: { pollId, text: textValue.text, title: title?.trim() },
       dataType: 'poll',
-      metadata: { mentioned: textValue.mentioned },
+      metadata: {
+        mentioned: textValue.mentioned,
+        hashtags: textValue.hashtags,
+      },
       mentionees: textValue.mentionees as Amity.UserMention[],
+      hashtags: textValue.hashtags.map((hashtag) => hashtag.text),
       attachments: [],
     };
 
@@ -252,18 +292,31 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
 
       const payload = {
         question: textValue.text,
-        answers: options,
+        answers:
+          pollType === 'image'
+            ? imageOptions
+                .filter((option) => option.fileId)
+                .map(({ id, indexOfFiles, ...option }) => option)
+            : options.filter((option) => option.data.trim().length > 0),
         answerType,
         closedIn,
+        title: title?.trim(),
       };
 
       const createdPoll = await PollRepository.createPoll(
         payload as Parameters<typeof PollRepository.createPoll>[0],
       );
       await onCreatePost(createdPoll.data.pollId);
-    } finally {
       setIsCreating(false);
       isDesktop && closePopup();
+    } catch (error: unknown) {
+      setIsCreating(false);
+      if (error instanceof Error && error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+        notification.info({
+          content: "Your post wasn't posted as it contains an inappropriate word.",
+          alignment: 'fullscreen',
+        });
+      }
     }
   };
 
@@ -283,17 +336,31 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     });
   };
 
-  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) =>
+  const onChange = (val: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    hashtags: Amity.Hashtag[];
+    text: string;
+  }) =>
     setTextValue((prev) => ({
       ...prev,
       mentioned: val.mentioned,
       text: val.text,
       mentionees: val.mentionees,
+      hashtags: val.hashtags,
     }));
 
   const addOption = () => {
     if (options.length < MAX_OPTIONS) {
       setOptions([...options, { dataType: 'text', data: '' }]);
+    }
+  };
+  const addImageOption = () => {
+    if (imageOptions.length < MAX_OPTIONS) {
+      setImageOptions([
+        ...imageOptions,
+        { dataType: 'image', data: '', fileId: '', id: '', indexOfFiles: undefined },
+      ]);
     }
   };
 
@@ -304,9 +371,25 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     setOptions(updatedOptions);
   };
 
+  const updateImageOption = (index: number, value: string) => {
+    const updatedImageOptions = imageOptions.map((option, i) => {
+      const trimValue =
+        value.length > MAX_OPTION_LENGTH ? value.slice(0, MAX_OPTION_LENGTH) : value;
+      return i === index ? { ...option, data: trimValue } : option;
+    });
+    setImageOptions(updatedImageOptions);
+  };
+
   const deleteOption = (index: number) => {
     const updatedOptions = options.filter((_, i) => i !== index);
     setOptions(updatedOptions);
+  };
+  const deleteImageOption = (index: number) => {
+    const updatedImageOptions = imageOptions.filter((_, i) => i !== index);
+    if (updatedImageOptions.length < 2) {
+      addImageOption();
+    }
+    setImageOptions(updatedImageOptions);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -329,18 +412,134 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
     textValue.text.trim() === '' ||
     textValue.text.length > MAX_POLL_QUESTION_LENGTH ||
     options.length < 2 ||
-    options.some(
-      (option) =>
-        option.data.length > MAX_OPTION_LENGTH ||
-        option.data.length === 0 ||
-        option.data.trim() === '',
+    options.filter((option) => option.data.trim().length > 0).length < 2 ||
+    options.some((option) => option.data.length > MAX_OPTION_LENGTH);
+
+  const isDisabledImagePollSubmitButton =
+    isCreating ||
+    textValue.text.trim() === '' ||
+    textValue.text.length > MAX_POLL_QUESTION_LENGTH ||
+    imageOptions.length < 2 ||
+    imageOptions.filter((option) => !!option.fileId).length < 2 ||
+    imageOptions.some((option) => option.data.length > MAX_OPTION_LENGTH);
+
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    setCurrentUploadImageIndex(index);
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileChange([e.target.files[0]], FileType.IMAGE);
+    }
+  };
+  const triggerFileInput = (index: number) => {
+    const fileInput = document.getElementById(`upload-${index}`) as HTMLInputElement;
+    fileInput.click();
+  };
+
+  useEffect(() => {
+    const currentImageOptions = [...imageOptions];
+    if (
+      files?.length > 0 &&
+      files[files.length - 1]?.id &&
+      typeof currentUploadImageIndex === 'number'
+    ) {
+      currentImageOptions[currentUploadImageIndex].id = files[files.length - 1]?.id;
+      currentImageOptions[currentUploadImageIndex].indexOfFiles = files.length - 1;
+    }
+    if (
+      files?.length > 0 &&
+      (files[files.length - 1]?.file as Amity.File).fileId &&
+      typeof currentUploadImageIndex === 'number'
+    ) {
+      currentImageOptions[currentUploadImageIndex].fileId = (
+        files[files.length - 1]?.file as Amity.File
+      ).fileId;
+      setImageOptions(currentImageOptions);
+    }
+  }, [progress, files]);
+
+  const errorImageMenu = useCallback(
+    ({
+      fileIndex,
+      closeMenu,
+      fileId,
+    }: {
+      fileIndex: number;
+      closeMenu: () => void;
+      fileId: string;
+    }) => {
+      return (
+        <div className={styles.pollPostComposer__errorImageOption__container}>
+          <Button
+            className={styles.pollPostComposer__errorImageOption__item}
+            onPress={() => {
+              closeMenu();
+              if (fileId) {
+                retryUpload(fileId);
+              }
+            }}
+          >
+            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
+              Retry
+            </Typography.Body>
+          </Button>
+          <Button
+            className={styles.pollPostComposer__errorImageOption__item}
+            onPress={() => {
+              closeMenu();
+              triggerFileInput(fileIndex);
+            }}
+          >
+            <Typography.Body className={styles.pollPostComposer__errorImageOption__text}>
+              Upload new image
+            </Typography.Body>
+          </Button>
+        </div>
+      );
+    },
+    [styles, retryUpload, imageOptions],
+  );
+
+  const ErrorImageMenuButton = ({ fileIndex, fileId }: { fileIndex: number; fileId: string }) => {
+    return (
+      <Popover
+        placement="bottom"
+        containerClassName={styles.pollPostComposer__errorImageOption__popOver__container}
+        trigger={({ openPopover, isOpen, isDesktop, closePopover }) => {
+          setIsPopoverOpen(isOpen);
+          return (
+            <AriaButton
+              className={styles.pollPostComposer__errorImageOption__popOver__triggerButton}
+              variant="text"
+              onPress={() => {
+                isDesktop
+                  ? openPopover()
+                  : setDrawerData({
+                      content: errorImageMenu({
+                        fileIndex,
+                        closeMenu: () => {
+                          closePopover();
+                          removeDrawerData();
+                        },
+                        fileId,
+                      }),
+                    });
+              }}
+            />
+          );
+        }}
+      >
+        {({ closePopover }) => (
+          <>{errorImageMenu({ fileIndex, closeMenu: closePopover, fileId })}</>
+        )}
+      </Popover>
     );
+  };
 
   return (
     <div
       style={themeStyles}
       data-testid={accessibilityId}
       className={styles.pollPostComposerPage__container}
+      data-open-popover={isPopoverOpen}
     >
       <Form
         id="pollPostComposer"
@@ -359,11 +558,38 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
             variant="text"
             color="primary"
             type="submit"
-            isDisabled={isDisabledSubmitButton}
+            isDisabled={
+              pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
+            }
           >
             Post
           </AriaButton>
         </div>
+        <TextField name="title" className={styles.pollPostComposerPage__pollQuestion}>
+          <FormLabel
+            optional
+            length={title.length}
+            maxLength={MAX_POST_TITLE_LENGTH}
+            elementId={ELEMENT_ID.POST_TITLE}
+            componentId={COMPONENT_ID.WILD_CARD}
+            pageId={PAGE_ID.POLL_POST_COMPOSER_PAGE}
+            className={styles.pollPostComposerPage__postTitle__label}
+          />
+          <$TextArea
+            data-testid="poll-post-composer-page-title-input"
+            name="title"
+            value={title}
+            maxLength={MAX_POST_TITLE_LENGTH}
+            placeholder="Give your poll a headline"
+            className={styles.pollPostComposerPage__postTitle__input}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+            onChange={(e) => {
+              e.target.value.length > MAX_POST_TITLE_LENGTH
+                ? setTitle(e.target.value.slice(0, MAX_POST_TITLE_LENGTH))
+                : setTitle(e.target.value);
+            }}
+          />
+        </TextField>
         <TextField name="question" className={styles.pollPostComposerPage__pollQuestion}>
           <Label className={styles.pollPostComposerPage__pollQuestion__label}>
             <PollQuestionTitle pageId={pageId} />
@@ -403,45 +629,141 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
         <TextField name="answers" className={styles.pollPostComposerPage__pollOptions}>
           <Label className={styles.pollPostComposerPage__pollOptions__label}>
             <PollOptionsTitle pageId={pageId} />
-            <PollOptionsDesc pageId={pageId} />
+            {pollType === 'text' ? (
+              <PollOptionsDesc pageId={pageId} />
+            ) : (
+              <Typography.Caption className={styles.pollPostComposerPage__pollOptions__desc}>
+                Poll must contain at least 2 options, and an image must be uploaded for every
+                option.
+              </Typography.Caption>
+            )}
           </Label>
-          {options.map((option, index) => (
-            <div className={styles.pollPostComposerPage__pollOptions__options}>
-              <div className={styles.pollPostComposerPage__pollOptions__optionsWrapper}>
-                <TextArea
-                  data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
-                  className={styles.pollPostComposerPage__pollOptions__input}
-                  value={option.data}
-                  placeholder={`Option ${index + 1}`}
-                  onChange={(e) => updateOption(index, e.target.value)}
-                  rows={1}
-                  onKeyDown={handleKeyDown}
-                />
-                <Button
-                  className={styles.pollPostComposerPage__pollOptions__trashButton}
-                  onPress={() => deleteOption(index)}
-                >
-                  <TrashIcon className={styles.pollPostComposerPage__pollOptions__trashIcon} />
-                </Button>
-              </div>
-              {option.data.length > MAX_OPTION_LENGTH && (
-                <div className={styles.pollPostComposerPage__pollOptions__validationWrap}>
-                  <Typography.Caption
-                    className={styles.pollPostComposerPage__pollQuestion__validationText}
+          {pollType === 'text' ? (
+            <div>
+              {options.map((option, index) => (
+                <div className={styles.pollPostComposerPage__pollOptions__options}>
+                  <div className={styles.pollPostComposerPage__pollOptions__optionsWrapper}>
+                    <TextArea
+                      data-testid={`poll-option-${index + 1}`}
+                      data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
+                      className={styles.pollPostComposerPage__pollOptions__input}
+                      value={option.data}
+                      placeholder={`Option ${index + 1}`}
+                      onChange={(e) => updateOption(index, e.target.value)}
+                      rows={1}
+                      onKeyDown={handleKeyDown}
+                    />
+                    <Button
+                      data-testid={`poll-option-${index + 1}-delete-button`}
+                      className={styles.pollPostComposerPage__pollOptions__trashButton}
+                      onPress={() => deleteOption(index)}
+                    >
+                      <TrashIcon className={styles.pollPostComposerPage__pollOptions__trashIcon} />
+                    </Button>
+                  </div>
+                  {option.data.length > MAX_OPTION_LENGTH && (
+                    <div className={styles.pollPostComposerPage__pollOptions__validationWrap}>
+                      <Typography.Caption
+                        className={styles.pollPostComposerPage__pollQuestion__validationText}
+                      >
+                        Poll option cannot exceed 60 characters.
+                      </Typography.Caption>
+                    </div>
+                  )}
+                </div>
+              ))}
+              {options.length < MAX_OPTIONS && (
+                <PollAddOptionButton onPress={addOption} pageId={pageId} />
+              )}
+            </div>
+          ) : (
+            <div className={styles.pollPostComposerPage__imagePollOptions__wrapper}>
+              {imageOptions.map((option, index) => (
+                <div key={index} className={styles.pollPostComposerPage__imagePollOptions}>
+                  <Button
+                    className={styles.pollPostComposerPage__imagePollOptions__closeButton}
+                    onPress={() => deleteImageOption(index)}
                   >
-                    Poll option cannot exceed 60 characters.
-                  </Typography.Caption>
+                    <CloseCircle
+                      className={styles.pollPostComposerPage__imagePollOptions__closeIcon}
+                    />
+                  </Button>
+                  <div className={styles.pollPostComposerPage__imagePollOptions__card}>
+                    <input
+                      className={styles.uploadPollImage_input}
+                      type="file"
+                      onChange={(e) => onChangeImage(e, index)}
+                      id={`upload-${index}`}
+                      accept={'image/png,image/jpeg'}
+                    />
+                    {option.id && typeof option.indexOfFiles === 'number' ? (
+                      <Button
+                        className={styles.pollPostComposerPage__imagePollOptions__image}
+                        onPress={() => triggerFileInput(index)}
+                        data-testid={`image-poll-option-uploaded-image-${index + 1}`}
+                      >
+                        <ImageThumbnail
+                          files={[files[option.indexOfFiles]]}
+                          pageId={pageId}
+                          progress={progress}
+                          removeFile={removeFile}
+                          onAltTextChange={handleAltTextChange}
+                          isImagePollPost
+                          ErrorImageMenuButton={() =>
+                            typeof option.indexOfFiles === 'number' &&
+                            ErrorImageMenuButton({
+                              fileIndex: index,
+                              fileId: files[option.indexOfFiles].id,
+                            })
+                          }
+                        />
+                      </Button>
+                    ) : (
+                      <Button
+                        onPress={() => triggerFileInput(index)}
+                        isDisabled={isLoading}
+                        className={styles.pollPostComposerPage__imagePollOptions__uploadButton}
+                        data-testid={`image-poll-option-upload-button-${index + 1}`}
+                      >
+                        <UploadImageArea />
+                      </Button>
+                    )}
+                    <TextField
+                      data-isvalid={option.data.length <= MAX_OPTION_LENGTH}
+                      value={option.data}
+                      onChange={(text) => updateImageOption(index, text)}
+                      onKeyDown={handleKeyDown}
+                    >
+                      <Input
+                        className={styles.pollPostComposerPage__pollOptions__input}
+                        data-image-poll={true}
+                        placeholder={`Option ${index + 1}`}
+                      />
+                    </TextField>
+                  </div>
+                </div>
+              ))}
+              {imageOptions.length < MAX_OPTIONS && (
+                <div className={styles.pollPostComposerPage__imagePollOptions__card}>
+                  <div
+                    onClick={addImageOption}
+                    className={styles.pollPostComposerPage__imagePollOptions__addImageOption}
+                  >
+                    <Plus className={styles.pollPostComposerPage__imagePollOptions__plusIcon} />
+                    <Typography.CaptionBold
+                      className={styles.pollPostComposerPage__imagePollOptions__addOptionCaption}
+                    >
+                      Add option
+                    </Typography.CaptionBold>
+                  </div>
                 </div>
               )}
             </div>
-          ))}
-          {options.length < MAX_OPTIONS && (
-            <PollAddOptionButton onPress={addOption} pageId={pageId} />
           )}
         </TextField>
 
         <TextField name="answerType" className={styles.pollPostComposerPage__answerType}>
-          <Label className={styles.pollPostComposerPage__answerType__label}>
+          <Label>
             <PollMultipleSelectionTitle pageId={pageId} />
             <PollMultipleSelectionDesc pageId={pageId} />
           </Label>
@@ -483,7 +805,7 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
                         });
                   }}
                 >
-                  <Typography.Body>
+                  <Typography.Body data-testid="poll-duration">
                     {selectedDate
                       ? `Ends on ${formatEndDate} at ${formatEndTime}`
                       : duration && duration.label}
@@ -512,7 +834,10 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
 
         {!selectedDate && (
           <div className={styles.pollPostComposerPage__duration__captionWrap}>
-            <Typography.Caption className={styles.pollPostComposerPage__duration__caption}>
+            <Typography.Caption
+              data-testid="poll-duration"
+              className={styles.pollPostComposerPage__duration__caption}
+            >
               {`Ends on ${formattedDate} at ${formatEndTime}`}
             </Typography.Caption>
           </div>
@@ -521,9 +846,12 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
         {isDesktop && (
           <div className={styles.pollPostComposerPage__postButtonWrap}>
             <AriaButton
+              data-testid="poll-post-composer-page-submit-button"
               type="submit"
-              isDisabled={isDisabledSubmitButton}
               className={styles.pollPostComposerPage__postButton}
+              isDisabled={
+                pollType === 'image' ? isDisabledImagePollSubmitButton : isDisabledSubmitButton
+              }
             >
               Post
             </AriaButton>
@@ -532,23 +860,14 @@ export const PollPostComposerPage = ({ targetId, targetType }: PollPostComposerP
       </Form>
 
       <div className={styles.pollPostComposerPage__notificationWrapper}>
-        {isCreating && (
-          <>
-            <div className={styles.pollPostComposerPage__overlay} />
-            <Notification icon={<Spinner />} content="Posting..." alignment="fixed" />
-          </>
-        )}
+        {isCreating && <Notification icon={<Spinner />} content="Posting..." alignment="fixed" />}
         {isError && (
-          <>
-            <div className={styles.pollPostComposerPage__overlay} />
-
-            <Notification
-              duration={3000}
-              content="Failed to create post"
-              alignment="fixed"
-              icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
-            />
-          </>
+          <Notification
+            duration={3000}
+            content="Failed to create post. Please try again."
+            alignment="fixed"
+            icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+          />
         )}
       </div>
     </div>

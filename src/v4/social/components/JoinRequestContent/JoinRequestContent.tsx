@@ -18,12 +18,14 @@ type JoinRequestContentProps = {
   pageId?: string;
   joinRequests: Amity.JoinRequest[] | null;
   isLoading: boolean;
+  refresh?: () => void;
 };
 
 export const JoinRequestContent = ({
   pageId = '*',
   joinRequests = [],
   isLoading,
+  refresh,
 }: JoinRequestContentProps) => {
   const componentId = 'join_request_content';
 
@@ -34,7 +36,14 @@ export const JoinRequestContent = ({
 
   const { goToUserProfilePage } = useNavigation();
 
-  const { approveJoinRequest, declineJoinRequest } = useJoinRequests();
+  const { approveJoinRequest, declineJoinRequest } = useJoinRequests({
+    onApproveError: () => {
+      refresh && refresh();
+    },
+    onDeclineError: () => {
+      refresh && refresh();
+    },
+  });
 
   const onClickAccept = (joinRequest: Amity.JoinRequest) => approveJoinRequest(joinRequest);
   const onClickReject = (joinRequest: Amity.JoinRequest) => declineJoinRequest(joinRequest);

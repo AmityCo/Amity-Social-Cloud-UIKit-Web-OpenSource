@@ -1,7 +1,6 @@
 .userProfileHeader__container {
   padding: 0 1rem;
   background-color: var(--asc-color-background-default);
-  margin-bottom: 0.75rem;
 }
 
 .userProfileHeader__header {
@@ -48,7 +47,7 @@
 .userProfileHeader__relationship {
   display: flex;
   gap: 0.75rem;
-  padding: 0.25rem 0 1rem;
+  padding: 0.25rem 0 0.5rem;
 }
 
 .userProfileHeader__relationship__separator {
@@ -157,7 +156,8 @@
 }
 
 .pendingCountButton__notification {
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .pendingCountButton__notification__icon {

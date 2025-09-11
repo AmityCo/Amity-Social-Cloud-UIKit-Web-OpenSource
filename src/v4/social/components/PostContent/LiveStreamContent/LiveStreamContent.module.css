@@ -20,3 +20,11 @@
 .liveStreamContent[data-idle='true'] {
   cursor: default;
 }
+
+.liveStreamContent__statusBadge {
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  position: absolute;
+  display: inline-block;
+}

@@ -50,6 +50,7 @@ interface CommentComposerProps {
   community?: Amity.Community | null;
   containerClassName?: string;
   commentComposerClassName?: string;
+  isFromCommentClick?: boolean;
 }
 
 export const CommentComposer = ({
@@ -62,6 +63,7 @@ export const CommentComposer = ({
   community,
   containerClassName,
   commentComposerClassName,
+  isFromCommentClick = false,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
   const { user } = useUser({ userId });
@@ -104,11 +106,11 @@ export const CommentComposer = ({
       });
     },
     onError: (error) => {
-      if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+      if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
         notification.info({
           content: 'Your comment contains inappropriate word. Please review and delete it.',
         });
-      } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+      } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
         notification.info({
           content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
         });
@@ -209,9 +211,10 @@ export const CommentComposer = ({
             targetId={referenceId}
             value={textValue}
             placehoder={
-              replyTo ? `Replying to ${replyTo?.creator?.displayName}...` : 'Say something nice...'
+              replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
             }
             communityId={community?.communityId}
+            shouldAutoFocus={isFromCommentClick}
           />
         </div>
         <Button

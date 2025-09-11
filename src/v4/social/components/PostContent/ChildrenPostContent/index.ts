@@ -1,0 +1,1 @@
+export { ChildrenPostContent } from './ChildrenPostContent';

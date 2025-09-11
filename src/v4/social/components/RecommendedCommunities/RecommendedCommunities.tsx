@@ -29,7 +29,6 @@ type RecommendedCommunityCardProps = {
   onCategoryClick?: (categoryId: string) => void;
   onJoinButtonClick: (community: Amity.Community) => void;
   onLeaveButtonClick: (community: Amity.Community) => void;
-  isPendingJoin?: boolean;
 };
 
 const RecommendedCommunityCard = ({
@@ -40,7 +39,6 @@ const RecommendedCommunityCard = ({
   onCategoryClick,
   onJoinButtonClick,
   onLeaveButtonClick,
-  isPendingJoin = false,
 }: RecommendedCommunityCardProps) => {
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
 
@@ -85,7 +83,7 @@ const RecommendedCommunityCard = ({
             />
           </div>
           <div className={styles.recommendedCommunities__content__right}>
-            {community.isJoined && isPendingJoin ? (
+            {community.isJoined ? (
               <CommunityJoinedButton
                 pageId={pageId}
                 componentId={componentId}
@@ -112,7 +110,8 @@ interface RecommendedCommunitiesProps {
 export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesProps) => {
   const componentId = 'recommended_communities';
 
-  const MAX_DISPLAYED_COMMUNITIES = 4;
+  const MAX_DISPLAYED_COMMUNITIES = 5;
+  const FETCH_BUFFER_SIZE = 10; // Fetch more to account for filtering
 
   const { accessibilityId, themeStyles } = useAmityComponent({
     pageId,
@@ -127,8 +126,13 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     isLoading,
     fetchRecommendedCommunities,
     refetchRecommendedCommunities,
+    refreshBothCommunityCollections,
     pendingJoinCommunities,
     setPendingJoinCommunity,
+    removePendingJoinCommunity,
+    priorityRecommendedCommunities,
+    addPriorityRecommendedCommunity,
+    removePriorityRecommendedCommunity,
   } = useExplore();
 
   const communityIds = recommendedCommunities
@@ -137,7 +141,8 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
 
   const { joinRequestList } = useGetJoinRequestList(communityIds);
 
-  const recommendedCommunitiesWithOutJoinRequests = joinRequestList
+  // First, filter out communities with pending join requests
+  const availableCommunities = joinRequestList
     ? recommendedCommunities.filter(
         (community) =>
           !joinRequestList.some(
@@ -147,6 +152,26 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     : recommendedCommunities.filter(
         (community) => !pendingJoinCommunities.includes(community.communityId),
       );
+
+  // Separate priority communities (those that were in trending and became available again)
+  const priorityCommunities = availableCommunities.filter((community) =>
+    priorityRecommendedCommunities.includes(community.communityId),
+  );
+
+  // Get other available communities (not in priority list)
+  const otherCommunities = availableCommunities.filter(
+    (community) => !priorityRecommendedCommunities.includes(community.communityId),
+  );
+
+  // Combine priority communities first, then fill with others to reach MAX_DISPLAYED_COMMUNITIES
+  const finalCommunities = [...priorityCommunities, ...otherCommunities].slice(
+    0,
+    MAX_DISPLAYED_COMMUNITIES,
+  );
+
+  // If we have fewer than MAX_DISPLAYED_COMMUNITIES and more communities are available,
+  // try to fetch more (this is handled by the increased buffer size in ExploreProvider)
+  const recommendedCommunitiesWithOutJoinRequests = finalCommunities;
 
   useEffect(() => {
     fetchRecommendedCommunities();
@@ -158,7 +183,10 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
         setPendingJoinCommunity(communityId);
       }
 
-      refetchRecommendedCommunities();
+      refreshBothCommunityCollections();
+    },
+    onLeaveSuccess: () => {
+      refreshBothCommunityCollections();
     },
   });
 
@@ -179,6 +207,8 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
       });
       return;
     }
+    // Remove from pending list before leaving
+    removePendingJoinCommunity(community.communityId);
     leaveCommunity(community);
   };
 
@@ -209,13 +239,6 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
                     community={community}
                     componentId={componentId}
                     key={community.communityId}
-                    isPendingJoin={
-                      joinRequestList?.some(
-                        (request) =>
-                          request.targetId === community.communityId &&
-                          request.status === 'pending',
-                      ) || pendingJoinCommunities.includes(community.communityId)
-                    }
                     onJoinButtonClick={(community) => handleJoinButtonClick(community)}
                     onLeaveButtonClick={(community) => handleLeaveButtonClick(community)}
                     onClick={(communityId) => goToCommunityProfilePage(communityId)}

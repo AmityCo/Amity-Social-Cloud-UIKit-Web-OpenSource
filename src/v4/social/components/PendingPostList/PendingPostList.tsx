@@ -23,6 +23,7 @@ import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import styles from './PendingPostList.module.css';
 import FireworkPaper from '~/v4/icons/FireworkPaper';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 
 type PendingPostListProps = {
   pageId?: string;
@@ -225,7 +226,8 @@ export const PendingPostList = ({
           <TextContent
             pageId={pageId}
             componentId={componentId}
-            text={(post as Amity.Post<'text'>)?.data?.text || ''}
+            text={isTextPost(post) ? post?.data?.text : ''}
+            title={isTextPost(post) ? post?.data?.title ?? '' : ''}
             mentioned={post?.metadata?.mentioned}
             mentionees={post?.mentionees}
             post={post}

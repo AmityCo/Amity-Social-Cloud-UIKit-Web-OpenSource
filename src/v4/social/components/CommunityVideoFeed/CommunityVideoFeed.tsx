@@ -12,6 +12,7 @@ import { ClipGallery } from '~/v4/social/internal-components/ClipGallery/ClipGal
 import { TabType } from '~/v4/social/constants/videoTabs';
 import { EmptyClipFeed } from '~/v4/social/elements/EmptyClipFeed/EmptyClipFeed';
 import styles from './CommunityVideoFeed.module.css';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 type CommunityVideoFeedProps = {
   pageId?: string;
@@ -20,6 +21,7 @@ type CommunityVideoFeedProps = {
 
 export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideoFeedProps) => {
   const componentId = 'community_video_feed';
+  const { linkToPost, setLinkToPost } = useLayoutContext();
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [intersectionClipNode, setIntersectionClipNode] = useState<HTMLDivElement | null>(null);
@@ -34,8 +36,9 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
   const { posts, hasMore, loadMore, refresh, isLoading } = usePostsCollection({
     targetId: communityId,
     targetType: 'community',
-    limit: 10,
+    limit: linkToPost ? (linkToPost.index >= 10 ? linkToPost.index + 10 : 10) : 10,
     dataTypes: ['video'],
+    feedType: 'published',
   });
 
   const {
@@ -45,6 +48,7 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
     refresh: refreshClips,
     isLoading: isLoadingClips,
   } = usePostsCollection({
+    feedType: 'published',
     targetId: communityId,
     targetType: 'community',
     limit: 10,
@@ -59,6 +63,10 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
     refresh();
     refreshClips();
   }, []);
+
+  useEffect(() => {
+    if (posts.length === 0 && !isLoading) setLinkToPost(null);
+  }, [posts.length, isLoading]);
 
   useIntersectionObserver({
     node: intersectionNode,
@@ -130,13 +138,12 @@ export const CommunityVideoFeed = ({ pageId = '*', communityId }: CommunityVideo
           {posts?.length === 0 && !isLoading && (
             <EmptyCommunityVideoFeed pageId={pageId} componentId={componentId} />
           )}
-          {posts?.length > 0 && (
-            <VideoGallery
-              posts={posts as Amity.Post<'video'>[]}
-              pageId={pageId}
-              componentId={communityId}
-            />
-          )}
+          <VideoGallery
+            isLoading={isLoading}
+            posts={posts as Amity.Post<'video'>[]}
+            pageId={pageId}
+            componentId={componentId}
+          />
           {isLoading && renderLoading()}
           {hasMore && <div ref={(node) => setIntersectionNode(node)} />}
         </>
