@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.12.0 (2025-09-11)
+
+
+### Features
+
+* pnpm lock ([124bc9c](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/124bc9ca503a3f9b53f56788db5da09888204e29))
+
 ### 4.11.2 (2025-08-20)
 
 ### Bug Fixes
