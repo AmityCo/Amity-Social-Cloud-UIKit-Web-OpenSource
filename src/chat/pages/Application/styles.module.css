@@ -3,22 +3,51 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0px;
+  padding: 16px 0;
+  flex-shrink: 0;
 }
 
 .applicationContainer {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  padding-bottom: 5rem;
-  gap: 1rem;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding-bottom: 3rem;
 }
 
 .chatContainer {
   display: flex;
-  border: 1px solid #909090;
-  border-radius: 8px;
+  border: 1px solid #d3d3d3;
+  border-radius: 16px;
   flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.chatSection {
+  display: flex;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.newChatPopup {
+  position: absolute;
+  right: 5rem;
+  top: 5rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 4px 16px 0 rgb(0 0 0 / 12%);
+}
+
+.newChatPopupItem {
+  display: flex;
+  height: 3.25rem;
+  padding: 0.75rem 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
 }
 
 .newChatContainer {
@@ -30,9 +59,46 @@
   width: 36px;
   height: 36px;
   cursor: pointer;
+  background: white;
 }
 
 .newChatIcon {
   width: 24px;
   height: 24px;
+}
+
+/* Mobile styles */
+@media (width <= 768px) {
+  .chatContainer {
+    position: relative;
+    border-radius: 8px;
+    border: none;
+  }
+
+  .mobileRecentOnly {
+    display: flex;
+    width: 100%;
+  }
+
+  .mobileChatOnly {
+    display: none;
+    width: 100%;
+  }
+
+  .mobileShowChat .mobileRecentOnly {
+    display: none;
+  }
+
+  .mobileShowChat .mobileChatOnly {
+    display: flex;
+    width: 100%;
+  }
+
+  .chatSection {
+    width: 100%;
+  }
+
+  .chatHeader {
+    padding: 16px;
+  }
 }

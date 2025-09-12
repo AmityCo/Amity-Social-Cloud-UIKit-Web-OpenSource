@@ -1,6 +1,12 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-no-unsupported-browser-features"],
   "rules": {
-    "selector-class-pattern": null
+    "selector-class-pattern": null,
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["font-named-instance"]
+      }
+    ]
   }
 }

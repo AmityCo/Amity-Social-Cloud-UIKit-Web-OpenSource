@@ -1,3 +1,6 @@
-**/*/*.css
+node_modules/**/*.css
+dist/**/*.css
+build/**/*.css
+storybook-build/**/*.css
 
-!src/v4/**/*.css
+!src/**/*.css

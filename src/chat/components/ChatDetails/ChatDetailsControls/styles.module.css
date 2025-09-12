@@ -20,6 +20,7 @@
 
 .controlItemLabel {
   padding-right: 8px;
+
   /* theme.typography.body */
   color: var(--color-neutral-main);
 }

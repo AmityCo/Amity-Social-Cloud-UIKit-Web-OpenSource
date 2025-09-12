@@ -1,8 +1,7 @@
 .chatMembersContainer {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
 }
 
 .membersReturn {
@@ -28,6 +27,7 @@
 
 .membersReturnTitle {
   padding-left: 8px;
+
   /* theme.typography.body */
 }
 
@@ -41,6 +41,7 @@
 
 .memberItemInfo {
   padding-left: 12px;
+
   /* theme.typography.body */
   color: var(--color-neutral-main);
 }

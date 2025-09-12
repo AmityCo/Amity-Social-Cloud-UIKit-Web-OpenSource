@@ -58,6 +58,7 @@
 .errorMessageWrapper {
   margin-top: 8px;
   color: var(--color-alert-main);
+
   /* theme.typography.caption */
 }
 

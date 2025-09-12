@@ -3,11 +3,13 @@
   flex-direction: column-reverse;
   flex-grow: 1;
   overflow: auto;
-  background: #f7f7f8;
+  background: white;
+  min-height: 0;
 }
 
 .messageListContainer {
   display: flex;
   flex-direction: column-reverse;
-  padding: 0 20px;
+  padding: 0 16px 16px;
+  gap: 0.5rem;
 }

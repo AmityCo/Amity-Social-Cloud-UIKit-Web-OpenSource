@@ -20,15 +20,17 @@ interface ChatProps {
   channelId: string;
   onChatDetailsClick: () => void;
   shouldShowChatDetails: boolean;
+  onBackClick?: () => void;
 }
 
-const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProps) => {
+const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails, onBackClick }: ChatProps) => {
   useEffect(() => {
     return () => {
       SubChannelRepository.stopMessageReceiptSync(channelId);
     };
   }, [channelId]);
 
+  console.log('🚀 ~ channelId:', channelId);
   const { isModerator } = useChannelPermission(channelId);
   const channel = useChannel(channelId);
 
@@ -53,6 +55,7 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatProp
         channelId={channelId}
         shouldShowChatDetails={shouldShowChatDetails}
         onChatDetailsClick={onChatDetailsClick}
+        onBackClick={onBackClick}
       />
       <MessageList channelId={channelId} />
       {renderMessageComposeBar()}

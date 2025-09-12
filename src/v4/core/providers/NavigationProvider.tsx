@@ -628,7 +628,7 @@ interface NavigationProviderProps {
     targetType?: 'community' | 'user';
     targetId?: string;
   }) => void;
-  goToChatPage: () => void;
+  goToChatPage?: () => void;
 
   onCommunityCreated?: (communityId: string) => void;
   goToCommunityCreatePage?: () => void;

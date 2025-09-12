@@ -9,8 +9,6 @@
 .checkbox {
   /* Hide the default browser checkbox */
   appearance: none;
-  appearance: none;
-  appearance: none;
   position: absolute; /* Keep it interactive but invisible */
   opacity: 0;
   width: 20px; /* Make it clickable in the area of the custom box */
