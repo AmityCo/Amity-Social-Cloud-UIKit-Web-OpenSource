@@ -3,6 +3,7 @@ import styles from './UserProfileHeader.module.css';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { UserFollowing } from '~/v4/social/elements/UserFollowing/UserFollowing';
 import { UserFollower } from '~/v4/social/elements/UserFollower/UserFollower';
+import { UserGroup } from '~/v4/social/elements/UserGroup/UserGroup';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { UserName } from '~/v4/social/elements/UserName/UserName';
 import { UserDescription } from '~/v4/social/elements/UserDescription/UserDescription';
@@ -252,7 +253,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
           <div className={styles.userProfileHeader__relationship__separator}></div>
           <UserFollower userId={user.userId} pageId={pageId} componentId={componentId} />
           <div className={styles.userProfileHeader__relationship__separator}></div>
-          {/* TO ADD group counter */}
+          <UserGroup userId={user.userId} pageId={pageId} componentId={componentId} />
         </div>
 
         <div className={styles.userProfileHeader__relationshipButtons}>
@@ -299,7 +300,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
           )}
 
           {isShowFollowingButton && renderFollowingButton(user.userId)}
-          {renderSendMessageButton(user.userId)}
+          {(!isCurrentUser || forcePublicProfileView) && renderSendMessageButton(user.userId)}
           {isShowPendingButton && (
             <PendingUserButton
               pageId={pageId}

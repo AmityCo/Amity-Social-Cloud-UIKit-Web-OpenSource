@@ -11,12 +11,14 @@ import { UserFeed } from '~/v4/social/components/UserFeed/UserFeed';
 import { UserImageFeed } from '~/v4/social/components/UserImageFeed/UserImageFeed';
 import { UserVideoFeed } from '~/v4/social/components/UserVideoFeed/UserVideoFeed';
 import { Typography } from '~/v4/core/components';
-import { TopNavigation } from '~/v4/social/components/TopNavigation';
 import ChevronRight from '~/v4/icons/ChevronRight';
-import useSDK from '~/v4/core/hooks/useSDK';
+// import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/components';
 import { Check, CrossIcon } from '~/icons';
 import PublicProfileTopNavigation from './partial/PublicProfileTopNavigation/PublicProfileTopNavigation';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { PublicProfileOptions } from './partial/PublicProfileOptions';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type PublicProfilePageProps = {
   userId: string;
@@ -32,6 +34,8 @@ const enum UserProfileTabs {
 export const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ userId, userBadgeTitle }) => {
   const pageId = 'public_profile_page';
   const containerRef = useRef<HTMLDivElement>(null);
+  const { onBack } = useNavigation();
+  const { isDesktop } = useResponsive();
 
   const { themeStyles } = useAmityPage({ pageId });
   const { user } = useUser({ userId });
@@ -39,6 +43,7 @@ export const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ userId, us
 
   const [isScroll, setIsScroll] = useState(false);
   const [hasPendingRequest, setHasPendingRequest] = useState(false);
+  const [showProfileOptions, setShowProfileOptions] = useState(false);
   const [currentActiveTab, setCurrentActiveTab] = React.useState<UserProfileTabs>(
     UserProfileTabs.FEED,
   );
@@ -132,70 +137,112 @@ export const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ userId, us
     );
   };
 
+  const handleProfileSettings = () => {
+    // On mobile, toggle the profile options visibility
+    if (!isDesktop) {
+      setShowProfileOptions(!showProfileOptions);
+    }
+    // For desktop, the popup is handled in the PublicProfileTopNavigation component
+  };
+
+  const handleFollowUser = () => {
+    console.log('Follow user clicked');
+    setShowProfileOptions(false);
+  };
+
+  const handleReportUser = () => {
+    console.log('Report user clicked');
+    setShowProfileOptions(false);
+  };
+
+  const handleShareProfile = () => {
+    console.log('Share profile clicked');
+    setShowProfileOptions(false);
+  };
+
+  const handleBlockUser = () => {
+    console.log('Block user clicked');
+    setShowProfileOptions(false);
+  };
+
   return (
     <PullToRefresh className={styles.publicProfilePage} style={themeStyles}>
-      <PublicProfileTopNavigation />
-      {/* Mock button to be removed */}
-      <Button className={styles.publicProfilePage__mockButton} onClick={togglePendingRequest}>
-        {hasPendingRequest ? 'Hide Request' : 'Show Request'}
-      </Button>
+      <PublicProfileTopNavigation
+        onBackFunc={!isDesktop && showProfileOptions ? () => setShowProfileOptions(false) : onBack}
+        handleProfileSettings={handleProfileSettings}
+      />
 
-      <div className={styles.publicProfilePage__container} ref={containerRef}>
-        {hasPendingRequest && (
-          <div className={styles.publicProfilePage__cardBorders}>
-            <div className={styles.publicProfilePage__pendingRequest}>
-              <div className={styles.publicProfilePage__pendingRequestContent}>
-                <Typography.BodyBold>Richiesta di amicizia in attesa</Typography.BodyBold>
-                <Typography.Body>{`${user?.displayName || userId} ha inviato una richiesta di amicizia. Accetta per connetterti.`}</Typography.Body>
+      {!isDesktop && showProfileOptions ? (
+        // Show profile options when in mobile view and options are toggled
+        <PublicProfileOptions
+          onFollowUser={handleFollowUser}
+          onReportUser={handleReportUser}
+          onShareProfile={handleShareProfile}
+          onBlockUser={handleBlockUser}
+        />
+      ) : (
+        // Otherwise show the regular profile content
+        <>
+          <div className={styles.publicProfilePage__container} ref={containerRef}>
+            {hasPendingRequest && (
+              <div className={styles.publicProfilePage__cardBorders}>
+                <div className={styles.publicProfilePage__pendingRequest}>
+                  <div className={styles.publicProfilePage__pendingRequestContent}>
+                    <Typography.BodyBold>Richiesta di amicizia in attesa</Typography.BodyBold>
+                    <Typography.Body>{`${user?.displayName || userId} ha inviato una richiesta di amicizia. Accetta per connetterti.`}</Typography.Body>
+                  </div>
+                  <div className={styles.publicProfilePage__pendingRequestButtons}>
+                    <Button
+                      className={styles.publicProfilePage__acceptButton}
+                      onClick={handleAcceptRequest}
+                    >
+                      <Check />
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      className={styles.publicProfilePage__declineButton}
+                      onClick={handleDeclineRequest}
+                    >
+                      <CrossIcon />
+                    </Button>
+                  </div>
+                </div>
               </div>
-              <div className={styles.publicProfilePage__pendingRequestButtons}>
-                <Button
-                  className={styles.publicProfilePage__acceptButton}
-                  onClick={handleAcceptRequest}
-                >
-                  <Check />
-                </Button>
-                <Button
-                  variant="outlined"
-                  className={styles.publicProfilePage__declineButton}
-                  onClick={handleDeclineRequest}
-                >
-                  <CrossIcon />
-                </Button>
+            )}
+
+            <div className={styles.publicProfilePage__cardBorders}>
+              <UserProfileHeader
+                user={user}
+                pageId={pageId}
+                userBadgeTitle={userBadgeTitle}
+                isCurrentUser={false}
+                forcePublicProfileView={true}
+              />
+              {/* Public profile cta buttons */}
+              <div className=""></div>
+              <Typography.Caption className={styles.publicProfilePage__caption}>
+                Appassionato di sport e giochi di squadra, ama le sfide e condividere emozioni con
+                nuovi amici. Sempre pronto a tifare e a mettersi in gioco! Milano, Italia
+              </Typography.Caption>
+
+              <div className={styles.publicProfilePage__card}>
+                <div className={styles.publicProfilePage__cardContentSection}>
+                  <Typography.BodyBold>Le sue info</Typography.BodyBold>
+                  <ChevronRight />
+                </div>
+                <div className={styles.publicProfilePage__cardContentSection}>
+                  preferenze di gioco, interessi , livello ...
+                </div>
               </div>
             </div>
+            <Typography.BodyBold className={styles.publicProfilePage__sectionHeading}>
+              Attività
+            </Typography.BodyBold>
+            {renderActivityTabs()}
+            {renderTabContent()}
           </div>
-        )}
-
-        <div className={styles.publicProfilePage__cardBorders}>
-          <UserProfileHeader
-            user={user}
-            pageId={pageId}
-            userBadgeTitle={userBadgeTitle}
-            isCurrentUser={false}
-            forcePublicProfileView={true}
-          />
-          {/* Public profile cta buttons */}
-          <div className=""></div>
-          <Typography.Caption className={styles.publicProfilePage__caption}>
-            Appassionato di sport e giochi di squadra, ama le sfide e condividere emozioni con nuovi
-            amici. Sempre pronto a tifare e a mettersi in gioco! Milano, Italia
-          </Typography.Caption>
-
-          <div className={styles.publicProfilePage__card}>
-            <div className={styles.publicProfilePage__cardContentSection}>
-              <Typography.BodyBold>Le sue info</Typography.BodyBold>
-              <ChevronRight />
-            </div>
-            <div className={styles.publicProfilePage__cardContentSection}>
-              preferenze di gioco, interessi , livello ...
-            </div>
-          </div>
-        </div>
-
-        {renderActivityTabs()}
-        {renderTabContent()}
-      </div>
+        </>
+      )}
     </PullToRefresh>
   );
 };

@@ -713,6 +713,9 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/user_profile_header/user_follower': {
       text: 'followers',
     },
+    'user_profile_page/user_profile_header/user_group': {
+      text: 'groups',
+    },
     'user_profile_page/user_feed/empty_user_feed': {
       text: 'No posts yet',
       image: 'EmptyPost',
@@ -787,6 +790,9 @@ export const defaultConfig: DefaultConfig = {
     },
     'public_profile_page/user_profile_header/user_follower': {
       text: 'Followers',
+    },
+    'public_profile_page/user_profile_header/user_group': {
+      text: 'Groups',
     },
     'public_profile_page/user_profile_header/follow_user_button': {
       text: 'Segui',

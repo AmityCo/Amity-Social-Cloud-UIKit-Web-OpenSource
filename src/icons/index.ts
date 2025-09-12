@@ -65,6 +65,9 @@ export { default as EditIcon } from './EditIcon';
 export { default as PageIcon } from './PageIcon';
 export { default as AssistanceIcon } from './AssistanceIcon';
 export { default as CrossIcon } from './Cross';
+export { default as AddUser } from './AddUser';
+export { default as CopyLink } from './CopyLink';
+export { default as RemoveUser } from './RemoveUser';
 
 // files
 export { default as AudioFile } from './files/Audio';
