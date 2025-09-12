@@ -64,6 +64,7 @@ export enum PageTypes {
   DraftClipPage = 'DraftClipPage',
   ClipFeedPage = 'ClipFeedPage',
   ChatPage = 'ChatPage',
+  SettingPage = 'SettingPage',
 }
 
 type Page =
@@ -277,7 +278,12 @@ type Page =
       };
     }
   | {
+      type: PageTypes.SettingPage;
+      context: Record<string, never>;
+    }
+  | {
       type: PageTypes.ChatPage;
+      context: Record<string, never>;
     };
 
 type ContextValue = {
@@ -294,7 +300,7 @@ type ContextValue = {
   onEditCommunity: (communityId: string, tab?: string) => void;
   onMessageUser: (userId: string) => void;
   onBack: (page?: number) => void;
-  goToUserProfilePage: (userId: string) => void;
+  goToUserProfilePage: (userId: string, forcePublicView?: boolean) => void;
   goToEditUserPage: (userId: string) => void;
   goToChangeAvatarPage: (context: {
     userId: string;
@@ -405,6 +411,7 @@ type ContextValue = {
     targetId?: string;
   }) => void;
   goToChatPage: () => void;
+  goToSettingPage: () => void;
 
   //V3 functions
   onClickStory: (
@@ -424,7 +431,7 @@ let defaultValue: ContextValue = {
   onCommunityCreated: (communityId: string) => {},
   onEditCommunity: (communityId: string) => {},
   onMessageUser: (userId: string) => {},
-  goToUserProfilePage: (userId: string) => {},
+  goToUserProfilePage: (userId: string, forcePublicView?: boolean) => {},
   goToEditUserPage: (userId: string) => {},
   goToChangeAvatarPage: (context: { userId: string; image: Amity.File<'image'> | null }) => {},
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
@@ -488,6 +495,7 @@ let defaultValue: ContextValue = {
     targetId?: string;
   }) => {},
   goToChatPage: () => {},
+  goToSettingPage: () => {},
 
   setNavigationBlocker: () => {},
   onBack: (page?: number) => {},
@@ -570,6 +578,10 @@ if (process.env.NODE_ENV !== 'production') {
       console.log(`NavigationContext goToLiveStreamPlayerPage(${context})`),
     goToNotificationTrayPage: () => console.log('NavigationContext goToNotificationTrayPage()'),
     goToChatPage: () => console.log('NavigationContext goToChatPage()'),
+    goToPendingRequestPage: (context) =>
+      console.log(`NavigationContext goToPendingRequestPage(${context})`),
+    goToClipFeedPage: (context) => console.log(`NavigationContext goToClipFeedPage(${context})`),
+    goToSettingPage: () => console.log('NavigationContext goToSettingPage()'),
 
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
@@ -975,14 +987,14 @@ export default function NavigationProvider({
   );
 
   const goToUserProfilePage = useCallback(
-    (userId) => {
+    (userId, forcePublicView: boolean = false) => {
       const next = {
         type: PageTypes.UserProfilePage,
         context: {
           userId,
+          forcePublicView,
         },
       };
-
       pushPage(next);
     },
     [onChangePage, pushPage],
@@ -1423,7 +1435,14 @@ export default function NavigationProvider({
       type: PageTypes.ChatPage,
       context: {},
     };
+    pushPage(next);
+  }, [pushPage]);
 
+  const goToSettingPage = useCallback(() => {
+    const next = {
+      type: PageTypes.SettingPage,
+      context: {},
+    };
     pushPage(next);
   }, [pushPage]);
 
@@ -1497,6 +1516,9 @@ export default function NavigationProvider({
         onClickStory: handleClickStory,
         goToNotificationTrayPage,
         goToChatPage,
+        goToPendingRequestPage,
+        goToClipFeedPage,
+        goToSettingPage,
       }}
     >
       <NavigationContextV3.Provider

@@ -28,13 +28,14 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   };
 
   const handleSettingsClick = () => {
-    console.log('Navigate to settings');
+    goToSettingPage();
   };
 
   //#endregion
 
   const componentId = 'community_sidebar';
-  const { page, goToSocialHomePage, goToNotificationTrayPage, goToChatPage } = useNavigation();
+  const { page, goToSocialHomePage, goToNotificationTrayPage, goToSettingPage, goToChatPage } =
+    useNavigation();
   const { accessibilityId, themeStyles, config, uiReference, defaultConfig } = useAmityComponent({
     componentId,
     pageId,
@@ -43,7 +44,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   const isHomeActive = page.type === PageTypes.SocialHomePage;
   const isNotificationsActive = page.type === PageTypes.NotificationTrayPage;
   const isChatActive = page.type === PageTypes.ChatPage;
-  const isSettingsActive = false;
+  const isSettingsActive = page.type === PageTypes.SettingPage;
 
   return (
     <div

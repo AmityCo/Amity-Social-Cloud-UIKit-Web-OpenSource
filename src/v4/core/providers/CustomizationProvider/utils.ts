@@ -713,6 +713,9 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/user_profile_header/user_follower': {
       text: 'followers',
     },
+    'user_profile_page/user_profile_header/user_group': {
+      text: 'groups',
+    },
     'user_profile_page/user_feed/empty_user_feed': {
       text: 'No posts yet',
       image: 'EmptyPost',
@@ -782,7 +785,28 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/top_navigation/header_label': {
       text: 'Your Profile',
     },
+    'public_profile_page/user_profile_header/user_following': {
+      text: 'Following',
+    },
+    'public_profile_page/user_profile_header/user_follower': {
+      text: 'Followers',
+    },
+    'public_profile_page/user_profile_header/user_group': {
+      text: 'Groups',
+    },
+    'public_profile_page/user_profile_header/follow_user_button': {
+      text: 'Segui',
+    },
+    'public_profile_page/user_profile_header/pending_user_button': {
+      text: 'richiesta inviata',
+    },
+    'public_profile_page/user_profile_header/unblock_user_button': {
+      text: 'Sblocca',
+    },
 
+    'setting_page/top_navigation/header_label': {
+      text: 'Settings',
+    },
     'edit_user_profile_page/*/*': {},
     'edit_user_profile_page/*/back_button': {
       image: 'ArrowLeft',

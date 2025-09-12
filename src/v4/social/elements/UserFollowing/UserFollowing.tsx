@@ -45,7 +45,6 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
       </Typography.BodyBold>
       {config.text && (
         <Typography.Caption className={styles.userFollowing__label}>
-          {' '}
           {config.text}
         </Typography.Caption>
       )}

@@ -5,7 +5,7 @@ import styles from './Button.module.css';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   context?: 'default' | 'registration';
-  variant?: 'primary' | 'secondary' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outlined';
   size?: 'small' | 'default';
   icon?: React.ReactNode;
 }

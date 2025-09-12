@@ -1,0 +1,54 @@
+.topNavigationContainer {
+  position: relative;
+  width: 100%;
+}
+
+.topNavigation {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 80%;
+  max-width: 300px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
+  z-index: 100;
+  padding: 0.5rem 0;
+  margin-right: 1rem;
+}
+
+.menuPopup {
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.menuPopupItem {
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.menuPopupItem:hover {
+  background-color: #f5f5f5;
+}
+
+.sectionHeading {
+  margin: 1rem 0;
+  padding: 0 1rem;
+  color: #666;
+}
+
+.menuItemContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

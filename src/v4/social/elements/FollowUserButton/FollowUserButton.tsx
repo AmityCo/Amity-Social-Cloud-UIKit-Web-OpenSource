@@ -30,12 +30,12 @@ export const FollowUserButton: React.FC<FollowUserButtonProps> = ({
   return (
     <Button data-testid={accessibilityId} className={styles.followUserButton} onPress={onClick}>
       <div className={styles.followUserButton__inner}>
-        <IconComponent
+        {/* <IconComponent
           defaultIcon={() => <Plus className={styles.followUserButton__icon} />}
           configIconName={config.image}
           defaultIconName={defaultConfig.image}
           imgIcon={() => <img src={config.image} alt={uiReference} />}
-        />
+        /> */}
         {config.text && (
           <Typography.BodyBold className={styles.followUserButton__text}>
             {config.text}

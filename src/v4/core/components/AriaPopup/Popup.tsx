@@ -4,6 +4,7 @@ import React, { Fragment, PropsWithChildren } from 'react';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Dialog, Modal, ModalOverlay } from 'react-aria-components';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
+import { Typography } from '~/v4/core/components';
 import styles from './Popup.module.css';
 
 export function Popup() {
@@ -95,9 +96,18 @@ type PopupHeaderProps = PropsWithChildren<{
 }>;
 
 function PopupHeader({ onClose, children, pageId = '*' }: PopupHeaderProps) {
+  let headerContent = children;
+  if (typeof children === 'string') {
+    headerContent = (
+      <Typography.SubTitleBold className={styles.popup__header__title}>
+        {children}
+      </Typography.SubTitleBold>
+    );
+  }
+
   return (
     <div className={clsx(styles.popup__header)}>
-      {children}
+      {headerContent}
       <CloseButton
         pageId={pageId}
         onPress={onClose}
