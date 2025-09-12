@@ -13,6 +13,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 24px 18px 20px;
+
   /* theme.typography.title */
   line-height: 1.75;
   color: var(--color-neutral-shade1);
@@ -37,6 +38,7 @@
 
 .titleInfoLabel {
   padding-bottom: 2px;
+
   /* theme.typography.body */
   line-height: 16px;
   color: var(--color-neutral-main);
@@ -45,5 +47,5 @@
 .titleInfoChatName {
   /* theme.typography.bodyBold */
   line-height: 24px;
-  color: #000000;
+  color: #000;
 }

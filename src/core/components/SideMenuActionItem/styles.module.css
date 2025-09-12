@@ -10,13 +10,13 @@
   border-radius: 4px;
 }
 
-.actionItemContainer:hover:not(:disabled) {
-  background-color: var(--asc-color-primary-shade3);
-}
-
 .actionItemContainer:disabled {
   color: var(--asc-color-neutral-shade2);
   background-color: transparent;
+}
+
+.actionItemContainer:hover:not(:disabled) {
+  background-color: var(--asc-color-primary-shade3);
 }
 
 /* Button specific styles */
@@ -37,13 +37,13 @@
   text-align: left;
 }
 
-.buttonActionItem:hover:not(:disabled) {
-  background-color: var(--asc-color-primary-shade3);
-}
-
 .buttonActionItem:disabled {
   color: var(--asc-color-neutral-shade2);
   background-color: transparent;
+}
+
+.buttonActionItem:hover:not(:disabled) {
+  background-color: var(--asc-color-primary-shade3);
 }
 
 /* Anchor specific styles */
@@ -62,19 +62,24 @@
   line-height: var(--asc-line-height-s);
 }
 
-.anchorActionItem:hover:not(:disabled) {
-  background-color: var(--asc-color-primary-shade3);
-}
-
 .anchorActionItem:disabled {
   color: var(--asc-color-neutral-shade2);
   background-color: transparent;
+}
+
+.anchorActionItem:hover:not(:disabled) {
+  background-color: var(--asc-color-primary-shade3);
 }
 
 /* Active state for both button and anchor */
 .buttonActionItem.active,
 .anchorActionItem.active {
   background-color: var(--asc-color-primary-shade3);
+}
+
+/* Action item child wrapper */
+.actionItemChild {
+  color: inherit;
 }
 
 .buttonActionItem.active .actionItemChild,
@@ -101,11 +106,7 @@
 
 .iconWrapper.active {
   background: var(--asc-color-primary-main);
+
   /* TODO: check color with design */
   color: white;
-}
-
-/* Action item child wrapper */
-.actionItemChild {
-  color: inherit;
 }

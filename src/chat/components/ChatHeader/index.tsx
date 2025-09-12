@@ -11,19 +11,32 @@ import { BarsIcon } from '~/icons';
 import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
 import useChannel from '~/chat/hooks/useChannel';
+import { Button } from '~/v4/core/components';
+import ChevronLeft from '~/v4/icons/ChevronLeft';
 
 type ChatHeaderProps = {
   channelId: string;
   onChatDetailsClick: () => void;
   shouldShowChatDetails: boolean;
+  onBackClick?: () => void;
 };
 
-const ChatHeader = ({ channelId, onChatDetailsClick, shouldShowChatDetails }: ChatHeaderProps) => {
+const ChatHeader = ({
+  channelId,
+  onChatDetailsClick,
+  shouldShowChatDetails,
+  onBackClick,
+}: ChatHeaderProps) => {
   const channel = useChannel(channelId);
   const { chatName, chatAvatar } = useChatInfo({ channel });
 
   return (
     <div className={styles.chatHeaderContainer} data-testid="chat-header">
+      {onBackClick && (
+        <Button variant="ghost" onClick={onBackClick} className={styles.backButton}>
+          <ChevronLeft width={16} height={16} />
+        </Button>
+      )}
       <div className={styles.channel}>
         <UserAvatar
           avatarUrl={chatAvatar || undefined}

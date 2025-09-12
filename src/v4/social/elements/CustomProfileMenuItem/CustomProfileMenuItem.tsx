@@ -66,7 +66,7 @@ export function CustomProfileMenuItem({
         />
         <div className={styles.userProfileButton__content}>
           <div className={styles.customProfileMenuItem__userNameWrapper} data-active={isActive}>
-            UserNameHere
+            {currentUserId}
           </div>
           {userBadgeTitle && <div className={styles.userBadge}>{userBadgeTitle}</div>}
         </div>

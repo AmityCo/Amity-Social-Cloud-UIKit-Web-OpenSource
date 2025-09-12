@@ -27,11 +27,7 @@ const MessageBody = ({
 }) => {
   if (isDeleted) {
     return (
-      <div
-        className={`${styles.deletedMessageBody} ${isIncoming ? styles.incoming : styles.outgoing}`}
-        data-testid="message-body-deleted"
-        {...otherProps}
-      >
+      <div className={styles.deletedMessageBody} data-testid="message-body-deleted" {...otherProps}>
         {children}
       </div>
     );
@@ -50,11 +46,7 @@ const MessageBody = ({
   }
 
   return (
-    <div
-      className={`${styles.generalMessageBody} ${isIncoming ? styles.incoming : styles.outgoing}`}
-      data-testid="message-body-general"
-      {...otherProps}
-    >
+    <div className={styles.generalMessageBody} data-testid="message-body-general" {...otherProps}>
       {children}
     </div>
   );
@@ -85,7 +77,7 @@ const Message = ({
   userDisplayName,
   containerRef,
 }: MessageProps) => {
-  const shouldShowUserName = isIncoming && !isConsequent && userDisplayName;
+  const shouldShowUserName = isIncoming && userDisplayName;
   const isSupportedMessageType = ['text', 'custom'].includes(type);
 
   const renderAvatar = () => {
@@ -95,36 +87,49 @@ const Message = ({
   };
 
   return (
-    <div className={`${styles.messageReservedRow} ${isIncoming ? '' : styles.outgoing}`}>
-      <div className={styles.messageWrapper}>
+    <div
+      className={`${styles.messageReservedRow} ${isIncoming ? styles.incoming : styles.outgoing}`}
+    >
+      <div className={`${styles.messageWrapper} ${isIncoming ? styles.incoming : styles.outgoing}`}>
         {isIncoming && (
           <div className={styles.avatarWrapper}>{!isConsequent && renderAvatar()}</div>
         )}
 
-        <div className={styles.messageContainer} data-testid="message">
+        <div
+          className={`${styles.messageContentWrapper} ${isIncoming ? styles.incoming : styles.outgoing}`}
+        >
           {shouldShowUserName && <div className={styles.userName}>{userDisplayName}</div>}
-          <MessageBody
-            type={type}
-            isIncoming={isIncoming}
-            isDeleted={isDeleted || false}
-            isSupportedMessageType={isSupportedMessageType}
+
+          <div
+            className={`${styles.messageWithTimestamp} ${isIncoming ? styles.incoming : styles.outgoing}`}
           >
-            <MessageContent data={data} type={type} isDeleted={isDeleted} />
-            {!isDeleted && (
-              <div className={styles.bottomLine}>
-                <div className={styles.messageDate}>
-                  <FormattedTime value={createdAt} />
-                </div>
-                <Options
+            <div
+              className={`${styles.messageContainer} ${isIncoming ? styles.incoming : styles.outgoing}`}
+              data-testid="message"
+            >
+              {/* <Options
                   messageId={messageId}
                   data={data}
                   isIncoming={isIncoming}
                   isSupportedMessageType={isSupportedMessageType}
                   popupContainerRef={containerRef}
-                />
+                /> */}
+              <MessageBody
+                type={type}
+                isIncoming={isIncoming}
+                isDeleted={isDeleted || false}
+                isSupportedMessageType={isSupportedMessageType}
+              >
+                <MessageContent data={data} type={type} isDeleted={isDeleted} />
+              </MessageBody>
+            </div>
+
+            {!isDeleted && (
+              <div className={styles.messageDate}>
+                <FormattedTime value={createdAt} />
               </div>
             )}
-          </MessageBody>
+          </div>
         </div>
       </div>
     </div>

@@ -158,7 +158,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{json,css}": "prettier --write",
-    "*.{css}": "stylelint --fix"
+    "*.css": "stylelint --fix"
   },
   "postcss": {
     "plugins": {

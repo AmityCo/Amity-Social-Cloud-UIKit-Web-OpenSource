@@ -26,16 +26,12 @@
     cursor: pointer;
   }
 
-  > *:last-child {
-    margin-left: auto;
-  }
-}
-
-.itemsContainer {
-  word-break: break-word;
-
   > * {
     margin: 0 3px;
+  }
+
+  > *:last-child {
+    margin-left: auto;
   }
 }
 
@@ -161,7 +157,7 @@
   }
 
   /* Filled state (when active but not open and no error) */
-  &.isActive:not(.error):not(.isOpen) {
+  &.isActive:not(.error, .isOpen) {
     color: #909090;
   }
 

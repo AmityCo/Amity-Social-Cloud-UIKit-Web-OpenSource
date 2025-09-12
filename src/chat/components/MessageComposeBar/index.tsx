@@ -4,6 +4,7 @@ import { SendMessage } from '~/icons';
 
 import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
+import { MediaAttachment } from '~/v4/social/components';
 
 interface MessageComposeBarProps {
   onSubmit: (message: string) => void;
@@ -22,6 +23,7 @@ const MessageComposeBar = ({ onSubmit }: MessageComposeBarProps) => {
 
   return (
     <div className={styles.messageComposeBarContainer}>
+      <MediaAttachment pageId={'*'} isVisibleCamera isVisibleImage isVisibleVideo />
       <input
         className={styles.messageComposeBarInput}
         data-testid="message-compose-bar-input"

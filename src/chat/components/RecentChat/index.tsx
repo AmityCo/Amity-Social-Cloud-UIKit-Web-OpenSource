@@ -24,6 +24,7 @@ const RecentChat = ({
   membershipFilter,
 }: RecentChatProps) => {
   const { channels, hasMore, loadMore } = useChannelsCollection({
+    isDeleted: false,
     membership: membershipFilter,
     sortBy: 'lastActivity',
     limit: 20,

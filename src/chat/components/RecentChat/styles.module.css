@@ -1,16 +1,9 @@
-.createNewChatIcon {
-  width: 24px !important;
-  cursor: pointer;
-  height: 18px;
-}
-
 .recentContainer {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 280px;
-  border-right: 1px solid #e3e4e8;
-  max-height: 100dvh;
+  height: 100%;
+  width: 100%;
 }
 
 .recentHeader {
@@ -33,6 +26,19 @@
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
+}
+
+.createNewChatIcon {
+  width: 24px !important;
+  cursor: pointer;
+  height: 18px;
+}
+
+/* Mobile styles */
+@media (width >= 48rem) {
+  .recentContainer {
+    border-right: 1px solid #909090;
+    border-radius: 16px 0 0 16px;
+  }
 }
