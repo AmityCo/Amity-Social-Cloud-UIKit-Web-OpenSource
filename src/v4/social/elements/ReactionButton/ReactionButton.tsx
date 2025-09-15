@@ -283,6 +283,15 @@ export function ReactionButton({
       ref={desktopButtonRef}
       style={themeStyles}
       data-testid={accessibilityId}
+      className={clsx(styles.reactButton, buttonClassName)}
+      onClick={(e) => {
+        // Prevent click if reaction picker is shown
+        e.stopPropagation();
+        if (showReactionPicker) {
+          return;
+        }
+        handleQuickReaction();
+      }}
       role="button"
       tabIndex={0}
       aria-label="Reaction Button"
@@ -290,18 +299,7 @@ export function ReactionButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleCustomMouseLeave}
     >
-      <Button
-        variant="default"
-        onPress={(e) => {
-          if (showReactionPicker || isLongPressing) {
-            return;
-          }
-          handleQuickReaction();
-        }}
-        className={clsx(styles.reactButton, buttonClassName)}
-      >
-        {renderReactionButton()}
-      </Button>
+      {renderReactionButton()}
     </div>
   ) : (
     <div

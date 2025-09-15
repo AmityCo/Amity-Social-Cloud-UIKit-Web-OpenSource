@@ -124,6 +124,7 @@
 }
 
 .postContent__inlineComment__container {
+  cursor: pointer;
   justify-content: start;
   padding: 0.75rem 1rem;
   box-sizing: border-box;

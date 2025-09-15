@@ -678,13 +678,14 @@ export const PostContent = ({
             ) : (
               <>
                 {inlineComment && (
-                  <Button
+                  <div
                     data-testid="post-inline-comment-button"
-                    variant="default"
+                    role="button"
+                    tabIndex={0}
                     className={styles.postContent__inlineComment__container}
-                    onPress={() =>
-                      onClick?.({ commentId: inlineComment.commentId, isFromCommentClick: true })
-                    }
+                    onClick={(e) => {
+                      onClick?.({ commentId: inlineComment.commentId, isFromCommentClick: true });
+                    }}
                   >
                     <Comment
                       key={inlineComment?.commentId} // Add key to force proper re-rendering
@@ -709,7 +710,7 @@ export const PostContent = ({
                       community={targetCommunity}
                       maxLines={3}
                     />
-                  </Button>
+                  </div>
                 )}
               </>
             )}
