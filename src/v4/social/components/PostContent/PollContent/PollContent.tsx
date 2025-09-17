@@ -123,6 +123,7 @@ export const PollContent: FC<PollContentProps> = ({
       {poll.isVoted || isAuthorSeeingPoll || isPollEnded ? (
         <>
           <div
+            data-testid="poll-voted-items-container"
             className={styles.pollContent__votedItemsContainer}
             data-image-poll={pollAnswers?.[0].dataType === 'image'}
           >
