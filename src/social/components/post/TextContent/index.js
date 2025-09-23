@@ -39,7 +39,15 @@ function TextContent({ text, postMaxLines, mentionees }) {
         component: ({ href, children, ...props }) => {
           // Handle mention links with format: mention:index
           if (href && href.startsWith('mention:')) {
-            const highlightIndex = parseInt(href.replace('mention:', ''), 10);
+            const indexStr = href.replace('mention:', '');
+            const highlightIndex = parseInt(indexStr, 10);
+            
+            // Validate that we have a valid number
+            if (isNaN(highlightIndex) || highlightIndex < 0) {
+              console.warn(`Invalid mention index: ${indexStr}. Falling back to regular link.`);
+              return <a href={href} {...props}>{children}</a>;
+            }
+            
             return (
               <MentionHighlightTag 
                 highlightIndex={highlightIndex} 

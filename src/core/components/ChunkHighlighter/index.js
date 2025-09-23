@@ -63,7 +63,9 @@ export function formatMentionChunks(text = '', mentionees = [], tag = 'mention')
     if (chunk.highlight) {
       // Use a safe format that works with disableParsingRawHTML: true
       // This creates a markdown-style link that will be processed by the mention override
-      formattedText += `[@${chunkText.replace('@', '')}](mention:${highlightIndex})`;
+      // Remove leading @ if present, then add it back to ensure consistent format
+      const cleanText = chunkText.startsWith('@') ? chunkText.slice(1) : chunkText;
+      formattedText += `[@${cleanText}](mention:${highlightIndex})`;
       highlightIndex += 1;
     } else {
       formattedText += chunkText;
