@@ -26,10 +26,23 @@ const CommentText = ({ text, className, mentionees, maxLines = COMMENT_MAX_LINES
     () => ({
       ...defaultBlockComponentMap,
       ...defaultMarkComponentMap,
-      mention: {
-        component: MentionHighlightTag,
-        props: {
-          mentionees,
+      a: {
+        component: ({ href, children, ...props }) => {
+          // Handle mention links with format: mention:index
+          if (href && href.startsWith('mention:')) {
+            const highlightIndex = parseInt(href.replace('mention:', ''), 10);
+            return (
+              <MentionHighlightTag 
+                highlightIndex={highlightIndex} 
+                mentionees={mentionees}
+                {...props}
+              >
+                {children}
+              </MentionHighlightTag>
+            );
+          }
+          // Regular links
+          return <a href={href} {...props}>{children}</a>;
         },
       },
     }),
