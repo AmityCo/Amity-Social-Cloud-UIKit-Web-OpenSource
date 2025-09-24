@@ -35,10 +35,31 @@ function TextContent({ text, postMaxLines, mentionees }) {
     () => ({
       ...defaultBlockComponentMap,
       ...defaultMarkComponentMap,
-      mention: {
-        component: MentionHighlightTag,
-        props: {
-          mentionees,
+      a: {
+        component: ({ href, children, ...props }) => {
+          // Handle mention links with format: mention:index
+          if (href && href.startsWith('mention:')) {
+            const indexStr = href.replace('mention:', '');
+            const highlightIndex = parseInt(indexStr, 10);
+            
+            // Validate that we have a valid number
+            if (isNaN(highlightIndex) || highlightIndex < 0) {
+              console.warn(`Invalid mention index: ${indexStr}. Falling back to regular link.`);
+              return <a href={href} {...props}>{children}</a>;
+            }
+            
+            return (
+              <MentionHighlightTag 
+                highlightIndex={highlightIndex} 
+                mentionees={mentionees}
+                {...props}
+              >
+                {children}
+              </MentionHighlightTag>
+            );
+          }
+          // Regular links
+          return <a href={href} {...props}>{children}</a>;
         },
       },
     }),
