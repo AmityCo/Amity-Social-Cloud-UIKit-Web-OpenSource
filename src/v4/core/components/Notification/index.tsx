@@ -41,13 +41,17 @@ export const Notification = ({
   return (
     isVisible && (
       <div
+        data-testid="toast-notification"
         data-show-detail-media-attachment={isShowAttributes}
         className={clsx(styles.notificationContainer, className)}
         data-alignment={alignment}
       >
         <div className={clsx(styles.icon__container, iconClassName)}>{icon}</div>{' '}
         {typeof content === 'string' ? (
-          <Typography.Body className={clsx(styles.notification__text, textClassName)}>
+          <Typography.Body
+            data-testid="toast-notification-text"
+            className={clsx(styles.notification__text, textClassName)}
+          >
             {content}
           </Typography.Body>
         ) : (
@@ -62,7 +66,7 @@ export const NotificationsContainer = () => {
   const notifications = useNotificationData();
 
   return (
-    <div className={styles.notifications}>
+    <div className={styles.notifications} data-testid="toast-notifications-container">
       {notifications.map((notificationData) => {
         return <Notification {...notificationData} key={notificationData.id} />;
       })}
