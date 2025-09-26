@@ -1,0 +1,1 @@
+export { PollDurationOptions } from './PollDurationOptions';

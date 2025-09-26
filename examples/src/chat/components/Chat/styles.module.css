@@ -1,0 +1,101 @@
+.channelContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  min-height: 0;
+  background: white;
+  border-radius: 0 16px 16px 0;
+}
+
+.formBlockBody {
+  padding: 20px 16px 16px;
+}
+
+.styledSelect button {
+  width: 100%;
+}
+
+.textInput {
+  /* theme.typography.global */
+  border-radius: 4px;
+  border: 1px solid #e3e4e8;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.textInput:focus-within {
+  border-color: var(--color-primary-main);
+}
+
+.label.required::after {
+  color: var(--color-alert-main);
+  content: ' *';
+}
+
+.labelContainer {
+  width: 700px;
+  margin-right: 20px;
+}
+
+.labelWrapper {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.field.horizontal {
+  flex-direction: row;
+}
+
+.field.separate {
+  border-top: 1px solid var(--color-base-shade4);
+  padding-top: 20px;
+}
+
+.errorMessageWrapper {
+  margin-top: 8px;
+  color: var(--color-alert-main);
+
+  /* theme.typography.caption */
+}
+
+.footer {
+  border-top: 1px solid var(--color-base-shade4);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.footer.edit {
+  padding: 12px 0;
+  justify-content: flex-start;
+}
+
+.controllerContainer {
+  width: 100%;
+}
+
+.submitButton {
+  padding: 10px 16px;
+  margin-left: 12px;
+}
+
+.submitButton.edit {
+  min-width: 100px;
+  margin-left: 0;
+}
+
+/* Mobile styles */
+@media (width <= 768px) {
+  .channelContainer {
+    border-radius: 0;
+    background: white;
+  }
+}

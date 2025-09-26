@@ -1,0 +1,22 @@
+.publicProfileOptions {
+  width: 100%;
+  margin:1rem 0;
+}
+
+.sectionHeading {
+  margin: 1rem 0;
+  color: #666;
+}
+
+.menuItemContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sectionDivider {
+  margin: 1rem 0;
+  border: none;
+  height: 1px;
+  background-color: #e5e5e5;
+}

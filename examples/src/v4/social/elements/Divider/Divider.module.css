@@ -1,0 +1,12 @@
+.divider {
+  width: 100%;
+  min-height: 0.5rem;
+  background-color: var(--asc-color-white);
+}
+
+@media (width >= 48em) {
+  .divider {
+    min-height: 0.75rem;
+    background-color: var(--asc-color-white);
+  }
+}

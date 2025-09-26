@@ -1,0 +1,41 @@
+.modal {
+  max-width: 22.5rem;
+}
+
+.background {
+  background-color: var(--asc-color-background-default);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.okButton {
+  color: var(--asc-color-primary-shade4);
+  display: flex;
+  padding: 0.625rem 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--asc-border-radius-sm);
+  background: var(--asc-color-alert-default);
+  border: none;
+  cursor: pointer;
+}
+
+.cancelButton {
+  color: var(--asc-color-secondary-default);
+  display: flex;
+  padding: 0.625rem 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--asc-border-radius-sm);
+  border: 1px solid var(--asc-color-secondary-shade3);
+  background: var(--asc-color-white);
+  cursor: pointer;
+}
+
+.cancelButton:hover {
+  color: var(--asc-color-secondary-default);
+}

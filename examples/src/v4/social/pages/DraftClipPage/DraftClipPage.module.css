@@ -1,0 +1,75 @@
+.draftClipPage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--asc-color-black);
+}
+
+.draftClipPage__headerContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.draftClipPage__headerRight {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.draftClipPage__videoPreview {
+  max-height: calc(100% - 4.5rem);
+  width: 100%;
+  height: 100%;
+  background-color: var(--asc-color-black);
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.draftClipPage__loadingContainer {
+  position: relative;
+  max-height: calc(100% - 4.5rem);
+  width: 100%;
+  height: 100%;
+}
+
+.draftClipPage__spinner {
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--asc-color-white);
+  stroke: var(--asc-color-white);
+}
+
+.draftClipPage__loadingThumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  filter: blur(2px);
+}
+
+.draftClipPage__videoPreview[data-isaspect-fill='false'] {
+  object-fit: contain;
+}
+
+.draftClipPage__backButton {
+  color: var(--asc-color-white);
+}
+
+.draftClipPage__aspectRatioButtonIcon {
+  color: var(--asc-color-white);
+}
+
+.draftClipPage__nextButton {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}

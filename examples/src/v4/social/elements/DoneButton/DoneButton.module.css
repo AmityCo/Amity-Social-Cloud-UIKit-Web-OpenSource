@@ -1,0 +1,5 @@
+.doneButton {
+  all: unset;
+  cursor: pointer;
+  color: var(--asc-color-primary-default);
+}

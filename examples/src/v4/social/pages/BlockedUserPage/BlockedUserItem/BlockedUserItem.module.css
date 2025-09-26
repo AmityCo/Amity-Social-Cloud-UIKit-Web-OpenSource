@@ -1,0 +1,24 @@
+.blockUserItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 0.75rem;
+}
+
+.blockUserItem__avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+}
+
+.blockUserItem__displayName {
+  color: var(--asc-color-base-default);
+  flex-grow: 1;
+}
+
+.blockUserItem__user {
+  display: flex;
+  gap: 0.75rem;
+}

@@ -1,0 +1,1 @@
+export { SenderMessageBubble } from './SenderMessageBubble';

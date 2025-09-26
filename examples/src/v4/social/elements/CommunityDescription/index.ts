@@ -1,0 +1,1 @@
+export { CommunityDescription } from './CommunityDescription';

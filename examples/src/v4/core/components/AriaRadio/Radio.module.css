@@ -1,0 +1,49 @@
+.radio {
+  gap: 0.5rem;
+  display: flex;
+  font-size: 1rem;
+  position: relative;
+  align-items: center;
+  forced-color-adjust: none;
+  color: var(--asc-color-base-default);
+  flex-direction: row;
+  width: 100%;
+}
+
+.radio::before {
+  content: '';
+  display: block;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+  border-radius: 1rem;
+  transition: all 200ms;
+  border: 2px solid var(--asc-color-base-shade3);
+  background: var(--asc-color-background-default);
+  flex-shrink: 0;
+}
+
+.radio[data-pressed]::before {
+  border-color: var(--asc-color-base-shade4);
+}
+
+.radio[data-selected]::before {
+  border-width: 0.475rem;
+  border-color: var(--asc-color-primary-default);
+}
+
+.radio[data-selected][data-pressed]::before {
+  border-color: var(--asc-color-base-shade4);
+}
+
+.radio[data-disabled]::before {
+  border-color: var(--asc-color-base-shade4);
+}
+
+.radio[data-selected][data-disabled]::before {
+  border-color: var(--asc-color-primary-shade3);
+}
+
+.radio[data-focus-visible]::before {
+  outline-offset: 2px;
+  outline: 2px solid var(--asc-color-primary-default);
+}

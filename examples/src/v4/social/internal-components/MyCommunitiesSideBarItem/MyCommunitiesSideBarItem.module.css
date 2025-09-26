@@ -1,0 +1,74 @@
+.myCommunitiesSideBarItem {
+  gap: 1rem;
+  display: grid;
+  padding: 0.5rem 1rem;
+  grid-template-columns: 2rem 12.5rem;
+}
+
+.myCommunitiesSideBarItem:hover,
+.myCommunitiesSideBarItem:focus-within {
+  background-color: var(--asc-color-background-shade1);
+}
+
+.myCommunitiesSideBarItem[data-selected='true'] {
+  background-color: var(--asc-color-primary-shade3);
+}
+
+.myCommunitiesSideBarItem__image {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 100%;
+}
+
+.myCommunitiesSideBarItem__imageIcon {
+  width: 100%;
+  height: 100%;
+  fill: var(--asc-color-primary-shade2);
+}
+
+.myCommunitiesSideBarItem__content {
+  gap: 0.25rem;
+  width: 100%;
+  display: grid;
+}
+
+.myCommunitiesSideBarItem__communityName {
+  display: flex;
+  width: 12.5rem;
+  align-items: center;
+  justify-content: start;
+}
+
+.myCommunitiesSideBarItem__communityName__private {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.myCommunitiesSideBarItem__communityName__privateIcon {
+  fill: var(--asc-color-base-default);
+}
+
+.myCommunitiesSideBarItem__communityName[data-selected='true']
+  .myCommunitiesSideBarItem__communityName__privateIcon {
+  fill: var(--asc-color-primary-default);
+}
+
+.myCommunitiesSideBarItem__communityDisplayName {
+  color: var(--asc-color-base-default);
+}
+
+.myCommunitiesSideBarItem__communityName__officialBadge {
+  height: 1rem;
+  width: 1.25rem;
+}
+
+.myCommunitiesSideBarItem__communityName[data-selected='true']
+  .myCommunitiesSideBarItem__communityDisplayName {
+  color: var(--asc-color-primary-default);
+}
+
+.myCommunitiesSideBarItem__categories {
+  width: 12.5rem;
+  flex-wrap: nowrap;
+}

@@ -1,0 +1,1 @@
+export { CommunityCoverImage } from './CommunityCoverImage';

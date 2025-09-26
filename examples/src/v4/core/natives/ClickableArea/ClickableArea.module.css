@@ -1,0 +1,5 @@
+.clickableArea {
+  box-sizing: border-box;
+  cursor: pointer;
+  outline: none;
+}

@@ -1,0 +1,1 @@
+export { MyCommunitiesSideBar } from './MyCommunitiesSideBar';

@@ -1,0 +1,19 @@
+.communityCoverImage__image {
+  width: 100%;
+  object-fit: cover;
+  max-height: 11.75rem;
+}
+
+.communityCoverImage__spinner {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+@media only screen and (width >= 48em) {
+  .communityCoverImage__image {
+    max-height: 17.0625rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+}

@@ -1,0 +1,65 @@
+.userRelationshipList__container {
+  margin-top: 0.5rem;
+}
+
+.userRelationshipList__menuContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.userRelationshipList__menuButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.userRelationshipList__menuButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.userRelationshipList__menuButton__label {
+  color: var(--asc-color-base-default);
+}
+
+.userRelationshipList__observerTarget {
+  height: var(--asc-spacing-m1);
+  width: 100%;
+}
+
+.userRelationshipList__emptyIcon {
+  color: var(--asc-color-secondary-shade4);
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
+.userRelationshipList__emptyContainer {
+  padding: 5rem 0.5rem;
+  text-align: center;
+}
+
+.userRelationshipList__skeletonContainer {
+  display: block;
+}
+
+.userRelationshipList__emptyText {
+  color: var(--asc-color-base-shade3);
+}
+
+@media (width >= 48em) {
+  .userRelationshipList__container {
+    margin: 0;
+  }
+
+  .userRelationshipList__skeletonContainer {
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

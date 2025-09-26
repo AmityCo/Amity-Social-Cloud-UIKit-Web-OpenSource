@@ -1,0 +1,57 @@
+.communityRowItem {
+  width: 100%;
+  gap: 0.75rem;
+  display: flex;
+  padding: 0.5rem 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.communityRowItem__image {
+  height: 5rem;
+  min-width: 5rem;
+  max-width: 5rem;
+  position: relative;
+  border-radius: var(--asc-border-radius-sm);
+}
+
+.communityRowItem__order {
+  left: 0.5rem;
+  bottom: 0.37rem;
+  position: absolute;
+  color: var(--asc-color-white);
+}
+
+.communityRowItem__content {
+  width: 100%;
+  min-width: 0;
+  gap: 0.125rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.communityRowItem__communityName {
+  min-width: 0;
+  display: flex;
+  gap: 0.125rem;
+  align-items: center;
+  justify-content: start;
+}
+
+.communityRowItem__joinButton {
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: flex-end;
+}
+
+.communityRowItem__pendingButton {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-secondary-default);
+}
+
+.communityRowItem__pendingButtonWrapper {
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: flex-end;
+}

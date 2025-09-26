@@ -1,0 +1,27 @@
+/*
+You can add your own styles or override the default sheet styles via the exposed class names.
+Note that you might need to use !important for style overrides since the inner styles are applied as inline styles
+which have higher specificity.
+*/
+
+.bottomSheet__container {
+  background-color: var(--asc-color-background-default) !important;
+}
+
+.bottomSheet__header {
+  background-color: var(--asc-color-background-default);
+  border-top-left-radius: var(--asc-border-radius-xl);
+  border-top-right-radius: var(--asc-border-radius-xl);
+  text-align: center;
+  color: var(--asc-color-base-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  padding-bottom: var(--asc-spacing-m1);
+}
+
+.bottomSheet__content {
+  background-color: var(--asc-color-background-default);
+}
+
+.bottomSheet__backdrop {
+  background-color: rgb(0 0 0 / 50%);
+}

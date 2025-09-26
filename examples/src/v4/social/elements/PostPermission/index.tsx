@@ -1,0 +1,1 @@
+export { PostPermission } from './PostPermission';

@@ -1,0 +1,100 @@
+.userRelationshipPage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.userRelationshipPage__container {
+  flex-direction: column;
+  display: flex;
+  flex: 1;
+  margin-top: 3.62rem;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.userRelationshipPage__content {
+  height: 100%;
+  width: 100%;
+  flex-grow: 1;
+  padding: 0 1rem;
+}
+
+.userRelationshipPage__tabBar {
+  height: 100%;
+}
+
+.userRelationshipPage__topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.625rem;
+  padding-inline: 0.75rem 1rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.userRelationshipPage__displayName {
+  color: var(--asc-color-base-default);
+  width: 100%;
+  text-align: center;
+}
+
+.userRelationshipPage__feedTabs {
+  background-color: var(--asc-color-background-default);
+  position: sticky;
+  top: -0.125rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1.25rem;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  padding: 0 1rem;
+  z-index: 1;
+}
+
+@media (width >=48em) {
+  .userRelationshipPage {
+    background-color: transparent;
+  }
+
+  .userRelationshipPage__topBar {
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem 0.5rem 0 0;
+    position: static;
+  }
+
+  .userRelationshipPage__topSection {
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem 0.5rem 0 0;
+    border: 1px solid var(--asc-color-base-shade4);
+  }
+
+  .userRelationshipPage__container {
+    margin-top: 0;
+  }
+
+  .userRelationshipPage__content {
+    padding: 0;
+  }
+
+  .userRelationshipPage__tabList {
+    background-color: var(--asc-color-background-default);
+    padding: 0 1rem;
+    border-radius: 0 0 0.5rem 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    border-top-style: none;
+  }
+
+  .userRelationshipPage__tabPanel {
+    padding: 0 1rem;
+    margin-top: 0.75rem;
+    height: max-content;
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+  }
+}

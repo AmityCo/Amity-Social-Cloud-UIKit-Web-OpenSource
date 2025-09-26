@@ -1,0 +1,490 @@
+import React, { useRef, useState } from 'react';
+import { CommunityPostSettings, PostRepository } from '@amityco/ts-sdk';
+import { FileType } from '@amityco/ts-sdk';
+import { useForm } from 'react-hook-form';
+import { useNetworkState } from 'react-use';
+import { useAmityPage } from '~/v4/core/hooks/uikit';
+import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
+import {
+  AmityPostComposerCreateOptions,
+  CreatePostParams,
+} from '~/v4/social/pages/PostComposerPage/PostComposerPage';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
+import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
+import { CreateNewPostButton } from '~/v4/social/elements/CreateNewPostButton';
+import { PostTextField } from '~/v4/social/elements/PostTextField';
+import { ImageThumbnail } from '~/v4/social/internal-components/ImageThumbnail';
+import { VideoThumbnail } from '~/v4/social/internal-components/VideoThumbnail';
+import ReactDOM from 'react-dom';
+import { Drawer } from 'vaul';
+import { Spinner } from '~/v4/social/internal-components/Spinner';
+import { MediaAttachment } from '~/v4/social/components/MediaAttachment';
+import { DetailedMediaAttachment } from '~/v4/social/components/DetailedMediaAttachment';
+import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
+import { Notification } from '~/v4/core/components/Notification';
+import { Mentioned, Mentionees } from '~/v4/helpers/utils';
+import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { MAXIMUM_POST_CHARACTERS } from '~/v4/social/constants';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useSDK } from '~/v4/core/hooks/useSDK';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
+import { isAdmin } from '~/v4/utils/permissions';
+import { useMediaAttachmentVisible } from '~/v4/social/hooks/useMediaAttachmentVisible';
+import { useFilePostUpload } from '~/v4/social/hooks/useFilePostUpload';
+import { useMutation } from '@tanstack/react-query';
+import { useResizeObserver } from '~/v4/social/hooks/useResizeObserver';
+import styles from './CreatePost.module.css';
+import { Typography } from '~/v4/core/components';
+import { useClipContext } from '~/v4/social/providers/ClipProvider';
+import { Play } from '~/v4/icons/Play';
+import { isAmityFile } from '~/v4/utils/checkFileType';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+
+export function CreatePost({
+  community,
+  targetType,
+  targetId,
+  isClipPost = false,
+}: AmityPostComposerCreateOptions) {
+  const pageId = 'post_composer_page';
+
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const mentionRef = useRef<HTMLDivElement | null>(null);
+  const drawerContentRef = useRef<HTMLDivElement>(null);
+
+  const { currentUserId } = useSDK();
+  const { user } = useUser({ userId: currentUserId });
+  const { handleSubmit } = useForm();
+  const { info } = useConfirmContext();
+  const { isDesktop } = useResponsive();
+  const { confirm } = useConfirmContext();
+  const { onBack, prevPage, prev2Page } = useNavigation();
+  const { AmityPostComposerPageBehavior } = usePageBehavior();
+  const { prependItem } = useGlobalFeedContext();
+  const { themeStyles } = useAmityPage({ pageId });
+  const drawerHeight = useResizeObserver({ ref: drawerContentRef });
+  const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
+  const { online } = useNetworkState();
+  const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
+    useFilePostUpload(pageId);
+
+  const {
+    file: clipFile,
+    setFile: setClipFile,
+    clipThumbnail,
+    isMuted,
+    isAspectFill,
+    setIsMuted,
+    setIsAspectFill,
+  } = useClipContext();
+
+  const [isCreating, setIsCreating] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [postErrorText, setPostErrorText] = useState<string | undefined>();
+
+  const [textValue, setTextValue] = useState<CreatePostParams>({
+    text: '',
+    mentioned: [],
+    mentionees: [
+      {
+        type: 'user',
+        userIds: [''],
+      },
+    ],
+    attachments: [
+      {
+        fileId: '',
+        type: 'image',
+      },
+    ],
+  });
+
+  const {
+    HEIGHT_MEDIA_ATTACHMENT_MENU,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2,
+    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
+    snap,
+    isShowDetailMediaAttachmentMenu,
+    isVisibleCamera,
+    isVisibleImage,
+    isVisibleVideo,
+    handleSnapChange,
+    showToastPosition,
+  } = useMediaAttachmentVisible({ files });
+
+  const { mutate: createPost } = useMutation({
+    mutationFn: async (params: Parameters<typeof PostRepository.createPost>[0]) =>
+      PostRepository.createPost(params),
+
+    onMutate: () => {
+      setIsCreating(true);
+      setIsError(false);
+      setPostErrorText(undefined);
+    },
+
+    onSuccess: (response) => {
+      const post = response.data;
+
+      const isModerator =
+        (moderators || []).find((moderator) => moderator.userId === post.postedUserId) != null;
+
+      if (!targetId) prependItem(post);
+
+      // TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
+      if (
+        ((community as Amity.Community & { needApprovalOnPostCreation?: boolean })
+          ?.needApprovalOnPostCreation ||
+          community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED) &&
+        !isModerator &&
+        !isAdmin(user?.roles)
+      ) {
+        info({
+          pageId,
+          title: 'Posts sent for review',
+          content:
+            'Your post has been submitted to the pending list. It will be published once approved by the community moderator.',
+          okText: 'OK',
+        });
+      } else {
+        prependItem(post);
+      }
+      setIsMuted(false);
+      setIsAspectFill(true);
+      setIsCreating(false);
+      handlePostSuccess();
+    },
+
+    onError: (error: Error) => {
+      setIsCreating(false);
+      setIsError(true);
+      handlePostError(error);
+    },
+  });
+
+  async function onCreatePost() {
+    if (textValue.text?.length > MAXIMUM_POST_CHARACTERS) {
+      setPostErrorText('You have reached the maximum of 50,000 characters in a post.');
+      return;
+    }
+
+    const attachments = isClipPost
+      ? [
+          {
+            fileId: clipFile && isAmityFile(clipFile) ? clipFile.fileId : '',
+            type: 'clip',
+            displayMode: isAspectFill ? 'fill' : 'fit',
+            isMuted: isMuted,
+          },
+        ]
+      : files.map(({ file }) => ({
+          fileId: (file as Amity.File).fileId,
+          type: file.type,
+        }));
+
+    const createPostParams: Parameters<typeof PostRepository.createPost>[0] = {
+      targetId: targetId!,
+      targetType,
+      data: { text: textValue.text },
+      metadata: { mentioned: textValue.mentioned },
+      mentionees: textValue.mentionees as Amity.UserMention[],
+      attachments,
+    };
+
+    createPost(createPostParams);
+  }
+
+  const handlePostSuccess = () => {
+    setClipFile(null);
+    checkRedirectPage();
+  };
+
+  const handlePostError = (error: Error) => {
+    if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+      setPostErrorText("Your post wasn't posted because it contains a blocked word.");
+    } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+      setPostErrorText("Your post wasn't posted because it contains a link that's not allowed.");
+    } else {
+      setPostErrorText('Failed to create post. Please try again.');
+    }
+  };
+  //TODO : Make the function works the issues is can't remove extra mention from DOM
+
+  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
+    setTextValue((prev) => ({
+      ...prev,
+      mentioned: val.mentioned,
+      text: val.text,
+      mentionees: val.mentionees,
+    }));
+  };
+
+  const onClickClose = () => {
+    if (hasNoChanges) return onBack();
+    confirm({
+      pageId: pageId,
+      type: 'confirm',
+      title: 'Discard this post?',
+      content: 'The post will be permanently discarded. It cannot be undone.',
+      onOk: () => {
+        setClipFile(null);
+        checkRedirectPage();
+      },
+      okText: 'Discard',
+      cancelText: 'Keep editing',
+    });
+  };
+
+  const notifications = (
+    <div
+      className={styles.createPost__notificationWrapper}
+      data-item-position={snap === HEIGHT_MEDIA_ATTACHMENT_MENU}
+    >
+      {(isCreating || !online) && (
+        <Notification
+          icon={<Spinner />}
+          content={online ? 'Posting...' : 'Waiting for network...'}
+          alignment="fixed"
+        />
+      )}
+      {(isError || postErrorText) && (
+        <Notification
+          duration={3000}
+          content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
+          alignment="fixed"
+          icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+          onClose={() => {
+            setPostErrorText(undefined);
+            setIsError(false);
+          }}
+        />
+      )}
+    </div>
+  );
+
+  const checkRedirectPage = () => {
+    if (
+      prevPage?.type === PageTypes.SelectPostTargetPage ||
+      prev2Page?.type === PageTypes.SelectPostTargetPage
+    ) {
+      return AmityPostComposerPageBehavior?.goToSocialHomePage?.();
+    } else if (
+      prev2Page?.type === PageTypes.UserProfilePage ||
+      prev2Page?.type === PageTypes.CommunityProfilePage
+    ) {
+      return onBack(2);
+    } else {
+      return onBack();
+    }
+  };
+
+  const hasContent = textValue.text.length > 0 || files.length > 0 || clipFile !== undefined;
+  const hasErrors = files.some((file) => file.errorText !== undefined);
+  const hasNoChanges = textValue.text.length === 0 && files.length === 0 && clipFile == undefined;
+
+  const canSubmitPost =
+    !hasNoChanges && hasContent && !hasErrors && !isCreating && online && !isLoading;
+
+  const renderPosting = () => {
+    if (isCreating || !online) {
+      <Typography.Body
+        className={styles.createPost__notification}
+        data-show-detail-media-attachment={showToastPosition()}
+      >
+        <Notification
+          className={styles.createPost__notificationToast}
+          content={online ? 'Posting...' : 'Waiting for network...'}
+          icon={<Spinner />}
+          alignment="fixed"
+        />
+      </Typography.Body>;
+    }
+    return;
+  };
+
+  const renderError = () => {
+    if (isError || postErrorText) {
+      <Typography.Body
+        className={styles.createPost__notification}
+        data-show-detail-media-attachment={showToastPosition()}
+      >
+        <Notification
+          content={postErrorText ? postErrorText : 'Failed to create post. Please try again.'}
+          icon={<ExclamationCircle className={styles.createPost_notificationIcon} />}
+          alignment="fixed"
+          duration={3000}
+          className={styles.createPost__notificationToast}
+          onClose={() => {
+            setPostErrorText(undefined);
+            setIsError(false);
+          }}
+        />
+      </Typography.Body>;
+    }
+    return;
+  };
+
+  const renderTags = () => {
+    return (
+      <>
+        <Typography.Body className={styles.createPost__tagsTitle}>Choose your tags</Typography.Body>
+        <div className={styles.createPost__tagsContent}>
+          <div className={styles.createPost__tagsItem}>#poker</div>
+          <div className={styles.createPost__tagsItem}>#slot</div>
+          <div className={styles.createPost__tagsItem}>#bingo</div>
+          <div className={styles.createPost__tagsItem}>#roulette</div>
+        </div>
+      </>
+    );
+  };
+
+  return (
+    <div className={styles.createPost} style={themeStyles}>
+      {isDesktop && notifications}
+      <form
+        className={styles.createPost__form}
+        onSubmit={handleSubmit(onCreatePost)}
+        data-from-media={snap == HEIGHT_MEDIA_ATTACHMENT_MENU}
+      >
+        <div className={styles.createPost__topBar}>
+          <CloseButton pageId={pageId} onPress={onClickClose} />
+          <CommunityDisplayName pageId={pageId} community={community} />
+          <CreateNewPostButton pageId={pageId} variant="text" isDisabled={!canSubmitPost} />
+        </div>
+        {isClipPost && (
+          <div className={styles.createPost__clipPostThumbnaiContainer}>
+            <img
+              data-aspect-fill={isAspectFill}
+              src={clipThumbnail ?? undefined}
+              alt="thumbnail clip"
+              className={styles.createPost__clipPostThumbnail}
+            />
+            <div className={styles.createPost__clipPostPlayIconWrap}>
+              <Play className={styles.createPost__clipPostPlayIcon} />
+            </div>
+          </div>
+        )}
+        <div className={styles.createPost__formContent}>
+          <PostTextField
+            pageId={pageId}
+            componentId={isClipPost ? 'clipPost' : undefined}
+            onChange={onChange}
+            communityId={targetId}
+            className={styles.createPost__input}
+            dataValue={{ data: { text: textValue.text } }}
+            placeholderClassName={styles.createPost__placeholder}
+            mentionContainer={isDesktop ? null : mentionRef.current}
+            mentionContainerClassName={styles.createPost__mentionContainer}
+          />
+          <ImageThumbnail
+            files={files}
+            pageId={pageId}
+            progress={progress}
+            removeFile={removeFile}
+            onAltTextChange={handleAltTextChange}
+          />
+          <VideoThumbnail
+            files={files}
+            pageId={pageId}
+            progress={progress}
+            removeFile={removeFile}
+          />
+        </div>
+        <div className={styles.createPost__tags}>{renderTags()}</div>
+        <div className={styles.createPost__attachment}>
+          <MediaAttachment
+            pageId={pageId}
+            isVisibleCamera={isVisibleCamera}
+            isVisibleImage={isVisibleImage}
+            isVisibleVideo={isVisibleVideo}
+            totalMedia={files.length}
+            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
+            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
+          />
+        </div>
+        <div className={styles.createPost__ctaWrapper}>
+          <CreateNewPostButton
+            variant="fill"
+            pageId={pageId}
+            className={styles.createPost__cta}
+            isDisabled={!canSubmitPost}
+          />
+        </div>
+        <div
+          ref={mentionRef}
+          className={styles.createPost__mention}
+          data-testid={`${pageId}/mention_text_input_options`}
+          style={{ '--asc-mention-bottom': `${drawerHeight ?? 0}px` } as React.CSSProperties}
+        />
+      </form>
+      {!isDesktop && !isClipPost && (
+        <div className={styles.createPost__attachmentDrawer}>
+          <div ref={drawerRef}></div>
+          {drawerRef.current
+            ? ReactDOM.createPortal(
+                <Drawer.Root
+                  modal={false}
+                  open
+                  activeSnapPoint={snap}
+                  snapPoints={[
+                    HEIGHT_MEDIA_ATTACHMENT_MENU,
+                    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_1,
+                    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_2,
+                    HEIGHT_DETAIL_MEDIA_ATTACHMENT__MENU_3,
+                  ]}
+                  setActiveSnapPoint={(newSnapPoint) => {
+                    typeof newSnapPoint === 'string' && handleSnapChange(newSnapPoint);
+                  }}
+                >
+                  <Drawer.Portal container={drawerRef.current}>
+                    <Drawer.Content className={styles.createPost__attachmentDrawer__content}>
+                      <div
+                        ref={drawerContentRef}
+                        className={styles.createPost__attachmentDrawer__contentContainer}
+                        data-show-detail-media-attachment={isShowDetailMediaAttachmentMenu}
+                      >
+                        {isShowDetailMediaAttachmentMenu ? (
+                          <DetailedMediaAttachment
+                            pageId={pageId}
+                            isVisibleCamera={isVisibleCamera}
+                            isVisibleImage={isVisibleImage}
+                            isVisibleVideo={isVisibleVideo}
+                            totalMedia={files.length}
+                            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
+                            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
+                          />
+                        ) : (
+                          <MediaAttachment
+                            pageId={pageId}
+                            isVisibleCamera={isVisibleCamera}
+                            isVisibleImage={isVisibleImage}
+                            isVisibleVideo={isVisibleVideo}
+                            totalMedia={files.length}
+                            onImageFileChange={(files) => handleFileChange(files, FileType.IMAGE)}
+                            onVideoFileChange={(files) => handleFileChange(files, FileType.VIDEO)}
+                          />
+                        )}
+                      </div>
+                    </Drawer.Content>
+                  </Drawer.Portal>
+                </Drawer.Root>,
+                drawerRef.current,
+              )
+            : null}
+
+          {renderPosting()}
+          {renderError()}
+        </div>
+      )}
+      {isClipPost && (
+        <>
+          {renderPosting()}
+          {renderError()}
+        </>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,7 @@
+.featuredIcon__background {
+  fill: var(--asc-color-base-shade4);
+}
+
+.featuredIcon__textColor {
+  fill: var(--asc-color-base-default);
+}

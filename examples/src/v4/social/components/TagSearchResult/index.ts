@@ -1,0 +1,1 @@
+export { TagSearchResult } from './TagSearchResult';

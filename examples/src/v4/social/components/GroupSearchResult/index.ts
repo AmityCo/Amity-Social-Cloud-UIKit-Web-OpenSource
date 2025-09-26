@@ -1,0 +1,1 @@
+export { GroupSearchResult } from './GroupSearchResult';

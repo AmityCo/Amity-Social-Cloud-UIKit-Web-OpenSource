@@ -1,0 +1,7 @@
+.title {
+  color: var(--asc-color-base-default);
+}
+
+.title__requiredIndicator {
+  color: var(--asc-color-alert-default);
+}

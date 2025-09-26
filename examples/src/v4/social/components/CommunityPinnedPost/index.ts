@@ -1,0 +1,1 @@
+export { CommunityPinnedPost } from './CommunityPinnedPost';

@@ -1,0 +1,1 @@
+export { CommunityVerifyBadge } from './CommunityVerifyBadge';

@@ -1,0 +1,1 @@
+export { CommunitySideBarTitle } from './CommunitySideBarTitle';

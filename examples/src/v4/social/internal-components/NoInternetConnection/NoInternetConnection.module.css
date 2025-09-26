@@ -1,0 +1,23 @@
+.noInternetConnection__container {
+  width: 100%;
+  text-align: center;
+  background-color: inherit;
+  padding: 1.5rem;
+}
+
+.noInternetConnection__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: var(--asc-color-base-shade4);
+}
+
+.noInternetConnection__title {
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.noInternetConnection__retry {
+  background-color: var(--asc-color-white);
+  border: 1px solid var(--asc-color-secondary-shade3);
+  margin: 1rem auto 0;
+}

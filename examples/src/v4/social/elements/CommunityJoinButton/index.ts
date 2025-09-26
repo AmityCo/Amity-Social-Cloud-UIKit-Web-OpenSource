@@ -1,0 +1,1 @@
+export { CommunityJoinButton } from './CommunityJoinButton';

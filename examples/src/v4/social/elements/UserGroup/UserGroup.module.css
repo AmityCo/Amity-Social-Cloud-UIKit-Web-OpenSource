@@ -1,0 +1,14 @@
+.userGroup__container {
+  display: flex;
+  align-items: center;
+}
+
+.userGroup__count {
+  color: var(--asc-color-base-default);
+  margin-right: 0.25rem;
+}
+
+.userGroup__label {
+  color: var(--secondary-text-color);
+  text-decoration: underline;
+}

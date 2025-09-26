@@ -1,0 +1,1 @@
+export { EmptyResultIcon } from './EmptyResultIcon';

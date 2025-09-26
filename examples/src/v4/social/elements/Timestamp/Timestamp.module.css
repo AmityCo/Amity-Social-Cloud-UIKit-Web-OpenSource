@@ -1,0 +1,5 @@
+.timestamp {
+  color: var(--asc-color-base-shade2);
+  display: inline-block;
+  white-space: nowrap;
+}

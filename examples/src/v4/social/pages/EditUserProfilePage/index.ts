@@ -1,0 +1,1 @@
+export { EditUserProfilePage } from './EditUserProfilePage';

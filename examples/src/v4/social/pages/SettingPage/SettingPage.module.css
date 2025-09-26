@@ -1,0 +1,31 @@
+.settingPageContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.settingPageContent {
+  flex: 1;
+}
+
+.sectionHeading {
+  margin-bottom: 1rem;
+}
+
+.deleteProfileContainer {
+  text-decoration: underline;
+  margin-top: 2rem;
+  cursor: pointer;
+}
+
+.sectionDivider {
+  margin: 1rem 0;
+  padding: 0 1rem;
+}
+
+@media (width >=48rem) {
+
+  .settingPageContainer {
+    margin-top: 1.5rem;
+  }
+}

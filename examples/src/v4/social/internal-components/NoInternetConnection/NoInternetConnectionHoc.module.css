@@ -1,0 +1,20 @@
+@media (width >=48em) {
+  .noInternetConnectionHoc[data-page='feed'] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.75rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background: var(--asc-color-background-default);
+  }
+
+  .noInternetConnectionHoc[data-page='global-search'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 18.5rem;
+    width: 100%;
+  }
+}

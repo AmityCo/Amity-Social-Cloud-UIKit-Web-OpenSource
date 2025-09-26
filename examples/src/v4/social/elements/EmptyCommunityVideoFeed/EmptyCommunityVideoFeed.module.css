@@ -1,0 +1,24 @@
+.emptyCommunityVideoFeed__container {
+  margin: auto;
+  text-align: center;
+  padding: 5rem 0.5rem;
+  min-height: 15rem;
+}
+
+.emptyCommunityVideoFeed__text {
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.emptyCommunityVideoFeed__icon {
+  width: 3.75rem;
+  height: 2.8125rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+@media (width >= 48em) {
+  .emptyCommunityVideoFeed__container {
+    padding: 2.9rem;
+    min-height: auto;
+  }
+}

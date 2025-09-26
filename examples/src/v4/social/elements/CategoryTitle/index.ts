@@ -1,0 +1,1 @@
+export { CategoryTitle } from './CategoryTitle';

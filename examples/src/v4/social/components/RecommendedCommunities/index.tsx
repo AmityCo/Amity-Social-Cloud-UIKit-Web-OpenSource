@@ -1,0 +1,1 @@
+export { RecommendedCommunities } from './RecommendedCommunities';

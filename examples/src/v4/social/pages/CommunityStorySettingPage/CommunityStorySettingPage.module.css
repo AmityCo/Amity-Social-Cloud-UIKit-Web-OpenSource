@@ -1,0 +1,63 @@
+.communityStorySettingPage__container {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.communityStorySettingPage__communityTitleWrap {
+  display: flex;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.communityStorySettingPage__communityTitle {
+  color: var(--asc-color-base-default);
+}
+
+.communityStorySettingPage__emptyDiv {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.communityStorySettingPage__wrapLabel {
+  gap: 0.5rem;
+  display: flex;
+  padding: 0.75rem 0;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.communityStorySettingPage__labelText {
+  display: block;
+}
+
+.communityStorySettingPage__description {
+  padding-top: 0.12rem;
+  color: var(--asc-color-base-shade1);
+}
+
+@media only screen and (width >= 48em) {
+  .communityStorySettingPage__container {
+    padding: 0;
+    gap: 0.75rem;
+    display: grid;
+  }
+
+  .communityStorySettingPage__communityTitleWrap {
+    padding: 1.25rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .communityStorySettingPage__communityTitle {
+    font-size: 1.25rem;
+  }
+
+  .communityStorySettingPage__wrapLabel {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+}

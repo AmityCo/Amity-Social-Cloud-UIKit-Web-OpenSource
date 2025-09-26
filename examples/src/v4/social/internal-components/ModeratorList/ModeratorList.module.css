@@ -1,0 +1,13 @@
+@media (width >= 48em) {
+  .moderatorList {
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .moderatorList[data-hidden='true'] {
+    padding: 0;
+    border: none;
+  }
+}

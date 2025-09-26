@@ -1,0 +1,11 @@
+.groupSearchResult {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.groupSearchResult__noInternetConnectionHoc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

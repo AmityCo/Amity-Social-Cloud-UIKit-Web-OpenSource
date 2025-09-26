@@ -1,0 +1,1 @@
+export { PrivateUserFeed } from './PrivateUserFeed';

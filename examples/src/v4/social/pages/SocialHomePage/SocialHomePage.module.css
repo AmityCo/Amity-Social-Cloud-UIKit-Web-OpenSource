@@ -1,0 +1,58 @@
+.socialHomePage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.socialHomePage__topBar {
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 7.5rem;
+  background-color: var(--asc-color-background-default);
+}
+
+.socialHomePage__contents {
+  position: absolute;
+  top: 7.5rem;
+  width: 100%;
+  height: calc(100% - 7.5rem);
+  overflow: hidden scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.socialHomePage__contents::-webkit-scrollbar {
+  display: none;
+}
+
+.socialHomePage__createPostMenu {
+  position: absolute;
+  right: 1rem;
+  top: 3.25rem;
+  width: 12.5rem;
+}
+
+.socialHomePage__noConnection {
+  padding-top: 10rem;
+}
+
+@media (width >= 48em) {
+  .socialHomePage {
+    background-color: transparent;
+  }
+
+  .socialHomePage__topBar {
+    display: none;
+  }
+
+  .socialHomePage__contents {
+    top: 0;
+    height: 100%;
+  }
+
+  .socialHomePage__noConnection {
+    margin: 0;
+  }
+}

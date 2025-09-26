@@ -1,0 +1,49 @@
+.linkPreviewSkeleton {
+  border: 1px solid var(--asc-color-base-shade4);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.linkPreviewSkeleton__bottom {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.linkPreviewSkeleton__bar1 {
+  height: 0.7109rem;
+  width: 14.9458rem;
+  border-radius: 1.0156rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.linkPreviewSkeleton__bar2 {
+  width: 11.0126rem;
+  height: 0.8203rem;
+  border-radius: 1.1719rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.linkPreviewSkeleton__image {
+  height: 11rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.linkPreviewSkeleton__animation {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}

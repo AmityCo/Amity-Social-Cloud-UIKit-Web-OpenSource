@@ -1,0 +1,19 @@
+.noInternetConnection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.noInternetConnection__icon {
+  width: 3.75rem;
+  height: 2.8125rem;
+  color: var(--asc-color-secondary-shade4);
+}
+
+.noInternetConnection__text {
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-shade3);
+}

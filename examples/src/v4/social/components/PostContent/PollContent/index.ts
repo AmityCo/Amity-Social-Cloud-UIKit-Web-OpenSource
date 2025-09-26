@@ -1,0 +1,1 @@
+export { PollContent } from './PollContent';

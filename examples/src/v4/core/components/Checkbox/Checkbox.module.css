@@ -1,0 +1,98 @@
+/* Checkbox.module.css - Updated with Figma design system styles */
+
+.container {
+  display: inline-flex; /* Aligns the hidden input and custom box visually */
+  align-items: center;
+  position: relative; /* For positioning the custom box */
+}
+
+.checkbox {
+  /* Hide the default browser checkbox */
+  appearance: none;
+  position: absolute; /* Keep it interactive but invisible */
+  opacity: 0;
+  width: 20px; /* Make it clickable in the area of the custom box */
+  height: 20px;
+  cursor: pointer;
+  z-index: 1; /* Ensure it's above the custom visual */
+}
+
+.checkbox:disabled {
+  cursor: not-allowed;
+}
+
+.customBox {
+  position: relative; /* Allows pseudo-elements for checkmark */
+  width: 20px; /* Size of the custom checkbox */
+  height: 20px;
+  border: 1px solid #909090; /* Default border color from design system */
+  background-color: #fff; /* Default background from design system */
+  border-radius: 4px; /* Radius from design system */
+  box-sizing: border-box;
+  transition: all 0.2s ease; /* Smooth transitions */
+}
+
+/* Checked state */
+.checkbox:checked + .customBox,
+.customBox.checked {
+  background-color: #bed62f; /* Active surface color from design system */
+  border-color: #bed62f; /* Active border color from design system */
+}
+
+/* Disabled state */
+.customBox.disabled {
+  background-color: #f2f2f2; /* Disabled surface color from design system */
+  border-color: #d3d3d3; /* Disabled border color from design system */
+}
+
+/* Disabled checked state */
+.customBox.disabled.checked {
+  background-color: #909090; /* Global disabled surface color */
+  border-color: #909090; /* Global disabled surface color */
+}
+
+/* Error state */
+.customBox.error {
+  border-color: #e32219; /* Error border color from design system */
+  background-color: #fff; /* Error surface color from design system */
+}
+
+/* Error checked state */
+.customBox.error.checked {
+  background-color: #e32219; /* Error border color used as background */
+  border-color: #e32219; /* Error border color from design system */
+}
+
+/* Checkmark when checked */
+.checkbox:checked + .customBox::after,
+.customBox.checked::after {
+  content: '';
+  position: absolute;
+  left: 6px; /* Positioned for 20px box */
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid #fff; /* Icon active color from design system */
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Focus style for accessibility */
+.checkbox:focus + .customBox {
+  box-shadow: 0 0 0 2px rgb(190 214 47 / 30%); /* Focus ring with active color */
+  outline: none;
+}
+
+/* Focus style for error state */
+.checkbox:focus + .customBox.error {
+  box-shadow: 0 0 0 2px rgb(227 34 25 / 30%); /* Focus ring with error color */
+}
+
+/* Hover states (only when not disabled) */
+.checkbox:not(:disabled):hover + .customBox:not(.disabled) {
+  border-color: #bed62f; /* Hover with active color */
+}
+
+.checkbox:not(:disabled):hover + .customBox.error:not(.disabled) {
+  border-color: #e32219; /* Keep error color on hover */
+}

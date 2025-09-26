@@ -1,0 +1,199 @@
+.storyPreview_title {
+  color: var(--asc-color-white);
+}
+
+.contentWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.storyPreviewWrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.storyPreview_description {
+  color: var(--asc-color-white);
+}
+
+.storyPreviewContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.headerContainer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0 0.625rem;
+}
+
+.progressBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.125rem;
+  border-radius: 0.25rem;
+  background-color: rgb(255 255 255 / 30%);
+}
+
+.progressFill {
+  height: 100%;
+  background-color: white;
+  transition: width 0.1s linear;
+}
+
+.userInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.storyPreviewTitle {
+  color: white;
+}
+
+.nameContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.hyperLinkContainer {
+  position: absolute;
+  bottom: 2rem;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1rem 0.625rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.mediaContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarContainer {
+  width: 2rem;
+  height: 2rem;
+}
+
+.imageFit {
+  object-fit: contain;
+}
+
+.imageCover {
+  object-fit: cover;
+}
+
+.headerContent {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userInfoContent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.shadowOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 16%) 100%, rgb(255 255 255 / 0%) 55.05%);
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.skeleton {
+  background-color: #e0e0e0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.progressBar.skeleton {
+  height: 0.25rem;
+  width: 100%;
+}
+
+.avatarContainer.skeleton {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.storyPreviewTitle.skeleton {
+  width: 60%;
+  height: 1rem;
+  border-radius: 0.25rem;
+}
+
+.mediaContainer.skeleton {
+  width: 100%;
+  height: 100%;
+}
+
+.textSkeleton {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.nameSkeleton {
+  width: 80%;
+  height: 0.5rem;
+  background-color: #e0e0e0;
+  margin-bottom: 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.timeSkeleton {
+  width: 40%;
+  height: 0.5rem;
+  background-color: #e0e0e0;
+  border-radius: 0.25rem;
+}

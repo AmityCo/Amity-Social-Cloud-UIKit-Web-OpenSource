@@ -1,0 +1,1 @@
+export { GenericSearchResult } from './GenericSearchResult';

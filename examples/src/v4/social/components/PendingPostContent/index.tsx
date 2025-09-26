@@ -1,0 +1,1 @@
+export { PendingPostContent } from './PendingPostContent';

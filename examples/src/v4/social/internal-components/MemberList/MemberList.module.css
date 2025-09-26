@@ -1,0 +1,114 @@
+.memberList__searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem 0.75rem;
+}
+
+.memberList__searchInput {
+  border-radius: 0.5rem;
+  background-color: var(--asc-color-base-shade4);
+  width: 100%;
+  padding: 0.63rem 0.75rem 0.63rem 2.5rem;
+  font-size: 1rem;
+  color: var(--asc-color-base-default);
+  border: none;
+  outline: none;
+}
+
+.memberList__searchIcon {
+  left: 1.75rem;
+  width: 1.25rem;
+  position: absolute;
+  fill: var(--asc-color-base-shade2);
+}
+
+.memberList__searchIcon[data-search-value='true'] {
+  fill: var(--asc-color-base-default);
+}
+
+.memberList__clearSearchButton {
+  display: none;
+}
+
+.memberList__clearSearchButton[data-search-value='true'] {
+  display: block;
+  position: absolute;
+  right: 1.75rem;
+}
+
+.memberList__clearSearch {
+  fill: var(--asc-color-base-shade3);
+  width: 1.5rem;
+  height: 1rem;
+}
+
+.memberList__userSkeleton {
+  padding: 0.5rem 1rem;
+}
+
+.memberList__userSkeletonHeader {
+  display: flex;
+  align-items: center;
+}
+
+.memberList__userSkeletonAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade4);
+  margin-right: 0.75rem;
+}
+
+.memberList__userSkeletonUserInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.memberList__userSkeletonUsername {
+  width: 8.75rem;
+  height: 0.5rem;
+  background-color: var(--asc-color-base-shade4);
+  margin-bottom: 0.5rem;
+  border-radius: 0.75rem;
+}
+
+.memberList__userSkeletonSubtitle {
+  width: 6.75rem;
+  height: 0.5rem;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.75rem;
+}
+
+.memberList__userSkeletonAvatar,
+.memberList__userSkeletonUsername,
+.memberList__userSkeletonSubtitle {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (width >= 48em) {
+  .memberList {
+    border-radius: 0.5rem;
+    padding-bottom: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .memberList__searchWrap {
+    padding: 0.75rem 1rem;
+  }
+}

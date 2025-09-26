@@ -1,0 +1,19 @@
+.userSearchResult {
+  width: 100%;
+  display: flex;
+  min-height: 20rem;
+  padding: 0.5rem 0;
+  overflow: hidden scroll;
+  align-items: start;
+  scrollbar-width: none;
+  flex-direction: column;
+  -ms-overflow-style: none;
+  background-color: var(--asc-color-background-default);
+}
+
+.userSearchResult__noInternetConnectionHoc {
+  height: calc(100vh - 10rem);
+  width: 100%;
+  display: flex;
+  align-items: center;
+}

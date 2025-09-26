@@ -1,0 +1,1 @@
+export { ExploreTrendingTitle } from './ExploreTrendingTitle';

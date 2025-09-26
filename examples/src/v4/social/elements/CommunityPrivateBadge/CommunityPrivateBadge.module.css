@@ -1,0 +1,7 @@
+.communityPrivateBadge {
+  height: 1rem;
+  width: 1.25rem;
+  min-width: 1.25rem;
+  margin-top: -0.125rem;
+  fill: var(--asc-color-base-default);
+}

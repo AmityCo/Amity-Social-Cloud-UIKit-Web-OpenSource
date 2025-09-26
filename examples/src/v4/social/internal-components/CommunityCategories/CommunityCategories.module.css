@@ -1,0 +1,13 @@
+.communityCategories {
+  gap: 0.25rem;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.communityCategories__categoryChip {
+  width: unset;
+}
+
+.communityCategories__categoryOverflow {
+  width: min-content;
+}

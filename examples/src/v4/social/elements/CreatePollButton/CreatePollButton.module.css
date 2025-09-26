@@ -1,0 +1,31 @@
+.createPollButton {
+  display: flex;
+  padding: 0.75rem 0;
+  width: 100%;
+  cursor: pointer;
+  align-items: center;
+}
+
+.createPollButton__text {
+  margin-left: 0.5rem;
+  color: var(--asc-color-base-default);
+}
+
+.createPollButton__icon {
+  color: var(--asc-color-base-default);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+@media (width >= 48em) {
+  .createPollButton__text {
+    margin-top: 0.1rem;
+    margin-left: 0.5rem;
+  }
+
+  .createPollButton__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.25rem;
+  }
+}

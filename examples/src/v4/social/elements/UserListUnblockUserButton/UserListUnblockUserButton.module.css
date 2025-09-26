@@ -1,0 +1,10 @@
+.userListUnblockUserButton {
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.25rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--asc-color-secondary-shade3);
+}
+
+.userListUnblockUserButton__text {
+  color: var(--asc-color-secondary-default);
+}

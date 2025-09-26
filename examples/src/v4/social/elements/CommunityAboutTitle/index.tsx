@@ -1,0 +1,1 @@
+export { CommunityAboutTitle } from './CommunityAboutTitle';

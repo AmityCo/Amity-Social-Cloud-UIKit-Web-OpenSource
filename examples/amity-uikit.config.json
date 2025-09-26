@@ -1,0 +1,407 @@
+{
+  "preferred_theme": "light",
+  "theme": {
+    "light": {
+      "primary_color": "#BED62F",
+      "base_inverse_color": "#222222",
+      "base_color": "#222222",
+      "dark_shade1_color": "#00653B",
+      "dark_shade2_color": "#7FB19C",
+      "dark_shade3_color": "#CCE0D8",
+      "light_shade1_color": "#BED62F",
+      "light_shade2_color": "#DEEA96",
+      "light_shade3_color": "#F2F7D5",
+      "medium_shade1_color": "#0B7D3E",
+      "medium_shade2_color": "#84BD9E",
+      "medium_shade3_color": "#D9F5E8",
+      "medium_shade4_color": "#E6F2EB",
+      "registration_shade1_color": "#FF8E0D",
+      "registration_shade2_color": "#FFC685",
+      "registration_shade3_color": "#FFE8CF",
+      "bonus_shade1_color": "#722DAD",
+      "bonus_shade2_color": "#E3D5EF",
+      "bagde_jackpot_color": "#40CD8C",
+      "bagde_promo_color": "#FFBF00",
+      "bagde_info_color": "#67AAF9",
+      "bagde_bonus_color": "#722DAD",
+      "bagde_new_color": "#D63480",
+      "icon_default_color": "#222222",
+      "neutral_default1_color": "#222222",
+      "neutral_default2_color": "#4E4E4E",
+      "neutral_default3_color": "#909090",
+      "neutral_default4_color": "#D3D3D3",
+      "neutral_default5_color": "#F2F2F2",
+      "neutral_default6_color": "#F8F8F8",
+      "neutral_default7_color": "#FCFCFC",
+      "neutral_default8_color": "#FFFFFF",
+      "neutral_alt1_color": "#262C2F",
+      "neutral_alt2_color": "#2F3C43",
+      "neutral_alt3_color": "#435864",
+      "neutral_alt4_color": "#969DA0",
+      "neutral_alt5_color": "#D5D8D9",
+      "neutral_alpha1_color": "rgba(34, 34, 34, 0.8)",
+      "neutral_alpha2_color": "rgba(242, 242, 242, 0.8)",
+      "neutral_alpha3_color": "rgba(0,0,0 , 0.12)",
+      "neutral_alpha4_color": "rgba(255, 255, 255, 0 )",
+      "success_shade1_color": "#0B7D3E",
+      "success_shade2_color": "#84BD9E",
+      "success_shade3_color": "#D9F5E8",
+      "success_shade4_color": "#E6F2EB",
+      "info_shade1_color": "#0B6DBE",
+      "info_shade2_color": "#67AAF9",
+      "info_shade3_color": "#B2D4FB",
+      "info_shade4_color": "#E1EEFE",
+      "warning_shade1_color": "#504E47",
+      "warning_shade2_color": "#FFBF00",
+      "warning_shade3_color": "#FFDE7F",
+      "warning_shade4_color": "#FFF2CC",
+      "error_shade1_color": "#990707",
+      "error_shade2_color": "#E32219",
+      "error_shade3_color": "#F0908B",
+      "error_shade4_color": "#F9D3D1",
+      "background_color": "#FFFFFF"
+    },
+    "dark": {
+      "primary_color": "#BED62F",
+      "base_inverse_color": "#222222",
+      "base_color": "#222222",
+      "dark_shade1_color": "#00653B",
+      "dark_shade2_color": "#7FB19C",
+      "dark_shade3_color": "#CCE0D8",
+      "light_shade1_color": "#BED62F",
+      "light_shade2_color": "#DEEA96",
+      "light_shade3_color": "#F2F7D5",
+      "medium_shade1_color": "#0B7D3E",
+      "medium_shade2_color": "#84BD9E",
+      "medium_shade3_color": "#D9F5E8",
+      "medium_shade4_color": "#E6F2EB",
+      "registration_shade1_color": "#FF8E0D",
+      "registration_shade2_color": "#FFC685",
+      "registration_shade3_color": "#FFE8CF",
+      "bonus_shade1_color": "#722DAD",
+      "bonus_shade2_color": "#E3D5EF",
+      "bagde_jackpot_color": "#40CD8C",
+      "bagde_promo_color": "#FFBF00",
+      "bagde_info_color": "#67AAF9",
+      "bagde_bonus_color": "#722DAD",
+      "bagde_new_color": "#D63480",
+      "icon_default_color": "#222222",
+      "neutral_default1_color": "#222222",
+      "neutral_default2_color": "#4E4E4E",
+      "neutral_default3_color": "#909090",
+      "neutral_default4_color": "#D3D3D3",
+      "neutral_default5_color": "#F2F2F2",
+      "neutral_default6_color": "#F8F8F8",
+      "neutral_default7_color": "#FCFCFC",
+      "neutral_default8_color": "#FFFFFF",
+      "neutral_alt1_color": "#262C2F",
+      "neutral_alt2_color": "#2F3C43",
+      "neutral_alt3_color": "#435864",
+      "neutral_alt4_color": "#969DA0",
+      "neutral_alt5_color": "#D5D8D9",
+      "neutral_alpha1_color": "rgba(34, 34, 34, 0.8)",
+      "neutral_alpha2_color": "rgba(242, 242, 242, 0.8)",
+      "neutral_alpha3_color": "rgba(0,0,0 , 0.12)",
+      "neutral_alpha4_color": "rgba(255, 255, 255, 0 )",
+      "success_shade1_color": "#0B7D3E",
+      "success_shade2_color": "#84BD9E",
+      "success_shade3_color": "#D9F5E8",
+      "success_shade4_color": "#E6F2EB",
+      "info_shade1_color": "#0B6DBE",
+      "info_shade2_color": "#67AAF9",
+      "info_shade3_color": "#B2D4FB",
+      "info_shade4_color": "#E1EEFE",
+      "warning_shade1_color": "#504E47",
+      "warning_shade2_color": "#FFBF00",
+      "warning_shade3_color": "#FFDE7F",
+      "warning_shade4_color": "#FFF2CC",
+      "error_shade1_color": "#990707",
+      "error_shade2_color": "#E32219",
+      "error_shade3_color": "#F0908B",
+      "error_shade4_color": "#F9D3D1",
+      "background_color": "#FFFFFF"
+    }
+  },
+  "excludes": [],
+  "message_reactions": [
+    { "name": "heart", "image": "message_reaction_heart.png" },
+    { "name": "like", "image": "message_reaction_like.png" },
+    { "name": "fire", "image": "message_reaction_fire.png" },
+    { "name": "grinning", "image": "message_reaction_grinning.png" },
+    { "name": "sad", "image": "message_reaction_sad.png" }
+  ],
+  "customizations": {
+    "select_target_page/*/*": {
+      "theme": {},
+      "title": "Share to"
+    },
+    "select_target_page/*/back_button": {
+      "theme": {},
+      "back_icon": "back.png"
+    },
+
+    "camera_page/*/*": {
+      "theme": {},
+      "resolution": "720p"
+    },
+    "camera_page/*/close_button": {
+      "theme": {},
+      "close_icon": "close.png"
+    },
+    "create_story_page/*/*": {
+      "theme": {}
+    },
+    "create_story_page/*/back_button": {
+      "theme": {},
+      "back_icon": "back.png",
+      "background_color": ""
+    },
+    "create_story_page/*/aspect_ratio_button": {
+      "theme": {},
+      "aspect_ratio_icon": "aspect_ratio.png",
+      "background_color": ""
+    },
+    "create_story_page/*/story_hyperlink_button": {
+      "theme": {},
+      "hyperlink_button_icon": "hyperlink_button.png",
+      "background_color": ""
+    },
+    "create_story_page/*/hyper_link": {
+      "theme": {},
+      "hyper_link_icon": "hyper_link.png",
+      "background_color": ""
+    },
+    "create_story_page/*/share_story_button": {
+      "theme": {},
+      "share_icon": "share_story_button.png",
+      "background_color": "",
+      "hide_avatar": false
+    },
+    "story_page/*/*": {
+      "theme": {}
+    },
+    "story_page/*/progress_bar": {
+      "theme": {},
+      "progress_color": "",
+      "background_color": ""
+    },
+    "story_page/*/overflow_menu": {
+      "theme": {},
+      "overflow_menu_icon": "threeDot.png"
+    },
+    "story_page/*/close_button": {
+      "theme": {},
+      "close_icon": "close.png"
+    },
+    "story_page/*/story_impression_button": {
+      "theme": {},
+      "impression_icon": "impressionIcon.png"
+    },
+    "story_page/*/story_comment_button": {
+      "theme": {},
+      "comment_icon": "comment.png",
+      "background_color": ""
+    },
+    "story_page/*/story_reaction_button": {
+      "theme": {},
+      "reaction_icon": "like.png",
+      "background_color": ""
+    },
+    "story_page/*/create_new_story_button": {
+      "theme": {},
+      "create_new_story_icon": "plus.png",
+      "background_color": "#ffffff"
+    },
+    "story_page/*/speaker_button": {
+      "theme": {},
+      "mute_icon": "mute.png",
+      "unmute_icon": "unmute.png",
+      "background_color": ""
+    },
+
+    "*/edit_comment_component/*": {
+      "theme": {}
+    },
+    "*/edit_comment_component/cancel_button": {
+      "theme": {},
+      "cancel_icon": "",
+      "cancel_button_text": "cancel",
+      "background_color": ""
+    },
+    "*/edit_comment_component/save_button": {
+      "theme": {},
+      "save_icon": "",
+      "save_button_text": "Save",
+      "background_color": ""
+    },
+
+    "*/hyper_link_config_component/*": {
+      "theme": {}
+    },
+    "*/hyper_link_config_component/done_button": {
+      "theme": {},
+      "done_icon": "",
+      "done_button_text": "Done",
+      "background_color": ""
+    },
+    "*/hyper_link_config_component/cancel_button": {
+      "theme": {},
+      "cancel_icon": "",
+      "cancel_button_text": "Cancel"
+    },
+    "*/comment_tray_component/*": {
+      "theme": {}
+    },
+    "*/story_tab_component/*": {
+      "theme": {}
+    },
+    "*/story_tab_component/story_ring": {
+      "theme": {},
+      "progress_color": ["#339AF9", "#78FA58"],
+      "background_color": ""
+    },
+    "*/story_tab_component/create_new_story_button": {
+      "theme": {},
+      "create_new_story_icon": "plus.png",
+      "background_color": ""
+    },
+
+    "*/*/close_button": {
+      "theme": {},
+      "close_icon": "close.png"
+    },
+    "live_chat/*/*": {
+      "theme": {
+        "light": {
+          "primary_color": "#BED62F",
+          "base_inverse_color": "#222222",
+          "base_color": "#222222",
+          "dark_shade1_color": "#00653B",
+          "dark_shade2_color": "#7FB19C",
+          "dark_shade3_color": "#CCE0D8",
+          "light_shade1_color": "#BED62F",
+          "light_shade2_color": "#DEEA96",
+          "light_shade3_color": "#F2F7D5",
+          "medium_shade1_color": "#0B7D3E",
+          "medium_shade2_color": "#84BD9E",
+          "medium_shade3_color": "#D9F5E8",
+          "medium_shade4_color": "#E6F2EB",
+          "registration_shade1_color": "#FF8E0D",
+          "registration_shade2_color": "#FFC685",
+          "registration_shade3_color": "#FFE8CF",
+          "bonus_shade1_color": "#722DAD",
+          "bonus_shade2_color": "#E3D5EF",
+          "bagde_jackpot_color": "#40CD8C",
+          "bagde_promo_color": "#FFBF00",
+          "bagde_info_color": "#67AAF9",
+          "bagde_bonus_color": "#722DAD",
+          "bagde_new_color": "#D63480",
+          "icon_default_color": "#222222",
+          "neutral_default1_color": "#222222",
+          "neutral_default2_color": "#4E4E4E",
+          "neutral_default3_color": "#909090",
+          "neutral_default4_color": "#D3D3D3",
+          "neutral_default5_color": "#F2F2F2",
+          "neutral_default6_color": "#F8F8F8",
+          "neutral_default7_color": "#FCFCFC",
+          "neutral_default8_color": "#FFFFFF",
+          "neutral_alt1_color": "#262C2F",
+          "neutral_alt2_color": "#2F3C43",
+          "neutral_alt3_color": "#435864",
+          "neutral_alt4_color": "#969DA0",
+          "neutral_alt5_color": "#D5D8D9",
+          "neutral_alpha1_color": "rgba(34, 34, 34, 0.8)",
+          "neutral_alpha2_color": "rgba(242, 242, 242, 0.8)",
+          "neutral_alpha3_color": "rgba(0,0,0 , 0.12)",
+          "neutral_alpha4_color": "rgba(255, 255, 255, 0 )",
+          "success_shade1_color": "#0B7D3E",
+          "success_shade2_color": "#84BD9E",
+          "success_shade3_color": "#D9F5E8",
+          "success_shade4_color": "#E6F2EB",
+          "info_shade1_color": "#0B6DBE",
+          "info_shade2_color": "#67AAF9",
+          "info_shade3_color": "#B2D4FB",
+          "info_shade4_color": "#E1EEFE",
+          "warning_shade1_color": "#504E47",
+          "warning_shade2_color": "#FFBF00",
+          "warning_shade3_color": "#FFDE7F",
+          "warning_shade4_color": "#FFF2CC",
+          "error_shade1_color": "#990707",
+          "error_shade2_color": "#E32219",
+          "error_shade3_color": "#F0908B",
+          "error_shade4_color": "#F9D3D1",
+          "background_color": "#FFFFFF"
+        },
+        "dark": {
+          "primary_color": "#BED62F",
+          "base_inverse_color": "#222222",
+          "base_color": "#222222",
+          "dark_shade1_color": "#00653B",
+          "dark_shade2_color": "#7FB19C",
+          "dark_shade3_color": "#CCE0D8",
+          "light_shade1_color": "#BED62F",
+          "light_shade2_color": "#DEEA96",
+          "light_shade3_color": "#F2F7D5",
+          "medium_shade1_color": "#0B7D3E",
+          "medium_shade2_color": "#84BD9E",
+          "medium_shade3_color": "#D9F5E8",
+          "medium_shade4_color": "#E6F2EB",
+          "registration_shade1_color": "#FF8E0D",
+          "registration_shade2_color": "#FFC685",
+          "registration_shade3_color": "#FFE8CF",
+          "bonus_shade1_color": "#722DAD",
+          "bonus_shade2_color": "#E3D5EF",
+          "bagde_jackpot_color": "#40CD8C",
+          "bagde_promo_color": "#FFBF00",
+          "bagde_info_color": "#67AAF9",
+          "bagde_bonus_color": "#722DAD",
+          "bagde_new_color": "#D63480",
+          "icon_default_color": "#222222",
+          "neutral_default1_color": "#222222",
+          "neutral_default2_color": "#4E4E4E",
+          "neutral_default3_color": "#909090",
+          "neutral_default4_color": "#D3D3D3",
+          "neutral_default5_color": "#F2F2F2",
+          "neutral_default6_color": "#F8F8F8",
+          "neutral_default7_color": "#FCFCFC",
+          "neutral_default8_color": "#FFFFFF",
+          "neutral_alt1_color": "#262C2F",
+          "neutral_alt2_color": "#2F3C43",
+          "neutral_alt3_color": "#435864",
+          "neutral_alt4_color": "#969DA0",
+          "neutral_alt5_color": "#D5D8D9",
+          "neutral_alpha1_color": "rgba(34, 34, 34, 0.8)",
+          "neutral_alpha2_color": "rgba(242, 242, 242, 0.8)",
+          "neutral_alpha3_color": "rgba(0,0,0 , 0.12)",
+          "neutral_alpha4_color": "rgba(255, 255, 255, 0 )",
+          "success_shade1_color": "#0B7D3E",
+          "success_shade2_color": "#84BD9E",
+          "success_shade3_color": "#D9F5E8",
+          "success_shade4_color": "#E6F2EB",
+          "info_shade1_color": "#0B6DBE",
+          "info_shade2_color": "#67AAF9",
+          "info_shade3_color": "#B2D4FB",
+          "info_shade4_color": "#E1EEFE",
+          "warning_shade1_color": "#504E47",
+          "warning_shade2_color": "#FFBF00",
+          "warning_shade3_color": "#FFDE7F",
+          "warning_shade4_color": "#FFF2CC",
+          "error_shade1_color": "#990707",
+          "error_shade2_color": "#E32219",
+          "error_shade3_color": "#F0908B",
+          "error_shade4_color": "#F9D3D1",
+          "background_color": "#FFFFFF"
+        }
+      }
+    },
+    "live_chat/chat_header/*": {},
+    "live_chat/message_list/*": {},
+    "live_chat/message_composer/*": {
+      "message_limit": 200,
+      "placeholder_text": "Write a message"
+    },
+    "live_chat/message_list/message_quick_reaction": {
+      "reaction": "heart"
+    }
+  }
+}

@@ -1,0 +1,204 @@
+.communityInviteMemberPage {
+  height: 100vh;
+  overflow: scroll;
+  position: relative;
+}
+
+.communityInviteMemberPage__topBarSticky {
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  position: sticky;
+  background-color: var(--asc-color-background-default);
+}
+
+.communityInviteMemberPage__navbar {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.communityInviteMemberPage__title {
+  font-size: 1.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.communityInviteMemberPage__emptySpace {
+  width: 1.5rem;
+}
+
+.communityInviteMemberPage__search {
+  padding: 0.75rem 1rem;
+}
+
+.communityInviteMemberPage__selectedUsers {
+  gap: 0.5rem;
+  display: flex;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 1rem 1rem 1.25rem;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.communityInviteMemberPage__selectedUsers::-webkit-scrollbar {
+  display: none;
+}
+
+.communityInviteMemberPage__selectedUser {
+  display: block;
+  text-align: center;
+}
+
+.communityInviteMemberPage__selectedUserAvatar {
+  display: flex;
+  position: relative;
+  justify-content: center;
+}
+
+.communityInviteMemberPage .communityInviteMemberPage__selectedUserAvatarImage {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.communityInviteMemberPage__removeUserButton {
+  top: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  right: 0.5rem;
+  cursor: pointer;
+  background: none;
+  position: absolute;
+  display: inline-block;
+}
+
+.communityInviteMemberPage__removeUserIcon {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  fill: var(--asc-color-background-transparent-black);
+}
+
+.communityInviteMemberPage__selectedUserDisplayName {
+  width: 4rem;
+  overflow: hidden;
+  align-items: center;
+  margin-top: 0.25rem;
+  white-space: nowrap;
+  justify-self: center;
+  display: inline-block;
+  text-overflow: ellipsis;
+  color: var(--asc-color-base-default);
+}
+
+.communityInviteMemberPage__memberList {
+  padding: 1rem;
+}
+
+.communityInviteMemberPage__state {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.communityInviteMemberPage__state[data-selected='true'] {
+  height: 50vh;
+}
+
+.communityInviteMemberPage__checkboxGroup {
+  gap: 1rem;
+}
+
+.communityInviteMemberPage__checkboxLabel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.communityInviteMemberPage__memberAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 0.25rem;
+}
+
+.communityInviteMemberPage__memberName {
+  max-width: 100%;
+  overflow: hidden;
+  padding: 0 0.5rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--asc-color-base-default);
+}
+
+.communityInviteMemberPage__inviteMember {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  transition: all 0.1s ease-in-out;
+  width: 100%;
+  display: flex;
+  padding: 1rem;
+  position: fixed;
+  margin-top: 1.5rem;
+  justify-content: center;
+  border-top: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-default);
+}
+
+@media only screen and (width >= 48em) {
+  .communityInviteMemberPage {
+    height: auto;
+    width: 30rem;
+    border-radius: 0.75rem;
+  }
+
+  .communityInviteMemberPage__navbar {
+    flex-direction: row-reverse;
+    padding: 1.25rem 1.5rem 1rem;
+  }
+
+  .communityInviteMemberPage__closeButton {
+    fill: var(--asc-color-base-shade3);
+  }
+
+  .communityInviteMemberPage__emptySpace {
+    display: none;
+  }
+
+  .communityInviteMemberPage__selectedUsers {
+    margin-bottom: 0;
+  }
+
+  .communityInviteMemberPage__memberList {
+    max-height: 50vh;
+    min-height: 50vh;
+    overflow-y: scroll;
+    padding-bottom: 5rem;
+  }
+
+  .communityInviteMemberPage__state {
+    height: 45vh;
+  }
+
+  .communityInviteMemberPage__state[data-selected='true'] {
+    height: 30vh;
+  }
+
+  .communityInviteMemberPage__memberList[data-has-selected='true'] {
+    min-height: calc(50vh - 6.5rem);
+    max-height: calc(50vh - 6.5rem);
+  }
+
+  .communityInviteMemberPage__inviteMember {
+    margin-top: 0;
+    position: static;
+  }
+}

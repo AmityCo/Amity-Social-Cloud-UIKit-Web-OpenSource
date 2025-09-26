@@ -1,0 +1,22 @@
+.userVideoFeedTabButton {
+  justify-items: center;
+  width: 100%;
+  padding: 1rem 0;
+  border-bottom: 0.125rem solid transparent;
+  transition: border-color 0.3s;
+}
+
+.userVideoFeedTabButton[data-active='true'] {
+  border-bottom: 0.125rem solid var(--asc-color-primary-default);
+}
+
+.userVideoFeedTabButton__icon {
+  fill: var(--asc-color-secondary-shade2);
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: fill 0.3s;
+}
+
+.userVideoFeedTabButton__icon[data-active='true'] {
+  fill: var(--asc-color-base-default);
+}

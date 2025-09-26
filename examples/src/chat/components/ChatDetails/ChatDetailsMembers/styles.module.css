@@ -1,0 +1,72 @@
+.chatMembersContainer {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
+}
+
+.membersReturn {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 100%;
+  height: 52px;
+  padding-left: 20px;
+  color: var(--color-neutral-shade2);
+  border-bottom: 1px solid #e3e4e8;
+  cursor: pointer;
+}
+
+.membersReturn:hover {
+  color: var(--color-neutral-main);
+}
+
+.membersArrowLeft {
+  width: 18px;
+  height: 14px;
+}
+
+.membersReturnTitle {
+  padding-left: 8px;
+
+  /* theme.typography.body */
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 24px 0 20px;
+  border-bottom: 1px solid #f7f7f8;
+}
+
+.memberItemInfo {
+  padding-left: 12px;
+
+  /* theme.typography.body */
+  color: var(--color-neutral-main);
+}
+
+.clickableMenuItem {
+  display: flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 24px 0 20px;
+  border-bottom: 1px solid #f7f7f8;
+  cursor: pointer;
+}
+
+.clickableMenuItem:hover {
+  background-color: #f7f7f8;
+}
+
+.iconWrapper {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconWrapper svg {
+  font-size: 20px;
+}

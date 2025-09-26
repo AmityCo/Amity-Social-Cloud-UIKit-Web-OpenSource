@@ -1,0 +1,91 @@
+.blockedUserPage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.blockedUserPage__container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.blockedUserPage__topBar {
+  display: flex;
+  align-items: center;
+  height: 3.625rem;
+  padding-inline: 0.75rem 1rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.blockedUserPage__content {
+  margin-top: 3.625rem;
+  padding: 1rem;
+}
+
+.blockedUserPage__topBar__text {
+  width: 100%;
+  color: var(--asc-color-base-default);
+}
+
+.blockedUserPage__emptyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.blockedUserPage__emptyContent__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: var(--asc-color-secondary-shade4);
+}
+
+.blockedUserPage__skeletionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.blockedUserPage__blockedList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.blockedUserPage__intersectionNode {
+  height: 1px;
+  width: 100%;
+}
+
+@media (width >= 48em) {
+  .blockedUserPage {
+    background-color: transparent;
+  }
+
+  .blockedUserPage__topBar {
+    background-color: var(--asc-color-background-default);
+    position: static;
+    border: 1px solid var(--asc-color-base-shade4);
+    margin-bottom: 0.75rem;
+    border-radius: 0.5rem;
+  }
+
+  .blockedUserPage__content {
+    background-color: var(--asc-color-background-default);
+    margin-top: 0;
+    border: 1px solid var(--asc-color-base-shade4);
+    border-radius: 0.5rem;
+  }
+
+  .blockedUserPage__emptyContent {
+    height: auto;
+  }
+}

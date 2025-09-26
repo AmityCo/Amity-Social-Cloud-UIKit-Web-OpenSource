@@ -1,0 +1,16 @@
+.aspectRatioButton {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(from var(--asc-color-black) r g b / 50%) !important;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+.aspectRatioButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-white);
+}

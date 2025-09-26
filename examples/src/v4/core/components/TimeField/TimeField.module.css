@@ -1,0 +1,37 @@
+.timeField__container {
+  padding: 0.7rem 0;
+}
+
+.timeField__wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timeField__label {
+  color: var(--asc-color-base-default);
+  font-size: 1rem;
+  line-height: 1.375rem;
+  text-align: right;
+}
+
+.timeField__dateInput {
+  display: flex;
+  padding: 0.38rem 0.69rem;
+  border-radius: 0.25rem;
+  background-color: var(--asc-color-base-shade4);
+  outline: none;
+  text-transform: uppercase;
+}
+
+.timeField__dateSegment:focus {
+  border: 1px solid var(--asc-color-primary-default);
+}
+
+.timeField__validateText {
+  display: flex;
+  justify-content: end;
+  color: var(--asc-color-alert-default);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}

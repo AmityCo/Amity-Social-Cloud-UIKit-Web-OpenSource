@@ -1,0 +1,60 @@
+.communityMembershipPage {
+  padding-bottom: 1rem;
+}
+
+.communityMembershipPage__topBar {
+  display: flex;
+  padding: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.communityMembershipPage__title {
+  color: var(--asc-color-base-default);
+}
+
+.communityMembershipPage__plusIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.communityMembershipPage__addMemberButton:focus-visible {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  outline: 2px solid var(--asc-color-primary-default);
+}
+
+.communityMembershipPage__tabList {
+  padding: 0 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.communityMembershipPage__tabLabel {
+  font-size: 1rem;
+}
+
+@media (width >= 48em) {
+  .communityMembershipPage__topBar {
+    padding: 1.25rem 1rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .communityMembershipPage__title {
+    font-size: 1.25rem;
+  }
+
+  .communityMembershipPage__tabList {
+    border-radius: 0 0 0.5rem 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+    border-width: 0 1px 1px;
+  }
+
+  .communityMembershipPage__tabLabel {
+    font-size: 0.875rem;
+  }
+}

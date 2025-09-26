@@ -1,0 +1,12 @@
+.createNewPostButton {
+  display: flex;
+  font-weight: var(--asc-text-font-weight-normal);
+  color: var(--asc-color-primary-default);
+}
+
+.createNewPostButton:disabled {
+  display: flex;
+  font-weight: var(--asc-text-font-weight-normal);
+  color: var(--asc-color-primary-shade2);
+  cursor: not-allowed;
+}

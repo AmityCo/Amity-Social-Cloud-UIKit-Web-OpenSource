@@ -1,0 +1,61 @@
+.switch {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  forced-color-adjust: none;
+  color: var(--asc-color-base-default);
+}
+
+.switch__indicator {
+  width: 3rem;
+  height: 1.75rem;
+  border-radius: 10rem;
+  transition: all 200ms;
+  background: var(--asc-color-base-shade3);
+}
+
+.switch__indicator::before {
+  content: '';
+  display: block;
+  width: 1.45rem;
+  height: 1.45rem;
+  margin: 0.145rem;
+  border-radius: 50%;
+  transition: all 200ms;
+  background: var(--asc-color-background-default);
+}
+
+.switch[data-focus-visible] .switch__indicator {
+  outline-offset: 2px;
+  outline: 2px solid var(--asc-color-primary-default);
+}
+
+.switch[data-disabled] .switch__indicator {
+  cursor: not-allowed;
+  background: var(--asc-color-base-shade4);
+}
+
+.switch[data-pressed] .switch__indicator {
+  background: var(--asc-color-base-shade2);
+}
+
+.switch[data-pressed] .switch__indicator::before {
+  background: var(--asc-color-background-default);
+}
+
+.switch[data-selected] .switch__indicator {
+  background: var(--asc-color-primary-default);
+}
+
+.switch[data-selected][data-disabled] .switch__indicator {
+  background: var(--asc-color-primary-shade3);
+}
+
+.switch[data-selected] .switch__indicator::before {
+  transform: translateX(86%);
+  background: var(--asc-color-background-default);
+}
+
+.switch[data-selected][data-pressed] .switch__indicator {
+  background: var(--asc-color-primary-background-pressed);
+}

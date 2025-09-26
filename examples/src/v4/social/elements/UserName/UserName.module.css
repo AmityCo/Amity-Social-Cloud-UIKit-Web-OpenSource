@@ -1,0 +1,5 @@
+.userName__displayName {
+  color: var(--asc-color-base-default);
+  display: flex;
+  align-items: center;
+}

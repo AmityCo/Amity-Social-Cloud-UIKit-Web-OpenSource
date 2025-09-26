@@ -1,0 +1,13 @@
+.createNewStoryButton {
+  all: unset;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 1rem;
+  height: 1rem;
+}
+
+.createNewStoryButton[data-disabled] {
+  cursor: not-allowed;
+}

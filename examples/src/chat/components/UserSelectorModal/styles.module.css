@@ -1,0 +1,37 @@
+.prependIconWrapper {
+  display: flex;
+  width: 28px;
+  justify-content: flex-end;
+  align-items: center;
+  color: rgb(153 153 153);
+}
+
+.prependIconWrapper svg {
+  font-size: 16px;
+}
+
+.wrapSearch {
+  padding: 8px;
+  border-style: solid;
+  border-color: rgb(228 228 228);
+  border-image: initial;
+  border-width: 1px 0;
+  margin-top: -1px;
+  background-color: rgb(249 249 249);
+}
+
+.wrapResult {
+  display: flex;
+  height: 350px;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.okButton {
+  margin-left: 15px;
+}

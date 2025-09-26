@@ -1,0 +1,115 @@
+.pollDurationOptions__container {
+  background-color: var(--asc-color-background-default);
+}
+
+.pollDurationOptions__calendar {
+  margin: 0 auto;
+  padding-bottom: 1rem;
+}
+
+.pollDurationOptions__optionsLabel {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.pollDurationOptions__pickDateTime {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.pollDurationOptions__angleRightIcon {
+  fill: var(--asc-color-base-shade1);
+  width: 1.5rem;
+  height: 1.25rem;
+}
+
+/* Radio custom */
+.pollDurationOptions__radio {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pollDurationOptions__customRadio {
+  display: inline-block;
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 2px solid var(--asc-color-base-shade3);
+  background-color: var(--asc-color-white);
+  transition: background 0.3s;
+  padding: 0.25rem;
+}
+
+.pollDurationOptions__hiddenRadio {
+  display: none; /* Hides the default radio button */
+}
+
+/* Create the checked indicator */
+.pollDurationOptions__radio:checked + .pollDurationOptions__customRadio::after {
+  content: '';
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: var(--asc-color-white);
+  border: 1px solid var(--asc-color-primary-default);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.2s ease-in-out;
+}
+
+.pollDurationOptions__hiddenRadio:checked + .pollDurationOptions__customRadio {
+  border-color: var(--asc-color-primary-default);
+  background-color: var(--asc-color-primary-default);
+}
+
+.pollDurationOptions__hiddenRadio:checked + .pollDurationOptions__customRadio::after {
+  opacity: 1;
+}
+
+/* Calendar container */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--asc-color-background-default);
+  padding: 1rem 0;
+}
+
+.calendarNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  padding: 0.75rem 0;
+}
+
+/* Navigation buttons */
+.calendar__navRight {
+  fill: var(--asc-color-primary-default);
+  width: 1.5rem;
+  height: 1.5rem;
+  transform: rotate(180deg);
+}
+
+.calendar__navLeft {
+  fill: var(--asc-color-primary-default);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (width >= 48em) {
+  .pollDurationOptions__container {
+    width: 31.625rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    background-color: var(--asc-color-background-default);
+    box-shadow: var(--asc-box-shadow-03);
+  }
+}

@@ -1,0 +1,111 @@
+.pendingPostsPage__container {
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.pendingPostsPage__topBar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--asc-color-background-default);
+}
+
+.pendingPostsPage__titleWrap {
+  display: flex;
+  align-items: center;
+  color: var(--asc-color-base-default);
+}
+
+.pendingPostsPage__emptyDiv {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.pendingPostsPage__title {
+  color: var(--asc-color-base-default);
+  margin-right: 0.25rem;
+}
+
+.pendingPostsPage__descWrap {
+  background-color: var(--asc-color-background-shade1);
+  padding: 0.75rem 1rem;
+}
+
+.pendingPostsPage__desc {
+  color: var(--asc-color-base-shade1);
+}
+
+.pendingPostsPage__noPendingPost {
+  gap: 1rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: calc(100vh - 10rem);
+  background-color: var(--asc-color-background-default);
+}
+
+.pendingPostsPage__fireworkIcon {
+  fill: var(--asc-color-secondary-shade4);
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
+.pendingPostsPage__noPendingPostText {
+  color: var(--asc-color-base-shade3);
+}
+
+.pendingPostsPage__pendingPostSkeletons {
+  display: grid;
+  margin-top: 0;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.pendingPostsPage__list {
+  gap: 0.5rem;
+  display: grid;
+  background-color: var(--asc-color-base-shade4);
+}
+
+@media (width >= 48em) {
+  .pendingPostsPage__container {
+    height: auto;
+  }
+
+  .pendingPostsPage__topBar {
+    border-radius: 0.5rem 0.5rem 0 0;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .pendingPostsPage__topBar[data-review='false'] {
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .pendingPostsPage__descWrap {
+    margin-bottom: 0.75rem;
+    border-radius: 0 0 0.5rem 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    border-width: 0 1px 1px;
+  }
+
+  .pendingPostsPage__pendingPostSkeletons {
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    background-color: transparent;
+  }
+
+  .pendingPostsPage__list {
+    gap: 0.75rem;
+    background-color: transparent;
+  }
+
+  .pendingPostsPage__noPendingPost {
+    height: auto;
+    padding: 3.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+  }
+}

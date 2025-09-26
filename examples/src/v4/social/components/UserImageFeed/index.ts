@@ -1,0 +1,1 @@
+export { UserImageFeed } from './UserImageFeed';

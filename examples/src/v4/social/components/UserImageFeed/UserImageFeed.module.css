@@ -1,0 +1,124 @@
+.userImageFeed__container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+
+.userImageFeed__loadingIndicator {
+  display: flex;
+  justify-content: center;
+  padding: var(--asc-spacing-m1) 0;
+}
+
+.userImageFeed__observerTarget {
+  height: var(--asc-spacing-m1);
+  width: 100%;
+}
+
+.userImageFeed__spinner {
+  animation: spin 1s linear infinite;
+}
+
+.userImageFeed__postContent {
+  padding-bottom: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.userImageFeed_postSkeleton__post {
+  height: 13rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+}
+
+.userImageFeed_postSkeleton__post__header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.userImageFeed_postSkeleton__post__avatar {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade4);
+  margin-right: 0.5rem;
+}
+
+.userImageFeed_postSkeleton__post__headerText_wrap {
+  padding: 0.25rem 0;
+  flex: 1;
+}
+
+.userImageFeed_postSkeleton__post__displayName {
+  height: 0.5rem;
+  width: 60%;
+  border-radius: 0.75rem;
+  margin-bottom: 0.5rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.userImageFeed_postSkeleton__post__timestamp {
+  height: 0.5rem;
+  width: 25%;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.userImageFeed_postSkeleton__post__content {
+  height: 0.5rem;
+  margin-bottom: 0.75rem;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.userImageFeed_postSkeleton__post__avatar,
+.userImageFeed_postSkeleton__post__displayName,
+.userImageFeed_postSkeleton__post__timestamp,
+.userImageFeed_postSkeleton__post__content {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.userImageFeed_postSkeleton__post__content:nth-child(1) {
+  width: 60%;
+}
+
+.userImageFeed_postSkeleton__post__content:nth-child(2) {
+  width: 25%;
+}
+
+.userImageFeed_postSkeleton__post__content:nth-child(3) {
+  width: 80%;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (width >=48em) {
+  .userImageFeed__container {
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+  }
+}

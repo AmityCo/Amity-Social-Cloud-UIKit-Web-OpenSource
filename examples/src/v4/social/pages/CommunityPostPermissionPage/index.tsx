@@ -1,0 +1,1 @@
+export { CommunityPostPermissionPage } from './CommunityPostPermissionPage';

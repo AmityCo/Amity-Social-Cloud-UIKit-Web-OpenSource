@@ -1,0 +1,25 @@
+.emptySearchResult {
+  gap: 0.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  height: calc(100vh - 10rem);
+}
+
+.emptySearchResult__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  fill: var(--asc-color-secondary-shade4);
+}
+
+.emptySearchResult__text {
+  color: var(--asc-color-base-shade3);
+}
+
+@media (width >= 48em) {
+  .emptySearchResult {
+    height: 18.5rem;
+  }
+}

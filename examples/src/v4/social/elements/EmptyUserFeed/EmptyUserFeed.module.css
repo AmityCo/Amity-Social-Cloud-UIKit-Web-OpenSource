@@ -1,0 +1,21 @@
+.emptyUserFeed {
+  text-align: center;
+  padding: 5rem 0.5rem;
+}
+
+.emptyUserFeed__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  fill: var(--asc-color-secondary-shade4);
+}
+
+.emptyUserFeed__text {
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+@media (width >= 48rem) {
+  .emptyUserFeed {
+    background-color: var(--asc-color-background-default);
+  }
+}

@@ -1,0 +1,82 @@
+.userPendingFollowRequestPage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.userPendingFollowRequestPage__container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.userPendingFollowRequestPage__topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3.625rem;
+  padding-inline: 0.75rem 1rem;
+  left: 0;
+  right: 0;
+  top: 0;
+}
+
+.userPendingFollowRequestPage__topBar__text {
+  color: var(--asc-color-base-default);
+  width: 100%;
+  text-align: center;
+}
+
+.userPendingFollowRequestPage__description {
+  color: var(--asc-color-base-shade1);
+  padding: 0.75rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--asc-color-background-shade1);
+}
+
+.userPendingFollowRequestPage__devider {
+  width: 100%;
+  background-color: var(--asc-color-base-shade4);
+  height: 0.5rem;
+}
+
+.userPendingFollowRequestPage__noPending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.userPendingFollowRequestPage__noPending__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: var(--asc-color-secondary-shade4);
+}
+
+@media (width >=48em) {
+  .userPendingFollowRequestPage {
+    background-color: transparent;
+  }
+
+  .userPendingFollowRequestPage__topBar {
+    background-color: var(--asc-color-background-default);
+    position: static;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border: 1px solid var(--asc-color-base-shade4);
+    border-bottom: none;
+  }
+
+  .userPendingFollowRequestPage__noPending {
+    height: auto;
+  }
+
+  .userPendingFollowRequestPage__description {
+    border: 1px solid var(--asc-color-base-shade4);
+    border-radius: 0 0 0.5rem 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+}

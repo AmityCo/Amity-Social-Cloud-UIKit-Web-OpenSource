@@ -1,0 +1,7 @@
+.postDeclineButton__button {
+  width: 100%;
+}
+
+.postDeclineButton__text {
+  color: var(--asc-color-base-default);
+}

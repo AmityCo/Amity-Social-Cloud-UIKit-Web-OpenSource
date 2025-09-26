@@ -1,0 +1,27 @@
+.emptyStateRing {
+  stroke: var(--asc-color-secondary-shade4);
+  stroke-width: 2;
+  fill: none;
+}
+
+.errorRing {
+  stroke: var(--asc-color-alert-default);
+}
+
+.uploadingProgressRing {
+  stroke-dasharray: 339;
+  stroke-dashoffset: 339;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  animation: upload-progress 2s linear infinite;
+}
+
+@keyframes upload-progress {
+  0% {
+    stroke-dashoffset: 339;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+  }
+}

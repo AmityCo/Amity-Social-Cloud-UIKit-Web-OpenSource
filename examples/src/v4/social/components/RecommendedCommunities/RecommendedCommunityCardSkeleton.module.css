@@ -1,0 +1,63 @@
+.recommendedCommunityCardSkeleton {
+  width: 15.625rem;
+  border-radius: 0.75rem;
+  height: calc(8.4rem + 5.7rem);
+  box-shadow: var(--asc-box-shadow-02);
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+.recommendedCommunityCardSkeleton__image {
+  height: 8.4rem;
+  width: 15.625rem;
+  border-radius: 0.75rem 0.75rem 0 0;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.recommendedCommunityCardSkeleton__content {
+  display: flex;
+  height: 5.7rem;
+  width: 15.625rem;
+  flex-direction: column;
+  padding: 1.06rem 1rem;
+}
+
+.recommendedCommunityCardSkeleton__contentBar1 {
+  height: 0.5rem;
+  width: 5.1875rem;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.recommendedCommunityCardSkeleton__contentBar2 {
+  height: 0.5rem;
+  margin-top: 1rem;
+  width: 8.9055rem;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.recommendedCommunityCardSkeleton__contentBar3 {
+  height: 0.5rem;
+  width: 11.25rem;
+  margin-top: 0.5rem;
+  border-radius: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.recommendedCommunityCardSkeleton__animation {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.6;
+  }
+}

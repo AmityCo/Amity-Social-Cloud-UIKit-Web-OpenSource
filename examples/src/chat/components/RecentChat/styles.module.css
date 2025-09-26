@@ -1,0 +1,44 @@
+.recentContainer {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.recentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  margin-bottom: 17px;
+  padding-left: 20px;
+  padding-right: 16px;
+}
+
+.recentHeaderLabel {
+  /* theme.typography.title */
+  line-height: 28px;
+  color: var(--color-neutral-shade1);
+}
+
+.infiniteScrollContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden auto;
+}
+
+.createNewChatIcon {
+  width: 24px !important;
+  cursor: pointer;
+  height: 18px;
+}
+
+/* Mobile styles */
+@media (width >= 48rem) {
+  .recentContainer {
+    border-right: 1px solid #909090;
+    border-radius: 16px 0 0 16px;
+  }
+}

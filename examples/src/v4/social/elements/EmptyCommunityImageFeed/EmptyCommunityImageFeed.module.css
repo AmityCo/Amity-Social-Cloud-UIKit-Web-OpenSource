@@ -1,0 +1,30 @@
+.emptyUserImageFeed__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  fill: var(--asc-color-secondary-shade4);
+}
+
+.emptyCommunityImageFeed__container {
+  margin: auto;
+  text-align: center;
+  padding: 5rem 0.5rem;
+  min-height: 15rem;
+}
+
+.emptyCommunityImageFeed__text {
+  margin-top: 0.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.emptyCommunityImageFeed__icon {
+  width: 3.75rem;
+  height: 2.8125rem;
+  fill: var(--asc-color-base-shade4);
+}
+
+@media (width >= 48em) {
+  .emptyCommunityImageFeed__container {
+    padding: 2.9rem;
+    min-height: auto;
+  }
+}

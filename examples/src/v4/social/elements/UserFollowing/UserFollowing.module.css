@@ -1,0 +1,14 @@
+.userFollowing__container {
+  display: flex;
+  align-items: center;
+}
+
+.userFollowing__count {
+  color: var(--asc-color-base-default);
+  margin-right: 0.25rem;
+}
+
+.userFollowing__label {
+  color: var(--asc-color-base-shade2);
+  text-decoration: underline;
+}

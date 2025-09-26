@@ -1,0 +1,88 @@
+.container {
+  padding: 16px;
+}
+
+.sectionHeading {
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.blockedUserSetting {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.blockedUserSetting__container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.blockedUserSetting__content {
+  margin-top: 3.625rem;
+  padding: 1rem;
+}
+
+.blockedUserSetting__emptyContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.blockedUserSetting__emptyContent__icon {
+  width: 3.75rem;
+  height: 3.75rem;
+  color: var(--asc-color-secondary-shade4);
+}
+
+.blockedUserSetting__skeletionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.blockedUserSetting__blockedList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.blockedUserSetting__intersectionNode {
+  height: 1px;
+  width: 100%;
+}
+
+@media (width >= 48em) {
+  .blockedUserSetting {
+    background-color: transparent;
+  }
+
+  .blockedUserSetting__content {
+    background-color: var(--asc-color-background-default);
+    margin-top: 0;
+    border-radius: 0.5rem;
+  }
+
+  .blockedUserSetting__emptyContent {
+    height: auto;
+  }
+}

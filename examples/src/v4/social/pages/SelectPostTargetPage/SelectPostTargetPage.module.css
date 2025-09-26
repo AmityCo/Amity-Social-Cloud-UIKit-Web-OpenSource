@@ -1,0 +1,97 @@
+.selectPostTargetPage {
+  height: 100vh;
+  max-width: 100vw;
+  background-color: var(--asc-color-background-default);
+  padding: var(--asc-spacing-none) var(--asc-spacing-m1);
+}
+
+.selectPostTargetPage__topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--asc-color-background-default);
+  padding: var(--asc-spacing-m1) var(--asc-spacing-none);
+}
+
+.selectPostTargetPage__timelineContainer {
+  width: 100%;
+  padding-top: 0;
+}
+
+.selectPostTargetPage__timeline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.selectPostTargetPage__line {
+  margin-top: var(--asc-spacing-s1);
+  border-top: 1px solid var(--asc-color-base-shade4);
+}
+
+.selectPostTargetPage__myCommunities {
+  display: flex;
+  text-align: left;
+  color: var(--asc-color-base-shade3);
+  padding: var(--asc-spacing-m1) var(--asc-spacing-none) var(--asc-spacing-s1);
+  font-size: var(--asc-text-font-size-md);
+  line-height: var(--asc-line-height-md);
+  letter-spacing: -0.015rem;
+}
+
+.selectPostTargetPage__communityAvatar {
+  margin-right: var(--asc-spacing-s1);
+}
+
+.selectPostTargetPage__communityName {
+  display: flex;
+  gap: 0.125rem;
+  align-items: center;
+  justify-content: start;
+}
+
+.selectPostTargetPage__closeButton {
+  display: flex;
+  fill: var(--asc-color-base-default);
+}
+
+.selectPostTargetPage__title {
+  color: var(--asc-color-base-default);
+}
+
+.selectPostTargetPage__displayName {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 1.25rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--asc-color-white);
+}
+
+@media (width >= 48em) {
+  .selectPostTargetPage {
+    width: 30rem;
+    overflow-y: auto;
+    padding: 0 1.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .selectPostTargetPage__timelineContainer {
+    padding-top: 0.5rem;
+  }
+
+  .selectPostTargetPage__topBar {
+    display: none;
+  }
+
+  .selectPostTargetPage__timeline[data-focus-visible] {
+    background-color: var(--asc-color-base-shade4);
+  }
+
+  .selectPostTargetPage__myCommunitiesList {
+    max-height: calc(100% - 24rem);
+    overflow-y: scroll;
+  }
+}

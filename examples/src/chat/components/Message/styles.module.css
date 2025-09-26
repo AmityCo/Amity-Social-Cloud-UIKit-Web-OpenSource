@@ -1,0 +1,188 @@
+.editingContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.editingInput {
+  height: 34px;
+  padding: 6px;
+  margin: 5px;
+  outline: none;
+  border: 1px solid #e3e4e8;
+  border-radius: 4px;
+}
+
+.saveIcon {
+  opacity: 0.7;
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+.closeIcon {
+  opacity: 0.7;
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+.messageOptionsIcon {
+  opacity: 0.5;
+  margin: 0 5px;
+  cursor: pointer;
+  width: 11px;
+  height: 11px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.messageReservedRow {
+  display: flex;
+  width: 100%;
+}
+
+.messageReservedRow.outgoing {
+  justify-content: flex-end;
+}
+
+.messageReservedRow.incoming {
+  justify-content: flex-start;
+}
+
+.messageWrapper {
+  display: flex;
+  max-width: 70%;
+  align-items: flex-start;
+}
+
+.messageWrapper.incoming {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.messageWrapper.outgoing {
+  flex-direction: row-reverse;
+}
+
+.messageContentWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.messageContentWrapper.outgoing {
+  align-items: flex-end;
+}
+
+.messageWithTimestamp {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.messageWithTimestamp.incoming {
+  flex-direction: row;
+}
+
+.messageWithTimestamp.outgoing {
+  flex-direction: row-reverse;
+}
+
+.messageContainer {
+  border-radius: 20px;
+  padding: 10px 16px;
+  max-width: 196px;
+  word-break: break-word;
+}
+
+.messageContainer.incoming {
+  background: #f2f2f2;
+}
+
+.messageContainer.outgoing {
+  background: #f2f7d5;
+}
+
+.avatarWrapper {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.userName {
+  color: #222;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: Roboto, sans-serif;
+  margin-bottom: 8px;
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+}
+
+.generalMessageBody {
+  display: flex;
+  flex-direction: column;
+  word-break: break-word;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 18px;
+  color: #222;
+}
+
+.generalMessageBody pre {
+  white-space: pre-wrap;
+}
+
+.deletedMessageBody {
+  display: flex;
+  flex-direction: column;
+  word-break: break-word;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 18px;
+  color: #222;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: #f2f2f2;
+}
+
+.deletedMessageBody pre {
+  white-space: pre-wrap;
+}
+
+.unsupportedMessageBody {
+  display: flex;
+  flex-direction: column;
+  word-break: break-word;
+  text-align: center;
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 18px;
+  color: #222;
+  padding: 10px 16px;
+  border-radius: 20px;
+  background: #f2f2f2;
+}
+
+.unsupportedMessageBody pre {
+  white-space: pre-wrap;
+}
+
+.messageDate {
+  font-family: Roboto, sans-serif;
+  font-size: 10px;
+  line-height: 12px;
+  color: #909090;
+  align-self: flex-end;
+  margin-bottom: 8px;
+}

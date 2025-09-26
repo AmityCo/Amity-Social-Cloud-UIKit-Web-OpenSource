@@ -1,0 +1,11 @@
+.pollAddOptionButton__addOptionButton {
+  width: 100%;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pollAddOptionButton__plusIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: var(--asc-color-secondary-default);
+}

@@ -1,0 +1,74 @@
+.searchResultSkeleton__postSkeleton {
+  padding: 0.5rem 0;
+  background-color: var(--asc-color-background-default);
+}
+
+.searchResultSkeleton__postSkeletonHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.searchResultSkeleton__postSkeletonAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--asc-color-base-shade4);
+  flex-shrink: 0;
+}
+
+.searchResultSkeleton__postSkeletonUserInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.searchResultSkeleton__postSkeletonUsername {
+  width: 6rem;
+  height: 1rem;
+  background-color: var(--asc-color-base-shade4);
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.searchResultSkeleton__postSkeletonSubtitle {
+  width: 4rem;
+  height: 0.75rem;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+}
+
+.searchResultSkeleton__postSkeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.searchResultSkeleton__postSkeletonLine {
+  height: 0.625rem;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 0.25rem;
+  width: 100%;
+  max-width: 45%;
+  flex-grow: 1;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.searchResultSkeleton__postSkeletonAvatar,
+.searchResultSkeleton__postSkeletonUsername,
+.searchResultSkeleton__postSkeletonSubtitle,
+.searchResultSkeleton__postSkeletonLine {
+  animation: pulse 1.5s ease-in-out infinite;
+}

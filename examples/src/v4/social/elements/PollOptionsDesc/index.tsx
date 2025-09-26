@@ -1,0 +1,1 @@
+export { PollOptionsDesc } from './PollOptionsDesc';

@@ -1,0 +1,17 @@
+.userAboutTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.userAboutTitle__title {
+  display: inline;
+}
+
+.userAboutTitle__length {
+  color: var(--asc-color-base-shade1);
+}
+
+.userAboutTitle__optional__text {
+  color: var(--asc-color-base-shade3);
+}

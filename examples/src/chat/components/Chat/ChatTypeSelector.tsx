@@ -1,0 +1,37 @@
+import React from 'react';
+import { useIntl } from 'react-intl';
+import Select from '~/core/components/Select';
+
+import styles from './styles.module.css';
+
+const itemRenderer = ({ name }: { name?: string }) => (
+  <div data-testid={`chat-type-selector-item-${name}`}>{name}</div>
+);
+
+interface ChatTypeSelectorProps {
+  onChange: (value: string) => void;
+  parentContainer?: HTMLElement | null;
+}
+
+const ChatTypeSelector = ({ onChange, parentContainer }: ChatTypeSelectorProps) => {
+  const { formatMessage } = useIntl();
+
+  const options = ['live', 'community', 'conversation', 'broadcast'].map((answerType) => ({
+    name: formatMessage({ id: 'select.chatType.item' }, { answerType }),
+    value: answerType,
+  }));
+
+  return (
+    <Select
+      className={styles.styledSelect}
+      data-testid="chat-type"
+      options={options}
+      value={[options[0]]}
+      parentContainer={parentContainer}
+      renderItem={itemRenderer}
+      onSelect={({ value }: { value: string }) => onChange(value)}
+    />
+  );
+};
+
+export default ChatTypeSelector;

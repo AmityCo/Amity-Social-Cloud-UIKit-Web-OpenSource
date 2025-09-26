@@ -1,0 +1,69 @@
+.pollVotedItem {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+.pollVotedItem[data-top-voted='true'] {
+  border: 1px solid var(--asc-color-primary-default);
+}
+
+.pollVotedItem__title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.13rem;
+  gap: 0.75rem;
+}
+
+.pollVotedItem__title__text {
+  color: var(--asc-color-base-default);
+}
+
+.pollVotedItem__title__percent {
+  color: var(--asc-color-base-shade1);
+}
+
+.pollVotedItem__title__percent[data-top-voted='true'] {
+  color: var(--asc-color-primary-default);
+}
+
+.pollVotedItem__voteCount {
+  display: flex;
+  gap: 0.25rem;
+  color: var(--asc-color-base-shade2);
+}
+
+.pollVotedItem__voteCount__avatar {
+  width: 1rem;
+  height: 1rem;
+}
+
+.pollVotedItem__voteCount__textPlaceholder {
+  font-size: 0.75rem;
+}
+
+.pollVoteItem__processBar {
+  position: relative;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 6.19rem;
+  overflow: hidden;
+  background-color: var(--asc-color-base-shade4);
+  margin-top: 0.5rem;
+}
+
+.pollVoteItem__processBar[data-top-voted='true'] {
+  background-color: var(--asc-color-primary-shade3);
+}
+
+.pollVotedItem__processBar__count {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--asc-color-base-shade1);
+}
+
+.pollVotedItem__processBar__count[data-top-voted='true'] {
+  background-color: var(--asc-color-primary-default);
+}

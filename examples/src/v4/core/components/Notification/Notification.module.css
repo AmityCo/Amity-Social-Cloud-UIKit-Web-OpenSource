@@ -1,0 +1,94 @@
+.icon__container {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  fill: var(--asc-color-white);
+}
+
+.icon {
+  width: var(--asc-spacing-m2);
+  height: var(--asc-spacing-m2);
+}
+
+.notifications {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 18rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 99999;
+  pointer-events: none;
+  padding: var(--asc-spacing-m1);
+}
+
+.notificationContainer {
+  gap: var(--asc-spacing-s1);
+  width: 22rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: var(--asc-color-white);
+  border-radius: 0.5rem;
+  margin-bottom: var(--asc-spacing-m1);
+  margin-top: 0;
+  animation-duration: 0.3s;
+  animation-name: appear;
+  pointer-events: auto;
+  background-color: var(--asc-color-secondary-default);
+  padding: 1rem;
+  box-shadow: var(--asc-box-shadow-02);
+}
+
+.notification__text {
+  color: var(--asc-color-white);
+}
+
+.notificationContainer[data-alignment='fullscreen'] {
+  position: relative;
+  left: -9rem;
+}
+
+.notificationContainer[data-alignment='fixed'] {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (width < 48em) {
+  .notifications {
+    top: auto;
+    left: 0;
+    bottom: 0;
+  }
+
+  .notificationContainer {
+    width: 100%;
+    margin-top: var(--asc-spacing-m1);
+    margin-bottom: 0;
+  }
+
+  .notificationContainer[data-alignment='fullscreen'] {
+    position: unset;
+    left: unset;
+  }
+
+  .notificationContainer[data-alignment='fixed'] {
+    position: unset;
+    top: unset;
+    left: unset;
+    transform: unset;
+  }
+}

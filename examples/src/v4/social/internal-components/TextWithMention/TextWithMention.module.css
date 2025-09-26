@@ -1,0 +1,36 @@
+.textWithMention__container {
+  width: 100%;
+  background-color: inherit;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  color: var(--asc-color-base-default);
+}
+
+.textWithMention__mention {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: inline;
+  background-color: transparent;
+  color: var(--asc-color-primary-default);
+}
+
+.textWithMention__mention[data-focus-visible] {
+  outline: 2px solid var(--asc-color-primary-default);
+}
+
+.textWithMention__link {
+  display: inline;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--asc-color-primary-default);
+}
+
+.textWithMention__seeMore {
+  display: inline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--asc-color-primary-default);
+}

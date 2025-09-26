@@ -1,0 +1,23 @@
+.errorContent__container {
+  text-align: center;
+  padding: 5rem 0.5rem;
+  color: var(--asc-color-base-shade3);
+}
+
+.errorContent__text {
+  margin-top: 0.5rem;
+}
+
+.errorContent__icon {
+  width: 3.75rem;
+  height: 2.5rem;
+  fill: var(--asc-color-secondary-shade4);
+}
+
+@media (width >= 48rem) {
+  .errorContent__container {
+    background-color: var(--asc-color-background-default);
+    border: 1px solid var(--asc-color-base-shade4);
+    border-radius: 0.5rem;
+  }
+}

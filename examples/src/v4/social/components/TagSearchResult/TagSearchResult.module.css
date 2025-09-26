@@ -1,0 +1,11 @@
+.tagSearchResult {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tagSearchResult__noInternetConnectionHoc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

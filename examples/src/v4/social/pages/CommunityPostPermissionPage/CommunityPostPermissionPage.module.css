@@ -1,0 +1,88 @@
+.communityPostPermissionPage__container {
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.communityPostPermissionPage__communityTitleWrap {
+  display: flex;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.communityPostPermissionPage__communityTitle {
+  color: var(--asc-color-base-default);
+}
+
+.communityPostPermissionPage__label {
+  display: block;
+  padding: 1rem 0;
+}
+
+.communityPostPermissionPage__desc {
+  padding-top: 0.12rem;
+  color: var(--asc-color-base-shade1);
+}
+
+.communityPostPermissionPage__radioGroup {
+  gap: 0;
+}
+
+.communityPostPermissionPage__choice {
+  display: flex;
+  padding: 1rem 0;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+.communityPostPermissionPage__desktopCtaWrapper {
+  display: none;
+}
+
+@media only screen and (width >= 48em) {
+  .communityPostPermissionPage__container {
+    padding: 0;
+    gap: 0.75rem;
+    display: grid;
+  }
+
+  .communityPostPermissionPage__communityTitleWrap {
+    padding: 1.25rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .communityPostPermissionPage__communityTitle {
+    font-size: 1.25rem;
+  }
+
+  .communityPostPermissionPage__mobileCta {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .communityPostPermissionPage__communityContentWrap {
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .communityPostPermissionPage__label {
+    padding: 1rem;
+  }
+
+  .communityPostPermissionPage__choice {
+    padding: 1rem;
+  }
+
+  .communityPostPermissionPage__desktopCtaWrapper {
+    padding: 1rem;
+    display: block;
+  }
+
+  .communityPostPermissionPage__desktopCta {
+    width: 100%;
+  }
+}

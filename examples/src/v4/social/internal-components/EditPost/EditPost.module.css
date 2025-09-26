@@ -1,0 +1,317 @@
+.editPost {
+  height: 100%;
+  position: relative;
+  background-color: var(--asc-color-background-default);
+}
+
+.editPost__form {
+  overflow-y: scroll;
+  max-height: calc(100% - 6.75rem);
+}
+
+.editPost__form[data-from-media='false'] {
+  overflow-y: scroll;
+  max-height: calc(100% - 14.875rem);
+}
+
+.editPost__form::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.editPost__topBar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--asc-spacing-m1);
+}
+
+.editPost__formContent {
+  max-height: auto;
+  min-height: auto;
+}
+
+.editPost__input {
+  padding: 1rem;
+}
+
+.editPost__placeholder {
+  left: 1rem;
+  top: 4.4rem;
+}
+
+.editPost__placeholder[data-isclip='true'] {
+  left: 1rem;
+  top: 15.3rem;
+}
+
+.editPost__mentionContainer {
+  display: none;
+}
+
+.editPost__attachment {
+  display: none;
+}
+
+.editPost__ctaWrapper {
+  display: none;
+}
+
+.editPost__cta {
+  display: none;
+}
+
+.editPost__mention {
+  left: 0;
+  width: 100%;
+  position: absolute;
+  overflow-y: scroll;
+  max-height: 12.5rem;
+  bottom: var(--asc-mention-bottom, 0);
+  background-color: var(--asc-color-background-default);
+}
+
+.editPost__mention::-webkit-scrollbar {
+  display: none;
+}
+
+.editPost__notificationWrapper {
+  bottom: 6rem;
+  position: relative;
+}
+
+.editPost__notificationWrapper[data-item-position='false'] {
+  bottom: 11rem;
+  position: relative;
+}
+
+.editPost__notification[data-isclip='false'] {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 15rem;
+  left: 1rem;
+  display: flex;
+  justify-content: start;
+  margin: 0 auto 1rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--asc-box-shadow-03);
+  background-color: var(--asc-color-secondary-default);
+  color: var(--asc-color-background-default);
+}
+
+.editPost__notification[data-isclip='true'] {
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 1rem !important;
+  left: 1rem;
+  display: flex;
+  justify-content: start;
+  margin: 0 auto 1rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--asc-box-shadow-03);
+  background-color: var(--asc-color-secondary-default);
+  color: var(--asc-color-background-default);
+}
+
+.editPost__notificationToast {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.editPost__notification[data-show-detail-media-attachment='0'] {
+  bottom: 6rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='1'] {
+  bottom: 10rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='2'] {
+  bottom: 12rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='3'] {
+  bottom: 15rem;
+}
+
+.editPost__notification[data-show-detail-media-attachment='4'] {
+  bottom: 19rem;
+}
+
+.editPost__notificationIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-background-default);
+}
+
+.editPost__notificationContainer {
+  bottom: 0;
+  width: 100%;
+  position: absolute;
+}
+
+.editPost__attachmentDrawer {
+  display: block;
+}
+
+.editPost__attachmentDrawer__content {
+  top: 0;
+  left: 0;
+  width: 100%;
+  outline: none;
+  position: absolute;
+}
+
+.editPost_notificationIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-background-default);
+}
+
+.editPost__attachmentDrawer__contentContainer {
+  position: absolute;
+  box-shadow: var(--asc-box-shadow-04);
+  border-top-left-radius: 1.25rem;
+  border-top-right-radius: 1.25rem;
+  display: block;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--asc-color-background-default);
+}
+
+.editPost__attachmentDrawer__contentContainer[data-show-detail-media-attachment='false'] {
+  padding: 0.5rem 2rem;
+  bottom: -0.4rem;
+  margin-top: 0.75rem;
+}
+
+.editPost__attachmentDrawer__contentContainer[data-show-detail-media-attachment='true'] {
+  bottom: -0.9rem;
+  margin-top: -1rem;
+  padding: 0.75rem 1rem 2rem;
+}
+
+.editPost__clipPostThumbnaiContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.editPost__clipPostThumbnail {
+  width: 5rem;
+  height: 8.5rem;
+  border-radius: 0.25rem;
+}
+
+.editPost__clipPostThumbnailBroken {
+  width: 5rem;
+  height: 8.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.editPost__clipPostPlayIconWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background-color: rgb(0 0 0 / 30%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editPost__clipPostPlayIcon {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+@media (width >= 48em) {
+  .editPost {
+    width: 30rem;
+    position: static;
+    border-radius: 0.75rem;
+  }
+
+  .editPost__topBar {
+    display: none;
+  }
+
+  .editPost__formContent {
+    overflow-y: auto;
+    max-height: 50vh;
+    min-height: 13rem;
+    position: relative;
+  }
+
+  .editPost__attachment {
+    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1.5rem;
+    background-color: var(--asc-color-background-default);
+  }
+
+  .editPost__input {
+    padding: 1rem 1.5rem;
+  }
+
+  .editPost__placeholder {
+    top: 1rem;
+    left: 1.5rem;
+  }
+
+  .editPost__mentionContainer {
+    z-index: 9999;
+    display: block;
+    width: 16.25rem;
+    height: 16.5rem;
+    position: relative;
+    overflow-y: scroll;
+    border-radius: 0.5rem;
+    box-shadow: var(--asc-box-shadow-04);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .editPost__ctaWrapper {
+    display: block;
+    padding: 1rem 1.5rem;
+  }
+
+  .editPost__cta {
+    width: 100%;
+    display: block;
+  }
+
+  .editPost__mention {
+    display: none;
+  }
+
+  .editPost__notificationContainer {
+    top: 1.75rem;
+    width: 30rem;
+    bottom: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .editPost__notification {
+    margin: 0;
+    width: 22rem;
+    position: static;
+  }
+
+  .editPost__attachmentDrawer {
+    display: none;
+  }
+}

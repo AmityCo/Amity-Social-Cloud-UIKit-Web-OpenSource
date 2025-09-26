@@ -1,0 +1,1 @@
+export { SelectPostTargetPage } from './SelectPostTargetPage';

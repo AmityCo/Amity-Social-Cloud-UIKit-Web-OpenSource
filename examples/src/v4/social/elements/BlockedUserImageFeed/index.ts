@@ -1,0 +1,1 @@
+export { BlockedUserImageFeed } from './BlockedUserImageFeed';

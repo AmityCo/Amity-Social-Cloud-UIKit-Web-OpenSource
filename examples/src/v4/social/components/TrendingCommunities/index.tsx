@@ -1,0 +1,1 @@
+export { TrendingCommunities } from './TrendingCommunities';

@@ -1,0 +1,19 @@
+/* Text message content styles */
+.textContent {
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+/* Mention styling within text messages */
+.mention {
+  font-weight: bold;
+  color: inherit;
+}
+
+/* Text content with mentions */
+.textWithMentions {
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+}

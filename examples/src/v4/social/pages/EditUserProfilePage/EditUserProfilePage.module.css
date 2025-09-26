@@ -1,0 +1,332 @@
+.editUserProfilePage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+  background-color: var(--asc-color-background-default);
+  width: 100%;
+ 
+}
+
+.editUserProfilePage__container {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.editUserProfilePage__avatarContainer {
+  width: 5rem;
+  height: 5rem;
+  position: relative;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.editUserProfilePage__avatar {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+}
+
+.editUserProfilePage__avatarEditButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.editUserProfilePage__avatarTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.editUserProfilePage__avatarOverlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background-color: rgb(0 0 0 / 50%);
+}
+
+.editUserProfilePage__icon {
+  fill: var(--asc-color-white);
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.editUserProfilePage__topSection {
+  display: flex;
+  height: 3.625rem;
+  align-items: center;
+  padding: 0 0.75rem;
+}
+
+.editUserProfilePage__topSection__backButton {
+  flex-basis: max-content;
+}
+
+.editUserProfilePage__topSection__title {
+  width: 100%;
+  flex-grow: 1;
+  color: var(--asc-color-base-default);
+}
+
+.editUserProfilePage__form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.editUserProfilePage__formItem {
+  margin-top: 1.5rem;
+}
+
+.editUserProfilePage__input {
+  padding: 1rem 0;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+  height: auto;
+  resize: none;
+  overflow: hidden;
+}
+
+.editUserProfilePage__input:focus {
+  outline: none;
+}
+
+.editUserProfilePage__input:disabled {
+  color: var(--asc-color-base-shade2);
+}
+
+.editUserProfilePage__imageInput {
+  display: none;
+}
+
+.editUserProfilePage__cardPositioner {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.editUserProfilePage__card {
+  display: flex;
+  width: 100%;
+  padding: var(--component-card-multipuropse-layout-padding-default, 1rem);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--global-layout-gap-sm, 1rem);
+  border-radius: var(--component-card-multipuropse-layout-radius-default, 0.5rem);
+  background: var(--component-card-multipuropse-surface-even, #fff);
+  box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
+    var(--effect-elevation-sm-blur, 16px) var(--effect-elevation-sm-spread, 0)
+    var(--effect-surface-effect, rgb(0 0 0 / 12%));
+}
+
+.editUserProfilePage__cardContentSection {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+.editUserProfilePage__avatarSection {
+  justify-content: center;
+  flex-direction: column;
+}
+
+.editUserProfilePage__segmentedControl {
+  display: inline-flex;
+  height: 50px;
+  padding: 0 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  border: 1px solid #d3d3d3;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+
+  &:hover {
+    border-radius: 4px;
+    border: 1px solid #bed62f;
+    background: #f2f7d5;
+  }
+}
+
+.editUserProfilePage__segmentedControlWrap {
+  display: inline-flex;
+  height: 50px;
+  padding: 0 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+  border: 1px solid #d3d3d3;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-radius: 4px;
+    border: 1px solid #bed62f;
+    background: #f2f7d5;
+  }
+}
+
+.editUserProfilePage__segmentedControlActive {
+  border: 1px solid #bed62f;
+  background: #f2f7d5;
+}
+
+.editUserProfilePage__gameTagsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.editUserProfilePage__gameTagsContainerWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.editUserProfilePage__fullWidth {
+  width: 100% !important;
+}
+
+.editUserProfilePage__playerTypeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.editUserProfilePage__playerTypeItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #fff;
+  width: 100%;
+}
+
+.editUserProfilePage__playerTypeHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editUserProfilePage__playerTypeLevels {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.editUserProfilePage__playerTypeLevelButtons {
+  display: flex;
+}
+
+.editUserProfilePage__levelButton {
+  display: flex;
+  flex: 1;
+  height: 24px;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  border: 1px solid #222 !important;
+  background: rgb(255 255 255 / 35%) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border: 1px solid #bed62f !important;
+    background: #f2f7d5 !important;
+  }
+}
+
+.editUserProfilePage__levelButtonActive {
+  border: 1px solid #bed62f !important;
+  background: #f2f7d5 !important;
+}
+
+.editUserProfilePage__playerTypeLevelLabels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 4px;
+}
+
+@media (width >=48em) {
+  .editUserProfilePage {
+    background-color: transparent;
+    height: 80dvh;
+    width: 100%;
+    overflow-y: scroll;
+    padding: 1.5rem 1rem 6rem;
+  }
+
+  .editUserProfilePage__container {
+    flex: 0;
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4, #ebecef);
+  }
+
+  .editUserProfilePage__topSection {
+    background-color: var(--asc-color-background-default);
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  .editUserProfilePage__topSection__title {
+    font-size: 1.25rem;
+  }
+
+  .editUserProfilePage__avatarPlaceholder {
+    font-size: 3.75rem;
+  }
+
+  .editUserProfilePage__avatarContainer {
+    width: 5rem;
+    height: 5rem;
+    margin: 0 auto;
+  }
+
+  .editUserProfilePage__form {
+    justify-content: flex-start;
+  }
+
+  .editUserProfilePage__fromInputWrap {
+    margin-bottom: 1rem;
+  }
+
+  .editUserProfilePage__icon {
+    fill: var(--asc-color-white);
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .editUserProfilePage__cardPositioner {
+    padding: 0;
+    gap: 1.5rem;
+  }
+}

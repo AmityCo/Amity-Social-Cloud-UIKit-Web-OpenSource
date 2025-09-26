@@ -1,0 +1,1 @@
+export { CommunityPinTabButton } from './CommunityPinTabButton';

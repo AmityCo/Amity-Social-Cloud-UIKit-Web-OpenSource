@@ -1,0 +1,17 @@
+.closeCommunityDescription__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0.13rem 0 1rem;
+}
+
+.closeCommunityDescription__text {
+  color: var(--asc-color-base-shade1);
+}
+
+@media only screen and (width >= 48em) {
+  .closeCommunityDescription__container {
+    border-bottom: none;
+  }
+}

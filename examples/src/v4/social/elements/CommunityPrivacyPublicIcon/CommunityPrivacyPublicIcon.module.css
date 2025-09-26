@@ -1,0 +1,16 @@
+.communityPrivacyPublicIcon_iconWrapper {
+  padding: 0.5rem;
+  background-color: var(--asc-color-base-shade4);
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.communityPrivacyPublicIcon_icon {
+  width: 1.5rem;
+  height: 1.25rem;
+  fill: var(--asc-color-base-default);
+}

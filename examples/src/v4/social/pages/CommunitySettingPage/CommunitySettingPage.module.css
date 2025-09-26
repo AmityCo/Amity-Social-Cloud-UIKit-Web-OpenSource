@@ -1,0 +1,55 @@
+.communitySettingPage__container {
+  padding: 0 1rem;
+}
+
+.communitySettingPage__communityTitleWrap {
+  display: flex;
+  padding: 1rem 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.communitySettingPage__communityTitle {
+  color: var(--asc-color-base-default);
+}
+
+.communitySettingPage__basicInfoWrap {
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.communitySettingPage__basicInfo {
+  padding: 1.5rem 0 0.25rem;
+}
+
+.communitySettingPage__communityPermissionWrap {
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.communitySettingPage__communityPermissions {
+  padding: 1.5rem 0 0.25rem;
+}
+
+@media only screen and (width >= 48em) {
+  .communitySettingPage__container {
+    padding: 0;
+  }
+
+  .communitySettingPage__communityTitleWrap {
+    border-radius: 0.5rem;
+    padding: 1.25rem 1rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .communitySettingPage__communityTitle {
+    font-size: 1.25rem;
+  }
+
+  .communitySettingPage__content {
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+}

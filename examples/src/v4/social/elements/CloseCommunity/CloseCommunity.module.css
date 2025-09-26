@@ -1,0 +1,11 @@
+.closeCommunity__container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.closeCommunity__text {
+  color: var(--asc-color-alert-default);
+}

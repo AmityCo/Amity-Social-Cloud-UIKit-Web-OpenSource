@@ -1,0 +1,1 @@
+export { PrivateUserImageFeed } from './PrivateUserImageFeed';
