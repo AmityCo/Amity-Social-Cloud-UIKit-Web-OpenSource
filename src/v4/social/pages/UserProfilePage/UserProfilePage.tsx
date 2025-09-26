@@ -11,7 +11,6 @@ import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { MasterTrophy } from '~/v4/icons/MasterTrophy';
 import { Plus } from '~/v4/icons/Plus';
@@ -29,14 +28,11 @@ import { initChart } from './chartConfig';
 import { FloatingActionButtonMenu } from './FloatingActionButtonMenu/FloatingActionButtonMenu';
 import styles from './UserProfilePage.module.css';
 import { Popover } from '~/v4/core/components/AriaPopover';
-import useSDK from '~/v4/core/hooks/useSDK';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { Mode, PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
-import { Button } from '~/v4/core/natives/Button';
 import { RadioGroup } from '~/v4/core/components/AriaRadioGroup';
 import { ChevronTop } from '~/v4/icons/ChevronTop';
 import { ChevronDown } from '~/v4/icons/ChevronDown';
@@ -63,31 +59,30 @@ const mockSports = [
   { name: 'Basket', icon: <Star color="#4ECDC4" />, percentage: 45 },
 ];
 
-export const UserProfilePage: React.FC<UserProfilePageProps> = ({
-  userId,
-  userBadgeTitle,
-  forcePublicView,
-}) => {
 export const FeedSource = {
   ALL: 'all',
   COMMUNITY: FeedSourceEnum.Community,
   USER: FeedSourceEnum.User,
 };
-
-const FEED_TYPE_OPTIONS = [
-  {
-    label: 'Public community & profile posts',
-    value: FeedSource.ALL,
-  },
-  {
-    label: 'Public community posts',
-    value: FeedSource.COMMUNITY,
-  },
-  {
-    label: 'Profile posts',
-    value: FeedSource.USER,
-  },
-];
+export const UserProfilePage: React.FC<UserProfilePageProps> = ({
+  userId,
+  userBadgeTitle,
+  forcePublicView,
+}) => {
+  const FEED_TYPE_OPTIONS = [
+    {
+      label: 'Public community & profile posts',
+      value: FeedSource.ALL,
+    },
+    {
+      label: 'Public community posts',
+      value: FeedSource.COMMUNITY,
+    },
+    {
+      label: 'Profile posts',
+      value: FeedSource.USER,
+    },
+  ];
 
   const pageId = 'user_profile_page';
   const containerRef = useRef<HTMLDivElement>(null);
@@ -395,7 +390,6 @@ const FEED_TYPE_OPTIONS = [
                   </div>
                 </div>
               </div>
-
             </div>
             {isFilterAvailable && (
               <Popover
@@ -403,7 +397,7 @@ const FEED_TYPE_OPTIONS = [
                 containerClassName={styles.userProfilePage__feedTypePopover}
                 trigger={({ openPopover, isOpen, isDesktop }) => (
                   <Button
-                    onPress={() => {
+                    onClick={() => {
                       if (isDesktop) {
                         openPopover();
                       } else {

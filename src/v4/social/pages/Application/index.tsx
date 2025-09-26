@@ -35,7 +35,6 @@ import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelection
 import { UserPendingFollowRequestPage } from '~/v4/social/pages/UserPendingFollowRequestPage/UserPendingFollowRequestPage';
 import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
 import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
-import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import {
   AmityDraftStoryPage,
   ChatPage,
@@ -50,33 +49,8 @@ import {
 } from '..';
 import { UserProfileHeader } from '../../components';
 import styles from './Application.module.css';
-import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
-import CommunityFeed from '~/social/pages/CommunityFeed';
-import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
-import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
-import CommunityEditPage from '~/social/pages/CommunityEdit';
-import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
-import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
-import { AllCategoriesPage } from '~/v4/social/pages/AllCategoriesPage';
-import { CommunitiesByCategoryPage } from '~/v4/social/pages/CommunitiesByCategoryPage';
-import { MainLayout } from '~/v4/social/layouts/Main';
-import { CommunitySideBar } from '~/v4/social/components/CommunitySideBar';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
-import { UserPendingFollowRequestPage } from '~/v4/social/pages/UserPendingFollowRequestPage/UserPendingFollowRequestPage';
-import { BlockedUserPage } from '~/v4/social/pages/BlockedUserPage/BlockedUserPage';
-import { CommunitySetupPage } from '~/v4/social/pages/CommunitySetupPage';
-import { CommunityAddMemberPage } from '~/v4/social/pages/CommunityAddMemberPage/CommunityAddMemberPage';
-import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
-import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
-import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
-import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
-import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
 import { LiveStreamBannedPage } from '~/v4/social/pages/LiveStreamBannedPage';
-import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
-import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
-import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
 
 const Application = ({
   userId,

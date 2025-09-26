@@ -71,7 +71,7 @@ const PageRenderer = ({ children }: PageRendererProps) => {
     case PageTypes.SocialHomePage:
       return <SocialHomePage />;
     case PageTypes.SocialGlobalSearchPage:
-      return !isDesktop ? <SocialGlobalSearchPage keyword={page.context?.keyword} /> : null;
+      return !isDesktop ? <SocialGlobalSearchPage /> : null;
     case PageTypes.PostDetailPage:
       return (
         <PostDetailPage

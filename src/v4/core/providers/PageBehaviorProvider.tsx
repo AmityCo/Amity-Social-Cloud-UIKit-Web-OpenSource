@@ -1,3 +1,4 @@
+import { use } from 'echarts';
 import React, { useContext } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
@@ -743,8 +744,16 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityUserProfilePageBehavior.goToChangeAvatarPage(context);
         }
 
-        goToChangeAvatarPage?.(context);
+        goToChangeAvatarPage?.({
+          ...context,
+          onImageUploaded: context.onImageUploaded
+            ? (uploadedImage: Amity.File<any>) => {
+                context.onImageUploaded?.(uploadedImage as Amity.File<'image'>);
+              }
+            : undefined,
+        });
       },
+
       goToBlockedUsersPage() {
         if (pageBehavior?.AmityUserProfilePageBehavior?.goToBlockedUsersPage) {
           return pageBehavior.AmityUserProfilePageBehavior.goToBlockedUsersPage();

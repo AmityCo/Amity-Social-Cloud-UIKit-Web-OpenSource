@@ -23,7 +23,6 @@ import { AmityRoute } from './AmityUIKitProvider';
 
 import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
 
-
 export enum PageTypes {
   Explore = 'explore',
   NewsFeed = 'newsfeed',
@@ -337,14 +336,14 @@ type ContextValue = {
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
   goToBlockedUsersPage: () => void;
-<!--   goToPostDetailPage: (
-    postId: string,
-    hideTarget?: boolean,
-    category?: AmityPostCategory,
-    commentId?: string,
-    parentId?: string,
-    posts?: Amity.Post[],
-  ) => void; -->
+  // goToPostDetailPage: (
+  //   postId: string,
+  //   hideTarget?: boolean,
+  //   category?: AmityPostCategory,
+  //   commentId?: string,
+  //   parentId?: string,
+  //   posts?: Amity.Post[],
+  // ) => void;
   goToPostDetailPage: (context: GoToPostDetailPageParams) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
   goToSocialGlobalSearchPage: (tab?: string, keyword?: string) => void;
@@ -467,14 +466,14 @@ let defaultValue: ContextValue = {
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
 
-//   goToPostDetailPage: (
-//     postId: string,
-//     hideTarget?: boolean,
-//     category?: AmityPostCategory,
-//     commentId?: string,
-//     parentId?: string,
-//     posts?: Amity.Post[],
-//   ) => {},
+  //   goToPostDetailPage: (
+  //     postId: string,
+  //     hideTarget?: boolean,
+  //     category?: AmityPostCategory,
+  //     commentId?: string,
+  //     parentId?: string,
+  //     posts?: Amity.Post[],
+  //   ) => {},
 
   goToPostDetailPage: (context: GoToPostDetailPageParams) => {},
 
