@@ -5,7 +5,17 @@ import {
   useInvitationNotificationTray,
   InvitationNotificationTray,
   initialInvitationNotificationTray,
+  useLinkToPost,
+  LinkToPost,
 } from '~/v4/social/hooks';
+
+type LocalVideoPost = {
+  postId: string;
+  videos: {
+    fileId: string;
+    thumbnailUrl: string | undefined;
+  }[];
+};
 
 type LayoutContextType = {
   activeTab: HomePageTab;
@@ -15,6 +25,10 @@ type LayoutContextType = {
   acceptedInvitation: Amity.Invitation | null;
   setAcceptedInvitation: (invitation: Amity.Invitation) => void;
   invitationNotificationTray: InvitationNotificationTray;
+  linkToPost: LinkToPost | null;
+  setLinkToPost: (linkToPost: LinkToPost | null) => void;
+  videoThumbnail: LocalVideoPost | undefined;
+  setVideoThumbnail: React.Dispatch<React.SetStateAction<LocalVideoPost | undefined>>;
 };
 
 const LayoutContext = createContext<LayoutContextType>({
@@ -25,6 +39,10 @@ const LayoutContext = createContext<LayoutContextType>({
   acceptedInvitation: null,
   setAcceptedInvitation: () => {},
   invitationNotificationTray: initialInvitationNotificationTray,
+  linkToPost: null,
+  setLinkToPost: () => {},
+  videoThumbnail: undefined,
+  setVideoThumbnail: () => {},
 });
 
 export const useLayoutContext = () => {
@@ -42,6 +60,8 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const [acceptedInvitation, setAcceptedInvitation] = useState<Amity.Invitation | null>(null);
   const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);
   const invitationNotificationTray = useInvitationNotificationTray();
+  const { linkToPost, setLinkToPost } = useLinkToPost();
+  const [videoThumbnail, setVideoThumbnail] = useState<LocalVideoPost | undefined>(undefined);
 
   return (
     <LayoutContext.Provider
@@ -53,6 +73,10 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
         acceptedInvitation,
         setAcceptedInvitation,
         invitationNotificationTray,
+        linkToPost,
+        setLinkToPost,
+        videoThumbnail,
+        setVideoThumbnail,
       }}
     >
       {children}

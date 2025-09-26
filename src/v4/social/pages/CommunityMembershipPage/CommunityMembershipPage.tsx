@@ -149,6 +149,7 @@ export const CommunityMembershipPage = ({ community }: CommunityMembershipPagePr
         </Typography.TitleBold>
         {hasModeratorPermissions ? (
           <Button
+            data-testid={`${pageId}/*/add-member-button`}
             className={styles.communityMembershipPage__addMemberButton}
             onPress={() => (isInvitation ? openInviteMemberPage() : openAddMemberPage())}
           >

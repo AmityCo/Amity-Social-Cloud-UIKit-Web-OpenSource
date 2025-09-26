@@ -9,6 +9,7 @@ import { EmptyNewsfeed } from '~/v4/social/components/EmptyNewsFeed';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
 import styles from './Newsfeed.module.css';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type NewsfeedProps = {
   pageId?: string;
@@ -29,12 +30,10 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
     removeItem,
   } = useGlobalFeedContext();
 
-  useEffect(() => {
-    refetch();
-  }, []);
+  const { isDesktop } = useResponsive();
 
   const onFeedReachBottom = () => {
-    if (hasMore && !isLoading) loadMore();
+    if (hasMore && !isLoading) loadMore?.();
   };
 
   const handleSearchClick = () => {
@@ -66,6 +65,7 @@ export const Newsfeed = ({ pageId = '*' }: NewsfeedProps) => {
           isGlobalFeaturedPostsLoading={isGlobalFeaturedPostsLoading}
         />
       )}
+
     </PullToRefresh>
   );
 };

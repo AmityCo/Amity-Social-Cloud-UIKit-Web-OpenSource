@@ -22,6 +22,7 @@ export function Explore({ pageId = '*' }: ExploreProps) {
     isLoading,
     isEmpty,
     isCommunityEmpty,
+    isNoCategory,
     noRecommendedCommunities,
     noTrendingCommunities,
     error,
@@ -59,10 +60,14 @@ export function Explore({ pageId = '*' }: ExploreProps) {
 
   return (
     <PullToRefresh className={styles.explore} onTouchEndCallback={refresh}>
-      <Divider />
-      <div className={styles.explore__exploreCategories}>
-        <ExploreCommunityCategories pageId={pageId} />
-      </div>
+      {!isNoCategory && (
+        <>
+          <Divider />
+          <div className={styles.explore__exploreCategories}>
+            <ExploreCommunityCategories pageId={pageId} />
+          </div>
+        </>
+      )}
       <Divider className={styles.explore__divider} />
       {!noRecommendedCommunities ? (
         <div className={styles.explore__recommendedForYou} data-is-loading={!!isLoading}>

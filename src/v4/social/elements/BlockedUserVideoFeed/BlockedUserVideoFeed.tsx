@@ -14,8 +14,8 @@ export const BlockedUserVideoFeed: React.FC<BlockedUserVideoFeedProps> = ({
   pageId = '*',
   componentId = '*',
 }) => {
-  const elementId = 'blocked_user_image_feed';
-  const infoElementId = 'blocked_user_image_feed_info';
+  const elementId = 'blocked_user_video_feed';
+  const infoElementId = 'blocked_user_video_feed_info';
   return (
     <EmptyContent
       pageId={pageId}

@@ -8,7 +8,7 @@ export const useSearchChannelUser = ({
   limit = 20,
   shouldCall = true,
 }: {
-  channelId: Amity.Channel['channelId'];
+  channelId?: Amity.Channel['channelId'];
   memberships: Amity.QueryChannelMembers['memberships'];
   limit?: number;
   search?: string | null;
@@ -16,7 +16,13 @@ export const useSearchChannelUser = ({
 }) => {
   const { items, ...rest } = useLiveCollection({
     fetcher: ChannelRepository.Membership.searchMembers,
-    params: { channelId, search: search || '', memberships, limit, includeDeleted: false },
+    params: {
+      channelId: channelId!,
+      search: search || '',
+      memberships,
+      limit,
+      includeDeleted: false,
+    },
     shouldCall: !!channelId && shouldCall,
   });
 

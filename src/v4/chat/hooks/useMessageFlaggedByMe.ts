@@ -1,58 +1,111 @@
+import { useState } from 'react';
 import { MessageRepository } from '@amityco/ts-sdk';
-import { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
-const useMessageFlaggedByMe = (messageId?: string) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isFlaggedByMe, setIsFlaggedByMe] = useState(false);
+export const useMessageFlaggedByMe = ({
+  messageId,
+  reasonReport,
+  onCloseMenu,
+}: {
+  messageId: string;
+  reasonReport?: Amity.ContentFlagReason;
+  onCloseMenu?: () => void;
+}): {
+  isLoading: boolean;
+  isFlaggedByMe: boolean;
+  isMessageDeleted: boolean;
+  isFlagLoading: boolean;
+  mutateReportMessage: () => Promise<unknown>;
+  mutateUnreportMessage: () => Promise<unknown>;
+} => {
+  const { success, info } = useNotifications();
+  const queryClient = useQueryClient();
+  const [isMessageDeleted, setIsMessageDeleted] = useState(false);
+  const { isDesktop } = useResponsive();
+  const queryKey = ['asc-uikit', 'MessageRepository', 'isMessageFlaggedByMe', messageId];
 
-  useEffect(() => {
-    if (!messageId) return;
-    MessageRepository.isMessageFlaggedByMe(messageId).then((value) => {
-      setIsFlaggedByMe(value);
-      setIsLoading(false);
-    });
-  }, [messageId]);
+  const { data, isLoading } = useQuery({
+    queryKey,
+    queryFn: () => {
+      return MessageRepository.isMessageFlaggedByMe(messageId);
+    },
+    enabled: messageId != null,
+  });
 
-  const flagMessage = async () => {
-    if (messageId == null) return;
+  const { mutateAsync: mutateReportMessage, isPending: isFlagLoading } = useMutation({
+    mutationFn: async () => {
+      if (messageId == null) return;
+      return MessageRepository.flagMessage(messageId, reasonReport);
+    },
+    onSuccess: () => {
+      success({
+        content: 'Message reported.',
+      });
+      onCloseMenu?.();
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey,
+      });
 
-    try {
-      setIsLoading(true);
-      setIsFlaggedByMe(true);
-      await MessageRepository.flagMessage(messageId);
+      queryClient.setQueryData(queryKey, () => true);
+    },
+    onError: (error) => {
+      if (error.message?.includes('400400')) {
+        setIsMessageDeleted(true);
+      } else {
+        info({
+          content: `Failed to report message. Please try again.`,
+          alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+        });
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey,
+      });
+    },
+  });
 
-      setIsLoading(false);
-    } catch (_error) {
-      setIsFlaggedByMe(false);
-    }
-  };
+  const { mutateAsync: mutateUnreportMessage } = useMutation({
+    mutationFn: async () => {
+      if (messageId == null) return;
+      return MessageRepository.unflagMessage(messageId);
+    },
+    onSuccess: () => {
+      success({
+        content: `Message unreported.`,
+      });
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({
+        queryKey,
+      });
 
-  const unflagMessage = async () => {
-    if (messageId == null) return;
-    try {
-      setIsFlaggedByMe(false);
-      await MessageRepository.unflagMessage(messageId);
-    } catch (_error) {
-      setIsFlaggedByMe(true);
-    }
-  };
-
-  const toggleFlagMessage = () => {
-    if (messageId == null) return;
-    if (isFlaggedByMe) {
-      unflagMessage();
-    } else {
-      flagMessage();
-    }
-  };
+      queryClient.setQueryData(queryKey, () => false);
+    },
+    onError: () => {
+      info({
+        content: `Failed to unreport Message. Please try again.`,
+        alignment: isDesktop ? 'fullscreen' : 'withSidebar',
+      });
+      onCloseMenu?.();
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey,
+      });
+    },
+  });
 
   return {
     isLoading,
-    isFlaggedByMe,
-    flagMessage,
-    unflagMessage,
-    toggleFlagMessage,
+    isFlaggedByMe: data || false,
+    isMessageDeleted,
+    isFlagLoading,
+    mutateReportMessage,
+    mutateUnreportMessage,
   };
 };
-
-export default useMessageFlaggedByMe;

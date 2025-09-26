@@ -78,6 +78,11 @@ type BaseThemeValue = {
   plyr_color_main: string;
   plyr_video_control_background_hover: string;
   transparent_black: string;
+  custom_toast_background: string;
+  live_stream_chat_bubble_color: string;
+  elevation_08_01_color: string;
+  elevation_08_02_color: string;
+  elevation_08_03_color: string;
 };
 
 type GeneratedThemeValue = {
@@ -103,17 +108,28 @@ const defaultBase = {
   plyr_color_main: '#f6f7f8',
   plyr_video_control_background_hover: 'rgb(0 0 0 / 30%)',
   transparent_black: 'rgb(0 0 0 / 50%)',
+  trasparent_black_color: 'rgb(0 0 0 / 50%)',
+  live_stream_chat_bubble_color: 'rgba(99, 104, 120, 0.30)',
 };
 
 export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValue } = {
   dark: {
     background_shade1_color: '#40434e',
     message_bubble_secondary_color: '#292b32',
+    custom_toast_background: '#40434e',
+    elevation_08_01_color: 'rgba(0, 0, 0, 0.10)',
+    elevation_08_02_color: 'rgba(0, 0, 0, 0.08)',
+    elevation_08_03_color: 'rgba(0, 0, 0, 0.04)',
+
     ...defaultBase,
   },
   light: {
     background_shade1_color: '#f6f7f8',
     message_bubble_secondary_color: '#ebecef',
+    custom_toast_background: '#292B32',
+    elevation_08_01_color: 'rgba(41, 43, 50, 0.10)',
+    elevation_08_02_color: 'rgba(41, 43, 50, 0.08)',
+    elevation_08_03_color: 'rgba(41, 43, 50, 0.04)',
     ...defaultBase,
   },
 };
@@ -470,7 +486,7 @@ export const defaultConfig: DefaultConfig = {
     },
     'social_global_search_page/*/*': {},
     'social_global_search_page/top_search_bar/*': {
-      text: 'Search community and user',
+      text: 'Search',
     },
     'social_global_search_page/top_search_bar/search_icon': {
       icon: 'search',
@@ -976,6 +992,9 @@ export const defaultConfig: DefaultConfig = {
     'community_comments_notification_page/*/*': {},
     'community_stories_notification_page/*/*': {},
     'poll_post_composer_page/*/*': {},
+    'poll_post_composer_page/*/post_title': {
+      text: 'Post title',
+    },
     'poll_post_composer_page/*/poll_question_title': {
       text: 'Poll question',
     },
@@ -1016,6 +1035,22 @@ export const defaultConfig: DefaultConfig = {
     },
     'livestream_terminated_page/*/*': {},
     'livestream_terminated_page/*/livestream_terminated_action_button': {},
+    'livestream_banned_page/*/*': {},
+    'livestream_banned_page/*/title': {
+      text: 'Live stream',
+    },
+    'livestream_banned_page/*/livestream_banned_image': {
+      image: 'BannedCaution',
+    },
+    'livestream_banned_page/*/livestream_banned_title': {
+      text: 'You’ve been banned.',
+    },
+    'livestream_banned_page/*/livestream_banned_description': {
+      text: 'You can no longer access this live stream.',
+    },
+    'livestream_banned_page/*/livestream_banned_button': {
+      text: 'OK',
+    },
     'notification_tray_page/*/*': {},
     'notification_tray_page/*/back_button': {
       image: 'value',
@@ -1137,7 +1172,17 @@ export const defaultConfig: DefaultConfig = {
     'pending_request_page/join_request_content/join_decline_button': {
       text: 'Decline',
     },
-
+    '*/livestream_chat_compose_bar/message_composer': {},
+    '*/livestream_chat_compose_bar/reaction_button': {
+      name: 'like',
+      image: '',
+    },
+    '*/livestream_chat_compose_bar/create_message_button': {
+      image: '',
+    },
+    '*/livestream_chat_compose_bar/swap_camera_button': {
+      image: '',
+    },
     'draft_clip_page/*/back_button': {
       image: 'value',
     },
@@ -1188,6 +1233,62 @@ export const defaultConfig: DefaultConfig = {
     'clip_feed_page/*/create_community_button': {
       icon: 'createCommunityIcon',
       text: 'Create Community',
+    },
+    'livestream_player_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'livestream_player_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy live stream link',
+    },
+    'create_livestream_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'create_livestream_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy live stream link',
+    },
+    'clip_feed_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'clip_feed_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy clip link',
+    },
+    'post_detail_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'post_detail_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy post link',
+    },
+    '*/post_content/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    '*/post_content/copy_link': {
+      image: 'icon',
+      text: 'Copy post link',
+    },
+    'user_profile_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'user_profile_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy profile link',
+    },
+    'community_profile_page/*/share_link': {
+      image: 'icon',
+      text: 'Share to',
+    },
+    'community_profile_page/*/copy_link': {
+      image: 'icon',
+      text: 'Copy profile link',
     },
   },
 };
@@ -1248,14 +1349,19 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   highlight_color: '--asc-color-highlight-default',
   message_bubble_primary_color: '--asc-color-message-bubble-primary',
   message_bubble_secondary_color: '--asc-color-message-bubble-secondary',
+  live_stream_chat_bubble_color: '--asc-color-live-steram-chat-bubble',
   background_transparent_black_color: '--asc-color-background-transparent-black',
   background_transparent_white_color: '--asc-color-background-transparent-white',
   primary_background_hover_color: '--asc-color-primary-background-hover',
   primary_background_pressed_color: '--asc-color-primary-background-pressed',
   primary_background_disabled_color: '--asc-color-primary-background-disabled',
+  custom_toast_background: '--asc-color-custom-toast-background',
   plyr_color_main: '--plyr-color-main',
   plyr_video_control_background_hover: '--plyr-video-control-background-hover',
   transparent_black: '--asc-color-transparent-black',
+  elevation_08_01_color: '--asc-color-elevation-08-01',
+  elevation_08_02_color: '--asc-color-elevation-08-02',
+  elevation_08_03_color: '--asc-color-elevation-08-03',
 };
 
 export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> }) => {

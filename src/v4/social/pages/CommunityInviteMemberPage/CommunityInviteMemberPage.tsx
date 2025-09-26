@@ -252,7 +252,9 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
             className={styles.communityInviteMemberPage__checkboxGroup}
             checkboxes={filteredUsers.map((user) => ({
               value: user.userId,
-              label: <MemberLabel userId={user.userId} displayName={user.displayName} />,
+              label: (
+                <MemberLabel pageId={pageId} userId={user.userId} displayName={user.displayName} />
+              ),
             }))}
             onChange={(value) => {
               setSelectedMembers((existingSelectedMembers) => {
@@ -374,16 +376,20 @@ function SelectedMember({ user, handleRemoveUser }: SelectedMemberProps) {
 }
 
 type MemberLabelProps = {
+  pageId?: string;
   userId: string;
   displayName?: string;
 };
 
-function MemberLabel({ userId, displayName }: MemberLabelProps) {
+function MemberLabel({ pageId = '*', userId, displayName }: MemberLabelProps) {
   const { isDesktop } = useResponsive();
   const { AmityCommunityInviteMemberPageBehavior } = usePageBehavior();
 
   return (
-    <div className={styles.communityInviteMemberPage__checkboxLabel}>
+    <div
+      data-testid={`${pageId}/*/member-label-${userId}`}
+      className={styles.communityInviteMemberPage__checkboxLabel}
+    >
       <div className={styles.communityInviteMemberPage__memberAvatar}>
         <UserAvatar
           userId={userId}
@@ -394,7 +400,10 @@ function MemberLabel({ userId, displayName }: MemberLabelProps) {
           }
         />
       </div>
-      <Typography.BodyBold className={styles.communityInviteMemberPage__memberName}>
+      <Typography.BodyBold
+        testId={`${pageId}/*/member-${userId}`}
+        className={styles.communityInviteMemberPage__memberName}
+      >
         {displayName ?? userId}
       </Typography.BodyBold>
     </div>

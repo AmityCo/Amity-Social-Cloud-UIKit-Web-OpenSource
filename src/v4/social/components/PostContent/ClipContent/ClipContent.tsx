@@ -76,33 +76,33 @@ type ClipContentProps = {
   pageId?: string;
   elementId?: string;
   componentId?: string;
-  post: Amity.Post<'clip'>;
+  posts: Amity.Post<'clip'>[];
   onClipClick: (postId: string) => void;
 };
 
 export const ClipContent = ({
-  post,
+  posts,
   onClipClick,
   pageId = '*',
   elementId = '*',
   componentId = '*',
 }: ClipContentProps) => {
-  const { post: childPost, isLoading } = usePost(post.children[0]);
+  const childPost = posts?.[0];
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
-  if (isLoading || childPost?.dataType !== 'clip') return null;
+  if (!childPost || childPost.dataType !== 'clip') return null;
 
   return (
     <div className={styles.clipContent} style={themeStyles}>
       <div
         style={themeStyles}
         className={styles.clipContent}
-        data-videos-amount={Math.min(post.children.length, 4)}
+        data-videos-amount={Math.min(posts.length, 4)}
       >
         <Clip
-          key={childPost.postId}
+          key={posts[0].postId}
           pageId={pageId}
-          post={childPost as Amity.Post<'clip'>}
+          post={posts[0] as Amity.Post<'clip'>}
           componentId={componentId}
           onClipClick={() => onClipClick(childPost.postId)}
         />

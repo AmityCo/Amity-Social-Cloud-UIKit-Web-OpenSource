@@ -43,6 +43,7 @@ export const MyCommunitiesSideBarItem = ({
       className={styles.myCommunitiesSideBarItem}
       onPress={() => onClick(community.communityId)}
       data-has-categories={community.categoryIds.length > 0}
+      data-testid="community-side-bar-item"
     >
       <div className={styles.myCommunitiesSideBarItem__image}>
         <CommunityAvatar

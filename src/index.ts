@@ -79,6 +79,9 @@ export {
   LivestreamTerminatedPage as AmityLivestreamTerminatedPage,
   DraftClipPage as AmityDraftClipPage,
   ClipFeedPage as AmityClipFeedPage,
+  PendingRequestPage as AmityPendingRequestPage,
+  CommunityInviteMemberPage as AmityCommunityInviteMemberPage,
+  CommunityPendingInvitationPage as AmityCommunityPendingInvitationPage,
 } from '~/v4/social/pages';
 
 export {
@@ -113,6 +116,10 @@ export {
   UserImageFeed as AmityUserImageFeedComponent,
   UserVideoFeed as AmityUserVideoFeedComponent,
   Explore as AmityExploreComponent,
+  PendingPostList as AmityPendingPostListComponent,
+  JoinRequestContent as AmityJoinRequestContentComponent,
+  InvitationBanner as AmityInvitationBannerComponent,
+  InvitationSection as AmityInvitationSectionComponent,
 } from '~/v4/social/components/';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';

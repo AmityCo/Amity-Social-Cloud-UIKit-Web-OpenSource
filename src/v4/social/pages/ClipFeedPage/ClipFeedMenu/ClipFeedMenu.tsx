@@ -10,6 +10,7 @@ import useCommunity from '~/v4/core/hooks/collections/useCommunity';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { CommentDrawer } from './CommentDrawer';
+import LikeTransparent from '~/v4/icons/LikeTransparent';
 
 type ClipFeedMenuProps = {
   pageId?: string;
@@ -35,10 +36,15 @@ export const ClipFeedMenu = ({
   isLocalMuted,
 }: ClipFeedMenuProps) => {
   const { post, isLoading } = usePost(postId);
-  const { mutateAddReactionAsync, mutateRemoveReactionAsync, reactionByMe, reactionsCount } =
-    usePostReaction({
-      post: post as Amity.Post<'video' | 'clip'>,
-    });
+  const {
+    mutateAddReactionAsync,
+    mutateRemoveReactionAsync,
+    reactionByMe,
+    setReactionByMe,
+    reactionsCount,
+  } = usePostReaction({
+    post: post as Amity.Post<'video' | 'clip'>,
+  });
 
   const notification = useNotifications();
   const { setDrawerData } = useDrawer();
@@ -55,10 +61,13 @@ export const ClipFeedMenu = ({
         content: 'Join community to interact with this clip.',
       });
     }
-    if (reactionByMe === reactionKey) {
-      await mutateRemoveReactionAsync(reactionKey);
-    } else {
+    if (reactionByMe === null) {
       await mutateAddReactionAsync(reactionKey);
+    } else if (reactionByMe !== reactionKey) {
+      await mutateRemoveReactionAsync(reactionByMe);
+      await mutateAddReactionAsync(reactionKey);
+    } else {
+      await mutateRemoveReactionAsync(reactionByMe);
     }
   };
 
@@ -81,8 +90,13 @@ export const ClipFeedMenu = ({
           defaultIconClassName={styles.clipFeedMenu__reactionButtonIcon}
           reactionsCountClassName={styles.clipFeedMenu__reactionsCount}
           reactButtonClassName={styles.clipFeedMenu__reactButton}
+          fallbackReactButtonClassName={styles.clipFeedMenu__reactButton__fallbackIcon}
           reactionsCount={reactionsCount || 0}
           myReaction={reactionByMe || null}
+          isClipReaction
+          defaultIcon={() => (
+            <LikeTransparent className={styles.clipFeedMenu__reactionButtonIcon} />
+          )}
         />
       )}
       {isShowInteractionMenu && !isDragging && (

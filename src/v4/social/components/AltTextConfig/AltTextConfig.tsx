@@ -10,6 +10,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Button as AriButton } from '~/v4/core/components/AriaButton';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import styles from './AltTextConfig.module.css';
 
 export type AltTextMedia = { type: 'image'; image: Amity.File<'image'> };
@@ -23,11 +24,6 @@ export type AltTextConfigProps = {
   result: (text: string) => void;
   renderHeader?: ({ count }: { count: number; isDisabled?: boolean }) => React.ReactNode;
 };
-
-export const errorCode = Object.freeze({
-  CONTAIN_BLOCKED_WORD: 400308,
-  CONTAIN_BLOCKED_URL: 400309,
-});
 
 export function useAltTextConfig({ mode, result }: AltTextConfigProps) {
   const isEdit = mode.type === 'edit';
@@ -54,8 +50,8 @@ export function useAltTextConfig({ mode, result }: AltTextConfigProps) {
       }
 
       if (
-        error.message.includes(`${errorCode.CONTAIN_BLOCKED_WORD}`) ||
-        error.message.includes(`${errorCode.CONTAIN_BLOCKED_URL}`)
+        error.message.includes(`${ERROR_RESPONSE.BLOCKED_WORD}`) ||
+        error.message.includes(`${ERROR_RESPONSE.BLOCKED_URL}`)
       ) {
         return info({ content: error?.message?.split(': ')[1], alignment: 'fullscreen' });
       }

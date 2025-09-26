@@ -25,6 +25,7 @@ export { CommunityPostPermissionPage } from './CommunityPostPermissionPage';
 export { CommunityStorySettingPage } from './CommunityStorySettingPage';
 export { PendingPostsPage } from './PendingPostsPage';
 export { CommunityMembershipPage } from './CommunityMembershipPage';
+export { CommunityPendingInvitationPage } from './CommunityPendingInvitationPage';
 
 export { PollPostComposerPage } from './PollPostComposerPage';
 export { PollTargetSelectionPage } from './PollTargetSelectionPage';
@@ -34,6 +35,7 @@ export { CommunitiesByCategoryPage } from './CommunitiesByCategoryPage';
 
 export { LiveStreamPlayerPage } from './LiveStreamPlayerPage';
 export { LivestreamTerminatedPage } from './LivestreamTerminatedPage';
+export { LiveStreamBannedPage } from './LiveStreamBannedPage';
 
 export { NotificationTrayPage } from './NotificationTrayPage';
 

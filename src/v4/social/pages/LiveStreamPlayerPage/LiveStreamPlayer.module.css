@@ -15,6 +15,20 @@
   background: rgb(from var(--asc-color-black) r g b / 80%);
 }
 
+.liveStreamPlayer__overlay[data-is-live='true'] {
+  background: var(--asc-color-black);
+}
+
+.liveStreamPlayer__liveDetail {
+  display: flex;
+  padding: 1rem 0.5rem;
+  z-index: 300;
+  position: absolute;
+  width: 100%;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .liveStreamPlayer__closeButton {
   top: 2rem;
   left: 1rem;
@@ -22,16 +36,59 @@
   position: fixed;
 }
 
+.liveStreamPlayer__closeButton[data-is-live='true'] {
+  position: unset;
+}
+
 .liveStreamPlayer__closeButton__icon {
   width: 1.5rem;
   height: 1.5rem;
+  color: var(--asc-color-base-shade4);
   fill: var(--asc-color-base-shade4);
+}
+
+.liveStreamPlayer__closeButton__icon[data-is-live='true'],
+.liveStreamPlayer__closeButton__icon[data-is-ended='true'] {
+  z-index: unset;
+  position: unset;
+  width: 2rem;
+  height: 2rem;
+  color: var(--asc-color-white);
+}
+
+.liveStreamPlayer__liveDetail__detail {
+  margin-left: 0.25rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.liveStreamPlayer__liveDetail__optionWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.liveStreamPlayer__liveDetail__avatar {
+  width: 2rem;
+  height: 2rem;
+}
+
+.livestreamPlayer__liveDetail__text {
+  display: block;
+  color: var(--asc-color-white);
 }
 
 .liveStreamPlayer__dialog {
   width: 100%;
   height: 100%;
   outline: none;
+}
+
+.liveStreamPlayer__dialog[data-is-live='true'] {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  position: relative;
 }
 
 .liveStreamPlayer__video {
@@ -45,7 +102,7 @@
 
 .liveStreamPlayer__video[data-orientation='portrait'] {
   width: 100vw;
-  height: 100dvh;
+  height: calc(100dvh - 3.5rem);
   object-fit: cover;
 }
 
@@ -56,6 +113,7 @@
 }
 
 .liveStreamPlayer__loading {
+  pointer-events: none;
   top: 0;
   left: 0;
   z-index: 2;
@@ -86,6 +144,66 @@
   border-top-color: var(--asc-color-white);
 }
 
+/* show if live stream status = live */
+.livestreamChat__container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100dvw;
+  height: 100dvh;
+}
+
+.livestreamChat__container__inner {
+  mask-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0%) 0%,
+    #fff 50%,
+    #fff 98.07%,
+    rgb(255 255 255 / 20%) 100%
+  );
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  position: absolute;
+  background-color: transparent;
+  width: 100%;
+  height: 40%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.livestreamChat__overlay__top {
+  background: linear-gradient(180deg, rgb(0 0 0 / 100%) 0%, rgb(0 0 0 / 0%) 100%);
+  height: 5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.livestreamChat__overlay__bottom {
+  background: linear-gradient(0deg, rgb(0 0 0 / 100%) 0%, rgb(0 0 0 / 0%) 100%);
+  height: 40%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.livestreamChat__reactionLane__ref {
+  position: relative;
+  width: 100%;
+  height: 0;
+  overflow: visible;
+}
+
+.liveStreamPlayer__optionIcon {
+  color: var(--asc-color-white);
+  width: 2rem;
+  height: 2rem;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -93,6 +211,25 @@
 }
 
 @media only screen and (width >= 48em) {
+  .plyr__controls {
+    position: absolute;
+    width: 100dvw;
+  }
+
+  .livestreamPlayer__modal[data-is-live='true'],
+  .livestreamPlayer__modal[data-is-ended='true'] {
+    height: 100dvh;
+    width: 100dvw;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .liveStreamPlayer[data-is-live='true'] {
+    display: flex;
+    justify-content: center;
+    position: unset;
+  }
+
   .liveStreamPlayer__video[data-orientation='landscape'] {
     width: 80vw;
     max-height: 75vh;
@@ -101,6 +238,47 @@
   .liveStreamPlayer__video[data-orientation='portrait'] {
     width: 100%;
     height: 75vh;
-    max-width: 90vw;
+  }
+
+  .liveStreamPlayer__video[data-is-live='true'] {
+    position: unset;
+    height: 100dvh;
+  }
+
+  .livestreamChat__container {
+    position: unset;
+    height: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    min-width: 25rem;
+    width: 30%;
+  }
+
+  .livestreamChat__container__inner {
+    mask-image: unset;
+    position: relative;
+    border-radius: 1rem;
+    background-color: var(--asc-color-background-default);
+    width: 100%;
+    height: 100%;
+    max-height: unset;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .liveStreamPlayer__pendingPost__banner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+  }
+
+  .livestreamChat__pendingPost__text {
+    padding-bottom: 1.5rem;
+    color: var(--asc-color-secondary-shade2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
   }
 }

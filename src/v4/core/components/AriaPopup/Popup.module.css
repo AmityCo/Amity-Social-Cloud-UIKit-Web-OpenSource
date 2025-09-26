@@ -14,6 +14,11 @@
   animation: none;
 }
 
+.popup[data-media='true'] {
+  border-radius: 0;
+  background: transparent;
+}
+
 .overlay {
   top: 0;
   left: 0;
@@ -24,7 +29,7 @@
   position: fixed;
   align-items: center;
   justify-content: center;
-  background: rgb(from var(--asc-color-black) r g b / 60%);
+  background: var(--asc-color-black);
 }
 
 .overlay[data-view='mobile'] {
@@ -100,6 +105,10 @@
 }
 
 @media (width >= 48em) {
+  .overlay {
+    background: rgb(from var(--asc-color-black) r g b / 80%);
+  }
+
   .overlay[data-view='mobile'] {
     display: none;
   }

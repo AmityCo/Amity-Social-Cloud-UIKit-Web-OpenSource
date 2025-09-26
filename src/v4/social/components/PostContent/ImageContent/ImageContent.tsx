@@ -11,40 +11,39 @@ type ImageContentProps = {
   pageId?: string;
   elementId?: string;
   componentId?: string;
-  post: Amity.Post<'image'>;
+  posts: Amity.Post<'image'>[];
   onImageClick: (imageIndex: number) => void;
 };
 
 export const ImageContent = ({
-  post,
+  posts,
   pageId = '*',
-  onImageClick,
   elementId = '*',
   componentId = '*',
+  onImageClick,
 }: ImageContentProps) => {
-  const { post: childPost, isLoading } = usePost(post.children?.[0]);
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
-  const first4Images = post.children.slice(0, 4);
-  const imageLeftCount = Math.max(0, post.children.length - 4);
+  const first4Images = posts?.slice(0, 4);
+  const imageLeftCount = Math.max(0, posts?.length - 4);
 
-  if (isLoading || childPost?.dataType !== 'image') return null;
+  if (!posts || posts[0]?.dataType !== 'image') return null;
 
   return (
     <div
       style={themeStyles}
       className={styles.imageContent}
-      data-images-amount={Math.min(post.children.length, 4)}
+      data-images-amount={Math.min(posts?.length ?? 0, 4)}
     >
-      {first4Images.map((postId: string, index: number) => (
+      {first4Images.map((post: Amity.Post<'image'>, index: number) => (
         <Image
-          key={postId}
+          key={post.postId}
           index={index}
-          postId={postId}
+          imagePost={post}
           pageId={pageId}
           componentId={componentId}
           imageLeftCount={imageLeftCount}
-          totalCount={post.children.length}
+          totalCount={posts.length}
           onImageClick={() => onImageClick(index)}
           isLastImage={index === first4Images.length - 1}
         />
@@ -55,7 +54,7 @@ export const ImageContent = ({
 
 type ImageProps = {
   index: number;
-  postId: string;
+  imagePost: Amity.Post<'image'>;
   pageId?: string;
   totalCount: number;
   componentId?: string;
@@ -66,7 +65,7 @@ type ImageProps = {
 
 function Image({
   index,
-  postId,
+  imagePost,
   isLastImage,
   totalCount,
   pageId = '*',
@@ -74,12 +73,11 @@ function Image({
   imageLeftCount,
   componentId = '*',
 }: ImageProps) {
-  const { post: imagePost, isLoading } = usePost(postId);
   const [isBrokenImg, setIsBrokenImg] = useState(false);
 
   const file = imagePost?.getImageInfo();
 
-  if (isLoading) return null;
+  if (!imagePost) return null;
 
   return (
     <Button

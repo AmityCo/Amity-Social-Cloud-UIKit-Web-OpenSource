@@ -11,7 +11,9 @@ import {
   $createMentionNode,
   MentionNode,
 } from '~/v4/social/internal-components/Lexical/nodes/MentionNode';
+import { HashtagNode } from '~/v4/social/internal-components/Lexical/nodes/HashtagNode';
 import { MentionPlugin } from '~/v4/social/internal-components/Lexical/plugins/MentionPlugin';
+import { HashtagPlugin } from '~/v4/social/internal-components/Lexical/plugins/HashtagPlugin';
 import { Mentioned, Mentionees } from '~/v4/helpers/utils';
 import { LinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/LinkPlugin';
 import { AutoLinkPlugin } from '~/v4/social/internal-components/Lexical/plugins/AutoLinkPlugin';
@@ -47,10 +49,16 @@ interface PostTextFieldProps {
     data: { text: string };
     metadata?: {
       mentioned?: Mentioned[];
+      hashtags?: Amity.Hashtag[];
     };
     mentionees?: Mentionees;
   };
-  onChange: (data: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => void;
+  onChange: (data: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    hashtags: Amity.Hashtag[];
+    text: string;
+  }) => void;
 }
 
 const useSuggestions = (communityId?: string | null) => {
@@ -133,7 +141,7 @@ const useSuggestions = (communityId?: string | null) => {
   return { suggestions, queryString, onQueryChange, loadMore, hasMore, isLoading };
 };
 
-const nodes = [AutoLinkNode, LinkNode, MentionNode] as Array<Klass<LexicalNode>>;
+const nodes = [AutoLinkNode, LinkNode, MentionNode, HashtagNode] as Array<Klass<LexicalNode>>;
 
 export const PostTextField = ({
   onChange,
@@ -157,6 +165,7 @@ export const PostTextField = ({
     namespace: 'PostTextField',
     theme: {
       link: styles.editorLink,
+      hashtag: styles.editorHashtag,
       placeholder: styles.editorPlaceholder,
       paragraph: styles.editorParagraph,
     },
@@ -210,6 +219,7 @@ export const PostTextField = ({
         <AutoFocusPlugin />
         <LinkPlugin />
         <AutoLinkPlugin />
+        <HashtagPlugin />
         <MentionPlugin<MentionData, MentionNode<MentionData>>
           suggestions={suggestions}
           onQueryChange={onQueryChange}

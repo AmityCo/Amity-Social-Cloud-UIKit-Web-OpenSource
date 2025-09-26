@@ -1,16 +1,13 @@
-import { CommentRepository, ReactionRepository } from '@amityco/ts-sdk';
+import { CommentRepository } from '@amityco/ts-sdk';
 import clsx from 'clsx';
-import millify from 'millify';
 import React, { useCallback, useState } from 'react';
 import { BottomSheet, Typography } from '~/v4/core/components';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { Mentionees } from '~/v4/helpers/utils';
-import { LIKE_REACTION_KEY } from '~/v4/social/constants/reactions';
 import { EditCancelButton } from '~/v4/social/elements/EditCancelButton/EditCancelButton';
-import { SaveButton } from '~/v4/social/elements';
+import { ReactionButton, SaveButton } from '~/v4/social/elements';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge/ModeratorBadge';
-import Like from '~/v4/social/elements/ReactionButton/Like';
 import { Timestamp } from '~/v4/social/elements/Timestamp/Timestamp';
 import { MinusCircleIcon } from '~/v4/social/icons';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
@@ -22,13 +19,15 @@ import useCommunityPostPermission from '~/v4/social/hooks/useCommunityPostPermis
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
-import { Button } from '~/v4/core/natives/Button';
 import { ReactionList } from '~/v4/social/components/ReactionList';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useReactionHandler } from '~/v4/core/hooks/useReactionHandler';
+import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
+import { useCommentReactionDisplay } from '~/v4/social/hooks/useCommentReactionDisplay';
+import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
 import styles from './ReplyComment.module.css';
 
 type ReplyCommentProps = {
@@ -36,6 +35,7 @@ type ReplyCommentProps = {
   community?: Amity.Community;
   comment: Amity.Comment;
   isHighlightDeleted?: boolean;
+  testId?: string;
 };
 
 const PostReplyComment = ({
@@ -43,6 +43,7 @@ const PostReplyComment = ({
   community,
   comment,
   isHighlightDeleted = false,
+  testId,
 }: ReplyCommentProps) => {
   const componentId = 'post_comment';
   const { confirm } = useConfirmContext();
@@ -66,7 +67,35 @@ const PostReplyComment = ({
     userId: comment.creator?.userId,
   });
 
-  const isLiked = (comment.myReactions || []).some((reaction) => reaction === 'like');
+  // Use comment reaction hook for better reaction management
+  const {
+    reactionByMe,
+    setReactionByMe,
+    reactionsCount,
+    mutateAddReactionAsync,
+    mutateRemoveReactionAsync,
+  } = useCommentReaction({
+    comment,
+  });
+
+  useCommentReactionDisplay({ comment });
+
+  const handleReactionClick = async (reactionKey: string) => {
+    if (reactionByMe === null) {
+      await mutateAddReactionAsync(reactionKey);
+    } else if (reactionByMe !== reactionKey) {
+      await mutateRemoveReactionAsync(reactionByMe);
+      await mutateAddReactionAsync(reactionKey);
+    } else {
+      await mutateRemoveReactionAsync(reactionByMe);
+    }
+  };
+
+  // Use reaction handler for long press functionality
+  useReactionHandler({
+    myReaction: reactionByMe,
+    onReactionClick: handleReactionClick,
+  });
 
   const isBrandUser = comment.creator?.isBrand ?? false;
 
@@ -93,16 +122,6 @@ const PostReplyComment = ({
     });
   };
 
-  const handleLike = async () => {
-    if (!comment) return;
-
-    if (!isLiked) {
-      await ReactionRepository.addReaction('comment', comment?.commentId, LIKE_REACTION_KEY);
-    } else {
-      await ReactionRepository.removeReaction('comment', comment?.commentId, LIKE_REACTION_KEY);
-    }
-  };
-
   const handleSaveComment = useCallback(async () => {
     if (!commentData || !comment.commentId) return;
 
@@ -111,11 +130,11 @@ const PostReplyComment = ({
       mentionees: commentData.mentionees as Amity.UserMention[],
       metadata: commentData.metadata,
     }).catch((error) => {
-      if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
+      if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
         notification.info({
           content: 'Your comment contains inappropriate word. Please review and delete it.',
         });
-      } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
+      } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
         notification.info({
           content: 'Your comment contains a link that’s not allowed. Please review and delete it.',
         });
@@ -197,10 +216,13 @@ const PostReplyComment = ({
           </div>
         </div>
       ) : (
-        <div className={styles.postReplyComment} style={themeStyles} data-testid={accessibilityId}>
+        <div className={styles.postReplyComment} style={themeStyles} data-testid={testId}>
           <UserAvatar pageId={pageId} componentId={componentId} userId={comment.userId} />
           <div className={styles.postReplyComment__details}>
-            <div className={styles.postReplyComment__content}>
+            <div
+              data-has-reaction={reactionsCount > 0}
+              className={styles.postReplyComment__content}
+            >
               <div className={styles.postReplyComment__userInfo}>
                 <Typography.BodyBold
                   data-testid={`${pageId}/${componentId}/username`}
@@ -217,6 +239,31 @@ const PostReplyComment = ({
                 data={{ text: (comment.data as Amity.ContentDataText).text }}
                 mentionees={comment.mentionees as Amity.UserMention[]}
                 metadata={comment.metadata}
+                testId={`${pageId}/${componentId}/reply-comment-text`}
+              />
+              <CommentReactionDisplay
+                pageId={pageId}
+                componentId={componentId}
+                comment={comment}
+                reactionsCount={reactionsCount}
+                position="replyComment"
+                onReactionPress={() => {
+                  const reactionList = (
+                    <ReactionList
+                      pageId={pageId}
+                      referenceType="comment"
+                      referenceId={comment.commentId}
+                      customReferenceType="reply"
+                    />
+                  );
+                  isDesktop
+                    ? openPopup({ view: 'desktop', children: reactionList })
+                    : setDrawerData({
+                        content: reactionList,
+                        snapPoints: [0.7, 1],
+                        activeSnapPoint: 0.7,
+                      });
+                }}
               />
             </div>
             <div className={styles.postReplyComment__secondRow}>
@@ -231,15 +278,18 @@ const PostReplyComment = ({
                     {comment.createdAt !== comment.editedAt && ' (edited)'}
                   </span>
                 </Typography.Caption>
-                <div onClick={handleLike}>
-                  <Typography.CaptionBold
-                    data-testid={`${pageId}/${componentId}/reply_comment_like`}
-                    className={styles.postReplyComment__secondRow__like}
-                    data-is-liked={isLiked}
-                  >
-                    Like
-                  </Typography.CaptionBold>
-                </div>
+                {community && community.isJoined && (
+                  <ReactionButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    myReaction={reactionByMe}
+                    onReactionClick={handleReactionClick}
+                    buttonClassName={styles.postReplyComment__secondRow__like}
+                    isCommentReaction
+                    referenceType="comment"
+                  />
+                )}
+
                 <Popover
                   trigger={{
                     pageId,
@@ -264,30 +314,6 @@ const PostReplyComment = ({
                   )}
                 </Popover>
               </div>
-              {comment.reactionsCount > 0 && (
-                <Button
-                  className={styles.postReplyComment__secondRow__rightPane}
-                  onPress={() => {
-                    const reactionList = (
-                      <ReactionList
-                        pageId={pageId}
-                        referenceType="comment"
-                        referenceId={comment.commentId}
-                      />
-                    );
-                    isDesktop
-                      ? openPopup({ view: 'desktop', children: reactionList })
-                      : setDrawerData({ content: reactionList });
-                  }}
-                >
-                  <Typography.Caption
-                    className={styles.postReplyComment__secondRow__rightPane__reactionCount}
-                  >
-                    {millify(comment.reactionsCount)}
-                  </Typography.Caption>
-                  <Like className={styles.postReplyComment__secondRow__rightPane__like} />
-                </Button>
-              )}
             </div>
           </div>
         </div>

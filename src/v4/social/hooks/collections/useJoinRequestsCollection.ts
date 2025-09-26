@@ -15,6 +15,7 @@ export default function useJoinRequestsCollection({
   const [hasMore, setHasMore] = useState<boolean>();
 
   const loadMoreRef = useRef<(() => void) | null>();
+  const unsubscriberRef = useRef<(() => void) | null>(null);
 
   const loadMore = useCallback(() => {
     if (loadMoreRef.current) {
@@ -22,7 +23,7 @@ export default function useJoinRequestsCollection({
     }
   }, []);
 
-  useEffect(() => {
+  const subscribe = useCallback(() => {
     if (!community.communityId) return;
 
     const unsubscriber = community.getJoinRequests(
@@ -48,16 +49,33 @@ export default function useJoinRequestsCollection({
       },
     );
 
-    return () => {
-      unsubscriber();
-    };
+    unsubscriberRef.current = unsubscriber;
+    return unsubscriber;
   }, [community.communityId, status]);
+
+  const refresh = useCallback(() => {
+    if (unsubscriberRef.current) {
+      unsubscriberRef.current();
+    }
+    subscribe();
+  }, [subscribe]);
+
+  useEffect(() => {
+    subscribe();
+
+    return () => {
+      if (unsubscriberRef.current) {
+        unsubscriberRef.current();
+      }
+    };
+  }, [subscribe]);
 
   return {
     joinRequests: items,
     loading: isLoading,
     hasMore,
     loadMore,
+    refresh,
     error,
   };
 }

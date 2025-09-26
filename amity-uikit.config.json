@@ -130,6 +130,13 @@
     { "name": "grinning", "image": "message_reaction_grinning.png" },
     { "name": "sad", "image": "message_reaction_sad.png" }
   ],
+  "social_reactions": [
+    { "name": "like", "image": "message_reaction_like.png" },
+    { "name": "love", "image": "message_reaction_heart.png" },
+    { "name": "fire", "image": "message_reaction_fire.png" },
+    { "name": "happy", "image": "message_reaction_grinning.png" },
+    { "name": "sad", "image": "message_reaction_sad.png" }
+  ],
   "customizations": {
     "select_target_page/*/*": {
       "theme": {},
@@ -393,6 +400,17 @@
           "background_color": "#FFFFFF"
         }
       }
+    },
+    "*/livestream_chat_compose_bar/message_composer": {},
+    "*/livestream_chat_compose_bar/reaction_button": {
+      "name": "like",
+      "image": ""
+    },
+    "*/livestream_chat_compose_bar/create_message_button": {
+      "image": ""
+    },
+    "*/livestream_chat_compose_bar/swap_camera_button": {
+      "image": ""
     },
     "live_chat/chat_header/*": {},
     "live_chat/message_list/*": {},

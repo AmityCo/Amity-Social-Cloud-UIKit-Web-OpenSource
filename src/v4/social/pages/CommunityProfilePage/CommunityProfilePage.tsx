@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import styles from './CommunityProfilePage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CommunityHeader } from '~/v4/social/components/CommunityHeader';
@@ -23,7 +23,7 @@ import { PostComposer } from '~/v4/social/components/PostComposer';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName';
-import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage/PollPostComposerPage';
+import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
 import useCommunityModeratorsCollection from '~/v4/social/hooks/collections/useCommunityModeratorsCollection';
@@ -35,7 +35,9 @@ import { useGetInvitation } from '~/v4/social/hooks';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
 import { useClipContext } from '~/v4/social/providers/ClipProvider';
+import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
 
+import { Typography } from '~/v4/core/components';
 interface CommunityProfileProps {
   communityId: string;
   page?: number;
@@ -44,6 +46,7 @@ interface CommunityProfileProps {
 export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communityId, page }) => {
   const pageId = 'community_profile_page';
 
+  const { onScroll, scrollPosition } = useFeedScrollContext();
   const { openPopup } = usePopupContext();
   const { confirm } = useConfirmContext();
   const { currentUserId } = useSDK();
@@ -68,8 +71,9 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   const { moderators } = useCommunityModeratorsCollection({ communityId: community?.communityId });
   const isCommunityModerator = moderators.find((moderator) => moderator.userId === currentUserId);
   const { onBack } = useNavigation();
-  const { acceptedInvitation } = useLayoutContext();
+  const { acceptedInvitation, linkToPost } = useLayoutContext();
   const { isDesktop } = useResponsive();
+  const initialLoad = useRef(true);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -138,6 +142,10 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
   }, [acceptedInvitation]);
 
   useEffect(() => {
+    !linkToPost && setActiveTab('community_feed');
+  }, [communityId]);
+
+  useEffect(() => {
     if (file) {
       AmityCommunityProfilePageBehavior?.goToStoryCreationPage?.({
         targetId: communityId,
@@ -187,6 +195,7 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
       accessibilityId={accessibilityId}
       onTouchEndCallback={handleRefresh}
       className={styles.communityProfilePage__container}
+      onScroll={onScroll}
     >
       {(isLoading || isInvitationLoading) && <CommunityProfileSkeleton />}
       {isShowFailed && <FailedToShow pageId={pageId} onBack={onBack} />}
@@ -232,12 +241,13 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                   pageId,
                   view: 'desktop',
                   isDismissable: false,
-                  onClose: onCloseCreatePostPopup,
-                  header: CreatePostHeader,
-                  children: (
-                    <PollPostComposerPage
-                      targetId={community?.communityId as string}
+                  header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                  children: ({ close }) => (
+                    <PollTypeSelection
+                      target={community}
+                      onClickNext={close}
                       targetType="community"
+                      targetId={community?.communityId as string}
                     />
                   ),
                 });
@@ -270,11 +280,15 @@ export const CommunityProfilePage: React.FC<CommunityProfileProps> = ({ communit
                       pageId={pageId}
                       componentId={communityId}
                       onClick={() => {
-                        AmityCommunityProfilePageBehavior?.goToPollPostComposerPage?.({
-                          targetId: communityId,
-                          targetType: 'community',
+                        setDrawerData({
+                          content: (
+                            <PollTypeSelection
+                              targetId={communityId}
+                              targetType="community"
+                              onClickNext={removeDrawerData}
+                            />
+                          ),
                         });
-                        removeDrawerData();
                       }}
                     />
                     {hasStoryPermission && (

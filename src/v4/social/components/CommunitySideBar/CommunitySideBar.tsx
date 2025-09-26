@@ -6,6 +6,9 @@ import { CustomSideBarMenuItem } from '~/v4/social/elements/CommunitySideBarMenu
 import { CustomProfileMenuItem } from '~/v4/social/elements/CustomProfileMenuItem';
 import styles from './CommunitySideBar.module.css';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { notificationTray } from '@amityco/ts-sdk';
+import { Popover } from '~/v4/core/components/AriaPopover';
+import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
 
 type CommunitySideBarProps = {
   pageId?: string;
@@ -13,7 +16,17 @@ type CommunitySideBarProps = {
   isExploreHidden?: boolean;
 };
 
-export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarProps) => {
+
+export const CommunitySideBar = ({
+  className,
+  pageId = '*',
+  isExploreHidden,
+}: CommunitySideBarProps) => {
+  const componentId = 'community_sidebar';
+  const { goToCreateCommunityPage } = useNavigation();
+  const { socialCommunityCreationButtonVisible } = useConfig();
+  const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
+  const { searchValue } = useSearchResultContext();
   //#region button navigators
   const handleHomeClick = () => {
     goToSocialHomePage();
@@ -26,7 +39,6 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
   const handleChatClick = () => {
     goToChatPage();
   };
-
   const handleSettingsClick = () => {
     goToSettingPage();
   };
@@ -101,7 +113,20 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
           />
         </div>
         <div className={styles.communitySideBar__menuButton}>
-          <CustomSideBarMenuItem
+        
+<!--         <SocialGlobalSearchPage keyword={searchValue} />
+      </div>
+
+      <div className={styles.communitySideBar__menuSection}>
+        <NewsFeedMenuItem pageId={pageId} componentId={componentId} />
+//         {!isExploreHidden && <ExploreMenuItem pageId={pageId} componentId={componentId} />}
+      </div>
+      <div className={styles.communitySideBar__myCommunitiesSection}>
+        <MyCommunitiesSideBarTitle pageId={pageId} componentId={componentId} />
+//         {socialCommunityCreationButtonVisible && (
+<!--           <CreateCommunityMenuItem /> -->
+
+      <CustomSideBarMenuItem
             pageId={pageId}
             componentId={componentId}
             elementId="settings_sidebar_menu_item"

@@ -1,6 +1,7 @@
 export * from './collections/useReactionsCollection';
 export { useGetActiveStoriesByTarget } from './useGetActiveStories';
 export { useCommentFlaggedByMe } from './useCommentFlaggedByMe';
+export { useCommentReaction } from './useCommentReaction';
 export { default as useCommunityPermission } from './useCommunityPermission';
 export { useCommunityInfo } from './useCommunityInfo';
 export { default as useCategoriesByIds } from './useCategoriesByIds';
@@ -10,3 +11,5 @@ export { default as useLiveCollection } from './useLiveCollection';
 export { useUserQueryByDisplayName } from './useUserQueryByDisplayName';
 export * from './useInvitationNotificationTray';
 export { useGetInvitation } from './useGetInvitation';
+export * from './collections/useUserFeed';
+export * from './useLinkToPost';

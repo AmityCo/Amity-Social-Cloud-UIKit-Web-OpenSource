@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CommentRepository, ContentFlagReasonEnum } from '@amityco/ts-sdk';
+import { CommentRepository } from '@amityco/ts-sdk';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';

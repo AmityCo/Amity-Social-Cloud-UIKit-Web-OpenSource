@@ -17,6 +17,8 @@ export const LiveChat = ({ channelId }: LiveChatProps) => {
   const { themeStyles } = useAmityPage({ pageId });
   const ref = useRef<HTMLDivElement>(null);
 
+  if (!channel) return null;
+
   return (
     <LiveChatNotificationProvider>
       <div className={styles.liveChat} ref={ref} style={themeStyles}>

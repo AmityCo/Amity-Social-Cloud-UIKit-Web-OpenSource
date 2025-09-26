@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { formatAltText } from '~/v4/social/utils';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import useSwiper from '~/v4/social/hooks/useSwiper';
-import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { ClearButton } from '~/v4/social/elements/ClearButton';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { getFileUrlWithSize } from '~/v4/utils/getFileUrlWithSize';
-import { AltTextMenu } from '~/v4/social/internal-components/AltTextMenu';
+import { MediaMenu } from '~/v4/social/internal-components/MediaMenu';
 import { AltTextBottomSheet } from '~/v4/social/internal-components/ImageThumbnail/ImageThumbnail';
 import styles from './ImageViewer.module.css';
 import { usePostPermissions } from '~/v4/core/hooks/usePostPermissions';
-
-//TODO: After SDK update getPostChildren should be used instead of usePost
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 
 type ImageViewerProps = {
   pageId?: string;
@@ -24,26 +25,36 @@ type ImageViewerProps = {
   elementId?: string;
   componentId?: string;
   initialImageIndex: number;
+  isFromGallery?: boolean;
+  target?: 'community' | 'user';
+  feedSources?: FeedSourceEnum[];
 };
 
 export function ImageViewer({
   post,
   onClose,
+  target,
   pageId = '*',
   elementId = '*',
   componentId = '*',
   initialImageIndex,
+  isFromGallery,
+  feedSources,
 }: ImageViewerProps) {
   const { isOwner } = usePostPermissions({ post });
-  const [selectedImageIndex, setSelectedImageIndex] = useState(initialImageIndex);
-  const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
-  const { post: imagePost } = usePost(post?.children[selectedImageIndex]);
+  const [isOpen, setIsOpen] = useState(false);
   const [isBrokenImg, setIsBrokenImg] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(initialImageIndex);
+  const { goToPostDetailPage } = useNavigation();
+  const { setLinkToPost } = useLayoutContext();
 
-  const imageFile = imagePost?.getImageInfo();
+  const imageFile =
+    post.children.length > 0
+      ? post.childrenPosts[selectedImageIndex]?.getImageInfo()
+      : post?.getImageInfo();
 
   const { setDrawerData, removeDrawerData } = useDrawer();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const { themeStyles, accessibilityId } = useAmityElement({ pageId, componentId, elementId });
 
   const next = () => {
     if (hasNext) setSelectedImageIndex((prev) => prev + 1);
@@ -58,33 +69,84 @@ export function ImageViewer({
 
   const { handleTouchEnd, handleTouchMove, handleTouchStart } = useSwiper({ next, prev });
 
+  const redirectToPostDetailPage = () => {
+    const postId = post.children.length > 0 ? post.postId : post.parentPostId;
+    if (target === 'community') {
+      if (post) {
+        setLinkToPost({
+          tab: 'community_image_feed',
+          index: selectedImageIndex,
+          target: 'community',
+          parentPostId: post.parentPostId,
+          postId: post.postId,
+          feedSources,
+        });
+      }
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
+    }
+    if (target === 'user') {
+      if (post) {
+        setLinkToPost({
+          tab: UserProfileTabs.IMAGE,
+          index: selectedImageIndex,
+          target: 'user',
+          parentPostId: post.parentPostId,
+          postId: post.postId,
+          feedSources,
+        });
+      }
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
+    }
+  };
+
   return (
     <div style={themeStyles} data-testid={accessibilityId} className={styles.imageViewer__modal}>
       <span className={styles.imageViewer__close}>
         <ClearButton
           pageId={pageId}
-          onPress={onClose}
+          onPress={() => {
+            onClose();
+            removeDrawerData();
+          }}
           componentId={componentId}
           defaultClassName={styles.imageViewer__closeButton}
           imgClassName={styles.imageViewer__closeButton__img}
         />
-        {isOwner && (
+        {(isFromGallery || isOwner) && (
           <Popover
             trigger={{
               pageId,
-
               className: styles.imageViewer__menuButton,
               iconClassName: styles.imageViewer__menuButton__icon,
               onClick: () => {
                 setDrawerData({
                   content: (
-                    <AltTextMenu
-                      file={imageFile}
+                    <MediaMenu
                       pageId={pageId}
-                      onPress={() => {
-                        setIsOpen(true);
-                        removeDrawerData();
-                      }}
+                      file={imageFile}
+                      onViewPostPress={
+                        isFromGallery
+                          ? () => {
+                              onClose();
+                              removeDrawerData();
+                              redirectToPostDetailPage();
+                            }
+                          : undefined
+                      }
+                      onEditAltTextPress={
+                        isOwner
+                          ? () => {
+                              setIsOpen(true);
+                              removeDrawerData();
+                            }
+                          : undefined
+                      }
                     />
                   ),
                 });
@@ -92,7 +154,29 @@ export function ImageViewer({
             }}
           >
             {({ closePopover }) => {
-              return <AltTextMenu file={imageFile} pageId={pageId} onPress={closePopover} />;
+              return (
+                <MediaMenu
+                  pageId={pageId}
+                  file={imageFile}
+                  onEditAltTextPress={
+                    isOwner
+                      ? () => {
+                          setIsOpen(true);
+                          closePopover();
+                        }
+                      : undefined
+                  }
+                  onViewPostPress={
+                    isFromGallery
+                      ? () => {
+                          onClose();
+                          closePopover();
+                          redirectToPostDetailPage();
+                        }
+                      : undefined
+                  }
+                />
+              );
             }}
           </Popover>
         )}
@@ -148,7 +232,7 @@ export function ImageViewer({
         </Button>
       )}
 
-      {imageFile && (
+      {imageFile && isOwner && (
         <AltTextBottomSheet file={imageFile} mode="edit" isOpen={isOpen} setIsOpen={setIsOpen} />
       )}
     </div>

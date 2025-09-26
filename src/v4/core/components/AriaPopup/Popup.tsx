@@ -21,6 +21,7 @@ export function Popup() {
           children,
           className,
           view = 'all',
+          media = false,
           overlayClassName,
           keepPrevious = true,
           isDismissable = true,
@@ -44,6 +45,7 @@ export function Popup() {
             <Modal
               style={style}
               aria-modal="true"
+              data-media={!!media}
               data-animation={!disabledAnimation}
               className={clsx(styles.popup, className)}
             >
@@ -70,6 +72,7 @@ export function Popup() {
               data-view={keepPrevious && !isLastPopup ? 'none' : view}
             >
               <Dialog
+                data-media={!!media}
                 data-animation={!disabledAnimation}
                 className={clsx(styles.popup, styles.dialog, className)}
               >

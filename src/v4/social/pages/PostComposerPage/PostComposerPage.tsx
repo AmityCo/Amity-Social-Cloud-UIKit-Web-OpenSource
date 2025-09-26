@@ -56,6 +56,8 @@ export type CreatePostParams = {
   text: string;
   mentioned: Mentioned[];
   mentionees: Mentionees;
+  hashtagsMetadata?: Amity.Hashtag[];
+  hashtags?: string[];
   attachments?: {
     fileId: string;
     type: string;

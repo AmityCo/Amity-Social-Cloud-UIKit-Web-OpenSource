@@ -17,13 +17,13 @@ import FlagIcon from '~/v4/icons/Flag';
 import { TrashIcon } from '~/v4/icons/Trash';
 import styles from './PostMenu.module.css';
 import { CreatePost } from '~/v4/icons/CreatePost';
-import usePost from '~/v4/core/hooks/objects/usePost';
-import usePoll from '~/v4/social/hooks/usePoll';
 import { ClosePollIcon } from '~/v4/icons/ClosePoll';
 import UnFlag from '~/v4/icons/UnFlag';
-import { ContentReportReason } from '~/v4/social/internal-components/ContentReportReason/ContentReportReason';
+import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason/ContentReportReason';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { checkDeleteCommunityPostPermission } from '~/v4/social/utils';
+import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
+import { SharableModel } from '~/v4/utils/sharableLink';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -33,6 +33,8 @@ interface PostMenuProps {
   onCloseMenu: () => void;
   onConfirmEditPost?: ({ onConfirm }: { onConfirm: () => void }) => void;
   onPostDeleted?: (post: Amity.Post) => void;
+  onPollClosed?: () => void;
+  isSearchPost?: boolean;
 }
 
 export const PostMenu = ({
@@ -42,19 +44,16 @@ export const PostMenu = ({
   onConfirmEditPost,
   onCloseMenu,
   onPostDeleted,
+  onPollClosed,
+  isSearchPost = false,
 }: PostMenuProps) => {
   const { success, info } = useNotifications();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
-  const { post: childPost } = usePost(post.children?.[0]);
-  const { item: poll } = usePoll((childPost as Amity.Post<'poll'>)?.data?.pollId);
   const { client } = useSDK();
 
-  const isLiveStreamPost = useMemo(
-    () => childPost?.dataType === 'liveStream',
-    [childPost?.dataType],
-  );
-
+  const poll = post?.childrenPosts?.[0]?.getPollInfo();
+  const isLiveStreamPost = post?.childrenPosts?.[0]?.dataType === 'livestream';
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 
   const { community } = useCommunity({
@@ -83,9 +82,15 @@ export const PostMenu = ({
         };
       }
     } else {
-      if (isOwner) {
+      if (isOwner && !isSearchPost) {
         return {
           showEditPostButton: true,
+          showDeletePostButton: true,
+          showReportPostButton: false,
+        };
+      } else if (isOwner && isSearchPost) {
+        return {
+          showEditPostButton: false,
           showDeletePostButton: true,
           showReportPostButton: false,
         };
@@ -103,12 +108,18 @@ export const PostMenu = ({
         };
       }
     }
-  }, [isCommunityModerator, isOwner, client, post]);
+  }, [isCommunityModerator, isOwner, client, post, isSearchPost]);
 
   const showClosePollButton = useMemo(() => {
     if (poll && poll.status === 'open' && isOwner) return true;
     return false;
   }, [isOwner, poll]);
+
+  const showCopyLinkButton = useMemo(() => {
+    if (post.targetType === 'user') return false;
+    if (community?.isPublic && !community?.isJoined) return true;
+    if (community?.isPublic && community?.isJoined) return false;
+  }, [post.targetType, community?.isJoined, community?.isPublic]);
 
   const isPollPost = useMemo(() => {
     return !!poll;
@@ -161,6 +172,7 @@ export const PostMenu = ({
     onSuccess: () => {
       success({ content: 'Poll closed.' });
       onPostDeleted?.(post);
+      onPollClosed?.();
     },
     onError: () => {
       info({ content: 'Oops, something went wrong.' });
@@ -228,7 +240,7 @@ export const PostMenu = ({
     onCloseMenu();
     confirm({
       title: 'Close poll?',
-      content: `The Poll duration you've set will be ignored and your poll will be closed immediately.`,
+      content: `The poll duration you've set will be ignored and your poll will be closed immediately.`,
       cancelText: 'Cancel',
       okText: 'Close poll',
       onOk: () => {
@@ -302,6 +314,7 @@ export const PostMenu = ({
           </Typography.BodyBold>
         </Button>
       ) : null}
+
       {!isShowReportReason && showEditPostButton && !isPollPost && !isLiveStreamPost ? (
         <Button
           data-testid={`${pageId}/${componentId}/edit_post`}
@@ -314,6 +327,15 @@ export const PostMenu = ({
           </Typography.BodyBold>
         </Button>
       ) : null}
+      {showCopyLinkButton && (
+        <CopyLinkButton
+          pageId={pageId}
+          componentId={componentId}
+          model={SharableModel.POST}
+          referenceId={post.postId}
+          onDone={onCloseMenu}
+        />
+      )}
       {!isShowReportReason && showDeletePostButton ? (
         <Button
           data-testid={`${pageId}/${componentId}/delete_post`}

@@ -4,6 +4,13 @@ import { VideoFileStatus } from '~/social/constants';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { ClearButton } from '~/v4/social/elements/ClearButton/ClearButton';
 import styles from './SingleVideoViewer.module.css';
+import { Popover } from '~/v4/core/components/AriaPopover';
+import { MediaMenu } from '~/v4/social/internal-components/MediaMenu';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { UserProfileTabs } from '~/v4/social/pages/UserProfilePage/UserProfilePage';
+import { FeedSourceEnum } from '@amityco/ts-sdk';
 
 export const VideoPlayer = memo(
   ({
@@ -87,6 +94,10 @@ interface SingleVideoViewerProps {
   thumbnailFileId: string;
   onClose(): void;
   isMuted?: boolean;
+  isFromGallery?: boolean;
+  post: Amity.Post;
+  selectedImageIndex: number;
+  feedSources?: FeedSourceEnum[];
 }
 
 export function SingleVideoViewer({
@@ -97,15 +108,54 @@ export function SingleVideoViewer({
   thumbnailFileId,
   isMuted = false,
   onClose,
+  isFromGallery,
+  post,
+  selectedImageIndex,
+  feedSources,
 }: SingleVideoViewerProps) {
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
+  const { setDrawerData, removeDrawerData } = useDrawer();
+  const { goToPostDetailPage, page } = useNavigation();
+  const { setLinkToPost } = useLayoutContext();
+
+  const redirectToPostDetailPage = () => {
+    const postId = post.children.length > 0 ? post.postId : post.parentPostId;
+    if (page.type === PageTypes.CommunityProfilePage) {
+      setLinkToPost({
+        tab: 'community_video_feed',
+        index: selectedImageIndex,
+        target: 'community',
+        parentPostId: post.parentPostId,
+        postId: post.postId,
+        feedSources,
+      });
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
+    }
+    if (page.type === PageTypes.UserProfilePage) {
+      setLinkToPost({
+        tab: UserProfileTabs.VIDEO,
+        index: selectedImageIndex,
+        target: 'user',
+        parentPostId: post.parentPostId,
+        postId: post.postId,
+        feedSources,
+      });
+      goToPostDetailPage?.({
+        postId,
+        hideTarget: false,
+      });
+    }
+  };
 
   return (
     <div style={themeStyles}>
       <div className={styles.modal} onClick={onClose}>
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
           <VideoPlayer fileId={fileId} thumbnailFileId={thumbnailFileId} isMuted={isMuted} />
-          <span className={styles.closeButton}>
+          <div className={styles.modal__actions}>
             <ClearButton
               pageId={pageId}
               componentId={componentId}
@@ -113,7 +163,51 @@ export function SingleVideoViewer({
               imgClassName={styles.videoViewer__clearButton__img}
               onPress={onClose}
             />
-          </span>
+            {isFromGallery && (
+              <Popover
+                trigger={{
+                  pageId,
+                  className: styles.videoViewer__menuButton,
+                  iconClassName: styles.videoViewer__menuButton__icon,
+                  onClick: () => {
+                    setDrawerData({
+                      content: (
+                        <MediaMenu
+                          pageId={pageId}
+                          onViewPostPress={
+                            isFromGallery
+                              ? () => {
+                                  onClose();
+                                  removeDrawerData();
+                                  redirectToPostDetailPage();
+                                }
+                              : undefined
+                          }
+                        />
+                      ),
+                    });
+                  },
+                }}
+              >
+                {({ closePopover }) => {
+                  return (
+                    <MediaMenu
+                      pageId={pageId}
+                      onViewPostPress={
+                        isFromGallery
+                          ? () => {
+                              onClose();
+                              closePopover();
+                              redirectToPostDetailPage();
+                            }
+                          : undefined
+                      }
+                    />
+                  );
+                }}
+              </Popover>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -6,5 +6,5 @@ interface BrandBadgeProps {
 }
 
 export const BrandBadge = ({ className }: BrandBadgeProps) => {
-  return <Brand className={className} />;
+  return <Brand className={className} data-testid="brand-badge" />;
 };

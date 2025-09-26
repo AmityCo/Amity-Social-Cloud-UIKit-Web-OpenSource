@@ -70,10 +70,11 @@ export function UserAvatar({
       <Button
         onPress={() => handleAvatarClick()}
         className={clsx(styles.userAvatar__container, imageContainerClassName)}
+        data-testid={`user-avatar-button-${userId}`}
       >
         <img
           src={userImage}
-          data-testid={accessibilityId}
+          data-testid={`${accessibilityId}-${user?.userId}`}
           className={clsx(styles.userAvatar__img, className)}
         />
         {isShowModeratorBadge && <Badge className={styles.userAvatar__badge} />}
@@ -83,10 +84,12 @@ export function UserAvatar({
 
   return (
     <Button
+      data-testid={`${accessibilityId}-${user?.userId}`}
       className={clsx(styles.userAvatar__placeholder, className)}
       onPress={() => handleAvatarClick()}
     >
       <Typography.TitleBold
+        data-testid={`user-avatar-${userId}`}
         className={clsx(styles.userAvatar__placeholder__text, textPlaceholderClassName)}
       >
         {firstChar}

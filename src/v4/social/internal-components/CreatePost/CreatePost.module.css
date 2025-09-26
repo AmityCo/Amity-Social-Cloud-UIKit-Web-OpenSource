@@ -27,6 +27,20 @@
   min-height: auto;
 }
 
+.createPost__formContent .createPost__titleInput {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 1rem 1rem 0;
+}
+
+.createPost__formContent .createPost__titleInput::placeholder {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 .createPost__formContent .createPost__input {
   padding: 1rem;
 }
@@ -232,13 +246,12 @@
     position: relative;
   }
 
-  .createPost__formContent .createPost__input {
-    padding: 1rem 1.5rem;
+  .createPost__formContent .createPost__titleInput {
+    padding: 1rem 1.5rem 0;
   }
 
-  .createPost__formContent .createPost__placeholder {
-    top: 1rem;
-    left: 1.5rem;
+  .createPost__formContent .createPost__input {
+    padding: 1rem 1.5rem;
   }
 
   .createPost__attachment {

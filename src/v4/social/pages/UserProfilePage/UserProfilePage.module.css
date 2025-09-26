@@ -1,7 +1,11 @@
 .userProfilePage {
-  position: relative;
+/*   position: relative;
   width: 100%;
-  height: 100dvh;
+  height: 100dvh; */
+  height: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
   background-color: var(--asc-color-background-default);
 }
 
@@ -26,25 +30,40 @@
   align-items: center;
   height: 3.5rem;
   padding-inline: 0.75rem 1rem;
+  top: 0;
   left: 0;
   right: 0;
-  top: 0;
+  z-index: 1;
+  display: flex;
+  height: 3.5rem;
+  position: sticky;
+  align-items: center;
+  padding: 1rem 0.75rem;
+  justify-content: space-between;
+  background-color: var(--asc-color-background-default);
 }
 
 .userProfilePage__displayName {
-  transition: opacity 0.3s;
   opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .userProfilePage__displayName[data-show='true'] {
   opacity: 1;
 }
 
-.userProfilePage__feedTabs {
-  background-color: var(--asc-color-background-default);
+.userProfilePage__stickyHeader {
+  left: 0;
+  right: 0;
+  z-index: 1;
+  top: 3.5rem;
   position: sticky;
-  top: -0.125rem;
+}
+
+.userProfilePage__feedTabs {
+  gap: 1.25rem;
   display: flex;
+  padding: 0 1rem;
   justify-content: space-between;
   gap: 1.25rem;
   border-bottom: 1px solid #d3d3d3;
@@ -54,9 +73,10 @@
 }
 
 .userProfilePage__floatingButton {
-  position: absolute;
-  bottom: 1rem;
   right: 1rem;
+  bottom: 1rem;
+  z-index: 100;
+  position: absolute;
 }
 
 .userProfilePage__createPostHeader {
@@ -183,6 +203,40 @@
   overflow-x: hidden;
 }
 
+.userProfilePage__feedTypePopover {
+  display: flex;
+}
+
+.userProfilePage__feedTypeButton {
+  flex: 1;
+  gap: 0.5rem;
+  display: flex;
+  padding: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--asc-color-base-shade1);
+  background-color: var(--asc-color-background-default);
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.userProfilePage__feedTypeButtonIcon {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-base-shade1);
+}
+
+.userProfilePage__feedTypeRadioGroup {
+  padding: 0.5rem 0;
+  gap: 0;
+  border-radius: 0;
+  box-shadow: none;
+  min-width: auto;
+}
+
+.userProfilePage__feedTypeRadio {
+  padding: 1rem 0;
+}
+
 @media (width >=48em) {
   .userProfilePage {
     background-color: transparent;
@@ -194,12 +248,21 @@
   }
 
   .userProfilePage__topBar {
-    background-color: var(--asc-color-background-default);
     position: static;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border-top: 1px solid var(--asc-color-base-shade4);
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
   }
 
   .userProfilePage__tipsterSection {
     flex-direction: row;
+  }
+  .userProfilePage__topSection {
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
   }
 
   .userProfilePage__tipsterCard {
@@ -235,6 +298,14 @@
   .userProfilePage__feedTabs {
     position: static;
     border-bottom: 1px solid #d3d3d3;
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .userProfilePage__stickyHeader {
+    position: static;
+    margin-bottom: 0.75rem;
   }
 
   .userProfilePage__floatingButton {
@@ -258,5 +329,21 @@
   .userProfilePage__tipsterCard,
   .userProfilePage__mainSportsCard {
     width: 100%;
+  }
+  .userProfilePage__feedTypeButton {
+    justify-content: flex-start;
+    border-radius: 0 0 0.5rem 0.5rem;
+    border-left: 1px solid var(--asc-color-base-shade4);
+    border-right: 1px solid var(--asc-color-base-shade4);
+    background-color: var(--asc-color-background-default);
+  }
+
+  .userProfilePage__feedTypeRadioGroup {
+    min-width: 20rem;
+    border-radius: 0.75rem;
+  }
+
+  .userProfilePage__feedTypeRadio {
+    padding: 1rem;
   }
 }

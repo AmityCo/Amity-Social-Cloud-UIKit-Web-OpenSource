@@ -1,3 +1,7 @@
+.userFeed {
+  padding-bottom: 1rem;
+}
+
 .userFeed__container {
   display: flex;
   flex-direction: column;

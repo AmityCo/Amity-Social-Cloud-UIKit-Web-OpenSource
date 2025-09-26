@@ -2,6 +2,9 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 interface DrawerData {
   content: ReactNode;
+  snapPoints?: (string | number)[];
+  activeSnapPoint?: string | number;
+  onSnapPointChange?: (snapPoint: string | number | null) => void;
 }
 
 interface DrawerContextProps {

@@ -43,7 +43,7 @@ import styles from './EditPost.module.css';
 import { isTextPost } from '~/v4/social/utils/postTypeChecker';
 import { Play } from '~/v4/icons/Play';
 import { useImage } from '~/v4/core/hooks/useImage';
-import usePost from '~/v4/core/hooks/objects/usePost';
+import { TextArea } from '~/v4/core/components/TextField';
 
 export function EditPost({ post }: AmityPostComposerEditOptions) {
   const pageId = 'post_composer_page';
@@ -60,8 +60,8 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const drawerHeight = useResizeObserver({ ref: drawerContentRef });
   const { onBack } = useNavigation();
-  const { confirm, info } = useConfirmContext();
-  const { updateItem, updateGlobalFeaturedPosts } = useGlobalFeedContext();
+  const { confirm } = useConfirmContext();
+  const { updateGlobalFeaturedPosts } = useGlobalFeedContext();
   const { files, progress, isLoading, removeFile, handleFileChange, handleAltTextChange } =
     useFilePostUpload(pageId);
   const posts = usePostByIds(post?.children || []);
@@ -96,9 +96,11 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     showToastPosition,
   } = useMediaAttachmentVisible({ files, posts: localPost });
 
+  const [title, setTitle] = useState<string>((post as Amity.Post<'text'>)?.data?.title || '');
   const [textValue, setTextValue] = useState<CreatePostParams>({
     text: (post as Amity.Post<'text'>)?.data?.text ?? '',
     mentioned: post.metadata?.mentioned || [],
+    hashtagsMetadata: [],
     mentionees: post.mentionees as Amity.UserMention[],
     attachments: [
       {
@@ -131,24 +133,18 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       onSuccess: (response) => {
         setIsUpdating(false);
         isDesktop ? closePopup() : onBack();
-        updateItem(response.data);
         updateGlobalFeaturedPosts(response.data);
       },
       onError: (error) => {
         setIsUpdating(false);
         setIsError(true);
 
-        if (error.message.includes(ERROR_RESPONSE.CONTAIN_BLOCKED_WORD)) {
-          setPostErrorText("Your post wasn't posted because it contains a blocked word.");
-          return;
-        } else if (error.message.includes(ERROR_RESPONSE.NOT_INCLUDE_WHITELIST_LINK)) {
-          setPostErrorText(
-            "Your post wasn't posted because it contains a link that's not allowed.",
-          );
-          return;
+        if (error.message.includes(ERROR_RESPONSE.BLOCKED_WORD)) {
+          setPostErrorText("Your post wasn't posted as it contains an inappropriate word.");
+        } else if (error.message.includes(ERROR_RESPONSE.BLOCKED_URL)) {
+          setPostErrorText("Your post wasn't posted as it contains a link that's not allowed.");
         } else {
-          setPostErrorText('Failed to post.');
-          return;
+          setPostErrorText('Failed to create post. Please try again.');
         }
       },
     });
@@ -224,13 +220,21 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
       isClipPost
         ? mutateUpdatePostAsync({
             data: { text: textValue.text },
-            metadata: { mentioned: textValue.mentioned ?? [] },
+            metadata: {
+              mentioned: textValue.mentioned ?? [],
+              hashtags: textValue.hashtagsMetadata,
+            },
             mentionees: textValue.mentionees as Amity.UserMention[],
+            hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
           })
         : mutateUpdatePostAsync({
-            data: { text: textValue.text },
-            metadata: { mentioned: textValue.mentioned ?? [] },
+            data: { text: textValue.text, title: title.trim() },
+            metadata: {
+              mentioned: textValue.mentioned ?? [],
+              hashtags: textValue.hashtagsMetadata,
+            },
             mentionees: textValue.mentionees as Amity.UserMention[],
+            hashtags: textValue.hashtagsMetadata?.map((hashtag) => hashtag.text) || [],
             attachments: attachments,
           });
     }
@@ -270,12 +274,18 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     }
   };
 
-  const onChange = (val: { mentioned: Mentioned[]; mentionees: Mentionees; text: string }) => {
+  const onChange = (val: {
+    mentioned: Mentioned[];
+    mentionees: Mentionees;
+    hashtags: Amity.Hashtag[];
+    text: string;
+  }) => {
     setTextValue((prev) => ({
       ...prev,
       mentioned: val.mentioned,
       text: val.text,
       mentionees: val.mentionees,
+      hashtagsMetadata: val.hashtags,
     }));
   };
 
@@ -330,7 +340,12 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
 
   const hasMediaChange = files.length > 0 || posts.length !== localPost.length;
 
-  const hasNoChanges = isTextPost(post) && post.data?.text === textValue.text && !hasMediaChange;
+  const hasNoChanges =
+    isTextPost(post) &&
+    post.data?.text === textValue.text &&
+    post.data?.title === title &&
+    !hasMediaChange;
+
   const hasNoContent = !(
     textValue.text.trim().length > 0 ||
     files.length > 0 ||
@@ -354,8 +369,6 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
     fileId: thumbnailFileId,
     imageSize: 'medium',
   });
-
-  const { post: newPost } = usePost(post.postId);
 
   return (
     <div className={styles.editPost} style={themeStyles}>
@@ -389,6 +402,20 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
           </div>
         )}
         <div className={styles.editPost__formContent}>
+          <TextArea
+            data-testid="edit-post-title-input"
+            name="title"
+            value={title}
+            maxLength={150}
+            placeholder="Title (optional)"
+            className={styles.editPost__titleInput}
+            onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+            onChange={(e) => {
+              e.target.value.length > 150
+                ? setTitle(e.target.value.slice(0, 150))
+                : setTitle(e.target.value);
+            }}
+          />
           <PostTextField
             pageId={pageId}
             onChange={onChange}
@@ -401,7 +428,10 @@ export function EditPost({ post }: AmityPostComposerEditOptions) {
             dataValue={{
               mentionees: post.mentionees,
               data: { text: (post as Amity.Post<'text'>)?.data?.text || '' },
-              metadata: { mentioned: post.metadata?.mentioned || [] },
+              metadata: {
+                mentioned: post.metadata?.mentioned || [],
+                hashtags: post.metadata?.hashtags || [],
+              },
             }}
           />
 

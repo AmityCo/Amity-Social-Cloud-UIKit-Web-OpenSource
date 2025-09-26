@@ -6,16 +6,22 @@ export type AmityReactionType = {
   image: string;
 };
 
-const CustomReactionContext = createContext<AmityReactionType[]>([]);
+const CustomReactionContext = createContext<{
+  reactions: AmityReactionType[];
+  socialReactions: AmityReactionType[];
+}>({
+  reactions: [],
+  socialReactions: [],
+});
 
 export const useCustomReaction = () => {
-  const config = useContext(CustomReactionContext);
-  return { config };
+  return useContext(CustomReactionContext);
 };
 
 export const CustomReactionProvider: React.FC = ({ children }) => {
   const { config } = useCustomization();
   const [reactions, setReactions] = React.useState<AmityReactionType[]>([]);
+  const [socialReactions, setSocialReactions] = React.useState<AmityReactionType[]>([]);
 
   React.useEffect(() => {
     if (!config) return;
@@ -26,7 +32,18 @@ export const CustomReactionProvider: React.FC = ({ children }) => {
     setReactions(reactionConfig);
   }, [config]);
 
+  React.useEffect(() => {
+    if (!config) return;
+
+    const socialReactionConfig = config?.social_reactions;
+    if (!socialReactionConfig) return;
+
+    setSocialReactions(socialReactionConfig);
+  }, [config]);
+
   return (
-    <CustomReactionContext.Provider value={reactions}>{children}</CustomReactionContext.Provider>
+    <CustomReactionContext.Provider value={{ reactions, socialReactions }}>
+      {children}
+    </CustomReactionContext.Provider>
   );
 };

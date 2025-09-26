@@ -19,14 +19,24 @@ import styles from './PostDetailPage.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
+import { isPollPost } from '~/v4/social/utils/postTypeChecker';
 
-interface PostDetailPageProps {
+export interface PostDetailPageProps {
   id: string;
   hideTarget?: boolean;
   category?: AmityPostCategory;
   commentId?: string;
   parentId?: string;
   posts?: Amity.Post<'clip' | 'video'>[];
+  selectedReplyComment?: Amity.Comment;
+  showReplyCommentAt?: string;
+  keyword?: string;
+  isFromCommentClick?: boolean;
+}
+
+export interface GoToPostDetailPageParams extends Omit<PostDetailPageProps, 'id'> {
+  postId: string;
 }
 
 export function PostDetailPage({
@@ -36,11 +46,19 @@ export function PostDetailPage({
   commentId,
   parentId,
   posts = [],
+  selectedReplyComment,
+  showReplyCommentAt,
+  keyword,
+  isFromCommentClick = false,
 }: PostDetailPageProps) {
   const pageId = 'post_detail_page';
 
-  const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
+  const { removeItem } = useGlobalFeedContext();
+
+  const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
+  const [failedToShow, setFailedToShow] = useState(false);
   const commentListRef = useRef<HTMLDivElement>(null);
+  const hasScrolledRef = useRef(false); // Track if we've already scrolled to this commentId
 
   const { AmityPostDetailPageBehavior } = usePageBehavior();
   const { isDesktop } = useResponsive();
@@ -66,7 +84,13 @@ export function PostDetailPage({
 
   // Add this useEffect to handle scrolling to comment when commentId is provided
   useEffect(() => {
-    if (commentId && commentListRef.current) {
+    hasScrolledRef.current = false;
+
+    // Only scroll if we haven't already and the comment list is available
+    if (commentId && commentListRef.current && !hasScrolledRef.current) {
+      // Mark that we're processing this scroll
+      hasScrolledRef.current = true;
+
       // Create a custom event to signal when scrolling is complete
       const scrollCompleteEvent = new CustomEvent('comment-scroll-complete', {
         bubbles: true,
@@ -117,22 +141,27 @@ export function PostDetailPage({
     [],
   );
 
-  const handlePostDeleted = useCallback(() => {
-    if (prevPage?.type === PageTypes.ClipFeedPage) {
-      AmityPostDetailPageBehavior?.goToClipFeedPage?.({
-        currentPostId: post?.children?.[0],
-        targetId: post?.targetId,
-        targetType: post?.targetType,
-        postIndex: 0,
-      });
-    } else {
+  const handlePostDeleted = useCallback(
+    (post: Amity.Post) => {
+      removeItem(post.postId);
       onBack();
-    }
-  }, [prevPage, posts, post, AmityPostDetailPageBehavior, onBack]);
+    },
+    [onBack],
+  );
 
   const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
 
-  if (error || (post === null && !isPostLoading) || community?.isDeleted || post?.isDeleted)
+  if (isPostLoading) {
+    return <PostContentSkeleton pageId={pageId} />;
+  }
+
+  if (
+    error ||
+    (post === null && !isPostLoading) ||
+    community?.isDeleted ||
+    post?.isDeleted ||
+    failedToShow
+  )
     return <FailedToShow pageId={pageId} onBack={onBack} />;
 
   if (!post) return null;
@@ -143,15 +172,7 @@ export function PostDetailPage({
         <BackButton
           pageId={pageId}
           defaultClassName={styles.postDetailPage__backIcon}
-          onPress={() =>
-            prevPage?.type === PageTypes.ClipFeedPage
-              ? AmityPostDetailPageBehavior?.goToClipFeedPage?.({
-                  currentPostId: post?.children?.[0],
-                  targetId: post?.targetId,
-                  targetType: post?.targetType,
-                })
-              : onBack()
-          }
+          onPress={() => onBack()}
         />
         <Typography.TitleBold
           data-testid={`${pageId}/page_title`}
@@ -195,21 +216,41 @@ export function PostDetailPage({
 
       <div className={styles.postDetailPage__container}>
         <div>
-          {isPostLoading ? (
-            <PostContentSkeleton pageId={pageId} />
-          ) : post ? (
-            <PostContent
-              pageId={pageId}
-              post={post}
-              className={styles.postDetailPage__postContent}
-              category={category ?? AmityPostCategory.GENERAL}
-              style={AmityPostContentComponentStyle.DETAIL}
-              hideTarget={hideTarget}
-              disabledContent={isNotJoinedCommunity}
-            />
-          ) : null}
+          <PostContent
+            pageId={pageId}
+            post={post}
+            className={styles.postDetailPage__postContent}
+            category={category ?? AmityPostCategory.GENERAL}
+            style={AmityPostContentComponentStyle.DETAIL}
+            hideTarget={hideTarget}
+            disabledContent={isNotJoinedCommunity}
+            onPollPostDeleted={() => setFailedToShow(true)}
+            expandAllContent={isPollPost(post.childrenPosts[0])}
+          />
         </div>
-        <div className={styles.postDetailPage__comments__divider} data-is-loading={isPostLoading} />
+
+        {post?.targetType === 'community' && !community?.isJoined ? (
+          <div>
+            <div className={styles.postDetailPage__divider} />
+            <Typography.Body className={styles.postDetailPage__notMember}>
+              Join community to interact with all posts
+            </Typography.Body>
+            <div className={styles.postDetailPage__divider} />
+          </div>
+        ) : (
+          post &&
+          !isDesktop && (
+            <CommentComposer
+              pageId={pageId}
+              referenceId={post.postId}
+              referenceType={'post'}
+              replyTo={replyComment}
+              onCancelReply={() => setReplyComment(undefined)}
+              community={community}
+              isFromCommentClick={isFromCommentClick}
+            />
+          )
+        )}
         {post && isDesktop && !isNotJoinedCommunity && (
           <CommentComposer
             pageId={pageId}
@@ -220,6 +261,7 @@ export function PostDetailPage({
             containerClassName={
               post?.commentsCount <= 0 ? styles.postDetailPage__commentList__container : undefined
             }
+            isFromCommentClick={isFromCommentClick}
           />
         )}
         {post?.commentsCount > 0 && (
@@ -234,6 +276,7 @@ export function PostDetailPage({
                 commentCount={post.commentsCount}
                 highlightedCommentId={commentId}
                 parentId={parentId}
+                showReplyCommentAt={showReplyCommentAt}
                 renderReplyComment={(comment) => {
                   if (replyComment && comment.commentId === replyComment.commentId && isDesktop) {
                     return (
@@ -244,6 +287,7 @@ export function PostDetailPage({
                         replyTo={replyComment}
                         onCancelReply={() => setReplyComment(undefined)}
                         community={community}
+                        isFromCommentClick={isFromCommentClick}
                       />
                     );
                   }
@@ -253,27 +297,6 @@ export function PostDetailPage({
           </div>
         )}
       </div>
-
-      {post?.targetType === 'community' && !community?.isJoined ? (
-        <div>
-          <div className={styles.postDetailPage__divider} />
-          <Typography.Body className={styles.postDetailPage__notMember}>
-            Join community to interact with all posts
-          </Typography.Body>
-        </div>
-      ) : (
-        post &&
-        !isDesktop && (
-          <CommentComposer
-            pageId={pageId}
-            referenceId={post.postId}
-            referenceType={'post'}
-            replyTo={replyComment}
-            onCancelReply={() => setReplyComment(undefined)}
-            community={community}
-          />
-        )
-      )}
     </div>
   );
 }

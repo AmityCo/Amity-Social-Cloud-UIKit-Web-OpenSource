@@ -13,6 +13,7 @@ import { ClickableArea } from '~/v4/core/natives/ClickableArea';
 import styles from './GlobalFeed.module.css';
 import { Divider } from '~/v4/social/elements/Divider';
 import useGlobalPinnedPostsCollection from '~/v4/social/hooks/collections/useGlobalPinnedPostsCollection';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 interface GlobalFeedProps {
   pageId?: string;
@@ -45,6 +46,7 @@ export const GlobalFeed = ({
   });
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
+  const { isDesktop } = useResponsive();
 
   const { AmityGlobalFeedComponentBehavior } = usePageBehavior();
 
@@ -92,17 +94,7 @@ export const GlobalFeed = ({
 
           return (
             <React.Fragment key={item.post.postId}>
-              <ClickableArea
-                elementType="div"
-                className={styles.global_feed__postContainer}
-                onPress={() =>
-                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
-                    hideTarget: true,
-                    postId: item.post?.postId as string,
-                    category: AmityPostCategory.ANNOUNCEMENT,
-                  })
-                }
-              >
+              <div className={styles.global_feed__postContainer}>
                 <PostContent
                   pageId={pageId}
                   post={item.post}
@@ -110,52 +102,60 @@ export const GlobalFeed = ({
                   style={AmityPostContentComponentStyle.FEED}
                   isGlobalFeaturePost={true}
                   onPostDeleted={() => onPostDeleted?.(item.post!)}
-                  onClick={() => {
+                  onPollPostDeleted={onPostDeleted}
+                  onClick={(context) => {
                     AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
                       hideTarget: true,
                       postId: item.post?.postId as string,
                       category: AmityPostCategory.ANNOUNCEMENT,
+                      commentId: context?.commentId,
+                      parentId: context?.parentId,
+                      selectedReplyComment: context?.selectedReplyComment,
+                      showReplyCommentAt: context?.showReplyCommentAt,
+                      isFromCommentClick: context?.isFromCommentClick,
                     });
                   }}
                 />
-              </ClickableArea>
-              <Divider />
+              </div>
+              <Divider isShown={!isDesktop} />
             </React.Fragment>
           );
         })}
       {filteredItems.map((item, index) => (
         <React.Fragment key={getItemKey(item, filteredItems[Math.max(0, index - 1)])}>
-          <Divider isShown={index !== 0} />
+          <Divider isShown={!isDesktop && index !== 0} />
           {isAmityAd(item) ? (
             <PostAd ad={item} />
           ) : (
-            <ClickableArea
-              elementType="div"
-              className={styles.global_feed__postContainer}
-              onPress={() =>
-                AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId })
-              }
-            >
+            <div className={styles.global_feed__postContainer}>
               <PostContent
                 pageId={pageId}
                 post={item}
                 category={AmityPostCategory.GENERAL}
                 style={AmityPostContentComponentStyle.FEED}
-                onClick={() => {
-                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({ postId: item.postId });
+                onClick={(context) => {
+                  AmityGlobalFeedComponentBehavior?.goToPostDetailPage?.({
+                    postId: item?.postId,
+                    commentId: context?.commentId,
+                    parentId: context?.parentId,
+                    selectedReplyComment: context?.selectedReplyComment,
+                    showReplyCommentAt: context?.showReplyCommentAt,
+                    isFromCommentClick: context?.isFromCommentClick,
+                  });
                 }}
                 onPostDeleted={onPostDeleted}
+                onPollPostDeleted={onPostDeleted}
               />
-            </ClickableArea>
+            </div>
           )}
         </React.Fragment>
       ))}
-      <Divider isShown={filteredItems.length > 0} />
+      <Divider isShown={!isDesktop && filteredItems.length > 0} />
       {isLoading
         ? Array.from({ length: 5 }).map((_, index) => (
             <div key={index}>
               <PostContentSkeleton />
-              <Divider isShown={index !== 5} />
+              <Divider isShown={!isDesktop && index !== 5} />
             </div>
           ))
         : null}

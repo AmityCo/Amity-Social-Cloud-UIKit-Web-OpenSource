@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import styles from './PollTargetSelectionPage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CloseButton } from '~/v4/social/elements/CloseButton/CloseButton';
 import { Title } from '~/v4/social/elements/Title/Title';
@@ -13,14 +12,15 @@ import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName'
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { Button } from '~/v4/core/natives/Button';
 import { canCreatePostCommunity } from '~/v4/social/utils';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
-import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { PollTypeSelection } from '~/v4/social/components/PollTypeSelection';
+import { Typography } from '~/v4/core/components';
+import styles from './PollTargetSelectionPage.module.css';
 
 export function PollTargetSelectionPage() {
   const { client } = useSDK();
@@ -32,12 +32,12 @@ export function PollTargetSelectionPage() {
   const { communities, hasMore, loadMore, isLoading } = useCommunitiesCollection({
     queryParams: { limit: 20, membership: 'member' },
   });
-  const { AmityPollTargetSelectionPageBehavior } = usePageBehavior();
+
   const { currentUserId } = useSDK();
   const { user } = useUser({ userId: currentUserId });
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
-  const { confirm } = useConfirmContext();
+  const { setDrawerData, removeDrawerData } = useDrawer();
 
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
 
@@ -46,6 +46,9 @@ export function PollTargetSelectionPage() {
       if (hasMore && isLoading === false) {
         loadMore();
       }
+    },
+    options: {
+      threshold: 0.7,
     },
     node: intersectionNode,
   });
@@ -70,29 +73,19 @@ export function PollTargetSelectionPage() {
                   pageId,
                   view: 'desktop',
                   isDismissable: false,
-                  onClose: ({ close }) => {
-                    confirm({
-                      onOk: close,
-                      type: 'confirm',
-                      okText: 'Discard',
-                      cancelText: 'Keep editing',
-                      title: 'Discard this post?',
-                      pageId: 'post_composer_page',
-                      content: 'The post will be permanently discarded. It cannot be undone.',
-                    });
-                  },
-                  header: (
-                    <CommunityDisplayName
-                      community={undefined}
-                      pageId="post_composer_page"
-                      className={styles.pollTargetSelectionPage__displayName}
+                  header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                  children: ({ close }) => (
+                    <PollTypeSelection targetId={null} targetType="user" onClickNext={close} />
+                  ),
+                })
+              : setDrawerData({
+                  content: (
+                    <PollTypeSelection
+                      targetId={null}
+                      targetType="user"
+                      onClickNext={removeDrawerData}
                     />
                   ),
-                  children: <PollPostComposerPage targetId={null} targetType="user" />,
-                })
-              : AmityPollTargetSelectionPageBehavior?.goToPollPostComposerPage?.({
-                  targetId: null,
-                  targetType: 'user',
                 });
           }}
         >
@@ -109,40 +102,32 @@ export function PollTargetSelectionPage() {
             <Button
               key={community.communityId}
               className={styles.pollTargetSelectionPage__timeline}
+              data-testid="poll-target-community-item"
               onPress={() => {
                 isDesktop
                   ? openPopup({
                       pageId,
                       view: 'desktop',
                       isDismissable: false,
-                      onClose: ({ close }) => {
-                        confirm({
-                          onOk: close,
-                          type: 'confirm',
-                          okText: 'Discard',
-                          cancelText: 'Keep editing',
-                          title: 'Discard this post?',
-                          pageId: 'post_composer_page',
-                          content: 'The post will be permanently discarded. It cannot be undone.',
-                        });
-                      },
-                      header: (
-                        <CommunityDisplayName
-                          community={community}
-                          pageId="post_composer_page"
-                          className={styles.pollTargetSelectionPage__displayName}
-                        />
-                      ),
-                      children: (
-                        <PollPostComposerPage
+                      header: <Typography.Headline>Choose poll type</Typography.Headline>,
+                      children: ({ close }) => (
+                        <PollTypeSelection
+                          onClickNext={close}
                           targetType="community"
+                          target={community}
                           targetId={community.communityId}
                         />
                       ),
                     })
-                  : AmityPollTargetSelectionPageBehavior?.goToPollPostComposerPage?.({
-                      targetType: 'community',
-                      targetId: community.communityId,
+                  : setDrawerData({
+                      content: (
+                        <PollTypeSelection
+                          target={community}
+                          targetId={community.communityId}
+                          targetType="community"
+                          onClickNext={removeDrawerData}
+                        />
+                      ),
                     });
               }}
             >
@@ -157,7 +142,10 @@ export function PollTargetSelectionPage() {
             </Button>
           );
         })}
-      <div ref={(node) => setIntersectionNode(node)} />
+      <div
+        ref={(node) => setIntersectionNode(node)}
+        className={styles.pollTargetSelectionPage__intersectionObserver}
+      />
     </div>
   );
 }

@@ -50,6 +50,33 @@ import {
 } from '..';
 import { UserProfileHeader } from '../../components';
 import styles from './Application.module.css';
+import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
+import CommunityFeed from '~/social/pages/CommunityFeed';
+import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
+import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
+import CommunityEditPage from '~/social/pages/CommunityEdit';
+import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
+import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
+import { AllCategoriesPage } from '~/v4/social/pages/AllCategoriesPage';
+import { CommunitiesByCategoryPage } from '~/v4/social/pages/CommunitiesByCategoryPage';
+import { MainLayout } from '~/v4/social/layouts/Main';
+import { CommunitySideBar } from '~/v4/social/components/CommunitySideBar';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
+import { UserPendingFollowRequestPage } from '~/v4/social/pages/UserPendingFollowRequestPage/UserPendingFollowRequestPage';
+import { BlockedUserPage } from '~/v4/social/pages/BlockedUserPage/BlockedUserPage';
+import { CommunitySetupPage } from '~/v4/social/pages/CommunitySetupPage';
+import { CommunityAddMemberPage } from '~/v4/social/pages/CommunityAddMemberPage/CommunityAddMemberPage';
+import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
+import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
+import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
+import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
+import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
+import { LiveStreamBannedPage } from '~/v4/social/pages/LiveStreamBannedPage';
+import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
+import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
 
 const Application = ({
   userId,
@@ -94,16 +121,12 @@ const Application = ({
       >
         {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
         {page.type === PageTypes.SocialGlobalSearchPage && !isDesktop && <SocialGlobalSearchPage />}
-        {page.type === PageTypes.PostDetailPage && (
-          <PostDetailPage
-            id={page.context?.postId}
-            hideTarget={page.context?.hideTarget}
-            category={page.context?.category}
-            commentId={page.context?.commentId}
-            parentId={page.context?.parentId}
-            posts={page.context?.posts}
-          />
-        )}
+        {page.type === PageTypes.PostDetailPage &&
+          (() => {
+            const { postId, ...rest } = page.context || {};
+            // change only postId to be id and pass the rest context fields as props
+            return <PostDetailPage id={postId} {...rest} />;
+          })()}
         {page.type === PageTypes.StoryTargetSelectionPage && <StoryTargetSelectionPage />}
         {page.type === PageTypes.CommunityProfilePage && (
           <CommunityTabProvider>
@@ -200,6 +223,7 @@ const Application = ({
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
         {page.type === PageTypes.SettingPage && <SettingPage />}
         {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
+        {page.type === PageTypes.LiveStreamBannedPage && <LiveStreamBannedPage />}
         {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
         {page.type === PageTypes.PendingRequestPage && (
           <PendingRequestPage community={page.context.community} />
@@ -226,6 +250,7 @@ const Application = ({
           <PollPostComposerPage
             targetId={page.context.targetId}
             targetType={page.context.targetType}
+            pollType={page.context.pollType}
           />
         )}
         {page.type === PageTypes.DraftClipPage && (

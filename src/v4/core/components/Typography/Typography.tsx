@@ -6,9 +6,27 @@ type TypographyElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span' 
 
 export type TypographyProps = ComponentPropsWithoutRef<TypographyElement> & {
   as?: TypographyElement;
+  testId?: string;
 };
 
-export function Typography({ as: Element = 'p', children, className, ...props }: TypographyProps) {
+export const enum TypographyVariant {
+  Headline = 'headline',
+  TitleBold = 'titleBold',
+  Title = 'title',
+  BodyBold = 'bodyBold',
+  Body = 'body',
+  CaptionBold = 'captionBold',
+  Caption = 'caption',
+  CaptionSmall = 'captionSmall',
+}
+
+export function Typography({
+  as: Element = 'p',
+  children,
+  className,
+  testId,
+  ...props
+}: TypographyProps) {
   return (
     <Element className={clsx(styles.typography, className)} {...(props as any)}>
       {children}
@@ -16,18 +34,37 @@ export function Typography({ as: Element = 'p', children, className, ...props }:
   );
 }
 
-Typography.Headline = function ({ as = 'h1', className, ...props }: TypographyProps) {
-  return <Typography as={as} className={clsx(styles.typography__headline, className)} {...props} />;
-};
-
-Typography.TitleBold = function ({ as = 'h2', className, ...props }: TypographyProps) {
+Typography.Headline = function ({ as = 'h1', className, testId, ...props }: TypographyProps) {
   return (
-    <Typography as={as} className={clsx(styles.typography__titleBold, className)} {...props} />
+    <Typography
+      as={as}
+      data-testid={testId}
+      className={clsx(styles.typography__headline, className)}
+      {...props}
+    />
   );
 };
 
-Typography.Title = function ({ as = 'h2', className, ...props }: TypographyProps) {
-  return <Typography as={as} className={clsx(styles.typography__title, className)} {...props} />;
+Typography.TitleBold = function ({ as = 'h2', className, testId, ...props }: TypographyProps) {
+  return (
+    <Typography
+      as={as}
+      data-testid={testId}
+      className={clsx(styles.typography__titleBold, className)}
+      {...props}
+    />
+  );
+};
+
+Typography.Title = function ({ as = 'h2', className, testId, ...props }: TypographyProps) {
+  return (
+    <Typography
+      as={as}
+      data-testid={testId}
+      className={clsx(styles.typography__title, className)}
+      {...props}
+    />
+  );
 };
 
 Typography.SubTitleBold = function ({ as = 'h3', className, ...props }: TypographyProps) {
@@ -35,7 +72,7 @@ Typography.SubTitleBold = function ({ as = 'h3', className, ...props }: Typograp
     <Typography as={as} className={clsx(styles.typography__subTitleBold, className)} {...props} />
   );
 };
-
+        
 Typography.SubTitle = function ({ as = 'h3', className, ...props }: TypographyProps) {
   return <Typography as={as} className={clsx(styles.typography__subTitle, className)} {...props} />;
 };
@@ -44,23 +81,47 @@ Typography.BodyBold = function ({ as = 'p', className, ...props }: TypographyPro
   return <Typography as={as} className={clsx(styles.typography__bodyBold, className)} {...props} />;
 };
 
-Typography.Body = function ({ as = 'p', className, ...props }: TypographyProps) {
-  return <Typography as={as} className={clsx(styles.typography__body, className)} {...props} />;
-};
-
-Typography.CaptionBold = function ({ as = 'span', className, ...props }: TypographyProps) {
+Typography.Body = function ({ as = 'p', className, testId, ...props }: TypographyProps) {
   return (
-    <Typography as={as} className={clsx(styles.typography__captionBold, className)} {...props} />
+    <Typography
+      as={as}
+      data-testid={testId}
+      className={clsx(styles.typography__body, className)}
+      {...props}
+    />
   );
 };
 
-Typography.Caption = function ({ as = 'span', className, ...props }: TypographyProps) {
-  return <Typography as={as} className={clsx(styles.typography__caption, className)} {...props} />;
+Typography.CaptionBold = function ({ as = 'span', className, testId, ...props }: TypographyProps) {
+  return (
+    <Typography
+      as={as}
+      data-testid={testId}
+      className={clsx(styles.typography__captionBold, className)}
+      {...props}
+    />
+  );
 };
 
-Typography.CaptionSmall = function ({ as = 'span', className, ...props }: TypographyProps) {
+Typography.Caption = function ({ as = 'span', className, testId, ...props }: TypographyProps) {
   return (
-    <Typography as={as} className={clsx(styles.typography__captionSmall, className)} {...props} />
+    <Typography
+      as={as}
+      data-testid={testId}
+      className={clsx(styles.typography__caption, className)}
+      {...props}
+    />
+  );
+};
+
+Typography.CaptionSmall = function ({ as = 'span', className, testId, ...props }: TypographyProps) {
+  return (
+    <Typography
+      as={as}
+      data-testid={testId}
+      className={clsx(styles.typography__captionSmall, className)}
+      {...props}
+    />
   );
 };
 

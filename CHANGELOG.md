@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.12.0 (2025-09-11)
+
+
+### Features
+
+* pnpm lock ([124bc9c](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/124bc9ca503a3f9b53f56788db5da09888204e29))
+
+### 4.11.2 (2025-08-20)
+
+### Bug Fixes
+
+- update redirect user profile ([af039b4](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/af039b4437f237636b5bd2e91fd5c599933824af))
+
+### 4.11.2 (2025-08-20)
+
+### Bug Fixes
+
+- add props redirect ([7d7f996](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/7d7f996948675c64ee21663168d963307e0d1a38))
+
+### 4.11.1 (2025-08-06)
+
+## 4.11.0 (2025-07-18)
+
+### Features
+
+- pnpm lock update ([a25f6fb](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/a25f6fb565fa973f933ce6be8c9f8effcb58b674))
+
 ## 4.10.0 (2025-07-11)
 
 ## 4.9.0 (2025-06-20)

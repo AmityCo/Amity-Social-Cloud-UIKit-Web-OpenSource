@@ -2,20 +2,40 @@ import React, { useState } from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useImage } from '~/v4/core/hooks/useImage';
-import usePost from '~/v4/core/hooks/objects/usePost';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import styles from './VideoContent.module.css';
 import VideoControl from '~/v4/icons/VideoControl';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 
 const VideoThumbnail = ({
-  fileId,
+  videoPostData,
   placeholder,
 }: {
-  fileId: Amity.File<'image'>['fileId'];
+  videoPostData?: Amity.ContentDataVideo;
   placeholder: React.ReactNode;
 }) => {
-  const videoThumbnailUrl = useImage({ fileId });
+  const { videoThumbnail } = useLayoutContext();
   const [isBrokenImg, setIsBrokenImg] = useState(false);
+
+  // Find thumbnailFileId: fallback to videoThumbnail context if not present
+  const thumbnailFileId = videoPostData?.thumbnailFileId;
+  // Always call useImage hook unconditionally
+  const imageThumbnailUrl = useImage({ fileId: thumbnailFileId });
+
+  let videoThumbnailUrl: string | undefined;
+  if (!thumbnailFileId && videoPostData?.videoFileId.original) {
+    const thumbnail = videoThumbnail?.videos.find(
+      ({ fileId }) => fileId === videoPostData.videoFileId.original,
+    );
+    const thumbnailUrl = thumbnail?.thumbnailUrl;
+    if (thumbnailUrl) {
+      videoThumbnailUrl = thumbnailUrl;
+    } else {
+      videoThumbnailUrl = imageThumbnailUrl;
+    }
+  } else {
+    videoThumbnailUrl = imageThumbnailUrl;
+  }
 
   return (
     <>
@@ -24,7 +44,7 @@ const VideoThumbnail = ({
           loading="lazy"
           className={styles.videoContent__video}
           src={videoThumbnailUrl}
-          alt={fileId}
+          alt={videoThumbnailUrl}
           onError={() => setIsBrokenImg(true)}
         />
       ) : (
@@ -35,7 +55,7 @@ const VideoThumbnail = ({
 };
 
 const Video = ({
-  postId,
+  videoPost,
   postAmount,
   isLastVideo,
   onVideoClick,
@@ -43,7 +63,7 @@ const Video = ({
   videoLeftCount,
   componentId = '*',
 }: {
-  postId: string;
+  videoPost?: Amity.Post<'video'>;
   pageId?: string;
   postAmount: number;
   isLastVideo: boolean;
@@ -51,9 +71,7 @@ const Video = ({
   videoLeftCount: number;
   onVideoClick: () => void;
 }) => {
-  const { post: videoPost, isLoading } = usePost(postId);
-
-  if (isLoading) return null;
+  if (!videoPost) return null;
 
   return (
     <Button
@@ -63,7 +81,7 @@ const Video = ({
       data-testid={`${pageId}/${componentId}/post_video`}
     >
       <VideoThumbnail
-        fileId={(videoPost as Amity.Post<'video'>)?.data?.thumbnailFileId as string}
+        videoPostData={(videoPost as Amity.Post<'video'>)?.data}
         placeholder={
           <div className={styles.videoContent__skeleton}>
             <VideoControl className={styles.videoContent__skeleton__icon} />
@@ -90,40 +108,39 @@ type VideoContentProps = {
   pageId?: string;
   elementId?: string;
   componentId?: string;
-  post: Amity.Post<'video'>;
+  posts: Amity.Post<'video'>[];
   onVideoClick: (index: number) => void;
 };
 
 export const VideoContent = ({
-  post,
+  posts,
   onVideoClick,
   pageId = '*',
   elementId = '*',
   componentId = '*',
 }: VideoContentProps) => {
-  const { post: childPost, isLoading } = usePost(post.children[0]);
   const { themeStyles } = useAmityElement({ pageId, componentId, elementId });
 
-  const first4Videos = post.children.slice(0, 4);
-  const videoLeftCount = Math.max(0, post.children.length - 4);
+  const first4Videos = posts?.slice(0, 4);
+  const videoLeftCount = Math.max(0, posts?.length - 4);
 
-  if (isLoading || childPost?.dataType !== 'video') return null;
+  if (!posts || posts[0]?.dataType !== 'video') return null;
 
   return (
     <div className={styles.videoContent} style={themeStyles}>
       <div
         style={themeStyles}
         className={styles.videoContent}
-        data-videos-amount={Math.min(post.children.length, 4)}
+        data-videos-amount={Math.min(posts.length ?? 0, 4)}
       >
-        {first4Videos.map((postId: string, index: number) => (
+        {first4Videos.map((post: Amity.Post, index: number) => (
           <Video
-            key={postId}
+            key={post.postId}
             pageId={pageId}
-            postId={postId}
+            videoPost={posts[index]}
             componentId={componentId}
             videoLeftCount={videoLeftCount}
-            postAmount={post.children.length}
+            postAmount={posts.length}
             onVideoClick={() => onVideoClick(index)}
             isLastVideo={index === first4Videos.length - 1}
           />

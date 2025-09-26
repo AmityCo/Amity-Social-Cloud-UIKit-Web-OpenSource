@@ -34,6 +34,7 @@ export interface Config {
   };
   excludes?: string[];
   message_reactions?: AmityReactionType[];
+  social_reactions?: AmityReactionType[];
   customizations?: {
     [key: string]: GetConfigReturnValue;
   };

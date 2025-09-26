@@ -10,7 +10,7 @@ export const MessageReactionPicker = ({
   message: Amity.Message;
   onSelectReaction: (reactionName: string) => void;
 }) => {
-  const { config } = useCustomReaction();
+  const { reactions: config } = useCustomReaction();
 
   const onClickReaction = (reactionName: AmityReactionType['name']) => {
     selectMessageReaction({ reactionName, message });
