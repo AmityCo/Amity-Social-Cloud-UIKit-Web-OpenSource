@@ -1,1 +1,0 @@
-export { CloseCommunityDescription } from './CloseCommunityDescription';

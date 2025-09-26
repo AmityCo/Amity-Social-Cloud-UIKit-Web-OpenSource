@@ -1,1 +1,0 @@
-export { UserRelationshipList } from './UserRelationshipList';

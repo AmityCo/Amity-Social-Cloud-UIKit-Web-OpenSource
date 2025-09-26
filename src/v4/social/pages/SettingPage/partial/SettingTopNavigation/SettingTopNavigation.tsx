@@ -19,7 +19,7 @@ const SettingTopNavigation: React.FC<SettingTopNavigationProps> = ({ pageTitle, 
         onClick={onBackFunc}
         className={styles.hiddenOnDesktop}
       />
-      <Typography.SubTitleBold>{pageTitle}</Typography.SubTitleBold>
+      <Typography.Headline>{pageTitle}</Typography.Headline>
       <span className={styles.hiddenOnDesktop} />
     </div>
   );

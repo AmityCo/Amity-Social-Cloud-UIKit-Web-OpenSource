@@ -1,1 +1,0 @@
-export { CreatePollButton } from './CreatePollButton';

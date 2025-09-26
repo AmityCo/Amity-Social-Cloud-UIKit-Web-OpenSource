@@ -1,1 +1,0 @@
-export { PollAddOptionButton } from './PollAddOptionButton';

@@ -1,2 +1,0 @@
-export const MAXIMUM_POST_CHARACTERS = 50000;
-export const MAXIMUM_POST_MENTIONEES = 30;

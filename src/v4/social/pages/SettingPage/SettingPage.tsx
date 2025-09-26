@@ -30,13 +30,13 @@ const menuItems = [
       },
       {
         elementId: 'follower-setting',
-        text: 'Gestisci le richieste di seguirti',
+        text: 'Come vuoi che ti seguano?',
         pageTitle: 'Gestisci le richieste di seguirti',
         icon: 'UserSettingsIcon',
       },
       {
         elementId: 'profile-mention',
-        text: 'Menzioni nei post',
+        text: 'Vuoi mostrare nel tuo feed i post dove ricevi una menzione?',
         pageTitle: 'Post nei quali sei menzionato',
         icon: 'EditIcon',
       },

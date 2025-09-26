@@ -1,1 +1,0 @@
-export { UserProfileHeader } from './UserProfileHeader';

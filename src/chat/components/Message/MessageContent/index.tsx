@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Deleted from './Deleted';
-import Text from './Text';
+import Text from './Mentions';
 import Custom from './Custom';
 import Unsupported from './Unsupported';
 

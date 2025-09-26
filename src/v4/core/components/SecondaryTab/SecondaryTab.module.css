@@ -12,10 +12,6 @@
   display: flex;
 }
 
-.tabsList[data-orientation='horizontal'] {
-  border-bottom: 1px solid var(--asc-color-base-shade4);
-}
-
 .tabPanel {
   height: 100%;
   overflow: scroll;
@@ -28,25 +24,27 @@
 }
 
 .tab {
-  outline: none;
+  border: 1px solid black;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  height: 1.875rem;
+  background: transparent;
   cursor: pointer;
-  position: relative;
-  padding: 1rem 0 0.75rem;
-  transition: color 200ms;
-
-  --border-color: transparent;
-
-  border-bottom: 2px solid var(--border-color);
-}
-
-.tab[data-hovered] {
-  color: var(--asc-color-primary-default);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--asc-color-base-shade3);
+  transition: all 0.2s ease;
 }
 
 .tab[data-selected] {
-  color: var(--asc-color-primary-default);
+  background: var(--component-form-filter-surface-active, #435864);
+  color: var(--asc-color-white);
+}
 
-  --border-color: var(--asc-color-primary-default);
+.tab[data-selected] .typography {
+  color: var(--asc-color-white);
 }
 
 .tab[data-disabled] {

@@ -16,12 +16,12 @@ import { Icon } from '~/v4/core/components/Icon/Icon';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
 import { StoryButton } from '~/v4/social/elements/StoryButton/StoryButton';
-import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import styles from './PostComposer.module.css';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { UserAvatar } from '~/v4/social/elements/UserAvatar';
+import { Typography } from '~/v4/core/components';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type PostComposerProps = {
   pageId?: string;
@@ -29,7 +29,10 @@ type PostComposerProps = {
   onClickPost?: () => void;
   onClickPoll?: () => void;
   onSelectFile?: (files: FileList | null) => void;
+  onSelectedFeed?: (feed: string) => void;
+  onSearchClick?: () => void;
 };
+type FeedType = 'all' | 'poker' | 'scommesse' | 'bingo';
 
 export function PostComposer({
   pageId = '*',
@@ -37,6 +40,8 @@ export function PostComposer({
   onClickPost,
   onClickPoll,
   onSelectFile,
+  onSelectedFeed,
+  onSearchClick,
 }: PostComposerProps) {
   const componentId = 'post_composer';
 
@@ -47,20 +52,22 @@ export function PostComposer({
   const { hasStoryPermission } = useStoryPermission(communityId);
   const avatarUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
+  const [activeFeed, setActiveFeedId] = React.useState<FeedType>('all'); // Default su 'all'
+  const { isDesktop } = useResponsive();
 
-  const handlePostClick = () => {
-    if (onClickPost) return onClickPost();
+  // const handlePostClick = () => {
+  //   if (onClickPost) return onClickPost();
 
-    openPopup({
-      pageId,
-      componentId,
-      view: 'desktop',
-      header: (
-        <Title pageId="select_post_target_page" titleClassName={styles.postComposer__title} />
-      ),
-      children: <SelectPostTargetPage />,
-    });
-  };
+  //   openPopup({
+  //     pageId,
+  //     componentId,
+  //     view: 'desktop',
+  //     header: (
+  //       <Title pageId="select_post_target_page" titleClassName={styles.postComposer__title} />
+  //     ),
+  //     children: <SelectPostTargetPage />,
+  //   });
+  // };
 
   const onClickStory = () => {
     openPopup({
@@ -89,7 +96,12 @@ export function PostComposer({
       children: <PollTargetSelectionPage />,
     });
   };
-
+  const setActiveFeedFunc = (feed: FeedType) => {
+    setActiveFeedId(feed);
+    if (onSelectedFeed) {
+      onSelectedFeed(feed);
+    }
+  };
   const renderStoryButton = () => {
     const isExcludedPage = pageId === 'user_profile_page';
     const isFileTriggerPage = pageId === 'community_profile_page';
@@ -121,42 +133,37 @@ export function PostComposer({
   };
 
   return (
-    <div className={styles.postComposer} data-testid={accessibilityId} style={themeStyles}>
-      <UserAvatar
-        pageId={pageId}
-        userId={user?.userId}
-        componentId={componentId}
-        className={styles.postComposer__avatar}
-        imageContainerClassName={styles.postComposer__avatar}
-        textPlaceholderClassName={styles.postComposer__avatarPlaceholder}
-      />
-      <Button className={styles.postComposer__input} onPress={handlePostClick}>
-        <Icon name="Search" /> What's going on?
-      </Button>
-      <ImageButton
-        onPress={handlePostClick}
-        pageId={pageId}
-        componentId={componentId}
-        defaultIconClassName={styles.postComposer__button}
-      />
-      <VideoButton
-        onPress={handlePostClick}
-        pageId={pageId}
-        componentId={componentId}
-        defaultIconClassName={styles.postComposer__button}
-      />
-      <FileButton
-        pageId={pageId}
-        componentId={componentId}
-        defaultIconClassName={styles.postComposer__button}
-      />
-      <PollButton
-        onPress={handlePollClick}
-        pageId="post_composer_page"
-        componentId="poll_button"
-        defaultIconClassName={styles.postComposer__button}
-      />
-      {renderStoryButton()}
+    <div className={styles.containerFeedChooser}>
+      {isDesktop && <Typography.Headline as="h1">Community</Typography.Headline>}
+      <div className={styles.postComposer} data-testid={accessibilityId} style={themeStyles}>
+        <Button className={styles.postComposer__button} onPress={onSearchClick}>
+          <Icon name="Search" />
+        </Button>
+        <Button
+          className={`${activeFeed === 'all' ? styles.postComposer__tagButton_active : styles.postComposer__tagButton}`}
+          onPress={() => setActiveFeedFunc('all')}
+        >
+          Tutti
+        </Button>
+        <Button
+          className={`${activeFeed === 'poker' ? styles.postComposer__tagButton_active : styles.postComposer__tagButton}`}
+          onPress={() => setActiveFeedFunc('poker')}
+        >
+          Poker
+        </Button>
+        <Button
+          className={`${activeFeed === 'scommesse' ? styles.postComposer__tagButton_active : styles.postComposer__tagButton}`}
+          onPress={() => setActiveFeedFunc('scommesse')}
+        >
+          Scommesse
+        </Button>
+        <Button
+          className={`${activeFeed === 'bingo' ? styles.postComposer__tagButton_active : styles.postComposer__tagButton}`}
+          onPress={() => setActiveFeedFunc('bingo')}
+        >
+          Bingo
+        </Button>
+      </div>
     </div>
   );
 }

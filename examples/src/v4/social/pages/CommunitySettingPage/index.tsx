@@ -1,1 +1,0 @@
-export { CommunitySettingPage } from './CommunitySettingPage';

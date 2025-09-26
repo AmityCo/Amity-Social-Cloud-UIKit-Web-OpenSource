@@ -5,7 +5,7 @@
   display: flex;
   cursor: pointer;
   align-items: center;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
   background-color: transparent;
   color: var(--asc-color-base-default);
 }
@@ -49,8 +49,6 @@
 .communitySideBarMenuItem__icon {
   width: 1.25rem;
   height: 1.25rem;
-
-  /* fill: var(--asc-color-base-default); */
 }
 
 .communitySideBarMenuItem__icon[data-active='true'] {
@@ -60,6 +58,16 @@
 .communitySideBarMenuItem__label {
   font-size: var(--asc-text-font-size-sm);
   font-weight: var(--asc-text-font-weight-bold);
+}
+
+/* Specific padding for sidebar menu items */
+.communitySideBarMenuItem.sidebarPadding {
+  padding-left: 1rem;
+}
+
+/* Keep for backward compatibility */
+.extra-padding {
+  padding-left: 1rem;
 }
 
 @media (width >= 48em) {

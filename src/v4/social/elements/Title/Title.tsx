@@ -21,12 +21,12 @@ export function Title({ pageId = '*', componentId = '*', titleClassName }: Title
   if (isExcluded) return null;
 
   return (
-    <Typography.TitleBold
+    <Typography.Headline
       style={themeStyles}
       data-testid={accessibilityId}
       className={clsx(styles.title, titleClassName)}
     >
       {config.text}
-    </Typography.TitleBold>
+    </Typography.Headline>
   );
 }

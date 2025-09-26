@@ -1,1 +1,0 @@
-export { EmptyResultIcon } from './EmptyResultIcon';

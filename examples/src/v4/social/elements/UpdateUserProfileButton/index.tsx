@@ -1,1 +1,0 @@
-export { UpdateUserProfileButton } from './UpdateUserProfileButton';

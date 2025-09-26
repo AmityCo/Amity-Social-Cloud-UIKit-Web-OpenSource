@@ -1,1 +1,0 @@
-export { PostPermission } from './PostPermission';

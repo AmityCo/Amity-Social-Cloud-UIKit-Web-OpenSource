@@ -1,1 +1,0 @@
-export { NoResultIcon } from './NoResultIcon';

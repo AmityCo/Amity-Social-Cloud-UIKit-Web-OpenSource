@@ -1,1 +1,0 @@
-export { UserDescription } from './UserDescription';

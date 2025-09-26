@@ -108,7 +108,7 @@ function useChatInfo({ channel }: { channel: Amity.Channel | null }) {
     return receiveChatName;
   }, [channel, otherUser]);
 
-  return { chatName, chatAvatar, type: channel?.type };
+  return { chatName, chatAvatar, type: channel?.type, otherUserId };
 }
 
 export default useChatInfo;

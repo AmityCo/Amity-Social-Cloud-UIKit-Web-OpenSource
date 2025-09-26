@@ -1,1 +1,0 @@
-export { PostsTabDescription } from './PostsTabDescription';

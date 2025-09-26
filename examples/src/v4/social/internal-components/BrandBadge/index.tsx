@@ -1,1 +1,0 @@
-export { BrandBadge } from './BrandBadge';

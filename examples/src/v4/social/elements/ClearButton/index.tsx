@@ -1,1 +1,0 @@
-export { ClearButton } from './ClearButton';

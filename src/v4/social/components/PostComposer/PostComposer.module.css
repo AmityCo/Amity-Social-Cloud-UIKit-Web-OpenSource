@@ -1,11 +1,11 @@
 .postComposer {
   gap: 0.5rem;
-  display: none;
-  padding: 0.75rem;
+  display: flex;
   align-items: center;
   border-radius: 0.5rem;
   margin-bottom: 0.75rem;
   background-color: var(--asc-color-background-default);
+  margin-left: 1rem;
 }
 
 .postComposer__avatar {
@@ -31,7 +31,7 @@
   gap: 4px;
 }
 
-.postComposer__title {
+/* .postComposer__title {
   display: block;
   max-width: 100%;
   overflow: hidden;
@@ -39,22 +39,51 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   color: var(--asc-color-white);
+} */
+
+.containerFeedChooser {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
 }
 
-.postComposer__popup {
+.postComposer__title {
   display: none;
+}
+
+.postComposer__tagButton_active {
+  background-color: var(--asc-color-primary-default);
+  border-radius: 100px;
+  padding: 8px 16px;
+  cursor: pointer;
+  color: #222;
+  font-size: 0.875rem;
+
+  /* o altri stili per indicare lo stato attivo */
 }
 
 .postComposer__button {
   border: 1px solid var(--asc-color-primary-default);
   border-radius: 8px;
+  padding: 8px;
   cursor: pointer;
   background-color: var(--asc-color-background-default);
+}
+
+.postComposer__tagButton {
+  border: 1px solid #d3d3d3;
+  border-radius: 100px;
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: var(--asc-color-background-default);
+  color: #222;
+  font-size: 0.875rem;
 }
 
 @media (width >=48em) {
   .postComposer {
     display: flex;
+    margin-left: unset;
   }
 
   .postComposer__popup {

@@ -1,1 +1,0 @@
-export { CommunityEmptyTitle } from './CommunityEmptyTitle';

@@ -1,1 +1,0 @@
-export { EmptyContent } from './EmptyContent';

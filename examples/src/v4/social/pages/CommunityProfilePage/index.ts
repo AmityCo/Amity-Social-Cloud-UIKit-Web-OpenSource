@@ -1,1 +1,0 @@
-export { CommunityProfilePage } from './CommunityProfilePage';

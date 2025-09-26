@@ -1,1 +1,0 @@
-export { CommunityPendingPost } from './CommunityPendingPost';

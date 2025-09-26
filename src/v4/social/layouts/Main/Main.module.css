@@ -9,11 +9,13 @@
 
 .layout__aside {
   width: 18rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .layout__main {
   width: 100%;
-  margin: 0 auto;
+  margin: 1rem;
   overflow: scroll;
   padding: 0 5rem;
   scrollbar-width: none; /* Firefox */
@@ -35,6 +37,7 @@
   }
 
   .layout__main {
+    margin: unset;
     padding: 0;
     max-width: unset;
   }

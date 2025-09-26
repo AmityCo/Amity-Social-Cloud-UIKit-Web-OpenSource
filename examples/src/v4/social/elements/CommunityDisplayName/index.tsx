@@ -1,1 +1,0 @@
-export { CommunityDisplayName } from './CommunityDisplayName';

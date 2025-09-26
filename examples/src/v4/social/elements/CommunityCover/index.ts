@@ -1,1 +1,0 @@
-export { CommunityCover } from './CommunityCover';

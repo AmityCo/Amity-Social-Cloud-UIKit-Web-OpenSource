@@ -1,1 +1,0 @@
-export { EmptyUserFeed } from './EmptyUserFeed';

@@ -1,1 +1,0 @@
-export { BlockedUserPage } from './BlockedUserPage';

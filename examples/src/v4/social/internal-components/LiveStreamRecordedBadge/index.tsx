@@ -1,1 +1,0 @@
-export { LiveStreamRecordedBadge } from './LiveStreamRecordedBadge';

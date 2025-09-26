@@ -1,1 +1,0 @@
-export { SecondaryTab } from './SecondaryTab';

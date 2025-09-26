@@ -1,1 +1,0 @@
-export { CommunityMember } from './CommunityMember';

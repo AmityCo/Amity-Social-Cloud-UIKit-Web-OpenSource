@@ -1,1 +1,0 @@
-export { NewsfeedButton } from './NewsfeedButton';

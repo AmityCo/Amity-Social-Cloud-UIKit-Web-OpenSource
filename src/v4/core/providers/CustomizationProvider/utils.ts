@@ -693,7 +693,7 @@ export const defaultConfig: DefaultConfig = {
       image: 'Plus',
     },
     'user_profile_page/user_profile_header/following_user_button': {
-      text: 'Following',
+      text: 'Gia segui',
       image: 'FollowingUser',
     },
     'user_profile_page/user_profile_header/pending_user_button': {
@@ -708,7 +708,7 @@ export const defaultConfig: DefaultConfig = {
     'user_profile_page/user_profile_header/user_name': {},
     'user_profile_page/user_profile_header/user_description': {},
     'user_profile_page/user_profile_header/user_following': {
-      text: 'following',
+      text: 'Gia segui',
     },
     'user_profile_page/user_profile_header/user_follower': {
       text: 'followers',
@@ -783,10 +783,13 @@ export const defaultConfig: DefaultConfig = {
     },
 
     'user_profile_page/top_navigation/header_label': {
-      text: 'Your Profile',
+      text: 'Your community profile',
     },
     'public_profile_page/user_profile_header/user_following': {
-      text: 'Following',
+      text: 'Gia segui',
+    },
+    'public_profile_page/user_profile_header/following_user_button': {
+      text: 'Gia segui',
     },
     'public_profile_page/user_profile_header/user_follower': {
       text: 'Followers',
@@ -798,7 +801,7 @@ export const defaultConfig: DefaultConfig = {
       text: 'Segui',
     },
     'public_profile_page/user_profile_header/pending_user_button': {
-      text: 'richiesta inviata',
+      text: 'Richiesta inviata',
     },
     'public_profile_page/user_profile_header/unblock_user_button': {
       text: 'Sblocca',

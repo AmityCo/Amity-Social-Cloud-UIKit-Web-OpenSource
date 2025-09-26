@@ -1,1 +1,0 @@
-export { CommunitySmallListSekeleton } from './CommunitySmallListSekeleton';

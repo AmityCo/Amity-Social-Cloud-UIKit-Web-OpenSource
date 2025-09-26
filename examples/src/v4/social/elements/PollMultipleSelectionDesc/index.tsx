@@ -1,1 +1,0 @@
-export { PollMultipleSelectionDesc } from './PollMultipleSelectionDesc';

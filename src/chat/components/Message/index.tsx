@@ -77,7 +77,7 @@ const Message = ({
   userDisplayName,
   containerRef,
 }: MessageProps) => {
-  const shouldShowUserName = isIncoming && userDisplayName;
+  const shouldShowUserName = isIncoming && userDisplayName && !isConsequent;
   const isSupportedMessageType = ['text', 'custom'].includes(type);
 
   const renderAvatar = () => {

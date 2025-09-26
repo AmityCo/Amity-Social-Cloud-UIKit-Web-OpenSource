@@ -1,1 +1,0 @@
-export { NotificationTrayPage } from './NotificationTrayPage';

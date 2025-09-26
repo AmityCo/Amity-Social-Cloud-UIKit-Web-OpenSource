@@ -13,26 +13,6 @@
   background-color: var(--asc-color-background-default);
 }
 
-.socialHomePage__topNavigation {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.socialHomePage__tabs {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  gap: 0.5rem;
-  overflow-x: scroll;
-  width: 100%;
-  padding: 0.75rem 1rem;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.socialHomePage__tabs::-webkit-scrollbar {
-  display: none;
-}
-
 .socialHomePage__contents {
   position: absolute;
   top: 7.5rem;

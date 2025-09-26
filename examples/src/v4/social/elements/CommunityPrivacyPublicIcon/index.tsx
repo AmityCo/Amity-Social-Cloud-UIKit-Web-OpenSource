@@ -1,1 +1,0 @@
-export { CommunityPrivacyPublicIcon } from './CommunityPrivacyPublicIcon';

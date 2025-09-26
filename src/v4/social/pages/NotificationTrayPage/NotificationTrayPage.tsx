@@ -1,21 +1,21 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useAmityPage } from '~/v4/core/hooks/uikit';
-import { BackButton, EmptyNotification, NoInternetConnection, Title } from '~/v4/social/elements';
-import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import useNotificationTrayItemsCollection from '~/v4/social/hooks/collections/useNotificationTrayItemsCollection';
-import {
-  NotificationTraySkeleton,
-  NotificationItemSkeleton,
-} from '~/v4/social/internal-components/NotificationTraySkeleton';
-import { useNetworkState } from 'react-use';
-import { NotificationItem } from '~/v4/social/internal-components/NotificationItem';
+import React, { useEffect, useRef, useState } from 'react';
 import { Typography } from '~/v4/core/components';
-import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import Notification from '~/v4/core/components/Notification';
-import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import { useAmityPage } from '~/v4/core/hooks/uikit';
+import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useNavigation } from '~/v4/core/providers/NavigationProvider';
+import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import { InvitationSection } from '~/v4/social/components';
+import { BackButton, EmptyNotification, NoInternetConnection, Title } from '~/v4/social/elements';
+import useNotificationTrayItemsCollection from '~/v4/social/hooks/collections/useNotificationTrayItemsCollection';
+import { NotificationItem } from '~/v4/social/internal-components/NotificationItem';
+import {
+  NotificationItemSkeleton,
+  NotificationTraySkeleton,
+} from '~/v4/social/internal-components/NotificationTraySkeleton';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { useNetworkState } from 'react-use';
 import styles from './NotificationTrayPage.module.css';
 
 interface NotificationTrayPageProps {
@@ -58,9 +58,23 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
     !isLoading && setNotificationItemLoading(isLoading);
   }, [isLoading]);
 
-  const recentItems = items.filter((item) => item.isRecent);
-  const unRecentItems = items.filter((item) => !item.isRecent);
+  const getItemsByDateRange = (startDays: number, endDays: number = 0, limit: number = 3) => {
+    const now = new Date();
+    const startDate = new Date(now);
+    startDate.setDate(now.getDate() - startDays);
+    startDate.setHours(0, 0, 0, 0);
 
+    const endDate = new Date(now);
+    endDate.setDate(now.getDate() - endDays);
+    endDate.setHours(23, 59, 59, 999);
+
+    return items
+      .filter((item) => {
+        const itemDate = new Date(item.lastOccurredAt);
+        return itemDate >= startDate && itemDate < endDate; // Cambiato <= in <
+      })
+      .slice(0, limit);
+  };
   useEffect(() => {
     refresh();
     invitationNotificationTray.refresh();
@@ -100,7 +114,7 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
             imgClassName={styles.notificationTrayPage__closeButton}
           />
         )}
-        <Title pageId={pageId} titleClassName={styles.notificationTrayPage__title} />
+        <Typography.Headline>Notifications</Typography.Headline>
         <div className={styles.notificationTrayPage__topBarGap} />
       </div>
       <div className={styles.notificationTrayPage__content}>
@@ -117,12 +131,16 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                     invitations={invitationNotificationTray.invitations}
                   />
                 )}
-                {recentItems.length > 0 && (
+                {getItemsByDateRange(0, 0, 3).length > 0 && (
                   <>
-                    <Typography.CaptionBold as="p" className={styles.notificationTrayPage__header}>
-                      Recent
-                    </Typography.CaptionBold>
-                    {recentItems.map((item) => (
+                    <Typography.SubTitleBold
+                      as="h3"
+                      style={{ textAlign: 'left' }}
+                      className={styles.notificationTrayPage__header}
+                    >
+                      Today
+                    </Typography.SubTitleBold>
+                    {getItemsByDateRange(0, 0, 3).map((item) => (
                       <NotificationItem
                         pageId={pageId}
                         key={item._id}
@@ -132,12 +150,73 @@ export const NotificationTrayPage = ({ onClose }: NotificationTrayPageProps) => 
                     ))}
                   </>
                 )}
-                {unRecentItems.length > 0 && (
+                {getItemsByDateRange(1, 1, 3).length > 0 && (
                   <>
-                    <Typography.CaptionBold as="p" className={styles.notificationTrayPage__header}>
-                      Older
-                    </Typography.CaptionBold>
-                    {unRecentItems.map((item) => (
+                    <Typography.SubTitleBold
+                      as="h3"
+                      style={{ textAlign: 'left' }}
+                      className={styles.notificationTrayPage__header}
+                    >
+                      Today
+                    </Typography.SubTitleBold>
+                    {getItemsByDateRange(1, 1, 3).map((item) => (
+                      <NotificationItem
+                        pageId={pageId}
+                        key={item._id}
+                        item={item}
+                        onClose={onClose}
+                      />
+                    ))}
+                  </>
+                )}
+                {getItemsByDateRange(2, 1, 3).length > 0 && (
+                  <>
+                    <Typography.SubTitleBold
+                      as="h3"
+                      style={{ textAlign: 'left' }}
+                      className={styles.notificationTrayPage__header}
+                    >
+                      Ieri
+                    </Typography.SubTitleBold>
+                    {getItemsByDateRange(2, 1, 3).map((item) => (
+                      <NotificationItem
+                        pageId={pageId}
+                        key={item._id}
+                        item={item}
+                        onClose={onClose}
+                      />
+                    ))}
+                  </>
+                )}
+                {getItemsByDateRange(7, 2, 3).length > 0 && (
+                  <>
+                    <Typography.SubTitleBold
+                      as="h3"
+                      style={{ textAlign: 'left' }}
+                      className={styles.notificationTrayPage__header}
+                    >
+                      Ultimi 7 giorni
+                    </Typography.SubTitleBold>
+                    {getItemsByDateRange(7, 2, 3).map((item) => (
+                      <NotificationItem
+                        pageId={pageId}
+                        key={item._id}
+                        item={item}
+                        onClose={onClose}
+                      />
+                    ))}
+                  </>
+                )}
+                {getItemsByDateRange(30, 7, 3).length > 0 && (
+                  <>
+                    <Typography.SubTitleBold
+                      as="h3"
+                      style={{ textAlign: 'left' }}
+                      className={styles.notificationTrayPage__header}
+                    >
+                      Ultimi 30 giorni
+                    </Typography.SubTitleBold>
+                    {getItemsByDateRange(30, 7, 3).map((item) => (
                       <NotificationItem
                         pageId={pageId}
                         key={item._id}

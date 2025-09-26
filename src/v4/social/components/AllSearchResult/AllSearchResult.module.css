@@ -1,0 +1,18 @@
+.allSearchResult {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.allSearchResult__section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.allSearchResult__sectionTitle {
+  padding: 0 1rem;
+  color: var(--asc-color-base-shade2);
+  font-size: 14px;
+  font-weight: 600;
+}

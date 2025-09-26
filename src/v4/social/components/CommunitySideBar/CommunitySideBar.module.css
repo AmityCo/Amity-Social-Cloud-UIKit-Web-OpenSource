@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  border-right: 1px solid var(--asc-color-base-shade4);
+  border: 1px solid #ebecef;
   background-color: var(--asc-color-background-default);
   border-radius: 16px 16px 0;
-  box-shadow: 0 16px 16px 0 rgb(0 0 0 / 12%);
+  box-shadow: 0 4px 16px 0 rgb(0 0 0 / 12%);
 }
 
 .communitySideBar__header {
@@ -78,7 +78,6 @@
   align-items: center;
 }
 
-/* Hover state for all menu items */
 .communitySideBar__menuButton .communitySideBarMenuItem:hover {
   background-color: var(--asc-color-background-shade1);
 }
@@ -97,9 +96,12 @@
   margin-right: 12px;
 }
 
-/* Text styling */
 .communitySideBar__menuButton .communitySideBarMenuItem .text {
   font-size: 14px;
   font-weight: 500;
   flex: 1;
+}
+
+.sidebarPadding {
+  padding-left: 1rem;
 }

@@ -1,1 +1,0 @@
-export { AnnouncementBadge } from './AnnouncementBadge';

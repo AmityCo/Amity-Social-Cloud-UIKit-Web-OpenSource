@@ -5,11 +5,12 @@ import { backgroundImage as communityBackgroundImage } from '~/icons/Community';
 import useChatInfo from '~/chat/hooks/useChatInfo';
 import UserAvatar from '~/chat/components/UserAvatar';
 import SideMenuItem from '~/core/components/SideMenuItem';
+import { useChannelLastMessage } from '~/chat/hooks/useChannelLastMessage';
+import { formatChatTimestamp, truncateMessage } from '~/chat/utils/chatTimestamp';
+import useSDK from '~/core/hooks/useSDK';
 
 import styles from './styles.module.css';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
-import useChannelSubscription from '~/social/hooks/useChannelSubscription';
-import useChannel from '~/chat/hooks/useChannel';
 
 function getNormalizedUnreadCount(channelUnreadCount: number) {
   // Within this range the unread counter will show an actuall number
@@ -35,7 +36,33 @@ interface ChatItemProps {
 
 const ChatItem = ({ channel, isSelected, onSelect }: ChatItemProps) => {
   const { chatName, chatAvatar } = useChatInfo({ channel });
+  const { currentUserId } = useSDK();
+  const { lastMessage } = useChannelLastMessage(channel?.channelId);
+
   const normalizedUnreadCount = getNormalizedUnreadCount(channel?.unreadCount || 0);
+
+  const getLastMessagePreview = () => {
+    if (!lastMessage) return '';
+
+    const messageText = lastMessage.data?.text || '';
+    const isOwnMessage = lastMessage.creatorId === currentUserId;
+
+    if (isOwnMessage) {
+      return `Tu: ${truncateMessage(messageText, 50)}`;
+    }
+
+    return truncateMessage(messageText, 60);
+  };
+
+  const getTimestamp = () => {
+    if (lastMessage?.createdAt) {
+      return formatChatTimestamp(lastMessage.createdAt);
+    }
+    if (channel?.updatedAt) {
+      return formatChatTimestamp(channel.updatedAt);
+    }
+    return '';
+  };
 
   return (
     <SideMenuItem
@@ -56,13 +83,23 @@ const ChatItem = ({ channel, isSelected, onSelect }: ChatItemProps) => {
             }
           />
         </div>
-        <div className={styles.title}>{chatName}</div>
-      </div>
-      {normalizedUnreadCount && (
-        <div className={styles.unreadCount} data-testid="chat-item-unread-count">
-          {normalizedUnreadCount}
+        <div className={styles.chatContent}>
+          <div className={styles.chatHeader}>
+            <div className={styles.title}>{chatName}</div>
+          </div>
+          {getLastMessagePreview() && (
+            <div className={styles.lastMessage}>{getLastMessagePreview()}</div>
+          )}
         </div>
-      )}
+      </div>
+      <div className={styles.rightSide}>
+        {getTimestamp() && <div className={styles.timestamp}>{getTimestamp()}</div>}
+        {normalizedUnreadCount && (
+          <div className={styles.unreadBadge} data-testid="chat-item-unread-count">
+            {normalizedUnreadCount}
+          </div>
+        )}
+      </div>
     </SideMenuItem>
   );
 };

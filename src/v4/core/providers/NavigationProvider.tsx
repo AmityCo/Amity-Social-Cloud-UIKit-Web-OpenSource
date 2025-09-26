@@ -1,24 +1,24 @@
 import React, {
   createContext,
+  ReactNode,
   useCallback,
   useContext,
-  useState,
-  useMemo,
-  ReactNode,
   useEffect,
+  useMemo,
+  useState,
 } from 'react';
-import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
-import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
 import { NavigationContext as NavigationContextV3 } from '~/social/providers/NavigationProvider';
 import { AmityPostCategory } from '~/v4/social/components/PostContent/PostContent';
-import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 import {
   AmityCommunitySetupPageMode,
   MemberCommunitySetup,
 } from '~/v4/social/pages/CommunitySetupPage/CommunitySetupPage';
-import { AmityRoute } from './AmityUIKitProvider';
+import { AmityStoryMediaType } from '~/v4/social/pages/DraftsPage/DraftsPage';
 import { LiveStreamPlayerPageProps } from '~/v4/social/pages/LiveStreamPlayerPage';
+import { Mode } from '~/v4/social/pages/PostComposerPage/PostComposerPage';
+import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
+import { AmityRoute } from './AmityUIKitProvider';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -110,32 +110,44 @@ type Page =
         category?: AmityPostCategory;
         commentId?: string;
         parentId?: string;
-        posts?: Amity.Post<'clip' | 'video'>[];
+        posts?: Amity.Post[];
       };
     }
-  | { type: PageTypes.CommunityProfilePage; context: { communityId: string; page?: number } }
-  | { type: PageTypes.UserProfilePage; context: { userId: string; communityId?: string } }
+  | {
+      type: PageTypes.CommunityProfilePage;
+      context: { communityId: string; page?: number };
+    }
+  | {
+      type: PageTypes.UserProfilePage;
+      context: { userId: string; communityId?: string };
+    }
   | { type: PageTypes.EditUserProfilePage; context: { userId: string } }
   | {
       type: PageTypes.ChangeAvatarPage;
       context: {
         userId: string;
-        image: Amity.File<'image'> | null;
+        image: Amity.File | null;
         selectedFile?: File | null;
         pageId?: string;
         onBack?: () => void;
-        onImageUploaded?: (uploadedImage: Amity.File<'image'>) => void;
+        onImageUploaded?: (uploadedImage: Amity.File) => void;
       };
     }
   | {
       type: PageTypes.UserRelationshipPage;
       context: { userId: string; selectedTab: UserRelationshipPageTabs };
     }
-  | { type: PageTypes.UserPendingFollowRequestPage; context: { userId: string } }
+  | {
+      type: PageTypes.UserPendingFollowRequestPage;
+      context: { userId: string };
+    }
   | { type: PageTypes.BlockedUsersPage }
   | { type: PageTypes.SocialHomePage; context: { communityId?: string } }
   | { type: PageTypes.SocialGlobalSearchPage; context: { tab?: string } }
-  | { type: PageTypes.MyCommunitiesSearchPage; context: { communityId?: string } }
+  | {
+      type: PageTypes.MyCommunitiesSearchPage;
+      context: { communityId?: string };
+    }
   | { type: PageTypes.SelectPostTargetPage; context?: { isClipPost?: boolean } }
   | {
       type: PageTypes.DraftPage;
@@ -279,11 +291,11 @@ type Page =
     }
   | {
       type: PageTypes.SettingPage;
-      context: Record<string, never>;
+      context: Record;
     }
   | {
       type: PageTypes.ChatPage;
-      context: Record<string, never>;
+      context: Record;
     };
 
 type ContextValue = {
@@ -304,11 +316,11 @@ type ContextValue = {
   goToEditUserPage: (userId: string) => void;
   goToChangeAvatarPage: (context: {
     userId: string;
-    image: Amity.File<'image'> | null;
+    image: Amity.File | null;
     selectedFile?: File | null;
     pageId?: string;
     onBack?: () => void;
-    onImageUploaded?: (uploadedImage: Amity.File<'image'>) => void;
+    onImageUploaded?: (uploadedImage: Amity.File) => void;
   }) => void;
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => void;
   goToPendingFollowRequestPage: () => void;
@@ -319,7 +331,7 @@ type ContextValue = {
     category?: AmityPostCategory,
     commentId?: string,
     parentId?: string,
-    posts?: Amity.Post<'clip' | 'video'>[],
+    posts?: Amity.Post[],
   ) => void;
   goToCommunityProfilePage: (communityId: string, page?: number) => void;
   goToSocialGlobalSearchPage: (tab?: string) => void;
@@ -433,7 +445,7 @@ let defaultValue: ContextValue = {
   onMessageUser: (userId: string) => {},
   goToUserProfilePage: (userId: string, forcePublicView?: boolean) => {},
   goToEditUserPage: (userId: string) => {},
-  goToChangeAvatarPage: (context: { userId: string; image: Amity.File<'image'> | null }) => {},
+  goToChangeAvatarPage: (context: { userId: string; image: Amity.File | null }) => {},
   goToUserRelationshipPage: (userId: string, selectedTab: UserRelationshipPageTabs) => {},
   goToPendingFollowRequestPage: () => {},
   goToBlockedUsersPage: () => {},
@@ -443,7 +455,7 @@ let defaultValue: ContextValue = {
     category?: AmityPostCategory,
     commentId?: string,
     parentId?: string,
-    posts?: Amity.Post<'clip' | 'video'>[],
+    posts?: Amity.Post[],
   ) => {},
   goToViewStoryPage: (context: {
     targetId: string;
@@ -509,7 +521,10 @@ let defaultValue: ContextValue = {
 
 if (process.env.NODE_ENV !== 'production') {
   defaultValue = {
-    page: { type: PageTypes.SocialHomePage, context: { communityId: undefined } },
+    page: {
+      type: PageTypes.SocialHomePage,
+      context: { communityId: undefined },
+    },
     setDefaultPage: (page: Page) => console.log(`Default page ${page}`),
     onChangePage: (type) => console.log(`NavigationContext onChangePage(${type})`),
     onClickCategory: (categoryId) =>
@@ -646,7 +661,7 @@ interface NavigationProviderProps {
   goToCommunityCreatePage?: () => void;
   onEditCommunity?: (communityId: string, options?: { tab?: string }) => void;
   onEditUser?: (userId: string) => void;
-  onChangeAvatar?: (userId: string, image: Amity.File<'image'> | null) => void;
+  onChangeAvatar?: (userId: string, image: Amity.File | null) => void;
   onMessageUser?: (userId: string) => void;
   onBack?: (page?: number) => void;
   //V3 functions
@@ -692,7 +707,10 @@ const getDefaultRoute = (activeRoute?: AmityRoute): Page => {
     }
   }
 
-  return { type: PageTypes.SocialHomePage, context: { communityId: undefined } };
+  return {
+    type: PageTypes.SocialHomePage,
+    context: { communityId: undefined },
+  };
 };
 
 export default function NavigationProvider({
@@ -827,6 +845,8 @@ export default function NavigationProvider({
           userId,
         },
       };
+
+      window.location.href = `/users/${userId}`;
 
       if (onChangePage) return onChangePage(next);
       if (onClickUser) return onClickUser(userId);

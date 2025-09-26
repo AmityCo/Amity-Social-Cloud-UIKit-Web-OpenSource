@@ -11,6 +11,7 @@ import styles from './styles.module.css';
 import CreateChatModal from '~/chat/components/Chat/CreateChatModal';
 import EditChatMemberModal from '~/chat/components/ChatDetails/EditChatMemberModal';
 import NewChatView from '~/chat/components/NewChatModal';
+import NewGroupView from '~/chat/components/NewGroupView';
 import NewGroupModal from '~/chat/components/NewGroupModal';
 import { useNotifications } from '~/core/providers/NotificationProvider';
 import { Typography } from '~/v4/core/components';
@@ -22,7 +23,7 @@ import NewGroup from '~/v4/icons/NewGroup';
 type PartialChannel = Pick<Amity.Channel, 'channelId' | 'type'>;
 
 const ChatApplication = ({
-  membershipFilter = 'all',
+  membershipFilter = 'member',
   defaultChannelId,
   onMemberSelect,
   onChannelSelect,
@@ -56,7 +57,7 @@ const ChatApplication = ({
   const [isChatModalOpened, setChatModalOpened] = useState(false);
   const [isEditChatMemberModalOpened, setIsEditChatMemberModalOpened] = useState(false);
   const [isNewChatModalOpened, setIsNewChatModalOpened] = useState(false);
-  const [isNewGroupModalOpened, setIsNewGroupModalOpened] = useState(false);
+  const [isNewGroupViewOpened, setIsNewGroupViewOpened] = useState(false);
   const openChatModal = () => setChatModalOpened(true);
   const [showNewMessage, setShowNewMessage] = useState(false);
 
@@ -107,13 +108,11 @@ const ChatApplication = ({
     }
   }, [defaultChannelId, isDesktop]);
 
-  console.log('🚀 ~ currentChannelData?.channelId:', currentChannelData?.channelId);
-
   return (
     <div className={styles.applicationContainer}>
-      {!isNewChatModalOpened && (
+      {!isNewChatModalOpened && !isNewGroupViewOpened && (
         <div className={styles.chatHeader}>
-          <Typography.SubTitleBold>Community Chat</Typography.SubTitleBold>
+          <Typography.Headline>Community Chat</Typography.Headline>
           <div
             className={styles.newChatContainer}
             onClick={() => setShowNewMessage(!showNewMessage)}
@@ -135,7 +134,7 @@ const ChatApplication = ({
               <div
                 className={styles.newChatPopupItem}
                 onClick={() => {
-                  setIsNewGroupModalOpened(true);
+                  setIsNewGroupViewOpened(true);
                   setShowNewMessage(false);
                 }}
               >
@@ -155,6 +154,59 @@ const ChatApplication = ({
             }}
           />
         </div>
+      ) : isNewGroupViewOpened ? (
+        isDesktop ? (
+          // Desktop: Keep the existing chat layout and show modal
+          <div
+            className={`${styles.chatContainer} ${showChatOnMobile ? styles.mobileShowChat : ''}`}
+          >
+            <div className={!isDesktop ? styles.mobileRecentOnly : ''}>
+              <RecentChat
+                selectedChannelId={currentChannelData?.channelId}
+                membershipFilter={membershipFilter}
+                onChannelSelect={handleChannelSelect}
+                onAddNewChannelClick={() => {
+                  openChatModal();
+                  onAddNewChannel?.();
+                }}
+              />
+            </div>
+            {currentChannelData && (
+              <div className={`${styles.chatSection} ${!isDesktop ? styles.mobileChatOnly : ''}`}>
+                <Chat
+                  channelId={currentChannelData.channelId}
+                  shouldShowChatDetails={false}
+                  onChatDetailsClick={showChatDetails}
+                  onBackClick={!isDesktop ? handleBackToRecentChats : undefined}
+                />
+              </div>
+            )}
+            {shouldShowChatDetails && currentChannelData && (
+              <ChatDetails
+                channelId={currentChannelData.channelId}
+                leaveChat={leaveChat}
+                onEditChatMemberClick={(newData) => {
+                  setIsEditChatMemberModalOpened(true);
+                  onEditChatMember?.(newData);
+                }}
+                onMemberSelect={onMemberSelect}
+                onClose={hideChatDetails}
+              />
+            )}
+          </div>
+        ) : (
+          // Mobile: Full-screen view
+          <div
+            className={`${styles.chatContainer} ${showChatOnMobile ? styles.mobileShowChat : ''}`}
+          >
+            <NewGroupView
+              onClose={() => setIsNewGroupViewOpened(false)}
+              onGroupCreated={(channelId: string) => {
+                handleChannelSelect({ channelId, type: 'conversation' });
+              }}
+            />
+          </div>
+        )
       ) : (
         <div className={`${styles.chatContainer} ${showChatOnMobile ? styles.mobileShowChat : ''}`}>
           <div className={!isDesktop ? styles.mobileRecentOnly : ''}>
@@ -199,10 +251,15 @@ const ChatApplication = ({
           onClose={() => setIsEditChatMemberModalOpened(false)}
         />
       ) : null}
-      <NewGroupModal
-        isOpen={isNewGroupModalOpened}
-        onClose={() => setIsNewGroupModalOpened(false)}
-      />
+      {isDesktop && isNewGroupViewOpened && (
+        <NewGroupModal
+          isOpen={isNewGroupViewOpened}
+          onClose={() => setIsNewGroupViewOpened(false)}
+          onGroupCreated={(channelId: string) => {
+            handleChannelSelect({ channelId, type: 'conversation' });
+          }}
+        />
+      )}
     </div>
   );
 };

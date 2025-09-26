@@ -42,6 +42,7 @@ export function UserAvatar({
   const userImage = useImage({
     fileId: userData?.avatarFileId || user?.avatar?.fileId,
   });
+  console.log(user, 'USER AVATAR USER');
   const { accessibilityId } = useAmityElement({ pageId, componentId, elementId });
   const { closePopup } = usePopupContext();
 

@@ -1,1 +1,0 @@
-export { CommunityHeader } from './CommunityHeader';

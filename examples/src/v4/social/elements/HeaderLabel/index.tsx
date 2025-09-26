@@ -1,1 +1,0 @@
-export { HeaderLabel } from './HeaderLabel';

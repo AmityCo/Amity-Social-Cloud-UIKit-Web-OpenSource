@@ -5,6 +5,17 @@
   background-color: var(--asc-color-background-default);
 }
 
+/* .newsFeed__cardBorders {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-radius: var(--component-card-multipuropse-layout-radius-default, 0.5rem);
+  background: var(--component-card-multipuropse-surface-even, #fff);
+  box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
+    var(--effect-elevation-sm-blur, 16px) var(--effect-elevation-sm-spread, 0)
+    var(--effect-surface-effect, rgb(0 0 0 / 12%));
+} */
+
 .newsfeed__postList {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CommunitySearchResult } from '~/v4/social/components/CommunitySearchResult/';
+import { GenericSearchResult } from '~/v4/social/components/GenericSearchResult/';
 import useCommunitiesCollection from '~/v4/social/hooks/collections/useCommunitiesCollection';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 
@@ -22,9 +22,10 @@ export const MyCommunities = ({ pageId = '*' }: MyCommunitiesProps) => {
 
   return (
     <div style={themeStyles} className={styles.myCommunitiesList}>
-      <CommunitySearchResult
+      <GenericSearchResult
         pageId={pageId}
-        communityCollection={communities}
+        type="community"
+        collection={communities}
         isLoading={isLoading}
         onLoadMore={() => {
           if (hasMore && isLoading === false) {

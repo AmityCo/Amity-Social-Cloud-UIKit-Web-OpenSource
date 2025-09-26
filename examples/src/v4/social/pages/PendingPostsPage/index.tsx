@@ -1,1 +1,0 @@
-export { PendingPostsPage } from './PendingPostsPage';

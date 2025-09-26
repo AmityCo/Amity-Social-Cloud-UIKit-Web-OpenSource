@@ -1,1 +1,0 @@
-export { MessageComposer } from './MessageComposer';

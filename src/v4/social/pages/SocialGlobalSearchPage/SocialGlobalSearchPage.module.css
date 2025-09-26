@@ -5,15 +5,13 @@
   display: flex;
   padding: 1rem;
   flex-direction: column;
-  background-color: var(--asc-color-background-default);
 }
 
 .socialGlobalSearchPage__tabs {
-  left: 1rem;
   padding: 0;
   width: 100%;
   z-index: 10;
-  gap: 1.25rem;
+  gap: 1rem;
   display: flex;
   position: static;
   overflow-y: scroll;
@@ -26,49 +24,97 @@
 }
 
 .socialGlobalSearchPage__searchResultContainer__footer {
-  left: 1rem;
-  top: 30.6rem;
   width: 20rem;
   z-index: 100;
   display: none;
-  position: fixed;
   padding: 0.25rem 1rem;
   border-radius: 0 0 0.5rem 0.5rem;
   background-color: var(--asc-color-background-default);
 }
 
-@media (width >= 48em) {
+@media (width >=48em) {
   .socialGlobalSearchPage {
-    padding: 0;
+    padding: 1rem;
     height: auto;
     position: relative;
+    border-radius: 0.5rem;
+    background: var(--component-card-multipuropse-surface-even, #fff);
+    box-shadow: var(--effect-elevation-sm-x, 0) var(--effect-elevation-sm-y, 4px)
+      var(--effect-elevation-sm-blur, 16px) var(--effect-elevation-sm-spread, 0)
+      var(--effect-surface-effect, rgb(0 0 0 / 12%));
   }
 
   .socialGlobalSearchPage__tabPanel {
-    padding: 3rem 0;
+    padding: 1rem 0;
   }
 
   .socialGlobalSearchPage__searchResultContainer {
-    left: 0;
-    top: 2.8rem;
     z-index: 200;
-    width: 20rem;
     max-height: 25rem;
-    position: absolute;
     overflow-y: scroll;
-    border-radius: 0.5rem;
-    padding: 0 1rem 1rem;
-    box-shadow: var(--asc-box-shadow-04);
     background-color: var(--asc-color-background-default);
   }
 
   .socialGlobalSearchPage__tabs {
-    width: 20rem;
-    position: fixed;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem 1rem;
   }
 
   .socialGlobalSearchPage__searchResultContainer__footer {
     display: initial;
+  }
+}
+
+.tabLabel {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--asc-color-base-shade2);
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.tabLabel:hover {
+  background-color: var(--asc-color-background-shade1);
+}
+
+.activeTab {
+  color: var(--asc-color-primary-default);
+  background-color: var(--asc-color-primary-shade3);
+}
+
+.secondaryTabButton {
+  border: 1px solid black;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  height: 1.875rem;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--asc-color-base-shade3);
+  transition: all 0.2s ease;
+}
+
+.secondaryTabButton:hover {
+  background: var(--asc-color-base-shade3);
+}
+
+.secondaryTabButtonActive {
+  background: var(--component-form-filter-surface-active, #435864);
+  color: var(--asc-color-white);
+}
+
+.secondaryTabButton:disabled {
+  color: var(--asc-color-base-shade3);
+}
+
+@media (width >= 48em) {
+  .secondaryTabButton:focus-visible {
+    background-color: var(--asc-color-primary-shade3);
   }
 }

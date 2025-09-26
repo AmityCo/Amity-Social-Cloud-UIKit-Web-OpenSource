@@ -1,6 +1,6 @@
 .breadcrumb {
   display: inline-flex;
-  padding: 0.5rem var(--global-layout-gap-lg, 1rem);
+  padding: 16px;
   align-items: center;
   gap: var(--component-navigation-breadcrumb-layout-padding 0.5rem);
 }
@@ -34,7 +34,7 @@
 }
 
 .breadcrumb__textActive {
-  color: var(--asc-color-primary);
+  color: #0b7d3e;
   font-weight: 500;
 }
 

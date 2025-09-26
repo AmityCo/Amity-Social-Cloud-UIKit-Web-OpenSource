@@ -317,7 +317,6 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
           )}
 
           {isShowFollowingButton && renderFollowingButton(user.userId)}
-          {(!isCurrentUser || forcePublicProfileView) && renderSendMessageButton(user.userId)}
           {isShowPendingButton && (
             <PendingUserButton
               pageId={pageId}
@@ -354,6 +353,9 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({
               }}
             />
           )}
+          {(!isCurrentUser || forcePublicProfileView) &&
+            !isShowUnBlockButton &&
+            renderSendMessageButton(user.userId)}
         </div>
       </div>
 

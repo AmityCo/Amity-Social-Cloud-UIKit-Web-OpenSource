@@ -1,13 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { SocialHomePage } from '~/v4/social/pages/SocialHomePage';
+import CommunityEditPage from '~/social/pages/CommunityEdit';
+import CommunityFeed from '~/social/pages/CommunityFeed';
+import { Breadcrumb } from '~/v4/core/components';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
+import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
+import { CommunitySideBar } from '~/v4/social/components/CommunitySideBar';
+import { MainLayout } from '~/v4/social/layouts/Main';
+import { AllCategoriesPage } from '~/v4/social/pages/AllCategoriesPage';
+import { BlockedUserPage } from '~/v4/social/pages/BlockedUserPage/BlockedUserPage';
+import { ChangeAvatarPage } from '~/v4/social/pages/ChangeAvatarPage';
+import { CommunitiesByCategoryPage } from '~/v4/social/pages/CommunitiesByCategoryPage';
+import { CommunityAddMemberPage } from '~/v4/social/pages/CommunityAddMemberPage/CommunityAddMemberPage';
+import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
+import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
+import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
+import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
+import { CommunitySetupPage } from '~/v4/social/pages/CommunitySetupPage';
+import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
+import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
+import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
+import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
+import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
+import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
+import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { PostComposerPage } from '~/v4/social/pages/PostComposerPage';
 import { PostDetailPage } from '~/v4/social/pages/PostDetailPage';
-import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
-import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
 import { SelectPostTargetPage } from '~/v4/social/pages/SelectPostTargetPage';
-import { MyCommunitiesSearchPage } from '~/v4/social/pages/MyCommunitiesSearchPage/MyCommunitiesSearchPage';
-import styles from './Application.module.css';
+import SettingPage from '~/v4/social/pages/SettingPage/SettingPage';
+import { SocialGlobalSearchPage } from '~/v4/social/pages/SocialGlobalSearchPage';
+import { SocialHomePage } from '~/v4/social/pages/SocialHomePage';
+import { ViewStoryPage } from '~/v4/social/pages/StoryPage';
+import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
+import { UserPendingFollowRequestPage } from '~/v4/social/pages/UserPendingFollowRequestPage/UserPendingFollowRequestPage';
+import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
+import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
+import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import {
   AmityDraftStoryPage,
   ChatPage,
@@ -20,42 +48,28 @@ import {
   NotificationTrayPage,
   PendingRequestPage,
 } from '..';
-import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
-import CommunityFeed from '~/social/pages/CommunityFeed';
-import { UserProfilePage } from '~/v4/social/pages/UserProfilePage';
-import { EditUserProfilePage } from '~/v4/social/pages/EditUserProfilePage';
-import { ChangeAvatarPage } from '~/v4/social/pages/ChangeAvatarPage';
-import CommunityEditPage from '~/social/pages/CommunityEdit';
-import { CommunityProfilePage } from '~/v4/social/pages/CommunityProfilePage';
-import { CommunityTabProvider } from '~/v4/core/providers/CommunityTabProvider';
-import { AllCategoriesPage } from '~/v4/social/pages/AllCategoriesPage';
-import { CommunitiesByCategoryPage } from '~/v4/social/pages/CommunitiesByCategoryPage';
-import { MainLayout } from '~/v4/social/layouts/Main';
-import SettingPage from '~/v4/social/pages/SettingPage/SettingPage';
-import { CommunitySideBar } from '~/v4/social/components/CommunitySideBar';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { UserRelationshipPage } from '~/v4/social/pages/UserRelationshipPage';
-import { UserPendingFollowRequestPage } from '~/v4/social/pages/UserPendingFollowRequestPage/UserPendingFollowRequestPage';
-import { BlockedUserPage } from '~/v4/social/pages/BlockedUserPage/BlockedUserPage';
-import { CommunitySetupPage } from '~/v4/social/pages/CommunitySetupPage';
-import { CommunityAddMemberPage } from '~/v4/social/pages/CommunityAddMemberPage/CommunityAddMemberPage';
-import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
-import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
-import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
-import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
-import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
-import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
-import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
-import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
-import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
-import { Breadcrumb } from '~/v4/core/components';
+import { UserProfileHeader } from '../../components';
+import styles from './Application.module.css';
 
-const Application = () => {
+const Application = ({
+  userId,
+  redirectToUserProfile,
+}: {
+  userId?: string;
+  redirectToUserProfile?: boolean;
+}) => {
   const { isDesktop } = useResponsive();
   const [open, setOpen] = useState(false);
-  const { page, goToSocialHomePage } = useNavigation();
+  const { page, goToSocialHomePage, goToUserProfilePage } = useNavigation();
   const { liveStreamPlayer } = useLayoutContext();
   const toggleOpen = () => setOpen((open) => !open);
+
+  useEffect(() => {
+    // Se redirectToUserProfile è true e abbiamo un userId, naviga al profilo utente
+    if (redirectToUserProfile && userId) {
+      goToUserProfilePage(userId);
+    }
+  }, [redirectToUserProfile, userId, goToUserProfilePage]);
 
   useEffect(() => {
     if (
@@ -70,8 +84,14 @@ const Application = () => {
 
   return (
     <div className={styles.applicationContainer}>
-      <Breadcrumb maxItems={3} />
-      <MainLayout aside={<CommunitySideBar />}>
+      <MainLayout
+        aside={
+          <>
+            <Breadcrumb maxItems={3} />
+            <CommunitySideBar />
+          </>
+        }
+      >
         {page.type === PageTypes.SocialHomePage && <SocialHomePage />}
         {page.type === PageTypes.SocialGlobalSearchPage && !isDesktop && <SocialGlobalSearchPage />}
         {page.type === PageTypes.PostDetailPage && (

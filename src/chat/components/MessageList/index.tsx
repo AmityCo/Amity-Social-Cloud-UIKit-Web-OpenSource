@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import MessageComponent from '~/chat/components/Message';
@@ -46,6 +46,7 @@ interface MessageListProps {
 const MessageList = ({ channelId }: MessageListProps) => {
   const { client } = useSDK();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [containerHeight, setContainerHeight] = useState(0);
   const { messages, hasMore, loadMore, isLoading } = useMessagesCollection({
     subChannelId: channelId,
     sortBy: 'segmentDesc',
@@ -58,12 +59,46 @@ const MessageList = ({ channelId }: MessageListProps) => {
     }
   }, [isLoading, messages]);
 
-  // Helper function to check if two dates are on the same day
+  // Update container height when channelId changes or when container ref is available
+  useEffect(() => {
+    const updateHeight = () => {
+      if (containerRef.current) {
+        const newHeight = containerRef.current.clientHeight;
+        if (newHeight > 0) {
+          setContainerHeight(newHeight);
+        }
+      }
+    };
+
+    const initialTimeout = setTimeout(updateHeight, 50);
+
+    const handleResize = () => {
+      updateHeight();
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [channelId]);
+  useEffect(() => {
+    if (containerRef.current && messages.length > 0) {
+      const newHeight = containerRef.current.clientHeight;
+      if (newHeight > 0 && newHeight !== containerHeight) {
+        setContainerHeight(newHeight);
+      }
+    }
+  }, [messages, containerHeight]);
+
+  // Force re-render of InfiniteScroll when channelId changes
+  const infiniteScrollKey = `infinite-scroll-${channelId}`;
+
   const isSameDay = (date1: Date, date2: Date) => {
     return date1.toDateString() === date2.toDateString();
   };
 
-  // Group messages by day and create elements with date dividers
   const renderMessagesWithDateDividers = () => {
     const elements: React.ReactElement[] = [];
 
@@ -75,7 +110,6 @@ const MessageList = ({ channelId }: MessageListProps) => {
 
       if (!message?.data || !message.createdAt) return;
 
-      // Add the message first
       elements.push(
         <MessageItem
           key={message.messageId}
@@ -86,8 +120,6 @@ const MessageList = ({ channelId }: MessageListProps) => {
         />,
       );
 
-      // Check if we need to add a date divider after this message
-      // (which will appear before it visually due to column-reverse)
       const nextMessageDate = nextMessage ? new Date(nextMessage.createdAt) : null;
       if (!nextMessageDate || !isSameDay(messageDate, nextMessageDate)) {
         elements.push(
@@ -101,8 +133,9 @@ const MessageList = ({ channelId }: MessageListProps) => {
 
   return (
     <div className={styles.infiniteScrollContainer} ref={containerRef}>
-      {containerRef.current ? (
+      {containerRef.current && containerHeight > 0 ? (
         <InfiniteScroll
+          key={infiniteScrollKey}
           scrollableTarget={containerRef.current}
           scrollThreshold={0.7}
           hasMore={hasMore}
@@ -111,13 +144,9 @@ const MessageList = ({ channelId }: MessageListProps) => {
           inverse={true}
           dataLength={messages?.length || 0}
           style={{ display: 'flex', flexDirection: 'column-reverse' }}
-          height={containerRef.current.clientHeight}
+          height={containerHeight}
         >
-          <div
-            className={styles.messageListContainer}
-            ref={containerRef}
-            data-testid="message-list"
-          >
+          <div className={styles.messageListContainer} data-testid="message-list">
             {renderMessagesWithDateDividers()}
           </div>
         </InfiniteScroll>

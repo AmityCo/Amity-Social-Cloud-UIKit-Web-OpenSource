@@ -1,1 +1,0 @@
-export { CloseCommunity } from './CloseCommunity';

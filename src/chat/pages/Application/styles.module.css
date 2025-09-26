@@ -3,8 +3,8 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
   flex-shrink: 0;
+  margin-bottom: 0.5rem;
 }
 
 .applicationContainer {
@@ -36,6 +36,7 @@
   position: absolute;
   right: 5rem;
   top: 5rem;
+  z-index: 1000;
   border-radius: 0.75rem;
   background: #fff;
   box-shadow: 0 4px 16px 0 rgb(0 0 0 / 12%);

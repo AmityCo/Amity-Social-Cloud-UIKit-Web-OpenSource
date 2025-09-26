@@ -1,1 +1,0 @@
-export { InvitationSection } from './InvitationSection';

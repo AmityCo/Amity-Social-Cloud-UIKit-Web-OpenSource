@@ -1,1 +1,0 @@
-export { CommunityCategoryName } from './CommunityCategoryName';

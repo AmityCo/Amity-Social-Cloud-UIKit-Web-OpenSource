@@ -1,1 +1,0 @@
-export { CommunityOfficialBadge } from './CommunityOfficialBadge';

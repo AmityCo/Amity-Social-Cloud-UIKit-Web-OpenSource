@@ -1,1 +1,0 @@
-export { ArrowRightButton } from './ArrowRightButton';

@@ -1,1 +1,0 @@
-export { UserImageFeed } from './UserImageFeed';

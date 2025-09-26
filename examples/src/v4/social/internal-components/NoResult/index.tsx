@@ -1,1 +1,0 @@
-export { NoResult } from './NoResult';

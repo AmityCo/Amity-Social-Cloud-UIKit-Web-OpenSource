@@ -17,7 +17,7 @@
   background: white;
   border-radius: 8px;
   width: 486px;
-  max-height: 90vh;
+  height: 32rem;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -68,8 +68,14 @@
 }
 
 /* Group Name Section */
-.groupNameSection {
-  padding: 16px 24px 0;
+.newGroupSection {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1.25rem;
+  margin: 0 24px;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px 0 rgb(0 0 0 / 12%);
 }
 
 .groupNameInput {
@@ -128,9 +134,8 @@
 }
 
 /* Selected Users */
-.selectedUsersContainer {
-  padding: 0 24px 16px;
-  border-bottom: 1px solid #f0f0f0;
+.cursorDefault {
+  cursor: default;
 }
 
 .selectedUsersList {
@@ -141,8 +146,9 @@
 
 .selectedUserItem {
   display: flex;
+  flex-direction: column;
+  position: relative;
   align-items: center;
-  background: #f5f5f5;
   border-radius: 20px;
   padding: 4px 8px 4px 4px;
   gap: 6px;
@@ -156,6 +162,9 @@
 }
 
 .removeSelectedUser {
+  position: absolute;
+  top: 0;
+  right: 0;
   background: none;
   border: none;
   color: #666;
@@ -173,11 +182,27 @@
   background-color: rgb(0 0 0 / 10%);
 }
 
+.removeUserIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
 /* Content */
 .contentContainer {
   padding: 16px 24px;
   flex: 1;
   min-height: 0;
+  border-radius: 0.75rem;
+  margin: 0 24px;
+  box-shadow: 0 4px 16px 0 rgb(0 0 0 / 12%);
+}
+
+.noUsersContainer {
+  flex: 1;
 }
 
 .sectionTitle {
@@ -287,15 +312,16 @@
 
 /* Footer */
 .footer {
+  display: flex;
+  justify-content: flex-end;
   padding: 16px 24px;
-  border-top: 1px solid #f0f0f0;
 }
 
 .createButton {
-  width: 100%;
   background-color: #bed62f;
   border: none;
   border-radius: 8px;
+  min-width: 10rem;
   padding: 12px 24px;
   font-family: Roboto, sans-serif;
   font-weight: 700;
@@ -325,10 +351,11 @@
 
 /* UserAvatar Styles */
 .selectedUserAvatar {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  position: relative;
+  width: 2.5rem;
+  height: 2.5rem;
   flex-shrink: 0;
+  cursor: unset;
 }
 
 .userAvatar {

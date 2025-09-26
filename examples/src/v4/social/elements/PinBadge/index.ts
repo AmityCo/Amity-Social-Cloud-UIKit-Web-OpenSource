@@ -1,1 +1,0 @@
-export { PinBadge } from './PinBadge';

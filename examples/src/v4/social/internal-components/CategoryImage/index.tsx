@@ -1,1 +1,0 @@
-export { CategoryImage } from './CategoryImage';

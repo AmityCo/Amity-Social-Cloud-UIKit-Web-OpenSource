@@ -1,6 +1,0 @@
-.editCancelButton {
-  all: unset;
-  cursor: pointer;
-  color: var(--asc-color-base-default);
-  background-color: var(--asc-color-background-default);
-}

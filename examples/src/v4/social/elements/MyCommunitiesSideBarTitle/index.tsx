@@ -1,1 +1,0 @@
-export { MyCommunitiesSideBarTitle } from './MyCommunitiesSideBarTitle';

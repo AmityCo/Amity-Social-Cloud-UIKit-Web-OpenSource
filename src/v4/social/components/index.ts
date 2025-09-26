@@ -8,6 +8,8 @@ export * from './MediaAttachment';
 export * from './DetailedMediaAttachment';
 export * from './UserSearchResult';
 export * from './CommunitySearchResult';
+export * from './SearchResultGenericItem';
+export * from './GenericSearchResult';
 export * from './TopSearchBar';
 export * from './PostContent';
 export * from './MyCommunities';

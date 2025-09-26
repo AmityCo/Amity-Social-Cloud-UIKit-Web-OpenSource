@@ -1,1 +1,0 @@
-export { SheetIcon } from './SheetIcon';

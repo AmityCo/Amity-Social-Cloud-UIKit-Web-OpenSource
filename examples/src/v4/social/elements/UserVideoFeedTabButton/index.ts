@@ -1,1 +1,0 @@
-export { UserVideoFeedTabButton } from './UserVideoFeedTabButton';

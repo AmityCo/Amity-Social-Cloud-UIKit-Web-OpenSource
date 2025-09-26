@@ -1,1 +1,0 @@
-export { CommunityPostPermissionPage } from './CommunityPostPermissionPage';

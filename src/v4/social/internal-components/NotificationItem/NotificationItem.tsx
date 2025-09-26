@@ -1,12 +1,12 @@
 import React from 'react';
 import { notificationTray } from '@amityco/ts-sdk';
-import { useAmityComponent } from '~/v4/core/hooks/uikit';
-import { UserAvatar } from '~/v4/social/elements/UserAvatar';
 import { Typography } from '~/v4/core/components';
-import { Timestamp } from '~/v4/social/elements/Timestamp';
-import { highlightedText } from '~/v4/social/utils/highlightedText';
+import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { Timestamp } from '~/v4/social/elements/Timestamp';
+import { UserAvatar } from '~/v4/social/elements/UserAvatar';
+import { highlightedText } from '~/v4/social/utils/highlightedText';
 import styles from './NotificationItem.module.css';
 
 type NotificationItemProps = {
@@ -84,7 +84,6 @@ export const NotificationItem = ({
             {highlightedText(item.templatedText, item.text)}
           </Typography.Body>
         </div>
-        <Timestamp pageId={pageId} timestamp={item.lastOccurredAt} />
       </div>
     </Button>
   );

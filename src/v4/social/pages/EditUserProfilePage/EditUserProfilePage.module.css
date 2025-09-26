@@ -4,6 +4,7 @@
   position: relative;
   height: 100%;
   background-color: var(--asc-color-background-default);
+  width: 100%;
 }
 
 .editUserProfilePage__container {
@@ -274,7 +275,7 @@
   .editUserProfilePage {
     background-color: transparent;
     height: 80dvh;
-    width: 30rem;
+    width: 100%;
     overflow-y: scroll;
     padding: 1.5rem 1rem 6rem;
   }

@@ -6,10 +6,12 @@
 }
 
 .typography__headline {
-  font-size: 1.25rem; /* 20px */
-  line-height: 1.5rem; /* 24px */
+  color: var(--global-text-default, #222);
+  font-family: var(--typography-scale-heading-h1-family, Mulish);
+  font-size: var(--typography-scale-heading-h1-size, 1.5rem);
+  font-style: normal;
   font-weight: 800;
-  font-family: Roboto, sans-serif;
+  line-height: var(--typography-scale-heading-h1-line-height, 1.75rem);
 }
 
 .typography__titleBold {
@@ -52,7 +54,7 @@
 }
 
 .typography__captionBold {
-  color: #fff;
+  /* color: var(--asc-color-base-default); */
   text-align: center;
   font-family: Roboto, sans-serif;
   font-size: 0.75rem;

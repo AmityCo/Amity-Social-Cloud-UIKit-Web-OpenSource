@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 1.5rem;
   padding: 1rem 1rem 2.5rem;
+  width: 100%;
 }
 
 .cropperContainer {
@@ -19,6 +20,6 @@
 
 @media (width >= 48rem) {
   .changeAvatarPage {
-    max-width: 30rem;
+    max-width: 100%;
   }
 }

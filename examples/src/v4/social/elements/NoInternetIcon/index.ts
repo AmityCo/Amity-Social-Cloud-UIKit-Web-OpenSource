@@ -1,1 +1,0 @@
-export { NoInternetIcon } from './NoInternetIcon';

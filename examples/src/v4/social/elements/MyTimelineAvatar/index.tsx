@@ -1,1 +1,0 @@
-export { MyTimelineAvatar } from './MyTimelineAvatar';

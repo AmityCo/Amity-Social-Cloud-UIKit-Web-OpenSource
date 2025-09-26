@@ -8,8 +8,6 @@ const calculateResponsiveValues = (element: HTMLElement) => {
   // Since container is always square, use the smaller dimension for calculations
   const containerSize = Math.min(containerWidth, containerHeight);
 
-  console.log('Container size:', containerSize);
-
   // More aggressive scaling for very small devices
   let radiusPercentage = 0.35; // Default 35%
 
@@ -22,8 +20,6 @@ const calculateResponsiveValues = (element: HTMLElement) => {
   // Use calculated percentage of the container size for radius
   const baseRadius = containerSize * radiusPercentage;
   const radius = Math.max(baseRadius, 40); // Reduced minimum radius to 40px for very small screens
-
-  console.log('Calculated radius:', radius, 'for container size:', containerSize);
 
   // More aggressive font size scaling for small devices
   let fontScale = containerSize / 20; // Default scaling

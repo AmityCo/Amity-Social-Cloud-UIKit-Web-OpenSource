@@ -1,1 +1,0 @@
-export { CommunityCategory } from './CommunityCategory';

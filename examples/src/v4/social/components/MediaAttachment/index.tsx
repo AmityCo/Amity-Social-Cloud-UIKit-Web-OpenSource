@@ -1,1 +1,0 @@
-export { MediaAttachment } from './MediaAttachment';

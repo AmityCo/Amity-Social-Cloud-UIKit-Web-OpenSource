@@ -11,8 +11,8 @@ const MAX_UPLOAD_MEDIA = 10;
 interface MediaAttachmentProps {
   pageId: string;
   isVisibleCamera: boolean;
-  isVisibleImage: boolean;
-  isVisibleVideo: boolean;
+  isVisibleImage?: boolean;
+  isVisibleVideo?: boolean;
   totalMedia?: number;
   onVideoFileChange?: (files: File[], fileType?: string) => void;
   onImageFileChange?: (files: File[], fileType?: string) => void;

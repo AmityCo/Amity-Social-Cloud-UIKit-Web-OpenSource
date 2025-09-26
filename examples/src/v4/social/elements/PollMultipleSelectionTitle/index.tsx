@@ -1,1 +1,0 @@
-export { PollMultipleSelectionTitle } from './PollMultipleSelectionTitle';

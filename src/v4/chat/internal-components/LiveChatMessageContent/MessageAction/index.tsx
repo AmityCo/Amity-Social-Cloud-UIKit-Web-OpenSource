@@ -5,6 +5,7 @@ import Popover from '~/v4/core/components/Popover';
 import Reply from '~/v4/icons/Reply';
 import Copy from '~/v4/icons/Copy';
 import Bin from '~/v4/icons/Bin';
+import { Pin } from '~/v4/icons/Pin';
 import Flag from '~/v4/icons/Flag';
 import { Typography } from '~/v4/core/components';
 
@@ -15,6 +16,7 @@ export type MessageActionType = {
   onDelete?: () => void;
   onReply?: () => void;
   onMention?: () => void;
+  onPin?: () => void;
 };
 
 interface MessageActionProps {
@@ -60,6 +62,11 @@ export const MessageAction = ({
     setIsPopoverOpen(false);
   };
 
+  const onPinMessage = () => {
+    action.onPin && action.onPin();
+    setIsPopoverOpen(false);
+  };
+
   return (
     <>
       <Popover
@@ -68,19 +75,20 @@ export const MessageAction = ({
         isOpen={isPopoverOpen}
         align="start"
         parentElement={containerRef?.current || undefined}
+        containerClassName={styles.optionContainer}
         content={
           <>
             <div className={styles.messageActionButton} onClick={onReplyMessage}>
+              <Reply className={styles.replyIcon} />
               <div className={styles.messageActionButtonText}>
                 <Typography.Body>Reply</Typography.Body>
               </div>
-              <Reply className={styles.replyIcon} />
             </div>
             <div className={styles.messageActionButton} onClick={onCopyMessage}>
+              <Copy className={styles.copyIcon} />
               <div className={styles.messageActionButtonText}>
                 <Typography.Body>Copy</Typography.Body>
               </div>
-              <Copy className={styles.copyIcon} />
             </div>
             {/* TODO: release 1.1 hide these action, will be implement in release 1.2 */}
             {/* {!isOwner || (
@@ -103,18 +111,26 @@ export const MessageAction = ({
                 className={styles.messageActionButton}
                 onClick={isFlagged ? onUnFlagMessage : onFlagMessage}
               >
+                <Flag className={styles.flagIcon} />
                 <div className={styles.messageDangerActionButtonText}>
                   <Typography.Body>{isFlagged ? 'Unreport' : 'Report'}</Typography.Body>
                 </div>
-                <Flag className={styles.flagIcon} />
               </div>
             )}
             {(isOwner || isModerator) && (
               <div className={styles.messageActionButton} onClick={onDeleteMessage}>
+                <Bin className={styles.binIcon} />
                 <div className={styles.messageDangerActionButtonText}>
                   <Typography.Body>Delete</Typography.Body>
                 </div>
-                <Bin className={styles.binIcon} />
+              </div>
+            )}
+            {isModerator && (
+              <div className={styles.messageActionButton} onClick={onPinMessage}>
+                <Pin className={styles.pinIcon} />
+                <div className={styles.messageActionButtonText}>
+                  <Typography.Body>Pin</Typography.Body>
+                </div>
               </div>
             )}
           </>

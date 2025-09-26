@@ -1,1 +1,0 @@
-export { JoinRequestContent } from './JoinRequestContent';

@@ -73,6 +73,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
             icon="HomeIcon"
             isActive={isHomeActive}
             onPress={handleHomeClick}
+            className={styles.sidebarPadding}
           />
         </div>
         <div className={styles.communitySideBar__menuButton}>
@@ -84,6 +85,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
             icon="NotificationBell"
             isActive={isNotificationsActive}
             onPress={handleNotificationsClick}
+            className={styles.sidebarPadding}
           />
         </div>
         <div className={styles.communitySideBar__menuButton}>
@@ -95,6 +97,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
             icon="ChatBubbleIcon"
             isActive={isChatActive}
             onPress={handleChatClick}
+            className={styles.sidebarPadding}
           />
         </div>
         <div className={styles.communitySideBar__menuButton}>
@@ -106,6 +109,7 @@ export const CommunitySideBar = ({ className, pageId = '*' }: CommunitySideBarPr
             icon="GearIcon"
             isActive={isSettingsActive}
             onPress={handleSettingsClick}
+            className={styles.sidebarPadding}
           />
         </div>
       </div>

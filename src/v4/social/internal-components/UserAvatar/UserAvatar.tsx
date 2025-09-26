@@ -19,6 +19,7 @@ type UserAvatarProps = {
   imageContainerClassName?: string;
   textPlaceholderClassName?: string;
   shouldRedirectToUserProfile?: boolean;
+  noClick?: boolean;
 };
 
 export function UserAvatar({
@@ -30,6 +31,7 @@ export function UserAvatar({
   isShowModeratorBadge = false,
   textPlaceholderClassName = '',
   shouldRedirectToUserProfile = false,
+  noClick = false,
 }: UserAvatarProps) {
   const elementId = 'user_avatar';
 
@@ -49,6 +51,7 @@ export function UserAvatar({
       <Button
         className={clsx(styles.userAvatar__placeholder, className)}
         onPress={() => {
+          if (noClick) return;
           if (!userId) return;
           if (userId && shouldRedirectToUserProfile) {
             closePopup();
@@ -71,6 +74,7 @@ export function UserAvatar({
   return (
     <Button
       onPress={() => {
+        if (noClick) return;
         if (!userId) return;
         if (userId && shouldRedirectToUserProfile) {
           closePopup();

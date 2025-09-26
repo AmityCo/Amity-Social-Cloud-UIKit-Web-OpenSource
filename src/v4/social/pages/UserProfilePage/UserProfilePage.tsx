@@ -1,29 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styles from './UserProfilePage.module.css';
-import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import { Button, Typography } from '~/v4/core/components';
+import { FloatingActionButton } from '~/v4/core/components/FloatingActionButton/FloatingActionButton';
+import { PercentageCircle } from '~/v4/core/components/PercentageCircle/PercentageCircle';
+import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
 import { useUser } from '~/v4/core/hooks/objects/useUser';
-import { UserProfileHeader } from '~/v4/social/components/UserProfileHeader';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import useSDK from '~/v4/core/hooks/useSDK';
+import { useDrawer } from '~/v4/core/providers/DrawerProvider';
+import ChevronRight from '~/v4/icons/ChevronRight';
+import { MasterTrophy } from '~/v4/icons/MasterTrophy';
+import { Plus } from '~/v4/icons/Plus';
+import Star from '~/v4/icons/Star';
+import { TipsterLogo } from '~/v4/icons/TipsterLogo';
+import { TopNavigation } from '~/v4/social/components/TopNavigation';
+import { UserFeed } from '~/v4/social/components/UserFeed/UserFeed';
+import { UserImageFeed } from '~/v4/social/components/UserImageFeed/UserImageFeed';
+import { UserProfileHeader } from '~/v4/social/components/UserProfileHeader';
+import { UserVideoFeed } from '~/v4/social/components/UserVideoFeed/UserVideoFeed';
 import { UserFeedTabButton } from '~/v4/social/elements/UserFeedTabButton/UserFeedTabButton';
 import { UserImageFeedTabButton } from '~/v4/social/elements/UserImageFeedTabButton/UserImageFeedTabButton';
 import { UserVideoFeedTabButton } from '~/v4/social/elements/UserVideoFeedTabButton/UserVideoFeedTabButton';
-import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
-import { UserFeed } from '~/v4/social/components/UserFeed/UserFeed';
-import { UserImageFeed } from '~/v4/social/components/UserImageFeed/UserImageFeed';
-import { UserVideoFeed } from '~/v4/social/components/UserVideoFeed/UserVideoFeed';
-import { FloatingActionButton } from '~/v4/core/components/FloatingActionButton/FloatingActionButton';
-import { Plus } from '~/v4/icons/Plus';
-import { PercentageCircle } from '~/v4/core/components/PercentageCircle/PercentageCircle';
-import ChevronRight from '~/v4/icons/ChevronRight';
-import { FloatingActionButtonMenu } from './FloatingActionButtonMenu/FloatingActionButtonMenu';
-import useSDK from '~/v4/core/hooks/useSDK';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
-import { Button, Typography } from '~/v4/core/components';
 import { initChart } from './chartConfig';
-import Star from '~/v4/icons/Star';
-import { TopNavigation } from '~/v4/social/components/TopNavigation';
-import { MasterTrophy } from '~/v4/icons/MasterTrophy';
-import { TipsterLogo } from '~/v4/icons/TipsterLogo';
+import { FloatingActionButtonMenu } from './FloatingActionButtonMenu/FloatingActionButtonMenu';
+import styles from './UserProfilePage.module.css';
 
 type UserProfilePageProps = {
   userId: string;
@@ -160,8 +160,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({
               isCurrentUser={isCurrentUser}
             />
             <Typography.Caption className={styles.userProfilePage__caption}>
-              Appassionato di sport e giochi di squadra, amo le sfide e condividere emozioni con
-              nuovi amici. Sempre pronto a tifare e a mettermi in gioco! Milano, Italia
+              {user?.description || ''}
             </Typography.Caption>
 
             {!profilingQuizDone && isCurrentUser && (
@@ -193,7 +192,7 @@ export const UserProfilePage: React.FC<UserProfilePageProps> = ({
                   <ChevronRight />
                 </div>
                 <div className={styles.userProfilePage__cardContentSection}>
-                  preferenze di gioco, interessi , livello ...
+                  preferenze di gioco, interessi, livello ...
                 </div>
               </div>
               <div className={styles.userProfilePage__card}>

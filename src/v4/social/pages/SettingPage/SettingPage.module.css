@@ -6,21 +6,25 @@
 
 .settingPageContent {
   flex: 1;
-  padding: 32px;
 }
 
 .sectionHeading {
   margin-bottom: 1rem;
-  padding: 0 1rem;
 }
 
 .deleteProfileContainer {
   text-decoration: underline;
-  padding: 0 1rem;
   margin-top: 2rem;
+  cursor: pointer;
 }
 
 .sectionDivider {
   margin: 1rem 0;
   padding: 0 1rem;
+}
+
+@media (width >=48rem) {
+  .settingPageContainer {
+    margin-top: 1.5rem;
+  }
 }

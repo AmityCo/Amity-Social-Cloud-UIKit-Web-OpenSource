@@ -22,12 +22,12 @@ export function HeaderLabel({ pageId = '*', componentId = '*' }: HeaderLabelProp
   console.log(config, config.text, 'config');
 
   return (
-    <Typography.TitleBold
+    <Typography.Headline
       className={styles.headerLabel}
       style={themeStyles}
       data-testid={accessibilityId}
     >
       {config.text}
-    </Typography.TitleBold>
+    </Typography.Headline>
   );
 }

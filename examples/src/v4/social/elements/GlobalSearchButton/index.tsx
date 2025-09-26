@@ -1,1 +1,0 @@
-export { GlobalSearchButton } from './GlobalSearchButton';

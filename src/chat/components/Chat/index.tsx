@@ -30,21 +30,26 @@ const Chat = ({ channelId, onChatDetailsClick, shouldShowChatDetails, onBackClic
     };
   }, [channelId]);
 
-  console.log('🚀 ~ channelId:', channelId);
   const { isModerator } = useChannelPermission(channelId);
   const channel = useChannel(channelId);
 
-  const sendMessage = async (text: string) => {
-    return MessageRepository.createMessage({
+  const sendMessage = async (text: string, mentions?: Amity.UserMention[]) => {
+    const messageParams: any = {
       subChannelId: channelId,
       data: { text },
       dataType: 'text',
-    });
+    };
+
+    if (mentions && mentions.length > 0) {
+      messageParams.mentionees = mentions;
+    }
+
+    return MessageRepository.createMessage(messageParams);
   };
 
   const renderMessageComposeBar = () => {
     if (channel?.type !== 'broadcast' || (channel?.type === 'broadcast' && isModerator)) {
-      return <MessageComposeBar onSubmit={sendMessage} />;
+      return <MessageComposeBar channelId={channelId} onSubmit={sendMessage} />;
     }
     return null;
   };

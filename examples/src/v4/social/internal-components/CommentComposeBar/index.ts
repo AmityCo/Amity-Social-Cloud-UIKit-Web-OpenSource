@@ -1,1 +1,0 @@
-export { CommentComposeBar } from './CommentComposeBar';
