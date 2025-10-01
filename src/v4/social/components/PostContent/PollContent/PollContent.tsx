@@ -67,6 +67,7 @@ export const PollContent: FC<PollContentProps> = ({
   const maxChoicesShown = 4;
   const isAuthor = parentPost?.creator?.userId === currentUserId;
   const isVoteDisabled = parentPost?.feedType === 'reviewing' || disabled;
+
   const isVoteButtonDisabled = isVoteDisabled || !answers || answers?.length < 1 || disabled;
 
   const processPollAnswer = useCallback((pollAnswer: Amity.PollAnswer[], maxVoteCount: number) => {
@@ -119,6 +120,7 @@ export const PollContent: FC<PollContentProps> = ({
     parentPost,
     onPollEnded: handlePollEnd,
   });
+
   const { mutateAsync: mutateUnvotePoll } = useUnvotePoll({
     onPostDeleted,
     onPollEnded: handlePollEnd,
