@@ -1,8 +1,10 @@
 import { UserRepository } from '@amityco/ts-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 const useUserFlaggedByMe = (userId?: string) => {
+  const { isVisitorOrBot } = useSDK();
   const [isFlaggedByMe, setIsFlaggedByMe] = useState(false);
 
   const { data, isLoading, refetch } = useQuery({
@@ -10,7 +12,7 @@ const useUserFlaggedByMe = (userId?: string) => {
     queryFn: () => {
       return UserRepository.isUserFlaggedByMe(userId as string);
     },
-    enabled: userId != null,
+    enabled: userId != null && !isVisitorOrBot,
   });
 
   useEffect(() => {

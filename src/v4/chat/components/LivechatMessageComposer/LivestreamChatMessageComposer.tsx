@@ -18,6 +18,7 @@ import { ReactionBar } from '~/v4/chat/components/ReactionBar/ReactionBar';
 import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -29,6 +30,12 @@ interface LivestreamChatMessageComposerProps {
 
 const LIVESTREAM_MESSAGE_MAX_CHARACTOR = 200;
 
+type AddLivestreamReactionParams = {
+  reaction: string;
+  targetId: string;
+  streamId: string;
+};
+
 export const LivestreamChatMessageComposer = ({
   pageId = '*',
   channelId,
@@ -36,6 +43,8 @@ export const LivestreamChatMessageComposer = ({
   isJoined,
   isPendingPost = false,
 }: LivestreamChatMessageComposerProps) => {
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+
   const componentId = 'livestream_chat_compose_bar';
   const editorRef = useRef<LexicalEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,16 +76,8 @@ export const LivestreamChatMessageComposer = ({
     },
   });
 
-  const onClickReaction = useCallback(
-    ({
-      reaction,
-      targetId,
-      streamId,
-    }: {
-      reaction: string;
-      targetId: string;
-      streamId: string;
-    }) => {
+  const onReactionClick = useCallback(
+    ({ reaction, targetId, streamId }: AddLivestreamReactionParams) => {
       LiveReactionRepository.createReaction({
         referenceId: targetId,
         referenceType: 'post',
@@ -86,6 +87,14 @@ export const LivestreamChatMessageComposer = ({
     },
     [],
   );
+
+  const handleReactionClick = (params: AddLivestreamReactionParams) => {
+    return handleCommunityProfileBehavior({
+      defaultBehavior: () => onReactionClick(params),
+      allowNonMember: false,
+      isJoined: isJoined,
+    });
+  };
 
   useEffect(() => {
     const container = containerRef.current;
@@ -156,10 +165,11 @@ export const LivestreamChatMessageComposer = ({
           placement="top"
           trigger={({ openPopover }) => (
             <ReactionButton
+              isLivestreamReaction={true}
               pageId={pageId}
               componentId={componentId}
               onReactionClick={(reaction: string) =>
-                onClickReaction({
+                handleReactionClick({
                   reaction,
                   targetId,
                   streamId,
@@ -257,15 +267,6 @@ export const LivestreamChatMessageComposer = ({
         </div>
       );
 
-    if (!isJoined)
-      return (
-        <div className={styles.livestreamChatMessageComposer__unJoined__container}>
-          <Typography.Body className={styles.livestreamChatMessageComposer__unJoined__text}>
-            Join community to interact with live stream.
-          </Typography.Body>
-        </div>
-      );
-
     if (channel?.isMuted && channel?.attachedTo?.postId && channel?.attachedTo?.videoStreamId)
       return renderReadOnlyState({
         message: 'This live stream is now read-only.',
@@ -298,6 +299,7 @@ export const LivestreamChatMessageComposer = ({
             maxCharactor={200}
             maxLines={1}
             scrollable={false}
+            isJoinedCommunity={isJoined}
           />
           <div className={styles.livestreamChatMessageComposer__sendButton__container}>
             {(isEmpty && channel?.attachedTo?.postId && channel?.attachedTo?.videoStreamId) ||

@@ -13,10 +13,13 @@ import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import UnFlag from '~/v4/icons/UnFlag';
 import styles from './CommentOptions.module.css';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 interface CommentOptionsProps {
   pageId?: string;
   componentId?: string;
+  community?: Amity.Community | null;
   comment: Amity.Comment;
   handleEditComment: () => void;
   handleDeleteComment: () => void;
@@ -26,6 +29,7 @@ interface CommentOptionsProps {
 export const CommentOptions = ({
   pageId = '*',
   componentId = '*',
+  community,
   comment,
   handleEditComment,
   handleDeleteComment,
@@ -40,6 +44,8 @@ export const CommentOptions = ({
 
   const { openPopup } = usePopupContext();
   const { isDesktop } = useResponsive();
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
 
@@ -53,7 +59,7 @@ export const CommentOptions = ({
   const { canDelete, canEdit, canReport } = useCommentPermission(comment, false, userRoles);
   useNotifications();
 
-  const handleClickReportComment = () => {
+  const onClickReportComment = () => {
     if (isDesktop) {
       onCloseMenu();
       openPopup({
@@ -73,6 +79,20 @@ export const CommentOptions = ({
     } else {
       setIsShowReportReason(true);
     }
+  };
+
+  const handleClickReportComment = () => {
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => onClickReportComment(),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    handleUserProfileBehavior({
+      defaultBehavior: () => onClickReportComment(),
+      allowNonFollower: true,
+    });
   };
 
   const handleClickUnReportComment = () => {

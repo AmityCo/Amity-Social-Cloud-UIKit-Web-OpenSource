@@ -26,6 +26,7 @@ import { Popover } from '~/v4/core/components/AriaPopover';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 interface UserProfileHeaderProps {
   user?: Amity.User | null;
@@ -55,9 +56,10 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
   const componentId = 'user_profile_header';
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 
-  const { currentUserId } = useSDK();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+  const { currentUserId, isVisitorOrBot } = useSDK();
   const { themeStyles, accessibilityId } = useAmityComponent({ pageId, componentId });
-  const { AmityUserProfileHeaderComponentBehavior } = usePageBehavior();
+  const { AmityUserProfileHeaderComponentBehavior, AmityGlobalBehavior } = usePageBehavior();
   const { followStatus, pendingCount } = useFollowCount(user?.userId);
   const { followUser, unFollowUser, cancelFollow } = useUserFollow();
   const { unblockUser } = useUserBlock();
@@ -125,7 +127,8 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
   const isShowPendingButton =
     currentUserId && user && currentUserId !== user.userId && followStatus === 'pending';
   const isShowFollowButton =
-    currentUserId && user && currentUserId !== user.userId && followStatus === 'none';
+    isVisitorOrBot ||
+    (currentUserId && user && currentUserId !== user.userId && followStatus === 'none');
   const isShowFollowingButton =
     currentUserId && user && currentUserId !== user.userId && followStatus === 'accepted';
 
@@ -167,9 +170,19 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
       <UserDescription description={user.description} pageId={pageId} componentId={componentId} />
 
       <div className={styles.userProfileHeader__relationship}>
-        <UserFollowing userId={user.userId} pageId={pageId} componentId={componentId} />
+        <UserFollowing
+          userId={user.userId}
+          pageId={pageId}
+          componentId={componentId}
+          followStatus={followStatus}
+        />
         <div className={styles.userProfileHeader__relationship__separator}></div>
-        <UserFollower userId={user.userId} pageId={pageId} componentId={componentId} />
+        <UserFollower
+          userId={user.userId}
+          pageId={pageId}
+          componentId={componentId}
+          followStatus={followStatus}
+        />
       </div>
       {pendingCount > 0 && (
         <Button
@@ -197,15 +210,20 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
         <FollowUserButton
           pageId={pageId}
           componentId={componentId}
-          onClick={() => {
-            if (!online) {
-              notification.info({
-                content: 'Oops, something went wrong.',
-              });
-              return;
-            }
-            followUser(user.userId);
-          }}
+          onClick={() =>
+            handleUserProfileBehavior({
+              allowNonFollower: true,
+              defaultBehavior: () => {
+                if (!online) {
+                  notification.info({
+                    content: 'Oops, something went wrong.',
+                  });
+                  return;
+                }
+                followUser(user.userId);
+              },
+            })
+          }
         />
       )}
 

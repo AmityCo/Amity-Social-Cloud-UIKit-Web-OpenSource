@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import useImage from '~/core/hooks/useImage';
-import { Button } from '~/v4/core/natives/Button';
+import { Button } from '~/v4/core/components/AriaButton';
 import { Carousel } from '~/v4/core/components/Carousel';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { useExplore } from '~/v4/social/providers/ExploreProvider';
@@ -20,6 +20,7 @@ import styles from './RecommendedCommunities.module.css';
 import { useNetworkState } from 'react-use';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { useGetJoinRequestList } from '~/v4/social/hooks/useGetJoinRequestList';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type RecommendedCommunityCardProps = {
   pageId: string;
@@ -43,9 +44,11 @@ const RecommendedCommunityCard = ({
   const avatarUrl = useImage({ fileId: community.avatarFileId, imageSize: 'medium' });
 
   return (
-    <Button
+    <div
       className={styles.recommendedCommunityCard}
-      onPress={() => onClick(community.communityId)}
+      onClick={() => onClick(community.communityId)}
+      role="button"
+      tabIndex={0}
     >
       <div className={styles.recommendedCommunityCard__imageWrapper}>
         <CommunityCardImage
@@ -99,7 +102,7 @@ const RecommendedCommunityCard = ({
           </div>
         </div>
       </div>
-    </Button>
+    </div>
   );
 };
 
@@ -109,6 +112,7 @@ interface RecommendedCommunitiesProps {
 
 export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesProps) => {
   const componentId = 'recommended_communities';
+  const { isVisitorOrBot } = useSDK();
 
   const MAX_DISPLAYED_COMMUNITIES = 5;
   const FETCH_BUFFER_SIZE = 10; // Fetch more to account for filtering
@@ -139,7 +143,7 @@ export const RecommendedCommunities = ({ pageId = '*' }: RecommendedCommunitiesP
     .map((community) => community.communityId)
     .filter((id) => !pendingJoinCommunities.includes(id));
 
-  const { joinRequestList } = useGetJoinRequestList(communityIds);
+  const { joinRequestList } = useGetJoinRequestList({ communityIds, enabled: !isVisitorOrBot });
 
   // First, filter out communities with pending join requests
   const availableCommunities = joinRequestList

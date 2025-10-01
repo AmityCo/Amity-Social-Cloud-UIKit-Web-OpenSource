@@ -135,12 +135,6 @@ export const renderer: CustomRenderer = ({
   const isLiked = story?.myReactions?.includes(LIKE_REACTION_KEY);
   const totalLikes = story?.reactions[LIKE_REACTION_KEY] || 0;
 
-  const { members } = useCommunityMembersCollection({
-    queryParams: { communityId: community?.communityId as string },
-    shouldCall: !!community?.communityId,
-  });
-  const isMember = members?.some((member) => member.userId === client?.userId);
-
   const isOfficial = community?.isOfficial || false;
   const isCreator = creator?.userId === user?.userId;
   const { hasStoryPermission } = useStoryPermission(community?.communityId);
@@ -269,7 +263,6 @@ export const renderer: CustomRenderer = ({
       referenceType="story"
       community={community as Amity.Community}
       shouldAllowCreation={community?.allowCommentInStory}
-      shouldAllowInteraction={isMember}
     />
   );
 
@@ -443,7 +436,7 @@ export const renderer: CustomRenderer = ({
         onClickComment={onClickCommentButton}
         myReactions={myReactions}
         showImpression={isCreator || checkStoryPermission(client, community?.communityId)}
-        isMember={isMember}
+        community={community}
         onPlay={play}
         onPause={pause}
         onDeleteStory={onDeleteStory}

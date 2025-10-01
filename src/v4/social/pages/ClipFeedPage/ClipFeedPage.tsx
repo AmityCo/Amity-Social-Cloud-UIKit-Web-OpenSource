@@ -47,6 +47,7 @@ export const ClipFeedPage = ({
 }: ClipFeedPageProps) => {
   const pageId = 'clip_feed_page';
 
+  const { isVisitorOrBot } = useSDK();
   const { accessibilityId, themeStyles } = useAmityPage({
     pageId,
   });
@@ -478,9 +479,10 @@ export const ClipFeedPage = ({
       data-testid={accessibilityId}
       className={styles.clipFeedPage__container}
     >
-      {post === undefined ||
-      post?.isDeleted ||
-      (posts.length === 0 && !isLoading && !isLoadingCollectionPosts) ? (
+      {!isVisitorOrBot &&
+      (post === undefined ||
+        post?.isDeleted ||
+        (posts.length === 0 && !isLoading && !isLoadingCollectionPosts)) ? (
         <EmptyFeed
           pageId={pageId}
           onClickBack={() => onBack()}
@@ -561,7 +563,7 @@ export const ClipFeedPage = ({
                           targetId={post.targetId}
                           targetType={post.targetType}
                         />
-                        {isShowInteractionMenu ? (
+                        {!isVisitorOrBot && isShowInteractionMenu ? (
                           <CreateNewClipButton
                             onClick={() =>
                               AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({
@@ -638,7 +640,7 @@ export const ClipFeedPage = ({
                       targetId={post.targetId}
                       targetType={post.targetType}
                     />
-                    {isShowInteractionMenu ? (
+                    {!isVisitorOrBot && isShowInteractionMenu ? (
                       <CreateNewClipButton
                         onClick={() =>
                           AmityClipFeedPageBehavior?.goToSelectClipPostTargetPage?.({

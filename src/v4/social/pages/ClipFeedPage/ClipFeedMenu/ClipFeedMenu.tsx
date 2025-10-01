@@ -11,6 +11,8 @@ import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { CommentDrawer } from './CommentDrawer';
 import LikeTransparent from '~/v4/icons/LikeTransparent';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 type ClipFeedMenuProps = {
   pageId?: string;
@@ -36,6 +38,9 @@ export const ClipFeedMenu = ({
   isLocalMuted,
 }: ClipFeedMenuProps) => {
   const { post, isLoading } = usePost(postId);
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+
   const {
     mutateAddReactionAsync,
     mutateRemoveReactionAsync,
@@ -55,12 +60,7 @@ export const ClipFeedMenu = ({
     shouldCall: post?.targetType === 'community',
   });
 
-  const handleReactionClick = async (reactionKey: string) => {
-    if (post?.targetType === 'community' && !community?.isJoined) {
-      return notification.info({
-        content: 'Join community to interact with this clip.',
-      });
-    }
+  const onReactionClick = async (reactionKey: string) => {
     if (reactionByMe === null) {
       await mutateAddReactionAsync(reactionKey);
     } else if (reactionByMe !== reactionKey) {
@@ -69,6 +69,20 @@ export const ClipFeedMenu = ({
     } else {
       await mutateRemoveReactionAsync(reactionByMe);
     }
+  };
+
+  const handleReactionClick = (reactionKey: string) => {
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => onReactionClick(reactionKey),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    return handleUserProfileBehavior({
+      defaultBehavior: () => onReactionClick(reactionKey),
+      allowNonFollower: true,
+    });
   };
 
   const handleCommentClick = () => {

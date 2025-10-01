@@ -121,6 +121,7 @@
     border-radius: 0.5rem;
     background-color: transparent;
     border: 1px solid var(--asc-color-base-shade4);
+    overflow: hidden;
   }
 
   .postDetailPage__topBar {

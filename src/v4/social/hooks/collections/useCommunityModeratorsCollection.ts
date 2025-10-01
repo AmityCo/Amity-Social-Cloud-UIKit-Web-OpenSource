@@ -1,5 +1,6 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { MemberRoles } from '~/v4/social/constants/memberRoles';
 
 const { COMMUNITY_MODERATOR } = MemberRoles;
@@ -11,6 +12,7 @@ export default function useCommunityModeratorsCollection({
   communityId?: string;
   shouldCall?: boolean;
 }) {
+  const { isVisitorOrBot } = useSDK();
   const { items, ...rest } = useLiveCollection({
     fetcher: CommunityRepository.Membership.getMembers,
     params: {
@@ -18,7 +20,7 @@ export default function useCommunityModeratorsCollection({
       roles: [COMMUNITY_MODERATOR],
       limit: 20,
     },
-    shouldCall: !!communityId && shouldCall,
+    shouldCall: !!communityId && shouldCall && !isVisitorOrBot,
   });
 
   return {

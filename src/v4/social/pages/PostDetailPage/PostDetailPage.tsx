@@ -21,6 +21,7 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { isPollPost } from '~/v4/social/utils/postTypeChecker';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export interface PostDetailPageProps {
   id: string;
@@ -54,6 +55,7 @@ export function PostDetailPage({
   const pageId = 'post_detail_page';
 
   const { removeItem } = useGlobalFeedContext();
+  const { isVisitorOrBot } = useSDK();
 
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>(selectedReplyComment);
   const [failedToShow, setFailedToShow] = useState(false);
@@ -69,6 +71,9 @@ export function PostDetailPage({
   const { community } = useCommunity({
     communityId: post?.targetType === 'community' ? post.targetId : null,
   });
+
+  const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
+  const canSeeCommentComposer = post && isDesktop && !isNotJoinedCommunity && !isVisitorOrBot;
 
   useEffect(() => {
     refresh();
@@ -149,8 +154,6 @@ export function PostDetailPage({
     [onBack],
   );
 
-  const isNotJoinedCommunity = post?.targetType === 'community' && !community?.isJoined;
-
   if (isPostLoading) {
     return <PostContentSkeleton pageId={pageId} />;
   }
@@ -223,35 +226,11 @@ export function PostDetailPage({
             category={category ?? AmityPostCategory.GENERAL}
             style={AmityPostContentComponentStyle.DETAIL}
             hideTarget={hideTarget}
-            disabledContent={isNotJoinedCommunity}
             onPollPostDeleted={() => setFailedToShow(true)}
             expandAllContent={isPollPost(post.childrenPosts[0])}
           />
         </div>
-
-        {post?.targetType === 'community' && !community?.isJoined ? (
-          <div>
-            <div className={styles.postDetailPage__divider} />
-            <Typography.Body className={styles.postDetailPage__notMember}>
-              Join community to interact with all posts
-            </Typography.Body>
-            <div className={styles.postDetailPage__divider} />
-          </div>
-        ) : (
-          post &&
-          !isDesktop && (
-            <CommentComposer
-              pageId={pageId}
-              referenceId={post.postId}
-              referenceType={'post'}
-              replyTo={replyComment}
-              onCancelReply={() => setReplyComment(undefined)}
-              community={community}
-              isFromCommentClick={isFromCommentClick}
-            />
-          )
-        )}
-        {post && isDesktop && !isNotJoinedCommunity && (
+        {canSeeCommentComposer && (
           <CommentComposer
             pageId={pageId}
             referenceId={post.postId}

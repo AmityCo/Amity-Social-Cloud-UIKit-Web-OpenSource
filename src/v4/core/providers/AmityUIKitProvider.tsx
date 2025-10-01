@@ -6,7 +6,11 @@ import useUser from '~/core/hooks/useUser';
 
 import SDKConnectorProviderV3 from '~/core/providers/SDKConnectorProvider';
 import SDKConnectorProvider from '~/v4/core/providers/SDKConnectorProvider';
-import { SDKContext } from '~/v4/core/providers/SDKProvider';
+import {
+  initialSDKContext,
+  SDKContext,
+  type SDKContextType,
+} from '~/v4/core/providers/SDKProvider';
 import { SDKContext as SDKContextV3 } from '~/core/providers/SDKProvider';
 import PostRendererProvider from '~/social/providers/PostRendererProvider';
 import NavigationProvider from './NavigationProvider';
@@ -52,6 +56,7 @@ import { FeedScrollProvider } from '~/v4/core/providers/FeedScrollProvider';
 import { SearchResultProvider } from '~/v4/social/providers/SearchResultProvider';
 import { GlobalBan } from '~/v4/social/internal-components/GlobalBan';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
+import { Client, UserTypeEnum } from '@amityco/ts-sdk';
 
 const InternalComponent = ({
   apiKey,
@@ -67,26 +72,33 @@ const InternalComponent = ({
   onConnectionStatusChange,
   onDisconnected,
   getAuthToken,
+  getAuthSignature,
+  authSignatureExpiresAt,
   configs,
   activeRoute,
   onRouteChange,
   seoOptimizationEnabled = false,
   syncNetworkConfig = false,
 }: AmityUIKitProviderProps) => {
-  const currentUser = useUser(userId);
   const { error } = useNotifications();
   const [client, setClient] = useState<Amity.Client | null>(null);
   const { networkConfig, isNetworkConfigLoading } = useNetworkConfig(client);
   const [isGlobalBanned, setIsGlobalBanned] = useState<boolean>(false);
 
-  const sdkContextValue = useMemo(
-    () => ({
+  const sdkContextValue: SDKContextType = useMemo(() => {
+    if (!client) return initialSDKContext;
+
+    const currentUser = Client.getCurrentUser();
+    const userType = Client.getCurrentUserType();
+
+    return {
       client,
-      currentUserId: userId || undefined,
+      currentUserId: currentUser?.userId,
       userRoles: currentUser?.roles || [],
-    }),
-    [client, userId, currentUser?.roles],
-  );
+      currentUser,
+      isVisitorOrBot: userType !== UserTypeEnum.SIGNED_IN,
+    };
+  }, [client, userId]);
 
   const initialConfig = useMemo(() => {
     let initialConfig = { ...defaultConfig };
@@ -133,14 +145,30 @@ const InternalComponent = ({
       try {
         // Set up the AmityUIKitManager
         AmityUIKitManager.setup({ apiKey, apiRegion, apiEndpoint, seoOptimizationEnabled });
-
         AdEngine.instance;
 
+        const newClient = AmityUIKitManager.getClient();
+        const deviceId = await newClient?.getVisitorDeviceId();
+
+        let authSignatureParams;
+
+        if (getAuthSignature && authSignatureExpiresAt && deviceId) {
+          const authSignature = await getAuthSignature({
+            deviceId,
+            authSignatureExpiresAt,
+          });
+
+          authSignatureParams = {
+            authSignature,
+            authSignatureExpiresAt,
+          };
+        }
+
         // Register the device and get the client instance
-        await AmityUIKitManager.registerDevice(
-          userId.toString(),
-          displayName?.toString() || userId.toString(),
-          {
+        await AmityUIKitManager.registerDevice({
+          userId: userId?.toString(),
+          displayName: displayName?.toString(),
+          sessionHandler: {
             sessionWillRenewAccessToken: (renewal) => {
               // Handle access token renewal
               if (getAuthToken) {
@@ -153,13 +181,12 @@ const InternalComponent = ({
             },
           },
           authToken,
+          authSignatureParams,
           onConnectionStatusChange,
-          undefined,
           onDisconnected,
           onGlobalBanned,
-        );
+        });
 
-        const newClient = AmityUIKitManager.getClient();
         setClient(newClient);
       } catch (_error) {
         console.error('Error setting up AmityUIKitManager:', _error);
@@ -252,7 +279,7 @@ interface AmityUIKitProviderProps {
     mqtt?: string;
     upload?: string;
   };
-  userId: string;
+  userId?: string;
   displayName?: string;
   postRendererConfig?: any;
   theme?: Record<string, unknown>;
@@ -273,6 +300,15 @@ interface AmityUIKitProviderProps {
   onConnected?: () => void;
   onDisconnected?: () => void;
   getAuthToken?: () => Promise<string>;
+  authSignatureExpiresAt?: string;
+  getAuthSignature?: ({
+    deviceId,
+    authSignatureExpiresAt,
+  }: {
+    deviceId: string;
+    authSignatureExpiresAt: string;
+  }) => Promise<string>;
+  isBotUser?: boolean;
   configs?: AmityUIKitConfig;
   activeRoute?: AmityRoute;
   onRouteChange?: (route: AmityRoute) => void;

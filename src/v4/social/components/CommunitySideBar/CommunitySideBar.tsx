@@ -21,6 +21,7 @@ import styles from './CommunitySideBar.module.css';
 import { notificationTray } from '@amityco/ts-sdk';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useSearchResultContext } from '~/v4/social/providers/SearchResultProvider';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type CommunitySideBarProps = {
   pageId?: string;
@@ -38,6 +39,7 @@ export const CommunitySideBar = ({
   const { socialCommunityCreationButtonVisible } = useConfig();
   const { accessibilityId, themeStyles } = useAmityComponent({ componentId, pageId });
   const { searchValue } = useSearchResultContext();
+  const { isVisitorOrBot } = useSDK();
 
   const handleNotificationTrayButtonClick = () => {
     notificationTray.markTraySeen(new Date().toISOString());
@@ -52,45 +54,51 @@ export const CommunitySideBar = ({
       <div className={styles.communitySideBar__header}>
         <div className={styles.communitySideBar__headerLeft}>
           <CommunitySideBarTitle pageId={pageId} componentId={componentId} />
-          <Popover
-            placement="bottom left"
-            className={styles.communitySideBar__notificationTray}
-            trigger={({ openPopover }) => {
-              return (
-                <NotificationTrayButton
-                  pageId={pageId}
-                  componentId={componentId}
-                  onPress={() => {
-                    openPopover();
-                    handleNotificationTrayButtonClick();
-                  }}
-                />
-              );
-            }}
-            aria-label="notification_tray"
-          >
-            {({ closePopover }) => <NotificationTrayPage onClose={closePopover} />}
-          </Popover>
+          {!isVisitorOrBot && (
+            <Popover
+              placement="bottom left"
+              className={styles.communitySideBar__notificationTray}
+              trigger={({ openPopover }) => {
+                return (
+                  <NotificationTrayButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    onPress={() => {
+                      openPopover();
+                      handleNotificationTrayButtonClick();
+                    }}
+                  />
+                );
+              }}
+              aria-label="notification_tray"
+            >
+              {({ closePopover }) => <NotificationTrayPage onClose={closePopover} />}
+            </Popover>
+          )}
         </div>
 
         <SocialGlobalSearchPage keyword={searchValue} />
       </div>
 
       <div className={styles.communitySideBar__menuSection}>
-        <NewsFeedMenuItem pageId={pageId} componentId={componentId} />
+        {!isVisitorOrBot && <NewsFeedMenuItem pageId={pageId} componentId={componentId} />}
         {!isExploreHidden && <ExploreMenuItem pageId={pageId} componentId={componentId} />}
       </div>
-      <div className={styles.communitySideBar__myCommunitiesSection}>
-        <MyCommunitiesSideBarTitle pageId={pageId} componentId={componentId} />
-        {socialCommunityCreationButtonVisible && (
-          <CreateCommunityMenuItem
-            pageId={pageId}
-            componentId={componentId}
-            onPress={() => goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE })}
-          />
-        )}
-        <MyCommunitiesSideBar pageId={pageId} />
-      </div>
+      {!isVisitorOrBot && (
+        <div className={styles.communitySideBar__myCommunitiesSection}>
+          <MyCommunitiesSideBarTitle pageId={pageId} componentId={componentId} />
+          {socialCommunityCreationButtonVisible && (
+            <CreateCommunityMenuItem
+              pageId={pageId}
+              componentId={componentId}
+              onPress={() =>
+                goToCreateCommunityPage?.({ mode: AmityCommunitySetupPageMode.CREATE })
+              }
+            />
+          )}
+          <MyCommunitiesSideBar pageId={pageId} />
+        </div>
+      )}
     </div>
   );
 };

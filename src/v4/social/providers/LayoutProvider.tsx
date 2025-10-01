@@ -8,6 +8,7 @@ import {
   useLinkToPost,
   LinkToPost,
 } from '~/v4/social/hooks';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type LocalVideoPost = {
   postId: string;
@@ -63,10 +64,12 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const { linkToPost, setLinkToPost } = useLinkToPost();
   const [videoThumbnail, setVideoThumbnail] = useState<LocalVideoPost | undefined>(undefined);
 
+  const { isVisitorOrBot } = useSDK();
+
   return (
     <LayoutContext.Provider
       value={{
-        activeTab,
+        activeTab: isVisitorOrBot ? HomePageTab.Explore : HomePageTab.Newsfeed,
         setActiveTab,
         liveStreamPlayer,
         setStreamPlayer,

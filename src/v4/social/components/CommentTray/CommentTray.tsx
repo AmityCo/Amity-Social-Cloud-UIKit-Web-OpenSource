@@ -10,7 +10,7 @@ type CommentTrayProps = {
   referenceId: string;
   community: Amity.Community;
   shouldAllowCreation?: boolean;
-  shouldAllowInteraction: boolean;
+  shouldAllowInteraction?: boolean;
   referenceType: Amity.CommentReferenceType;
 };
 

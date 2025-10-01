@@ -26,6 +26,7 @@ import Clock from '~/v4/icons/Clock';
 import styles from './CommunityHeader.module.css';
 import { useGetMyJoinRequest } from '~/v4/social/hooks/useGetMyJoinRequest';
 import useJoinRequestsCollection from '~/v4/social/hooks/collections/useJoinRequestsCollection';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 //TODO: check needApprovalOnPostCreation and onlyAdminCanPost after postSetting fix from SDK
 
@@ -47,6 +48,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
   const { isDesktop } = useResponsive();
   const { AmityCommunityProfilePageBehavior } = usePageBehavior();
   const { currentUserId } = useSDK();
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const { online } = useNetworkState();
   const notification = useNotifications();
   const { invitation, setInvitation } = useGetInvitation(community);
@@ -97,6 +99,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
       community?.postSetting === CommunityPostSettings.ADMIN_REVIEW_POST_REQUIRED);
 
   const isShowJoinRequest = joinRequestCount > 0 && canReviewCommunityPosts;
+
   const isShowPendingBanner = isShowPendingPost || isShowJoinRequest;
 
   return (
@@ -152,10 +155,16 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
             componentId={componentId}
             count={community.membersCount}
             text={`member${community.membersCount === 1 ? '' : 's'}`}
-            onClick={() => {
-              community.isJoined &&
-                AmityCommunityProfilePageBehavior?.goToMembershipPage?.({ community: community });
-            }}
+            onClick={() =>
+              handleCommunityProfileBehavior({
+                allowNonMember: false,
+                isJoined: community.isJoined,
+                defaultBehavior: () =>
+                  AmityCommunityProfilePageBehavior?.goToMembershipPage?.({
+                    community: community,
+                  }),
+              })
+            }
           />
         </div>
 
@@ -182,6 +191,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
                     });
                     return;
                   }
+                  // NOTE: checking guest user in joinCommunity function
                   joinCommunity(community);
                 }}
                 componentId={componentId}
@@ -206,7 +216,8 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
             />
           </div>
         )}
-        {(community.isJoined || community.isPublic) && (
+
+        {community.isPublic && (
           <div>
             <StoryTab type="communityFeed" pageId={pageId} communityId={community.communityId} />
           </div>
@@ -232,8 +243,6 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
           </div>
         )}
       </div>
-
-      <div className={styles.communityProfile__divider} />
     </>
   );
 };

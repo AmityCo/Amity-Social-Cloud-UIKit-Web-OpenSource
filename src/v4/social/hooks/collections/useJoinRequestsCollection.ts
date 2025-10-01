@@ -1,5 +1,6 @@
 import { JoinRequestStatusEnum } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type useJoinRequestsCollectionParams = {
   community: Amity.Community;
@@ -14,6 +15,7 @@ export default function useJoinRequestsCollection({
   const [items, setItems] = useState<Amity.JoinRequest[] | null>(null);
   const [hasMore, setHasMore] = useState<boolean>();
 
+  const { isVisitorOrBot } = useSDK();
   const loadMoreRef = useRef<(() => void) | null>();
   const unsubscriberRef = useRef<(() => void) | null>(null);
 
@@ -24,7 +26,7 @@ export default function useJoinRequestsCollection({
   }, []);
 
   const subscribe = useCallback(() => {
-    if (!community.communityId) return;
+    if (!community.communityId || isVisitorOrBot) return;
 
     const unsubscriber = community.getJoinRequests(
       {

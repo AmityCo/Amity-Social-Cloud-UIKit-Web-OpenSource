@@ -24,9 +24,12 @@ import useSDK from '~/v4/core/hooks/useSDK';
 import { checkDeleteCommunityPostPermission } from '~/v4/social/utils';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { SharableModel } from '~/v4/utils/sharableLink';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 interface PostMenuProps {
   post: Amity.Post;
+  community?: Amity.Community | null;
   pageId?: string;
   componentId?: string;
   elementId?: string;
@@ -39,6 +42,7 @@ interface PostMenuProps {
 
 export const PostMenu = ({
   post,
+  community,
   pageId = '*',
   componentId = '*',
   onConfirmEditPost,
@@ -52,14 +56,11 @@ export const PostMenu = ({
   const { openPopup } = usePopupContext();
   const { client } = useSDK();
 
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+
   const poll = post?.childrenPosts?.[0]?.getPollInfo();
   const isLiveStreamPost = post?.childrenPosts?.[0]?.dataType === 'livestream';
-  const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
-
-  const { community } = useCommunity({
-    communityId: post?.targetId,
-    shouldCall,
-  });
 
   const [isShowReportReason, setIsShowReportReason] = useState(false);
 
@@ -284,6 +285,20 @@ export const PostMenu = ({
     }
   };
 
+  const handleReportPost = () => {
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => onClickReportPost(),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    handleUserProfileBehavior({
+      defaultBehavior: () => onClickReportPost(),
+      allowNonFollower: true,
+    });
+  };
+
   return (
     <div className={styles.postMenu}>
       {!isShowReportReason && showClosePollButton && (
@@ -302,7 +317,7 @@ export const PostMenu = ({
         <Button
           data-testid={`${pageId}/${componentId}/report_post_button`}
           className={styles.postMenu__item}
-          onPress={() => (isFlaggedByMe ? handleUnreportPost() : onClickReportPost())}
+          onPress={() => (isFlaggedByMe ? handleUnreportPost() : handleReportPost())}
         >
           {isFlaggedByMe ? (
             <UnFlag className={styles.postMenu__reportPost__icon} />

@@ -11,6 +11,7 @@ import { ExploreTrendingTitle } from '~/v4/social/elements/ExploreTrendingTitle'
 import { ExploreRecommendedTitle } from '~/v4/social/elements/ExploreRecommendedTitle';
 import { Divider } from '~/v4/social/elements/Divider';
 import { PullToRefresh } from '~/v4/core/components/PullToRefresh';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type ExploreProps = {
   pageId?: string;
@@ -27,6 +28,8 @@ export function Explore({ pageId = '*' }: ExploreProps) {
     noTrendingCommunities,
     error,
   } = useExplore();
+
+  const { isDesktop } = useResponsive();
 
   useEffect(() => {
     refresh();
@@ -62,7 +65,7 @@ export function Explore({ pageId = '*' }: ExploreProps) {
     <PullToRefresh className={styles.explore} onTouchEndCallback={refresh}>
       {!isNoCategory && (
         <>
-          <Divider />
+          {!isDesktop && <Divider />}
           <div className={styles.explore__exploreCategories}>
             <ExploreCommunityCategories pageId={pageId} />
           </div>

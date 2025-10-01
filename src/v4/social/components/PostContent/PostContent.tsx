@@ -44,6 +44,8 @@ import { useSharableLink } from '~/v4/social/hooks/useSharableLink';
 import { Button } from '~/v4/core/components/AriaButton';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { isEqual } from 'lodash';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 export enum AmityPostContentComponentStyle {
   FEED = 'feed',
@@ -139,6 +141,8 @@ export const PostContent = ({
   expandAllContent = false,
 }: PostContentProps) => {
   const componentId = 'post_content';
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const { themeStyles, accessibilityId } = useAmityComponent({
     pageId,
@@ -200,7 +204,7 @@ export const PostContent = ({
     referenceId: post.postId,
   });
 
-  const handleReactionClick = async (reactionKey: string) => {
+  const onReactionClick = async (reactionKey: string) => {
     if (reactionByMe === null) {
       await mutateAddReactionAsync(reactionKey);
     } else if (reactionByMe !== reactionKey) {
@@ -209,6 +213,47 @@ export const PostContent = ({
     } else {
       await mutateRemoveReactionAsync(reactionByMe);
     }
+  };
+
+  const handleReactionClick = (reactionKey: string) => {
+    if (targetCommunity)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => onReactionClick(reactionKey),
+        allowNonMember: false,
+        isJoined: targetCommunity?.isJoined,
+      });
+
+    return handleUserProfileBehavior({
+      defaultBehavior: () => onReactionClick(reactionKey),
+      allowNonFollower: true,
+    });
+  };
+
+  const handleCommentClick = (
+    context: Pick<
+      PostDetailPageProps,
+      | 'commentId'
+      | 'selectedReplyComment'
+      | 'parentId'
+      | 'showReplyCommentAt'
+      | 'isFromCommentClick'
+    >,
+  ) => {
+    if (targetCommunity)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => {
+          onClick?.(context);
+        },
+        allowNonMember: false,
+        isJoined: targetCommunity?.isJoined,
+      });
+
+    handleUserProfileBehavior({
+      defaultBehavior: () => {
+        onClick?.(context);
+      },
+      allowNonFollower: true,
+    });
   };
 
   const openImageViewer = (imageIndex: number) => {
@@ -400,6 +445,7 @@ export const PostContent = ({
                         <PostMenu
                           post={post}
                           pageId={pageId}
+                          community={targetCommunity}
                           componentId={componentId}
                           isSearchPost={isSearchPost}
                           onPostDeleted={onPostDeleted}
@@ -427,6 +473,7 @@ export const PostContent = ({
                     post={post}
                     pageId={pageId}
                     componentId={componentId}
+                    community={targetCommunity}
                     isSearchPost={isSearchPost}
                     onPostDeleted={onPostDeleted}
                     onPollClosed={handlePollClosed}
@@ -488,7 +535,6 @@ export const PostContent = ({
                 goToPostDetail={onClick}
                 onPollPostDeleted={pageId === 'post_detail_page' ? onPollPostDeleted : undefined}
                 forceShowPollResults={forceShowPollResults}
-                disabledContent={isNotJoinedCommunity || disabledContent}
                 expandAllContent={expandAllContent}
               />
             ) : null}
@@ -570,89 +616,78 @@ export const PostContent = ({
             )}
           </div>
 
-          {isNotJoinedCommunity && (isSearchPost || page.type !== PageTypes.PostDetailPage) ? (
-            <>
-              <div className={styles.postContent__divider} />
-              <Button variant="default" onPress={() => goToCommunityProfilePage(post.targetId)}>
-                <Typography.Body className={styles.postContent__notMember}>
-                  Join community to interact with all posts
-                </Typography.Body>
-              </Button>
-            </>
-          ) : targetCommunity &&
-            !targetCommunity?.isJoined &&
-            page.type === PageTypes.PostDetailPage ? null : (
-            <>
-              <div className={styles.postContent__divider} />
-              <div className={styles.postContent__reactionBar}>
-                <div className={styles.postContent__reactionBar__leftPane}>
-                  <ReactionButton
-                    pageId={pageId}
-                    componentId={componentId}
-                    reactionsCount={
-                      style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
-                    }
-                    myReaction={reactionByMe}
-                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                    onReactionClick={handleReactionClick}
-                  />
-                  <CommentButton
-                    pageId={pageId}
-                    componentId={componentId}
-                    commentsCount={
-                      style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
-                    }
-                    buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
-                    defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
-                    imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
-                    onPress={() => onClick?.({ isFromCommentClick: true })}
-                  />
-                </div>
-                <div className={styles.postContent__reactionBar__rightPane}>
-                  {(!targetCommunity || targetCommunity?.isPublic) && (
-                    <Popover
-                      containerClassName={styles.postContent__bar__actionButton}
-                      trigger={({ openPopover }) => (
-                        <IconButton
-                          variant="text"
-                          pageId={pageId}
-                          componentId={componentId}
-                          elementId="copy_link_button"
-                          defaultIcon={<Share className={styles.postContent__shareIcon} />}
-                          onPress={() =>
-                            isDesktop
-                              ? openPopover()
-                              : setDrawerData({
-                                  content: (
-                                    <CopyLinkButton
-                                      pageId={pageId}
-                                      componentId={componentId}
-                                      model={SharableModel.POST}
-                                      referenceId={post.postId}
-                                      onDone={removeDrawerData}
-                                    />
-                                  ),
-                                })
-                          }
-                        />
-                      )}
-                    >
-                      {({ closePopover }) => (
-                        <CopyLinkButton
-                          pageId={pageId}
-                          componentId={componentId}
-                          model={SharableModel.POST}
-                          referenceId={post.postId}
-                          onDone={isDesktop ? closePopover : removeDrawerData}
-                        />
-                      )}
-                    </Popover>
-                  )}
-                </div>
+          {/* Reaction Bar */}
+          <>
+            <div className={styles.postContent__divider} />
+            <div className={styles.postContent__reactionBar}>
+              <div className={styles.postContent__reactionBar__leftPane}>
+                <ReactionButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  reactionsCount={
+                    style === AmityPostContentComponentStyle.FEED ? reactionsCount : undefined
+                  }
+                  myReaction={reactionByMe}
+                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                  onReactionClick={handleReactionClick}
+                />
+                <CommentButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  commentsCount={
+                    style === AmityPostContentComponentStyle.FEED ? post.commentsCount : undefined
+                  }
+                  buttonClassName={styles.postContent__reactionBar__leftPane__commentButton}
+                  defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
+                  imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
+                  onPress={() => handleCommentClick({ isFromCommentClick: true })}
+                />
               </div>
-            </>
-          )}
+              <div className={styles.postContent__reactionBar__rightPane}>
+                {(!targetCommunity || targetCommunity?.isPublic) && (
+                  <Popover
+                    containerClassName={styles.postContent__bar__actionButton}
+                    trigger={({ openPopover }) => (
+                      <IconButton
+                        variant="text"
+                        pageId={pageId}
+                        componentId={componentId}
+                        elementId="copy_link_button"
+                        defaultIcon={<Share className={styles.postContent__shareIcon} />}
+                        onPress={() =>
+                          isDesktop
+                            ? openPopover()
+                            : setDrawerData({
+                                content: (
+                                  <CopyLinkButton
+                                    pageId={pageId}
+                                    componentId={componentId}
+                                    model={SharableModel.POST}
+                                    referenceId={post.postId}
+                                    onDone={removeDrawerData}
+                                  />
+                                ),
+                              })
+                        }
+                      />
+                    )}
+                  >
+                    {({ closePopover }) => (
+                      <CopyLinkButton
+                        pageId={pageId}
+                        componentId={componentId}
+                        model={SharableModel.POST}
+                        referenceId={post.postId}
+                        onDone={isDesktop ? closePopover : removeDrawerData}
+                      />
+                    )}
+                  </Popover>
+                )}
+              </div>
+            </div>
+          </>
+
           {isVideoViewerOpen && typeof clickedVideoIndex === 'number' ? (
             <VideoViewer
               post={post}
@@ -669,53 +704,52 @@ export const PostContent = ({
       {/*
        * Should not see inline comment in post detail page and pending post page
        */}
-      {!disabledInlineComment &&
-        !(isNotJoinedCommunity && page.type !== PageTypes.PostDetailPage) && (
-          <>
-            <Divider className={styles.postContent__inlineComment__divider} />
-            {loadingInlineComment ? (
-              <CommentSkeleton pageId={pageId} componentId={componentId} />
-            ) : (
-              <>
-                {inlineComment && (
-                  <div
-                    data-testid="post-inline-comment-button"
-                    role="button"
-                    tabIndex={0}
-                    className={styles.postContent__inlineComment__container}
-                    onClick={(e) => {
-                      onClick?.({ commentId: inlineComment.commentId, isFromCommentClick: true });
+      {!disabledInlineComment && (
+        <>
+          <Divider className={styles.postContent__inlineComment__divider} />
+          {loadingInlineComment ? (
+            <CommentSkeleton pageId={pageId} componentId={componentId} />
+          ) : (
+            <>
+              {inlineComment && (
+                <div
+                  data-testid="post-inline-comment-button"
+                  role="button"
+                  tabIndex={0}
+                  className={styles.postContent__inlineComment__container}
+                  onClick={(e) => {
+                    onClick?.({ commentId: inlineComment.commentId, isFromCommentClick: true });
+                  }}
+                >
+                  <Comment
+                    key={inlineComment?.commentId} // Add key to force proper re-rendering
+                    pageId={pageId}
+                    comment={inlineComment}
+                    onClickReply={() => {
+                      onClick?.({
+                        commentId: inlineComment?.commentId,
+                        parentId: inlineComment?.parentId,
+                        selectedReplyComment: inlineComment!,
+                      });
                     }}
-                  >
-                    <Comment
-                      key={inlineComment?.commentId} // Add key to force proper re-rendering
-                      pageId={pageId}
-                      comment={inlineComment}
-                      onClickReply={() => {
-                        onClick?.({
-                          commentId: inlineComment?.commentId,
-                          parentId: inlineComment?.parentId,
-                          selectedReplyComment: inlineComment!,
-                        });
-                      }}
-                      onClickShowReply={() => {
-                        onClick?.({
-                          commentId: inlineComment?.commentId,
-                          showReplyCommentAt: inlineComment?.commentId,
-                        });
-                      }}
-                      componentId={componentId}
-                      // hide option buttion for inline comment
-                      hideOptionButton={true}
-                      community={targetCommunity}
-                      maxLines={3}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-          </>
-        )}
+                    onClickShowReply={() => {
+                      onClick?.({
+                        commentId: inlineComment?.commentId,
+                        showReplyCommentAt: inlineComment?.commentId,
+                      });
+                    }}
+                    componentId={componentId}
+                    // hide option buttion for inline comment
+                    hideOptionButton={true}
+                    community={targetCommunity}
+                    maxLines={3}
+                  />
+                </div>
+              )}
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { getLiveReactionTopic, subscribeTopic } from '@amityco/ts-sdk';
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { useCustomReaction } from '~/v4/core/providers/CustomReactionProvider';
 import { ReactionObservable, ReactionCount } from '~/v4/core/ReactionEngine';
 import styles from './ReactionFloating.module.css';
@@ -23,6 +24,7 @@ interface ReactionFloatingProps {
 
 export const ReactionFloating: React.FC<ReactionFloatingProps> = ({ post }) => {
   const { reactions: reactionsConfig } = useCustomReaction();
+  const { isVisitorOrBot } = useSDK();
   const [lanes, setLanes] = useState<ReactionCount[]>();
   const containerRef = useRef<HTMLDivElement>(null);
   const reactionsRef = useRef<FloatingReaction[]>([]);
@@ -147,6 +149,24 @@ export const ReactionFloating: React.FC<ReactionFloatingProps> = ({ post }) => {
       });
     }
   }, [lanes]);
+
+  useEffect(() => {
+    if (!isVisitorOrBot) return;
+
+    let intervalId: NodeJS.Timeout | null = null;
+
+    if (reactionsConfig.length > 0) {
+      intervalId = setInterval(() => {
+        // Pick a random reaction
+        const randomReaction = reactionsConfig[Math.floor(Math.random() * reactionsConfig.length)];
+        pushReaction({ reactionName: randomReaction.name });
+      }, 500);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isVisitorOrBot, reactionsConfig, pushReaction]);
 
   return <div ref={containerRef} className={styles.reactionFloating__container}></div>;
 };
