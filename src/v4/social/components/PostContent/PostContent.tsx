@@ -536,6 +536,7 @@ export const PostContent = ({
                 onPollPostDeleted={pageId === 'post_detail_page' ? onPollPostDeleted : undefined}
                 forceShowPollResults={forceShowPollResults}
                 expandAllContent={expandAllContent}
+                community={targetCommunity}
               />
             ) : null}
           </Button>

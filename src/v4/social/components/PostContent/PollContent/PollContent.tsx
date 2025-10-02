@@ -16,7 +16,7 @@ type PollContentProps = {
   pageId?: string;
   componentId?: string;
   elementId?: string;
-  community?: Amity.Community;
+  community?: Amity.Community | null;
   posts: Amity.Post<'poll'>[];
   parentPost: Amity.Post;
   disabled?: boolean;

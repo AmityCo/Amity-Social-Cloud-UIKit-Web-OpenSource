@@ -37,7 +37,6 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
     <Button
       data-testid={accessibilityId}
       style={themeStyles}
-      className={styles.userFollowing__container}
       onPress={() =>
         handleUserProfileBehavior({
           followStatus,
@@ -55,7 +54,6 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
       </Typography.BodyBold>
       {config.text && (
         <Typography.Caption className={styles.userFollowing__label}>
-          {' '}
           {config.text}
         </Typography.Caption>
       )}

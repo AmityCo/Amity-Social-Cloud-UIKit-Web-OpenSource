@@ -34,7 +34,6 @@ export const UserFollower: React.FC<UserFollowerProps> = ({
   });
   return (
     <Button
-      className={styles.userFollower__container}
       data-testid={accessibilityId}
       style={themeStyles}
       onPress={() =>

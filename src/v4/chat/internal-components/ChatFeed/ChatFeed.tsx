@@ -7,6 +7,7 @@ import { MessageBubbleSkeleton } from '~/v4/chat/internal-components/MessageBubb
 import { Typography } from '~/v4/core/components';
 import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
@@ -19,6 +20,7 @@ const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'t
 const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
   const [joined, setJoined] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { isVisitorOrBot } = useSDK();
 
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
@@ -26,7 +28,7 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
       includeDeleted: true,
       limit: 15,
     },
-    joined,
+    joined && !isVisitorOrBot,
   );
 
   useEffect(() => {
@@ -41,16 +43,16 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
       }
     };
 
-    joinLiveChannel();
+    !isVisitorOrBot && joinLiveChannel();
 
     return () => unsubTopic();
-  }, [channel]);
+  }, [channel, isVisitorOrBot]);
 
   const isEmpty = !loading && messages?.length === 0;
 
   return (
     <div className={styles.chatFeed__container}>
-      {isEmpty ? (
+      {isEmpty || isVisitorOrBot ? (
         <div className={styles.chatFeed__empty__container}>
           <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
           <Typography.TitleBold className={styles.chatFeed__emptyText}>
