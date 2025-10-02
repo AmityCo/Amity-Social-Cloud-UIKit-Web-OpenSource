@@ -11,13 +11,14 @@ import useSDK from '~/v4/core/hooks/useSDK';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
+  isJoinedCommunity?: boolean;
 }
 
 const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'text'> => {
   return !!message.data && typeof message.data !== 'string' && 'text' in message.data;
 };
 
-const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
+const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity }) => {
   const [joined, setJoined] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { isVisitorOrBot } = useSDK();
@@ -91,7 +92,13 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
             <div className={styles.chatFeed__messageList__inner}>
               {messages?.map((message) => {
                 if (!isAmityTextMessage(message)) return null;
-                return <MessageBubble key={message.messageId} message={message} />;
+                return (
+                  <MessageBubble
+                    key={message.messageId}
+                    message={message}
+                    isJoinedCommunity={isJoinedCommunity}
+                  />
+                );
               })}
             </div>
           </InfiniteScroll>

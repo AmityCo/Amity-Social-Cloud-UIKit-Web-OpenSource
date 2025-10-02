@@ -544,7 +544,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
             {isDesktop ? (
               <div className={styles.livestreamChat__container}>
                 <div className={styles.livestreamChat__container__inner}>
-                  <ChatFeed channel={channel} />
+                  <ChatFeed channel={channel} isJoinedCommunity={!!community?.isJoined} />
                   <LivestreamChatMessageComposer
                     pageId={pageId}
                     channelId={channel.channelId}
@@ -576,7 +576,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                             className={styles.livestreamChat__container__inner}
                             ref={chatContainerRef}
                           >
-                            <ChatFeed channel={channel} />
+                            <ChatFeed channel={channel} isJoinedCommunity={!!community?.isJoined} />
                           </div>
                         </>
                       )}
