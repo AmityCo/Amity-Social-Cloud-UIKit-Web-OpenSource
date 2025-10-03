@@ -9,11 +9,14 @@ import useUser from '~/core/hooks/useUser';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { PollSingleAnswer } from './PollSingleAnswer';
 import { PollMultipleAnswer } from './PollMultipleAnswer';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 type PollContentProps = {
   pageId?: string;
   componentId?: string;
   elementId?: string;
+  community?: Amity.Community | null;
   posts: Amity.Post<'poll'>[];
   parentPost: Amity.Post;
   disabled?: boolean;
@@ -22,11 +25,14 @@ type PollContentProps = {
   expandOption?: boolean;
 };
 
+type VotePollParam = { pollId: string; answerIds: string[] };
+
 export const PollContent: FC<PollContentProps> = ({
   pageId = '*',
   componentId = '*',
   elementId = '*',
   parentPost,
+  community,
   posts,
   disabled = false,
   expandOption = false,
@@ -34,6 +40,8 @@ export const PollContent: FC<PollContentProps> = ({
   forceShowResults = false,
 }) => {
   const { currentUserId } = useSDK();
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const poll = posts?.[0]?.getPollInfo();
   const [answers, setAnswers] = useState<string[] | undefined>();
@@ -105,11 +113,26 @@ export const PollContent: FC<PollContentProps> = ({
     parentPost,
     onPollEnded: handlePollEnd,
   });
+
   const { mutateAsync: mutateUnvotePoll } = useUnvotePoll({
     onPostDeleted,
     onPollEnded: handlePollEnd,
     parentPost,
   });
+
+  const handleVotePoll = (params: VotePollParam) => {
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => mutateVotePoll(params),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    return handleUserProfileBehavior({
+      defaultBehavior: () => mutateVotePoll(params),
+      allowNonFollower: true,
+    });
+  };
 
   const formatPercentage = (count?: number) => {
     if (!count) return '0';
@@ -123,6 +146,7 @@ export const PollContent: FC<PollContentProps> = ({
       {poll.isVoted || isAuthorSeeingPoll || isPollEnded ? (
         <>
           <div
+            data-testid="poll-voted-items-container"
             className={styles.pollContent__votedItemsContainer}
             data-image-poll={pollAnswers?.[0].dataType === 'image'}
           >
@@ -184,7 +208,7 @@ export const PollContent: FC<PollContentProps> = ({
             className={styles.pollContent__vote__button}
             onPress={() => {
               if (!answers) return;
-              mutateVotePoll({ pollId: poll.pollId, answerIds: answers });
+              handleVotePoll({ pollId: poll.pollId, answerIds: answers });
             }}
             isDisabled={isVoteButtonDisabled}
             data-testid="poll-vote-button"

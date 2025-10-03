@@ -5,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import useSDK from './useSDK';
 
 export const usePostFlaggedByMe = ({
   post,
@@ -29,6 +30,7 @@ export const usePostFlaggedByMe = ({
   mutateReportPost: UseMutateAsyncFunction<boolean, Error, void, void>;
   mutateUnReportPost: UseMutateAsyncFunction<boolean, Error, void, void>;
 } => {
+  const { isVisitorOrBot } = useSDK();
   const queryClient = useQueryClient();
   const postId = post?.postId || undefined;
 
@@ -38,7 +40,7 @@ export const usePostFlaggedByMe = ({
     queryFn: () => {
       return PostRepository.isPostFlaggedByMe(postId);
     },
-    enabled: postId != null && isFlaggable,
+    enabled: postId != null && isFlaggable && !isVisitorOrBot,
   });
 
   const { mutateAsync: mutateReportPost, isPending } = useMutation({

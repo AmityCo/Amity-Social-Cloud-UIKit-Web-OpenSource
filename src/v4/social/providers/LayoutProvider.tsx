@@ -8,6 +8,15 @@ import {
   useLinkToPost,
   LinkToPost,
 } from '~/v4/social/hooks';
+import useSDK from '~/v4/core/hooks/useSDK';
+
+type LocalVideoPost = {
+  postId: string;
+  videos: {
+    fileId: string;
+    thumbnailUrl: string | undefined;
+  }[];
+};
 
 type LocalVideoPost = {
   postId: string;
@@ -56,7 +65,10 @@ export const useLayoutContext = () => {
 type LayoutProviderProps = PropsWithChildren<unknown>;
 
 export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<HomePageTab>(HomePageTab.Newsfeed);
+  const { isVisitorOrBot } = useSDK();
+  const [activeTab, setActiveTab] = useState<HomePageTab>(
+    isVisitorOrBot ? HomePageTab.Explore : HomePageTab.Newsfeed,
+  );
   const [acceptedInvitation, setAcceptedInvitation] = useState<Amity.Invitation | null>(null);
   const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);
   const invitationNotificationTray = useInvitationNotificationTray();

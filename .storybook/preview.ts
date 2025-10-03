@@ -9,14 +9,27 @@ const preview: Preview = {
     displayName: undefined,
     submit: false,
     syncNetworkConfig: false,
+    visitorCanViewClip: false,
+    authSignatureExpiresAt: new Date(),
+    secureMode: false,
   },
   argTypes: {
     apiKey: { control: { type: 'text' } },
     apiRegion: { control: { type: 'text' } },
     userId: { control: { type: 'text' } },
+    userType: {
+      control: { type: 'select' },
+      options: ['signed-in', 'visitor', 'bot'],
+    },
+    visitorCanViewClip: { control: { type: 'boolean' } },
     displayName: { control: { type: 'text' } },
     submit: { control: { type: 'boolean' } },
     syncNetworkConfig: { control: { type: 'boolean' } },
+    authSignatureExpiresAt: {
+      control: { type: 'date' },
+      description: 'Authentication signature expiration date and time',
+    },
+    secureMode: { control: { type: 'boolean' } },
     theme: {
       options: ['default', 'light', 'dark'],
       control: {

@@ -13,20 +13,22 @@ import { useDeleteMessage } from '~/v4/chat/hooks/useDeleteMessage';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 interface MessageBubbleProps {
   pageId?: string;
   componentId?: string;
   message: Amity.Message<'text'>;
+  isJoinedCommunity?: boolean;
 }
 
 export const MessageBubble: FC<MessageBubbleProps> = ({
   pageId = '*',
   componentId = '*',
   message,
+  isJoinedCommunity,
 }) => {
-  const [error, setError] = useState();
-  const [isShowReportReason, setIsShowReportReason] = useState(false);
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
 
   const { currentUserId } = useSDK();
   const { isDesktop } = useResponsive();
@@ -84,7 +86,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
               onPress={() => {
                 closePopover();
                 removeDrawerData();
-                onClickReportMessage();
+                handleClickReportMessage();
               }}
             >
               <Typography.BodyBold className={styles.messageBubble__optionButton__text}>
@@ -139,6 +141,13 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     },
     [message.messageId],
   );
+
+  const handleClickReportMessage = () =>
+    handleCommunityProfileBehavior({
+      defaultBehavior: onClickReportMessage,
+      isJoined: isJoinedCommunity,
+      allowNonMember: false,
+    });
 
   return (
     <div className={styles.messageBubble__container}>

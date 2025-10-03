@@ -247,5 +247,12 @@
     "live_chat/message_list/message_quick_reaction": {
       "reaction": "heart"
     }
+  },
+  "feature_flags": {
+    "post": {
+      "clip": {
+        "can_view_tab": "singed_in_user_only"
+      }
+    }
   }
 }

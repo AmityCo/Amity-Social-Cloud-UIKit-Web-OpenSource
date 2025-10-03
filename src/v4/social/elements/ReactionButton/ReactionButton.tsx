@@ -43,11 +43,12 @@ interface ReactionButtonProps {
   reactButtonClassName?: string;
   fallbackReactButtonClassName?: string;
   defaultIcon?: () => JSX.Element;
-  onReactionClick: (reactionKey: string) => void;
+  onReactionClick: (reactionKey: string) => boolean;
   onHover?: () => void;
   onLongPress?: () => void;
   hoverDuration?: number;
   longPressDuration?: number;
+  isLivestreamReaction?: boolean;
   isCommentReaction?: boolean;
   isClipReaction?: boolean;
   referenceType?: 'post' | 'comment';
@@ -76,6 +77,7 @@ export function ReactionButton({
   onLongPress,
   defaultIcon,
   onReactionClick,
+  isLivestreamReaction = false,
   isCommentReaction = false,
   isClipReaction = false,
   referenceType = 'post',
@@ -192,6 +194,37 @@ export function ReactionButton({
     />
   );
 
+  const renderReactionCountText = () => {
+    if (isLivestreamReaction) return null;
+
+    let text: string = '';
+    let elementId: string = '';
+
+    if (isCommentReaction) {
+      text = displayReaction ?? config.text ?? 'Like';
+      elementId = 'comment-reaction-text';
+    } else if (isClipReaction) {
+      text =
+        typeof reactionsCount === 'number'
+          ? millify(reactionsCount)
+          : (myReaction || config.text) ?? '';
+      elementId = 'clip-reaction-text';
+    } else {
+      text = (displayReaction || config.text) ?? '';
+      elementId = 'reaction-text';
+    }
+
+    return (
+      <Typography.CaptionBold
+        className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
+        data-has-my-reaction={hasMyReaction}
+        testId={`${pageId}/${componentId}/${elementId}`}
+      >
+        {text}
+      </Typography.CaptionBold>
+    );
+  };
+
   const renderReactionButton = () => {
     return (
       <>
@@ -211,35 +244,7 @@ export function ReactionButton({
             )}
           </>
         )}
-
-        {isCommentReaction ? (
-          <Typography.CaptionBold
-            className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
-            data-has-my-reaction={hasMyReaction}
-            testId={`${pageId}/${componentId}/comment-reaction-text`}
-          >
-            {displayReaction ?? config.text ?? 'Like'}
-          </Typography.CaptionBold>
-        ) : isClipReaction ? (
-          <Typography.BodyBold
-            className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
-            data-has-my-reaction={hasMyReaction}
-            testId={`${pageId}/${componentId}/comment-reaction-text`}
-          >
-            {typeof reactionsCount === 'number'
-              ? millify(reactionsCount)
-              : myReaction || config.text}
-          </Typography.BodyBold>
-        ) : (
-          <Typography.BodyBold
-            className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
-            data-has-my-reaction={hasMyReaction}
-            testId={`${pageId}/${componentId}/comment-reaction-text`}
-          >
-            {displayReaction || config.text}
-          </Typography.BodyBold>
-        )}
-
+        {renderReactionCountText()}
         {showReactionPicker && (
           <div
             data-testid={`${pageId}/${componentId}/reaction-picker-panel`}
@@ -283,6 +288,15 @@ export function ReactionButton({
       ref={desktopButtonRef}
       style={themeStyles}
       data-testid={accessibilityId}
+      className={clsx(styles.reactButton, buttonClassName)}
+      onClick={(e) => {
+        // Prevent click if reaction picker is shown
+        e.stopPropagation();
+        if (showReactionPicker) {
+          return;
+        }
+        handleQuickReaction();
+      }}
       role="button"
       tabIndex={0}
       aria-label="Reaction Button"
@@ -290,18 +304,7 @@ export function ReactionButton({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleCustomMouseLeave}
     >
-      <Button
-        variant="default"
-        onPress={(e) => {
-          if (showReactionPicker || isLongPressing) {
-            return;
-          }
-          handleQuickReaction();
-        }}
-        className={clsx(styles.reactButton, buttonClassName)}
-      >
-        {renderReactionButton()}
-      </Button>
+      {renderReactionButton()}
     </div>
   ) : (
     <div

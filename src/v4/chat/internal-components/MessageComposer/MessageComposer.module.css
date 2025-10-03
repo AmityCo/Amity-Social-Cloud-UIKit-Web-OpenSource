@@ -212,6 +212,14 @@
   transform: translate(50%, 0);
 }
 
+.blocked__messageComposer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: 2;
+}
+
 @media only screen and (width >= 48em) {
   .editorPlaceholder {
     top: 0.75rem;

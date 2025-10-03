@@ -7,6 +7,7 @@ import { CommunityRowItem } from '~/v4/social/internal-components/CommunityRowIt
 import { CommunityRowItemSkeleton } from '~/v4/social/internal-components/CommunityRowItem/CommunityRowItemSkeleton';
 import styles from './TrendingCommunities.module.css';
 import { useGetJoinRequestList } from '~/v4/social/hooks/useGetJoinRequestList';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type TrendingCommunitiesProps = {
   pageId?: string;
@@ -14,6 +15,7 @@ type TrendingCommunitiesProps = {
 
 export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) => {
   const componentId = 'trending_communities';
+  const { isVisitorOrBot } = useSDK();
 
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
   const MAX_COMMUNITIES = 5; // Limit to 5 communities
@@ -30,7 +32,7 @@ export const TrendingCommunities = ({ pageId = '*' }: TrendingCommunitiesProps) 
 
   const communityIds = trendingCommunities.map((community) => community.communityId);
 
-  const { joinRequestList } = useGetJoinRequestList(communityIds);
+  const { joinRequestList } = useGetJoinRequestList({ communityIds, enabled: !isVisitorOrBot });
 
   useEffect(() => {
     fetchTrendingCommunities();

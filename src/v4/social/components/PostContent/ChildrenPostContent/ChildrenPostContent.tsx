@@ -18,12 +18,14 @@ type ChildrenPostContentProps = {
   goToPostDetail?: () => void;
   onPollPostDeleted?: (post: Amity.Post) => void;
   forceShowPollResults?: boolean;
+  community?: Amity.Community | null;
 };
 
 export const ChildrenPostContent = ({
   post,
   pageId,
   componentId,
+  community,
   onImageClick,
   onVideoClick,
   onClipClick,
@@ -44,6 +46,7 @@ export const ChildrenPostContent = ({
         onPostDeleted={onPollPostDeleted}
         forceShowResults={forceShowPollResults}
         expandOption={expandAllContent}
+        community={community}
       />
       <ImageContent
         pageId={pageId}

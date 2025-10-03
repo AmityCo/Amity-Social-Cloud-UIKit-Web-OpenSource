@@ -1,6 +1,6 @@
 import './inter.css';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Client as ASCClient } from '@amityco/ts-sdk';
+import { Client as ASCClient, Client, UserTypeEnum } from '@amityco/ts-sdk';
 
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { NotificationsContainer } from '~/core/components/Notification';
@@ -78,19 +78,24 @@ const UiKitProvider = ({
   getAuthToken,
 }: UiKitProviderProps) => {
   const queryClient = new QueryClient();
+
   const [isConnected, setIsConnected] = useState(false);
   const [client, setClient] = useState<Amity.Client | null>(null);
+
   const stateChangeRef = useRef<(() => void) | null>(null);
   const disconnectedChangeRef = useRef<(() => void) | null>(null);
-  const currentUser = useUser(userId);
-  const sdkContextValue = useMemo(
-    () => ({
+
+  const sdkContextValue = useMemo(() => {
+    const currentUser = client ? Client.getCurrentUser() : null;
+    const userType = client ? Client.getCurrentUserType() : null;
+
+    return {
       client: client || null,
       currentUserId: userId || undefined,
       userRoles: currentUser?.roles ?? [],
-    }),
-    [client, userId, currentUser?.roles],
-  );
+      isVisitorOrBot: userType !== UserTypeEnum.SIGNED_IN,
+    };
+  }, [client, userId]);
 
   async function login() {
     try {

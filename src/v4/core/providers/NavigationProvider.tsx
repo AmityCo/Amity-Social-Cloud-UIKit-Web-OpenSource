@@ -20,6 +20,7 @@ import { AmityRoute } from './AmityUIKitProvider';
 import { LiveStreamPlayerPageProps } from '~/v4/social/pages/LiveStreamPlayerPage';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { GoToPostDetailPageParams } from '~/v4/social/pages/PostDetailPage/PostDetailPage';
+import { useNotifications } from './NotificationProvider';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -394,6 +395,10 @@ type ContextValue = {
     storyType: 'communityFeed' | 'globalFeed',
     targetId?: string[],
   ) => void;
+
+  handleGuestUserAction: () => void;
+  handleNonMemberAction: () => void;
+  handleNonFollowerAction: () => void;
 };
 
 let defaultValue: ContextValue = {
@@ -473,6 +478,9 @@ let defaultValue: ContextValue = {
     storyType: 'communityFeed' | 'globalFeed',
     targetId?: string[],
   ) => {},
+  handleGuestUserAction: () => {},
+  handleNonMemberAction: () => {},
+  handleNonFollowerAction: () => {},
 };
 
 if (process.env.NODE_ENV !== 'production') {
@@ -551,6 +559,10 @@ if (process.env.NODE_ENV !== 'production') {
     //V3 functions
     onClickStory: (storyId, storyType, targetIds) =>
       console.log(`NavigationContext onClickStory(${storyId}, ${storyType}, ${targetIds})`),
+
+    handleGuestUserAction: () => console.log('NavigationContext handleGuestUserAction()'),
+    handleNonMemberAction: () => console.log('NavigationContext handleNonMemberAction()'),
+    handleNonFollowerAction: () => console.log('NavigationContext handleNonFollowerAction()'),
   };
 }
 
@@ -678,6 +690,7 @@ export default function NavigationProvider({
   const prevPage = useMemo((page = 2) => pages[pages.length - page], [pages]);
   const prev2Page = useMemo((page = 3) => pages[pages.length - page], [pages]);
   const [currentClip, setCurrentClip] = useState(0);
+  const notification = useNotifications();
 
   const [navigationBlocker, setNavigationBlocker] = useState<
     | {
@@ -1394,6 +1407,18 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
+  const handleGuestUserAction = () => {
+    notification.info({ content: 'Create an account or sign in to continue.' });
+  };
+
+  const handleNonMemberAction = () => {
+    notification.info({ content: 'Join community to interact.' });
+  };
+
+  const handleNonFollowerAction = () => {
+    notification.info({ content: 'Follow user to interact.' });
+  };
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1467,6 +1492,9 @@ export default function NavigationProvider({
         goToNotificationTrayPage,
         goToPendingRequestPage,
         goToClipFeedPage,
+        handleGuestUserAction,
+        handleNonMemberAction,
+        handleNonFollowerAction,
       }}
     >
       <NavigationContextV3.Provider

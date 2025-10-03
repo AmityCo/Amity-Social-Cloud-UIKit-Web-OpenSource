@@ -26,6 +26,14 @@ export type NetworkConfig = {
   config: DefaultConfig;
 };
 
+export const enum UserAccessTypes {
+  ALL = 'all',
+  SIGNED_IN_USER_ONLY = 'singed_in_user_only',
+  NONE = 'none',
+}
+
+export type UserAccess = `${UserAccessTypes}`;
+
 export interface Config {
   preferred_theme?: 'light' | 'dark' | 'default';
   theme?: {
@@ -37,6 +45,14 @@ export interface Config {
   social_reactions?: AmityReactionType[];
   customizations?: {
     [key: string]: GetConfigReturnValue;
+  };
+  feature_flags?: {
+    post?: {
+      clip?: {
+        can_create: UserAccess;
+        can_view_tab: UserAccess;
+      };
+    };
   };
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CommunityCategory.module.css';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
-import { Button } from '~/v4/core/natives/Button/Button';
+import { Button } from '~/v4/core/components/AriaButton';
 import clsx from 'clsx';
 import { Typography } from '~/v4/core/components';
 
@@ -55,6 +55,7 @@ export const CommunityCategory = ({
       data-truncated={categoryNameLength > (minCharacters ?? 0) ? truncate : false}
       className={clsx(styles.communityCategory, className)}
       onPress={() => onClick?.()}
+      variant="default"
     >
       <Typography.Caption>{categoryName}</Typography.Caption>
     </Button>

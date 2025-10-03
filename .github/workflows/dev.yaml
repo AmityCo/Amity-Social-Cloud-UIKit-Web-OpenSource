@@ -23,6 +23,7 @@ jobs:
       STORYBOOK_API_REGION: ${{ secrets.STORYBOOK_API_REGION }}
       STORYBOOK_API_KEY: ${{ secrets.STORYBOOK_API_KEY }}
       STORYBOOK_USERS: ${{ secrets.STORYBOOK_USERS }}
+      STORYBOOK_VISITOR_AUTH_SIGNATURE_URL: ${{ secrets.STORYBOOK_VISITOR_AUTH_SIGNATURE_URL }}
 
     steps:
       - name: git checkout

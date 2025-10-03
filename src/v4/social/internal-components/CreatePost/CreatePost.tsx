@@ -260,6 +260,7 @@ export function CreatePost({
 
   const notifications = (
     <div
+      data-testid="create-post-notification-wrapper"
       className={styles.createPost__notificationWrapper}
       data-item-position={snap === HEIGHT_MEDIA_ATTACHMENT_MENU}
     >
@@ -313,6 +314,7 @@ export function CreatePost({
     if (isCreating || !online) {
       return (
         <Typography.Body
+          data-testid="create-post-posting-notification"
           className={styles.createPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
         >
@@ -332,6 +334,7 @@ export function CreatePost({
     if (isError || postErrorText) {
       return (
         <Typography.Body
+          data-testid="create-post-error-notification"
           className={styles.createPost__notification}
           data-show-detail-media-attachment={showToastPosition()}
         >
