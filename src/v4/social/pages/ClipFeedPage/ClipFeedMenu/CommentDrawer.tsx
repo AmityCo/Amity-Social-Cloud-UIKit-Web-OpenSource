@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { CommentComposer } from '~/v4/social/components/CommentComposer/CommentComposer';
 import { CommentList } from '~/v4/social/components/CommentList/CommentList';
 import styles from './ClipFeedMenu.module.css';
@@ -10,6 +11,7 @@ type CommentDrawerProps = {
 };
 
 export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerProps) => {
+  const { isVisitorOrBot } = useSDK();
   const [replyComment, setReplyComment] = useState<Amity.Comment | undefined>();
 
   const handleReplyClick = useCallback(
@@ -39,7 +41,7 @@ export const CommentDrawer = ({ pageId = '*', post, community }: CommentDrawerPr
         />
       )}
 
-      {!isNonMemberCommunity && post && (
+      {!isVisitorOrBot && !isNonMemberCommunity && post && (
         <CommentComposer
           pageId={pageId}
           referenceId={post.postId}

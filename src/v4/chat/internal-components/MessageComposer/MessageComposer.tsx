@@ -33,6 +33,8 @@ import { PasteLimitPlugin } from '~/v4/social/internal-components/Lexical/plugin
 import { EditorTextCheckerPlugin } from '~/v4/social/internal-components/Lexical/plugins/EditorTextChekerPlugin';
 import { useChannelMentionSuggestion } from '~/v4/chat/hooks/useChannelMentionSuggestion';
 import clsx from 'clsx';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 const COMPOSEBAR_MAX_CHARACTER_LIMIT = 200;
 
@@ -55,6 +57,7 @@ interface MessageComposerProps {
   allowEnterNewLine?: boolean;
   enterToSendMessage?: boolean;
   scrollable?: boolean;
+  isJoinedCommunity?: boolean;
   setIsEmpty?: (empty: boolean) => void;
   setIsSpacebar?: (spacebar: boolean) => void;
   onEnter?: () => void;
@@ -74,6 +77,7 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
       enterToSendMessage = false,
       disabled = false,
       scrollable = true,
+      isJoinedCommunity,
       setIsEmpty,
       setIsSpacebar,
       onEnter,
@@ -84,6 +88,9 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
     const editorRef = useRef<LexicalEditor | null>(null);
     const elementId = 'message_composer';
 
+    const { isVisitorOrBot } = useSDK();
+    const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+
     const { themeStyles, uiReference, config, accessibilityId } = useAmityElement({
       pageId,
       componentId,
@@ -92,9 +99,11 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
 
     const { onQueryChange, suggestions } = useChannelMentionSuggestion();
 
+    const editable = !disabled && !isVisitorOrBot;
+
     const editorConfig = getEditorConfig({
       namespace: uiReference,
-      editable: !disabled,
+      editable,
       theme: {
         root: styles.editorRoot,
         placeholder: styles.editorPlaceholder,
@@ -111,9 +120,16 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
 
     useEffect(() => {
       if (editorRef) {
-        editorRef.current?.setEditable(!disabled);
+        editorRef.current?.setEditable(editable);
       }
-    }, [disabled]);
+    }, [editable]);
+
+    const onClickComposeBar = () => {
+      return handleCommunityProfileBehavior({
+        allowNonMember: false,
+        isJoined: isJoinedCommunity,
+      });
+    };
 
     return (
       <div style={themeStyles} data-testid={accessibilityId}>
@@ -212,6 +228,16 @@ export const MessageComposer = forwardRef<LexicalEditor, MessageComposerProps>(
               />
             )}
           </LexicalComposer>
+
+          {isVisitorOrBot && (
+            <div
+              className={styles.blocked__messageComposer}
+              onClick={onClickComposeBar}
+              role="button"
+              tabIndex={0}
+              data-testid={`${accessibilityId}-blocked-element`}
+            />
+          )}
         </div>
       </div>
     );

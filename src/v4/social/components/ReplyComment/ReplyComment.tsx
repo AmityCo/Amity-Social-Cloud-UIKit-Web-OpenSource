@@ -29,6 +29,8 @@ import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
 import { useCommentReactionDisplay } from '~/v4/social/hooks/useCommentReactionDisplay';
 import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
 import styles from './ReplyComment.module.css';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 type ReplyCommentProps = {
   pageId?: string;
@@ -50,6 +52,9 @@ const PostReplyComment = ({
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
   const { setDrawerData } = useDrawer();
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+
   const notification = useNotifications();
 
   const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
@@ -80,7 +85,7 @@ const PostReplyComment = ({
 
   useCommentReactionDisplay({ comment });
 
-  const handleReactionClick = async (reactionKey: string) => {
+  const onReactionClick = async (reactionKey: string) => {
     if (reactionByMe === null) {
       await mutateAddReactionAsync(reactionKey);
     } else if (reactionByMe !== reactionKey) {
@@ -89,6 +94,20 @@ const PostReplyComment = ({
     } else {
       await mutateRemoveReactionAsync(reactionByMe);
     }
+  };
+
+  const handleReactionClick = (reactionKey: string) => {
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => onReactionClick(reactionKey),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    return handleUserProfileBehavior({
+      defaultBehavior: () => onReactionClick(reactionKey),
+      allowNonFollower: true,
+    });
   };
 
   // Use reaction handler for long press functionality
@@ -278,18 +297,15 @@ const PostReplyComment = ({
                     {comment.createdAt !== comment.editedAt && ' (edited)'}
                   </span>
                 </Typography.Caption>
-                {community && community.isJoined && (
-                  <ReactionButton
-                    pageId={pageId}
-                    componentId={componentId}
-                    myReaction={reactionByMe}
-                    onReactionClick={handleReactionClick}
-                    buttonClassName={styles.postReplyComment__secondRow__like}
-                    isCommentReaction
-                    referenceType="comment"
-                  />
-                )}
-
+                <ReactionButton
+                  pageId={pageId}
+                  componentId={componentId}
+                  myReaction={reactionByMe}
+                  onReactionClick={handleReactionClick}
+                  buttonClassName={styles.postReplyComment__secondRow__like}
+                  isCommentReaction
+                  referenceType="comment"
+                />
                 <Popover
                   trigger={{
                     pageId,

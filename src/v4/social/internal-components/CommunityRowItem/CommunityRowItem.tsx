@@ -115,12 +115,13 @@ export const CommunityRowItem = <T extends boolean | undefined>({
   };
 
   return (
-    <Button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       style={themeStyles}
       key={community.communityId}
       className={styles.communityRowItem}
-      onPress={() => onClick(community.communityId)}
+      onClick={() => onClick(community.communityId)}
       data-has-categories={community.categoryIds.length > 0}
     >
       <div className={styles.communityRowItem__image}>
@@ -203,6 +204,6 @@ export const CommunityRowItem = <T extends boolean | undefined>({
             );
           }
         })()}
-    </Button>
+    </div>
   );
 };

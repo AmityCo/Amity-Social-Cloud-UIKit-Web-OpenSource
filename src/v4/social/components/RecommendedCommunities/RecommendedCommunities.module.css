@@ -9,6 +9,7 @@
 }
 
 .recommendedCommunityCard {
+  cursor: pointer;
   width: 15.625rem;
   height: calc(8.4rem + 5.7rem);
   border-radius: var(--asc-border-radius-sm);

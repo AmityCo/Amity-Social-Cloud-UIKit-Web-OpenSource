@@ -1,5 +1,6 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export default function useCommunityMembersCollection({
   queryParams,
@@ -8,6 +9,7 @@ export default function useCommunityMembersCollection({
   queryParams?: Parameters<typeof CommunityRepository.Membership.getMembers>[0];
   shouldCall?: boolean;
 }) {
+  const { isVisitorOrBot } = useSDK();
   const { items, ...rest } = useLiveCollection({
     fetcher: CommunityRepository.Membership.getMembers,
     params: {
@@ -15,7 +17,7 @@ export default function useCommunityMembersCollection({
       includeDeleted: false,
       limit: 20,
     },
-    shouldCall: !!queryParams?.communityId && shouldCall,
+    shouldCall: !!queryParams?.communityId && shouldCall && !isVisitorOrBot,
   });
 
   return {

@@ -224,7 +224,6 @@ export const renderer: CustomRenderer = ({
       referenceType="story"
       community={community as Amity.Community}
       shouldAllowCreation={community?.allowCommentInStory}
-      shouldAllowInteraction={!!community?.isJoined}
     />
   );
 
@@ -396,7 +395,7 @@ export const renderer: CustomRenderer = ({
         onClickComment={onClickCommentButton}
         // Only story-creator and moderator of the community should be able to see impression count.
         showImpression={isCreator || checkStoryPermission(client, community?.communityId)}
-        isMember={!!community?.isJoined}
+        community={community}
         onPlay={play}
         onPause={pause}
         onDeleteStory={onDeleteStory}

@@ -14,6 +14,33 @@ interface SessionHandler {
 }
 
 /**
+ * Interface for the registerDevice parameters.
+ */
+interface RegisterDeviceParams {
+  userId?: string;
+  displayName?: string;
+  sessionHandler: SessionHandler;
+  authToken?: string;
+  authSignatureParams?: Amity.ConnectClientAsVisitorParams;
+  onConnectionStatusChange?: (state: Amity.SessionStates) => void;
+  onConnected?: () => void;
+  onDisconnected?: () => void;
+  onGlobalBanned?: (payload: Amity.UserPayload) => void;
+}
+
+/**
+ * Interface for the connectAndLogin parameters.
+ */
+interface ConnectAndLoginParams {
+  userId?: string;
+  displayName?: string;
+  sessionHandler: SessionHandler;
+  authToken?: string;
+  authSignatureParams?: Amity.ConnectClientAsVisitorParams;
+  isBotUser?: boolean;
+}
+
+/**
  * Manages the Amity SDK client and authentication state.
  */
 export class AmityUIKitManager {
@@ -59,24 +86,19 @@ export class AmityUIKitManager {
 
   /**
    * Registers a device with the Amity SDK and handles the login process.
-   * @param userId - The user ID to be used for login.
-   * @param displayName - The display name of the user.
-   * @param sessionHandler - The session handler for access token renewal.
-   * @param authToken - The authentication token to be used for login.
-   * @param onConnectionStatusChange - The callback function for connection status changes.
-   * @param onConnected - The callback function to be called when connected.
-   * @param onDisconnected - The callback function to be called when disconnected.
+   * @param params - The parameters object containing all registration options.
    */
-  public static async registerDevice(
-    userId: string,
-    displayName: string,
-    sessionHandler: SessionHandler,
-    authToken?: string,
-    onConnectionStatusChange?: (state: Amity.SessionStates) => void,
-    onConnected?: () => void,
-    onDisconnected?: () => void,
-    onGlobalBanned?: (payload: Amity.UserPayload) => void,
-  ): Promise<void> {
+  public static async registerDevice({
+    userId,
+    displayName,
+    sessionHandler,
+    authToken,
+    authSignatureParams,
+    onConnectionStatusChange,
+    onConnected,
+    onDisconnected,
+    onGlobalBanned,
+  }: RegisterDeviceParams): Promise<void> {
     if (!AmityUIKitManager.instance) {
       throw new Error('AmityUIKitManager must be set up first using the setup method.');
     }
@@ -86,12 +108,13 @@ export class AmityUIKitManager {
     AmityUIKitManager.instance.onDisconnected = onDisconnected;
     AmityUIKitManager.instance.onGlobalBanned = onGlobalBanned;
 
-    await AmityUIKitManager.instance.connectAndLogin(
+    await AmityUIKitManager.instance.connectAndLogin({
       userId,
       displayName,
       sessionHandler,
       authToken,
-    );
+      authSignatureParams,
+    });
   }
 
   /**
@@ -114,19 +137,30 @@ export class AmityUIKitManager {
    * @param displayName - The display name of the user.
    * @param sessionHandler - The session handler for access token renewal.
    */
-  private async connectAndLogin(
-    userId: string,
-    displayName: string,
-    sessionHandler: SessionHandler,
-    authToken?: string,
-  ): Promise<void> {
-    await ASCClient.login(
-      { userId, displayName, authToken },
-      {
-        sessionWillRenewAccessToken:
-          sessionHandler.sessionWillRenewAccessToken.bind(sessionHandler),
-      },
-    );
+
+  private async connectAndLogin({
+    userId,
+    displayName,
+    sessionHandler,
+    authToken,
+    authSignatureParams,
+    isBotUser,
+  }: ConnectAndLoginParams): Promise<void> {
+    const bindedSessionHandlder = {
+      sessionWillRenewAccessToken: sessionHandler.sessionWillRenewAccessToken.bind(sessionHandler),
+    };
+
+    if (userId) {
+      await ASCClient.login({ userId, displayName, authToken }, bindedSessionHandlder);
+    } else if (!userId && isBotUser) {
+      await ASCClient.loginAsBot({
+        sessionHandler: bindedSessionHandlder,
+      });
+    } else
+      await ASCClient.loginAsVisitor({
+        ...authSignatureParams,
+        sessionHandler: bindedSessionHandlder,
+      });
 
     this.stateChangeHandler = ASCClient.onSessionStateChange((state: Amity.SessionStates) => {
       this.onConnectionStatusChange?.(state);

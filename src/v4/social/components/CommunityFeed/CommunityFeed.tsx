@@ -17,6 +17,7 @@ import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
 import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
 import styles from './CommunityFeed.module.css';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 export const CommunityFeedPostContentSkeleton = () => {
   return (
@@ -43,6 +44,7 @@ interface CommunityFeedProps {
 }
 
 export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps) => {
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
   const componentId = 'community_feed_component';
   const { isExcluded, accessibilityId, themeStyles } = useAmityComponent({
     pageId,

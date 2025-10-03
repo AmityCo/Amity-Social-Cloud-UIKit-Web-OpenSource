@@ -13,11 +13,14 @@ import { Button } from '~/v4/core/components/AriaButton';
 import { useConfirmContext } from '~/v4/core/providers/ConfirmProvider';
 import { EllipsisH } from '~/v4/icons/Ellipsis';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 const Footer: React.FC<
   React.PropsWithChildren<{
     pageId?: string;
     storyId?: string;
+    community?: Amity.Community;
     showImpression: boolean;
     reach?: number | null;
     commentsCount: number;
@@ -25,7 +28,6 @@ const Footer: React.FC<
     isLiked?: boolean;
     onClickComment: () => void;
     syncState?: Amity.SyncState;
-    isMember?: boolean;
     myReactions?: string[];
     onPlay: () => void;
     onPause: () => void;
@@ -34,6 +36,7 @@ const Footer: React.FC<
 > = ({
   pageId = '*',
   syncState,
+  community,
   reach,
   commentsCount,
   reactionsCount,
@@ -41,12 +44,13 @@ const Footer: React.FC<
   storyId,
   onClickComment,
   showImpression,
-  isMember,
   myReactions,
   onPlay,
   onPause,
   onDeleteStory,
 }) => {
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const notification = useNotifications();
   const { confirm } = useConfirmContext();
 
@@ -66,14 +70,8 @@ const Footer: React.FC<
     });
   };
 
-  const handleClickReaction = async () => {
+  const onReactionClick = async () => {
     try {
-      if (!isMember) {
-        notification.info({
-          content: 'Join community to interact with all stories',
-        });
-        return;
-      }
       if (!isLiked) {
         await ReactionRepository.addReaction('story', storyId as string, LIKE_REACTION_KEY);
       } else {
@@ -82,6 +80,22 @@ const Footer: React.FC<
     } catch (error) {
       console.error("Can't toggle like", error);
     }
+  };
+
+  const handleReactionClick = () => {
+    if (community) {
+      handleCommunityProfileBehavior({
+        defaultBehavior: () => onReactionClick(),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+      return;
+    }
+
+    handleUserProfileBehavior({
+      defaultBehavior: () => onReactionClick(),
+      allowNonFollower: true,
+    });
   };
 
   if (syncState === 'syncing') {
@@ -128,7 +142,7 @@ const Footer: React.FC<
           pageId={pageId}
           myReactions={myReactions}
           reactionsCount={reactionsCount}
-          onPress={handleClickReaction}
+          onPress={handleReactionClick}
         />
       </div>
     </div>

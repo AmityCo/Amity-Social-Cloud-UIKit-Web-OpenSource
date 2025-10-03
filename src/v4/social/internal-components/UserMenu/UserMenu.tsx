@@ -15,6 +15,7 @@ import useFollowCount from '~/v4/core/hooks/objects/useFollowCount';
 import { useNetworkState } from 'react-use';
 import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { SharableModel } from '~/v4/utils/sharableLink';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 interface UserMenuProps {
   user?: Amity.User | null;
@@ -30,6 +31,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   onCloseMenu,
 }) => {
   const { currentUserId } = useSDK();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const { online } = useNetworkState();
   const notification = useNotifications();
   const { isReportedByMe } = useUserReportedByMe(user?.userId);
@@ -45,6 +47,56 @@ export const UserMenu: React.FC<UserMenuProps> = ({
     onCloseMenu();
     AmityUserProfilePageBehavior?.goToEditUserPage?.({ userId: user.userId });
   };
+
+  const onReportUser = () =>
+    handleUserProfileBehavior({
+      allowNonFollower: true,
+      followStatus,
+      defaultBehavior: () => {
+        onCloseMenu();
+        if (!online) {
+          notification.info({
+            content: `Failed to ${isReportedByMe ? 'unreport' : 'report'} user. Please try again.`,
+          });
+          return;
+        }
+        if (isReportedByMe) unReportUser(user.userId);
+        else reportUser(user.userId);
+      },
+    });
+
+  const onBlockUser = () =>
+    handleUserProfileBehavior({
+      allowNonFollower: true,
+      followStatus,
+      defaultBehavior: () => () => {
+        onCloseMenu();
+        if (isCurrentUser) {
+          AmityUserProfilePageBehavior?.goToBlockedUsersPage?.();
+          onCloseMenu();
+        } else {
+          if (!online) {
+            notification.info({
+              content: `Failed to ${followStatus === 'blocked' ? 'unblock' : 'block'} user. Please try again.`,
+            });
+            return;
+          }
+          followStatus === 'blocked'
+            ? unblockUser({
+                pageId,
+                componentId,
+                userId: user.userId,
+                displayName: user.displayName ?? user.userId,
+              })
+            : blockUser({
+                pageId,
+                componentId,
+                userId: user.userId,
+                displayName: user.displayName ?? user.userId,
+              });
+        }
+      },
+    });
 
   return (
     <div className={styles.userMenu}>
@@ -64,17 +116,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         <Button
           data-testid={`${pageId}/${componentId}/block_user_button`}
           className={styles.userMenu__button}
-          onPress={() => {
-            onCloseMenu();
-            if (!online) {
-              notification.info({
-                content: `Failed to ${isReportedByMe ? 'unreport' : 'report'} user. Please try again.`,
-              });
-              return;
-            }
-            if (isReportedByMe) unReportUser(user.userId);
-            else reportUser(user.userId);
-          }}
+          onPress={onReportUser}
         >
           <Flag className={styles.userMenu__reportUser__icon} />
           <Typography.BodyBold className={styles.userMenu__reportUser__text}>
@@ -86,33 +128,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
       <Button
         data-testid={`${pageId}/${componentId}/manage_blocked_users_button`}
         className={styles.userMenu__button}
-        onPress={() => {
-          onCloseMenu();
-          if (isCurrentUser) {
-            AmityUserProfilePageBehavior?.goToBlockedUsersPage?.();
-            onCloseMenu();
-          } else {
-            if (!online) {
-              notification.info({
-                content: `Failed to ${followStatus === 'blocked' ? 'unblock' : 'block'} user. Please try again.`,
-              });
-              return;
-            }
-            followStatus === 'blocked'
-              ? unblockUser({
-                  pageId,
-                  componentId,
-                  userId: user.userId,
-                  displayName: user.displayName ?? user.userId,
-                })
-              : blockUser({
-                  pageId,
-                  componentId,
-                  userId: user.userId,
-                  displayName: user.displayName ?? user.userId,
-                });
-          }
-        }}
+        onPress={onBlockUser}
       >
         <BlockedUser className={styles.userMenu__blockedUser__icon} />
         <Typography.BodyBold className={styles.userMenu__blockedUser__text}>

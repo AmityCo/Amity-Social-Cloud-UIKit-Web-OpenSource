@@ -7,18 +7,23 @@ import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { UserRelationshipPageTabs } from '~/v4/social/pages/UserRelationshipPage/UserRelationshipPage';
 import millify from 'millify';
+import useSDK from '~/v4/core/hooks/useSDK';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 
 interface UserFollowingProps {
   userId: string;
   pageId?: string;
   componentId?: string;
+  followStatus: Amity.FollowStatus['status'] | null;
 }
 
 export const UserFollowing: React.FC<UserFollowingProps> = ({
   userId,
   pageId = '*',
   componentId = '*',
+  followStatus,
 }) => {
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const { followingCount } = useFollowCount(userId);
   const { AmityUserProfileHeaderComponentBehavior } = usePageBehavior();
   const elementId = 'user_following';
@@ -32,11 +37,15 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
     <Button
       data-testid={accessibilityId}
       style={themeStyles}
-      className={styles.userFollowing__container}
       onPress={() =>
-        AmityUserProfileHeaderComponentBehavior.goToUserRelationshipPage?.({
-          userId,
-          selectedTab: UserRelationshipPageTabs.FOLLOWING,
+        handleUserProfileBehavior({
+          followStatus,
+          allowNonFollower: false,
+          defaultBehavior: () =>
+            AmityUserProfileHeaderComponentBehavior?.goToUserRelationshipPage?.({
+              userId,
+              selectedTab: UserRelationshipPageTabs.FOLLOWING,
+            }),
         })
       }
     >
@@ -45,7 +54,6 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
       </Typography.BodyBold>
       {config.text && (
         <Typography.Caption className={styles.userFollowing__label}>
-          {' '}
           {config.text}
         </Typography.Caption>
       )}

@@ -7,18 +7,21 @@ import { MessageBubbleSkeleton } from '~/v4/chat/internal-components/MessageBubb
 import { Typography } from '~/v4/core/components';
 import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
+  isJoinedCommunity?: boolean;
 }
 
 const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'text'> => {
   return !!message.data && typeof message.data !== 'string' && 'text' in message.data;
 };
 
-const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
+const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity }) => {
   const [joined, setJoined] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { isVisitorOrBot } = useSDK();
 
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
@@ -26,7 +29,7 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
       includeDeleted: true,
       limit: 15,
     },
-    joined,
+    joined && !isVisitorOrBot,
   );
 
   useEffect(() => {
@@ -41,16 +44,16 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
       }
     };
 
-    joinLiveChannel();
+    !isVisitorOrBot && joinLiveChannel();
 
     return () => unsubTopic();
-  }, [channel]);
+  }, [channel, isVisitorOrBot]);
 
   const isEmpty = !loading && messages?.length === 0;
 
   return (
     <div className={styles.chatFeed__container}>
-      {isEmpty ? (
+      {isEmpty || isVisitorOrBot ? (
         <div className={styles.chatFeed__empty__container}>
           <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
           <Typography.TitleBold className={styles.chatFeed__emptyText}>
@@ -89,7 +92,13 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
             <div className={styles.chatFeed__messageList__inner}>
               {messages?.map((message) => {
                 if (!isAmityTextMessage(message)) return null;
-                return <MessageBubble key={message.messageId} message={message} />;
+                return (
+                  <MessageBubble
+                    key={message.messageId}
+                    message={message}
+                    isJoinedCommunity={isJoinedCommunity}
+                  />
+                );
               })}
             </div>
           </InfiniteScroll>

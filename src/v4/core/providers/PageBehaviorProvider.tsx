@@ -241,6 +241,11 @@ export interface PageBehavior {
     goToUserProfilePage?(context: { userId: string }): void;
     goToCommunityProfilePage?(context: { communityId: string }): void;
   };
+  AmityGlobalBehavior: {
+    handleGuestUserAction?(): void;
+    handleNonMemberAction?(): void;
+    handleNonFollowerAction?(): void;
+  };
 }
 
 const PageBehaviorContext = React.createContext<PageBehavior | undefined>(undefined);
@@ -288,6 +293,9 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToPendingInvitationPage,
     goToPendingRequestPage,
     goToSocialGlobalSearchPage,
+    handleGuestUserAction,
+    handleNonMemberAction,
+    handleNonFollowerAction,
   } = useNavigation();
   const navigationBehavior: PageBehavior = {
     AmityStoryViewPageBehavior: {
@@ -861,6 +869,27 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityClipFeedPageBehavior.goToCommunityProfilePage(context);
         }
         goToCommunityProfilePage(context.communityId);
+      },
+    },
+    AmityGlobalBehavior: {
+      handleGuestUserAction: () => {
+        if (pageBehavior?.AmityGlobalBehavior?.handleGuestUserAction) {
+          return pageBehavior?.AmityGlobalBehavior?.handleGuestUserAction;
+        }
+        handleGuestUserAction();
+      },
+      handleNonMemberAction: () => {
+        if (pageBehavior?.AmityGlobalBehavior?.handleNonMemberAction) {
+          return pageBehavior?.AmityGlobalBehavior?.handleNonMemberAction;
+        }
+        handleNonMemberAction();
+      },
+
+      handleNonFollowerAction: () => {
+        if (pageBehavior?.AmityGlobalBehavior?.handleNonFollowerAction) {
+          return pageBehavior?.AmityGlobalBehavior?.handleNonFollowerAction;
+        }
+        handleNonFollowerAction();
       },
     },
   };

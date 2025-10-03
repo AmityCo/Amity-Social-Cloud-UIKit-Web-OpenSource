@@ -1,18 +1,26 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
 import { useEffect, useState } from 'react';
 
-export function useGetJoinRequestList(communityIds: string[]) {
+interface UseGetJoinRequestListParams {
+  communityIds: string[];
+  enabled?: boolean;
+}
+
+export function useGetJoinRequestList({
+  communityIds,
+  enabled = true,
+}: UseGetJoinRequestListParams) {
   const [joinRequestList, setJoinRequestList] = useState<Amity.JoinRequest[] | undefined>();
 
   useEffect(() => {
-    if (communityIds.length === 0) return;
+    if (!enabled || communityIds.length === 0) return;
 
     const unsubscribe = CommunityRepository.getJoinRequestList({ communityIds }, ({ data }) => {
       setJoinRequestList(data);
     });
 
     return () => unsubscribe();
-  }, [JSON.stringify(communityIds)]);
+  }, [JSON.stringify(communityIds), enabled]);
 
   return {
     joinRequestList,

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './SocialHomePage.module.css';
 
 import { TopNavigation } from '~/v4/social/components/TopNavigation';
@@ -16,10 +16,14 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
 import { ClipsFeedButton } from '~/v4/social/elements/ClipsFeedButton';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import useQueryClipGlobalFeed from '~/v4/social/hooks/useQueryClipGlobalFeed';
+import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
+
+import useSDK from '~/v4/core/hooks/useSDK';
 
 export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: HomePageTab }) {
   const pageId = 'social_home_page';
+  const { currentUser, isVisitorOrBot } = useSDK();
+  const { config } = useCustomization();
   const { themeStyles } = useAmityPage({
     pageId,
   });
@@ -28,7 +32,6 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
 
   const { activeTab, setActiveTab } = useLayoutContext();
   const { AmitySocialHomePageBehavior } = usePageBehavior();
-  const { posts } = useQueryClipGlobalFeed();
 
   const [isShowCreatePostMenu, setIsShowCreatePostMenu] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -69,6 +72,52 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
     }
   }, [isShowCreatePostMenu]);
 
+  const handleTabClick = useCallback(
+    (tab: HomePageTab) => {
+      setActiveTab(tab);
+      if (tab === HomePageTab.Clips) {
+        AmitySocialHomePageBehavior?.goToClipFeedPage?.({});
+      }
+    },
+    [setActiveTab, AmitySocialHomePageBehavior],
+  );
+
+  const renderTabButtons = useCallback(() => {
+    const viewableUserType = config?.feature_flags?.post?.clip?.can_view_tab;
+    const hideClipFeedTab = isVisitorOrBot && viewableUserType !== 'all';
+
+    return (
+      <>
+        {!isVisitorOrBot && (
+          <NewsfeedButton
+            pageId={pageId}
+            isActive={activeTab === HomePageTab.Newsfeed}
+            onClick={() => handleTabClick(HomePageTab.Newsfeed)}
+          />
+        )}
+        <ExploreButton
+          pageId={pageId}
+          isActive={activeTab === HomePageTab.Explore}
+          onClick={() => handleTabClick(HomePageTab.Explore)}
+        />
+        {!hideClipFeedTab && (
+          <ClipsFeedButton
+            pageId={pageId}
+            isActive={activeTab === HomePageTab.Clips}
+            onClick={() => handleTabClick(HomePageTab.Clips)}
+          />
+        )}
+        {!isVisitorOrBot && (
+          <MyCommunitiesButton
+            pageId={pageId}
+            isActive={activeTab === HomePageTab.MyCommunities}
+            onClick={() => handleTabClick(HomePageTab.MyCommunities)}
+          />
+        )}
+      </>
+    );
+  }, [config?.feature_flags?.post?.clip?.can_view_tab, isVisitorOrBot]);
+
   return (
     <div className={styles.socialHomePage} style={themeStyles}>
       <div className={styles.socialHomePage__topBar}>
@@ -79,31 +128,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
             onClickPostCreationButton={handleClickButton}
           />
         </div>
-        <div className={styles.socialHomePage__tabs}>
-          <NewsfeedButton
-            pageId={pageId}
-            isActive={activeTab === HomePageTab.Newsfeed}
-            onClick={() => setActiveTab(HomePageTab.Newsfeed)}
-          />
-          <ExploreButton
-            pageId={pageId}
-            isActive={activeTab === HomePageTab.Explore}
-            onClick={() => setActiveTab(HomePageTab.Explore)}
-          />
-          <ClipsFeedButton
-            pageId={pageId}
-            isActive={activeTab === HomePageTab.Clips}
-            onClick={() => {
-              setActiveTab(HomePageTab.Clips);
-              AmitySocialHomePageBehavior?.goToClipFeedPage?.({});
-            }}
-          />
-          <MyCommunitiesButton
-            pageId={pageId}
-            isActive={activeTab === HomePageTab.MyCommunities}
-            onClick={() => setActiveTab(HomePageTab.MyCommunities)}
-          />
-        </div>
+        <div className={styles.socialHomePage__tabs}>{renderTabButtons()}</div>
       </div>
       <NoInternetConnectionHoc page="feed" className={styles.socialHomePage__noConnection}>
         <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>

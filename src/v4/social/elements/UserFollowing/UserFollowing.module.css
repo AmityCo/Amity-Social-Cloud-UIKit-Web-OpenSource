@@ -1,8 +1,5 @@
-.userFollowing__container {
-  display: inline-block;
-}
-
 .userFollowing__count {
+  display: inline;
   color: var(--asc-color-base-default);
   margin-right: 0.25rem;
 }

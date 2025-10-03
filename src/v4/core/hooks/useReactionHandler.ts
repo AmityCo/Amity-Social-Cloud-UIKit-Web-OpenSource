@@ -6,7 +6,7 @@ interface UseReactionHandlerOptions {
   myReaction?: string | null;
   hoverDuration?: number;
   longPressDuration?: number;
-  onReactionClick: (reactionKey: string) => void;
+  onReactionClick: (reactionKey: string) => boolean;
   onHover?: () => void;
   onLongPress?: () => void;
 }
@@ -110,13 +110,13 @@ export function useReactionHandler({
       setHoveredReaction(null);
 
       if (displayReaction === reactionName) {
-        setOptimisticReaction(null);
-        onReactionClick(reactionName);
+        const result = onReactionClick(reactionName);
+        result && setOptimisticReaction(null);
         return;
       }
 
-      setOptimisticReaction(reactionName);
-      onReactionClick(reactionName);
+      const result = onReactionClick(reactionName);
+      result && setOptimisticReaction(reactionName);
     },
     [onReactionClick, displayReaction],
   );
@@ -277,11 +277,11 @@ export function useReactionHandler({
     const currentReaction = displayReaction;
 
     if (currentReaction) {
-      setOptimisticReaction(null);
-      onReactionClick(currentReaction);
+      const result = onReactionClick(currentReaction);
+      result && setOptimisticReaction(null);
     } else {
-      setOptimisticReaction('like');
-      onReactionClick('like');
+      const result = onReactionClick('like');
+      result && setOptimisticReaction('like');
     }
   }, [displayReaction, onReactionClick]);
 

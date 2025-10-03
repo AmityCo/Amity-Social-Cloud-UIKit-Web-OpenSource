@@ -33,6 +33,8 @@ import { useCommentReaction } from '~/v4/social/hooks/useCommentReaction';
 import { CommentReactionDisplay } from '~/v4/social/internal-components/CommentReactionDisplay/CommentReactionDisplay';
 import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import styles from './Comment.module.css';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 interface CommentProps {
   pageId?: string;
@@ -74,6 +76,9 @@ export const Comment = ({
     pageId,
     componentId,
   });
+
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
 
   const { isDesktop } = useResponsive();
   const { setDrawerData } = useDrawer();
@@ -151,7 +156,7 @@ export const Comment = ({
     });
   };
 
-  const handleReactionClick = async (reactionKey: string) => {
+  const onReactionClick = async (reactionKey: string) => {
     if (reactionByMe === null) {
       await mutateAddReactionAsync(reactionKey);
     } else if (reactionByMe !== reactionKey) {
@@ -160,6 +165,34 @@ export const Comment = ({
     } else {
       await mutateRemoveReactionAsync(reactionByMe);
     }
+  };
+
+  const handleReactionClick = (reactionKey: string) => {
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => onReactionClick(reactionKey),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    return handleUserProfileBehavior({
+      defaultBehavior: () => onReactionClick(reactionKey),
+      allowNonFollower: true,
+    });
+  };
+
+  const handleReplyClick = (comment: Amity.Comment) => {
+    if (community)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: () => onClickReply(comment),
+        allowNonMember: false,
+        isJoined: community?.isJoined,
+      });
+
+    handleUserProfileBehavior({
+      defaultBehavior: () => onClickReply(comment),
+      allowNonFollower: true,
+    });
   };
 
   const handleSaveComment = useCallback(async () => {
@@ -363,54 +396,49 @@ export const Comment = ({
                       {comment.createdAt !== comment.editedAt && ' (edited)'}
                     </span>
                   </Typography.Caption>
-                  {((community && community.isJoined) || community === null) && (
-                    <>
-                      <ReactionButton
+                  <ReactionButton
+                    pageId={pageId}
+                    componentId={componentId}
+                    myReaction={reactionByMe}
+                    onReactionClick={handleReactionClick}
+                    buttonClassName={styles.postComment__secondRow__like}
+                    isCommentReaction
+                    referenceType="comment"
+                  />
+                  <Button
+                    data-testid={`${pageId}/${componentId}/reply_button`}
+                    variant="default"
+                    onPress={() => handleReplyClick(comment)}
+                  >
+                    <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
+                      Reply
+                    </Typography.CaptionBold>
+                  </Button>
+                  <Popover
+                    trigger={{
+                      onClick: () => setBottomSheetOpen(true),
+                      className: styles.postComment__secondRow__actionButton,
+                      iconClassName: styles.postComment__secondRow__actionButton__icon,
+                    }}
+                  >
+                    {({ closePopover }) => (
+                      <CommentOptions
                         pageId={pageId}
                         componentId={componentId}
-                        myReaction={reactionByMe}
-                        onReactionClick={handleReactionClick}
-                        buttonClassName={styles.postComment__secondRow__like}
-                        isCommentReaction
-                        referenceType="comment"
+                        comment={comment}
+                        community={community}
+                        handleEditComment={() => {
+                          closePopover();
+                          handleEditComment();
+                        }}
+                        handleDeleteComment={() => {
+                          closePopover();
+                          handleDeleteComment();
+                        }}
+                        onCloseMenu={closePopover}
                       />
-                      <Button
-                        data-testid={`${pageId}/${componentId}/reply_button`}
-                        variant="default"
-                        onPress={() => onClickReply(comment)}
-                      >
-                        <Typography.CaptionBold className={styles.postComment__secondRow__reply}>
-                          Reply
-                        </Typography.CaptionBold>
-                      </Button>
-                    </>
-                  )}
-                  {!hideOptionButton && (
-                    <Popover
-                      trigger={{
-                        onClick: () => setBottomSheetOpen(true),
-                        className: styles.postComment__secondRow__actionButton,
-                        iconClassName: styles.postComment__secondRow__actionButton__icon,
-                      }}
-                    >
-                      {({ closePopover }) => (
-                        <CommentOptions
-                          pageId={pageId}
-                          componentId={componentId}
-                          comment={comment}
-                          handleEditComment={() => {
-                            closePopover();
-                            handleEditComment();
-                          }}
-                          handleDeleteComment={() => {
-                            closePopover();
-                            handleDeleteComment();
-                          }}
-                          onCloseMenu={closePopover}
-                        />
-                      )}
-                    </Popover>
-                  )}
+                    )}
+                  </Popover>
                 </div>
               ) : (
                 <div />

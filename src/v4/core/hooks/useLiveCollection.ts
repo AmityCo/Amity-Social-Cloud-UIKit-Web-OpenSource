@@ -62,6 +62,7 @@ function useLiveCollection<TCallback, TParams>({
       params,
       callback: callbackFn,
     });
+
     unsubscribeRef.current = unsubscribe;
 
     return () => {
