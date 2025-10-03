@@ -80,12 +80,10 @@ export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const [videoThumbnail, setVideoThumbnail] = useState<LocalVideoPost | undefined>(undefined);
   const [canBeDiscarded, setCanBeDiscarded] = useState<boolean>(true);
 
-  const { isVisitorOrBot } = useSDK();
-
   return (
     <LayoutContext.Provider
       value={{
-        activeTab: isVisitorOrBot ? HomePageTab.Explore : HomePageTab.Newsfeed,
+        activeTab,
         setActiveTab,
         liveStreamPlayer,
         setStreamPlayer,
