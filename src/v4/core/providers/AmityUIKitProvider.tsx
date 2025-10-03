@@ -183,7 +183,6 @@ const InternalComponent = ({
           authToken,
           authSignatureParams,
           onConnectionStatusChange,
-          undefined,
           onDisconnected,
           onGlobalBanned,
         });
