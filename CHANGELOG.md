@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.13.0 (2025-10-03)
+
+
+### Bug Fixes
+
+* remove undefined ([7df8538](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web-OpenSource/commit/7df85389ec95cff015fed2a2f459e60b216851c5))
+
 ## 4.12.0 (2025-09-11)
 
 
