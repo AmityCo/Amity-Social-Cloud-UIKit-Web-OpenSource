@@ -76,7 +76,7 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, stream, isJoinedCommunity }) => 
 
     !isVisitorOrBot && joinLiveChannel();
 
-    return () => unsubTopic();
+    return () => unsubTopic?.();
   }, [channel, isVisitorOrBot]);
 
   const isEmpty = !loading && messages?.length === 0;
