@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.13.1 (2025-10-03)
+
+## 4.13.0 (2025-10-03)
+
+
+### Bug Fixes
+
+* add isJoined check before sent msg ([#1277](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/issues/1277)) ([f059326](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/f0593263ba045743991fadfa18daa7eccdb1fd25))
+
 ## 4.12.0 (2025-09-11)
 
 

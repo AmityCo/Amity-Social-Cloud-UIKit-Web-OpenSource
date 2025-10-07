@@ -20,6 +20,7 @@ import { LiveReactionRepository } from '@amityco/ts-sdk';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -53,6 +54,8 @@ export const LivestreamChatMessageComposer = ({
   const { currentUserId } = useSDK();
 
   const { channel, loading: isChannelLoading } = useChannel({ channelId });
+
+  const { info } = useNotifications();
 
   const [error, setError] = useState<string | null>(null);
   const [isEmpty, setIsEmpty] = useState(true);
@@ -227,6 +230,12 @@ export const LivestreamChatMessageComposer = ({
   const sendMessage = () => {
     if (!channel) return;
     if (!editorRef.current) return;
+    if (!isJoined) {
+      return info({
+        content: 'Join community to interact.',
+        alignment: 'fullscreen',
+      });
+    }
 
     const { mentioned, mentionees, text } = editorToText(editorRef.current);
 

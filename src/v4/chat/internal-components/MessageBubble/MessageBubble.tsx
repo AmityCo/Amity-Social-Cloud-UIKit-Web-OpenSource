@@ -19,6 +19,7 @@ import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
 import { DemoteToMember } from '~/v4/icons/DemoteToMember';
 import Muted from '~/v4/icons/Muted';
 import { HostBadge } from '~/v4/social/elements/HostBadge';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 interface MessageBubbleProps {
   pageId?: string;
@@ -27,6 +28,7 @@ interface MessageBubbleProps {
   channel?: Amity.Channel;
   streamerId?: string;
   handlePopoverStateChange?: (isOpen: boolean) => void;
+  isJoinedCommunity?: boolean;
 }
 
 export const MessageBubble: FC<MessageBubbleProps> = ({
@@ -36,7 +38,10 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   channel,
   streamerId,
   handlePopoverStateChange,
+  isJoinedCommunity,
 }) => {
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+
   const { currentUserId } = useSDK();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
@@ -97,7 +102,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
               onPress={() => {
                 closePopover();
                 removeDrawerData();
-                onClickReportMessage();
+                handleClickReportMessage();
               }}
             >
               <Typography.BodyBold className={styles.messageBubble__optionButton__text}>
@@ -287,6 +292,13 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
       </div>
     );
   };
+
+  const handleClickReportMessage = () =>
+    handleCommunityProfileBehavior({
+      defaultBehavior: onClickReportMessage,
+      isJoined: isJoinedCommunity,
+      allowNonMember: false,
+    });
 
   return (
     <div className={styles.messageBubble__container}>

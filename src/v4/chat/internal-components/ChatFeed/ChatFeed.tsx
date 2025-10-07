@@ -13,13 +13,14 @@ import { useChannel } from '~/v4/chat/hooks/useChannel';
 interface ChatFeedProps {
   channel: Amity.Channel;
   stream: Amity.Stream | null;
+  isJoinedCommunity?: boolean;
 }
 
 const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'text'> => {
   return !!message.data && typeof message.data !== 'string' && 'text' in message.data;
 };
 
-const ChatFeed: FC<ChatFeedProps> = ({ channel, stream }) => {
+const ChatFeed: FC<ChatFeedProps> = ({ channel, stream, isJoinedCommunity }) => {
   const [joined, setJoined] = useState<boolean>(false);
   const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
   const [currentMessages, setCurrentMessages] = useState<Amity.Message<any>[]>([]);
@@ -129,6 +130,7 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, stream }) => {
                     channel={liveChannel}
                     streamerId={stream?.userId}
                     handlePopoverStateChange={handlePopoverStateChange}
+                    isJoinedCommunity={isJoinedCommunity}
                   />
                 );
               })}

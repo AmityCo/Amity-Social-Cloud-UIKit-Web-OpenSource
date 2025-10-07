@@ -57,19 +57,20 @@ export const useLayoutContext = () => {
 type LayoutProviderProps = PropsWithChildren<unknown>;
 
 export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
-  const [activeTab, setActiveTab] = useState<HomePageTab>(HomePageTab.Newsfeed);
+  const { isVisitorOrBot } = useSDK();
+  const [activeTab, setActiveTab] = useState<HomePageTab>(
+    isVisitorOrBot ? HomePageTab.Explore : HomePageTab.Newsfeed,
+  );
   const [acceptedInvitation, setAcceptedInvitation] = useState<Amity.Invitation | null>(null);
   const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);
   const invitationNotificationTray = useInvitationNotificationTray();
   const { linkToPost, setLinkToPost } = useLinkToPost();
   const [videoThumbnail, setVideoThumbnail] = useState<LocalVideoPost | undefined>(undefined);
 
-  const { isVisitorOrBot } = useSDK();
-
   return (
     <LayoutContext.Provider
       value={{
-        activeTab: isVisitorOrBot ? HomePageTab.Explore : HomePageTab.Newsfeed,
+        activeTab,
         setActiveTab,
         liveStreamPlayer,
         setStreamPlayer,
