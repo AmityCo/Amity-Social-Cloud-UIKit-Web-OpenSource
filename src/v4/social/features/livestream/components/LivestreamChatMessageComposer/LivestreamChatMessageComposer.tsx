@@ -59,13 +59,9 @@ export const LivestreamChatMessageComposer = ({
   const editorRef = useRef<LexicalEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDesktop } = useResponsive();
-
-  const { channel, loading: isChannelLoading } = useChannel({ channelId });
   const { currentUserId } = useSDK();
 
-  const { info } = useNotifications();
-
-  const { openPopup, closePopup } = usePopupContext();
+  const { channel, loading: isChannelLoading } = useChannel({ channelId });
 
   const { info } = useNotifications();
 

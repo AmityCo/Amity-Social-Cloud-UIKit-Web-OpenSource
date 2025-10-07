@@ -47,6 +47,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const isModerator =
     isChannelModerator || !!channel?.metadata?.moderators?.includes(currentUserId);
   const isOwner = message.creatorId === currentUserId;
+  const isHostMessage = streamerId === message.creatorId;
 
   const isHostMessage = hostId === message.creatorId;
   const isModeratorMessage = channel?.metadata?.moderators?.includes(message.creatorId);
@@ -292,6 +293,141 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     },
     [invitation?.status, invitedCoHost?.userId, message.creatorId, message.creator?.displayName],
   );
+
+  const renderModerationOptions = ({ closePopover }: { closePopover: () => void }) => {
+    return (
+      <div className={styles.messageBubble__optionsButton__container}>
+        <div className={styles.messageBubble__optionUserInfo}>
+          <div className={styles.messageBubble__displayName__container}>
+            <Typography.TitleBold className={styles.messageBubble__optionUserInfo__displayName}>
+              {message.creator?.displayName}
+            </Typography.TitleBold>
+            {channel?.metadata?.mutedMembers?.includes(message.creatorId) && (
+              <div className={styles.messageBubble__optionUserInfo__mutedIcon}>
+                <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
+              </div>
+            )}
+          </div>
+          {channel?.metadata?.moderators?.includes(message.creatorId) && (
+            <ModeratorBadge variant="chat" />
+          )}
+        </div>
+        {channel?.metadata?.moderators?.includes(message.creatorId) ? (
+          <Button
+            variant="text"
+            className={styles.messageBubble__optionUserInfo__button}
+            icon={<DemoteToMember className={styles.messageBubble__optionUserInfo__buttonIcon} />}
+            iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+            onPress={() => {
+              closePopover();
+              removeDrawerData();
+              demoteFromModerator({
+                channelId: message.channelId,
+                creatorId: message.creatorId,
+                moderators:
+                  channel?.metadata?.moderators?.filter((id: string) => id !== message.creatorId) ??
+                  [],
+                mutedMembers: channel?.metadata?.mutedMembers || [],
+              });
+            }}
+          >
+            <Typography.BodyBold className={styles.messageBubble__optionUserInfo__buttonLabel}>
+              Demote to moderator
+            </Typography.BodyBold>
+          </Button>
+        ) : (
+          <>
+            {channel?.metadata?.mutedMembers?.includes(message.creatorId) ? (
+              <Button
+                variant="text"
+                className={styles.messageBubble__optionUserInfo__button}
+                icon={
+                  <UnMutedOutlined className={styles.messageBubble__optionUserInfo__buttonIcon} />
+                }
+                iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+                onPress={() => {
+                  closePopover();
+                  removeDrawerData();
+                  unmuteUser({
+                    creatorId: message.creatorId,
+                    channelId: message.channelId,
+                    moderators: channel?.metadata?.moderators || [],
+                    mutedMembers:
+                      channel?.metadata?.mutedMembers?.filter(
+                        (id: string) => id !== message.creatorId,
+                      ) || [],
+                  });
+                }}
+              >
+                <Typography.BodyBold className={styles.messageBubble__optionUserInfo__buttonLabel}>
+                  Unmute user
+                </Typography.BodyBold>
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="text"
+                  className={styles.messageBubble__optionUserInfo__button}
+                  icon={
+                    <PromoteToModerator
+                      className={styles.messageBubble__optionUserInfo__buttonIcon}
+                    />
+                  }
+                  iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+                  onPress={() => {
+                    closePopover();
+                    removeDrawerData();
+                    promoteToModerator({
+                      creatorId: message.creatorId,
+                      channelId: message.channelId,
+                      moderators: channel?.metadata?.moderators
+                        ? channel.metadata.moderators.includes(message.creatorId)
+                          ? channel.metadata.moderators
+                          : [...channel.metadata.moderators, message.creatorId]
+                        : [message.creatorId],
+                      mutedMembers: channel?.metadata?.mutedMembers || [],
+                    });
+                  }}
+                >
+                  <Typography.BodyBold
+                    className={styles.messageBubble__optionUserInfo__buttonLabel}
+                  >
+                    Promote to moderator
+                  </Typography.BodyBold>
+                </Button>
+                <Button
+                  variant="text"
+                  className={styles.messageBubble__optionUserInfo__button}
+                  icon={<Muted className={styles.messageBubble__optionUserInfo__buttonIcon} />}
+                  iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+                  onPress={() => {
+                    closePopover();
+                    removeDrawerData();
+                    muteUser({
+                      creatorId: message.creatorId,
+                      channelId: message.channelId,
+                      moderators: channel?.metadata?.moderators || [],
+                      mutedMembers: channel?.metadata?.mutedMembers
+                        ? channel?.metadata?.mutedMembers?.includes(message?.creatorId)
+                          ? channel.metadata.mutedMembers
+                          : [...channel.metadata.mutedMembers, message.creatorId]
+                        : [message.creatorId],
+                    });
+                  }}
+                >
+                  <Typography.BodyBold
+                    className={styles.messageBubble__optionUserInfo__buttonLabel}
+                  >
+                    Mute user
+                  </Typography.BodyBold>
+                </Button>
+              </>
+            )}
+          </>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className={styles.messageBubble__container}>
