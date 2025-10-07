@@ -1,0 +1,1 @@
+export { HostBadge } from './HostBadge';

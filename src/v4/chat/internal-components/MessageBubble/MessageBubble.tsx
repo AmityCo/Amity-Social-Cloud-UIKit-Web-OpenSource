@@ -1,10 +1,9 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback } from 'react';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
-import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import styles from './MessageBubble.module.css';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import Flag from '~/v4/icons/Flag';
@@ -13,29 +12,43 @@ import { useDeleteMessage } from '~/v4/chat/hooks/useDeleteMessage';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
+import { PromoteToModerator } from '~/v4/icons/PromoteToModerator';
+import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
+import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
+import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
+import { DemoteToMember } from '~/v4/icons/DemoteToMember';
+import Muted from '~/v4/icons/Muted';
+import { HostBadge } from '~/v4/social/elements/HostBadge';
 
 interface MessageBubbleProps {
   pageId?: string;
   componentId?: string;
   message: Amity.Message<'text'>;
+  channel?: Amity.Channel;
+  streamerId?: string;
+  handlePopoverStateChange?: (isOpen: boolean) => void;
 }
 
 export const MessageBubble: FC<MessageBubbleProps> = ({
   pageId = '*',
   componentId = '*',
   message,
+  channel,
+  streamerId,
+  handlePopoverStateChange,
 }) => {
-  const [error, setError] = useState();
-  const [isShowReportReason, setIsShowReportReason] = useState(false);
-
   const { currentUserId } = useSDK();
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
-  const { isModerator } = useChannelPermission(message.channelId);
+
+  const isModerator = !!channel?.metadata?.moderators?.includes(currentUserId);
+  const isHost = streamerId === currentUserId;
   const isOwner = message.creatorId === currentUserId;
+  const isHostMessage = streamerId === message.creatorId;
 
   const { deleteMessage } = useDeleteMessage();
   const { setDrawerData, removeDrawerData } = useDrawer();
+  const { demoteFromModerator, muteUser, promoteToModerator, unmuteUser } = useChatModeration();
 
   const onClickReportMessage = () => {
     if (isDesktop) {
@@ -140,12 +153,184 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     [message.messageId],
   );
 
+  const renderModerationOptions = ({ closePopover }: { closePopover: () => void }) => {
+    return (
+      <div className={styles.messageBubble__optionsButton__container}>
+        <div className={styles.messageBubble__optionUserInfo}>
+          <div className={styles.messageBubble__displayName__container}>
+            <Typography.TitleBold className={styles.messageBubble__optionUserInfo__displayName}>
+              {message.creator?.displayName}
+            </Typography.TitleBold>
+            {channel?.metadata?.mutedMembers?.includes(message.creatorId) && (
+              <div className={styles.messageBubble__optionUserInfo__mutedIcon}>
+                <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
+              </div>
+            )}
+          </div>
+          {channel?.metadata?.moderators?.includes(message.creatorId) && (
+            <ModeratorBadge variant="chat" />
+          )}
+        </div>
+        {channel?.metadata?.moderators?.includes(message.creatorId) ? (
+          <Button
+            variant="text"
+            className={styles.messageBubble__optionUserInfo__button}
+            icon={<DemoteToMember className={styles.messageBubble__optionUserInfo__buttonIcon} />}
+            iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+            onPress={() => {
+              closePopover();
+              removeDrawerData();
+              demoteFromModerator({
+                channelId: message.channelId,
+                creatorId: message.creatorId,
+                moderators:
+                  channel?.metadata?.moderators?.filter((id: string) => id !== message.creatorId) ??
+                  [],
+                mutedMembers: channel?.metadata?.mutedMembers || [],
+              });
+            }}
+          >
+            <Typography.BodyBold className={styles.messageBubble__optionUserInfo__buttonLabel}>
+              Demote to moderator
+            </Typography.BodyBold>
+          </Button>
+        ) : (
+          <>
+            {channel?.metadata?.mutedMembers?.includes(message.creatorId) ? (
+              <Button
+                variant="text"
+                className={styles.messageBubble__optionUserInfo__button}
+                icon={
+                  <UnMutedOutlined className={styles.messageBubble__optionUserInfo__buttonIcon} />
+                }
+                iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+                onPress={() => {
+                  closePopover();
+                  removeDrawerData();
+                  unmuteUser({
+                    creatorId: message.creatorId,
+                    channelId: message.channelId,
+                    moderators: channel?.metadata?.moderators || [],
+                    mutedMembers:
+                      channel?.metadata?.mutedMembers?.filter(
+                        (id: string) => id !== message.creatorId,
+                      ) || [],
+                  });
+                }}
+              >
+                <Typography.BodyBold className={styles.messageBubble__optionUserInfo__buttonLabel}>
+                  Unmute user
+                </Typography.BodyBold>
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="text"
+                  className={styles.messageBubble__optionUserInfo__button}
+                  icon={
+                    <PromoteToModerator
+                      className={styles.messageBubble__optionUserInfo__buttonIcon}
+                    />
+                  }
+                  iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+                  onPress={() => {
+                    closePopover();
+                    removeDrawerData();
+                    promoteToModerator({
+                      creatorId: message.creatorId,
+                      channelId: message.channelId,
+                      moderators: channel?.metadata?.moderators
+                        ? channel.metadata.moderators.includes(message.creatorId)
+                          ? channel.metadata.moderators
+                          : [...channel.metadata.moderators, message.creatorId]
+                        : [message.creatorId],
+                      mutedMembers: channel?.metadata?.mutedMembers || [],
+                    });
+                  }}
+                >
+                  <Typography.BodyBold
+                    className={styles.messageBubble__optionUserInfo__buttonLabel}
+                  >
+                    Promote to moderator
+                  </Typography.BodyBold>
+                </Button>
+                <Button
+                  variant="text"
+                  className={styles.messageBubble__optionUserInfo__button}
+                  icon={<Muted className={styles.messageBubble__optionUserInfo__buttonIcon} />}
+                  iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
+                  onPress={() => {
+                    closePopover();
+                    removeDrawerData();
+                    muteUser({
+                      creatorId: message.creatorId,
+                      channelId: message.channelId,
+                      moderators: channel?.metadata?.moderators || [],
+                      mutedMembers: channel?.metadata?.mutedMembers
+                        ? channel?.metadata?.mutedMembers?.includes(message?.creatorId)
+                          ? channel.metadata.mutedMembers
+                          : [...channel.metadata.mutedMembers, message.creatorId]
+                        : [message.creatorId],
+                    });
+                  }}
+                >
+                  <Typography.BodyBold
+                    className={styles.messageBubble__optionUserInfo__buttonLabel}
+                  >
+                    Mute user
+                  </Typography.BodyBold>
+                </Button>
+              </>
+            )}
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className={styles.messageBubble__container}>
       <div className={styles.messageBubble__topSectionWrap}>
-        <Typography.CaptionSmall className={styles.messageBubble__displayName}>
-          {message.creator?.displayName}
-        </Typography.CaptionSmall>
+        <div className={styles.messageBubble__displayName__container}>
+          {isHostMessage || isOwner || (!isHost && !isModerator) ? (
+            <Typography.CaptionSmall className={styles.messageBubble__displayName}>
+              {message.creator?.displayName}
+            </Typography.CaptionSmall>
+          ) : (
+            <Popover
+              placement="end top"
+              onOpen={() => handlePopoverStateChange?.(true)}
+              onClose={() => handlePopoverStateChange?.(false)}
+              trigger={({ closePopover, isDesktop, openPopover }) => (
+                <Button
+                  variant="default"
+                  onPress={() => {
+                    if (isDesktop) {
+                      openPopover();
+                    } else {
+                      setDrawerData({
+                        content: renderModerationOptions({ closePopover }),
+                      });
+                    }
+                  }}
+                >
+                  <Typography.CaptionSmall className={styles.messageBubble__button__displayName}>
+                    {message.creator?.displayName}
+                  </Typography.CaptionSmall>
+                </Button>
+              )}
+            >
+              {({ closePopover }) => renderModerationOptions({ closePopover })}
+            </Popover>
+          )}
+          {isHostMessage && <HostBadge />}
+          {channel?.metadata?.moderators?.includes(message.creatorId) && (
+            <ModeratorBadge variant="chat" />
+          )}
+          {channel?.metadata?.mutedMembers?.includes(message.creatorId) && (
+            <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
+          )}
+        </div>
         {message.syncState !== 'error' && !message.isDeleted && (
           <Popover
             containerClassName={styles.messageBubble__optionIcon}

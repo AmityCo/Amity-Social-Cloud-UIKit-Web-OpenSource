@@ -19,6 +19,7 @@ import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -49,6 +50,7 @@ export const LivestreamChatMessageComposer = ({
   const editorRef = useRef<LexicalEditor | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { isDesktop } = useResponsive();
+  const { currentUserId } = useSDK();
 
   const { channel, loading: isChannelLoading } = useChannel({ channelId });
 
@@ -269,12 +271,18 @@ export const LivestreamChatMessageComposer = ({
 
     if (channel?.isMuted && channel?.attachedTo?.postId && channel?.attachedTo?.videoStreamId)
       return renderReadOnlyState({
+        allowReaction: true,
         message: 'This live stream is now read-only.',
         targetId: channel?.attachedTo?.postId,
         streamId: channel?.attachedTo?.videoStreamId,
       });
-    if (isMuted && channel?.attachedTo?.postId && channel?.attachedTo?.videoStreamId)
+    if (
+      (isMuted || channel?.metadata?.mutedMembers?.includes(currentUserId)) &&
+      channel?.attachedTo?.postId &&
+      channel?.attachedTo?.videoStreamId
+    )
       return renderReadOnlyState({
+        allowReaction: true,
         message: 'You have been muted.',
         targetId: channel?.attachedTo?.postId,
         streamId: channel?.attachedTo?.videoStreamId,
@@ -337,6 +345,7 @@ export const LivestreamChatMessageComposer = ({
     isLoadingMembership,
     channel?.attachedTo?.postId,
     channel?.attachedTo?.videoStreamId,
+    channel?.metadata?.mutedMembers,
   ]);
 
   return (

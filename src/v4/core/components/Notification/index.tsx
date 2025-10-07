@@ -5,7 +5,7 @@ import { useNotificationData } from '~/v4/core/providers/NotificationProvider';
 import styles from './Notification.module.css';
 
 interface NotificationProps {
-  alignment?: 'fullscreen' | 'withSidebar' | 'fixed';
+  alignment?: 'fullscreen' | 'withSidebar' | 'fixed' | 'live-chat';
   content: ReactNode;
   icon?: ReactNode;
   duration?: number;

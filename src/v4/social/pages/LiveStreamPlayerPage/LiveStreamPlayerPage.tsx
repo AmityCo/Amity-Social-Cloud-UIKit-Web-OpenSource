@@ -43,6 +43,7 @@ import { useKeyboardVisibility } from './useKeyboardVisibility';
 import { CommunityAvatar } from '~/v4/social/elements/CommunityAvatar';
 import useCommunityMembersCollection from '~/v4/social/hooks/collections/useCommunityMembersCollection';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useTheme } from '~/v4/core/providers/ThemeProvider';
 
 export type LiveStreamPlayerPageProps = {
   post: Amity.Post;
@@ -251,7 +252,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
   const pageId = 'livestream_player_page';
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const stream = useStream(post.childrenPosts[0]?.getLivestreamInfo()?.streamId);
-
+  const { toggleTheme, setDefaultTheme } = useTheme();
   const { currentUserId } = useSDK();
   const { keyboardOffset } = useKeyboardVisibility();
   const [chatContainerHeight, setChatContainerHeight] = useState<number>();
@@ -292,6 +293,14 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
   const onClose = useCallback(() => setStreamPlayer(null), []);
 
   const isUserBanned = stream?.isBanned || (myMembership && myMembership.isBanned);
+
+  useEffect(() => {
+    toggleTheme('dark'); // livestream will be in dark mode only
+
+    return () => {
+      setDefaultTheme();
+    };
+  }, []);
 
   useEffect(() => {
     if (keyboardOffset) setHideChatFeed(true);
@@ -544,7 +553,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
             {isDesktop ? (
               <div className={styles.livestreamChat__container}>
                 <div className={styles.livestreamChat__container__inner}>
-                  <ChatFeed channel={channel} />
+                  <ChatFeed channel={channel} stream={stream} />
                   <LivestreamChatMessageComposer
                     pageId={pageId}
                     channelId={channel.channelId}
@@ -576,7 +585,7 @@ export function LiveStreamPlayerPage({ post, goToDetailPage }: LiveStreamPlayerP
                             className={styles.livestreamChat__container__inner}
                             ref={chatContainerRef}
                           >
-                            <ChatFeed channel={channel} />
+                            <ChatFeed channel={channel} stream={stream} />
                           </div>
                         </>
                       )}

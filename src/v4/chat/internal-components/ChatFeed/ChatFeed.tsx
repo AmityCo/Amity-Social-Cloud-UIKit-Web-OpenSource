@@ -8,19 +8,26 @@ import { Typography } from '~/v4/core/components';
 import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useChannel } from '~/v4/chat/hooks/useChannel';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
+  stream: Amity.Stream | null;
 }
 
 const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'text'> => {
   return !!message.data && typeof message.data !== 'string' && 'text' in message.data;
 };
 
-const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
+const ChatFeed: FC<ChatFeedProps> = ({ channel, stream }) => {
   const [joined, setJoined] = useState<boolean>(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState<boolean>(false);
+  const [currentMessages, setCurrentMessages] = useState<Amity.Message<any>[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { isVisitorOrBot } = useSDK();
+  const { channel: liveChannel, loading: liveChannelLoading } = useChannel({
+    channelId: channel.channelId,
+  });
 
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
@@ -28,11 +35,34 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
       includeDeleted: true,
       limit: 15,
     },
-    joined && !isVisitorOrBot,
+    joined && !isVisitorOrBot && !!liveChannel,
   );
 
+  const handlePopoverStateChange = (isOpen: boolean) => {
+    setCurrentMessages(isOpen ? messages ?? [] : []);
+    setIsPopoverOpen(isOpen);
+  };
+
   useEffect(() => {
-    const unsubTopic = subscribeTopic(getChannelTopic(channel));
+    let unsubTopic: Amity.Unsubscriber;
+    let retryCount = 0;
+    const maxRetries = 5;
+
+    const subscribeWithRetry = () => {
+      setTimeout(() => {
+        unsubTopic = subscribeTopic(getChannelTopic(channel), (error) => {
+          if (error) {
+            if (retryCount < maxRetries) {
+              retryCount++;
+              subscribeWithRetry();
+            }
+          }
+        });
+      }, 3000);
+    };
+
+    subscribeWithRetry();
+
     const joinLiveChannel = async () => {
       try {
         await ChannelRepository.joinChannel(channel.channelId);
@@ -52,7 +82,7 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
 
   return (
     <div className={styles.chatFeed__container}>
-      {isEmpty || isVisitorOrBot ? (
+      {liveChannelLoading || isEmpty || isVisitorOrBot ? (
         <div className={styles.chatFeed__empty__container}>
           <MessageBubbleIcon className={styles.chatFeed__empty__icon} />
           <Typography.TitleBold className={styles.chatFeed__emptyText}>
@@ -64,16 +94,19 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
         </div>
       ) : (
         <div
-          className={styles.chatFeed__messageList__container}
           ref={containerRef}
           id="chatFeedScrollableContainer"
+          data-disable-scroll={`${isPopoverOpen}`}
+          className={styles.chatFeed__messageList__container}
         >
           <InfiniteScroll
-            scrollableTarget={'chatFeedScrollableContainer'}
+            inverse={true}
             scrollThreshold={0.5}
             hasMore={hasMore || false}
-            next={() => loadMore?.()}
-            inverse={true}
+            dataLength={messages?.length || 0}
+            next={() => !isPopoverOpen && loadMore?.()}
+            scrollableTarget={'chatFeedScrollableContainer'}
+            style={{ display: 'flex', flexDirection: 'column-reverse' }}
             loader={
               loading && !messages ? (
                 <div className={styles.chatFeed__skeleton__container}>
@@ -85,13 +118,19 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel }) => {
                 </div>
               ) : null
             }
-            dataLength={messages?.length || 0}
-            style={{ display: 'flex', flexDirection: 'column-reverse' }}
           >
             <div className={styles.chatFeed__messageList__inner}>
-              {messages?.map((message) => {
+              {(isPopoverOpen ? currentMessages : messages)?.map((message) => {
                 if (!isAmityTextMessage(message)) return null;
-                return <MessageBubble key={message.messageId} message={message} />;
+                return (
+                  <MessageBubble
+                    key={message.messageId}
+                    message={message}
+                    channel={liveChannel}
+                    streamerId={stream?.userId}
+                    handlePopoverStateChange={handlePopoverStateChange}
+                  />
+                );
               })}
             </div>
           </InfiniteScroll>

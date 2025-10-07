@@ -10,6 +10,12 @@
   margin-bottom: 0.25rem;
 }
 
+.messageBubble__displayName__container {
+  gap: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
 .messageBubble__displayName {
   color: var(--asc-color-secondary-default);
 }
@@ -78,4 +84,51 @@
   width: 1.5rem;
   height: 1.5rem;
   fill: var(--asc-color-white);
+}
+
+.messageBubble__button__displayName {
+  color: var(--asc-color-secondary-default);
+}
+
+.messageBubble__button__displayName:hover {
+  text-decoration: underline;
+}
+
+.messageBubble__optionUserInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--asc-color-base-shade4);
+}
+
+.messageBubble__optionUserInfo__displayName {
+  text-align: center;
+  width: 100%;
+}
+
+.messageBubble__optionUserInfo__button {
+  padding: 0.75rem 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.messageBubble__optionUserInfo__buttonIcon {
+  margin-right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  fill: var(--asc-color-base-default);
+}
+
+.messageBubble__optionUserInfo__buttonLabel {
+  color: var(--asc-color-base-default);
+}
+
+.messageBubble__optionUserInfo__mutedIcon {
+  width: 1rem;
+  height: 1rem;
+  fill: var(--asc-color-base-shade2);
 }

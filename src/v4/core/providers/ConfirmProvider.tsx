@@ -16,6 +16,7 @@ export type ConfirmType = {
   componentId?: string;
   elementId?: string;
   retryText?: ReactNode;
+  shownCancelButton?: boolean;
 };
 
 interface ConfirmContextProps {

@@ -1,28 +1,50 @@
 .moderatorBadge {
+  gap: 1px;
   display: flex;
-  padding: 0 0.375rem 0 0.25rem;
-  justify-content: center;
   align-items: center;
-  gap: 0.0625rem;
-  background-color: var(--asc-color-primary-shade3);
+  padding: 3px 0.375rem;
   border-radius: 1.25rem;
+  justify-content: center;
+  background-color: var(--asc-color-primary-shade3);
 }
 
 .moderatorBadge__icon {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 0.5625rem;
   width: 0.75rem;
+  height: 0.75rem;
+  align-items: center;
+  justify-content: center;
   fill: var(--asc-color-primary-default);
+  color: var(--asc-color-primary-default);
 }
 
 .moderatorBadge__text {
-  color: var(--asc-color-primary-default);
   text-align: center;
   font-size: 0.625rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.125rem;
-  letter-spacing: -0.0063rem;
+  color: var(--asc-color-primary-default);
+}
+
+.moderatorBadge[data-variant='chat'] {
+  gap: 1px;
+  display: flex;
+  padding: 1px 3px 1px 2px;
+  align-items: center;
+  border-radius: 0.25rem;
+  justify-content: center;
+  background-color: var(--asc-color-secondary-shade3);
+}
+
+.moderatorBadge__icon[data-variant='chat'] {
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: var(--asc-color-base-inverse);
+  color: var(--asc-color-base-inverse);
+}
+
+.moderatorBadge__text[data-variant='chat'] {
+  font-size: 0.75rem;
+  color: var(--asc-color-base-inverse);
 }
