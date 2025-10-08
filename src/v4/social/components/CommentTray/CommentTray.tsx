@@ -4,6 +4,7 @@ import { CommentList } from '~/v4/social/components/CommentList';
 import { CommentComposer } from '~/v4/social/components/CommentComposer';
 import styles from './CommentTray.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type CommentTrayProps = {
   pageId?: string;
@@ -25,6 +26,7 @@ export const CommentTray = ({
   const componentId = 'comment_tray_component';
 
   const { isDesktop } = useResponsive();
+  const { isVisitorOrBot } = useSDK();
   const [replyTo, setReplyTo] = useState<Amity.Comment | undefined>();
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
 
@@ -66,7 +68,7 @@ export const CommentTray = ({
           }}
         />
       </div>
-      {shouldAllowInteraction && (
+      {shouldAllowInteraction && !isVisitorOrBot && community.isJoined && (
         <CommentComposer
           referenceId={referenceId}
           onCancelReply={onCancelReply}
