@@ -93,6 +93,7 @@
     "classnames": "^2.3.1",
     "filesize": "^9.0.11",
     "hls.js": "^1.2.1",
+    "form-data": "^4.0.4",
     "html-entities": "2.3.3",
     "human-readable-numbers": "^0.9.5",
     "is-hotkey": "0.2.0",
