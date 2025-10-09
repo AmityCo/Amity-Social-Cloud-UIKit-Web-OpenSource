@@ -645,6 +645,7 @@ export const PostContent = ({
                   defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
                   imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
                   onReactionClick={handleReactionClick}
+                  community={targetCommunity}
                 />
                 <CommentButton
                   pageId={pageId}

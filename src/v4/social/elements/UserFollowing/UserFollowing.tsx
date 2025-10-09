@@ -15,6 +15,7 @@ interface UserFollowingProps {
   pageId?: string;
   componentId?: string;
   followStatus: Amity.FollowStatus['status'] | null;
+  isCurrentUser?: boolean;
 }
 
 export const UserFollowing: React.FC<UserFollowingProps> = ({
@@ -22,6 +23,7 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
   pageId = '*',
   componentId = '*',
   followStatus,
+  isCurrentUser,
 }) => {
   const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
   const { followingCount } = useFollowCount(userId);
@@ -41,6 +43,7 @@ export const UserFollowing: React.FC<UserFollowingProps> = ({
         handleUserProfileBehavior({
           followStatus,
           allowNonFollower: false,
+          isCurrentUser,
           defaultBehavior: () =>
             AmityUserProfileHeaderComponentBehavior?.goToUserRelationshipPage?.({
               userId,

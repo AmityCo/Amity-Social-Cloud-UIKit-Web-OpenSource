@@ -36,10 +36,10 @@ export function PostComposer({
 }: PostComposerProps) {
   const componentId = 'post_composer';
 
-  const { currentUserId } = useSDK();
+  const { currentUserId, isVisitorOrBot } = useSDK();
   const { goToUserProfilePage } = useNavigation();
   const { openPopup } = usePopupContext();
-  const { user, isLoading } = useUser({ userId: currentUserId });
+  const { user, isLoading } = useUser({ userId: currentUserId, shouldCall: !isVisitorOrBot });
   const { hasStoryPermission } = useStoryPermission(communityId);
   const avatarUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });

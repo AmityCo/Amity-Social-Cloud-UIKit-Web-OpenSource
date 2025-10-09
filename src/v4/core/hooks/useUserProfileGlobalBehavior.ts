@@ -11,16 +11,18 @@ const useUserProfileGlobalBehavior = () => {
       defaultBehavior,
       allowNonFollower,
       followStatus,
+      isCurrentUser,
     }: {
       defaultBehavior?: () => void;
       allowNonFollower?: boolean;
       followStatus?: Amity.FollowStatus['status'] | null;
+      isCurrentUser?: boolean;
     }) => {
       if (isVisitorOrBot) {
         AmityGlobalBehavior.handleGuestUserAction?.();
         return false;
       }
-      if (allowNonFollower || followStatus === 'accepted') {
+      if (allowNonFollower || followStatus === 'accepted' || isCurrentUser) {
         defaultBehavior?.();
         return true;
       }

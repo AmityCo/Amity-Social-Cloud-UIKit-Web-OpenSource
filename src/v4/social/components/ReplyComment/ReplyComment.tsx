@@ -305,6 +305,7 @@ const PostReplyComment = ({
                   buttonClassName={styles.postReplyComment__secondRow__like}
                   isCommentReaction
                   referenceType="comment"
+                  community={community}
                 />
                 <Popover
                   trigger={{
