@@ -43,6 +43,9 @@ export function VideoButton({
     e.preventDefault();
     e.stopPropagation();
     onVideoFileChange?.(e.target.files ? [...e.target.files] : []);
+
+    // Clear the input after processing
+    e.target.value = '';
   };
 
   return (
