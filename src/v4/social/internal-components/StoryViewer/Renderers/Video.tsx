@@ -259,6 +259,7 @@ export const renderer: CustomRenderer = ({
 
   const renderCommentTray = () => (
     <CommentTray
+      pageId={pageId}
       referenceId={storyId}
       referenceType="story"
       community={community as Amity.Community}

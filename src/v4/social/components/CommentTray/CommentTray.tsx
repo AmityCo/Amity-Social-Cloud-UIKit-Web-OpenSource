@@ -51,29 +51,15 @@ export const CommentTray = ({
           onClickReply={onClickReply}
           referenceType={referenceType}
           shouldAllowInteraction={shouldAllowInteraction}
-          renderReplyComment={(comment) => {
-            if (replyTo && comment.commentId === replyTo.commentId && isDesktop) {
-              return (
-                <CommentComposer
-                  pageId={pageId}
-                  replyTo={replyTo}
-                  community={community}
-                  referenceId={referenceId}
-                  referenceType={referenceType}
-                  onCancelReply={onCancelReply}
-                  shouldAllowCreation={shouldAllowCreation}
-                />
-              );
-            }
-          }}
         />
       </div>
       {shouldAllowInteraction && !isVisitorOrBot && community.isJoined && (
         <CommentComposer
+          pageId={pageId}
           referenceId={referenceId}
           onCancelReply={onCancelReply}
           referenceType={referenceType}
-          replyTo={isDesktop ? undefined : (replyTo as Amity.Comment)}
+          replyTo={replyTo}
           shouldAllowCreation={shouldAllowCreation}
           containerClassName={styles.commentTrayContainer__commentComposer}
           community={community}
