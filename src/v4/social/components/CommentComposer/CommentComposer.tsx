@@ -225,7 +225,9 @@ export const CommentComposer = ({
             targetId={referenceId}
             value={textValue}
             placehoder={
-              replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
+              replyTo && !isStoryPage
+                ? `Replying to ${replyTo?.creator?.displayName}`
+                : 'Say something nice...'
             }
             communityId={community?.communityId}
             shouldAutoFocus={isFromCommentClick}
