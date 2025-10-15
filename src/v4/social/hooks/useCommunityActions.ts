@@ -2,7 +2,6 @@ import { CommunityRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
 export const useCommunityActions = (
   {
