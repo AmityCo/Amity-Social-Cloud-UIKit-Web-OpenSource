@@ -17,14 +17,14 @@ const useCommunityProfileGlobalBehavior = () => {
       isJoined?: boolean;
     }) => {
       if (isVisitorOrBot) {
-        AmityGlobalBehavior.handleGuestUserAction?.();
+        AmityGlobalBehavior?.handleVisitorUserAction?.();
         return false;
       }
       if (allowNonMember || isJoined) {
         defaultBehavior?.();
         return true;
       }
-      AmityGlobalBehavior.handleNonMemberAction?.();
+      AmityGlobalBehavior?.handleNonMemberAction?.();
       return false;
     },
     [isVisitorOrBot, AmityGlobalBehavior],

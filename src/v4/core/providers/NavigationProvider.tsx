@@ -396,7 +396,7 @@ type ContextValue = {
     targetId?: string[],
   ) => void;
 
-  handleGuestUserAction: () => void;
+  handleVisitorUserAction: () => void;
   handleNonMemberAction: () => void;
   handleNonFollowerAction: () => void;
 };
@@ -478,7 +478,7 @@ let defaultValue: ContextValue = {
     storyType: 'communityFeed' | 'globalFeed',
     targetId?: string[],
   ) => {},
-  handleGuestUserAction: () => {},
+  handleVisitorUserAction: () => {},
   handleNonMemberAction: () => {},
   handleNonFollowerAction: () => {},
 };
@@ -560,7 +560,7 @@ if (process.env.NODE_ENV !== 'production') {
     onClickStory: (storyId, storyType, targetIds) =>
       console.log(`NavigationContext onClickStory(${storyId}, ${storyType}, ${targetIds})`),
 
-    handleGuestUserAction: () => console.log('NavigationContext handleGuestUserAction()'),
+    handleVisitorUserAction: () => console.log('NavigationContext handleVisitorUserAction()'),
     handleNonMemberAction: () => console.log('NavigationContext handleNonMemberAction()'),
     handleNonFollowerAction: () => console.log('NavigationContext handleNonFollowerAction()'),
   };
@@ -1407,7 +1407,7 @@ export default function NavigationProvider({
     [onChangePage, pushPage],
   );
 
-  const handleGuestUserAction = () => {
+  const handleVisitorUserAction = () => {
     notification.info({ content: 'Create an account or sign in to continue.' });
   };
 
@@ -1492,7 +1492,7 @@ export default function NavigationProvider({
         goToNotificationTrayPage,
         goToPendingRequestPage,
         goToClipFeedPage,
-        handleGuestUserAction,
+        handleVisitorUserAction,
         handleNonMemberAction,
         handleNonFollowerAction,
       }}

@@ -19,14 +19,14 @@ const useUserProfileGlobalBehavior = () => {
       isCurrentUser?: boolean;
     }) => {
       if (isVisitorOrBot) {
-        AmityGlobalBehavior.handleGuestUserAction?.();
+        AmityGlobalBehavior?.handleVisitorUserAction?.();
         return false;
       }
       if (allowNonFollower || followStatus === 'accepted' || isCurrentUser) {
         defaultBehavior?.();
         return true;
       }
-      AmityGlobalBehavior.handleNonFollowerAction?.();
+      AmityGlobalBehavior?.handleNonFollowerAction?.();
       return false;
     },
     [isVisitorOrBot, AmityGlobalBehavior],
