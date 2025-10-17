@@ -18,14 +18,6 @@ type LocalVideoPost = {
   }[];
 };
 
-type LocalVideoPost = {
-  postId: string;
-  videos: {
-    fileId: string;
-    thumbnailUrl: string | undefined;
-  }[];
-};
-
 type LayoutContextType = {
   activeTab: HomePageTab;
   setActiveTab: (tab: HomePageTab) => void;

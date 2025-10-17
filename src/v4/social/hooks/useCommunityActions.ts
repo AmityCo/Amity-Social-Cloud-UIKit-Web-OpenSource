@@ -1,7 +1,6 @@
 import { CommunityRepository } from '@amityco/ts-sdk';
 import { useMutation } from '@tanstack/react-query';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
-import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 
@@ -13,7 +12,6 @@ export const useCommunityActions = (
     onLeaveError,
     onCancelJoinSuccess,
     onCancelJoinError,
-    community,
     joinRequest,
   }: {
     onJoinSuccess?: ({
@@ -46,8 +44,6 @@ export const useCommunityActions = (
   cancelJoinCommunity: () => void;
 } => {
   const { success, info } = useNotifications();
-  const { AmityGlobalBehavior } = usePageBehavior();
-  const { isVisitorOrBot } = useSDK();
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
 
   const { mutate: joinCommunity } = useMutation({

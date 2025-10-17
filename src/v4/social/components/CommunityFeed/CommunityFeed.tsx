@@ -17,6 +17,7 @@ import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
 import { useFeedScrollContext } from '~/v4/core/providers/FeedScrollProvider';
 import styles from './CommunityFeed.module.css';
+import { FeedDataTypeEnum } from '@amityco/ts-sdk';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 export const CommunityFeedPostContentSkeleton = () => {
@@ -66,6 +67,15 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
     feedType: 'published',
     targetId: communityId,
     targetType: 'community',
+    matchingOnlyParentPost: true,
+    dataTypes: [
+      FeedDataTypeEnum.Text,
+      FeedDataTypeEnum.Image,
+      FeedDataTypeEnum.Video,
+      FeedDataTypeEnum.Poll,
+      FeedDataTypeEnum.Clip,
+      FeedDataTypeEnum.LiveStream,
+    ],
     limit: 10,
   });
 
@@ -219,7 +229,7 @@ export const CommunityFeed = ({ pageId = '*', communityId }: CommunityFeedProps)
           Array.from({ length: 3 }).map((_, index) => (
             <CommunityFeedPostContentSkeleton key={index} />
           ))}
-        {posts?.length === 0 && !isLoading && (
+        {announcementPosts?.length === 0 && posts?.length === 0 && !isLoading && (
           <div className={styles.communityFeed__emptyPost}>
             <EmptyPost className={styles.communityFeed__emptyPostIcon} />
             <Typography.Body className={styles.communityFeed__emptyPostText}>

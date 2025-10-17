@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLongPress } from 'react-use';
+import useCommunityProfileGlobalBehavior from './useCommunityProfileGlobalBehavior';
 import { useResponsive } from './useResponsive';
+import useSDK from './useSDK';
+import useUserProfileGlobalBehavior from './useUserProfileGlobalBehavior';
 
 interface UseReactionHandlerOptions {
   myReaction?: string | null;
@@ -9,6 +12,7 @@ interface UseReactionHandlerOptions {
   onReactionClick: (reactionKey: string) => boolean;
   onHover?: () => void;
   onLongPress?: () => void;
+  community?: Amity.Community | null;
 }
 
 interface UseReactionHandlerReturn {
@@ -44,6 +48,7 @@ export function useReactionHandler({
   myReaction,
   hoverDuration = DEFAULT_HOVER_DURATION,
   longPressDuration = DEFAULT_LONG_PRESS_DURATION,
+  community,
   onReactionClick,
   onHover,
   onLongPress,
@@ -53,12 +58,19 @@ export function useReactionHandler({
   const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartPositionRef = useRef<{ x: number; y: number } | null>(null);
 
+  const { isVisitorOrBot } = useSDK();
+
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+
   const [showReactionPicker, setShowReactionPicker] = useState(false);
   const [optimisticReaction, setOptimisticReaction] = useState<string | null>(null);
   const [isLongPressing, setIsLongPressing] = useState(false);
   const [hoveredReaction, setHoveredReaction] = useState<string | null>(null);
   const [isTouchDragging, setIsTouchDragging] = useState(false);
   const { isDesktop } = useResponsive();
+
+  const shouldNotShowPicker = isVisitorOrBot || (community && !community.isJoined);
 
   const displayReaction = optimisticReaction || myReaction || null;
   const hasMyReaction = displayReaction != null;
@@ -69,13 +81,14 @@ export function useReactionHandler({
     }
   }, [myReaction, optimisticReaction]);
 
-  const longPressHandler = useCallback(() => {
+  /* Long pressing on PC */
+  const handleLongPressing = useCallback(() => {
     setIsLongPressing(true);
     setShowReactionPicker(true);
     onLongPress?.();
   }, [onLongPress]);
 
-  const longPressEvent = useLongPress(longPressHandler, {
+  const longPressEvent = useLongPress(handleLongPressing, {
     isPreventDefault: true,
     delay: longPressDuration,
   });
@@ -127,10 +140,9 @@ export function useReactionHandler({
     setHoveredReaction(null);
   }, []);
 
+  /* Long pression on Mobile */
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      if (isDesktop) return;
-
       setIsLongPressing(false);
       setIsTouchDragging(false);
       touchStartTimeRef.current = Date.now();
@@ -150,7 +162,7 @@ export function useReactionHandler({
         onLongPress?.();
       }, longPressDuration);
     },
-    [longPressDuration, onLongPress, isDesktop],
+    [longPressDuration, onLongPress, isDesktop, shouldNotShowPicker],
   );
 
   const handleTouchMove = useCallback(
@@ -187,8 +199,6 @@ export function useReactionHandler({
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent) => {
-      if (isDesktop) return;
-
       if (longPressTimeoutRef.current) {
         clearTimeout(longPressTimeoutRef.current);
         longPressTimeoutRef.current = null;

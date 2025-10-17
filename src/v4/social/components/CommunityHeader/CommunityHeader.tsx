@@ -191,7 +191,7 @@ export const CommunityHeader: React.FC<CommunityProfileHeaderProps> = ({
                     });
                     return;
                   }
-                  // NOTE: checking guest user in joinCommunity function
+                  // NOTE: checking visitor user in joinCommunity function
                   joinCommunity(community);
                 }}
                 componentId={componentId}

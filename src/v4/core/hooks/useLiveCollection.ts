@@ -68,7 +68,7 @@ function useLiveCollection<TCallback, TParams>({
     return () => {
       unsubscribe();
     };
-  }, [params, shouldCall]);
+  }, [JSON.stringify(params), shouldCall]);
 
   const refresh = useCallback(() => {
     if (unsubscribeRef.current) {

@@ -4,9 +4,9 @@ import useSocialSettings from '~/v4/social/hooks/useSocialSettings';
 import { checkStoryPermission, isAdmin, isModerator } from '~/v4/social/utils';
 
 export function useStoryPermission(communityId?: string) {
-  const { client } = useSDK();
+  const { client, isVisitorOrBot } = useSDK();
   const { socialSettings } = useSocialSettings();
-  const { user } = useUser({ userId: client?.userId });
+  const { user } = useUser({ userId: client?.userId, shouldCall: !isVisitorOrBot });
 
   const isGlobalAdmin = isAdmin(user?.roles);
   const isModeratorUser = isModerator(user?.roles);

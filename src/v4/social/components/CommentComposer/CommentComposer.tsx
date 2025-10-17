@@ -66,7 +66,7 @@ export const CommentComposer = ({
   isFromCommentClick = false,
 }: CommentComposerProps) => {
   const userId = useSDK().currentUserId;
-  const { user } = useUser({ userId });
+  const isStoryPage = pageId === 'story_page';
   const { isDesktop } = useResponsive();
   const notification = useNotifications();
   const { online } = useNetworkState();
@@ -159,7 +159,7 @@ export const CommentComposer = ({
       )}
       <div className={styles.commentComposer__top}>
         <div className={styles.commentComposer__mentionContainer} ref={mentionContainerRef} />
-        {replyTo && !isDesktop && (
+        {replyTo && (!isDesktop || isStoryPage) && (
           <div
             className={styles.commentComposer__replyContainer}
             style={
@@ -211,7 +211,9 @@ export const CommentComposer = ({
             targetId={referenceId}
             value={textValue}
             placehoder={
-              replyTo ? `Replying to ${replyTo?.creator?.displayName}` : 'Say something nice...'
+              replyTo && !isStoryPage
+                ? `Replying to ${replyTo?.creator?.displayName}`
+                : 'Say something nice...'
             }
             communityId={community?.communityId}
             shouldAutoFocus={isFromCommentClick}

@@ -21,6 +21,7 @@ import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
 import { isPollPost } from '~/v4/social/utils/postTypeChecker';
+import { PostStructureType } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
 
 export interface PostDetailPageProps {
@@ -163,7 +164,10 @@ export function PostDetailPage({
     (post === null && !isPostLoading) ||
     community?.isDeleted ||
     post?.isDeleted ||
-    failedToShow
+    failedToShow ||
+    post?.structureType === PostStructureType.AUDIO ||
+    post?.structureType === PostStructureType.FILE ||
+    post?.structureType === PostStructureType.MIXED
   )
     return <FailedToShow pageId={pageId} onBack={onBack} />;
 

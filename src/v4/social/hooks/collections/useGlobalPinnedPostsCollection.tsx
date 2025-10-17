@@ -1,4 +1,4 @@
-import { PostRepository } from '@amityco/ts-sdk';
+import { PostRepository, PostStructureType } from '@amityco/ts-sdk';
 import useLiveCollection from '~/v4/core/hooks/useLiveCollection';
 
 export default function useGlobalPinnedPostsCollection() {
@@ -9,7 +9,13 @@ export default function useGlobalPinnedPostsCollection() {
   });
 
   return {
-    globalFeaturedPosts: items,
+    globalFeaturedPosts: items.filter(
+      (pinnedPost) =>
+        pinnedPost.post &&
+        pinnedPost.post?.structureType !== PostStructureType.AUDIO &&
+        pinnedPost.post?.structureType !== PostStructureType.FILE &&
+        pinnedPost.post?.structureType !== PostStructureType.MIXED,
+    ),
     ...rest,
   };
 }

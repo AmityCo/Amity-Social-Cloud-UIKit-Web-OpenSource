@@ -229,6 +229,34 @@ export const PostContent = ({
     });
   };
 
+  const onReactionListClick = () => {
+    const reactionList = (
+      <ReactionList pageId={pageId} referenceId={post.postId} referenceType={'post'} />
+    );
+
+    if (isDesktop) openPopup({ view: 'desktop', children: reactionList });
+    else
+      setDrawerData({
+        content: reactionList,
+        snapPoints: [0.7, 1],
+        activeSnapPoint: 0.7,
+      });
+  };
+
+  const handleReactionListClick = () => {
+    if (targetCommunity)
+      return handleCommunityProfileBehavior({
+        defaultBehavior: onReactionListClick,
+        allowNonMember: true,
+        isJoined: targetCommunity?.isJoined,
+      });
+
+    return handleUserProfileBehavior({
+      defaultBehavior: onReactionListClick,
+      allowNonFollower: true,
+    });
+  };
+
   const handleCommentClick = (
     context: Pick<
       PostDetailPageProps,
@@ -547,22 +575,7 @@ export const PostContent = ({
                 data-testid={`${pageId}/${componentId}/post-content-reactions-button`}
                 variant="default"
                 className={styles.postContent__reactionsBar}
-                onPress={() => {
-                  const reactionList = (
-                    <ReactionList
-                      pageId={pageId}
-                      referenceId={post.postId}
-                      referenceType={'post'}
-                    />
-                  );
-                  isDesktop
-                    ? openPopup({ view: 'desktop', children: reactionList })
-                    : setDrawerData({
-                        content: reactionList,
-                        snapPoints: [0.7, 1],
-                        activeSnapPoint: 0.7,
-                      });
-                }}
+                onPress={handleReactionListClick}
               >
                 {hasReaction ? (
                   <div className={styles.postContent__reactionsBar__reactions}>
@@ -632,6 +645,7 @@ export const PostContent = ({
                   defaultIconClassName={styles.postContent__reactionBar__leftPane__icon}
                   imgIconClassName={styles.postContent__reactionBar__leftPane__iconImg}
                   onReactionClick={handleReactionClick}
+                  community={targetCommunity}
                 />
                 <CommentButton
                   pageId={pageId}

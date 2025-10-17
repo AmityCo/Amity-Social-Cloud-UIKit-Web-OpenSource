@@ -23,7 +23,7 @@ const VideoThumbnail = ({
   const imageThumbnailUrl = useImage({ fileId: thumbnailFileId });
 
   let videoThumbnailUrl: string | undefined;
-  if (!thumbnailFileId && videoPostData?.videoFileId.original) {
+  if (!thumbnailFileId && videoPostData?.videoFileId?.original) {
     const thumbnail = videoThumbnail?.videos.find(
       ({ fileId }) => fileId === videoPostData.videoFileId.original,
     );

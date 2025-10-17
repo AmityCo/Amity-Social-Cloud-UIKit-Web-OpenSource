@@ -1,13 +1,14 @@
-import { JoinRequestStatusEnum, PostRepository } from '@amityco/ts-sdk';
+import { PostRepository } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 
-type useSearchPostWithHashtagCollectionParams = {
-  hashtags?: string[];
-  dataTypes?: string[];
-};
+type useSearchPostWithHashtagCollectionParams = Parameters<
+  typeof PostRepository.searchPostsByHashtag
+>[0];
+
 export default function useSearchPostWithHashtagCollection({
   hashtags,
   dataTypes,
+  ...props
 }: useSearchPostWithHashtagCollectionParams) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
@@ -31,10 +32,10 @@ export default function useSearchPostWithHashtagCollection({
 
     const unsubscriber = PostRepository.searchPostsByHashtag(
       {
+        ...props,
         hashtags,
         dataTypes,
         limit: 20,
-        targetType: 'all',
       },
       ({ data, loading, error, hasNextPage, onNextPage }) => {
         setIsLoading(loading);

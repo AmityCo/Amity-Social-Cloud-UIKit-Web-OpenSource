@@ -1,17 +1,16 @@
 import { JoinRequestStatusEnum, PostRepository } from '@amityco/ts-sdk';
 import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 
-type useSemanticSearchPostCollectionParams = {
-  query: string;
-  targetId?: string;
-  targetType?: 'community' | 'user';
-  dataTypes?: string[];
-};
+type useSemanticSearchPostCollectionParams = Parameters<
+  typeof PostRepository.semanticSearchPosts
+>[0];
+
 export default function useSemanticSearchPostCollection({
   query,
   targetId,
   targetType,
   dataTypes,
+  ...props
 }: useSemanticSearchPostCollectionParams) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
@@ -31,6 +30,7 @@ export default function useSemanticSearchPostCollection({
 
     const unsubscriber = PostRepository.semanticSearchPosts(
       {
+        ...props,
         query,
         dataTypes,
         targetId,

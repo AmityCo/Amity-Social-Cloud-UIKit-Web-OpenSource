@@ -116,7 +116,7 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
         )}
       </>
     );
-  }, [config?.feature_flags?.post?.clip?.can_view_tab, isVisitorOrBot]);
+  }, [config?.feature_flags?.post?.clip?.can_view_tab, isVisitorOrBot, activeTab]);
 
   return (
     <div className={styles.socialHomePage} style={themeStyles}>
