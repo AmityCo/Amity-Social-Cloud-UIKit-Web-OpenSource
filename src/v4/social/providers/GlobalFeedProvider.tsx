@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { FeedRepository } from '@amityco/ts-sdk';
+import { FeedRepository, PostStructureType } from '@amityco/ts-sdk';
 import { usePaginatorApi } from '~/v4/core/hooks/usePaginator';
 import useGlobalPinnedPostsCollection from '~/v4/social/hooks/collections/useGlobalPinnedPostsCollection';
 
@@ -32,7 +32,7 @@ const useGlobalFeed = () => {
     if (globalFeaturedPosts) {
       setGlobalFeaturedPostsItems(globalFeaturedPosts);
     }
-  }, [globalFeaturedPosts]);
+  }, [globalFeaturedPosts?.length]);
 
   const fetch = useCallback(() => {
     const unsubscriber = FeedRepository.getGlobalFeed(
@@ -45,7 +45,14 @@ const useGlobalFeed = () => {
         if (data && !loading) {
           setHasNextPage(!!hasNextPage);
           onNextPageRef.current = onNextPage;
-          setItems(data);
+          setItems(
+            data.filter(
+              (post) =>
+                post.structureType !== PostStructureType.AUDIO &&
+                post.structureType !== PostStructureType.FILE &&
+                post.structureType !== PostStructureType.MIXED,
+            ),
+          );
         }
         if (error) {
           console.error('error', error);
@@ -65,7 +72,7 @@ const useGlobalFeed = () => {
     };
   }, [fetch]);
 
-  const refetch = useCallback(async () => {
+  const refetch = async () => {
     // Cleanup current subscription
     if (unsubscriberRef.current) {
       unsubscriberRef.current();
@@ -82,7 +89,7 @@ const useGlobalFeed = () => {
 
     // Setup new subscription
     fetch();
-  }, [fetch, reset]);
+  };
 
   const onScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.target as HTMLDivElement;
