@@ -404,6 +404,7 @@ export const Comment = ({
                     buttonClassName={styles.postComment__secondRow__like}
                     isCommentReaction
                     referenceType="comment"
+                    community={community}
                   />
                   <Button
                     data-testid={`${pageId}/${componentId}/reply_button`}

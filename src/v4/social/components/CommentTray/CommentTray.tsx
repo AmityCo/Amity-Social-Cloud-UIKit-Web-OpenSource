@@ -4,6 +4,7 @@ import { CommentList } from '~/v4/social/components/CommentList';
 import { CommentComposer } from '~/v4/social/components/CommentComposer';
 import styles from './CommentTray.module.css';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import useSDK from '~/v4/core/hooks/useSDK';
 
 type CommentTrayProps = {
   pageId?: string;
@@ -25,6 +26,7 @@ export const CommentTray = ({
   const componentId = 'comment_tray_component';
 
   const { isDesktop } = useResponsive();
+  const { isVisitorOrBot } = useSDK();
   const [replyTo, setReplyTo] = useState<Amity.Comment | undefined>();
   const { accessibilityId, themeStyles } = useAmityComponent({ pageId, componentId });
 
@@ -49,29 +51,15 @@ export const CommentTray = ({
           onClickReply={onClickReply}
           referenceType={referenceType}
           shouldAllowInteraction={shouldAllowInteraction}
-          renderReplyComment={(comment) => {
-            if (replyTo && comment.commentId === replyTo.commentId && isDesktop) {
-              return (
-                <CommentComposer
-                  pageId={pageId}
-                  replyTo={replyTo}
-                  community={community}
-                  referenceId={referenceId}
-                  referenceType={referenceType}
-                  onCancelReply={onCancelReply}
-                  shouldAllowCreation={shouldAllowCreation}
-                />
-              );
-            }
-          }}
         />
       </div>
-      {shouldAllowInteraction && (
+      {shouldAllowInteraction && !isVisitorOrBot && community.isJoined && (
         <CommentComposer
+          pageId={pageId}
           referenceId={referenceId}
           onCancelReply={onCancelReply}
           referenceType={referenceType}
-          replyTo={isDesktop ? undefined : (replyTo as Amity.Comment)}
+          replyTo={replyTo}
           shouldAllowCreation={shouldAllowCreation}
           containerClassName={styles.commentTrayContainer__commentComposer}
           community={community}

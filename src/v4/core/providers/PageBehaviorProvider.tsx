@@ -241,8 +241,8 @@ export interface PageBehavior {
     goToUserProfilePage?(context: { userId: string }): void;
     goToCommunityProfilePage?(context: { communityId: string }): void;
   };
-  AmityGlobalBehavior: {
-    handleGuestUserAction?(): void;
+  AmityGlobalBehavior?: {
+    handleVisitorUserAction?(): void;
     handleNonMemberAction?(): void;
     handleNonFollowerAction?(): void;
   };
@@ -293,7 +293,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToPendingInvitationPage,
     goToPendingRequestPage,
     goToSocialGlobalSearchPage,
-    handleGuestUserAction,
+    handleVisitorUserAction,
     handleNonMemberAction,
     handleNonFollowerAction,
   } = useNavigation();
@@ -872,11 +872,11 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
       },
     },
     AmityGlobalBehavior: {
-      handleGuestUserAction: () => {
-        if (pageBehavior?.AmityGlobalBehavior?.handleGuestUserAction) {
-          return pageBehavior?.AmityGlobalBehavior?.handleGuestUserAction;
+      handleVisitorUserAction: () => {
+        if (pageBehavior?.AmityGlobalBehavior?.handleVisitorUserAction) {
+          return pageBehavior?.AmityGlobalBehavior?.handleVisitorUserAction;
         }
-        handleGuestUserAction();
+        handleVisitorUserAction();
       },
       handleNonMemberAction: () => {
         if (pageBehavior?.AmityGlobalBehavior?.handleNonMemberAction) {

@@ -111,6 +111,7 @@ export const ClipFeedMenu = ({
           defaultIcon={() => (
             <LikeTransparent className={styles.clipFeedMenu__reactionButtonIcon} />
           )}
+          community={community}
         />
       )}
       {isShowInteractionMenu && !isDragging && (

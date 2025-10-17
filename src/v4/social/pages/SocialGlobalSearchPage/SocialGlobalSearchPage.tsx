@@ -1,5 +1,5 @@
 import { Key } from 'react-aria';
-import { UserRepository } from '@amityco/ts-sdk';
+import { FeedDataTypeEnum, UserRepository } from '@amityco/ts-sdk';
 import { useClickAway } from 'react-use';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { SecondaryTab } from '~/v4/core/components/SecondaryTab';
@@ -75,14 +75,26 @@ const useGlobalSearchViewModel = ({ keyword }: { keyword?: string }) => {
   });
 
   const postWithHashtagCollection = useSearchPostWithHashtagCollection({
+    targetType: 'all',
     hashtags:
       searchValue && searchValue.length > 0 && searchValue.startsWith('#')
         ? [searchValue.startsWith('#') ? searchValue.slice(1) : searchValue]
         : [],
+    matchingOnlyParentPost: true,
+    dataTypes: [
+      FeedDataTypeEnum.Text,
+      FeedDataTypeEnum.Image,
+      FeedDataTypeEnum.Video,
+      FeedDataTypeEnum.Poll,
+      FeedDataTypeEnum.Clip,
+      FeedDataTypeEnum.LiveStream,
+    ],
   });
 
   const semanticPostCollection = useSemanticSearchPostCollection({
     query: searchValue && searchValue.length > 0 && !searchValue.startsWith('#') ? searchValue : '',
+    matchingOnlyParentPost: true,
+    dataTypes: [FeedDataTypeEnum.Text, FeedDataTypeEnum.Image],
   });
 
   // Use the appropriate collection based on search type

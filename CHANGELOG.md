@@ -38,7 +38,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## 4.10.0 (2025-07-11)
 
-## 4.9.0 (2025-06-20)
+### 4.13.1 (2025-10-03)
 
 ### Bug Fixes
 

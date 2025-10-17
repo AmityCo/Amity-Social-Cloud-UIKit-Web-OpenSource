@@ -17,6 +17,9 @@ import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider
 import { Button } from '~/v4/core/components/AriaButton';
 import styles from './ReactionButton.module.css';
 import millify from 'millify';
+import useSDK from '~/v4/core/hooks/useSDK';
+import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 
 const LikeSvg = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -52,6 +55,7 @@ interface ReactionButtonProps {
   isCommentReaction?: boolean;
   isClipReaction?: boolean;
   referenceType?: 'post' | 'comment';
+  community?: Amity.Community | null;
 }
 
 const MOUSE_DURATION = 250;
@@ -81,6 +85,7 @@ export function ReactionButton({
   isCommentReaction = false,
   isClipReaction = false,
   referenceType = 'post',
+  community,
 }: ReactionButtonProps) {
   const elementId = 'reaction_button';
 
@@ -95,6 +100,9 @@ export function ReactionButton({
 
   const reactionButtonRef = useRef<HTMLButtonElement>(null);
   const desktopButtonRef = useRef<HTMLDivElement>(null);
+
+  const { isVisitorOrBot } = useSDK();
+  const shouldNotShowReactionPicker = isVisitorOrBot || (community && !community.isJoined);
   const [showPanelBelow, setShowPanelBelow] = useState(false);
 
   const { isDesktop } = useResponsive();
@@ -121,6 +129,7 @@ export function ReactionButton({
     myReaction,
     hoverDuration,
     longPressDuration,
+    community,
     onReactionClick,
     onHover,
     onLongPress,
@@ -148,6 +157,23 @@ export function ReactionButton({
       checkButtonPosition();
     }
   }, [showReactionPicker, checkButtonPosition]);
+
+  const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
+  const { handleUserProfileBehavior } = useUserProfileGlobalBehavior();
+
+  useEffect(() => {
+    if (showReactionPicker && shouldNotShowReactionPicker) {
+      if (community)
+        handleCommunityProfileBehavior({
+          isJoined: community.isJoined,
+          allowNonMember: false,
+        });
+      else
+        handleUserProfileBehavior({
+          allowNonFollower: true,
+        });
+    }
+  }, [showReactionPicker, shouldNotShowReactionPicker]);
 
   if (isExcluded) return null;
 
@@ -214,14 +240,16 @@ export function ReactionButton({
       elementId = 'reaction-text';
     }
 
+    const TypographyComponent = isCommentReaction ? Typography.CaptionBold : Typography.BodyBold;
+
     return (
-      <Typography.CaptionBold
+      <TypographyComponent
         className={clsx(styles.reactButton__reactionsText, reactionsCountClassName)}
         data-has-my-reaction={hasMyReaction}
         testId={`${pageId}/${componentId}/${elementId}`}
       >
         {text}
-      </Typography.CaptionBold>
+      </TypographyComponent>
     );
   };
 
@@ -245,7 +273,7 @@ export function ReactionButton({
           </>
         )}
         {renderReactionCountText()}
-        {showReactionPicker && (
+        {showReactionPicker && !shouldNotShowReactionPicker && (
           <div
             data-testid={`${pageId}/${componentId}/reaction-picker-panel`}
             className={clsx(
@@ -292,9 +320,7 @@ export function ReactionButton({
       onClick={(e) => {
         // Prevent click if reaction picker is shown
         e.stopPropagation();
-        if (showReactionPicker) {
-          return;
-        }
+        if (showReactionPicker) return;
         handleQuickReaction();
       }}
       role="button"

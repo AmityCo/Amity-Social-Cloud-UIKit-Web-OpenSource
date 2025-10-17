@@ -9,7 +9,7 @@ const useGlobalBehavior = () => {
   const handleGlobalBehavior = useCallback(
     ({ defaultBehavior }: { defaultBehavior?: () => void }) => {
       if (isVisitorOrBot) {
-        return AmityGlobalBehavior.handleGuestUserAction?.();
+        return AmityGlobalBehavior?.handleVisitorUserAction?.();
       }
 
       return defaultBehavior?.();

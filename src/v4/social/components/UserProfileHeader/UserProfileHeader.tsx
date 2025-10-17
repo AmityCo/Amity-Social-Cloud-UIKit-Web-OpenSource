@@ -171,6 +171,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
 
       <div className={styles.userProfileHeader__relationship}>
         <UserFollowing
+          isCurrentUser={user.userId === currentUserId}
           userId={user.userId}
           pageId={pageId}
           componentId={componentId}
@@ -178,6 +179,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
         />
         <div className={styles.userProfileHeader__relationship__separator}></div>
         <UserFollower
+          isCurrentUser={user.userId === currentUserId}
           userId={user.userId}
           pageId={pageId}
           componentId={componentId}
