@@ -102,7 +102,14 @@ const useGlobalFeed = () => {
         if (data && !loading) {
           setHasNextPage(!!hasNextPage);
           onNextPageRef.current = onNextPage;
-          setItems(data);
+          setItems(
+            data.filter(
+              (post) =>
+                post.structureType !== PostStructureType.AUDIO &&
+                post.structureType !== PostStructureType.FILE &&
+                post.structureType !== PostStructureType.MIXED,
+            ),
+          );
         }
         if (error) {
           console.error('error', error);
@@ -122,7 +129,7 @@ const useGlobalFeed = () => {
     };
   }, [fetch]);
 
-  const refetch = useCallback(async () => {
+  const refetch = async () => {
     // Cleanup current subscription
     if (unsubscriberRef.current) {
       unsubscriberRef.current();
@@ -139,7 +146,7 @@ const useGlobalFeed = () => {
 
     // Setup new subscription
     fetch();
-  }, [fetch, reset]);
+  };
 
   const onScroll = (event: React.UIEvent<HTMLDivElement>) => {
     const target = event.target as HTMLDivElement;
