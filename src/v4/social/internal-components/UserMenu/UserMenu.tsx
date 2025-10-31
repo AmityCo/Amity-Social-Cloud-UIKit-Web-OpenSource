@@ -69,7 +69,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
     handleUserProfileBehavior({
       allowNonFollower: true,
       followStatus,
-      defaultBehavior: () => () => {
+      defaultBehavior: () => {
         onCloseMenu();
         if (isCurrentUser) {
           AmityUserProfilePageBehavior?.goToBlockedUsersPage?.();
