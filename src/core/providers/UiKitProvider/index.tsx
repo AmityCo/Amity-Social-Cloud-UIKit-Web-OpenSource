@@ -86,8 +86,10 @@ const UiKitProvider = ({
   const disconnectedChangeRef = useRef<(() => void) | null>(null);
 
   const sdkContextValue = useMemo(() => {
-    const currentUser = client ? Client.getCurrentUser() : null;
-    const userType = client ? Client.getCurrentUserType() : null;
+    if (!client || !isConnected) return;
+
+    const currentUser = Client.getCurrentUser();
+    const userType = Client.getCurrentUserType();
 
     return {
       client: client || null,
@@ -95,7 +97,7 @@ const UiKitProvider = ({
       userRoles: currentUser?.roles ?? [],
       isVisitorOrBot: userType !== UserTypeEnum.SIGNED_IN,
     };
-  }, [client, userId]);
+  }, [client, isConnected, userId]);
 
   async function login() {
     try {
