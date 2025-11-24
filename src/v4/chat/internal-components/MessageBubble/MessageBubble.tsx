@@ -39,6 +39,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   channel,
   handlePopoverStateChange,
   isJoinedCommunity,
+  channel,
 }) => {
   const { currentUserId } = useSDK();
   const { isModerator: isChannelModerator } = useChannelPermission(message.channelId);
@@ -268,6 +269,29 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
       isJoined: isJoinedCommunity,
       allowNonMember: false,
     });
+
+  const renderModeratorOptions = useCallback(
+    (closePopover: () => void) => {
+      return (
+        <LivestreamModerationOptions
+          displayName={message.creator?.displayName ?? coHost?.displayName}
+          isHost={isHost}
+          coHostId={invitedCoHost?.userId ?? coHost?.userId}
+          isModerator={isModerator}
+          onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
+          onPromoteToModerator={handlePromoteToModerator}
+          onCancelInvitation={handleCancelInvitation}
+          onRemoveCoHost={handleRemoveCoHost}
+          onLeaveAsCoHost={handleLeaveAsCoHost}
+          onClickOption={closePopover}
+          isPendingCoHost={
+            invitedCoHost?.userId === message.creatorId && invitation?.status === 'pending'
+          }
+        />
+      );
+    },
+    [invitation?.status, invitedCoHost?.userId, message.creatorId, message.creator?.displayName],
+  );
 
   return (
     <div className={styles.messageBubble__container}>

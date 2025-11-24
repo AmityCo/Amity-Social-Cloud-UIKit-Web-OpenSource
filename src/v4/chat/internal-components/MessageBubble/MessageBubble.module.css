@@ -66,6 +66,13 @@
   border-bottom: 1px solid var(--asc-color-base-divider-line);
 }
 
+.messageBubble__optionsMenu__header {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--asc-color-base-divider-line);
+}
+
 .messageBubble__optionsButton__container {
   padding: 0.5rem 0;
 }

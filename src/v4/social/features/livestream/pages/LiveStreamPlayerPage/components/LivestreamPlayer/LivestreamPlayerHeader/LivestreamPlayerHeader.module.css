@@ -1,0 +1,68 @@
+.livestreamPlayerHeader {
+  display: block;
+}
+
+.livestreamPlayerHeader__liveDetail {
+  display: flex;
+  padding: 1rem 0.5rem;
+  z-index: 300;
+  position: absolute;
+  width: 100%;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.livestreamPlayerHeader__closeButton {
+  top: 2rem;
+  left: 1rem;
+  z-index: 300;
+  position: fixed;
+}
+
+.livestreamPlayerHeader__closeButton[data-is-live='true'] {
+  position: unset;
+}
+
+.livestreamPlayerHeader__closeButton__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-base-shade4);
+  fill: var(--asc-color-base-shade4);
+}
+
+.livestreamPlayerHeader__closeButton__icon[data-is-live='true'],
+.livestreamPlayerHeader__closeButton__icon[data-is-ended='true'] {
+  z-index: unset;
+  position: unset;
+  width: 2rem;
+  height: 2rem;
+  color: var(--asc-color-white);
+}
+
+.livestreamPlayerHeader__liveDetail__detail {
+  margin-left: 0.25rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.livestreamPlayerHeader__liveDetail__optionWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.livestreamPlayerHeader__liveDetail__avatar {
+  width: 2rem;
+  height: 2rem;
+}
+
+.livestreamPlayer__liveDetail__text {
+  display: block;
+  color: var(--asc-color-white);
+}
+
+.livestreamPlayerHeader__optionIcon {
+  color: var(--asc-color-white);
+  width: 2rem;
+  height: 2rem;
+}

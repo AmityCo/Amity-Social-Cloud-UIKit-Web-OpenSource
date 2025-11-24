@@ -80,7 +80,6 @@ export const useCreateLivestream = ({
   const { currentUserId } = useSDK();
   const { onBack, goToPostDetailPage } = useNavigation();
   const { confirm } = useConfirmContext();
-
   const { openPopup } = usePopupContext();
   const { isPending: isEnding, stopStream } = useStopStream();
 

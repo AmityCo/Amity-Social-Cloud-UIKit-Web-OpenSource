@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './CommunityProfilePage.module.css';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CommunityHeader } from '~/v4/social/components/CommunityHeader';
