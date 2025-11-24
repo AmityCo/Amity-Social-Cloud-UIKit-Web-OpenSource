@@ -4,8 +4,8 @@ import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 export type CommunityTab =
   | 'community_feed'
   | 'community_pin'
-  | 'community_image_feed'
-  | 'community_video_feed';
+  | 'community_event_feed'
+  | 'community_media_feed';
 
 type CommunityTabContextType = {
   activeTab: CommunityTab;
@@ -28,8 +28,8 @@ export const CommunityTabProvider: React.FC<CommunityTabProviderProps> = ({ chil
   const [activeTab, setActiveTab] = useState<CommunityTabContextType['activeTab']>(
     linkToPost?.tab === 'community_feed' ||
       linkToPost?.tab === 'community_pin' ||
-      linkToPost?.tab === 'community_image_feed' ||
-      linkToPost?.tab === 'community_video_feed'
+      linkToPost?.tab === 'community_event_feed' ||
+      linkToPost?.tab === 'community_media_feed'
       ? linkToPost?.tab
       : 'community_feed',
   );

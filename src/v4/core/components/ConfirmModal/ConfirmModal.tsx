@@ -14,6 +14,7 @@ type ConfirmProps = ConfirmType & {
   okText?: ReactNode;
   cancelText?: ReactNode;
   type?: 'confirm' | 'info';
+  okButtonColor?: 'primary' | 'alert';
 };
 
 const Confirm = ({
@@ -25,6 +26,7 @@ const Confirm = ({
   className,
   pageId = '*',
   okText = 'OK',
+  okButtonColor,
   type = 'confirm',
   componentId = '*',
   cancelText = 'Cancel',
@@ -88,7 +90,7 @@ const Confirm = ({
                     variant="fill"
                     style={themeStyles}
                     className={styles.popup__footer__okButton}
-                    color={type === 'info' ? 'primary' : 'alert'}
+                    color={okButtonColor ? okButtonColor : type === 'info' ? 'primary' : 'alert'}
                     data-testid={`${elementId}-${accessibilityId}-ok-button`}
                     isDisabled={isLoading}
                     onPress={async () => {

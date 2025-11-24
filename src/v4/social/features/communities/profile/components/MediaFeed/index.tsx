@@ -1,0 +1,1 @@
+export { CommunityMediaFeed } from './MediaFeed';

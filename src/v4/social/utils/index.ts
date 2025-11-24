@@ -222,7 +222,7 @@ export function canCreatePostCommunity(
   }
 
   const communityPermission = client
-    .hasPermission(Permissions.CreatePivillegedPostPermission)
+    .hasPermission(Permissions.CreatePrivilegedPostPermission)
     .community(community.communityId);
 
   if (communityPermission || community.postSetting !== 'ONLY_ADMIN_CAN_POST') {

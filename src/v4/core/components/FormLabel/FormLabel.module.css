@@ -1,0 +1,7 @@
+.formLabel {
+  color: var(--asc-color-base-default);
+}
+
+.formLabel__optional {
+  color: var(--asc-color-base-shade3);
+}

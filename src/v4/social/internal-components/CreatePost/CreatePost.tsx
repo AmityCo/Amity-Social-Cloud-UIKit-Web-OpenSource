@@ -50,6 +50,7 @@ export function CreatePost({
   targetType,
   targetId,
   isClipPost = false,
+  targetName,
 }: AmityPostComposerCreateOptions) {
   const pageId = 'post_composer_page';
 
@@ -365,7 +366,7 @@ export function CreatePost({
       >
         <div className={styles.createPost__topBar}>
           <CloseButton pageId={pageId} onPress={onClickClose} />
-          <CommunityDisplayName pageId={pageId} community={community} />
+          <CommunityDisplayName pageId={pageId} community={community} displayName={targetName} />
           <CreateNewPostButton pageId={pageId} variant="text" isDisabled={!canSubmitPost} />
         </div>
         {isClipPost && (

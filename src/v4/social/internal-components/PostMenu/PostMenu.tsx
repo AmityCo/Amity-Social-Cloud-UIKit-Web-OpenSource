@@ -26,6 +26,7 @@ import { CopyLinkButton } from '~/v4/social/elements/CopyLinkButton';
 import { SharableModel } from '~/v4/utils/sharableLink';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
+import { Pencil } from '~/v4/icons/Pencil';
 
 interface PostMenuProps {
   post: Amity.Post;
@@ -336,7 +337,7 @@ export const PostMenu = ({
           className={styles.postMenu__item}
           onPress={onEditClick}
         >
-          <CreatePost className={styles.postMenu__editPost__icon} />
+          <Pencil className={styles.postMenu__editPost__icon} />
           <Typography.BodyBold className={styles.postMenu__editPost__text}>
             Edit post
           </Typography.BodyBold>

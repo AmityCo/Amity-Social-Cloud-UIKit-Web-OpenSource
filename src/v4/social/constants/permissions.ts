@@ -35,6 +35,11 @@ export enum Permissions {
   EditCommunityCategoryPermission = 'EDIT_COMMUNITY_CATEGORY',
   DeleteCommunityCategoryPermission = 'DELETE_COMMUNITY_CATEGORY',
   ManageStoryPermission = 'MANAGE_COMMUNITY_STORY',
-  CreatePivillegedPostPermission = 'CREATE_PRIVILEGED_POST',
+  CreatePrivilegedPostPermission = 'CREATE_PRIVILEGED_POST',
   ReviewCommunityPost = 'REVIEW_COMMUNITY_POST',
+  CreateEventPermission = 'CREATE_EVENT',
+  UpdateEventPermission = 'UPDATE_EVENT',
+  DeleteEventPermission = 'DELETE_EVENT',
+  CreateEventWithLivestreamPermission = 'CREATE_EVENT_WITH_LIVESTREAM',
+  ManageCommunityEventsPermission = 'MANAGE_COMMUNITY_EVENTS',
 }

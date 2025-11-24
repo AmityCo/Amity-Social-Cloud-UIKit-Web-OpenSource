@@ -1,0 +1,11 @@
+.eventActions {
+  top: 0;
+  left: 0;
+  right: 0;
+  gap: 1rem;
+  display: flex;
+  padding: 1rem;
+  position: fixed;
+  align-items: center;
+  justify-content: space-between;
+}

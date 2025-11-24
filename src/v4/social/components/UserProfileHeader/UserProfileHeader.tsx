@@ -18,7 +18,7 @@ import { Typography } from '~/v4/core/components';
 import NotificationIndicator from '~/v4/icons/NotificationIndicator';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import useUserFollow from '~/v4/social/hooks/useUserFollow';
-import UnfollowUser from '~/v4/icons/UnfollowUser';
+import UserTimes from '~/v4/icons/UserTimes';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import useUserBlock from '~/v4/social/hooks/useUserBlock';
 import { SingleImageViewer } from '~/v4/social/internal-components/SingleImageViewer';
@@ -83,7 +83,7 @@ export const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ user, page
       }}
       variant="text"
     >
-      <UnfollowUser className={styles.userProfileHeader__unFollowButton__icon} />
+      <UserTimes className={styles.userProfileHeader__unFollowButton__icon} />
       <Typography.BodyBold className={styles.userProfileHeader__unFollowButton__text}>
         Unfollow
       </Typography.BodyBold>

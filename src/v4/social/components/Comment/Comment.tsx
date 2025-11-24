@@ -35,6 +35,7 @@ import { ReactionButton } from '~/v4/social/elements/ReactionButton';
 import styles from './Comment.module.css';
 import useUserProfileGlobalBehavior from '~/v4/core/hooks/useUserProfileGlobalBehavior';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { EventHostBadge } from '~/v4/social/elements';
 
 interface CommentProps {
   pageId?: string;
@@ -55,6 +56,7 @@ interface CommentProps {
   // support inline comment behavior - behavior when click show reply
   onClickShowReply?: () => void;
   testId?: string;
+  isHost?: boolean;
 }
 
 export const Comment = ({
@@ -71,6 +73,7 @@ export const Comment = ({
   onClickShowReply,
   maxLines,
   testId,
+  isHost,
 }: CommentProps) => {
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -344,8 +347,11 @@ export const Comment = ({
                 {isBrandUser && <BrandBadge className={styles.postComment__brandBadge} />}
               </Button>
 
-              {isModeratorUser && !isBrandUser && (
-                <ModeratorBadge pageId={pageId} componentId={componentId} />
+              {isHost ? (
+                <EventHostBadge withLabel />
+              ) : (
+                isModeratorUser &&
+                !isBrandUser && <ModeratorBadge pageId={pageId} componentId={componentId} />
               )}
 
               <TextWithMention

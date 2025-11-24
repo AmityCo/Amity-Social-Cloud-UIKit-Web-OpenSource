@@ -26,6 +26,7 @@ interface RegisterDeviceParams {
   onConnected?: () => void;
   onDisconnected?: () => void;
   onGlobalBanned?: (payload: Amity.UserPayload) => void;
+  onUserDeleted?: (payload: Amity.UserPayload) => void;
 }
 
 /**
@@ -54,6 +55,7 @@ export class AmityUIKitManager {
   private onDisconnected?: () => void;
   private globalBannedUnsubscribe?: Amity.Unsubscriber;
   private onGlobalBanned?: (users: Amity.UserPayload) => void;
+  private onUserDeleted?: (users: Amity.UserPayload) => void;
 
   /**
    * Private constructor to prevent direct instantiation.
@@ -98,6 +100,7 @@ export class AmityUIKitManager {
     onConnected,
     onDisconnected,
     onGlobalBanned,
+    onUserDeleted,
   }: RegisterDeviceParams): Promise<void> {
     if (!AmityUIKitManager.instance) {
       throw new Error('AmityUIKitManager must be set up first using the setup method.');
@@ -107,6 +110,7 @@ export class AmityUIKitManager {
     AmityUIKitManager.instance.onConnected = onConnected;
     AmityUIKitManager.instance.onDisconnected = onDisconnected;
     AmityUIKitManager.instance.onGlobalBanned = onGlobalBanned;
+    AmityUIKitManager.instance.onUserDeleted = onUserDeleted;
 
     await AmityUIKitManager.instance.connectAndLogin({
       userId,
@@ -175,6 +179,12 @@ export class AmityUIKitManager {
     this.globalBannedUnsubscribe = ASCClient.onClientBanned((payload) => {
       this.onGlobalBanned?.(payload);
     });
+
+    // TODO: confirm if we have this on SDK - confirm with mobile platform
+
+    // this.deletedUserUnsubscribe = ASCClient.onUserDeleted((payload) => {
+    //   this.onGlobalBanned?.(payload);
+    // });
 
     try {
       const sharableLinkConfig = await ASCClient.getShareableLinkConfiguration();

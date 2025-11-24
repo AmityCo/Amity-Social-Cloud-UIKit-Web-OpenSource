@@ -64,6 +64,13 @@
   }
 
   .chatFeed__container {
+    position: relative;
     padding: 1rem 1rem 0;
+  }
+
+  .chatFeed__container__overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 }

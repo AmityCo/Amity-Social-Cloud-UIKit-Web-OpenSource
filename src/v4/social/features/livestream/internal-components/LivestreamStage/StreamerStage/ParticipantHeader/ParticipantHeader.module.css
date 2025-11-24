@@ -1,0 +1,47 @@
+.participantHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.participantHeader__muteMic__icon {
+  fill: var(--asc-color-white);
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.participantHeader__displayName {
+  max-width: 15rem;
+  padding: 0.25rem 0.625rem;
+  display: flex;
+  align-items: center;
+  border-radius: 50rem;
+  background: rgb(0 0 0 / 20%);
+}
+
+.participantHeader__displayName__text {
+  color: var(--asc-color-white);
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.participantHeader__optionButton {
+  background: rgb(0 0 0 / 20%);
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.25rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.participantHeader__optionButton__icon {
+  color: var(--asc-color-white);
+}

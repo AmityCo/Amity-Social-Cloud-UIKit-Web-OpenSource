@@ -32,10 +32,6 @@ export { PollTargetSelectionPage } from './PollTargetSelectionPage';
 export { AllCategoriesPage } from './AllCategoriesPage';
 export { CommunitiesByCategoryPage } from './CommunitiesByCategoryPage';
 
-export { LiveStreamPlayerPage } from './LiveStreamPlayerPage';
-export { LivestreamTerminatedPage } from './LivestreamTerminatedPage';
-export { LiveStreamBannedPage } from './LiveStreamBannedPage';
-
 export { NotificationTrayPage } from './NotificationTrayPage';
 
 export { PendingRequestPage } from './PendingRequestPage';
@@ -43,3 +39,13 @@ export { PendingRequestPage } from './PendingRequestPage';
 export { DraftClipPage } from './DraftClipPage';
 
 export { ClipFeedPage } from './ClipFeedPage';
+
+export { EventTargetSelectionPage } from './EventTargetSelectionPage';
+
+export { EventSetupPage } from './EventSetupPage';
+
+export { UpcomingEventsPage } from './UpcomingEventsPage';
+
+export { PastEventsPage } from './PastEventsPage';
+
+export { EventDetailPage } from './EventDetailPage';

@@ -27,9 +27,12 @@ export function useLiveCollectionV4<TCallback, TParams>({
   error: Error | null;
   loadMoreHasBeenCalled: boolean;
   refresh: () => void;
+  isLoadingFirstPage: boolean;
 } {
   const [loadMoreHasBeenCalled, setLoadMoreHasBeenCalled] = useState(false);
-  const [isLoading, setIsLoading] = useState(shouldCall ? shouldCall : true);
+  const loadingCountRef = useRef(0);
+  const [isLoadingFirstPage, setIsLoadingFirstPage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState<TCallback[]>([]);
   const [error, setError] = useState<Error | null>(null);
   const [hasMore, setHasMore] = useState(false);
@@ -47,7 +50,13 @@ export function useLiveCollectionV4<TCallback, TParams>({
     (response) => {
       if (!shouldCall) return;
       if (response.data) setItems(response.data);
-      setIsLoading(response.loading);
+      if (loadingCountRef.current === 0) {
+        setIsLoadingFirstPage(response.loading);
+      } else {
+        setIsLoadingFirstPage(false);
+        setIsLoading(response.loading);
+      }
+      loadingCountRef.current += 1;
       setHasMore(response.hasNextPage);
       setError(response.error);
       loadMoreFnRef.current = response.onNextPage;
@@ -85,6 +94,7 @@ export function useLiveCollectionV4<TCallback, TParams>({
     isLoading,
     loadMore,
     refresh,
+    isLoadingFirstPage,
     loadMoreHasBeenCalled,
   };
 }

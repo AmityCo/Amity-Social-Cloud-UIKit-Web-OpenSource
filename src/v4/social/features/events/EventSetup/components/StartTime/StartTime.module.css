@@ -1,0 +1,36 @@
+.startTime {
+  gap: 0.75rem;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 7.5rem 1fr;
+}
+
+.startTime__label {
+  text-align: left;
+  color: var(--asc-color-base-default);
+}
+
+.startTime__button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  justify-content: space-between;
+  background-color: var(--asc-color-base-shade4);
+}
+
+.startTime__dateTimePickerContainer {
+  width: 23.4375rem;
+}
+
+@media only screen and (width < 48em) {
+  .startTime {
+    gap: 0.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  .startTime__dateTimePickerContainer {
+    width: 100%;
+  }
+}

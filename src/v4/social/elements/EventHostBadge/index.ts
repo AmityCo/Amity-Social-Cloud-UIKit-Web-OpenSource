@@ -1,0 +1,1 @@
+export { EventHostBadge } from './EventHostBadge';

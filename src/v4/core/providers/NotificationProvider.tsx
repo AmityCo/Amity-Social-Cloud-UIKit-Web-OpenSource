@@ -4,15 +4,16 @@ import CheckCircle from '~/v4/icons/CheckCircle';
 import ExclamationCircle from '~/v4/icons/ExclamationCircle';
 import Remove from '~/v4/icons/Remove';
 import styles from './NotificationProvider.module.css';
+import { Spinner } from '~/v4/social/internal-components/Spinner';
 
 interface Notification {
-  id: number;
+  id?: number | string;
   content: ReactNode;
   icon?: ReactNode;
   duration?: number;
 }
 
-type NotificationInput = Omit<Notification, 'id'> & {
+type NotificationInput = Notification & {
   duration?: number;
   alignment?: 'fullscreen' | 'withSidebar' | 'fixed';
 };
@@ -20,20 +21,24 @@ type NotificationInput = Omit<Notification, 'id'> & {
 interface NotificationContextProps {
   notifications: Notification[];
   notificationFunction: {
+    remove: (id: Notification['id']) => void;
     success: (data: Omit<NotificationInput, 'icon'>) => void;
     info: (data: Omit<NotificationInput, 'icon'>) => void;
     error: (data: Omit<NotificationInput, 'icon'>) => void;
     show: (data: Omit<NotificationInput, 'icon'>) => void;
+    loading: (data: Omit<NotificationInput, 'icon'>) => void;
   };
 }
 
 export const NotificationContext = createContext<NotificationContextProps>({
   notifications: [],
   notificationFunction: {
+    remove: () => {},
     success: () => {},
     info: () => {},
     error: () => {},
     show: () => {},
+    loading: () => {},
   },
 });
 
@@ -42,7 +47,7 @@ const DEFAULT_NOTIFICATION_DURATION = 3000;
 export const NotificationProvider: React.FC = ({ children }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const removeNotification = (id: number) =>
+  const removeNotification = (id: Notification['id']) =>
     setNotifications &&
     setNotifications((prevNotifications) =>
       prevNotifications.filter((notification) => notification.id !== id),
@@ -53,8 +58,8 @@ export const NotificationProvider: React.FC = ({ children }) => {
     setNotifications((prevNotifications) => [
       ...prevNotifications,
       {
-        id,
         ...data,
+        id: data.id || id,
       },
     ]);
 
@@ -68,6 +73,7 @@ export const NotificationProvider: React.FC = ({ children }) => {
       value={{
         notifications,
         notificationFunction: {
+          remove: removeNotification,
           success: (data: Omit<NotificationInput, 'icon'>) =>
             addNotifications({
               ...data,
@@ -84,6 +90,12 @@ export const NotificationProvider: React.FC = ({ children }) => {
             addNotifications({
               ...data,
               icon: <Remove className={styles.icon} />,
+              alignment: data.alignment,
+            }),
+          loading: (data: Omit<NotificationInput, 'icon'>) =>
+            addNotifications({
+              ...data,
+              icon: <Spinner className={styles.icon} />,
               alignment: data.alignment,
             }),
           show: (data: Omit<NotificationInput, 'icon'>) => addNotifications(data),

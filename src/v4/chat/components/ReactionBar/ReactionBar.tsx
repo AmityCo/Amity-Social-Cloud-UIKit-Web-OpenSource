@@ -8,14 +8,14 @@ import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfi
 interface ReactionBarProps {
   targetType: string;
   targetId: string;
-  streamId?: string;
+  roomId?: string;
   isJoinedCommunity?: boolean;
 }
 
 export const ReactionBar = ({
   targetType,
   targetId,
-  streamId,
+  roomId,
   isJoinedCommunity,
 }: ReactionBarProps) => {
   const { reactions: config } = useCustomReaction();
@@ -25,15 +25,15 @@ export const ReactionBar = ({
 
   const onReactionClick = useCallback(
     (reactionName: string) => {
-      if (streamId)
+      if (roomId)
         LiveReactionRepository.createReaction({
           referenceId: targetId,
           referenceType: targetType,
           reactionName: reactionName,
-          streamId,
+          roomId,
         });
     },
-    [targetId, targetType, streamId],
+    [targetId, targetType, roomId],
   );
 
   const handleReactionClick = (reactionName: string) => {

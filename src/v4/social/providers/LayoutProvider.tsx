@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren, useContext, useState } from 'react';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
-import { LiveStreamPlayerPageProps } from '~/v4/social/pages/LiveStreamPlayerPage';
+import { LiveStreamPlayerPageProps } from '~/v4/social/features/livestream/pages/LiveStreamPlayerPage';
 import {
   useInvitationNotificationTray,
   InvitationNotificationTray,
@@ -59,7 +59,7 @@ type LayoutProviderProps = PropsWithChildren<unknown>;
 export const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
   const { isVisitorOrBot } = useSDK();
   const [activeTab, setActiveTab] = useState<HomePageTab>(
-    isVisitorOrBot ? HomePageTab.Explore : HomePageTab.Newsfeed,
+    isVisitorOrBot ? HomePageTab.Communities : HomePageTab.Newsfeed,
   );
   const [acceptedInvitation, setAcceptedInvitation] = useState<Amity.Invitation | null>(null);
   const [liveStreamPlayer, setStreamPlayer] = useState<LiveStreamPlayerPageProps | null>(null);

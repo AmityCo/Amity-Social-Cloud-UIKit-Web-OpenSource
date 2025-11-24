@@ -1,0 +1,32 @@
+/* CoHostPlaceholder Component Styles */
+
+.coHostPlaceholder__container {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    var(--asc-color-secondary-shade2) 0%,
+    var(--asc-color-secondary-shade3) 100%
+  );
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+/* These styles are now handled by ParticipantHeader component */
+
+.coHostPlaceholder__avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.coHostPlaceholder__text {
+  width: 30%;
+  color: var(--asc-color-base-default);
+  text-align: center;
+}

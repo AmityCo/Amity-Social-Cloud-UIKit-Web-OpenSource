@@ -1,0 +1,31 @@
+.liveStreamBanThumbnail[data-view='post'] {
+  gap: 0.25rem;
+  height: 100%;
+  display: flex;
+  margin: 0 -1rem;
+  text-align: center;
+  align-items: center;
+  aspect-ratio: 16 / 9;
+  flex-direction: column;
+  justify-content: center;
+  object-position: center;
+  width: calc(100% + 2rem);
+  color: var(--asc-color-white);
+  background-color: var(--asc-color-black);
+}
+
+.liveStreamBanThumbnail[data-view='full-screen'] {
+  inset: 0;
+  gap: 0.25rem;
+  height: 100dvh;
+  z-index: 100;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  object-position: center;
+  color: var(--asc-color-white);
+  background-color: var(--asc-color-black);
+  width: 100dvw;
+}

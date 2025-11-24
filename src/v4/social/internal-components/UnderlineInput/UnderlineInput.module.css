@@ -31,6 +31,7 @@
   overflow: hidden;
   line-height: 1.25rem;
   field-sizing: content;
+  background: transparent;
 }
 
 .underlineInput__value::placeholder {

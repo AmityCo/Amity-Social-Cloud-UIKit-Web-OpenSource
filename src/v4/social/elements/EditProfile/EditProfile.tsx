@@ -1,6 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
-import { Pen } from '~/v4/icons/Pen';
+import { Pencil } from '~/v4/icons/Pencil';
 import ChevronRight from '~/v4/icons/ChevronRight';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
@@ -39,7 +38,7 @@ export const EditProfile = ({
       <div className={styles.editProfile__leftWrap}>
         <IconComponent
           defaultIcon={() => (
-            <Pen className={clsx(styles.editProfile__icon, defaultIconClassName)} />
+            <Pencil className={clsx(styles.editProfile__icon, defaultIconClassName)} />
           )}
           imgIcon={() => <img src={config.icon} alt={uiReference} className={imgIconClassName} />}
           defaultIconName={defaultConfig.icon}

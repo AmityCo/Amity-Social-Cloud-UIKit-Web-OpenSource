@@ -79,9 +79,12 @@ type BaseThemeValue = {
   transparent_black: string;
   custom_toast_background: string;
   live_stream_chat_bubble_color: string;
+  base_divider_line: string;
   elevation_08_01_color: string;
   elevation_08_02_color: string;
   elevation_08_03_color: string;
+  host_color: string;
+  host_color_shade1: string;
 };
 
 type GeneratedThemeValue = {
@@ -109,6 +112,9 @@ const defaultBase = {
   transparent_black: 'rgb(0 0 0 / 50%)',
   trasparent_black_color: 'rgb(0 0 0 / 50%)',
   live_stream_chat_bubble_color: 'rgba(99, 104, 120, 0.30)',
+  base_divider_line: ' #292B32',
+  host_color: '#4B1BD0',
+  host_color_shade1: '#EAE2FF',
 };
 
 export const defaultBaseThemeValue: { dark: BaseThemeValue; light: BaseThemeValue } = {
@@ -310,8 +316,15 @@ export const defaultConfig: DefaultConfig = {
       text: 'Explore',
     },
     'social_home_page/*/my_communities_button': {
-      text: 'My Communities',
+      text: 'My communities',
     },
+    'social_home_page/*/communities_button': {
+      text: 'Communities',
+    },
+    'social_home_page/*/events_button': {
+      text: 'Events',
+    },
+
     'social_home_page/empty_newsfeed/illustration': {
       icon: 'emptyFeedIcon',
     },
@@ -354,6 +367,7 @@ export const defaultConfig: DefaultConfig = {
       text: 'Clip',
       image: 'value',
     },
+
     'social_home_page/*/clipsfeed_button': {
       text: 'Clips',
     },
@@ -449,6 +463,10 @@ export const defaultConfig: DefaultConfig = {
     'social_home_page/create_post_menu/create_livestream_button': {
       text: 'Livestream',
       image: 'Livestream',
+    },
+    'social_home_page/create_post_menu/create_event_button': {
+      text: 'Event',
+      image: '',
     },
     'select_post_target_page/*/close_button': {
       image: 'platformValue',
@@ -579,6 +597,9 @@ export const defaultConfig: DefaultConfig = {
     'community_profile_page/*/create_clip_button': {
       text: 'Clip',
     },
+    'community_profile_page/*/create_event_button': {
+      text: 'Event',
+    },
     'community_profile_page/community_video_feed/videos_button': {
       text: 'Videos',
     },
@@ -658,11 +679,19 @@ export const defaultConfig: DefaultConfig = {
       icon: 'Global',
     },
     '*/community_sidebar/my_communities_sidebar_title': {
-      text: 'My Communities',
+      text: 'My communities',
     },
     '*/community_sidebar/create_community_sidebar_menu_item': {
       text: 'Create community',
       icon: 'Plus',
+    },
+    '*/community_sidebar/communities_sidebar_menu_item': {
+      text: 'Communities',
+      icon: '',
+    },
+    '*/community_sidebar/events_sidebar_menu_item': {
+      text: 'Events',
+      icon: '',
     },
     'user_profile_page/*/*': {},
     'user_profile_page/*/back_button': {
@@ -772,6 +801,21 @@ export const defaultConfig: DefaultConfig = {
       image: 'BlockedUser',
     },
     'user_profile_page/user_video_feed/blocked_user_video_feed_info': {
+      text: 'Unblock to see their posts.',
+    },
+
+    'user_profile_page/user_clip_feed/private_user_clip_feed': {
+      text: 'This account is private',
+      image: 'PrivateFeed',
+    },
+    'user_profile_page/user_clip_feed/private_user_clip_feed_info': {
+      text: 'Follow this user to see their posts.',
+    },
+    'user_profile_page/user_clip_feed/blocked_user_clip_feed': {
+      text: 'You’ve blocked this user',
+      image: 'BlockedUser',
+    },
+    'user_profile_page/user_clip_feed/blocked_user_clip_feed_info': {
       text: 'Unblock to see their posts.',
     },
 
@@ -991,6 +1035,16 @@ export const defaultConfig: DefaultConfig = {
       text: 'Post to',
     },
     'select_poll_target_page/*/my_timeline_text': {
+      text: 'My Timeline',
+    },
+    'select_livestream_target_page/*/close_button': {
+      image: 'platformValue',
+    },
+    'select_livestream_target_page/*/my_timeline_avatar': {},
+    'select_livestream_target_page/*/title': {
+      text: 'Live on',
+    },
+    'select_livestream_target_page/*/my_timeline_text': {
       text: 'My Timeline',
     },
     'livestream_terminated_page/*/*': {},
@@ -1250,6 +1304,36 @@ export const defaultConfig: DefaultConfig = {
       image: 'icon',
       text: 'Copy profile link',
     },
+
+    'select_event_target_page/*/*': {},
+    'select_event_target_page/*/close_button': {
+      image: '',
+    },
+    'select_event_target_page/*/title': {
+      text: 'Create event in',
+    },
+
+    'event_setup_page/*/*': {},
+    'event_setup_page/*/camera_button': {
+      text: 'Camera',
+      image: '',
+    },
+    'event_setup_page/*/image_button': {
+      text: 'Photo',
+      image: '',
+    },
+    'event_setup_page/*/event_name_title': {
+      text: 'Event name',
+    },
+    'event_setup_page/*/event_details_title': {
+      text: 'Event details',
+    },
+    'event_setup_page/*/event_date_time_title': {
+      text: 'Date and time',
+    },
+    'event_setup_page/*/event_location_title': {
+      text: 'Location',
+    },
   },
 };
 
@@ -1309,6 +1393,7 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   message_bubble_primary_color: '--asc-color-message-bubble-primary',
   message_bubble_secondary_color: '--asc-color-message-bubble-secondary',
   live_stream_chat_bubble_color: '--asc-color-live-steram-chat-bubble',
+  base_divider_line: '--asc-color-base-divider-line',
   background_transparent_black_color: '--asc-color-background-transparent-black',
   background_transparent_white_color: '--asc-color-background-transparent-white',
   primary_background_hover_color: '--asc-color-primary-background-hover',
@@ -1321,6 +1406,8 @@ const propertyMappings: Record<keyof ThemeValue, string> = {
   elevation_08_01_color: '--asc-color-elevation-08-01',
   elevation_08_02_color: '--asc-color-elevation-08-02',
   elevation_08_03_color: '--asc-color-elevation-08-03',
+  host_color: '--asc-color-host-default',
+  host_color_shade1: '--asc-color-host-shade1',
 };
 
 export const themePropertiesToCSSVar = ({ theme }: { theme: Partial<ThemeValue> }) => {

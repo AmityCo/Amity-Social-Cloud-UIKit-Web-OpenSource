@@ -1,0 +1,1 @@
+export { EventDiscussion } from './EventDiscussion';

@@ -1,1 +1,0 @@
-export { EmptyCommunityImageFeed } from './EmptyCommunityImageFeed';

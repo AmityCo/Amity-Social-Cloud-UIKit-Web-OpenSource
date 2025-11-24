@@ -1,12 +1,15 @@
-import React from 'react';
+import { useResponsive } from '~/v4/core/hooks/useResponsive';
+import { useEventPermission } from '~/v4/social/features/events/hooks';
 import { CreatePostButton } from '~/v4/social/elements/CreatePostButton';
 import { CreatePollButton } from '~/v4/social/elements/CreatePollButton';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
 import { CreateStoryButton } from '~/v4/social/elements/CreateStoryButton';
 import { CreateClipButton } from '~/v4/social/elements/CreateClipButton';
+import { CreateLivestreamButton } from '~/v4/social/elements/CreateLivestreamButton';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { CreateEventButton } from '~/v4/social/elements/CreateEventButton';
+import { useRedirectEventTargetSelectionPage } from '~/v4/social/features/events/hooks';
 import styles from './CreatePostMenu.module.css';
-import { useResponsive } from '~/v4/core/hooks/useResponsive';
 
 type CreatePostMenuProps = {
   pageId: string;
@@ -15,9 +18,11 @@ type CreatePostMenuProps = {
 export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
   const componentId = 'create_post_menu';
 
-  const { hasStoryPermission } = useStoryPermission();
-  const { AmityCreatePostMenuComponentBehavior } = usePageBehavior();
   const { isDesktop } = useResponsive();
+  const { hasStoryPermission } = useStoryPermission();
+  const { hasCreateEventPermission } = useEventPermission();
+  const { AmityCreatePostMenuComponentBehavior } = usePageBehavior();
+  const { redirectEventTargetSelectionPage } = useRedirectEventTargetSelectionPage();
 
   return (
     <div className={styles.createPostMenu}>
@@ -47,6 +52,18 @@ export function CreatePostMenu({ pageId }: CreatePostMenuProps) {
               isClipPost: true,
             })
           }
+        />
+      )}
+      <CreateLivestreamButton
+        pageId={pageId}
+        componentId={componentId}
+        onClick={() => AmityCreatePostMenuComponentBehavior?.goToLivestreamUnsupportedPage?.()}
+      />
+      {hasCreateEventPermission && (
+        <CreateEventButton
+          pageId={pageId}
+          componentId={componentId}
+          onPress={redirectEventTargetSelectionPage}
         />
       )}
     </div>

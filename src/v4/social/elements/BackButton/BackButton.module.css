@@ -1,16 +1,36 @@
-.backButton {
+.backButton[data-variant='default'] {
   all: unset;
   width: 1.5rem;
   height: 1.5rem;
   display: grid;
   cursor: pointer;
   place-content: center;
+  background-color: transparent;
   fill: var(--asc-color-base-inverse);
   color: var(--asc-color-base-inverse);
 }
 
-.backButton__icon {
+.backButton__icon[data-variant='default'] {
   width: 1.5rem;
   height: 1.5rem;
   color: var(--asc-color-base-default);
+}
+
+.backButton[data-variant='filled'] {
+  all: unset;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  cursor: pointer;
+  border-radius: 10rem;
+  place-content: center;
+  fill: var(--asc-color-base-inverse);
+  color: var(--asc-color-base-inverse);
+  background-color: var(--asc-color-background-transparent-black);
+}
+
+.backButton__icon[data-variant='filled'] {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--asc-color-white);
 }

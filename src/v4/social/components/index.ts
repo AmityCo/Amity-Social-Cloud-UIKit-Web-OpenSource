@@ -31,3 +31,4 @@ export * from './InvitationSection';
 export * from './PostSearchResult';
 export * from './PendingPostList';
 export * from './JoinRequestContent';
+export * from './UserClipFeed';

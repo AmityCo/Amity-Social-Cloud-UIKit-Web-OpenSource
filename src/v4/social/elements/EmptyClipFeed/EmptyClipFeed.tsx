@@ -1,23 +1,18 @@
-import React from 'react';
-import styles from './EmptyClipFeed.module.css';
 import EmptyClip from '~/v4/icons/EmptyClip';
-import { EmptyContent } from '~/v4/social/internal-components/EmptyContent/EmptyContent';
+import { Typography } from '~/v4/core/components';
+import { IconComponent } from '~/v4/core/IconComponent';
+import styles from './EmptyClipFeed.module.css';
 
-interface EmptyClipFeedProps {
-  pageId?: string;
-  componentId?: string;
-}
-
-export const EmptyClipFeed = ({ pageId = '*', componentId = '*' }: EmptyClipFeedProps) => {
-  const elementId = 'empty_clip_feed';
-
+export const EmptyClipFeed = () => {
   return (
-    <EmptyContent
-      pageId={pageId}
-      componentId={componentId}
-      elementId={elementId}
-      defaultIcon={() => <EmptyClip className={styles.emptyClipFeed__icon} />}
-      emptyContentClassName={styles.emptyClipFeed}
-    />
+    <div data-testid="empty-clip-feed" className={styles.emptyClipFeed}>
+      <IconComponent
+        defaultIcon={() => <EmptyClip className={styles.emptyClipFeed__icon} />}
+        imgIcon={() => <EmptyClip className={styles.emptyClipFeed__icon} />}
+      />
+      <Typography.TitleBold className={styles.emptyClipFeed__text}>
+        No clips yet
+      </Typography.TitleBold>
+    </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './UserMenu.module.css';
 import { Button } from '~/v4/core/natives/Button';
-import Pencil from '~/v4/icons/Pencil';
+import { Pencil } from '~/v4/icons/Pencil';
 import BlockedUser from '~/v4/icons/BlockedUser';
 import { Typography } from '~/v4/core/components';
 import useSDK from '~/v4/core/hooks/useSDK';

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import useMessagesCollection from '~/v4/chat/hooks/collections/useMessagesCollection';
 import MessageBubbleIcon from '~/v4/icons/MessageBubble';
 import { MessageBubble } from '~/v4/chat/internal-components/MessageBubble/MessageBubble';
@@ -8,20 +8,24 @@ import { Typography } from '~/v4/core/components';
 import styles from './ChatFeed.module.css';
 import { ChannelRepository, getChannelTopic, subscribeTopic } from '@amityco/ts-sdk';
 import useSDK from '~/v4/core/hooks/useSDK';
+import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 
 interface ChatFeedProps {
   channel: Amity.Channel;
   isJoinedCommunity?: boolean;
+  isLoading?: boolean;
 }
 
 const isAmityTextMessage = (message: Amity.Message): message is Amity.Message<'text'> => {
   return !!message.data && typeof message.data !== 'string' && 'text' in message.data;
 };
 
-const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity }) => {
+const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity, isLoading }) => {
   const [joined, setJoined] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
   const { isVisitorOrBot } = useSDK();
+  const { room, invitationByMe } = useLivestreamData();
 
   const { messages, loading, hasMore, loadMore } = useMessagesCollection(
     {
@@ -49,6 +53,18 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity }) => {
     return () => unsubTopic();
   }, [channel, isVisitorOrBot]);
 
+  const renderLoadingSkeleton = useCallback(() => {
+    return (
+      <div className={styles.chatFeed__skeleton__container}>
+        {Array.from({
+          length: 5,
+        }).map((_, index) => (
+          <MessageBubbleSkeleton key={index} />
+        ))}
+      </div>
+    );
+  }, []);
+
   const isEmpty = !loading && messages?.length === 0;
 
   return (
@@ -64,45 +80,40 @@ const ChatFeed: FC<ChatFeedProps> = ({ channel, isJoinedCommunity }) => {
           </Typography.Caption>
         </div>
       ) : (
-        <div
-          className={styles.chatFeed__messageList__container}
-          ref={containerRef}
-          id="chatFeedScrollableContainer"
-        >
-          <InfiniteScroll
-            scrollableTarget={'chatFeedScrollableContainer'}
-            scrollThreshold={0.5}
-            hasMore={hasMore || false}
-            next={() => loadMore?.()}
-            inverse={true}
-            loader={
-              loading && !messages ? (
-                <div className={styles.chatFeed__skeleton__container}>
-                  {Array.from({
-                    length: 5,
-                  }).map((_, index) => (
-                    <MessageBubbleSkeleton key={index} />
-                  ))}
-                </div>
-              ) : null
-            }
-            dataLength={messages?.length || 0}
-            style={{ display: 'flex', flexDirection: 'column-reverse' }}
+        <>
+          {/* <div className={styles.chatFeed__container__overlay}></div> */}
+          <div
+            className={styles.chatFeed__messageList__container}
+            ref={containerRef}
+            id="chatFeedScrollableContainer"
           >
-            <div className={styles.chatFeed__messageList__inner}>
-              {messages?.map((message) => {
-                if (!isAmityTextMessage(message)) return null;
-                return (
-                  <MessageBubble
-                    key={message.messageId}
-                    message={message}
-                    isJoinedCommunity={isJoinedCommunity}
-                  />
-                );
-              })}
-            </div>
-          </InfiniteScroll>
-        </div>
+            {(loading || isLoading) && renderLoadingSkeleton()}
+            <InfiniteScroll
+              scrollableTarget={'chatFeedScrollableContainer'}
+              scrollThreshold={0.5}
+              hasMore={hasMore || false}
+              next={() => loadMore?.()}
+              inverse={true}
+              loader={(loading || isLoading) && !messages ? renderLoadingSkeleton() : null}
+              dataLength={messages?.length || 0}
+              style={{ display: 'flex', flexDirection: 'column-reverse' }}
+            >
+              <div className={styles.chatFeed__messageList__inner}>
+                {messages?.map((message) => {
+                  if (!isAmityTextMessage(message)) return null;
+                  return (
+                    <MessageBubble
+                      key={message.messageId}
+                      message={message}
+                      isJoinedCommunity={isJoinedCommunity}
+                      channel={channel}
+                    />
+                  );
+                })}
+              </div>
+            </InfiniteScroll>
+          </div>
+        </>
       )}
     </div>
   );

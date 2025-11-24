@@ -1,0 +1,109 @@
+.eventDescription {
+  padding: 1rem;
+  border-left: 1px solid var(--asc-color-base-shade4);
+  border-right: 1px solid var(--asc-color-base-shade4);
+  background-color: var(--asc-color-background-default);
+}
+
+.eventDescription__community {
+  gap: 0.25rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.325rem;
+}
+
+.eventDescription__status {
+  text-transform: uppercase;
+  color: var(--asc-color-base-shade1);
+}
+
+.eventDescription__name {
+  color: var(--asc-color-base-default);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.eventDescription__title {
+  margin-bottom: 1.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.eventDescription__details {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.eventDescription__row {
+  gap: 0.75rem;
+  display: flex;
+  align-items: center;
+}
+
+.eventDescription__dateIconContainer {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+.eventDescription__dateIconMonth {
+  font-size: 0.5rem;
+  text-align: center;
+  padding: 0.125rem 0;
+  text-transform: uppercase;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  color: var(--asc-color-base-shade1);
+  background-color: var(--asc-color-base-shade4);
+}
+
+.eventDescription__dateIconDay {
+  text-align: center;
+  color: var(--asc-color-base-default);
+}
+
+.eventDescription__iconContainer {
+  display: flex;
+  padding: 0.625rem;
+  place-content: center;
+  border-radius: 0.5rem;
+  border: 1px solid var(--asc-color-base-shade4);
+}
+
+.eventDescription__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--asc-color-base-default);
+}
+
+.eventDescription__subTitle {
+  color: var(--asc-color-base-shade2);
+}
+
+.eventDescription__hostAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.eventDescription__hostInfo {
+  gap: 0.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.eventDescription__brandBadge {
+  width: 1rem;
+  height: 1rem;
+}
+
+.eventDescription__communityButton {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.eventDescription__setUpLiveStreamButton {
+  margin: 1.25rem 0 1rem;
+}

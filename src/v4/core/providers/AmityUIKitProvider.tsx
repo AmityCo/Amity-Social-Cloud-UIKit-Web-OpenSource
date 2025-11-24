@@ -57,6 +57,7 @@ import { SearchResultProvider } from '~/v4/social/providers/SearchResultProvider
 import { GlobalBan } from '~/v4/social/internal-components/GlobalBan';
 import { ERROR_RESPONSE } from '~/v4/social/constants/errorResponse';
 import { Client, UserTypeEnum } from '@amityco/ts-sdk';
+import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 
 const InternalComponent = ({
   apiKey,
@@ -84,6 +85,7 @@ const InternalComponent = ({
   const [client, setClient] = useState<Amity.Client | null>(null);
   const { networkConfig, isNetworkConfigLoading } = useNetworkConfig(client);
   const [isGlobalBanned, setIsGlobalBanned] = useState<boolean>(false);
+  const [isUserDeleted, setIsUserDeleted] = useState<boolean>(false);
 
   const sdkContextValue: SDKContextType = useMemo(() => {
     if (!client) return initialSDKContext;
@@ -131,6 +133,12 @@ const InternalComponent = ({
   const onGlobalBanned = (payload: Amity.UserPayload) => {
     if (payload.users.find((user) => user.userId === userId)?.isGlobalBan) {
       setIsGlobalBanned(true);
+    }
+  };
+
+  const onUserDeleted = (payload: Amity.UserPayload) => {
+    if (payload.users.find((user) => user.userId === userId)?.isGlobalBan) {
+      setIsUserDeleted(true);
     }
   };
 
@@ -185,6 +193,7 @@ const InternalComponent = ({
           onConnectionStatusChange,
           onDisconnected,
           onGlobalBanned,
+          onUserDeleted,
         });
 
         setClient(newClient);
@@ -204,6 +213,8 @@ const InternalComponent = ({
   }, [userId, displayName, onConnectionStatusChange, onDisconnected]);
 
   if (isGlobalBanned) return <GlobalBan />;
+
+  if (isUserDeleted) return <FailedToShow />;
 
   if (!client || isNetworkConfigLoading) return null;
 

@@ -87,7 +87,7 @@ export const UnderlineInput = forwardRef(function (
         </div>
         {showCounter && (
           <Typography.Caption className={styles.underlineInput__counter}>
-            {value?.length}/{maxLength}
+            {value?.length ?? 0}/{maxLength}
           </Typography.Caption>
         )}
       </Label>

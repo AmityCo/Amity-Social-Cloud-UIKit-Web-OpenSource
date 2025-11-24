@@ -75,19 +75,31 @@ export {
   CommunityPostPermissionPage as AmityCommunityPostPermissionPage,
   CommunityStorySettingPage as AmityCommunityStorySettingPage,
   CommunityMembershipPage as AmityCommunityMembershipPage,
-  LiveStreamPlayerPage as AmityLiveStreamPlayerPage,
-  LivestreamTerminatedPage as AmityLivestreamTerminatedPage,
   DraftClipPage as AmityDraftClipPage,
   ClipFeedPage as AmityClipFeedPage,
   PendingRequestPage as AmityPendingRequestPage,
   CommunityInviteMemberPage as AmityCommunityInviteMemberPage,
   CommunityPendingInvitationPage as AmityCommunityPendingInvitationPage,
+  EventTargetSelectionPage as AmityEventTargetSelectionPage,
+  EventSetupPage as AmityEventSetupPage,
+  UpcomingEventsPage as AmityUpcomingEventsPage,
+  PastEventsPage as AmityPastEventsPage,
+  EventDetailPage as AmityEventDetailPage,
 } from '~/v4/social/pages';
 
 export {
   AmityCommunitySetupPageMode,
   UserRelationshipPageTabs as AmityUserRelationshipPageTabs,
 } from '~/v4/social/pages';
+
+export {
+  LiveStreamPlayerPage as AmityLiveStreamPlayerPage,
+  LivestreamTerminatedPage as AmityLivestreamTerminatedPage,
+  LiveStreamBannedPage as AmityLiveStreamBannedPage,
+  LivestreamUnsupportedPage as AmityLivestreamUnsupportedPage,
+  CreateLivestreamPage as AmityCreateLivestreamPage,
+  LivestreamTargetSelectionPage as AmityLivestreamTargetSelectionPage,
+} from '~/v4/social/features/livestream/pages';
 
 export {
   MyCommunities as AmityMyCommunitiesComponent,
@@ -123,3 +135,16 @@ export {
 } from '~/v4/social/components/';
 
 export { HomePageTab as AmitySocialHomePageTab } from '~/v4/social/constants/HomePageTab';
+
+export { EventSetupMode as AmityEventSetupPageMode } from './v4/social/features';
+
+export {
+  CommunityEventFeed as AmityCommunityEventFeedComponent,
+  CommunityMediaFeed as AmityCommunityMediaFeedComponent,
+} from './v4/social/features/communities/profile/components';
+
+export { ExploreEvent as AmityExploreEventFeedComponent } from './v4/social/features/events/EventHub/components/Explore';
+export { MyEvents as AmityMyEventFeedComponent } from './v4/social/features/events/EventHub/components/MyEvents';
+export { EventInfo as AmityEventInfoComponent } from './v4/social/features/events';
+
+export { LivestreamChatMessageComposer as AmityLivestreamChatMessageComposerComponent } from '~/v4/social/features/livestream';

@@ -1,28 +1,24 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import styles from './SocialHomePage.module.css';
-
 import { TopNavigation } from '~/v4/social/components/TopNavigation';
-import { MyCommunities } from '~/v4/social/components/MyCommunities';
-import { NewsfeedButton } from '~/v4/social/elements/NewsfeedButton';
-import { ExploreButton } from '~/v4/social/elements/ExploreButton';
-import { MyCommunitiesButton } from '~/v4/social/elements/MyCommunitiesButton';
 import { Newsfeed } from '~/v4/social/components/Newsfeed';
 import { useAmityPage } from '~/v4/core/hooks/uikit';
 import { CreatePostMenu } from '~/v4/social/components/CreatePostMenu';
 import { useGlobalFeedContext } from '~/v4/social/providers/GlobalFeedProvider';
-import { Explore } from '~/v4/social/components/Explore';
 import { HomePageTab } from '~/v4/social/constants/HomePageTab';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { NoInternetConnectionHoc } from '~/v4/social/internal-components/NoInternetConnection/NoInternetConnectionHoc';
-import { ClipsFeedButton } from '~/v4/social/elements/ClipsFeedButton';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useCustomization } from '~/v4/core/providers/CustomizationProvider';
-
 import useSDK from '~/v4/core/hooks/useSDK';
+import { Communities } from '~/v4/social/internal-components/Communities/Communities';
+import styles from './SocialHomePage.module.css';
+import { Events } from '~/v4/social/features';
+import ChipButton from '~/v4/social/elements/ChipButton';
+import { ELEMENT_ID, PAGE_ID } from '~/v4/constants/customization';
 
 export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: HomePageTab }) {
   const pageId = 'social_home_page';
-  const { currentUser, isVisitorOrBot } = useSDK();
+  const { isVisitorOrBot } = useSDK();
   const { config } = useCustomization();
   const { themeStyles } = useAmityPage({
     pageId,
@@ -82,41 +78,43 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
     [setActiveTab, AmitySocialHomePageBehavior],
   );
 
-  const renderTabButtons = useCallback(() => {
+  const renderChipButtons = () => {
     const viewableUserType = config?.feature_flags?.post?.clip?.can_view_tab;
     const hideClipFeedTab = isVisitorOrBot && viewableUserType !== 'all';
 
     return (
-      <>
+      <div className={styles.socialHomePage__tabs}>
         {!isVisitorOrBot && (
-          <NewsfeedButton
-            pageId={pageId}
+          <ChipButton
+            pageId={PAGE_ID.SOCIAL_HOME_PAGE}
+            elementId={ELEMENT_ID.NEWSFEED_BUTTON}
             isActive={activeTab === HomePageTab.Newsfeed}
-            onClick={() => handleTabClick(HomePageTab.Newsfeed)}
+            onPress={() => handleTabClick(HomePageTab.Newsfeed)}
           />
         )}
-        <ExploreButton
-          pageId={pageId}
-          isActive={activeTab === HomePageTab.Explore}
-          onClick={() => handleTabClick(HomePageTab.Explore)}
+        <ChipButton
+          pageId={PAGE_ID.SOCIAL_HOME_PAGE}
+          elementId={ELEMENT_ID.COMMUNITIES_BUTTON}
+          isActive={activeTab === HomePageTab.Communities}
+          onPress={() => handleTabClick(HomePageTab.Communities)}
+        />
+        <ChipButton
+          pageId={PAGE_ID.SOCIAL_HOME_PAGE}
+          elementId={ELEMENT_ID.EVENTS_BUTTON}
+          isActive={activeTab === HomePageTab.Events}
+          onPress={() => handleTabClick(HomePageTab.Events)}
         />
         {!hideClipFeedTab && (
-          <ClipsFeedButton
-            pageId={pageId}
+          <ChipButton
+            pageId={PAGE_ID.SOCIAL_HOME_PAGE}
+            elementId={ELEMENT_ID.CLIPSFEED_BUTTON}
             isActive={activeTab === HomePageTab.Clips}
-            onClick={() => handleTabClick(HomePageTab.Clips)}
+            onPress={() => handleTabClick(HomePageTab.Clips)}
           />
         )}
-        {!isVisitorOrBot && (
-          <MyCommunitiesButton
-            pageId={pageId}
-            isActive={activeTab === HomePageTab.MyCommunities}
-            onClick={() => handleTabClick(HomePageTab.MyCommunities)}
-          />
-        )}
-      </>
+      </div>
     );
-  }, [config?.feature_flags?.post?.clip?.can_view_tab, isVisitorOrBot, activeTab]);
+  };
 
   return (
     <div className={styles.socialHomePage} style={themeStyles}>
@@ -128,13 +126,13 @@ export function SocialHomePage({ activeTab: initialActiveTab }: { activeTab?: Ho
             onClickPostCreationButton={handleClickButton}
           />
         </div>
-        <div className={styles.socialHomePage__tabs}>{renderTabButtons()}</div>
+        {renderChipButtons()}
       </div>
       <NoInternetConnectionHoc page="feed" className={styles.socialHomePage__noConnection}>
         <div className={styles.socialHomePage__contents} ref={containerRef} onScroll={handleScroll}>
           {activeTab === HomePageTab.Newsfeed && <Newsfeed pageId={pageId} />}
-          {activeTab === HomePageTab.Explore && <Explore pageId={pageId} />}
-          {activeTab === HomePageTab.MyCommunities && <MyCommunities pageId={pageId} />}
+          {activeTab === HomePageTab.Communities && <Communities pageId={pageId} />}
+          {activeTab === HomePageTab.Events && <Events pageId={pageId} />}
         </div>
       </NoInternetConnectionHoc>
 

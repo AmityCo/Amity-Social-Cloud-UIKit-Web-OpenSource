@@ -1,6 +1,14 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { PageTypes, useNavigation } from '~/v4/core/providers/NavigationProvider';
 import {
+  CreateLivestreamPage,
+  LivestreamTargetSelectionPage,
+  LivestreamUnsupportedPage,
+  LiveStreamPlayerPage,
+  LivestreamTerminatedPage,
+  LiveStreamBannedPage,
+} from '~/v4/social/features/livestream/pages';
+import {
   AmityDraftStoryPage,
   CommunityAddCategoryPage,
   CommunityMembershipPage,
@@ -15,9 +23,6 @@ import {
   CommunityProfilePage,
   CommunitySettingPage,
   EditUserProfilePage,
-  LiveStreamPlayerPage,
-  LivestreamTerminatedPage,
-  LiveStreamBannedPage,
   PendingPostsPage,
   MyCommunitiesSearchPage,
   PollPostComposerPage,
@@ -193,6 +198,17 @@ const PageRenderer = ({ children }: PageRendererProps) => {
           goToDetailPage={page.context.goToDetailPage}
         />
       );
+    case PageTypes.CreateLivestreamPage:
+      return (
+        <CreateLivestreamPage
+          targetType={page.context.targetType}
+          targetId={page.context.targetId}
+        />
+      );
+    case PageTypes.LivestreamTargetSelectionPage:
+      return <LivestreamTargetSelectionPage />;
+    case PageTypes.LivestreamUnsupportedPage:
+      return <LivestreamUnsupportedPage />;
     case PageTypes.DraftClipPage:
       return (
         <DraftClipPage targetId={page.context.targetId} targetType={page.context.targetType} />

@@ -1,5 +1,4 @@
-import React from 'react';
-import Pencil from '~/v4/icons/Pencil';
+import { Pencil } from '~/v4/icons/Pencil';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/natives/Button';
 import { CloseButton } from '~/v4/social/elements';

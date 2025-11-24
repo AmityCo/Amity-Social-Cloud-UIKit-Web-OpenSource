@@ -1,25 +1,33 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
-import styles from './MessageBubble.module.css';
-import ExclamationCircle from '~/v4/icons/ExclamationCircle';
-import Flag from '~/v4/icons/Flag';
-import Bin from '~/v4/icons/Bin';
 import { useDeleteMessage } from '~/v4/chat/hooks/useDeleteMessage';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { ContentReportReason } from '~/v4/core/internal-components/ContentReportReason';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import { LivestreamModerationOptions } from '~/v4/social/features/livestream/internal-components/LivestreamModerationOptions';
+import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
+import { MessageOptions } from '~/v4/chat/internal-components/MessageOptions';
+import styles from './MessageBubble.module.css';
+import ExclamationCircle from '~/v4/icons/ExclamationCircle';
+import Bin from '~/v4/icons/Bin';
+import { HostBadge } from '~/v4/social/elements/HostBadge';
+import { CoHostBadge } from '~/v4/social/elements/CoHostBadge';
+import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
+import { useLivestreamData } from '~/v4/social/features/livestream/providers';
+import { useCreateInvitation } from '~/v4/social/features/livestream/hooks';
 
 interface MessageBubbleProps {
   pageId?: string;
   componentId?: string;
   message: Amity.Message<'text'>;
   isJoinedCommunity?: boolean;
+  channel?: Amity.Channel | null;
 }
 
 export const MessageBubble: FC<MessageBubbleProps> = ({
@@ -27,6 +35,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   componentId = '*',
   message,
   isJoinedCommunity,
+  channel,
 }) => {
   const { handleCommunityProfileBehavior } = useCommunityProfileGlobalBehavior();
 
@@ -34,7 +43,29 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
   const { isModerator } = useChannelPermission(message.channelId);
+  const { room, invitationByMe: invitation } = useLivestreamData();
+
   const isOwner = message.creatorId === currentUserId;
+
+  // Use the livestream moderation hook
+  const {
+    host,
+    coHost,
+    isHost,
+    invitedCoHost,
+    handleCancelInvitation,
+    handlePromoteToModerator,
+    handleRemoveCoHost,
+    handleLeaveAsCoHost,
+  } = useLivestreamModeration({
+    pageId,
+    room,
+    channel,
+    invitation,
+  });
+
+  const hostId = host?.userId;
+  const coHostId = coHost?.userId;
 
   const { deleteMessage } = useDeleteMessage();
   const { setDrawerData, removeDrawerData } = useDrawer();
@@ -73,74 +104,22 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     }
   };
 
-  const renderOptions = useCallback(
-    ({ closePopover }: { closePopover: () => void }) => {
-      return (
-        <div className={styles.messageBubble__optionsButton__container}>
-          {!isOwner && (
-            <Button
-              variant="text"
-              className={styles.messageBubble__optionButton}
-              icon={<Flag />}
-              iconClassName={styles.messageBubble__optionButton__icon}
-              onPress={() => {
-                closePopover();
-                removeDrawerData();
-                handleClickReportMessage();
-              }}
-            >
-              <Typography.BodyBold className={styles.messageBubble__optionButton__text}>
-                Report message
-              </Typography.BodyBold>
-            </Button>
-          )}
-          {(isOwner || isModerator) && (
-            <Button
-              variant="text"
-              className={styles.messageBubble__optionButton}
-              icon={<Bin />}
-              iconClassName={styles.messageBubble__optionButton__deleteIcon}
-              onPress={() => {
-                deleteMessage(message.messageId);
-                closePopover();
-                removeDrawerData();
-              }}
-            >
-              <Typography.BodyBold className={styles.messageBubble__optionButton__deleteText}>
-                Delete message
-              </Typography.BodyBold>
-            </Button>
-          )}
-        </div>
-      );
-    },
-    [message.messageId, isModerator, isOwner],
-  );
+  const { handleCreateInvitation, isPending: isPendingCreateInvitation } = useCreateInvitation({
+    room,
+    pageId,
+  });
 
-  const renderDeleteOption = useCallback(
-    ({ closePopover }: { closePopover: () => void }) => {
-      return (
-        <div className={styles.messageBubble__optionsButton__container}>
-          <Button
-            variant="text"
-            className={styles.messageBubble__optionButton}
-            icon={<Bin />}
-            iconClassName={styles.messageBubble__optionButton__deleteIcon}
-            onPress={() => {
-              deleteMessage(message.messageId);
-              closePopover();
-              removeDrawerData();
-            }}
-          >
-            <Typography.BodyBold className={styles.messageBubble__optionButton__deleteText}>
-              Delete message
-            </Typography.BodyBold>
-          </Button>
-        </div>
-      );
-    },
-    [message.messageId],
-  );
+  const handleDemoteModerator = (userId: string) => {};
+
+  const handleReportMessage = () => {
+    removeDrawerData();
+    handleClickReportMessage();
+  };
+
+  const handleDeleteMessage = (messageId: string) => {
+    deleteMessage(messageId);
+    removeDrawerData();
+  };
 
   const handleClickReportMessage = () =>
     handleCommunityProfileBehavior({
@@ -149,12 +128,71 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
       allowNonMember: false,
     });
 
+  const renderModeratorOptions = useCallback(
+    (closePopover: () => void) => {
+      return (
+        <LivestreamModerationOptions
+          displayName={message.creator?.displayName ?? coHost?.displayName}
+          isHost={isHost}
+          coHostId={invitedCoHost?.userId ?? coHost?.userId}
+          isModerator={isModerator}
+          onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
+          onPromoteToModerator={handlePromoteToModerator}
+          onCancelInvitation={handleCancelInvitation}
+          onRemoveCoHost={handleRemoveCoHost}
+          onLeaveAsCoHost={handleLeaveAsCoHost}
+          onClickOption={closePopover}
+          isPendingCoHost={
+            invitedCoHost?.userId === message.creatorId && invitation?.status === 'pending'
+          }
+        />
+      );
+    },
+    [invitation?.status, invitedCoHost?.userId, message.creatorId, message.creator?.displayName],
+  );
+
   return (
     <div className={styles.messageBubble__container}>
       <div className={styles.messageBubble__topSectionWrap}>
-        <Typography.CaptionSmall className={styles.messageBubble__displayName}>
-          {message.creator?.displayName}
-        </Typography.CaptionSmall>
+        <div className={styles.messageBubble__displayName__wrapper}>
+          {currentUserId === message.creatorId ? (
+            <Typography.CaptionSmall className={styles.messageBubble__displayName}>
+              {message.creator?.displayName}
+            </Typography.CaptionSmall>
+          ) : (
+            <Popover
+              placement="bottom left"
+              containerClassName={styles.messageBubble__optionIcon}
+              trigger={({ isDesktop, openPopover, closePopover }) => (
+                <Button
+                  variant="text"
+                  onPress={() => {
+                    if (!room) return;
+
+                    isDesktop
+                      ? openPopover()
+                      : setDrawerData({
+                          content: () => renderModeratorOptions(closePopover),
+                        });
+                  }}
+                >
+                  <Typography.CaptionSmall className={styles.messageBubble__displayName}>
+                    {message.creator?.displayName}
+                  </Typography.CaptionSmall>
+                </Button>
+              )}
+            >
+              {({ closePopover }) => renderModeratorOptions(closePopover)}
+            </Popover>
+          )}
+          {hostId === message.creatorId ? (
+            <HostBadge pageId={pageId} componentId={componentId} />
+          ) : coHostId === message.creatorId ? (
+            <CoHostBadge pageId={pageId} componentId={componentId} />
+          ) : isModerator ? (
+            <ModeratorBadge pageId={pageId} componentId={componentId} type="live" />
+          ) : null}
+        </div>
         {message.syncState !== 'error' && !message.isDeleted && (
           <Popover
             containerClassName={styles.messageBubble__optionIcon}
@@ -163,11 +201,31 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
               componentId,
               onClick: ({ closePopover }) =>
                 setDrawerData({
-                  content: renderOptions({ closePopover }),
+                  content: (
+                    <MessageOptions
+                      isOwner={isOwner}
+                      isModerator={isModerator}
+                      messageId={message.messageId}
+                      syncState={message.syncState}
+                      onReportMessage={handleReportMessage}
+                      onDeleteMessage={handleDeleteMessage}
+                      onClose={closePopover}
+                    />
+                  ),
                 }),
             }}
           >
-            {({ closePopover }) => renderOptions({ closePopover })}
+            {({ closePopover }) => (
+              <MessageOptions
+                isOwner={isOwner}
+                isModerator={isModerator}
+                messageId={message.messageId}
+                syncState={message.syncState}
+                onReportMessage={handleReportMessage}
+                onDeleteMessage={handleDeleteMessage}
+                onClose={closePopover}
+              />
+            )}
           </Popover>
         )}
       </div>
@@ -193,7 +251,17 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                     isDesktop
                       ? openPopover()
                       : setDrawerData({
-                          content: renderDeleteOption({ closePopover }),
+                          content: (
+                            <MessageOptions
+                              isOwner={isOwner}
+                              isModerator={isModerator}
+                              messageId={message.messageId}
+                              syncState={message.syncState}
+                              onReportMessage={handleReportMessage}
+                              onDeleteMessage={handleDeleteMessage}
+                              onClose={closePopover}
+                            />
+                          ),
                         })
                   }
                 >
@@ -201,7 +269,17 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                 </Button>
               )}
             >
-              {({ closePopover }) => renderOptions({ closePopover })}
+              {({ closePopover }) => (
+                <MessageOptions
+                  isOwner={isOwner}
+                  isModerator={isModerator}
+                  messageId={message.messageId}
+                  syncState={message.syncState}
+                  onReportMessage={handleReportMessage}
+                  onDeleteMessage={handleDeleteMessage}
+                  onClose={closePopover}
+                />
+              )}
             </Popover>
           )}
         </div>

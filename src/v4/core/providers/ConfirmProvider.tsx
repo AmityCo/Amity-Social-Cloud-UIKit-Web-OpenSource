@@ -6,6 +6,7 @@ export type ConfirmType = {
   onOk?: () => void;
   onRetry?: () => void;
   type?: 'confirm' | 'info';
+  okButtonColor?: 'primary' | 'alert';
   OkButton?: ReactNode;
   CancelButton?: ReactNode;
   title?: ReactNode;

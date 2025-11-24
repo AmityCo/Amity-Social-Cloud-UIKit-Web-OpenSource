@@ -73,7 +73,7 @@ export function TopNavigation({
           componentId={componentId}
           onPress={handleGlobalSearchClick}
         />
-        {selectedTab !== HomePageTab.Explore && (
+        {!isVisitorOrBot && (
           <PostCreationButton
             pageId={pageId}
             componentId={componentId}

@@ -1,11 +1,9 @@
-import React from 'react';
 import clsx from 'clsx';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { useAmityElement } from '~/v4/core/hooks/uikit';
 import { IconComponent } from '~/v4/core/IconComponent';
-import { Camera } from '~/v4/icons/Camera';
 import styles from './CreateNewClipButton.module.css';
-import { CameraTranparent } from '~/v4/icons/CameraTranparent';
+import { CameraOutlined } from '~/v4/icons/CameraOutlined';
 
 type CreateNewClipButtonProps = {
   pageId?: string;
@@ -45,7 +43,7 @@ export const CreateNewClipButton = ({
     >
       <IconComponent
         defaultIcon={() => (
-          <CameraTranparent
+          <CameraOutlined
             className={clsx(styles.createNewClipButton__icon, defaultIconClassName)}
           />
         )}

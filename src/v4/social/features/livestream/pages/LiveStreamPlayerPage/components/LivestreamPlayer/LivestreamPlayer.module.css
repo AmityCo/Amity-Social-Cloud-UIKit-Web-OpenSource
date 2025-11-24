@@ -1,0 +1,82 @@
+.liveStreamPlayer {
+  position: relative;
+  height: 100%;
+}
+
+.liveStreamPlayer__video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  position: relative;
+  object-position: center;
+  margin: auto;
+}
+
+.liveStreamPlayer__video[data-orientation='portrait'] {
+  width: 100vw;
+  height: calc(100dvh - 3.5rem);
+  object-fit: cover;
+}
+
+.liveStreamPlayer__video[data-orientation='landscape'] {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.liveStreamPlayer__loading {
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  background: rgb(from var(--asc-color-black) r g b / 50%);
+}
+
+.liveStreamPlayer__slowConnection {
+  gap: 0.5rem;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--asc-color-white);
+}
+
+@media only screen and (width >= 48em) {
+  .liveStreamPlayer {
+    display: flex;
+    align-items: center;
+  }
+
+  .liveStreamPlayer[data-is-live='true'] {
+    display: flex;
+    justify-content: center;
+    position: unset;
+  }
+
+  .liveStreamPlayer__video[data-orientation='landscape'] {
+    width: 80vw;
+    max-height: 75vh;
+  }
+
+  .liveStreamPlayer__video[data-orientation='portrait'] {
+    width: 100%;
+    height: 75vh;
+  }
+
+  .liveStreamPlayer__video[data-is-live='true'] {
+    position: unset;
+    height: 100dvh;
+    width: auto;
+  }
+
+  .liveStreamPlayer__video[data-is-terminated='true'] {
+    display: none;
+  }
+}

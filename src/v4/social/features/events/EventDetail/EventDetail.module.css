@@ -1,0 +1,11 @@
+.eventDetail {
+  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.eventDetail__header {
+  position: relative;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}

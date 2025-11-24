@@ -1,0 +1,172 @@
+.liveStreamPlayer__overlay {
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  height: 100dvh;
+  display: flex;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  background: rgb(from var(--asc-color-black) r g b / 80%);
+}
+
+.liveStreamPlayer__overlay[data-is-live='true'],
+.liveStreamPlayer__overlay[data-backstage='true'] {
+  background: var(--asc-color-black);
+}
+
+.liveStreamPlayer__dialog {
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.liveStreamPlayer__dialog[data-is-live='true'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.liveStreamPlayer__player__wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.liveStreamPlayer__cameraSection__wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.liveStreamPlayer__cameraSection__placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* show if live stream status = live */
+.livestreamChat__container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100dvw;
+  height: 100dvh;
+}
+
+.livestreamChat__container__inner {
+  mask-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0%) 0%,
+    #fff 50%,
+    #fff 98.07%,
+    rgb(255 255 255 / 20%) 100%
+  );
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  position: absolute;
+  background-color: transparent;
+  width: 100%;
+  height: 40%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.livestreamChat__overlay__top {
+  background: linear-gradient(180deg, rgb(0 0 0 / 100%) 0%, rgb(0 0 0 / 0%) 100%);
+  height: 5rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.livestreamChat__overlay__bottom {
+  background: linear-gradient(0deg, rgb(0 0 0 / 100%) 0%, rgb(0 0 0 / 0%) 100%);
+  height: 40%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.livestreamChat__reactionLane__ref {
+  position: relative;
+  width: 100%;
+  height: 0;
+  overflow: visible;
+}
+
+.livestreamPlayer__modal[data-is-live='true'] {
+  height: 100%;
+  width: 100%;
+}
+
+@media only screen and (width >= 48em) {
+  .plyr__controls {
+    position: absolute;
+    width: 100dvw;
+  }
+
+  .liveStreamPlayer__dialog[data-is-live='true'],
+  .liveStreamPlayer__dialog[data-backstage='true'] {
+    display: grid;
+    grid-template-columns: 1fr 30vw;
+    width: 100dvw;
+  }
+
+  .liveStreamPlayer__dialog[data-backstage='true'] {
+    height: 100dvh;
+  }
+
+  .livestreamPlayer__modal[data-is-live='true'],
+  .livestreamPlayer__modal[data-is-ended='true'] {
+    height: 100dvh;
+    width: 100dvw;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .liveStreamPlayer__rightSection__wrapper {
+    padding: 1.5rem;
+  }
+
+  .livestreamChat__container {
+    position: unset;
+    height: 100%;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    min-width: 25rem;
+    width: 30%;
+  }
+
+  .livestreamChat__container__inner {
+    mask-image: unset;
+    position: relative;
+    border-radius: 1rem;
+    background-color: var(--asc-color-background-default);
+    width: 100%;
+    height: 100%;
+    max-height: unset;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .liveStreamPlayer__pendingPost__banner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+  }
+
+  .livestreamChat__pendingPost__text {
+    padding-bottom: 1.5rem;
+    color: var(--asc-color-secondary-shade2);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
+  }
+}

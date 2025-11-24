@@ -16,8 +16,11 @@ import {
   CommunityPostPermissionPage,
   CommunityStorySettingPage,
   DraftClipPage,
+  EventDetailPage,
   NotificationTrayPage,
+  PastEventsPage,
   PendingRequestPage,
+  UpcomingEventsPage,
 } from '..';
 import { StoryTargetSelectionPage } from '~/v4/social/pages/StoryTargetSelectionPage';
 import CommunityFeed from '~/social/pages/CommunityFeed';
@@ -40,12 +43,18 @@ import { CommunitySettingPage } from '~/v4/social/pages/CommunitySettingPage';
 import { PendingPostsPage } from '~/v4/social/pages/PendingPostsPage';
 import { PollTargetSelectionPage } from '~/v4/social/pages/PollTargetSelectionPage';
 import { PollPostComposerPage } from '~/v4/social/pages/PollPostComposerPage';
-import { LivestreamTerminatedPage } from '~/v4/social/pages/LivestreamTerminatedPage';
-import { LiveStreamBannedPage } from '~/v4/social/pages/LiveStreamBannedPage';
-import { LiveStreamPlayerPage } from '~/v4/social/pages/LiveStreamPlayerPage';
+import {
+  CreateLivestreamPage,
+  LivestreamTerminatedPage,
+  LiveStreamBannedPage,
+  LiveStreamPlayerPage,
+  LivestreamTargetSelectionPage,
+  LivestreamUnsupportedPage,
+} from '~/v4/social/features/livestream/pages';
 import { useLayoutContext } from '~/v4/social/providers/LayoutProvider';
 import { CommunityInviteMemberPage } from '~/v4/social/pages/CommunityInviteMemberPage';
 import { CommunityPendingInvitationPage } from '~/v4/social/pages/CommunityPendingInvitationPage';
+import { EventTargetSelectionPage, EventSetupPage } from '~/v4/social/pages';
 
 const Application = () => {
   const { isDesktop } = useResponsive();
@@ -100,6 +109,7 @@ const Application = () => {
             community={page.context?.community}
             post={page.context?.post}
             isClipPost={page.context?.isClipPost}
+            targetName={page.context?.targetName}
           />
         )}
         {page.type === PageTypes.SelectPostTargetPage && (
@@ -161,7 +171,10 @@ const Application = () => {
         )}
         {page.type === PageTypes.UserPendingFollowRequestPage && <UserPendingFollowRequestPage />}
         {page.type === PageTypes.BlockedUsersPage && <BlockedUserPage />}
+        {page.type === PageTypes.CreateLivestreamPage && <CreateLivestreamPage {...page.context} />}
+        {page.type === PageTypes.LivestreamTargetSelectionPage && <LivestreamTargetSelectionPage />}
         {page.type === PageTypes.LiveStreamTerminatedPage && <LivestreamTerminatedPage />}
+        {page.type === PageTypes.LivestreamUnsupportedPage && <LivestreamUnsupportedPage />}
         {page.type === PageTypes.LiveStreamBannedPage && <LiveStreamBannedPage />}
         {page.type === PageTypes.NotificationTrayPage && <NotificationTrayPage />}
         {page.type === PageTypes.PendingRequestPage && (
@@ -170,6 +183,12 @@ const Application = () => {
 
         {/* modal as page */}
         {liveStreamPlayer && <LiveStreamPlayerPage {...liveStreamPlayer} />}
+
+        {page.type === PageTypes.EventTargetSelectionPage && <EventTargetSelectionPage />}
+        {page.type === PageTypes.EventSetupPage && <EventSetupPage {...page.context} />}
+        {page.type === PageTypes.UpcomingEventsPage && <UpcomingEventsPage {...page.context} />}
+        {page.type === PageTypes.PastEventsPage && <PastEventsPage />}
+        {page.type === PageTypes.EventDetailPage && <EventDetailPage {...page.context} />}
 
         {/* V3 */}
         {page.type === PageTypes.CommunityFeed && (
