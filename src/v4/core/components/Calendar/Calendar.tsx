@@ -22,6 +22,8 @@ type CalendarComponentProps = {
   minValue?: DateValue;
   maxValue?: DateValue;
   isDisabledDate?: boolean;
+  focusValue?: CalendarDate;
+  onFocusChange?: ((value: CalendarDate | CalendarDateTime | ZonedDateTime) => void) | undefined;
 };
 
 export const CalendarComponent = ({
@@ -43,9 +45,11 @@ export const CalendarComponent = ({
   return (
     <Calendar
       value={date}
+      focusedValue={date}
       defaultValue={defaultValue ?? currentDate}
       defaultFocusedValue={defaultValue ?? currentDate}
       onChange={setDate}
+      onFocusChange={setDate}
       className={styles.calendar}
       aria-label="Select a date"
       minValue={minValue ?? undefined}
