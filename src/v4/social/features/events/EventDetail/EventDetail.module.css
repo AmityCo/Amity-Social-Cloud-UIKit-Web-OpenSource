@@ -9,3 +9,17 @@
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
 }
+
+.eventDetail__topBar {
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  position: absolute;
+}
+
+@media only screen and (width < 48em) {
+  .eventDetail__topBar {
+    position: fixed;
+  }
+}

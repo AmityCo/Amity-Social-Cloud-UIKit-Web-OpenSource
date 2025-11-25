@@ -1,5 +1,6 @@
 import { Pencil } from '~/v4/icons/Pencil';
 import Trash from '~/v4/social/icons/trash';
+import { Typography } from '~/v4/core/components';
 import { EventSetupMode } from '~/v4/social/features';
 import { Popover } from '~/v4/core/components/AriaPopover';
 import { useDrawer } from '~/v4/core/providers/DrawerProvider';
@@ -14,9 +15,10 @@ import styles from './EventActions.module.css';
 
 export type EventActionsProps = {
   event: Amity.Event;
+  withTitle?: boolean;
 };
 
-export function EventActions({ event }: EventActionsProps) {
+export function EventActions({ event, withTitle }: EventActionsProps) {
   const { onBack } = useNavigation();
   const { info } = useConfirmContext();
   const { deleteEvent } = useEventActions();
@@ -58,7 +60,16 @@ export function EventActions({ event }: EventActionsProps) {
 
   return (
     <div className={styles.eventActions}>
-      <BackButton onPress={() => onBack()} variant="filled" />
+      <div className={styles.eventActions__headerLeft}>
+        <div>
+          <BackButton onPress={() => onBack()} variant="filled" />
+        </div>
+        {withTitle && (
+          <Typography.TitleBold className={styles.eventActions__eventTitle}>
+            {event?.title}
+          </Typography.TitleBold>
+        )}
+      </div>
       {actions.length > 0 && (
         <Popover
           trigger={({ openPopover, isDesktop }) => (

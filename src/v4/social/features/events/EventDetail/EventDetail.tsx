@@ -17,19 +17,54 @@ export type EventDetailProps = {
 };
 
 export function EventDetail({ eventId }: EventDetailProps) {
-  const { event, pageId, activeTab, themeStyles, setActiveTab, EventDetailTab, accessibilityId } =
-    useEventDetail(eventId);
+  const {
+    event,
+    pageId,
+    sticky,
+    tabRef,
+    activeTab,
+    themeStyles,
+    setActiveTab,
+    eventCoverRef,
+    EventDetailTab,
+    accessibilityId,
+    actionBackground,
+    isBackgroundShown,
+  } = useEventDetail(eventId);
 
   if (!event) return null;
 
   return (
-    <section className={styles.eventDetail} data-testid={accessibilityId} style={themeStyles}>
+    <section style={themeStyles} data-testid={accessibilityId} className={styles.eventDetail}>
       <div className={styles.eventDetail__header}>
-        <EventActions event={event} />
-        <EventCover url={event.coverImage?.fileUrl} />
+        <div className={styles.eventDetail__topBar} style={actionBackground}>
+          <EventActions event={event} withTitle={isBackgroundShown} />
+          {sticky && (
+            <Tabs
+              ref={tabRef}
+              variant="icon"
+              value={activeTab}
+              onChange={setActiveTab}
+              tabs={[
+                {
+                  value: EventDetailTab.About,
+                  label: Event,
+                  content: () => null,
+                },
+                {
+                  value: EventDetailTab.Discussion,
+                  label: Discussion,
+                  content: () => null,
+                },
+              ]}
+            />
+          )}
+        </div>
+        <EventCover url={event.coverImage?.fileUrl} ref={eventCoverRef} />
         <EventDescription event={event} />
         <RSVPButton event={event} />
         <Tabs
+          ref={tabRef}
           variant="icon"
           value={activeTab}
           onChange={setActiveTab}
