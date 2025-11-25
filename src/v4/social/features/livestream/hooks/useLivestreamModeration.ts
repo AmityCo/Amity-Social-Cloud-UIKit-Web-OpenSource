@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { MemberRoles } from '~/v4/chat/constants';
-import useChannelRole from '~/v4/chat/hooks/useChannelRole';
 import { useChannelPermission } from '~/v4/chat/hooks/useChannelPermission';
 import useSDK from '~/v4/core/hooks/useSDK';
 import { useCancelInvitation } from '~/v4/social/features/livestream/hooks';
@@ -27,7 +26,6 @@ export interface UseLivestreamModerationReturn {
 
   // Action handlers
   handleCancelInvitation: () => void;
-  handlePromoteToModerator: () => void;
   handleRemoveCoHost: () => void;
   handleLeaveAsCoHost: () => void;
 
@@ -68,7 +66,6 @@ export const useLivestreamModeration = ({
   const { cancelInvitation, isPending: isPendingCancelInvitation } = useCancelInvitation({
     pageId,
   });
-  const { assingRoleToUsers } = useChannelRole({ channel });
   const { handleRemoveParticipant, isPending: isPendingRemoveParticipant } = useRemoveParticipant({
     room,
   });
@@ -77,15 +74,6 @@ export const useLivestreamModeration = ({
   const handleCancelInvitation = () => {
     if (invitation?.invitationId) {
       cancelInvitation(invitation.invitationId);
-    }
-  };
-
-  const handlePromoteToModerator = () => {
-    if (invitedCoHost?.userId) {
-      assingRoleToUsers({
-        userIds: [invitedCoHost.userId],
-        roleId: CHANNEL_MODERATOR,
-      });
     }
   };
 
@@ -112,7 +100,6 @@ export const useLivestreamModeration = ({
 
     // Action handlers
     handleCancelInvitation,
-    handlePromoteToModerator,
     handleRemoveCoHost,
     handleLeaveAsCoHost,
 

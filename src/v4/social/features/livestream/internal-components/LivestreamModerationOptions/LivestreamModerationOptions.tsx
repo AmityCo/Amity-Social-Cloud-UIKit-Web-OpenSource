@@ -40,11 +40,6 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
     onClickOption?.();
   };
 
-  const handlePromoteToModerator = () => {
-    onPromoteToModerator?.();
-    onClickOption?.();
-  };
-
   const handleRemoveCoHost = () => {
     onRemoveCoHost?.();
     onClickOption?.();
@@ -56,13 +51,7 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
   };
 
   return (
-    <div className={styles.livestreamModerationOptions}>
-      <div className={styles.livestreamModerationOptions__header}>
-        <Typography.TitleBold className={styles.livestreamModerationOptions__header__text}>
-          {displayName}
-        </Typography.TitleBold>
-        {coHostId && <CoHostBadge />}
-      </div>
+    <div>
       {isHost && !coHostId && (
         <MenuOptionButton
           text="Invite as co-host"
@@ -93,13 +82,6 @@ export const LivestreamModerationOptions: React.FC<LivestreamModerationOptionsPr
           icon={<SignOut />}
           onPress={handleLeaveAsCoHost}
           isDanger={true}
-        />
-      )}
-      {isHost && !isModerator && (
-        <MenuOptionButton
-          text="Promote to moderator"
-          icon={<UserShield />}
-          onPress={handlePromoteToModerator}
         />
       )}
     </div>
