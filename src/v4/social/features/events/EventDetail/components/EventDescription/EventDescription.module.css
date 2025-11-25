@@ -41,6 +41,11 @@
   align-items: center;
 }
 
+.eventDescription__attendeeButton {
+  justify-content: flex-start;
+  text-align: left;
+}
+
 .eventDescription__dateIconContainer {
   width: 2.5rem;
   height: 2.5rem;
@@ -106,4 +111,9 @@
 
 .eventDescription__setUpLiveStreamButton {
   margin: 1.25rem 0 1rem;
+}
+
+.eventDescription__calendarIcon {
+  width: 7.5rem;
+  height: 7.5rem;
 }

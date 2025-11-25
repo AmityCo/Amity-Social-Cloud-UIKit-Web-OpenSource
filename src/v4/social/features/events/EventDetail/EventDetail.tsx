@@ -8,6 +8,7 @@ import {
   EventDescription,
   EventDiscussion,
   EventInfo,
+  RSVPButton,
 } from './components';
 import styles from './EventDetail.module.css';
 
@@ -27,6 +28,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
         <EventActions event={event} />
         <EventCover url={event.coverImage?.fileUrl} />
         <EventDescription event={event} />
+        <RSVPButton event={event} />
         <Tabs
           variant="icon"
           value={activeTab}

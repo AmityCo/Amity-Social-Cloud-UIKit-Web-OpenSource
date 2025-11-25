@@ -231,6 +231,7 @@ export interface PageBehavior {
     goToCommunityProfilePage?(context: { communityId: string }): void;
     goToPostDetailPage?(context: GoToPostDetailPageParams): void;
     goToUserProfilePage?(context: { userId: string }): void;
+    goToEventDetailPage?(context: EventDetailProps): void;
   };
   AmityDraftClipPageBehavior?: {
     goToPostComposerPage?(context: {
@@ -286,9 +287,13 @@ export interface PageBehavior {
       targetType: 'community' | 'user';
       pollType?: 'text' | 'image';
     }): void;
+    goToEventAttendeesPage?(context: { event: Amity.Event }): void;
   };
   AmityEventSetupPageBehavior: {
     goToEventDetailPage: (context: EventDetailProps) => void;
+  };
+  AmityEventAttendeesPageBehavior: {
+    goToUserProfilePage?(context: { userId: string }): void;
   };
 }
 
@@ -346,6 +351,7 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
     goToCreateCommunityPage,
     goToUpcomingEventsPage,
     goToPastEventsPage,
+    goToEventAttendeesPage,
     goToCreateLivestreamPage,
     goToEventDetailPage,
   } = useNavigation();
@@ -902,6 +908,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToUserProfilePage(context.userId);
       },
+      goToEventDetailPage: (context: EventDetailProps) => {
+        if (pageBehavior?.AmityNotificationTrayPageBehavior?.goToEventDetailPage) {
+          return pageBehavior.AmityNotificationTrayPageBehavior.goToEventDetailPage(context);
+        }
+        goToEventDetailPage(context);
+      },
     },
     AmityDraftClipPageBehavior: {
       goToPostComposerPage: (context: {
@@ -1050,6 +1062,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToPollPostComposerPage(context);
       },
+      goToEventAttendeesPage(context: { event: Amity.Event }) {
+        if (pageBehavior?.AmityEventDetailPageBehavior?.goToEventAttendeesPage) {
+          return pageBehavior.AmityEventDetailPageBehavior.goToEventAttendeesPage(context);
+        }
+        goToEventAttendeesPage?.({ event: context.event });
+      },
     },
     AmityEventSetupPageBehavior: {
       goToEventDetailPage: (context: EventDetailProps) => {
@@ -1057,6 +1075,14 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventSetupPageBehavior.goToEventDetailPage(context);
         }
         goToEventDetailPage(context);
+      },
+    },
+    AmityEventAttendeesPageBehavior: {
+      goToUserProfilePage: (context: { userId: string }) => {
+        if (pageBehavior?.AmityEventAttendeesPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityEventAttendeesPageBehavior.goToUserProfilePage(context);
+        }
+        goToUserProfilePage(context.userId);
       },
     },
   };

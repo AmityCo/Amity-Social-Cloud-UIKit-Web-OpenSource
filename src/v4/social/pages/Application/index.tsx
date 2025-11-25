@@ -16,6 +16,7 @@ import {
   CommunityPostPermissionPage,
   CommunityStorySettingPage,
   DraftClipPage,
+  EventAttendeesPage,
   EventDetailPage,
   NotificationTrayPage,
   PastEventsPage,
@@ -189,6 +190,7 @@ const Application = () => {
         {page.type === PageTypes.UpcomingEventsPage && <UpcomingEventsPage {...page.context} />}
         {page.type === PageTypes.PastEventsPage && <PastEventsPage />}
         {page.type === PageTypes.EventDetailPage && <EventDetailPage {...page.context} />}
+        {page.type === PageTypes.EventAttendeesPage && <EventAttendeesPage {...page.context} />}
 
         {/* V3 */}
         {page.type === PageTypes.CommunityFeed && (

@@ -13,9 +13,15 @@ type UserItemProps = {
   userId: string;
   pageId?: string;
   componentId?: string;
+  isShowMenuButton?: boolean;
 };
 
-export const UserItem: FC<UserItemProps> = ({ userId, pageId = '*', componentId = '*' }) => {
+export const UserItem: FC<UserItemProps> = ({
+  userId,
+  pageId = '*',
+  componentId = '*',
+  isShowMenuButton = true,
+}) => {
   const { AmityUserRelationshipPageBehavior } = usePageBehavior();
   const { setDrawerData } = useDrawer();
 
@@ -34,24 +40,27 @@ export const UserItem: FC<UserItemProps> = ({ userId, pageId = '*', componentId 
           componentId={componentId}
           userId={user.userId}
           className={styles.userItem__avatar}
+          shouldRedirectToUserProfile
         />
 
         <Typography.BodyBold className={styles.userItem__displayName}>
           {user.displayName}
         </Typography.BodyBold>
       </Button>
-      <Popover
-        trigger={{
-          pageId,
-          componentId,
-          onClick: ({ closePopover }) =>
-            setDrawerData({
-              content: <UserItemMenu closePopover={closePopover} user={user} />,
-            }),
-        }}
-      >
-        {({ closePopover }) => <UserItemMenu closePopover={closePopover} user={user} />}
-      </Popover>
+      {isShowMenuButton && (
+        <Popover
+          trigger={{
+            pageId,
+            componentId,
+            onClick: ({ closePopover }) =>
+              setDrawerData({
+                content: <UserItemMenu closePopover={closePopover} user={user} />,
+              }),
+          }}
+        >
+          {({ closePopover }) => <UserItemMenu closePopover={closePopover} user={user} />}
+        </Popover>
+      )}
     </div>
   );
 };

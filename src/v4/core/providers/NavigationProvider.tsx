@@ -25,6 +25,7 @@ import { CreateLivestreamPageProps } from '~/v4/social/features/livestream/pages
 import { EventSetupProps } from '~/v4/social/features';
 import { UpcomingEventsPageProps } from '~/v4/social/pages/UpcomingEventsPage/UpcomingEventsPage';
 import { EventDetailPageProps } from '~/v4/social/pages/EventDetailPage/EventDetailPage';
+import { EventAttendeesPageProps } from '~/v4/social/pages/EventAttendeesPage/EventAttendeesPage';
 
 export enum PageTypes {
   Explore = 'explore',
@@ -77,6 +78,7 @@ export enum PageTypes {
   UpcomingEventsPage = 'UpcomingEventsPage',
   PastEventsPage = 'PastEventsPage',
   EventDetailPage = 'EventDetailPage',
+  EventAttendeesPage = 'EventAttendeesPage',
 }
 
 type Page =
@@ -314,6 +316,10 @@ type Page =
   | {
       type: PageTypes.EventDetailPage;
       context: EventDetailPageProps;
+    }
+  | {
+      type: PageTypes.EventAttendeesPage;
+      context: EventAttendeesPageProps;
     };
 
 type ContextValue = {
@@ -447,6 +453,7 @@ type ContextValue = {
   goToUpcomingEventsPage: (context: UpcomingEventsPageProps) => void;
   goToPastEventsPage: () => void;
   goToEventDetailPage: (context: EventDetailPageProps) => void;
+  goToEventAttendeesPage?: (context: EventAttendeesPageProps) => void;
 };
 
 let defaultValue: ContextValue = {
@@ -536,6 +543,7 @@ let defaultValue: ContextValue = {
   goToUpcomingEventsPage: () => {},
   goToPastEventsPage: () => {},
   goToEventDetailPage: (context: EventDetailPageProps) => {},
+  goToEventAttendeesPage: (context: EventAttendeesPageProps) => {},
 };
 
 if (process.env.NODE_ENV !== 'production') {
@@ -631,6 +639,8 @@ if (process.env.NODE_ENV !== 'production') {
     goToPastEventsPage: () => console.log('NavigationContext goToPastEventsPage()'),
     goToEventDetailPage: (context) =>
       console.log('NavigationContext goToEventDetailPage()', context),
+    goToEventAttendeesPage: (context) =>
+      console.log('NavigationContext goToEventAttendeesPage()', context),
   };
 }
 
@@ -1537,6 +1547,18 @@ export default function NavigationProvider({
     [pushPage],
   );
 
+  const goToEventAttendeesPage = useCallback(
+    (context: EventAttendeesPageProps) => {
+      const next = {
+        type: PageTypes.EventAttendeesPage,
+        context,
+      };
+
+      pushPage(next);
+    },
+    [pushPage],
+  );
+
   useEffect(() => {
     if (currentPage.type === PageTypes.CommunityProfilePage) {
       onRouteChange?.({
@@ -1620,6 +1642,7 @@ export default function NavigationProvider({
         goToUpcomingEventsPage,
         goToPastEventsPage,
         goToEventDetailPage,
+        goToEventAttendeesPage,
       }}
     >
       <NavigationContextV3.Provider

@@ -49,3 +49,5 @@ export { UpcomingEventsPage } from './UpcomingEventsPage';
 export { PastEventsPage } from './PastEventsPage';
 
 export { EventDetailPage } from './EventDetailPage';
+
+export { EventAttendeesPage } from './EventAttendeesPage';

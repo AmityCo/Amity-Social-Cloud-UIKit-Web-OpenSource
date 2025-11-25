@@ -12,8 +12,10 @@ import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { EVENT_TYPE, STATUS_LABEL } from '~/v4/social/features/events/constants';
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
-import { formatEventDuration, checkIsWithinMinutes } from '~/v4/social/utils/timezone';
 import styles from './EventDescription.module.css';
+import { Attendee } from '~/v4/icons/Attendee';
+import { millify } from 'millify';
+import { formatEventDuration, checkIsWithinMinutes } from '~/v4/social/utils/timezone';
 
 type EventDescriptionProps = {
   event: Amity.Event;
@@ -22,6 +24,7 @@ type EventDescriptionProps = {
 export function EventDescription({ event }: EventDescriptionProps) {
   const { currentUserId } = useSDK();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
+  const { isVisitorOrBot } = useSDK();
 
   const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
@@ -44,7 +47,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
           variant="text"
           className={styles.eventDescription__communityButton}
           onPress={() =>
-            AmityEventDetailPageBehavior.goToCommunityProfilePage({ communityId: event.originId })
+            AmityEventDetailPageBehavior?.goToCommunityProfilePage({ communityId: event.originId })
           }
         >
           <Typography.BodyBold as="span" className={styles.eventDescription__name}>
@@ -96,6 +99,33 @@ export function EventDescription({ event }: EventDescriptionProps) {
             </Typography.BodyBold>
           </div>
         </div>
+
+        {event.rsvpCount > 0 && event.status === AmityEventStatus.Scheduled && !isVisitorOrBot && (
+          <Button
+            onPress={() =>
+              AmityEventDetailPageBehavior?.goToEventAttendeesPage?.({
+                event,
+              })
+            }
+            variant="text"
+            className={styles.eventDescription__attendeeButton}
+          >
+            <div className={styles.eventDescription__row}>
+              <div className={styles.eventDescription__iconContainer}>
+                <Attendee className={styles.eventDescription__icon} />
+              </div>
+              <div>
+                <Typography.Caption className={styles.eventDescription__subTitle}>
+                  Attendees
+                </Typography.Caption>
+                <Typography.BodyBold className={styles.eventDescription__name}>
+                  {millify(event.rsvpCount)}
+                </Typography.BodyBold>
+              </div>
+            </div>
+          </Button>
+        )}
+
         <div className={styles.eventDescription__row}>
           <div>
             <UserAvatar userId={event.userId} className={styles.eventDescription__hostAvatar} />

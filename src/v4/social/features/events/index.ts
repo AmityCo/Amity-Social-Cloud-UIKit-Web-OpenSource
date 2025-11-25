@@ -4,3 +4,4 @@ export * from './EventHub';
 export * from './UpcomingEvents';
 export * from './PastEvents';
 export * from './EventDetail';
+export * from './EventAttendees';

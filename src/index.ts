@@ -85,6 +85,7 @@ export {
   UpcomingEventsPage as AmityUpcomingEventsPage,
   PastEventsPage as AmityPastEventsPage,
   EventDetailPage as AmityEventDetailPage,
+  EventAttendeesPage as AmityEventAttendeesPage,
 } from '~/v4/social/pages';
 
 export {
