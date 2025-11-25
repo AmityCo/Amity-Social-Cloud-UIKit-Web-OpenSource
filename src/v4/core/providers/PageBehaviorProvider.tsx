@@ -332,9 +332,13 @@ export interface PageBehavior {
       targetType: 'community' | 'user';
       pollType?: 'text' | 'image';
     }): void;
+    goToEventAttendeesPage?(context: { event: Amity.Event }): void;
   };
   AmityEventSetupPageBehavior: {
     goToEventDetailPage: (context: EventDetailProps) => void;
+  };
+  AmityEventAttendeesPageBehavior: {
+    goToUserProfilePage?(context: { userId: string }): void;
   };
 }
 
@@ -1231,6 +1235,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
         }
         goToPollPostComposerPage(context);
       },
+      goToEventAttendeesPage(context: { event: Amity.Event }) {
+        if (pageBehavior?.AmityEventDetailPageBehavior?.goToEventAttendeesPage) {
+          return pageBehavior.AmityEventDetailPageBehavior.goToEventAttendeesPage(context);
+        }
+        goToEventAttendeesPage?.({ event: context.event });
+      },
     },
     AmityEventSetupPageBehavior: {
       goToEventDetailPage: (context: EventDetailProps) => {
@@ -1238,6 +1248,14 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventSetupPageBehavior.goToEventDetailPage(context);
         }
         goToEventDetailPage(context);
+      },
+    },
+    AmityEventAttendeesPageBehavior: {
+      goToUserProfilePage: (context: { userId: string }) => {
+        if (pageBehavior?.AmityEventAttendeesPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityEventAttendeesPageBehavior.goToUserProfilePage(context);
+        }
+        goToUserProfilePage(context.userId);
       },
     },
   };

@@ -48,6 +48,11 @@
   text-align: left;
 }
 
+.eventDescription__attendeeButton {
+  justify-content: flex-start;
+  text-align: left;
+}
+
 .eventDescription__dateIconContainer {
   width: 2.5rem;
   height: 2.5rem;

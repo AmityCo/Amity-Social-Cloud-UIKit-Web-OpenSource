@@ -23,6 +23,7 @@ type EventDescriptionProps = {
 export function EventDescription({ event }: EventDescriptionProps) {
   const { currentUserId, isVisitorOrBot } = useSDK();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
+  const { isVisitorOrBot } = useSDK();
 
   const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
