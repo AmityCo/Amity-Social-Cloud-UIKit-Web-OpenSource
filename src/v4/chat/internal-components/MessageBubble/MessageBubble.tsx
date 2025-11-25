@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Typography } from '~/v4/core/components';
 import { Button } from '~/v4/core/components/AriaButton/Button';
 import { Popover } from '~/v4/core/components/AriaPopover/Popover';
@@ -10,7 +10,10 @@ import UnMutedOutlined from '~/v4/icons/UnMutedOutlined';
 import { useChatModeration } from '~/v4/chat/hooks/useChatModeration';
 import { DemoteToMember } from '~/v4/icons/DemoteToMember';
 import Muted from '~/v4/icons/Muted';
-import { LivestreamModerationOptions } from '~/v4/social/features/livestream/internal-components/LivestreamModerationOptions';
+import {
+  LivestreamModerationOptions,
+  UserModerationHeader,
+} from '~/v4/social/features/livestream/internal-components';
 import { useLivestreamModeration } from '~/v4/social/features/livestream/hooks/useLivestreamModeration';
 import { MessageOptions } from '~/v4/chat/internal-components/MessageOptions';
 import styles from './MessageBubble.module.css';
@@ -20,7 +23,11 @@ import { HostBadge } from '~/v4/social/elements/HostBadge';
 import { CoHostBadge } from '~/v4/social/elements/CoHostBadge';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
-import { useCreateInvitation } from '~/v4/social/features/livestream/hooks';
+import {
+  useCreateInvitation,
+  useRoom,
+  useUpdateCohostPermission,
+} from '~/v4/social/features/livestream/hooks';
 import { BrandBadge } from '~/v4/social/elements';
 
 interface MessageBubbleProps {
@@ -39,7 +46,6 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   channel,
   handlePopoverStateChange,
   isJoinedCommunity,
-  channel,
 }) => {
   const { currentUserId } = useSDK();
   const { isModerator: isChannelModerator } = useChannelPermission(message.channelId);
@@ -47,7 +53,6 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const isModerator =
     isChannelModerator || !!channel?.metadata?.moderators?.includes(currentUserId);
   const isOwner = message.creatorId === currentUserId;
-  const isHostMessage = streamerId === message.creatorId;
 
   const isHostMessage = hostId === message.creatorId;
   const isModeratorMessage = channel?.metadata?.moderators?.includes(message.creatorId);
@@ -56,6 +61,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const isCurrentUserMuted = channel?.metadata?.mutedMembers?.includes(currentUserId);
   const showMutedIndicator = isUserMuted && (isCurrentUserMuted || isModerator);
 
+  const { updateCohostPermission } = useUpdateCohostPermission({ room, pageId });
   const {
     coHost,
     isHost,
@@ -63,12 +69,21 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
     handleCancelInvitation,
     handleRemoveCoHost,
     handleLeaveAsCoHost,
+    canCoHostManageProductTags,
   } = useLivestreamModeration({
     pageId,
     room,
     channel,
     invitation,
   });
+
+  const [canCoHostManageProductTagsState, setCanCoHostManageProductTagsState] = useState<
+    boolean | undefined
+  >(canCoHostManageProductTags);
+
+  useEffect(() => {
+    setCanCoHostManageProductTagsState(canCoHostManageProductTags);
+  }, [canCoHostManageProductTags]);
 
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { demoteFromModerator, muteUser, promoteToModerator, unmuteUser } = useChatModeration();
@@ -81,32 +96,20 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   const renderModerationOptions = ({ closePopover }: { closePopover: () => void }) => {
     return (
       <div className={styles.messageBubble__optionsButton__container}>
-        <div className={styles.messageBubble__optionUserInfo}>
-          <div className={styles.messageBubble__displayName__container}>
-            <Typography.TitleBold className={styles.messageBubble__optionUserInfo__displayName}>
-              {message.creator?.displayName}
-            </Typography.TitleBold>
-            {message.creator?.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
-            {channel?.metadata?.mutedMembers?.includes(message.creatorId) && (
-              <div className={styles.messageBubble__optionUserInfo__mutedIcon}>
-                <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
-              </div>
-            )}
-          </div>
-          {isCoHostMessage ? (
-            <CoHostBadge />
-          ) : (
-            channel?.metadata?.moderators?.includes(message.creatorId) && (
-              <ModeratorBadge type="live" />
-            )
-          )}
-        </div>
+        <UserModerationHeader
+          pageId={pageId}
+          componentId={componentId}
+          displayName={message.creator?.displayName}
+          isBrandUser={message.creator?.isBrand}
+          isMuted={channel?.metadata?.mutedMembers?.includes(message.creatorId)}
+          isCoHost={isCoHostMessage}
+          isModerator={!!channel?.metadata?.moderators?.includes(message.creatorId)}
+          showMutedIcon={true}
+        />
         {((coHost && isCoHostMessage) || !coHost) && (
           <LivestreamModerationOptions
-            displayName={message.creator?.displayName ?? coHost?.displayName}
             isHost={isHost}
             coHostId={invitedCoHost?.userId ?? coHost?.userId}
-            isModerator={isModerator}
             onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
             onCancelInvitation={handleCancelInvitation}
             onRemoveCoHost={handleRemoveCoHost}
@@ -115,6 +118,19 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
             isPendingCoHost={
               invitedCoHost?.userId === message.creatorId && invitation?.status === 'pending'
             }
+            isSelectedCoHostPermission={canCoHostManageProductTagsState ?? false}
+            onCoHostPermissionChange={async (canManageProductTags) => {
+              const currentCoHostId = invitedCoHost?.userId ?? coHost?.userId;
+              if (currentCoHostId) {
+                const previousState = canCoHostManageProductTagsState;
+                setCanCoHostManageProductTagsState(canManageProductTags);
+                try {
+                  updateCohostPermission({ coHostId: currentCoHostId, canManageProductTags });
+                } catch {
+                  setCanCoHostManageProductTagsState(previousState);
+                }
+              }
+            }}
           />
         )}
 
@@ -263,171 +279,6 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
   };
 
   const disableModerationPopup = isHostMessage || isOwner || (isCoHostMessage && !isHost);
-
-  const handleClickReportMessage = () =>
-    handleCommunityProfileBehavior({
-      defaultBehavior: onClickReportMessage,
-      isJoined: isJoinedCommunity,
-      allowNonMember: false,
-    });
-
-  const renderModeratorOptions = useCallback(
-    (closePopover: () => void) => {
-      return (
-        <LivestreamModerationOptions
-          displayName={message.creator?.displayName ?? coHost?.displayName}
-          isHost={isHost}
-          coHostId={invitedCoHost?.userId ?? coHost?.userId}
-          isModerator={isModerator}
-          onInviteAsCoHost={() => handleCreateInvitation(message.creatorId)}
-          onPromoteToModerator={handlePromoteToModerator}
-          onCancelInvitation={handleCancelInvitation}
-          onRemoveCoHost={handleRemoveCoHost}
-          onLeaveAsCoHost={handleLeaveAsCoHost}
-          onClickOption={closePopover}
-          isPendingCoHost={
-            invitedCoHost?.userId === message.creatorId && invitation?.status === 'pending'
-          }
-        />
-      );
-    },
-    [invitation?.status, invitedCoHost?.userId, message.creatorId, message.creator?.displayName],
-  );
-
-  const renderModerationOptions = ({ closePopover }: { closePopover: () => void }) => {
-    return (
-      <div className={styles.messageBubble__optionsButton__container}>
-        <div className={styles.messageBubble__optionUserInfo}>
-          <div className={styles.messageBubble__displayName__container}>
-            <Typography.TitleBold className={styles.messageBubble__optionUserInfo__displayName}>
-              {message.creator?.displayName}
-            </Typography.TitleBold>
-            {channel?.metadata?.mutedMembers?.includes(message.creatorId) && (
-              <div className={styles.messageBubble__optionUserInfo__mutedIcon}>
-                <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
-              </div>
-            )}
-          </div>
-          {channel?.metadata?.moderators?.includes(message.creatorId) && (
-            <ModeratorBadge variant="chat" />
-          )}
-        </div>
-        {channel?.metadata?.moderators?.includes(message.creatorId) ? (
-          <Button
-            variant="text"
-            className={styles.messageBubble__optionUserInfo__button}
-            icon={<DemoteToMember className={styles.messageBubble__optionUserInfo__buttonIcon} />}
-            iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
-            onPress={() => {
-              closePopover();
-              removeDrawerData();
-              demoteFromModerator({
-                channelId: message.channelId,
-                creatorId: message.creatorId,
-                moderators:
-                  channel?.metadata?.moderators?.filter((id: string) => id !== message.creatorId) ??
-                  [],
-                mutedMembers: channel?.metadata?.mutedMembers || [],
-              });
-            }}
-          >
-            <Typography.BodyBold className={styles.messageBubble__optionUserInfo__buttonLabel}>
-              Demote to moderator
-            </Typography.BodyBold>
-          </Button>
-        ) : (
-          <>
-            {channel?.metadata?.mutedMembers?.includes(message.creatorId) ? (
-              <Button
-                variant="text"
-                className={styles.messageBubble__optionUserInfo__button}
-                icon={
-                  <UnMutedOutlined className={styles.messageBubble__optionUserInfo__buttonIcon} />
-                }
-                iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
-                onPress={() => {
-                  closePopover();
-                  removeDrawerData();
-                  unmuteUser({
-                    creatorId: message.creatorId,
-                    channelId: message.channelId,
-                    moderators: channel?.metadata?.moderators || [],
-                    mutedMembers:
-                      channel?.metadata?.mutedMembers?.filter(
-                        (id: string) => id !== message.creatorId,
-                      ) || [],
-                  });
-                }}
-              >
-                <Typography.BodyBold className={styles.messageBubble__optionUserInfo__buttonLabel}>
-                  Unmute user
-                </Typography.BodyBold>
-              </Button>
-            ) : (
-              <>
-                <Button
-                  variant="text"
-                  className={styles.messageBubble__optionUserInfo__button}
-                  icon={
-                    <PromoteToModerator
-                      className={styles.messageBubble__optionUserInfo__buttonIcon}
-                    />
-                  }
-                  iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
-                  onPress={() => {
-                    closePopover();
-                    removeDrawerData();
-                    promoteToModerator({
-                      creatorId: message.creatorId,
-                      channelId: message.channelId,
-                      moderators: channel?.metadata?.moderators
-                        ? channel.metadata.moderators.includes(message.creatorId)
-                          ? channel.metadata.moderators
-                          : [...channel.metadata.moderators, message.creatorId]
-                        : [message.creatorId],
-                      mutedMembers: channel?.metadata?.mutedMembers || [],
-                    });
-                  }}
-                >
-                  <Typography.BodyBold
-                    className={styles.messageBubble__optionUserInfo__buttonLabel}
-                  >
-                    Promote to moderator
-                  </Typography.BodyBold>
-                </Button>
-                <Button
-                  variant="text"
-                  className={styles.messageBubble__optionUserInfo__button}
-                  icon={<Muted className={styles.messageBubble__optionUserInfo__buttonIcon} />}
-                  iconClassName={styles.messageBubble__optionUserInfo__buttonIcon}
-                  onPress={() => {
-                    closePopover();
-                    removeDrawerData();
-                    muteUser({
-                      creatorId: message.creatorId,
-                      channelId: message.channelId,
-                      moderators: channel?.metadata?.moderators || [],
-                      mutedMembers: channel?.metadata?.mutedMembers
-                        ? channel?.metadata?.mutedMembers?.includes(message?.creatorId)
-                          ? channel.metadata.mutedMembers
-                          : [...channel.metadata.mutedMembers, message.creatorId]
-                        : [message.creatorId],
-                    });
-                  }}
-                >
-                  <Typography.BodyBold
-                    className={styles.messageBubble__optionUserInfo__buttonLabel}
-                  >
-                    Mute user
-                  </Typography.BodyBold>
-                </Button>
-              </>
-            )}
-          </>
-        )}
-      </div>
-    );
-  };
 
   return (
     <div className={styles.messageBubble__container}>
