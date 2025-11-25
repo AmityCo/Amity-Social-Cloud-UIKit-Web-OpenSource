@@ -23,12 +23,11 @@ export function ModeratorBadge({
   variant = 'textWithIcon',
 }: ModeratorBadgeProps) {
   const elementId = 'moderator_badge';
-  const { accessibilityId, config, defaultConfig, isExcluded, uiReference, themeStyles } =
-    useAmityElement({
-      pageId,
-      componentId,
-      elementId,
-    });
+  const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
+    pageId,
+    componentId,
+    elementId,
+  });
 
   if (isExcluded) return null;
 

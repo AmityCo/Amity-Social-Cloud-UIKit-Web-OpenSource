@@ -9,6 +9,8 @@ type PopoverProps = Omit<$PopoverProps, 'children' | 'trigger'> & {
   containerClassName?: string;
   children: React.ReactNode | (({ closePopover }: { closePopover: () => void }) => React.ReactNode);
   forceShowPopUp?: boolean;
+  onClose?: () => void;
+  onOpen?: () => void;
   trigger:
     | (Omit<MenuButtonProps, 'onClick'> & {
         onClick?: ({ closePopover }: { closePopover: () => void }) => void;
@@ -27,6 +29,8 @@ type PopoverProps = Omit<$PopoverProps, 'children' | 'trigger'> & {
 };
 
 export const Popover = ({
+  onOpen,
+  onClose,
   trigger,
   children,
   className,
@@ -39,8 +43,14 @@ export const Popover = ({
   const [isOpen, setIsOpen] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
 
-  const openPopover = () => setIsOpen(true);
-  const closePopover = () => setIsOpen(false);
+  const openPopover = () => {
+    setIsOpen(true);
+    onOpen?.();
+  };
+  const closePopover = () => {
+    setIsOpen(false);
+    onClose?.();
+  };
 
   return (
     <div ref={popoverRef} className={containerClassName}>
@@ -62,7 +72,7 @@ export const Popover = ({
           isOpen={isOpen}
           placement={placement}
           triggerRef={popoverRef}
-          onOpenChange={setIsOpen}
+          onOpenChange={(open) => (open ? openPopover() : closePopover())}
           className={clsx(styles.popover, className)}
         >
           <Dialog className={styles.dialog} aria-label="popover-dialog">

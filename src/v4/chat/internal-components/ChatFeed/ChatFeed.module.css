@@ -24,6 +24,12 @@
   flex-direction: column-reverse;
   height: 100%;
   overflow: auto;
+  pointer-events: auto;
+}
+
+.chatFeed__messageList__container[data-disable-scroll='true'] {
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .chatFeed__messageList__inner {

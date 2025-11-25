@@ -57,6 +57,15 @@
   transform: translateX(-50%);
 }
 
+.notificationContainer[data-alignment='live-chat'] {
+  right: 2.5rem;
+  bottom: 5rem;
+  width: 20rem;
+  position: fixed;
+  background-color: var(--asc-color-base-shade3);
+  box-shadow: var(--asc-box-shadow-02);
+}
+
 @keyframes appear {
   from {
     opacity: 0;
@@ -90,5 +99,15 @@
     top: unset;
     left: unset;
     transform: unset;
+  }
+
+  .notificationContainer[data-alignment='live-chat'] {
+    position: fixed;
+    right: 1rem;
+    left: 1rem;
+    bottom: 4rem;
+    width: auto;
+    background-color: var(--asc-color-base-shade3);
+    box-shadow: var(--asc-box-shadow-02);
   }
 }

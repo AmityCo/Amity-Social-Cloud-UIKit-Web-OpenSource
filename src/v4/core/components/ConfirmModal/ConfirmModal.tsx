@@ -28,6 +28,7 @@ const Confirm = ({
   okText = 'OK',
   okButtonColor,
   type = 'confirm',
+  shownCancelButton,
   componentId = '*',
   cancelText = 'Cancel',
   retryText,
@@ -71,7 +72,7 @@ const Confirm = ({
                   {content}
                 </div>
                 <div className={styles.popup__footer}>
-                  {type === 'confirm' && (
+                  {(shownCancelButton || type === 'confirm') && (
                     <Button
                       size="medium"
                       color="secondary"

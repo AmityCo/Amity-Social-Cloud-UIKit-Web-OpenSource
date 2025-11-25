@@ -19,12 +19,12 @@ import { useChannel } from '~/v4/chat/hooks/useChannel';
 import { LiveReactionRepository } from '@amityco/ts-sdk';
 import { useResponsive } from '~/v4/core/hooks/useResponsive';
 import useCommunityProfileGlobalBehavior from '~/v4/core/hooks/useCommunityProfileGlobalBehavior';
+import useSDK from '~/v4/core/hooks/useSDK';
 import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 import AddUser from '~/v4/icons/AddUser';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
 import { InviteCoHostList } from '~/v4/social/features/livestream/internal-components/InviteCoHostList';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
-import useSDK from '~/v4/core/hooks/useSDK';
 
 interface LivestreamChatMessageComposerProps {
   channelId?: Amity.Channel['channelId'];
@@ -300,16 +300,19 @@ export const LivestreamChatMessageComposer = ({
 
     if (channel?.isMuted)
       return renderReadOnlyState({
+        allowReaction: !isHost,
         message: 'This live stream is now read-only.',
         channel,
-        allowReaction: !isHost,
       });
-
-    if (isMuted)
+    if (
+      (isMuted || channel?.metadata?.mutedMembers?.includes(currentUserId)) &&
+      channel?.attachedTo?.postId &&
+      channel?.attachedTo?.videoStreamId
+    )
       return renderReadOnlyState({
+        allowReaction: !isHost,
         message: 'You have been muted.',
         channel,
-        allowReaction: !isHost,
       });
 
     return (
@@ -404,6 +407,7 @@ export const LivestreamChatMessageComposer = ({
     channel?.attachedTo?.postId,
     channel?.attachedTo?.roomId,
     coHost?.userId,
+    channel?.metadata?.mutedMembers,
   ]);
 
   return (

@@ -15,7 +15,7 @@ interface Notification {
 
 type NotificationInput = Notification & {
   duration?: number;
-  alignment?: 'fullscreen' | 'withSidebar' | 'fixed';
+  alignment?: 'fullscreen' | 'withSidebar' | 'fixed' | 'live-chat';
 };
 
 interface NotificationContextProps {
