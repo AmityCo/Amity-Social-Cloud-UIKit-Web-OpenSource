@@ -15,6 +15,7 @@ import { WatchingCountBadge } from '~/v4/social/features/livestream/internal-com
 import CloseIcon from '~/v4/icons/Close';
 import Kebub from '~/v4/icons/Kebub';
 import styles from './LivestreamPlayerHeader.module.css';
+import { BrandBadge } from '~/v4/social/elements';
 
 interface LivestreamPlayerHeaderProps {
   pageId: string;
@@ -69,9 +70,12 @@ export const LivestreamPlayerHeader: React.FC<LivestreamPlayerHeaderProps> = ({
               <Typography.CaptionBold className={styles.livestreamPlayer__liveDetail__text}>
                 {community?.displayName}
               </Typography.CaptionBold>
-              <Typography.CaptionSmall className={styles.livestreamPlayer__liveDetail__text}>
-                By {post.creator?.displayName}
-              </Typography.CaptionSmall>
+              <div className={styles.livestreamPlayer__liveDetail__displayName}>
+                <Typography.CaptionSmall className={styles.livestreamPlayer__liveDetail__text}>
+                  By {post.creator?.displayName}
+                </Typography.CaptionSmall>
+                {post.creator?.isBrand && <BrandBadge pageId={pageId} />}
+              </div>
             </div>
           </div>
 

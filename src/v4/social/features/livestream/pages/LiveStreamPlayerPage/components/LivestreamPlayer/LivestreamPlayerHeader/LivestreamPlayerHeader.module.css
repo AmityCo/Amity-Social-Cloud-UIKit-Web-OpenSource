@@ -36,7 +36,7 @@
   position: unset;
   width: 2rem;
   height: 2rem;
-  color: var(--asc-color-white);
+  fill: var(--asc-color-white);
 }
 
 .livestreamPlayerHeader__liveDetail__detail {
@@ -59,6 +59,12 @@
 .livestreamPlayer__liveDetail__text {
   display: block;
   color: var(--asc-color-white);
+}
+
+.livestreamPlayer__liveDetail__displayName {
+  display: flex;
+  align-items: center;
+  gap: 0.12rem;
 }
 
 .livestreamPlayerHeader__optionIcon {
