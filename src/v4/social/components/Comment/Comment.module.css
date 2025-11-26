@@ -93,6 +93,11 @@
   color: var(--asc-color-base-shade2);
 }
 
+.postComment__secondRow__replyButton {
+  display: flex;
+  align-items: center;
+}
+
 .postComment__secondRow__like[data-is-liked='true'] {
   color: var(--asc-color-primary-default);
 }

@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { EventHostBadge } from '~/v4/social/elements';
+import { BrandBadge, EventHostBadge } from '~/v4/social/elements';
 import { FileRepository } from '@amityco/ts-sdk';
 import { Typography } from '~/v4/core/components';
 import TruncateMarkup from 'react-truncate-markup';
 import { formatEventDuration } from '~/v4/social/utils/timezone';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 import { EventTypeBadge } from '~/v4/social/features/events/EventHub/elements';
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
 import styles from './EventCard.module.css';

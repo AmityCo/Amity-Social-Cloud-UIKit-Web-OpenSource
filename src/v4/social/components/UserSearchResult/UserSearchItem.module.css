@@ -30,11 +30,6 @@
   height: 2.5rem;
 }
 
-.userItem__brandIcon__container {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
 .userItem__brandIcon {
   width: 1.125rem;
   height: 1.125rem;
@@ -43,7 +38,7 @@
 .userItem__userName {
   display: flex;
   justify-content: start;
-  align-items: last baseline baseline;
+  align-items: center;
   gap: 0.25rem;
   width: 100%;
   color: var(--asc-color-base-default);

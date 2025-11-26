@@ -23,6 +23,12 @@
   align-items: center;
 }
 
+.communityMemberItem__memberNameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.12rem;
+}
+
 .communityMemberItem__memberName {
   color: var(--asc-color-base-default);
   max-width: 100%;

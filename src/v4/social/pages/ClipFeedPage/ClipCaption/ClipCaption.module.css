@@ -46,6 +46,11 @@
   gap: 0.25rem;
 }
 
+.clipCaption__usernameButton {
+  display: flex;
+  gap: 0.12rem;
+}
+
 .clipCaption__avatar {
   width: 2rem;
   height: 2rem;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '~/v4/core/natives/Button';
 import { Typography } from '~/v4/core/components';
 import { useNavigation } from '~/v4/core/providers/NavigationProvider';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
+import { BrandBadge } from '~/v4/social/elements';
 import { UserAvatar } from '~/v4/social/elements/UserAvatar/UserAvatar';
 import styles from './UserSearchItem.module.css';
 
@@ -49,11 +49,7 @@ export const UserSearchItem = ({
           >
             {user.displayName}
           </Typography.BodyBold>
-          {user.isBrand ? (
-            <div className={styles.userItem__brandIcon__container}>
-              <BrandBadge className={styles.userItem__brandIcon} />
-            </div>
-          ) : null}
+          {user.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
         </div>
       </div>
     </Button>

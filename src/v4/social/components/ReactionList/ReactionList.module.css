@@ -157,6 +157,12 @@
   height: 2.5rem;
 }
 
+.userDetailsNameContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.12rem;
+}
+
 @keyframes skeleton-pulse {
   0% {
     opacity: 0.6;

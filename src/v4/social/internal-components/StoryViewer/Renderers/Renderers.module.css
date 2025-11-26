@@ -312,3 +312,9 @@
 .commentTrayHeader {
   color: var(--asc-color-base-default);
 }
+
+.creatorWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}

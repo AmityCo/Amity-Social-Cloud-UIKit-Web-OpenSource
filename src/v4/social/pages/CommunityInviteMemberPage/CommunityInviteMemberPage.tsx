@@ -20,7 +20,7 @@ import { useNetworkState } from 'react-use';
 import { TopSearchBar } from '~/v4/social/components';
 import styles from './CommunityInviteMemberPage.module.css';
 import { usePopupContext } from '~/v4/core/providers/PopupProvider';
-import { InviteButton, Title } from '~/v4/social/elements';
+import { BrandBadge, InviteButton, Title } from '~/v4/social/elements';
 import { NoResult } from '~/v4/social/internal-components/NoResult';
 import { EmptyResult } from '~/v4/social/internal-components/EmptyResult';
 import { NoInternet } from '~/v4/social/internal-components/NoInternet';
@@ -55,7 +55,12 @@ function useCommunityInviteMemberPage({
   const [selectedMembers, setSelectedMembers] = useState<MemberCommunitySetup[]>(
     $users && $users.length > 0
       ? $users.map(
-          (user) => ({ userId: user._id, displayName: user.displayName }) as MemberCommunitySetup,
+          (user) =>
+            ({
+              userId: user._id,
+              displayName: user.displayName,
+              isBrand: user.isBrand,
+            }) as MemberCommunitySetup,
         )
       : members ?? [],
   );
@@ -252,9 +257,7 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
             className={styles.communityInviteMemberPage__checkboxGroup}
             checkboxes={filteredUsers.map((user) => ({
               value: user.userId,
-              label: (
-                <MemberLabel pageId={pageId} userId={user.userId} displayName={user.displayName} />
-              ),
+              label: <MemberLabel pageId={pageId} user={user} />,
             }))}
             onChange={(value) => {
               setSelectedMembers((existingSelectedMembers) => {
@@ -270,7 +273,11 @@ export const CommunityInviteMemberPage = (props: CommunityInviteMemberPageProps)
                 );
                 const newSelectedMembers = filteredUsers
                   .filter((user) => newSelectedMemberValue.includes(user.userId))
-                  .map((user) => ({ userId: user.userId, displayName: user.displayName ?? '' }));
+                  .map((user) => ({
+                    userId: user.userId,
+                    displayName: user.displayName ?? '',
+                    isBrand: user.isBrand,
+                  }));
 
                 return [...oldSelectedMembers, ...newSelectedMembers];
               });
@@ -343,11 +350,12 @@ function CommunityInviteMemberPageTopBar({
 }
 
 type SelectedMemberProps = {
+  pageId?: string;
   user: MemberCommunitySetup;
   handleRemoveUser: () => void;
 };
 
-function SelectedMember({ user, handleRemoveUser }: SelectedMemberProps) {
+function SelectedMember({ pageId = '*', user, handleRemoveUser }: SelectedMemberProps) {
   return (
     <div key={user.userId} className={styles.communityInviteMemberPage__selectedUser}>
       <div className={styles.communityInviteMemberPage__selectedUserAvatar}>
@@ -366,46 +374,54 @@ function SelectedMember({ user, handleRemoveUser }: SelectedMemberProps) {
         </Button>
       </div>
       <Typography.Body
+        data-is-brand={user.isBrand}
         key={user.userId}
         className={styles.communityInviteMemberPage__selectedUserDisplayName}
       >
         {user.displayName}
       </Typography.Body>
+      {user.isBrand && <BrandBadge pageId={pageId} />}
     </div>
   );
 }
 
 type MemberLabelProps = {
   pageId?: string;
-  userId: string;
-  displayName?: string;
+  user: Amity.User;
 };
 
-function MemberLabel({ pageId = '*', userId, displayName }: MemberLabelProps) {
+function MemberLabel({ pageId = '*', user }: MemberLabelProps) {
   const { isDesktop } = useResponsive();
   const { AmityCommunityInviteMemberPageBehavior } = usePageBehavior();
 
   return (
     <div
-      data-testid={`${pageId}/*/member-label-${userId}`}
+      data-testid={`${pageId}/*/member-label-${user.userId}`}
       className={styles.communityInviteMemberPage__checkboxLabel}
     >
       <div className={styles.communityInviteMemberPage__memberAvatar}>
         <UserAvatar
-          userId={userId}
+          userId={user.userId}
           className={styles.communityInviteMemberPage__selectedUserAvatarImage}
           textPlaceholderClassName={styles.communityInviteMemberPage__selectedUserAvatarImage}
           onPressAvatar={() =>
-            !isDesktop && AmityCommunityInviteMemberPageBehavior?.goToUserProfilePage?.({ userId })
+            !isDesktop &&
+            AmityCommunityInviteMemberPageBehavior?.goToUserProfilePage?.({ userId: user.userId })
           }
         />
       </div>
       <Typography.BodyBold
-        testId={`${pageId}/*/member-${userId}`}
+        testId={`${pageId}/*/member-${user.userId}`}
         className={styles.communityInviteMemberPage__memberName}
       >
-        {displayName ?? userId}
+        {user.displayName ?? user.userId}
       </Typography.BodyBold>
+      {user.isBrand && (
+        <BrandBadge
+          pageId={pageId}
+          className={styles.communityInviteMemberPage__selectedUserBrandBadge}
+        />
+      )}
     </div>
   );
 }

@@ -27,6 +27,7 @@ import { CoHostBadge } from '~/v4/social/elements/CoHostBadge';
 import { ModeratorBadge } from '~/v4/social/elements/ModeratorBadge';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import { useCreateInvitation } from '~/v4/social/features/livestream/hooks';
+import { BrandBadge } from '~/v4/social/elements';
 
 interface MessageBubbleProps {
   pageId?: string;
@@ -304,9 +305,12 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
       <div className={styles.messageBubble__topSectionWrap}>
         <div className={styles.messageBubble__displayName__container}>
           {isHostMessage || isOwner || (!isHost && !isModerator) ? (
-            <Typography.CaptionSmall className={styles.messageBubble__displayName}>
-              {message.creator?.displayName}
-            </Typography.CaptionSmall>
+            <>
+              <Typography.CaptionSmall className={styles.messageBubble__displayName}>
+                {message.creator?.displayName}
+              </Typography.CaptionSmall>
+              {message.creator?.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
+            </>
           ) : (
             <Popover
               placement="end top"
@@ -327,9 +331,14 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                     }
                   }}
                 >
-                  <Typography.CaptionSmall className={styles.messageBubble__button__displayName}>
-                    {message.creator?.displayName}
-                  </Typography.CaptionSmall>
+                  <>
+                    <Typography.CaptionSmall className={styles.messageBubble__button__displayName}>
+                      {message.creator?.displayName}
+                    </Typography.CaptionSmall>
+                    {message.creator?.isBrand && (
+                      <BrandBadge pageId={pageId} componentId={componentId} />
+                    )}
+                  </>
                 </Button>
               )}
             >

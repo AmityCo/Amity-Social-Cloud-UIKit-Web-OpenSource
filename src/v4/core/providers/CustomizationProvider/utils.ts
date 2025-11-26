@@ -1334,6 +1334,9 @@ export const defaultConfig: DefaultConfig = {
     'event_setup_page/*/event_location_title': {
       text: 'Location',
     },
+    '*/*/brand_badge': {
+      image: 'value',
+    },
   },
 };
 

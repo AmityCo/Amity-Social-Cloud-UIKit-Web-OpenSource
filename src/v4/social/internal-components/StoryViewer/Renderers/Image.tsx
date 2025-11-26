@@ -26,6 +26,7 @@ import clsx from 'clsx';
 
 import { StoryProgressBar } from '~/v4/social/elements/StoryProgressBar/StoryProgressBar';
 import { useStoryPermission } from '~/v4/social/hooks/useStoryPermission';
+import { BrandBadge } from '~/v4/social/elements/';
 
 export const renderer: CustomRenderer = ({
   story: {
@@ -101,9 +102,10 @@ export const renderer: CustomRenderer = ({
   const subheading = useMemo(
     () =>
       createdAt && creator?.displayName ? (
-        <span>
+        <span className={styles.creatorWrapper}>
           <span data-testid="created_at">{formatTimeAgo(createdAt as string)}</span> • By{' '}
           <span data-testid="creator_display_name">{creator?.displayName}</span>
+          {creator?.isBrand && <BrandBadge pageId={pageId} />}
         </span>
       ) : (
         ''

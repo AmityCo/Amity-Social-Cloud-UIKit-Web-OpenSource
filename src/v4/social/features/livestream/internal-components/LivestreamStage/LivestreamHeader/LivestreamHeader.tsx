@@ -17,9 +17,9 @@ import {
 import { WatchingCountBadge } from '~/v4/social/features/livestream/internal-components/WatchingCountBadge';
 import { useLivestreamData } from '~/v4/social/features/livestream/providers';
 import useSDK from '~/v4/core/hooks/useSDK';
-import { BrandBadge } from '~/v4/social/internal-components/BrandBadge';
 import { FileRepository } from '@amityco/ts-sdk';
 import eventThumbnail from '~/v4/social/assets/images/event-default-thumbnail.png';
+import { BrandBadge } from '~/v4/social/elements';
 
 export interface LivestreamHeaderProps {
   pageId: string;
