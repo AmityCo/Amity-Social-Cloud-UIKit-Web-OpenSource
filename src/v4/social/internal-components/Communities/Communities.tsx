@@ -47,6 +47,8 @@ export function Communities({ pageId }: CommunitiesProps) {
           variant="underlined"
           value={activeTab}
           onChange={setActiveTab}
+          tabListClassName={styles.communities__tabList}
+          tabPanelClassName={styles.communities__tabPanel}
           tabs={[
             {
               value: CommunitiesTab.Explore,

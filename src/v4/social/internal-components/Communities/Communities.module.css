@@ -32,6 +32,13 @@
   }
 
   .communities__tabList {
-    border-radius: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    position: fixed;
+  }
+
+  .communities__tabPanel {
+    padding-top: 4rem;
   }
 }

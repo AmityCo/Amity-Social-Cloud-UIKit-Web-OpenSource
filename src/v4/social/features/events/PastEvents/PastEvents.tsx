@@ -42,6 +42,8 @@ export function PastEvents() {
           value={activeTab}
           variant="underlined"
           onChange={setActiveTab}
+          tabListClassName={styles.pastEvents__tabList}
+          tabPanelClassName={styles.pastEvents__tabPanel}
           tabs={[
             {
               label: 'All',

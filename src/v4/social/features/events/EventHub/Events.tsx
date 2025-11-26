@@ -47,6 +47,8 @@ export function Events({ pageId }: EventsProps) {
           value={activeTab}
           variant="underlined"
           onChange={setActiveTab}
+          tabListClassName={styles.events__tabList}
+          tabPanelClassName={styles.events__tabPanel}
           tabs={[
             {
               value: EventsTab.Explore,

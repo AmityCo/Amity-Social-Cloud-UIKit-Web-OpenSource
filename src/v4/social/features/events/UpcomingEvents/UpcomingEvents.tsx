@@ -46,6 +46,8 @@ export function UpcomingEvents({ fromExplore }: UpcomingEventsProps) {
           value={activeTab}
           variant="underlined"
           onChange={setActiveTab}
+          tabListClassName={styles.upcomingEvents__tabList}
+          tabPanelClassName={styles.upcomingEvents__tabPanel}
           tabs={[
             {
               value: UpcomingEventsTab.All,

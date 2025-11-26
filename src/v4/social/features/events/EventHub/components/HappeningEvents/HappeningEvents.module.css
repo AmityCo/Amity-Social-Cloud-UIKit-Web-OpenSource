@@ -84,4 +84,9 @@
     border: none;
     border-radius: 0;
   }
+
+  .happeningEvents__skeleton {
+    border: none;
+    border-radius: 0;
+  }
 }
