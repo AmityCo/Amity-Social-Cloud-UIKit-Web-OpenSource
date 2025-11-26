@@ -38,6 +38,14 @@
   justify-content: center;
 }
 
+.displayName__container {
+  max-width: 4rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .displayName {
   margin: 0;
   text-align: center;
