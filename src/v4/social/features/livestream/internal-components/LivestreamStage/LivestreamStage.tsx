@@ -152,7 +152,7 @@ export const LivestreamStage: React.FC<LivestreamStageProps> = ({
       {showCountdownOverlay && countdownDisplay && (
         <LivestreamOverlay.CountdownEnding countdown={countdownDisplay} />
       )}
-      {uiState === 'broadcast' && channel?.attachedTo?.roomId && (
+      {uiState === 'broadcast' && channel?.attachedTo?.roomId && room?.post && (
         <ReactionFloating post={room?.post as Amity.Post} />
       )}
     </div>

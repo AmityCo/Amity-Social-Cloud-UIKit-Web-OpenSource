@@ -88,11 +88,13 @@ export const useCreateLivestream = ({
   const [livestreamTitle, setLivestreamTitle] = useState('');
   const [livestreamDescription, setLivestreamDescription] = useState('');
   const [thumbnailFileId, setThumbnailFileId] = useState('');
+  const [roomId, setRoomId] = useState<string | undefined>(event?.room?.roomId);
 
-  // Livestream post creation state
-  const [roomId, setRoomId] = useState<string>();
   const { room } = useRoom(roomId);
-  const [livestreamPost, setLivestreamPost] = useState<Amity.Post>();
+
+  const [livestreamPost, setLivestreamPost] = useState<Amity.Post | undefined>(
+    event?.room?.post as Amity.Post,
+  );
   const [channel, setChannel] = useState<Amity.Channel<'live'>>();
 
   const { community } = useCommunity({
@@ -115,7 +117,7 @@ export const useCreateLivestream = ({
     if (broadcasterData) {
       setUiState('broadcast');
     }
-  }, [broadcasterData]);
+  }, [broadcasterData, room?.roomId]);
 
   // Computed states
   const isTargetEvent = !!event;
@@ -127,11 +129,17 @@ export const useCreateLivestream = ({
 
   const handleStopRoom = (roomId: string) => {
     stopStream(roomId, {
-      onSuccess: () =>
-        livestreamPost?.postId && goToPostDetailPage({ postId: livestreamPost?.postId }),
-      onError: (error) => {
-        if (error.message.includes('Room is already ended'))
+      onSuccess: () => {
+        if (!isTargetEvent)
           livestreamPost?.postId && goToPostDetailPage({ postId: livestreamPost?.postId });
+        else onBack();
+      },
+      onError: (error) => {
+        if (error.message.includes('Room is already ended')) {
+          if (!isTargetEvent)
+            livestreamPost?.postId && goToPostDetailPage({ postId: livestreamPost?.postId });
+          else onBack();
+        }
       },
     });
   };
@@ -198,36 +206,43 @@ export const useCreateLivestream = ({
     },
   });
 
+  const goLiveOnEvent = (room?: Amity.Room) => {
+    if (!room) return;
+    getBroadcasterData(room.roomId);
+  };
+
   const handleGoLive = () => {
-    createLivestreamPost(
-      {
-        title: livestreamTitle,
-        description: livestreamDescription,
-        thumbnailFileId,
-        targetType,
-        targetId: targetType !== 'user' ? targetId : currentUserId!,
-        liveChatEnabled: targetType === 'community',
-      },
-      {
-        onSuccess: (result) => {
-          const post = result.post;
+    isTargetEvent
+      ? goLiveOnEvent(event.room)
+      : createLivestreamPost(
+          {
+            title: livestreamTitle,
+            description: livestreamDescription,
+            thumbnailFileId,
+            targetType,
+            targetId: targetType !== 'user' ? targetId : currentUserId!,
+            liveChatEnabled: targetType === 'community',
+          },
+          {
+            onSuccess: (result) => {
+              const post = result.post;
 
-          if (post.data) {
-            const postData = post.data;
-            setLivestreamPost(postData);
-            const room = postData.childrenPosts[0]?.getRoomInfo();
+              if (post.data) {
+                const postData = post.data;
+                setLivestreamPost(postData);
+                const room = postData.childrenPosts[0]?.getRoomInfo();
 
-            if (room) {
-              getBroadcasterData(room.roomId);
+                if (room) {
+                  getBroadcasterData(room.roomId);
 
-              if (targetType === 'community') getLiveChat(room);
+                  if (targetType === 'community') getLiveChat(room);
 
-              setRoomId(room.roomId);
-            }
-          }
-        },
-      },
-    );
+                  setRoomId(room.roomId);
+                }
+              }
+            },
+          },
+        );
   };
 
   return {

@@ -1,9 +1,7 @@
 .storyTabContainer {
   display: flex;
-  overflow: auto;
-  padding: 1rem;
   background-color: var(--asc-color-background-default);
-  gap: var(--asc-spacing-s1);
+  gap: 0.75rem;
 }
 
 .storyTab {
@@ -71,7 +69,7 @@
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 
-.storyTabGlobalFeeed__arrow {
+.storyTabGlobalFeed__arrow {
   z-index: 100;
   display: none;
   top: calc(50% - 1rem);
@@ -85,7 +83,7 @@
   background-color: var(--asc-color-background-default);
 }
 
-.storyTabGlobalFeeed__arrowIcon {
+.storyTabGlobalFeed__arrowIcon {
   width: 1.5rem;
   height: 1.5rem;
   fill: var(--asc-color-base-default);
@@ -119,12 +117,7 @@
 }
 
 @media (width >= 48em) {
-  .storyTabContainer {
-    border-radius: 0.5rem;
-    border: 1px solid var(--asc-color-base-shade4);
-  }
-
-  .storyTabGlobalFeeed__arrow {
+  .storyTabGlobalFeed__arrow {
     display: flex;
   }
 }

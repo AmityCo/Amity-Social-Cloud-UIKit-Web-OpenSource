@@ -5,18 +5,23 @@ import { useCallback, useEffect, useRef, useState } from 'react';
  * It provides same functionalities of useLiveCollection.
  */
 
-export function useLiveCollectionV4<TCallback, TParams>({
+export function useLiveCollectionV4<TCallback, TParams = void>({
   fetcher,
   params,
   callback = () => {},
   shouldCall = true,
 }: {
-  fetcher: (
-    params: Amity.LiveCollectionParams<TParams>,
-    callback: Amity.LiveCollectionCallback<TCallback>,
-    config?: Amity.LiveCollectionConfig,
-  ) => Amity.Unsubscriber;
-  params: Amity.LiveCollectionParams<TParams>;
+  fetcher:
+    | ((
+        params: Amity.LiveCollectionParams<TParams>,
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber)
+    | ((
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber);
+  params?: Amity.LiveCollectionParams<TParams>;
   callback?: Amity.LiveCollectionCallback<TCallback>;
   shouldCall?: boolean;
 }): {
@@ -71,7 +76,7 @@ export function useLiveCollectionV4<TCallback, TParams>({
     unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
-  }, [JSON.stringify(params), shouldCall]);
+  }, [JSON.stringify(params), shouldCall, callbackFn]);
 
   const refresh = useCallback(() => {
     if (unsubscribeRef.current) unsubscribeRef.current();
@@ -85,7 +90,7 @@ export function useLiveCollectionV4<TCallback, TParams>({
     unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
-  }, []);
+  }, [fetcher, params, callbackFn]);
 
   return {
     error,
@@ -105,16 +110,25 @@ const subscribe = <TParams, TCallback>({
   callback,
   config,
 }: {
-  fetcher: (
-    params: Amity.LiveCollectionParams<TParams>,
-    callback: Amity.LiveCollectionCallback<TCallback>,
-    config?: Amity.LiveCollectionConfig,
-  ) => Amity.Unsubscriber;
-  params: Amity.LiveCollectionParams<TParams>;
+  fetcher:
+    | ((
+        params: Amity.LiveCollectionParams<TParams>,
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber)
+    | ((
+        callback: Amity.LiveCollectionCallback<TCallback>,
+        config?: Amity.LiveCollectionConfig,
+      ) => Amity.Unsubscriber);
+  params?: Amity.LiveCollectionParams<TParams>;
   callback: Amity.LiveCollectionCallback<TCallback>;
   config?: Amity.LiveCollectionConfig;
   refresh?: boolean;
 }) => {
-  const unsubscribe = fetcher(params, (response) => callback(response), config);
+  // Check if fetcher accepts params (has 2-3 arguments) or only callback (has 1-2 arguments)
+  const unsubscribe =
+    params !== undefined
+      ? (fetcher as any)(params, (response: any) => callback(response), config)
+      : (fetcher as any)((response: any) => callback(response), config);
   return { unsubscribe };
 };

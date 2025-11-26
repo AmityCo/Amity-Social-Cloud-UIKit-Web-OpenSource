@@ -6,12 +6,14 @@ import styles from './LiveStreamLiveBadge.module.css';
 export function LiveStreamLiveBadge({
   className,
   duration,
+  size = 'large',
 }: {
   className?: string;
   duration?: string;
+  size?: 'small' | 'medium' | 'large';
 }) {
   return (
-    <div className={clsx(styles.liveStreamLiveBadge, className)}>
+    <div className={clsx(styles.liveStreamLiveBadge, className)} data-size={size}>
       <Typography.CaptionBold>Live</Typography.CaptionBold>
       {duration && <Typography.CaptionBold>{' ' + duration}</Typography.CaptionBold>}
     </div>

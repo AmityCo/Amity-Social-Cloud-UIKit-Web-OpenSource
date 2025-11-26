@@ -1,0 +1,19 @@
+/* CommunityLiveRoomTarget Component Styles */
+
+.communityLiveRoomTarget {
+  overflow: auto hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.communityLiveRoomTarget__rings {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.communityLiveRoomTarget__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--asc-color-base-shade2);
+}

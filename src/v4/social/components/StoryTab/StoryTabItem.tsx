@@ -1,11 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 import Verified from '~/v4/icons/Verified';
-import { Typography } from '~/v4/core/components';
 import { useImage } from '~/v4/core/hooks/useImage';
 import { StoryRing } from '~/v4/social/elements/StoryRing';
 import useCommunity from '~/v4/core/hooks/collections/useCommunity';
-import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
+import { StoryTabDisplayName } from './StoryTabDisplayName';
 import styles from './StoryTabItem.module.css';
 
 const ErrorIcon = (props: React.SVGProps<SVGSVGElement>) => {
@@ -96,13 +95,12 @@ export const StoryTabItem: React.FC<StoryTabProps> = ({
         {community?.isOfficial && !isErrored && <Verified className={styles.verifiedIcon} />}
       </div>
 
-      <Typography.Caption
-        data-testid={`${pageId}/${componentId}/community_name`}
-        className={clsx(styles.displayName)}
-      >
-        {!community?.isPublic && <CommunityPrivateBadge className={styles.lockIcon} />}
-        {community?.displayName}
-      </Typography.Caption>
+      <StoryTabDisplayName
+        pageId={pageId}
+        componentId={componentId}
+        displayName={community?.displayName}
+        isPublic={community?.isPublic}
+      />
     </div>
   );
 };
