@@ -21,9 +21,8 @@ type EventDescriptionProps = {
 };
 
 export function EventDescription({ event }: EventDescriptionProps) {
-  const { currentUserId } = useSDK();
+  const { currentUserId, isVisitorOrBot } = useSDK();
   const { AmityEventDetailPageBehavior } = usePageBehavior();
-  const { isVisitorOrBot } = useSDK();
 
   const isWithin15Minutes = checkIsWithinMinutes(event.startTime);
 
@@ -125,7 +124,14 @@ export function EventDescription({ event }: EventDescriptionProps) {
           </Button>
         )}
 
-        <div className={styles.eventDescription__row}>
+        <Button
+          variant="default"
+          aria-label="Click to go host profile"
+          className={styles.eventDescription__row}
+          onPress={() => {
+            AmityEventDetailPageBehavior.goToUserProfilePage?.({ userId: event.userId });
+          }}
+        >
           <div>
             <UserAvatar userId={event.userId} className={styles.eventDescription__hostAvatar} />
           </div>
@@ -144,7 +150,7 @@ export function EventDescription({ event }: EventDescriptionProps) {
               )}
             </div>
           </div>
-        </div>
+        </Button>
       </div>
       {canSetupLiveStream && (
         <div className={styles.eventDescription__setUpLiveStreamButton}>

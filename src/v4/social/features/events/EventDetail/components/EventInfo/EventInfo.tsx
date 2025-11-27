@@ -1,15 +1,12 @@
 import { Typography } from '~/v4/core/components';
-import TruncateMarkup from 'react-truncate-markup';
 import { useAmityComponent } from '~/v4/core/hooks/uikit';
 import { COMPONENT_ID } from '~/v4/constants/customization';
 import { AmityEventStatus, AmityEventType } from '@amityco/ts-sdk';
+import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { CopyButton } from '~/v4/social/features/events/EventDetail/elements';
 import { LiveStreamContent } from '~/v4/social/components/PostContent/LiveStreamContent';
-import styles from './EventInfo.module.css';
-import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
-import { useState } from 'react';
-import { Button } from '~/v4/core/components/AriaButton';
 import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
+import styles from './EventInfo.module.css';
 
 type EventInfoProps = {
   pageId: string;
@@ -18,7 +15,6 @@ type EventInfoProps = {
 
 export function EventInfo({ pageId, event }: EventInfoProps) {
   const componentId = COMPONENT_ID.EVENT_INFO;
-  const [expanded, setExpanded] = useState(false);
 
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -40,30 +36,12 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
         <Typography.TitleBold className={styles.eventInfo__text}>
           About the event
         </Typography.TitleBold>
-        <Typography.Body className={styles.eventInfo__text}>
-          {expanded ? (
-            <span>{event.description}</span>
-          ) : (
-            <TruncateMarkup
-              lines={10}
-              ellipsis={
-                <>
-                  ...
-                  <Button
-                    variant="text"
-                    data-testid="see-more-button"
-                    className={styles.eventInfo__seeMore}
-                    onPress={() => setExpanded(true)}
-                  >
-                    <Typography.BodyBold> See more</Typography.BodyBold>
-                  </Button>
-                </>
-              }
-            >
-              <span>{event.description}</span>
-            </TruncateMarkup>
-          )}
-        </Typography.Body>
+        <TextWithMention
+          maxLines={10}
+          mentionees={[]}
+          textClassName={styles.eventInfo__text}
+          data={{ text: event.description || '' }}
+        />
       </div>
 
       {event.type === AmityEventType.Virtual ? (

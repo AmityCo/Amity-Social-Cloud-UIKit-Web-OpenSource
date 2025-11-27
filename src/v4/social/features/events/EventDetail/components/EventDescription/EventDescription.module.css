@@ -38,7 +38,9 @@
 .eventDescription__row {
   gap: 0.75rem;
   display: flex;
+  text-align: left;
   align-items: center;
+  justify-content: flex-start;
 }
 
 .eventDescription__attendeeButton {

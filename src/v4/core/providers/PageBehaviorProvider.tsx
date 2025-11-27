@@ -288,6 +288,7 @@ export interface PageBehavior {
       pollType?: 'text' | 'image';
     }): void;
     goToEventAttendeesPage?(context: { event: Amity.Event }): void;
+    goToUserProfilePage?(context: { userId: string }): void;
   };
   AmityEventSetupPageBehavior: {
     goToEventDetailPage: (context: EventDetailProps) => void;
@@ -1067,6 +1068,12 @@ export const PageBehaviorProvider: React.FC<PageBehaviorProviderProps> = ({
           return pageBehavior.AmityEventDetailPageBehavior.goToEventAttendeesPage(context);
         }
         goToEventAttendeesPage?.({ event: context.event });
+      },
+      goToUserProfilePage(context: { userId: string }) {
+        if (pageBehavior?.AmityEventDetailPageBehavior?.goToUserProfilePage) {
+          return pageBehavior.AmityEventDetailPageBehavior.goToUserProfilePage(context);
+        }
+        goToUserProfilePage(context.userId);
       },
     },
     AmityEventSetupPageBehavior: {
