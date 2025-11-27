@@ -15,7 +15,6 @@ type EventInfoProps = {
 
 export function EventInfo({ pageId, event }: EventInfoProps) {
   const componentId = COMPONENT_ID.EVENT_INFO;
-  const [expanded, setExpanded] = useState(false);
 
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
