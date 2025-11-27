@@ -2,6 +2,7 @@ import Event from '~/v4/icons/Events';
 import { useEventDetail } from './hooks';
 import { Tabs } from '~/v4/core/components';
 import { Discussion } from '~/v4/icons/Discussion';
+import { FailedToShow } from '~/v4/social/internal-components/FailedToShow';
 import {
   EventActions,
   EventCover,
@@ -33,7 +34,7 @@ export function EventDetail({ eventId, pop }: EventDetailProps) {
     isBackgroundShown,
   } = useEventDetail(eventId);
 
-  if (!event) return null;
+  if (!event || event.isDeleted) return <FailedToShow />;
 
   return (
     <section style={themeStyles} data-testid={accessibilityId} className={styles.eventDetail}>

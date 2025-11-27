@@ -9,6 +9,7 @@ import styles from './EventInfo.module.css';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
 import { useState } from 'react';
 import { Button } from '~/v4/core/components/AriaButton';
+import { TextWithMention } from '~/v4/social/internal-components/TextWithMention/TextWithMention';
 
 type EventInfoProps = {
   pageId: string;
@@ -118,7 +119,11 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
             Event address
           </Typography.TitleBold>
           <div className={styles.eventInfo__row}>
-            <Typography.Body className={styles.eventInfo__text}>{event.location}</Typography.Body>
+            <TextWithMention
+              mentionees={[]}
+              textClassName={styles.eventInfo__text}
+              data={{ text: event.location || '' }}
+            />
             <CopyButton text={event.location || ''} />
           </div>
         </div>
