@@ -133,7 +133,11 @@ export function EventDescription({ event }: EventDescriptionProps) {
           }}
         >
           <div>
-            <UserAvatar userId={event.userId} className={styles.eventDescription__hostAvatar} />
+            <UserAvatar
+              userId={event.userId}
+              shouldRedirectToUserProfile
+              className={styles.eventDescription__hostAvatar}
+            />
           </div>
           <div className={styles.eventDescription__name}>
             <Typography.Caption className={styles.eventDescription__subTitle}>
