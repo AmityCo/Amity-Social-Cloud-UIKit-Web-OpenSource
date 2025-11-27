@@ -124,7 +124,7 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
               textClassName={styles.eventInfo__text}
               data={{ text: event.location || '' }}
             />
-            <CopyButton text={event.location || ''} />
+            <CopyButton text={event.location || ''} toast="Address copied" />
           </div>
         </div>
       )}

@@ -4,9 +4,10 @@ import { useNotifications } from '~/v4/core/providers/NotificationProvider';
 
 type CopyButtonProps = {
   text: string;
+  toast?: string;
 };
 
-export function CopyButton({ text }: CopyButtonProps) {
+export function CopyButton({ text, toast }: CopyButtonProps) {
   const { success, info } = useNotifications();
 
   return (
@@ -18,7 +19,7 @@ export function CopyButton({ text }: CopyButtonProps) {
       onPress={async () => {
         try {
           await navigator?.clipboard?.writeText(text);
-          success({ content: 'Link copied' });
+          success({ content: toast || 'Link copied' });
         } catch (err) {
           info({ content: 'Failed to copy link' });
         }
