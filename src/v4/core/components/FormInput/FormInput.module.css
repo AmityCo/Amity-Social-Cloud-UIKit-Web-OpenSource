@@ -19,6 +19,7 @@
   line-height: 1.25rem;
   field-sizing: content;
   color: var(--asc-color-base-default);
+  background-color: var(--asc-color-background-default);
   border-bottom: 1px solid var(--asc-color-base-shade4);
 }
 

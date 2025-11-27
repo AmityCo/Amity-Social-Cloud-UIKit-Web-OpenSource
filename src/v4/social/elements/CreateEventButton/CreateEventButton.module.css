@@ -15,5 +15,5 @@
 .createEventButton__icon {
   width: 1.5rem;
   height: 1.5rem;
-  color: var(--asc-color-base-default);
+  fill: var(--asc-color-base-default);
 }
