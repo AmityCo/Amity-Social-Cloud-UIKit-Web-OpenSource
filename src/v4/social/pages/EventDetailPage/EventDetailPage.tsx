@@ -2,8 +2,8 @@ import { EventDetail, EventDetailProps } from '~/v4/social/features';
 
 export type EventDetailPageProps = EventDetailProps;
 
-function EventDetailPage({ eventId }: EventDetailPageProps) {
-  return <EventDetail eventId={eventId} />;
+function EventDetailPage(props: EventDetailPageProps) {
+  return <EventDetail {...props} />;
 }
 
 export default EventDetailPage;

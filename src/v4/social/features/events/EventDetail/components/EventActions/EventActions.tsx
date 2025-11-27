@@ -16,9 +16,10 @@ import styles from './EventActions.module.css';
 export type EventActionsProps = {
   event: Amity.Event;
   withTitle?: boolean;
+  pop?: number;
 };
 
-export function EventActions({ event, withTitle }: EventActionsProps) {
+export function EventActions({ event, withTitle, pop = 1 }: EventActionsProps) {
   const { onBack } = useNavigation();
   const { info } = useConfirmContext();
   const { deleteEvent } = useEventActions();
@@ -62,7 +63,7 @@ export function EventActions({ event, withTitle }: EventActionsProps) {
     <div className={styles.eventActions}>
       <div className={styles.eventActions__headerLeft}>
         <div>
-          <BackButton onPress={() => onBack()} variant="filled" />
+          <BackButton onPress={() => onBack(pop)} variant="filled" />
         </div>
         {withTitle && (
           <Typography.TitleBold className={styles.eventActions__eventTitle}>

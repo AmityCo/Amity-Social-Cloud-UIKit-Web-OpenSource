@@ -7,6 +7,8 @@ import { CopyButton } from '~/v4/social/features/events/EventDetail/elements';
 import { LiveStreamContent } from '~/v4/social/components/PostContent/LiveStreamContent';
 import styles from './EventInfo.module.css';
 import { usePageBehavior } from '~/v4/core/providers/PageBehaviorProvider';
+import { useState } from 'react';
+import { Button } from '~/v4/core/components/AriaButton';
 
 type EventInfoProps = {
   pageId: string;
@@ -15,6 +17,7 @@ type EventInfoProps = {
 
 export function EventInfo({ pageId, event }: EventInfoProps) {
   const componentId = COMPONENT_ID.EVENT_INFO;
+  const [expanded, setExpanded] = useState(false);
 
   const { accessibilityId, isExcluded, themeStyles } = useAmityComponent({
     pageId,
@@ -37,9 +40,28 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
           About the event
         </Typography.TitleBold>
         <Typography.Body className={styles.eventInfo__text}>
-          <TruncateMarkup lines={10}>
+          {expanded ? (
             <span>{event.description}</span>
-          </TruncateMarkup>
+          ) : (
+            <TruncateMarkup
+              lines={10}
+              ellipsis={
+                <>
+                  ...
+                  <Button
+                    variant="text"
+                    data-testid="see-more-button"
+                    className={styles.eventInfo__seeMore}
+                    onPress={() => setExpanded(true)}
+                  >
+                    <Typography.BodyBold> See more</Typography.BodyBold>
+                  </Button>
+                </>
+              }
+            >
+              <span>{event.description}</span>
+            </TruncateMarkup>
+          )}
         </Typography.Body>
       </div>
 

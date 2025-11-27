@@ -26,7 +26,7 @@ export function useEventDetail(eventId: string) {
   const actionBackground: React.CSSProperties = {
     background: isBackgroundShown
       ? event?.coverImage?.fileUrl
-        ? `url(${FileRepository.fileUrlWithSize(event?.coverImage?.fileUrl, 'medium')})`
+        ? `url(${FileRepository.fileUrlWithSize(event?.coverImage?.fileUrl, 'medium')}) center/cover no-repeat`
         : 'linear-gradient(188deg, #A5A9B5 6.23%, #898E9E 93.77%)'
       : 'transparent',
   };

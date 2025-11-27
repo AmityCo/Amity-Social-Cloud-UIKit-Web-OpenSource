@@ -184,7 +184,7 @@ export function useEventSetup(props: EventSetupProps) {
       onSettled: () => remove('create-event-loading'),
       onSuccess: ({ data }) => {
         success({ content: 'Successfully created event.' });
-        AmityEventSetupPageBehavior.goToEventDetailPage({ eventId: data.eventId });
+        AmityEventSetupPageBehavior.goToEventDetailPage({ eventId: data.eventId, pop: 2 });
       },
       onError: (error) => {
         if (error.message?.includes(ERROR_CODE.BLOCKED_WORD)) {

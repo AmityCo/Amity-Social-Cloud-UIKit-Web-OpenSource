@@ -42,6 +42,15 @@
   border-radius: 0.5rem;
 }
 
+.eventInfo__seeMore {
+  display: inline;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--asc-color-primary-default);
+}
+
 @media only screen and (width < 48em) {
   .eventInfo {
     gap: 0;

@@ -16,8 +16,8 @@
 }
 
 .reactButton__icon {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .reactButton__icon[data-has-my-reaction='false'] {

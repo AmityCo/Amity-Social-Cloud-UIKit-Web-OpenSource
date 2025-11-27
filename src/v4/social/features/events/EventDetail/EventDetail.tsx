@@ -14,9 +14,10 @@ import styles from './EventDetail.module.css';
 
 export type EventDetailProps = {
   eventId: string;
+  pop?: number;
 };
 
-export function EventDetail({ eventId }: EventDetailProps) {
+export function EventDetail({ eventId, pop }: EventDetailProps) {
   const {
     event,
     pageId,
@@ -38,7 +39,7 @@ export function EventDetail({ eventId }: EventDetailProps) {
     <section style={themeStyles} data-testid={accessibilityId} className={styles.eventDetail}>
       <div className={styles.eventDetail__header}>
         <div className={styles.eventDetail__topBar} style={actionBackground}>
-          <EventActions event={event} withTitle={isBackgroundShown} />
+          <EventActions event={event} withTitle={isBackgroundShown} pop={pop} />
           {sticky && (
             <Tabs
               ref={tabRef}
