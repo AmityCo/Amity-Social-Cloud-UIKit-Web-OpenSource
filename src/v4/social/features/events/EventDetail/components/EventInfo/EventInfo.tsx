@@ -73,15 +73,12 @@ export function EventInfo({ pageId, event }: EventInfoProps) {
               Event link
             </Typography.TitleBold>
             <div className={styles.eventInfo__row}>
-              <a
-                target="_blank"
-                href={event.externalUrl}
-                rel="noopener noreferrer"
-                className={styles.eventInfo__link}
-              >
-                {event.externalUrl}
-              </a>
-              <CopyButton text={event.externalUrl} />
+              <TextWithMention
+                mentionees={[]}
+                textClassName={styles.eventInfo__link}
+                data={{ text: event.externalUrl || '' }}
+              />
+              <CopyButton text={event.externalUrl || ''} toast="Link copied" />
             </div>
           </div>
         ) : (
