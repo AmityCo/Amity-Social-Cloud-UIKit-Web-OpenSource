@@ -6,6 +6,7 @@ export const useRSVP = (event: Amity.Event) => {
   const { success, error } = useNotifications();
 
   const { mutateAsync: createRSVP } = useMutation({
+    networkMode: 'always',
     mutationFn: async (status: AmityEventResponseStatus) => {
       return await event.createRSVP(status);
     },
@@ -18,6 +19,7 @@ export const useRSVP = (event: Amity.Event) => {
   });
 
   const { mutateAsync: updateRSVP } = useMutation({
+    networkMode: 'always',
     mutationFn: async (status: AmityEventResponseStatus) => {
       return await event.updateRSVP(status);
     },
