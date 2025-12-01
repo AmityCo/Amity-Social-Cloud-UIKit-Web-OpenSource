@@ -11,10 +11,19 @@ import { CommunityDisplayName } from '~/v4/social/elements/CommunityDisplayName'
 import { CommunityPrivateBadge } from '~/v4/social/elements/CommunityPrivateBadge';
 import { CommunityOfficialBadge } from '~/v4/social/elements/CommunityOfficialBadge';
 import styles from './EventTargetSelection.module.css';
+import { EmptyTargetSelection } from '~/v4/social/components/EmptyTargetSelection';
 
 export function EventTargetSelection() {
-  const { pageId, client, onBack, closePopup, communities, themeStyles, setIntersectionNode } =
-    useEventTargetSelection();
+  const {
+    pageId,
+    client,
+    onBack,
+    closePopup,
+    communities,
+    themeStyles,
+    setIntersectionNode,
+    isLoading,
+  } = useEventTargetSelection();
   const { AmityEventTargetSelectionPageBehavior } = usePageBehavior();
 
   return (
@@ -27,6 +36,8 @@ export function EventTargetSelection() {
       <Typography.Body className={styles.eventTargetSelection__myCommunities}>
         My communities
       </Typography.Body>
+      {communities.filter((community) => canCreatePostCommunity(client, community)).length === 0 &&
+        !isLoading && <EmptyTargetSelection />}
       {communities
         .filter((community) => canCreatePostCommunity(client, community))
         .map((community) => {

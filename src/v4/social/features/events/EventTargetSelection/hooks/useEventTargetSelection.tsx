@@ -34,6 +34,7 @@ export function useEventTargetSelection() {
     communities,
     themeStyles,
     closePopup,
+    isLoading,
     setIntersectionNode,
   };
 }

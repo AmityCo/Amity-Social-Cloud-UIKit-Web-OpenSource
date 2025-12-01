@@ -1,0 +1,14 @@
+.emptyTargetSelection {
+  height: 80%;
+  width: 100%;
+  display: flex;
+  padding: 2.5rem;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.emptyTargetSelection__label {
+  color: var(--asc-color-base-shade3);
+}
