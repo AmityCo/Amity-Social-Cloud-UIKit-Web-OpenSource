@@ -3,10 +3,14 @@
   align-items: center;
   white-space: nowrap;
   border-radius: 10rem;
+  background: transparent;
   padding: 0.5rem 0.75rem;
   color: var(--asc-color-base-shade1);
-  background: var(--asc-color-base-shade4);
   border: 1px solid var(--asc-color-base-shade4);
+}
+
+.chipButton[data-transparent='false'] {
+  background: var(--asc-color-base-shade4);
 }
 
 .chipButton[data-active='true'] {

@@ -154,4 +154,9 @@
   .locationForm__popoverItem {
     padding: 1rem 0;
   }
+
+  .locationForm__externalUrlInput,
+  .locationForm__addressInput {
+    max-width: 100%;
+  }
 }

@@ -10,6 +10,7 @@ type ChipButtonProps = Omit<ButtonProps, 'variant'> & {
   isActive?: boolean;
   label?: string;
   variant?: 'title' | 'body';
+  isTransparent?: boolean;
 };
 
 function ChipButton({
@@ -19,6 +20,7 @@ function ChipButton({
   isActive = false,
   variant = 'title',
   componentId = '*',
+  isTransparent = true,
   ...props
 }: ChipButtonProps) {
   const { accessibilityId, config, isExcluded, themeStyles } = useAmityElement({
@@ -45,6 +47,7 @@ function ChipButton({
       data-active={isActive}
       className={styles.chipButton}
       data-testid={accessibilityId}
+      data-transparent={isTransparent}
       {...props}
     >
       <Component data-active={isActive} className={styles.chipButton__text}>

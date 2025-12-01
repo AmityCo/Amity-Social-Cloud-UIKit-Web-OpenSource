@@ -50,12 +50,14 @@ export const CommunityEventFeed = ({ pageId = '*', communityId }: CommunityEvent
           <ChipButton
             variant="body"
             label="Upcoming"
+            isTransparent={false}
             isActive={eventTab === AmityEventStatus.Scheduled}
             onPress={() => setEventTab(AmityEventStatus.Scheduled)}
           />
           <ChipButton
             label="Past"
             variant="body"
+            isTransparent={false}
             isActive={eventTab === AmityEventStatus.Ended}
             onPress={() => setEventTab(AmityEventStatus.Ended)}
           />

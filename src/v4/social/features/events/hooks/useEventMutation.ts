@@ -15,10 +15,12 @@ type UpdateEventResponse = Awaited<ReturnType<typeof EventRepository.updateEvent
 
 export function useEventMutation() {
   const createEventMutation = useMutation<CreateEventResponse, Error, CreateEventPayload>({
+    networkMode: 'always',
     mutationFn: EventRepository.createEvent,
   });
 
   const updateEventMutation = useMutation<UpdateEventResponse, Error, UpdateEventPayload>({
+    networkMode: 'always',
     mutationFn: ([eventId, payload]) => EventRepository.updateEvent(eventId, payload),
   });
 

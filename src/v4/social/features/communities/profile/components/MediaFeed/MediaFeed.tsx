@@ -37,6 +37,7 @@ export const CommunityMediaFeed = ({ pageId = '*', communityId }: CommunityMedia
             key={tab.type}
             variant="body"
             label={tab.label}
+            isTransparent={false}
             aria-label={tab.label}
             isActive={activeTab === tab.type}
             data-testid={`chip-button-${tab.type}`}

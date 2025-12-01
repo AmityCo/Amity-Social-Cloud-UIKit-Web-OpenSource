@@ -184,7 +184,10 @@ export function useEventSetup(props: EventSetupProps) {
       onSettled: () => remove('create-event-loading'),
       onSuccess: ({ data }) => {
         success({ content: 'Successfully created event.' });
-        AmityEventSetupPageBehavior.goToEventDetailPage({ eventId: data.eventId, pop: 2 });
+        AmityEventSetupPageBehavior.goToEventDetailPage({
+          eventId: data.eventId,
+          pop: isDesktop ? 2 : 3,
+        });
       },
       onError: (error) => {
         if (error.message?.includes(ERROR_CODE.BLOCKED_WORD)) {
@@ -217,7 +220,7 @@ export function useEventSetup(props: EventSetupProps) {
             content: "Your event wasn't updated as it contains a link that's not allowed.",
           });
         } else {
-          info({ content: 'Failed to edit event. Please try again.' });
+          info({ content: 'Failed to update event. Please try again.' });
         }
       },
     });
