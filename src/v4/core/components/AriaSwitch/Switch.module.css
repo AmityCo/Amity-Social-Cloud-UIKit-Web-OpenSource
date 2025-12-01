@@ -22,7 +22,7 @@
   margin: 0.145rem;
   border-radius: 50%;
   transition: all 200ms;
-  background: var(--asc-color-background-default);
+  background: var(--asc-color-white);
 }
 
 .switch[data-focus-visible] .switch__indicator {

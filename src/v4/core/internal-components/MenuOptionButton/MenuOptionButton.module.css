@@ -18,15 +18,15 @@
 }
 
 .menuOptionButton__icon {
-  width: 1rem;
-  height: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
   color: var(--asc-color-base-default);
   fill: var(--asc-color-base-default);
 }
 
 .menuOptionButton__dangerIcon {
-  width: 1rem;
-  height: 1rem;
+  width: 1.5rem;
+  height: 1.5rem;
   color: var(--asc-color-alert-default);
   fill: var(--asc-color-alert-default);
 }

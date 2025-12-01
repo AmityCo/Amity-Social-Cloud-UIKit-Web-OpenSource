@@ -137,6 +137,7 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
             <Typography.TitleBold className={styles.messageBubble__optionUserInfo__displayName}>
               {message.creator?.displayName}
             </Typography.TitleBold>
+            {message.creator?.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
             {channel?.metadata?.mutedMembers?.includes(message.creatorId) && (
               <div className={styles.messageBubble__optionUserInfo__mutedIcon}>
                 <Muted className={styles.messageBubble__optionUserInfo__mutedIcon} />
@@ -305,12 +306,12 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
       <div className={styles.messageBubble__topSectionWrap}>
         <div className={styles.messageBubble__displayName__container}>
           {isHostMessage || isOwner || (!isHost && !isModerator) ? (
-            <>
+            <div className={styles.messageBubble__displayName__container}>
               <Typography.CaptionSmall className={styles.messageBubble__displayName}>
                 {message.creator?.displayName}
               </Typography.CaptionSmall>
               {message.creator?.isBrand && <BrandBadge pageId={pageId} componentId={componentId} />}
-            </>
+            </div>
           ) : (
             <Popover
               placement="end top"
@@ -331,14 +332,14 @@ export const MessageBubble: FC<MessageBubbleProps> = ({
                     }
                   }}
                 >
-                  <>
+                  <div className={styles.messageBubble__displayName__container}>
                     <Typography.CaptionSmall className={styles.messageBubble__button__displayName}>
                       {message.creator?.displayName}
                     </Typography.CaptionSmall>
                     {message.creator?.isBrand && (
                       <BrandBadge pageId={pageId} componentId={componentId} />
                     )}
-                  </>
+                  </div>
                 </Button>
               )}
             >
